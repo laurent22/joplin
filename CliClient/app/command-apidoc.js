@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 			{
 				name: 'type',
 				label: 'Type',
-				filter: value => {
+				filter: (value) => {
 					return Database.enumName('fieldType', value);
 				},
 			},

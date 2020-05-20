@@ -12,7 +12,7 @@ class Search extends BaseModel {
 	static keywords(query) {
 		let output = query.trim();
 		output = output.split(/[\s\t\n]+/);
-		output = output.filter(o => !!o);
+		output = output.filter((o) => !!o);
 		return output;
 	}
 }

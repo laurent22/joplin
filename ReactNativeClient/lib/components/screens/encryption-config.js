@@ -103,7 +103,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			return shared.onSavePasswordClick(this, mk);
 		};
 
-		const onPasswordChange = text => {
+		const onPasswordChange = (text) => {
 			return shared.onPasswordChange(this, mk, text);
 		};
 
@@ -120,7 +120,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
+					<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={(text) => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
@@ -155,7 +155,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}
 					value={this.state.passwordPromptAnswer}
-					onChangeText={text => {
+					onChangeText={(text) => {
 						this.setState({ passwordPromptAnswer: text });
 					}}
 				></TextInput>
@@ -167,7 +167,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}
 					value={this.state.passwordPromptConfirmAnswer}
-					onChangeText={text => {
+					onChangeText={(text) => {
 						this.setState({ passwordPromptConfirmAnswer: text });
 					}}
 				></TextInput>
@@ -286,7 +286,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					<View style={{ flex: 1, height: 20 }}></View>
 				</ScrollView>
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -295,7 +295,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const EncryptionConfigScreen = connect(state => {
+const EncryptionConfigScreen = connect((state) => {
 	return {
 		theme: state.settings.theme,
 		masterKeys: state.masterKeys,

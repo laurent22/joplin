@@ -104,7 +104,7 @@ class Note extends BaseItem {
 		if (!body || body.length <= 32) return [];
 
 		const links = urlUtils.extractResourceUrls(body);
-		const itemIds = links.map(l => l.itemId);
+		const itemIds = links.map((l) => l.itemId);
 		return ArrayUtils.unique(itemIds);
 	}
 
@@ -175,7 +175,7 @@ class Note extends BaseItem {
 		for (const basePath of pathsToTry) {
 			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
 			const re = new RegExp(reString, 'gi');
-			body = body.replace(re, match => {
+			body = body.replace(re, (match) => {
 				const id = Resource.pathToId(match);
 				return `:/${id}`;
 			});
@@ -200,7 +200,7 @@ class Note extends BaseItem {
 
 	// Note: sort logic must be duplicated in previews();
 	static sortNotes(notes, orders, uncompletedTodosOnTop) {
-		const noteOnTop = note => {
+		const noteOnTop = (note) => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
 

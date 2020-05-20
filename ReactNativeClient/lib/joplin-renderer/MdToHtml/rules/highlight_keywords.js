@@ -33,7 +33,7 @@ function createHighlightedTokens(Token, splitted) {
 function installRule(markdownIt, mdOptions, ruleOptions) {
 	const divider = md5(Date.now().toString() + Math.random().toString());
 
-	markdownIt.core.ruler.push('highlight_keywords', state => {
+	markdownIt.core.ruler.push('highlight_keywords', (state) => {
 		const keywords = ruleOptions.highlightedKeywords;
 		if (!keywords || !keywords.length) return;
 

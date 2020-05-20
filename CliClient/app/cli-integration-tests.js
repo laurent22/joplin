@@ -236,7 +236,7 @@ async function main() {
 	}
 }
 
-main(process.argv).catch(error => {
+main(process.argv).catch((error) => {
 	console.info('');
 	logger.error(error);
 });

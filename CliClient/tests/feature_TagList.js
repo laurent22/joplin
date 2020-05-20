@@ -84,7 +84,7 @@ describe('integration_TagList', function() {
 
 		// check the tag list is updated
 		state = testApp.store().getState();
-		const tagIds = state.selectedNoteTags.map(n => n.id).sort();
+		const tagIds = state.selectedNoteTags.map((n) => n.id).sort();
 		const expectedTagIds = [tags[0].id, tags[2].id].sort();
 		expect(state.selectedNoteTags.length).toEqual(2);
 		expect(tagIds).toEqual(expectedTagIds);

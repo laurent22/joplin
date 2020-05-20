@@ -21,7 +21,7 @@ class Shared {
 			shim.openUrl(this.comp_.state.loginUrl);
 		};
 
-		this.authCodeInput_change = event => {
+		this.authCodeInput_change = (event) => {
 			this.comp_.setState({
 				authCode: typeof event === 'object' ? event.target.value : event,
 			});

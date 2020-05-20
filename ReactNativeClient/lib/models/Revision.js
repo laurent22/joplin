@@ -67,7 +67,7 @@ class Revision extends BaseItem {
 	static patchStats(patch) {
 		if (typeof patch === 'object') throw new Error('Not implemented');
 
-		const countChars = diffLine => {
+		const countChars = (diffLine) => {
 			return unescape(diffLine).length - 1;
 		};
 
@@ -125,7 +125,7 @@ class Revision extends BaseItem {
 		if (!itemIds.length) return [];
 		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("${itemIds.join('","')}")`, [itemType]);
 
-		return rows.map(r => r.item_id);
+		return rows.map((r) => r.item_id);
 	}
 
 	static async itemsWithNoRevisions(itemType, itemIds) {

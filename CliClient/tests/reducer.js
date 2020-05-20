@@ -526,8 +526,8 @@ describe('Reducer', function() {
 		// current = 3
 		state = goBackWard(state);
 
-		expect(state.backwardHistoryNotes.map(n=>n.id)).toEqual([notes[0], notes[1], notes[2], notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
-		expect(state.forwardHistoryNotes.map(n=>n.id)).toEqual([notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
+		expect(state.backwardHistoryNotes.map((n)=>n.id)).toEqual([notes[0], notes[1], notes[2], notes[3], notes[2], notes[3], notes[2]].map((n)=>n.id));
+		expect(state.forwardHistoryNotes.map((n)=>n.id)).toEqual([notes[3], notes[2], notes[3], notes[2]].map((n)=>n.id));
 		expect(state.selectedNoteIds).toEqual([notes[3].id]);
 
 		// delete third note
@@ -547,8 +547,8 @@ describe('Reducer', function() {
 		// backward = 0 1
 		// forward =
 		// current = 3
-		expect(state.backwardHistoryNotes.map(x => x.id)).toEqual([notes[0].id, notes[1].id]);
-		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+		expect(state.backwardHistoryNotes.map((x) => x.id)).toEqual([notes[0].id, notes[1].id]);
+		expect(state.forwardHistoryNotes.map((x) => x.id)).toEqual([]);
 		expect(state.selectedNoteIds).toEqual([notes[3].id]);
 	}));
 
@@ -565,7 +565,7 @@ describe('Reducer', function() {
 		}
 
 		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
-		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+		expect(state.forwardHistoryNotes.map((x) => x.id)).toEqual([]);
 
 		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
 			state = goBackWard(state);
@@ -579,6 +579,6 @@ describe('Reducer', function() {
 		}
 
 		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
-		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+		expect(state.forwardHistoryNotes.map((x) => x.id)).toEqual([]);
 	}));
 });

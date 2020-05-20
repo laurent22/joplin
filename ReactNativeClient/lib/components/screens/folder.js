@@ -50,7 +50,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 				lastSavedFolder: Object.assign({}, folder),
 			});
 		} else {
-			Folder.load(this.props.folderId).then(folder => {
+			Folder.load(this.props.folderId).then((folder) => {
 				this.setState({
 					folder: folder,
 					lastSavedFolder: Object.assign({}, folder),
@@ -107,9 +107,9 @@ class FolderScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
-				<TextInput placeholder={_('Enter notebook title')} placeholderTextColor={theme.colorFaded} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
+				<TextInput placeholder={_('Enter notebook title')} placeholderTextColor={theme.colorFaded} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				<dialogs.DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -118,7 +118,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const FolderScreen = connect(state => {
+const FolderScreen = connect((state) => {
 	return {
 		folderId: state.selectedFolderId,
 		theme: state.settings.theme,

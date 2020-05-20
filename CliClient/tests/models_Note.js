@@ -173,7 +173,7 @@ describe('models_Note', function() {
 		expect(allAfterDelete.length).toBe(expectedLength);
 
 		// Common elements between the to-be-deleted notes and the notes and folders remaining after the delete
-		const intersection = [...notesToRemoveFromFolder1, ...notesToRemoveFromFolder2].filter(x => allAfterDelete.includes(x));
+		const intersection = [...notesToRemoveFromFolder1, ...notesToRemoveFromFolder2].filter((x) => allAfterDelete.includes(x));
 		// Should be empty
 		expect(intersection.length).toBe(0);
 	}));

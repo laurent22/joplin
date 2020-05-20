@@ -31,7 +31,7 @@ class Command extends BaseCommand {
 	async action(args) {
 		const options = args.options;
 
-		const askForMasterKey = async error => {
+		const askForMasterKey = async (error) => {
 			const masterKeyId = error.masterKeyId;
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
@@ -147,7 +147,7 @@ class Command extends BaseCommand {
 
 			const dirPaths = function(targetPath) {
 				const paths = [];
-				fs.readdirSync(targetPath).forEach(path => {
+				fs.readdirSync(targetPath).forEach((path) => {
 					paths.push(path);
 				});
 				return paths;

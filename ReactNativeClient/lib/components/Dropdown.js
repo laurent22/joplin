@@ -90,7 +90,7 @@ class Dropdown extends React.Component {
 			this.setState({ listVisible: false });
 		};
 
-		const itemRenderer = item => {
+		const itemRenderer = (item) => {
 			return (
 				<TouchableOpacity
 					style={itemWrapperStyle}
@@ -111,7 +111,7 @@ class Dropdown extends React.Component {
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity
 					style={headerWrapperStyle}
-					ref={ref => (this.headerRef_ = ref)}
+					ref={(ref) => (this.headerRef_ = ref)}
 					disabled={this.props.disabled}
 					onPress={() => {
 						this.updateHeaderCoordinates();
@@ -141,7 +141,7 @@ class Dropdown extends React.Component {
 									style={itemListStyle}
 									items={this.props.items}
 									itemHeight={itemHeight}
-									itemRenderer={item => {
+									itemRenderer={(item) => {
 										return itemRenderer(item);
 									}}
 								/>

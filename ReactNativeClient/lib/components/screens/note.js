@@ -128,7 +128,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.setState({ noteTagDialogShown: false });
 		};
 
-		this.onJoplinLinkClick_ = async msg => {
+		this.onJoplinLinkClick_ = async (msg) => {
 			try {
 				if (msg.indexOf('joplin://') === 0) {
 					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
@@ -407,7 +407,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				(width, height) => {
 					resolve({ width: width, height: height });
 				},
-				error => {
+				(error) => {
 					reject(error);
 				}
 			);
@@ -416,7 +416,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	showImagePicker(options) {
 		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, response => {
+			ImagePicker.launchImageLibrary(options, (response) => {
 				resolve(response);
 			});
 		});
@@ -871,7 +871,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		let bodyComponent = null;
 		if (this.state.mode == 'view' && !Setting.value('editor.beta')) {
-			const onCheckboxChange = newBody => {
+			const onCheckboxChange = (newBody) => {
 				this.saveOneProperty('body', newBody);
 			};
 
@@ -899,7 +899,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						highlightedKeywords={keywords}
 						theme={this.props.theme}
 						noteHash={this.props.noteHash}
-						onCheckboxChange={newBody => {
+						onCheckboxChange={(newBody) => {
 							onCheckboxChange(newBody);
 						}}
 						onMarkForDownload={this.onMarkForDownload}
@@ -923,7 +923,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			}
 
-			const onCheckboxChange = newBody => {
+			const onCheckboxChange = (newBody) => {
 				this.saveOneProperty('body', newBody);
 			};
 
@@ -938,7 +938,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					value={note.body}
 					borderColor={this.styles().markdownButtons.borderColor}
 					markdownButtonsColor={this.styles().markdownButtons.color}
-					saveText={text => this.body_changeText(text)}
+					saveText={(text) => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
@@ -957,7 +957,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						highlightedKeywords: keywords,
 						theme: this.props.theme,
 						noteHash: this.props.noteHash,
-						onCheckboxChange: newBody => {
+						onCheckboxChange: (newBody) => {
 							onCheckboxChange(newBody);
 						},
 						onMarkForDownload: this.onMarkForDownload,
@@ -979,7 +979,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				// a plain TextInput for now.
 				// See https://github.com/laurent22/joplin/issues/3041
 				(
-					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
+					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
 				);
 		}
 
@@ -1031,7 +1031,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -1041,7 +1041,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NoteScreen = connect(state => {
+const NoteScreen = connect((state) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,

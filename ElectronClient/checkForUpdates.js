@@ -157,7 +157,7 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
 			if (buttonIndex === 2) require('electron').shell.openExternal(release.pageUrl);
 		}
-	}).catch(error => {
+	}).catch((error) => {
 		autoUpdateLogger_.error(error);
 		if (!checkInBackground_) showErrorMessageBox(error.message);
 	}).then(() => {

@@ -314,7 +314,7 @@ class ConfigScreenComponent extends React.Component {
 					<select
 						value={value}
 						style={selectStyle}
-						onChange={event => {
+						onChange={(event) => {
 							updateSettingValue(key, event.target.value);
 						}}
 					>
@@ -338,12 +338,12 @@ class ConfigScreenComponent extends React.Component {
 							id={`setting_checkbox_${key}`}
 							type="checkbox"
 							checked={!!value}
-							onChange={event => {
+							onChange={(event) => {
 								onCheckboxClick(event);
 							}}
 						/>
 						<label
-							onClick={event => {
+							onClick={(event) => {
 								onCheckboxClick(event);
 							}}
 							style={checkboxLabelStyle}
@@ -365,13 +365,13 @@ class ConfigScreenComponent extends React.Component {
 			if (md.subType === 'file_path_and_args') {
 				inputStyle.marginBottom = subLabel.marginBottom;
 
-				const splitCmd = cmdString => {
+				const splitCmd = (cmdString) => {
 					const path = pathUtils.extractExecutablePath(cmdString);
 					const args = cmdString.substr(path.length + 1);
 					return [pathUtils.unquotePath(path), args];
 				};
 
-				const joinCmd = cmdArray => {
+				const joinCmd = (cmdArray) => {
 					if (!cmdArray[0] && !cmdArray[1]) return '';
 					let cmdString = pathUtils.quotePath(cmdArray[0]);
 					if (!cmdString) cmdString = '""';
@@ -379,13 +379,13 @@ class ConfigScreenComponent extends React.Component {
 					return cmdString;
 				};
 
-				const onPathChange = event => {
+				const onPathChange = (event) => {
 					const cmd = splitCmd(this.state.settings[key]);
 					cmd[0] = event.target.value;
 					updateSettingValue(key, joinCmd(cmd));
 				};
 
-				const onArgsChange = event => {
+				const onArgsChange = (event) => {
 					const cmd = splitCmd(this.state.settings[key]);
 					cmd[1] = event.target.value;
 					updateSettingValue(key, joinCmd(cmd));
@@ -418,7 +418,7 @@ class ConfigScreenComponent extends React.Component {
 									<input
 										type={inputType}
 										style={Object.assign({}, inputStyle, { marginBottom: 0 })}
-										onChange={event => {
+										onChange={(event) => {
 											onPathChange(event);
 										}}
 										value={cmd[0]}
@@ -430,7 +430,7 @@ class ConfigScreenComponent extends React.Component {
 								<input
 									type={inputType}
 									style={inputStyle}
-									onChange={event => {
+									onChange={(event) => {
 										onArgsChange(event);
 									}}
 									value={cmd[1]}
@@ -449,7 +449,7 @@ class ConfigScreenComponent extends React.Component {
 					</div>
 				);
 			} else {
-				const onTextChange = event => {
+				const onTextChange = (event) => {
 					updateSettingValue(key, event.target.value);
 				};
 
@@ -462,7 +462,7 @@ class ConfigScreenComponent extends React.Component {
 							type={inputType}
 							style={inputStyle}
 							value={this.state.settings[key]}
-							onChange={event => {
+							onChange={(event) => {
 								onTextChange(event);
 							}}
 						/>
@@ -471,7 +471,7 @@ class ConfigScreenComponent extends React.Component {
 				);
 			}
 		} else if (md.type === Setting.TYPE_INT) {
-			const onNumChange = event => {
+			const onNumChange = (event) => {
 				updateSettingValue(key, event.target.value);
 			};
 
@@ -489,7 +489,7 @@ class ConfigScreenComponent extends React.Component {
 						type="number"
 						style={inputStyle}
 						value={this.state.settings[key]}
-						onChange={event => {
+						onChange={(event) => {
 							onNumChange(event);
 						}}
 						min={md.minimum}
@@ -620,7 +620,7 @@ class ConfigScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
 		settings: state.settings,

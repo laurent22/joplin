@@ -86,7 +86,7 @@ class StatusBarWidget extends BaseWidget {
 
 		// const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		// const textStyle = (s) => s;
-		const textStyle = this.promptActive ? s => s : chalk.gray;
+		const textStyle = this.promptActive ? (s) => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
 

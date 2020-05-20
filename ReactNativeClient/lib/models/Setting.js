@@ -56,7 +56,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'sync',
 				label: () => _('Synchronisation target'),
-				description: appType => {
+				description: (appType) => {
 					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
@@ -68,14 +68,14 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					try {
 						return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem');
 					} catch (error) {
 						return false;
 					}
 				},
-				filter: value => {
+				filter: (value) => {
 					return value ? rtrimSlashes(value) : '';
 				},
 				public: true,
@@ -87,7 +87,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -98,7 +98,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -108,7 +108,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -120,7 +120,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -131,7 +131,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -141,7 +141,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -557,7 +557,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				advanced: true,
-				show: settings => {
+				show: (settings) => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
@@ -570,7 +570,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_BOOL,
 				advanced: true,
 				section: 'sync',
-				show: settings => {
+				show: (settings) => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
@@ -723,7 +723,7 @@ class Setting extends BaseModel {
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
-		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
+		return this.modelSelectAll('SELECT * FROM settings').then((rows) => {
 			this.cache_ = [];
 
 			for (let i = 0; i < rows.length; i++) {

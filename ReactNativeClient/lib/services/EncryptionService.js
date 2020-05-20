@@ -216,7 +216,7 @@ class EncryptionService {
 	async randomHexString(byteCount) {
 		const bytes = await shim.randomBytes(byteCount);
 		return bytes
-			.map(a => {
+			.map((a) => {
 				return hexPad(a.toString(16), 2);
 			})
 			.join('');
@@ -251,7 +251,7 @@ class EncryptionService {
 		}, options);
 
 		const bytes = await shim.randomBytes(256);
-		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
+		const hexaBytes = bytes.map((a) => hexPad(a.toString(16), 2)).join('');
 
 		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password);
 	}
@@ -505,7 +505,7 @@ class EncryptionService {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
-			read: async size => {
+			read: async (size) => {
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
 			close: async () => {
@@ -517,7 +517,7 @@ class EncryptionService {
 
 	async fileWriter_(path, encoding) {
 		return {
-			append: async data => {
+			append: async (data) => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},

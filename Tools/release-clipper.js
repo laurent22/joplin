@@ -66,8 +66,8 @@ async function compareDir(dir1, dir2) {
 		return !stat.isDirectory();
 	};
 
-	const files1 = glob.sync(`${dir1}/**/*`, globOptions).filter(filterFiles).map(f => f.substr(dir1.length + 1));
-	const files2 = glob.sync(`${dir2}/**/*`, globOptions).filter(filterFiles).map(f => f.substr(dir2.length + 1));
+	const files1 = glob.sync(`${dir1}/**/*`, globOptions).filter(filterFiles).map((f) => f.substr(dir1.length + 1));
+	const files2 = glob.sync(`${dir2}/**/*`, globOptions).filter(filterFiles).map((f) => f.substr(dir2.length + 1));
 
 	const missingFiles1 = [];
 	const missingFiles2 = [];

@@ -10,11 +10,11 @@ class DatabaseDriverReactNative {
 		return new Promise((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },
-				db => {
+				(db) => {
 					this.db_ = db;
 					resolve();
 				},
-				error => {
+				(error) => {
 					reject(error);
 				}
 			);
@@ -30,10 +30,10 @@ class DatabaseDriverReactNative {
 			this.db_.executeSql(
 				sql,
 				params,
-				r => {
+				(r) => {
 					resolve(r.rows.length ? r.rows.item(0) : null);
 				},
-				error => {
+				(error) => {
 					reject(error);
 				}
 			);
@@ -41,7 +41,7 @@ class DatabaseDriverReactNative {
 	}
 
 	selectAll(sql, params = null) {
-		return this.exec(sql, params).then(r => {
+		return this.exec(sql, params).then((r) => {
 			const output = [];
 			for (let i = 0; i < r.rows.length; i++) {
 				output.push(r.rows.item(i));
@@ -55,11 +55,11 @@ class DatabaseDriverReactNative {
 			this.db_.executeSql(
 				sql,
 				params,
-				r => {
+				(r) => {
 					if ('insertId' in r) this.lastInsertId_ = r.insertId;
 					resolve(r);
 				},
-				error => {
+				(error) => {
 					reject(error);
 				}
 			);

@@ -12,7 +12,7 @@ class SearchEngineUtils {
 		}
 
 		const results = await SearchEngine.instance().search(query, { searchType });
-		const noteIds = results.map(n => n.id);
+		const noteIds = results.map((n) => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
 		// present in field list, add it.L Also remember it was auto-added so that

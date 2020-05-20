@@ -260,7 +260,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		const notes = [];
 		let processingNotes = false;
 
-		stream.on('error', error => {
+		stream.on('error', (error) => {
 			reject(new Error(error.toString()));
 		});
 
@@ -327,7 +327,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return true;
 		}
 
-		saxStream.on('error', error => {
+		saxStream.on('error', (error) => {
 			importOptions.onError(error);
 		});
 
@@ -421,7 +421,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				notes.push(note);
 
 				if (notes.length >= 10) {
-					processNotes().catch(error => {
+					processNotes().catch((error) => {
 						importOptions.onError(error);
 					});
 				}
@@ -463,7 +463,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		saxStream.on('end', function() {
 			// Wait till there is no more notes to process.
 			const iid = setInterval(() => {
-				processNotes().then(allDone => {
+				processNotes().then((allDone) => {
 					if (allDone) {
 						clearTimeout(iid);
 						resolve();

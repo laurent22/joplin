@@ -1137,7 +1137,7 @@ class Application extends BaseApplication {
 		// It seems the "visible" property of separators is ignored by Electron, making
 		// it display separators that we want hidden. So this function iterates through
 		// them and remove them completely.
-		const cleanUpSeparators = items => {
+		const cleanUpSeparators = (items) => {
 			const output = [];
 			for (const item of items) {
 				if ('visible' in item && item.type === 'separator' && !item.visible) continue;

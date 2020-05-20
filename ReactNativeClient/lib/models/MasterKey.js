@@ -19,11 +19,11 @@ class MasterKey extends BaseItem {
 	}
 
 	static allWithoutEncryptionMethod(masterKeys, method) {
-		return masterKeys.filter(m => m.encryption_method !== method);
+		return masterKeys.filter((m) => m.encryption_method !== method);
 	}
 
 	static async save(o, options = null) {
-		return super.save(o, options).then(item => {
+		return super.save(o, options).then((item) => {
 			this.dispatch({
 				type: 'MASTERKEY_UPDATE_ONE',
 				item: item,

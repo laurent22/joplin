@@ -45,7 +45,7 @@ class ResourceServer {
 		this.server_ = http.createServer();
 
 		this.server_.on('request', async (request, response) => {
-			const writeResponse = message => {
+			const writeResponse = (message) => {
 				response.write(message);
 				response.end();
 			};
@@ -73,7 +73,7 @@ class ResourceServer {
 			response.end();
 		});
 
-		this.server_.on('error', error => {
+		this.server_.on('error', (error) => {
 			this.logger().error('Resource server:', error);
 		});
 

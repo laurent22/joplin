@@ -100,6 +100,7 @@ module.exports = {
 		"space-before-blocks": "error",
 		"spaced-comment": ["error", "always"],
 		"keyword-spacing": ["error", { "before": true, "after": true }],
+		"arrow-parens": ["error"],
 	},
 	"plugins": [
 		"react",

@@ -158,7 +158,7 @@ class BaseModel {
 		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
-			.then(r => {
+			.then((r) => {
 				return r ? r['total'] : 0;
 			});
 	}
@@ -198,7 +198,7 @@ class BaseModel {
 	static async allIds(options = null) {
 		const q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
 		const rows = await this.db().selectAll(q.sql, q.params);
-		return rows.map(r => r.id);
+		return rows.map((r) => r.id);
 	}
 
 	static async all(options = null) {
@@ -253,7 +253,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectOne(sql, params)
-			.then(model => {
+			.then((model) => {
 				return this.filter(this.addModelMd(model));
 			});
 	}
@@ -262,7 +262,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
-			.then(models => {
+			.then((models) => {
 				return this.filterArray(this.addModelMd(models));
 			});
 	}

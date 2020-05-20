@@ -7,7 +7,7 @@ const TemplateUtils = {};
 
 // Mustache escapes strings (including /) with the html code by default
 // This isn't useful for markdown so it's disabled
-Mustache.escape = text => {
+Mustache.escape = (text) => {
 	return text;
 };
 
@@ -47,7 +47,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		// sensitivity ensures that the sort will ignore case
 		files.sort((a, b) => { return a.path.localeCompare(b.path, undefined, { sensitivity: 'accent' }); });
 
-		files.forEach(async file => {
+		files.forEach(async (file) => {
 			if (file.path.endsWith('.md')) {
 				try {
 					const fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');

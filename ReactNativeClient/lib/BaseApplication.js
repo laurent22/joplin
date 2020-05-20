@@ -358,7 +358,7 @@ class BaseApplication {
 	}
 
 	generalMiddlewareFn() {
-		const middleware = store => next => action => {
+		const middleware = (store) => (next) => (action) => {
 			return this.generalMiddleware(store, next, action);
 		};
 
@@ -690,7 +690,7 @@ class BaseApplication {
 		if (!Setting.value('api.token')) {
 			EncryptionService.instance()
 				.randomHexString(64)
-				.then(token => {
+				.then((token) => {
 					Setting.setValue('api.token', token);
 				});
 		}

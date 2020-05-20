@@ -24,11 +24,11 @@ class HtmlUtils {
 			output.push(matches[2]);
 		}
 
-		return output.filter(url => !!url);
+		return output.filter((url) => !!url);
 	}
 
 	replaceImageUrls(html, callback) {
-		return this.processImageTags(html, data => {
+		return this.processImageTags(html, (data) => {
 			const newSrc = callback(data.src);
 			return {
 				type: 'replaceSource',

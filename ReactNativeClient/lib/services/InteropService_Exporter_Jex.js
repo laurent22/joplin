@@ -24,7 +24,7 @@ class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 
 	async close() {
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
-		const filePaths = stats.filter(a => !a.isDirectory()).map(a => a.path);
+		const filePaths = stats.filter((a) => !a.isDirectory()).map((a) => a.path);
 
 		if (!filePaths.length) throw new Error(_('There is no data to export.'));
 

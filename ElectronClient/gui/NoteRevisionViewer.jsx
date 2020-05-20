@@ -211,7 +211,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
 	};

@@ -64,7 +64,7 @@ function filterLogs(logs, platform) {
 
 		let prefix = log.message.trim().toLowerCase().split(':');
 		if (prefix.length <= 1) continue;
-		prefix = prefix[0].split(',').map(s => s.trim());
+		prefix = prefix[0].split(',').map((s) => s.trim());
 
 		let addIt = false;
 
@@ -104,8 +104,8 @@ function formatCommitMessage(msg, author, options) {
 
 	let subModule = '';
 
-	const isPlatformPrefix = prefix => {
-		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
+	const isPlatformPrefix = (prefix) => {
+		prefix = prefix.split(',').map((p) => p.trim().toLowerCase());
 		for (const p of prefix) {
 			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api'].indexOf(p) >= 0) return true;
 		}
@@ -124,7 +124,7 @@ function formatCommitMessage(msg, author, options) {
 
 	output = output.split('\n')[0].trim();
 
-	const detectType = msg => {
+	const detectType = (msg) => {
 		msg = msg.trim().toLowerCase();
 
 		if (msg.indexOf('fix') === 0) return 'fixed';
@@ -315,7 +315,7 @@ async function main() {
 
 	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 
-	const changelogString = changelog.map(l => `- ${l}`);
+	const changelogString = changelog.map((l) => `- ${l}`);
 	console.info(changelogString.join('\n'));
 }
 

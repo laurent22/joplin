@@ -4,7 +4,7 @@ const Promise = require('promise');
 class DatabaseDriverNode {
 	open(options) {
 		return new Promise((resolve, reject) => {
-			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, error => {
+			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
 				if (error) {
 					reject(error);
 					return;
@@ -52,7 +52,7 @@ class DatabaseDriverNode {
 	exec(sql, params = null) {
 		if (!params) params = {};
 		return new Promise((resolve, reject) => {
-			this.db_.run(sql, params, error => {
+			this.db_.run(sql, params, (error) => {
 				if (error) {
 					reject(error);
 					return;
