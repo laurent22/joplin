@@ -9,6 +9,7 @@ const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
 interface NoteListItemProps {
 	theme: number,
 	width: number,
+	style: any,
 	dragItemIndex: number,
 	highlightedWords: string[],
 	index: number,
