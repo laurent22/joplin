@@ -496,7 +496,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		} else {
 			props.onMessage(event);
 		}
-	}, [props.onMessage, props.content, aceEditor_change]);
+	}, [props.onMessage, props.content, aceEditor_change, setEditorPercentScroll]);
 
 	useEffect(() => {
 		let cancelled = false;
