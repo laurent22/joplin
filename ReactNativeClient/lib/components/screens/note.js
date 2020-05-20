@@ -72,6 +72,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			HACK_webviewLoadingState: 0,
 		};
 
+		this.selection = null;
+
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
 		this.doFocusUpdate_ = false;
@@ -291,6 +293,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async UNSAFE_componentWillMount() {
+		this.selection = null;
+
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -556,7 +560,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const resourceTag = Resource.markdownTag(resource);
 
 		const newNote = Object.assign({}, this.state.note);
-		newNote.body += `\n${resourceTag}`;
+
+		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.selection) {
+			const prefix = newNote.body.substring(0, this.selection.start);
+			const suffix = newNote.body.substring(this.selection.end);
+			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
+		} else {
+			newNote.body += `\n${resourceTag}`;
+		}
+
 		this.setState({ note: newNote });
 
 		this.refreshResource(resource, newNote.body);
@@ -979,7 +991,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 				// a plain TextInput for now.
 				// See https://github.com/laurent22/joplin/issues/3041
 				(
-					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={(text) => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
+					<TextInput
+						autoCapitalize="sentences"
+						style={this.styles().bodyTextInput}
+						ref="noteBodyTextField"
+						multiline={true}
+						value={note.body}
+						onChangeText={(text) => this.body_changeText(text)}
+						onSelectionChange={({ nativeEvent: { selection } }) => {
+							this.selection = selection;
+						}}
+						blurOnSubmit={false}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add body')}
+						placeholderTextColor={theme.colorFaded}
+					/>
 				);
 		}
 
