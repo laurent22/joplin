@@ -72,7 +72,7 @@ export function useSelectionRange(editor: any) {
 			// and even infinite rendering loops. So before setting it on the state
 			// we deep compare the previous and new selection.
 			// https://github.com/laurent22/joplin/issues/3200
-			setSelectionRange(prev => {
+			setSelectionRange((prev:any) => {
 				if (selectionRangesEqual(prev, firstRange)) return prev;
 				return firstRange;
 			});
