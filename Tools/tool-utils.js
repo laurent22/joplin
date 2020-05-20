@@ -206,7 +206,7 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 	return responseJson;
 };
 
-toolUtils.readline = question => {
+toolUtils.readline = (question) => {
 	return new Promise((resolve) => {
 		const readline = require('readline');
 
@@ -215,7 +215,7 @@ toolUtils.readline = question => {
 			output: process.stdout,
 		});
 
-		rl.question(`${question} `, answer => {
+		rl.question(`${question} `, (answer) => {
 			resolve(answer);
 			rl.close();
 		});

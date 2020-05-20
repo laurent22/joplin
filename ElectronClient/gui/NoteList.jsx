@@ -118,7 +118,7 @@ class NoteListComponent extends React.Component {
 			}
 		};
 
-		const onDragStart = event => {
+		const onDragStart = (event) => {
 			let noteIds = [];
 
 			// Here there is two cases:
@@ -138,7 +138,7 @@ class NoteListComponent extends React.Component {
 			event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
 		};
 
-		const onCheckboxClick = async event => {
+		const onCheckboxClick = async (event) => {
 			const checked = event.target.checked;
 			const newNote = {
 				id: item.id,
@@ -173,7 +173,7 @@ class NoteListComponent extends React.Component {
 					style={{ margin: 0, marginBottom: 1, marginRight: 5 }}
 					type="checkbox"
 					defaultChecked={!!item.todo_completed}
-					onClick={event => {
+					onClick={(event) => {
 						onCheckboxClick(event, item);
 					}}
 				/>
@@ -220,7 +220,7 @@ class NoteListComponent extends React.Component {
 			paddingRight: 4,
 			color: theme.color,
 		};
-		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : <i style={watchedIconStyle} className={'fa fa-external-link'}></i>;
+		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
 
 		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
 		const ref = this.itemAnchorRefs_[item.id];
@@ -232,14 +232,14 @@ class NoteListComponent extends React.Component {
 				{checkbox}
 				<a
 					ref={ref}
-					onContextMenu={event => this.itemContextMenu(event)}
+					onContextMenu={(event) => this.itemContextMenu(event)}
 					href="#"
 					draggable={true}
 					style={listItemTitleStyle}
-					onClick={event => {
+					onClick={(event) => {
 						onTitleClick(event, item);
 					}}
-					onDragStart={event => onDragStart(event)}
+					onDragStart={(event) => onDragStart(event)}
 					data-id={item.id}
 				>
 					{watchedIcon}
@@ -365,7 +365,7 @@ class NoteListComponent extends React.Component {
 			event.preventDefault();
 
 			const notes = BaseModel.modelsByIds(this.props.notes, noteIds);
-			const todos = notes.filter(n => !!n.is_todo);
+			const todos = notes.filter((n) => !!n.is_todo);
 			if (!todos.length) return;
 
 			for (let i = 0; i < todos.length; i++) {
@@ -457,7 +457,7 @@ class NoteListComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
 		notes: state.notes,
 		folders: state.folders,

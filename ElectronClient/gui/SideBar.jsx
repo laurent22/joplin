@@ -20,7 +20,7 @@ class SideBarComponent extends React.Component {
 	constructor() {
 		super();
 
-		this.onFolderDragStart_ = event => {
+		this.onFolderDragStart_ = (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
 
@@ -29,12 +29,12 @@ class SideBarComponent extends React.Component {
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 		};
 
-		this.onFolderDragOver_ = event => {
+		this.onFolderDragOver_ = (event) => {
 			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 			if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 		};
 
-		this.onFolderDrop_ = async event => {
+		this.onFolderDrop_ = async (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
@@ -62,7 +62,7 @@ class SideBarComponent extends React.Component {
 			}
 		};
 
-		this.onTagDrop_ = async event => {
+		this.onTagDrop_ = async (event) => {
 			const tagId = event.currentTarget.getAttribute('tagid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
@@ -77,7 +77,7 @@ class SideBarComponent extends React.Component {
 			}
 		};
 
-		this.onFolderToggleClick_ = async event => {
+		this.onFolderToggleClick_ = async (event) => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 
 			this.props.dispatch({
@@ -468,7 +468,7 @@ class SideBarComponent extends React.Component {
 		};
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
-		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
+		const expandIcon = <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
@@ -489,7 +489,7 @@ class SideBarComponent extends React.Component {
 					href="#"
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={event => this.itemContextMenu(event)}
+					onContextMenu={(event) => this.itemContextMenu(event)}
 					style={style}
 					folderid={folder.id}
 					onClick={() => {
@@ -517,7 +517,7 @@ class SideBarComponent extends React.Component {
 				ref={anchorRef}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={event => this.itemContextMenu(event)}
+				onContextMenu={(event) => this.itemContextMenu(event)}
 				tagid={tag.id}
 				key={tag.id}
 				style={style}
@@ -558,7 +558,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fa ${iconName}`} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fas ${iconName}`} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = 'pointer';
@@ -572,7 +572,7 @@ class SideBarComponent extends React.Component {
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
 			const isExpanded = this.state[toggleKey];
-			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
+			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 		if (extraProps.selected) {
 			style.backgroundColor = this.style().listItemSelected.backgroundColor;
@@ -586,7 +586,7 @@ class SideBarComponent extends React.Component {
 				style={style}
 				key={key}
 				{...extraProps}
-				onClick={event => {
+				onClick={(event) => {
 					// if a custom click event is attached, trigger that.
 					if (headerClick) {
 						headerClick(key, event);
@@ -712,7 +712,7 @@ class SideBarComponent extends React.Component {
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = 'fa-refresh';
+		const iconName = 'fa-sync-alt';
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const iconStyle = { fontSize: style.fontSize, marginRight: 5 };
 
@@ -720,7 +720,7 @@ class SideBarComponent extends React.Component {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
 		}
 
-		const icon = <i style={iconStyle} className={`fa ${iconName}`} />;
+		const icon = <i style={iconStyle} className={`fas ${iconName}`} />;
 		return (
 			<a
 				className="synchronize-button"
@@ -832,7 +832,7 @@ class SideBarComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

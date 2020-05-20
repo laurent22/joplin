@@ -189,7 +189,7 @@ class ClipperServer {
 					if (request.method === 'POST' || request.method === 'PUT') {
 						let body = '';
 
-						request.on('data', data => {
+						request.on('data', (data) => {
 							body += data;
 						});
 

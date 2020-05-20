@@ -208,7 +208,7 @@ class Dialog extends React.PureComponent {
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery);
 
-				resultsInBody = !!results.find(row => row.fields.includes('body'));
+				resultsInBody = !!results.find((row) => row.fields.includes('body'));
 
 				if (!resultsInBody) {
 					for (let i = 0; i < results.length; i++) {
@@ -219,7 +219,7 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body'] });
+					const notes = await Note.byIds(results.map((result) => result.id).slice(0, limit), { fields: ['id', 'body'] });
 					const notesById = notes.reduce((obj, { id, body }) => ((obj[[id]] = body), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
@@ -247,7 +247,7 @@ class Dialog extends React.PureComponent {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 							}

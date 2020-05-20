@@ -266,7 +266,7 @@
 
 		for (const preElement of preElements) {
 			const fontFamily = getComputedStyle(preElement).getPropertyValue('font-family');
-			const fontFamilyArray = fontFamily.split(',').map(f => f.toLowerCase().trim());
+			const fontFamilyArray = fontFamily.split(',').map((f) => f.toLowerCase().trim());
 			if (fontFamilyArray.indexOf('monospace') >= 0) {
 				preElement.style.fontFamily = fontFamily;
 			}

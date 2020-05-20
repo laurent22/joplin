@@ -57,6 +57,7 @@ module.exports = {
 		"require-atomic-updates": 0,
 		"prefer-const": ["error"],
 		"no-var": ["error"],
+		"no-new-func": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",
@@ -99,6 +100,7 @@ module.exports = {
 		"space-before-blocks": "error",
 		"spaced-comment": ["error", "always"],
 		"keyword-spacing": ["error", { "before": true, "after": true }],
+		"arrow-parens": ["error"],
 	},
 	"plugins": [
 		"react",

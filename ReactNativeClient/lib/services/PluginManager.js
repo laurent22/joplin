@@ -39,7 +39,7 @@ class PluginManager {
 		const p = this.plugins_[name];
 		if (p.instance) return p.instance;
 		p.instance = new p.Class();
-		p.instance.dispatch = action => this.dispatch_(action);
+		p.instance.dispatch = (action) => this.dispatch_(action);
 		return p.instance;
 	}
 
@@ -73,7 +73,7 @@ class PluginManager {
 
 	dialogProps_(name) {
 		return {
-			dispatch: action => this.dispatch_(action),
+			dispatch: (action) => this.dispatch_(action),
 			plugin: this.pluginInstance_(name),
 		};
 	}

@@ -53,7 +53,7 @@ class SearchEngine {
 
 	async rebuildIndex_() {
 		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		noteIds = noteIds.map(n => n.id);
+		noteIds = noteIds.map((n) => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -137,7 +137,7 @@ class SearchEngine {
 
 				if (!changes.length) break;
 
-				const noteIds = changes.map(a => a.item_id);
+				const noteIds = changes.map((a) => a.item_id);
 				const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 				const queries = [];
 
@@ -238,7 +238,7 @@ class SearchEngine {
 	processResults_(rows, parsedQuery) {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			const offsets = row.offsets.split(' ').map(o => Number(o));
+			const offsets = row.offsets.split(' ').map((o) => Number(o));
 			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
 			row.fields = this.fieldNamesFromOffsets_(offsets);
 		}

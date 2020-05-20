@@ -15,6 +15,7 @@ const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { BackButtonService } = require('lib/services/back-button.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -68,6 +69,14 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			Setting.setValue(r.name, r.value);
 		};
+
+		this.backHandler = () => {
+			if (this.dialogbox.state.isVisible) {
+				this.dialogbox.close();
+				return true;
+			}
+			return false;
+		};
 	}
 
 	styles() {
@@ -91,10 +100,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		await this.refreshNotes();
 		AppState.addEventListener('change', this.onAppStateChange_);
+		BackButtonService.addHandler(this.backHandler);
 	}
 
 	async componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		BackButtonService.removeHandler(this.backHandler);
 	}
 
 	async componentDidUpdate(prevProps) {
@@ -140,7 +151,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
-		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
+		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then((ok) => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
@@ -151,7 +162,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 						smartFilterId: 'c3176726992c11e9ac940492261af972',
 					});
 				})
-				.catch(error => {
+				.catch((error) => {
 					alert(error.message);
 				});
 		});
@@ -226,7 +237,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -235,7 +246,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NotesScreen = connect(state => {
+const NotesScreen = connect((state) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

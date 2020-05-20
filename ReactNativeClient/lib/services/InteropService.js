@@ -95,7 +95,7 @@ class InteropService {
 			},
 		];
 
-		importModules = importModules.map(a => {
+		importModules = importModules.map((a) => {
 			const className = a.importerClass || `InteropService_Importer_${toTitleCase(a.format)}`;
 			const output = Object.assign(
 				{},
@@ -109,7 +109,7 @@ class InteropService {
 			return output;
 		});
 
-		exportModules = exportModules.map(a => {
+		exportModules = exportModules.map((a) => {
 			const className = `InteropService_Exporter_${toTitleCase(a.format)}`;
 			return Object.assign(
 				{},
@@ -123,7 +123,7 @@ class InteropService {
 
 		this.modules_ = importModules.concat(exportModules);
 
-		this.modules_ = this.modules_.map(a => {
+		this.modules_ = this.modules_.map((a) => {
 			a.fullLabel = function(moduleSource = null) {
 				const label = [`${this.format.toUpperCase()} - ${this.description}`];
 				if (moduleSource && this.sources.length > 1) {
@@ -156,7 +156,7 @@ class InteropService {
 			}
 		}
 
-		const output = matches.find(m => !!m.isDefault);
+		const output = matches.find((m) => !!m.isDefault);
 		if (output) return output;
 
 		return matches.length ? matches[0] : null;

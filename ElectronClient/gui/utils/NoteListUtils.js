@@ -12,7 +12,7 @@ const { substrWithEllipsis } = require('lib/string-utils');
 
 class NoteListUtils {
 	static makeContextMenu(noteIds, props) {
-		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
+		const notes = noteIds.map((id) => BaseModel.byId(props.notes, id));
 
 		let hasEncrypted = false;
 		for (let i = 0; i < notes.length; i++) {

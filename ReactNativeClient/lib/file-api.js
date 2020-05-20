@@ -268,7 +268,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		newContext.statsCache.sort(function(a, b) {
 			return a.updated_time - b.updated_time;
 		});
-		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
+		newContext.statIdsCache = newContext.statsCache.filter((item) => BaseItem.isSystemPath(item.path)).map((item) => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 

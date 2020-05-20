@@ -1,4 +1,6 @@
 const darkStyle = {
+	appearance: 'dark',
+
 	backgroundColor: '#1D2024',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: '#dddddd',

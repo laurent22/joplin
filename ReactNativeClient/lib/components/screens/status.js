@@ -41,7 +41,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		const renderBody = report => {
+		const renderBody = (report) => {
 			const baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
@@ -144,7 +144,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const StatusScreen = connect(state => {
+const StatusScreen = connect((state) => {
 	return {
 		theme: state.settings.theme,
 	};

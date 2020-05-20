@@ -69,7 +69,7 @@ class Command extends BaseCommand {
 		const isImport = args.options.import || args.options.importFile;
 		const importFile = args.options.importFile;
 
-		const renderKeyValue = name => {
+		const renderKeyValue = (name) => {
 			const md = Setting.settingMetadata(name);
 			let value = Setting.value(name);
 			if (typeof value === 'object' || Array.isArray(value)) value = JSON.stringify(value);

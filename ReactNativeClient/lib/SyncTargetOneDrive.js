@@ -49,7 +49,7 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 		this.api_ = new OneDriveApi(this.oneDriveParameters().id, this.oneDriveParameters().secret, isPublic);
 		this.api_.setLogger(this.logger());
 
-		this.api_.on('authRefreshed', a => {
+		this.api_.on('authRefreshed', (a) => {
 			this.logger().info('Saving updated OneDrive auth.');
 			Setting.setValue(`sync.${this.syncTargetId()}.auth`, a ? JSON.stringify(a) : null);
 		});

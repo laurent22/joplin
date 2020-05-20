@@ -9,7 +9,7 @@ class ToolbarComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 
 		const style = Object.assign({
-			height: theme.toolbarHeight,
+			// height: theme.toolbarHeight,
 			display: 'flex',
 			flexDirection: 'row',
 			borderBottom: `1px solid ${theme.dividerColor}`,
@@ -51,7 +51,7 @@ class ToolbarComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return { theme: state.settings.theme };
 };
 

@@ -16,7 +16,6 @@ export interface NoteEditorProps {
 	windowCommand: any;
 	folders: any[];
 	notesParentType: string;
-	historyNotes: any[];
 	selectedNoteTags: any[];
 	lastEditorScrollPercents: any;
 	selectedNoteHash: string;
@@ -41,7 +40,6 @@ export interface NoteBodyEditorProps {
 	markupToHtml: Function;
 	htmlToMarkdown: Function;
 	allAssets: Function;
-	attachResources: Function;
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
@@ -50,6 +48,7 @@ export interface NoteBodyEditorProps {
 	keyboardMode: string,
 	resourceInfos: ResourceInfos,
 	locale: string,
+	onDrop: Function,
 }
 
 export interface FormNote {

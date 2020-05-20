@@ -85,7 +85,7 @@ class WebDavApi {
 	async xmlToJson(xml) {
 		const davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
-		const nameProcessor = name => {
+		const nameProcessor = (name) => {
 			if (name.indexOf('xmlns') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.

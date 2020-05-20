@@ -172,7 +172,7 @@ class MainScreenComponent extends React.Component {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
-					onClose: async answer => {
+					onClose: async (answer) => {
 						if (answer) {
 							let folder = null;
 							try {
@@ -197,7 +197,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.commonTagsByNoteIds(command.noteIds);
 			const startTags = tags
-				.map(a => {
+				.map((a) => {
 					return { value: a.id, label: a.title };
 				})
 				.sort((a, b) => {
@@ -206,7 +206,7 @@ class MainScreenComponent extends React.Component {
 					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
 			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags.map(a => {
+			const tagSuggestions = allTags.map((a) => {
 				return { value: a.id, label: a.title };
 			})
 				.sort((a, b) => {
@@ -221,24 +221,24 @@ class MainScreenComponent extends React.Component {
 					inputType: 'tags',
 					value: startTags,
 					autocomplete: tagSuggestions,
-					onClose: async answer => {
+					onClose: async (answer) => {
 						if (answer !== null) {
-							const endTagTitles = answer.map(a => {
+							const endTagTitles = answer.map((a) => {
 								return a.label.trim();
 							});
 							if (command.noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(command.noteIds[0], endTagTitles);
 							} else {
-								const startTagTitles = startTags.map(a => { return a.label.trim(); });
-								const addTags = endTagTitles.filter(value => !startTagTitles.includes(value));
-								const delTags = startTagTitles.filter(value => !endTagTitles.includes(value));
+								const startTagTitles = startTags.map((a) => { return a.label.trim(); });
+								const addTags = endTagTitles.filter((value) => !startTagTitles.includes(value));
+								const delTags = startTagTitles.filter((value) => !endTagTitles.includes(value));
 
 								// apply the tag additions and deletions to each selected note
 								for (let i = 0; i < command.noteIds.length; i++) {
 									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
-									let tagTitles = tags.map(a => { return a.title; });
+									let tagTitles = tags.map((a) => { return a.title; });
 									tagTitles = tagTitles.concat(addTags);
-									tagTitles = tagTitles.filter(value => !delTags.includes(value));
+									tagTitles = tagTitles.filter((value) => !delTags.includes(value));
 									await Tag.setNoteTagsByTitles(command.noteIds[i], tagTitles);
 								}
 							}
@@ -268,7 +268,7 @@ class MainScreenComponent extends React.Component {
 					inputType: 'dropdown',
 					value: '',
 					autocomplete: startFolders,
-					onClose: async answer => {
+					onClose: async (answer) => {
 						if (answer != null) {
 							for (let i = 0; i < command.noteIds.length; i++) {
 								await Note.moveToFolder(command.noteIds[i], answer.value);
@@ -286,7 +286,7 @@ class MainScreenComponent extends React.Component {
 					promptOptions: {
 						label: _('Rename notebook:'),
 						value: folder.title,
-						onClose: async answer => {
+						onClose: async (answer) => {
 							if (answer !== null) {
 								try {
 									folder.title = answer;
@@ -307,7 +307,7 @@ class MainScreenComponent extends React.Component {
 					promptOptions: {
 						label: _('Rename tag:'),
 						value: tag.title,
-						onClose: async answer => {
+						onClose: async (answer) => {
 							if (answer !== null) {
 								try {
 									tag.title = answer;
@@ -439,7 +439,7 @@ class MainScreenComponent extends React.Component {
 					inputType: 'dropdown',
 					value: this.props.templates[0], // Need to start with some value
 					autocomplete: this.props.templates,
-					onClose: async answer => {
+					onClose: async (answer) => {
 						if (answer) {
 							if (command.noteType === 'note' || command.noteType === 'todo') {
 								createNewNote(answer.value, command.noteType === 'todo');
@@ -605,7 +605,7 @@ class MainScreenComponent extends React.Component {
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
-		this.styles_.verticalResizer = {
+		this.styles_.verticalResizerSidebar = {
 			width: 5,
 			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
 			// making the whole window scroll vertically. So we remove 10 extra pixels here.
@@ -613,8 +613,10 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
+
 		this.styles_.sideBar = {
-			width: sidebarWidth - this.styles_.verticalResizer.width,
+			width: sidebarWidth - this.styles_.verticalResizerSidebar.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -623,10 +625,11 @@ class MainScreenComponent extends React.Component {
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
 			this.styles_.sideBar.display = 'none';
+			this.styles_.verticalResizerSidebar.display = 'none';
 		}
 
 		this.styles_.noteList = {
-			width: noteListWidth - this.styles_.verticalResizer.width,
+			width: noteListWidth - this.styles_.verticalResizerNotelist.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -635,7 +638,7 @@ class MainScreenComponent extends React.Component {
 		if (isNoteListVisible === false) {
 			this.styles_.noteList.width = 0;
 			this.styles_.noteList.display = 'none';
-			this.styles_.verticalResizer.display = 'none';
+			this.styles_.verticalResizerNotelist.display = 'none';
 		}
 
 		this.styles_.noteText = {
@@ -782,7 +785,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'fa-file',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
@@ -791,7 +794,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'fa-check-square',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newTodo' });
@@ -808,7 +811,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Code View'),
-			iconName: 'fa-file-code-o ',
+			iconName: 'fa-file-code ',
 			enabled: !!notes.length,
 			type: 'checkbox',
 			checked: this.props.settingEditorCodeView,
@@ -836,7 +839,7 @@ class MainScreenComponent extends React.Component {
 		headerItems.push({
 			title: _('Search...'),
 			iconName: 'fa-search',
-			onQuery: query => {
+			onQuery: (query) => {
 				this.doCommand({ name: 'search', query: query });
 			},
 			type: 'search',
@@ -874,9 +877,9 @@ class MainScreenComponent extends React.Component {
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
+				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
+				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
 				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
 				{pluginDialog}
 			</div>
@@ -884,7 +887,7 @@ class MainScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],

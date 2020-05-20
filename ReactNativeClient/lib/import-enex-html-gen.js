@@ -47,7 +47,7 @@ function attributeToLowerCase(node) {
 function enexXmlToHtml_(stream, resources) {
 	const remainingResources = resources.slice();
 
-	const removeRemainingResource = id => {
+	const removeRemainingResource = (id) => {
 		for (let i = 0; i < remainingResources.length; i++) {
 			const r = remainingResources[i];
 			if (r.id === id) {

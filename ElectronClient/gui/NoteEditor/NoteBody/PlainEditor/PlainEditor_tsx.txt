@@ -13,7 +13,6 @@ interface PlainEditorProps {
 	onChange(event: OnChangeEvent): void,
 	onWillChange(event:any): void,
 	markupToHtml: Function,
-	attachResources: Function,
 	disabled: boolean,
 }
 

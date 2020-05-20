@@ -100,18 +100,18 @@ class PromptDialog extends React.Component {
 		};
 
 		this.styles_.select = {
-			control: provided =>
+			control: (provided) =>
 				Object.assign(provided, {
 					minWidth: width * 0.2,
 					maxWidth: width * 0.5,
 					fontFamily: theme.fontFamily,
 				}),
-			input: provided =>
+			input: (provided) =>
 				Object.assign(provided, {
 					minWidth: '20px',
 					color: theme.color,
 				}),
-			menu: provided =>
+			menu: (provided) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
@@ -123,17 +123,17 @@ class PromptDialog extends React.Component {
 					fontFamily: theme.fontFamily,
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				}),
-			multiValueLabel: provided =>
+			multiValueLabel: (provided) =>
 				Object.assign(provided, {
 					fontFamily: theme.fontFamily,
 				}),
-			multiValueRemove: provided =>
+			multiValueRemove: (provided) =>
 				Object.assign(provided, {
 					color: theme.color,
 				}),
 		};
 
-		this.styles_.selectTheme = tagTheme =>
+		this.styles_.selectTheme = (tagTheme) =>
 			Object.assign(tagTheme, {
 				borderRadius: 2,
 				colors: Object.assign(tagTheme.colors, {
@@ -181,7 +181,7 @@ class PromptDialog extends React.Component {
 			this.setState({ visible: false, answer: '' });
 		};
 
-		const onChange = event => {
+		const onChange = (event) => {
 			this.setState({ answer: event.target.value });
 		};
 
@@ -194,16 +194,16 @@ class PromptDialog extends React.Component {
 		// 	return m.isValid() ? m.toDate() : null;
 		// }
 
-		const onDateTimeChange = momentObject => {
+		const onDateTimeChange = (momentObject) => {
 			this.setState({ answer: momentObject });
 		};
 
-		const onSelectChange = newValue => {
+		const onSelectChange = (newValue) => {
 			this.setState({ answer: newValue });
 			this.focusInput_ = true;
 		};
 
-		const onKeyDown = event => {
+		const onKeyDown = (event) => {
 			if (event.key === 'Enter') {
 				if (this.props.inputType !== 'tags' && this.props.inputType !== 'dropdown') {
 					onClose(true);
@@ -221,13 +221,13 @@ class PromptDialog extends React.Component {
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
-			inputComp = <Datetime value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
+			inputComp = <Datetime value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={(momentObject) => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event) => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event) => onKeyDown(event)} />;
 		} else {
-			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={(event) => onChange(event)} onKeyDown={(event) => onKeyDown(event)} />;
 		}
 
 		const buttonComps = [];

@@ -315,7 +315,7 @@ class Synchronizer {
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
-		const resourceRemotePath = resourceId => {
+		const resourceRemotePath = (resourceId) => {
 			return `${this.resourceDirName_}/${resourceId}`;
 		};
 
@@ -340,7 +340,7 @@ class Synchronizer {
 			if (syncSteps.indexOf('update_remote') >= 0) {
 				const donePaths = [];
 
-				const completeItemProcessing = path => {
+				const completeItemProcessing = (path) => {
 					donePaths.push(path);
 				};
 

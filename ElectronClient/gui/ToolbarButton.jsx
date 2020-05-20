@@ -14,10 +14,10 @@ class ToolbarButton extends React.Component {
 		if (this.props.iconName) {
 			const iconStyle = {
 				fontSize: Math.round(theme.fontSize * 1.5),
-				color: theme.color,
+				color: theme.iconColor,
 			};
 			if (title) iconStyle.marginRight = 5;
-			icon = <i style={iconStyle} className={`fa ${this.props.iconName}`}></i>;
+			icon = <i style={iconStyle} className={`fas ${this.props.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in this.props) || this.props.enabled === true;

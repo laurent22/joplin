@@ -110,7 +110,7 @@ describe('services_SearchEngine', function() {
 			const rows = await engine.search(testCase[0]);
 
 			for (let i = 0; i < notes.length; i++) {
-				const row = rows.find(row => row.id === notes[i].id);
+				const row = rows.find((row) => row.id === notes[i].id);
 				const actual = row ? row.fields.sort().join(',') : '';
 				const expected = testCase[i + 1].sort().join(',');
 				expect(expected).toBe(actual);
@@ -330,9 +330,9 @@ describe('services_SearchEngine', function() {
 			const expected = t[1];
 			const actual = engine.parseQuery(input);
 
-			const _Values = actual.terms._ ? actual.terms._.map(v => v.value) : undefined;
-			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
-			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
+			const _Values = actual.terms._ ? actual.terms._.map((v) => v.value) : undefined;
+			const titleValues = actual.terms.title ? actual.terms.title.map((v) => v.value) : undefined;
+			const bodyValues = actual.terms.body ? actual.terms.body.map((v) => v.value) : undefined;
 
 			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
 			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);

@@ -102,7 +102,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	comp.setState(newState);
 
 	if (isProvisionalNote) {
-		Note.updateGeolocation(note.id).then(geoNote => {
+		Note.updateGeolocation(note.id).then((geoNote) => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved

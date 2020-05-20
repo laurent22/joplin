@@ -57,7 +57,7 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 	if (!keywords.length) return text;
 
 	let regexString = keywords
-		.map(k => {
+		.map((k) => {
 			if (k.type === 'regex') {
 				return replaceRegexDiacritics(k.valueRegex);
 			} else {

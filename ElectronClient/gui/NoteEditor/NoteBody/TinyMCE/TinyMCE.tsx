@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { resourcesStatus } from '../../utils/resourceHandling';
+import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
-const { _ } = require('lib/locale');
+const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
 const { themeStyle, buildStyle } = require('../../../../theme.js');
 const { clipboard } = require('electron');
+const supportedLocales = require('./supportedLocales');
 
 function markupRenderOptions(override:any = null) {
 	return {
@@ -125,6 +126,7 @@ function styles_(props:NoteBodyEditorProps) {
 				padding: 20,
 				paddingTop: 50,
 				textAlign: 'center',
+				width: '100%',
 			},
 			rootStyle: {
 				position: 'relative',
@@ -142,12 +144,13 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
-
-	const attachResources = useRef(null);
-	attachResources.current = props.attachResources;
+	const [draggingStarted, setDraggingStarted] = useState(false);
 
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
+
+	const props_onDrop = useRef(null);
+	props_onDrop.current = props.onDrop;
 
 	const contextMenuActionOptions = useRef<ContextMenuOptions>(null);
 
@@ -172,6 +175,17 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
 	};
+
+	const insertResourcesIntoContent = useCallback(async (filePaths:string[] = null, options:any = null) => {
+		const resourceMd = await commandAttachFileToBody('', filePaths, options);
+		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
+		editor.insertContent(result.html);
+		// editor.fire('joplinChange');
+		// dispatchDidUpdate(editor);
+	}, [props.markupToHtml, editor]);
+
+	const insertResourcesIntoContentRef = useRef(null);
+	insertResourcesIntoContentRef.current = insertResourcesIntoContent;
 
 	const onEditorContentClick = useCallback((event:any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
@@ -239,6 +253,15 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					editor.insertContent(result.html);
 				} else if (cmd.name === 'focus') {
 					editor.focus();
+				} else if (cmd.name === 'dropItems') {
+					if (cmd.value.type === 'notes') {
+						const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value.markdownTags.join('\n'), markupRenderOptions({ bodyOnly: true }));
+						editor.insertContent(result.html);
+					} else if (cmd.value.type === 'files') {
+						insertResourcesIntoContentRef.current(cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
+					} else {
+						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
+					}
 				} else {
 					commandProcessed = false;
 				}
@@ -358,6 +381,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-editor-header {
+				border-top: 1px solid ${theme.dividerColor};
 				border-bottom: 1px solid ${theme.dividerColor};
 			}
 
@@ -370,8 +394,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox input,
 			.tox .tox-label,
 			.tox .tox-toolbar-label {
-				color: ${theme.color} !important;
-				fill: ${theme.color} !important;
+				color: ${theme.iconColor} !important;
+				fill: ${theme.iconColor} !important;
 			}
 
 			.tox .tox-statusbar a,
@@ -451,6 +475,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			const contextMenuItemNames = [];
 			for (const name in contextMenuItems) contextMenuItemNames.push(contextMenuItemNameWithNamespace(name));
 
+			const language = closestSupportedLocale(props.locale, true, supportedLocales);
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -467,7 +493,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				branding: false,
 				target_list: false,
 				table_resize_bars: false,
-				language: props.locale,
+				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
 				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
 				localization_function: _,
 				contextmenu: contextMenuItemNames.join(' '),
@@ -540,18 +566,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
 						onAction: async function() {
-							const resources = await attachResources.current();
-							if (!resources.length) return;
-
-							const html = [];
-							for (const resource of resources) {
-								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resource.markdownTag, markupRenderOptions({ bodyOnly: true }));
-								html.push(result.html);
-							}
-
-							editor.insertContent(html.join('\n'));
-							editor.fire('joplinChange');
-							dispatchDidUpdate(editor);
+							insertResourcesIntoContentRef.current();
 						},
 					});
 
@@ -633,6 +648,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						if (editable) openEditDialog(editable);
 					});
 
+					// This is triggered when an external file is dropped on the editor
+					editor.on('drop', (event:any) => {
+						props_onDrop.current(event);
+					});
+
 					editor.on('ObjectResized', function(event:any) {
 						if (event.target.nodeName === 'IMG') {
 							editor.fire('joplinChange');
@@ -662,7 +682,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
 		const cssFiles = [
-			'css/fork-awesome.min.css',
+			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
@@ -709,13 +729,12 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			if (lastOnChangeEventContent.current === props.content) return;
-
-			const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
-			if (cancelled) return;
-
-			lastOnChangeEventContent.current = props.content;
-			editor.setContent(result.html);
+			if (lastOnChangeEventContent.current !== props.content) {
+				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
+				if (cancelled) return;
+				lastOnChangeEventContent.current = props.content;
+				editor.setContent(result.html);
+			}
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
 
@@ -748,6 +767,34 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
 	}, [editor, onEditorContentClick]);
+
+	// This is to handle dropping notes on the editor. In this case, we add an
+	// overlay over the editor, which makes it a valid drop target. This in
+	// turn makes NoteEditor get the drop event and dispatch it.
+	useEffect(() => {
+		if (!editor) return () => {};
+
+		function onDragStart() {
+			setDraggingStarted(true);
+		}
+
+		function onDrop() {
+			setDraggingStarted(false);
+		}
+
+		function onDragEnd() {
+			setDraggingStarted(false);
+		}
+
+		document.addEventListener('dragstart', onDragStart);
+		document.addEventListener('drop', onDrop);
+		document.addEventListener('dragend', onDragEnd);
+		return () => {
+			document.removeEventListener('dragstart', onDragStart);
+			document.removeEventListener('drop', onDrop);
+			document.removeEventListener('dragend', onDragEnd);
+		};
+	}, [editor]);
 
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
@@ -833,18 +880,24 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		}
 
 		async function onPaste(event:any) {
-			const pastedText = event.clipboardData.getData('text');
-
-			if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
-				event.preventDefault();
-				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+			const resourceMds = await handlePasteEvent(event);
+			if (resourceMds.length) {
+				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
-			} else { // Paste regular text
-				// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
-				// so we manually add it here. We also can't do it immediately it seems, or
-				// else nothing is added to the stack, so do it on the next frame.
-				window.requestAnimationFrame(() => editor.undoManager.add());
-				onChangeHandler();
+			} else {
+				const pastedText = event.clipboardData.getData('text');
+
+				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+					event.preventDefault();
+					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+					editor.insertContent(result.html);
+				} else { // Paste regular text
+					// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
+					// so we manually add it here. We also can't do it immediately it seems, or
+					// else nothing is added to the stack, so do it on the next frame.
+					window.requestAnimationFrame(() => editor.undoManager.add());
+					onChangeHandler();
+				}
 			}
 		}
 
@@ -905,13 +958,14 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	// as it is quite complex and probably rarely used.
 	function renderDisabledOverlay() {
 		const status = resourcesStatus(props.resourceInfos);
-		if (status === 'ready') return null;
+		if (status === 'ready' && !draggingStarted) return null;
 
-		const message = _('Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.', _('Code View'));
+		const message = draggingStarted ? _('Drop notes or files here') : _('Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.', _('Code View'));
+		const statusComp = draggingStarted ? null : <p style={theme.textStyleMinor}>{`Status: ${status}`}</p>;
 		return (
 			<div style={styles.disabledOverlay}>
 				<p style={theme.textStyle}>{message}</p>
-				<p style={theme.textStyleMinor}>{`Status: ${status}`}</p>
+				{statusComp}
 			</div>
 		);
 	}

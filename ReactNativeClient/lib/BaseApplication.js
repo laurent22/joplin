@@ -358,7 +358,7 @@ class BaseApplication {
 	}
 
 	generalMiddlewareFn() {
-		const middleware = store => next => action => {
+		const middleware = (store) => (next) => (action) => {
 			return this.generalMiddleware(store, next, action);
 		};
 
@@ -441,6 +441,11 @@ class BaseApplication {
 		// would cause the sidebar to refresh all the time.
 		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
 			refreshFolders = true;
+		}
+
+		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
 		}
 
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
@@ -685,7 +690,7 @@ class BaseApplication {
 		if (!Setting.value('api.token')) {
 			EncryptionService.instance()
 				.randomHexString(64)
-				.then(token => {
+				.then((token) => {
 					Setting.setValue('api.token', token);
 				});
 		}

@@ -34,6 +34,7 @@ ElectronClient/lib/vendor/sjcl.js
 ElectronClient/locales
 ElectronClient/node_modules
 ElectronClient/packageInfo.js
+ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 highlight.pack.js
 Modules/TinyMCE/JoplinLists/
 node_modules/

@@ -1,4 +1,6 @@
 const draculaStyle = {
+	appearance: 'dark',
+
 	backgroundColor: '#282a36',
 	backgroundColorTransparent: 'rgba(40, 42, 54, 0.9)',
 	oddBackgroundColor: '#282a36',

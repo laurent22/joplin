@@ -119,7 +119,7 @@ class Tag extends BaseItem {
 		let commonTagIds = await NoteTag.tagIdsByNoteId(noteIds[0]);
 		for (let i = 1; i < noteIds.length; i++) {
 			const tagIds = await NoteTag.tagIdsByNoteId(noteIds[i]);
-			commonTagIds = commonTagIds.filter(value => tagIds.includes(value));
+			commonTagIds = commonTagIds.filter((value) => tagIds.includes(value));
 			if (commonTagIds.length === 0) {
 				break;
 			}
@@ -184,7 +184,7 @@ class Tag extends BaseItem {
 			}
 		}
 
-		return super.save(o, options).then(tag => {
+		return super.save(o, options).then((tag) => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
 				item: tag,

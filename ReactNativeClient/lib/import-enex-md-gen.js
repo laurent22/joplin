@@ -409,7 +409,7 @@ function isSpanStyleItalic(attributes) {
 function enexXmlToMdArray(stream, resources) {
 	const remainingResources = resources.slice();
 
-	const removeRemainingResource = id => {
+	const removeRemainingResource = (id) => {
 		for (let i = 0; i < remainingResources.length; i++) {
 			const r = remainingResources[i];
 			if (r.id === id) {
@@ -442,7 +442,7 @@ function enexXmlToMdArray(stream, resources) {
 			console.warn(e);
 		});
 
-		const unwrapInnerText = text => {
+		const unwrapInnerText = (text) => {
 			const lines = text.split('\n');
 
 			let output = '';

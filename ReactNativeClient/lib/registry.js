@@ -17,15 +17,15 @@ reg.logger = () => {
 	return reg.logger_;
 };
 
-reg.setLogger = l => {
+reg.setLogger = (l) => {
 	reg.logger_ = l;
 };
 
-reg.setShowErrorMessageBoxHandler = v => {
+reg.setShowErrorMessageBoxHandler = (v) => {
 	reg.showErrorMessageBoxHandler_ = v;
 };
 
-reg.showErrorMessageBox = message => {
+reg.showErrorMessageBox = (message) => {
 	if (!reg.showErrorMessageBoxHandler_) return;
 	reg.showErrorMessageBoxHandler_(message);
 };
@@ -124,7 +124,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 						reg.logger().info('Starting scheduled sync');
 						const options = Object.assign({}, syncOptions, { context: context });
 						if (!options.saveContextHandler) {
-							options.saveContextHandler = newContext => {
+							options.saveContextHandler = (newContext) => {
 								Setting.setValue(contextKey, JSON.stringify(newContext));
 							};
 						}
@@ -205,7 +205,7 @@ reg.setupRecurrentSync = () => {
 	}
 };
 
-reg.setDb = v => {
+reg.setDb = (v) => {
 	reg.db_ = v;
 };
 

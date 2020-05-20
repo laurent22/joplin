@@ -27,7 +27,7 @@ function shimInit() {
 		return shim.fsDriver_;
 	};
 
-	shim.randomBytes = async count => {
+	shim.randomBytes = async (count) => {
 		const buffer = require('crypto').randomBytes(count);
 		return Array.from(buffer);
 	};
@@ -281,7 +281,7 @@ function shimInit() {
 	const nodeFetch = require('node-fetch');
 
 	// Not used??
-	shim.readLocalFileBase64 = path => {
+	shim.readLocalFileBase64 = (path) => {
 		const data = fs.readFileSync(path);
 		return new Buffer(data).toString('base64');
 	};
@@ -336,7 +336,7 @@ function shimInit() {
 			return new Promise((resolve, reject) => {
 				let file = null;
 
-				const cleanUpOnError = error => {
+				const cleanUpOnError = (error) => {
 					// We ignore any unlink error as we only want to report on the main error
 					fs.unlink(filePath)
 						.catch(() => {})
@@ -399,7 +399,7 @@ function shimInit() {
 
 	shim.Buffer = Buffer;
 
-	shim.openUrl = url => {
+	shim.openUrl = (url) => {
 		const { bridge } = require('electron').remote.require('./bridge');
 		// Returns true if it opens the file successfully; returns false if it could
 		// not find the file.
@@ -408,7 +408,7 @@ function shimInit() {
 
 	shim.httpAgent_ = null;
 
-	shim.httpAgent = url => {
+	shim.httpAgent = (url) => {
 		if (shim.isLinux() && !shim.httpAgent) {
 			const AgentSettings = {
 				keepAlive: true,

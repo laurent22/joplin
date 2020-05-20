@@ -356,8 +356,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 					return pickerItems;
 				};
 
-				const titlePickerItems = mustSelect => {
-					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
+				const titlePickerItems = (mustSelect) => {
+					const folders = this.props.folders.filter((f) => f.id !== Folder.conflictFolderId());
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
 					const folderTree = Folder.buildTree(folders);
@@ -448,7 +448,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		const menuComp =
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
-				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
+				<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
 						<Icon name="md-more" style={this.styles().contextMenuTrigger} />
 					</MenuTrigger>
@@ -481,7 +481,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				</View>
 				{warningComps}
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -494,7 +494,7 @@ ScreenHeaderComponent.defaultProps = {
 	menuOptions: [],
 };
 
-const ScreenHeader = connect(state => {
+const ScreenHeader = connect((state) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 
 // eslint-disable-next-line no-unused-vars
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { commandAttachFileToBody } from '../../utils/resourceHandling';
+import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
 import useListIdent from './utils/useListIdent';
@@ -15,12 +15,9 @@ const AceEditorReact = require('react-ace').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
-const mimeUtils = require('lib/mime-utils.js').mime;
 const Setting = require('lib/models/Setting.js');
 const NoteTextViewer = require('../../../NoteTextViewer.min');
 const shared = require('lib/components/shared/note-screen-shared.js');
-const md5 = require('md5');
-const { shim } = require('lib/shim.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const markdownUtils = require('lib/markdownUtils');
@@ -37,8 +34,10 @@ require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
 require('brace/theme/chaos');
+require('brace/theme/tomorrow');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
+require('brace/theme/terminal');
 
 // TODO: Could not get below code to work
 
@@ -332,32 +331,13 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [editor, props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
-		const formats = clipboard.availableFormats();
-		for (let i = 0; i < formats.length; i++) {
-			const format = formats[i].toLowerCase();
-			const formatType = format.split('/')[0];
-
-			const position = currentTextOffset(editor, props.content);
-
-			if (formatType === 'image') {
-				if (event) event.preventDefault();
-
-				const image = clipboard.readImage();
-
-				const fileExt = mimeUtils.toFileExtension(format);
-				const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
-
-				await shim.writeImageToFile(image, format, filePath);
-				const newBody = await commandAttachFileToBody(props.content, [filePath], { position });
-				await shim.fsDriver().remove(filePath);
-
-				aceEditor_change(newBody);
-			}
-		}
-	}, [editor, props.content, aceEditor_change]);
+		const resourceMds = await handlePasteEvent(event);
+		if (!resourceMds.length) return;
+		wrapSelectionWithStrings('', '', resourceMds.join('\n'));
+	}, [wrapSelectionWithStrings]);
 
 	const onEditorKeyDown = useCallback((event: any) => {
-		setLastKeys(prevLastKeys => {
+		setLastKeys((prevLastKeys) => {
 			const keys = prevLastKeys.slice();
 			keys.push(event.key);
 			while (keys.length > 2) keys.splice(0, 1);
@@ -516,7 +496,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		} else {
 			props.onMessage(event);
 		}
-	}, [props.onMessage, props.content, aceEditor_change]);
+	}, [props.onMessage, props.content, aceEditor_change, setEditorPercentScroll]);
 
 	useEffect(() => {
 		let cancelled = false;

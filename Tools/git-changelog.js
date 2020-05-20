@@ -47,6 +47,7 @@ function filterLogs(logs, platform) {
 	const output = [];
 	const revertedLogs = [];
 
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	let updatedTranslations = false;
 
 	for (const log of logs) {
@@ -63,7 +64,7 @@ function filterLogs(logs, platform) {
 
 		let prefix = log.message.trim().toLowerCase().split(':');
 		if (prefix.length <= 1) continue;
-		prefix = prefix[0].split(',').map(s => s.trim());
+		prefix = prefix[0].split(',').map((s) => s.trim());
 
 		let addIt = false;
 
@@ -88,7 +89,8 @@ function filterLogs(logs, platform) {
 		if (addIt) output.push(log);
 	}
 
-	if (updatedTranslations) output.push({ message: 'Updated translations' });
+	// Actually we don't really need this info - translations are being updated all the time
+	// if (updatedTranslations) output.push({ message: 'Updated translations' });
 
 	return output;
 }
@@ -102,8 +104,8 @@ function formatCommitMessage(msg, author, options) {
 
 	let subModule = '';
 
-	const isPlatformPrefix = prefix => {
-		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
+	const isPlatformPrefix = (prefix) => {
+		prefix = prefix.split(',').map((p) => p.trim().toLowerCase());
 		for (const p of prefix) {
 			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api'].indexOf(p) >= 0) return true;
 		}
@@ -122,7 +124,7 @@ function formatCommitMessage(msg, author, options) {
 
 	output = output.split('\n')[0].trim();
 
-	const detectType = msg => {
+	const detectType = (msg) => {
 		msg = msg.trim().toLowerCase();
 
 		if (msg.indexOf('fix') === 0) return 'fixed';
@@ -145,7 +147,8 @@ function formatCommitMessage(msg, author, options) {
 			};
 		}
 
-		let t = parts[0].trim().toLowerCase();
+		let originalType = parts[0].trim();
+		let t = originalType.toLowerCase();
 
 		parts.splice(0, 1);
 		let message = parts.join(':').trim();
@@ -159,13 +162,26 @@ function formatCommitMessage(msg, author, options) {
 			t = parts[0].trim().toLowerCase();
 			parts.splice(0, 1);
 			message = parts.join(':').trim();
+		} else if (t.indexOf('resolves') === 0) { // If we didn't have the third token default to "improved"
+			t = 'improved';
+			message = parts.join(':').trim();
 		}
 
 		if (t.indexOf('fix') === 0) type = 'fixed';
 		if (t.indexOf('new') === 0) type = 'new';
 		if (t.indexOf('improved') === 0) type = 'improved';
 
-		if (!type) type = detectType(message);
+		if (t.indexOf('security') === 0) {
+			type = 'security';
+			parts.splice(0, 1);
+			message = parts.join(':').trim();
+		}
+
+		if (!type) {
+			type = detectType(message);
+			if (originalType.toLowerCase() === 'tinymce') originalType = 'WYSIWYG';
+			message = `${originalType}: ${message}`;
+		}
 
 		let issueNumber = output.match(/#(\d+)/);
 		issueNumber = issueNumber && issueNumber.length >= 2 ? issueNumber[1] : null;
@@ -282,7 +298,7 @@ async function main() {
 	const changelogNews = [];
 
 	for (const l of changelog) {
-		if (l.indexOf('Fix') === 0) {
+		if (l.indexOf('Fix') === 0 || l.indexOf('Security') === 0) {
 			changelogFixes.push(l);
 		} else if (l.indexOf('Improve') === 0) {
 			changelogImproves.push(l);
@@ -293,9 +309,13 @@ async function main() {
 		}
 	}
 
+	changelogFixes.sort();
+	changelogImproves.sort();
+	changelogNews.sort();
+
 	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 
-	const changelogString = changelog.map(l => `- ${l}`);
+	const changelogString = changelog.map((l) => `- ${l}`);
 	console.info(changelogString.join('\n'));
 }
 

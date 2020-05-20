@@ -50,7 +50,7 @@ class SyncTargetDropbox extends BaseSyncTarget {
 			secret: params.secret,
 		});
 
-		api.on('authRefreshed', auth => {
+		api.on('authRefreshed', (auth) => {
 			this.logger().info('Saving updated Dropbox auth.');
 			Setting.setValue(`sync.${SyncTargetDropbox.id()}.auth`, auth ? auth : null);
 		});

@@ -78,7 +78,7 @@ class AppNavComponent extends Component {
 	}
 }
 
-const AppNav = connect(state => {
+const AppNav = connect((state) => {
 	return {
 		route: state.route,
 		theme: state.settings.theme,

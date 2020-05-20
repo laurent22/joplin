@@ -165,7 +165,7 @@ class DropboxApi {
 				};
 
 				// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-				const newError = message => {
+				const newError = (message) => {
 					const json = loadResponseJson();
 					let code = '';
 					if (json && json.error_summary) {
