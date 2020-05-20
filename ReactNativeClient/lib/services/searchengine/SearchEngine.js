@@ -454,13 +454,13 @@ class SearchEngine {
 			// console.log(params);
 			try {
 
-				const startTime = Date.now();
+				// const startTime = Date.now();
 
 				const rows = await this.db().selectAll(query, params);
 
-				const timeTaken = Date.now() - startTime;
-				console.log(`Time taken for query '${searchString}': ${timeTaken}ms`);
-				console.log(`Rows returned ${rows.length}`);
+				// const timeTaken = Date.now() - startTime;
+				// console.log(`Time taken for query '${searchString}': ${timeTaken}ms`);
+				// console.log(`Rows returned ${rows.length}`);
 
 				// const
 				this.processResults_(rows);

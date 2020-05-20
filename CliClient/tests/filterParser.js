@@ -128,4 +128,28 @@ describe('filterParser should be correct filter for keyword', () => {
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
+
+	it('negated tag queries', () => {
+		const searchString = '-tag:instagram';
+		const expected = new Map([
+			['tag', [{ relation: 'NOT', value: 'instagram' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('in a notebook', () => {
+		const searchString = 'notebook:notebook1';
+		const expected = new Map([
+			['notebook', [{ relation: 'AND', value: 'notebook1' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('NOT in a notebook', () => {
+		const searchString = '-notebook:notebook1';
+		const expected = new Map([
+			['notebook', [{ relation: 'NOT', value: 'notebook1' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
 });

@@ -4,15 +4,19 @@ require('app-module-path').addPath(__dirname);
 
 // For pretty printing.
 // See https://stackoverflow.com/questions/23676459/karma-jasmine-pretty-printing-object-comparison/26324116
-// jasmine.pp = function(obj) {
-// 	return JSON.stringify(obj, undefined, 2);
-// };
+jasmine.pp = function(obj) {
+	return JSON.stringify(obj, undefined, 2);
+};
 
 const { queryBuilder } = require('lib/services/searchengine/queryBuilder.js');
 
 const tagSQL = 'tag_filter as (SELECT note_tags.note_id as id FROM note_tags WHERE 1 INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?))';
-
+const negatedTagSQL = tagSQL.replace('INTERSECT', 'EXCEPT');
 const tagDoubleSQL = 'tag_filter as (SELECT note_tags.note_id as id FROM note_tags WHERE 1 INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?) INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?))';
+
+const notebookSQL = `child_notebooks(id) as (select folders.id from folders where id=(select id from folders where folders.title LIKE ?)
+union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
+// select * from child_notebooks;`
 
 const defaultSQL = `SELECT
 	notes_fts.id,
@@ -152,7 +156,7 @@ describe('queryBuilder should give correct sql', () => {
 			['tag', [{ relation: 'AND', value: 'tag123' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: `WITH ${tagSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
+			query: `WITH RECURSIVE ${tagSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
 			params: ['tag123'],
 		});
 
@@ -160,8 +164,40 @@ describe('queryBuilder should give correct sql', () => {
 			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag345' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: `WITH ${tagDoubleSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
+			query: `WITH RECURSIVE ${tagDoubleSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
 			params: ['tag123', 'tag345'],
 		});
 	});
+
+	it('when filter contains negated tags', () => {
+		const filters = new Map([
+			['tag', [{ relation: 'NOT', value: 'instagram' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `WITH RECURSIVE ${negatedTagSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
+			params: ['instagram'],
+		});
+	});
+
+	it('when filter contains notebook', () => {
+		let filters = new Map([
+			['notebook', [{ relation: 'AND', value: 'notebook1' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `WITH RECURSIVE ${notebookSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`,
+			params: ['notebook1'],
+		});
+
+		filters = new Map([
+			['notebook', [{ relation: 'NOT', value: 'notebook1' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `WITH RECURSIVE ${notebookSQL} ${defaultSQL} AND ROWID NOT IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`,
+			params: ['notebook1'],
+		});
+
+
+	});
+
+
 });

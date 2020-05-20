@@ -56,7 +56,14 @@ const parseQuery = (query: string): Array<Filter> => {
 		if (terms[i][0] !== '_') {
 			// Hopefully a valid filter
 			// TO DO : handle negation
-			result.push({ relation: relation, name: terms[i][0], value: terms[i][1] });
+			const name = terms[i][0];
+			const value = terms[i][1];
+
+			if (name.startsWith('-')) {
+				result.push({ relation: 'NOT', name: name.slice(1), value: value });
+			} else {
+				result.push({ relation, name, value });
+			}
 			relation = 'AND'; // reset to default
 		} else {
 			// could be AND or OR or text to fts search

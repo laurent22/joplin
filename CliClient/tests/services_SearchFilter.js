@@ -4,9 +4,10 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('test-utils.js');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Note = require('lib/models/Note');
+const Folder = require('lib/models/Folder');
 const Tag = require('lib/models/Tag');
 const ItemChange = require('lib/models/ItemChange');
 const Setting = require('lib/models/Setting');
@@ -161,14 +162,13 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by tags', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
-		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
-		const n3 = await Note.save({ title: 'storm front', body: 'wicked wizard' });
+		const n1 = await Note.save({ title: 'Peace Talks', body: 'Battle Ground' });
+		const n2 = await Note.save({ title: 'Mouse', body: 'Mister' });
+		const n3 = await Note.save({ title: 'Dresden Files', body: 'Harry Dresden' });
 
 		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
 		await Tag.setNoteTagsByTitles(n2.id, ['tag2', 'tag3']);
 		await Tag.setNoteTagsByTitles(n3.id, ['tag3', 'tag4']);
-		await sleep(0.1);
 
 		await engine.syncTables();
 
@@ -189,7 +189,61 @@ describe('services_SearchFilter', function() {
 
 		rows = await engine.search('tag:tag2 tag:tag3 tag:tag4');
 		expect(rows.length).toBe(0);
+
+		rows = await engine.search('-tag:tag2');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n3.id);
 	}));
+
+	it('should support filtering by notebook', asyncTest(async () => {
+		let rows;
+		const folder0 = await Folder.save({ title: 'notebook0' });
+		const folder1 = await Folder.save({ title: 'notebook1' });
+		const notes0 = await createNTestNotes(5, folder0);
+		const notes1 = await createNTestNotes(5, folder1);
+
+		await engine.syncTables();
+
+		rows = await engine.search('notebook:notebook0');
+		expect(rows.length).toBe(5);
+		expect(ids(rows).sort()).toEqual(ids(notes0).sort());
+
+	}));
+
+	it('should support filtering by nested notebook', asyncTest(async () => {
+		let rows;
+		const folder0 = await Folder.save({ title: 'notebook0' });
+		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
+		const folder1 = await Folder.save({ title: 'notebook1' });
+		const notes0 = await createNTestNotes(5, folder0);
+		const notes00 = await createNTestNotes(5, folder00);
+		const notes1 = await createNTestNotes(5, folder1);
+
+		await engine.syncTables();
+
+		rows = await engine.search('notebook:notebook0');
+		expect(rows.length).toBe(10);
+		expect(ids(rows).sort()).toEqual(ids(notes0.concat(notes00)).sort());
+	}));
+
+	it('should support filtering by negated notebook', asyncTest(async () => {
+		let rows;
+		const folder0 = await Folder.save({ title: 'notebook0' });
+		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
+		const folder1 = await Folder.save({ title: 'notebook1' });
+		const notes0 = await createNTestNotes(5, folder0);
+		const notes00 = await createNTestNotes(5, folder00);
+		const notes1 = await createNTestNotes(5, folder1);
+
+		await engine.syncTables();
+
+		rows = await engine.search('-notebook:notebook0');
+		expect(rows.length).toBe(5);
+		expect(ids(rows).sort()).toEqual(ids(notes1).sort());
+	}));
+
+
+
 
 
 });
