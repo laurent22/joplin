@@ -152,4 +152,22 @@ describe('filterParser should be correct filter for keyword', () => {
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
+
+	it('created on DATE', () => {
+		const searchString = 'created:20151218'; // YYYYMMDD
+		const expected = new Map([
+			['created', [{ relation: 'AND', value: '20151218' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('updated on DATE', () => {
+		const searchString = 'updated:20151218'; // YYYYMMDD
+		const expected = new Map([
+			['updated', [{ relation: 'AND', value: '20151218' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+
 });

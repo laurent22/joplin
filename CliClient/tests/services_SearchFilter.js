@@ -242,6 +242,42 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows).sort()).toEqual(ids(notes1).sort());
 	}));
 
+	it('should support filtering by created date', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: Date.parse('2020-05-20') });
+		const n2 = await Note.save({ title: 'I made this on', body: 'May 19 2020', user_created_time: Date.parse('2020-05-19') });
+
+		await engine.syncTables();
+
+		rows = await engine.search('created:20200520');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('created:20200519');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+	}));
+
+	// Not working -- would it have anything to do with not using user_updated time?
+	it('should support filtering by updated date', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'I updated this on', body: 'May 20 2020', updated_time: Date.parse('2020-05-20'), user_updated_time: Date.parse('2020-05-20') }, { autoTimestamp: false });
+		const n2 = await Note.save({ title: 'I updated this on', body: 'May 19 2020', updated_time: Date.parse('2020-05-20'), user_updated_time: Date.parse('2020-05-19') }, { autoTimestamp: false });
+
+		await engine.syncTables();
+
+		rows = await engine.search('updated:20200520');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('updated:20200519');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+	}));
+
+
+
+
 
 
 

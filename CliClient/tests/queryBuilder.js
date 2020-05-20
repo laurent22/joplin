@@ -195,8 +195,27 @@ describe('queryBuilder should give correct sql', () => {
 			query: `WITH RECURSIVE ${notebookSQL} ${defaultSQL} AND ROWID NOT IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`,
 			params: ['notebook1'],
 		});
+	});
 
 
+	it('when filter contains created date', () => {
+		const filters = new Map([
+			['created', [{ relation: 'AND', value: '20151218' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `${defaultSQL} AND ROWID IN (SELECT ROWID from notes where notes.user_created_time >= ? AND notes.user_created_time < ?)`,
+			params: ['1450396800000', '1450483200000'],
+		});
+	});
+
+	it('when filter contains updated date', () => {
+		const filters = new Map([
+			['updated', [{ relation: 'AND', value: '20151218' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `${defaultSQL} AND ROWID IN (SELECT ROWID from notes where notes.user_updated_time >= ? AND notes.user_updated_time < ?)`,
+			params: ['1450396800000', '1450483200000'],
+		});
 	});
 
 

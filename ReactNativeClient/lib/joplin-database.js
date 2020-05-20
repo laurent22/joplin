@@ -701,21 +701,24 @@ class JoplinDatabase extends Database {
 				// Can't add columns to virtual tables
 				queries.push('DROP TABLE notes_fts');
 
-				queries.push(`CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes",
-				notindexed="id", notindexed="created_time", notindexed="updated_time", notindexed="is_todo", notindexed="todo_completed", notindexed="parent_id",
-				id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id);`);
+				// TO DO: Remove fields that we don't use!
+				// eg. user_created_time and user_updated_time and used directly from notes table.
 
-				queries.push(`INSERT INTO notes_fts(docid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id)
-				SELECT rowid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0`);
+				queries.push(`CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes",
+				notindexed="id", notindexed="user_created_time", notindexed="user_updated_time", notindexed="is_todo", notindexed="todo_completed", notindexed="parent_id",
+				id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id);`);
+
+				queries.push(`INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id)
+				SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0`);
 
 				queries.push('DROP trigger notes_after_update');
 				queries.push('DROP trigger notes_after_insert');
 
 				queries.push(`CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
-				INSERT INTO notes_fts(docid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+				INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
 				END`);
 				queries.push(`CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
-				INSERT INTO notes_fts(docid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, created_time, updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+				INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
 				END`);
 			}
 
