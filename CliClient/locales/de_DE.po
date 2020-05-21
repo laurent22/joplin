@@ -2304,7 +2304,7 @@ msgstr "Ja"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr "(WYSIWYG kompatibel: %s)"
+msgstr "(WYSIWYG: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 msgid "no"
