@@ -42,69 +42,9 @@ export function selectedText(selectionRange: any, body: string) {
 	return body.substr(selection.start, selection.end - selection.start);
 }
 
-function selectionRangesEqual(s1:any, s2:any) {
-	if (s1 === s2) return true;
-	if (!s1 && !s2) return true;
-
-	if (s1 && !s2) return false;
-	if (!s1 && s2) return false;
-
-	if (s1.start.row !== s2.start.row) return false;
-	if (s1.start.column !== s2.start.column) return false;
-	if (s1.end.row !== s2.end.row) return false;
-	if (s1.end.column !== s2.end.column) return false;
-
-	return true;
-}
-
-export function useSelectionRange(editor: any) {
-	const [selectionRange, setSelectionRange] = useState(null);
-
-	useEffect(() => {
-		if (!editor) return () => {};
-
-		function updateSelection() {
-			const ranges = editor.getSelection().getAllRanges();
-			const firstRange = ranges && ranges.length ? ranges[0] : null;
-
-			// Ace Editor might sometimes send multiple "changeSelection" events
-			// with the same selection range, which triggers unecessary updates
-			// and even infinite rendering loops. So before setting it on the state
-			// we deep compare the previous and new selection.
-			// https://github.com/laurent22/joplin/issues/3200
-			setSelectionRange((prev:any) => {
-				if (selectionRangesEqual(prev, firstRange)) return prev;
-				return firstRange;
-			});
-
-			// if (process.platform === 'linux') {
-			// 	const textRange = this.textOffsetSelection();
-			// 	if (textRange.start != textRange.end) {
-			// 		clipboard.writeText(this.state.note.body.slice(
-			// 			Math.min(textRange.start, textRange.end),
-			// 			Math.max(textRange.end, textRange.start)), 'selection');
-			// 	}
-			// }
-		}
-
-		function onSelectionChange() {
-			updateSelection();
-		}
-
-		function onFocus() {
-			updateSelection();
-		}
-
-		editor.getSession().selection.on('changeSelection', onSelectionChange);
-		editor.on('focus', onFocus);
-
-		return () => {
-			editor.getSession().selection.off('changeSelection', onSelectionChange);
-			editor.off('focus', onFocus);
-		};
-	}, [editor]);
-
-	return selectionRange;
+export function selectionRange(editor:any) {
+	const ranges = editor.getSelection().getAllRanges();
+	return ranges && ranges.length ? ranges[0] : null;
 }
 
 export function textOffsetToCursorPosition(offset: number, body: string) {
