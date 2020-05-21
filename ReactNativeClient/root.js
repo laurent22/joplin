@@ -627,7 +627,7 @@ class AppComponent extends React.Component {
 
 		const sharedData = await ShareExtension.data();
 		if (sharedData) {
-			reg.logger().info(`Received shared data: ${JSON.stringify(sharedData)}`);
+			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
 				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
 			} else {
