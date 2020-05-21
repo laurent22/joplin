@@ -55,10 +55,10 @@ class TaskQueue {
 
 			task
 				.callback()
-				.then((result) => {
+				.then(result => {
 					completeTask(task, result, null);
 				})
-				.catch((error) => {
+				.catch(error => {
 					if (!error) error = new Error('Unknown error');
 					completeTask(task, null, error);
 				});
@@ -68,7 +68,7 @@ class TaskQueue {
 	}
 
 	isWaiting(taskId) {
-		return this.waitingTasks_.find((task) => task.id === taskId);
+		return this.waitingTasks_.find(task => task.id === taskId);
 	}
 
 	isProcessing(taskId) {

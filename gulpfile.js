@@ -20,9 +20,9 @@ const updateIgnoredTypeScriptBuildTask = async function() {
 			'**/Modules/TinyMCE/JoplinLists/**',
 			'**/Modules/TinyMCE/IconPack/**',
 		],
-	}).map((f) => f.substr(__dirname.length + 1));
+	}).map(f => f.substr(__dirname.length + 1));
 
-	const ignoredFiles = tsFiles.map((f) => {
+	const ignoredFiles = tsFiles.map(f => {
 		const s = f.split('.');
 		s.pop();
 		return `${s.join('.')}.js`;

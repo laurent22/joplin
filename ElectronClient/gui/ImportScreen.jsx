@@ -67,7 +67,7 @@ class ImportScreenComponent extends React.Component {
 		let lastProgress = '';
 
 		const options = {
-			onProgress: (progressState) => {
+			onProgress: progressState => {
 				const line = [];
 				line.push(_('Found: %d.', progressState.loaded));
 				line.push(_('Created: %d.', progressState.created));
@@ -78,7 +78,7 @@ class ImportScreenComponent extends React.Component {
 				lastProgress = line.join(' ');
 				this.addMessage('progress', lastProgress);
 			},
-			onError: (error) => {
+			onError: error => {
 				// Don't display the error directly because most of the time it doesn't matter
 				// (eg. for weird broken HTML, but the note is still imported)
 				console.warn('When importing ENEX file', error);
@@ -123,7 +123,7 @@ class ImportScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

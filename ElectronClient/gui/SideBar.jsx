@@ -20,7 +20,7 @@ class SideBarComponent extends React.Component {
 	constructor() {
 		super();
 
-		this.onFolderDragStart_ = (event) => {
+		this.onFolderDragStart_ = event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
 
@@ -29,12 +29,12 @@ class SideBarComponent extends React.Component {
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 		};
 
-		this.onFolderDragOver_ = (event) => {
+		this.onFolderDragOver_ = event => {
 			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 			if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 		};
 
-		this.onFolderDrop_ = async (event) => {
+		this.onFolderDrop_ = async event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
@@ -62,7 +62,7 @@ class SideBarComponent extends React.Component {
 			}
 		};
 
-		this.onTagDrop_ = async (event) => {
+		this.onTagDrop_ = async event => {
 			const tagId = event.currentTarget.getAttribute('tagid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
@@ -77,7 +77,7 @@ class SideBarComponent extends React.Component {
 			}
 		};
 
-		this.onFolderToggleClick_ = async (event) => {
+		this.onFolderToggleClick_ = async event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 
 			this.props.dispatch({
@@ -489,7 +489,7 @@ class SideBarComponent extends React.Component {
 					href="#"
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={(event) => this.itemContextMenu(event)}
+					onContextMenu={event => this.itemContextMenu(event)}
 					style={style}
 					folderid={folder.id}
 					onClick={() => {
@@ -517,7 +517,7 @@ class SideBarComponent extends React.Component {
 				ref={anchorRef}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={(event) => this.itemContextMenu(event)}
+				onContextMenu={event => this.itemContextMenu(event)}
 				tagid={tag.id}
 				key={tag.id}
 				style={style}
@@ -586,7 +586,7 @@ class SideBarComponent extends React.Component {
 				style={style}
 				key={key}
 				{...extraProps}
-				onClick={(event) => {
+				onClick={event => {
 					// if a custom click event is attached, trigger that.
 					if (headerClick) {
 						headerClick(key, event);
@@ -832,7 +832,7 @@ class SideBarComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

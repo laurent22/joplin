@@ -110,7 +110,7 @@ export default class MarkdownEditor extends React.Component {
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
 	};
 
-	onSelectionChange = (event) => {
+	onSelectionChange = event => {
 		this.setState({ selection: event.nativeEvent.selection });
 	};
 

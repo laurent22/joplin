@@ -176,7 +176,7 @@ class ResourceFetcher extends BaseService {
 				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
 				await completeDownload(true, localResourceContentPath);
 			})
-			.catch(async (error) => {
+			.catch(async error => {
 				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
 				await completeDownload();

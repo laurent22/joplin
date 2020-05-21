@@ -143,7 +143,7 @@ cliUtils.promptMcq = function(message, answers) {
 	message += _('Your choice: ');
 
 	return new Promise((resolve, reject) => {
-		rl.question(message, (answer) => {
+		rl.question(message, answer => {
 			rl.close();
 
 			if (!(answer in answers)) {
@@ -168,7 +168,7 @@ cliUtils.promptConfirm = function(message, answers = null) {
 	message += ` (${answers.join('/')})`;
 
 	return new Promise((resolve) => {
-		rl.question(`${message} `, (answer) => {
+		rl.question(`${message} `, answer => {
 			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
 			rl.close();
 			resolve(ok);
@@ -202,7 +202,7 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 	return new Promise((resolve) => {
 		mutableStdout.muted = false;
 
-		rl.question(promptString, (answer) => {
+		rl.question(promptString, answer => {
 			rl.close();
 			if (options.secure) this.stdout_('');
 			resolve(answer);

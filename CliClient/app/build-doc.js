@@ -49,7 +49,7 @@ function renderCommand(cmd) {
 
 function getCommands() {
 	const output = [];
-	fs.readdirSync(__dirname).forEach((path) => {
+	fs.readdirSync(__dirname).forEach(path => {
 		if (path.indexOf('command-') !== 0) return;
 		const ext = fileExtension(path);
 		if (ext != 'js') return;
@@ -134,6 +134,6 @@ async function main() {
 	console.info(`${headerText}\n\n` + 'USAGE' + `\n\n${commandsText}\n\n${footerText}`);
 }
 
-main().catch((error) => {
+main().catch(error => {
 	console.error(error);
 });

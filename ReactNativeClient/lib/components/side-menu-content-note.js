@@ -106,7 +106,7 @@ class SideMenuContentNoteComponent extends Component {
 	}
 }
 
-const SideMenuContentNote = connect((state) => {
+const SideMenuContentNote = connect(state => {
 	return {
 		theme: state.settings.theme,
 	};

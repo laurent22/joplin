@@ -2328,11 +2328,11 @@ async function main() {
 		clients[clientId].activeCommandCount++;
 
 		execRandomCommand(clients[clientId])
-			.catch((error) => {
+			.catch(error => {
 				logger.info(`Client ${clientId}:`);
 				logger.error(error);
 			})
-			.then((r) => {
+			.then(r => {
 				if (r) {
 					logger.info(`Client ${clientId}:\n${r.trim()}`);
 				}
@@ -2397,6 +2397,6 @@ async function main() {
 	}, 100);
 }
 
-main(process.argv).catch((error) => {
+main(process.argv).catch(error => {
 	logger.error(error);
 });

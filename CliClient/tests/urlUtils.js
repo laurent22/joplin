@@ -76,7 +76,7 @@ describe('urlUtils', function() {
 			const result = urlUtils.extractResourceUrls(t[0]);
 			const expected = t[1];
 
-			const itemIds = result.map((r) => r.itemId);
+			const itemIds = result.map(r => r.itemId);
 			expect(itemIds.sort().join(',')).toBe(expected.sort().join(','));
 		}
 	}));

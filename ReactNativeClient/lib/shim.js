@@ -114,7 +114,7 @@ shim.fetchRequestCanBeRetried = function(error) {
 
 shim.fetchMaxRetry_ = 5;
 
-shim.fetchMaxRetrySet = (v) => {
+shim.fetchMaxRetrySet = v => {
 	const previous = shim.fetchMaxRetry_;
 	shim.fetchMaxRetry_ = v;
 	return previous;
@@ -153,7 +153,7 @@ shim.fsDriver = () => {
 };
 shim.FileApiDriverLocal = null;
 
-shim.readLocalFileBase64 = (path) => {
+shim.readLocalFileBase64 = path => {
 	throw new Error('Not implemented');
 };
 
@@ -163,7 +163,7 @@ shim.uploadBlob = () => {
 
 shim.sjclModule = null;
 
-shim.randomBytes = async (count) => {
+shim.randomBytes = async count => {
 	throw new Error('Not implemented');
 };
 
@@ -204,7 +204,7 @@ shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
 
-shim.injectedJs = (name) => '';
+shim.injectedJs = name => '';
 
 let isTestingEnv_ = false;
 

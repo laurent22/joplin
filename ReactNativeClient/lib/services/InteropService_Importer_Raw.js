@@ -18,7 +18,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
-		const replaceLinkedItemIds = async (noteBody) => {
+		const replaceLinkedItemIds = async noteBody => {
 			let output = noteBody;
 			const itemIds = Note.linkedItemIds(noteBody);
 
@@ -52,7 +52,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			return defaultFolder_;
 		};
 
-		const setFolderToImportTo = async (itemParentId) => {
+		const setFolderToImportTo = async itemParentId => {
 			// Logic is a bit complex here:
 			// - If a destination folder was specified, move the note to it.
 			// - Otherwise, if the associated folder exists, use this.

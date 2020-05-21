@@ -9,7 +9,7 @@ async function main() {
 	await fs.mkdirp(destDir);
 	await fs.copy(sourceDir, destDir);
 
-	const supportedLocales = glob.sync(`${sourceDir}/*.js`).map((s) => {
+	const supportedLocales = glob.sync(`${sourceDir}/*.js`).map(s => {
 		s = s.split('/');
 		s = s[s.length - 1];
 		s = s.split('.');

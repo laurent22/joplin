@@ -52,21 +52,21 @@ class Command extends BaseCommand {
 
 			for (let i = 0; i < keymap.length; i++) {
 				const item = keymap[i];
-				const keys = item.keys.map((k) => (k === ' ' ? '(SPACE)' : k));
+				const keys = item.keys.map(k => (k === ' ' ? '(SPACE)' : k));
 				rows.push([keys.join(', '), item.command]);
 			}
 
 			cliUtils.printArray(this.stdout.bind(this), rows);
 		} else if (args.command === 'all') {
 			const commands = this.allCommands();
-			const output = commands.map((c) => renderCommandHelp(c));
+			const output = commands.map(c => renderCommandHelp(c));
 			this.stdout(output.join('\n\n'));
 		} else if (args.command) {
 			const command = app().findCommandByName(args['command']);
 			if (!command) throw new Error(_('Cannot find "%s".', args.command));
 			this.stdout(renderCommandHelp(command, stdoutWidth));
 		} else {
-			const commandNames = this.allCommands().map((a) => a.name());
+			const commandNames = this.allCommands().map(a => a.name());
 
 			this.stdout(_('Type `help [command]` for more information about a command; or type `help all` for the complete usage information.'));
 			this.stdout('');

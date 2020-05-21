@@ -44,7 +44,7 @@ class NavigatorComponent extends Component {
 	}
 }
 
-const Navigator = connect((state) => {
+const Navigator = connect(state => {
 	return {
 		route: state.route,
 	};

@@ -394,7 +394,7 @@ function markdownToHtml(md, templateParams) {
 		html: true,
 	});
 
-	markdownIt.core.ruler.push('checkbox', (state) => {
+	markdownIt.core.ruler.push('checkbox', state => {
 		const tokens = state.tokens;
 		const Token = state.Token;
 		const doneNames = [];
@@ -432,7 +432,7 @@ function markdownToHtml(md, templateParams) {
 			return output;
 		};
 
-		const createAnchorTokens = (anchorName) => {
+		const createAnchorTokens = anchorName => {
 			const output = [];
 
 			{

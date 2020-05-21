@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 
-const loadCustomCss = async (filePath) => {
+const loadCustomCss = async filePath => {
 	let cssString = '';
 	if (await fs.pathExists(filePath)) {
 		try {
@@ -16,7 +16,7 @@ const loadCustomCss = async (filePath) => {
 	return cssString;
 };
 
-const injectCustomStyles = async (cssFilePath) => {
+const injectCustomStyles = async cssFilePath => {
 	const css = await loadCustomCss(cssFilePath);
 	const styleTag = document.createElement('style');
 	styleTag.type = 'text/css';

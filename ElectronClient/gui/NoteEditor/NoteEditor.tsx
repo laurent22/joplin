@@ -252,7 +252,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
 
-		setFormNote((prev) => {
+		setFormNote(prev => {
 			return {
 				...prev,
 				bodyWillChangeId: event.changeId,
@@ -286,7 +286,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}, [formNote]);
 
 	const onNotePropertyChange = useCallback((event) => {
-		setFormNote((formNote) => {
+		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
 			const newFormNote: FormNote = { ...formNote };

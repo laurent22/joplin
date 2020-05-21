@@ -105,7 +105,7 @@ utils.copyDir = async function(src, dest, options) {
 	} else {
 		let excludedFlag = '';
 		if (options.excluded.length) {
-			excludedFlag = options.excluded.map((f) => {
+			excludedFlag = options.excluded.map(f => {
 				return `--exclude "${f}"`;
 			}).join(' ');
 		}

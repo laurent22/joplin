@@ -257,7 +257,7 @@ class JoplinDatabase extends Database {
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
 		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
-			.then((tableRows) => {
+			.then(tableRows => {
 				const chain = [];
 				for (let i = 0; i < tableRows.length; i++) {
 					const tableName = tableRows[i].name;
@@ -266,7 +266,7 @@ class JoplinDatabase extends Database {
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
 					chain.push(() => {
-						return this.selectAll(`PRAGMA table_info("${tableName}")`).then((pragmas) => {
+						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
 								const item = pragmas[i];
 								// In SQLite, if the default value is a string it has double quotes around it, so remove them here

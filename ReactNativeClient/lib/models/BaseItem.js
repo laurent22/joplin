@@ -186,7 +186,7 @@ class BaseItem extends BaseModel {
 		let conflictNoteIds = [];
 		if (this.modelType() == BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ("${ids.join('","')}") AND is_conflict = 1`);
-			conflictNoteIds = conflictNotes.map((n) => {
+			conflictNoteIds = conflictNotes.map(n => {
 				return n.id;
 			});
 		}
@@ -609,7 +609,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static syncItemClassNames() {
-		return BaseItem.syncItemDefinitions_.map((def) => {
+		return BaseItem.syncItemDefinitions_.map(def => {
 			return def.className;
 		});
 	}
@@ -625,7 +625,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static syncItemTypes() {
-		return BaseItem.syncItemDefinitions_.map((def) => {
+		return BaseItem.syncItemDefinitions_.map(def => {
 			return def.type;
 		});
 	}
@@ -726,7 +726,7 @@ class BaseItem extends BaseModel {
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
-			const ids = items.map((item) => {
+			const ids = items.map(item => {
 				return item.id;
 			});
 			if (!ids.length) continue;

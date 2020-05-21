@@ -146,7 +146,7 @@ describe('services_EncryptionService', function() {
 		const needUpgrade = service.masterKeysThatNeedUpgrading(await MasterKey.all());
 
 		expect(needUpgrade.length).toBe(2);
-		expect(needUpgrade.map((k) => k.id).sort()).toEqual([masterKey1.id, masterKey2.id].sort());
+		expect(needUpgrade.map(k => k.id).sort()).toEqual([masterKey1.id, masterKey2.id].sort());
 	}));
 
 	it('should encrypt and decrypt with a master key', asyncTest(async () => {

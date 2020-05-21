@@ -332,7 +332,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [wrapSelectionWithStrings]);
 
 	const onEditorKeyDown = useCallback((event: any) => {
-		setLastKeys((prevLastKeys) => {
+		setLastKeys(prevLastKeys => {
 			const keys = prevLastKeys.slice();
 			keys.push(event.key);
 			while (keys.length > 2) keys.splice(0, 1);

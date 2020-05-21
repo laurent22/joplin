@@ -55,7 +55,7 @@ class HtmlToHtml {
 		if (!html) {
 			html = htmlUtils.sanitizeHtml(markup);
 
-			html = htmlUtils.processImageTags(html, (data) => {
+			html = htmlUtils.processImageTags(html, data => {
 				if (!data.src) return null;
 
 				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_);

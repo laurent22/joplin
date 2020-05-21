@@ -19,7 +19,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 	async componentDidMount() {
 		const log = (s) => {
-			this.setState((state) => {
+			this.setState(state => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };
@@ -76,7 +76,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

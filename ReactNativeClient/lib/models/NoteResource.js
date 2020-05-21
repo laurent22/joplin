@@ -66,7 +66,7 @@ class NoteResource extends BaseModel {
 		`,
 			[cutOffTime]
 		);
-		return output.map((r) => r.resource_id);
+		return output.map(r => r.resource_id);
 	}
 
 	static async deleteByResource(resourceId) {

@@ -17,13 +17,13 @@ class HeaderComponent extends React.Component {
 		this.searchOnQuery_ = null;
 		this.searchElement_ = null;
 
-		const triggerOnQuery = (query) => {
+		const triggerOnQuery = query => {
 			clearTimeout(this.scheduleSearchChangeEventIid_);
 			if (this.searchOnQuery_) this.searchOnQuery_(query);
 			this.scheduleSearchChangeEventIid_ = null;
 		};
 
-		this.search_onChange = (event) => {
+		this.search_onChange = event => {
 			this.setState({ searchQuery: event.target.value });
 
 			if (this.scheduleSearchChangeEventIid_) clearTimeout(this.scheduleSearchChangeEventIid_);
@@ -55,7 +55,7 @@ class HeaderComponent extends React.Component {
 			}, 5000);
 		};
 
-		this.search_keyDown = (event) => {
+		this.search_keyDown = event => {
 			if (event.keyCode === 27) {
 				// ESCAPE
 				this.resetSearch();
@@ -261,7 +261,7 @@ class HeaderComponent extends React.Component {
 
 		return (
 			<div key={key} style={containerStyle}>
-				<input type="text" style={inputStyle} placeholder={options.title} value={state.searchQuery} onChange={this.search_onChange} ref={(elem) => (this.searchElement_ = elem)} onFocus={this.search_onFocus} onBlur={this.search_onBlur} onKeyDown={this.search_keyDown} />
+				<input type="text" style={inputStyle} placeholder={options.title} value={state.searchQuery} onChange={this.search_onChange} ref={elem => (this.searchElement_ = elem)} onFocus={this.search_onFocus} onBlur={this.search_onBlur} onKeyDown={this.search_keyDown} />
 				<a href="#" style={searchButton} onClick={this.search_onClear}>
 					{icon}
 				</a>
@@ -326,7 +326,7 @@ class HeaderComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,

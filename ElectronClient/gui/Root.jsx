@@ -98,7 +98,7 @@ class RootComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,

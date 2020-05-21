@@ -163,8 +163,8 @@ class Api {
 		if (!query || !query.fields) return defaultFields;
 		const fields = query.fields
 			.split(',')
-			.map((f) => f.trim())
-			.filter((f) => !!f);
+			.map(f => f.trim())
+			.filter(f => !!f);
 		return fields.length ? fields : defaultFields;
 	}
 
@@ -649,7 +649,7 @@ class Api {
 
 		const output = {};
 
-		const downloadOne = async (url) => {
+		const downloadOne = async url => {
 			const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
 			if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 		};
@@ -699,7 +699,7 @@ class Api {
 		const imageSizesIndexes = {};
 
 		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-			return htmlUtils.replaceImageUrls(md, (imageUrl) => {
+			return htmlUtils.replaceImageUrls(md, imageUrl => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return imageUrl;
 				return Resource.internalUrl(urlInfo.resource);

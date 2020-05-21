@@ -392,7 +392,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						<Text key="label" style={this.styles().switchSettingText}>
 							{md.label()}
 						</Text>
-						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.strongDividerColor }} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.strongDividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 					{descriptionComp}
 				</View>
@@ -410,7 +410,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
@@ -420,7 +420,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -557,7 +557,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const ConfigScreen = connect((state) => {
+const ConfigScreen = connect(state => {
 	return {
 		settings: state.settings,
 		theme: state.settings.theme,

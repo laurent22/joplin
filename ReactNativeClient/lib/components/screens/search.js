@@ -178,7 +178,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 							onSubmitEditing={() => {
 								this.searchTextInput_submit();
 							}}
-							onChangeText={(text) => this.searchTextInput_changeText(text)}
+							onChangeText={text => this.searchTextInput_changeText(text)}
 							value={this.state.query}
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
@@ -188,10 +188,10 @@ class SearchScreenComponent extends BaseScreenComponent {
 						</TouchableHighlight>
 					</View>
 
-					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={(event) => <NoteItem note={event.item} />} />
+					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
 				<DialogBox
-					ref={(dialogbox) => {
+					ref={dialogbox => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -200,7 +200,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const SearchScreen = connect((state) => {
+const SearchScreen = connect(state => {
 	return {
 		query: state.searchQuery,
 		theme: state.settings.theme,

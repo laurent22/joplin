@@ -388,7 +388,7 @@ class SideMenuContentComponent extends Component {
 	}
 }
 
-const SideMenuContent = connect((state) => {
+const SideMenuContent = connect(state => {
 	return {
 		folders: state.folders,
 		syncStarted: state.syncStarted,

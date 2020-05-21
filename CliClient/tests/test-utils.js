@@ -426,7 +426,7 @@ function id(a) {
 }
 
 function ids(a) {
-	return a.map((n) => n.id);
+	return a.map(n => n.id);
 }
 
 function sortedIds(a) {

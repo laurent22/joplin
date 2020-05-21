@@ -14,11 +14,11 @@ async function handleAutocompletionPromise(line) {
 	// should look for commands it could be
 	if (words.length == 1) {
 		if (names.indexOf(words[0]) === -1) {
-			const x = names.filter((n) => n.indexOf(words[0]) === 0);
+			const x = names.filter(n => n.indexOf(words[0]) === 0);
 			if (x.length === 1) {
 				return `${x[0]} `;
 			}
-			return x.length > 0 ? x.map((a) => `${a} `) : line;
+			return x.length > 0 ? x.map(a => `${a} `) : line;
 		} else {
 			return line;
 		}
@@ -60,14 +60,14 @@ async function handleAutocompletionPromise(line) {
 		if (l.length === 0) {
 			return line;
 		}
-		const ret = l.map((a) => toCommandLine(a));
+		const ret = l.map(a => toCommandLine(a));
 		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
 	// Complete an argument
 	// Determine the number of positional arguments by counting the number of
 	// words that don't start with a - less one for the command name
-	const positionalArgs = words.filter((a) => a.indexOf('-') !== 0).length - 1;
+	const positionalArgs = words.filter(a => a.indexOf('-') !== 0).length - 1;
 
 	const cmdUsage = yargParser(metadata.usage)['_'];
 	cmdUsage.splice(0, 1);
@@ -80,23 +80,23 @@ async function handleAutocompletionPromise(line) {
 
 		if (argName == 'note' || argName == 'note-pattern') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
-			l.push(...notes.map((n) => n.title));
+			l.push(...notes.map(n => n.title));
 		}
 
 		if (argName == 'notebook') {
 			const folders = await Folder.search({ titlePattern: `${next}*` });
-			l.push(...folders.map((n) => n.title));
+			l.push(...folders.map(n => n.title));
 		}
 
 		if (argName == 'item') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			const folders = await Folder.search({ titlePattern: `${next}*` });
-			l.push(...notes.map((n) => n.title), folders.map((n) => n.title));
+			l.push(...notes.map(n => n.title), folders.map(n => n.title));
 		}
 
 		if (argName == 'tag') {
 			const tags = await Tag.search({ titlePattern: `${next}*` });
-			l.push(...tags.map((n) => n.title));
+			l.push(...tags.map(n => n.title));
 		}
 
 		if (argName == 'file') {
@@ -117,7 +117,7 @@ async function handleAutocompletionPromise(line) {
 	if (l.length === 1) {
 		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
-		const ret = l.map((a) => toCommandLine(a));
+		const ret = l.map(a => toCommandLine(a));
 		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}

@@ -167,7 +167,7 @@ class NoteTextViewerComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

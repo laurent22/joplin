@@ -61,7 +61,7 @@ class AppGui {
 
 			this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
-			this.app_.on('modelAction', async (event) => {
+			this.app_.on('modelAction', async event => {
 				await this.handleModelAction(event.action);
 			});
 
@@ -131,7 +131,7 @@ class AppGui {
 		};
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
-		folderList.on('currentItemChange', async (event) => {
+		folderList.on('currentItemChange', async event => {
 			const item = folderList.currentItem;
 
 			if (item === '-') {
@@ -166,7 +166,7 @@ class AppGui {
 				});
 			}
 		});
-		this.rootWidget_.connect(folderList, (state) => {
+		this.rootWidget_.connect(folderList, state => {
 			return {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
@@ -193,7 +193,7 @@ class AppGui {
 				id: note ? note.id : null,
 			});
 		});
-		this.rootWidget_.connect(noteList, (state) => {
+		this.rootWidget_.connect(noteList, state => {
 			return {
 				selectedNoteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				items: state.notes,
@@ -207,7 +207,7 @@ class AppGui {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 		};
-		this.rootWidget_.connect(noteText, (state) => {
+		this.rootWidget_.connect(noteText, state => {
 			return {
 				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				notes: state.notes,
@@ -222,7 +222,7 @@ class AppGui {
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
 		};
-		this.rootWidget_.connect(noteMetadata, (state) => {
+		this.rootWidget_.connect(noteMetadata, state => {
 			return { noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null };
 		});
 		noteMetadata.hide();

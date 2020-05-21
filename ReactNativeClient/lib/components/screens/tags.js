@@ -105,7 +105,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const TagsScreen = connect((state) => {
+const TagsScreen = connect(state => {
 	return {
 		theme: state.settings.theme,
 	};

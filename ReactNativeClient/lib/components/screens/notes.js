@@ -151,7 +151,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
-		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then((ok) => {
+		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
@@ -162,7 +162,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 						smartFilterId: 'c3176726992c11e9ac940492261af972',
 					});
 				})
-				.catch((error) => {
+				.catch(error => {
 					alert(error.message);
 				});
 		});
@@ -237,7 +237,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox
-					ref={(dialogbox) => {
+					ref={dialogbox => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -246,7 +246,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NotesScreen = connect((state) => {
+const NotesScreen = connect(state => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

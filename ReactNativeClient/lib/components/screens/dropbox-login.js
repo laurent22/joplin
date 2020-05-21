@@ -16,7 +16,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 
 		this.styles_ = {};
 
-		this.shared_ = new Shared(this, (msg) => dialogs.info(this, msg), (msg) => dialogs.error(this, msg));
+		this.shared_ = new Shared(this, msg => dialogs.info(this, msg), msg => dialogs.error(this, msg));
 	}
 
 	UNSAFE_componentWillMount() {
@@ -68,7 +68,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 				</ScrollView>
 
 				<DialogBox
-					ref={(dialogbox) => {
+					ref={dialogbox => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -77,7 +77,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const DropboxLoginScreen = connect((state) => {
+const DropboxLoginScreen = connect(state => {
 	return {
 		theme: state.settings.theme,
 	};

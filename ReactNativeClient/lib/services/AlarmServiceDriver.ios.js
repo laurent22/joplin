@@ -5,7 +5,7 @@ class AlarmServiceDriver {
 		this.hasPermission_ = null;
 		this.inAppNotificationHandler_ = null;
 
-		PushNotificationIOS.addEventListener('localNotification', (instance) => {
+		PushNotificationIOS.addEventListener('localNotification', instance => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
@@ -36,7 +36,7 @@ class AlarmServiceDriver {
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
 		return new Promise((resolve) => {
-			PushNotificationIOS.checkPermissions(async (perm) => {
+			PushNotificationIOS.checkPermissions(async perm => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
 				resolve(ok);

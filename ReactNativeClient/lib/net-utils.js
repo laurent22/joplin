@@ -30,7 +30,7 @@ netUtils.findAvailablePort = async (possiblePorts, extraRandomPortsToTry = 20) =
 	return port;
 };
 
-netUtils.mimeTypeFromHeaders = (headers) => {
+netUtils.mimeTypeFromHeaders = headers => {
 	if (!headers || !headers['content-type']) return null;
 
 	const splitted = headers['content-type'].split(';');

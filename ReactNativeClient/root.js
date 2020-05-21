@@ -95,7 +95,7 @@ const logReducerAction = function(action) {
 	// reg.logger().debug('Reducer action', msg.join(', '));
 };
 
-const generalMiddleware = (store) => (next) => async (action) => {
+const generalMiddleware = store => next => async (action) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
@@ -757,7 +757,7 @@ class AppComponent extends React.Component {
 						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 							<AppNav screens={appNavInit} />
 						</View>
-						<DropdownAlert ref={(ref) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 					</SafeAreaView>
 				</MenuContext>

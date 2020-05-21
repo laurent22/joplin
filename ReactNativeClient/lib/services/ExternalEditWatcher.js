@@ -214,7 +214,7 @@ class ExternalEditWatcher {
 				path = 'open';
 			}
 
-			const wrapError = (error) => {
+			const wrapError = error => {
 				if (!error) return error;
 				const msg = error.message ? [error.message] : [];
 				msg.push(`Command was: "${path}" ${args.join(' ')}`);
@@ -233,7 +233,7 @@ class ExternalEditWatcher {
 					}
 				}, 100);
 
-				subProcess.on('error', (error) => {
+				subProcess.on('error', error => {
 					clearInterval(iid);
 					reject(wrapError(error));
 				});

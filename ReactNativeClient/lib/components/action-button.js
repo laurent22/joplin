@@ -123,7 +123,7 @@ class ActionButtonComponent extends React.Component {
 	}
 }
 
-const ActionButton = connect((state) => {
+const ActionButton = connect(state => {
 	return {
 		folders: state.folders,
 		locale: state.settings.locale,

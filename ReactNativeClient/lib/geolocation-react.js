@@ -25,10 +25,10 @@ class GeolocationReact {
 
 		return new Promise((resolve, reject) => {
 			navigator.geolocation.getCurrentPosition(
-				(data) => {
+				data => {
 					resolve(data);
 				},
-				(error) => {
+				error => {
 					reject(error);
 				},
 				options

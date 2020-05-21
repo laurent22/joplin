@@ -35,7 +35,7 @@ async function fetchPosts(url) {
 
 	const responseJson = await response.json();
 
-	const posts = responseJson.data.map((p) => {
+	const posts = responseJson.data.map(p => {
 		return {
 			id: p.id,
 			title: p.attributes.title,

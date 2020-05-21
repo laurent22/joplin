@@ -101,7 +101,7 @@ describe('services_KvStore', function() {
 		const results = await store.searchByPrefix('testing:');
 		expect(results.length).toBe(2);
 
-		const numbers = results.map((r) => r.value).sort();
+		const numbers = results.map(r => r.value).sort();
 		expect(numbers[0]).toBe(1);
 		expect(numbers[1]).toBe(2);
 	}));

@@ -74,8 +74,8 @@ class DecryptionWorker {
 
 	async decryptionDisabledItems() {
 		let items = await this.kvStore().searchByPrefix('decrypt:');
-		items = items.filter((item) => item.value > this.maxDecryptionAttempts_);
-		items = items.map((item) => {
+		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
+		items = items.map(item => {
 			const s = item.key.split(':');
 			return {
 				type_: Number(s[1]),

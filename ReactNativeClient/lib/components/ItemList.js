@@ -93,11 +93,11 @@ class ItemList extends React.Component {
 		return (
 			<ScrollView
 				scrollEventThrottle={500}
-				onLayout={(event) => {
+				onLayout={event => {
 					this.onLayout(event);
 				}}
 				style={style}
-				onScroll={(event) => {
+				onScroll={event => {
 					this.onScroll(event);
 				}}
 			>

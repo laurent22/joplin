@@ -162,11 +162,11 @@ class Command extends BaseCommand {
 			const sync = await syncTarget.synchronizer();
 
 			const options = {
-				onProgress: (report) => {
+				onProgress: report => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
 				},
-				onMessage: (msg) => {
+				onMessage: msg => {
 					cliUtils.redrawDone();
 					this.stdout(msg);
 				},

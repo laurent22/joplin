@@ -34,7 +34,7 @@ class Folder extends BaseItem {
 	static noteIds(parentId) {
 		return this.db()
 			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
-			.then((rows) => {
+			.then(rows => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {
 					const row = rows[i];
@@ -46,7 +46,7 @@ class Folder extends BaseItem {
 
 	static async subFolderIds(parentId) {
 		const rows = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [parentId]);
-		return rows.map((r) => r.id);
+		return rows.map(r => r.id);
 	}
 
 	static async noteCount(parentId) {
@@ -143,7 +143,7 @@ class Folder extends BaseItem {
 			folderIdToTime[row.parent_id] = row.content_updated_time;
 		}
 
-		const findFolderParent = (folderId) => {
+		const findFolderParent = folderId => {
 			const folder = BaseModel.byId(folders, folderId);
 			if (!folder) return null; // For the rare case of notes that are associated with a no longer existing folder
 			if (!folder.parent_id) return null;
@@ -157,7 +157,7 @@ class Folder extends BaseItem {
 			return null;
 		};
 
-		const applyChildTimeToParent = (folderId) => {
+		const applyChildTimeToParent = folderId => {
 			const parent = findFolderParent(folderId);
 			if (!parent) return;
 
@@ -429,7 +429,7 @@ class Folder extends BaseItem {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
-		return super.save(o, options).then((folder) => {
+		return super.save(o, options).then(folder => {
 			this.dispatch({
 				type: 'FOLDER_UPDATE_ONE',
 				item: folder,

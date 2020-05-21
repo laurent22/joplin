@@ -117,11 +117,11 @@ class Application extends BaseApplication {
 	}
 
 	setupCommand(cmd) {
-		cmd.setStdout((text) => {
+		cmd.setStdout(text => {
 			return this.stdout(text);
 		});
 
-		cmd.setDispatcher((action) => {
+		cmd.setDispatcher(action => {
 			if (this.store()) {
 				return this.store().dispatch(action);
 			} else {
@@ -176,7 +176,7 @@ class Application extends BaseApplication {
 
 	commands(uiType = null) {
 		if (!this.allCommandsLoaded_) {
-			fs.readdirSync(__dirname).forEach((path) => {
+			fs.readdirSync(__dirname).forEach(path => {
 				if (path.indexOf('command-') !== 0) return;
 				const ext = fileExtension(path);
 				if (ext != 'js') return;
@@ -275,7 +275,7 @@ class Application extends BaseApplication {
 			},
 			showConsole: () => {},
 			maximizeConsole: () => {},
-			stdout: (text) => {
+			stdout: text => {
 				console.info(text);
 			},
 			fullScreen: () => {},
@@ -370,7 +370,7 @@ class Application extends BaseApplication {
 		// Map reserved shortcuts to their equivalent key
 		// https://github.com/cronvel/terminal-kit/issues/101
 		for (let i = 0; i < output.length; i++) {
-			const newKeys = output[i].keys.map((k) => {
+			const newKeys = output[i].keys.map(k => {
 				k = k.replace(/CTRL_H/g, 'BACKSPACE');
 				k = k.replace(/CTRL_I/g, 'TAB');
 				k = k.replace(/CTRL_M/g, 'ENTER');

@@ -133,7 +133,7 @@ class NoteItemComponent extends Component {
 				<View style={selectionWrapperStyle}>
 					<View style={opacityStyle}>
 						<View style={listItemStyle}>
-							<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={(checked) => this.todoCheckbox_change(checked)} />
+							<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={checked => this.todoCheckbox_change(checked)} />
 							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
 						</View>
 					</View>
@@ -143,7 +143,7 @@ class NoteItemComponent extends Component {
 	}
 }
 
-const NoteItem = connect((state) => {
+const NoteItem = connect(state => {
 	return {
 		theme: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,

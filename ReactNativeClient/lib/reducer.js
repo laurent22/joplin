@@ -122,7 +122,7 @@ stateUtils.getCurrentNote = function(state) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
 	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
-		const currNote = notes.find((note) => note.id === selectedNoteIds[0]);
+		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
 		if (currNote != null) {
 			return {
 				id: currNote.id,
@@ -451,14 +451,14 @@ function handleHistory(state, action) {
 	case 'NOTE_UPDATE_ONE': {
 		const modNote = action.note;
 
-		backwardHistoryNotes = backwardHistoryNotes.map((note) => {
+		backwardHistoryNotes = backwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
 				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
 			return note;
 		});
 
-		forwardHistoryNotes = forwardHistoryNotes.map((note) => {
+		forwardHistoryNotes = forwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
 				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
@@ -475,15 +475,15 @@ function handleHistory(state, action) {
 		}
 		break;
 	case 'FOLDER_DELETE':
-		backwardHistoryNotes = backwardHistoryNotes.filter((note) => note.parent_id != action.id);
-		forwardHistoryNotes = forwardHistoryNotes.filter((note) => note.parent_id != action.id);
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.parent_id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.parent_id != action.id);
 
 		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
 		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
 		break;
 	case 'NOTE_DELETE': {
-		backwardHistoryNotes = backwardHistoryNotes.filter((note) => note.id != action.id);
-		forwardHistoryNotes = forwardHistoryNotes.filter((note) => note.id != action.id);
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.id != action.id);
 
 		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
 		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
@@ -563,16 +563,16 @@ const reducer = (state = defaultState, action) => {
 
 		case 'NOTE_SELECT_ALL':
 			newState = Object.assign({}, state);
-			newState.selectedNoteIds = newState.notes.map((n) => n.id);
+			newState.selectedNoteIds = newState.notes.map(n => n.id);
 			break;
 
 		case 'NOTE_SELECT_ALL_TOGGLE': {
 			newState = Object.assign({}, state);
-			const allSelected = state.notes.every((n) => state.selectedNoteIds.includes(n.id));
+			const allSelected = state.notes.every(n => state.selectedNoteIds.includes(n.id));
 			if (allSelected) {
 				newState.selectedNoteIds = [];
 			} else {
-				newState.selectedNoteIds = newState.notes.map((n) => n.id);
+				newState.selectedNoteIds = newState.notes.map(n => n.id);
 			}
 			break;
 		}
@@ -761,7 +761,7 @@ const reducer = (state = defaultState, action) => {
 		case 'TAG_UPDATE_ONE':
 			{
 				// We only want to update the selected note tags if the tag belongs to the currently open note
-				const selectedNoteHasTag = !!state.selectedNoteTags.find((tag) => tag.id === action.item.id);
+				const selectedNoteHasTag = !!state.selectedNoteTags.find(tag => tag.id === action.item.id);
 				newState = updateOneItem(state, action);
 				if (selectedNoteHasTag) newState = updateOneItem(newState, action, 'selectedNoteTags');
 			}

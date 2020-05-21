@@ -27,7 +27,7 @@ function shimInit() {
 		return shim.fsDriver_;
 	};
 
-	shim.randomBytes = async (count) => {
+	shim.randomBytes = async count => {
 		const randomBytes = await generateSecureRandom(count);
 		const temp = [];
 		for (const n in randomBytes) {
@@ -134,7 +134,7 @@ function shimInit() {
 
 	shim.Buffer = Buffer;
 
-	shim.openUrl = (url) => {
+	shim.openUrl = url => {
 		Linking.openURL(url);
 	};
 

@@ -23,7 +23,7 @@ class NoteTagsDialogComponent extends React.Component {
 			savingTags: false,
 		};
 
-		const noteHasTag = (tagId) => {
+		const noteHasTag = tagId => {
 			for (let i = 0; i < this.state.tagListData.length; i++) {
 				if (this.state.tagListData[i].id === tagId) return this.state.tagListData[i].selected;
 			}
@@ -33,11 +33,11 @@ class NoteTagsDialogComponent extends React.Component {
 		const newTagTitles = () => {
 			return this.state.newTags
 				.split(',')
-				.map((t) => t.trim().toLowerCase())
-				.filter((t) => !!t);
+				.map(t => t.trim().toLowerCase())
+				.filter(t => !!t);
 		};
 
-		this.tag_press = (tagId) => {
+		this.tag_press = tagId => {
 			const newData = this.state.tagListData.slice();
 			for (let i = 0; i < newData.length; i++) {
 				const t = newData[i];
@@ -52,7 +52,7 @@ class NoteTagsDialogComponent extends React.Component {
 			this.setState({ tagListData: newData });
 		};
 
-		this.renderTag = (data) => {
+		this.renderTag = data => {
 			const tag = data.item;
 			const iconName = noteHasTag(tag.id) ? 'md-checkbox-outline' : 'md-square-outline';
 			return (
@@ -71,7 +71,7 @@ class NoteTagsDialogComponent extends React.Component {
 			this.setState({ savingTags: true });
 
 			try {
-				const tagIds = this.state.tagListData.filter((t) => t.selected).map((t) => t.id);
+				const tagIds = this.state.tagListData.filter(t => t.selected).map(t => t.id);
 				await Tag.setNoteTagsByIds(this.state.noteId, tagIds);
 
 				const extraTitles = newTagTitles();
@@ -98,9 +98,9 @@ class NoteTagsDialogComponent extends React.Component {
 
 	async loadNoteTags(noteId) {
 		const tags = await Tag.tagsByNoteId(noteId);
-		const tagIds = tags.map((t) => t.id);
+		const tagIds = tags.map(t => t.id);
 
-		const tagListData = this.props.tags.map((tag) => {
+		const tagListData = this.props.tags.map(tag => {
 			return {
 				id: tag.id,
 				title: tag.title,
@@ -165,7 +165,7 @@ class NoteTagsDialogComponent extends React.Component {
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
 						value={this.state.newTags}
-						onChangeText={(value) => {
+						onChangeText={value => {
 							this.setState({ newTags: value });
 						}}
 						style={this.styles().newTagBoxInput}
@@ -179,7 +179,7 @@ class NoteTagsDialogComponent extends React.Component {
 	}
 }
 
-const NoteTagsDialog = connect((state) => {
+const NoteTagsDialog = connect(state => {
 	return {
 		theme: state.settings.theme,
 		tags: state.tags,

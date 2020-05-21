@@ -87,10 +87,10 @@ class NoteListComponent extends Component {
 
 		if (this.props.items.length) {
 			return <FlatList
-				ref={(ref) => (this.rootRef_ = ref)}
+				ref={ref => (this.rootRef_ = ref)}
 				data={this.props.items}
 				renderItem={({ item }) => <NoteItem note={item} />}
-				keyExtractor={(item) => item.id}
+				keyExtractor={item => item.id}
 			/>;
 		} else {
 			if (!this.props.folders.length) {
@@ -109,7 +109,7 @@ class NoteListComponent extends Component {
 	}
 }
 
-const NoteList = connect((state) => {
+const NoteList = connect(state => {
 	return {
 		items: state.notes,
 		folders: state.folders,

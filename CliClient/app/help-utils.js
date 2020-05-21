@@ -41,7 +41,7 @@ function renderCommandHelp(cmd, width = null) {
 	}
 
 	if (cmd.name() === 'config') {
-		const renderMetadata = (md) => {
+		const renderMetadata = md => {
 			const desc = [];
 
 			if (md.label) {

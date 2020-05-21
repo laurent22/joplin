@@ -101,7 +101,7 @@ class LogScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={this.state.logEntries}
 					renderItem={renderRow}
-					keyExtractor={(item) => { return `${item.id}`; }}
+					keyExtractor={item => { return `${item.id}`; }}
 				/>
 				<View style={{ flexDirection: 'row' }}>
 					<View style={{ flex: 1, marginRight: 5 }}>
@@ -126,7 +126,7 @@ class LogScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const LogScreen = connect((state) => {
+const LogScreen = connect(state => {
 	return {
 		theme: state.settings.theme,
 	};

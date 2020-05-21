@@ -21,7 +21,7 @@ const defaultState = {
 	isProbablyReaderable: true,
 };
 
-const reduxMiddleware = (store) => (next) => async (action) => {
+const reduxMiddleware = store => next => async (action) => {
 	const result = next(action);
 	const newState = store.getState();
 

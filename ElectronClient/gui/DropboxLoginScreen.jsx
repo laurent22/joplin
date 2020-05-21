@@ -10,7 +10,7 @@ class DropboxLoginScreenComponent extends React.Component {
 	constructor() {
 		super();
 
-		this.shared_ = new Shared(this, (msg) => bridge().showInfoMessageBox(msg), (msg) => bridge().showErrorMessageBox(msg));
+		this.shared_ = new Shared(this, msg => bridge().showInfoMessageBox(msg), msg => bridge().showErrorMessageBox(msg));
 	}
 
 	UNSAFE_componentWillMount() {
@@ -51,7 +51,7 @@ class DropboxLoginScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

@@ -17,8 +17,8 @@ class Command extends BaseCommand {
 		const service = new InteropService();
 		const formats = service
 			.modules()
-			.filter((m) => m.type === 'exporter' && m.format !== 'html')
-			.map((m) => m.format + (m.description ? ` (${m.description})` : ''));
+			.filter(m => m.type === 'exporter' && m.format !== 'html')
+			.map(m => m.format + (m.description ? ` (${m.description})` : ''));
 
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}
@@ -34,17 +34,17 @@ class Command extends BaseCommand {
 		if (args.options.note) {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.options.note));
-			exportOptions.sourceNoteIds = notes.map((n) => n.id);
+			exportOptions.sourceNoteIds = notes.map(n => n.id);
 		} else if (args.options.notebook) {
 			const folders = await app().loadItems(BaseModel.TYPE_FOLDER, args.options.notebook);
 			if (!folders.length) throw new Error(_('Cannot find "%s".', args.options.notebook));
-			exportOptions.sourceFolderIds = folders.map((n) => n.id);
+			exportOptions.sourceFolderIds = folders.map(n => n.id);
 		}
 
 		const service = new InteropService();
 		const result = await service.export(exportOptions);
 
-		result.warnings.map((w) => this.stdout(w));
+		result.warnings.map(w => this.stdout(w));
 	}
 }
 

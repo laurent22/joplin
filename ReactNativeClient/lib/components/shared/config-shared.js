@@ -18,7 +18,7 @@ shared.init = function(comp) {
 };
 
 shared.advancedSettingsButton_click = (comp) => {
-	comp.setState((state) => {
+	comp.setState(state => {
 		return { showAdvancedSettings: !state.showAdvancedSettings };
 	});
 };
@@ -79,7 +79,7 @@ shared.checkNextcloudApp = async function(comp, settings) {
 };
 
 shared.updateSettingValue = function(comp, key, value) {
-	comp.setState((state) => {
+	comp.setState(state => {
 		const settings = Object.assign({}, state.settings);
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);

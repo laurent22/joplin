@@ -87,7 +87,7 @@ class OneDriveApiNodeUtils {
 						targetConsole.log(_('The application has been successfully authorised.'));
 						waitAndDestroy();
 					})
-					.catch((error) => {
+					.catch(error => {
 						writeResponse(400, error.message);
 						targetConsole.log('');
 						targetConsole.log(error.message);

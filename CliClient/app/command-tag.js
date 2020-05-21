@@ -47,7 +47,7 @@ class Command extends BaseCommand {
 		} else if (command == 'list') {
 			if (tag) {
 				const notes = await Tag.notes(tag.id);
-				notes.map((note) => {
+				notes.map(note => {
 					let line = '';
 					if (options.long) {
 						line += BaseModel.shortId(note.id);
@@ -71,7 +71,7 @@ class Command extends BaseCommand {
 				});
 			} else {
 				const tags = await Tag.all();
-				tags.map((tag) => {
+				tags.map(tag => {
 					this.stdout(tag.title);
 				});
 			}
@@ -80,7 +80,7 @@ class Command extends BaseCommand {
 				const note = await app().loadItem(BaseModel.TYPE_NOTE, args.tag);
 				if (!note) throw new Error(_('Cannot find "%s".', args.tag));
 				const tags = await Tag.tagsByNoteId(note.id);
-				tags.map((tag) => {
+				tags.map(tag => {
 					this.stdout(tag.title);
 				});
 			} else {

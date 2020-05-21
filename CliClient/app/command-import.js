@@ -18,8 +18,8 @@ class Command extends BaseCommand {
 		const service = new InteropService();
 		const formats = service
 			.modules()
-			.filter((m) => m.type === 'importer')
-			.map((m) => m.format);
+			.filter(m => m.type === 'importer')
+			.map(m => m.format);
 
 		return [['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))], ['-f, --force', _('Do not ask for confirmation.')]];
 	}
@@ -38,7 +38,7 @@ class Command extends BaseCommand {
 
 		// onProgress/onError supported by Enex import only
 
-		importOptions.onProgress = (progressState) => {
+		importOptions.onProgress = progressState => {
 			const line = [];
 			line.push(_('Found: %d.', progressState.loaded));
 			line.push(_('Created: %d.', progressState.created));
@@ -50,7 +50,7 @@ class Command extends BaseCommand {
 			cliUtils.redraw(lastProgress);
 		};
 
-		importOptions.onError = (error) => {
+		importOptions.onError = error => {
 			const s = error.trace ? error.trace : error.toString();
 			this.stdout(s);
 		};
@@ -61,7 +61,7 @@ class Command extends BaseCommand {
 		this.stdout(_('Importing notes...'));
 		const service = new InteropService();
 		const result = await service.import(importOptions);
-		result.warnings.map((w) => this.stdout(w));
+		result.warnings.map(w => this.stdout(w));
 		cliUtils.redrawDone();
 		if (lastProgress) this.stdout(_('The notes have been imported: %s', lastProgress));
 	}

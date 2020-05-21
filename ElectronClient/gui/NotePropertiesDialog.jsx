@@ -232,7 +232,7 @@ class NotePropertiesDialog extends React.Component {
 		let editCompHandler = null;
 		let editCompIcon = null;
 
-		const onKeyDown = (event) => {
+		const onKeyDown = event => {
 			if (event.keyCode === 13) {
 				this.saveProperty();
 			} else if (event.keyCode === 27) {
@@ -249,10 +249,10 @@ class NotePropertiesDialog extends React.Component {
 						dateFormat={time.dateFormat()}
 						timeFormat={time.timeFormat()}
 						inputProps={{
-							onKeyDown: (event) => onKeyDown(event, key),
+							onKeyDown: event => onKeyDown(event, key),
 							style: styles.input,
 						}}
-						onChange={(momentObject) => {
+						onChange={momentObject => {
 							this.setState({ editedValue: momentObject });
 						}}
 					/>
@@ -268,10 +268,10 @@ class NotePropertiesDialog extends React.Component {
 						defaultValue={value}
 						type="text"
 						ref="editField"
-						onChange={(event) => {
+						onChange={event => {
 							this.setState({ editedValue: event.target.value });
 						}}
-						onKeyDown={(event) => onKeyDown(event)}
+						onKeyDown={event => onKeyDown(event)}
 						style={styles.input}
 					/>
 				);

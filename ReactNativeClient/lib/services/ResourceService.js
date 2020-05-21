@@ -46,10 +46,10 @@ class ResourceService extends BaseService {
 
 			if (!changes.length) break;
 
-			const noteIds = changes.map((a) => a.item_id);
+			const noteIds = changes.map(a => a.item_id);
 			const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 
-			const noteById = (noteId) => {
+			const noteById = noteId => {
 				for (let i = 0; i < notes.length; i++) {
 					if (notes[i].id === noteId) return notes[i];
 				}

@@ -138,7 +138,7 @@ class FileApiDriverMemory {
 	}
 
 	async delta(path, options = null) {
-		const getStatFn = async (path) => {
+		const getStatFn = async path => {
 			const output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {
 				const item = Object.assign({}, output[i]);

@@ -36,7 +36,7 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output = [];
 
-		const searchUrls = (tokens) => {
+		const searchUrls = tokens => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 

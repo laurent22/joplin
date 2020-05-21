@@ -48,7 +48,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			return shared.onSavePasswordClick(this, mk);
 		};
 
-		const onPasswordChange = (event) => {
+		const onPasswordChange = event => {
 			return shared.onPasswordChange(this, mk, event.target.value);
 		};
 
@@ -64,7 +64,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.created_time)}</td>
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.updated_time)}</td>
 				<td style={theme.textStyle}>
-					<input type="password" style={passwordStyle} value={password} onChange={(event) => onPasswordChange(event)} />{' '}
+					<input type="password" style={passwordStyle} value={password} onChange={event => onPasswordChange(event)} />{' '}
 					<button style={theme.buttonStyle} onClick={() => onSaveClick()}>
 						{_('Save')}
 					</button>
@@ -287,7 +287,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		masterKeys: state.masterKeys,
