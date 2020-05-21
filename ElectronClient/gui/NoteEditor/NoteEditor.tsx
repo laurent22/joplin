@@ -85,7 +85,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function scheduleSaveNote(formNote: FormNote) {
 		if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
-		reg.logger().debug('Scheduling...', formNote);
+		// reg.logger().debug('Scheduling...', formNote);
 
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
@@ -514,7 +514,7 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
-	if (formNote.encryption_applied || !formNote.id) {
+	if (formNote.encryption_applied || !formNote.id || !props.noteId) {
 		return renderNoNotes(styles.root);
 	}
 

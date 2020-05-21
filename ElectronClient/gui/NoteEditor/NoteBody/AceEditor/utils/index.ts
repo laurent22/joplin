@@ -42,45 +42,9 @@ export function selectedText(selectionRange: any, body: string) {
 	return body.substr(selection.start, selection.end - selection.start);
 }
 
-export function useSelectionRange(editor: any) {
-	const [selectionRange, setSelectionRange] = useState(null);
-
-	useEffect(() => {
-		if (!editor) return () => {};
-
-		function updateSelection() {
-			const ranges = editor.getSelection().getAllRanges();
-			const firstRange = ranges && ranges.length ? ranges[0] : null;
-			setSelectionRange(firstRange);
-
-			// if (process.platform === 'linux') {
-			// 	const textRange = this.textOffsetSelection();
-			// 	if (textRange.start != textRange.end) {
-			// 		clipboard.writeText(this.state.note.body.slice(
-			// 			Math.min(textRange.start, textRange.end),
-			// 			Math.max(textRange.end, textRange.start)), 'selection');
-			// 	}
-			// }
-		}
-
-		function onSelectionChange() {
-			updateSelection();
-		}
-
-		function onFocus() {
-			updateSelection();
-		}
-
-		editor.getSession().selection.on('changeSelection', onSelectionChange);
-		editor.on('focus', onFocus);
-
-		return () => {
-			editor.getSession().selection.off('changeSelection', onSelectionChange);
-			editor.off('focus', onFocus);
-		};
-	}, [editor]);
-
-	return selectionRange;
+export function selectionRange(editor:any) {
+	const ranges = editor.getSelection().getAllRanges();
+	return ranges && ranges.length ? ranges[0] : null;
 }
 
 export function textOffsetToCursorPosition(offset: number, body: string) {
@@ -247,7 +211,8 @@ export function useRootWidth(dependencies:any) {
 
 	useEffect(() => {
 		if (!rootRef.current) return;
-		setRootWidth(rootRef.current.offsetWidth);
+
+		if (rootWidth !== rootRef.current.offsetWidth) setRootWidth(rootRef.current.offsetWidth);
 	});
 
 	return rootWidth;

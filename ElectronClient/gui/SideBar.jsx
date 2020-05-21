@@ -572,7 +572,7 @@ class SideBarComponent extends React.Component {
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
 			const isExpanded = this.state[toggleKey];
-			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
+			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 		if (extraProps.selected) {
 			style.backgroundColor = this.style().listItemSelected.backgroundColor;
