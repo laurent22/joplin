@@ -698,28 +698,46 @@ class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE version ADD COLUMN table_fields_version INT NOT NULL DEFAULT 0');
 			}
 			if (targetVersion == 30) {
-				// Can't add columns to virtual tables
-				queries.push('DROP TABLE notes_fts');
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_delete');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
+				queries.push('DROP TABLE IF EXISTS notes_fts');
 
-				// TO DO: Remove fields that we don't use!
-				// eg. user_created_time and user_updated_time and used directly from notes table.
+				const newVirtualTableSql = `
+					CREATE VIRTUAL TABLE notes_fts USING fts4(
+						content="notes",
+						notindexed="id",
+						notindexed="user_created_time",
+						notindexed="user_updated_time",
+						notindexed="is_todo",
+						notindexed="todo_completed",
+						notindexed="parent_id",
+						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id
+					);`
+				;
 
-				queries.push(`CREATE VIRTUAL TABLE notes_fts USING fts4(content="notes",
-				notindexed="id", notindexed="user_created_time", notindexed="user_updated_time", notindexed="is_todo", notindexed="todo_completed", notindexed="parent_id",
-				id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id);`);
+				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
 
-				queries.push(`INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id)
-				SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0`);
+				queries.push('INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 
-				queries.push('DROP trigger notes_after_update');
-				queries.push('DROP trigger notes_after_insert');
-
-				queries.push(`CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
-				INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
-				END`);
-				queries.push(`CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
-				INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
-				END`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(
+					`CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id)
+						SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END`);
+				queries.push(
+					`CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
+					END`);
 			}
 
 			if (targetVersion == 30) {

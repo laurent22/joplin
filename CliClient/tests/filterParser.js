@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
-const { filterParser } = require('lib/services/searchengine/filterParser.js');
+const filterParser = require('lib/services/searchengine/filterParser.js').default;
 // import filterParser from 'lib/services/searchengine/filterParser.js';
 
 describe('filterParser should be correct filter for keyword', () => {
@@ -170,9 +170,33 @@ describe('filterParser should be correct filter for keyword', () => {
 	});
 
 	it('created on smart value, day', () => {
-		const searchString = 'created:day-1'; // YYYYMMDD
+		const searchString = 'created:day-1';
 		const expected = new Map([
 			['created', [{ relation: 'AND', value: 'day-1' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('is a todo', () => {
+		const searchString = 'todo:*';
+		const expected = new Map([
+			['todo', [{ relation: 'AND', value: '*' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('is a completed todo', () => {
+		const searchString = 'todo:true';
+		const expected = new Map([
+			['todo', [{ relation: 'AND', value: 'true' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('is a uncompleted todo', () => {
+		const searchString = 'todo:false';
+		const expected = new Map([
+			['todo', [{ relation: 'AND', value: 'false' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});

@@ -19,13 +19,13 @@ const noteBookFilter = () => {
 union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
 };
 
-// TODO: Add format check?
 const hyphenateDate = (date: string) => `${date.slice(0,4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
 
 const getUnixMs = (date:string) => Date.parse(hyphenateDate(date));
 
 const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryParts: string[], params: string[]): void => {
-	const smartValue = /(day|week|month|year)-([0-9]+)/i;
+	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
+	const yyyymmdd = /^[0-9]{8}$/;
 	const term = filters.get(type)[0];
 	if (smartValue.test(term.value)) {
 		const match = smartValue.exec(term.value);
@@ -34,12 +34,13 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 		const timeFrom = time.goBackInTime(number, timeDuration); // eg. goBackInTime(1, 'day')
 		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ?)`);
 		params.push(timeFrom);
-	} else {
-		// string in YYYYMMDD format; TO DO: add validation test - throw error if invalid
-		const msOfDay = getUnixMs(term.value); // unixMs from YYYYMMDD eg. 20150212
+	} else if (yyyymmdd.test(term.value)) {
+		const msOfDay = getUnixMs(term.value); // unixMs from YYYYMMDD
 		const msOfNextDay = msOfDay + (60 * 60 * 24 * 1000);
 		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
 		params.push(msOfDay.toString(), msOfNextDay.toString());
+	} else {
+		throw new Error(`Date value of ${type} in unknown format: ${term.value}`);
 	}
 };
 
@@ -59,7 +60,7 @@ const makeMatchQuery = (name: string, filters:Map<string, Array<Term>>) => {
 // FROM notes_fts
 // WHERE 1 AND rowid IN (select notes.ROWID from tag_filter join notes on tag_filter.id=notes.id) AND notes_fts MATCH ?;
 
-export function queryBuilder(filters: Map<string, Array<Term>>) {
+export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	let query;
 	const queryParts = [];
 	const params = [];
@@ -68,6 +69,8 @@ export function queryBuilder(filters: Map<string, Array<Term>>) {
 	queryParts.push(`SELECT
 	notes_fts.id,
 	notes_fts.title AS normalized_title,
+	offsets(notes_fts) AS offsets,
+	notes_fts.user_updated_time,
 	notes_fts.is_todo,
 	notes_fts.todo_completed,
 	notes_fts.parent_id
@@ -85,6 +88,20 @@ export function queryBuilder(filters: Map<string, Array<Term>>) {
 		queryParts.push(`AND ROWID ${term.relation === 'NOT' ? 'NOT' : ''} IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`);
 		withs.push(noteBookFilter());
 		params.push(term.value);
+	}
+
+	if (filters.has('todo')) {
+
+		const term = filters.get('todo')[0]; // *, true, false as term.value
+		if (term.value === '*') {
+			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)'); }
+		} else if (term.value === 'true') {
+			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); }
+		} else if (term.value === 'false') {
+			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); }
+		} else {
+			throw new Error(`Invalid argument for filter todo: ${term.value}`);
+		}
 	}
 
 	if (filters.has('created')) {

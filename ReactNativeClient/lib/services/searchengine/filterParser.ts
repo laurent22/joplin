@@ -5,14 +5,12 @@ interface Filter {
 }
 
 interface Term {
-  relation: string;
+  name: string;
   value: string;
 }
 
-const parseQuery = (query: string): Array<Filter> => {
-	const terms = [];
-
-	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
+const getTerms = (query: string) : Term[] => {
+	const terms: Term[] = [];
 	let inQuote = false;
 	let currentCol = '_';
 	let currentTerm = '';
@@ -22,7 +20,7 @@ const parseQuery = (query: string): Array<Filter> => {
 		if (c === '"') {
 			currentTerm += c; // keep the quotes
 			if (inQuote) {
-				terms.push([currentCol, currentTerm]);
+				terms.push({ name: currentCol, value: currentTerm });
 				currentTerm = '';
 				inQuote = false;
 			} else {
@@ -33,7 +31,7 @@ const parseQuery = (query: string): Array<Filter> => {
 
 		if (c === ' ' && !inQuote) {
 			if (!currentTerm) continue;
-			terms.push([currentCol, currentTerm]);
+			terms.push({ name: currentCol, value: currentTerm });
 			currentCol = '_';
 			currentTerm = '';
 			continue;
@@ -47,61 +45,76 @@ const parseQuery = (query: string): Array<Filter> => {
 
 		currentTerm += c;
 	}
-	if (currentTerm) terms.push([currentCol, currentTerm]);
+	if (currentTerm) terms.push({ name: currentCol, value: currentTerm });
+	return terms;
+};
 
+const parseQuery = (query: string): Array<Filter> => {
+	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
+	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'todo']);
 
-	let relation = 'AND'; // default relation
-	const result: Array<Filter> = [];
+	const terms = getTerms(query);
+
+	const defaultRelation = 'AND';
+	let relation = defaultRelation;
+	const result: Filter[] = [];
 	for (let i = 0; i < terms.length; i++) {
-		if (terms[i][0] !== '_') {
-			// Hopefully a valid filter
-			// TO DO : handle negation
-			const name = terms[i][0];
-			const value = terms[i][1];
+		let name = terms[i].name;
+		const value = terms[i].value;
 
+		if (name !== '_') {
 			if (name.startsWith('-')) {
-				result.push({ relation: 'NOT', name: name.slice(1), value: value });
+				relation = 'NOT';
+				name = name.slice(1);
+			}
+
+			if (!validFilters.has(name)) {
+				throw new Error(`Invalid filter: ${name}`);
+			}
+
+			if (name === 'title' || name === 'body') {
+				// Trim quotes since we don't support phrase query here
+				// eg. Split title:"hello world" to title:hello title:world with relation
+				const values = trimQuotes(value).split(' ');
+				values.forEach(value => {
+					result.push({ relation, name, value });
+				});
 			} else {
 				result.push({ relation, name, value });
 			}
-			relation = 'AND'; // reset to default
+			relation = defaultRelation; // reset to default
 		} else {
 			// could be AND or OR or text to fts search
-			if (terms[i][1].toUpperCase() !== 'AND' && terms[i][1].toUpperCase() !== 'OR') {
+			if (value.toUpperCase() !== 'AND' && value.toUpperCase() !== 'OR') {
 				// this is text
-				result.push({ relation: relation, name: 'text', value: terms[i][1] });
-				relation = 'AND'; // reset to default
+				result.push({ relation: relation, name: 'text', value: value });
+				relation = defaultRelation; // reset to default
 			} else {
 				// this is a relation for the next term;
-				relation = terms[i][1].toUpperCase(); // OR
+				relation = value.toUpperCase();
 			}
 		}
 	}
-
 	return result;
 };
 
 const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-export function filterParser(searchString: string) {
+export default function filterParser(searchString: string) {
 	searchString = searchString.trim();
-	const filters: Map<string, Array<Term>> = new Map();
+	const filters: Map<string, {relation:string, value: string}[]> = new Map();
 
 	const matches = parseQuery(searchString);
-	let terms: Array<Term>;
 	for (const match of matches) {
 		const { name, relation, value } = match;
 
 		if (!value) continue;
 
-		if (name === 'title' || name === 'body') {
-			// Trim quotes since we don't support phrase query here
-			// eg. Split title:"hello world" to title:hello title:world with relation
-			terms = trimQuotes(match.value).split(' ').map(value => ({ relation, value }));
+		if (filters.has(name)) {
+			filters.set(name, [...filters.get(name), { relation, value }]);
 		} else {
-			terms = [{ relation, value }];
+			filters.set(name, [{ relation, value }]);
 		}
-		filters.set(name, filters.get(name) ? [...filters.get(name), ...terms] : terms);
 	}
 
 	return filters;

@@ -7,8 +7,8 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
-const { filterParser } = require('./filterParser');
-const { queryBuilder } = require('./queryBuilder');
+const filterParser = require('./filterParser').default;
+const queryBuilder = require('./queryBuilder').default;
 
 class SearchEngine {
 	constructor() {
@@ -447,6 +447,7 @@ class SearchEngine {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			return this.basicSearch(searchString);
 		} else {
+			const parsedQuery = this.parseQuery(searchString.replace(/-/g, ' '));
 
 			const filters = filterParser(searchString);
 			const { query, params } = queryBuilder(filters);
@@ -463,7 +464,7 @@ class SearchEngine {
 				// console.log(`Rows returned ${rows.length}`);
 
 				// const
-				this.processResults_(rows);
+				this.processResults_(rows, this.parseQuery(rows, parsedQuery));
 				// console.log(`Rows returned after search for ${searchString}: ${rows}`);
 				return rows;
 			} catch (error) {

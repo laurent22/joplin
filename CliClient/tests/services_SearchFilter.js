@@ -258,7 +258,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 	}));
 
-	it('should support filtering by created with smart value day', asyncTest(async () => {
+	it('should support filtering by created with smart value: day', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'today', user_created_time: parseInt(time.goBackInTime(0, 'day')) });
 		const n2 = await Note.save({ title: 'I made this', body: 'yesterday', user_created_time: parseInt(time.goBackInTime(1, 'day')) });
@@ -282,7 +282,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value week', asyncTest(async () => {
+	it('should support filtering by created with smart value: week', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this week', user_created_time: parseInt(time.goBackInTime(0, 'week')) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the week before', user_created_time: parseInt(time.goBackInTime(1, 'week')) });
@@ -306,7 +306,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value month', asyncTest(async () => {
+	it('should support filtering by created with smart value: month', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this month', user_created_time: parseInt(time.goBackInTime(0, 'month')) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the month before', user_created_time: parseInt(time.goBackInTime(1, 'month')) });
@@ -330,7 +330,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value year', asyncTest(async () => {
+	it('should support filtering by created with smart value: year', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this year', user_created_time: parseInt(time.goBackInTime(0, 'year')) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the year before', user_created_time: parseInt(time.goBackInTime(1, 'year')) });
@@ -370,7 +370,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 	}));
 
-	it('should support filtering by updated with smart value day', asyncTest(async () => {
+	it('should support filtering by updated with smart value: day', asyncTest(async () => {
 		let rows;
 		const today = parseInt(time.goBackInTime(0, 'day'));
 		const yesterday = parseInt(time.goBackInTime(1, 'day'));
@@ -400,6 +400,27 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n11.id);
 		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n3.id);
+	}));
+
+	it('should support filtering by todo', asyncTest(async () => {
+		let rows;
+		const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
+		const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
+
+		await engine.syncTables();
+
+		rows = await engine.search('todo:*');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(t1.id);
+		expect(ids(rows)).toContain(t2.id);
+
+		rows = await engine.search('todo:true');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t2.id);
+
+		rows = await engine.search('todo:false');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t1.id);
 	}));
 
 });
