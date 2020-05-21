@@ -5,14 +5,16 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
+import { textOffsetToCursorPosition, useScrollHandler, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
 import useListIdent from './utils/useListIdent';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
+import CodeMirrorEditor from './CodeMirror';
 
-const AceEditorReact = require('react-ace').default;
+//  @ts-ignore
 const { bridge } = require('electron').remote.require('./bridge');
+//  @ts-ignore
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
 const Setting = require('lib/models/Setting.js');
@@ -77,7 +79,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
-	const [editor, setEditor] = useState(null);
+	const [editor] = useState(null);
 	const [lastKeys, setLastKeys] = useState([]);
 	const [webviewReady, setWebviewReady] = useState(false);
 
@@ -100,9 +102,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const selectionRangeRef = useRef(null);
 	selectionRangeRef.current = useSelectionRange(editor);
 
-	const rootWidth = useRootWidth({ rootRef });
-
-	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll } = useScrollHandler(editor, webviewRef, props.onScroll);
+	//  @ts-ignore
+	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editor, webviewRef, props.onScroll);
 
 	useListIdent({ editor, selectionRangeRef });
 
@@ -421,10 +422,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
-	function aceEditor_load(editor: any) {
-		setEditor(editor);
-	}
-
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -575,44 +572,52 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	function renderEditor() {
 		// Need to hard-code the editor width, otherwise various bugs pops up
-		let width = 0;
-		if (props.visiblePanes.includes('editor')) {
-			width = !props.visiblePanes.includes('viewer') ? rootWidth : Math.floor(rootWidth / 2);
-		}
+		//  @ts-ignore
+		// let width = 0;
+		// if (props.visiblePanes.includes('editor')) {
+		// 	width = !props.visiblePanes.includes('viewer') ? rootWidth : Math.floor(rootWidth / 2);
+		// }
 
 		return (
 			<div style={cellEditorStyle}>
-				<AceEditorReact
+				<CodeMirrorEditor
 					value={props.content}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
+					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.editorTheme}
 					style={styles.editor}
-					width={`${width}px`}
-					fontSize={styles.editor.fontSize}
-					showGutter={false}
-					readOnly={props.visiblePanes.indexOf('editor') < 0}
-					name="note-editor"
-					wrapEnabled={true}
-					onScroll={editor_scroll}
 					onChange={aceEditor_change}
-					showPrintMargin={false}
-					onLoad={aceEditor_load}
-					// Enable/Disable the autoclosing braces
-					setOptions={
-						{
-							behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
-							useSoftTabs: false,
-						}
-					}
-					// Disable warning: "Automatically scrolling cursor into view after
-					// selection change this will be disabled in the next version set
-					// editor.$blockScrolling = Infinity to disable this message"
-					editorProps={{ $blockScrolling: Infinity }}
-					// This is buggy (gets outside the container)
-					highlightActiveLine={false}
-					keyboardHandler={props.keyboardMode}
 				/>
 			</div>
+		// <AceEditorReact
+		// 	value={props.content}
+		// 	mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
+		// 	theme={styles.editor.editorTheme}
+		// 	style={styles.editor}
+		// 	width={`${width}px`}
+		// 	fontSize={styles.editor.fontSize}
+		// 	showGutter={false}
+		// 	readOnly={props.visiblePanes.indexOf('editor') < 0}
+		// 	name="note-editor"
+		// 	wrapEnabled={true}
+		// 	onScroll={editor_scroll}
+		// 	onChange={aceEditor_change}
+		// 	showPrintMargin={false}
+		// 	onLoad={aceEditor_load}
+		// 	// Enable/Disable the autoclosing braces
+		// 	setOptions={
+		// 		{
+		// 			behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
+		// 			useSoftTabs: false,
+		// 		}
+		// 	}
+		// 	// Disable warning: "Automatically scrolling cursor into view after
+		// 	// selection change this will be disabled in the next version set
+		// 	// editor.$blockScrolling = Infinity to disable this message"
+		// 	editorProps={{ $blockScrolling: Infinity }}
+		// 	// This is buggy (gets outside the container)
+		// 	highlightActiveLine={false}
+		// 	keyboardHandler={props.keyboardMode}
+		// />
 		);
 	}
 

@@ -34,7 +34,7 @@ const aritimStyle = {
 	htmlCodeBorderColor: '#141a21', // Single line code border, and tables
 	htmlCodeColor: '#005b47', // Single line code text
 
-	editorTheme: 'chaos',
+	editorTheme: 'monokai',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 
 	highlightedColor: '#d3dae3',
