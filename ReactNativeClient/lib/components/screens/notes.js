@@ -25,6 +25,8 @@ class NotesScreenComponent extends BaseScreenComponent {
 	constructor() {
 		super();
 
+		this.prevFolderId_ = null;
+
 		this.onAppStateChange_ = async () => {
 			// Force an update to the notes list when app state changes
 			const newProps = Object.assign({}, this.props);
@@ -71,7 +73,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = () => {
-			if (this.dialogbox.state.isVisible) {
+			if (!!this.dialogbox && this.dialogbox.state.isVisible) {
 				this.dialogbox.close();
 				return true;
 			}
@@ -110,6 +112,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	async componentDidUpdate(prevProps) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId != this.props.selectedFolderId || prevProps.selectedTagId != this.props.selectedTagId || prevProps.selectedSmartFilterId != this.props.selectedSmartFilterId || prevProps.notesParentType != this.props.notesParentType) {
+			if (prevProps.selectedFolderId) {
+				this.prevFolderId_ = prevProps.selectedFolderId;
+			}
 			await this.refreshNotes(this.props);
 		}
 	}
@@ -227,9 +232,10 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
+		const folderId = this.props.selectedFolderId ? this.props.selectedFolderId  : this.prevFolderId_;
+		const addFolderNoteButtons = !!folderId && folderId != Folder.conflictFolderId();
 		const thisComp = this;
-		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>;
+		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={folderId}></ActionButton>;
 
 		return (
 			<View style={rootStyle}>
