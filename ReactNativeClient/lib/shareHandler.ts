@@ -1,5 +1,5 @@
 const Note = require('lib/models/Note.js');
-const checkPermissions = require('lib/permissions.js').default;
+const checkPermissions = require('lib/checkPermissions.js').default;
 const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
 
