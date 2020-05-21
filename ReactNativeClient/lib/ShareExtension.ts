@@ -1,6 +1,12 @@
 const { NativeModules, Platform } = require('react-native');
 
-const ext = (Platform.OS === 'android' && NativeModules.ShareExtension) ?
+export interface SharedData {
+	title?: string,
+	text?: string,
+	resources?: string[]
+}
+
+const ShareExtension = (Platform.OS === 'android' && NativeModules.ShareExtension) ?
 	{
 		data: () => NativeModules.ShareExtension.data(),
 		close: () => NativeModules.ShareExtension.close(),
@@ -10,4 +16,4 @@ const ext = (Platform.OS === 'android' && NativeModules.ShareExtension) ?
 		close: () => {},
 	};
 
-export default ext;
+export { ShareExtension };
