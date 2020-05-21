@@ -694,7 +694,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
 		// code would check this and either append the CSS or replace.
 
-		let docHead_ = null;
+		let docHead_:any = null;
 
 		function docHead() {
 			if (docHead_) return docHead_;
