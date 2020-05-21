@@ -153,7 +153,7 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('created on DATE', () => {
+	it('created on', () => {
 		const searchString = 'created:20151218'; // YYYYMMDD
 		const expected = new Map([
 			['created', [{ relation: 'AND', value: '20151218' }]],
@@ -161,10 +161,18 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('updated on DATE', () => {
+	it('updated on', () => {
 		const searchString = 'updated:20151218'; // YYYYMMDD
 		const expected = new Map([
 			['updated', [{ relation: 'AND', value: '20151218' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('created on smart value, day', () => {
+		const searchString = 'created:day-1'; // YYYYMMDD
+		const expected = new Map([
+			['created', [{ relation: 'AND', value: 'day-1' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
