@@ -173,6 +173,7 @@ a {
 
 /* These must be important to prevent the codemirror defaults from taking over*/
 .CodeMirror {
+  font-family: monospace;
 	height: 100% !important;
   width: 100% !important;
   color: inherit !important;

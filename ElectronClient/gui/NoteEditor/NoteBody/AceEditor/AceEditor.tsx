@@ -6,7 +6,6 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
-import useListIdent from './utils/useListIdent';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -26,20 +25,6 @@ const markdownUtils = require('lib/markdownUtils');
 const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
-
-require('brace/mode/markdown');
-// https://ace.c9.io/build/kitchen-sink.html
-// https://highlightjs.org/static/demo/
-require('brace/theme/chrome');
-require('brace/theme/solarized_light');
-require('brace/theme/solarized_dark');
-require('brace/theme/twilight');
-require('brace/theme/dracula');
-require('brace/theme/chaos');
-require('brace/theme/tomorrow');
-require('brace/keybinding/vim');
-require('brace/keybinding/emacs');
-require('brace/theme/terminal');
 
 // TODO: Could not get below code to work
 
@@ -97,8 +82,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
 
 	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editor, webviewRef, props.onScroll);
-
-	useListIdent({ editor });
 
 	const aceEditor_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -579,37 +562,14 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.editorTheme}
 					style={styles.editor}
+					readOnly={props.visiblePanes.indexOf('editor') < 0}
+					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					onChange={aceEditor_change}
+					keyMap={props.keyboardMode}
 				/>
 			</div>
 		// <AceEditorReact
-		// 	value={props.content}
-		// 	mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
-		// 	theme={styles.editor.editorTheme}
-		// 	style={styles.editor}
-		// 	width={`${width}px`}
-		// 	fontSize={styles.editor.fontSize}
-		// 	showGutter={false}
-		// 	readOnly={props.visiblePanes.indexOf('editor') < 0}
-		// 	name="note-editor"
-		// 	wrapEnabled={true}
 		// 	onScroll={editor_scroll}
-		// 	onChange={aceEditor_change}
-		// 	showPrintMargin={false}
-		// 	onLoad={aceEditor_load}
-		// 	// Enable/Disable the autoclosing braces
-		// 	setOptions={
-		// 		{
-		// 			behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
-		// 			useSoftTabs: false,
-		// 		}
-		// 	}
-		// 	// Disable warning: "Automatically scrolling cursor into view after
-		// 	// selection change this will be disabled in the next version set
-		// 	// editor.$blockScrolling = Infinity to disable this message"
-		// 	editorProps={{ $blockScrolling: Infinity }}
-		// 	// This is buggy (gets outside the container)
-		// 	highlightActiveLine={false}
 		// 	keyboardHandler={props.keyboardMode}
 		// />
 		);

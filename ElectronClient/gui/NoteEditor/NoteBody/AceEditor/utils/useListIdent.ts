@@ -1,40 +1,55 @@
-import { useEffect } from 'react';
-import { selectionRange } from './index';
+// Markdown list indentation.
+// If the current line starts with `markup.list` token,
+// hitting `Tab` key indents the line instead of inserting tab at cursor.
+export default function useListIdent(CodeMirror: any) {
 
-interface HookDependencies {
-	editor: any,
-}
+	function isSelection(anchor: any, head: any) {
+		return anchor.line !== head.line || anchor.ch !== head.ch;
+	}
 
-export default function useListIdent(dependencies:HookDependencies) {
-	const { editor } = dependencies;
+	CodeMirror.commands.smartListIndent = function(cm: any) {
+		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
-	useEffect(() => {
-		if (!editor) return;
+		const ranges = cm.listSelections();
+		for (let i = 0; i < ranges.length; i++) {
+			const { anchor, head } = ranges[i];
 
-		// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
-		// If the current line starts with `markup.list` token,
-		// hitting `Tab` key indents the line instead of inserting tab at cursor.
-		const originalEditorIndent = editor.indent;
+			const tokens = cm.getLineTokens(anchor.line);
+			console.log(tokens);
 
-		editor.indent = function() {
-			const range = selectionRange(editor);
-			if (range.isEmpty()) {
-				const row = range.start.row;
-				const tokens = this.session.getTokens(row);
+			// This is an actual selection and we should indent
+			if (isSelection(anchor, head) || tokens.length == 0 || !tokens[0].state.base.list) {
+				cm.execCommand('defaultTab');
+			} else {
+				let token: any = tokens[0];
 
-				if (tokens.length > 0 && tokens[0].type == 'markup.list') {
-					if (tokens[0].value.search(/\d+\./) != -1) {
-						// Resets numbered list to 1.
-						this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
-							tokens[0].value.replace(/\d+\./, '1.'));
-					}
+				if (tokens[0].string.match(/\s/) && tokens.length > 1) { token = tokens[1]; }
 
-					this.session.indentRows(row, row, '\t');
-					return;
+				if (token.string.match(/\d+/)) {
+					// Resets numbered list to 1.
+					cm.replaceRange('1',  { line: anchor.line, ch: token.start }, { line: anchor.line, ch: token.end });
 				}
-			}
 
-			if (originalEditorIndent) originalEditorIndent.call(this);
-		};
-	}, [editor]);
+				cm.indentLine(anchor.line, 'add');
+			}
+		}
+	};
+
+	CodeMirror.commands.smartListUnindent = function(cm: any) {
+		if (cm.getOption('disableInput')) return CodeMirror.Pass;
+
+		const ranges = cm.listSelections();
+		for (let i = 0; i < ranges.length; i++) {
+			const { anchor, head } = ranges[i];
+
+			const tokens = cm.getLineTokens(anchor.line);
+
+			// This is an actual selection and we should indent
+			if (isSelection(anchor, head) || tokens.length == 0 || !tokens[0].state.base.list) {
+				cm.execCommand('indentAuto');
+			} else {
+				cm.indentLine(anchor.line, 'subtract');
+			}
+		}
+	};
 }
