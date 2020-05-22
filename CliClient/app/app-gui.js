@@ -483,11 +483,14 @@ class AppGui {
 		} else if (cmd === 'next_link' || cmd === 'previous_link' || cmd === 'open_link') {
 			const noteText = this.widget('noteText');
 			const mainWindow = this.widget('mainWindow');
+			// const lines = noteText.renderedText_.split('\n');
+			// console.log(lines)
 
 			if (noteText.hasFocus) {
 				noteText.render();
+
 				const lines = noteText.renderedText_.split('\n');
-				// const link = /\\x1B\[[0-9][0-9]m\\x1B\[[0-9]mhttp:\/\/[0-9.]+:[0-9]+\/[0-9]+\\x1B\[[0-9][0-9]m\\x1B\[[0-9][0-9]m/g;
+				// const link = /\\x1B\[[0-9]{2}m\\x1B\[[0-9]mhttp:\/\/[0-9.]+:[0-9]+\/[0-9]+\\x1B\[[0-9]{2}m\\x1B\[[0-9]{2}m/g;
 				const link = /http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g;
 
 				this.term_.moveTo(mainWindow.width - noteText.innerWidth + 1, 1);
@@ -497,7 +500,7 @@ class AppGui {
 
 					const innerX = x - mainWindow.width + noteText.innerWidth;
 					const innerY = y;
-					const scrollHeight = noteText.scrollableHeight_;
+					const scrollHeight = noteText.scrollableHeight_ - 1;
 
 					const beginStr = lines[innerY].substr(0, innerX);
 					const endStr = lines[innerY].substr(innerX, lines[innerY].length - 1);
@@ -512,7 +515,7 @@ class AppGui {
 							}
 
 						} else if (cmd === 'next_link' && matchesNext.length > 1) {
-							this.term_.term().move(matchesNext[1].index - 9, innerY);
+							this.term_.term().move(matchesNext[1].index, innerY);
 							this.term_.term().inverse(matchesNext[1]);
 							return;
 						}
@@ -522,7 +525,7 @@ class AppGui {
 					} else {
 						const matchesPrev = [...endStr.matchAll(link)];
 						if (matchesPrev.length) {
-							this.term_.move(matchesPrev[-1].index - 9, innerY);
+							this.term_.move(matchesPrev[-1].index, innerY);
 							this.term_.term().inverse(matchesPrev[-1]);
 							return;
 						}
@@ -532,24 +535,20 @@ class AppGui {
 					if (cmd === 'next_link') i === scrollHeight ? i = 0 : i = innerY + 1;
 					else i === 0 ? i = scrollHeight : i = innerY - 1;
 					for (; i !== innerY; (cmd === 'next_link' ? i++ : i--)) {
-						if (i === scrollHeight) i = 0;
 						const matches = [...lines[i].matchAll(link)];
 
 						if (cmd === 'next_link') {
 							if (i === scrollHeight) i = 0;
 							if (matches.length) {
-								this.term_.term().move(matches[0].index - 9, i);
+								this.term_.term().move(matches[0].index, i);
 								this.term_.term().inverse(matches[0][0]);
-								// this.term_.term().styleReset();
 								return;
 							}
 						} else {
 							if (i === 0) i = scrollHeight;
 							if (matches.length) {
-								this.term_.term().move(matches[matches.length - 1].index - 9, i);
+								this.term_.term().move(matches[matches.length - 1].index, i);
 								this.term_.term().inverse(matches[matches.length - 1][0]);
-								// this.term_.term().styleReset();
-								// noteText.render();
 								return;
 							}
 						}
