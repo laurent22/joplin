@@ -314,6 +314,7 @@ class Application extends BaseApplication {
 	}
 
 	async loadKeymaps() {
+		// NOTE: This is where the shortcuts are mapped. types are stored in app-gui.js. Mine are now already input.
 		const defaultKeyMap = [
 			{ keys: [':'], type: 'function', command: 'enter_command_line_mode' },
 			{ keys: ['TAB'], type: 'function', command: 'focus_next' },
@@ -324,6 +325,9 @@ class Application extends BaseApplication {
 			{ keys: ['PAGE_DOWN'], type: 'function', command: 'page_down' },
 			{ keys: ['ENTER'], type: 'function', command: 'activate' },
 			{ keys: ['DELETE', 'BACKSPACE'], type: 'function', command: 'delete' },
+			{ keys: ['n'], type: 'function', command: 'next_link' },
+			{ keys: ['b'], type: 'function', command: 'previous_link' },
+			{ keys: ['o'], type: 'function', command: 'open_link' },
 			{ keys: [' '], command: 'todo toggle $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
