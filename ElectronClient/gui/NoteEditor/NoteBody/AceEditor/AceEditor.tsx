@@ -385,7 +385,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCutText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -395,7 +395,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCopyText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -410,7 +410,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						onEditorPaste();
 					}
 				},
-			})
+			}),
 		);
 
 		menu.popup(bridge().window());
@@ -516,6 +516,17 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			clearTimeout(timeoutId);
 		};
 	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+
+	useEffect(() => {
+		if (!editor) return;
+
+		if (contentKeyHasChangedRef.current) {
+			// editor.getSession().setMode(new CustomMdMode());
+			const undoManager = editor.getSession().getUndoManager();
+			undoManager.reset();
+			editor.getSession().setUndoManager(undoManager);
+		}
+	}, [props.content, editor]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
