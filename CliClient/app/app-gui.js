@@ -493,12 +493,14 @@ class AppGui {
 				// const link = /\\x1B\[[0-9]{2}m\\x1B\[[0-9]mhttp:\/\/[0-9.]+:[0-9]+\/[0-9]+\\x1B\[[0-9]{2}m\\x1B\[[0-9]{2}m/g;
 				const link = /http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g;
 
-				this.term_.moveTo(mainWindow.width - noteText.innerWidth + 1, 1);
+				// this.term_.moveTo(mainWindow.width - noteText.innerWidth + 1, 1);
+				this.term_.showCursor();
 
 				this.term_.term().getCursorLocation((error, x, y) => {
 					if (error) throw new Error('Could not get cursor index');
 
-					const innerX = x - mainWindow.width + noteText.innerWidth;
+					const cursorOffset = mainWindow.width - noteText.innerWidth + 1;
+					const innerX = x - cursorOffset;
 					const innerY = y;
 					const scrollHeight = noteText.scrollableHeight_ - 1;
 
@@ -509,14 +511,17 @@ class AppGui {
 						const matchesNext = [...beginStr.matchAll(link)];
 
 						if (cmd === 'open_link' && matchesNext.length) {
-							if (matchesNext[0].index === innerX) {
+
+							if (matchesNext[0].index  === innerX) {
+								console.log(matchesNext[0][0]);
 								open(matchesNext[0][0]);
 								return;
 							}
 
 						} else if (cmd === 'next_link' && matchesNext.length > 1) {
-							this.term_.term().move(matchesNext[1].index, innerY);
-							this.term_.term().inverse(matchesNext[1]);
+							this.term_.term().moveTo(cursorOffset + matchesNext[1].index - 9, innerY);
+							this.term_.term().inverse(matchesNext[1][0]);
+							this.term_.term().move(-matchesNext[1][0].length, 0);
 							return;
 						}
 
@@ -525,8 +530,9 @@ class AppGui {
 					} else {
 						const matchesPrev = [...endStr.matchAll(link)];
 						if (matchesPrev.length) {
-							this.term_.move(matchesPrev[-1].index, innerY);
-							this.term_.term().inverse(matchesPrev[-1]);
+							this.term_.moveTo(cursorOffset + matchesPrev[matchesPrev.length - 1].index - 9, innerY);
+							this.term_.term().inverse(matchesPrev[matchesPrev.length - 1][0]);
+							this.term_.move(-matchesPrev[matchesPrev.length - 1][0].length, 0);
 							return;
 						}
 					}
@@ -540,15 +546,17 @@ class AppGui {
 						if (cmd === 'next_link') {
 							if (i === scrollHeight) i = 0;
 							if (matches.length) {
-								this.term_.term().move(matches[0].index, i);
+								this.term_.term().moveTo(cursorOffset + matches[0].index - 9, i + 1);
 								this.term_.term().inverse(matches[0][0]);
+								this.term_.term().move(-matches[0][0].length, 0);
 								return;
 							}
 						} else {
 							if (i === 0) i = scrollHeight;
 							if (matches.length) {
-								this.term_.term().move(matches[matches.length - 1].index, i);
+								this.term_.term().moveTo(cursorOffset + matches[matches.length - 1].index - 9, i + 1);
 								this.term_.term().inverse(matches[matches.length - 1][0]);
+								this.term_.term().move(-matches[matches.length - 1][0].length, 0);
 								return;
 							}
 						}
