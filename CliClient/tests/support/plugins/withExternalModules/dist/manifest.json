@@ -1,0 +1,10 @@
+{
+    "manifest_version": 1,
+    "name": "Joplin Test Plugin with imports",
+    "version": "1.0.0",
+    "description": "To test importing an external package from the plugin",
+    "homepage_url": "https://joplinapp.org",
+    "permissions": [
+        "model"
+    ]
+}

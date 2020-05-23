@@ -9,6 +9,8 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
+const testPluginDir = `${__dirname}/../tests/support/plugins`;
+
 describe('services_PluginService', function() {
 
 	beforeEach(async (done) => {
@@ -17,19 +19,8 @@ describe('services_PluginService', function() {
 		done();
 	});
 
-	it('should load and run a plugin', asyncTest(async () => {
-		const plugin = {
-			id: 'test',
-			script: `
-				exports = {
-					run: async function() {
-						const folder = await joplin.model.post('folders', null, { title: "my plugin folder" });
-						await joplin.model.post('notes', null, { parent_id: folder.id, title: "testing plugin!" });
-					},
-				};
-			`,
-		};
-
+	it('should load and run a simple plugin', asyncTest(async () => {
+		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/simple`);
 		await PluginService.instance().runPlugin(plugin);
 
 		const allFolders = await Folder.all();
@@ -40,5 +31,23 @@ describe('services_PluginService', function() {
 		expect(allNotes.length).toBe(1);
 		expect(allNotes[0].title).toBe('testing plugin!');
 		expect(allNotes[0].parent_id).toBe(allFolders[0].id);
+	}));
+
+	it('should load and run a plugin from a directory', asyncTest(async () => {
+		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/testImport`);
+		await PluginService.instance().runPlugin(plugin);
+
+		const allFolders = await Folder.all();
+		expect(allFolders.length).toBe(1);
+		expect(allFolders[0].title).toBe('testImport');
+	}));
+
+	it('should load and run a plugin that uses external packages', asyncTest(async () => {
+		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/withExternalModules/dist`);
+		await PluginService.instance().runPlugin(plugin);
+
+		const allFolders = await Folder.all();
+		expect(allFolders.length).toBe(1);
+		expect(allFolders[0].title).toBe('  foo');
 	}));
 });

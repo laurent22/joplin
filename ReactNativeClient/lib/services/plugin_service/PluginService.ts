@@ -1,10 +1,8 @@
 import * as vm from 'vm';
+import Plugin from './Plugin';
+import manifestFromObject from './utils/manifestFromObject';
+const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
-
-interface Plugin {
-	id: string,
-	script: string,
-}
 
 class SandboxService {
 
@@ -14,13 +12,14 @@ class SandboxService {
 		this.api = new Api();
 	}
 
-	public newSandbox() {
-		// that:SandboxService
+	public newSandbox(plugin:Plugin) {
 		return (() => {
-			const requireWhiteList:string[] = [
-				// 'lib/models/Note',
-				// 'lib/models/Folder',
-			];
+			const fsDriver = shim.fsDriver();
+
+			// const requireWhiteList:string[] = [
+			// 	// 'lib/models/Note',
+			// 	// 'lib/models/Folder',
+			// ];
 
 			function serializeApiBody(body:any) {
 				if (typeof body !== 'string') return JSON.stringify(body);
@@ -43,11 +42,26 @@ class SandboxService {
 							return this.api.route('DELETE', path, query);
 						},
 					},
+					plugins: {
+						register: (script:any) => {
+							plugin.script = script;
+						},
+					},
 				},
 				console: console,
-				require: function(path:string):any {
-					if (!requireWhiteList.includes(path)) throw new Error(`Cannot access this module: ${path}`);
-					return require(path);
+				require: (path:string):any => {
+					let pathToLoad = path;
+
+					if (path.indexOf('.') === 0) {
+						const absolutePath = fsDriver.resolve(`${plugin.baseDir}/${path}`);
+						if (absolutePath.indexOf(plugin.baseDir) !== 0) throw new Error('Can only load files from within the plugin directory');
+						pathToLoad = absolutePath;
+					} else {
+						if (path.indexOf('lib/') === 0) throw new Error('Access to internal lib is not allowed');
+						// if (!requireWhiteList.includes(path)) throw new Error(`Cannot access this module: ${path}`);
+					}
+
+					return require(pathToLoad);
 				},
 			};
 		})();
@@ -80,19 +94,31 @@ export default class PluginService {
 		};
 	}
 
+	async loadPlugin(path:string):Promise<Plugin> {
+		const fsDriver = shim.fsDriver();
+		const manifestPath = `${path}/manifest.json`;
+		const indexPath = `${path}/index.js`;
+		const manifestContent = await fsDriver.readFile(manifestPath);
+		const manifest = manifestFromObject(JSON.parse(manifestContent));
+
+		const mainScriptContent = await fsDriver.readFile(indexPath);
+
+		return new Plugin(path, manifest, mainScriptContent);
+	}
+
 	async runPlugin(plugin:Plugin) {
-		const sandbox = this.sandboxService.newSandbox();
+		const sandbox = this.sandboxService.newSandbox(plugin);
 
 		vm.createContext(sandbox);
 
-		const result = vm.runInContext(plugin.script, sandbox);
+		vm.runInContext(plugin.scriptText, sandbox);
 
-		if (result.run) {
+		if (plugin.script) {
 			const startTime = Date.now();
 
 			try {
 				this.logger().info(`Starting plugin: ${plugin.id}`);
-				await result.run(null);
+				await plugin.script.run(null);
 			} catch (error) {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
@@ -103,6 +129,8 @@ export default class PluginService {
 			}
 
 			this.logger().info(`Finished plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
+		} else {
+			throw new Error('No plugin was registered! Call joplin.plugins.register({.....}) from within the plugin.');
 		}
 	}
 
