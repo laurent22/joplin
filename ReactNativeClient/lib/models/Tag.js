@@ -54,6 +54,9 @@ class Tag extends BaseItem {
 		let childrenIds = await Tag.childrenTagIds(parentId);
 		for (let i = 0; i < childrenIds.length; i++) {
 			const childId = childrenIds[i];
+			// Fail-safe in case of a loop in the tag hierarchy.
+			if (descendantIds.includes(childId)) continue;
+
 			descendantIds.push(childId);
 			childrenIds = childrenIds.concat(await Tag.childrenTagIds(childId));
 		}
