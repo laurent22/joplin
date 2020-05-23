@@ -34,7 +34,6 @@ const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const open = require('open');
 
 const chalk = require('chalk');
 const tk = require('terminal-kit');
@@ -56,6 +55,9 @@ const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
 const StatusBarWidget = require('./gui/StatusBarWidget.js');
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
+const LinkSelector = require('./LinkSelector.js');
+// const linkSelector = new LinkSelector();
+
 
 class AppGui {
 	constructor(app, store, keymap) {
@@ -96,6 +98,8 @@ class AppGui {
 
 			this.currentShortcutKeys_ = [];
 			this.lastShortcutKeyTime_ = 0;
+
+			this.linkSelector_ = new LinkSelector();
 
 			// Recurrent sync is setup only when the GUI is started. In
 			// a regular command it's not necessary since the process
