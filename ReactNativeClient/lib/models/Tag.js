@@ -303,7 +303,7 @@ class Tag extends BaseItem {
 	static async moveTag(tagId, parentTagId) {
 		if (tagId === parentTagId
 				|| (await Tag.descendantTagIds(tagId)).includes(parentTagId)) {
-			throw new Error(_('Cannot move tag to this location'));
+			throw new Error(_('Cannot move tag to this location.'));
 		}
 
 		const tag = await Tag.load(tagId);
@@ -322,6 +322,12 @@ class Tag extends BaseItem {
 		if (!options) options = {};
 		// The following option is used to prevent loops in the tag hierarchy
 		if (!('mainTagId' in options) && tag.id) options.mainTagId = tag.id;
+
+		if (tag.title.startsWith('/') || tag.title.endsWith('/')) {
+			throw new Error(_('Tag name cannot start or end with a `/`.'));
+		} else if (tag.title.includes('//')) {
+			throw new Error(_('Tag name cannot contain `//`.'));
+		}
 
 		let parentId = '';
 		// Check if the tag is nested using `/` as separator

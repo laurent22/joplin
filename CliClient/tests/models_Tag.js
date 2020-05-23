@@ -222,6 +222,25 @@ describe('models_Tag', function() {
 		expect(tag1).not.toBeDefined();
 	}));
 
+	it('should delete noteless parent tags', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
+		const subsubtag = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		await Tag.addNote(subsubtag.id, note0.id);
+		let tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
+
+		// This will remove the link from tag1 to subsubtag1 (which is removed)
+		// So tag1 is noteless and should also be removed
+		await Tag.delete(tag1_subtag1.id);
+
+		const parent_tag = await Tag.loadByTitle('tag1');
+		expect(parent_tag).not.toBeDefined();
+		tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
+		expect(tag1_subtag1).not.toBeDefined();
+		const tag1 = await Tag.loadByTitle('tag1/subtag1/subsubtag');
+		expect(tag1).not.toBeDefined();
+	}));
+
 	it('renaming should change prefix in descendant tags', asyncTest(async () => {
 		const tag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
 		const subtag2 = await Tag.saveNested({ title: 'tag1/subtag2' });
@@ -275,5 +294,33 @@ describe('models_Tag', function() {
 		await Tag.moveTag(subsubtag1.id, tag2.id);
 
 		expect((await Tag.load(subsubtag1.id)).title).toBe('tag2/subsubtag1');
+	}));
+
+	it('moving tag to itself or its descendant throws error', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
+		const subsubtag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag1' });
+		await Tag.addNote(subsubtag1.id, note1.id);
+
+		const tag1 = await Tag.loadByTitle('tag1');
+
+		let hasThrown = await checkThrowAsync(async () => await Tag.moveTag(tag1.id, subsubtag1.id));
+		expect(hasThrown).toBe(true);
+		hasThrown = await checkThrowAsync(async () => await Tag.moveTag(tag1.id, tag1.id));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('renaming tag as a child of itself creates new parent', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
+		const subtag1 = await Tag.saveNested({ title: 'tag1/subtag1' });
+		await Tag.addNote(subtag1.id, note1.id);
+
+		const a = await Tag.rename(subtag1, 'tag1/subtag1/a/subtag1');
+
+		const subtag1_renamed = await Tag.loadByTitle('tag1/subtag1/a/subtag1');
+		expect(subtag1_renamed.id).toBe(subtag1.id);
+		const subtag1_new = await Tag.loadByTitle('tag1/subtag1');
+		expect(subtag1_new.id).not.toBe(subtag1.id);
 	}));
 });
