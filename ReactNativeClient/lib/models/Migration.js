@@ -3,6 +3,7 @@ const BaseModel = require('lib/BaseModel.js');
 const migrationScripts = {
 	20: require('lib/migrations/20.js'),
 	27: require('lib/migrations/27.js'),
+	30: require('lib/migrations/30.js'),
 };
 
 class Migration extends BaseModel {
