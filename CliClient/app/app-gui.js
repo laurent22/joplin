@@ -1,7 +1,3 @@
-// NOTE: tests:
-// 1. change contents of a note
-// 2. navigate away from note to new note
-
 const { Logger } = require('lib/logger.js');
 const Folder = require('lib/models/Folder.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -463,8 +459,6 @@ class AppGui {
 			} else {
 				this.stdout(_('Please select the note or notebook to be deleted first.'));
 			}
-
-		// NOTE: MY SHORTCUTS
 		} else if (cmd === 'next_link' || cmd === 'previous_link') {
 			const noteText = this.widget('noteText');
 			// if (noteText.hasFocus) {

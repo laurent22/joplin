@@ -1,5 +1,4 @@
 const open = require('open');
-// TODO: Figure out what the underscore after the variable means in other classes
 
 class LinkSelector {
 	constructor() {
