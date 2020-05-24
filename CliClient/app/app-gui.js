@@ -779,6 +779,7 @@ class AppGui {
 				// -------------------------------------------------------------------------
 				// Process shortcut and execute associated command
 				// -------------------------------------------------------------------------
+
 				const shortcutKey = this.currentShortcutKeys_.join('');
 				const keymapItem = this.keymapItemByKey(shortcutKey);
 
@@ -792,6 +793,7 @@ class AppGui {
 					this.logger().debug('Shortcut:', shortcutKey, keymapItem);
 
 					this.currentShortcutKeys_ = [];
+
 					if (keymapItem.type === 'function') {
 						this.processFunctionCommand(keymapItem.command);
 					} else if (keymapItem.type === 'prompt') {
