@@ -582,9 +582,9 @@ class BaseApplication {
 	}
 
 	determineProfileDir(initArgs) {
-		if (initArgs.profileDir) return toSystemSlashes(initArgs.profileDir);
+		if (initArgs.profileDir) return initArgs.profileDir;
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return toSystemSlashes(`${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`);
+		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 
 		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
 	}
