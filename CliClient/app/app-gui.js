@@ -461,7 +461,6 @@ class AppGui {
 			}
 		} else if (cmd === 'next_link' || cmd === 'previous_link') {
 			const noteText = this.widget('noteText');
-			// if (noteText.hasFocus) {
 
 			noteText.render();
 
@@ -480,7 +479,6 @@ class AppGui {
 				);
 				setTimeout(() => this.term_.term().inverse(this.linkSelector_.link), 50);
 			}
-			// }
 		} else if (cmd === 'open_link') {
 			if (this.widget('noteText').hasFocus) {
 				this.linkSelector_.openLink(this.widget('noteText'));
@@ -779,6 +777,7 @@ class AppGui {
 				// -------------------------------------------------------------------------
 				// Process shortcut and execute associated command
 				// -------------------------------------------------------------------------
+
 				const shortcutKey = this.currentShortcutKeys_.join('');
 				const keymapItem = this.keymapItemByKey(shortcutKey);
 
@@ -792,6 +791,7 @@ class AppGui {
 					this.logger().debug('Shortcut:', shortcutKey, keymapItem);
 
 					this.currentShortcutKeys_ = [];
+
 					if (keymapItem.type === 'function') {
 						this.processFunctionCommand(keymapItem.command);
 					} else if (keymapItem.type === 'prompt') {

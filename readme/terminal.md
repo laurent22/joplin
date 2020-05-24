@@ -176,9 +176,9 @@ There are two types of shortcuts: those that manipulate the user interface direc
 	ENTER             activate
 	DELETE, BACKSPACE delete
 	(SPACE)           todo toggle $n
-	n				  next_link
-	b				  previous_link
-	o				  open_link
+	n                 next_link
+	b                 previous_link
+	o                 open_link
 	tc                toggle_console
 	tm                toggle_metadata
 	/                 search ""
