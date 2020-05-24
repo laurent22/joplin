@@ -47,20 +47,20 @@ msgstr "Tidak ada notebook yang ditentukan."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
-msgstr "Ya"
+msgstr "Y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "n"
-msgstr "tidak"
+msgstr "t"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "N"
-msgstr "Tidak"
+msgstr "N"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
-msgstr "ya"
+msgstr "y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
