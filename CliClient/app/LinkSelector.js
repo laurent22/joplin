@@ -3,14 +3,12 @@ const open = require('open');
 
 class LinkSelector {
 	constructor() {
-		this.noteId_ = null; // the note id
-		this.scrollTop_ = null; // units from the top of the scroll window
-		this.renderedText_ = null; // rendered text string with correct newline chars
-		this.currentLinkIndex_ = null; // currently selected link index from linkStore_
-		this.linkStore_ = null; // object of all link objects in the text
-		// this.linkRegex_ = /\\x1B[^\s]+http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g; // link regex being searched for
+		this.noteId_ = null;
+		this.scrollTop_ = null; // used so 'o' won't open unhighlighted link after scrolling
+		this.renderedText_ = null;
+		this.currentLinkIndex_ = null;
+		this.linkStore_ = null;
 		this.linkRegex_ = /http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g;
-		// const link = /\\x1B\[[0-9]{2}m\\x1B\[[0-9]mhttp:\/\/[0-9.]+:[0-9]+\/[0-9]+\\x1B\[[0-9]{2}m\\x1B\[[0-9]{2}m/g;
 	}
 
 	get link() {
@@ -26,10 +24,6 @@ class LinkSelector {
 	get noteY() {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].noteY;
-	}
-
-	get scrollTop() {
-		return this.scrollTop_;
 	}
 
 	findLinks(renderedText) {
@@ -63,10 +57,12 @@ class LinkSelector {
 	}
 
 	scrollWidget(textWidget) {
+		if (this.currentLinkIndex_ === null) return;
+
 		const noteY = this.linkStore_[this.currentLinkIndex_].noteY;
 
-		let viewBoxMin = textWidget.scrollTop_;
-		let viewBoxMax = viewBoxMin + textWidget.innerHeight;
+		let viewBoxMin = textWidget.scrollTop_ + 1;
+		let viewBoxMax = viewBoxMin + textWidget.innerHeight - 2;
 
 		if (noteY < viewBoxMin) {
 			for (; noteY < viewBoxMin; textWidget.pageUp()) {
@@ -96,16 +92,11 @@ class LinkSelector {
 			this.changeLink(textWidget, offset);
 			return;
 		}
-		if (textWidget.scrollTop_ !== this.scrollTop_) {
-			this.scrollTop_ = textWidget.scrollTop_;
-			this.changeLink(textWidget, 0);
-			return;
-		}
+		if (textWidget.scrollTop_ !== this.scrollTop_) this.scrollTop_ = textWidget.scrollTop_;
 
 		if (!this.linkStore_.length) return null;
 
 		let offsetMod = (offset + this.currentLinkIndex_) % this.linkStore_.length;
-		if (offsetMod < 0) offsetMod = this.linkStore_.length + offsetMod;
 
 		if (this.currentLinkIndex_ === null) {
 			if (offsetMod < 0) this.currentLinkIndex_ = this.linkStore_.length + offsetMod;
@@ -113,6 +104,8 @@ class LinkSelector {
 			else this.currentLinkIndex_ = offsetMod - 1;
 			return;
 		}
+
+		if (offsetMod < 0) offsetMod = this.linkStore_.length + offsetMod;
 
 		this.currentLinkIndex_ = offsetMod;
 		return;
