@@ -3,6 +3,7 @@ import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
+const { filename } = require('lib/path-utils');
 
 class SandboxService {
 
@@ -28,7 +29,7 @@ class SandboxService {
 
 			return {
 				joplin: {
-					model: {
+					api: {
 						get: (path:string, query:any = null) => {
 							return this.api.route('GET', path, query);
 						},
@@ -82,6 +83,7 @@ export default class PluginService {
 	}
 
 	private sandboxService:SandboxService;
+	private plugins_:Plugin[] = [];
 
 	constructor() {
 		this.sandboxService = new SandboxService();
@@ -94,16 +96,36 @@ export default class PluginService {
 		};
 	}
 
+	public get plugins():Plugin[] {
+		return this.plugins_;
+	}
+
 	async loadPlugin(path:string):Promise<Plugin> {
 		const fsDriver = shim.fsDriver();
-		const manifestPath = `${path}/manifest.json`;
-		const indexPath = `${path}/index.js`;
+
+		let distPath = path;
+		if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
+			distPath = `${path}/dist`;
+		}
+
+		const manifestPath = `${distPath}/manifest.json`;
+		const indexPath = `${distPath}/index.js`;
 		const manifestContent = await fsDriver.readFile(manifestPath);
 		const manifest = manifestFromObject(JSON.parse(manifestContent));
-
 		const mainScriptContent = await fsDriver.readFile(indexPath);
+		return new Plugin(filename(path), distPath, manifest, mainScriptContent);
+	}
 
-		return new Plugin(path, manifest, mainScriptContent);
+	async loadPlugins(pluginDir:string) {
+		const fsDriver = shim.fsDriver();
+		const pluginPaths = await fsDriver.readDirStats(pluginDir);
+
+		for (const stat of pluginPaths) {
+			if (!stat.isDirectory()) continue;
+			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
+			await this.runPlugin(plugin);
+			this.plugins.push(plugin);
+		}
 	}
 
 	async runPlugin(plugin:Plugin) {

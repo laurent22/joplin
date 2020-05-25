@@ -1,5 +1,4 @@
 import { PluginManifest } from './utils/types';
-const { filename } = require('lib/path-utils');
 const { shim } = require('lib/shim');
 
 export default class Plugin {
@@ -9,9 +8,10 @@ export default class Plugin {
 	private manifest_:PluginManifest;
 	private scriptText_:string;
 	private script_:any;
+	private enabled_:boolean = true;
 
-	constructor(baseDir:string, manifest:PluginManifest, scriptText:string) {
-		this.id_ = filename(baseDir);
+	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string) {
+		this.id_ = id;
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
@@ -19,6 +19,10 @@ export default class Plugin {
 
 	public get id():string {
 		return this.id_;
+	}
+
+	public get enabled():boolean {
+		return this.enabled_;
 	}
 
 	public get manifest():PluginManifest {

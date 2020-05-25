@@ -617,6 +617,7 @@ class BaseApplication {
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);

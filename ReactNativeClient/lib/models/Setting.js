@@ -1208,6 +1208,7 @@ Setting.constants_ = {
 	profileDir: '',
 	templateDir: '',
 	tempDir: '',
+	pluginDir: '',
 	flagOpenDevTools: false,
 	syncVersion: 1,
 };

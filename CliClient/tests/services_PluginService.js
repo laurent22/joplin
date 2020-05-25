@@ -43,11 +43,23 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
-		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/withExternalModules/dist`);
+		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/withExternalModules`);
+		expect(plugin.id).toBe('withExternalModules');
 		await PluginService.instance().runPlugin(plugin);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
 		expect(allFolders[0].title).toBe('  foo');
+	}));
+
+	it('should load multiple plugins from a directory', asyncTest(async () => {
+		const service = PluginService.instance();
+		await service.loadPlugins(`${testPluginDir}/multi_plugins`);
+
+		expect(service.plugins.length).toBe(2);
+
+		const allFolders = await Folder.all();
+		expect(allFolders.length).toBe(2);
+		expect(allFolders.map(f => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 });
