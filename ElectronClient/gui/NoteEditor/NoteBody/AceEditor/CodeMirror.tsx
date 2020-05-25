@@ -20,6 +20,11 @@ import 'codemirror/mode/xml/xml';
 // Modes for syntax highlighting inside of code blocks
 import 'codemirror/mode/python/python';
 
+export interface CancelledKeys {
+	mac: string[],
+	default: string[],
+}
+
 export interface EditorProps {
 	value: string,
 	mode: string,
@@ -28,32 +33,97 @@ export interface EditorProps {
 	readOnly: boolean,
 	autoMatchBraces: boolean,
 	keyMap: string,
+	cancelledKeys: CancelledKeys,
 	onChange: any,
+	onScroll: any,
+	onEditorContextMenu: any,
+	onEditorPaste: any,
 }
 
 function CodeMirrorEditor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
+	const [editorParent, setEditorParent] = useState(null);
 
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab
 	useListIdent(CodeMirror);
-	CodeMirror.keyMap.default['Ctrl-G'] = null;
 
-	useImperativeHandle(ref, () => ({
-		focus: () => {
-			editor.focus();
-		},
-	}));
+	const getScrollHeight = useCallback(() => {
+		if (editor) {
+			const info = editor.getScrollInfo();
+			const overdraw = editor.state.scrollPastEndPadding ? editor.state.scrollPastEndPadding : '0px';
+			return info.height - info.clientHeight - parseInt(overdraw);
+		}
+		return 0;
+	}, [editor]);
+
+	useEffect(() => {
+		if (props.cancelledKeys) {
+			for (let i = 0; i < props.cancelledKeys.mac.length; i++) {
+				const k = props.cancelledKeys.mac[i];
+				CodeMirror.keyMap.macDefault[k] = null;
+			}
+			for (let i = 0; i < props.cancelledKeys.default.length; i++) {
+				const k = props.cancelledKeys.default[i];
+				CodeMirror.keyMap.default[k] = null;
+			}
+		}
+	}, [props.cancelledKeys]);
+
+	useImperativeHandle(ref, () => {
+		return {
+			focus: () => {
+				editor.focus();
+			},
+			getSelection: () => {
+				return editor.getSelection();
+			},
+			getScrollHeight: () => {
+				return getScrollHeight();
+			},
+			getScrollPercent: () => {
+				if (editor) {
+					const info = editor.getScrollInfo();
+
+					return info.top / getScrollHeight();
+				}
+				return 0;
+			},
+			setScrollPercent: (p: number) => {
+				if (editor) {
+					editor.scrollTo(null, p * getScrollHeight());
+				}
+			},
+		};
+	});
 
 	// TODO: use the change deltas rather than getValue (should be faster)
-	const editor_change = useCallback((cm, change) => {
+	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
 		}
-	}, []);
+	}, [props.onChange]);
+
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	const editor_scroll = useCallback((_cm: any) => {
+		props.onScroll();
+	}, [props.onScroll]);
+
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	const editor_mousedown = useCallback((_cm: any, event: any) => {
+		if (event && event.button === 2) {
+			props.onEditorContextMenu();
+		}
+	}, [props.onEditorContextMenu]);
+
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	const editor_paste = useCallback((_cm: any, _event: any) => {
+		props.onEditorPaste();
+	}, [props.onEditorPaste]);
 
 	const divRef = useCallback(node => {
 		if (node !== null) {
+			console.log(editor);
 			const cmOptions = {
 				value: props.value,
 				theme: props.theme,
@@ -74,18 +144,39 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 			};
 			const cm = CodeMirror(node, cmOptions);
 			setEditor(cm);
+			setEditorParent(node);
 			cm.on('change', editor_change);
+			cm.on('scroll', editor_scroll);
+			cm.on('mousedown', editor_mousedown);
+			cm.on('paste', editor_paste);
 			console.log('!!!!!!!!!!!!New ref!!!!!!!!!!!!!!!');
+			console.log(props);
+		} else {
+			if (editor) {
+				// Clean up codemirror
+				editor.off('change', editor_change);
+				editor.off('scroll', editor_scroll);
+				editor.off('mousedown', editor_mousedown);
+				editorParent.removeChild(editor.getWrapperElement());
+				setEditor(null);
+			}
 		}
 	}, []);
 
 	useEffect(() => {
 		if (editor) {
-			editor.setValue(props.value);
-			editor.clearHistory();
-			console.log('!!!!!!!!!!UPDATE PROPS!!!!!!!!!!!!');
+			//  Value can also be changed by the editor itself so we need this guard
+			//  to prevent loops
+			if (props.value !== editor.getValue()) {
+				editor.setValue(props.value);
+			}
+			editor.setOption('theme', props.theme);
+			editor.setOption('mode', props.mode);
+			editor.setOption('readOnly', props.readOnly);
+			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
+			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
-	}, [props.value]);
+	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
 
 	return <div style={props.style} ref={divRef} />;
 }

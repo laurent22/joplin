@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { textOffsetToCursorPosition, useScrollHandler, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
+import { textOffsetToCursorPosition, useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -65,7 +65,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const [editor] = useState(null);
-	const [lastKeys, setLastKeys] = useState([]);
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousRenderedBody = usePrevious(renderedBody);
@@ -81,7 +80,18 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const contentKeyHasChangedRef = useRef(false);
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
 
-	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editor, webviewRef, props.onScroll);
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
+
+	const cancelledKeys: {mac: string[], default: string[]} = { mac: [], default: [] };
+	// Remove Joplin reserved key bindings from the editor
+	const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
+	for (let i = 0; i < letters.length; i++) {
+		const l = letters[i];
+		cancelledKeys.default.push(`Ctrl-${l}`);
+		cancelledKeys.mac.push(`Cmd-${l}`);
+	}
+	cancelledKeys.default.push('Alt-E');
+	cancelledKeys.mac.push('Alt-E');
 
 	const aceEditor_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -237,6 +247,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				let commandProcessed = true;
 
 				if (cmd.name === 'dropItems') {
+					console.log('drop!!!!!!!!!!!!!');
 					if (cmd.value.type === 'notes') {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
@@ -314,15 +325,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		wrapSelectionWithStrings('', '', resourceMds.join('\n'));
 	}, [wrapSelectionWithStrings]);
 
-	const onEditorKeyDown = useCallback((event: any) => {
-		setLastKeys(prevLastKeys => {
-			const keys = prevLastKeys.slice();
-			keys.push(event.key);
-			while (keys.length > 2) keys.splice(0, 1);
-			return keys;
-		});
-	}, []);
-
 	const editorCutText = useCallback(() => {
 		const text = selectedText(selectionRange(editor), props.content);
 		if (!text) return;
@@ -358,7 +360,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const onEditorContextMenu = useCallback(() => {
 		const menu = new Menu();
 
-		const hasSelectedText = !!selectedText(selectionRange(editor), props.content);
+		const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
 		const clipboardText = clipboard.readText();
 
 		menu.append(
@@ -398,60 +400,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste, editor]);
-
-	useEffect(() => {
-		if (!editor) return () => {};
-
-		const cancelledKeys = [];
-		const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
-		for (let i = 0; i < letters.length; i++) {
-			const l = letters[i];
-			cancelledKeys.push(`Ctrl+${l}`);
-			cancelledKeys.push(`Command+${l}`);
-		}
-		cancelledKeys.push('Alt+E');
-
-		for (let i = 0; i < cancelledKeys.length; i++) {
-			const k = cancelledKeys[i];
-			editor.commands.bindKey(k, () => {
-				// HACK: Ace doesn't seem to provide a way to override its shortcuts, but throwing
-				// an exception from this undocumented function seems to cancel it without any
-				// side effect.
-				// https://stackoverflow.com/questions/36075846
-				throw new Error(`HACK: Overriding Ace Editor shortcut: ${k}`);
-			});
-		}
-
-		document.querySelector('#note-editor').addEventListener('paste', onEditorPaste, true);
-		document.querySelector('#note-editor').addEventListener('keydown', onEditorKeyDown);
-		document.querySelector('#note-editor').addEventListener('contextmenu', onEditorContextMenu);
-
-		// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
-		// https://github.com/ajaxorg/ace/issues/2754
-		// @ts-ignore: Keep the function signature as-is despite unusued arguments
-		editor.getSession().getMode().getNextLineIndent = function(state: any, line: string) {
-			const ls = lastKeys;
-			if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
-
-			const leftSpaces = lineLeftSpaces(line);
-			const lineNoLeftSpaces = line.trimLeft();
-
-			if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return `${leftSpaces}- [ ] `;
-			if (lineNoLeftSpaces.indexOf('- ') === 0) return `${leftSpaces}- `;
-			if (lineNoLeftSpaces.indexOf('* ') === 0 && line.trim() !== '* * *') return `${leftSpaces}* `;
-
-			const bulletNumber = markdownUtils.olLineNumber(lineNoLeftSpaces);
-			if (bulletNumber) return `${leftSpaces + (bulletNumber + 1)}. `;
-
-			return this.$getIndent(line);
-		};
-
-		return () => {
-			document.querySelector('#note-editor').removeEventListener('paste', onEditorPaste, true);
-			document.querySelector('#note-editor').removeEventListener('keydown', onEditorKeyDown);
-			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
-		};
-	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -515,18 +463,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
-			// Note: Ideally we'd set the display to "none" to take the editor out
-			// of the DOM but if we do that, certain things won't work, in particular
-			// things related to scroll, which are based on the editor.
-
-			// Note that the below hack doesn't work and causes a bug in this case:
-			// - Put Ace Editor in viewer-only mode
-			// - Go to WYSIWYG editor
-			// - Create new to-do - set title only
-			// - Switch to Code View
-			// - Switch layout and type something
-			// => Text editor layout is broken and text is off-screen
-
 			output.display = 'none'; // Seems to work fine since the refactoring
 		}
 
@@ -548,30 +484,24 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [styles.cellViewer, props.visiblePanes]);
 
 	function renderEditor() {
-		// Need to hard-code the editor width, otherwise various bugs pops up
-		//  @ts-ignore
-		// let width = 0;
-		// if (props.visiblePanes.includes('editor')) {
-		// 	width = !props.visiblePanes.includes('viewer') ? rootWidth : Math.floor(rootWidth / 2);
-		// }
-
 		return (
 			<div style={cellEditorStyle}>
 				<CodeMirrorEditor
 					value={props.content}
+					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.editorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
-					onChange={aceEditor_change}
 					keyMap={props.keyboardMode}
+					cancelledKeys={cancelledKeys}
+					onChange={aceEditor_change}
+					onScroll={editor_scroll}
+					onEditorContextMenu={onEditorContextMenu}
+					onEditorPaste={onEditorPaste}
 				/>
 			</div>
-		// <AceEditorReact
-		// 	onScroll={editor_scroll}
-		// 	keyboardHandler={props.keyboardMode}
-		// />
 		);
 	}
 
