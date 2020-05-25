@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Fabian <fab4x@mailbox.org>\n"
+"Last-Translator: Eike <ei-ke@users.noreply.github.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -588,6 +590,8 @@ msgstr "Zeigt eine Zusammenfassung der Notizen und Notizbücher an."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Um die Entschlüsselung dieser Objekte nochmal zu versuchen führe `e2ee "
+"decrypt --retry-failed-items` aus."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -787,9 +791,8 @@ msgstr ""
 "Objekte im Hintergrund entschlüsselt und stehen in Kürze zur Verfügung."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Nicht nach einer Bestätigung fragen."
+msgstr "Sie können auch `status` für weitere Informationen eingeben."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
@@ -1843,6 +1846,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Dies ist ein Werkzeug für Fortgeschrittene, um die Anhänge anzuzeigen, die "
+"mit Ihren Notizen verknüpft sind. Bitte seien Sie vorsichtig, wenn Sie einen "
+"davon löschen, da sie danach nicht mehr wiederhergestellt werden können."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -2162,6 +2168,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Sie sind dabei, ein großes Bild (%dx%d Pixel) anzuhängen. Möchten Sie es vor "
+"dem Anhängen auf %d Pixel verkleinern?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2296,12 +2304,11 @@ msgstr "Ja"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(WYSIWYG: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "Nein"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2432,11 +2439,11 @@ msgstr "Dracula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:254
 msgid "Solarised Light"
-msgstr "Solarized Hell"
+msgstr "Solarisiert hell"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:255
 msgid "Solarised Dark"
-msgstr "Solarised Dark"
+msgstr "Solarisiert dunkel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Nord"
@@ -2444,7 +2451,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim dunkel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
@@ -2755,16 +2762,15 @@ msgstr "Ignoriere TLS-Zertifikatfehler"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "Fehlersicher"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Störungssicher: Lösche nicht die lokalen Daten, wenn das "
-"Synchronisationsziel leer ist (oft ein Resultat von Fehlkonfiguration oder "
-"einem Programmfehler)"
+"Fehlersicher: Lösche nicht die lokalen Daten, wenn das Synchronisationsziel "
+"leer ist (oft ein Resultat von Fehlkonfiguration oder einem Programmfehler)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:586
 msgid ""
@@ -2839,6 +2845,14 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Diese Zusatzprogramme erweitern den Markdown-Renderer um zusätzliche "
+"Funktionen. Bitte beachten Sie, dass diese Funktionen zwar nützlich sein "
+"können, es sich dabei jedoch nicht um Standard Markdown handelt und die "
+"meisten von ihnen daher nur in Joplin funktionieren. Außerdem sind einige "
+"von ihnen *inkompatibel* mit dem WYSIWYG-Editor. Wenn Sie eine Notiz, die "
+"eines dieser Zusatzprogramme verwendet, in diesem Editor öffnen, verlieren "
+"Sie die Zusatzprogramm-Formatierung. Es ist unten angegeben, welche "
+"Zusatzprogramme mit dem WYSIWYG-Editor kompatibel sind oder nicht."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format

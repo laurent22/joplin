@@ -98,22 +98,22 @@ function useToolbarItems(props:NoteToolbarProps) {
 	});
 
 	if (watchedNoteFiles.indexOf(note.id) >= 0) {
-		// toolbarItems.push({
-		// 	tooltip: _('Click to stop external editing'),
-		// 	title: _('Watching...'),
-		// 	iconName: 'fa-share-square',
-		// 	onClick: () => {
-		// 		onButtonClick({ name: 'stopExternalEditing' });
-		// 	},
-		// });
+		toolbarItems.push({
+			tooltip: _('Click to stop external editing'),
+			title: _('Watching...'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'stopExternalEditing' });
+			},
+		});
 	} else {
-		// toolbarItems.push({
-		// 	tooltip: _('Edit in external editor'),
-		// 	iconName: 'fa-share-square',
-		// 	onClick: () => {
-		// 		onButtonClick({ name: 'startExternalEditing' });
-		// 	},
-		// });
+		toolbarItems.push({
+			tooltip: _('Edit in external editor'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'startExternalEditing' });
+			},
+		});
 	}
 
 	if (note.is_todo) {
