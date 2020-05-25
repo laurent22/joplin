@@ -1,4 +1,4 @@
-const leftPad = require('left-pad')
+const leftPad = require('left-pad');
 
 joplin.plugins.register({
 	run: async function() {
