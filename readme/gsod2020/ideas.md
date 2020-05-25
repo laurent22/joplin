@@ -19,3 +19,6 @@ You can start with:
 # 3. Idea - create a tool to collect ideas and suggestions based on the content of the community forum
 There are many ideas in the forum and attempts to organize and streamline them.
 Task is to find a toolset to structure them and make the knowledge buried in there available easily.
+
+# 4. Idea - Divide panel into separate windows
+Joplin has 4 panes: side bar, notes list, code and view. Change joplin in a way that these parts can be different windows. Thus it is possible to put these windows on different screens for more space and better overview.
