@@ -149,7 +149,7 @@ class Note extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
-			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
+			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
 		this.logger().info('replaceResourceInternalToExternalLinks result', body);
