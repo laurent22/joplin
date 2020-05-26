@@ -56,7 +56,7 @@ msgstr "t"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "N"
-msgstr "N"
+msgstr "T"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
