@@ -94,10 +94,28 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 					editor.scrollTo(null, p * getScrollHeight());
 				}
 			},
+			somethingSelected: () => {
+				return editor.somethingSelected();
+			},
+			getSelections: () => {
+				return editor.getSelections();
+			},
+			listSelections: () => {
+				return editor.listSelections();
+			},
+			replaceSelections: (replacement: string[]) => {
+				editor.replaceSelections(replacement, 'around');
+			},
+			getCursor: () => {
+				return editor.getCursor('anchor');
+			},
+			insertAtCursor: (insert: string) => {
+				const pos = editor.getCursor('anchor');
+				editor.replaceRange(insert, pos);
+			},
 		};
 	});
 
-	// TODO: use the change deltas rather than getValue (should be faster)
 	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
@@ -126,11 +144,12 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 			console.log(editor);
 			const cmOptions = {
 				value: props.value,
+				screenReaderLabel: props.value,
 				theme: props.theme,
 				mode: props.mode,
 				readOnly: props.readOnly,
 				autoCloseBrackets: props.autoMatchBraces,
-				inputStyle: 'contenteditable', // Has better support for screen readers
+				inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
 				lineWrapping: true,
 				lineNumbers: false,
 				scrollPastEnd: true,
@@ -157,6 +176,7 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 				editor.off('change', editor_change);
 				editor.off('scroll', editor_scroll);
 				editor.off('mousedown', editor_mousedown);
+				editor.off('paste', editor_paste);
 				editorParent.removeChild(editor.getWrapperElement());
 				setEditor(null);
 			}
@@ -169,7 +189,9 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 			//  to prevent loops
 			if (props.value !== editor.getValue()) {
 				editor.setValue(props.value);
+				editor.clearHistory();
 			}
+			editor.setOption('screenReaderLabel', props.value);
 			editor.setOption('theme', props.theme);
 			editor.setOption('mode', props.mode);
 			editor.setOption('readOnly', props.readOnly);

@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { textOffsetToCursorPosition, useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
+import { useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, textOffsetSelection, selectedText } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -26,36 +26,6 @@ const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 
-// TODO: Could not get below code to work
-
-// @ts-ignore Ace global variable
-// const aceGlobal = (ace as any);
-
-// class CustomHighlightRules extends aceGlobal.acequire(
-// 	'ace/mode/markdown_highlight_rules'
-// ).MarkdownHighlightRules {
-// 	constructor() {
-// 		super();
-// 		if (Setting.value('markdown.plugin.mark')) {
-// 			this.$rules.start.push({
-// 				// This is actually a highlight `mark`, but Ace has no token name for
-// 				// this so we made up our own. Reference for common tokens here:
-// 				// https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
-// 				token: 'highlight_mark',
-// 				regex: '==[^ ](?:.*?[^ ])?==',
-// 			});
-// 		}
-// 	}
-// }
-
-// /* eslint-disable-next-line no-undef */
-// class CustomMdMode extends aceGlobal.acequire('ace/mode/markdown').Mode {
-// 	constructor() {
-// 		super();
-// 		this.HighlightRules = CustomHighlightRules;
-// 	}
-// }
-
 function markupRenderOptions(override: any = null) {
 	return { ...override };
 }
@@ -64,7 +34,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
-	const [editor] = useState(null);
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousRenderedBody = usePrevious(renderedBody);
@@ -72,7 +41,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const previousContentKey = usePrevious(props.contentKey);
 
 	const editorRef = useRef(null);
-	editorRef.current = editor;
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
 	const props_onChangeRef = useRef<Function>(null);
@@ -98,123 +66,61 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, []);
 
 	const wrapSelectionWithStrings = useCallback((string1: string, string2 = '', defaultText = '', replacementText: string = null, byLine = false) => {
-		if (!editor) return;
+		if (!editorRef.current) return;
 
-		const selection = textOffsetSelection(selectionRange(editor), props.content);
+		if (editorRef.current.somethingSelected()) {
+			const selectedStrings = editorRef.current.getSelections();
 
-		let newBody = props.content;
+			//  byLine will wrap each line of a selection with the given strings
+			//  and it doesn't care about whitespace
+			if (byLine) {
+				for (let i = 0; i < selectedStrings.length; i++) {
+					const selected = replacementText !== null ? replacementText : selectedStrings[i];
+					const lines = selected.split(/\r?\n/);
+					//  Save the newline character to restore it later
+					const newLines = selected.match(/\r?\n/);
 
-		if (selection && selection.start !== selection.end) {
-			const selectedLines = replacementText !== null ? replacementText : props.content.substr(selection.start, selection.end - selection.start);
-			const selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
+					for (let j = 0; j < lines.length; j++) {
+						const line = lines[j];
+						lines[j] = string1 + line + string2;
+					}
 
-			newBody = props.content.substr(0, selection.start);
-
-			let startCursorPos, endCursorPos;
-
-			for (let i = 0; i < selectedStrings.length; i++) {
-				if (byLine == false) {
-					const start = selectedStrings[i].search(/[^\s]/);
-					const end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
-					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
-					// Getting position for correcting offset in highlighted text when surrounded by white spaces
-					startCursorPos = textOffsetToCursorPosition(selection.start + start, newBody);
-					endCursorPos = textOffsetToCursorPosition(selection.start + end + 1, newBody);
-
-				} else { newBody += string1 + selectedStrings[i] + string2; }
-
-			}
-
-			newBody += props.content.substr(selection.end);
-
-			const r = selectionRange(editor);
-
-			// Because some insertion strings will have newlines, we'll need to account for them
-			const str1Split = string1.split(/\r?\n/);
-
-			// Add the number of newlines to the row
-			// and add the length of the final line to the column (for strings with no newlines this is the string length)
-
-			let newRange: any = {};
-			if (!byLine) {
-				// Correcting offset in Highlighted text when surrounded by white spaces
-				newRange = {
-					start: {
-						row: startCursorPos.row,
-						column: startCursorPos.column + string1.length,
-					},
-					end: {
-						row: endCursorPos.row,
-						column: endCursorPos.column + string1.length,
-					},
-				};
+					const newLine = newLines !== null ? newLines[0] : '\n';
+					selectedStrings[i] = lines.join(newLine);
+				}
 			} else {
-				newRange = {
-					start: {
-						row: r.start.row + str1Split.length - 1,
-						column: r.start.column + str1Split[str1Split.length - 1].length,
-					},
-					end: {
-						row: r.end.row + str1Split.length - 1,
-						column: r.end.column + str1Split[str1Split.length - 1].length,
-					},
-				};
+				for (let i = 0; i < selectedStrings.length; i++) {
+					const selected = replacementText !== null ? replacementText : selectedStrings[i];
+					const start = selected.search(/[^\s]/);
+					const end = selected.search(/[^\s](?=[\s]*$)/);
+					const replacement = selected.substr(0, start) + string1 + selected.substr(start, end - start + 1) + string2 + selected.substr(end + 1);
+
+					selectedStrings[i] = replacement;
+				}
 			}
 
-			if (replacementText !== null) {
-				const diff = replacementText.length - (selection.end - selection.start);
-				newRange.end.column += diff;
-			}
+			editorRef.current.replaceSelections(selectedStrings);
+			editorRef.current.focus();
 
-			setTimeout(() => {
-				const range = selectionRange(editor);
-				range.setStart(newRange.start.row, newRange.start.column);
-				range.setEnd(newRange.end.row, newRange.end.column);
-				editor.getSession().getSelection().setSelectionRange(range, false);
-				editor.focus();
-			}, 10);
 		} else {
 			const middleText = replacementText !== null ? replacementText : defaultText;
-			const textOffset = currentTextOffset(editor, props.content);
-			const s1 = props.content.substr(0, textOffset);
-			const s2 = props.content.substr(textOffset);
-			newBody = s1 + string1 + middleText + string2 + s2;
+			const insert = string1 + middleText + string2;
 
-			const p = textOffsetToCursorPosition(textOffset + string1.length, newBody);
-			const newRange = {
-				start: { row: p.row, column: p.column },
-				end: { row: p.row, column: p.column + middleText.length },
-			};
-
-			// BUG!! If replacementText contains newline characters, the logic
-			// to select the new text will not work.
-
-			setTimeout(() => {
-				if (middleText && newRange) {
-					const range = selectionRange(editor);
-					range.setStart(newRange.start.row, newRange.start.column);
-					range.setEnd(newRange.end.row, newRange.end.column);
-					editor.getSession().getSelection().setSelectionRange(range, false);
-				} else {
-					for (let i = 0; i < string1.length; i++) {
-						editor.getSession().getSelection().moveCursorRight();
-					}
-				}
-				editor.focus();
-			}, 10);
+			editorRef.current.insertAtCursor(insert);
+			editorRef.current.focus();
 		}
 
-		aceEditor_change(newBody);
-	}, [editor, props.content, aceEditor_change]);
+	}, [props.content]);
 
 	const addListItem = useCallback((string1, string2 = '', defaultText = '', byLine = false) => {
-		let newLine = '\n';
-		const range = selectionRange(editor);
-		if (!range || (range.start.row === range.end.row && !selectionRangeCurrentLine(range, props.content))) {
-			newLine = '';
+		if (editorRef.current) {
+			let newLine = '';
+			if (editorRef.current.somethingSelected() || editorRef.current.getCursor().ch !== 0) {
+				newLine = '\n';
+			}
+			wrapSelectionWithStrings(newLine + string1, string2, defaultText, null, byLine);
 		}
-		wrapSelectionWithStrings(newLine + string1, string2, defaultText, null, byLine);
-	}, [wrapSelectionWithStrings, props.content, editor]);
+	}, [wrapSelectionWithStrings]);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -240,7 +146,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				return false;
 			},
 			execCommand: async (cmd: EditorCommand) => {
-				if (!editor) return false;
+				if (!editorRef.current) return false;
 
 				reg.logger().debug('AceEditor: execCommand', cmd);
 
@@ -257,7 +163,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
 					}
 				} else if (cmd.name === 'focus') {
-					editor.focus();
+					editorRef.current.focus();
 				} else {
 					commandProcessed = false;
 				}
@@ -271,7 +177,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {
-							const selection = textOffsetSelection(selectionRange(editor), props.content);
+							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
 							const string = props.content.substr(selection.start, selection.end - selection.start);
 
 							// Look for newlines
@@ -289,12 +195,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						},
 						insertText: (value: any) => wrapSelectionWithStrings(value),
 						attachFile: async () => {
-							const selection = textOffsetSelection(selectionRange(editor), props.content);
+							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
 							const newBody = await commandAttachFileToBody(props.content, null, { position: selection ? selection.start : 0 });
 							if (newBody) aceEditor_change(newBody);
 						},
 						textNumberedList: () => {
-							const selection = selectionRange(editor);
+							const selection = selectionRange(editorRef.current);
 							let bulletNumber = markdownUtils.olLineNumber(selectionRangeCurrentLine(selection, props.content));
 							if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(selectionRangePreviousLine(selection, props.content));
 							if (!bulletNumber) bulletNumber = 0;
@@ -317,7 +223,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				return true;
 			},
 		};
-	}, [editor, props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -326,12 +232,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [wrapSelectionWithStrings]);
 
 	const editorCutText = useCallback(() => {
-		const text = selectedText(selectionRange(editor), props.content);
+		const text = selectedText(selectionRange(editorRef.current), props.content);
 		if (!text) return;
 
 		clipboard.writeText(text);
 
-		const s = textOffsetSelection(selectionRange(editor), props.content);
+		const s = textOffsetSelection(selectionRange(editorRef.current), props.content);
 		if (!s || s.start === s.end) return;
 
 		const s1 = props.content.substr(0, s.start);
@@ -340,18 +246,18 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		aceEditor_change(s1 + s2);
 
 		setTimeout(() => {
-			const range = selectionRange(editor);
-			range.setStart(range.start.row, range.start.column);
-			range.setEnd(range.start.row, range.start.column);
-			editor.getSession().getSelection().setSelectionRange(range, false);
-			editor.focus();
+			// const range = selectionRange(editorRef.current);
+			// range.setStart(range.start.row, range.start.column);
+			// range.setEnd(range.start.row, range.start.column);
+			// editor.getSession().getSelection().setSelectionRange(range, false);
+			editorRef.current.focus();
 		}, 10);
-	}, [props.content, editor, aceEditor_change]);
+	}, [props.content, aceEditor_change]);
 
 	const editorCopyText = useCallback(() => {
-		const text = selectedText(selectionRange(editor), props.content);
+		const text = selectedText(selectionRange(editorRef.current), props.content);
 		clipboard.writeText(text);
-	}, [props.content, editor]);
+	}, [props.content]);
 
 	const editorPasteText = useCallback(() => {
 		wrapSelectionWithStrings(clipboard.readText(), '', '', '');
@@ -399,7 +305,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		);
 
 		menu.popup(bridge().window());
-	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste, editor]);
+	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
