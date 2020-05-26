@@ -1,6 +1,19 @@
-const open = require('open');
+import open from 'open';
+
+interface LinkStoreEntry {
+	link: string;
+	noteX: number;
+	noteY: number;
+}
 
 class LinkSelector {
+	noteId_: string;
+	scrollTop_: number;
+	renderedText_: string;
+	currentLinkIndex_: number;
+	linkStore_: LinkStoreEntry[];
+	linkRegex_: RegExp;
+
 	constructor() {
 		this.noteId_ = null;
 		this.scrollTop_ = null; // used so 'o' won't open unhighlighted link after scrolling
@@ -10,27 +23,27 @@ class LinkSelector {
 		this.linkRegex_ = /http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g;
 	}
 
-	get link() {
+	get link(): string | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].link;
 	}
 
-	get noteX() {
+	get noteX(): number | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].noteX;
 	}
 
-	get noteY() {
+	get noteY(): number | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].noteY;
 	}
 
-	findLinks(renderedText) {
-		const newLinkStore = [];
-		const lines = renderedText.split('\n');
+	findLinks(renderedText: string): LinkStoreEntry[] {
+		const newLinkStore: LinkStoreEntry[] = [];
+		const lines: string[] = renderedText.split('\n');
 		for (let i = 0; i < lines.length; i++) {
 			const matches = [...lines[i].matchAll(this.linkRegex_)];
-			matches.forEach((e, n) => {
+			matches.forEach((_e, n) => {
 				newLinkStore.push(
 					{
 						link: matches[n][0],
@@ -43,19 +56,19 @@ class LinkSelector {
 		return newLinkStore;
 	}
 
-	updateText(renderedText) {
+	updateText(renderedText: string): void {
 		this.currentLinkIndex_ = null;
 		this.renderedText_ = renderedText;
 		this.linkStore_ = this.findLinks(this.renderedText_);
 	}
 
-	updateNote(textWidget) {
+	updateNote(textWidget: any): void {
 		this.noteId_ = textWidget.noteId;
 		this.scrollTop_ = textWidget.scrollTop_;
 		this.updateText(textWidget.renderedText_);
 	}
 
-	scrollWidget(textWidget) {
+	scrollWidget(textWidget: any): void {
 		if (this.currentLinkIndex_ === null) return;
 
 		const noteY = this.linkStore_[this.currentLinkIndex_].noteY;
@@ -80,7 +93,7 @@ class LinkSelector {
 		return;
 	}
 
-	changeLink(textWidget, offset) {
+	changeLink(textWidget: any, offset: number): void | null {
 		if (textWidget.noteId !== this.noteId_) {
 			this.updateNote(textWidget);
 			this.changeLink(textWidget, offset);
@@ -110,13 +123,13 @@ class LinkSelector {
 		return;
 	}
 
-	openLink(textWidget) {
+	openLink(textWidget: any): void {
 		if (textWidget.noteId !== this.noteId_) return;
 		if (textWidget.renderedText_ !== this.renderedText_) return;
 		if (textWidget.scrollTop_ !== this.scrollTop_) return;
 		open(this.linkStore_[this.currentLinkIndex_].link);
 	}
-
 }
 
-module.exports = LinkSelector;
+export default LinkSelector;
+

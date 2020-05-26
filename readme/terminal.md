@@ -127,7 +127,7 @@ It is possible to also synchronise outside of the user interface by typing `jopl
 
 # URLs
 
-When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
+When Ctrl+Clicking a URL (or opening with the shortcut 'o' while it is highlighted), most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
 <img src="https://joplinapp.org/images/UrlCut.png" width="300px">
 
@@ -204,6 +204,9 @@ As an example, this is the default keymap, but read below for a detailed explana
 	{ "keys": ["ENTER"], "type": "function", "command": "activate" },
 	{ "keys": ["DELETE", "BACKSPACE"], "type": "function", "command": "delete" },
 	{ "keys": [" "], "command": "todo toggle $n" },
+	{ "keys": ["n"], "type": "function", "command": "next_link" },
+	{ "keys": ["b"], "type": "function", "command": "previous_link" },
+	{ "keys": ["o"], "type": "function", "command": "open_link" },
 	{ "keys": ["tc"], "type": "function", "command": "toggle_console" },
 	{ "keys": ["tm"], "type": "function", "command": "toggle_metadata" },
 	{ "keys": ["/"], "type": "prompt", "command": "search \"\"", "cursorPosition": -2 },
@@ -222,7 +225,7 @@ Name | Description
 `keys` | The array of keys that will trigger the action. Special keys such as page up, down arrow, etc. needs to be specified UPPERCASE. See the [list of available special keys](https://github.com/cronvel/terminal-kit/blob/3114206a9556f518cc63abbcb3d188fe1995100d/lib/termconfig/xterm.js#L531). For example, `['DELETE', 'BACKSPACE']` means the command will run if the user pressed either the delete or backspace key. Key combinations can also be provided - in that case specify them lowercase. For example "tc" means that the command will be executed when the user pressed "t" then "c". Special keys can also be used in this fashion - simply write them one after the other. For instance, `CTRL_WCTRL_W` means the action would be executed if the user pressed "ctrl-w ctrl-w".
 `type` | The command type. It can have the value "exec", "function" or "prompt". **exec**: Simply execute the provided [command](#commands). For example `edit $n` would edit the selected note. **function**: Run a special commands (see below for the list of functions). **prompt**: A bit similar to "exec", except that the command is not going to be executed immediately - this allows the user to provide additional data. For example `mknote ""` would fill the command line with this command and allow the user to set the title. A prompt command can also take a `cursorPosition` parameter (see below)
 `command` | The command that needs to be executed
-`cusorPosition` | An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end. A value of "0" means positioning the caret at the first character. A value of "-1" means positioning it at the end.
+`cursorPosition` | An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end. A value of "0" means positioning the caret at the first character. A value of "-1" means positioning it at the end.
 
 This is the list of special functions:
 
@@ -235,6 +238,9 @@ move_up | Move up (in a list for example)
 move_down | Move down (in a list for example)
 page_up | Page up
 page_down | Page down
+next_link | Select the next link in the currently opened note (the first link will be selected if no link is currently selected)
+previous_link | Select the previous link in the currently opened note (the last link will be selected if no link is currently selected)
+open_link | Open the currently selected link externally
 activate | Activates the selected item. If the item is a note for example it will be open in the editor
 delete | Deletes the selected item
 toggle_console | Toggle the console

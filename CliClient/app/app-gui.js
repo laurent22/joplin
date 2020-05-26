@@ -33,7 +33,7 @@ const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
 const StatusBarWidget = require('./gui/StatusBarWidget.js');
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
-const LinkSelector = require('./LinkSelector.js');
+const LinkSelector = require('./LinkSelector.js').default;
 
 
 class AppGui {

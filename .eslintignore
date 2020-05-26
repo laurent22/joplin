@@ -61,6 +61,8 @@ Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js
