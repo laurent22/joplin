@@ -21,7 +21,7 @@ Please check that your request has not already been posted on the forum or the [
 
 Avoid listing multiple requests in one topic. One topic per request makes it easier to track and discuss it.
 
-Finally, when submitting a pull request, don't forget to [test your code](#unit-tests).
+Finally, when submitting a pull request, don't forget to [test your code](#automated-tests).
 
 # Contributing to Joplin's translation
 
@@ -49,9 +49,9 @@ For changes made to the Desktop client that affect the user interface, refer to 
 
 ## Automated tests
 
-When submitting a pull request for a new feature or bug fixes, please add automated tests for your code whenever possible. Tests in Joplin are divided in **unit tests** and **feature tests**.
+When submitting a pull request for a new feature or a bug fix, please add automated tests for your code whenever possible. Tests in Joplin are divided into **unit tests** and **feature tests**.
 
-* **Unit tests** are used to tests models, services or utility classes - they are relatively low level. Unit tests should be prefixed with the type of class that is being tested - for example "models_Folder" or "services_SearchEngine".
+* **Unit tests** are used to test models, services or utility classes - they are relatively low level. Unit tests should be prefixed with the type of class that is being tested - for example "models_Folder" or "services_SearchEngine".
 
 * **Feature tests** on the other hand are to test higher level functionalities such as interactions with the GUI and how they affect the underlying model. Often these tests would dispatch Redux actions, and inspect how the application state has been changed. The feature tests should be prefixed with "feature_", for example "feature_TagList". There's a good explanation on what qualifies as a feature test in [this post](https://github.com/laurent22/joplin/pull/2819#issuecomment-603502230).
 
