@@ -51,6 +51,8 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js
