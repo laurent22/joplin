@@ -137,7 +137,7 @@ As a solution Joplin tries to start a mini-server in the background and, if succ
 
 <img src="https://joplinapp.org/images/UrlNoCut.png" width="300px">
 
-Since this is still an actual URL, the terminal will still make it click. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
+Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
 # Attachments / Resources
 
