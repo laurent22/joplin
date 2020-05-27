@@ -347,39 +347,25 @@ class Setting extends BaseModel {
 					};
 				},
 			},
-			defaultNote: {
-				value: '0',
+			'editor.defaultNoteTemplate': {
+				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'note',
 				isEnum: true,
 				public: true,
 				appTypes: ['desktop'],
-				label: () => _('Choose default template for new note:'),
-				options: () => {
-					const templates = TemplateUtils.availableTemplates();
-					const options = { 0: 'None' };
-					for (let i = 0; i < templates.length; i++) {
-						options[templates[i].label] = templates[i].label;
-					}
-					return options;
-				},
+				label: () => _('New note default template:'),
+				options: () => Setting.defaultTemplateOptions(),
 			},
-			defaultTodo: {
-				value: '0',
+			'editor.defaultTodoTemplate': {
+				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'note',
 				isEnum: true,
 				public: true,
 				appTypes: ['desktop'],
-				label: () => _('Choose default template for new todo:'),
-				options: () => {
-					const templates = TemplateUtils.availableTemplates();
-					const options = { 0: 'None' };
-					for (let i = 0; i < templates.length; i++) {
-						options[templates[i].label] = templates[i].label;
-					}
-					return options;
-				},
+				label: () => _('New to-do default template:'),
+				options: () => Setting.defaultTemplateOptions(),
 			},
 
 			// Deprecated - use markdown.plugin.*
@@ -1052,6 +1038,15 @@ class Setting extends BaseModel {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
+	}
+
+	static defaultTemplateOptions() {
+		const templates = TemplateUtils.availableTemplates();
+		const options = { '': 'None' };
+		for (let i = 0; i < templates.length; i++) {
+			options[templates[i].label] = templates[i].label;
+		}
+		return options;
 	}
 }
 
