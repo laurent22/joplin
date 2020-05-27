@@ -109,4 +109,4 @@ script:
 
     # Prepare the Electron app and build it
     cd ElectronClient
-    USE_HARD_LINKS=false yarn dist
+    USE_HARD_LINKS=false npm run dist

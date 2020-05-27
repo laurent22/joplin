@@ -57,6 +57,7 @@ module.exports = {
 		"require-atomic-updates": 0,
 		"prefer-const": ["error"],
 		"no-var": ["error"],
+		"no-new-func": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",

@@ -146,7 +146,7 @@ class JoplinDatabase extends Database {
 		}
 		this.tableFieldNames_[tableName] = output;
 
-		return output;
+		return output.slice();
 	}
 
 	tableFields(tableName, options = null) {
