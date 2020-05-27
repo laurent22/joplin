@@ -5,15 +5,14 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, textOffsetSelection, selectedText } from './utils';
+import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
+import useListIdent from './utils/useListIdent';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
-import CodeMirrorEditor from './CodeMirror';
 
-//  @ts-ignore
+const AceEditorReact = require('react-ace').default;
 const { bridge } = require('electron').remote.require('./bridge');
-//  @ts-ignore
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
 const Setting = require('lib/models/Setting.js');
@@ -26,6 +25,50 @@ const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 
+require('brace/mode/markdown');
+// https://ace.c9.io/build/kitchen-sink.html
+// https://highlightjs.org/static/demo/
+require('brace/theme/chrome');
+require('brace/theme/solarized_light');
+require('brace/theme/solarized_dark');
+require('brace/theme/twilight');
+require('brace/theme/dracula');
+require('brace/theme/chaos');
+require('brace/theme/tomorrow');
+require('brace/keybinding/vim');
+require('brace/keybinding/emacs');
+require('brace/theme/terminal');
+
+// TODO: Could not get below code to work
+
+// @ts-ignore Ace global variable
+// const aceGlobal = (ace as any);
+
+// class CustomHighlightRules extends aceGlobal.acequire(
+// 	'ace/mode/markdown_highlight_rules'
+// ).MarkdownHighlightRules {
+// 	constructor() {
+// 		super();
+// 		if (Setting.value('markdown.plugin.mark')) {
+// 			this.$rules.start.push({
+// 				// This is actually a highlight `mark`, but Ace has no token name for
+// 				// this so we made up our own. Reference for common tokens here:
+// 				// https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
+// 				token: 'highlight_mark',
+// 				regex: '==[^ ](?:.*?[^ ])?==',
+// 			});
+// 		}
+// 	}
+// }
+
+// /* eslint-disable-next-line no-undef */
+// class CustomMdMode extends aceGlobal.acequire('ace/mode/markdown').Mode {
+// 	constructor() {
+// 		super();
+// 		this.HighlightRules = CustomHighlightRules;
+// 	}
+// }
+
 function markupRenderOptions(override: any = null) {
 	return { ...override };
 }
@@ -34,6 +77,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
+	const [editor, setEditor] = useState(null);
+	const [lastKeys, setLastKeys] = useState([]);
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousRenderedBody = usePrevious(renderedBody);
@@ -41,6 +86,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const previousContentKey = usePrevious(props.contentKey);
 
 	const editorRef = useRef(null);
+	editorRef.current = editor;
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
 	const props_onChangeRef = useRef<Function>(null);
@@ -48,79 +94,134 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const contentKeyHasChangedRef = useRef(false);
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
+	const rootWidth = useRootWidth({ rootRef });
 
-	const cancelledKeys: {mac: string[], default: string[]} = { mac: [], default: [] };
-	// Remove Joplin reserved key bindings from the editor
-	const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
-	for (let i = 0; i < letters.length; i++) {
-		const l = letters[i];
-		cancelledKeys.default.push(`Ctrl-${l}`);
-		cancelledKeys.mac.push(`Cmd-${l}`);
-	}
-	cancelledKeys.default.push('Alt-E');
-	cancelledKeys.mac.push('Alt-E');
+	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll } = useScrollHandler(editor, webviewRef, props.onScroll);
+
+	useListIdent({ editor });
 
 	const aceEditor_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
 
 	const wrapSelectionWithStrings = useCallback((string1: string, string2 = '', defaultText = '', replacementText: string = null, byLine = false) => {
-		if (!editorRef.current) return;
+		if (!editor) return;
 
-		if (editorRef.current.somethingSelected()) {
-			const selectedStrings = editorRef.current.getSelections();
+		const selection = textOffsetSelection(selectionRange(editor), props.content);
 
-			//  byLine will wrap each line of a selection with the given strings
-			//  and it doesn't care about whitespace
-			if (byLine) {
-				for (let i = 0; i < selectedStrings.length; i++) {
-					const selected = replacementText !== null ? replacementText : selectedStrings[i];
-					const lines = selected.split(/\r?\n/);
-					//  Save the newline character to restore it later
-					const newLines = selected.match(/\r?\n/);
+		let newBody = props.content;
 
-					for (let j = 0; j < lines.length; j++) {
-						const line = lines[j];
-						lines[j] = string1 + line + string2;
-					}
+		if (selection && selection.start !== selection.end) {
+			const selectedLines = replacementText !== null ? replacementText : props.content.substr(selection.start, selection.end - selection.start);
+			const selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
 
-					const newLine = newLines !== null ? newLines[0] : '\n';
-					selectedStrings[i] = lines.join(newLine);
-				}
-			} else {
-				for (let i = 0; i < selectedStrings.length; i++) {
-					const selected = replacementText !== null ? replacementText : selectedStrings[i];
-					const start = selected.search(/[^\s]/);
-					const end = selected.search(/[^\s](?=[\s]*$)/);
-					const replacement = selected.substr(0, start) + string1 + selected.substr(start, end - start + 1) + string2 + selected.substr(end + 1);
+			newBody = props.content.substr(0, selection.start);
 
-					selectedStrings[i] = replacement;
-				}
+			let startCursorPos, endCursorPos;
+
+			for (let i = 0; i < selectedStrings.length; i++) {
+				if (byLine == false) {
+					const start = selectedStrings[i].search(/[^\s]/);
+					const end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
+					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
+					// Getting position for correcting offset in highlighted text when surrounded by white spaces
+					startCursorPos = textOffsetToCursorPosition(selection.start + start, newBody);
+					endCursorPos = textOffsetToCursorPosition(selection.start + end + 1, newBody);
+
+				} else { newBody += string1 + selectedStrings[i] + string2; }
+
 			}
 
-			editorRef.current.replaceSelections(selectedStrings);
-			editorRef.current.focus();
+			newBody += props.content.substr(selection.end);
 
+			const r = selectionRange(editor);
+
+			// Because some insertion strings will have newlines, we'll need to account for them
+			const str1Split = string1.split(/\r?\n/);
+
+			// Add the number of newlines to the row
+			// and add the length of the final line to the column (for strings with no newlines this is the string length)
+
+			let newRange: any = {};
+			if (!byLine) {
+				// Correcting offset in Highlighted text when surrounded by white spaces
+				newRange = {
+					start: {
+						row: startCursorPos.row,
+						column: startCursorPos.column + string1.length,
+					},
+					end: {
+						row: endCursorPos.row,
+						column: endCursorPos.column + string1.length,
+					},
+				};
+			} else {
+				newRange = {
+					start: {
+						row: r.start.row + str1Split.length - 1,
+						column: r.start.column + str1Split[str1Split.length - 1].length,
+					},
+					end: {
+						row: r.end.row + str1Split.length - 1,
+						column: r.end.column + str1Split[str1Split.length - 1].length,
+					},
+				};
+			}
+
+			if (replacementText !== null) {
+				const diff = replacementText.length - (selection.end - selection.start);
+				newRange.end.column += diff;
+			}
+
+			setTimeout(() => {
+				const range = selectionRange(editor);
+				range.setStart(newRange.start.row, newRange.start.column);
+				range.setEnd(newRange.end.row, newRange.end.column);
+				editor.getSession().getSelection().setSelectionRange(range, false);
+				editor.focus();
+			}, 10);
 		} else {
 			const middleText = replacementText !== null ? replacementText : defaultText;
-			const insert = string1 + middleText + string2;
+			const textOffset = currentTextOffset(editor, props.content);
+			const s1 = props.content.substr(0, textOffset);
+			const s2 = props.content.substr(textOffset);
+			newBody = s1 + string1 + middleText + string2 + s2;
 
-			editorRef.current.insertAtCursor(insert);
-			editorRef.current.focus();
+			const p = textOffsetToCursorPosition(textOffset + string1.length, newBody);
+			const newRange = {
+				start: { row: p.row, column: p.column },
+				end: { row: p.row, column: p.column + middleText.length },
+			};
+
+			// BUG!! If replacementText contains newline characters, the logic
+			// to select the new text will not work.
+
+			setTimeout(() => {
+				if (middleText && newRange) {
+					const range = selectionRange(editor);
+					range.setStart(newRange.start.row, newRange.start.column);
+					range.setEnd(newRange.end.row, newRange.end.column);
+					editor.getSession().getSelection().setSelectionRange(range, false);
+				} else {
+					for (let i = 0; i < string1.length; i++) {
+						editor.getSession().getSelection().moveCursorRight();
+					}
+				}
+				editor.focus();
+			}, 10);
 		}
 
-	}, [props.content]);
+		aceEditor_change(newBody);
+	}, [editor, props.content, aceEditor_change]);
 
 	const addListItem = useCallback((string1, string2 = '', defaultText = '', byLine = false) => {
-		if (editorRef.current) {
-			let newLine = '';
-			if (editorRef.current.somethingSelected() || editorRef.current.getCursor().ch !== 0) {
-				newLine = '\n';
-			}
-			wrapSelectionWithStrings(newLine + string1, string2, defaultText, null, byLine);
+		let newLine = '\n';
+		const range = selectionRange(editor);
+		if (!range || (range.start.row === range.end.row && !selectionRangeCurrentLine(range, props.content))) {
+			newLine = '';
 		}
-	}, [wrapSelectionWithStrings]);
+		wrapSelectionWithStrings(newLine + string1, string2, defaultText, null, byLine);
+	}, [wrapSelectionWithStrings, props.content, editor]);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -146,14 +247,13 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				return false;
 			},
 			execCommand: async (cmd: EditorCommand) => {
-				if (!editorRef.current) return false;
+				if (!editor) return false;
 
 				reg.logger().debug('AceEditor: execCommand', cmd);
 
 				let commandProcessed = true;
 
 				if (cmd.name === 'dropItems') {
-					console.log('drop!!!!!!!!!!!!!');
 					if (cmd.value.type === 'notes') {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
@@ -163,7 +263,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
 					}
 				} else if (cmd.name === 'focus') {
-					editorRef.current.focus();
+					editor.focus();
 				} else {
 					commandProcessed = false;
 				}
@@ -177,7 +277,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {
-							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
+							const selection = textOffsetSelection(selectionRange(editor), props.content);
 							const string = props.content.substr(selection.start, selection.end - selection.start);
 
 							// Look for newlines
@@ -195,12 +295,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						},
 						insertText: (value: any) => wrapSelectionWithStrings(value),
 						attachFile: async () => {
-							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
+							const selection = textOffsetSelection(selectionRange(editor), props.content);
 							const newBody = await commandAttachFileToBody(props.content, null, { position: selection ? selection.start : 0 });
 							if (newBody) aceEditor_change(newBody);
 						},
 						textNumberedList: () => {
-							const selection = selectionRange(editorRef.current);
+							const selection = selectionRange(editor);
 							let bulletNumber = markdownUtils.olLineNumber(selectionRangeCurrentLine(selection, props.content));
 							if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(selectionRangePreviousLine(selection, props.content));
 							if (!bulletNumber) bulletNumber = 0;
@@ -223,7 +323,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				return true;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [editor, props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -231,13 +331,22 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		wrapSelectionWithStrings('', '', resourceMds.join('\n'));
 	}, [wrapSelectionWithStrings]);
 
+	const onEditorKeyDown = useCallback((event: any) => {
+		setLastKeys(prevLastKeys => {
+			const keys = prevLastKeys.slice();
+			keys.push(event.key);
+			while (keys.length > 2) keys.splice(0, 1);
+			return keys;
+		});
+	}, []);
+
 	const editorCutText = useCallback(() => {
-		const text = selectedText(selectionRange(editorRef.current), props.content);
+		const text = selectedText(selectionRange(editor), props.content);
 		if (!text) return;
 
 		clipboard.writeText(text);
 
-		const s = textOffsetSelection(selectionRange(editorRef.current), props.content);
+		const s = textOffsetSelection(selectionRange(editor), props.content);
 		if (!s || s.start === s.end) return;
 
 		const s1 = props.content.substr(0, s.start);
@@ -246,18 +355,18 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		aceEditor_change(s1 + s2);
 
 		setTimeout(() => {
-			// const range = selectionRange(editorRef.current);
-			// range.setStart(range.start.row, range.start.column);
-			// range.setEnd(range.start.row, range.start.column);
-			// editor.getSession().getSelection().setSelectionRange(range, false);
-			editorRef.current.focus();
+			const range = selectionRange(editor);
+			range.setStart(range.start.row, range.start.column);
+			range.setEnd(range.start.row, range.start.column);
+			editor.getSession().getSelection().setSelectionRange(range, false);
+			editor.focus();
 		}, 10);
-	}, [props.content, aceEditor_change]);
+	}, [props.content, editor, aceEditor_change]);
 
 	const editorCopyText = useCallback(() => {
-		const text = selectedText(selectionRange(editorRef.current), props.content);
+		const text = selectedText(selectionRange(editor), props.content);
 		clipboard.writeText(text);
-	}, [props.content]);
+	}, [props.content, editor]);
 
 	const editorPasteText = useCallback(() => {
 		wrapSelectionWithStrings(clipboard.readText(), '', '', '');
@@ -266,7 +375,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const onEditorContextMenu = useCallback(() => {
 		const menu = new Menu();
 
-		const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+		const hasSelectedText = !!selectedText(selectionRange(editor), props.content);
 		const clipboardText = clipboard.readText();
 
 		menu.append(
@@ -276,7 +385,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCutText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -286,7 +395,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCopyText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -301,11 +410,69 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						onEditorPaste();
 					}
 				},
-			})
+			}),
 		);
 
 		menu.popup(bridge().window());
-	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
+	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste, editor]);
+
+	function aceEditor_load(editor: any) {
+		setEditor(editor);
+	}
+
+	useEffect(() => {
+		if (!editor) return () => {};
+
+		const cancelledKeys = [];
+		const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
+		for (let i = 0; i < letters.length; i++) {
+			const l = letters[i];
+			cancelledKeys.push(`Ctrl+${l}`);
+			cancelledKeys.push(`Command+${l}`);
+		}
+		cancelledKeys.push('Alt+E');
+
+		for (let i = 0; i < cancelledKeys.length; i++) {
+			const k = cancelledKeys[i];
+			editor.commands.bindKey(k, () => {
+				// HACK: Ace doesn't seem to provide a way to override its shortcuts, but throwing
+				// an exception from this undocumented function seems to cancel it without any
+				// side effect.
+				// https://stackoverflow.com/questions/36075846
+				throw new Error(`HACK: Overriding Ace Editor shortcut: ${k}`);
+			});
+		}
+
+		document.querySelector('#note-editor').addEventListener('paste', onEditorPaste, true);
+		document.querySelector('#note-editor').addEventListener('keydown', onEditorKeyDown);
+		document.querySelector('#note-editor').addEventListener('contextmenu', onEditorContextMenu);
+
+		// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
+		// https://github.com/ajaxorg/ace/issues/2754
+		// @ts-ignore: Keep the function signature as-is despite unusued arguments
+		editor.getSession().getMode().getNextLineIndent = function(state: any, line: string) {
+			const ls = lastKeys;
+			if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
+
+			const leftSpaces = lineLeftSpaces(line);
+			const lineNoLeftSpaces = line.trimLeft();
+
+			if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return `${leftSpaces}- [ ] `;
+			if (lineNoLeftSpaces.indexOf('- ') === 0) return `${leftSpaces}- `;
+			if (lineNoLeftSpaces.indexOf('* ') === 0 && line.trim() !== '* * *') return `${leftSpaces}* `;
+
+			const bulletNumber = markdownUtils.olLineNumber(lineNoLeftSpaces);
+			if (bulletNumber) return `${leftSpaces + (bulletNumber + 1)}. `;
+
+			return this.$getIndent(line);
+		};
+
+		return () => {
+			document.querySelector('#note-editor').removeEventListener('paste', onEditorPaste, true);
+			document.querySelector('#note-editor').removeEventListener('keydown', onEditorKeyDown);
+			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
+		};
+	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -351,6 +518,17 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 
 	useEffect(() => {
+		if (!editor) return;
+
+		if (contentKeyHasChangedRef.current) {
+			// editor.getSession().setMode(new CustomMdMode());
+			const undoManager = editor.getSession().getUndoManager();
+			undoManager.reset();
+			editor.getSession().setUndoManager(undoManager);
+		}
+	}, [props.content, editor]);
+
+	useEffect(() => {
 		if (!webviewReady) return;
 
 		const options: any = {
@@ -369,6 +547,18 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
+			// Note: Ideally we'd set the display to "none" to take the editor out
+			// of the DOM but if we do that, certain things won't work, in particular
+			// things related to scroll, which are based on the editor.
+
+			// Note that the below hack doesn't work and causes a bug in this case:
+			// - Put Ace Editor in viewer-only mode
+			// - Go to WYSIWYG editor
+			// - Create new to-do - set title only
+			// - Switch to Code View
+			// - Switch layout and type something
+			// => Text editor layout is broken and text is off-screen
+
 			output.display = 'none'; // Seems to work fine since the refactoring
 		}
 
@@ -390,22 +580,43 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [styles.cellViewer, props.visiblePanes]);
 
 	function renderEditor() {
+		// Need to hard-code the editor width, otherwise various bugs pops up
+		let width = 0;
+		if (props.visiblePanes.includes('editor')) {
+			width = !props.visiblePanes.includes('viewer') ? rootWidth : Math.floor(rootWidth / 2);
+		}
+
 		return (
 			<div style={cellEditorStyle}>
-				<CodeMirrorEditor
+				<AceEditorReact
 					value={props.content}
-					ref={editorRef}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
+					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 					theme={styles.editor.editorTheme}
 					style={styles.editor}
+					width={`${width}px`}
+					fontSize={styles.editor.fontSize}
+					showGutter={false}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
-					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
-					keyMap={props.keyboardMode}
-					cancelledKeys={cancelledKeys}
-					onChange={aceEditor_change}
+					name="note-editor"
+					wrapEnabled={true}
 					onScroll={editor_scroll}
-					onEditorContextMenu={onEditorContextMenu}
-					onEditorPaste={onEditorPaste}
+					onChange={aceEditor_change}
+					showPrintMargin={false}
+					onLoad={aceEditor_load}
+					// Enable/Disable the autoclosing braces
+					setOptions={
+						{
+							behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
+							useSoftTabs: false,
+						}
+					}
+					// Disable warning: "Automatically scrolling cursor into view after
+					// selection change this will be disabled in the next version set
+					// editor.$blockScrolling = Infinity to disable this message"
+					editorProps={{ $blockScrolling: Infinity }}
+					// This is buggy (gets outside the container)
+					highlightActiveLine={false}
+					keyboardHandler={props.keyboardMode}
 				/>
 			</div>
 		);

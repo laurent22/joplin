@@ -1,55 +1,40 @@
-// Markdown list indentation.
-// If the current line starts with `markup.list` token,
-// hitting `Tab` key indents the line instead of inserting tab at cursor.
-export default function useListIdent(CodeMirror: any) {
+import { useEffect } from 'react';
+import { selectionRange } from './index';
 
-	function isSelection(anchor: any, head: any) {
-		return anchor.line !== head.line || anchor.ch !== head.ch;
-	}
+interface HookDependencies {
+	editor: any,
+}
 
-	CodeMirror.commands.smartListIndent = function(cm: any) {
-		if (cm.getOption('disableInput')) return CodeMirror.Pass;
+export default function useListIdent(dependencies:HookDependencies) {
+	const { editor } = dependencies;
 
-		const ranges = cm.listSelections();
-		for (let i = 0; i < ranges.length; i++) {
-			const { anchor, head } = ranges[i];
+	useEffect(() => {
+		if (!editor) return;
 
-			const tokens = cm.getLineTokens(anchor.line);
-			console.log(tokens);
+		// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
+		// If the current line starts with `markup.list` token,
+		// hitting `Tab` key indents the line instead of inserting tab at cursor.
+		const originalEditorIndent = editor.indent;
 
-			// This is an actual selection and we should indent
-			if (isSelection(anchor, head) || tokens.length == 0 || !tokens[0].state.base.list) {
-				cm.execCommand('defaultTab');
-			} else {
-				let token: any = tokens[0];
+		editor.indent = function() {
+			const range = selectionRange(editor);
+			if (range.isEmpty()) {
+				const row = range.start.row;
+				const tokens = this.session.getTokens(row);
 
-				if (tokens[0].string.match(/\s/) && tokens.length > 1) { token = tokens[1]; }
+				if (tokens.length > 0 && tokens[0].type == 'markup.list') {
+					if (tokens[0].value.search(/\d+\./) != -1) {
+						// Resets numbered list to 1.
+						this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
+							tokens[0].value.replace(/\d+\./, '1.'));
+					}
 
-				if (token.string.match(/\d+/)) {
-					// Resets numbered list to 1.
-					cm.replaceRange('1',  { line: anchor.line, ch: token.start }, { line: anchor.line, ch: token.end });
+					this.session.indentRows(row, row, '\t');
+					return;
 				}
-
-				cm.indentLine(anchor.line, 'add');
 			}
-		}
-	};
 
-	CodeMirror.commands.smartListUnindent = function(cm: any) {
-		if (cm.getOption('disableInput')) return CodeMirror.Pass;
-
-		const ranges = cm.listSelections();
-		for (let i = 0; i < ranges.length; i++) {
-			const { anchor, head } = ranges[i];
-
-			const tokens = cm.getLineTokens(anchor.line);
-
-			// This is an actual selection and we should indent
-			if (isSelection(anchor, head) || tokens.length == 0 || !tokens[0].state.base.list) {
-				cm.execCommand('indentAuto');
-			} else {
-				cm.indentLine(anchor.line, 'subtract');
-			}
-		}
-	};
+			if (originalEditorIndent) originalEditorIndent.call(this);
+		};
+	}, [editor]);
 }

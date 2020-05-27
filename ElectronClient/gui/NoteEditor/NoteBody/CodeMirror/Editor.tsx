@@ -40,7 +40,7 @@ export interface EditorProps {
 	onEditorPaste: any,
 }
 
-function CodeMirrorEditor(props: EditorProps, ref: any) {
+function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const [editorParent, setEditorParent] = useState(null);
 
@@ -139,6 +139,11 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 		props.onEditorPaste();
 	}, [props.onEditorPaste]);
 
+	const editor_drop = useCallback((_cm: any, event:any) => {
+		console.log('DROP');
+		console.log(event);
+	}, []);
+
 	const divRef = useCallback(node => {
 		if (node !== null) {
 			console.log(editor);
@@ -168,6 +173,7 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 			cm.on('scroll', editor_scroll);
 			cm.on('mousedown', editor_mousedown);
 			cm.on('paste', editor_paste);
+			cm.on('drop', editor_drop);
 			console.log('!!!!!!!!!!!!New ref!!!!!!!!!!!!!!!');
 			console.log(props);
 		} else {
@@ -177,6 +183,7 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 				editor.off('scroll', editor_scroll);
 				editor.off('mousedown', editor_mousedown);
 				editor.off('paste', editor_paste);
+				editor.off('drop', editor_drop);
 				editorParent.removeChild(editor.getWrapperElement());
 				setEditor(null);
 			}
@@ -203,4 +210,4 @@ function CodeMirrorEditor(props: EditorProps, ref: any) {
 	return <div style={props.style} ref={divRef} />;
 }
 
-export default forwardRef(CodeMirrorEditor);
+export default forwardRef(Editor);

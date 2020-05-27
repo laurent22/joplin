@@ -5,11 +5,11 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, textOffsetSelection, selectedText } from './utils';
+import { useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, textOffsetSelection } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
-import CodeMirrorEditor from './CodeMirror';
+import Editor from './Editor';
 
 //  @ts-ignore
 const { bridge } = require('electron').remote.require('./bridge');
@@ -30,7 +30,7 @@ function markupRenderOptions(override: any = null) {
 	return { ...override };
 }
 
-function AceEditor(props: NoteBodyEditorProps, ref: any) {
+function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
@@ -61,7 +61,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	cancelledKeys.default.push('Alt-E');
 	cancelledKeys.mac.push('Alt-E');
 
-	const aceEditor_change = useCallback((newBody: string) => {
+	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
 
@@ -148,7 +148,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			execCommand: async (cmd: EditorCommand) => {
 				if (!editorRef.current) return false;
 
-				reg.logger().debug('AceEditor: execCommand', cmd);
+				reg.logger().debug('CodeMirror: execCommand', cmd);
 
 				let commandProcessed = true;
 
@@ -158,9 +158,9 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
-						aceEditor_change(newBody);
+						codeMirror_change(newBody);
 					} else {
-						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
+						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
 				} else if (cmd.name === 'focus') {
 					editorRef.current.focus();
@@ -197,7 +197,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						attachFile: async () => {
 							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
 							const newBody = await commandAttachFileToBody(props.content, null, { position: selection ? selection.start : 0 });
-							if (newBody) aceEditor_change(newBody);
+							if (newBody) codeMirror_change(newBody);
 						},
 						textNumberedList: () => {
 							const selection = selectionRange(editorRef.current);
@@ -215,7 +215,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					if (commands[cmd.name]) {
 						commands[cmd.name](cmd.value);
 					} else {
-						reg.logger().warn('AceEditor: unsupported Joplin command: ', cmd);
+						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
 						return false;
 					}
 				}
@@ -223,7 +223,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				return true;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, aceEditor_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, codeMirror_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -232,32 +232,25 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [wrapSelectionWithStrings]);
 
 	const editorCutText = useCallback(() => {
-		const text = selectedText(selectionRange(editorRef.current), props.content);
-		if (!text) return;
-
-		clipboard.writeText(text);
-
-		const s = textOffsetSelection(selectionRange(editorRef.current), props.content);
-		if (!s || s.start === s.end) return;
-
-		const s1 = props.content.substr(0, s.start);
-		const s2 = props.content.substr(s.end);
-
-		aceEditor_change(s1 + s2);
-
-		setTimeout(() => {
-			// const range = selectionRange(editorRef.current);
-			// range.setStart(range.start.row, range.start.column);
-			// range.setEnd(range.start.row, range.start.column);
-			// editor.getSession().getSelection().setSelectionRange(range, false);
-			editorRef.current.focus();
-		}, 10);
-	}, [props.content, aceEditor_change]);
+		if (editorRef.current) {
+			const selections = editorRef.current.getSelections();
+			if (selections.length > 0) {
+				clipboard.writeText(selections[0]);
+				// Easy way to wipe out just the first selection
+				selections[0] = '';
+				editorRef.current.replaceSelections(selections);
+			}
+		}
+	}, []);
 
 	const editorCopyText = useCallback(() => {
-		const text = selectedText(selectionRange(editorRef.current), props.content);
-		clipboard.writeText(text);
-	}, [props.content]);
+		if (editorRef.current) {
+			const selections = editorRef.current.getSelections();
+			if (selections.length > 0) {
+				clipboard.writeText(selections[0]);
+			}
+		}
+	}, []);
 
 	const editorPasteText = useCallback(() => {
 		wrapSelectionWithStrings(clipboard.readText(), '', '', '');
@@ -318,13 +311,13 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			const newBody = shared.toggleCheckbox(msg, props.content);
-			aceEditor_change(newBody);
+			codeMirror_change(newBody);
 		} else if (msg === 'percentScroll') {
 			setEditorPercentScroll(arg0);
 		} else {
 			props.onMessage(event);
 		}
-	}, [props.onMessage, props.content, aceEditor_change, setEditorPercentScroll]);
+	}, [props.onMessage, props.content, codeMirror_change, setEditorPercentScroll]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -392,7 +385,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	function renderEditor() {
 		return (
 			<div style={cellEditorStyle}>
-				<CodeMirrorEditor
+				<Editor
 					value={props.content}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
@@ -402,7 +395,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}
 					cancelledKeys={cancelledKeys}
-					onChange={aceEditor_change}
+					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorContextMenu={onEditorContextMenu}
 					onEditorPaste={onEditorPaste}
@@ -441,5 +434,5 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	);
 }
 
-export default forwardRef(AceEditor);
+export default forwardRef(CodeMirror);
 
