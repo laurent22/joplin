@@ -321,7 +321,7 @@ class Setting extends BaseModel {
 				label: () => _('Sort notes by'),
 				options: () => {
 					const Note = require('lib/models/Note');
-					const noteSortFields = ['user_updated_time', 'user_created_time', 'title'];
+					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
 					const options = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
