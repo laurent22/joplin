@@ -1753,7 +1753,7 @@ msgstr "删除"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
 #, fuzzy, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "是否删除笔记“%s”？"
+msgstr "是否删除附件“%s”？"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1764,7 +1764,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
-msgstr "请稍后..."
+msgstr "请稍候..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
@@ -1773,7 +1773,7 @@ msgstr "没有资源！"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "由于性能原因并未显示出所有资源 (范围: %s)。"
+msgstr "警告：由于性能原因无法显示所有资源 (范围: %s)。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1805,7 +1805,7 @@ msgstr[0] "链接已复制到剪贴板！"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "注意：共享笔记后，便不再在服务器上对其进行加密。"
+msgstr "注意：笔记共享后，便不再在服务器上加密。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
 msgid "Share Notes"
@@ -2000,7 +2000,7 @@ msgstr "OneDrive"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive 开发版（仅用于测试）"
+msgstr "OneDrive 开发版（仅供测试）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
@@ -2014,7 +2014,7 @@ msgstr "未知日志级别：%s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:187
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "未知级别的 ID：%s"
+msgstr "未知级别 ID：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
 msgid ""
@@ -2034,7 +2034,7 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "请在浏览器中打开以下链接激活该应用程序。该应用会建立“Apps/Joplin”文件目录，并"
-"只会读写该目录中的文件。它没有任何权限访问此目录以外的任何文件或个人信息。也"
+"只会读写该目录中的文件。该应用没有任何权限访问此目录以外的任何文件或个人信息，也"
 "不会与第三方分享任何数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
@@ -2165,7 +2165,7 @@ msgstr "创建日期"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:105
 msgid "This note does not have geolocation information."
-msgstr "该笔记不包含地理定位信息。"
+msgstr "该笔记不含地理定位信息。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:459
 #, javascript-format
@@ -2341,11 +2341,11 @@ msgstr "北欧"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "暗黑 (Aritim)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
-msgstr "暗黑 (OLED)"
+msgstr "纯黑 (OLED)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Show note counts"
@@ -2500,7 +2500,7 @@ msgstr "显示托盘图标"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：某些桌面环境下无效。"
+msgstr "注意：部分桌面环境下无效。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
 msgid ""
@@ -2525,19 +2525,19 @@ msgstr "编辑器字体"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:456
 msgid "Editor font family"
-msgstr "编辑器字体"
+msgstr "编辑器字体系列"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:458
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会设置成一款"
+"必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会默认设置为"
 "通用的等宽字体。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "自定义样式表，适用于整个Joplin"
+msgstr "适用于 Joplin 全域应用样式的自定义样式表"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:503
 msgid "Automatically update the application"
@@ -2545,12 +2545,12 @@ msgstr "自动更新程序"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 msgid "Get pre-releases when checking for updates"
-msgstr "检查更新时获取预发布版本"
+msgstr "检查更新时获取预发行版本"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "预发布版本的详细信息，请参阅页面: %s"
+msgstr "若需了解预发行版本的详细信息，请参阅页面: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Synchronisation interval"
@@ -2583,8 +2583,8 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
-"认编辑器。"
+"该文本编辑器命令（可能包括参数）将会被用于打开笔记。"
+"若未提供将尝试自动检测默认编辑器。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
 msgid "Page size for PDF export"
@@ -2620,11 +2620,11 @@ msgstr "PDF导出的页面方向"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
 msgid "Portrait"
-msgstr "肖像"
+msgstr "竖版"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:544
 msgid "Landscape"
-msgstr "景观"
+msgstr "横板"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:559
 msgid "Custom TLS certificates"
@@ -2637,7 +2637,7 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"以逗号分隔的路径列表，可以是包含证书的目录，也可以是单独的证书路径。 例如：/"
+"以逗号分隔的路径列表，可以是包含证书的目录，也可以直接指向单独的证书路径。 例如：/"
 "my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存更"
 "改，之后再点击“检查同步配置”。"
 
@@ -2647,7 +2647,7 @@ msgstr "忽略 TLS 证书错误"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "自动防故障"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2713,7 +2713,7 @@ msgstr "加密"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1027
 msgid "Web Clipper"
-msgstr "网页剪藏"
+msgstr "网页剪辑"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1032
 msgid ""
@@ -2725,6 +2725,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"这些插件为 Markdown 渲染器提供额外功能。 请"
+"注意，尽管这些额外功能可能是可用的，但他们并非标准"
+"Markdown 语法，因此这些功能基本只能在 Joplin 内运行。此外，其中的"
+"一些功能与 WYSIWYG 编辑器是*不兼容*的。如果你在"
+"上述编辑器中打开使用了这些插件的笔记，就将会丢失插件"
+"格式。下面已表明插件与 WYSIWYG 编辑器"
+"兼容与否。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -2765,11 +2772,11 @@ msgstr "Json 导出目录"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
 msgid "HTML File"
-msgstr "HTML文件"
+msgstr "HTML 文件"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
 msgid "HTML Directory"
-msgstr "HTML文件目录"
+msgstr "HTML 文件目录"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -3241,7 +3248,7 @@ msgstr "启用加密"
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr "有关端到端加密（E2EE）的更多信息，以及如何启用它的建议，请查看文档："
+msgstr "若想了解有关端到端加密（E2EE）的更多信息，以及如何启用它的建议，请查看文档："
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
