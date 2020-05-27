@@ -4,43 +4,52 @@ const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
 const BaseModel = require('lib/BaseModel');
-const markJsUtils = require('lib/markJsUtils');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
-const Mark = require('mark.js/dist/mark.min.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
+const Setting = require('lib/models/Setting');
 const NoteListUtils = require('./utils/NoteListUtils');
-const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const NoteListItem = require('./NoteListItem').default;
 
 class NoteListComponent extends React.Component {
 	constructor() {
 		super();
+
+		this.itemHeight = 34;
+
+		this.state = {
+			dragOverTargetNoteIndex: null,
+		};
 
 		this.itemListRef = React.createRef();
 		this.itemAnchorRefs_ = {};
 
 		this.itemRenderer = this.itemRenderer.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
+		this.noteItem_titleClick = this.noteItem_titleClick.bind(this);
+		this.noteItem_noteDragOver = this.noteItem_noteDragOver.bind(this);
+		this.noteItem_noteDrop = this.noteItem_noteDrop.bind(this);
+		this.noteItem_checkboxClick = this.noteItem_checkboxClick.bind(this);
+		this.noteItem_dragStart = this.noteItem_dragStart.bind(this);
+		this.onGlobalDrop_ = this.onGlobalDrop_.bind(this);
+		this.registerGlobalDragEndEvent_ = this.registerGlobalDragEndEvent_.bind(this);
+		this.unregisterGlobalDragEndEvent_ = this.unregisterGlobalDragEndEvent_.bind(this);
 	}
 
 	style() {
+		if (this.styleCache_ && this.styleCache_[this.props.theme]) return this.styleCache_[this.props.theme];
+
 		const theme = themeStyle(this.props.theme);
-
-		const itemHeight = 34;
-
-		// Note: max-width is used to specifically prevent horizontal scrolling on Linux when the scrollbar is present in the note list.
-		// Pull request: https://github.com/laurent22/joplin/pull/2062
-		const itemWidth = '100%';
 
 		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
 			listItem: {
-				maxWidth: itemWidth,
-				height: itemHeight,
+				maxWidth: '100%',
+				height: this.itemHeight,
 				boxSizing: 'border-box',
 				display: 'flex',
 				alignItems: 'stretch',
@@ -68,6 +77,9 @@ class NoteListComponent extends React.Component {
 			},
 		};
 
+		this.styleCache_ = {};
+		this.styleCache_[this.props.theme] = style;
+
 		return style;
 	}
 
@@ -93,160 +105,152 @@ class NoteListComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	itemRenderer(item) {
-		const theme = themeStyle(this.props.theme);
-		const width = this.props.style.width;
+	onGlobalDrop_() {
+		this.unregisterGlobalDragEndEvent_();
+		this.setState({ dragOverTargetNoteIndex: null });
+	}
 
-		const onTitleClick = async (event, item) => {
-			if (event.ctrlKey || event.metaKey) {
-				event.preventDefault();
-				this.props.dispatch({
-					type: 'NOTE_SELECT_TOGGLE',
-					id: item.id,
-				});
-			} else if (event.shiftKey) {
-				event.preventDefault();
-				this.props.dispatch({
-					type: 'NOTE_SELECT_EXTEND',
-					id: item.id,
-				});
-			} else {
-				this.props.dispatch({
-					type: 'NOTE_SELECT',
-					id: item.id,
-				});
-			}
-		};
+	registerGlobalDragEndEvent_() {
+		if (this.globalDragEndEventRegistered_) return;
+		this.globalDragEndEventRegistered_ = true;
+		document.addEventListener('dragend', this.onGlobalDrop_);
+	}
 
-		const onDragStart = event => {
-			let noteIds = [];
+	unregisterGlobalDragEndEvent_() {
+		this.globalDragEndEventRegistered_ = false;
+		document.removeEventListener('dragend', this.onGlobalDrop_);
+	}
 
-			// Here there is two cases:
-			// - If multiple notes are selected, we drag the group
-			// - If only one note is selected, we drag the note that was clicked on (which might be different from the currently selected note)
-			if (this.props.selectedNoteIds.length >= 2) {
-				noteIds = this.props.selectedNoteIds;
-			} else {
-				const clickedNoteId = event.currentTarget.getAttribute('data-id');
-				if (clickedNoteId) noteIds.push(clickedNoteId);
-			}
+	dragTargetNoteIndex_(event) {
+		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop()) / this.itemHeight));
+	}
 
-			if (!noteIds.length) return;
+	noteItem_noteDragOver(event) {
+		if (this.props.notesParentType !== 'Folder') return;
 
-			event.dataTransfer.setDragImage(new Image(), 1, 1);
-			event.dataTransfer.clearData();
-			event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-		};
+		const dt = event.dataTransfer;
 
-		const onCheckboxClick = async event => {
-			const checked = event.target.checked;
-			const newNote = {
-				id: item.id,
-				todo_completed: checked ? time.unixMs() : 0,
-			};
-			await Note.save(newNote, { userSideValidation: true });
-			eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
-		};
-
-		const hPadding = 10;
-
-		let highlightedWords = [];
-		if (this.props.notesParentType === 'Search') {
-			const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
-			if (query) {
-				const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
-				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
-			}
+		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+			event.preventDefault();
+			const newIndex = this.dragTargetNoteIndex_(event);
+			if (this.state.dragOverTargetNoteIndex === newIndex) return;
+			this.registerGlobalDragEndEvent_();
+			this.setState({ dragOverTargetNoteIndex: newIndex });
 		}
+	}
 
-		let style = Object.assign({ width: width, opacity: this.props.provisionalNoteIds.includes(item.id) ? 0.5 : 1 }, this.style().listItem);
+	async noteItem_noteDrop(event) {
+		if (this.props.notesParentType !== 'Folder') return;
 
-		if (this.props.selectedNoteIds.indexOf(item.id) >= 0) {
-			style = Object.assign(style, this.style().listItemSelected);
-		}
-
-		// Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
-		// but don't know how it will look in other OSes.
-		const checkbox = item.is_todo ? (
-			<div style={{ display: 'flex', height: style.height, alignItems: 'center', paddingLeft: hPadding }}>
-				<input
-					style={{ margin: 0, marginBottom: 1, marginRight: 5 }}
-					type="checkbox"
-					defaultChecked={!!item.todo_completed}
-					onClick={event => {
-						onCheckboxClick(event, item);
-					}}
-				/>
-			</div>
-		) : null;
-
-		let listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
-		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
-		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
-
-		const displayTitle = Note.displayTitle(item);
-		let titleComp = null;
-
-		if (highlightedWords.length) {
-			const titleElement = document.createElement('span');
-			titleElement.textContent = displayTitle;
-			const mark = new Mark(titleElement, {
-				exclude: ['img'],
-				acrossElements: true,
+		if (this.props.noteSortOrder !== 'order') {
+			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
+				buttons: [_('Do it now'), _('Cancel')],
 			});
+			if (!doIt) return;
 
-			mark.unmark();
-
-			for (let i = 0; i < highlightedWords.length; i++) {
-				const w = highlightedWords[i];
-
-				markJsUtils.markKeyword(mark, w, {
-					pregQuote: pregQuote,
-					replaceRegexDiacritics: replaceRegexDiacritics,
-				});
-			}
-
-			// Note: in this case it is safe to use dangerouslySetInnerHTML because titleElement
-			// is a span tag that we created and that contains data that's been inserted as plain text
-			// with `textContent` so it cannot contain any XSS attacks. We use this feature because
-			// mark.js can only deal with DOM elements.
-			// https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
-			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>;
-		} else {
-			titleComp = <span>{displayTitle}</span>;
+			Setting.setValue('notes.sortOrder.field', 'order');
+			return;
 		}
 
-		const watchedIconStyle = {
-			paddingRight: 4,
-			color: theme.color,
+		// TODO: check that parent type is folder
+
+		const dt = event.dataTransfer;
+		this.unregisterGlobalDragEndEvent_();
+		this.setState({ dragOverTargetNoteIndex: null });
+
+		const targetNoteIndex = this.dragTargetNoteIndex_(event);
+		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+
+		Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
+	}
+
+
+	async noteItem_checkboxClick(event, item) {
+		const checked = event.target.checked;
+		const newNote = {
+			id: item.id,
+			todo_completed: checked ? time.unixMs() : 0,
 		};
-		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
+		await Note.save(newNote, { userSideValidation: true });
+		eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
+	}
+
+	async noteItem_titleClick(event, item) {
+		if (event.ctrlKey || event.metaKey) {
+			event.preventDefault();
+			this.props.dispatch({
+				type: 'NOTE_SELECT_TOGGLE',
+				id: item.id,
+			});
+		} else if (event.shiftKey) {
+			event.preventDefault();
+			this.props.dispatch({
+				type: 'NOTE_SELECT_EXTEND',
+				id: item.id,
+			});
+		} else {
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id: item.id,
+			});
+		}
+	}
+
+	noteItem_dragStart(event) {
+		let noteIds = [];
+
+		// Here there is two cases:
+		// - If multiple notes are selected, we drag the group
+		// - If only one note is selected, we drag the note that was clicked on (which might be different from the currently selected note)
+		if (this.props.selectedNoteIds.length >= 2) {
+			noteIds = this.props.selectedNoteIds;
+		} else {
+			const clickedNoteId = event.currentTarget.getAttribute('data-id');
+			if (clickedNoteId) noteIds.push(clickedNoteId);
+		}
+
+		if (!noteIds.length) return;
+
+		event.dataTransfer.setDragImage(new Image(), 1, 1);
+		event.dataTransfer.clearData();
+		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
+	}
+
+	itemRenderer(item, index) {
+		const highlightedWords = () => {
+			if (this.props.notesParentType === 'Search') {
+				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+				if (query) {
+					const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
+					return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+				}
+			}
+			return [];
+		};
 
 		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
 		const ref = this.itemAnchorRefs_[item.id];
 
-		// Need to include "todo_completed" in key so that checkbox is updated when
-		// item is changed via sync.
-		return (
-			<div key={`${item.id}_${item.todo_completed}`} className="list-item-container" style={style}>
-				{checkbox}
-				<a
-					ref={ref}
-					onContextMenu={event => this.itemContextMenu(event)}
-					href="#"
-					draggable={true}
-					style={listItemTitleStyle}
-					onClick={event => {
-						onTitleClick(event, item);
-					}}
-					onDragStart={event => onDragStart(event)}
-					data-id={item.id}
-				>
-					{watchedIcon}
-					{titleComp}
-				</a>
-			</div>
-		);
+		return <NoteListItem
+			ref={ref}
+			key={item.id}
+			style={this.style(this.props.theme)}
+			item={item}
+			index={index}
+			theme={this.props.theme}
+			width={this.props.style.width}
+			dragItemIndex={this.state.dragOverTargetNoteIndex}
+			highlightedWords={highlightedWords()}
+			isProvisional={this.props.provisionalNoteIds.includes(item.id)}
+			isSelected={this.props.selectedNoteIds.indexOf(item.id) >= 0}
+			isWatched={this.props.watchedNoteFiles.indexOf(item.id) < 0}
+			itemCount={this.props.notes.length}
+			onCheckboxClick={this.noteItem_checkboxClick}
+			onDragStart={this.noteItem_dragStart}
+			onNoteDragOver={this.noteItem_noteDragOver}
+			onNoteDrop={this.noteItem_noteDrop}
+			onTitleClick={this.noteItem_titleClick}
+		/>;
 	}
 
 	itemAnchorRef(itemId) {
@@ -434,9 +438,8 @@ class NoteListComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
-		const notes = this.props.notes.slice();
 
-		if (!notes.length) {
+		if (!this.props.notes.length) {
 			const padding = 10;
 			const emptyDivStyle = Object.assign(
 				{
@@ -453,7 +456,16 @@ class NoteListComponent extends React.Component {
 			return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
 		}
 
-		return <ItemList ref={this.itemListRef} itemHeight={this.style().listItem.height} className={'note-list'} items={notes} style={style} itemRenderer={this.itemRenderer} onKeyDown={this.onKeyDown} />;
+		return <ItemList
+			ref={this.itemListRef}
+			disabled={this.props.isInsertingNotes}
+			itemHeight={this.style(this.props.theme).listItem.height}
+			className={'note-list'}
+			items={this.props.notes}
+			style={style}
+			itemRenderer={this.itemRenderer}
+			onKeyDown={this.onKeyDown}
+		/>;
 	}
 }
 
@@ -462,6 +474,7 @@ const mapStateToProps = state => {
 		notes: state.notes,
 		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedFolderId: state.selectedFolderId,
 		theme: state.settings.theme,
 		notesParentType: state.notesParentType,
 		searches: state.searches,
@@ -469,6 +482,8 @@ const mapStateToProps = state => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		windowCommand: state.windowCommand,
 		provisionalNoteIds: state.provisionalNoteIds,
+		isInsertingNotes: state.isInsertingNotes,
+		noteSortOrder: state.settings['notes.sortOrder.field'],
 	};
 };
 

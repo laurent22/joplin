@@ -369,6 +369,7 @@ class Application extends BaseApplication {
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
+				id: `sort:${type}:reverse`,
 				label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
 				type: 'checkbox',
 				checked: Setting.value(`${type}.sortOrder.reverse`),
@@ -1274,6 +1275,9 @@ class Application extends BaseApplication {
 			if (!menuItem) continue;
 			menuItem.enabled = selectedNoteIds.length === 1;
 		}
+
+		const sortNoteReverseItem = Menu.getApplicationMenu().getMenuItemById('sort:notes:reverse');
+		sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
