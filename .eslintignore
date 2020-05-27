@@ -84,6 +84,7 @@ ElectronClient/gui/NoteEditor/utils/useMessageHandler.js
 ElectronClient/gui/NoteEditor/utils/useNoteSearchBar.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js
+ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
