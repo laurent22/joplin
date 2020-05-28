@@ -173,10 +173,17 @@ a {
 
 /* These must be important to prevent the codemirror defaults from taking over*/
 .CodeMirror {
-  font-family: monospace;
+	font-family: monospace;
 	height: 100% !important;
-  width: 100% !important;
-  color: inherit !important;
-  background-color: inherit !important;
-  position: absolute !important;
+	width: 100% !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	position: absolute !important;
 }
+
+.cm-header-1 { font-size: 250%; }
+.cm-header-2 { font-size: 200%; }
+.cm-header-3 { font-size: 150%; }
+.cm-header-4 { font-size: 120%; }
+.cm-header-5 { font-size: 100%; }
+

@@ -175,6 +175,7 @@ function Editor(props: EditorProps, ref: any) {
 				scrollPastEnd: true,
 				indentWithTabs: true,
 				indentUnit: 4,
+				spellcheck: true,
 				keyMap: props.keyMap ? props.keyMap : 'default',
 				extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList',
 					'Ctrl-/': 'toggleComment',
