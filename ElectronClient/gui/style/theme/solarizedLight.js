@@ -31,7 +31,8 @@ const solarizedLightStyle = {
 	htmlCodeBorderColor: '#eee8d5',
 	htmlCodeColor: '#002b36',
 
-	editorTheme: 'solarized light',
+	aceEditorTheme: 'tomorrow',
+	codeMirrorTheme: 'solarized light',
 	codeThemeCss: 'atom-one-light.css',
 };
 

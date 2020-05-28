@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { useScrollHandler, usePrevious, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, textOffsetSelection } from './utils';
+import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -71,11 +71,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		if (editorRef.current.somethingSelected()) {
 			const selectedStrings = editorRef.current.getSelections();
 
-			//  byLine will wrap each line of a selection with the given strings
-			//  and it doesn't care about whitespace
-			if (byLine) {
-				for (let i = 0; i < selectedStrings.length; i++) {
-					const selected = replacementText !== null ? replacementText : selectedStrings[i];
+			for (let i = 0; i < selectedStrings.length; i++) {
+				const selected = selectedStrings[i];
+				//  byLine will wrap each line of a selection with the given strings
+				//  and it doesn't care about whitespace
+				if (byLine) {
 					const lines = selected.split(/\r?\n/);
 					//  Save the newline character to restore it later
 					const newLines = selected.match(/\r?\n/);
@@ -87,15 +87,20 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 					const newLine = newLines !== null ? newLines[0] : '\n';
 					selectedStrings[i] = lines.join(newLine);
-				}
-			} else {
-				for (let i = 0; i < selectedStrings.length; i++) {
-					const selected = replacementText !== null ? replacementText : selectedStrings[i];
+				} else {
+					// Remove white space on either side of selection
 					const start = selected.search(/[^\s]/);
 					const end = selected.search(/[^\s](?=[\s]*$)/);
-					const replacement = selected.substr(0, start) + string1 + selected.substr(start, end - start + 1) + string2 + selected.substr(end + 1);
+					const core = selected.substr(start, end - start + 1);
 
-					selectedStrings[i] = replacement;
+					// If selection can be toggled do that
+					if (core.startsWith(string1) && core.endsWith(string2)) {
+						const inside = core.substr(string1.length, core.length - string1.length - string2.length);
+						selectedStrings[i] = selected.substr(0, start) + inside + selected.substr(end + 1);
+					} else {
+						selectedStrings[i] = selected.substr(0, start) + string1 + core + string2 + selected.substr(end + 1);
+					}
+
 				}
 			}
 
@@ -153,12 +158,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				let commandProcessed = true;
 
 				if (cmd.name === 'dropItems') {
-					console.log('drop!!!!!!!!!!!!!');
 					if (cmd.value.type === 'notes') {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
-						codeMirror_change(newBody);
+						editorRef.current.updateBody(newBody);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
@@ -177,32 +181,33 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {
-							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
-							const string = props.content.substr(selection.start, selection.end - selection.start);
+							const selections = editorRef.current.getSelections();
 
-							// Look for newlines
-							const match = string.match(/\r?\n/);
+							// This bases the selection wrapping only around the first element
+							if (selections.length > 0) {
+								const string = selections[0];
 
-							if (match && match.length > 0) {
-								if (string.startsWith('```') && string.endsWith('```')) {
-									wrapSelectionWithStrings('', '', '', string.substr(4, selection.end - selection.start - 8));
-								} else {
+								// Look for newlines
+								const match = string.match(/\r?\n/);
+
+								if (match && match.length > 0) {
 									wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+								} else {
+									wrapSelectionWithStrings('`', '`', '');
 								}
-							} else {
-								wrapSelectionWithStrings('`', '`', '');
 							}
 						},
 						insertText: (value: any) => wrapSelectionWithStrings(value),
 						attachFile: async () => {
-							const selection = textOffsetSelection(selectionRange(editorRef.current), props.content);
-							const newBody = await commandAttachFileToBody(props.content, null, { position: selection ? selection.start : 0 });
-							if (newBody) codeMirror_change(newBody);
+							const cursor = editorRef.current.getCursor();
+							const pos = cursorPositionToTextOffset(cursor, props.content);
+
+							const newBody = await commandAttachFileToBody(props.content, null, { position: pos });
+							if (newBody) editorRef.current.updateBody(newBody);
 						},
 						textNumberedList: () => {
-							const selection = selectionRange(editorRef.current);
-							let bulletNumber = markdownUtils.olLineNumber(selectionRangeCurrentLine(selection, props.content));
-							if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(selectionRangePreviousLine(selection, props.content));
+							let bulletNumber = markdownUtils.olLineNumber(editorRef.current.getCurrentLine());
+							if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(editorRef.current.getPreviousLine());
 							if (!bulletNumber) bulletNumber = 0;
 							addListItem(`${bulletNumber + 1}. `, '', _('List item'), true);
 						},
@@ -223,7 +228,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return true;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, selectionRangeCurrentLine, codeMirror_change, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -311,13 +316,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			const newBody = shared.toggleCheckbox(msg, props.content);
-			codeMirror_change(newBody);
+			if (editorRef.current) {
+				editorRef.current.updateBody(newBody);
+			}
 		} else if (msg === 'percentScroll') {
 			setEditorPercentScroll(arg0);
 		} else {
 			props.onMessage(event);
 		}
-	}, [props.onMessage, props.content, codeMirror_change, setEditorPercentScroll]);
+	}, [props.onMessage, props.content, setEditorPercentScroll]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -389,7 +396,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					value={props.content}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
-					theme={styles.editor.editorTheme}
+					theme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}

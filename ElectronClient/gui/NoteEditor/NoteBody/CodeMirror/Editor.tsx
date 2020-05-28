@@ -7,8 +7,6 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/scrollpastend';
-import 'codemirror/addon/search/searchcursor';
-import 'codemirror/addon/search/search';
 
 import useListIdent from './utils/useListIdent';
 
@@ -113,6 +111,25 @@ function Editor(props: EditorProps, ref: any) {
 				const pos = editor.getCursor('anchor');
 				editor.replaceRange(insert, pos);
 			},
+			getCurrentLine: () => {
+				const curs = editor.getCursor('anchor');
+
+				return editor.getLine(curs.line);
+			},
+			getPreviousLine: () => {
+				const curs = editor.getCursor('anchor');
+
+				if (curs.line > 0) { return editor.getLine(curs.line - 1); }
+				return '';
+			},
+			updateBody: (newBody: string) => {
+				// this updates the body in a way that registers with the undo/redo
+				const start = { line: editor.firstLine(), ch: 0 };
+				const last = editor.getLine(editor.lastLine());
+				const end = { line: editor.lastLine(), ch: last ? last.length : 0 };
+
+				editor.replaceRange(newBody, start, end, '+insert');
+			},
 		};
 	});
 
@@ -139,14 +156,12 @@ function Editor(props: EditorProps, ref: any) {
 		props.onEditorPaste();
 	}, [props.onEditorPaste]);
 
-	const editor_drop = useCallback((_cm: any, event:any) => {
-		console.log('DROP');
-		console.log(event);
+	const editor_drop = useCallback((_cm: any, event: any) => {
+		event.preventDefault();
 	}, []);
 
 	const divRef = useCallback(node => {
 		if (node !== null) {
-			console.log(editor);
 			const cmOptions = {
 				value: props.value,
 				screenReaderLabel: props.value,
@@ -174,8 +189,6 @@ function Editor(props: EditorProps, ref: any) {
 			cm.on('mousedown', editor_mousedown);
 			cm.on('paste', editor_paste);
 			cm.on('drop', editor_drop);
-			console.log('!!!!!!!!!!!!New ref!!!!!!!!!!!!!!!');
-			console.log(props);
 		} else {
 			if (editor) {
 				// Clean up codemirror

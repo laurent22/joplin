@@ -337,6 +337,14 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
+			'editor.betaCodeMirror': {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				public: true,
+				section: 'note',
+				appTypes: ['desktop'],
+				label: () => _('Use CodeMirror as the code editor (WARNING: BETA).'),
+			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {
 				value: 'title',
@@ -488,7 +496,7 @@ class Setting extends BaseModel {
 						section: 'appearance',
 						label: () => _('Editor font family'),
 						description: () =>
-							_('This must be *monospace* font or it will not work properly. If the font ' +
+							_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
 						'is incorrect or empty, it will default to a generic monospace font.'),
 					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
