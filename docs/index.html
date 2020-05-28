@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/README.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -360,17 +360,17 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.201/Joplin-Setup-1.0.201.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
-<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.201/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-Setup-1.0.216.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
+<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.201/Joplin-1.0.201.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-1.0.216.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
 <td>You can also use Homebrew: <code>brew cask install joplin</code></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.201/Joplin-1.0.201.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-1.0.216.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
 <td>An Arch Linux package <a href="#terminal-application">is also available</a>.<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash</code></td>
 </tr>
 </tbody>
@@ -407,12 +407,26 @@ https://github.com/laurent22/joplin/blob/master/README.md
 </thead>
 <tbody>
 <tr>
+<td>macOS, Linux, or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
+<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 10+</a>.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
+</tr>
+</tbody>
+</table>
+<p>To start it, type <code>joplin</code>.</p>
+<p>For usage information, please refer to the full <a href="https://joplinapp.org/terminal/">Joplin Terminal Application Documentation</a>.</p>
+<h3>Unsupported methods<a name="unsupported-methods" href="#unsupported-methods" class="heading-anchor">🔗</a></h3>
+<p>There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.</p>
+<table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td>macOS</td>
 <td><code>brew install joplin</code></td>
-</tr>
-<tr>
-<td>Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
-<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 10+</a>.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
 </tr>
 <tr>
 <td>Arch Linux</td>
@@ -420,8 +434,6 @@ https://github.com/laurent22/joplin/blob/master/README.md
 </tr>
 </tbody>
 </table>
-<p>To start it, type <code>joplin</code>.</p>
-<p>For usage information, please refer to the full <a href="https://joplinapp.org/terminal/">Joplin Terminal Application Documentation</a>.</p>
 <h2>Web Clipper<a name="web-clipper" href="#web-clipper" class="heading-anchor">🔗</a></h2>
 <p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the <a href="https://joplinapp.org/clipper/">Web Clipper Help Page</a>.</p>
 <h1>Features<a name="features" href="#features" class="heading-anchor">🔗</a></h1>
