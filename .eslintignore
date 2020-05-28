@@ -75,7 +75,9 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/styles/index.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 ElectronClient/gui/NoteEditor/NoteEditor.js

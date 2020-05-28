@@ -46,7 +46,7 @@ export default function useListIdent(CodeMirror: any) {
 
 			// This is an actual selection and we should indent
 			if (isSelection(anchor, head) || tokens.length == 0 || !tokens[0].state.base.list) {
-				cm.execCommand('indentAuto');
+				cm.execCommand('indentLess');
 			} else {
 				cm.indentLine(anchor.line, 'subtract');
 			}
