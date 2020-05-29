@@ -13,9 +13,12 @@ const tagFilter = (tags: Array<Term>) => {
 	return result;
 };
 
-const noteBookFilter = () => {
-	// TO DO: Add multiple notebook support?
-	return `child_notebooks(id) as (select folders.id from folders where id=(select id from folders where folders.title LIKE ?)
+const noteBookFilter = (terms: Term[]) => {
+	const likes = [];
+	for (let i = 0; i < terms.length; i++) {
+		likes.push('folders.title LIKE ?');
+	}
+	return `child_notebooks(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
 union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
 };
 
@@ -62,9 +65,9 @@ const makeMatchQuery = (name: string, filters:Map<string, Array<Term>>) => {
 
 export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	let query;
-	const queryParts = [];
-	const params = [];
-	const withs = [];
+	const queryParts: string[] = [];
+	const params: string[] = [];
+	const withs: string[] = [];
 
 	queryParts.push(`SELECT
 	notes_fts.id,
@@ -83,10 +86,10 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	}
 
 	if (filters.has('notebook')) {
-		const term = filters.get('notebook')[0];
-		queryParts.push(`AND ROWID ${term.relation === 'NOT' ? 'NOT' : ''} IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`);
-		withs.push(noteBookFilter());
-		params.push(term.value);
+		const terms = filters.get('notebook');
+		withs.push(noteBookFilter(terms));
+		terms.forEach(term => params.push(term.value));
+		queryParts.push('AND ROWID IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)');
 	}
 
 	if (filters.has('is')) {

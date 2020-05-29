@@ -226,23 +226,23 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows).sort()).toEqual(ids(notes0.concat(notes00)).sort());
 	}));
 
-	// it('should support filtering by multiple notebooks', asyncTest(async () => {
-	// 	let rows;
-	// 	const folder0 = await Folder.save({ title: 'notebook0' });
-	// 	const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
-	// 	const folder1 = await Folder.save({ title: 'notebook1' });
-	// 	const folder2 = await Folder.save({ title: 'notebook2' });
-	// 	const notes0 = await createNTestNotes(5, folder0);
-	// 	const notes00 = await createNTestNotes(5, folder00);
-	// 	const notes1 = await createNTestNotes(5, folder1);
-	// 	const notes2 = await createNTestNotes(5, folder2);
+	it('should support filtering by multiple notebooks', asyncTest(async () => {
+		let rows;
+		const folder0 = await Folder.save({ title: 'notebook0' });
+		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
+		const folder1 = await Folder.save({ title: 'notebook1' });
+		const folder2 = await Folder.save({ title: 'notebook2' });
+		const notes0 = await createNTestNotes(5, folder0);
+		const notes00 = await createNTestNotes(5, folder00);
+		const notes1 = await createNTestNotes(5, folder1);
+		const notes2 = await createNTestNotes(5, folder2);
 
-	// 	await engine.syncTables();
+		await engine.syncTables();
 
-	// 	rows = await engine.search('notebook:notebook0 notebook:notebook1');
-	// 	expect(rows.length).toBe(15);
-	// 	expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
-	// }));
+		rows = await engine.search('notebook:notebook0 notebook:notebook1');
+		expect(rows.length).toBe(15);
+		expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
+	}));
 
 	it('should support filtering by created date', asyncTest(async () => {
 		let rows;
