@@ -145,14 +145,6 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('NOT in a notebook', () => {
-		const searchString = '-notebook:notebook1';
-		const expected = new Map([
-			['notebook', [{ relation: 'NOT', value: 'notebook1' }]],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
-	});
-
 	it('created on', () => {
 		const searchString = 'created:20151218'; // YYYYMMDD
 		const expected = new Map([
@@ -178,28 +170,27 @@ describe('filterParser should be correct filter for keyword', () => {
 	});
 
 	it('is a todo', () => {
-		const searchString = 'todo:*';
+		const searchString = 'is:todo';
 		const expected = new Map([
-			['todo', [{ relation: 'AND', value: '*' }]],
+			['is', [{ relation: 'AND', value: 'todo' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
 	it('is a completed todo', () => {
-		const searchString = 'todo:true';
+		const searchString = 'iscompleted:true'; // should accept true/false, 1/0, yes/no
 		const expected = new Map([
-			['todo', [{ relation: 'AND', value: 'true' }]],
+			['iscompleted', [{ relation: 'AND', value: 'true' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
 	it('is a uncompleted todo', () => {
-		const searchString = 'todo:false';
+		const searchString = 'iscompleted:false'; // should accept true/false, 1/0, yes/no
 		const expected = new Map([
-			['todo', [{ relation: 'AND', value: 'false' }]],
+			['iscompleted', [{ relation: 'AND', value: 'false' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
-
 
 });

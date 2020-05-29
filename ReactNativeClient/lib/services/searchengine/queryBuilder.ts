@@ -83,24 +83,31 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	}
 
 	if (filters.has('notebook')) {
-		// currently only supports one notebook
 		const term = filters.get('notebook')[0];
 		queryParts.push(`AND ROWID ${term.relation === 'NOT' ? 'NOT' : ''} IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)`);
 		withs.push(noteBookFilter());
 		params.push(term.value);
 	}
 
-	if (filters.has('todo')) {
-
-		const term = filters.get('todo')[0]; // *, true, false as term.value
-		if (term.value === '*') {
-			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)'); }
-		} else if (term.value === 'true') {
-			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)'); }
-		} else if (term.value === 'false') {
-			if (term.relation === 'OR') { queryParts.push('OR ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); } else if (term.relation === 'NOT') { queryParts.push('AND ROWID NOT IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); } else { queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)'); }
+	if (filters.has('is')) {
+		const term = filters.get('is')[0];
+		if (term.value === 'todo') {
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)');
+		} else if (term.value == 'note') {
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 0)');
 		} else {
 			throw new Error(`Invalid argument for filter todo: ${term.value}`);
+		}
+	}
+
+	if (filters.has('iscompleted')) {
+		const term = filters.get('iscompleted')[0];
+		if (term.value === 'true' || term.value === 'yes' || term.value === '1') {
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)');
+		} else if (term.value === 'false' || term.value === 'no' || term.value === '0') {
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)');
+		} else {
+			throw new Error(`Invalid argument for filter iscompleted: ${term.value}`);
 		}
 	}
 

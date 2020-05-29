@@ -226,21 +226,23 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows).sort()).toEqual(ids(notes0.concat(notes00)).sort());
 	}));
 
-	it('should support filtering by negated notebook', asyncTest(async () => {
-		let rows;
-		const folder0 = await Folder.save({ title: 'notebook0' });
-		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
-		const folder1 = await Folder.save({ title: 'notebook1' });
-		const notes0 = await createNTestNotes(5, folder0);
-		const notes00 = await createNTestNotes(5, folder00);
-		const notes1 = await createNTestNotes(5, folder1);
+	// it('should support filtering by multiple notebooks', asyncTest(async () => {
+	// 	let rows;
+	// 	const folder0 = await Folder.save({ title: 'notebook0' });
+	// 	const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
+	// 	const folder1 = await Folder.save({ title: 'notebook1' });
+	// 	const folder2 = await Folder.save({ title: 'notebook2' });
+	// 	const notes0 = await createNTestNotes(5, folder0);
+	// 	const notes00 = await createNTestNotes(5, folder00);
+	// 	const notes1 = await createNTestNotes(5, folder1);
+	// 	const notes2 = await createNTestNotes(5, folder2);
 
-		await engine.syncTables();
+	// 	await engine.syncTables();
 
-		rows = await engine.search('-notebook:notebook0');
-		expect(rows.length).toBe(5);
-		expect(ids(rows).sort()).toEqual(ids(notes1).sort());
-	}));
+	// 	rows = await engine.search('notebook:notebook0 notebook:notebook1');
+	// 	expect(rows.length).toBe(15);
+	// 	expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
+	// }));
 
 	it('should support filtering by created date', asyncTest(async () => {
 		let rows;
@@ -402,25 +404,56 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by todo', asyncTest(async () => {
+	it('should support filtering by type todo', asyncTest(async () => {
 		let rows;
 		const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
 		const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
+		const t3 = await Note.save({ title: 'This is NOT a ', body: 'todo' });
 
 		await engine.syncTables();
 
-		rows = await engine.search('todo:*');
+		rows = await engine.search('is:todo');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(t1.id);
 		expect(ids(rows)).toContain(t2.id);
 
-		rows = await engine.search('todo:true');
+		rows = await engine.search('iscompleted:true');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t2.id);
 
-		rows = await engine.search('todo:false');
+		rows = await engine.search('iscompleted:yes');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t2.id);
+
+		rows = await engine.search('iscompleted:1');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t2.id);
+
+		rows = await engine.search('iscompleted:false');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t1.id);
+
+		rows = await engine.search('iscompleted:no');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t1.id);
+
+		rows = await engine.search('iscompleted:0');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t1.id);
+	}));
+
+	it('should support filtering by type note', asyncTest(async () => {
+		let rows;
+		const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
+		const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
+		const t3 = await Note.save({ title: 'This is NOT a ', body: 'todo' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('is:note');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(t3.id);
+
 	}));
 
 });

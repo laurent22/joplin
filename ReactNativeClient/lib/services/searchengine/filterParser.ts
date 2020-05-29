@@ -51,7 +51,7 @@ const getTerms = (query: string) : Term[] => {
 
 const parseQuery = (query: string): Array<Filter> => {
 	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
-	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'todo']);
+	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'is', 'iscompleted']);
 
 	const terms = getTerms(query);
 
