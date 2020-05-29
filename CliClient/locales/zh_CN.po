@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: paventyang@gmail.com\n"
+"Last-Translator: paventyang <paventyang@gmail.com>\n"
 "Language-Team: paventyang@gmail.com\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -208,14 +208,14 @@ msgstr ""
 "开始解密，请稍候... 取决于需解密的文件数量，解密环节可能需要等待几分钟。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "解密项目：%s / %s"
+msgstr "解密项目：%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
+msgstr "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -567,7 +567,7 @@ msgstr "显示关于笔记与笔记本的概况。"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
+msgstr "重试这些项目的解密。 运行‘e2ee crypto --retry-failed-items’"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -750,19 +750,18 @@ msgstr ""
 "decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "不再要求确认。"
+msgstr "您还可以输入`status`以获取更多信息。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:142
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
+msgstr "以“%s”格式导出到“%s”。 请稍候..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "无法升级主密钥：%s"
+msgstr "Could not export notes: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
@@ -845,9 +844,8 @@ msgid "Options"
 msgstr "选项"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
-#, fuzzy
 msgid "Note attachments..."
-msgstr "附加文件"
+msgstr "注意附件..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
 #, javascript-format
@@ -1038,7 +1036,6 @@ msgid "Zoom Out"
 msgstr "缩小"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
-#, fuzzy
 msgid "&Note"
 msgstr "笔记"
 
@@ -1060,7 +1057,7 @@ msgstr "标签"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
 msgid "Statistics..."
-msgstr ""
+msgstr "统计..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
@@ -1448,9 +1445,8 @@ msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "移动到笔记本..."
+msgstr "移动到笔记本："
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
 msgid "Rename notebook:"
@@ -1512,9 +1508,8 @@ msgid "Custom order"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
-#, fuzzy
 msgid "View"
-msgstr "界面 (&V)"
+msgstr "预览视图"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
@@ -1527,6 +1522,7 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"要手动对笔记进行排序，必须在菜单 \"%s\"> \"%s\"中将排序顺序更改为 \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
 #, fuzzy
@@ -1771,7 +1767,7 @@ msgid "Delete"
 msgstr "删除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
 msgstr "是否删除附件“%s”？"
 
@@ -1781,6 +1777,7 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"这是一个高级工具，用于显示笔记中的附件。 删除时请小心，删除后将无法恢复。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1804,9 +1801,8 @@ msgid "Dropbox Login"
 msgstr "登录 Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "附加文件"
+msgstr "笔记附件"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -1896,9 +1892,8 @@ msgstr "请选择同步状态的导出位置"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "重试"
+msgstr "重试全部"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1910,9 +1905,8 @@ msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "移动到笔记本..."
+msgstr "移动到笔记本"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
@@ -1965,13 +1959,10 @@ msgid "Error opening note in editor: %s"
 msgstr "打开以下笔记时出现错误：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:439
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
-msgstr ""
-"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
-"记本名字。"
+msgstr "输入笔记标题或标签进行转跳。输入 # 跟标签名字，或 @ 跟笔记本名字。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:477
 msgid "Goto Anything..."
@@ -2085,6 +2076,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"您将要添加一个大图像（%d x %d 像素）。 您要在添加之前将其尺寸压缩到%d个像素"
+"吗？"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2214,7 +2207,6 @@ msgid "Downloaded"
 msgstr "已下载"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
 msgstr "是"
 
@@ -2222,10 +2214,9 @@ msgstr "是"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "（所见即所得：%s）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
 msgstr "否"
 
@@ -2353,15 +2344,15 @@ msgstr "主题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "自动切换主题以匹配系统主题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
-msgstr ""
+msgstr "首选明亮主题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "首选暗黑主题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
