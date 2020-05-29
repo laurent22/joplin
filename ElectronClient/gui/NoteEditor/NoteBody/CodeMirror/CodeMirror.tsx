@@ -71,9 +71,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		if (editorRef.current.somethingSelected()) {
 			editorRef.current.wrapSelections(string1, string2);
 		} else {
-			const insert = string1 + defaultText + string2;
+			editorRef.current.wrapSelections(string1 + defaultText, string2);
 
-			editorRef.current.insertAtCursor(insert);
+			// Now select the default text so the user can replace it
+			const selections = editorRef.current.listSelections();
+			const newSelections = [];
+			for (let i = 0; i < selections.length; i++) {
+				const s = selections[i];
+				const anchor = { line: s.anchor.line, ch: s.anchor.ch + string1.length };
+				const head = { line: s.head.line, ch: s.head.ch - string2.length };
+				newSelections.push({ anchor: anchor, head: head });
+			}
+			editorRef.current.setSelections(newSelections);
 		}
 		editorRef.current.focus();
 	}, []);
@@ -85,11 +94,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			} else if (editorRef.current.getCursor('anchor').ch !== 0) {
 				editorRef.current.insertAtCursor(`\n${string1}`);
 			} else {
-				editorRef.current.insertAtCursor(string1 + defaultText);
+				wrapSelectionWithStrings(string1, '', defaultText);
 			}
 			editorRef.current.focus();
 		}
-	}, []);
+	}, [wrapSelectionWithStrings]);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -125,7 +134,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (cmd.value.type === 'notes') {
 						editorRef.current.insertAtCursor(cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
-						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
+						const pos = cursorPositionToTextOffset(editorRef.current.getCursor(), props.content);
+						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
 						editorRef.current.updateBody(newBody);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);

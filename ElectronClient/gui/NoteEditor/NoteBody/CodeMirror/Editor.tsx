@@ -90,9 +90,18 @@ function Editor(props: EditorProps, ref: any) {
 		props.onEditorPaste();
 	}, [props.onEditorPaste]);
 
-	const editor_drop = useCallback((_cm: any, event: any) => {
-		// Disable file dropping with codemirror, Joplin will handle it
-		event.preventDefault();
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	const editor_drop = useCallback((cm: any, _event: any) => {
+		cm.focus();
+	}, []);
+
+	const editor_drag = useCallback((cm: any, event: any) => {
+		// This is the type for all drag and drops that are external to codemirror
+		// setting the cursor allows us to drop them in the right place
+		if (event.dataTransfer.effectAllowed === 'all') {
+			const coords = cm.coordsChar({ left: event.x, top: event.y });
+			cm.setCursor(coords);
+		}
 	}, []);
 
 	// const divRef = useCallback(node => {
@@ -113,6 +122,7 @@ function Editor(props: EditorProps, ref: any) {
 			indentWithTabs: true,
 			indentUnit: 4,
 			spellcheck: true,
+			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
 			extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList',
 				'Ctrl-/': 'toggleComment',
@@ -126,6 +136,7 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('mousedown', editor_mousedown);
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
+		cm.on('dragover', editor_drag);
 
 		return () => {
 			// Clean up codemirror
@@ -134,6 +145,7 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('mousedown', editor_mousedown);
 			cm.off('paste', editor_paste);
 			cm.off('drop', editor_drop);
+			cm.off('dragover', editor_drag);
 			editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};
