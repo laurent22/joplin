@@ -4,6 +4,8 @@
 const { DeviceEventEmitter } = require('react-native');
 import * as QuickActions from 'react-native-quick-actions';
 const { _ } = require('lib/locale.js');
+const Note = require('lib/models/Note.js');
+const { reg } = require('lib/registry.js');
 
 type TData = {
 	type: string
@@ -16,7 +18,9 @@ export default (dispatch: Function, folderId: string) => {
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
 	]);
 
-	DeviceEventEmitter.addListener('quickActionShortcut', (data: TData) => {
+	const handleQuickAction = (data: TData) => {
+		if (!data) return;
+
 		// This dispatch is to momentarily go back to reset state, similar to what
 		// happens in onJoplinLinkClick_(). Easier to just go back, then go to the
 		// note since the Note screen doesn't handle reloading a different note.
@@ -28,25 +32,25 @@ export default (dispatch: Function, folderId: string) => {
 		// note. If you navigate around enough (which I think changes the redux
 		// state sufficiently or something), then it'll work again.
 		dispatch({ type: 'NAV_BACK' });
+		dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		if (data.type === 'New note') {
+		const isTodo = data.type === 'New to-do' ? 1 : 0;
+
+		Note.save({
+			parent_id: folderId,
+			is_todo: isTodo,
+		}, { provisional: true }).then((newNote: any) => {
 			dispatch({
 				type: 'NAV_GO',
-				noteId: null,
+				noteId: newNote.id,
 				folderId,
 				routeName: 'Note',
-				itemType: 'note',
 			});
-		}
+		});
+	};
 
-		if (data.type === 'New to-do') {
-			dispatch({
-				type: 'NAV_GO',
-				noteId: null,
-				folderId,
-				routeName: 'Note',
-				itemType: 'todo',
-			});
-		}
-	});
+	DeviceEventEmitter.addListener('quickActionShortcut', handleQuickAction);
+
+	QuickActions.popInitialAction().then(handleQuickAction).catch((reason: any) => reg.logger().error(reason));
 };
+

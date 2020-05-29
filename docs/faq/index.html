@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -322,6 +322,13 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 </ul>
 </li>
 <li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
 <p>About</p>
 <ul>
 <li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
@@ -332,6 +339,17 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 </li>
 </ul>
 </div>
+<h1>Installer gets stuck on Windows<a name="installer-gets-stuck-on-windows" href="#installer-gets-stuck-on-windows" class="heading-anchor">🔗</a></h1>
+<p>The installer may get stuck if the app was not uninstalled correctly. To fix the issue you will need to clean up the left-over entry from the Registry. To do so please follow these steps:</p>
+<ul>
+<li>Press Win + R (Windows Key + R)</li>
+<li>Type &quot;regedit.exe&quot;</li>
+<li>Navigate to <code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall</code></li>
+<li>In there, you will see one or more folders. Open them one by one to find the one for Joplin. One of the entries in there should be &quot;DisplayName&quot; with value &quot;Joplin x.x.x&quot;.</li>
+<li>Once found, delete that folder.</li>
+</ul>
+<p>Now try to install again and it should work.</p>
+<p>More info there: <a href="https://github.com/electron-userland/electron-builder/issues/4057">https://github.com/electron-userland/electron-builder/issues/4057</a></p>
 <h1>How can I edit my note in an external text editor?<a name="how-can-i-edit-my-note-in-an-external-text-editor" href="#how-can-i-edit-my-note-in-an-external-text-editor" class="heading-anchor">🔗</a></h1>
 <p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -&gt; Text editor command.</p>
 <p>Some example configurations are: (comments after #)</p>

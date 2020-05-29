@@ -4,7 +4,6 @@ const htmlentities = new Entities().encode;
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-const JS_EVENT_NAMES = ['onabort', 'onafterprint', 'onbeforeprint', 'onbeforeunload', 'onblur', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu', 'oncopy', 'oncuechange', 'oncut', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'onhashchange', 'oninput', 'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata', 'onloadstart', 'onmessage', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onoffline', 'ononline', 'onpagehide', 'onpageshow', 'onpaste', 'onpause', 'onplay', 'onplaying', 'onpopstate', 'onprogress', 'onratechange', 'onreset', 'onresize', 'onscroll', 'onsearch', 'onseeked', 'onseeking', 'onselect', 'onstalled', 'onstorage', 'onsubmit', 'onsuspend', 'ontimeupdate', 'ontoggle', 'onunload', 'onvolumechange', 'onwaiting', 'onwheel'];
 
 const selfClosingElements = [
 	'area',
@@ -70,7 +69,13 @@ class HtmlUtils {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
-	sanitizeHtml(html) {
+	sanitizeHtml(html, options = null) {
+		options = Object.assign({}, {
+			// If true, adds a "jop-noMdConv" class to all the tags.
+			// It can be used afterwards to restore HTML tags in Markdown.
+			addNoMdConvClass: false,
+		}, options);
+
 		const htmlparser2 = require('htmlparser2');
 
 		const output = [];
@@ -82,7 +87,11 @@ class HtmlUtils {
 			return tagStack[tagStack.length - 1];
 		};
 
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object'];
+		// The BASE tag allows changing the base URL from which files are loaded, and
+		// that can break several plugins, such as Katex (which needs to load CSS
+		// files using a relative URL). For that reason it is disabled.
+		// More info: https://github.com/laurent22/joplin/issues/3021
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base'];
 
 		const parser = new htmlparser2.Parser({
 
@@ -92,9 +101,30 @@ class HtmlUtils {
 				if (disallowedTags.includes(currentTag())) return;
 
 				attrs = Object.assign({}, attrs);
-				for (const eventName of JS_EVENT_NAMES) {
-					delete attrs[eventName];
+
+				// Remove all the attributes that start with "on", which
+				// normally should be JavaScript events. A better solution
+				// would be to blacklist known events only but it seems the
+				// list is not well defined [0] and we don't want any to slip
+				// throught the cracks. A side effect of this change is a
+				// regular harmless attribute that starts with "on" will also
+				// be removed.
+				// 0: https://developer.mozilla.org/en-US/docs/Web/Events
+				for (const name in attrs) {
+					if (!attrs.hasOwnProperty(name)) continue;
+					if (name.length <= 2) continue;
+					if (name.toLowerCase().substr(0, 2) !== 'on') continue;
+					delete attrs[name];
 				}
+
+				if (options.addNoMdConvClass) {
+					let classAttr = attrs['class'] || '';
+					if (!classAttr.includes('jop-noMdConv')) {
+						classAttr += ' jop-noMdConv';
+						attrs['class'] = classAttr.trim();
+					}
+				}
+
 				let attrHtml = this.attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = this.isSelfClosingTag(name) ? '/>' : '>';

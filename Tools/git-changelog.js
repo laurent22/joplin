@@ -47,6 +47,9 @@ function filterLogs(logs, platform) {
 	const output = [];
 	const revertedLogs = [];
 
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	let updatedTranslations = false;
+
 	for (const log of logs) {
 
 		// Save to an array any commit that has been reverted, and exclude
@@ -74,8 +77,20 @@ function filterLogs(logs, platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
+		// Translation updates often comes in format "Translation: Update pt_PT.po"
+		// but that's not useful in a changelog especially since most people
+		// don't know country and language codes. So we catch all these and
+		// bundle them all up in a single "Updated translations" at the end.
+		if (log.message.match(/Translation: Update .*?\.po/)) {
+			updatedTranslations = true;
+			addIt = false;
+		}
+
 		if (addIt) output.push(log);
 	}
+
+	// Actually we don't really need this info - translations are being updated all the time
+	// if (updatedTranslations) output.push({ message: 'Updated translations' });
 
 	return output;
 }
@@ -132,7 +147,8 @@ function formatCommitMessage(msg, author, options) {
 			};
 		}
 
-		let t = parts[0].trim().toLowerCase();
+		let originalType = parts[0].trim();
+		let t = originalType.toLowerCase();
 
 		parts.splice(0, 1);
 		let message = parts.join(':').trim();
@@ -146,13 +162,26 @@ function formatCommitMessage(msg, author, options) {
 			t = parts[0].trim().toLowerCase();
 			parts.splice(0, 1);
 			message = parts.join(':').trim();
+		} else if (t.indexOf('resolves') === 0) { // If we didn't have the third token default to "improved"
+			t = 'improved';
+			message = parts.join(':').trim();
 		}
 
 		if (t.indexOf('fix') === 0) type = 'fixed';
 		if (t.indexOf('new') === 0) type = 'new';
 		if (t.indexOf('improved') === 0) type = 'improved';
 
-		if (!type) type = detectType(message);
+		if (t.indexOf('security') === 0) {
+			type = 'security';
+			parts.splice(0, 1);
+			message = parts.join(':').trim();
+		}
+
+		if (!type) {
+			type = detectType(message);
+			if (originalType.toLowerCase() === 'tinymce') originalType = 'WYSIWYG';
+			message = `${originalType}: ${message}`;
+		}
 
 		let issueNumber = output.match(/#(\d+)/);
 		issueNumber = issueNumber && issueNumber.length >= 2 ? issueNumber[1] : null;
@@ -269,7 +298,7 @@ async function main() {
 	const changelogNews = [];
 
 	for (const l of changelog) {
-		if (l.indexOf('Fix') === 0) {
+		if (l.indexOf('Fix') === 0 || l.indexOf('Security') === 0) {
 			changelogFixes.push(l);
 		} else if (l.indexOf('Improve') === 0) {
 			changelogImproves.push(l);
@@ -279,6 +308,10 @@ async function main() {
 			throw new Error(`Invalid changelog line: ${l}`);
 		}
 	}
+
+	changelogFixes.sort();
+	changelogImproves.sort();
+	changelogNews.sort();
 
 	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 

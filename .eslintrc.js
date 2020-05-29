@@ -49,6 +49,7 @@ module.exports = {
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
 		"no-unused-vars": "error",
+		"@typescript-eslint/no-unused-vars": "error",
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
 		// This error is always a false positive so far since it detects
@@ -56,6 +57,7 @@ module.exports = {
 		"require-atomic-updates": 0,
 		"prefer-const": ["error"],
 		"no-var": ["error"],
+		"no-new-func": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",

@@ -5,7 +5,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
-const { rtrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
 
@@ -24,11 +24,33 @@ class Setting extends BaseModel {
 		const platform = shim.platformName();
 		const mobilePlatform = shim.mobilePlatform();
 
+		let wysiwygYes = '';
+		let wysiwygNo = '';
+		if (shim.isElectron()) {
+			wysiwygYes = ` ${_('(wysiwyg: %s)', _('yes'))}`;
+			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
+		}
+
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
+
+		const themeOptions = () => {
+			const output = {};
+			output[Setting.THEME_LIGHT] = _('Light');
+			output[Setting.THEME_DARK] = _('Dark');
+			if (platform !== mobilePlatform) {
+				output[Setting.THEME_DRACULA] = _('Dracula');
+				output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+				output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+				output[Setting.THEME_NORD] = _('Nord');
+			} else {
+				output[Setting.THEME_OLED_DARK] = _('OLED Dark');
+			}
+			return output;
+		};
 
 		this.metadata_ = {
 			'clientId': {
@@ -36,20 +58,11 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_STRING,
 				public: false,
 			},
-			'editor.keyboardMode': {
-				value: 'default',
-				type: Setting.TYPE_STRING,
-				public: true,
+			'editor.codeView': {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				public: false,
 				appTypes: ['desktop'],
-				isEnum: true,
-				label: () => _('Keyboard Mode'),
-				options: () => {
-					const output = {};
-					output['default'] = _('Default');
-					output['emacs'] = _('Emacs');
-					output['vim'] = _('Vim');
-					return output;
-				},
 			},
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
@@ -230,31 +243,59 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
+
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: Setting.TYPE_INT,
 				public: true,
 				appTypes: ['mobile', 'desktop'],
+				show: (settings) => {
+					return !settings['themeAutoDetect'];
+				},
 				isEnum: true,
 				label: () => _('Theme'),
 				section: 'appearance',
-				options: () => {
-					const output = {};
-					output[Setting.THEME_LIGHT] = _('Light');
-					output[Setting.THEME_DARK] = _('Dark');
-					if (platform !== mobilePlatform) {
-						output[Setting.THEME_DRACULA] = _('Dracula');
-						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
-						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
-						output[Setting.THEME_NORD] = _('Nord');
-						output[Setting.THEME_ARITIM_DARK] = _('Aritim Dark');
-					} else {
-						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
-					}
-					return output;
-				},
+				options: () => themeOptions(),
 			},
-			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+
+			themeAutoDetect: {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				section: 'appearance',
+				appTypes: ['desktop'],
+				public: true,
+				label: () => _('Automatically switch theme to match system theme'),
+			},
+
+			preferredLightTheme: {
+				value: Setting.THEME_LIGHT,
+				type: Setting.TYPE_INT,
+				public: true,
+				show: (settings) => {
+					return settings['themeAutoDetect'];
+				},
+				appTypes: ['desktop'],
+				isEnum: true,
+				label: () => _('Preferred light theme'),
+				section: 'appearance',
+				options: () => themeOptions(),
+			},
+
+			preferredDarkTheme: {
+				value: Setting.THEME_DARK,
+				type: Setting.TYPE_INT,
+				public: true,
+				show: (settings) => {
+					return settings['themeAutoDetect'];
+				},
+				appTypes: ['desktop'],
+				isEnum: true,
+				label: () => _('Preferred dark theme'),
+				section: 'appearance',
+				options: () => themeOptions(),
+			},
+
+			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
@@ -266,7 +307,6 @@ class Setting extends BaseModel {
 					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
 					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
 					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
-					[Setting.LAYOUT_SPLIT_WYSIWYG]: _('%s / %s', _('Split'), 'WYSIWYG (Experimental)'),
 				}),
 			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
@@ -281,7 +321,7 @@ class Setting extends BaseModel {
 				label: () => _('Sort notes by'),
 				options: () => {
 					const Note = require('lib/models/Note');
-					const noteSortFields = ['user_updated_time', 'user_created_time', 'title'];
+					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
 					const options = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
@@ -364,21 +404,22 @@ class Setting extends BaseModel {
 			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
-			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
-			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
-			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
-			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
-			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension') },
-			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax') },
-			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax') },
-			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable deflist syntax') },
-			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable abbreviation syntax') },
-			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji') },
-			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax') },
-			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension') },
-			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Fountain syntax support') },
-			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Mermaid diagrams support') },
+			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
+			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
+			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
+
+			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
+			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
+			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
+			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
+			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
+			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
+			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
+			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
+			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
+			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -520,7 +561,7 @@ class Setting extends BaseModel {
 			tagHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			folderHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			editor: { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
@@ -530,13 +571,29 @@ class Setting extends BaseModel {
 					'Legal': _('Legal'),
 				};
 			} },
-			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
 				};
 			} },
 
+			'editor.keyboardMode': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: true,
+				appTypes: ['desktop'],
+				isEnum: true,
+				advanced: true,
+				label: () => _('Keyboard Mode'),
+				options: () => {
+					const output = {};
+					output[''] = _('Default');
+					output['emacs'] = _('Emacs');
+					output['vim'] = _('Vim');
+					return output;
+				},
+			},
 
 			'net.customCertificates': {
 				value: '',
@@ -614,6 +671,46 @@ class Setting extends BaseModel {
 				minimum: 30,
 				maximum: 300,
 				step: 10,
+			},
+
+			'layout.folderList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Notebook list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.noteList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.note.factor': {
+				value: 2,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note area growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
 			},
 		};
 
@@ -761,6 +858,10 @@ class Setting extends BaseModel {
 
 	static incValue(key, inc) {
 		return this.setValue(key, this.value(key) + inc);
+	}
+
+	static toggle(key) {
+		return this.setValue(key, !this.value(key));
 	}
 
 	static setObjectKey(settingKey, objectKey, value) {
@@ -1020,16 +1121,22 @@ class Setting extends BaseModel {
 		return name;
 	}
 
+	static sectionDescription(name) {
+		if (name === 'plugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		return '';
+	}
+
 	static sectionNameToIcon(name) {
-		if (name === 'general') return 'fa-sliders';
-		if (name === 'sync') return 'fa-refresh';
-		if (name === 'appearance') return 'fa-pencil';
-		if (name === 'note') return 'fa-file-text-o';
-		if (name === 'plugins') return 'fa-puzzle-piece';
-		if (name === 'application') return 'fa-cog';
-		if (name === 'revisionService') return 'fa-archive-org';
-		if (name === 'encryption') return 'fa-key-modern';
-		if (name === 'server') return 'fa-hand-scissors-o';
+		if (name === 'general') return 'fas fa-sliders-h';
+		if (name === 'sync') return 'fas fa-sync-alt';
+		if (name === 'appearance') return 'fas fa-pencil-alt';
+		if (name === 'note') return 'far fa-file-alt';
+		if (name === 'plugins') return 'fas fa-puzzle-piece';
+		if (name === 'application') return 'fas fa-cog';
+		if (name === 'revisionService') return 'fas fa-history';
+		if (name === 'encryption') return 'fas fa-key';
+		if (name === 'server') return 'far fa-hand-scissors';
 		return name;
 	}
 
@@ -1066,7 +1173,6 @@ Setting.LAYOUT_ALL = 0;
 Setting.LAYOUT_EDITOR_VIEWER = 1;
 Setting.LAYOUT_EDITOR_SPLIT = 2;
 Setting.LAYOUT_VIEWER_SPLIT = 3;
-Setting.LAYOUT_SPLIT_WYSIWYG = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';

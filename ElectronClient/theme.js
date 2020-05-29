@@ -1,4 +1,5 @@
 const Setting = require('lib/models/Setting.js');
+const Color = require('color');
 
 const themes = {
 	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
@@ -29,7 +30,8 @@ const globalStyle = {
 	headerButtonHPadding: 6,
 
 	toolbarHeight: 35,
-	tagItemPadding: 3,
+
+	appearance: 'light',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -83,23 +85,27 @@ globalStyle.buttonStyle = {
 };
 
 function addExtraStyles(style) {
+	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
+	style.iconColor = Color(style.color).alpha(0.8);
+
 	style.tagStyle = {
 		fontSize: style.fontSize,
 		fontFamily: style.fontFamily,
-		marginTop: style.itemMarginTop * 0.4,
-		marginBottom: style.itemMarginBottom * 0.4,
-		marginRight: style.margin * 0.3,
-		paddingTop: style.tagItemPadding,
-		paddingBottom: style.tagItemPadding,
-		paddingRight: style.tagItemPadding * 2,
-		paddingLeft: style.tagItemPadding * 2,
+		paddingTop: 3,
+		paddingBottom: 3,
+		paddingRight: 8,
+		paddingLeft: 8,
 		backgroundColor: style.raisedBackgroundColor,
 		color: style.raisedColor,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginRight: 5,
 	};
 
 	style.toolbarStyle = {
 		height: style.toolbarHeight,
-		// minWidth: style.toolbarHeight,
+		minWidth: style.toolbarHeight,
 		display: 'flex',
 		alignItems: 'center',
 		paddingLeft: style.headerButtonHPadding,
@@ -122,7 +128,7 @@ function addExtraStyles(style) {
 	};
 
 	style.textStyle2 = Object.assign({}, style.textStyle,
-		{ color: style.color2 }
+		{ color: style.color2 },
 	);
 
 	style.textStyleMinor = Object.assign({}, style.textStyle,
@@ -136,7 +142,7 @@ function addExtraStyles(style) {
 		{
 			textDecoration: 'underline',
 			color: style.urlColor,
-		}
+		},
 	);
 
 	style.h1Style = Object.assign({},
@@ -145,7 +151,7 @@ function addExtraStyles(style) {
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.5,
 			fontWeight: 'bold',
-		}
+		},
 	);
 
 	style.h2Style = Object.assign({},
@@ -154,7 +160,7 @@ function addExtraStyles(style) {
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.3,
 			fontWeight: 'bold',
-		}
+		},
 	);
 
 	style.dialogModalLayer = {
@@ -194,10 +200,13 @@ function addExtraStyles(style) {
 		padding: 16,
 		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		marginTop: 20,
+		maxHeight: '80%',
+		display: 'flex',
+		flexDirection: 'column',
 	};
 
 	style.buttonIconStyle = {
-		color: style.color,
+		color: style.iconColor,
 		marginRight: 6,
 	};
 
@@ -265,7 +274,7 @@ function themeStyle(theme) {
 
 	output.icon = Object.assign({},
 		output.icon,
-		{ color: output.color }
+		{ color: output.color },
 	);
 
 	output.lineInput = Object.assign({},
@@ -273,7 +282,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		}
+		},
 	);
 
 	output.headerStyle = Object.assign({},
@@ -281,7 +290,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		}
+		},
 	);
 
 	output.inputStyle = Object.assign({},
@@ -290,7 +299,7 @@ function themeStyle(theme) {
 			color: output.color,
 			backgroundColor: output.backgroundColor,
 			borderColor: output.dividerColor,
-		}
+		},
 	);
 
 	output.containerStyle = Object.assign({},
@@ -298,7 +307,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		}
+		},
 	);
 
 	output.buttonStyle = Object.assign({},
@@ -308,7 +317,7 @@ function themeStyle(theme) {
 			backgroundColor: output.backgroundColor,
 			borderColor: output.dividerColor,
 			userSelect: 'none',
-		}
+		},
 	);
 
 	output = addExtraStyles(output);
