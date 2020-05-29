@@ -161,6 +161,24 @@ shim.uploadBlob = () => {
 	throw new Error('Not implemented');
 };
 
+shim.uploadChunk = () => {
+	throw new Error('Not implemented');
+};
+
+
+shim.uploadChunk = async function(url, handle, options) {
+	// TODO: Check if Handle, url and options.contentLength are givend
+	const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
+	const Buffer = require('buffer').Buffer; // TODO: necessary?
+	const buffer = Buffer.from(chunk, 'base64');
+	delete options.contentLength;
+	options.body = buffer;
+
+	const response = await shim.fetch(url, options);
+	return response;
+
+};
+
 shim.sjclModule = null;
 
 shim.randomBytes = async count => {

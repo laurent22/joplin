@@ -1,6 +1,6 @@
 const moment = require('moment');
 const { dirname, basename } = require('lib/path-utils.js');
-const fs = require('fs');
+const { shim } = require('lib/shim.js'); // TODO: kann es sein, dass shim vom Objekt api, welches im Konstruktor übergeben ist, verwendet wird? Dann besser in der API Klasse fileSize abfragen (ist api onedrive-api?)
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -132,7 +132,7 @@ class FileApiDriverOneDrive {
 
 		if (options.source == 'file') {
 			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
-			const fileSize = fs.statSync(options.path)['size'];
+			const fileSize = await shim.fsDriver().fileSize(options.path);
 			if (fileSize < 4194304) {
 				path = `${this.makePath_(path)}:/content`;
 				options.fileType = 'small';

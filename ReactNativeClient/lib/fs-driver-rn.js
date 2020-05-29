@@ -156,6 +156,12 @@ class FsDriverRN extends FsDriverBase {
 		handle.offset += length;
 		return output ? output : null;
 	}
+
+	async fileSize(filePath) {
+		const stats = await RNFetchBlob.fs.stat(filePath);
+		return stats.size;
+	}
+
 }
 
 module.exports.FsDriverRN = FsDriverRN;
