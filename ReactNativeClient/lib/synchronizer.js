@@ -718,9 +718,9 @@ class Synchronizer {
 							if (action == 'createLocal') options.isNew = true;
 							if (action == 'updateLocal') options.oldItem = local;
 
-							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal';
+							const creatingOrUpdatingResource = content.type_ == BaseModel.TYPE_RESOURCE && (action == 'createLocal' || action == 'updateLocal');
 
-							if (creatingNewResource) {
+							if (creatingOrUpdatingResource) {
 								if (content.size >= this.maxResourceSize()) {
 									await handleCannotSyncItem(ItemClass, syncTargetId, content, `File "${content.title}" is larger than allowed ${this.maxResourceSize()} bytes. Beyond this limit, the mobile app would crash.`, BaseItem.SYNC_ITEM_LOCATION_REMOTE);
 									continue;
@@ -731,7 +731,7 @@ class Synchronizer {
 
 							await ItemClass.save(content, options);
 
-							if (creatingNewResource) this.dispatch({ type: 'SYNC_CREATED_RESOURCE', id: content.id });
+							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;

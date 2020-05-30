@@ -110,8 +110,16 @@ class Resource extends BaseItem {
 	}
 
 	static async isReady(resource) {
+		const r = await this.readyStatus(resource);
+		return r === 'ok';
+	}
+
+	static async readyStatus(resource) {
 		const ls = await this.localState(resource);
-		return resource && ls.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
+		if (!resource) return 'notFound';
+		if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) return 'notDownloaded';
+		if (resource.encryption_blob_encrypted) return 'encrypted';
+		return 'ok';
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.

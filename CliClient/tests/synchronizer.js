@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, allSyncTargetItemsEncrypted, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -989,6 +989,42 @@ describe('synchronizer', function() {
 		const resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+	}));
+
+	it('should sync resource blob changes', asyncTest(async () => {
+		const tempFile = `${__dirname}/tmp/test.txt`;
+		await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, tempFile);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+		let resource1_2 = (await Resource.all())[0];
+		const modFile = `${__dirname}/tmp/test_mod.txt`;
+		await shim.fsDriver().writeFile(modFile, '1234 MOD', 'utf8');
+		await shim.updateResourceBlob(resource1_2.id, modFile);
+		const originalSize = resource1_2.size;
+		resource1_2 = (await Resource.all())[0];
+		const newSize = resource1_2.size;
+		expect(originalSize).toBe(4);
+		expect(newSize).toBe(8);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+		const resource1_1 = (await Resource.all())[0];
+		expect(resource1_1.size).toBe(newSize);
+		const resource1_1Path = Resource.fullPath(resource1_1);
+		const newContent = await shim.fsDriver().readFile(resource1_1Path, 'utf8');
+		expect(newContent).toBe('1234 MOD');
 	}));
 
 	it('should upload decrypted items to sync target after encryption disabled', asyncTest(async () => {

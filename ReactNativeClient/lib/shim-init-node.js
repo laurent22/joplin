@@ -207,6 +207,9 @@ function shimInit() {
 
 	shim.updateResourceBlob = async function(resourceId, newBlobFilePath) {
 		const resource = await Resource.load(resourceId);
+		const readyStatus = await Resource.readyStatus(resourceId);
+		if (readyStatus !== 'ok') throw new Error(`Cannot set resource blob because resource is not ready. Status: ${readyStatus}`);
+
 		const fileStat = await shim.fsDriver().stat(newBlobFilePath);
 		await shim.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
 
