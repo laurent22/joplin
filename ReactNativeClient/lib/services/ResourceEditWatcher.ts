@@ -9,11 +9,14 @@ const { _ } = require('lib/locale');
 import AsyncActionQueue from '../AsyncActionQueue';
 
 interface WatchedItem {
-	[key: string]: {
-		resourceId: string,
-		updatedTime: number,
-		asyncSaveQueue: AsyncActionQueue,
-	}
+	resourceId: string,
+	updatedTime: number,
+	path:string,
+	asyncSaveQueue: AsyncActionQueue,
+}
+
+interface WatchedItems {
+	[key:string]: WatchedItem,
 }
 
 export default class ResourceEditWatcher {
@@ -24,8 +27,9 @@ export default class ResourceEditWatcher {
 	// private dispatch:Function;
 	private watcher_:any;
 	private chokidar_:any;
-	private watchedItems_:WatchedItem = {};
+	private watchedItems_:WatchedItems = {};
 	private eventEmitter_:any;
+	private tempDir_:string = '';
 
 	constructor() {
 		this.logger_ = new Logger();
@@ -46,8 +50,13 @@ export default class ResourceEditWatcher {
 		return this.instance_;
 	}
 
-	tempDir() {
-		return Setting.value('tempDir');
+	private async tempDir() {
+		if (!this.tempDir_) {
+			this.tempDir_ = `${Setting.value('tempDir')}/edited_resources`;
+			await shim.fsDriver().mkdir(this.tempDir_);
+		}
+
+		return this.tempDir_;
 	}
 
 	logger() {
@@ -86,8 +95,14 @@ export default class ResourceEditWatcher {
 					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					const watchedItem = this.watchedItems_[path];
+					const watchedItem = this.watchedItemByPath(path);
 					const resourceId = watchedItem.resourceId;
+
+					if (!watchedItem) {
+						this.logger().error(`ResourceEditWatcher: could not find resource ID from path: ${path}`);
+						return;
+					}
+
 					const stat = await shim.fsDriver().stat(path);
 					const updatedTime = stat.mtime.getTime();
 
@@ -100,19 +115,10 @@ export default class ResourceEditWatcher {
 						return;
 					}
 
-					if (!watchedItem) {
-						this.logger().error(`ResourceEditWatcher: could not find IDs from path: ${path}`);
-						return;
-					}
-
 					this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
 
 					watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
-
-					this.watchedItems_[path] = {
-						...watchedItem,
-						updatedTime: updatedTime,
-					};
+					watchedItem.updatedTime = updatedTime;
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
@@ -134,34 +140,73 @@ export default class ResourceEditWatcher {
 	}
 
 	public async openAndWatch(resourceId:string) {
-		let editFilePath = this.resourceIdToPath(resourceId);
+		let watchedItem = this.watchedItemByResourceId(resourceId);
 
-		if (!editFilePath) {
+		if (!watchedItem) {
+			// Immediately create and push the item to prevent race conditions
+
+			watchedItem = {
+				resourceId: resourceId,
+				updatedTime: 0,
+				asyncSaveQueue: new AsyncActionQueue(1000),
+				path: '',
+			};
+
+			this.watchedItems_[resourceId] = watchedItem;
+
 			const resource = await Resource.load(resourceId);
 			if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
 			const sourceFilePath = Resource.fullPath(resource);
-			editFilePath = await shim.fsDriver().findUniqueFilename(`${this.tempDir()}/${Resource.friendlySafeFilename(resource)}`);
+			const tempDir = await this.tempDir();
+			const editFilePath = await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`);
 			await shim.fsDriver().copy(sourceFilePath, editFilePath);
 			const stat = await shim.fsDriver().stat(editFilePath);
 
-			this.watchedItems_[editFilePath] = {
-				resourceId: resourceId,
-				updatedTime: stat.mtime.getTime(),
-				asyncSaveQueue: new AsyncActionQueue(1000),
-			};
+			watchedItem.path = editFilePath;
+			watchedItem.updatedTime = stat.mtime;
 
 			this.watch(editFilePath);
 		}
 
-		bridge().openItem(editFilePath);
+		bridge().openItem(watchedItem.path);
 
-		this.logger().info(`ResourceEditWatcher: Started watching ${editFilePath}`);
+		this.logger().info(`ResourceEditWatcher: Started watching ${watchedItem.path}`);
 	}
 
-	private resourceIdToPath(resourceId:string):string {
-		for (const path in this.watchedItems_) {
-			const item = this.watchedItems_[path];
-			if (item.resourceId === resourceId) return path;
+	async stopWatching(resourceId:string) {
+		if (!resourceId) return;
+
+		const item = this.watchedItemByResourceId(resourceId);
+		if (!item) {
+			this.logger().error(`ResourceEditWatcher: Trying to stop watching non-watched resource ${resourceId}`);
+			return;
+		}
+
+		await item.asyncSaveQueue.waitForAllDone();
+
+		if (this.watcher_) this.watcher_.unwatch(item.path);
+		await shim.fsDriver().remove(item.path);
+		delete this.watchedItems_[resourceId];
+		this.logger().info(`ResourceEditWatcher: Stopped watching ${item.path}`);
+	}
+
+	public async stopWatchingAll() {
+		const promises = [];
+		for (const resourceId in this.watchedItems_) {
+			const item = this.watchedItems_[resourceId];
+			promises.push(this.stopWatching(item.resourceId));
+		}
+		return Promise.all(promises);
+	}
+
+	private watchedItemByResourceId(resourceId:string):WatchedItem {
+		return this.watchedItems_[resourceId];
+	}
+
+	private watchedItemByPath(path:string):WatchedItem {
+		for (const resourceId in this.watchedItems_) {
+			const item = this.watchedItems_[resourceId];
+			if (item.path === path) return item;
 		}
 		return null;
 	}
