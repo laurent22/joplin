@@ -67,6 +67,7 @@ class Resource extends BaseItem {
 		return Resource.fsDriver_;
 	}
 
+	// DEPRECATED IN FAVOUR OF friendlySafeFilename()
 	static friendlyFilename(resource) {
 		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
 		if (!output) output = resource.id;
@@ -89,6 +90,15 @@ class Resource extends BaseItem {
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? `.${extension}` : '';
 		return resource.id + extension;
+	}
+
+	static friendlySafeFilename(resource) {
+		let ext = resource.extension;
+		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
+		let title = resource.title ? resource.title : resource.id;
+		if (safeExt && pathUtils.fileExtension(title).toLowerCase() === safeExt) title = pathUtils.filename(title);
+		return pathUtils.friendlySafeFilename(title) + (safeExt ? `.${safeExt}` : '');
 	}
 
 	static relativePath(resource, encryptedBlob = false) {

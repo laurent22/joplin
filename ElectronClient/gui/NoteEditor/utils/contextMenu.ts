@@ -7,6 +7,8 @@ const { clipboard } = require('electron');
 const { toSystemSlashes } = require('lib/path-utils');
 const { _ } = require('lib/locale');
 
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
+
 export enum ContextMenuItemType {
 	None = '',
 	Image = 'image',
@@ -42,9 +44,12 @@ export function menuItems():ContextMenuItems {
 		open: {
 			label: _('Open...'),
 			onAction: async (options:ContextMenuOptions) => {
-				const { resourcePath } = await resourceInfo(options);
-				const ok = bridge().openExternal(`file://${resourcePath}`);
-				if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
+				try {
+					await ResourceEditWatcher.instance().openAndWatch(options.resourceId);
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			},
 			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},

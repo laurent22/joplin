@@ -144,7 +144,7 @@ function shimInit() {
 
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
 		options = Object.assign({
-			resizeLargeImages: 'always', // 'always' or 'ask'
+			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 		}, options);
 
 		const readChunk = require('read-chunk');
@@ -182,7 +182,7 @@ function shimInit() {
 
 		const targetPath = Resource.fullPath(resource);
 
-		if (['image/jpeg', 'image/jpg', 'image/png'].includes(resource.mime)) {
+		if (options.resizeLargeImages !== 'never' && ['image/jpeg', 'image/jpg', 'image/png'].includes(resource.mime)) {
 			const ok = await handleResizeImage_(filePath, targetPath, resource.mime, options.resizeLargeImages);
 			if (!ok) return null;
 		} else {
@@ -203,6 +203,17 @@ function shimInit() {
 		resource.size = fileStat.size;
 
 		return Resource.save(resource, { isNew: true });
+	};
+
+	shim.updateResourceBlob = async function(resourceId, newBlobFilePath) {
+		const resource = await Resource.load(resourceId);
+		const fileStat = await shim.fsDriver().stat(newBlobFilePath);
+		await shim.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		await Resource.save({
+			id: resource.id,
+			size: fileStat.size,
+		});
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {

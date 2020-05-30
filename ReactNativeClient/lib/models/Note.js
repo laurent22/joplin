@@ -149,7 +149,7 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? `${`file://${Resource.fullPath(resource)}` + '?t='}${resource.updated_time}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
@@ -174,7 +174,7 @@ class Note extends BaseItem {
 		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
-			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
+			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`;
 			const re = new RegExp(reString, 'gi');
 			body = body.replace(re, match => {
 				const id = Resource.pathToId(match);
