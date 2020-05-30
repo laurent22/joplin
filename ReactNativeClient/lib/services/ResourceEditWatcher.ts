@@ -6,11 +6,13 @@ const EventEmitter = require('events');
 const chokidar = require('chokidar');
 const { bridge } = require('electron').remote.require('./bridge');
 const { _ } = require('lib/locale');
+import AsyncActionQueue from '../AsyncActionQueue';
 
 interface WatchedItem {
 	[key: string]: {
 		resourceId: string,
 		updatedTime: number,
+		asyncSaveQueue: AsyncActionQueue,
 	}
 }
 
@@ -63,6 +65,14 @@ export default class ResourceEditWatcher {
 	private watch(fileToWatch:string) {
 		if (!this.chokidar_) return;
 
+		const makeSaveAction = (resourceId:string, path:string) => {
+			return async () => {
+				this.logger().info(`ResourceEditWatcher: Saving resource ${resourceId}`);
+				await shim.updateResourceBlob(resourceId, path);
+				this.eventEmitter_.emit('resourceChange', { id: resourceId });
+			};
+		};
+
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event:any, path:string) => {
@@ -77,6 +87,7 @@ export default class ResourceEditWatcher {
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
 					const watchedItem = this.watchedItems_[path];
+					const resourceId = watchedItem.resourceId;
 					const stat = await shim.fsDriver().stat(path);
 					const updatedTime = stat.mtime.getTime();
 
@@ -85,6 +96,7 @@ export default class ResourceEditWatcher {
 						// so double-check the modified time and skip processing if there's no change.
 						// In particular it emits two such events just after the file has been copied
 						// in openAndWatch().
+						this.logger().debug(`ResourceEditWatcher: No timestamp change - skip: ${resourceId}`);
 						return;
 					}
 
@@ -93,18 +105,14 @@ export default class ResourceEditWatcher {
 						return;
 					}
 
-					const resourceId = watchedItem.resourceId;
+					this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
 
-					await shim.updateResourceBlob(resourceId, path);
+					watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
 
 					this.watchedItems_[path] = {
-						resourceId: resourceId,
+						...watchedItem,
 						updatedTime: updatedTime,
 					};
-
-					this.eventEmitter_.emit('resourceChange', { id: resourceId });
-
-					// TODO: handle race conditions
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
@@ -139,6 +147,7 @@ export default class ResourceEditWatcher {
 			this.watchedItems_[editFilePath] = {
 				resourceId: resourceId,
 				updatedTime: stat.mtime.getTime(),
+				asyncSaveQueue: new AsyncActionQueue(1000),
 			};
 
 			this.watch(editFilePath);
