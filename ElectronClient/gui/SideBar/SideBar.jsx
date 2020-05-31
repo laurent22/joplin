@@ -14,7 +14,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
-const { substrWithEllipsis } = require('lib/string-utils');
+const { substrWithEllipsis, substrStartWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 const commands = [
@@ -273,7 +273,7 @@ class SideBarComponent extends React.Component {
 			buttonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrStartWithEllipsis(tag.full_title, -32, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}

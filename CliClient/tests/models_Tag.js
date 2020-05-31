@@ -151,7 +151,7 @@ describe('models_Tag', function() {
 	}));
 
 	it('should create parent tags', asyncTest(async () => {
-		const tag = await Tag.saveNested({ title: 'tag1/subtag1/subtag2' });
+		const tag = await Tag.saveNested({ full_title: 'tag1/subtag1/subtag2' });
 		expect(tag).not.toEqual(null);
 
 		let parent_tag = await Tag.loadByTitle('tag1/subtag1');
@@ -163,7 +163,7 @@ describe('models_Tag', function() {
 
 	it('should should find notes tagged with descendant tag', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		const tag0 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		const tag0 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
 		const tag1 = await Tag.loadByTitle('tag1/subtag1');
 
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
@@ -180,7 +180,7 @@ describe('models_Tag', function() {
 
 	it('should untag descendant tags', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		const tag0 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		const tag0 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
 		const parent_tag = await Tag.loadByTitle('tag1');
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
 
@@ -195,7 +195,7 @@ describe('models_Tag', function() {
 
 	it('should count note_tags of descendant tags', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		const tag0 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		const tag0 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
 		const parent_tag = await Tag.loadByTitle('tag1');
 
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
@@ -206,7 +206,7 @@ describe('models_Tag', function() {
 	}));
 
 	it('should delete descendant tags', asyncTest(async () => {
-		let tag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		let tag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
 		let tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
 		expect(tag1).toBeDefined();
 		expect(tag1_subtag1).toBeDefined();
@@ -225,7 +225,7 @@ describe('models_Tag', function() {
 	it('should delete noteless parent tags', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
-		const subsubtag = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
+		const subsubtag = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
 		await Tag.addNote(subsubtag.id, note0.id);
 		let tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
 
@@ -242,29 +242,33 @@ describe('models_Tag', function() {
 	}));
 
 	it('renaming should change prefix in descendant tags', asyncTest(async () => {
-		const tag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag' });
-		const subtag2 = await Tag.saveNested({ title: 'tag1/subtag2' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
+
+		const tag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag' });
+		const subtag2 = await Tag.saveNested({ full_title: 'tag1/subtag2' });
 		const subtag1 = await Tag.loadByTitle('tag1/subtag1');
 		const tag1_parent = await Tag.loadByTitle('tag1');
 
-		await Tag.rename(tag1_parent, 'tag2');
+		await Tag.setNoteTagsByIds(note0.id, [tag1.id, subtag2.id]);
+		await Tag.renameNested(tag1_parent, 'tag2');
 
-		expect((await Tag.load(tag1_parent.id)).title).toBe('tag2');
-		expect((await Tag.load(tag1.id)).title).toBe('tag2/subtag1/subsubtag');
-		expect((await Tag.load(subtag1.id)).title).toBe('tag2/subtag1');
-		expect((await Tag.load(subtag2.id)).title).toBe('tag2/subtag2');
+		expect((await Tag.loadWithCount(tag1_parent.id)).full_title).toBe('tag2');
+		expect((await Tag.loadWithCount(tag1.id)).full_title).toBe('tag2/subtag1/subsubtag');
+		expect((await Tag.loadWithCount(subtag1.id)).full_title).toBe('tag2/subtag1');
+		expect((await Tag.loadWithCount(subtag2.id)).full_title).toBe('tag2/subtag2');
 	}));
 
 	it('renaming parent prefix should branch-out to two hierarchies', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'my note 2', parent_id: folder1.id });
-		const subsubtag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag1' });
-		const subsubtag2 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag2' });
+		const subsubtag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag1' });
+		const subsubtag2 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag2' });
 		await Tag.addNote(subsubtag1.id, note1.id);
 		await Tag.addNote(subsubtag2.id, note2.id);
 
-		await Tag.rename(subsubtag1, 'tag1/subtag2/subsubtag1');
+		await Tag.renameNested(subsubtag1, 'tag1/subtag2/subsubtag1');
 
 		const subtag1 = await Tag.loadByTitle('tag1/subtag1');
 		const subtag2 = await Tag.loadByTitle('tag1/subtag2');
@@ -275,11 +279,11 @@ describe('models_Tag', function() {
 	it('renaming parent prefix to existing tag should remove unused old tag', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
-		const subsubtag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag1' });
-		const subsubtag2 = await Tag.saveNested({ title: 'tag1/subtag2/subsubtag2' });
+		const subsubtag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag1' });
+		const subsubtag2 = await Tag.saveNested({ full_title: 'tag1/subtag2/subsubtag2' });
 		await Tag.addNote(subsubtag2.id, note1.id);
 
-		await Tag.rename(subsubtag1, 'tag1/subtag2/subsubtag1');
+		await Tag.renameNested(subsubtag1, 'tag1/subtag2/subsubtag1');
 
 		expect((await Tag.loadByTitle('tag1/subtag1'))).not.toBeDefined();
 	}));
@@ -287,19 +291,19 @@ describe('models_Tag', function() {
 	it('moving tag should change prefix name', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
-		const subsubtag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag1' });
-		const tag2 = await Tag.saveNested({ title: 'tag2' });
-		await Tag.addNote(tag2.id, note1.id);
+		const subsubtag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag1' });
+		const tag2 = await Tag.saveNested({ full_title: 'tag2' });
+		await Tag.setNoteTagsByIds(note1.id, [tag2.id, subsubtag1.id]);
 
 		await Tag.moveTag(subsubtag1.id, tag2.id);
 
-		expect((await Tag.load(subsubtag1.id)).title).toBe('tag2/subsubtag1');
+		expect((await Tag.loadWithCount(subsubtag1.id)).full_title).toBe('tag2/subsubtag1');
 	}));
 
 	it('moving tag to itself or its descendant throws error', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
-		const subsubtag1 = await Tag.saveNested({ title: 'tag1/subtag1/subsubtag1' });
+		const subsubtag1 = await Tag.saveNested({ full_title: 'tag1/subtag1/subsubtag1' });
 		await Tag.addNote(subsubtag1.id, note1.id);
 
 		const tag1 = await Tag.loadByTitle('tag1');
@@ -313,14 +317,44 @@ describe('models_Tag', function() {
 	it('renaming tag as a child of itself creates new parent', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
-		const subtag1 = await Tag.saveNested({ title: 'tag1/subtag1' });
+		const subtag1 = await Tag.saveNested({ full_title: 'tag1/subtag1' });
 		await Tag.addNote(subtag1.id, note1.id);
 
-		const a = await Tag.rename(subtag1, 'tag1/subtag1/a/subtag1');
+		const a = await Tag.renameNested(subtag1, 'tag1/subtag1/a/subtag1');
 
 		const subtag1_renamed = await Tag.loadByTitle('tag1/subtag1/a/subtag1');
 		expect(subtag1_renamed.id).toBe(subtag1.id);
 		const subtag1_new = await Tag.loadByTitle('tag1/subtag1');
 		expect(subtag1_new.id).not.toBe(subtag1.id);
+	}));
+
+	it('should search by full title regex', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
+		const abc = await Tag.saveNested({ full_title: 'a/b/c' });
+		const adef = await Tag.saveNested({ full_title: 'a/d/e/f' });
+
+		await Tag.setNoteTagsByIds(note1.id, [abc.id, adef.id]);
+
+		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*c.*' })).length).toBe(1);
+		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*b.*' })).length).toBe(2);
+		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*b/c.*' })).length).toBe(1);
+		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*a.*' })).length).toBe(6);
+		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*a/d.*' })).length).toBe(3);
+	}));
+
+	it('creating tags with the same name at the same level should throw exception', asyncTest(async () => {
+		// Should not complain when creating at different levels
+		await Tag.saveNested({ full_title: 'a/b/c' });
+		await Tag.saveNested({ full_title: 'a/d/e/c' });
+		await Tag.saveNested({ full_title: 'c' });
+
+		// Should complain when creating at the same level
+		let hasThrown = await checkThrowAsync(async () => await Tag.saveNested({ full_title: 'a/d' }, { userSideValidation: true }));
+		expect(hasThrown).toBe(true);
+		hasThrown = await checkThrowAsync(async () => await Tag.saveNested({ full_title: 'a' }, { userSideValidation: true }));
+		expect(hasThrown).toBe(true);
+		hasThrown = await checkThrowAsync(async () => await Tag.saveNested({ full_title: 'a/b/c' }, { userSideValidation: true }));
+		expect(hasThrown).toBe(true);
 	}));
 });

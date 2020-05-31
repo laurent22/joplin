@@ -63,6 +63,21 @@ class Tag extends BaseItem {
 		return descendantIds;
 	}
 
+	static async ancestorTags(tag) {
+		const ancestorIds = [];
+		const ancestors = [];
+		while (tag.parent_id != '') {
+			// Fail-safe in case of a loop in the tag hierarchy.
+			if (ancestorIds.includes(tag.parent_id)) break;
+
+			tag = await Tag.load(tag.parent_id);
+			ancestorIds.push(tag.id);
+			ancestors.push(tag);
+		}
+		ancestors.reverse();
+		return ancestors;
+	}
+
 	// Untag all the notes and delete tag
 	static async untagAll(tagId, options = null) {
 		if (!options) options = {};
@@ -147,13 +162,50 @@ class Tag extends BaseItem {
 		});
 	}
 
-	static async addNoteCounts(tags) {
+	static async _addNoteCounts(tags) {
 		for (const tag of tags) {
 			const noteIds = await Tag.noteIds(tag.id);
 			// Make sure the notes exist
 			const notes = await Note.byIds(noteIds);
 			tag.note_count = notes.length;
 		}
+	}
+
+	static _addFullTitles(tags) {
+		for (const tag of tags) {
+			const tagPath = Tag.tagPath(tags, tag.id);
+			const pathTitles = tagPath.map((t) => t.title);
+			tag.full_title = pathTitles.join('/');
+		}
+	}
+
+	static async getFullTitle(tag) {
+		const ancestorTags = await Tag.ancestorTags(tag);
+		ancestorTags.push(tag);
+		const ancestorTitles = ancestorTags.map((t) => t.title);
+		return ancestorTitles.join('/');
+	}
+
+	static async load(tagId, options = null) {
+		const tag = await super.load(tagId, options);
+		if (!tag) return;
+		tag.full_title = await Tag.getFullTitle(tag);
+		return tag;
+	}
+
+	static async all(options = null) {
+		const tags = await super.all(options);
+		Tag._addFullTitles(tags);
+		return tags;
+	}
+
+	static async byIds(ids, options = null) {
+		const tags = await super.byIds(ids, options);
+		for (let i = 0; i < tags.length; i++) {
+			if (!tags[i]) continue;
+			tags[i].full_title = await Tag.getFullTitle(tags[i]);
+		}
+		return tags;
 	}
 
 	static async loadWithCount(tagId) {
@@ -175,23 +227,38 @@ class Tag extends BaseItem {
 
 	static async allWithNotes() {
 		let tags = await Tag.all();
-		await Tag.addNoteCounts(tags);
+		await Tag._addNoteCounts(tags);
 
 		tags = tags.filter((tag) => tag.note_count > 0);
+
+		return tags;
+	}
+
+	static async search(options) {
+		const tags = await super.search(options);
+		for (let i = 0; i < tags.length; i++) {
+			tags[i].full_title = await Tag.getFullTitle(tags[i]);
+		}
 		return tags;
 	}
 
 	static async searchAllWithNotes(options) {
-		const tags = this.search(options);
-		await Tag.addNoteCounts(tags);
+		if (!options) options = {};
+		let tags = await this.search(options);
 
-		tags.filter((tag) => tag.note_count > 0);
+		// Apply fullTitleRegex on the full_title
+		if (options.fullTitleRegex) {
+			const titleRE = new RegExp(options.fullTitleRegex);
+			tags = tags.filter((tag) => tag.full_title.match(titleRE));
+		}
+
 		return tags;
 	}
 
 	static async tagsByNoteId(noteId) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
-		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
+		const tags = await this.allWithNotes();
+		return tags.filter((tag) => tagIds.includes(tag.id));
 	}
 
 	static async commonTagsByNoteIds(noteIds) {
@@ -206,16 +273,35 @@ class Tag extends BaseItem {
 				break;
 			}
 		}
-		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
+		const tags = await this.allWithNotes();
+		return tags.filter((tag) => commonTagIds.includes(tag.id));
 	}
 
 	static async loadByTitle(title) {
-		return this.loadByField('title', title, { caseInsensitive: true });
+		// When loading by title we need to verify that the path from parent to child exists
+		const sql = `SELECT * FROM \`${this.tableName()}\` WHERE title = ? and parent_id = ? COLLATE NOCASE`;
+		const separator = '/';
+		let i = title.indexOf(separator);
+		let parentId = '';
+		let restTitle = title;
+		while (i !== -1) {
+			const ancestorTitle = restTitle.slice(0,i);
+			restTitle = restTitle.slice(i + 1);
+
+			const ancestorTag = await this.modelSelectOne(sql, [ancestorTitle, parentId]);
+			if (!ancestorTag) return;
+			parentId = ancestorTag.id;
+
+			i = restTitle.indexOf(separator);
+		}
+		const tag = await this.modelSelectOne(sql, [restTitle, parentId]);
+		if (tag) tag.full_title = title;
+		return tag;
 	}
 
 	static async addNoteTagByTitle(noteId, tagTitle) {
 		let tag = await this.loadByTitle(tagTitle);
-		if (!tag) tag = await Tag.saveNested({ title: tagTitle }, { userSideValidation: true });
+		if (!tag) tag = await Tag.saveNested({ full_title: tagTitle }, { userSideValidation: true });
 		return await this.addNote(tag.id, noteId);
 	}
 
@@ -227,13 +313,13 @@ class Tag extends BaseItem {
 			const title = tagTitles[i].trim().toLowerCase();
 			if (!title) continue;
 			let tag = await this.loadByTitle(title);
-			if (!tag) tag = await Tag.saveNested({ title: title }, { userSideValidation: true  });
+			if (!tag) tag = await Tag.saveNested({ full_title: title }, { userSideValidation: true  });
 			await this.addNote(tag.id, noteId);
 			addedTitles.push(title);
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
+			if (addedTitles.indexOf(previousTags[i].full_title.toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
@@ -260,34 +346,39 @@ class Tag extends BaseItem {
 		return nestedPath(tags, tagId);
 	}
 
-	static displayTitle(item) {
-		const title = super.displayTitle(item);
-		const separator = '/';
-		const i = title.lastIndexOf(separator);
-		if (i !== -1) return title.slice(i + separator.length);
-		return title;
-	}
-
-	static async changeDescendantPrefix(parentItem, parentPrefix) {
-		const childrenTagIds = await Tag.childrenTagIds(parentItem.id);
-		for (let i = 0; i < childrenTagIds.length; i++) {
-			const childItem = await Tag.load(childrenTagIds[i]);
-			// The new title of the child is new prefix + display name
-			const childName = `${parentPrefix}/${await Tag.displayTitle(childItem)}`;
-			childItem.title = childName;
-			// Change the child title
-			await Tag.save(childItem, { fields: ['title'] });
-			// Change descendant titles
-			await Tag.changeDescendantPrefix(childItem, childName);
+	static async moveTag(tagId, parentTagId) {
+		if (tagId === parentTagId
+				|| (await Tag.descendantTagIds(tagId)).includes(parentTagId)) {
+			throw new Error(_('Cannot move tag to this location.'));
 		}
+		if (!parentTagId) parentTagId = '';
+
+		let tag = await Tag.load(tagId);
+		if (!tag) return;
+
+		const oldParentTagId = tag.parent_id;
+
+		// Save new parent id
+		tag.parent_id = parentTagId;
+		tag = await Tag.save(tag, { userSideValidation: true });
+
+		if (parentTagId !== oldParentTagId) {
+			// If the parent tag has changed, and the ancestor doesn't
+			// have notes attached, then remove it
+			const oldParentWithCount = await Tag.loadWithCount(oldParentTagId);
+			if (!oldParentWithCount) {
+				await Tag.delete(oldParentTagId, { deleteChildren: false, deleteNotelessParents: true });
+			}
+		}
+
+		return tag;
 	}
 
-	static async rename(tag, newTitle) {
+	static async renameNested(tag, newTitle) {
 		const oldParentId = tag.parent_id;
 
-		tag.title = newTitle;
+		tag.full_title = newTitle;
 		tag = await Tag.saveNested(tag, { fields: ['title', 'parent_id'], userSideValidation: true });
-		await Tag.changeDescendantPrefix(tag, newTitle);
 
 		if (oldParentId !== tag.parent_id) {
 			// If the parent tag has changed, and the ancestor doesn't
@@ -300,41 +391,24 @@ class Tag extends BaseItem {
 		return tag;
 	}
 
-	static async moveTag(tagId, parentTagId) {
-		if (tagId === parentTagId
-				|| (await Tag.descendantTagIds(tagId)).includes(parentTagId)) {
-			throw new Error(_('Cannot move tag to this location.'));
-		}
-
-		const tag = await Tag.load(tagId);
-		if (!tag) return;
-		let tagTitle = await Tag.displayTitle(tag);
-
-		const parentTag = await Tag.load(parentTagId);
-		if (parentTag) {
-			tagTitle = `${parentTag.title}/${tagTitle}`;
-		}
-
-		return await Tag.rename(tag, tagTitle);
-	}
-
 	static async saveNested(tag, options) {
 		if (!options) options = {};
 		// The following option is used to prevent loops in the tag hierarchy
 		if (!('mainTagId' in options) && tag.id) options.mainTagId = tag.id;
 
-		if (tag.title.startsWith('/') || tag.title.endsWith('/')) {
+		if (tag.full_title.startsWith('/') || tag.full_title.endsWith('/')) {
 			throw new Error(_('Tag name cannot start or end with a `/`.'));
-		} else if (tag.title.includes('//')) {
+		} else if (tag.full_title.includes('//')) {
 			throw new Error(_('Tag name cannot contain `//`.'));
 		}
 
 		let parentId = '';
 		// Check if the tag is nested using `/` as separator
 		const separator = '/';
-		const i = tag.title.lastIndexOf(separator);
+		const i = tag.full_title.lastIndexOf(separator);
 		if (i !== -1) {
-			const parentTitle = tag.title.slice(0,i);
+			const parentTitle = tag.full_title.slice(0,i);
+			tag.title = tag.full_title.slice(i + 1);
 
 			// Try to get the parent tag
 			const parentTag = await Tag.loadByTitle(parentTitle);
@@ -350,9 +424,12 @@ class Tag extends BaseItem {
 				// Create the parent tag if it doesn't exist
 				const parentOpts = {};
 				if ('mainTagId' in options) parentOpts.mainTagId = options.mainTagId;
-				const parentTag = await Tag.saveNested({ title: parentTitle }, parentOpts);
+				const parentTag = await Tag.saveNested({ full_title: parentTitle }, parentOpts);
 				parentId = parentTag.id;
 			}
+		} else {
+			// Tag not nested so set the title to full title
+			tag.title = tag.full_title;
 		}
 
 		// Set parent_id
@@ -365,8 +442,15 @@ class Tag extends BaseItem {
 			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
 
-				const existingTag = await Tag.loadByTitle(o.title);
-				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+				// Check that a tag with the same title does not already exist at the same level
+				let parentId = o.parent_id;
+				if (!parentId) parentId = '';
+				const existingCurrentLevelTags = await Tag.byIds(await Tag.childrenTagIds(parentId));
+				const existingTag = existingCurrentLevelTags.find((t) => t.title === o.title);
+				if (existingTag && existingTag.id !== o.id) {
+					const fullTitle = await Tag.getFullTitle(existingTag);
+					throw new Error(_('The tag "%s" already exists. Please choose a different name.', fullTitle));
+				}
 			}
 		}
 

@@ -192,8 +192,11 @@ class Dialog extends React.PureComponent {
 
 			if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+				searchQuery = this.state.query.split(' ')[0].substr(1).trim();
+				results = await Tag.searchAllWithNotes({ fullTitleRegex: `.*${searchQuery}.*` });
+				for (let i = 0; i < results.length; i++) {
+					results[i].title = results[i].full_title;
+				}
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
@@ -451,6 +454,7 @@ class Dialog extends React.PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
+		tags: state.tags,
 		theme: state.settings.theme,
 	};
 };

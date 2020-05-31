@@ -21,12 +21,12 @@ class TagListComponent extends React.Component {
 		if (tags && tags.length > 0) {
 			// Sort by id for now, but probably needs to be changed in the future.
 			tags.sort((a, b) => {
-				return a.title < b.title ? -1 : +1;
+				return a.full_title < b.full_title ? -1 : +1;
 			});
 
 			for (let i = 0; i < tags.length; i++) {
 				const props = {
-					title: tags[i].title,
+					title: tags[i].full_title,
 					key: tags[i].id,
 				};
 				tagItems.push(<TagItem {...props} />);

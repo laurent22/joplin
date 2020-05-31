@@ -103,13 +103,13 @@ class NoteTagsDialogComponent extends React.Component {
 		const tagListData = this.props.tags.map(tag => {
 			return {
 				id: tag.id,
-				title: tag.title,
+				title: tag.full_title,
 				selected: tagIds.indexOf(tag.id) >= 0,
 			};
 		});
 
 		tagListData.sort((a, b) => {
-			return naturalCompare.caseInsensitive(a.title, b.title);
+			return naturalCompare.caseInsensitive(a.full_title, b.full_title);
 		});
 
 		this.setState({ tagListData: tagListData });

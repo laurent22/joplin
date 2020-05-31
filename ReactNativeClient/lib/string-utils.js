@@ -264,6 +264,11 @@ function substrWithEllipsis(s, start, length) {
 	return `${s.substr(start, length - 3)}...`;
 }
 
+function substrStartWithEllipsis(s, start, length) {
+	if (s.length <= length) return s;
+	return `...${s.substr(start + 3, length)}`;
+}
+
 function nextWhitespaceIndex(s, begin) {
 	// returns index of the next whitespace character
 	const i = s.slice(begin).search(/\s/);
@@ -285,4 +290,4 @@ function scriptType(s) {
 	return 'en';
 }
 
-module.exports = Object.assign({ removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);
+module.exports = Object.assign({ removeDiacritics, substrWithEllipsis, substrStartWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);

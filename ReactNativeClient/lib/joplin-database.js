@@ -739,7 +739,7 @@ class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE tags ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
 				// Drop the tag note count view, instead compute note count on the fly
 				queries.push('DROP VIEW tags_with_note_count');
-				queries.push(this.addMigrationFile(30));
+				queries.push(this.addMigrationFile(31));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

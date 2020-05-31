@@ -26,6 +26,7 @@ script.exec = async function() {
 			count++;
 		}
 
+		tag.full_title = tag.title;
 		await Tag.saveNested(tag);
 	}
 };
