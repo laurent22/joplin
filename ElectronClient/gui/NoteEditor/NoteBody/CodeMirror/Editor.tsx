@@ -11,6 +11,7 @@ import 'codemirror/addon/scroll/scrollpastend';
 import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
+import useLineSorting from './utils/useLineSorting';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -49,6 +50,7 @@ function Editor(props: EditorProps, ref: any) {
 	useListIdent(CodeMirror);
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
+	useLineSorting(CodeMirror);
 
 	useEffect(() => {
 		if (props.cancelledKeys) {
@@ -126,6 +128,7 @@ function Editor(props: EditorProps, ref: any) {
 			keyMap: props.keyMap ? props.keyMap : 'default',
 			extraKeys: { 'Enter': 'insertListElement',
 				'Ctrl-/': 'toggleComment',
+				'Ctrl-Alt-S': 'sortSelectedLines',
 				'Tab': 'smartListIndent',
 				'Shift-Tab': 'smartListUnindent' },
 		};
