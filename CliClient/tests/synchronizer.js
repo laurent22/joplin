@@ -1085,6 +1085,51 @@ describe('synchronizer', function() {
 		}
 	}));
 
+	it('should handle resource conflicts if a resource is changed locally but deleted remotely', asyncTest(async () => {
+		{
+			const tempFile = `${__dirname}/tmp/test.txt`;
+			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+			const folder1 = await Folder.save({ title: 'folder1' });
+			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+			await shim.attachFileToNote(note1, tempFile);
+			await synchronizer().start();
+		}
+
+		await switchClient(2);
+
+		{
+			await synchronizer().start();
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+		}
+
+		await switchClient(1);
+
+		{
+			const resource = (await Resource.all())[0];
+			await Resource.delete(resource.id);
+			await synchronizer().start();
+
+		}
+
+		await switchClient(2);
+
+		{
+			const originalResource = (await Resource.all())[0];
+			await Resource.save({ id: originalResource.id, title: 'modified resource' });
+			await synchronizer().start(); // CONFLICT
+
+			const deletedResource = await Resource.load(originalResource.id);
+			expect(!deletedResource).toBe(true);
+
+			const allResources = await Resource.all();
+			expect(allResources.length).toBe(1);
+			const conflictResource = allResources[0];
+			expect(originalResource.id).not.toBe(conflictResource.id);
+			expect(conflictResource.title).toBe('modified resource');
+		}
+	}));
+
 	it('should upload decrypted items to sync target after encryption disabled', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
