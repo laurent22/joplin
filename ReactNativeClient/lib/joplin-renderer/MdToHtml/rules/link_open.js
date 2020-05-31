@@ -23,8 +23,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		let icon = '';
 		let hrefAttr = '#';
 		let mime = '';
+		let resourceId = null;
 		if (isResourceUrl) {
-			const resourceId = resourceHrefInfo.itemId;
+			resourceId = resourceHrefInfo.itemId;
 
 			const result = ruleOptions.resources[resourceId];
 			const resourceStatus = utils.resourceStatus(ruleOptions.ResourceModel, result);
@@ -62,13 +63,27 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		// https://github.com/laurent22/joplin/issues/2030
 		href = href.replace(/'/g, '%27');
 
-		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
+		let js = '';
+		if (!ruleOptions.enableLongPress) {
+			js = `onclick='${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;'`;
+		} else if (resourceId) {
+			const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
+
+			const onClick = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)})`;
+			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
+
+			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${longPressDelay});`;
+			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
+
+			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+		}
+
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
 		if (ruleOptions.plainResourceRendering || pluginOptions.linkRenderingType === 2) {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${htmlentities(href)}' type='${htmlentities(mime)}'>`;
 		} else {
-			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}' type='${htmlentities(mime)}'>${icon}`;
+			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' ${js} type='${htmlentities(mime)}'>${icon}`;
 		}
 	};
 }

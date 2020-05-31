@@ -4,13 +4,17 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
 
 	markdownIt.renderer.rules.image = function(tokens, idx, options, env, self) {
+		if (!ruleOptions.enableLongPress) {
+			return;
+		}
+
 		const html = defaultRenderer(tokens, idx, options, env, self);
 
 		return html.replace(/^<img(.*)data-from-md data-resource-id="([^"]*)"(.*)\/>$/, (s, prefix, id, suffix) => {
 			const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
 
-			const touchStart = `timer=setTimeout(()=>{timer=null; ${longPressHandler};}, ${longPressDelay});`;
-			const touchEnd = 'if (timer) clearTimeout(timer); timer=null';
+			const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${longPressDelay});`;
+			const touchEnd = 'if (!!t) clearTimeout(t); t=null';
 
 			const handlers = `ontouchstart="${touchStart}" ontouchend="${touchEnd}"`;
 

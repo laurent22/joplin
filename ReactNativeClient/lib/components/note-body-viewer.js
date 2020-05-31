@@ -80,6 +80,7 @@ class NoteBodyViewer extends Component {
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 			// onImageLongPress: 'console.log',
+			enableLongPress: shim.isReactNative(),
 			longPressDelay: 500, // TODO use system value
 		};
 
