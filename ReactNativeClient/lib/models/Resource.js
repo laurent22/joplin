@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
@@ -327,7 +328,7 @@ class Resource extends BaseItem {
 		const fileStat = await this.fsDriver().stat(newBlobFilePath);
 		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
 
-		await Resource.save({
+		return await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
 		});
@@ -337,6 +338,40 @@ class Resource extends BaseItem {
 		const resource = await Resource.load(resourceId);
 		await this.requireIsReady(resource);
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
+	}
+
+	static async duplicateResource(resourceId) {
+		const resource = await Resource.load(resourceId);
+		const localState = await Resource.localState(resource);
+
+		let newResource = { ...resource };
+		delete newResource.id;
+		newResource = await Resource.save(newResource);
+
+		const newLocalState = { ...localState };
+		newLocalState.resource_id = newResource.id;
+		delete newLocalState.id;
+
+		await Resource.setLocalState(newResource, newLocalState);
+
+		const sourcePath = Resource.fullPath(resource);
+		if (await this.fsDriver().exists(sourcePath)) {
+			await this.fsDriver().copy(sourcePath, Resource.fullPath(newResource));
+		}
+
+		return newResource;
+	}
+
+	static async createConflictResourceNote(resource) {
+		const Note = this.getClass('Note');
+
+		const conflictResource = await Resource.duplicateResource(resource.id);
+
+		await Note.save({
+			title: _('Attachment conflict: "%s"', resource.title),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict', Resource.markdownTag(conflictResource)),
+			is_conflict: 1,
+		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
 }

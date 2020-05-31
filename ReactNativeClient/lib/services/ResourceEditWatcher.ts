@@ -10,7 +10,8 @@ import AsyncActionQueue from '../AsyncActionQueue';
 
 interface WatchedItem {
 	resourceId: string,
-	updatedTime: number,
+	lastFileUpdatedTime: number,
+	lastResourceUpdatedTime: number,
 	path:string,
 	asyncSaveQueue: AsyncActionQueue,
 }
@@ -77,7 +78,19 @@ export default class ResourceEditWatcher {
 		const makeSaveAction = (resourceId:string, path:string) => {
 			return async () => {
 				this.logger().info(`ResourceEditWatcher: Saving resource ${resourceId}`);
-				await Resource.updateResourceBlob(resourceId, path);
+				const resource = await Resource.load(resourceId);
+				const watchedItem = this.watchedItemByResourceId(resourceId);
+
+				if (resource.updated_time !== watchedItem.lastResourceUpdatedTime) {
+					this.logger().info(`ResourceEditWatcher: Conflict was detected (resource was modified from somewhere else, possibly via sync). Conflict note will be created: ${resourceId}`);
+					// The resource has been modified from elsewhere, for example via sync
+					// so copy the current version to the Conflict notebook, and overwrite
+					// the resource content.
+					await Resource.createConflictResourceNote(resource);
+				}
+
+				const savedResource = await Resource.updateResourceBlobContent(resourceId, path);
+				watchedItem.lastResourceUpdatedTime = savedResource.updated_time;
 				this.eventEmitter_.emit('resourceChange', { id: resourceId });
 			};
 		};
@@ -104,9 +117,9 @@ export default class ResourceEditWatcher {
 					}
 
 					const stat = await shim.fsDriver().stat(path);
-					const updatedTime = stat.mtime.getTime();
+					const editedFileUpdatedTime = stat.mtime.getTime();
 
-					if (watchedItem.updatedTime === updatedTime) {
+					if (watchedItem.lastFileUpdatedTime === editedFileUpdatedTime) {
 						// chokidar is buggy and emits "change" events even when nothing has changed
 						// so double-check the modified time and skip processing if there's no change.
 						// In particular it emits two such events just after the file has been copied
@@ -118,7 +131,7 @@ export default class ResourceEditWatcher {
 					this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
 
 					watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
-					watchedItem.updatedTime = updatedTime;
+					watchedItem.lastFileUpdatedTime = editedFileUpdatedTime;
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
@@ -147,7 +160,8 @@ export default class ResourceEditWatcher {
 
 			watchedItem = {
 				resourceId: resourceId,
-				updatedTime: 0,
+				lastFileUpdatedTime: 0,
+				lastResourceUpdatedTime: 0,
 				asyncSaveQueue: new AsyncActionQueue(1000),
 				path: '',
 			};
@@ -163,7 +177,8 @@ export default class ResourceEditWatcher {
 			const stat = await shim.fsDriver().stat(editFilePath);
 
 			watchedItem.path = editFilePath;
-			watchedItem.updatedTime = stat.mtime;
+			watchedItem.lastFileUpdatedTime = stat.mtime.getTime();
+			watchedItem.lastResourceUpdatedTime = resource.updated_time;
 
 			this.watch(editFilePath);
 		}

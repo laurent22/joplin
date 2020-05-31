@@ -539,18 +539,14 @@ class Synchronizer {
 							// Unlike notes we always handle the conflict for resources
 							// ------------------------------------------------------------------------------
 
-							const conflictResource = await shim.duplicateResource(local.id);
+							await Resource.createConflictResourceNote(local);
 
-							await Note.save({
-								title: _('Attachment conflict: "%s"', local.title),
-								body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict', Resource.markdownTag(conflictResource)),
-								is_conflict: 1,
-							}, { changeSource: ItemChange.SOURCE_SYNC });
-
-							// The local content we have is no longer valid and should be re-downloaded
-							await Resource.setLocalState(local.id, {
-								fetch_status: Resource.FETCH_STATUS_IDLE,
-							});
+							if (remote) {
+								// The local content we have is no longer valid and should be re-downloaded
+								await Resource.setLocalState(local.id, {
+									fetch_status: Resource.FETCH_STATUS_IDLE,
+								});
+							}
 						}
 
 						if (['noteConflict', 'resourceConflict'].includes(action)) {

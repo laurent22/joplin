@@ -205,28 +205,6 @@ function shimInit() {
 		return Resource.save(resource, { isNew: true });
 	};
 
-	shim.duplicateResource = async function(resourceId) {
-		const resource = await Resource.load(resourceId);
-		const localState = await Resource.localState(resource);
-
-		let newResource = { ...resource };
-		delete newResource.id;
-		newResource = await Resource.save(newResource);
-
-		const newLocalState = { ...localState };
-		newLocalState.resource_id = newResource.id;
-		delete newLocalState.id;
-
-		await Resource.setLocalState(newResource, newLocalState);
-
-		const sourcePath = Resource.fullPath(resource);
-		if (await shim.fsDriver().exists(sourcePath)) {
-			await shim.fsDriver().copy(sourcePath, Resource.fullPath(newResource));
-		}
-
-		return newResource;
-	};
-
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
 		options = Object.assign({}, {
 			createFileURL: false,
