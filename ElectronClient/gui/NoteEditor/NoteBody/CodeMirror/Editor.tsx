@@ -20,6 +20,11 @@ import 'codemirror/mode/gfm/gfm';
 import 'codemirror/mode/xml/xml';
 // Modes for syntax highlighting inside of code blocks
 import 'codemirror/mode/python/python';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/diff/diff';
+import 'codemirror/mode/sql/sql';
 
 export interface CancelledKeys {
 	mac: string[],
