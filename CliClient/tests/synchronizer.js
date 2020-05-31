@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, allSyncTargetItemsEncrypted, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -992,7 +992,7 @@ describe('synchronizer', function() {
 	}));
 
 	it('should sync resource blob changes', asyncTest(async () => {
-		const tempFile = `${__dirname}/tmp/test.txt`;
+		const tempFile = tempFilePath('txt');
 		await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -1005,7 +1005,7 @@ describe('synchronizer', function() {
 		await resourceFetcher().start();
 		await resourceFetcher().waitForAllFinished();
 		let resource1_2 = (await Resource.all())[0];
-		const modFile = `${__dirname}/tmp/test_mod.txt`;
+		const modFile = tempFilePath('txt');
 		await shim.fsDriver().writeFile(modFile, '1234 MOD', 'utf8');
 		await Resource.updateResourceBlobContent(resource1_2.id, modFile);
 		const originalSize = resource1_2.size;
@@ -1027,7 +1027,7 @@ describe('synchronizer', function() {
 
 	it('should handle resource conflicts', asyncTest(async () => {
 		{
-			const tempFile = `${__dirname}/tmp/test.txt`;
+			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
 			const folder1 = await Folder.save({ title: 'folder1' });
 			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -1042,7 +1042,7 @@ describe('synchronizer', function() {
 			await resourceFetcher().start();
 			await resourceFetcher().waitForAllFinished();
 			const resource = (await Resource.all())[0];
-			const modFile2 = `${__dirname}/tmp/test_mod_2.txt`;
+			const modFile2 = tempFilePath('txt');
 			await shim.fsDriver().writeFile(modFile2, '1234 MOD 2', 'utf8');
 			await Resource.updateResourceBlobContent(resource.id, modFile2);
 			await synchronizer().start();
@@ -1053,7 +1053,7 @@ describe('synchronizer', function() {
 		{
 			// Going to modify a resource without syncing first, which will cause a conflict
 			const resource = (await Resource.all())[0];
-			const modFile1 = `${__dirname}/tmp/test_mod_1.txt`;
+			const modFile1 = tempFilePath('txt');
 			await shim.fsDriver().writeFile(modFile1, '1234 MOD 1', 'utf8');
 			await Resource.updateResourceBlobContent(resource.id, modFile1);
 			await synchronizer().start(); // CONFLICT
@@ -1087,7 +1087,7 @@ describe('synchronizer', function() {
 
 	it('should handle resource conflicts if a resource is changed locally but deleted remotely', asyncTest(async () => {
 		{
-			const tempFile = `${__dirname}/tmp/test.txt`;
+			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
 			const folder1 = await Folder.save({ title: 'folder1' });
 			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

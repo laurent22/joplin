@@ -41,6 +41,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const md5 = require('md5');
 
 const databases_ = [];
 const synchronizers_ = [];
@@ -486,6 +487,10 @@ async function createNTestTags(n) {
 	return tags;
 }
 
+function tempFilePath(ext) {
+	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
+}
+
 // Application for feature integration testing
 class TestApp extends BaseApplication {
 	constructor(hasGui = true) {
@@ -554,4 +559,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, resourceFetcher, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
