@@ -124,7 +124,7 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-			extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList',
+			extraKeys: { 'Enter': 'insertListElement',
 				'Ctrl-/': 'toggleComment',
 				'Tab': 'smartListIndent',
 				'Shift-Tab': 'smartListUnindent' },
