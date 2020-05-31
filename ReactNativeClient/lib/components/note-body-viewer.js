@@ -13,6 +13,7 @@ const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const Resource = require('lib/models/Resource.js');
 const Share = require('react-native-share').default;
+const { BackButtonService } = require('lib/services/back-button.js');
 
 import Async from 'react-async';
 
@@ -33,15 +34,25 @@ class NoteBodyViewer extends Component {
 
 		this.reloadNote = this.reloadNote.bind(this);
 		this.watchFn = this.watchFn.bind(this);
+
+		this.backHandler = () => {
+			if (!!this.dialogbox && this.dialogbox.state.isVisible) {
+				this.dialogbox.close();
+				return true;
+			}
+			return false;
+		};
 	}
 
 	componentDidMount() {
 		this.isMounted_ = true;
+		BackButtonService.addHandler(this.backHandler);
 	}
 
 	componentWillUnmount() {
 		this.markupToHtml_ = null;
 		this.isMounted_ = false;
+		BackButtonService.removeHandler(this.backHandler);
 	}
 
 	async reloadNote() {
