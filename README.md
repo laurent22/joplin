@@ -168,7 +168,9 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 ## Dropbox synchronisation
 
-When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
+When syncing with Dropbox, Joplin creates a sub-directory in Dropbox server, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory. 
+
+On the desktop Joplin syncs directly with the Dropbox servers, and does not require the installation of the Dropbox client. If you have the Dropbox client installed you should set the Dropbox/Apps/Joplin folder to not sync locally, using Selective Sync. This will avoid unnecessarily storing and syncing duplicate data.
 
 In the **desktop application** or **mobile application**, select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
