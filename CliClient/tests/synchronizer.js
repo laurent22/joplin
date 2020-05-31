@@ -1007,7 +1007,7 @@ describe('synchronizer', function() {
 		let resource1_2 = (await Resource.all())[0];
 		const modFile = `${__dirname}/tmp/test_mod.txt`;
 		await shim.fsDriver().writeFile(modFile, '1234 MOD', 'utf8');
-		await shim.updateResourceBlob(resource1_2.id, modFile);
+		await Resource.updateResourceBlobContent(resource1_2.id, modFile);
 		const originalSize = resource1_2.size;
 		resource1_2 = (await Resource.all())[0];
 		const newSize = resource1_2.size;
@@ -1022,9 +1022,67 @@ describe('synchronizer', function() {
 		await resourceFetcher().waitForAllFinished();
 		const resource1_1 = (await Resource.all())[0];
 		expect(resource1_1.size).toBe(newSize);
-		const resource1_1Path = Resource.fullPath(resource1_1);
-		const newContent = await shim.fsDriver().readFile(resource1_1Path, 'utf8');
-		expect(newContent).toBe('1234 MOD');
+		expect(await Resource.resourceBlobContent(resource1_1.id, 'utf8')).toBe('1234 MOD');
+	}));
+
+	it('should handle resource conflicts', asyncTest(async () => {
+		{
+			const tempFile = `${__dirname}/tmp/test.txt`;
+			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+			const folder1 = await Folder.save({ title: 'folder1' });
+			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+			await shim.attachFileToNote(note1, tempFile);
+			await synchronizer().start();
+		}
+
+		await switchClient(2);
+
+		{
+			await synchronizer().start();
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+			const resource = (await Resource.all())[0];
+			const modFile2 = `${__dirname}/tmp/test_mod_2.txt`;
+			await shim.fsDriver().writeFile(modFile2, '1234 MOD 2', 'utf8');
+			await Resource.updateResourceBlobContent(resource.id, modFile2);
+			await synchronizer().start();
+		}
+
+		await switchClient(1);
+
+		{
+			// Going to modify a resource without syncing first, which will cause a conflict
+			const resource = (await Resource.all())[0];
+			const modFile1 = `${__dirname}/tmp/test_mod_1.txt`;
+			await shim.fsDriver().writeFile(modFile1, '1234 MOD 1', 'utf8');
+			await Resource.updateResourceBlobContent(resource.id, modFile1);
+			await synchronizer().start(); // CONFLICT
+
+			// If we try to read the resource content now, it should throw because the local
+			// content has been moved to the conflict notebook, and the new local content
+			// has not been downloaded yet.
+			await checkThrowAsync(async () => await Resource.resourceBlobContent(resource.id));
+
+			// Now download resources, and our local content would have been overwritten by
+			// the content from client 2
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+			const localContent =  await Resource.resourceBlobContent(resource.id, 'utf8');
+			expect(localContent).toBe('1234 MOD 2');
+
+			// Check that the Conflict note has been generated, with the conflict resource
+			// attached to it, and check that it has the original content.
+			const allNotes = await Note.all();
+			expect(allNotes.length).toBe(2);
+			const conflictNote = allNotes.find((v) => {
+				return !!v.is_conflict;
+			});
+			expect(!!conflictNote).toBe(true);
+			const resourceIds = await Note.linkedResourceIds(conflictNote.body);
+			expect(resourceIds.length).toBe(1);
+			const conflictContent =  await Resource.resourceBlobContent(resourceIds[0], 'utf8');
+			expect(conflictContent).toBe('1234 MOD 1');
+		}
 	}));
 
 	it('should upload decrypted items to sync target after encryption disabled', asyncTest(async () => {

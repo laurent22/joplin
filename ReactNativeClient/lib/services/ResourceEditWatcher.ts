@@ -77,7 +77,7 @@ export default class ResourceEditWatcher {
 		const makeSaveAction = (resourceId:string, path:string) => {
 			return async () => {
 				this.logger().info(`ResourceEditWatcher: Saving resource ${resourceId}`);
-				await shim.updateResourceBlob(resourceId, path);
+				await Resource.updateResourceBlob(resourceId, path);
 				this.eventEmitter_.emit('resourceChange', { id: resourceId });
 			};
 		};

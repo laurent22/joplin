@@ -205,18 +205,26 @@ function shimInit() {
 		return Resource.save(resource, { isNew: true });
 	};
 
-	shim.updateResourceBlob = async function(resourceId, newBlobFilePath) {
+	shim.duplicateResource = async function(resourceId) {
 		const resource = await Resource.load(resourceId);
-		const readyStatus = await Resource.readyStatus(resourceId);
-		if (readyStatus !== 'ok') throw new Error(`Cannot set resource blob because resource is not ready. Status: ${readyStatus}`);
+		const localState = await Resource.localState(resource);
 
-		const fileStat = await shim.fsDriver().stat(newBlobFilePath);
-		await shim.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+		let newResource = { ...resource };
+		delete newResource.id;
+		newResource = await Resource.save(newResource);
 
-		await Resource.save({
-			id: resource.id,
-			size: fileStat.size,
-		});
+		const newLocalState = { ...localState };
+		newLocalState.resource_id = newResource.id;
+		delete newLocalState.id;
+
+		await Resource.setLocalState(newResource, newLocalState);
+
+		const sourcePath = Resource.fullPath(resource);
+		if (await shim.fsDriver().exists(sourcePath)) {
+			await shim.fsDriver().copy(sourcePath, Resource.fullPath(newResource));
+		}
+
+		return newResource;
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {

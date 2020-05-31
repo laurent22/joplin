@@ -122,6 +122,11 @@ class Resource extends BaseItem {
 		return 'ok';
 	}
 
+	static async requireIsReady(resource) {
+		const readyStatus = await Resource.readyStatus(resource);
+		if (readyStatus !== 'ok') throw new Error(`Resource is not ready. Status: ${readyStatus}`);
+	}
+
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
 	static async decrypt(item) {
 		// The item might already be decrypted but not the blob (for instance if it crashes while
@@ -236,7 +241,7 @@ class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
-	static localState(resourceOrId) {
+	static async localState(resourceOrId) {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
@@ -313,6 +318,25 @@ class Resource extends BaseItem {
 		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
 		if (status === Resource.FETCH_STATUS_ERROR) return _('Error');
 		throw new Error(`Invalid status: ${status}`);
+	}
+
+	static async updateResourceBlobContent(resourceId, newBlobFilePath) {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+
+		const fileStat = await this.fsDriver().stat(newBlobFilePath);
+		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		await Resource.save({
+			id: resource.id,
+			size: fileStat.size,
+		});
+	}
+
+	static async resourceBlobContent(resourceId, encoding = 'Buffer') {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
 }
