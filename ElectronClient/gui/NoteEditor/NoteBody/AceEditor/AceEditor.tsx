@@ -432,6 +432,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			cancelledKeys.push(`Command+${l}`);
 		}
 		cancelledKeys.push('Alt+E');
+		cancelledKeys.push('Command+Shift+L');
+		cancelledKeys.push('Ctrl+Shift+L');
 
 		for (let i = 0; i < cancelledKeys.length; i++) {
 			const k = cancelledKeys[i];
