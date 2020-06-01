@@ -7,6 +7,7 @@ import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceH
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
 import useListIdent from './utils/useListIdent';
+import useFocus from './utils/useFocus';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -544,6 +545,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, [props.searchMarkers, renderedBody]);
 
+	const { focused, onBlur, onFocus } = useFocus({ editor });
+
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
@@ -592,6 +595,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					value={props.content}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 					theme={styles.editor.editorTheme}
+					onFocus={onFocus}
+					onBlur={onBlur}
 					style={styles.editor}
 					width={`${width}px`}
 					fontSize={styles.editor.fontSize}
@@ -641,6 +646,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					theme={props.theme}
 					dispatch={props.dispatch}
+					disabled={!focused}
 				/>
 				{props.noteToolbar}
 			</div>

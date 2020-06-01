@@ -35,6 +35,8 @@ class ToolbarComponent extends React.Component {
 					o
 				);
 
+				if (this.props.disabled) props.disabled = true;
+
 				if (itemType === 'button') {
 					itemComps.push(<ToolbarButton {...props} />);
 				} else if (itemType === 'separator') {
