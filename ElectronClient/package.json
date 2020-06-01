@@ -68,6 +68,7 @@
     },
     "linux": {
       "asar": true,
+      "icon": "../Assets/LinuxIcons/256x256.png",
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
