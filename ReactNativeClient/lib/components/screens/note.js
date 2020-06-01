@@ -42,6 +42,7 @@ const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
+const { addNoteToRecentsWidget } = require('lib/widgetHandler.ts');
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -372,6 +373,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
 		}
+
+		if (this.state.note) {
+			addNoteToRecentsWidget(this.state.note);
+		}
 	}
 
 	onMarkForDownload(event) {
@@ -393,6 +398,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	componentWillUnmount() {
+		addNoteToRecentsWidget(this.state.note);
+
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 

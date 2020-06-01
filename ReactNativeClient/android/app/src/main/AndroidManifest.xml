@@ -114,6 +114,16 @@
 				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
+			<receiver android:name=".widgets.recents.RecentsWidgetProvider">
+				<intent-filter>
+					<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+				</intent-filter>
+				<meta-data android:name="android.appwidget.provider"
+					android:resource="@xml/recents_widget_provider_info" />
+			</receiver>
+			<service android:name=".widgets.recents.RecentsWidgetService"
+				android:permission="android.permission.BIND_REMOTEVIEWS"
+				android:exported="false" />
 	</application>
 
 </manifest>

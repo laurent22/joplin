@@ -5,6 +5,7 @@ const Note = require('lib/models/Note');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const { removeNoteFromRecentsWidget } = require('lib/widgetHandler.ts');
 
 const reduxSharedMiddleware = async function(store, next, action) {
 	const newState = store.getState();
@@ -79,6 +80,10 @@ const reduxSharedMiddleware = async function(store, next, action) {
 
 	if (mustAutoAddResources) {
 		ResourceFetcher.instance().autoAddResources();
+	}
+
+	if (action.type === 'NOTE_DELETE') {
+		removeNoteFromRecentsWidget(action.id);
 	}
 
 	if (refreshTags) {
