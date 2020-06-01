@@ -149,34 +149,35 @@ class OneDriveApi {
 			const chunkSize = 7864320;
 			const numberOfChunks = Math.ceil(options.fileSize / chunkSize);
 			const handle = await shim.fsDriver().open(options.path, 'r');
-			// TODO: muss das auch geschlossen werden??
 			for (let i = 0; i < numberOfChunks; i++) {
 				const startByte = i * chunkSize;
 				let endByte = null;
+				let contentLength = null;
 				if (i == numberOfChunks - 1) {
 					// Last fragment. It is not ensured that the last fragment is a multiple of 327,680 bytes as recommanded in the api doc. The reasons is that the docs are out of day for this purpose: https://github.com/OneDrive/onedrive-api-docs/issues/1200#issuecomment-597281253
 					endByte = options.fileSize - 1;
-					options.contentLength = options.fileSize - ((numberOfChunks - 1) * chunkSize);
+					contentLength = options.fileSize - ((numberOfChunks - 1) * chunkSize);
 				} else {
 					endByte = (i + 1) * chunkSize - 1;
-					options.contentLength = chunkSize;
+					contentLength = chunkSize;
 				}
 				this.logger().info(`${options.path}: Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(options.fileSize / 1048576).toFixed(2)} Mbit ...`);
-				['path', 'filesize', 'filetype'].forEach(e => delete options[e]);
-				options.headers = {
-					'Content-Length': options.contentLength,
+				const headers = {
+					'Content-Length': contentLength,
 					'Content-Range': `bytes ${startByte}-${endByte}/${options.fileSize}`,
 					'Content-Type': 'application/octet-stream; charset=utf-8',
 				};
 
-				const response = await shim.uploadChunk(uploadUrl, handle, options);
+				const response = await shim.uploadChunk(uploadUrl, handle, { contentLength: contentLength, method: 'PUT', headers: headers });
 
 				if (response.ok) {
 					this.logger().info(`${options.path}: ${(endByte / 1048576).toFixed(2)} from ${(options.fileSize / 1048576).toFixed(2)} Mbit have been uploaded`);
 				} else {
+					await shim.fsDriver().close(handle);
 					return response;
 				}
 			}
+			await shim.fsDriver().close(handle);
 			return { ok: true };
 		}
 	}

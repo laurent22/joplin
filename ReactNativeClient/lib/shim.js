@@ -161,15 +161,15 @@ shim.uploadBlob = () => {
 	throw new Error('Not implemented');
 };
 
-shim.uploadChunk = () => {
-	throw new Error('Not implemented');
-};
-
-
 shim.uploadChunk = async function(url, handle, options) {
-	// TODO: Check if Handle, url and options.contentLength are givend
+
+	if (!options.method) { options.method = 'POST'; }
+	if (!options.headers) { options.headers = {}; }
+
+	if (!options.contentLength) throw new Error(' uploadChunk: contentLength is missing');
+
 	const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
-	const Buffer = require('buffer').Buffer; // TODO: necessary?
+	const Buffer = require('buffer').Buffer;
 	const buffer = Buffer.from(chunk, 'base64');
 	delete options.contentLength;
 	options.body = buffer;
