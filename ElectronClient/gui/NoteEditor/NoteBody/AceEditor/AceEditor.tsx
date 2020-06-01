@@ -477,6 +477,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		};
 	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
 
+	useEffect(() => {
+		// We disable dragging ot text because it's not really supported, and
+		// can lead to data loss: https://github.com/laurent22/joplin/issues/3302
+		if (editor) editor.setOption('dragEnabled', false);
+	}, [editor]);
+
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
 	}, []);
