@@ -1522,7 +1522,7 @@ msgstr "Schlagwörter hinzufügen oder entfernen:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
 msgid "Move to notebook:"
-msgstr "In Notizbuch verschieben:"
+msgstr "Verschiebe in das Notizbuch:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
 msgid "Rename notebook:"
@@ -2003,9 +2003,8 @@ msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "In Notizbuch verschieben..."
+msgstr "Verschiebe in das Notizbuch"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
