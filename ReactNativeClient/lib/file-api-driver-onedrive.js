@@ -1,6 +1,6 @@
 const moment = require('moment');
 const { dirname, basename } = require('lib/path-utils.js');
-const { shim } = require('lib/shim.js'); // TODO: kann es sein, dass shim vom Objekt api, welches im Konstruktor übergeben ist, verwendet wird? Dann besser in der API Klasse fileSize abfragen (ist api onedrive-api?)
+const { shim } = require('lib/shim.js');
 
 class FileApiDriverOneDrive {
 	constructor(api) {
