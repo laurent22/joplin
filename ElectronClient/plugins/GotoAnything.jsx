@@ -9,7 +9,7 @@ const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords, nextWhitespaceIndex } = require('lib/string-utils.js');
+const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -234,8 +234,10 @@ class Dialog extends React.PureComponent {
 								const body = notesById[row.id];
 
 								// Iterate over all matches in the body for each search keyword
-								for (const { valueRegex } of searchKeywords) {
-									for (const match of body.matchAll(new RegExp(valueRegex, 'ig'))) {
+								for (let { valueRegex } of searchKeywords) {
+									valueRegex = removeDiacritics(valueRegex);
+
+									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
 										// Populate 'indices' with [begin index, end index] of each note fragment
 										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
 										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);

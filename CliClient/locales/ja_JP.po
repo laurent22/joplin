@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -209,14 +211,16 @@ msgstr ""
 "のでお待ちください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "復号済み（非暗号化）アイテム: %s/%s"
+msgstr "復号済み（非暗号化）アイテム: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"スキップされたアイテム: %d (再度復号化を試みるには--retry-failed-itemsオプ"
+"ションを使用してください)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -780,9 +784,9 @@ msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "マスターキーをアップグレードできませんでした: %s"
+msgstr "ノートをエクスポートできませんでした: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
@@ -919,7 +923,7 @@ msgstr "OK"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:709
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:792
 msgid "&File"
-msgstr "&ファイル"
+msgstr "ファイル(&F)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:715
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1140
@@ -974,7 +978,7 @@ msgstr "ウィンドウを閉じる"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
 msgid "&Edit"
-msgstr "&編集"
+msgstr "編集(&E)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
 msgid "Cut"
@@ -1022,7 +1026,7 @@ msgstr "現在のノートを検索"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
 msgid "&View"
-msgstr "&表示"
+msgstr "表示(&V)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:949
 msgid "Toggle sidebar"
@@ -1058,9 +1062,8 @@ msgid "Zoom Out"
 msgstr "ズームアウト"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
-#, fuzzy
 msgid "&Note"
-msgstr "ノート"
+msgstr "ノート(&N)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1065
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1801
@@ -1080,15 +1083,15 @@ msgstr "タグ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
 msgid "Statistics..."
-msgstr ""
+msgstr "統計..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
-msgstr "&ツール"
+msgstr "ツール(&T)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1106
 msgid "&Help"
-msgstr "&ヘルプ"
+msgstr "ヘルプ(&H)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1109
 msgid "Website and documentation"
@@ -1542,12 +1545,11 @@ msgstr "閉じる"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
-msgstr ""
+msgstr "任意順"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
-#, fuzzy
 msgid "View"
-msgstr "&表示"
+msgstr "表示"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
@@ -1560,11 +1562,12 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切"
+"り替えてください (メニューバーの \"%s\" > \"%s\" から選択)。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "Do it now"
-msgstr "今すぐ取得:"
+msgstr "今すぐ実行"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -2227,7 +2230,7 @@ msgstr "作成日"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "任意順"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -2396,15 +2399,15 @@ msgstr "テーマ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "システムのテーマにあわせて自動設定"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
-msgstr ""
+msgstr "優先ライトテーマ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "優先ダークテーマ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
@@ -2738,7 +2741,7 @@ msgstr "ノート履歴の保存期間"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "ノートブック一覧のストレッチ係数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
@@ -2749,14 +2752,17 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"ストレッチ係数プロパティは表示項目間のサイズ比を指定するために使います。たと"
+"えば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の変"
+"更はアプリケーションの再起動後に反映されます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
 msgid "Note list growth factor"
-msgstr ""
+msgstr "ノート一覧のストレッチ係数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
 msgid "Note area growth factor"
-msgstr ""
+msgstr "ノートエリアのストレッチ係数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format
