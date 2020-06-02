@@ -58,6 +58,7 @@ ElectronClient/gui/NoteEditor/NoteBody/AceEditor/styles/index.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/index.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/types.js
+ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/useFocus.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Editor.js

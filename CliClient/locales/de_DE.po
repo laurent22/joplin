@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -223,6 +225,8 @@ msgstr "Entschlüsselte Objekte: %s / %s"
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Übersprungene Objekte: %d (benutze --retry-failed-items um erneut eine "
+"Entschlüsselung zu versuchen)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -808,9 +812,9 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportiere „%s“ ins „%s“-Format. Bitte warten..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Konnte Hauptschlüssel nicht exportieren: %s"
+msgstr "Konnte Notizen nicht exportieren: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
@@ -893,9 +897,8 @@ msgid "Options"
 msgstr "Optionen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Anhänge"
+msgstr "Anhänge..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
 #, javascript-format
@@ -1108,7 +1111,7 @@ msgstr "Schlagwörter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
 msgid "Statistics..."
-msgstr ""
+msgstr "Statistik..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
@@ -1518,9 +1521,8 @@ msgid "Add or remove tags:"
 msgstr "Schlagwörter hinzufügen oder entfernen:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "In Notizbuch verschieben..."
+msgstr "Verschiebe in das Notizbuch:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
 msgid "Rename notebook:"
@@ -1579,7 +1581,7 @@ msgstr "Schliessen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
-msgstr ""
+msgstr "Benutzerdefinierte Reihenfolge"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #, fuzzy
@@ -1591,12 +1593,15 @@ msgstr "&Ansicht"
 msgid "Sort notes by"
 msgstr "Sortiere Notizen nach"
 
+# I am not sure how the %s are filled. In the German translation the order of Strings is different than in the original English version.
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Um die Notizen manuell zu sortieren, muss die Sortierreihenfolge im Menü "
+"\"% s\"> \"% s\" in \"% s\" geändert werden."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
 #, fuzzy
@@ -1849,9 +1854,9 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Notiz \"%s\" löschen?"
+msgstr "Anhang \"%s\" löschen?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1985,9 +1990,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "Erneut versuchen"
+msgstr "Erneut alle versuchen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1999,9 +2003,8 @@ msgid "Add or remove tags"
 msgstr "Schlagwörter hinzufügen oder entfernen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "In Notizbuch verschieben..."
+msgstr "Verschiebe in das Notizbuch"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
@@ -2284,7 +2287,7 @@ msgstr "Erstelldatum"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "Benutzerdefinierte Reihenfolge"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -2454,17 +2457,23 @@ msgstr "Zeitformat"
 msgid "Theme"
 msgstr "Thema"
 
+# Thema vs Theme
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, fuzzy
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Automatisch das Theme ändern um es dem System-Theme anzupassen"
 
+# Thema vs Theme
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+#, fuzzy
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Bevorzugtes helles Theme"
 
+# Thema vs Theme
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+#, fuzzy
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Bevorzugtes dunkles Theme"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
@@ -2803,7 +2812,7 @@ msgstr "Speicher Notizen-Verlauf für"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Notizbuch Listenwachstumsfaktor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
@@ -2814,14 +2823,19 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Die Faktor-Eigenschaft legt fest, wie der Artikel wächst oder schrumpft, um "
+"dem verfügbaren Platz in seinem Container in Bezug auf die anderen Artikel "
+"zu entsprechen. Ein Element mit dem Faktor 2 benötigt also doppelt so viel "
+"Platz wie ein Element mit dem Faktor 1. Starten Sie die App neu, um "
+"Änderungen zu sehen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Notiz Listenwachstumsfaktor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Notiz Flächenwachstumsfaktor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format

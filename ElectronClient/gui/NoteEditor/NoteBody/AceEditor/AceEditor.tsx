@@ -7,6 +7,7 @@ import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceH
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
 import useListIdent from './utils/useListIdent';
+import useFocus from './utils/useFocus';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -431,6 +432,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			cancelledKeys.push(`Command+${l}`);
 		}
 		cancelledKeys.push('Alt+E');
+		cancelledKeys.push('Command+Shift+L');
+		cancelledKeys.push('Ctrl+Shift+L');
 
 		for (let i = 0; i < cancelledKeys.length; i++) {
 			const k = cancelledKeys[i];
@@ -473,6 +476,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
 	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
+
+	useEffect(() => {
+		// We disable dragging ot text because it's not really supported, and
+		// can lead to data loss: https://github.com/laurent22/joplin/issues/3302
+		if (editor) editor.setOption('dragEnabled', false);
+	}, [editor]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -544,6 +553,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, [props.searchMarkers, renderedBody]);
 
+	const { focused, onBlur, onFocus } = useFocus();
+
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
@@ -591,7 +602,9 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<AceEditorReact
 					value={props.content}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
-					theme={styles.editor.aceEditorTheme}
+					theme={styles.editor.editorTheme}
+					onFocus={onFocus}
+					onBlur={onBlur}
 					style={styles.editor}
 					width={`${width}px`}
 					fontSize={styles.editor.fontSize}
@@ -641,6 +654,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					theme={props.theme}
 					dispatch={props.dispatch}
+					disabled={!focused}
 				/>
 				{props.noteToolbar}
 			</div>

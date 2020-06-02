@@ -7,6 +7,7 @@ const { buildStyle, themeStyle } = require('../../../../theme.js');
 interface ToolbarProps {
 	theme: number,
 	dispatch: Function,
+	disabled: boolean,
 }
 
 function styles_(props:ToolbarProps) {
@@ -164,5 +165,5 @@ export default function Toolbar(props:ToolbarProps) {
 		return toolbarItems;
 	}
 
-	return <ToolbarBase style={styles.root} items={createToolbarItems()} />;
+	return <ToolbarBase disabled={props.disabled} style={styles.root} items={createToolbarItems()} />;
 }
