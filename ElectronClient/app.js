@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const MasterKey = require('lib/models/MasterKey');
 const Note = require('lib/models/Note');
+const Folder = require('lib/models/Folder');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { _, setLocale } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
@@ -58,6 +59,8 @@ class Application extends BaseApplication {
 	constructor() {
 		super();
 		this.lastMenuScreen_ = null;
+
+		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 	}
 
 	hasGui() {
@@ -306,9 +309,27 @@ class Application extends BaseApplication {
 			mustUpdateMenuItemStates = true;
 		}
 
+		if (action.type === 'FOLDER_AND_NOTE_SELECT') {
+			await Folder.expandTree(newState.folders, action.folderId);
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type == 'SETTING_UPDATE_ALL')) {
+			this.handleThemeAutoDetect();
+		}
+
 		if (mustUpdateMenuItemStates) this.updateMenuItemStates(newState);
 
 		return result;
+	}
+
+	handleThemeAutoDetect() {
+		if (!Setting.value('themeAutoDetect')) return;
+
+		if (bridge().shouldUseDarkColors()) {
+			Setting.setValue('theme', Setting.value('preferredDarkTheme'));
+		} else {
+			Setting.setValue('theme', Setting.value('preferredLightTheme'));
+		}
 	}
 
 	async refreshMenu() {
@@ -348,6 +369,7 @@ class Application extends BaseApplication {
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
+				id: `sort:${type}:reverse`,
 				label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
 				type: 'checkbox',
 				checked: Setting.value(`${type}.sortOrder.reverse`),
@@ -1255,8 +1277,15 @@ class Application extends BaseApplication {
 			menuItem.enabled = selectedNoteIds.length === 1;
 		}
 
+		const sortNoteReverseItem = Menu.getApplicationMenu().getMenuItemById('sort:notes:reverse');
+		sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
+
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
+	}
+
+	bridge_nativeThemeUpdated() {
+		this.handleThemeAutoDetect();
 	}
 
 	updateTray() {
@@ -1485,6 +1514,8 @@ class Application extends BaseApplication {
 		window.revisionService = RevisionService.instance();
 		window.migrationService = MigrationService.instance();
 		window.decryptionWorker = DecryptionWorker.instance();
+
+		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 	}
 
 }

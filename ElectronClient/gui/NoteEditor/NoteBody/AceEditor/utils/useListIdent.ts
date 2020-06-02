@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
+import { selectionRange } from './index';
 
 interface HookDependencies {
 	editor: any,
-	selectionRangeRef: any,
 }
 
 export default function useListIdent(dependencies:HookDependencies) {
-	const { editor, selectionRangeRef } = dependencies;
+	const { editor } = dependencies;
 
 	useEffect(() => {
 		if (!editor) return;
@@ -17,7 +17,7 @@ export default function useListIdent(dependencies:HookDependencies) {
 		const originalEditorIndent = editor.indent;
 
 		editor.indent = function() {
-			const range = selectionRangeRef.current;
+			const range = selectionRange(editor);
 			if (range.isEmpty()) {
 				const row = range.start.row;
 				const tokens = this.session.getTokens(row);

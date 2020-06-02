@@ -78,6 +78,7 @@
     "react-native-webview": "^5.12.0",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
+    "remove-markdown": "^0.3.0",
     "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "stream": "0.0.2",

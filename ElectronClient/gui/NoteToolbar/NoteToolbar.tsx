@@ -15,7 +15,6 @@ interface ButtonClickEvent {
 interface NoteToolbarProps {
 	theme: number,
 	style: any,
-	selectedFolderId: string,
 	folders: any[],
 	watchedNoteFiles: string[],
 	backwardHistoryNotes: any[],
@@ -38,12 +37,12 @@ function styles_(props:NoteToolbarProps) {
 }
 
 function useToolbarItems(props:NoteToolbarProps) {
-	const { note, selectedFolderId, folders, watchedNoteFiles, notesParentType, dispatch
+	const { note, folders, watchedNoteFiles, notesParentType, dispatch
 		, onButtonClick, backwardHistoryNotes, forwardHistoryNotes } = props;
 
 	const toolbarItems = [];
 
-	const folder = Folder.byId(folders, selectedFolderId);
+	const selectedNoteFolder = Folder.byId(folders, note.parent_id);
 
 	toolbarItems.push({
 		tooltip: _('Back'),
@@ -69,62 +68,18 @@ function useToolbarItems(props:NoteToolbarProps) {
 		},
 	});
 
-	if (folder && ['Search', 'Tag', 'SmartFilter'].includes(notesParentType)) {
+	if (selectedNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(notesParentType)) {
 		toolbarItems.push({
-			title: _('In: %s', substrWithEllipsis(folder.title, 0, 16)),
+			title: _('In: %s', substrWithEllipsis(selectedNoteFolder.title, 0, 16)),
 			iconName: 'fa-book',
 			onClick: () => {
 				props.dispatch({
 					type: 'FOLDER_AND_NOTE_SELECT',
-					folderId: folder.id,
+					folderId: selectedNoteFolder.id,
 					noteId: note.id,
 				});
-				Folder.expandTree(folders, folder.parent_id);
 			},
 		});
-	}
-
-	if (watchedNoteFiles.indexOf(note.id) >= 0) {
-		toolbarItems.push({
-			tooltip: _('Click to stop external editing'),
-			title: _('Watching...'),
-			iconName: 'fa-external-link',
-			onClick: () => {
-				onButtonClick({ name: 'stopExternalEditing' });
-			},
-		});
-	} else {
-		toolbarItems.push({
-			tooltip: _('Edit in external editor'),
-			iconName: 'fa-external-link',
-			onClick: () => {
-				onButtonClick({ name: 'startExternalEditing' });
-			},
-		});
-	}
-
-	toolbarItems.push({
-		tooltip: _('Tags'),
-		iconName: 'fa-tags',
-		onClick: () => {
-			onButtonClick({ name: 'setTags' });
-		},
-	});
-
-	if (note.is_todo) {
-		const item:any = {
-			iconName: 'fa-clock-o',
-			enabled: !note.todo_completed,
-			onClick: () => {
-				onButtonClick({ name: 'setAlarm' });
-			},
-		};
-		if (Note.needAlarm(note)) {
-			item.title = time.formatMsToLocal(note.todo_due);
-		} else {
-			item.tooltip = _('Set alarm');
-		}
-		toolbarItems.push(item);
 	}
 
 	toolbarItems.push({
@@ -142,6 +97,49 @@ function useToolbarItems(props:NoteToolbarProps) {
 		},
 	});
 
+	if (watchedNoteFiles.indexOf(note.id) >= 0) {
+		toolbarItems.push({
+			tooltip: _('Click to stop external editing'),
+			title: _('Watching...'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'stopExternalEditing' });
+			},
+		});
+	} else {
+		toolbarItems.push({
+			tooltip: _('Edit in external editor'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'startExternalEditing' });
+			},
+		});
+	}
+
+	if (note.is_todo) {
+		const item:any = {
+			iconName: 'fa-clock',
+			enabled: !note.todo_completed,
+			onClick: () => {
+				onButtonClick({ name: 'setAlarm' });
+			},
+		};
+		if (Note.needAlarm(note)) {
+			item.title = time.formatMsToLocal(note.todo_due);
+		} else {
+			item.tooltip = _('Set alarm');
+		}
+		toolbarItems.push(item);
+	}
+
+	toolbarItems.push({
+		tooltip: _('Tags'),
+		iconName: 'fa-tags',
+		onClick: () => {
+			onButtonClick({ name: 'setTags' });
+		},
+	});
+
 	return toolbarItems;
 }
 
@@ -153,7 +151,6 @@ function NoteToolbar(props:NoteToolbarProps) {
 
 const mapStateToProps = (state:any) => {
 	return {
-		selectedFolderId: state.selectedFolderId,
 		folders: state.folders,
 		watchedNoteFiles: state.watchedNoteFiles,
 		backwardHistoryNotes: state.backwardHistoryNotes,

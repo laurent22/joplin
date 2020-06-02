@@ -52,7 +52,7 @@ pluginAssets[2] = function(theme:any) {
 
 				ul.joplin-checklist li::before {
 					content:"\\f14a";
-					font-family:ForkAwesome;
+					font-family:"Font Awesome 5 Free";
 					background-size: 16px 16px;
 					pointer-events: all;
 					cursor: pointer;

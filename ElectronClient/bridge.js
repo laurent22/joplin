@@ -1,6 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, nativeTheme } = require('electron');
 
 class Bridge {
 
@@ -168,6 +168,18 @@ class Bridge {
 
 	screen() {
 		return require('electron').screen;
+	}
+
+	shouldUseDarkColors() {
+		return nativeTheme.shouldUseDarkColors;
+	}
+
+	addEventListener(name, fn) {
+		if (name === 'nativeThemeUpdated') {
+			nativeTheme.on('updated', fn);
+		} else {
+			throw new Error(`Unsupported event: ${name}`);
+		}
 	}
 
 }

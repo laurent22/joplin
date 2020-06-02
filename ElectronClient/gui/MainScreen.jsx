@@ -139,11 +139,15 @@ class MainScreenComponent extends React.Component {
 
 			const body = template ? TemplateUtils.render(template) : '';
 
-			const newNote = await Note.save({
+			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
+
+			let newNote = Object.assign({}, defaultValues, {
 				parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
 				body: body,
-			}, { provisional: true });
+			});
+
+			newNote = await Note.save(newNote, { provisional: true });
 
 			this.props.dispatch({
 				type: 'NOTE_SELECT',
@@ -785,7 +789,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'fa-file',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
@@ -794,7 +798,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'fa-check-square',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newTodo' });
@@ -811,7 +815,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Code View'),
-			iconName: 'fa-file-code-o ',
+			iconName: 'fa-file-code ',
 			enabled: !!notes.length,
 			type: 'checkbox',
 			checked: this.props.settingEditorCodeView,

@@ -1,4 +1,6 @@
 const aritimStyle = {
+	appearance: 'dark',
+
 	backgroundColor: '#10151a', // Main background color
 	backgroundColorTransparent: 'rgba(16, 21, 26, 0.9)', //
 	oddBackgroundColor: '#141a21',

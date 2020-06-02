@@ -322,7 +322,7 @@ class NotePropertiesDialog extends React.Component {
 		if (editCompHandler) {
 			editComp = (
 				<a href="#" onClick={editCompHandler} style={styles.editPropertyButton}>
-					<i className={`fa ${editCompIcon}`} aria-hidden="true"></i>
+					<i className={`fas ${editCompIcon}`} aria-hidden="true"></i>
 				</a>
 			);
 		}

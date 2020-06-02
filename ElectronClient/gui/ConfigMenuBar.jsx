@@ -10,7 +10,7 @@ function ConfigMenuBarButton(props) {
 
 	return (
 		<button style={style.button} onClick={props.onClick}>
-			<i style={iconStyle} className={`fa ${props.iconName}`}></i>
+			<i style={iconStyle} className={props.iconName}></i>
 			<span style={labelStyle}>{props.label}</span>
 		</button>
 	);
