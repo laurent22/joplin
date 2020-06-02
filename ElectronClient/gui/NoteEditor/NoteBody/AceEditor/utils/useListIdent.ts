@@ -122,9 +122,57 @@ export default function useListIdent(dependencies: HookDependencies) {
 			readonly: false,
 		});
 
+		// Delete a list markup (e.g. `- `) from an empty list item on hitting Enter.
+		// (https://github.com/laurent22/joplin/pull/2772)
+		editor.commands.addCommand({
+			name: 'markdownEnter',
+			bindKey: 'Enter',
+			multiSelectAction: 'forEach',
+			exec: function(editor: any) {
+				const range = editor.getSelectionRange();
+				const tokens = listTokens(editor, range.start.row);
+
+				const emptyListItem =
+					tokens.length === 1 || hyphenEmptyListItem(tokens);
+				const emptyCheckboxItem =
+					tokens.length === 3 &&
+					['[ ]', '[x]'].includes(tokens[1].value) &&
+					tokens[2].value === ' ';
+
+				if (!range.isEmpty() || !(emptyListItem || emptyCheckboxItem)) {
+					editor.insert('\n');
+					// Cursor can go out of the view after inserting '\n'.
+					editor.renderer.scrollCursorIntoView();
+					return;
+				}
+
+				const row = range.start.row;
+				const line = editor.session.getLine(row);
+				let indent = editor
+					.getSession()
+					.getMode()
+					.getNextLineIndent(null, line);
+				if (indent.startsWith('\t')) {
+					indent = indent.slice(1);
+				} else {
+					indent = '';
+				}
+
+				editor.session.replace(
+					{
+						start: { row, column: 0 },
+						end: { row, column: line.length },
+					},
+					indent
+				);
+			},
+			readOnly: false,
+		});
+
 		return () => {
 			editor.indent = originalEditorIndent;
 			editor.commands.removeCommand('markdownOutdent');
+			editor.commands.removeCommand('markdownEnter');
 		};
 	}, [editor]);
 }
