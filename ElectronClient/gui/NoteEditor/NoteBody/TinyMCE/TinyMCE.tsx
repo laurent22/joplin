@@ -765,8 +765,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		const loadContent = async () => {
 			if (lastOnChangeEventInfo.current.content !== props.content || lastOnChangeEventInfo.current.resourceInfos !== props.resourceInfos) {
-				console.info('RELOAD CONTENT');
-
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
 
