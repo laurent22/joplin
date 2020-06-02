@@ -132,15 +132,8 @@ class FileApiDriverOneDrive {
 
 		if (options.source == 'file') {
 			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
-			const fileSize = await shim.fsDriver().fileSize(options.path);
-			if (fileSize < 4194304) {
-				path = `${this.makePath_(path)}:/content`;
-				options.fileType = 'small';
-			} else {
-				path = `${this.makePath_(path)}:/createUploadSession`;
-				options.fileType = 'big';
-				options.fileSize = fileSize;
-			}
+			const fileSize = (await shim.fsDriver().stat(options.path)).size;
+			path = fileSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
 			response = await this.api_.exec('PUT', path, null, null, options);
 		} else {
 			options.headers = { 'Content-Type': 'text/plain' };

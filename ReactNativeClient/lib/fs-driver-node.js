@@ -188,10 +188,6 @@ class FsDriverNode extends FsDriverBase {
 		if (encoding === 'ascii') return buffer.toString('ascii');
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
-
-	fileSize(filepath) {
-		return fs.statSync(filepath)['size'];
-	}
 }
 
 module.exports.FsDriverNode = FsDriverNode;
