@@ -1549,7 +1549,7 @@ msgstr "任意順"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 msgid "View"
-msgstr "表示(&V)"
+msgstr "表示"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
