@@ -7,40 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Fathy AR <16875937+fathyar@users.noreply.github.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
-msgstr "Untuk menghapus tag, Hapus tag catatan yang terkait."
+msgstr "Untuk menghapus sebuah label, hapus label dari catatan terkait."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:456
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Silakan pilih catatan atau notebook yang akan dihapus terlebih dahulu."
+msgstr ""
+"Silakan pilih catatan atau buku catatan yang akan dihapus terlebih dahulu."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr ""
-"Tekan Ctrl + D atau dengan mengetik “Keluar” untuk keluar dari aplikasi"
+msgstr "Tekan Ctrl+D atau ketik \"exit\" untuk keluar dari aplikasi"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Lebih dari satu item cocok \" %s\". Silakan dipersempit kueri anda."
+msgstr ""
+"Lebih dari satu item cocok dengan \"%s\". Silakan persempit kueri Anda."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
-msgstr "Tidak ada notebook yang terpilih."
+msgstr "Tidak ada buku catatan yang terpilih."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
 msgid "No notebook has been specified."
-msgstr "Tidak ada notebook yang ditentukan."
+msgstr "Belum ada buku catatan yang ditentukan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
@@ -62,21 +65,21 @@ msgstr "y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Menunda proses sinkronisasi pada belakang layar… Mohon ditunggu."
+msgstr "Membatalkan proses sinkronisasi latar belakang... Mohon tunggu."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
 #, javascript-format
 msgid "No such command: %s"
-msgstr "Tidak ada perintah semacam itu: %s"
+msgstr "Tidak ada perintah semacam ini: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Perintah “%s” hanya tersedia pada mode GUI"
+msgstr "Perintah \"%s\" hanya tersedia dalam mode GUI"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
-msgstr "Tidak dapat merubah item yang terenkripsi"
+msgstr "Tidak dapat mengubah item yang terenkripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
 #, javascript-format
@@ -91,16 +94,16 @@ msgstr "%s: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
 msgid "Your choice: "
-msgstr "Pilihanmu: "
+msgstr "Pilihan Anda: "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "Jawaban salah: %s"
+msgstr "Jawaban tidak valid: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
-msgstr "Lampirkan file yang ditujukan ke catatan."
+msgstr "Melampirkan berkas yang dipilih ke catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:25
@@ -131,15 +134,15 @@ msgstr "Lampirkan file yang ditujukan ke catatan."
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "Tidak menemukan “%s”."
+msgstr "Tidak dapat menemukan \"%s\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:14
 msgid "Displays the given note."
-msgstr "Memnampilkan catatan yang diberikan."
+msgstr "Menampilkan catatan yang dipilih."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:18
 msgid "Displays the complete information about note."
-msgstr "Menampilkan seluruh informasi tentang catatan."
+msgstr "Menampilkan informasi lengkap tentang catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
 msgid ""
@@ -147,15 +150,15 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Mengambil atau memberikan nilai pada nilai konfigurasi. ketika [nilai]  "
-"tidak tesedia, maka akan menampilkan nilai dari [nama]. Jika [nama] maupun "
-"[nilai] tidak juga tersedia makan akan menampilkan daftar konfigurasi saat "
+"Mendapatkan atau menyetel nilai konfigurasi. Jika [value] (nilai) tidak "
+"tersedia, maka akan menampilkan nilai dari [name] (nama). Jika [name] maupun "
+"[value] tidak tersedia juga, maka akan menampilkan daftar konfigurasi saat "
 "ini."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
 msgstr ""
-"Juga menampilkan yang belum terkonfigurasi dan konfigurasi variabel yang "
+"Juga menampilkan variabel konfigurasi yang belum disetel dan yang "
 "tersembunyi."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
@@ -173,31 +176,31 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Menduplikasi catatan yang sesuai dengan <note> ke [notebook]. Jika tidak ada "
-"notebook secara spesifik makan catatan akan di duplikasikan ke notebook yang "
-"saat ini aktif."
+"Menduplikasi catatan yang sesuai dengan <note> (catatan) ke [notebook] (buku "
+"catatan). Jika tidak ada buku catatan yang ditentukan maka catatan akan "
+"diduplikasi ke buku catatan saat ini."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
-msgstr "Tandai to-do menjadi selesai (done)."
+msgstr "Tandai tugas telah selesai."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Catatan bukan sebuah to-do: “%s”"
+msgstr "Catatan bukan sebuah tugas: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Mengolah konfigurasi E2EE. Terdapat beberapa perintah yaitu `enable`, "
+"Mengelola konfigurasi E2EE. Terdapat beberapa perintah yaitu `enable`, "
 "`disable`, `decrypt`, `status`, `decrypt-file` dan `target-status`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:36
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
-msgstr "Masukkan sandi master:"
+msgstr "Masukkan kata sandi master:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:38
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:74
@@ -210,18 +213,20 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Sedang memulai dekripsi… Mohon ditunggu beberapa saat, akan memakan beberapa "
-"menit dikarenakan bergantung seberapa besar yang akan di dekripsi."
+"Memulai dekripsi… Mohon tunggu beberapa saat, kemungkinan proses akan "
+"memakan waktu beberapa menit tergantung seberapa besar yang akan didekripsi."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Item yang didekripsi: %s / %s"
+msgstr "Item terdekripsi: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Item yang dilewati: %d (gunakan --retry-failed-items untuk mencoba "
+"mendekripsinya lagi)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -230,12 +235,12 @@ msgstr "Proses dekripsi selesai."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:77
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:163
 msgid "Confirm password:"
-msgstr "Konfirmasi sandi:"
+msgstr "Konfirmasi kata sandi:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:83
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
-msgstr "Sandi tidak cocok!"
+msgstr "Kata sandi tidak cocok!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
@@ -248,13 +253,13 @@ msgstr "Diaktifkan"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:548
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
-msgstr "Dimatikan"
+msgstr "Dinonaktifkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "Enkripsinya adalah: %s"
+msgstr "Enkripsi adalah: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
 msgid "Edit note."
@@ -264,17 +269,17 @@ msgstr "Ubah catatan."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Tidak ada teks editor yang di atur.  Untuk mengaturnya dapat menggunakan "
-"`config editor <editor-path>`"
+"Tidak ada editor teks yang diatur. Silakan setel menggunakan `config editor "
+"<editor-path>`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
-msgstr "Tidak ada notebook yang aktif."
+msgstr "Tidak ada buku catatan yang aktif."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Catatan tidak tersedia: “%s”. Buat?"
+msgstr "Catatan tidak ada: \"%s\". Buat?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
 msgid "Exits the application."
@@ -285,8 +290,9 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Ekspor data Joplin dengan memberikan alamat. Umumnya, itu akan mengekspor "
-"database termasuk notebooks, notes, tags dan resources."
+"Mengekspor data Joplin ke alamat direktori yang diberikan. Secara otomatis, "
+"ini akan mengekspor basis data lengkap termasuk buku catatan, catatan, label "
+"dan sumber daya."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 #, javascript-format
@@ -303,33 +309,34 @@ msgstr "Mengekspor hanya buku catatan yang diberikan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Menampilkan alamat URL geolokasi untuk catatan."
+msgstr "Menampilkan URL geolokasi untuk catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
 msgid "Displays usage information."
-msgstr "Menampilkan penggunaan informasi."
+msgstr "Menampilkan informasi penggunaan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
-"Untuk informasi bagaimana cara mengkustom pintasan dapat mengunjungi %s"
+"Untuk informasi tentang bagaimana cara personalisasi pintasan silakan "
+"kunjungi %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Pintasan tidak tersedia di mode CLI."
+msgstr "Pintasan tidak tersedia dalam mode CLI."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Ketik `help [command]` untuk informasi lanjutan dari perintah ; atau "
-"mengetik `help all` untuk penggunaan secara lengkap."
+"Ketik `help [command]` untuk informasi lanjutan tentang sebuah perintah "
+"(command); atau ketik `help all` untuk informasi penggunaan secara lengkap."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
 msgid "The possible commands are:"
-msgstr "Perintah yang memungkinkan adalah:"
+msgstr "Perintah yang mungkin adalah:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
 msgid ""
@@ -337,44 +344,46 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"Di sebagian perintah, catatan atau buku catatan dapat mengacu pada title "
-"atau ID bisa juga menggunakan pintasan seperti  `$n` atau `$b`,  yang sedang "
-"terpilih. `$c` dapat mengacu pada item yang saat ini terpilih sedang aktif."
+"Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul "
+"atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan "
+"atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk "
+"pada item yang saat ini terpilih."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Untuk pindah dari 1 layar ke layar lain, menekan Tab atau Shift+Tab."
+msgstr ""
+"Untuk berpindah dari suatu panel ke panel lainnya, tekan Tab atau Shift+Tab."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Gunakan tanda panah atas dab bawah untuk melakukan skroll dari listing dan "
-"teks area (termasuk konsol ini)."
+"Gunakan tombol tanda panah dan tombol page up/down pada keyboard untuk "
+"menggulir daftar dan area teks (termasuk konsol ini)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Untuk memperbesar/ memperkecil layar konsol, tekan “tc”."
+msgstr "Untuk memperbesar/memperkecil layar konsol, tekan \"tc\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "Untuk masuk mode CLI, tekan “:”"
+msgstr "Untuk masuk mode CLI, tekan \":\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Untuk keluar dar mode CLI, tekan ESCAPE"
+msgstr "Untuk keluar dari mode CLI, tekan ESCAPE"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Untuk melihat daftar pintasan keyboard dan pilihan konfigurasi tekan `help "
+"Untuk melihat daftar pintasan keyboard dan opsi konfigurasi, ketik `help "
 "keymap`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
-msgstr "Impor data ke Joplin."
+msgstr "Mengimpor data ke Joplin."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
 #, javascript-format
@@ -413,23 +422,23 @@ msgstr "Dilewati: %d."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
-msgstr "Sumber: %d."
+msgstr "Sumber daya: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Ditandai: %d."
+msgstr "Diberi label: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
 msgid "Importing notes..."
-msgstr "Mengimpor catatan…."
+msgstr "Mengimpor catatan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Catatab berhasil di impor: %s"
+msgstr "Catatan telah berhasil diimpor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
 msgid ""
@@ -437,21 +446,21 @@ msgid ""
 "of notebooks."
 msgstr ""
 "Menampilkan catatan pada buku catatan saat ini. Gunakan `ls /` untuk "
-"menampilkan daftar dar buku catatan."
+"menampilkan daftar buku catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
-msgstr "Menampilkan dari catatan teratas <num>."
+msgstr "Menampilkan hanya <num> (bilangan) catatan teratas."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Mengurutkan item berdaraskan <field> (contoh. title, updated_time, "
-"created_time)."
+"Mengurutkan item berdasarkan <field> (bidang) (contoh: title (judul), "
+"updated_time (waktu diperbarui), created_time (waktu dibuat))."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
-msgstr "Membalikkan urutan dari penyortir."
+msgstr "Membalikkan urutan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:30
 msgid ""
@@ -459,14 +468,14 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Menampilkan hanya memiliki tipe yang spesifik. Dapat berupa `n` untuk "
-"catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (seperti. `-tt` "
+"Menampilkan hanya item dengan tipe-tipe tertentu. Dapat berupa `n` untuk "
+"catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
 "hanya akan menampilkan tugas, sedangkan `-ttd` akan menampilkan catatan dan "
-"tugas."
+"tugas)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
-msgstr "Diantara “text” atau “json”"
+msgstr "Antara \"text\" atau \"json\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
@@ -474,12 +483,13 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Gunakan format LONG untuk daftar. Formatnya adalah seperti berikut "
-"NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for tugas), TITLE"
+"Gunakan format daftar yang panjang. Formatnya adalah ID, NOTE_COUNT (jumlah "
+"catatan) (untuk buku catatan), DATE (tanggal), TODO_CHECKED (tugas selesai) "
+"(untuk tugas), TITLE (judul)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
-msgstr "Dimohon memilih buku catatan terlebih dahulu."
+msgstr "Silakan pilih buku catatan terlebih dahulu."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
@@ -496,16 +506,19 @@ msgstr "Catatan hanya dapat dibuat di dalam buku catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr "Membuat to-do baru."
+msgstr "Membuat tugas baru."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Memindahkan catatan yang cocok dengan <note> ke [notebook]."
+msgstr ""
+"Memindahkan catatan yang cocok dengan <note> (catatan) ke [notebook] (buku "
+"catatan)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
-"Mengganti nama yang diberikan <item> (catatan atau buku catatan) ke <nama>."
+"Mengganti nama <item> yang diberikan (catatan atau buku catatan) menjadi "
+"<name> (nama)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -513,8 +526,7 @@ msgstr "Menghapus buku catatan yang diberikan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr ""
-"Menghapus buku catatan yang diberikan dengan tanpa menanyakan konfirmasi."
+msgstr "Menghapus buku catatan tanpa meminta konfirmasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:154
@@ -522,15 +534,16 @@ msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"Hapus buku catatan? Semua catatan dan sub-buku catatan juga akan dihapus."
+"Hapus buku catatan? Semua catatan dan sub-buku catatan dalam buku catatan "
+"ini juga akan dihapus."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Hapus catatan yang cocok dengan <note-pattern>."
+msgstr "Menghapus catatan yang cocok dengan <note-pattern> (pola-catatan)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Hapus catatan dengan tanpa menayakan konfirmasi."
+msgstr "Menghapus catatan tanpa meminta konfirmasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #, javascript-format
@@ -544,7 +557,7 @@ msgstr "Hapus catatan?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Mencari <pattern> yang diberikan di semua catatan."
+msgstr "Pencarian untuk <pattern> (pola) yang diberikan di semua catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
 #, javascript-format
@@ -552,19 +565,19 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"Memulai, Menghentikan atau memeriksa server API. Untuk menentukan port mana "
-"yang harus dijalankan, atur variabel config api.port. Perintah sebagai "
-"berikut (% s)."
+"Memulai, menghentikan atau memeriksa server API. Untuk menentukan pada port "
+"mana server seharusnya berjalan, setel variabel konfigurasi api.port. "
+"Perintahnya adalah (%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "Server sedang berjalan pada port %d"
+msgstr "Server sudah berjalan pada port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "Server dijalankan pada port %d"
+msgstr "Server berjalan pada port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
@@ -579,10 +592,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Set properti <name> yang diberikan <note> ke [value] yang diberikan. "
-"Properti yang memungkin adalah:\n"
+"Menyetel properti <name> (nama) dari <note> (catatan) yang diberikan menjadi "
+"[value] (nilai) yang diberikan. Properti yang mungkin adalah:\n"
 "\n"
-"% s"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -592,25 +605,25 @@ msgstr "Menampilkan ringkasan tentang catatan dan buku catatan."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Untuk mencoba kembali dekripsi item-item. Dapat  menjalankan perintah `e2ee "
-"decrypt —retry-fail-items`"
+"Untuk mencoba kembali dekripsi item ini, jalankan perintah `e2ee decrypt --"
+"retry-failed-items`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
-msgstr "Mensinkronisasikan dengan remote storage."
+msgstr "Menyinkronkan dengan penyimpanan jarak jauh."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sinkronkan ke target yang disediakan (default untuk sync.target dari nilai "
-"konfigurasi)"
+"Sinkronkan ke target yang disediakan (secara default ke nilai konfigurasi "
+"sync.target)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Autentikasi belum selesai (tidak menerima token autentikasi)."
+msgstr "Otentikasi tidak selesai (tidak menerima token otentikasi)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
@@ -618,31 +631,33 @@ msgstr "Autentikasi belum selesai (tidak menerima token autentikasi)."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Untuk memperbolehkan Joplin mensinkronisasikan dengan Dropbox, dapat "
-"mengikuti langkah berikut:"
+"Untuk memungkinkan Joplin menyinkronkan dengan Dropbox, silakan ikuti "
+"langkah-langkah berikut:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Langkah Pertama: Buka URL ini di browser untuk melakukan autorisasi aplikasi:"
+"Langkah 1: Buka URL ini di peramban web Anda untuk memberi otorisasi pada "
+"aplikasi:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Langkah Kedua: Masukkan kode yang dikirimkan oleh Dropbox:"
+msgstr "Langkah 2: Masukkan kode yang diberikan oleh Dropbox:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
-"Tidak ada autentikasi dengan% s. Harap memberikan kredensial yang hilang."
+"Tidak dapat dilakukan otentikasi dengan %s. Harap sediakan semua kredensial "
+"yang hilang."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
-msgstr "Sinkronisasi sedang dalam proses."
+msgstr "Sinkronisasi sedang berlangsung."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
@@ -651,8 +666,9 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"File kunci sedang ditahan. Jika kamu tidak tahu tentang sinkronisasi yang "
-"terjadi, kamu dapat menghapus file kunci di “% s” dan melanjutkan operasi."
+"Berkas kunci (lock file) sedang ditahan. Jika Anda tahu bahwa tidak ada "
+"proses sinkronisasi yang terjadi, Anda dapat menghapus berkas kunci di \"%s"
+"\" dan melanjutkan operasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
@@ -661,19 +677,19 @@ msgstr "Target sinkronisasi: %s (%s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
 msgid "Cannot initialize synchroniser."
-msgstr "Tidak dapat menginisiasi sinkroniser."
+msgstr "Tidak dapat menginisiasi penyinkron."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
-msgstr "Memulai sinkronisasi…."
+msgstr "Memulai sinkronisasi..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
-msgstr "Mengunduh sumber daya…."
+msgstr "Mengunduh sumber daya..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
-msgstr "Membatalkan… Mohon ditunggu."
+msgstr "Membatalkan… Mohon tunggu."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
 msgid ""
@@ -682,16 +698,17 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> dapat berupa “tambah”, “hapus”, “daftar”, atau “pemberitahuan” "
-"untuk menetapkan atau menghapus [tag] dari [note], untuk membuat daftar "
-"catatan yang terkait dengan [tag], atau untuk daftar tag yang terkait dengan "
-"[catatan]. Perintah `tag list` dapat digunakan untuk membuat daftar semua "
-"tag (gunakan -l untuk opsi panjang)."
+"<tag-command> (perintah-label) dapat berupa \"add\", \"remove\", \"list\", "
+"atau \"notetags\" untuk menetapkan atau menghapus [tag] (label) dari [note] "
+"(catatan), untuk menampilkan daftar catatan yang terkait dengan [tag], atau "
+"untuk menampilkan daftar label yang terkait dengan [note]. Perintah `tag "
+"list` dapat digunakan untuk menampilkan daftar semua label (gunakan -l untuk "
+"opsi panjang)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Perintah tidak valid: “%s”"
+msgstr "Perintah tidak valid: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
 msgid ""
@@ -700,26 +717,27 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> dapat berupa “toggle” atau “clear”. Gunakan “toggle” untuk "
-"mengganti to-do yang diberikan antara status selesai dan tidak selesai (jika "
-"target adalah not reguler, itu akan dikonversi menjadi to-do). Gunakan "
-"“hapus” untuk mengubah to-do kembali ke catatan reguler."
+"<todo-command> (perintah-tugas) dapat berupa \"toggle\" atau \"clear\". "
+"Gunakan \"toggle\" untuk beralih dari dan ke status selesai dan belum "
+"selesai pada tugas yang dipilih (jika target adalah catatan biasa, maka ia "
+"akan dikonversi menjadi tugas). Gunakan \"clear\" untuk mengubah tugas "
+"kembali menjadi catatan biasa."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "Tandai tugas menjadi tidak selesai."
+msgstr "Menandai tugas belum selesai."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Beralih ke [notebook] - semua operasi lebih lanjut akan terjadi dalam buku "
-"catatan ini."
+"Beralih ke [notebook] (buku catatan) - semua operasi selanjutnya akan "
+"terjadi dalam buku catatan ini."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
 msgid "Displays version information"
-msgstr "Menampilkan infrormasi dar versi"
+msgstr "Menampilkan informasi versi"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
 #, javascript-format
@@ -738,7 +756,7 @@ msgstr "Tipe: %s."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "Nilai yang memungkinkan: %s."
+msgstr "Nilai yang mungkin: %s."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
 #, javascript-format
@@ -747,15 +765,15 @@ msgstr "Default: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "Nilai yang memungkinan:"
+msgstr "Kunci/nilai yang mungkin:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
 msgid "Type `joplin help` for usage information."
-msgstr "Ketik `joplin help` untuk menampilkan infromasi."
+msgstr "Ketik `joplin help` untuk informasi penggunaan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
 msgid "Fatal error:"
-msgstr "Fatal error:"
+msgstr "Kesalahan fatal:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -772,10 +790,11 @@ msgid ""
 msgstr ""
 "Selamat datang di Joplin!\n"
 "\n"
-"Ktik `:help shortcuts` untuk menampilkan pintasan keyboard, atau dengan `:"
-"help` untuk menampilkan informasi penggunaan secara lengkap.\n"
+"Ketik `:help shortcuts` untuk menampilkan pintasan keyboard, atau hanya `:"
+"help` untuk menampilkan informasi penggunaan.\n"
 "\n"
-"Contoh, untuk membuat buku catatan tekan `mb`; untuk membuat catatan `mn`."
+"Contoh, untuk membuat buku catatan tekan `mb`; untuk membuat catatan tekan "
+"`mn`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 msgid ""
@@ -784,28 +803,28 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Satu atau lebih item saat ini dienkripsi dan Kamu mungkin perlu memberikan "
-"kata sandi utama. Untuk melakukannya, silakan ketik `e2ee decrypt`. Jika "
-"Kamu telah memberikan kata sandi, item yang dienkripsi sedang didekripsi di "
-"latar belakang dan akan segera tersedia."
+"Satu item atau lebih saat ini terenkripsi dan Anda mungkin perlu memberikan "
+"kata sandi master. Untuk melakukannya, silakan ketik `e2ee decrypt`. Jika "
+"Anda telah memberikan kata sandi, maka item yang terenkripsi sedang "
+"didekripsi di latar belakang dan akan segera tersedia."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "Kamu juga bisa mengetikkan `status` untuk informasi lebih lanjut."
+msgstr "Anda juga dapat mengetik `status` untuk informasi lebih lanjut."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:142
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Mengimpor format dari “%s” sebagai “%s”. Mohon ditunggu…."
+msgstr "Mengekspor ke \"%s\" sebagai format \"%s\". Mohon tunggu..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Tidak dapat memutakhirkan kunci utama:%s"
+msgstr "Tidak dapat mengekspor catatan: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
-msgstr "Sidebar"
+msgstr "Bilah samping"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:397
 msgid "Note list"
@@ -822,18 +841,18 @@ msgstr "Isi catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:461
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Mengimpor format dari “%s” sebagai “%s”. Mohon ditunggu…."
+msgstr "Mengimpor dari \"%s\" sebagai format \"%s\". Mohon tunggu..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:545
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:186
 msgid "PDF File"
-msgstr "File PDF"
+msgstr "Berkas PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:514
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
-msgstr "Status sinkronisasi"
+msgstr "Status Sinkronisasi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:524
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
@@ -852,7 +871,7 @@ msgstr "Buku catatan baru"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:559
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:304
 msgid "New sub-notebook"
-msgstr "Sub buku catatan baru"
+msgstr "Sub-buku catatan baru"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:571
 msgid "Print"
@@ -885,7 +904,7 @@ msgstr "Pilihan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
 msgid "Note attachments..."
-msgstr "Catatan lampiran…."
+msgstr "Lampiran catatan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
 #, javascript-format
@@ -900,12 +919,12 @@ msgstr "%s %s (%s, %s)"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:685
 #, javascript-format
 msgid "Client ID: %s"
-msgstr "ID Klien : %s"
+msgstr "ID klien: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
 #, javascript-format
 msgid "Sync Version: %s"
-msgstr "Versi sinkronisasi: %s"
+msgstr "Versi Sinkronisasi: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:687
 #, javascript-format
@@ -932,7 +951,7 @@ msgstr "Salin"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
-msgstr "Oke"
+msgstr "Baik"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:709
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:792
@@ -951,7 +970,7 @@ msgstr "Preferensi..."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:732
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1119
 msgid "Check for updates..."
-msgstr "Periksa update...."
+msgstr "Periksa pembaruan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
@@ -1044,19 +1063,19 @@ msgstr "&Lihat"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:949
 msgid "Toggle sidebar"
-msgstr "Mengalihkan sidebar"
+msgstr "Alihkan bilah samping"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:962
 msgid "Layout button sequence"
-msgstr "Urutan tata letak tombol"
+msgstr "Urutan tombol tata letak"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:966
 msgid "Toggle note list"
-msgstr "Beralih daftar catatan"
+msgstr "Alihkan daftar catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:975
 msgid "Toggle editor layout"
-msgstr "Beralih tata letak editor"
+msgstr "Alihkan tata letak editor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1023
 msgid "Focus"
@@ -1076,9 +1095,8 @@ msgid "Zoom Out"
 msgstr "Perkecil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
-#, fuzzy
 msgid "&Note"
-msgstr "Catatan"
+msgstr "&Catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1065
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1801
@@ -1094,11 +1112,11 @@ msgstr "Ubah di editor eksternal"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:757
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
-msgstr "Tanda"
+msgstr "Label"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
 msgid "Statistics..."
-msgstr ""
+msgstr "Statistik..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
@@ -1160,21 +1178,21 @@ msgstr "Batal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
-msgstr "Saat ini sudah versi terbaru."
+msgstr "Versi saat ini adalah versi terbaru."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:148
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (pra-rilis)"
+msgstr "%s (prarilis)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
-msgstr "Update terbaru sudah tersedia, apakah mau mengunduh sekarang?"
+msgstr "Pembaruan tersedia, apakah Anda mau mengunduhnya sekarang?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
 #, javascript-format
 msgid "Your version: %s"
-msgstr "Versimu: %s"
+msgstr "Versi Anda: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
 #, javascript-format
@@ -1195,20 +1213,20 @@ msgstr "Tidak"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 msgid "Full Release Notes"
-msgstr "Catatan lengkap perilisan"
+msgstr "Catatan Rilis Lengkap"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
-msgstr "Token telah disalin ke papan clip!"
+msgstr "Token telah disalin ke papan klip!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Layanan clipper web diaktifkan dan diatur ke mulai otomatis."
+msgstr "Layanan Web Clipper diaktifkan dan disetel menjadi mulai otomatis."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "Status: Sedang berjalan pada  port %d"
+msgstr "Status: Dimulai pada port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:82
 #, javascript-format
@@ -1217,7 +1235,7 @@ msgstr "Status: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:88
 msgid "Disable Web Clipper Service"
-msgstr "Matikan layanan Web Clipper"
+msgstr "Nonaktifkan Layanan Web Clipper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:94
 msgid "The web clipper service is not enabled."
@@ -1225,23 +1243,23 @@ msgstr "Layanan web clipper tidak diaktifkan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:99
 msgid "Enable Web Clipper Service"
-msgstr "Hidupkan layanan Web Clipper"
+msgstr "Aktifkan Layanan Web Clipper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:122
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Joplin Web Clipper memperolehkan menyimpan halaman web dan tangkapan layar "
-"dari peramban ke Joplin."
+"Web Clipper Joplin memungkinkan penyimpanan halaman web dan tangkapan layar "
+"dari peramban web Anda ke Joplin."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Untuk menggunakan web clipper, kamu dapat mengikuti intruksi berikut:"
+msgstr "Untuk menggunakan web clipper, Anda perlu melakukan hal berikut:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
-msgstr "Langkah Pertama: Mengaktifkan layanan clipper"
+msgstr "Langkah 1: Aktifkan layanan clipper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:140
 msgid ""
@@ -1249,17 +1267,17 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Layanan ini memungkinkan ekstensi browser untuk berkomunikasi dengan Joplin. "
-"Saat mengaktifkannya, firewall akan meminta memberi izin kepada Joplin untuk "
-"mendengarkan port tertentu."
+"Layanan ini memungkinkan ekstensi peramban web untuk berkomunikasi dengan "
+"Joplin. Saat mengaktifkannya, mungkin firewall Anda akan meminta Anda untuk "
+"memberi izin kepada Joplin untuk mendengarkan port tertentu."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:154
 msgid "Step 2: Install the extension"
-msgstr "Langkah Kedua: Pasang ekstensi"
+msgstr "Langkah 2: Pasang ekstensi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
-msgstr "Unduh dan pasang yang relevan dengan perambanmu:"
+msgstr "Unduh dan pasang ekstensi yang relevan dengan peramban web Anda:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
@@ -1267,7 +1285,7 @@ msgstr "Opsi lanjutan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
-msgstr "Autorisasi token:"
+msgstr "Token otorisasi:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
@@ -1283,12 +1301,12 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
-msgstr "Ini akan membuka layar baru. Simpan perubahanmu saat ini?"
+msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:170
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:311
 msgid "Check synchronisation configuration"
-msgstr "Memeriksa konfigurasi pada sinkronisasi"
+msgstr "Periksa konfigurasi sinkronisasi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:179
 msgid "Unknown"
@@ -1296,7 +1314,7 @@ msgstr "Tidak diketahui"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:183
 msgid "Checking..."
-msgstr "Memeriksa...."
+msgstr "Memeriksa..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:187
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:296
@@ -1308,8 +1326,8 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
-"Aplikasi Joplin Nextcloud tidak terinstall atau salah konfigurasi. Silakan "
-"lihat pesan kesalahan lengkap di bawah ini:"
+"Aplikasi Joplin Nextcloud tidak terpasang atau ada kesalahan konfigurasi. "
+"Silakan lihat pesan kesalahan lengkap di bawah ini:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:211
 msgid "Show Log"
@@ -1317,11 +1335,11 @@ msgstr "Tampilkan Log"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
-msgstr "Status Aplikasi Joplin Nextcloud:"
+msgstr "Status Aplikasi Nextcloud Joplin:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:238
 msgid "Check Status"
-msgstr "Memeriksa Status"
+msgstr "Periksa Status"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:245
 msgid "Help"
@@ -1333,7 +1351,7 @@ msgstr "Perlihatkan pengaturan lanjutan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:521
 msgid "Browse..."
-msgstr "Telusuri…."
+msgstr "Telusuri..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:642
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1017
@@ -1349,7 +1367,7 @@ msgstr "Kembali"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:761
 msgid "Apply"
-msgstr "Menerapkan"
+msgstr "Terapkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:64
@@ -1363,7 +1381,7 @@ msgstr "Simpan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr "Kunci utama yang perlu ditingkatkan"
+msgstr "Kunci master yang perlu upgrade"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1371,9 +1389,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"Kunci master berikut menggunakan algoritma enkripsi yang kadaluarsa dan "
-"disarankan untuk memutakhirkannya. Kunci master yang ditingkatkan masih akan "
-"dapat mendekripsi dan mengenkripsi datamu seperti biasa."
+"Kunci master berikut menggunakan algoritma enkripsi yang telah usang dan "
+"disarankan untuk mengupgradenya. Kunci master yang telah diupgrade masih "
+"akan dapat mendekripsi dan mengenkripsi data Anda seperti biasa."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1384,28 +1402,28 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr "Tingkatkan"
+msgstr "Upgrade"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
 msgid "Re-encrypt data"
-msgstr "Enkripsi data ulang"
+msgstr "Enkripsi ulang data"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
-"Metode enkripsi default telah diubah menjadi yang lebih aman dan dapat "
-"disarankan untuk menerapkannya pada datamu."
+"Metode enkripsi default telah diubah menjadi yang lebih aman dan Anda "
+"disarankan untuk menerapkannya pada data Anda."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Kamu dapat menggunakan alat di bawah ini untuk mengenkripsi ulang data, "
-"misalnya jika kamu tahu bahwa beberapa catatan dienkripsi dengan metode "
-"enkripsi yang kadaluarsa."
+"Anda dapat menggunakan alat di bawah ini untuk mengenkripsi ulang data, "
+"misalnya jika Anda tahu bahwa beberapa catatan Anda dienkripsi dengan metode "
+"enkripsi yang telah usang."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1424,19 +1442,20 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"In order to do so, your entire data set will have to be encrypted and "
-"synchronised, so it is best to run it overnight.\n"
+"Untuk melakukannya, seluruh data Anda harus dienkripsi and disinkronkan, "
+"jadi cara terbaik yang disarankan adalah menjalankannya semalaman.\n"
 "\n"
-"To start, please follow these instructions:\n"
+"Untuk memulai, silakan ikuti instruksi berikut ini:\n"
 "\n"
-"1. Sinkronisasi semua perangkatmu.\n"
-"2. Klik “%s”.\n"
-"3. Biarkan berjalan sampai selesai. Saat berjalan, hindari mengubah catatan "
-"apa pun di perangkatmu yang lain, untuk menghindari konflik.\n"
-"4. Ketika sinkronisasi selesai pada perangkat, sinkronisasi semua "
-"perangkatmu dan biarkan sampai selesai.\n"
+"1. Sinkronkan semua perangkat Anda.\n"
+"2. Klik \"%s\".\n"
+"3. Biarkan proses berjalan sampai selesai. Saat proses berjalan, hindari "
+"mengubah catatan apa pun di perangkat Anda yang lain, untuk menghindari "
+"konflik.\n"
+"4. Ketika sinkronisasi selesai pada perangkat ini, sinkronkan semua "
+"perangkat Anda dan biarkan proses berjalan sampai selesai.\n"
 "\n"
-"Penting: kamu hanya perlu menjalankan sekali pada satu perangkat."
+"Penting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1454,7 +1473,7 @@ msgstr "Ekstensi Firefox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr "Chrome Web Store"
+msgstr "Toko Web Chrome"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
@@ -1481,15 +1500,16 @@ msgstr "Penggunaan"
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Buku catatan baru “% s” akan dibuat dan file “% s” akan diimpor ke dalamnya"
+"Buku catatan baru \"%s\" akan dibuat dan berkas \"%s\" akan diimpor ke "
+"dalamnya"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:161
 msgid "Please create a notebook first."
-msgstr "Silahkan buat buku catatan baru."
+msgstr "Silakan buat buku catatan dahulu."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
 msgid "Please create a notebook first"
-msgstr "Silahkan buat buku catatan baru"
+msgstr "Silakan buat buku catatan dahulu"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:174
 msgid "Notebook title:"
@@ -1497,7 +1517,7 @@ msgstr "Judul buku catatan:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:217
 msgid "Add or remove tags:"
-msgstr "Tambah atau hapus tanda:"
+msgstr "Tambah atau hapus label:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
 msgid "Move to notebook:"
@@ -1509,15 +1529,15 @@ msgstr "Ganti nama buku catatan:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:309
 msgid "Rename tag:"
-msgstr "Ganti nama tanda:"
+msgstr "Ganti nama label:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:413
 msgid "Set alarm:"
-msgstr "Pasang alarm:"
+msgstr "Setel alarm:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:444
 msgid "Template file:"
-msgstr "Templat file:"
+msgstr "Berkas templat:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:51
 msgid "Words"
@@ -1560,17 +1580,16 @@ msgstr "Tutup"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
-msgstr ""
+msgstr "Urutan khusus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
-#, fuzzy
 msgid "View"
-msgstr "&Lihat"
+msgstr "Lihat"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
 msgid "Sort notes by"
-msgstr "Urutkan berdasarkan"
+msgstr "Urutkan catatan berdasarkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
 #, javascript-format
@@ -1578,21 +1597,24 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Untuk mengurutkan catatan secara manual, tata pengurutan harus diganti "
+"menjadi \"%s\" dalam menu \"%s\" > \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "Do it now"
-msgstr "Dapatkan sekarang:"
+msgstr "Lakukan sekarang"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Tidak ada catatan di sini. Buat satu dengan mengklik “Catatan baru”."
+msgstr ""
+"Tidak ada catatan di sini. Buat catatan dengan mengeklik \"Catatan baru\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Saat ini tidak ada notebook. Buat satu dengan mengklik \"Notebook baru\"."
+"Tidak ada buku catatan saat ini. Buat buku catatan dengan mengeklik \"Buku "
+"catatan baru\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:27
 msgid "Created"
@@ -1621,7 +1643,7 @@ msgstr "Riwayat catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
-msgstr "Markup"
+msgstr "Markah"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:305
 msgid "Previous versions of this note"
@@ -1635,7 +1657,7 @@ msgstr "Properti catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Catatan “% s” telah berhasil dikembalikan ke catatan “% s”."
+msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -1645,11 +1667,11 @@ msgstr "Catatan ini tidak memiliki riwayat"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:865
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Tautan atau pesan yang tidak didukung:% s"
+msgstr "Tautan atau pesan yang tidak didukung: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:177
 msgid "Restore"
-msgstr "Kembalikan"
+msgstr "Pulihkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
@@ -1657,22 +1679,22 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Klik \"% s\" untuk mengembalikan catatan. Ini akan disalin dalam buku "
-"catatan bernama \"% s\". Versi catatan saat ini tidak akan diganti atau "
+"Klik \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku "
+"catatan bernama \"%s\". Versi catatan saat ini tidak akan diganti atau "
 "dimodifikasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:778
 msgid "Open..."
-msgstr "Buka…."
+msgstr "Buka..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:781
 #, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "File ini tidak dapat dibuka:% s"
+msgstr "Berkas ini tidak dapat dibuka: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:786
 msgid "Save as..."
-msgstr "Simpan sebagai…."
+msgstr "Simpan sebagai..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:797
 msgid "Copy path to clipboard"
@@ -1680,7 +1702,7 @@ msgstr "Salin jalur ke papan klip"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
-msgstr "Salin alamat tautan"
+msgstr "Salin Alamat Tautan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
@@ -1700,41 +1722,41 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Catatan ini tidak memiliki konten. Klik \"% s\" untuk beralih editor dan "
+"Catatan ini tidak memiliki konten. Klik \"%s\" untuk beralih ke editor dan "
 "mengedit catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
-msgstr "Hanya satu catatan yang dapat dicetak sekaligus."
+msgstr "Hanya satu catatan yang dapat dicetak dalam satu waktu."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1547
 msgid "strong text"
-msgstr "teks yang kuat"
+msgstr "teks yang ditekankan lebih kuat (strong text)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1551
 msgid "emphasized text"
-msgstr "teks yang ditekankan"
+msgstr "teks yang ditekankan (emphasized text)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1591
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1595
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1604
 msgid "List item"
-msgstr "Daftar item"
+msgstr "Item daftar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1616
 msgid "Insert Hyperlink"
-msgstr "Masukkan Hyperlink"
+msgstr "Masukkan Tautan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1627
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1726
 msgid "Attach file"
-msgstr "Lampirkan file"
+msgstr "Lampirkan berkas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1642
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1828
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:742
 msgid "Set alarm"
-msgstr "Atur alarm"
+msgstr "Setel alarm"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1656
 #, javascript-format
@@ -1743,7 +1765,7 @@ msgstr "Di: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1710
 msgid "Hyperlink"
-msgstr "Hyperlink"
+msgstr "Tautan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
@@ -1763,7 +1785,7 @@ msgstr "Tajuk"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1770
 msgid "Horizontal Rule"
-msgstr "Aturan Horisontal"
+msgstr "Garis Horisontal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1792
 msgid "Click to stop external editing"
@@ -1771,7 +1793,7 @@ msgstr "Klik untuk menghentikan pengeditan eksternal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1793
 msgid "Watching..."
-msgstr "Mengamati…."
+msgstr "Mengamati..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1852
 msgid "Content Properties"
@@ -1788,7 +1810,7 @@ msgstr "catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Membuat %s…."
+msgstr "Membuat %s baru..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1827,7 +1849,7 @@ msgstr "Hapus"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Hapus lampuran “%s”?"
+msgstr "Hapus lampiran \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1835,24 +1857,24 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Ini adalah alat untuk menunjukkan lampiran yang terhubung dengan catatanmu. "
-"Harap berhati-hati saat menghapus salah satu karena tidak dapat dipulihkan "
-"setelahnya."
+"Ini adalah alat lanjutan untuk menampilkan lampiran yang terhubung dengan "
+"catatan Anda. Harap berhati-hati saat menghapus salah satunya karena mereka "
+"tidak dapat dipulihkan setelahnya."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
-msgstr "Mohon ditunggu…."
+msgstr "Mohon tunggu..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
-msgstr "Tanpa sumber daya!"
+msgstr "Tidak ada sumber daya!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Peringatan: tidak semua sumber daya ditampilkan untuk alasan peforma (batas:"
-"% s)."
+"Peringatan: tidak semua sumber daya ditampilkan karena alasan performa "
+"(batas: %s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1868,23 +1890,24 @@ msgstr "Lampiran catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
-msgstr "Sinkronisasi...."
+msgstr "Menyinkronkan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:160
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Menghasilkan tautan…."
+msgstr[0] "Menghasilkan tautan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:162
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Tautan tersalin ke papan klip!"
+msgstr[0] "Tautan telah tersalin ke papan klip!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
-"Catatan: Ketika sebuah catatan dibagikan, tidak lagi dienkripsi pada server."
+"Catatan: Ketika sebuah catatan dibagikan, ia tidak akan dienkripsi lagi di "
+"server."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
 msgid "Share Notes"
@@ -1897,7 +1920,7 @@ msgstr[0] "Salin Tautan yang Dapat Dibagikan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
-msgstr "Menghapus"
+msgstr "Hapus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
@@ -1907,19 +1930,18 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Hapus buku catatan “%s”?\n"
+"Hapus buku catatan \"%s\"?\n"
 "\n"
-"Semua buku catatan dan sub-buku catatan dalam buku catatan ini juga akan "
-"terhapus."
+"Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Hapus tanda “%s” dari semua catatan?"
+msgstr "Hapus label \"%s\" dari semua catatan?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
-msgstr "Hapus pencarian ini dari sidebar?"
+msgstr "Hapus pencarian ini dari bilah samping?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:339
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:389
@@ -1942,31 +1964,31 @@ msgstr "Buku catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Deskripsi item: %d/%d"
+msgstr "Mendekripsi item: %d/%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:802
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Mengambil sumber daya:% d /% d"
+msgstr "Mengambil sumber daya: %d/%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
-msgstr "Pilih di mana status sinkronisasi seharusnya diekspor"
+msgstr "Silakan pilih di mana status sinkronisasi seharusnya diekspor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
 msgid "Retry All"
-msgstr "Coba semua"
+msgstr "Coba lagi semua"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
 msgid "Retry"
-msgstr "Coba"
+msgstr "Coba lagi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
-msgstr "Tambah atau hapus tanda"
+msgstr "Tambah atau hapus label"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
 msgid "Move to notebook"
@@ -1975,7 +1997,7 @@ msgstr "Pindah ke buku catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
 msgid "Duplicate"
-msgstr "Duplikasi"
+msgstr "Buat duplikat"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:58
 #, javascript-format
@@ -1984,11 +2006,11 @@ msgstr "%s - Salin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:78
 msgid "Stop external editing"
-msgstr "Hentikan perubahan eksternal"
+msgstr "Hentikan pengeditan eksternal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:90
 msgid "Switch between note and to-do type"
-msgstr "Beralih di antara jenis catatan dan tugas"
+msgstr "Beralih antara tipe catatan dan tugas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
 msgid "Switch to note type"
@@ -2001,38 +2023,38 @@ msgstr "Beralih ke tipe tugas"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:138
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:771
 msgid "Copy Markdown link"
-msgstr "Salin tautan markdown"
+msgstr "Salin tautan Markdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:153
 msgid "Share note..."
-msgstr "Bagikan catatan…."
+msgstr "Bagikan catatan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Hapus catatan “%s”?"
+msgstr "Hapus catatan \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:223
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Hapus catatan %d ini?"
+msgstr "Hapus %d catatan ini?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:240
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "Terjadi kesalahan pada catatan saat di editor: %s"
+msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:439
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Ketikkan judul catatan atau bagian dari isinya untuk melompat ke sana. Atau "
-"ketik # diikuti dengan nama tag, atau @ diikuti dengan nama buku catatan."
+"Ketik judul catatan atau bagian dari isinya untuk melompat ke sana. Atau "
+"ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:477
 msgid "Goto Anything..."
-msgstr "Pergi kemanapun...."
+msgstr "Pergi ke apa saja..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:137
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:150
@@ -2054,10 +2076,11 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Tidak dapat terhubung ke aplikasi Joplin Nextcloud. Silakan periksa "
-"konfigurasi di layar Konfigurasi sinkronisasi. Kesalahan penuh adalah:\n"
+"Tidak dapat terhubung ke aplikasi Nextcloud Joplin. Silakan periksa "
+"konfigurasinya di layar konfigurasi Sinkronisasi. Kesalahan lengkapnya "
+"adalah:\n"
 "\n"
-"% s"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2065,7 +2088,7 @@ msgstr "Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
 msgid "File system"
-msgstr "File system"
+msgstr "Sistem berkas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
@@ -2077,7 +2100,7 @@ msgstr "OneDrive"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (Hanya untuk testing)"
+msgstr "OneDrive Dev (Hanya untuk pengujian)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
@@ -2086,18 +2109,19 @@ msgstr "WebDAV"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:178
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "Log level tidak diketahui: %s"
+msgstr "Level log tidak diketahui: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:187
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "Level ID tidak diketahui: %s"
+msgstr "ID level tidak diketahui: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
-"Aplikasi telah diautorisasi - Kamu sekarang dapat menutup tab browser ini."
+"Aplikasi telah diotorisasi - Anda sekarang dapat menutup tab peramban web "
+"ini."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
 msgid "The application has been successfully authorised."
@@ -2111,11 +2135,11 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Silakan buka URL berikut di browser Anda untuk mengotentikasi aplikasi. "
-"Aplikasi akan membuat direktori di \"Aplikasi / Joplin\" dan hanya akan "
-"membaca dan menulis file di direktori ini. Itu tidak akan memiliki akses ke "
-"file di luar direktori ini atau ke data pribadi lainnya. Tidak ada data yang "
-"akan dibagikan dengan pihak ketiga mana pun."
+"Silakan buka URL berikut di peramban web Anda untuk mengotentikasi aplikasi. "
+"Aplikasi akan membuat direktori di \"Apps/Joplin\" dan hanya akan membaca "
+"dan menulis berkas di direktori ini. Ia tidak akan memiliki akses ke berkas "
+"apa pun di luar direktori ini atau ke data pribadi lainnya. Tidak ada data "
+"yang akan dibagikan dengan pihak ketiga mana pun."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
 msgid ""
@@ -2123,7 +2147,7 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 "Tidak dapat menyegarkan token: data otentikasi tidak ada. Memulai "
-"sinkronisasi lagi dapat memperbaiki masalah."
+"sinkronisasi lagi mungkin dapat memperbaiki masalah."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:156
 msgid ""
@@ -2148,8 +2172,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"Kamu akan melampirkan gambar besar (%dx% d piksel). Apakah kamu ingin "
-"mengubah ukurannya menjadi %d piksel sebelum melampirkannya?"
+"Anda akan melampirkan gambar besar (%dx%d piksel). Apakah Anda ingin "
+"mengubah ukurannya hingga %d piksel sebelum melampirkannya?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2159,32 +2183,32 @@ msgstr "Tidak dapat mengakses %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:93
 #, javascript-format
 msgid "Created local items: %d."
-msgstr "Membuat lokal item: %d."
+msgstr "Item lokal yang dibuat: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr "Memperbarui lokal item: %d."
+msgstr "Item lokal yang diperbarui: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr "Membuat remot item: %d."
+msgstr "Item jarak jauh yang dibuat: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr "Memperbarui lokal item: %d."
+msgstr "Item jarak jauh yang diperbarui: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "Menghapus lokal item: %d."
+msgstr "Item lokal yang dihapus: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "Menghapus remote item: %d."
+msgstr "Item jarak jauh yang dihapus: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
 #, javascript-format
@@ -2193,7 +2217,7 @@ msgstr "Item yang diambil: %d/%d."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:101
 msgid "Cancelling..."
-msgstr "Membatalkan…."
+msgstr "Membatalkan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
 #, javascript-format
@@ -2203,7 +2227,7 @@ msgstr "Selesai: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
 #, javascript-format
 msgid "Last error: %s"
-msgstr "Terakhir error: %s"
+msgstr "Kesalahan terakhir: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:203
 msgid "Idle"
@@ -2211,7 +2235,7 @@ msgstr "Diam"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
 msgid "In progress"
-msgstr "Dalam perkembangan"
+msgstr "Sedang berlangsung"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:709
 msgid "Encrypted"
@@ -2229,7 +2253,7 @@ msgstr "judul"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
-msgstr "tanggal diubah"
+msgstr "tanggal diperbarui"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:88
 msgid "Conflicts"
@@ -2242,7 +2266,9 @@ msgstr "Tidak dapat memindah buku catatan ke lokasi ini"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:429
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "Notebook tidak dapat dinamai “%s”, yang merupakan judul yang dipesan."
+msgstr ""
+"Buku catatan tidak dapat dinamai \"%s\", yang merupakan judul yang telah "
+"dipesan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
@@ -2250,21 +2276,21 @@ msgstr "tanggal dibuat"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "urutan khusus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
-msgstr "Catatan ini tidak dapat mengolah gelokasi lokasi."
+msgstr "Catatan ini tidak memiliki informasi gelokasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:446
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Tidak dapat menyalin ke “%s” buku catatan"
+msgstr "Tidak dapat menyalin catatan ke buku catatan \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:457
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "TIdak dapat memindah catatan ke “%s” buku catatan"
+msgstr "TIdak dapat memindah catatan ke buku catatan \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:293
 msgid "Not downloaded"
@@ -2299,9 +2325,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Perhatian: Jika mengubah lokasi ini, pastikan menyalin semua kontenmu "
-"sebelum menyinkronkan, jika tidak semua file akan dihapus! Dapat melihat FAQ "
-"untuk detail lebih lanjut:%s"
+"Perhatian: Jika mengubah lokasi ini, pastikan Anda menyalin semua konten "
+"Anda ke sana sebelum menyinkronkan, jika tidak semua berkas akan terhapus! "
+"Lihat Tanya Jawab Umum (FAQ) untuk detail lebih lanjut: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:42
 msgid "Light"
@@ -2317,11 +2343,11 @@ msgstr "Dracula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:46
 msgid "Solarised Light"
-msgstr "Solarised Light"
+msgstr "Solarized Terang"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:47
 msgid "Solarised Dark"
-msgstr "Solarised Dark"
+msgstr "Solarized Gelap"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 msgid "Nord"
@@ -2329,7 +2355,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "OLED Dark"
-msgstr "OLED Dark"
+msgstr "OLED Gelap"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:73
 msgid "Synchronisation target"
@@ -2346,35 +2372,35 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:97
 msgid "Directory to synchronise with (absolute path)"
-msgstr "Direktori untu disinkronisasikan dengan path absolut"
+msgstr "Direktori untuk disinkronkan (jalur absolut)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:109
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "URL WebDav Nextcloud"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:120
 msgid "Nextcloud username"
-msgstr "Nextcloud pengguna"
+msgstr "Nama pengguna Nextcloud"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:130
 msgid "Nextcloud password"
-msgstr "Nextcloud sandi"
+msgstr "Kata sandi Nextcloud"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:142
 msgid "WebDAV URL"
-msgstr "WebDAV URL"
+msgstr "URL WebDAV"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:153
 msgid "WebDAV username"
-msgstr "WebDAV pengguna"
+msgstr "Nama pengguna WebDAV"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:163
 msgid "WebDAV password"
-msgstr "WebDAV sandi"
+msgstr "Kata sandi WebDAV"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
 msgid "Attachment download behaviour"
-msgstr "Perilaku unduhan lampiran"
+msgstr "Perilaku mengunduh lampiran"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:189
 msgid ""
@@ -2382,9 +2408,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"Dalam mode “Manual”, lampiran hanya diunduh saat Anda mengkliknya. Di "
-"“Otomatis”, diunduh saat membuka catatan. Dalam “Selalu”, semua lampiran "
-"diunduh apakah akan membuka catatan atau tidak."
+"Dalam mode \"Manual\", lampiran diunduh hanya saat Anda mengekliknya. Dalam "
+"mode \"Otomatis\", lampiran diunduh saat Anda membuka catatan. Dalam mode "
+"\"Selalu\", semua lampiran diunduh baik Anda membuka catatan atau pun tidak."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:192
 msgid "Always"
@@ -2400,7 +2426,7 @@ msgstr "Otomatis"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:199
 msgid "Max concurrent connections"
-msgstr "Koneksi konkurensi maksimal"
+msgstr "Koneksi bersamaan maksimum"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:208
 msgid "Language"
@@ -2420,15 +2446,15 @@ msgstr "Tema"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Beralih tema secara otomatis untuk menyesuaikannya dengan tema sistem"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Tema terang yang dipilih"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Tema gelap yang dipilih"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
@@ -2438,7 +2464,7 @@ msgstr "Tampilkan jumlah catatan"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
 msgid "Split View"
-msgstr "Split tampilan"
+msgstr "Tampilan Terpisah"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
 #, javascript-format
@@ -2458,20 +2484,20 @@ msgstr "Tugas belum selesai diatas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
 msgid "Show completed to-dos"
-msgstr "Tampilkan tugas selesai"
+msgstr "Tampilkan tugas yang sudah selesai"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:338
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "Auto-pair braces, kurung, kutipan, dll."
+msgstr "Pasangkan secara otomatis kurung kurawal, tanda kurung, kutipan, dll."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Reverse sort order"
-msgstr "Membalik urutan pesanan"
+msgstr "Balikkan urutan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:347
 msgid "Sort notebooks by"
-msgstr "Sortir buku catatan menurut"
+msgstr "Urutkan buku catatan menurut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Save geo-location with notes"
@@ -2497,67 +2523,67 @@ msgstr "Ketika membuat catatan baru:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
 msgid "Enable soft breaks"
-msgstr "Hidupkan soft breaks"
+msgstr "Aktifkan soft break"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:408
 msgid "Enable typographer support"
-msgstr "Hidupkan support tipografi"
+msgstr "Aktifkan dukungan typographer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:409
 msgid "Enable math expressions"
-msgstr "Hidupkan ekspresi matematika"
+msgstr "Aktifkan ekspresi matematika"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:410
 msgid "Enable Fountain syntax support"
-msgstr "Hidupkan Fountain syntax support"
+msgstr "Aktifkan dukungan sintaksis Fountain"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:411
 msgid "Enable Mermaid diagrams support"
-msgstr "Hidupkan Mermaid diagrams support"
+msgstr "Aktifkan dukungan diagram Mermaid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:413
 msgid "Enable ==mark== syntax"
-msgstr "Hidupkan Mermaid diagrams support"
+msgstr "Aktifkan sintaksis ==mark=="
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:414
 msgid "Enable footnotes"
-msgstr "Hidupkan footnotes"
+msgstr "Aktifkan catatan kaki"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:415
 msgid "Enable table of contents extension"
-msgstr "Hidupkan ekstensi daftar isi"
+msgstr "Aktifkan ekstensi daftar isi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:416
 msgid "Enable ~sub~ syntax"
-msgstr "Hidupkan ~sub~ syntax"
+msgstr "Aktifkan sintaksis ~sub~"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:417
 msgid "Enable ^sup^ syntax"
-msgstr "Hidupkan ^sup^ syntax"
+msgstr "Aktifkan sintaksis ^sup^"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:418
 msgid "Enable deflist syntax"
-msgstr "Hidupkan deflist syntax"
+msgstr "Aktifkan sintaksis daftar definisi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:419
 msgid "Enable abbreviation syntax"
-msgstr "Hidupkan abbreviation syntax"
+msgstr "Aktifkan sintaksis singkatan (abbreviation)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:420
 msgid "Enable markdown emoji"
-msgstr "Hidupkan markdown emoji"
+msgstr "Aktifkan emoji markdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:421
 msgid "Enable ++insert++ syntax"
-msgstr "Hidupkan ++insert++ syntax"
+msgstr "Aktifkan sintaksis ++insert++"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:422
 msgid "Enable multimarkdown table extension"
-msgstr "Hidupkan multimarkdown table extension"
+msgstr "Aktifkan ekstensi tabel multimarkdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:434
 msgid "Show tray icon"
-msgstr "Tampilkan ikon baki"
+msgstr "Tampilkan ikon tray"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
 msgid "Note: Does not work in all desktop environments."
@@ -2570,49 +2596,50 @@ msgid ""
 "reducing the number of conflicts."
 msgstr ""
 "Ini akan memungkinkan Joplin berjalan di latar belakang. Disarankan untuk "
-"mengaktifkan pengaturan ini agar catatanmu terus disinkronkan, sehingga "
+"mengaktifkan pengaturan ini agar catatan Anda terus disinkronkan, sehingga "
 "mengurangi jumlah konflik."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:440
 msgid "Start application minimised in the tray icon"
-msgstr "Mulai aplikasi yang diperkecil pada ikon baki"
+msgstr "Mulai aplikasi dalam keadaan disembunyikan dalam ikon tray"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:457
 msgid "Editor font size"
-msgstr "Editor ukuran font"
+msgstr "Ukuran font pada editor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:465
 msgid "Editor font"
-msgstr "Editor font"
+msgstr "Font pada editor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
 msgid "Editor font family"
-msgstr "Editor font family"
+msgstr "Keluarga font pada editor"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"Ini harus font *monospace* atau tidak akan berfungsi dengan baik. Jika font "
-"tidak benar atau kosong, itu akan default ke font monospace generik."
+"Ini harus font *monospace* atau ia tidak akan berfungsi sebagaimana "
+"mestinya. Jika font tidak benar atau kosong, font akan disetel secara "
+"otomatis ke font monospace generik."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Lembar gaya kustom untuk gaya aplikasi Joplin"
+msgstr "Lembar gaya khusus untuk gaya keseluruhan aplikasi Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
 msgid "Automatically update the application"
-msgstr "Otomatis update aplikasi"
+msgstr "Perbarui aplikasi secara otomatis"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 msgid "Get pre-releases when checking for updates"
-msgstr "Dapatkan pra-rilis saat memeriksa pembaruan"
+msgstr "Dapatkan prarilis saat memeriksa pembaruan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "Lihat halaman pra-rilis untuk detail lebih lanjut:%s"
+msgstr "Lihat halaman prarilis untuk detail lebih lanjut: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:545
 msgid "Synchronisation interval"
@@ -2638,20 +2665,20 @@ msgstr "%d jam"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid "Text editor command"
-msgstr "Perintah teks editor"
+msgstr "Perintah editor teks"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Perintah editor (mungkin termasuk argumen) yang akan digunakan untuk membuka "
+"Perintah editor (dapat mengandung argumen) yang akan digunakan untuk membuka "
 "catatan. Jika tidak ada yang disediakan, ia akan mencoba mendeteksi editor "
 "default secara otomatis."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:564
 msgid "Page size for PDF export"
-msgstr "Ukura untuk ekspor ekstensi PDF"
+msgstr "Ukuran halaman untuk ekspor PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:566
 msgid "A4"
@@ -2659,7 +2686,7 @@ msgstr "A4"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
 msgid "Letter"
-msgstr "Surat"
+msgstr "Letter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:568
 msgid "A3"
@@ -2679,7 +2706,7 @@ msgstr "Legal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:574
 msgid "Page orientation for PDF export"
-msgstr "Orientasi untuk ekspor PDF"
+msgstr "Orientasi halaman untuk ekspor PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
 msgid "Portrait"
@@ -2687,11 +2714,11 @@ msgstr "Potret"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
 msgid "Landscape"
-msgstr "Landscape"
+msgstr "Lanskap"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:588
 msgid "Keyboard Mode"
-msgstr "Mode Keyboard"
+msgstr "Mode Papan Ketik"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:591
 msgid "Default"
@@ -2716,11 +2743,11 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Daftar jalur yang dipisahkan koma ke direktori tempat memuat sertifikat "
-"dari, atau jalur ke file sertifikat individual. Sebagai contoh: / my / "
-"cert_dir, /other/custom.pem. Perhatikan bahwa jika membuat perubahan pada "
-"pengaturan TLS, Anda harus menyimpan perubahanmu sebelum mengklik “Periksa "
-"konfigurasi sinkronisasi”."
+"Daftar \"jalur ke direktori tempat asal sertifikat dimuat\" atau \"jalur ke "
+"berkas sertifikat\" yang dipisahkan koma. Contoh: /jalur/ke/dir_sert, /"
+"lainnya/custom.pem. Perhatikan bahwa jika membuat perubahan pada pengaturan "
+"TLS, Anda harus menyimpan perubahan Anda sebelum mengeklik \"Periksa "
+"konfigurasi sinkronisasi\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:621
 msgid "Ignore TLS certificate errors"
@@ -2728,14 +2755,14 @@ msgstr "Abaikan kesalahan sertifikat TLS"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:630
 msgid "Fail-safe"
-msgstr "Fail-safe"
+msgstr "Gagal-aman"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:631
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Fail-safe: Jangan menghapus data lokal saat target sinkronisasi kosong "
+"Gagal-aman: Jangan menghapus data lokal saat target sinkronisasi kosong "
 "(seringkali akibat kesalahan konfigurasi atau bug)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:635
@@ -2743,12 +2770,12 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
-"Tentukan port yang harus digunakan oleh server API. Jika tidak diatur, maka "
+"Tentukan port yang harus digunakan oleh server API. Jika tidak disetel, maka "
 "pengaturan default akan digunakan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:643
 msgid "Enable note history"
-msgstr "Hidupkan riwayat catatan"
+msgstr "Aktifkan riwayat catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
 msgid "days"
@@ -2761,11 +2788,11 @@ msgstr "%d hari"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:655
 msgid "Keep note history for"
-msgstr "Simpan catatan sejarah untuk"
+msgstr "Simpan riwayat catatan untuk"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Faktor pertumbuhan daftar buku catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
@@ -2776,19 +2803,23 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut agar "
+"sesuai dengan ruang yang tersedia dalam wadahnya sehubungan dengan item "
+"lainnya. Jadi item dengan faktor 2 akan memakan ruang dua kali lebih banyak "
+"dari item dengan faktor 1. Mulai ulang aplikasi untuk melihat perubahan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Faktor pertumbuhan daftar catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Faktor pertumbuhan area catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Nilai opsi tidak valid: “% s”. Nilai yang mungkin adalah:%s."
+msgstr "Nilai opsi tidak valid: \"%s\". Nilai yang mungkin adalah: %s."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1112
 msgid "General"
@@ -2808,7 +2839,7 @@ msgstr "Catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1116
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Plugin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1117
 msgid "Application"
@@ -2832,13 +2863,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Plugin ini meningkatkan renderer Markdown dengan fitur tambahan. Harap "
-"dicatat bahwa, sementara fitur ini mungkin berguna, mereka bukan Markdown "
-"standar dan dengan demikian sebagian besar dari mereka hanya akan berfungsi "
-"di Joplin. Selain itu, beberapa *tidak kompatibel* dengan editor WYSIWYG. "
-"Jika Anda membuka catatan yang menggunakan salah satu plugin ini di editor, "
-"Maka akan kehilangan format plugin. Diindikasikan di bawah ini plugin mana "
-"yang kompatibel atau tidak dengan editor WYSIWYG."
+"Plugin ini meningkatkan penyaji Markdown dengan fitur tambahan. Harap "
+"dicatat bahwa, sementara fitur-fitur ini mungkin berguna, mereka bukan "
+"Markdown standar dan dengan demikian sebagian besar dari mereka hanya akan "
+"berfungsi di Joplin. Selain itu, beberapa *tidak kompatibel* dengan editor "
+"WYSIWYG. Jika Anda membuka catatan yang menggunakan salah satu plugin ini di "
+"editor itu, Anda akan kehilangan format plugin. Di bawah ini ditunjukkan "
+"plugin mana yang kompatibel atau tidak dengan editor WYSIWYG."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1126
 #, javascript-format
@@ -2848,12 +2879,12 @@ msgstr "Catatan dan pengaturan disimpan di: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "Tag “%s” sudah ada. Silakan pilih nama yang berbeda."
+msgstr "Label \"%s\" sudah ada. Silakan pilih nama yang berbeda."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
 msgid "Joplin Export File"
-msgstr "Joplin ekspor file"
+msgstr "Berkas Ekspor Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
@@ -2863,15 +2894,15 @@ msgstr "Markdown"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
 msgid "Joplin Export Directory"
-msgstr "Direktori ekspor Joplin"
+msgstr "Direktori Ekspor Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
 msgid "Evernote Export File (as Markdown)"
-msgstr "Expor file Evernote (sbg Markdown)"
+msgstr "Berkas Ekspor Evernote (sbg. Markdown)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
 msgid "Evernote Export File (as HTML)"
-msgstr "Expor file Evernote (sbg HTML)"
+msgstr "Berkas Ekspor Evernote (sbg. HTML)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
@@ -2879,7 +2910,7 @@ msgstr "Direktori ekspor JSON"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
 msgid "HTML File"
-msgstr "File HTML"
+msgstr "Berkas HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
 msgid "HTML Directory"
@@ -2887,7 +2918,7 @@ msgstr "Direktori HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
-msgstr "File"
+msgstr "Berkas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "Directory"
@@ -2896,7 +2927,7 @@ msgstr "Direktori"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "Tidak dapat memuat modul “%s” untuk memformat “%s”"
+msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
@@ -2909,8 +2940,8 @@ msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-"Item ini saat ini dienkripsi: %s “%s”. Harap tunggu semua item didekripsi "
-"dan coba lagi."
+"Item ini sekarang masih terenkripsi: %s \"%s\". Harap tunggu hingga semua "
+"item telah terdekripsi dan coba lagi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
@@ -2922,11 +2953,11 @@ msgstr "Silakan tentukan buku catatan tempat catatan harus diimpor."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:215
 msgid "Restored Notes"
-msgstr "Kembalikan catatan"
+msgstr "Catatan yang Dipulihkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
-msgstr "Item yang tidak dapat di sinkronkan"
+msgstr "Item yang tidak dapat disinkronkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
 msgid ""
@@ -2934,9 +2965,9 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Item ini akan tetap ada di perangkat tetapi tidak akan diunggah ke target "
-"sinkronisasi. Untuk menemukan item ini, cari judul atau ID (yang ditampilkan "
-"dalam tanda kurung di atas)."
+"Item ini akan tetap berada di perangkat tetapi tidak akan diunggah ke target "
+"sinkronisasi. Untuk menemukan item ini, lakukan pencarian untuk judul atau "
+"ID (yang ditampilkan dalam tanda kurung di atas)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, javascript-format
@@ -2946,11 +2977,11 @@ msgstr "%s (%s) tidak dapat diunggah: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Item “%s” tidak dapat diunduh: %s"
+msgstr "Item \"%s\" tidak dapat diunduh: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
-msgstr "Item tidak dapat di dekripsi"
+msgstr "Item yang tidak dapat didekripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
 msgid ""
@@ -2958,9 +2989,9 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin gagal mendekripsi item ini beberapa kali, mungkin karena mereka rusak "
-"atau terlalu besar. Item ini akan tetap ada di perangkat tetapi Joplin tidak "
-"akan lagi mencoba mendekripsinya."
+"Joplin berkali-kali gagal mendekripsi item ini, mungkin karena mereka rusak "
+"atau terlalu besar. Item ini akan tetap berada di perangkat tetapi Joplin "
+"tidak akan mencoba mendekripsinya lagi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:182
 msgid "Attachments"
@@ -2983,7 +3014,7 @@ msgstr "Terunduh dan terenkripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:204
 msgid "Attachments that could not be downloaded"
-msgstr "Lampiran tidak dapat diunduh"
+msgstr "Lampiran yang tidak dapat diunduh"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:209
 #, javascript-format
@@ -2992,7 +3023,7 @@ msgstr "%s (%s): %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
-msgstr "Status sinkronisasi (item tersinkron/ item total)"
+msgstr "Status sinkronisasi (item tersinkron / total item)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:226
 #, javascript-format
@@ -3007,7 +3038,7 @@ msgstr "Total: %d/%d"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:231
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "Conflicted: %d"
+msgstr "Bertentangan: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:232
 #, javascript-format
@@ -3025,7 +3056,7 @@ msgstr "%s: %d catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:252
 msgid "Coming alarms"
-msgstr "Alarm datang"
+msgstr "Alarm yang akan datang"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:257
 #, javascript-format
@@ -3038,7 +3069,7 @@ msgstr "Izin penggunaan kamera"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
 msgid "Your permission to use your camera is required."
-msgstr "Membutuhkan perizinan penggunaan kamera."
+msgstr "Membutuhkan perizinan untuk penggunaan kamera."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -3050,7 +3081,7 @@ msgstr "Buat buku catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Saat ini tidak ada catatan tersedia. Klik tombol (+) untuk membuatnya."
+msgstr "Saat ini belum ada catatan. Buat catatan dengan mengeklik tombol (+)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -3058,12 +3089,12 @@ msgstr "Hapus catatan ini?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:362
 msgid "Move to notebook..."
-msgstr "Pindahkan ke buku catatan…."
+msgstr "Pindahkan ke buku catatan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Pindahkan %d catatan ke buku catatan “%s”?"
+msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:421
 msgid "Press to set the decryption password."
@@ -3096,20 +3127,20 @@ msgstr "Buku catatan: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:132
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Notebook terenkripsi tidak dapat diganti namanya"
+msgstr "Buku catatan terenkripsi tidak bisa diganti nama"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
 msgid "New Notebook"
-msgstr "Buku catatan baru"
+msgstr "Buku Catatan Baru"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:553
 msgid "Configuration"
-msgstr "Pengaturan"
+msgstr "Konfigurasi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
-msgstr "Memeriksa…Mohon ditunggu."
+msgstr "Sedang memeriksa… Mohon tunggu."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -3120,13 +3151,13 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"Kesalahan. Harap periksa apakah URL, nama pengguna, kata sandi, dll. Sudah "
+"Kesalahan. Tolong periksa bahwa URL, nama pengguna, kata sandi, dll. sudah "
 "benar dan target sinkronisasi dapat diakses. Kesalahan yang dilaporkan "
 "adalah:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "Aplikasi sudah terautorisasi!"
+msgstr "Aplikasi sudah terotorisasi!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
@@ -3137,37 +3168,39 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"Tidak dapat autorisasi aplikasi:\n"
+"Tidak dapat mengotorisasi aplikasi:\n"
 "\n"
 "%s\n"
 "\n"
-"Coba lagi."
+"Tolong coba lagi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr "Harap konfirmasi bahwa ingin mengenkripsi ulang basis data lengkapmu."
+msgstr ""
+"Silakan konfirmasi bahwa Anda ingin mengenkripsi ulang seluruh basis data "
+"Anda."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Data akan dienkripsi ulang dan disinkronkan lagi."
+msgstr "Data Anda akan dienkripsi ulang dan disinkronkan lagi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
-"Silakan masukkan kata sandi di daftar kunci utama di bawah ini sebelum "
-"meningkatkan kunci."
+"Silakan masukkan kata sandi Anda di daftar kunci master di bawah ini sebelum "
+"mengupgrade kunci."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr "Kunci master telah berhasil ditingkatkan!"
+msgstr "Kunci master telah berhasil diupgrade!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "Tidak dapat memutakhirkan kunci utama:%s"
+msgstr "Tidak dapat mengupgrade kunci master: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3176,11 +3209,11 @@ msgstr "Item yang didekripsi: %s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "Tanda baru:"
+msgstr "Label baru:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
-msgstr "Ketikkan tag baru atau pilih dari daftar"
+msgstr "Ketik label baru atau pilih dari daftar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 msgid "Warning"
@@ -3191,13 +3224,13 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Agar dapat menggunakan sinkronisasi pada sistem perizinan berkas untuk "
-"dubuat penyimpanan eksernal ketika dibutuhkan."
+"Agar dapat menggunakan sinkronisasi sistem berkas, dibutuhkan perizinan "
+"untuk menulis pada penyimpanan eksternal."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:320
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:264
 msgid "Encryption Config"
-msgstr "Pengaturan enkripsi"
+msgstr "Konfigurasi Enkripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:440
 msgid "Tools"
@@ -3214,31 +3247,31 @@ msgstr "Log"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Creating report..."
-msgstr "Membuat laporan…."
+msgstr "Membuat laporan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Export Debug Report"
-msgstr "Ekspor laporan debug"
+msgstr "Ekspor Laporan Debug"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fixing search index..."
-msgstr "Memperbaiki indeks pencarian…."
+msgstr "Memperbaiki indeks pencarian..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fix search index"
-msgstr "Perbaiki pencarian index"
+msgstr "Perbaiki indeks pencarian"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Gunakan ini untuk membangun kembali indeks pencarian ketika terdapat masalah "
-"dengan pencarian. Memerlukan waktu lama bergantung pada jumlah catatan."
+"Gunakan ini untuk membangun kembali indeks pencarian jika ada masalah dengan "
+"pencarian. Ini mungkin butuh waktu lama tergantung pada jumlah catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Exporting profile..."
-msgstr "Mengekspor profil…."
+msgstr "Mengekspor profil..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Export profile"
@@ -3246,49 +3279,54 @@ msgstr "Ekspor profil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "Hanya untuk keperluan debug: ekspor profilmu ke kartu SD eksternal."
+msgstr ""
+"Hanya untuk keperluan debugging: ekspor profil Anda ke kartu SD eksternal."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:465
 msgid "More information"
-msgstr "Informasi lebih"
+msgstr "Informasi lebih lanjut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:475
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"Agar bekerja dengan benar, aplikasi membutuhkan perizinan berikut. Silahkan "
-"hidupkan di pengaturan ponsel, di Apps > Joplin > Permissions"
+"Agar dapat bekerja dengan benar, aplikasi ini membutuhkan perizinan berikut. "
+"Silakan aktifkan mereka di pengaturan ponsel Anda, di Aplikasi > Joplin > "
+"Perizinan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:478
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Penyimpanan : membolehkan melampirkan berkas ke catatan dan menghidupkan "
-"sinkronisasi pada filesistem."
+"- Penyimpanan: untuk memungkinkan melampirkan berkas ke catatan dan "
+"mengaktifkan sinkronisasi sistem berkas."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:481
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Kamera : Membolehkan melampirkan informasi geolokasi ke catatan."
+msgstr ""
+"- Kamera: untuk memungkinkan pengambilan gambar dan melampirkannya ke "
+"catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:484
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- Lokasi : Membolehkan melampirkan informasi geolokasi ke catatan."
+msgstr ""
+"- Lokasi: untuk memungkinkan melampirkan informasi geolokasi ke catatan."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:513
 msgid "Joplin website"
-msgstr "Website joplin"
+msgstr "Situs web Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
 #, javascript-format
 msgid "Database v%s"
-msgstr "Basisdata v%s"
+msgstr "Basis data v%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
 #, javascript-format
 msgid "FTS enabled: %d"
-msgstr "Menghidupkan FTS: %d"
+msgstr "FTS diaktifkan: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:51
 msgid "Login with Dropbox"
@@ -3301,7 +3339,7 @@ msgstr "Masukkan kode disini"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:119
 #, javascript-format
 msgid "Master Key %s"
-msgstr "Kunci Utama %s"
+msgstr "Kunci Master %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
@@ -3312,15 +3350,15 @@ msgstr "Dibuat: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "Sandi:"
+msgstr "Kata sandi:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
-msgstr "Sandi tidak boleh kosong"
+msgstr "Kata sandi tidak boleh kosong"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:139
 msgid "Confirm password cannot be empty"
-msgstr "Konfirmasi sandi tidak boleh kosong"
+msgstr "Konfirmasi kata sandi tidak boleh kosong"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:150
 msgid ""
@@ -3329,19 +3367,19 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Mengaktifkan enkripsi berarti *semua* catatan dan lampiran akan "
-"tersinkronisasi ulang dan mengirim enkripsi ke sinronisasi target. Jangan "
-"kehilangan sandi dikarenakan alasan keamanan, ini akan *hanya* cara untuk "
-"mendekripsi data! Untuk menghidupkan enkripsi, silahkan masukkan sandimu "
-"dibawah ini."
+"Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
+"disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target "
+"sinkronisasi. Jangan sampai kehilangan kata sandinya karena, untuk alasan "
+"keamanan, ini akan menjadi *hanya* satu-satunya cara untuk mendekripsi data! "
+"Untuk mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:177
 msgid "Enable"
-msgstr "Hidup"
+msgstr "Aktifkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:248
 msgid "Missing Master Keys"
-msgstr "Kehilangan kunci utama"
+msgstr "Kunci Master yang Hilang"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
 msgid ""
@@ -3349,25 +3387,25 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Kunci utama dengan IDs ini akan digunakan mengenkripsi dari item-mu, namun "
-"saat ini aplikasi tidak dapat mengaksesnya. Pada akhirnya akan diunduh "
-"melalui via sinkronisasi."
+"Kunci master dengan ID ini digunakan mengenkripsi beberapa item Anda, namun "
+"saat ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada "
+"akhirnya akan diunduh via sinkronisasi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:258
 msgid "Disable encryption"
-msgstr "Matikan enkripsi"
+msgstr "Nonaktifkan enkripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:258
 msgid "Enable encryption"
-msgstr "Hidupkan enkripsi"
+msgstr "Aktifkan enkripsi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:268
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Untuk informasi tentang enkripsi End-To-End (E2EE) dan tentang cara "
-"mengaktifkannya dapat diperiksa pada dokumentasi:"
+"Untuk informasi lebih lanjut tentang enkripsi End-To-End (E2EE) dan tentang "
+"bagaimana cara mengaktifkannya silakan cek dokumentasi:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
@@ -3380,7 +3418,7 @@ msgstr "Ubah buku catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
 msgid "Enter notebook title"
-msgstr "Memasukkan judul buku catatan"
+msgstr "Masukkan judul buku catatan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
@@ -3390,7 +3428,7 @@ msgstr "Segarkan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
 msgid "Show all"
-msgstr "Tampilkan Semua"
+msgstr "Tampilkan semua"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
 msgid "Errors only"
@@ -3398,7 +3436,7 @@ msgstr "Hanya kesalahan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "This note has been modified:"
-msgstr "Catatan ini termodifikasi:"
+msgstr "Catatan ini telah diubah:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Save changes"
@@ -3406,7 +3444,7 @@ msgstr "Simpan perubahan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Discard changes"
-msgstr "Membuang perubahan"
+msgstr "Buang perubahan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:139
 #, javascript-format
@@ -3415,40 +3453,39 @@ msgstr "Tidak ada item dengan ID %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:158
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Lampiran tidak dapat diunduh atau tidak terdekripsi."
+msgstr "Lampiran ini belum diunduh atau belum didekripsi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:162
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"Aplikasi mobile joplin saat ini tidak dapat mendukung tipe dari tautan : %s"
+msgstr "Aplikasi mobile Joplin saat ini belum mendukung tipe tautan ini: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:166
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "Tidak mendukung tautan dengan protokol “%s”"
+msgstr "Tautan dengan protokol \"%s\" tidak didukung"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:534
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Tidak mendukung tipe gambar: %s"
+msgstr "Tipe gambar tidak didukung: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:690
 #, javascript-format
 msgid "Updated: %s"
-msgstr "Terubah: %s"
+msgstr "Diperbarui: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:694
 msgid "View on map"
-msgstr "Lihat di map"
+msgstr "Lihat di peta"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
 msgid "Go to source URL"
-msgstr "Ke sumber URL"
+msgstr "Pergi ke URL sumber"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:729
 msgid "Attach..."
-msgstr "Melampirkan…."
+msgstr "Lampirkan..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Choose an option"
@@ -3464,11 +3501,11 @@ msgstr "Lampirkan foto"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Attach any file"
-msgstr "Lampirkan file apa saja"
+msgstr "Lampirkan berkas apa saja"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:750
 msgid "Share"
-msgstr "Sebarkan"
+msgstr "Bagikan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
 msgid "Convert to note"
