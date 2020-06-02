@@ -139,11 +139,15 @@ class MainScreenComponent extends React.Component {
 
 			const body = template ? TemplateUtils.render(template) : '';
 
-			const newNote = await Note.save({
+			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
+
+			let newNote = Object.assign({}, defaultValues, {
 				parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
 				body: body,
-			}, { provisional: true });
+			});
+
+			newNote = await Note.save(newNote, { provisional: true });
 
 			this.props.dispatch({
 				type: 'NOTE_SELECT',

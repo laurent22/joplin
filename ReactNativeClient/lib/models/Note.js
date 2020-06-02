@@ -249,9 +249,24 @@ class Note extends BaseItem {
 		});
 	}
 
-	static previewFields() {
-		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
-		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+	static previewFieldsWithDefaultValues(options = null) {
+		return Note.defaultValues(this.previewFields(options));
+	}
+
+	static previewFields(options = null) {
+		options = Object.assign({
+			includeTimestamps: true,
+		}, options);
+
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'encryption_applied'];
+
+		if (options.includeTimestamps) {
+			output.push('updated_time');
+			output.push('user_updated_time');
+			output.push('user_created_time');
+		}
+
+		return output;
 	}
 
 	static previewFieldsSql(fields = null) {

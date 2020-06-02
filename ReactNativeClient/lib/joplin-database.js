@@ -215,6 +215,18 @@ class JoplinDatabase extends Database {
 		return row;
 	}
 
+	fieldByName(tableName, fieldName) {
+		const fields = this.tableFields(tableName);
+		for (const field of fields) {
+			if (field.name === fieldName) return field;
+		}
+		throw new Error(`No such field: ${tableName}: ${fieldName}`);
+	}
+
+	fieldDefaultValue(tableName, fieldName) {
+		return this.fieldByName(tableName, fieldName).default;
+	}
+
 	fieldDescription(tableName, fieldName) {
 		const sp = sprintf;
 
