@@ -223,6 +223,8 @@ describe('models_Note', function() {
 		const resourceDir = Setting.value('resourceDir');
 		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
 		const r2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const t1 = r1.updated_time;
+		const t2 = r2.updated_time;
 
 		const testCases = [
 			[
@@ -248,12 +250,12 @@ describe('models_Note', function() {
 			[
 				true,
 				`![](:/${r1.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg)`,
+				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1})`,
 			],
 			[
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg) ![](file://${resourceDir}/${r1.id}.jpg) ![](file://${resourceDir}/${r2.id}.jpg)`,
+				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r2.id}.jpg?t=${t2})`,
 			],
 		];
 

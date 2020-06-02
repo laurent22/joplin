@@ -521,7 +521,7 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
-		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
 		}
 
