@@ -553,7 +553,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, [props.searchMarkers, renderedBody]);
 
-	const { focused, onBlur, onFocus } = useFocus({ editor });
+	const { focused, onBlur, onFocus } = useFocus();
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
