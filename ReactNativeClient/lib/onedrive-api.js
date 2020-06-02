@@ -130,8 +130,6 @@ class OneDriveApi {
 		}
 	}
 
-
-
 	async uploadChunk(url, handle, options) {
 		options = Object.assign({}, options);
 		if (!options.method) { options.method = 'POST'; }
@@ -148,7 +146,6 @@ class OneDriveApi {
 		const response = await shim.fetch(url, options);
 		return response;
 	}
-
 
 	async uploadBigFile(url, options) {
 		const response = await shim.fetch(url, {
