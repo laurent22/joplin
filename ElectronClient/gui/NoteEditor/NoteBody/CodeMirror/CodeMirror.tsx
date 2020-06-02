@@ -6,6 +6,7 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
+import useFocus from './utils/useFocus';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -344,6 +345,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, [props.searchMarkers, renderedBody]);
 
+	const { focused, onBlur, onFocus } = useFocus();
+
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
@@ -382,6 +385,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					cancelledKeys={cancelledKeys}
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
+					onFocus={onFocus}
+					onBlur={onBlur}
 					onEditorContextMenu={onEditorContextMenu}
 					onEditorPaste={onEditorPaste}
 				/>
@@ -408,6 +413,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					theme={props.theme}
 					dispatch={props.dispatch}
+					disabled={!focused}
 				/>
 				{props.noteToolbar}
 			</div>
