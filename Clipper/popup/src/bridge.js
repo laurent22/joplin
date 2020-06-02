@@ -375,4 +375,5 @@ const bridge = function() {
 	return bridge_;
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { bridge };

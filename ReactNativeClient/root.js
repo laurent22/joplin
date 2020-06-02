@@ -1,3 +1,6 @@
+import setUpQuickActions from './setUpQuickActions';
+import PluginAssetsLoader from './PluginAssetsLoader';
+
 const React = require('react');
 const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
@@ -80,9 +83,6 @@ const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
-
-import setUpQuickActions from './setUpQuickActions';
-import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
 

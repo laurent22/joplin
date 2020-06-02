@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
-const { MarkupToHtml } = require('lib/joplin-renderer');
-const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 import AsyncActionQueue from '../../../lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const usePrevious = require('lib/hooks/usePrevious').default;
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');

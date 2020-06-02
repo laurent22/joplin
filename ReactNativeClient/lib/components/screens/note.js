@@ -1,3 +1,5 @@
+import FileViewer from 'react-native-file-viewer';
+
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
@@ -38,8 +40,6 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
-
-import FileViewer from 'react-native-file-viewer';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
