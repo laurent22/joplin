@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -353,20 +353,32 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 </thead>
 <tbody>
 <tr>
-<td>macOS</td>
-<td><code>brew install joplin</code></td>
-</tr>
-<tr>
-<td>Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
-<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 10+</a>. <br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
-</tr>
-<tr>
-<td>Arch Linux</td>
-<td>An Arch Linux package is available <a href="https://aur.archlinux.org/packages/joplin/">here</a>. To install it, use an AUR wrapper such as yay: <code>yay -S joplin</code>. Both the CLI tool (type <code>joplin</code>) and desktop app (type <code>joplin-desktop</code>) are packaged. For support, please go to the <a href="https://github.com/masterkorp/joplin-pkgbuild">GitHub repo</a>.</td>
+<td>macOS, Linux, or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
+<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 10+</a>.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
 </tr>
 </tbody>
 </table>
 <p>To start it, type <code>joplin</code>.</p>
+<h2>Unsupported methods<a name="unsupported-methods" href="#unsupported-methods" class="heading-anchor">🔗</a></h2>
+<p>There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.</p>
+<table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td><code>brew install joplin</code></td>
+</tr>
+<tr>
+<td>Arch Linux</td>
+<td>An Arch Linux package is available <a href="https://aur.archlinux.org/packages/joplin/">here</a>. To install it, use an AUR wrapper such as yay: <code>yay -S joplin</code>. Both the CLI tool (type <code>joplin</code>) and desktop app (type <code>joplin-desktop</code>) are packaged. You can also install a compiled version with the <a href="https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur">chaotic-aur</a> repository. For support, please go to the <a href="https://github.com/masterkorp/joplin-pkgbuild">GitHub repo</a>.</td>
+</tr>
+</tbody>
+</table>
 <h1>Usage<a name="usage" href="#usage" class="heading-anchor">🔗</a></h1>
 <p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#shortcuts">shortcuts</a>.</p>
 <img src="https://joplinapp.org/images/ScreenshotTerminalCaptions.png" height="450px">

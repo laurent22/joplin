@@ -15,22 +15,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Για να διαγράψετε μία ετικέτα, αφαιρέστε την πρώτα από τις σχετικές "
 "σημειώσεις."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:456
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 "Παρακαλώ πρώτα επιλέξτε τη σημείωση ή το σημειωματάριο που θέλετε να "
 "διαγραφτεί."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
 "Πατήστε Ctrl+D ή πληκτρολογήστε \"exit\" για να βγείτε από την εφαρμογή"
@@ -113,12 +111,12 @@ msgid "Attaches the given file to the note."
 msgstr "Προσθέτει το καθορισμένο αρχείο στη σημείωση."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:25
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:40
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
@@ -143,11 +141,11 @@ msgstr "Προσθέτει το καθορισμένο αρχείο στη ση�
 msgid "Cannot find \"%s\"."
 msgstr "Δεν είναι δυνατή η εύρεση του \"%s\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:14
 msgid "Displays the given note."
 msgstr "Εμφανίζει τη καθορισμένη σημείωση."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:18
 msgid "Displays the complete information about note."
 msgstr "Εμφανίζει όλες τις πληροφορίες σχετικά με τη σημείωση."
 
@@ -202,13 +200,13 @@ msgstr ""
 "`decrypt`, `status`, `decrypt-file` και `target-status`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
 msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:38
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:70
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:75
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:74
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:79
 msgid "Operation cancelled"
 msgstr "Η λειτουργία ακυρώθηκε"
 
@@ -220,34 +218,44 @@ msgstr ""
 "Εκκίνηση αποκρυπτογράφησης... Παρακαλώ περιμένετε καθώς μπορεί να διαρκέσει "
 "αρκετά λεπτά ανάλογα με το μέγεθος αυτών που πρέπει να αποκρυπτογραφηθούν."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:64
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Αποκρυπτογραφημένα στοιχεία: %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
 msgstr "Η αποκρυπτογράφηση ολοκληρώθηκε."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:73
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:77
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:163
 msgid "Confirm password:"
 msgstr "Επιβεβαίωση κωδικού πρόσβασης:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:79
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:83
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
 msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός!"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Enabled"
 msgstr "Ενεργοποιημένη"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:548
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Απενεργοποιημένη"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 #, javascript-format
 msgid "Encryption is: %s"
@@ -516,7 +524,7 @@ msgid "Deletes the notebook without asking for confirmation."
 msgstr "Διαγράφει το σημειωματάριο χωρίς να ζητηθεί επιβεβαίωση."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:154
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
@@ -538,7 +546,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d σημειώσεις ταιριάζουν. Θέλετε να διαγραφούν;"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:373
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:377
 msgid "Delete note?"
 msgstr "Να διαγραφεί η σημείωση;"
 
@@ -801,128 +809,136 @@ msgid "You may also type `status` for more information."
 msgstr ""
 "Μπορείτε επίσης να πληκτρολογήσετε `status` για περισσότερες πληροφορίες."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:142
+#, fuzzy, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
+#, fuzzy, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
 msgstr "Πλευρική μπάρα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:369
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:397
 msgid "Note list"
 msgstr "Λίστα σημειώσεων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:375
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:403
 msgid "Note title"
 msgstr "Τίτλος σημειωματάριου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:409
 msgid "Note body"
 msgstr "Σώμα σημειώσεων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:461
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:466
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:545
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:186
 msgid "PDF File"
 msgstr "Αρχείο PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:514
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:496
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:682
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:524
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "Νέα σημείωση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:508
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:536
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "Νέο to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:520
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:700
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:548
 msgid "New notebook"
 msgstr "Νέο σημειωματάριο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:531
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:559
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:304
 msgid "New sub-notebook"
 msgstr "Νέο υπο-σημειωματάριο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:571
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:562
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:591
 msgid "Create note from template"
 msgstr "Δημιουργία σημείωσης από πρότυπο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:601
 msgid "Create to-do from template"
 msgstr "Δημιουργία to-do από πρότυπο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:611
 msgid "Insert template"
 msgstr "Εισαγωγή προτύπου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:592
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:621
 msgid "Open template directory"
 msgstr "Άνοιγμα φακέλου προτύπου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:599
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
 msgid "Refresh templates"
 msgstr "Ανανέωση προτύπων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:612
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:641
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "Επιλογές"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
 msgid "Note attachments..."
 msgstr "Επισυναπτόμενα..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
 #, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "Αναθεώρηση: %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:685
 #, javascript-format
 msgid "Client ID: %s"
 msgstr "Αναγνωριστικό προγράμματος-πελάτη: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
 #, javascript-format
 msgid "Sync Version: %s"
 msgstr "Έκδοση συγχρονισμού: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:687
 #, javascript-format
 msgid "Profile Version: %s"
 msgstr "Έκδοση προφίλ: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:840
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:804
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:126
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:101
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:135
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:139
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:185
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:754
@@ -931,211 +947,219 @@ msgstr "Αντιγραφή"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
 msgid "OK"
 msgstr "Εντάξει"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:680
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:709
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:792
 msgid "&File"
 msgstr "&Αρχείο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1085
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1140
 msgid "About Joplin"
 msgstr "Σχετικά με το Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:722
 msgid "Preferences..."
 msgstr "Προτιμήσεις..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:703
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:732
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1119
 msgid "Check for updates..."
 msgstr "Ελεγχος για ενημερώσεις..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:777
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:782
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "Εισαγωγή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:728
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:385
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:191
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:757
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:197
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:734
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:726
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "Συγχρονισμός"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
 #, javascript-format
 msgid "Hide %s"
 msgstr "Απόκρυψη %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
 msgid "Quit"
 msgstr "Έξοδος"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:799
 msgid "Close Window"
 msgstr "Κλείσιμο παραθύρου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:808
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
 msgid "&Edit"
 msgstr "&Επεξεργασία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
 msgid "Cut"
 msgstr "Αποκοπή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:821
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:850
 msgid "Paste"
 msgstr "Επικόλληση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:826
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:855
 msgid "Select all"
 msgstr "Επιλογή όλων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:834
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:863
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1690
 msgid "Bold"
 msgstr "Έντονη γραφή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1698
 msgid "Italic"
 msgstr "Πλάγια γραφή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:856
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
 msgid "Link"
 msgstr "Σύνδεσμος"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:867
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1718
 msgid "Code"
 msgstr "Κώδικας"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:881
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:910
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
 msgstr "Εισαγωγή Ημερομηνίας Ώρας"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:895
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:924
+msgid "Search in all the notes"
+msgstr "Αναζήτηση σε όλες τις σημειώσεις"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+msgid "Search in current note"
+msgstr "Αναζήτηση στην τρέχουσα σημείωση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
+msgid "&View"
+msgstr "&Εμφάνιση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:949
+msgid "Toggle sidebar"
+msgstr "Εναλλαγή πλευρικής μπάρας"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:962
+msgid "Layout button sequence"
+msgstr "Ακολουθία κουμπιών διάταξης"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:966
+msgid "Toggle note list"
+msgstr "Εναλλαγή λίστας σημειώσεων"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:975
+msgid "Toggle editor layout"
+msgstr "Εναλλαγή διάταξης editor"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1023
+msgid "Focus"
+msgstr "Εστίαση σε"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+msgid "Actual Size"
+msgstr "Πραγματικό μέγεθος"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1041
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1047
+msgid "Zoom In"
+msgstr "Μεγέθυνση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+msgid "Zoom Out"
+msgstr "Σμίκρινση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
+#, fuzzy
+msgid "&Note"
+msgstr "Σημείωση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1065
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1801
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:68
 msgid "Edit in external editor"
 msgstr "Επεξεργασία σε εξωτερικό editor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:906
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1076
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1634
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1810
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:781
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:779
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:745
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:757
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:922
-msgid "Search in all the notes"
-msgstr "Αναζήτηση σε όλες τις σημειώσεις"
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
+msgid "Statistics..."
+msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:933
-msgid "Search in current note"
-msgstr "Αναζήτηση στην τρέχουσα σημείωση"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:945
-msgid "&View"
-msgstr "&Εμφάνιση"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:664
-msgid "Toggle sidebar"
-msgstr "Εναλλαγή πλευρικής μπάρας"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:960
-msgid "Layout button sequence"
-msgstr "Ακολουθία κουμπιών διάταξης"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:964
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:673
-msgid "Toggle note list"
-msgstr "Εναλλαγή λίστας σημειώσεων"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:973
-msgid "Toggle editor layout"
-msgstr "Εναλλαγή διάταξης editor"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1021
-msgid "Focus"
-msgstr "Εστίαση σε"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
-msgid "Actual Size"
-msgstr "Πραγματικό μέγεθος"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
-msgid "Zoom In"
-msgstr "Μεγέθυνση"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
-msgid "Zoom Out"
-msgstr "Σμίκρινση"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
 msgstr "&Εργαλεία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1106
 msgid "&Help"
 msgstr "&Βοήθεια"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1109
 msgid "Website and documentation"
 msgstr "Ιστοσελίδα και εγχειρίδια"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1113
 msgid "Joplin Forum"
 msgstr "Joplin φόρουμ"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1061
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1116
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:499
 msgid "Make a donation"
 msgstr "Κάντε μια δωρεά"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1073
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1128
 msgid "Toggle development tools"
 msgstr "Εναλλαγή εργαλείων προγραμματισμού"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1207
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1299
 #, javascript-format
 msgid "Open %s"
 msgstr "Άνοιγμα %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1209
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1301
 msgid "Exit"
 msgstr "Έξοδος"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:242
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:322
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:726
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
@@ -1145,8 +1169,8 @@ msgstr "Έξοδος"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:438
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:442
 msgid "Cancel"
 msgstr "Άκυρο"
 
@@ -1175,13 +1199,13 @@ msgstr "Νέα έκδοση: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:436
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:440
 msgid "Yes"
 msgstr "Ναι"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:437
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:441
 msgid "No"
 msgstr "Όχι"
 
@@ -1283,7 +1307,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "Αυτό θα ανοίξει μια νέα οθόνη. Να αποθηκευθούν οι τρέχουσες αλλαγές;"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:170
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:313
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:311
 msgid "Check synchronisation configuration"
 msgstr "Ελέγχος ρυθμίσεων συγχρονισμού"
 
@@ -1333,12 +1357,12 @@ msgid "Browse..."
 msgstr "Αναζήτηση..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:642
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:990
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1017
 msgid "Edit"
 msgstr "Επεξεργασία"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:316
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1671
 msgid "Back"
@@ -1473,7 +1497,7 @@ msgstr "Εικονίδιο"
 msgid "Notebook properties"
 msgstr "Ιδιότητες σημειωματαρίου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:267
 msgid "Usage"
 msgstr "Χρήση"
 
@@ -1484,122 +1508,114 @@ msgid ""
 msgstr ""
 "Θα δημιουργηθεί νέο σημειωματάριο \"% s\" και θα εισαχθεί το αρχείο \"% s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:154
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:161
 msgid "Please create a notebook first."
 msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:160
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
 msgid "Please create a notebook first"
 msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:174
 msgid "Notebook title:"
 msgstr "Τίτλος σημειωματάριου:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:210
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:217
 msgid "Add or remove tags:"
 msgstr "Προσθήκη ή διαγραφή ετικετών:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:259
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
 msgid "Move to notebook:"
 msgstr "Μετακίνηση στο σημειωματάριο:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:279
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
 msgid "Rename notebook:"
 msgstr "Μετονομασία σημειωματάριου:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:300
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:309
 msgid "Rename tag:"
 msgstr "Μετονομασία ετικέτας:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:401
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:413
 msgid "Set alarm:"
 msgstr "Ορισμός ειδοποίησης:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:432
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:444
 msgid "Template file:"
 msgstr "Αρχείο προτύπου:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:574
-msgid "Some items cannot be synchronised."
-msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:579
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:591
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:615
-msgid "View them now"
-msgstr "Προβολή τώρα"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:586
-msgid "Some items cannot be decrypted."
-msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:598
-msgid "One or more master keys need a password."
-msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:603
-msgid "Set the password"
-msgstr "Ορισμός κωδικού πρόσβασης"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:610
-msgid "One of your master keys use an obsolete encryption method."
-msgstr ""
-"Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
-msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
-msgstr ""
-"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
-"κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:627
-msgid "More info"
-msgstr "Περισσότερες πληροφορίες"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:708
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
-msgid "Layout"
-msgstr "Διάταξη"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:717
-msgid "Search..."
-msgstr "Αναζήτηση..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:51
 msgid "Words"
 msgstr "Λέξεις"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:52
 msgid "Characters"
 msgstr "Χαρακτήρες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:53
 msgid "Characters excluding spaces"
 msgstr "Χαρακτήρες χωρίς τα κενά"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:54
 msgid "Lines"
 msgstr "Γραμμές"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:73
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+msgid "Editor"
+msgstr "Επεξεργασία"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:74
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
+msgid "Viewer"
+msgstr "Εμφάνιση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:82
 msgid "Content properties"
 msgstr "Ιδιότητες περιεχομένου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:454
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+msgid "Custom order"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#, fuzzy
+msgid "View"
+msgstr "&Εμφάνιση"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
+msgid "Sort notes by"
+msgstr "Ταξινόμηση σημειώσεων κατά"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
+#, fuzzy
+msgid "Do it now"
+msgstr "Λήψη τώρα:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Δεν υπάρχουν σημειώσεις εδώ μέσα. Δημιουργήστε μία πατώντας στο \"Νέα "
 "σημείωση\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:454
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -1627,7 +1643,7 @@ msgid "URL"
 msgstr "URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1025
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1118
 msgid "Note History"
 msgstr "Ιστορικό Σημειώσεων"
 
@@ -1635,11 +1651,11 @@ msgstr "Ιστορικό Σημειώσεων"
 msgid "Markup"
 msgstr "Markup"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:305
 msgid "Previous versions of this note"
 msgstr "Προηγούμενες εκδόσεις αυτής της σημείωσης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:382
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1834
 msgid "Note properties"
 msgstr "Ιδιότητες σημείωσης"
@@ -1656,7 +1672,6 @@ msgstr "Αυτή η σημείωση δεν έχει ιστορικό"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:865
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:630
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Μη υποστηριζόμενος σύνδεσμος ή μήνυμα: %s"
@@ -1697,14 +1712,16 @@ msgid "Copy Link Address"
 msgstr "Αντιγραφή διεύθυνσης σύνδεσης"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:594
 msgid "There was an error downloading this attachment:"
 msgstr "Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:597
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Διάταξη"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
@@ -1744,7 +1761,7 @@ msgstr "Επισύναψη αρχείου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1642
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1828
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:730
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:742
 msgid "Set alarm"
 msgstr "Ορισμός υπενθύμισης"
 
@@ -1790,17 +1807,14 @@ msgid "Content Properties"
 msgstr "Ιδιότητες Περιεχομένου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 msgid "to-do"
 msgstr "to-do"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 msgid "note"
 msgstr "σημείωση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Δημιουργία νεου %s..."
@@ -1824,19 +1838,18 @@ msgstr "Ενέργεια"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:42
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:707
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:710
 msgid "Untitled"
 msgstr "Χωρίς τίτλο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:46
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:198
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:325
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:287
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:326
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:772
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:784
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -1914,11 +1927,11 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "Αντιγραφή Συνδέσμου Κοινοποίησης"
 msgstr[1] "Αντιγραφή Συνδέσμων Κοινοποίησης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
 msgstr "Κατάργηση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:289
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -1931,39 +1944,39 @@ msgstr ""
 "Όλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν "
 "επίσης."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:293
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:295
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
 msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:342
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:392
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:339
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:389
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "Μετονομασία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:757
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:359
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Όλες οι σημειώσεις"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:764
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:762
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:363
 msgid "Notebooks"
 msgstr "Σημειωματάρια"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:799
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:797
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Αποκρυπτογράφηση αντικειμένων: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:804
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:802
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -1993,7 +2006,7 @@ msgid "Move to notebook"
 msgstr "Μετακίνηση στο σημειωματάριο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
 msgid "Duplicate"
 msgstr "Δημιουργία αντιγράφου"
 
@@ -2010,39 +2023,39 @@ msgstr "Διακοπή εξωτερικής επεξεργασίας"
 msgid "Switch between note and to-do type"
 msgstr "Εναλλαγή μεταξύ σημείωσης και to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:113
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
 msgid "Switch to note type"
 msgstr "Αλλαγή σε σημείωση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:122
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:128
 msgid "Switch to to-do type"
 msgstr "Αλλαγή σε to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:132
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:138
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:771
 msgid "Copy Markdown link"
 msgstr "Αντιγραφή συνδέσμου Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:147
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:153
 msgid "Share note..."
 msgstr "Κοινοποίηση σημείωσης..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:215
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Διαγραφή σημείωσης \"%s\";"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:217
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:223
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Διαγραφή των σημειώσεων %d;"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:234
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:240
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:439
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
@@ -2051,7 +2064,7 @@ msgstr ""
 "μεταβείτε σε αυτόν. Ή πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας "
 "ή @ ακολουθούμενο από ένα σημειωματάριο."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:471
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:477
 msgid "Goto Anything..."
 msgstr "Γρήγορη Μετακίνηση..."
 
@@ -2164,7 +2177,7 @@ msgstr ""
 "Παρακαλώ σκεφτείτε να χρησιμοποιήσετε έναν κανονικό λογαριασμό OneDrive."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:90
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:435
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:439
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2235,21 +2248,21 @@ msgstr "Αδρανής"
 msgid "In progress"
 msgstr "Σε εξέλιξη"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:706
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:709
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:766
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:769
 msgid "Encrypted items cannot be modified"
 msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "title"
 msgstr "τίτλος"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
 msgstr "ημερομηνία ενημέρωσης"
 
@@ -2257,31 +2270,35 @@ msgstr "ημερομηνία ενημέρωσης"
 msgid "Conflicts"
 msgstr "Διενέξεις"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:354
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:381
 msgid "Cannot move notebook to this location"
 msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:402
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:429
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Τα σημειωματάρια δεν μπορούν να ονομαστούν  \"%s\", που είναι δεσμευμένος "
 "τίτλος."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
 msgstr "ημερομηνία δημιουργίας"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:105
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
 msgstr "Αυτή η σημείωση δεν διαθέτει πληροφορίες γεωγραφικής θέσης."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:459
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:446
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Δεν είναι δυνατή η αντιγραφή της σημείωσης στο σημειωματάριο \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:470
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:457
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Δεν είναι δυνατή η μετακίνηση της σημείωσης στο σημειωματάριο \"%s\""
@@ -2323,27 +2340,39 @@ msgstr ""
 "περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα "
 "αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:52
-msgid "Keyboard Mode"
-msgstr "Λειτουργία πληκτρολογίου"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:42
+msgid "Light"
+msgstr "Light"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:55
-msgid "Default"
-msgstr "Προεπιλογή"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:43
+msgid "Dark"
+msgstr "Dark"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:56
-msgid "Emacs"
-msgstr "Emacs"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+msgid "Dracula"
+msgstr "Dracula"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:57
-msgid "Vim"
-msgstr "Vim"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:46
+msgid "Solarised Light"
+msgstr "Solarised Light"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:47
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+msgid "Nord"
+msgstr "Nord"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:73
 msgid "Synchronisation target"
 msgstr "Στόχος συγχρονισμού"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:69
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:75
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
@@ -2352,39 +2381,39 @@ msgstr ""
 "πρόσθετες παραμέτρους οι οποίες ονομάζονται ως `sync.NUM.NAME` (οι οποίες "
 "αναφέρονται παρακάτω)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:97
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Φάκελος για συγχρονισμό (absolute path)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:109
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:114
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:120
 msgid "Nextcloud username"
 msgstr "Nextcloud username"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:124
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:130
 msgid "Nextcloud password"
 msgstr "Nextcloud password"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:136
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:142
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:147
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:153
 msgid "WebDAV username"
 msgstr "WebDAV username"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:157
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:163
 msgid "WebDAV password"
 msgstr "WebDAV password"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
 msgid "Attachment download behaviour"
 msgstr "Συμπεριφορά λήψης συνημμένων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:183
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:189
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2395,225 +2424,184 @@ msgstr ""
 "σημείωση. Στην λειτουργία \"Πάντα\", όλα τα συνημμένα λαμβάνονται είτε "
 "ανοίγετε τη σημείωση είτε όχι."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:192
 msgid "Always"
 msgstr "Πάντα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:187
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:193
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:194
 msgid "Auto"
 msgstr "Αυτόματα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:193
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:199
 msgid "Max concurrent connections"
 msgstr "Μέγιστος αριθμός ταυτόχρονων συνδέσεων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:202
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:208
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:212
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:218
 msgid "Date format"
 msgstr "Μορφή ημερομηνίας"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:231
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:237
 msgid "Time format"
 msgstr "Μορφή ώρας"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Theme"
 msgstr "Θέμα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:250
-msgid "Light"
-msgstr "Light"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Automatically switch theme to match system theme"
+msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-msgid "Dark"
-msgstr "Dark"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+msgid "Preferred light theme"
+msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-msgid "Dracula"
-msgstr "Dracula"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+msgid "Preferred dark theme"
+msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:254
-msgid "Solarised Light"
-msgstr "Solarised Light"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:255
-msgid "Solarised Dark"
-msgstr "Solarised Dark"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
-msgid "Nord"
-msgstr "Nord"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
-msgid "Aritim Dark"
-msgstr "Aritim Dark"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
-msgid "OLED Dark"
-msgstr "OLED Dark"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
 msgstr "Εμφάνιση πλήθους σημειώσεων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-msgid "Editor"
-msgstr "Επεξεργασία"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
-msgid "Viewer"
-msgstr "Εμφάνιση"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
 msgid "Split View"
 msgstr "Διαίρεση προβολής"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
-msgid "Split"
-msgstr "Διαχωρισμός"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:312
 msgid "Uncompleted to-dos on top"
 msgstr "Μη ολοκληρωμένα to-dos στην κορυφή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
 msgid "Show completed to-dos"
 msgstr "Εμφάνιση ολοκληρωμένων to-dos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:288
-msgid "Sort notes by"
-msgstr "Ταξινόμηση σημειώσεων κατά"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:338
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Reverse sort order"
 msgstr "Αντίστροφη σειρά ταξινόμησης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:314
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:347
 msgid "Sort notebooks by"
 msgstr "Ταξινόμηση σημειωματάριων κατά"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Save geo-location with notes"
 msgstr "Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:345
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid "When creating a new to-do:"
 msgstr "Κατά τη δημιουργία ενός νέου to-do:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:348
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:396
 msgid "Focus title"
 msgstr "Eστίαση στον τίτλο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:349
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:397
 msgid "Focus body"
 msgstr "Eστίαση στο σώμα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:393
 msgid "When creating a new note:"
 msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:374
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
 msgid "Enable soft breaks"
 msgstr "Ενεργοποίηση soft breaks"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:375
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:408
 msgid "Enable typographer support"
 msgstr "Ενεργοποίηση υποστήριξης typographer"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:409
 msgid "Enable math expressions"
 msgstr "Ενεργοποίηση math expressions"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:377
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:410
 msgid "Enable Fountain syntax support"
 msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:411
 msgid "Enable Mermaid diagrams support"
 msgstr "Ενεργοποίηση υποστήριξης διαγραμμάτων Mermaid"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:413
 msgid "Enable ==mark== syntax"
 msgstr "Ενεργοποίηση ==mark== syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:414
 msgid "Enable footnotes"
 msgstr "Ενεργοποίηση footnotes"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:415
 msgid "Enable table of contents extension"
 msgstr "Ενεργοποίηση επέκτασης table of contents"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:383
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:416
 msgid "Enable ~sub~ syntax"
 msgstr "Ενεργοποίηση ~sub~ syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:384
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:417
 msgid "Enable ^sup^ syntax"
 msgstr "Ενεργοποίηση ^sup^ syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:385
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:418
 msgid "Enable deflist syntax"
 msgstr "Ενεργοποίηση deflist syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:419
 msgid "Enable abbreviation syntax"
 msgstr "Ενεργοποίηση abbreviation syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:387
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:420
 msgid "Enable markdown emoji"
 msgstr "Ενεργοποίηση markdown emoji"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:388
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:421
 msgid "Enable ++insert++ syntax"
 msgstr "Ενεργοποίηση ++insert++ syntax"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:389
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:422
 msgid "Enable multimarkdown table extension"
 msgstr "Ενεργοποίηση επέκτασης multimarkdown table"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:401
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:434
 msgid "Show tray icon"
 msgstr "Εμφάνιση εικονιδίου στη γραμμή εργασιών"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
 msgid "Note: Does not work in all desktop environments."
 msgstr "Σημείωση: Δεν λειτουργεί σε όλα τα γραφικά περιβάλλοντα."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2623,23 +2611,23 @@ msgstr ""
 "ενεργοποιήσετε αυτήν τη ρύθμιση έτσι ώστε οι σημειώσεις σας να "
 "συγχρονίζονται συνεχώς, μειώνοντας έτσι τον αριθμό των διενέξεων."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:440
 msgid "Start application minimised in the tray icon"
 msgstr "Έναρξη εφαρμογής ελαχιστοποιημένη στη γραμμή εργασιών"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:424
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:457
 msgid "Editor font size"
 msgstr "Μέγεθος γραμματοσειράς editor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:465
 msgid "Editor font"
 msgstr "Γραμματοσειρά editor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:456
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
 msgid "Editor font family"
 msgstr "Οικογένεια γραμματοσειράς editor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:458
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
@@ -2648,50 +2636,50 @@ msgstr ""
 "σωστά. Εάν η γραμματοσειρά είναι εσφαλμένη ή κενή, θα προεπιλεγεί μια γενική "
 "γραμματοσειρά *monospace*."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:503
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
 msgid "Automatically update the application"
 msgstr "Αυτόματη ενημέρωση της εφαρμογής"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 msgid "Get pre-releases when checking for updates"
 msgstr "Λήψη προεκδόσεων κατά τον έλεγχο για ενημερώσεις"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Δείτε τη σελίδα προέκδοσης για περισσότερες λεπτομέρειες: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:545
 msgid "Synchronisation interval"
 msgstr "Διάστημα συγχρονισμού"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:516
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:551
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d΄λεπτά"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:519
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
 #, javascript-format
 msgid "%d hour"
 msgstr "%d ώρα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:520
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:553
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:554
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ώρες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid "Text editor command"
 msgstr "Εντολή \"Επεξεργαστή κειμένου\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2700,51 +2688,67 @@ msgstr ""
 "για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να "
 "ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:564
 msgid "Page size for PDF export"
 msgstr "Μέγεθος σελίδας για εξαγωγή PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:566
 msgid "A4"
 msgstr "A4"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
 msgid "Letter"
 msgstr "Letter"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:535
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:568
 msgid "A3"
 msgstr "A3"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
 msgid "A5"
 msgstr "A5"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:538
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:571
 msgid "Legal"
 msgstr "Legal"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:541
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:574
 msgid "Page orientation for PDF export"
 msgstr "Προσανατολισμός σελίδας για εξαγωγή PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
 msgid "Portrait"
 msgstr "Κάθετη"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:544
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
 msgid "Landscape"
 msgstr "Οριζόντια"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:559
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:588
+msgid "Keyboard Mode"
+msgstr "Λειτουργία πληκτρολογίου"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:591
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:592
+msgid "Emacs"
+msgstr "Emacs"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:593
+msgid "Vim"
+msgstr "Vim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:608
 msgid "Custom TLS certificates"
 msgstr "Custom πιστοποιητικά TLS"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:609
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2757,15 +2761,15 @@ msgstr ""
 "στις ρυθμίσεις TLS, πρέπει να αποθηκεύσετε τις αλλαγές σας πριν κάνετε κλικ "
 "στο \"Έλεγχος ρύθμισης παραμέτρων συγχρονισμού\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:621
 msgid "Ignore TLS certificate errors"
 msgstr "Παράβλεψη σφαλμάτων πιστοποιητικού TLS"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:630
 msgid "Fail-safe"
 msgstr "Ασφαλής"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:631
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2774,7 +2778,7 @@ msgstr ""
 "είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός "
 "σφάλματος)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:586
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:635
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2782,61 +2786,83 @@ msgstr ""
 "Καθορίστε τη πόρτα που πρέπει να χρησιμοποιείται από το διακομιστή API. Εάν "
 "δεν οριστεί, θα χρησιμοποιηθεί μια προεπιλογή."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:594
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:643
 msgid "Enable note history"
 msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:604
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
 msgid "days"
 msgstr "ημέρες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:604
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
 #, javascript-format
 msgid "%d days"
 msgstr "%d ημέρες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:606
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:655
 msgid "Keep note history for"
 msgstr "Διατήρηση ιστορικού σημειώσεων για"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:731
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
+msgid "Notebook list growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:710
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
+msgid "Note list growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
+msgid "Note area growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1019
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1112
 msgid "General"
 msgstr "Γενικά"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1020
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1113
 msgid "Synchronisation"
 msgstr "Συγχρονισμός"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1021
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1114
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1022
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1115
 msgid "Note"
 msgstr "Σημείωση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1023
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1116
 msgid "Plugins"
 msgstr "Πρόσθετα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1024
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1117
 msgid "Application"
 msgstr "Εφαρμογή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1026
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1119
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1027
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1120
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1032
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1125
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2855,7 +2881,7 @@ msgstr ""
 "μορφοποίηση της προσθήκης. Υποδεικνύεται παρακάτω ποια πρόσθετα είναι "
 "συμβατά ή όχι με τον επεξεργαστή WYSIWYG."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1126
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Οι σημειώσεις και οι ρυθμίσεις αποθηκεύονται στο: %s"
@@ -3071,24 +3097,24 @@ msgstr ""
 "Δεν υπάρχουν προς το παρόν σημειώσεις. Δημιουργήστε μία κάνοντας κλικ στο "
 "κουμπί (+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:184
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:185
 msgid "Delete these notes?"
 msgstr "Να διαγραφούν αυτές οι σημειώσεις;"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:361
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:362
 msgid "Move to notebook..."
 msgstr "Μετακίνηση στο σημειωματάριο..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:400
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:418
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:421
 msgid "Press to set the decryption password."
 msgstr "Πατήστε για να ορίσετε τον κωδικό αποκρυπτογράφησης."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:419
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:422
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Πατήστε για "
@@ -3124,7 +3150,7 @@ msgid "New Notebook"
 msgstr "Νέο σημειωματάριο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:555
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:553
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
 
@@ -3209,7 +3235,6 @@ msgid "Warning"
 msgstr "Προειδοποίηση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -3217,45 +3242,41 @@ msgstr ""
 "Για να χρησιμοποιήσετε το συγχρονισμό του συστήματος αρχείων απαιτείται η "
 "άδειά σας για εγγραφή στον εξωτερικό χώρο αποθήκευσης."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
-msgid "Information"
-msgstr "Πληροφορίες"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:322
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:320
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:264
 msgid "Encryption Config"
 msgstr "Ρυθμίσεις κρυπτογράφησης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:442
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:440
 msgid "Tools"
 msgstr "Εργαλεία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:442
 msgid "Sync Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:443
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
 msgid "Log"
 msgstr "Log"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Creating report..."
 msgstr "Δημιουργία αναφοράς..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Export Debug Report"
 msgstr "Εξαγωγή Aναφοράς Debug"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fixing search index..."
 msgstr "Διόρθωση ευρετηρίων αναζήτησης..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fix search index"
 msgstr "Διόρθωση ευρετηρίων αναζήτησης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -3264,25 +3285,25 @@ msgstr ""
 "πρόβλημα με την αναζήτηση. Μπορεί να χρειαστεί πολύς χρόνος ανάλογα με τον "
 "αριθμό των σημειώσεων."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Exporting profile..."
 msgstr "Γίνεται εξαγωγή προφίλ..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Export profile"
 msgstr "Εξαγωγή προφίλ"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 "Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια "
 "εξωτερική κάρτα SD."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:467
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:465
 msgid "More information"
 msgstr "Περισσότερες πληροφορίες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:477
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:475
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -3291,7 +3312,7 @@ msgstr ""
 "Ενεργοποιήστε τα στις ρυθμίσεις του τηλεφώνου σας, στο Apps> Joplin> "
 "Permissions"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:480
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:478
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -3299,28 +3320,28 @@ msgstr ""
 "- Αποθήκευση: για να επιτρέπεται η προσάρτηση αρχείων στις σημειώσεις και η "
 "ενεργοποίηση συγχρονισμού αρχείων συστήματος."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:481
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Φωτογραφική μηχανή: για να μπορείτε να τραβήξετε μια φωτογραφία και να την "
 "προσαρτήσετε σε μια σημείωση."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:484
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Τοποθεσία: να επιτρέπεται η επισύναψη πληροφοριών γεωγραφικής θέσης σε μια "
 "σημείωση."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:513
 msgid "Joplin website"
 msgstr "Joplin website"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
 #, javascript-format
 msgid "Database v%s"
 msgstr "Βάση Δεδομένων v%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "FTS ενεργοποιημένο: %d"
@@ -3339,7 +3360,7 @@ msgid "Master Key %s"
 msgstr "Κύριο Κλειδί %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:677
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
 #, javascript-format
 msgid "Created: %s"
 msgstr "Δημιουργήθηκε: %s"
@@ -3432,99 +3453,99 @@ msgstr "Εμφάνιση όλων"
 msgid "Errors only"
 msgstr "Μόνο σφάλματα"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "This note has been modified:"
 msgstr "Αυτή η σημείωση έχει τροποποιηθεί:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Save changes"
 msgstr "Αποθήκευση αλλαγών"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Discard changes"
 msgstr "Απόρριψη αλλαγών"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:137
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:139
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Δεν υπάρχει στοιχείο με αναγνωριστικό %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:156
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:158
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:160
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:162
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Η εφαρμογή Joplin για κινητά δεν υποστηρίζει αυτήν τη στιγμή αυτόν τον τύπο "
 "συνδέσμου: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:164
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:166
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Σύνδεσμοι με πρωτόκολλο \"%s\" δεν υποστηρίζονται"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:534
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Μη υποστηριζόμενος τύπος εικόνας: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:678
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:690
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Ενημερώθηκε: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:682
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:694
 msgid "View on map"
 msgstr "Προβολή στο χάρτη"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
 msgid "Go to source URL"
 msgstr "Μεταβείτε στη διεύθυνση URL προέλευσης"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:729
 msgid "Attach..."
 msgstr "Επισύναψη..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Choose an option"
 msgstr "Διαλέξτε μία επιλογή"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Take photo"
 msgstr "Βγάλτε μια φωτογραφία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Attach photo"
 msgstr "Επισυνάψτε μία φωτογραφία"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Attach any file"
 msgstr "Επισυνάψτε οποιοδήποτε αρχείο"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:738
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:750
 msgid "Share"
 msgstr "Κοινοποίηση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:752
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
 msgid "Convert to note"
 msgstr "Μετατροπή σε σημείωση"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:752
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
 msgid "Convert to todo"
 msgstr "Μετατροπή σε to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:766
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:778
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:945
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:982
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:957
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1007
 msgid "Add body"
 msgstr "Προσθήκη σώματος κειμένου"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1018
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1045
 msgid "Add title"
 msgstr "Προσθήκη τίτλου"
 
@@ -3535,6 +3556,47 @@ msgstr "Είσοδος με Onedrive"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
 msgstr "Εύρεση"
+
+#~ msgid "Some items cannot be synchronised."
+#~ msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
+
+#~ msgid "View them now"
+#~ msgstr "Προβολή τώρα"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
+
+#~ msgid "One or more master keys need a password."
+#~ msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
+
+#~ msgid "Set the password"
+#~ msgstr "Ορισμός κωδικού πρόσβασης"
+
+#~ msgid "One of your master keys use an obsolete encryption method."
+#~ msgstr ""
+#~ "Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
+
+#~ msgid ""
+#~ "The default encryption method has been changed, you should re-encrypt "
+#~ "your data."
+#~ msgstr ""
+#~ "Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
+#~ "κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
+
+#~ msgid "More info"
+#~ msgstr "Περισσότερες πληροφορίες"
+
+#~ msgid "Search..."
+#~ msgstr "Αναζήτηση..."
+
+#~ msgid "Aritim Dark"
+#~ msgstr "Aritim Dark"
+
+#~ msgid "Split"
+#~ msgstr "Διαχωρισμός"
+
+#~ msgid "Information"
+#~ msgstr "Πληροφορίες"
 
 #, fuzzy
 #~ msgid "Resources"
