@@ -39,6 +39,7 @@ showHelp() {
     print "\t" "--allow-root" "\t" "Allow the install to be run as root"
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
+    print "\t" "--silent" "\t" "Don't print any output"
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
