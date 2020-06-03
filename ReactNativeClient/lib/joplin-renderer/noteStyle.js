@@ -100,6 +100,16 @@ module.exports = function(theme) {
 			font-size: 1em;
 			font-weight: bold;
 		}
+
+		.exported-note-title {
+			font-size: 2em;
+			font-weight: bold;
+			margin-bottom: 0.8em;
+			line-height: 1.5em;
+			padding-bottom: .35em;
+			border-bottom: 1px solid ${theme.htmlDividerColor};
+		}
+
 		a {
 			color: ${theme.htmlLinkColor};
 		}
@@ -278,12 +288,6 @@ module.exports = function(theme) {
 
 		.md-checkbox .checkbox-label-checked {
 			opacity: 0.5;
-		}
-
-		.exported-note-title {
-			font-size: 2.2em;
-			font-weight: bold;
-			margin-bottom: 1em;
 		}
 
 		.exported-note {
