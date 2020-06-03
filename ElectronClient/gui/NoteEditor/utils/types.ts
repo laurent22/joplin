@@ -61,6 +61,7 @@ export interface FormNote {
 	markup_language: number,
 	user_updated_time: number,
 	encryption_applied: number,
+	source_url: string,
 
 	hasChanged: boolean,
 
@@ -111,6 +112,7 @@ export function defaultFormNote():FormNote {
 		hasChanged: false,
 		user_updated_time: 0,
 		encryption_applied: 0,
+		source_url: '',
 	};
 }
 

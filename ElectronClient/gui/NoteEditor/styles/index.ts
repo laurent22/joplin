@@ -31,6 +31,14 @@ export default function styles(props: NoteEditorProps) {
 				border: '1px solid',
 				borderColor: theme.dividerColor,
 			},
+			urlStyle: {
+				...theme.urlStyle,
+				whiteSpace: 'nowrap',
+				overflow: 'hidden',
+				textOverflow: 'ellipsis',
+				margin: 8,
+				marginBottom: 3,
+			},
 			warningBanner: {
 				background: theme.warningBackgroundColor,
 				fontFamily: theme.fontFamily,

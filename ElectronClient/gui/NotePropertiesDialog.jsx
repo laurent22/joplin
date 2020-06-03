@@ -198,6 +198,10 @@ class NotePropertiesDialog extends React.Component {
 				newFormNote[this.state.editedKey] = this.state.editedValue;
 			}
 
+			if (this.props.onChange) {
+				this.props.onChange(this.state.editedKey, newFormNote[this.state.editedKey]);
+			}
+
 			this.setState(
 				{
 					formNote: newFormNote,

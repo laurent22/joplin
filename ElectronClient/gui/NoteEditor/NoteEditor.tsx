@@ -189,11 +189,8 @@ function NoteEditor(props: NoteEditorProps) {
 
 		handleProvisionalFlag();
 
-		const change = field === 'body' ? {
-			body: value,
-		} : {
-			title: value,
-		};
+		const change: { [key: string]: any } = {};
+		change[field] = value;
 
 		const newNote = {
 			...formNote,
@@ -316,6 +313,20 @@ function NoteEditor(props: NoteEditorProps) {
 	const noteToolbar_buttonClick = useCallback((event: any) => {
 		const cases: any = {
 
+			'noteProperties': async () => {
+				props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandNoteProperties',
+					noteId: formNote.id,
+					onRevisionLinkClick: () => {
+						noteToolbar_buttonClick({ name: 'showRevisions' });
+					},
+					onChange: (key: string, value: any) => {
+						onFieldChange(key, value);
+					},
+				});
+			},
+
 			'startExternalEditing': async () => {
 				props.dispatch({
 					type: 'WINDOW_COMMAND',
@@ -410,6 +421,22 @@ function NoteEditor(props: NoteEditorProps) {
 					value={formNote.title}
 				/>
 				{titleBarDate}
+			</div>
+		);
+	}
+
+	function renderUrlBar() {
+		if (!formNote.source_url) return false;
+
+		return (
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<a
+					href="#"
+					onClick={() => bridge().openExternal(formNote.source_url)}
+					style={styles.urlStyle}
+				>
+					{formNote.source_url}
+				</a>
 			</div>
 		);
 	}
@@ -525,6 +552,7 @@ function NoteEditor(props: NoteEditorProps) {
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderTitleBar()}
+				{renderUrlBar()}
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderNoteToolbar()}{renderTagBar()}
 				</div>

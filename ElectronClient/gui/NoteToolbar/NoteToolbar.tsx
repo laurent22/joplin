@@ -37,8 +37,8 @@ function styles_(props:NoteToolbarProps) {
 }
 
 function useToolbarItems(props:NoteToolbarProps) {
-	const { note, folders, watchedNoteFiles, notesParentType, dispatch
-		, onButtonClick, backwardHistoryNotes, forwardHistoryNotes } = props;
+	const { note, folders, watchedNoteFiles, notesParentType, onButtonClick
+		, backwardHistoryNotes, forwardHistoryNotes } = props;
 
 	const toolbarItems = [];
 
@@ -86,14 +86,7 @@ function useToolbarItems(props:NoteToolbarProps) {
 		tooltip: _('Note properties'),
 		iconName: 'fa-info-circle',
 		onClick: () => {
-			dispatch({
-				type: 'WINDOW_COMMAND',
-				name: 'commandNoteProperties',
-				noteId: note.id,
-				onRevisionLinkClick: () => {
-					onButtonClick({ name: 'showRevisions' });
-				},
-			});
+			onButtonClick({ name: 'noteProperties' });
 		},
 	});
 
