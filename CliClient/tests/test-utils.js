@@ -37,12 +37,14 @@ const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const ResourceService = require('lib/services/ResourceService.js');
 const RevisionService = require('lib/services/RevisionService.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
+const md5 = require('md5');
 
 const databases_ = [];
 const synchronizers_ = [];
@@ -50,6 +52,7 @@ const encryptionServices_ = [];
 const revisionServices_ = [];
 const decryptionWorkers_ = [];
 const resourceServices_ = [];
+const resourceFetchers_ = [];
 const kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
@@ -254,6 +257,7 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 	resourceServices_[id] = new ResourceService();
+	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
 
 	await fileApi().clearRoot();
@@ -296,6 +300,11 @@ function decryptionWorker(id = null) {
 function resourceService(id = null) {
 	if (id === null) id = currentClient_;
 	return resourceServices_[id];
+}
+
+function resourceFetcher(id = null) {
+	if (id === null) id = currentClient_;
+	return resourceFetchers_[id];
 }
 
 async function loadEncryptionMasterKey(id = null, useExisting = false) {
@@ -482,6 +491,10 @@ async function createNTestTags(n) {
 	return tags;
 }
 
+function tempFilePath(ext) {
+	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
+}
+
 // Application for feature integration testing
 class TestApp extends BaseApplication {
 	constructor(hasGui = true) {
@@ -550,4 +563,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

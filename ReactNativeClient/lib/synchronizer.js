@@ -372,6 +372,12 @@ class Synchronizer {
 						let reason = '';
 						let remoteContent = null;
 
+						const getConflictType = (conflictedItem) => {
+							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return 'noteConflict';
+							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return 'resourceConflict';
+							return 'itemConflict';
+						};
+
 						if (!remote) {
 							if (!local.sync_time) {
 								action = 'createRemote';
@@ -379,7 +385,7 @@ class Synchronizer {
 							} else {
 								// Note or item was modified after having been deleted remotely
 								// "itemConflict" is for all the items except the notes, which are dealt with in a special way
-								action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
+								action = getConflictType(local);
 								reason = 'remote has been deleted, but local has changes';
 							}
 						} else {
@@ -416,7 +422,7 @@ class Synchronizer {
 								// Since, in this loop, we are only dealing with items that require sync, if the
 								// remote has been modified after the sync time, it means both items have been
 								// modified and so there's a conflict.
-								action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
+								action = getConflictType(local);
 								reason = 'both remote and local have changes';
 							} else {
 								action = 'updateRemote';
@@ -528,8 +534,25 @@ class Synchronizer {
 								conflictedNote.is_conflict = 1;
 								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
 							}
-
+						} else if (action == 'resourceConflict') {
 							// ------------------------------------------------------------------------------
+							// Unlike notes we always handle the conflict for resources
+							// ------------------------------------------------------------------------------
+
+							await Resource.createConflictResourceNote(local);
+
+							if (remote) {
+								// The local content we have is no longer valid and should be re-downloaded
+								await Resource.setLocalState(local.id, {
+									fetch_status: Resource.FETCH_STATUS_IDLE,
+								});
+							}
+						}
+
+						if (['noteConflict', 'resourceConflict'].includes(action)) {
+							// ------------------------------------------------------------------------------
+							// For note and resource conflicts, the creation of the conflict item is done
+							// differently. However the way the local content is handled is the same.
 							// Either copy the remote content to local or, if the remote content has
 							// been deleted, delete the local content.
 							// ------------------------------------------------------------------------------
@@ -718,9 +741,9 @@ class Synchronizer {
 							if (action == 'createLocal') options.isNew = true;
 							if (action == 'updateLocal') options.oldItem = local;
 
-							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal';
+							const creatingOrUpdatingResource = content.type_ == BaseModel.TYPE_RESOURCE && (action == 'createLocal' || action == 'updateLocal');
 
-							if (creatingNewResource) {
+							if (creatingOrUpdatingResource) {
 								if (content.size >= this.maxResourceSize()) {
 									await handleCannotSyncItem(ItemClass, syncTargetId, content, `File "${content.title}" is larger than allowed ${this.maxResourceSize()} bytes. Beyond this limit, the mobile app would crash.`, BaseItem.SYNC_ITEM_LOCATION_REMOTE);
 									continue;
@@ -731,7 +754,7 @@ class Synchronizer {
 
 							await ItemClass.save(content, options);
 
-							if (creatingNewResource) this.dispatch({ type: 'SYNC_CREATED_RESOURCE', id: content.id });
+							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;

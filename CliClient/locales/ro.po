@@ -17,525 +17,498 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
 "%100<=19) ? 1 : 2);\n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
+#: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Pentru a șterge o eticheta, ștergeți eticheta respectivă din cadrul "
 "notițelor aferente."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:456
+#: CliClient/app/app-gui.js:456
 #, fuzzy
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Selectați prima dată un caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:720
+#: CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Apăsați Ctrl+D ori scrieți \"exit\" pentru a ieși din aplicație"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
+#: CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
+#: CliClient/app/app.js:91
 msgid "No notebook selected."
 msgstr "Niciun caiet de notițe nu a fost selectat."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
+#: CliClient/app/app.js:97
 msgid "No notebook has been specified."
 msgstr "Niciun caiet de notițe nu a fost specificat."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+#: CliClient/app/app.js:136 CliClient/app/cli-utils.js:160
 msgid "Y"
 msgstr "Y"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+#: CliClient/app/app.js:136 CliClient/app/cli-utils.js:160
 msgid "n"
 msgstr "n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: CliClient/app/app.js:136
 msgid "N"
 msgstr "N"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: CliClient/app/app.js:136
 msgid "y"
 msgstr "y"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
+#: CliClient/app/app.js:169
 #, fuzzy
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
+#: CliClient/app/app.js:254
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Nu există o asemenea comandă: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
+#: CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Comanda \"%s\" este disponibilă doar în modul GUI"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
+#: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
 msgstr "Nu se poate schimba itemul criptat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
+#: CliClient/app/cli-utils.js:108
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Lipsește argumentul necesar: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
+#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
+#: CliClient/app/cli-utils.js:143
 msgid "Your choice: "
 msgstr "Alegerea dumneavoastră: "
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
+#: CliClient/app/cli-utils.js:150
 #, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Răspuns invalid: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
+#: CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
 msgstr "Atașează fișierul în notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:40
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
+#: CliClient/app/command-attach.js:21 CliClient/app/command-cat.js:25
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-done.js:20 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-help.js:66 CliClient/app/command-import.js:30
+#: CliClient/app/command-mv.js:22 CliClient/app/command-mv.js:25
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-rmnote.js:25 CliClient/app/command-search.js:27
+#: CliClient/app/command-set.js:32 CliClient/app/command-tag.js:33
+#: CliClient/app/command-tag.js:36 CliClient/app/command-tag.js:42
+#: CliClient/app/command-tag.js:43 CliClient/app/command-tag.js:81
+#: CliClient/app/command-tag.js:87 CliClient/app/command-todo.js:21
+#: CliClient/app/command-use.js:21
+#: ReactNativeClient/lib/services/InteropService.js:218
+#: ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Nu poate fi găsit \"%s\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:14
+#: CliClient/app/command-cat.js:14
 msgid "Displays the given note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:18
+#: CliClient/app/command-cat.js:18
 msgid "Displays the complete information about note."
 msgstr "Afișează informațiile complete despre notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
+#: CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
+#: CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
+#: CliClient/app/command-config.js:79
 #, javascript-format
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:81
+#: CliClient/app/command-config.js:81
 #, javascript-format
 msgid "%s = %s"
 msgstr "%s = %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
+#: CliClient/app/command-cp.js:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
+#: CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
 msgstr "Marcați o sarcină ca fiind terminată."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
+#: CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notița nu este o sarcină: \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
+#: CliClient/app/command-e2ee.js:18
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:72
+#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:38
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:74
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:79
+#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
+#: CliClient/app/command-e2ee.js:79
 msgid "Operation cancelled"
 msgstr "Operațiunea a fost amânată"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:47
+#: CliClient/app/command-e2ee.js:47
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: CliClient/app/command-e2ee.js:53
 #, fuzzy, javascript-format
 msgid "Decrypted items: %d"
 msgstr "Se decriptează itemi: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
+#: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
+#: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
 msgstr "Decriptare completă."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:77
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:163
+#: CliClient/app/command-e2ee.js:77
+#: ReactNativeClient/lib/components/screens/encryption-config.js:163
 #, fuzzy
 msgid "Confirm password:"
 msgstr "Parolă:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:83
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
+#: CliClient/app/command-e2ee.js:83
+#: ReactNativeClient/lib/components/screens/encryption-config.js:140
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "Parolă nu poate fi un câmp gol"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Enabled"
 msgstr "Activat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:548
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: ReactNativeClient/lib/models/Setting.js:548
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: CliClient/app/command-e2ee.js:108
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "Criptarea este: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
+#: CliClient/app/command-edit.js:17
 msgid "Edit note."
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
+#: CliClient/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
+#: CliClient/app/command-edit.js:40
 msgid "No active notebook."
 msgstr "Niciun caiet de notițe activ."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
+#: CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notița nu există: \"%s\". Doriți să o creați?"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
+#: CliClient/app/command-exit.js:11
 msgid "Exits the application."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
+#: CliClient/app/command-export.js:13
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: CliClient/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
 msgstr "Format la destinație: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: CliClient/app/command-export.js:23
 msgid "Exports only the given note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: CliClient/app/command-export.js:23
 #, fuzzy
 msgid "Exports only the given notebook."
 msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
+#: CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
+#: CliClient/app/command-help.js:13
 msgid "Displays usage information."
 msgstr "Afișați informațiile de utilizare."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
+#: CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+#: CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Scurtăturile nu sunt disponibile în modul CLI."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
+#: CliClient/app/command-help.js:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
+#: CliClient/app/command-help.js:73
 msgid "The possible commands are:"
 msgstr "Comenzile posibile sunt:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
+#: CliClient/app/command-help.js:77
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
+#: CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "Pentru a vă muta dintr-un panou în altul, apăsați Tab ori Shift+Tab."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
+#: CliClient/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+#: CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Pentru a maximiza/minimiza consola, apăsați \"tc\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
+#: CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
 msgstr "Pentru a intra în linia de comandă, apăsați \":\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
+#: CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
+#: CliClient/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
+#: CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
 msgstr "Importați date în Joplin."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:24
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Formatul sursei: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:24
 msgid "Do not ask for confirmation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Găsit: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Creat: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Actualizat: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Sărite: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Resurse: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Etichetate: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:61
 msgid "Importing notes..."
 msgstr "Se importă notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Notițele au fost importante: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+#: CliClient/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
+#: CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
+#: CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
+#: CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
 msgstr "Inversează ordinea sortării."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:30
+#: CliClient/app/command-ls.js:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
+#: CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
 msgstr "Fie \"text\", fie \"json\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
+#: CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
 msgstr "Selectați prima dată un caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
+#: CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Creați caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:12
+#: CliClient/app/command-mknote.js:12
 msgid "Creates a new note."
 msgstr "Creați o nouă notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
+#: CliClient/app/command-mknote.js:16 CliClient/app/command-mktodo.js:16
 msgid "Notes can only be created within a notebook."
 msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
+#: CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
 msgstr "Creează o nouă sarcină."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
+#: CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
+#: CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
+#: CliClient/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
+#: CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Șterge caietele de notițe fără a mai cere confirmarea."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:154
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
+#: CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
+#: CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: CliClient/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:377
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/note.js:377
 msgid "Delete note?"
 msgstr "Ștergeți notița?"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
+#: CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
+#: CliClient/app/command-server.js:14
 #, javascript-format
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
+#: CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#: CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
+#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
 msgid "Server is not running."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
+#: CliClient/app/command-set.js:22
 #, javascript-format
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
@@ -544,61 +517,60 @@ msgid ""
 "%s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
+#: CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:44
+#: CliClient/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
+#: CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
+#: CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
+#: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
+#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: CliClient/app/command-sync.js:86
+#: ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: CliClient/app/command-sync.js:87
+#: ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Pasul 1: Deschideți adresa URL în navigatorul dumneavoastră web pentru a "
 "autoriza aplicația:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: CliClient/app/command-sync.js:89
+#: ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pasul 2: Introduceți codul oferit de Dropbox:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
+#: CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
+#: CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
 msgstr "Sincronizarea este deja în progres."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
+#: CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -606,28 +578,28 @@ msgid ""
 "operation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
+#: CliClient/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
+#: CliClient/app/command-sync.js:177
 msgid "Cannot initialize synchroniser."
 msgstr "Nu se poate inițializa sincronizatorul."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
+#: CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
 msgstr "Se începe sincronizarea..."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
+#: CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
+#: CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
+#: CliClient/app/command-tag.js:14
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
@@ -635,12 +607,12 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
+#: CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Comandă invalidă: \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
+#: CliClient/app/command-todo.js:14
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
 "toggle the given to-do between completed and uncompleted state (If the "
@@ -648,61 +620,30 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
+#: CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
 msgstr "Marcați o sarcină ca fiind necompletă."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
+#: CliClient/app/command-use.js:12
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
+#: CliClient/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Afișează informații despre versiune"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
+#: CliClient/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
-msgid "Enum"
-msgstr "Enum"
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
-#, javascript-format
-msgid "Type: %s."
-msgstr "Tip: %s."
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
-#, javascript-format
-msgid "Possible values: %s."
-msgstr "Valori posibile: %s."
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
-#, javascript-format
-msgid "Default: %s"
-msgstr "Modul implicit: %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
-msgid "Possible keys/values:"
-msgstr "Posibile chei/valori:"
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
-msgid "Type `joplin help` for usage information."
-msgstr "Tastați `joplin help` pentru informații de utilizare."
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
-msgid "Fatal error:"
-msgstr "Eroare fatală:"
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
+#: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
 msgstr "Căutați:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
+#: CliClient/app/gui/NoteWidget.js:36
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
@@ -719,7 +660,7 @@ msgstr ""
 "De exemplu, creați un caiet de notițe apăsând 'mb'; pentru a crea o notă "
 "apăsați 'mn'."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
+#: CliClient/app/gui/NoteWidget.js:48
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
 "master password. To do so please type `e2ee decrypt`. If you have already "
@@ -727,632 +668,638 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
+#: CliClient/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:142
-#, fuzzy, javascript-format
-msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
+#: CliClient/app/help-utils.js:56
 #, javascript-format
-msgid "Could not export notes: %s"
-msgstr ""
+msgid "Type: %s."
+msgstr "Tip: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Valori posibile: %s."
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Modul implicit: %s"
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Posibile chei/valori:"
+
+#: CliClient/app/main.js:77
+msgid "Type `joplin help` for usage information."
+msgstr "Tastați `joplin help` pentru informații de utilizare."
+
+#: CliClient/app/main.js:79
+msgid "Fatal error:"
+msgstr "Eroare fatală:"
+
+#: ElectronClient/app.js:392
 msgid "Sidebar"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:397
+#: ElectronClient/app.js:398
 #, fuzzy
 msgid "Note list"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:403
+#: ElectronClient/app.js:404
 #, fuzzy
 msgid "Note title"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:409
+#: ElectronClient/app.js:410
 #, fuzzy
 msgid "Note body"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:461
+#: ElectronClient/app.js:462
 #, fuzzy, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:545
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:186
+#: ElectronClient/app.js:495 ElectronClient/gui/MainScreen.min.js:549
+#: ElectronClient/gui/utils/NoteListUtils.js:186
 msgid "PDF File"
 msgstr "Fișier PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:514
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
+#: ElectronClient/app.js:515 ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "Statutul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:524
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
+#: ElectronClient/app.js:525
+#: ReactNativeClient/lib/components/action-button.js:73
+#: ReactNativeClient/setUpQuickActions.js:14
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:536
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
+#: ElectronClient/app.js:537
+#: ReactNativeClient/lib/components/action-button.js:64
+#: ReactNativeClient/setUpQuickActions.js:15
 msgid "New to-do"
 msgstr "Adăugați o nouă sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:548
+#: ElectronClient/app.js:549
 msgid "New notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:559
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:304
+#: ElectronClient/app.js:560 ElectronClient/gui/SideBar.min.js:304
 #, fuzzy
 msgid "New sub-notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:571
+#: ElectronClient/app.js:572
 msgid "Print"
 msgstr "Printați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:591
+#: ElectronClient/app.js:592
 msgid "Create note from template"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:601
+#: ElectronClient/app.js:602
 msgid "Create to-do from template"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:611
+#: ElectronClient/app.js:612
 msgid "Insert template"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:621
+#: ElectronClient/app.js:622
 msgid "Open template directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
+#: ElectronClient/app.js:629
 msgid "Refresh templates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:641
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
+#: ElectronClient/app.js:642 ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "Opțiuni"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#: ElectronClient/app.js:655
 #, fuzzy
 msgid "Note attachments..."
 msgstr "Atașați fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
+#: ElectronClient/app.js:677
 #, fuzzy, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
+#: ElectronClient/app.js:684
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:685
+#: ElectronClient/app.js:686
 #, fuzzy, javascript-format
 msgid "Client ID: %s"
 msgstr "Completat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
+#: ElectronClient/app.js:687
 #, fuzzy, javascript-format
 msgid "Sync Version: %s"
 msgstr "Criptarea este: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:687
+#: ElectronClient/app.js:688
 #, fuzzy, javascript-format
 msgid "Profile Version: %s"
 msgstr "Valori posibile: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:840
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:804
+#: ElectronClient/app.js:698 ElectronClient/app.js:841
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:366
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
 msgid "Copy"
 msgstr "Copiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:135
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:139
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:185
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:754
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:30
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:235
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
+#: ElectronClient/app.js:698 ElectronClient/bridge.js:101
+#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/bridge.js:135 ElectronClient/checkForUpdates.js:139
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:754
+#: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/PromptDialog.min.js:235
+#: ReactNativeClient/lib/components/CameraView.js:182
+#: ReactNativeClient/lib/components/ModalDialog.js:67
+#: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
 msgstr "OK"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:709
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:792
+#: ElectronClient/app.js:710 ElectronClient/app.js:793
 #, fuzzy
 msgid "&File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:715
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1140
+#: ElectronClient/app.js:716 ElectronClient/app.js:1141
 msgid "About Joplin"
 msgstr "Despre Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:722
+#: ElectronClient/app.js:723
 msgid "Preferences..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:732
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1119
+#: ElectronClient/app.js:733 ElectronClient/app.js:1120
 msgid "Check for updates..."
 msgstr "Verificați actualizările..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
+#: ElectronClient/app.js:747 ElectronClient/app.js:807
 msgid "Templates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
+#: ElectronClient/app.js:754 ElectronClient/app.js:812
+#: ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "Importați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:757
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:382
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:197
+#: ElectronClient/app.js:758 ElectronClient/app.js:815
+#: ElectronClient/gui/SideBar.min.js:382
+#: ElectronClient/gui/utils/NoteListUtils.js:197
 msgid "Export"
 msgstr "Exportați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+#: ElectronClient/app.js:764 ElectronClient/gui/SideBar.min.js:724
+#: ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "Sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
+#: ElectronClient/app.js:779
 #, javascript-format
 msgid "Hide %s"
 msgstr "Ascundeți %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
+#: ElectronClient/app.js:786
 msgid "Quit"
 msgstr "Ieșiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:799
+#: ElectronClient/app.js:800
 msgid "Close Window"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
+#: ElectronClient/app.js:838
 #, fuzzy
 msgid "&Edit"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
+#: ElectronClient/app.js:846
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:359
 msgid "Cut"
 msgstr "Tăiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:850
+#: ElectronClient/app.js:851
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:373
 msgid "Paste"
 msgstr "Lipește"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:855
+#: ElectronClient/app.js:856
 #, fuzzy
 msgid "Select all"
 msgstr "Selectați data"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:863
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1690
+#: ElectronClient/app.js:864
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:24
 msgid "Bold"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1698
+#: ElectronClient/app.js:875
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:34
 msgid "Italic"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
+#: ElectronClient/app.js:886
 msgid "Link"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1718
+#: ElectronClient/app.js:897
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:57
 msgid "Code"
 msgstr "Cod"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:910
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1778
+#: ElectronClient/app.js:911
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:130
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:556
 msgid "Insert Date Time"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:924
+#: ElectronClient/app.js:925
 msgid "Search in all the notes"
 msgstr "Căutați în toate notițele"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+#: ElectronClient/app.js:936
 #, fuzzy
 msgid "Search in current note"
 msgstr "Căutați în toate notițele"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
+#: ElectronClient/app.js:948
 #, fuzzy
 msgid "&View"
 msgstr "Vizualizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:949
+#: ElectronClient/app.js:950
 msgid "Toggle sidebar"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:962
+#: ElectronClient/app.js:963
 msgid "Layout button sequence"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:966
+#: ElectronClient/app.js:967
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:975
+#: ElectronClient/app.js:976
 #, fuzzy
 msgid "Toggle editor layout"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1023
+#: ElectronClient/app.js:1024
 msgid "Focus"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+#: ElectronClient/app.js:1031
 msgid "Actual Size"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1041
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1047
+#: ElectronClient/app.js:1042 ElectronClient/app.js:1048
 msgid "Zoom In"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+#: ElectronClient/app.js:1055
 msgid "Zoom Out"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
+#: ElectronClient/app.js:1063
 #, fuzzy
 msgid "&Note"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1065
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1801
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:68
+#: ElectronClient/app.js:1066 ElectronClient/gui/NoteToolbar/NoteToolbar.js:86
+#: ElectronClient/gui/utils/NoteListUtils.js:68
 msgid "Edit in external editor"
 msgstr "Editați într-un editor extern"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1076
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1634
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1810
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:779
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:757
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
+#: ElectronClient/app.js:1077 ElectronClient/gui/NoteToolbar/NoteToolbar.js:110
+#: ElectronClient/gui/SideBar.min.js:779
+#: ReactNativeClient/lib/components/screens/note.js:757
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/side-menu-content.js:313
 msgid "Tags"
 msgstr "Etichete"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
+#: ElectronClient/app.js:1093
 msgid "Statistics..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
+#: ElectronClient/app.js:1103
 #, fuzzy
 msgid "&Tools"
 msgstr "Unelte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1106
+#: ElectronClient/app.js:1107
 #, fuzzy
 msgid "&Help"
 msgstr "Ajutor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1109
+#: ElectronClient/app.js:1110
 msgid "Website and documentation"
 msgstr "Website și documentație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1113
+#: ElectronClient/app.js:1114
 #, fuzzy
 msgid "Joplin Forum"
 msgstr "Website Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1116
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:499
+#: ElectronClient/app.js:1117
+#: ReactNativeClient/lib/components/screens/config.js:499
 msgid "Make a donation"
 msgstr "Faceți o donație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1128
+#: ElectronClient/app.js:1129
 #, fuzzy
 msgid "Toggle development tools"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1299
+#: ElectronClient/app.js:1300
 #, javascript-format
 msgid "Open %s"
 msgstr "Deschideți %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1301
+#: ElectronClient/app.js:1302
 msgid "Exit"
 msgstr "Ieșiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:242
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:319
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:156
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:442
+#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/utils/NoteListUtils.js:227
+#: ReactNativeClient/lib/components/CameraView.js:183
+#: ReactNativeClient/lib/components/ModalDialog.js:70
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/note.js:90
+#: ReactNativeClient/lib/components/screens/note.js:442
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ReactNativeClient/lib/components/side-menu-content.js:156
+#: ReactNativeClient/lib/components/side-menu-content.js:165
+#: ReactNativeClient/lib/components/side-menu-content.js:337
+#: ReactNativeClient/lib/shim-init-node.js:91
 msgid "Cancel"
 msgstr "Anulați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:138
+#: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
 msgstr "Versiunea curentă este actualizată."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:148
+#: ElectronClient/checkForUpdates.js:148
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
+#: ElectronClient/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
+#: ElectronClient/checkForUpdates.js:152
 #, javascript-format
 msgid "Your version: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:152
+#: ElectronClient/checkForUpdates.js:152
 #, javascript-format
 msgid "New version: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:440
+#: ElectronClient/checkForUpdates.js:153
+#: ReactNativeClient/lib/components/screens/note.js:440
+#: ReactNativeClient/lib/shim-init-node.js:91
 msgid "Yes"
 msgstr "Da"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:441
+#: ElectronClient/checkForUpdates.js:153
+#: ReactNativeClient/lib/components/screens/note.js:441
+#: ReactNativeClient/lib/shim-init-node.js:91
 msgid "No"
 msgstr "Nu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
+#: ElectronClient/checkForUpdates.js:153
 msgid "Full Release Notes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:39
+#: ElectronClient/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:69
+#: ElectronClient/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:76
+#: ElectronClient/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:82
+#: ElectronClient/gui/ClipperConfigScreen.min.js:82
 #, javascript-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:88
+#: ElectronClient/gui/ClipperConfigScreen.min.js:88
 msgid "Disable Web Clipper Service"
 msgstr "Dezactivați Web Clipper Service"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:94
+#: ElectronClient/gui/ClipperConfigScreen.min.js:94
 msgid "The web clipper service is not enabled."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:99
+#: ElectronClient/gui/ClipperConfigScreen.min.js:99
 msgid "Enable Web Clipper Service"
 msgstr "Activați Web Clipper Service"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:122
+#: ElectronClient/gui/ClipperConfigScreen.min.js:122
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:127
+#: ElectronClient/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:135
+#: ElectronClient/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:140
+#: ElectronClient/gui/ClipperConfigScreen.min.js:140
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:154
+#: ElectronClient/gui/ClipperConfigScreen.min.js:154
 msgid "Step 2: Install the extension"
 msgstr "Pasul 2: Instalați extensia"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:159
+#: ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:174
+#: ElectronClient/gui/ClipperConfigScreen.min.js:174
 #, fuzzy
 msgid "Advanced options"
 msgstr "Afișați opțiunile avansate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:179
+#: ElectronClient/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:189
+#: ElectronClient/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:195
+#: ElectronClient/gui/ClipperConfigScreen.min.js:195
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
+#: ElectronClient/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:170
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:311
+#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ReactNativeClient/lib/components/screens/config.js:311
 msgid "Check synchronisation configuration"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:179
+#: ElectronClient/gui/ConfigScreen.min.js:179
 msgid "Unknown"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:183
+#: ElectronClient/gui/ConfigScreen.min.js:183
 #, fuzzy
 msgid "Checking..."
 msgstr "Se amână..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:187
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:296
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ReactNativeClient/lib/models/Resource.js:320
 #, fuzzy
 msgid "Error"
 msgstr "Doar erori"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:198
+#: ElectronClient/gui/ConfigScreen.min.js:198
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:211
+#: ElectronClient/gui/ConfigScreen.min.js:211
 #, fuzzy
 msgid "Show Log"
 msgstr "Afișați tot"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:224
+#: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:238
+#: ElectronClient/gui/ConfigScreen.min.js:238
 #, fuzzy
 msgid "Check Status"
 msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:245
+#: ElectronClient/gui/ConfigScreen.min.js:245
 #, fuzzy
 msgid "Help"
 msgstr "Ajutor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:264
+#: ElectronClient/gui/ConfigScreen.min.js:264
 #, fuzzy
 msgid "Show Advanced Settings"
 msgstr "Afișați opțiunile avansate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:521
+#: ElectronClient/gui/ConfigScreen.min.js:521
 msgid "Browse..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:642
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1017
+#: ElectronClient/gui/ConfigScreen.min.js:642
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:467
+#: ReactNativeClient/lib/components/screens/note.js:1017
 msgid "Edit"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:316
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/Header.min.js:316
+#: ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:24
 msgid "Back"
 msgstr "Înapoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:761
+#: ElectronClient/gui/ConfigScreen.min.js:761
 msgid "Apply"
 msgstr "Aplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
 msgid "Submit"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:95
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
 msgid "Save"
 msgstr "Salvați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:26
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:38
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
+#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/ResourceScreen.js:38
 msgid "ID"
 msgstr "ID"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:181
 #, fuzzy
 msgid "Re-encrypt data"
 msgstr "Selectați data"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
@@ -1370,164 +1317,286 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:279
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:139
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:432
+#: ReactNativeClient/lib/components/screens/encryption-config.js:279
+#: ReactNativeClient/lib/components/screens/status.js:139
 msgid "Status"
 msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:437
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:437
 msgid "Encryption is:"
 msgstr "Criptarea este:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:10
+#: ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
+#: ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
+#: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
-msgid "Name"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
-msgid "Icon"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
-msgid "Notebook properties"
-msgstr "Titlul caietului de notițe:"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:267
+#: ElectronClient/gui/Header.min.js:267
 #, fuzzy
 msgid "Usage"
 msgstr "Utilizare: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:62
+#: ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:161
+#: ElectronClient/gui/MainScreen.min.js:165
 msgid "Please create a notebook first."
 msgstr "Creați un caiet de sarcini prima dată."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
+#: ElectronClient/gui/MainScreen.min.js:171
 msgid "Please create a notebook first"
 msgstr "Creați un caiet de sarcini prima dată"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:174
+#: ElectronClient/gui/MainScreen.min.js:178
 msgid "Notebook title:"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:217
+#: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
+#: ElectronClient/gui/MainScreen.min.js:272
 #, fuzzy
 msgid "Move to notebook:"
 msgstr "Mutați în caietul de notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
+#: ElectronClient/gui/MainScreen.min.js:292
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:309
+#: ElectronClient/gui/MainScreen.min.js:313
 msgid "Rename tag:"
 msgstr "Redenumiți eticheta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:413
+#: ElectronClient/gui/MainScreen.min.js:417
 msgid "Set alarm:"
 msgstr "Setați alarma:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:444
+#: ElectronClient/gui/MainScreen.min.js:448
 msgid "Template file:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:51
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:51
 msgid "Words"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:52
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:52
 msgid "Characters"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:53
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:53
 msgid "Characters excluding spaces"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:54
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:54
 msgid "Lines"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:73
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:73
+#: ReactNativeClient/lib/models/Setting.js:306
+#: ReactNativeClient/lib/models/Setting.js:307
+#: ReactNativeClient/lib/models/Setting.js:308
 #, fuzzy
 msgid "Editor"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:74
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:74
+#: ReactNativeClient/lib/models/Setting.js:306
+#: ReactNativeClient/lib/models/Setting.js:307
+#: ReactNativeClient/lib/models/Setting.js:309
 #, fuzzy
 msgid "Viewer"
 msgstr "Vizualizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:82
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:82
 #, fuzzy
-msgid "Content properties"
-msgstr "Titlul caietului de notițe:"
+msgid "Statistics"
+msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:86
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:86
+#: ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:256
+msgid "strong text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:257
+msgid "emphasized text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:259
+msgid "Insert Hyperlink"
+msgstr "Introduceți hyperlink"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:294
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:296
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:297
+msgid "List item"
+msgstr "Listați item"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:473
+msgid "Layout"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:473
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:47
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:67
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:523
+msgid "Attach file"
+msgstr "Atașați fișier"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:80
+msgid "Numbered List"
+msgstr "Listă numerotată"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:90
+msgid "Bulleted List"
+msgstr "Listă cu puncte"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:100
+msgid "Checkbox"
+msgstr "Căsuță"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:110
+msgid "Heading"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:120
+msgid "Horizontal Rule"
+msgstr "Linie orizontală"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "Căsuță"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:532
+msgid "Code Block"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:541
+msgid "Inline Code"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
+msgid "Drop notes or files here"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
+#, fuzzy
+msgid "Code View"
+msgstr "Cod"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
+msgid "to-do"
+msgstr "sarcină"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
+msgid "note"
+msgstr "notiță"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Se crează un %s..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+msgid "Open..."
+msgstr "Deschideți..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+msgid "Save as..."
+msgstr "Salvați ca..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+msgid "Reveal file in folder"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+msgid "Copy path to clipboard"
+msgstr "Copiați locația în clipboard"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+msgid "Copy Link Address"
+msgstr "Copați adresa link-ului"
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+msgid "There was an error downloading this attachment:"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#: ElectronClient/gui/NoteList.min.js:146
 #, fuzzy
 msgid "View"
 msgstr "Vizualizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
+#: ElectronClient/gui/NoteList.min.js:146
+#: ReactNativeClient/lib/models/Setting.js:321
 msgid "Sort notes by"
 msgstr "Sortați notițele după"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#: ElectronClient/gui/NoteList.min.js:146
 #, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList.min.js:147
 msgid "Do it now"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
+#: ElectronClient/gui/NoteList.min.js:450
 #, fuzzy
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe butonnul "
 "(+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
+#: ElectronClient/gui/NoteList.min.js:450
 #, fuzzy
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
@@ -1535,285 +1604,173 @@ msgstr ""
 "Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe butonnul "
 "(+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:27
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
 msgid "Created"
 msgstr "Creat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:28
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
 msgid "Updated"
 msgstr "Actualizat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
 #, fuzzy
 msgid "Completed"
 msgstr "Completat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:31
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
 msgid "URL"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1118
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: ReactNativeClient/lib/models/Setting.js:1118
 #, fuzzy
 msgid "Note History"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:33
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:305
+#: ElectronClient/gui/NotePropertiesDialog.min.js:305
 msgid "Previous versions of this note"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:382
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1834
+#: ElectronClient/gui/NotePropertiesDialog.min.js:382
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:61
 #, fuzzy
 msgid "Note properties"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:75
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
 #, fuzzy
 msgid "This note has no history"
 msgstr "Această notiță a fost modificată:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:865
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:177
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
 msgid "Restore"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:778
-msgid "Open..."
-msgstr "Deschideți..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:781
-#, javascript-format
-msgid "This file could not be opened: %s"
-msgstr "Acest fișier nu a putut fi deschis: %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:786
-msgid "Save as..."
-msgstr "Salvați ca..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:797
-msgid "Copy path to clipboard"
-msgstr "Copiați locația în clipboard"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:811
-msgid "Copy Link Address"
-msgstr "Copați adresa link-ului"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
-msgid "There was an error downloading this attachment:"
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
+msgid "Forward"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
-msgid "This attachment is not downloaded or not decrypted yet"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
-msgid "Layout"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1321
-msgid "Only one note can be printed at a time."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1547
-msgid "strong text"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1591
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1595
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1604
-msgid "List item"
-msgstr "Listați item"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1616
-msgid "Insert Hyperlink"
-msgstr "Introduceți hyperlink"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1627
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1726
-msgid "Attach file"
-msgstr "Atașați fișier"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1642
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1828
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:742
-msgid "Set alarm"
-msgstr "Setați alarma"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1656
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
 #, javascript-format
 msgid "In: %s"
 msgstr "În: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1710
-msgid "Hyperlink"
-msgstr "Hyperlink"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1738
-msgid "Numbered List"
-msgstr "Listă numerotată"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1746
-msgid "Bulleted List"
-msgstr "Listă cu puncte"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1754
-msgid "Checkbox"
-msgstr "Căsuță"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1762
-msgid "Heading"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1770
-msgid "Horizontal Rule"
-msgstr "Linie orizontală"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1792
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:76
 msgid "Click to stop external editing"
 msgstr "Faceți click pentru a opri editarea în aplicația externă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1793
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:77
 #, fuzzy
 msgid "Watching..."
 msgstr "Se amână..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1852
-#, fuzzy
-msgid "Content Properties"
-msgstr "Titlul caietului de notițe:"
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
+#: ReactNativeClient/lib/components/screens/note.js:742
+msgid "Set alarm"
+msgstr "Setați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-msgid "to-do"
-msgstr "sarcină"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-msgid "note"
-msgstr "notiță"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#, javascript-format
-msgid "Creating new %s..."
-msgstr "Se crează un %s..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:249
+#: ElectronClient/gui/PromptDialog.min.js:249
 #, fuzzy
 msgid "Clear"
 msgstr "Setați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:31
+#: ElectronClient/gui/ResourceScreen.js:31
 #, fuzzy
 msgid "Title"
 msgstr "titlu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
+#: ElectronClient/gui/ResourceScreen.js:35
 msgid "Size"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:39
+#: ElectronClient/gui/ResourceScreen.js:39
 #, fuzzy
 msgid "Action"
 msgstr "Duplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:42
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:710
+#: ElectronClient/gui/ResourceScreen.js:42
+#: ReactNativeClient/lib/models/BaseItem.js:710
+#: ReactNativeClient/lib/path-utils.js:65
+#: ReactNativeClient/lib/path-utils.js:101
 msgid "Untitled"
 msgstr "Fără denumire"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:46
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:287
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:326
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:784
+#: ElectronClient/gui/ResourceScreen.js:46
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:204
+#: ElectronClient/gui/utils/NoteListUtils.js:227
+#: ReactNativeClient/lib/components/screen-header.js:326
+#: ReactNativeClient/lib/components/screens/note.js:784
+#: ReactNativeClient/lib/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Ștergeți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
+#: ElectronClient/gui/ResourceScreen.js:93
 #, fuzzy, javascript-format
 msgid "Delete attachment \"%s\"?"
 msgstr "Ștergeți notițele?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
+#: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
+#: ElectronClient/gui/ResourceScreen.js:140
 #, fuzzy
 msgid "Please wait..."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:142
+#: ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:144
+#: ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
+#: ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
 msgstr "Autentificare OneDrive"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:90
+#: ElectronClient/gui/Root.min.js:90
 msgid "Dropbox Login"
 msgstr "Autentificare Dropbox"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
+#: ElectronClient/gui/Root.min.js:93
 #, fuzzy
 msgid "Note attachments"
 msgstr "Atașați fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
+#: ElectronClient/gui/ShareNoteDialog.js:158
 #, fuzzy
 msgid "Synchronising..."
 msgstr "Statusul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:160
+#: ElectronClient/gui/ShareNoteDialog.js:160
 #, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
@@ -1821,24 +1778,24 @@ msgstr[0] "Se crează un %s..."
 msgstr[1] "Se crează un %s..."
 msgstr[2] "Se crează un %s..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:162
+#: ElectronClient/gui/ShareNoteDialog.js:162
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
+#: ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
+#: ElectronClient/gui/ShareNoteDialog.js:170
 #, fuzzy
 msgid "Share Notes"
 msgstr "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:172
+#: ElectronClient/gui/ShareNoteDialog.js:172
 #, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
@@ -1846,12 +1803,12 @@ msgstr[0] "Distribuie"
 msgstr[1] "Distribuie"
 msgstr[2] "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:283
+#: ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1859,146 +1816,622 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
+#: ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:292
+#: ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:339
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:389
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "Redenumiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:757
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:359
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:188
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/screens/notes.js:188
+#: ReactNativeClient/lib/components/side-menu-content.js:359
 #, fuzzy
 msgid "All notes"
 msgstr "notiță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:762
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:363
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:363
 msgid "Notebooks"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:797
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:324
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Se decriptează itemi: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:802
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:329
 #, fuzzy, javascript-format
 msgid "Fetching resources: %d/%d"
 msgstr "Resurse: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:33
+#: ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:109
 msgid "Retry All"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:115
 msgid "Retry"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:27
+#: ElectronClient/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
+#: ElectronClient/gui/utils/NoteListUtils.js:40
 #, fuzzy
 msgid "Move to notebook"
 msgstr "Mutați în caietul de notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
+#: ElectronClient/gui/utils/NoteListUtils.js:53
+#: ReactNativeClient/lib/components/screen-header.js:332
 #, fuzzy
 msgid "Duplicate"
 msgstr "Duplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:58
+#: ElectronClient/gui/utils/NoteListUtils.js:58
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Copiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:78
+#: ElectronClient/gui/utils/NoteListUtils.js:78
 #, fuzzy
 msgid "Stop external editing"
 msgstr "Faceți click pentru a opri editarea în aplicația externă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:90
+#: ElectronClient/gui/utils/NoteListUtils.js:90
 msgid "Switch between note and to-do type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
+#: ElectronClient/gui/utils/NoteListUtils.js:119
 #, fuzzy
 msgid "Switch to note type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:128
+#: ElectronClient/gui/utils/NoteListUtils.js:128
 #, fuzzy
 msgid "Switch to to-do type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:138
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:771
+#: ElectronClient/gui/utils/NoteListUtils.js:138
+#: ReactNativeClient/lib/components/screens/note.js:771
 msgid "Copy Markdown link"
 msgstr "Copiați link-ul Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:153
+#: ElectronClient/gui/utils/NoteListUtils.js:153
 #, fuzzy
 msgid "Share note..."
 msgstr "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#: ElectronClient/gui/utils/NoteListUtils.js:221
 #, fuzzy, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Ștergeți notițele?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:223
+#: ElectronClient/gui/utils/NoteListUtils.js:223
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste notițe?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:240
+#: ElectronClient/gui/utils/NoteListUtils.js:240
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "Eroare deschidere notiță în editor: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:439
+#: ElectronClient/InteropServiceHelper.js:142
+#, fuzzy, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
+
+#: ElectronClient/InteropServiceHelper.js:160
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
+#: ElectronClient/plugins/GotoAnything.min.js:441
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:477
+#: ElectronClient/plugins/GotoAnything.min.js:479
 msgid "Goto Anything..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:137
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:150
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:181
+#: ReactNativeClient/lib/BaseApplication.js:137
+#: ReactNativeClient/lib/BaseApplication.js:150
+#: ReactNativeClient/lib/BaseApplication.js:181
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilizare: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:216
+#: ReactNativeClient/lib/BaseApplication.js:216
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#: ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr ""
+
+#: ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/note-list.js:97
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Niciun caiet de notițe activ."
+
+#: ReactNativeClient/lib/components/note-list.js:101
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Creați caiet de notițe."
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Ștergeți aceste notițe?"
+
+#: ReactNativeClient/lib/components/screen-header.js:362
+msgid "Move to notebook..."
+msgstr "Mutați în caietul de notițe..."
+
+#: ReactNativeClient/lib/components/screen-header.js:403
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Mutați %d notițe în caietul de notițe \"%s\"?"
+
+#: ReactNativeClient/lib/components/screen-header.js:421
+msgid "Press to set the decryption password."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screen-header.js:422
+#, fuzzy
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Câțiva itemi nu pot fi sincronizați."
+
+#: ReactNativeClient/lib/components/screens/config.js:51
+msgid "Warning"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:51
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:320
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+msgid "Encryption Config"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:440
+#, fuzzy
+msgid "Tools"
+msgstr "Unelte"
+
+#: ReactNativeClient/lib/components/screens/config.js:442
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+#: ReactNativeClient/lib/components/screens/log.js:100
+msgid "Log"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:445
+#, fuzzy
+msgid "Creating report..."
+msgstr "Se crează un %s..."
+
+#: ReactNativeClient/lib/components/screens/config.js:445
+msgid "Export Debug Report"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:447
+msgid "Fixing search index..."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:447
+msgid "Fix search index"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:447
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:450
+#, fuzzy
+msgid "Exporting profile..."
+msgstr "Se importă notițe..."
+
+#: ReactNativeClient/lib/components/screens/config.js:450
+#, fuzzy
+msgid "Export profile"
+msgstr "Exportați"
+
+#: ReactNativeClient/lib/components/screens/config.js:450
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:465
+#, fuzzy
+msgid "More information"
+msgstr "Configurare"
+
+#: ReactNativeClient/lib/components/screens/config.js:475
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:478
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:481
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:484
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:513
+msgid "Joplin website"
+msgstr "Website Joplin"
+
+#: ReactNativeClient/lib/components/screens/config.js:541
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:547
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "De șters: %d"
+
+#: ReactNativeClient/lib/components/screens/config.js:553
+#: ReactNativeClient/lib/components/side-menu-content.js:315
+msgid "Configuration"
+msgstr "Configurare"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+msgid "Login with Dropbox"
+msgstr "Autentificați-vă cu Dropbox"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+msgid "Enter code here"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/note.js:689
+#, javascript-format
+msgid "Created: %s"
+msgstr "Creat: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Parolă:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Parolă nu poate fi un câmp gol"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Parolă nu poate fi un câmp gol"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Activați"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Dezactivați criptarea"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Activați criptarea"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Caietul de notițe nu a puut fi salvat: %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Editați caietul de notițe"
+
+#: ReactNativeClient/lib/components/screens/folder.js:110
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Titlul caietului de notițe:"
+
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/status.js:141
+msgid "Refresh"
+msgstr "Reîncărcați"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Afișați tot"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Doar erori"
+
+#: ReactNativeClient/lib/components/screens/note.js:90
+msgid "This note has been modified:"
+msgstr "Această notiță a fost modificată:"
+
+#: ReactNativeClient/lib/components/screens/note.js:90
+msgid "Save changes"
+msgstr "Salvați schimbările"
+
+#: ReactNativeClient/lib/components/screens/note.js:90
+msgid "Discard changes"
+msgstr "Renunțați la schimbări"
+
+#: ReactNativeClient/lib/components/screens/note.js:139
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Niciun item cu ID-ul %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:158
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:162
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:166
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:439
+#: ReactNativeClient/lib/shim-init-node.js:90
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:534
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:690
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Actualizat: %d."
+
+#: ReactNativeClient/lib/components/screens/note.js:694
+msgid "View on map"
+msgstr "Vizualizați pe hartă"
+
+#: ReactNativeClient/lib/components/screens/note.js:701
+msgid "Go to source URL"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:729
+#, fuzzy
+msgid "Attach..."
+msgstr "Caută..."
+
+#: ReactNativeClient/lib/components/screens/note.js:731
+#, fuzzy
+msgid "Choose an option"
+msgstr "Afișați opțiunile avansate"
+
+#: ReactNativeClient/lib/components/screens/note.js:731
+#, fuzzy
+msgid "Take photo"
+msgstr "Atașează imagine"
+
+#: ReactNativeClient/lib/components/screens/note.js:731
+msgid "Attach photo"
+msgstr "Atașează imagine"
+
+#: ReactNativeClient/lib/components/screens/note.js:731
+msgid "Attach any file"
+msgstr "Atașați orice fișier"
+
+#: ReactNativeClient/lib/components/screens/note.js:750
+msgid "Share"
+msgstr "Distribuie"
+
+#: ReactNativeClient/lib/components/screens/note.js:764
+#, fuzzy
+msgid "Convert to note"
+msgstr "Mutați în caietul de notițe..."
+
+#: ReactNativeClient/lib/components/screens/note.js:764
+msgid "Convert to todo"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:778
+msgid "Properties"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:957
+#: ReactNativeClient/lib/components/screens/note.js:1007
+msgid "Add body"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:1045
+#, fuzzy
+msgid "Add title"
+msgstr "titlu"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Etichete noi:"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr ""
+
+# vezi context
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+msgid "Login with OneDrive"
+msgstr "Autentificare prin OneDrive"
+
+#: ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Caută"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:65
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Setați alarma"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:68
+msgid "Save alarm"
+msgstr "Salvați alarma"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "Selectați data"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "Confirmați"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:46
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "Se anulează... Vă rugăm să așteptați."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
+msgid "The master key has been upgraded successfully!"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Se decriptează itemi: %d/%d"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Caiete de notițe"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Itemii criptați nu pot fi editați"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:311
+#, fuzzy
+msgid "New Notebook"
+msgstr "Adăugați un nou caiet de notițe"
+
+#: ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
 "Could not connect to the Joplin Nextcloud app. Please check the "
@@ -2007,226 +2440,111 @@ msgid ""
 "%s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
-msgid "Dropbox"
-msgstr "Dropbox"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
-msgid "File system"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
-msgid "Nextcloud"
-msgstr "Nextcloud"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
-msgid "OneDrive"
-msgstr "OneDrive"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
-msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (Doar pentru teste)"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:178
+#: ReactNativeClient/lib/logger.js:178
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:187
+#: ReactNativeClient/lib/logger.js:187
 #, javascript-format
 msgid "Unknown level ID: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
-msgid "The application has been successfully authorised."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
-msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:156
-msgid ""
-"Could not synchronize with OneDrive.\n"
-"\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
-"\n"
-"Please consider using a regular OneDrive account."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:90
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:439
-#, javascript-format
-msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
-#, javascript-format
-msgid "Cannot access %s"
-msgstr "Nu se poate accesa %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:93
-#, javascript-format
-msgid "Created local items: %d."
-msgstr "Creare itemi locali: %d."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
-#, javascript-format
-msgid "Updated local items: %d."
-msgstr "Itemi locali actualizați: %d."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
-#, javascript-format
-msgid "Created remote items: %d."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
-#, javascript-format
-msgid "Updated remote items: %d."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
-#, javascript-format
-msgid "Deleted local items: %d."
-msgstr "Itemi locali șterși: %d."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
-#, javascript-format
-msgid "Deleted remote items: %d."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
-#, javascript-format
-msgid "Fetched items: %d/%d."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:101
-msgid "Cancelling..."
-msgstr "Se amână..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
-#, javascript-format
-msgid "Completed: %s"
-msgstr "Completat: %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
-#, javascript-format
-msgid "Last error: %s"
-msgstr "Ultima eroare: %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:203
-msgid "Idle"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
-msgid "In progress"
-msgstr "În progres"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:709
+#: ReactNativeClient/lib/models/BaseItem.js:709
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:769
+#: ReactNativeClient/lib/models/BaseItem.js:769
 msgid "Encrypted items cannot be modified"
 msgstr "Itemii criptați nu pot fi editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+#: ReactNativeClient/lib/models/Folder.js:27
+#: ReactNativeClient/lib/models/Note.js:25
 msgid "title"
 msgstr "titlu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
+#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
 msgstr "data actualizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:88
+#: ReactNativeClient/lib/models/Folder.js:88
 msgid "Conflicts"
 msgstr "Conflicte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:381
+#: ReactNativeClient/lib/models/Folder.js:381
 msgid "Cannot move notebook to this location"
 msgstr "Nu se poate muta caietul de notițe în această locație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:429
+#: ReactNativeClient/lib/models/Folder.js:429
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:27
+#: ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
 msgstr "data creării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
+#: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
+#: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:446
+#: ReactNativeClient/lib/models/Note.js:468
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:457
+#: ReactNativeClient/lib/models/Note.js:479
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:293
+#: ReactNativeClient/lib/models/Resource.js:317
 msgid "Not downloaded"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:294
+#: ReactNativeClient/lib/models/Resource.js:318
 msgid "Downloading"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:295
+#: ReactNativeClient/lib/models/Resource.js:319
 msgid "Downloaded"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Atașați fișier"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:30
 #, fuzzy
 msgid "yes"
 msgstr "Da"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
+#: ReactNativeClient/lib/models/Setting.js:30
+#: ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
+#: ReactNativeClient/lib/models/Setting.js:31
 #, fuzzy
 msgid "no"
 msgstr "n"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
+#: ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2234,406 +2552,406 @@ msgid ""
 "more details: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:42
+#: ReactNativeClient/lib/models/Setting.js:42
 msgid "Light"
 msgstr "Deschisă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:43
+#: ReactNativeClient/lib/models/Setting.js:43
 msgid "Dark"
 msgstr "Închisă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+#: ReactNativeClient/lib/models/Setting.js:45
 msgid "Dracula"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:46
+#: ReactNativeClient/lib/models/Setting.js:46
 msgid "Solarised Light"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:47
+#: ReactNativeClient/lib/models/Setting.js:47
 msgid "Solarised Dark"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+#: ReactNativeClient/lib/models/Setting.js:48
 msgid "Nord"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+#: ReactNativeClient/lib/models/Setting.js:50
 #, fuzzy
 msgid "OLED Dark"
 msgstr "Închisă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:73
+#: ReactNativeClient/lib/models/Setting.js:73
 msgid "Synchronisation target"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:75
+#: ReactNativeClient/lib/models/Setting.js:75
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:97
+#: ReactNativeClient/lib/models/Setting.js:97
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:109
+#: ReactNativeClient/lib/models/Setting.js:109
 msgid "Nextcloud WebDAV URL"
 msgstr "URL NextCloud WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:120
+#: ReactNativeClient/lib/models/Setting.js:120
 msgid "Nextcloud username"
 msgstr "Nume utilizator Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:130
+#: ReactNativeClient/lib/models/Setting.js:130
 msgid "Nextcloud password"
 msgstr "Parolă Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:142
+#: ReactNativeClient/lib/models/Setting.js:142
 msgid "WebDAV URL"
 msgstr "URL-ul WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:153
+#: ReactNativeClient/lib/models/Setting.js:153
 msgid "WebDAV username"
 msgstr "Nume utilizator WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:163
+#: ReactNativeClient/lib/models/Setting.js:163
 msgid "WebDAV password"
 msgstr "Parolă WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
+#: ReactNativeClient/lib/models/Setting.js:188
 msgid "Attachment download behaviour"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:189
+#: ReactNativeClient/lib/models/Setting.js:189
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:192
+#: ReactNativeClient/lib/models/Setting.js:192
 msgid "Always"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:193
+#: ReactNativeClient/lib/models/Setting.js:193
 msgid "Manual"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:194
+#: ReactNativeClient/lib/models/Setting.js:194
 msgid "Auto"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:199
+#: ReactNativeClient/lib/models/Setting.js:199
 msgid "Max concurrent connections"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:208
+#: ReactNativeClient/lib/models/Setting.js:208
 msgid "Language"
 msgstr "Limbă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:218
+#: ReactNativeClient/lib/models/Setting.js:218
 msgid "Date format"
 msgstr "Format dată"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:237
+#: ReactNativeClient/lib/models/Setting.js:237
 msgid "Time format"
 msgstr "Format timp"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
+#: ReactNativeClient/lib/models/Setting.js:256
 msgid "Theme"
 msgstr "Temă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#: ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+#: ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+#: ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
+#: ReactNativeClient/lib/models/Setting.js:298
 #, fuzzy
 msgid "Show note counts"
 msgstr "Afișați iconița coșul de gunoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
+#: ReactNativeClient/lib/models/Setting.js:306
+#: ReactNativeClient/lib/models/Setting.js:308
+#: ReactNativeClient/lib/models/Setting.js:309
 msgid "Split View"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: ReactNativeClient/lib/models/Setting.js:306
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s = %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
+#: ReactNativeClient/lib/models/Setting.js:307
+#: ReactNativeClient/lib/models/Setting.js:308
+#: ReactNativeClient/lib/models/Setting.js:309
 #, javascript-format
 msgid "%s / %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:312
+#: ReactNativeClient/lib/models/Setting.js:312
 msgid "Uncompleted to-dos on top"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
+#: ReactNativeClient/lib/models/Setting.js:313
 msgid "Show completed to-dos"
 msgstr "Arătați sarcinile terminate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:338
+#: ReactNativeClient/lib/models/Setting.js:338
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+#: ReactNativeClient/lib/models/Setting.js:340
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Reverse sort order"
 msgstr "Inversați ordinea sortării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:347
+#: ReactNativeClient/lib/models/Setting.js:347
 #, fuzzy
 msgid "Sort notebooks by"
 msgstr "Sortați notițele după"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+#: ReactNativeClient/lib/models/Setting.js:359
 msgid "Save geo-location with notes"
 msgstr "Salvați geo-locația în  notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
+#: ReactNativeClient/lib/models/Setting.js:378
 msgid "When creating a new to-do:"
 msgstr "Când este creată o nouă sarcină:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:396
+#: ReactNativeClient/lib/models/Setting.js:381
+#: ReactNativeClient/lib/models/Setting.js:396
 msgid "Focus title"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:382
+#: ReactNativeClient/lib/models/Setting.js:397
 msgid "Focus body"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:393
+#: ReactNativeClient/lib/models/Setting.js:393
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
+#: ReactNativeClient/lib/models/Setting.js:407
 msgid "Enable soft breaks"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:408
+#: ReactNativeClient/lib/models/Setting.js:408
 msgid "Enable typographer support"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:409
+#: ReactNativeClient/lib/models/Setting.js:409
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:410
+#: ReactNativeClient/lib/models/Setting.js:410
 msgid "Enable Fountain syntax support"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:411
+#: ReactNativeClient/lib/models/Setting.js:411
 msgid "Enable Mermaid diagrams support"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:413
+#: ReactNativeClient/lib/models/Setting.js:413
 msgid "Enable ==mark== syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:414
+#: ReactNativeClient/lib/models/Setting.js:414
 msgid "Enable footnotes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:415
+#: ReactNativeClient/lib/models/Setting.js:415
 msgid "Enable table of contents extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:416
+#: ReactNativeClient/lib/models/Setting.js:416
 msgid "Enable ~sub~ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:417
+#: ReactNativeClient/lib/models/Setting.js:417
 msgid "Enable ^sup^ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:418
+#: ReactNativeClient/lib/models/Setting.js:418
 msgid "Enable deflist syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:419
+#: ReactNativeClient/lib/models/Setting.js:419
 msgid "Enable abbreviation syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:420
+#: ReactNativeClient/lib/models/Setting.js:420
 msgid "Enable markdown emoji"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:421
+#: ReactNativeClient/lib/models/Setting.js:421
 msgid "Enable ++insert++ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:422
+#: ReactNativeClient/lib/models/Setting.js:422
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:434
+#: ReactNativeClient/lib/models/Setting.js:434
 msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
+#: ReactNativeClient/lib/models/Setting.js:436
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
+#: ReactNativeClient/lib/models/Setting.js:436
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:440
+#: ReactNativeClient/lib/models/Setting.js:440
 msgid "Start application minimised in the tray icon"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:457
+#: ReactNativeClient/lib/models/Setting.js:457
 #, fuzzy
 msgid "Editor font size"
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:465
+#: ReactNativeClient/lib/models/Setting.js:465
 #, fuzzy
 msgid "Editor font"
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#: ReactNativeClient/lib/models/Setting.js:489
 msgid "Editor font family"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: ReactNativeClient/lib/models/Setting.js:491
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
+#: ReactNativeClient/lib/models/Setting.js:536
 msgid "Automatically update the application"
 msgstr "Actualizați automat aplicația"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
+#: ReactNativeClient/lib/models/Setting.js:537
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
+#: ReactNativeClient/lib/models/Setting.js:537
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:545
+#: ReactNativeClient/lib/models/Setting.js:545
 msgid "Synchronisation interval"
 msgstr "Intervalul de sincronizare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:551
+#: ReactNativeClient/lib/models/Setting.js:549
+#: ReactNativeClient/lib/models/Setting.js:550
+#: ReactNativeClient/lib/models/Setting.js:551
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minute"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
+#: ReactNativeClient/lib/models/Setting.js:552
 #, javascript-format
 msgid "%d hour"
 msgstr "%d oră"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:553
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:554
+#: ReactNativeClient/lib/models/Setting.js:553
+#: ReactNativeClient/lib/models/Setting.js:554
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ore"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
+#: ReactNativeClient/lib/models/Setting.js:563
 msgid "Text editor command"
 msgstr "Comandă editor de text"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
+#: ReactNativeClient/lib/models/Setting.js:563
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:564
+#: ReactNativeClient/lib/models/Setting.js:564
 msgid "Page size for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:566
+#: ReactNativeClient/lib/models/Setting.js:566
 msgid "A4"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#: ReactNativeClient/lib/models/Setting.js:567
 msgid "Letter"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:568
+#: ReactNativeClient/lib/models/Setting.js:568
 msgid "A3"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
+#: ReactNativeClient/lib/models/Setting.js:569
 msgid "A5"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
+#: ReactNativeClient/lib/models/Setting.js:570
 msgid "Tabloid"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:571
+#: ReactNativeClient/lib/models/Setting.js:571
 msgid "Legal"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:574
+#: ReactNativeClient/lib/models/Setting.js:574
 msgid "Page orientation for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
+#: ReactNativeClient/lib/models/Setting.js:576
 msgid "Portrait"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
+#: ReactNativeClient/lib/models/Setting.js:577
 msgid "Landscape"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:588
+#: ReactNativeClient/lib/models/Setting.js:588
 msgid "Keyboard Mode"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:591
+#: ReactNativeClient/lib/models/Setting.js:591
 #, fuzzy
 msgid "Default"
 msgstr "Modul implicit: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:592
+#: ReactNativeClient/lib/models/Setting.js:592
 msgid "Emacs"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:593
+#: ReactNativeClient/lib/models/Setting.js:593
 msgid "Vim"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:608
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:609
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2641,51 +2959,51 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:621
+#: ReactNativeClient/lib/models/Setting.js:621
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:630
+#: ReactNativeClient/lib/models/Setting.js:630
 msgid "Fail-safe"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:631
+#: ReactNativeClient/lib/models/Setting.js:631
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:635
+#: ReactNativeClient/lib/models/Setting.js:635
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:643
+#: ReactNativeClient/lib/models/Setting.js:643
 #, fuzzy
 msgid "Enable note history"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:653
 msgid "days"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:653
 #, javascript-format
 msgid "%d days"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:655
+#: ReactNativeClient/lib/models/Setting.js:655
 msgid "Keep note history for"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
+#: ReactNativeClient/lib/models/Setting.js:682
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:710
+#: ReactNativeClient/lib/models/Setting.js:684
+#: ReactNativeClient/lib/models/Setting.js:697
+#: ReactNativeClient/lib/models/Setting.js:710
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2693,57 +3011,57 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
+#: ReactNativeClient/lib/models/Setting.js:695
 msgid "Note list growth factor"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
+#: ReactNativeClient/lib/models/Setting.js:708
 msgid "Note area growth factor"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
+#: ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1112
+#: ReactNativeClient/lib/models/Setting.js:1112
 #, fuzzy
 msgid "General"
 msgstr "Opțiuni Generale"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1113
+#: ReactNativeClient/lib/models/Setting.js:1113
 #, fuzzy
 msgid "Synchronisation"
 msgstr "Statusul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1114
+#: ReactNativeClient/lib/models/Setting.js:1114
 msgid "Appearance"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1115
+#: ReactNativeClient/lib/models/Setting.js:1115
 #, fuzzy
 msgid "Note"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1116
+#: ReactNativeClient/lib/models/Setting.js:1116
 msgid "Plugins"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1117
+#: ReactNativeClient/lib/models/Setting.js:1117
 #, fuzzy
 msgid "Application"
 msgstr "Duplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1119
+#: ReactNativeClient/lib/models/Setting.js:1119
 #, fuzzy
 msgid "Encryption"
 msgstr "Criptarea este:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1120
+#: ReactNativeClient/lib/models/Setting.js:1120
 msgid "Web Clipper"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1125
+#: ReactNativeClient/lib/models/Setting.js:1125
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2754,652 +3072,328 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1126
+#: ReactNativeClient/lib/models/Setting.js:1126
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
+#: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr ""
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+
+#: ReactNativeClient/lib/onedrive-api.js:270
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+
+#: ReactNativeClient/lib/registry.js:156
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
+#: ReactNativeClient/lib/services/InteropService.js:29
+#: ReactNativeClient/lib/services/InteropService.js:67
 msgid "Joplin Export File"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:36
+#: ReactNativeClient/lib/services/InteropService.js:82
 msgid "Markdown"
 msgstr "Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:41
+#: ReactNativeClient/lib/services/InteropService.js:72
 msgid "Joplin Export Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
+#: ReactNativeClient/lib/services/InteropService.js:47
 msgid "Evernote Export File (as Markdown)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
+#: ReactNativeClient/lib/services/InteropService.js:55
 msgid "Evernote Export File (as HTML)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:89
 #, fuzzy
 msgid "HTML File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:94
 msgid "HTML Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:130
 msgid "Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
+#: ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
+#: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+#: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
 msgstr "Nu există date de exportat."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:215
-msgid "Restored Notes"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
+#: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
 msgstr "Itemii nu pot fi sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
+#: ReactNativeClient/lib/services/report.js:123
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
+#: ReactNativeClient/lib/services/report.js:130
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
+#: ReactNativeClient/lib/services/report.js:132
 #, fuzzy, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
+#: ReactNativeClient/lib/services/report.js:142
 #, fuzzy
 msgid "Items that cannot be decrypted"
 msgstr "Itemii nu pot fi sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
+#: ReactNativeClient/lib/services/report.js:144
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:182
+#: ReactNativeClient/lib/services/report.js:182
 #, fuzzy
 msgid "Attachments"
 msgstr "Atașați fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and decrypted"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:194
+#: ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:194
 #, fuzzy, javascript-format
 msgid "%s: %d"
 msgstr "%s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:191
 msgid "Downloaded and encrypted"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:204
+#: ReactNativeClient/lib/services/report.js:204
 #, fuzzy
 msgid "Attachments that could not be downloaded"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:209
+#: ReactNativeClient/lib/services/report.js:209
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:222
+#: ReactNativeClient/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:226
+#: ReactNativeClient/lib/services/report.js:226
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:229
+#: ReactNativeClient/lib/services/report.js:229
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Total: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:231
+#: ReactNativeClient/lib/services/report.js:231
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "În conflict: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:232
+#: ReactNativeClient/lib/services/report.js:232
 #, javascript-format
 msgid "To delete: %d"
 msgstr "De șters: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:236
+#: ReactNativeClient/lib/services/report.js:236
 msgid "Folders"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:244
+#: ReactNativeClient/lib/services/report.js:244
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:252
+#: ReactNativeClient/lib/services/report.js:252
 msgid "Coming alarms"
 msgstr "Alarmele următoare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:257
+#: ReactNativeClient/lib/services/report.js:257
 #, javascript-format
 msgid "On %s: %s"
 msgstr "Pe %s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
-msgid "Permission to use camera"
+#: ReactNativeClient/lib/services/RevisionService.js:215
+msgid "Restored Notes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
-msgid "Your permission to use your camera is required."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
-#, fuzzy
-msgid "You currently have no notebooks."
-msgstr "Niciun caiet de notițe activ."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:101
-#, fuzzy
-msgid "Create a notebook"
-msgstr "Creați caiet de notițe."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
-msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:185
-msgid "Delete these notes?"
-msgstr "Ștergeți aceste notițe?"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:362
-msgid "Move to notebook..."
-msgstr "Mutați în caietul de notițe..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
+#: ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Mutați %d notițe în caietul de notițe \"%s\"?"
+msgid "Cannot access %s"
+msgstr "Nu se poate accesa %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:421
-msgid "Press to set the decryption password."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:422
-#, fuzzy
-msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Câțiva itemi nu pot fi sincronizați."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
-#, fuzzy
-msgid "Clear alarm"
-msgstr "Setați alarma"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
-msgid "Save alarm"
-msgstr "Salvați alarma"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
-msgid "Select date"
-msgstr "Selectați data"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
-msgid "Confirm"
-msgstr "Confirmați"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:126
-#, fuzzy, javascript-format
-msgid "Notebook: %s"
-msgstr "Caiete de notițe"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:132
-#, fuzzy
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "Itemii criptați nu pot fi editați"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
-#, fuzzy
-msgid "New Notebook"
-msgstr "Adăugați un nou caiet de notițe"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:553
-msgid "Configuration"
-msgstr "Configurare"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
-#, fuzzy
-msgid "Checking... Please wait."
-msgstr "Se anulează... Vă rugăm să așteptați."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
-msgid "Success! Synchronisation configuration appears to be correct."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
-msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
-msgid "The application has been authorised!"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#: ReactNativeClient/lib/synchronizer.js:93
 #, javascript-format
-msgid ""
-"Could not authorise application:\n"
-"\n"
-"%s\n"
-"\n"
-"Please try again."
-msgstr ""
+msgid "Created local items: %d."
+msgstr "Creare itemi locali: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
-msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
-msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
-msgid "The master key has been upgraded successfully!"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#: ReactNativeClient/lib/synchronizer.js:94
 #, javascript-format
-msgid "Could not upgrade master key: %s"
-msgstr ""
+msgid "Updated local items: %d."
+msgstr "Itemi locali actualizați: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
-#, fuzzy, javascript-format
-msgid "Decrypted items: %s / %s"
-msgstr "Se decriptează itemi: %d/%d"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
-msgid "New tags:"
-msgstr "Etichete noi:"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
-msgid "Type new tags or select from list"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-msgid "Warning"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:320
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:264
-msgid "Encryption Config"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:440
-#, fuzzy
-msgid "Tools"
-msgstr "Unelte"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:442
-#, fuzzy
-msgid "Sync Status"
-msgstr "Status"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:443
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
-msgid "Log"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
-#, fuzzy
-msgid "Creating report..."
-msgstr "Se crează un %s..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
-msgid "Export Debug Report"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
-msgid "Fixing search index..."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
-msgid "Fix search index"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
-#, fuzzy
-msgid "Exporting profile..."
-msgstr "Se importă notițe..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
-#, fuzzy
-msgid "Export profile"
-msgstr "Exportați"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:465
-#, fuzzy
-msgid "More information"
-msgstr "Configurare"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:475
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:478
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:481
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:484
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:513
-msgid "Joplin website"
-msgstr "Website Joplin"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+#: ReactNativeClient/lib/synchronizer.js:95
 #, javascript-format
-msgid "Database v%s"
+msgid "Created remote items: %d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
-#, fuzzy, javascript-format
-msgid "FTS enabled: %d"
-msgstr "De șters: %d"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:51
-msgid "Login with Dropbox"
-msgstr "Autentificați-vă cu Dropbox"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:62
-msgid "Enter code here"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:119
+#: ReactNativeClient/lib/synchronizer.js:96
 #, javascript-format
-msgid "Master Key %s"
+msgid "Updated remote items: %d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: ReactNativeClient/lib/synchronizer.js:97
 #, javascript-format
-msgid "Created: %s"
-msgstr "Creat: %s"
+msgid "Deleted local items: %d."
+msgstr "Itemi locali șterși: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:151
-msgid "Password:"
-msgstr "Parolă:"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:137
-msgid "Password cannot be empty"
-msgstr "Parolă nu poate fi un câmp gol"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:139
-#, fuzzy
-msgid "Confirm password cannot be empty"
-msgstr "Parolă nu poate fi un câmp gol"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:150
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "Activați"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:248
-msgid "Missing Master Keys"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Disable encryption"
-msgstr "Dezactivați criptarea"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Enable encryption"
-msgstr "Activați criptarea"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:268
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
+#: ReactNativeClient/lib/synchronizer.js:98
 #, javascript-format
-msgid "The notebook could not be saved: %s"
-msgstr "Caietul de notițe nu a puut fi salvat: %s"
+msgid "Deleted remote items: %d."
+msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
-msgid "Edit notebook"
-msgstr "Editați caietul de notițe"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
-#, fuzzy
-msgid "Enter notebook title"
-msgstr "Titlul caietului de notițe:"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:141
-msgid "Refresh"
-msgstr "Reîncărcați"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
-msgid "Show all"
-msgstr "Afișați tot"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
-msgid "Errors only"
-msgstr "Doar erori"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
-msgid "This note has been modified:"
-msgstr "Această notiță a fost modificată:"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
-msgid "Save changes"
-msgstr "Salvați schimbările"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
-msgid "Discard changes"
-msgstr "Renunțați la schimbări"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:139
+#: ReactNativeClient/lib/synchronizer.js:99
 #, javascript-format
-msgid "No item with ID %s"
-msgstr "Niciun item cu ID-ul %s"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:158
-msgid "This attachment is not downloaded or not decrypted yet."
+msgid "Fetched items: %d/%d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:162
+#: ReactNativeClient/lib/synchronizer.js:101
+msgid "Cancelling..."
+msgstr "Se amână..."
+
+#: ReactNativeClient/lib/synchronizer.js:102
 #, javascript-format
-msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
+msgid "Completed: %s"
+msgstr "Completat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:166
+#: ReactNativeClient/lib/synchronizer.js:103
 #, javascript-format
-msgid "Links with protocol \"%s\" are not supported"
+msgid "Last error: %s"
+msgstr "Ultima eroare: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:203
+msgid "Idle"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:534
-#, javascript-format
-msgid "Unsupported image type: %s"
+#: ReactNativeClient/lib/synchronizer.js:204
+msgid "In progress"
+msgstr "În progres"
+
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:690
-#, fuzzy, javascript-format
-msgid "Updated: %s"
-msgstr "Actualizat: %d."
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:694
-msgid "View on map"
-msgstr "Vizualizați pe hartă"
+#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
-msgid "Go to source URL"
-msgstr ""
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (Doar pentru teste)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:729
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "Acest fișier nu a putut fi deschis: %s"
+
 #, fuzzy
-msgid "Attach..."
-msgstr "Caută..."
+#~ msgid "Content Properties"
+#~ msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 #, fuzzy
-msgid "Choose an option"
-msgstr "Afișați opțiunile avansate"
+#~ msgid "Content properties"
+#~ msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 #, fuzzy
-msgid "Take photo"
-msgstr "Atașează imagine"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
-msgid "Attach photo"
-msgstr "Atașează imagine"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
-msgid "Attach any file"
-msgstr "Atașați orice fișier"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:750
-msgid "Share"
-msgstr "Distribuie"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
-#, fuzzy
-msgid "Convert to note"
-msgstr "Mutați în caietul de notițe..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
-msgid "Convert to todo"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:778
-msgid "Properties"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:957
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1007
-msgid "Add body"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1045
-#, fuzzy
-msgid "Add title"
-msgstr "titlu"
-
-# vezi context
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
-msgid "Login with OneDrive"
-msgstr "Autentificare prin OneDrive"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
-msgid "Search"
-msgstr "Caută"
+#~ msgid "Notebook properties"
+#~ msgstr "Titlul caietului de notițe:"
 
 #~ msgid "Some items cannot be synchronised."
 #~ msgstr "Câțiva itemi nu pot fi sincronizați."

@@ -102,6 +102,7 @@ ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
+ReactNativeClient/lib/services/ResourceEditWatcher.js
 ReactNativeClient/lib/services/SettingUtils.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
