@@ -8,7 +8,7 @@ const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 const { initBridge } = require('./bridge');
 const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
-const envFromArgs = require('./envFromArgs');
+const envFromArgs = require('lib/envFromArgs');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);

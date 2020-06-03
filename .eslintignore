@@ -97,7 +97,13 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/lib/services/keychain/KeychainService.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
 ReactNativeClient/lib/services/ResourceEditWatcher.js
+ReactNativeClient/lib/services/SettingUtils.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

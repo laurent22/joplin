@@ -686,6 +686,7 @@ class Application extends BaseApplication {
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
 				_('Profile Version: %s', reg.db().version()),
+				_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
