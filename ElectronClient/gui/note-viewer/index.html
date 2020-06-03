@@ -419,6 +419,12 @@
 			updateBodyHeight();
 		}));
 
+		// Prevent middle-click as that would open the URL in an Electron window
+		// https://github.com/laurent22/joplin/issues/3287
+		window.addEventListener('auxclick', webviewLib.logEnabledEventHandler((event) => {
+			event.preventDefault();
+		}));
+
 		updateBodyHeight();
 	} catch (error) {
 		ipcProxySendToHost('error:' + JSON.stringify(webviewLib.cloneError(error)));
