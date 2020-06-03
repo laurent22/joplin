@@ -18,19 +18,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
 msgstr "Desmarque las notas asociadas para eliminar una etiqueta."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:456
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Seleccione primero la nota o libreta que desea eliminar."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Pulse Ctrl+D o escriba «salir» para salir de la aplicación"
 
@@ -109,12 +111,12 @@ msgid "Attaches the given file to the note."
 msgstr "Adjuntar archivo a la nota."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:25
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:40
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
@@ -139,11 +141,11 @@ msgstr "Adjuntar archivo a la nota."
 msgid "Cannot find \"%s\"."
 msgstr "No se puede encontrar «%s»."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:14
 msgid "Displays the given note."
 msgstr "Mostrar la nota dada."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:18
 msgid "Displays the complete information about note."
 msgstr "Mostrar la información completa acerca de la nota."
 
@@ -197,13 +199,13 @@ msgstr ""
 "`disable`, `decrypt`, `status`, `decrypt-file` y `target-status`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
 msgstr "Introduzca la contraseña maestra:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:38
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:70
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:75
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:74
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:79
 msgid "Operation cancelled"
 msgstr "Operación cancelada"
 
@@ -215,34 +217,46 @@ msgstr ""
 "Iniciando descifrado... Por favor espere, puede tardar varios minutos "
 "dependiendo de cuanto haya que descifrar."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:64
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Elementos descifrados: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+"Elementos omitidos: %d (use --retry-failed-items para intentar descifrarlos "
+"nuevamente)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
 msgstr "Descifrado completado."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:73
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:77
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:163
 msgid "Confirm password:"
 msgstr "Confirma la contraseña:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:79
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:83
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Enabled"
 msgstr "Habilitado"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:548
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Deshabilitado"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:104
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:108
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
 #, javascript-format
 msgid "Encryption is: %s"
@@ -506,7 +520,7 @@ msgid "Deletes the notebook without asking for confirmation."
 msgstr "Elimina una libreta sin pedir confirmación."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:154
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
@@ -528,7 +542,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notas coinciden con el patrón. ¿Eliminarlas?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:373
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:377
 msgid "Delete note?"
 msgstr "¿Borrar nota?"
 
@@ -582,6 +596,8 @@ msgstr "Muestra un resumen acerca de las notas y las libretas."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Para reintentar el descifrado de estos elementos ejecute 'e2ee decrypt --"
+"retry-failed-items'"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -780,138 +796,143 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
 #, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "No requiere confirmación."
+msgstr "También puede escribir `status` para obtener más información."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:142
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Exportando el formato de «%s» a «%s». Por favor espere..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/InteropServiceHelper.js:160
+#, fuzzy, javascript-format
+msgid "Could not export notes: %s"
+msgstr "No se pudo exportar las notas: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:391
 msgid "Sidebar"
 msgstr "Barra lateral"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:369
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:397
 #, fuzzy
 msgid "Note list"
 msgstr ""
 "Historial\n"
 " de notas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:375
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:403
 msgid "Note title"
 msgstr "Titulo de nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:409
 msgid "Note body"
 msgstr "Cuerpo de nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:461
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importando el formato de «%s» a «%s». Por favor espere..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:466
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:545
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:186
 msgid "PDF File"
 msgstr "Archivo PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:514
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "Estado de la sincronización"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:496
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:682
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:524
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "Nueva nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:508
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:536
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "Nueva lista de tareas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:520
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:700
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:548
 msgid "New notebook"
 msgstr "Nueva libreta"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:531
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:559
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:304
 msgid "New sub-notebook"
 msgstr "Nueva sublibreta"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:571
 msgid "Print"
 msgstr "Imprimir"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:562
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:591
 msgid "Create note from template"
-msgstr "Introduce fecha"
+msgstr "Crear nota desde plantilla"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:601
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Crear lista de tareas desde una plantilla"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:611
 msgid "Insert template"
-msgstr "Introduce fecha"
+msgstr "Insertar plantilla"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:592
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:621
 #, fuzzy
 msgid "Open template directory"
-msgstr "Directorio para exportar de Joplin"
+msgstr "Abrir directorio de plantillas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:599
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
 msgid "Refresh templates"
-msgstr "Introduce fecha"
+msgstr "Actualizar plantillas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:612
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:641
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "Opciones"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
 #, fuzzy
 msgid "Note attachments..."
-msgstr "Adjuntos"
+msgstr "Adjuntos..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
-#, fuzzy, javascript-format
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "Revisión: %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
-#, fuzzy, javascript-format
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:685
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Completado: %s"
+msgstr "ID del cliente: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
-#, fuzzy, javascript-format
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Nueva versión: %s"
+msgstr "Versión de sincronización: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
-#, fuzzy, javascript-format
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:687
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Nueva versión: %s"
+msgstr "Versión del perfil: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:840
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:804
 msgid "Copy"
 msgstr "Copiar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:126
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:101
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:135
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:139
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:185
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:754
@@ -920,211 +941,218 @@ msgstr "Copiar"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
 msgid "OK"
 msgstr "OK"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:680
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:709
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:792
 msgid "&File"
 msgstr "&Archivo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1085
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1140
 msgid "About Joplin"
 msgstr "Acerca de Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:722
 msgid "Preferences..."
 msgstr "Preferencias..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:703
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:732
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1119
 msgid "Check for updates..."
 msgstr "Comprobar actualizaciones..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:777
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
 msgid "Templates"
 msgstr "Plantillas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:782
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "Importar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:728
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:385
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:191
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:757
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:197
 msgid "Export"
 msgstr "Exportar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:734
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:726
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "Sincronizar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
 #, javascript-format
 msgid "Hide %s"
 msgstr "Oculta %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
 msgid "Quit"
 msgstr "Salir"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:799
 msgid "Close Window"
 msgstr "Cerrar Ventana"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:808
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
 msgid "&Edit"
 msgstr "&Editar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
 msgid "Cut"
 msgstr "Cortar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:821
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:850
 msgid "Paste"
 msgstr "Pegar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:826
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:855
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:834
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:863
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1690
 msgid "Bold"
 msgstr "Negrita"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1698
 msgid "Italic"
 msgstr "Cursiva"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:856
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
 msgid "Link"
 msgstr "Enlace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:867
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1718
 msgid "Code"
 msgstr "Código"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:881
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:910
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
 msgstr "Introduce fecha"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:895
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:924
+msgid "Search in all the notes"
+msgstr "Buscar en todas las notas"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+msgid "Search in current note"
+msgstr "Buscar en nota actual"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
+msgid "&View"
+msgstr "&Ver"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:949
+msgid "Toggle sidebar"
+msgstr "Cambia la barra lateral"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:962
+msgid "Layout button sequence"
+msgstr "Diseño de los botones"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:966
+msgid "Toggle note list"
+msgstr "Cambia la lista de notas"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:975
+msgid "Toggle editor layout"
+msgstr "Cambia el diseño del editor"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1023
+msgid "Focus"
+msgstr "Foco"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+msgid "Actual Size"
+msgstr "Tamaño actual"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1041
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1047
+msgid "Zoom In"
+msgstr "Ampliar"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+msgid "Zoom Out"
+msgstr "Alejar"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1062
+msgid "&Note"
+msgstr "&Nota"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1065
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1801
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:68
 msgid "Edit in external editor"
 msgstr "Editar con un editor externo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:906
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1076
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1634
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1810
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:781
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:779
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:745
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:757
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:922
-msgid "Search in all the notes"
-msgstr "Buscar en todas las notas"
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1092
+msgid "Statistics..."
+msgstr "Estadísticas..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:933
-msgid "Search in current note"
-msgstr "Buscar en nota actual"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:945
-msgid "&View"
-msgstr "&Ver"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:664
-msgid "Toggle sidebar"
-msgstr "Cambia la barra lateral"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:960
-msgid "Layout button sequence"
-msgstr "Diseño de los botones"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:964
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:673
-msgid "Toggle note list"
-msgstr "Cambia la lista de notas"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:973
-msgid "Toggle editor layout"
-msgstr "Cambia el diseño del editor"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1021
-msgid "Focus"
-msgstr "Foco"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
-msgid "Actual Size"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
-msgid "Zoom In"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
-msgid "Zoom Out"
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1102
 msgid "&Tools"
 msgstr "&Herramientas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1106
 msgid "&Help"
 msgstr "&Ayuda"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1109
 msgid "Website and documentation"
 msgstr "Sitio web y documentación"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1113
 msgid "Joplin Forum"
 msgstr "Foro Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1061
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1116
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:499
 msgid "Make a donation"
 msgstr "Hacer una donación"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1073
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1128
 msgid "Toggle development tools"
 msgstr "Activa o desactiva las herramientas de desarrollo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1207
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1299
 #, javascript-format
 msgid "Open %s"
 msgstr "Abrir %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1209
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1301
 msgid "Exit"
 msgstr "Salir"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:112
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:125
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:242
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:322
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:726
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
@@ -1134,8 +1162,8 @@ msgstr "Salir"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:438
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:442
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1164,13 +1192,13 @@ msgstr "Nueva versión: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:436
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:440
 msgid "Yes"
 msgstr "Sí"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:437
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:441
 msgid "No"
 msgstr "No"
 
@@ -1269,7 +1297,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "Esto abrirá una nueva pantalla. ¿Quieres salvar los cambios actuales?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:170
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:313
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:311
 msgid "Check synchronisation configuration"
 msgstr "Comprobar sincronización"
 
@@ -1319,12 +1347,12 @@ msgid "Browse..."
 msgstr "Explorar..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:642
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:990
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1017
 msgid "Edit"
 msgstr "Editar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:744
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:316
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1671
 msgid "Back"
@@ -1346,14 +1374,18 @@ msgstr "Guardar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Claves maestras que necesitan actualización"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
+#, fuzzy
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Las siguientes claves maestras utilizan un algoritmo de cifrado obsoleto y "
+"se recomienda actualizarlas. La clave maestra actualizada todavía será capaz "
+"de descifrar y cifrar sus datos como de costumbre."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1364,27 +1396,31 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Actualizar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "Seleccione fecha"
+msgstr "Encriptar datos nuevamente"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"El método de cifrado predeterminado se ha cambiado por uno más seguro y se "
+"recomienda que lo aplique a sus datos."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Puede utilizar la siguiente herramienta para volver a cifrar sus datos, por "
+"ejemplo, si sabe que algunas de sus notas están cifradas con un método de "
+"cifrado obsoleto."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1400,6 +1436,21 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"Para hacerlo, todo sus datos deberán estar encriptados y sincronizados, por "
+"lo que es mejor ejecutarlo durante la noche.\n"
+"\n"
+"Para empezar, siga estas instrucciones:\n"
+"\n"
+"1. Sincronice todos sus dispositivos.\n"
+"2. Haga clic en \"%s\".\n"
+"3. Deje que se ejecute hasta su finalización. Mientras se ejecuta, evite "
+"modificar cualquier nota en sus otros dispositivos para evitar conflictos.\n"
+"4. Una vez que la sincronización se realiza en este dispositivo, sincronice "
+"todos sus otros dispositivos y deje que se ejecute la sincronización hasta "
+"su finalización.\n"
+"\n"
+"Importante: solo necesita realizar este procedimiento UNA ÚNICA VEZ en un "
+"dispositivo."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1425,18 +1476,18 @@ msgstr "Obtenerlo ahora en:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Icono"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
 #, fuzzy
 msgid "Notebook properties"
-msgstr "Propiedades de nota"
+msgstr "Propiedades de libreta"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:267
 msgid "Usage"
 msgstr "Uso"
 
@@ -1446,121 +1497,114 @@ msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Se creará la nueva libreta «%s» y se importará en ella el archivo «%s»"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:154
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:161
 msgid "Please create a notebook first."
 msgstr "Por favor cree una libreta primero."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:160
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
 msgid "Please create a notebook first"
 msgstr "Por favor cree una libreta primero"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:167
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:174
 msgid "Notebook title:"
 msgstr "Título de libreta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:210
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:217
 msgid "Add or remove tags:"
 msgstr "Agregar o borrar etiquetas:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:259
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
 msgid "Move to notebook:"
-msgstr "Mover a la libreta..."
+msgstr "Mover a la libreta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:279
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:288
 msgid "Rename notebook:"
 msgstr "Renombrar libreta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:300
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:309
 msgid "Rename tag:"
 msgstr "Renombrar etiqueta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:401
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:413
 msgid "Set alarm:"
 msgstr "Ajustar alarma:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:432
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:444
 msgid "Template file:"
 msgstr "Archivo de plantilla:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:574
-msgid "Some items cannot be synchronised."
-msgstr "No se han podido sincronizar algunos de los elementos."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:579
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:591
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:615
-msgid "View them now"
-msgstr "Verlos ahora"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:586
-msgid "Some items cannot be decrypted."
-msgstr "No se han podido descifrar algunos elementos."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:598
-msgid "One or more master keys need a password."
-msgstr "Una o más llaves maestras necesitan una contraseña."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:603
-msgid "Set the password"
-msgstr "Establecer la contraseña"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:610
-#, fuzzy
-msgid "One of your master keys use an obsolete encryption method."
-msgstr "Una o más llaves maestras necesitan una contraseña."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
-msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:627
-#, fuzzy
-msgid "More info"
-msgstr "Más información"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:708
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
-msgid "Layout"
-msgstr "Diseño"
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:717
-msgid "Search..."
-msgstr "Buscar..."
-
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:51
 msgid "Words"
-msgstr ""
+msgstr "Palabras"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:52
 msgid "Characters"
-msgstr ""
+msgstr "Caracteres"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:53
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Caracteres excluyendo espacios"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:54
 msgid "Lines"
-msgstr ""
+msgstr "Líneas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:73
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+msgid "Editor"
+msgstr "Editor"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:74
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
+msgid "Viewer"
+msgstr "Visor"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:82
 #, fuzzy
 msgid "Content properties"
 msgstr "Propiedades de nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "Cerrar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:454
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+msgid "Custom order"
+msgstr "Orden personalizado"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+msgid "View"
+msgstr "Ver"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:321
+msgid "Sort notes by"
+msgstr "Ordenar notas por"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:146
+#, fuzzy, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+"Para ordenar manualmente las notas, el orden de clasificación debe ser "
+"cambiado a \"%s\" en el menú \"%s\" > \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:147
+#, fuzzy
+msgid "Do it now"
+msgstr "Obtenerlo ahora en:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "No hay ninguna nota. Cree una pulsando «Nota nueva»."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:454
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "No hay ninguna libreta. Cree una pulsando en «Libreta nueva»."
@@ -1586,7 +1630,7 @@ msgid "URL"
 msgstr "URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1025
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1118
 msgid "Note History"
 msgstr ""
 "Historial\n"
@@ -1596,11 +1640,11 @@ msgstr ""
 msgid "Markup"
 msgstr "Aumento"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:305
 msgid "Previous versions of this note"
 msgstr "Versiones anteriores de esta nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:382
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1834
 msgid "Note properties"
 msgstr "Propiedades de nota"
@@ -1616,7 +1660,6 @@ msgstr "Esta nota no dispone de historial"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:865
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:630
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Enlace o mensaje no soportado: %s"
@@ -1656,14 +1699,16 @@ msgid "Copy Link Address"
 msgstr "Copiar enlace"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:594
 msgid "There was an error downloading this attachment:"
 msgstr "Ha habido un error descargando este adjunto:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:597
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Este adjunto no ha sido descargado o desencriptado todavía"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Diseño"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
@@ -1704,7 +1749,7 @@ msgstr "Adjuntar archivo"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1642
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1828
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:730
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:742
 msgid "Set alarm"
 msgstr "Establecer alarma"
 
@@ -1751,17 +1796,14 @@ msgid "Content Properties"
 msgstr "Propiedades de nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 msgid "to-do"
 msgstr "lista de tareas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 msgid "note"
 msgstr "nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Creando nuevo %s..."
@@ -1771,13 +1813,12 @@ msgid "Clear"
 msgstr "Limpiar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:31
-#, fuzzy
 msgid "Title"
-msgstr "título"
+msgstr "Título"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
 msgid "Size"
-msgstr ""
+msgstr "Tamaño"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:39
 #, fuzzy
@@ -1787,19 +1828,18 @@ msgstr "Localización"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:42
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:707
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:710
 msgid "Untitled"
 msgstr "Sin título"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:46
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:94
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:198
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:325
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:287
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:227
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:326
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:772
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:784
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -1814,6 +1854,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Esta es una herramienta avanzada para mostrar los archivos adjuntos que "
+"están vinculados a sus notas. Por favor, tenga cuidado al eliminar uno de "
+"ellos, ya que no pueden ser recuperados después."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 #, fuzzy
@@ -1822,12 +1865,14 @@ msgstr "Comprobando... Por favor espere."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
-msgstr ""
+msgstr "¡No hay recursos!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Aviso: no se muestran todos los recursos por razones de rendimiento (límite: "
+"% s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1873,11 +1918,11 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "Copiar enlace compartible"
 msgstr[1] "Copiar enlaces compartible"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
 msgstr "Eliminar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:289
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -1889,39 +1934,39 @@ msgstr ""
 "\n"
 "Todas las notas y sublibretas de esta libreta serán borradas."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:293
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Desea borrar las etiquetas pertenecientes a «%s» de todas las notas?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:295
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
 msgstr "¿Desea eliminar esta búsqueda de la barra lateral?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:342
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:392
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:339
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:389
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "Renombrar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:757
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:359
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Todas las notas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:764
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:762
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:363
 msgid "Notebooks"
 msgstr "Libretas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:799
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:797
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Descifrando elementos: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:804
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:802
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -1935,7 +1980,7 @@ msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
 #, fuzzy
 msgid "Retry All"
-msgstr "Reintento"
+msgstr "Reintentar todos"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1947,12 +1992,11 @@ msgid "Add or remove tags"
 msgstr "Añadir o borrar etiquetas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Mover a la libreta..."
+msgstr "Mover a la libreta"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:332
 msgid "Duplicate"
 msgstr "Duplicado"
 
@@ -1969,48 +2013,49 @@ msgstr "Detener la edición externa"
 msgid "Switch between note and to-do type"
 msgstr "Cambiar entre nota y lista de tareas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:113
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
 msgid "Switch to note type"
 msgstr "Cambiar a nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:122
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:128
 msgid "Switch to to-do type"
 msgstr "Cambiar a lista de tareas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:132
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:138
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:771
 msgid "Copy Markdown link"
 msgstr "Copiar el enlace de Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:147
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:153
 msgid "Share note..."
 msgstr "Compartir nota..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:215
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "¿Borrar nota «%s»?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:217
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:223
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Borrar estas %d notas?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:234
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:240
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "Error abriendo la nota en el editor: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:439
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Escriba el título de una nota para abrirla. O escriba # seguido de un nombre "
-"de etiqueta, o @ seguido del nombre de una libreta."
+"Escriba el título de una nota o una parte de su contenido para abrirla. O "
+"escriba # seguido de un nombre de etiqueta, o @ seguido del nombre de una "
+"libreta."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:471
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:477
 msgid "Goto Anything..."
 msgstr "Ir a..."
 
@@ -2124,12 +2169,14 @@ msgstr ""
 "Podría considerar utilizar una cuenta Personal de OneDrive."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:90
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:435
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:439
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Está a punto de adjuntar una imagen grande (%dx%d píxeles). ¿Desea cambiar "
+"su tamaño a %d píxeles antes de adjuntarlo?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2193,21 +2240,21 @@ msgstr "Espera"
 msgid "In progress"
 msgstr "En progreso"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:706
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:709
 msgid "Encrypted"
 msgstr "Cifrado"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:766
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:769
 msgid "Encrypted items cannot be modified"
 msgstr "Los elementos cifrados no pueden ser modificados"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "title"
 msgstr "título"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
 msgstr "fecha de actualización"
 
@@ -2215,30 +2262,34 @@ msgstr "fecha de actualización"
 msgid "Conflicts"
 msgstr "Conflictos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:354
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:381
 msgid "Cannot move notebook to this location"
 msgstr "No se puede mover la libreta a este lugar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:402
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:429
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "No se puede usar el nombre «%s» para una libreta; es un título reservado."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
 msgstr "fecha de creación"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:105
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr "orden personalizado"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
 msgstr "Esta nota no tiene informacion de geolocalización."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:459
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:446
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "No se ha podido copiar la nota a la libreta «%s»"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:470
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:457
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "No se ha podido mover la nota a la libreta «%s»"
@@ -2256,9 +2307,8 @@ msgid "Downloaded"
 msgstr "Descargado"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Sí"
+msgstr "sí"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
@@ -2267,9 +2317,8 @@ msgid "(wysiwyg: %s)"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "no"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2282,27 +2331,40 @@ msgstr ""
 "antes de sincronizarlo, de lo contrario todos los archivos serán eliminados. "
 "Consulte las preguntas frecuentes para obtener más detalles: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:52
-msgid "Keyboard Mode"
-msgstr "Modo de teclado"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:42
+msgid "Light"
+msgstr "Claro"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:55
-msgid "Default"
-msgstr "Por defecto"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:43
+msgid "Dark"
+msgstr "Oscuro"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:56
-msgid "Emacs"
-msgstr "Emacs"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+msgid "Dracula"
+msgstr "Dracula"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:57
-msgid "Vim"
-msgstr "Vim"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:46
+msgid "Solarised Light"
+msgstr "Solarised Light"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:47
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+msgid "Nord"
+msgstr "Nord"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+#, fuzzy
+msgid "OLED Dark"
+msgstr "Oscuro"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:73
 msgid "Synchronisation target"
 msgstr "Destino de sincronización"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:69
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:75
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
@@ -2311,39 +2373,39 @@ msgstr ""
 "tener parámetros adicionales los cuales son llamados como `sync.NUM.NAME` "
 "(todos abajo documentados)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:97
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Directorio con el que sincronizarse (ruta completa)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:109
 msgid "Nextcloud WebDAV URL"
 msgstr "Servidor WebDAV de Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:114
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:120
 msgid "Nextcloud username"
 msgstr "Usuario de Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:124
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:130
 msgid "Nextcloud password"
 msgstr "Contraseña de Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:136
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:142
 msgid "WebDAV URL"
 msgstr "Servidor WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:147
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:153
 msgid "WebDAV username"
 msgstr "Usuario de WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:157
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:163
 msgid "WebDAV password"
 msgstr "Contraseña de WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
 msgid "Attachment download behaviour"
 msgstr "Comportamiento de descarga de adjuntos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:183
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:189
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2354,228 +2416,186 @@ msgstr ""
 "«Always», se descargan todos los archivos adjuntos aunque la nota no esté "
 "abierta."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:192
 msgid "Always"
 msgstr "Siempre"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:187
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:193
 msgid "Manual"
 msgstr "Manual"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:188
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:194
 msgid "Auto"
 msgstr "Automático"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:193
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:199
 msgid "Max concurrent connections"
 msgstr "Conexiones simultáneas máximas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:202
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:208
 msgid "Language"
 msgstr "Idioma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:212
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:218
 msgid "Date format"
 msgstr "Formato de fecha"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:231
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:237
 msgid "Time format"
 msgstr "Formato de hora"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Theme"
 msgstr "Tema"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:250
-msgid "Light"
-msgstr "Claro"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-msgid "Dark"
-msgstr "Oscuro"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-msgid "Dracula"
-msgstr "Dracula"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:254
-msgid "Solarised Light"
-msgstr "Solarised Light"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:255
-msgid "Solarised Dark"
-msgstr "Solarised Dark"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
-msgid "Nord"
-msgstr "Nord"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
-msgid "Aritim Dark"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Automatically switch theme to match system theme"
 msgstr ""
+"Cambiar automáticamente el tema para que coincida con el tema del sistema"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
-#, fuzzy
-msgid "OLED Dark"
-msgstr "Oscuro"
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+msgid "Preferred light theme"
+msgstr "Tema claro preferido"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+msgid "Preferred dark theme"
+msgstr "Tema oscuro preferido"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
 msgstr "Mostrar los recuentos de notas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-msgid "Editor"
-msgstr "Editor"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
-msgid "Viewer"
-msgstr "Visor"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
 msgid "Split View"
 msgstr "Vista dividida"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:272
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:273
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:274
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:275
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:309
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
-#, fuzzy
-msgid "Split"
-msgstr "Vista dividida"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:312
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
 msgid "Show completed to-dos"
 msgstr "Mostrar tareas completadas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:288
-msgid "Sort notes by"
-msgstr "Ordenar notas por"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:338
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-emparejar llaves, paréntesis, comillas, etc."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Reverse sort order"
 msgstr "Invierte el orden"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:314
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:347
 msgid "Sort notebooks by"
 msgstr "Ordenar libretas por"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Save geo-location with notes"
 msgstr "Guardar geolocalización en las notas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:345
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid "When creating a new to-do:"
 msgstr "Al crear una nueva lista de tareas:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:348
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:396
 msgid "Focus title"
 msgstr "Foco en el título"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:349
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:397
 msgid "Focus body"
 msgstr "Foco en el cuerpo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:393
 msgid "When creating a new note:"
 msgstr "Cuando se crear una nota nueva:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:374
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
 msgid "Enable soft breaks"
 msgstr "Activar saltos de línea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:375
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:408
 msgid "Enable typographer support"
 msgstr "Habilitar el soporte de tipógrafo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:409
 msgid "Enable math expressions"
 msgstr "Habilitar expresiones matemáticas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:377
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:410
 msgid "Enable Fountain syntax support"
 msgstr "Habilitar el soporte de sintaxis de Fountain"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:411
 #, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Habilitar el soporte de tipógrafo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:413
 msgid "Enable ==mark== syntax"
 msgstr "Activar sintaxis ==mark=="
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:414
 msgid "Enable footnotes"
 msgstr "Activar notas al pie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:415
 msgid "Enable table of contents extension"
 msgstr "Activar extensión de tabla de contenidos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:383
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:416
 msgid "Enable ~sub~ syntax"
 msgstr "Activar sintaxis ~sub~"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:384
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:417
 msgid "Enable ^sup^ syntax"
 msgstr "Activar sintaxis ^sup^"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:385
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:418
 msgid "Enable deflist syntax"
 msgstr "Activar sintaxis Deflist"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:419
 msgid "Enable abbreviation syntax"
 msgstr "Activar sintaxis de abreviaturas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:387
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:420
 msgid "Enable markdown emoji"
 msgstr "Activar sintaxis de emojis"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:388
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:421
 msgid "Enable ++insert++ syntax"
 msgstr "Activar sintaxis ++insert++"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:389
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:422
 msgid "Enable multimarkdown table extension"
 msgstr "Activar extensión de tablas multimarkdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:401
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:434
 msgid "Show tray icon"
 msgstr "Mostrar icono en la bandeja"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: No funciona en todos los entornos de escritorio."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:403
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2585,23 +2605,23 @@ msgstr ""
 "habilitar esta configuración para que sus notas estén sincronizadas "
 "constantemente, reduciendo así el número de conflictos."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:440
 msgid "Start application minimised in the tray icon"
 msgstr "Iniciar aplicación minimizada en el icono de la bandeja"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:424
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:457
 msgid "Editor font size"
 msgstr "Editar tamaño de fuente"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:465
 msgid "Editor font"
 msgstr "Editar fuente"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:456
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
 msgid "Editor font family"
 msgstr "Editor de familia de fuente"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:458
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
@@ -2610,50 +2630,50 @@ msgstr ""
 "la fuente es incorrecta o vacía, se configurará una fuente monoespaciada "
 "genérica."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Hoja de estilos (completa) para personalizar Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:503
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
 msgid "Automatically update the application"
 msgstr "Actualizar la aplicación automáticamente"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 msgid "Get pre-releases when checking for updates"
 msgstr "Obtenga prelanzamientos cuando busque actualizaciones"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Ver la página de prelanzamiento para más detalles: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:545
 msgid "Synchronisation interval"
 msgstr "Intervalo de sincronización"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:516
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:551
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:519
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
 #, javascript-format
 msgid "%d hour"
 msgstr "%d hora"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:520
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:553
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:554
 #, javascript-format
 msgid "%d hours"
 msgstr "%d horas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid "Text editor command"
 msgstr "Editor de texto"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2662,51 +2682,67 @@ msgstr ""
 "una nota. Si no se provee ninguno se intentará auto detectar el editor por "
 "defecto."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:564
 msgid "Page size for PDF export"
 msgstr "Tamaño de página para exportar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:566
 msgid "A4"
 msgstr "A4"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
 msgid "Letter"
 msgstr "Carta"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:535
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:568
 msgid "A3"
 msgstr "A3"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
 msgid "A5"
 msgstr "A5"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 msgid "Tabloid"
 msgstr "Tabloide"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:538
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:571
 msgid "Legal"
 msgstr "Legal"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:541
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:574
 msgid "Page orientation for PDF export"
 msgstr "Orientación de la página para exportar PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
 msgid "Portrait"
 msgstr "Vertical"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:544
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
 msgid "Landscape"
 msgstr "Apaisado"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:559
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:588
+msgid "Keyboard Mode"
+msgstr "Modo de teclado"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:591
+msgid "Default"
+msgstr "Por defecto"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:592
+msgid "Emacs"
+msgstr "Emacs"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:593
+msgid "Vim"
+msgstr "Vim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:608
 msgid "Custom TLS certificates"
 msgstr "Certificados TLS personalizados"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:609
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2719,15 +2755,15 @@ msgstr ""
 "la configuración de los certificados debe guardar los cambios antes de "
 "pulsar en «Comprobar la configuración de sincronización»."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:621
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorar errores en certificados TLS"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:630
 msgid "Fail-safe"
-msgstr ""
+msgstr "A prueba de fallos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:631
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2736,7 +2772,7 @@ msgstr ""
 "sincronización esté vacío (a menudo como resultado de una configuración "
 "errónea o de un error)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:586
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:635
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2744,61 +2780,90 @@ msgstr ""
 "Especifique el puerto que debe utilizar el servidor de la API. Si no está "
 "configurado, se utilizará un valor predeterminado."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:594
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:643
 msgid "Enable note history"
 msgstr "Habilitar historial de notas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:604
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
 msgid "days"
 msgstr "días"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:604
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:653
 #, javascript-format
 msgid "%d days"
 msgstr "%d días"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:606
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:655
 msgid "Keep note history for"
 msgstr "Mantener historial de la nota durante"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:731
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:682
+msgid "Notebook list growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:684
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:710
+#, fuzzy
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+"La propiedad factor establece cómo el elemento crecerá o se reducirá para "
+"adaptarse al espacio disponible en su contenedor con respecto a los otros "
+"elementos. Por lo tanto, un elemento con un factor de 2 ocupará el doble de "
+"espacio que un elemento con un factor de 1. Reinicie la aplicación para ver "
+"los cambios."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:695
+msgid "Note list growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:708
+msgid "Note area growth factor"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Opción inválida: «%s». Los valores posibles son: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1019
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1112
 msgid "General"
 msgstr "General"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1020
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1113
 msgid "Synchronisation"
 msgstr "Sincronización"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1021
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1114
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1022
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1115
 msgid "Note"
 msgstr "Nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1023
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1116
 msgid "Plugins"
 msgstr "Plugins"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1024
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1117
 msgid "Application"
 msgstr "Aplicación"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1026
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1119
 msgid "Encryption"
 msgstr "Encriptación"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1027
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1120
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1032
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1125
+#, fuzzy
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2808,8 +2873,15 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Estos complementos mejoran el renderizador de Markdown con características "
+"adicionales. Tenga en cuenta que, si bien estas características pueden ser "
+"útiles, no son Markdown estándar y, por lo tanto, la mayoría de ellas solo "
+"funcionarán en Joplin. Además, algunos de ellos son *incompatibles* con el "
+"editor WYSIWYG. Si abre una nota que usa uno de estos complementos en ese "
+"editor, perderá el formato del complemento. A continuación se indica qué "
+"complementos son compatibles o no con el editor WYSIWYG."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1126
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Las notas y los ajustes se guardan en: %s"
@@ -3021,24 +3093,24 @@ msgstr "Crea una nueva libreta"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "No hay notas. Cree una pulsando en el botón (+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:184
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:185
 msgid "Delete these notes?"
 msgstr "¿Desea borrar estas notas?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:361
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:362
 msgid "Move to notebook..."
 msgstr "Mover a la libreta..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:400
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "¿Desea mover %d notas a libreta «%s»?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:418
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:421
 msgid "Press to set the decryption password."
 msgstr "Presione para establecer la contraseña de descifrado."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:419
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:422
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "No se han podido sincronizar algunos de los elementos. Pulsa para más "
@@ -3074,7 +3146,7 @@ msgid "New Notebook"
 msgstr "Nueva cuaderno"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:555
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:553
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -3117,25 +3189,28 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Por favor, confirme que desea volver a encriptar su base de datos  completa."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Sus datos van a ser encriptados y sincronizados nuevamente."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Por favor, ingrese su contraseña en la lista de claves maestras a "
+"continuación antes de actualizar la clave."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "¡La clave maestra ha sido actualizada exitosamente!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "No se pudo exportar las notas: %s"
+msgstr "No se pudo actualizar la clave maestra: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3155,7 +3230,6 @@ msgid "Warning"
 msgstr "Advertencia"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -3163,45 +3237,41 @@ msgstr ""
 "Para utilizar la sincronización del sistema de archivos se requieren sus "
 "permisospara escribir en el almacenamiento externo."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
-msgid "Information"
-msgstr "Información"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:322
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:320
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:264
 msgid "Encryption Config"
 msgstr "Configuración de cifrado"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:442
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:440
 msgid "Tools"
 msgstr "Herramientas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:442
 msgid "Sync Status"
 msgstr "Estado de sincronización"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:443
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
 msgid "Log"
 msgstr "Log"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Creating report..."
 msgstr "Creando reporte..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:445
 msgid "Export Debug Report"
 msgstr "Exportar informe de depuración"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fixing search index..."
 msgstr "Reparando indice de busqueda..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Fix search index"
 msgstr "Repara indice de busqueda"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -3210,24 +3280,24 @@ msgstr ""
 "busqueda.Puede tomar un largo periodo de tiempo dependiendo del número de "
 "notas."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Exporting profile..."
 msgstr "Exportando perfil..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "Export profile"
 msgstr "Exportar perfil"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:450
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 "Solo para fines de depuración: exporte su perfil a una tarjeta SD externa."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:467
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:465
 msgid "More information"
 msgstr "Más información"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:477
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:475
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -3236,7 +3306,7 @@ msgstr ""
 "permisos. Por favor habilitelos en su teléfono, en Aplicaciones > Joplin > "
 "Permisos"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:480
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:478
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -3244,26 +3314,26 @@ msgstr ""
 "- Almacenamiento: Permite adjuntar archivos a las notas y habilitar la "
 "sincronización del sistema de ficheros."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:481
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Cámara: permite tomar fotografías y adjuntarlas en una nota."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:484
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Localización: permite adjuntar la información de geolocalización en la "
 "nota."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:513
 msgid "Joplin website"
 msgstr "Sitio web de Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
 #, javascript-format
 msgid "Database v%s"
 msgstr "Base de datos v%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "FTS activado: %d"
@@ -3282,7 +3352,7 @@ msgid "Master Key %s"
 msgstr "Clave maestra %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:677
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
 #, javascript-format
 msgid "Created: %s"
 msgstr "Creado: %s"
@@ -3373,98 +3443,98 @@ msgstr "Mostrar todo"
 msgid "Errors only"
 msgstr "Solo errores"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "This note has been modified:"
 msgstr "Esta nota ha sido modificada:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Save changes"
 msgstr "Guardar cambios"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:90
 msgid "Discard changes"
 msgstr "Descartar cambios"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:137
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:139
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "No hay elementos con el ID %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:156
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:158
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "El adjunto no ha sido descargado o desencriptado todavía."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:160
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:162
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "La aplicación móvil de Joplin no soporta actualmente este tipo de enlace: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:164
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:166
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Enlazar con el protocolo «%s» no es soportado"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:534
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imagen no soportado: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:678
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:690
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Actualizado: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:682
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:694
 msgid "View on map"
 msgstr "Ver en un mapa"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
 msgid "Go to source URL"
 msgstr "Ir a origen URL"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:729
 msgid "Attach..."
 msgstr "Adjuntar..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Choose an option"
 msgstr "Selecciona una opción"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Take photo"
 msgstr "Tomar foto"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Attach photo"
 msgstr "Adjuntar foto"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:719
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:731
 msgid "Attach any file"
 msgstr "Adjuntar cualquier archivo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:738
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:750
 msgid "Share"
 msgstr "Compartir"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:752
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
 msgid "Convert to note"
 msgstr "Convertir en nota"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:752
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:764
 msgid "Convert to todo"
 msgstr "Convertir a lista de tareas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:766
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:778
 msgid "Properties"
 msgstr "Propiedades"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:945
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:982
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:957
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1007
 msgid "Add body"
 msgstr "Añadir cuerpo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1018
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1045
 msgid "Add title"
 msgstr "Añadir título"
 
@@ -3475,6 +3545,39 @@ msgstr "Acceder con OneDrive"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
 msgstr "Buscar"
+
+#~ msgid "Some items cannot be synchronised."
+#~ msgstr "No se han podido sincronizar algunos de los elementos."
+
+#~ msgid "View them now"
+#~ msgstr "Verlos ahora"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "No se han podido descifrar algunos elementos."
+
+#~ msgid "One or more master keys need a password."
+#~ msgstr "Una o más llaves maestras necesitan una contraseña."
+
+#~ msgid "Set the password"
+#~ msgstr "Establecer la contraseña"
+
+#, fuzzy
+#~ msgid "One of your master keys use an obsolete encryption method."
+#~ msgstr "Una o más llaves maestras necesitan una contraseña."
+
+#, fuzzy
+#~ msgid "More info"
+#~ msgstr "Más información"
+
+#~ msgid "Search..."
+#~ msgstr "Buscar..."
+
+#, fuzzy
+#~ msgid "Split"
+#~ msgstr "Vista dividida"
+
+#~ msgid "Information"
+#~ msgstr "Información"
 
 #, fuzzy
 #~ msgid "Resources"
@@ -3520,9 +3623,6 @@ msgstr "Buscar"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "Establecer el porcentaje de aumento de la aplicación"
-
-#~ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-#~ msgstr "Exportando el formato de «%s» a «%s». Por favor espere..."
 
 #~ msgid "All potential ports are in use - please report the issue at %s"
 #~ msgstr ""

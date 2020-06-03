@@ -443,6 +443,11 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
+		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
@@ -452,6 +457,10 @@ class BaseApplication {
 				refreshNotesUseSelectedNoteId = true;
 				refreshNotesHash = action.hash;
 			}
+		}
+
+		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+			refreshNotes = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -512,7 +521,7 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
-		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
 		}
 
@@ -577,11 +586,17 @@ class BaseApplication {
 	}
 
 	determineProfileDir(initArgs) {
-		if (initArgs.profileDir) return initArgs.profileDir;
+		let output = '';
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		if (initArgs.profileDir) {
+			output = initArgs.profileDir;
+		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
+			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		} else {
+			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
+		}
 
-		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
+		return toSystemSlashes(output, 'linux');
 	}
 
 	async start(argv) {

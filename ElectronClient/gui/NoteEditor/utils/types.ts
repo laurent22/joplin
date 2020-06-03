@@ -16,7 +16,6 @@ export interface NoteEditorProps {
 	windowCommand: any;
 	folders: any[];
 	notesParentType: string;
-	historyNotes: any[];
 	selectedNoteTags: any[];
 	lastEditorScrollPercents: any;
 	selectedNoteHash: string;

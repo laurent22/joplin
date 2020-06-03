@@ -139,11 +139,15 @@ class MainScreenComponent extends React.Component {
 
 			const body = template ? TemplateUtils.render(template) : '';
 
-			const newNote = await Note.save({
+			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
+
+			let newNote = Object.assign({}, defaultValues, {
 				parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
 				body: body,
-			}, { provisional: true });
+			});
+
+			newNote = await Note.save(newNote, { provisional: true });
 
 			this.props.dispatch({
 				type: 'NOTE_SELECT',
@@ -605,7 +609,7 @@ class MainScreenComponent extends React.Component {
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
-		this.styles_.verticalResizer = {
+		this.styles_.verticalResizerSidebar = {
 			width: 5,
 			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
 			// making the whole window scroll vertically. So we remove 10 extra pixels here.
@@ -613,8 +617,10 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
+
 		this.styles_.sideBar = {
-			width: sidebarWidth - this.styles_.verticalResizer.width,
+			width: sidebarWidth - this.styles_.verticalResizerSidebar.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -623,10 +629,11 @@ class MainScreenComponent extends React.Component {
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
 			this.styles_.sideBar.display = 'none';
+			this.styles_.verticalResizerSidebar.display = 'none';
 		}
 
 		this.styles_.noteList = {
-			width: noteListWidth - this.styles_.verticalResizer.width,
+			width: noteListWidth - this.styles_.verticalResizerNotelist.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -635,7 +642,7 @@ class MainScreenComponent extends React.Component {
 		if (isNoteListVisible === false) {
 			this.styles_.noteList.width = 0;
 			this.styles_.noteList.display = 'none';
-			this.styles_.verticalResizer.display = 'none';
+			this.styles_.verticalResizerNotelist.display = 'none';
 		}
 
 		this.styles_.noteText = {
@@ -782,7 +789,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'fa-file',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
@@ -791,7 +798,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'fa-check-square',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newTodo' });
@@ -808,7 +815,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Code View'),
-			iconName: 'fa-file-code-o ',
+			iconName: 'fa-file-code ',
 			enabled: !!notes.length,
 			type: 'checkbox',
 			checked: this.props.settingEditorCodeView,
@@ -874,9 +881,9 @@ class MainScreenComponent extends React.Component {
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
+				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
+				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
 				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
 				{pluginDialog}
 			</div>

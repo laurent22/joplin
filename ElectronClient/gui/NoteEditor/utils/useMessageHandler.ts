@@ -10,6 +10,7 @@ const { urlDecode } = require('lib/string-utils');
 const urlUtils = require('lib/urlUtils');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const { reg } = require('lib/registry.js');
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
 
 export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
 	return useCallback(async (event: any) => {
@@ -17,7 +18,7 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
+		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
 			const s = msg.split(':');
@@ -60,18 +61,19 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 					}
 					return;
 				}
-				const filePath = Resource.fullPath(item);
-				bridge().openItem(filePath);
+
+				try {
+					await ResourceEditWatcher.instance().openAndWatch(item.id);
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {
 				dispatch({
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyNoteAction: {
-						id: formNote.id,
-						parent_id: formNote.parent_id,
-					},
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);

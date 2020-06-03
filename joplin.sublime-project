@@ -70,7 +70,10 @@
 				"ElectronClient/gui/NoteEditor/utils/useResourceRefresher.js",
 				"ElectronClient/gui/NoteEditor/utils/useFormNote.js",
 				"ElectronClient/gui/NoteEditor/utils/useResourceInfos.js",
-				"Modules/TinyMCE/langs/*.js"
+				"Modules/TinyMCE/langs/*.js",
+				"ElectronClient/gui/NoteEditor/utils/contextMenu.js",
+				"ReactNativeClient/lib/services/ResourceEditWatcher.js",
+				"ReactNativeClient/lib/hooks/usePrevious.js"
 			],
 			"folder_exclude_patterns":
 			[

@@ -21,21 +21,21 @@ Some example configurations are: (comments after #)
 Linux/Mac:
 
 ```bash
-subl -n       # Opens Sublime (subl) in a new window (-n)
-code -n       # Opens Visual Studio Code (code) in a new window (-n)
+subl -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
-xterm -e vim  # Opens a new terminal and opens vim. Can be replaced with an
-              # alternative terminal (gnome-terminal, terminator, etc.) 
-              # or terminal text-editor (emacs, nano, etc.)
+xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
+                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # or terminal text-editor (emacs, nano, etc.)
 open -a <application> # Mac only: opens a GUI application
 ```
 
 Windows:
 
 ```bash
-subl.exe -n   # Opens Sublime (subl) in a new window (-n)
-code.exe -n   # Opens Visual Studio Code in a new window (-n)
-notepad.exe   # Opens Notepad in a new window
+subl.exe -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code.exe -n --wait  # Opens Visual Studio Code in a new window (-n) and waits for close (--wait)
+notepad.exe         # Opens Notepad in a new window
 notepad++.exe --openSession   # Opens Notepad ++ in new window
 ```
 

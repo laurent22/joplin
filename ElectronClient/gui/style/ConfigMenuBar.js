@@ -20,7 +20,7 @@ const style = createSelector(
 			},
 			buttonIcon: {
 				fontSize: 24,
-				color: theme.colorFaded,
+				color: theme.iconColor,
 			},
 			buttonLabel: {
 				display: 'flex',

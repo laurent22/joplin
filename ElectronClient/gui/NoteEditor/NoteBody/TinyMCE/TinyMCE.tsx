@@ -136,7 +136,8 @@ function styles_(props:NoteBodyEditorProps) {
 	});
 }
 
-let loadedAssetFiles_:string[] = [];
+let loadedCssFiles_:string[] = [];
+let loadedJsFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
 
@@ -157,7 +158,10 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
-	const lastOnChangeEventContent = useRef<string>('');
+	const lastOnChangeEventInfo = useRef<any>({
+		content: null,
+		resourceInfos: null,
+	});
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 	const editorRef = useRef<any>(null);
@@ -381,6 +385,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-editor-header {
+				border-top: 1px solid ${theme.dividerColor};
 				border-bottom: 1px solid ${theme.dividerColor};
 			}
 
@@ -393,8 +398,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox input,
 			.tox .tox-label,
 			.tox .tox-toolbar-label {
-				color: ${theme.color} !important;
-				fill: ${theme.color} !important;
+				color: ${theme.iconColor} !important;
+				fill: ${theme.iconColor} !important;
 			}
 
 			.tox .tox-statusbar a,
@@ -441,7 +446,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [editorReady]);
+	}, [editorReady, props.theme]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -459,7 +464,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	useEffect(() => {
 		if (!scriptLoaded) return;
 
-		loadedAssetFiles_ = [];
+		loadedCssFiles_ = [];
+		loadedJsFiles_ = [];
 
 		function contextMenuItemNameWithNamespace(name:string) {
 			// For unknown reasons, TinyMCE converts all context menu names to
@@ -680,27 +686,57 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	// -----------------------------------------------------------------------------------------
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
+		// Note: The way files are cached is not correct because it assumes there's only one version
+		// of each file. However, when the theme change, a new CSS file, specific to the theme, is
+		// created. That file should not be loaded on top of the previous one, but as a replacement.
+		// Otherwise it would do this:
+		// - Try to load CSS for theme 1 => OK
+		// - Try to load CSS for theme 2 => OK
+		// - Try to load CSS for theme 1 => Skip because the file is in cache. As a result, theme 2
+		//                                  incorrectly stay.
+		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
+		// code would check this and either append the CSS or replace.
+
+		let docHead_:any = null;
+
+		function docHead() {
+			if (docHead_) return docHead_;
+			docHead_ = editor.getDoc().getElementsByTagName('head')[0];
+			return docHead_;
+		}
+
 		const cssFiles = [
-			'css/fork-awesome.min.css',
+			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'text/css')
 				.map((a:any) => a.path)
-		).filter((path:string) => !loadedAssetFiles_.includes(path));
+		).filter((path:string) => !loadedCssFiles_.includes(path));
 
 		const jsFiles = [].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'application/javascript')
 				.map((a:any) => a.path)
-		).filter((path:string) => !loadedAssetFiles_.includes(path));
+		).filter((path:string) => !loadedJsFiles_.includes(path));
 
-		for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
-		for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
+		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
+		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
 
 		console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
 
-		if (cssFiles.length) editor.dom.loadCSS(cssFiles.join(','));
+		if (cssFiles.length) {
+			for (const cssFile of cssFiles) {
+				const script = editor.dom.create('link', {
+					rel: 'stylesheet',
+					type: 'text/css',
+					href: cssFile,
+					class: 'jop-tinymce-css',
+				});
+
+				docHead().appendChild(script);
+			}
+		}
 
 		if (jsFiles.length) {
 			const editorElementId = editor.dom.uniqueId();
@@ -712,7 +748,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					src: jsFile,
 				});
 
-				editor.getDoc().getElementsByTagName('head')[0].appendChild(script);
+				docHead().appendChild(script);
 			}
 		}
 	};
@@ -728,10 +764,15 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			if (lastOnChangeEventContent.current !== props.content) {
+			if (lastOnChangeEventInfo.current.content !== props.content || lastOnChangeEventInfo.current.resourceInfos !== props.resourceInfos) {
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
-				lastOnChangeEventContent.current = props.content;
+
+				lastOnChangeEventInfo.current = {
+					content: props.content,
+					resourceInfos: props.resourceInfos,
+				};
+
 				editor.setContent(result.html);
 			}
 
@@ -826,7 +867,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 				if (!editor) return;
 
-				lastOnChangeEventContent.current = contentMd;
+				lastOnChangeEventInfo.current.content = contentMd;
 
 				props_onChangeRef.current({
 					changeId: changeId,

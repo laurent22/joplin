@@ -9,13 +9,13 @@ platform:
   # - '%USERPROFILE%\.electron'
 
 install:
-  - ps: Install-Product node 8 x64
+  - ps: Install-Product node 10 x64
   - yarn
 
 build_script:
   - npm install
   - ps: cd ElectronClient
-  - yarn dist
+  - npm run dist
 
 test: off
 

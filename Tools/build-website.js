@@ -290,7 +290,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--

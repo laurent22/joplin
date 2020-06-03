@@ -31,6 +31,10 @@ const sources = [
 		id: 6,
 		name: '../JoplinLetter.png',
 	},
+	{
+		id: 7,
+		name: 'RoundedCornersMac_1024x1024.png',
+	},
 ];
 
 function sourceById(id) {
@@ -184,43 +188,45 @@ const operations = [
 		height: 64,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_128x128.png',
 		width: 128,
 		height: 128,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_128x128@2x.png',
 		width: 256,
 		height: 256,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_256x256.png',
 		width: 256,
 		height: 256,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_256x256@2x.png',
 		width: 512,
 		height: 512,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_512x512.png',
 		width: 512,
 		height: 512,
 	},
 	{
-		source: 4,
+		source: 7,
 		dest: 'Assets/macOs.iconset/icon_512x512@2x.png',
 		width: 1024,
 		height: 1024,
 	},
 
-
+	// ============================================================================
+	// PortableApps launcher
+	// ============================================================================
 
 	{
 		source: 5,

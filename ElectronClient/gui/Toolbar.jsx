@@ -9,7 +9,7 @@ class ToolbarComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 
 		const style = Object.assign({
-			height: theme.toolbarHeight,
+			// height: theme.toolbarHeight,
 			display: 'flex',
 			flexDirection: 'row',
 			borderBottom: `1px solid ${theme.dividerColor}`,
@@ -34,6 +34,8 @@ class ToolbarComponent extends React.Component {
 					},
 					o
 				);
+
+				if (this.props.disabled) props.disabled = true;
 
 				if (itemType === 'button') {
 					itemComps.push(<ToolbarButton {...props} />);

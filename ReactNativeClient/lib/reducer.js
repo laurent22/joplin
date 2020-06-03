@@ -46,16 +46,22 @@ const defaultState = {
 		itemIndex: 0,
 		itemCount: 0,
 		decryptedItemCounts: {},
+		decryptedItemCount: 0,
+		skippedItemCount: 0,
 	},
 	selectedNoteTags: [],
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
-	historyNotes: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
+	isInsertingNotes: false,
 };
+
+const MAX_HISTORY = 200;
 
 const stateUtils = {};
 
@@ -72,12 +78,25 @@ const cacheEnabledOutput = (key, output) => {
 };
 
 stateUtils.notesOrder = function(stateSettings) {
-	return cacheEnabledOutput('notesOrder', [
-		{
-			by: stateSettings['notes.sortOrder.field'],
-			dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
-		},
-	]);
+	if (stateSettings['notes.sortOrder.field'] === 'order') {
+		return cacheEnabledOutput('notesOrder', [
+			{
+				by: 'order',
+				dir: 'DESC',
+			},
+			{
+				by: 'user_created_time',
+				dir: 'DESC',
+			},
+		]);
+	} else {
+		return cacheEnabledOutput('notesOrder', [
+			{
+				by: stateSettings['notes.sortOrder.field'],
+				dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
+			},
+		]);
+	}
 };
 
 stateUtils.foldersOrder = function(stateSettings) {
@@ -113,6 +132,27 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	return output ? output : [];
 };
 
+stateUtils.getCurrentNote = function(state) {
+	const selectedNoteIds = state.selectedNoteIds;
+	const notes = state.notes;
+	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
+		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
+		if (currNote != null) {
+			return {
+				id: currNote.id,
+				parent_id: currNote.parent_id,
+				notesParentType: state.notesParentType,
+				selectedFolderId: state.selectedFolderId,
+				selectedTagId: state.selectedTagId,
+				selectedSearchId: state.selectedSearchId,
+				searches: state.searches,
+				selectedSmartFilterId: state.selectedSmartFilterId,
+			};
+		}
+	}
+	return null;
+};
+
 function arrayHasEncryptedItems(array) {
 	for (let i = 0; i < array.length; i++) {
 		if (array[i].encryption_applied) return true;
@@ -142,6 +182,10 @@ function folderSetCollapsed(state, action) {
 	const newState = Object.assign({}, state);
 	newState.collapsedFolderIds = collapsedFolderIds;
 	return newState;
+}
+
+function removeAdjacentDuplicates(items) {
+	return items.filter((item, idx) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
 }
 
 // When deleting a note, tag or folder
@@ -262,8 +306,6 @@ function defaultNotesParentType(state, exclusion) {
 
 function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
-
 	const newState = Object.assign({}, state);
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
@@ -274,7 +316,6 @@ function changeSelectedFolder(state, action, options = null) {
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
-	if (options.clearNoteHistory) newState.historyNotes = [];
 	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
@@ -294,7 +335,6 @@ function recordLastSelectedNoteIds(state, noteIds) {
 
 function changeSelectedNotes(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
@@ -335,8 +375,6 @@ function changeSelectedNotes(state, action, options = null) {
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
 
-	if (options.clearNoteHistory) newState.historyNotes = [];
-
 	return newState;
 }
 
@@ -351,20 +389,158 @@ function removeItemFromArray(array, property, value) {
 	return array;
 }
 
+const getContextFromHistory = (ctx) => {
+	const result = {};
+	result.notesParentType = ctx.notesParentType;
+	if (result.notesParentType === 'Folder') {
+		result.selectedFolderId = ctx.selectedFolderId;
+	} else if (result.notesParentType === 'Tag') {
+		result.selectedTagId = ctx.selectedTagId;
+	} else if (result.notesParentType === 'Search') {
+		result.selectedSearchId = ctx.selectedSearchId;
+		result.searches = ctx.searches;
+	} else if (result.notesParentType === 'SmartFilter') {
+		result.selectedSmartFilterId = ctx.selectedSmartFilterId;
+	}
+	return result;
+};
+
+function handleHistory(state, action) {
+	let newState = Object.assign({}, state);
+	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+	const currentNote = stateUtils.getCurrentNote(state);
+	switch (action.type) {
+	case 'HISTORY_BACKWARD': {
+		const note = backwardHistoryNotes[backwardHistoryNotes.length - 1];
+		if (currentNote != null && (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id)) {
+			forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+
+		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+
+		const ctx = backwardHistoryNotes[backwardHistoryNotes.length - 1];
+		newState = Object.assign(newState, getContextFromHistory(ctx));
+
+		backwardHistoryNotes.pop();
+		break;
+	}
+	case 'HISTORY_FORWARD': {
+		const note = forwardHistoryNotes[forwardHistoryNotes.length - 1];
+
+		if (currentNote != null && (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id)) {
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+
+		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+
+		const ctx = forwardHistoryNotes[forwardHistoryNotes.length - 1];
+		newState = Object.assign(newState, getContextFromHistory(ctx));
+
+
+		forwardHistoryNotes.pop();
+		break;
+	}
+	case 'NOTE_SELECT':
+		if (currentNote != null &&  action.id != currentNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		// History should be free from duplicates.
+		if (backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
+						action.id === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+			backwardHistoryNotes.pop();
+		}
+		break;
+	case 'TAG_SELECT':
+	case 'FOLDER_AND_NOTE_SELECT':
+	case 'FOLDER_SELECT':
+		if (currentNote != null) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		break;
+	case 'NOTE_UPDATE_ONE': {
+		const modNote = action.note;
+
+		backwardHistoryNotes = backwardHistoryNotes.map(note => {
+			if (note.id === modNote.id) {
+				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+			}
+			return note;
+		});
+
+		forwardHistoryNotes = forwardHistoryNotes.map(note => {
+			if (note.id === modNote.id) {
+				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+			}
+			return note;
+		});
+
+		break;
+	}
+	case 'SEARCH_UPDATE':
+		if (currentNote != null && (backwardHistoryNotes.length === 0 ||
+						backwardHistoryNotes[backwardHistoryNotes.length - 1].id != currentNote.id)) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		break;
+	case 'FOLDER_DELETE':
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.parent_id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.parent_id != action.id);
+
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
+		break;
+	case 'NOTE_DELETE': {
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.id != action.id);
+
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
+
+		// Fix the case where after deletion the currently selected note is also the latest in history
+		const selectedNoteIds = newState.selectedNoteIds;
+		if (selectedNoteIds.length && backwardHistoryNotes.length && backwardHistoryNotes[backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+			backwardHistoryNotes = backwardHistoryNotes.slice(0, backwardHistoryNotes.length - 1);
+		}
+		if (selectedNoteIds.length && forwardHistoryNotes.length && forwardHistoryNotes[forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+			forwardHistoryNotes = forwardHistoryNotes.slice(0, forwardHistoryNotes.length - 1);
+		}
+		break;
+	}
+	default:
+		// console.log('Unknown action in history reducer.' ,action.type);
+		return state;
+	}
+
+	newState.backwardHistoryNotes = backwardHistoryNotes;
+	newState.forwardHistoryNotes = forwardHistoryNotes;
+	return newState;
+}
+
 const reducer = (state = defaultState, action) => {
 	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type);
 
 	let newState = state;
 
+	// NOTE_DELETE requires post processing
+	if (action.type !== 'NOTE_DELETE') {
+		newState = handleHistory(newState, action);
+	}
+
 	try {
 		switch (action.type) {
+
 		case 'NOTE_SELECT':
 		case 'NOTE_SELECT_ADD':
 		case 'NOTE_SELECT_REMOVE':
 		case 'NOTE_SELECT_TOGGLE':
-			newState = changeSelectedNotes(state, action);
+			newState = changeSelectedNotes(newState, action);
 			break;
-
 		case 'NOTE_SELECT_EXTEND':
 			{
 				newState = Object.assign({}, state);
@@ -422,29 +598,14 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_SELECT':
-			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
+			newState = changeSelectedFolder(newState, action, { clearSelectedNoteIds: true });
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
+				newState = changeSelectedFolder(newState, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
-
-				if (action.historyNoteAction) {
-					const historyNotes = newState.historyNotes.slice();
-					if (typeof action.historyNoteAction === 'object') {
-						historyNotes.push(Object.assign({}, action.historyNoteAction));
-					} else if (action.historyNoteAction === 'pop') {
-						historyNotes.pop();
-					}
-					newState.historyNotes = historyNotes;
-				} else if (newState !== state) {
-					// Clear the note history if folder and selected note have actually been changed. For example
-					// they won't change if they are already selected. That way, the "Back" button to go to the
-					// previous note wll stay.
-					newState.historyNotes = [];
-				}
+				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
 
@@ -541,6 +702,7 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
+
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
 				} else {
@@ -565,6 +727,14 @@ const reducer = (state = defaultState, action) => {
 					t.splice(idx, 1);
 					newState.provisionalNoteIds = t;
 				}
+			}
+			break;
+
+		case 'NOTE_IS_INSERTING_NOTES':
+
+			if (state.isInsertingNotes !== action.value) {
+				newState = Object.assign({}, state);
+				newState.isInsertingNotes = action.value;
 			}
 			break;
 
@@ -601,7 +771,6 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_SELECT':
-			newState = Object.assign({}, state);
 			newState.selectedTagId = action.id;
 			if (!action.id) {
 				newState.notesParentType = defaultNotesParentType(state, 'Tag');
@@ -652,7 +821,7 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_DELETE':
-			newState = handleItemDelete(state, action);
+			newState = handleItemDelete(newState, action);
 			break;
 
 		case 'MASTERKEY_UPDATE_ALL':
@@ -723,7 +892,6 @@ const reducer = (state = defaultState, action) => {
 
 		case 'SEARCH_UPDATE':
 			{
-				newState = Object.assign({}, state);
 				const searches = newState.searches.slice();
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
@@ -844,7 +1012,11 @@ const reducer = (state = defaultState, action) => {
 		newState.hasEncryptedItems = stateHasEncryptedItems(newState);
 	}
 
+	if (action.type === 'NOTE_DELETE') {
+		newState = handleHistory(newState, action);
+	}
+
 	return newState;
 };
 
-module.exports = { reducer, defaultState, stateUtils };
+module.exports = { reducer, defaultState, stateUtils, MAX_HISTORY };
