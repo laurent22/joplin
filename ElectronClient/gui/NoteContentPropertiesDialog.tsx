@@ -124,7 +124,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={theme.dialogBox}>
-				<div style={dialogBoxHeadingStyle}>{_('Content properties')}</div>
+				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 				<table>
 					<thead>
 						{tableHeader}

@@ -130,6 +130,78 @@ class OneDriveApi {
 		}
 	}
 
+	async uploadChunk(url, handle, options) {
+		options = Object.assign({}, options);
+		if (!options.method) { options.method = 'POST'; }
+		if (!options.headers) { options.headers = {}; }
+
+		if (!options.contentLength) throw new Error(' uploadChunk: contentLength is missing');
+
+		const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
+		const Buffer = require('buffer').Buffer;
+		const buffer = Buffer.from(chunk, 'base64');
+		delete options.contentLength;
+		options.body = buffer;
+
+		const response = await shim.fetch(url, options);
+		return response;
+	}
+
+	async uploadBigFile(url, options) {
+		const response = await shim.fetch(url, {
+			method: 'POST',
+			headers: {
+				'Authorization': options.headers.Authorization,
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!response.ok) {
+			return response;
+		} else {
+			const uploadUrl = (await response.json()).uploadUrl;
+			// uploading file in 7.5 MiB-Fragments (except the last one) because this is the mean of 5 and 10 Mib which are the recommended lower and upper limits.
+			// https://docs.microsoft.com/de-de/onedrive/developer/rest-api/api/driveitem_createuploadsession?view=odsp-graph-online#best-practices
+			const chunkSize = 7.5 * 1024 * 1024;
+			const fileSize = (await shim.fsDriver().stat(options.path)).size;
+			const numberOfChunks = Math.ceil(fileSize / chunkSize);
+			const handle = await shim.fsDriver().open(options.path, 'r');
+
+			try {
+				for (let i = 0; i < numberOfChunks; i++) {
+					const startByte = i * chunkSize;
+					let endByte = null;
+					let contentLength = null;
+					if (i === numberOfChunks - 1) {
+						// Last fragment. It is not ensured that the last fragment is a multiple of 327,680 bytes as recommanded in the api doc. The reasons is that the docs are out of day for this purpose: https://github.com/OneDrive/onedrive-api-docs/issues/1200#issuecomment-597281253
+						endByte = fileSize - 1;
+						contentLength = fileSize - ((numberOfChunks - 1) * chunkSize);
+					} else {
+						endByte = (i + 1) * chunkSize - 1;
+						contentLength = chunkSize;
+					}
+					this.logger().debug(`${options.path}: Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(fileSize / 1048576).toFixed(2)} Mbit ...`);
+					const headers = {
+						'Content-Length': contentLength,
+						'Content-Range': `bytes ${startByte}-${endByte}/${fileSize}`,
+						'Content-Type': 'application/octet-stream; charset=utf-8',
+					};
+
+					const response = await this.uploadChunk(uploadUrl, handle, { contentLength: contentLength, method: 'PUT', headers: headers });
+
+					if (!response.ok) {
+						return response;
+					}
+				}
+				return { ok: true };
+			} catch (error) {
+				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
+				throw error;
+			} finally {
+				await shim.fsDriver().close(handle);
+			}
+		}
+	}
+
 	async exec(method, path, query = null, data = null, options = null) {
 		if (!path) throw new Error('Path is required');
 
@@ -170,7 +242,7 @@ class OneDriveApi {
 			let response = null;
 			try {
 				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					response = await shim.uploadBlob(url, options);
+					response = path.includes('/createUploadSession') ? await this.uploadBigFile(url, options) : await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
 				} else {
