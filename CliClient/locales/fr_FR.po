@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -285,7 +287,7 @@ msgstr "Exporter uniquement le carnet spécifié."
 
 #: CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Afficher l'URL de l'emplacement de la note."
+msgstr "Afficher une URL de géolocalisation pour la note."
 
 #: CliClient/app/command-help.js:13
 msgid "Displays usage information."
@@ -2570,7 +2572,7 @@ msgstr "ordre personalisé"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
-msgstr "Cette note n'a pas d'information d'emplacement."
+msgstr "Cette note n'a pas d'information de géolocalisation."
 
 #: ReactNativeClient/lib/models/Note.js:468
 #, javascript-format
@@ -2808,7 +2810,7 @@ msgstr "Trier les carnets par"
 
 #: ReactNativeClient/lib/models/Setting.js:359
 msgid "Save geo-location with notes"
-msgstr "Enregistrer l'emplacement avec les notes"
+msgstr "Enregistrer les informations de géolocalisation des notes"
 
 #: ReactNativeClient/lib/models/Setting.js:378
 msgid "When creating a new to-do:"
