@@ -16,4 +16,4 @@ const ShareExtension = (Platform.OS === 'android' && NativeModules.ShareExtensio
 		close: () => {},
 	};
 
-export { ShareExtension };
+export default ShareExtension;
