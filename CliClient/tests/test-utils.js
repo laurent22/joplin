@@ -41,6 +41,9 @@ const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
+const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 
 const databases_ = [];
@@ -109,7 +112,7 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', tempDir);
 
@@ -133,7 +136,9 @@ function currentClientId() {
 	return currentClient_;
 }
 
-async function switchClient(id) {
+async function switchClient(id, options = null) {
+	options = Object.assign({}, { keychainEnabled: false }, options);
+
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
 
 	await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
@@ -149,9 +154,8 @@ async function switchClient(id) {
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 
-	await Setting.load();
+	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
@@ -186,7 +190,9 @@ async function clearDatabase(id = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
-async function setupDatabase(id = null) {
+async function setupDatabase(id = null, options = null) {
+	options = Object.assign({}, { keychainEnabled: false }, options);
+
 	if (id === null) id = currentClient_;
 
 	Setting.cancelScheduleSave();
@@ -195,8 +201,7 @@ async function setupDatabase(id = null) {
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
-		await Setting.load();
-		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 		return;
 	}
 
@@ -213,8 +218,7 @@ async function setupDatabase(id = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
-	await Setting.load();
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 }
 
 function resourceDirName(id = null) {
@@ -227,12 +231,12 @@ function resourceDir(id = null) {
 	return `${__dirname}/data/${resourceDirName(id)}`;
 }
 
-async function setupDatabaseAndSynchronizer(id = null) {
+async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
 
-	await setupDatabase(id);
+	await setupDatabase(id, options);
 
 	EncryptionService.instance_ = null;
 	DecryptionWorker.instance_ = null;
