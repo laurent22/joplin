@@ -36,7 +36,7 @@ const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
-// const ShareExtension = require('react-native-share-extension').default;
+const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
@@ -120,6 +120,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 					mode: 'view',
 				});
 
+				return true;
+			}
+
+			if (this.state.fromShare) {
+				// effectively the same as NAV_BACK but NAV_BACK causes undesired behaviour in this case:
+				// - share to Joplin from some other app
+				// - open Joplin and open any note
+				// - go back -- with NAV_BACK this causes the app to exit rather than just showing notes
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Notes',
+					folderId: this.state.note.parent_id,
+				});
 				return true;
 			}
 
@@ -333,9 +346,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		// if (Platform.OS !== 'ios' && this.state.fromShare) {
-		// 	ShareExtension.close();
-		// }
+		if (this.state.fromShare) {
+			ShareExtension.close();
+		}
 	}
 
 	title_changeText(text) {
@@ -527,7 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
-				const done = await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
 				if (fileType === 'image') {
