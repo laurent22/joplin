@@ -42,8 +42,6 @@ export interface EditorProps {
 	cancelledKeys: CancelledKeys,
 	onChange: any,
 	onScroll: any,
-	onFocus: any,
-	onBlur: any,
 	onEditorContextMenu: any,
 	onEditorPaste: any,
 }
@@ -86,16 +84,6 @@ function Editor(props: EditorProps, ref: any) {
 	const editor_scroll = useCallback((_cm: any) => {
 		props.onScroll();
 	}, [props.onScroll]);
-
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	const editor_focus = useCallback((_cm: any) => {
-		props.onFocus();
-	}, [props.onFocus]);
-
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	const editor_blur = useCallback((_cm: any) => {
-		props.onBlur();
-	}, [props.onBlur]);
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	const editor_mousedown = useCallback((_cm: any, event: any) => {
@@ -157,8 +145,6 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
-		cm.on('focus', editor_focus);
-		cm.on('blur', editor_blur);
 
 		return () => {
 			// Clean up codemirror
@@ -168,8 +154,6 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('paste', editor_paste);
 			cm.off('drop', editor_drop);
 			cm.off('dragover', editor_drag);
-			cm.off('focus', editor_focus);
-			cm.off('blur', editor_blur);
 			editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};
