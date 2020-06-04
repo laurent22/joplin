@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
 import contextMenu from './contextMenu';
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
 const BaseItem = require('lib/models/BaseItem');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
@@ -10,7 +11,6 @@ const { urlDecode } = require('lib/string-utils');
 const urlUtils = require('lib/urlUtils');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const { reg } = require('lib/registry.js');
-import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
 
 export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
 	return useCallback(async (event: any) => {
