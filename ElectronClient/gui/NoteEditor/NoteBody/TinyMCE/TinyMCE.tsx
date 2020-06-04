@@ -182,6 +182,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const insertResourcesIntoContent = useCallback(async (filePaths:string[] = null, options:any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
+		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		editor.insertContent(result.html);
 		// editor.fire('joplinChange');

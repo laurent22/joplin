@@ -101,6 +101,10 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	useListIdent({ editor });
 
 	const aceEditor_change = useCallback((newBody: string) => {
+		// Throw an error early to know what part of the code set the body to the
+		// wrong value. Otherwise it will trigger an error somewhere deep in React-Ace
+		// which will be hard to debug.
+		if (typeof newBody !== 'string') throw new Error('Body is not a string');
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
 
@@ -258,7 +262,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
-						aceEditor_change(newBody);
+						if (newBody) aceEditor_change(newBody);
 					} else {
 						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
 					}
