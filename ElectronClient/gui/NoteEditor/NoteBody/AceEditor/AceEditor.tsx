@@ -78,7 +78,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const [editor, setEditor] = useState(null);
-	const [lastKeys, setLastKeys] = useState([]);
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousRenderedBody = usePrevious(renderedBody);
@@ -335,15 +334,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		wrapSelectionWithStrings('', '', resourceMds.join('\n'));
 	}, [wrapSelectionWithStrings]);
 
-	const onEditorKeyDown = useCallback((event: any) => {
-		setLastKeys(prevLastKeys => {
-			const keys = prevLastKeys.slice();
-			keys.push(event.key);
-			while (keys.length > 2) keys.splice(0, 1);
-			return keys;
-		});
-	}, []);
-
 	const editorCutText = useCallback(() => {
 		const text = selectedText(selectionRange(editor), props.content);
 		if (!text) return;
@@ -450,16 +440,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 
 		document.querySelector('#note-editor').addEventListener('paste', onEditorPaste, true);
-		document.querySelector('#note-editor').addEventListener('keydown', onEditorKeyDown);
 		document.querySelector('#note-editor').addEventListener('contextmenu', onEditorContextMenu);
 
 		// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 		// https://github.com/ajaxorg/ace/issues/2754
 		// @ts-ignore: Keep the function signature as-is despite unusued arguments
 		editor.getSession().getMode().getNextLineIndent = function(state: any, line: string) {
-			const ls = lastKeys;
-			if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
-
 			const leftSpaces = lineLeftSpaces(line);
 			const lineNoLeftSpaces = line.trimLeft();
 
@@ -475,10 +461,9 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 		return () => {
 			document.querySelector('#note-editor').removeEventListener('paste', onEditorPaste, true);
-			document.querySelector('#note-editor').removeEventListener('keydown', onEditorKeyDown);
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
-	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
+	}, [editor, onEditorPaste, onEditorContextMenu]);
 
 	useEffect(() => {
 		// We disable dragging ot text because it's not really supported, and
