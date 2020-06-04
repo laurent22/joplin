@@ -7,7 +7,6 @@ import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceH
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRange, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText } from './utils';
 import useListIdent from './utils/useListIdent';
-import useFocus from './utils/useFocus';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -553,8 +552,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, [props.searchMarkers, renderedBody]);
 
-	const { focused, onBlur, onFocus } = useFocus();
-
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
@@ -590,6 +587,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
+	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
+
 	function renderEditor() {
 		// Need to hard-code the editor width, otherwise various bugs pops up
 		let width = 0;
@@ -603,13 +602,11 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					value={props.content}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 					theme={styles.editor.editorTheme}
-					onFocus={onFocus}
-					onBlur={onBlur}
 					style={styles.editor}
 					width={`${width}px`}
 					fontSize={styles.editor.fontSize}
 					showGutter={false}
-					readOnly={props.visiblePanes.indexOf('editor') < 0}
+					readOnly={editorReadOnly}
 					name="note-editor"
 					wrapEnabled={true}
 					onScroll={editor_scroll}
@@ -654,7 +651,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					theme={props.theme}
 					dispatch={props.dispatch}
-					disabled={!focused}
+					disabled={editorReadOnly}
 				/>
 				{props.noteToolbar}
 			</div>

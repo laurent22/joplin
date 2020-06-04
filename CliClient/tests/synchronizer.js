@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { setupDatabase, allSyncTargetItemsEncrypted, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const { setupDatabase, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
 const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
@@ -989,6 +989,145 @@ describe('synchronizer', function() {
 		const resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
+	}));
+
+	it('should sync resource blob changes', asyncTest(async () => {
+		const tempFile = tempFilePath('txt');
+		await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, tempFile);
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+		let resource1_2 = (await Resource.all())[0];
+		const modFile = tempFilePath('txt');
+		await shim.fsDriver().writeFile(modFile, '1234 MOD', 'utf8');
+		await Resource.updateResourceBlobContent(resource1_2.id, modFile);
+		const originalSize = resource1_2.size;
+		resource1_2 = (await Resource.all())[0];
+		const newSize = resource1_2.size;
+		expect(originalSize).toBe(4);
+		expect(newSize).toBe(8);
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		await synchronizer().start();
+		await resourceFetcher().start();
+		await resourceFetcher().waitForAllFinished();
+		const resource1_1 = (await Resource.all())[0];
+		expect(resource1_1.size).toBe(newSize);
+		expect(await Resource.resourceBlobContent(resource1_1.id, 'utf8')).toBe('1234 MOD');
+	}));
+
+	it('should handle resource conflicts', asyncTest(async () => {
+		{
+			const tempFile = tempFilePath('txt');
+			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+			const folder1 = await Folder.save({ title: 'folder1' });
+			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+			await shim.attachFileToNote(note1, tempFile);
+			await synchronizer().start();
+		}
+
+		await switchClient(2);
+
+		{
+			await synchronizer().start();
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+			const resource = (await Resource.all())[0];
+			const modFile2 = tempFilePath('txt');
+			await shim.fsDriver().writeFile(modFile2, '1234 MOD 2', 'utf8');
+			await Resource.updateResourceBlobContent(resource.id, modFile2);
+			await synchronizer().start();
+		}
+
+		await switchClient(1);
+
+		{
+			// Going to modify a resource without syncing first, which will cause a conflict
+			const resource = (await Resource.all())[0];
+			const modFile1 = tempFilePath('txt');
+			await shim.fsDriver().writeFile(modFile1, '1234 MOD 1', 'utf8');
+			await Resource.updateResourceBlobContent(resource.id, modFile1);
+			await synchronizer().start(); // CONFLICT
+
+			// If we try to read the resource content now, it should throw because the local
+			// content has been moved to the conflict notebook, and the new local content
+			// has not been downloaded yet.
+			await checkThrowAsync(async () => await Resource.resourceBlobContent(resource.id));
+
+			// Now download resources, and our local content would have been overwritten by
+			// the content from client 2
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+			const localContent =  await Resource.resourceBlobContent(resource.id, 'utf8');
+			expect(localContent).toBe('1234 MOD 2');
+
+			// Check that the Conflict note has been generated, with the conflict resource
+			// attached to it, and check that it has the original content.
+			const allNotes = await Note.all();
+			expect(allNotes.length).toBe(2);
+			const conflictNote = allNotes.find((v) => {
+				return !!v.is_conflict;
+			});
+			expect(!!conflictNote).toBe(true);
+			const resourceIds = await Note.linkedResourceIds(conflictNote.body);
+			expect(resourceIds.length).toBe(1);
+			const conflictContent =  await Resource.resourceBlobContent(resourceIds[0], 'utf8');
+			expect(conflictContent).toBe('1234 MOD 1');
+		}
+	}));
+
+	it('should handle resource conflicts if a resource is changed locally but deleted remotely', asyncTest(async () => {
+		{
+			const tempFile = tempFilePath('txt');
+			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
+			const folder1 = await Folder.save({ title: 'folder1' });
+			const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+			await shim.attachFileToNote(note1, tempFile);
+			await synchronizer().start();
+		}
+
+		await switchClient(2);
+
+		{
+			await synchronizer().start();
+			await resourceFetcher().start();
+			await resourceFetcher().waitForAllFinished();
+		}
+
+		await switchClient(1);
+
+		{
+			const resource = (await Resource.all())[0];
+			await Resource.delete(resource.id);
+			await synchronizer().start();
+
+		}
+
+		await switchClient(2);
+
+		{
+			const originalResource = (await Resource.all())[0];
+			await Resource.save({ id: originalResource.id, title: 'modified resource' });
+			await synchronizer().start(); // CONFLICT
+
+			const deletedResource = await Resource.load(originalResource.id);
+			expect(!deletedResource).toBe(true);
+
+			const allResources = await Resource.all();
+			expect(allResources.length).toBe(1);
+			const conflictResource = allResources[0];
+			expect(originalResource.id).not.toBe(conflictResource.id);
+			expect(conflictResource.title).toBe('modified resource');
+		}
 	}));
 
 	it('should upload decrypted items to sync target after encryption disabled', asyncTest(async () => {

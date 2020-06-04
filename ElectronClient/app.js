@@ -23,6 +23,7 @@ const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const ResourceEditWatcher = require('lib/services/ResourceEditWatcher').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -685,6 +686,7 @@ class Application extends BaseApplication {
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
 				_('Profile Version: %s', reg.db().version()),
+				_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
@@ -1504,6 +1506,8 @@ class Application extends BaseApplication {
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+
+		ResourceEditWatcher.instance().initialize(reg.logger(), this.store().dispatch);
 
 		RevisionService.instance().runInBackground();
 

@@ -151,7 +151,7 @@ const generalMiddleware = store => next => async (action) => {
 		DecryptionWorker.instance().scheduleStart();
 	}
 
-	if (action.type === 'SYNC_CREATED_RESOURCE') {
+	if (action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 		ResourceFetcher.instance().autoAddResources();
 	}
 

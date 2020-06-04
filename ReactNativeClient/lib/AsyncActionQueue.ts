@@ -7,6 +7,10 @@ export interface QueueItem {
 	context: any,
 }
 
+// The AsyncActionQueue can be used to debounce asynchronous actions, to make sure
+// they run in the right order, and also to ensure that if multiple actions are emitted
+// only the last one is executed. This is particularly useful to save data in the background.
+// Each queue should be associated with a specific entity (a note, resource, etc.)
 export default class AsyncActionQueue {
 
 	queue_:QueueItem[] = [];
@@ -64,6 +68,8 @@ export default class AsyncActionQueue {
 	}
 
 	waitForAllDone() {
+		if (!this.queue_.length) return Promise.resolve();
+
 		this.scheduleProcessing(1);
 
 		return new Promise((resolve) => {

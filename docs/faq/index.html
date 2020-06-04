@@ -315,6 +315,7 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
 <li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
@@ -354,18 +355,18 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 <p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -&gt; Text editor command.</p>
 <p>Some example configurations are: (comments after #)</p>
 <p>Linux/Mac:</p>
-<pre><code class="language-bash">subl -n       # Opens Sublime (subl) in a new window (-n)
-code -n       # Opens Visual Studio Code (code) in a new window (-n)
+<pre><code class="language-bash">subl -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
-xterm -e vim  # Opens a new terminal and opens vim. Can be replaced with an
-              # alternative terminal (gnome-terminal, terminator, etc.) 
-              # or terminal text-editor (emacs, nano, etc.)
+xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
+                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # or terminal text-editor (emacs, nano, etc.)
 open -a &lt;application&gt; # Mac only: opens a GUI application
 </code></pre>
 <p>Windows:</p>
-<pre><code class="language-bash">subl.exe -n   # Opens Sublime (subl) in a new window (-n)
-code.exe -n   # Opens Visual Studio Code in a new window (-n)
-notepad.exe   # Opens Notepad in a new window
+<pre><code class="language-bash">subl.exe -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code.exe -n --wait  # Opens Visual Studio Code in a new window (-n) and waits for close (--wait)
+notepad.exe         # Opens Notepad in a new window
 notepad++.exe --openSession   # Opens Notepad ++ in new window
 </code></pre>
 <p>Note that the path to directory with your editor executable must exist in your PATH variable (<a href="https://www.computerhope.com/issues/ch000549.htm">Windows</a>, <a href="https://opensource.com/article/17/6/set-path-linux">Linux/Mac</a>) If not, the full path to the executable must be provided.</p>
