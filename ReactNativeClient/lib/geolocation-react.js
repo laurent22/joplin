@@ -1,3 +1,5 @@
+import Geolocation from '@react-native-community/geolocation';
+
 const Setting = require('lib/models/Setting.js');
 
 class GeolocationReact {
@@ -24,7 +26,7 @@ class GeolocationReact {
 		if (!('timeout' in options)) options.timeout = 10000;
 
 		return new Promise((resolve, reject) => {
-			navigator.geolocation.getCurrentPosition(
+			Geolocation.getCurrentPosition(
 				data => {
 					resolve(data);
 				},
