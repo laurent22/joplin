@@ -14,6 +14,7 @@
     "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/push-notification-ios": "^1.0.5",
     "@react-native-community/slider": "^2.0.8",
     "async-mutex": "^0.1.3",
