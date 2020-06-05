@@ -124,6 +124,7 @@ class JoplinDatabase extends Database {
 		this.initialized_ = false;
 		this.tableFields_ = null;
 		this.version_ = null;
+		this.tableFieldNames_ = {};
 	}
 
 	initialized() {
@@ -136,12 +137,16 @@ class JoplinDatabase extends Database {
 	}
 
 	tableFieldNames(tableName) {
+		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName].slice();
+
 		const tf = this.tableFields(tableName);
 		const output = [];
 		for (let i = 0; i < tf.length; i++) {
 			output.push(tf[i].name);
 		}
-		return output;
+		this.tableFieldNames_[tableName] = output;
+
+		return output.slice();
 	}
 
 	tableFields(tableName, options = null) {
@@ -210,6 +215,18 @@ class JoplinDatabase extends Database {
 		return row;
 	}
 
+	fieldByName(tableName, fieldName) {
+		const fields = this.tableFields(tableName);
+		for (const field of fields) {
+			if (field.name === fieldName) return field;
+		}
+		throw new Error(`No such field: ${tableName}: ${fieldName}`);
+	}
+
+	fieldDefaultValue(tableName, fieldName) {
+		return this.fieldByName(tableName, fieldName).default;
+	}
+
 	fieldDescription(tableName, fieldName) {
 		const sp = sprintf;
 
@@ -246,7 +263,7 @@ class JoplinDatabase extends Database {
 		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
-	refreshTableFields() {
+	refreshTableFields(newVersion) {
 		this.logger().info('Initializing tables...');
 		const queries = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
@@ -284,6 +301,7 @@ class JoplinDatabase extends Database {
 				return promiseChain(chain);
 			})
 			.then(() => {
+				queries.push({ sql: 'UPDATE version SET table_fields_version = ?', params: [newVersion] });
 				return this.transactionExecBatch(queries);
 			});
 	}
@@ -308,7 +326,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -676,6 +694,47 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX resources_size ON resources(size)');
 			}
 
+			if (targetVersion == 29) {
+				queries.push('ALTER TABLE version ADD COLUMN table_fields_version INT NOT NULL DEFAULT 0');
+			}
+
+			if (targetVersion == 30) {
+				// Change the type of the "order" field from INT to NUMERIC
+				// Making it a float provides a much bigger range when inserting notes.
+				// For example, with an INT, inserting a note C between note A with order 1000 and
+				// note B with order 1001 wouldn't be possible without changing the order
+				// value of note A or B. But with a float, we can set the order of note C to 1000.5
+				queries = queries.concat(
+					this.alterColumnQueries('notes', {
+						id: 'TEXT PRIMARY KEY',
+						parent_id: 'TEXT NOT NULL DEFAULT ""',
+						title: 'TEXT NOT NULL DEFAULT ""',
+						body: 'TEXT NOT NULL DEFAULT ""',
+						created_time: 'INT NOT NULL',
+						updated_time: 'INT NOT NULL',
+						is_conflict: 'INT NOT NULL DEFAULT 0',
+						latitude: 'NUMERIC NOT NULL DEFAULT 0',
+						longitude: 'NUMERIC NOT NULL DEFAULT 0',
+						altitude: 'NUMERIC NOT NULL DEFAULT 0',
+						author: 'TEXT NOT NULL DEFAULT ""',
+						source_url: 'TEXT NOT NULL DEFAULT ""',
+						is_todo: 'INT NOT NULL DEFAULT 0',
+						todo_due: 'INT NOT NULL DEFAULT 0',
+						todo_completed: 'INT NOT NULL DEFAULT 0',
+						source: 'TEXT NOT NULL DEFAULT ""',
+						source_application: 'TEXT NOT NULL DEFAULT ""',
+						application_data: 'TEXT NOT NULL DEFAULT ""',
+						order: 'NUMERIC NOT NULL DEFAULT 0', // that's the change!
+						user_created_time: 'INT NOT NULL DEFAULT 0',
+						user_updated_time: 'INT NOT NULL DEFAULT 0',
+						encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
+						encryption_applied: 'INT NOT NULL DEFAULT 0',
+						markup_language: 'INT NOT NULL DEFAULT 1',
+						is_shared: 'INT NOT NULL DEFAULT 0',
+					})
+				);
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
@@ -729,12 +788,13 @@ class JoplinDatabase extends Database {
 		}
 
 		const version = !versionRow ? 0 : versionRow.version;
+		const tableFieldsVersion = !versionRow ? 0 : versionRow.table_fields_version;
 		this.version_ = version;
 		this.logger().info('Current database version', version);
 
 		const newVersion = await this.upgradeDatabase(version);
 		this.version_ = newVersion;
-		if (newVersion !== version) await this.refreshTableFields();
+		if (newVersion !== tableFieldsVersion) await this.refreshTableFields(newVersion);
 
 		this.tableFields_ = {};
 

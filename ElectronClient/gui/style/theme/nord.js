@@ -45,6 +45,8 @@ const nord = ['#2e3440', '#3b4252', '#434c5e', '#4c566a', '#d8dee9', '#e5e9f0', 
 // 2e3440 === rbga(46, 52, 64, 1)
 
 const nordStyle = {
+	appearance: 'dark',
+
 	backgroundColor: nord[0],
 	backgroundColorTransparent: 'rgba(46, 52, 64, 0.9)',
 	oddBackgroundColor: nord[1],
@@ -77,7 +79,7 @@ const nordStyle = {
 	htmlCodeBorderColor: nord[2],
 	htmlCodeColor: nord[13],
 
-	editorTheme: 'chaos',
+	editorTheme: 'terminal',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 

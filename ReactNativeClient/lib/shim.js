@@ -5,7 +5,7 @@ const shim = {};
 shim.isNode = () => {
 	if (typeof process === 'undefined') return false;
 	if (shim.isElectron()) return true;
-	return process.title == 'node';
+	return process.title == 'node' || (process.title && process.title.indexOf('gulp') === 0);
 };
 
 shim.isReactNative = () => {

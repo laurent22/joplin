@@ -162,6 +162,12 @@ toolUtils.githubUsername = async function(email, name) {
 	return output;
 };
 
+toolUtils.patreonOauthToken = async function() {
+	const fs = require('fs-extra');
+	const r = await fs.readFile(`${__dirname}/patreon_oauth_token.txt`);
+	return r.toString();
+};
+
 toolUtils.githubOauthToken = async function() {
 	const fs = require('fs-extra');
 	const r = await fs.readFile(`${__dirname}/github_oauth_token.txt`);

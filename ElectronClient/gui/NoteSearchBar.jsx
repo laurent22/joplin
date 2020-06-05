@@ -52,7 +52,7 @@ class NoteSearchBarComponent extends React.Component {
 			opacity: isEnabled ? 1.0 : theme.disabledOpacity,
 		};
 
-		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
+		const icon = <i style={iconStyle} className={`fas ${iconName}`}></i>;
 
 		return (
 			<a href="#" style={searchButton} onClick={clickHandler}>

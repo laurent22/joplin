@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const utils = require('../Tools/gulp/utils');
 const tasks = {
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
+	tsc: require('../Tools/gulp/tasks/tsc'),
 };
 
 tasks.build = {
@@ -45,5 +46,16 @@ tasks.buildTests = {
 	},
 };
 
+const buildTestSeries = [
+	tasks.buildTests.fn,
+];
+
+if (require('os').platform() === 'win32') {
+	gulp.task('copyLib', tasks.copyLib.fn);
+	gulp.task('tsc', tasks.tsc.fn);
+	buildTestSeries.push('copyLib');
+	buildTestSeries.push('tsc');
+}
+
 gulp.task('build', tasks.build.fn);
-gulp.task('buildTests', tasks.buildTests.fn);
+gulp.task('buildTests', gulp.series(...buildTestSeries));

@@ -7,7 +7,10 @@ Note that all the applications share the same library, which, for historical rea
 ## Required dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
-- Install node - https://nodejs.org/en/
+- Install node 10+ - https://nodejs.org/en/
+- macOS, Linux: Install rsync - https://nodejs.org/en/
+- macOS: Install Cocoapods - `brew install cocoapods`
+- Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
 
 ## Building
 
@@ -34,8 +37,8 @@ First you need to setup React Native to build projects with native code. For thi
 Then:
 
 	cd ReactNativeClient
-	npm start-android
-	# Or: npm start-ios
+	npm run start-android
+	# Or: npm run start-ios
 
 To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 

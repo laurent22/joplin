@@ -15,7 +15,6 @@ const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { shim } = require('lib/shim.js');
-const { uuid } = require('lib/uuid.js');
 const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
@@ -38,6 +37,8 @@ const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
@@ -443,6 +444,11 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
+		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
@@ -452,6 +458,10 @@ class BaseApplication {
 				refreshNotesUseSelectedNoteId = true;
 				refreshNotesHash = action.hash;
 			}
+		}
+
+		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+			refreshNotes = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -512,7 +522,7 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
-		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
 		}
 
@@ -577,11 +587,17 @@ class BaseApplication {
 	}
 
 	determineProfileDir(initArgs) {
-		if (initArgs.profileDir) return initArgs.profileDir;
+		let output = '';
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		if (initArgs.profileDir) {
+			output = initArgs.profileDir;
+		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
+			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		} else {
+			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
+		}
 
-		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
+		return toSystemSlashes(output, 'linux');
 	}
 
 	async start(argv) {
@@ -627,14 +643,20 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
 		reg.dispatch = () => {};
 
+		BaseService.logger_ = this.logger_;
+
 		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
+
+		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
+			this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
+		}
 
 		if (Setting.value('env') === 'dev') {
 			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
@@ -652,9 +674,9 @@ class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await Setting.load();
+		await loadKeychainServiceAndSettings(KeychainServiceDriver);
 
-		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		this.logger_.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
@@ -697,7 +719,6 @@ class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().setLogger(this.logger_);

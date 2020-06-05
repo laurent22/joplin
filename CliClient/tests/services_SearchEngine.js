@@ -92,6 +92,32 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n1.id);
 	}));
 
+	it('should tell where the results are found', asyncTest(async () => {
+		const notes = [
+			await Note.save({ title: 'abcd efgh', body: 'abcd' }),
+			await Note.save({ title: 'abcd' }),
+			await Note.save({ title: 'efgh', body: 'abcd' }),
+		];
+
+		await engine.syncTables();
+
+		const testCases = [
+			['abcd', ['title', 'body'], ['title'], ['body']],
+			['efgh', ['title'], [], ['title']],
+		];
+
+		for (const testCase of testCases) {
+			const rows = await engine.search(testCase[0]);
+
+			for (let i = 0; i < notes.length; i++) {
+				const row = rows.find(row => row.id === notes[i].id);
+				const actual = row ? row.fields.sort().join(',') : '';
+				const expected = testCase[i + 1].sort().join(',');
+				expect(expected).toBe(actual);
+			}
+		}
+	}));
+
 	it('should order search results by relevance (2)', asyncTest(async () => {
 		// 1
 		const n1 = await Note.save({ title: 'abcd efgh', body: 'XX abcd XX efgh' });
@@ -231,22 +257,29 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Chinese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '我是法国人' });
+		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('我')).length).toBe(1);
 		expect((await engine.search('法国人')).length).toBe(1);
+		expect((await engine.search('法国人*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('测试')).length).toBe(1);
+		expect((await engine.search('测试'))[0].fields).toEqual(['body']);
+		expect((await engine.search('测试*'))[0].fields).toEqual(['body']);
 	}));
 
 	it('should support queries with Japanese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '私は日本語を話すことができません' });
+		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('日本')).length).toBe(1);
 		expect((await engine.search('できません')).length).toBe(1);
+		expect((await engine.search('できません*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('テスト'))[0].fields.sort()).toEqual(['body']);
+
 	}));
 
 	it('should support queries with Korean characters', asyncTest(async () => {
@@ -276,10 +309,15 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 
 		expect((await engine.search('title:你好*')).length).toBe(1);
+		expect((await engine.search('title:你好*'))[0].fields).toEqual(['title']);
+		expect((await engine.search('body:法国人')).length).toBe(1);
+		expect((await engine.search('body:法国人'))[0].fields).toEqual(['body']);
 		expect((await engine.search('body:你好')).length).toBe(0);
 		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
+		expect((await engine.search('title:你好 body:法国人'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
 		expect((await engine.search('title:你好 我是')).length).toBe(1);
+		expect((await engine.search('title:你好 我是'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:bla 我是')).length).toBe(0);
 
 		// For non-alpha char, only the first field is looked at, the following ones are ignored
@@ -318,7 +356,11 @@ describe('services_SearchEngine', function() {
 		let rows;
 
 		const testCases = [
-			['did-not-match', 'did-not-match'],
+			// "-" is considered a word delimiter so it is stripped off
+			// when indexing the notes. "did-not-match" is translated to
+			// three word "did", "not", "match"
+			['did-not-match', 'did not match'],
+			['did-not-match', '"did-not-match"'],
 			['does match', 'does match'],
 		];
 
@@ -332,8 +374,20 @@ describe('services_SearchEngine', function() {
 			rows = await engine.search(query);
 			expect(rows.length).toBe(1);
 
+
 			await Note.delete(n.id);
 		}
+	}));
+
+	it('should allow using basic search', asyncTest(async () => {
+		const n1 = await Note.save({ title: '- [ ] abcd' });
+		const n2 = await Note.save({ title: '[ ] abcd' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(0);
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
+		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
 	}));
 
 });

@@ -17,6 +17,7 @@
     "markdown-it": "^8.4.1",
     "md5-file": "^4.0.0",
     "moment": "^2.24.0",
+    "momentjs": "^2.0.0",
     "mustache": "^2.3.0",
     "node-fetch": "^1.7.3",
     "request": "^2.88.0",

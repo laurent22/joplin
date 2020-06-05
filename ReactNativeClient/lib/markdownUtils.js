@@ -2,6 +2,7 @@ const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
 const { setupLinkify } = require('lib/joplin-renderer');
+const removeMarkdown = require('remove-markdown');
 
 const markdownUtils = {
 	// Not really escaping because that's not supported by marked.js
@@ -17,6 +18,7 @@ const markdownUtils = {
 	escapeLinkUrl(url) {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');
+		url = url.replace(/ /g, '%20');
 		return url;
 	},
 
@@ -90,6 +92,21 @@ const markdownUtils = {
 		}
 
 		return output.join('\n');
+	},
+
+	titleFromBody(body) {
+		if (!body) return '';
+		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
+		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
+		const filterRegex = /^[# \n\t*`-]*/;
+		const lines = body.trim().split('\n');
+		const title = lines[0].trim();
+		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
+	},
+
+	stripMarkdown(text, options = { gfm: false }) {
+		// Removes Markdown syntax elements from the given text
+		return removeMarkdown(text, options);
 	},
 };
 

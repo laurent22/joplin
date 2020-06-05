@@ -39,6 +39,7 @@ showHelp() {
     print "\t" "--allow-root" "\t" "Allow the install to be run as root"
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
+    print "\t" "--silent" "\t" "Don't print any output"
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -83,21 +84,19 @@ fi
 #-----------------------------------------------------
 showLogo
 
+#-----------------------------------------------------
 print "Checking architecture..."
-# Architecture check
-if ! [[ -x "$(command -v uname)" ]] ; then
-	print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
-else
-  ## this actually gives more information than needed, but it contains all architectures (hardware and software)
-	ARCHITECTURE=$(uname -a)
+## uname actually gives more information than needed, but it contains all architectures (hardware and software)
+ARCHITECTURE=$(uname -a || echo "NO CHECK")
 
-	if [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
-		showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-		exit 1
-	elif [[ $ARCHITECTURE =~ .*i.86.* ]] ; then
-		showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-		exit 1
-	fi
+if [[ $ARCHITECTURE = "NO CHECK" ]] ; then
+  print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
+elif [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
+  showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+  exit 1
+elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]] ; then
+  showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+  exit 1
 fi
 
 #-----------------------------------------------------
@@ -155,7 +154,7 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
-if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.* ]]
+if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]
 then
     : "${TMPDIR:=$TEMP_DIR}"
     # This command extracts to squashfs-root by default and can't be changed...

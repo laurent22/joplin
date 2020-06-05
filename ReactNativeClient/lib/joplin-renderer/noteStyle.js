@@ -100,6 +100,16 @@ module.exports = function(theme) {
 			font-size: 1em;
 			font-weight: bold;
 		}
+
+		.exported-note-title {
+			font-size: 2em;
+			font-weight: bold;
+			margin-bottom: 0.8em;
+			line-height: 1.5em;
+			padding-bottom: .35em;
+			border-bottom: 1px solid ${theme.htmlDividerColor};
+		}
+
 		a {
 			color: ${theme.htmlLinkColor};
 		}
@@ -238,7 +248,7 @@ module.exports = function(theme) {
 		}
 		
 		.inline-code,
-		.tox :not(.joplin-editable) code {
+		.mce-content-body code {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlCodeBackgroundColor};
 			padding-right: .2em;
@@ -280,12 +290,6 @@ module.exports = function(theme) {
 			opacity: 0.5;
 		}
 
-		.exported-note-title {
-			font-size: 2.2em;
-			font-weight: bold;
-			margin-bottom: 1em;
-		}
-
 		.exported-note {
 			padding: 1em;
 		}
@@ -303,9 +307,11 @@ module.exports = function(theme) {
 			padding: 5px 10px 10em 10px;
 		}
 
+		/*
 		.mce-content-body code {
 			background-color: transparent;
 		}
+		*/
 
 		.mce-content-body [data-mce-selected=inline-boundary] {
 			background-color: transparent;
@@ -322,6 +328,15 @@ module.exports = function(theme) {
 		/* We need that to make sure click events have the A has a target */
 		.katex a span {
 			pointer-events: none;
+		}
+
+		/* Clear the CODE style if the element is within a joplin-editable block */
+		.mce-content-body .joplin-editable code {
+			border: none;
+			background: none;
+			padding: 0;
+			color: inherit;
+			font-size: inherit;
 		}
 
 		/* =============================================== */
