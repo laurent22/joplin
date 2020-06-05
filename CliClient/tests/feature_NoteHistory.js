@@ -172,12 +172,10 @@ describe('feature_NoteHistory', function() {
 
 	it('should ensure no adjacent duplicates', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
-		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(3, folders[0]);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
-		await testApp.wait();
 
 		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
 		await testApp.wait();
@@ -186,28 +184,16 @@ describe('feature_NoteHistory', function() {
 		await testApp.wait();
 		goToNote(testApp, notes0[2]);
 		await testApp.wait();
-		goToNote(testApp, notes0[3]);
+		goToNote(testApp, notes0[1]);
 		await testApp.wait();
 		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
 		await testApp.wait();
 
 		let state = testApp.store().getState();
+		expect(state.selectedNoteIds).toEqual([notes0[2].id]);
+		expect(state.selectedFolderId).toEqual(folders[0].id);
 
-		goBackWard(state);
+		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[1].id });
 		await testApp.wait();
 
 		state = testApp.store().getState();
@@ -215,33 +201,11 @@ describe('feature_NoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 
 		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[2].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[2].id });
 		await testApp.wait();
 
 		state = testApp.store().getState();
-
-		// These tests are randomly failing so disabling them for now.
-		// https://github.com/laurent22/joplin/pull/2819#issuecomment-636551313
-		//
-		// expect(state.selectedNoteIds).toEqual([notes0[3].id]);
-		// expect(state.selectedFolderId).toEqual(folders[0].id);
+		expect(state.selectedNoteIds).toEqual([notes0[0].id]);
+		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 
 	it('should ensure history is not corrupted when notes get deleted.', asyncTest(async () => {
