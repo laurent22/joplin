@@ -105,4 +105,5 @@ class SelectDateTimeDialog extends React.PureComponent {
 
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export { SelectDateTimeDialog };

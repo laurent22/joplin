@@ -14,9 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Loco-Source-Locale: en_GB\n"
-"X-Generator: Poedit 2.3\n"
-"X-Loco-Parser: loco_parse_po\n"
+"X-Generator: Poedit 2.3.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -195,14 +195,16 @@ msgstr ""
 "zaman alabilir, lütfen bekleyiniz."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Şifresi çözülen öğeler: %s / %s"
+msgstr "Şifresi çözülen öğeler: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Atlanan öğeler: %d (--retry-failed parametresi ile şifrelemelerini çözmeyi "
+"yeniden deneyebilirsiniz)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -1028,9 +1030,8 @@ msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
 #: ElectronClient/app.js:1063
-#, fuzzy
 msgid "&Note"
-msgstr "Not"
+msgstr "&Not"
 
 #: ElectronClient/app.js:1066 ElectronClient/gui/NoteToolbar/NoteToolbar.js:86
 #: ElectronClient/gui/utils/NoteListUtils.js:68
@@ -1047,7 +1048,7 @@ msgstr "Etiketler"
 
 #: ElectronClient/app.js:1093
 msgid "Statistics..."
-msgstr ""
+msgstr "İstatistikler..."
 
 #: ElectronClient/app.js:1103
 msgid "&Tools"
@@ -1487,9 +1488,8 @@ msgid "Viewer"
 msgstr "Görünteleyici"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:82
-#, fuzzy
 msgid "Statistics"
-msgstr "Durum"
+msgstr "İstatistik"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1557,26 +1557,24 @@ msgid "Horizontal Rule"
 msgstr "Yatay kural"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "Onay Kutusu"
+msgstr "Onay Kutusu listesi"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:532
 msgid "Code Block"
-msgstr ""
+msgstr "Kod Bloğu"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:541
 msgid "Inline Code"
-msgstr ""
+msgstr "İç Kod"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Not veya dosyaları buraya sürükleyin"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
-#, fuzzy
 msgid "Code View"
-msgstr "Kod"
+msgstr "Kod Görünümü"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
 #, javascript-format
@@ -1584,6 +1582,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Tüm ek dosyaların indirilip şifrelerinin çözülmesi için lütfen bekleyin. "
+"Ayrıca %s ile notu düzenleyebilirsiniz."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:315
 msgid "to-do"
@@ -1608,7 +1608,7 @@ msgstr "Farklı kaydet..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Dosyayı klasörde görüntüle"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 msgid "Copy path to clipboard"
@@ -1635,12 +1635,11 @@ msgstr "Desteklenmeyen bağlantı veya mesaj: %s"
 
 #: ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
-msgstr ""
+msgstr "Özel sıralama"
 
 #: ElectronClient/gui/NoteList.min.js:146
-#, fuzzy
 msgid "View"
-msgstr "&Görüntüle"
+msgstr "Görüntüle"
 
 #: ElectronClient/gui/NoteList.min.js:146
 #: ReactNativeClient/lib/models/Setting.js:321
@@ -1653,11 +1652,12 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Notları manuel olarak sıralamak istiyorsanız menüdeki sıoralama ayarı \"%s\" "
+"olarak, \"%s\" > \"%s\" yerinden değiştirilmelidir"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "Do it now"
-msgstr "Hemen al:"
+msgstr "Hemen yap"
 
 #: ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1733,7 +1733,7 @@ msgstr ""
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
 msgid "Forward"
-msgstr ""
+msgstr "İleri"
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
 #, javascript-format
@@ -1989,9 +1989,9 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
 
 #: ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Ana şifreleme anahtarı güncellenemedi: %s"
+msgstr "Notlar dışarı aktarılamadı: %s"
 
 #: ElectronClient/plugins/GotoAnything.min.js:441
 msgid ""
@@ -2554,7 +2554,7 @@ msgstr "oluşturma zamanı"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "özel sıralama"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -2583,17 +2583,20 @@ msgid "Downloaded"
 msgstr "İndirildi"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Ek Dosyalar"
+msgstr "Ek dosyalarında çakışma: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Bu eki indirirken bir hata oluştu:"
+msgstr ""
+"Aşağıdaki ek dosya(lar)da (%s) çakışma meydana geldi.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Setting.js:30
 msgid "yes"
@@ -2736,15 +2739,15 @@ msgstr "Tema"
 
 #: ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Temayı system temasına göre otomatik olarak değiştir"
 
 #: ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Tercih edilen açık renk tema"
 
 #: ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Tercih edilen koyu renk tema"
 
 #: ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"
@@ -3081,7 +3084,7 @@ msgstr "Not tarihçesini şu kadar süre tut"
 
 #: ReactNativeClient/lib/models/Setting.js:682
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Not defteri listesi büyüme faktörü"
 
 #: ReactNativeClient/lib/models/Setting.js:684
 #: ReactNativeClient/lib/models/Setting.js:697
@@ -3092,14 +3095,18 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Faktör özelliği, dosyanın diğer dosyaların da ebatına sadık kalarak yeterli "
+"alan olduğu sürece hangi değerle büyüyüp ufalacağını tanımlar. Faktör değeri "
+"2 olan bir bileşen, faktör değeri 1 olana nazaran 2 kat fazla alan kaplar. "
+"Değişiklikleri görmek için uygulamayı yeniden başlatın."
 
 #: ReactNativeClient/lib/models/Setting.js:695
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Not listesi büyüme faktörü"
 
 #: ReactNativeClient/lib/models/Setting.js:708
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Not alanı büyüme faktörü"
 
 #: ReactNativeClient/lib/models/Setting.js:820
 #, javascript-format

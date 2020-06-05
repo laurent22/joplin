@@ -53,7 +53,7 @@ Your users can retrieve crash reports from their device and send them to you via
 
 3) Select Diagnostics & Usage Data
 
-4) Locate the log for the crashed app. The logs will be named in the format: <AppName>_<DateTime>_<DeviceName>
+4) Locate the log for the crashed app. The logs will be named in the format: `<AppName>_<DateTime>_<DeviceName>`
 
 5) Select the desired log. Then, using the text selection UI select the entire text of the log. Once the text is selected, tap Copy
 
