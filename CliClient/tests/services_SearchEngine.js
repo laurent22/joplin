@@ -257,22 +257,29 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Chinese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '我是法国人' });
+		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('我')).length).toBe(1);
 		expect((await engine.search('法国人')).length).toBe(1);
+		expect((await engine.search('法国人*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('测试')).length).toBe(1);
+		expect((await engine.search('测试'))[0].fields).toEqual(['body']);
+		expect((await engine.search('测试*'))[0].fields).toEqual(['body']);
 	}));
 
 	it('should support queries with Japanese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '私は日本語を話すことができません' });
+		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('日本')).length).toBe(1);
 		expect((await engine.search('できません')).length).toBe(1);
+		expect((await engine.search('できません*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('テスト'))[0].fields.sort()).toEqual(['body']);
+
 	}));
 
 	it('should support queries with Korean characters', asyncTest(async () => {
@@ -302,10 +309,15 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 
 		expect((await engine.search('title:你好*')).length).toBe(1);
+		expect((await engine.search('title:你好*'))[0].fields).toEqual(['title']);
+		expect((await engine.search('body:法国人')).length).toBe(1);
+		expect((await engine.search('body:法国人'))[0].fields).toEqual(['body']);
 		expect((await engine.search('body:你好')).length).toBe(0);
 		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
+		expect((await engine.search('title:你好 body:法国人'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
 		expect((await engine.search('title:你好 我是')).length).toBe(1);
+		expect((await engine.search('title:你好 我是'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:bla 我是')).length).toBe(0);
 
 		// For non-alpha char, only the first field is looked at, the following ones are ignored

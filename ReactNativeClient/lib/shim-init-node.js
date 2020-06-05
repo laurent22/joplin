@@ -452,6 +452,7 @@ function shimInit() {
 	shim.pathRelativeToCwd = (path) => {
 		return toRelative(process.cwd(), path);
 	};
+
 }
 
 module.exports = { shimInit };

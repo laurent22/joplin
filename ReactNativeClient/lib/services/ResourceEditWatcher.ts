@@ -1,3 +1,4 @@
+import AsyncActionQueue from '../AsyncActionQueue';
 const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting');
 const Resource = require('lib/models/Resource');
@@ -6,7 +7,6 @@ const EventEmitter = require('events');
 const chokidar = require('chokidar');
 const { bridge } = require('electron').remote.require('./bridge');
 const { _ } = require('lib/locale');
-import AsyncActionQueue from '../AsyncActionQueue';
 
 interface WatchedItem {
 	resourceId: string,

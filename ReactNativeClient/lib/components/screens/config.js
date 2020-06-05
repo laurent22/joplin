@@ -1,3 +1,6 @@
+import { PermissionsAndroid } from 'react-native';
+import Slider from '@react-native-community/slider';
+
 const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
 const { connect } = require('react-redux');
@@ -20,8 +23,6 @@ const RNFS = require('react-native-fs');
 
 const checkPermissions = require('lib/checkPermissions.js').default;
 import { PermissionsAndroid } from 'react-native';
-
-import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

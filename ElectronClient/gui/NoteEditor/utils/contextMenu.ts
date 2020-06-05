@@ -1,3 +1,5 @@
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
+
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -6,8 +8,6 @@ const fs = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('lib/path-utils');
 const { _ } = require('lib/locale');
-
-import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
 
 export enum ContextMenuItemType {
 	None = '',

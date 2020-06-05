@@ -1,8 +1,8 @@
+import { RNCamera } from 'react-native-camera';
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const { View, TouchableOpacity, Text, Dimensions } = require('react-native');
-import { RNCamera } from 'react-native-camera';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim');

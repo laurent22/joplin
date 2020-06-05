@@ -16,6 +16,7 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
 
 const { themeStyle } = require('../../theme.js');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
@@ -28,7 +29,6 @@ const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
 const eventManager = require('../../eventManager');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const TagList = require('../TagList.min.js');
