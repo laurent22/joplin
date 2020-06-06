@@ -80,7 +80,7 @@ class OneDriveApi {
 	authCodeUrl(redirectUri) {
 		const query = {
 			client_id: this.clientId_,
-			scope: 'files.readwrite offline_access',
+			scope: 'files.readwrite offline_access sites.readwrite.all',
 			response_type: 'code',
 			redirect_uri: redirectUri,
 		};
@@ -218,6 +218,11 @@ class OneDriveApi {
 		if (method == 'PATCH' || method == 'POST') {
 			options.headers['Content-Type'] = 'application/json';
 			if (data) data = JSON.stringify(data);
+		}
+
+		if (path == '/drive/root:/Apps/JoplinDev:/delta') {
+			path = '/drive/root/delta';
+			console.log('klappt');
 		}
 
 		let url = path;
