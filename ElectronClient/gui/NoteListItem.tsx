@@ -23,6 +23,7 @@ interface NoteListItemProps {
 	onNoteDragOver: any,
 	onNoteDrop: any,
 	onTitleClick: any,
+	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void,
 }
 
 function NoteListItem(props:NoteListItemProps, ref:any) {
@@ -126,7 +127,7 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 			{renderCheckbox()}
 			<a
 				ref={anchorRef}
-				onContextMenu={event => this.itemContextMenu(event)}
+				onContextMenu={props.onContextMenu}
 				href="#"
 				draggable={true}
 				style={listItemTitleStyle}

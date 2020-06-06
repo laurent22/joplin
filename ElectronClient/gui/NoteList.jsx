@@ -36,6 +36,7 @@ class NoteListComponent extends React.Component {
 		this.onGlobalDrop_ = this.onGlobalDrop_.bind(this);
 		this.registerGlobalDragEndEvent_ = this.registerGlobalDragEndEvent_.bind(this);
 		this.unregisterGlobalDragEndEvent_ = this.unregisterGlobalDragEndEvent_.bind(this);
+		this.itemContextMenu = this.itemContextMenu.bind(this);
 	}
 
 	style() {
@@ -250,6 +251,7 @@ class NoteListComponent extends React.Component {
 			onNoteDragOver={this.noteItem_noteDragOver}
 			onNoteDrop={this.noteItem_noteDrop}
 			onTitleClick={this.noteItem_titleClick}
+			onContextMenu={this.itemContextMenu}
 		/>;
 	}
 
