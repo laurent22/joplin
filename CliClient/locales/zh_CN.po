@@ -1427,7 +1427,7 @@ msgstr "编辑器"
 #: ReactNativeClient/lib/models/Setting.js:307
 #: ReactNativeClient/lib/models/Setting.js:309
 msgid "Viewer"
-msgstr "界面 (&V)"
+msgstr "浏览"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:82
 msgid "Statistics"
