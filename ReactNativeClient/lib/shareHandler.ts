@@ -1,9 +1,9 @@
+import ShareExtension, { SharedData } from './ShareExtension';
+
 const Note = require('lib/models/Note.js');
 const checkPermissions = require('lib/checkPermissions.js').default;
 const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
-
-import ShareExtension, { SharedData } from './ShareExtension';
 
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
