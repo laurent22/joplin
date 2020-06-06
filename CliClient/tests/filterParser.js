@@ -89,6 +89,15 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
+	it('negated word text', () => {
+		const searchString = 'baba -yaga';
+		const expected = new Map([
+			['text', [{ relation: 'AND', value: 'baba' }, { relation: 'NOT', value: 'yaga' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+
 	it('phrase text search', () => {
 		const searchString = '"baba yaga"';
 		const expected = new Map([
@@ -153,6 +162,30 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
+	it('created less than', () => {
+		const searchString = 'created:<20151218';
+		const expected = new Map([
+			['created', [{ relation: 'AND', value: '<20151218' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('created greater than', () => {
+		const searchString = 'created:>20151218';
+		const expected = new Map([
+			['created', [{ relation: 'AND', value: '>20151218' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('created in between', () => {
+		const searchString = 'created:20151218..20160118';
+		const expected = new Map([
+			['created', [{ relation: 'AND', value: '20151218..20160118' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
 	it('updated on', () => {
 		const searchString = 'updated:20151218'; // YYYYMMDD
 		const expected = new Map([
@@ -169,10 +202,10 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('is a todo', () => {
-		const searchString = 'is:todo';
+	it('is of type todo', () => {
+		const searchString = 'type:todo';
 		const expected = new Map([
-			['is', [{ relation: 'AND', value: 'todo' }]],
+			['type', [{ relation: 'AND', value: 'todo' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});

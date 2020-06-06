@@ -119,6 +119,7 @@ describe('services_SearchFilter', function() {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'dead bar' });
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
+		const n3 = await Note.save({ title: 'foo ho', body: 'ho ho ho' });
 		await engine.syncTables();
 
 		// Interpretation: Match with notes containing foo in title/body and bar in title/body
@@ -127,6 +128,10 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(2);
 		expect(rows.map(r=>r.id)).toContain(n1.id);
 		expect(rows.map(r=>r.id)).toContain(n2.id);
+
+		rows = await engine.search('foo -bar');
+		expect(rows.length).toBe(1);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
 
 		rows = await engine.search('foo efgh');
 		expect(rows.length).toBe(1);
@@ -248,6 +253,7 @@ describe('services_SearchFilter', function() {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: Date.parse('2020-05-20') });
 		const n2 = await Note.save({ title: 'I made this on', body: 'May 19 2020', user_created_time: Date.parse('2020-05-19') });
+		const n3 = await Note.save({ title: 'I made this on', body: 'May 18 2020', user_created_time: Date.parse('2020-05-18') });
 
 		await engine.syncTables();
 
@@ -258,6 +264,44 @@ describe('services_SearchFilter', function() {
 		rows = await engine.search('created:20200519');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('created:<20200519');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('created:>20200519');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n1.id);
+	}));
+
+	it('should support filtering by between two dates', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'I made this on', body: 'January 01 2020', user_created_time: Date.parse('2020-01-01') });
+		const n2 = await Note.save({ title: 'I made this on', body: 'February 15 2020', user_created_time: Date.parse('2020-02-15') });
+		const n3 = await Note.save({ title: 'I made this on', body: 'March 25 2019', user_created_time: Date.parse('2019-03-25') });
+		const n4 = await Note.save({ title: 'I made this on', body: 'March 01 2018', user_created_time: Date.parse('2018-03-01') });
+
+		await engine.syncTables();
+
+		rows = await engine.search('created:20200101..20200220');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('created:201901..202002');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n1.id);
+
+
+		rows = await engine.search('created:2018..2019');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n4.id);
+
 	}));
 
 	it('should support filtering by created with smart value: day', asyncTest(async () => {
@@ -412,7 +456,7 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('is:todo');
+		rows = await engine.search('type:todo');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(t1.id);
 		expect(ids(rows)).toContain(t2.id);
@@ -450,7 +494,7 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('is:note');
+		rows = await engine.search('type:note');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t3.id);
 

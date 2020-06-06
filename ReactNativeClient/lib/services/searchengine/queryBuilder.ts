@@ -29,7 +29,22 @@ const getUnixMs = (date:string) => Date.parse(hyphenateDate(date));
 const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryParts: string[], params: string[]): void => {
 	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
 	const yyyymmdd = /^[0-9]{8}$/;
-	const term = filters.get(type)[0];
+	const yyyymmdd_yyyymmdd = /^[0-9]{8}\.\.[0-9]{8}$/;
+	const yyyymm_yyyymm = /^[0-9]{6}\.\.[0-9]{6}$/;
+	const yyyy_yyyy = /^[0-9]{4}\.\.[0-9]{4}$/;
+
+	const term = filters.get(type)[0]; // only one date is supported
+
+	let relation = 'EQUAL';
+	if (term.value.startsWith('<')) {
+		relation = 'LESS';
+		term.value = term.value.slice(1);
+	} else if (term.value.startsWith('>')) {
+		relation = 'GREATER';
+		term.value = term.value.slice(1);
+	}
+
+
 	if (smartValue.test(term.value)) {
 		const match = smartValue.exec(term.value);
 		const timeDuration = match[1]; // eg. day, week, month, year
@@ -40,15 +55,68 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 	} else if (yyyymmdd.test(term.value)) {
 		const msOfDay = getUnixMs(term.value); // unixMs from YYYYMMDD
 		const msOfNextDay = msOfDay + (60 * 60 * 24 * 1000);
+
+		if (relation == 'LESS') {
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time < ?)`);
+			params.push(msOfNextDay.toString());
+		} else if (relation == 'GREATER') {
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ?)`);
+			params.push(msOfDay.toString());
+		} else {
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+			params.push(msOfDay.toString(), msOfNextDay.toString());
+		}
+
+	} else if (yyyymmdd_yyyymmdd.test(term.value)) {
+		const [date1, date2] = term.value.split('..');
+		const startDate = getUnixMs(date1);
+		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
 		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
-		params.push(msOfDay.toString(), msOfNextDay.toString());
+		params.push(startDate.toString(), endDate.toString());
+	} else if (yyyymm_yyyymm.test(term.value)) {
+		let [date1, date2] = term.value.split('..');
+
+
+		// find start of the next month
+		let endYear = date2.slice(0, 4);
+		let endMonth = date2.slice(-2);
+
+		const incYear = ((Number(endMonth) + 1) / 12) > 1.0;
+		endMonth = ((Number(endMonth) + 1) % 12).toString();
+		if (endMonth.length == 1) endMonth = `0${endMonth}`;
+		if (incYear) endYear = (Number(endYear) + 1).toString();
+
+		date1 = `${date1}01`; // make day start from the 1st day of the month
+		date2 = `${endYear + endMonth}01`; // first day of the next month
+
+		const startDate = getUnixMs(date1);
+		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+		params.push(startDate.toString(), endDate.toString());
+	} else if (yyyy_yyyy.test(term.value)) {
+		let [date1, date2] = term.value.split('..');
+
+		date1 = `${date1}0101`; // make day start from the 1st day of the month and first month of year
+		date2 = `${(Number(date2) + 1).toString()}0101`;
+
+		const startDate = getUnixMs(date1);
+		const endDate = getUnixMs(date2); // start of next day
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+		params.push(startDate.toString(), endDate.toString());
 	} else {
 		throw new Error(`Date value of ${type} in unknown format: ${term.value}`);
 	}
 };
 
 const makeMatchQuery = (name: string, filters:Map<string, Array<Term>>) => {
-	if (name !== 'text') { return filters.get(name).map(term => `${term.relation === 'AND' ? '' : `${term.relation}`} ${name}:${term.value}`); } else { return filters.get(name).map(term => `${term.relation === 'AND' ? '' : `${term.relation}`} ${term.value}`); }
+	if (name !== 'text') {
+		// eg. title:xyz body:abc
+		return filters.get(name).map(term => `${term.relation === 'AND' ? '' : `${term.relation}`} ${name}:${term.value}`);
+	} else {
+		return filters.get(name).map(term => {
+			if (term.relation === 'AND') { return `${term.value}`; } else if (term.relation === 'NOT') { return `-${term.value}`; } else { return `${term.relation} ${term.value}`; }
+		});
+	}
 };
 
 // The query we want to construct is this:
@@ -92,8 +160,8 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 		queryParts.push('AND ROWID IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)');
 	}
 
-	if (filters.has('is')) {
-		const term = filters.get('is')[0];
+	if (filters.has('type')) {
+		const term = filters.get('type')[0];
 		if (term.value === 'todo') {
 			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)');
 		} else if (term.value == 'note') {

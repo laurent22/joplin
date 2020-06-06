@@ -51,7 +51,7 @@ const getTerms = (query: string) : Term[] => {
 
 const parseQuery = (query: string): Array<Filter> => {
 	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
-	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'is', 'iscompleted']);
+	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'type', 'iscompleted']);
 
 	const terms = getTerms(query);
 
@@ -86,8 +86,11 @@ const parseQuery = (query: string): Array<Filter> => {
 		} else {
 			// could be AND or OR or text to fts search
 			if (value.toUpperCase() !== 'AND' && value.toUpperCase() !== 'OR') {
-				// this is text
-				result.push({ relation: relation, name: 'text', value: value });
+				if (value.startsWith('-')) {
+					result.push({ relation: 'NOT', name: 'text', value: value.slice(1) });
+				} else {
+					result.push({ relation: relation, name: 'text', value: value });
+				}
 				relation = defaultRelation; // reset to default
 			} else {
 				// this is a relation for the next term;
