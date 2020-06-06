@@ -33,7 +33,8 @@ const darkStyle = {
 	htmlCodeBackgroundColor: 'rgb(47, 48, 49)',
 	htmlCodeBorderColor: 'rgb(70, 70, 70)',
 
-	editorTheme: 'twilight',
+	aceEditorTheme: 'twilight',
+	codeMirrorTheme: 'material-darker',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 
 	highlightedColor: '#0066C7',

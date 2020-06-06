@@ -32,7 +32,8 @@ const lightStyle = {
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
 
-	editorTheme: 'chrome',
+	aceEditorTheme: 'chrome',
+	codeMirrorTheme: 'default',
 	codeThemeCss: 'atom-one-light.css',
 };
 

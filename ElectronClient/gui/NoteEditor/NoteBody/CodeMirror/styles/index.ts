@@ -53,7 +53,7 @@ export default function styles(props: NoteBodyEditorProps) {
 				fontSize: `${theme.editorFontSize}px`,
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
-				aceEditorTheme: theme.aceEditorTheme, // Defined in theme.js
+				codeMirrorTheme: theme.codeMirrorTheme, // Defined in theme.js
 			},
 		};
 	});

@@ -170,3 +170,33 @@ a {
 	from {transform: rotate(0deg);}
 	to {transform: rotate(360deg);}
 }
+
+/* These must be important to prevent the codemirror defaults from taking over*/
+.CodeMirror {
+	font-family: monospace;
+	height: 100% !important;
+	width: 100% !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	position: absolute !important;
+}
+
+.cm-header-1 {
+	font-size: 1.5em;
+}
+
+.cm-header-2 {
+	font-size: 1.3em;
+}
+
+.cm-header-3 {
+	font-size: 1.1em;
+}
+
+.cm-header-4, .cm-header-5, .cm-header-6 {
+	font-size: 1em;
+}
+
+.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
+	line-height: 1.5em;
+}

@@ -1314,10 +1314,12 @@ class Application extends BaseApplication {
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
 
-		const css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const ace_css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
+		styleTag.appendChild(document.createTextNode(ace_css));
 		document.head.appendChild(styleTag);
 	}
 

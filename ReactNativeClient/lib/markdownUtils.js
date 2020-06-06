@@ -4,6 +4,10 @@ const MarkdownIt = require('markdown-it');
 const { setupLinkify } = require('lib/joplin-renderer');
 const removeMarkdown = require('remove-markdown');
 
+// Taken from codemirror/addon/edit/continuelist.js
+const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/;
+const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
+
 const markdownUtils = {
 	// Not really escaping because that's not supported by marked.js
 	escapeLinkText(text) {
@@ -61,9 +65,25 @@ const markdownUtils = {
 		return output;
 	},
 
+	// The match results has 5 items
+	// Full match array is
+	// [Full match, whitespace, list token, ol line number, whitespace following token]
 	olLineNumber(line) {
-		const match = line.match(/^(\d+)\.(\s.*|)$/);
-		return match ? Number(match[1]) : 0;
+		const match = line.match(listRegex);
+		return match ? Number(match[3]) : 0;
+	},
+
+	extractListToken(line) {
+		const match = line.match(listRegex);
+		return match ? match[2] : '';
+	},
+
+	isListItem(line) {
+		return listRegex.test(line);
+	},
+
+	isEmptyListItem(line) {
+		return emptyListRegex.test(line);
 	},
 
 	createMarkdownTable(headers, rows) {

@@ -102,6 +102,7 @@
     "base64-stream": "^1.0.0",
     "chokidar": "^3.0.0",
     "clean-html": "^1.5.0",
+    "codemirror": "^5.54.0",
     "color": "^3.1.2",
     "compare-versions": "^3.2.1",
     "countable": "^3.0.1",
