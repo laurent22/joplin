@@ -5,6 +5,17 @@ const Note = require('lib/models/Note.js');
 const { nestedPath } = require('lib/nested-utils.js');
 const { _ } = require('lib/locale');
 
+// Create a fullTitle cache, which defaults to ''
+const fullTitleCache = new Proxy({}, {
+	get: function(cache, id) {
+		return cache.hasOwnProperty(id) ? cache[id] : '';
+	},
+	set: function(cache, id, value) {
+		cache[id] = value;
+		return true;
+	},
+});
+
 class Tag extends BaseItem {
 	static tableName() {
 		return 'tags';
@@ -71,6 +82,8 @@ class Tag extends BaseItem {
 			if (ancestorIds.includes(tag.parent_id)) break;
 
 			tag = await Tag.load(tag.parent_id);
+			// Fail-safe in case a parent isn't there
+			if (!tag) break;
 			ancestorIds.push(tag.id);
 			ancestors.push(tag);
 		}
@@ -171,12 +184,26 @@ class Tag extends BaseItem {
 		}
 	}
 
-	static _addFullTitles(tags) {
-		for (const tag of tags) {
-			const tagPath = Tag.tagPath(tags, tag.id);
-			const pathTitles = tagPath.map((t) => t.title);
-			tag.full_title = pathTitles.join('/');
+	static async updateCachedFullTitleForIds(tagIds) {
+		const tags = await Tag.byIds(tagIds);
+		for (let i = 0; i < tags.length; i++) {
+			if (!tags[i]) continue;
+			fullTitleCache[tags[i].id] = await Tag.getFullTitle(tags[i]);
 		}
+	}
+
+	static getCachedFullTitle(tagId) {
+		return fullTitleCache[tagId];
+	}
+
+	static _addFullTitle(tag) {
+		Object.defineProperty(tag, 'full_title', {
+			get: function() { return Tag.getCachedFullTitle(tag.id); },
+			// We shouldn't modify the full_title as a property
+			// use appropriate methods instead
+			set: function() { return false; },
+			enumerable: true,
+		});
 	}
 
 	static async getFullTitle(tag) {
@@ -189,13 +216,21 @@ class Tag extends BaseItem {
 	static async load(tagId, options = null) {
 		const tag = await super.load(tagId, options);
 		if (!tag) return;
-		tag.full_title = await Tag.getFullTitle(tag);
+		Tag._addFullTitle(tag);
 		return tag;
 	}
 
 	static async all(options = null) {
 		const tags = await super.all(options);
-		Tag._addFullTitles(tags);
+
+		for (const tag of tags) {
+			const tagPath = Tag.tagPath(tags, tag.id);
+			const pathTitles = tagPath.map((t) => t.title);
+			const fullTitle = pathTitles.join('/');
+			// When all tags are reloaded we can also cheaply update the cache
+			fullTitleCache[tag.id] = fullTitle;
+			Tag._addFullTitle(tag);
+		}
 		return tags;
 	}
 
@@ -203,7 +238,7 @@ class Tag extends BaseItem {
 		const tags = await super.byIds(ids, options);
 		for (let i = 0; i < tags.length; i++) {
 			if (!tags[i]) continue;
-			tags[i].full_title = await Tag.getFullTitle(tags[i]);
+			Tag._addFullTitle(tags[i]);
 		}
 		return tags;
 	}
@@ -230,14 +265,13 @@ class Tag extends BaseItem {
 		await Tag._addNoteCounts(tags);
 
 		tags = tags.filter((tag) => tag.note_count > 0);
-
 		return tags;
 	}
 
 	static async search(options) {
 		const tags = await super.search(options);
 		for (let i = 0; i < tags.length; i++) {
-			tags[i].full_title = await Tag.getFullTitle(tags[i]);
+			Tag._addFullTitle(tags[i]);
 		}
 		return tags;
 	}
@@ -295,13 +329,16 @@ class Tag extends BaseItem {
 			i = restTitle.indexOf(separator);
 		}
 		const tag = await this.modelSelectOne(sql, [restTitle, parentId]);
-		if (tag) tag.full_title = title;
+		if (tag) {
+			fullTitleCache[tag.id] = await Tag.getFullTitle(tag);
+			Tag._addFullTitle(tag);
+		}
 		return tag;
 	}
 
 	static async addNoteTagByTitle(noteId, tagTitle) {
 		let tag = await this.loadByTitle(tagTitle);
-		if (!tag) tag = await Tag.saveNested({ full_title: tagTitle }, { userSideValidation: true });
+		if (!tag) tag = await Tag.saveNested({}, tagTitle, { userSideValidation: true });
 		return await this.addNote(tag.id, noteId);
 	}
 
@@ -313,7 +350,7 @@ class Tag extends BaseItem {
 			const title = tagTitles[i].trim().toLowerCase();
 			if (!title) continue;
 			let tag = await this.loadByTitle(title);
-			if (!tag) tag = await Tag.saveNested({ full_title: title }, { userSideValidation: true  });
+			if (!tag) tag = await Tag.saveNested({}, title, { userSideValidation: true  });
 			await this.addNote(tag.id, noteId);
 			addedTitles.push(title);
 		}
@@ -377,8 +414,7 @@ class Tag extends BaseItem {
 	static async renameNested(tag, newTitle) {
 		const oldParentId = tag.parent_id;
 
-		tag.full_title = newTitle;
-		tag = await Tag.saveNested(tag, { fields: ['title', 'parent_id'], userSideValidation: true });
+		tag = await Tag.saveNested(tag, newTitle, { fields: ['title', 'parent_id'], userSideValidation: true });
 
 		if (oldParentId !== tag.parent_id) {
 			// If the parent tag has changed, and the ancestor doesn't
@@ -391,24 +427,24 @@ class Tag extends BaseItem {
 		return tag;
 	}
 
-	static async saveNested(tag, options) {
+	static async saveNested(tag, fullTitle, options) {
 		if (!options) options = {};
 		// The following option is used to prevent loops in the tag hierarchy
 		if (!('mainTagId' in options) && tag.id) options.mainTagId = tag.id;
 
-		if (tag.full_title.startsWith('/') || tag.full_title.endsWith('/')) {
+		if (fullTitle.startsWith('/') || fullTitle.endsWith('/')) {
 			throw new Error(_('Tag name cannot start or end with a `/`.'));
-		} else if (tag.full_title.includes('//')) {
+		} else if (fullTitle.includes('//')) {
 			throw new Error(_('Tag name cannot contain `//`.'));
 		}
 
 		let parentId = '';
 		// Check if the tag is nested using `/` as separator
 		const separator = '/';
-		const i = tag.full_title.lastIndexOf(separator);
+		const i = fullTitle.lastIndexOf(separator);
 		if (i !== -1) {
-			const parentTitle = tag.full_title.slice(0,i);
-			tag.title = tag.full_title.slice(i + 1);
+			const parentTitle = fullTitle.slice(0,i);
+			tag.title = fullTitle.slice(i + 1);
 
 			// Try to get the parent tag
 			const parentTag = await Tag.loadByTitle(parentTitle);
@@ -424,12 +460,12 @@ class Tag extends BaseItem {
 				// Create the parent tag if it doesn't exist
 				const parentOpts = {};
 				if ('mainTagId' in options) parentOpts.mainTagId = options.mainTagId;
-				const parentTag = await Tag.saveNested({ full_title: parentTitle }, parentOpts);
+				const parentTag = await Tag.saveNested({}, parentTitle, parentOpts);
 				parentId = parentTag.id;
 			}
 		} else {
-			// Tag not nested so set the title to full title
-			tag.title = tag.full_title;
+			// Tag is not nested so set the title to full title
+			tag.title = fullTitle;
 		}
 
 		// Set parent_id
@@ -454,13 +490,20 @@ class Tag extends BaseItem {
 			}
 		}
 
-		return super.save(o, options).then(tag => {
+		const tag = await super.save(o, options).then(tag => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
 				item: tag,
 			});
 			return tag;
 		});
+
+		// Update fullTitleCache cache
+		const tagIdsToUpdate = await Tag.descendantTagIds(tag.id);
+		tagIdsToUpdate.push(tag.id);
+		await Tag.updateCachedFullTitleForIds(tagIdsToUpdate);
+
+		return tag;
 	}
 }
 

@@ -581,7 +581,7 @@ describe('synchronizer', function() {
 	it('should sync tag deletion', asyncTest(async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
-		const tag = await Tag.saveNested({ full_title: 'a/b/c' });
+		const tag = await Tag.saveNested({}, 'a/b/c');
 		await Tag.addNote(tag.id, n1.id);
 		await synchronizer().start();
 
@@ -611,8 +611,8 @@ describe('synchronizer', function() {
 	it('should sync child tag deletion', asyncTest(async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
-		const tag1 = await Tag.saveNested({ full_title: 'a/b/c/d' });
-		const tag2 = await Tag.saveNested({ full_title: 'a/b/d' });
+		const tag1 = await Tag.saveNested({}, 'a/b/c/d');
+		const tag2 = await Tag.saveNested({}, 'a/b/d');
 		await Tag.addNote(tag1.id, n1.id);
 		await Tag.addNote(tag2.id, n1.id);
 		let taga = await Tag.loadByTitle('a');
