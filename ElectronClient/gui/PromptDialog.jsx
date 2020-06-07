@@ -3,7 +3,7 @@ const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
-const CreatableSelect = require('react-select/lib/Creatable').default;
+const CreatableSelect = require('react-select/lib/AsyncCreatable').default;
 const Select = require('react-select').default;
 const makeAnimated = require('react-select/lib/animated').default;
 
@@ -162,6 +162,17 @@ class PromptDialog extends React.Component {
 		return this.styles_;
 	}
 
+	filterOptions(searchKey) {
+		const fullList = this.props.autocomplete;
+		return new Promise(resolve => {
+			resolve(fullList.filter(tag => tag.label.includes(searchKey))
+				.sort((tag1, tag2) => {
+					return tag1.label.indexOf(searchKey) - tag2.label.indexOf(searchKey);
+				}));
+
+		});
+
+	}
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
@@ -223,7 +234,7 @@ class PromptDialog extends React.Component {
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} defaultOptions = {this.props.autocomplete} loadOptions={this.filterOptions.bind(this)}  onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
 			inputComp = <Select styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
