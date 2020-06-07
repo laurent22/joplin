@@ -185,7 +185,6 @@ describe('models_Folder', function() {
 	}));
 
 	it('should recursively find folder path', asyncTest(async () => {
-
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -217,5 +216,11 @@ describe('models_Folder', function() {
 		expect(sortedFolderTree[1].id).toBe(f4.id);
 		expect(sortedFolderTree[1].children[0].id).toBe(f5.id);
 		expect(sortedFolderTree[2].id).toBe(f6.id);
+	}));
+
+	it('should not allow setting a notebook parent as itself', asyncTest(async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));
+		expect(hasThrown).toBe(true);
 	}));
 });
