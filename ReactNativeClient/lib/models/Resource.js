@@ -369,7 +369,7 @@ class Resource extends BaseItem {
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
 			is_conflict: 1,
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
