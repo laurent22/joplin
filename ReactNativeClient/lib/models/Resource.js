@@ -207,11 +207,11 @@ class Resource extends BaseItem {
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');

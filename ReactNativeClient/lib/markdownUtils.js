@@ -9,11 +9,6 @@ const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
 
 const markdownUtils = {
-	// Not really escaping because that's not supported by marked.js
-	escapeLinkText(text) {
-		return text.replace(/(\[|\]|\(|\))/g, '_');
-	},
-
 	// Titles for markdown links only need escaping for [ and ]
 	escapeTitleText(text) {
 		return text.replace(/(\[|\])/g, '\\$1');
