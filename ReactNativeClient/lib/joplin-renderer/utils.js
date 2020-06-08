@@ -138,7 +138,7 @@ utils.resourceReplacement = function(ResourceModel, src, resources, resourceBase
 	}
 
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
-	const type = ResourceModel.isSupportedMimeType(mime);
+	const type = ResourceModel.mimeTypeToMediaType(mime);
 	if (type != 'unknown') {
 		let newSrc = `./${ResourceModel.filename(resource)}`;
 		if (resourceBaseUrl) newSrc = resourceBaseUrl + newSrc;
