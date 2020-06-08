@@ -846,8 +846,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async folderPickerOptions_valueChanged(itemValue) {
 		const note = this.state.note;
+		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
-		if (!note.id) {
+		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
 			await Note.moveToFolder(note.id, itemValue);
