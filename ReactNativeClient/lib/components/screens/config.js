@@ -1,8 +1,6 @@
-import { PermissionsAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
-
 const React = require('react');
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
@@ -20,6 +18,7 @@ const { time } = require('lib/time-utils');
 const { shim } = require('lib/shim');
 const SearchEngine = require('lib/services/SearchEngine');
 const RNFS = require('react-native-fs');
+const checkPermissions = require('lib/checkPermissions.js').default;
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -101,27 +100,29 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const exportPath = this.state.profileExportPath;
 			const resourcePath = `${exportPath}/resources`;
 			try {
-
-				{
-					const copyFiles = async (source, dest) => {
-						await shim.fsDriver().mkdir(dest);
-
-						const files = await shim.fsDriver().readDirStats(source);
-
-						for (const file of files) {
-							const source_ = `${source}/${file.path}`;
-							const dest_ = `${dest}/${file.path}`;
-							if (!file.isDirectory()) {
-								reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
-								await shim.fsDriver().copy(source_, dest_);
-							} else {
-								await copyFiles(source_, dest_);
-							}
-						}
-					};
-					await copyFiles(dbPath, exportPath);
-					await copyFiles(Setting.value('resourceDir'), resourcePath);
+				const hasPermissions = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+				if (!hasPermissions) {
+					throw new Error('Permission denied');
 				}
+
+				const copyFiles = async (source, dest) => {
+					await shim.fsDriver().mkdir(dest);
+
+					const files = await shim.fsDriver().readDirStats(source);
+
+					for (const file of files) {
+						const source_ = `${source}/${file.path}`;
+						const dest_ = `${dest}/${file.path}`;
+						if (!file.isDirectory()) {
+							reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
+							await shim.fsDriver().copy(source_, dest_);
+						} else {
+							await copyFiles(source_, dest_);
+						}
+					}
+				};
+				await copyFiles(dbPath, exportPath);
+				await copyFiles(Setting.value('resourceDir'), resourcePath);
 
 				alert('Profile has been exported!');
 			} catch (error) {
@@ -141,16 +142,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			// Not implemented yet
 			return true;
 		}
-		const hasPermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-		if (hasPermission) {
-			return true;
-		}
-		const requestResult = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
 			title: _('Information'),
 			message: _('In order to use file system synchronisation your permission to write to external storage is required.'),
 			buttonPositive: _('OK'),
 		});
-		return requestResult === PermissionsAndroid.RESULTS.GRANTED;
 	}
 
 	UNSAFE_componentWillMount() {
