@@ -84,7 +84,7 @@ class NoteBodyViewer extends Component {
 		injectedJs.push(shim.injectedJs('webviewLib'));
 		// Note that this postMessage function accepts two arguments, for compatibility with the desktop version, but
 		// the ReactNativeWebView actually supports only one, so the second arg is ignored (and currently not needed for the mobile app).
-		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { console.info("AAAAAAAAAAAAAAAAA"); return window.ReactNativeWebView.postMessage(msg); };');
+		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {
