@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
 
-const CodeMirror = require('codemirror');
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
@@ -25,6 +24,9 @@ import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
+
+const CodeMirror = require('codemirror');
+const Setting = require('lib/models/Setting');
 
 export interface CancelledKeys {
 	mac: string[],
@@ -122,13 +124,13 @@ function Editor(props: EditorProps, ref: any) {
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
-			inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
+			inputStyle: 'contenteditable', // contenteditable loses cursor position on focus change, use textarea instead
 			lineWrapping: true,
 			lineNumbers: false,
 			scrollPastEnd: true,
 			indentWithTabs: true,
 			indentUnit: 4,
-			spellcheck: true,
+			spellcheck: Setting.value('spellcheck'),
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
 			extraKeys: { 'Enter': 'insertListElement',

@@ -5,11 +5,11 @@ const Mutex = require('async-mutex').Mutex;
 
 class BaseModel {
 	static modelType() {
-		throw new Error('Must be overriden');
+		throw new Error('Must be overridden');
 	}
 
 	static tableName() {
-		throw new Error('Must be overriden');
+		throw new Error('Must be overridden');
 	}
 
 	static setDb(db) {

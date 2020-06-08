@@ -13,6 +13,7 @@ const Resource = require('lib/models/Resource');
 const { themeStyle, buildStyle } = require('../../../../theme.js');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
+const Setting = require('lib/models/Setting');
 
 function markupRenderOptions(override:any = null) {
 	return {
@@ -491,7 +492,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				resize: false,
 				icons: 'Joplin',
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
-				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
+				plugins: 'noneditable link joplinLists hr searchreplace codesample table spellchecker',
+				browser_spellcheck: Setting.value('spellcheck'),
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
@@ -500,8 +502,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
-				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
+				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime', // TODO: Look into spellchecker toolbar plugin
 				localization_function: _,
+				// TODO: spellchecker_callback function for context menu
 				contextmenu: contextMenuItemNames.join(' '),
 				setup: (editor:any) => {
 

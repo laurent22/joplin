@@ -240,47 +240,80 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, []);
 
 	const onEditorContextMenu = useCallback(() => {
-		const menu = new Menu();
 
-		const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-		const clipboardText = clipboard.readText();
+		bridge().window().webContents.on('context-menu', (_event: any, params: any) => {
+			const menu = new Menu();
 
-		menu.append(
-			new MenuItem({
-				label: _('Cut'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCutText();
-				},
-			})
-		);
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			const clipboardText = clipboard.readText();
 
-		menu.append(
-			new MenuItem({
-				label: _('Copy'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCopyText();
-				},
-			})
-		);
+			if (params.misspelledWord) {
+				for (const suggestion of params.dictionarySuggestions) {
+					menu.append(new MenuItem({
+						label: suggestion,
+						enabled: true,
+						click: async () => editorRef.current.replaceSelection(suggestion),
+					}));
+				}
 
-		menu.append(
-			new MenuItem({
-				label: _('Paste'),
-				enabled: true,
-				click: async () => {
-					if (clipboardText) {
-						editorPasteText();
-					} else {
+				menu.append(
+					new MenuItem({
+						type: 'separator',
+					})
+				);
+
+				menu.append(
+					new MenuItem({
+						label: _(`Add "${params.misspelledWord}" to dictionary`),
+						click: async () => bridge().window().webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord),
+					})
+				);
+
+				menu.append(
+					new MenuItem({
+						type: 'separator',
+					})
+				);
+			}
+
+			menu.append(
+				new MenuItem({
+					label: _('Cut'),
+					enabled: hasSelectedText,
+					click: async () => {
+						editorCutText();
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
+					label: _('Copy'),
+					enabled: hasSelectedText,
+					click: async () => {
+						editorCopyText();
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
+					label: _('Paste'),
+					enabled: true,
+					click: async () => {
+						if (clipboardText) {
+							editorPasteText();
+						} else {
 						// To handle pasting images
-						onEditorPaste();
-					}
-				},
-			})
-		);
+							onEditorPaste();
+						}
+					},
+				})
+			);
 
-		menu.popup(bridge().window());
+			menu.popup(bridge().window());
+		});
+
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
 	const webview_domReady = useCallback(() => {

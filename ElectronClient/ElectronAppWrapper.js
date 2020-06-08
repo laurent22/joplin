@@ -67,6 +67,7 @@ class ElectronAppWrapper {
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
+				spellcheck: true,
 			},
 			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting

@@ -43,7 +43,7 @@ class Setting extends BaseModel {
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
-		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
+		// if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		const themeOptions = () => {
@@ -252,7 +252,13 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
-
+			spellcheck: {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Enable Spellcheck (BETA: Only works with CodeMirror)'),
+			},
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: Setting.TYPE_INT,
