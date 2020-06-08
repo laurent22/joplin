@@ -61,9 +61,9 @@ class NoteBodyViewer extends Component {
 				}, 100);
 			},
 			highlightedKeywords: this.props.highlightedKeywords,
-			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
+			resources: this.props.noteResources,
 			codeTheme: theme.codeThemeCss,
-			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
+			postMessageSyntax: 'window.joplinPostMessage_',
 		};
 
 		const result = await this.markupToHtml_.render(
@@ -82,6 +82,9 @@ class NoteBodyViewer extends Component {
 
 		const injectedJs = [];
 		injectedJs.push(shim.injectedJs('webviewLib'));
+		// Note that this postMessage function accepts two arguments, for compatibility with the desktop version, but
+		// the ReactNativeWebView actually supports only one, so the second arg is ignored (and currently not needed for the mobile app).
+		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { console.info("AAAAAAAAAAAAAAAAA"); return window.ReactNativeWebView.postMessage(msg); };');
 		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {
