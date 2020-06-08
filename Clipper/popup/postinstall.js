@@ -9,3 +9,8 @@ const sourcePath = `${__dirname}../../../ReactNativeClient/lib/randomClipperPort
 if (fs.pathExistsSync(sourcePath)) {
 	fs.copySync(sourcePath, `${__dirname}/../src/randomClipperPort.js`);
 }
+
+// These files give warnings when loading the extension in Chrome, in dev mode
+fs.removeSync(`${__dirname}/node_modules/public-encrypt/test/test_key.pem`);
+fs.removeSync(`${__dirname}/node_modules/public-encrypt/test/test_rsa_pubkey.pem`);
+fs.removeSync(`${__dirname}/node_modules/public-encrypt/test/test_rsa_privkey.pem`);
