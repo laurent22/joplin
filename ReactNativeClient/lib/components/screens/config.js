@@ -1,8 +1,5 @@
-import { PermissionsAndroid } from 'react-native';
-import Slider from '@react-native-community/slider';
-
 const React = require('react');
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
@@ -20,9 +17,7 @@ const { time } = require('lib/time-utils');
 const { shim } = require('lib/shim');
 const SearchEngine = require('lib/services/SearchEngine');
 const RNFS = require('react-native-fs');
-
 const checkPermissions = require('lib/checkPermissions.js').default;
-import { PermissionsAndroid } from 'react-native';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
