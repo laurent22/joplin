@@ -720,6 +720,7 @@ class AppComponent extends React.Component {
 		return (
 			<SideMenu
 				menu={sideMenuContent}
+				edgeHitWidth={5}
 				menuPosition={menuPosition}
 				onChange={(isOpen) => this.sideMenu_change(isOpen)}
 				onSliding={(percent) => {
