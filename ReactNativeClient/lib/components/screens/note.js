@@ -1,4 +1,5 @@
 import FileViewer from 'react-native-file-viewer';
+import AsyncActionQueue from '../../AsyncActionQueue';
 
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
@@ -73,6 +74,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.selection = null;
+
+		this.saveActionQueues_ = {};
 
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
@@ -349,6 +352,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.state.fromShare) {
 			ShareExtension.close();
 		}
+
+		this.saveActionQueue(this.state.note.id).processAllNow();
 	}
 
 	title_changeText(text) {
@@ -362,15 +367,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	scheduleSave() {
-		if (this.scheduleSaveIID_) {
-			clearTimeout(this.scheduleSaveIID_);
-			this.scheduleSaveIID_ = null;
-		}
+	makeSaveAction() {
+		return async () => {
+			return shared.saveNoteButton_press(this);
+		};
+	}
 
-		this.scheduleSaveIID_ = setTimeout(async () => {
-			await shared.saveNoteButton_press(this);
-		}, 1000);
+	saveActionQueue(noteId) {
+		if (!this.saveActionQueues_[noteId]) {
+			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
+		}
+		return this.saveActionQueues_[noteId];
+	}
+
+	scheduleSave() {
+		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
 	async saveNoteButton_press(folderId = null) {
@@ -1044,7 +1055,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		const showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		// Save button is not really needed anymore with the improved save logic
+		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;

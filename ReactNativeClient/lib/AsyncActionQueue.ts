@@ -67,7 +67,13 @@ export default class AsyncActionQueue {
 		this.processing_ = false;
 	}
 
-	waitForAllDone() {
+	// Currently waitForAllDone() already finishes all the actions
+	// as quickly as possible so we can make it an alias.
+	async processAllNow() {
+		return this.waitForAllDone();
+	}
+
+	async waitForAllDone() {
 		if (!this.queue_.length) return Promise.resolve();
 
 		this.scheduleProcessing(1);
