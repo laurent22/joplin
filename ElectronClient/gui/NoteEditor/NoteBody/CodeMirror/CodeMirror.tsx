@@ -240,8 +240,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, []);
 
 	const onEditorContextMenu = useCallback(() => {
-
-		bridge().window().webContents.on('context-menu', (_event: any, params: any) => {
+		bridge().window().webContents.once('context-menu', (_event: any, params: any) => {
 			const menu = new Menu();
 
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
@@ -264,7 +263,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 				menu.append(
 					new MenuItem({
-						label: _(`Add "${params.misspelledWord}" to dictionary`),
+						label: _('Add "%s" to dictionary', params.misspelledWord),
 						click: async () => bridge().window().webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord),
 					})
 				);

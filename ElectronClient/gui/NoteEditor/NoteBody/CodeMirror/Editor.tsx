@@ -124,13 +124,13 @@ function Editor(props: EditorProps, ref: any) {
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
-			inputStyle: 'contenteditable', // contenteditable loses cursor position on focus change, use textarea instead
+			inputStyle: 'contenteditable',
 			lineWrapping: true,
 			lineNumbers: false,
 			scrollPastEnd: true,
 			indentWithTabs: true,
 			indentUnit: 4,
-			spellcheck: Setting.value('spellcheck'),
+			spellcheck: Setting.value('spellcheck.enabled'),
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
 			extraKeys: { 'Enter': 'insertListElement',

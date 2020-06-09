@@ -252,12 +252,12 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
-			spellcheck: {
+			'spellcheck.enabled': {
 				value: true,
 				type: Setting.TYPE_BOOL,
 				public: true,
 				appTypes: ['desktop'],
-				label: () => _('Enable Spellcheck (BETA: Only works with CodeMirror)'),
+				label: () => _('Enable spellcheck'),
 			},
 			theme: {
 				value: Setting.THEME_LIGHT,
