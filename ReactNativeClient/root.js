@@ -369,6 +369,10 @@ function resourceFetcher_downloadComplete(event) {
 	}
 }
 
+function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
+	ResourceFetcher.instance().scheduleAutoAddResources();
+}
+
 async function initialize(dispatch) {
 	shimInit();
 
@@ -498,6 +502,7 @@ async function initialize(dispatch) {
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
