@@ -9,8 +9,7 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');
 const shared = require('lib/components/shared/encryption-config-shared.js');
-const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
+const dialogs = require('lib/components/dialogs.js').default;
 
 class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -141,7 +140,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
-				await dialogs.error(this, error.message);
+				await dialogs.error(error.message);
 			}
 		};
 
@@ -212,13 +211,13 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		const onToggleButtonClick = async () => {
 			if (this.props.encryptionEnabled) {
-				const ok = await dialogs.confirm(this, _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+				const ok = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 				if (!ok) return;
 
 				try {
 					await EncryptionService.instance().disableEncryption();
 				} catch (error) {
-					await dialogs.error(this, error.message);
+					await dialogs.error(error.message);
 				}
 			} else {
 				this.setState({
@@ -285,11 +284,6 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					{nonExistingMasterKeySection}
 					<View style={{ flex: 1, height: 20 }}></View>
 				</ScrollView>
-				<DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
 			</View>
 		);
 	}

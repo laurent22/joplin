@@ -6,7 +6,7 @@ const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { dialogs } = require('lib/dialogs.js');
+const dialogs = require('lib/components/dialogs.js').default;
 const { themeStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale.js');
 
@@ -84,7 +84,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		try {
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
-			dialogs.error(this, _('The notebook could not be saved: %s', error.message));
+			dialogs.error(_('The notebook could not be saved: %s', error.message));
 			return;
 		}
 
@@ -108,11 +108,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
 				<TextInput placeholder={_('Enter notebook title')} placeholderTextColor={theme.colorFaded} underlineColorAndroid={theme.dividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
-				<dialogs.DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
 			</View>
 		);
 	}

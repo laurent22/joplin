@@ -31,6 +31,7 @@ const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
 const RevisionService = require('lib/services/RevisionService');
 const KvStore = require('lib/services/KvStore');
+const { Dialog, initializeDialogs } = require('lib/components/dialogs.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -607,6 +608,10 @@ class AppComponent extends React.Component {
 		this.onAppStateChange_ = () => {
 			PoorManIntervals.update();
 		};
+
+		this.dialogRef = React.createRef();
+
+		initializeDialogs(this.dialogRef);
 	}
 
 	async componentDidMount() {
@@ -749,6 +754,7 @@ class AppComponent extends React.Component {
 						</SafeAreaView>
 					</MenuContext>
 				</SideMenu>
+				<Dialog ref={this.dialogRef}/>
 			</View>
 		);
 	}
