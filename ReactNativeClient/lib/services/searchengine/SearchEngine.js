@@ -64,13 +64,13 @@ class SearchEngine {
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
-			const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+			const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
-				queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [n.id, n.title, n.body] });
+				queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id] });
 			}
 
 			await this.db().transactionExecBatch(queries);
@@ -140,7 +140,7 @@ class SearchEngine {
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);
-				const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+				const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 				const queries = [];
 
 				for (let i = 0; i < changes.length; i++) {
@@ -151,7 +151,7 @@ class SearchEngine {
 						const note = this.noteById_(notes, change.item_id);
 						if (note) {
 							const n = this.normalizeNote_(note);
-							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
@@ -445,27 +445,28 @@ class SearchEngine {
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
-			return this.basicSearch(searchString);
+			const rows = await this.basicSearch(searchString);
+			const parsedQuery = this.parseQuery(searchString);
+			this.processResults_(rows, parsedQuery, true);
+			return rows;
 		} else {
-			const parsedQuery = this.parseQuery(searchString.replace(/-/g, ' '));
+			// SEARCH_TYPE_FTS
+			// FTS will ignore all special characters, like "-" in the index. So if
+			// we search for "this-phrase" it won't find it because it will only
+			// see "this phrase" in the index. Because of this, we remove the dashes
+			// when searching.
+			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+
+			// commented out because of search syntax like day-0 or -tag:something we can't do this.
+			// searchString = searchString.replace(/-/g, ' ')
+
+			const parsedQuery = this.parseQuery(searchString);
 
 			const filters = filterParser(searchString);
 			const { query, params } = queryBuilder(filters);
-			// console.log(query);
-			// console.log(params);
 			try {
-
-				// const startTime = Date.now();
-
 				const rows = await this.db().selectAll(query, params);
-
-				// const timeTaken = Date.now() - startTime;
-				// console.log(`Time taken for query '${searchString}': ${timeTaken}ms`);
-				// console.log(`Rows returned ${rows.length}`);
-
-				// const
-				this.processResults_(rows, this.parseQuery(rows, parsedQuery));
-				// console.log(`Rows returned after search for ${searchString}: ${rows}`);
+				this.processResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

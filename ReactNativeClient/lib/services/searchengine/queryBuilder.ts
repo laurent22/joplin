@@ -50,20 +50,20 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 		const timeDuration = match[1]; // eg. day, week, month, year
 		const number = parseInt(match[2], 10); // eg. 1, 12, 101
 		const timeFrom = time.goBackInTime(number, timeDuration); // eg. goBackInTime(1, 'day')
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ?)`);
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ?)`);
 		params.push(timeFrom);
 	} else if (yyyymmdd.test(term.value)) {
 		const msOfDay = getUnixMs(term.value); // unixMs from YYYYMMDD
 		const msOfNextDay = msOfDay + (60 * 60 * 24 * 1000);
 
 		if (relation == 'LESS') {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time < ?)`);
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time < ?)`);
 			params.push(msOfNextDay.toString());
 		} else if (relation == 'GREATER') {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ?)`);
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ?)`);
 			params.push(msOfDay.toString());
 		} else {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
 			params.push(msOfDay.toString(), msOfNextDay.toString());
 		}
 
@@ -71,7 +71,7 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 		const [date1, date2] = term.value.split('..');
 		const startDate = getUnixMs(date1);
 		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
 		params.push(startDate.toString(), endDate.toString());
 	} else if (yyyymm_yyyymm.test(term.value)) {
 		let [date1, date2] = term.value.split('..');
@@ -91,7 +91,7 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 
 		const startDate = getUnixMs(date1);
 		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
 		params.push(startDate.toString(), endDate.toString());
 	} else if (yyyy_yyyy.test(term.value)) {
 		let [date1, date2] = term.value.split('..');
@@ -101,7 +101,7 @@ const makeDateFilter = (type: string, filters: Map<string, Array<Term>>, queryPa
 
 		const startDate = getUnixMs(date1);
 		const endDate = getUnixMs(date2); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes where notes.user_${type}_time >= ? AND notes.user_${type}_time < ?)`);
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
 		params.push(startDate.toString(), endDate.toString());
 	} else {
 		throw new Error(`Date value of ${type} in unknown format: ${term.value}`);
@@ -139,7 +139,7 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 
 	queryParts.push(`SELECT
 	notes_fts.id,
-	notes_fts.title AS normalized_title,
+	notes_fts.title,
 	offsets(notes_fts) AS offsets,
 	notes_fts.user_updated_time,
 	notes_fts.is_todo,
@@ -148,7 +148,7 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	FROM notes_fts WHERE 1`);
 
 	if (filters.has('tag')) {
-		queryParts.push('AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)');
+		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)');
 		withs.push(tagFilter(filters.get('tag')));
 		filters.get('tag').forEach((term) => params.push(term.value));
 	}
@@ -157,15 +157,15 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 		const terms = filters.get('notebook');
 		withs.push(noteBookFilter(terms));
 		terms.forEach(term => params.push(term.value));
-		queryParts.push('AND ROWID IN (SELECT notes.ROWID from (child_notebooks) JOIN notes on notes.parent_id=child_notebooks.id)');
+		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (child_notebooks) JOIN notes_normalized on child_notebooks.id=notes_normalized.parent_id)');
 	}
 
 	if (filters.has('type')) {
 		const term = filters.get('type')[0];
 		if (term.value === 'todo') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1)');
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)');
 		} else if (term.value == 'note') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 0)');
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)');
 		} else {
 			throw new Error(`Invalid argument for filter todo: ${term.value}`);
 		}
@@ -174,9 +174,9 @@ export default function queryBuilder(filters: Map<string, Array<Term>>) {
 	if (filters.has('iscompleted')) {
 		const term = filters.get('iscompleted')[0];
 		if (term.value === 'true' || term.value === 'yes' || term.value === '1') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed != 0)');
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)');
 		} else if (term.value === 'false' || term.value === 'no' || term.value === '0') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes where notes.is_todo = 1 AND notes.todo_completed = 0)');
+			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)');
 		} else {
 			throw new Error(`Invalid argument for filter iscompleted: ${term.value}`);
 		}

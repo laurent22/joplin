@@ -697,48 +697,6 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 29) {
 				queries.push('ALTER TABLE version ADD COLUMN table_fields_version INT NOT NULL DEFAULT 0');
 			}
-			if (targetVersion == 30) {
-				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_update');
-				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_delete');
-				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
-				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
-				queries.push('DROP TABLE IF EXISTS notes_fts');
-
-				const newVirtualTableSql = `
-					CREATE VIRTUAL TABLE notes_fts USING fts4(
-						content="notes",
-						notindexed="id",
-						notindexed="user_created_time",
-						notindexed="user_updated_time",
-						notindexed="is_todo",
-						notindexed="todo_completed",
-						notindexed="parent_id",
-						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id
-					);`
-				;
-
-				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
-
-				queries.push('INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-
-				queries.push(`
-					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes BEGIN
-						DELETE FROM notes_fts WHERE docid=old.rowid;
-					END;`);
-				queries.push(`
-					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes BEGIN
-						DELETE FROM notes_fts WHERE docid=old.rowid;
-					END;`);
-				queries.push(
-					`CREATE TRIGGER notes_after_update AFTER UPDATE ON notes BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id)
-						SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
-					END`);
-				queries.push(
-					`CREATE TRIGGER notes_after_insert AFTER INSERT ON notes BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND new.rowid = notes.rowid;
-					END`);
-			}
 
 			if (targetVersion == 30) {
 				// Change the type of the "order" field from INT to NUMERIC
@@ -797,6 +755,68 @@ class JoplinDatabase extends Database {
 							LEFT JOIN notes on notes.id = nt.note_id 
 						WHERE notes.id IS NOT NULL 
 						GROUP BY tags.id`);
+			}
+
+			if (targetVersion == 32) {
+			
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_delete');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
+				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
+
+				queries.push('DROP TABLE IF EXISTS notes_normalized');
+				queries.push('DROP INDEX IF EXISTS notes_normalized_id');
+				queries.push('DROP TABLE IF EXISTS notes_fts');
+
+
+				const notesNormalized = `
+					CREATE TABLE notes_normalized (
+						id TEXT NOT NULL,
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT "",
+						user_created_time INT NOT NULL DEFAULT 0,
+						user_updated_time INT NOT NULL DEFAULT 0,
+						is_todo INT NOT NULL DEFAULT 0,
+						todo_completed INT NOT NULL DEFAULT 0,
+						parent_id TEXT NOT NULL DEFAULT ""
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(notesNormalized)[0]);
+
+				queries.push('CREATE INDEX notes_normalized_id ON notes_normalized (id)');
+
+				const newVirtualTableSql = `
+					CREATE VIRTUAL TABLE notes_fts USING fts4(
+						content="notes_normalized",
+						notindexed="id",
+						notindexed="user_created_time",
+						notindexed="user_updated_time",
+						notindexed="is_todo",
+						notindexed="todo_completed",
+						notindexed="parent_id",
+						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id
+					);`
+				;
+
+				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
+
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

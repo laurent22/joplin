@@ -167,9 +167,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by tags', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'Peace Talks', body: 'Battle Ground' });
-		const n2 = await Note.save({ title: 'Mouse', body: 'Mister' });
-		const n3 = await Note.save({ title: 'Dresden Files', body: 'Harry Dresden' });
+		const n1 = await Note.save({ title: 'peace talks', body: 'battle ground' });
+		const n2 = await Note.save({ title: 'mouse', body: 'mister' });
+		const n3 = await Note.save({ title: 'dresden files', body: 'harry dresden' });
 
 		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
 		await Tag.setNoteTagsByTitles(n2.id, ['tag2', 'tag3']);
