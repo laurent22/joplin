@@ -444,7 +444,7 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-70.sqlite' });
+			await db.open({ name: 'joplin-71.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -722,30 +722,34 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
+		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+
 		return (
-			<SideMenu
-				menu={sideMenuContent}
-				edgeHitWidth={5}
-				menuPosition={menuPosition}
-				onChange={(isOpen) => this.sideMenu_change(isOpen)}
-				onSliding={(percent) => {
-					this.props.dispatch({
-						type: 'SIDE_MENU_OPEN_PERCENT',
-						value: percent,
-					});
-				}}
-			>
-				<StatusBar barStyle="dark-content" />
-				<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor  }}>
-					<SafeAreaView style={{ flex: 1 }}>
-						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-							<AppNav screens={appNavInit} />
-						</View>
-						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-					</SafeAreaView>
-				</MenuContext>
-			</SideMenu>
+			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+				<SideMenu
+					menu={sideMenuContent}
+					edgeHitWidth={5}
+					menuPosition={menuPosition}
+					onChange={(isOpen) => this.sideMenu_change(isOpen)}
+					onSliding={(percent) => {
+						this.props.dispatch({
+							type: 'SIDE_MENU_OPEN_PERCENT',
+							value: percent,
+						});
+					}}
+				>
+					<StatusBar barStyle={statusBarStyle} />
+					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+						<SafeAreaView style={{ flex: 1 }}>
+							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+								<AppNav screens={appNavInit} />
+							</View>
+							<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+						</SafeAreaView>
+					</MenuContext>
+				</SideMenu>
+			</View>
 		);
 	}
 }

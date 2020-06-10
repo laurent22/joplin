@@ -19,7 +19,7 @@ import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
 import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
 
-const { themeStyle } = require('../../theme.js');
+const { themeStyle } = require('lib/theme');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');

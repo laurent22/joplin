@@ -222,7 +222,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		});
 
 		styles.settingControl.borderBottomWidth = 1;
-		styles.settingControl.borderBottomColor = theme.strongDividerColor;
+		styles.settingControl.borderBottomColor = theme.dividerColor;
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
 		styles.switchSettingText.width = '80%';
@@ -388,7 +388,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						<Text key="label" style={this.styles().switchSettingText}>
 							{md.label()}
 						</Text>
-						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.strongDividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 					{descriptionComp}
 				</View>

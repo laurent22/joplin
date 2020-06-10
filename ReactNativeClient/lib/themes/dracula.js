@@ -14,7 +14,6 @@ const draculaStyle = {
 	urlColor: '#8be9fd',
 
 	backgroundColor2: '#21222C',
-	depthColor: 'rgb(200, 200, 200, OPACITY)',
 	color2: '#bd93f9',
 	selectedColor2: '#44475a',
 	colorError2: '#ff5555',
@@ -24,14 +23,10 @@ const draculaStyle = {
 
 	warningBackgroundColor: '#ffb86c',
 
-	htmlColor: '#f8f8f2',
-	htmlBackgroundColor: '#282a36',
-	htmlDividerColor: '#f8f8f2',
-	htmlLinkColor: '#8be9fd',
-	htmlTableBackgroundColor: '#6272a4',
-	htmlCodeBackgroundColor: '#44475a',
-	htmlCodeBorderColor: '#f8f8f2',
-	htmlCodeColor: '#50fa7b',
+	tableBackgroundColor: '#6272a4',
+	codeBackgroundColor: '#44475a',
+	codeBorderColor: '#f8f8f2',
+	codeColor: '#50fa7b',
 
 	aceEditorTheme: 'dracula',
 	codeMirrorTheme: 'dracula',

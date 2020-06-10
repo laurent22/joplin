@@ -1,20 +1,13 @@
 const React = require('react');
 
-const { StyleSheet, View, Text, Button, FlatList } = require('react-native');
+const { View, Text, Button, FlatList } = require('react-native');
 const Setting = require('lib/models/Setting.js');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
-
-const styles = StyleSheet.create({
-	body: {
-		flex: 1,
-		margin: globalStyle.margin,
-	},
-});
+const { themeStyle } = require('lib/components/global-style.js');
 
 class StatusScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -36,6 +29,16 @@ class StatusScreenComponent extends BaseScreenComponent {
 		const service = new ReportService();
 		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+		return {
+			body: {
+				flex: 1,
+				margin: theme.margin,
+			},
+		};
 	}
 
 	render() {
@@ -137,7 +140,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Status')} />
-				<View style={styles.body}>{body}</View>
+				<View style={this.styles().body}>{body}</View>
 				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
 			</View>
 		);

@@ -2,35 +2,51 @@ const Setting = require('lib/models/Setting.js');
 const Color = require('color');
 
 const themes = {
-	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
-	[Setting.THEME_DARK]: require('./gui/style/theme/dark'),
-	[Setting.THEME_DRACULA]: require('./gui/style/theme/dracula'),
-	[Setting.THEME_SOLARIZED_LIGHT]: require('./gui/style/theme/solarizedLight'),
-	[Setting.THEME_SOLARIZED_DARK]: require('./gui/style/theme/solarizedDark'),
-	[Setting.THEME_NORD]: require('./gui/style/theme/nord'),
-	[Setting.THEME_ARITIM_DARK]: require('./gui/style/theme/aritimDark'),
+	[Setting.THEME_LIGHT]: require('./themes/light'),
+	[Setting.THEME_DARK]: require('./themes/dark'),
+	[Setting.THEME_DRACULA]: require('./themes/dracula'),
+	[Setting.THEME_SOLARIZED_LIGHT]: require('./themes/solarizedLight'),
+	[Setting.THEME_SOLARIZED_DARK]: require('./themes/solarizedDark'),
+	[Setting.THEME_NORD]: require('./themes/nord'),
+	[Setting.THEME_ARITIM_DARK]: require('./themes/aritimDark'),
+	[Setting.THEME_OLED_DARK]: require('./themes/oledDark'),
 };
+
+function themeById(themeId) {
+	if (!themes[themeId]) throw new Error(`Invalid theme ID: ${themeId}`);
+	const output = Object.assign({}, themes[themeId]);
+
+	if (!output.headerBackgroundColor) {
+		output.headerBackgroundColor = output.appearance === 'light' ? '#F0F0F0' : '#2D3136';
+	}
+
+	if (!output.textSelectionColor) {
+		output.textSelectionColor = output.appearance === 'light' ? '#0096FF' : '#00AEFF';
+	}
+
+	if (!output.colorBright2) {
+		output.colorBright2 = output.appearance === 'light' ? '#ffffff' : '#ffffff';
+	}
+
+	return output;
+}
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
 const globalStyle = {
-	fontSize: 12,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	fontSizeSmaller: 14,
 	disabledOpacity: 0.3,
 	buttonMinWidth: 50,
 	buttonMinHeight: 30,
 	editorFontSize: 12,
 	textAreaLineHeight: 17,
-
+	lineHeight: '1.6em',
 	headerHeight: 35,
 	headerButtonHPadding: 6,
-
 	toolbarHeight: 35,
-
 	appearance: 'light',
 };
 
@@ -38,7 +54,6 @@ globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
-globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
 globalStyle.icon = {
 	fontSize: 30,
@@ -248,20 +263,15 @@ function themeStyle(theme) {
 	// and computed here to allow them to respond to settings changes
 	// without the need to restart
 	const fontSizes = {
-		fontSize: Math.round(globalStyle.fontSize * zoomRatio),
+		fontSize: Math.round(12 * zoomRatio),
 		editorFontSize: editorFontSize,
 		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
-
-		// For WebView - must correspond to the properties above
-		htmlFontSize: `${Math.round(15 * zoomRatio)}px`,
-		htmlLineHeight: '1.6em', // Math.round(20 * zoomRatio) + 'px'
-
-		htmlCodeFontSize: '.9em',
 	};
+
+	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
 
 	let output = {};
 	output.zoomRatio = zoomRatio;
-	output.editorFontSize = editorFontSize;
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
@@ -341,4 +351,4 @@ function buildStyle(cacheKey, themeId, callback) {
 	return cachedStyles_[cacheKey].style;
 }
 
-module.exports = { themeStyle, buildStyle };
+module.exports = { themeStyle, buildStyle, themeById };

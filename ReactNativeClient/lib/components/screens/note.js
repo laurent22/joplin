@@ -269,7 +269,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 			markdownButtons: {
 				borderColor: theme.dividerColor,
-				color: theme.htmlLinkColor,
+				color: theme.urlColor,
 			},
 		};
 
