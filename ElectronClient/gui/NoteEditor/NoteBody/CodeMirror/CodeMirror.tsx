@@ -340,9 +340,26 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+			// TODO: remove this options hack when aceeditor is removed
+			// Currently the webviewRef will send out an ipcMessage to set the results count
+			// Also setting it here will start an infinite loop of repeating the search
+			// Unfortunately we can't remove the function in the webview setMarkers
+			// until the aceeditor is remove.
+			// The below search is more accurate than the webview based one as it searches
+			// the text and not rendered html (rendered html fails if there is a match
+			// in a katex block)
+			let options = { notFromAce: true };
+			if (props.searchMarkers.options) {
+				options = Object.assign(props.searchMarkers.options, options);
+			}
+			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, options);
+			if (editorRef.current) {
+
+				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
+				props.setLocalSearchResultCount(matches);
+			}
 		}
-	}, [props.searchMarkers, renderedBody]);
+	}, [props.searchMarkers, props.setLocalSearchResultCount, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };

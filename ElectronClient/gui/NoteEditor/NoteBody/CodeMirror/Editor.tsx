@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
-
-const CodeMirror = require('codemirror');
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/scrollpastend';
+import 'codemirror/addon/search/searchcursor';
 
 import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useEditorSearch from './utils/useEditorSearch';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -25,6 +25,8 @@ import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
+
+const CodeMirror = require('codemirror');
 
 export interface CancelledKeys {
 	mac: string[],
@@ -56,6 +58,7 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useEditorSearch(CodeMirror);
 
 	useEffect(() => {
 		if (props.cancelledKeys) {

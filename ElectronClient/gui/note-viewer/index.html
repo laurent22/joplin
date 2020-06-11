@@ -272,7 +272,8 @@
 			let elementIndex = 0;
 
 			const onEachElement = (element) => {
-				if (!('selectedIndex' in options)) return;
+				// TODO: remove notFromAce hack when removing aceeditor
+				if (!('selectedIndex' in options) || 'notFromAce' in options) return;
 
 				if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
 					markSelectedElement_ = element;
@@ -298,13 +299,19 @@
 				}, markKeywordOptions);
 			}
 
-			ipcProxySendToHost('setMarkerCount', elementIndex);
+			// TODO: Remove this block when removing Ace
+			// HACK: Aceeditor uses this view to handle all the searching
+			// The newer editor wont and this needs to be disabled in order to 
+			// prevent an infinite loop
+			if (!('notFromAce' in options)) {
+				ipcProxySendToHost('setMarkerCount', elementIndex);
 
-			// We only scroll the element into view if the search just happened. So when the user type the search
-			// or select the next/previous result, we scroll into view. However for other actions that trigger a
-			// re-render, we don't scroll as this is normally not wanted.
-			// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
-			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
+				// We only scroll the element into view if the search just happened. So when the user type the search
+				// or select the next/previous result, we scroll into view. However for other actions that trigger a
+				// re-render, we don't scroll as this is normally not wanted.
+				// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
+				if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
+			}
 		}
 
 		let markLoader_ = { state: 'idle', whenDone: null };
