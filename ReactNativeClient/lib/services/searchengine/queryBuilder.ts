@@ -7,10 +7,15 @@ const tagFilter = (tags: string[]) => {
 	return result;
 };
 
-const noteBookFilter = (names: string[]) => {
+const noteBookFilter = (names: string[], negated: boolean = false) => {
 	const likes = new Array(names.length).fill('folders.title LIKE ?');
-	return `child_notebooks(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
-union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
+	if (negated) {
+		return `child_notebooks_negated(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
+		union all select folders.id from folders JOIN child_notebooks_negated on folders.parent_id=child_notebooks_negated.id)`;
+	} else {
+		return `child_notebooks(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
+		union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
+	}
 };
 
 const hyphenateDate = (date: string) => `${date.slice(0,4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
@@ -103,9 +108,7 @@ const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
 	if (name === 'title' || name === 'body') {
 		return filters.get(name).map(value => `${name}:${value}`);
 	} else if (name === 'text') {
-		return filters.get(name);// else if (term.relation === 'NOT') { return `-${term.value}`; } else { return `${term.relation} ${term.value}`; }
-	} else if (name === '-text') {
-		return filters.get(name).map(value => `-${value}`);
+		return filters.get(name);
 	} else {
 		throw new Error(`Invalid filter for match query: ${name}`);
 	}
@@ -163,6 +166,13 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (child_notebooks) JOIN notes_normalized on child_notebooks.id=notes_normalized.parent_id)');
 	}
 
+	if (filters.has('-notebook')) {
+		const values = filters.get('-notebook');
+		withs.push(noteBookFilter(values, true));
+		values.forEach(value => params.push(value));
+		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (child_notebooks_negated) JOIN notes_normalized on child_notebooks_negated.id=notes_normalized.parent_id)');
+	}
+
 	// negated notebooks?
 
 	if (filters.has('type')) {
@@ -195,7 +205,7 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		makeDateFilter('updated', filters, queryParts, params);
 	}
 
-	if (filters.has('title') || filters.has('body') || filters.has('text') || filters.has('-text')) {
+	if (filters.has('title') || filters.has('body') || filters.has('text')) {
 		// there is something to fts search
 		queryParts.push('AND notes_fts MATCH ?');
 		let match: string[] = [];
@@ -209,12 +219,13 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		if (filters.has('text')) {
 			match = [...match, ...makeMatchQuery('text', filters)];
 		}
-		if (filters.has('-text')) {
-			match = [...match, ...makeMatchQuery('-text', filters)];
-		}
 		params.push(match.join(' ').trim());
 	}
 
+	if (filters.has('-text')) {
+		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)');
+		params.push(filters.get('-text').join(' OR '));
+	}
 
 	if (filters.has('-title')) {
 		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)');
