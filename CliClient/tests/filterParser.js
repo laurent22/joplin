@@ -6,9 +6,9 @@ const filterParser = require('lib/services/searchengine/filterParser.js').defaul
 
 describe('filterParser should be correct filter for keyword', () => {
 	it('title', () => {
-		const searchString = 'title:something';
+		const searchString = 'title: something';
 		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'something' }]],
+			['title', ['something']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -16,7 +16,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('body', () => {
 		const searchString = 'body:something';
 		const expected = new Map([
-			['body', [{ relation: 'AND', value: 'something' }]],
+			['body', ['something']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -24,8 +24,8 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('title and body', () => {
 		const searchString = 'title:testTitle body:testBody';
 		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'testTitle' }]],
-			['body', [{ relation: 'AND', value: 'testBody' }]],
+			['title', ['testTitle']],
+			['body', ['testBody']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -33,8 +33,8 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('title with multiple words', () => {
 		const searchString = 'title:"word1 word2" body:testBody';
 		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'word1' }, { relation: 'AND', value: 'word2' }]],
-			['body', [{ relation: 'AND', value: 'testBody' }]],
+			['title', ['word1', 'word2']],
+			['body', ['testBody']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -42,41 +42,41 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('body with multiple words', () => {
 		const searchString = 'title:testTitle body:"word1 word2"';
 		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'testTitle' }]],
-			['body', [{ relation: 'AND', value: 'word1' }, { relation: 'AND', value: 'word2' }]],
+			['title', ['testTitle']],
+			['body', ['word1', 'word2']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('title or title', () => {
-		const searchString = 'title:testTitle1 OR title:testTitle2';
-		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'testTitle1' }, { relation: 'OR', value: 'testTitle2' }]],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
-	});
+	// it('title or title', () => {
+	// 	const searchString = 'title:testTitle1 OR title:testTitle2';
+	// 	const expected = new Map([
+	// 		['title', ['testTitle1', 'testTitle2']],
+	// 	]);
+	// 	expect(filterParser(searchString)).toEqual(expected);
+	// });
 
-	it('body or body', () => {
-		const searchString = 'body:testBody1 OR body:testBody2';
-		const expected = new Map([
-			['body', [{ relation: 'AND', value: 'testBody1' }, { relation: 'OR', value: 'testBody2' }]],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
-	});
+	// it('body or body', () => {
+	// 	const searchString = 'body:testBody1 OR body:testBody2';
+	// 	const expected = new Map([
+	// 		['body', ['testBody1', 'testBody2']],
+	// 	]);
+	// 	expect(filterParser(searchString)).toEqual(expected);
+	// });
 
-	it('title or body', () => {
-		const searchString = 'title:testTitle1 OR body:testBody2';
-		const expected = new Map([
-			['title', [{ relation: 'AND', value: 'testTitle1' }]],
-			['body', [{ relation: 'OR', value: 'testBody2' }]],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
-	});
+	// it('title or body', () => {
+	// 	const searchString = 'title:testTitle1 OR body:testBody2';
+	// 	const expected = new Map([
+	// 		['title', ['testTitle1']],
+	// 		['body', ['testBody2']],
+	// 	]);
+	// 	expect(filterParser(searchString)).toEqual(expected);
+	// });
 
 	it('single word text', () => {
 		const searchString = 'babayaga';
 		const expected = new Map([
-			['text', [{ relation: 'AND', value: 'babayaga' }]],
+			['text', ['babayaga']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -84,7 +84,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('multi word text', () => {
 		const searchString = 'baba yaga';
 		const expected = new Map([
-			['text', [{ relation: 'AND', value: 'baba' }, { relation: 'AND', value: 'yaga' }]],
+			['text', ['baba', 'yaga']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -92,7 +92,8 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('negated word text', () => {
 		const searchString = 'baba -yaga';
 		const expected = new Map([
-			['text', [{ relation: 'AND', value: 'baba' }, { relation: 'NOT', value: 'yaga' }]],
+			['text', ['baba']],
+			['-text', ['yaga']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -101,7 +102,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('phrase text search', () => {
 		const searchString = '"baba yaga"';
 		const expected = new Map([
-			['text', [{ relation: 'AND', value: '"baba yaga"' }]],
+			['text', ['"baba yaga"']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -109,7 +110,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('tag', () => {
 		const searchString = 'tag:tag123';
 		const expected = new Map([
-			['tag', [{ relation: 'AND', value: 'tag123' }]],
+			['tag', ['tag123']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -117,23 +118,23 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('multiple tags', () => {
 		const searchString = 'tag:tag123 tag:tag456';
 		const expected = new Map([
-			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag456' }]],
+			['tag', ['tag123', 'tag456']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('tag or tag', () => {
-		const searchString = 'tag:tag123 or tag:tag456';
-		const expected = new Map([
-			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'OR', value: 'tag456' }]],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
-	});
+	// it('tag or tag', () => {
+	// 	const searchString = 'tag:tag123 or tag:tag456';
+	// 	const expected = new Map([
+	// 		['tag', ['tag123', 'tag456']],
+	// 	]);
+	// 	expect(filterParser(searchString)).toEqual(expected);
+	// });
 
 	it('multi word body', () => {
 		const searchString = 'body:"foo bar"';
 		const expected = new Map([
-			['body', [{ relation: 'AND', value: 'foo' }, { relation: 'AND', value: 'bar' }]],
+			['body', ['foo', 'bar']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -141,7 +142,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('negated tag queries', () => {
 		const searchString = '-tag:instagram';
 		const expected = new Map([
-			['tag', [{ relation: 'NOT', value: 'instagram' }]],
+			['-tag', ['instagram']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -149,7 +150,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('in a notebook', () => {
 		const searchString = 'notebook:notebook1';
 		const expected = new Map([
-			['notebook', [{ relation: 'AND', value: 'notebook1' }]],
+			['notebook', ['notebook1']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -157,7 +158,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('created on', () => {
 		const searchString = 'created:20151218'; // YYYYMMDD
 		const expected = new Map([
-			['created', [{ relation: 'AND', value: '20151218' }]],
+			['created', ['20151218']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -165,7 +166,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('created less than', () => {
 		const searchString = 'created:<20151218';
 		const expected = new Map([
-			['created', [{ relation: 'AND', value: '<20151218' }]],
+			['created', ['<20151218']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -173,7 +174,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('created greater than', () => {
 		const searchString = 'created:>20151218';
 		const expected = new Map([
-			['created', [{ relation: 'AND', value: '>20151218' }]],
+			['created', ['>20151218']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -181,7 +182,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('created in between', () => {
 		const searchString = 'created:20151218..20160118';
 		const expected = new Map([
-			['created', [{ relation: 'AND', value: '20151218..20160118' }]],
+			['created', ['20151218..20160118']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -189,7 +190,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('updated on', () => {
 		const searchString = 'updated:20151218'; // YYYYMMDD
 		const expected = new Map([
-			['updated', [{ relation: 'AND', value: '20151218' }]],
+			['updated', ['20151218']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -197,7 +198,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('created on smart value, day', () => {
 		const searchString = 'created:day-1';
 		const expected = new Map([
-			['created', [{ relation: 'AND', value: 'day-1' }]],
+			['created', ['day-1']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
@@ -205,23 +206,23 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('is of type todo', () => {
 		const searchString = 'type:todo';
 		const expected = new Map([
-			['type', [{ relation: 'AND', value: 'todo' }]],
+			['type', ['todo']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
 	it('is a completed todo', () => {
-		const searchString = 'iscompleted:true'; // should accept true/false, 1/0, yes/no
+		const searchString = 'iscompleted:1';
 		const expected = new Map([
-			['iscompleted', [{ relation: 'AND', value: 'true' }]],
+			['iscompleted', ['1']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
 	it('is a uncompleted todo', () => {
-		const searchString = 'iscompleted:false'; // should accept true/false, 1/0, yes/no
+		const searchString = 'iscompleted:0';
 		const expected = new Map([
-			['iscompleted', [{ relation: 'AND', value: 'false' }]],
+			['iscompleted', ['0']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});

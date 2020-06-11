@@ -1,8 +1,3 @@
-interface Filter {
-	relation: string,
-	name: string,
-	value: string
-}
 
 interface Term {
   name: string;
@@ -49,25 +44,18 @@ const getTerms = (query: string) : Term[] => {
 	return terms;
 };
 
-const parseQuery = (query: string): Array<Filter> => {
+const parseQuery = (query: string): Array<Term> => {
 	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
-	const validFilters = new Set(['title', 'body', 'tag', 'notebook', 'created', 'updated', 'type', 'iscompleted']);
+	const validFilters = new Set(['title', 'body', 'tag', '-tag', 'notebook', 'created', 'updated', 'type', 'iscompleted']);
 
 	const terms = getTerms(query);
 
-	const defaultRelation = 'AND';
-	let relation = defaultRelation;
-	const result: Filter[] = [];
+	const result: Term[] = [];
 	for (let i = 0; i < terms.length; i++) {
-		let name = terms[i].name;
+		const name = terms[i].name;
 		const value = terms[i].value;
 
 		if (name !== '_') {
-			if (name.startsWith('-')) {
-				relation = 'NOT';
-				name = name.slice(1);
-			}
-
 			if (!validFilters.has(name)) {
 				throw new Error(`Invalid filter: ${name}`);
 			}
@@ -77,24 +65,17 @@ const parseQuery = (query: string): Array<Filter> => {
 				// eg. Split title:"hello world" to title:hello title:world with relation
 				const values = trimQuotes(value).split(' ');
 				values.forEach(value => {
-					result.push({ relation, name, value });
+					result.push({ name, value });
 				});
 			} else {
-				result.push({ relation, name, value });
+				result.push({ name, value });
 			}
-			relation = defaultRelation; // reset to default
 		} else {
-			// could be AND or OR or text to fts search
-			if (value.toUpperCase() !== 'AND' && value.toUpperCase() !== 'OR') {
-				if (value.startsWith('-')) {
-					result.push({ relation: 'NOT', name: 'text', value: value.slice(1) });
-				} else {
-					result.push({ relation: relation, name: 'text', value: value });
-				}
-				relation = defaultRelation; // reset to default
+			// text to fts search
+			if (value.startsWith('-')) {
+				result.push({ name: '-text', value: value.slice(1) });
 			} else {
-				// this is a relation for the next term;
-				relation = value.toUpperCase();
+				result.push({ name: 'text', value: value });
 			}
 		}
 	}
@@ -105,18 +86,18 @@ const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, 
 
 export default function filterParser(searchString: string) {
 	searchString = searchString.trim();
-	const filters: Map<string, {relation:string, value: string}[]> = new Map();
+	const filters: Map<string, string[]> = new Map();
 
 	const matches = parseQuery(searchString);
 	for (const match of matches) {
-		const { name, relation, value } = match;
+		const { name, value } = match;
 
 		if (!value) continue;
 
 		if (filters.has(name)) {
-			filters.set(name, [...filters.get(name), { relation, value }]);
+			filters.set(name, [...filters.get(name), value]);
 		} else {
-			filters.set(name, [{ relation, value }]);
+			filters.set(name, [value]);
 		}
 	}
 

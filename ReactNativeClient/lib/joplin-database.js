@@ -764,8 +764,8 @@ class JoplinDatabase extends Database {
 				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
 				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
 
-				queries.push('DROP TABLE IF EXISTS notes_normalized');
 				queries.push('DROP INDEX IF EXISTS notes_normalized_id');
+				queries.push('DROP TABLE IF EXISTS notes_normalized');
 				queries.push('DROP TABLE IF EXISTS notes_fts');
 
 
