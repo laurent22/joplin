@@ -11,6 +11,10 @@ const { shim } = require('lib/shim');
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
+const Resource = require('lib/models/Resource.js');
+const Share = require('react-native-share').default;
 
 class NoteBodyViewer extends Component {
 	constructor() {
@@ -64,6 +68,8 @@ class NoteBodyViewer extends Component {
 			resources: this.props.noteResources,
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.joplinPostMessage_',
+			enableLongPress: shim.isReactNative(),
+			longPressDelay: 500, // TODO use system value
 		};
 
 		const result = await this.markupToHtml_.render(
@@ -203,6 +209,24 @@ class NoteBodyViewer extends Component {
 		return this.forceUpdate_;
 	}
 
+	async onResourceLongPress(resourceId) {
+		const resource = await Resource.load(resourceId);
+		const name = resource.title ? resource.title : resource.file_name;
+
+		const action = await dialogs.pop(this, name, [
+			{ text: 'Share', id: 'share' },
+		]);
+
+		if (action === 'share') {
+			Share.open({
+				type: resource.mime,
+				filename: resource.title,
+				url: `file://${Resource.fullPath(resource)}`,
+				failOnCancel: false,
+			});
+		}
+	}
+
 	render() {
 		// Note: useWebKit={false} is needed to go around this bug:
 		// https://github.com/react-native-community/react-native-webview/issues/376
@@ -256,7 +280,11 @@ class NoteBodyViewer extends Component {
 										msg = msg.split(':');
 										const resourceId = msg[1];
 										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
-									} else {
+									} else if (msg.startsWith('longclick:')) {
+										msg = msg.split(':');
+										const resourceId = msg[1];
+										this.onResourceLongPress(resourceId);
+									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
 									}
 								}}
@@ -264,6 +292,11 @@ class NoteBodyViewer extends Component {
 						);
 					}}
 				</Async>
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
