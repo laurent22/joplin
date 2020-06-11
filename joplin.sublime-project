@@ -44,6 +44,11 @@
 				"ElectronClient/gui/NoteEditor/utils/useDropHandler.js",
 				"ElectronClient/gui/NoteEditor/utils/useMessageHandler.js",
 				"ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js",
+				"ReactNativeClient/lib/services/keychain/KeychainService.js",
+				"ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js",
+				"ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js",
+				"ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js",
+				"ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js",
 				"locales/*.json",
 				"log.txt",
 				"package-lock.json",
@@ -56,7 +61,7 @@
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js",
 				"ReactNativeClient/lib/JoplinServerApi.js",
-				"ReactNativeClient/lib/mime-utils.js",
+				"ReactNativeClient/lib/mime-utils-types.js",
 				"ReactNativeClient/locales/*",
 				"ReactNativeClient/PluginAssetsLoader.js",
 				"ReactNativeClient/setUpQuickActions.js",
@@ -70,7 +75,10 @@
 				"ElectronClient/gui/NoteEditor/utils/useResourceRefresher.js",
 				"ElectronClient/gui/NoteEditor/utils/useFormNote.js",
 				"ElectronClient/gui/NoteEditor/utils/useResourceInfos.js",
-				"Modules/TinyMCE/langs/*.js"
+				"Modules/TinyMCE/langs/*.js",
+				"ElectronClient/gui/NoteEditor/utils/contextMenu.js",
+				"ReactNativeClient/lib/services/ResourceEditWatcher.js",
+				"ReactNativeClient/lib/hooks/usePrevious.js"
 			],
 			"folder_exclude_patterns":
 			[

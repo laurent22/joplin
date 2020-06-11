@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.214",
+  "version": "1.0.218",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -68,6 +68,7 @@
     },
     "linux": {
       "asar": true,
+      "icon": "../Assets/LinuxIcons/256x256.png",
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
@@ -101,6 +102,7 @@
     "base64-stream": "^1.0.0",
     "chokidar": "^3.0.0",
     "clean-html": "^1.5.0",
+    "codemirror": "^5.54.0",
     "color": "^3.1.2",
     "compare-versions": "^3.2.1",
     "countable": "^3.0.1",
@@ -121,11 +123,12 @@
     "html-minifier": "^4.0.0",
     "htmlparser2": "^4.1.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.27",
+    "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",
     "katex": "^0.11.1",
+    "keytar": "^5.4.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.15",
     "mark.js": "^8.11.1",

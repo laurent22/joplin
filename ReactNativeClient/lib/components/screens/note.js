@@ -1,3 +1,6 @@
+import FileViewer from 'react-native-file-viewer';
+import AsyncActionQueue from '../../AsyncActionQueue';
+
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
@@ -26,20 +29,17 @@ const { shim } = require('lib/shim.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
-const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
+const dialogs = require('lib/components/dialogs.js').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
-// const ShareExtension = require('react-native-share-extension').default;
+const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
-
-import FileViewer from 'react-native-file-viewer';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -74,6 +74,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.selection = null;
 
+		this.saveActionQueues_ = {};
+
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
 		this.doFocusUpdate_ = false;
@@ -87,7 +89,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
-				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
+				const buttonId = await dialogs.pop(_('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
@@ -120,6 +122,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 					mode: 'view',
 				});
 
+				return true;
+			}
+
+			if (this.state.fromShare) {
+				// effectively the same as NAV_BACK but NAV_BACK causes undesired behaviour in this case:
+				// - share to Joplin from some other app
+				// - open Joplin and open any note
+				// - go back -- with NAV_BACK this causes the app to exit rather than just showing notes
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Notes',
+					folderId: this.state.note.parent_id,
+				});
 				return true;
 			}
 
@@ -169,7 +184,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}
 				}
 			} catch (error) {
-				dialogs.error(this, error.message);
+				dialogs.error(error.message);
 			}
 		};
 
@@ -253,7 +268,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 			markdownButtons: {
 				borderColor: theme.dividerColor,
-				color: theme.htmlLinkColor,
+				color: theme.urlColor,
 			},
 		};
 
@@ -333,9 +348,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		// if (Platform.OS !== 'ios' && this.state.fromShare) {
-		// 	ShareExtension.close();
-		// }
+		if (this.state.fromShare) {
+			ShareExtension.close();
+		}
+
+		this.saveActionQueue(this.state.note.id).processAllNow();
 	}
 
 	title_changeText(text) {
@@ -349,15 +366,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	scheduleSave() {
-		if (this.scheduleSaveIID_) {
-			clearTimeout(this.scheduleSaveIID_);
-			this.scheduleSaveIID_ = null;
-		}
+	makeSaveAction() {
+		return async () => {
+			return shared.saveNoteButton_press(this);
+		};
+	}
 
-		this.scheduleSaveIID_ = setTimeout(async () => {
-			await shared.saveNoteButton_press(this);
-		}, 1000);
+	saveActionQueue(noteId) {
+		if (!this.saveActionQueues_[noteId]) {
+			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
+		}
+		return this.saveActionQueues_[noteId];
+	}
+
+	scheduleSave() {
+		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
 	async saveNoteButton_press(folderId = null) {
@@ -374,7 +397,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(this, _('Delete note?'));
+		const ok = await dialogs.confirm(_('Delete note?'));
 		if (!ok) return;
 
 		const folderId = note.parent_id;
@@ -436,7 +459,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
 
 		if (mustResize) {
-			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
+			const buttonId = await dialogs.pop(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
 				{ text: _('Yes'), id: 'yes' },
 				{ text: _('No'), id: 'no' },
 				{ text: _('Cancel'), id: 'cancel' },
@@ -527,11 +550,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
-				const done = await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
 				if (fileType === 'image') {
-					dialogs.error(this, _('Unsupported image type: %s', mimeType));
+					dialogs.error(_('Unsupported image type: %s', mimeType));
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
@@ -545,7 +568,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
-			await dialogs.error(this, error.message);
+			await dialogs.error(error.message);
 			return;
 		}
 
@@ -657,7 +680,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			await dialogs.error(this, error.message);
+			await dialogs.error(error.message);
 		}
 	}
 
@@ -668,7 +691,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		try {
 			Linking.openURL(note.source_url);
 		} catch (error) {
-			await dialogs.error(this, error.message);
+			await dialogs.error(error.message);
 		}
 	}
 
@@ -728,7 +751,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(_('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
@@ -833,8 +856,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async folderPickerOptions_valueChanged(itemValue) {
 		const note = this.state.note;
+		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
-		if (!note.id) {
+		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
 			await Note.moveToFolder(note.id, itemValue);
@@ -1030,7 +1054,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		const showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		// Save button is not really needed anymore with the improved save logic
+		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
@@ -1056,12 +1081,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{!Setting.value('editor.beta') && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
-
-				<DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
 				{noteTagDialog}
 			</View>
 		);

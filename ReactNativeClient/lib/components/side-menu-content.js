@@ -7,7 +7,7 @@ const Folder = require('lib/models/Folder.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const NavService = require('lib/services/NavService.js');
 const { _ } = require('lib/locale.js');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const { themeStyle } = require('lib/components/global-style.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
 
 Icon.loadFont();
@@ -298,7 +298,8 @@ class SideMenuContentComponent extends Component {
 	}
 
 	makeDivider(key) {
-		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>;
+		const theme = themeStyle(this.props.theme);
+		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
 	}
 
 	renderBottomPanel() {
@@ -354,7 +355,7 @@ class SideMenuContentComponent extends Component {
 
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
-		items.push(<View style={{ height: globalStyle.marginTop }} key="bottom_top_hack" />);
+		items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
 		items.push(this.renderSideBarButton('all_notes', _('All notes'), 'md-document', this.allNotesButton_press, this.props.notesParentType === 'SmartFilter'));
 
@@ -371,7 +372,7 @@ class SideMenuContentComponent extends Component {
 		const style = {
 			flex: 1,
 			borderRightWidth: 1,
-			borderRightColor: globalStyle.dividerColor,
+			borderRightColor: theme.dividerColor,
 			backgroundColor: theme.backgroundColor,
 		};
 

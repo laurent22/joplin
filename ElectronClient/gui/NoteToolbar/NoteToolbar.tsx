@@ -1,6 +1,6 @@
 import * as React from 'react';
 const { connect } = require('react-redux');
-const { buildStyle } = require('../../theme.js');
+const { buildStyle } = require('lib/theme');
 const Toolbar = require('../Toolbar.min.js');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
@@ -57,7 +57,7 @@ function useToolbarItems(props:NoteToolbarProps) {
 	});
 
 	toolbarItems.push({
-		tooltip: _('Front'),
+		tooltip: _('Forward'),
 		iconName: 'fa-arrow-right',
 		enabled: (forwardHistoryNotes.length > 0),
 		onClick: () => {
@@ -98,22 +98,22 @@ function useToolbarItems(props:NoteToolbarProps) {
 	});
 
 	if (watchedNoteFiles.indexOf(note.id) >= 0) {
-		// toolbarItems.push({
-		// 	tooltip: _('Click to stop external editing'),
-		// 	title: _('Watching...'),
-		// 	iconName: 'fa-share-square',
-		// 	onClick: () => {
-		// 		onButtonClick({ name: 'stopExternalEditing' });
-		// 	},
-		// });
+		toolbarItems.push({
+			tooltip: _('Click to stop external editing'),
+			title: _('Watching...'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'stopExternalEditing' });
+			},
+		});
 	} else {
-		// toolbarItems.push({
-		// 	tooltip: _('Edit in external editor'),
-		// 	iconName: 'fa-share-square',
-		// 	onClick: () => {
-		// 		onButtonClick({ name: 'startExternalEditing' });
-		// 	},
-		// });
+		toolbarItems.push({
+			tooltip: _('Edit in external editor'),
+			iconName: 'fa-share-square',
+			onClick: () => {
+				onButtonClick({ name: 'startExternalEditing' });
+			},
+		});
 	}
 
 	if (note.is_todo) {

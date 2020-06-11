@@ -23,7 +23,7 @@ const goToNote = (testApp, note) => {
 	testApp.dispatch({ type: 'NOTE_SELECT', id: note.id });
 };
 
-describe('integration_ForwardBackwardNoteHistory', function() {
+describe('feature_NoteHistory', function() {
 	beforeEach(async (done) => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
@@ -172,12 +172,10 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 
 	it('should ensure no adjacent duplicates', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
-		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(3, folders[0]);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
-		await testApp.wait();
 
 		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
 		await testApp.wait();
@@ -186,28 +184,16 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		await testApp.wait();
 		goToNote(testApp, notes0[2]);
 		await testApp.wait();
-		goToNote(testApp, notes0[3]);
+		goToNote(testApp, notes0[1]);
 		await testApp.wait();
 		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
-		await testApp.wait();
-		goToNote(testApp, notes0[2]);
-		await testApp.wait();
-		goToNote(testApp, notes0[3]);
 		await testApp.wait();
 
 		let state = testApp.store().getState();
+		expect(state.selectedNoteIds).toEqual([notes0[2].id]);
+		expect(state.selectedFolderId).toEqual(folders[0].id);
 
-		goBackWard(state);
+		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[1].id });
 		await testApp.wait();
 
 		state = testApp.store().getState();
@@ -215,28 +201,10 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 
 		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[2].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		goBackWard(state);
-
-		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
-		expect(state.selectedFolderId).toEqual(folders[0].id);
-
-		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[2].id });
 		await testApp.wait();
 
 		state = testApp.store().getState();
-		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
+		expect(state.selectedNoteIds).toEqual([notes0[0].id]);
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 

@@ -1,3 +1,5 @@
+import Async from 'react-async';
+
 const React = require('react');
 const Component = React.Component;
 const { Platform, View, Text } = require('react-native');
@@ -9,8 +11,6 @@ const { shim } = require('lib/shim');
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-
-import Async from 'react-async';
 
 class NoteBodyViewer extends Component {
 	constructor() {
@@ -61,9 +61,9 @@ class NoteBodyViewer extends Component {
 				}, 100);
 			},
 			highlightedKeywords: this.props.highlightedKeywords,
-			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
+			resources: this.props.noteResources,
 			codeTheme: theme.codeThemeCss,
-			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
+			postMessageSyntax: 'window.joplinPostMessage_',
 		};
 
 		const result = await this.markupToHtml_.render(
@@ -82,6 +82,9 @@ class NoteBodyViewer extends Component {
 
 		const injectedJs = [];
 		injectedJs.push(shim.injectedJs('webviewLib'));
+		// Note that this postMessage function accepts two arguments, for compatibility with the desktop version, but
+		// the ReactNativeWebView actually supports only one, so the second arg is ignored (and currently not needed for the mobile app).
+		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {

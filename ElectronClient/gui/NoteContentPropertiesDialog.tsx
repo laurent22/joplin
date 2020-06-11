@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 const { _ } = require('lib/locale.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const { stripMarkdown } = require('lib/markdownUtils');
 const Countable = require('countable');
@@ -124,7 +124,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={theme.dialogBox}>
-				<div style={dialogBoxHeadingStyle}>{_('Content properties')}</div>
+				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 				<table>
 					<thead>
 						{tableHeader}

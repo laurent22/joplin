@@ -120,7 +120,7 @@ export async function handlePasteEvent(event:any) {
 			const md = await commandAttachFileToBody('', [filePath]);
 			await shim.fsDriver().remove(filePath);
 
-			output.push(md);
+			if (md) output.push(md);
 		}
 	}
 	return output;

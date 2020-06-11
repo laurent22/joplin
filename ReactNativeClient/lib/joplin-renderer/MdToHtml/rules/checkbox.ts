@@ -60,7 +60,7 @@ pluginAssets[2] = function(theme:any) {
 					height: 1em;
 					margin-left: -1.3em;
 					position: absolute;
-					color: ${theme.htmlColor};
+					color: ${theme.color};
 				}
 
 				.joplin-checklist li:not(.checked)::before {
