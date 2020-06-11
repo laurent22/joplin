@@ -114,7 +114,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	});
 
 
-	it('created on', () => {
+	it('created after', () => {
 		const searchString = 'created:20151218'; // YYYYMMDD
 		const expected = new Map([
 			['created', ['20151218']],
@@ -122,13 +122,14 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-
-	it('created in between', () => {
-		const searchString = 'created:20151218..20160118';
+	it('created before', () => {
+		const searchString = '-created:20151218'; // YYYYMMDD
 		const expected = new Map([
-			['created', ['20151218..20160118']],
+			['-created', ['20151218']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
+
+
 
 });

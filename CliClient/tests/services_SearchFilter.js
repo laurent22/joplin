@@ -301,18 +301,18 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n1.id);
 
 		rows = await engine.search('created:20200519');
-		expect(rows.length).toBe(1);
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 
-		rows = await engine.search('created:<20200519');
+		rows = await engine.search('-created:20200519');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n3.id);
 
-		rows = await engine.search('created:>20200519');
-		expect(rows.length).toBe(2);
-		expect(ids(rows)).toContain(n2.id);
-		expect(ids(rows)).toContain(n1.id);
+		rows = await engine.search('-created:20200518');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n3.id);
 	}));
 
 	it('should support filtering by between two dates', asyncTest(async () => {
@@ -324,23 +324,21 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('created:20200101..20200220');
+		rows = await engine.search('created:20200101 -created:20200220');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 
-		rows = await engine.search('created:201901..202002');
+		rows = await engine.search('created:201901 -created:202002');
 		expect(rows.length).toBe(3);
 		expect(ids(rows)).toContain(n3.id);
 		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n1.id);
 
-
-		rows = await engine.search('created:2018..2019');
+		rows = await engine.search('created:2018 -created:2019');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n3.id);
 		expect(ids(rows)).toContain(n4.id);
-
 	}));
 
 	it('should support filtering by created with smart value: day', asyncTest(async () => {
@@ -451,7 +449,8 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n1.id);
 
 		rows = await engine.search('updated:20200519');
-		expect(rows.length).toBe(1);
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 	}));
 

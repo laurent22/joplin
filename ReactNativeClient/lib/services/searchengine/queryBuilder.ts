@@ -22,86 +22,59 @@ const hyphenateDate = (date: string) => `${date.slice(0,4)}-${date.slice(4, 6)}-
 
 const getUnixMs = (date:string) => Date.parse(hyphenateDate(date));
 
-const makeDateFilter = (type: string, filters: Map<string, string[]>, queryParts: string[], params: string[]): void => {
+const getNextMonthDate = (value: string) : string => {
+	let endYear = value.slice(0, 4);
+	let endMonth = value.slice(-2);
+	const incYear: boolean = ((Number(endMonth) + 1) / 12) > 1.0;
+	endMonth = ((Number(endMonth) + 1) % 12).toString();
+	if (endMonth.length == 1) endMonth = `0${endMonth}`;
+	if (incYear) endYear = (Number(endYear) + 1).toString();
+	return `${endYear + endMonth}01`;
+};
+
+const makeDateFilter = (type: string, values: string[], queryParts: string[], params: string[], negated: boolean = false): void => {
 	// make it simple with created meaning >= and -created meaning <= ? with support for partial YYYYMMDD and smart values like (day, week, month, year)
-	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
+
 	const yyyymmdd = /^[0-9]{8}$/;
-	const yyyymmdd_yyyymmdd = /^[0-9]{8}\.\.[0-9]{8}$/;
-	const yyyymm_yyyymm = /^[0-9]{6}\.\.[0-9]{6}$/;
-	const yyyy_yyyy = /^[0-9]{4}\.\.[0-9]{4}$/;
+	const yyyymm = /^[0-9]{6}$/;
+	const yyyy = /^[0-9]{4}$/;
+	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
 
-	let value = filters.get(type)[0]; // only one date is supported
+	const msInDay = 60 * 60 * 24 * 1000;
 
-	let relation = 'EQUAL';
-	if (value.startsWith('<')) {
-		relation = 'LESS';
-		value = value.slice(1);
-	} else if (value.startsWith('>')) {
-		relation = 'GREATER';
-		value = value.slice(1);
-	}
+	values.forEach(value => {
+		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time ${negated ? '<' : '>='} ?)`);
+		if (yyyymmdd.test(value)) {
+			const msOfDay = getUnixMs(value);
+			const msOfNextDay = msOfDay + msInDay;
+			negated ? params.push(msOfNextDay.toString()) : params.push(msOfDay.toString()) ;
+		} else if (yyyymm.test(value)) {
+			const msOfMonth = getUnixMs(`${value}01`); // make day start from the 1st day of the month
+			const msOfNextMonth = getUnixMs(getNextMonthDate(value));
+			negated ? params.push(msOfNextMonth.toString()) : params.push(msOfMonth.toString());
+		} else if (yyyy.test(value)) {
+			const msOfYear = getUnixMs(`${value}0101`); // make day start from the 1st day of the month 1st month of year
+			const msOfNextYear = getUnixMs(`${(Number(value) + 1).toString()}0101`);
+			negated ? params.push(msOfNextYear.toString()) : params.push(msOfYear.toString());
+		} else if (smartValue.test(value)) {
+			const match = smartValue.exec(value);
+			const timeUnit = match[1]; // eg. day, week, month, year
+			const n = Number(match[2]); // eg. 1, 12, 101
+			const msStart = time.goBackInTime(n, timeUnit); // eg. goBackInTime(1, 'day')
+			let msEnd = null;
 
-	if (smartValue.test(value)) {
-		const match = smartValue.exec(value);
-		const timeDuration = match[1]; // eg. day, week, month, year
-		const number = parseInt(match[2], 10); // eg. 1, 12, 101
-		const timeFrom = time.goBackInTime(number, timeDuration); // eg. goBackInTime(1, 'day')
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ?)`);
-		params.push(timeFrom);
-	} else if (yyyymmdd.test(value)) {
-		const msOfDay = getUnixMs(value); // unixMs from YYYYMMDD
-		const msOfNextDay = msOfDay + (60 * 60 * 24 * 1000);
-
-		if (relation == 'LESS') {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time < ?)`);
-			params.push(msOfNextDay.toString());
-		} else if (relation == 'GREATER') {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ?)`);
-			params.push(msOfDay.toString());
+			switch (timeUnit) {
+			case 'day': msEnd = Number(msStart) + msInDay; break;
+			case 'week': msEnd = Number(msStart) + (msInDay * 7); break;
+			case 'month': msEnd = Number(msStart) + (msInDay * 7 * 30); break; // not accurate!
+			case 'year': msEnd = Number(msStart) + (msInDay * 7 * 30 * 12); break;  // not accurate!
+			}
+			negated ? params.push(msEnd.toString()) : params.push(msStart.toString());
 		} else {
-			queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
-			params.push(msOfDay.toString(), msOfNextDay.toString());
+			throw new Error(`Date value of ${type} in unknown format: ${value}`);
 		}
+	});
 
-	} else if (yyyymmdd_yyyymmdd.test(value)) {
-		const [date1, date2] = value.split('..');
-		const startDate = getUnixMs(date1);
-		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
-		params.push(startDate.toString(), endDate.toString());
-	} else if (yyyymm_yyyymm.test(value)) {
-		let [date1, date2] = value.split('..');
-
-
-		// find start of the next month
-		let endYear = date2.slice(0, 4);
-		let endMonth = date2.slice(-2);
-
-		const incYear = ((Number(endMonth) + 1) / 12) > 1.0;
-		endMonth = ((Number(endMonth) + 1) % 12).toString();
-		if (endMonth.length == 1) endMonth = `0${endMonth}`;
-		if (incYear) endYear = (Number(endYear) + 1).toString();
-
-		date1 = `${date1}01`; // make day start from the 1st day of the month
-		date2 = `${endYear + endMonth}01`; // first day of the next month
-
-		const startDate = getUnixMs(date1);
-		const endDate = getUnixMs(date2) + (60 * 60 * 24 * 1000); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
-		params.push(startDate.toString(), endDate.toString());
-	} else if (yyyy_yyyy.test(value)) {
-		let [date1, date2] = value.split('..');
-
-		date1 = `${date1}0101`; // make day start from the 1st day of the month and first month of year
-		date2 = `${(Number(date2) + 1).toString()}0101`;
-
-		const startDate = getUnixMs(date1);
-		const endDate = getUnixMs(date2); // start of next day
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time >= ? AND notes_normalized.user_${type}_time < ?)`);
-		params.push(startDate.toString(), endDate.toString());
-	} else {
-		throw new Error(`Date value of ${type} in unknown format: ${value}`);
-	}
 };
 
 const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
@@ -173,8 +146,6 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (child_notebooks_negated) JOIN notes_normalized on child_notebooks_negated.id=notes_normalized.parent_id)');
 	}
 
-	// negated notebooks?
-
 	if (filters.has('type')) {
 		const value = filters.get('type')[0];
 		if (value === 'todo') {
@@ -198,12 +169,21 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	}
 
 	if (filters.has('created')) {
-		makeDateFilter('created', filters, queryParts, params);
+		makeDateFilter('created', filters.get('created'), queryParts, params);
+	}
+
+	if (filters.has('-created')) {
+		makeDateFilter('created', filters.get('-created'), queryParts, params, true);
 	}
 
 	if (filters.has('updated')) {
-		makeDateFilter('updated', filters, queryParts, params);
+		makeDateFilter('updated', filters.get('updated'), queryParts, params);
 	}
+
+	if (filters.has('-updated')) {
+		makeDateFilter('updated', filters.get('-updated'), queryParts, params, true);
+	}
+
 
 	if (filters.has('title') || filters.has('body') || filters.has('text')) {
 		// there is something to fts search
