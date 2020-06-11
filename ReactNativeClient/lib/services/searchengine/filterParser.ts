@@ -45,8 +45,7 @@ const getTerms = (query: string) : Term[] => {
 };
 
 const parseQuery = (query: string): Array<Term> => {
-	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
-	const validFilters = new Set(['title', 'body', 'tag', '-tag', 'notebook', 'created', 'updated', 'type', 'iscompleted']);
+	const validFilters = new Set(['title', '-title', 'body', '-body', 'tag', '-tag', 'notebook', 'created', 'updated', 'type', 'iscompleted']);
 
 	const terms = getTerms(query);
 
@@ -62,7 +61,7 @@ const parseQuery = (query: string): Array<Term> => {
 
 			if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
-				// eg. Split title:"hello world" to title:hello title:world with relation
+				// eg. Split title:"hello world" to title:hello title:world
 				const values = trimQuotes(value).split(' ');
 				values.forEach(value => {
 					result.push({ name, value });

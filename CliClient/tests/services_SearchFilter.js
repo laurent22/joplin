@@ -50,6 +50,18 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n1.id);
 	}));
 
+	it('should return note matching negated title', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
+		const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
+
+		await engine.syncTables();
+		rows = await engine.search('-title: abcd');
+
+		expect(rows.length).toBe(1);
+		expect(rows[0].id).toBe(n2.id);
+	}));
+
 	it('should return note matching body', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body1' });
@@ -60,6 +72,18 @@ describe('services_SearchFilter', function() {
 
 		expect(rows.length).toBe(1);
 		expect(rows[0].id).toBe(n1.id);
+	}));
+
+	it('should return note matching negated body', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abcd', body: 'body1' });
+		const n2 = await Note.save({ title: 'efgh', body: 'body2' });
+
+		await engine.syncTables();
+		rows = await engine.search('-body: body1');
+
+		expect(rows.length).toBe(1);
+		expect(rows[0].id).toBe(n2.id);
 	}));
 
 	it('should return note matching title containing multiple words', asyncTest(async () => {

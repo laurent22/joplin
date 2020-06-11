@@ -7,11 +7,8 @@ const tagFilter = (tags: string[]) => {
 	return result;
 };
 
-const noteBookFilter = (terms: string[]) => {
-	const likes = [];
-	for (let i = 0; i < terms.length; i++) {
-		likes.push('folders.title LIKE ?');
-	}
+const noteBookFilter = (names: string[]) => {
+	const likes = new Array(names.length).fill('folders.title LIKE ?');
 	return `child_notebooks(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
 union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
 };
@@ -21,6 +18,7 @@ const hyphenateDate = (date: string) => `${date.slice(0,4)}-${date.slice(4, 6)}-
 const getUnixMs = (date:string) => Date.parse(hyphenateDate(date));
 
 const makeDateFilter = (type: string, filters: Map<string, string[]>, queryParts: string[], params: string[]): void => {
+	// make it simple with created meaning >= and -created meaning <= ? with support for partial YYYYMMDD and smart values like (day, week, month, year)
 	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
 	const yyyymmdd = /^[0-9]{8}$/;
 	const yyyymmdd_yyyymmdd = /^[0-9]{8}\.\.[0-9]{8}$/;
@@ -141,6 +139,9 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	notes_fts.parent_id
 	FROM notes_fts WHERE 1`);
 
+	// console.log("testing beep beep boop boop")
+	// console.log(filters);
+
 	if (filters.has('tag')) {
 		const values = filters.get('tag');
 		withs.push(tagFilter(values));
@@ -212,6 +213,17 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 			match = [...match, ...makeMatchQuery('-text', filters)];
 		}
 		params.push(match.join(' ').trim());
+	}
+
+
+	if (filters.has('-title')) {
+		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)');
+		params.push(filters.get('-title').join(' OR '));
+	}
+
+	if (filters.has('-body')) {
+		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)');
+		params.push(filters.get('-body').join(' OR '));
 	}
 
 	if (withs.length > 0) {
