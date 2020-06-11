@@ -202,11 +202,20 @@ a {
 }
 
 .mark {
-	background-color: #F3B717;
+	background: #F3B717;
 	color: black;
 }
 
 .mark-selected {
 	background: #CF3F00;
 	color: white;
+}
+
+.mark-scrollbar {
+	background: #F3B717;
+  border-top: 1px solid orange;
+  border-bottom: 1px solid orange;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  opacity: .5;
 }

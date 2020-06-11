@@ -5,6 +5,8 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/scrollpastend';
+import 'codemirror/addon/scroll/annotatescrollbar';
+import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/search/searchcursor';
 
 import useListIdent from './utils/useListIdent';
