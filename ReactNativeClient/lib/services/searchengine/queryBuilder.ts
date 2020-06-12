@@ -1,9 +1,9 @@
 const { time } = require('lib/time-utils.js');
 
-const tagFilter = (tags: string[]) => {
-	let result = new Array(tags.length).fill('INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?)').join(' ');
-	result = `SELECT note_tags.note_id as id FROM note_tags WHERE 1 ${result}`;
-	result = `tag_filter as (${result})`;
+const tagFilter = (tags: string[], intersect: boolean = true, negated: boolean = false) => {
+	let result = new Array(tags.length).fill(`${intersect ? 'INTERSECT' : 'UNION'} SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?)`).join(' ');
+	result = intersect ? `SELECT note_tags.note_id as id FROM note_tags WHERE 1 ${result}` : `SELECT note_tags.note_id as id FROM note_tags WHERE 0 ${result}`;
+	result = negated ? `tag_filter_negated as (${result})` : `tag_filter as (${result})`;
 	return result;
 };
 
@@ -33,8 +33,6 @@ const getNextMonthDate = (value: string) : string => {
 };
 
 const makeDateFilter = (type: string, values: string[], queryParts: string[], params: string[], negated: boolean = false): void => {
-	// make it simple with created meaning >= and -created meaning <= ? with support for partial YYYYMMDD and smart values like (day, week, month, year)
-
 	const yyyymmdd = /^[0-9]{8}$/;
 	const yyyymm = /^[0-9]{6}$/;
 	const yyyy = /^[0-9]{4}$/;
@@ -65,7 +63,7 @@ const makeDateFilter = (type: string, values: string[], queryParts: string[], pa
 			switch (timeUnit) {
 			case 'day': msEnd = Number(msStart) + msInDay; break;
 			case 'week': msEnd = Number(msStart) + (msInDay * 7); break;
-			case 'month': msEnd = Number(msStart) + (msInDay * 7 * 30); break; // not accurate!
+			case 'month': msEnd = Number(msStart) + (msInDay * 7 * 30); break; // not accurate! maybe use goForwardInTime(startTime?, n, timeUnit)
 			case 'year': msEnd = Number(msStart) + (msInDay * 7 * 30 * 12); break;  // not accurate!
 			}
 			negated ? params.push(msEnd.toString()) : params.push(msStart.toString());
@@ -73,7 +71,6 @@ const makeDateFilter = (type: string, values: string[], queryParts: string[], pa
 			throw new Error(`Date value of ${type} in unknown format: ${value}`);
 		}
 	});
-
 };
 
 const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
@@ -85,18 +82,6 @@ const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
 		throw new Error(`Invalid filter for match query: ${name}`);
 	}
 };
-
-// The query we want to construct is this:
-// with tag_filter as
-// (
-// select note_tags.note_id as id from note_tags
-// where 1
-// (intersect/union/except)
-// select note_tags.note_id from note_tags where note_tags.tag_id IN (select tags.id from tags where tags.title like ?)
-// )
-// SELECT *
-// FROM notes_fts
-// WHERE 1 AND rowid IN (select notes.ROWID from tag_filter join notes on tag_filter.id=notes.id) AND notes_fts MATCH ?;
 
 export default function queryBuilder(filters: Map<string, string[]>) {
 	let query;
@@ -117,6 +102,14 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	// console.log("testing beep beep boop boop")
 	// console.log(filters);
 
+	// const defaultRelation = 'AND';
+	// let relation = defaultRelation;
+
+	// if (filters.has('any')) {
+	// 	const value = filters.get('any')[0]; // Only consider the first any
+	// 	if (value === '1') relation = 'OR';
+	// }
+
 	if (filters.has('tag')) {
 		const values = filters.get('tag');
 		withs.push(tagFilter(values));
@@ -126,9 +119,9 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 
 	if (filters.has('-tag')) {
 		const values = filters.get('-tag');
-		withs.push(tagFilter(values));
+		withs.push(tagFilter(values, false, true));
 		values.forEach((value) => params.push(value));
-		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)');
+		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)');
 	}
 
 	if (filters.has('notebook')) {

@@ -222,6 +222,9 @@ describe('services_SearchFilter', function() {
 		rows = await engine.search('-tag:tag2');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('-tag:tag2 -tag:tag3');
+		expect(rows.length).toBe(0);
 	}));
 
 	it('should support filtering by notebook', asyncTest(async () => {

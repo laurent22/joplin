@@ -130,6 +130,15 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
+	it('any', () => {
+		const searchString = 'any:1 tag:123';
+		const expected = new Map([
+			['any', ['1']],
+			['tag', ['123']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
 
 
 });
