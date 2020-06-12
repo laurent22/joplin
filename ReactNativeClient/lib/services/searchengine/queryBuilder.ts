@@ -32,7 +32,7 @@ const getNextMonthDate = (value: string) : string => {
 	return `${endYear + endMonth}01`;
 };
 
-const makeDateFilter = (type: string, values: string[], queryParts: string[], params: string[], negated: boolean = false): void => {
+const makeDateFilter = (type: string, values: string[], queryParts: string[], params: string[], negated: boolean = false, relation: string): void => {
 	const yyyymmdd = /^[0-9]{8}$/;
 	const yyyymm = /^[0-9]{6}$/;
 	const yyyy = /^[0-9]{4}$/;
@@ -41,7 +41,7 @@ const makeDateFilter = (type: string, values: string[], queryParts: string[], pa
 	const msInDay = 60 * 60 * 24 * 1000;
 
 	values.forEach(value => {
-		queryParts.push(`AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time ${negated ? '<' : '>='} ?)`);
+		queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time ${negated ? '<' : '>='} ?)`);
 		if (yyyymmdd.test(value)) {
 			const msOfDay = getUnixMs(value);
 			const msOfNextDay = msOfDay + msInDay;
@@ -97,31 +97,23 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	notes_fts.is_todo,
 	notes_fts.todo_completed,
 	notes_fts.parent_id
-	FROM notes_fts WHERE 1`);
+	FROM notes_fts WHERE`);
 
 	// console.log("testing beep beep boop boop")
 	// console.log(filters);
 
-	// const defaultRelation = 'AND';
-	// let relation = defaultRelation;
+	const defaultRelation = 'AND';
+	let relation = defaultRelation;
 
-	// if (filters.has('any')) {
-	// 	const value = filters.get('any')[0]; // Only consider the first any
-	// 	if (value === '1') relation = 'OR';
-	// }
-
-	if (filters.has('tag')) {
-		const values = filters.get('tag');
-		withs.push(tagFilter(values));
-		values.forEach((value) => params.push(value));
-		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)');
+	if (filters.has('any')) {
+		const value = filters.get('any')[0]; // Only consider the first any
+		if (value === '1') relation = 'OR';
 	}
 
-	if (filters.has('-tag')) {
-		const values = filters.get('-tag');
-		withs.push(tagFilter(values, false, true));
-		values.forEach((value) => params.push(value));
-		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)');
+	if (!filters.has('notebook') && filters.has('any')) {
+		queryParts.push('rowid=-1'); // something impossible to act as WHERE 0
+	} else {
+		queryParts.push('1');
 	}
 
 	if (filters.has('notebook')) {
@@ -131,20 +123,34 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (child_notebooks) JOIN notes_normalized on child_notebooks.id=notes_normalized.parent_id)');
 	}
 
-	if (filters.has('-notebook')) {
-		const values = filters.get('-notebook');
-		withs.push(noteBookFilter(values, true));
-		values.forEach(value => params.push(value));
-		queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (child_notebooks_negated) JOIN notes_normalized on child_notebooks_negated.id=notes_normalized.parent_id)');
+	// if (filters.has('-notebook')) {
+	// 	const values = filters.get('-notebook');
+	// 	withs.push(noteBookFilter(values, true));
+	// 	values.forEach(value => params.push(value));
+	// 	queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (child_notebooks_negated) JOIN notes_normalized on child_notebooks_negated.id=notes_normalized.parent_id)');
+	// }
+
+	if (filters.has('tag')) {
+		const values = filters.get('tag');
+		withs.push(tagFilter(values));
+		values.forEach((value) => params.push(value));
+		queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)`);
+	}
+
+	if (filters.has('-tag')) {
+		const values = filters.get('-tag');
+		withs.push(tagFilter(values, false, true));
+		values.forEach((value) => params.push(value));
+		queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
 	}
 
 	if (filters.has('type')) {
 		const values = filters.get('type');
 		values.forEach(value => {
 			if (value === 'todo') {
-				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)');
+				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)`);
 			} else if (value == 'note') {
-				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)');
+				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)`);
 			} else {
 				throw new Error(`Invalid argument for filter todo: ${value}`);
 			}
@@ -155,9 +161,9 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		const values = filters.get('iscompleted');
 		values.forEach(value => {
 			if (value === '1') {
-				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)');
+				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)`);
 			} else if (value === '0') {
-				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)');
+				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)`);
 			} else {
 				throw new Error(`Invalid argument for filter iscompleted: ${value}`);
 			}
@@ -165,25 +171,24 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	}
 
 	if (filters.has('created')) {
-		makeDateFilter('created', filters.get('created'), queryParts, params);
+		makeDateFilter('created', filters.get('created'), queryParts, params, false, relation);
 	}
 
 	if (filters.has('-created')) {
-		makeDateFilter('created', filters.get('-created'), queryParts, params, true);
+		makeDateFilter('created', filters.get('-created'), queryParts, params, true, relation);
 	}
 
 	if (filters.has('updated')) {
-		makeDateFilter('updated', filters.get('updated'), queryParts, params);
+		makeDateFilter('updated', filters.get('updated'), queryParts, params, false, relation);
 	}
 
 	if (filters.has('-updated')) {
-		makeDateFilter('updated', filters.get('-updated'), queryParts, params, true);
+		makeDateFilter('updated', filters.get('-updated'), queryParts, params, true, relation);
 	}
-
 
 	if (filters.has('title') || filters.has('body') || filters.has('text')) {
 		// there is something to fts search
-		queryParts.push('AND notes_fts MATCH ?');
+		queryParts.push(`${relation} notes_fts MATCH ?`);
 		let match: string[] = [];
 
 		if (filters.has('title')) {
@@ -195,21 +200,23 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		if (filters.has('text')) {
 			match = match.concat(makeMatchQuery('text', filters));
 		}
-		params.push(match.join(' ').trim());
+
+		if (relation === 'AND') { params.push(match.join(' ').trim()); }
+		if (relation === 'OR') { params.push(match.join(' OR ').trim()); }
 	}
 
 	if (filters.has('-text')) {
-		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)');
+		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)`);
 		params.push(filters.get('-text').join(' OR '));
 	}
 
 	if (filters.has('-title')) {
-		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)');
+		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)`);
 		params.push(filters.get('-title').join(' OR '));
 	}
 
 	if (filters.has('-body')) {
-		queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)');
+		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)`);
 		params.push(filters.get('-body').join(' OR '));
 	}
 

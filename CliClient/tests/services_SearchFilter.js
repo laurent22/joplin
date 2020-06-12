@@ -124,20 +124,20 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(0);
 	}));
 
-	// it('should return note matching title OR body', asyncTest(async () => {
-	// 	let rows;
-	// 	const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
-	// 	const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
+	it('should return note matching title OR body', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
+		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
 
-	// 	await engine.syncTables();
-	// 	rows = await engine.search('title: abcd OR body: "foo bar"');
-	// 	expect(rows.length).toBe(2);
-	// 	expect(rows.map(r=>r.id)).toContain(n1.id);
-	// 	expect(rows.map(r=>r.id)).toContain(n2.id);
+		await engine.syncTables();
+		rows = await engine.search('any:1 title: abcd body: "foo bar"');
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
 
-	// 	rows = await engine.search('title: wxyz OR body: "blah blah"');
-	// 	expect(rows.length).toBe(0);
-	// }));
+		rows = await engine.search('any:1 title: wxyz body: "blah blah"');
+		expect(rows.length).toBe(0);
+	}));
 
 	it('should return notes matching text', asyncTest(async () => {
 		let rows;
@@ -242,20 +242,20 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-	it('should support filtering by negated notebook', asyncTest(async () => {
-		let rows;
-		const folder0 = await Folder.save({ title: 'notebook0' });
-		const folder1 = await Folder.save({ title: 'notebook1' });
-		const notes0 = await createNTestNotes(5, folder0);
-		const notes1 = await createNTestNotes(5, folder1);
+	// it('should support filtering by negated notebook', asyncTest(async () => {
+	// 	let rows;
+	// 	const folder0 = await Folder.save({ title: 'notebook0' });
+	// 	const folder1 = await Folder.save({ title: 'notebook1' });
+	// 	const notes0 = await createNTestNotes(5, folder0);
+	// 	const notes1 = await createNTestNotes(5, folder1);
 
-		await engine.syncTables();
+	// 	await engine.syncTables();
 
-		rows = await engine.search('-notebook:notebook0');
-		expect(rows.length).toBe(5);
-		expect(ids(rows).sort()).toEqual(ids(notes1).sort());
+	// 	rows = await engine.search('-notebook:notebook0');
+	// 	expect(rows.length).toBe(5);
+	// 	expect(ids(rows).sort()).toEqual(ids(notes1).sort());
 
-	}));
+	// }));
 
 	it('should support filtering by nested notebook', asyncTest(async () => {
 		let rows;
@@ -522,7 +522,6 @@ describe('services_SearchFilter', function() {
 		rows = await engine.search('type:note');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t3.id);
-
 	}));
 
 });
