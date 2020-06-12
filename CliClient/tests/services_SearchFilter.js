@@ -499,25 +499,9 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t1.id);
 		expect(ids(rows)).toContain(t2.id);
 
-		rows = await engine.search('iscompleted:true');
-		expect(rows.length).toBe(1);
-		expect(ids(rows)).toContain(t2.id);
-
-		rows = await engine.search('iscompleted:yes');
-		expect(rows.length).toBe(1);
-		expect(ids(rows)).toContain(t2.id);
-
 		rows = await engine.search('iscompleted:1');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t2.id);
-
-		rows = await engine.search('iscompleted:false');
-		expect(rows.length).toBe(1);
-		expect(ids(rows)).toContain(t1.id);
-
-		rows = await engine.search('iscompleted:no');
-		expect(rows.length).toBe(1);
-		expect(ids(rows)).toContain(t1.id);
 
 		rows = await engine.search('iscompleted:0');
 		expect(rows.length).toBe(1);

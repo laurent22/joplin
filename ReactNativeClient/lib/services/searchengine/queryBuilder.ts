@@ -62,7 +62,6 @@ const makeDateFilter = (type: string, values: string[], queryParts: string[], pa
 			const n = Number(match[2]); // eg. 1, 12, 101
 			const msStart = time.goBackInTime(n, timeUnit); // eg. goBackInTime(1, 'day')
 			let msEnd = null;
-
 			switch (timeUnit) {
 			case 'day': msEnd = Number(msStart) + msInDay; break;
 			case 'week': msEnd = Number(msStart) + (msInDay * 7); break;
@@ -147,25 +146,29 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	}
 
 	if (filters.has('type')) {
-		const value = filters.get('type')[0];
-		if (value === 'todo') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)');
-		} else if (value == 'note') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)');
-		} else {
-			throw new Error(`Invalid argument for filter todo: ${value}`);
-		}
+		const values = filters.get('type');
+		values.forEach(value => {
+			if (value === 'todo') {
+				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)');
+			} else if (value == 'note') {
+				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)');
+			} else {
+				throw new Error(`Invalid argument for filter todo: ${value}`);
+			}
+		});
 	}
 
 	if (filters.has('iscompleted')) {
-		const value = filters.get('iscompleted')[0];
-		if (value === 'true' || value === 'yes' || value === '1') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)');
-		} else if (value === 'false' || value === 'no' || value === '0') {
-			queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)');
-		} else {
-			throw new Error(`Invalid argument for filter iscompleted: ${value}`);
-		}
+		const values = filters.get('iscompleted');
+		values.forEach(value => {
+			if (value === '1') {
+				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)');
+			} else if (value === '0') {
+				queryParts.push('AND ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)');
+			} else {
+				throw new Error(`Invalid argument for filter iscompleted: ${value}`);
+			}
+		});
 	}
 
 	if (filters.has('created')) {
@@ -191,13 +194,13 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 		let match: string[] = [];
 
 		if (filters.has('title')) {
-			match = [...match, ...makeMatchQuery('title', filters)];
+			match = match.concat(makeMatchQuery('title', filters));
 		}
 		if (filters.has('body')) {
-			match = [...match, ...makeMatchQuery('body', filters)];
+			match = match.concat(makeMatchQuery('body', filters));
 		}
 		if (filters.has('text')) {
-			match = [...match, ...makeMatchQuery('text', filters)];
+			match = match.concat(makeMatchQuery('text', filters));
 		}
 		params.push(match.join(' ').trim());
 	}
