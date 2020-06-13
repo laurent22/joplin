@@ -47,16 +47,16 @@ export default function useListIdent(CodeMirror: any) {
 		return currentToken;
 	}
 
-	// Gets the first non-whitespace token locationof a list
-	function getListSpan(listTokens: any) {
+	// Gets the character coordinates of the start and end of a list token
+	function getListSpan(listTokens: any, line: string) {
 		let start = listTokens[0].start;
-		const end = listTokens[listTokens.length - 1].end;
+		const token = extractListToken(line);
 
 		if (listTokens.length > 1 && listTokens[0].string.match(/\s/)) {
 			start = listTokens[1].start;
 		}
 
-		return { start: start, end: end };
+		return { start: start, end: start + token.length };
 	}
 
 	CodeMirror.commands.smartListIndent = function(cm: any) {
@@ -74,7 +74,7 @@ export default function useListIdent(CodeMirror: any) {
 			} else {
 				if (olLineNumber(line)) {
 					const tokens = cm.getLineTokens(anchor.line);
-					const { start, end } = getListSpan(tokens);
+					const { start, end } = getListSpan(tokens, line);
 					// Resets numbered list to 1.
 					cm.replaceRange('1. ',  { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
 				}
@@ -99,9 +99,9 @@ export default function useListIdent(CodeMirror: any) {
 			} else {
 				const newToken = newListToken(cm, anchor.line);
 				const tokens = cm.getLineTokens(anchor.line);
-				const { start, end } = getListSpan(tokens);
+				const { start, end } = getListSpan(tokens, line);
 
-				cm.replaceRange(newToken,  { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+				cm.replaceRange(newToken, { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
 
 				cm.indentLine(anchor.line, 'subtract');
 			}
