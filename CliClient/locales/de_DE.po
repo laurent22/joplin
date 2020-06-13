@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -217,9 +219,9 @@ msgstr ""
 "betreffenden Objekte einige Minuten dauern kann."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Entschlüsselte Objekte: %s / %s"
+msgstr "Entschlüsselte Objekte: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
@@ -747,7 +749,7 @@ msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
 "Um die Entschlüsselung dieser Objekte nochmal zu versuchen führe `e2ee "
-"decrypt --retry-failed-items` aus."
+"decrypt --retry-failed-items` aus"
 
 #: CliClient/app/command-tag.js:14
 msgid ""
@@ -812,7 +814,6 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ElectronClient/plugins/GotoAnything.min.js:436
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
@@ -1050,9 +1051,8 @@ msgid "Insert Date Time"
 msgstr "Datum / Uhrzeit einfügen"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "Kontrollkästchen"
+msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1073,16 +1073,18 @@ msgid "Drop notes or files here"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
-#, fuzzy
 msgid "Code View"
-msgstr "Code"
+msgstr ""
 
+# Depending on the word that is used in %s, the preposition is either 'auf' or 'zu'.
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Bitte warte bis alle Anhänge heruntergeladen und entschlüsselt sind. Du "
+"kannst auch auf/zu %s wechseln, um die Notiz zu bearbeiten."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1410,7 +1412,6 @@ msgid "Options"
 msgstr "Optionen"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
 msgstr "Anhänge"
 
@@ -1448,29 +1449,26 @@ msgid "Custom order"
 msgstr "Benutzerdefinierte Reihenfolge"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "View"
-msgstr "&Ansicht"
+msgstr "Ansicht"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ReactNativeClient/lib/models/Setting.js:329
 msgid "Sort notes by"
 msgstr "Sortiere Notizen nach"
 
-# I am not sure how the %s are filled. In the German translation the order of Strings is different than in the original English version.
 #: ElectronClient/gui/NoteList.min.js:147
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Um die Notizen manuell zu sortieren, muss die Sortierreihenfolge im Menü "
-"\"% s\"> \"% s\" in \"% s\" geändert werden."
+"Um die Notizen manuell zu sortieren, muss die Sortierreihenfolge auf \"%s\" "
+"geändert werden. (im Menü \"%s\" > \"%s\")"
 
 #: ElectronClient/gui/NoteList.min.js:148
-#, fuzzy
 msgid "Do it now"
-msgstr "Hole es jetzt:"
+msgstr ""
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1744,9 +1742,8 @@ msgid "Viewer"
 msgstr "Vorschau"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:82
-#, fuzzy
 msgid "Statistics"
-msgstr "Statistik..."
+msgstr "Statistik"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2084,9 +2081,8 @@ msgid "Zoom Out"
 msgstr "Herauszoomen"
 
 #: ElectronClient/app.js:1064
-#, fuzzy
 msgid "&Note"
-msgstr "Notiz"
+msgstr "&Notiz"
 
 #: ElectronClient/app.js:1094
 msgid "Statistics..."
@@ -2220,7 +2216,6 @@ msgstr ""
 "Notizbuch kann nicht \"%s\" genannt werden. Dieser Name ist reserviert."
 
 #: ReactNativeClient/lib/models/Setting.js:39
-#, fuzzy
 msgid "yes"
 msgstr "Ja"
 
@@ -2366,18 +2361,24 @@ msgid "Theme"
 msgstr "Thema"
 
 # Thema vs Theme
+# Not sure what other applications use. I don't have any German apps thus I can't say.
+# Both words don't strike me as a proper translation in this context.
 #: ReactNativeClient/lib/models/Setting.js:274
 #, fuzzy
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatisch das Theme ändern um es dem System-Theme anzupassen"
 
 # Thema vs Theme
+# Not sure what other applications use. I don't have any German apps thus I can't say.
+# Both words don't strike me as a proper translation in this context.
 #: ReactNativeClient/lib/models/Setting.js:286
 #, fuzzy
 msgid "Preferred light theme"
 msgstr "Bevorzugtes helles Theme"
 
 # Thema vs Theme
+# Not sure what other applications use. I don't have any German apps thus I can't say.
+# Both words don't strike me as a proper translation in this context.
 #: ReactNativeClient/lib/models/Setting.js:300
 #, fuzzy
 msgid "Preferred dark theme"
@@ -2421,7 +2422,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Verwende CodeMirror als Editor (WARNUNG: BETA)."
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
@@ -2549,15 +2550,14 @@ msgid "Editor font family"
 msgstr "Schriftfamilie im Editor"
 
 #: ReactNativeClient/lib/models/Setting.js:508
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Dies muss eine *Monospace* Schriftart sein, sonst funktioniert es nicht "
-"richtig. Wenn die Schriftart falsch oder leer ist, wird eine "
-"voreingestellte, generische Monospace-Schriftart verwendet."
+"Dies muss eine *nichtproportionale* Schriftart sein, sonst werden einige "
+"Elemente falsch dargestellt. Wenn die Schriftart falsch oder leer ist, wird "
+"eine voreingestellte nichtproportionale Schriftart verwendet."
 
 #: ReactNativeClient/lib/models/Setting.js:547
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2826,17 +2826,20 @@ msgid "Downloaded"
 msgstr "Heruntergeladen"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Anhänge"
+msgstr ""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Es gab einen Fehler beim Herunterladen des Anhangs:"
+msgstr ""
+"Es gab einen [Konflikt](%s) für den folgenden Anhang.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
