@@ -165,6 +165,48 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(0);
 	}));
 
+	it('should return notes matching any negated text', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc', body: 'def' });
+		const n2 = await Note.save({ title: 'def', body: 'ghi' });
+		const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
+		await engine.syncTables();
+
+		rows = await engine.search('any:1 -abc -ghi');
+		expect(rows.length).toBe(3);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+	}));
+
+	it('should return notes matching any negated title', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc', body: 'def' });
+		const n2 = await Note.save({ title: 'def', body: 'ghi' });
+		const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
+		await engine.syncTables();
+
+		rows = await engine.search('any:1 -title:abc -title:ghi');
+		expect(rows.length).toBe(3);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+	}));
+
+	it('should return notes matching any negated body', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc', body: 'def' });
+		const n2 = await Note.save({ title: 'def', body: 'ghi' });
+		const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
+		await engine.syncTables();
+
+		rows = await engine.search('any:1 -body:xyz -body:ghi');
+		expect(rows.length).toBe(3);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+	}));
+
 	it('should support phrase search', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });

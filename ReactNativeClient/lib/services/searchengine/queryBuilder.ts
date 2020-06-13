@@ -238,18 +238,45 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	}
 
 	if (filters.has('-text')) {
-		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)`);
-		params.push(filters.get('-text').join(' OR '));
+		if (relation === 'AND') {
+			queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)');
+			params.push(filters.get('-text').join(' OR '));
+		}
+
+		if (relation === 'OR') {
+			filters.get('-text').forEach(value => {
+				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts match ?))');
+				params.push(value);
+			});
+		}
 	}
 
 	if (filters.has('-title')) {
-		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)`);
-		params.push(filters.get('-title').join(' OR '));
+		if (relation === 'AND') {
+			queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)`);
+			params.push(filters.get('-title').join(' OR '));
+		}
+
+		if (relation === 'OR') {
+			filters.get('-title').forEach(value => {
+				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts.title match ?))');
+				params.push(value);
+			});
+		}
 	}
 
 	if (filters.has('-body')) {
-		queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)`);
-		params.push(filters.get('-body').join(' OR '));
+		if (relation === 'AND') {
+			queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)');
+			params.push(filters.get('-body').join(' OR '));
+		}
+		if (relation === 'OR') {
+			filters.get('-body').forEach(value => {
+				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts.body match ?))');
+				params.push(value);
+			});
+		}
+
 	}
 
 	if (withs.length > 0) {
