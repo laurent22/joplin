@@ -14,8 +14,6 @@
 		"strictFunctionTypes": true,
 		"sourceMap": true,
 		"jsx": "react",
-		// This is needed because otherwise we get errors in node_modules for React
-		// but ideally it should be made to work.
 		"skipLibCheck": true,
 	},
     "include": [

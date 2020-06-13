@@ -5,7 +5,8 @@ const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const dialogs = require('lib/components/dialogs.js').default;
+const DialogBox = require('react-native-dialogbox').default;
+const { dialogs } = require('lib/dialogs.js');
 const Shared = require('lib/components/shared/dropbox-login-shared');
 const { themeStyle } = require('lib/components/global-style.js');
 
@@ -15,7 +16,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 
 		this.styles_ = {};
 
-		this.shared_ = new Shared(this, msg => dialogs.info(msg), msg => dialogs.error(msg));
+		this.shared_ = new Shared(this, msg => dialogs.info(this, msg), msg => dialogs.error(this, msg));
 	}
 
 	UNSAFE_componentWillMount() {
@@ -65,6 +66,12 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 					{/* Add this extra padding to make sure the view is scrollable when the keyboard is visible on small screens (iPhone SE) */}
 					<View style={{ height: 200 }}></View>
 				</ScrollView>
+
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}

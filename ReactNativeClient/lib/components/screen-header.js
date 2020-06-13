@@ -12,7 +12,8 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
-const dialogs = require('lib/components/dialogs.js').default;
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 Icon.loadFont();
 
@@ -181,7 +182,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		const ok = await dialogs.confirm(_('Delete these notes?'));
+		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
 		if (!ok) return;
 
 		const noteIds = this.props.selectedNoteIds;
@@ -429,7 +430,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await dialogs.confirm(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await dialogs.confirm(this.props.parentComponent, _('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -511,6 +512,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{menuComp}
 				</View>
 				{warningComps}
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}

@@ -30,7 +30,8 @@ const { shim } = require('lib/shim.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
-const dialogs = require('lib/components/dialogs.js').default;
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
@@ -95,7 +96,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
-				const buttonId = await dialogs.pop(_('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
+				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
@@ -192,7 +193,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}
 				}
 			} catch (error) {
-				dialogs.error(error.message);
+				dialogs.error(this, error.message);
 			}
 		};
 
@@ -457,7 +458,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(_('Delete note?'));
+		const ok = await dialogs.confirm(this, _('Delete note?'));
 		if (!ok) return;
 
 		const folderId = note.parent_id;
@@ -519,7 +520,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
 
 		if (mustResize) {
-			const buttonId = await dialogs.pop(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
+			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
 				{ text: _('Yes'), id: 'yes' },
 				{ text: _('No'), id: 'no' },
 				{ text: _('Cancel'), id: 'cancel' },
@@ -614,7 +615,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				if (!done) return;
 			} else {
 				if (fileType === 'image') {
-					dialogs.error(_('Unsupported image type: %s', mimeType));
+					dialogs.error(this, _('Unsupported image type: %s', mimeType));
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
@@ -628,7 +629,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 			return;
 		}
 
@@ -740,7 +741,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 		}
 	}
 
@@ -751,7 +752,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		try {
 			Linking.openURL(note.source_url);
 		} catch (error) {
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 		}
 	}
 
@@ -811,7 +812,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(_('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
@@ -1166,6 +1167,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{!Setting.value('editor.beta') && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 				{noteTagDialog}
 			</View>
 		);

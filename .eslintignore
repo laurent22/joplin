@@ -100,7 +100,6 @@ ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/checkPermissions.js
-ReactNativeClient/lib/components/dialogs.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js

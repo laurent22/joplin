@@ -10,6 +10,7 @@ const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const DialogBox = require('react-native-dialogbox').default;
 
 Icon.loadFont();
 
@@ -189,6 +190,11 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
