@@ -6,6 +6,7 @@ const { Platform, View, Text } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
+const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
 const { assetsToHeaders } = require('lib/joplin-renderer');
@@ -214,7 +215,7 @@ class NoteBodyViewer extends Component {
 		const name = resource.title ? resource.title : resource.file_name;
 
 		const action = await dialogs.pop(this, name, [
-			{ text: 'Share', id: 'share' },
+			{ text: _('Share'), id: 'share' },
 		]);
 
 		if (action === 'share') {
