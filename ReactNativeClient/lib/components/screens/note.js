@@ -8,6 +8,7 @@ const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
+const UndoRedoService = require('lib/services/UndoRedoService.js').default;
 const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
@@ -70,9 +71,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// margin. This forces RN to update the text input and to display it. Maybe that hack can be removed once RN is upgraded.
 			// See https://github.com/laurent22/joplin/issues/1057
 			HACK_webviewLoadingState: 0,
-		};
 
-		this.selection = null;
+			undoRedoButtonState: {
+				canUndo: false,
+				canRedo: false,
+			},
+
+			selection: { start: 0, end: 0 },
+		};
 
 		this.saveActionQueues_ = {};
 
@@ -121,6 +127,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					note: Object.assign({}, this.state.lastSavedNote),
 					mode: 'view',
 				});
+
+				await this.undoRedoService_.reset();
 
 				return true;
 			}
@@ -216,6 +224,39 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
+		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
+		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
+		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
+		this.body_selectionChange = this.body_selectionChange.bind(this);
+	}
+
+	undoRedoService_stackChange() {
+		this.setState({ undoRedoButtonState: {
+			canUndo: this.undoRedoService_.canUndo,
+			canRedo: this.undoRedoService_.canRedo,
+		} });
+	}
+
+	async undoRedo(type) {
+		const undoState = await this.undoRedoService_[type](this.undoState());
+		if (!undoState) return;
+
+		this.setState((state) => {
+			const newNote = Object.assign({}, state.note);
+			newNote.body = undoState.body;
+			return {
+				note: newNote,
+				selection: Object.assign({}, undoState.selection),
+			};
+		});
+	}
+
+	screenHeader_undoButtonPress() {
+		this.undoRedo('undo');
+	}
+
+	screenHeader_redoButtonPress() {
+		this.undoRedo('redo');
 	}
 
 	styles() {
@@ -307,9 +348,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	async UNSAFE_componentWillMount() {
-		this.selection = null;
+	undoState(noteBody = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+			selection: Object.assign({}, this.state.selection),
+		};
+	}
 
+	async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -317,6 +363,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.installResourceHandling(this.refreshResource);
 
 		await shared.initState(this);
+
+		this.undoRedoService_ = new UndoRedoService();
+		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
 		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
@@ -353,6 +402,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
+
+		this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text) {
@@ -362,8 +413,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_changeText(text) {
+		if (!this.undoRedoService_.canUndo) {
+			this.undoRedoService_.push(this.undoState());
+		} else {
+			this.undoRedoService_.schedulePush(this.undoState());
+		}
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
+	}
+
+	body_selectionChange(event) {
+		this.setState({ selection: event.nativeEvent.selection });
 	}
 
 	makeSaveAction() {
@@ -584,9 +644,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.selection) {
-			const prefix = newNote.body.substring(0, this.selection.start);
-			const suffix = newNote.body.substring(this.selection.end);
+		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.state.selection) {
+			const prefix = newNote.body.substring(0, this.state.selection.start);
+			const suffix = newNote.body.substring(this.state.selection.end);
 			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
 		} else {
 			newNote.body += `\n${resourceTag}`;
@@ -1022,9 +1082,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						multiline={true}
 						value={note.body}
 						onChangeText={(text) => this.body_changeText(text)}
-						onSelectionChange={({ nativeEvent: { selection } }) => {
-							this.selection = selection;
-						}}
+						selection={this.state.selection}
+						onSelectionChange={this.body_selectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -1056,7 +1115,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		const saveButtonDisabled = !this.isModified();
+		const saveButtonDisabled = true;// !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
@@ -1067,7 +1126,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
+				<TextInput
+					onContentSizeChange={this.titleTextInput_contentSizeChange}
+					multiline={this.enableMultilineTitle_}
+					ref="titleTextField"
+					underlineColorAndroid="#ffffff00"
+					autoCapitalize="sentences"
+					style={this.styles().titleTextInput}
+					value={note.title}
+					onChangeText={this.title_changeText}
+					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
+					placeholder={_('Add title')}
+					placeholderTextColor={theme.colorFaded}
+				/>
 			</View>
 		);
 
@@ -1075,7 +1147,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
+				<ScreenHeader
+					folderPickerOptions={this.folderPickerOptions()}
+					menuOptions={this.menuOptions()}
+					showSaveButton={showSaveButton}
+					saveButtonDisabled={saveButtonDisabled}
+					onSaveButtonPress={this.saveNoteButton_press}
+					showSideMenuButton={false}
+					showSearchButton={false}
+					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
+					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
+					onUndoButtonPress={this.screenHeader_undoButtonPress}
+					onRedoButtonPress={this.screenHeader_redoButtonPress}
+				/>
 				{titleComp}
 				{bodyComponent}
 				{!Setting.value('editor.beta') && actionButtonComp}
