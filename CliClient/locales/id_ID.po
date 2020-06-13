@@ -16,144 +16,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.3.1\n"
 
-#: CliClient/app/app-gui.js:446
-msgid "To delete a tag, untag the associated notes."
-msgstr "Untuk menghapus sebuah label, hapus label dari catatan terkait."
-
-#: CliClient/app/app-gui.js:456
-msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Silakan pilih catatan atau buku catatan yang akan dihapus terlebih dahulu."
-
-#: CliClient/app/app-gui.js:720
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Tekan Ctrl+D atau ketik \"exit\" untuk keluar dari aplikasi"
-
-#: CliClient/app/app.js:61
-#, javascript-format
-msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"Lebih dari satu item cocok dengan \"%s\". Silakan persempit kueri Anda."
-
-#: CliClient/app/app.js:91
-msgid "No notebook selected."
-msgstr "Tidak ada buku catatan yang terpilih."
-
-#: CliClient/app/app.js:97
-msgid "No notebook has been specified."
-msgstr "Belum ada buku catatan yang ditentukan."
-
-#: CliClient/app/app.js:136 CliClient/app/cli-utils.js:160
-msgid "Y"
-msgstr "Y"
-
-#: CliClient/app/app.js:136 CliClient/app/cli-utils.js:160
-msgid "n"
-msgstr "t"
-
-#: CliClient/app/app.js:136
-msgid "N"
-msgstr "T"
-
-#: CliClient/app/app.js:136
-msgid "y"
-msgstr "y"
-
-#: CliClient/app/app.js:169
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "Membatalkan proses sinkronisasi latar belakang... Mohon tunggu."
-
-#: CliClient/app/app.js:254
-#, javascript-format
-msgid "No such command: %s"
-msgstr "Tidak ada perintah semacam ini: %s"
-
-#: CliClient/app/app.js:302
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Perintah \"%s\" hanya tersedia dalam mode GUI"
-
-#: CliClient/app/base-command.js:15
-msgid "Cannot change encrypted item"
-msgstr "Tidak dapat mengubah item yang terenkripsi"
-
-#: CliClient/app/cli-utils.js:108
-#, javascript-format
-msgid "Missing required argument: %s"
-msgstr "Argumen yang dibutuhkan tidak ada: %s"
-
-#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
-#, javascript-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: CliClient/app/cli-utils.js:143
-msgid "Your choice: "
-msgstr "Pilihan Anda: "
-
-#: CliClient/app/cli-utils.js:150
-#, javascript-format
-msgid "Invalid answer: %s"
-msgstr "Jawaban tidak valid: %s"
-
-#: CliClient/app/command-attach.js:13
-msgid "Attaches the given file to the note."
-msgstr "Melampirkan berkas yang dipilih ke catatan."
-
-#: CliClient/app/command-attach.js:21 CliClient/app/command-cat.js:25
-#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-done.js:20 CliClient/app/command-export.js:36
-#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
-#: CliClient/app/command-help.js:66 CliClient/app/command-import.js:30
-#: CliClient/app/command-mv.js:22 CliClient/app/command-mv.js:25
-#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
-#: CliClient/app/command-rmnote.js:25 CliClient/app/command-search.js:27
-#: CliClient/app/command-set.js:32 CliClient/app/command-tag.js:33
-#: CliClient/app/command-tag.js:36 CliClient/app/command-tag.js:42
-#: CliClient/app/command-tag.js:43 CliClient/app/command-tag.js:81
-#: CliClient/app/command-tag.js:87 CliClient/app/command-todo.js:21
-#: CliClient/app/command-use.js:21
-#: ReactNativeClient/lib/services/InteropService.js:218
-#: ReactNativeClient/lib/services/InteropService.js:239
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Tidak dapat menemukan \"%s\"."
-
-#: CliClient/app/command-cat.js:14
-msgid "Displays the given note."
-msgstr "Menampilkan catatan yang dipilih."
-
-#: CliClient/app/command-cat.js:18
-msgid "Displays the complete information about note."
-msgstr "Menampilkan informasi lengkap tentang catatan."
-
-#: CliClient/app/command-config.js:13
-msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
-msgstr ""
-"Mendapatkan atau menyetel nilai konfigurasi. Jika [value] (nilai) tidak "
-"tersedia, maka akan menampilkan nilai dari [name] (nama). Jika [name] maupun "
-"[value] tidak tersedia juga, maka akan menampilkan daftar konfigurasi saat "
-"ini."
-
-#: CliClient/app/command-config.js:18
-msgid "Also displays unset and hidden config variables."
-msgstr ""
-"Juga menampilkan variabel konfigurasi yang belum disetel dan yang "
-"tersembunyi."
-
-#: CliClient/app/command-config.js:79
-#, javascript-format
-msgid "%s = %s (%s)"
-msgstr "%s = %s (%s)"
-
-#: CliClient/app/command-config.js:81
-#, javascript-format
-msgid "%s = %s"
-msgstr "%s = %s"
-
 #: CliClient/app/command-cp.js:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
@@ -163,14 +25,173 @@ msgstr ""
 "catatan). Jika tidak ada buku catatan yang ditentukan maka catatan akan "
 "diduplikasi ke buku catatan saat ini."
 
-#: CliClient/app/command-done.js:14
-msgid "Marks a to-do as done."
-msgstr "Tandai tugas telah selesai."
-
-#: CliClient/app/command-done.js:21
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
+#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
+#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
+#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
+#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
+#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
+#: CliClient/app/command-done.js:20
+#: ReactNativeClient/lib/services/InteropService.js:218
+#: ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
-msgid "Note is not a to-do: \"%s\""
-msgstr "Catatan bukan sebuah tugas: \"%s\""
+msgid "Cannot find \"%s\"."
+msgstr "Tidak dapat menemukan \"%s\"."
+
+#: CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Menampilkan catatan pada buku catatan saat ini. Gunakan `ls /` untuk "
+"menampilkan daftar buku catatan."
+
+#: CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Menampilkan hanya <num> (bilangan) catatan teratas."
+
+#: CliClient/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Mengurutkan item berdasarkan <field> (bidang) (contoh: title (judul), "
+"updated_time (waktu diperbarui), created_time (waktu dibuat))."
+
+#: CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Membalikkan urutan."
+
+#: CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Menampilkan hanya item dengan tipe-tipe tertentu. Dapat berupa `n` untuk "
+"catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
+"hanya akan menampilkan tugas, sedangkan `-ttd` akan menampilkan catatan dan "
+"tugas)."
+
+#: CliClient/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "Antara \"text\" atau \"json\""
+
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Gunakan format daftar yang panjang. Formatnya adalah ID, NOTE_COUNT (jumlah "
+"catatan) (untuk buku catatan), DATE (tanggal), TODO_CHECKED (tugas selesai) "
+"(untuk tugas), TITLE (judul)"
+
+#: CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Silakan pilih buku catatan terlebih dahulu."
+
+#: CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Mengimpor data ke Joplin."
+
+#: CliClient/app/command-import.js:24
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Format sumber: %s"
+
+#: CliClient/app/command-import.js:24
+msgid "Do not ask for confirmation."
+msgstr "Jangan meminta konfirmasi."
+
+#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "Ditemukan: %d."
+
+#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "Dibuat: %d."
+
+#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Diubah: %d."
+
+#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Dilewati: %d."
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Sumber daya: %d."
+
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Diberi label: %d."
+
+#: CliClient/app/command-import.js:61
+msgid "Importing notes..."
+msgstr "Mengimpor catatan..."
+
+#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Catatan telah berhasil diimpor: %s"
+
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Tipe: %s."
+
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Nilai yang mungkin: %s."
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Default: %s"
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Kunci/nilai yang mungkin:"
+
+#: CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Memulai, menghentikan atau memeriksa server API. Untuk menentukan pada port "
+"mana server seharusnya berjalan, setel variabel konfigurasi api.port. "
+"Perintahnya adalah (%s)."
+
+#: CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Server sudah berjalan pada port %d"
+
+#: CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Server berjalan pada port %d"
+
+#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
+msgid "Server is not running."
+msgstr "Server tidak berjalan."
 
 #: CliClient/app/command-e2ee.js:18
 msgid ""
@@ -231,8 +252,8 @@ msgstr "Diaktifkan"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/models/Setting.js:565
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
-#: ReactNativeClient/lib/models/Setting.js:548
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
@@ -242,243 +263,9 @@ msgstr "Dinonaktifkan"
 msgid "Encryption is: %s"
 msgstr "Enkripsi adalah: %s"
 
-#: CliClient/app/command-edit.js:17
-msgid "Edit note."
-msgstr "Ubah catatan."
-
-#: CliClient/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"Tidak ada editor teks yang diatur. Silakan setel menggunakan `config editor "
-"<editor-path>`"
-
-#: CliClient/app/command-edit.js:40
-msgid "No active notebook."
-msgstr "Tidak ada buku catatan yang aktif."
-
-#: CliClient/app/command-edit.js:46
-#, javascript-format
-msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Catatan tidak ada: \"%s\". Buat?"
-
-#: CliClient/app/command-exit.js:11
-msgid "Exits the application."
-msgstr "Keluar dari aplikasi."
-
-#: CliClient/app/command-export.js:13
-msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
-msgstr ""
-"Mengekspor data Joplin ke alamat direktori yang diberikan. Secara otomatis, "
-"ini akan mengekspor basis data lengkap termasuk buku catatan, catatan, label "
-"dan sumber daya."
-
-#: CliClient/app/command-export.js:23
-#, javascript-format
-msgid "Destination format: %s"
-msgstr "Format tujuan: %s"
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given note."
-msgstr "Mengekspor hanya catatan yang diberikan."
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given notebook."
-msgstr "Mengekspor hanya buku catatan yang diberikan."
-
-#: CliClient/app/command-geoloc.js:13
-msgid "Displays a geolocation URL for the note."
-msgstr "Menampilkan URL geolokasi untuk catatan."
-
-#: CliClient/app/command-help.js:13
-msgid "Displays usage information."
-msgstr "Menampilkan informasi penggunaan."
-
-#: CliClient/app/command-help.js:36
-#, javascript-format
-msgid "For information on how to customise the shortcuts please visit %s"
-msgstr ""
-"Untuk informasi tentang bagaimana cara personalisasi pintasan silakan "
-"kunjungi %s"
-
-#: CliClient/app/command-help.js:44
-msgid "Shortcuts are not available in CLI mode."
-msgstr "Pintasan tidak tersedia dalam mode CLI."
-
-#: CliClient/app/command-help.js:71
-msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
-"Ketik `help [command]` untuk informasi lanjutan tentang sebuah perintah "
-"(command); atau ketik `help all` untuk informasi penggunaan secara lengkap."
-
-#: CliClient/app/command-help.js:73
-msgid "The possible commands are:"
-msgstr "Perintah yang mungkin adalah:"
-
-#: CliClient/app/command-help.js:77
-msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
-"Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul "
-"atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan "
-"atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk "
-"pada item yang saat ini terpilih."
-
-#: CliClient/app/command-help.js:79
-msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
-"Untuk berpindah dari suatu panel ke panel lainnya, tekan Tab atau Shift+Tab."
-
-#: CliClient/app/command-help.js:80
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr ""
-"Gunakan tombol tanda panah dan tombol page up/down pada keyboard untuk "
-"menggulir daftar dan area teks (termasuk konsol ini)."
-
-#: CliClient/app/command-help.js:81
-msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Untuk memperbesar/memperkecil layar konsol, tekan \"tc\"."
-
-#: CliClient/app/command-help.js:82
-msgid "To enter command line mode, press \":\""
-msgstr "Untuk masuk mode CLI, tekan \":\""
-
-#: CliClient/app/command-help.js:83
-msgid "To exit command line mode, press ESCAPE"
-msgstr "Untuk keluar dari mode CLI, tekan ESCAPE"
-
-#: CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"Untuk melihat daftar pintasan keyboard dan opsi konfigurasi, ketik `help "
-"keymap`"
-
-#: CliClient/app/command-import.js:14
-msgid "Imports data into Joplin."
-msgstr "Mengimpor data ke Joplin."
-
-#: CliClient/app/command-import.js:24
-#, javascript-format
-msgid "Source format: %s"
-msgstr "Format sumber: %s"
-
-#: CliClient/app/command-import.js:24
-msgid "Do not ask for confirmation."
-msgstr "Jangan meminta konfirmasi."
-
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
-#, javascript-format
-msgid "Found: %d."
-msgstr "Ditemukan: %d."
-
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
-#, javascript-format
-msgid "Created: %d."
-msgstr "Dibuat: %d."
-
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
-#, javascript-format
-msgid "Updated: %d."
-msgstr "Diubah: %d."
-
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
-#, javascript-format
-msgid "Skipped: %d."
-msgstr "Dilewati: %d."
-
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
-#, javascript-format
-msgid "Resources: %d."
-msgstr "Sumber daya: %d."
-
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
-#, javascript-format
-msgid "Tagged: %d."
-msgstr "Diberi label: %d."
-
-#: CliClient/app/command-import.js:61
-msgid "Importing notes..."
-msgstr "Mengimpor catatan..."
-
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
-#, javascript-format
-msgid "The notes have been imported: %s"
-msgstr "Catatan telah berhasil diimpor: %s"
-
-#: CliClient/app/command-ls.js:18
-msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
-"Menampilkan catatan pada buku catatan saat ini. Gunakan `ls /` untuk "
-"menampilkan daftar buku catatan."
-
-#: CliClient/app/command-ls.js:27
-msgid "Displays only the first top <num> notes."
-msgstr "Menampilkan hanya <num> (bilangan) catatan teratas."
-
-#: CliClient/app/command-ls.js:28
-msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"Mengurutkan item berdasarkan <field> (bidang) (contoh: title (judul), "
-"updated_time (waktu diperbarui), created_time (waktu dibuat))."
-
-#: CliClient/app/command-ls.js:29
-msgid "Reverses the sorting order."
-msgstr "Membalikkan urutan."
-
-#: CliClient/app/command-ls.js:30
-msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
-msgstr ""
-"Menampilkan hanya item dengan tipe-tipe tertentu. Dapat berupa `n` untuk "
-"catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
-"hanya akan menampilkan tugas, sedangkan `-ttd` akan menampilkan catatan dan "
-"tugas)."
-
-#: CliClient/app/command-ls.js:31
-msgid "Either \"text\" or \"json\""
-msgstr "Antara \"text\" atau \"json\""
-
-#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
-msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"Gunakan format daftar yang panjang. Formatnya adalah ID, NOTE_COUNT (jumlah "
-"catatan) (untuk buku catatan), DATE (tanggal), TODO_CHECKED (tugas selesai) "
-"(untuk tugas), TITLE (judul)"
-
-#: CliClient/app/command-ls.js:63
-msgid "Please select a notebook first."
-msgstr "Silakan pilih buku catatan terlebih dahulu."
-
 #: CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Membuat buku catatan baru."
-
-#: CliClient/app/command-mknote.js:12
-msgid "Creates a new note."
-msgstr "Membuat catatan baru."
-
-#: CliClient/app/command-mknote.js:16 CliClient/app/command-mktodo.js:16
-msgid "Notes can only be created within a notebook."
-msgstr "Catatan hanya dapat dibuat di dalam buku catatan."
-
-#: CliClient/app/command-mktodo.js:12
-msgid "Creates a new to-do."
-msgstr "Membuat tugas baru."
 
 #: CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
@@ -486,98 +273,40 @@ msgstr ""
 "Memindahkan catatan yang cocok dengan <note> (catatan) ke [notebook] (buku "
 "catatan)."
 
-#: CliClient/app/command-ren.js:14
-msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
-"Mengganti nama <item> yang diberikan (catatan atau buku catatan) menjadi "
-"<name> (nama)."
-
-#: CliClient/app/command-rmbook.js:13
-msgid "Deletes the given notebook."
-msgstr "Menghapus buku catatan yang diberikan."
-
-#: CliClient/app/command-rmbook.js:17
-msgid "Deletes the notebook without asking for confirmation."
-msgstr "Menghapus buku catatan tanpa meminta konfirmasi."
-
-#: CliClient/app/command-rmbook.js:26
-#: ReactNativeClient/lib/components/screens/notes.js:154
+#: CliClient/app/command-config.js:13
 msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
 msgstr ""
-"Hapus buku catatan? Semua catatan dan sub-buku catatan dalam buku catatan "
-"ini juga akan dihapus."
+"Mendapatkan atau menyetel nilai konfigurasi. Jika [value] (nilai) tidak "
+"tersedia, maka akan menampilkan nilai dari [name] (nama). Jika [name] maupun "
+"[value] tidak tersedia juga, maka akan menampilkan daftar konfigurasi saat "
+"ini."
 
-#: CliClient/app/command-rmnote.js:13
-msgid "Deletes the notes matching <note-pattern>."
-msgstr "Menghapus catatan yang cocok dengan <note-pattern> (pola-catatan)."
+#: CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr ""
+"Juga menampilkan variabel konfigurasi yang belum disetel dan yang "
+"tersembunyi."
 
-#: CliClient/app/command-rmnote.js:17
-msgid "Deletes the notes without asking for confirmation."
-msgstr "Menghapus catatan tanpa meminta konfirmasi."
-
-#: CliClient/app/command-rmnote.js:27
+#: CliClient/app/command-config.js:79
 #, javascript-format
-msgid "%d notes match this pattern. Delete them?"
-msgstr "%d catatan cocok dengan pola ini. Hapus?"
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
 
-#: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:377
-msgid "Delete note?"
-msgstr "Hapus catatan?"
-
-#: CliClient/app/command-search.js:13
-msgid "Searches for the given <pattern> in all the notes."
-msgstr "Pencarian untuk <pattern> (pola) yang diberikan di semua catatan."
-
-#: CliClient/app/command-server.js:14
+#: CliClient/app/command-config.js:81
 #, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: CliClient/app/command-use.js:12
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
 msgstr ""
-"Memulai, menghentikan atau memeriksa server API. Untuk menentukan pada port "
-"mana server seharusnya berjalan, setel variabel konfigurasi api.port. "
-"Perintahnya adalah (%s)."
-
-#: CliClient/app/command-server.js:37
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr "Server sudah berjalan pada port %d"
-
-#: CliClient/app/command-server.js:43
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr "Server berjalan pada port %d"
-
-#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
-msgid "Server is not running."
-msgstr "Server tidak berjalan."
-
-#: CliClient/app/command-set.js:22
-#, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"Menyetel properti <name> (nama) dari <note> (catatan) yang diberikan menjadi "
-"[value] (nilai) yang diberikan. Properti yang mungkin adalah:\n"
-"\n"
-"%s"
-
-#: CliClient/app/command-status.js:13
-msgid "Displays summary about the notes and notebooks."
-msgstr "Menampilkan ringkasan tentang catatan dan buku catatan."
-
-#: CliClient/app/command-status.js:44
-msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-"Untuk mencoba kembali dekripsi item ini, jalankan perintah `e2ee decrypt --"
-"retry-failed-items`"
+"Beralih ke [notebook] (buku catatan) - semua operasi selanjutnya akan "
+"terjadi dalam buku catatan ini."
 
 #: CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -661,49 +390,99 @@ msgstr "Mengunduh sumber daya..."
 msgid "Cancelling... Please wait."
 msgstr "Membatalkan… Mohon tunggu."
 
-#: CliClient/app/command-tag.js:14
-msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+#: CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
-"<tag-command> (perintah-label) dapat berupa \"add\", \"remove\", \"list\", "
-"atau \"notetags\" untuk menetapkan atau menghapus [tag] (label) dari [note] "
-"(catatan), untuk menampilkan daftar catatan yang terkait dengan [tag], atau "
-"untuk menampilkan daftar label yang terkait dengan [note]. Perintah `tag "
-"list` dapat digunakan untuk menampilkan daftar semua label (gunakan -l untuk "
-"opsi panjang)."
+"Mengganti nama <item> yang diberikan (catatan atau buku catatan) menjadi "
+"<name> (nama)."
 
-#: CliClient/app/command-tag.js:90
+#: CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Menghapus buku catatan yang diberikan."
+
+#: CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Menghapus buku catatan tanpa meminta konfirmasi."
+
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Hapus buku catatan? Semua catatan dan sub-buku catatan dalam buku catatan "
+"ini juga akan dihapus."
+
+#: CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Membuat tugas baru."
+
+#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Catatan hanya dapat dibuat di dalam buku catatan."
+
+#: CliClient/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Menampilkan catatan yang dipilih."
+
+#: CliClient/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Menampilkan informasi lengkap tentang catatan."
+
+#: CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Ubah catatan."
+
+#: CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Tidak ada editor teks yang diatur. Silakan setel menggunakan `config editor "
+"<editor-path>`"
+
+#: CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Tidak ada buku catatan yang aktif."
+
+#: CliClient/app/command-edit.js:46
 #, javascript-format
-msgid "Invalid command: \"%s\""
-msgstr "Perintah tidak valid: \"%s\""
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Catatan tidak ada: \"%s\". Buat?"
 
-#: CliClient/app/command-todo.js:14
-msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+#: CliClient/app/app-gui.js:446
+msgid "To delete a tag, untag the associated notes."
+msgstr "Untuk menghapus sebuah label, hapus label dari catatan terkait."
+
+#: CliClient/app/app-gui.js:456
+msgid "Please select the note or notebook to be deleted first."
 msgstr ""
-"<todo-command> (perintah-tugas) dapat berupa \"toggle\" atau \"clear\". "
-"Gunakan \"toggle\" untuk beralih dari dan ke status selesai dan belum "
-"selesai pada tugas yang dipilih (jika target adalah catatan biasa, maka ia "
-"akan dikonversi menjadi tugas). Gunakan \"clear\" untuk mengubah tugas "
-"kembali menjadi catatan biasa."
+"Silakan pilih catatan atau buku catatan yang akan dihapus terlebih dahulu."
 
-#: CliClient/app/command-undone.js:12
-msgid "Marks a to-do as non-completed."
-msgstr "Menandai tugas belum selesai."
+#: CliClient/app/app-gui.js:720
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Tekan Ctrl+D atau ketik \"exit\" untuk keluar dari aplikasi"
 
-#: CliClient/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
-msgstr ""
-"Beralih ke [notebook] (buku catatan) - semua operasi selanjutnya akan "
-"terjadi dalam buku catatan ini."
+#: CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Menghapus catatan yang cocok dengan <note-pattern> (pola-catatan)."
+
+#: CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Menghapus catatan tanpa meminta konfirmasi."
+
+#: CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d catatan cocok dengan pola ini. Hapus?"
+
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/note.js:457
+msgid "Delete note?"
+msgstr "Hapus catatan?"
+
+#: CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Melampirkan berkas yang dipilih ke catatan."
 
 #: CliClient/app/command-version.js:11
 msgid "Displays version information"
@@ -714,9 +493,47 @@ msgstr "Menampilkan informasi versi"
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
-#: CliClient/app/gui/FolderListWidget.js:31
-msgid "Search:"
-msgstr "Pencarian:"
+#: CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Menandai tugas belum selesai."
+
+#: CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Mengekspor data Joplin ke alamat direktori yang diberikan. Secara otomatis, "
+"ini akan mengekspor basis data lengkap termasuk buku catatan, catatan, label "
+"dan sumber daya."
+
+#: CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Format tujuan: %s"
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Mengekspor hanya catatan yang diberikan."
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Mengekspor hanya buku catatan yang diberikan."
+
+#: CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Membuat catatan baru."
+
+#: CliClient/app/main.js:82
+msgid "Type `joplin help` for usage information."
+msgstr "Ketik `joplin help` untuk informasi penggunaan."
+
+#: CliClient/app/main.js:84
+msgid "Fatal error:"
+msgstr "Kesalahan fatal:"
+
+#: CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Menampilkan URL geolokasi untuk catatan."
 
 #: CliClient/app/gui/NoteWidget.js:36
 msgid ""
@@ -751,375 +568,276 @@ msgstr ""
 msgid "You may also type `status` for more information."
 msgstr "Anda juga dapat mengetik `status` untuk informasi lebih lanjut."
 
-#: CliClient/app/help-utils.js:56
-msgid "Enum"
-msgstr "Enum"
+#: CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Pencarian:"
 
-#: CliClient/app/help-utils.js:56
+#: CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Pencarian untuk <pattern> (pola) yang diberikan di semua catatan."
+
+#: CliClient/app/command-set.js:22
 #, javascript-format
-msgid "Type: %s."
-msgstr "Tipe: %s."
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Menyetel properti <name> (nama) dari <note> (catatan) yang diberikan menjadi "
+"[value] (nilai) yang diberikan. Properti yang mungkin adalah:\n"
+"\n"
+"%s"
 
-#: CliClient/app/help-utils.js:57
+#: CliClient/app/cli-utils.js:108
 #, javascript-format
-msgid "Possible values: %s."
-msgstr "Nilai yang mungkin: %s."
+msgid "Missing required argument: %s"
+msgstr "Argumen yang dibutuhkan tidak ada: %s"
 
-#: CliClient/app/help-utils.js:71
+#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
 #, javascript-format
-msgid "Default: %s"
-msgstr "Default: %s"
+msgid "%s: %s"
+msgstr "%s: %s"
 
-#: CliClient/app/help-utils.js:77
-msgid "Possible keys/values:"
-msgstr "Kunci/nilai yang mungkin:"
+#: CliClient/app/cli-utils.js:143
+msgid "Your choice: "
+msgstr "Pilihan Anda: "
 
-#: CliClient/app/main.js:77
-msgid "Type `joplin help` for usage information."
-msgstr "Ketik `joplin help` untuk informasi penggunaan."
-
-#: CliClient/app/main.js:79
-msgid "Fatal error:"
-msgstr "Kesalahan fatal:"
-
-#: ElectronClient/app.js:392
-msgid "Sidebar"
-msgstr "Bilah samping"
-
-#: ElectronClient/app.js:398
-msgid "Note list"
-msgstr "Daftar catatan"
-
-#: ElectronClient/app.js:404
-msgid "Note title"
-msgstr "Judul catatan"
-
-#: ElectronClient/app.js:410
-msgid "Note body"
-msgstr "Isi catatan"
-
-#: ElectronClient/app.js:462
+#: CliClient/app/cli-utils.js:150
 #, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Mengimpor dari \"%s\" sebagai format \"%s\". Mohon tunggu..."
+msgid "Invalid answer: %s"
+msgstr "Jawaban tidak valid: %s"
 
-#: ElectronClient/app.js:495 ElectronClient/gui/MainScreen.min.js:549
-#: ElectronClient/gui/utils/NoteListUtils.js:186
-msgid "PDF File"
-msgstr "Berkas PDF"
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "Y"
+msgstr "Y"
 
-#: ElectronClient/app.js:515 ElectronClient/gui/Root.min.js:94
-msgid "Synchronisation Status"
-msgstr "Status Sinkronisasi"
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "n"
+msgstr "t"
 
-#: ElectronClient/app.js:525
-#: ReactNativeClient/lib/components/action-button.js:73
-#: ReactNativeClient/setUpQuickActions.js:14
-msgid "New note"
-msgstr "Catatan baru"
+#: CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Tidak dapat mengubah item yang terenkripsi"
 
-#: ElectronClient/app.js:537
-#: ReactNativeClient/lib/components/action-button.js:64
-#: ReactNativeClient/setUpQuickActions.js:15
-msgid "New to-do"
-msgstr "Tugas baru"
+#: CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Menampilkan informasi penggunaan."
 
-#: ElectronClient/app.js:549
-msgid "New notebook"
-msgstr "Buku catatan baru"
-
-#: ElectronClient/app.js:560 ElectronClient/gui/SideBar.min.js:304
-msgid "New sub-notebook"
-msgstr "Sub-buku catatan baru"
-
-#: ElectronClient/app.js:572
-msgid "Print"
-msgstr "Cetak"
-
-#: ElectronClient/app.js:592
-msgid "Create note from template"
-msgstr "Buat catatan dari templat"
-
-#: ElectronClient/app.js:602
-msgid "Create to-do from template"
-msgstr "Buat tugas dari templat"
-
-#: ElectronClient/app.js:612
-msgid "Insert template"
-msgstr "Masukkan templat"
-
-#: ElectronClient/app.js:622
-msgid "Open template directory"
-msgstr "Buka direktori templat"
-
-#: ElectronClient/app.js:629
-msgid "Refresh templates"
-msgstr "Segarkan templat"
-
-#: ElectronClient/app.js:642 ElectronClient/gui/Root.min.js:92
-msgid "Options"
-msgstr "Pilihan"
-
-#: ElectronClient/app.js:655
-msgid "Note attachments..."
-msgstr "Lampiran catatan..."
-
-#: ElectronClient/app.js:677
+#: CliClient/app/command-help.js:36
 #, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "Revisi: %s (%s)"
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+"Untuk informasi tentang bagaimana cara personalisasi pintasan silakan "
+"kunjungi %s"
 
-#: ElectronClient/app.js:684
+#: CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Pintasan tidak tersedia dalam mode CLI."
+
+#: CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Ketik `help [command]` untuk informasi lanjutan tentang sebuah perintah "
+"(command); atau ketik `help all` untuk informasi penggunaan secara lengkap."
+
+#: CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Perintah yang mungkin adalah:"
+
+#: CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul "
+"atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan "
+"atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk "
+"pada item yang saat ini terpilih."
+
+#: CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+"Untuk berpindah dari suatu panel ke panel lainnya, tekan Tab atau Shift+Tab."
+
+#: CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Gunakan tombol tanda panah dan tombol page up/down pada keyboard untuk "
+"menggulir daftar dan area teks (termasuk konsol ini)."
+
+#: CliClient/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Untuk memperbesar/memperkecil layar konsol, tekan \"tc\"."
+
+#: CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Untuk masuk mode CLI, tekan \":\""
+
+#: CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Untuk keluar dari mode CLI, tekan ESCAPE"
+
+#: CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"Untuk melihat daftar pintasan keyboard dan opsi konfigurasi, ketik `help "
+"keymap`"
+
+#: CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> (perintah-tugas) dapat berupa \"toggle\" atau \"clear\". "
+"Gunakan \"toggle\" untuk beralih dari dan ke status selesai dan belum "
+"selesai pada tugas yang dipilih (jika target adalah catatan biasa, maka ia "
+"akan dikonversi menjadi tugas). Gunakan \"clear\" untuk mengubah tugas "
+"kembali menjadi catatan biasa."
+
+#: CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Keluar dari aplikasi."
+
+#: CliClient/app/app.js:61
 #, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"Lebih dari satu item cocok dengan \"%s\". Silakan persempit kueri Anda."
 
-#: ElectronClient/app.js:686
+#: CliClient/app/app.js:91
+msgid "No notebook selected."
+msgstr "Tidak ada buku catatan yang terpilih."
+
+#: CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr "Belum ada buku catatan yang ditentukan."
+
+#: CliClient/app/app.js:136
+msgid "N"
+msgstr "T"
+
+#: CliClient/app/app.js:136
+msgid "y"
+msgstr "y"
+
+#: CliClient/app/app.js:169
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Membatalkan proses sinkronisasi latar belakang... Mohon tunggu."
+
+#: CliClient/app/app.js:254
 #, javascript-format
-msgid "Client ID: %s"
-msgstr "ID klien: %s"
+msgid "No such command: %s"
+msgstr "Tidak ada perintah semacam ini: %s"
 
-#: ElectronClient/app.js:687
+#: CliClient/app/app.js:302
 #, javascript-format
-msgid "Sync Version: %s"
-msgstr "Versi Sinkronisasi: %s"
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Perintah \"%s\" hanya tersedia dalam mode GUI"
 
-#: ElectronClient/app.js:688
+#: CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Menampilkan ringkasan tentang catatan dan buku catatan."
+
+#: CliClient/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+"Untuk mencoba kembali dekripsi item ini, jalankan perintah `e2ee decrypt --"
+"retry-failed-items`"
+
+#: CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> (perintah-label) dapat berupa \"add\", \"remove\", \"list\", "
+"atau \"notetags\" untuk menetapkan atau menghapus [tag] (label) dari [note] "
+"(catatan), untuk menampilkan daftar catatan yang terkait dengan [tag], atau "
+"untuk menampilkan daftar label yang terkait dengan [note]. Perintah `tag "
+"list` dapat digunakan untuk menampilkan daftar semua label (gunakan -l untuk "
+"opsi panjang)."
+
+#: CliClient/app/command-tag.js:90
 #, javascript-format
-msgid "Profile Version: %s"
-msgstr "Versi Profil: %s"
+msgid "Invalid command: \"%s\""
+msgstr "Perintah tidak valid: \"%s\""
 
-#: ElectronClient/app.js:698 ElectronClient/app.js:841
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:366
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
-msgid "Copy"
-msgstr "Salin"
+#: CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Tandai tugas telah selesai."
 
-#: ElectronClient/app.js:698 ElectronClient/bridge.js:101
-#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
-#: ElectronClient/bridge.js:135 ElectronClient/checkForUpdates.js:139
-#: ElectronClient/gui/ConfigScreen.min.js:185
-#: ElectronClient/gui/ConfigScreen.min.js:754
+#: CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Catatan bukan sebuah tugas: \"%s\""
+
+#: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
+#: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
+#: ElectronClient/checkForUpdates.js:139
 #: ElectronClient/gui/DialogButtonRow.min.js:30
 #: ElectronClient/gui/PromptDialog.min.js:235
-#: ReactNativeClient/lib/components/CameraView.js:182
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:754 ElectronClient/app.js:699
 #: ReactNativeClient/lib/components/ModalDialog.js:67
+#: ReactNativeClient/lib/components/CameraView.js:182
 #: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
 msgstr "Baik"
 
-#: ElectronClient/app.js:710 ElectronClient/app.js:793
-msgid "&File"
-msgstr "&Berkas"
-
-#: ElectronClient/app.js:716 ElectronClient/app.js:1141
-msgid "About Joplin"
-msgstr "Tentang Joplin"
-
-#: ElectronClient/app.js:723
-msgid "Preferences..."
-msgstr "Preferensi..."
-
-#: ElectronClient/app.js:733 ElectronClient/app.js:1120
-msgid "Check for updates..."
-msgstr "Periksa pembaruan..."
-
-#: ElectronClient/app.js:747 ElectronClient/app.js:807
-msgid "Templates"
-msgstr "Templat"
-
-#: ElectronClient/app.js:754 ElectronClient/app.js:812
-#: ElectronClient/gui/Root.min.js:91
-msgid "Import"
-msgstr "Impor"
-
-#: ElectronClient/app.js:758 ElectronClient/app.js:815
-#: ElectronClient/gui/SideBar.min.js:382
-#: ElectronClient/gui/utils/NoteListUtils.js:197
-msgid "Export"
-msgstr "Ekspor"
-
-#: ElectronClient/app.js:764 ElectronClient/gui/SideBar.min.js:724
-#: ReactNativeClient/lib/components/side-menu-content.js:337
-msgid "Synchronise"
-msgstr "Sinkronisasi %s"
-
-#: ElectronClient/app.js:779
-#, javascript-format
-msgid "Hide %s"
-msgstr "Sembunyikan %s"
-
-#: ElectronClient/app.js:786
-msgid "Quit"
-msgstr "Keluar"
-
-#: ElectronClient/app.js:800
-msgid "Close Window"
-msgstr "Tutup jendela"
-
-#: ElectronClient/app.js:838
-msgid "&Edit"
-msgstr "&Ubah"
-
-#: ElectronClient/app.js:846
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:359
-msgid "Cut"
-msgstr "Potong"
-
-#: ElectronClient/app.js:851
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:373
-msgid "Paste"
-msgstr "Tempel"
-
-#: ElectronClient/app.js:856
-msgid "Select all"
-msgstr "Pilih semua"
-
-#: ElectronClient/app.js:864
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:24
-msgid "Bold"
-msgstr "Tebal"
-
-#: ElectronClient/app.js:875
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:34
-msgid "Italic"
-msgstr "Miring"
-
-#: ElectronClient/app.js:886
-msgid "Link"
-msgstr "Tautan"
-
-#: ElectronClient/app.js:897
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:57
-msgid "Code"
-msgstr "Kode"
-
-#: ElectronClient/app.js:911
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:130
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:556
-msgid "Insert Date Time"
-msgstr "Masukkan Waktu dan Tanggal"
-
-#: ElectronClient/app.js:925
-msgid "Search in all the notes"
-msgstr "Pencarian di semua catatan"
-
-#: ElectronClient/app.js:936
-msgid "Search in current note"
-msgstr "Pencarian di catatan sekarang"
-
-#: ElectronClient/app.js:948
-msgid "&View"
-msgstr "&Lihat"
-
-#: ElectronClient/app.js:950
-msgid "Toggle sidebar"
-msgstr "Alihkan bilah samping"
-
-#: ElectronClient/app.js:963
-msgid "Layout button sequence"
-msgstr "Urutan tombol tata letak"
-
-#: ElectronClient/app.js:967
-msgid "Toggle note list"
-msgstr "Alihkan daftar catatan"
-
-#: ElectronClient/app.js:976
-msgid "Toggle editor layout"
-msgstr "Alihkan tata letak editor"
-
-#: ElectronClient/app.js:1024
-msgid "Focus"
-msgstr "Fokus"
-
-#: ElectronClient/app.js:1031
-msgid "Actual Size"
-msgstr "Ukuran sebenarnya"
-
-#: ElectronClient/app.js:1042 ElectronClient/app.js:1048
-msgid "Zoom In"
-msgstr "Perbesar"
-
-#: ElectronClient/app.js:1055
-msgid "Zoom Out"
-msgstr "Perkecil"
-
-#: ElectronClient/app.js:1063
-msgid "&Note"
-msgstr "&Catatan"
-
-#: ElectronClient/app.js:1066 ElectronClient/gui/NoteToolbar/NoteToolbar.js:86
-#: ElectronClient/gui/utils/NoteListUtils.js:68
-msgid "Edit in external editor"
-msgstr "Ubah di editor eksternal"
-
-#: ElectronClient/app.js:1077 ElectronClient/gui/NoteToolbar/NoteToolbar.js:110
-#: ElectronClient/gui/SideBar.min.js:779
-#: ReactNativeClient/lib/components/screens/note.js:757
-#: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/side-menu-content.js:313
-msgid "Tags"
-msgstr "Label"
-
-#: ElectronClient/app.js:1093
-msgid "Statistics..."
-msgstr "Statistik..."
-
-#: ElectronClient/app.js:1103
-msgid "&Tools"
-msgstr "&Alat"
-
-#: ElectronClient/app.js:1107
-msgid "&Help"
-msgstr "&Bantuan"
-
-#: ElectronClient/app.js:1110
-msgid "Website and documentation"
-msgstr "Situs web dan dokumentasi"
-
-#: ElectronClient/app.js:1114
-msgid "Joplin Forum"
-msgstr "Forum Joplin"
-
-#: ElectronClient/app.js:1117
-#: ReactNativeClient/lib/components/screens/config.js:499
-msgid "Make a donation"
-msgstr "Beri donasi"
-
-#: ElectronClient/app.js:1129
-msgid "Toggle development tools"
-msgstr "Alihkan alat pengembang"
-
-#: ElectronClient/app.js:1300
-#, javascript-format
-msgid "Open %s"
-msgstr "Buka %s"
-
-#: ElectronClient/app.js:1302
-msgid "Exit"
-msgstr "Keluar"
-
 #: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
-#: ElectronClient/gui/ConfigScreen.min.js:744
 #: ElectronClient/gui/DialogButtonRow.min.js:38
-#: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/PromptDialog.min.js:242
-#: ElectronClient/gui/ResourceScreen.js:94
 #: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/utils/NoteListUtils.js:227
-#: ReactNativeClient/lib/components/CameraView.js:183
-#: ReactNativeClient/lib/components/ModalDialog.js:70
-#: ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: ReactNativeClient/lib/components/screens/note.js:90
-#: ReactNativeClient/lib/components/screens/note.js:442
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/shim-init-node.js:91
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:70
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ReactNativeClient/lib/components/ModalDialog.js:70
+#: ReactNativeClient/lib/components/CameraView.js:183
 #: ReactNativeClient/lib/components/side-menu-content.js:156
 #: ReactNativeClient/lib/components/side-menu-content.js:165
-#: ReactNativeClient/lib/components/side-menu-content.js:337
-#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:522
 msgid "Cancel"
 msgstr "Batal"
+
+#: ElectronClient/plugins/GotoAnything.min.js:436
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name."
+msgstr ""
+"Ketik judul catatan atau bagian dari isinya untuk melompat ke sana. Atau "
+"ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku catatan."
+
+#: ElectronClient/plugins/GotoAnything.min.js:474
+msgid "Goto Anything..."
+msgstr "Pergi ke apa saja..."
+
+#: ElectronClient/InteropServiceHelper.js:142
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Mengekspor ke \"%s\" sebagai format \"%s\". Mohon tunggu..."
+
+#: ElectronClient/InteropServiceHelper.js:160
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Tidak dapat mengekspor catatan: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -1144,21 +862,449 @@ msgstr "Versi Anda: %s"
 msgid "New version: %s"
 msgstr "Versi baru: %s"
 
-#: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/components/screens/note.js:440
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:520
 msgid "Yes"
 msgstr "Ya"
 
-#: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/components/screens/note.js:441
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:521
 msgid "No"
 msgstr "Tidak"
 
 #: ElectronClient/checkForUpdates.js:153
 msgid "Full Release Notes"
 msgstr "Catatan Rilis Lengkap"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Catatan ini tidak memiliki riwayat"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Tautan atau pesan yang tidak didukung: %s"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Pulihkan"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Klik \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku "
+"catatan bernama \"%s\". Versi catatan saat ini tidak akan diganti atau "
+"dimodifikasi."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:24
+#: ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/Header.min.js:316
+msgid "Back"
+msgstr "Kembali"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:153
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:260
+#: ElectronClient/gui/NoteText.min.js:1547
+msgid "strong text"
+msgstr "teks yang ditekankan lebih kuat (strong text)"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "teks yang ditekankan (emphasized text)"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
+#: ElectronClient/gui/NoteText.min.js:1616
+msgid "Insert Hyperlink"
+msgstr "Masukkan Tautan"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:189
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:191
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:192
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
+#: ElectronClient/gui/NoteText.min.js:1591
+#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1604
+msgid "List item"
+msgstr "Item daftar"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:245
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
+#: ElectronClient/app.js:847
+msgid "Cut"
+msgstr "Potong"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:361
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:699
+#: ElectronClient/app.js:842
+msgid "Copy"
+msgstr "Salin"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:259
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
+#: ElectronClient/app.js:852
+msgid "Paste"
+msgstr "Tempel"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Tata letak"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteText.min.js:1085
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Catatan ini tidak memiliki konten. Klik \"%s\" untuk beralih ke editor dan "
+"mengedit catatan."
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:24
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:24
+#: ElectronClient/gui/NoteText.min.js:1690 ElectronClient/app.js:865
+msgid "Bold"
+msgstr "Tebal"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:34
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:34
+#: ElectronClient/gui/NoteText.min.js:1698 ElectronClient/app.js:876
+msgid "Italic"
+msgstr "Miring"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:47
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:47
+#: ElectronClient/gui/NoteText.min.js:1710
+msgid "Hyperlink"
+msgstr "Tautan"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:57
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:57
+#: ElectronClient/gui/NoteText.min.js:1718 ElectronClient/app.js:898
+msgid "Code"
+msgstr "Kode"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:67
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:525
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:67
+#: ElectronClient/gui/NoteText.min.js:1627
+#: ElectronClient/gui/NoteText.min.js:1726
+msgid "Attach file"
+msgstr "Lampirkan berkas"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:80
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:80
+#: ElectronClient/gui/NoteText.min.js:1738
+msgid "Numbered List"
+msgstr "Daftar nomor"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:90
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:90
+#: ElectronClient/gui/NoteText.min.js:1746
+msgid "Bulleted List"
+msgstr "Daftar berpoin"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:100
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:100
+#: ElectronClient/gui/NoteText.min.js:1754
+msgid "Checkbox"
+msgstr "Kotak centang"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:110
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:110
+#: ElectronClient/gui/NoteText.min.js:1762
+msgid "Heading"
+msgstr "Tajuk"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:120
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:120
+#: ElectronClient/gui/NoteText.min.js:1770
+msgid "Horizontal Rule"
+msgstr "Garis Horisontal"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:130
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:558
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:130
+#: ElectronClient/gui/NoteText.min.js:1778 ElectronClient/app.js:912
+msgid "Insert Date Time"
+msgstr "Masukkan Waktu dan Tanggal"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "Kotak centang"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
+#: ElectronClient/gui/ConfigScreen.min.js:642
+#: ReactNativeClient/lib/components/screens/note.js:1106
+msgid "Edit"
+msgstr "Ubah"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:534
+msgid "Code Block"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:543
+msgid "Inline Code"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
+msgid "Drop notes or files here"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
+#, fuzzy
+msgid "Code View"
+msgstr "Kode"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+#: ElectronClient/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
+msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ElectronClient/gui/NoteText.min.js:835
+#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Lampiran ini belum diunduh atau belum didekripsi"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "Buka..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "Simpan sebagai..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+msgid "Reveal file in folder"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
+msgstr "Salin jalur ke papan klip"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+#: ElectronClient/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr "Salin Alamat Tautan"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:316
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "to-do"
+msgstr "tugas"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:316
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "note"
+msgstr "catatan"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:316
+#: ElectronClient/gui/NoteText.min.js:2121
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Membuat %s baru..."
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
+#: ElectronClient/gui/ResourceScreen.js:38
+msgid "ID"
+msgstr "ID"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "Dibuat"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "Diubah"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr "Selesai"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+msgid "Location"
+msgstr "Lokasi"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: ReactNativeClient/lib/models/Setting.js:1211
+msgid "Note History"
+msgstr "Riwayat catatan"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Markah"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:305
+msgid "Previous versions of this note"
+msgstr "Versi sebelumnya dari catatan ini"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:382
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:61
+#: ElectronClient/gui/NoteText.min.js:1834
+msgid "Note properties"
+msgstr "Properti catatan"
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
+msgid "Forward"
+msgstr ""
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
+#: ElectronClient/gui/NoteText.min.js:1656
+#, javascript-format
+msgid "In: %s"
+msgstr "Di: %s"
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:76
+#: ElectronClient/gui/NoteText.min.js:1792
+msgid "Click to stop external editing"
+msgstr "Klik untuk menghentikan pengeditan eksternal"
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:77
+#: ElectronClient/gui/NoteText.min.js:1793
+msgid "Watching..."
+msgstr "Mengamati..."
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:86
+#: ElectronClient/gui/utils/NoteListUtils.js:68
+#: ElectronClient/gui/NoteText.min.js:1801 ElectronClient/app.js:1067
+msgid "Edit in external editor"
+msgstr "Ubah di editor eksternal"
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
+#: ElectronClient/gui/NoteText.min.js:1642
+#: ElectronClient/gui/NoteText.min.js:1828
+#: ReactNativeClient/lib/components/screens/note.js:822
+msgid "Set alarm"
+msgstr "Setel alarm"
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:110
+#: ElectronClient/gui/SideBar.min.js:779
+#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
+#: ReactNativeClient/lib/components/side-menu-content.js:314
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/screens/note.js:837
+msgid "Tags"
+msgstr "Label"
+
+#: ElectronClient/gui/SideBar.min.js:283
+msgid "Remove"
+msgstr "Hapus"
+
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Hapus buku catatan \"%s\"?\n"
+"\n"
+"Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
+
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:204
+#: ElectronClient/gui/utils/NoteListUtils.js:227
+#: ElectronClient/gui/ResourceScreen.js:46
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/components/screen-header.js:356
+#: ReactNativeClient/lib/components/side-menu-content.js:146
+#: ReactNativeClient/lib/components/screens/note.js:864
+msgid "Delete"
+msgstr "Hapus"
+
+#: ElectronClient/gui/SideBar.min.js:290
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Hapus label \"%s\" dari semua catatan?"
+
+#: ElectronClient/gui/SideBar.min.js:292
+msgid "Remove this search from the sidebar?"
+msgstr "Hapus pencarian ini dari bilah samping?"
+
+#: ElectronClient/gui/SideBar.min.js:304 ElectronClient/app.js:560
+msgid "New sub-notebook"
+msgstr "Sub-buku catatan baru"
+
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Ganti nama"
+
+#: ElectronClient/gui/SideBar.min.js:382
+#: ElectronClient/gui/utils/NoteListUtils.js:197 ElectronClient/app.js:759
+#: ElectronClient/app.js:816
+msgid "Export"
+msgstr "Ekspor"
+
+#: ElectronClient/gui/SideBar.min.js:724 ElectronClient/app.js:765
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+msgid "Synchronise"
+msgstr "Sinkronisasi %s"
+
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ReactNativeClient/lib/components/screens/notes.js:188
+msgid "All notes"
+msgstr "Semua catatan"
+
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Buku catatan"
+
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Mendekripsi item: %d/%d"
+
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Mengambil sumber daya: %d/%d"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
@@ -1244,81 +1390,181 @@ msgstr ""
 "Token otorisasi ini hanya diperlukan untuk memungkinkan aplikasi pihak "
 "ketiga untuk mengakses Joplin."
 
-#: ElectronClient/gui/ConfigScreen.min.js:82
-msgid "This will open a new screen. Save your current changes?"
-msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
+#: ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "Masuk OneDrive"
 
-#: ElectronClient/gui/ConfigScreen.min.js:170
-#: ReactNativeClient/lib/components/screens/config.js:311
-msgid "Check synchronisation configuration"
-msgstr "Periksa konfigurasi sinkronisasi"
+#: ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "Masuk Dropbox"
 
-#: ElectronClient/gui/ConfigScreen.min.js:179
-msgid "Unknown"
-msgstr "Tidak diketahui"
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:755
+#: ElectronClient/app.js:813
+msgid "Import"
+msgstr "Impor"
 
-#: ElectronClient/gui/ConfigScreen.min.js:183
-msgid "Checking..."
-msgstr "Memeriksa..."
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:642
+msgid "Options"
+msgstr "Pilihan"
 
-#: ElectronClient/gui/ConfigScreen.min.js:187
-#: ReactNativeClient/lib/models/Resource.js:320
-msgid "Error"
-msgstr "Kesalahan"
+#: ElectronClient/gui/Root.min.js:93
+msgid "Note attachments"
+msgstr "Lampiran catatan"
 
-#: ElectronClient/gui/ConfigScreen.min.js:198
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:515
+msgid "Synchronisation Status"
+msgstr "Status Sinkronisasi"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Ekstensi Firefox"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Toko Web Chrome"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Dapatkan sekarang:"
+
+#: ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
 msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Aplikasi Joplin Nextcloud tidak terpasang atau ada kesalahan konfigurasi. "
-"Silakan lihat pesan kesalahan lengkap di bawah ini:"
-
-#: ElectronClient/gui/ConfigScreen.min.js:211
-msgid "Show Log"
-msgstr "Tampilkan Log"
-
-#: ElectronClient/gui/ConfigScreen.min.js:224
-msgid "Joplin Nextcloud App status:"
-msgstr "Status Aplikasi Nextcloud Joplin:"
-
-#: ElectronClient/gui/ConfigScreen.min.js:238
-msgid "Check Status"
-msgstr "Periksa Status"
-
-#: ElectronClient/gui/ConfigScreen.min.js:245
-msgid "Help"
-msgstr "Bantuan"
-
-#: ElectronClient/gui/ConfigScreen.min.js:264
-msgid "Show Advanced Settings"
-msgstr "Perlihatkan pengaturan lanjutan"
-
-#: ElectronClient/gui/ConfigScreen.min.js:521
-msgid "Browse..."
-msgstr "Telusuri..."
-
-#: ElectronClient/gui/ConfigScreen.min.js:642
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:467
-#: ReactNativeClient/lib/components/screens/note.js:1017
-msgid "Edit"
-msgstr "Ubah"
-
-#: ElectronClient/gui/ConfigScreen.min.js:744
-#: ElectronClient/gui/Header.min.js:316
-#: ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:24
-msgid "Back"
-msgstr "Kembali"
-
-#: ElectronClient/gui/ConfigScreen.min.js:761
-msgid "Apply"
-msgstr "Terapkan"
+"Buku catatan baru \"%s\" akan dibuat dan berkas \"%s\" akan diimpor ke "
+"dalamnya"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:64
 msgid "Submit"
 msgstr "Kirim"
+
+#: ElectronClient/gui/NoteList.min.js:147
+msgid "Custom order"
+msgstr "Urutan khusus"
+
+#: ElectronClient/gui/NoteList.min.js:147
+msgid "View"
+msgstr "Lihat"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ReactNativeClient/lib/models/Setting.js:329
+msgid "Sort notes by"
+msgstr "Urutkan catatan berdasarkan"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+"Untuk mengurutkan catatan secara manual, tata pengurutan harus diganti "
+"menjadi \"%s\" dalam menu \"%s\" > \"%s\""
+
+#: ElectronClient/gui/NoteList.min.js:148
+msgid "Do it now"
+msgstr "Lakukan sekarang"
+
+#: ElectronClient/gui/NoteList.min.js:452
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+"Tidak ada catatan di sini. Buat catatan dengan mengeklik \"Catatan baru\"."
+
+#: ElectronClient/gui/NoteList.min.js:452
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Tidak ada buku catatan saat ini. Buat buku catatan dengan mengeklik \"Buku "
+"catatan baru\"."
+
+#: ElectronClient/gui/utils/NoteListUtils.js:27
+msgid "Add or remove tags"
+msgstr "Tambah atau hapus label"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:40
+msgid "Move to notebook"
+msgstr "Pindah ke buku catatan"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:53
+#: ReactNativeClient/lib/components/screen-header.js:362
+msgid "Duplicate"
+msgstr "Buat duplikat"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:58
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Salin"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:78
+msgid "Stop external editing"
+msgstr "Hentikan pengeditan eksternal"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:90
+msgid "Switch between note and to-do type"
+msgstr "Beralih antara tipe catatan dan tugas"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:119
+msgid "Switch to note type"
+msgstr "Beralih ke tipe catatan"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:128
+msgid "Switch to to-do type"
+msgstr "Beralih ke tipe tugas"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:138
+#: ReactNativeClient/lib/components/screens/note.js:851
+msgid "Copy Markdown link"
+msgstr "Salin tautan Markdown"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:153
+msgid "Share note..."
+msgstr "Bagikan catatan..."
+
+#: ElectronClient/gui/utils/NoteListUtils.js:186
+#: ElectronClient/gui/MainScreen.min.js:549 ElectronClient/app.js:495
+msgid "PDF File"
+msgstr "Berkas PDF"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:221
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Hapus catatan \"%s\"?"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:223
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Hapus %d catatan ini?"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:240
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "Nama"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "Ikon"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "Properti buku catatan"
+
+#: ElectronClient/gui/NoteText.min.js:781
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Berkas ini tidak dapat dibuka: %s"
+
+#: ElectronClient/gui/NoteText.min.js:1321
+msgid "Only one note can be printed at a time."
+msgstr "Hanya satu catatan yang dapat dicetak dalam satu waktu."
+
+#: ElectronClient/gui/NoteText.min.js:1852
+msgid "Content Properties"
+msgstr "Properti Konten"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
 #: ReactNativeClient/lib/components/screens/encryption-config.js:125
@@ -1338,12 +1584,6 @@ msgstr ""
 "Kunci master berikut menggunakan algoritma enkripsi yang telah usang dan "
 "disarankan untuk mengupgradenya. Kunci master yang telah diupgrade masih "
 "akan dapat mendekripsi dan mengenkripsi data Anda seperti biasa."
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
-#: ElectronClient/gui/NotePropertiesDialog.min.js:26
-#: ElectronClient/gui/ResourceScreen.js:38
-msgid "ID"
-msgstr "ID"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
@@ -1404,7 +1644,7 @@ msgstr ""
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: ReactNativeClient/lib/components/screens/encryption-config.js:279
-#: ReactNativeClient/lib/components/screens/status.js:139
+#: ReactNativeClient/lib/components/screens/status.js:142
 msgid "Status"
 msgstr "Status"
 
@@ -1412,29 +1652,19 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Enkripsi adalah:"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:10
-msgid "Firefox Extension"
-msgstr "Ekstensi Firefox"
+#: ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr "Silakan pilih di mana status sinkronisasi seharusnya diekspor"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:17
-msgid "Chrome Web Store"
-msgstr "Toko Web Chrome"
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:112
+msgid "Retry All"
+msgstr "Coba lagi semua"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:44
-msgid "Get it now:"
-msgstr "Dapatkan sekarang:"
-
-#: ElectronClient/gui/Header.min.js:267
-msgid "Usage"
-msgstr "Penggunaan"
-
-#: ElectronClient/gui/ImportScreen.min.js:62
-#, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"Buku catatan baru \"%s\" akan dibuat dan berkas \"%s\" akan diimpor ke "
-"dalamnya"
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:118
+msgid "Retry"
+msgstr "Coba lagi"
 
 #: ElectronClient/gui/MainScreen.min.js:165
 msgid "Please create a notebook first."
@@ -1472,6 +1702,10 @@ msgstr "Setel alarm:"
 msgid "Template file:"
 msgstr "Berkas templat:"
 
+#: ElectronClient/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Bersihkan"
+
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:51
 msgid "Words"
 msgstr "Kata"
@@ -1489,16 +1723,16 @@ msgid "Lines"
 msgstr "Garis"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:73
-#: ReactNativeClient/lib/models/Setting.js:306
-#: ReactNativeClient/lib/models/Setting.js:307
-#: ReactNativeClient/lib/models/Setting.js:308
+#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:315
+#: ReactNativeClient/lib/models/Setting.js:316
 msgid "Editor"
 msgstr "Editor"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:74
-#: ReactNativeClient/lib/models/Setting.js:306
-#: ReactNativeClient/lib/models/Setting.js:307
-#: ReactNativeClient/lib/models/Setting.js:309
+#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:315
+#: ReactNativeClient/lib/models/Setting.js:317
 msgid "Viewer"
 msgstr "Viewer"
 
@@ -1512,267 +1746,67 @@ msgstr "Statistik..."
 msgid "Close"
 msgstr "Tutup"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:256
-msgid "strong text"
-msgstr "teks yang ditekankan lebih kuat (strong text)"
+#: ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:257
-msgid "emphasized text"
-msgstr "teks yang ditekankan (emphasized text)"
+#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Periksa konfigurasi sinkronisasi"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:259
-msgid "Insert Hyperlink"
-msgstr "Masukkan Tautan"
+#: ElectronClient/gui/ConfigScreen.min.js:179
+msgid "Unknown"
+msgstr "Tidak diketahui"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:294
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:296
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:297
-msgid "List item"
-msgstr "Item daftar"
+#: ElectronClient/gui/ConfigScreen.min.js:183
+msgid "Checking..."
+msgstr "Memeriksa..."
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:473
-msgid "Layout"
-msgstr "Tata letak"
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ReactNativeClient/lib/models/Resource.js:320
+msgid "Error"
+msgstr "Kesalahan"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:473
-#, javascript-format
+#: ElectronClient/gui/ConfigScreen.min.js:198
 msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
 msgstr ""
-"Catatan ini tidak memiliki konten. Klik \"%s\" untuk beralih ke editor dan "
-"mengedit catatan."
+"Aplikasi Joplin Nextcloud tidak terpasang atau ada kesalahan konfigurasi. "
+"Silakan lihat pesan kesalahan lengkap di bawah ini:"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:47
-msgid "Hyperlink"
-msgstr "Tautan"
+#: ElectronClient/gui/ConfigScreen.min.js:211
+msgid "Show Log"
+msgstr "Tampilkan Log"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:67
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:523
-msgid "Attach file"
-msgstr "Lampirkan berkas"
+#: ElectronClient/gui/ConfigScreen.min.js:224
+msgid "Joplin Nextcloud App status:"
+msgstr "Status Aplikasi Nextcloud Joplin:"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:80
-msgid "Numbered List"
-msgstr "Daftar nomor"
+#: ElectronClient/gui/ConfigScreen.min.js:238
+msgid "Check Status"
+msgstr "Periksa Status"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:90
-msgid "Bulleted List"
-msgstr "Daftar berpoin"
+#: ElectronClient/gui/ConfigScreen.min.js:245
+msgid "Help"
+msgstr "Bantuan"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:100
-msgid "Checkbox"
-msgstr "Kotak centang"
+#: ElectronClient/gui/ConfigScreen.min.js:264
+msgid "Show Advanced Settings"
+msgstr "Perlihatkan pengaturan lanjutan"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:110
-msgid "Heading"
-msgstr "Tajuk"
+#: ElectronClient/gui/ConfigScreen.min.js:521
+msgid "Browse..."
+msgstr "Telusuri..."
 
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:120
-msgid "Horizontal Rule"
-msgstr "Garis Horisontal"
+#: ElectronClient/gui/ConfigScreen.min.js:761
+msgid "Apply"
+msgstr "Terapkan"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
-msgid "Checkbox list"
-msgstr "Kotak centang"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:532
-msgid "Code Block"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:541
-msgid "Inline Code"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
-msgid "Drop notes or files here"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
-#, fuzzy
-msgid "Code View"
-msgstr "Kode"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
-#, javascript-format
-msgid ""
-"Please wait for all attachments to be downloaded and decrypted. You may also "
-"switch to %s to edit the note."
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
-msgid "to-do"
-msgstr "tugas"
-
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
-msgid "note"
-msgstr "catatan"
-
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:315
-#, javascript-format
-msgid "Creating new %s..."
-msgstr "Membuat %s baru..."
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
-msgid "Open..."
-msgstr "Buka..."
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
-msgid "Save as..."
-msgstr "Simpan sebagai..."
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
-msgid "Reveal file in folder"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
-msgid "Copy path to clipboard"
-msgstr "Salin jalur ke papan klip"
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
-msgid "Copy Link Address"
-msgstr "Salin Alamat Tautan"
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
-msgid "There was an error downloading this attachment:"
-msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
-#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
-msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Lampiran ini belum diunduh atau belum didekripsi"
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
-#: ElectronClient/gui/NoteRevisionViewer.min.js:142
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Tautan atau pesan yang tidak didukung: %s"
-
-#: ElectronClient/gui/NoteList.min.js:146
-msgid "Custom order"
-msgstr "Urutan khusus"
-
-#: ElectronClient/gui/NoteList.min.js:146
-msgid "View"
-msgstr "Lihat"
-
-#: ElectronClient/gui/NoteList.min.js:146
-#: ReactNativeClient/lib/models/Setting.js:321
-msgid "Sort notes by"
-msgstr "Urutkan catatan berdasarkan"
-
-#: ElectronClient/gui/NoteList.min.js:146
-#, javascript-format
-msgid ""
-"To manually sort the notes, the sort order must be changed to \"%s\" in the "
-"menu \"%s\" > \"%s\""
-msgstr ""
-"Untuk mengurutkan catatan secara manual, tata pengurutan harus diganti "
-"menjadi \"%s\" dalam menu \"%s\" > \"%s\""
-
-#: ElectronClient/gui/NoteList.min.js:147
-msgid "Do it now"
-msgstr "Lakukan sekarang"
-
-#: ElectronClient/gui/NoteList.min.js:450
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-"Tidak ada catatan di sini. Buat catatan dengan mengeklik \"Catatan baru\"."
-
-#: ElectronClient/gui/NoteList.min.js:450
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"Tidak ada buku catatan saat ini. Buat buku catatan dengan mengeklik \"Buku "
-"catatan baru\"."
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:27
-msgid "Created"
-msgstr "Dibuat"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:28
-msgid "Updated"
-msgstr "Diubah"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:29
-msgid "Completed"
-msgstr "Selesai"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:30
-msgid "Location"
-msgstr "Lokasi"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:31
-msgid "URL"
-msgstr "URL"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1118
-msgid "Note History"
-msgstr "Riwayat catatan"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:33
-msgid "Markup"
-msgstr "Markah"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:305
-msgid "Previous versions of this note"
-msgstr "Versi sebelumnya dari catatan ini"
-
-#: ElectronClient/gui/NotePropertiesDialog.min.js:382
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:61
-msgid "Note properties"
-msgstr "Properti catatan"
-
-#: ElectronClient/gui/NoteRevisionViewer.min.js:75
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
-
-#: ElectronClient/gui/NoteRevisionViewer.min.js:100
-msgid "This note has no history"
-msgstr "Catatan ini tidak memiliki riwayat"
-
-#: ElectronClient/gui/NoteRevisionViewer.min.js:177
-msgid "Restore"
-msgstr "Pulihkan"
-
-#: ElectronClient/gui/NoteRevisionViewer.min.js:178
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-"Klik \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku "
-"catatan bernama \"%s\". Versi catatan saat ini tidak akan diganti atau "
-"dimodifikasi."
-
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
-msgid "Forward"
-msgstr ""
-
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
-#, javascript-format
-msgid "In: %s"
-msgstr "Di: %s"
-
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:76
-msgid "Click to stop external editing"
-msgstr "Klik untuk menghentikan pengeditan eksternal"
-
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:77
-msgid "Watching..."
-msgstr "Mengamati..."
-
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
-#: ReactNativeClient/lib/components/screens/note.js:742
-msgid "Set alarm"
-msgstr "Setel alarm"
-
-#: ElectronClient/gui/PromptDialog.min.js:249
-msgid "Clear"
-msgstr "Bersihkan"
+#: ElectronClient/gui/Header.min.js:267
+msgid "Usage"
+msgstr "Penggunaan"
 
 #: ElectronClient/gui/ResourceScreen.js:31
 msgid "Title"
@@ -1787,22 +1821,11 @@ msgid "Action"
 msgstr "Aksi"
 
 #: ElectronClient/gui/ResourceScreen.js:42
-#: ReactNativeClient/lib/models/BaseItem.js:710
 #: ReactNativeClient/lib/path-utils.js:65
 #: ReactNativeClient/lib/path-utils.js:101
+#: ReactNativeClient/lib/models/BaseItem.js:710
 msgid "Untitled"
 msgstr "Tanpa Judul"
-
-#: ElectronClient/gui/ResourceScreen.js:46
-#: ElectronClient/gui/ResourceScreen.js:94
-#: ElectronClient/gui/SideBar.min.js:287
-#: ElectronClient/gui/utils/NoteListUtils.js:204
-#: ElectronClient/gui/utils/NoteListUtils.js:227
-#: ReactNativeClient/lib/components/screen-header.js:326
-#: ReactNativeClient/lib/components/screens/note.js:784
-#: ReactNativeClient/lib/components/side-menu-content.js:146
-msgid "Delete"
-msgstr "Hapus"
 
 #: ElectronClient/gui/ResourceScreen.js:93
 #, javascript-format
@@ -1834,18 +1857,6 @@ msgstr ""
 "Peringatan: tidak semua sumber daya ditampilkan karena alasan performa "
 "(batas: %s)."
 
-#: ElectronClient/gui/Root.min.js:89
-msgid "OneDrive Login"
-msgstr "Masuk OneDrive"
-
-#: ElectronClient/gui/Root.min.js:90
-msgid "Dropbox Login"
-msgstr "Masuk Dropbox"
-
-#: ElectronClient/gui/Root.min.js:93
-msgid "Note attachments"
-msgstr "Lampiran catatan"
-
 #: ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
 msgstr "Menyinkronkan..."
@@ -1876,463 +1887,289 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Salin Tautan yang Dapat Dibagikan"
 
-#: ElectronClient/gui/SideBar.min.js:283
-msgid "Remove"
-msgstr "Hapus"
+#: ElectronClient/app.js:392
+msgid "Sidebar"
+msgstr "Bilah samping"
 
-#: ElectronClient/gui/SideBar.min.js:286
-#: ReactNativeClient/lib/components/side-menu-content.js:148
+#: ElectronClient/app.js:398
+msgid "Note list"
+msgstr "Daftar catatan"
+
+#: ElectronClient/app.js:404
+msgid "Note title"
+msgstr "Judul catatan"
+
+#: ElectronClient/app.js:410
+msgid "Note body"
+msgstr "Isi catatan"
+
+#: ElectronClient/app.js:462
 #, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Mengimpor dari \"%s\" sebagai format \"%s\". Mohon tunggu..."
+
+#: ElectronClient/app.js:525
+#: ReactNativeClient/lib/components/action-button.js:73
+#: ReactNativeClient/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Catatan baru"
+
+#: ElectronClient/app.js:537
+#: ReactNativeClient/lib/components/action-button.js:64
+#: ReactNativeClient/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "Tugas baru"
+
+#: ElectronClient/app.js:549
+msgid "New notebook"
+msgstr "Buku catatan baru"
+
+#: ElectronClient/app.js:572
+msgid "Print"
+msgstr "Cetak"
+
+#: ElectronClient/app.js:592
+msgid "Create note from template"
+msgstr "Buat catatan dari templat"
+
+#: ElectronClient/app.js:602
+msgid "Create to-do from template"
+msgstr "Buat tugas dari templat"
+
+#: ElectronClient/app.js:612
+msgid "Insert template"
+msgstr "Masukkan templat"
+
+#: ElectronClient/app.js:622
+msgid "Open template directory"
+msgstr "Buka direktori templat"
+
+#: ElectronClient/app.js:629
+msgid "Refresh templates"
+msgstr "Segarkan templat"
+
+#: ElectronClient/app.js:655
+msgid "Note attachments..."
+msgstr "Lampiran catatan..."
+
+#: ElectronClient/app.js:677
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Revisi: %s (%s)"
+
+#: ElectronClient/app.js:684
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ElectronClient/app.js:686
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "ID klien: %s"
+
+#: ElectronClient/app.js:687
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Versi Sinkronisasi: %s"
+
+#: ElectronClient/app.js:688
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Versi Profil: %s"
+
+#: ElectronClient/app.js:689
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
+#: ElectronClient/app.js:711 ElectronClient/app.js:794
+msgid "&File"
+msgstr "&Berkas"
+
+#: ElectronClient/app.js:717 ElectronClient/app.js:1142
+msgid "About Joplin"
+msgstr "Tentang Joplin"
+
+#: ElectronClient/app.js:724
+msgid "Preferences..."
+msgstr "Preferensi..."
+
+#: ElectronClient/app.js:734 ElectronClient/app.js:1121
+msgid "Check for updates..."
+msgstr "Periksa pembaruan..."
+
+#: ElectronClient/app.js:748 ElectronClient/app.js:808
+msgid "Templates"
+msgstr "Templat"
+
+#: ElectronClient/app.js:780
+#, javascript-format
+msgid "Hide %s"
+msgstr "Sembunyikan %s"
+
+#: ElectronClient/app.js:787
+msgid "Quit"
+msgstr "Keluar"
+
+#: ElectronClient/app.js:801
+msgid "Close Window"
+msgstr "Tutup jendela"
+
+#: ElectronClient/app.js:839
+msgid "&Edit"
+msgstr "&Ubah"
+
+#: ElectronClient/app.js:857
+msgid "Select all"
+msgstr "Pilih semua"
+
+#: ElectronClient/app.js:887
+msgid "Link"
+msgstr "Tautan"
+
+#: ElectronClient/app.js:926
+msgid "Search in all the notes"
+msgstr "Pencarian di semua catatan"
+
+#: ElectronClient/app.js:937
+msgid "Search in current note"
+msgstr "Pencarian di catatan sekarang"
+
+#: ElectronClient/app.js:949
+msgid "&View"
+msgstr "&Lihat"
+
+#: ElectronClient/app.js:951
+msgid "Toggle sidebar"
+msgstr "Alihkan bilah samping"
+
+#: ElectronClient/app.js:964
+msgid "Layout button sequence"
+msgstr "Urutan tombol tata letak"
+
+#: ElectronClient/app.js:968
+msgid "Toggle note list"
+msgstr "Alihkan daftar catatan"
+
+#: ElectronClient/app.js:977
+msgid "Toggle editor layout"
+msgstr "Alihkan tata letak editor"
+
+#: ElectronClient/app.js:1025
+msgid "Focus"
+msgstr "Fokus"
+
+#: ElectronClient/app.js:1032
+msgid "Actual Size"
+msgstr "Ukuran sebenarnya"
+
+#: ElectronClient/app.js:1043 ElectronClient/app.js:1049
+msgid "Zoom In"
+msgstr "Perbesar"
+
+#: ElectronClient/app.js:1056
+msgid "Zoom Out"
+msgstr "Perkecil"
+
+#: ElectronClient/app.js:1064
+msgid "&Note"
+msgstr "&Catatan"
+
+#: ElectronClient/app.js:1094
+msgid "Statistics..."
+msgstr "Statistik..."
+
+#: ElectronClient/app.js:1104
+msgid "&Tools"
+msgstr "&Alat"
+
+#: ElectronClient/app.js:1108
+msgid "&Help"
+msgstr "&Bantuan"
+
+#: ElectronClient/app.js:1111
+msgid "Website and documentation"
+msgstr "Situs web dan dokumentasi"
+
+#: ElectronClient/app.js:1115
+msgid "Joplin Forum"
+msgstr "Forum Joplin"
+
+#: ElectronClient/app.js:1118
+#: ReactNativeClient/lib/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Beri donasi"
+
+#: ElectronClient/app.js:1130
+msgid "Toggle development tools"
+msgstr "Alihkan alat pengembang"
+
+#: ElectronClient/app.js:1301
+#, javascript-format
+msgid "Open %s"
+msgstr "Buka %s"
+
+#: ElectronClient/app.js:1303
+msgid "Exit"
+msgstr "Keluar"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
 msgid ""
-"Delete notebook \"%s\"?\n"
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+"Aplikasi telah diotorisasi - Anda sekarang dapat menutup tab peramban web "
+"ini."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "Aplikasi telah berhasil diotorisasi."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Silakan buka URL berikut di peramban web Anda untuk mengotentikasi aplikasi. "
+"Aplikasi akan membuat direktori di \"Apps/Joplin\" dan hanya akan membaca "
+"dan menulis berkas di direktori ini. Ia tidak akan memiliki akses ke berkas "
+"apa pun di luar direktori ini atau ke data pribadi lainnya. Tidak ada data "
+"yang akan dibagikan dengan pihak ketiga mana pun."
+
+#: ReactNativeClient/lib/registry.js:156
+msgid ""
+"Could not synchronize with OneDrive.\n"
 "\n"
-"All notes and sub-notebooks within this notebook will also be deleted."
-msgstr ""
-"Hapus buku catatan \"%s\"?\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
 "\n"
-"Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan dihapus."
-
-#: ElectronClient/gui/SideBar.min.js:290
-#, javascript-format
-msgid "Remove tag \"%s\" from all notes?"
-msgstr "Hapus label \"%s\" dari semua catatan?"
-
-#: ElectronClient/gui/SideBar.min.js:292
-msgid "Remove this search from the sidebar?"
-msgstr "Hapus pencarian ini dari bilah samping?"
-
-#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
-#: ReactNativeClient/lib/components/side-menu-content.js:129
-msgid "Rename"
-msgstr "Ganti nama"
-
-#: ElectronClient/gui/SideBar.min.js:757
-#: ReactNativeClient/lib/components/screens/notes.js:188
-#: ReactNativeClient/lib/components/side-menu-content.js:359
-msgid "All notes"
-msgstr "Semua catatan"
-
-#: ElectronClient/gui/SideBar.min.js:762
-#: ReactNativeClient/lib/components/side-menu-content.js:363
-msgid "Notebooks"
-msgstr "Buku catatan"
-
-#: ElectronClient/gui/SideBar.min.js:797
-#: ReactNativeClient/lib/components/side-menu-content.js:324
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Mendekripsi item: %d/%d"
-
-#: ElectronClient/gui/SideBar.min.js:802
-#: ReactNativeClient/lib/components/side-menu-content.js:329
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Mengambil sumber daya: %d/%d"
-
-#: ElectronClient/gui/StatusScreen.min.js:33
-msgid "Please select where the sync status should be exported to"
-msgstr "Silakan pilih di mana status sinkronisasi seharusnya diekspor"
-
-#: ElectronClient/gui/StatusScreen.min.js:71
-#: ReactNativeClient/lib/components/screens/status.js:109
-msgid "Retry All"
-msgstr "Coba lagi semua"
-
-#: ElectronClient/gui/StatusScreen.min.js:96
-#: ReactNativeClient/lib/components/screens/status.js:115
-msgid "Retry"
-msgstr "Coba lagi"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:27
-msgid "Add or remove tags"
-msgstr "Tambah atau hapus label"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:40
-msgid "Move to notebook"
-msgstr "Pindah ke buku catatan"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:53
-#: ReactNativeClient/lib/components/screen-header.js:332
-msgid "Duplicate"
-msgstr "Buat duplikat"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:58
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Salin"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:78
-msgid "Stop external editing"
-msgstr "Hentikan pengeditan eksternal"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:90
-msgid "Switch between note and to-do type"
-msgstr "Beralih antara tipe catatan dan tugas"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:119
-msgid "Switch to note type"
-msgstr "Beralih ke tipe catatan"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:128
-msgid "Switch to to-do type"
-msgstr "Beralih ke tipe tugas"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:771
-msgid "Copy Markdown link"
-msgstr "Salin tautan Markdown"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:153
-msgid "Share note..."
-msgstr "Bagikan catatan..."
-
-#: ElectronClient/gui/utils/NoteListUtils.js:221
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "Hapus catatan \"%s\"?"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:223
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Hapus %d catatan ini?"
-
-#: ElectronClient/gui/utils/NoteListUtils.js:240
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
-
-#: ElectronClient/InteropServiceHelper.js:142
-#, javascript-format
-msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Mengekspor ke \"%s\" sebagai format \"%s\". Mohon tunggu..."
-
-#: ElectronClient/InteropServiceHelper.js:160
-#, javascript-format
-msgid "Could not export notes: %s"
-msgstr "Tidak dapat mengekspor catatan: %s"
-
-#: ElectronClient/plugins/GotoAnything.min.js:441
-msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name."
+"Please consider using a regular OneDrive account."
 msgstr ""
-"Ketik judul catatan atau bagian dari isinya untuk melompat ke sana. Atau "
-"ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku catatan."
+"Tidak dapat menyinkronkan dengan OneDrive.\n"
+"\n"
+"Kesalahan ini sering terjadi ketika menggunakan OneDrive for Business, yang "
+"sayangnya tidak dapat didukung.\n"
+"\n"
+"Silakan pertimbangkan menggunakan akun OneDrive biasa."
 
-#: ElectronClient/plugins/GotoAnything.min.js:479
-msgid "Goto Anything..."
-msgstr "Pergi ke apa saja..."
-
-#: ReactNativeClient/lib/BaseApplication.js:137
-#: ReactNativeClient/lib/BaseApplication.js:150
-#: ReactNativeClient/lib/BaseApplication.js:181
+#: ReactNativeClient/lib/logger.js:178
 #, javascript-format
-msgid "Usage: %s"
-msgstr "Penggunaan: %s"
+msgid "Unknown log level: %s"
+msgstr "Level log tidak diketahui: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:216
+#: ReactNativeClient/lib/logger.js:187
 #, javascript-format
-msgid "Unknown flag: %s"
-msgstr "Tanda tidak diketahui: %s"
+msgid "Unknown level ID: %s"
+msgstr "ID level tidak diketahui: %s"
 
-#: ReactNativeClient/lib/components/CameraView.js:180
-msgid "Permission to use camera"
-msgstr "Izin penggunaan kamera"
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
 
-#: ReactNativeClient/lib/components/CameraView.js:181
-msgid "Your permission to use your camera is required."
-msgstr "Membutuhkan perizinan untuk penggunaan kamera."
-
-#: ReactNativeClient/lib/components/note-list.js:97
-msgid "You currently have no notebooks."
-msgstr "Saat ini tidak ada buku catatan."
-
-#: ReactNativeClient/lib/components/note-list.js:101
-msgid "Create a notebook"
-msgstr "Buat buku catatan"
-
-#: ReactNativeClient/lib/components/note-list.js:105
-msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Saat ini belum ada catatan. Buat catatan dengan mengeklik tombol (+)."
-
-#: ReactNativeClient/lib/components/screen-header.js:185
-msgid "Delete these notes?"
-msgstr "Hapus catatan ini?"
-
-#: ReactNativeClient/lib/components/screen-header.js:362
-msgid "Move to notebook..."
-msgstr "Pindahkan ke buku catatan..."
-
-#: ReactNativeClient/lib/components/screen-header.js:403
-#, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
-
-#: ReactNativeClient/lib/components/screen-header.js:421
-msgid "Press to set the decryption password."
-msgstr "Tekan untuk mengatur kata sandi dekripsi."
-
-#: ReactNativeClient/lib/components/screen-header.js:422
-msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Beberapa item tidak dapat disinkronkan. Tekan untuk info lebih lanjut."
-
-#: ReactNativeClient/lib/components/screens/config.js:51
-msgid "Warning"
-msgstr "Peringatan"
-
-#: ReactNativeClient/lib/components/screens/config.js:51
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-"Agar dapat menggunakan sinkronisasi sistem berkas, dibutuhkan perizinan "
-"untuk menulis pada penyimpanan eksternal."
-
-#: ReactNativeClient/lib/components/screens/config.js:320
-#: ReactNativeClient/lib/components/screens/encryption-config.js:264
-msgid "Encryption Config"
-msgstr "Konfigurasi Enkripsi"
-
-#: ReactNativeClient/lib/components/screens/config.js:440
-msgid "Tools"
-msgstr "Alat"
-
-#: ReactNativeClient/lib/components/screens/config.js:442
-msgid "Sync Status"
-msgstr "Status sinkronisasi"
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-#: ReactNativeClient/lib/components/screens/log.js:100
-msgid "Log"
-msgstr "Log"
-
-#: ReactNativeClient/lib/components/screens/config.js:445
-msgid "Creating report..."
-msgstr "Membuat laporan..."
-
-#: ReactNativeClient/lib/components/screens/config.js:445
-msgid "Export Debug Report"
-msgstr "Ekspor Laporan Debug"
-
-#: ReactNativeClient/lib/components/screens/config.js:447
-msgid "Fixing search index..."
-msgstr "Memperbaiki indeks pencarian..."
-
-#: ReactNativeClient/lib/components/screens/config.js:447
-msgid "Fix search index"
-msgstr "Perbaiki indeks pencarian"
-
-#: ReactNativeClient/lib/components/screens/config.js:447
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-"Gunakan ini untuk membangun kembali indeks pencarian jika ada masalah dengan "
-"pencarian. Ini mungkin butuh waktu lama tergantung pada jumlah catatan."
-
-#: ReactNativeClient/lib/components/screens/config.js:450
-msgid "Exporting profile..."
-msgstr "Mengekspor profil..."
-
-#: ReactNativeClient/lib/components/screens/config.js:450
-msgid "Export profile"
-msgstr "Ekspor profil"
-
-#: ReactNativeClient/lib/components/screens/config.js:450
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
-"Hanya untuk keperluan debugging: ekspor profil Anda ke kartu SD eksternal."
-
-#: ReactNativeClient/lib/components/screens/config.js:465
-msgid "More information"
-msgstr "Informasi lebih lanjut"
-
-#: ReactNativeClient/lib/components/screens/config.js:475
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"Agar dapat bekerja dengan benar, aplikasi ini membutuhkan perizinan berikut. "
-"Silakan aktifkan mereka di pengaturan ponsel Anda, di Aplikasi > Joplin > "
-"Perizinan"
-
-#: ReactNativeClient/lib/components/screens/config.js:478
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-"- Penyimpanan: untuk memungkinkan melampirkan berkas ke catatan dan "
-"mengaktifkan sinkronisasi sistem berkas."
-
-#: ReactNativeClient/lib/components/screens/config.js:481
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
-"- Kamera: untuk memungkinkan pengambilan gambar dan melampirkannya ke "
-"catatan."
-
-#: ReactNativeClient/lib/components/screens/config.js:484
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
-"- Lokasi: untuk memungkinkan melampirkan informasi geolokasi ke catatan."
-
-#: ReactNativeClient/lib/components/screens/config.js:513
-msgid "Joplin website"
-msgstr "Situs web Joplin"
-
-#: ReactNativeClient/lib/components/screens/config.js:541
-#, javascript-format
-msgid "Database v%s"
-msgstr "Basis data v%s"
-
-#: ReactNativeClient/lib/components/screens/config.js:547
-#, javascript-format
-msgid "FTS enabled: %d"
-msgstr "FTS diaktifkan: %d"
-
-#: ReactNativeClient/lib/components/screens/config.js:553
-#: ReactNativeClient/lib/components/side-menu-content.js:315
-msgid "Configuration"
-msgstr "Konfigurasi"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
-msgid "Login with Dropbox"
-msgstr "Masuk dengan Dropboox"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
-msgid "Enter code here"
-msgstr "Masukkan kode disini"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:119
-#, javascript-format
-msgid "Master Key %s"
-msgstr "Kunci Master %s"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:689
-#, javascript-format
-msgid "Created: %s"
-msgstr "Dibuat: %s"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:122
-#: ReactNativeClient/lib/components/screens/encryption-config.js:151
-msgid "Password:"
-msgstr "Kata sandi:"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:137
-msgid "Password cannot be empty"
-msgstr "Kata sandi tidak boleh kosong"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:139
-msgid "Confirm password cannot be empty"
-msgstr "Konfirmasi kata sandi tidak boleh kosong"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:150
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-"Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
-"disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target "
-"sinkronisasi. Jangan sampai kehilangan kata sandinya karena, untuk alasan "
-"keamanan, ini akan menjadi *hanya* satu-satunya cara untuk mendekripsi data! "
-"Untuk mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "Aktifkan"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:248
-msgid "Missing Master Keys"
-msgstr "Kunci Master yang Hilang"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:249
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"Kunci master dengan ID ini digunakan mengenkripsi beberapa item Anda, namun "
-"saat ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada "
-"akhirnya akan diunduh via sinkronisasi."
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Disable encryption"
-msgstr "Nonaktifkan enkripsi"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Enable encryption"
-msgstr "Aktifkan enkripsi"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:268
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-"Untuk informasi lebih lanjut tentang enkripsi End-To-End (E2EE) dan tentang "
-"bagaimana cara mengaktifkannya silakan cek dokumentasi:"
-
-#: ReactNativeClient/lib/components/screens/folder.js:87
-#, javascript-format
-msgid "The notebook could not be saved: %s"
-msgstr "Buku catatan tidak bisa disimpan: %s"
-
-#: ReactNativeClient/lib/components/screens/folder.js:109
-msgid "Edit notebook"
-msgstr "Ubah buku catatan"
-
-#: ReactNativeClient/lib/components/screens/folder.js:110
-msgid "Enter notebook title"
-msgstr "Masukkan judul buku catatan"
-
-#: ReactNativeClient/lib/components/screens/log.js:109
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
-#: ReactNativeClient/lib/components/screens/status.js:141
-msgid "Refresh"
-msgstr "Segarkan"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Show all"
-msgstr "Tampilkan semua"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Errors only"
-msgstr "Hanya kesalahan"
-
-#: ReactNativeClient/lib/components/screens/note.js:90
-msgid "This note has been modified:"
-msgstr "Catatan ini telah diubah:"
-
-#: ReactNativeClient/lib/components/screens/note.js:90
-msgid "Save changes"
-msgstr "Simpan perubahan"
-
-#: ReactNativeClient/lib/components/screens/note.js:90
-msgid "Discard changes"
-msgstr "Buang perubahan"
-
-#: ReactNativeClient/lib/components/screens/note.js:139
-#, javascript-format
-msgid "No item with ID %s"
-msgstr "Tidak ada item dengan ID %s"
-
-#: ReactNativeClient/lib/components/screens/note.js:158
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Lampiran ini belum diunduh atau belum didekripsi."
-
-#: ReactNativeClient/lib/components/screens/note.js:162
-#, javascript-format
-msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Aplikasi mobile Joplin saat ini belum mendukung tipe tautan ini: %s"
-
-#: ReactNativeClient/lib/components/screens/note.js:166
-#, javascript-format
-msgid "Links with protocol \"%s\" are not supported"
-msgstr "Tautan dengan protokol \"%s\" tidak didukung"
-
-#: ReactNativeClient/lib/components/screens/note.js:439
 #: ReactNativeClient/lib/shim-init-node.js:90
+#: ReactNativeClient/lib/components/screens/note.js:519
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2341,84 +2178,697 @@ msgstr ""
 "Anda akan melampirkan gambar besar (%dx%d piksel). Apakah Anda ingin "
 "mengubah ukurannya hingga %d piksel sebelum melampirkannya?"
 
-#: ReactNativeClient/lib/components/screens/note.js:534
+#: ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
-msgid "Unsupported image type: %s"
-msgstr "Tipe gambar tidak didukung: %s"
+msgid "Cannot access %s"
+msgstr "Tidak dapat mengakses %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:690
+#: ReactNativeClient/lib/models/Folder.js:27
+#: ReactNativeClient/lib/models/Note.js:25
+msgid "title"
+msgstr "judul"
+
+#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Note.js:26
+msgid "updated date"
+msgstr "tanggal diperbarui"
+
+#: ReactNativeClient/lib/models/Folder.js:88
+msgid "Conflicts"
+msgstr "Konflik"
+
+#: ReactNativeClient/lib/models/Folder.js:386
+msgid "Cannot move notebook to this location"
+msgstr "Tidak dapat memindah buku catatan ke lokasi ini"
+
+#: ReactNativeClient/lib/models/Folder.js:438
 #, javascript-format
-msgid "Updated: %s"
-msgstr "Diperbarui: %s"
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+"Buku catatan tidak dapat dinamai \"%s\", yang merupakan judul yang telah "
+"dipesan."
 
-#: ReactNativeClient/lib/components/screens/note.js:694
-msgid "View on map"
-msgstr "Lihat di peta"
+#: ReactNativeClient/lib/models/Setting.js:39
+msgid "yes"
+msgstr "ya"
 
-#: ReactNativeClient/lib/components/screens/note.js:701
-msgid "Go to source URL"
-msgstr "Pergi ke URL sumber"
+#: ReactNativeClient/lib/models/Setting.js:39
+#: ReactNativeClient/lib/models/Setting.js:40
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr "(wysiwyg: %s)"
 
-#: ReactNativeClient/lib/components/screens/note.js:729
-msgid "Attach..."
-msgstr "Lampirkan..."
+#: ReactNativeClient/lib/models/Setting.js:40
+msgid "no"
+msgstr "tidak"
 
-#: ReactNativeClient/lib/components/screens/note.js:731
-msgid "Choose an option"
-msgstr "Pilih satu opsi"
+#: ReactNativeClient/lib/models/Setting.js:43
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Perhatian: Jika mengubah lokasi ini, pastikan Anda menyalin semua konten "
+"Anda ke sana sebelum menyinkronkan, jika tidak semua berkas akan terhapus! "
+"Lihat Tanya Jawab Umum (FAQ) untuk detail lebih lanjut: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:731
-msgid "Take photo"
-msgstr "Ambil foto"
+#: ReactNativeClient/lib/models/Setting.js:51
+msgid "Light"
+msgstr "Terang"
 
-#: ReactNativeClient/lib/components/screens/note.js:731
-msgid "Attach photo"
-msgstr "Lampirkan foto"
+#: ReactNativeClient/lib/models/Setting.js:52
+msgid "Dark"
+msgstr "Gelap"
 
-#: ReactNativeClient/lib/components/screens/note.js:731
-msgid "Attach any file"
-msgstr "Lampirkan berkas apa saja"
+#: ReactNativeClient/lib/models/Setting.js:53
+msgid "Dracula"
+msgstr "Dracula"
 
-#: ReactNativeClient/lib/components/screens/note.js:750
-msgid "Share"
-msgstr "Bagikan"
+#: ReactNativeClient/lib/models/Setting.js:54
+msgid "Solarised Light"
+msgstr "Solarized Terang"
 
-#: ReactNativeClient/lib/components/screens/note.js:764
-msgid "Convert to note"
-msgstr "Konversi ke catatan"
+#: ReactNativeClient/lib/models/Setting.js:55
+msgid "Solarised Dark"
+msgstr "Solarized Gelap"
 
-#: ReactNativeClient/lib/components/screens/note.js:764
-msgid "Convert to todo"
-msgstr "Konversi ke tugas"
+#: ReactNativeClient/lib/models/Setting.js:56
+msgid "Nord"
+msgstr "Nord"
 
-#: ReactNativeClient/lib/components/screens/note.js:778
-msgid "Properties"
-msgstr "Properti"
+#: ReactNativeClient/lib/models/Setting.js:57
+msgid "Aritim Dark"
+msgstr "Aritim Dark"
 
-#: ReactNativeClient/lib/components/screens/note.js:957
-#: ReactNativeClient/lib/components/screens/note.js:1007
-msgid "Add body"
-msgstr "Tambahkan isi"
+#: ReactNativeClient/lib/models/Setting.js:58
+msgid "OLED Dark"
+msgstr "OLED Gelap"
 
-#: ReactNativeClient/lib/components/screens/note.js:1045
-msgid "Add title"
-msgstr "Tambahkan judul"
+#: ReactNativeClient/lib/models/Setting.js:80
+msgid "Synchronisation target"
+msgstr "Target sinkronisasi"
 
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
-msgid "New tags:"
-msgstr "Label baru:"
+#: ReactNativeClient/lib/models/Setting.js:82
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Target untuk disinkronkan. Setiap target sinkronisasi dapat memiliki "
+"parameter tambahan yang dinamai `sync.NUM.NAME` (semua didokumentasikan di "
+"bawah)."
 
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
-msgid "Type new tags or select from list"
-msgstr "Ketik label baru atau pilih dari daftar"
+#: ReactNativeClient/lib/models/Setting.js:104
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Direktori untuk disinkronkan (jalur absolut)"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
-msgid "Login with OneDrive"
-msgstr "Masuk dengan OneDrive"
+#: ReactNativeClient/lib/models/Setting.js:116
+msgid "Nextcloud WebDAV URL"
+msgstr "URL WebDav Nextcloud"
 
-#: ReactNativeClient/lib/components/screens/search.js:163
-msgid "Search"
-msgstr "Pencarian"
+#: ReactNativeClient/lib/models/Setting.js:127
+msgid "Nextcloud username"
+msgstr "Nama pengguna Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:137
+msgid "Nextcloud password"
+msgstr "Kata sandi Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:149
+msgid "WebDAV URL"
+msgstr "URL WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:160
+msgid "WebDAV username"
+msgstr "Nama pengguna WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:170
+msgid "WebDAV password"
+msgstr "Kata sandi WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:195
+msgid "Attachment download behaviour"
+msgstr "Perilaku mengunduh lampiran"
+
+#: ReactNativeClient/lib/models/Setting.js:196
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Dalam mode \"Manual\", lampiran diunduh hanya saat Anda mengekliknya. Dalam "
+"mode \"Otomatis\", lampiran diunduh saat Anda membuka catatan. Dalam mode "
+"\"Selalu\", semua lampiran diunduh baik Anda membuka catatan atau pun tidak."
+
+#: ReactNativeClient/lib/models/Setting.js:199
+msgid "Always"
+msgstr "Selalu"
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "Manual"
+msgstr "Manual"
+
+#: ReactNativeClient/lib/models/Setting.js:201
+msgid "Auto"
+msgstr "Otomatis"
+
+#: ReactNativeClient/lib/models/Setting.js:206
+msgid "Max concurrent connections"
+msgstr "Koneksi bersamaan maksimum"
+
+#: ReactNativeClient/lib/models/Setting.js:215
+msgid "Language"
+msgstr "Bahasa"
+
+#: ReactNativeClient/lib/models/Setting.js:225
+msgid "Date format"
+msgstr "Format tanggal"
+
+#: ReactNativeClient/lib/models/Setting.js:244
+msgid "Time format"
+msgstr "Format waktu"
+
+#: ReactNativeClient/lib/models/Setting.js:263
+msgid "Theme"
+msgstr "Tema"
+
+#: ReactNativeClient/lib/models/Setting.js:274
+msgid "Automatically switch theme to match system theme"
+msgstr "Beralih tema secara otomatis untuk menyesuaikannya dengan tema sistem"
+
+#: ReactNativeClient/lib/models/Setting.js:286
+msgid "Preferred light theme"
+msgstr "Tema terang yang dipilih"
+
+#: ReactNativeClient/lib/models/Setting.js:300
+msgid "Preferred dark theme"
+msgstr "Tema gelap yang dipilih"
+
+#: ReactNativeClient/lib/models/Setting.js:305
+msgid "Show note counts"
+msgstr "Tampilkan jumlah catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:316
+#: ReactNativeClient/lib/models/Setting.js:317
+msgid "Split View"
+msgstr "Tampilan Terpisah"
+
+#: ReactNativeClient/lib/models/Setting.js:314
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:315
+#: ReactNativeClient/lib/models/Setting.js:316
+#: ReactNativeClient/lib/models/Setting.js:317
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:320
+msgid "Uncompleted to-dos on top"
+msgstr "Tugas belum selesai diatas"
+
+#: ReactNativeClient/lib/models/Setting.js:321
+msgid "Show completed to-dos"
+msgstr "Tampilkan tugas yang sudah selesai"
+
+#: ReactNativeClient/lib/models/Setting.js:346
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Pasangkan secara otomatis kurung kurawal, tanda kurung, kutipan, dll."
+
+#: ReactNativeClient/lib/models/Setting.js:354
+msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:374
+msgid "Reverse sort order"
+msgstr "Balikkan urutan"
+
+#: ReactNativeClient/lib/models/Setting.js:363
+msgid "Sort notebooks by"
+msgstr "Urutkan buku catatan menurut"
+
+#: ReactNativeClient/lib/models/Setting.js:375
+msgid "Save geo-location with notes"
+msgstr "Simpan geolokasi dengan catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:394
+msgid "When creating a new to-do:"
+msgstr "Ketika membuat tugas baru:"
+
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:412
+msgid "Focus title"
+msgstr "Fokus pada judul"
+
+#: ReactNativeClient/lib/models/Setting.js:398
+#: ReactNativeClient/lib/models/Setting.js:413
+msgid "Focus body"
+msgstr "Fokus pada isi"
+
+#: ReactNativeClient/lib/models/Setting.js:409
+msgid "When creating a new note:"
+msgstr "Ketika membuat catatan baru:"
+
+#: ReactNativeClient/lib/models/Setting.js:423
+msgid "Enable soft breaks"
+msgstr "Aktifkan soft break"
+
+#: ReactNativeClient/lib/models/Setting.js:424
+msgid "Enable typographer support"
+msgstr "Aktifkan dukungan typographer"
+
+#: ReactNativeClient/lib/models/Setting.js:425
+msgid "Enable math expressions"
+msgstr "Aktifkan ekspresi matematika"
+
+#: ReactNativeClient/lib/models/Setting.js:426
+msgid "Enable Fountain syntax support"
+msgstr "Aktifkan dukungan sintaksis Fountain"
+
+#: ReactNativeClient/lib/models/Setting.js:427
+msgid "Enable Mermaid diagrams support"
+msgstr "Aktifkan dukungan diagram Mermaid"
+
+#: ReactNativeClient/lib/models/Setting.js:429
+msgid "Enable ==mark== syntax"
+msgstr "Aktifkan sintaksis ==mark=="
+
+#: ReactNativeClient/lib/models/Setting.js:430
+msgid "Enable footnotes"
+msgstr "Aktifkan catatan kaki"
+
+#: ReactNativeClient/lib/models/Setting.js:431
+msgid "Enable table of contents extension"
+msgstr "Aktifkan ekstensi daftar isi"
+
+#: ReactNativeClient/lib/models/Setting.js:432
+msgid "Enable ~sub~ syntax"
+msgstr "Aktifkan sintaksis ~sub~"
+
+#: ReactNativeClient/lib/models/Setting.js:433
+msgid "Enable ^sup^ syntax"
+msgstr "Aktifkan sintaksis ^sup^"
+
+#: ReactNativeClient/lib/models/Setting.js:434
+msgid "Enable deflist syntax"
+msgstr "Aktifkan sintaksis daftar definisi"
+
+#: ReactNativeClient/lib/models/Setting.js:435
+msgid "Enable abbreviation syntax"
+msgstr "Aktifkan sintaksis singkatan (abbreviation)"
+
+#: ReactNativeClient/lib/models/Setting.js:436
+msgid "Enable markdown emoji"
+msgstr "Aktifkan emoji markdown"
+
+#: ReactNativeClient/lib/models/Setting.js:437
+msgid "Enable ++insert++ syntax"
+msgstr "Aktifkan sintaksis ++insert++"
+
+#: ReactNativeClient/lib/models/Setting.js:438
+msgid "Enable multimarkdown table extension"
+msgstr "Aktifkan ekstensi tabel multimarkdown"
+
+#: ReactNativeClient/lib/models/Setting.js:450
+msgid "Show tray icon"
+msgstr "Tampilkan ikon tray"
+
+#: ReactNativeClient/lib/models/Setting.js:452
+msgid "Note: Does not work in all desktop environments."
+msgstr "Catatan: Tidak berfungsi di semua lingkungan desktop."
+
+#: ReactNativeClient/lib/models/Setting.js:452
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Ini akan memungkinkan Joplin berjalan di latar belakang. Disarankan untuk "
+"mengaktifkan pengaturan ini agar catatan Anda terus disinkronkan, sehingga "
+"mengurangi jumlah konflik."
+
+#: ReactNativeClient/lib/models/Setting.js:456
+msgid "Start application minimised in the tray icon"
+msgstr "Mulai aplikasi dalam keadaan disembunyikan dalam ikon tray"
+
+#: ReactNativeClient/lib/models/Setting.js:474
+msgid "Editor font size"
+msgstr "Ukuran font pada editor"
+
+#: ReactNativeClient/lib/models/Setting.js:482
+msgid "Editor font"
+msgstr "Font pada editor"
+
+#: ReactNativeClient/lib/models/Setting.js:506
+msgid "Editor font family"
+msgstr "Keluarga font pada editor"
+
+#: ReactNativeClient/lib/models/Setting.js:508
+#, fuzzy
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"Ini harus font *monospace* atau ia tidak akan berfungsi sebagaimana "
+"mestinya. Jika font tidak benar atau kosong, font akan disetel secara "
+"otomatis ke font monospace generik."
+
+#: ReactNativeClient/lib/models/Setting.js:547
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Lembar gaya khusus untuk gaya keseluruhan aplikasi Joplin"
+
+#: ReactNativeClient/lib/models/Setting.js:553
+msgid "Automatically update the application"
+msgstr "Perbarui aplikasi secara otomatis"
+
+#: ReactNativeClient/lib/models/Setting.js:554
+msgid "Get pre-releases when checking for updates"
+msgstr "Dapatkan prarilis saat memeriksa pembaruan"
+
+#: ReactNativeClient/lib/models/Setting.js:554
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Lihat halaman prarilis untuk detail lebih lanjut: %s"
+
+#: ReactNativeClient/lib/models/Setting.js:562
+msgid "Synchronisation interval"
+msgstr "Interval sinkronisasi"
+
+#: ReactNativeClient/lib/models/Setting.js:566
+#: ReactNativeClient/lib/models/Setting.js:567
+#: ReactNativeClient/lib/models/Setting.js:568
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d menit"
+
+#: ReactNativeClient/lib/models/Setting.js:569
+#, javascript-format
+msgid "%d hour"
+msgstr "%d jam"
+
+#: ReactNativeClient/lib/models/Setting.js:570
+#: ReactNativeClient/lib/models/Setting.js:571
+#, javascript-format
+msgid "%d hours"
+msgstr "%d jam"
+
+#: ReactNativeClient/lib/models/Setting.js:580
+msgid "Text editor command"
+msgstr "Perintah editor teks"
+
+#: ReactNativeClient/lib/models/Setting.js:580
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Perintah editor (dapat mengandung argumen) yang akan digunakan untuk membuka "
+"catatan. Jika tidak ada yang disediakan, ia akan mencoba mendeteksi editor "
+"default secara otomatis."
+
+#: ReactNativeClient/lib/models/Setting.js:581
+msgid "Page size for PDF export"
+msgstr "Ukuran halaman untuk ekspor PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:583
+msgid "A4"
+msgstr "A4"
+
+#: ReactNativeClient/lib/models/Setting.js:584
+msgid "Letter"
+msgstr "Letter"
+
+#: ReactNativeClient/lib/models/Setting.js:585
+msgid "A3"
+msgstr "A3"
+
+#: ReactNativeClient/lib/models/Setting.js:586
+msgid "A5"
+msgstr "A5"
+
+#: ReactNativeClient/lib/models/Setting.js:587
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: ReactNativeClient/lib/models/Setting.js:588
+msgid "Legal"
+msgstr "Legal"
+
+#: ReactNativeClient/lib/models/Setting.js:591
+msgid "Page orientation for PDF export"
+msgstr "Orientasi halaman untuk ekspor PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:593
+msgid "Portrait"
+msgstr "Potret"
+
+#: ReactNativeClient/lib/models/Setting.js:594
+msgid "Landscape"
+msgstr "Lanskap"
+
+#: ReactNativeClient/lib/models/Setting.js:605
+msgid "Keyboard Mode"
+msgstr "Mode Papan Ketik"
+
+#: ReactNativeClient/lib/models/Setting.js:608
+msgid "Default"
+msgstr "Default"
+
+#: ReactNativeClient/lib/models/Setting.js:609
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ReactNativeClient/lib/models/Setting.js:610
+msgid "Vim"
+msgstr "Vim"
+
+#: ReactNativeClient/lib/models/Setting.js:625
+msgid "Custom TLS certificates"
+msgstr "Sertifikat TLS khusus"
+
+#: ReactNativeClient/lib/models/Setting.js:626
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Daftar \"jalur ke direktori tempat asal sertifikat dimuat\" atau \"jalur ke "
+"berkas sertifikat\" yang dipisahkan koma. Contoh: /jalur/ke/dir_sert, /"
+"lainnya/custom.pem. Perhatikan bahwa jika membuat perubahan pada pengaturan "
+"TLS, Anda harus menyimpan perubahan Anda sebelum mengeklik \"Periksa "
+"konfigurasi sinkronisasi\"."
+
+#: ReactNativeClient/lib/models/Setting.js:638
+msgid "Ignore TLS certificate errors"
+msgstr "Abaikan kesalahan sertifikat TLS"
+
+#: ReactNativeClient/lib/models/Setting.js:647
+msgid "Fail-safe"
+msgstr "Gagal-aman"
+
+#: ReactNativeClient/lib/models/Setting.js:648
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Gagal-aman: Jangan menghapus data lokal saat target sinkronisasi kosong "
+"(seringkali akibat kesalahan konfigurasi atau bug)"
+
+#: ReactNativeClient/lib/models/Setting.js:652
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Tentukan port yang harus digunakan oleh server API. Jika tidak disetel, maka "
+"pengaturan default akan digunakan."
+
+#: ReactNativeClient/lib/models/Setting.js:660
+msgid "Enable note history"
+msgstr "Aktifkan riwayat catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:670
+msgid "days"
+msgstr "hari"
+
+#: ReactNativeClient/lib/models/Setting.js:670
+#, javascript-format
+msgid "%d days"
+msgstr "%d hari"
+
+#: ReactNativeClient/lib/models/Setting.js:672
+msgid "Keep note history for"
+msgstr "Simpan riwayat catatan untuk"
+
+#: ReactNativeClient/lib/models/Setting.js:699
+msgid "Notebook list growth factor"
+msgstr "Faktor pertumbuhan daftar buku catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:701
+#: ReactNativeClient/lib/models/Setting.js:714
+#: ReactNativeClient/lib/models/Setting.js:727
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut agar "
+"sesuai dengan ruang yang tersedia dalam wadahnya sehubungan dengan item "
+"lainnya. Jadi item dengan faktor 2 akan memakan ruang dua kali lebih banyak "
+"dari item dengan faktor 1. Mulai ulang aplikasi untuk melihat perubahan."
+
+#: ReactNativeClient/lib/models/Setting.js:712
+msgid "Note list growth factor"
+msgstr "Faktor pertumbuhan daftar catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:725
+msgid "Note area growth factor"
+msgstr "Faktor pertumbuhan area catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:877
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Nilai opsi tidak valid: \"%s\". Nilai yang mungkin adalah: %s."
+
+#: ReactNativeClient/lib/models/Setting.js:1205
+msgid "General"
+msgstr "Umum"
+
+#: ReactNativeClient/lib/models/Setting.js:1206
+msgid "Synchronisation"
+msgstr "Sinkronisasi"
+
+#: ReactNativeClient/lib/models/Setting.js:1207
+msgid "Appearance"
+msgstr "Tampilan"
+
+#: ReactNativeClient/lib/models/Setting.js:1208
+msgid "Note"
+msgstr "Catatan"
+
+#: ReactNativeClient/lib/models/Setting.js:1209
+msgid "Plugins"
+msgstr "Plugin"
+
+#: ReactNativeClient/lib/models/Setting.js:1210
+msgid "Application"
+msgstr "Aplikasi"
+
+#: ReactNativeClient/lib/models/Setting.js:1212
+msgid "Encryption"
+msgstr "Enkripsi"
+
+#: ReactNativeClient/lib/models/Setting.js:1213
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: ReactNativeClient/lib/models/Setting.js:1218
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+"Plugin ini meningkatkan penyaji Markdown dengan fitur tambahan. Harap "
+"dicatat bahwa, sementara fitur-fitur ini mungkin berguna, mereka bukan "
+"Markdown standar dan dengan demikian sebagian besar dari mereka hanya akan "
+"berfungsi di Joplin. Selain itu, beberapa *tidak kompatibel* dengan editor "
+"WYSIWYG. Jika Anda membuka catatan yang menggunakan salah satu plugin ini di "
+"editor itu, Anda akan kehilangan format plugin. Di bawah ini ditunjukkan "
+"plugin mana yang kompatibel atau tidak dengan editor WYSIWYG."
+
+#: ReactNativeClient/lib/models/Setting.js:1219
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Catatan dan pengaturan disimpan di: %s"
+
+#: ReactNativeClient/lib/models/Resource.js:317
+msgid "Not downloaded"
+msgstr "Tidak terunduh"
+
+#: ReactNativeClient/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr "Mengunduh"
+
+#: ReactNativeClient/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr "Terunduh"
+
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Lampiran"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, fuzzy, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
+
+#: ReactNativeClient/lib/models/Tag.js:183
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Label \"%s\" sudah ada. Silakan pilih nama yang berbeda."
+
+#: ReactNativeClient/lib/models/Note.js:27
+msgid "created date"
+msgstr "tanggal dibuat"
+
+#: ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr "urutan khusus"
+
+#: ReactNativeClient/lib/models/Note.js:92
+msgid "This note does not have geolocation information."
+msgstr "Catatan ini tidak memiliki informasi gelokasi."
+
+#: ReactNativeClient/lib/models/Note.js:468
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Tidak dapat menyalin catatan ke buku catatan \"%s\""
+
+#: ReactNativeClient/lib/models/Note.js:479
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "TIdak dapat memindah catatan ke buku catatan \"%s\""
+
+#: ReactNativeClient/lib/models/BaseItem.js:709
+msgid "Encrypted"
+msgstr "Terenkripsi"
+
+#: ReactNativeClient/lib/models/BaseItem.js:769
+msgid "Encrypted items cannot be modified"
+msgstr "Item yang terenkripsi tidak bisa diubah"
+
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (Hanya untuk pengujian)"
+
+#: ReactNativeClient/lib/BaseApplication.js:138
+#: ReactNativeClient/lib/BaseApplication.js:151
+#: ReactNativeClient/lib/BaseApplication.js:182
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Penggunaan: %s"
+
+#: ReactNativeClient/lib/BaseApplication.js:217
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Tanda tidak diketahui: %s"
+
+#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
 
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2435,6 +2885,65 @@ msgstr "Pilih tanggal"
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:88
 msgid "Confirm"
 msgstr "Konfirmasi"
+
+#: ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "Izin penggunaan kamera"
+
+#: ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr "Membutuhkan perizinan untuk penggunaan kamera."
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Hapus catatan ini?"
+
+#: ReactNativeClient/lib/components/screen-header.js:392
+msgid "Move to notebook..."
+msgstr "Pindahkan ke buku catatan..."
+
+#: ReactNativeClient/lib/components/screen-header.js:433
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
+
+#: ReactNativeClient/lib/components/screen-header.js:451
+msgid "Press to set the decryption password."
+msgstr "Tekan untuk mengatur kata sandi dekripsi."
+
+#: ReactNativeClient/lib/components/screen-header.js:452
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Beberapa item tidak dapat disinkronkan. Tekan untuk info lebih lanjut."
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Buku catatan: %s"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Buku catatan terenkripsi tidak bisa diganti nama"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Buku Catatan Baru"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:316
+#: ReactNativeClient/lib/components/screens/config.js:549
+msgid "Configuration"
+msgstr "Konfigurasi"
+
+#: ReactNativeClient/lib/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Saat ini tidak ada buku catatan."
+
+#: ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Buat buku catatan"
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Saat ini belum ada catatan. Buat catatan dengan mengeklik tombol (+)."
 
 #: ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
@@ -2505,18 +3014,399 @@ msgstr "Tidak dapat mengupgrade kunci master: %s"
 msgid "Decrypted items: %s / %s"
 msgstr "Item yang didekripsi: %s / %s"
 
-#: ReactNativeClient/lib/components/side-menu-content.js:126
+#: ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
-msgid "Notebook: %s"
-msgstr "Buku catatan: %s"
+msgid "The notebook could not be saved: %s"
+msgstr "Buku catatan tidak bisa disimpan: %s"
 
-#: ReactNativeClient/lib/components/side-menu-content.js:132
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "Buku catatan terenkripsi tidak bisa diganti nama"
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Ubah buku catatan"
 
-#: ReactNativeClient/lib/components/side-menu-content.js:311
-msgid "New Notebook"
-msgstr "Buku Catatan Baru"
+#: ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Masukkan judul buku catatan"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+msgid "Login with OneDrive"
+msgstr "Masuk dengan OneDrive"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Segarkan"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Label baru:"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Ketik label baru atau pilih dari daftar"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+msgid "Login with Dropbox"
+msgstr "Masuk dengan Dropboox"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+msgid "Enter code here"
+msgstr "Masukkan kode disini"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Kunci Master %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/note.js:769
+#, javascript-format
+msgid "Created: %s"
+msgstr "Dibuat: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Kata sandi:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Kata sandi tidak boleh kosong"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Konfirmasi kata sandi tidak boleh kosong"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
+"disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target "
+"sinkronisasi. Jangan sampai kehilangan kata sandinya karena, untuk alasan "
+"keamanan, ini akan menjadi *hanya* satu-satunya cara untuk mendekripsi data! "
+"Untuk mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Aktifkan"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Kunci Master yang Hilang"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Kunci master dengan ID ini digunakan mengenkripsi beberapa item Anda, namun "
+"saat ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada "
+"akhirnya akan diunduh via sinkronisasi."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Nonaktifkan enkripsi"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Aktifkan enkripsi"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+#: ReactNativeClient/lib/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Konfigurasi Enkripsi"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Untuk informasi lebih lanjut tentang enkripsi End-To-End (E2EE) dan tentang "
+"bagaimana cara mengaktifkannya silakan cek dokumentasi:"
+
+#: ReactNativeClient/lib/components/screens/log.js:100
+#: ReactNativeClient/lib/components/screens/config.js:439
+msgid "Log"
+msgstr "Log"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Tampilkan semua"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Hanya kesalahan"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid "Warning"
+msgstr "Peringatan"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Agar dapat menggunakan sinkronisasi sistem berkas, dibutuhkan perizinan "
+"untuk menulis pada penyimpanan eksternal."
+
+#: ReactNativeClient/lib/components/screens/config.js:436
+msgid "Tools"
+msgstr "Alat"
+
+#: ReactNativeClient/lib/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "Status sinkronisasi"
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "Membuat laporan..."
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Ekspor Laporan Debug"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "Memperbaiki indeks pencarian..."
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "Perbaiki indeks pencarian"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Gunakan ini untuk membangun kembali indeks pencarian jika ada masalah dengan "
+"pencarian. Ini mungkin butuh waktu lama tergantung pada jumlah catatan."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "Mengekspor profil..."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Export profile"
+msgstr "Ekspor profil"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+"Hanya untuk keperluan debugging: ekspor profil Anda ke kartu SD eksternal."
+
+#: ReactNativeClient/lib/components/screens/config.js:461
+msgid "More information"
+msgstr "Informasi lebih lanjut"
+
+#: ReactNativeClient/lib/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Agar dapat bekerja dengan benar, aplikasi ini membutuhkan perizinan berikut. "
+"Silakan aktifkan mereka di pengaturan ponsel Anda, di Aplikasi > Joplin > "
+"Perizinan"
+
+#: ReactNativeClient/lib/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Penyimpanan: untuk memungkinkan melampirkan berkas ke catatan dan "
+"mengaktifkan sinkronisasi sistem berkas."
+
+#: ReactNativeClient/lib/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+"- Kamera: untuk memungkinkan pengambilan gambar dan melampirkannya ke "
+"catatan."
+
+#: ReactNativeClient/lib/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+"- Lokasi: untuk memungkinkan melampirkan informasi geolokasi ke catatan."
+
+#: ReactNativeClient/lib/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Situs web Joplin"
+
+#: ReactNativeClient/lib/components/screens/config.js:537
+#, javascript-format
+msgid "Database v%s"
+msgstr "Basis data v%s"
+
+#: ReactNativeClient/lib/components/screens/config.js:543
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS diaktifkan: %d"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "This note has been modified:"
+msgstr "Catatan ini telah diubah:"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Save changes"
+msgstr "Simpan perubahan"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Discard changes"
+msgstr "Buang perubahan"
+
+#: ReactNativeClient/lib/components/screens/note.js:161
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Tidak ada item dengan ID %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:180
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Lampiran ini belum diunduh atau belum didekripsi."
+
+#: ReactNativeClient/lib/components/screens/note.js:184
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "Aplikasi mobile Joplin saat ini belum mendukung tipe tautan ini: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:188
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Tautan dengan protokol \"%s\" tidak didukung"
+
+#: ReactNativeClient/lib/components/screens/note.js:614
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Tipe gambar tidak didukung: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:770
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Diperbarui: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:774
+msgid "View on map"
+msgstr "Lihat di peta"
+
+#: ReactNativeClient/lib/components/screens/note.js:781
+msgid "Go to source URL"
+msgstr "Pergi ke URL sumber"
+
+#: ReactNativeClient/lib/components/screens/note.js:809
+msgid "Attach..."
+msgstr "Lampirkan..."
+
+#: ReactNativeClient/lib/components/screens/note.js:811
+msgid "Choose an option"
+msgstr "Pilih satu opsi"
+
+#: ReactNativeClient/lib/components/screens/note.js:811
+msgid "Take photo"
+msgstr "Ambil foto"
+
+#: ReactNativeClient/lib/components/screens/note.js:811
+msgid "Attach photo"
+msgstr "Lampirkan foto"
+
+#: ReactNativeClient/lib/components/screens/note.js:811
+msgid "Attach any file"
+msgstr "Lampirkan berkas apa saja"
+
+#: ReactNativeClient/lib/components/screens/note.js:830
+msgid "Share"
+msgstr "Bagikan"
+
+#: ReactNativeClient/lib/components/screens/note.js:844
+msgid "Convert to note"
+msgstr "Konversi ke catatan"
+
+#: ReactNativeClient/lib/components/screens/note.js:844
+msgid "Convert to todo"
+msgstr "Konversi ke tugas"
+
+#: ReactNativeClient/lib/components/screens/note.js:858
+msgid "Properties"
+msgstr "Properti"
+
+#: ReactNativeClient/lib/components/screens/note.js:1038
+#: ReactNativeClient/lib/components/screens/note.js:1096
+msgid "Add body"
+msgstr "Tambahkan isi"
+
+#: ReactNativeClient/lib/components/screens/note.js:1146
+msgid "Add title"
+msgstr "Tambahkan judul"
+
+#: ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Pencarian"
+
+#: ReactNativeClient/lib/onedrive-api.js:342
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Tidak dapat menyegarkan token: data otentikasi tidak ada. Memulai "
+"sinkronisasi lagi mungkin dapat memperbaiki masalah."
+
+#: ReactNativeClient/lib/synchronizer.js:93
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Item lokal yang dibuat: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Item lokal yang diperbarui: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Item jarak jauh yang dibuat: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Item jarak jauh yang diperbarui: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Item lokal yang dihapus: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Item jarak jauh yang dihapus: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Item yang diambil: %d/%d."
+
+#: ReactNativeClient/lib/synchronizer.js:101
+msgid "Cancelling..."
+msgstr "Membatalkan..."
+
+#: ReactNativeClient/lib/synchronizer.js:102
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Selesai: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Kesalahan terakhir: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:203
+msgid "Idle"
+msgstr "Diam"
+
+#: ReactNativeClient/lib/synchronizer.js:204
+msgid "In progress"
+msgstr "Sedang berlangsung"
 
 #: ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
@@ -2532,787 +3422,25 @@ msgstr ""
 "\n"
 "%s"
 
-#: ReactNativeClient/lib/logger.js:178
-#, javascript-format
-msgid "Unknown log level: %s"
-msgstr "Level log tidak diketahui: %s"
-
-#: ReactNativeClient/lib/logger.js:187
-#, javascript-format
-msgid "Unknown level ID: %s"
-msgstr "ID level tidak diketahui: %s"
-
-#: ReactNativeClient/lib/models/BaseItem.js:709
-msgid "Encrypted"
-msgstr "Terenkripsi"
-
-#: ReactNativeClient/lib/models/BaseItem.js:769
-msgid "Encrypted items cannot be modified"
-msgstr "Item yang terenkripsi tidak bisa diubah"
-
-#: ReactNativeClient/lib/models/Folder.js:27
-#: ReactNativeClient/lib/models/Note.js:25
-msgid "title"
-msgstr "judul"
-
-#: ReactNativeClient/lib/models/Folder.js:28
-#: ReactNativeClient/lib/models/Note.js:26
-msgid "updated date"
-msgstr "tanggal diperbarui"
-
-#: ReactNativeClient/lib/models/Folder.js:88
-msgid "Conflicts"
-msgstr "Konflik"
-
-#: ReactNativeClient/lib/models/Folder.js:381
-msgid "Cannot move notebook to this location"
-msgstr "Tidak dapat memindah buku catatan ke lokasi ini"
-
-#: ReactNativeClient/lib/models/Folder.js:429
-#, javascript-format
-msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
-"Buku catatan tidak dapat dinamai \"%s\", yang merupakan judul yang telah "
-"dipesan."
-
-#: ReactNativeClient/lib/models/Note.js:27
-msgid "created date"
-msgstr "tanggal dibuat"
-
-#: ReactNativeClient/lib/models/Note.js:28
-msgid "custom order"
-msgstr "urutan khusus"
-
-#: ReactNativeClient/lib/models/Note.js:92
-msgid "This note does not have geolocation information."
-msgstr "Catatan ini tidak memiliki informasi gelokasi."
-
-#: ReactNativeClient/lib/models/Note.js:468
-#, javascript-format
-msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Tidak dapat menyalin catatan ke buku catatan \"%s\""
-
-#: ReactNativeClient/lib/models/Note.js:479
-#, javascript-format
-msgid "Cannot move note to \"%s\" notebook"
-msgstr "TIdak dapat memindah catatan ke buku catatan \"%s\""
-
-#: ReactNativeClient/lib/models/Resource.js:317
-msgid "Not downloaded"
-msgstr "Tidak terunduh"
-
-#: ReactNativeClient/lib/models/Resource.js:318
-msgid "Downloading"
-msgstr "Mengunduh"
-
-#: ReactNativeClient/lib/models/Resource.js:319
-msgid "Downloaded"
-msgstr "Terunduh"
-
-#: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
-msgid "Attachment conflict: \"%s\""
-msgstr "Lampiran"
-
-#: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
-msgid ""
-"There was a [conflict](%s) on the attachment below.\n"
-"\n"
-"%s"
-msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
-
-#: ReactNativeClient/lib/models/Setting.js:30
-msgid "yes"
-msgstr "ya"
-
-#: ReactNativeClient/lib/models/Setting.js:30
-#: ReactNativeClient/lib/models/Setting.js:31
-#, javascript-format
-msgid "(wysiwyg: %s)"
-msgstr "(wysiwyg: %s)"
-
-#: ReactNativeClient/lib/models/Setting.js:31
-msgid "no"
-msgstr "tidak"
-
-#: ReactNativeClient/lib/models/Setting.js:34
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"Perhatian: Jika mengubah lokasi ini, pastikan Anda menyalin semua konten "
-"Anda ke sana sebelum menyinkronkan, jika tidak semua berkas akan terhapus! "
-"Lihat Tanya Jawab Umum (FAQ) untuk detail lebih lanjut: %s"
-
-#: ReactNativeClient/lib/models/Setting.js:42
-msgid "Light"
-msgstr "Terang"
-
-#: ReactNativeClient/lib/models/Setting.js:43
-msgid "Dark"
-msgstr "Gelap"
-
-#: ReactNativeClient/lib/models/Setting.js:45
-msgid "Dracula"
-msgstr "Dracula"
-
-#: ReactNativeClient/lib/models/Setting.js:46
-msgid "Solarised Light"
-msgstr "Solarized Terang"
-
-#: ReactNativeClient/lib/models/Setting.js:47
-msgid "Solarised Dark"
-msgstr "Solarized Gelap"
-
-#: ReactNativeClient/lib/models/Setting.js:48
-msgid "Nord"
-msgstr "Nord"
-
-#: ReactNativeClient/lib/models/Setting.js:50
-msgid "OLED Dark"
-msgstr "OLED Gelap"
-
-#: ReactNativeClient/lib/models/Setting.js:73
-msgid "Synchronisation target"
-msgstr "Target sinkronisasi"
-
-#: ReactNativeClient/lib/models/Setting.js:75
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"Target untuk disinkronkan. Setiap target sinkronisasi dapat memiliki "
-"parameter tambahan yang dinamai `sync.NUM.NAME` (semua didokumentasikan di "
-"bawah)."
-
-#: ReactNativeClient/lib/models/Setting.js:97
-msgid "Directory to synchronise with (absolute path)"
-msgstr "Direktori untuk disinkronkan (jalur absolut)"
-
-#: ReactNativeClient/lib/models/Setting.js:109
-msgid "Nextcloud WebDAV URL"
-msgstr "URL WebDav Nextcloud"
-
-#: ReactNativeClient/lib/models/Setting.js:120
-msgid "Nextcloud username"
-msgstr "Nama pengguna Nextcloud"
-
-#: ReactNativeClient/lib/models/Setting.js:130
-msgid "Nextcloud password"
-msgstr "Kata sandi Nextcloud"
-
-#: ReactNativeClient/lib/models/Setting.js:142
-msgid "WebDAV URL"
-msgstr "URL WebDAV"
-
-#: ReactNativeClient/lib/models/Setting.js:153
-msgid "WebDAV username"
-msgstr "Nama pengguna WebDAV"
-
-#: ReactNativeClient/lib/models/Setting.js:163
-msgid "WebDAV password"
-msgstr "Kata sandi WebDAV"
-
-#: ReactNativeClient/lib/models/Setting.js:188
-msgid "Attachment download behaviour"
-msgstr "Perilaku mengunduh lampiran"
-
-#: ReactNativeClient/lib/models/Setting.js:189
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"Dalam mode \"Manual\", lampiran diunduh hanya saat Anda mengekliknya. Dalam "
-"mode \"Otomatis\", lampiran diunduh saat Anda membuka catatan. Dalam mode "
-"\"Selalu\", semua lampiran diunduh baik Anda membuka catatan atau pun tidak."
-
-#: ReactNativeClient/lib/models/Setting.js:192
-msgid "Always"
-msgstr "Selalu"
-
-#: ReactNativeClient/lib/models/Setting.js:193
-msgid "Manual"
-msgstr "Manual"
-
-#: ReactNativeClient/lib/models/Setting.js:194
-msgid "Auto"
-msgstr "Otomatis"
-
-#: ReactNativeClient/lib/models/Setting.js:199
-msgid "Max concurrent connections"
-msgstr "Koneksi bersamaan maksimum"
-
-#: ReactNativeClient/lib/models/Setting.js:208
-msgid "Language"
-msgstr "Bahasa"
-
-#: ReactNativeClient/lib/models/Setting.js:218
-msgid "Date format"
-msgstr "Format tanggal"
-
-#: ReactNativeClient/lib/models/Setting.js:237
-msgid "Time format"
-msgstr "Format waktu"
-
-#: ReactNativeClient/lib/models/Setting.js:256
-msgid "Theme"
-msgstr "Tema"
-
-#: ReactNativeClient/lib/models/Setting.js:267
-msgid "Automatically switch theme to match system theme"
-msgstr "Beralih tema secara otomatis untuk menyesuaikannya dengan tema sistem"
-
-#: ReactNativeClient/lib/models/Setting.js:279
-msgid "Preferred light theme"
-msgstr "Tema terang yang dipilih"
-
-#: ReactNativeClient/lib/models/Setting.js:293
-msgid "Preferred dark theme"
-msgstr "Tema gelap yang dipilih"
-
-#: ReactNativeClient/lib/models/Setting.js:298
-msgid "Show note counts"
-msgstr "Tampilkan jumlah catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:306
-#: ReactNativeClient/lib/models/Setting.js:308
-#: ReactNativeClient/lib/models/Setting.js:309
-msgid "Split View"
-msgstr "Tampilan Terpisah"
-
-#: ReactNativeClient/lib/models/Setting.js:306
-#, javascript-format
-msgid "%s / %s / %s"
-msgstr "%s / %s / %s"
-
-#: ReactNativeClient/lib/models/Setting.js:307
-#: ReactNativeClient/lib/models/Setting.js:308
-#: ReactNativeClient/lib/models/Setting.js:309
-#, javascript-format
-msgid "%s / %s"
-msgstr "%s / %s"
-
-#: ReactNativeClient/lib/models/Setting.js:312
-msgid "Uncompleted to-dos on top"
-msgstr "Tugas belum selesai diatas"
-
-#: ReactNativeClient/lib/models/Setting.js:313
-msgid "Show completed to-dos"
-msgstr "Tampilkan tugas yang sudah selesai"
-
-#: ReactNativeClient/lib/models/Setting.js:338
-msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "Pasangkan secara otomatis kurung kurawal, tanda kurung, kutipan, dll."
-
-#: ReactNativeClient/lib/models/Setting.js:340
-#: ReactNativeClient/lib/models/Setting.js:358
-msgid "Reverse sort order"
-msgstr "Balikkan urutan"
-
-#: ReactNativeClient/lib/models/Setting.js:347
-msgid "Sort notebooks by"
-msgstr "Urutkan buku catatan menurut"
-
-#: ReactNativeClient/lib/models/Setting.js:359
-msgid "Save geo-location with notes"
-msgstr "Simpan geolokasi dengan catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:378
-msgid "When creating a new to-do:"
-msgstr "Ketika membuat tugas baru:"
-
-#: ReactNativeClient/lib/models/Setting.js:381
-#: ReactNativeClient/lib/models/Setting.js:396
-msgid "Focus title"
-msgstr "Fokus pada judul"
-
-#: ReactNativeClient/lib/models/Setting.js:382
-#: ReactNativeClient/lib/models/Setting.js:397
-msgid "Focus body"
-msgstr "Fokus pada isi"
-
-#: ReactNativeClient/lib/models/Setting.js:393
-msgid "When creating a new note:"
-msgstr "Ketika membuat catatan baru:"
-
-#: ReactNativeClient/lib/models/Setting.js:407
-msgid "Enable soft breaks"
-msgstr "Aktifkan soft break"
-
-#: ReactNativeClient/lib/models/Setting.js:408
-msgid "Enable typographer support"
-msgstr "Aktifkan dukungan typographer"
-
-#: ReactNativeClient/lib/models/Setting.js:409
-msgid "Enable math expressions"
-msgstr "Aktifkan ekspresi matematika"
-
-#: ReactNativeClient/lib/models/Setting.js:410
-msgid "Enable Fountain syntax support"
-msgstr "Aktifkan dukungan sintaksis Fountain"
-
-#: ReactNativeClient/lib/models/Setting.js:411
-msgid "Enable Mermaid diagrams support"
-msgstr "Aktifkan dukungan diagram Mermaid"
-
-#: ReactNativeClient/lib/models/Setting.js:413
-msgid "Enable ==mark== syntax"
-msgstr "Aktifkan sintaksis ==mark=="
-
-#: ReactNativeClient/lib/models/Setting.js:414
-msgid "Enable footnotes"
-msgstr "Aktifkan catatan kaki"
-
-#: ReactNativeClient/lib/models/Setting.js:415
-msgid "Enable table of contents extension"
-msgstr "Aktifkan ekstensi daftar isi"
-
-#: ReactNativeClient/lib/models/Setting.js:416
-msgid "Enable ~sub~ syntax"
-msgstr "Aktifkan sintaksis ~sub~"
-
-#: ReactNativeClient/lib/models/Setting.js:417
-msgid "Enable ^sup^ syntax"
-msgstr "Aktifkan sintaksis ^sup^"
-
-#: ReactNativeClient/lib/models/Setting.js:418
-msgid "Enable deflist syntax"
-msgstr "Aktifkan sintaksis daftar definisi"
-
-#: ReactNativeClient/lib/models/Setting.js:419
-msgid "Enable abbreviation syntax"
-msgstr "Aktifkan sintaksis singkatan (abbreviation)"
-
-#: ReactNativeClient/lib/models/Setting.js:420
-msgid "Enable markdown emoji"
-msgstr "Aktifkan emoji markdown"
-
-#: ReactNativeClient/lib/models/Setting.js:421
-msgid "Enable ++insert++ syntax"
-msgstr "Aktifkan sintaksis ++insert++"
-
-#: ReactNativeClient/lib/models/Setting.js:422
-msgid "Enable multimarkdown table extension"
-msgstr "Aktifkan ekstensi tabel multimarkdown"
-
-#: ReactNativeClient/lib/models/Setting.js:434
-msgid "Show tray icon"
-msgstr "Tampilkan ikon tray"
-
-#: ReactNativeClient/lib/models/Setting.js:436
-msgid "Note: Does not work in all desktop environments."
-msgstr "Catatan: Tidak berfungsi di semua lingkungan desktop."
-
-#: ReactNativeClient/lib/models/Setting.js:436
-msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable "
-"this setting so that your notes are constantly being synchronised, thus "
-"reducing the number of conflicts."
-msgstr ""
-"Ini akan memungkinkan Joplin berjalan di latar belakang. Disarankan untuk "
-"mengaktifkan pengaturan ini agar catatan Anda terus disinkronkan, sehingga "
-"mengurangi jumlah konflik."
-
-#: ReactNativeClient/lib/models/Setting.js:440
-msgid "Start application minimised in the tray icon"
-msgstr "Mulai aplikasi dalam keadaan disembunyikan dalam ikon tray"
-
-#: ReactNativeClient/lib/models/Setting.js:457
-msgid "Editor font size"
-msgstr "Ukuran font pada editor"
-
-#: ReactNativeClient/lib/models/Setting.js:465
-msgid "Editor font"
-msgstr "Font pada editor"
-
-#: ReactNativeClient/lib/models/Setting.js:489
-msgid "Editor font family"
-msgstr "Keluarga font pada editor"
-
-#: ReactNativeClient/lib/models/Setting.js:491
-msgid ""
-"This must be *monospace* font or it will not work properly. If the font is "
-"incorrect or empty, it will default to a generic monospace font."
-msgstr ""
-"Ini harus font *monospace* atau ia tidak akan berfungsi sebagaimana "
-"mestinya. Jika font tidak benar atau kosong, font akan disetel secara "
-"otomatis ke font monospace generik."
-
-#: ReactNativeClient/lib/models/Setting.js:530
-msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Lembar gaya khusus untuk gaya keseluruhan aplikasi Joplin"
-
-#: ReactNativeClient/lib/models/Setting.js:536
-msgid "Automatically update the application"
-msgstr "Perbarui aplikasi secara otomatis"
-
-#: ReactNativeClient/lib/models/Setting.js:537
-msgid "Get pre-releases when checking for updates"
-msgstr "Dapatkan prarilis saat memeriksa pembaruan"
-
-#: ReactNativeClient/lib/models/Setting.js:537
-#, javascript-format
-msgid "See the pre-release page for more details: %s"
-msgstr "Lihat halaman prarilis untuk detail lebih lanjut: %s"
-
-#: ReactNativeClient/lib/models/Setting.js:545
-msgid "Synchronisation interval"
-msgstr "Interval sinkronisasi"
-
-#: ReactNativeClient/lib/models/Setting.js:549
-#: ReactNativeClient/lib/models/Setting.js:550
-#: ReactNativeClient/lib/models/Setting.js:551
-#, javascript-format
-msgid "%d minutes"
-msgstr "%d menit"
-
-#: ReactNativeClient/lib/models/Setting.js:552
-#, javascript-format
-msgid "%d hour"
-msgstr "%d jam"
-
-#: ReactNativeClient/lib/models/Setting.js:553
-#: ReactNativeClient/lib/models/Setting.js:554
-#, javascript-format
-msgid "%d hours"
-msgstr "%d jam"
-
-#: ReactNativeClient/lib/models/Setting.js:563
-msgid "Text editor command"
-msgstr "Perintah editor teks"
-
-#: ReactNativeClient/lib/models/Setting.js:563
-msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
-msgstr ""
-"Perintah editor (dapat mengandung argumen) yang akan digunakan untuk membuka "
-"catatan. Jika tidak ada yang disediakan, ia akan mencoba mendeteksi editor "
-"default secara otomatis."
-
-#: ReactNativeClient/lib/models/Setting.js:564
-msgid "Page size for PDF export"
-msgstr "Ukuran halaman untuk ekspor PDF"
-
-#: ReactNativeClient/lib/models/Setting.js:566
-msgid "A4"
-msgstr "A4"
-
-#: ReactNativeClient/lib/models/Setting.js:567
-msgid "Letter"
-msgstr "Letter"
-
-#: ReactNativeClient/lib/models/Setting.js:568
-msgid "A3"
-msgstr "A3"
-
-#: ReactNativeClient/lib/models/Setting.js:569
-msgid "A5"
-msgstr "A5"
-
-#: ReactNativeClient/lib/models/Setting.js:570
-msgid "Tabloid"
-msgstr "Tabloid"
-
-#: ReactNativeClient/lib/models/Setting.js:571
-msgid "Legal"
-msgstr "Legal"
-
-#: ReactNativeClient/lib/models/Setting.js:574
-msgid "Page orientation for PDF export"
-msgstr "Orientasi halaman untuk ekspor PDF"
-
-#: ReactNativeClient/lib/models/Setting.js:576
-msgid "Portrait"
-msgstr "Potret"
-
-#: ReactNativeClient/lib/models/Setting.js:577
-msgid "Landscape"
-msgstr "Lanskap"
-
-#: ReactNativeClient/lib/models/Setting.js:588
-msgid "Keyboard Mode"
-msgstr "Mode Papan Ketik"
-
-#: ReactNativeClient/lib/models/Setting.js:591
-msgid "Default"
-msgstr "Default"
-
-#: ReactNativeClient/lib/models/Setting.js:592
-msgid "Emacs"
-msgstr "Emacs"
-
-#: ReactNativeClient/lib/models/Setting.js:593
-msgid "Vim"
-msgstr "Vim"
-
-#: ReactNativeClient/lib/models/Setting.js:608
-msgid "Custom TLS certificates"
-msgstr "Sertifikat TLS khusus"
-
-#: ReactNativeClient/lib/models/Setting.js:609
-msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
-msgstr ""
-"Daftar \"jalur ke direktori tempat asal sertifikat dimuat\" atau \"jalur ke "
-"berkas sertifikat\" yang dipisahkan koma. Contoh: /jalur/ke/dir_sert, /"
-"lainnya/custom.pem. Perhatikan bahwa jika membuat perubahan pada pengaturan "
-"TLS, Anda harus menyimpan perubahan Anda sebelum mengeklik \"Periksa "
-"konfigurasi sinkronisasi\"."
-
-#: ReactNativeClient/lib/models/Setting.js:621
-msgid "Ignore TLS certificate errors"
-msgstr "Abaikan kesalahan sertifikat TLS"
-
-#: ReactNativeClient/lib/models/Setting.js:630
-msgid "Fail-safe"
-msgstr "Gagal-aman"
-
-#: ReactNativeClient/lib/models/Setting.js:631
-msgid ""
-"Fail-safe: Do not wipe out local data when sync target is empty (often the "
-"result of a misconfiguration or bug)"
-msgstr ""
-"Gagal-aman: Jangan menghapus data lokal saat target sinkronisasi kosong "
-"(seringkali akibat kesalahan konfigurasi atau bug)"
-
-#: ReactNativeClient/lib/models/Setting.js:635
-msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
-msgstr ""
-"Tentukan port yang harus digunakan oleh server API. Jika tidak disetel, maka "
-"pengaturan default akan digunakan."
-
-#: ReactNativeClient/lib/models/Setting.js:643
-msgid "Enable note history"
-msgstr "Aktifkan riwayat catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:653
-msgid "days"
-msgstr "hari"
-
-#: ReactNativeClient/lib/models/Setting.js:653
-#, javascript-format
-msgid "%d days"
-msgstr "%d hari"
-
-#: ReactNativeClient/lib/models/Setting.js:655
-msgid "Keep note history for"
-msgstr "Simpan riwayat catatan untuk"
-
-#: ReactNativeClient/lib/models/Setting.js:682
-msgid "Notebook list growth factor"
-msgstr "Faktor pertumbuhan daftar buku catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:684
-#: ReactNativeClient/lib/models/Setting.js:697
-#: ReactNativeClient/lib/models/Setting.js:710
-msgid ""
-"The factor property sets how the item will grow or shrink to fit the "
-"available space in its container with respect to the other items. Thus an "
-"item with a factor of 2 will take twice as much space as an item with a "
-"factor of 1.Restart app to see changes."
-msgstr ""
-"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut agar "
-"sesuai dengan ruang yang tersedia dalam wadahnya sehubungan dengan item "
-"lainnya. Jadi item dengan faktor 2 akan memakan ruang dua kali lebih banyak "
-"dari item dengan faktor 1. Mulai ulang aplikasi untuk melihat perubahan."
-
-#: ReactNativeClient/lib/models/Setting.js:695
-msgid "Note list growth factor"
-msgstr "Faktor pertumbuhan daftar catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:708
-msgid "Note area growth factor"
-msgstr "Faktor pertumbuhan area catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:820
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Nilai opsi tidak valid: \"%s\". Nilai yang mungkin adalah: %s."
-
-#: ReactNativeClient/lib/models/Setting.js:1112
-msgid "General"
-msgstr "Umum"
-
-#: ReactNativeClient/lib/models/Setting.js:1113
-msgid "Synchronisation"
-msgstr "Sinkronisasi"
-
-#: ReactNativeClient/lib/models/Setting.js:1114
-msgid "Appearance"
-msgstr "Tampilan"
-
-#: ReactNativeClient/lib/models/Setting.js:1115
-msgid "Note"
-msgstr "Catatan"
-
-#: ReactNativeClient/lib/models/Setting.js:1116
-msgid "Plugins"
-msgstr "Plugin"
-
-#: ReactNativeClient/lib/models/Setting.js:1117
-msgid "Application"
-msgstr "Aplikasi"
-
-#: ReactNativeClient/lib/models/Setting.js:1119
-msgid "Encryption"
-msgstr "Enkripsi"
-
-#: ReactNativeClient/lib/models/Setting.js:1120
-msgid "Web Clipper"
-msgstr "Web Clipper"
-
-#: ReactNativeClient/lib/models/Setting.js:1125
-msgid ""
-"These plugins enhance the Markdown renderer with additional features. Please "
-"note that, while these features might be useful, they are not standard "
-"Markdown and thus most of them will only work in Joplin. Additionally, some "
-"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
-"uses one of these plugins in that editor, you will lose the plugin "
-"formatting. It is indicated below which plugins are compatible or not with "
-"the WYSIWYG editor."
-msgstr ""
-"Plugin ini meningkatkan penyaji Markdown dengan fitur tambahan. Harap "
-"dicatat bahwa, sementara fitur-fitur ini mungkin berguna, mereka bukan "
-"Markdown standar dan dengan demikian sebagian besar dari mereka hanya akan "
-"berfungsi di Joplin. Selain itu, beberapa *tidak kompatibel* dengan editor "
-"WYSIWYG. Jika Anda membuka catatan yang menggunakan salah satu plugin ini di "
-"editor itu, Anda akan kehilangan format plugin. Di bawah ini ditunjukkan "
-"plugin mana yang kompatibel atau tidak dengan editor WYSIWYG."
-
-#: ReactNativeClient/lib/models/Setting.js:1126
-#, javascript-format
-msgid "Notes and settings are stored in: %s"
-msgstr "Catatan dan pengaturan disimpan di: %s"
-
-#: ReactNativeClient/lib/models/Tag.js:183
-#, javascript-format
-msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "Label \"%s\" sudah ada. Silakan pilih nama yang berbeda."
-
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
-msgstr ""
-"Aplikasi telah diotorisasi - Anda sekarang dapat menutup tab peramban web "
-"ini."
-
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
-msgid "The application has been successfully authorised."
-msgstr "Aplikasi telah berhasil diotorisasi."
-
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
-msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
-msgstr ""
-"Silakan buka URL berikut di peramban web Anda untuk mengotentikasi aplikasi. "
-"Aplikasi akan membuat direktori di \"Apps/Joplin\" dan hanya akan membaca "
-"dan menulis berkas di direktori ini. Ia tidak akan memiliki akses ke berkas "
-"apa pun di luar direktori ini atau ke data pribadi lainnya. Tidak ada data "
-"yang akan dibagikan dengan pihak ketiga mana pun."
-
-#: ReactNativeClient/lib/onedrive-api.js:270
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr ""
-"Tidak dapat menyegarkan token: data otentikasi tidak ada. Memulai "
-"sinkronisasi lagi mungkin dapat memperbaiki masalah."
-
-#: ReactNativeClient/lib/registry.js:156
-msgid ""
-"Could not synchronize with OneDrive.\n"
-"\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
-"\n"
-"Please consider using a regular OneDrive account."
-msgstr ""
-"Tidak dapat menyinkronkan dengan OneDrive.\n"
-"\n"
-"Kesalahan ini sering terjadi ketika menggunakan OneDrive for Business, yang "
-"sayangnya tidak dapat didukung.\n"
-"\n"
-"Silakan pertimbangkan menggunakan akun OneDrive biasa."
-
-#: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
-msgid "Joplin Export File"
-msgstr "Berkas Ekspor Joplin"
-
-#: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
-msgid "Markdown"
-msgstr "Markdown"
-
-#: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
-msgid "Joplin Export Directory"
-msgstr "Direktori Ekspor Joplin"
-
-#: ReactNativeClient/lib/services/InteropService.js:47
-msgid "Evernote Export File (as Markdown)"
-msgstr "Berkas Ekspor Evernote (sbg. Markdown)"
-
-#: ReactNativeClient/lib/services/InteropService.js:55
-msgid "Evernote Export File (as HTML)"
-msgstr "Berkas Ekspor Evernote (sbg. HTML)"
-
-#: ReactNativeClient/lib/services/InteropService.js:77
-msgid "Json Export Directory"
-msgstr "Direktori ekspor JSON"
-
-#: ReactNativeClient/lib/services/InteropService.js:89
-msgid "HTML File"
-msgstr "Berkas HTML"
-
-#: ReactNativeClient/lib/services/InteropService.js:94
-msgid "HTML Directory"
-msgstr "Direktori HTML"
-
-#: ReactNativeClient/lib/services/InteropService.js:130
-msgid "File"
-msgstr "Berkas"
-
-#: ReactNativeClient/lib/services/InteropService.js:130
-msgid "Directory"
-msgstr "Direktori"
-
-#: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\""
-
-#: ReactNativeClient/lib/services/InteropService.js:232
-#, javascript-format
-msgid "Please specify import format for %s"
-msgstr "Silakan tentukan format impor untuk %s"
-
-#: ReactNativeClient/lib/services/InteropService.js:364
-#, javascript-format
-msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
-msgstr ""
-"Item ini sekarang masih terenkripsi: %s \"%s\". Harap tunggu hingga semua "
-"item telah terdekripsi dan coba lagi."
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Sistem berkas"
 
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
 msgstr "Tidak ada data untuk di ekspor."
+
+#: ReactNativeClient/lib/services/RevisionService.js:215
+msgid "Restored Notes"
+msgstr "Catatan yang Dipulihkan"
 
 #: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
@@ -3426,116 +3554,70 @@ msgstr "Alarm yang akan datang"
 msgid "On %s: %s"
 msgstr "Di %s: %s"
 
-#: ReactNativeClient/lib/services/RevisionService.js:215
-msgid "Restored Notes"
-msgstr "Catatan yang Dipulihkan"
+#: ReactNativeClient/lib/services/InteropService.js:29
+#: ReactNativeClient/lib/services/InteropService.js:67
+msgid "Joplin Export File"
+msgstr "Berkas Ekspor Joplin"
 
-#: ReactNativeClient/lib/shim-init-node.js:156
+#: ReactNativeClient/lib/services/InteropService.js:36
+#: ReactNativeClient/lib/services/InteropService.js:82
+msgid "Markdown"
+msgstr "Markdown"
+
+#: ReactNativeClient/lib/services/InteropService.js:41
+#: ReactNativeClient/lib/services/InteropService.js:72
+msgid "Joplin Export Directory"
+msgstr "Direktori Ekspor Joplin"
+
+#: ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "Berkas Ekspor Evernote (sbg. Markdown)"
+
+#: ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "Berkas Ekspor Evernote (sbg. HTML)"
+
+#: ReactNativeClient/lib/services/InteropService.js:77
+msgid "Json Export Directory"
+msgstr "Direktori ekspor JSON"
+
+#: ReactNativeClient/lib/services/InteropService.js:89
+msgid "HTML File"
+msgstr "Berkas HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:94
+msgid "HTML Directory"
+msgstr "Direktori HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:130
+msgid "File"
+msgstr "Berkas"
+
+#: ReactNativeClient/lib/services/InteropService.js:130
+msgid "Directory"
+msgstr "Direktori"
+
+#: ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
-msgid "Cannot access %s"
-msgstr "Tidak dapat mengakses %s"
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\""
 
-#: ReactNativeClient/lib/synchronizer.js:93
+#: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
-msgid "Created local items: %d."
-msgstr "Item lokal yang dibuat: %d."
+msgid "Please specify import format for %s"
+msgstr "Silakan tentukan format impor untuk %s"
 
-#: ReactNativeClient/lib/synchronizer.js:94
+#: ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
-msgid "Updated local items: %d."
-msgstr "Item lokal yang diperbarui: %d."
-
-#: ReactNativeClient/lib/synchronizer.js:95
-#, javascript-format
-msgid "Created remote items: %d."
-msgstr "Item jarak jauh yang dibuat: %d."
-
-#: ReactNativeClient/lib/synchronizer.js:96
-#, javascript-format
-msgid "Updated remote items: %d."
-msgstr "Item jarak jauh yang diperbarui: %d."
-
-#: ReactNativeClient/lib/synchronizer.js:97
-#, javascript-format
-msgid "Deleted local items: %d."
-msgstr "Item lokal yang dihapus: %d."
-
-#: ReactNativeClient/lib/synchronizer.js:98
-#, javascript-format
-msgid "Deleted remote items: %d."
-msgstr "Item jarak jauh yang dihapus: %d."
-
-#: ReactNativeClient/lib/synchronizer.js:99
-#, javascript-format
-msgid "Fetched items: %d/%d."
-msgstr "Item yang diambil: %d/%d."
-
-#: ReactNativeClient/lib/synchronizer.js:101
-msgid "Cancelling..."
-msgstr "Membatalkan..."
-
-#: ReactNativeClient/lib/synchronizer.js:102
-#, javascript-format
-msgid "Completed: %s"
-msgstr "Selesai: %s"
-
-#: ReactNativeClient/lib/synchronizer.js:103
-#, javascript-format
-msgid "Last error: %s"
-msgstr "Kesalahan terakhir: %s"
-
-#: ReactNativeClient/lib/synchronizer.js:203
-msgid "Idle"
-msgstr "Diam"
-
-#: ReactNativeClient/lib/synchronizer.js:204
-msgid "In progress"
-msgstr "Sedang berlangsung"
-
-#: ReactNativeClient/lib/SyncTargetDropbox.js:25
-msgid "Dropbox"
-msgstr "Dropbox"
-
-#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
-msgid "File system"
-msgstr "Sistem berkas"
-
-#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
-msgid "Nextcloud"
-msgstr "Nextcloud"
-
-#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
-msgid "OneDrive"
-msgstr "OneDrive"
-
-#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
-msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (Hanya untuk pengujian)"
-
-#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#~ msgid "This file could not be opened: %s"
-#~ msgstr "Berkas ini tidak dapat dibuka: %s"
-
-#~ msgid "Only one note can be printed at a time."
-#~ msgstr "Hanya satu catatan yang dapat dicetak dalam satu waktu."
-
-#~ msgid "Content Properties"
-#~ msgstr "Properti Konten"
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Item ini sekarang masih terenkripsi: %s \"%s\". Harap tunggu hingga semua "
+"item telah terdekripsi dan coba lagi."
 
 #~ msgid "Content properties"
 #~ msgstr "Properti konten"
-
-#~ msgid "Name"
-#~ msgstr "Nama"
-
-#~ msgid "Icon"
-#~ msgstr "Ikon"
-
-#~ msgid "Notebook properties"
-#~ msgstr "Properti buku catatan"
 
 #~ msgid "Some items cannot be synchronised."
 #~ msgstr "Beberapa item tidak dapat di sinkronisasi."
@@ -3567,9 +3649,6 @@ msgstr "WebDAV"
 
 #~ msgid "Search..."
 #~ msgstr "Pencarian…."
-
-#~ msgid "Aritim Dark"
-#~ msgstr "Aritim Dark"
 
 #~ msgid "Split"
 #~ msgstr "Split"
