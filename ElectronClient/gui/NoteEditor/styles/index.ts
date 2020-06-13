@@ -1,6 +1,6 @@
 import { NoteEditorProps } from '../utils/types';
 
-const { buildStyle } = require('../../../theme.js');
+const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteEditorProps) {
 	return buildStyle('NoteEditor', props.theme, (theme: any) => {

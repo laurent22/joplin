@@ -1,6 +1,6 @@
 import * as React from 'react';
 const { connect } = require('react-redux');
-const { buildStyle } = require('../../theme.js');
+const { buildStyle } = require('lib/theme');
 const Toolbar = require('../Toolbar.min.js');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');

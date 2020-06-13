@@ -12,8 +12,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -189,14 +191,14 @@ msgstr ""
 "开始解密，请稍候... 取决于需解密的文件数量，解密环节可能需要等待几分钟。"
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "解密项目：%s / %s"
+msgstr "解密项目：%d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
+msgstr "跳过项目：%d (使用 —retry-failed-items 来尝试重新解密)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -538,7 +540,7 @@ msgstr "显示关于笔记与笔记本的概况。"
 #: CliClient/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
+msgstr "运行 `e2ee decrypt —retry-failed-items` 来尝试再次解密这些项目"
 
 #: CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -689,9 +691,8 @@ msgstr ""
 "decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
 
 #: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "不再要求确认。"
+msgstr "输入 `status` 可获取更多信息。"
 
 #: CliClient/app/help-utils.js:56
 msgid "Enum"
@@ -803,9 +804,8 @@ msgid "Options"
 msgstr "选项"
 
 #: ElectronClient/app.js:655
-#, fuzzy
 msgid "Note attachments..."
-msgstr "附加文件"
+msgstr "笔记附件…"
 
 #: ElectronClient/app.js:677
 #, javascript-format
@@ -988,7 +988,6 @@ msgid "Zoom Out"
 msgstr "缩小"
 
 #: ElectronClient/app.js:1063
-#, fuzzy
 msgid "&Note"
 msgstr "笔记"
 
@@ -1007,7 +1006,7 @@ msgstr "标签"
 
 #: ElectronClient/app.js:1093
 msgid "Statistics..."
-msgstr ""
+msgstr "统计数据…"
 
 #: ElectronClient/app.js:1103
 msgid "&Tools"
@@ -1381,9 +1380,8 @@ msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
 #: ElectronClient/gui/MainScreen.min.js:272
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "移动到笔记本..."
+msgstr "移动到笔记本："
 
 #: ElectronClient/gui/MainScreen.min.js:292
 msgid "Rename notebook:"
@@ -1429,12 +1427,11 @@ msgstr "编辑器"
 #: ReactNativeClient/lib/models/Setting.js:307
 #: ReactNativeClient/lib/models/Setting.js:309
 msgid "Viewer"
-msgstr "界面 (&V)"
+msgstr "浏览"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:82
-#, fuzzy
 msgid "Statistics"
-msgstr "状态"
+msgstr "统计数据"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1500,33 +1497,31 @@ msgid "Horizontal Rule"
 msgstr "水平线"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "复选框"
+msgstr "勾选框"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:532
 msgid "Code Block"
-msgstr ""
+msgstr "代码块"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:541
 msgid "Inline Code"
-msgstr ""
+msgstr "行内代码"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "将笔记或文件拖到此处"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
-#, fuzzy
 msgid "Code View"
-msgstr "代码"
+msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:899
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr ""
+msgstr "请等待所有附件均被下载并解密。你还能在%s 中编辑笔记。"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:315
 msgid "to-do"
@@ -1551,7 +1546,7 @@ msgstr "另存为..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "在文件夹中展示文件"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 msgid "Copy path to clipboard"
@@ -1578,7 +1573,7 @@ msgstr "不被支持的链接或信息：%s"
 
 #: ElectronClient/gui/NoteList.min.js:146
 msgid "Custom order"
-msgstr ""
+msgstr "自定义顺序"
 
 #: ElectronClient/gui/NoteList.min.js:146
 #, fuzzy
@@ -1595,12 +1590,11 @@ msgstr "排序笔记"
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
-msgstr ""
+msgstr "欲手动调整顺序，应在菜单“%s” > “%s” 中将排序方式调整为 “%s”"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "Do it now"
-msgstr "立即获取："
+msgstr ""
 
 #: ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1673,7 +1667,7 @@ msgstr ""
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
 msgid "Forward"
-msgstr ""
+msgstr "前进"
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
 #, javascript-format
@@ -1706,9 +1700,8 @@ msgid "Size"
 msgstr "大小"
 
 #: ElectronClient/gui/ResourceScreen.js:39
-#, fuzzy
 msgid "Action"
-msgstr "位置"
+msgstr "动作"
 
 #: ElectronClient/gui/ResourceScreen.js:42
 #: ReactNativeClient/lib/models/BaseItem.js:710
@@ -1729,7 +1722,7 @@ msgid "Delete"
 msgstr "删除"
 
 #: ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
 msgstr "是否删除附件“%s”？"
 
@@ -1738,7 +1731,7 @@ msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
-msgstr ""
+msgstr "这是用于展示与笔记相关联的附件的高级工具。需要小心，删除后无法恢复。"
 
 #: ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1762,9 +1755,8 @@ msgid "Dropbox Login"
 msgstr "登录 Dropbox"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "附加文件"
+msgstr "笔记附件"
 
 #: ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -1853,9 +1845,8 @@ msgstr "请选择同步状态的导出位置"
 
 #: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "重试"
+msgstr "全部重试"
 
 #: ElectronClient/gui/StatusScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/status.js:115
@@ -1867,9 +1858,8 @@ msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "移动到笔记本..."
+msgstr "移动到笔记本"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:53
 #: ReactNativeClient/lib/components/screen-header.js:332
@@ -1924,25 +1914,24 @@ msgstr "打开以下笔记时出现错误：%s"
 #: ElectronClient/InteropServiceHelper.js:142
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
+msgstr "从“%s”导出，导出格式为“%s”。请稍等…"
 
 #: ElectronClient/InteropServiceHelper.js:160
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "无法升级主密钥：%s"
+msgstr "无法导出笔记：%s"
 
 #: ElectronClient/plugins/GotoAnything.min.js:441
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
-"记本名字。"
+"输入笔记标题或内容以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着"
+"一个笔记本名字。"
 
 #: ElectronClient/plugins/GotoAnything.min.js:479
 msgid "Goto Anything..."
-msgstr "转到某处..."
+msgstr ""
 
 #: ReactNativeClient/lib/BaseApplication.js:137
 #: ReactNativeClient/lib/BaseApplication.js:150
@@ -2244,7 +2233,7 @@ msgstr "不支持“%s”协议链接"
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
-msgstr ""
+msgstr "您将要附加一个大图像（%dx%d 像素）。您是否要将其调整为 %d 像素？"
 
 #: ReactNativeClient/lib/components/screens/note.js:534
 #, javascript-format
@@ -2478,7 +2467,7 @@ msgstr "创建日期"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "自定义顺序"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -2507,20 +2496,22 @@ msgid "Downloaded"
 msgstr "已下载"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "附加文件"
+msgstr "附件冲突:  %s"
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "下载此附件时出错："
+msgstr ""
+"以下附件存在[冲突](%s) \n"
+"\n"
+" %s"
 
 #: ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
 msgstr "是"
 
@@ -2531,7 +2522,6 @@ msgid "(wysiwyg: %s)"
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
 msgstr "否"
 
@@ -2659,15 +2649,15 @@ msgstr "主题"
 
 #: ReactNativeClient/lib/models/Setting.js:267
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "根据系统主题自动切换"
 
 #: ReactNativeClient/lib/models/Setting.js:279
 msgid "Preferred light theme"
-msgstr ""
+msgstr "选择明亮主题"
 
 #: ReactNativeClient/lib/models/Setting.js:293
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "选择暗黑主题"
 
 #: ReactNativeClient/lib/models/Setting.js:298
 msgid "Show note counts"

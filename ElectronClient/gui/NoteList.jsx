@@ -2,7 +2,7 @@ const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -36,6 +36,7 @@ class NoteListComponent extends React.Component {
 		this.onGlobalDrop_ = this.onGlobalDrop_.bind(this);
 		this.registerGlobalDragEndEvent_ = this.registerGlobalDragEndEvent_.bind(this);
 		this.unregisterGlobalDragEndEvent_ = this.unregisterGlobalDragEndEvent_.bind(this);
+		this.itemContextMenu = this.itemContextMenu.bind(this);
 	}
 
 	style() {
@@ -250,6 +251,7 @@ class NoteListComponent extends React.Component {
 			onNoteDragOver={this.noteItem_noteDragOver}
 			onNoteDrop={this.noteItem_noteDrop}
 			onTitleClick={this.noteItem_titleClick}
+			onContextMenu={this.itemContextMenu}
 		/>;
 	}
 

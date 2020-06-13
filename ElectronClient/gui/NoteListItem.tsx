@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('lib/markJsUtils');
 const Note = require('lib/models/Note');
@@ -23,6 +23,7 @@ interface NoteListItemProps {
 	onNoteDragOver: any,
 	onNoteDrop: any,
 	onTitleClick: any,
+	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void,
 }
 
 function NoteListItem(props:NoteListItemProps, ref:any) {
@@ -126,7 +127,7 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 			{renderCheckbox()}
 			<a
 				ref={anchorRef}
-				onContextMenu={event => this.itemContextMenu(event)}
+				onContextMenu={props.onContextMenu}
 				href="#"
 				draggable={true}
 				style={listItemTitleStyle}

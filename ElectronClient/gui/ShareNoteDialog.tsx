@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import JoplinServerApi from '../lib/JoplinServerApi';
 
 const { _, _n } = require('lib/locale.js');
-const { themeStyle, buildStyle } = require('../theme.js');
+const { themeStyle, buildStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');

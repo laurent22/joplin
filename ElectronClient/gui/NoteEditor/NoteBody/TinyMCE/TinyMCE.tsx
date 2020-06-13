@@ -10,7 +10,7 @@ const { reg } = require('lib/registry.js');
 const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
-const { themeStyle, buildStyle } = require('../../../../theme.js');
+const { themeStyle, buildStyle } = require('lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 

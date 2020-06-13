@@ -12,7 +12,7 @@ const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim');
 const MdToHtml = require('lib/joplin-renderer/MdToHtml');
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
-const { themeStyle } = require('../../ElectronClient/theme.js');
+const { themeStyle } = require('lib/theme');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
 

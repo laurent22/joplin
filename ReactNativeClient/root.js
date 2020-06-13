@@ -31,6 +31,7 @@ const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
 const RevisionService = require('lib/services/RevisionService');
 const KvStore = require('lib/services/KvStore');
+const { Dialog, initializeDialogs } = require('lib/components/dialogs.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -369,6 +370,10 @@ function resourceFetcher_downloadComplete(event) {
 	}
 }
 
+function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
+	ResourceFetcher.instance().scheduleAutoAddResources();
+}
+
 async function initialize(dispatch) {
 	shimInit();
 
@@ -440,7 +445,7 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-70.sqlite' });
+			await db.open({ name: 'joplin-71.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -498,6 +503,7 @@ async function initialize(dispatch) {
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
@@ -602,6 +608,10 @@ class AppComponent extends React.Component {
 		this.onAppStateChange_ = () => {
 			PoorManIntervals.update();
 		};
+
+		this.dialogRef = React.createRef();
+
+		initializeDialogs(this.dialogRef);
 	}
 
 	async componentDidMount() {
@@ -717,29 +727,35 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
+		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+
 		return (
-			<SideMenu
-				menu={sideMenuContent}
-				menuPosition={menuPosition}
-				onChange={(isOpen) => this.sideMenu_change(isOpen)}
-				onSliding={(percent) => {
-					this.props.dispatch({
-						type: 'SIDE_MENU_OPEN_PERCENT',
-						value: percent,
-					});
-				}}
-			>
-				<StatusBar barStyle="dark-content" />
-				<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor  }}>
-					<SafeAreaView style={{ flex: 1 }}>
-						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-							<AppNav screens={appNavInit} />
-						</View>
-						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-					</SafeAreaView>
-				</MenuContext>
-			</SideMenu>
+			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+				<SideMenu
+					menu={sideMenuContent}
+					edgeHitWidth={5}
+					menuPosition={menuPosition}
+					onChange={(isOpen) => this.sideMenu_change(isOpen)}
+					onSliding={(percent) => {
+						this.props.dispatch({
+							type: 'SIDE_MENU_OPEN_PERCENT',
+							value: percent,
+						});
+					}}
+				>
+					<StatusBar barStyle={statusBarStyle} />
+					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+						<SafeAreaView style={{ flex: 1 }}>
+							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+								<AppNav screens={appNavInit} />
+							</View>
+							<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+						</SafeAreaView>
+					</MenuContext>
+				</SideMenu>
+				<Dialog ref={this.dialogRef}/>
+			</View>
 		);
 	}
 }

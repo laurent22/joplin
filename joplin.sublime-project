@@ -61,7 +61,7 @@
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js",
 				"ReactNativeClient/lib/JoplinServerApi.js",
-				"ReactNativeClient/lib/mime-utils.js",
+				"ReactNativeClient/lib/mime-utils-types.js",
 				"ReactNativeClient/locales/*",
 				"ReactNativeClient/PluginAssetsLoader.js",
 				"ReactNativeClient/setUpQuickActions.js",

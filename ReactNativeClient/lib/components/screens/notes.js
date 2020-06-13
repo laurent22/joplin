@@ -12,8 +12,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
 const { ActionButton } = require('lib/components/action-button.js');
-const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
+const dialogs = require('lib/components/dialogs.js').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { BackButtonService } = require('lib/services/back-button.js');
 
@@ -64,17 +63,17 @@ class NotesScreenComponent extends BaseScreenComponent {
 				id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 			});
 
-			const r = await dialogs.pop(this, Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
+			const r = await dialogs.pop(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 			if (!r) return;
 
 			Setting.setValue(r.name, r.value);
 		};
 
 		this.backHandler = () => {
-			if (this.dialogbox.state.isVisible) {
-				this.dialogbox.close();
-				return true;
-			}
+			// if (this.dialogbox.state.isVisible) {
+			// 	this.dialogbox.close();
+			// 	return true;
+			// }
 			return false;
 		};
 	}
@@ -151,7 +150,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
-		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
+		dialogs.confirm(_('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
@@ -236,11 +235,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
-				<DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
+
 			</View>
 		);
 	}

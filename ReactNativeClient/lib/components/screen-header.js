@@ -12,8 +12,7 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
-const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
+const dialogs = require('lib/components/dialogs.js').default;
 
 Icon.loadFont();
 
@@ -39,7 +38,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const styleObject = {
 			container: {
 				flexDirection: 'column',
-				backgroundColor: theme.raisedBackgroundColor,
+				backgroundColor: theme.backgroundColor2,
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
@@ -52,7 +51,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			sideMenuButton: {
 				flex: 1,
 				alignItems: 'center',
-				backgroundColor: theme.raisedBackgroundColor,
+				backgroundColor: theme.backgroundColor2,
 				paddingLeft: theme.marginLeft,
 				paddingRight: 5,
 				marginRight: 2,
@@ -61,7 +60,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			},
 			iconButton: {
 				flex: 1,
-				backgroundColor: theme.raisedBackgroundColor,
+				backgroundColor: theme.backgroundColor2,
 				paddingLeft: 15,
 				paddingRight: 15,
 				paddingTop: PADDING_V,
@@ -73,18 +72,18 @@ class ScreenHeaderComponent extends React.PureComponent {
 				alignItems: 'center',
 				padding: 10,
 				borderWidth: 1,
-				borderColor: theme.raisedHighlightedColor,
+				borderColor: theme.colorBright2,
 				borderRadius: 4,
 				marginRight: 8,
 			},
 			saveButtonText: {
 				textAlignVertical: 'center',
-				color: theme.raisedHighlightedColor,
+				color: theme.colorBright2,
 				fontWeight: 'bold',
 			},
 			savedButtonIcon: {
 				fontSize: 20,
-				color: theme.raisedHighlightedColor,
+				color: theme.colorBright2,
 				width: 18,
 				height: 18,
 			},
@@ -96,11 +95,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 				fontSize: 30,
 				paddingLeft: 10,
 				paddingRight: theme.marginRight,
-				color: theme.raisedColor,
+				color: theme.color2,
 				fontWeight: 'bold',
 			},
 			contextMenu: {
-				backgroundColor: theme.raisedBackgroundColor,
+				backgroundColor: theme.backgroundColor2,
 			},
 			contextMenuItem: {
 				backgroundColor: theme.backgroundColor,
@@ -120,7 +119,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				flex: 1,
 				textAlignVertical: 'center',
 				marginLeft: 10,
-				color: theme.raisedHighlightedColor,
+				color: theme.colorBright2,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
 				paddingTop: 15,
@@ -136,7 +135,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		styleObject.topIcon = Object.assign({}, theme.icon);
 		styleObject.topIcon.flex = 1;
 		styleObject.topIcon.textAlignVertical = 'center';
-		styleObject.topIcon.color = theme.raisedColor;
+		styleObject.topIcon.color = theme.colorBright2;
 
 		styleObject.backButton = Object.assign({}, styleObject.iconButton);
 		styleObject.backButton.marginRight = 1;
@@ -182,7 +181,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
+		const ok = await dialogs.confirm(_('Delete these notes?'));
 		if (!ok) return;
 
 		const noteIds = this.props.selectedNoteIds;
@@ -376,7 +375,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 							backgroundColor: theme.backgroundColor,
 						}}
 						headerStyle={{
-							color: theme.raisedHighlightedColor,
+							color: theme.colorBright2,
 							fontSize: theme.fontSize,
 							opacity: disabled ? theme.disabledOpacity : 1,
 						}}
@@ -400,7 +399,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await dialogs.confirm(this.props.parentComponent, _('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await dialogs.confirm(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -480,11 +479,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{menuComp}
 				</View>
 				{warningComps}
-				<DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
 			</View>
 		);
 	}

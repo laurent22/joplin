@@ -41,6 +41,22 @@ function uninstallResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceEditWatcher.instance().off('resourceChange', onResourceChangeHandler);
 }
 
+function resourceInfosChanged(a:ResourceInfos, b:ResourceInfos):boolean {
+	if (Object.keys(a).length !== Object.keys(b).length) return true;
+
+	for (const id in a) {
+		const r1 = a[id];
+		const r2 = b[id];
+		if (!r2) return true;
+		if (r1.item.updated_time !== r2.item.updated_time) return true;
+		if (r1.item.encryption_applied !== r2.item.encryption_applied) return true;
+		if (r1.item.is_shared !== r2.item.is_shared) return true;
+		if (r1.localState.fetch_status !== r2.localState.fetch_status) return true;
+	}
+
+	return false;
+}
+
 export default function useFormNote(dependencies:HookDependencies) {
 	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
@@ -197,7 +213,9 @@ export default function useFormNote(dependencies:HookDependencies) {
 		async function runEffect() {
 			const r = await attachedResources(formNote.body);
 			if (cancelled) return;
-			setResourceInfos(r);
+			setResourceInfos((previous:ResourceInfos) => {
+				return resourceInfosChanged(previous, r) ? r : previous;
+			});
 		}
 
 		runEffect();

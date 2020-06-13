@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import AceEditor  from './NoteBody/AceEditor/AceEditor';
+import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import NoteToolbar from '../NoteToolbar/NoteToolbar';
@@ -18,7 +19,7 @@ import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
 import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
 
-const { themeStyle } = require('../../theme.js');
+const { themeStyle } = require('lib/theme');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
@@ -448,6 +449,8 @@ function NoteEditor(props: NoteEditorProps) {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'AceEditor') {
 		editor = <AceEditor {...editorProps}/>;
+	} else if (props.bodyEditor === 'CodeMirror') {
+		editor = <CodeMirror {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}

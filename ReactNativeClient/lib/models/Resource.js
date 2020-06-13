@@ -94,7 +94,7 @@ class Resource extends BaseItem {
 	}
 
 	static friendlySafeFilename(resource) {
-		let ext = resource.extension;
+		let ext = resource.file_extension;
 		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
 		let title = resource.title ? resource.title : resource.id;
@@ -207,11 +207,11 @@ class Resource extends BaseItem {
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');
@@ -369,7 +369,7 @@ class Resource extends BaseItem {
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
 			is_conflict: 1,
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}

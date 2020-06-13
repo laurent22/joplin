@@ -12,6 +12,7 @@ COLOR_RESET=`tput sgr0`
 SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
+INCLUDE_PRE_RELEASE=false
 
 print() {
     if [[ "${SILENT}" == false ]] ; then
@@ -40,6 +41,7 @@ showHelp() {
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
+    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -67,6 +69,7 @@ while getopts "${optspec}" OPT; do
     silent )       SILENT=true ;;
     force )        FORCE=true ;;
     changelog )    SHOW_CHANGELOG=true ;;
+    prerelease )   INCLUDE_PRE_RELEASE=true ;;
     [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
     \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
   esac
@@ -104,7 +107,11 @@ fi
 #-----------------------------------------------------
 
 # Get the latest version to download
-RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
+  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | head -1)
+else
+  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+fi
 
 # Check if it's in the latest version
 if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then

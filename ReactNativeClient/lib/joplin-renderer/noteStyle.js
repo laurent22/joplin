@@ -19,11 +19,11 @@ module.exports = function(theme) {
 		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 
 		body {
-			font-size: ${theme.htmlFontSize};
-			color: ${theme.htmlColor};
+			font-size: ${theme.noteViewerFontSize};
+			color: ${theme.color};
 			word-wrap: break-word;
-			line-height: ${theme.htmlLineHeight};
-			background-color: ${theme.htmlBackgroundColor};
+			line-height: ${theme.lineHeight};
+			background-color: ${theme.backgroundColor};
 			font-family: ${fontFamily};
 			padding-bottom: ${formatCssSize(theme.bodyPaddingBottom)};
 			padding-top: ${formatCssSize(theme.bodyPaddingTop)};
@@ -32,11 +32,11 @@ module.exports = function(theme) {
 			color: ${theme.colorBright};
 		}
 		kbd {
-			border: 1px solid ${theme.htmlCodeBorderColor};
-			box-shadow: inset 0 -1px 0 ${theme.htmlCodeBorderColor};
+			border: 1px solid ${theme.codeBorderColor};
+			box-shadow: inset 0 -1px 0 ${theme.codeBorderColor};
 			padding: 2px 4px;
 			border-radius: 3px;
-			background-color: ${theme.htmlCodeBackgroundColor};
+			background-color: ${theme.codeBackgroundColor};
 		}
 		::-webkit-scrollbar {
 			width: 7px;
@@ -85,7 +85,7 @@ module.exports = function(theme) {
 		h1 {
 			font-size: 1.5em;
 			font-weight: bold;
-			border-bottom: 1px solid ${theme.htmlDividerColor};
+			border-bottom: 1px solid ${theme.dividerColor};
 			padding-bottom: .3em;
 		}
 		h2 {
@@ -107,11 +107,11 @@ module.exports = function(theme) {
 			margin-bottom: 0.8em;
 			line-height: 1.5em;
 			padding-bottom: .35em;
-			border-bottom: 1px solid ${theme.htmlDividerColor};
+			border-bottom: 1px solid ${theme.dividerColor};
 		}
 
 		a {
-			color: ${theme.htmlLinkColor};
+			color: ${theme.urlColor};
 		}
 		ul, ol {
 			padding-left: 0;
@@ -132,7 +132,7 @@ module.exports = function(theme) {
 			width: 1.2em;
 			height: 1.4em;
 			margin-right: 0.4em;
-			background-color:  ${theme.htmlLinkColor};
+			background-color:  ${theme.urlColor};
 		}
     /* These icons are obtained from the wonderful ForkAwesome project by copying the src svgs 
      * into the css classes below.
@@ -193,7 +193,7 @@ module.exports = function(theme) {
       -webkit-mask-repeat: no-repeat;
 		}
 		blockquote {
-			border-left: 4px solid ${theme.htmlCodeBorderColor};
+			border-left: 4px solid ${theme.codeBorderColor};
 			padding-left: 1.2em;
 			margin-left: 0;
 			opacity: .7;
@@ -203,34 +203,34 @@ module.exports = function(theme) {
 		table {
 			text-align: left;
 			border-collapse: collapse;
-			border: 1px solid ${theme.htmlCodeBorderColor};
-			background-color: ${theme.htmlBackgroundColor};
+			border: 1px solid ${theme.codeBorderColor};
+			background-color: ${theme.backgroundColor};
 		}
 
 		.jop-tinymce table td, .jop-tinymce table th,
 		table td, th {
 			text-align: left;
 			padding: .5em 1em .5em 1em;
-			font-size: ${theme.htmlFontSize};
-			color: ${theme.htmlColor};
+			font-size: ${theme.noteViewerFontSize};
+			color: ${theme.color};
 			font-family: ${fontFamily};
 		}
 
 		.jop-tinymce table td,
 		table td {
-			border: 1px solid ${theme.htmlCodeBorderColor};
+			border: 1px solid ${theme.codeBorderColor};
 		}
 
 		.jop-tinymce table th,
 		table th {
-			border: 1px solid ${theme.htmlCodeBorderColor};
-			border-bottom: 2px solid ${theme.htmlCodeBorderColor};
-			background-color: ${theme.htmlTableBackgroundColor};
+			border: 1px solid ${theme.codeBorderColor};
+			border-bottom: 2px solid ${theme.codeBorderColor};
+			background-color: ${theme.tableBackgroundColor};
 		}
 
 		.jop-tinymce table tr:nth-child(even),
 		table tr:nth-child(even) {
-			background-color: ${theme.htmlTableBackgroundColor};
+			background-color: ${theme.tableBackgroundColor};
 		}
 
 		.jop-tinymce table tr:hover,
@@ -240,7 +240,7 @@ module.exports = function(theme) {
 
 		hr {
 			border: none;
-			border-bottom: 2px solid ${theme.htmlDividerColor};
+			border-bottom: 2px solid ${theme.dividerColor};
 		}
 		img {
 			max-width: 100%;
@@ -249,13 +249,13 @@ module.exports = function(theme) {
 		
 		.inline-code,
 		.mce-content-body code {
-			border: 1px solid ${theme.htmlCodeBorderColor};
-			background-color: ${theme.htmlCodeBackgroundColor};
+			border: 1px solid ${theme.codeBorderColor};
+			background-color: ${theme.codeBackgroundColor};
 			padding-right: .2em;
 			padding-left: .2em;
 			border-radius: .25em;
-			color: ${theme.htmlCodeColor};
-			font-size: ${theme.htmlCodeFontSize};
+			color: ${theme.codeColor};
+			font-size: ${theme.codeFontSize};
 		}
 
 		.highlighted-keyword {

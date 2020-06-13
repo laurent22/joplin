@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "follow-redirects": "^1.11.0",
-    "joplin-turndown": "^4.0.27",
+    "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "relative": "^3.0.2"
   }

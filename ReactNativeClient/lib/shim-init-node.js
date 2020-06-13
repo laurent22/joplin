@@ -211,7 +211,7 @@ function shimInit() {
 		}, options);
 
 		const { basename } = require('path');
-		const { escapeLinkText } = require('lib/markdownUtils');
+		const { escapeTitleText } = require('lib/markdownUtils');
 		const { toFileProtocolPath } = require('lib/path-utils');
 
 		let resource = null;
@@ -231,7 +231,7 @@ function shimInit() {
 		if (!options.createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
-			const filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			const filename = escapeTitleText(basename(filePath)); // to get same filename as standard drag and drop
 			const fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
 			newBody.push(fileURL);
 		}
