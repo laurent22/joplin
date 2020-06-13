@@ -77,8 +77,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
-
-			selection: { start: 0, end: 0 },
 		};
 
 		this.saveActionQueues_ = {};
@@ -247,7 +245,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
-				selection: Object.assign({}, undoState.selection),
 			};
 		});
 	}
@@ -352,7 +349,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	undoState(noteBody = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
-			selection: Object.assign({}, this.state.selection),
 		};
 	}
 
@@ -424,7 +420,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_selectionChange(event) {
-		this.setState({ selection: event.nativeEvent.selection });
+		this.selection = event.nativeEvent.selection;
 	}
 
 	makeSaveAction() {
@@ -645,9 +641,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.state.selection) {
-			const prefix = newNote.body.substring(0, this.state.selection.start);
-			const suffix = newNote.body.substring(this.state.selection.end);
+		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.selection) {
+			const prefix = newNote.body.substring(0, this.selection.start);
+			const suffix = newNote.body.substring(this.selection.end);
 			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
 		} else {
 			newNote.body += `\n${resourceTag}`;
@@ -1075,6 +1071,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 				// the whole text input has to be in memory for the scrollview to work. So we keep it as
 				// a plain TextInput for now.
 				// See https://github.com/laurent22/joplin/issues/3041
+
+				// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+				// context. In other words, the selection should be considered read-only. For example, if the seleciton
+				// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+				// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+				// later the real selection will be different from what is stored in the state, thus making
+				// the cursor jump around. Eg, when typing "abcdef", it will do this:
+				//     abcd|
+				//     abcde|
+				//     abcde|f
 				(
 					<TextInput
 						autoCapitalize="sentences"
@@ -1083,7 +1089,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 						multiline={true}
 						value={note.body}
 						onChangeText={(text) => this.body_changeText(text)}
-						selection={this.state.selection}
 						onSelectionChange={this.body_selectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
