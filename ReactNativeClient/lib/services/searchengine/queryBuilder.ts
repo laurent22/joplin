@@ -1,11 +1,36 @@
 const { time } = require('lib/time-utils.js');
 
-const tagFilter = (tags: string[], intersect: boolean = true, negated: boolean = false) => {
+const tagFilter = (tags: string[], intersect: boolean = true, negated: boolean = false) => { // note_tags.tag_id  (NOT) IN (SELECT
 	let result = new Array(tags.length).fill(`${intersect ? 'INTERSECT' : 'UNION'} SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?)`).join(' ');
 	result = intersect ? `SELECT note_tags.note_id as id FROM note_tags WHERE 1 ${result}` : `SELECT note_tags.note_id as id FROM note_tags WHERE 0 ${result}`;
 	result = negated ? `tag_filter_negated as (${result})` : `tag_filter as (${result})`;
 	return result;
 };
+
+// WITH RECURSIVE tagged_notes
+// AS
+// (
+// SELECT DISTINCT note_tags.note_id FROM note_tags
+// ),
+// tag_filter_negated(id)
+// as
+// (
+// select * from (
+// select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like 'tag3')
+// )
+// UNION
+// select * from (
+// select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like 'tag1')
+// )
+// )
+
+
+const negatedAnyTagFilter = (tags: string[]) => {
+	let result = new Array(tags.length).fill('select * from (select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like ?))').join(' UNION ');
+	result = `tag_filter_negated(id) as (${result})`;
+	return result;
+};
+
 
 const noteBookFilter = (names: string[], negated: boolean = false) => {
 	const likes = new Array(names.length).fill('folders.title LIKE ?');
@@ -132,16 +157,23 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 
 	if (filters.has('tag')) {
 		const values = filters.get('tag');
-		withs.push(tagFilter(values));
+		withs.push(tagFilter(values, relation === 'AND', false)); // intersect/union depending on relation
 		values.forEach((value) => params.push(value));
 		queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)`);
 	}
 
 	if (filters.has('-tag')) {
 		const values = filters.get('-tag');
-		withs.push(tagFilter(values, false, true));
+		if (relation === 'AND') {
+			withs.push(tagFilter(values, false, true));
+			queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
+		}
+		if (relation === 'OR') {
+			withs.push('tagged_notes AS (SELECT DISTINCT note_tags.note_id FROM note_tags)');
+			withs.push(negatedAnyTagFilter(values));
+			queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
+		}
 		values.forEach((value) => params.push(value));
-		queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
 	}
 
 	if (filters.has('type')) {

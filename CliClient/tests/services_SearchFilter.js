@@ -210,11 +210,11 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n2.id);
 
-		// rows = await engine.search('tag:tag1 OR tag:tag2 OR tag:tag3');
-		// expect(rows.length).toBe(3);
-		// expect(ids(rows)).toContain(n1.id);
-		// expect(ids(rows)).toContain(n2.id);
-		// expect(ids(rows)).toContain(n3.id);
+		rows = await engine.search('any:1 tag:tag1 tag:tag2 tag:tag3');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
 
 		rows = await engine.search('tag:tag2 tag:tag3 tag:tag4');
 		expect(rows.length).toBe(0);
@@ -225,6 +225,14 @@ describe('services_SearchFilter', function() {
 
 		rows = await engine.search('-tag:tag2 -tag:tag3');
 		expect(rows.length).toBe(0);
+
+		rows = await engine.search('-tag:tag2 -tag:tag3');
+		expect(rows.length).toBe(0);
+
+		rows = await engine.search('any:1 -tag:tag2 -tag:tag3');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n3.id);
 	}));
 
 	it('should support filtering by notebook', asyncTest(async () => {
