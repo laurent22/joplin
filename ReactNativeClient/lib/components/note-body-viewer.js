@@ -219,12 +219,21 @@ class NoteBodyViewer extends Component {
 		]);
 
 		if (action === 'share') {
-			Share.open({
+			const file_name = resource.file_name ?
+				`${resource.file_name}.${resource.file_extension}` :
+				resource.title;
+			const targetPath = `${Setting.value('resourceDir')}/${file_name}`;
+
+			await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
+
+			await Share.open({
 				type: resource.mime,
 				filename: resource.title,
-				url: `file://${Resource.fullPath(resource)}`,
+				url: `file://${targetPath}`,
 				failOnCancel: false,
 			});
+
+			await shim.fsDriver().remove(targetPath);
 		}
 	}
 
