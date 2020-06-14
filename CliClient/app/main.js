@@ -52,8 +52,6 @@ BaseItem.loadClass('Revision', Revision);
 Setting.setConstant('appId', `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-cli`);
 Setting.setConstant('appType', 'cli');
 
-console.info(Setting.value('appId'));
-
 shimInit();
 
 const application = app();

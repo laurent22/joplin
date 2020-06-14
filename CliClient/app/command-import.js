@@ -21,7 +21,11 @@ class Command extends BaseCommand {
 			.filter(m => m.type === 'importer')
 			.map(m => m.format);
 
-		return [['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))], ['-f, --force', _('Do not ask for confirmation.')]];
+		return [
+			['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))],
+			['-f, --force', _('Do not ask for confirmation.')],
+			['--output-format <output-format>', _('Output format: %s', 'md, html')],
+		];
 	}
 
 	async action(args) {
@@ -55,9 +59,9 @@ class Command extends BaseCommand {
 			this.stdout(s);
 		};
 
-		app()
-			.gui()
-			.showConsole();
+		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat;
+
+		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));
 		const service = new InteropService();
 		const result = await service.import(importOptions);
