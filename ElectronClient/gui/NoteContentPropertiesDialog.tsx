@@ -29,6 +29,14 @@ function countElements(text:string, wordSetter:Function, characterSetter:Functio
 	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
 }
 
+function formatReadTime(read_time: number) {
+	if (read_time < 1) {
+		return '< 1';
+	}
+
+	return Math.floor(read_time).toString();
+}
+
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.theme);
 	const tableBodyComps: JSX.Element[] = [];
@@ -42,6 +50,8 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	const [strippedWords, setStrippedWords] = useState<number>(0);
 	const [strippedCharacters, setStrippedCharacters] = useState<number>(0);
 	const [strippedCharactersNoSpace, setStrippedCharactersNoSpace] = useState<number>(0);
+	const [strippedReadTime, setStrippedReadTime] = useState<number>(0);
+	const words_per_minute = 200;
 
 	useEffect(() => {
 		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setLines);
@@ -51,6 +61,11 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 		const strippedText: string = stripMarkdown(props.text);
 		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
 	}, [props.text]);
+
+	useEffect(() => {
+		const read_time: number = strippedWords / words_per_minute;
+		setStrippedReadTime(read_time);
+	}, [strippedWords]);
 
 	const textProperties: TextPropertiesMap = {
 		lines: lines,
@@ -133,6 +148,9 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 						{tableBodyComps}
 					</tbody>
 				</table>
+				<div style={labelCompStyle}>
+					{_('Approx. reading time:')} {formatReadTime(strippedReadTime)} {_('min')}
+				</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>
