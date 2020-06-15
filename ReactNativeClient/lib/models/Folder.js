@@ -223,6 +223,8 @@ class Folder extends BaseItem {
 
 	static async expandTree(folders, parentId) {
 		const folderPath = await this.folderPath(folders, parentId);
+		folderPath.pop(); // We don't expand the leaft notebook
+
 		for (const folder of folderPath) {
 			this.dispatch({
 				type: 'FOLDER_SET_COLLAPSED',
