@@ -34,7 +34,7 @@ function formatReadTime(read_time: number) {
 		return '< 1';
 	}
 
-	return Math.floor(read_time).toString();
+	return Math.ceil(read_time).toString();
 }
 
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
