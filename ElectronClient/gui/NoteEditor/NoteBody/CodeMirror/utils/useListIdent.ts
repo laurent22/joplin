@@ -126,7 +126,15 @@ export default function useListIdent(CodeMirror: any) {
 					cm.replaceRange('', { line: anchor.line, ch: 0 }, anchor);
 				}
 			} else {
-				cm.execCommand('newlineAndIndentContinueMarkdownList');
+				// Disable automatic indent for html/xml outside of codeblocks
+				const state = cm.getTokenAt(anchor).state;
+				const mode = cm.getModeAt(anchor);
+				// html/xml inside of a codeblock is fair game for auto-indent
+				if (mode.name !== 'xml' || state.overlay.codeBlock) {
+					cm.execCommand('newlineAndIndentContinueMarkdownList');
+				} else {
+					cm.replaceSelection('\n');
+				}
 			}
 		}
 	};
