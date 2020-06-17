@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Laurent Cozic",
   "scripts": {
-    "test": "gulp buildTests -L && jasmine --config=tests/support/jasmine.json",
+    "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
     "postinstall": "npm run build && patch-package --patch-dir ../patches",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --stack-trace-enabled --log-level debug --env dev"
@@ -55,11 +55,12 @@
     "htmlparser2": "^4.1.0",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.27",
+    "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.0",
     "katex": "^0.11.1",
+    "keytar": "^5.4.0",
     "levenshtein": "^1.0.5",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",

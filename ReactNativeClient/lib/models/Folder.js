@@ -125,6 +125,11 @@ class Folder extends BaseItem {
 				const folder = foldersById[parentId];
 				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
 				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
+
+				// Should not happen anymore but just to be safe, add the check below
+				// https://github.com/laurent22/joplin/issues/3334
+				if (folder.id === folder.parent_id) break;
+
 				parentId = folder.parent_id;
 			} while (parentId);
 		});
@@ -218,6 +223,8 @@ class Folder extends BaseItem {
 
 	static async expandTree(folders, parentId) {
 		const folderPath = await this.folderPath(folders, parentId);
+		folderPath.pop(); // We don't expand the leaft notebook
+
 		for (const folder of folderPath) {
 			this.dispatch({
 				type: 'FOLDER_SET_COLLAPSED',
@@ -403,6 +410,10 @@ class Folder extends BaseItem {
 			if (!('duplicateCheck' in options)) options.duplicateCheck = true;
 			if (!('reservedTitleCheck' in options)) options.reservedTitleCheck = true;
 			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;
+
+			if (o.id && o.parent_id && o.id === o.parent_id) {
+				throw new Error('Parent ID cannot be the same as ID');
+			}
 		}
 
 		if (options.stripLeftSlashes === true && o.title) {

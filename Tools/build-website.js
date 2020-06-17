@@ -505,8 +505,8 @@ function tocMd() {
 }
 
 function replaceGitHubByJoplinAppLinks(md) {
-	let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
-	output = output.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
+	let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
+	output = output.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
 	return output;
 }
 
@@ -587,6 +587,7 @@ async function main() {
 		['readme/api.md', 'docs/api/index.html', { title: 'REST API' }],
 		['readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' }],
 		['readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' }],
+		['readme/conflict.md', 'docs/conflict/index.html', { title: 'What is a conflict?' }],
 		['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
 
 		['readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' }],

@@ -1,5 +1,5 @@
 import { NoteBodyEditorProps } from '../../../utils/types';
-const { buildStyle } = require('../../../../../theme.js');
+const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
 	return buildStyle('AceEditor', props.theme, (theme: any) => {
@@ -53,7 +53,7 @@ export default function styles(props: NoteBodyEditorProps) {
 				fontSize: `${theme.editorFontSize}px`,
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
-				editorTheme: theme.editorTheme, // Defined in theme.js
+				aceEditorTheme: theme.aceEditorTheme, // Defined in theme.js
 			},
 		};
 	});

@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
@@ -67,6 +68,7 @@ class Resource extends BaseItem {
 		return Resource.fsDriver_;
 	}
 
+	// DEPRECATED IN FAVOUR OF friendlySafeFilename()
 	static friendlyFilename(resource) {
 		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
 		if (!output) output = resource.id;
@@ -91,6 +93,15 @@ class Resource extends BaseItem {
 		return resource.id + extension;
 	}
 
+	static friendlySafeFilename(resource) {
+		let ext = resource.file_extension;
+		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
+		let title = resource.title ? resource.title : resource.id;
+		if (safeExt && pathUtils.fileExtension(title).toLowerCase() === safeExt) title = pathUtils.filename(title);
+		return pathUtils.friendlySafeFilename(title) + (safeExt ? `.${safeExt}` : '');
+	}
+
 	static relativePath(resource, encryptedBlob = false) {
 		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
 	}
@@ -100,8 +111,21 @@ class Resource extends BaseItem {
 	}
 
 	static async isReady(resource) {
+		const r = await this.readyStatus(resource);
+		return r === 'ok';
+	}
+
+	static async readyStatus(resource) {
 		const ls = await this.localState(resource);
-		return resource && ls.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
+		if (!resource) return 'notFound';
+		if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) return 'notDownloaded';
+		if (resource.encryption_blob_encrypted) return 'encrypted';
+		return 'ok';
+	}
+
+	static async requireIsReady(resource) {
+		const readyStatus = await Resource.readyStatus(resource);
+		if (readyStatus !== 'ok') throw new Error(`Resource is not ready. Status: ${readyStatus}`);
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
@@ -183,11 +207,11 @@ class Resource extends BaseItem {
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');
@@ -218,7 +242,7 @@ class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
-	static localState(resourceOrId) {
+	static async localState(resourceOrId) {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
@@ -295,6 +319,59 @@ class Resource extends BaseItem {
 		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
 		if (status === Resource.FETCH_STATUS_ERROR) return _('Error');
 		throw new Error(`Invalid status: ${status}`);
+	}
+
+	static async updateResourceBlobContent(resourceId, newBlobFilePath) {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+
+		const fileStat = await this.fsDriver().stat(newBlobFilePath);
+		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		return await Resource.save({
+			id: resource.id,
+			size: fileStat.size,
+		});
+	}
+
+	static async resourceBlobContent(resourceId, encoding = 'Buffer') {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
+	}
+
+	static async duplicateResource(resourceId) {
+		const resource = await Resource.load(resourceId);
+		const localState = await Resource.localState(resource);
+
+		let newResource = { ...resource };
+		delete newResource.id;
+		newResource = await Resource.save(newResource);
+
+		const newLocalState = { ...localState };
+		newLocalState.resource_id = newResource.id;
+		delete newLocalState.id;
+
+		await Resource.setLocalState(newResource, newLocalState);
+
+		const sourcePath = Resource.fullPath(resource);
+		if (await this.fsDriver().exists(sourcePath)) {
+			await this.fsDriver().copy(sourcePath, Resource.fullPath(newResource));
+		}
+
+		return newResource;
+	}
+
+	static async createConflictResourceNote(resource) {
+		const Note = this.getClass('Note');
+
+		const conflictResource = await Resource.duplicateResource(resource.id);
+
+		await Note.save({
+			title: _('Attachment conflict: "%s"', resource.title),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
+			is_conflict: 1,
+		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
 }

@@ -23,6 +23,7 @@ const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const ResourceEditWatcher = require('lib/services/ResourceEditWatcher').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -369,6 +370,7 @@ class Application extends BaseApplication {
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
+				id: `sort:${type}:reverse`,
 				label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
 				type: 'checkbox',
 				checked: Setting.value(`${type}.sortOrder.reverse`),
@@ -684,6 +686,7 @@ class Application extends BaseApplication {
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
 				_('Profile Version: %s', reg.db().version()),
+				_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
@@ -1275,6 +1278,9 @@ class Application extends BaseApplication {
 			menuItem.enabled = selectedNoteIds.length === 1;
 		}
 
+		const sortNoteReverseItem = Menu.getApplicationMenu().getMenuItemById('sort:notes:reverse');
+		sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
+
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
 	}
@@ -1308,10 +1314,12 @@ class Application extends BaseApplication {
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
 
-		const css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const ace_css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
+		styleTag.appendChild(document.createTextNode(ace_css));
 		document.head.appendChild(styleTag);
 	}
 
@@ -1500,6 +1508,8 @@ class Application extends BaseApplication {
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+
+		ResourceEditWatcher.instance().initialize(reg.logger(), this.store().dispatch);
 
 		RevisionService.instance().runInBackground();
 

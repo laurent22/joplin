@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const SearchEngine = require('lib/services/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
@@ -9,7 +9,7 @@ const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords, nextWhitespaceIndex } = require('lib/string-utils.js');
+const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -234,8 +234,10 @@ class Dialog extends React.PureComponent {
 								const body = notesById[row.id];
 
 								// Iterate over all matches in the body for each search keyword
-								for (const { valueRegex } of searchKeywords) {
-									for (const match of body.matchAll(new RegExp(valueRegex, 'ig'))) {
+								for (let { valueRegex } of searchKeywords) {
+									valueRegex = removeDiacritics(valueRegex);
+
+									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
 										// Populate 'indices' with [begin index, end index] of each note fragment
 										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
 										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
@@ -260,19 +262,14 @@ class Dialog extends React.PureComponent {
 				}
 			}
 
-			let selectedItemId = null;
-			const itemIndex = this.selectedItemIndex(results, this.state.selectedItemId);
-			if (itemIndex > 0) {
-				selectedItemId = this.state.selectedItemId;
-			} else if (results.length > 0) {
-				selectedItemId = results[0].id;
-			}
+			// make list scroll to top in every search
+			this.itemListRef.current.makeItemIndexVisible(0);
 
 			this.setState({
 				listType: listType,
 				results: results,
 				keywords: this.keywords(searchQuery),
-				selectedItemId: selectedItemId,
+				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
 			});
 		}

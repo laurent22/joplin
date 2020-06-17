@@ -61,8 +61,6 @@ Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-CliClient/tests-build/support/plugins/withExternalModules/global.d.js
-CliClient/tests-build/support/plugins/withExternalModules/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
 CliClient/tests/support/plugins/withExternalModules/src/index.js
 ElectronClient/gui/MultiNoteActions.js
@@ -73,6 +71,16 @@ ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/index.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/types.js
 ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/useListIdent.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Editor.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/styles/index.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useLineSorting.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 ElectronClient/gui/NoteEditor/NoteEditor.js
@@ -88,10 +96,12 @@ ElectronClient/gui/NoteEditor/utils/useMessageHandler.js
 ElectronClient/gui/NoteEditor/utils/useNoteSearchBar.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js
+ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/AsyncActionQueue.js
+ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
@@ -99,10 +109,20 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/lib/services/keychain/KeychainService.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
 ReactNativeClient/lib/services/plugin_service/Plugin.js
 ReactNativeClient/lib/services/plugin_service/PluginService.js
 ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
+ReactNativeClient/lib/services/ResourceEditWatcher.js
+ReactNativeClient/lib/services/SettingUtils.js
+ReactNativeClient/lib/services/UndoRedoService.js
+ReactNativeClient/lib/ShareExtension.js
+ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
