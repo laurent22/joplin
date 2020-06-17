@@ -98,6 +98,14 @@ const makeDateFilter = (type: string, values: string[], queryParts: string[], pa
 	});
 };
 
+
+const makeLocationFilter = (name: string, values: string[], queryParts: string[], params: string[], negated: boolean = false, relation: string): void => {
+	values.forEach(value => {
+		queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.${name} ${negated ? '<=' : '>='} ?)`);
+		params.push(value);
+	});
+};
+
 const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
 	if (name === 'title' || name === 'body') {
 		return filters.get(name).map(value => `${name}:${value}`);
@@ -216,6 +224,30 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 
 	if (filters.has('-updated')) {
 		makeDateFilter('updated', filters.get('-updated'), queryParts, params, true, relation);
+	}
+
+	if (filters.has('latitude')) {
+		makeLocationFilter('latitude', filters.get('latitude'), queryParts, params, false, relation);
+	}
+
+	if (filters.has('-latitude')) {
+		makeLocationFilter('latitude', filters.get('-latitude'), queryParts, params, true, relation);
+	}
+
+	if (filters.has('longitude')) {
+		makeLocationFilter('longitude', filters.get('longitude'), queryParts, params, false, relation);
+	}
+
+	if (filters.has('-longitude')) {
+		makeLocationFilter('longitude', filters.get('-longitude'), queryParts, params, true, relation);
+	}
+
+	if (filters.has('altitude')) {
+		makeLocationFilter('altitude', filters.get('altitude'), queryParts, params, false, relation);
+	}
+
+	if (filters.has('-altitude')) {
+		makeLocationFilter('altitude', filters.get('-altitude'), queryParts, params, true, relation);
 	}
 
 	if (filters.has('title') || filters.has('body') || filters.has('text')) {

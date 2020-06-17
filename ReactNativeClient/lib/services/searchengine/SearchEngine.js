@@ -64,13 +64,13 @@ class SearchEngine {
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
-			const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+			const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
-				queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id] });
+				queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
 			}
 
 			await this.db().transactionExecBatch(queries);
@@ -140,7 +140,7 @@ class SearchEngine {
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);
-				const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+				const notes = await Note.modelSelectAll(`SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 				const queries = [];
 
 				for (let i = 0; i < changes.length; i++) {
@@ -151,7 +151,7 @@ class SearchEngine {
 						const note = this.noteById_(notes, change.item_id);
 						if (note) {
 							const n = this.normalizeNote_(note);
-							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id] });
+							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {

@@ -599,4 +599,51 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t3.id);
 	}));
 
+	it('should support filtering by latitude, longitude, altitude', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.72  });
+		const n2 = await Note.save({ title: 'I made this', body: 'the week before', latitude: 42.11, longitude: 77.77, altitude: 42.00  });
+		const n3 = await Note.save({ title: 'I made this', body: 'before before week', latitude: 82.01, longitude: 66.66, altitude: 13.13  });
+
+		await engine.syncTables();
+
+		rows = await engine.search('latitude:13.5');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('-latitude:40');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('latitude:13 -latitude:80');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('altitude:13.5');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('-altitude:80.12');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('longitude:70 -longitude:80');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('latitude:20 longitude:50 altitude:40');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('any:1 latitude:20 longitude:50 altitude:40');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+	}));
+
 });

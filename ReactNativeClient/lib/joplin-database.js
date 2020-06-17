@@ -778,7 +778,10 @@ class JoplinDatabase extends Database {
 						user_updated_time INT NOT NULL DEFAULT 0,
 						is_todo INT NOT NULL DEFAULT 0,
 						todo_completed INT NOT NULL DEFAULT 0,
-						parent_id TEXT NOT NULL DEFAULT ""
+						parent_id TEXT NOT NULL DEFAULT "",
+						latitude NUMERIC NOT NULL DEFAULT 0,
+						longitude NUMERIC NOT NULL DEFAULT 0,
+						altitude NUMERIC NOT NULL DEFAULT 0
 					);
 				`;
 
@@ -795,7 +798,10 @@ class JoplinDatabase extends Database {
 						notindexed="is_todo",
 						notindexed="todo_completed",
 						notindexed="parent_id",
-						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id
+						notindexed="latitude",
+						notindexed="longitude",
+						notindexed="altitude",
+						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude
 					);`
 				;
 
@@ -811,11 +817,11 @@ class JoplinDatabase extends Database {
 					END;`);
 				queries.push(`
 					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
 				queries.push(`
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
 			}
 
