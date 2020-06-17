@@ -26,6 +26,7 @@ import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
 
 const CodeMirror = require('codemirror');
+const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
 
 export interface CancelledKeys {
 	mac: string[],
@@ -116,7 +117,9 @@ function Editor(props: EditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		const cmOptions = {
+		const runtimeOptions = runtimePreferences.get('codemirror.options', {});
+
+		const cmOptions = Object.assign({}, {
 			value: props.value,
 			screenReaderLabel: props.value,
 			theme: props.theme,
@@ -143,7 +146,8 @@ function Editor(props: EditorProps, ref: any) {
 				'Opt-Down': 'swapLineDown',
 				'Tab': 'smartListIndent',
 				'Shift-Tab': 'smartListUnindent' },
-		};
+		}, runtimeOptions);
+
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
 		cm.on('change', editor_change);

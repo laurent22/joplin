@@ -4,12 +4,14 @@ export default function manifestFromObject(o:any):PluginManifest {
 
 	const getString = (name:string, required:boolean = true):string => {
 		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
+		if (!o[name]) return '';
 		if (typeof o[name] !== 'string') throw new Error(`Field must be a string: ${name}`);
 		return o[name];
 	};
 
 	const getNumber = (name:string, required:boolean = true):number => {
 		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
+		if (!o[name]) return 0;
 		if (typeof o[name] !== 'number') throw new Error(`Field must be a number: ${name}`);
 		return o[name];
 	};

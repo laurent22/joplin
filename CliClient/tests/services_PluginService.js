@@ -1,7 +1,8 @@
 require('app-module-path').addPath(__dirname);
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrow } = require('test-utils.js');
 const PluginService = require('lib/services/plugin_service/PluginService.js').default;
+const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 
@@ -61,5 +62,22 @@ describe('services_PluginService', function() {
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
 		expect(allFolders.map(f => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+	}));
+
+	it('should get and set runtime preferences', asyncTest(async () => {
+		runtimePreferences.set('test', 123);
+		expect(runtimePreferences.get('test')).toBe(123);
+
+		expect(checkThrow(() => runtimePreferences.set('test.invalid', 456))).toBe(true);
+
+		runtimePreferences.set('with.sub.prop1', 'abc');
+		runtimePreferences.set('with.sub.prop2', 'efg');
+
+		expect(runtimePreferences.get('with.sub.prop1')).toBe('abc');
+		expect(runtimePreferences.get('with.sub.prop2')).toBe('efg');
+
+		const group = runtimePreferences.get('with.sub');
+		expect(group.prop1).toBe('abc');
+		expect(group.prop2).toBe('efg');
 	}));
 });

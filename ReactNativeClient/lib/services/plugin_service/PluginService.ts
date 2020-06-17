@@ -5,6 +5,51 @@ const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
 const { filename } = require('lib/path-utils');
 
+class RuntimePreferences {
+
+	options_:any = {};
+
+	set(path:string, value:any) {
+		const splitted = path.split('.');
+		let current = this.options_;
+
+		for (let i = 0; i < splitted.length; i++) {
+			const part = splitted[i];
+
+			if (i === splitted.length - 1) {
+				current[part] = value;
+			} else {
+				if (!(part in current)) {
+					current[part] = {};
+				} else {
+					if (typeof current[part] !== 'object') throw new Error('Trying to set a sub-property on a property that is not an object');
+				}
+				current = current[part];
+			}
+		}
+	}
+
+	get(path:string, defaultValue:any = undefined):any {
+		const splitted = path.split('.');
+		let current = this.options_;
+
+		for (let i = 0; i < splitted.length; i++) {
+			const part = splitted[i];
+
+			if (i === splitted.length - 1) {
+				return current[part];
+			} else {
+				if (!(part in current)) return defaultValue;
+				current = current[part];
+			}
+		}
+	}
+
+}
+
+const runtimePreferences = new RuntimePreferences();
+export { runtimePreferences };
+
 class SandboxService {
 
 	public api:any;
@@ -16,11 +61,6 @@ class SandboxService {
 	public newSandbox(plugin:Plugin) {
 		return (() => {
 			const fsDriver = shim.fsDriver();
-
-			// const requireWhiteList:string[] = [
-			// 	// 'lib/models/Note',
-			// 	// 'lib/models/Folder',
-			// ];
 
 			function serializeApiBody(body:any) {
 				if (typeof body !== 'string') return JSON.stringify(body);
@@ -47,6 +87,9 @@ class SandboxService {
 						register: (script:any) => {
 							plugin.script = script;
 						},
+					},
+					runtime: {
+						preferences: runtimePreferences,
 					},
 				},
 				console: console,

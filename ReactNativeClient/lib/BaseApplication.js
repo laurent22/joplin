@@ -42,6 +42,8 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
+// const PluginService = require('lib/services/plugin_service/PluginService.js').default;
+// const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
 
 class BaseApplication {
 	constructor() {
@@ -746,6 +748,10 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
+
+		// const codeMirrorPlugin = await PluginService.instance().loadPlugin(`${Setting.value('pluginDir')}/codemirror_test`);
+		// await PluginService.instance().runPlugin(codeMirrorPlugin);
+
 		return argv;
 	}
 }
