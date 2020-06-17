@@ -139,6 +139,35 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
+	it('fuzzy tags', () => {
+		let searchString = 'tag:*';
+		let expected = new Map([
+			['tag', ['%']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+
+		searchString = '-tag:*';
+		expected = new Map([
+			['-tag', ['%']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+
+		searchString = 'tag:bl*sphemy';
+		expected = new Map([
+			['tag', ['bl%sphemy']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('fuzzy notebooks', () => {
+		const searchString = 'notebook:my*notebook';
+		const expected = new Map([
+			['notebook', ['my%notebook']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+
+	});
+
 
 
 });

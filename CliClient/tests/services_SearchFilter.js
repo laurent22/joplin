@@ -230,6 +230,31 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 	}));
 
+	it('should support filtering by tags', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'But I would', body: 'walk 500 miles' });
+		const n2 = await Note.save({ title: 'And I would', body: 'walk 500 more' });
+		const n3 = await Note.save({ title: 'Just to be', body: 'the man who' });
+		const n4 = await Note.save({ title: 'walked a thousand', body: 'miles to fall' });
+		const n5 = await Note.save({ title: 'down at your', body: 'door' });
+
+		await Tag.setNoteTagsByTitles(n1.id, ['Da', 'da', 'lat', 'da']);
+		await Tag.setNoteTagsByTitles(n2.id, ['Da', 'da', 'lat', 'da']);
+
+		await engine.syncTables();
+
+		rows = await engine.search('tag:*');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('-tag:*');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n4.id);
+		expect(ids(rows)).toContain(n5.id);
+	}));
+
 
 	it('should support filtering by tags', asyncTest(async () => {
 		let rows;

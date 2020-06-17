@@ -59,7 +59,10 @@ const parseQuery = (query: string): Array<Term> => {
 				throw new Error(`Invalid filter: ${name}`);
 			}
 
-			if (name === 'title' || name === 'body') {
+			if (name === 'tag' || name === '-tag' || name === 'notebook') {
+				const fuzzyValue = value.replace(/[*]/g, '%');
+				result.push({ name, value: fuzzyValue });
+			} else if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world
 				const values = trimQuotes(value).split(' ');
