@@ -7,7 +7,7 @@ The [Joplin Forum](https://discourse.joplinapp.org/) is the community driven pla
 File bugs in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Please follow these guidelines:
 
 - Search existing issues first, make sure yours hasn't already been reported.
-- Please follow the template.
+- Please follow the [template](https://github.com/laurent22/joplin/issues/new/choose).
 - Consider [enabling debug mode](https://joplinapp.org/debugging/) so that you can provide as much details as possible when reporting the issue.
 - Stay on topic, but describe the issue in detail so that others can **reproduce** it.
 - **Provide a screenshot** if possible. A screenshot showing the problem is often more useful than a paragraph describing it.
