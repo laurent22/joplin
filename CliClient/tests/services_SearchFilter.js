@@ -11,6 +11,10 @@ const Folder = require('lib/models/Folder');
 const Tag = require('lib/models/Tag');
 const ItemChange = require('lib/models/ItemChange');
 const Setting = require('lib/models/Setting');
+const Resource = require('lib/models/Resource.js');
+const { shim } = require('lib/shim');
+const ResourceService = require('lib/services/ResourceService.js');
+
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -644,6 +648,49 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n3.id);
+	}));
+
+	it('should support filtering by resource MIME type', asyncTest(async () => {
+		let rows;
+		const service = new ResourceService();
+		// console.log(testImagePath)
+		const folder1 = await Folder.save({ title: 'folder1' });
+		let n1 = await Note.save({ title: 'I have a picture', body: 'Im awesome', parent_id: folder1.id });
+		const n2 = await Note.save({ title: 'Boring note 1', body: 'I just have text', parent_id: folder1.id });
+		const n3 = await Note.save({ title: 'Boring note 2', body: 'me too', parent_id: folder1.id });
+		let n4 = await Note.save({ title: 'A picture?', body: 'pfff, I have a pdf', parent_id: folder1.id });
+		await engine.syncTables();
+
+		// let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		n1 = await shim.attachFileToNote(n1, `${__dirname}/../tests/support/photo.jpg`);
+		// const resource1 = (await Resource.all())[0];
+
+		n4 = await shim.attachFileToNote(n4, `${__dirname}/../tests/support/welcome.pdf`);
+
+		await service.indexNoteResources();
+
+		rows = await engine.search('resource:image/jpeg');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('resource:image/*');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('resource:application/pdf');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n4.id);
+
+		rows = await engine.search('-resource:image/jpeg');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n4.id);
+
+		rows = await engine.search('any:1 resource:application/pdf resource:image/jpeg');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n4.id);
 	}));
 
 });

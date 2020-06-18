@@ -139,7 +139,7 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('fuzzy tags', () => {
+	it('wildcard tags', () => {
 		let searchString = 'tag:*';
 		let expected = new Map([
 			['tag', ['%']],
@@ -159,13 +159,20 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('fuzzy notebooks', () => {
+	it('wildcard notebooks', () => {
 		const searchString = 'notebook:my*notebook';
 		const expected = new Map([
 			['notebook', ['my%notebook']],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
+	});
 
+	it('wildcard MIME types', () => {
+		const searchString = 'resource:image/*';
+		const expected = new Map([
+			['resource', ['image/%']],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
 	});
 
 

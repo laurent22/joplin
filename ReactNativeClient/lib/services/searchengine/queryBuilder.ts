@@ -7,6 +7,24 @@ const tagFilter = (tags: string[], intersect: boolean = true, negated: boolean =
 	return result;
 };
 
+
+// WITH RECURSIVE resource_filter as (
+// 	SELECT note_resources.note_id as id FROM note_resources WHERE 1 INTERSECT SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1
+// 	AND note_resources.resource_id IN (SELECT resources.id from resources WHERE resources.mime LIKE 'application/pdf'))
+
+const resourceFilter = (mimeTypes: string[], intersect: boolean = true, negated: boolean = false) => {
+	let result = new Array(mimeTypes.length).fill(`${intersect ? 'INTERSECT' : 'UNION'} SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1 AND note_resources.resource_id IN (SELECT resources.id from resources WHERE resources.mime LIKE ?)`).join(' ');
+	result = intersect ? `SELECT note_resources.note_id as id FROM note_resources WHERE 1 ${result}` : `SELECT note_resources.note_id as id FROM note_resources WHERE 0 ${result}`;
+	result = negated ? `resource_filter_negated as (${result})` : `resource_filter as (${result})`;
+	return result;
+};
+
+const negatedAnyResourceFilter = (mimeTypes: string[]) => {
+	let result = new Array(mimeTypes.length).fill('select * from (select * from notes_with_resources except SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1 AND note_resources.resource_id IN (select resources.id from resources where resources.mime like ?))').join(' UNION ');
+	result = `resource_filter_negated(id) as (${result})`;
+	return result;
+};
+
 // WITH RECURSIVE tagged_notes
 // AS
 // (
@@ -132,6 +150,7 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 	notes_fts.parent_id
 	FROM notes_fts WHERE`);
 
+
 	// console.log("testing beep beep boop boop")
 	// console.log(filters);
 
@@ -182,6 +201,27 @@ export default function queryBuilder(filters: Map<string, string[]>) {
 			queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
 		}
 		values.forEach((value) => params.push(value));
+	}
+
+	if (filters.has('resource')) {
+		const values = filters.get('resource');
+		withs.push(resourceFilter(values, relation === 'AND', false)); // intersect/union depending on relation
+		values.forEach((value) => params.push(value));
+		queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (resource_filter) JOIN notes_normalized on resource_filter.id=notes_normalized.id)`);
+	}
+
+	if (filters.has('-resource')) {
+		const values = filters.get('-resource');
+		if (relation === 'AND') {
+			withs.push(resourceFilter(values, false, true));
+			queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (resource_filter_negated) JOIN notes_normalized on resource_filter_negated.id=notes_normalized.id)`);
+		}
+		if (relation === 'OR') {
+			withs.push('notes_with_resources AS (SELECT DISTINCT note_tags.note_id FROM note_tags)');
+			withs.push(negatedAnyResourceFilter(values));
+			queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (resource_filter_negated) JOIN notes_normalized on resource_filter_negated.id=notes_normalized.id)`);
+		}
+		values.forEach(value => params.push(value));
 	}
 
 	if (filters.has('type')) {

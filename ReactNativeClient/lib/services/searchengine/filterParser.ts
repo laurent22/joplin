@@ -48,7 +48,7 @@ const parseQuery = (query: string): Array<Term> => {
 	const validFilters = new Set(['any', 'title', '-title', 'body', '-body', 'tag',
 		'-tag', 'notebook', 'created', '-created',  '-updated', 'updated', 'type',
 		'iscompleted', 'latitude', '-latitude', 'longitude', '-longitude',
-		'altitude', '-altitude']);
+		'altitude', '-altitude', 'resource', '-resource']);
 
 	const terms = getTerms(query);
 
@@ -62,7 +62,7 @@ const parseQuery = (query: string): Array<Term> => {
 				throw new Error(`Invalid filter: ${name}`);
 			}
 
-			if (name === 'tag' || name === '-tag' || name === 'notebook') {
+			if (name === 'tag' || name === '-tag' || name === 'notebook' || name === 'resource' || name === '-resource') {
 				const fuzzyValue = value.replace(/[*]/g, '%');
 				result.push({ name, value: fuzzyValue });
 			} else if (name === 'title' || name === 'body') {
