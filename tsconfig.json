@@ -14,7 +14,6 @@
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
 		"sourceMap": true,
-		"esModuleInterop": true,
 		"jsx": "react",
 	},
     "include": [
