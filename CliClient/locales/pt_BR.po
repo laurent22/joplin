@@ -16,6 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -1955,7 +1957,7 @@ msgstr "Versão do Perfil: %s"
 #: ElectronClient/app.js:689
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Keychain Suportada: %s"
 
 #: ElectronClient/app.js:711 ElectronClient/app.js:794
 msgid "&File"
@@ -2372,7 +2374,7 @@ msgstr "Parear automaticamente chaves, parênteses, aspas etc."
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Usar CodeMirror como editor de código (ATENÇÃO: BETA)."
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
@@ -2500,14 +2502,14 @@ msgid "Editor font family"
 msgstr "Família de fontes do editor"
 
 #: ReactNativeClient/lib/models/Setting.js:508
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Deve ser uma fonte *monospace\" ou não vai funcionar direito. Se a fonte "
-"estiver incorreta ou vazia, será usada uma fonte genérica monospace."
+"Deve ser uma fonte *monospace\" ou alguns elementos vão aparecer "
+"incorretamente. Se a fonte estiver incorreta ou vazia, será usada uma fonte "
+"genérica monospace."
 
 #: ReactNativeClient/lib/models/Setting.js:547
 msgid "Custom stylesheet for Joplin-wide app styles"
