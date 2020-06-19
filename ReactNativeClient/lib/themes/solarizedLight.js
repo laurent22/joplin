@@ -1,4 +1,6 @@
 const solarizedLightStyle = {
+	appearance: 'light',
+
 	backgroundColor: '#fdf6e3',
 	backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)',
 	oddBackgroundColor: '#eee8d5',
@@ -12,7 +14,6 @@ const solarizedLightStyle = {
 	urlColor: '#268bd2',
 
 	backgroundColor2: '#002b36',
-	depthColor: 'rgb(100, 182, 253, OPACITY)',
 	color2: '#eee8d5',
 	selectedColor2: '#6c71c4',
 	colorError2: '#cb4b16',
@@ -22,14 +23,10 @@ const solarizedLightStyle = {
 
 	warningBackgroundColor: '#b5890055',
 
-	htmlColor: '#657b83',
-	htmlBackgroundColor: '#fdf6e3',
-	htmlDividerColor: '#eee8d5',
-	htmlLinkColor: '#268bd2',
-	htmlTableBackgroundColor: '#fdf6e3',
-	htmlCodeBackgroundColor: '#fdf6e3',
-	htmlCodeBorderColor: '#eee8d5',
-	htmlCodeColor: '#002b36',
+	tableBackgroundColor: '#fdf6e3',
+	codeBackgroundColor: '#fdf6e3',
+	codeBorderColor: '#eee8d5',
+	codeColor: '#002b36',
 
 	aceEditorTheme: 'tomorrow',
 	codeMirrorTheme: 'solarized light',

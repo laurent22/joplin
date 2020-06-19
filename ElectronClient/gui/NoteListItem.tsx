@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('lib/markJsUtils');
 const Note = require('lib/models/Note');

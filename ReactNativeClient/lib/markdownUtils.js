@@ -5,7 +5,7 @@ const { setupLinkify } = require('lib/joplin-renderer');
 const removeMarkdown = require('remove-markdown');
 
 // Taken from codemirror/addon/edit/continuelist.js
-const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/;
+const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
 
 const markdownUtils = {
@@ -119,9 +119,8 @@ const markdownUtils = {
 		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
 	},
 
-	stripMarkdown(text, options = { gfm: false }) {
-		// Removes Markdown syntax elements from the given text
-		return removeMarkdown(text, options);
+	stripMarkdown(text) {
+		return removeMarkdown(text, { gfm: false });
 	},
 };
 

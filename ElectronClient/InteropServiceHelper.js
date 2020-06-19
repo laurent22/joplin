@@ -4,6 +4,7 @@ const InteropService = require('lib/services/InteropService');
 const Setting = require('lib/models/Setting');
 const Note = require('lib/models/Note.js');
 const { friendlySafeFilename } = require('lib/path-utils');
+const { time } = require('lib/time-utils.js');
 const md5 = require('md5');
 const url = require('url');
 const { shim } = require('lib/shim');
@@ -108,10 +109,16 @@ class InteropServiceHelper {
 	}
 
 	static async defaultFilename(noteId, fileExtension) {
-		if (!noteId) return '';
-		const note = await Note.load(noteId);
-		// In a rare case the passed not will be null, use the id for filename
-		const filename = friendlySafeFilename(note ? note.title : noteId, 100);
+		// Default filename is just the date
+		const date = time.formatMsToLocal(new Date().getTime(), time.dateFormat());
+		let filename = friendlySafeFilename(`${date}`, 100);
+
+		if (noteId) {
+			const note = await Note.load(noteId);
+			// In a rare case the passed note will be null, use the id for filename
+			filename = friendlySafeFilename(note ? note.title : noteId, 100);
+		}
+
 		return `${filename}.${fileExtension}`;
 	}
 

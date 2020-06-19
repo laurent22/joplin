@@ -94,7 +94,7 @@ class Resource extends BaseItem {
 	}
 
 	static friendlySafeFilename(resource) {
-		let ext = resource.extension;
+		let ext = resource.file_extension;
 		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
 		let title = resource.title ? resource.title : resource.id;

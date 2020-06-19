@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const ToolbarBase = require('../../../Toolbar.min.js');
 const { _ } = require('lib/locale');
-const { buildStyle, themeStyle } = require('../../../../theme.js');
+const { buildStyle, themeStyle } = require('lib/theme');
 
 interface ToolbarProps {
 	theme: number,

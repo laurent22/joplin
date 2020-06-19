@@ -50,14 +50,12 @@ class Setting extends BaseModel {
 			const output = {};
 			output[Setting.THEME_LIGHT] = _('Light');
 			output[Setting.THEME_DARK] = _('Dark');
-			if (platform !== mobilePlatform) {
-				output[Setting.THEME_DRACULA] = _('Dracula');
-				output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
-				output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
-				output[Setting.THEME_NORD] = _('Nord');
-			} else {
-				output[Setting.THEME_OLED_DARK] = _('OLED Dark');
-			}
+			output[Setting.THEME_DRACULA] = _('Dracula');
+			output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+			output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+			output[Setting.THEME_NORD] = _('Nord');
+			output[Setting.THEME_ARITIM_DARK] = _('Aritim Dark');
+			output[Setting.THEME_OLED_DARK] = _('OLED Dark');
 			return output;
 		};
 

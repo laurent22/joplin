@@ -60,7 +60,6 @@ const nordStyle = {
 	urlColor: nord[8],
 
 	backgroundColor2: nord[2],
-	depthColor: 'rgb(200, 200, 200, OPACITY)',
 	color2: nord[8],
 	selectedColor2: nord[10],
 	colorError2: nord[11],
@@ -70,14 +69,10 @@ const nordStyle = {
 
 	warningBackgroundColor: nord[13],
 
-	htmlColor: nord[4],
-	htmlBackgroundColor: nord[1],
-	htmlDividerColor: nord[2],
-	htmlLinkColor: nord[10],
-	htmlTableBackgroundColor: nord[0],
-	htmlCodeBackgroundColor: nord[0],
-	htmlCodeBorderColor: nord[2],
-	htmlCodeColor: nord[13],
+	tableBackgroundColor: nord[0],
+	codeBackgroundColor: nord[0],
+	codeBorderColor: nord[2],
+	codeColor: nord[13],
 
 	aceEditorTheme: 'terminal',
 	codeMirrorTheme: 'nord',
