@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
 
-const CodeMirror = require('codemirror');
+import * as CodeMirror from 'codemirror';
+
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
@@ -15,6 +16,7 @@ import useLineSorting from './utils/useLineSorting';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
+import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/gfm/gfm';
 import 'codemirror/mode/xml/xml';
@@ -134,6 +136,12 @@ function Editor(props: EditorProps, ref: any) {
 			extraKeys: { 'Enter': 'insertListElement',
 				'Ctrl-/': 'toggleComment',
 				'Ctrl-Alt-S': 'sortSelectedLines',
+				'Alt-Up': 'swapLineUp',
+				'Alt-Down': 'swapLineDown',
+				'Cmd-/': 'toggleComment',
+				'Cmd-Opt-S': 'sortSelectedLines',
+				'Opt-Up': 'swapLineUp',
+				'Opt-Down': 'swapLineDown',
 				'Tab': 'smartListIndent',
 				'Shift-Tab': 'smartListUnindent' },
 		};

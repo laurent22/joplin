@@ -140,7 +140,7 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
-		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
@@ -153,7 +153,7 @@ class Note extends BaseItem {
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
-		this.logger().info('replaceResourceInternalToExternalLinks result', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -171,7 +171,7 @@ class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -189,7 +189,7 @@ class Note extends BaseItem {
 			}
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks result', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}

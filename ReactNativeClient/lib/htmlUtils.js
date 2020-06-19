@@ -7,12 +7,38 @@ const htmlentities = new Entities().encode;
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
+const selfClosingElements = [
+	'area',
+	'base',
+	'basefont',
+	'br',
+	'col',
+	'command',
+	'embed',
+	'frame',
+	'hr',
+	'img',
+	'input',
+	'isindex',
+	'keygen',
+	'link',
+	'meta',
+	'param',
+	'source',
+	'track',
+	'wbr',
+];
+
 class HtmlUtils {
 	headAndBodyHtml(doc) {
 		const output = [];
 		if (doc.head) output.push(doc.head.innerHTML);
 		if (doc.body) output.push(doc.body.innerHTML);
 		return output.join('\n');
+	}
+
+	isSelfClosingTag(tagName) {
+		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	extractImageUrls(html) {

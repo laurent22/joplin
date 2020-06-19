@@ -8,6 +8,7 @@ const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
+const UndoRedoService = require('lib/services/UndoRedoService.js').default;
 const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
@@ -29,7 +30,8 @@ const { shim } = require('lib/shim.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
-const dialogs = require('lib/components/dialogs.js').default;
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
@@ -70,9 +72,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// margin. This forces RN to update the text input and to display it. Maybe that hack can be removed once RN is upgraded.
 			// See https://github.com/laurent22/joplin/issues/1057
 			HACK_webviewLoadingState: 0,
-		};
 
-		this.selection = null;
+			undoRedoButtonState: {
+				canUndo: false,
+				canRedo: false,
+			},
+		};
 
 		this.saveActionQueues_ = {};
 
@@ -89,7 +94,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
-				const buttonId = await dialogs.pop(_('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
+				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
@@ -121,6 +126,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					note: Object.assign({}, this.state.lastSavedNote),
 					mode: 'view',
 				});
+
+				await this.undoRedoService_.reset();
 
 				return true;
 			}
@@ -184,7 +191,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}
 				}
 			} catch (error) {
-				dialogs.error(error.message);
+				dialogs.error(this, error.message);
 			}
 		};
 
@@ -216,6 +223,38 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
+		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
+		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
+		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
+		this.body_selectionChange = this.body_selectionChange.bind(this);
+	}
+
+	undoRedoService_stackChange() {
+		this.setState({ undoRedoButtonState: {
+			canUndo: this.undoRedoService_.canUndo,
+			canRedo: this.undoRedoService_.canRedo,
+		} });
+	}
+
+	async undoRedo(type) {
+		const undoState = await this.undoRedoService_[type](this.undoState());
+		if (!undoState) return;
+
+		this.setState((state) => {
+			const newNote = Object.assign({}, state.note);
+			newNote.body = undoState.body;
+			return {
+				note: newNote,
+			};
+		});
+	}
+
+	screenHeader_undoButtonPress() {
+		this.undoRedo('undo');
+	}
+
+	screenHeader_redoButtonPress() {
+		this.undoRedo('redo');
 	}
 
 	styles() {
@@ -307,9 +346,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	async UNSAFE_componentWillMount() {
-		this.selection = null;
+	undoState(noteBody = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+		};
+	}
 
+	async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -317,6 +360,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.installResourceHandling(this.refreshResource);
 
 		await shared.initState(this);
+
+		this.undoRedoService_ = new UndoRedoService();
+		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
 		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
@@ -353,6 +399,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
+
+		this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text) {
@@ -362,8 +410,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_changeText(text) {
+		if (!this.undoRedoService_.canUndo) {
+			this.undoRedoService_.push(this.undoState());
+		} else {
+			this.undoRedoService_.schedulePush(this.undoState());
+		}
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
+	}
+
+	body_selectionChange(event) {
+		this.selection = event.nativeEvent.selection;
 	}
 
 	makeSaveAction() {
@@ -397,7 +454,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		if (!note.id) return;
 
-		const ok = await dialogs.confirm(_('Delete note?'));
+		const ok = await dialogs.confirm(this, _('Delete note?'));
 		if (!ok) return;
 
 		const folderId = note.parent_id;
@@ -459,7 +516,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
 
 		if (mustResize) {
-			const buttonId = await dialogs.pop(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
+			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
 				{ text: _('Yes'), id: 'yes' },
 				{ text: _('No'), id: 'no' },
 				{ text: _('Cancel'), id: 'cancel' },
@@ -554,7 +611,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				if (!done) return;
 			} else {
 				if (fileType === 'image') {
-					dialogs.error(_('Unsupported image type: %s', mimeType));
+					dialogs.error(this, _('Unsupported image type: %s', mimeType));
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
@@ -568,7 +625,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 			return;
 		}
 
@@ -680,7 +737,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 		}
 	}
 
@@ -691,7 +748,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		try {
 			Linking.openURL(note.source_url);
 		} catch (error) {
-			await dialogs.error(error.message);
+			await dialogs.error(this, error.message);
 		}
 	}
 
@@ -751,7 +808,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(_('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
@@ -1014,6 +1071,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 				// the whole text input has to be in memory for the scrollview to work. So we keep it as
 				// a plain TextInput for now.
 				// See https://github.com/laurent22/joplin/issues/3041
+
+				// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+				// context. In other words, the selection should be considered read-only. For example, if the seleciton
+				// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+				// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+				// later the real selection will be different from what is stored in the state, thus making
+				// the cursor jump around. Eg, when typing "abcdef", it will do this:
+				//     abcd|
+				//     abcde|
+				//     abcde|f
 				(
 					<TextInput
 						autoCapitalize="sentences"
@@ -1022,9 +1089,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						multiline={true}
 						value={note.body}
 						onChangeText={(text) => this.body_changeText(text)}
-						onSelectionChange={({ nativeEvent: { selection } }) => {
-							this.selection = selection;
-						}}
+						onSelectionChange={this.body_selectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -1056,7 +1121,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		const saveButtonDisabled = !this.isModified();
+		const saveButtonDisabled = true;// !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
@@ -1067,7 +1132,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
+				<TextInput
+					onContentSizeChange={this.titleTextInput_contentSizeChange}
+					multiline={this.enableMultilineTitle_}
+					ref="titleTextField"
+					underlineColorAndroid="#ffffff00"
+					autoCapitalize="sentences"
+					style={this.styles().titleTextInput}
+					value={note.title}
+					onChangeText={this.title_changeText}
+					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
+					placeholder={_('Add title')}
+					placeholderTextColor={theme.colorFaded}
+				/>
 			</View>
 		);
 
@@ -1075,12 +1153,31 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
+				<ScreenHeader
+					folderPickerOptions={this.folderPickerOptions()}
+					menuOptions={this.menuOptions()}
+					showSaveButton={showSaveButton}
+					saveButtonDisabled={saveButtonDisabled}
+					onSaveButtonPress={this.saveNoteButton_press}
+					showSideMenuButton={false}
+					showSearchButton={false}
+					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
+					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
+					onUndoButtonPress={this.screenHeader_undoButtonPress}
+					onRedoButtonPress={this.screenHeader_redoButtonPress}
+				/>
 				{titleComp}
 				{bodyComponent}
 				{!Setting.value('editor.beta') && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 				{noteTagDialog}
 			</View>
 		);

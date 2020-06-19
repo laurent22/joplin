@@ -113,7 +113,7 @@ async function createPotFile(potFilePath) {
 		'./Tools/*',
 	];
 
-	const findCommand = `find ./ -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 
 	process.chdir(`${__dirname}/..`);
 	const files = (await execCommand(findCommand)).split('\n');
