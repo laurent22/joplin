@@ -332,7 +332,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:177
 msgid "Cannot initialize synchroniser."
-msgstr ""
+msgstr "Cannot initialise synchroniser."
 
 #: CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
@@ -825,7 +825,7 @@ msgstr ""
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
 #: ElectronClient/gui/NoteText.min.js:1551
 msgid "emphasized text"
-msgstr ""
+msgstr "emphasised text"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
@@ -1989,6 +1989,12 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"Could not synchronise with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
 
 #: ReactNativeClient/lib/logger.js:178
 #, javascript-format
