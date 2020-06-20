@@ -375,6 +375,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Editor
 					value={props.content}
 					ref={editorRef}
+					parentSize={rootRef.current ? rootRef.current.getBoundingClientRect() : null}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.codeMirrorTheme}
 					style={styles.editor}

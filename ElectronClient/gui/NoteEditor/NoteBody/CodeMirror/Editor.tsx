@@ -35,6 +35,7 @@ export interface CancelledKeys {
 
 export interface EditorProps {
 	value: string,
+	parentSize: any,
 	mode: string,
 	style: any,
 	theme: any,
@@ -183,6 +184,18 @@ function Editor(props: EditorProps, ref: any) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
 	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+
+	useEffect(() => {
+		if (editor) {
+			// Need to let codemirror know that it's container's size has changed so that it can
+			// re-compute anything it needs to. This ensures the cursor (and anything that is
+			// based on window size will be correct
+			// Manually calling refresh here will cause a double refresh in some instances (when the
+			// windows size is changed for example) but this is a fairly quick operation so it's worth
+			// it.
+			editor.refresh();
+		}
+	}, [props.parentSize]);
 
 	return <div style={props.style} ref={editorParent} />;
 }
