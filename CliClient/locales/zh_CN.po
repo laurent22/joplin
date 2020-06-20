@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: paventyang@gmail.com\n"
-"Language-Team: paventyang@gmail.com\n"
+"Last-Translator: yaozeye@outlook.com\n"
+"Language-Team: yaozeye@yaozeye.onmicrosoft.com\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3590,7 +3590,7 @@ msgstr "该项目当前已加密：%s“%s”。请等待所有项目解密后�
 
 #~ msgid ""
 #~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
-#~ msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
+#~ msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
 
 #~ msgid "Permission to write to external storage"
 #~ msgstr "写入外部存储的权限"
@@ -3628,13 +3628,13 @@ msgstr "该项目当前已加密：%s“%s”。请等待所有项目解密后�
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "
 #~ "See `sync.target`."
-#~ msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
+#~ msgstr "启用文件系统同步的路径。见 `sync.target`。"
 
 #~ msgid "State: %s."
 #~ msgstr "状态：%s。"
 
 #~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "以此标题命名的笔记本已存在：\"%s\""
+#~ msgstr "该命名的笔记本已存在于：\"%s\""
 
 #~ msgid "Searches"
 #~ msgstr "搜索历史"
