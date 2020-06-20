@@ -153,7 +153,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 					//  acfd6503-8d97-4349-ae2e-e7a19dd7b6bc\r\nTimestamp: 2017-12-01 13:35:55Z","error_codes":[50011],"timestamp":"2017-12-01 13:35:55Z","trace_id":
 					// "6e63dac6-8b37-47e2-bd1b-4768f8713400","correlation_id":"acfd6503-8d97-4349-ae2e-e7a19dd7b6bc"}
 					if (error && error.message && error.message.indexOf('"invalid_client"') >= 0) {
-						reg.showErrorMessageBox(_('Could not synchronize with OneDrive.\n\nThis error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n\nPlease consider using a regular OneDrive account.'));
+						reg.showErrorMessageBox(_('Could not synchronise with OneDrive.\n\nThis error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n\nPlease consider using a regular OneDrive account.'));
 					}
 				}
 				reg.setupRecurrentSync();
