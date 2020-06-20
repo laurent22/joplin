@@ -1,10 +1,9 @@
-// const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
 
-function installRule(markdownIt, mdOptions, ruleOptions) {
+function installRule(markdownIt:any, ruleOptions:any) {
 	const defaultRender = markdownIt.renderer.rules.link_open;
 
-	markdownIt.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+	markdownIt.renderer.rules.link_open = (tokens: { [x: string]: any; }, idx: string | number, options: any, env: any, self: any) => {
 		const Resource = ruleOptions.ResourceModel;
 
 		const token = tokens[idx];
@@ -21,8 +20,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	};
 }
 
-module.exports = function(context, ruleOptions) {
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
+export default function(ruleOptions: any) {
+	return function(md: any) {
+		installRule(md, ruleOptions);
 	};
 };
