@@ -26,6 +26,21 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
+	externalApi() {
+		return {
+			openAndWatch: async ({ noteId }) => {
+				const note = await Note.load(noteId);
+				return this.openAndWatch(note);
+			},
+			stopWatching: async ({ noteId }) => {
+				return this.stopWatching(noteId);
+			},
+			noteIsWatched: async ({ noteId }) => {
+				return this.noteIsWatched(noteId);
+			},
+		};
+	}
+
 	tempDir() {
 		return Setting.value('profileDir');
 	}
