@@ -25,8 +25,6 @@ const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { uuid } = require('lib/uuid');
 
-const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
 		super(message);
@@ -60,10 +58,11 @@ class ErrorBadRequest extends ApiError {
 }
 
 class Api {
-	constructor(token = null) {
+	constructor(token = null, actionApi = null) {
 		this.token_ = token;
 		this.knownNounces_ = {};
 		this.logger_ = new Logger();
+		this.actionApi_ = actionApi;
 	}
 
 	get token() {
@@ -391,13 +390,11 @@ class Api {
 		this.checkToken_(request);
 
 		if (request.method !== 'POST') throw new ErrorMethodNotAllowed();
+		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
+		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);
 
-		if (serviceName === 'externalEditWatcher') {
-			const externalApi = ExternalEditWatcher.instance().externalApi();
-			return this.execServiceActionFromRequest_(externalApi, JSON.parse(request.body));
-		} else {
-			throw new ErrorNotFound(`No such service: ${serviceName}`);
-		}
+		const externalApi = this.actionApi_[serviceName]();
+		return this.execServiceActionFromRequest_(externalApi, JSON.parse(request.body));
 	}
 
 	async action_notes(request, id = null, link = null) {

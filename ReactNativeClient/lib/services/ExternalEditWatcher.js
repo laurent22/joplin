@@ -36,7 +36,8 @@ class ExternalEditWatcher {
 				return this.stopWatching(noteId);
 			},
 			noteIsWatched: async ({ noteId }) => {
-				return this.noteIsWatched(noteId);
+				const note = await Note.load(noteId);
+				return this.noteIsWatched(note);
 			},
 		};
 	}

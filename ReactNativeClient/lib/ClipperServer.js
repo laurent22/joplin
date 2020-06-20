@@ -4,6 +4,7 @@ const { Logger } = require('lib/logger.js');
 const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
+const actionApi = require('lib/services/rest/ActionApi.desktop').default;
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const multiparty = require('multiparty');
 
@@ -15,7 +16,7 @@ class ClipperServer {
 		this.port_ = null;
 		this.api_ = new Api(() => {
 			return Setting.value('api.token');
-		});
+		}, actionApi);
 	}
 
 	static instance() {
@@ -143,6 +144,8 @@ class ClipperServer {
 					writeResponseInstance(code, response);
 				} else if (typeof response === 'string') {
 					writeResponseText(code, response);
+				} else if (response === null || response === undefined) {
+					writeResponseText(code, '');
 				} else {
 					writeResponseJson(code, response);
 				}
@@ -155,7 +158,7 @@ class ClipperServer {
 			const execRequest = async (request, body = '', files = []) => {
 				try {
 					const response = await this.api_.route(request.method, url.pathname, url.query, body, files);
-					writeResponse(200, response ? response : '');
+					writeResponse(200, response);
 				} catch (error) {
 					this.logger().error(error);
 					const httpCode = error.httpCode ? error.httpCode : 500;

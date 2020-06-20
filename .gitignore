@@ -104,6 +104,7 @@ ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
 ReactNativeClient/lib/services/ResourceEditWatcher.js
+ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/SettingUtils.js
 ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
