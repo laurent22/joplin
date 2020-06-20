@@ -9,6 +9,7 @@ const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
 const { bridge } = require('electron').remote.require('./bridge');
 const { time } = require('lib/time-utils.js');
+const { ErrorNotFound } = require('./rest/errors');
 
 class ExternalEditWatcher {
 	constructor() {
@@ -27,16 +28,22 @@ class ExternalEditWatcher {
 	}
 
 	externalApi() {
+		const loadNote = async (noteId) => {
+			const note = await Note.load(noteId);
+			if (!note) throw new ErrorNotFound(`No such note: ${noteId}`);
+			return note;
+		};
+
 		return {
 			openAndWatch: async ({ noteId }) => {
-				const note = await Note.load(noteId);
+				const note = await loadNote(noteId);
 				return this.openAndWatch(note);
 			},
 			stopWatching: async ({ noteId }) => {
 				return this.stopWatching(noteId);
 			},
 			noteIsWatched: async ({ noteId }) => {
-				const note = await Note.load(noteId);
+				const note = await loadNote(noteId);
 				return this.noteIsWatched(note);
 			},
 		};

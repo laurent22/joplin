@@ -24,38 +24,7 @@ const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { uuid } = require('lib/uuid');
-
-class ApiError extends Error {
-	constructor(message, httpCode = 400) {
-		super(message);
-		this.httpCode_ = httpCode;
-	}
-
-	get httpCode() {
-		return this.httpCode_;
-	}
-}
-
-class ErrorMethodNotAllowed extends ApiError {
-	constructor(message = 'Method Not Allowed') {
-		super(message, 405);
-	}
-}
-class ErrorNotFound extends ApiError {
-	constructor(message = 'Not Found') {
-		super(message, 404);
-	}
-}
-class ErrorForbidden extends ApiError {
-	constructor(message = 'Forbidden') {
-		super(message, 403);
-	}
-}
-class ErrorBadRequest extends ApiError {
-	constructor(message = 'Bad Request') {
-		super(message, 400);
-	}
-}
+const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
 class Api {
 	constructor(token = null, actionApi = null) {
