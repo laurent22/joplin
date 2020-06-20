@@ -370,15 +370,24 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
 
 	function renderEditor() {
+		// The editor needs to be kept up to date on the actual space that it's filling
+		// Ogherwise we can get some rendering errors when the editor size is changed
+		// (this can happen when switching layout of when toggling sidebars for example)
+		const editorStyle = Object.assign({ width: 0, height: 0 }, styles.editor);
+		if (rootRef.current && props.visiblePanes.includes('editor')) {
+			const rootSize = rootRef.current.getBoundingClientRect();
+			editorStyle.width = !props.visiblePanes.includes('viewer') ? rootSize.width : Math.floor(rootSize.width / 2);
+			editorStyle.height = rootSize.height;
+		}
+
 		return (
 			<div style={cellEditorStyle}>
 				<Editor
 					value={props.content}
 					ref={editorRef}
-					parentSize={rootRef.current ? rootRef.current.getBoundingClientRect() : null}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.codeMirrorTheme}
-					style={styles.editor}
+					style={editorStyle}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}

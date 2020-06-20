@@ -35,7 +35,6 @@ export interface CancelledKeys {
 
 export interface EditorProps {
 	value: string,
-	parentSize: any,
 	mode: string,
 	style: any,
 	theme: any,
@@ -195,7 +194,7 @@ function Editor(props: EditorProps, ref: any) {
 			// it.
 			editor.refresh();
 		}
-	}, [props.parentSize]);
+	}, [props.style.width, props.style.height]);
 
 	return <div style={props.style} ref={editorParent} />;
 }
