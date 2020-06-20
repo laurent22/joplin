@@ -2,20 +2,16 @@ import { useState } from 'react';
 // Helper functions that use the cursor
 export default function useCursorUtils(CodeMirror: any) {
 
-	const [markers, setMarkers] = useState(null);
-	const [scrollMarkers, setScrollMarkers] = useState(null);
+	const [markers, setMarkers] = useState([]);
+	const [scrollMarkers, setScrollMarkers] = useState([]);
 
 	function clearMarkers() {
-		if (markers) {
-			for (let i = 0; i < markers.length; i++) {
-				markers[i].clear();
-			}
+		for (let i = 0; i < markers.length; i++) {
+			markers[i].clear();
 		}
 
-		if (scrollMarkers) {
-			for (let i = 0; i < scrollMarkers.length; i++) {
-				scrollMarkers[i].clear();
-			}
+		for (let i = 0; i < scrollMarkers.length; i++) {
+			scrollMarkers[i].clear();
 		}
 	}
 

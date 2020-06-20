@@ -272,8 +272,11 @@
 			let elementIndex = 0;
 
 			const onEachElement = (element) => {
+				// SEARCHHACK
 				// TODO: remove notFromAce hack when removing aceeditor
+				// when removing just remove the 'notFromAce' part and leave the rest alone
 				if (!('selectedIndex' in options) || 'notFromAce' in options) return;
+				// SEARCHHACK
 
 				if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
 					markSelectedElement_ = element;
@@ -299,7 +302,8 @@
 				}, markKeywordOptions);
 			}
 
-			// TODO: Remove this block when removing Ace
+			// SEARCHHACK
+			// TODO: Remove this block (until the other SEARCHHACK marker) when removing Ace
 			// HACK: Aceeditor uses this view to handle all the searching
 			// The newer editor wont and this needs to be disabled in order to 
 			// prevent an infinite loop
@@ -312,6 +316,7 @@
 				// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
 				if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
 			}
+			// SEARCHHACK
 		}
 
 		let markLoader_ = { state: 'idle', whenDone: null };

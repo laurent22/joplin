@@ -21,6 +21,8 @@ const lightStyle = {
 
 	raisedBackgroundColor: '#e5e5e5',
 	raisedColor: '#222222',
+	markBackgroundColor: '#F3B717',
+	markColor: 'black',
 
 	warningBackgroundColor: '#FFD08D',
 

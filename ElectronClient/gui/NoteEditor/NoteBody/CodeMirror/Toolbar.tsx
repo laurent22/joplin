@@ -11,7 +11,7 @@ interface ToolbarProps {
 }
 
 function styles_(props:ToolbarProps) {
-	return buildStyle('AceEditorToolbar', props.theme, (/* theme:any*/) => {
+	return buildStyle('CodeMirrorToolbar', props.theme, (/* theme:any*/) => {
 		const theme = themeStyle(props.theme);
 		return {
 			root: {
