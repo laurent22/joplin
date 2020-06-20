@@ -11,7 +11,7 @@ const darkStyle = {
 	colorBright: '#ffffff', // For important text
 	dividerColor: '#555555',
 	selectedColor: '#333333',
-	urlColor: '#4E87EE',
+	urlColor: 'rgb(166,166,255)',
 
 	backgroundColor2: '#181A1D',
 	color2: '#ffffff',
