@@ -569,7 +569,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 <tr>
 <td>order</td>
-<td>int</td>
+<td>numeric</td>
 <td></td>
 </tr>
 <tr>
@@ -654,7 +654,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </li>
 </ul>
 <h3>Creating a note with a specific ID<a name="creating-a-note-with-a-specific-id" href="#creating-a-note-with-a-specific-id" class="heading-anchor">🔗</a></h3>
-<p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a 32 characters long hexadecimal string. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
+<p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a <strong>32 characters long string</strong> in hexadecimal. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
 <pre><code>  curl --data '{ &quot;id&quot;: &quot;00a87474082744c1a8515da6aa5792d2&quot;, &quot;title&quot;: &quot;My note with custom ID&quot;}' http://127.0.0.1:41184/notes
 </code></pre>
 <h2>PUT /notes/:id<a name="put-notes-id" href="#put-notes-id" class="heading-anchor">🔗</a></h2>
