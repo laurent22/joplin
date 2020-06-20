@@ -4,7 +4,7 @@ const { Logger } = require('lib/logger.js');
 const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
-const actionApi = require('lib/services/rest/ActionApi.desktop').default;
+const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const multiparty = require('multiparty');
 
