@@ -321,18 +321,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				line-height: 1.5em;
 			}
 			
-			.mark {
-				background: ${theme.markBackgroundColor};
-				color: ${theme.markColor} !important;
+			.search-marker {
+				background: ${theme.searchMarkerBackgroundColor};
+				color: ${theme.searchMarkerColor} !important;
 			}
 			
-			.mark-selected {
+			.search-marker-selected {
 				background: ${theme.selectedColor2};
 				color: ${theme.color2} !important;
 			}
 			
-			.mark-scrollbar {
-				background: ${theme.markBackgroundColor};
+			.search-marker-scrollbar {
+				background: ${theme.searchMarkerBackgroundColor};
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
 				opacity: .5;

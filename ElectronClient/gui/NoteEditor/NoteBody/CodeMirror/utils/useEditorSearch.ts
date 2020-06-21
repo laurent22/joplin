@@ -32,17 +32,17 @@ export default function useCursorUtils(CodeMirror: any) {
 				searchTerm = new RegExp(keyword.value, 'i');
 			}
 
-			scrollMarks.push(this.showMatchesOnScrollbar(searchTerm, true, 'mark-scrollbar'));
+			scrollMarks.push(this.showMatchesOnScrollbar(searchTerm, true, 'search-marker-scrollbar'));
 			const cursor = this.getSearchCursor(searchTerm);
 
 			while (cursor.findNext()) {
 				matches.push(cursor.pos);
-				marks.push(this.markText(cursor.from(), cursor.to(), { className: 'mark' }));
+				marks.push(this.markText(cursor.from(), cursor.to(), { className: 'search-marker' }));
 			}
 
 			if (options.selectedIndex < matches.length) {
 				const selected = matches[options.selectedIndex];
-				marks.push(this.markText(selected.from, selected.to, { className: 'mark-selected' }));
+				marks.push(this.markText(selected.from, selected.to, { className: 'search-marker-selected' }));
 				this.scrollIntoView(selected);
 			}
 
