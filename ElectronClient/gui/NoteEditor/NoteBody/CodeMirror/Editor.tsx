@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
+
+import * as CodeMirror from 'codemirror';
+
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
@@ -25,7 +28,6 @@ import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
 
-const CodeMirror = require('codemirror');
 const eventManager = require('lib/eventManager');
 
 export interface CancelledKeys {

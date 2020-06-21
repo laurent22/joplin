@@ -174,7 +174,7 @@ class Command extends BaseCommand {
 
 			this.stdout(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTargetId_), this.syncTargetId_));
 
-			if (!sync) throw new Error(_('Cannot initialize synchroniser.'));
+			if (!sync) throw new Error(_('Cannot initialise synchroniser.'));
 
 			this.stdout(_('Starting synchronisation...'));
 

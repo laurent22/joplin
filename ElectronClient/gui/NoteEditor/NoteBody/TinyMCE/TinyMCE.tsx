@@ -779,17 +779,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
 
-			// Need to clear UndoManager to avoid this problem:
-			// - Load note 1
-			// - Make a change
-			// - Load note 2
-			// - Undo => content is that of note 1
-
-			// The doc is not very clear what's the different between
-			// clear() and reset() but it seems reset() works best, in
-			// particular for the onPaste bug.
-			editor.undoManager.reset();
-
 			dispatchDidUpdate(editor);
 		};
 
@@ -799,6 +788,21 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			cancelled = true;
 		};
 	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos]);
+
+	useEffect(() => {
+		if (!editor) return;
+
+		// Need to clear UndoManager to avoid this problem:
+		// - Load note 1
+		// - Make a change
+		// - Load note 2
+		// - Undo => content is that of note 1
+
+		// The doc is not very clear what's the different between
+		// clear() and reset() but it seems reset() works best, in
+		// particular for the onPaste bug.
+		editor.undoManager.reset();
+	}, [editor, props.contentKey]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
