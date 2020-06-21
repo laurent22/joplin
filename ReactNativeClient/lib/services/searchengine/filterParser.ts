@@ -1,8 +1,14 @@
 
 interface Term {
-  name: string;
-  value: string;
+	name: string
+	value: string
+	negated: boolean
 }
+
+const makeTerm = (name: string, value: string): Term => {
+	if (name.startsWith('-')) { return { name: name.slice(1), value: value, negated: true }; }
+	return { name: name, value: value, negated: false };
+};
 
 const getTerms = (query: string) : Term[] => {
 	const terms: Term[] = [];
@@ -15,7 +21,7 @@ const getTerms = (query: string) : Term[] => {
 		if (c === '"') {
 			currentTerm += c; // keep the quotes
 			if (inQuote) {
-				terms.push({ name: currentCol, value: currentTerm });
+				terms.push(makeTerm(currentCol, currentTerm));
 				currentTerm = '';
 				inQuote = false;
 			} else {
@@ -26,7 +32,7 @@ const getTerms = (query: string) : Term[] => {
 
 		if (c === ' ' && !inQuote) {
 			if (!currentTerm) continue;
-			terms.push({ name: currentCol, value: currentTerm });
+			terms.push(makeTerm(currentCol, currentTerm));
 			currentCol = '_';
 			currentTerm = '';
 			continue;
@@ -40,11 +46,11 @@ const getTerms = (query: string) : Term[] => {
 
 		currentTerm += c;
 	}
-	if (currentTerm) terms.push({ name: currentCol, value: currentTerm });
+	if (currentTerm) terms.push(makeTerm(currentCol, currentTerm));
 	return terms;
 };
 
-const parseQuery = (query: string): Array<Term> => {
+const parseQuery = (query: string): Term[] => {
 	const validFilters = new Set(['any', 'title', '-title', 'body', '-body', 'tag',
 		'-tag', 'notebook', 'created', '-created',  '-updated', 'updated', 'type',
 		'iscompleted', 'latitude', '-latitude', 'longitude', '-longitude',
@@ -54,8 +60,7 @@ const parseQuery = (query: string): Array<Term> => {
 
 	const result: Term[] = [];
 	for (let i = 0; i < terms.length; i++) {
-		const name = terms[i].name;
-		const value = terms[i].value;
+		const { name, value, negated } = terms[i];
 
 		if (name !== '_') {
 			if (!validFilters.has(name)) {
@@ -64,23 +69,23 @@ const parseQuery = (query: string): Array<Term> => {
 
 			if (name === 'tag' || name === '-tag' || name === 'notebook' || name === 'resource' || name === '-resource') {
 				const fuzzyValue = value.replace(/[*]/g, '%');
-				result.push({ name, value: fuzzyValue });
+				result.push({ name, value: fuzzyValue, negated });
 			} else if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world
 				const values = trimQuotes(value).split(' ');
 				values.forEach(value => {
-					result.push({ name, value });
+					result.push({ name, value, negated });
 				});
 			} else {
-				result.push({ name, value });
+				result.push({ name, value, negated });
 			}
 		} else {
-			// text to fts search
+			// text to fts search, here value has the '-' if negated
 			if (value.startsWith('-')) {
-				result.push({ name: '-text', value: value.slice(1) });
+				result.push({ name: 'text', value: value.slice(1), negated: true });
 			} else {
-				result.push({ name: 'text', value: value });
+				result.push({ name: 'text', value: value, negated: false });
 			}
 		}
 	}
@@ -91,20 +96,5 @@ const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, 
 
 export default function filterParser(searchString: string) {
 	searchString = searchString.trim();
-	const filters: Map<string, string[]> = new Map();
-
-	const matches = parseQuery(searchString);
-	for (const match of matches) {
-		const { name, value } = match;
-
-		if (!value) continue;
-
-		if (filters.has(name)) {
-			filters.set(name, [...filters.get(name), value]);
-		} else {
-			filters.set(name, [value]);
-		}
-	}
-
-	return filters;
+	return parseQuery(searchString);
 }

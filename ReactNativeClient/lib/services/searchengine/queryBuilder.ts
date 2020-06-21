@@ -1,356 +1,458 @@
-const { time } = require('lib/time-utils.js');
+const moment = require('moment');
 
-const tagFilter = (tags: string[], intersect: boolean = true, negated: boolean = false) => { // note_tags.tag_id  (NOT) IN (SELECT
-	let result = new Array(tags.length).fill(`${intersect ? 'INTERSECT' : 'UNION'} SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?)`).join(' ');
-	result = intersect ? `SELECT note_tags.note_id as id FROM note_tags WHERE 1 ${result}` : `SELECT note_tags.note_id as id FROM note_tags WHERE 0 ${result}`;
-	result = negated ? `tag_filter_negated as (${result})` : `tag_filter as (${result})`;
-	return result;
-};
+interface Term {
+	name: string
+	value: string
+	negated: boolean
+}
 
+const tagFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
+	const tagIDs = 'SELECT tags.id from tags WHERE tags.title LIKE ?';
 
-// WITH RECURSIVE resource_filter as (
-// 	SELECT note_resources.note_id as id FROM note_resources WHERE 1 INTERSECT SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1
-// 	AND note_resources.resource_id IN (SELECT resources.id from resources WHERE resources.mime LIKE 'application/pdf'))
+	const noteIDsWithTag = `SELECT note_tags.note_id AS id
+							FROM note_tags
+							WHERE note_tags.tag_id IN (${tagIDs})`;
 
-const resourceFilter = (mimeTypes: string[], intersect: boolean = true, negated: boolean = false) => {
-	let result = new Array(mimeTypes.length).fill(`${intersect ? 'INTERSECT' : 'UNION'} SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1 AND note_resources.resource_id IN (SELECT resources.id from resources WHERE resources.mime LIKE ?)`).join(' ');
-	result = intersect ? `SELECT note_resources.note_id as id FROM note_resources WHERE 1 ${result}` : `SELECT note_resources.note_id as id FROM note_resources WHERE 0 ${result}`;
-	result = negated ? `resource_filter_negated as (${result})` : `resource_filter as (${result})`;
-	return result;
-};
+	const requiredTags = filters.filter(x => x.name === 'tag' && !x.negated).map(x => x.value);
+	const excludedTags = filters.filter(x => x.name === 'tag' && x.negated).map(x => x.value);
 
-const negatedAnyResourceFilter = (mimeTypes: string[]) => {
-	let result = new Array(mimeTypes.length).fill('select * from (select * from notes_with_resources except SELECT note_resources.note_id FROM note_resources WHERE note_resources.is_associated=1 AND note_resources.resource_id IN (select resources.id from resources where resources.mime like ?))').join(' UNION ');
-	result = `resource_filter_negated(id) as (${result})`;
-	return result;
-};
+	if (relation === 'AND' && (requiredTags.length > 0)) {
+		const withRequired = `notes_with_required_tags
+								AS (
+									SELECT note_tags.note_id as id
+									FROM note_tags
+									WHERE 1 INTERSECT ${new Array(requiredTags.length).fill(noteIDsWithTag).join(' INTERSECT ')})`;
 
-// WITH RECURSIVE tagged_notes
-// AS
-// (
-// SELECT DISTINCT note_tags.note_id FROM note_tags
-// ),
-// tag_filter_negated(id)
-// as
-// (
-// select * from (
-// select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like 'tag3')
-// )
-// UNION
-// select * from (
-// select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like 'tag1')
-// )
-// )
+		const where = `AND ROWID IN (
+								SELECT notes_normalized.ROWID
+								FROM notes_with_required_tags
+								JOIN notes_normalized
+								ON notes_with_required_tags.id=notes_normalized.id
+							)`;
+		withs.push(withRequired);
+		params.push(...requiredTags);
+		conditions.push(where);
+	}
+	if (relation === 'AND' && (excludedTags.length > 0)) {
+		const withExcluded = `notes_with_any_excluded_tags
+								AS (
+									SELECT note_tags.note_id as id
+									FROM note_tags
+									WHERE 0 UNION ${new Array(excludedTags.length).fill(noteIDsWithTag).join(' UNION ')}
+								)`;
 
+		const whereNot = `AND ROWID NOT IN (
+								SELECT notes_normalized.ROWID
+								FROM notes_with_any_excluded_tags
+								JOIN notes_normalized
+								ON notes_with_any_excluded_tags.id=notes_normalized.id
+							)`;
 
-const negatedAnyTagFilter = (tags: string[]) => {
-	let result = new Array(tags.length).fill('select * from (select * from tagged_notes except SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags where tags.title like ?))').join(' UNION ');
-	result = `tag_filter_negated(id) as (${result})`;
-	return result;
-};
+		withs.push(withExcluded);
+		params.push(...excludedTags);
+		conditions.push(whereNot);
+	}
 
+	if (relation === 'OR' && (requiredTags.length > 0)) {
+		const withRequired = `notes_with_any_required_tags
+								AS (
+									SELECT note_tags.note_id as id
+									FROM note_tags
+									WHERE 0 UNION ${new Array(requiredTags.length).fill(noteIDsWithTag).join(' UNION ')}
+								)`;
 
-const noteBookFilter = (names: string[], negated: boolean = false) => {
-	const likes = new Array(names.length).fill('folders.title LIKE ?');
-	if (negated) {
-		return `child_notebooks_negated(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
-		union all select folders.id from folders JOIN child_notebooks_negated on folders.parent_id=child_notebooks_negated.id)`;
-	} else {
-		return `child_notebooks(id) as (select folders.id from folders where id IN (select id from folders where ${likes.join(' OR ')})
-		union all select folders.id from folders JOIN child_notebooks on folders.parent_id=child_notebooks.id)`;
+		const where = `OR ROWID IN (
+									SELECT notes_normalized.ROWID
+									FROM notes_with_any_required_tags
+									JOIN notes_normalized
+									ON notes_with_any_required_tags.id=notes_normalized.id
+								)`;
+		withs.push(withRequired);
+		params.push(...requiredTags);
+		conditions.push(where);
+	}
+
+	if (relation === 'OR' && (excludedTags.length > 0)) {
+		const allNotesWithTags = `all_notes_with_tags
+								AS (
+									SELECT DISTINCT note_tags.note_id AS id FROM note_tags
+								)`;
+		withs.push(allNotesWithTags); // for reuse
+
+		const notesWithoutExcludedTag = `SELECT * FROM (
+											SELECT *
+											FROM all_notes_with_tags
+											EXCEPT ${noteIDsWithTag}
+										)`;
+
+		const withNoExcluded = `notes_without_atleast_one_excluded_tag
+								AS (
+									${new Array(excludedTags.length).fill(notesWithoutExcludedTag).join(' UNION ')}
+								)`;
+
+		const where = `OR ROWID IN (
+									SELECT notes_normalized.ROWID
+									FROM notes_without_atleast_one_excluded_tag
+									JOIN notes_normalized
+									ON notes_without_atleast_one_excluded_tag.id=notes_normalized.id
+								)`;
+		withs.push(withNoExcluded);
+		params.push(...excludedTags);
+		conditions.push(where);
 	}
 };
 
-const hyphenateDate = (date: string) => `${date.slice(0,4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
+const notebookFilter = (filters: Term[], withs: string[], conditions: string[], params: string[]) => {
+	const notebooks = filters.filter(x => x.name === 'notebook' && !x.negated).map(x => x.value);
+	if (notebooks.length === 0) return;
 
-const getUnixMs = (date:string) => Date.parse(hyphenateDate(date));
+	const likes = new Array(notebooks.length).fill('folders.title LIKE ?').join(' OR ');
+	const withInNotebook = `
+	notebooks_in_scope(id)
+	AS (
+		SELECT folders.id
+		FROM folders
+		WHERE id
+		IN (
+			SELECT id
+			FROM folders
+			WHERE ${likes}
+		)
+		UNION ALL
+		SELECT folders.id
+		FROM folders
+		JOIN notebooks_in_scope
+		ON folders.parent_id=notebooks_in_scope.id
+	)`;
+	const where = `AND ROWID IN (
+		SELECT notes_normalized.ROWID
+		FROM notebooks_in_scope
+		JOIN notes_normalized
+		ON notebooks_in_scope.id=notes_normalized.parent_id
+	)`;
 
-const getNextMonthDate = (value: string) : string => {
-	let endYear = value.slice(0, 4);
-	let endMonth = value.slice(-2);
-	const incYear: boolean = ((Number(endMonth) + 1) / 12) > 1.0;
-	endMonth = ((Number(endMonth) + 1) % 12).toString();
-	if (endMonth.length == 1) endMonth = `0${endMonth}`;
-	if (incYear) endYear = (Number(endYear) + 1).toString();
-	return `${endYear + endMonth}01`;
+	withs.push(withInNotebook);
+	params.push(...notebooks);
+	conditions.push(where);
 };
 
-const makeDateFilter = (type: string, values: string[], queryParts: string[], params: string[], negated: boolean = false, relation: string): void => {
+
+const resourceFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
+	const resourceIDs = 'SELECT resources.id from resources WHERE resources.mime LIKE ?';
+
+	const noteIDsWithResource = `
+	SELECT note_resources.note_id AS id
+	FROM note_resources
+	WHERE note_resources.is_associated=1
+	AND note_resources.resource_id IN (${resourceIDs})`;
+
+	const requiredResources = filters.filter(x => x.name === 'resource' && !x.negated).map(x => x.value);
+	const excludedResources = filters.filter(x => x.name === 'resource' && x.negated).map(x => x.value);
+
+	if (relation === 'AND' && (requiredResources.length > 0)) {
+		const withRequired = `notes_with_required_resources
+								AS (
+									SELECT note_resources.note_id as id
+									FROM note_resources
+									WHERE 1 INTERSECT ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' INTERSECT ')})`;
+
+		const where = `AND ROWID IN (
+								SELECT notes_normalized.ROWID
+								FROM notes_with_required_resources
+								JOIN notes_normalized
+								ON notes_with_required_resources.id=notes_normalized.id
+							)`;
+		withs.push(withRequired);
+		params.push(...requiredResources);
+		conditions.push(where);
+	}
+	if (relation === 'AND' && (excludedResources.length > 0)) {
+		const withExcluded = `notes_with_any_excluded_resources
+								AS (
+									SELECT note_resources.note_id as id
+									FROM note_resources
+									WHERE 0 UNION ${new Array(excludedResources.length).fill(noteIDsWithResource).join(' UNION ')}
+								)`;
+
+		const whereNot = `AND ROWID NOT IN (
+								SELECT notes_normalized.ROWID
+								FROM notes_with_any_excluded_resources
+								JOIN notes_normalized
+								ON notes_with_any_excluded_resources.id=notes_normalized.id
+							)`;
+
+		withs.push(withExcluded);
+		params.push(...excludedResources);
+		conditions.push(whereNot);
+	}
+
+	if (relation === 'OR' && (requiredResources.length > 0)) {
+		const withRequired = `notes_with_any_required_resources
+								AS (
+									SELECT note_resources.note_id as id
+									FROM note_resources
+									WHERE 0 UNION ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' UNION ')}
+								)`;
+
+		const where = `OR ROWID IN (
+									SELECT notes_normalized.ROWID
+									FROM notes_with_any_required_resources
+									JOIN notes_normalized
+									ON notes_with_any_required_resources.id=notes_normalized.id
+								)`;
+		withs.push(withRequired);
+		params.push(...requiredResources);
+		conditions.push(where);
+	}
+
+	if (relation === 'OR' && (excludedResources.length > 0)) {
+		const allNotesWithResources = `all_notes_with_resources
+								AS (
+									SELECT DISTINCT note_resources.note_id AS id FROM note_resources
+								)`;
+		withs.push(allNotesWithResources); // for reuse
+
+		const notesWithoutExcludedResource = `SELECT * FROM (
+											SELECT *
+											FROM all_notes_with_resources
+											EXCEPT ${noteIDsWithResource}
+										)`;
+
+		const withNoExcluded = `notes_without_atleast_one_excluded_resource
+								AS (
+									${new Array(excludedResources.length).fill(notesWithoutExcludedResource).join(' UNION ')}
+								)`;
+
+		const where = `OR ROWID IN (
+									SELECT notes_normalized.ROWID
+									FROM notes_without_atleast_one_excluded_resource
+									JOIN notes_normalized
+									ON notes_without_atleast_one_excluded_resource.id=notes_normalized.id
+								)`;
+		withs.push(withNoExcluded);
+		params.push(...excludedResources);
+		conditions.push(where);
+	}
+};
+
+const typeFilter = (filters: Term[], conditions: string[], relation: string) => {
+	const typeOfNote = filters.filter(x => x.name === 'type' && !x.negated).map(x => x.value);
+	typeOfNote.forEach(type => {
+		conditions.push(`${relation} ROWID IN (
+			SELECT ROWID
+			FROM notes_normalized
+			WHERE notes_normalized.is_todo=${type === 'todo' ? 1 : 0}
+		)`); // check in filterParser itself whether type is todo|note
+	});
+};
+
+const completedFilter = (filters: Term[], conditions: string[], relation: string) => {
+	const values = filters.filter(x => x.name === 'iscompleted' && !x.negated).map(x => x.value);
+	values.forEach(value => {
+		conditions.push(`${relation} ROWID IN (
+			SELECT ROWID
+			FROM notes_normalized
+			WHERE notes_normalized.is_todo = 1
+			AND notes_normalized.todo_completed ${value === '1' ? '!= ' : '= '} 0
+		)`); // check in filterParser itself whether value is 1|0
+	});
+};
+
+const getUnixMs = (date:string): string => {
 	const yyyymmdd = /^[0-9]{8}$/;
 	const yyyymm = /^[0-9]{6}$/;
 	const yyyy = /^[0-9]{4}$/;
 	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
 
-	const msInDay = 60 * 60 * 24 * 1000;
 
-	values.forEach(value => {
-		queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.user_${type}_time ${negated ? '<' : '>='} ?)`);
-		if (yyyymmdd.test(value)) {
-			const msOfDay = getUnixMs(value);
-			const msOfNextDay = msOfDay + msInDay;
-			negated ? params.push(msOfNextDay.toString()) : params.push(msOfDay.toString()) ;
-		} else if (yyyymm.test(value)) {
-			const msOfMonth = getUnixMs(`${value}01`); // make day start from the 1st day of the month
-			const msOfNextMonth = getUnixMs(getNextMonthDate(value));
-			negated ? params.push(msOfNextMonth.toString()) : params.push(msOfMonth.toString());
-		} else if (yyyy.test(value)) {
-			const msOfYear = getUnixMs(`${value}0101`); // make day start from the 1st day of the month 1st month of year
-			const msOfNextYear = getUnixMs(`${(Number(value) + 1).toString()}0101`);
-			negated ? params.push(msOfNextYear.toString()) : params.push(msOfYear.toString());
-		} else if (smartValue.test(value)) {
-			const match = smartValue.exec(value);
-			const timeUnit = match[1]; // eg. day, week, month, year
-			const n = Number(match[2]); // eg. 1, 12, 101
-			const msStart = time.goBackInTime(n, timeUnit); // eg. goBackInTime(1, 'day')
-			let msEnd = null;
-			switch (timeUnit) {
-			case 'day': msEnd = Number(msStart) + msInDay; break;
-			case 'week': msEnd = Number(msStart) + (msInDay * 7); break;
-			case 'month': msEnd = Number(msStart) + (msInDay * 7 * 30); break; // not accurate! maybe use goForwardInTime(startTime?, n, timeUnit)
-			case 'year': msEnd = Number(msStart) + (msInDay * 7 * 30 * 12); break;  // not accurate!
-			}
-			negated ? params.push(msEnd.toString()) : params.push(msStart.toString());
-		} else {
-			throw new Error(`Date value of ${type} in unknown format: ${value}`);
-		}
-	});
-};
-
-
-const makeLocationFilter = (name: string, values: string[], queryParts: string[], params: string[], negated: boolean = false, relation: string): void => {
-	values.forEach(value => {
-		queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.${name} ${negated ? '<=' : '>='} ?)`);
-		params.push(value);
-	});
-};
-
-const makeMatchQuery = (name: string, filters:Map<string, string[]>) => {
-	if (name === 'title' || name === 'body') {
-		return filters.get(name).map(value => `${name}:${value}`);
-	} else if (name === 'text') {
-		return filters.get(name);
+	if (yyyymmdd.test(date)) {
+		return moment.utc(date, 'YYYYMMDD').format('x');
+	} else if (yyyymm.test(date)) {
+		return moment.utc(date, 'YYYYMM').format('x');
+	} else if (yyyy.test(date)) {
+		return moment.utc(date, 'YYYY').format('x');
+	} else if (smartValue.test(date)) {
+		const match = smartValue.exec(date);
+		const timeUnit = match[1]; // eg. day, week, month, year
+		const num = Number(match[2]); // eg. 1, 12, 101
+		return moment.utc().startOf(timeUnit).subtract(num, timeUnit).format('x');
 	} else {
-		throw new Error(`Invalid filter for match query: ${name}`);
+		throw new Error('Invalid date format!');
 	}
 };
 
-export default function queryBuilder(filters: Map<string, string[]>) {
-	let query;
+const dateFilter = (filters: Term[], conditons: string[], params: string[], relation: string) => {
+	const dateTerms = filters.filter(x => x.name === 'created' || x.name === 'updated');
+	dateTerms.forEach(dateTerm => {
+		conditons.push(`
+		${relation} ROWID IN (
+			SELECT ROWID
+			FROM notes_normalized
+			WHERE notes_normalized.user_${dateTerm.name}_time ${dateTerm.negated ? '<' : '>='} ?
+		)`);
+		params.push(getUnixMs(dateTerm.value));
+	});
+};
+
+
+const locationFilter = (filters: Term[], conditons: string[], params: string[], relation: string) => {
+	const locationTerms = filters.filter(x => x.name === 'latitude' || x.name === 'longitude' || x.name === 'altitude');
+
+	locationTerms.forEach(locationTerm => {
+		conditons.push(`
+		${relation} ROWID IN (
+			SELECT ROWID
+			FROM notes_normalized
+			WHERE notes_normalized.${locationTerm.name} ${locationTerm.negated ? '<' : '>='} ?
+		)`);
+		params.push(locationTerm.value);
+	});
+};
+
+const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: string) => {
+	const type = excludedTerms[0].name;
+
+	if (excludedTerms && relation === 'AND') {
+		conditions.push(`
+			AND ROWID NOT IN (
+				SELECT ROWID
+				FROM notes_fts
+				WHERE notes_fts.${type} MATCH ?
+			)
+		`);
+		params.push(excludedTerms.map(x => x.value).join(' OR '));
+	}
+
+	if (excludedTerms && relation === 'OR') {
+		excludedTerms.forEach(term => {
+			conditions.push(`
+				OR ROWID IN (
+					SELECT *
+					FROM (
+						SELECT ROWID
+						FROM notes_fts
+						EXCEPT
+						SELECT ROWID
+						FROM notes_fts
+						WHERE notes_fts.${type} MATCH ?
+					)
+				)
+			`);
+			params.push(term.value);
+		});
+	}
+};
+
+
+const textFilter = (filters: Term[], conditions: string[], params: string[], relation: string) => {
+	const allTerms = filters.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
+
+	const includedTerms = allTerms.filter(x => !x.negated);
+	if (includedTerms.length > 0) {
+		conditions.push(`${relation} notes_fts MATCH ?`);
+		const termsToMatch = includedTerms.map(term => {
+			if (term.name === 'text') return term.value;
+			else return `${term.name}:${term.value}`;
+		});
+		const matchQuery = (relation === 'OR') ? termsToMatch.join(' OR ') : termsToMatch.join(' ');
+		params.push(matchQuery);
+	}
+
+	const excludedTextTerms = allTerms.filter(x => x.name === 'text' && x.negated);
+	const excludedTitleTerms = allTerms.filter(x => x.name === 'title' && x.negated);
+	const excludedBodyTerms = allTerms.filter(x => x.name === 'body' && x.negated);
+
+	if ((excludedTextTerms.length > 0) && relation === 'AND') {
+		conditions.push(`
+			AND ROWID NOT IN (
+			SELECT ROWID
+			FROM notes_fts
+			WHERE notes_fts MATCH ?
+		)`);
+		params.push(excludedTextTerms.map(x => x.value).join(' OR '));
+	}
+
+	if ((excludedTextTerms.length > 0) && relation === 'OR') {
+		excludedTextTerms.map(textTerm => {
+			conditions.push(`
+				OR ROWID IN (
+				SELECT *
+				FROM (
+					SELECT ROWID
+					FROM notes_fts
+					EXCEPT
+					SELECT ROWID FROM notes_fts
+					WHERE notes_fts MATCH ?
+			))`);
+			params.push(textTerm.value);
+		});
+	}
+
+	if (excludedTitleTerms.length > 0) {
+		addExcludeTextConditions(excludedTitleTerms, conditions, params, relation);
+	}
+
+	if (excludedBodyTerms.length > 0) {
+		addExcludeTextConditions(excludedBodyTerms, conditions, params, relation);
+	}
+
+};
+
+const getDefaultRelation = (filters: Term[]): 'OR' | 'AND' => {
+	const anyTerm = filters.find(term => term.name === 'any');
+	if (anyTerm) { return (anyTerm.value === '1') ? 'OR' : 'AND'; }
+	return 'AND';
+};
+
+const getConnective = (filters: Term[], relation: 'OR' | 'AND'): string => {
+	const notebookTerm = filters.find(x => x.name === 'notebook');
+	return (!notebookTerm && (relation === 'OR')) ? 'ROWID=-1' : '1'; // ROWID=-1 acts as 0 (something always false)
+};
+
+export default function queryBuilder(filters: Term[]) {
 	const queryParts: string[] = [];
 	const params: string[] = [];
 	const withs: string[] = [];
 
-	queryParts.push(`SELECT
+	// console.log("testing beep beep boop boop")
+	// console.log(filters);
+
+	const relation: 'AND' | 'OR' = getDefaultRelation(filters);
+
+	// console.log(`relations = ${relation}`);
+	// console.log(filters);
+
+	queryParts.push(`
+	SELECT
 	notes_fts.id,
 	notes_fts.title,
 	offsets(notes_fts) AS offsets,
+	notes_fts.user_created_time,
 	notes_fts.user_updated_time,
 	notes_fts.is_todo,
 	notes_fts.todo_completed,
 	notes_fts.parent_id
-	FROM notes_fts WHERE`);
+	FROM notes_fts
+	WHERE ${getConnective(filters, relation)}`);
+
+	notebookFilter(filters, withs, queryParts, params);
+
+	tagFilter(filters, withs, queryParts, params, relation);
+
+	resourceFilter(filters, withs, queryParts, params, relation);
+
+	typeFilter(filters, queryParts, relation);
+
+	completedFilter(filters, queryParts, relation);
+
+	dateFilter(filters, queryParts, params, relation);
+
+	locationFilter(filters, queryParts, params, relation);
+
+	textFilter(filters, queryParts, params, relation);
 
 
-	// console.log("testing beep beep boop boop")
-	// console.log(filters);
-
-	const defaultRelation = 'AND';
-	let relation = defaultRelation;
-
-	if (filters.has('any')) {
-		const value = filters.get('any')[0]; // Only consider the first any
-		if (value === '1') relation = 'OR';
-	}
-
-	if (!filters.has('notebook') && filters.has('any')) {
-		queryParts.push('rowid=-1'); // something impossible to act as WHERE 0
-	} else {
-		queryParts.push('1');
-	}
-
-	if (filters.has('notebook')) {
-		const values = filters.get('notebook');
-		withs.push(noteBookFilter(values));
-		values.forEach(value => params.push(value));
-		queryParts.push('AND ROWID IN (SELECT notes_normalized.ROWID from (child_notebooks) JOIN notes_normalized on child_notebooks.id=notes_normalized.parent_id)');
-	}
-
-	// if (filters.has('-notebook')) {
-	// 	const values = filters.get('-notebook');
-	// 	withs.push(noteBookFilter(values, true));
-	// 	values.forEach(value => params.push(value));
-	// 	queryParts.push('AND ROWID NOT IN (SELECT notes_normalized.ROWID from (child_notebooks_negated) JOIN notes_normalized on child_notebooks_negated.id=notes_normalized.parent_id)');
-	// }
-
-	if (filters.has('tag')) {
-		const values = filters.get('tag');
-		withs.push(tagFilter(values, relation === 'AND', false)); // intersect/union depending on relation
-		values.forEach((value) => params.push(value));
-		queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter) JOIN notes_normalized on tag_filter.id=notes_normalized.id)`);
-	}
-
-	if (filters.has('-tag')) {
-		const values = filters.get('-tag');
-		if (relation === 'AND') {
-			withs.push(tagFilter(values, false, true));
-			queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
-		}
-		if (relation === 'OR') {
-			withs.push('tagged_notes AS (SELECT DISTINCT note_tags.note_id FROM note_tags)');
-			withs.push(negatedAnyTagFilter(values));
-			queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (tag_filter_negated) JOIN notes_normalized on tag_filter_negated.id=notes_normalized.id)`);
-		}
-		values.forEach((value) => params.push(value));
-	}
-
-	if (filters.has('resource')) {
-		const values = filters.get('resource');
-		withs.push(resourceFilter(values, relation === 'AND', false)); // intersect/union depending on relation
-		values.forEach((value) => params.push(value));
-		queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (resource_filter) JOIN notes_normalized on resource_filter.id=notes_normalized.id)`);
-	}
-
-	if (filters.has('-resource')) {
-		const values = filters.get('-resource');
-		if (relation === 'AND') {
-			withs.push(resourceFilter(values, false, true));
-			queryParts.push(`${relation} ROWID NOT IN (SELECT notes_normalized.ROWID from (resource_filter_negated) JOIN notes_normalized on resource_filter_negated.id=notes_normalized.id)`);
-		}
-		if (relation === 'OR') {
-			withs.push('notes_with_resources AS (SELECT DISTINCT note_tags.note_id FROM note_tags)');
-			withs.push(negatedAnyResourceFilter(values));
-			queryParts.push(`${relation} ROWID IN (SELECT notes_normalized.ROWID from (resource_filter_negated) JOIN notes_normalized on resource_filter_negated.id=notes_normalized.id)`);
-		}
-		values.forEach(value => params.push(value));
-	}
-
-	if (filters.has('type')) {
-		const values = filters.get('type');
-		values.forEach(value => {
-			if (value === 'todo') {
-				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1)`);
-			} else if (value == 'note') {
-				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 0)`);
-			} else {
-				throw new Error(`Invalid argument for filter todo: ${value}`);
-			}
-		});
-	}
-
-	if (filters.has('iscompleted')) {
-		const values = filters.get('iscompleted');
-		values.forEach(value => {
-			if (value === '1') {
-				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed != 0)`);
-			} else if (value === '0') {
-				queryParts.push(`${relation} ROWID IN (SELECT ROWID from notes_normalized where notes_normalized.is_todo = 1 AND notes_normalized.todo_completed = 0)`);
-			} else {
-				throw new Error(`Invalid argument for filter iscompleted: ${value}`);
-			}
-		});
-	}
-
-	if (filters.has('created')) {
-		makeDateFilter('created', filters.get('created'), queryParts, params, false, relation);
-	}
-
-	if (filters.has('-created')) {
-		makeDateFilter('created', filters.get('-created'), queryParts, params, true, relation);
-	}
-
-	if (filters.has('updated')) {
-		makeDateFilter('updated', filters.get('updated'), queryParts, params, false, relation);
-	}
-
-	if (filters.has('-updated')) {
-		makeDateFilter('updated', filters.get('-updated'), queryParts, params, true, relation);
-	}
-
-	if (filters.has('latitude')) {
-		makeLocationFilter('latitude', filters.get('latitude'), queryParts, params, false, relation);
-	}
-
-	if (filters.has('-latitude')) {
-		makeLocationFilter('latitude', filters.get('-latitude'), queryParts, params, true, relation);
-	}
-
-	if (filters.has('longitude')) {
-		makeLocationFilter('longitude', filters.get('longitude'), queryParts, params, false, relation);
-	}
-
-	if (filters.has('-longitude')) {
-		makeLocationFilter('longitude', filters.get('-longitude'), queryParts, params, true, relation);
-	}
-
-	if (filters.has('altitude')) {
-		makeLocationFilter('altitude', filters.get('altitude'), queryParts, params, false, relation);
-	}
-
-	if (filters.has('-altitude')) {
-		makeLocationFilter('altitude', filters.get('-altitude'), queryParts, params, true, relation);
-	}
-
-	if (filters.has('title') || filters.has('body') || filters.has('text')) {
-		// there is something to fts search
-		queryParts.push(`${relation} notes_fts MATCH ?`);
-		let match: string[] = [];
-
-		if (filters.has('title')) {
-			match = match.concat(makeMatchQuery('title', filters));
-		}
-		if (filters.has('body')) {
-			match = match.concat(makeMatchQuery('body', filters));
-		}
-		if (filters.has('text')) {
-			match = match.concat(makeMatchQuery('text', filters));
-		}
-
-		if (relation === 'AND') { params.push(match.join(' ').trim()); }
-		if (relation === 'OR') { params.push(match.join(' OR ').trim()); }
-	}
-
-	if (filters.has('-text')) {
-		if (relation === 'AND') {
-			queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts MATCH ?)');
-			params.push(filters.get('-text').join(' OR '));
-		}
-
-		if (relation === 'OR') {
-			filters.get('-text').forEach(value => {
-				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts match ?))');
-				params.push(value);
-			});
-		}
-	}
-
-	if (filters.has('-title')) {
-		if (relation === 'AND') {
-			queryParts.push(`${relation} ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.title MATCH ?)`);
-			params.push(filters.get('-title').join(' OR '));
-		}
-
-		if (relation === 'OR') {
-			filters.get('-title').forEach(value => {
-				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts.title match ?))');
-				params.push(value);
-			});
-		}
-	}
-
-	if (filters.has('-body')) {
-		if (relation === 'AND') {
-			queryParts.push('AND ROWID NOT IN (SELECT ROWID FROM notes_fts WHERE notes_fts.body MATCH ?)');
-			params.push(filters.get('-body').join(' OR '));
-		}
-		if (relation === 'OR') {
-			filters.get('-body').forEach(value => {
-				queryParts.push('OR ROWID IN (select * from (select rowid from notes_fts except select rowid from notes_fts where notes_fts.body match ?))');
-				params.push(value);
-			});
-		}
-
-	}
-
+	let query;
 	if (withs.length > 0) {
 		query = ['WITH RECURSIVE' , withs.join(',') ,queryParts.join(' ')].join(' ');
 	} else {

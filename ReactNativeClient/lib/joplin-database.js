@@ -758,15 +758,14 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 32) {
-			
-				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_update');
-				queries.push('DROP TRIGGER IF EXISTS notes_fts_before_delete');
-				queries.push('DROP TRIGGER IF EXISTS notes_after_update');
-				queries.push('DROP TRIGGER IF EXISTS notes_after_insert');
+				queries.push('DROP TRIGGER notes_fts_before_update');
+				queries.push('DROP TRIGGER notes_fts_before_delete');
+				queries.push('DROP TRIGGER notes_after_update');
+				queries.push('DROP TRIGGER notes_after_insert');
 
-				queries.push('DROP INDEX IF EXISTS notes_normalized_id');
-				queries.push('DROP TABLE IF EXISTS notes_normalized');
-				queries.push('DROP TABLE IF EXISTS notes_fts');
+				queries.push('DROP INDEX notes_normalized_id');
+				queries.push('DROP TABLE notes_normalized');
+				queries.push('DROP TABLE notes_fts');
 
 
 				const notesNormalized = `

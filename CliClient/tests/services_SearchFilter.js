@@ -388,21 +388,17 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 
 		rows = await engine.search('-created:20200519');
-		expect(rows.length).toBe(2);
-		expect(ids(rows)).toContain(n2.id);
-		expect(ids(rows)).toContain(n3.id);
-
-		rows = await engine.search('-created:20200518');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n3.id);
+
 	}));
 
 	it('should support filtering by between two dates', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this on', body: 'January 01 2020', user_created_time: Date.parse('2020-01-01') });
-		const n2 = await Note.save({ title: 'I made this on', body: 'February 15 2020', user_created_time: Date.parse('2020-02-15') });
-		const n3 = await Note.save({ title: 'I made this on', body: 'March 25 2019', user_created_time: Date.parse('2019-03-25') });
-		const n4 = await Note.save({ title: 'I made this on', body: 'March 01 2018', user_created_time: Date.parse('2018-03-01') });
+		const n1 = await Note.save({ title: 'January 01 2020', body: 'January 01 2020', user_created_time: Date.parse('2020-01-01') });
+		const n2 = await Note.save({ title: 'February 15 2020', body: 'February 15 2020', user_created_time: Date.parse('2020-02-15') });
+		const n3 = await Note.save({ title: 'March 25 2019', body: 'March 25 2019', user_created_time: Date.parse('2019-03-25') });
+		const n4 = await Note.save({ title: 'March 01 2018', body: 'March 01 2018', user_created_time: Date.parse('2018-03-01') });
 
 		await engine.syncTables();
 
@@ -412,14 +408,12 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 
 		rows = await engine.search('created:201901 -created:202002');
-		expect(rows.length).toBe(3);
+		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n3.id);
-		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n1.id);
 
 		rows = await engine.search('created:2018 -created:2019');
-		expect(rows.length).toBe(2);
-		expect(ids(rows)).toContain(n3.id);
+		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n4.id);
 	}));
 
@@ -605,7 +599,7 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by latitude, longitude, altitude', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.72  });
+		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96  });
 		const n2 = await Note.save({ title: 'I made this', body: 'the week before', latitude: 42.11, longitude: 77.77, altitude: 42.00  });
 		const n3 = await Note.save({ title: 'I made this', body: 'before before week', latitude: 82.01, longitude: 66.66, altitude: 13.13  });
 

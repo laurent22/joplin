@@ -4,177 +4,116 @@ require('app-module-path').addPath(__dirname);
 const filterParser = require('lib/services/searchengine/filterParser.js').default;
 // import filterParser from 'lib/services/searchengine/filterParser.js';
 
+const makeTerm = (name, value, negated) => { return { name, value, negated }; };
 describe('filterParser should be correct filter for keyword', () => {
 	it('title', () => {
 		const searchString = 'title: something';
-		const expected = new Map([
-			['title', ['something']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'something', false));
 	});
 
 	it('negated title', () => {
 		const searchString = '-title: something';
-		const expected = new Map([
-			['-title', ['something']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'something', true));
 	});
 
 	it('body', () => {
 		const searchString = 'body:something';
-		const expected = new Map([
-			['body', ['something']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'something', false));
 	});
 
 	it('negated body', () => {
 		const searchString = '-body:something';
-		const expected = new Map([
-			['-body', ['something']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'something', true));
 	});
 
 	it('title and body', () => {
 		const searchString = 'title:testTitle body:testBody';
-		const expected = new Map([
-			['title', ['testTitle']],
-			['body', ['testBody']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'testTitle', false));
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'testBody', false));
 	});
 
 	it('title with multiple words', () => {
 		const searchString = 'title:"word1 word2" body:testBody';
-		const expected = new Map([
-			['title', ['word1', 'word2']],
-			['body', ['testBody']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'word1', false));
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'word2', false));
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'testBody', false));
 	});
 
 	it('body with multiple words', () => {
 		const searchString = 'title:testTitle body:"word1 word2"';
-		const expected = new Map([
-			['title', ['testTitle']],
-			['body', ['word1', 'word2']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('title', 'testTitle', false));
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'word1', false));
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'word2', false));
 	});
 
 	it('single word text', () => {
-		const searchString = 'babayaga';
-		const expected = new Map([
-			['text', ['babayaga']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		const searchString = 'joplin';
+		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', false));
 	});
 
 	it('multi word text', () => {
-		const searchString = 'baba yaga';
-		const expected = new Map([
-			['text', ['baba', 'yaga']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		const searchString = 'scott joplin';
+		expect(filterParser(searchString)).toContain(makeTerm('text', 'scott', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', false));
 	});
 
 	it('negated word text', () => {
-		const searchString = 'baba -yaga';
-		const expected = new Map([
-			['text', ['baba']],
-			['-text', ['yaga']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		const searchString = 'scott -joplin';
+		expect(filterParser(searchString)).toContain(makeTerm('text', 'scott', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', true));
 	});
 
 	it('phrase text search', () => {
-		const searchString = '"baba yaga"';
-		const expected = new Map([
-			['text', ['"baba yaga"']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		const searchString = '"scott joplin"';
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"scott joplin"', false));
 	});
 
 	it('multi word body', () => {
 		const searchString = 'body:"foo bar"';
-		const expected = new Map([
-			['body', ['foo', 'bar']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'foo', false));
+		expect(filterParser(searchString)).toContain(makeTerm('body', 'bar', false));
 	});
 
 	it('negated tag queries', () => {
-		const searchString = '-tag:instagram';
-		const expected = new Map([
-			['-tag', ['instagram']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		const searchString = '-tag:mozart';
+		expect(filterParser(searchString)).toContain(makeTerm('tag', 'mozart', true));
 	});
 
 
 	it('created after', () => {
 		const searchString = 'created:20151218'; // YYYYMMDD
-		const expected = new Map([
-			['created', ['20151218']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('created', '20151218', false));
 	});
 
 	it('created before', () => {
 		const searchString = '-created:20151218'; // YYYYMMDD
-		const expected = new Map([
-			['-created', ['20151218']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('created', '20151218', true));
 	});
 
 	it('any', () => {
 		const searchString = 'any:1 tag:123';
-		const expected = new Map([
-			['any', ['1']],
-			['tag', ['123']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('any', '1', false));
+		expect(filterParser(searchString)).toContain(makeTerm('tag', '123', false));
 	});
 
 	it('wildcard tags', () => {
 		let searchString = 'tag:*';
-		let expected = new Map([
-			['tag', ['%']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('tag', '%', false));
 
 		searchString = '-tag:*';
-		expected = new Map([
-			['-tag', ['%']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('tag', '%', true));
 
 		searchString = 'tag:bl*sphemy';
-		expected = new Map([
-			['tag', ['bl%sphemy']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('tag', 'bl%sphemy', false));
 	});
 
 	it('wildcard notebooks', () => {
 		const searchString = 'notebook:my*notebook';
-		const expected = new Map([
-			['notebook', ['my%notebook']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('notebook', 'my%notebook', false));
 	});
 
 	it('wildcard MIME types', () => {
 		const searchString = 'resource:image/*';
-		const expected = new Map([
-			['resource', ['image/%']],
-		]);
-		expect(filterParser(searchString)).toEqual(expected);
+		expect(filterParser(searchString)).toContain(makeTerm('resource', 'image/%', false));
 	});
-
-
-
 });
