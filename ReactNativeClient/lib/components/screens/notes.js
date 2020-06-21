@@ -184,7 +184,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			output = Folder.byId(props.folders, props.selectedFolderId);
 		} else if (props.notesParentType == 'Tag') {
 			output = Tag.byId(props.tags, props.selectedTagId);
-			output.title = output.full_title;
+			output.title = Tag.getCachedFullTitle(output.id);
 		} else if (props.notesParentType == 'SmartFilter') {
 			output = { id: this.props.selectedSmartFilterId, title: _('All notes') };
 		} else {

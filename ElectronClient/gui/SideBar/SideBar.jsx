@@ -273,7 +273,7 @@ class SideBarComponent extends React.Component {
 			buttonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrStartWithEllipsis(tag.full_title, -32, 32));
+			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrStartWithEllipsis(Tag.getCachedFullTitle(tag.id), -32, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}

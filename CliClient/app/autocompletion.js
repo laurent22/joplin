@@ -96,7 +96,7 @@ async function handleAutocompletionPromise(line) {
 
 		if (argName == 'tag') {
 			const tags = await Tag.search({ fullTitleRegex: `${next}.*` });
-			l.push(...tags.map(n => n.full_title));
+			l.push(...tags.map(tag => Tag.getCachedFullTitle(tag.id)));
 		}
 
 		if (argName == 'file') {

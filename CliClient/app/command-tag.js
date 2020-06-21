@@ -72,7 +72,7 @@ class Command extends BaseCommand {
 			} else {
 				const tags = await Tag.all();
 				tags.map(tag => {
-					this.stdout(tag.full_title);
+					this.stdout(Tag.getCachedFullTitle(tag.id));
 				});
 			}
 		} else if (command == 'notetags') {

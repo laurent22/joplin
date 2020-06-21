@@ -253,10 +253,10 @@ describe('models_Tag', function() {
 		await Tag.setNoteTagsByIds(note0.id, [tag1.id, subtag2.id]);
 		await Tag.renameNested(tag1_parent, 'tag2');
 
-		expect((await Tag.loadWithCount(tag1_parent.id)).full_title).toBe('tag2');
-		expect((await Tag.loadWithCount(tag1.id)).full_title).toBe('tag2/subtag1/subsubtag');
-		expect((await Tag.loadWithCount(subtag1.id)).full_title).toBe('tag2/subtag1');
-		expect((await Tag.loadWithCount(subtag2.id)).full_title).toBe('tag2/subtag2');
+		expect(Tag.getCachedFullTitle((await Tag.loadWithCount(tag1_parent.id)).id)).toBe('tag2');
+		expect(Tag.getCachedFullTitle((await Tag.loadWithCount(tag1.id)).id)).toBe('tag2/subtag1/subsubtag');
+		expect(Tag.getCachedFullTitle((await Tag.loadWithCount(subtag1.id)).id)).toBe('tag2/subtag1');
+		expect(Tag.getCachedFullTitle((await Tag.loadWithCount(subtag2.id)).id)).toBe('tag2/subtag2');
 	}));
 
 	it('renaming parent prefix should branch-out to two hierarchies', asyncTest(async () => {
@@ -297,7 +297,7 @@ describe('models_Tag', function() {
 
 		await Tag.moveTag(subsubtag1.id, tag2.id);
 
-		expect((await Tag.loadWithCount(subsubtag1.id)).full_title).toBe('tag2/subsubtag1');
+		expect(Tag.getCachedFullTitle((await Tag.loadWithCount(subsubtag1.id)).id)).toBe('tag2/subsubtag1');
 	}));
 
 	it('moving tag to itself or its descendant throws error', asyncTest(async () => {
@@ -336,11 +336,11 @@ describe('models_Tag', function() {
 
 		await Tag.setNoteTagsByIds(note1.id, [abc.id, adef.id]);
 
-		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*c.*' })).length).toBe(1);
-		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*b.*' })).length).toBe(2);
-		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*b/c.*' })).length).toBe(1);
-		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*a.*' })).length).toBe(6);
-		expect((await Tag.searchAllWithNotes({ fullTitleRegex: '.*a/d.*' })).length).toBe(3);
+		expect((await Tag.search({ fullTitleRegex: '.*c.*' })).length).toBe(1);
+		expect((await Tag.search({ fullTitleRegex: '.*b.*' })).length).toBe(2);
+		expect((await Tag.search({ fullTitleRegex: '.*b/c.*' })).length).toBe(1);
+		expect((await Tag.search({ fullTitleRegex: '.*a.*' })).length).toBe(6);
+		expect((await Tag.search({ fullTitleRegex: '.*a/d.*' })).length).toBe(3);
 	}));
 
 	it('creating tags with the same name at the same level should throw exception', asyncTest(async () => {

@@ -196,28 +196,11 @@ class Tag extends BaseItem {
 		return fullTitleCache[tagId];
 	}
 
-	static _addFullTitle(tag) {
-		Object.defineProperty(tag, 'full_title', {
-			get: function() { return Tag.getCachedFullTitle(tag.id); },
-			// We shouldn't modify the full_title as a property
-			// use appropriate methods instead
-			set: function() { return false; },
-			enumerable: true,
-		});
-	}
-
 	static async getFullTitle(tag) {
 		const ancestorTags = await Tag.ancestorTags(tag);
 		ancestorTags.push(tag);
 		const ancestorTitles = ancestorTags.map((t) => t.title);
 		return ancestorTitles.join('/');
-	}
-
-	static async load(tagId, options = null) {
-		const tag = await super.load(tagId, options);
-		if (!tag) return;
-		Tag._addFullTitle(tag);
-		return tag;
 	}
 
 	static async all(options = null) {
@@ -229,16 +212,6 @@ class Tag extends BaseItem {
 			const fullTitle = pathTitles.join('/');
 			// When all tags are reloaded we can also cheaply update the cache
 			fullTitleCache[tag.id] = fullTitle;
-			Tag._addFullTitle(tag);
-		}
-		return tags;
-	}
-
-	static async byIds(ids, options = null) {
-		const tags = await super.byIds(ids, options);
-		for (let i = 0; i < tags.length; i++) {
-			if (!tags[i]) continue;
-			Tag._addFullTitle(tags[i]);
 		}
 		return tags;
 	}
@@ -269,21 +242,12 @@ class Tag extends BaseItem {
 	}
 
 	static async search(options) {
-		const tags = await super.search(options);
-		for (let i = 0; i < tags.length; i++) {
-			Tag._addFullTitle(tags[i]);
-		}
-		return tags;
-	}
-
-	static async searchAllWithNotes(options) {
-		if (!options) options = {};
-		let tags = await this.search(options);
+		let tags = await super.search(options);
 
 		// Apply fullTitleRegex on the full_title
-		if (options.fullTitleRegex) {
+		if (options && options.fullTitleRegex) {
 			const titleRE = new RegExp(options.fullTitleRegex);
-			tags = tags.filter((tag) => tag.full_title.match(titleRE));
+			tags = tags.filter((tag) => Tag.getCachedFullTitle(tag.id).match(titleRE));
 		}
 
 		return tags;
@@ -331,7 +295,6 @@ class Tag extends BaseItem {
 		const tag = await this.modelSelectOne(sql, [restTitle, parentId]);
 		if (tag) {
 			fullTitleCache[tag.id] = await Tag.getFullTitle(tag);
-			Tag._addFullTitle(tag);
 		}
 		return tag;
 	}
@@ -356,7 +319,7 @@ class Tag extends BaseItem {
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].full_title.toLowerCase()) < 0) {
+			if (addedTitles.indexOf(Tag.getCachedFullTitle(previousTags[i].id).toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
