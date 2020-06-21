@@ -26,7 +26,7 @@ msgstr ""
 "huidige notitieboek."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
 #: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
 #: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
 #: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
@@ -95,50 +95,55 @@ msgstr "Kies eerst een notitieboek."
 msgid "Imports data into Joplin."
 msgstr "Importeert gegeven naar Joplin."
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Bronformaat: %s"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:26
 msgid "Do not ask for confirmation."
 msgstr "Niet vragen om bevestiging."
 
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Bronformaat: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Gevonden: %d."
 
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Gecreëerd: %d."
 
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Bijgewerkt: %d."
 
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Overgeslagen: %d."
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Bronnen: %d."
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Gelabeld: %d."
 
-#: CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:65
 msgid "Importing notes..."
 msgstr "Notities importeren..."
 
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "De notities zijn geïmporteerd: %s"
@@ -314,20 +319,20 @@ msgstr "Authenticatie is niet voltooid (geen authenticatiesleutel ontvangen)."
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "Volg de onderstaande stappen om Joplin te synchroniseren met Dropbox:"
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "Stap 1: Open deze URL in uw browser om de applicatie te autoriseren:"
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Stap 2: Voer de code in die u krijgt van Dropbox:"
 
@@ -357,7 +362,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Synchronisatiedoel: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-msgid "Cannot initialize synchroniser."
+#, fuzzy
+msgid "Cannot initialise synchroniser."
 msgstr "De synchronisatie kan niet worden geïnitaliseerd."
 
 #: CliClient/app/command-sync.js:179
@@ -457,7 +463,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:457
+#: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
 msgstr "Notitie verwijderen?"
 
@@ -503,11 +509,11 @@ msgstr "Exporteert alleen het opgegeven notitieboek."
 msgid "Creates a new note."
 msgstr "Creëert een nieuwe notitie."
 
-#: CliClient/app/main.js:82
+#: CliClient/app/main.js:80
 msgid "Type `joplin help` for usage information."
 msgstr "Typ `joplin help` voor meer informatie over het gebruik."
 
-#: CliClient/app/main.js:84
+#: CliClient/app/main.js:82
 msgid "Fatal error:"
 msgstr "Fatale fout:"
 
@@ -787,7 +793,7 @@ msgstr "Oké"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/components/screens/note.js:526
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -804,12 +810,12 @@ msgstr ""
 msgid "Goto Anything..."
 msgstr "Ga naar Alles..."
 
-#: ElectronClient/InteropServiceHelper.js:142
+#: ElectronClient/InteropServiceHelper.js:149
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Bezig met exporteren van \"%s\" in het formaat \"%s\". Even geduld..."
 
-#: ElectronClient/InteropServiceHelper.js:160
+#: ElectronClient/InteropServiceHelper.js:167
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr ""
@@ -839,13 +845,13 @@ msgstr "Nieuwe versie: %s"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:520
+#: ReactNativeClient/lib/components/screens/note.js:524
 msgid "Yes"
 msgstr "Ja"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:521
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "No"
 msgstr "Nee"
 
@@ -899,8 +905,8 @@ msgstr "vetgedrukte tekst"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
+#, fuzzy
+msgid "emphasised text"
 msgstr "nadrukkelijke tekst"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
@@ -942,13 +948,13 @@ msgid "Paste"
 msgstr "Plakken"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "Indeling"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1034,7 +1040,7 @@ msgstr "Checkbox"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1106
+#: ReactNativeClient/lib/components/screens/note.js:1110
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -1188,7 +1194,7 @@ msgstr "Bewerken in externe editor"
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:822
+#: ReactNativeClient/lib/components/screens/note.js:826
 msgid "Set alarm"
 msgstr "Alarm instellen"
 
@@ -1198,7 +1204,7 @@ msgstr "Alarm instellen"
 #: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:837
+#: ReactNativeClient/lib/components/screens/note.js:841
 msgid "Tags"
 msgstr "Labels"
 
@@ -1226,7 +1232,7 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:864
+#: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -1414,7 +1420,7 @@ msgstr ""
 "ernaar geïmporteerd"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "Versturen"
 
@@ -1493,7 +1499,7 @@ msgid "Switch to to-do type"
 msgstr "Overschakelen naar todo-type"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:851
+#: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
 msgstr "Markdownlink kopiëren"
 
@@ -1542,6 +1548,10 @@ msgstr "Dit bestand kan niet worden geopend: %s"
 #: ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
 msgstr "Slechts één notitie kan gelijktijdig worden afgedrukt."
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "nadrukkelijke tekst"
 
 #: ElectronClient/gui/NoteText.min.js:1852
 #, fuzzy
@@ -2104,8 +2114,9 @@ msgstr ""
 "met een derde partij."
 
 #: ReactNativeClient/lib/registry.js:156
+#, fuzzy
 msgid ""
-"Could not synchronize with OneDrive.\n"
+"Could not synchronise with OneDrive.\n"
 "\n"
 "This error often happens when using OneDrive for Business, which "
 "unfortunately cannot be supported.\n"
@@ -2134,7 +2145,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:519
+#: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2160,11 +2171,11 @@ msgstr "bijgewerkt op"
 msgid "Conflicts"
 msgstr "Conflicten"
 
-#: ReactNativeClient/lib/models/Folder.js:386
+#: ReactNativeClient/lib/models/Folder.js:388
 msgid "Cannot move notebook to this location"
 msgstr "Kan notitieboek niet verplaatsen naar deze locatie"
 
-#: ReactNativeClient/lib/models/Folder.js:438
+#: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notitieboeken mogen niet \"%s\" heten; dit is een gereserveerde titel."
@@ -2977,11 +2988,11 @@ msgstr "Notitieboek bewerken"
 msgid "Enter notebook title"
 msgstr "Invoeren titel notitieboek"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
 msgstr "Inloggen met OneDrive"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -2995,11 +3006,11 @@ msgstr "Nieuwe labels:"
 msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Inloggen met Dropbox"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "Code hier invoeren"
 
@@ -3009,7 +3020,7 @@ msgid "Master Key %s"
 msgstr "Hoofdsleutel %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:769
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Created: %s"
 msgstr "Gecreëerd op: %s"
@@ -3222,66 +3233,66 @@ msgstr "De mobiele Joplin-app ondersteunt momenteel niet dit soort links: %s"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Links met protocol “%s” worden niet ondersteund"
 
-#: ReactNativeClient/lib/components/screens/note.js:614
+#: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:770
+#: ReactNativeClient/lib/components/screens/note.js:774
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Bijgewerkt: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
 msgstr "Tonen op kaart"
 
-#: ReactNativeClient/lib/components/screens/note.js:781
+#: ReactNativeClient/lib/components/screens/note.js:785
 msgid "Go to source URL"
 msgstr "Ga naar bron-URL"
 
-#: ReactNativeClient/lib/components/screens/note.js:809
+#: ReactNativeClient/lib/components/screens/note.js:813
 msgid "Attach..."
 msgstr "Bijvoegen..."
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Choose an option"
 msgstr "Kies een optie"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Take photo"
 msgstr "Foto maken"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach photo"
 msgstr "Foto bijvoegen"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach any file"
 msgstr "Ander bestand bijvoegen"
 
-#: ReactNativeClient/lib/components/screens/note.js:830
+#: ReactNativeClient/lib/components/screens/note.js:834
 msgid "Share"
 msgstr "Delen"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to note"
 msgstr "Omzetten naar notitie"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to todo"
 msgstr "Omzetten naar taak"
 
-#: ReactNativeClient/lib/components/screens/note.js:858
+#: ReactNativeClient/lib/components/screens/note.js:862
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: ReactNativeClient/lib/components/screens/note.js:1038
-#: ReactNativeClient/lib/components/screens/note.js:1096
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
 msgstr "Inhoud toevoegen"
 
-#: ReactNativeClient/lib/components/screens/note.js:1146
+#: ReactNativeClient/lib/components/screens/note.js:1150
 msgid "Add title"
 msgstr "Toevoegen titel"
 
@@ -3502,17 +3513,17 @@ msgid "On %s: %s"
 msgstr "Op %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
 msgstr "Joplin-exportbestand"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:83
 msgid "Markdown"
 msgstr "Markdown"
 
 #: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
 msgstr "Joplin-exportmap"
 
@@ -3524,29 +3535,29 @@ msgstr "Evernote-exportbestand (als Markdown)"
 msgid "Evernote Export File (as HTML)"
 msgstr "Evernote-exportbestand (als HTML)"
 
-#: ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
 msgstr "JSON-exportmap"
 
-#: ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:90
 msgid "HTML File"
 msgstr "HTML-bestand"
 
-#: ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:95
 msgid "HTML Directory"
 msgstr "HTML-map"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
 msgstr "Bestand"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
 msgstr "Map"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Kan de module \"%s\" niet laden voor het formaat \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
@@ -3554,7 +3565,7 @@ msgstr "Kan de module \"%s\" niet laden voor het formaat \"%s\""
 msgid "Please specify import format for %s"
 msgstr "Geef een importformaat op voor %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "

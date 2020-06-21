@@ -25,7 +25,7 @@ msgstr ""
 "(zápisník) specifikován, je poznámka duplikována v tom současném."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
 #: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
 #: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
 #: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
@@ -92,50 +92,55 @@ msgstr "Nejprve prosím vyberte zápisník."
 msgid "Imports data into Joplin."
 msgstr "Importuje data do Joplinu."
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Zdrojový formát: %s"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:26
 msgid "Do not ask for confirmation."
 msgstr "Neptat se na potvrzení."
 
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Zdrojový formát: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Nalezeno: %d."
 
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Vytvořeno: %d."
 
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Upraveno: %d."
 
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Přeskočeno: %d."
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Zdroje: %d."
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Otagováno: %d."
 
-#: CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:65
 msgid "Importing notes..."
 msgstr "Importuji poznámky..."
 
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Poznámky importovány: %s"
@@ -312,7 +317,7 @@ msgstr "Autentizace nebyla dokončena (nedostali jsme autentizační token)."
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
@@ -321,7 +326,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Krok 1: Chcete-li povolit aplikaci, otevřete tuto adresu URL ve svém "
@@ -329,7 +334,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Zadejte kód poskytnutý službou Dropbox:"
 
@@ -358,7 +363,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Cíl synchronizace:  %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-msgid "Cannot initialize synchroniser."
+#, fuzzy
+msgid "Cannot initialise synchroniser."
 msgstr "Nelze zavézt synchronizátor."
 
 #: CliClient/app/command-sync.js:179
@@ -456,7 +462,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d poznámek vyhovuje zadání. Smazat všechny?"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:457
+#: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
 msgstr "Smazat poznámku?"
 
@@ -502,11 +508,11 @@ msgstr "Exportuje pouze vybraný zápisník."
 msgid "Creates a new note."
 msgstr "Vytvoří novou poznámku."
 
-#: CliClient/app/main.js:82
+#: CliClient/app/main.js:80
 msgid "Type `joplin help` for usage information."
 msgstr "Zadejte `joplin help` pro nápovědu."
 
-#: CliClient/app/main.js:84
+#: CliClient/app/main.js:82
 msgid "Fatal error:"
 msgstr "Fatální chyba:"
 
@@ -782,7 +788,7 @@ msgstr "OK"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/components/screens/note.js:526
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -799,12 +805,12 @@ msgstr ""
 msgid "Goto Anything..."
 msgstr "Přejít kamkoliv..."
 
-#: ElectronClient/InteropServiceHelper.js:142
+#: ElectronClient/InteropServiceHelper.js:149
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
 
-#: ElectronClient/InteropServiceHelper.js:160
+#: ElectronClient/InteropServiceHelper.js:167
 #, fuzzy, javascript-format
 msgid "Could not export notes: %s"
 msgstr "Nebylo možné exportovat poznámky: %s"
@@ -834,13 +840,13 @@ msgstr "Nová verze: %s"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:520
+#: ReactNativeClient/lib/components/screens/note.js:524
 msgid "Yes"
 msgstr "Ano"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:521
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "No"
 msgstr "Ne"
 
@@ -894,8 +900,8 @@ msgstr "tučný text"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
+#, fuzzy
+msgid "emphasised text"
 msgstr "zvýrazněný text"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
@@ -937,13 +943,13 @@ msgid "Paste"
 msgstr "Vložit"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "Rozvržení"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1027,7 +1033,7 @@ msgstr "Zaškrtávací pole"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1106
+#: ReactNativeClient/lib/components/screens/note.js:1110
 msgid "Edit"
 msgstr "Upravit"
 
@@ -1181,7 +1187,7 @@ msgstr "Upravit externím editorem"
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:822
+#: ReactNativeClient/lib/components/screens/note.js:826
 msgid "Set alarm"
 msgstr "Nastavit alarm"
 
@@ -1191,7 +1197,7 @@ msgstr "Nastavit alarm"
 #: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:837
+#: ReactNativeClient/lib/components/screens/note.js:841
 msgid "Tags"
 msgstr "Tagy"
 
@@ -1218,7 +1224,7 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:864
+#: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
 msgstr "Smazat"
 
@@ -1404,7 +1410,7 @@ msgid ""
 msgstr "Bude vytvořen zápisník \"%s\" a soubor \"%s\" do něj bude importován"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "Odeslat"
 
@@ -1479,7 +1485,7 @@ msgid "Switch to to-do type"
 msgstr "Přepnout na to-do"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:851
+#: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
 msgstr "Vytvořit Markdown odkaz"
 
@@ -1530,6 +1536,10 @@ msgstr "Soubor se nepodařilo otevřít: %s"
 msgid "Only one note can be printed at a time."
 msgstr ""
 "Pouze jedna poznámka může být zároveň vytištěna nebo exportována do PDF."
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "zvýrazněný text"
 
 #: ElectronClient/gui/NoteText.min.js:1852
 #, fuzzy
@@ -2097,8 +2107,9 @@ msgstr ""
 "informacím. Žádná data nebudou sdílena s jakoukoliv třetí stranou."
 
 #: ReactNativeClient/lib/registry.js:156
+#, fuzzy
 msgid ""
-"Could not synchronize with OneDrive.\n"
+"Could not synchronise with OneDrive.\n"
 "\n"
 "This error often happens when using OneDrive for Business, which "
 "unfortunately cannot be supported.\n"
@@ -2127,7 +2138,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:519
+#: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2153,11 +2164,11 @@ msgstr "datum aktualizace"
 msgid "Conflicts"
 msgstr "Konflikty"
 
-#: ReactNativeClient/lib/models/Folder.js:386
+#: ReactNativeClient/lib/models/Folder.js:388
 msgid "Cannot move notebook to this location"
 msgstr "Zápisník nelze přesunout na toto umístění"
 
-#: ReactNativeClient/lib/models/Folder.js:438
+#: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
@@ -2965,11 +2976,11 @@ msgstr "Upravit zápisník"
 msgid "Enter notebook title"
 msgstr "Vložte název zápisníku"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
 msgstr "Přihlásit se pomocí OneDrive"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -2983,11 +2994,11 @@ msgstr "Nové tagy:"
 msgid "Type new tags or select from list"
 msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Přihlášení Dropbox"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "Zde vložte kód"
 
@@ -2997,7 +3008,7 @@ msgid "Master Key %s"
 msgstr "Master heslo %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:769
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Created: %s"
 msgstr "Vytvořeno: %s"
@@ -3210,66 +3221,66 @@ msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu: %s"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Odkazy s protokolem \"%s\" nejsou podporovány"
 
-#: ReactNativeClient/lib/components/screens/note.js:614
+#: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný formát obrázku: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:770
+#: ReactNativeClient/lib/components/screens/note.js:774
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Upraveno: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
 msgstr "Zobrazit na map+"
 
-#: ReactNativeClient/lib/components/screens/note.js:781
+#: ReactNativeClient/lib/components/screens/note.js:785
 msgid "Go to source URL"
 msgstr "Jít na zdrojovou URL"
 
-#: ReactNativeClient/lib/components/screens/note.js:809
+#: ReactNativeClient/lib/components/screens/note.js:813
 msgid "Attach..."
 msgstr "Přiložit..."
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Choose an option"
 msgstr "Zvolit možnost"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Take photo"
 msgstr "Přiložit foto"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach photo"
 msgstr "Přiložit obrázek"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach any file"
 msgstr "Přiložit soubor"
 
-#: ReactNativeClient/lib/components/screens/note.js:830
+#: ReactNativeClient/lib/components/screens/note.js:834
 msgid "Share"
 msgstr "Sdílet"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to note"
 msgstr "Konvertovat na poznámku"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to todo"
 msgstr "Konvertovat na todo"
 
-#: ReactNativeClient/lib/components/screens/note.js:858
+#: ReactNativeClient/lib/components/screens/note.js:862
 msgid "Properties"
 msgstr "Nastavení"
 
-#: ReactNativeClient/lib/components/screens/note.js:1038
-#: ReactNativeClient/lib/components/screens/note.js:1096
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
 msgstr "Přidat tělo"
 
-#: ReactNativeClient/lib/components/screens/note.js:1146
+#: ReactNativeClient/lib/components/screens/note.js:1150
 msgid "Add title"
 msgstr "Přidejte nadpis"
 
@@ -3488,17 +3499,17 @@ msgid "On %s: %s"
 msgstr "Na %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
 msgstr "Soubor Joplin Export"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:83
 msgid "Markdown"
 msgstr "Markdown"
 
 #: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
 msgstr "Složka pro export"
 
@@ -3510,29 +3521,29 @@ msgstr "Soubor exportu Evernote (jako Markdown)"
 msgid "Evernote Export File (as HTML)"
 msgstr "Soubor Evernote Exportu (jako HTML)"
 
-#: ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
 msgstr "Složka pro JSON export"
 
-#: ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:90
 msgid "HTML File"
 msgstr "HTML soubor"
 
-#: ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:95
 msgid "HTML Directory"
 msgstr "HTML adresář"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
 msgstr "Soubor"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
 msgstr "Adresář"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Nemohu nahrát \"%s\" modul pro formát \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
@@ -3540,7 +3551,7 @@ msgstr "Nemohu nahrát \"%s\" modul pro formát \"%s\""
 msgid "Please specify import format for %s"
 msgstr "Prosím specifikujte formát pro import %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
