@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -103,9 +105,9 @@ msgid "Do not ask for confirmation."
 msgstr "確認を行ないません。"
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "ソースフォーマット: %s"
+msgstr "出力フォーマット: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -359,7 +361,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "同期先: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "同期プロセスを初期化できませんでした。"
 
@@ -896,9 +897,8 @@ msgstr "文字を太字に"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
-msgstr "文字の強調"
+msgstr "強調したいテキスト"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
@@ -1025,9 +1025,8 @@ msgid "Insert Date Time"
 msgstr "日付の入力"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "チェックボックス"
+msgstr "チェックボックスリスト"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1037,20 +1036,19 @@ msgstr "編集"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:534
 msgid "Code Block"
-msgstr ""
+msgstr "コードブロック"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:543
 msgid "Inline Code"
-msgstr ""
+msgstr "インラインコード"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "ノートやファイルをここにドロップします"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
-#, fuzzy
 msgid "Code View"
-msgstr "コード"
+msgstr "コードビュー"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 #, javascript-format
@@ -1058,6 +1056,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り"
+"替えてノートを編集することはできます。"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1082,7 +1082,7 @@ msgstr "名前を付けて保存..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "ファイルのあるフォルダーを開く"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
@@ -1158,7 +1158,7 @@ msgstr "ノートのプロパティ"
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:36
 msgid "Forward"
-msgstr ""
+msgstr "進む"
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:49
 #: ElectronClient/gui/NoteText.min.js:1656
@@ -1708,9 +1708,8 @@ msgid "Viewer"
 msgstr "ビューアー"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:82
-#, fuzzy
 msgid "Statistics"
-msgstr "統計..."
+msgstr "統計"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:86
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1948,7 +1947,7 @@ msgstr "プロファイルバージョン: %s"
 #: ElectronClient/app.js:689
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "キーチェーンのサポート: %s"
 
 #: ElectronClient/app.js:711 ElectronClient/app.js:794
 msgid "&File"
@@ -2104,7 +2103,6 @@ msgstr ""
 "ません。第三者にデータが共有されることもありません。"
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -2365,7 +2363,7 @@ msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "コードエディターとしてCodeMirrorを使う (ベータ版のため注意)"
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
@@ -2492,14 +2490,14 @@ msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
 #: ReactNativeClient/lib/models/Setting.js:508
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"ここは *monospace* (等幅)フォントを選択しないと正しく動作しません。フォントが"
-"誤っているか空の場合は、一般的な等幅フォントが指定されるでしょう。"
+"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されな"
+"い場合があります。指定したフォントが誤っているか空の場合は、一般的な等幅フォ"
+"ントが使用されます。"
 
 #: ReactNativeClient/lib/models/Setting.js:547
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2762,17 +2760,20 @@ msgid "Downloaded"
 msgstr "ダウンロード済み"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "添付ファイル"
+msgstr "添付ファイルの衝突: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "この添付ファイルをダウンロードするときにエラーが発生しました:"
+msgstr ""
+"下記の添付ファイルで[衝突](%s)が発生しました。\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
@@ -3546,9 +3547,9 @@ msgid "Directory"
 msgstr "ディレクトリ"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" モジュール（\"%s\" フォーマット用）を読み込めません"
+msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
