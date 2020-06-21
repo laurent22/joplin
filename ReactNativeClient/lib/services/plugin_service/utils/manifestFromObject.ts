@@ -2,9 +2,9 @@ import { PluginManifest, PluginPermission } from './types';
 
 export default function manifestFromObject(o:any):PluginManifest {
 
-	const getString = (name:string, required:boolean = true):string => {
+	const getString = (name:string, required:boolean = true, defaultValue:string = ''):string => {
 		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
-		if (!o[name]) return '';
+		if (!o[name]) return defaultValue;
 		if (typeof o[name] !== 'string') throw new Error(`Field must be a string: ${name}`);
 		return o[name];
 	};
@@ -22,7 +22,7 @@ export default function manifestFromObject(o:any):PluginManifest {
 		manifest_version: getNumber('manifest_version', true),
 		name: getString('name', true),
 		version: getString('version', true),
-		description: getString('description'),
+		description: getString('description', false),
 		homepage_url: getString('homepage_url'),
 		permissions: permissions,
 	};

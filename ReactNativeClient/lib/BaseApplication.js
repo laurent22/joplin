@@ -42,8 +42,7 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
-// const PluginService = require('lib/services/plugin_service/PluginService.js').default;
-// const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
+const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 class BaseApplication {
 	constructor() {
@@ -749,8 +748,10 @@ class BaseApplication {
 
 		await MigrationService.instance().run();
 
-		// const codeMirrorPlugin = await PluginService.instance().loadPlugin(`${Setting.value('pluginDir')}/codemirror_test`);
-		// await PluginService.instance().runPlugin(codeMirrorPlugin);
+		await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
+
+		// const testPlugin = await PluginService.instance().loadPlugin(`${Setting.value('pluginDir')}/testui`);
+		// PluginService.instance().runPlugin(testPlugin);
 
 		return argv;
 	}

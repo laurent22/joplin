@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<script>
+	// const postMessage = (methodName, arg) => {
+	// 	window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+	// }
+
+	const rootElement = document.createElement('div');
+	document.getElementsByTagName('body')[0].appendChild(rootElement);
+
+	const ipc = {};
+
+	window.addEventListener('message', ((event) => {
+		// Here we only deal with messages that are sent from the main Electro process to the webview.
+		// if (!event.data || event.data.target !== 'webview') return;
+
+		// const callName = event.data.name;
+		// const callData = event.data.data;
+
+		// if (!ipc[callName]) {
+		// 	console.warn('Missing IPC function:', event.data);
+		// } else {
+		// 	ipc[callName](callData);
+		// }
+	}));
+
+	// ipc.setHtml = (event) => {
+	// 	const html = event.html;
+
+	// 	markJsHackMarkerInserted_ = false;
+
+	// 	updateBodyHeight();
+
+	// 	contentElement.innerHTML = html;
+
+	// 	let previousContentHeight = contentElement.scrollHeight;
+	// 	let startTime = Date.now();
+	// 	restorePercentScroll();
+
+	// 	if (!checkScrollIID_) {
+	// 		checkScrollIID_ = setInterval(() => {
+	// 			const h = contentElement.scrollHeight;
+	// 			if (h !== previousContentHeight) {
+	// 				previousContentHeight = h;
+	// 				restorePercentScroll();
+	// 			}
+	// 			if (Date.now() - startTime >= 1000) {
+	// 				clearInterval(checkScrollIID_);
+	// 				checkScrollIID_ = null;
+	// 			}
+	// 		}, 1);
+	// 	}
+
+	// 	addPluginAssets(event.options.pluginAssets);
+
+	// 	if (event.options.downloadResources === 'manual') {
+	// 		webviewLib.setupResourceManualDownload();
+	// 	}
+
+	// 	document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+
+	// 	if (checkAllImageLoadedIID_) clearInterval(checkAllImageLoadedIID_);
+
+	// 	checkAllImageLoadedIID_ = setInterval(() => {
+	// 		if (!allImagesLoaded()) return;
+
+	// 		clearInterval(checkAllImageLoadedIID_);
+	// 		ipcProxySendToHost('noteRenderComplete');
+	// 	}, 100);
+	// }
+
+	</script>
+</body>
+</html>

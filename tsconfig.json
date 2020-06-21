@@ -15,6 +15,7 @@
 		"sourceMap": true,
 		"jsx": "react",
 		"skipLibCheck": true,
+		"allowUmdGlobalAccess": true,
 	},
     "include": [
         "ReactNativeClient/**/*",

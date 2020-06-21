@@ -9,6 +9,7 @@ export default class Plugin {
 	private scriptText_:string;
 	private script_:any;
 	private enabled_:boolean = true;
+	public sandbox:any = null;
 
 	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string) {
 		this.id_ = id;

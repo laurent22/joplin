@@ -1,117 +1,54 @@
 import * as vm from 'vm';
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
+import SandboxService from './SandboxService';
 const { shim } = require('lib/shim');
-const Api = require('lib/services/rest/Api');
 const { filename } = require('lib/path-utils');
 
-class RuntimePreferences {
+// class RuntimePreferences {
 
-	options_:any = {};
+// 	options_:any = {};
 
-	set(path:string, value:any) {
-		const splitted = path.split('.');
-		let current = this.options_;
+// 	set(path:string, value:any) {
+// 		const splitted = path.split('.');
+// 		let current = this.options_;
 
-		for (let i = 0; i < splitted.length; i++) {
-			const part = splitted[i];
+// 		for (let i = 0; i < splitted.length; i++) {
+// 			const part = splitted[i];
 
-			if (i === splitted.length - 1) {
-				current[part] = value;
-			} else {
-				if (!(part in current)) {
-					current[part] = {};
-				} else {
-					if (typeof current[part] !== 'object') throw new Error('Trying to set a sub-property on a property that is not an object');
-				}
-				current = current[part];
-			}
-		}
-	}
+// 			if (i === splitted.length - 1) {
+// 				current[part] = value;
+// 			} else {
+// 				if (!(part in current)) {
+// 					current[part] = {};
+// 				} else {
+// 					if (typeof current[part] !== 'object') throw new Error('Trying to set a sub-property on a property that is not an object');
+// 				}
+// 				current = current[part];
+// 			}
+// 		}
+// 	}
 
-	get(path:string, defaultValue:any = undefined):any {
-		const splitted = path.split('.');
-		let current = this.options_;
+// 	get(path:string, defaultValue:any = undefined):any {
+// 		const splitted = path.split('.');
+// 		let current = this.options_;
 
-		for (let i = 0; i < splitted.length; i++) {
-			const part = splitted[i];
+// 		for (let i = 0; i < splitted.length; i++) {
+// 			const part = splitted[i];
 
-			if (i === splitted.length - 1) {
-				return current[part];
-			} else {
-				if (!(part in current)) return defaultValue;
-				current = current[part];
-			}
-		}
-	}
+// 			if (i === splitted.length - 1) {
+// 				return current[part];
+// 			} else {
+// 				if (!(part in current)) return defaultValue;
+// 				current = current[part];
+// 			}
+// 		}
+// 	}
 
-}
+// }
 
-const runtimePreferences = new RuntimePreferences();
-export { runtimePreferences };
-
-class SandboxService {
-
-	public api:any;
-
-	constructor() {
-		this.api = new Api();
-	}
-
-	public newSandbox(plugin:Plugin) {
-		return (() => {
-			const fsDriver = shim.fsDriver();
-
-			function serializeApiBody(body:any) {
-				if (typeof body !== 'string') return JSON.stringify(body);
-				return body;
-			}
-
-			return {
-				joplin: {
-					api: {
-						get: (path:string, query:any = null) => {
-							return this.api.route('GET', path, query);
-						},
-						post: (path:string, query:any = null, body:any = null, files:any[] = null) => {
-							return this.api.route('POST', path, query, serializeApiBody(body), files);
-						},
-						put: (path:string, query:any = null, body:any = null, files:any[] = null) => {
-							return this.api.route('PUT', path, query, serializeApiBody(body), files);
-						},
-						delete: (path:string, query:any = null) => {
-							return this.api.route('DELETE', path, query);
-						},
-					},
-					plugins: {
-						register: (script:any) => {
-							plugin.script = script;
-						},
-					},
-					runtime: {
-						preferences: runtimePreferences,
-					},
-				},
-				console: console,
-				require: (path:string):any => {
-					let pathToLoad = path;
-
-					if (path.indexOf('.') === 0) {
-						const absolutePath = fsDriver.resolve(`${plugin.baseDir}/${path}`);
-						if (absolutePath.indexOf(plugin.baseDir) !== 0) throw new Error('Can only load files from within the plugin directory');
-						pathToLoad = absolutePath;
-					} else {
-						if (path.indexOf('lib/') === 0) throw new Error('Access to internal lib is not allowed');
-						// if (!requireWhiteList.includes(path)) throw new Error(`Cannot access this module: ${path}`);
-					}
-
-					return require(pathToLoad);
-				},
-			};
-		})();
-	}
-
-}
+// const runtimePreferences = new RuntimePreferences();
+// export { runtimePreferences };
 
 export default class PluginService {
 
@@ -125,7 +62,7 @@ export default class PluginService {
 		return this.instance_;
 	}
 
-	private sandboxService:SandboxService;
+	public sandboxService:SandboxService;
 	private plugins_:Plugin[] = [];
 
 	constructor() {
@@ -177,6 +114,8 @@ export default class PluginService {
 		vm.createContext(sandbox);
 
 		vm.runInContext(plugin.scriptText, sandbox);
+
+		plugin.sandbox = sandbox;
 
 		if (plugin.script) {
 			const startTime = Date.now();

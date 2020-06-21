@@ -26,7 +26,7 @@ import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
 
 const CodeMirror = require('codemirror');
-const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
+const eventManager = require('lib/eventManager');
 
 export interface CancelledKeys {
 	mac: string[],
@@ -117,7 +117,7 @@ function Editor(props: EditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		const runtimeOptions = runtimePreferences.get('codemirror.options', {});
+		const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
 
 		const cmOptions = Object.assign({}, {
 			value: props.value,
@@ -146,7 +146,7 @@ function Editor(props: EditorProps, ref: any) {
 				'Opt-Down': 'swapLineDown',
 				'Tab': 'smartListIndent',
 				'Shift-Tab': 'smartListUnindent' },
-		}, runtimeOptions);
+		}, userOptions);
 
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);

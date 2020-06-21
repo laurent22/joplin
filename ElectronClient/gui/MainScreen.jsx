@@ -20,11 +20,13 @@ const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const eventManager = require('../eventManager');
+const eventManager = require('lib/eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
+const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
+const UserWebview = require('./plugin_service/UserWebview.js').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
 
@@ -646,7 +648,7 @@ class MainScreenComponent extends React.Component {
 		}
 
 		this.styles_.noteText = {
-			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10),
+			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10) - 250,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -869,6 +871,14 @@ class MainScreenComponent extends React.Component {
 		const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
 		const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 
+		// <iframe style={{width:200, height:'100%', backgroundColor:'red'}}></iframe>
+
+		const userWebviews = [];
+		for (const vc of PluginService.instance().sandboxService.viewControllers) {
+			const v = <UserWebview key={vc.key} controller={vc} style={{ width: 200, height: '100%' }}/>;
+			userWebviews.push(v);
+		}
+
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
@@ -883,6 +893,9 @@ class MainScreenComponent extends React.Component {
 				{messageComp}
 				<SideBar style={styles.sideBar} />
 				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
+				<div style={{ display: 'inline-block' }}>
+					{userWebviews}
+				</div>
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
 				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />

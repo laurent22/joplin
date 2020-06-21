@@ -1,5 +1,7 @@
 joplin.plugins.register({
 	run: async function() {
-		joplin.runtime.preferences.set('codemirror.options.lineNumbers', true);
+		joplin.filters.on('codeMirrorOptions', (options:any) => {
+			return { ...options, lineNumbers: true };
+		});
 	},
 });
