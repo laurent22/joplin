@@ -321,17 +321,17 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				line-height: 1.5em;
 			}
 			
-			.search-marker {
+			.cm-search-marker {
 				background: ${theme.searchMarkerBackgroundColor};
 				color: ${theme.searchMarkerColor} !important;
 			}
 			
-			.search-marker-selected {
+			.cm-search-marker-selected {
 				background: ${theme.selectedColor2};
 				color: ${theme.color2} !important;
 			}
 			
-			.search-marker-scrollbar {
+			.cm-search-marker-scrollbar {
 				background: ${theme.searchMarkerBackgroundColor};
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
@@ -415,7 +415,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			// (replacing options)
 			let options = { notFromAce: true };
 			if (props.searchMarkers.options) {
-				options = Object.assign(props.searchMarkers.options, options);
+				options = Object.assign({}, props.searchMarkers.options, options);
 			}
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, options);
 			//  SEARCHHACK

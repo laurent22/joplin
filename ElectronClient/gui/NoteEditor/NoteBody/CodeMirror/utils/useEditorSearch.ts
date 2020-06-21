@@ -3,53 +3,138 @@ import { useState } from 'react';
 export default function useCursorUtils(CodeMirror: any) {
 
 	const [markers, setMarkers] = useState([]);
-	const [scrollMarkers, setScrollMarkers] = useState([]);
+	const [overlay, setOverlay] = useState(null);
+	const [scrollbarMarks, setScrollbarMarks] = useState(null);
+	const [overlayTimeout, setOverlayTimeout] = useState(null);
+	const [previousKeywordValue, setPreviousKeywordValue] = useState(null);
 
 	function clearMarkers() {
 		for (let i = 0; i < markers.length; i++) {
 			markers[i].clear();
 		}
 
-		for (let i = 0; i < scrollMarkers.length; i++) {
-			scrollMarkers[i].clear();
+		setMarkers([]);
+	}
+
+	function clearOverlay(cm: any) {
+		if (overlay) cm.removeOverlay(overlay);
+		if (scrollbarMarks) scrollbarMarks.clear();
+
+		setOverlay(null);
+		setScrollbarMarks(null);
+	}
+
+	// Modified from codemirror/addons/search/search.js
+	function searchOverlay(query: RegExp) {
+		return { token: function(stream: any) {
+			query.lastIndex = stream.pos;
+			const match = query.exec(stream.string);
+			if (match && match.index == stream.pos) {
+				stream.pos += match[0].length || 1;
+				return 'search-marker';
+			} else if (match) {
+				stream.pos = match.index;
+			} else {
+				stream.skipToEnd();
+			}
+			return null;
+		} };
+	}
+
+	// Highlights the currently active found work
+	// It's possible to get tricky with this fucntions and just use findNext/findPrev
+	// but this is fast enough and works more naturally with the current search logic
+	function highlightSearch(cm: any, searchTerm: RegExp, index: number) {
+		const marks: any = [];
+
+		const cursor = cm.getSearchCursor(searchTerm);
+
+		let match = null;
+		for (let j = 0; j < index + 1; j++) {
+			if (!cursor.findNext()) {
+				// If we run out of matches then just highlight the final match
+				break;
+			}
+			match = cursor.pos;
 		}
+
+		if (match) {
+			marks.push(cm.markText(match.from, match.to, { className: 'cm-search-marker-selected' }));
+			cm.scrollIntoView(match);
+		}
+
+		return marks;
+	}
+
+	function getSearchTerm(keyword: any) {
+		let searchTerm = new RegExp(keyword.value, 'g');
+
+		if (keyword.accuracy === 'partially') {
+			searchTerm = new RegExp(keyword.value, 'gi');
+		}
+
+		return searchTerm;
 	}
 
 	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
-		clearMarkers();
-		const matches = [];
-		const marks = [];
-		const scrollMarks = [];
+		if (!options) {
+			options = { selectedIndex: 0 };
+		}
 
+		clearMarkers();
+
+		// HIGHLIGHT KEYWORDS
+		// When doing a global search it's possible to have multiple keywords
+		// This means we need to highlight each one
+		let marks: any = [];
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 
 			if (keyword.value === '') continue;
 
-			let searchTerm = keyword.value;
+			const searchTerm = getSearchTerm(keyword);
 
-			if (keyword.accuracy === 'partially') {
-				searchTerm = new RegExp(keyword.value, 'i');
-			}
-
-			scrollMarks.push(this.showMatchesOnScrollbar(searchTerm, true, 'search-marker-scrollbar'));
-			const cursor = this.getSearchCursor(searchTerm);
-
-			while (cursor.findNext()) {
-				matches.push(cursor.pos);
-				marks.push(this.markText(cursor.from(), cursor.to(), { className: 'search-marker' }));
-			}
-
-			if (options.selectedIndex < matches.length) {
-				const selected = matches[options.selectedIndex];
-				marks.push(this.markText(selected.from, selected.to, { className: 'search-marker-selected' }));
-				this.scrollIntoView(selected);
-			}
-
+			marks = marks.concat(highlightSearch(this, searchTerm, options.selectedIndex));
 		}
 
 		setMarkers(marks);
-		setScrollMarkers(scrollMarks);
-		return matches.length;
+
+		// SEARCHOVERLAY
+		// We only want to highlight all matches when there is only 1 search term
+		if (keywords.length !== 1 || keywords[0].value == '') {
+			clearOverlay(this);
+			return 0;
+		}
+
+		const searchTerm = getSearchTerm(keywords[0]);
+
+		// Determine the number of matches in the source, this is passed on
+		// to the NoteEditor component
+		const regexMatches = this.getValue().match(searchTerm);
+		const nMatches = regexMatches ? regexMatches.length : 0;
+
+		// Don't bother clearing and re-calculating the overlay if the search term
+		// hasn't changed
+		if (keywords[0].value === previousKeywordValue) return nMatches;
+
+		clearOverlay(this);
+		setPreviousKeywordValue(keywords[0].value);
+
+		if (overlayTimeout) {
+			clearTimeout(overlayTimeout);
+		}
+		// These operations are pretty slow, so we won't add use them until the user
+		// has finished typing, 500ms is probably enough time
+		const timeout = setTimeout(() => {
+			const scrollMarks = this.showMatchesOnScrollbar(searchTerm, true, 'cm-search-marker-scrollbar');
+			const overlay = searchOverlay(searchTerm);
+			this.addOverlay(overlay);
+			setOverlay(overlay);
+			setScrollbarMarks(scrollMarks);
+		}, 500);
+
+		setOverlayTimeout(timeout);
+
+		return nMatches;
 	});
 }
