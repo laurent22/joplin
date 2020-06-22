@@ -31,7 +31,7 @@ const buildSeries = [
 // which makes the copyPluginAssets command fail. For that reason,
 // it's not possible to run watch on Windows while testing the desktop app.
 if (require('os').platform() === 'win32') {
-	buildSeries.push('tsc');
+	// buildSeries.push('tsc');
 }
 
 const buildParallel = [
