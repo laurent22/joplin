@@ -51,7 +51,9 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	const [strippedCharacters, setStrippedCharacters] = useState<number>(0);
 	const [strippedCharactersNoSpace, setStrippedCharactersNoSpace] = useState<number>(0);
 	const [strippedReadTime, setStrippedReadTime] = useState<number>(0);
-	const wordsPerMinute = 200;
+	// This amount based on the following paper:
+	// https://www.researchgate.net/publication/332380784_How_many_words_do_we_read_per_minute_A_review_and_meta-analysis_of_reading_rate
+	const wordsPerMinute = 250;
 
 	useEffect(() => {
 		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setLines);
