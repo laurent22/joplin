@@ -748,7 +748,7 @@ class BaseApplication {
 
 		await MigrationService.instance().run();
 
-		await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
+		if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
 
 		// const testPlugin = await PluginService.instance().loadPlugin(`${Setting.value('pluginDir')}/testui`);
 		// PluginService.instance().runPlugin(testPlugin);
