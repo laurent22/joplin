@@ -126,7 +126,7 @@ utils.mkdir = async function(dir) {
 	if (utils.isWindows()) {
 		return utils.execCommand(`if not exist "${utils.toSystemSlashes(dir)}" mkdir "${utils.toSystemSlashes(dir)}"`);
 	} else {
-		return fs.ensureDir(dir);
+		return fs.mkdirp(dir);
 	}
 };
 
