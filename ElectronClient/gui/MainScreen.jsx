@@ -23,7 +23,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('lib/eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
-const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
 const UserWebview = require('./plugin_service/UserWebview.js').default;
@@ -752,6 +751,19 @@ class MainScreenComponent extends React.Component {
 		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems;
 	}
 
+	renderUserWebviews() {
+		const output = [];
+		for (const pluginId in this.props.plugins) {
+			const plugin = this.props.plugins[pluginId];
+			for (const controlId in plugin.controls) {
+				const control = plugin.controls[controlId];
+				const v = <UserWebview key={control.id} html={control.html} style={{ width: 200, height: '100%' }}/>;
+				output.push(v);
+			}
+		}
+		return output;
+	}
+
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign(
@@ -859,7 +871,7 @@ class MainScreenComponent extends React.Component {
 
 		const messageComp = this.renderNotification(theme, styles);
 
-		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.plugins);
+		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.pluginsLegacy);
 		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
@@ -871,13 +883,7 @@ class MainScreenComponent extends React.Component {
 		const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
 		const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 
-		// <iframe style={{width:200, height:'100%', backgroundColor:'red'}}></iframe>
-
-		const userWebviews = [];
-		for (const vc of PluginService.instance().sandboxService.viewControllers) {
-			const v = <UserWebview key={vc.key} controller={vc} style={{ width: 200, height: '100%' }}/>;
-			userWebviews.push(v);
-		}
+		const userWebviews = this.renderUserWebviews();
 
 		return (
 			<div style={style}>
@@ -923,7 +929,7 @@ const mapStateToProps = state => {
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-		plugins: state.plugins,
+		pluginsLegacy: state.pluginsLegacy,
 		templates: state.templates,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,

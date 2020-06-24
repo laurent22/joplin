@@ -42,7 +42,6 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
-const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 class BaseApplication {
 	constructor() {
@@ -747,11 +746,6 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
-		if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
-
-		// const testPlugin = await PluginService.instance().loadPlugin(`${Setting.value('pluginDir')}/testui`);
-		// PluginService.instance().runPlugin(testPlugin);
 
 		return argv;
 	}

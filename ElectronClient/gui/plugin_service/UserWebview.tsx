@@ -3,41 +3,38 @@ import { useRef, useEffect } from 'react';
 
 interface UserWebviewProps {
 	style:any,
-	controller:any,
+	html:string,
 }
 
 export default function UserWebview(props:UserWebviewProps) {
 	const viewRef = useRef(null);
 
-	// function frameWindow() {
-	// 	if (!viewRef.current) return null;
-	// 	return viewRef.current.contentWindow;
-	// }
+	function frameWindow() {
+		if (!viewRef.current) return null;
+		return viewRef.current.contentWindow;
+	}
 
-	// function postMessage(name:string, data:any = null) {
-	// 	const win = frameWindow();
-	// 	if (!win) return;
-	// 	win.postMessage({ name, data }, '*');
-	// }
+	function postMessage(name:string, args:any = null) {
+		const win = frameWindow();
+		if (!win) return;
+		win.postMessage({ name, args }, '*');
+	}
 
 	useEffect(() => {
-		console.info('Got controller', props.controller);
-	}, []);
+		if (!viewRef.current) return () => {};
 
-	// useImperativeHandle(ref, () => {
-	// 	return {
-	// 		setHtml: function(html:string) {
-	// 			postMessage('setHtml', { html });
-	// 		},
-	// 	};
-	// });
+		function onReady() {
+			postMessage('setHtml', { html: props.html });
+		}
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		console.info('SEND');
-	// 		postMessage('testing', {bla:"123"});
-	// 	}, 1000);
-	// }, []);
+		viewRef.current.addEventListener('dom-ready', onReady);
+		viewRef.current.addEventListener('load', onReady);
+
+		return () => {
+			viewRef.current.removeEventListener('dom-ready', onReady);
+			viewRef.current.removeEventListener('load', onReady);
+		};
+	}, [viewRef.current]);
 
 	return <iframe ref={viewRef} style={props.style} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
 }

@@ -1,7 +1,7 @@
 import * as vm from 'vm';
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
-import SandboxService from './SandboxService';
+import newSandbox from './newSandbox';
 const { shim } = require('lib/shim');
 const { filename } = require('lib/path-utils');
 
@@ -62,11 +62,11 @@ export default class PluginService {
 		return this.instance_;
 	}
 
-	public sandboxService:SandboxService;
 	private plugins_:Plugin[] = [];
+	private store_:any = null;
 
-	constructor() {
-		this.sandboxService = new SandboxService();
+	initialize(store:any) {
+		this.store_ = store;
 	}
 
 	logger() {
@@ -93,7 +93,14 @@ export default class PluginService {
 		const manifestContent = await fsDriver.readFile(manifestPath);
 		const manifest = manifestFromObject(JSON.parse(manifestContent));
 		const mainScriptContent = await fsDriver.readFile(indexPath);
-		return new Plugin(filename(path), distPath, manifest, mainScriptContent);
+		const plugin = new Plugin(filename(path), distPath, manifest, mainScriptContent);
+
+		this.store_.dispatch({
+			type: 'PLUGIN_ADD',
+			pluginId: plugin.id,
+		});
+
+		return plugin;
 	}
 
 	async loadPlugins(pluginDir:string) {
@@ -109,7 +116,7 @@ export default class PluginService {
 	}
 
 	async runPlugin(plugin:Plugin) {
-		const sandbox = this.sandboxService.newSandbox(plugin);
+		const sandbox = newSandbox(plugin, this.store_);
 
 		vm.createContext(sandbox);
 

@@ -32,6 +32,7 @@ const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
+const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -1521,6 +1522,9 @@ class Application extends BaseApplication {
 		window.decryptionWorker = DecryptionWorker.instance();
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
+
+		PluginService.instance().initialize(this.store());
+		if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
 	}
 
 }

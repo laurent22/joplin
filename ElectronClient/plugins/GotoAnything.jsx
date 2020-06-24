@@ -17,7 +17,7 @@ class GotoAnything {
 
 	onTrigger() {
 		this.dispatch({
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
 			pluginName: PLUGIN_NAME,
 		});
@@ -126,7 +126,7 @@ class Dialog extends React.PureComponent {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -136,7 +136,7 @@ class Dialog extends React.PureComponent {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -278,7 +278,7 @@ class Dialog extends React.PureComponent {
 	async gotoItem(item) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
 

@@ -108,9 +108,10 @@ ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
+ReactNativeClient/lib/services/plugin_service/newSandbox.js
 ReactNativeClient/lib/services/plugin_service/Plugin.js
 ReactNativeClient/lib/services/plugin_service/PluginService.js
-ReactNativeClient/lib/services/plugin_service/SandboxService.js
+ReactNativeClient/lib/services/plugin_service/reducer.js
 ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
 ReactNativeClient/lib/services/plugin_service/ViewController.js

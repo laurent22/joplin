@@ -3,6 +3,14 @@ const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
+const defaultStates = {
+	plugins: require('lib/services/plugin_service/reducer.js').defaultState,
+};
+
+const reducers = {
+	plugins: require('lib/services/plugin_service/reducer.js').default,
+};
+
 const defaultState = {
 	notes: [],
 	notesSource: '',
@@ -55,10 +63,15 @@ const defaultState = {
 	},
 	backwardHistoryNotes: [],
 	forwardHistoryNotes: [],
-	plugins: {},
+	// pluginsLegacy is the original plugin system, which eventually was used only for GotoAnything.
+	// GotoAnything should be refactored to part of core and when it's done the pluginsLegacy key can
+	// be removed. It was originally named "plugins", then renamed "pluginsLegacy" so as not to conflict
+	// with the new "plugins" key used for the new plugin system.
+	pluginsLegacy: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
+	plugins: defaultStates.plugins,
 };
 
 const MAX_HISTORY = 200;
@@ -990,15 +1003,15 @@ const reducer = (state = defaultState, action) => {
 			newState.selectedNoteTags = action.items;
 			break;
 
-		case 'PLUGIN_DIALOG_SET':
+		case 'PLUGINLEGACY_DIALOG_SET':
 			{
 				if (!action.pluginName) throw new Error('action.pluginName not specified');
 				newState = Object.assign({}, state);
-				const newPlugins = Object.assign({}, newState.plugins);
-				const newPlugin = newState.plugins[action.pluginName] ? Object.assign({}, newState.plugins[action.pluginName]) : {};
+				const newPluginsLegacy = Object.assign({}, newState.pluginsLegacy);
+				const newPlugin = newState.pluginsLegacy[action.pluginName] ? Object.assign({}, newState.pluginsLegacy[action.pluginName]) : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
-				newPlugins[action.pluginName] = newPlugin;
-				newState.plugins = newPlugins;
+				newPluginsLegacy[action.pluginName] = newPlugin;
+				newState.pluginsLegacy = newPluginsLegacy;
 			}
 			break;
 		}
@@ -1015,6 +1028,8 @@ const reducer = (state = defaultState, action) => {
 	if (action.type === 'NOTE_DELETE') {
 		newState = handleHistory(newState, action);
 	}
+
+	newState = reducers.plugins(newState, action);
 
 	return newState;
 };
