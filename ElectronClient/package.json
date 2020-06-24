@@ -25,6 +25,7 @@
       "build/icons/*",
       "build/images/*"
     ],
+    "afterAllArtifactBuild": "./generateSHA256.js",
     "win": {
       "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
