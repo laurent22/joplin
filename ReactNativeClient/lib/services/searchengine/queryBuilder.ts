@@ -475,6 +475,8 @@ export default function queryBuilder(filters: Term[]) {
 
 	resourceFilter(filters, withs, queryParts, params, relation);
 
+	textFilter(filters, queryParts, params, relation);
+
 	typeFilter(filters, queryParts, relation);
 
 	completedFilter(filters, queryParts, relation);
@@ -483,7 +485,6 @@ export default function queryBuilder(filters: Term[]) {
 
 	locationFilter(filters, queryParts, params, relation);
 
-	textFilter(filters, queryParts, params, relation);
 
 
 	let query;

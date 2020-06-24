@@ -788,6 +788,16 @@ class JoplinDatabase extends Database {
 
 				queries.push('CREATE INDEX notes_normalized_id ON notes_normalized (id)');
 
+				queries.push('CREATE INDEX notes_normalized_user_created_time ON notes_normalized (user_created_time)');
+				queries.push('CREATE INDEX notes_normalized_user_updated_time ON notes_normalized (user_updated_time)');
+				queries.push('CREATE INDEX notes_normalized_is_todo ON notes_normalized (is_todo)');
+				queries.push('CREATE INDEX notes_normalized_todo_completed ON notes_normalized (todo_completed)');
+				queries.push('CREATE INDEX notes_normalized_parent_id ON notes_normalized (parent_id)');
+				queries.push('CREATE INDEX notes_normalized_latitude ON notes_normalized (latitude)');
+				queries.push('CREATE INDEX notes_normalized_longitude ON notes_normalized (longitude)');
+				queries.push('CREATE INDEX notes_normalized_altitude ON notes_normalized (altitude)');
+
+
 				const newVirtualTableSql = `
 					CREATE VIRTUAL TABLE notes_fts USING fts4(
 						content="notes_normalized",

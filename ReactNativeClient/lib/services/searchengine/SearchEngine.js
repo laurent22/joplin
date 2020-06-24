@@ -74,9 +74,9 @@ class SearchEngine {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
-					INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
-					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-					params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude]}
+				INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] }
 				);
 			}
 
@@ -151,7 +151,7 @@ class SearchEngine {
 					SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude
 					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`
 				);
-				
+
 				const queries = [];
 
 				for (let i = 0; i < changes.length; i++) {
@@ -163,9 +163,9 @@ class SearchEngine {
 						if (note) {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
-								INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
-								VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-								params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
+							INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
@@ -478,9 +478,9 @@ class SearchEngine {
 
 			const filters = filterParser(searchString);
 			const { query, params } = queryBuilder(filters);
-			// console.log('--debug--');
-			// console.log(query);
-			// console.log(params);
+			console.log('--debug--');
+			console.log(query);
+			console.log(params);
 			try {
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
