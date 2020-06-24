@@ -326,7 +326,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -757,7 +757,7 @@ class JoplinDatabase extends Database {
 						GROUP BY tags.id`);
 			}
 
-			if (targetVersion == 32) {
+			if (targetVersion == 33) {
 				queries.push('DROP TRIGGER notes_fts_before_update');
 				queries.push('DROP TRIGGER notes_fts_before_delete');
 				queries.push('DROP TRIGGER notes_after_update');
@@ -822,6 +822,8 @@ class JoplinDatabase extends Database {
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
 						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
+				
+				queries.push(this.addMigrationFile(33));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
@@ -829,8 +831,8 @@ class JoplinDatabase extends Database {
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
-				if (targetVersion === 15 || targetVersion === 18) {
-					this.logger().warn('Could not upgrade to database v15 or v18 - FTS feature will not be used', error);
+				if (targetVersion === 15 || targetVersion === 18 || targetVersion === 33) {
+					this.logger().warn('Could not upgrade to database v15 or v18 or v33- FTS feature will not be used', error);
 				} else {
 					throw error;
 				}
