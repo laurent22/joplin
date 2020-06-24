@@ -21,9 +21,10 @@ utils.execCommand = function(command) {
 		exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout) => {
 			if (error) {
 
-				// Special case for robocopy, which will return an error code of "1"
-				// if successful - https://ss64.com/nt/robocopy-exit.html
-				if (command.indexOf('robocopy') === 0 && error.code <= 1) {
+				// Special case for robocopy, which will return non-zero error codes
+				// when sucessful. Doc is very imprecise but <= 7 seems more or less
+				// fine and >= 8 seems more errorish. https://ss64.com/nt/robocopy-exit.html
+				if (command.indexOf('robocopy') === 0 && error.code <= 7) {
 					resolve(stdout.trim());
 					return;
 				}
@@ -31,7 +32,8 @@ utils.execCommand = function(command) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
-					reject(error);
+					const newError = new Error(`Code: ${error.code}: ${error.message}: ${stdout.trim()}`);
+					reject(newError);
 				}
 			} else {
 				resolve(stdout.trim());
