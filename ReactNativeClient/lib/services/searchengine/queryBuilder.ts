@@ -7,46 +7,58 @@ interface Term {
 }
 
 const tagFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
-	const tagIDs = 'SELECT tags.id from tags WHERE tags.title LIKE ?';
+	const tagIDs = `
+	SELECT tags.id
+	FROM tags
+	WHERE tags.title
+	LIKE ?`;
 
-	const noteIDsWithTag = `SELECT note_tags.note_id AS id
-							FROM note_tags
-							WHERE note_tags.tag_id IN (${tagIDs})`;
+	const noteIDsWithTag = `
+	SELECT note_tags.note_id AS id
+	FROM note_tags
+	WHERE note_tags.tag_id IN (${tagIDs})`;
 
 	const requiredTags = filters.filter(x => x.name === 'tag' && !x.negated).map(x => x.value);
 	const excludedTags = filters.filter(x => x.name === 'tag' && x.negated).map(x => x.value);
 
 	if (relation === 'AND' && (requiredTags.length > 0)) {
-		const withRequired = `notes_with_required_tags
-								AS (
-									SELECT note_tags.note_id as id
-									FROM note_tags
-									WHERE 1 INTERSECT ${new Array(requiredTags.length).fill(noteIDsWithTag).join(' INTERSECT ')})`;
+		const withRequired = `
+		notes_with_required_tags
+		AS (
+			SELECT note_tags.note_id as id
+			FROM note_tags
+			WHERE 1
+			INTERSECT
+			${new Array(requiredTags.length).fill(noteIDsWithTag).join(' INTERSECT ')}
+		)`;
 
-		const where = `AND ROWID IN (
-								SELECT notes_normalized.ROWID
-								FROM notes_with_required_tags
-								JOIN notes_normalized
-								ON notes_with_required_tags.id=notes_normalized.id
-							)`;
+		const where = `
+		AND ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_required_tags
+			JOIN notes_normalized
+			ON notes_with_required_tags.id=notes_normalized.id
+		)`;
 		withs.push(withRequired);
 		params.push(...requiredTags);
 		conditions.push(where);
 	}
 	if (relation === 'AND' && (excludedTags.length > 0)) {
-		const withExcluded = `notes_with_any_excluded_tags
-								AS (
-									SELECT note_tags.note_id as id
-									FROM note_tags
-									WHERE 0 UNION ${new Array(excludedTags.length).fill(noteIDsWithTag).join(' UNION ')}
-								)`;
+		const withExcluded = `
+		notes_with_any_excluded_tags
+		AS (
+			SELECT note_tags.note_id as id
+			FROM note_tags
+			WHERE 0 UNION ${new Array(excludedTags.length).fill(noteIDsWithTag).join(' UNION ')}
+		)`;
 
-		const whereNot = `AND ROWID NOT IN (
-								SELECT notes_normalized.ROWID
-								FROM notes_with_any_excluded_tags
-								JOIN notes_normalized
-								ON notes_with_any_excluded_tags.id=notes_normalized.id
-							)`;
+		const whereNot = `
+		AND ROWID NOT IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_any_excluded_tags
+			JOIN notes_normalized
+			ON notes_with_any_excluded_tags.id=notes_normalized.id
+		)`;
 
 		withs.push(withExcluded);
 		params.push(...excludedTags);
@@ -54,48 +66,54 @@ const tagFilter = (filters: Term[], withs: string[], conditions: string[], param
 	}
 
 	if (relation === 'OR' && (requiredTags.length > 0)) {
-		const withRequired = `notes_with_any_required_tags
-								AS (
-									SELECT note_tags.note_id as id
-									FROM note_tags
-									WHERE 0 UNION ${new Array(requiredTags.length).fill(noteIDsWithTag).join(' UNION ')}
-								)`;
+		const withRequired = `
+		notes_with_any_required_tags
+		AS (
+			SELECT note_tags.note_id as id
+			FROM note_tags
+			WHERE 0 UNION ${new Array(requiredTags.length).fill(noteIDsWithTag).join(' UNION ')}
+		)`;
 
-		const where = `OR ROWID IN (
-									SELECT notes_normalized.ROWID
-									FROM notes_with_any_required_tags
-									JOIN notes_normalized
-									ON notes_with_any_required_tags.id=notes_normalized.id
-								)`;
+		const where = `
+		OR ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_any_required_tags
+			JOIN notes_normalized
+			ON notes_with_any_required_tags.id=notes_normalized.id
+		)`;
 		withs.push(withRequired);
 		params.push(...requiredTags);
 		conditions.push(where);
 	}
 
 	if (relation === 'OR' && (excludedTags.length > 0)) {
-		const allNotesWithTags = `all_notes_with_tags
-								AS (
-									SELECT DISTINCT note_tags.note_id AS id FROM note_tags
-								)`;
+		const allNotesWithTags = `
+		all_notes_with_tags
+		AS (
+			SELECT DISTINCT note_tags.note_id AS id FROM note_tags
+		)`;
 		withs.push(allNotesWithTags); // for reuse
 
-		const notesWithoutExcludedTag = `SELECT * FROM (
-											SELECT *
-											FROM all_notes_with_tags
-											EXCEPT ${noteIDsWithTag}
-										)`;
+		const notesWithoutExcludedTag = `
+		SELECT * FROM (
+			SELECT *
+			FROM all_notes_with_tags
+			EXCEPT ${noteIDsWithTag}
+		)`;
 
-		const withNoExcluded = `notes_without_atleast_one_excluded_tag
-								AS (
-									${new Array(excludedTags.length).fill(notesWithoutExcludedTag).join(' UNION ')}
-								)`;
+		const withNoExcluded = `
+		notes_without_atleast_one_excluded_tag
+		AS (
+			${new Array(excludedTags.length).fill(notesWithoutExcludedTag).join(' UNION ')}
+		)`;
 
-		const where = `OR ROWID IN (
-									SELECT notes_normalized.ROWID
-									FROM notes_without_atleast_one_excluded_tag
-									JOIN notes_normalized
-									ON notes_without_atleast_one_excluded_tag.id=notes_normalized.id
-								)`;
+		const where = `
+		OR ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_without_atleast_one_excluded_tag
+			JOIN notes_normalized
+			ON notes_without_atleast_one_excluded_tag.id=notes_normalized.id
+		)`;
 		withs.push(withNoExcluded);
 		params.push(...excludedTags);
 		conditions.push(where);
@@ -124,7 +142,8 @@ const notebookFilter = (filters: Term[], withs: string[], conditions: string[], 
 		JOIN notebooks_in_scope
 		ON folders.parent_id=notebooks_in_scope.id
 	)`;
-	const where = `AND ROWID IN (
+	const where = `
+	AND ROWID IN (
 		SELECT notes_normalized.ROWID
 		FROM notebooks_in_scope
 		JOIN notes_normalized
@@ -138,7 +157,10 @@ const notebookFilter = (filters: Term[], withs: string[], conditions: string[], 
 
 
 const resourceFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
-	const resourceIDs = 'SELECT resources.id from resources WHERE resources.mime LIKE ?';
+	const resourceIDs = `
+	SELECT resources.id
+	FROM resources
+	WHERE resources.mime LIKE ?`;
 
 	const noteIDsWithResource = `
 	SELECT note_resources.note_id AS id
@@ -150,36 +172,41 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 	const excludedResources = filters.filter(x => x.name === 'resource' && x.negated).map(x => x.value);
 
 	if (relation === 'AND' && (requiredResources.length > 0)) {
-		const withRequired = `notes_with_required_resources
-								AS (
-									SELECT note_resources.note_id as id
-									FROM note_resources
-									WHERE 1 INTERSECT ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' INTERSECT ')})`;
+		const withRequired = `
+		notes_with_required_resources
+		AS (
+			SELECT note_resources.note_id as id
+			FROM note_resources
+			WHERE 1 INTERSECT ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' INTERSECT ')}
+		)`;
 
-		const where = `AND ROWID IN (
-								SELECT notes_normalized.ROWID
-								FROM notes_with_required_resources
-								JOIN notes_normalized
-								ON notes_with_required_resources.id=notes_normalized.id
-							)`;
+		const where = `
+		AND ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_required_resources
+			JOIN notes_normalized
+			ON notes_with_required_resources.id=notes_normalized.id
+		)`;
 		withs.push(withRequired);
 		params.push(...requiredResources);
 		conditions.push(where);
 	}
 	if (relation === 'AND' && (excludedResources.length > 0)) {
-		const withExcluded = `notes_with_any_excluded_resources
-								AS (
-									SELECT note_resources.note_id as id
-									FROM note_resources
-									WHERE 0 UNION ${new Array(excludedResources.length).fill(noteIDsWithResource).join(' UNION ')}
-								)`;
+		const withExcluded = `
+		notes_with_any_excluded_resources
+		AS (
+			SELECT note_resources.note_id as id
+			FROM note_resources
+			WHERE 0 UNION ${new Array(excludedResources.length).fill(noteIDsWithResource).join(' UNION ')}
+		)`;
 
-		const whereNot = `AND ROWID NOT IN (
-								SELECT notes_normalized.ROWID
-								FROM notes_with_any_excluded_resources
-								JOIN notes_normalized
-								ON notes_with_any_excluded_resources.id=notes_normalized.id
-							)`;
+		const whereNot = `
+		AND ROWID NOT IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_any_excluded_resources
+			JOIN notes_normalized
+			ON notes_with_any_excluded_resources.id=notes_normalized.id
+		)`;
 
 		withs.push(withExcluded);
 		params.push(...excludedResources);
@@ -187,48 +214,55 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 	}
 
 	if (relation === 'OR' && (requiredResources.length > 0)) {
-		const withRequired = `notes_with_any_required_resources
-								AS (
-									SELECT note_resources.note_id as id
-									FROM note_resources
-									WHERE 0 UNION ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' UNION ')}
-								)`;
+		const withRequired = `
+		notes_with_any_required_resources
+		AS (
+			SELECT note_resources.note_id as id
+			FROM note_resources
+			WHERE 0 UNION ${new Array(requiredResources.length).fill(noteIDsWithResource).join(' UNION ')}
+		)`;
 
-		const where = `OR ROWID IN (
-									SELECT notes_normalized.ROWID
-									FROM notes_with_any_required_resources
-									JOIN notes_normalized
-									ON notes_with_any_required_resources.id=notes_normalized.id
-								)`;
+		const where = `
+		OR ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_with_any_required_resources
+			JOIN notes_normalized
+			ON notes_with_any_required_resources.id=notes_normalized.id
+		)`;
+
 		withs.push(withRequired);
 		params.push(...requiredResources);
 		conditions.push(where);
 	}
 
 	if (relation === 'OR' && (excludedResources.length > 0)) {
-		const allNotesWithResources = `all_notes_with_resources
-								AS (
-									SELECT DISTINCT note_resources.note_id AS id FROM note_resources
-								)`;
+		const allNotesWithResources = `
+		all_notes_with_resources
+		AS (
+			SELECT DISTINCT note_resources.note_id AS id FROM note_resources
+		)`;
 		withs.push(allNotesWithResources); // for reuse
 
-		const notesWithoutExcludedResource = `SELECT * FROM (
-											SELECT *
-											FROM all_notes_with_resources
-											EXCEPT ${noteIDsWithResource}
-										)`;
+		const notesWithoutExcludedResource = `
+		SELECT * FROM (
+			SELECT *
+			FROM all_notes_with_resources
+			EXCEPT ${noteIDsWithResource}
+		)`;
 
-		const withNoExcluded = `notes_without_atleast_one_excluded_resource
-								AS (
-									${new Array(excludedResources.length).fill(notesWithoutExcludedResource).join(' UNION ')}
-								)`;
+		const withNoExcluded = `
+		notes_without_atleast_one_excluded_resource
+		AS (
+			${new Array(excludedResources.length).fill(notesWithoutExcludedResource).join(' UNION ')}
+		)`;
 
-		const where = `OR ROWID IN (
-									SELECT notes_normalized.ROWID
-									FROM notes_without_atleast_one_excluded_resource
-									JOIN notes_normalized
-									ON notes_without_atleast_one_excluded_resource.id=notes_normalized.id
-								)`;
+		const where = `
+		OR ROWID IN (
+			SELECT notes_normalized.ROWID
+			FROM notes_without_atleast_one_excluded_resource
+			JOIN notes_normalized
+			ON notes_without_atleast_one_excluded_resource.id=notes_normalized.id
+		)`;
 		withs.push(withNoExcluded);
 		params.push(...excludedResources);
 		conditions.push(where);
@@ -238,23 +272,25 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 const typeFilter = (filters: Term[], conditions: string[], relation: string) => {
 	const typeOfNote = filters.filter(x => x.name === 'type' && !x.negated).map(x => x.value);
 	typeOfNote.forEach(type => {
-		conditions.push(`${relation} ROWID IN (
+		conditions.push(`
+		${relation} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
 			WHERE notes_normalized.is_todo=${type === 'todo' ? 1 : 0}
-		)`); // check in filterParser itself whether type is todo|note
+		)`);
 	});
 };
 
 const completedFilter = (filters: Term[], conditions: string[], relation: string) => {
 	const values = filters.filter(x => x.name === 'iscompleted' && !x.negated).map(x => x.value);
 	values.forEach(value => {
-		conditions.push(`${relation} ROWID IN (
+		conditions.push(`
+		${relation} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
 			WHERE notes_normalized.is_todo = 1
 			AND notes_normalized.todo_completed ${value === '1' ? '!= ' : '= '} 0
-		)`); // check in filterParser itself whether value is 1|0
+		)`);
 	});
 };
 
@@ -314,30 +350,28 @@ const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], pa
 
 	if (excludedTerms && relation === 'AND') {
 		conditions.push(`
-			AND ROWID NOT IN (
-				SELECT ROWID
-				FROM notes_fts
-				WHERE notes_fts.${type} MATCH ?
-			)
-		`);
+		AND ROWID NOT IN (
+			SELECT ROWID
+			FROM notes_fts
+			WHERE notes_fts.${type} MATCH ?
+		)`);
 		params.push(excludedTerms.map(x => x.value).join(' OR '));
 	}
 
 	if (excludedTerms && relation === 'OR') {
 		excludedTerms.forEach(term => {
 			conditions.push(`
-				OR ROWID IN (
-					SELECT *
-					FROM (
-						SELECT ROWID
-						FROM notes_fts
-						EXCEPT
-						SELECT ROWID
-						FROM notes_fts
-						WHERE notes_fts.${type} MATCH ?
-					)
+			OR ROWID IN (
+				SELECT *
+				FROM (
+					SELECT ROWID
+					FROM notes_fts
+					EXCEPT
+					SELECT ROWID
+					FROM notes_fts
+					WHERE notes_fts.${type} MATCH ?
 				)
-			`);
+			)`);
 			params.push(term.value);
 		});
 	}
@@ -364,10 +398,10 @@ const textFilter = (filters: Term[], conditions: string[], params: string[], rel
 
 	if ((excludedTextTerms.length > 0) && relation === 'AND') {
 		conditions.push(`
-			AND ROWID NOT IN (
-			SELECT ROWID
-			FROM notes_fts
-			WHERE notes_fts MATCH ?
+		AND ROWID NOT IN (
+		SELECT ROWID
+		FROM notes_fts
+		WHERE notes_fts MATCH ?
 		)`);
 		params.push(excludedTextTerms.map(x => x.value).join(' OR '));
 	}
@@ -375,14 +409,14 @@ const textFilter = (filters: Term[], conditions: string[], params: string[], rel
 	if ((excludedTextTerms.length > 0) && relation === 'OR') {
 		excludedTextTerms.map(textTerm => {
 			conditions.push(`
-				OR ROWID IN (
-				SELECT *
-				FROM (
-					SELECT ROWID
-					FROM notes_fts
-					EXCEPT
-					SELECT ROWID FROM notes_fts
-					WHERE notes_fts MATCH ?
+			OR ROWID IN (
+			SELECT *
+			FROM (
+				SELECT ROWID
+				FROM notes_fts
+				EXCEPT
+				SELECT ROWID FROM notes_fts
+				WHERE notes_fts MATCH ?
 			))`);
 			params.push(textTerm.value);
 		});
