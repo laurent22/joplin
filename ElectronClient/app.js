@@ -30,6 +30,7 @@ const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const CommandService = require('lib/services/CommandService').default;
+const KeymapService = require('lib/services/KeymapService.js');
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 
@@ -77,7 +78,7 @@ const globalCommands = [
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
 
 const pluginClasses = [
-	require('./plugins/GotoAnything.min'),
+	'./plugins/GotoAnything.min',
 ];
 
 const appDefaultState = Object.assign({}, defaultState, {
@@ -466,9 +467,9 @@ class Application extends BaseApplication {
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
-								!module.isNoteArchive && moduleSource === 'file'
-									? selectedFolderId
-									: null,
+									!module.isNoteArchive && moduleSource === 'file'
+										? selectedFolderId
+										: null,
 							};
 
 							const service = new InteropService();
@@ -534,7 +535,7 @@ class Application extends BaseApplication {
 		}, {
 			label: _('Insert template'),
 			visible: templateDirExists,
-			accelerator: 'CommandOrControl+Alt+I',
+			accelerator: keymapService.getAccelerator('insertTemplate'),
 			click: () => {
 				cmdService.execute('selectTemplate');
 			},
@@ -561,7 +562,7 @@ class Application extends BaseApplication {
 		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
-			accelerator: 'CommandOrControl+,',
+			accelerator: shim.isMac() ? null : keymapService.getAccelerator('config'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',
@@ -643,7 +644,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Preferences...'),
 				visible: shim.isMac() ? true : false,
-				accelerator: 'CommandOrControl+,',
+				accelerator: shim.isMac() ? keymapService.getAccelerator('config') : null,
 				click: () => {
 					this.dispatch({
 						type: 'NAV_GO',
@@ -692,13 +693,13 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Hide %s', 'Joplin'),
 				platforms: ['darwin'],
-				accelerator: 'CommandOrControl+H',
+				accelerator: shim.isMac() ? keymapService.getAccelerator('hideApp') : null,
 				click: () => { bridge().electronApp().hide(); },
 			}, {
 				type: 'separator',
 			}, {
 				label: _('Quit'),
-				accelerator: 'CommandOrControl+Q',
+				accelerator: keymapService.getAccelerator('quit'),
 				click: () => { bridge().electronApp().quit(); },
 			}],
 		};
@@ -712,9 +713,9 @@ class Application extends BaseApplication {
 				newNotebookItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
-					accelerator: 'Command+W',
+					accelerator: shim.isMac() ? keymapService.getAccelerator('closeWindow') : null,
 					selector: 'performClose:',
-				},  {
+				}, {
 					type: 'separator',
 				}, {
 					label: _('Templates'),
@@ -876,7 +877,7 @@ class Application extends BaseApplication {
 				role: 'help', // Makes it add the "Search" field on macOS
 				submenu: [{
 					label: _('Website and documentation'),
-					accelerator: 'F1',
+					accelerator: keymapService.getAccelerator('help'),
 					click() { bridge().openExternal('https://joplinapp.org'); },
 				}, {
 					label: _('Joplin Forum'),
@@ -1127,15 +1128,20 @@ class Application extends BaseApplication {
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
+		KeymapService.setLogger(reg.logger());
+
 		reg.setShowErrorMessageBoxHandler((message) => { bridge().showErrorMessageBox(message); });
 
 		if (Setting.value('flagOpenDevTools')) {
 			bridge().openDevTools();
 		}
 
+		// Load plugins after the initialization
+		const _pluginClasses = pluginClasses.map(plugin => require(plugin));
+
 		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
 		PluginManager.instance().setLogger(reg.logger());
-		PluginManager.instance().register(pluginClasses);
+		PluginManager.instance().register(_pluginClasses);
 
 		this.initRedux();
 

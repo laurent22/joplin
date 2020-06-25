@@ -14,6 +14,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const KeymapService = require('lib/services/KeymapService.js');
 
 class GotoAnything {
 
@@ -462,7 +463,7 @@ GotoAnything.manifest = {
 			name: 'main',
 			parent: 'tools',
 			label: _('Goto Anything...'),
-			accelerator: 'CommandOrControl+G',
+			accelerator: KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
 		},
 	],
