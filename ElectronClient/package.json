@@ -25,7 +25,7 @@
       "build/icons/*",
       "build/images/*"
     ],
-    "afterAllArtifactBuild": "./generateSHA256.js",
+    "afterAllArtifactBuild": "./generateSha512.js",
     "win": {
       "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
@@ -126,7 +126,7 @@
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "js-yaml": "^3.14.0",
+    "js-sha512": "^0.8.0",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",
     "katex": "^0.11.1",

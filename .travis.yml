@@ -113,4 +113,3 @@ script:
     # Prepare the Electron app and build it
     cd ElectronClient
     USE_HARD_LINKS=false npm run dist
-    bash generate_sha256.sh
