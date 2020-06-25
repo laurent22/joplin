@@ -1,54 +1,9 @@
 import * as vm from 'vm';
-import Plugin from './Plugin';
+import { Plugin } from './utils/types';
 import manifestFromObject from './utils/manifestFromObject';
 import newSandbox from './newSandbox';
 const { shim } = require('lib/shim');
 const { filename } = require('lib/path-utils');
-
-// class RuntimePreferences {
-
-// 	options_:any = {};
-
-// 	set(path:string, value:any) {
-// 		const splitted = path.split('.');
-// 		let current = this.options_;
-
-// 		for (let i = 0; i < splitted.length; i++) {
-// 			const part = splitted[i];
-
-// 			if (i === splitted.length - 1) {
-// 				current[part] = value;
-// 			} else {
-// 				if (!(part in current)) {
-// 					current[part] = {};
-// 				} else {
-// 					if (typeof current[part] !== 'object') throw new Error('Trying to set a sub-property on a property that is not an object');
-// 				}
-// 				current = current[part];
-// 			}
-// 		}
-// 	}
-
-// 	get(path:string, defaultValue:any = undefined):any {
-// 		const splitted = path.split('.');
-// 		let current = this.options_;
-
-// 		for (let i = 0; i < splitted.length; i++) {
-// 			const part = splitted[i];
-
-// 			if (i === splitted.length - 1) {
-// 				return current[part];
-// 			} else {
-// 				if (!(part in current)) return defaultValue;
-// 				current = current[part];
-// 			}
-// 		}
-// 	}
-
-// }
-
-// const runtimePreferences = new RuntimePreferences();
-// export { runtimePreferences };
 
 export default class PluginService {
 
@@ -62,7 +17,6 @@ export default class PluginService {
 		return this.instance_;
 	}
 
-	private plugins_:Plugin[] = [];
 	private store_:any = null;
 
 	initialize(store:any) {
@@ -77,7 +31,7 @@ export default class PluginService {
 	}
 
 	public get plugins():Plugin[] {
-		return this.plugins_;
+		return this.store_.getState().plugins;
 	}
 
 	async loadPlugin(path:string):Promise<Plugin> {
@@ -93,11 +47,18 @@ export default class PluginService {
 		const manifestContent = await fsDriver.readFile(manifestPath);
 		const manifest = manifestFromObject(JSON.parse(manifestContent));
 		const mainScriptContent = await fsDriver.readFile(indexPath);
-		const plugin = new Plugin(filename(path), distPath, manifest, mainScriptContent);
+
+		const plugin:Plugin = {
+			id: filename(path),
+			manifest: manifest,
+			scriptText: mainScriptContent,
+			baseDir: shim.fsDriver().resolve(distPath),
+			controls: {},
+		};
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
-			pluginId: plugin.id,
+			plugin: plugin,
 		});
 
 		return plugin;
@@ -111,25 +72,20 @@ export default class PluginService {
 			if (!stat.isDirectory()) continue;
 			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
 			await this.runPlugin(plugin);
-			this.plugins.push(plugin);
 		}
 	}
 
 	async runPlugin(plugin:Plugin) {
-		const sandbox = newSandbox(plugin, this.store_);
-
+		const { sandbox, context } = newSandbox(plugin, this.store_);
 		vm.createContext(sandbox);
-
 		vm.runInContext(plugin.scriptText, sandbox);
 
-		plugin.sandbox = sandbox;
-
-		if (plugin.script) {
+		if (context.runtime.onStart) {
 			const startTime = Date.now();
 
 			try {
 				this.logger().info(`Starting plugin: ${plugin.id}`);
-				await plugin.script.run(null);
+				await context.runtime.onStart({});
 			} catch (error) {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
@@ -141,7 +97,7 @@ export default class PluginService {
 
 			this.logger().info(`Finished plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
 		} else {
-			throw new Error('No plugin was registered! Call joplin.plugins.register({.....}) from within the plugin.');
+			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
 		}
 	}
 

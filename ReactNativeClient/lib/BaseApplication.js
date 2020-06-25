@@ -42,6 +42,7 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
+const { setAutoFreeze } = require('immer');
 
 class BaseApplication {
 	constructor() {
@@ -610,6 +611,9 @@ class BaseApplication {
 		let appName = initArgs.env == 'dev' ? 'joplindev' : 'joplin';
 		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
 		Setting.setConstant('appName', appName);
+
+		// https://immerjs.github.io/immer/docs/freezing
+		setAutoFreeze(initArgs.env === 'dev');
 
 		const profileDir = this.determineProfileDir(initArgs);
 		const resourceDirName = 'resources';

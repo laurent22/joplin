@@ -1,10 +1,16 @@
-import Plugin from './Plugin';
 import WebviewController from './WebviewController';
+import { Sandbox, SandboxContext, Plugin } from './utils/types';
 const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
 const eventManager = require('lib/eventManager');
 
-export default function(plugin:Plugin, store:any) {
+
+interface NewSandboxResult {
+	sandbox: Sandbox,
+	context: SandboxContext,
+}
+
+export default function(plugin:Plugin, store:any):NewSandboxResult {
 	const api = new Api();
 
 	return (() => {
@@ -15,7 +21,16 @@ export default function(plugin:Plugin, store:any) {
 			return body;
 		}
 
-		return {
+		// Context contains the data that is sent from the plugin to the app
+		// Currently it only contains the object that's registered when
+		// the plugin calls `joplin.plugins.register()`
+		const context:SandboxContext = {
+			runtime: null,
+		};
+
+		// The sandbox is the runtime that the plugin sees, including the
+		// `joplin` global object, `console`, etc.
+		const sandbox:Sandbox = {
 			joplin: {
 				api: {
 					get: (path:string, query:any = null) => {
@@ -33,26 +48,26 @@ export default function(plugin:Plugin, store:any) {
 				},
 				plugins: {
 					register: (script:any) => {
-						plugin.script = script;
+						context.runtime = script;
 					},
 				},
 				filters: {
 					on: (name:string, callback:Function) => {
-						return eventManager.filterOn(name, callback);
+						eventManager.filterOn(name, callback);
 					},
 					off: (name:string, callback:Function) => {
-						return eventManager.filterOff(name, callback);
+						eventManager.filterOff(name, callback);
 					},
 				},
 				events: {
 					on: (name:string, callback:Function) => {
-						return eventManager.on(name, callback);
+						eventManager.on(name, callback);
 					},
 					off: (name:string, callback:Function) => {
-						return eventManager.off(name, callback);
+						eventManager.off(name, callback);
 					},
 				},
-				window: {
+				windows: {
 					createWebviewPanel: (/* options:any*/) => {
 						const controller = new WebviewController(plugin.id, store);
 
@@ -82,5 +97,7 @@ export default function(plugin:Plugin, store:any) {
 				return require(pathToLoad);
 			},
 		};
+
+		return { sandbox, context };
 	})();
 }
