@@ -29,6 +29,8 @@ const UserWebview = require('./plugin_service/UserWebview.js').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
 
+const PLUGIN_SIDEBAR_WIDTH = 200;
+
 class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
@@ -585,8 +587,8 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth) {
-		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth].join('_');
+	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth, pluginSidebarCount) {
+		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth, pluginSidebarCount].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -647,7 +649,7 @@ class MainScreenComponent extends React.Component {
 		}
 
 		this.styles_.noteText = {
-			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10) - 250,
+			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10) - PLUGIN_SIDEBAR_WIDTH * pluginSidebarCount,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -751,13 +753,22 @@ class MainScreenComponent extends React.Component {
 		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems;
 	}
 
+	pluginControlCount() {
+		let output = 0;
+		for (const pluginId in this.props.plugins) {
+			const plugin = this.props.plugins[pluginId];
+			output += Object.keys(plugin.controls).length;
+		}
+		return output;
+	}
+
 	renderUserWebviews() {
 		const output = [];
 		for (const pluginId in this.props.plugins) {
 			const plugin = this.props.plugins[pluginId];
 			for (const controlId in plugin.controls) {
 				const control = plugin.controls[controlId];
-				const v = <UserWebview key={control.id} html={control.html} style={{ width: 200, height: '100%' }}/>;
+				const v = <UserWebview key={control.id} html={control.html} style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}/>;
 				output.push(v);
 			}
 		}
@@ -778,7 +789,7 @@ class MainScreenComponent extends React.Component {
 		const notes = this.props.notes;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth, this.pluginControlCount());
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
@@ -899,7 +910,7 @@ class MainScreenComponent extends React.Component {
 				{messageComp}
 				<SideBar style={styles.sideBar} />
 				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
-				<div style={{ display: 'inline-block' }}>
+				<div style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'top', height: '100%' }}>
 					{userWebviews}
 				</div>
 				<NoteList style={styles.noteList} />

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 
 interface UserWebviewProps {
 	style:any,
@@ -36,5 +36,14 @@ export default function UserWebview(props:UserWebviewProps) {
 		};
 	}, [viewRef.current]);
 
-	return <iframe ref={viewRef} style={props.style} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
+	const style = useMemo(() => {
+		return {
+			padding: 0,
+			margin: 0,
+			border: 'none',
+			...props.style,
+		};
+	}, [props.style]);
+
+	return <iframe ref={viewRef} style={style} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
 }
