@@ -5,8 +5,8 @@ const sha512 = require('js-sha512');
 const generateChecksumFile = () => {
 	const distDirName = 'dist';
 	const distPath = path.join(__dirname, distDirName);
-	let appImageName = '';
 	try {
+		let appImageName = '';
 		const files = fs.readdirSync(distPath);
 		for (const key in files) {
 			const filename = files[key];
@@ -16,7 +16,7 @@ const generateChecksumFile = () => {
 			}
 		}
 		if (appImageName === '') {
-			// That mean we are not on Linux
+			// That means we are not on Linux
 			return [];
 		}
 		try {
