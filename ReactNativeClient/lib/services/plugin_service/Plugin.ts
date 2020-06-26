@@ -8,13 +8,15 @@ export default class Plugin {
 	private manifest_:PluginManifest;
 	private scriptText_:string;
 	private enabled_:boolean = true;
-	public sandbox:any = null;
+	private context_:any = null;
+	private logger_:any = null;
 
-	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string) {
+	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string, logger:any) {
 		this.id_ = id;
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
+		this.logger_ = logger;
 	}
 
 	public get id():string {
@@ -35,6 +37,30 @@ export default class Plugin {
 
 	public get baseDir():string {
 		return this.baseDir_;
+	}
+
+	public get context():any {
+		return this.context_;
+	}
+
+	public set context(v:any) {
+		this.context_ = v;
+	}
+
+	public onMessage(event:any) {
+		this.logger_.debug(`Plugin ${this.id}: Got message: `, event);
+
+		if (!this.context) {
+			this.logger_.warn(`Plugin ${this.id}: Got message but no context is defined. Message: `, event);
+			return;
+		}
+
+		if (!this.context.runtime.onMessage) {
+			this.logger_.warn(`Plugin ${this.id}: Got message but onMessage() handler is not defined. Message: `, event);
+			return;
+		}
+
+		this.context.runtime.onMessage(event.message);
 	}
 
 }

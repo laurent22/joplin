@@ -28,6 +28,7 @@ const EncryptionService = require('lib/services/EncryptionService');
 const UserWebview = require('./plugin_service/UserWebview.js').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
+const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 const PLUGIN_SIDEBAR_WIDTH = 200;
 
@@ -55,6 +56,7 @@ class MainScreenComponent extends React.Component {
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
 		this.commandSavePdf = this.commandSavePdf.bind(this);
 		this.commandPrint = this.commandPrint.bind(this);
+		this.userWebview_message = this.userWebview_message.bind(this);
 	}
 
 	setupAppCloseHandling() {
@@ -766,13 +768,24 @@ class MainScreenComponent extends React.Component {
 		return output;
 	}
 
+	userWebview_message(event) {
+		PluginService.instance().pluginById(event.pluginId).onMessage(event);
+	}
+
 	renderUserWebviews() {
 		const output = [];
 		for (const pluginId in this.props.plugins) {
 			const plugin = this.props.plugins[pluginId];
 			for (const controlId in plugin.controls) {
 				const control = plugin.controls[controlId];
-				const v = <UserWebview key={control.id} html={control.html} style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}/>;
+				const v = <UserWebview
+					key={control.id}
+					html={control.html}
+					scripts={control.scripts}
+					pluginId={pluginId}
+					onMessage={this.userWebview_message}
+					style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}
+				/>;
 				output.push(v);
 			}
 		}

@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 
 interface UserWebviewProps {
 	style:any,
 	html:string,
+	scripts:string[],
+	onMessage:Function,
+	pluginId:string,
 }
 
 export default function UserWebview(props:UserWebviewProps) {
+	const [isReady, setIsReady] = useState(false);
+
 	const viewRef = useRef(null);
 
 	function frameWindow() {
@@ -17,14 +22,22 @@ export default function UserWebview(props:UserWebviewProps) {
 	function postMessage(name:string, args:any = null) {
 		const win = frameWindow();
 		if (!win) return;
-		win.postMessage({ name, args }, '*');
+		win.postMessage({ target: 'webview', name, args }, '*');
 	}
 
 	useEffect(() => {
-		if (!viewRef.current) return () => {};
+		if (!isReady) return;
+		postMessage('setHtml', { html: props.html });
+	}, [props.html, isReady]);
 
+	useEffect(() => {
+		if (!isReady) return;
+		postMessage('setScripts', { scripts: props.scripts });
+	}, [props.scripts, isReady]);
+
+	useEffect(() => {
 		function onReady() {
-			postMessage('setHtml', { html: props.html });
+			setIsReady(true);
 		}
 
 		viewRef.current.addEventListener('dom-ready', onReady);
@@ -34,7 +47,21 @@ export default function UserWebview(props:UserWebviewProps) {
 			viewRef.current.removeEventListener('dom-ready', onReady);
 			viewRef.current.removeEventListener('load', onReady);
 		};
-	}, [viewRef.current]);
+	}, []);
+
+	useEffect(() => {
+		function onMessage(event:any) {
+			if (!event.data || event.data.target !== 'plugin') return;
+			props.onMessage({ pluginId: props.pluginId, message: event.data.message });
+		}
+
+		viewRef.current.contentWindow.addEventListener('message', onMessage);
+
+		return () => {
+			viewRef.current.contentWindow.removeEventListener('message', onMessage);
+		};
+	}, [props.onMessage, props.pluginId]);
+
 
 	const style = useMemo(() => {
 		return {

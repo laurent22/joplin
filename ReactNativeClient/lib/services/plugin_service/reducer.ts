@@ -31,6 +31,11 @@ const reducer = produce((draft: Draft<any>, action:any) => {
 			draft.pluginSystem.plugins[action.pluginId].controls[action.id][action.name] = action.value;
 			break;
 
+		case 'PLUGIN_CONTROL_PROP_PUSH':
+
+			draft.pluginSystem.plugins[action.pluginId].controls[action.id][action.name].push(action.value);
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In plugin reducer: ${error.message} Action: ${JSON.stringify(action)}`;

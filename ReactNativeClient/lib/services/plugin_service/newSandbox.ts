@@ -69,19 +69,22 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 				},
 				windows: {
 					createWebviewPanel: (/* options:any*/) => {
-						const controller = new WebviewController(plugin.id, store);
-
-						store.dispatch({
-							type: 'PLUGIN_CONTROL_ADD',
-							pluginId: plugin.id,
-							control: controller.toObject(),
-						});
-
+						const controller = new WebviewController(plugin.id, plugin.baseDir, store);
 						return controller;
 					},
 				},
 			},
 			console: console,
+			setTimeout: (fn:Function, interval:number) => {
+				return setTimeout(() => {
+					fn();
+				}, interval);
+			},
+			setInterval: (fn:Function, interval:number) => {
+				return setInterval(() => {
+					fn();
+				}, interval);
+			},
 			require: (path:string):any => {
 				let pathToLoad = path;
 

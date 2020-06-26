@@ -64,6 +64,8 @@ export interface Sandbox {
 	joplin: SandboxJoplin,
 	console: SandboxConsole,
 	require: Function,
+	setTimeout: Function,
+	setInterval: Function,
 }
 
 export interface SandboxContextRuntime {

@@ -2,32 +2,9 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<script src="UserWebviewIndex.js"></script>
 </head>
 
 <body>
-	<script>
-	const rootElement = document.createElement('div');
-	document.getElementsByTagName('body')[0].appendChild(rootElement);
-
-	const contentElement = document.createElement('div');
-	rootElement.appendChild(contentElement);
-
-	const ipc = {
-		setHtml: (args) => {
-			contentElement.innerHTML = args.html;
-		},
-	};
-
-	window.addEventListener('message', ((event) => {
-		const callName = event.data.name;
-		const args = event.data.args;
-
-		if (!ipc[callName]) {
-			console.warn('Missing IPC function:', event.data);
-		} else {
-			ipc[callName](args);
-		}
-	}));
-	</script>
 </body>
 </html>

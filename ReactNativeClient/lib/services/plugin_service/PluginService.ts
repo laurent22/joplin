@@ -4,8 +4,13 @@ import manifestFromObject from './utils/manifestFromObject';
 import newSandbox from './newSandbox';
 const { shim } = require('lib/shim');
 const { filename } = require('lib/path-utils');
+const BaseService = require('lib/services/BaseService');
 
-export default class PluginService {
+interface Plugins {
+	[key:string]: Plugin
+}
+
+export default class PluginService extends BaseService {
 
 	private static instance_:PluginService = null;
 
@@ -18,20 +23,16 @@ export default class PluginService {
 	}
 
 	private store_:any = null;
+	private plugins_:Plugins = {};
 
 	initialize(store:any) {
 		this.store_ = store;
 	}
 
-	logger() {
-		return {
-			error: console.error,
-			info: console.info,
-		};
-	}
+	public pluginById(id:string):Plugin {
+		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
-	public get plugins():Plugin[] {
-		return this.store_.getState().plugins;
+		return this.plugins_[id];
 	}
 
 	async loadPlugin(path:string):Promise<Plugin> {
@@ -49,7 +50,7 @@ export default class PluginService {
 		const scriptText = await fsDriver.readFile(indexPath);
 		const pluginId = filename(path);
 
-		const plugin = new Plugin(pluginId, distPath, manifest, scriptText);
+		const plugin = new Plugin(pluginId, distPath, manifest, scriptText, this.logger());
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
@@ -69,12 +70,14 @@ export default class PluginService {
 		for (const stat of pluginPaths) {
 			if (!stat.isDirectory()) continue;
 			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
+			this.plugins_[plugin.id] = plugin;
 			await this.runPlugin(plugin);
 		}
 	}
 
 	async runPlugin(plugin:Plugin) {
 		const { sandbox, context } = newSandbox(plugin, this.store_);
+		plugin.context = context;
 		vm.createContext(sandbox);
 		vm.runInContext(plugin.scriptText, sandbox);
 
