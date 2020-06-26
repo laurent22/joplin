@@ -3,13 +3,13 @@ const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
-const defaultStates = {
-	plugins: require('lib/services/plugin_service/reducer.js').defaultState,
-};
+const additionalReducers = [];
 
-const reducers = {
-	plugins: require('lib/services/plugin_service/reducer.js').default,
-};
+additionalReducers.push({
+	stateRootKey: require('lib/services/plugin_service/reducer.js').stateRootKey,
+	defaultState: require('lib/services/plugin_service/reducer.js').defaultState,
+	reducer: require('lib/services/plugin_service/reducer.js').default,
+});
 
 const defaultState = {
 	notes: [],
@@ -71,8 +71,11 @@ const defaultState = {
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
-	plugins: defaultStates.plugins,
 };
+
+for (const additionalReducer of additionalReducers) {
+	defaultState[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+}
 
 const MAX_HISTORY = 200;
 
@@ -1029,7 +1032,9 @@ const reducer = (state = defaultState, action) => {
 		newState = handleHistory(newState, action);
 	}
 
-	newState = reducers.plugins(newState, action);
+	for (const additionalReducer of additionalReducers) {
+		newState = additionalReducer.reducer(newState, action);
+	}
 
 	return newState;
 };

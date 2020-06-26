@@ -1,9 +1,9 @@
 import WebviewController from './WebviewController';
-import { Sandbox, SandboxContext, Plugin } from './utils/types';
+import { Sandbox, SandboxContext } from './utils/types';
+import Plugin from './Plugin';
 const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
 const eventManager = require('lib/eventManager');
-
 
 interface NewSandboxResult {
 	sandbox: Sandbox,
@@ -91,7 +91,6 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 					pathToLoad = absolutePath;
 				} else {
 					if (path.indexOf('lib/') === 0) throw new Error('Access to internal lib is not allowed');
-					// if (!requireWhiteList.includes(path)) throw new Error(`Cannot access this module: ${path}`);
 				}
 
 				return require(pathToLoad);

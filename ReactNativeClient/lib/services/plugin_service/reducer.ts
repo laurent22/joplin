@@ -1,7 +1,9 @@
 import produce, { Draft } from 'immer';
 
+export const stateRootKey = 'pluginSystem';
+
 export const defaultState = {
-	controls: {},
+	plugins: {},
 };
 
 const reducer = produce((draft: Draft<any>, action:any) => {
@@ -15,18 +17,18 @@ const reducer = produce((draft: Draft<any>, action:any) => {
 
 		case 'PLUGIN_ADD':
 
-			if (draft.plugins[action.plugin.id]) throw new Error(`Plugin is already loaded: ${JSON.stringify(action)}`);
-			draft.plugins[action.plugin.id] = action.plugin;
+			if (draft.pluginSystem.plugins[action.plugin.id]) throw new Error(`Plugin is already loaded: ${JSON.stringify(action)}`);
+			draft.pluginSystem.plugins[action.plugin.id] = action.plugin;
 			break;
 
 		case 'PLUGIN_CONTROL_ADD':
 
-			draft.plugins[action.pluginId].controls[action.control.id] = { ...action.control };
+			draft.pluginSystem.plugins[action.pluginId].controls[action.control.id] = { ...action.control };
 			break;
 
 		case 'PLUGIN_CONTROL_PROP_SET':
 
-			draft.plugins[action.pluginId].controls[action.id][action.name] = action.value;
+			draft.pluginSystem.plugins[action.pluginId].controls[action.id][action.name] = action.value;
 			break;
 
 		}
@@ -34,8 +36,6 @@ const reducer = produce((draft: Draft<any>, action:any) => {
 		error.message = `In plugin reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 		throw error;
 	}
-
-	// TODO: DISABLE FREEZING IN PROD
 });
 
 export default reducer;

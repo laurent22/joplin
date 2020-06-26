@@ -7,7 +7,6 @@ export default class Plugin {
 	private baseDir_:string;
 	private manifest_:PluginManifest;
 	private scriptText_:string;
-	private script_:any;
 	private enabled_:boolean = true;
 	public sandbox:any = null;
 
@@ -32,14 +31,6 @@ export default class Plugin {
 
 	public get scriptText():string {
 		return this.scriptText_;
-	}
-
-	public get script():any {
-		return this.script_;
-	}
-
-	public set script(v:any) {
-		this.script_ = v;
 	}
 
 	public get baseDir():string {

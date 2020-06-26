@@ -757,6 +757,10 @@ class MainScreenComponent extends React.Component {
 		let output = 0;
 		for (const pluginId in this.props.plugins) {
 			const plugin = this.props.plugins[pluginId];
+			if (!plugin.controls) {
+				console.error('Plugin without controls key:', pluginId, this.props.plugins);
+				continue;
+			}
 			output += Object.keys(plugin.controls).length;
 		}
 		return output;
@@ -941,7 +945,7 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
-		plugins: state.plugins,
+		plugins: state.pluginSystem.plugins,
 		templates: state.templates,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,

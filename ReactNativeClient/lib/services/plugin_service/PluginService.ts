@@ -1,5 +1,5 @@
 import * as vm from 'vm';
-import { Plugin } from './utils/types';
+import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import newSandbox from './newSandbox';
 const { shim } = require('lib/shim');
@@ -46,19 +46,17 @@ export default class PluginService {
 		const indexPath = `${distPath}/index.js`;
 		const manifestContent = await fsDriver.readFile(manifestPath);
 		const manifest = manifestFromObject(JSON.parse(manifestContent));
-		const mainScriptContent = await fsDriver.readFile(indexPath);
+		const scriptText = await fsDriver.readFile(indexPath);
+		const pluginId = filename(path);
 
-		const plugin:Plugin = {
-			id: filename(path),
-			manifest: manifest,
-			scriptText: mainScriptContent,
-			baseDir: shim.fsDriver().resolve(distPath),
-			controls: {},
-		};
+		const plugin = new Plugin(pluginId, distPath, manifest, scriptText);
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
-			plugin: plugin,
+			plugin: {
+				id: pluginId,
+				controls: {},
+			},
 		});
 
 		return plugin;
