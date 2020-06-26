@@ -88,6 +88,7 @@
     "electron-rebuild": "^1.10.1",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
+    "js-sha512": "^0.8.0",
     "patch-package": "^6.2.0"
   },
   "optionalDependencies": {
@@ -126,7 +127,6 @@
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "js-sha512": "^0.8.0",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",
     "katex": "^0.11.1",
