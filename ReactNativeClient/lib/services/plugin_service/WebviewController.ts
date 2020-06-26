@@ -7,6 +7,7 @@ export default class WebviewController {
 	private pluginId_:string;
 	private baseDir_:string;
 	private store_:any;
+	private messageListener_:Function = null;
 
 	constructor(pluginId:string, baseDir:string, store:any) {
 		this.pluginId_ = pluginId;
@@ -67,6 +68,15 @@ export default class WebviewController {
 			name: 'scripts',
 			value: fullPath,
 		});
+	}
+
+	public emitMessage(event:any) {
+		if (!this.messageListener_) return;
+		this.messageListener_(event.message);
+	}
+
+	public onMessage(callback:any) {
+		this.messageListener_ = callback;
 	}
 
 }

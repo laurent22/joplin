@@ -9,7 +9,9 @@ export default class Plugin {
 	private scriptText_:string;
 	private enabled_:boolean = true;
 	private context_:any = null;
+	// @ts-ignore Should be useful later on
 	private logger_:any = null;
+	private viewControllers_:any = {};
 
 	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string, logger:any) {
 		this.id_ = id;
@@ -47,20 +49,14 @@ export default class Plugin {
 		this.context_ = v;
 	}
 
-	public onMessage(event:any) {
-		this.logger_.debug(`Plugin ${this.id}: Got message: `, event);
+	public addViewController(v:any) {
+		if (this.viewControllers_[v.id]) throw new Error(`View already added: ${v.id}`);
+		this.viewControllers_[v.id] = v;
+	}
 
-		if (!this.context) {
-			this.logger_.warn(`Plugin ${this.id}: Got message but no context is defined. Message: `, event);
-			return;
-		}
-
-		if (!this.context.runtime.onMessage) {
-			this.logger_.warn(`Plugin ${this.id}: Got message but onMessage() handler is not defined. Message: `, event);
-			return;
-		}
-
-		this.context.runtime.onMessage(event.message);
+	public viewControllerById(id:string) {
+		if (!this.viewControllers_[id]) throw new Error(`View not found: ${id}`);
+		return this.viewControllers_[id];
 	}
 
 }

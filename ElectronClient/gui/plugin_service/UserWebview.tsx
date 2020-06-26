@@ -7,6 +7,7 @@ interface UserWebviewProps {
 	scripts:string[],
 	onMessage:Function,
 	pluginId:string,
+	controlId:string,
 }
 
 export default function UserWebview(props:UserWebviewProps) {
@@ -52,7 +53,11 @@ export default function UserWebview(props:UserWebviewProps) {
 	useEffect(() => {
 		function onMessage(event:any) {
 			if (!event.data || event.data.target !== 'plugin') return;
-			props.onMessage({ pluginId: props.pluginId, message: event.data.message });
+			props.onMessage({
+				pluginId: props.pluginId,
+				controlId: props.controlId,
+				message: event.data.message,
+			});
 		}
 
 		viewRef.current.contentWindow.addEventListener('message', onMessage);
@@ -60,7 +65,7 @@ export default function UserWebview(props:UserWebviewProps) {
 		return () => {
 			viewRef.current.contentWindow.removeEventListener('message', onMessage);
 		};
-	}, [props.onMessage, props.pluginId]);
+	}, [props.onMessage, props.pluginId, props.controlId]);
 
 
 	const style = useMemo(() => {

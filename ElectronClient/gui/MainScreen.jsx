@@ -769,7 +769,7 @@ class MainScreenComponent extends React.Component {
 	}
 
 	userWebview_message(event) {
-		PluginService.instance().pluginById(event.pluginId).onMessage(event);
+		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.controlId).emitMessage(event);
 	}
 
 	renderUserWebviews() {
@@ -780,6 +780,7 @@ class MainScreenComponent extends React.Component {
 				const control = plugin.controls[controlId];
 				const v = <UserWebview
 					key={control.id}
+					controlId={control.id}
 					html={control.html}
 					scripts={control.scripts}
 					pluginId={pluginId}
