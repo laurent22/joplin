@@ -69,7 +69,7 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 				},
 				views: {
 					createWebviewPanel: (/* options:any*/) => {
-						const controller = new WebviewController(plugin.id, plugin.baseDir, store);
+						const controller = new WebviewController(plugin.id, store, plugin.baseDir);
 						plugin.addViewController(controller);
 						return controller;
 					},

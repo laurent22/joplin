@@ -1,20 +1,17 @@
+import ViewController from './ViewController';
 const { shim } = require('lib/shim');
 const { toSystemSlashes } = require('lib/path-utils');
 
-export default class WebviewController {
+export default class WebviewController extends ViewController {
 
-	private id_:string = `webview_${Math.random()}`;
-	private pluginId_:string;
 	private baseDir_:string;
-	private store_:any;
 	private messageListener_:Function = null;
 
-	constructor(pluginId:string, baseDir:string, store:any) {
-		this.pluginId_ = pluginId;
+	constructor(pluginId:string, store:any, baseDir:string) {
+		super(pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
-		this.store_ = store;
 
-		this.store_.dispatch({
+		this.store.dispatch({
 			type: 'PLUGIN_VIEW_ADD',
 			pluginId: pluginId,
 			view: {
@@ -26,18 +23,6 @@ export default class WebviewController {
 		});
 	}
 
-	private get storeView():any {
-		return this.store_.pluginSystem.plugins[this.pluginId_].views[this.id];
-	}
-
-	public get key():string {
-		return this.id_;
-	}
-
-	public get id():string {
-		return this.id_;
-	}
-
 	public get type():string {
 		return 'webview';
 	}
@@ -47,9 +32,9 @@ export default class WebviewController {
 	}
 
 	public set html(html:string) {
-		this.store_.dispatch({
+		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_SET',
-			pluginId: this.pluginId_,
+			pluginId: this.pluginId,
 			id: this.id,
 			name: 'html',
 			value: html,
@@ -61,9 +46,9 @@ export default class WebviewController {
 
 		if (fullPath.indexOf(this.baseDir_) !== 0) throw new Error(`Script appears to be outside of plugin base directory: ${fullPath} (Base dir: ${this.baseDir_})`);
 
-		this.store_.dispatch({
+		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_PUSH',
-			pluginId: this.pluginId_,
+			pluginId: this.pluginId,
 			id: this.id,
 			name: 'scripts',
 			value: fullPath,

@@ -77,7 +77,7 @@ export default class PluginService extends BaseService {
 
 	async runPlugin(plugin:Plugin) {
 		const { sandbox, context } = newSandbox(plugin, this.store_);
-		plugin.context = context;
+		// plugin.context = context;
 		vm.createContext(sandbox);
 		vm.runInContext(plugin.scriptText, sandbox);
 

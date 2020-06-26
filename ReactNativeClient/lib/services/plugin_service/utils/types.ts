@@ -70,6 +70,7 @@ export interface Sandbox {
 
 export interface SandboxContextRuntime {
 	onStart(event:any):void;
+	onMessage(event:any):void;
 }
 
 export interface SandboxContext {
