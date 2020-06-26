@@ -67,7 +67,7 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 						eventManager.off(name, callback);
 					},
 				},
-				windows: {
+				views: {
 					createWebviewPanel: (/* options:any*/) => {
 						const controller = new WebviewController(plugin.id, plugin.baseDir, store);
 						plugin.addViewController(controller);

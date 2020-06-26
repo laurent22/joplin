@@ -56,7 +56,7 @@ export default class PluginService extends BaseService {
 			type: 'PLUGIN_ADD',
 			plugin: {
 				id: pluginId,
-				controls: {},
+				views: {},
 			},
 		});
 

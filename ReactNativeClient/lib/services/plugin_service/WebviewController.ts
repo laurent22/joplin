@@ -15,9 +15,9 @@ export default class WebviewController {
 		this.store_ = store;
 
 		this.store_.dispatch({
-			type: 'PLUGIN_CONTROL_ADD',
+			type: 'PLUGIN_VIEW_ADD',
 			pluginId: pluginId,
-			control: {
+			view: {
 				id: this.id,
 				type: this.type,
 				html: '',
@@ -26,8 +26,8 @@ export default class WebviewController {
 		});
 	}
 
-	private get storeControl():any {
-		return this.store_.pluginSystem.plugins[this.pluginId_].controls[this.id];
+	private get storeView():any {
+		return this.store_.pluginSystem.plugins[this.pluginId_].views[this.id];
 	}
 
 	public get key():string {
@@ -43,12 +43,12 @@ export default class WebviewController {
 	}
 
 	public get html():string {
-		return this.storeControl.html;
+		return this.storeView.html;
 	}
 
 	public set html(html:string) {
 		this.store_.dispatch({
-			type: 'PLUGIN_CONTROL_PROP_SET',
+			type: 'PLUGIN_VIEW_PROP_SET',
 			pluginId: this.pluginId_,
 			id: this.id,
 			name: 'html',
@@ -62,7 +62,7 @@ export default class WebviewController {
 		if (fullPath.indexOf(this.baseDir_) !== 0) throw new Error(`Script appears to be outside of plugin base directory: ${fullPath} (Base dir: ${this.baseDir_})`);
 
 		this.store_.dispatch({
-			type: 'PLUGIN_CONTROL_PROP_PUSH',
+			type: 'PLUGIN_VIEW_PROP_PUSH',
 			pluginId: this.pluginId_,
 			id: this.id,
 			name: 'scripts',

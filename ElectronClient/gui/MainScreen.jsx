@@ -759,28 +759,28 @@ class MainScreenComponent extends React.Component {
 		let output = 0;
 		for (const pluginId in this.props.plugins) {
 			const plugin = this.props.plugins[pluginId];
-			if (!plugin.controls) {
-				console.error('Plugin without controls key:', pluginId, this.props.plugins);
+			if (!plugin.views) {
+				console.error('Plugin without views key:', pluginId, this.props.plugins);
 				continue;
 			}
-			output += Object.keys(plugin.controls).length;
+			output += Object.keys(plugin.views).length;
 		}
 		return output;
 	}
 
 	userWebview_message(event) {
-		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.controlId).emitMessage(event);
+		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.viewId).emitMessage(event);
 	}
 
 	renderUserWebviews() {
 		const output = [];
 		for (const pluginId in this.props.plugins) {
 			const plugin = this.props.plugins[pluginId];
-			for (const controlId in plugin.controls) {
-				const control = plugin.controls[controlId];
+			for (const viewId in plugin.views) {
+				const control = plugin.views[viewId];
 				const v = <UserWebview
 					key={control.id}
-					controlId={control.id}
+					viewId={control.id}
 					html={control.html}
 					scripts={control.scripts}
 					pluginId={pluginId}

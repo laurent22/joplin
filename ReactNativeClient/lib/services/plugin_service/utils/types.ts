@@ -40,7 +40,7 @@ export interface SandboxJoplinEvents {
 	off(name:string, callback:Function):void;
 }
 
-export interface SandboxJoplinWindows {
+export interface SandboxJoplinViews {
 	createWebviewPanel(options:any):any; // TODO: Should return an instance of ViewController
 }
 
@@ -49,7 +49,7 @@ export interface SandboxJoplin {
 	plugins: SandboxJoplinPlugins,
 	filters: SandboxJoplinFilters,
 	events: SandboxJoplinEvents,
-	windows: SandboxJoplinWindows,
+	views: SandboxJoplinViews,
 }
 
 export interface SandboxConsole {

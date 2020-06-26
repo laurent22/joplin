@@ -21,19 +21,19 @@ const reducer = produce((draft: Draft<any>, action:any) => {
 			draft.pluginSystem.plugins[action.plugin.id] = action.plugin;
 			break;
 
-		case 'PLUGIN_CONTROL_ADD':
+		case 'PLUGIN_VIEW_ADD':
 
-			draft.pluginSystem.plugins[action.pluginId].controls[action.control.id] = { ...action.control };
+			draft.pluginSystem.plugins[action.pluginId].views[action.view.id] = { ...action.view };
 			break;
 
-		case 'PLUGIN_CONTROL_PROP_SET':
+		case 'PLUGIN_VIEW_PROP_SET':
 
-			draft.pluginSystem.plugins[action.pluginId].controls[action.id][action.name] = action.value;
+			draft.pluginSystem.plugins[action.pluginId].views[action.id][action.name] = action.value;
 			break;
 
-		case 'PLUGIN_CONTROL_PROP_PUSH':
+		case 'PLUGIN_VIEW_PROP_PUSH':
 
-			draft.pluginSystem.plugins[action.pluginId].controls[action.id][action.name].push(action.value);
+			draft.pluginSystem.plugins[action.pluginId].views[action.id][action.name].push(action.value);
 			break;
 
 		}
