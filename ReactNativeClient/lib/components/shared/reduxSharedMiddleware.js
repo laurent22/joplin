@@ -5,9 +5,12 @@ const Note = require('lib/models/Note');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const eventManager = require('lib/eventManager');
 
 const reduxSharedMiddleware = async function(store, next, action) {
 	const newState = store.getState();
+
+	eventManager.appStateEmit(newState);
 
 	let refreshTags = false;
 

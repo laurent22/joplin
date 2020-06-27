@@ -69,6 +69,12 @@ export default class PluginService extends BaseService {
 
 		for (const stat of pluginPaths) {
 			if (!stat.isDirectory()) continue;
+
+			if (stat.path.indexOf('_') === 0) {
+				this.logger().info(`PluginService: Plugin name starts with "_" and has not been loaded: ${stat.path}`);
+				continue;
+			}
+
 			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
 			this.plugins_[plugin.id] = plugin;
 			await this.runPlugin(plugin);
@@ -80,6 +86,10 @@ export default class PluginService extends BaseService {
 		// plugin.context = context;
 		vm.createContext(sandbox);
 		vm.runInContext(plugin.scriptText, sandbox);
+
+		if (!context.runtime) {
+			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
+		}
 
 		if (context.runtime.onStart) {
 			const startTime = Date.now();
@@ -96,9 +106,7 @@ export default class PluginService extends BaseService {
 				this.logger().error(plugin.id, `In plugin ${plugin.id}:`, newError);
 			}
 
-			this.logger().info(`Finished plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
-		} else {
-			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
+			this.logger().info(`Finished running plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
 		}
 	}
 

@@ -40,6 +40,11 @@ export interface SandboxJoplinEvents {
 	off(name:string, callback:Function):void;
 }
 
+export interface SandboxJoplinAppState {
+	on(propName:string, callback:Function):void;
+	off(propName:string, callback:Function):void;
+}
+
 export interface SandboxJoplinViews {
 	createWebviewPanel(options:any):any; // TODO: Should return an instance of ViewController
 }
@@ -50,6 +55,7 @@ export interface SandboxJoplin {
 	filters: SandboxJoplinFilters,
 	events: SandboxJoplinEvents,
 	views: SandboxJoplinViews,
+	appState: SandboxJoplinAppState,
 }
 
 export interface SandboxConsole {

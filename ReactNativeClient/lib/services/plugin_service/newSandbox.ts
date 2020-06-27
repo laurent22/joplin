@@ -67,6 +67,14 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 						eventManager.off(name, callback);
 					},
 				},
+				appState: {
+					on: (propName:string, callback:Function) => {
+						eventManager.appStateOn(propName, callback);
+					},
+					off: (propName:string, callback:Function) => {
+						eventManager.appStateOff(propName, callback);
+					},
+				},
 				views: {
 					createWebviewPanel: (/* options:any*/) => {
 						const controller = new WebviewController(plugin.id, store, plugin.baseDir);

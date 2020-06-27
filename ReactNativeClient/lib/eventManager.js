@@ -3,7 +3,15 @@ const events = require('events');
 class EventManager {
 
 	constructor() {
+		this.reset();
+	}
+
+	reset() {
 		this.emitter_ = new events.EventEmitter();
+
+		this.appStatePrevious_ = {};
+		this.appStateWatchedProps_ = [];
+		this.appStateListeners_ = {};
 	}
 
 	on(eventName, callback) {
@@ -49,6 +57,64 @@ class EventManager {
 		}
 
 		return output;
+	}
+
+	appStateOn(propName, callback) {
+		if (!this.appStateListeners_[propName]) {
+			this.appStateListeners_[propName] = [];
+			this.appStateWatchedProps_.push(propName);
+		}
+
+		this.appStateListeners_[propName].push(callback);
+	}
+
+	appStateOff(propName, callback) {
+		if (!this.appStateListeners_[propName]) {
+			throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (1)');
+		}
+
+		const idx = this.appStateListeners_[propName].indexOf(callback);
+		if (idx < 0) throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (2)');
+
+		this.appStateListeners_[propName].splice(idx, 1);
+	}
+
+	stateValue_(state, propName) {
+		const parts = propName.split('.');
+		let s = state;
+		for (const p of parts) {
+			if (!(p in s)) throw new Error(`Invalid state property path: ${propName}`);
+			s = s[p];
+		}
+		return s;
+	}
+
+	// This function works by keeping a copy of the watched props and, whenever this function
+	// is called, comparing the previous and new values and emitting events if they have changed.
+	// The appStateEmit function should be called from a middleware.
+	appStateEmit(state) {
+		if (!this.appStateWatchedProps_.length) return;
+
+		for (const propName of this.appStateWatchedProps_) {
+			let emit = false;
+
+			const stateValue = this.stateValue_(state, propName);
+
+			if (!(propName in this.appStatePrevious_) || this.appStatePrevious_[propName] !== stateValue) {
+				this.appStatePrevious_[propName] = stateValue;
+				emit = true;
+			}
+
+			if (emit) {
+				const listeners = this.appStateListeners_[propName];
+				if (!listeners || !listeners.length) continue;
+
+				const eventValue = Object.freeze(stateValue);
+				for (const listener of listeners) {
+					listener({ value: eventValue });
+				}
+			}
+		}
 	}
 
 }
