@@ -29,6 +29,10 @@ export default class PluginService extends BaseService {
 		this.store_ = store;
 	}
 
+	public get plugins():Plugins {
+		return this.plugins_;
+	}
+
 	public pluginById(id:string):Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 

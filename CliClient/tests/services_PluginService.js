@@ -1,8 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrow } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const PluginService = require('lib/services/plugin_service/PluginService.js').default;
-const { runtimePreferences } = require('lib/services/plugin_service/PluginService.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 
@@ -11,6 +10,15 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
+
+function newService() {
+	const dummyStore = {
+		dispatch: () => {},
+	};
+	const service = new PluginService();
+	service.initialize(dummyStore);
+	return service;
+}
 
 describe('services_PluginService', function() {
 
@@ -21,8 +29,9 @@ describe('services_PluginService', function() {
 	});
 
 	it('should load and run a simple plugin', asyncTest(async () => {
-		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/simple`);
-		await PluginService.instance().runPlugin(plugin);
+		const service = newService();
+		const plugin = await service.loadPlugin(`${testPluginDir}/simple`);
+		await service.runPlugin(plugin);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -35,8 +44,9 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should load and run a plugin from a directory', asyncTest(async () => {
-		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/testImport`);
-		await PluginService.instance().runPlugin(plugin);
+		const service = newService();
+		const plugin = await service.loadPlugin(`${testPluginDir}/testImport`);
+		await service.runPlugin(plugin);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -44,9 +54,10 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
-		const plugin = await PluginService.instance().loadPlugin(`${testPluginDir}/withExternalModules`);
+		const service = newService();
+		const plugin = await service.loadPlugin(`${testPluginDir}/withExternalModules`);
 		expect(plugin.id).toBe('withExternalModules');
-		await PluginService.instance().runPlugin(plugin);
+		await service.runPlugin(plugin);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -54,30 +65,15 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should load multiple plugins from a directory', asyncTest(async () => {
-		const service = PluginService.instance();
+		const service = newService();
 		await service.loadPlugins(`${testPluginDir}/multi_plugins`);
 
-		expect(service.plugins.length).toBe(2);
+		service.pluginById('simple1');
+		service.pluginById('simple2');
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
 		expect(allFolders.map(f => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
-	it('should get and set runtime preferences', asyncTest(async () => {
-		runtimePreferences.set('test', 123);
-		expect(runtimePreferences.get('test')).toBe(123);
-
-		expect(checkThrow(() => runtimePreferences.set('test.invalid', 456))).toBe(true);
-
-		runtimePreferences.set('with.sub.prop1', 'abc');
-		runtimePreferences.set('with.sub.prop2', 'efg');
-
-		expect(runtimePreferences.get('with.sub.prop1')).toBe('abc');
-		expect(runtimePreferences.get('with.sub.prop2')).toBe('efg');
-
-		const group = runtimePreferences.get('with.sub');
-		expect(group.prop1).toBe('abc');
-		expect(group.prop2).toBe('efg');
-	}));
 });
