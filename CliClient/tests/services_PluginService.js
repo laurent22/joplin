@@ -17,7 +17,6 @@ function newPluginService() {
 		dispatch: () => {},
 		getState: () => {},
 	});
-	return service;
 }
 
 describe('services_PluginService', function() {
@@ -47,7 +46,6 @@ describe('services_PluginService', function() {
 	// 	const service = newPluginService();
 	// 	const plugin = await service.loadPlugin(`${testPluginDir}/testImport`);
 	// 	await service.runPlugin(plugin);
-
 	// 	const allFolders = await Folder.all();
 	// 	expect(allFolders.length).toBe(1);
 	// 	expect(allFolders[0].title).toBe('testImport');
