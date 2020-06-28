@@ -10,7 +10,7 @@ export default class ViewController {
 	}
 
 	protected get storeView():any {
-		return this.store_.pluginSystem.plugins[this.pluginId_].views[this.id];
+		return this.store_.pluginService.plugins[this.pluginId_].views[this.id];
 	}
 
 	protected get store():any {

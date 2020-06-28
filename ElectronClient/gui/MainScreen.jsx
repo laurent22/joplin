@@ -959,7 +959,7 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
-		plugins: state.pluginSystem.plugins,
+		plugins: state.pluginService.plugins,
 		templates: state.templates,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
