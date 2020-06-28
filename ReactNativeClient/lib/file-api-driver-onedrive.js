@@ -191,6 +191,7 @@ class FileApiDriverOneDrive {
 	}
 
 	async delta(path, options = null) {
+
 		const output = {
 			hasMore: false,
 			context: {},
@@ -218,31 +219,45 @@ class FileApiDriverOneDrive {
 		}
 
 		let response = null;
-		try {
-			response = await this.api_.execJson('GET', url, query);
-		} catch (error) {
-			if (error.code === 'resyncRequired') {
-				// Error: Resync required. Replace any local items with the server's version (including deletes) if you're sure that the service was up to date with your local changes when you last sync'd. Upload any local changes that the server doesn't know about.
-				// Code: resyncRequired
-				// Request: GET https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev:/delta?select=...
+		const type = 'business'; // TODO: hier muss man es iwie bereits wissen.
+		if (type === 'business') {
+			const driveId = (await this.api_.execJson('GET', '/me/drive')).id;
+			response = await  this.api_.execJson('GET', `/drives/${driveId}/root/delta`, query);
+			console.log(`response = ${JSON.stringify(response)}`);
 
-				// The delta token has expired or is invalid and so a full resync is required. This happens for example when all the items
-				// on the OneDrive App folder are manually deleted. In this case, instead of sending the list of deleted items in the delta
-				// call, OneDrive simply request the client to re-sync everything.
-
-				// OneDrive provides a URL to resume syncing from but it does not appear to work so below we simply start over from
-				// the beginning. The synchronizer will ensure that no duplicate are created and conflicts will be resolved.
-
-				// More info there: https://stackoverflow.com/q/46941371/561309
-
-				const info = freshStartDelta();
-				url = info.url;
-				query = info.query;
+			// TODO: Noch filtern? (Wird das evt. schon in Zeile 273-277 gemacht?)
+		} else {
+			try {
 				response = await this.api_.execJson('GET', url, query);
-			} else {
-				throw error;
+			} catch (error) {
+				if (error.code === 'resyncRequired') {
+					// Error: Resync required. Replace any local items with the server's version (including deletes) if you're sure that the service was up to date with your local changes when you last sync'd. Upload any local changes that the server doesn't know about.
+					// Code: resyncRequired
+					// Request: GET https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev:/delta?select=...
+
+					// The delta token has expired or is invalid and so a full resync is required. This happens for example when all the items
+					// on the OneDrive App folder are manually deleted. In this case, instead of sending the list of deleted items in the delta
+					// call, OneDrive simply request the client to re-sync everything.
+
+					// OneDrive provides a URL to resume syncing from but it does not appear to work so below we simply start over from
+					// the beginning. The synchronizer will ensure that no duplicate are created and conflicts will be resolved.
+
+					// More info there: https://stackoverflow.com/q/46941371/561309
+
+					const info = freshStartDelta();
+					url = info.url;
+					query = info.query;
+					response = await this.api_.execJson('GET', url, query);
+				} else {
+					throw error;
+				}
 			}
+
 		}
+
+		console.log(`response: ${JSON.stringify(response)}`);
+		console.log(`query: ${JSON.stringify(query)}`);
+
 
 		const items = [];
 
@@ -288,6 +303,8 @@ class FileApiDriverOneDrive {
 		}
 
 		output.items = temp;
+
+		console.log(`output: ${JSON.stringify(output)}`);
 
 		return output;
 	}

@@ -224,7 +224,6 @@ class OneDriveApi {
 			if (data) data = JSON.stringify(data);
 		}
 
-
 		let url = path;
 
 		// In general, `path` contains a path relative to the base URL, but in some
