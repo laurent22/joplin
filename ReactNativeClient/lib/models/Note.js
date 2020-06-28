@@ -265,7 +265,7 @@ class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'encryption_applied'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'encryption_applied', 'order'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -278,9 +278,7 @@ class Note extends BaseItem {
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db()
-			.escapeFields(fields)
-			.join(',');
+		return this.db().escapeFields(fields).join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
