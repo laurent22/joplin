@@ -123,7 +123,9 @@ function enexXmlToHtml_(stream, resources) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
 				}
 			} else if (tagName == 'en-todo') {
-				section.lines.push('<input type="checkbox" onclick="return false;" />');
+				const nodeAttributes = attributeToLowerCase(node);
+				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? ' checked="checked" ' : ' ';
+				section.lines.push(`<input${checkedHtml}type="checkbox" onclick="return false;" />`);
 			} else if (isSelfClosingTag(tagName)) {
 				section.lines.push(`<${tagName}${attributesStr}/>`);
 			} else {
