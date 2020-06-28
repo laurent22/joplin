@@ -131,6 +131,7 @@ class Api {
 	fields_(request, defaultFields) {
 		const query = request.query;
 		if (!query || !query.fields) return defaultFields;
+		if (Array.isArray(query.fields)) return query.fields.slice();
 		const fields = query.fields
 			.split(',')
 			.map(f => f.trim())

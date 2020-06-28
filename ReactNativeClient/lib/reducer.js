@@ -284,14 +284,14 @@ function updateOneItem(state, action, keyName = '') {
 		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
 	}
 
-	const newItems = state[itemsKey].splice(0);
+	const newItems = state[itemsKey].slice();
 	const item = action.item;
 
 	let found = false;
 	for (let i = 0; i < newItems.length; i++) {
 		const n = newItems[i];
 		if (n.id == item.id) {
-			newItems[i] = Object.assign(newItems[i], item);
+			newItems[i] = Object.assign({}, newItems[i], item);
 			found = true;
 			break;
 		}

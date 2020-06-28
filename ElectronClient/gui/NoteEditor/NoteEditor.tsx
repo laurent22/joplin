@@ -105,6 +105,8 @@ function NoteEditor(props: NoteEditorProps) {
 					type: 'EDITOR_NOTE_STATUS_REMOVE',
 					id: formNote.id,
 				});
+
+				eventManager.emit('noteContentChange', { note: savedNote });
 			};
 		};
 

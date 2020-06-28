@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormNote, EditorCommand } from './types';
+import { FormNote, EditorCommand, ScrollOptionTypes } from './types';
 const { time } = require('lib/time-utils.js');
 const { reg } = require('lib/registry.js');
 const NoteListUtils = require('../../utils/NoteListUtils');
@@ -71,6 +71,15 @@ export default function useWindowCommandHandler(dependencies:HookDependencies) {
 			} else if (command.name === 'insertTemplate') {
 				editorCmd.name = 'insertText';
 				editorCmd.value = TemplateUtils.render(command.value);
+			} else if (command.name === 'scrollToHash') {
+				fn = () => {
+					if (editorRef.current) {
+						editorRef.current.scrollTo({
+							type: ScrollOptionTypes.Hash,
+							value: command.hash,
+						});
+					}
+				};
 			}
 
 			if (command.name === 'focusElement' && command.target === 'noteTitle') {

@@ -53,9 +53,12 @@ export interface SandboxJoplin {
 	api: SandboxJoplinApi,
 	plugins: SandboxJoplinPlugins,
 	filters: SandboxJoplinFilters,
-	events: SandboxJoplinEvents,
+	// events: SandboxJoplinEvents,
 	views: SandboxJoplinViews,
-	appState: SandboxJoplinAppState,
+	// appState: SandboxJoplinAppState,
+	workspace: any,
+	utils: any,
+	commands: any,
 }
 
 export interface SandboxConsole {
@@ -69,7 +72,7 @@ export interface SandboxConsole {
 export interface Sandbox {
 	joplin: SandboxJoplin,
 	console: SandboxConsole,
-	require: Function,
+	// require: Function,
 	setTimeout: Function,
 	setInterval: Function,
 }

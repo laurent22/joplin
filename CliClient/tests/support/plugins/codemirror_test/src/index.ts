@@ -1,5 +1,5 @@
 joplin.plugins.register({
-	run: async function() {
+	onStart: async function() {
 		joplin.filters.on('codeMirrorOptions', (options:any) => {
 			return { ...options, lineNumbers: true };
 		});

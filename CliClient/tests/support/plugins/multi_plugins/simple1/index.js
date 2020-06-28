@@ -1,5 +1,5 @@
 joplin.plugins.register({
-	run: async function() {
+	onStart: async function() {
 		await joplin.api.post('folders', null, { title: "multi - simple1" });
 	},
 });
