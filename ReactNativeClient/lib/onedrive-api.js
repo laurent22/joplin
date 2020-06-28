@@ -73,7 +73,11 @@ class OneDriveApi {
 	}
 
 	async appDirectory() {
-		const r = await this.execJson('GET', '/drive/special/approot');
+
+		const driveId = (await this.execJson('GET', '/me/drive')).id;
+		console.log(`drive ID: ${driveId}`);
+		const r = await this.execJson('GET', `/me/drives/${driveId}/special/approot`);
+		console.log(`r = ${JSON.stringify(r)}`);
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
@@ -220,10 +224,6 @@ class OneDriveApi {
 			if (data) data = JSON.stringify(data);
 		}
 
-		if (path == '/drive/root:/Apps/JoplinDev:/delta') {
-			path = '/drive/root/delta';
-			console.log('klappt');
-		}
 
 		let url = path;
 
