@@ -12,8 +12,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -100,9 +102,9 @@ msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "原数据格式：%s"
+msgstr "导出数据格式：%s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -172,18 +174,18 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"启动，停止或检查API服务。可以通过设置‘api.port’变量指定API服务运行在哪个端口"
-"上。执行命令（%s）。"
+"启动，停止或检查 API 服务。可以通过设置 ‘api.port’ 变量指定API服务运行在哪个"
+"端口上。执行命令（%s）。"
 
 #: CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "服务已在端口%d上运行"
+msgstr "服务已在端口 %d 上运行"
 
 #: CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "服务正在端口%d上运行"
+msgstr "服务正在端口 %d 上运行"
 
 #: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
 msgid "Server is not running."
@@ -235,7 +237,7 @@ msgstr "确认密码："
 #: CliClient/app/command-e2ee.js:83
 #: ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
-msgstr "密码不符合！"
+msgstr "密码不匹配！"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
@@ -333,7 +335,7 @@ msgstr "未授予 %s 的权限。请提供缺少的凭据。"
 
 #: CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
-msgstr "已经在同步。"
+msgstr "同步已在进行。"
 
 #: CliClient/app/command-sync.js:129
 #, javascript-format
@@ -351,7 +353,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "同步目标：%s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "无法初始化同步。"
 
@@ -377,7 +378,7 @@ msgstr "删除选定的笔记本。"
 
 #: CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "删除笔记本（不要求确认）。"
+msgstr "删除笔记本 (不要求确认) 。"
 
 #: CliClient/app/command-rmbook.js:26
 #: ReactNativeClient/lib/components/screens/notes.js:154
@@ -409,7 +410,7 @@ msgstr "编辑笔记。"
 #: CliClient/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr "未设置指定的文本编辑器。请通过`config editor <editor-path>`设置"
+msgstr "未设置指定的文本编辑器。请通过 `config editor <editor-path>` 设置"
 
 #: CliClient/app/command-edit.js:40
 msgid "No active notebook."
@@ -515,7 +516,7 @@ msgid ""
 msgstr ""
 "欢迎使用 Joplin！\n"
 "\n"
-"输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取使用信息。\n"
+"输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取用法信息。\n"
 "\n"
 "例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
 
@@ -626,7 +627,7 @@ msgstr "按 Tab 键或 Shift+Tab 组合键切换面板。"
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr "通过方向键与 page up/down 键来滚动列表与文本区域（包含此控制台）。"
+msgstr "通过方向键与 Page Up / Down 键来滚动列表与文本区域（包含此控制台）。"
 
 #: CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -653,7 +654,7 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> 可以是“toggle”或者“clear”。使用“toggle”命令来切换待办事项的完"
-"成状态（若目标为普通笔记则将会转换成待办事项）。使用“clear”命令来把待办事项转"
+"成状态 (若目标为普通笔记则将会转换成待办事项) 。使用“clear”命令来把待办事项转"
 "换到普通笔记。"
 
 #: CliClient/app/command-exit.js:11
@@ -675,11 +676,11 @@ msgstr "未指定笔记本。"
 
 #: CliClient/app/app.js:136
 msgid "N"
-msgstr "否"
+msgstr "否 (N)"
 
 #: CliClient/app/app.js:136
 msgid "y"
-msgstr "是"
+msgstr "是 (y)"
 
 #: CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -774,12 +775,12 @@ msgstr ""
 
 #: ElectronClient/plugins/GotoAnything.min.js:474
 msgid "Goto Anything..."
-msgstr ""
+msgstr "跳转到任意内容..."
 
 #: ElectronClient/InteropServiceHelper.js:149
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导出，导出格式为“%s”。请稍等…"
+msgstr "从“%s”导出，导出格式为“%s”。请稍等..."
 
 #: ElectronClient/InteropServiceHelper.js:167
 #, javascript-format
@@ -870,7 +871,6 @@ msgstr "加粗文本"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
 msgstr "强调文本"
 
@@ -916,7 +916,7 @@ msgstr "粘贴"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
-msgstr "布局"
+msgstr "切换布局"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
@@ -1020,7 +1020,7 @@ msgstr "将笔记或文件拖到此处"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 msgid "Code View"
-msgstr ""
+msgstr "代码视图"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 #, javascript-format
@@ -1354,11 +1354,11 @@ msgstr "同步状态"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr "Firefox扩展"
+msgstr "Firefox 扩展"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr "Chrome网上商店"
+msgstr "Chrome 网上商店"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
@@ -1380,14 +1380,13 @@ msgid "Custom order"
 msgstr "自定义顺序"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#, fuzzy
 msgid "View"
-msgstr "界面 (&V)"
+msgstr "视图"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ReactNativeClient/lib/models/Setting.js:329
 msgid "Sort notes by"
-msgstr "排序笔记"
+msgstr "笔记排序依据"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #, javascript-format
@@ -1398,7 +1397,7 @@ msgstr "欲手动调整顺序，应在菜单“%s” > “%s” 中将排序方�
 
 #: ElectronClient/gui/NoteList.min.js:148
 msgid "Do it now"
-msgstr ""
+msgstr "现在去完成"
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1699,7 +1698,7 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
-"没有安装Joplin Nextcloud应用程序或配置错误。 请查看下面的完整错误消息："
+"没有安装 Joplin NextCloud 应用程序或配置错误。 请查看下面的完整错误消息："
 
 #: ElectronClient/gui/ConfigScreen.min.js:211
 msgid "Show Log"
@@ -1707,7 +1706,7 @@ msgstr "显示日志"
 
 #: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
-msgstr "Joplin Nextcloud的状态："
+msgstr "Joplin NextCloud 的状态："
 
 #: ElectronClient/gui/ConfigScreen.min.js:238
 msgid "Check Status"
@@ -1852,7 +1851,7 @@ msgstr "从模版创建笔记"
 
 #: ElectronClient/app.js:602
 msgid "Create to-do from template"
-msgstr "从模版创建To-Do列表"
+msgstr "从模版创建 To-Do 列表"
 
 #: ElectronClient/app.js:612
 msgid "Insert template"
@@ -1868,7 +1867,7 @@ msgstr "刷新模版"
 
 #: ElectronClient/app.js:655
 msgid "Note attachments..."
-msgstr "笔记附件…"
+msgstr "查看笔记附件..."
 
 #: ElectronClient/app.js:677
 #, javascript-format
@@ -1898,7 +1897,7 @@ msgstr "最新版本：%s"
 #: ElectronClient/app.js:689
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "密钥链支持: %s"
 
 #: ElectronClient/app.js:711 ElectronClient/app.js:794
 msgid "&File"
@@ -1955,7 +1954,7 @@ msgstr "在当前笔记内搜索"
 
 #: ElectronClient/app.js:949
 msgid "&View"
-msgstr "界面 (&V)"
+msgstr "视图 (&V)"
 
 #: ElectronClient/app.js:951
 msgid "Toggle sidebar"
@@ -1991,11 +1990,11 @@ msgstr "缩小"
 
 #: ElectronClient/app.js:1064
 msgid "&Note"
-msgstr "笔记"
+msgstr "笔记 (&N)"
 
 #: ElectronClient/app.js:1094
 msgid "Statistics..."
-msgstr "统计数据…"
+msgstr "统计数据..."
 
 #: ElectronClient/app.js:1104
 msgid "&Tools"
@@ -2053,7 +2052,6 @@ msgstr ""
 "息，也不会与第三方分享任何数据。"
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -2126,7 +2124,7 @@ msgstr "是"
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(是否所见即所得: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
 msgid "no"
@@ -2191,15 +2189,15 @@ msgstr "待同步的目录（绝对路径）。"
 
 #: ReactNativeClient/lib/models/Setting.js:116
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "NextCloud WebDAV URL"
 
 #: ReactNativeClient/lib/models/Setting.js:127
 msgid "Nextcloud username"
-msgstr "Nextcloud 用户名"
+msgstr "NextCloud 用户名"
 
 #: ReactNativeClient/lib/models/Setting.js:137
 msgid "Nextcloud password"
-msgstr "Nextcloud 密码"
+msgstr "NextCloud 密码"
 
 #: ReactNativeClient/lib/models/Setting.js:149
 msgid "WebDAV URL"
@@ -2306,7 +2304,7 @@ msgstr "自动配对花括号、圆括号、引号等。"
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "使用 CodeMirror 作为代码编辑器 (BETA)"
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
@@ -2345,7 +2343,7 @@ msgstr "启动软中断"
 
 #: ReactNativeClient/lib/models/Setting.js:424
 msgid "Enable typographer support"
-msgstr "启用 typographer 支持"
+msgstr "启用 Typographer 支持"
 
 #: ReactNativeClient/lib/models/Setting.js:425
 msgid "Enable math expressions"
@@ -2389,7 +2387,7 @@ msgstr "启用缩写句法"
 
 #: ReactNativeClient/lib/models/Setting.js:436
 msgid "Enable markdown emoji"
-msgstr "启用 markdown emoji"
+msgstr "启用 Markdown Emoji"
 
 #: ReactNativeClient/lib/models/Setting.js:437
 msgid "Enable ++insert++ syntax"
@@ -2397,7 +2395,7 @@ msgstr "启用 ++insert++ 句法"
 
 #: ReactNativeClient/lib/models/Setting.js:438
 msgid "Enable multimarkdown table extension"
-msgstr "启用 multimarkdown 表格扩展"
+msgstr "启用 MultiMarkdown 表格扩展"
 
 #: ReactNativeClient/lib/models/Setting.js:450
 msgid "Show tray icon"
@@ -2405,7 +2403,7 @@ msgstr "显示托盘图标"
 
 #: ReactNativeClient/lib/models/Setting.js:452
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：部分桌面环境下无效。"
+msgstr "注意：在部分桌面环境下无法工作。"
 
 #: ReactNativeClient/lib/models/Setting.js:452
 msgid ""
@@ -2433,14 +2431,13 @@ msgid "Editor font family"
 msgstr "编辑器字体系列"
 
 #: ReactNativeClient/lib/models/Setting.js:508
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会默认设置为"
-"通用的等宽字体。"
+"必须是 *等宽* 字体，否则一些元素将无法被正确渲染。若字体不正确或留空，该处将"
+"会默认设置为通用的等宽字体。"
 
 #: ReactNativeClient/lib/models/Setting.js:547
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2495,7 +2492,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:581
 msgid "Page size for PDF export"
-msgstr "PDF导出时的页面规格"
+msgstr "PDF 导出时的页面规格"
 
 #: ReactNativeClient/lib/models/Setting.js:583
 msgid "A4"
@@ -2523,7 +2520,7 @@ msgstr "法律"
 
 #: ReactNativeClient/lib/models/Setting.js:591
 msgid "Page orientation for PDF export"
-msgstr "PDF导出的页面方向"
+msgstr "PDF 导出的页面方向"
 
 #: ReactNativeClient/lib/models/Setting.js:593
 msgid "Portrait"
@@ -2576,13 +2573,13 @@ msgstr "自动防故障"
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
-msgstr "注意：当同步目标为空时（通常是配置错误或bug），请勿删除本地数据"
+msgstr "注意：当同步目标为空时（通常是配置错误或 Bug ），请勿删除本地数据"
 
 #: ReactNativeClient/lib/models/Setting.js:652
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr "请指定API服务应使用的端口。 如果未设置，将使用默认值。"
+msgstr "请指定 API 服务应使用的端口。 如果未设置，将使用默认值。"
 
 #: ReactNativeClient/lib/models/Setting.js:660
 msgid "Enable note history"
@@ -2595,7 +2592,7 @@ msgstr "天"
 #: ReactNativeClient/lib/models/Setting.js:670
 #, javascript-format
 msgid "%d days"
-msgstr "%d天"
+msgstr "%d 天"
 
 #: ReactNativeClient/lib/models/Setting.js:672
 msgid "Keep note history for"
@@ -2603,7 +2600,7 @@ msgstr "保留笔记历史记录"
 
 #: ReactNativeClient/lib/models/Setting.js:699
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "笔记本列表增长因数"
 
 #: ReactNativeClient/lib/models/Setting.js:701
 #: ReactNativeClient/lib/models/Setting.js:714
@@ -2614,14 +2611,17 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"因数属性决定了列表上的一项如何增长或缩小，以适应其容器中相对于其他项目的可用"
+"空间。因此因数为 2 的的一项是因数为 1 的一项的占用空间的两倍。重启软件以查看"
+"变化。"
 
 #: ReactNativeClient/lib/models/Setting.js:712
 msgid "Note list growth factor"
-msgstr ""
+msgstr "笔记列表增长因数"
 
 #: ReactNativeClient/lib/models/Setting.js:725
 msgid "Note area growth factor"
-msgstr ""
+msgstr "笔记区域增长因数"
 
 #: ReactNativeClient/lib/models/Setting.js:877
 #, javascript-format
@@ -2642,7 +2642,7 @@ msgstr "外观"
 
 #: ReactNativeClient/lib/models/Setting.js:1208
 msgid "Note"
-msgstr "笔记"
+msgstr "笔记属性"
 
 #: ReactNativeClient/lib/models/Setting.js:1209
 msgid "Plugins"
@@ -2670,10 +2670,11 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"这些插件为 Markdown 渲染器提供额外功能。 请注意，尽管这些额外功能可能是可用"
-"的，但他们并非标准Markdown 语法，因此这些功能基本只能在 Joplin 内运行。此外，"
-"其中的一些功能与 WYSIWYG 编辑器是*不兼容*的。如果你在上述编辑器中打开使用了这"
-"些插件的笔记，就将会丢失插件格式。下面已表明插件与 WYSIWYG 编辑器兼容与否。"
+"这些插件为 Markdown 渲染器提供额外特性。 请注意，尽管这些额外特性可能是可用"
+"的，但它们并非标准 Markdown 语法，因此这些功能基本只能在 Joplin 内运行。此"
+"外，其中的一些功能与所见即所得 (WYSIWYG) 编辑器是*不兼容*的。如果你在上述编辑"
+"器中打开使用了这些插件的笔记，就将会丢失插件格式。下面已表明插件与所见即所得 "
+"(WYSIWYG) 编辑器兼容与否。"
 
 #: ReactNativeClient/lib/models/Setting.js:1219
 #, javascript-format
@@ -2723,7 +2724,7 @@ msgstr "自定义顺序"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
-msgstr "该笔记不含地理定位信息。"
+msgstr "该笔记未含地理定位信息。"
 
 #: ReactNativeClient/lib/models/Note.js:468
 #, javascript-format
@@ -3288,14 +3289,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"无法连接到Joplin Nextcloud应用。 请在“同步配置”中检查配置。 完整的错误信息"
+"无法连接到 Joplin NextCloud 应用。 请在“同步配置”中检查配置。 完整的错误信息"
 "是：\n"
 "\n"
 "%s"
 
 #: ReactNativeClient/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
-msgstr "Nextcloud"
+msgstr "NextCloud"
 
 #: ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
@@ -3467,9 +3468,9 @@ msgid "Directory"
 msgstr "文件目录"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "无法加载“%s”模块用于读取“%s”格式"
+msgstr "无法加载\"%s\"模块以读取\"%s\"格式并输出\"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
