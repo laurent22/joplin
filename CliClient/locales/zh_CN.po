@@ -575,11 +575,11 @@ msgstr "此答案无效：%s"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "Y"
-msgstr "是"
+msgstr "是 (Y)"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "n"
-msgstr "否"
+msgstr "否 (n)"
 
 #: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -1698,7 +1698,7 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
-"没有安装 Joplin NextCloud 应用程序或配置错误。 请查看下面的完整错误消息："
+"没有安装 Joplin Nextcloud 应用程序或配置错误。 请查看下面的完整错误消息："
 
 #: ElectronClient/gui/ConfigScreen.min.js:211
 msgid "Show Log"
@@ -1706,7 +1706,7 @@ msgstr "显示日志"
 
 #: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
-msgstr "Joplin NextCloud 的状态："
+msgstr "Joplin Nextcloud 的状态："
 
 #: ElectronClient/gui/ConfigScreen.min.js:238
 msgid "Check Status"
@@ -2154,15 +2154,15 @@ msgstr "德古拉"
 
 #: ReactNativeClient/lib/models/Setting.js:54
 msgid "Solarised Light"
-msgstr "明亮 (Solarised)"
+msgstr "日光白"
 
 #: ReactNativeClient/lib/models/Setting.js:55
 msgid "Solarised Dark"
-msgstr "暗黑 (Solarised)"
+msgstr "黄昏黑"
 
 #: ReactNativeClient/lib/models/Setting.js:56
 msgid "Nord"
-msgstr "北欧"
+msgstr "北欧蓝"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
@@ -2189,15 +2189,15 @@ msgstr "待同步的目录（绝对路径）。"
 
 #: ReactNativeClient/lib/models/Setting.js:116
 msgid "Nextcloud WebDAV URL"
-msgstr "NextCloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
 
 #: ReactNativeClient/lib/models/Setting.js:127
 msgid "Nextcloud username"
-msgstr "NextCloud 用户名"
+msgstr "Nextcloud 用户名"
 
 #: ReactNativeClient/lib/models/Setting.js:137
 msgid "Nextcloud password"
-msgstr "NextCloud 密码"
+msgstr "Nextcloud 密码"
 
 #: ReactNativeClient/lib/models/Setting.js:149
 msgid "WebDAV URL"
@@ -3289,14 +3289,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"无法连接到 Joplin NextCloud 应用。 请在“同步配置”中检查配置。 完整的错误信息"
+"无法连接到 Joplin Nextcloud 应用。 请在“同步配置”中检查配置。 完整的错误信息"
 "是：\n"
 "\n"
 "%s"
 
 #: ReactNativeClient/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
-msgstr "NextCloud"
+msgstr "Nextcloud"
 
 #: ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
