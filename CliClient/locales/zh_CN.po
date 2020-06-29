@@ -174,8 +174,8 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"启动，停止或检查 API 服务。可以通过设置 ‘api.port’ 变量指定API服务运行在哪个"
-"端口上。执行命令（%s）。"
+"启动，停止或检查 API 服务。可以通过设置 ‘api.port’ 变量指定 API 服务运行在哪"
+"个端口上。执行命令（%s）。"
 
 #: CliClient/app/command-server.js:37
 #, javascript-format
