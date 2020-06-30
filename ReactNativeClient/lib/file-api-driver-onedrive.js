@@ -191,7 +191,6 @@ class FileApiDriverOneDrive {
 	}
 
 	async delta(path, options = null) {
-
 		const output = {
 			hasMore: false,
 			context: {},
@@ -247,9 +246,6 @@ class FileApiDriverOneDrive {
 			}
 		}
 
-
-
-
 		const items = [];
 
 		// The delta API might return things that happen in subdirectories of the root and we don't want to
@@ -294,7 +290,6 @@ class FileApiDriverOneDrive {
 		}
 
 		output.items = temp;
-
 
 		return output;
 	}
