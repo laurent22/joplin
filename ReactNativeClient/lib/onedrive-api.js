@@ -13,6 +13,7 @@ class OneDriveApi {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
+		this.acctProps_ = null;
 		this.isPublic_ = isPublic;
 		this.listeners_ = {
 			authRefreshed: [],
@@ -74,10 +75,8 @@ class OneDriveApi {
 
 	async appDirectory() {
 
-		const driveId = (await this.execJson('GET', '/me/drive')).id;
-		console.log(`drive ID: ${driveId}`);
+		const driveId = this.acctProps_.driveId;
 		const r = await this.execJson('GET', `/me/drives/${driveId}/special/approot`);
-		console.log(`r = ${JSON.stringify(r)}`);
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
@@ -319,6 +318,23 @@ class OneDriveApi {
 		}
 
 		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
+	}
+
+	setAcctProps(acctProps) {
+		this.acctProps_ = acctProps;
+	}
+
+	async execAcctPropsRequest() {
+		// TODO: error handling
+		const response = await shim.fetch('https://graph.microsoft.com/v1.0/me/drive', {
+			method: 'GET',
+			headers: {
+				'Authorization': this.token(),
+			},
+		});
+		const data = await response.json();
+		const acctProps = { accountType: data.driveType, driveId: data.id };
+		return acctProps;
 	}
 
 	async execJson(method, path, query, data) {

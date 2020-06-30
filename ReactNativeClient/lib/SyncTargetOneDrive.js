@@ -71,6 +71,14 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
+		let acctProps = Setting.value(`sync.${this.syncTargetId()}.accountProperties`);
+		if (acctProps === '') {
+			acctProps = await this.api_.execAcctPropsRequest();
+			Setting.setValue(`sync.${this.syncTargetId()}.accountProperties`, JSON.stringify(acctProps));
+		} else {
+			acctProps = JSON.parse(acctProps);
+		}
+		this.api_.setAcctProps(acctProps);
 		const appDir = await this.api().appDirectory();
 		const fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.syncTargetId());
