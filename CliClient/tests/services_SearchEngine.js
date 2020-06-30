@@ -79,17 +79,35 @@ describe('services_SearchEngine', function() {
 	}));
 
 
-	it('should order search results by relevance (1)', asyncTest(async () => {
+	it('should order search results by relevance BM25', asyncTest(async () => {
+		// BM25 returns weight zero for search term which occurs in more than half the notes.
+		// So terms that are abundant in all notes to have zero relevance w.r.t BM25.
+
+		// BM25 is based on term frequency - inverse document frequency
+		// The tf–idf value increases proportionally to the number of times a word appears in the document
+		// and is offset by the number of documents in the corpus that contain the word, which helps to adjust
+		// for the fact that some words appear more frequently in general.
+
+
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
-		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
+		const n2 = await Note.save({ title: 'abcd efgh abcd abcd' }); // 1
 		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' }); // 2
+		const n4 = await Note.save({ title: 'xyz xyz' });
+		const n5 = await Note.save({ title: 'xyz xyz xyz xyz' });
+		const n6 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		const n7 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		const n8 = await Note.save({ title: 'xyz xyzxyz xyzxyz xyzxyz xyz' });
 
 		await engine.syncTables();
-		const rows = await engine.search('abcd');
+		let rows = await engine.search('abcd');
 
 		expect(rows[0].id).toBe(n2.id);
 		expect(rows[1].id).toBe(n3.id);
 		expect(rows[2].id).toBe(n1.id);
+
+		rows = await engine.search('abcd efgh');
+		expect(rows[0].id).toBe(n1.id); // shorter note; also 'efgh' is more rare than 'abcd'.
+		expect(rows[1].id).toBe(n2.id);
 	}));
 
 	it('should tell where the results are found', asyncTest(async () => {
@@ -116,28 +134,6 @@ describe('services_SearchEngine', function() {
 				expect(expected).toBe(actual);
 			}
 		}
-	}));
-
-	it('should order search results by relevance (2)', asyncTest(async () => {
-		// 1
-		const n1 = await Note.save({ title: 'abcd efgh', body: 'XX abcd XX efgh' });
-		// 4
-		const n2 = await Note.save({ title: 'abcd aaaaa bbbb eeee efgh' });
-		// 3
-		const n3 = await Note.save({ title: 'abcd aaaaa efgh' });
-		// 2
-		const n4 = await Note.save({ title: 'blablablabla blabla bla abcd X efgh' });
-		// 5
-		const n5 = await Note.save({ title: 'occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh' });
-
-		await engine.syncTables();
-		const rows = await engine.search('abcd efgh');
-
-		expect(rows[0].id).toBe(n1.id);
-		expect(rows[1].id).toBe(n4.id);
-		expect(rows[2].id).toBe(n3.id);
-		expect(rows[3].id).toBe(n2.id);
-		expect(rows[4].id).toBe(n5.id);
 	}));
 
 	it('should order search results by relevance (last updated first)', asyncTest(async () => {
