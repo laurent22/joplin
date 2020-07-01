@@ -248,14 +248,8 @@ class FileApiDriverOneDrive {
 
 		const items = [];
 
-		// The delta API might return things that happen in subdirectories of the root and we don't want to
-		// deal with these since all the files we're interested in are at the root (The .resource dir
-		// is special since it's managed directly by the clients and resources never change - only the
-		// associated .md file at the root is synced). So in the loop below we check that the parent is
-		// indeed the root, otherwise the item is skipped.
-		// (Not sure but it's possible the delta API also returns events for files that are copied outside
-		//  of the app directory and later deleted or modified. We also don't want to deal with
-		//  these files during sync).
+		// The delta API might return things that happens in subdirectories and outside of the joplin directory. We don't want to deal with these since all the files we're interested in are at the root of the joplin directory (The .resource dir is special since it's managed directly by the clients and resources never change - only the associated .md file at the root is synced). So in the loop below we check that the parent is indeed the joplin directory, otherwise the item is skipped.
+		// At OneDrive for Business delte requests can only make at the root of OneDrive.  Not sure but it's possible that the delta API also returns events for files that are copied outside of the app directory and later deleted or modified when using OneDrive Personal).
 
 		for (let i = 0; i < response.value.length; i++) {
 			const v = response.value[i];

@@ -74,7 +74,6 @@ class OneDriveApi {
 	}
 
 	async appDirectory() {
-
 		const driveId = this.acctProps_.driveId;
 		const r = await this.execJson('GET', `/me/drives/${driveId}/special/approot`);
 		return `${r.parentReference.path}/${r.name}`;
@@ -325,7 +324,6 @@ class OneDriveApi {
 	}
 
 	async execAcctPropsRequest() {
-		// TODO: error handling
 		const response = await shim.fetch('https://graph.microsoft.com/v1.0/me/drive', {
 			method: 'GET',
 			headers: {
@@ -334,6 +332,11 @@ class OneDriveApi {
 		});
 		const data = await response.json();
 		const acctProps = { accountType: data.driveType, driveId: data.id };
+
+		if (!response.ok) {
+			const text = await response.text();
+			throw new Error(`Could not retrieve account details (drive ID, Account type): ${response.status}: ${response.statusText}: ${text}`);
+		}
 		return acctProps;
 	}
 
