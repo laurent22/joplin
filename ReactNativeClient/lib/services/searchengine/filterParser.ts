@@ -96,5 +96,18 @@ const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, 
 
 export default function filterParser(searchString: string) {
 	searchString = searchString.trim();
-	return parseQuery(searchString);
+	const result =  parseQuery(searchString);
+
+	// validation
+	let incorrect = result.filter(term => term.name === 'type')
+		.find(x => (x.value !== 'note' && x.value !== 'todo') || (x.negated));
+	if (incorrect) throw new Error('Invalid argument for filter type');
+
+
+	incorrect = result.filter(term => term.name === 'iscompleted')
+		.find(x => (x.value !== '1' && x.value !== '0') || (x.negated));
+	if (incorrect) throw new Error('Invalid argument for filter iscompleted');
+
+
+	return result;
 }

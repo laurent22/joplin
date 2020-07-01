@@ -4,6 +4,8 @@ const { time } = require('lib/time-utils.js');
 const stringPadding = require('string-padding');
 const { Logger } = require('lib/logger.js');
 
+const { reg } = require('lib/registry.js');
+
 const cliUtils = {};
 
 cliUtils.printArray = function(logFunction, rows) {
@@ -75,6 +77,12 @@ cliUtils.parseCommandArg = function(arg) {
 };
 
 cliUtils.makeCommandArgs = function(cmd, argv) {
+	reg.logger().info('-----DEBUG - START-----');
+
+	reg.logger().info('cmd is ', cmd);
+	reg.logger().info(`argv is ${argv}`);
+
+
 	let cmdUsage = cmd.usage();
 	cmdUsage = yargParser(cmdUsage);
 	const output = {};
@@ -102,10 +110,27 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		boolean: booleanFlags,
 		alias: aliases,
 		string: ['_'],
+		configuration: {
+			'short-option-groups': false,
+		},
 	});
 
+	if (args['_'][0] === 'search') {
+		const negated_args = [];
+		for (key in args) {
+			if (key === '_') continue;
+			if (args[key] === true) {
+				negated_args.push(`-${key}`);
+			}
+		}
+		args['_'].push(...negated_args);
+	}
+
+	reg.logger().info('args is ', args);
 	for (let i = 1; i < cmdUsage['_'].length; i++) {
 		const a = cliUtils.parseCommandArg(cmdUsage['_'][i]);
+		reg.logger().info(`a${i} is`, a);
+		reg.logger().info(`args['_'][${i}] is `, args['_'][i]);
 		if (a.required && !args['_'][i]) throw new Error(_('Missing required argument: %s', a.name));
 		if (i >= a.length) {
 			output[a.name] = null;
@@ -113,6 +138,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 			output[a.name] = args['_'][i];
 		}
 	}
+	reg.logger().info('-----DEBUG - END-----');
 
 	const argOptions = {};
 	for (const key in args) {

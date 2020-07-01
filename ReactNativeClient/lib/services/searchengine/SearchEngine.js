@@ -478,9 +478,9 @@ class SearchEngine {
 
 			const filters = filterParser(searchString);
 			const { query, params } = queryBuilder(filters);
-			console.log('--debug--');
-			console.log(query);
-			console.log(params);
+			// console.log('--debug--');
+			// console.log(query);
+			// console.log(params);
 			try {
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);

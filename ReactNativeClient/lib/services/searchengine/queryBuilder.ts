@@ -272,25 +272,35 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 const typeFilter = (filters: Term[], conditions: string[], relation: string) => {
 	const typeOfNote = filters.filter(x => x.name === 'type' && !x.negated).map(x => x.value);
 	typeOfNote.forEach(type => {
-		conditions.push(`
-		${relation} ROWID IN (
-			SELECT ROWID
-			FROM notes_normalized
-			WHERE notes_normalized.is_todo=${type === 'todo' ? 1 : 0}
-		)`);
+		if (relation === 'AND') {
+			conditions.push(`AND notes_fts.is_todo IS ${type === 'todo' ? 1 : 0}`);
+		}
+		if (relation === 'OR') {
+			conditions.push(`
+			OR ROWID IN (
+				SELECT ROWID
+				FROM notes_normalized
+				WHERE notes_normalized.is_todo=${type === 'todo' ? 1 : 0}
+			)`);
+		}
 	});
 };
 
 const completedFilter = (filters: Term[], conditions: string[], relation: string) => {
 	const values = filters.filter(x => x.name === 'iscompleted' && !x.negated).map(x => x.value);
 	values.forEach(value => {
-		conditions.push(`
-		${relation} ROWID IN (
-			SELECT ROWID
-			FROM notes_normalized
-			WHERE notes_normalized.is_todo = 1
-			AND notes_normalized.todo_completed ${value === '1' ? '!= ' : '= '} 0
-		)`);
+		if (relation === 'AND') {
+			conditions.push(`AND notes_fts.is_todo IS 1 AND notes_fts.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`);
+		}
+		if (relation === 'OR') {
+			conditions.push(`
+			OR ROWID IN (
+				SELECT ROWID
+				FROM notes_normalized
+				WHERE notes_normalized.is_todo = 1
+				AND notes_normalized.todo_completed ${value === '1' ? '!= ' : '= '} 0
+			)`);
+		}
 	});
 };
 
@@ -484,8 +494,6 @@ export default function queryBuilder(filters: Term[]) {
 	dateFilter(filters, queryParts, params, relation);
 
 	locationFilter(filters, queryParts, params, relation);
-
-
 
 	let query;
 	if (withs.length > 0) {

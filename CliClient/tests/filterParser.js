@@ -116,4 +116,24 @@ describe('filterParser should be correct filter for keyword', () => {
 		const searchString = 'resource:image/*';
 		expect(filterParser(searchString)).toContain(makeTerm('resource', 'image/%', false));
 	});
+
+	it('handle invalid filters', () => {
+		let searchString = 'titletitle:123';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid filter: titletitle'));
+
+		searchString = 'invalid:abc';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid filter: invalid'));
+
+		searchString = ':abc';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid filter: '));
+
+		searchString = 'type:blah';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter type'));
+
+		searchString = '-type:note';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter type'));
+
+		searchString = 'iscompleted:blah';
+		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter iscompleted'));
+	});
 });
