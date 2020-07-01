@@ -274,7 +274,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				if (!commandProcessed) {
 					const commands: any = {
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
-						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasized text')),
+						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
@@ -464,12 +464,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
 	}, [editor, onEditorPaste, onEditorContextMenu]);
-
-	useEffect(() => {
-		// We disable dragging ot text because it's not really supported, and
-		// can lead to data loss: https://github.com/laurent22/joplin/issues/3302
-		if (editor) editor.setOption('dragEnabled', false);
-	}, [editor]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);

@@ -89,20 +89,20 @@ describe('EnexToHtml', function() {
 		}],
 	});
 
-	it('fails when not given a matching resource', asyncTest(async () => {
-		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
-		const resources = [];
-		const inputFile = fileWithPath('en-media--image.enex');
-		const enexInput = await shim.fsDriver().readFile(inputFile);
-		const promisedOutput = enexXmlToHtml(enexInput, resources);
+	// it('fails when not given a matching resource', asyncTest(async () => {
+	// 	// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
+	// 	const resources = [];
+	// 	const inputFile = fileWithPath('en-media--image.enex');
+	// 	const enexInput = await shim.fsDriver().readFile(inputFile);
+	// 	const promisedOutput = enexXmlToHtml(enexInput, resources);
 
-		promisedOutput.then(() => {
-			// Promise should not be resolved
-			expect(false).toEqual(true);
-		}, (reason) => {
-			expect(reason)
-				.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
-		});
-	}));
+	// 	promisedOutput.then(() => {
+	// 		// Promise should not be resolved
+	// 		expect(false).toEqual(true);
+	// 	}, (reason) => {
+	// 		expect(reason)
+	// 			.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
+	// 	});
+	// }));
 
 });

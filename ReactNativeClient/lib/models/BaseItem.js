@@ -29,11 +29,21 @@ class BaseItem extends BaseModel {
 		throw new Error(`Invalid class name: ${className}`);
 	}
 
-	static async findUniqueItemTitle(title) {
+	static async findUniqueItemTitle(title, parentId = null) {
 		let counter = 1;
 		let titleToTry = title;
 		while (true) {
-			const item = await this.loadByField('title', titleToTry);
+			let item = null;
+
+			if (parentId !== null) {
+				item = await this.loadByFields({
+					title: titleToTry,
+					parent_id: parentId,
+				});
+			} else {
+				item = await this.loadByField('title', titleToTry);
+			}
+
 			if (!item) return titleToTry;
 			titleToTry = `${title} (${counter})`;
 			counter++;

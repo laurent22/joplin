@@ -688,7 +688,7 @@ function enexXmlToMdArray(stream, resources) {
 					}
 
 					if (!found) {
-						console.warn(`Hash with no associated resource: ${hash}`);
+						// console.warn(`Hash with no associated resource: ${hash}`);
 					}
 				}
 

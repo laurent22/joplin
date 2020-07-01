@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const utils = require('../../Tools/gulp/utils');
 
 async function main() {
 	const rootDir = `${__dirname}/..`;
@@ -10,9 +10,7 @@ async function main() {
 
 	for (const destDir of destDirs) {
 		console.info(`Copying to ${destDir}`);
-		await fs.remove(destDir);
-		await fs.mkdirp(destDir);
-		await fs.copy(sourceDir, destDir);
+		await utils.copyDir(sourceDir, destDir);
 	}
 }
 

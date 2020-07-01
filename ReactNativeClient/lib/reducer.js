@@ -467,14 +467,14 @@ function handleHistory(state, action) {
 
 		backwardHistoryNotes = backwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
 			return note;
 		});
 
 		forwardHistoryNotes = forwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
 			return note;
 		});

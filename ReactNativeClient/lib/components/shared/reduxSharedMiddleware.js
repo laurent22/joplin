@@ -87,6 +87,18 @@ const reduxSharedMiddleware = async function(store, next, action) {
 			items: await Tag.allWithNotes(),
 		});
 	}
+
+	// For debugging purposes: it seems in some case an empty note is saved to
+	// the note array, so in that case display a log statements so that it can
+	// be debugged.
+	// https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367/3?u=laurent
+	if (action.type.indexOf('NOTE_') === 0) {
+		for (const note of newState.notes) {
+			if (!note) {
+				reg.logger().error('Detected empty element in note array', action);
+			}
+		}
+	}
 };
 
 module.exports = reduxSharedMiddleware;
