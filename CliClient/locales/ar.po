@@ -26,7 +26,7 @@ msgstr ""
 "ملاحظات). إذا لم يحدد دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
 #: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
 #: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
 #: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
@@ -96,50 +96,55 @@ msgstr "يرجى اختيار دفتر ملاحظات أولاً."
 msgid "Imports data into Joplin."
 msgstr "استيراد البيانات إلى Joplin."
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
 msgstr "تنسيق المصدر: %s"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:26
 msgid "Do not ask for confirmation."
 msgstr "لا تطلب التأكيد."
 
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "تنسيق المصدر: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "تم العثور عليها: %d."
 
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "تم إنشاؤها: %d."
 
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "تم تحديثها: %d."
 
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "تم تجاوزها: %d."
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "الموارد: %d."
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "تم وسمها: %d."
 
-#: CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:65
 msgid "Importing notes..."
 msgstr "استيراد الملاحظات جارٍ..."
 
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "جرى استيراد الملاحظات: %s"
@@ -312,20 +317,20 @@ msgstr "لم تكتمل المصادقة (لم أستلم الرمز الممي�
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "الخطوة 1: إفتح عنوان URL هذا في المستعرض للتصريح للتطبيق:"
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "الخطوة 2: أدخل الرمز المزوّد من Dropbox:"
 
@@ -356,7 +361,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "وجهة المزامنة: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-msgid "Cannot initialize synchroniser."
+#, fuzzy
+msgid "Cannot initialise synchroniser."
 msgstr "لم نتمكن من تمهيد مكوّن المزامنة."
 
 #: CliClient/app/command-sync.js:179
@@ -453,7 +459,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d ملاحظة تطابق هذا النمط. حذف هذه الملاحظات؟"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:457
+#: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
 msgstr "حذف الملاحظة؟"
 
@@ -499,11 +505,11 @@ msgstr "تصدير دفتر الملاحظات المعطى فقط."
 msgid "Creates a new note."
 msgstr "ينشئ ملاحظة جديدة."
 
-#: CliClient/app/main.js:82
+#: CliClient/app/main.js:80
 msgid "Type `joplin help` for usage information."
 msgstr "أكتب `joplin help` لمعلومات الاستخدام."
 
-#: CliClient/app/main.js:84
+#: CliClient/app/main.js:82
 msgid "Fatal error:"
 msgstr "خطأ فادح:"
 
@@ -777,7 +783,7 @@ msgstr "موافق"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/components/screens/note.js:526
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -794,12 +800,12 @@ msgstr ""
 msgid "Goto Anything..."
 msgstr "اذهب إلى أي شيء..."
 
-#: ElectronClient/InteropServiceHelper.js:142
+#: ElectronClient/InteropServiceHelper.js:149
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
 
-#: ElectronClient/InteropServiceHelper.js:160
+#: ElectronClient/InteropServiceHelper.js:167
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr ""
@@ -829,13 +835,13 @@ msgstr "النسخة الجديدة: %s"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:520
+#: ReactNativeClient/lib/components/screens/note.js:524
 msgid "Yes"
 msgstr "نعم"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:521
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "No"
 msgstr "لا"
 
@@ -888,8 +894,8 @@ msgstr "نص مشدَّد"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
+#, fuzzy
+msgid "emphasised text"
 msgstr "نص مؤكد"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
@@ -931,13 +937,13 @@ msgid "Paste"
 msgstr "لصق"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "تخطيط"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1022,7 +1028,7 @@ msgstr "خانة اختيار"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1106
+#: ReactNativeClient/lib/components/screens/note.js:1110
 msgid "Edit"
 msgstr "تحرير"
 
@@ -1178,7 +1184,7 @@ msgstr "التحرير في محرر خارجي"
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:822
+#: ReactNativeClient/lib/components/screens/note.js:826
 msgid "Set alarm"
 msgstr "ضبط منبّه"
 
@@ -1188,7 +1194,7 @@ msgstr "ضبط منبّه"
 #: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:837
+#: ReactNativeClient/lib/components/screens/note.js:841
 msgid "Tags"
 msgstr "وسوم"
 
@@ -1215,7 +1221,7 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:864
+#: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
 msgstr "حذف"
 
@@ -1398,7 +1404,7 @@ msgid ""
 msgstr "سيتم إنشاء دفتر الملاحظات \"%s\" و استيراد الملف \"%s\" إليه"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "إرسال"
 
@@ -1475,7 +1481,7 @@ msgid "Switch to to-do type"
 msgstr "التبديل إلى النوع قائمة مهام"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:851
+#: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
 msgstr "نسخ رابط Markdown"
 
@@ -1525,6 +1531,10 @@ msgstr "لم نتمكن من فتح هذا الملف: %s"
 #, fuzzy
 msgid "Only one note can be printed at a time."
 msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "نص مؤكد"
 
 #: ElectronClient/gui/NoteText.min.js:1852
 #, fuzzy
@@ -2100,8 +2110,9 @@ msgstr ""
 "أخرى. لن نشارك البيانات مع أي طرف ثالث."
 
 #: ReactNativeClient/lib/registry.js:156
+#, fuzzy
 msgid ""
-"Could not synchronize with OneDrive.\n"
+"Could not synchronise with OneDrive.\n"
 "\n"
 "This error often happens when using OneDrive for Business, which "
 "unfortunately cannot be supported.\n"
@@ -2130,7 +2141,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:519
+#: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2156,11 +2167,11 @@ msgstr "تاريخ التحديث"
 msgid "Conflicts"
 msgstr "التعارضات"
 
-#: ReactNativeClient/lib/models/Folder.js:386
+#: ReactNativeClient/lib/models/Folder.js:388
 msgid "Cannot move notebook to this location"
 msgstr "لا يمكن نقل دفتر الملاحظات إلى هذا المكان"
 
-#: ReactNativeClient/lib/models/Folder.js:438
+#: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "لا يمكن تسمية دفتر الملاحظات بـ \"%s\" لأنه عنوان محجوز."
@@ -2966,11 +2977,11 @@ msgstr "تحرير دفتر الملاحظات"
 msgid "Enter notebook title"
 msgstr "أدخل عنوان دفتر الملاحظات"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
 msgstr "تسجيل الدخول عبر OneDrive"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -2984,11 +2995,11 @@ msgstr "وسوم جديدة:"
 msgid "Type new tags or select from list"
 msgstr "أكتب وسوماً جديدة أو اخترها من القائمة"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "تسجيل الدخول عبر Dropbox"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "أدخل الرمز هنا"
 
@@ -2998,7 +3009,7 @@ msgid "Master Key %s"
 msgstr "المفتاح الرئيس %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:769
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Created: %s"
 msgstr "الإنشاء في: %s"
@@ -3210,66 +3221,66 @@ msgstr "تطبيق Joplin على الهاتف الجوال لا يدعم حال�
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "الروابط مع البروتوكول \"%s\" غير مدعومة"
 
-#: ReactNativeClient/lib/components/screens/note.js:614
+#: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "نوع صورة غير مدعوم: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:770
+#: ReactNativeClient/lib/components/screens/note.js:774
 #, javascript-format
 msgid "Updated: %s"
 msgstr "تم تحديثها: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
 msgstr "عرض على الخريطة"
 
-#: ReactNativeClient/lib/components/screens/note.js:781
+#: ReactNativeClient/lib/components/screens/note.js:785
 msgid "Go to source URL"
 msgstr "الذهاب إلى عنوان URL المصدر"
 
-#: ReactNativeClient/lib/components/screens/note.js:809
+#: ReactNativeClient/lib/components/screens/note.js:813
 msgid "Attach..."
 msgstr "إرفاق..."
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Choose an option"
 msgstr "إختر خيار"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Take photo"
 msgstr "التقاط صورة"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach photo"
 msgstr "إرفاق صورة"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach any file"
 msgstr "إرفاق أي ملف"
 
-#: ReactNativeClient/lib/components/screens/note.js:830
+#: ReactNativeClient/lib/components/screens/note.js:834
 msgid "Share"
 msgstr "مشاركة"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to note"
 msgstr "تحويل إلى ملاحظة"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to todo"
 msgstr "تحويل إلى قائمة مهام"
 
-#: ReactNativeClient/lib/components/screens/note.js:858
+#: ReactNativeClient/lib/components/screens/note.js:862
 msgid "Properties"
 msgstr "الخصائص"
 
-#: ReactNativeClient/lib/components/screens/note.js:1038
-#: ReactNativeClient/lib/components/screens/note.js:1096
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
 msgstr "أضف الجسم"
 
-#: ReactNativeClient/lib/components/screens/note.js:1146
+#: ReactNativeClient/lib/components/screens/note.js:1150
 msgid "Add title"
 msgstr "أضف العنوان"
 
@@ -3489,17 +3500,17 @@ msgid "On %s: %s"
 msgstr "في %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
 msgstr "ملف تصدير Joplin"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:83
 msgid "Markdown"
 msgstr "تنسيق Markdown"
 
 #: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
 msgstr "دليل تصدير بيانات Joplin"
 
@@ -3511,29 +3522,29 @@ msgstr "ملف تصدير Evernote (بتنسيق Markdown)"
 msgid "Evernote Export File (as HTML)"
 msgstr "ملف تصدير Evernote (بتنسيق HTML)"
 
-#: ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
 msgstr "دليل تصدير بيانات JSON"
 
-#: ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:90
 msgid "HTML File"
 msgstr "ملف HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:95
 msgid "HTML Directory"
 msgstr "دليل HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
 msgstr "ملف"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
 msgstr "دليل"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
@@ -3541,7 +3552,7 @@ msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
 msgid "Please specify import format for %s"
 msgstr "فضلاً حدّد تنسيق الاستيراد لـ %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "

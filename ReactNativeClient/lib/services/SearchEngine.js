@@ -454,6 +454,11 @@ class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 			query = query.replace(/-/g, ' ');
+
+			// Note that when the search engine index is somehow corrupted, it might contain
+			// references to notes that don't exist. Not clear how it can happen, but anyway
+			// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
+			// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 			const sql = `
 				SELECT
 					notes_fts.id,
@@ -467,6 +472,7 @@ class SearchEngine {
 				FROM notes_fts
 				LEFT JOIN notes ON notes_fts.id = notes.id
 				WHERE notes_fts MATCH ?
+				AND notes.user_updated_time IS NOT NULL
 			`;
 			try {
 				const rows = await this.db().selectAll(sql, [query]);

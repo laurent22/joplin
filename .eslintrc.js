@@ -60,6 +60,7 @@ module.exports = {
 		"no-new-func": ["error"],
 		"import/prefer-default-export": ["error"],
 		"import/first": ["error"],
+		"no-array-constructor": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",

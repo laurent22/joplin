@@ -26,7 +26,7 @@ msgstr ""
 "τρέχον."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
 #: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
 #: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
 #: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
@@ -96,50 +96,55 @@ msgstr "Παρακαλώ επιλέξτε πρώτα σημειωματάριο.
 msgid "Imports data into Joplin."
 msgstr "Εισάγει δεδομένα στο Joplin."
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Μορφή προέλευσης: %s"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:26
 msgid "Do not ask for confirmation."
 msgstr "Χωρίς να ζητείται επιβεβαίωση."
 
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Μορφή προέλευσης: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Βρέθηκε: %d."
 
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Δημιουργήθηκε: %d."
 
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Ενημερώθηκε: %d."
 
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Παραλείφθηκε: %d."
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Πόροι: %d."
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Με ετικέτα: %d."
 
-#: CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:65
 msgid "Importing notes..."
 msgstr "Εισαγωγή σημειώσεων..."
 
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Οι σημειώσεις έχουν εισαχθεί: %s"
@@ -319,7 +324,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
@@ -328,7 +333,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Βήμα 1: Ανοίξτε αυτήν τη διεύθυνση URL στο πρόγραμμα περιήγησής σας για να "
@@ -336,7 +341,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Βήμα 2: Εισάγετε τον κωδικό που παρέχεται από το Dropbox:"
 
@@ -368,7 +373,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Στόχος συγχρονισμού: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-msgid "Cannot initialize synchroniser."
+#, fuzzy
+msgid "Cannot initialise synchroniser."
 msgstr "Δεν είναι δυνατή η προετοιμασία του συγχρονιστή."
 
 #: CliClient/app/command-sync.js:179
@@ -472,7 +478,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d σημειώσεις ταιριάζουν. Θέλετε να διαγραφούν;"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:457
+#: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
 msgstr "Να διαγραφεί η σημείωση;"
 
@@ -519,11 +525,11 @@ msgstr "Εξάγει μόνο το καθορισμένο σημειωματάρ
 msgid "Creates a new note."
 msgstr "Δημιουργεί μία νέα σημείωση."
 
-#: CliClient/app/main.js:82
+#: CliClient/app/main.js:80
 msgid "Type `joplin help` for usage information."
 msgstr "Πληκτρολογήστε `joplin help` για πληροφορίες χρήσης."
 
-#: CliClient/app/main.js:84
+#: CliClient/app/main.js:82
 msgid "Fatal error:"
 msgstr "Ανεπανόρθωτο σφάλμα:"
 
@@ -812,7 +818,7 @@ msgstr "Εντάξει"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/components/screens/note.js:526
 msgid "Cancel"
 msgstr "Άκυρο"
 
@@ -829,12 +835,12 @@ msgstr ""
 msgid "Goto Anything..."
 msgstr "Γρήγορη Μετακίνηση..."
 
-#: ElectronClient/InteropServiceHelper.js:142
+#: ElectronClient/InteropServiceHelper.js:149
 #, fuzzy, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 
-#: ElectronClient/InteropServiceHelper.js:160
+#: ElectronClient/InteropServiceHelper.js:167
 #, fuzzy, javascript-format
 msgid "Could not export notes: %s"
 msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
@@ -864,13 +870,13 @@ msgstr "Νέα έκδοση: %s"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:520
+#: ReactNativeClient/lib/components/screens/note.js:524
 msgid "Yes"
 msgstr "Ναι"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:521
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "No"
 msgstr "Όχι"
 
@@ -925,8 +931,8 @@ msgstr "έντονη γραφή"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
+#, fuzzy
+msgid "emphasised text"
 msgstr "πλάγια γραφή"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
@@ -968,13 +974,13 @@ msgid "Paste"
 msgstr "Επικόλληση"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "Διάταξη"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1060,7 +1066,7 @@ msgstr "Πλαίσιο ελέγχου"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1106
+#: ReactNativeClient/lib/components/screens/note.js:1110
 msgid "Edit"
 msgstr "Επεξεργασία"
 
@@ -1214,7 +1220,7 @@ msgstr "Επεξεργασία σε εξωτερικό editor"
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:822
+#: ReactNativeClient/lib/components/screens/note.js:826
 msgid "Set alarm"
 msgstr "Ορισμός υπενθύμισης"
 
@@ -1224,7 +1230,7 @@ msgstr "Ορισμός υπενθύμισης"
 #: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:837
+#: ReactNativeClient/lib/components/screens/note.js:841
 msgid "Tags"
 msgstr "Ετικέτες"
 
@@ -1252,7 +1258,7 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:864
+#: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -1442,7 +1448,7 @@ msgstr ""
 "Θα δημιουργηθεί νέο σημειωματάριο \"% s\" και θα εισαχθεί το αρχείο \"% s\""
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "Yποβολή"
 
@@ -1520,7 +1526,7 @@ msgid "Switch to to-do type"
 msgstr "Αλλαγή σε to-do"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:851
+#: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
 msgstr "Αντιγραφή συνδέσμου Markdown"
 
@@ -1568,6 +1574,10 @@ msgstr "Αυτό το αρχείο δεν ήταν δυνατό να ανοιχ�
 #: ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
 msgstr "Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί."
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "πλάγια γραφή"
 
 #: ElectronClient/gui/NoteText.min.js:1852
 msgid "Content Properties"
@@ -2153,8 +2163,9 @@ msgstr ""
 "δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
 
 #: ReactNativeClient/lib/registry.js:156
+#, fuzzy
 msgid ""
-"Could not synchronize with OneDrive.\n"
+"Could not synchronise with OneDrive.\n"
 "\n"
 "This error often happens when using OneDrive for Business, which "
 "unfortunately cannot be supported.\n"
@@ -2183,7 +2194,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:519
+#: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2211,11 +2222,11 @@ msgstr "ημερομηνία ενημέρωσης"
 msgid "Conflicts"
 msgstr "Διενέξεις"
 
-#: ReactNativeClient/lib/models/Folder.js:386
+#: ReactNativeClient/lib/models/Folder.js:388
 msgid "Cannot move notebook to this location"
 msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
 
-#: ReactNativeClient/lib/models/Folder.js:438
+#: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
@@ -3043,11 +3054,11 @@ msgstr "Επεξεργασία σημειωματάριου"
 msgid "Enter notebook title"
 msgstr "Δώστε τον τίτλο του σημειωματάριου"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
 msgstr "Είσοδος με Onedrive"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -3061,11 +3072,11 @@ msgstr "Νέες ετικέτες:"
 msgid "Type new tags or select from list"
 msgstr "Πληκτρολογήστε καινούρια ετικέτα ή επιλέξτε από την λίστα"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Είσοδος με Dropbox"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "Βάλτε τον κωδικό εδώ"
 
@@ -3075,7 +3086,7 @@ msgid "Master Key %s"
 msgstr "Κύριο Κλειδί %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:769
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Created: %s"
 msgstr "Δημιουργήθηκε: %s"
@@ -3298,66 +3309,66 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Σύνδεσμοι με πρωτόκολλο \"%s\" δεν υποστηρίζονται"
 
-#: ReactNativeClient/lib/components/screens/note.js:614
+#: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Μη υποστηριζόμενος τύπος εικόνας: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:770
+#: ReactNativeClient/lib/components/screens/note.js:774
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Ενημερώθηκε: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
 msgstr "Προβολή στο χάρτη"
 
-#: ReactNativeClient/lib/components/screens/note.js:781
+#: ReactNativeClient/lib/components/screens/note.js:785
 msgid "Go to source URL"
 msgstr "Μεταβείτε στη διεύθυνση URL προέλευσης"
 
-#: ReactNativeClient/lib/components/screens/note.js:809
+#: ReactNativeClient/lib/components/screens/note.js:813
 msgid "Attach..."
 msgstr "Επισύναψη..."
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Choose an option"
 msgstr "Διαλέξτε μία επιλογή"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Take photo"
 msgstr "Βγάλτε μια φωτογραφία"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach photo"
 msgstr "Επισυνάψτε μία φωτογραφία"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach any file"
 msgstr "Επισυνάψτε οποιοδήποτε αρχείο"
 
-#: ReactNativeClient/lib/components/screens/note.js:830
+#: ReactNativeClient/lib/components/screens/note.js:834
 msgid "Share"
 msgstr "Κοινοποίηση"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to note"
 msgstr "Μετατροπή σε σημείωση"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to todo"
 msgstr "Μετατροπή σε to-do"
 
-#: ReactNativeClient/lib/components/screens/note.js:858
+#: ReactNativeClient/lib/components/screens/note.js:862
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: ReactNativeClient/lib/components/screens/note.js:1038
-#: ReactNativeClient/lib/components/screens/note.js:1096
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
 msgstr "Προσθήκη σώματος κειμένου"
 
-#: ReactNativeClient/lib/components/screens/note.js:1146
+#: ReactNativeClient/lib/components/screens/note.js:1150
 msgid "Add title"
 msgstr "Προσθήκη τίτλου"
 
@@ -3578,17 +3589,17 @@ msgid "On %s: %s"
 msgstr "Στο %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
 msgstr "Αρχείο εξαγωγής Joplin"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:83
 msgid "Markdown"
 msgstr "Markdown"
 
 #: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
 msgstr "Φάκελος εξαγωγής Joplin"
 
@@ -3600,29 +3611,29 @@ msgstr "Αρχείο εξαγωγής Evernote (σαν Markdown)"
 msgid "Evernote Export File (as HTML)"
 msgstr "Αρχείο εξαγωγής Evernote (σαν HTML)"
 
-#: ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
 msgstr "Φάκελος εξαγωγής Json"
 
-#: ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:90
 msgid "HTML File"
 msgstr "Αρχείο HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:95
 msgid "HTML Directory"
 msgstr "Φάκελος HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
 msgstr "Αρχείο"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
 msgstr "Φάκελος"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Δεν είναι δυνατή η φόρτωση του module \"%s\" για τη μορφή \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
@@ -3630,7 +3641,7 @@ msgstr "Δεν είναι δυνατή η φόρτωση του module \"%s\" γ
 msgid "Please specify import format for %s"
 msgstr "Παρακαλώ καθορίστε τη μορφή εισαγωγής για το %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "

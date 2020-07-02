@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:30 CliClient/app/command-mv.js:22
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
 #: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
 #: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
 #: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
@@ -87,51 +87,56 @@ msgstr "โปรดเลือกสมุดบันทึกก่อน"
 msgid "Imports data into Joplin."
 msgstr "นำเข้าข้อมูลเข้ามาที่ Joplin"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
 msgstr "ฟอร์แมตต้นฉบับ: %s"
 
-#: CliClient/app/command-import.js:24
+#: CliClient/app/command-import.js:26
 #, fuzzy
 msgid "Do not ask for confirmation."
 msgstr "อย่าถามให้ยืนยัน"
 
-#: CliClient/app/command-import.js:43 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "ฟอร์แมตต้นฉบับ: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "พบ: %d"
 
-#: CliClient/app/command-import.js:44 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "สร้างเมื่อ: %d"
 
-#: CliClient/app/command-import.js:45 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "แก้ไขเมื่อ: %d"
 
-#: CliClient/app/command-import.js:46 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "ข้าม: %d"
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "ทรัพยากร: %d"
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "แท็ก: %d"
 
-#: CliClient/app/command-import.js:61
+#: CliClient/app/command-import.js:65
 msgid "Importing notes..."
 msgstr "กำลังนำเข้าบันทึก..."
 
-#: CliClient/app/command-import.js:66 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
@@ -301,20 +306,20 @@ msgstr "การขออนุมัติไม่สมบูรณ์ (ไ�
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น"
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
 
@@ -342,8 +347,9 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "จุดหมายการซิงโครไนซ์: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-msgid "Cannot initialize synchroniser."
-msgstr ""
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "มีบางรายการที่ไม่สามารถซิงโครไนซ์ได้"
 
 #: CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
@@ -437,7 +443,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:457
+#: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
 msgstr "ลบบันทึก?"
 
@@ -483,11 +489,11 @@ msgstr "ส่งออกเฉพาะสมุดบันทึกที่
 msgid "Creates a new note."
 msgstr "สร้างบันทึกใหม่"
 
-#: CliClient/app/main.js:82
+#: CliClient/app/main.js:80
 msgid "Type `joplin help` for usage information."
 msgstr "พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน"
 
-#: CliClient/app/main.js:84
+#: CliClient/app/main.js:82
 msgid "Fatal error:"
 msgstr "ผิดพลาดร้ายแรง:"
 
@@ -746,7 +752,7 @@ msgstr "ตกลง"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/components/screens/note.js:526
 msgid "Cancel"
 msgstr "ยกเลิก"
 
@@ -760,12 +766,12 @@ msgstr ""
 msgid "Goto Anything..."
 msgstr ""
 
-#: ElectronClient/InteropServiceHelper.js:142
+#: ElectronClient/InteropServiceHelper.js:149
 #, fuzzy, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
 
-#: ElectronClient/InteropServiceHelper.js:160
+#: ElectronClient/InteropServiceHelper.js:167
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr ""
@@ -797,13 +803,13 @@ msgstr "เวอร์ชั่นใหม่: %s"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:520
+#: ReactNativeClient/lib/components/screens/note.js:524
 msgid "Yes"
 msgstr "ใช่"
 
 #: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:689
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:521
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "No"
 msgstr "ไม่"
 
@@ -855,8 +861,7 @@ msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
+msgid "emphasised text"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:156
@@ -898,13 +903,13 @@ msgid "Paste"
 msgstr "วาง"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:463
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -990,7 +995,7 @@ msgstr "ช่องทำเครื่องหมาย"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1106
+#: ReactNativeClient/lib/components/screens/note.js:1110
 msgid "Edit"
 msgstr "แก้ไข"
 
@@ -1147,7 +1152,7 @@ msgstr "แก้ไขด้วยโปรแกรมภายนอก"
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:105
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:822
+#: ReactNativeClient/lib/components/screens/note.js:826
 msgid "Set alarm"
 msgstr "ตั้งการแจ้งเตือน"
 
@@ -1157,7 +1162,7 @@ msgstr "ตั้งการแจ้งเตือน"
 #: ElectronClient/gui/NoteText.min.js:1810 ElectronClient/app.js:1078
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:837
+#: ReactNativeClient/lib/components/screens/note.js:841
 msgid "Tags"
 msgstr "แท็ก"
 
@@ -1185,7 +1190,7 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:864
+#: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
 msgstr "ลบ"
 
@@ -1366,7 +1371,7 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:64
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr ""
 
@@ -1444,7 +1449,7 @@ msgid "Switch to to-do type"
 msgstr "เปลี่ยนชนิดเป็น to-do"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:138
-#: ReactNativeClient/lib/components/screens/note.js:851
+#: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
 msgstr "คัดลอกลิงก์ Markdown"
 
@@ -1491,6 +1496,10 @@ msgstr "ไม่สามารถเปิดไฟล์นี้ได้: %
 
 #: ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
 msgstr ""
 
 #: ElectronClient/gui/NoteText.min.js:1852
@@ -2056,7 +2065,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/registry.js:156
 msgid ""
-"Could not synchronize with OneDrive.\n"
+"Could not synchronise with OneDrive.\n"
 "\n"
 "This error often happens when using OneDrive for Business, which "
 "unfortunately cannot be supported.\n"
@@ -2079,7 +2088,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:519
+#: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2107,12 +2116,12 @@ msgstr "แก้ไขเมื่อ"
 msgid "Conflicts"
 msgstr "ขัดแย้ง"
 
-#: ReactNativeClient/lib/models/Folder.js:386
+#: ReactNativeClient/lib/models/Folder.js:388
 #, fuzzy
 msgid "Cannot move notebook to this location"
 msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
 
-#: ReactNativeClient/lib/models/Folder.js:438
+#: ReactNativeClient/lib/models/Folder.js:440
 #, fuzzy, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "สมุดบันทึกไม่สามารถใช้ชื่อ “%s” เพราะมีคำสงวน"
@@ -2920,11 +2929,11 @@ msgstr "แก้ไขสมุดบันทึก"
 msgid "Enter notebook title"
 msgstr "กรอกชื่อของสมุดบันทึก"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
 msgstr "เข้าสู่ระบบด้วย OneDrive"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -2939,11 +2948,11 @@ msgstr "แท็กใหม่:"
 msgid "Type new tags or select from list"
 msgstr "กรอกแท็กใหม่หรือเลือกจากรายการ"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:51
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "เข้าสู่ระบบด้วย Dropbox"
 
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:62
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "กรอกรหัสที่นี่"
 
@@ -2953,7 +2962,7 @@ msgid "Master Key %s"
 msgstr "มาสเตอร์คีย์ %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:769
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Created: %s"
 msgstr "สร้างเมื่อ: %s"
@@ -3157,67 +3166,67 @@ msgstr "แอป Joplin mobile ยังไม่รองรับชนิด
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
 
-#: ReactNativeClient/lib/components/screens/note.js:614
+#: ReactNativeClient/lib/components/screens/note.js:618
 #, fuzzy, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "ไม่รองรับภาพนี้ประเภทนี้: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:770
+#: ReactNativeClient/lib/components/screens/note.js:774
 #, fuzzy, javascript-format
 msgid "Updated: %s"
 msgstr "แก้ไขเมื่อ: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
 msgstr "แสดงในแผนที่"
 
-#: ReactNativeClient/lib/components/screens/note.js:781
+#: ReactNativeClient/lib/components/screens/note.js:785
 msgid "Go to source URL"
 msgstr "ไปที่ URL แหล่งที่มา"
 
-#: ReactNativeClient/lib/components/screens/note.js:809
+#: ReactNativeClient/lib/components/screens/note.js:813
 msgid "Attach..."
 msgstr "แนบ..."
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Choose an option"
 msgstr ""
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 #, fuzzy
 msgid "Take photo"
 msgstr "ถ่ายรูป"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach photo"
 msgstr "แนบรูปภาพ"
 
-#: ReactNativeClient/lib/components/screens/note.js:811
+#: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Attach any file"
 msgstr "แนบไฟล์"
 
-#: ReactNativeClient/lib/components/screens/note.js:830
+#: ReactNativeClient/lib/components/screens/note.js:834
 msgid "Share"
 msgstr "แบ่งปัน"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to note"
 msgstr "แปลงเป็นบันทึก"
 
-#: ReactNativeClient/lib/components/screens/note.js:844
+#: ReactNativeClient/lib/components/screens/note.js:848
 msgid "Convert to todo"
 msgstr "แปลงเป็น to-do"
 
-#: ReactNativeClient/lib/components/screens/note.js:858
+#: ReactNativeClient/lib/components/screens/note.js:862
 msgid "Properties"
 msgstr "คุณสมบัติ"
 
-#: ReactNativeClient/lib/components/screens/note.js:1038
-#: ReactNativeClient/lib/components/screens/note.js:1096
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
 msgstr "เพิ่มเนื้อความ"
 
-#: ReactNativeClient/lib/components/screens/note.js:1146
+#: ReactNativeClient/lib/components/screens/note.js:1150
 msgid "Add title"
 msgstr "เพิ่มชื่อเรื่อง"
 
@@ -3429,17 +3438,17 @@ msgid "On %s: %s"
 msgstr "เมื่อ %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:67
+#: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
 msgstr "ไฟล์ส่งออก Joplin"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:82
+#: ReactNativeClient/lib/services/InteropService.js:83
 msgid "Markdown"
 msgstr "Markdown"
 
 #: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:72
+#: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
 msgstr "ไดเรกทอรี่ส่งออก Joplin"
 
@@ -3451,30 +3460,30 @@ msgstr "ไฟล์ส่งออก Evernote (เป็น Markdown)"
 msgid "Evernote Export File (as HTML)"
 msgstr "ไฟล์ส่งออก Evernote (เป็น HTML)"
 
-#: ReactNativeClient/lib/services/InteropService.js:77
+#: ReactNativeClient/lib/services/InteropService.js:78
 #, fuzzy
 msgid "Json Export Directory"
 msgstr "ไดเรกทอรี่ส่งออก Json"
 
-#: ReactNativeClient/lib/services/InteropService.js:89
+#: ReactNativeClient/lib/services/InteropService.js:90
 msgid "HTML File"
 msgstr "ไฟล์ HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:94
+#: ReactNativeClient/lib/services/InteropService.js:95
 msgid "HTML Directory"
 msgstr "ไดเรกทอรี่ HTML"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
 msgstr "ไฟล์"
 
-#: ReactNativeClient/lib/services/InteropService.js:130
+#: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
 msgstr "ไดเรกทอรี่"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "ไม่สามารถโหลดโมดูล “%s” สำหรับฟอร์แมต “%s”"
 
 #: ReactNativeClient/lib/services/InteropService.js:232
@@ -3482,15 +3491,12 @@ msgstr "ไม่สามารถโหลดโมดูล “%s” สำ�
 msgid "Please specify import format for %s"
 msgstr ""
 
-#: ReactNativeClient/lib/services/InteropService.js:364
+#: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-
-#~ msgid "Some items cannot be synchronised."
-#~ msgstr "มีบางรายการที่ไม่สามารถซิงโครไนซ์ได้"
 
 #, fuzzy
 #~ msgid "Some items cannot be decrypted."

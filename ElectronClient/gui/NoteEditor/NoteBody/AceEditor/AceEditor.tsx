@@ -274,7 +274,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				if (!commandProcessed) {
 					const commands: any = {
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
-						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasized text')),
+						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							if (url) wrapSelectionWithStrings('[', `](${url})`);

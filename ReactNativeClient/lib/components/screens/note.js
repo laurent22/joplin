@@ -268,6 +268,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// TODO: Clean up these style names and nesting
 		const styles = {
+			screen: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+			},
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,

@@ -49,7 +49,7 @@
     "font-awesome-filetypes": "^2.1.0",
     "form-data": "^2.1.4",
     "fs-extra": "^5.0.0",
-    "highlight.js": "^9.17.1",
+    "highlight.js": "10.1.1",
     "html-entities": "^1.2.1",
     "html-minifier": "^3.5.15",
     "htmlparser2": "^4.1.0",
