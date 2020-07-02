@@ -375,7 +375,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Editor
 					value={props.content}
 					ref={editorRef}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'markdown'}
+					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					theme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}

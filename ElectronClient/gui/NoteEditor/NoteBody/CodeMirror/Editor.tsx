@@ -13,6 +13,7 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useJoplinMode from './utils/useJoplinMode';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -57,6 +58,7 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useJoplinMode(CodeMirror);
 
 	useEffect(() => {
 		if (props.cancelledKeys) {
@@ -112,18 +114,6 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, []);
 
-	const getModeOptions = (mode: string) => {
-		const markdownOptions = { name: 'markdown',
-			taskLists: true,
-			strikethrough: true,
-			emoji: true,
-			tokenTypeOverrides: {
-				linkText: 'link-text',
-			},
-		};
-		return mode === 'markdown' ? markdownOptions : mode;
-	};
-
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
@@ -131,7 +121,7 @@ function Editor(props: EditorProps, ref: any) {
 			value: props.value,
 			screenReaderLabel: props.value,
 			theme: props.theme,
-			mode: getModeOptions(props.mode),
+			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
 			inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
@@ -187,7 +177,7 @@ function Editor(props: EditorProps, ref: any) {
 			}
 			editor.setOption('screenReaderLabel', props.value);
 			editor.setOption('theme', props.theme);
-			editor.setOption('mode', getModeOptions(props.mode));
+			editor.setOption('mode', props.mode);
 			editor.setOption('readOnly', props.readOnly);
 			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
