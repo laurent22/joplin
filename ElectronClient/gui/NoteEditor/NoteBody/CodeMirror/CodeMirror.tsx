@@ -52,17 +52,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
-	const cancelledKeys: {mac: string[], default: string[]} = { mac: [], default: [] };
-	// Remove Joplin reserved key bindings from the editor
-	const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
-	for (let i = 0; i < letters.length; i++) {
-		const l = letters[i];
-		cancelledKeys.default.push(`Ctrl-${l}`);
-		cancelledKeys.mac.push(`Cmd-${l}`);
-	}
-	cancelledKeys.default.push('Alt-E');
-	cancelledKeys.mac.push('Alt-E');
-
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
@@ -397,7 +386,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}
-					cancelledKeys={cancelledKeys}
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorContextMenu={onEditorContextMenu}
