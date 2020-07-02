@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const Setting = require('lib/models/Setting.js');
 const BaseService = require('lib/services/BaseService');
-const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim.js');
 
 class KeymapService extends BaseService {
@@ -87,9 +86,7 @@ class KeymapService extends BaseService {
 
 	constructor() {
 		super();
-
 		this.keymap = KeymapService.initKeymap();
-		this.logger_ = new Logger();
 
 		const customKeymapPath = `${Setting.value('profileDir')}/keymap-desktop.json`;
 		if (fs.existsSync(customKeymapPath)) {
@@ -158,6 +155,7 @@ class KeymapService extends BaseService {
 		try {
 			this.validateKeymap(); // Throws whenever there are duplicate Accelerators used in the keymap
 		} catch (err) {
+			this.resetKeymap();
 			throw new Error(
 				`Keymap configuration contains duplicates!\n${err.message}`
 			);
@@ -168,7 +166,7 @@ class KeymapService extends BaseService {
 		this.keymap = KeymapService.initKeymap();
 	}
 
-	validateKeymapItem(item: KeymapItem) {
+	private validateKeymapItem(item: KeymapItem) {
 		const commandReference = 'https://github.com/laurent22/joplin/blob/master/README.md';
 		const acceleratorReference = 'https://www.electronjs.org/docs/api/accelerator';
 
@@ -197,7 +195,7 @@ class KeymapService extends BaseService {
 		}
 	}
 
-	validateKeymap() {
+	private validateKeymap() {
 		const contextSets: { [context: string]: Set<string> } = { 'default': new Set() };
 		const contextHasAccelerator = (context: string, accelerator: string) => contextSets[context].has(accelerator);
 
@@ -209,7 +207,6 @@ class KeymapService extends BaseService {
 			if (itemContext !== 'default' && contextHasAccelerator('default', itemAccelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
 
-				this.resetKeymap();
 				throw new Error(
 					`Accelerator "${itemAccelerator}" can't be used for "${item.command}" command because ` +
 					`it's already used in the default context for "${originalItem.command}" command!\n\n` +
@@ -221,7 +218,6 @@ class KeymapService extends BaseService {
 				if (contextHasAccelerator(itemContext, itemAccelerator)) {
 					const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
 
-					this.resetKeymap();
 					throw new Error(
 						`Accelerator "${itemAccelerator}" is used for both "${item.command}" and ` +
 						`"${originalItem.command}" commands within the ${itemContext} context!\n\n` +
@@ -297,14 +293,6 @@ class KeymapService extends BaseService {
 
 		this.instance_ = new KeymapService();
 		return this.instance_;
-	}
-
-	static setLogger(v: any) {
-		this.logger_ = v;
-	}
-
-	static logger() {
-		return this.logger_;
 	}
 }
 
