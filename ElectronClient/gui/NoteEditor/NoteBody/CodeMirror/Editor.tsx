@@ -18,12 +18,11 @@ import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
-import 'codemirror/mode/gfm/gfm';
+import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/xml/xml';
 // Modes for syntax highlighting inside of code blocks
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
@@ -113,7 +112,11 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, []);
 
-	// const divRef = useCallback(node => {
+	const getModeOptions = (mode: string) => {
+		const markdownOptions = { name: 'markdown', taskLists: true, strikethrough: true, emoji: true };
+		return mode === 'markdown' ? markdownOptions : mode;
+	};
+
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
@@ -121,7 +124,7 @@ function Editor(props: EditorProps, ref: any) {
 			value: props.value,
 			screenReaderLabel: props.value,
 			theme: props.theme,
-			mode: props.mode,
+			mode: getModeOptions(props.mode),
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
 			inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
@@ -177,7 +180,7 @@ function Editor(props: EditorProps, ref: any) {
 			}
 			editor.setOption('screenReaderLabel', props.value);
 			editor.setOption('theme', props.theme);
-			editor.setOption('mode', props.mode);
+			editor.setOption('mode', getModeOptions(props.mode));
 			editor.setOption('readOnly', props.readOnly);
 			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
