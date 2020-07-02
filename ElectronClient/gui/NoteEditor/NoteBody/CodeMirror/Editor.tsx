@@ -113,7 +113,14 @@ function Editor(props: EditorProps, ref: any) {
 	}, []);
 
 	const getModeOptions = (mode: string) => {
-		const markdownOptions = { name: 'markdown', taskLists: true, strikethrough: true, emoji: true };
+		const markdownOptions = { name: 'markdown',
+			taskLists: true,
+			strikethrough: true,
+			emoji: true,
+			tokenTypeOverrides: {
+				linkText: 'link-text',
+			},
+		};
 		return mode === 'markdown' ? markdownOptions : mode;
 	};
 
