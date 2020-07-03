@@ -25,6 +25,7 @@
       "build/icons/*",
       "build/images/*"
     ],
+    "afterAllArtifactBuild": "./generateSha512.js",
     "win": {
       "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
@@ -87,6 +88,7 @@
     "electron-rebuild": "^1.10.1",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
+    "js-sha512": "^0.8.0",
     "patch-package": "^6.2.0"
   },
   "optionalDependencies": {
