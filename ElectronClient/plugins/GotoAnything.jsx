@@ -13,6 +13,10 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
+const { stripMarkdown } = require('lib/markdownUtils');
+const striptags = require('striptags');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlEntitiesDecode = new Entities().decode;
 
 class GotoAnything {
 
@@ -232,7 +236,7 @@ class Dialog extends React.PureComponent {
 
 							if (i < limit) { // Display note fragments of search keyword matches
 								const indices = [];
-								const body = notesById[row.id];
+								const body = stripMarkdown(htmlEntitiesDecode(striptags(notesById[row.id])));
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -332,13 +336,13 @@ class Dialog extends React.PureComponent {
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
-			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
 
-		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
 
 		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" />;
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;
-		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: fragmentsHtml }}></div>;
+		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
