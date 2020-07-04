@@ -1,7 +1,8 @@
 import * as vm from 'vm';
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
-import newSandbox from './newSandbox';
+import Sandbox from './Sandbox';
+import { SandboxContext } from './utils/types';
 const { shim } = require('lib/shim');
 const { filename } = require('lib/path-utils');
 const BaseService = require('lib/services/BaseService');
@@ -86,8 +87,14 @@ export default class PluginService extends BaseService {
 	}
 
 	async runPlugin(plugin:Plugin) {
-		const { sandbox, context } = newSandbox(plugin, this.store_);
-		// plugin.context = context;
+		// Context contains the data that is sent from the plugin to the app
+		// Currently it only contains the object that's registered when
+		// the plugin calls `joplin.plugins.register()`
+		const context:SandboxContext = {
+			runtime: null,
+		};
+
+		const sandbox = new Sandbox(plugin, this.store_, context);
 		vm.createContext(sandbox);
 		vm.runInContext(plugin.scriptText, sandbox);
 
