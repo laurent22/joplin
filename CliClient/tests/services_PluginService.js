@@ -17,6 +17,7 @@ function newPluginService() {
 		dispatch: () => {},
 		getState: () => {},
 	});
+	return service;
 }
 
 describe('services_PluginService', function() {

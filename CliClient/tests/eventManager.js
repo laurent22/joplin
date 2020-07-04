@@ -16,6 +16,11 @@ describe('eventManager', function() {
 		done();
 	});
 
+	afterEach(async (done) => {
+		eventManager.reset();
+		done();
+	});
+
 	it('should watch state props', asyncTest(async () => {
 		let localStateName = '';
 		let callCount = 0;
