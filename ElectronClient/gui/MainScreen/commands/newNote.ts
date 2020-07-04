@@ -38,5 +38,8 @@ export const runtime = ():CommandRuntime => {
 			const { folders, selectedFolderId } = utils.store.getState();
 			return !!folders.length && selectedFolderId !== Folder.conflictFolderId();
 		},
+		title: () => {
+			return _('New note');
+		},
 	};
 };

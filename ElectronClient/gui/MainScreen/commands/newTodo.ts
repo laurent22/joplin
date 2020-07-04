@@ -15,5 +15,8 @@ export const runtime = ():CommandRuntime => {
 		isEnabled: () => {
 			return CommandService.instance().isEnabled('newNote');
 		},
+		title: () => {
+			return _('New to-do');
+		},
 	};
 };

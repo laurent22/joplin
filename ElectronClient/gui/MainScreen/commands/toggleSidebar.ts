@@ -14,5 +14,8 @@ export const runtime = (comp:any):CommandRuntime => {
 				type: 'SIDEBAR_VISIBILITY_TOGGLE',
 			});
 		},
+		title: () => {
+			return _('Toggle sidebar');
+		},
 	};
 };

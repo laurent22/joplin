@@ -232,7 +232,7 @@ export default class CommandService extends BaseService {
 	title(commandName:string):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
-		return command.runtime.props ? command.runtime.title(command.runtime.props ? command.runtime.props : {}) : null;
+		return command.runtime.title(command.runtime.props ? command.runtime.props : {});
 	}
 
 	private extractExecuteArgs(command:Command, executeArgs:any) {

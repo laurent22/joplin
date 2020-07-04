@@ -45,5 +45,8 @@ export const runtime = (comp:any):CommandRuntime => {
 				notes: state.notes,
 			};
 		},
+		title: () => {
+			return _('New notebook');
+		},
 	};
 };

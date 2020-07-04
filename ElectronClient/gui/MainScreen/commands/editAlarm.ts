@@ -52,13 +52,14 @@ export const runtime = (comp:any):CommandRuntime => {
 			});
 		},
 		title: (props:any):string => {
+			if (!props.noteId || !props.notes) return null;
 			const note = BaseModel.byId(props.notes, props.noteId);
 			if (!note || !note.todo_due) return null;
 			return time.formatMsToLocal(note.todo_due);
 		},
 		isEnabled: (props:any):boolean => {
 			const { notes, noteId } = props;
-			if (!noteId) return false;
+			if (!noteId || !notes) return false;
 			const note = BaseModel.byId(notes, noteId);
 			if (!note) return false;
 			return !!note.is_todo && !note.todo_completed;

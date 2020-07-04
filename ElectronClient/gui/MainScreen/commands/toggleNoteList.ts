@@ -14,5 +14,8 @@ export const runtime = (comp:any):CommandRuntime => {
 				type: 'NOTELIST_VISIBILITY_TOGGLE',
 			});
 		},
+		title: () => {
+			return _('Toggle note list');
+		},
 	};
 };
