@@ -575,11 +575,11 @@ msgstr "此答案无效: %s"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "Y"
-msgstr "是"
+msgstr "Y"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "n"
-msgstr "否"
+msgstr "n"
 
 #: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -676,11 +676,11 @@ msgstr "未指定笔记本。"
 
 #: CliClient/app/app.js:136
 msgid "N"
-msgstr "否"
+msgstr "N"
 
 #: CliClient/app/app.js:136
 msgid "y"
-msgstr "是"
+msgstr "y"
 
 #: CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -998,7 +998,7 @@ msgstr "插入时间"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
-msgstr "勾选框"
+msgstr "复选框列表"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1012,7 +1012,7 @@ msgstr "代码块"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:543
 msgid "Inline Code"
-msgstr "行内代码"
+msgstr "内联代码"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 msgid "Drop notes or files here"
@@ -1027,7 +1027,7 @@ msgstr "代码视图"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr "请等待所有附件均被下载并解密。你还能在%s 中编辑笔记。"
+msgstr "请等待所有附件均被下载并解密。你还能在 %s 中编辑笔记。"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -2150,7 +2150,7 @@ msgstr "暗黑"
 
 #: ReactNativeClient/lib/models/Setting.js:53
 msgid "Dracula"
-msgstr "德古拉"
+msgstr "德古拉紫"
 
 #: ReactNativeClient/lib/models/Setting.js:54
 msgid "Solarised Light"
