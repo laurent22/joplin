@@ -158,7 +158,15 @@ ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
 ReactNativeClient/lib/services/plugin_service/Plugin.js
 ReactNativeClient/lib/services/plugin_service/PluginService.js
 ReactNativeClient/lib/services/plugin_service/reducer.js
-ReactNativeClient/lib/services/plugin_service/Sandbox.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/Sandbox.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplin.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinApi.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinCommands.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinFilters.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspaces.js
 ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
 ReactNativeClient/lib/services/plugin_service/ViewController.js

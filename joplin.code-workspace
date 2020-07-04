@@ -357,7 +357,16 @@
 			"ReactNativeClient/lib/commands/historyForward.js": true,
 			"ReactNativeClient/lib/hooks/useEffectDebugger.js": true,
 			"ReactNativeClient/lib/services/plugin_service/newSandbox.js": true,
-			"ReactNativeClient/lib/services/plugin_service/reducer.js": true
+			"ReactNativeClient/lib/services/plugin_service/reducer.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/Sandbox.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplin.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinApi.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinCommands.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinFilters.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspaces.js": true
 		},
 		"spellright.language": [
 			"en"

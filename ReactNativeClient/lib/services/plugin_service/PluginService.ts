@@ -1,7 +1,7 @@
 import * as vm from 'vm';
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
-import Sandbox from './Sandbox';
+import Sandbox from './Sandbox/Sandbox';
 import { SandboxContext } from './utils/types';
 const { shim } = require('lib/shim');
 const { filename } = require('lib/path-utils');
