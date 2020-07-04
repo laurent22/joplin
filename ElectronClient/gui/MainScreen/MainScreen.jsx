@@ -15,11 +15,10 @@ const { shim } = require('lib/shim');
 const { themeStyle } = require('lib/theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const eventManager = require('lib/eventManager');
 const VerticalResizer = require('../VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
-const UserWebview = require('./plugin_service/UserWebview.js').default;
+const UserWebview = require('../plugin_service/UserWebview.js').default;
 const CommandService = require('lib/services/CommandService').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
@@ -444,7 +443,6 @@ class MainScreenComponent extends React.Component {
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
 		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth, this.pluginControlCount());
-		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
 
