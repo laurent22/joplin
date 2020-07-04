@@ -284,6 +284,21 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
+	static loadByFields(fields, options = null) {
+		if (!options) options = {};
+		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
+		if (!options.fields) options.fields = '*';
+		const whereSql = [];
+		const params = [];
+		for (const fieldName in fields) {
+			whereSql.push(`\`${fieldName}\` = ?`);
+			params.push(fields[fieldName]);
+		}
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\` WHERE ${whereSql.join(' AND ')}`;
+		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
+		return this.modelSelectOne(sql, params);
+	}
+
 	static loadByTitle(fieldValue) {
 		return this.modelSelectOne(`SELECT * FROM \`${this.tableName()}\` WHERE \`title\` = ?`, [fieldValue]);
 	}

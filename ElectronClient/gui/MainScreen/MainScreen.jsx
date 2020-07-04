@@ -1,36 +1,54 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { Header } = require('./Header.min.js');
-const { SideBar } = require('./SideBar.min.js');
-const { NoteList } = require('./NoteList.min.js');
-const NoteEditor = require('./NoteEditor/NoteEditor.js').default;
+const { Header } = require('../Header/Header.min.js');
+const { SideBar } = require('../SideBar/SideBar.min.js');
+const { NoteList } = require('../NoteList/NoteList.min.js');
+const NoteEditor = require('../NoteEditor/NoteEditor.js').default;
 const { stateUtils } = require('lib/reducer.js');
-const { PromptDialog } = require('./PromptDialog.min.js');
-const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
-const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
-const ShareNoteDialog = require('./ShareNoteDialog.js').default;
-const InteropServiceHelper = require('../InteropServiceHelper.js');
+const { PromptDialog } = require('../PromptDialog.min.js');
+const NoteContentPropertiesDialog = require('../NoteContentPropertiesDialog.js').default;
+const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
+const ShareNoteDialog = require('../ShareNoteDialog.js').default;
+const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
-const BaseModel = require('lib/BaseModel.js');
-const Tag = require('lib/models/Tag.js');
-const Note = require('lib/models/Note.js');
-const { uuid } = require('lib/uuid.js');
 const { shim } = require('lib/shim');
-const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('lib/eventManager');
-const VerticalResizer = require('./VerticalResizer.min');
+const VerticalResizer = require('../VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
-const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
 const UserWebview = require('./plugin_service/UserWebview.js').default;
+const CommandService = require('lib/services/CommandService').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
 const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 const PLUGIN_SIDEBAR_WIDTH = 200;
+
+const commands = [
+	require('./commands/editAlarm'),
+	require('./commands/exportPdf'),
+	require('./commands/hideModalMessage'),
+	require('./commands/moveToFolder'),
+	require('./commands/newNote'),
+	require('./commands/newNotebook'),
+	require('./commands/newTodo'),
+	require('./commands/print'),
+	require('./commands/renameFolder'),
+	require('./commands/renameTag'),
+	require('./commands/search'),
+	require('./commands/selectTemplate'),
+	require('./commands/setTags'),
+	require('./commands/showModalMessage'),
+	require('./commands/showNoteContentProperties'),
+	require('./commands/showNoteProperties'),
+	require('./commands/showShareNoteDialog'),
+	require('./commands/toggleNoteList'),
+	require('./commands/toggleSidebar'),
+	require('./commands/toggleVisiblePanes'),
+];
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -47,15 +65,16 @@ class MainScreenComponent extends React.Component {
 			shareNoteDialogOptions: {},
 		};
 
+		this.registerCommands();
+
 		this.setupAppCloseHandling();
 
+		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
-		this.commandSavePdf = this.commandSavePdf.bind(this);
-		this.commandPrint = this.commandPrint.bind(this);
 		this.userWebview_message = this.userWebview_message.bind(this);
 	}
 
@@ -110,17 +129,31 @@ class MainScreenComponent extends React.Component {
 		this.setState({ shareNoteDialogOptions: {} });
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
-		// Execute a command if any, and if we haven't already executed it
-		if (newProps.windowCommand && newProps.windowCommand !== this.props.windowCommand) {
-			this.doCommand(newProps.windowCommand);
+	commandService_commandsEnabledStateChange(event) {
+		const buttonCommandNames = [
+			'toggleSidebar',
+			'toggleNoteList',
+			'newNote',
+			'newTodo',
+			'newNotebook',
+			'toggleVisiblePanes',
+		];
+
+		for (const n of buttonCommandNames) {
+			if (event.commands[n]) {
+				this.forceUpdate();
+				return;
+			}
 		}
 	}
 
-	toggleVisiblePanes() {
-		this.props.dispatch({
-			type: 'NOTE_VISIBLE_PANES_TOGGLE',
-		});
+	componentDidMount() {
+		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+	}
+
+	componentWillUnmount() {
+		CommandService.instance().off('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+		this.unregisterCommands();
 	}
 
 	toggleSidebar() {
@@ -133,361 +166,6 @@ class MainScreenComponent extends React.Component {
 		this.props.dispatch({
 			type: 'NOTELIST_VISIBILITY_TOGGLE',
 		});
-	}
-
-	async doCommand(command) {
-		if (!command) return;
-
-		const createNewNote = async (template, isTodo) => {
-			const folderId = Setting.value('activeFolderId');
-			if (!folderId) return;
-
-			const body = template ? TemplateUtils.render(template) : '';
-
-			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
-
-			let newNote = Object.assign({}, defaultValues, {
-				parent_id: folderId,
-				is_todo: isTodo ? 1 : 0,
-				body: body,
-			});
-
-			newNote = await Note.save(newNote, { provisional: true });
-
-			this.props.dispatch({
-				type: 'NOTE_SELECT',
-				id: newNote.id,
-			});
-		};
-
-		let commandProcessed = true;
-
-		let delayedFunction = null;
-		let delayedArgs = null;
-
-		if (command.name === 'newNote') {
-			if (!this.props.folders.length) {
-				bridge().showErrorMessageBox(_('Please create a notebook first.'));
-			} else {
-				await createNewNote(null, false);
-			}
-		} else if (command.name === 'newTodo') {
-			if (!this.props.folders.length) {
-				bridge().showErrorMessageBox(_('Please create a notebook first'));
-			} else {
-				await createNewNote(null, true);
-			}
-		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
-			this.setState({
-				promptOptions: {
-					label: _('Notebook title:'),
-					onClose: async answer => {
-						if (answer) {
-							let folder = null;
-							try {
-								folder = await Folder.save({ title: answer }, { userSideValidation: true });
-								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
-							} catch (error) {
-								bridge().showErrorMessageBox(error.message);
-							}
-
-							if (folder) {
-								this.props.dispatch({
-									type: 'FOLDER_SELECT',
-									id: folder.id,
-								});
-							}
-						}
-
-						this.setState({ promptOptions: null });
-					},
-				},
-			});
-		} else if (command.name === 'setTags') {
-			const tags = await Tag.commonTagsByNoteIds(command.noteIds);
-			const startTags = tags
-				.map(a => {
-					return { value: a.id, label: a.title };
-				})
-				.sort((a, b) => {
-					// sensitivity accent will treat accented characters as differemt
-					// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
-				});
-			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags.map(a => {
-				return { value: a.id, label: a.title };
-			})
-				.sort((a, b) => {
-				// sensitivity accent will treat accented characters as differemt
-				// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
-				});
-
-			this.setState({
-				promptOptions: {
-					label: _('Add or remove tags:'),
-					inputType: 'tags',
-					value: startTags,
-					autocomplete: tagSuggestions,
-					onClose: async answer => {
-						if (answer !== null) {
-							const endTagTitles = answer.map(a => {
-								return a.label.trim();
-							});
-							if (command.noteIds.length === 1) {
-								await Tag.setNoteTagsByTitles(command.noteIds[0], endTagTitles);
-							} else {
-								const startTagTitles = startTags.map(a => { return a.label.trim(); });
-								const addTags = endTagTitles.filter(value => !startTagTitles.includes(value));
-								const delTags = startTagTitles.filter(value => !endTagTitles.includes(value));
-
-								// apply the tag additions and deletions to each selected note
-								for (let i = 0; i < command.noteIds.length; i++) {
-									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
-									let tagTitles = tags.map(a => { return a.title; });
-									tagTitles = tagTitles.concat(addTags);
-									tagTitles = tagTitles.filter(value => !delTags.includes(value));
-									await Tag.setNoteTagsByTitles(command.noteIds[i], tagTitles);
-								}
-							}
-						}
-						this.setState({ promptOptions: null });
-					},
-				},
-			});
-		} else if (command.name === 'moveToFolder') {
-			const folders = await Folder.sortFolderTree();
-			const startFolders = [];
-			const maxDepth = 15;
-
-			const addOptions = (folders, depth) => {
-				for (let i = 0; i < folders.length; i++) {
-					const folder = folders[i];
-					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
-					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
-				}
-			};
-
-			addOptions(folders, 0);
-
-			this.setState({
-				promptOptions: {
-					label: _('Move to notebook:'),
-					inputType: 'dropdown',
-					value: '',
-					autocomplete: startFolders,
-					onClose: async answer => {
-						if (answer != null) {
-							for (let i = 0; i < command.noteIds.length; i++) {
-								await Note.moveToFolder(command.noteIds[i], answer.value);
-							}
-						}
-						this.setState({ promptOptions: null });
-					},
-				},
-			});
-		} else if (command.name === 'renameFolder') {
-			const folder = await Folder.load(command.id);
-
-			if (folder) {
-				this.setState({
-					promptOptions: {
-						label: _('Rename notebook:'),
-						value: folder.title,
-						onClose: async answer => {
-							if (answer !== null) {
-								try {
-									folder.title = answer;
-									await Folder.save(folder, { fields: ['title'], userSideValidation: true });
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-								}
-							}
-							this.setState({ promptOptions: null });
-						},
-					},
-				});
-			}
-		} else if (command.name === 'renameTag') {
-			const tag = await Tag.load(command.id);
-			if (tag) {
-				this.setState({
-					promptOptions: {
-						label: _('Rename tag:'),
-						value: tag.title,
-						onClose: async answer => {
-							if (answer !== null) {
-								try {
-									tag.title = answer;
-									await Tag.save(tag, { fields: ['title'], userSideValidation: true });
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-								}
-							}
-							this.setState({ promptOptions: null });
-						},
-					},
-				});
-			}
-		} else if (command.name === 'search') {
-			if (!this.searchId_) this.searchId_ = uuid.create();
-
-			this.props.dispatch({
-				type: 'SEARCH_UPDATE',
-				search: {
-					id: this.searchId_,
-					title: command.query,
-					query_pattern: command.query,
-					query_folder_id: null,
-					type_: BaseModel.TYPE_SEARCH,
-				},
-			});
-
-			if (command.query) {
-				this.props.dispatch({
-					type: 'SEARCH_SELECT',
-					id: this.searchId_,
-				});
-			} else {
-				const note = await Note.load(this.props.selectedNoteId);
-				if (note) {
-					this.props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: note.parent_id,
-						noteId: note.id,
-					});
-				}
-			}
-		} else if (command.name === 'commandNoteProperties') {
-			this.setState({
-				notePropertiesDialogOptions: {
-					noteId: command.noteId,
-					visible: true,
-					onRevisionLinkClick: command.onRevisionLinkClick,
-				},
-			});
-		} else if (command.name === 'commandContentProperties') {
-			const note = await Note.load(this.props.selectedNoteId);
-			if (note) {
-				this.setState({
-					noteContentPropertiesDialogOptions: {
-						visible: true,
-						text: note.body,
-						// lines: command.lines,
-					},
-				});
-			}
-		} else if (command.name === 'commandShareNoteDialog') {
-			this.setState({
-				shareNoteDialogOptions: {
-					noteIds: command.noteIds,
-					visible: true,
-				},
-			});
-		} else if (command.name === 'toggleVisiblePanes') {
-			this.toggleVisiblePanes();
-		} else if (command.name === 'toggleSidebar') {
-			this.toggleSidebar();
-		} else if (command.name === 'toggleNoteList') {
-			this.toggleNoteList();
-		} else if (command.name === 'showModalMessage') {
-			this.setState({
-				modalLayer: {
-					visible: true,
-					message:
-						<div className="modal-message">
-							<div id="loading-animation" />
-							<div className="text">{command.message}</div>
-						</div>,
-				},
-			});
-		} else if (command.name === 'hideModalMessage') {
-			this.setState({ modalLayer: { visible: false, message: '' } });
-		} else if (command.name === 'editAlarm') {
-			const note = await Note.load(command.noteId);
-
-			const defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
-			defaultDate.setMinutes(0);
-			defaultDate.setSeconds(0);
-
-			this.setState({
-				promptOptions: {
-					label: _('Set alarm:'),
-					inputType: 'datetime',
-					buttons: ['ok', 'cancel', 'clear'],
-					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
-					onClose: async (answer, buttonType) => {
-						let newNote = null;
-
-						if (buttonType === 'clear') {
-							newNote = {
-								id: note.id,
-								todo_due: 0,
-							};
-						} else if (answer !== null) {
-							newNote = {
-								id: note.id,
-								todo_due: answer.getTime(),
-							};
-						}
-
-						if (newNote) {
-							await Note.save(newNote);
-							eventManager.emit('alarmChange', { noteId: note.id, note: newNote });
-						}
-
-						this.setState({ promptOptions: null });
-					},
-				},
-			});
-		} else if (command.name === 'selectTemplate') {
-			this.setState({
-				promptOptions: {
-					label: _('Template file:'),
-					inputType: 'dropdown',
-					value: this.props.templates[0], // Need to start with some value
-					autocomplete: this.props.templates,
-					onClose: async answer => {
-						if (answer) {
-							if (command.noteType === 'note' || command.noteType === 'todo') {
-								createNewNote(answer.value, command.noteType === 'todo');
-							} else {
-								this.props.dispatch({
-									type: 'WINDOW_COMMAND',
-									name: 'insertTemplate',
-									value: answer.value,
-								});
-							}
-						}
-
-						this.setState({ promptOptions: null });
-					},
-				},
-			});
-		} else if (command.name === 'exportPdf') {
-			delayedFunction = this.commandSavePdf;
-			delayedArgs = { noteIds: command.noteIds };
-		} else if (command.name === 'print') {
-			delayedFunction = this.commandPrint;
-			delayedArgs = { noteIds: command.noteIds };
-		} else {
-			commandProcessed = false;
-		}
-
-		if (commandProcessed) {
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: null,
-			});
-		}
-
-		if (delayedFunction) {
-			requestAnimationFrame(() => {
-				delayedFunction = delayedFunction.bind(this);
-				delayedFunction(delayedArgs);
-			});
-		}
 	}
 
 	async waitForNoteToSaved(noteId) {
@@ -534,59 +212,6 @@ class MainScreenComponent extends React.Component {
 			}
 		}
 		this.isPrinting_ = false;
-	}
-
-	async commandSavePdf(args) {
-		try {
-			const noteIds = args.noteIds;
-
-			if (!noteIds.length) throw new Error('No notes selected for pdf export');
-
-			let path = null;
-			if (noteIds.length === 1) {
-				path = bridge().showSaveDialog({
-					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: await InteropServiceHelper.defaultFilename(noteIds[0], 'pdf'),
-				});
-
-			} else {
-				path = bridge().showOpenDialog({
-					properties: ['openDirectory', 'createDirectory'],
-				});
-			}
-
-			if (!path) return;
-
-			for (let i = 0; i < noteIds.length; i++) {
-				const note = await Note.load(noteIds[i]);
-
-				let pdfPath = '';
-
-				if (noteIds.length === 1) {
-					pdfPath = path;
-				} else {
-					const n = await InteropServiceHelper.defaultFilename(note.id, 'pdf');
-					pdfPath = await shim.fsDriver().findUniqueFilename(`${path}/${n}`);
-				}
-
-				await this.printTo_('pdf', { path: pdfPath, noteId: note.id });
-			}
-		} catch (error) {
-			console.error(error);
-			bridge().showErrorMessageBox(error.message);
-		}
-	}
-
-	async commandPrint(args) {
-		// TODO: test
-		try {
-			const noteIds = args.noteIds;
-			if (noteIds.length !== 1) throw new Error(_('Only one note can be printed at a time.'));
-
-			await this.printTo_('printer', { noteId: noteIds[0] });
-		} catch (error) {
-			bridge().showErrorMessageBox(error.message);
-		}
 	}
 
 	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth, pluginSidebarCount) {
@@ -755,6 +380,18 @@ class MainScreenComponent extends React.Component {
 		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems;
 	}
 
+	registerCommands() {
+		for (const command of commands) {
+			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(this));
+		}
+	}
+
+	unregisterCommands() {
+		for (const command of commands) {
+			CommandService.instance().unregisterRuntime(command.declaration.name);
+		}
+	}
+
 	pluginControlCount() {
 		let output = 0;
 		for (const pluginId in this.props.plugins) {
@@ -803,7 +440,6 @@ class MainScreenComponent extends React.Component {
 			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
-		const folders = this.props.folders;
 		const notes = this.props.notes;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
@@ -812,49 +448,11 @@ class MainScreenComponent extends React.Component {
 
 		const headerItems = [];
 
-		headerItems.push({
-			title: _('Toggle sidebar'),
-			iconName: 'fa-bars',
-			iconRotation: this.props.sidebarVisibility ? 0 : 90,
-			onClick: () => {
-				this.doCommand({ name: 'toggleSidebar' });
-			},
-		});
-
-		headerItems.push({
-			title: _('Toggle note list'),
-			iconName: 'fa-align-justify',
-			iconRotation: noteListVisibility ? 0 : 90,
-			onClick: () => {
-				this.doCommand({ name: 'toggleNoteList' });
-			},
-		});
-
-		headerItems.push({
-			title: _('New note'),
-			iconName: 'fa-file',
-			enabled: !!folders.length && !onConflictFolder,
-			onClick: () => {
-				this.doCommand({ name: 'newNote' });
-			},
-		});
-
-		headerItems.push({
-			title: _('New to-do'),
-			iconName: 'fa-check-square',
-			enabled: !!folders.length && !onConflictFolder,
-			onClick: () => {
-				this.doCommand({ name: 'newTodo' });
-			},
-		});
-
-		headerItems.push({
-			title: _('New notebook'),
-			iconName: 'fa-book',
-			onClick: () => {
-				this.doCommand({ name: 'newNotebook' });
-			},
-		});
+		headerItems.push(CommandService.instance().commandToToolbarButton('toggleSidebar', { iconRotation: sidebarVisibility ? 0 : 90 }));
+		headerItems.push(CommandService.instance().commandToToolbarButton('toggleNoteList', { iconRotation: noteListVisibility ? 0 : 90 }));
+		headerItems.push(CommandService.instance().commandToToolbarButton('newNote'));
+		headerItems.push(CommandService.instance().commandToToolbarButton('newTodo'));
+		headerItems.push(CommandService.instance().commandToToolbarButton('newNotebook'));
 
 		headerItems.push({
 			title: _('Code View'),
@@ -872,22 +470,13 @@ class MainScreenComponent extends React.Component {
 			},
 		});
 
-		if (this.props.settingEditorCodeView) {
-			headerItems.push({
-				title: _('Layout'),
-				iconName: 'fa-columns',
-				enabled: !!notes.length,
-				onClick: () => {
-					this.doCommand({ name: 'toggleVisiblePanes' });
-				},
-			});
-		}
+		headerItems.push(CommandService.instance().commandToToolbarButton('toggleVisiblePanes'));
 
 		headerItems.push({
 			title: _('Search...'),
 			iconName: 'fa-search',
 			onQuery: query => {
-				this.doCommand({ name: 'search', query: query });
+				CommandService.instance().execute('search', { query });
 			},
 			type: 'search',
 		});
@@ -944,7 +533,6 @@ const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
-		windowCommand: state.windowCommand,
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,
 		folders: state.folders,

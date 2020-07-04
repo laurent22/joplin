@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -106,9 +108,9 @@ msgid "Do not ask for confirmation."
 msgstr "Onay için sorma."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Kaynak biçimi: %s"
+msgstr "Çıktı biçimi: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -368,9 +370,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Senkronizasyon hedefi: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
-msgstr "Senkronizasyon aracı başlatılamıyor."
+msgstr "Senkronizasyon başlatılamadı."
 
 #: CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
@@ -912,7 +913,6 @@ msgstr "kuvvetli metin"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
 msgstr "vurgulanan metin"
 
@@ -2128,7 +2128,6 @@ msgstr ""
 "şahıslarla paylaşılmayacaktır."
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -2515,15 +2514,14 @@ msgid "Editor font family"
 msgstr "Editör yazı tipi"
 
 #: ReactNativeClient/lib/models/Setting.js:508
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Bu font *monospace* olmalıdır, aksi halde düzgün çalışmayacaktır. Yazı tipi "
-"yanlış seçilmiş veya boş bırakılmışsa, varsayılan monospace yazı tipi "
-"kullanılacaktır."
+"Bu yazı tipi *monospace* olmalıdır, aksi halde bazı karakterler düzgün "
+"çıkmayacak. Yazı tipi yanlış seçilmiş veya boş bırakılmışsa, varsayılan "
+"monospace yazı tipi kullanılacaktır."
 
 #: ReactNativeClient/lib/models/Setting.js:547
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3580,9 +3578,9 @@ msgid "Directory"
 msgstr "Dizin"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" modülü \"%s\" formatı için yüklenemedi"
+msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" çıktısı için yüklenemedi"
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format

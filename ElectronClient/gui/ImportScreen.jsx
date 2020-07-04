@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Folder = require('lib/models/Folder.js');
-const { Header } = require('./Header.min.js');
+const { Header } = require('./Header/Header.min.js');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { filename, basename } = require('lib/path-utils.js');

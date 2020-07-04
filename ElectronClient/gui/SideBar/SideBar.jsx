@@ -2,6 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
+const CommandService = require('lib/services/CommandService.js').default;
 const BaseModel = require('lib/BaseModel.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
@@ -12,13 +13,19 @@ const { themeStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const InteropServiceHelper = require('../InteropServiceHelper.js');
+const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+
+const commands = [
+	require('./commands/focusElementSideBar'),
+];
 
 class SideBarComponent extends React.Component {
 	constructor() {
 		super();
+
+		CommandService.instance().componentRegisterCommands(this, commands);
 
 		this.onFolderDragStart_ = event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
@@ -213,61 +220,10 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	doCommand(command) {
-		if (!command) return;
-
-		let commandProcessed = true;
-
-		if (command.name === 'focusElement' && command.target === 'sideBar') {
-			if (this.props.sidebarVisibility) {
-				const item = this.selectedItem();
-				if (item) {
-					const anchorRef = this.anchorItemRefs[item.type][item.id];
-					if (anchorRef) anchorRef.current.focus();
-				} else {
-					const anchorRef = this.firstAnchorItemRef('folder');
-					console.info('anchorRef', anchorRef);
-					if (anchorRef) anchorRef.current.focus();
-				}
-			}
-		} else if (command.name === 'synchronize') {
-			if (!this.props.syncStarted) this.sync_click();
-		} else {
-			commandProcessed = false;
-		}
-
-		if (commandProcessed) {
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: null,
-			});
-		}
-	}
-
 	componentWillUnmount() {
 		this.clearForceUpdateDuringSync();
-	}
 
-	componentDidUpdate(prevProps) {
-		if (prevProps.windowCommand !== this.props.windowCommand) {
-			this.doCommand(this.props.windowCommand);
-		}
-
-		// if (shim.isLinux()) {
-		// 	// For some reason, the UI seems to sleep in some Linux distro during
-		// 	// sync. Cannot find the reason for it and cannot replicate, so here
-		// 	// as a test force the update at regular intervals.
-		// 	// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
-		// 	if (!prevProps.syncStarted && this.props.syncStarted) {
-		// 		this.clearForceUpdateDuringSync();
-
-		// 		this.forceUpdateDuringSyncIID_ = setInterval(() => {
-		// 			this.forceUpdate();
-		// 		}, 2000);
-		// 	}
-
-		// 	if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
-		// }
+		CommandService.instance().componentUnregisterCommands(commands);
 	}
 
 	async itemContextMenu(event) {
@@ -299,16 +255,7 @@ class SideBarComponent extends React.Component {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem({
-					label: _('New sub-notebook'),
-					click: () => {
-						this.props.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'newSubNotebook',
-							activeFolderId: itemId,
-						});
-					},
-				})
+				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', null, itemId)),
 			);
 		}
 
@@ -337,31 +284,7 @@ class SideBarComponent extends React.Component {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-			menu.append(
-				new MenuItem({
-					label: _('Rename'),
-					click: async () => {
-						this.props.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'renameFolder',
-							id: itemId,
-						});
-					},
-				})
-			);
-
-			// menu.append(
-			// 	new MenuItem({
-			// 		label: _("Move"),
-			// 		click: async () => {
-			// 			this.props.dispatch({
-			// 				type: "WINDOW_COMMAND",
-			// 				name: "renameFolder",
-			// 				id: itemId,
-			// 			});
-			// 		},
-			// 	})
-			// );
+			menu.append(new MenuItem(CommandService.instance().commandToMenuItem('renameFolder', null, { folderId: itemId })));
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
@@ -393,18 +316,9 @@ class SideBarComponent extends React.Component {
 		}
 
 		if (itemType === BaseModel.TYPE_TAG) {
-			menu.append(
-				new MenuItem({
-					label: _('Rename'),
-					click: async () => {
-						this.props.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'renameTag',
-							id: itemId,
-						});
-					},
-				})
-			);
+			menu.append(new MenuItem(
+				CommandService.instance().commandToMenuItem('renameTag', null, { tagId: itemId })
+			));
 		}
 
 		menu.popup(bridge().window());
@@ -424,9 +338,9 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
-	async sync_click() {
-		await shared.synchronize_press(this);
-	}
+	// async sync_click() {
+	// 	await shared.synchronize_press(this);
+	// }
 
 	anchorItemRef(type, id) {
 		if (!this.anchorItemRefs[type]) this.anchorItemRefs[type] = {};
@@ -662,17 +576,9 @@ class SideBarComponent extends React.Component {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteBody',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteBody' });
 			} else {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteList',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteList' });
 			}
 		}
 
@@ -728,7 +634,8 @@ class SideBarComponent extends React.Component {
 				href="#"
 				key="sync_button"
 				onClick={() => {
-					this.sync_click();
+					CommandService.instance().execute('synchronize');
+					// this.sync_click();
 				}}
 			>
 				{icon}
@@ -849,7 +756,6 @@ const mapStateToProps = state => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
-		windowCommand: state.windowCommand,
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,
 	};

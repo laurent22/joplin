@@ -16,6 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -103,9 +105,9 @@ msgid "Do not ask for confirmation."
 msgstr "Não pedir confirmação."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Formato da origem: \"%s\""
+msgstr "Formato da saída: \"%s\""
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -367,7 +369,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Alvo de sincronização: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Não é possível inicializar o sincronizador."
 
@@ -906,7 +907,6 @@ msgstr "texto forte"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
 msgstr "texto enfatizado"
 
@@ -2123,7 +2123,6 @@ msgstr ""
 "com terceiros."
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -3582,9 +3581,10 @@ msgid "Directory"
 msgstr "Diretório"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Não é possível carregar o módulo \"%s\" para o formato \"%s\""
+msgstr ""
+"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e saída \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format

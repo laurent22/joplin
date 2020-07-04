@@ -2,6 +2,7 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const CommandService = require('lib/services/CommandService').default;
 
 const additionalReducers = [];
 
@@ -91,6 +92,10 @@ const cacheEnabledOutput = (key, output) => {
 
 	derivedStateCache_[key] = output;
 	return derivedStateCache_[key];
+};
+
+stateUtils.hasOneSelectedNote = function(state) {
+	return state.selectedNoteIds.length === 1;
 };
 
 stateUtils.notesOrder = function(stateSettings) {
@@ -1031,6 +1036,8 @@ const reducer = (state = defaultState, action) => {
 	if (action.type === 'NOTE_DELETE') {
 		newState = handleHistory(newState, action);
 	}
+
+	CommandService.instance().scheduleMapStateToProps(newState);
 
 	for (const additionalReducer of additionalReducers) {
 		newState = additionalReducer.reducer(newState, action);

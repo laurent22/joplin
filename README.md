@@ -28,7 +28,7 @@ Linux          | <a href='https://github.com/laurent22/joplin/releases/download/
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.332/joplin-v1.0.332.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.332/joplin-v1.0.332-32bit.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.333/joplin-v1.0.333.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.333/joplin-v1.0.333-32bit.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -63,7 +63,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 |     |     |     |
 | :---: | :---: | :---: |
 | <img width="50" src="https://avatars0.githubusercontent.com/u/6979755?s=96&v=4"/></br>[Devon Zuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[小西　孝宗](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[Alexander van der Berg](https://github.com/avanderberg)
-| <img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br>[Nicholas Head](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[Frank Bloise](https://github.com/fbloise)
+| <img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br>[Nicholas Head](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[Frank Bloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[Thomas Broussard](https://github.com/thomasbroussard)
 
 <!-- TOC -->
 # Table of contents
@@ -204,7 +204,6 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
-- [Yandex Disk](https://disk.yandex.ru/download?src=Yandex.Sidebar#pc)
 - [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation

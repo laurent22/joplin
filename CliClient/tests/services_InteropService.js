@@ -79,6 +79,45 @@ describe('services_InteropService', function() {
 		fieldsEqual(folder3, folder1, fieldNames);
 	}));
 
+	it('should import folders and de-duplicate titles when needed', asyncTest(async () => {
+		const service = new InteropService();
+		const folder1 = await Folder.save({ title: 'folder' });
+		const folder2 = await Folder.save({ title: 'folder' });
+		const filePath = `${exportDir()}/test.jex`;
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+
+		await service.import({ path: filePath });
+
+		const allFolders = await Folder.all();
+		expect(allFolders.map(f => f.title).sort().join(' - ')).toBe('folder - folder (1)');
+	}));
+
+	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
+		const service = new InteropService();
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const sub1 = await Folder.save({ title: 'Sub', parent_id: folder1.id });
+		const sub2 = await Folder.save({ title: 'Sub', parent_id: folder2.id });
+		const filePath = `${exportDir()}/test.jex`;
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+
+		await service.import({ path: filePath });
+
+		const importedFolder1 = await Folder.loadByTitle('folder1');
+		const importedFolder2 = await Folder.loadByTitle('folder2');
+		const importedSub1 = await Folder.load((await Folder.childrenIds(importedFolder1.id))[0]);
+		const importedSub2 = await Folder.load((await Folder.childrenIds(importedFolder2.id))[0]);
+
+		expect(importedSub1.title).toBe('Sub');
+		expect(importedSub2.title).toBe('Sub');
+	}));
+
 	it('should export and import folders and notes', asyncTest(async () => {
 		const service = new InteropService();
 		const folder1 = await Folder.save({ title: 'folder1' });

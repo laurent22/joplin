@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
+import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -48,18 +48,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const contentKeyHasChangedRef = useRef(false);
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
+	const rootSize = useRootSize({ rootRef });
 
-	const cancelledKeys: {mac: string[], default: string[]} = { mac: [], default: [] };
-	// Remove Joplin reserved key bindings from the editor
-	const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
-	for (let i = 0; i < letters.length; i++) {
-		const l = letters[i];
-		cancelledKeys.default.push(`Ctrl-${l}`);
-		cancelledKeys.mac.push(`Cmd-${l}`);
-	}
-	cancelledKeys.default.push('Alt-E');
-	cancelledKeys.mac.push('Alt-E');
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -367,9 +358,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
+	// The editor needs to be kept up to date on the actual space that it's filling
+	// Ogherwise we can get some rendering errors when the editor size is changed
+	// (this can happen when switching layout of when toggling sidebars for example)
+	const editorStyle = useMemo(() => {
+		const output = Object.assign({}, rootSize, styles.editor);
+
+		if (props.visiblePanes.includes('editor') && props.visiblePanes.includes('viewer')) {
+			output.width = Math.floor(rootSize.width / 2);
+		}
+
+		return output;
+	}, [rootSize, styles.editor, props.visiblePanes]);
+
 	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
 
 	function renderEditor() {
+
 		return (
 			<div style={cellEditorStyle}>
 				<Editor
@@ -377,11 +382,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
 					theme={styles.editor.codeMirrorTheme}
-					style={styles.editor}
+					style={editorStyle}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}
-					cancelledKeys={cancelledKeys}
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorContextMenu={onEditorContextMenu}
