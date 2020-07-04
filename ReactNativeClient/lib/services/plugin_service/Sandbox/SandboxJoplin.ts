@@ -2,7 +2,7 @@ import { SandboxContext } from '../utils/types';
 import Plugin from '../Plugin';
 import SandboxJoplinApi from './SandboxJoplinApi';
 import SandboxJoplinPlugins from './SandboxJoplinPlugins';
-import SandboxJoplinWorkspaces from './SandboxJoplinWorkspaces';
+import SandboxJoplinWorkspace from './SandboxJoplinWorkspace';
 import SandboxJoplinFilters from './SandboxJoplinFilters';
 import SandboxJoplinCommands from './SandboxJoplinCommands';
 import SandboxJoplinViews from './SandboxJoplinViews';
@@ -12,7 +12,7 @@ export default class SandboxJoplin {
 
 	private api_: SandboxJoplinApi = null;
 	private plugins_: SandboxJoplinPlugins = null;
-	private workspaces_: SandboxJoplinWorkspaces = null;
+	private workspace_: SandboxJoplinWorkspace = null;
 	private filters_: SandboxJoplinFilters = null;
 	private commands_: SandboxJoplinCommands = null;
 	private views_: SandboxJoplinViews = null;
@@ -21,7 +21,7 @@ export default class SandboxJoplin {
 	constructor(plugin: Plugin, store: any, context: SandboxContext) {
 		this.api_ = new SandboxJoplinApi();
 		this.plugins_ = new SandboxJoplinPlugins(context);
-		this.workspaces_ = new SandboxJoplinWorkspaces(store);
+		this.workspace_ = new SandboxJoplinWorkspace(store);
 		this.filters_ = new SandboxJoplinFilters();
 		this.commands_ = new SandboxJoplinCommands();
 		this.views_ = new SandboxJoplinViews(plugin, store);
@@ -36,8 +36,8 @@ export default class SandboxJoplin {
 		return this.plugins_;
 	}
 
-	get workspaces(): SandboxJoplinWorkspaces {
-		return this.workspaces_;
+	get workspace(): SandboxJoplinWorkspace {
+		return this.workspace_;
 	}
 
 	get filters(): SandboxJoplinFilters {
