@@ -112,7 +112,14 @@ export default class CommandService extends BaseService {
 
 		for (const name in this.commands_) {
 			const command = this.commands_[name];
-			if (!command.runtime || !command.runtime.mapStateToProps) continue;
+
+			if (!command.runtime) continue;
+
+			if (!command.runtime.mapStateToProps) {
+				command.runtime.props = {};
+				continue;
+			}
+
 			const newProps = command.runtime.mapStateToProps(state);
 
 			const haveChanged = this.propsHaveChanged(command.runtime.props, newProps);
@@ -226,13 +233,14 @@ export default class CommandService extends BaseService {
 	isEnabled(commandName:string):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
-		return command.runtime.props ? command.runtime.isEnabled(command.runtime.props ? command.runtime.props : {}) : true;
+		if (!command.runtime.props) return false;
+		return command.runtime.isEnabled(command.runtime.props);
 	}
 
 	title(commandName:string):string {
 		const command = this.commandByName(commandName);
-		if (!command || !command.runtime) return null;
-		return command.runtime.title(command.runtime.props ? command.runtime.props : {});
+		if (!command || !command.runtime || !command.runtime.props) return null;
+		return command.runtime.title(command.runtime.props);
 	}
 
 	private extractExecuteArgs(command:Command, executeArgs:any) {
