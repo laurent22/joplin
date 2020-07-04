@@ -1,0 +1,30 @@
+{{#if groups}}
+<section class="tsd-panel-group tsd-index-group">
+    <h2>Index</h2>
+    <section class="tsd-panel tsd-index-panel">
+        <div class="tsd-index-content">
+            {{#each groups}}
+                <section class="tsd-index-section {{cssClasses}}">
+                    {{#if categories}}
+                        {{#each categories}}
+                            <h3>{{#if title}}{{title}} {{/if}}{{../title}}</h3>
+                            <ul class="tsd-index-list">
+                                {{#each children}}
+                                    <li class="{{cssClasses}}"><a href="{{relativeURL url}}" class="tsd-kind-icon">{{#if name}}{{{wbr name}}}{{else}}<em>{{{wbr kindString}}}</em>{{/if}}</a></li>
+                                {{/each}}
+                            </ul>
+                        {{/each}}
+                    {{else}}
+                        <h3>{{title}}</h3>
+                        <ul class="tsd-index-list">
+                            {{#each children}}
+                                <li class="{{cssClasses}}"><a href="{{relativeURL url}}" class="tsd-kind-icon">{{#if name}}{{{wbr name}}}{{else}}<em>{{{wbr kindString}}}</em>{{/if}}</a></li>
+                            {{/each}}
+                        </ul>
+                    {{/if}}
+                </section>
+            {{/each}}
+        </div>
+    </section>
+</section>
+{{/if}}

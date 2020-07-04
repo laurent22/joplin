@@ -1,0 +1,211 @@
+{{! Each type gets its own inline helper to determine how it is rendered. }}
+{{! The name of the helper is the value of the 'type' property on the type.}}
+
+{{!
+The type helper accepts an optional needsParens parameter that is checked
+if an inner type may result in invalid output without them. For example:
+1 | 2[] !== (1 | 2)[]
+() => 1 | 2 !== (() => 1) | 2
+}}
+
+{{#*inline 'array'}}
+    {{#with elementType}}
+        {{> type needsParens=true}}
+        <span class="tsd-signature-symbol">[]</span>
+    {{/with}}
+{{/inline}}
+
+{{#*inline 'conditional'}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">(</span>
+    {{/if}}
+    {{#with checkType}}
+        {{> type needsParens=true}}
+    {{/with}}
+    <span class="tsd-signature-symbol"> extends </span>
+    {{#with extendsType}}
+        {{> type}}
+    {{/with}}
+    <span class="tsd-signature-symbol"> ? </span>
+    {{#with trueType}}
+        {{> type}}
+    {{/with}}
+    <span class="tsd-signature-symbol"> : </span>
+    {{#with falseType}}
+        {{> type}}
+    {{/with}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">)</span>
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'indexedAccess'}}
+    {{#with objectType}}
+        {{> type}}
+    {{/with}}
+    <span class="tsd-signature-symbol">[</span>
+    {{#with indexType}}
+        {{> type}}
+    {{/with}}
+    <span class="tsd-signature-symbol">]</span>
+{{/inline}}
+
+{{#*inline 'inferred'}}
+    <span class="tsd-signature-symbol">infer </span> {{name}}
+{{/inline}}
+
+{{#*inline 'intersection'}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">(</span>
+    {{/if}}
+    {{#each types}}
+        {{#unless @first}}
+            <span class="tsd-signature-symbol"> &amp; </span>
+        {{/unless}}
+        {{> type}}
+    {{/each}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">)</span>
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'intrinsic'}}
+    <span class="tsd-signature-type">{{name}}</span>
+{{/inline}}
+
+{{#*inline 'predicate'}}
+    {{#if asserts}}
+        <span class="tsd-signature-symbol">asserts</span>
+    {{/if}}
+    <span class="tsd-signature-type">{{name}}</span>
+    {{#if targetType}}
+        <span class="tsd-signature-symbol"> is </span>
+        {{#with targetType}}
+            {{>type}}
+        {{/with}}
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'query'}}
+    <span class="tsd-signature-symbol">typeof </span>
+    {{#with queryType}}
+        {{> type}}
+    {{/with}}
+{{/inline}}
+
+{{#*inline 'reference'}}
+    {{#if reflection}}
+        <a href="{{relativeURL reflection.url}}" class="tsd-signature-type">
+            {{reflection.name}}
+        </a>
+    {{else}}
+        <span class="tsd-signature-type">{{name}}</span>
+    {{/if}}
+    {{#if typeArguments}}
+        <span class="tsd-signature-symbol">&lt;</span>
+        {{#each typeArguments}}
+            {{#unless @first}}
+                <span class="tsd-signature-symbol">, </span>
+            {{/unless}}
+            {{> type}}
+        {{/each}}
+        <span class="tsd-signature-symbol">&gt;</span>
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'reflection'}}
+    {{#if declaration.children}} {{! object literal }}
+        <span class="tsd-signature-symbol">{ </span>
+        {{#each declaration.children}}
+            {{#unless @first}}
+                <span class="tsd-signature-symbol">; </span>
+            {{/unless}}
+            {{name}}
+            {{#if flags.isOptional }}
+                <span class="tsd-signature-symbol">?: </span>
+            {{else}}
+                <span class="tsd-signature-symbol">: </span>
+            {{/if}}
+            {{#with type}}
+                {{> type}}
+            {{else}}
+                <span class="tsd-signature-type">any</span>
+            {{/with}}
+        {{/each}}
+        <span class="tsd-signature-symbol"> }</span>
+    {{else if declaration.signatures}}
+        {{#if (lookup declaration.signatures 1) }} {{! more than one signature}}
+            <span class="tsd-signature-symbol">{ </span>
+            {{#each declaration.signatures}}
+                {{> member.signature.title hideName=true}}
+                {{#unless @last}}
+                    <span class="tsd-signature-symbol">; </span>
+                {{/unless}}
+            {{/each}}
+            <span class="tsd-signature-symbol"> }</span>
+        {{else}}
+            {{#if needsParens}}
+                <span class="tsd-signature-symbol">(</span>
+            {{/if}}
+            {{#with (lookup declaration.signatures '0') }}
+                {{> member.signature.title hideName=true arrowStyle=true}}
+            {{/with}}
+            {{#if needsParens}}
+                <span class="tsd-signature-symbol">)</span>
+            {{/if}}
+        {{/if}}
+    {{else}}
+        <span class="tsd-signature-symbol">{}</span>
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'stringLiteral'}}
+    <span class="tsd-signature-type">"{{value}}"</span>
+{{/inline}}
+
+{{#*inline 'tuple'}}
+    <span class="tsd-signature-symbol">[</span>
+    {{#each elements}}
+        {{#unless @first}}
+            <span class="tsd-signature-symbol">, </span>
+        {{/unless}}
+        {{> type}}
+    {{/each}}
+    <span class="tsd-signature-symbol">]</span>
+{{/inline}}
+
+{{#*inline 'typeOperator'}}
+    <span class="tsd-signature-symbol">{{operator}} </span>
+    {{#with target}}
+        {{> type}}
+    {{/with}}
+{{/inline}}
+
+{{#*inline 'typeParameter'}}
+    <span class="tsd-signature-type">{{name}}</span>
+{{/inline}}
+
+{{#*inline 'union'}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">(</span>
+    {{/if}}
+    {{#each types}}
+        {{#unless @first}}
+            <span class="tsd-signature-symbol"> | </span>
+        {{/unless}}
+        {{> type needsParens=true}}
+    {{/each}}
+    {{#if needsParens}}
+        <span class="tsd-signature-symbol">)</span>
+    {{/if}}
+{{/inline}}
+
+{{#*inline 'unknown'}}
+    <span class="tsd-signature-type">{{name}}</span>
+{{/inline}}
+
+{{#if this}}
+    {{> (lookup . 'type') }}
+{{else}}
+    <span class="tsd-signature-type">void</span>
+{{/if}}

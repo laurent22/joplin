@@ -1,0 +1,49 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{#ifCond model.name '==' project.name}}{{project.name}}{{else}}{{model.name}} | {{project.name}}{{/ifCond}}</title>
+    <meta name="description" content="Documentation for {{project.name}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{relativeURL "assets/css/main.css"}}">
+</head>
+<body>
+
+{{> header}}
+
+<div class="container container-main">
+    <div class="row">
+        <div class="col-8 col-content">
+            {{{contents}}}
+        </div>
+        <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+            <nav class="tsd-navigation primary">
+                <ul>
+                    {{#each navigation.children}}
+                        {{> navigation}}
+                    {{/each}}
+                </ul>
+            </nav>
+
+            <nav class="tsd-navigation secondary menu-sticky">
+                <ul class="before-current">
+                    {{#each toc.children}}
+                        {{> toc.root}}
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+{{> footer}}
+
+<div class="overlay"></div>
+<script src="{{relativeURL "assets/js/main.js"}}"></script>
+
+{{> analytics}}
+
+</body>
+</html>

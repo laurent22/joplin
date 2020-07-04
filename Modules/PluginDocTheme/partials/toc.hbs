@@ -1,0 +1,10 @@
+<li class="{{#if isInPath}}current{{/if}} {{cssClasses}}">
+    <a href="{{relativeURL url}}" class="tsd-kind-icon">{{{wbr title}}}</a>
+    {{#if children}}
+        <ul>
+            {{#each children}}
+                {{> toc}}
+            {{/each}}
+        </ul>
+    {{/if}}
+</li>

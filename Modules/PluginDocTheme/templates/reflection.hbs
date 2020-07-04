@@ -1,0 +1,79 @@
+{{#with model}}
+    {{#if hasComment}}
+        <section class="tsd-panel tsd-comment">
+            {{> comment}}
+        </section>
+    {{/if}}
+{{/with}}
+
+{{#if model.typeParameters}}
+    <section class="tsd-panel tsd-type-parameters">
+        <h3>Type parameters</h3>
+        {{#with model}}{{> typeParameters}}{{/with}}
+    </section>
+{{/if}}
+
+{{#if model.typeHierarchy}}
+    <section class="tsd-panel tsd-hierarchy">
+        <h3>Hierarchy</h3>
+        {{#with model.typeHierarchy}}{{> hierarchy}}{{/with}}
+    </section>
+{{/if}}
+
+{{#if model.implementedTypes}}
+    <section class="tsd-panel">
+        <h3>Implements</h3>
+        <ul class="tsd-hierarchy">
+            {{#each model.implementedTypes}}
+                <li>{{#compact}}{{> type}}{{/compact}}</li>
+            {{/each}}
+        </ul>
+    </section>
+{{/if}}
+
+{{#if model.implementedBy}}
+    <section class="tsd-panel">
+        <h3>Implemented by</h3>
+        <ul class="tsd-hierarchy">
+            {{#each model.implementedBy}}
+                <li>{{#compact}}{{> type}}{{/compact}}</li>
+            {{/each}}
+        </ul>
+    </section>
+{{/if}}
+
+{{#if model.signatures}}
+    <section class="tsd-panel">
+        <h3 class="tsd-before-signature">Callable</h3>
+        {{#with model}}{{> member.signatures}}{{/with}}
+    </section>
+{{/if}}
+
+{{#if model.indexSignature}}
+    <section class="tsd-panel {{model.cssClasses}}">
+        <h3 class="tsd-before-signature">Indexable</h3>
+        <div class="tsd-signature tsd-kind-icon">{{#compact}}
+            <span class="tsd-signature-symbol">[</span>
+            {{#each model.indexSignature.parameters}}
+                {{name}}:&nbsp;{{#with type}}{{>type}}{{/with}}
+            {{/each}}
+            <span class="tsd-signature-symbol">]:&nbsp;</span>
+            {{#with model.indexSignature.type}}{{>type}}{{/with}}
+        {{/compact}}</div>
+
+        {{#with model.indexSignature}}
+            {{> comment}}
+        {{/with}}
+
+        {{#if model.indexSignature.type.declaration}}
+            {{#with model.indexSignature.type.declaration}}
+                {{> parameter}}
+            {{/with}}
+        {{/if}}
+    </section>
+{{/if}}
+
+{{#with model}}
+    {{> index}}
+    {{> members}}
+{{/with}}

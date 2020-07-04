@@ -7,6 +7,7 @@
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "gulp watch",
     "build": "gulp build",
+    "buildPluginDoc": "typedoc --theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib/services/plugin_service/Sandbox",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {
@@ -34,7 +35,8 @@
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
-    "typescript": "^3.7.3"
+    "typedoc": "^0.17.8",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
     "follow-redirects": "^1.11.0",

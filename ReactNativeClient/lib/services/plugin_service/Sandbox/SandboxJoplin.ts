@@ -36,7 +36,7 @@ export default class SandboxJoplin {
 		return this.plugins_;
 	}
 
-	get workspace(): SandboxJoplinWorkspaces {
+	get workspaces(): SandboxJoplinWorkspaces {
 		return this.workspaces_;
 	}
 
