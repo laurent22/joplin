@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormNote } from './types';
+import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
 import CommandService, { CommandDeclaration,  CommandRuntime } from '../../../lib/services/CommandService';
 const { time } = require('lib/time-utils.js');
@@ -30,17 +30,22 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 			} else {
-				const execArgs = {
-					name: declaration.name,
-					value: props.value,
-				};
-
 				if (declaration.name === 'insertDateTime') {
-					execArgs.name = 'insertText';
-					execArgs.value = time.formatMsToLocal(new Date().getTime());
+					editorRef.current.execCommand({
+						name: 'insertText',
+						value: time.formatMsToLocal(new Date().getTime()),
+					});
+				} else if (declaration.name === 'scrollToHash') {
+					editorRef.current.scrollTo({
+						type: ScrollOptionTypes.Hash,
+						value: props.hash,
+					});
+				} else {
+					editorRef.current.execCommand({
+						name: declaration.name,
+						value: props.value,
+					});
 				}
-
-				editorRef.current.execCommand(execArgs);
 			}
 		},
 		isEnabled: (props:any) => {
@@ -70,17 +75,6 @@ export default function useWindowCommandHandler(dependencies:HookDependencies) {
 		for (const declaration of editorCommandDeclarations) {
 			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef));
 		}
-
-		// } else if (command.name === 'scrollToHash') {
-		// 	fn = () => {
-		// 		if (editorRef.current) {
-		// 			editorRef.current.scrollTo({
-		// 				type: ScrollOptionTypes.Hash,
-		// 				value: command.hash,
-		// 			});
-		// 		}
-		// 	};
-		// }
 
 		const dependencies = {
 			editorRef,

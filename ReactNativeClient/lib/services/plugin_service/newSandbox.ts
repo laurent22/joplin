@@ -1,6 +1,7 @@
 import WebviewController from './WebviewController';
 import { Sandbox, SandboxContext } from './utils/types';
 import Plugin from './Plugin';
+import CommandService from '../CommandService';
 // const { shim } = require('lib/shim');
 const Api = require('lib/services/rest/Api');
 const eventManager = require('lib/eventManager');
@@ -77,11 +78,8 @@ export default function(plugin:Plugin, store:any):NewSandboxResult {
 					},
 				},
 				commands: {
-					execute: (command:string, args:any) => {
-						store.dispatch(Object.assign({}, args, {
-							type: 'WINDOW_COMMAND',
-							name: command,
-						}));
+					execute: (commandName:string, args:any) => {
+						CommandService.instance().execute(commandName, args);
 					},
 				},
 				// events: {

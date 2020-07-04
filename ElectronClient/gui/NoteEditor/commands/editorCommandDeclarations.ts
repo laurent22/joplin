@@ -6,6 +6,9 @@ const declarations:CommandDeclaration[] = [
 		name: 'insertText',
 	},
 	{
+		name: 'scrollToHash',
+	},
+	{
 		name: 'textCopy',
 		label: () => _('Copy'),
 		role: 'copy',
