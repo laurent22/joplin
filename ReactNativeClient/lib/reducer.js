@@ -2,6 +2,7 @@
 
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
+const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 const CommandService = require('lib/services/CommandService').default;
@@ -1047,7 +1048,11 @@ const reducer = (state = defaultState, action) => {
 		newState = additionalReducer.reducer(newState, action);
 	}
 
-	return newState;
+	if (Setting.value('env') === 'dev') {
+		return Object.freeze(newState);
+	} else {
+		return newState;
+	}
 };
 
 module.exports = { reducer, defaultState, stateUtils, MAX_HISTORY };
