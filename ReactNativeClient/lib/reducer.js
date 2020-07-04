@@ -347,6 +347,7 @@ function recordLastSelectedNoteIds(state, noteIds) {
 	const parent = stateUtils.parentItem(state);
 	if (!parent) return state;
 
+	newOnes[parent.type] = Object.assign({}, newOnes[parent.type]);
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
 	return Object.assign({}, state, {
@@ -403,6 +404,7 @@ function removeItemFromArray(array, property, value) {
 	for (let i = 0; i !== array.length; ++i) {
 		const currentItem = array[i];
 		if (currentItem[property] === value) {
+			array = array.slice();
 			array.splice(i, 1);
 			break;
 		}
@@ -761,7 +763,7 @@ const reducer = (state = defaultState, action) => {
 
 		case 'TAG_DELETE':
 			newState = handleItemDelete(state, action);
-			newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', action.id);
+			newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags, 'id', action.id);
 			break;
 
 		case 'FOLDER_UPDATE_ALL':
@@ -814,7 +816,7 @@ const reducer = (state = defaultState, action) => {
 			{
 				newState = updateOneItem(state, action, 'tags');
 				const tagRemoved = action.item;
-				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
+				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags, 'id', tagRemoved.id);
 			}
 			break;
 
