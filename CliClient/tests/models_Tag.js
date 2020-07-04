@@ -59,7 +59,7 @@ describe('models_Tag', function() {
 		expect(tags.length).toBe(0);
 	}));
 
-	it('should return tags with note counts', asyncTest(async () => {
+	it('should return correct note counts', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
@@ -68,33 +68,18 @@ describe('models_Tag', function() {
 
 		let tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
-		expect(tags[0].note_count).toBe(2);
+		expect(Tag.getCachedNoteCount(tags[0].id)).toBe(2);
 
 		await Note.delete(note1.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
-		expect(tags[0].note_count).toBe(1);
+		expect(Tag.getCachedNoteCount(tags[0].id)).toBe(1);
 
 		await Note.delete(note2.id);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
-	}));
-
-	it('should load individual tags with note count', asyncTest(async () => {
-		const folder1 = await Folder.save({ title: 'folder1' });
-		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
-		const tag = await Tag.save({ title: 'mytag' });
-		await Tag.addNote(tag.id, note1.id);
-
-		let tagWithCount = await Tag.loadWithCount(tag.id);
-		expect(tagWithCount.note_count).toBe(1);
-
-		await Tag.addNote(tag.id, note2.id);
-		tagWithCount = await Tag.loadWithCount(tag.id);
-		expect(tagWithCount.note_count).toBe(2);
 	}));
 
 	it('should get common tags for set of notes', asyncTest(async () => {
@@ -196,13 +181,13 @@ describe('models_Tag', function() {
 	it('should count note_tags of descendant tags', asyncTest(async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const tag0 = await Tag.saveNested({}, 'tag1/subtag1/subsubtag');
-		const parent_tag = await Tag.loadByTitle('tag1');
+		let parent_tag = await Tag.loadByTitle('tag1');
 
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
 		await Tag.addNote(tag0.id, note0.id);
 
-		const parent_tag_with_count = await Tag.loadWithCount(parent_tag.id);
-		expect(parent_tag_with_count.note_count).toBe(1);
+		parent_tag = await Tag.loadWithCount(parent_tag.id);
+		expect(Tag.getCachedNoteCount(parent_tag.id)).toBe(1);
 	}));
 
 	it('should delete descendant tags', asyncTest(async () => {

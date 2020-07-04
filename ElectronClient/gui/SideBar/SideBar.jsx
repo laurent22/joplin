@@ -424,7 +424,7 @@ class SideBarComponent extends React.Component {
 			collapsedIds = this.props.collapsedTagIds;
 			jsxItemIdAttribute.tagid = item.id;
 			anchorRef = this.anchorItemRef('tag', item.id);
-			noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(item.note_count) : '';
+			noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(Tag.getCachedNoteCount(item.id)) : '';
 			onDragStart = this.onTagDragStart_;
 			onDragOver = this.onTagDragOver_;
 			onDrop = this.onTagDrop_;

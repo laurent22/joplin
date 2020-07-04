@@ -5,7 +5,7 @@ const Note = require('lib/models/Note.js');
 const { nestedPath } = require('lib/nested-utils.js');
 const { _ } = require('lib/locale');
 
-// Create a fullTitle cache, which defaults to ''
+// fullTitle cache, which defaults to ''
 const fullTitleCache = new Proxy({}, {
 	get: function(cache, id) {
 		return cache.hasOwnProperty(id) ? cache[id] : '';
@@ -15,6 +15,9 @@ const fullTitleCache = new Proxy({}, {
 		return true;
 	},
 });
+
+// noteCount cache
+const noteCountCache = {};
 
 class Tag extends BaseItem {
 	static tableName() {
@@ -53,6 +56,25 @@ class Tag extends BaseItem {
 				conditions: [`id IN ("${noteIds.join('","')}")`],
 			})
 		);
+	}
+
+	static async noteCount(tagId) {
+		const noteIds = await Tag.noteIds(tagId);
+		// Make sure the notes exist
+		const notes = await Note.byIds(noteIds);
+		return notes.length;
+	}
+
+	static async updateCachedNoteCountForIds(tagIds) {
+		const tags = await Tag.byIds(tagIds);
+		for (let i = 0; i < tags.length; i++) {
+			if (!tags[i]) continue;
+			noteCountCache[tags[i].id] = await Tag.noteCount(tags[i].id);
+		}
+	}
+
+	static getCachedNoteCount(tagId) {
+		return noteCountCache[tagId];
 	}
 
 	static async childrenTagIds(parentId) {
@@ -155,6 +177,11 @@ class Tag extends BaseItem {
 			note_id: noteId,
 		});
 
+		// Update note counts
+		const tagIdsToUpdate = await Tag.ancestorTags(tagId);
+		tagIdsToUpdate.push(tagId);
+		await Tag.updateCachedNoteCountForIds(tagIdsToUpdate);
+
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
 			item: await Tag.loadWithCount(tagId),
@@ -169,19 +196,15 @@ class Tag extends BaseItem {
 			await NoteTag.delete(noteTags[i].id);
 		}
 
+		// Update note counts
+		const tagIdsToUpdate = await Tag.ancestorTags(tagId);
+		tagIdsToUpdate.push(tagId);
+		await Tag.updateCachedNoteCountForIds(tagIdsToUpdate);
+
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
 			item: await Tag.load(tagId),
 		});
-	}
-
-	static async _addNoteCounts(tags) {
-		for (const tag of tags) {
-			const noteIds = await Tag.noteIds(tag.id);
-			// Make sure the notes exist
-			const notes = await Note.byIds(noteIds);
-			tag.note_count = notes.length;
-		}
 	}
 
 	static async updateCachedFullTitleForIds(tagIds) {
@@ -203,6 +226,14 @@ class Tag extends BaseItem {
 		return ancestorTitles.join('/');
 	}
 
+	static async load(id, options = null) {
+		const tag = await super.load(id, options);
+		if (!tag) return;
+		// Update noteCount cache
+		noteCountCache[tag.id] = await Tag.noteCount(tag.id);
+		return tag;
+	}
+
 	static async all(options = null) {
 		const tags = await super.all(options);
 
@@ -213,6 +244,11 @@ class Tag extends BaseItem {
 			// When all tags are reloaded we can also cheaply update the cache
 			fullTitleCache[tag.id] = fullTitle;
 		}
+
+		// Update noteCount cache
+		const tagIds = tags.map((tag) => tag.id);
+		await Tag.updateCachedNoteCountForIds(tagIds);
+
 		return tags;
 	}
 
@@ -220,11 +256,8 @@ class Tag extends BaseItem {
 		const tag = await Tag.load(tagId);
 		if (!tag) return;
 
-		const noteIds = await Tag.noteIds(tagId);
-		// Make sure the notes exist
-		tag.note_count = (await Note.byIds(noteIds)).length;
-		if (tag.note_count === 0) return;
-
+		// Make tag has notes
+		if ((await Tag.getCachedNoteCount(tagId)) === 0) return;
 		return tag;
 	}
 
@@ -235,9 +268,8 @@ class Tag extends BaseItem {
 
 	static async allWithNotes() {
 		let tags = await Tag.all();
-		await Tag._addNoteCounts(tags);
 
-		tags = tags.filter((tag) => tag.note_count > 0);
+		tags = tags.filter((tag) => Tag.getCachedNoteCount(tag.id) > 0);
 		return tags;
 	}
 
