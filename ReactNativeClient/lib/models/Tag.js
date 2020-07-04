@@ -353,14 +353,12 @@ class Tag extends BaseItem {
 		}
 		if (!parentTagId) parentTagId = '';
 
-		let tag = await Tag.load(tagId);
+		const tag = await Tag.load(tagId);
 		if (!tag) return;
 
 		const oldParentTagId = tag.parent_id;
-
 		// Save new parent id
-		tag.parent_id = parentTagId;
-		tag = await Tag.save(tag, { userSideValidation: true });
+		const newTag = await Tag.save({ id: tag.id, parent_id: parentTagId }, { userSideValidation: true });
 
 		if (parentTagId !== oldParentTagId) {
 			// If the parent tag has changed, and the ancestor doesn't
@@ -371,7 +369,7 @@ class Tag extends BaseItem {
 			}
 		}
 
-		return tag;
+		return newTag;
 	}
 
 	static async renameNested(tag, newTitle) {
@@ -401,13 +399,14 @@ class Tag extends BaseItem {
 			throw new Error(_('Tag name cannot contain `//`.'));
 		}
 
+		const newTag = Object.assign({}, tag);
 		let parentId = '';
 		// Check if the tag is nested using `/` as separator
 		const separator = '/';
 		const i = fullTitle.lastIndexOf(separator);
 		if (i !== -1) {
 			const parentTitle = fullTitle.slice(0,i);
-			tag.title = fullTitle.slice(i + 1);
+			newTag.title = fullTitle.slice(i + 1);
 
 			// Try to get the parent tag
 			const parentTag = await Tag.loadByTitle(parentTitle);
@@ -428,12 +427,12 @@ class Tag extends BaseItem {
 			}
 		} else {
 			// Tag is not nested so set the title to full title
-			tag.title = fullTitle;
+			newTag.title = fullTitle;
 		}
 
 		// Set parent_id
-		tag.parent_id = parentId;
-		return await Tag.save(tag, options);
+		newTag.parent_id = parentId;
+		return await Tag.save(newTag, options);
 	}
 
 	static async save(o, options = null) {

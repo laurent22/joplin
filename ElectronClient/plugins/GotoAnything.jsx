@@ -194,9 +194,7 @@ class Dialog extends React.PureComponent {
 				listType = BaseModel.TYPE_TAG;
 				searchQuery = this.state.query.split(' ')[0].substr(1).trim();
 				results = await Tag.search({ fullTitleRegex: `.*${searchQuery}.*` });
-				for (let i = 0; i < results.length; i++) {
-					results[i].title = Tag.getCachedFullTitle(results[i].id);
-				}
+				results = results.map(tag => Object.assign({}, tag, { title: Tag.getCachedFullTitle(tag.id) }));
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;

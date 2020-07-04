@@ -7,7 +7,7 @@ script.exec = async function() {
 
 	// In case tags with `/` exist, we want to transform them into nested tags
 	for (let i = 0; i < tags.length; i++) {
-		const tag = tags[i];
+		const tag = Object.assign({}, tags[i]);
 		// Remove any starting sequence of '/'
 		tag.title = tag.title.replace(/^\/*/, '');
 		// Remove any ending sequence of '/'

@@ -312,17 +312,14 @@ class Api {
 		const hasFullTitleField = checkAndRemoveFullTitleField(request);
 
 		if (hasFullTitleField && request.method === 'GET' && !id) {
-			const tags = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
-
-			for (let i = 0; i < tags.length; i++) {
-				tags[i].full_title = Tag.getCachedFullTitle(tags[i].id);
-			}
+			let tags = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
+			tags = tags.map(tag => Object.assign({}, tag, { full_title: Tag.getCachedFullTitle(tag.id) }));
 			return tags;
 		}
 
 		if (hasFullTitleField && request.method === 'GET' && id) {
-			const tag = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
-			tag.full_title = Tag.getCachedFullTitle(tag.id);
+			let tag = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
+			tag = Object.assign({}, tag, { full_title: Tag.getCachedFullTitle(tag.id) });
 			return tag;
 		}
 
