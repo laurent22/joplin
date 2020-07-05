@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { time } = require('lib/time-utils.js');
 
 interface Term {
 	name: string
@@ -310,18 +310,17 @@ const getUnixMs = (date:string): string => {
 	const yyyy = /^[0-9]{4}$/;
 	const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
 
-
 	if (yyyymmdd.test(date)) {
-		return moment.utc(date, 'YYYYMMDD').format('x');
+		return time.formatLocalToMs(date, 'YYYYMMDD').toString();
 	} else if (yyyymm.test(date)) {
-		return moment.utc(date, 'YYYYMM').format('x');
+		return time.formatLocalToMs(date, 'YYYYMM').toString();
 	} else if (yyyy.test(date)) {
-		return moment.utc(date, 'YYYY').format('x');
+		return time.formatLocalToMs(date, 'YYYY').toString();
 	} else if (smartValue.test(date)) {
 		const match = smartValue.exec(date);
 		const timeUnit = match[1]; // eg. day, week, month, year
 		const num = Number(match[2]); // eg. 1, 12, 101
-		return moment.utc().startOf(timeUnit).subtract(num, timeUnit).format('x');
+		return time.goBackInTime(num, timeUnit);
 	} else {
 		throw new Error('Invalid date format!');
 	}

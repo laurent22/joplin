@@ -116,11 +116,11 @@ class Time {
 	goBackInTime(n, timeDuration) {
 		// Note that we are starting from the first ms of the current timeDuration
 		// eg. If we go back by one day we are subtracting (24*60*60*1000) ms from the start ms of today
-		return moment().utc().startOf(timeDuration).subtract(n, timeDuration).format('x');
+		return moment().startOf(timeDuration).subtract(n, timeDuration).format('x');
 	}
 
 	goForwardInTime(n, timeDuration) {
-		return moment().utc().startOf(timeDuration).add(n, timeDuration).format('x');
+		return moment().startOf(timeDuration).add(n, timeDuration).format('x');
 	}
 
 }
