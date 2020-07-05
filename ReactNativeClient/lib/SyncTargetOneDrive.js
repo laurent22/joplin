@@ -71,12 +71,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		let acctProps = Setting.value(`sync.${this.syncTargetId()}.accountProperties`);
-		if (acctProps === '') {
+
+		// Es muss funktionieren, wenn context in db nicht angegeben ist (also glecih '' ist) und wenn context.acctprops = null (das passiert, wenn joplin upgegradet wird)
+		let context = Setting.value(`sync.${this.syncTargetId()}.context`);
+		context = context === '' ? null : JSON.parse(context);
+		let acctProps = context ? context.acctProps : null;
+		if (!acctProps) {
 			acctProps = await this.api_.execAcctPropsRequest();
-			Setting.setValue(`sync.${this.syncTargetId()}.accountProperties`, JSON.stringify(acctProps));
-		} else {
-			acctProps = JSON.parse(acctProps);
+			context ? context.acctProps = acctProps : context = { acctProps: acctProps };
+			Setting.setValue(`sync.${this.syncTargetId()}.context`, JSON.stringify(context));
 		}
 		this.api_.setAcctProps(acctProps);
 		const appDir = await this.api().appDirectory();
