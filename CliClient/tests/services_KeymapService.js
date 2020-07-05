@@ -294,7 +294,7 @@ describe('services_KeymapService', () => {
 	describe('setKeymap', () => {
 		beforeEach(() => keymapService.resetKeymap());
 
-		describe('with default context commands', () => {
+		describe('with default commands', () => {
 			it('should not throw and update the keymap', () => {
 				const customKeymap = shim.isMac()
 					? [
@@ -422,94 +422,6 @@ describe('services_KeymapService', () => {
 			});
 		});
 
-		describe('with non-default context commands', () => {
-			// Manually inject some fake non-default context keymap items to test the scenario
-			beforeAll(() => {
-				const extraItems = [
-					{ accelerator: shim.isMac() ? 'Option+Command+D' : 'Control+Alt+D', command: 'testCommand1_testContext1', context: 'testContext1' },
-					{ accelerator: shim.isMac() ? 'Control+Option+E' : 'Control+Alt+E', command: 'testCommand2_testContext1', context: 'testContext1' },
-					{ accelerator: shim.isMac() ? 'Control+Option+F6' : 'Control+Alt+F6', command: 'testCommand3_testContext1', context: 'testContext1' },
-					{ accelerator: shim.isMac() ? 'Option+Shift+Y' : 'Alt+Shift+Y', command: 'testCommand4_testContext2', context: 'testContext2' },
-					{ accelerator: shim.isMac() ? 'Control+Option+Shift+K' : 'Control+Alt+Shift+K', command: 'testCommand5_testContext2', context: 'testContext2' },
-					{ accelerator: shim.isMac() ? 'Alt+Cmd+F6' : 'Control+Alt+F6', command: 'testCommand6_testContext2', context: 'testContext2' },
-				];
-
-				KeymapService.defaultKeymap.push(...extraItems);
-				keymapService.resetKeymap();
-			});
-
-			it('should throw when duplicate accelerators are provided for non-default context commands', () => {
-				const customKeymap = shim.isMac()
-					? [
-						{ command: 'testCommand1_testContext1', accelerator: 'Control+Option+Shift+D' },
-						{ command: 'testCommand2_testContext1', accelerator: 'Control+Option+Shift+D' /* Duplicate in the same context */ },
-						{ command: 'testCommand3_testContext1', accelerator: 'Option+Command+F6' },
-						{ command: 'testCommand4_testContext2', accelerator: 'Option+Shift+Cmd+Y' },
-						{ command: 'testCommand5_testContext2', accelerator: 'Control+Shift+Cmd+K' },
-					] : [
-						{ command: 'testCommand1_testContext1', accelerator: 'Control+Alt+Shift+D' },
-						{ command: 'testCommand2_testContext1', accelerator: 'Control+Alt+Shift+D' /* Duplicate in the same context */ },
-						{ command: 'testCommand3_testContext1', accelerator: 'Control+Alt+Shift+F6' },
-						{ command: 'testCommand4_testContext2', accelerator: 'Control+Alt+Shift+Y' },
-						{ command: 'testCommand5_testContext2', accelerator: 'Control+Shift+K' },
-					];
-
-				// Save keymap defaults
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
-				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-
-				// All items should be reset to default values
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-					expect(keymapService.getAccelerator(customKeymap[j].command)).not.toEqual(
-						KeymapService.localizeAccelerator(customKeymap[j].accelerator)
-					);
-				}
-			});
-
-			it('should throw when the provided accelerator for non-default context command is already used in default context', () => {
-				const customKeymap = [
-					{ command: 'testCommand1_testContext1', accelerator: 'Control+Alt+Shift+D' },
-					{ command: 'testCommand2_testContext1', accelerator: 'Control+Alt+Shift+G' },
-					{ command: 'testCommand3_testContext1', accelerator: 'Control+Alt+Shift+F6' },
-					{ command: 'testCommand4_testContext2', accelerator: 'Control+Alt+Shift+Y' },
-					{ command: 'testCommand5_testContext2', accelerator: shim.isMac() ? 'Command+C' : 'Control+C' /* Default of "copy" command */ },
-				];
-
-				// Save keymap defaults
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
-				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-
-				// All items should be reset to default values
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-					expect(keymapService.getAccelerator(customKeymap[j].command)).not.toEqual(KeymapService.localizeAccelerator(customKeymap[j].accelerator));
-				}
-			});
-
-			it('should not throw when duplicate accelerators are provided for commands of different non-default contexts', () => {
-				const customKeymap = [
-					{ command: 'testCommand1_testContext1', accelerator: 'Control+Alt+Shift+D' },
-					{ command: 'testCommand2_testContext1', accelerator: 'Control+Alt+Shift+G' },
-					{ command: 'testCommand3_testContext1', accelerator: 'Control+Alt+Shift+F6' },
-					{ command: 'testCommand4_testContext2', accelerator: 'Control+Alt+Shift+Y' },
-					{ command: 'testCommand5_testContext2', accelerator: 'Control+Alt+Shift+D' /* Same of "testCommand1_testContext1" */ },
-				];
-
-				// Save keymap defaults
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
-				expect(() => keymapService.setKeymap(customKeymap)).not.toThrow();
-
-				// All items should be updated
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(KeymapService.localizeAccelerator(customKeymap[j].accelerator));
-					expect(keymapService.getAccelerator(customKeymap[j].command)).not.toEqual(defaultAccelerators[j]);
-				}
-			});
-		});
 
 		describe('with modifiers in mixed-form', () => {
 			if ('should detect duplicates if one Accelerator uses long-form', () => {

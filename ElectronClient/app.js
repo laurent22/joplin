@@ -1128,8 +1128,6 @@ class Application extends BaseApplication {
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
-		KeymapService.setLogger(reg.logger());
-
 		reg.setShowErrorMessageBoxHandler((message) => { bridge().showErrorMessageBox(message); });
 
 		if (Setting.value('flagOpenDevTools')) {

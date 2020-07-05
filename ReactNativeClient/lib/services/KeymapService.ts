@@ -196,41 +196,21 @@ class KeymapService extends BaseService {
 	}
 
 	private validateKeymap() {
-		const contextSets: { [context: string]: Set<string> } = { 'default': new Set() };
-		const contextHasAccelerator = (context: string, accelerator: string) => contextSets[context].has(accelerator);
+		const usedAccelerators = new Set();
 
 		for (const item of Object.values(this.keymap)) {
 			const itemAccelerator = item.accelerator;
-			const itemContext = item.context ? item.context : 'default';
 
-			// Accelerators shouldn't be used in "default" context
-			if (itemContext !== 'default' && contextHasAccelerator('default', itemAccelerator)) {
+			if (usedAccelerators.has(itemAccelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
 
 				throw new Error(
-					`Accelerator "${itemAccelerator}" can't be used for "${item.command}" command because ` +
-					`it's already used in the default context for "${originalItem.command}" command!\n\n` +
+					`Accelerator "${itemAccelerator}" can't be used for "${item.command}" command ` +
+					`because it's already used for "${originalItem.command}" command!\n\n` +
 					'You have to change the Accelerator for any of above commands.'
 				);
-			}
-
-			if (contextSets.hasOwnProperty(itemContext)) {
-				if (contextHasAccelerator(itemContext, itemAccelerator)) {
-					const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
-
-					throw new Error(
-						`Accelerator "${itemAccelerator}" is used for both "${item.command}" and ` +
-						`"${originalItem.command}" commands within the ${itemContext} context!\n\n` +
-						'You have to change the Accelerator for any of above commands.'
-					);
-				} else if (itemAccelerator !== null) {
-					// Disabled shortcuts contain "null" accelerators, and should be skipped
-					contextSets[itemContext].add(itemAccelerator);
-				}
-			} else {
-				// Impossible to have a duplicate at this point
-				contextSets[itemContext] = new Set();
-				contextSets[itemContext].add(itemAccelerator);
+			} else if (itemAccelerator !== null) {
+				usedAccelerators.add(itemAccelerator);
 			}
 		}
 	}
@@ -299,7 +279,6 @@ class KeymapService extends BaseService {
 interface KeymapItem {
 	accelerator: string;
 	command: string;
-	context?: string;
 }
 
 export = KeymapService;
