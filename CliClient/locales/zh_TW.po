@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Ethan Chen <ethan42411@gmail.com>\n"
+"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"將匹配 <note> 的記事複製到 [notebook]。如果未指定筆記本，則預設複製到當前記事"
+"將匹配 <note> 的記事複製到 [notebook]。如果未指定筆記本，則預設複製到當前筆記"
 "本中。"
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
@@ -713,8 +713,8 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> 可以是 \"add\" (新增)，\"remove\" (刪除) 或\" notetags\" (記事"
-"標籤)，來從[note]中分配或刪除[tag]，列出與[tag]相關聯的筆記，或列出與[note]相"
-"關聯的標籤。 標籤列表命令可用於列出所有標籤(使用-l作為長選項)。"
+"標籤)，來從[note]中分配或刪除[tag]，列出與[tag]相關聯的記事，或列出與[note]相"
+"關聯的標籤。 `tag list` 命令可用於列出所有標籤(使用-l作為長選項)。"
 
 #: CliClient/app/command-tag.js:90
 #, javascript-format
@@ -769,7 +769,7 @@ msgstr "取消"
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
-msgstr "鍵入筆記標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個記事本名稱。"
+msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
 
 #: ElectronClient/plugins/GotoAnything.min.js:474
 msgid "Goto Anything..."
@@ -827,7 +827,7 @@ msgstr "完整的發行備註"
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "筆記 \"%s\" 已經被成功還原到記事本 \"%s\"."
+msgstr "記事 \"%s\" 已經被成功還原到筆記本 \"%s\"."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -850,7 +850,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"點選 \"%s\" 來還原筆記。它將被複製到名為 \"%s\"的筆記本中。目前筆記的版本將不"
+"點選 \"%s\" 來還原記事。它將被複製到名為 \"%s\"的記事本中。目前記事的版本將不"
 "會被取代或修改。"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
@@ -923,7 +923,7 @@ msgstr "頁面佈局"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "此筆記沒有內容。按一下 \"%s\" 切換到編輯模式並編輯筆記。"
+msgstr "此記事沒有內容。按一下 \"%s\" 切換到編輯模式並編輯記事。"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:24
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:24
@@ -996,7 +996,7 @@ msgstr "插入日期時間"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
-msgstr "核取方塊列表"
+msgstr "核取方塊清單"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1025,7 +1025,7 @@ msgstr "程式碼檢視"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr "請等待所有附件均被下載並解密。你還能在 %s 中編輯筆記。"
+msgstr "請等待所有附件均被下載並解密。你還能在 %s 中編輯記事。"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1070,7 +1070,7 @@ msgstr "待辦事項"
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:316
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "note"
-msgstr "筆記"
+msgstr "記事"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:316
 #: ElectronClient/gui/NoteText.min.js:2121
@@ -1181,7 +1181,7 @@ msgid ""
 msgstr ""
 "確定刪除記事本 \"%s\"?\n"
 "\n"
-"此記事本中的所有筆記和子記事本也將被刪除。"
+"此記事本中的所有記事和子筆記本也將被刪除。"
 
 #: ElectronClient/gui/SideBar.min.js:287
 #: ElectronClient/gui/utils/NoteListUtils.js:204
@@ -1399,7 +1399,7 @@ msgstr "立即去完成"
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "當前沒有任何筆記。通過按一下 \"新增筆記\" 去建立。"
+msgstr "當前沒有任何記事。通過按一下 \"新增記事\" 去建立。"
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid ""
@@ -1434,7 +1434,7 @@ msgstr "切換到記事 / 待辦事項"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:119
 msgid "Switch to note type"
-msgstr "切換為筆記"
+msgstr "切換為記事"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:128
 msgid "Switch to to-do type"
@@ -1447,7 +1447,7 @@ msgstr "複製 Markdown 連結"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:153
 msgid "Share note..."
-msgstr "分享筆記..."
+msgstr "分享記事..."
 
 #: ElectronClient/gui/utils/NoteListUtils.js:186
 #: ElectronClient/gui/MainScreen.min.js:549 ElectronClient/app.js:495
@@ -1535,7 +1535,7 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"您可以使用下面的工具重新加密您的資料，例如:如果您知道某些筆記已使用過時的加密"
+"您可以使用下面的工具重新加密您的資料，例如:如果您知道某些記事已使用過時的加密"
 "方法進行了加密。"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:185
@@ -1792,7 +1792,7 @@ msgstr[0] "連結已被複製到剪貼簿!"
 #: ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "注意：當筆記被分享時，他將不會在伺服器上被加密。"
+msgstr "注意：當記事被分享時，他將不會在伺服器上被加密。"
 
 #: ElectronClient/gui/ShareNoteDialog.js:170
 msgid "Share Notes"
@@ -1809,7 +1809,7 @@ msgstr "側邊欄"
 
 #: ElectronClient/app.js:398
 msgid "Note list"
-msgstr "記事列表"
+msgstr "記事清單"
 
 #: ElectronClient/app.js:404
 msgid "Note title"
@@ -1965,7 +1965,7 @@ msgstr "頁面佈局"
 
 #: ElectronClient/app.js:968
 msgid "Toggle note list"
-msgstr "切換筆記列表"
+msgstr "切換記事清單"
 
 #: ElectronClient/app.js:977
 msgid "Toggle editor layout"
@@ -1989,7 +1989,7 @@ msgstr "縮小"
 
 #: ElectronClient/app.js:1064
 msgid "&Note"
-msgstr "筆記 (&N)"
+msgstr "記事 (&N)"
 
 #: ElectronClient/app.js:1094
 msgid "Statistics..."
@@ -2125,7 +2125,7 @@ msgstr "是"
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr "(是否支援所見即所得: %s)"
+msgstr "(支援所見即所得: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
 msgid "no"
@@ -2223,8 +2223,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開筆"
-"記時即會開始下載。若是\"總是\"模式，無論您是否打開筆記，都會下載所有附件。"
+"在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記"
+"事時即會開始下載。若是\"總是\"模式，無論您是否打開記事，都會下載所有附件。"
 
 #: ReactNativeClient/lib/models/Setting.js:199
 msgid "Always"
@@ -2272,7 +2272,7 @@ msgstr "首選暗色主題"
 
 #: ReactNativeClient/lib/models/Setting.js:305
 msgid "Show note counts"
-msgstr "顯示筆記數量"
+msgstr "顯示記事數量"
 
 #: ReactNativeClient/lib/models/Setting.js:314
 #: ReactNativeClient/lib/models/Setting.js:316
@@ -2413,7 +2413,7 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的筆記，從而減少"
+"這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少"
 "衝突次數。"
 
 #: ReactNativeClient/lib/models/Setting.js:456
@@ -2489,7 +2489,7 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"用於開啟筆記的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
+"用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
 "的編輯器。"
 
 #: ReactNativeClient/lib/models/Setting.js:581
@@ -2587,7 +2587,7 @@ msgstr "指定 API 伺服器使用的連接埠。 如果未設定，將使用預
 
 #: ReactNativeClient/lib/models/Setting.js:660
 msgid "Enable note history"
-msgstr "啟用筆記歷史紀錄"
+msgstr "啟用記事歷史紀錄"
 
 #: ReactNativeClient/lib/models/Setting.js:670
 msgid "days"
@@ -2600,11 +2600,11 @@ msgstr "%d 天"
 
 #: ReactNativeClient/lib/models/Setting.js:672
 msgid "Keep note history for"
-msgstr "保留筆記歷史記錄"
+msgstr "保留記事歷史記錄"
 
 #: ReactNativeClient/lib/models/Setting.js:699
 msgid "Notebook list growth factor"
-msgstr "記事本列表增長因數"
+msgstr "記事本清單增長因數"
 
 #: ReactNativeClient/lib/models/Setting.js:701
 #: ReactNativeClient/lib/models/Setting.js:714
@@ -2615,17 +2615,17 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"因數屬性決定了列表上的一項如何增長或縮小，以適應其容器中相對於其他項目的可用"
+"因數屬性決定了清單上的一項如何增長或縮小，以適應其容器中相對於其他項目的可用"
 "空間。因此因數為 2 的的一項是因數為 1 的一項的佔用空間的兩倍。重啟程式以查看"
 "變化。"
 
 #: ReactNativeClient/lib/models/Setting.js:712
 msgid "Note list growth factor"
-msgstr "筆記列表增長因數"
+msgstr "記事清單增長因數"
 
 #: ReactNativeClient/lib/models/Setting.js:725
 msgid "Note area growth factor"
-msgstr "筆記区域增長因數"
+msgstr "記事区域增長因數"
 
 #: ReactNativeClient/lib/models/Setting.js:877
 #, javascript-format
@@ -2677,7 +2677,7 @@ msgstr ""
 "這些延伸模組為 Markdown 渲染器提供額外特性。請注意，儘管這些額外特性可能是可"
 "用的，但它們並非標準 Markdown 語法，因此這些功能基本只能在 Joplin 內運行。此"
 "外，其中的一些功能與所見即所得 (WYSIWYG) 編輯器是*不兼容*的。如果你在上述編輯"
-"器中打開使用了這些延伸模組的筆記，就將會丟失延伸模組格式。下面已表明延伸模組"
+"器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
 "與所見即所得 (WYSIWYG) 編輯器兼容與否。"
 
 #: ReactNativeClient/lib/models/Setting.js:1219
@@ -2841,7 +2841,7 @@ msgstr "新增一個記事本"
 
 #: ReactNativeClient/lib/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "您當前沒有任何筆記。通過按一下 (+) 鍵去新增一則筆記。"
+msgstr "您當前沒有任何記事。通過按一下 (+) 鍵去新增一則記事。"
 
 #: ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
@@ -2891,7 +2891,7 @@ msgstr "您的資料將被重新加密並再次同步。"
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr "在升級密鑰前，請在下面的主密鑰列表中輸入您的密碼。"
+msgstr "在升級密鑰前，請在下面的主密鑰清單中輸入您的密碼。"
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
@@ -2977,7 +2977,7 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"啟用加密意味著*所有*您的筆記和附件將被重新同步並在已加密的情況下發送到同步目"
+"啟用加密意味著*所有*您的記事和附件將被重新同步並在已加密的情況下發送到同步目"
 "標。為了安全起見，不要丟失密碼，這將是解密數據的唯一方式！要啟用加密，請在下"
 "面輸入您的密碼。"
 
@@ -3069,7 +3069,7 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"如果搜尋出現問題，請使用它來重新建立搜尋索引。 根據筆記的數量，可能會花費很長"
+"如果搜尋出現問題，請使用它來重新建立搜尋索引。 根據記事的數量，可能會花費很長"
 "時間。"
 
 #: ReactNativeClient/lib/components/screens/config.js:446
@@ -3100,7 +3100,7 @@ msgstr ""
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- 儲存: 允許將檔案附加到筆記並啟用檔案系統同步。"
+msgstr "- 儲存: 允許將檔案附加到記事並啟用檔案系統同步。"
 
 #: ReactNativeClient/lib/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -3108,7 +3108,7 @@ msgstr "- 相機: 允許拍照並附加相片到記事。"
 
 #: ReactNativeClient/lib/components/screens/config.js:480
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 位置: 允許將地理位置資訊附加到筆記。"
+msgstr "- 位置: 允許將地理位置資訊附加到記事。"
 
 #: ReactNativeClient/lib/components/screens/config.js:509
 msgid "Joplin website"
@@ -3316,7 +3316,7 @@ msgstr "沒有資料可匯出。"
 
 #: ReactNativeClient/lib/services/RevisionService.js:215
 msgid "Restored Notes"
-msgstr "恢復的筆記"
+msgstr "恢復的記事"
 
 #: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
