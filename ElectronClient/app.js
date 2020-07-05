@@ -69,6 +69,7 @@ const globalCommands = [
 	require('./commands/focusElement'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
+	require('./commands/copyDevCommand'),
 	require('lib/commands/synchronize'),
 	require('lib/commands/historyBackward'),
 	require('lib/commands/historyForward'),
@@ -898,7 +899,11 @@ class Application extends BaseApplication {
 							type: 'NOTE_DEVTOOLS_TOGGLE',
 						});
 					},
-				}, {
+				},
+
+				cmdService.commandToMenuItem('copyDevCommand'),
+
+				{
 					type: 'separator',
 					visible: shim.isMac() ? false : true,
 					screens: ['Main'],

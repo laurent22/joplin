@@ -55,6 +55,7 @@ CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
 CliClient/tests/support/plugins/withExternalModules/src/index.js
+ElectronClient/commands/copyDevCommand.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js

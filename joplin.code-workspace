@@ -77,6 +77,7 @@
 			"ReactNativeClient/lib/rnInjectedJs/": true,
 			"ReactNativeClient/node_modules/": true,
 			"Server/db*.sqlite/": true,
+			"CliClient/locales-build": true,
 			"Server/dist/": true,
 			"docs/":true,
 			"./ReactNativeClient/lib/joplin-renderer/**/node_modules/": true,
