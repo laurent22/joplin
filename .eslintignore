@@ -61,10 +61,6 @@ Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-CliClient/tests-build/support/plugins/codemirror_test/global.d.js
-CliClient/tests-build/support/plugins/codemirror_test/src/index.js
-CliClient/tests-build/support/plugins/withExternalModules/global.d.js
-CliClient/tests-build/support/plugins/withExternalModules/src/index.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
