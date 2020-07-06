@@ -172,9 +172,7 @@ class Setting extends BaseModel {
 			},
 
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.accountProperties': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.accountProperties': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
