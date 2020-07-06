@@ -369,13 +369,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.undoRedoService_ = new UndoRedoService();
 		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
-		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+		if (this.state.note) {
+			if (this.state.note.title) {
+				addNoteToRecentsWidget(this.state.note);
+			}
+			if (this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
-		}
-
-		if (this.state.note) {
-			addNoteToRecentsWidget(this.state.note);
+			}
 		}
 	}
 
