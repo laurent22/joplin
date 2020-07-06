@@ -1,8 +1,8 @@
-import RecentsWidget, { NoteItem } from './RecentsWidget';
+import { RecentsWidget, NoteItem } from './RecentsWidget';
 
 const MAX_COUNT = 10;
 
-export async function addNoteToRecentsWidget(note) {
+export async function addNoteToRecentsWidget(note: NoteItem) {
   let recents: NoteItem[] = (await RecentsWidget.read()).notes || [];
   recents = recents.filter(recent => recent.id !== note.id).slice(0, MAX_COUNT);
   recents.unshift({
@@ -14,7 +14,7 @@ export async function addNoteToRecentsWidget(note) {
   });
 }
 
-export async function removeNoteFromRecentsWidget(noteId) {
+export async function removeNoteFromRecentsWidget(noteId: string) {
   let recents: NoteItem[] = (await RecentsWidget.read()).notes || [];
   recents = recents.filter(recent => recent.id !== noteId);
   return RecentsWidget.write({
