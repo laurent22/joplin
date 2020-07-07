@@ -5,9 +5,9 @@ import 'codemirror/mode/stex/stex';
 // and support for katex math blocks
 export default function useJoplinMode(CodeMirror: any) {
 	CodeMirror.defineMode('joplin-markdown', (config: any) => {
-		const stex = CodeMirror.getMode({ inMathMode: true }, 'stex');
-		const blocks = [{ open: '$$', close: '$$', mode: stex },
-			{ open: '$', close: '$', mode: stex }];
+		const stex = CodeMirror.getMode(config, { name: 'stex', inMathMode: true });
+		const blocks = [{ open: '$$', close: '$$', mode: stex, delimStyle: 'katex-marker' },
+			{ open: '$', close: '$', mode: stex, delimStyle: 'katex-marker' }];
 
 		const markdownOptions = {
 			name: 'markdown',
