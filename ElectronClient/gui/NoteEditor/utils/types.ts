@@ -13,7 +13,6 @@ export interface NoteEditorProps {
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	bodyEditor: string;
-	windowCommand: any;
 	folders: any[];
 	notesParentType: string;
 	selectedNoteTags: any[];

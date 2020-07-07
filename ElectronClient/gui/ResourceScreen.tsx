@@ -4,7 +4,7 @@ const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header.min.js');
+const { Header } = require('./Header/Header.min.js');
 const prettyBytes = require('pretty-bytes');
 const Resource = require('lib/models/Resource.js');
 

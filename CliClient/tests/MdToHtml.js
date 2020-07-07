@@ -140,7 +140,7 @@ describe('MdToHtml', function() {
 		// The style is instead in the cssStrings property.
 		const result = await mdToHtml.render('just **testing**', null, { bodyOnly: true });
 		expect(result.cssStrings.length).toBe(1);
-		expect(result.html.trim()).toBe('<p>just <strong>testing</strong></p>');
+		expect(result.html.trim()).toBe('just <strong>testing</strong>');
 	}));
 
 	it('should split HTML and CSS', asyncTest(async () => {

@@ -18,6 +18,7 @@ import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
 import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
+import CommandService from '../../lib/services/CommandService';
 
 const { themeStyle } = require('lib/theme');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
@@ -30,9 +31,13 @@ const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const eventManager = require('../../eventManager');
+const eventManager = require('lib/eventManager');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const TagList = require('../TagList.min.js');
+
+const commands = [
+	require('./commands/showRevisions'),
+];
 
 function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
@@ -222,7 +227,7 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
-	useWindowCommandHandler({ windowCommand: props.windowCommand, dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
+	useWindowCommandHandler({ dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
 
 	const onDrop = useDropHandler({ editorRef });
 
@@ -238,17 +243,9 @@ function NoteEditor(props: NoteEditorProps) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteList',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteList' });
 			} else {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteBody',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteBody' });
 			}
 		}
 	}, [props.dispatch]);
@@ -314,52 +311,17 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 	}, [externalEditWatcher_noteChange, onNotePropertyChange]);
 
-	const noteToolbar_buttonClick = useCallback((event: any) => {
-		const cases: any = {
-
-			'startExternalEditing': async () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandStartExternalEditing',
-				});
-			},
-
-			'stopExternalEditing': () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandStopExternalEditing',
-				});
-			},
-
-			'setTags': async () => {
-				await saveNoteAndWait(formNote);
-
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'setTags',
-					noteIds: [formNote.id],
-				});
-			},
-
-			'setAlarm': async () => {
-				await saveNoteAndWait(formNote);
-
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'editAlarm',
-					noteId: formNote.id,
-				});
-			},
-
-			'showRevisions': () => {
-				setShowRevisions(true);
-			},
+	useEffect(() => {
+		const dependencies = {
+			setShowRevisions,
 		};
 
-		if (!cases[event.name]) throw new Error(`Unsupported event: ${event.name}`);
+		CommandService.instance().componentRegisterCommands(dependencies, commands);
 
-		cases[event.name]();
-	}, [formNote]);
+		return () => {
+			CommandService.instance().componentUnregisterCommands(commands);
+		};
+	}, [setShowRevisions]);
 
 	const onScroll = useCallback((event: any) => {
 		props.dispatch({
@@ -389,7 +351,6 @@ function NoteEditor(props: NoteEditorProps) {
 			theme={props.theme}
 			note={formNote}
 			style={toolbarStyle}
-			onButtonClick={noteToolbar_buttonClick}
 		/>;
 	}
 
@@ -474,7 +435,6 @@ function NoteEditor(props: NoteEditorProps) {
 			padding: theme.margin,
 			verticalAlign: 'top',
 			boxSizing: 'border-box',
-
 		};
 
 		return (
@@ -560,7 +520,6 @@ const mapStateToProps = (state: any) => {
 		syncStarted: state.syncStarted,
 		theme: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
-		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
 		selectedNoteTags: state.selectedNoteTags,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,

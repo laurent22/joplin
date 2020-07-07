@@ -29,6 +29,14 @@ function countElements(text:string, wordSetter:Function, characterSetter:Functio
 	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
 }
 
+function formatReadTime(readTimeMinutes: number) {
+	if (readTimeMinutes < 1) {
+		return '< 1';
+	}
+
+	return Math.ceil(readTimeMinutes).toString();
+}
+
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.theme);
 	const tableBodyComps: JSX.Element[] = [];
@@ -42,6 +50,10 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	const [strippedWords, setStrippedWords] = useState<number>(0);
 	const [strippedCharacters, setStrippedCharacters] = useState<number>(0);
 	const [strippedCharactersNoSpace, setStrippedCharactersNoSpace] = useState<number>(0);
+	const [strippedReadTime, setStrippedReadTime] = useState<number>(0);
+	// This amount based on the following paper:
+	// https://www.researchgate.net/publication/332380784_How_many_words_do_we_read_per_minute_A_review_and_meta-analysis_of_reading_rate
+	const wordsPerMinute = 250;
 
 	useEffect(() => {
 		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setLines);
@@ -51,6 +63,11 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 		const strippedText: string = stripMarkdown(props.text);
 		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
 	}, [props.text]);
+
+	useEffect(() => {
+		const readTimeMinutes: number = strippedWords / wordsPerMinute;
+		setStrippedReadTime(readTimeMinutes);
+	}, [strippedWords]);
 
 	const textProperties: TextPropertiesMap = {
 		lines: lines,
@@ -133,6 +150,9 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 						{tableBodyComps}
 					</tbody>
 				</table>
+				<div style={labelCompStyle}>
+					{_('Read time: %s min', formatReadTime(strippedReadTime))}
+				</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>

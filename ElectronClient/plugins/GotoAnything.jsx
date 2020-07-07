@@ -3,6 +3,7 @@ const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const SearchEngine = require('lib/services/SearchEngine');
+const CommandService = require('lib/services/CommandService').default;
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
 const Folder = require('lib/models/Folder');
@@ -301,11 +302,7 @@ class Dialog extends React.PureComponent {
 				noteId: item.id,
 			});
 
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: 'focusElement',
-				target: 'noteBody',
-			});
+			CommandService.instance().scheduleExecute('focusElement', { target: 'noteBody' });
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
 				type: 'TAG_SELECT',
