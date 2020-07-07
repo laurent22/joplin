@@ -40,6 +40,8 @@ function NoteToolbar(props:NoteToolbarProps) {
 	const styles = styles_(props);
 	const [toolbarItems, setToolbarItems] = useState([]);
 	const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
+	const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
+	const folderTitle = selectedNoteFolder ? selectedNoteFolder.title : '';
 
 	const cmdService = CommandService.instance();
 
@@ -54,14 +56,14 @@ function NoteToolbar(props:NoteToolbarProps) {
 			cmdService.commandToToolbarButton('historyForward')
 		);
 
-		if (selectedNoteFolder.id && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
+		if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
 			output.push({
-				title: _('In: %s', substrWithEllipsis(selectedNoteFolder.title, 0, 16)),
+				title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
 				iconName: 'fa-book',
 				onClick: () => {
 					props.dispatch({
 						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: selectedNoteFolder.id,
+						folderId: folderId,
 						noteId: props.note.id,
 					});
 				},
@@ -81,7 +83,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 		output.push(cmdService.commandToToolbarButton('setTags'));
 
 		setToolbarItems(output);
-	}, [props.note.id, selectedNoteFolder.id, selectedNoteFolder.title, props.watchedNoteFiles, props.notesParentType]);
+	}, [props.note.id, folderId, folderTitle, props.watchedNoteFiles, props.notesParentType]);
 
 	useEffect(() => {
 		updateToolbarItems();
