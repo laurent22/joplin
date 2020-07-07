@@ -98,29 +98,13 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		}
 	}
 
+
 	const args = yargParser(argv, {
 		boolean: booleanFlags,
 		alias: aliases,
 		string: ['_'],
-		configuration: {
-			'short-option-groups': false,
-		},
 	});
 
-	// By default negated filters like -tag:tag1 will be recognized as a 'short option'
-	// "tag:tag1" and set to true. When the command is 'search',
-	// we copy all the keys of args that are true (the negated filters)
-	// and place then in args['_'] with a '-' at the front.
-	if (args['_'][0] === 'search') {
-		const negated_filters = [];
-		for (const key in args) {
-			if (key === '_') continue;
-			if (args[key] === true) {
-				negated_filters.push(`-${key}`);
-			}
-		}
-		args['_'].push(...negated_filters);
-	}
 
 	for (let i = 1; i < cmdUsage['_'].length; i++) {
 		const a = cliUtils.parseCommandArg(cmdUsage['_'][i]);

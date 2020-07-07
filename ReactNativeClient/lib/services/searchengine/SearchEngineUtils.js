@@ -42,7 +42,13 @@ class SearchEngineUtils {
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
 
-		return sortedNotes;
+		if (noteIds.length !== notes.length) {
+			// remove null objects
+			return sortedNotes.filter(n => n);
+		} else {
+			return sortedNotes;
+		}
+
 	}
 }
 
