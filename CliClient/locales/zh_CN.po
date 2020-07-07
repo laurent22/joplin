@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: yaozeye@outlook.com\n"
-"Language-Team: yaozeye@yaozeye.onmicrosoft.com\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -42,7 +42,7 @@ msgstr ""
 #: ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "无法找到“%s”。"
+msgstr "无法找到 \"%s\" 。"
 
 #: CliClient/app/command-ls.js:18
 msgid ""
@@ -74,7 +74,7 @@ msgstr ""
 
 #: CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
-msgstr "“text”或“json”"
+msgstr "\"text\" 或 \"json\""
 
 #: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
 msgid ""
@@ -166,7 +166,7 @@ msgstr "默认值: %s"
 
 #: CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "可用键/值: "
+msgstr "可用键/值："
 
 #: CliClient/app/command-server.js:14
 #, javascript-format
@@ -201,7 +201,7 @@ msgstr ""
 
 #: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
-msgstr "输入主密码: "
+msgstr "输入主密码："
 
 #: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
 #: CliClient/app/command-e2ee.js:79
@@ -232,7 +232,7 @@ msgstr "已完成解密。"
 #: CliClient/app/command-e2ee.js:77
 #: ReactNativeClient/lib/components/screens/encryption-config.js:163
 msgid "Confirm password:"
-msgstr "确认密码: "
+msgstr "确认密码："
 
 #: CliClient/app/command-e2ee.js:83
 #: ReactNativeClient/lib/components/screens/encryption-config.js:140
@@ -301,7 +301,7 @@ msgstr "与远程储存同步。"
 
 #: CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "同步到所提供的目标 (默认为同步目标配置值) "
+msgstr "同步到所提供的目标 (默认为同步目标配置值)"
 
 #: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -314,19 +314,19 @@ msgstr "认证未完成 (未收到认证令牌) 。"
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作: "
+msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "步骤一: 在浏览器中打开此 URL 来授权应用程序: "
+msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "步骤二: 输入 Dropbox 提供的代码: "
+msgstr "步骤二：输入 Dropbox 提供的代码："
 
 #: CliClient/app/command-sync.js:101
 #, javascript-format
@@ -344,8 +344,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"锁定文件已被保存。如果您确认当前未在进行任何同步，可删除锁定文件“%s”后继续上"
-"一部操作。"
+"锁定文件已被保存。如果您确认当前未在进行任何同步，可删除锁定文件 \"%s\" 后继"
+"续上一部操作。"
 
 #: CliClient/app/command-sync.js:175
 #, javascript-format
@@ -419,7 +419,7 @@ msgstr "无活动笔记本。"
 #: CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "笔记不存在: “%s”。是否创建？"
+msgstr "笔记不存在:  \"%s\" 。是否创建？"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -431,7 +431,7 @@ msgstr "请先选择需要删除的笔记或笔记本。"
 
 #: CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "按 Ctrl+D 或输入“exit”退出程序"
+msgstr "按 Ctrl+D 或输入 \"exit\" 退出程序"
 
 #: CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -499,7 +499,7 @@ msgstr "输入 `joplin help` 获取用量信息。"
 
 #: CliClient/app/main.js:82
 msgid "Fatal error:"
-msgstr "严重错误: "
+msgstr "严重错误："
 
 #: CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
@@ -536,7 +536,7 @@ msgstr "输入 `status` 可获取更多信息。"
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
-msgstr "搜索: "
+msgstr "搜索："
 
 #: CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -575,11 +575,11 @@ msgstr "此答案无效: %s"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "Y"
-msgstr "是"
+msgstr "Y"
 
 #: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
 msgid "n"
-msgstr "否"
+msgstr "n"
 
 #: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -608,7 +608,7 @@ msgstr ""
 
 #: CliClient/app/command-help.js:73
 msgid "The possible commands are:"
-msgstr "可用的命令有: "
+msgstr "可用的命令有："
 
 #: CliClient/app/command-help.js:77
 msgid ""
@@ -631,11 +631,11 @@ msgstr "通过方向键与 Page Up / Down 键来滚动列表与文本区域 (包
 
 #: CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "按“TC”最大化/最小化控制台。"
+msgstr "按 \"TC\" 最大化/最小化控制台。"
 
 #: CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "按“:”键进入命令行模式"
+msgstr "按 \":\" 键进入命令行模式"
 
 #: CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
@@ -653,9 +653,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是“toggle”或者“clear”。使用“toggle”命令来切换待办事项的完"
-"成状态 (若目标为普通笔记则将会转换成待办事项) 。使用“clear”命令来把待办事项转"
-"换到普通笔记。"
+"<todo-command> 可以是 \"toggle\" 或者 \"clear\" 。使用 \"toggle\" 命令来切换"
+"待办事项的完成状态 (若目标为普通笔记则将会转换成待办事项) 。使用 \"clear\" 命"
+"令来把待办事项转换到普通笔记。"
 
 #: CliClient/app/command-exit.js:11
 msgid "Exits the application."
@@ -664,7 +664,7 @@ msgstr "退出程序。"
 #: CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "有多条项目符合 “%s”。请缩小您的检索范围。"
+msgstr "有多条项目符合  \"%s\" 。请缩小您的检索范围。"
 
 #: CliClient/app/app.js:91
 msgid "No notebook selected."
@@ -676,11 +676,11 @@ msgstr "未指定笔记本。"
 
 #: CliClient/app/app.js:136
 msgid "N"
-msgstr "否"
+msgstr "N"
 
 #: CliClient/app/app.js:136
 msgid "y"
-msgstr "是"
+msgstr "y"
 
 #: CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -694,7 +694,7 @@ msgstr "不存在该命令: %s"
 #: CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "命令“%s”仅在 GUI 模式下可用"
+msgstr "命令 \"%s\" 仅在 GUI 模式下可用"
 
 #: CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -712,14 +712,14 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是“add”、“remove”、“list” 或者 “notetags”，用于从 [note] 中"
-"赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所"
-"有的标签 (对于过长选项请使用 -l 参数) 。"
+"<tag-command> 可以是 \"add\" 、 \"remove\" 、 \"list\"  或者  \"notetags\" ，"
+"用于从 [note] 中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命"
+"令可以用于列出所有的标签 (对于过长选项请使用 -l 参数) 。"
 
 #: CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "无效命令: “%s”"
+msgstr "无效命令:  \"%s\""
 
 #: CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -728,7 +728,7 @@ msgstr "标记待办事项为完成。"
 #: CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "笔记非待办事项: “%s”"
+msgstr "笔记非待办事项:  \"%s\""
 
 #: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
 #: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
@@ -780,7 +780,7 @@ msgstr "跳转到任意内容..."
 #: ElectronClient/InteropServiceHelper.js:149
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导出，导出格式为“%s”。请稍等..."
+msgstr "从 \"%s\" 导出，导出格式为 \"%s\" 。请稍等..."
 
 #: ElectronClient/InteropServiceHelper.js:167
 #, javascript-format
@@ -829,7 +829,7 @@ msgstr "完整的发行说明"
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
+msgstr "笔记 \"%s\" 已成功恢复到笔记本 \"%s\" 中。"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -852,8 +852,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
-"换或修改。"
+"单击 \"%s\" 以恢复笔记。它将会被复制到名为 \"%s\" 的笔记本中。笔记的当前版本"
+"不会被替换或修改。"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:24
@@ -998,7 +998,7 @@ msgstr "插入时间"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
-msgstr "勾选框"
+msgstr "复选框列表"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:469
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1012,7 +1012,7 @@ msgstr "代码块"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:543
 msgid "Inline Code"
-msgstr "行内代码"
+msgstr "内联代码"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:901
 msgid "Drop notes or files here"
@@ -1027,12 +1027,12 @@ msgstr "代码视图"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr "请等待所有附件均被下载并解密。你还能在%s 中编辑笔记。"
+msgstr "请等待所有附件均被下载并解密。你还能在 %s 中编辑笔记。"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr "下载此附件时出错: "
+msgstr "下载此附件时出错："
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
 #: ElectronClient/gui/NoteText.min.js:835
@@ -1181,7 +1181,7 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"是否删除笔记本“%s”？\n"
+"是否删除笔记本 \"%s\" ？\n"
 "\n"
 "所有在该笔记本内的笔记和下级笔记本也将同时被删除。"
 
@@ -1199,7 +1199,7 @@ msgstr "删除"
 #: ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "从所有笔记中删除标签“%s”？"
+msgstr "从所有笔记中删除标签 \"%s\" ？"
 
 #: ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
@@ -1286,7 +1286,7 @@ msgstr "Joplin 网页剪辑可以让你将浏览器中的网页和屏幕截图�
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用网页剪辑功能，你需要按照以下步骤: "
+msgstr "要使用网页剪辑功能，你需要按照以下步骤："
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
@@ -1307,7 +1307,7 @@ msgstr "步骤二: 安装扩展"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
-msgstr "为您的浏览器下载并安装相关的扩展: "
+msgstr "为您的浏览器下载并安装相关的扩展："
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
@@ -1315,7 +1315,7 @@ msgstr "高级选项"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
-msgstr "授权 Token 令牌: "
+msgstr "授权 Token 令牌："
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
@@ -1362,13 +1362,13 @@ msgstr "Chrome 网上商店"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "立即获取: "
+msgstr "立即获取："
 
 #: ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "将新建的笔记本“%s”，并将文件“%s”导入其中"
+msgstr "将新建的笔记本 \"%s\" ，并将文件 \"%s\" 导入其中"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:68
@@ -1393,7 +1393,7 @@ msgstr "笔记排序依据"
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
-msgstr "欲手动调整顺序，应在菜单“%s” > “%s” 中将排序方式调整为 “%s”"
+msgstr "欲手动调整顺序，应在菜单 \"%s\"  >  \"%s\"  中将排序方式调整为  \"%s\""
 
 #: ElectronClient/gui/NoteList.min.js:148
 msgid "Do it now"
@@ -1401,12 +1401,12 @@ msgstr "现在去完成"
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "此处没有任何笔记。点击“新建笔记”创建。"
+msgstr "此处没有任何笔记。点击 \"新建笔记\" 创建。"
 
 #: ElectronClient/gui/NoteList.min.js:452
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "此处没有任何笔记本。点击“新建笔记本”创建。"
+msgstr "此处没有任何笔记本。点击 \"新建笔记本\" 创建。"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
@@ -1459,7 +1459,7 @@ msgstr "PDF 文件"
 #: ElectronClient/gui/utils/NoteListUtils.js:221
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "是否删除笔记“%s”？"
+msgstr "是否删除笔记 \"%s\" ？"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:223
 #, javascript-format
@@ -1576,7 +1576,7 @@ msgstr "状态"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:437
 msgid "Encryption is:"
-msgstr "加密状态: "
+msgstr "加密状态："
 
 #: ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
@@ -1594,39 +1594,39 @@ msgstr "重试"
 
 #: ElectronClient/gui/MainScreen.min.js:165
 msgid "Please create a notebook first."
-msgstr "请先创建笔记本。"
+msgstr "请先创建一本笔记本。"
 
 #: ElectronClient/gui/MainScreen.min.js:171
 msgid "Please create a notebook first"
-msgstr "请先创建笔记本"
+msgstr "请先创建一本笔记本"
 
 #: ElectronClient/gui/MainScreen.min.js:178
 msgid "Notebook title:"
-msgstr "笔记本标题: "
+msgstr "笔记本标题："
 
 #: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
-msgstr "添加或删除标签: "
+msgstr "添加或删除标签："
 
 #: ElectronClient/gui/MainScreen.min.js:272
 msgid "Move to notebook:"
-msgstr "移动到笔记本: "
+msgstr "移动到笔记本："
 
 #: ElectronClient/gui/MainScreen.min.js:292
 msgid "Rename notebook:"
-msgstr "重命名笔记本: "
+msgstr "重命名笔记本："
 
 #: ElectronClient/gui/MainScreen.min.js:313
 msgid "Rename tag:"
-msgstr "重命名标签: "
+msgstr "重命名标签："
 
 #: ElectronClient/gui/MainScreen.min.js:417
 msgid "Set alarm:"
-msgstr "设置提醒: "
+msgstr "设置提醒："
 
 #: ElectronClient/gui/MainScreen.min.js:448
 msgid "Template file:"
-msgstr "模版文件: "
+msgstr "模版文件："
 
 #: ElectronClient/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1642,7 +1642,7 @@ msgstr "字符数"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:53
 msgid "Characters excluding spaces"
-msgstr "字符数 (不计空格) "
+msgstr "字符数 (不计空格)"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:54
 msgid "Lines"
@@ -1698,7 +1698,7 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
-"没有安装 Joplin Nextcloud 应用程序或配置错误。 请查看下面的完整错误消息: "
+"没有安装 Joplin Nextcloud 应用程序或配置错误。 请查看下面的完整错误消息："
 
 #: ElectronClient/gui/ConfigScreen.min.js:211
 msgid "Show Log"
@@ -1706,7 +1706,7 @@ msgstr "显示日志"
 
 #: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
-msgstr "Joplin Nextcloud 的状态: "
+msgstr "Joplin Nextcloud 的状态："
 
 #: ElectronClient/gui/ConfigScreen.min.js:238
 msgid "Check Status"
@@ -1754,7 +1754,7 @@ msgstr "无标题"
 #: ElectronClient/gui/ResourceScreen.js:93
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "是否删除附件“%s”？"
+msgstr "是否删除附件 \"%s\" ？"
 
 #: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1823,7 +1823,7 @@ msgstr "笔记正文"
 #: ElectronClient/app.js:462
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导入，导入格式为“%s”。请稍等..."
+msgstr "从 \"%s\" 导入，导入格式为 \"%s\" 。请稍等..."
 
 #: ElectronClient/app.js:525
 #: ReactNativeClient/lib/components/action-button.js:73
@@ -2047,9 +2047,9 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"请在浏览器中打开以下链接以验证本应用程序。本应用会建立“Apps/Joplin”文件目录，"
-"并只会读写该目录中的文件。本应用没有任何权限访问此目录以外的任何文件或个人信"
-"息，也不会与第三方分享任何数据。"
+"请在浏览器中打开以下链接以验证本应用程序。本应用会建立 \"Apps/Joplin\" 文件目"
+"录，并只会读写该目录中的文件。本应用没有任何权限访问此目录以外的任何文件或个"
+"人信息，也不会与第三方分享任何数据。"
 
 #: ReactNativeClient/lib/registry.js:156
 msgid ""
@@ -2114,7 +2114,7 @@ msgstr "无法移动笔记本到该位置"
 #: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "笔记本无法被命名为“%s”，这个标题已被留作他用。"
+msgstr "笔记本无法被命名为 \"%s\" ，这个标题已被留作他用。"
 
 #: ReactNativeClient/lib/models/Setting.js:39
 msgid "yes"
@@ -2124,7 +2124,7 @@ msgstr "是"
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr "(是否所见即所得: %s)"
+msgstr "(兼容所见即所得编辑器: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
 msgid "no"
@@ -2150,7 +2150,7 @@ msgstr "暗黑"
 
 #: ReactNativeClient/lib/models/Setting.js:53
 msgid "Dracula"
-msgstr "德古拉"
+msgstr "德古拉紫"
 
 #: ReactNativeClient/lib/models/Setting.js:54
 msgid "Solarised Light"
@@ -2181,11 +2181,12 @@ msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下文) 。"
+"所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下"
+"文) 。"
 
 #: ReactNativeClient/lib/models/Setting.js:104
 msgid "Directory to synchronise with (absolute path)"
-msgstr "待同步的目录 (绝对路径) "
+msgstr "待同步的目录 (绝对路径)"
 
 #: ReactNativeClient/lib/models/Setting.js:116
 msgid "Nextcloud WebDAV URL"
@@ -2221,8 +2222,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在“手动”模式下，只有单击附件时才会下载它们。在“自动”中，当你打开笔记时，它们"
-"就会被下载下来。在“总是”中，无论你是否打开笔记，所有的附件都会被下载。"
+"在 \"手动\" 模式下，只有单击附件时才会下载它们。在 \"自动\" 中，当你打开笔记"
+"时，它们就会被下载下来。在 \"总是\" 中，无论你是否打开笔记，所有的附件都会被"
+"下载。"
 
 #: ReactNativeClient/lib/models/Setting.js:199
 msgid "Always"
@@ -2321,7 +2323,7 @@ msgstr "保存地理定位信息到笔记中"
 
 #: ReactNativeClient/lib/models/Setting.js:394
 msgid "When creating a new to-do:"
-msgstr "当新建待办事项时: "
+msgstr "当新建待办事项时："
 
 #: ReactNativeClient/lib/models/Setting.js:397
 #: ReactNativeClient/lib/models/Setting.js:412
@@ -2335,7 +2337,7 @@ msgstr "聚焦正文"
 
 #: ReactNativeClient/lib/models/Setting.js:409
 msgid "When creating a new note:"
-msgstr "当新建笔记时: "
+msgstr "当新建笔记时："
 
 #: ReactNativeClient/lib/models/Setting.js:423
 msgid "Enable soft breaks"
@@ -2428,7 +2430,7 @@ msgstr "编辑器字体"
 
 #: ReactNativeClient/lib/models/Setting.js:506
 msgid "Editor font family"
-msgstr "编辑器字体系列"
+msgstr "编辑器字体族"
 
 #: ReactNativeClient/lib/models/Setting.js:508
 msgid ""
@@ -2559,7 +2561,7 @@ msgid ""
 msgstr ""
 "以逗号分隔的路径列表，可以是包含证书的目录，也可以直接指向单独的证书路径。 例"
 "如: /my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存"
-"更改，之后再点击“检查同步配置”。"
+"更改，之后再点击 \"检查同步配置\" 。"
 
 #: ReactNativeClient/lib/models/Setting.js:638
 msgid "Ignore TLS certificate errors"
@@ -2628,7 +2630,7 @@ msgstr "笔记区域增长因数"
 #: ReactNativeClient/lib/models/Setting.js:877
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "无效的选项值: “%s”。可用值有: %s。"
+msgstr "无效的选项值:  \"%s\" 。可用值有: %s。"
 
 #: ReactNativeClient/lib/models/Setting.js:1205
 msgid "General"
@@ -2674,7 +2676,7 @@ msgid ""
 msgstr ""
 "这些插件为 Markdown 渲染器提供额外特性。 请注意，尽管这些额外特性可能是可用"
 "的，但它们并非标准 Markdown 语法，因此这些功能基本只能在 Joplin 内运行。此"
-"外，其中的一些功能与所见即所得 (WYSIWYG) 编辑器是*不兼容*的。如果你在上述编辑"
+"外，其中的一些功能与所见即所得 (WYSIWYG) 编辑器是*不兼容*的。如果您在上述编辑"
 "器中打开使用了这些插件的笔记，就将会丢失插件格式。下面已表明插件与所见即所得 "
 "(WYSIWYG) 编辑器兼容与否。"
 
@@ -2707,14 +2709,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"以下附件存在[冲突](%s) \n"
+"以下附件存在一个[conflict](%s) \n"
 "\n"
 " %s"
 
 #: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "标签“%s”已存在。请选择一个不同的名称。"
+msgstr "标签 \"%s\" 已存在。请选择一个不同的名称。"
 
 #: ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
@@ -2731,12 +2733,12 @@ msgstr "该笔记未含地理定位信息。"
 #: ReactNativeClient/lib/models/Note.js:468
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "无法复制笔记到笔记本“%s”"
+msgstr "无法复制笔记到笔记本 \"%s\""
 
 #: ReactNativeClient/lib/models/Note.js:479
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "无法移动笔记到笔记本“%s”"
+msgstr "无法移动笔记到笔记本 \"%s\""
 
 #: ReactNativeClient/lib/models/BaseItem.js:709
 msgid "Encrypted"
@@ -2748,7 +2750,7 @@ msgstr "无法修改已加密的项目"
 
 #: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive 开发版 (仅供测试) "
+msgstr "OneDrive 开发版 (仅供测试)"
 
 #: ReactNativeClient/lib/BaseApplication.js:138
 #: ReactNativeClient/lib/BaseApplication.js:151
@@ -2801,7 +2803,7 @@ msgstr "移动到笔记本..."
 #: ReactNativeClient/lib/components/screen-header.js:433
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "是否移动 %d 条笔记到笔记本“%s”？"
+msgstr "是否移动 %d 条笔记到笔记本 \"%s\" ？"
 
 #: ReactNativeClient/lib/components/screen-header.js:451
 msgid "Press to set the decryption password."
@@ -2831,7 +2833,7 @@ msgstr "配置"
 
 #: ReactNativeClient/lib/components/note-list.js:97
 msgid "You currently have no notebooks."
-msgstr "你现在还没有笔记本。"
+msgstr "您现在还没有笔记本。"
 
 #: ReactNativeClient/lib/components/note-list.js:101
 msgid "Create a notebook"
@@ -2855,7 +2857,7 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "发生错误。请检查 URL 、用户名、密码等是否正确，同步目标是否可访问。报告的错误"
-"如下: "
+"如下："
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2930,7 +2932,7 @@ msgstr "刷新"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "新建标签: "
+msgstr "新建标签："
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
@@ -2958,7 +2960,7 @@ msgstr "创建于: %s"
 #: ReactNativeClient/lib/components/screens/encryption-config.js:122
 #: ReactNativeClient/lib/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "密码: "
+msgstr "密码："
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
@@ -3014,7 +3016,7 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"若想了解有关端到端加密 (E2EE) 的更多信息，以及如何启用它的建议，请查阅文档: "
+"若想了解有关端到端加密 (E2EE) 的更多信息，以及如何启用它的建议，请查阅文档："
 
 #: ReactNativeClient/lib/components/screens/log.js:100
 #: ReactNativeClient/lib/components/screens/config.js:439
@@ -3080,7 +3082,7 @@ msgstr "导出配置文件"
 
 #: ReactNativeClient/lib/components/screens/config.js:446
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "仅用于调试目的: 将您的配置文件导出到外部SD卡。"
+msgstr "仅用于调试目的: 将您的配置文件导出到外部 SD 卡。"
 
 #: ReactNativeClient/lib/components/screens/config.js:461
 msgid "More information"
@@ -3091,7 +3093,7 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"本应用程序需要下列权限才能正常运作。请在你的手机设置 (应用 > Joplin > 权限) "
+"本应用程序需要下列权限才能正常运作。请在您的手机设置 (应用 > Joplin > 权限) "
 "中启用它们"
 
 #: ReactNativeClient/lib/components/screens/config.js:474
@@ -3124,7 +3126,7 @@ msgstr "FTS 已开启: %d"
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "This note has been modified:"
-msgstr "该笔记已被修改: "
+msgstr "该笔记已被修改："
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "Save changes"
@@ -3151,7 +3153,7 @@ msgstr "Joplin 手机应用目前不支持这种类型的链接: %s"
 #: ReactNativeClient/lib/components/screens/note.js:188
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "不支持“%s”协议链接"
+msgstr "不支持 \"%s\" 协议链接"
 
 #: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
@@ -3291,8 +3293,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"无法连接到 Joplin Nextcloud 应用。 请在“同步配置”中检查配置。 完整的错误信息"
-"是: \n"
+"无法连接到 Joplin Nextcloud 应用。 请在 \"同步配置\" 中检查配置。 完整的错误"
+"信息是: \n"
 "\n"
 "%s"
 
@@ -3341,7 +3343,7 @@ msgstr "%s (%s) 无法上传到: %s"
 #: ReactNativeClient/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "项目“%s”无法从 %s 中下载"
+msgstr "项目 \"%s\" 无法从 %s 中下载"
 
 #: ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
@@ -3386,7 +3388,7 @@ msgstr "%s (%s): %s"
 
 #: ReactNativeClient/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
-msgstr "同步状态 (已同步项目/项目总数) "
+msgstr "同步状态 (已同步项目/项目总数)"
 
 #: ReactNativeClient/lib/services/report.js:226
 #, javascript-format
@@ -3443,11 +3445,11 @@ msgstr "Joplin 导出目录"
 
 #: ReactNativeClient/lib/services/InteropService.js:47
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote 导出文件 (Markdown) "
+msgstr "Evernote 导出文件 (Markdown)"
 
 #: ReactNativeClient/lib/services/InteropService.js:55
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote 导出文件 (HTML) "
+msgstr "Evernote 导出文件 (HTML)"
 
 #: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
@@ -3484,7 +3486,7 @@ msgstr "请指定 %s 的导入格式"
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
-msgstr "该项目当前已加密: %s“%s”。请等待所有项目解密后再重试。"
+msgstr "该项目当前已加密: %s \"%s\" 。请等待所有项目解密后再重试。"
 
 #~ msgid "Content properties"
 #~ msgstr "内容属性"
