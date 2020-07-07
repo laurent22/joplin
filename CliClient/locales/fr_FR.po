@@ -2257,7 +2257,7 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
-msgstr "Aritim Dark"
+msgstr "Aritim Sombre"
 
 #: ReactNativeClient/lib/models/Setting.js:58
 msgid "OLED Dark"
