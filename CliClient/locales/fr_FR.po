@@ -7,13 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Laurent Cozic\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: CliClient/app/command-cp.js:13
@@ -1979,7 +1981,7 @@ msgstr "Version du profil : %s"
 #: ElectronClient/app.js:689
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Trousseau supporté : %s"
 
 #: ElectronClient/app.js:711 ElectronClient/app.js:794
 msgid "&File"
@@ -2255,7 +2257,7 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Sombre"
 
 #: ReactNativeClient/lib/models/Setting.js:58
 msgid "OLED Dark"
@@ -2397,7 +2399,7 @@ msgstr "Auto-compléter les paires de parenthèses, guillemets, etc."
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Utiliser CodeMirror comme éditeur de code (ATTENTION: BETA)."
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
