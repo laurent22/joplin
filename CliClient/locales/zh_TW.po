@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
-"Language-Team: \n"
+"Last-Translator: Yaoze Ye <yaozeye@yahoo.co.jp>\n"
+"Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -91,7 +91,7 @@ msgstr "請先選擇記事本。"
 
 #: CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
-msgstr "匯入資料到 Joplin。"
+msgstr "匯入資料至 Joplin。"
 
 #: CliClient/app/command-import.js:25
 #, javascript-format
@@ -158,7 +158,7 @@ msgstr "類型: %s。"
 #: CliClient/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "有可能的值: %s。"
+msgstr "可能的值: %s。"
 
 #: CliClient/app/help-utils.js:71
 #, javascript-format
@@ -167,7 +167,7 @@ msgstr "預設: %s"
 
 #: CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "可能的鍵/值:"
+msgstr "可能的鍵/值: "
 
 #: CliClient/app/command-server.js:14
 #, javascript-format
@@ -202,7 +202,7 @@ msgstr ""
 
 #: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
-msgstr "輸入主密碼:"
+msgstr "輸入主密碼: "
 
 #: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
 #: CliClient/app/command-e2ee.js:79
@@ -232,7 +232,7 @@ msgstr "解密完成。"
 #: CliClient/app/command-e2ee.js:77
 #: ReactNativeClient/lib/components/screens/encryption-config.js:163
 msgid "Confirm password:"
-msgstr "輸入確認密碼:"
+msgstr "確認密碼: "
 
 #: CliClient/app/command-e2ee.js:83
 #: ReactNativeClient/lib/components/screens/encryption-config.js:140
@@ -314,19 +314,19 @@ msgstr "身份驗證未完成 (未收到身份驗證的 token)。"
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "請按照以下步驟，設置 Joplin 與 Dropbox 同步所需的選項:"
+msgstr "請按照以下步驟，設置 Joplin 與 Dropbox 同步所需的選項: "
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "步驟 1: 在瀏覽器中打開此網址以授權應用程式:"
+msgstr "步驟 1: 在瀏覽器中打開此網址以授權應用程式: "
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "步驟 2: 輸入 Dropbox 提供給您的代碼:"
+msgstr "步驟 2: 輸入 Dropbox 提供給您的代碼: "
 
 #: CliClient/app/command-sync.js:101
 #, javascript-format
@@ -499,7 +499,7 @@ msgstr "鍵入 `joplin help` 檢視使用說明。"
 
 #: CliClient/app/main.js:82
 msgid "Fatal error:"
-msgstr "嚴重錯誤:"
+msgstr "嚴重錯誤: "
 
 #: CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
@@ -536,7 +536,7 @@ msgstr "鍵入 `status` 可獲取更多信息。"
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
-msgstr "搜尋:"
+msgstr "搜尋: "
 
 #: CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -792,7 +792,7 @@ msgstr "此版本是最新的。"
 #: ElectronClient/checkForUpdates.js:148
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (預先發行)"
+msgstr "%s (預發行)"
 
 #: ElectronClient/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
@@ -1030,7 +1030,7 @@ msgstr "請等待所有附件均被下載並解密。你還能在 %s 中編輯�
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr "下載此附件時出現錯誤:"
+msgstr "下載此附件時出現錯誤: "
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
 #: ElectronClient/gui/NoteText.min.js:835
@@ -1284,7 +1284,7 @@ msgstr "Joplin 網頁剪輯可以讓您從瀏覽器保存網頁和螢幕截圖�
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用網頁剪輯，您需要執行以下動作:"
+msgstr "要使用網頁剪輯，您需要執行以下動作: "
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
@@ -1305,7 +1305,7 @@ msgstr "步驟 2: 安裝插件"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
-msgstr "下載並安裝瀏覽器插件:"
+msgstr "下載並安裝瀏覽器插件: "
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
@@ -1313,7 +1313,7 @@ msgstr "顯示進階選項"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
-msgstr "Token 授權書:"
+msgstr "Token 授權書: "
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
@@ -1360,7 +1360,7 @@ msgstr "Chrome 網上應用店"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "立即取得:"
+msgstr "立即取得: "
 
 #: ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
@@ -1575,7 +1575,7 @@ msgstr "狀態"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:437
 msgid "Encryption is:"
-msgstr "加密:"
+msgstr "加密: "
 
 #: ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
@@ -1601,7 +1601,7 @@ msgstr "請先新增記事本"
 
 #: ElectronClient/gui/MainScreen.min.js:178
 msgid "Notebook title:"
-msgstr "記事本標題:"
+msgstr "記事本標題: "
 
 #: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
@@ -1609,23 +1609,23 @@ msgstr "新增或移除標籤:"
 
 #: ElectronClient/gui/MainScreen.min.js:272
 msgid "Move to notebook:"
-msgstr "移動至記事本:"
+msgstr "移動至記事本: "
 
 #: ElectronClient/gui/MainScreen.min.js:292
 msgid "Rename notebook:"
-msgstr "重新命名記事本:"
+msgstr "重新命名記事本: "
 
 #: ElectronClient/gui/MainScreen.min.js:313
 msgid "Rename tag:"
-msgstr "重新命名標籤:"
+msgstr "重新命名標籤: "
 
 #: ElectronClient/gui/MainScreen.min.js:417
 msgid "Set alarm:"
-msgstr "設置提醒:"
+msgstr "設置提醒: "
 
 #: ElectronClient/gui/MainScreen.min.js:448
 msgid "Template file:"
-msgstr "範本檔案:"
+msgstr "範本檔案: "
 
 #: ElectronClient/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1705,7 +1705,7 @@ msgstr "顯示日誌"
 
 #: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
-msgstr "Joplin Nextcloud 應用程式狀態:"
+msgstr "Joplin Nextcloud 應用程式狀態: "
 
 #: ElectronClient/gui/ConfigScreen.min.js:238
 msgid "Check Status"
@@ -2323,7 +2323,7 @@ msgstr "在記事中保存地理位置資訊"
 
 #: ReactNativeClient/lib/models/Setting.js:394
 msgid "When creating a new to-do:"
-msgstr "當新增待辦事項時:"
+msgstr "當新增待辦事項時: "
 
 #: ReactNativeClient/lib/models/Setting.js:397
 #: ReactNativeClient/lib/models/Setting.js:412
@@ -2337,7 +2337,7 @@ msgstr "游標置於內文"
 
 #: ReactNativeClient/lib/models/Setting.js:409
 msgid "When creating a new note:"
-msgstr "當新增記事時:"
+msgstr "當新增記事時: "
 
 #: ReactNativeClient/lib/models/Setting.js:423
 msgid "Enable soft breaks"
@@ -2451,12 +2451,12 @@ msgstr "自動更新應用程式"
 
 #: ReactNativeClient/lib/models/Setting.js:554
 msgid "Get pre-releases when checking for updates"
-msgstr "檢查更新時一併檢查預先發行"
+msgstr "獲取預發行更新"
 
 #: ReactNativeClient/lib/models/Setting.js:554
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "有關更多詳細信息，請查閱預先發行頁面: %s"
+msgstr "有關更多詳細信息，請查閱預發行頁面: %s"
 
 #: ReactNativeClient/lib/models/Setting.js:562
 msgid "Synchronisation interval"
@@ -2522,15 +2522,15 @@ msgstr "法律規格紙 (Legal)"
 
 #: ReactNativeClient/lib/models/Setting.js:591
 msgid "Page orientation for PDF export"
-msgstr "匯出 PDF 的頁面方向"
+msgstr "匯出至 PDF 的頁面方向"
 
 #: ReactNativeClient/lib/models/Setting.js:593
 msgid "Portrait"
-msgstr "直式"
+msgstr "豎直"
 
 #: ReactNativeClient/lib/models/Setting.js:594
 msgid "Landscape"
-msgstr "橫式"
+msgstr "橫向"
 
 #: ReactNativeClient/lib/models/Setting.js:605
 msgid "Keyboard Mode"
@@ -2857,7 +2857,7 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "錯誤。 請檢查網址、使用者名稱、密碼等是否正確以及同步目標是否可以被存取。 錯"
-"誤回報訊息為:"
+"誤回報訊息為: "
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2932,7 +2932,7 @@ msgstr "重新整理"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "新增標籤:"
+msgstr "新增標籤: "
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
@@ -2960,7 +2960,7 @@ msgstr "已建立: %s"
 #: ReactNativeClient/lib/components/screens/encryption-config.js:122
 #: ReactNativeClient/lib/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "密碼:"
+msgstr "密碼: "
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
@@ -3015,7 +3015,7 @@ msgstr "加密設置"
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用它，請參考線上文檔:"
+msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用它，請參考線上文檔: "
 
 #: ReactNativeClient/lib/components/screens/log.js:100
 #: ReactNativeClient/lib/components/screens/config.js:439
@@ -3126,7 +3126,7 @@ msgstr "FTS 已啟用: %d"
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "This note has been modified:"
-msgstr "此記事已被修改:"
+msgstr "此記事已被修改: "
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "Save changes"
@@ -3575,11 +3575,11 @@ msgstr "此項目當前已加密: %s \"%s\"。請等待所有專案被解密後�
 
 #, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "輸入主密碼:"
+#~ msgstr "輸入主密碼: "
 
 #, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "輸入主密碼:"
+#~ msgstr "輸入主密碼: "
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
