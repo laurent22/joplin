@@ -15,12 +15,14 @@ export enum ContextMenuItemType {
 	Resource = 'resource',
 	Text = 'text',
 	Link = 'link',
+	LinkAndText = 'linkAndText',
 }
 
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType,
 	resourceId: string,
 	textToCopy: string,
+	urlToCopy: string,
 }
 
 interface ContextMenuItem {
@@ -86,14 +88,14 @@ export function menuItems():ContextMenuItems {
 			onAction: async (options:ContextMenuOptions) => {
 				clipboard.writeText(options.textToCopy);
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Text,
+			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Text || itemType === ContextMenuItemType.LinkAndText,
 		},
 		copyLinkUrl: {
 			label: _('Copy Link Address'),
 			onAction: async (options:ContextMenuOptions) => {
-				clipboard.writeText(options.textToCopy);
+				clipboard.writeText(options.urlToCopy);
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Link,
+			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Link || itemType === ContextMenuItemType.LinkAndText,
 		},
 	};
 }

@@ -41,6 +41,7 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 				itemType: arg0 && arg0.type,
 				resourceId: arg0.resourceId,
 				textToCopy: arg0.textToCopy,
+				urlToCopy: arg0.urlToCopy,
 			});
 
 			menu.popup(bridge().window());

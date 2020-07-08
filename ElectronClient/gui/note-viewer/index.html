@@ -383,15 +383,21 @@
 			} else {
 				const selectedText = window.getSelection().toString();
 
-				if (selectedText) {
+				if (selectedText && !event.target.getAttribute('href')) {
 					ipcProxySendToHost('contextMenu', {
 						type: 'text',
 						textToCopy: selectedText,
 					});
-				} else if (event.target.getAttribute('href')) {
+				} else if (selectedText && event.target.getAttribute('href')) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'linkAndText',
+						textToCopy: selectedText,
+						urlToCopy: event.target.getAttribute('href'),
+					});
+				} else if (!selectedText && event.target.getAttribute('href')) {
 					ipcProxySendToHost('contextMenu', {
 						type: 'link',
-						textToCopy: event.target.getAttribute('href'),
+						urlToCopy: event.target.getAttribute('href'),
 					});
 				}
 			}

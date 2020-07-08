@@ -626,6 +626,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 								let itemType:ContextMenuItemType = ContextMenuItemType.None;
 								let resourceId = '';
 								let textToCopy = '';
+								const urlToCopy = '';
 
 								if (element.nodeName === 'IMG') {
 									itemType = ContextMenuItemType.Image;
@@ -638,7 +639,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 									textToCopy = editor.selection.getContent({ format: 'text' });
 								}
 
-								contextMenuActionOptions.current = { itemType, resourceId, textToCopy };
+								contextMenuActionOptions.current = { itemType, resourceId, textToCopy, urlToCopy };
 
 
 								return item.isActive(itemType) ? itemNameNS : '';
