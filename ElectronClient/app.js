@@ -78,7 +78,7 @@ const globalCommands = [
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
 
 const pluginClasses = [
-	'./plugins/GotoAnything.min',
+	require('./plugins/GotoAnything.min'),
 ];
 
 const appDefaultState = Object.assign({}, defaultState, {
@@ -1120,10 +1120,13 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const dir = Setting.value('profileDir');
+
+		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
 		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+
+		await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -1134,12 +1137,9 @@ class Application extends BaseApplication {
 			bridge().openDevTools();
 		}
 
-		// Load plugins after the initialization
-		const _pluginClasses = pluginClasses.map(plugin => require(plugin));
-
 		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
 		PluginManager.instance().setLogger(reg.logger());
-		PluginManager.instance().register(_pluginClasses);
+		PluginManager.instance().register(pluginClasses);
 
 		this.initRedux();
 

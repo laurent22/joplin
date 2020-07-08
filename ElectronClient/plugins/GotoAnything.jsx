@@ -463,7 +463,7 @@ GotoAnything.manifest = {
 			name: 'main',
 			parent: 'tools',
 			label: _('Goto Anything...'),
-			accelerator: KeymapService.instance().getAccelerator('gotoAnything'),
+			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
 		},
 	],

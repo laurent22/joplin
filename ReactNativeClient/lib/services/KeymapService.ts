@@ -1,5 +1,4 @@
 const fs = require('fs-extra');
-const Setting = require('lib/models/Setting.js');
 const BaseService = require('lib/services/BaseService');
 const { shim } = require('lib/shim.js');
 
@@ -11,93 +10,88 @@ class KeymapService extends BaseService {
 		: { 'Ctrl': 0, 'Alt': 1, 'AltGr': 2, 'Shift': 3, 'Super': 4 };
 
 	private keymap: { [command: string]: KeymapItem };
-
-	static readonly defaultKeymap_macOS: KeymapItem[] = [
-		// Keymap items with null "accelerator" property allows users to set their own Accelerators
-		// i.e. { accelerator: null, command: 'someCommand' }
-		{ accelerator: 'Cmd+N', command: 'newNoteItem' },
-		{ accelerator: 'Cmd+T', command: 'newTodoItem' },
-		{ accelerator: 'Cmd+S', command: 'synchronize' },
-		{ accelerator: 'Cmd+P', command: 'printItem' },
-		{ accelerator: 'Cmd+H', command: 'hideApp' },
-		{ accelerator: 'Cmd+Q', command: 'quit' },
-		{ accelerator: 'Cmd+,', command: 'config' },
-		{ accelerator: 'Cmd+W', command: 'closeWindow' },
-		{ accelerator: 'Option+Cmd+I', command: 'insertTemplate' },
-		{ accelerator: 'Cmd+C', command: 'copy' },
-		{ accelerator: 'Cmd+X', command: 'cut' },
-		{ accelerator: 'Cmd+V', command: 'paste' },
-		{ accelerator: 'Cmd+A', command: 'selectAll' },
-		{ accelerator: 'Cmd+B', command: 'textBold' },
-		{ accelerator: 'Cmd+I', command: 'textItalic' },
-		{ accelerator: 'Cmd+K', command: 'textLink' },
-		{ accelerator: 'Cmd+`', command: 'textCode' },
-		{ accelerator: 'Shift+Cmd+T', command: 'insertDateTime' },
-		{ accelerator: 'Shift+Cmd+F', command: 'focusSearch' },
-		{ accelerator: 'Cmd+F', command: 'showLocalSearch' },
-		{ accelerator: 'Shift+Cmd+S', command: 'focusSidebar' },
-		{ accelerator: 'Shift+Cmd+L', command: 'focusNoteList' },
-		{ accelerator: 'Shift+Cmd+N', command: 'focusNoteTitle' },
-		{ accelerator: 'Shift+Cmd+B', command: 'focusNoteBody' },
-		{ accelerator: 'Option+Cmd+S', command: 'toggleSidebar' },
-		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
-		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
-		{ accelerator: 'Cmd+E', command: 'startExternalEditing' },
-		{ accelerator: 'Option+Cmd+T', command: 'setTags' },
-		{ accelerator: 'Cmd+G', command: 'gotoAnything' },
-		{ accelerator: 'F1', command: 'help' },
-	];
-
-	static readonly defaultKeymap_OtherPlatforms: KeymapItem[] = [
-		{ accelerator: 'Ctrl+N', command: 'newNoteItem' },
-		{ accelerator: 'Ctrl+T', command: 'newTodoItem' },
-		{ accelerator: 'Ctrl+S', command: 'synchronize' },
-		{ accelerator: 'Ctrl+P', command: 'printItem' },
-		{ accelerator: 'Ctrl+Q', command: 'quit' },
-		{ accelerator: 'Ctrl+Alt+I', command: 'insertTemplate' },
-		{ accelerator: 'Ctrl+C', command: 'copy' },
-		{ accelerator: 'Ctrl+X', command: 'cut' },
-		{ accelerator: 'Ctrl+V', command: 'paste' },
-		{ accelerator: 'Ctrl+A', command: 'selectAll' },
-		{ accelerator: 'Ctrl+B', command: 'textBold' },
-		{ accelerator: 'Ctrl+I', command: 'textItalic' },
-		{ accelerator: 'Ctrl+K', command: 'textLink' },
-		{ accelerator: 'Ctrl+`', command: 'textCode' },
-		{ accelerator: 'Ctrl+Shift+T', command: 'insertDateTime' },
-		{ accelerator: 'F6', command: 'focusSearch' },
-		{ accelerator: 'Ctrl+F', command: 'showLocalSearch' },
-		{ accelerator: 'Ctrl+Shift+S', command: 'focusSidebar' },
-		{ accelerator: 'Ctrl+Shift+L', command: 'focusNoteList' },
-		{ accelerator: 'Ctrl+Shift+N', command: 'focusNoteTitle' },
-		{ accelerator: 'Ctrl+Shift+B', command: 'focusNoteBody' },
-		{ accelerator: 'F10', command: 'toggleSidebar' },
-		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
-		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
-		{ accelerator: 'Ctrl+E', command: 'startExternalEditing' },
-		{ accelerator: 'Ctrl+Alt+T', command: 'setTags' },
-		{ accelerator: 'Ctrl+,', command: 'config' },
-		{ accelerator: 'Ctrl+G', command: 'gotoAnything' },
-		{ accelerator: 'F1', command: 'help' },
-	];
-
 	static readonly defaultKeymap = shim.isMac()
-		? KeymapService.defaultKeymap_macOS
-		: KeymapService.defaultKeymap_OtherPlatforms;
+		? [
+			// Keymap items with null "accelerator" property allows users to set their own Accelerators
+			// i.e. { accelerator: null, command: 'someCommand' }
+			{ accelerator: 'Cmd+N', command: 'newNote' },
+			{ accelerator: 'Cmd+T', command: 'newTodo' },
+			{ accelerator: 'Cmd+S', command: 'synchronize' },
+			{ accelerator: 'Cmd+P', command: 'print' },
+			{ accelerator: 'Cmd+H', command: 'hideApp' },
+			{ accelerator: 'Cmd+Q', command: 'quit' },
+			{ accelerator: 'Cmd+,', command: 'config' },
+			{ accelerator: 'Cmd+W', command: 'closeWindow' },
+			{ accelerator: 'Option+Cmd+I', command: 'insertTemplate' },
+			{ accelerator: 'Cmd+C', command: 'textCopy' },
+			{ accelerator: 'Cmd+X', command: 'textCut' },
+			{ accelerator: 'Cmd+V', command: 'textPaste' },
+			{ accelerator: 'Cmd+A', command: 'textSelectAll' },
+			{ accelerator: 'Cmd+B', command: 'textBold' },
+			{ accelerator: 'Cmd+I', command: 'textItalic' },
+			{ accelerator: 'Cmd+K', command: 'textLink' },
+			{ accelerator: 'Cmd+`', command: 'textCode' },
+			{ accelerator: 'Shift+Cmd+T', command: 'insertDateTime' },
+			{ accelerator: 'Shift+Cmd+F', command: 'focusSearch' },
+			{ accelerator: 'Cmd+F', command: 'showLocalSearch' },
+			{ accelerator: 'Shift+Cmd+S', command: 'focusElementSideBar' },
+			{ accelerator: 'Shift+Cmd+L', command: 'focusElementNoteList' },
+			{ accelerator: 'Shift+Cmd+N', command: 'focusElementNoteTitle' },
+			{ accelerator: 'Shift+Cmd+B', command: 'focusElementNoteBody' },
+			{ accelerator: 'Option+Cmd+S', command: 'toggleSidebar' },
+			{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
+			{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
+			{ accelerator: 'Cmd+E', command: 'startExternalEditing' },
+			{ accelerator: 'Option+Cmd+T', command: 'setTags' },
+			{ accelerator: 'Cmd+G', command: 'gotoAnything' },
+			{ accelerator: 'F1', command: 'help' },
+		] : [
+			{ accelerator: 'Ctrl+N', command: 'newNote' },
+			{ accelerator: 'Ctrl+T', command: 'newTodo' },
+			{ accelerator: 'Ctrl+S', command: 'synchronize' },
+			{ accelerator: 'Ctrl+P', command: 'print' },
+			{ accelerator: 'Ctrl+Q', command: 'quit' },
+			{ accelerator: 'Ctrl+Alt+I', command: 'insertTemplate' },
+			{ accelerator: 'Ctrl+C', command: 'textCopy' },
+			{ accelerator: 'Ctrl+X', command: 'textCut' },
+			{ accelerator: 'Ctrl+V', command: 'textPaste' },
+			{ accelerator: 'Ctrl+A', command: 'textSelectAll' },
+			{ accelerator: 'Ctrl+B', command: 'textBold' },
+			{ accelerator: 'Ctrl+I', command: 'textItalic' },
+			{ accelerator: 'Ctrl+K', command: 'textLink' },
+			{ accelerator: 'Ctrl+`', command: 'textCode' },
+			{ accelerator: 'Ctrl+Shift+T', command: 'insertDateTime' },
+			{ accelerator: 'F6', command: 'focusSearch' },
+			{ accelerator: 'Ctrl+F', command: 'showLocalSearch' },
+			{ accelerator: 'Ctrl+Shift+S', command: 'focusElementSideBar' },
+			{ accelerator: 'Ctrl+Shift+L', command: 'focusElementNoteList' },
+			{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
+			{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
+			{ accelerator: 'F10', command: 'toggleSidebar' },
+			{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
+			{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
+			{ accelerator: 'Ctrl+E', command: 'startExternalEditing' },
+			{ accelerator: 'Ctrl+Alt+T', command: 'setTags' },
+			{ accelerator: 'Ctrl+,', command: 'config' },
+			{ accelerator: 'Ctrl+G', command: 'gotoAnything' },
+			{ accelerator: 'F1', command: 'help' },
+		];
 
 	constructor() {
 		super();
 		this.keymap = KeymapService.initKeymap();
+	}
 
-		const customKeymapPath = `${Setting.value('profileDir')}/keymap-desktop.json`;
-		if (fs.existsSync(customKeymapPath)) {
+	async loadKeymap(keymapPath: string) {
+		if (await fs.exists(keymapPath)) {
+			this.logger().info(`Loading keymap: ${keymapPath}`);
+
 			try {
-				const customKeymap = JSON.parse(fs.readFileSync(customKeymapPath, 'utf-8'));
-				this.setKeymap(customKeymap);
+				const keymapFile = await fs.readFile(keymapPath, 'utf-8');
+				this.setKeymap(JSON.parse(keymapFile));
 			} catch (err) {
 				const msg = err.message ? err.message : '';
-				throw new Error(
-					`KeymapService: Failed to override keymap at ${customKeymapPath}!\n\n${msg}`
-				);
+				throw new Error(`KeymapService: Failed to load the keymap at ${keymapPath}!\n${msg}`);
 			}
 		}
 	}
@@ -136,8 +130,6 @@ class KeymapService extends BaseService {
 	}
 
 	setKeymap(customKeymap: KeymapItem[]) {
-		this.logger().info('KeymapService: Overriding the keymap...');
-
 		for (let i = 0; i < customKeymap.length; i++) {
 			const item = customKeymap[i];
 
