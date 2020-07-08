@@ -105,11 +105,8 @@ class KeymapService extends BaseService {
 	getAccelerator(command: string) {
 		const item = this.keymap[command];
 
-		if (item === undefined) {
-			throw new Error(`KeymapService: Requested "${command}" command is non-existent in the current keymap!`);
-		} else {
-			return item.accelerator;
-		}
+		if (!item) throw new Error(`KeymapService: "${command}" command does not exist!`);
+		else return item.accelerator;
 	}
 
 	setAccelerator(command: string, accelerator: string) {
@@ -119,7 +116,9 @@ class KeymapService extends BaseService {
 
 	resetAccelerator(command: string) {
 		const defaultItem = KeymapService.defaultKeymap.find((item => item.command === command));
-		this.setAccelerator(command, defaultItem.accelerator);
+
+		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
+		else this.setAccelerator(command, defaultItem.accelerator);
 	}
 
 	getKeymap() {
