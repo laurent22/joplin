@@ -16,6 +16,39 @@ process.on('unhandledRejection', (reason, p) => {
 
 let engine = null;
 
+
+const IDF = (N, n) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+
+const frequency = (word, string) => {
+	const re = new RegExp(`\\b(${word})\\b`, 'g');
+	return (string.match(re) || []).length;
+};
+
+const calculateScore = (searchString, notes) => {
+	const K1 = 1.2;
+	const B = 0.75;
+
+	const freqTitle = notes.map(note => frequency(searchString, note.title));
+	const notesWithWord = freqTitle.filter(count => count !== 0).length;
+	const numTokens = notes.map(note => note.title.split(' ').length);
+	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
+
+	let titleBM25 = new Array(notes.length).fill(-1);
+	if (avgTokens != 0) {
+		for (let i = 0; i < notes.length; i++) {
+			titleBM25[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
+		}
+	}
+
+	const scores = [];
+	for (let i = 0; i < notes.length; i++) {
+		if (freqTitle[i]) scores.push(titleBM25[i]);
+	}
+
+	scores.sort().reverse();
+	return scores;
+};
+
 describe('services_SearchEngine', function() {
 
 	beforeEach(async (done) => {
@@ -80,14 +113,13 @@ describe('services_SearchEngine', function() {
 
 
 	it('should order search results by relevance BM25', asyncTest(async () => {
-		// BM25 returns weight zero for search term which occurs in more than half the notes.
-		// So terms that are abundant in all notes to have zero relevance w.r.t BM25.
-
 		// BM25 is based on term frequency - inverse document frequency
 		// The tf–idf value increases proportionally to the number of times a word appears in the document
 		// and is offset by the number of documents in the corpus that contain the word, which helps to adjust
 		// for the fact that some words appear more frequently in general.
 
+		// BM25 returns weight zero for search term which occurs in more than half the notes.
+		// So terms that are abundant in all notes to have zero relevance w.r.t BM25.
 
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 		const n2 = await Note.save({ title: 'abcd efgh abcd abcd' }); // 1
@@ -96,7 +128,7 @@ describe('services_SearchEngine', function() {
 		const n5 = await Note.save({ title: 'xyz xyz xyz xyz' });
 		const n6 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
 		const n7 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
-		const n8 = await Note.save({ title: 'xyz xyzxyz xyzxyz xyzxyz xyz' });
+		const n8 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
 
 		await engine.syncTables();
 		let rows = await engine.search('abcd');
@@ -108,6 +140,64 @@ describe('services_SearchEngine', function() {
 		rows = await engine.search('abcd efgh');
 		expect(rows[0].id).toBe(n1.id); // shorter note; also 'efgh' is more rare than 'abcd'.
 		expect(rows[1].id).toBe(n2.id);
+	}));
+
+	it('should correctly weigh notes using BM25', asyncTest(async () => {
+
+		const noteData = [
+			{
+				title: 'abc test2 test2',
+			},
+			{
+				title: 'foo foo',
+			},
+			{
+				title: 'dead beef',
+			},
+			{
+				title: 'test2 bar',
+			},
+			{
+				title: 'blah blah abc',
+			},
+		];
+
+		const n0 = await Note.save(noteData[0]);
+		const n1 = await Note.save(noteData[1]);
+		const n2 = await Note.save(noteData[2]);
+		const n3 = await Note.save(noteData[3]);
+		const n4 = await Note.save(noteData[4]);
+
+		await engine.syncTables();
+
+		let searchString = 'abc';
+		let scores = calculateScore(searchString, noteData);
+		let rows = await engine.search(searchString);
+
+		expect(rows[0].weight).toEqual(scores[0]);
+		expect(rows[1].weight).toEqual(scores[1]);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		searchString = 'test2';
+		scores = calculateScore(searchString, noteData);
+		rows = await engine.search(searchString);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		expect(rows[0].weight).toEqual(scores[0]);
+		expect(rows[1].weight).toEqual(scores[1]);
+
+		searchString = 'foo';
+		scores = calculateScore(searchString, noteData);
+		rows = await engine.search(searchString);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		expect(rows[0].weight).toEqual(scores[0]);
 	}));
 
 	it('should tell where the results are found', asyncTest(async () => {
