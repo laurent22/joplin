@@ -386,6 +386,40 @@ async function checkThrowAsync(asyncFn) {
 	return hasThrown;
 }
 
+async function expectThrow(asyncFn, errorCode = undefined) {
+	let hasThrown = false;
+	let thrownErrorCode = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		hasThrown = true;
+		thrownErrorCode = error.code;
+	}
+
+	if (!hasThrown) {
+		expect('not throw').toBe('throw', 'Expected function to throw an error but did not');
+	} else if (thrownErrorCode !== errorCode) {
+		expect(`error code: ${thrownErrorCode}`).toBe(`error code: ${errorCode}`);
+	} else {
+		expect(true).toBe(true);
+	}
+}
+
+async function expectNotThrow(asyncFn) {
+	let thrownError = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		thrownError = error;
+	}
+
+	if (thrownError) {
+		expect(thrownError.message).toBe('', 'Expected function not to throw an error but it did');
+	} else {
+		expect(true).toBe(true);
+	}
+}
+
 function checkThrow(fn) {
 	let hasThrown = false;
 	try {
@@ -581,4 +615,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, expectThrow, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

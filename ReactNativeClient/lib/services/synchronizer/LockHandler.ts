@@ -21,10 +21,19 @@ export default class LockHandler {
 
 	private api_:any = null;
 	private lockDirPath_:any = null;
+	private syncLockMaxAge_:number = 1000 * 60 * 3;
 
 	constructor(api:any, lockDirPath:string) {
 		this.api_ = api;
 		this.lockDirPath_ = lockDirPath;
+	}
+
+	public get syncLockMaxAge():number {
+		return this.syncLockMaxAge_;
+	}
+
+	public set syncLockMaxAge(v:number) {
+		this.syncLockMaxAge_ = v;
 	}
 
 	private lockFilename(lock:Lock) {
@@ -98,7 +107,7 @@ export default class LockHandler {
 		const exclusiveLock = await this.exclusiveLock();
 
 		if (exclusiveLock) {
-			throw new JoplinError(`Cannot acquire sync lock because "${exclusiveLock.clientType}" client (ID ${exclusiveLock.clientId}) has an exclusive lock on the sync target.`, 'hasExclusiveLock');
+			throw new JoplinError(`Cannot acquire sync lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(exclusiveLock)}`, 'hasExclusiveLock');
 		}
 
 		await this.saveLock({
@@ -106,6 +115,10 @@ export default class LockHandler {
 			clientType: clientType,
 			clientId: clientId,
 		});
+	}
+
+	private lockToClientString(lock:Lock):string {
+		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
 	private async acquireExclusiveLock(clientType:string, clientId:string, timeoutMs:number = 0) {
@@ -121,27 +134,38 @@ export default class LockHandler {
 
 		const startTime = Date.now();
 
+		async function waitForTimeout() {
+			if (!timeoutMs) return false;
+
+			const elapsed = Date.now() - startTime;
+			if (timeoutMs && elapsed < timeoutMs) {
+				await time.sleep(2);
+				return true;
+			}
+			return false;
+		}
+
 		while (true) {
-			// const syncLocks = await this.syncLocks();
+			const syncLocks = await this.syncLocks();
+			const recentSyncLocks = syncLocks.filter(l => (Date.now() - l.updatedTime) < this.syncLockMaxAge);
+
+			if (recentSyncLocks.length) {
+				if (await waitForTimeout()) continue;
+				const lockString = recentSyncLocks.map(l => this.lockToClientString(l)).join(', ');
+				throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${lockString}`, 'hasSyncLock');
+			}
 
 			const exclusiveLock = await this.exclusiveLock();
-			const isOwnExclusiveLock = exclusiveLock.clientId === clientId;
-
-			// TODO: check for existince of sync locks
 
 			if (exclusiveLock) {
-				if (isOwnExclusiveLock) {
+				if (exclusiveLock.clientId === clientId) {
 					// Save it again to refresh the timestamp
 					await this.saveLock(exclusiveLock);
 					return;
 				} else {
 					// If there's already an exclusive lock, wait for it to be released
-					const elapsed = Date.now() - startTime;
-					if (timeoutMs && elapsed < timeoutMs) {
-						await time.sleep(2);
-						continue;
-					}
-					throw new JoplinError(`Cannot acquire exclusive lock because "${exclusiveLock.clientType}" client (ID ${exclusiveLock.clientId}) has an exclusive lock on the sync target.`, 'hasExclusiveLock');
+					if (await waitForTimeout()) continue;
+					throw new JoplinError(`Cannot acquire exclusive lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(exclusiveLock)}`, 'hasExclusiveLock');
 				}
 			} else {
 				// If there's not already an exclusive lock, acquire one
