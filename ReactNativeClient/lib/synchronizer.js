@@ -12,7 +12,7 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
-const { filename, fileExtension } = require('lib/path-utils');
+// const { filename, fileExtension } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
@@ -23,7 +23,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
-		this.lockDirName_ = '.lock';
+		this.lockDirName_ = 'locks';
 		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
@@ -205,52 +205,52 @@ class Synchronizer {
 		return state;
 	}
 
-	async acquireLock_() {
-		await this.checkLock_();
-		await this.api().put(`${this.lockDirName_}/${this.clientId()}_${Date.now()}.lock`, `${Date.now()}`);
-	}
+	// async acquireLock_() {
+	// 	await this.checkLock_();
+	// 	await this.api().put(`${this.lockDirName_}/${this.clientId()}_${Date.now()}.lock`, `${Date.now()}`);
+	// }
 
-	async releaseLock_() {
-		const lockFiles = await this.lockFiles_();
-		for (const lockFile of lockFiles) {
-			const p = this.parseLockFilePath(lockFile.path);
-			if (p.clientId === this.clientId()) {
-				await this.api().delete(p.fullPath);
-			}
-		}
-	}
+	// async releaseLock_() {
+	// 	const lockFiles = await this.lockFiles_();
+	// 	for (const lockFile of lockFiles) {
+	// 		const p = this.parseLockFilePath(lockFile.path);
+	// 		if (p.clientId === this.clientId()) {
+	// 			await this.api().delete(p.fullPath);
+	// 		}
+	// 	}
+	// }
 
-	async lockFiles_() {
-		const output = await this.api().list(this.lockDirName_);
-		return output.items.filter((p) => {
-			const ext = fileExtension(p.path);
-			return ext === 'lock';
-		});
-	}
+	// async lockFiles_() {
+	// 	const output = await this.api().list(this.lockDirName_);
+	// 	return output.items.filter((p) => {
+	// 		const ext = fileExtension(p.path);
+	// 		return ext === 'lock';
+	// 	});
+	// }
 
-	parseLockFilePath(path) {
-		const splitted = filename(path).split('_');
-		const fullPath = `${this.lockDirName_}/${path}`;
-		if (splitted.length !== 2) throw new Error(`Sync target appears to be locked but lock filename is invalid: ${fullPath}. Please delete it on the sync target to continue.`);
-		return {
-			clientId: splitted[0],
-			timestamp: Number(splitted[1]),
-			fullPath: fullPath,
-		};
-	}
+	// parseLockFilePath(path) {
+	// 	const splitted = filename(path).split('_');
+	// 	const fullPath = `${this.lockDirName_}/${path}`;
+	// 	if (splitted.length !== 2) throw new Error(`Sync target appears to be locked but lock filename is invalid: ${fullPath}. Please delete it on the sync target to continue.`);
+	// 	return {
+	// 		clientId: splitted[0],
+	// 		timestamp: Number(splitted[1]),
+	// 		fullPath: fullPath,
+	// 	};
+	// }
 
-	async checkLock_() {
-		const lockFiles = await this.lockFiles_();
-		if (lockFiles.length) {
-			const lock = this.parseLockFilePath(lockFiles[0].path);
+	// async checkLock_() {
+	// 	const lockFiles = await this.lockFiles_();
+	// 	if (lockFiles.length) {
+	// 		const lock = this.parseLockFilePath(lockFiles[0].path);
 
-			if (lock.clientId === this.clientId()) {
-				await this.releaseLock_();
-			} else {
-				throw new Error(`The sync target was locked by client ${lock.clientId} on ${time.unixMsToLocalDateTime(lock.timestamp)} and cannot be accessed. If no app is currently operating on the sync target, you can delete the files in the "${this.lockDirName_}" directory on the sync target to resume.`);
-			}
-		}
-	}
+	// 		if (lock.clientId === this.clientId()) {
+	// 			await this.releaseLock_();
+	// 		} else {
+	// 			throw new Error(`The sync target was locked by client ${lock.clientId} on ${time.unixMsToLocalDateTime(lock.timestamp)} and cannot be accessed. If no app is currently operating on the sync target, you can delete the files in the "${this.lockDirName_}" directory on the sync target to resume.`);
+	// 		}
+	// 	}
+	// }
 
 	async checkSyncTargetVersion_() {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
@@ -330,7 +330,7 @@ class Synchronizer {
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
 
-			await this.checkLock_();
+			// await this.checkLock_();
 			await this.checkSyncTargetVersion_();
 
 			// ========================================================================

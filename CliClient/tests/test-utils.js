@@ -132,6 +132,14 @@ function sleep(n) {
 	});
 }
 
+function msleep(ms) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+}
+
 function currentClientId() {
 	return currentClient_;
 }
@@ -573,4 +581,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
