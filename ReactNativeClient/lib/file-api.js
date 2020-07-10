@@ -128,6 +128,7 @@ class FileApi {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
+		if (!('includeDirs' in options)) options.includeDirs = true;
 
 		this.logger().debug(`list ${this.baseDir()}`);
 
@@ -139,6 +140,10 @@ class FileApi {
 				if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
 			}
 			result.items = temp;
+		}
+
+		if (!options.includeHidden) {
+			result.items = result.items.filter(f => !f.isDir);
 		}
 
 		return result;

@@ -33,7 +33,7 @@ async function allNotesFolders() {
 }
 
 async function remoteItemsByTypes(types) {
-	const list = await fileApi().list();
+	const list = await fileApi().list('', { includeDirs: false });
 	if (list.has_more) throw new Error('Not implemented!!!');
 	const files = list.items;
 
@@ -822,7 +822,7 @@ describe('synchronizer', function() {
 		// First create a folder, without encryption enabled, and sync it
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
-		let files = await fileApi().list();
+		let files = await fileApi().list('', { includeDirs: false });
 		let content = await fileApi().get(files.items[0].path);
 		expect(content.indexOf('folder1') >= 0).toBe(true);
 
@@ -1662,22 +1662,22 @@ describe('synchronizer', function() {
 		expect(hasThrown).toBe(true);
 	}));
 
-	it('should not sync when target is locked', asyncTest(async () => {
-		await synchronizer().start();
-		await synchronizer().acquireLock_();
+	// it('should not sync when target is locked', asyncTest(async () => {
+	// 	await synchronizer().start();
+	// 	await synchronizer().acquireLock_();
 
-		await switchClient(2);
-		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
-		expect(hasThrown).toBe(true);
-	}));
+	// 	await switchClient(2);
+	// 	const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
+	// 	expect(hasThrown).toBe(true);
+	// }));
 
-	it('should clear a lock if it was created by the same app as the current one', asyncTest(async () => {
-		await synchronizer().start();
-		await synchronizer().acquireLock_();
-		expect((await synchronizer().lockFiles_()).length).toBe(1);
-		await synchronizer().start({ throwOnError: true });
-		expect((await synchronizer().lockFiles_()).length).toBe(0);
-	}));
+	// it('should clear a lock if it was created by the same app as the current one', asyncTest(async () => {
+	// 	await synchronizer().start();
+	// 	await synchronizer().acquireLock_();
+	// 	expect((await synchronizer().lockFiles_()).length).toBe(1);
+	// 	await synchronizer().start({ throwOnError: true });
+	// 	expect((await synchronizer().lockFiles_()).length).toBe(0);
+	// }));
 
 	it('should not encrypt notes that are shared', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);

@@ -457,7 +457,7 @@ function asyncTest(callback) {
 }
 
 async function allSyncTargetItemsEncrypted() {
-	const list = await fileApi().list();
+	const list = await fileApi().list('', { includeDirs: false });
 	const files = list.items;
 
 	let totalCount = 0;

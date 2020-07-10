@@ -16,6 +16,7 @@ const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
+const LockHandler = require('lib/services/synchronizer/LockHandler').default;
 
 class Synchronizer {
 	constructor(db, api, appType) {
@@ -64,6 +65,12 @@ class Synchronizer {
 
 	logger() {
 		return this.logger_;
+	}
+
+	lockHandler() {
+		if (this.lockHandler_) return this.lockHandler_;
+		this.lockHandler_ = new LockHandler(this.api(), this.lockDirName_);
+		return this.lockHandler_;
 	}
 
 	maxResourceSize() {
@@ -329,6 +336,8 @@ class Synchronizer {
 			await this.api().mkdir(this.lockDirName_);
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
+
+			await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
 
 			// await this.checkLock_();
 			await this.checkSyncTargetVersion_();
@@ -856,6 +865,8 @@ class Synchronizer {
 				}
 			}
 		}
+
+		await this.lockHandler().releaseLock('sync', this.appType_, this.clientId_);
 
 		if (this.cancelling()) {
 			this.logger().info('Synchronisation was cancelled.');
