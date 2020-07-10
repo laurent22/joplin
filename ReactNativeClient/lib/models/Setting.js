@@ -1252,6 +1252,7 @@ class Setting extends BaseModel {
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
 		if (name === 'server') return _('Web Clipper');
+		if (name === 'keymap') return _('Keyboard Shortcuts');
 		return name;
 	}
 
@@ -1271,6 +1272,7 @@ class Setting extends BaseModel {
 		if (name === 'revisionService') return 'fas fa-history';
 		if (name === 'encryption') return 'fas fa-key';
 		if (name === 'server') return 'far fa-hand-scissors';
+		if (name === 'keymap') return 'fa fa-keyboard';
 		return name;
 	}
 
