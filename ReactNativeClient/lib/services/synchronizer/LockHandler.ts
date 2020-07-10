@@ -99,6 +99,23 @@ export default class LockHandler {
 		return lock;
 	}
 
+	private lockIsActive(lock:Lock):boolean {
+		return Date.now() - lock.updatedTime < this.syncLockMaxAge;
+	}
+
+	async hasActiveExclusiveLock():Promise<boolean> {
+		const lock = await this.exclusiveLock();
+		return !!lock && this.lockIsActive(lock);
+	}
+
+	async hasActiveSyncLock(clientType:string, clientId:string) {
+		const locks = await this.syncLocks();
+		for (const lock of locks) {
+			if (lock.clientType === clientType && lock.clientId === clientId && this.lockIsActive(lock)) return true;
+		}
+		return false;
+	}
+
 	private async saveLock(lock:Lock) {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
 	}
@@ -147,11 +164,13 @@ export default class LockHandler {
 
 		while (true) {
 			const syncLocks = await this.syncLocks();
-			const recentSyncLocks = syncLocks.filter(l => (Date.now() - l.updatedTime) < this.syncLockMaxAge);
+			const activeSyncLocks = syncLocks.filter(lock => this.lockIsActive(lock));
 
-			if (recentSyncLocks.length) {
+			// TODO: delete old sync locks
+
+			if (activeSyncLocks.length) {
 				if (await waitForTimeout()) continue;
-				const lockString = recentSyncLocks.map(l => this.lockToClientString(l)).join(', ');
+				const lockString = activeSyncLocks.map(l => this.lockToClientString(l)).join(', ');
 				throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${lockString}`, 'hasSyncLock');
 			}
 
