@@ -6,7 +6,7 @@ class KeymapService extends BaseService {
 	private keymap: { [command: string]: KeymapItem };
 	static readonly keyCodes = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
 	static readonly modifiers = shim.isMac()
-		? /^(Cmd|Option|Shift)$/
+		? /^(Ctrl|Option|Shift|Cmd)$/
 		: /^(Ctrl|Alt|AltGr|Shift|Super)$/;
 	static readonly defaultKeymap = shim.isMac()
 		? [
