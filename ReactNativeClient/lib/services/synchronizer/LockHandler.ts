@@ -32,6 +32,8 @@ export default class LockHandler {
 		return this.syncLockMaxAge_;
 	}
 
+	// Should only be done for testing purposes since all clients should
+	// use the same lock max age.
 	public set syncLockMaxAge(v:number) {
 		this.syncLockMaxAge_ = v;
 	}
@@ -165,8 +167,6 @@ export default class LockHandler {
 		while (true) {
 			const syncLocks = await this.syncLocks();
 			const activeSyncLocks = syncLocks.filter(lock => this.lockIsActive(lock));
-
-			// TODO: delete old sync locks
 
 			if (activeSyncLocks.length) {
 				if (await waitForTimeout()) continue;
