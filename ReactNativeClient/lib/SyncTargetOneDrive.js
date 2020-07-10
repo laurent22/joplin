@@ -88,8 +88,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initSynchronizer() {
-		if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
-		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+		try {
+			if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
+			return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+		} catch (error) {
+			BaseSyncTarget.dispatch({ type: 'SYNC_REPORT_UPDATE', report: { errors: [error] } });
+			throw error;
+		}
+
+
 	}
 }
 
