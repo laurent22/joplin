@@ -3,13 +3,11 @@ const BaseService = require('lib/services/BaseService');
 const { shim } = require('lib/shim.js');
 
 class KeymapService extends BaseService {
-	static readonly modifiers = /^(Command|Control|Ctrl|Cmd|Alt|Option|Shift|Shift|Super|CommandOrControl|CmdOrCtrl)$/;
-	static readonly keyCodes = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
-	static readonly modifierWeights: { [modifier: string]: number } = shim.isMac()
-		? { 'Ctrl': 0, 'Option': 1, 'Shift': 2, 'Cmd': 3, 'Super': 4 }
-		: { 'Ctrl': 0, 'Alt': 1, 'AltGr': 2, 'Shift': 3, 'Super': 4 };
-
 	private keymap: { [command: string]: KeymapItem };
+	static readonly keyCodes = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
+	static readonly modifiers = shim.isMac()
+		? /^(Cmd|Option|Shift)$/
+		: /^(Ctrl|Alt|AltGr|Shift|Super)$/;
 	static readonly defaultKeymap = shim.isMac()
 		? [
 			// Keymap items with null "accelerator" property allows users to set their own Accelerators
@@ -83,6 +81,8 @@ class KeymapService extends BaseService {
 	}
 
 	async loadKeymap(keymapPath: string) {
+		this.keymapPath = keymapPath;
+
 		if (await fs.exists(keymapPath)) {
 			this.logger().info(`Loading keymap: ${keymapPath}`);
 
@@ -91,7 +91,7 @@ class KeymapService extends BaseService {
 				this.setKeymap(JSON.parse(keymapFile));
 			} catch (err) {
 				const msg = err.message ? err.message : '';
-				throw new Error(`KeymapService: Failed to load the keymap at ${keymapPath}!\n${msg}`);
+				throw new Error(`Failed to load keymap: ${keymapPath}\n${msg}`);
 			}
 		}
 	}
@@ -104,8 +104,7 @@ class KeymapService extends BaseService {
 	}
 
 	setAccelerator(command: string, accelerator: string) {
-		// Run through localizeAccelerator() to detect duplicates with high accuracy
-		this.keymap[command].accelerator = KeymapService.localizeAccelerator(accelerator);
+		this.keymap[command].accelerator = accelerator;
 	}
 
 	resetAccelerator(command: string) {
@@ -137,9 +136,7 @@ class KeymapService extends BaseService {
 				this.validateKeymapItem(item); // Throws if there are any issues in the keymap item
 				this.setAccelerator(item.command, item.accelerator);
 			} catch (err) {
-				throw new Error(
-					`Keymap item ${JSON.stringify(item)} is invalid!\nReason: ${err.message}`
-				);
+				throw new Error(`Keymap item ${JSON.stringify(item)} is invalid: ${err.message}`);
 			}
 		}
 
@@ -147,9 +144,7 @@ class KeymapService extends BaseService {
 			this.validateKeymap(); // Throws whenever there are duplicate Accelerators used in the keymap
 		} catch (err) {
 			this.resetKeymap();
-			throw new Error(
-				`Keymap configuration contains duplicates!\n${err.message}`
-			);
+			throw new Error(`Keymap configuration contains duplicates\n${err.message}`);
 		}
 	}
 
@@ -158,31 +153,18 @@ class KeymapService extends BaseService {
 	}
 
 	private validateKeymapItem(item: KeymapItem) {
-		const commandReference = 'https://github.com/laurent22/joplin/blob/master/README.md';
-		const acceleratorReference = 'https://www.electronjs.org/docs/api/accelerator';
+		const referMessage = 'Visit https://github.com/laurent22/joplin/blob/master/README.md to learn more';
 
 		if (!item.hasOwnProperty('command')) {
-			throw new Error(
-				'Couldn\'t find the "command" property.\n\n' +
-				`Visit ${commandReference} to see the list of available commands.`
-			);
+			throw new Error(`"command" property is missing\n${referMessage}`);
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(
-				`"${item.command}" is not a valid command.\n\n` +
-				`Visit ${commandReference} to see the list of available commands.`
-			);
+			throw new Error(`"${item.command}" is not a valid command\n${referMessage}`);
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error(
-				'Couldn\'t find the "accelerator" property.\n\n' +
-				`Visit ${acceleratorReference} to learn more about Electron Accelerators.`
-			);
+			throw new Error(`"accelerator" property is missing\n${referMessage}`);
 		} else if (!(item.accelerator === null || KeymapService.isAccelerator(item.accelerator))) {
-			throw new Error(
-				`"${item.accelerator}" is not a valid Accelerator.\n\n` +
-				`Visit ${acceleratorReference} to learn more about Electron Accelerators.`
-			);
+			throw new Error(`"${item.accelerator}" is not a valid accelerator\n${referMessage}`);
 		}
 	}
 
@@ -194,11 +176,9 @@ class KeymapService extends BaseService {
 
 			if (usedAccelerators.has(itemAccelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
-
 				throw new Error(
-					`Accelerator "${itemAccelerator}" can't be used for "${item.command}" command ` +
-					`because it's already used for "${originalItem.command}" command!\n\n` +
-					'You have to change the Accelerator for any of above commands.'
+					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands\n` +
+					'You have to change the accelerator for any of above commands'
 				);
 			} else if (itemAccelerator !== null) {
 				usedAccelerators.add(itemAccelerator);
@@ -235,28 +215,6 @@ class KeymapService extends BaseService {
 			if (index === (parts.length - 1) && !keyFound) return false;
 			return isKey || isModifier;
 		});
-	}
-
-	static localizeAccelerator(accelerator: string) {
-		return accelerator === null
-			? null
-			: accelerator
-				// Allow usage of all modifiers for the sake of compatibility
-				// But only use one type of modifiers to improve duplicate detection
-				.replace(/(CommandOrControl|CmdOrCtrl)/i, shim.isMac() ? 'Cmd' : 'Ctrl')
-				.replace(/(Command)/i, 'Cmd')
-				.replace(/(Control)/i, 'Ctrl')
-				.replace(/(Alt|Option)/i, shim.isMac() ? 'Option' : 'Alt')
-				// Reorder components so that "Option+Shift+Cmd+X" and "Shift+Option+Cmd+X" will be the same
-				.split('+')
-				.sort((a, b) => KeymapService.getWeight(a) - KeymapService.getWeight(b))
-				.join('+');
-	}
-
-	static getWeight(modifier: string) {
-		return KeymapService.modifierWeights.hasOwnProperty(modifier)
-			? KeymapService.modifierWeights[modifier]
-			: /* Maximum weight */ 5;
 	}
 
 	static instance() {
