@@ -62,6 +62,7 @@ Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/tests/synchronizer_LockHandler.js
+CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js

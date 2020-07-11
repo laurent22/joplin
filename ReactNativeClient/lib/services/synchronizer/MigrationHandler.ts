@@ -8,6 +8,7 @@ const migrations = [
 
 const Setting = require('lib/models/Setting');
 const { sprintf } = require('sprintf-js');
+const JoplinError = require('lib/JoplinError');
 
 interface SyncTargetInfo {
 	version: number,
@@ -27,7 +28,7 @@ export default class MigrationHandler {
 		this.clientId_ = clientId;
 	}
 
-	private async fetchSyncTargetInfo() {
+	public async fetchSyncTargetInfo() {
 		const syncTargetInfoText = await this.api_.get('info.json');
 
 		const output:SyncTargetInfo = syncTargetInfoText ? JSON.parse(syncTargetInfoText) : {
@@ -48,18 +49,18 @@ export default class MigrationHandler {
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 
 		if (syncTargetInfo.version > supportedSyncTargetVersion) {
-			throw new Error(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion));
+			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		} else if (syncTargetInfo.version < supportedSyncTargetVersion) {
-			throw new Error(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', syncTargetInfo.version, supportedSyncTargetVersion));
+			throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
 		}
 	}
 
-	async exec() {
+	async upgrade(targetVersion:number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 
 		if (syncTargetInfo.version > supportedSyncTargetVersion) {
-			throw new Error(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion));
+			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
 		// TODO: refresh lock every x min
@@ -67,12 +68,14 @@ export default class MigrationHandler {
 
 		try {
 			for (let newVersion = syncTargetInfo.version + 1; newVersion < migrations.length; newVersion++) {
+				if (targetVersion && newVersion > targetVersion) break;
+
 				const migration = migrations[newVersion];
 				if (!migration) continue;
 
-				await migration.exec(this.api_);
+				await migration(this.api_);
 
-				await this.api_.put('put', 'info.json', this.serializeSyncTargetInfo({
+				await this.api_.put('info.json', this.serializeSyncTargetInfo({
 					...syncTargetInfo,
 					version: newVersion,
 				}));

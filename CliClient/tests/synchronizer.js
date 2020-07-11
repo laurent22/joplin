@@ -1645,37 +1645,6 @@ describe('synchronizer', function() {
 		expect((await Note.all()).length).toBe(11);
 	}));
 
-	it('should not sync if client sync version is higher than target', asyncTest(async () => {
-		// This should work - syncing two clients with same supported sync target version
-		await synchronizer().start();
-		await switchClient(2);
-		await synchronizer().start();
-
-		await switchClient(1);
-
-		Setting.setConstant('syncVersion', 2);
-		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
-		expect(hasThrown).toBe(true);
-		Setting.setConstant('syncVersion', 1);
-	}));
-
-	// it('should not sync when target is locked', asyncTest(async () => {
-	// 	await synchronizer().start();
-	// 	await synchronizer().acquireLock_();
-
-	// 	await switchClient(2);
-	// 	const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
-	// 	expect(hasThrown).toBe(true);
-	// }));
-
-	// it('should clear a lock if it was created by the same app as the current one', asyncTest(async () => {
-	// 	await synchronizer().start();
-	// 	await synchronizer().acquireLock_();
-	// 	expect((await synchronizer().lockFiles_()).length).toBe(1);
-	// 	await synchronizer().start({ throwOnError: true });
-	// 	expect((await synchronizer().lockFiles_()).length).toBe(0);
-	// }));
-
 	it('should not encrypt notes that are shared', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
