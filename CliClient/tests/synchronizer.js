@@ -1645,21 +1645,18 @@ describe('synchronizer', function() {
 		expect((await Note.all()).length).toBe(11);
 	}));
 
-	it('should not sync if client sync version is lower than target', asyncTest(async () => {
+	it('should not sync if client sync version is higher than target', asyncTest(async () => {
 		// This should work - syncing two clients with same supported sync target version
 		await synchronizer().start();
 		await switchClient(2);
 		await synchronizer().start();
 
-		// This should not work - syncing two clients, but one of them has not been upgraded yet to the latest sync version
 		await switchClient(1);
-		Setting.setConstant('syncVersion', 2);
-		await synchronizer().start();
 
-		await switchClient(2);
-		Setting.setConstant('syncVersion', 1);
+		Setting.setConstant('syncVersion', 2);
 		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
 		expect(hasThrown).toBe(true);
+		Setting.setConstant('syncVersion', 1);
 	}));
 
 	// it('should not sync when target is locked', asyncTest(async () => {
