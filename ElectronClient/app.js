@@ -1186,6 +1186,11 @@ class Application extends BaseApplication {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
+		this.store().dispatch({
+			type: 'TAG_SET_COLLAPSED_ALL',
+			ids: Setting.value('collapsedTagIds'),
+		});
+
 		// Loads custom Markdown preview styles
 		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({

@@ -1,6 +1,7 @@
 const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
@@ -776,7 +777,15 @@ class Synchronizer {
 							}
 
 							const ItemClass = BaseItem.itemClass(local.type_);
-							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
+							if (ItemClass === Tag) {
+								await Tag.delete(local.id, {
+									trackDeleted: false,
+									changeSource: ItemChange.SOURCE_SYNC,
+									deleteChildren: false,
+									deleteNotelessParents: false });
+							} else {
+								await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
+							}
 						}
 					}
 

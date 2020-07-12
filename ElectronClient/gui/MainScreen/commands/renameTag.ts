@@ -16,12 +16,11 @@ export const runtime = (comp:any):CommandRuntime => {
 				comp.setState({
 					promptOptions: {
 						label: _('Rename tag:'),
-						value: tag.title,
+						value: Tag.getCachedFullTitle(tag.id),
 						onClose: async (answer:string) => {
 							if (answer !== null) {
 								try {
-									tag.title = answer;
-									await Tag.save(tag, { fields: ['title'], userSideValidation: true });
+									await Tag.renameNested(tag, answer);
 								} catch (error) {
 									bridge().showErrorMessageBox(error.message);
 								}
