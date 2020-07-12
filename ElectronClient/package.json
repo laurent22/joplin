@@ -79,7 +79,6 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@types/jasmine": "^3.5.11",
     "ajv": "^6.5.0",
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",

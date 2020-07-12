@@ -37,8 +37,6 @@ tasks.buildTests = {
 				'lib/',
 				'locales/',
 				'node_modules/',
-				'*.ts',
-				'*.tsx',
 			],
 		});
 

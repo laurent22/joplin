@@ -51,7 +51,6 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-CliClient/tests/synchronizer_LockHandler.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
@@ -145,7 +144,6 @@ ReactNativeClient/lib/services/ResourceEditWatcher.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/SettingUtils.js
-ReactNativeClient/lib/services/synchronizer/LockHandler.js
 ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js

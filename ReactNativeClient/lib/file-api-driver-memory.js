@@ -111,7 +111,7 @@ class FileApiDriverMemory {
 			this.items_.push(item);
 		} else {
 			this.items_[index].content = this.encodeContent_(content);
-			this.items_[index].updated_time = time.unixMs();
+			this.items_[index].updated_time = time.unix();
 		}
 	}
 

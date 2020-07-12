@@ -20,7 +20,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
@@ -34,7 +33,6 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
-    "jasmine": "^3.5.0",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"
   },

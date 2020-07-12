@@ -89,7 +89,7 @@ class FileApiDriverWebDav {
 
 	async delta(path, options) {
 		const getDirStats = async path => {
-			const result = await this.list(path, { includeDirs: false });
+			const result = await this.list(path);
 			return result.items;
 		};
 
