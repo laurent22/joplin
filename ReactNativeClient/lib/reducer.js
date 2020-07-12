@@ -295,6 +295,21 @@ function updateOneItem(state, action, keyName = '') {
 	return newState;
 }
 
+function updateSelectedNotesFromExistingNotes(state) {
+	const newSelectedNoteIds = [];
+	for (const selectedNoteId of state.selectedNoteIds) {
+		for (const n of state.notes) {
+			if (n.id === selectedNoteId) {
+				newSelectedNoteIds.push(n.id);
+			}
+		}
+	}
+
+	return Object.assign({}, state, {
+		selectedNoteIds: newSelectedNoteIds,
+	});
+}
+
 function defaultNotesParentType(state, exclusion) {
 	let newNotesParentType = null;
 
@@ -637,12 +652,12 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
-
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			newState.notesSource = action.notesSource;
+			newState = updateSelectedNotesFromExistingNotes(newState);
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -706,7 +721,6 @@ const reducer = (state = defaultState, action) => {
 					if (!newNotes.length) newIndex = -1;
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
-
 
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
