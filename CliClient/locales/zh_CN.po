@@ -6,15 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
-"Language-Team: \n"
+"Last-Translator: yaozeye <yaozeye@outlook.com>\n"
+"Language-Team: zh_CN <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: CliClient/app/command-cp.js:13
@@ -102,9 +100,9 @@ msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
 
 #: CliClient/app/command-import.js:27
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Output format: %s"
-msgstr "导出数据格式: %s"
+msgstr "导出格式: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -353,6 +351,7 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "同步目标: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
+#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "无法初始化同步。"
 
@@ -419,7 +418,7 @@ msgstr "无活动笔记本。"
 #: CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "笔记不存在:  \"%s\" 。是否创建？"
+msgstr "笔记不存在: \"%s\" 。是否创建？"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -566,7 +565,7 @@ msgstr "%s: %s"
 
 #: CliClient/app/cli-utils.js:143
 msgid "Your choice: "
-msgstr "您的选择:  "
+msgstr "您的选择: "
 
 #: CliClient/app/cli-utils.js:150
 #, javascript-format
@@ -719,7 +718,7 @@ msgstr ""
 #: CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "无效命令:  \"%s\""
+msgstr "无效命令: \"%s\" "
 
 #: CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -728,7 +727,7 @@ msgstr "标记待办事项为完成。"
 #: CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "笔记非待办事项:  \"%s\""
+msgstr "笔记非待办事项: \"%s\" "
 
 #: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
 #: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
@@ -871,6 +870,7 @@ msgstr "加粗文本"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:154
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+#, fuzzy
 msgid "emphasised text"
 msgstr "强调文本"
 
@@ -916,7 +916,7 @@ msgstr "粘贴"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
-msgstr "切换布局"
+msgstr "布局"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:300
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
@@ -963,13 +963,13 @@ msgstr "附加文件"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:80
 #: ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
-msgstr "有序列表"
+msgstr "编号列表"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:90
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:90
 #: ElectronClient/gui/NoteText.min.js:1746
 msgid "Bulleted List"
-msgstr "无序列表"
+msgstr "项目符号列表"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js:100
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js:100
@@ -1381,7 +1381,7 @@ msgstr "自定义顺序"
 
 #: ElectronClient/gui/NoteList.min.js:147
 msgid "View"
-msgstr "视图"
+msgstr "视图 (&V)"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ReactNativeClient/lib/models/Setting.js:329
@@ -1557,7 +1557,7 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"为此，必须对整个数据集进行加密和同步，因此最好将其整夜运行。\n"
+"为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分彻夜运行。\n"
 "\n"
 "首先，请按照以下说明进行操作: \n"
 "\n"
@@ -1566,7 +1566,7 @@ msgstr ""
 "3.让它运行完成。 在运行时，请避免在其他设备上更改任何笔记，以免发生冲突。\n"
 "4.在此设备上完成同步后，同步其他所有设备，并使其同步完成。\n"
 "\n"
-"重要提示: 您只需要在一台设备上运行此ONCE一次。"
+"重要: 在一台设备上只需要运行一次。"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1851,7 +1851,7 @@ msgstr "从模版创建笔记"
 
 #: ElectronClient/app.js:602
 msgid "Create to-do from template"
-msgstr "从模版创建待办事项"
+msgstr "从模版创建 to-do 待办事项"
 
 #: ElectronClient/app.js:612
 msgid "Insert template"
@@ -1872,7 +1872,7 @@ msgstr "查看笔记附件..."
 #: ElectronClient/app.js:677
 #, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "修订:  %s (%s)"
+msgstr "修订: %s (%s)"
 
 #: ElectronClient/app.js:684
 #, javascript-format
@@ -2150,19 +2150,19 @@ msgstr "暗黑"
 
 #: ReactNativeClient/lib/models/Setting.js:53
 msgid "Dracula"
-msgstr "德古拉紫"
+msgstr "德古拉紫 (Dracula)"
 
 #: ReactNativeClient/lib/models/Setting.js:54
 msgid "Solarised Light"
-msgstr "日光白"
+msgstr "日光亮 (Solarised)"
 
 #: ReactNativeClient/lib/models/Setting.js:55
 msgid "Solarised Dark"
-msgstr "黄昏黑"
+msgstr "日光暗 (Solarised)"
 
 #: ReactNativeClient/lib/models/Setting.js:56
 msgid "Nord"
-msgstr "北欧蓝"
+msgstr "北欧 (Nord)"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
@@ -2630,7 +2630,7 @@ msgstr "笔记区域增长因数"
 #: ReactNativeClient/lib/models/Setting.js:877
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "无效的选项值:  \"%s\" 。可用值有: %s。"
+msgstr "无效的选项值: \"%s\" 。可用值有: %s。"
 
 #: ReactNativeClient/lib/models/Setting.js:1205
 msgid "General"
@@ -2700,7 +2700,7 @@ msgstr "已下载"
 #: ReactNativeClient/lib/models/Resource.js:371
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "附件冲突:  %s"
+msgstr "附件冲突: %s"
 
 #: ReactNativeClient/lib/models/Resource.js:372
 #, javascript-format
@@ -3558,7 +3558,7 @@ msgstr "该项目当前已加密: %s \"%s\" 。请等待所有项目解密后再
 #~ "marked as \"active\"). Any of the keys might be used for decryption, "
 #~ "depending on how the notes or notebooks were originally encrypted."
 #~ msgstr ""
-#~ "注意：仅有一个主密码会用于加密（被标记为“正在使用”的主密码）。但列出的所有"
+#~ "注意：仅有一个主密码会用于加密（被标记为 \"正在使用\" 的主密码）。但列出的所有"
 #~ "密码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
 
 #, fuzzy
@@ -3636,7 +3636,7 @@ msgstr "该项目当前已加密: %s \"%s\" 。请等待所有项目解密后再
 #~ msgstr "欢迎"
 
 #~ msgid "Separate each tag by a comma."
-#~ msgstr "用半角逗号“,”分开每个标签。"
+#~ msgstr "用半角逗号 \",\" 分开每个标签。"
 
 #~ msgid "Table of contents"
 #~ msgstr "目录"
