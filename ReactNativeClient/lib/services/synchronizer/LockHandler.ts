@@ -1,3 +1,4 @@
+import { Dirnames } from './utils/types';
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
 const { fileExtension, filename } = require('lib/path-utils.js');
@@ -20,12 +21,10 @@ const exclusiveFilename = 'exclusive.json';
 export default class LockHandler {
 
 	private api_:any = null;
-	private lockDirPath_:any = null;
 	private syncLockMaxAge_:number = 1000 * 60 * 3;
 
-	constructor(api:any, lockDirPath:string) {
+	constructor(api:any) {
 		this.api_ = api;
-		this.lockDirPath_ = lockDirPath;
 	}
 
 	public get syncLockMaxAge():number {
@@ -52,11 +51,11 @@ export default class LockHandler {
 	}
 
 	private lockFilePath(lock:Lock) {
-		return `${this.lockDirPath_}/${this.lockFilename(lock)}`;
+		return `${Dirnames.Locks}/${this.lockFilename(lock)}`;
 	}
 
 	private exclusiveFilePath():string {
-		return `${this.lockDirPath_}/${exclusiveFilename}`;
+		return `${Dirnames.Locks}/${exclusiveFilename}`;
 	}
 
 	private syncLockFileToObject(file:any):Lock {
@@ -71,7 +70,7 @@ export default class LockHandler {
 	}
 
 	async syncLocks():Promise<Lock[]> {
-		const result = await this.api_.list(this.lockDirPath_);
+		const result = await this.api_.list(Dirnames.Locks);
 		if (result.hasMore) throw new Error('hasMore not handled'); // Shouldn't happen anyway
 
 		const output = [];

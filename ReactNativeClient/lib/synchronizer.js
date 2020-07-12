@@ -14,18 +14,16 @@ const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
 // const { filename, fileExtension } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
-const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
 const LockHandler = require('lib/services/synchronizer/LockHandler').default;
+const MigrationHandler = require('lib/services/synchronizer/MigrationHandler').default;
+const { Dirnames } = require('lib/services/synchronizer/utils/types');
 
 class Synchronizer {
 	constructor(db, api, appType) {
 		this.state_ = 'idle';
 		this.db_ = db;
 		this.api_ = api;
-		this.syncDirName_ = '.sync';
-		this.lockDirName_ = 'locks';
-		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
@@ -69,8 +67,14 @@ class Synchronizer {
 
 	lockHandler() {
 		if (this.lockHandler_) return this.lockHandler_;
-		this.lockHandler_ = new LockHandler(this.api(), this.lockDirName_);
+		this.lockHandler_ = new LockHandler(this.api());
 		return this.lockHandler_;
+	}
+
+	migrationHandler() {
+		if (this.migrationHandler_) return this.migrationHandler_;
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		return this.migrationHandler_;
 	}
 
 	maxResourceSize() {
@@ -212,21 +216,21 @@ class Synchronizer {
 		return state;
 	}
 
-	async checkSyncTargetVersion_() {
-		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetVersion = await this.apiCall('get', '.sync/version.txt');
+	// async checkSyncTargetVersion_() {
+	// 	const supportedSyncTargetVersion = Setting.value('syncVersion');
+	// 	const syncTargetVersion = await this.apiCall('get', '.sync/version.txt');
 
-		if (!syncTargetVersion) {
-			await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
-		} else {
-			if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
-				throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
-			} else {
-				await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
-				// TODO: do upgrade job
-			}
-		}
-	}
+	// 	if (!syncTargetVersion) {
+	// 		await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
+	// 	} else {
+	// 		if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
+	// 			throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
+	// 		} else {
+	// 			await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
+	// 			// TODO: do upgrade job
+	// 		}
+	// 	}
+	// }
 
 	isFullSync(steps) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
@@ -318,16 +322,15 @@ class Synchronizer {
 		};
 
 		const resourceRemotePath = resourceId => {
-			return `${this.resourceDirName_}/${resourceId}`;
+			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
 		let errorToThrow = null;
 
 		try {
-			await this.apiCall('mkdir', this.syncDirName_);
-			await this.apiCall('mkdir', this.lockDirName_);
-			this.api().setTempDirName(this.syncDirName_);
-			await this.apiCall('mkdir', this.resourceDirName_);
+			await this.migrationHandler().checkCanSync();
+
+			this.api().setTempDirName(Dirnames.Temp);
 
 			await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
 
@@ -344,8 +347,6 @@ class Synchronizer {
 					this.cancel();
 				}
 			}, 1000 * 60);
-
-			await this.checkSyncTargetVersion_();
 
 			// ========================================================================
 			// 1. UPLOAD

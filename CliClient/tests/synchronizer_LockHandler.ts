@@ -9,11 +9,10 @@ process.on('unhandledRejection', (reason:any, p:any) => {
 });
 
 let lockHandler_:LockHandler = null;
-const locksDirname = 'locks';
 
 function lockHandler():LockHandler {
 	if (lockHandler_) return lockHandler_;
-	lockHandler_ = new LockHandler(fileApi(), locksDirname);
+	lockHandler_ = new LockHandler(fileApi());
 	return lockHandler_;
 }
 

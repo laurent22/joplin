@@ -142,7 +142,7 @@ class FileApi {
 			result.items = temp;
 		}
 
-		if (!options.includeHidden) {
+		if (!options.includeDirs) {
 			result.items = result.items.filter(f => !f.isDir);
 		}
 
