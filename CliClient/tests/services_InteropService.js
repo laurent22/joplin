@@ -427,4 +427,21 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));
 
+	it('should export a notebook as MD', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'testexportfolder' });
+		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
+		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+
+		const service = new InteropService();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+			sourceFolderIds: [folder1.id],
+		});
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
+	}));
+
 });

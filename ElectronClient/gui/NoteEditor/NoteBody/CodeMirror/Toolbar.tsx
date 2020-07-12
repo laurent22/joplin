@@ -1,7 +1,7 @@
 import * as React from 'react';
+import CommandService from '../../../../lib/services/CommandService';
 
 const ToolbarBase = require('../../../Toolbar.min.js');
-const { _ } = require('lib/locale');
 const { buildStyle, themeStyle } = require('lib/theme');
 
 interface ToolbarProps {
@@ -26,144 +26,23 @@ function styles_(props:ToolbarProps) {
 export default function Toolbar(props:ToolbarProps) {
 	const styles = styles_(props);
 
-	function createToolbarItems() {
-		const toolbarItems = [];
+	const cmdService = CommandService.instance();
 
-		toolbarItems.push({
-			tooltip: _('Bold'),
-			iconName: 'fa-bold',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textBold',
-				});
-			},
-		});
+	const toolbarItems = [
+		cmdService.commandToToolbarButton('textBold'),
+		cmdService.commandToToolbarButton('textItalic'),
+		{ type: 'separator' },
+		cmdService.commandToToolbarButton('textLink'),
+		cmdService.commandToToolbarButton('textCode'),
+		cmdService.commandToToolbarButton('attachFile'),
+		{ type: 'separator' },
+		cmdService.commandToToolbarButton('textNumberedList'),
+		cmdService.commandToToolbarButton('textBulletedList'),
+		cmdService.commandToToolbarButton('textCheckbox'),
+		cmdService.commandToToolbarButton('textHeading'),
+		cmdService.commandToToolbarButton('textHorizontalRule'),
+		cmdService.commandToToolbarButton('insertDateTime'),
+	];
 
-		toolbarItems.push({
-			tooltip: _('Italic'),
-			iconName: 'fa-italic',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textItalic',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			type: 'separator',
-		});
-
-		toolbarItems.push({
-			tooltip: _('Hyperlink'),
-			iconName: 'fa-link',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textLink',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Code'),
-			iconName: 'fa-code',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textCode',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Attach file'),
-			iconName: 'fa-paperclip',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'attachFile',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			type: 'separator',
-		});
-
-		toolbarItems.push({
-			tooltip: _('Numbered List'),
-			iconName: 'fa-list-ol',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textNumberedList',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Bulleted List'),
-			iconName: 'fa-list-ul',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textBulletedList',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Checkbox'),
-			iconName: 'fa-check-square',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textCheckbox',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Heading'),
-			iconName: 'fa-heading',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textHeading',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Horizontal Rule'),
-			iconName: 'fa-ellipsis-h',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'textHorizontalRule',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Insert Date Time'),
-			iconName: 'fa-calendar-plus',
-			onClick: () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'insertDateTime',
-				});
-			},
-		});
-
-		toolbarItems.push({
-			type: 'separator',
-		});
-
-		return toolbarItems;
-	}
-
-	return <ToolbarBase disabled={props.disabled} style={styles.root} items={createToolbarItems()} />;
+	return <ToolbarBase disabled={props.disabled} style={styles.root} items={toolbarItems} />;
 }
