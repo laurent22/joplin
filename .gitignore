@@ -97,6 +97,7 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useLineSorting.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js

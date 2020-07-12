@@ -13,17 +13,17 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useJoplinMode from './utils/useJoplinMode';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
-import 'codemirror/mode/gfm/gfm';
+import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/xml/xml';
 // Modes for syntax highlighting inside of code blocks
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
@@ -52,6 +52,7 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useJoplinMode(CodeMirror);
 
 	CodeMirror.keyMap.basic = {
 		'Left': 'goCharLeft',
@@ -162,7 +163,6 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, []);
 
-	// const divRef = useCallback(node => {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
