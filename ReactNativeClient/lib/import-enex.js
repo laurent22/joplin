@@ -185,7 +185,7 @@ async function saveNoteTags(note) {
 		const tagTitle = note.tags[i];
 
 		let tag = await Tag.loadByTitle(tagTitle);
-		if (!tag) tag = await Tag.save({ title: tagTitle });
+		if (!tag) tag = await Tag.saveNested({}, tagTitle);
 
 		await Tag.addNote(tag.id, note.id);
 

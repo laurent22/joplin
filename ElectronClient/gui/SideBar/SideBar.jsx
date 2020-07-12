@@ -14,7 +14,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
-const { substrWithEllipsis } = require('lib/string-utils');
+const { substrWithEllipsis, substrStartWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 const commands = [
@@ -64,9 +64,24 @@ class SideBarComponent extends React.Component {
 
 				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
 				for (let i = 0; i < folderIds.length; i++) {
+					if (folderId === folderIds[i]) continue;
 					await Folder.moveToFolder(folderIds[i], folderId);
 				}
 			}
+		};
+
+		this.onTagDragStart_ = event => {
+			const tagId = event.currentTarget.getAttribute('tagid');
+			if (!tagId) return;
+
+			event.dataTransfer.setDragImage(new Image(), 1, 1);
+			event.dataTransfer.clearData();
+			event.dataTransfer.setData('text/x-jop-tag-ids', JSON.stringify([tagId]));
+		};
+
+		this.onTagDragOver_ = event => {
+			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
+			if (event.dataTransfer.types.indexOf('text/x-jop-tag-ids') >= 0) event.preventDefault();
 		};
 
 		this.onTagDrop_ = async event => {
@@ -81,6 +96,18 @@ class SideBarComponent extends React.Component {
 				for (let i = 0; i < noteIds.length; i++) {
 					await Tag.addNote(tagId, noteIds[i]);
 				}
+			} else if (dt.types.indexOf('text/x-jop-tag-ids') >= 0) {
+				event.preventDefault();
+
+				const tagIds = JSON.parse(dt.getData('text/x-jop-tag-ids'));
+				try {
+					for (let i = 0; i < tagIds.length; i++) {
+						if (tagId === tagIds[i]) continue;
+						await Tag.moveTag(tagIds[i], tagId);
+					}
+				} catch (error) {
+					bridge().showErrorMessageBox(error.message);
+				}
 			}
 		};
 
@@ -90,6 +117,15 @@ class SideBarComponent extends React.Component {
 			this.props.dispatch({
 				type: 'FOLDER_TOGGLE',
 				id: folderId,
+			});
+		};
+
+		this.onTagToggleClick_ = async event => {
+			const tagId = event.currentTarget.getAttribute('tagid');
+
+			this.props.dispatch({
+				type: 'TAG_TOGGLE',
+				id: tagId,
 			});
 		};
 
@@ -206,10 +242,6 @@ class SideBarComponent extends React.Component {
 			},
 		};
 
-		style.tagItem = Object.assign({}, style.listItem);
-		style.tagItem.paddingLeft = 23;
-		style.tagItem.height = itemHeight;
-
 		return style;
 	}
 
@@ -241,7 +273,7 @@ class SideBarComponent extends React.Component {
 			buttonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrStartWithEllipsis(Tag.getCachedFullTitle(tag.id), -32, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}
@@ -365,15 +397,46 @@ class SideBarComponent extends React.Component {
 		return <div style={this.style().noteCount}>({count})</div>;
 	}
 
-	folderItem(folder, selected, hasChildren, depth) {
-		let style = Object.assign({}, this.style().listItem);
-		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
+	renderItem(itemType, item, selected, hasChildren, depth) {
+		let itemTitle = '';
+		let collapsedIds = null;
+		const jsxItemIdAttribute = {};
+		let anchorRef = null;
+		let noteCount = '';
+		let onDragStart = null;
+		let onDragOver = null;
+		let onDrop = null;
+		let onItemClick = null;
+		let onItemToggleClick = null;
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			itemTitle = Folder.displayTitle(item);
+			collapsedIds = this.props.collapsedFolderIds;
+			jsxItemIdAttribute.folderid = item.id;
+			anchorRef = this.anchorItemRef('folder', item.id);
+			noteCount = item.note_count ? this.noteCountElement(item.note_count) : '';
+			onDragStart = this.onFolderDragStart_;
+			onDragOver = this.onFolderDragOver_;
+			onDrop = this.onFolderDrop_;
+			onItemClick = this.folderItem_click.bind(this);
+			onItemToggleClick = this.onFolderToggleClick_;
+		} else {
+			itemTitle = Tag.displayTitle(item);
+			collapsedIds = this.props.collapsedTagIds;
+			jsxItemIdAttribute.tagid = item.id;
+			anchorRef = this.anchorItemRef('tag', item.id);
+			noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(Tag.getCachedNoteCount(item.id)) : '';
+			onDragStart = this.onTagDragStart_;
+			onDragOver = this.onTagDragOver_;
+			onDrop = this.onTagDrop_;
+			onItemClick = this.tagItem_click.bind(this);
+			onItemToggleClick = this.onTagToggleClick_;
+		}
 
-		const itemTitle = Folder.displayTitle(folder);
+		let style = Object.assign({}, this.style().listItem);
+		if (item.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
 
 		let containerStyle = Object.assign({}, this.style().listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
-
 		containerStyle.paddingLeft = 8 + depth * 15;
 
 		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
@@ -381,67 +444,36 @@ class SideBarComponent extends React.Component {
 			visibility: hasChildren ? 'visible' : 'hidden',
 		};
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
+		const iconName = collapsedIds.indexOf(item.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
 		const expandIcon = <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
-			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
+			<a style={expandLinkStyle} href="#" {...jsxItemIdAttribute} onClick={onItemToggleClick}>
 				{expandIcon}
 			</a>
 		) : (
 			<span style={expandLinkStyle}>{expandIcon}</span>
 		);
 
-		const anchorRef = this.anchorItemRef('folder', folder.id);
-		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
-
 		return (
-			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
+			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={item.id} onDragStart={onDragStart} onDragOver={onDragOver} onDrop={onDrop} draggable={true} {...jsxItemIdAttribute}>
 				{expandLink}
 				<a
 					ref={anchorRef}
 					className="list-item"
 					href="#"
-					data-id={folder.id}
-					data-type={BaseModel.TYPE_FOLDER}
+					data-id={item.id}
+					data-type={itemType}
 					onContextMenu={event => this.itemContextMenu(event)}
 					style={style}
-					folderid={folder.id}
+					{...jsxItemIdAttribute}
 					onClick={() => {
-						this.folderItem_click(folder);
+						onItemClick(item);
 					}}
-					onDoubleClick={this.onFolderToggleClick_}
+					onDoubleClick={onItemToggleClick}
 				>
 					{itemTitle} {noteCount}
 				</a>
 			</div>
-		);
-	}
-
-	tagItem(tag, selected) {
-		let style = Object.assign({}, this.style().tagItem);
-		if (selected) style = Object.assign(style, this.style().listItemSelected);
-
-		const anchorRef = this.anchorItemRef('tag', tag.id);
-		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(tag.note_count) : '';
-
-		return (
-			<a
-				className="list-item"
-				href="#"
-				ref={anchorRef}
-				data-id={tag.id}
-				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={event => this.itemContextMenu(event)}
-				tagid={tag.id}
-				key={tag.id}
-				style={style}
-				onDrop={this.onTagDrop_}
-				onClick={() => {
-					this.tagItem_click(tag);
-				}}
-			>
-				{Tag.displayTitle(tag)} {noteCount}
-			</a>
 		);
 	}
 
@@ -669,7 +701,7 @@ class SideBarComponent extends React.Component {
 		);
 
 		if (this.props.folders.length) {
-			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
+			const result = shared.renderFolders(this.props, this.renderItem.bind(this, BaseModel.TYPE_FOLDER));
 			const folderItems = result.items;
 			this.folderItemsOrder_ = result.order;
 			items.push(
@@ -682,11 +714,12 @@ class SideBarComponent extends React.Component {
 		items.push(
 			this.makeHeader('tagHeader', _('Tags'), 'fa-tags', {
 				toggleblock: 1,
+				onDrop: this.onTagDrop_,
 			})
 		);
 
 		if (this.props.tags.length) {
-			const result = shared.renderTags(this.props, this.tagItem.bind(this));
+			const result = shared.renderTags(this.props, this.renderItem.bind(this, BaseModel.TYPE_TAG));
 			const tagItems = result.items;
 			this.tagItemsOrder_ = result.order;
 
@@ -754,6 +787,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		collapsedTagIds: state.collapsedTagIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
 		sidebarVisibility: state.sidebarVisibility,
