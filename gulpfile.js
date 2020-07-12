@@ -45,7 +45,7 @@ gulp.task('watch', function() {
 
 	// For watching, we use the actual tsc tool because it's more robust and
 	// doesn't crash when there's an error
-	const promise = execa('node', ['node_modules/typescript/bin/tsc', '--watch', '--project', 'tsconfig.json'], { cwd: `${__dirname}` });
+	const promise = execa('node', ['node_modules/typescript/bin/tsc', '--watch', '--project', 'tsconfig.dev.json'], { cwd: `${__dirname}` });
 	promise.stdout.pipe(process.stdout);
 });
 

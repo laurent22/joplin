@@ -3,6 +3,7 @@ const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const SearchEngine = require('lib/services/SearchEngine');
+const CommandService = require('lib/services/CommandService').default;
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
 const Folder = require('lib/models/Folder');
@@ -12,6 +13,10 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
+const { stripMarkdown } = require('lib/markdownUtils');
+const striptags = require('striptags');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlEntitiesDecode = new Entities().decode;
 
 class GotoAnything {
 
@@ -191,8 +196,9 @@ class Dialog extends React.PureComponent {
 
 			if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+				searchQuery = this.state.query.split(' ')[0].substr(1).trim();
+				results = await Tag.search({ fullTitleRegex: `.*${searchQuery}.*` });
+				results = results.map(tag => Object.assign({}, tag, { title: Tag.getCachedFullTitle(tag.id) }));
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
@@ -231,7 +237,7 @@ class Dialog extends React.PureComponent {
 
 							if (i < limit) { // Display note fragments of search keyword matches
 								const indices = [];
-								const body = notesById[row.id];
+								const body = stripMarkdown(htmlEntitiesDecode(striptags(notesById[row.id])));
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -294,6 +300,18 @@ class Dialog extends React.PureComponent {
 			}
 		}
 
+		if (this.state.listType === BaseModel.TYPE_TAG) {
+			const tagPath = await Tag.tagPath(this.props.tags, item.parent_id);
+
+			for (const tag of tagPath) {
+				this.props.dispatch({
+					type: 'TAG_SET_COLLAPSED',
+					id: tag.id,
+					collapsed: false,
+				});
+			}
+		}
+
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
@@ -301,11 +319,7 @@ class Dialog extends React.PureComponent {
 				noteId: item.id,
 			});
 
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: 'focusElement',
-				target: 'noteBody',
-			});
+			CommandService.instance().scheduleExecute('focusElement', { target: 'noteBody' });
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
 				type: 'TAG_SELECT',
@@ -335,13 +349,13 @@ class Dialog extends React.PureComponent {
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
-			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
 
-		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
 
 		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" />;
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;
-		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: fragmentsHtml }}></div>;
+		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
@@ -442,6 +456,7 @@ class Dialog extends React.PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
+		tags: state.tags,
 		theme: state.settings.theme,
 	};
 };

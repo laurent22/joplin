@@ -1,13 +1,12 @@
 const fs = require('fs-extra');
 const glob = require('glob');
+const utils = require('../../Tools/gulp/utils');
 
 async function main() {
 	const sourceDir = `${__dirname}/../../Modules/TinyMCE/langs`;
 	const destDir = `${__dirname}/../node_modules/tinymce/langs`;
 	console.info(`Copying ${sourceDir} => ${destDir}`);
-	await fs.remove(destDir);
-	await fs.mkdirp(destDir);
-	await fs.copy(sourceDir, destDir);
+	await utils.copyDir(sourceDir, destDir);
 
 	const supportedLocales = glob.sync(`${sourceDir}/*.js`).map(s => {
 		s = s.split('/');

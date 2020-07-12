@@ -4,6 +4,7 @@ import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } 
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
+import CommandService from '../../../../lib/services/CommandService';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
@@ -604,10 +605,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						tooltip: _('Insert Date Time'),
 						icon: 'insert-time',
 						onAction: function() {
-							props.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'insertDateTime',
-							});
+							CommandService.instance().execute('insertDateTime');
 						},
 					});
 

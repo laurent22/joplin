@@ -34,7 +34,7 @@ class Command extends BaseCommand {
 
 		if (command == 'add') {
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
-			if (!tag) tag = await Tag.save({ title: args.tag }, { userSideValidation: true });
+			if (!tag) tag = await Tag.saveNested({}, args.tag, { userSideValidation: true });
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.addNote(tag.id, notes[i].id);
 			}
@@ -72,7 +72,7 @@ class Command extends BaseCommand {
 			} else {
 				const tags = await Tag.all();
 				tags.map(tag => {
-					this.stdout(tag.title);
+					this.stdout(Tag.getCachedFullTitle(tag.id));
 				});
 			}
 		} else if (command == 'notetags') {
