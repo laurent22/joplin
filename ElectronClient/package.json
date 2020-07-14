@@ -26,8 +26,9 @@
       "build/images/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
+    "asar": true,
+    "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
-      "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
@@ -64,11 +65,9 @@
       "artifactName": "${productName}Portable.${ext}"
     },
     "mac": {
-      "icon": "../../Assets/macOs.icns",
-      "asar": true
+      "icon": "../../Assets/macOs.icns"
     },
     "linux": {
-      "asar": true,
       "icon": "../Assets/LinuxIcons/256x256.png",
       "category": "Office",
       "desktop": {
