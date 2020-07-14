@@ -287,7 +287,7 @@ class SideBarComponent extends React.Component {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', null, itemId)),
+				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', null, { parentId: itemId })),
 			);
 		}
 
