@@ -460,7 +460,7 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} lines={noteContentPropertiesDialogOptions.lines}/>}
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 

@@ -91,7 +91,6 @@
     "read-chunk": "^2.1.0",
     "redux": "^3.7.2",
     "relative": "^3.0.2",
-    "remove-markdown": "^0.3.0",
     "request": "^2.88.0",
     "sax": "^1.2.4",
     "server-destroy": "^1.0.1",
