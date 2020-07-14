@@ -122,6 +122,9 @@ export default class LockHandler {
 	}
 
 	private async acquireSyncLock(clientType:string, clientId:string) {
+		// TODO: Must repeat process once lock has been saved
+		// TODO: add function to refresh a sync lock
+		//       Fails if couldn't refresh within Y seconds
 		const exclusiveLock = await this.exclusiveLock();
 
 		if (exclusiveLock) {
