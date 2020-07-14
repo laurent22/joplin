@@ -4,6 +4,7 @@ const Note = require('lib/models/Note.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const { nestedPath } = require('lib/nested-utils.js');
 const { substrWithEllipsis } = require('lib/string-utils.js');
 
 class Folder extends BaseItem {
@@ -263,22 +264,7 @@ class Folder extends BaseItem {
 	}
 
 	static folderPath(folders, folderId) {
-		const idToFolders = {};
-		for (let i = 0; i < folders.length; i++) {
-			idToFolders[folders[i].id] = folders[i];
-		}
-
-		const path = [];
-		while (folderId) {
-			const folder = idToFolders[folderId];
-			if (!folder) break; // Shouldn't happen
-			path.push(folder);
-			folderId = folder.parent_id;
-		}
-
-		path.reverse();
-
-		return path;
+		return nestedPath(folders, folderId);
 	}
 
 	static folderPathString(folders, folderId, maxTotalLength = 80) {

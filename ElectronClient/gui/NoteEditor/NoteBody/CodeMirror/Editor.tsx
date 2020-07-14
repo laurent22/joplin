@@ -13,25 +13,20 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useJoplinMode from './utils/useJoplinMode';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
-import 'codemirror/mode/gfm/gfm';
+import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/xml/xml';
 // Modes for syntax highlighting inside of code blocks
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/sql/sql';
-
-export interface CancelledKeys {
-	mac: string[],
-	default: string[],
-}
 
 export interface EditorProps {
 	value: string,
@@ -41,7 +36,6 @@ export interface EditorProps {
 	readOnly: boolean,
 	autoMatchBraces: boolean,
 	keyMap: string,
-	cancelledKeys: CancelledKeys,
 	onChange: any,
 	onScroll: any,
 	onEditorContextMenu: any,
@@ -58,19 +52,75 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useJoplinMode(CodeMirror);
 
-	useEffect(() => {
-		if (props.cancelledKeys) {
-			for (let i = 0; i < props.cancelledKeys.mac.length; i++) {
-				const k = props.cancelledKeys.mac[i];
-				CodeMirror.keyMap.macDefault[k] = null;
-			}
-			for (let i = 0; i < props.cancelledKeys.default.length; i++) {
-				const k = props.cancelledKeys.default[i];
-				CodeMirror.keyMap.default[k] = null;
-			}
-		}
-	}, [props.cancelledKeys]);
+	CodeMirror.keyMap.basic = {
+		'Left': 'goCharLeft',
+		'Right': 'goCharRight',
+		'Up': 'goLineUp',
+		'Down': 'goLineDown',
+		'End': 'goLineEnd',
+		'Home': 'goLineStartSmart',
+		'PageUp': 'goPageUp',
+		'PageDown': 'goPageDown',
+		'Delete': 'delCharAfter',
+		'Backspace': 'delCharBefore',
+		'Shift-Backspace': 'delCharBefore',
+		'Tab': 'smartListIndent',
+		'Shift-Tab': 'smartListUnindent',
+		'Enter': 'insertListElement',
+		'Insert': 'toggleOverwrite',
+		'Esc': 'singleSelection',
+	};
+	CodeMirror.keyMap.default = {
+		'Ctrl-A': 'selectAll',
+		'Ctrl-D': 'deleteLine',
+		'Ctrl-Z': 'undo',
+		'Shift-Ctrl-Z': 'redo',
+		'Ctrl-Y': 'redo',
+		'Ctrl-Home': 'goDocStart',
+		'Ctrl-End': 'goDocEnd',
+		'Ctrl-Up': 'goLineUp',
+		'Ctrl-Down': 'goLineDown',
+		'Ctrl-Left': 'goGroupLeft',
+		'Ctrl-Right': 'goGroupRight',
+		'Alt-Left': 'goLineStart',
+		'Alt-Right': 'goLineEnd',
+		'Ctrl-Backspace': 'delGroupBefore',
+		'Ctrl-Delete': 'delGroupAfter',
+		'Ctrl-[': 'indentLess',
+		'Ctrl-]': 'indentMore',
+		'Ctrl-/': 'toggleComment',
+		'Ctrl-Alt-S': 'sortSelectedLines',
+		'Alt-Up': 'swapLineUp',
+		'Alt-Down': 'swapLineDown',
+		'fallthrough': 'basic',
+	};
+	CodeMirror.keyMap.pcDefault = CodeMirror.keyMap.default;
+	CodeMirror.keyMap.macDefault = {
+		'Cmd-A': 'selectAll',
+		'Cmd-D': 'deleteLine',
+		'Cmd-Z': 'undo',
+		'Shift-Cmd-Z': 'redo',
+		'Cmd-Y': 'redo',
+		'Cmd-Home': 'goDocStart',
+		'Cmd-Up': 'goDocStart',
+		'Cmd-End': 'goDocEnd',
+		'Cmd-Down': 'goDocEnd',
+		'Alt-Left': 'goGroupLeft',
+		'Alt-Right': 'goGroupRight',
+		'Cmd-Left': 'goLineLeft',
+		'Cmd-Right': 'goLineRight',
+		'Alt-Backspace': 'delGroupBefore',
+		'Alt-Delete': 'delGroupAfter',
+		'Cmd-[': 'indentLess',
+		'Cmd-]': 'indentMore',
+		'Cmd-/': 'toggleComment',
+		'Cmd-Opt-S': 'sortSelectedLines',
+		'Opt-Up': 'swapLineUp',
+		'Opt-Down': 'swapLineDown',
+		'fallthrough': 'basic',
+	};
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -113,7 +163,6 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, []);
 
-	// const divRef = useCallback(node => {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
@@ -133,17 +182,6 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-			extraKeys: { 'Enter': 'insertListElement',
-				'Ctrl-/': 'toggleComment',
-				'Ctrl-Alt-S': 'sortSelectedLines',
-				'Alt-Up': 'swapLineUp',
-				'Alt-Down': 'swapLineDown',
-				'Cmd-/': 'toggleComment',
-				'Cmd-Opt-S': 'sortSelectedLines',
-				'Opt-Up': 'swapLineUp',
-				'Opt-Down': 'swapLineDown',
-				'Tab': 'smartListIndent',
-				'Shift-Tab': 'smartListUnindent' },
 		};
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
@@ -183,6 +221,18 @@ function Editor(props: EditorProps, ref: any) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
 	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+
+	useEffect(() => {
+		if (editor) {
+			// Need to let codemirror know that it's container's size has changed so that it can
+			// re-compute anything it needs to. This ensures the cursor (and anything that is
+			// based on window size will be correct
+			// Manually calling refresh here will cause a double refresh in some instances (when the
+			// windows size is changed for example) but this is a fairly quick operation so it's worth
+			// it.
+			editor.refresh();
+		}
+	}, [props.style.width, props.style.height]);
 
 	return <div style={props.style} ref={editorParent} />;
 }

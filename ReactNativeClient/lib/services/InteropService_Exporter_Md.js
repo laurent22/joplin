@@ -15,7 +15,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	async makeDirPath_(item, pathPart = null) {
+	async makeDirPath_(item, pathPart = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -23,7 +23,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 					output = `${pathPart}/${output}`;
 				} else {
 					output = `${friendlySafeFilename(item.title, null, true)}/${output}`;
-					output = await shim.fsDriver().findUniqueFilename(output);
+					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output);
 				}
 			}
 			if (!item.parent_id) return output;
@@ -86,7 +86,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 				if (!note) continue;
 
-				let notePath = `${await this.makeDirPath_(note)}${friendlySafeFilename(note.title, null, true)}.md`;
+				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null, true)}.md`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths));
 				context.notePaths[note.id] = notePath;
 			}
