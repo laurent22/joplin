@@ -21,6 +21,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
+const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
@@ -33,6 +34,7 @@ const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const ResourceService = require('lib/services/ResourceService.js');
@@ -45,6 +47,7 @@ const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
+const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
 const synchronizers_ = [];
@@ -83,11 +86,13 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
 const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('amazon_s3');
 const syncDir = `${__dirname}/../tests/sync`;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
@@ -351,7 +356,14 @@ function fileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
+		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
+		const amazonS3Creds = require(amazonS3CredsPath);
+		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
+		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
+		fileApi_ = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	}
+
 
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);

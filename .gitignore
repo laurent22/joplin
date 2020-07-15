@@ -37,6 +37,7 @@ _mydocs
 Assets/DownloadBadges*.psd
 node_modules
 Tools/github_oauth_token.txt
+CliClient/tests/support/amazon-s3-auth.json
 _releases
 ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/

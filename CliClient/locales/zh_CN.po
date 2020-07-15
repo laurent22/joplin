@@ -14,6 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -100,7 +102,7 @@ msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
 msgstr "导出格式: %s"
 
@@ -351,7 +353,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "同步目标: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "无法初始化同步。"
 
@@ -718,7 +719,7 @@ msgstr ""
 #: CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "无效命令: \"%s\" "
+msgstr "无效命令: \"%s\""
 
 #: CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -727,7 +728,7 @@ msgstr "标记待办事项为完成。"
 #: CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "笔记非待办事项: \"%s\" "
+msgstr "笔记非待办事项: \"%s\""
 
 #: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
 #: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
@@ -897,9 +898,9 @@ msgid "Delete"
 msgstr "删除"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "从所有笔记中删除标签 \"%s\" ？"
+msgstr "从所有笔记中删除标签 \"%s\" 以及其后代标签？"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -969,7 +970,6 @@ msgstr "加粗文本"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
 msgstr "强调文本"
 
@@ -1778,7 +1778,7 @@ msgstr "统计数据"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:100
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "阅读时间： %s 分钟"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:101
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2778,17 +2778,16 @@ msgstr ""
 " %s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "无法移动笔记本到该位置"
+msgstr "无法移动标签到该位置。"
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "标签名不能以'/'开始或者结束。"
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "标签名不能包括符号'//'。"
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -3392,7 +3391,6 @@ msgid "Forward"
 msgstr "前进"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "同步"
 
