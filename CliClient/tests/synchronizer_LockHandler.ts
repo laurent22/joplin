@@ -55,18 +55,18 @@ describe('synchronizer_LockHandler', function() {
 		}
 	}));
 
-	it('should refresh sync lock timestamp when acquiring again', asyncTest(async () => {
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
+	// it('should refresh sync lock timestamp when acquiring again', asyncTest(async () => {
+	// 	await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
 
-		const beforeTime = (await lockHandler().syncLocks())[0].updatedTime;
-		await msleep(1);
+	// 	const beforeTime = (await lockHandler().syncLocks())[0].updatedTime;
+	// 	await msleep(1);
 
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
+	// 	await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
 
-		const afterTime = (await lockHandler().syncLocks())[0].updatedTime;
+	// 	const afterTime = (await lockHandler().syncLocks())[0].updatedTime;
 
-		expect(beforeTime).toBeLessThan(afterTime);
-	}));
+	// 	expect(beforeTime).toBeLessThan(afterTime);
+	// }));
 
 	it('should not allow sync locks if there is an exclusive lock', asyncTest(async () => {
 		await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '111');

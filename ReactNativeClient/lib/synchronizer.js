@@ -236,11 +236,12 @@ class Synchronizer {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
 
+	// TODO: test lockErrorStatus_
 	async lockErrorStatus_() {
 		const hasActiveExclusiveLock = await this.lockHandler().hasActiveExclusiveLock();
 		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
 
-		const hasActiveSyncLock = await this.lockHandler().hasActiveSyncLock();
+		const hasActiveSyncLock = await this.lockHandler().hasActiveSyncLock(this.appType_, this.clientId_);
 		if (!hasActiveSyncLock) return 'syncLockGone';
 
 		return '';

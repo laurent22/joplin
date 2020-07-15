@@ -16,25 +16,31 @@ export interface Lock {
 	updatedTime?: number,
 }
 
+interface RefreshTimers {
+	[key:string]: any;
+}
+
 const exclusiveFilename = 'exclusive.json';
 
 export default class LockHandler {
 
 	private api_:any = null;
-	private syncLockMaxAge_:number = 1000 * 60 * 3;
+	private refreshTimers_:RefreshTimers = {};
+	private refreshInterval_:number = 1000 * 60;
+	private syncLockTtl_:number = 1000 * 60 * 3;
 
 	constructor(api:any) {
 		this.api_ = api;
 	}
 
 	public get syncLockMaxAge():number {
-		return this.syncLockMaxAge_;
+		return this.syncLockTtl_;
 	}
 
 	// Should only be done for testing purposes since all clients should
 	// use the same lock max age.
 	public set syncLockMaxAge(v:number) {
-		this.syncLockMaxAge_ = v;
+		this.syncLockTtl_ = v;
 	}
 
 	private lockFilename(lock:Lock) {
@@ -109,33 +115,66 @@ export default class LockHandler {
 		return !!lock && this.lockIsActive(lock);
 	}
 
-	async hasActiveSyncLock(clientType:string, clientId:string) {
+	async hasActiveLock(lockType:LockType, clientType:string, clientId:string) {
+		if (lockType === LockType.Exclusive) return this.hasActiveExclusiveLock();
+		if (lockType === LockType.Sync) return this.hasActiveSyncLock(clientType, clientId);
+		throw new Error(`Invalid lock type: ${lockType}`);
+	}
+
+	private async activeSyncLock(clientType:string, clientId:string) {
 		const locks = await this.syncLocks();
 		for (const lock of locks) {
-			if (lock.clientType === clientType && lock.clientId === clientId && this.lockIsActive(lock)) return true;
+			if (lock.clientType === clientType && lock.clientId === clientId && this.lockIsActive(lock)) return lock;
 		}
-		return false;
+		return null;
+	}
+
+	async hasActiveSyncLock(clientType:string, clientId:string) {
+		const lock = await this.activeSyncLock(clientType, clientId);
+		return !!lock;
 	}
 
 	private async saveLock(lock:Lock) {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
 	}
 
+	// TODO: add function to refresh a sync lock
+	//       Fails if couldn't refresh within Y seconds
+	//       Test function
+	// TODO: wrap exclusive lock logic in try/catch block
+	// and release lock if something fail.
+
 	private async acquireSyncLock(clientType:string, clientId:string) {
-		// TODO: Must repeat process once lock has been saved
-		// TODO: add function to refresh a sync lock
-		//       Fails if couldn't refresh within Y seconds
-		const exclusiveLock = await this.exclusiveLock();
+		try {
+			while (true) {
+				const [exclusiveLock, syncLock] = await Promise.all([
+					this.exclusiveLock(),
+					this.activeSyncLock(clientType, clientId),
+				]);
 
-		if (exclusiveLock) {
-			throw new JoplinError(`Cannot acquire sync lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(exclusiveLock)}`, 'hasExclusiveLock');
+				if (exclusiveLock) {
+					throw new JoplinError(`Cannot acquire sync lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(exclusiveLock)}`, 'hasExclusiveLock');
+				}
+
+				if (syncLock) {
+					// Normally the second pass should happen immediately afterwards, but if for some reason
+					// (slow network, etc.) it took more than 10 seconds then refresh the lock.
+					if (Date.now() - syncLock.updatedTime > 1000 * 10) {
+						await this.saveLock(syncLock);
+					}
+					return;
+				}
+
+				await this.saveLock({
+					type: LockType.Sync,
+					clientType: clientType,
+					clientId: clientId,
+				});
+			}
+		} catch (error) {
+			await this.releaseLock(LockType.Sync, clientType, clientId);
+			throw error;
 		}
-
-		await this.saveLock({
-			type: LockType.Sync,
-			clientType: clientType,
-			clientId: clientId,
-		});
 	}
 
 	private lockToClientString(lock:Lock):string {
@@ -199,6 +238,47 @@ export default class LockHandler {
 				});
 			}
 		}
+	}
+
+	startAutoLockRefresh(lockType:LockType, clientType:string, clientId:string, errorHandler:Function):string {
+		const handle = [lockType, clientType, clientId].join('_');
+		if (this.refreshTimers_[handle]) {
+			throw new Error(`There is already a timer refreshing this lock: ${handle}`);
+		}
+
+		this.refreshTimers_[handle] = setTimeout(async () => {
+			let error = null;
+			const hasActiveLock = await this.hasActiveLock(lockType, clientType, clientId);
+			if (!this.refreshTimers_[handle]) return; // Timeout has been cleared
+
+			if (!hasActiveLock) {
+				error = new JoplinError('Lock has expired', 'lockExpired');
+			} else {
+				try {
+					await this.acquireLock(lockType, clientType, clientId);
+					if (!this.refreshTimers_[handle]) return; // Timeout has been cleared
+				} catch (e) {
+					error = e;
+				}
+			}
+
+			if (error) {
+				clearInterval(this.refreshTimers_[handle]);
+				delete this.refreshTimers_[handle];
+				errorHandler(error);
+			}
+		}, this.refreshInterval_);
+
+		return handle;
+	}
+
+	stopAutoLockRefresh(autoLockRefreshHandle:string) {
+		if (!this.refreshTimers_[autoLockRefreshHandle]) {
+			throw new Error(`There is no lock being auto-refreshed with this handle: ${autoLockRefreshHandle}`);
+		}
+
+		clearInterval(this.refreshTimers_[autoLockRefreshHandle]);
+		delete this.refreshTimers_[autoLockRefreshHandle];
 	}
 
 	async acquireLock(lockType:LockType, clientType:string, clientId:string, timeoutMs:number = 0) {
