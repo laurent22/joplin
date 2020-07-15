@@ -171,6 +171,25 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			'sync.8.url': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					try {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					} catch (error) {
+						return false;
+					}
+				},
+				filter: value => {
+					return value ? rtrimSlashes(value) : '';
+				},
+				public: true,
+				label: () => _('AWS S3 URL'),
+				description: () => 'Use to override the service URL for Ceph, Minio etc - Leave this blank for AWS',
+			},
+
 			'sync.8.path': {
 				value: '',
 				type: Setting.TYPE_STRING,

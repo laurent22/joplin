@@ -25,7 +25,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('AWS S3') + ' (Beta)';
+		return `${_('AWS S3')} (Beta)`;
 	}
 
 	async isAuthenticated() {
@@ -37,11 +37,18 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	s3AuthParameters() {
-		return {
-			accessKeyId: Setting.value('sync.8.username'),
-			secretAccessKey: Setting.value('sync.8.password'),
-			s3UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
-		};
+		const authParams = {};
+		const s3url = Setting.value('sync.8.url');
+		if (s3url) {
+			authParams.endpoint = s3url;
+			authParams.s3ForcePathStyle = true;
+			authParams.signatureVersion = 'v4';
+		} else {
+			authParams.s3UseArnRegion = true; // override the request region with the region inferred from requested resource's ARN
+		}
+		authParams.accessKeyId = Setting.value('sync.8.username');
+		authParams.secretAccessKey = Setting.value('sync.8.password');
+		return authParams;
 	}
 
 	api() {
@@ -58,6 +65,12 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			s3UseArnRegion: true,
 		};
 
+		if (options.url()) {
+			delete(apiOptions.s3UseArnRegion);
+			apiOptions.endpoint = options.url();
+			apiOptions.s3ForcePathStyle = true;
+			apiOptions.signatureVersion = 'v4';
+		}
 		const api = new S3(apiOptions);
 		const driver = new FileApiDriverAmazonS3(api, SyncTargetAmazonS3.s3BucketName());
 		const fileApi = new FileApi('', driver);
