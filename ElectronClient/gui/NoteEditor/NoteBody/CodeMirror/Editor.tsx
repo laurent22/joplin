@@ -106,6 +106,7 @@ function Editor(props: EditorProps, ref: any) {
 		'Esc': 'singleSelection',
 	};
 	CodeMirror.keyMap.default = {
+		// Windows/linux
 		'Ctrl-A': 'selectAll',
 		'Ctrl-D': 'deleteLine',
 		'Ctrl-Z': 'undo',
@@ -127,10 +128,8 @@ function Editor(props: EditorProps, ref: any) {
 		'Ctrl-Alt-S': 'sortSelectedLines',
 		'Alt-Up': 'swapLineUp',
 		'Alt-Down': 'swapLineDown',
-		'fallthrough': 'basic',
-	};
-	CodeMirror.keyMap.pcDefault = CodeMirror.keyMap.default;
-	CodeMirror.keyMap.macDefault = {
+
+		// MacOS
 		'Cmd-A': 'selectAll',
 		'Cmd-D': 'deleteLine',
 		'Cmd-Z': 'undo',
@@ -140,8 +139,6 @@ function Editor(props: EditorProps, ref: any) {
 		'Cmd-Up': 'goDocStart',
 		'Cmd-End': 'goDocEnd',
 		'Cmd-Down': 'goDocEnd',
-		'Alt-Left': 'goGroupLeft',
-		'Alt-Right': 'goGroupRight',
 		'Cmd-Left': 'goLineLeft',
 		'Cmd-Right': 'goLineRight',
 		'Alt-Backspace': 'delGroupBefore',
@@ -152,6 +149,7 @@ function Editor(props: EditorProps, ref: any) {
 		'Cmd-Opt-S': 'sortSelectedLines',
 		'Opt-Up': 'swapLineUp',
 		'Opt-Down': 'swapLineDown',
+
 		'fallthrough': 'basic',
 	};
 
