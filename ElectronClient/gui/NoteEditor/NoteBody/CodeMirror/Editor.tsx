@@ -19,14 +19,47 @@ import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/xml/xml';
-// Modes for syntax highlighting inside of code blocks
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/diff/diff';
-import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/meta';
+
+const { reg } = require('lib/registry.js');
+
+// Based on http://pypl.github.io/PYPL.html
+// +XML (HTML) +CSS and Markdown added
+const topLanguages = [
+	'python',
+	'clike',
+	'javascript',
+	'jsx',
+	'php',
+	'r',
+	'swift',
+	'go',
+	'vb',
+	'vbscript',
+	'ruby',
+	'rust',
+	'dart',
+	'lua',
+	'groovy',
+	'perl',
+	'cobol',
+	'julia',
+	'haskell',
+	'pascal',
+	'css',
+	'xml',
+	'markdown',
+];
+// Load Top Modes
+for (let i = 0; i < topLanguages.length; i++) {
+	const mode = topLanguages[i];
+
+	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
+		require(`codemirror/mode/${mode}/${mode}`);
+	} else {
+		reg.logger().error('Cannot find CodeMirror mode: ', mode);
+	}
+}
 
 export interface EditorProps {
 	value: string,
