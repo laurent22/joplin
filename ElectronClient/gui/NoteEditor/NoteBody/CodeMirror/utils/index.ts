@@ -87,15 +87,15 @@ export function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Func
 export function useRootSize(dependencies:any) {
 	const { rootRef } = dependencies;
 
-	const [rootSize, setRootSize] = useState({ width: 0, height: 0 });
+	const [rootSize, setRootSize] = useState({ rootWidth: 0, rootHeight: 0 });
 
 	useEffect(() => {
 		if (!rootRef.current) return;
 
 		const { width, height } = rootRef.current.getBoundingClientRect();
 
-		if (rootSize.width !== width || rootSize.height !== height) {
-			setRootSize({ width: width, height: height });
+		if (rootSize.rootWidth !== width || rootSize.rootHeight !== height) {
+			setRootSize({ rootWidth: width, rootHeight: height });
 		}
 	});
 

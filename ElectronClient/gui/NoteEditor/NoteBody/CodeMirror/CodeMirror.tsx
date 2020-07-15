@@ -365,7 +365,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const output = Object.assign({}, rootSize, styles.editor);
 
 		if (props.visiblePanes.includes('editor') && props.visiblePanes.includes('viewer')) {
-			output.width = Math.floor(rootSize.width / 2);
+			output.width = Math.floor(rootSize.rootWidth / 2);
 		}
 
 		return output;

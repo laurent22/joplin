@@ -232,7 +232,7 @@ function Editor(props: EditorProps, ref: any) {
 			// it.
 			editor.refresh();
 		}
-	}, [props.style.width, props.style.height]);
+	}, [props.style.rootWidth, props.style.rootHeight]);
 
 	return <div style={props.style} ref={editorParent} />;
 }
