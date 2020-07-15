@@ -69,7 +69,7 @@ class Synchronizer {
 
 	maxResourceSize() {
 		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
-		return this.appType_ === 'mobile' ? 10 * 1000 * 1000 : Infinity;
+		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
 	}
 
 	setEncryptionService(v) {
