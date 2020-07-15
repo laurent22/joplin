@@ -29,6 +29,7 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
@@ -629,6 +630,7 @@ class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
 		SyncTargetRegistry.addClass(SyncTargetWebDAV);
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
+		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 		await shim.fsDriver().remove(tempDir);
 
