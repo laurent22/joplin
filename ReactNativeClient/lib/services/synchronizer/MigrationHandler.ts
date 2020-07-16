@@ -63,8 +63,11 @@ export default class MigrationHandler {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
-		// TODO: refresh lock every x min
-		await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, 1000 * 30);
+		const syncLock = await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, 1000 * 30);
+		let autoLockError = null;
+		this.lockHandler_.startAutoLockRefresh(syncLock, (error:any) => {
+			autoLockError = error;
+		});
 
 		try {
 			for (let newVersion = syncTargetInfo.version + 1; newVersion < migrations.length; newVersion++) {
@@ -73,7 +76,9 @@ export default class MigrationHandler {
 				const migration = migrations[newVersion];
 				if (!migration) continue;
 
+				if (autoLockError) throw autoLockError;
 				await migration(this.api_);
+				if (autoLockError) throw autoLockError;
 
 				await this.api_.put('info.json', this.serializeSyncTargetInfo({
 					...syncTargetInfo,

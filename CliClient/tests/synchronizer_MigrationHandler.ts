@@ -7,6 +7,9 @@ const { asyncTest, fileApi, synchronizer, setupDatabaseAndSynchronizer, switchCl
 const Setting = require('lib/models/Setting');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
+const Tag = require('lib/models/Tag');
+const Resource = require('lib/models/Resource');
+const markdownUtils = require('lib/markdownUtils');
 const { shim } = require('lib/shim');
 
 let lockHandler_:LockHandler = null;
@@ -24,33 +27,33 @@ function migrationHandler(clientId:string = 'abcd'):MigrationHandler {
 	return migrationHandler_;
 }
 
-async function createTestNotes() {
-	const struct:any = {
-		folder1: {
-			subFolder1: {},
-			subFolder2: {
-				note1: {
-					resource: true,
-					tags: ['tag1'],
-				},
-				note2: {},
-			},
-			note3: {
-				tags: ['tag1', 'tag2'],
-			},
-			note4: {
-				tags: ['tag2'],
-			},
-		},
-		folder2: {},
-		folder3: {
-			note5: {
+const testData:any = {
+	folder1: {
+		subFolder1: {},
+		subFolder2: {
+			note1: {
 				resource: true,
-				tags: ['tag2'],
+				tags: ['tag1'],
 			},
+			note2: {},
 		},
-	};
+		note3: {
+			tags: ['tag1', 'tag2'],
+		},
+		note4: {
+			tags: ['tag2'],
+		},
+	},
+	folder2: {},
+	folder3: {
+		note5: {
+			resource: true,
+			tags: ['tag2'],
+		},
+	},
+};
 
+async function createTestData(data:any) {
 	async function recurseStruct(s:any, parentId:string = '') {
 		for (const n in s) {
 			if (n.toLowerCase().includes('folder')) {
@@ -61,12 +64,68 @@ async function createTestNotes() {
 				if (s[n].resource) {
 					await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
 				}
+
+				if (s[n].tags) {
+					for (const tagTitle of s[n].tags) {
+						await Tag.addNoteTagByTitle(note.id, tagTitle);
+					}
+				}
 			}
 		}
 	}
 
-	await recurseStruct(struct);
+	await recurseStruct(data);
 }
+
+async function checkTestData(data:any) {
+	async function recurseCheck(s:any) {
+		for (const n in s) {
+			const obj = s[n];
+
+			if (n.toLowerCase().includes('folder')) {
+				const folder = await Folder.loadByTitle(n);
+				expect(!!folder).toBe(true, `Folder: ${n}`);
+				await recurseCheck(obj);
+			} else {
+				const note = await Note.loadByTitle(n);
+				expect(!!note).toBe(true, `Note: ${n}`);
+
+				const parent = await Folder.load(note.parent_id);
+				expect(!!parent).toBe(true, `Note parent: ${n}`);
+
+				if (obj.resource) {
+					const urls = markdownUtils.extractImageUrls(note.body);
+					const resourceId = urls[0].substr(2);
+					const resource = await Resource.load(resourceId);
+					expect(!!resource).toBe(true, `Note resource: ${n}`);
+				}
+
+				if (obj.tags) {
+					for (const tagTitle of obj.tags) {
+						const tag = await Tag.loadByTitle(tagTitle);
+						expect(!!tag).toBe(true, `Tag: ${tagTitle}`);
+						expect(await Tag.hasNote(tag.id, note.id)).toBe(true);
+					}
+				}
+			}
+		}
+	}
+
+	await recurseCheck(data);
+}
+
+interface MigrationTests {
+	[key:string]: Function;
+}
+
+const migrationTests:MigrationTests = {
+	2: async function() {
+		const items = (await fileApi().list()).items;
+		expect(items.filter((i:any) => i.path === 'locks' && i.isDir).length).toBe(1);
+		expect(items.filter((i:any) => i.path === 'temp' && i.isDir).length).toBe(1);
+		expect(items.filter((i:any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
+	},
+};
 
 describe('synchronizer_MigrationHandler', function() {
 
@@ -104,28 +163,43 @@ describe('synchronizer_MigrationHandler', function() {
 	// With encryption and without
 	// => Check we got back the same notes, folders and tags
 
-	it('should migrate (2)', asyncTest(async () => {
-		await createTestNotes();
+	for (const migrationVersionString in migrationTests) {
+		const migrationVersion = Number(migrationVersionString);
 
-		Setting.setConstant('syncVersion', 1);
+		it(`should migrate (${migrationVersion})`, asyncTest(async () => {
+			// First create some test data that will be used to validate
+			// that the migration didn't alter any data.
+			await createTestData(testData);
 
-		await synchronizer().start();
+			// Setup the client and sync target as being the previous syncVersion
+			Setting.setConstant('syncVersion', migrationVersion - 1);
+			await synchronizer().start();
 
-		{
-			const v = await migrationHandler().fetchSyncTargetInfo();
-			expect(v.version).toBe(1);
-		}
+			// Verify that the sync target is set at the previous version
+			const info = await migrationHandler().fetchSyncTargetInfo();
+			expect(info.version).toBe(migrationVersion - 1);
 
-		await migrationHandler().upgrade(2);
+			// Now, migration to the new version
+			await migrationHandler().upgrade(migrationVersion);
 
-		{
-			const v = await migrationHandler().fetchSyncTargetInfo();
-			expect(v.version).toBe(2);
-			const items = (await fileApi().list()).items;
-			expect(items.filter((i:any) => i.path === 'locks' && i.isDir).length).toBe(1);
-			expect(items.filter((i:any) => i.path === 'temp' && i.isDir).length).toBe(1);
-			expect(items.filter((i:any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
-		}
-	}));
+			// Verify that it has been upgraded
+			const newInfo = await migrationHandler().fetchSyncTargetInfo();
+			expect(newInfo.version).toBe(migrationVersion);
+			await migrationTests[migrationVersion]();
+			Setting.setConstant('syncVersion', migrationVersion);
+
+			// Now sync with that upgraded target
+			await synchronizer().start();
+
+			// Check that the data has not been altered
+			await checkTestData(testData);
+
+			// Check what happens if we switch to a different client and sync
+			await switchClient(2);
+			Setting.setConstant('syncVersion', migrationVersion);
+			await synchronizer().start();
+			await checkTestData(testData);
+		}));
+	}
 
 });
