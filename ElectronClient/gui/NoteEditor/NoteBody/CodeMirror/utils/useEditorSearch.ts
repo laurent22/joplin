@@ -1,30 +1,33 @@
-import { useCallback, useEffect, useState } from 'react';
-// Helper functions that use the cursor
-export default function useCursorUtils(CodeMirror: any) {
+import { useEffect, useRef, useState } from 'react';
+
+export default function useEditorSearch(CodeMirror: any) {
 
 	const [markers, setMarkers] = useState([]);
 	const [overlay, setOverlay] = useState(null);
 	const [scrollbarMarks, setScrollbarMarks] = useState(null);
-	const [overlayTimeout, setOverlayTimeout] = useState(null);
 	const [previousKeywordValue, setPreviousKeywordValue] = useState(null);
+	const [overlayTimeout, setOverlayTimeout] = useState(null);
+	const overlayTimeoutRef = useRef(null);
+	overlayTimeoutRef.current = overlayTimeout;
 
-	const clearMarkers = useCallback(() => {
+	function clearMarkers() {
 		for (let i = 0; i < markers.length; i++) {
 			markers[i].clear();
 		}
 
 		setMarkers([]);
-	}, [markers]);
+	}
 
-	const clearOverlay = useCallback((cm: any) => {
+	function clearOverlay(cm: any) {
 		if (overlay) cm.removeOverlay(overlay);
 		if (scrollbarMarks) scrollbarMarks.clear();
+
 		if (overlayTimeout) clearTimeout(overlayTimeout);
 
 		setOverlay(null);
 		setScrollbarMarks(null);
 		setOverlayTimeout(null);
-	}, [overlay, scrollbarMarks, overlayTimeout]);
+	}
 
 	// Modified from codemirror/addons/search/search.js
 	function searchOverlay(query: RegExp) {
@@ -86,9 +89,10 @@ export default function useCursorUtils(CodeMirror: any) {
 
 	useEffect(() => {
 		return () => {
-			if (overlayTimeout) clearTimeout(overlayTimeout);
+			if (overlayTimeoutRef.current) clearTimeout(overlayTimeoutRef.current);
+			overlayTimeoutRef.current = null;
 		};
-	}, [overlayTimeout]);
+	}, []);
 
 	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
