@@ -125,6 +125,9 @@ const migrationTests:MigrationTests = {
 		expect(items.filter((i:any) => i.path === 'locks' && i.isDir).length).toBe(1);
 		expect(items.filter((i:any) => i.path === 'temp' && i.isDir).length).toBe(1);
 		expect(items.filter((i:any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
+
+		const versionForOldClients = await fileApi().get('.sync/version.txt');
+		expect(versionForOldClients).toBe('2');
 	},
 };
 
@@ -159,8 +162,6 @@ describe('synchronizer_MigrationHandler', function() {
 
 	for (const migrationVersionString in migrationTests) {
 		const migrationVersion = Number(migrationVersionString);
-
-		// TODO: Add E2EE tests
 
 		it(`should migrate (${migrationVersion})`, asyncTest(async () => {
 			// First create some test data that will be used to validate
