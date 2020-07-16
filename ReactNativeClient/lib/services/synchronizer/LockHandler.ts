@@ -147,10 +147,6 @@ export default class LockHandler {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
 	}
 
-	// TODO: add function to refresh a sync lock
-	//       Fails if couldn't refresh within Y seconds
-	//       Test function
-
 	private async acquireSyncLock(clientType:string, clientId:string):Promise<Lock> {
 		try {
 			let isFirstPass = true;

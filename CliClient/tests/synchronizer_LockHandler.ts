@@ -72,6 +72,23 @@ describe('synchronizer_LockHandler', function() {
 		await expectThrow(() => handler.stopAutoLockRefresh(lock));
 	}));
 
+	it('should call the error handler when lock has expired while being auto-refreshed', asyncTest(async () => {
+		const handler = newLockHandler({
+			lockTtl: 1,
+			autoRefreshInterval: 2,
+		});
+
+		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
+		let autoLockError:any = null;
+		handler.startAutoLockRefresh(lock, (error:any) => {
+			autoLockError = error;
+		});
+
+		await msleep(5);
+
+		expect(autoLockError.code).toBe('lockExpired');
+	}));
+
 	it('should not allow sync locks if there is an exclusive lock', asyncTest(async () => {
 		await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '111');
 

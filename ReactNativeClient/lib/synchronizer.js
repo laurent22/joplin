@@ -216,22 +216,6 @@ class Synchronizer {
 		return state;
 	}
 
-	// async checkSyncTargetVersion_() {
-	// 	const supportedSyncTargetVersion = Setting.value('syncVersion');
-	// 	const syncTargetVersion = await this.apiCall('get', '.sync/version.txt');
-
-	// 	if (!syncTargetVersion) {
-	// 		await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
-	// 	} else {
-	// 		if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
-	// 			throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
-	// 		} else {
-	// 			await this.apiCall('put', '.sync/version.txt', `${supportedSyncTargetVersion}`);
-	// 			// TODO: do upgrade job
-	// 		}
-	// 	}
-	// }
-
 	isFullSync(steps) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
@@ -327,27 +311,20 @@ class Synchronizer {
 		};
 
 		let errorToThrow = null;
+		let syncLock = null;
 
 		try {
 			await this.migrationHandler().checkCanSync();
 
 			this.api().setTempDirName(Dirnames.Temp);
 
-			await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
+			syncLock = await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
 
-			if (this.refreshLockIID_) clearInterval(this.refreshLockIID_);
-
-			this.refreshLockIID_ = setInterval(async () => {
-				try {
-					await this.refreshLock();
-				} catch (error) {
-					this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
-					clearInterval(this.refreshLockIID_);
-					this.syncTargetIsLocked_ = true;
-					this.refreshLockIID_ = null;
-					this.cancel();
-				}
-			}, 1000 * 60);
+			this.lockHandler().startAutoLockRefresh(syncLock, (error) => {
+				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
+				this.syncTargetIsLocked_ = true;
+				this.cancel();
+			});
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -873,11 +850,9 @@ class Synchronizer {
 			}
 		}
 
-		await this.lockHandler().releaseLock('sync', this.appType_, this.clientId_);
-
-		if (this.refreshLockIID_) {
-			clearInterval(this.refreshLockIID_);
-			this.refreshLockIID_ = null;
+		if (syncLock) {
+			this.lockHandler().stopAutoLockRefresh(syncLock);
+			await this.lockHandler().releaseLock('sync', this.appType_, this.clientId_);
 		}
 
 		this.syncTargetIsLocked_ = false;
