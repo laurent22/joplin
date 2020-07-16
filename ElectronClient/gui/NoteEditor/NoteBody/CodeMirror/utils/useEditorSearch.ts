@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // Helper functions that use the cursor
 export default function useCursorUtils(CodeMirror: any) {
 
@@ -8,21 +8,23 @@ export default function useCursorUtils(CodeMirror: any) {
 	const [overlayTimeout, setOverlayTimeout] = useState(null);
 	const [previousKeywordValue, setPreviousKeywordValue] = useState(null);
 
-	function clearMarkers() {
+	const clearMarkers = useCallback(() => {
 		for (let i = 0; i < markers.length; i++) {
 			markers[i].clear();
 		}
 
 		setMarkers([]);
-	}
+	}, [markers]);
 
-	function clearOverlay(cm: any) {
+	const clearOverlay = useCallback((cm: any) => {
 		if (overlay) cm.removeOverlay(overlay);
 		if (scrollbarMarks) scrollbarMarks.clear();
+		if (overlayTimeout) clearTimeout(overlayTimeout);
 
 		setOverlay(null);
 		setScrollbarMarks(null);
-	}
+		setOverlayTimeout(null);
+	}, [overlay, scrollbarMarks, overlayTimeout]);
 
 	// Modified from codemirror/addons/search/search.js
 	function searchOverlay(query: RegExp) {
@@ -66,15 +68,27 @@ export default function useCursorUtils(CodeMirror: any) {
 		return marks;
 	}
 
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
+	function escapeRegExp(keyword: string) {
+		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+	}
+
 	function getSearchTerm(keyword: any) {
-		let searchTerm = new RegExp(keyword.value, 'g');
+		const value = escapeRegExp(keyword.value);
+		let searchTerm = new RegExp(value, 'g');
 
 		if (keyword.accuracy === 'partially') {
-			searchTerm = new RegExp(keyword.value, 'gi');
+			searchTerm = new RegExp(value, 'gi');
 		}
 
 		return searchTerm;
 	}
+
+	useEffect(() => {
+		return () => {
+			if (overlayTimeout) clearTimeout(overlayTimeout);
+		};
+	}, [overlayTimeout]);
 
 	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
@@ -120,9 +134,6 @@ export default function useCursorUtils(CodeMirror: any) {
 		clearOverlay(this);
 		setPreviousKeywordValue(keywords[0].value);
 
-		if (overlayTimeout) {
-			clearTimeout(overlayTimeout);
-		}
 		// These operations are pretty slow, so we won't add use them until the user
 		// has finished typing, 500ms is probably enough time
 		const timeout = setTimeout(() => {
