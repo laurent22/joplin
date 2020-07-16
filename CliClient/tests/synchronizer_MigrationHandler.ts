@@ -121,7 +121,8 @@ interface MigrationTests {
 
 const migrationTests:MigrationTests = {
 	2: async function() {
-		const items = (await fileApi().list()).items;
+		const items = (await fileApi().list('', { includeHidden: true })).items;
+		expect(items.filter((i:any) => i.path === '.resource' && i.isDir).length).toBe(1);
 		expect(items.filter((i:any) => i.path === 'locks' && i.isDir).length).toBe(1);
 		expect(items.filter((i:any) => i.path === 'temp' && i.isDir).length).toBe(1);
 		expect(items.filter((i:any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
