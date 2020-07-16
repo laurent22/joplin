@@ -116,7 +116,7 @@ describe('synchronizer_LockHandler', function() {
 
 		await msleep(2);
 
-		expectNotThrow(async () => {
+		await expectNotThrow(async () => {
 			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '333');
 		});
 	}));

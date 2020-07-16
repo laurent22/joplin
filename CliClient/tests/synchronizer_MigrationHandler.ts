@@ -3,7 +3,7 @@ import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
 
 require('app-module-path').addPath(__dirname);
 
-const { asyncTest, fileApi, synchronizer, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
+const { asyncTest, fileApi, synchronizer, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
 const Setting = require('lib/models/Setting');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
@@ -84,27 +84,28 @@ async function checkTestData(data:any) {
 
 			if (n.toLowerCase().includes('folder')) {
 				const folder = await Folder.loadByTitle(n);
-				expect(!!folder).toBe(true, `Folder: ${n}`);
+				if (!folder) throw new Error(`Cannot load folder: ${n}`);
 				await recurseCheck(obj);
 			} else {
 				const note = await Note.loadByTitle(n);
-				expect(!!note).toBe(true, `Note: ${n}`);
+				if (!note) throw new Error(`Cannot load note: ${n}`);
 
 				const parent = await Folder.load(note.parent_id);
-				expect(!!parent).toBe(true, `Note parent: ${n}`);
+				if (!parent) throw new Error(`Cannot load note parent: ${n}`);
 
 				if (obj.resource) {
 					const urls = markdownUtils.extractImageUrls(note.body);
 					const resourceId = urls[0].substr(2);
 					const resource = await Resource.load(resourceId);
-					expect(!!resource).toBe(true, `Note resource: ${n}`);
+					if (!resource) throw new Error(`Cannot load note resource: ${n}`);
 				}
 
 				if (obj.tags) {
 					for (const tagTitle of obj.tags) {
 						const tag = await Tag.loadByTitle(tagTitle);
-						expect(!!tag).toBe(true, `Tag: ${tagTitle}`);
-						expect(await Tag.hasNote(tag.id, note.id)).toBe(true);
+						if (!tag) throw new Error(`Cannot load note tag: ${tagTitle}`);
+						const hasNote = await Tag.hasNote(tag.id, note.id);
+						if (!hasNote) throw new Error(`Tag not associated with note: ${tagTitle}`);
 					}
 				}
 			}
@@ -149,22 +150,17 @@ describe('synchronizer_MigrationHandler', function() {
 
 		await migrationHandler().upgrade(2);
 
-		expectNotThrow(async () => await migrationHandler().checkCanSync());
+		await expectNotThrow(async () => await migrationHandler().checkCanSync());
 
 		Setting.setConstant('syncVersion', 1);
 
 		expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedClient');
 	}));
 
-	// Create a helper function that create notes, folders, resources and tags
-	// Sync with previous sync format
-	// Upgrade
-	// Sync with new sync format
-	// With encryption and without
-	// => Check we got back the same notes, folders and tags
-
 	for (const migrationVersionString in migrationTests) {
 		const migrationVersion = Number(migrationVersionString);
+
+		// TODO: Add E2EE tests
 
 		it(`should migrate (${migrationVersion})`, asyncTest(async () => {
 			// First create some test data that will be used to validate
@@ -179,14 +175,14 @@ describe('synchronizer_MigrationHandler', function() {
 			const info = await migrationHandler().fetchSyncTargetInfo();
 			expect(info.version).toBe(migrationVersion - 1);
 
-			// Now, migration to the new version
+			// Now, migrate to the new version
+			Setting.setConstant('syncVersion', migrationVersion);
 			await migrationHandler().upgrade(migrationVersion);
 
 			// Verify that it has been upgraded
 			const newInfo = await migrationHandler().fetchSyncTargetInfo();
 			expect(newInfo.version).toBe(migrationVersion);
 			await migrationTests[migrationVersion]();
-			Setting.setConstant('syncVersion', migrationVersion);
 
 			// Now sync with that upgraded target
 			await synchronizer().start();
@@ -198,7 +194,52 @@ describe('synchronizer_MigrationHandler', function() {
 			await switchClient(2);
 			Setting.setConstant('syncVersion', migrationVersion);
 			await synchronizer().start();
+			await expectNotThrow(async () => await checkTestData(testData));
+		}));
+
+		it(`should migrate (E2EE) (${migrationVersion})`, asyncTest(async () => {
+			// First create some test data that will be used to validate
+			// that the migration didn't alter any data.
+			await createTestData(testData);
+
+			// Enable E2EE
+			Setting.setValue('encryption.enabled', true);
+			const masterKey = await loadEncryptionMasterKey();
+
+			// Sync
+			Setting.setConstant('syncVersion', migrationVersion - 1);
+			await synchronizer().start();
+
+			// Now, migrate to the new version
+			Setting.setConstant('syncVersion', migrationVersion);
+			await migrationHandler().upgrade(migrationVersion);
+
+			// Verify that it has been upgraded
+			const newInfo = await migrationHandler().fetchSyncTargetInfo();
+			expect(newInfo.version).toBe(migrationVersion);
+			await migrationTests[migrationVersion]();
+
+			// Now sync with that upgraded target
+			await synchronizer().start();
+
+			// Check that the data has not been altered
 			await checkTestData(testData);
+
+			// Check what happens if we switch to a different client and sync
+			await switchClient(2);
+			Setting.setConstant('syncVersion', migrationVersion);
+			await synchronizer().start();
+
+			// Should throw because data hasn't been decrypted yet
+			await expectThrow(async () => await checkTestData(testData));
+
+			// Enable E2EE and decrypt
+			Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+			await encryptionService().loadMasterKeysFromSettings();
+			await decryptionWorker().start();
+
+			// Should not throw because data is decrypted
+			await expectNotThrow(async () => await checkTestData(testData));
 		}));
 	}
 
