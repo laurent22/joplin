@@ -1,4 +1,4 @@
-import LockHandler, { LockType } from 'lib/services/synchronizer/LockHandler';
+import LockHandler, { LockType, LockHandlerOptions } from 'lib/services/synchronizer/LockHandler';
 
 require('app-module-path').addPath(__dirname);
 
@@ -9,6 +9,10 @@ process.on('unhandledRejection', (reason:any, p:any) => {
 });
 
 let lockHandler_:LockHandler = null;
+
+function newLockHandler(options:LockHandlerOptions = null):LockHandler {
+	return new LockHandler(fileApi(), options);
+}
 
 function lockHandler():LockHandler {
 	if (lockHandler_) return lockHandler_;
@@ -55,18 +59,18 @@ describe('synchronizer_LockHandler', function() {
 		}
 	}));
 
-	// it('should refresh sync lock timestamp when acquiring again', asyncTest(async () => {
-	// 	await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
+	it('should auto-refresh a lock', asyncTest(async () => {
+		const handler = newLockHandler({ autoRefreshInterval: 1 });
+		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
+		const lockBefore = await handler.activeSyncLock('desktop', '111');
+		handler.startAutoLockRefresh(lock, () => {});
+		await msleep(5);
+		const lockAfter = await handler.activeSyncLock('desktop', '111');
+		expect(lockAfter.updatedTime).toBeGreaterThan(lockBefore.updatedTime);
+		handler.stopAutoLockRefresh(lock);
 
-	// 	const beforeTime = (await lockHandler().syncLocks())[0].updatedTime;
-	// 	await msleep(1);
-
-	// 	await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
-
-	// 	const afterTime = (await lockHandler().syncLocks())[0].updatedTime;
-
-	// 	expect(beforeTime).toBeLessThan(afterTime);
-	// }));
+		await expectThrow(() => handler.stopAutoLockRefresh(lock));
+	}));
 
 	it('should not allow sync locks if there is an exclusive lock', asyncTest(async () => {
 		await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '111');
@@ -77,26 +81,26 @@ describe('synchronizer_LockHandler', function() {
 	}));
 
 	it('should not allow exclusive lock if there are sync locks', asyncTest(async () => {
-		lockHandler().syncLockMaxAge = 1000 * 60 * 60;
+		const lockHandler = newLockHandler({ lockTtl: 1000 * 60 * 60 });
 
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '222');
+		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
+		await lockHandler.acquireLock(LockType.Sync, 'mobile', '222');
 
 		expectThrow(async () => {
-			await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '333');
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '333');
 		}, 'hasSyncLock');
 	}));
 
 	it('should allow exclusive lock if the sync locks have expired', asyncTest(async () => {
-		lockHandler().syncLockMaxAge = 1;
+		const lockHandler = newLockHandler({ lockTtl: 1 });
 
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
-		await lockHandler().acquireLock(LockType.Sync, 'mobile', '222');
+		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
+		await lockHandler.acquireLock(LockType.Sync, 'mobile', '222');
 
 		await msleep(2);
 
 		expectNotThrow(async () => {
-			await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '333');
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '333');
 		});
 	}));
 
