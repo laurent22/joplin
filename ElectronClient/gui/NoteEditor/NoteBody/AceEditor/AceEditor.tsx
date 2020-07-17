@@ -601,6 +601,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						{
 							behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
 							useSoftTabs: false,
+							scrollPastEnd: '0.1',
 						}
 					}
 					// Disable warning: "Automatically scrolling cursor into view after
