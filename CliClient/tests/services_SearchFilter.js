@@ -687,4 +687,36 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n4.id);
 	}));
 
+	it('should ignore dashes in a word', asyncTest(async () => {
+		const n0 = await Note.save({ title: 'doesnotwork' });
+		const n1 = await Note.save({ title: 'does not work' });
+		const n2 = await Note.save({ title: 'does-not-work' });
+		const n3 = await Note.save({ title: 'does_not_work' });
+
+		await engine.syncTables();
+
+		let rows = await engine.search('does-not-work');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('does not work');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('"does not work"');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('doesnotwork');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n0.id);
+
+	}));
+
 });

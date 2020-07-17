@@ -11,6 +11,8 @@ const filterParser = require('./filterParser').default;
 const queryBuilder = require('./queryBuilder').default;
 
 class SearchEngine {
+	relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude';
+
 	constructor() {
 		this.dispatch = () => {};
 		this.logger_ = new Logger();
@@ -65,7 +67,7 @@ class SearchEngine {
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
 			const notes = await Note.modelSelectAll(`
-				SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude
+				SELECT ${this.relevantFields}
 				FROM notes
 				WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
@@ -74,7 +76,7 @@ class SearchEngine {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
-				INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
+				INSERT INTO notes_normalized(${this.relevantFields})
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] }
 				);
@@ -148,7 +150,7 @@ class SearchEngine {
 
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
-					SELECT id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude
+					SELECT ${this.relevantFields}
 					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`
 				);
 
@@ -163,7 +165,7 @@ class SearchEngine {
 						if (note) {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
-							INSERT INTO notes_normalized(id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude)
+							INSERT INTO notes_normalized(${this.relevantFields})
 							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
 							report.inserted++;
@@ -470,9 +472,6 @@ class SearchEngine {
 			// see "this phrase" in the index. Because of this, we remove the dashes
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
-
-			// commented out because of search syntax like day-0 or -tag:something we can't do this.
-			// searchString = searchString.replace(/-/g, ' ')
 
 			const parsedQuery = this.parseQuery(searchString);
 

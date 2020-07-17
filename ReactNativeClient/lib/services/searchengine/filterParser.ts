@@ -10,6 +10,17 @@ const makeTerm = (name: string, value: string): Term => {
 	return { name: name, value: value, negated: false };
 };
 
+
+const quote = (s : string) => {
+	const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
+
+	if (!quoted(s)) {
+		return `"${s}"`;
+	}
+	return s;
+};
+
+
 const getTerms = (query: string) : Term[] => {
 	const terms: Term[] = [];
 	let inQuote = false;
@@ -81,11 +92,12 @@ const parseQuery = (query: string): Term[] => {
 				result.push({ name, value, negated });
 			}
 		} else {
-			// text to fts search, here value has the '-' if negated
+			// Every word is quoted if not already.
+			// By quoting the word, FTS match query will take care of removing dashes and other word seperators.
 			if (value.startsWith('-')) {
-				result.push({ name: 'text', value: value.slice(1), negated: true });
+				result.push({ name: 'text', value: quote(value.slice(1)) , negated: true });
 			} else {
-				result.push({ name: 'text', value: value, negated: false });
+				result.push({ name: 'text', value: quote(value), negated: false });
 			}
 		}
 	}
