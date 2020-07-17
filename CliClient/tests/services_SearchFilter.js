@@ -321,21 +321,6 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-	// it('should support filtering by negated notebook', asyncTest(async () => {
-	// 	let rows;
-	// 	const folder0 = await Folder.save({ title: 'notebook0' });
-	// 	const folder1 = await Folder.save({ title: 'notebook1' });
-	// 	const notes0 = await createNTestNotes(5, folder0);
-	// 	const notes1 = await createNTestNotes(5, folder1);
-
-	// 	await engine.syncTables();
-
-	// 	rows = await engine.search('-notebook:notebook0');
-	// 	expect(rows.length).toBe(5);
-	// 	expect(ids(rows).sort()).toEqual(ids(notes1).sort());
-
-	// }));
-
 	it('should support filtering by nested notebook', asyncTest(async () => {
 		let rows;
 		const folder0 = await Folder.save({ title: 'notebook0' });

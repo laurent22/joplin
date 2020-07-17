@@ -62,10 +62,10 @@ const getTerms = (query: string) : Term[] => {
 };
 
 const parseQuery = (query: string): Term[] => {
-	const validFilters = new Set(['any', 'title', '-title', 'body', '-body', 'tag',
-		'-tag', 'notebook', 'created', '-created',  '-updated', 'updated', 'type',
-		'iscompleted', 'latitude', '-latitude', 'longitude', '-longitude',
-		'altitude', '-altitude', 'resource', '-resource']);
+	const validFilters = new Set(['any', 'title', 'body', 'tag',
+		'notebook', 'created', 'updated', 'type',
+		'iscompleted', 'latitude', 'longitude',
+		'altitude', 'resource']);
 
 	const terms = getTerms(query);
 
@@ -78,7 +78,7 @@ const parseQuery = (query: string): Term[] => {
 				throw new Error(`Invalid filter: ${name}`);
 			}
 
-			if (name === 'tag' || name === '-tag' || name === 'notebook' || name === 'resource' || name === '-resource') {
+			if (name === 'tag' || name === 'notebook' || name === 'resource') {
 				const fuzzyValue = value.replace(/[*]/g, '%');
 				result.push({ name, value: fuzzyValue, negated });
 			} else if (name === 'title' || name === 'body') {
@@ -111,15 +111,18 @@ export default function filterParser(searchString: string) {
 	const result =  parseQuery(searchString);
 
 	// validation
-	let incorrect = result.filter(term => term.name === 'type')
-		.find(x => (x.value !== 'note' && x.value !== 'todo') || (x.negated));
-	if (incorrect) throw new Error('Invalid argument for filter type');
+	let incorrect = result.filter(term => term.name === 'type' || term.name === 'iscompleted' || term.name === 'notebook')
+		.find(x => x.negated);
+	if (incorrect) throw new Error(`${incorrect.name} can't be negated`);
+
+	incorrect = result.filter(term => term.name === 'type')
+		.find(x => (x.value !== 'note' && x.value !== 'todo'));
+	if (incorrect) throw new Error('The value of filter "type" must be "note" or "todo"');
 
 
 	incorrect = result.filter(term => term.name === 'iscompleted')
 		.find(x => (x.value !== '1' && x.value !== '0') || (x.negated));
-	if (incorrect) throw new Error('Invalid argument for filter iscompleted');
-
+	if (incorrect) throw new Error('The value of filter "iscompleted" must be "1" or "0"');
 
 	return result;
 }

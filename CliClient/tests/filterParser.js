@@ -48,19 +48,19 @@ describe('filterParser should be correct filter for keyword', () => {
 
 	it('single word text', () => {
 		const searchString = 'joplin';
-		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"joplin"', false));
 	});
 
 	it('multi word text', () => {
 		const searchString = 'scott joplin';
-		expect(filterParser(searchString)).toContain(makeTerm('text', 'scott', false));
-		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"scott"', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"joplin"', false));
 	});
 
 	it('negated word text', () => {
 		const searchString = 'scott -joplin';
-		expect(filterParser(searchString)).toContain(makeTerm('text', 'scott', false));
-		expect(filterParser(searchString)).toContain(makeTerm('text', 'joplin', true));
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"scott"', false));
+		expect(filterParser(searchString)).toContain(makeTerm('text', '"joplin"', true));
 	});
 
 	it('phrase text search', () => {
@@ -128,12 +128,16 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(() => filterParser(searchString)).toThrow(new Error('Invalid filter: '));
 
 		searchString = 'type:blah';
-		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter type'));
+		expect(() => filterParser(searchString)).toThrow(new Error('The value of filter "type" must be "note" or "todo"'));
 
 		searchString = '-type:note';
-		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter type'));
+		expect(() => filterParser(searchString)).toThrow(new Error('type can\'t be negated'));
 
 		searchString = 'iscompleted:blah';
-		expect(() => filterParser(searchString)).toThrow(new Error('Invalid argument for filter iscompleted'));
+		expect(() => filterParser(searchString)).toThrow(new Error('The value of filter "iscompleted" must be "1" or "0"'));
+
+		searchString = '-notebook:n1';
+		expect(() => filterParser(searchString)).toThrow(new Error('notebook can\'t be negated'));
+
 	});
 });
