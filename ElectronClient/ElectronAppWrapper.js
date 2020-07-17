@@ -17,10 +17,19 @@ class ElectronAppWrapper {
 		this.tray_ = null;
 		this.buildDir_ = null;
 		this.rendererProcessQuitReply_ = null;
+		this.mode_ = 'normal';
 	}
 
 	electronApp() {
 		return this.electronApp_;
+	}
+
+	mode() {
+		return this.mode_;
+	}
+
+	setMode(v) {
+		this.mode_ = v;
 	}
 
 	setLogger(v) {
@@ -113,6 +122,11 @@ class ElectronAppWrapper {
 
 			// On Windows and Linux, the app is closed when the window is closed *except* if the tray icon is used. In which
 			// case the app must be explicitly closed with Ctrl+Q or by right-clicking on the tray icon and selecting "Exit".
+
+			// if (this.mode_ === 'upgradeSyncTarget') {
+			// 	alert('Nooooooooooooooooooooooo');
+			// 	return;
+			// }
 
 			let isGoingToExit = false;
 
