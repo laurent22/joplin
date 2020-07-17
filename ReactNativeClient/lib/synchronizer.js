@@ -314,7 +314,16 @@ class Synchronizer {
 		let syncLock = null;
 
 		try {
-			await this.migrationHandler().checkCanSync();
+			try {
+				await this.migrationHandler().checkCanSync();
+			} catch (error) {
+				if (error.code === 'outdatedSyncTarget') {
+					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
+					return;
+				} else {
+					throw error;
+				}
+			}
 
 			this.api().setTempDirName(Dirnames.Temp);
 

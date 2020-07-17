@@ -182,6 +182,15 @@ class Bridge {
 		}
 	}
 
+	restart() {
+		// Note that in this case we are not sending the "appClose" event
+		// to notify services and component that the app is about to close
+		// but for the current use-case it's not really needed.
+		const { app } = require('electron');
+		app.relaunch();
+		app.exit();
+	}
+
 }
 
 let bridge_ = null;
