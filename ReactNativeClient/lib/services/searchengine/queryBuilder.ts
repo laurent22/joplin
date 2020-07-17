@@ -6,7 +6,12 @@ interface Term {
 	negated: boolean
 }
 
-const tagFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
+enum Relation {
+    OR = 'OR',
+    AND = 'AND',
+}
+
+const tagFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: Relation) => {
 	const tagIDs = `
 	SELECT tags.id
 	FROM tags
@@ -156,7 +161,7 @@ const notebookFilter = (filters: Term[], withs: string[], conditions: string[], 
 };
 
 
-const resourceFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: string) => {
+const resourceFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: Relation) => {
 	const resourceIDs = `
 	SELECT resources.id
 	FROM resources
@@ -269,7 +274,7 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 	}
 };
 
-const typeFilter = (filters: Term[], conditions: string[], relation: string) => {
+const typeFilter = (filters: Term[], conditions: string[], relation: Relation) => {
 	const typeOfNote = filters.filter(x => x.name === 'type' && !x.negated).map(x => x.value);
 	typeOfNote.forEach(type => {
 		if (relation === 'AND') {
@@ -286,7 +291,7 @@ const typeFilter = (filters: Term[], conditions: string[], relation: string) => 
 	});
 };
 
-const completedFilter = (filters: Term[], conditions: string[], relation: string) => {
+const completedFilter = (filters: Term[], conditions: string[], relation: Relation) => {
 	const values = filters.filter(x => x.name === 'iscompleted' && !x.negated).map(x => x.value);
 	values.forEach(value => {
 		if (relation === 'AND') {
@@ -326,7 +331,7 @@ const getUnixMs = (date:string): string => {
 	}
 };
 
-const dateFilter = (filters: Term[], conditons: string[], params: string[], relation: string) => {
+const dateFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
 	const dateTerms = filters.filter(x => x.name === 'created' || x.name === 'updated');
 	dateTerms.forEach(dateTerm => {
 		conditons.push(`
@@ -340,7 +345,7 @@ const dateFilter = (filters: Term[], conditons: string[], params: string[], rela
 };
 
 
-const locationFilter = (filters: Term[], conditons: string[], params: string[], relation: string) => {
+const locationFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
 	const locationTerms = filters.filter(x => x.name === 'latitude' || x.name === 'longitude' || x.name === 'altitude');
 
 	locationTerms.forEach(locationTerm => {
@@ -354,7 +359,7 @@ const locationFilter = (filters: Term[], conditons: string[], params: string[], 
 	});
 };
 
-const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: string) => {
+const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: Relation) => {
 	const type = excludedTerms[0].name;
 
 	if (excludedTerms && relation === 'AND') {
@@ -387,7 +392,7 @@ const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], pa
 };
 
 
-const textFilter = (filters: Term[], conditions: string[], params: string[], relation: string) => {
+const textFilter = (filters: Term[], conditions: string[], params: string[], relation: Relation) => {
 	const allTerms = filters.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
 
 	const includedTerms = allTerms.filter(x => !x.negated);
@@ -441,13 +446,13 @@ const textFilter = (filters: Term[], conditions: string[], params: string[], rel
 
 };
 
-const getDefaultRelation = (filters: Term[]): 'OR' | 'AND' => {
+const getDefaultRelation = (filters: Term[]): Relation => {
 	const anyTerm = filters.find(term => term.name === 'any');
-	if (anyTerm) { return (anyTerm.value === '1') ? 'OR' : 'AND'; }
-	return 'AND';
+	if (anyTerm) { return (anyTerm.value === '1') ? Relation.OR : Relation.AND; }
+	return Relation.AND;
 };
 
-const getConnective = (filters: Term[], relation: 'OR' | 'AND'): string => {
+const getConnective = (filters: Term[], relation: Relation): string => {
 	const notebookTerm = filters.find(x => x.name === 'notebook');
 	return (!notebookTerm && (relation === 'OR')) ? 'ROWID=-1' : '1'; // ROWID=-1 acts as 0 (something always false)
 };
@@ -460,7 +465,7 @@ export default function queryBuilder(filters: Term[]) {
 	// console.log("testing beep beep boop boop")
 	// console.log(filters);
 
-	const relation: 'AND' | 'OR' = getDefaultRelation(filters);
+	const relation: Relation = getDefaultRelation(filters);
 
 	// console.log(`relations = ${relation}`);
 	// console.log(filters);
