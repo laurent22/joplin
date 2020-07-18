@@ -67,9 +67,9 @@ describe('services_KeymapService', () => {
 		beforeEach(() => keymapService.resetKeymap());
 
 		it('should return the platform-specific default Accelerator', () => {
-			expect(keymapService.getAccelerator('newNoteItem')).toEqual(shim.isMac() ? 'Cmd+N' : 'Ctrl+N');
+			expect(keymapService.getAccelerator('newNote')).toEqual(shim.isMac() ? 'Cmd+N' : 'Ctrl+N');
 			expect(keymapService.getAccelerator('synchronize')).toEqual(shim.isMac() ? 'Cmd+S' : 'Ctrl+S');
-			expect(keymapService.getAccelerator('selectAll')).toEqual(shim.isMac() ? 'Cmd+A' : 'Ctrl+A');
+			expect(keymapService.getAccelerator('textSelectAll')).toEqual(shim.isMac() ? 'Cmd+A' : 'Ctrl+A');
 			expect(keymapService.getAccelerator('textBold')).toEqual(shim.isMac() ? 'Cmd+B' : 'Ctrl+B');
 		});
 
@@ -141,102 +141,6 @@ describe('services_KeymapService', () => {
 				keymapService.resetAccelerator(command);
 				expect(keymapService.getAccelerator(command)).toEqual(_accelerator);
 			});
-		});
-	});
-
-	describe('getKeymap', () => {
-		beforeEach(() => keymapService.resetKeymap());
-
-		it('should return the updated keymap after setting the custom keymap', () => {
-			const customKeymap = shim.isMac()
-				? [
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Option+Shift+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'textBold', accelerator: 'Shift+F5' },
-					{ command: 'focusNoteTitle', accelerator: 'Option+Shift+Cmd+T' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Option+S' },
-					{ command: 'gotoAnything', accelerator: 'Shift+Cmd+G' },
-					{ command: 'focusSidebar', accelerator: null /* Disabled */ },
-					{ command: 'printItem', accelerator: 'Option+P' },
-					{ command: 'focusNoteBody', accelerator: 'Ctrl+Option+Shift+Cmd+B' },
-				] : [
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Alt+Shift+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'textBold', accelerator: 'Shift+F5' },
-					{ command: 'focusNoteTitle', accelerator: 'Ctrl+Alt+Shift+T' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
-					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
-					{ command: 'focusSidebar', accelerator: null /* Disabled */ },
-					{ command: 'printItem', accelerator: 'Alt+P' },
-					{ command: 'focusNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
-				];
-
-			expect(() => keymapService.setKeymap(customKeymap)).not.toThrow();
-
-			// Sort both of the lists so that the difference in order won't fail the test
-			expect(keymapService.getKeymap().sort((a, b) => a.command.localeCompare(b.command)))
-				.toEqual(customKeymap.sort((a, b) => a.command.localeCompare(b.command)));
-		});
-
-		it('should return the updated keymap after setting individual Accelerator', () => {
-			const customKeymap = shim.isMac()
-				? [
-					{ command: 'gotoAnything', accelerator: 'Shift+Cmd+G' },
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Option+Shift+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'focusSidebar', accelerator: null /* Disabled */ },
-					{ command: 'focusNoteTitle', accelerator: 'Option+Shift+Cmd+T' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Option+S' },
-					{ command: 'printItem', accelerator: 'Option+P' },
-					{ command: 'textBold', accelerator: 'Shift+F5' },
-					{ command: 'focusNoteBody', accelerator: 'Option+Cmd+B' },
-				] : [
-					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Alt+Shift+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'focusSidebar', accelerator: null /* Disabled */ },
-					{ command: 'focusNoteTitle', accelerator: 'Ctrl+Alt+Shift+T' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
-					{ command: 'printItem', accelerator: 'Alt+P' },
-					{ command: 'textBold', accelerator: 'Shift+F5' },
-					{ command: 'focusNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
-				];
-
-			customKeymap.forEach(({ command, accelerator }) => keymapService.setAccelerator(command, accelerator));
-
-			// Sort both of the lists so that the difference in order won't fail the test
-			expect(keymapService.getKeymap().sort((a, b) => a.command.localeCompare(b.command)))
-				.toEqual(customKeymap.sort((a, b) => a.command.localeCompare(b.command)));
-		});
-
-		it('should return the updated keymap after setting some Accelerators to null', () => {
-			// NOTE: Set "accelerator" property to null in order to disable a shortcut
-			const customKeymap = shim.isMac()
-				? [
-					{ command: 'gotoAnything', accelerator: 'Shift+Cmd++G' },
-					{ command: 'newNoteItem', accelerator: 'Option+Shift+Cmd+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'focusNoteTitle', accelerator: null },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Option+S' },
-					{ command: 'printItem', accelerator: 'Option+P' },
-					{ command: 'textBold', accelerator: null },
-					{ command: 'focusNoteBody', accelerator: 'Option+Shift+Cmd+B' },
-				] : [
-					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Alt+Shift+N' },
-					{ command: 'synchronize', accelerator: 'F11' },
-					{ command: 'focusNoteTitle', accelerator: null },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
-					{ command: 'printItem', accelerator: 'Alt+P' },
-					{ command: 'textBold', accelerator: null },
-					{ command: 'focusNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
-				];
-
-			customKeymap.forEach(({ command, accelerator }) => keymapService.setAccelerator(command, accelerator));
-
-			// Sort both of the lists so that the deference in order won't fail the test
-			expect(keymapService.getKeymap().sort((a, b) => a.command.localeCompare(b.command)))
-				.toEqual(customKeymap.sort((a, b) => a.command.localeCompare(b.command)));
 		});
 	});
 

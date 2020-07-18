@@ -114,20 +114,6 @@ class KeymapService extends BaseService {
 		else this.setAccelerator(command, defaultItem.accelerator);
 	}
 
-	getKeymap() {
-		const defaultItemsByCommand = KeymapService.initKeymap();
-
-		// Compare each "accelerator" value of the current keymap with the default values
-		// Return a keymap object, which can later be converted to a string and saved to the disk
-		return Object.entries(this.keymap).reduce((customKeymap, [command, { accelerator }]) => {
-			// If the Accelerator has been changed, add into the customKeymap object
-			if (defaultItemsByCommand[command].accelerator !== accelerator) {
-				customKeymap.push({ command, accelerator });
-			}
-			return customKeymap;
-		}, []);
-	}
-
 	setKeymap(customKeymap: KeymapItem[]) {
 		for (let i = 0; i < customKeymap.length; i++) {
 			const item = customKeymap[i];
