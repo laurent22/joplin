@@ -248,7 +248,7 @@ function Editor(props: EditorProps, ref: any) {
 			}
 			editor.setOption('screenReaderLabel', props.value);
 		}
-	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+	}, [props.value]);
 
 	useEffect(() => {
 		if (editor) {
