@@ -316,7 +316,14 @@ class Synchronizer {
 
 		try {
 			try {
-				await this.migrationHandler().checkCanSync();
+				const syncTargetInfo = await this.migrationHandler().checkCanSync();
+
+				this.logger().info('Sync target info:', syncTargetInfo);
+
+				if (!syncTargetInfo.version) {
+					this.logger().info('Sync target is new - setting it up...');
+					await this.migrationHandler().upgrade();
+				}
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
