@@ -1086,7 +1086,6 @@ class Application extends BaseApplication {
 		argv = await super.start(argv);
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
-			bridge().electronApp().setMode('upgradeSyncTarget');
 			return { action: 'upgradeSyncTarget' };
 		}
 
