@@ -60,7 +60,7 @@ const getOperator = (requirement: Requirement, relation: Relation): Operation =>
 	if (relation === 'AND' && requirement === 'INCLUSION') { return Operation.INTERSECT; } else { return Operation.UNION; }
 };
 
-const addFilter = (
+const filterByFieldName = (
 	withs: string[],
 	conditions: string[],
 	params: string[],
@@ -70,12 +70,10 @@ const addFilter = (
 	requirement: Requirement,
 	relation: Relation
 ) => {
-
 	const operator: Operation = getOperator(requirement, relation);
 
 	let withCondition = null;
-
-	// with_${requirement}_${field} is added to make sure the names are all unique
+	// with_${requirement}_${field} is added to the names to make them unique
 	if (relation === Relation.OR && requirement === Requirement.EXCLUSION) {
 		withs.push(`
 		all_notes_with_${requirement}_${field}
@@ -100,7 +98,7 @@ const addFilter = (
 		)`;
 
 	} else {
-		// Notes with any/all tag/resource
+		// Notes with any/all fieldValues depending upon relation and requirement
 		withCondition = `
 		notes_with_${requirement}_${field}
 		AS (
@@ -112,7 +110,7 @@ const addFilter = (
 		)`;
 	}
 
-	// Get the ROWID that satisfy the condition so we can filter the result
+	// Get the ROWIDs that satisfy the condition so we can filter the result
 	const whereCondition = `
 	${relation} ROWID ${(relation === 'AND' && requirement === 'EXCLUSION') ? 'NOT' : ''}
 	IN (
@@ -146,14 +144,13 @@ const resourceFilter = (filters: Term[], withs: string[], conditions: string[], 
 	const excludedResources = filters.filter(x => x.name === 'resource' && x.negated).map(x => x.value);
 
 	if (requiredResources.length > 0) {
-		addFilter(withs, conditions, params, requiredResources, fieldName, noteIDsWithResource, Requirement.INCLUSION, relation);
+		filterByFieldName(withs, conditions, params, requiredResources, fieldName, noteIDsWithResource, Requirement.INCLUSION, relation);
 	}
 
 	if (excludedResources.length > 0) {
-		addFilter(withs, conditions, params, excludedResources, fieldName, noteIDsWithResource, Requirement.EXCLUSION, relation);
+		filterByFieldName(withs, conditions, params, excludedResources, fieldName, noteIDsWithResource, Requirement.EXCLUSION, relation);
 	}
 };
-
 
 const tagFilter = (filters: Term[], withs: string[], conditions: string[], params: string[], relation: Relation) => {
 	const fieldName = 'tags';
@@ -173,47 +170,76 @@ const tagFilter = (filters: Term[], withs: string[], conditions: string[], param
 	const excludedTags = filters.filter(x => x.name === 'tag' && x.negated).map(x => x.value);
 
 	if (requiredTags.length > 0) {
-		addFilter(withs, conditions, params, requiredTags, fieldName, noteIDsWithTag, Requirement.INCLUSION, relation);
+		filterByFieldName(withs, conditions, params, requiredTags, fieldName, noteIDsWithTag, Requirement.INCLUSION, relation);
 	}
 
 	if (excludedTags.length > 0) {
-		addFilter(withs, conditions, params, excludedTags, fieldName, noteIDsWithTag, Requirement.EXCLUSION, relation);
+		filterByFieldName(withs, conditions, params, excludedTags, fieldName, noteIDsWithTag, Requirement.EXCLUSION, relation);
 	}
+};
+
+const getCondition = (filterName: string , value: string, relation: Relation) => {
+	const tableName = (relation === 'AND') ? 'notes_fts' : 'notes_normalized';
+
+	if (filterName === 'type') {
+		return `${tableName}.is_todo IS ${value === 'todo' ? 1 : 0}`;
+	} else if (filterName === 'iscompleted') {
+		return `${tableName}.is_todo IS 1
+		AND ${tableName}.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`;
+	} else {
+		throw new Error('Invalid field name.');
+	}
+};
+
+const biConditionalFilter = (values: string[], conditions: string[], relation: Relation, filterName: string) => {
+	// AND and OR are handled differently because FTS restricts how OR can be used.
+	values.forEach(value => {
+		if (relation === 'AND') {
+			conditions.push(`
+			AND ${getCondition(filterName, value, relation)}`);
+		}
+		if (relation === 'OR') {
+			conditions.push(`
+			OR ROWID IN (
+				SELECT ROWID
+				FROM notes_normalized
+				WHERE ${getCondition(filterName, value, relation)}
+			)`);
+		}
+	});
 };
 
 const typeFilter = (filters: Term[], conditions: string[], relation: Relation) => {
 	const typeOfNote = filters.filter(x => x.name === 'type' && !x.negated).map(x => x.value);
-	typeOfNote.forEach(type => {
-		if (relation === 'AND') {
-			conditions.push(`AND notes_fts.is_todo IS ${type === 'todo' ? 1 : 0}`);
-		}
-		if (relation === 'OR') {
-			conditions.push(`
-			OR ROWID IN (
-				SELECT ROWID
-				FROM notes_normalized
-				WHERE notes_normalized.is_todo=${type === 'todo' ? 1 : 0}
-			)`);
-		}
-	});
+	biConditionalFilter(typeOfNote, conditions, relation, 'type');
 };
 
 const completedFilter = (filters: Term[], conditions: string[], relation: Relation) => {
 	const values = filters.filter(x => x.name === 'iscompleted' && !x.negated).map(x => x.value);
-	values.forEach(value => {
-		if (relation === 'AND') {
-			conditions.push(`AND notes_fts.is_todo IS 1 AND notes_fts.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`);
-		}
-		if (relation === 'OR') {
-			conditions.push(`
-			OR ROWID IN (
-				SELECT ROWID
-				FROM notes_normalized
-				WHERE notes_normalized.is_todo = 1
-				AND notes_normalized.todo_completed ${value === '1' ? '!= ' : '= '} 0
-			)`);
-		}
+	biConditionalFilter(values, conditions, relation, 'iscompleted');
+};
+
+const genericFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, fieldName: string) => {
+	terms.forEach(term => {
+		conditions.push(`
+		${relation} ROWID IN (
+			SELECT ROWID
+			FROM notes_normalized
+			WHERE notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?
+		)`);
+		params.push(term.value);
 	});
+};
+
+const locationFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
+	const locationTerms = filters.filter(x => x.name === 'latitude' || x.name === 'longitude' || x.name === 'altitude');
+	genericFilter(locationTerms, conditons, params, relation, 'location');
+};
+
+const dateFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
+	const dateTerms = filters.filter(x => x.name === 'created' || x.name === 'updated');
+	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
+	genericFilter(unixDateTerms, conditons, params, relation, 'date');
 };
 
 const getUnixMs = (date:string): string => {
@@ -238,33 +264,6 @@ const getUnixMs = (date:string): string => {
 	}
 };
 
-const dateFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
-	const dateTerms = filters.filter(x => x.name === 'created' || x.name === 'updated');
-	dateTerms.forEach(dateTerm => {
-		conditons.push(`
-		${relation} ROWID IN (
-			SELECT ROWID
-			FROM notes_normalized
-			WHERE notes_normalized.user_${dateTerm.name}_time ${dateTerm.negated ? '<' : '>='} ?
-		)`);
-		params.push(getUnixMs(dateTerm.value));
-	});
-};
-
-
-const locationFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
-	const locationTerms = filters.filter(x => x.name === 'latitude' || x.name === 'longitude' || x.name === 'altitude');
-
-	locationTerms.forEach(locationTerm => {
-		conditons.push(`
-		${relation} ROWID IN (
-			SELECT ROWID
-			FROM notes_normalized
-			WHERE notes_normalized.${locationTerm.name} ${locationTerm.negated ? '<' : '>='} ?
-		)`);
-		params.push(locationTerm.value);
-	});
-};
 
 const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: Relation) => {
 	const type = excludedTerms[0].name;

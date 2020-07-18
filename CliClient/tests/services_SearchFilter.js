@@ -560,6 +560,11 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t1.id);
 		expect(ids(rows)).toContain(t2.id);
 
+		rows = await engine.search('any:1 type:todo');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(t1.id);
+		expect(ids(rows)).toContain(t2.id);
+
 		rows = await engine.search('iscompleted:1');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(t2.id);
