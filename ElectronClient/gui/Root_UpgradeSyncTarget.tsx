@@ -1,43 +1,13 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import useSyncTargetUpgrade from 'lib/services/synchronizer/gui/useSyncTargetUpgrade';
+import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from 'lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
 const Setting = require('lib/models/Setting');
 const { bridge } = require('electron').remote.require('./bridge');
 
-export default function Root_UpgradeSyncTarget() {
-	const upgradeResult = useSyncTargetUpgrade();
-
-	useEffect(function() {
-		if (upgradeResult.done) {
-			bridge().restart();
-		}
-	}, [upgradeResult.done]);
-
-	useEffect(function() {
-		const element = document.createElement('style');
-		element.appendChild(document.createTextNode(`
-			body {
-				font-family: sans-serif;
-				padding: 5px 20px;
-				color: #333333;
-			}
-
-			.errorBox {
-				border: 1px solid red;
-				padding: 5px 20px;
-				background-color: #ffeeee;
-			}
-
-			pre {
-				overflow-x: scroll;
-			}
-		`));
-		document.head.appendChild(element);
-	}, []);
-
+function useAppCloseHandler(upgradeResult:SyncTargetUpgradeResult) {
 	useEffect(function() {
 		async function onAppClose() {
 			let canClose = true;
@@ -65,6 +35,46 @@ export default function Root_UpgradeSyncTarget() {
 			ipcRenderer.off('appClose', onAppClose);
 		};
 	}, [upgradeResult.done]);
+}
+
+function useStyle() {
+	useEffect(function() {
+		const element = document.createElement('style');
+		element.appendChild(document.createTextNode(`
+			body {
+				font-family: sans-serif;
+				padding: 5px 20px;
+				color: #333333;
+			}
+
+			.errorBox {
+				border: 1px solid red;
+				padding: 5px 20px;
+				background-color: #ffeeee;
+			}
+
+			pre {
+				overflow-x: scroll;
+			}
+		`));
+		document.head.appendChild(element);
+	}, []);
+}
+
+function useRestartOnDone(upgradeResult:SyncTargetUpgradeResult) {
+	useEffect(function() {
+		if (upgradeResult.done) {
+			bridge().restart();
+		}
+	}, [upgradeResult.done]);
+}
+
+export default function Root_UpgradeSyncTarget() {
+	const upgradeResult = useSyncTargetUpgrade();
+
+	useStyle();
+	useRestartOnDone(upgradeResult);
+	useAppCloseHandler(upgradeResult);
 
 	function renderUpgradeError() {
 		if (!upgradeResult.error) return null;

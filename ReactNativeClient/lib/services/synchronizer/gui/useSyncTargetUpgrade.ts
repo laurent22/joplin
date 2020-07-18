@@ -3,7 +3,7 @@ import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
 const Setting = require('lib/models/Setting');
 const { reg } = require('lib/registry');
 
-interface SyncTargetUpgradeResult {
+export interface SyncTargetUpgradeResult {
 	done: boolean,
 	error: any,
 }
