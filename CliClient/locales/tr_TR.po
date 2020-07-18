@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -938,9 +940,10 @@ msgid "Delete"
 msgstr "Sil"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "“%s” etiketi tüm notlardan kaldırılsın mı?"
+msgstr ""
+"“%s” etiketi ve ona bağlı diğer etiketler tüm notlardan kaldırılsın mı?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1844,7 +1847,7 @@ msgstr "İstatistik"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:100
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Okuma süresü: %s dk"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:101
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2067,7 +2070,7 @@ msgstr "Profil sürümü: %s"
 #: ElectronClient/app.js:608
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Keychain Desteği: %s"
 
 #: ElectronClient/app.js:630 ElectronClient/app.js:706
 msgid "&File"
@@ -2451,7 +2454,7 @@ msgstr "Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle."
 
 #: ReactNativeClient/lib/models/Setting.js:354
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Metin düzenleyici olarak CodeMirror kulan (UYARI: BETA)."
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:374
@@ -2868,17 +2871,16 @@ msgstr ""
 "%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Not defteri bu konuma taşınamıyor"
+msgstr "Etiket bu konuma taşınamıyor."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "Etiket ismi `/` karakteri ile bitemez."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "Etiket ismi `//` karakterini içeremez."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -3497,9 +3499,8 @@ msgid "Forward"
 msgstr "İleri"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
-msgstr "Senkroniza Et"
+msgstr "Senkronize Et"
 
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
