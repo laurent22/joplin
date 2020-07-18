@@ -132,21 +132,11 @@ wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage.sha512 https://github.c
 #-----------------------------------------------------
 print 'Verifying download'
 if [[ -f "/usr/bin/sha512sum" ]]; then
-  HASH=$(sha512sum ${TEMP_DIR}/Joplin.AppImage | cut -f 1 -d ' ')
-  CHECKSUM=$(cat ${TEMP_DIR}/Joplin.AppImage.sha512)
-  if [[ $HASH != $CHECKSUM ]]; then
-    echo "${COLOR_RED}Checksum verification failed${COLOR_RESET}"
-    echo "Please re-run script"
-    print "Cleaning up..."
-    rm -rf $TEMP_DIR
-    exit 1
-  fi
-  print "${COLOR_GREEN}OK${COLOR_RESET}"
+  HASH=/usr/bin/sha512sum ${TEMP_DIR}/Joplin.AppImage | cut -f 1 -d ' '
 else
-  echo "${COLOR_RED}'sha512sum' not found on system.${COLOR_RESET}"
+  echo "sha512sum not found on system."
   echo "Could not verify download"
 fi
-
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
