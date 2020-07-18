@@ -247,13 +247,38 @@ function Editor(props: EditorProps, ref: any) {
 				editor.clearHistory();
 			}
 			editor.setOption('screenReaderLabel', props.value);
-			editor.setOption('theme', props.theme);
-			editor.setOption('mode', props.mode);
-			editor.setOption('readOnly', props.readOnly);
-			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
-			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
 	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('theme', props.theme);
+		}
+	}, [props.theme]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('mode', props.mode);
+		}
+	}, [props.mode]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('readOnly', props.readOnly);
+		}
+	}, [props.readOnly]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
+		}
+	}, [props.autoMatchBraces]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
+		}
+	}, [props.keyMap]);
 
 	useEffect(() => {
 		if (editor) {
