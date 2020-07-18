@@ -320,10 +320,8 @@ class Synchronizer {
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
-					return;
-				} else {
-					throw error;
 				}
+				throw error;
 			}
 
 			this.api().setTempDirName(Dirnames.Temp);

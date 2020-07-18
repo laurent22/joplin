@@ -1354,7 +1354,7 @@ Setting.constants_ = {
 	templateDir: '',
 	tempDir: '',
 	flagOpenDevTools: false,
-	syncVersion: 1,
+	syncVersion: 2,
 };
 
 Setting.autoSaveEnabled = true;

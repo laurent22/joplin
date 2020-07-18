@@ -1,5 +1,11 @@
 import LockHandler, { LockType } from './LockHandler';
+import { Dirnames } from './utils/types';
 
+// To add a new migration:
+// - Add the migration logic in ./migrations/VERSION_NUM.js
+// - Add the file to the array below.
+// - Set Setting.syncVersion to VERSION_NUM in models/Setting.js
+// - Add tests in synchronizer_migrationHandler
 const migrations = [
 	null,
 	null,
@@ -63,6 +69,12 @@ export default class MigrationHandler {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
+		// Special case for version 1 because it didn't have the lock folder and without
+		// it the lock handler will break. So we create the directory now.
+		if (syncTargetInfo.version === 1) {
+			await this.api_.mkdir(Dirnames.Locks);
+		}
+
 		const syncLock = await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, 1000 * 30);
 		let autoLockError = null;
 		this.lockHandler_.startAutoLockRefresh(syncLock, (error:any) => {
@@ -76,14 +88,19 @@ export default class MigrationHandler {
 				const migration = migrations[newVersion];
 				if (!migration) continue;
 
-				if (autoLockError) throw autoLockError;
-				await migration(this.api_);
-				if (autoLockError) throw autoLockError;
+				try {
+					if (autoLockError) throw autoLockError;
+					await migration(this.api_);
+					if (autoLockError) throw autoLockError;
 
-				await this.api_.put('info.json', this.serializeSyncTargetInfo({
-					...syncTargetInfo,
-					version: newVersion,
-				}));
+					await this.api_.put('info.json', this.serializeSyncTargetInfo({
+						...syncTargetInfo,
+						version: newVersion,
+					}));
+				} catch (error) {
+					error.message = `Could not upgrade from version ${newVersion - 1} to version ${newVersion}: ${error.message}`;
+					throw error;
+				}
 			}
 		} finally {
 			await this.lockHandler_.releaseLock(LockType.Exclusive, this.clientType_, this.clientId_);

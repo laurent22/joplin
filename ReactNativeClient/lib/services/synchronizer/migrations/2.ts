@@ -1,8 +1,6 @@
 import { Dirnames } from '../utils/types';
 
 export default async function(api:any) {
-	await api.delete('.lock');
-
 	await api.mkdir('.resource');
 	await api.mkdir('.sync');
 	await api.put('.sync/version.txt', '2');

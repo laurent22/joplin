@@ -1,37 +1,77 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
 
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
 const { reg } = require('lib/registry');
 const Setting = require('lib/models/Setting');
-
-async function upgradeSyncTarget() {
-	const syncTarget = reg.syncTarget();
-	const synchronizer = await syncTarget.synchronizer();
-
-	const migrationHandler = new MigrationHandler(
-		synchronizer.api(),
-		synchronizer.lockHandler(),
-		Setting.value('appType'),
-		Setting.value('clientId')
-	);
-
-	migrationHandler.upgrade(2); // TODO - handle upgrading to max
-
-	// migrationHandler.upgrade();
-}
+const { bridge } = require('electron').remote.require('./bridge');
 
 export default function Root_UpgradeSyncTarget() {
+	const [upgradeError, setUpgradeError] = useState(null);
+
+	async function upgradeSyncTarget() {
+		let error = null;
+		try {
+			const syncTarget = reg.syncTarget();
+			const synchronizer = await syncTarget.synchronizer();
+
+			const migrationHandler = new MigrationHandler(
+				synchronizer.api(),
+				synchronizer.lockHandler(),
+				Setting.value('appType'),
+				Setting.value('clientId')
+			);
+
+			await migrationHandler.upgrade();
+		} catch (e) {
+			error = e;
+		}
+
+		if (!error) {
+			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_IDLE);
+			await Setting.saveAll();
+			bridge().restart();
+		} else {
+			setUpgradeError(error);
+		}
+	}
+
 	useEffect(function() {
-		ipcRenderer.on('appClose', async function() {
-			const canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
+		const element = document.createElement('style');
+		element.appendChild(document.createTextNode(`
+			body {
+				font-family: sans-serif;
+				padding: 5px 20px;
+				color: #333333;
+			}
+
+			.errorBox {
+				border: 1px solid red;
+				padding: 5px 20px;
+				background-color: #ffeeee;
+			}
+
+			pre {
+				overflow-x: scroll;
+			}
+		`));
+		document.head.appendChild(element);
+	}, []);
+
+	useEffect(function() {
+		async function onAppClose() {
+			let canClose = true;
+
+			if (!upgradeError) {
+				canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
+			}
 
 			if (canClose) {
 				// We set the state back to IDLE so that the app can start normally and
-				// potentially the user can fix issues if any. The message to upgrade
-				// will show up again.
+				// potentially the user can fix issues if any, export the data, etc.
+				// The message to upgrade will show up again if they try to sync.
 				Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_IDLE);
 				await Setting.saveAll();
 			}
@@ -39,14 +79,40 @@ export default function Root_UpgradeSyncTarget() {
 			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
 				canClose: canClose,
 			});
-		});
-	}, []);
+		}
+
+		ipcRenderer.on('appClose', onAppClose);
+
+		return () => {
+			ipcRenderer.off('appClose', onAppClose);
+		};
+	}, [upgradeError]);
 
 	useEffect(function() {
 		upgradeSyncTarget();
 	}, []);
 
-	return <div>TEST</div>;
+	function renderUpgradeError() {
+		if (!upgradeError) return null;
+
+		return (
+			<div className="errorBox">
+				<h2>Error</h2>
+				<p>The sync target could not be upgraded due to an error. For support, please copy the <em>complete</em> content of this page and paste it in the forum: https://discourse.joplinapp.org/</p>
+				<p>The full error was:</p>
+				<p>{upgradeError.message}</p>
+				<pre>{upgradeError.stack}</pre>
+			</div>
+		);
+	}
+
+	return (
+		<div>
+			<h2>Joplin upgrade in progress...</h2>
+			<p>Please wait while the sync target is being upgraded. It may take a few seconds or a few minutes depending on the upgrade. The application will automatically restart once it is completed.</p>
+			{renderUpgradeError()}
+		</div>
+	);
 }
 
 render(<Root_UpgradeSyncTarget />, document.getElementById('react-root'));
