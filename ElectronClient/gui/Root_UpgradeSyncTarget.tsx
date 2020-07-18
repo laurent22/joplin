@@ -1,42 +1,20 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
+import { useEffect } from 'react';
+import useSyncTargetUpgrade from 'lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
-const { reg } = require('lib/registry');
 const Setting = require('lib/models/Setting');
 const { bridge } = require('electron').remote.require('./bridge');
 
 export default function Root_UpgradeSyncTarget() {
-	const [upgradeError, setUpgradeError] = useState(null);
+	const upgradeResult = useSyncTargetUpgrade();
 
-	async function upgradeSyncTarget() {
-		let error = null;
-		try {
-			const syncTarget = reg.syncTarget();
-			const synchronizer = await syncTarget.synchronizer();
-
-			const migrationHandler = new MigrationHandler(
-				synchronizer.api(),
-				synchronizer.lockHandler(),
-				Setting.value('appType'),
-				Setting.value('clientId')
-			);
-
-			await migrationHandler.upgrade();
-		} catch (e) {
-			error = e;
-		}
-
-		if (!error) {
-			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_IDLE);
-			await Setting.saveAll();
+	useEffect(function() {
+		if (upgradeResult.done) {
 			bridge().restart();
-		} else {
-			setUpgradeError(error);
 		}
-	}
+	}, [upgradeResult.done]);
 
 	useEffect(function() {
 		const element = document.createElement('style');
@@ -64,7 +42,7 @@ export default function Root_UpgradeSyncTarget() {
 		async function onAppClose() {
 			let canClose = true;
 
-			if (!upgradeError) {
+			if (!upgradeResult.done) {
 				canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
 			}
 
@@ -86,22 +64,18 @@ export default function Root_UpgradeSyncTarget() {
 		return () => {
 			ipcRenderer.off('appClose', onAppClose);
 		};
-	}, [upgradeError]);
-
-	useEffect(function() {
-		upgradeSyncTarget();
-	}, []);
+	}, [upgradeResult.done]);
 
 	function renderUpgradeError() {
-		if (!upgradeError) return null;
+		if (!upgradeResult.error) return null;
 
 		return (
 			<div className="errorBox">
 				<h2>Error</h2>
 				<p>The sync target could not be upgraded due to an error. For support, please copy the <em>complete</em> content of this page and paste it in the forum: https://discourse.joplinapp.org/</p>
 				<p>The full error was:</p>
-				<p>{upgradeError.message}</p>
-				<pre>{upgradeError.stack}</pre>
+				<p>{upgradeResult.error.message}</p>
+				<pre>{upgradeResult.error.stack}</pre>
 			</div>
 		);
 	}

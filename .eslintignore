@@ -158,6 +158,7 @@ ReactNativeClient/lib/services/ResourceEditWatcher.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/SettingUtils.js
+ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
 ReactNativeClient/lib/services/synchronizer/LockHandler.js
 ReactNativeClient/lib/services/synchronizer/MigrationHandler.js
 ReactNativeClient/lib/services/synchronizer/migrations/2.js
