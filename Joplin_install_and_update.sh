@@ -127,7 +127,16 @@ print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
 wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
 wget -qnv --show-progress -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
+wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage.sha512 https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage.sha512
 
+#-----------------------------------------------------
+print 'Verifying download'
+if [[ -f "/usr/bin/sha512sum" ]]; then
+  HASH=/usr/bin/sha512sum ${TEMP_DIR}/Joplin.AppImage | cut -f 1 -d ' '
+else
+  echo "sha512sum not found on system."
+  echo "Could not verify download"
+fi
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
