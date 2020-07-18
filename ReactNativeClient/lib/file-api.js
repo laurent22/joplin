@@ -177,6 +177,7 @@ class FileApi {
 		// });
 	}
 
+	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
 	get(path, options = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';

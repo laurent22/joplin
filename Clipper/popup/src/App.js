@@ -368,7 +368,7 @@ class AppComponent extends Component {
 		const tagDataListOptions = [];
 		for (let i = 0; i < this.props.tags.length; i++) {
 			const tag = this.props.tags[i];
-			tagDataListOptions.push(<option key={tag.id}>{tag.title}</option>);
+			tagDataListOptions.push(<option key={tag.id}>{tag.full_title}</option>);
 		}
 
 		let simplifiedPageButtonLabel = 'Clip simplified page';

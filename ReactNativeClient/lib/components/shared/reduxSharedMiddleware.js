@@ -15,6 +15,10 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		Setting.setValue('collapsedFolderIds', newState.collapsedFolderIds);
 	}
 
+	if (action.type == 'TAG_SET_COLLAPSED' || action.type == 'TAG_TOGGLE') {
+		Setting.setValue('collapsedTagIds', newState.collapsedTagIds);
+	}
+
 	if (action.type === 'SETTING_UPDATE_ONE' && !!action.key.match(/^sync\.\d+\.path$/)) {
 		reg.resetSyncTarget();
 	}

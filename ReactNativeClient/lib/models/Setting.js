@@ -177,16 +177,45 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
-			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.path': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					try {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					} catch (error) {
+						return false;
+					}
+				},
+				filter: value => {
+					return value ? rtrimSlashes(value) : '';
+				},
+				public: true,
+				label: () => _('AWS S3 bucket'),
+				description: () => emptyDirWarning,
+			},
+			'sync.8.username': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS key'),
+			},
+			'sync.8.password': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS secret'),
+				secure: true,
+			},
 
 			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
 
@@ -208,6 +237,18 @@ class Setting extends BaseModel {
 					};
 				},
 			},
+
+			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -462,6 +503,7 @@ class Setting extends BaseModel {
 			startMinimized: { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
 			collapsedFolderIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
+			collapsedTagIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
 
 			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },

@@ -38,6 +38,7 @@ const defaultState = {
 	customCss: '',
 	templates: [],
 	collapsedFolderIds: [],
+	collapsedTagIds: [],
 	clipperServer: {
 		startState: 'idle',
 		port: null,
@@ -172,20 +173,24 @@ function stateHasEncryptedItems(state) {
 	return false;
 }
 
-function folderSetCollapsed(state, action) {
-	const collapsedFolderIds = state.collapsedFolderIds.slice();
-	const idx = collapsedFolderIds.indexOf(action.id);
+function itemSetCollapsed(state, action) {
+	let collapsedItemsKey = null;
+	if (action.type.indexOf('TAG_') !== -1) collapsedItemsKey = 'collapsedTagIds';
+	else if (action.type.indexOf('FOLDER_') !== -1) collapsedItemsKey = 'collapsedFolderIds';
+
+	const collapsedItemIds = state[collapsedItemsKey].slice();
+	const idx = collapsedItemIds.indexOf(action.id);
 
 	if (action.collapsed) {
 		if (idx >= 0) return state;
-		collapsedFolderIds.push(action.id);
+		collapsedItemIds.push(action.id);
 	} else {
 		if (idx < 0) return state;
-		collapsedFolderIds.splice(idx, 1);
+		collapsedItemIds.splice(idx, 1);
 	}
 
 	const newState = Object.assign({}, state);
-	newState.collapsedFolderIds = collapsedFolderIds;
+	newState[collapsedItemsKey] = collapsedItemIds;
 	return newState;
 }
 
@@ -293,6 +298,21 @@ function updateOneItem(state, action, keyName = '') {
 	newState[itemsKey] = newItems;
 
 	return newState;
+}
+
+function updateSelectedNotesFromExistingNotes(state) {
+	const newSelectedNoteIds = [];
+	for (const selectedNoteId of state.selectedNoteIds) {
+		for (const n of state.notes) {
+			if (n.id === selectedNoteId) {
+				newSelectedNoteIds.push(n.id);
+			}
+		}
+	}
+
+	return Object.assign({}, state, {
+		selectedNoteIds: newSelectedNoteIds,
+	});
 }
 
 function defaultNotesParentType(state, exclusion) {
@@ -637,12 +657,12 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
-
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			newState.notesSource = action.notesSource;
+			newState = updateSelectedNotesFromExistingNotes(newState);
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -707,7 +727,6 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
 				} else {
@@ -754,20 +773,37 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_SET_COLLAPSED':
-			newState = folderSetCollapsed(state, action);
+			newState = itemSetCollapsed(state, action);
 			break;
 
 		case 'FOLDER_TOGGLE':
 			if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
-				newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
+				newState = itemSetCollapsed(state, Object.assign({ collapsed: false }, action));
 			} else {
-				newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
+				newState = itemSetCollapsed(state, Object.assign({ collapsed: true }, action));
 			}
 			break;
 
 		case 'FOLDER_SET_COLLAPSED_ALL':
 			newState = Object.assign({}, state);
 			newState.collapsedFolderIds = action.ids.slice();
+			break;
+
+		case 'TAG_SET_COLLAPSED':
+			newState = itemSetCollapsed(state, action);
+			break;
+
+		case 'TAG_TOGGLE':
+			if (state.collapsedTagIds.indexOf(action.id) >= 0) {
+				newState = itemSetCollapsed(state, Object.assign({ collapsed: false }, action));
+			} else {
+				newState = itemSetCollapsed(state, Object.assign({ collapsed: true }, action));
+			}
+			break;
+
+		case 'TAG_SET_COLLAPSED_ALL':
+			newState = Object.assign({}, state);
+			newState.collapsedTagIds = action.ids.slice();
 			break;
 
 		case 'TAG_UPDATE_ALL':

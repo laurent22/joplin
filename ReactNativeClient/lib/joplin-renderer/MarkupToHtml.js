@@ -1,5 +1,7 @@
 const MdToHtml = require('./MdToHtml');
 const HtmlToHtml = require('./HtmlToHtml');
+const htmlUtils = require('lib/htmlUtils');
+const MarkdownIt = require('markdown-it');
 
 class MarkupToHtml {
 	constructor(options) {
@@ -31,6 +33,34 @@ class MarkupToHtml {
 
 	injectedJavaScript() {
 		return '';
+	}
+
+	stripMarkup(markupLanguage, markup, options = null) {
+		if (!markup) return '';
+
+		options = Object.assign({}, {
+			collapseWhiteSpaces: false,
+		}, options);
+
+		let output = markup;
+
+		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
+			if (!this.rawMarkdownIt_) {
+				// We enable HTML because we don't want it to be escaped, so
+				// that it can be stripped off in the stripHtml call below.
+				this.rawMarkdownIt_ = new MarkdownIt({ html: true });
+			}
+			output = this.rawMarkdownIt_.render(output);
+		}
+
+		output = htmlUtils.stripHtml(output).trim();
+
+		if (options.collapseWhiteSpaces) {
+			output = output.replace(/\n+/g, ' ');
+			output = output.replace(/\s+/g, ' ');
+		}
+
+		return output;
 	}
 
 	async render(markupLanguage, markup, theme, options) {
