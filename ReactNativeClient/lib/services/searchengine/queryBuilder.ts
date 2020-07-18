@@ -184,8 +184,7 @@ const getCondition = (filterName: string , value: string, relation: Relation) =>
 	if (filterName === 'type') {
 		return `${tableName}.is_todo IS ${value === 'todo' ? 1 : 0}`;
 	} else if (filterName === 'iscompleted') {
-		return `${tableName}.is_todo IS 1;
-		AND ${tableName}.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`;
+		return `${tableName}.is_todo IS 1 AND ${tableName}.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`;
 	} else {
 		throw new Error('Invalid filter name.');
 	}
