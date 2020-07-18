@@ -88,7 +88,7 @@ const filterByFieldName = (
 			EXCEPT ${notesWithFieldValue}
 		)`;
 
-		// We need notes without atleast one excluded tag/resource
+		// We need notes without atleast one excluded field (tag/resource)
 		withCondition = `
 		notes_with_${requirement}_${field}
 		AS (
@@ -184,10 +184,10 @@ const getCondition = (filterName: string , value: string, relation: Relation) =>
 	if (filterName === 'type') {
 		return `${tableName}.is_todo IS ${value === 'todo' ? 1 : 0}`;
 	} else if (filterName === 'iscompleted') {
-		return `${tableName}.is_todo IS 1
+		return `${tableName}.is_todo IS 1;
 		AND ${tableName}.todo_completed IS ${value === '1' ? 'NOT 0' : '0'}`;
 	} else {
-		throw new Error('Invalid field name.');
+		throw new Error('Invalid filter name.');
 	}
 };
 
@@ -266,14 +266,14 @@ const getUnixMs = (date:string): string => {
 
 
 const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: Relation) => {
-	const type = excludedTerms[0].name;
+	const type = excludedTerms[0].name === 'text' ? '' : `.${excludedTerms[0].name}`;
 
 	if (excludedTerms && relation === 'AND') {
 		conditions.push(`
 		AND ROWID NOT IN (
 			SELECT ROWID
 			FROM notes_fts
-			WHERE notes_fts.${type} MATCH ?
+			WHERE notes_fts${type} MATCH ?
 		)`);
 		params.push(excludedTerms.map(x => x.value).join(' OR '));
 	}
@@ -289,7 +289,7 @@ const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], pa
 					EXCEPT
 					SELECT ROWID
 					FROM notes_fts
-					WHERE notes_fts.${type} MATCH ?
+					WHERE notes_fts${type} MATCH ?
 				)
 			)`);
 			params.push(term.value);
@@ -316,30 +316,8 @@ const textFilter = (filters: Term[], conditions: string[], params: string[], rel
 	const excludedTitleTerms = allTerms.filter(x => x.name === 'title' && x.negated);
 	const excludedBodyTerms = allTerms.filter(x => x.name === 'body' && x.negated);
 
-	if ((excludedTextTerms.length > 0) && relation === 'AND') {
-		conditions.push(`
-		AND ROWID NOT IN (
-		SELECT ROWID
-		FROM notes_fts
-		WHERE notes_fts MATCH ?
-		)`);
-		params.push(excludedTextTerms.map(x => x.value).join(' OR '));
-	}
-
-	if ((excludedTextTerms.length > 0) && relation === 'OR') {
-		excludedTextTerms.map(textTerm => {
-			conditions.push(`
-			OR ROWID IN (
-			SELECT *
-			FROM (
-				SELECT ROWID
-				FROM notes_fts
-				EXCEPT
-				SELECT ROWID FROM notes_fts
-				WHERE notes_fts MATCH ?
-			))`);
-			params.push(textTerm.value);
-		});
+	if ((excludedTextTerms.length > 0)) {
+		addExcludeTextConditions(excludedTextTerms, conditions, params, relation);
 	}
 
 	if (excludedTitleTerms.length > 0) {
@@ -349,7 +327,6 @@ const textFilter = (filters: Term[], conditions: string[], params: string[], rel
 	if (excludedBodyTerms.length > 0) {
 		addExcludeTextConditions(excludedBodyTerms, conditions, params, relation);
 	}
-
 };
 
 const getDefaultRelation = (filters: Term[]): Relation => {
@@ -372,9 +349,6 @@ export default function queryBuilder(filters: Term[]) {
 	// console.log(filters);
 
 	const relation: Relation = getDefaultRelation(filters);
-
-	// console.log(`relations = ${relation}`);
-	// console.log(filters);
 
 	queryParts.push(`
 	SELECT
