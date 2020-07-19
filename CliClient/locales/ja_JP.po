@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -922,9 +924,9 @@ msgid "Delete"
 msgstr "削除"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
+msgstr "すべてのノートからタグ \"%s\" とその子タグを削除しますか？"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1823,7 +1825,7 @@ msgstr "統計"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:100
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "読むのに必要な時間: %s 分"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:101
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2840,17 +2842,16 @@ msgstr ""
 "%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "ノートをノートブック \"%s\" に移動できません"
+msgstr "タグをこの場所に移動することはできません。"
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "タグ名の先頭と末尾に `/` を使わないでください。"
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "タグ名には連続するスラッシュ `//` を入れないでください。"
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -3465,7 +3466,6 @@ msgid "Forward"
 msgstr "進む"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "同期"
 
