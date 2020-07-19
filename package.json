@@ -39,6 +39,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
+    "@types/react-native": "^0.63.1",
     "follow-redirects": "^1.11.0",
     "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",

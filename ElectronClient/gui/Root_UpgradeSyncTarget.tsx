@@ -69,7 +69,7 @@ function useRestartOnDone(upgradeResult:SyncTargetUpgradeResult) {
 	}, [upgradeResult.done]);
 }
 
-export default function Root_UpgradeSyncTarget() {
+function Root_UpgradeSyncTarget() {
 	const upgradeResult = useSyncTargetUpgrade();
 
 	useStyle();

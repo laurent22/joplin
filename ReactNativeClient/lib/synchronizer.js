@@ -251,15 +251,6 @@ class Synchronizer {
 		}
 	}
 
-	async refreshLock() {
-		if (this.state_ !== 'in_progress') {
-			this.logger().warn('Trying to refresh lock, but sync is not in progress');
-			return;
-		}
-
-		await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
-	}
-
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
