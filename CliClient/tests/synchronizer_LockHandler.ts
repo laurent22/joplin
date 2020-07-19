@@ -42,6 +42,16 @@ describe('synchronizer_LockHandler', function() {
 		expect((await lockHandler().syncLocks()).length).toBe(0);
 	}));
 
+	it('should not use files that are not locks', asyncTest(async () => {
+		await fileApi().put('locks/desktop.ini', 'a');
+		await fileApi().put('locks/exclusive.json', 'a');
+		await fileApi().put('locks/garbage.json', 'a');
+		await fileApi().put('locks/sync_mobile_72c4d1b7253a4475bfb2f977117d26ed.json', 'a');
+
+		const locks = await lockHandler().syncLocks();
+		expect(locks.length).toBe(1);
+	}));
+
 	it('should allow multiple sync locks', asyncTest(async () => {
 		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
 
@@ -68,14 +78,12 @@ describe('synchronizer_LockHandler', function() {
 		const lockAfter = await handler.activeSyncLock('desktop', '111');
 		expect(lockAfter.updatedTime).toBeGreaterThan(lockBefore.updatedTime);
 		handler.stopAutoLockRefresh(lock);
-
-		await expectThrow(() => handler.stopAutoLockRefresh(lock));
 	}));
 
 	it('should call the error handler when lock has expired while being auto-refreshed', asyncTest(async () => {
 		const handler = newLockHandler({
-			lockTtl: 1,
-			autoRefreshInterval: 2,
+			lockTtl: 50,
+			autoRefreshInterval: 200,
 		});
 
 		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
@@ -84,9 +92,11 @@ describe('synchronizer_LockHandler', function() {
 			autoLockError = error;
 		});
 
-		await msleep(5);
+		await msleep(250);
 
 		expect(autoLockError.code).toBe('lockExpired');
+
+		handler.stopAutoLockRefresh(lock);
 	}));
 
 	it('should not allow sync locks if there is an exclusive lock', asyncTest(async () => {
@@ -109,12 +119,12 @@ describe('synchronizer_LockHandler', function() {
 	}));
 
 	it('should allow exclusive lock if the sync locks have expired', asyncTest(async () => {
-		const lockHandler = newLockHandler({ lockTtl: 1 });
+		const lockHandler = newLockHandler({ lockTtl: 50 });
 
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '222');
 
-		await msleep(2);
+		await msleep(100);
 
 		await expectNotThrow(async () => {
 			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '333');

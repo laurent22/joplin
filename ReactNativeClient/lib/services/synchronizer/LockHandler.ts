@@ -61,8 +61,11 @@ export default class LockHandler {
 	}
 
 	private lockTypeFromFilename(name:string):LockType {
+		const ext = fileExtension(name);
+		if (ext !== 'json') return LockType.None;
 		if (name === exclusiveFilename) return LockType.Exclusive;
-		return LockType.Sync;
+		if (name.indexOf(LockType.Sync) === 0) return LockType.Sync;
+		return LockType.None;
 	}
 
 	private lockFilePath(lock:Lock) {
@@ -90,9 +93,6 @@ export default class LockHandler {
 
 		const output = [];
 		for (const file of result.items) {
-			const ext = fileExtension(file.path);
-			if (ext !== 'json') continue;
-
 			const type = this.lockTypeFromFilename(file.path);
 			if (type !== LockType.Sync) continue;
 
@@ -169,6 +169,10 @@ export default class LockHandler {
 					return syncLock;
 				}
 
+				// Something wrong happened, which means we saved a lock but we didn't read
+				// it back. Could be application error or server issue.
+				if (!isFirstPass) throw new Error('Cannot acquire sync lock: either the lock could be written but not read back. Or it was expired before it was read again.');
+
 				await this.saveLock({
 					type: LockType.Sync,
 					clientType: clientType,
@@ -187,9 +191,9 @@ export default class LockHandler {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	private lockToString(lock:Lock):string {
-		return JSON.stringify(lock);
-	}
+	// private lockToString(lock:Lock):string {
+	// 	return JSON.stringify(lock);
+	// }
 
 	private async acquireExclusiveLock(clientType:string, clientId:string, timeoutMs:number = 0):Promise<Lock> {
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
@@ -294,7 +298,9 @@ export default class LockHandler {
 	stopAutoLockRefresh(lock:Lock) {
 		const handle = this.autoLockRefreshHandle(lock);
 		if (!this.refreshTimers_[handle]) {
-			throw new Error(`There is no such lock being auto-refreshed: ${this.lockToString(lock)}`);
+			// Should not throw an error because lock may have been cleared in startAutoLockRefresh
+			// if there was an error.
+			// throw new Error(`There is no such lock being auto-refreshed: ${this.lockToString(lock)}`);
 		}
 
 		clearInterval(this.refreshTimers_[handle]);

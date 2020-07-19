@@ -69,7 +69,7 @@ script:
     # and that would break the desktop release.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       cd CliClient
-      npm run test
+      npm run test-ci
       testResult=$?
       if [ $testResult -ne 0 ]; then
         exit $testResult

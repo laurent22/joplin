@@ -9,7 +9,7 @@ const BaseService = require('lib/services/BaseService.js');
 // - Add tests in synchronizer_migrationHandler
 const migrations = [
 	null,
-	null,
+	require('./migrations/1.js').default,
 	require('./migrations/2.js').default,
 ];
 
@@ -80,6 +80,12 @@ export default class MigrationHandler extends BaseService {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
+		// if (supportedSyncTargetVersion !== migrations.length - 1) {
+		// 	// Sanity check - it means a migration has been added by syncVersion has not be incremented or vice-versa,
+		// 	// so abort as it can cause strange issues.
+		// 	throw new JoplinError('Application error: mismatch between max supported sync version and max migration number: ' + supportedSyncTargetVersion + ' / ' + (migrations.length - 1));
+		// }
+
 		// Special case for version 1 because it didn't have the lock folder and without
 		// it the lock handler will break. So we create the directory now.
 		// Also if the sync target version is 0, it means it's a new one so we need the
@@ -127,6 +133,7 @@ export default class MigrationHandler extends BaseService {
 			}
 		} finally {
 			this.logger().info('MigrationHandler: Releasing exclusive lock');
+			this.lockHandler_.stopAutoLockRefresh(exclusiveLock);
 			await this.lockHandler_.releaseLock(LockType.Exclusive, this.clientType_, this.clientId_);
 		}
 	}

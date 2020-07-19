@@ -476,6 +476,8 @@ async function allSyncTargetItemsEncrypted() {
 	let encryptedCount = 0;
 	for (let i = 0; i < files.length; i++) {
 		const file = files[i];
+		if (!BaseItem.isSystemPath(file.path)) continue;
+
 		const remoteContentString = await fileApi().get(file.path);
 		const remoteContent = await BaseItem.unserialize(remoteContentString);
 		const ItemClass = BaseItem.itemClass(remoteContent);

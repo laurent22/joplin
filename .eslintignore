@@ -162,6 +162,7 @@ ReactNativeClient/lib/services/SettingUtils.js
 ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
 ReactNativeClient/lib/services/synchronizer/LockHandler.js
 ReactNativeClient/lib/services/synchronizer/MigrationHandler.js
+ReactNativeClient/lib/services/synchronizer/migrations/1.js
 ReactNativeClient/lib/services/synchronizer/migrations/2.js
 ReactNativeClient/lib/services/synchronizer/utils/types.js
 ReactNativeClient/lib/services/UndoRedoService.js

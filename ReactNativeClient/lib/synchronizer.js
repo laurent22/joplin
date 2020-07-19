@@ -313,7 +313,7 @@ class Synchronizer {
 
 				if (!syncTargetInfo.version) {
 					this.logger().info('Sync target is new - setting it up...');
-					await this.migrationHandler().upgrade();
+					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
 				}
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {

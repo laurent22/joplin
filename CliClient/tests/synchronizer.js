@@ -33,7 +33,7 @@ async function allNotesFolders() {
 }
 
 async function remoteItemsByTypes(types) {
-	const list = await fileApi().list('', { includeDirs: false });
+	const list = await fileApi().list('', { includeDirs: false, syncItemsOnly: true });
 	if (list.has_more) throw new Error('Not implemented!!!');
 	const files = list.items;
 
@@ -905,7 +905,7 @@ describe('synchronizer', function() {
 		// First create a folder, without encryption enabled, and sync it
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
-		let files = await fileApi().list('', { includeDirs: false });
+		let files = await fileApi().list('', { includeDirs: false, syncItemsOnly: true });
 		let content = await fileApi().get(files.items[0].path);
 		expect(content.indexOf('folder1') >= 0).toBe(true);
 
@@ -918,7 +918,7 @@ describe('synchronizer', function() {
 
 		// Even though the folder has not been changed it should have been synced again so that
 		// an encrypted version of it replaces the decrypted version.
-		files = await fileApi().list();
+		files = await fileApi().list('', { includeDirs: false, syncItemsOnly: true });
 		expect(files.items.length).toBe(2);
 		// By checking that the folder title is not present, we can confirm that the item has indeed been encrypted
 		// One of the two items is the master key
