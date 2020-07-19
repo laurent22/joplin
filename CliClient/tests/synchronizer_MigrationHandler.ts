@@ -146,13 +146,13 @@ describe('synchronizer_MigrationHandler', function() {
 	it('should not allow syncing if the sync target is out-dated', asyncTest(async () => {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') - 1}}`);
-		expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedSyncTarget');
+		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedSyncTarget');
 	}));
 
 	it('should not allow syncing if the client is out-dated', asyncTest(async () => {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') + 1}}`);
-		expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedClient');
+		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedClient');
 	}));
 
 	for (const migrationVersionString in migrationTests) {

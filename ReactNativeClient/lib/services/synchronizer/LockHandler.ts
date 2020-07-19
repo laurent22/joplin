@@ -16,8 +16,13 @@ export interface Lock {
 	updatedTime?: number,
 }
 
+interface RefreshTimer {
+	id: any,
+	inProgress: boolean
+}
+
 interface RefreshTimers {
-	[key:string]: any;
+	[key:string]: RefreshTimer;
 }
 
 export interface LockHandlerOptions {
@@ -269,27 +274,45 @@ export default class LockHandler {
 			throw new Error(`There is already a timer refreshing this lock: ${handle}`);
 		}
 
-		this.refreshTimers_[handle] = setInterval(async () => {
+		this.refreshTimers_[handle] = {
+			id: null,
+			inProgress: false,
+		};
+
+		this.refreshTimers_[handle].id = setInterval(async () => {
+			if (this.refreshTimers_[handle].inProgress) return;
+
+			const defer = () => {
+				if (!this.refreshTimers_[handle]) return;
+				this.refreshTimers_[handle].inProgress = false;
+			};
+
+			this.refreshTimers_[handle].inProgress = true;
+
 			let error = null;
 			const hasActiveLock = await this.hasActiveLock(lock.type, lock.clientType, lock.clientId);
-			if (!this.refreshTimers_[handle]) return; // Timeout has been cleared
+			if (!this.refreshTimers_[handle]) return defer(); // Timeout has been cleared
 
 			if (!hasActiveLock) {
 				error = new JoplinError('Lock has expired', 'lockExpired');
 			} else {
 				try {
 					await this.acquireLock(lock.type, lock.clientType, lock.clientId);
-					if (!this.refreshTimers_[handle]) return; // Timeout has been cleared
+					if (!this.refreshTimers_[handle]) return defer(); // Timeout has been cleared
 				} catch (e) {
 					error = e;
 				}
 			}
 
 			if (error) {
-				clearInterval(this.refreshTimers_[handle]);
-				delete this.refreshTimers_[handle];
+				if (this.refreshTimers_[handle]) {
+					clearInterval(this.refreshTimers_[handle].id);
+					delete this.refreshTimers_[handle];
+				}
 				errorHandler(error);
 			}
+
+			defer();
 		}, this.autoRefreshInterval_);
 
 		return handle;
@@ -301,9 +324,10 @@ export default class LockHandler {
 			// Should not throw an error because lock may have been cleared in startAutoLockRefresh
 			// if there was an error.
 			// throw new Error(`There is no such lock being auto-refreshed: ${this.lockToString(lock)}`);
+			return;
 		}
 
-		clearInterval(this.refreshTimers_[handle]);
+		clearInterval(this.refreshTimers_[handle].id);
 		delete this.refreshTimers_[handle];
 	}
 

@@ -349,13 +349,12 @@ function fileApi() {
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
 		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
-		const options = {
-			baseUrl: () => 'http://nextcloud.local/remote.php/dav/files/admin/JoplinTest',
-			username: () => 'admin',
-			password: () => '123456',
-		};
-
-		const api = new WebDavApi(options);
+		const options = require(`${__dirname}/../tests/support/nextcloud-auth.json`);
+		const api = new WebDavApi({
+			baseUrl: () => options.baseUrl,
+			username: () => options.username,
+			password: () => options.password,
+		});
 		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
 		const api = new DropboxApi();
@@ -400,18 +399,19 @@ async function checkThrowAsync(asyncFn) {
 
 async function expectThrow(asyncFn, errorCode = undefined) {
 	let hasThrown = false;
-	let thrownErrorCode = null;
+	let thrownError = null;
 	try {
 		await asyncFn();
 	} catch (error) {
 		hasThrown = true;
-		thrownErrorCode = error.code;
+		thrownError = error;
 	}
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw', 'Expected function to throw an error but did not');
-	} else if (thrownErrorCode !== errorCode) {
-		expect(`error code: ${thrownErrorCode}`).toBe(`error code: ${errorCode}`);
+	} else if (thrownError.code !== errorCode) {
+		console.error(thrownError);
+		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
 	} else {
 		expect(true).toBe(true);
 	}
@@ -629,4 +629,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, expectThrow, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
