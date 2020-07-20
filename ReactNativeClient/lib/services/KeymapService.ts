@@ -96,6 +96,10 @@ class KeymapService extends BaseService {
 		}
 	}
 
+	hasAccelerator(command: string) {
+		return !!this.keymap[command];
+	}
+
 	getAccelerator(command: string) {
 		const item = this.keymap[command];
 
@@ -139,18 +143,20 @@ class KeymapService extends BaseService {
 	}
 
 	private validateKeymapItem(item: KeymapItem) {
-		const referMessage = 'Visit https://github.com/laurent22/joplin/blob/master/README.md to learn more';
-
 		if (!item.hasOwnProperty('command')) {
-			throw new Error(`"command" property is missing\n${referMessage}`);
+			throw new Error('"command" property is missing');
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(`"${item.command}" is not a valid command\n${referMessage}`);
+			throw new Error(`"${item.command}" is not a valid command`);
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error(`"accelerator" property is missing\n${referMessage}`);
-		} else if (!(item.accelerator === null || KeymapService.isAccelerator(item.accelerator))) {
-			throw new Error(`"${item.accelerator}" is not a valid accelerator\n${referMessage}`);
+			throw new Error('"accelerator" property is missing');
+		} else if (item.accelerator !== null) {
+			try {
+				KeymapService.validateAccelerator(item.accelerator);
+			} catch (err) {
+				throw new Error(`"${item.accelerator}" is not a valid accelerator`);
+			}
 		}
 	}
 
@@ -183,11 +189,11 @@ class KeymapService extends BaseService {
 		return itemsByCommand;
 	}
 
-	static isAccelerator(accelerator: string) {
+	static validateAccelerator(accelerator: string) {
 		let keyFound = false;
-		const parts = accelerator.split('+');
 
-		return parts.every((part, index) => {
+		const parts = accelerator.split('+');
+		const isValid = parts.every((part, index) => {
 			const isKey = KeymapService.keyCodes.test(part);
 			const isModifier = KeymapService.modifiers.test(part);
 
@@ -201,6 +207,8 @@ class KeymapService extends BaseService {
 			if (index === (parts.length - 1) && !keyFound) return false;
 			return isKey || isModifier;
 		});
+
+		if (!isValid) throw new Error(`Accelerator invalid: ${accelerator}`);
 	}
 
 	static instance() {

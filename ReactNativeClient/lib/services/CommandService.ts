@@ -1,4 +1,5 @@
 const BaseService = require('lib/services/BaseService');
+const KeymapService = require('lib/services/KeymapService.js');
 const eventManager = require('lib/eventManager');
 
 export interface CommandRuntime {
@@ -74,6 +75,8 @@ export default class CommandService extends BaseService {
 	private commands_:Commands = {};
 	private commandPreviousStates_:CommandStates = {};
 	private mapStateToPropsIID_:any = null;
+
+	private keymapService = KeymapService.instance();
 
 	initialize(store:any) {
 		utils.store = store;
@@ -265,7 +268,7 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	commandToMenuItem(commandName:string, accelerator:string = null, executeArgs:any = null) {
+	commandToMenuItem(commandName:string, executeArgs:any = null) {
 		const command = this.commandByName(commandName);
 
 		const item:any = {
@@ -276,8 +279,10 @@ export default class CommandService extends BaseService {
 			},
 		};
 
-		if (accelerator) item.accelerator = accelerator;
 		if (command.declaration.role) item.role = command.declaration.role;
+		if (this.keymapService.hasAccelerator(commandName)) {
+			item.accelerator = this.keymapService.getAccelerator(commandName);
+		}
 
 		return item;
 	}

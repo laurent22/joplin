@@ -5,7 +5,7 @@ const KeymapService = require('lib/services/KeymapService.js');
 const keymapService = KeymapService.instance();
 
 describe('services_KeymapService', () => {
-	describe('isAccelerator', () => {
+	describe('validateAccelerator', () => {
 		it('should identify valid Accelerators', () => {
 			const testCases = shim.isMac()
 				? [
@@ -28,7 +28,7 @@ describe('services_KeymapService', () => {
 					'Alt+Shift+F9',
 				];
 
-			testCases.forEach(accelerator => expect(KeymapService.isAccelerator(accelerator)).toBeTruthy());
+			testCases.forEach(accelerator => expect(() => KeymapService.validateAccelerator(accelerator)).not.toThrow());
 		});
 
 		it('should identify invalid Accelerators', () => {
@@ -59,7 +59,7 @@ describe('services_KeymapService', () => {
 					'Cmd+Option+Shoft+T',
 				];
 
-			testCases.forEach(accelerator => expect(KeymapService.isAccelerator(accelerator)).not.toBeTruthy());
+			testCases.forEach(accelerator => expect(() => KeymapService.validateAccelerator(accelerator)).toThrow());
 		});
 	});
 
@@ -214,7 +214,7 @@ describe('services_KeymapService', () => {
 		});
 
 		it('should throw when the provided Accelerators are invalid', () => {
-			// Only one test case is provided since KeymapService.isAccelerator() is already tested
+			// Only one test case is provided since KeymapService.validateAccelerator() is already tested
 			const customKeymap = [
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: 'Alt+P' },

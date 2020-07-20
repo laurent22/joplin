@@ -371,6 +371,7 @@ class Application extends BaseApplication {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const cmdService = CommandService.instance();
+		const keymapService = KeymapService.instance();
 
 		const sortNoteFolderItems = (type) => {
 			const sortItems = [];
@@ -409,10 +410,10 @@ class Application extends BaseApplication {
 		const sortFolderItems = sortNoteFolderItems('folders');
 
 		const focusItems = [
-			cmdService.commandToMenuItem('focusElementSideBar', 'CommandOrControl+Shift+S'),
-			cmdService.commandToMenuItem('focusElementNoteList', 'CommandOrControl+Shift+L'),
-			cmdService.commandToMenuItem('focusElementNoteTitle', 'CommandOrControl+Shift+N'),
-			cmdService.commandToMenuItem('focusElementNoteBody', 'CommandOrControl+Shift+B'),
+			cmdService.commandToMenuItem('focusElementSideBar'),
+			cmdService.commandToMenuItem('focusElementNoteList'),
+			cmdService.commandToMenuItem('focusElementNoteTitle'),
+			cmdService.commandToMenuItem('focusElementNoteBody'),
 		];
 
 		let toolsItems = [];
@@ -508,8 +509,8 @@ class Application extends BaseApplication {
 			},
 		};
 
-		const newNoteItem = cmdService.commandToMenuItem('newNote', 'CommandOrControl+N');
-		const newTodoItem = cmdService.commandToMenuItem('newTodo', 'CommandOrControl+T');
+		const newNoteItem = cmdService.commandToMenuItem('newNote');
+		const newTodoItem = cmdService.commandToMenuItem('newTodo');
 		const newNotebookItem = cmdService.commandToMenuItem('newNotebook');
 		const printItem = cmdService.commandToMenuItem('print');
 
@@ -683,7 +684,7 @@ class Application extends BaseApplication {
 				type: 'separator',
 			},
 
-			cmdService.commandToMenuItem('synchronize', 'CommandOrControl+S'),
+			cmdService.commandToMenuItem('synchronize'),
 
 			shim.isMac() ? syncStatusItem : noItem, {
 				type: 'separator',
@@ -758,28 +759,28 @@ class Application extends BaseApplication {
 				id: 'edit',
 				label: _('&Edit'),
 				submenu: [
-					cmdService.commandToMenuItem('textCopy', 'CommandOrControl+C'),
-					cmdService.commandToMenuItem('textCut', 'CommandOrControl+X'),
-					cmdService.commandToMenuItem('textPaste', 'CommandOrControl+V'),
-					cmdService.commandToMenuItem('textSelectAll', 'CommandOrControl+A'),
+					cmdService.commandToMenuItem('textCopy'),
+					cmdService.commandToMenuItem('textCut'),
+					cmdService.commandToMenuItem('textPaste'),
+					cmdService.commandToMenuItem('textSelectAll'),
 					separator(),
-					cmdService.commandToMenuItem('textBold', 'CommandOrControl+B'),
-					cmdService.commandToMenuItem('textItalic', 'CommandOrControl+I'),
-					cmdService.commandToMenuItem('textLink', 'CommandOrControl+K'),
-					cmdService.commandToMenuItem('textCode', 'CommandOrControl+`'),
+					cmdService.commandToMenuItem('textBold'),
+					cmdService.commandToMenuItem('textItalic'),
+					cmdService.commandToMenuItem('textLink'),
+					cmdService.commandToMenuItem('textCode'),
 					separator(),
-					cmdService.commandToMenuItem('insertDateTime', 'CommandOrControl+Shift+T'),
+					cmdService.commandToMenuItem('insertDateTime'),
 					separator(),
-					cmdService.commandToMenuItem('focusSearch', shim.isMac() ? 'Shift+Command+F' : 'F6'),
-					cmdService.commandToMenuItem('showLocalSearch', 'CommandOrControl+F'),
+					cmdService.commandToMenuItem('focusSearch'),
+					cmdService.commandToMenuItem('showLocalSearch'),
 				],
 			},
 			view: {
 				label: _('&View'),
 				submenu: [
-					CommandService.instance().commandToMenuItem('toggleSidebar', shim.isMac() ? 'Option+Command+S' : 'F10'),
+					CommandService.instance().commandToMenuItem('toggleSidebar'),
 					CommandService.instance().commandToMenuItem('toggleNoteList'),
-					CommandService.instance().commandToMenuItem('toggleVisiblePanes', 'CommandOrControl+L'),
+					CommandService.instance().commandToMenuItem('toggleVisiblePanes'),
 					{
 						label: _('Layout button sequence'),
 						screens: ['Main'],
@@ -861,9 +862,8 @@ class Application extends BaseApplication {
 			note: {
 				label: _('&Note'),
 				submenu: [
-
-					CommandService.instance().commandToMenuItem('startExternalEditing', 'CommandOrControl+E'),
-					CommandService.instance().commandToMenuItem('setTags', 'CommandOrControl+Alt+T'),
+					CommandService.instance().commandToMenuItem('startExternalEditing'),
+					CommandService.instance().commandToMenuItem('setTags'),
 					separator(),
 					CommandService.instance().commandToMenuItem('showNoteContentProperties'),
 				],
@@ -1126,7 +1126,11 @@ class Application extends BaseApplication {
 		const filename = Setting.custom_css_files.JOPLIN_APP;
 		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
 
-		await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
+		try {
+			await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
+		} catch (err) {
+			bridge().showErrorMessageBox(err.message);
+		}
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
