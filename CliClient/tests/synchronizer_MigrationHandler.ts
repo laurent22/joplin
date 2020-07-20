@@ -12,6 +12,8 @@ const Resource = require('lib/models/Resource');
 const markdownUtils = require('lib/markdownUtils');
 const { shim } = require('lib/shim');
 
+const specTimeout = 60000 * 10; // Nextcloud tests can be slow
+
 let lockHandler_:LockHandler = null;
 let migrationHandler_:MigrationHandler = null;
 
@@ -147,13 +149,13 @@ describe('synchronizer_MigrationHandler', function() {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') - 1}}`);
 		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedSyncTarget');
-	}));
+	}), specTimeout);
 
 	it('should not allow syncing if the client is out-dated', asyncTest(async () => {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') + 1}}`);
 		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedClient');
-	}));
+	}), specTimeout);
 
 	for (const migrationVersionString in migrationTests) {
 		const migrationVersion = Number(migrationVersionString);
@@ -191,7 +193,7 @@ describe('synchronizer_MigrationHandler', function() {
 			Setting.setConstant('syncVersion', migrationVersion);
 			await synchronizer().start();
 			await expectNotThrow(async () => await checkTestData(testData));
-		}));
+		}), specTimeout);
 
 		it(`should migrate (E2EE) (${migrationVersion})`, asyncTest(async () => {
 			// First create some test data that will be used to validate
@@ -236,7 +238,7 @@ describe('synchronizer_MigrationHandler', function() {
 
 			// Should not throw because data is decrypted
 			await expectNotThrow(async () => await checkTestData(testData));
-		}));
+		}), specTimeout);
 	}
 
 });

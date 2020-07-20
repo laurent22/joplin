@@ -9,8 +9,6 @@ const { shim } = require('lib/shim.js');
 const fs = require('fs-extra');
 const Setting = require('lib/models/Setting.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });

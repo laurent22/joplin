@@ -10,8 +10,6 @@
 // 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 // });
 
-// jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 // describe('services_UndoRedoService', function() {
 
 // 	beforeEach(async (done) => {

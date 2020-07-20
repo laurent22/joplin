@@ -88,12 +88,18 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
-// const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('amazon_s3');
+const syncTargetName_ = 'memory';
+// const syncTargetName_ = 'filesystem';
+// const syncTargetName_ = 'nextcloud';
+// const syncTargetName_ = 'dropbox';
+// const syncTargetName_ = 'amazon_s3';
+
+const syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 const syncDir = `${__dirname}/../tests/sync`;
+
+let defaultJasmineTimeout = 90 * 1000;
+if (['nextcloud'].includes(syncTargetName_)) defaultJasmineTimeout = 60 * 1000 * 10;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
 
