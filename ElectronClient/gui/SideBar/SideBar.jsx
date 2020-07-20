@@ -15,7 +15,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis, substrStartWithEllipsis } = require('lib/string-utils');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { ALL_NOTES_FILTER_ID, ALL_TODOS_FILTER_ID } = require('lib/reserved-ids');
 
 const commands = [
 	require('./commands/focusElementSideBar'),
@@ -134,6 +134,7 @@ class SideBarComponent extends React.Component {
 
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
+		this.onAllTodosClick_ = this.onAllTodosClick_.bind(this);
 
 		this.rootRef = React.createRef();
 
@@ -648,6 +649,13 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
+	onAllTodosClick_() {
+		this.props.dispatch({
+			type: 'SMART_FILTER_SELECT',
+			id: ALL_TODOS_FILTER_ID,
+		});
+	}
+
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
 		const iconName = 'fa-sync-alt';
@@ -689,6 +697,13 @@ class SideBarComponent extends React.Component {
 			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
 				onClick: this.onAllNotesClick_,
 				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID,
+			})
+		);
+
+		items.push(
+			this.makeHeader('allTodosHeader', _('All To-dos'), 'fa-check-square', {
+				onClick: this.onAllTodosClick_,
+				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_TODOS_FILTER_ID,
 			})
 		);
 

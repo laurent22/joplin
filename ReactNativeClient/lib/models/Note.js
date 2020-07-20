@@ -13,7 +13,7 @@ const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
 const markdownUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { ALL_NOTES_FILTER_ID,ALL_TODOS_FILTER_ID } = require('lib/reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -310,7 +310,7 @@ class Note extends BaseItem {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
-			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
+			if (parentId && parentId !== ALL_NOTES_FILTER_ID && parentId !== ALL_TODOS_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
 			}
@@ -337,9 +337,13 @@ class Note extends BaseItem {
 			options.conditions.push('todo_completed <= 0');
 		}
 
+		if (parentId === ALL_TODOS_FILTER_ID) {
+			options.conditions.push('is_todo = 1');
+		}
+
 		if (options.uncompletedTodosOnTop && hasTodos) {
 			let cond = options.conditions.slice();
-			cond.push('is_todo = 1');
+			if (parentId !== ALL_TODOS_FILTER_ID) cond.push('is_todo = 1');
 			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
 			let tempOptions = Object.assign({}, options);
 			tempOptions.conditions = cond;

@@ -1,7 +1,7 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { ALL_NOTES_FILTER_ID, ALL_TODOS_FILTER_ID } = require('lib/reserved-ids');
 const CommandService = require('lib/services/CommandService').default;
 
 const defaultState = {
@@ -671,6 +671,7 @@ const reducer = (state = defaultState, action) => {
 			{
 				const modNote = action.note;
 				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+				const isViewingAllTodos = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_TODOS_FILTER_ID);
 				const isViewingConflictFolder = state.notesParentType === 'Folder' && state.selectedFolderId === Folder.conflictFolderId();
 
 				const noteIsInFolder = function(note, folderId) {
@@ -687,7 +688,7 @@ const reducer = (state = defaultState, action) => {
 					const n = newNotes[i];
 					if (n.id == modNote.id) {
 						// Note is still in the same folder
-						if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+						if (isViewingAllNotes || isViewingAllTodos ||  noteIsInFolder(modNote, n.parent_id)) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
@@ -710,7 +711,7 @@ const reducer = (state = defaultState, action) => {
 				// Note was not found - if the current folder is the same as the note folder,
 				// add it to it.
 				if (!found) {
-					if (isViewingAllNotes || noteIsInFolder(modNote, state.selectedFolderId)) {
+					if (isViewingAllNotes || isViewingAllTodos || noteIsInFolder(modNote, state.selectedFolderId)) {
 						newNotes.push(modNote);
 					}
 				}
