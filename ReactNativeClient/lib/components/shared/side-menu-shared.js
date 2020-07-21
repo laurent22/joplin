@@ -1,5 +1,6 @@
 const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
+const Tag = require('lib/models/Tag');
 
 const shared = {};
 
@@ -65,6 +66,13 @@ shared.renderFolders = function(props, renderItem) {
 };
 
 shared.renderTags = function(props, renderItem) {
+	props = Object.assign({}, props);
+	const tags = props.tags.slice();
+	// Sort tags alphabetically
+	tags.sort((a, b) => {
+		return Tag.getCachedFullTitle(a.id) < Tag.getCachedFullTitle(b.id) ? -1 : 1;
+	});
+	props.tags = tags;
 	return renderItemsRecursive_(props, renderItem, [], '', 0, [], BaseModel.TYPE_TAG);
 };
 

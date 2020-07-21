@@ -245,7 +245,7 @@ msgstr "已啟用"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: ReactNativeClient/lib/models/Setting.js:566
+#: ReactNativeClient/lib/models/Setting.js:607
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "已停用"
@@ -766,13 +766,13 @@ msgstr "確定"
 msgid "Cancel"
 msgstr "取消"
 
-#: ElectronClient/plugins/GotoAnything.min.js:450
+#: ElectronClient/plugins/GotoAnything.min.js:454
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
 
-#: ElectronClient/plugins/GotoAnything.min.js:489
+#: ElectronClient/plugins/GotoAnything.min.js:493
 msgid "Goto Anything..."
 msgstr "前往任意內容..."
 
@@ -1209,7 +1209,7 @@ msgid "URL"
 msgstr "網址"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1212
+#: ReactNativeClient/lib/models/Setting.js:1253
 msgid "Note History"
 msgstr "記事本歷史紀錄"
 
@@ -1530,7 +1530,7 @@ msgstr "檢視 (&V)"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ReactNativeClient/lib/models/Setting.js:329
+#: ReactNativeClient/lib/models/Setting.js:370
 msgid "Sort notes by"
 msgstr "記事排序依據"
 
@@ -1738,46 +1738,46 @@ msgstr "請先新增記事本"
 msgid "Clear"
 msgstr "清除"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:65
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
 msgstr "單字"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:66
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
 msgstr "字元"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:67
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
 msgstr "不含空格的字元"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:68
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
 msgstr "行數"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:87
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
 msgid "Editor"
 msgstr "編輯器"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:88
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Viewer"
 msgstr "閱讀器"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:96
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
 msgid "Statistics"
 msgstr "統計"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:100
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:101
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "關閉"
@@ -2137,6 +2137,10 @@ msgstr "未知的日誌級別: %s"
 msgid "Unknown level ID: %s"
 msgstr "未知的級別 ID: %s"
 
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -2275,11 +2279,23 @@ msgstr "WebDAV 用戶名稱"
 msgid "WebDAV password"
 msgstr "WebDAV 密碼"
 
-#: ReactNativeClient/lib/models/Setting.js:195
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
 msgstr "附件下載動作"
 
-#: ReactNativeClient/lib/models/Setting.js:196
+#: ReactNativeClient/lib/models/Setting.js:225
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2288,188 +2304,188 @@ msgstr ""
 "在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記"
 "事時即會開始下載。若是\"總是\"模式，無論您是否打開記事，都會下載所有附件。"
 
-#: ReactNativeClient/lib/models/Setting.js:199
+#: ReactNativeClient/lib/models/Setting.js:228
 msgid "Always"
 msgstr "總是"
 
-#: ReactNativeClient/lib/models/Setting.js:200
+#: ReactNativeClient/lib/models/Setting.js:229
 msgid "Manual"
 msgstr "手動"
 
-#: ReactNativeClient/lib/models/Setting.js:201
+#: ReactNativeClient/lib/models/Setting.js:230
 msgid "Auto"
 msgstr "自動"
 
-#: ReactNativeClient/lib/models/Setting.js:206
+#: ReactNativeClient/lib/models/Setting.js:247
 msgid "Max concurrent connections"
 msgstr "最大同時連接數"
 
-#: ReactNativeClient/lib/models/Setting.js:215
+#: ReactNativeClient/lib/models/Setting.js:256
 msgid "Language"
 msgstr "語言"
 
-#: ReactNativeClient/lib/models/Setting.js:225
+#: ReactNativeClient/lib/models/Setting.js:266
 msgid "Date format"
 msgstr "日期格式"
 
-#: ReactNativeClient/lib/models/Setting.js:244
+#: ReactNativeClient/lib/models/Setting.js:285
 msgid "Time format"
 msgstr "時間格式"
 
-#: ReactNativeClient/lib/models/Setting.js:263
+#: ReactNativeClient/lib/models/Setting.js:304
 msgid "Theme"
 msgstr "界面主題"
 
-#: ReactNativeClient/lib/models/Setting.js:274
+#: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
 msgstr "自動切換主題以匹配系統主題"
 
-#: ReactNativeClient/lib/models/Setting.js:286
+#: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
 msgstr "首選亮色主題"
 
-#: ReactNativeClient/lib/models/Setting.js:300
+#: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
 msgstr "首選暗色主題"
 
-#: ReactNativeClient/lib/models/Setting.js:305
+#: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
 msgstr "顯示記事數量"
 
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Split View"
 msgstr "分割顯示"
 
-#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:355
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:320
+#: ReactNativeClient/lib/models/Setting.js:361
 msgid "Uncompleted to-dos on top"
 msgstr "最上方顯示未完成的待辦事項"
 
-#: ReactNativeClient/lib/models/Setting.js:321
+#: ReactNativeClient/lib/models/Setting.js:362
 msgid "Show completed to-dos"
 msgstr "顯示已完成的待辦事項"
 
-#: ReactNativeClient/lib/models/Setting.js:346
+#: ReactNativeClient/lib/models/Setting.js:387
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "自動配對大括號，括號，引號等。"
 
-#: ReactNativeClient/lib/models/Setting.js:354
+#: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
 msgstr "使用 CodeMirror 作為代碼編輯器 (BETA)"
 
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
 msgid "Reverse sort order"
 msgstr "顛倒排序順序"
 
-#: ReactNativeClient/lib/models/Setting.js:363
+#: ReactNativeClient/lib/models/Setting.js:404
 msgid "Sort notebooks by"
 msgstr "排序記事方式"
 
-#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:416
 msgid "Save geo-location with notes"
 msgstr "在記事中保存地理位置資訊"
 
-#: ReactNativeClient/lib/models/Setting.js:394
+#: ReactNativeClient/lib/models/Setting.js:435
 msgid "When creating a new to-do:"
 msgstr "當新增待辦事項時: "
 
-#: ReactNativeClient/lib/models/Setting.js:397
-#: ReactNativeClient/lib/models/Setting.js:412
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
 msgid "Focus title"
 msgstr "游標置於標題"
 
-#: ReactNativeClient/lib/models/Setting.js:398
-#: ReactNativeClient/lib/models/Setting.js:413
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
 msgid "Focus body"
 msgstr "游標置於內文"
 
-#: ReactNativeClient/lib/models/Setting.js:409
+#: ReactNativeClient/lib/models/Setting.js:450
 msgid "When creating a new note:"
 msgstr "當新增記事時: "
 
-#: ReactNativeClient/lib/models/Setting.js:423
+#: ReactNativeClient/lib/models/Setting.js:464
 msgid "Enable soft breaks"
 msgstr "啟用軟中斷"
 
-#: ReactNativeClient/lib/models/Setting.js:424
+#: ReactNativeClient/lib/models/Setting.js:465
 msgid "Enable typographer support"
 msgstr "啟用 Typographer 支援"
 
-#: ReactNativeClient/lib/models/Setting.js:425
+#: ReactNativeClient/lib/models/Setting.js:466
 msgid "Enable math expressions"
 msgstr "啟用數學表達式"
 
-#: ReactNativeClient/lib/models/Setting.js:426
+#: ReactNativeClient/lib/models/Setting.js:467
 msgid "Enable Fountain syntax support"
 msgstr "啟用 Fountain 語法支援"
 
-#: ReactNativeClient/lib/models/Setting.js:427
+#: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable Mermaid diagrams support"
 msgstr "啟用 Mermaid 流程圖支援"
 
-#: ReactNativeClient/lib/models/Setting.js:429
+#: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable ==mark== syntax"
 msgstr "啟用 ==mark== 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:430
+#: ReactNativeClient/lib/models/Setting.js:471
 msgid "Enable footnotes"
 msgstr "啟用註腳"
 
-#: ReactNativeClient/lib/models/Setting.js:431
+#: ReactNativeClient/lib/models/Setting.js:472
 msgid "Enable table of contents extension"
 msgstr "啟用表格內容延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:432
+#: ReactNativeClient/lib/models/Setting.js:473
 msgid "Enable ~sub~ syntax"
 msgstr "啟用 ~sub~ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:433
+#: ReactNativeClient/lib/models/Setting.js:474
 msgid "Enable ^sup^ syntax"
 msgstr "啟用 ^sup^ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:434
+#: ReactNativeClient/lib/models/Setting.js:475
 msgid "Enable deflist syntax"
 msgstr "啟用 deflist 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:435
+#: ReactNativeClient/lib/models/Setting.js:476
 msgid "Enable abbreviation syntax"
 msgstr "啟用縮寫語法"
 
-#: ReactNativeClient/lib/models/Setting.js:436
+#: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable markdown emoji"
 msgstr "啟用 Markdown 表情符號"
 
-#: ReactNativeClient/lib/models/Setting.js:437
+#: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable ++insert++ syntax"
 msgstr "啟用 ++insert++ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:479
 msgid "Enable multimarkdown table extension"
 msgstr "啟用 MultiMarkdown 表格延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:450
+#: ReactNativeClient/lib/models/Setting.js:491
 msgid "Show tray icon"
 msgstr "顯示系統匣圖示"
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: 不是在全部桌面環境中都能發揮作用。"
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2478,23 +2494,23 @@ msgstr ""
 "這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少"
 "衝突次數。"
 
-#: ReactNativeClient/lib/models/Setting.js:456
+#: ReactNativeClient/lib/models/Setting.js:497
 msgid "Start application minimised in the tray icon"
 msgstr "啟動應用程式時最小化到任務欄"
 
-#: ReactNativeClient/lib/models/Setting.js:475
+#: ReactNativeClient/lib/models/Setting.js:516
 msgid "Editor font size"
 msgstr "編輯器字體大小"
 
-#: ReactNativeClient/lib/models/Setting.js:483
+#: ReactNativeClient/lib/models/Setting.js:524
 msgid "Editor font"
 msgstr "編輯器字型"
 
-#: ReactNativeClient/lib/models/Setting.js:507
+#: ReactNativeClient/lib/models/Setting.js:548
 msgid "Editor font family"
 msgstr "編輯器字型系列"
 
-#: ReactNativeClient/lib/models/Setting.js:509
+#: ReactNativeClient/lib/models/Setting.js:550
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -2503,50 +2519,50 @@ msgstr ""
 "必須是 *等距 (monospace)* 字型，否則程式將無法正常工作。如果字型不正確或沒有"
 "填寫，則預設為通用等距字型。"
 
-#: ReactNativeClient/lib/models/Setting.js:548
+#: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "自定義樣式表，適用於整個 Joplin 全域的應用程序風格"
 
-#: ReactNativeClient/lib/models/Setting.js:554
+#: ReactNativeClient/lib/models/Setting.js:595
 msgid "Automatically update the application"
 msgstr "自動更新應用程式"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
 msgstr "獲取預發行更新"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "有關更多詳細信息，請查閱預發行頁面: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:563
+#: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
 msgstr "同步時間間隔"
 
-#: ReactNativeClient/lib/models/Setting.js:567
-#: ReactNativeClient/lib/models/Setting.js:568
-#: ReactNativeClient/lib/models/Setting.js:569
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分鐘"
 
-#: ReactNativeClient/lib/models/Setting.js:570
+#: ReactNativeClient/lib/models/Setting.js:611
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 小時"
 
-#: ReactNativeClient/lib/models/Setting.js:571
-#: ReactNativeClient/lib/models/Setting.js:572
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 小時"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid "Text editor command"
 msgstr "文字編輯器命令"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2554,67 +2570,67 @@ msgstr ""
 "用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
 "的編輯器。"
 
-#: ReactNativeClient/lib/models/Setting.js:582
+#: ReactNativeClient/lib/models/Setting.js:623
 msgid "Page size for PDF export"
 msgstr "匯出 PDF 的頁面大小"
 
-#: ReactNativeClient/lib/models/Setting.js:584
+#: ReactNativeClient/lib/models/Setting.js:625
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:585
+#: ReactNativeClient/lib/models/Setting.js:626
 msgid "Letter"
 msgstr "信函 (Letter)"
 
-#: ReactNativeClient/lib/models/Setting.js:586
+#: ReactNativeClient/lib/models/Setting.js:627
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:587
+#: ReactNativeClient/lib/models/Setting.js:628
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:588
+#: ReactNativeClient/lib/models/Setting.js:629
 msgid "Tabloid"
 msgstr "文摘 (Tabloid)"
 
-#: ReactNativeClient/lib/models/Setting.js:589
+#: ReactNativeClient/lib/models/Setting.js:630
 msgid "Legal"
 msgstr "法律規格紙 (Legal)"
 
-#: ReactNativeClient/lib/models/Setting.js:592
+#: ReactNativeClient/lib/models/Setting.js:633
 msgid "Page orientation for PDF export"
 msgstr "匯出至 PDF 的頁面方向"
 
-#: ReactNativeClient/lib/models/Setting.js:594
+#: ReactNativeClient/lib/models/Setting.js:635
 msgid "Portrait"
 msgstr "豎直"
 
-#: ReactNativeClient/lib/models/Setting.js:595
+#: ReactNativeClient/lib/models/Setting.js:636
 msgid "Landscape"
 msgstr "橫向"
 
-#: ReactNativeClient/lib/models/Setting.js:606
+#: ReactNativeClient/lib/models/Setting.js:647
 msgid "Keyboard Mode"
 msgstr "鍵盤模式"
 
-#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:650
 msgid "Default"
 msgstr "預設"
 
-#: ReactNativeClient/lib/models/Setting.js:610
+#: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:611
+#: ReactNativeClient/lib/models/Setting.js:652
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:667
 msgid "Custom TLS certificates"
 msgstr "自訂 TLS 證書"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:668
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2625,15 +2641,15 @@ msgstr ""
 "cert_dir, /other/custom.pem。請注意，如果修改了 TLS 的設置，您必須先儲存變"
 "更，然後再按一下 \"檢測同步設置\"。"
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: ReactNativeClient/lib/models/Setting.js:680
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 證書錯誤"
 
-#: ReactNativeClient/lib/models/Setting.js:648
+#: ReactNativeClient/lib/models/Setting.js:689
 msgid "Fail-safe"
 msgstr "故障保護"
 
-#: ReactNativeClient/lib/models/Setting.js:649
+#: ReactNativeClient/lib/models/Setting.js:690
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2641,36 +2657,36 @@ msgstr ""
 "故障保護 (Fail-safe): 當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本"
 "機資料"
 
-#: ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:694
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr "指定 API 伺服器使用的連接埠。 如果未設定，將使用預設值。"
 
-#: ReactNativeClient/lib/models/Setting.js:661
+#: ReactNativeClient/lib/models/Setting.js:702
 msgid "Enable note history"
 msgstr "啟用記事歷史紀錄"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 msgid "days"
 msgstr "天數"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 #, javascript-format
 msgid "%d days"
 msgstr "%d 天"
 
-#: ReactNativeClient/lib/models/Setting.js:673
+#: ReactNativeClient/lib/models/Setting.js:714
 msgid "Keep note history for"
 msgstr "保留記事歷史記錄"
 
-#: ReactNativeClient/lib/models/Setting.js:700
+#: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
 msgstr "記事本清單增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:702
-#: ReactNativeClient/lib/models/Setting.js:715
-#: ReactNativeClient/lib/models/Setting.js:728
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2681,52 +2697,52 @@ msgstr ""
 "空間。因此因數為 2 的的一項是因數為 1 的一項的佔用空間的兩倍。重啟程式以查看"
 "變化。"
 
-#: ReactNativeClient/lib/models/Setting.js:713
+#: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
 msgstr "記事清單增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:726
+#: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
 msgstr "記事区域增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:878
+#: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "不正確選項值: \"%s\"。可能的值為: %s。"
 
-#: ReactNativeClient/lib/models/Setting.js:1206
+#: ReactNativeClient/lib/models/Setting.js:1247
 msgid "General"
 msgstr "一般選項"
 
-#: ReactNativeClient/lib/models/Setting.js:1207
+#: ReactNativeClient/lib/models/Setting.js:1248
 msgid "Synchronisation"
 msgstr "顯示同步狀態"
 
-#: ReactNativeClient/lib/models/Setting.js:1208
+#: ReactNativeClient/lib/models/Setting.js:1249
 msgid "Appearance"
 msgstr "外觀"
 
-#: ReactNativeClient/lib/models/Setting.js:1209
+#: ReactNativeClient/lib/models/Setting.js:1250
 msgid "Note"
 msgstr "記事本"
 
-#: ReactNativeClient/lib/models/Setting.js:1210
+#: ReactNativeClient/lib/models/Setting.js:1251
 msgid "Plugins"
 msgstr "延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:1211
+#: ReactNativeClient/lib/models/Setting.js:1252
 msgid "Application"
 msgstr "應用程式"
 
-#: ReactNativeClient/lib/models/Setting.js:1213
+#: ReactNativeClient/lib/models/Setting.js:1254
 msgid "Encryption"
 msgstr "加密"
 
-#: ReactNativeClient/lib/models/Setting.js:1214
+#: ReactNativeClient/lib/models/Setting.js:1255
 msgid "Web Clipper"
 msgstr "網頁剪輯"
 
-#: ReactNativeClient/lib/models/Setting.js:1219
+#: ReactNativeClient/lib/models/Setting.js:1260
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2742,7 +2758,7 @@ msgstr ""
 "器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
 "與所見即所得 (WYSIWYG) 編輯器兼容與否。"
 
-#: ReactNativeClient/lib/models/Setting.js:1220
+#: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "所有記事和設置均儲存於: %s"
@@ -2827,14 +2843,14 @@ msgstr "無法修改已加密項目"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (僅測試使用)"
 
-#: ReactNativeClient/lib/BaseApplication.js:138
-#: ReactNativeClient/lib/BaseApplication.js:151
-#: ReactNativeClient/lib/BaseApplication.js:182
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用資訊: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:217
+#: ReactNativeClient/lib/BaseApplication.js:218
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "未知的標誌: %s"

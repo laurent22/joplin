@@ -336,19 +336,31 @@ function themeStyle(theme) {
 	return themeCache_[cacheKey];
 }
 
-const cachedStyles_ = {};
+const cachedStyles_ = {
+	themeId: null,
+	styles: {},
+};
 
+// cacheKey must be a globally unique key, and must change whenever
+// the dependencies of the style change. If the style depends only
+// on the theme, a static string can be provided as a cache key.
 function buildStyle(cacheKey, themeId, callback) {
-	if (cachedStyles_[cacheKey]) cachedStyles_[cacheKey].style;
+	// We clear the cache whenever switching themes
+	if (cachedStyles_.themeId !== themeId) {
+		cachedStyles_.themeId = themeId;
+		cachedStyles_.styles = {};
+	}
+
+	if (cachedStyles_.styles[cacheKey]) return cachedStyles_.styles[cacheKey].style;
 
 	const s = callback(themeStyle(themeId));
 
-	cachedStyles_[cacheKey] = {
+	cachedStyles_.styles[cacheKey] = {
 		style: s,
 		timestamp: Date.now(),
 	};
 
-	return cachedStyles_[cacheKey].style;
+	return cachedStyles_.styles[cacheKey].style;
 }
 
 module.exports = { themeStyle, buildStyle, themeById };

@@ -16,6 +16,7 @@ export const runtime = (comp:any):CommandRuntime => {
 					noteContentPropertiesDialogOptions: {
 						visible: true,
 						text: note.body,
+						markupLanguage: note.markup_language,
 					},
 				});
 			}
