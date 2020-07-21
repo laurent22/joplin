@@ -25,7 +25,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	static label() {
-		return _('AWS S3') + ' (Beta)';
+		return `${_('AWS S3')} (Beta)`;
 	}
 
 	async isAuthenticated() {
