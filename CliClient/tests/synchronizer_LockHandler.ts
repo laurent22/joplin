@@ -2,7 +2,7 @@ import LockHandler, { LockType, LockHandlerOptions } from 'lib/services/synchron
 
 require('app-module-path').addPath(__dirname);
 
-const { syncTargetId, asyncTest, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('test-utils.js');
+const { isNetworkSyncTarget, asyncTest, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('test-utils.js');
 
 process.on('unhandledRejection', (reason:any, p:any) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -13,7 +13,7 @@ process.on('unhandledRejection', (reason:any, p:any) => {
 // ECONNRESET and similar errors (Dropbox or OneDrive migth also throttle). Also we can't use a
 // low lock TTL value because the lock might expire between the time it's written and the time it's checked.
 // For that reason we add this multiplier for non-memory sync targets.
-const timeoutMultipler = syncTargetId() === 5 ? 100 : 1;
+const timeoutMultipler = isNetworkSyncTarget() ? 100 : 1;
 
 let lockHandler_:LockHandler = null;
 

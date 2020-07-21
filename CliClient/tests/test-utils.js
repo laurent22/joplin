@@ -21,6 +21,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
+const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
@@ -43,6 +44,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const { OneDriveApi } = require('lib/onedrive-api');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
@@ -92,13 +94,16 @@ const syncTargetName_ = 'memory';
 // const syncTargetName_ = 'filesystem';
 // const syncTargetName_ = 'nextcloud';
 // const syncTargetName_ = 'dropbox';
+// const syncTargetName_ = 'onedrive';
 // const syncTargetName_ = 'amazon_s3';
 
 const syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 const syncDir = `${__dirname}/../tests/sync`;
 
+const isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'amazon_s3'].includes(syncTargetName_);
+
 let defaultJasmineTimeout = 90 * 1000;
-if (['nextcloud'].includes(syncTargetName_)) defaultJasmineTimeout = 60 * 1000 * 10;
+if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
 jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
@@ -133,6 +138,10 @@ Setting.autoSaveEnabled = false;
 
 function syncTargetId() {
 	return syncTargetId_;
+}
+
+function isNetworkSyncTarget() {
+	return isNetworkSyncTarget_;
 }
 
 function sleep(n) {
@@ -266,6 +275,7 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
 		const syncTarget = new SyncTargetClass(db(id));
+		await initFileApi();
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
@@ -345,9 +355,7 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 	return masterKey;
 }
 
-function fileApi() {
-	if (fileApi_) return fileApi_;
-
+async function initFileApi() {
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
 		fs.mkdirpSync(syncDir, 0o755);
@@ -363,12 +371,31 @@ function fileApi() {
 		});
 		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
+		// To get a token, go to the App Console:
+		// https://www.dropbox.com/developers/apps/
+		// Then select "JoplinTest" and click "Generated access token"
 		const api = new DropboxApi();
 		const authTokenPath = `${__dirname}/support/dropbox-auth.txt`;
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
+		// To get a token, open the URL below, then copy the *complete*
+		// redirection URL in onedrive-auth.txt. Keep in mind that auth data
+		// only lasts 1h for OneDrive.
+		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		const { parameters, setEnvOverride } = require('lib/parameters.js');
+		Setting.setConstant('env', 'dev');
+		setEnvOverride('test');
+		const config = parameters().oneDriveTest;
+		const api = new OneDriveApi(config.id, config.secret, false);
+		const authData = fs.readFileSync(`${__dirname}/support/onedrive-auth.txt`, 'utf8');
+		const urlInfo = require('url-parse')(authData, true);
+		const auth = require('querystring').parse(urlInfo.hash.substr(1));
+		api.setAuth(auth);
+		const appDir = await api.appDirectory();
+		fileApi_ = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
 		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
@@ -381,6 +408,9 @@ function fileApi() {
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);
 	fileApi_.requestRepeatCount_ = 0;
+}
+
+function fileApi() {
 	return fileApi_;
 }
 
@@ -635,4 +665,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

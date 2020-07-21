@@ -78,6 +78,10 @@ class FileApiDriverOneDrive {
 	}
 
 	async list(path, options = null) {
+		options = Object.assign({}, {
+			context: null,
+		}, options);
+
 		let query = this.itemFilter_();
 		let url = `${this.makePath_(path)}:/children`;
 
@@ -186,8 +190,23 @@ class FileApiDriverOneDrive {
 		return this.pathCache_[path];
 	}
 
-	clearRoot() {
-		throw new Error('Not implemented');
+	async clearRoot() {
+		const recurseItems = async (path) => {
+			const result = await this.list(this.fileApi_.fullPath_(path));
+			const output = [];
+
+			for (const item of result.items) {
+				const fullPath = `${path}/${item.path}`;
+				if (item.isDir) {
+					await recurseItems(fullPath);
+				}
+				await this.delete(this.fileApi_.fullPath_(fullPath));
+			}
+
+			return output;
+		};
+
+		await recurseItems('');
 	}
 
 	async delta(path, options = null) {

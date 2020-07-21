@@ -21,4 +21,5 @@ linkToLocal.sh
 yarn-error.log
 tests/support/dropbox-auth.txt
 tests/support/nextcloud-auth.json
+tests/support/onedrive-auth.txt
 build/
