@@ -78,13 +78,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 	function getSearchTerm(keyword: any) {
 		const value = escapeRegExp(keyword.value);
-		let searchTerm = new RegExp(value, 'g');
-
-		if (keyword.accuracy === 'partially') {
-			searchTerm = new RegExp(value, 'gi');
-		}
-
-		return searchTerm;
+		return new RegExp(value, 'gi');
 	}
 
 	useEffect(() => {
@@ -121,6 +115,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		// We only want to highlight all matches when there is only 1 search term
 		if (keywords.length !== 1 || keywords[0].value == '') {
 			clearOverlay(this);
+			setPreviousKeywordValue('');
 			return 0;
 		}
 
@@ -149,6 +144,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		}, 500);
 
 		setOverlayTimeout(timeout);
+		overlayTimeoutRef.current = timeout;
 
 		return nMatches;
 	});
