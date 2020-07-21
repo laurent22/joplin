@@ -767,6 +767,7 @@ class Application extends BaseApplication {
 					cmdService.commandToMenuItem('textCode', 'CommandOrControl+`'),
 					separator(),
 					cmdService.commandToMenuItem('insertDateTime', 'CommandOrControl+Shift+T'),
+					cmdService.commandToMenuItem('attachFile', 'CommandOrControl+Shift+A'),
 					separator(),
 					cmdService.commandToMenuItem('focusSearch', shim.isMac() ? 'Shift+Command+F' : 'F6'),
 					cmdService.commandToMenuItem('showLocalSearch', 'CommandOrControl+F'),
