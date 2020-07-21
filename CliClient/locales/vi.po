@@ -251,7 +251,7 @@ msgstr "Đã bật"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: ReactNativeClient/lib/models/Setting.js:566
+#: ReactNativeClient/lib/models/Setting.js:607
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Đã tắt"
@@ -797,7 +797,7 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Hủy"
 
-#: ElectronClient/plugins/GotoAnything.min.js:450
+#: ElectronClient/plugins/GotoAnything.min.js:454
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
@@ -806,7 +806,7 @@ msgstr ""
 "Ấn tiêu đề note để đi tới note đó. Hoặc ấn # theo sau bởi tên của một tag, "
 "hoặc @ theo sau bởi tên của notebook."
 
-#: ElectronClient/plugins/GotoAnything.min.js:489
+#: ElectronClient/plugins/GotoAnything.min.js:493
 msgid "Goto Anything..."
 msgstr "Đi tới bất kỳ điểm nào..."
 
@@ -1248,7 +1248,7 @@ msgid "URL"
 msgstr "URL"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1212
+#: ReactNativeClient/lib/models/Setting.js:1253
 msgid "Note History"
 msgstr "Lịch sử của note"
 
@@ -1583,7 +1583,7 @@ msgstr "&Giao diện"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ReactNativeClient/lib/models/Setting.js:329
+#: ReactNativeClient/lib/models/Setting.js:370
 msgid "Sort notes by"
 msgstr "Sắp xếp notes theo"
 
@@ -1780,47 +1780,47 @@ msgstr "Vui lòng tạo một notebook trước"
 msgid "Clear"
 msgstr "Xóa"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:65
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
 msgstr "Số từ"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:66
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
 msgstr "Số chữ"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:67
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
 msgstr "Số chữ ngoại trừ dấu cách"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:68
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
 msgstr "Số dòng"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:87
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
 msgid "Editor"
 msgstr "Trình chỉnh sửa văn bản"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:88
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Viewer"
 msgstr "Viewer"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:96
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
 #, fuzzy
 msgid "Statistics"
 msgstr "Trạng thái"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:100
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:101
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "Đóng"
@@ -2191,6 +2191,10 @@ msgstr "Không tìm thấy log level: %s"
 msgid "Unknown level ID: %s"
 msgstr "Không tìm thấy level ID: %s"
 
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -2330,11 +2334,23 @@ msgstr "Tên sử dụng WebDAV"
 msgid "WebDAV password"
 msgstr "Mật khẩu WebDAV"
 
-#: ReactNativeClient/lib/models/Setting.js:195
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
 msgstr "Hành vi tải về đính kèm"
 
-#: ReactNativeClient/lib/models/Setting.js:196
+#: ReactNativeClient/lib/models/Setting.js:225
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2345,188 +2361,188 @@ msgstr ""
 "độ \"Always\", tất cả đính kèm luôn được tải về bất kể bạn có mở note hay "
 "không."
 
-#: ReactNativeClient/lib/models/Setting.js:199
+#: ReactNativeClient/lib/models/Setting.js:228
 msgid "Always"
 msgstr "Always"
 
-#: ReactNativeClient/lib/models/Setting.js:200
+#: ReactNativeClient/lib/models/Setting.js:229
 msgid "Manual"
 msgstr "Manual"
 
-#: ReactNativeClient/lib/models/Setting.js:201
+#: ReactNativeClient/lib/models/Setting.js:230
 msgid "Auto"
 msgstr "Auto"
 
-#: ReactNativeClient/lib/models/Setting.js:206
+#: ReactNativeClient/lib/models/Setting.js:247
 msgid "Max concurrent connections"
 msgstr "Số lượng kết nối tối đa"
 
-#: ReactNativeClient/lib/models/Setting.js:215
+#: ReactNativeClient/lib/models/Setting.js:256
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: ReactNativeClient/lib/models/Setting.js:225
+#: ReactNativeClient/lib/models/Setting.js:266
 msgid "Date format"
 msgstr "Định dạng ngày"
 
-#: ReactNativeClient/lib/models/Setting.js:244
+#: ReactNativeClient/lib/models/Setting.js:285
 msgid "Time format"
 msgstr "Định dạng thời gian"
 
-#: ReactNativeClient/lib/models/Setting.js:263
+#: ReactNativeClient/lib/models/Setting.js:304
 msgid "Theme"
 msgstr "Thême"
 
-#: ReactNativeClient/lib/models/Setting.js:274
+#: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:286
+#: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:300
+#: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:305
+#: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
 msgstr "Hiển thị số lượng note"
 
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Split View"
 msgstr "Chia đôi màn hình"
 
-#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:355
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:320
+#: ReactNativeClient/lib/models/Setting.js:361
 msgid "Uncompleted to-dos on top"
 msgstr "HIển thị to-dos chưa hoàn thành lên đầu"
 
-#: ReactNativeClient/lib/models/Setting.js:321
+#: ReactNativeClient/lib/models/Setting.js:362
 msgid "Show completed to-dos"
 msgstr "Hiển thị to-dos đã hoàn thành"
 
-#: ReactNativeClient/lib/models/Setting.js:346
+#: ReactNativeClient/lib/models/Setting.js:387
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 
-#: ReactNativeClient/lib/models/Setting.js:354
+#: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
 msgid "Reverse sort order"
 msgstr "Đảo ngược thứ tự sắp xếp"
 
-#: ReactNativeClient/lib/models/Setting.js:363
+#: ReactNativeClient/lib/models/Setting.js:404
 msgid "Sort notebooks by"
 msgstr "Sắp xếp notebooks theo"
 
-#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:416
 msgid "Save geo-location with notes"
 msgstr "Lưu dữ liệu định vị của notes này"
 
-#: ReactNativeClient/lib/models/Setting.js:394
+#: ReactNativeClient/lib/models/Setting.js:435
 msgid "When creating a new to-do:"
 msgstr "Khi tạo một to-do mới:"
 
-#: ReactNativeClient/lib/models/Setting.js:397
-#: ReactNativeClient/lib/models/Setting.js:412
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
 msgid "Focus title"
 msgstr "Đặt dấu trỏ tại tiêu đề"
 
-#: ReactNativeClient/lib/models/Setting.js:398
-#: ReactNativeClient/lib/models/Setting.js:413
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
 msgid "Focus body"
 msgstr "Đặt dấu trỏ tại phần thân"
 
-#: ReactNativeClient/lib/models/Setting.js:409
+#: ReactNativeClient/lib/models/Setting.js:450
 msgid "When creating a new note:"
 msgstr "Khi tạo note mới:"
 
-#: ReactNativeClient/lib/models/Setting.js:423
+#: ReactNativeClient/lib/models/Setting.js:464
 msgid "Enable soft breaks"
 msgstr "Bật tự động xuống trang"
 
-#: ReactNativeClient/lib/models/Setting.js:424
+#: ReactNativeClient/lib/models/Setting.js:465
 msgid "Enable typographer support"
 msgstr "Bật hỗ trợ cá nhân làm thuật in máy"
 
-#: ReactNativeClient/lib/models/Setting.js:425
+#: ReactNativeClient/lib/models/Setting.js:466
 msgid "Enable math expressions"
 msgstr "Bật hỗ trợ toán học"
 
-#: ReactNativeClient/lib/models/Setting.js:426
+#: ReactNativeClient/lib/models/Setting.js:467
 msgid "Enable Fountain syntax support"
 msgstr "Bật hỗ trợ Fountain syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:427
+#: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable Mermaid diagrams support"
 msgstr "Bật Mermaid diagrams support"
 
-#: ReactNativeClient/lib/models/Setting.js:429
+#: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable ==mark== syntax"
 msgstr "Bật ==mark== syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:430
+#: ReactNativeClient/lib/models/Setting.js:471
 msgid "Enable footnotes"
 msgstr "Bật footnotes"
 
-#: ReactNativeClient/lib/models/Setting.js:431
+#: ReactNativeClient/lib/models/Setting.js:472
 msgid "Enable table of contents extension"
 msgstr "Bật ứng dụng mở rộng mục lục"
 
-#: ReactNativeClient/lib/models/Setting.js:432
+#: ReactNativeClient/lib/models/Setting.js:473
 msgid "Enable ~sub~ syntax"
 msgstr "Bật ~sub~ syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:433
+#: ReactNativeClient/lib/models/Setting.js:474
 msgid "Enable ^sup^ syntax"
 msgstr "Bật ^sup^ syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:434
+#: ReactNativeClient/lib/models/Setting.js:475
 msgid "Enable deflist syntax"
 msgstr "Bật deflist syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:435
+#: ReactNativeClient/lib/models/Setting.js:476
 msgid "Enable abbreviation syntax"
 msgstr "Bật abbreviation syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:436
+#: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable markdown emoji"
 msgstr "Bật markdown emoji"
 
-#: ReactNativeClient/lib/models/Setting.js:437
+#: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable ++insert++ syntax"
 msgstr "Bật ++insert++ syntax"
 
-#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:479
 msgid "Enable multimarkdown table extension"
 msgstr "Bật multimarkdown table extension"
 
-#: ReactNativeClient/lib/models/Setting.js:450
+#: ReactNativeClient/lib/models/Setting.js:491
 msgid "Show tray icon"
 msgstr "Hiển thị biểu tượng ở tray"
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid "Note: Does not work in all desktop environments."
 msgstr "Lưu ý: Không hoạt động trong tất cả môi trường desktop."
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2535,24 +2551,24 @@ msgstr ""
 "Điều này cho phép Joplin chạy trong nền. Khuyến cáo sử dụng chức năng này để "
 "notes có thể liên tục đồng bộ hóa, giảm thiểu số lần xung đột."
 
-#: ReactNativeClient/lib/models/Setting.js:456
+#: ReactNativeClient/lib/models/Setting.js:497
 msgid "Start application minimised in the tray icon"
 msgstr ""
 "Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
 
-#: ReactNativeClient/lib/models/Setting.js:475
+#: ReactNativeClient/lib/models/Setting.js:516
 msgid "Editor font size"
 msgstr "Kích thước font của trình chỉnh sửa văn bản"
 
-#: ReactNativeClient/lib/models/Setting.js:483
+#: ReactNativeClient/lib/models/Setting.js:524
 msgid "Editor font"
 msgstr "Font của trình chỉnh sửa văn bản"
 
-#: ReactNativeClient/lib/models/Setting.js:507
+#: ReactNativeClient/lib/models/Setting.js:548
 msgid "Editor font family"
 msgstr "Font family của trình chỉnh sửa văn bản"
 
-#: ReactNativeClient/lib/models/Setting.js:509
+#: ReactNativeClient/lib/models/Setting.js:550
 #, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
@@ -2562,50 +2578,50 @@ msgstr ""
 "Đây phải là *monospace* font hoặc sẽ không hiển thị được. Nếu font không "
 "đúng hoặc không có, ứng dung sẽ mặc định sử dụng monospace cơ bản."
 
-#: ReactNativeClient/lib/models/Setting.js:548
+#: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
 
-#: ReactNativeClient/lib/models/Setting.js:554
+#: ReactNativeClient/lib/models/Setting.js:595
 msgid "Automatically update the application"
 msgstr "Tự động cập nhật ứng dụng"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
 msgstr "Cập nhật bản trước phát hành khi kiểm tra cập nhật"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Xem trang phát hành trước để có thêm thông tin chi tiết: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:563
+#: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
 msgstr "Tần suất đồng bộ hóa"
 
-#: ReactNativeClient/lib/models/Setting.js:567
-#: ReactNativeClient/lib/models/Setting.js:568
-#: ReactNativeClient/lib/models/Setting.js:569
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d phút"
 
-#: ReactNativeClient/lib/models/Setting.js:570
+#: ReactNativeClient/lib/models/Setting.js:611
 #, javascript-format
 msgid "%d hour"
 msgstr "%d giờ"
 
-#: ReactNativeClient/lib/models/Setting.js:571
-#: ReactNativeClient/lib/models/Setting.js:572
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
 #, javascript-format
 msgid "%d hours"
 msgstr "%d giờ"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid "Text editor command"
 msgstr "Câu lệnh trình duyệt chỉnh sửa văn bản"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2614,67 +2630,67 @@ msgstr ""
 "note. Nếu không được cung cấp, câu lệnh trình duyệt văn bản sẽ tự động tìm "
 "trình duyệt chỉnh sửa văn bản mặc định."
 
-#: ReactNativeClient/lib/models/Setting.js:582
+#: ReactNativeClient/lib/models/Setting.js:623
 msgid "Page size for PDF export"
 msgstr "Kích thước của trang để export dạng PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:584
+#: ReactNativeClient/lib/models/Setting.js:625
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:585
+#: ReactNativeClient/lib/models/Setting.js:626
 msgid "Letter"
 msgstr "Letter"
 
-#: ReactNativeClient/lib/models/Setting.js:586
+#: ReactNativeClient/lib/models/Setting.js:627
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:587
+#: ReactNativeClient/lib/models/Setting.js:628
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:588
+#: ReactNativeClient/lib/models/Setting.js:629
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ReactNativeClient/lib/models/Setting.js:589
+#: ReactNativeClient/lib/models/Setting.js:630
 msgid "Legal"
 msgstr "Legal"
 
-#: ReactNativeClient/lib/models/Setting.js:592
+#: ReactNativeClient/lib/models/Setting.js:633
 msgid "Page orientation for PDF export"
 msgstr "Định hướng trang để export PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:594
+#: ReactNativeClient/lib/models/Setting.js:635
 msgid "Portrait"
 msgstr "Portrait"
 
-#: ReactNativeClient/lib/models/Setting.js:595
+#: ReactNativeClient/lib/models/Setting.js:636
 msgid "Landscape"
 msgstr "Landscape"
 
-#: ReactNativeClient/lib/models/Setting.js:606
+#: ReactNativeClient/lib/models/Setting.js:647
 msgid "Keyboard Mode"
 msgstr "Ché độ bàn phím"
 
-#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:650
 msgid "Default"
 msgstr "Mặc định"
 
-#: ReactNativeClient/lib/models/Setting.js:610
+#: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:611
+#: ReactNativeClient/lib/models/Setting.js:652
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:667
 msgid "Custom TLS certificates"
 msgstr "Tùy chỉnh TLS certicates"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:668
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2686,15 +2702,15 @@ msgstr ""
 "other/custom.pem. Lưu ý, nếu bnaj thay đổi cấu hình TLS, bnaj phải lưu những "
 "thay đổi đó trước khi ấn \"Kiểm tra cấu hình đồng bộ hóa\"."
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: ReactNativeClient/lib/models/Setting.js:680
 msgid "Ignore TLS certificate errors"
 msgstr "Bỏ qua các lỗi TLS certificate"
 
-#: ReactNativeClient/lib/models/Setting.js:648
+#: ReactNativeClient/lib/models/Setting.js:689
 msgid "Fail-safe"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:649
+#: ReactNativeClient/lib/models/Setting.js:690
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2702,7 +2718,7 @@ msgstr ""
 "Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống "
 "(thường là kết quả của bug hoặc cấu hình sai)"
 
-#: ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:694
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2710,30 +2726,30 @@ msgstr ""
 "Chỉ định port nên được sử dụng bởi server API. Nếu không được chỉ định, cấu "
 "hình mặc định sẽ được sử dụng."
 
-#: ReactNativeClient/lib/models/Setting.js:661
+#: ReactNativeClient/lib/models/Setting.js:702
 msgid "Enable note history"
 msgstr "Bật lịch sử note"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 msgid "days"
 msgstr "ngày"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 #, javascript-format
 msgid "%d days"
 msgstr "%d ngày"
 
-#: ReactNativeClient/lib/models/Setting.js:673
+#: ReactNativeClient/lib/models/Setting.js:714
 msgid "Keep note history for"
 msgstr "Lưu giữ lịch sử note để"
 
-#: ReactNativeClient/lib/models/Setting.js:700
+#: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:702
-#: ReactNativeClient/lib/models/Setting.js:715
-#: ReactNativeClient/lib/models/Setting.js:728
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2741,52 +2757,52 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:713
+#: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:726
+#: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:878
+#: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
 
-#: ReactNativeClient/lib/models/Setting.js:1206
+#: ReactNativeClient/lib/models/Setting.js:1247
 msgid "General"
 msgstr "Chung"
 
-#: ReactNativeClient/lib/models/Setting.js:1207
+#: ReactNativeClient/lib/models/Setting.js:1248
 msgid "Synchronisation"
 msgstr "Đồng bộ hóa"
 
-#: ReactNativeClient/lib/models/Setting.js:1208
+#: ReactNativeClient/lib/models/Setting.js:1249
 msgid "Appearance"
 msgstr "Bề ngoài"
 
-#: ReactNativeClient/lib/models/Setting.js:1209
+#: ReactNativeClient/lib/models/Setting.js:1250
 msgid "Note"
 msgstr "Note"
 
-#: ReactNativeClient/lib/models/Setting.js:1210
+#: ReactNativeClient/lib/models/Setting.js:1251
 msgid "Plugins"
 msgstr "Phần mềm mở rộng"
 
-#: ReactNativeClient/lib/models/Setting.js:1211
+#: ReactNativeClient/lib/models/Setting.js:1252
 msgid "Application"
 msgstr "Ứng dụng"
 
-#: ReactNativeClient/lib/models/Setting.js:1213
+#: ReactNativeClient/lib/models/Setting.js:1254
 msgid "Encryption"
 msgstr "Mã hóa"
 
-#: ReactNativeClient/lib/models/Setting.js:1214
+#: ReactNativeClient/lib/models/Setting.js:1255
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: ReactNativeClient/lib/models/Setting.js:1219
+#: ReactNativeClient/lib/models/Setting.js:1260
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2797,7 +2813,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:1220
+#: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
@@ -2879,14 +2895,14 @@ msgstr "Các mục đã mã hóa không thể chỉnh sửa"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (dành cho testing)"
 
-#: ReactNativeClient/lib/BaseApplication.js:138
-#: ReactNativeClient/lib/BaseApplication.js:151
-#: ReactNativeClient/lib/BaseApplication.js:182
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Sử dụng: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:217
+#: ReactNativeClient/lib/BaseApplication.js:218
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Không tìm thấy flag này: %s"
