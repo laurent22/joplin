@@ -285,7 +285,7 @@ class Api {
 		}
 
 		const checkAndRemoveFullTitleField = function(request) {
-			const fields = this.fields_(request);
+			const fields = this.fields_(request, []);
 			let hasFullTitleField = false;
 			for (let i = 0; i < fields.length; i++) {
 				if (fields[i] === 'full_title') {
