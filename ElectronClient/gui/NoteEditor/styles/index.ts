@@ -53,6 +53,18 @@ export default function styles(props: NoteEditorProps) {
 				paddingLeft: 10,
 				paddingRight: 10,
 			},
+			resourceWatchBanner: {
+				...theme.textStyle,
+				padding: 10,
+				marginLeft: 5,
+				marginBottom: 10,
+				color: theme.colorWarn,
+				backgroundColor: theme.warningBackgroundColor,
+			},
+			resourceWatchBannerLine: {
+				marginTop: 0,
+				marginBottom: 10,
+			},
 		};
 	});
 }

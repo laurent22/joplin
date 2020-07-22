@@ -22,6 +22,7 @@ export interface NoteEditorProps {
 	selectedSearchId: string,
 	customCss: string,
 	noteVisiblePanes: string[],
+	watchedResources: any,
 }
 
 export interface NoteBodyEditorProps {

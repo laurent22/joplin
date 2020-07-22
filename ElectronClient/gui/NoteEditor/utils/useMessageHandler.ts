@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
 import contextMenu from './contextMenu';
-import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher';
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher/index';
 const BaseItem = require('lib/models/BaseItem');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');

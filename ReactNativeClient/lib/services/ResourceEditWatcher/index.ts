@@ -1,4 +1,4 @@
-import AsyncActionQueue from '../AsyncActionQueue';
+import AsyncActionQueue from '../../AsyncActionQueue';
 const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting');
 const Resource = require('lib/models/Resource');
@@ -25,7 +25,7 @@ export default class ResourceEditWatcher {
 	private static instance_:ResourceEditWatcher;
 
 	private logger_:any;
-	// private dispatch:Function;
+	private dispatch:Function;
 	private watcher_:any;
 	private chokidar_:any;
 	private watchedItems_:WatchedItems = {};
@@ -34,15 +34,15 @@ export default class ResourceEditWatcher {
 
 	constructor() {
 		this.logger_ = new Logger();
-		// this.dispatch = () => {};
+		this.dispatch = () => {};
 		this.watcher_ = null;
 		this.chokidar_ = chokidar;
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	initialize(logger:any/* , dispatch:Function*/) {
+	initialize(logger:any, dispatch:Function) {
 		this.logger_ = logger;
-		// this.dispatch = dispatch;
+		this.dispatch = dispatch;
 	}
 
 	static instance() {
@@ -95,6 +95,41 @@ export default class ResourceEditWatcher {
 			};
 		};
 
+		const handleChangeEvent = async (path:string) => {
+			this.logger().debug('ResourceEditWatcher: handleChangeEvent: ' + path);
+
+			const watchedItem = this.watchedItemByPath(path);
+
+			if (!watchedItem) {
+				// The parent directory of the edited resource often gets a change event too
+				// and ends up here. Print a warning, but most likely it's nothing important.
+				this.logger().debug(`ResourceEditWatcher: could not find resource ID from path: ${path}`);
+				return;
+			}
+
+			const resourceId = watchedItem.resourceId;
+			const stat = await shim.fsDriver().stat(path);
+			const editedFileUpdatedTime = stat.mtime.getTime();
+
+			if (watchedItem.lastFileUpdatedTime === editedFileUpdatedTime) {
+				// chokidar is buggy and emits "change" events even when nothing has changed
+				// so double-check the modified time and skip processing if there's no change.
+				// In particular it emits two such events just after the file has been copied
+				// in openAndWatch().
+				//
+				// We also need this because some events are handled twice - once in the "all" event
+				// handle and once in the "raw" event handler, due to a bug in chokidar. So having
+				// this check means we don't unecessarily save the resource twice when the file is
+				// modified by the user.
+				this.logger().debug(`ResourceEditWatcher: No timestamp change - skip: ${resourceId}`);
+				return;
+			}
+
+			this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
+			watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
+			watchedItem.lastFileUpdatedTime = editedFileUpdatedTime;
+		}
+
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event:any, path:string) => {
@@ -108,41 +143,27 @@ export default class ResourceEditWatcher {
 					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					const watchedItem = this.watchedItemByPath(path);
-					const resourceId = watchedItem.resourceId;
-
-					if (!watchedItem) {
-						this.logger().error(`ResourceEditWatcher: could not find resource ID from path: ${path}`);
-						return;
-					}
-
-					const stat = await shim.fsDriver().stat(path);
-					const editedFileUpdatedTime = stat.mtime.getTime();
-
-					if (watchedItem.lastFileUpdatedTime === editedFileUpdatedTime) {
-						// chokidar is buggy and emits "change" events even when nothing has changed
-						// so double-check the modified time and skip processing if there's no change.
-						// In particular it emits two such events just after the file has been copied
-						// in openAndWatch().
-						this.logger().debug(`ResourceEditWatcher: No timestamp change - skip: ${resourceId}`);
-						return;
-					}
-
-					this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
-
-					watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
-					watchedItem.lastFileUpdatedTime = editedFileUpdatedTime;
+					handleChangeEvent(path);
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
 			});
+
 			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
 			// taken from https://github.com/paulmillr/chokidar/issues/591
+			//
+			// 2020-07-22: It also applies when editing Excel files, which copy the new file
+			// then rename, so handling the "change" event alone is not enough as sometimes
+			// that event is not event triggered.
+			// https://github.com/laurent22/joplin/issues/3407
+			//
 			// @ts-ignore Leave unused path variable
 			this.watcher_.on('raw', async (event:string, path:string, options:any) => {
+				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${options.watchedPath}`);
 				if (event === 'rename') {
 					this.watcher_.unwatch(options.watchedPath);
 					this.watcher_.add(options.watchedPath);
+					handleChangeEvent(options.watchedPath);
 				}
 			});
 		} else {
@@ -181,6 +202,12 @@ export default class ResourceEditWatcher {
 			watchedItem.lastResourceUpdatedTime = resource.updated_time;
 
 			this.watch(editFilePath);
+
+			this.dispatch({
+				type: 'RESOURCE_EDIT_WATCHER_SET',
+				id: resource.id,
+				title: resource.title,
+			});
 		}
 
 		bridge().openItem(watchedItem.path);
@@ -199,9 +226,20 @@ export default class ResourceEditWatcher {
 
 		await item.asyncSaveQueue.waitForAllDone();
 
-		if (this.watcher_) this.watcher_.unwatch(item.path);
-		await shim.fsDriver().remove(item.path);
+		try {
+			if (this.watcher_) this.watcher_.unwatch(item.path);
+			await shim.fsDriver().remove(item.path);
+		} catch (error) {
+			this.logger().warn(`ResourceEditWatcher: There was an error unwatching resource ${resourceId}. Joplin will ignore the file regardless.`, error);
+		}
+
 		delete this.watchedItems_[resourceId];
+
+		this.dispatch({
+			type: 'RESOURCE_EDIT_WATCHER_REMOVE',
+			id: resourceId,
+		});
+
 		this.logger().info(`ResourceEditWatcher: Stopped watching ${item.path}`);
 	}
 
@@ -211,7 +249,11 @@ export default class ResourceEditWatcher {
 			const item = this.watchedItems_[resourceId];
 			promises.push(this.stopWatching(item.resourceId));
 		}
-		return Promise.all(promises);
+		await Promise.all(promises);
+
+		this.dispatch({
+			type: 'RESOURCE_EDIT_WATCHER_CLEAR',
+		});
 	}
 
 	private watchedItemByResourceId(resourceId:string):WatchedItem {
