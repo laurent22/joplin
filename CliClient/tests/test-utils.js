@@ -513,6 +513,24 @@ async function createNTestTags(n) {
 	return tags;
 }
 
+
+async function createNTestTodos(n, folder, tagIds = null, title = 'todo') {
+	const todos = [];
+	for (let i = 0; i < n; i++) {
+		const title_ = n > 1 ? `${title}${i}` : title;
+		const todo = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0, is_todo: true });
+		todos.push(todo);
+		await time.msleep(10);
+	}
+	if (tagIds) {
+		for (let i = 0; i < todos.length; i++) {
+			await Tag.setNoteTagsByIds(todos[i].id, tagIds);
+			await time.msleep(10);
+		}
+	}
+	return todos;
+}
+
 function tempFilePath(ext) {
 	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
 }
@@ -585,4 +603,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, createNTestTodos, TestApp };
