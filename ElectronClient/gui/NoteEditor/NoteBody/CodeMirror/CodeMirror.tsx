@@ -451,17 +451,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
-	// The editor needs to be kept up to date on the actual space that it's filling
-	// Ogherwise we can get some rendering errors when the editor size is changed
-	// (this can happen when switching layout of when toggling sidebars for example)
-	const editorStyle = useMemo(() => {
-		const output = Object.assign({}, rootSize, styles.editor);
+	useEffect(() => {
+		if (!editorRef.current) return;
 
-		if (props.visiblePanes.includes('editor') && props.visiblePanes.includes('viewer')) {
-			output.width = Math.floor(rootSize.width / 2);
-		}
-
-		return output;
+		// Need to let codemirror know that it's container's size has changed so that it can
+		// re-compute anything it needs to. This ensures the cursor (and anything that is
+		// based on window size will be correct
+		// Codemirror will automatically refresh on window size changes but otherwise assumes
+		// that it's container size is stable, that is not true with Joplin, hence
+		// why we need to manually let codemirror know about resizes.
+		// Manually calling refresh here will cause a double refresh in some instances (when the
+		// window size is changed for example) but this is a fairly quick operation so it's worth
+		// it.
+		editorRef.current.refresh();
 	}, [rootSize, styles.editor, props.visiblePanes]);
 
 	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
@@ -475,7 +477,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					theme={styles.editor.codeMirrorTheme}
-					style={editorStyle}
+					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}
