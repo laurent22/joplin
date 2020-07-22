@@ -345,6 +345,8 @@ const cachedStyles_ = {
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
 function buildStyle(cacheKey, themeId, callback) {
+	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
+
 	// We clear the cache whenever switching themes
 	if (cachedStyles_.themeId !== themeId) {
 		cachedStyles_.themeId = themeId;
