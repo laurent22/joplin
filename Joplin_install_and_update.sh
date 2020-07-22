@@ -90,7 +90,7 @@ showLogo
 #-----------------------------------------------------
 print "Checking architecture..."
 ## uname actually gives more information than needed, but it contains all architectures (hardware and software)
-ARCHITECTURE=$(uname -a || echo "NO CHECK")
+ARCHITECTURE=$(uname -m -p -i || echo "NO CHECK")
 
 if [[ $ARCHITECTURE = "NO CHECK" ]] ; then
   print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
