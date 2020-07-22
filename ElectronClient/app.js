@@ -1265,7 +1265,7 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action) => { console.info('ACTION', action); this.store().dispatch(action); });
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action) => { this.store().dispatch(action); });
 
 		RevisionService.instance().runInBackground();
 
