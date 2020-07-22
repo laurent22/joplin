@@ -52,7 +52,7 @@ export default function useListIdent(CodeMirror: any) {
 		let start = listTokens[0].start;
 		const token = extractListToken(line);
 
-		if (listTokens.length > 1 && listTokens[0].string.match(/\s/)) {
+		if (listTokens.length > 1 && listTokens[0].string.match(/^\s/)) {
 			start = listTokens[1].start;
 		}
 
