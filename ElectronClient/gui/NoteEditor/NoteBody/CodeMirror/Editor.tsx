@@ -8,11 +8,15 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/scrollpastend';
+import 'codemirror/addon/scroll/annotatescrollbar';
+import 'codemirror/addon/search/matchesonscrollbar';
+import 'codemirror/addon/search/searchcursor';
 
 import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 
 import 'codemirror/keymap/emacs';
@@ -85,6 +89,7 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
 
 	CodeMirror.keyMap.basic = {

@@ -43,6 +43,7 @@ export interface NoteBodyEditorProps {
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
+	setLocalSearchResultCount(count: number): void,
 	searchMarkers: any,
 	visiblePanes: string[],
 	keyboardMode: string,

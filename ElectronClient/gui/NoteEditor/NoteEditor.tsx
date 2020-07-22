@@ -397,6 +397,7 @@ function NoteEditor(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,// renderNoteToolbar(),
 		onScroll: onScroll,
+		setLocalSearchResultCount: setLocalSearchResultCount,
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
