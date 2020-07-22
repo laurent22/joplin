@@ -252,13 +252,38 @@ function Editor(props: EditorProps, ref: any) {
 				editor.clearHistory();
 			}
 			editor.setOption('screenReaderLabel', props.value);
+		}
+	}, [props.value]);
+
+	useEffect(() => {
+		if (editor) {
 			editor.setOption('theme', props.theme);
+		}
+	}, [props.theme]);
+
+	useEffect(() => {
+		if (editor) {
 			editor.setOption('mode', props.mode);
+		}
+	}, [props.mode]);
+
+	useEffect(() => {
+		if (editor) {
 			editor.setOption('readOnly', props.readOnly);
+		}
+	}, [props.readOnly]);
+
+	useEffect(() => {
+		if (editor) {
 			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
+		}
+	}, [props.autoMatchBraces]);
+
+	useEffect(() => {
+		if (editor) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
-	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+	}, [props.keyMap]);
 
 	return <div style={props.style} ref={editorParent} />;
 }
