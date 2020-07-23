@@ -96,7 +96,7 @@ export default class ResourceEditWatcher {
 		};
 
 		const handleChangeEvent = async (path:string) => {
-			this.logger().debug('ResourceEditWatcher: handleChangeEvent: ' + path);
+			this.logger().debug(`ResourceEditWatcher: handleChangeEvent: ${path}`);
 
 			const watchedItem = this.watchedItemByPath(path);
 
@@ -128,7 +128,7 @@ export default class ResourceEditWatcher {
 			this.logger().debug(`ResourceEditWatcher: Queuing save action: ${resourceId}`);
 			watchedItem.asyncSaveQueue.push(makeSaveAction(resourceId, path));
 			watchedItem.lastFileUpdatedTime = editedFileUpdatedTime;
-		}
+		};
 
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
