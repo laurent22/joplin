@@ -155,17 +155,6 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [props.isProvisional, formNote.id]);
 
-	useEffect(() => {
-		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
-		// yet saved, we need to save it now before the component is unmounted. However, we can't put
-		// formNote in the dependency array or that effect will run every time the note changes. We only
-		// want to run it once on unmount. So because of that we need to use that formNoteRef.
-		return () => {
-			isMountedRef.current = false;
-			saveNoteIfWillChange(formNoteRef.current);
-		};
-	}, []);
-
 	const previousNoteId = usePrevious(formNote.id);
 
 	useEffect(() => {

@@ -857,32 +857,60 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const prop_htmlToMarkdownRef = useRef<Function>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
+	const nextOnChangeEventInfo = useRef<any>(null);
+
+	async function execOnChangeEvent() {
+		const info = nextOnChangeEventInfo.current;
+		if (!info) return;
+
+		nextOnChangeEventInfo.current = null;
+
+		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
+
+		lastOnChangeEventInfo.current.content = contentMd;
+
+		props_onChangeRef.current({
+			changeId: info.changeId,
+			content: contentMd,
+		});
+
+		dispatchDidUpdate(info.editor);
+	}
+
+	// When the component unmount, we dispatch the change event
+	// that was scheduled so that the parent component can save
+	// the note.
+	useEffect(() => {
+		return () => {
+			execOnChangeEvent();
+		};
+	}, []);
+
+	const onChangeHandlerTimeoutRef = useRef<any>(null);
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		let onChangeHandlerIID:any = null;
-
 		function onChangeHandler() {
+			// First this component notifies the parent that a change is going to happen.
+			// Then the actual onChange event is fired after a timeout or when this
+			// component gets unmounted.
+
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
+			if (onChangeHandlerTimeoutRef.current) clearTimeout(onChangeHandlerTimeoutRef.current);
 
-			onChangeHandlerIID = setTimeout(async () => {
-				onChangeHandlerIID = null;
+			nextOnChangeEventInfo.current = {
+				changeId: changeId,
+				editor: editor,
+				contentMarkupLanguage: props.contentMarkupLanguage,
+				contentOriginalCss: props.contentOriginalCss,
+			};
 
-				const contentMd = await prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editor.getContent(), props.contentOriginalCss);
-
-				if (!editor) return;
-
-				lastOnChangeEventInfo.current.content = contentMd;
-
-				props_onChangeRef.current({
-					changeId: changeId,
-					content: contentMd,
-				});
-
-				dispatchDidUpdate(editor);
+			onChangeHandlerTimeoutRef.current = setTimeout(async () => {
+				onChangeHandlerTimeoutRef.current = null;
+				execOnChangeEvent();
 			}, 1000);
 		}
 
