@@ -18,7 +18,7 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
+		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
 			const s = msg.split(':');

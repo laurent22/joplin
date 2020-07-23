@@ -139,9 +139,9 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		// We try to get most links work though, except for internal (joplin://) links.
 
 		const msg = event.channel ? event.channel : '';
-		const args = event.args;
+		// const args = event.args;
 
-		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
+		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		try {
 			if (msg.indexOf('joplin://') === 0) {
