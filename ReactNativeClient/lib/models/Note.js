@@ -187,6 +187,9 @@ class Note extends BaseItem {
 					return `:/${id}`;
 				});
 			}
+
+			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
+			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
 		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
