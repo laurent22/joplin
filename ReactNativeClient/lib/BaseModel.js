@@ -157,6 +157,7 @@ class BaseModel {
 		}
 		if (!('isNew' in options)) options.isNew = 'auto';
 		if (!('autoTimestamp' in options)) options.autoTimestamp = true;
+		if (!('userSideValidation' in options)) options.userSideValidation = false;
 		return options;
 	}
 
@@ -444,6 +445,17 @@ class BaseModel {
 		return query;
 	}
 
+	static userSideValidation(o) {
+		if (('id' in o) && !o.id.match(/^[a-f0-9]{32}$/)) {
+			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
+		}
+
+		const timestamps = ['user_updated_time', 'user_created_time'];
+		for (const k of timestamps) {
+			if ((k in o) && (typeof o[k] !== 'number' || isNaN(o[k]) || o[k] < 0)) throw new Error('Validation error: user_updated_time and user_created_time must be numbers greater than 0');
+		}
+	}
+
 	static async save(o, options = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
@@ -471,6 +483,10 @@ class BaseModel {
 
 		o = this.filter(o);
 
+		if (options.userSideValidation) {
+			this.userSideValidation(o);
+		}
+
 		let queries = [];
 		const saveQuery = this.saveQuery(o, options);
 		const modelId = saveQuery.id;
@@ -487,15 +503,10 @@ class BaseModel {
 			await this.db().transactionExecBatch(queries);
 
 			o = Object.assign({}, o);
-			// eslint-disable-next-line require-atomic-updates
 			if (modelId) o.id = modelId;
-			// eslint-disable-next-line require-atomic-updates
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
-			// eslint-disable-next-line require-atomic-updates
 			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
-			// eslint-disable-next-line require-atomic-updates
 			if ('user_updated_time' in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
-			// eslint-disable-next-line require-atomic-updates
 			if ('user_created_time' in saveQuery.modObject) o.user_created_time = saveQuery.modObject.user_created_time;
 			o = this.addModelMd(o);
 
