@@ -76,10 +76,11 @@ export default class CommandService extends BaseService {
 	private commandPreviousStates_:CommandStates = {};
 	private mapStateToPropsIID_:any = null;
 
-	private keymapService = KeymapService.instance();
+	private keymapService:typeof KeymapService = null;
 
-	initialize(store:any) {
+	initialize(store:any, keymapService:typeof KeymapService) {
 		utils.store = store;
+		this.keymapService = keymapService;
 	}
 
 	public on(eventName:string, callback:Function) {

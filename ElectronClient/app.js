@@ -1126,6 +1126,8 @@ class Application extends BaseApplication {
 		const filename = Setting.custom_css_files.JOPLIN_APP;
 		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
 
+		const keymapService = KeymapService.instance();
+
 		try {
 			await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
@@ -1147,7 +1149,7 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		CommandService.instance().initialize(this.store());
+		CommandService.instance().initialize(this.store(), keymapService);
 
 		for (const command of commands) {
 			CommandService.instance().registerDeclaration(command.declaration);
