@@ -341,6 +341,80 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </ul>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.231">v1.0.231</a> - 2020-07-24T17:21:53Z<a name="v1-0-231-https-github-com-laurent22-joplin-releases-tag-v1-0-231-2020-07-24t17-21-53z" href="#v1-0-231-https-github-com-laurent22-joplin-releases-tag-v1-0-231-2020-07-24t17-21-53z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added support for hierarchical/nested tags (<a href="https://github.com/laurent22/joplin/issues/2572">#2572</a> by Vaidotas Šimkus)</li>
+<li>New: Add support for AWS S3 synchronisation (Beta) (<a href="https://github.com/laurent22/joplin/issues/2815">#2815</a> by <a href="https://github.com/alexchee">@alexchee</a>)</li>
+<li>Security: Fixed a path traversal vulnerability in clipper server API that could allow an attacker to read or write an arbitrary file (CVE-2020-15844). Vulnerability found by <a href="mailto:ben@mayhem.sg">Benjamin Harris</a>.</li>
+<li>Improved: Improved GotoAnything speed and made it safer</li>
+<li>Improved: Enable searching in editor rather than the viewer for CodeMirror (<a href="https://github.com/laurent22/joplin/issues/3360">#3360</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Enforce that whitespace check for unindent checks the begining of a (<a href="https://github.com/laurent22/joplin/issues/3515">#3515</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Load more CodeMirror modes for syntax highlighting (<a href="https://github.com/laurent22/joplin/issues/3401">#3401</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Split Codemirror setOptions into different effects (<a href="https://github.com/laurent22/joplin/issues/3522">#3522</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: Fix filename when exporting notebook as Markdown (<a href="https://github.com/laurent22/joplin/issues/3473">#3473</a>)</li>
+<li>Fixed: Fixed alarms on macOS</li>
+<li>Fixed: Improve Markdown rendering in CodeMirror, in particular for math expressions (<a href="https://github.com/laurent22/joplin/issues/3448">#3448</a>) (<a href="https://github.com/laurent22/joplin/issues/3440">#3440</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: Crash when applying tags to multiple notes from within another tag (<a href="https://github.com/laurent22/joplin/issues/3481">#3481</a>)</li>
+<li>Fixed: Fixed regression when moving note to notebook from menu (<a href="https://github.com/laurent22/joplin/issues/3482">#3482</a>)</li>
+<li>Fixed: Api: Fixes nested tag API to handle calls with no 'fields' query key (<a href="https://github.com/laurent22/joplin/issues/3539">#3539</a> by Vaidotas Šimkus)</li>
+<li>Fixed: Editor window was no longer being resized with the main window (<a href="https://github.com/laurent22/joplin/issues/3503">#3503</a>)</li>
+<li>Fixed: Fixed attachments being out of order when importing Enex file</li>
+<li>Fixed: Fixed save issue in Rich Text editor when making a change to a note and quickly switching to a different notebook</li>
+<li>Fixed: Fixed style caching (<a href="https://github.com/laurent22/joplin/issues/3449">#3449</a>)</li>
+<li>Fixed: In some cases, changes made to an attachment would not be saved. Also added banner to show that an attachment is being edited (<a href="https://github.com/laurent22/joplin/issues/3407">#3407</a>)</li>
+<li>Fixed: Note links would be broken after saving a note in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/3510">#3510</a>)</li>
+<li>Fixed: Regression: Fix sort tags alphabetically in side-menu (<a href="https://github.com/laurent22/joplin/issues/3489">#3489</a> by Vaidotas Šimkus)</li>
+<li>Fixed: Regression: Fixed adding a new sub-notebook to a notebook</li>
+<li>Fixed: Revealing file in Windows did not work (<a href="https://github.com/laurent22/joplin/issues/3366">#3366</a>)</li>
+<li>Fixed: Undoing changes multiple time on an existing note could result in a blank note (<a href="https://github.com/laurent22/joplin/issues/3534">#3534</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.229">v1.0.229</a> - 2020-07-14T15:15:18Z<a name="v1-0-229-https-github-com-laurent22-joplin-releases-tag-v1-0-229-2020-07-14t15-15-18z" href="#v1-0-229-https-github-com-laurent22-joplin-releases-tag-v1-0-229-2020-07-14t15-15-18z" class="heading-anchor">🔗</a></h2>
+<p>Fixed a few regressions related to the recent command refactoring.</p>
+<ul>
+<li>New: Added support for hierarchical/nested tags (<a href="https://github.com/laurent22/joplin/issues/2572">#2572</a> by Vaidotas Šimkus)</li>
+<li>Fixed: Fix filename when exporting notebook as Markdown (<a href="https://github.com/laurent22/joplin/issues/3473">#3473</a>)</li>
+<li>Fixed: Fixed alarms on macOS</li>
+<li>Fixed: Improve Markdown rendering in CodeMirror, in particular for math expressions (<a href="https://github.com/laurent22/joplin/issues/3448">#3448</a>) (<a href="https://github.com/laurent22/joplin/issues/3440">#3440</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: Crash when applying tags to multiple notes from within another tag (<a href="https://github.com/laurent22/joplin/issues/3481">#3481</a>)</li>
+<li>Fixed: Fixed regression when moving note to notebook from menu (<a href="https://github.com/laurent22/joplin/issues/3482">#3482</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.227">v1.0.227</a> - 2020-07-07T20:44:54Z<a name="v1-0-227-https-github-com-laurent22-joplin-releases-tag-v1-0-227-2020-07-07t20-44-54z" href="#v1-0-227-https-github-com-laurent22-joplin-releases-tag-v1-0-227-2020-07-07t20-44-54z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add approximate reading time to note statistics (<a href="https://github.com/laurent22/joplin/issues/3373">#3373</a> by <a href="https://github.com/cadolphs">@cadolphs</a>)</li>
+<li>Improved: Codemirror: Remove cancelled keys in favour of explicit keymaps (<a href="https://github.com/laurent22/joplin/issues/3417">#3417</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Manually refresh codemirror whenever the window size changes (<a href="https://github.com/laurent22/joplin/issues/3388">#3388</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Refactored command system</li>
+<li>Fixed: Fix link color for dark theme (<a href="https://github.com/laurent22/joplin/issues/3391">#3391</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fixed custom order when note title is changed (<a href="https://github.com/laurent22/joplin/issues/3412">#3412</a>)</li>
+<li>Fixed: Fixed import of checkboxes in ENEX files (<a href="https://github.com/laurent22/joplin/issues/3402">#3402</a>)</li>
+<li>Fixed: Only de-duplicate imported notebook titles when needed (<a href="https://github.com/laurent22/joplin/issues/2331">#2331</a>)</li>
+<li>Fixed: Prevent code highlighting from freezing the app in some cases (<a href="https://github.com/laurent22/joplin/issues/3281">#3281</a>)</li>
+<li>Fixed: WYSIWYG: Fix undo issue</li>
+<li>Fixed: Fixed GotoAnything rendering issue with HTML notes</li>
+<li>Fixed: Fixed regression which could cause a crash after deleting a notebook (<a href="https://github.com/laurent22/joplin/issues/3461">#3461</a>)</li>
+<li>Fixed: WYSIWYG: Fixed inserting date time and other content inside header</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.226">v1.0.226</a> - 2020-07-04T10:21:26Z<a name="v1-0-226-https-github-com-laurent22-joplin-releases-tag-v1-0-226-2020-07-04t10-21-26z" href="#v1-0-226-https-github-com-laurent22-joplin-releases-tag-v1-0-226-2020-07-04t10-21-26z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Codemirror: Remove cancelled keys in favour of explicit keymaps (<a href="https://github.com/laurent22/joplin/issues/3417">#3417</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Manually refresh codemirror whenever the window size changes (<a href="https://github.com/laurent22/joplin/issues/3388">#3388</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Refactored command system</li>
+<li>Fixed: Fix link color for dark theme (<a href="https://github.com/laurent22/joplin/issues/3391">#3391</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fixed custom order when note title is changed (<a href="https://github.com/laurent22/joplin/issues/3412">#3412</a>)</li>
+<li>Fixed: Fixed import of checkboxes in ENEX files (<a href="https://github.com/laurent22/joplin/issues/3402">#3402</a>)</li>
+<li>Fixed: Only de-duplicate imported notebook titles when needed (<a href="https://github.com/laurent22/joplin/issues/2331">#2331</a>)</li>
+<li>Fixed: Prevent code highlighting from freezing the app in some cases (<a href="https://github.com/laurent22/joplin/issues/3281">#3281</a>)</li>
+<li>Fixed: WYSIWYG: Fix undo issue</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.224">v1.0.224</a> - 2020-06-20T22:26:08Z<a name="v1-0-224-https-github-com-laurent22-joplin-releases-tag-v1-0-224-2020-06-20t22-26-08z" href="#v1-0-224-https-github-com-laurent22-joplin-releases-tag-v1-0-224-2020-06-20t22-26-08z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed regression in v1.0.223</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.223">v1.0.223</a> - 2020-06-20T11:51:27Z<a name="v1-0-223-https-github-com-laurent22-joplin-releases-tag-v1-0-223-2020-06-20t11-51-27z" href="#v1-0-223-https-github-com-laurent22-joplin-releases-tag-v1-0-223-2020-06-20t11-51-27z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: API: Improved error handling on service end-point</li>
+<li>Fixed: API: Fixed externalEditWatcher/noteIsWatched call, fixed tests</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.221">v1.0.221</a> - 2020-06-20T01:44:20Z<a name="v1-0-221-https-github-com-laurent22-joplin-releases-tag-v1-0-221-2020-06-20t01-44-20z" href="#v1-0-221-https-github-com-laurent22-joplin-releases-tag-v1-0-221-2020-06-20t01-44-20z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: API: Add support for external editing from API</li>
