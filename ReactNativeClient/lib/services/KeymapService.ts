@@ -2,16 +2,19 @@ const fs = require('fs-extra');
 const BaseService = require('lib/services/BaseService');
 const { shim } = require('lib/shim.js');
 
+interface KeymapItem {
+	accelerator: string;
+	command: string;
+}
+
 class KeymapService extends BaseService {
 	private keymap: { [command: string]: KeymapItem };
+
 	static readonly keyCodes = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
-	static readonly modifiers = shim.isMac()
-		? /^(Ctrl|Option|Shift|Cmd)$/
-		: /^(Ctrl|Alt|AltGr|Shift|Super)$/;
+	static readonly modifiers = shim.isMac() ? /^(Ctrl|Option|Shift|Cmd)$/ : /^(Ctrl|Alt|AltGr|Shift|Super)$/;
+
 	static readonly defaultKeymap = shim.isMac()
 		? [
-			// Keymap items with null "accelerator" property allows users to set their own Accelerators
-			// i.e. { accelerator: null, command: 'someCommand' }
 			{ accelerator: 'Cmd+N', command: 'newNote' },
 			{ accelerator: 'Cmd+T', command: 'newTodo' },
 			{ accelerator: 'Cmd+S', command: 'synchronize' },
@@ -77,6 +80,7 @@ class KeymapService extends BaseService {
 
 	constructor() {
 		super();
+
 		this.keymap = KeymapService.initKeymap();
 	}
 
@@ -178,17 +182,6 @@ class KeymapService extends BaseService {
 		}
 	}
 
-	static initKeymap() {
-		const itemsByCommand: { [command: string]: KeymapItem } = {};
-		for (let i = 0; i < KeymapService.defaultKeymap.length; i++) {
-			// Make a copy of the KeymapItem before assigning it, hence the spread operator
-			// Otherwise we're going to mess up the defaultKeymap array
-			itemsByCommand[KeymapService.defaultKeymap[i].command] = { ...KeymapService.defaultKeymap[i] };
-		}
-
-		return itemsByCommand;
-	}
-
 	static validateAccelerator(accelerator: string) {
 		let keyFound = false;
 
@@ -211,17 +204,23 @@ class KeymapService extends BaseService {
 		if (!isValid) throw new Error(`Accelerator invalid: ${accelerator}`);
 	}
 
+	static initKeymap() {
+		const itemsByCommand: { [command: string]: KeymapItem } = {};
+		for (let i = 0; i < KeymapService.defaultKeymap.length; i++) {
+			// Make a copy of the KeymapItem before assigning it, hence the spread operator
+			// Otherwise we're going to mess up the defaultKeymap array
+			itemsByCommand[KeymapService.defaultKeymap[i].command] = { ...KeymapService.defaultKeymap[i] };
+		}
+
+		return itemsByCommand;
+	}
+
 	static instance() {
 		if (this.instance_) return this.instance_;
 
 		this.instance_ = new KeymapService();
 		return this.instance_;
 	}
-}
-
-interface KeymapItem {
-	accelerator: string;
-	command: string;
 }
 
 export = KeymapService;
