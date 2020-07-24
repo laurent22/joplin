@@ -126,7 +126,7 @@
     "htmlparser2": "^4.1.0",
     "image-type": "^3.0.0",
     "immer": "^7.0.5",
-    "joplin-turndown": "^4.0.28",
+    "joplin-turndown": "^4.0.29",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",
