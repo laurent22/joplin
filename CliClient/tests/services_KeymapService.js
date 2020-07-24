@@ -84,7 +84,7 @@ describe('services_KeymapService', () => {
 		it('should update the Accelerator', () => {
 			const testCases = shim.isMac()
 				? [
-					{ command: 'newNoteItem', accelerator: 'Ctrl+Option+Shift+N' },
+					{ command: 'newNote', accelerator: 'Ctrl+Option+Shift+N' },
 					{ command: 'synchronize', accelerator: 'F11' },
 					{ command: 'textBold', accelerator: 'Shift+F5' },
 					{ command: 'showLocalSearch', accelerator: 'Option+Cmd+S' },
