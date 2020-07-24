@@ -138,7 +138,6 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
-ReactNativeClient/lib/KeymapUtils.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/keychain/KeychainService.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js

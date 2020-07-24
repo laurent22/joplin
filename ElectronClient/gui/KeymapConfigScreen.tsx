@@ -1,25 +1,13 @@
 import * as React from 'react';
 const CommandService = require('lib/services/CommandService').default;
-const { DOMtoElectronAccelerator } = require('lib/KeymapUtils.js');
 const { themeStyle } = require('lib/theme');
+const { shim } = require('lib/shim');
 const { _ } = require('lib/locale.js');
 // const { bridge } = require('electron').remote.require('./bridge');
-// const Setting = require('lib/models/Setting');
 
-interface KeymapItem {
-	label: string,
-	accelerator: string,
-	command: string
-	isEditing: boolean,
-}
-
-// Temporary values
-const commandNames = [
-	'textCopy',
-	'textCut',
-	'textPaste',
-];
-const getAccelerator = (commandName: string) => {
+// Placeholders for current KeymapService members
+const KeymapService_keyCodes = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
+const KeymapService_instance_getAccelerator = (commandName: string) => {
 	switch (commandName) {
 	case 'textCopy':
 		return 'Ctrl+C';
@@ -31,11 +19,72 @@ const getAccelerator = (commandName: string) => {
 		throw new Error('Invalid command');
 	}
 };
+const KeymapService_instance_getCommands = () => [
+	'textCopy',
+	'textCut',
+	'textPaste',
+];
 
-const initialKeymap = commandNames.map(commandName => {
+// To be moved to KeymapService
+const KeymapService_domToElectronAccelerator = (event: React.KeyboardEvent<HTMLDivElement>) => {
+	const parts = [];
+	const { key, ctrlKey, metaKey, altKey, shiftKey } = event;
+
+	// First, the modifiers
+	if (ctrlKey) parts.push('Ctrl');
+	if (shim.isMac()) {
+		if (altKey) parts.push('Option');
+		if (shiftKey) parts.push('Shift');
+		if (metaKey) parts.push('Cmd');
+	} else {
+		if (altKey) parts.push('Alt');
+		if (shiftKey) parts.push('Shift');
+	}
+
+	// Finally, the key
+	const _key = KeymapService_domToElectronKey(key);
+	if (_key) parts.push(_key);
+
+	return parts.join('+');
+};
+
+// To be moved to KeymapService
+const KeymapService_domToElectronKey = (domKey: string) => {
+	let electronKey;
+
+	if (/^([a-z])$/.test(domKey)) electronKey = domKey.toUpperCase();
+	if (/^Arrow(Up|Down|Left|Right)|Audio(VolumeUp|VolumeDown|VolumeMute)$/.test(domKey)) electronKey = domKey.slice(5);
+
+	switch (domKey) {
+	case ' ':
+		electronKey = 'Space';
+		break;
+	case '+':
+		electronKey = 'Plus';
+		break;
+	case 'MediaTrackNext':
+		electronKey =  'MediaNextTrack';
+		break;
+	case 'MediaTrackPrevious':
+		electronKey =  'MediaPreviousTrack';
+		break;
+	}
+
+	if (KeymapService_keyCodes.test(electronKey)) return electronKey;
+	else return null;
+};
+
+interface KeymapItem {
+	label: string,
+	accelerator: string,
+	command: string
+	isEditing: boolean,
+}
+
+const initialKeymap = KeymapService_instance_getCommands().map(commandName => {
 	return {
 		label: CommandService.instance().label(commandName),
-		accelerator: getAccelerator(commandName),
+		accelerator: KeymapService_instance_getAccelerator(commandName),
 		command: commandName,
 		isEditing: false,
 	};
@@ -191,11 +240,11 @@ const ShortcutRecorder = (props: {
 
 
 	const handleKeydown = (
-		e: React.KeyboardEvent<HTMLDivElement>
+		event: React.KeyboardEvent<HTMLDivElement>
 	) => {
-		e.preventDefault();
+		event.preventDefault();
 
-		const _newAccelerator = DOMtoElectronAccelerator(e);
+		const _newAccelerator = KeymapService_domToElectronAccelerator(event);
 		switch (_newAccelerator) {
 		case 'Enter':
 			return props.updateAccelerator(newAccelerator);
@@ -223,7 +272,5 @@ const ShortcutRecorder = (props: {
 		</div>
 	);
 };
-
-
 
 export = KeymapConfigScreen;

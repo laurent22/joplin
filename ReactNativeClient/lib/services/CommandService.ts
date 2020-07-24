@@ -246,7 +246,7 @@ export default class CommandService extends BaseService {
 
 	label(commandName:string):string {
 		const command = this.commandByName(commandName);
-		if (!command) return null;
+		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		return command.declaration.label();
 	}
 
