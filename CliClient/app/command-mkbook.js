@@ -12,8 +12,25 @@ class Command extends BaseCommand {
 		return _('Creates a new notebook.');
 	}
 
+	options() {
+		return [
+			['-s, --sub', _('Creates the new notebook as a sub-notebook of the currently selected notebook')],
+		];
+	}
+
 	async action(args) {
-		const folder = await Folder.save({ title: args['new-notebook'] }, { userSideValidation: true });
+		const options = args.options;
+
+		const book = {
+			title: args['new-notebook'],
+		};
+
+		if (options && options.sub) {
+			if (!app().currentFolder()) throw new Error(_('Sub-notebooks can only be created within a notebook.'));
+			book.parent_id = app().currentFolder().id;
+		}
+
+		const folder = await Folder.save(book, { userSideValidation: true });
 		app().switchCurrentFolder(folder);
 	}
 }

@@ -96,6 +96,22 @@ testUnits.testFolders = async () => {
 	assertEquals(0, folders.length);
 };
 
+testUnits.testSubFolders = async () => {
+	await execCommand(client, 'mkbook nb1');
+	await execCommand(client, 'mkbook -s nb2');
+
+	let folders = await Folder.all();
+	assertEquals(2, folders.length);
+	assertEquals('nb1', folders[0].title);
+	assertEquals('nb2', folders[1].title);
+	assertEquals(folders[0].id, folders[1].parentId);
+
+	await execCommand(client, 'rm -r -f nb1');
+
+	folders = await Folder.all();
+	assertEquals(0, folders.length);
+};
+
 testUnits.testNotes = async () => {
 	await execCommand(client, 'mkbook nb1');
 	await execCommand(client, 'mknote n1');
