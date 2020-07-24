@@ -2286,11 +2286,11 @@ msgstr "AWS S3 存储桶"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr "AWS key"
+msgstr "AWS Access Key ID"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr "AWS secret"
+msgstr "AWS Secret Access Key"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
