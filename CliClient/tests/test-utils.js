@@ -53,13 +53,13 @@ const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
 let synchronizers_ = [];
+const fileApis_ = {};
 const encryptionServices_ = [];
 const revisionServices_ = [];
 const decryptionWorkers_ = [];
 const resourceServices_ = [];
 const resourceFetchers_ = [];
 const kvStores_ = [];
-let fileApi_ = null;
 let currentClient_ = 1;
 
 // The line `process.on('unhandledRejection'...` in all the test files is going to
@@ -367,12 +367,15 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 }
 
 async function initFileApi() {
+	if (fileApis_[syncTargetId_]) return;
+
+	let fileApi = null;
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
 		fs.mkdirpSync(syncDir, 0o755);
-		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
+		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
-		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+		fileApi = new FileApi('/root', new FileApiDriverMemory());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
 		const options = require(`${__dirname}/../tests/support/nextcloud-auth.json`);
 		const api = new WebDavApi({
@@ -380,7 +383,7 @@ async function initFileApi() {
 			username: () => options.username,
 			password: () => options.password,
 		});
-		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
+		fileApi = new FileApi('', new FileApiDriverWebDav(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
 		// To get a token, go to the App Console:
 		// https://www.dropbox.com/developers/apps/
@@ -390,7 +393,7 @@ async function initFileApi() {
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
-		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+		fileApi = new FileApi('', new FileApiDriverDropbox(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
 		// To get a token, open the URL below, then copy the *complete*
 		// redirection URL in onedrive-auth.txt. Keep in mind that auth data
@@ -406,23 +409,24 @@ async function initFileApi() {
 		const auth = require('querystring').parse(urlInfo.hash.substr(1));
 		api.setAuth(auth);
 		const appDir = await api.appDirectory();
-		fileApi_ = new FileApi(appDir, new FileApiDriverOneDrive(api));
+		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
 		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
 		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
 		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
-		fileApi_ = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
+		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	}
 
+	fileApi.setLogger(logger);
+	fileApi.setSyncTargetId(syncTargetId_);
+	fileApi.requestRepeatCount_ = 0;
 
-	fileApi_.setLogger(logger);
-	fileApi_.setSyncTargetId(syncTargetId_);
-	fileApi_.requestRepeatCount_ = 0;
+	fileApis_[syncTargetId_] = fileApi;
 }
 
 function fileApi() {
-	return fileApi_;
+	return fileApis_[syncTargetId_];
 }
 
 function objectsEqual(o1, o2) {
