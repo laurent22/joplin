@@ -10,7 +10,7 @@ const shared = require('lib/components/shared/config-shared.js');
 const ConfigMenuBar = require('./ConfigMenuBar.min.js');
 const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('./ClipperConfigScreen.min');
-const KeymapConfigScreen = require('./KeymapConfigScreen.js');
+const { KeymapConfigScreen } = require('./KeymapConfig/KeymapConfigScreen');
 
 class ConfigScreenComponent extends React.Component {
 	constructor() {
