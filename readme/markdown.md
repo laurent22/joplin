@@ -121,8 +121,14 @@ Note that Mermaid graphs are always rendered on a white background regardless of
 Checkboxes can be added like so:
 
 	- [ ] Milk
-	- [ ] Rice
+	- [x] Rice
 	- [ ] Eggs
+
+Which would turn into:
+
+- [ ] Milk
+- [x] Rice
+- [ ] Eggs
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
