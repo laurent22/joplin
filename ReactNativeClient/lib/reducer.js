@@ -3,6 +3,7 @@ const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 const CommandService = require('lib/services/CommandService').default;
+const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
 
 const defaultState = {
 	notes: [],
@@ -1056,6 +1057,8 @@ const reducer = (state = defaultState, action) => {
 	if (action.type === 'NOTE_DELETE') {
 		newState = handleHistory(newState, action);
 	}
+
+	newState = resourceEditWatcherReducer(newState, action);
 
 	CommandService.instance().scheduleMapStateToProps(newState);
 

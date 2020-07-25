@@ -1,5 +1,5 @@
 const { _, setLocale } = require('lib/locale.js');
-const { dirname } = require('lib/path-utils.js');
+const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 class Bridge {
@@ -30,7 +30,7 @@ class Bridge {
 	}
 
 	showItemInFolder(fullPath) {
-		return require('electron').shell.showItemInFolder(fullPath);
+		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
 	newBrowserWindow(options) {

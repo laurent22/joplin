@@ -546,6 +546,7 @@ graph TD;
 <th>Syntax</th>
 <th>Description</th>
 <th>Enabled</th>
+<th>Screenshot</th>
 </tr>
 </thead>
 <tbody>
@@ -554,84 +555,105 @@ graph TD;
 <td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">breaks</a> markdown-it demo</td>
 <td>Joplin uses hard breaks by default, which means that a line break is rendered as <code>&lt;br&gt;</code>. Enable soft breaks for traditional markdown line-break behaviour.</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/softbreaks_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td>Typographer</td>
 <td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">typographer</a> markdown-it demo</td>
 <td>Does typographic replacements, (c) -&gt; © and so on</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/typographer_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://katex.org">Katex</a></td>
 <td><code>$$math expr$$</code> or <code>$math$</code></td>
 <td><a href="#math-notation">See above</a></td>
 <td>yes</td>
+<td><a href="https://joplinapp.org/images/md_plugins/katex_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-mark">Mark</a></td>
 <td><code>==marked==</code></td>
 <td>Transforms into <code>&lt;mark&gt;marked&lt;/mark&gt;</code> (highlighted)</td>
 <td>yes</td>
+<td><a href="https://joplinapp.org/images/md_plugins/mark_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-footnote">Footnote</a></td>
 <td><code>Simples inline footnote ^[I'm inline!]</code></td>
 <td>See <a href="https://github.com/markdown-it/markdown-it-footnote">plugin page</a> for full description</td>
 <td>yes</td>
+<td><a href="https://joplinapp.org/images/md_plugins/footnote_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/nagaozen/markdown-it-toc-done-right">TOC</a></td>
 <td>Any of <code>${toc}, [[toc]], [toc], [[_toc_]]</code></td>
 <td>Adds a table of contents to the location of the toc page. Based on headings and sub-headings</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/toc_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-sub">Sub</a></td>
 <td><code>X~1~</code></td>
 <td>Transforms into X<sub>1</sub></td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/sub_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-sup">Sup</a></td>
 <td><code>X^2^</code></td>
 <td>Transforms into X<sup>2</sup></td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/sup_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-deflist">Deflist</a></td>
 <td>See <a href="http://johnmacfarlane.net/pandoc/README.html#definition-lists">pandoc</a> page for syntax</td>
 <td>Adds the html <code>&lt;dl&gt;</code> tag accessible through markdown</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/deflist_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-abbr">Abbr</a></td>
 <td>*[HTML]: Hyper Text Markup Language<br/>The HTML specification</td>
 <td>Allows definition of abbreviations that can be hovered over later for a full expansion</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/abbr_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
 <td><code>:smile:</code></td>
 <td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
 <td>no</td>
+<td>!View[]<a href="https://joplinapp.org/images/md_plugins/emoji_plugin.jpg">https://joplinapp.org/images/md_plugins/emoji_plugin.jpg</a>)</td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-ins">Insert</a></td>
 <td><code>++inserted++</code></td>
 <td>Transforms into <code>&lt;ins&gt;inserted&lt;/ins&gt;</code> (<ins>inserted</ins>)</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/insert_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/RedBug312/markdown-it-multimd-table">Multitable</a></td>
 <td>See <a href="https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html">MultiMarkdown</a> page</td>
 <td>Adds more power and customization to markdown tables</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/multitable_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://fountain.io">Fountain</a></td>
 <td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
 <td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
 <td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/fountain_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></td>
+<td><code>```mermaid</code><br/>mermaid syntax...<br/><code>```</code></td>
+<td>See <a href="https://mermaid-js.github.io/mermaid/#/examples">plugin page</a> for full description</td>
+<td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/mermaid.jpg">View</a></td>
 </tr>
 </tbody>
 </table>

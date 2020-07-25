@@ -285,7 +285,7 @@ class Api {
 		}
 
 		const checkAndRemoveFullTitleField = function(request) {
-			const fields = this.fields_(request);
+			const fields = this.fields_(request, []);
 			let hasFullTitleField = false;
 			for (let i = 0; i < fields.length; i++) {
 				if (fields[i] === 'full_title') {
@@ -382,7 +382,7 @@ class Api {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
 			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
-			return shim.createResourceFromPath(filePath, defaultProps);
+			return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);

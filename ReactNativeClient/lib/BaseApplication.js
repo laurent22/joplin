@@ -632,7 +632,13 @@ class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
-		await shim.fsDriver().remove(tempDir);
+		try {
+			await shim.fsDriver().remove(tempDir);
+		} catch (error) {
+			// Can't do anything in this case, not even log, since the logger
+			// is not yet ready. But normally it's not an issue if the temp
+			// dir cannot be deleted.
+		}
 
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
@@ -656,7 +662,7 @@ class BaseApplication {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
-			this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+			// this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		}
 
