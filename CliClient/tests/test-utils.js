@@ -52,7 +52,7 @@ const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
-const synchronizers_ = [];
+let synchronizers_ = [];
 const encryptionServices_ = [];
 const revisionServices_ = [];
 const decryptionWorkers_ = [];
@@ -90,25 +90,36 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
-const syncTargetName_ = 'memory';
-// const syncTargetName_ = 'filesystem';
-// const syncTargetName_ = 'nextcloud';
-// const syncTargetName_ = 'dropbox';
-// const syncTargetName_ = 'onedrive';
-// const syncTargetName_ = 'amazon_s3';
+let syncTargetName_ = '';
+let syncTargetId_ = null;
+let sleepTime = 0;
+let isNetworkSyncTarget_ = false;
 
-const syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
+function setSyncTargetName(name) {
+	if (name === syncTargetName_) return syncTargetName_;
+	const previousName = syncTargetName_;
+	syncTargetName_ = name;
+	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
+	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'amazon_s3'].includes(syncTargetName_);
+	synchronizers_ = [];
+	return previousName;
+}
+
+// setSyncTargetName('memory');
+setSyncTargetName('memory');
+// setSyncTargetName('nextcloud');
+// setSyncTargetName('dropbox');
+// setSyncTargetName('onedrive');
+// setSyncTargetName('amazon_s3');
+
+console.info(`Testing with sync target: ${syncTargetName_}`);
+
 const syncDir = `${__dirname}/../tests/sync`;
-
-const isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'amazon_s3'].includes(syncTargetName_);
 
 let defaultJasmineTimeout = 90 * 1000;
 if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
-jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
-
-const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-
-console.info(`Testing with sync target: ${SyncTargetRegistry.idToName(syncTargetId_)}`);
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
@@ -665,4 +676,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

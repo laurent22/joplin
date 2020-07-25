@@ -5,8 +5,12 @@ const Setting = require('lib/models/Setting');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
+const Resource = require('lib/models/Resource');
+const markdownUtils = require('lib/markdownUtils');
 const {shim} = require('lib/shim');
 const fs = require('fs-extra');
+
+const snapshotBaseDir = `${__dirname}/../../tests/support/syncTargetSnapshots`;
 
 const testData = {
 	folder1: {
@@ -96,6 +100,12 @@ async function checkTestData(data) {
 	await recurseCheck(data);
 }
 
+async function deploySyncTargetSnapshot(syncTargetType, syncVersion) {
+	const sourceDir = `${snapshotBaseDir}/${syncVersion}/${syncTargetType}`;
+	await fs.remove(syncDir);
+	await fs.copy(sourceDir, syncDir);
+}
+
 async function main(syncTargetType) {
 	const validSyncTargetTypes = ['normal', 'e2ee'];
 	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error('Sync target type must be: ' + validSyncTargetTypes.join(', '));
@@ -112,7 +122,7 @@ async function main(syncTargetType) {
 	await synchronizer().start();
 
 	if (!Setting.value('syncVersion')) throw new Error('syncVersion is not set');
-	const destDir = `${__dirname}/../../tests/support/syncTargetSnapshots/${Setting.value('syncVersion')}/${syncTargetType}`;
+	const destDir = `${snapshotBaseDir}/${Setting.value('syncVersion')}/${syncTargetType}`;
 	await fs.mkdirp(destDir); // Create intermediate directories
 	await fs.remove(destDir);
 	await fs.mkdirp(destDir);
@@ -125,4 +135,5 @@ module.exports = {
 	checkTestData,
 	main,
 	testData,
+	deploySyncTargetSnapshot,
 };

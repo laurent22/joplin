@@ -1,16 +1,17 @@
 import LockHandler from 'lib/services/synchronizer/LockHandler';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
 
+// To create a sync target snapshot for the current syncVersion:
+// - In test-utils, set syncTargetName_ to "filesystem"
+// - Then run:
+// gulp buildTests -L && node tests-build/support/createSyncTargetSnapshot.js normal && node tests-build/support/createSyncTargetSnapshot.js e2ee
+
 require('app-module-path').addPath(__dirname);
 
-const { asyncTest, fileApi, synchronizer, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
+const { asyncTest, setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
+const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
 const Setting = require('lib/models/Setting');
-const Folder = require('lib/models/Folder');
-const Note = require('lib/models/Note');
-const Tag = require('lib/models/Tag');
-const Resource = require('lib/models/Resource');
-const markdownUtils = require('lib/markdownUtils');
-const { shim } = require('lib/shim');
+const MasterKey = require('lib/models/MasterKey');
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
@@ -27,94 +28,6 @@ function migrationHandler(clientId:string = 'abcd'):MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
 	migrationHandler_ = new MigrationHandler(fileApi(), lockHandler(), 'desktop', clientId);
 	return migrationHandler_;
-}
-
-const testData:any = {
-	folder1: {
-		subFolder1: {},
-		subFolder2: {
-			note1: {
-				resource: true,
-				tags: ['tag1'],
-			},
-			note2: {},
-		},
-		note3: {
-			tags: ['tag1', 'tag2'],
-		},
-		note4: {
-			tags: ['tag2'],
-		},
-	},
-	folder2: {},
-	folder3: {
-		note5: {
-			resource: true,
-			tags: ['tag2'],
-		},
-	},
-};
-
-async function createTestData(data:any) {
-	async function recurseStruct(s:any, parentId:string = '') {
-		for (const n in s) {
-			if (n.toLowerCase().includes('folder')) {
-				const folder = await Folder.save({ title: n, parent_id: parentId });
-				await recurseStruct(s[n], folder.id);
-			} else {
-				const note = await Note.save({ title: n, parent_id: parentId });
-				if (s[n].resource) {
-					await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
-				}
-
-				if (s[n].tags) {
-					for (const tagTitle of s[n].tags) {
-						await Tag.addNoteTagByTitle(note.id, tagTitle);
-					}
-				}
-			}
-		}
-	}
-
-	await recurseStruct(data);
-}
-
-async function checkTestData(data:any) {
-	async function recurseCheck(s:any) {
-		for (const n in s) {
-			const obj = s[n];
-
-			if (n.toLowerCase().includes('folder')) {
-				const folder = await Folder.loadByTitle(n);
-				if (!folder) throw new Error(`Cannot load folder: ${n}`);
-				await recurseCheck(obj);
-			} else {
-				const note = await Note.loadByTitle(n);
-				if (!note) throw new Error(`Cannot load note: ${n}`);
-
-				const parent = await Folder.load(note.parent_id);
-				if (!parent) throw new Error(`Cannot load note parent: ${n}`);
-
-				if (obj.resource) {
-					const urls = markdownUtils.extractImageUrls(note.body);
-					const resourceId = urls[0].substr(2);
-					const resource = await Resource.load(resourceId);
-					if (!resource) throw new Error(`Cannot load note resource: ${n}`);
-				}
-
-				if (obj.tags) {
-					for (const tagTitle of obj.tags) {
-						const tag = await Tag.loadByTitle(tagTitle);
-						if (!tag) throw new Error(`Cannot load note tag: ${tagTitle}`);
-						const hasNote = await Tag.hasNote(tag.id, note.id);
-						if (!hasNote) throw new Error(`Tag not associated with note: ${tagTitle}`);
-					}
-				}
-			}
-		}
-	}
-
-	await recurseCheck(data);
 }
 
 interface MigrationTests {
@@ -134,14 +47,26 @@ const migrationTests:MigrationTests = {
 	},
 };
 
+let previousSyncTargetName:string = '';
+
 describe('synchronizer_MigrationHandler', function() {
 
 	beforeEach(async (done:Function) => {
+		// To test the migrations, we have to use the filesystem sync target
+		// because the sync target snapshots are plain files. Eventually
+		// it should be possible to copy a filesystem target to memory
+		// but for now that will do.
+		previousSyncTargetName = setSyncTargetName('filesystem');
 		lockHandler_ = null;
 		migrationHandler_ = null;
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
+		done();
+	});
+
+	afterEach(async (done:Function) => {
+		setSyncTargetName(previousSyncTargetName);
 		done();
 	});
 
@@ -161,20 +86,12 @@ describe('synchronizer_MigrationHandler', function() {
 		const migrationVersion = Number(migrationVersionString);
 
 		it(`should migrate (${migrationVersion})`, asyncTest(async () => {
-			// First create some test data that will be used to validate
-			// that the migration didn't alter any data.
-			await createTestData(testData);
+			await deploySyncTargetSnapshot('normal', migrationVersion - 1);
 
-			// Setup the client and sync target as being the previous syncVersion
-			Setting.setConstant('syncVersion', migrationVersion - 1);
-			await synchronizer().start();
-
-			// Verify that the sync target is set at the previous version
 			const info = await migrationHandler().fetchSyncTargetInfo();
 			expect(info.version).toBe(migrationVersion - 1);
 
 			// Now, migrate to the new version
-			Setting.setConstant('syncVersion', migrationVersion);
 			await migrationHandler().upgrade(migrationVersion);
 
 			// Verify that it has been upgraded
@@ -186,7 +103,7 @@ describe('synchronizer_MigrationHandler', function() {
 			await synchronizer().start();
 
 			// Check that the data has not been altered
-			await checkTestData(testData);
+			await expectNotThrow(async () => await checkTestData(testData));
 
 			// Check what happens if we switch to a different client and sync
 			await switchClient(2);
@@ -198,15 +115,7 @@ describe('synchronizer_MigrationHandler', function() {
 		it(`should migrate (E2EE) (${migrationVersion})`, asyncTest(async () => {
 			// First create some test data that will be used to validate
 			// that the migration didn't alter any data.
-			await createTestData(testData);
-
-			// Enable E2EE
-			Setting.setValue('encryption.enabled', true);
-			const masterKey = await loadEncryptionMasterKey();
-
-			// Sync
-			Setting.setConstant('syncVersion', migrationVersion - 1);
-			await synchronizer().start();
+			await deploySyncTargetSnapshot('e2ee', migrationVersion - 1);
 
 			// Now, migrate to the new version
 			Setting.setConstant('syncVersion', migrationVersion);
@@ -220,8 +129,14 @@ describe('synchronizer_MigrationHandler', function() {
 			// Now sync with that upgraded target
 			await synchronizer().start();
 
+			// Decrypt the data
+			const masterKey = (await MasterKey.all())[0];
+			Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+			await encryptionService().loadMasterKeysFromSettings();
+			await decryptionWorker().start();
+
 			// Check that the data has not been altered
-			await checkTestData(testData);
+			await expectNotThrow(async () => await checkTestData(testData));
 
 			// Check what happens if we switch to a different client and sync
 			await switchClient(2);
