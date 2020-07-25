@@ -37,7 +37,7 @@ function UpgradeSyncTargetScreen(props:any) {
 			<View>
 				<Text style={headerStyle}>Joplin upgrade in progress...</Text>
 				<Text style={lineStyle}>Please wait while the sync target is being upgraded. It may take a few seconds or a few minutes depending on the upgrade.</Text>
-				<Text style={lineStyle}>Make sure you leave your device on and the app opened while the upgrade is in progress</Text>
+				<Text style={lineStyle}>Make sure you leave your device on and the app opened while the upgrade is in progress.</Text>
 			</View>
 		);
 	}

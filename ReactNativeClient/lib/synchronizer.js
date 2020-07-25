@@ -839,7 +839,7 @@ class Synchronizer {
 		} catch (error) {
 			if (throwOnError) {
 				errorToThrow = error;
-			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError'].indexOf(error.code) >= 0) {
+			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError', 'outdatedSyncTarget'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.

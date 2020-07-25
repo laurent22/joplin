@@ -213,8 +213,6 @@ export default class LockHandler {
 					this.activeLock(LockType.Exclusive),
 				]);
 
-				// TODO: active exclusive lock should be last added
-
 				if (activeSyncLock) {
 					if (await waitForTimeout()) continue;
 					throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${this.lockToClientString(activeSyncLock)}`, 'hasSyncLock');
