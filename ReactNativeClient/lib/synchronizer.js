@@ -223,10 +223,10 @@ class Synchronizer {
 
 	// TODO: test lockErrorStatus_
 	async lockErrorStatus_() {
-		const hasActiveExclusiveLock = await this.lockHandler().hasActiveExclusiveLock();
+		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock('exclusive');
 		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
 
-		const hasActiveSyncLock = await this.lockHandler().hasActiveSyncLock(this.appType_, this.clientId_);
+		const hasActiveSyncLock = await this.lockHandler().hasActiveLock('sync', this.appType_, this.clientId_);
 		if (!hasActiveSyncLock) return 'syncLockGone';
 
 		return '';

@@ -30,8 +30,6 @@ export interface LockHandlerOptions {
 	lockTtl?: number,
 }
 
-const exclusiveFilename = 'exclusive.json';
-
 export default class LockHandler {
 
 	private api_:any = null;
@@ -58,18 +56,14 @@ export default class LockHandler {
 	}
 
 	private lockFilename(lock:Lock) {
-		if (lock.type === LockType.Exclusive) {
-			return exclusiveFilename;
-		} else {
-			return `${[lock.type, lock.clientType, lock.clientId].join('_')}.json`;
-		}
+		return `${[lock.type, lock.clientType, lock.clientId].join('_')}.json`;
 	}
 
 	private lockTypeFromFilename(name:string):LockType {
 		const ext = fileExtension(name);
 		if (ext !== 'json') return LockType.None;
-		if (name === exclusiveFilename) return LockType.Exclusive;
 		if (name.indexOf(LockType.Sync) === 0) return LockType.Sync;
+		if (name.indexOf(LockType.Exclusive) === 0) return LockType.Exclusive;
 		return LockType.None;
 	}
 
@@ -77,11 +71,7 @@ export default class LockHandler {
 		return `${Dirnames.Locks}/${this.lockFilename(lock)}`;
 	}
 
-	private exclusiveFilePath():string {
-		return `${Dirnames.Locks}/${exclusiveFilename}`;
-	}
-
-	private syncLockFileToObject(file:any):Lock {
+	private lockFileToObject(file:any):Lock {
 		const p = filename(file.path).split('_');
 
 		return {
@@ -92,60 +82,56 @@ export default class LockHandler {
 		};
 	}
 
-	async syncLocks():Promise<Lock[]> {
+	async locks(lockType:LockType = null):Promise<Lock[]> {
 		const result = await this.api_.list(Dirnames.Locks);
 		if (result.hasMore) throw new Error('hasMore not handled'); // Shouldn't happen anyway
 
 		const output = [];
 		for (const file of result.items) {
 			const type = this.lockTypeFromFilename(file.path);
-			if (type !== LockType.Sync) continue;
-
-			const lock = this.syncLockFileToObject(file);
+			if (type === LockType.None) continue;
+			if (lockType && type !== lockType) continue;
+			const lock = this.lockFileToObject(file);
 			output.push(lock);
 		}
 
 		return output;
 	}
 
-	private async exclusiveLock():Promise<Lock> {
-		const stat = await this.api_.stat(this.exclusiveFilePath());
-		if (!stat) return null;
-
-		const contentText = await this.api_.get(this.exclusiveFilePath());
-		if (!contentText) return null; // race condition
-
-		const lock:Lock = JSON.parse(contentText) as Lock;
-		lock.updatedTime = stat.updated_time;
-		return lock;
-	}
-
 	private lockIsActive(lock:Lock):boolean {
 		return Date.now() - lock.updatedTime < this.lockTtl;
 	}
 
-	async hasActiveExclusiveLock():Promise<boolean> {
-		const lock = await this.exclusiveLock();
-		return !!lock && this.lockIsActive(lock);
-	}
-
-	async hasActiveLock(lockType:LockType, clientType:string, clientId:string) {
-		if (lockType === LockType.Exclusive) return this.hasActiveExclusiveLock();
-		if (lockType === LockType.Sync) return this.hasActiveSyncLock(clientType, clientId);
-		throw new Error(`Invalid lock type: ${lockType}`);
-	}
-
-	async activeSyncLock(clientType:string, clientId:string) {
-		const locks = await this.syncLocks();
-		for (const lock of locks) {
-			if (lock.clientType === clientType && lock.clientId === clientId && this.lockIsActive(lock)) return lock;
-		}
-		return null;
-	}
-
-	async hasActiveSyncLock(clientType:string, clientId:string) {
-		const lock = await this.activeSyncLock(clientType, clientId);
+	async hasActiveLock(lockType:LockType, clientType:string = null, clientId:string = null) {
+		const lock = await this.activeLock(lockType, clientType, clientId);
 		return !!lock;
+	}
+
+	// Finds if there's an active lock for this clientType and clientId and returns it.
+	// If clientType and clientId are not specified, returns the first active lock
+	// of that type instead.
+	async activeLock(lockType:LockType, clientType:string = null, clientId:string = null) {
+		const locks = await this.locks(lockType);
+
+		if (lockType === LockType.Exclusive) {
+			const lock = locks.length ? locks.reduce((previous:Lock, current:Lock) => {
+				return current.updatedTime > previous.updatedTime ? current : previous;
+			}) : null;
+
+			if (!lock || !this.lockIsActive(lock)) return null;
+			if (clientType && clientType !== lock.clientType) return null;
+			if (clientId && clientId !== lock.clientId) return null;
+			return lock;
+		} else if (lockType === LockType.Sync) {
+			for (const lock of locks) {
+				if (clientType && lock.clientType !== clientType) continue;
+				if (clientId && lock.clientId !== clientId) continue;
+				if (this.lockIsActive(lock)) return lock;
+			}
+			return null;
+		}
+
+		throw new Error(`Unsupported lock type: ${lockType}`);
 	}
 
 	private async saveLock(lock:Lock) {
@@ -157,8 +143,8 @@ export default class LockHandler {
 			let isFirstPass = true;
 			while (true) {
 				const [exclusiveLock, syncLock] = await Promise.all([
-					this.exclusiveLock(),
-					this.activeSyncLock(clientType, clientId),
+					this.activeLock(LockType.Exclusive),
+					this.activeLock(LockType.Sync, clientType, clientId),
 				]);
 
 				if (exclusiveLock) {
@@ -196,10 +182,6 @@ export default class LockHandler {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	// private lockToString(lock:Lock):string {
-	// 	return JSON.stringify(lock);
-	// }
-
 	private async acquireExclusiveLock(clientType:string, clientId:string, timeoutMs:number = 0):Promise<Lock> {
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
 		//
@@ -226,26 +208,27 @@ export default class LockHandler {
 
 		try {
 			while (true) {
-				const syncLocks = await this.syncLocks();
-				const activeSyncLocks = syncLocks.filter(lock => this.lockIsActive(lock));
+				const [activeSyncLock, activeExclusiveLock] = await Promise.all([
+					this.activeLock(LockType.Sync),
+					this.activeLock(LockType.Exclusive),
+				]);
 
-				if (activeSyncLocks.length) {
+				// TODO: active exclusive lock should be last added
+
+				if (activeSyncLock) {
 					if (await waitForTimeout()) continue;
-					const lockString = activeSyncLocks.map(l => this.lockToClientString(l)).join(', ');
-					throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${lockString}`, 'hasSyncLock');
+					throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${this.lockToClientString(activeSyncLock)}`, 'hasSyncLock');
 				}
 
-				const exclusiveLock = await this.exclusiveLock();
-
-				if (exclusiveLock) {
-					if (exclusiveLock.clientId === clientId) {
+				if (activeExclusiveLock) {
+					if (activeExclusiveLock.clientId === clientId) {
 						// Save it again to refresh the timestamp
-						await this.saveLock(exclusiveLock);
-						return exclusiveLock;
+						await this.saveLock(activeExclusiveLock);
+						return activeExclusiveLock;
 					} else {
 						// If there's already an exclusive lock, wait for it to be released
 						if (await waitForTimeout()) continue;
-						throw new JoplinError(`Cannot acquire exclusive lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(exclusiveLock)}`, 'hasExclusiveLock');
+						throw new JoplinError(`Cannot acquire exclusive lock because the following client has an exclusive lock on the sync target: ${this.lockToClientString(activeExclusiveLock)}`, 'hasExclusiveLock');
 					}
 				} else {
 					// If there's not already an exclusive lock, acquire one

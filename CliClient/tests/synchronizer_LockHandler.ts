@@ -42,14 +42,14 @@ describe('synchronizer_LockHandler', function() {
 
 	it('should acquire and release a sync lock', asyncTest(async () => {
 		await lockHandler().acquireLock(LockType.Sync, 'mobile', '123456');
-		const locks = await lockHandler().syncLocks();
+		const locks = await lockHandler().locks(LockType.Sync);
 		expect(locks.length).toBe(1);
 		expect(locks[0].type).toBe(LockType.Sync);
 		expect(locks[0].clientId).toBe('123456');
 		expect(locks[0].clientType).toBe('mobile');
 
 		await lockHandler().releaseLock(LockType.Sync, 'mobile', '123456');
-		expect((await lockHandler().syncLocks()).length).toBe(0);
+		expect((await lockHandler().locks(LockType.Sync)).length).toBe(0);
 	}));
 
 	it('should not use files that are not locks', asyncTest(async () => {
@@ -58,7 +58,7 @@ describe('synchronizer_LockHandler', function() {
 		await fileApi().put('locks/garbage.json', 'a');
 		await fileApi().put('locks/sync_mobile_72c4d1b7253a4475bfb2f977117d26ed.json', 'a');
 
-		const locks = await lockHandler().syncLocks();
+		const locks = await lockHandler().locks(LockType.Sync);
 		expect(locks.length).toBe(1);
 	}));
 
@@ -69,11 +69,11 @@ describe('synchronizer_LockHandler', function() {
 
 		await lockHandler().acquireLock(LockType.Sync, 'mobile', '222');
 
-		expect((await lockHandler().syncLocks()).length).toBe(2);
+		expect((await lockHandler().locks(LockType.Sync)).length).toBe(2);
 
 		{
 			await lockHandler().releaseLock(LockType.Sync, 'mobile', '222');
-			const locks = await lockHandler().syncLocks();
+			const locks = await lockHandler().locks(LockType.Sync);
 			expect(locks.length).toBe(1);
 			expect(locks[0].clientId).toBe('111');
 		}
@@ -82,10 +82,10 @@ describe('synchronizer_LockHandler', function() {
 	it('should auto-refresh a lock', asyncTest(async () => {
 		const handler = newLockHandler({ autoRefreshInterval: 100 * timeoutMultipler });
 		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
-		const lockBefore = await handler.activeSyncLock('desktop', '111');
+		const lockBefore = await handler.activeLock(LockType.Sync, 'desktop', '111');
 		handler.startAutoLockRefresh(lock, () => {});
 		await msleep(500 * timeoutMultipler);
-		const lockAfter = await handler.activeSyncLock('desktop', '111');
+		const lockAfter = await handler.activeLock(LockType.Sync, 'desktop', '111');
 		expect(lockAfter.updatedTime).toBeGreaterThan(lockBefore.updatedTime);
 		handler.stopAutoLockRefresh(lock);
 	}));
