@@ -585,4 +585,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { syncDir, kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
