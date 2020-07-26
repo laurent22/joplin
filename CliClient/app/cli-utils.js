@@ -2,6 +2,7 @@ const yargParser = require('yargs-parser');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 const stringPadding = require('string-padding');
+const { Logger } = require('lib/logger.js');
 
 const cliUtils = {};
 
@@ -243,6 +244,19 @@ cliUtils.redrawDone = function() {
 
 	redrawLastLog_ = null;
 	redrawStarted_ = false;
+};
+
+cliUtils.stdoutLogger = function(stdout) {
+	const stdoutFn = (...s) => stdout(s.join(' '));
+
+	const logger = new Logger();
+	logger.addTarget('console', { console: {
+		info: stdoutFn,
+		warn: stdoutFn,
+		error: stdoutFn,
+	} });
+
+	return logger;
 };
 
 module.exports = { cliUtils };
