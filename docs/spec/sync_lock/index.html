@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/donate.md and any manual change
+This file was auto-generated from readme/spec/sync_lock.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/donate.md
+https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 
 -->
 
 <head>
-	<title>Donate | Joplin</title>
+	<title>Sync Lock Specifications | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -275,7 +275,7 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 
 <body>
 
-<div class="container page-donate">
+<div class="container page-sync_lock">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -350,28 +350,67 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 </li>
 </ul>
 </div>
-<h1>Support Joplin development<a name="support-joplin-development" href="#support-joplin-development" class="heading-anchor">🔗</a></h1>
-<p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standards.</p>
-<h2>PayPal<a name="paypal" href="#paypal" class="heading-anchor">🔗</a></h2>
-<p>To donate via PayPal, please follow this link:</p>
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate on PayPal"></a></p>
-<h2>GitHub Sponsor<a name="github-sponsor" href="#github-sponsor" class="heading-anchor">🔗</a></h2>
-<p>Or follow this link to become a GitHub Sponsor:</p>
-<p><a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a></p>
-<h2>Patreon<a name="patreon" href="#patreon" class="heading-anchor">🔗</a></h2>
-<p>Alternatively you may support the project on Patreon:</p>
-<p><a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a></p>
-<h2>Other way to support the development<a name="other-way-to-support-the-development" href="#other-way-to-support-the-development" class="heading-anchor">🔗</a></h2>
-<p>Finally, there are other ways to support the development of Joplin:</p>
+<h1>Lock types<a name="lock-types" href="#lock-types" class="heading-anchor">🔗</a></h1>
+<p>There are two types of locks:</p>
 <ul>
-<li>Consider rating the app on <a href="https://play.google.com/store/apps/details?id=net.cozic.joplin&amp;utm_source=GitHub&amp;utm_campaign=README&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">Google Play</a> or <a href="https://itunes.apple.com/us/app/joplin/id1315599797">App Store</a>.</li>
-<li><a href="https://joplinapp.org/#localisation">Create or update a translation</a>.</li>
-<li>Vote for or review the app on <a href="https://alternativeto.net/software/joplin/">alternativeTo</a> or <a href="https://www.producthunt.com/posts/joplin">Product Hunt</a>.</li>
-<li>Help improve <a href="https://en.wikipedia.org/wiki/Draft:Joplin_(software)">the Wikipedia article</a></li>
+<li><strong>SYNC</strong>: Used when synchronising a client with a target. There can be multiple SYNC locks simultaneously.</li>
+<li><strong>EXCLUSIVE</strong>: Used when a client upgrades a sync target. There can be only one EXCLUSIVE lock.</li>
 </ul>
+<h1>Timeout<a name="timeout" href="#timeout" class="heading-anchor">🔗</a></h1>
+<p>When a client acquires a lock, it must refresh it every X seconds. A lock timeout after Y seconds (where X &lt; Y). A lock with a timestamp greater than Y is considered expired and can be ignored by other clients. A client that tries to refresh a lock that has expired should fail.</p>
+<p>For example, if a client is currently syncing, it must stop doing so if it couldn't refresh the lock with Y seconds.</p>
+<p>For example, if a client is upgrading a target, it must stop doing so if it couldn't refresh the lock within Y seconds.</p>
+<h1>Acquiring a SYNC lock<a name="acquiring-a-sync-lock" href="#acquiring-a-sync-lock" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>The client check if there is a valid EXCLUSIVE lock on the target</li>
+<li>If there is, it must stop the sync process</li>
+<li>Otherwise it checks if it owns a SYNC lock on the target
+<ul>
+<li>If it does, it starts syncing
+<ul>
+<li>When syncing is done, it releases the SYNC lock</li>
+</ul>
+</li>
+<li>If it doesn't, it acquires a SYNC lock and repeat the complete process from the beginning (to avoid race conditions)</li>
+</ul>
+</li>
+</ul>
+<h1>Acquiring an EXCLUSIVE lock<a name="acquiring-an-exclusive-lock" href="#acquiring-an-exclusive-lock" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>The client check if there is a valid EXCLUSIVE or SYNC lock on the target</li>
+<li>If there is, it must stop the upgrade process (or wait till target is unlocked)</li>
+<li>Otherwise it checks if it owns an EXCLUSIVE lock on the target
+<ul>
+<li>If it does, it starts upgrading the target
+<ul>
+<li>When upgrading is done, it releases the EXCLUSIVE lock</li>
+</ul>
+</li>
+<li>If it doesn't, it acquires an EXCLUSIVE lock and repeat the complete process from the beginning (to avoid race conditions)</li>
+</ul>
+</li>
+</ul>
+<h1>Lock files<a name="lock-files" href="#lock-files" class="heading-anchor">🔗</a></h1>
+<p>The lock files are in format <code>&lt;lockType&gt;_&lt;clientType&gt;_&lt;clientId&gt;.json</code> with lockType being &quot;exclusive&quot; or &quot;sync&quot;, clientType being &quot;desktop&quot;, &quot;mobile&quot; or &quot;cli&quot; and clientId is the globally unique ID assigned to a client profile when it is created.</p>
+<p>The have the following content:</p>
+<pre><code class="language-json">{
+    &quot;type&quot;: &quot;exclusive&quot;,
+    &quot;clientType&quot;: &lt;string&gt;,
+    &quot;clientId&quot;: &lt;string&gt;,
+    &quot;updatedTime&quot;: &lt;timestamp in milliseconds&gt;,
+}
+</code></pre>
+<p>(Note that the lock file content is for information purpose only. Its content is not used in the lock algorithm since all data can be derived from the filename and file timestamp)</p>
+<p>Although only one client can acquire an exclusive lock, there can be multiple <code>exclusive_*.json</code> lock files in the lock folder (for example if a client crashed before releasing a lock or if two clients try to acquire a lock at the exact same time). In this case, only the oldest lock amongst the active ones is the valid one. If there are two locks with the same timestamp, the one with lowest client ID is the valid one.</p>
+<h1>Sync Target Migration<a name="sync-target-migration" href="#sync-target-migration" class="heading-anchor">🔗</a></h1>
+<p>First the app checks the sync target version - if it's new (no version), it set it up by upgrading to the latest sync version.</p>
+<p>If it's the same as the client supported version, it syncs as normal.</p>
+<p>If it's lower than the client supported version, the client does not allow sync and instead displays a message asking the user to upgrade the sync target (upgradeState = SHOULD_UPGRADE).</p>
+<p>If the user click on the link to upgrade, upgradeState becomes MUST_UPGRADE, and the app restarts.</p>
+<p>On startup, the app check the upgradeState setting. If it is MUST_UPGRADE it displays the upgrade screen and starts upgrarding. Once done it sets upgradeState back to IDLE, and restart the app.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/donate.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
