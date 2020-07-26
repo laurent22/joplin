@@ -398,8 +398,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			// to the viewer if they only want to scroll through matches
 			if (!props.visiblePanes.includes('editor') && props.searchMarkers !== previousSearchMarkers) {
 				props.dispatch({
-					type: 'NOTE_VISIBLE_PANES_SET',
-					panes: ['editor', 'viewer'],
+					type: 'NOTE_VISIBLE_PANES_TOGGLE',
 				});
 			}
 			// SEARCHHACK
