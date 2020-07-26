@@ -76,8 +76,8 @@ class SearchEngine {
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] }
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] }
 				);
 			}
 
@@ -165,8 +165,8 @@ class SearchEngine {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
 							INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude] });
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
@@ -475,6 +475,7 @@ class SearchEngine {
 			const parsedQuery = this.parseQuery(searchString);
 
 			const filters = filterParser(searchString);
+			// console.log(filters);
 			const { query, params } = queryBuilder(filters);
 			// console.log('--debug--');
 			// console.log(query);
@@ -509,7 +510,7 @@ class SearchEngine {
 	}
 }
 
-SearchEngine.relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude';
+SearchEngine.relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
 
 SearchEngine.instance_ = null;
 

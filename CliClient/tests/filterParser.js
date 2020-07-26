@@ -117,6 +117,15 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toContain(makeTerm('resource', 'image/%', false));
 	});
 
+	it('sourceurl', () => {
+		let searchString = 'sourceurl:https://www.google.com';
+		expect(filterParser(searchString)).toContain(makeTerm('sourceurl', 'https://www.google.com', false));
+
+		searchString = 'sourceurl:https://www.google.com -sourceurl:https://www.facebook.com';
+		expect(filterParser(searchString)).toContain(makeTerm('sourceurl', 'https://www.google.com', false));
+		expect(filterParser(searchString)).toContain(makeTerm('sourceurl', 'https://www.facebook.com', true));
+	});
+
 	it('handle invalid filters', () => {
 		let searchString = 'titletitle:123';
 		expect(() => filterParser(searchString)).toThrow(new Error('Invalid filter: titletitle'));

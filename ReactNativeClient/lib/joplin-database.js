@@ -780,7 +780,8 @@ class JoplinDatabase extends Database {
 						parent_id TEXT NOT NULL DEFAULT "",
 						latitude NUMERIC NOT NULL DEFAULT 0,
 						longitude NUMERIC NOT NULL DEFAULT 0,
-						altitude NUMERIC NOT NULL DEFAULT 0
+						altitude NUMERIC NOT NULL DEFAULT 0,
+						source_url TEXT NOT NULL DEFAULT ""
 					);
 				`;
 
@@ -796,6 +797,9 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX notes_normalized_latitude ON notes_normalized (latitude)');
 				queries.push('CREATE INDEX notes_normalized_longitude ON notes_normalized (longitude)');
 				queries.push('CREATE INDEX notes_normalized_altitude ON notes_normalized (altitude)');
+				queries.push('CREATE INDEX notes_normalized_source_url ON notes_normalized (source_url)');
+
+				const tableFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
 
 
 				const newVirtualTableSql = `
@@ -810,7 +814,8 @@ class JoplinDatabase extends Database {
 						notindexed="latitude",
 						notindexed="longitude",
 						notindexed="altitude",
-						id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude
+						notindexed="source_url",
+						${tableFields}
 					);`
 				;
 
@@ -826,11 +831,11 @@ class JoplinDatabase extends Database {
 					END;`);
 				queries.push(`
 					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
 				queries.push(`
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
-						INSERT INTO notes_fts(docid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude) SELECT rowid, id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
 				
 				queries.push(this.addMigrationFile(33));

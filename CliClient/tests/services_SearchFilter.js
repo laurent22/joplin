@@ -709,4 +709,38 @@ describe('services_SearchFilter', function() {
 
 	}));
 
+	it('should support filtering by sourceurl', asyncTest(async () => {
+		const n0 = await Note.save({ title: 'n0', source_url: 'https://discourse.joplinapp.org' });
+		const n1 = await Note.save({ title: 'n1', source_url: 'https://google.com' });
+		const n2 = await Note.save({ title: 'n2', source_url: 'https://reddit.com' });
+		const n3 = await Note.save({ title: 'n3', source_url: 'https://joplinapp.org' });
+
+		await engine.syncTables();
+
+		let rows = await engine.search('sourceurl:https://joplinapp.org');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('sourceurl:https://google.com');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n1.id);
+
+		rows = await engine.search('any:1 sourceurl:https://google.com sourceurl:https://reddit.com');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('-sourceurl:https://google.com');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n0.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('sourceurl:*joplinapp.org');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n0.id);
+		expect(ids(rows)).toContain(n3.id);
+
+	}));
+
 });

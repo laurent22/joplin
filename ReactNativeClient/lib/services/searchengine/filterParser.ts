@@ -24,6 +24,7 @@ const quote = (s : string) => {
 const getTerms = (query: string) : Term[] => {
 	const terms: Term[] = [];
 	let inQuote = false;
+	let inTerm = false;
 	let currentCol = '_';
 	let currentTerm = '';
 	for (let i = 0; i < query.length; i++) {
@@ -42,6 +43,7 @@ const getTerms = (query: string) : Term[] => {
 		}
 
 		if (c === ' ' && !inQuote) {
+			inTerm = false;
 			if (!currentTerm) continue;
 			terms.push(makeTerm(currentCol, currentTerm));
 			currentCol = '_';
@@ -49,9 +51,10 @@ const getTerms = (query: string) : Term[] => {
 			continue;
 		}
 
-		if (c === ':' && !inQuote) {
+		if (c === ':' && !inQuote && !inTerm) {
 			currentCol = currentTerm;
 			currentTerm = '';
+			inTerm = true; // to ignore any other ':' before a space eg.'sourceurl:https://www.google.com'
 			continue;
 		}
 
@@ -65,9 +68,10 @@ const parseQuery = (query: string): Term[] => {
 	const validFilters = new Set(['any', 'title', 'body', 'tag',
 		'notebook', 'created', 'updated', 'type',
 		'iscompleted', 'latitude', 'longitude',
-		'altitude', 'resource']);
+		'altitude', 'resource', 'sourceurl']);
 
 	const terms = getTerms(query);
+	// console.log(terms);
 
 	const result: Term[] = [];
 	for (let i = 0; i < terms.length; i++) {
@@ -78,9 +82,8 @@ const parseQuery = (query: string): Term[] => {
 				throw new Error(`Invalid filter: ${name}`);
 			}
 
-			if (name === 'tag' || name === 'notebook' || name === 'resource') {
-				const fuzzyValue = value.replace(/[*]/g, '%');
-				result.push({ name, value: fuzzyValue, negated });
+			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
+				result.push({ name, value: value.replace(/[*]/g, '%'), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world

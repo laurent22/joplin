@@ -219,12 +219,16 @@ const completedFilter = (filters: Term[], conditions: string[], relation: Relati
 };
 
 const genericFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, fieldName: string) => {
+	const getCondition = (term: Term) => {
+		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
+	};
+
 	terms.forEach(term => {
 		conditions.push(`
 		${relation} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
-			WHERE notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?
+			WHERE ${getCondition(term)}
 		)`);
 		params.push(term.value);
 	});
@@ -239,6 +243,11 @@ const dateFilter = (filters: Term[], conditons: string[], params: string[], rela
 	const dateTerms = filters.filter(x => x.name === 'created' || x.name === 'updated');
 	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
 	genericFilter(unixDateTerms, conditons, params, relation, 'date');
+};
+
+const sourceUrlFilter = (filters: Term[], conditons: string[], params: string[], relation: Relation) => {
+	const urlTerms = filters.filter(x => x.name === 'sourceurl');
+	genericFilter(urlTerms, conditons, params, relation, 'sourceurl');
 };
 
 const getUnixMs = (date:string): string => {
@@ -267,7 +276,7 @@ const getUnixMs = (date:string): string => {
 const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: Relation) => {
 	const type = excludedTerms[0].name === 'text' ? '' : `.${excludedTerms[0].name}`;
 
-	if (excludedTerms && relation === 'AND') {
+	if (relation === 'AND') {
 		conditions.push(`
 		AND ROWID NOT IN (
 			SELECT ROWID
@@ -277,7 +286,7 @@ const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], pa
 		params.push(excludedTerms.map(x => x.value).join(' OR '));
 	}
 
-	if (excludedTerms && relation === 'OR') {
+	if (relation === 'OR') {
 		excludedTerms.forEach(term => {
 			conditions.push(`
 			OR ROWID IN (
@@ -377,6 +386,8 @@ export default function queryBuilder(filters: Term[]) {
 	dateFilter(filters, queryParts, params, relation);
 
 	locationFilter(filters, queryParts, params, relation);
+
+	sourceUrlFilter(filters, queryParts, params, relation);
 
 	let query;
 	if (withs.length > 0) {
