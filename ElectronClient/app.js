@@ -1016,7 +1016,7 @@ class Application extends BaseApplication {
 		}
 
 		const sortNoteReverseItem = menu.getMenuItemById('sort:notes:reverse');
-		sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
+		if (sortNoteReverseItem) sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
 
 		// const devToolsMenuItem = menu.getMenuItemById('help:toggleDevTools');
 		// devToolsMenuItem.checked = state.devToolsVisible;
