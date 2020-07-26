@@ -391,34 +391,28 @@ describe('synchronizer', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
-		await synchronizer().start();
+		const context1 = await synchronizer().start();
 
 		await switchClient(2);
 
-		await synchronizer().start();
-
+		const context2 = await synchronizer().start();
 		await sleep(0.1);
-
 		await Folder.delete(folder1.id);
 
 		await switchClient(1);
 
 		await Folder.delete(folder2.id);
-
-		await synchronizer().start();
+		await synchronizer().start({ context: context1 });
 
 		await switchClient(2);
 
-		await synchronizer().start();
-
+		await synchronizer().start({ context: context2 });
 		const items2 = await allNotesFolders();
 
 		await switchClient(1);
 
-		await synchronizer().start();
-
+		await synchronizer().start({ context: context1 });
 		const items1 = await allNotesFolders();
-
 		expect(items1.length).toBe(0);
 		expect(items1.length).toBe(items2.length);
 	}));

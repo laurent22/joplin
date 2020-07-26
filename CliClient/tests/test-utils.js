@@ -101,7 +101,7 @@ function setSyncTargetName(name) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'amazon_s3'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
