@@ -1,4 +1,4 @@
-import LockHandler, { LockType, LockHandlerOptions } from 'lib/services/synchronizer/LockHandler';
+import LockHandler, { LockType, LockHandlerOptions, Lock } from 'lib/services/synchronizer/LockHandler';
 
 require('app-module-path').addPath(__dirname);
 
@@ -129,16 +129,73 @@ describe('synchronizer_LockHandler', function() {
 	}));
 
 	it('should allow exclusive lock if the sync locks have expired', asyncTest(async () => {
-		const lockHandler = newLockHandler({ lockTtl: 50 * timeoutMultipler });
+		const lockHandler = newLockHandler({ lockTtl: 500 * timeoutMultipler });
 
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '222');
 
-		await msleep(100 * timeoutMultipler);
+		await msleep(600 * timeoutMultipler);
 
 		await expectNotThrow(async () => {
 			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '333');
 		});
 	}));
+
+	it('should decide what is the active exclusive lock', asyncTest(async () => {
+		const lockHandler = newLockHandler();
+
+		{
+			const lock1:Lock = { type: LockType.Exclusive, clientId: '1', clientType: 'd' };
+			const lock2:Lock = { type: LockType.Exclusive, clientId: '2', clientType: 'd' };
+			await lockHandler.saveLock_(lock1);
+			await msleep(100);
+			await lockHandler.saveLock_(lock2);
+
+			const activeLock = await lockHandler.activeLock(LockType.Exclusive);
+			expect(activeLock.clientId).toBe('1');
+		}
+	}));
+
+	// it('should not have race conditions', asyncTest(async () => {
+	// 	const lockHandler = newLockHandler();
+
+	// 	const clients = [];
+	// 	for (let i = 0; i < 20; i++) {
+	// 		clients.push({
+	// 			id: 'client' + i,
+	// 			type: 'desktop',
+	// 		});
+	// 	}
+
+	// 	for (let loopIndex = 0; loopIndex < 1000; loopIndex++) {
+	// 		const promises:Promise<void | Lock>[] = [];
+	// 		for (let clientIndex = 0; clientIndex < clients.length; clientIndex++) {
+	// 			const client = clients[clientIndex];
+
+	// 			promises.push(
+	// 				lockHandler.acquireLock(LockType.Exclusive, client.type, client.id).catch(() => {})
+	// 			);
+
+	// 			// if (gotLock) {
+	// 			// 	await msleep(100);
+	// 			// 	const locks = await lockHandler.locks(LockType.Exclusive);
+	// 			// 	console.info('=======================================');
+	// 			// 	console.info(locks);
+	// 			// 	lockHandler.releaseLock(LockType.Exclusive, client.type, client.id);
+	// 			// }
+
+	// 			// await msleep(500);
+	// 		}
+
+	// 		const result = await Promise.all(promises);
+	// 		const locks = result.filter((lock:any) => !!lock);
+
+	// 		expect(locks.length).toBe(1);
+	// 		const lock:Lock = locks[0] as Lock;
+	// 		const allLocks = await lockHandler.locks();
+	// 		console.info('================================', allLocks);
+	// 		lockHandler.releaseLock(LockType.Exclusive, lock.clientType, lock.clientId);
+	// 	}
+	// }));
 
 });

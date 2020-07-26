@@ -114,14 +114,22 @@ export default class LockHandler {
 		const locks = await this.locks(lockType);
 
 		if (lockType === LockType.Exclusive) {
-			const lock = locks.length ? locks.reduce((previous:Lock, current:Lock) => {
-				return current.updatedTime > previous.updatedTime ? current : previous;
-			}) : null;
+			const activeLocks = locks
+				.slice()
+				.filter((lock:Lock) => this.lockIsActive(lock))
+				.sort((a:Lock, b:Lock) => {
+					if (a.updatedTime === b.updatedTime) {
+						return a.clientId < b.clientId ? -1 : +1;
+					}
+					return a.updatedTime < b.updatedTime ? -1 : +1;
+				});
 
-			if (!lock || !this.lockIsActive(lock)) return null;
-			if (clientType && clientType !== lock.clientType) return null;
-			if (clientId && clientId !== lock.clientId) return null;
-			return lock;
+			if (!activeLocks.length) return null;
+			const activeLock = activeLocks[0];
+
+			if (clientType && clientType !== activeLock.clientType) return null;
+			if (clientId && clientId !== activeLock.clientId) return null;
+			return activeLock;
 		} else if (lockType === LockType.Sync) {
 			for (const lock of locks) {
 				if (clientType && lock.clientType !== clientType) continue;
@@ -136,6 +144,11 @@ export default class LockHandler {
 
 	private async saveLock(lock:Lock) {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
+	}
+
+	// This is for testing only
+	public async saveLock_(lock:Lock) {
+		return this.saveLock(lock);
 	}
 
 	private async acquireSyncLock(clientType:string, clientId:string):Promise<Lock> {
@@ -237,6 +250,8 @@ export default class LockHandler {
 						clientType: clientType,
 						clientId: clientId,
 					});
+
+					await time.msleep(100);
 				}
 			}
 		} catch (error) {

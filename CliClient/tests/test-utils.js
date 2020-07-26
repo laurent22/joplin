@@ -53,6 +53,7 @@ const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
 let synchronizers_ = [];
+const synchronizerContexts_ = {};
 const fileApis_ = {};
 const encryptionServices_ = [];
 const revisionServices_ = [];
@@ -95,6 +96,10 @@ let syncTargetId_ = null;
 let sleepTime = 0;
 let isNetworkSyncTarget_ = false;
 
+function syncTargetName() {
+	return syncTargetName_;
+}
+
 function setSyncTargetName(name) {
 	if (name === syncTargetName_) return syncTargetName_;
 	const previousName = syncTargetName_;
@@ -106,7 +111,6 @@ function setSyncTargetName(name) {
 	return previousName;
 }
 
-// setSyncTargetName('memory');
 setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
@@ -290,6 +294,7 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
+		synchronizerContexts_[id] = null;
 	}
 
 	encryptionServices_[id] = new EncryptionService();
@@ -311,6 +316,19 @@ function db(id = null) {
 function synchronizer(id = null) {
 	if (id === null) id = currentClient_;
 	return synchronizers_[id];
+}
+
+// This is like calling synchronizer.start() but it handles the
+// complexity of passing around the sync context depending on
+// the client.
+async function synchronizerStart(id = null, extraOptions = null) {
+	if (id === null) id = currentClient_;
+	const context = synchronizerContexts_[id];
+	const options = Object.assign({}, extraOptions);
+	if (context) options.context = context;
+	const newContext = await synchronizer(id).start(options);
+	synchronizerContexts_[id] = newContext;
+	return newContext;
 }
 
 function encryptionService(id = null) {
@@ -420,7 +438,7 @@ async function initFileApi() {
 
 	fileApi.setLogger(logger);
 	fileApi.setSyncTargetId(syncTargetId_);
-	fileApi.requestRepeatCount_ = 0;
+	fileApi.requestRepeatCount_ = isNetworkSyncTarget_ ? 1 : 0;
 
 	fileApis_[syncTargetId_] = fileApi;
 }
@@ -680,4 +698,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
