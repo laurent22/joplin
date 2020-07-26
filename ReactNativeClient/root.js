@@ -512,7 +512,9 @@ async function initialize(dispatch) {
 
 		await FoldersScreenUtils.refreshFolders();
 
-		const tags = await Tag.allWithNotes();
+		let tags = await Tag.all();
+		await Tag.updateCachedNoteCountForIds(tags.map((t) => t.id));
+		tags = tags.filter((t) => Tag.getCachedNoteCount(t.id) > 0);
 
 		dispatch({
 			type: 'TAG_UPDATE_ALL',

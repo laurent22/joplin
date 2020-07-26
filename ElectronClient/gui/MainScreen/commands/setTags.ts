@@ -18,16 +18,16 @@ export const runtime = (comp:any):CommandRuntime => {
 					return { value: a.id, label: Tag.getCachedFullTitle(a.id) };
 				})
 				.sort((a:any, b:any) => {
-					// sensitivity accent will treat accented characters as differemt
+					// sensitivity accent will treat accented characters as different
 					// but treats caps as equal
 					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
-			const allTags = await Tag.allWithNotes();
+			const allTags = await Tag.all();
 			const tagSuggestions = allTags.map((a:any) => {
 				return { value: a.id, label: Tag.getCachedFullTitle(a.id) };
 			})
 				.sort((a:any, b:any) => {
-				// sensitivity accent will treat accented characters as differemt
+				// sensitivity accent will treat accented characters as different
 				// but treats caps as equal
 					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});

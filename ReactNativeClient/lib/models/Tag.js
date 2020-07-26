@@ -66,10 +66,40 @@ class Tag extends BaseItem {
 	}
 
 	static async updateCachedNoteCountForIds(tagIds) {
+		for (let i = 0; i < tagIds.length; i++) {
+			noteCountCache[tagIds[i]] = await Tag.noteCount(tagIds[i]);
+		}
+	}
+
+	static async updateCachedNoteCountForIdsAndAncestors(tagIds, options = null) {
+		// NOTE: this method could be separated into two, but updating cache and deleting abandoned
+		// tags requires calls to ancestorTags, which can be quite expensive. Instead I provided and option
+		// below to only run cache update if necessary.
+		if (!options) options = {};
+		if (!('deleteAbandoned' in options)) options.deleteAbandoned = false;
+
 		const tags = await Tag.byIds(tagIds);
+		let tagIdsToUpdate = new Set();
+
+		// Find all ancestors of the given tags
 		for (let i = 0; i < tags.length; i++) {
-			if (!tags[i]) continue;
-			noteCountCache[tags[i].id] = await Tag.noteCount(tags[i].id);
+			tagIdsToUpdate.add(tags[i].id);
+
+			const ancestors = await Tag.ancestorTags(tags[i]);
+			ancestors.forEach((t) => tagIdsToUpdate.add(t.id));
+		}
+
+		// Update note count cache for all tags up in the hierarchy
+		tagIdsToUpdate = Array.from(tagIdsToUpdate);
+		await Tag.updateCachedNoteCountForIds(tagIdsToUpdate);
+
+		// Remove tags that have been left abandoned (have zero attached notes in their hierarchy)
+		if (options.deleteAbandoned) {
+			for (let i = 0; i < tagIdsToUpdate.length; i++) {
+				if (Tag.getCachedNoteCount(tagIdsToUpdate[i]) === 0) {
+					await Tag.delete(tagIdsToUpdate[i], { deleteNotelessParents: false });
+				}
+			}
 		}
 	}
 
@@ -154,12 +184,8 @@ class Tag extends BaseItem {
 
 		await super.delete(id, options);
 
-		// Delete ancestor tags that do not have any associated notes left
 		if (options.deleteNotelessParents && tag.parent_id) {
-			const parent = await Tag.loadWithCount(tag.parent_id);
-			if (!parent) {
-				await Tag.delete(tag.parent_id, options);
-			}
+			await Tag.updateCachedNoteCountForIdsAndAncestors([tag.parent_id], { deleteAbandoned: true });
 		}
 
 		this.dispatch({
@@ -177,11 +203,6 @@ class Tag extends BaseItem {
 			note_id: noteId,
 		});
 
-		// Update note counts
-		const tagIdsToUpdate = await Tag.ancestorTags(tagId);
-		tagIdsToUpdate.push(tagId);
-		await Tag.updateCachedNoteCountForIds(tagIdsToUpdate);
-
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
 			item: await Tag.loadWithCount(tagId),
@@ -195,11 +216,6 @@ class Tag extends BaseItem {
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
-
-		// Update note counts
-		const tagIdsToUpdate = await Tag.ancestorTags(tagId);
-		tagIdsToUpdate.push(tagId);
-		await Tag.updateCachedNoteCountForIds(tagIdsToUpdate);
 
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
@@ -226,28 +242,16 @@ class Tag extends BaseItem {
 		return ancestorTitles.join('/');
 	}
 
-	static async load(id, options = null) {
-		const tag = await super.load(id, options);
-		if (!tag) return;
-		// Update noteCount cache
-		noteCountCache[tag.id] = await Tag.noteCount(tag.id);
-		return tag;
-	}
-
 	static async all(options = null) {
 		const tags = await super.all(options);
 
+		// When all tags are reloaded we can also cheaply update the fullTitle cache
 		for (const tag of tags) {
 			const tagPath = Tag.tagPath(tags, tag.id);
 			const pathTitles = tagPath.map((t) => t.title);
 			const fullTitle = pathTitles.join('/');
-			// When all tags are reloaded we can also cheaply update the cache
 			fullTitleCache[tag.id] = fullTitle;
 		}
-
-		// Update noteCount cache
-		const tagIds = tags.map((tag) => tag.id);
-		await Tag.updateCachedNoteCountForIds(tagIds);
 
 		return tags;
 	}
@@ -257,7 +261,7 @@ class Tag extends BaseItem {
 		if (!tag) return;
 
 		// Make tag has notes
-		if ((await Tag.getCachedNoteCount(tagId)) === 0) return;
+		if (Tag.getCachedNoteCount(tagId) === 0) return;
 		return tag;
 	}
 
@@ -287,8 +291,7 @@ class Tag extends BaseItem {
 
 	static async tagsByNoteId(noteId) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
-		const tags = await this.allWithNotes();
-		return tags.filter((tag) => tagIds.includes(tag.id));
+		return await Tag.byIds(tagIds);
 	}
 
 	static async commonTagsByNoteIds(noteIds) {
@@ -303,8 +306,8 @@ class Tag extends BaseItem {
 				break;
 			}
 		}
-		const tags = await this.allWithNotes();
-		return tags.filter((tag) => commonTagIds.includes(tag.id));
+		// Make sure the tags exist
+		return await Tag.byIds(commonTagIds);
 	}
 
 	static async loadByTitle(title) {
@@ -338,7 +341,7 @@ class Tag extends BaseItem {
 	}
 
 	static async setNoteTagsByTitles(noteId, tagTitles) {
-		const previousTags = await this.tagsByNoteId(noteId);
+		const previousTagIds = await NoteTag.tagIdsByNoteId(noteId);
 		const addedTitles = [];
 
 		for (let i = 0; i < tagTitles.length; i++) {
@@ -350,15 +353,15 @@ class Tag extends BaseItem {
 			addedTitles.push(title);
 		}
 
-		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(Tag.getCachedFullTitle(previousTags[i].id).toLowerCase()) < 0) {
-				await this.removeNote(previousTags[i].id, noteId);
+		for (let i = 0; i < previousTagIds.length; i++) {
+			if (addedTitles.indexOf(Tag.getCachedFullTitle(previousTagIds[i]).toLowerCase()) < 0) {
+				await this.removeNote(previousTagIds[i], noteId);
 			}
 		}
 	}
 
 	static async setNoteTagsByIds(noteId, tagIds) {
-		const previousTags = await this.tagsByNoteId(noteId);
+		const previousTagIds = await NoteTag.tagIdsByNoteId(noteId);
 		const addedIds = [];
 
 		for (let i = 0; i < tagIds.length; i++) {
@@ -367,9 +370,9 @@ class Tag extends BaseItem {
 			addedIds.push(tagId);
 		}
 
-		for (let i = 0; i < previousTags.length; i++) {
-			if (addedIds.indexOf(previousTags[i].id) < 0) {
-				await this.removeNote(previousTags[i].id, noteId);
+		for (let i = 0; i < previousTagIds.length; i++) {
+			if (addedIds.indexOf(previousTagIds[i]) < 0) {
+				await this.removeNote(previousTagIds[i], noteId);
 			}
 		}
 	}
@@ -390,15 +393,12 @@ class Tag extends BaseItem {
 
 		const oldParentTagId = tag.parent_id;
 		// Save new parent id
-		const newTag = await Tag.save({ id: tag.id, parent_id: parentTagId }, { userSideValidation: true });
+		const newTag = await Tag.save({ id: tag.id, parent_id: parentTagId }, { userSideValidation: true, updateNoteCountCache: false });
 
 		if (parentTagId !== oldParentTagId) {
 			// If the parent tag has changed, and the ancestor doesn't
 			// have notes attached, then remove it
-			const oldParentWithCount = await Tag.loadWithCount(oldParentTagId);
-			if (!oldParentWithCount) {
-				await Tag.delete(oldParentTagId, { deleteChildren: false, deleteNotelessParents: true });
-			}
+			await Tag.updateCachedNoteCountForIdsAndAncestors([newTag.parent_id, oldParentTagId], { deleteAbandoned: true });
 		}
 
 		return newTag;
@@ -407,15 +407,12 @@ class Tag extends BaseItem {
 	static async renameNested(tag, newTitle) {
 		const oldParentId = tag.parent_id;
 
-		tag = await Tag.saveNested(tag, newTitle, { fields: ['title', 'parent_id'], userSideValidation: true });
+		tag = await Tag.saveNested(tag, newTitle, { fields: ['title', 'parent_id'], userSideValidation: true, updateNoteCountCache: false });
 
 		if (oldParentId !== tag.parent_id) {
 			// If the parent tag has changed, and the ancestor doesn't
 			// have notes attached, then remove it
-			const oldParentWithCount = await Tag.loadWithCount(oldParentId);
-			if (!oldParentWithCount) {
-				await Tag.delete(oldParentId, { deleteChildren: false, deleteNotelessParents: true });
-			}
+			await Tag.updateCachedNoteCountForIdsAndAncestors([tag.parent_id, oldParentId], { deleteAbandoned: true });
 		}
 		return tag;
 	}
@@ -468,6 +465,9 @@ class Tag extends BaseItem {
 	}
 
 	static async save(o, options = null) {
+		if (!options) options = {};
+		if (!('updateNoteCountCache' in options)) options.updateNoteCountCache = true;
+
 		if (options && options.userSideValidation) {
 			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
@@ -484,18 +484,29 @@ class Tag extends BaseItem {
 			}
 		}
 
-		const tag = await super.save(o, options).then(tag => {
-			this.dispatch({
-				type: 'TAG_UPDATE_ONE',
-				item: tag,
-			});
-			return tag;
-		});
+		let oldTag;
+		if (o.id) {
+			oldTag = await Tag.load(o.id);
+		}
+
+		const tag = await super.save(o, options);
+
+		// Update note count cache for new and old parents
+		if (options.updateNoteCountCache && oldTag && tag.parent_id != oldTag.parent_id) {
+			await Tag.updateCachedNoteCountForIdsAndAncestors([tag.parent_id, oldTag.parent_id], { deleteAbandoned: false });
+		}
 
 		// Update fullTitleCache cache
-		const tagIdsToUpdate = await Tag.descendantTagIds(tag.id);
-		tagIdsToUpdate.push(tag.id);
-		await Tag.updateCachedFullTitleForIds(tagIdsToUpdate);
+		if (!oldTag || tag.parent_id != oldTag.parent_id || tag.title != oldTag.title) {
+			const tagIdsToUpdate = await Tag.descendantTagIds(tag.id);
+			tagIdsToUpdate.push(tag.id);
+			await Tag.updateCachedFullTitleForIds(tagIdsToUpdate);
+		}
+
+		this.dispatch({
+			type: 'TAG_UPDATE_ONE',
+			item: tag,
+		});
 
 		return tag;
 	}

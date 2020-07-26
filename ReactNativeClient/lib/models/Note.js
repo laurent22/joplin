@@ -4,6 +4,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
+const NoteTag = require('lib/models/NoteTag.js');
 const { shim } = require('lib/shim.js');
 const { pregQuote } = require('lib/string-utils.js');
 const { time } = require('lib/time-utils.js');
@@ -639,7 +640,24 @@ class Note extends BaseItem {
 					id: id,
 				});
 			}
+
+			const noteTags = await NoteTag.byNoteIds(notes.map((n) => n.id));
+			this.dispatch({
+				type: 'TAGS_NOTE_COUNT_UPDATE',
+				tagIds: noteTags.map((nt) => nt.tag_id),
+			});
 		}
+	}
+
+	static async delete(id, options = null) {
+		const output = await super.delete(id, options);
+
+		this.dispatch({
+			type: 'TAGS_NOTE_COUNT_UPDATE',
+			tagIds: await NoteTag.tagIdsByNoteId(id),
+		});
+
+		return output;
 	}
 
 	static dueNotes() {

@@ -28,6 +28,7 @@ describe('models_Tag', function() {
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
+		await Tag.updateCachedNoteCountForIds([(await Tag.loadByTitle('un')).id, (await Tag.loadByTitle('deux')).id]);
 
 		const noteTags = await Tag.tagsByNoteId(note1.id);
 		expect(noteTags.length).toBe(2);
@@ -49,11 +50,14 @@ describe('models_Tag', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
+		const tagId = (await Tag.loadByTitle('un')).id;
+		await Tag.updateCachedNoteCountForIds([tagId]);
 
 		let tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 
 		await Note.delete(note1.id);
+		await Tag.updateCachedNoteCountForIds([tagId]);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
@@ -65,18 +69,22 @@ describe('models_Tag', function() {
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 		await Tag.setNoteTagsByTitles(note2.id, ['un']);
+		const tagId = (await Tag.loadByTitle('un')).id;
+		await Tag.updateCachedNoteCountForIds([tagId]);
 
 		let tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 		expect(Tag.getCachedNoteCount(tags[0].id)).toBe(2);
 
 		await Note.delete(note1.id);
+		await Tag.updateCachedNoteCountForIds([tagId]);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 		expect(Tag.getCachedNoteCount(tags[0].id)).toBe(1);
 
 		await Note.delete(note2.id);
+		await Tag.updateCachedNoteCountForIds([tagId]);
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
@@ -185,6 +193,7 @@ describe('models_Tag', function() {
 
 		const note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
 		await Tag.addNote(tag0.id, note0.id);
+		await Tag.updateCachedNoteCountForIds([parent_tag.id]);
 
 		parent_tag = await Tag.loadWithCount(parent_tag.id);
 		expect(Tag.getCachedNoteCount(parent_tag.id)).toBe(1);

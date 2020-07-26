@@ -81,6 +81,12 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		});
 	}
 
+	if (action.type === 'TAGS_NOTE_COUNT_UPDATE') {
+		await Tag.updateCachedNoteCountForIdsAndAncestors(action.tagIds, { deleteAbandoned: true });
+
+		refreshTags = true;
+	}
+
 	if (mustAutoAddResources) {
 		ResourceFetcher.instance().autoAddResources();
 	}

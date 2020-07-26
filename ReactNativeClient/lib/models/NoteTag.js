@@ -23,6 +23,29 @@ class NoteTag extends BaseItem {
 		}
 		return output;
 	}
+
+	static async delete(id, options = null) {
+		const noteTag = NoteTag.byId(id);
+		const output = await super.delete(id, options);
+
+		this.dispatch({
+			type: 'TAGS_NOTE_COUNT_UPDATE',
+			tagIds: [noteTag.tag_id],
+		});
+
+		return output;
+	}
+
+	static async save(o, options = null) {
+		const noteTag = await super.save(o, options);
+
+		this.dispatch({
+			type: 'TAGS_NOTE_COUNT_UPDATE',
+			tagIds: [noteTag.tag_id],
+		});
+
+		return noteTag;
+	}
 }
 
 module.exports = NoteTag;
