@@ -41,7 +41,7 @@ showHelp() {
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
-    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases"
+    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
