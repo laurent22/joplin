@@ -121,8 +121,12 @@ Note that Mermaid graphs are always rendered on a white background regardless of
 Checkboxes can be added like so:
 
 	- [ ] Milk
-	- [ ] Rice
+	- [x] Rice
 	- [ ] Eggs
+
+Which would turn into:
+
+![Checkbox support in Joplin](https://joplin.cozic.net/images/Markdown_checkbox.jpg)
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
@@ -150,7 +154,7 @@ Note that the functionality added by these plugins is not part of the CommonMark
 | [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no | [View](https://joplinapp.org/images/md_plugins/sup_plugin.jpg) |
 | [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no | [View](https://joplinapp.org/images/md_plugins/deflist_plugin.jpg) |
 | [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language<br/>The HTML specification | Allows definition of abbreviations that can be hovered over later for a full expansion | no | [View](https://joplinapp.org/images/md_plugins/abbr_plugin.jpg) |
-| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |!View[]https://joplinapp.org/images/md_plugins/emoji_plugin.jpg) |
+| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |[View](https://joplinapp.org/images/md_plugins/emoji_plugin.jpg) |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no | [View](https://joplinapp.org/images/md_plugins/insert_plugin.jpg) |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no | [View](https://joplinapp.org/images/md_plugins/multitable_plugin.jpg) |
 | [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no | [View](https://joplinapp.org/images/md_plugins/fountain_plugin.jpg) |
