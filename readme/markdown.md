@@ -112,7 +112,7 @@ You can create diagrams in Joplin using the [Mermaid syntax](https://mermaidjs.g
 
 This is how it would look with the Markdown on the left, and rendered graph on the right:
 
-![Mermaid support in Joplin](https://joplin.cozic.net/images/Mermaid.png)
+![Mermaid support in Joplin](https://joplinapp.org/images/Mermaid.png)
 
 Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
 
@@ -126,7 +126,7 @@ Checkboxes can be added like so:
 
 Which would turn into:
 
-![Checkbox support in Joplin](https://joplin.cozic.net/images/Markdown_checkbox.jpg)
+![Checkbox support in Joplin](https://joplinapp.org/images/Markdown_checkbox.jpg)
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
