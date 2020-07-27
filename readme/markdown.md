@@ -126,9 +126,7 @@ Checkboxes can be added like so:
 
 Which would turn into:
 
-- [ ] Milk
-- [x] Rice
-- [ ] Eggs
+![Checkbox support in Joplin](https://joplin.cozic.net/images/Markdown_checkbox.jpg)
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
