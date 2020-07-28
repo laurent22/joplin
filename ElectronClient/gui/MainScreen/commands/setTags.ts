@@ -1,7 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
 const Tag = require('lib/models/Tag');
 const { _ } = require('lib/locale');
-const { bridge } = require('electron').remote.require('./bridge');
 
 export const declaration:CommandDeclaration = {
 	name: 'setTags',
@@ -15,7 +14,7 @@ export const runtime = (comp:any):CommandRuntime => {
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
 			const startTags = tags
 				.map((a:any) => {
-					return { value: a.id, label: Tag.getCachedFullTitle(a.id) };
+					return { value: a.id, label: a.title };
 				})
 				.sort((a:any, b:any) => {
 					// sensitivity accent will treat accented characters as differemt
@@ -24,7 +23,7 @@ export const runtime = (comp:any):CommandRuntime => {
 				});
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags.map((a:any) => {
-				return { value: a.id, label: Tag.getCachedFullTitle(a.id) };
+				return { value: a.id, label: a.title };
 			})
 				.sort((a:any, b:any) => {
 				// sensitivity accent will treat accented characters as differemt
@@ -43,25 +42,21 @@ export const runtime = (comp:any):CommandRuntime => {
 							const endTagTitles = answer.map(a => {
 								return a.label.trim();
 							});
-							try {
-								if (noteIds.length === 1) {
-									await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
-								} else {
-									const startTagTitles = startTags.map((a:any) => { return a.label.trim(); });
-									const addTags = endTagTitles.filter((value:string) => !startTagTitles.includes(value));
-									const delTags = startTagTitles.filter((value:string) => !endTagTitles.includes(value));
+							if (noteIds.length === 1) {
+								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
+							} else {
+								const startTagTitles = startTags.map((a:any) => { return a.label.trim(); });
+								const addTags = endTagTitles.filter((value:string) => !startTagTitles.includes(value));
+								const delTags = startTagTitles.filter((value:string) => !endTagTitles.includes(value));
 
-									// apply the tag additions and deletions to each selected note
-									for (let i = 0; i < noteIds.length; i++) {
-										const tags = await Tag.tagsByNoteId(noteIds[i]);
-										let tagTitles = tags.map((a:any) => { return Tag.getCachedFullTitle(a.id); });
-										tagTitles = tagTitles.concat(addTags);
-										tagTitles = tagTitles.filter((value:string) => !delTags.includes(value));
-										await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);
-									}
+								// apply the tag additions and deletions to each selected note
+								for (let i = 0; i < noteIds.length; i++) {
+									const tags = await Tag.tagsByNoteId(noteIds[i]);
+									let tagTitles = tags.map((a:any) => { return a.title; });
+									tagTitles = tagTitles.concat(addTags);
+									tagTitles = tagTitles.filter((value:string) => !delTags.includes(value));
+									await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);
 								}
-							} catch (error) {
-								bridge().showErrorMessageBox(error.message);
 							}
 						}
 						comp.setState({ promptOptions: null });

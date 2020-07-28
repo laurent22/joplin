@@ -326,7 +326,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -733,13 +733,6 @@ class JoplinDatabase extends Database {
 						is_shared: 'INT NOT NULL DEFAULT 0',
 					})
 				);
-			}
-
-			if (targetVersion == 31) {
-				queries.push('ALTER TABLE tags ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
-				// Drop the tag note count view, instead compute note count on the fly
-				queries.push('DROP VIEW tags_with_note_count');
-				queries.push(this.addMigrationFile(31));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

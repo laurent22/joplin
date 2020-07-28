@@ -497,7 +497,6 @@ class Setting extends BaseModel {
 			startMinimized: { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
 			collapsedFolderIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
-			collapsedTagIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
 
 			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },

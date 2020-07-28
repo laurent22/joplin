@@ -536,11 +536,6 @@ async function initialize(dispatch) {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		dispatch({
-			type: 'TAG_SET_COLLAPSED_ALL',
-			ids: Setting.value('collapsedTagIds'),
-		});
-
 		if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {

@@ -39,7 +39,6 @@ const defaultState = {
 	customCss: '',
 	templates: [],
 	collapsedFolderIds: [],
-	collapsedTagIds: [],
 	clipperServer: {
 		startState: 'idle',
 		port: null,
@@ -174,24 +173,20 @@ function stateHasEncryptedItems(state) {
 	return false;
 }
 
-function itemSetCollapsed(state, action) {
-	let collapsedItemsKey = null;
-	if (action.type.indexOf('TAG_') !== -1) collapsedItemsKey = 'collapsedTagIds';
-	else if (action.type.indexOf('FOLDER_') !== -1) collapsedItemsKey = 'collapsedFolderIds';
-
-	const collapsedItemIds = state[collapsedItemsKey].slice();
-	const idx = collapsedItemIds.indexOf(action.id);
+function folderSetCollapsed(state, action) {
+	const collapsedFolderIds = state.collapsedFolderIds.slice();
+	const idx = collapsedFolderIds.indexOf(action.id);
 
 	if (action.collapsed) {
 		if (idx >= 0) return state;
-		collapsedItemIds.push(action.id);
+		collapsedFolderIds.push(action.id);
 	} else {
 		if (idx < 0) return state;
-		collapsedItemIds.splice(idx, 1);
+		collapsedFolderIds.splice(idx, 1);
 	}
 
 	const newState = Object.assign({}, state);
-	newState[collapsedItemsKey] = collapsedItemIds;
+	newState.collapsedFolderIds = collapsedFolderIds;
 	return newState;
 }
 
@@ -774,37 +769,20 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_SET_COLLAPSED':
-			newState = itemSetCollapsed(state, action);
+			newState = folderSetCollapsed(state, action);
 			break;
 
 		case 'FOLDER_TOGGLE':
 			if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
-				newState = itemSetCollapsed(state, Object.assign({ collapsed: false }, action));
+				newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
 			} else {
-				newState = itemSetCollapsed(state, Object.assign({ collapsed: true }, action));
+				newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
 			}
 			break;
 
 		case 'FOLDER_SET_COLLAPSED_ALL':
 			newState = Object.assign({}, state);
 			newState.collapsedFolderIds = action.ids.slice();
-			break;
-
-		case 'TAG_SET_COLLAPSED':
-			newState = itemSetCollapsed(state, action);
-			break;
-
-		case 'TAG_TOGGLE':
-			if (state.collapsedTagIds.indexOf(action.id) >= 0) {
-				newState = itemSetCollapsed(state, Object.assign({ collapsed: false }, action));
-			} else {
-				newState = itemSetCollapsed(state, Object.assign({ collapsed: true }, action));
-			}
-			break;
-
-		case 'TAG_SET_COLLAPSED_ALL':
-			newState = Object.assign({}, state);
-			newState.collapsedTagIds = action.ids.slice();
 			break;
 
 		case 'TAG_UPDATE_ALL':
