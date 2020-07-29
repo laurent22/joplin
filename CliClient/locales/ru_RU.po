@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -105,9 +107,9 @@ msgid "Do not ask for confirmation."
 msgstr "Не запрашивать подтверждение."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Исходный формат: %s"
+msgstr "Выходной формат: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -220,14 +222,16 @@ msgstr ""
 "несколько минут в зависимости от объема данных."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Расшифрованные элементы: %s / %s"
+msgstr "Расшифровано элементов: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Пропущено элементов: %d (используйте команду --retry-failed-items чтобы "
+"повторить попытку расшифровки)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -555,9 +559,8 @@ msgstr ""
 "расшифровываются в фоновом режиме и вскоре будут доступны."
 
 #: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Не запрашивать подтверждение."
+msgstr "Наберите `status` для получения дополнительной информации."
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -739,6 +742,7 @@ msgstr "Выводит общую информацию о заметках и б
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Повторить попытку расшифровки элементов: `e2ee decrypt --retry-failed-items`"
 
 #: CliClient/app/command-tag.js:14
 msgid ""
@@ -816,7 +820,7 @@ msgstr ""
 
 #: ElectronClient/plugins/GotoAnything.min.js:493
 msgid "Goto Anything..."
-msgstr "Перейти к чему угодно…"
+msgstr "Перейти к чему-либо…"
 
 #: ElectronClient/InteropServiceHelper.js:147
 #, javascript-format
@@ -824,9 +828,9 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
 #: ElectronClient/InteropServiceHelper.js:164
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Не удалось обновить мастер-ключ: %s"
+msgstr "Не удалось экспортировать заметки: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -936,9 +940,9 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Удалить метку “%s” из всех заметок?"
+msgstr "Удалить метку “%s” и её производные из всех заметок?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1068,9 +1072,8 @@ msgstr ""
 "отредактировать ее."
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "Флажок"
+msgstr "Список флажков"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1087,11 +1090,11 @@ msgstr "Прикрепить файл"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
 msgid "Code Block"
-msgstr ""
+msgstr "Блок кода"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 msgid "Inline Code"
-msgstr ""
+msgstr "Инлайн код"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
@@ -1101,13 +1104,12 @@ msgstr "Вставить дату и время"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Перетащите сюда заметки или файлы"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:401
-#, fuzzy
 msgid "Code View"
-msgstr "Код"
+msgstr "Просмотр кода"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #, javascript-format
@@ -1115,6 +1117,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Пожалуйста дождитесь окончания загрузки и расшифровки всех вложений. Вы "
+"можете переключиться на %s для редактирования заметки."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1139,7 +1143,7 @@ msgstr "Сохранить как..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Показать файл в папке"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
@@ -1318,7 +1322,7 @@ msgstr "Поиск..."
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
-msgstr ""
+msgstr "Статистика..."
 
 #: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:17
@@ -1375,15 +1379,13 @@ msgid "New note"
 msgstr "Новая заметка"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Переместить в блокнот..."
+msgstr "Переместить в блокнот"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
 #: ElectronClient/gui/MainScreen.min.js:272
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Переместить в блокнот..."
+msgstr "Переместить в блокнот:"
 
 #: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
 msgid "Toggle editor layout"
@@ -1544,9 +1546,8 @@ msgid "Options"
 msgstr "Настройки"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "Вложения"
+msgstr "Вложения заметки"
 
 #: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
 msgid "Synchronisation Status"
@@ -1579,13 +1580,12 @@ msgstr "Отправить"
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "Custom order"
-msgstr ""
+msgstr "Пользовательский порядок"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#, fuzzy
 msgid "View"
-msgstr "&Вид"
+msgstr "Вид"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
@@ -1600,12 +1600,13 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Для сортировки заметок вручную порядок должен быть изменён на \"%s\" в меню "
+"\"%s\" > \"%s\""
 
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.min.js:153
-#, fuzzy
 msgid "Do it now"
-msgstr "Загрузить сейчас:"
+msgstr "Загрузить сейчас"
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
@@ -1785,9 +1786,8 @@ msgstr ""
 
 #: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:112
-#, fuzzy
 msgid "Retry All"
-msgstr "Повторить попытку"
+msgstr "Повторить попытку для всех"
 
 #: ElectronClient/gui/StatusScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/status.js:118
@@ -1837,14 +1837,13 @@ msgid "Viewer"
 msgstr "Просмотрщик"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
 msgid "Statistics"
-msgstr "Статус"
+msgstr "Статистика"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Продолжительность чтения: %s мин"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1942,9 +1941,9 @@ msgid "Untitled"
 msgstr "Без имени"
 
 #: ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Удалить заметку \"%s\"?"
+msgstr "Удалить вложение \"%s\"?"
 
 #: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1952,6 +1951,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Это продвинутый инструмент для отображения вложений, прикреплённых к вашим "
+"заметкам. Удаляйте вложения с осторожностью - они не могут быть "
+"восстановлены."
 
 #: ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -2040,9 +2042,8 @@ msgid "Refresh templates"
 msgstr "Обновить шаблоны"
 
 #: ElectronClient/app.js:574
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Вложения"
+msgstr "Вложения..."
 
 #: ElectronClient/app.js:596
 #, javascript-format
@@ -2072,7 +2073,7 @@ msgstr "Версия профиля: %s"
 #: ElectronClient/app.js:608
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Поддерживаемая связка ключей: %s"
 
 #: ElectronClient/app.js:630 ElectronClient/app.js:706
 msgid "&File"
@@ -2136,9 +2137,8 @@ msgid "Zoom Out"
 msgstr "Отдалить"
 
 #: ElectronClient/app.js:860
-#, fuzzy
 msgid "&Note"
-msgstr "Заметки"
+msgstr "&Заметки"
 
 #: ElectronClient/app.js:870
 msgid "&Tools"
@@ -2226,7 +2226,7 @@ msgstr "Неизвестный уровень ID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2239,6 +2239,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Вы собираетесь прикрепить крупное изображение (%dx%d пикселей). Вы хотите "
+"сжать его до %d пикселей перед прикреплением?"
 
 #: ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2261,7 +2263,7 @@ msgstr "Конфликты"
 
 #: ReactNativeClient/lib/models/Folder.js:374
 msgid "Cannot move notebook to this location"
-msgstr "Не удается переместить блокнот в указанное местоположение"
+msgstr "Не удается переместить блокнот в указанное расположение"
 
 #: ReactNativeClient/lib/models/Folder.js:426
 #, javascript-format
@@ -2270,20 +2272,18 @@ msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
 
 #: ReactNativeClient/lib/models/Setting.js:39
-#, fuzzy
 msgid "yes"
-msgstr "Да"
+msgstr "да"
 
 #: ReactNativeClient/lib/models/Setting.js:39
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "нет"
 
 #: ReactNativeClient/lib/models/Setting.js:43
 #, javascript-format
@@ -2311,11 +2311,11 @@ msgstr "Дракула"
 
 #: ReactNativeClient/lib/models/Setting.js:54
 msgid "Solarised Light"
-msgstr "Ярко-светлая"
+msgstr "Солнечная светлая"
 
 #: ReactNativeClient/lib/models/Setting.js:55
 msgid "Solarised Dark"
-msgstr "Ярко-тёмная"
+msgstr "Солнечная тёмная"
 
 #: ReactNativeClient/lib/models/Setting.js:56
 msgid "Nord"
@@ -2323,7 +2323,7 @@ msgstr "Север"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim тёмная"
 
 #: ReactNativeClient/lib/models/Setting.js:58
 msgid "OLED Dark"
@@ -2371,15 +2371,15 @@ msgstr "Пароль WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "Ключ AWS"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "Секрет AWS"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
@@ -2429,15 +2429,15 @@ msgstr "Тема"
 
 #: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Автоматическая смена темы в соответствии с настройками системы"
 
 #: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Предпочитемая светлая тема"
 
 #: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Предпочитемая тёмная тема"
 
 #: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
@@ -2475,7 +2475,7 @@ msgstr "Автоматическое закрытие скобок, кавыче
 
 #: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Использовать CodeMirror в качестве редактора кода (ВНИМАНИЕ: BETA)."
 
 #: ReactNativeClient/lib/models/Setting.js:397
 #: ReactNativeClient/lib/models/Setting.js:415
@@ -2525,7 +2525,6 @@ msgid "Enable Fountain syntax support"
 msgstr "Включить поддержку синтаксиса Fountain"
 
 #: ReactNativeClient/lib/models/Setting.js:468
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Включить поддержку Mermaid диаграм"
 
@@ -2604,15 +2603,14 @@ msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
 #: ReactNativeClient/lib/models/Setting.js:550
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Для корректной работы должно быть указано название *моноширинного* шрифта. "
-"Если название шрифта не указано или указано некорректно - будет использован "
-"шрифт по умолчанию."
+"Для корректного отображения требуется задать *моноширинный* шрифт. Если "
+"шрифт не был задан или выбран некорректный шрифт будет использован шрифт по "
+"умолчанию."
 
 #: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2678,7 +2676,7 @@ msgstr "A4"
 
 #: ReactNativeClient/lib/models/Setting.js:626
 msgid "Letter"
-msgstr "Letter"
+msgstr "Письмо"
 
 #: ReactNativeClient/lib/models/Setting.js:627
 msgid "A3"
@@ -2694,7 +2692,7 @@ msgstr "Tabloid"
 
 #: ReactNativeClient/lib/models/Setting.js:630
 msgid "Legal"
-msgstr "Legal"
+msgstr "Юр. сведения"
 
 #: ReactNativeClient/lib/models/Setting.js:633
 msgid "Page orientation for PDF export"
@@ -2747,7 +2745,7 @@ msgstr "Игнорировать ошибки сертификата TLS"
 
 #: ReactNativeClient/lib/models/Setting.js:689
 msgid "Fail-safe"
-msgstr ""
+msgstr "Режим защиты от сбоев"
 
 #: ReactNativeClient/lib/models/Setting.js:690
 msgid ""
@@ -2784,7 +2782,7 @@ msgstr "Хранить историю заметки"
 
 #: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Фактор роста списка блокнотов"
 
 #: ReactNativeClient/lib/models/Setting.js:743
 #: ReactNativeClient/lib/models/Setting.js:756
@@ -2795,14 +2793,18 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Параметр \"фактор\" отвечает за то, как элемент будет расти или уменьшаться "
+"чтобы поместиться в свободное пространство контейнера. Элемент с фактором 2 "
+"займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
+"приложение, чтобы изменения вступили в силу."
 
 #: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Фактор роста списка заметки"
 
 #: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Фактор роста поля заметки"
 
 #: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
@@ -2851,6 +2853,12 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Данные плагины расширяют отрисовщик Markdown доп. функциями. Учтите, что эти "
+"функции не являются стандартными для Markdown и большонство из них будет "
+"работать только в Joplin. Кроме того, некоторые из них *несовместимы* с "
+"редактором WYSIWYG. При открытии заметки с такими плагинами в WYSIWYG "
+"форматирование будет утеряно. Ниже отмечены плагины, совместимые с "
+"редактором WYSIWYG."
 
 #: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
@@ -2870,30 +2878,32 @@ msgid "Downloaded"
 msgstr "Загружено"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Вложения"
+msgstr "Конфликт вложения: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Произошла ошибка при загрузке вложения:"
+msgstr ""
+"[Конфликт](%s) При загрузке вложения.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Не удается переместить блокнот в указанное местоположение"
+msgstr "Не удается переместить метку в указанное расположение."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "Название тега не может начинаться или оканчиваться на `/`."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "Название тега не может содержать `//`."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -2906,7 +2916,7 @@ msgstr "дата создания"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "пользовательский порядок"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -3093,7 +3103,7 @@ msgstr "Не удалось обновить мастер-ключ: %s"
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Расшифрованные элементы: %s / %s"
+msgstr "Расшифровано элементов: %s / %s"
 
 #: ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
@@ -3253,7 +3263,7 @@ msgstr "Экспортировать отладочный отчет"
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid "Fixing search index..."
-msgstr "Исправление индекса поиска…"
+msgstr "Исправление индекса поиска..."
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid "Fix search index"
@@ -3516,7 +3526,7 @@ msgstr "Файловая система"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
-msgstr ""
+msgstr "Вперёд"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
 #, fuzzy
