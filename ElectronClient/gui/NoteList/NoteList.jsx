@@ -28,8 +28,11 @@ class NoteListComponent extends React.Component {
 
 		this.state = {
 			dragOverTargetNoteIndex: null,
+			width: 0,
+			height: 0,
 		};
 
+		this.noteListRef = React.createRef();
 		this.itemListRef = React.createRef();
 		this.itemAnchorRefs_ = {};
 
@@ -44,6 +47,7 @@ class NoteListComponent extends React.Component {
 		this.registerGlobalDragEndEvent_ = this.registerGlobalDragEndEvent_.bind(this);
 		this.unregisterGlobalDragEndEvent_ = this.unregisterGlobalDragEndEvent_.bind(this);
 		this.itemContextMenu = this.itemContextMenu.bind(this);
+		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 	}
 
 	style() {
@@ -246,7 +250,7 @@ class NoteListComponent extends React.Component {
 			item={item}
 			index={index}
 			theme={this.props.theme}
-			width={this.props.style.width}
+			width={this.state.width}
 			dragItemIndex={this.state.dragOverTargetNoteIndex}
 			highlightedWords={highlightedWords()}
 			isProvisional={this.props.provisionalNoteIds.includes(item.id)}
@@ -403,46 +407,81 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
+	updateSizeState() {
+		this.setState({
+			width: this.noteListRef.current.clientWidth,
+			height: this.noteListRef.current.clientHeight,
+		});
+	}
+
+	resizableLayout_resize() {
+		this.updateSizeState();
+	}
+
+	componentDidMount() {
+		this.props.resizableLayoutEventEmitter.on('resize', this.resizableLayout_resize);
+		this.updateSizeState();
+	}
+
 	componentWillUnmount() {
 		if (this.focusItemIID_) {
 			clearInterval(this.focusItemIID_);
 			this.focusItemIID_ = null;
 		}
 
+		this.props.resizableLayoutEventEmitter.off('resize', this.resizableLayout_resize);
+
 		CommandService.instance().componentUnregisterCommands(commands);
 	}
 
-	render() {
+	renderEmptyList(style) {
+		if (this.props.notes.length) return null;
+
 		const theme = themeStyle(this.props.theme);
-		const style = this.props.style;
+		const padding = 10;
+		const emptyDivStyle = Object.assign(
+			{
+				padding: `${padding}px`,
+				fontSize: theme.fontSize,
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				fontFamily: theme.fontFamily,
+			},
+			style
+		);
+		// emptyDivStyle.width = emptyDivStyle.width - padding * 2;
+		// emptyDivStyle.height = emptyDivStyle.height - padding * 2;
+		return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+	}
 
-		if (!this.props.notes.length) {
-			const padding = 10;
-			const emptyDivStyle = Object.assign(
-				{
-					padding: `${padding}px`,
-					fontSize: theme.fontSize,
-					color: theme.color,
-					backgroundColor: theme.backgroundColor,
-					fontFamily: theme.fontFamily,
-				},
-				style
-			);
-			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
-			emptyDivStyle.height = emptyDivStyle.height - padding * 2;
-			return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
-		}
+	renderItemList(style) {
+		if (!this.props.notes.length) return null;
 
-		return <ItemList
-			ref={this.itemListRef}
-			disabled={this.props.isInsertingNotes}
-			itemHeight={this.style(this.props.theme).listItem.height}
-			className={'note-list'}
-			items={this.props.notes}
-			style={style}
-			itemRenderer={this.itemRenderer}
-			onKeyDown={this.onKeyDown}
-		/>;
+		return (
+			<ItemList
+				ref={this.itemListRef}
+				disabled={this.props.isInsertingNotes}
+				itemHeight={this.style(this.props.theme).listItem.height}
+				className={'note-list'}
+				items={this.props.notes}
+				style={style}
+				itemRenderer={this.itemRenderer}
+				onKeyDown={this.onKeyDown}
+			/>
+		);
+	}
+
+	render() {
+		const style = Object.assign({}, this.props.style, {
+			height: this.state.height,
+		});
+
+		return (
+			<div ref={this.noteListRef} style={{ width: '100%', height: '100%' }}>
+				{this.renderEmptyList(style)}
+				{this.renderItemList(style)}
+			</div>
+		);
 	}
 }
 

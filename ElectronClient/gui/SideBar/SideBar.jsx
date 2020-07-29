@@ -117,6 +117,8 @@ class SideBarComponent extends React.Component {
 		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor2,
+				width: '100%',
+				height: '100%',
 			},
 			listItemContainer: {
 				boxSizing: 'border-box',
@@ -645,7 +647,7 @@ class SideBarComponent extends React.Component {
 	}
 
 	render() {
-		const style = Object.assign({}, this.style().root, this.props.style, {
+		const style = Object.assign({}, this.style().root, {
 			overflowX: 'hidden',
 			overflowY: 'hidden',
 			display: 'inline-flex',

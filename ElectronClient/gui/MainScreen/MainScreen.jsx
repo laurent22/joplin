@@ -15,12 +15,12 @@ const { shim } = require('lib/shim');
 const { themeStyle } = require('lib/theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const VerticalResizer = require('../VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
 const CommandService = require('lib/services/CommandService').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
+const ResizableLayout = require('../ResizableLayout/ResizableLayout').default;
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -58,6 +58,46 @@ class MainScreenComponent extends React.Component {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
+			layout: {
+				key: 'root',
+				direction: 'row',
+				resizable: false,
+				children: [
+					{
+						key: 'column1',
+						direction: 'column',
+						resizable: true,
+						width: 100,
+						children: [
+							{
+								key: 'sideBar',
+							},
+						],
+					},
+					{
+						key: 'column2',
+						direction: 'column',
+						resizable: true,
+						width: 100,
+						children: [
+							{
+								key: 'noteList',
+							},
+						],
+					},
+					{
+						key: 'column3',
+						direction: 'column',
+						resizable: false,
+						widthExpand: true,
+						children: [
+							{
+								key: 'editor',
+							},
+						],
+					},
+				],
+			},
 		};
 
 		this.registerCommands();
@@ -70,6 +110,8 @@ class MainScreenComponent extends React.Component {
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
+		this.resizableLayout_resizeStop = this.resizableLayout_resizeStop.bind(this);
+		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
 	}
 
 	setupAppCloseHandling() {
@@ -241,6 +283,10 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		this.styles_.resizableLayout = {
+			height: rowHeight,
+		};
+
 		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
 
 		this.styles_.sideBar = {
@@ -386,6 +432,26 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
+	resizableLayout_resizeStop(event) {
+		this.setState({ layout: event.layout });
+	}
+
+	resizableLayout_renderItem(key, event) {
+		const eventEmitter = event.eventEmitter;
+
+		if (key === 'sideBar') {
+			return <SideBar key={key} />;
+		} else if (key === 'noteList') {
+			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} />;
+		} else if (key === 'editor') {
+			const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
+			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
+			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+		}
+
+		throw new Error(`Invalid layout component: ${key}`);
+	}
+
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign(
@@ -453,9 +519,6 @@ class MainScreenComponent extends React.Component {
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 
-		const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
-		const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
-
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
@@ -468,11 +531,12 @@ class MainScreenComponent extends React.Component {
 
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
-				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
-				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
-				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
+				<ResizableLayout
+					style={styles.resizableLayout}
+					layout={this.state.layout}
+					onResizeStop={this.resizableLayout_resizeStop}
+					renderItem={this.resizableLayout_renderItem}
+				/>
 				{pluginDialog}
 			</div>
 		);
