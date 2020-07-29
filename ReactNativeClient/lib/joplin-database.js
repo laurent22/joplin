@@ -837,7 +837,6 @@ class JoplinDatabase extends Database {
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
 						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
-				
 				queries.push(this.addMigrationFile(33));
 			}
 

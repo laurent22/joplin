@@ -312,44 +312,14 @@ class SearchEngine {
 	}
 
 	parseQuery(query) {
-		const terms = { _: [] };
+		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-		let inQuote = false;
-		let currentCol = '_';
-		let currentTerm = '';
-		for (let i = 0; i < query.length; i++) {
-			const c = query[i];
+		const allTerms = filterParser(query);
+		const textTerms = allTerms.filter(x => x.name === 'text').map(x => trimQuotes(x.value));
+		const titleTerms = allTerms.filter(x => x.name === 'title').map(x => trimQuotes(x.value));
+		const bodyTerms = allTerms.filter(x => x.name === 'body').map(x => trimQuotes(x.value));
 
-			if (c === '"') {
-				if (inQuote) {
-					terms[currentCol].push(currentTerm);
-					currentTerm = '';
-					inQuote = false;
-				} else {
-					inQuote = true;
-				}
-				continue;
-			}
-
-			if (c === ' ' && !inQuote) {
-				if (!currentTerm) continue;
-				terms[currentCol].push(currentTerm);
-				currentCol = '_';
-				currentTerm = '';
-				continue;
-			}
-
-			if (c === ':' && !inQuote) {
-				currentCol = currentTerm;
-				if (!terms[currentCol]) terms[currentCol] = [];
-				currentTerm = '';
-				continue;
-			}
-
-			currentTerm += c;
-		}
-
-		if (currentTerm) terms[currentCol].push(currentTerm);
+		const terms = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
 
 		// Filter terms:
 		// - Convert wildcards to regex
