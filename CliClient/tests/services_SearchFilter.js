@@ -404,9 +404,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by created with smart value: day', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'today', user_created_time: parseInt(time.goBackInTime(0, 'day')) });
-		const n2 = await Note.save({ title: 'I made this', body: 'yesterday', user_created_time: parseInt(time.goBackInTime(1, 'day')) });
-		const n3 = await Note.save({ title: 'I made this', body: 'day before yesterday', user_created_time: parseInt(time.goBackInTime(2, 'day')) });
+		const n1 = await Note.save({ title: 'I made this', body: 'today', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'day')) });
+		const n2 = await Note.save({ title: 'I made this', body: 'yesterday', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'day')) });
+		const n3 = await Note.save({ title: 'I made this', body: 'day before yesterday', user_created_time: parseInt(time.goBackInTime(Date.now(), 2, 'day')) });
 
 		await engine.syncTables();
 
@@ -428,9 +428,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by created with smart value: week', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'this week', user_created_time: parseInt(time.goBackInTime(0, 'week')) });
-		const n2 = await Note.save({ title: 'I made this', body: 'the week before', user_created_time: parseInt(time.goBackInTime(1, 'week')) });
-		const n3 = await Note.save({ title: 'I made this', body: 'before before week', user_created_time: parseInt(time.goBackInTime(2, 'week')) });
+		const n1 = await Note.save({ title: 'I made this', body: 'this week', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'week')) });
+		const n2 = await Note.save({ title: 'I made this', body: 'the week before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'week')) });
+		const n3 = await Note.save({ title: 'I made this', body: 'before before week', user_created_time: parseInt(time.goBackInTime(Date.now(), 2, 'week')) });
 
 		await engine.syncTables();
 
@@ -452,9 +452,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by created with smart value: month', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'this month', user_created_time: parseInt(time.goBackInTime(0, 'month')) });
-		const n2 = await Note.save({ title: 'I made this', body: 'the month before', user_created_time: parseInt(time.goBackInTime(1, 'month')) });
-		const n3 = await Note.save({ title: 'I made this', body: 'before before month', user_created_time: parseInt(time.goBackInTime(2, 'month')) });
+		const n1 = await Note.save({ title: 'I made this', body: 'this month', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'month')) });
+		const n2 = await Note.save({ title: 'I made this', body: 'the month before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'month')) });
+		const n3 = await Note.save({ title: 'I made this', body: 'before before month', user_created_time: parseInt(time.goBackInTime(Date.now(), 2, 'month')) });
 
 		await engine.syncTables();
 
@@ -476,9 +476,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by created with smart value: year', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'this year', user_created_time: parseInt(time.goBackInTime(0, 'year')) });
-		const n2 = await Note.save({ title: 'I made this', body: 'the year before', user_created_time: parseInt(time.goBackInTime(1, 'year')) });
-		const n3 = await Note.save({ title: 'I made this', body: 'before before year', user_created_time: parseInt(time.goBackInTime(2, 'year')) });
+		const n1 = await Note.save({ title: 'I made this', body: 'this year', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'year')) });
+		const n2 = await Note.save({ title: 'I made this', body: 'the year before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'year')) });
+		const n3 = await Note.save({ title: 'I made this', body: 'before before year', user_created_time: parseInt(time.goBackInTime(Date.now(), 2, 'year')) });
 
 		await engine.syncTables();
 
@@ -517,9 +517,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by updated with smart value: day', asyncTest(async () => {
 		let rows;
-		const today = parseInt(time.goBackInTime(0, 'day'));
-		const yesterday = parseInt(time.goBackInTime(1, 'day'));
-		const dayBeforeYesterday = parseInt(time.goBackInTime(2, 'day'));
+		const today = parseInt(time.goBackInTime(Date.now(), 0, 'day'));
+		const yesterday = parseInt(time.goBackInTime(Date.now(), 1, 'day'));
+		const dayBeforeYesterday = parseInt(time.goBackInTime(Date.now(), 2, 'day'));
 		const n1 = await Note.save({ title: 'I made this', body: 'today', updated_time: today, user_updated_time: today  }, { autoTimestamp: false });
 		const n11 = await Note.save({ title: 'I also made this', body: 'today', updated_time: today, user_updated_time: today  }, { autoTimestamp: false });
 

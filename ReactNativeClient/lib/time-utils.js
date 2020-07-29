@@ -113,14 +113,13 @@ class Time {
 	}
 
 
-	goBackInTime(n, timeDuration) {
-		// Note that we are starting from the first ms of the current timeDuration
-		// eg. If we go back by one day we are subtracting (24*60*60*1000) ms from the start ms of today
-		return moment().startOf(timeDuration).subtract(n, timeDuration).format('x');
+	goBackInTime(startDate, n, period) {
+		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
+		return moment(startDate).startOf(period).subtract(n, period).format('x');
 	}
 
-	goForwardInTime(n, timeDuration) {
-		return moment().startOf(timeDuration).add(n, timeDuration).format('x');
+	goForwardInTime(startDate, n, period) {
+		return moment(startDate).startOf(period).add(n, period).format('x');
 	}
 
 }

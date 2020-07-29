@@ -25,7 +25,12 @@ const notebookFilter = (terms: Term[], conditions: string[], params: string[], w
 	const notebooks = terms.filter(x => x.name === 'notebook' && !x.negated).map(x => x.value);
 	if (notebooks.length === 0) return;
 
-	const likes = new Array(notebooks.length).fill('folders.title LIKE ?').join(' OR ');
+	const likes = [];
+	for (let i = 0; i < notebooks.length; i++) {
+		likes.push('folders.title LIKE ?');
+	}
+	const relevantFolders =  likes.join(' OR ');
+
 	const withInNotebook = `
 	notebooks_in_scope(id)
 	AS (
@@ -35,7 +40,7 @@ const notebookFilter = (terms: Term[], conditions: string[], params: string[], w
 		IN (
 			SELECT id
 			FROM folders
-			WHERE ${likes}
+			WHERE ${relevantFolders}
 		)
 		UNION ALL
 		SELECT folders.id
@@ -75,10 +80,11 @@ const filterByTableName = (
 	const values = terms.map(x => x.value);
 
 	let withCondition = null;
-	// with_${requirement}_${tableName} is added to the names to make them unique
+
 	if (relation === Relation.OR && requirement === Requirement.EXCLUSION) {
+		// with_${requirement}_${tableName} is added to the names to make them unique
 		withs.push(`
-		all_notes_with_${requirement}_${tableName}
+		all_notes_with_${requirement}_${tableName}    
 		AS (
 			SELECT DISTINCT note_${tableName}.note_id AS id FROM note_${tableName}
 		)`);
@@ -90,16 +96,27 @@ const filterByTableName = (
 			EXCEPT ${noteIDs}
 		)`;
 
-		// We need notes without atleast one excluded tableName (tag/resource)
+		const requiredNotes = [];
+		for (let i = 0; i < values.length; i++) {
+			requiredNotes.push(notesWithoutExcludedField);
+		}
+		const requiredNotesQuery = requiredNotes.join(' UNION ');
+
+		// We need notes without atleast one excluded (tag/resource)
 		withCondition = `
 		notes_with_${requirement}_${tableName}
 		AS (
-			${new Array(values.length)
-		.fill(notesWithoutExcludedField)
-		.join(' UNION ')}
+			${requiredNotesQuery}
 		)`;
 
 	} else {
+		const requiredNotes = [];
+		for (let i = 0; i < values.length; i++) {
+			requiredNotes.push(noteIDs);
+		}
+		const requiredNotesQuery = requiredNotes.join(` ${operator} `);
+
+
 		// Notes with any/all values depending upon relation and requirement
 		withCondition = `
 		notes_with_${requirement}_${tableName}
@@ -108,7 +125,7 @@ const filterByTableName = (
 			FROM note_${tableName}
 			WHERE
 			${operator === 'INTERSECT' ? 1 : 0} ${operator}
-			${new Array(values.length).fill(noteIDs).join(` ${operator} `)}
+			${requiredNotesQuery}
 		)`;
 	}
 
@@ -190,6 +207,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 	const getCondition = (term: Term) => {
 		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
 	};
+
 	terms.forEach(term => {
 		conditions.push(`
 		${relation} ROWID IN (
@@ -264,8 +282,8 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		} else if (smartValue.test(date)) {
 			const match = smartValue.exec(date);
 			const timeUnit = match[1]; // eg. day, week, month, year
-			const num = Number(match[2]); // eg. 1, 12, 101
-			return time.goBackInTime(num, timeUnit);
+			const num = Number(match[2]); // eg. 1, 12, 15
+			return time.goBackInTime(Date.now(), num, timeUnit);
 		} else {
 			throw new Error('Invalid date format!');
 		}
