@@ -20,6 +20,7 @@ import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
+const { shim } = require('lib/shim.js');
 
 const { reg } = require('lib/registry.js');
 
@@ -105,53 +106,62 @@ function Editor(props: EditorProps, ref: any) {
 		'Insert': 'toggleOverwrite',
 		'Esc': 'singleSelection',
 	};
-	CodeMirror.keyMap.default = {
-		// Windows/linux
-		'Ctrl-A': 'selectAll',
-		'Ctrl-D': 'deleteLine',
-		'Ctrl-Z': 'undo',
-		'Shift-Ctrl-Z': 'redo',
-		'Ctrl-Y': 'redo',
-		'Ctrl-Home': 'goDocStart',
-		'Ctrl-End': 'goDocEnd',
-		'Ctrl-Up': 'goLineUp',
-		'Ctrl-Down': 'goLineDown',
-		'Ctrl-Left': 'goGroupLeft',
-		'Ctrl-Right': 'goGroupRight',
-		'Alt-Left': 'goLineStart',
-		'Alt-Right': 'goLineEnd',
-		'Ctrl-Backspace': 'delGroupBefore',
-		'Ctrl-Delete': 'delGroupAfter',
-		'Ctrl-[': 'indentLess',
-		'Ctrl-]': 'indentMore',
-		'Ctrl-/': 'toggleComment',
-		'Ctrl-Alt-S': 'sortSelectedLines',
-		'Alt-Up': 'swapLineUp',
-		'Alt-Down': 'swapLineDown',
 
-		// MacOS
-		'Cmd-A': 'selectAll',
-		'Cmd-D': 'deleteLine',
-		'Cmd-Z': 'undo',
-		'Shift-Cmd-Z': 'redo',
-		'Cmd-Y': 'redo',
-		'Cmd-Home': 'goDocStart',
-		'Cmd-Up': 'goDocStart',
-		'Cmd-End': 'goDocEnd',
-		'Cmd-Down': 'goDocEnd',
-		'Cmd-Left': 'goLineLeft',
-		'Cmd-Right': 'goLineRight',
-		'Alt-Backspace': 'delGroupBefore',
-		'Alt-Delete': 'delGroupAfter',
-		'Cmd-[': 'indentLess',
-		'Cmd-]': 'indentMore',
-		'Cmd-/': 'toggleComment',
-		'Cmd-Opt-S': 'sortSelectedLines',
-		'Opt-Up': 'swapLineUp',
-		'Opt-Down': 'swapLineDown',
+	if (shim.isMac()) {
+		CodeMirror.keymap.default = {
+			// MacOS
+			'Cmd-A': 'selectAll',
+			'Cmd-D': 'deleteLine',
+			'Cmd-Z': 'undo',
+			'Shift-Cmd-Z': 'redo',
+			'Cmd-Y': 'redo',
+			'Cmd-Home': 'goDocStart',
+			'Cmd-Up': 'goDocStart',
+			'Cmd-End': 'goDocEnd',
+			'Cmd-Down': 'goDocEnd',
+			'Cmd-Left': 'goLineLeft',
+			'Cmd-Right': 'goLineRight',
+			'Alt-Left': 'goGroupLeft',
+			'Alt-Right': 'goGroupRight',
+			'Alt-Backspace': 'delGroupBefore',
+			'Alt-Delete': 'delGroupAfter',
+			'Cmd-[': 'indentLess',
+			'Cmd-]': 'indentMore',
+			'Cmd-/': 'toggleComment',
+			'Cmd-Opt-S': 'sortSelectedLines',
+			'Opt-Up': 'swapLineUp',
+			'Opt-Down': 'swapLineDown',
 
-		'fallthrough': 'basic',
-	};
+			'fallthrough': 'basic',
+		};
+	} else {
+		CodeMirror.keyMap.default = {
+			// Windows/linux
+			'Ctrl-A': 'selectAll',
+			'Ctrl-D': 'deleteLine',
+			'Ctrl-Z': 'undo',
+			'Shift-Ctrl-Z': 'redo',
+			'Ctrl-Y': 'redo',
+			'Ctrl-Home': 'goDocStart',
+			'Ctrl-End': 'goDocEnd',
+			'Ctrl-Up': 'goLineUp',
+			'Ctrl-Down': 'goLineDown',
+			'Ctrl-Left': 'goGroupLeft',
+			'Ctrl-Right': 'goGroupRight',
+			'Alt-Left': 'goLineStart',
+			'Alt-Right': 'goLineEnd',
+			'Ctrl-Backspace': 'delGroupBefore',
+			'Ctrl-Delete': 'delGroupAfter',
+			'Ctrl-[': 'indentLess',
+			'Ctrl-]': 'indentMore',
+			'Ctrl-/': 'toggleComment',
+			'Ctrl-Alt-S': 'sortSelectedLines',
+			'Alt-Up': 'swapLineUp',
+			'Alt-Down': 'swapLineDown',
+
+			'fallthrough': 'basic',
+		};
+	}
 
 	useImperativeHandle(ref, () => {
 		return editor;
