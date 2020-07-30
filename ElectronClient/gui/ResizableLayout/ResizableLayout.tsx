@@ -37,6 +37,27 @@ interface Props {
 	onResizeStop(event:OnResizeStopEvent):void;
 }
 
+export function findItemByKey(layout:LayoutContainer, key:string):LayoutContainer | LayoutComponent {
+	function recurseFind(item:LayoutContainer | LayoutComponent):LayoutContainer | LayoutComponent {
+		if (item.key === key) {
+			return item;
+		} else {
+			if ('children' in item) {
+				const container = item as LayoutContainer;
+				for (const child of container.children) {
+					const found = recurseFind(child);
+					if (found) return found;
+				}
+			}
+		}
+		return null;
+	}
+
+	const output = recurseFind(layout);
+	if (!output) throw new Error(`Invalid item key: ${key}`);
+	return output;
+}
+
 function updateLayoutItem(layout:LayoutContainer, key:string, props:any) {
 	// console.info('Update', key, props);
 

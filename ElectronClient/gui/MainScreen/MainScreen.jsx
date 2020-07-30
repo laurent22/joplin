@@ -21,6 +21,7 @@ const CommandService = require('lib/services/CommandService').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
 const ResizableLayout = require('../ResizableLayout/ResizableLayout').default;
+const { findItemByKey } = require('../ResizableLayout/ResizableLayout');
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -67,7 +68,7 @@ class MainScreenComponent extends React.Component {
 						key: 'column1',
 						direction: 'column',
 						resizable: true,
-						width: 100,
+						width: Setting.value('style.sidebar.width'),
 						children: [
 							{
 								key: 'sideBar',
@@ -78,7 +79,7 @@ class MainScreenComponent extends React.Component {
 						key: 'column2',
 						direction: 'column',
 						resizable: true,
-						width: 100,
+						width: Setting.value('style.noteList.width'),
 						children: [
 							{
 								key: 'noteList',
@@ -434,6 +435,11 @@ class MainScreenComponent extends React.Component {
 
 	resizableLayout_resizeStop(event) {
 		this.setState({ layout: event.layout });
+
+		const col1 = findItemByKey(event.layout, 'column1');
+		const col2 = findItemByKey(event.layout, 'column2');
+		Setting.setValue('style.sidebar.width', col1.width);
+		Setting.setValue('style.noteList.width', col2.width);
 	}
 
 	resizableLayout_renderItem(key, event) {
