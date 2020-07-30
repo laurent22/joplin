@@ -148,5 +148,8 @@ describe('filterParser should be correct filter for keyword', () => {
 		searchString = '-notebook:n1';
 		expect(() => filterParser(searchString)).toThrow(new Error('notebook can\'t be negated'));
 
+		searchString = '-iscompleted:1';
+		expect(() => filterParser(searchString)).toThrow(new Error('iscompleted can\'t be negated'));
+
 	});
 });

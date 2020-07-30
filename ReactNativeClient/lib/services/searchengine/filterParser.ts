@@ -87,7 +87,7 @@ const parseQuery = (query: string): Term[] => {
 			} else if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world
-				const values = trimQuotes(value).split(' ');
+				const values = trimQuotes(value).split(/[\s-_]+/);
 				values.forEach(value => {
 					result.push({ name, value, negated });
 				});
@@ -122,9 +122,8 @@ export default function filterParser(searchString: string) {
 		.find(x => (x.value !== 'note' && x.value !== 'todo'));
 	if (incorrect) throw new Error('The value of filter "type" must be "note" or "todo"');
 
-
 	incorrect = result.filter(term => term.name === 'iscompleted')
-		.find(x => (x.value !== '1' && x.value !== '0') || (x.negated));
+		.find(x => (x.value !== '1' && x.value !== '0'));
 	if (incorrect) throw new Error('The value of filter "iscompleted" must be "1" or "0"');
 
 	return result;

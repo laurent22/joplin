@@ -703,6 +703,12 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 		expect(ids(rows)).toContain(n3.id);
 
+		rows = await engine.search('title:does-not-work');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
 		rows = await engine.search('doesnotwork');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n0.id);
