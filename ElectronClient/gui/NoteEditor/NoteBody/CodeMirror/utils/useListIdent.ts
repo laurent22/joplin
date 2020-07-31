@@ -71,8 +71,14 @@ export default function useListIdent(CodeMirror: any) {
 				const line = cm.getLine(anchor.line);
 
 				// This is an actual selection and we should indent
-				if (isSelection(anchor, head) || !isListItem(line)) {
+				if (isSelection(anchor, head)) {
 					cm.execCommand('defaultTab');
+					// This will apply to all selections so it makes sense to stop processing here
+					// this is an edge case for users because there is no clear intended behavior
+					// if the use multicursor with a mix of selected and not selected
+					break;
+				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+					cm.replaceRange('\t', anchor, head);
 				} else {
 					if (olLineNumber(line)) {
 						const tokens = cm.getLineTokens(anchor.line);
@@ -99,8 +105,14 @@ export default function useListIdent(CodeMirror: any) {
 				const line = cm.getLine(anchor.line);
 
 				// This is an actual selection and we should unindent
-				if (isSelection(anchor, head) || !isListItem(line)) {
+				if (isSelection(anchor, head)) {
 					cm.execCommand('indentLess');
+					// This will apply to all selections so it makes sense to stop processing here
+					// this is an edge case for users because there is no clear intended behavior
+					// if the use multicursor with a mix of selected and not selected
+					break;
+				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+					cm.indentLine(anchor.line, 'subtract');
 				} else {
 					const newToken = newListToken(cm, anchor.line);
 					const tokens = cm.getLineTokens(anchor.line);
