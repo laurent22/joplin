@@ -284,67 +284,6 @@ class Api {
 			}
 		}
 
-		const checkAndRemoveFullTitleField = function(request) {
-			const fields = this.fields_(request, []);
-			let hasFullTitleField = false;
-			for (let i = 0; i < fields.length; i++) {
-				if (fields[i] === 'full_title') {
-					hasFullTitleField = true;
-					// Remove field from field list
-					fields.splice(i, 1);
-					break;
-				}
-			}
-
-			// Remove the full_title field from the query
-			if (hasFullTitleField) {
-				if (fields.length > 0) {
-					request.query.fields = fields.join(',');
-				} else if (request.query && request.query.fields) {
-					delete request.query.fields;
-				}
-			}
-
-			return hasFullTitleField;
-		}.bind(this);
-
-		// Handle full_title for GET requests
-		const hasFullTitleField = checkAndRemoveFullTitleField(request);
-
-		if (hasFullTitleField && request.method === 'GET' && !id) {
-			let tags = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
-			tags = tags.map(tag => Object.assign({}, tag, { full_title: Tag.getCachedFullTitle(tag.id) }));
-			return tags;
-		}
-
-		if (hasFullTitleField && request.method === 'GET' && id) {
-			let tag = await this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
-			tag = Object.assign({}, tag, { full_title: Tag.getCachedFullTitle(tag.id) });
-			return tag;
-		}
-
-		// Handle full_title for POST and PUT requests
-		if (request.method === 'PUT' || request.method === 'POST') {
-			const props = this.readonlyProperties(request.method);
-			if (props.includes('full_title')) {
-				if (request.method === 'PUT' && id) {
-					const model = await Tag.load(id);
-					if (!model) throw new ErrorNotFound();
-					let newModel = Object.assign({}, model, request.bodyJson(props));
-					newModel = await Tag.renameNested(newModel, newModel['full_title']);
-					return newModel;
-				}
-
-				if (request.method === 'POST') {
-					const idIdx = props.indexOf('id');
-					if (idIdx >= 0) props.splice(idIdx, 1);
-					const model = request.bodyJson(props);
-					const result = await Tag.saveNested(model, model['full_title'], this.defaultSaveOptions_(model, 'POST'));
-					return result;
-				}
-			}
-		}
-
 		return this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
 	}
 

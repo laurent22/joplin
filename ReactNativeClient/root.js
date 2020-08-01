@@ -539,11 +539,6 @@ async function initialize(dispatch) {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		dispatch({
-			type: 'TAG_SET_COLLAPSED_ALL',
-			ids: Setting.value('collapsedTagIds'),
-		});
-
 		if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
@@ -580,7 +575,9 @@ async function initialize(dispatch) {
 
 	await MigrationService.instance().run();
 
-	reg.scheduleSync().then(() => {
+	// When the app starts we want the full sync to
+	// start almost immediately to get the latest data.
+	reg.scheduleSync(1000).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		AlarmService.updateAllNotifications();

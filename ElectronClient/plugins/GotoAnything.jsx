@@ -199,9 +199,8 @@ class Dialog extends React.PureComponent {
 
 			if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = this.state.query.split(' ')[0].substr(1).trim();
-				results = await Tag.search({ fullTitleRegex: `.*${searchQuery}.*` });
-				results = results.map(tag => Object.assign({}, tag, { title: Tag.getCachedFullTitle(tag.id) }));
+				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
+				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
@@ -228,7 +227,7 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language'] });
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
@@ -270,6 +269,10 @@ class Dialog extends React.PureComponent {
 							results[i] = Object.assign({}, row, { path: path, fragments: '' });
 						}
 					}
+
+					if (!this.props.showCompletedTodos) {
+						results = results.filter((row) => !row.is_todo || !row.todo_completed);
+					}
 				}
 			}
 
@@ -300,18 +303,6 @@ class Dialog extends React.PureComponent {
 				this.props.dispatch({
 					type: 'FOLDER_SET_COLLAPSED',
 					id: folder.id,
-					collapsed: false,
-				});
-			}
-		}
-
-		if (this.state.listType === BaseModel.TYPE_TAG) {
-			const tagPath = await Tag.tagPath(this.props.tags, item.parent_id);
-
-			for (const tag of tagPath) {
-				this.props.dispatch({
-					type: 'TAG_SET_COLLAPSED',
-					id: tag.id,
 					collapsed: false,
 				});
 			}
@@ -461,8 +452,8 @@ class Dialog extends React.PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
-		tags: state.tags,
 		theme: state.settings.theme,
+		showCompletedTodos: state.settings.showCompletedTodos,
 	};
 };
 
