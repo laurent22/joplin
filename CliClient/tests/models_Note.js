@@ -223,6 +223,7 @@ describe('models_Note', function() {
 		const resourceDir = Setting.value('resourceDir');
 		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
 		const r2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const note1 = await Note.save({ title: 'note1' });
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
 
@@ -262,11 +263,14 @@ describe('models_Note', function() {
 		for (const testCase of testCases) {
 			const [useAbsolutePaths, input, expected] = testCase;
 			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
-			expect(expected).toBe(internalToExternal);
+			expect(internalToExternal).toBe(expected, 'replaceResourceInternalToExternalLinks failed');
 
 			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });
-			expect(externalToInternal).toBe(input);
+			expect(externalToInternal).toBe(input, 'replaceResourceExternalToInternalLinks failed');
 		}
+
+		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
+		expect(result).toBe(`[](:/${note1.id})`, 'replaceResourceExternalToInternalLinks failed (note link)');
 	}));
 
 });

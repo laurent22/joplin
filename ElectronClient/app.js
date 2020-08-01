@@ -20,8 +20,9 @@ const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
+const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const ResourceEditWatcher = require('lib/services/ResourceEditWatcher').default;
+const ResourceEditWatcher = require('lib/services/ResourceEditWatcher/index').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -1256,6 +1257,7 @@ class Application extends BaseApplication {
 		clipperLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-clipper.txt` });
 		clipperLogger.addTarget('console');
 
+		ClipperServer.instance().initialize(actionApi);
 		ClipperServer.instance().setLogger(clipperLogger);
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
@@ -1266,7 +1268,7 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), this.store().dispatch);
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action) => { this.store().dispatch(action); });
 
 		RevisionService.instance().runInBackground();
 

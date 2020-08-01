@@ -1,5 +1,18 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.165](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165) - 2020-07-10T18:51:42Z
+
+- New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by [@ffadilaputra](https://github.com/ffadilaputra))
+- Improved: Allow importing ENEX files as HTML
+- Improved: Disable support for HTML export for now as it does not work
+- Improved: Upload attachments > 4 MB when using OneDrive (#3195) (#173 by [@TheOnlyTrueJonathanHeard](https://github.com/TheOnlyTrueJonathanHeard))
+- Fixed: Fixed import of checkboxes in ENEX files (#3402)
+- Fixed: Fixed various bugs related to the import of ENEX files as HTML
+- Fixed: Only de-duplicate imported notebook titles when needed (#2331)
+- Fixed: Prevent desktop.ini file from breaking sync lock (#3381)
+- Fixed: Prevent notebook to be the parent of itself (#3334)
+- Fixed: Sync would fail in some cases due to a database error (#3234)
+
 ## [cli-v1.0.164](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164) - 2020-05-13T15:30:22Z
 
 - New: Added support for basic search

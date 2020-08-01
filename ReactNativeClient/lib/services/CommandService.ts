@@ -181,20 +181,21 @@ export default class CommandService extends BaseService {
 		this.commands_[declaration.name] = {
 			declaration: declaration,
 		};
+
+		delete this.commandPreviousStates_[declaration.name];
 	}
 
 	registerRuntime(commandName:string, runtime:CommandRuntime) {
-		// console.info('CommandService::registerRuntime:', commandName);
-
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
 		const command = this.commandByName(commandName);
-		// if (command.runtime) throw new Error(`Runtime is already registered for command: ${commandName}`);
 
 		runtime = Object.assign({}, runtime);
 		if (!runtime.isEnabled) runtime.isEnabled = () => true;
 		if (!runtime.title) runtime.title = () => null;
 		command.runtime = runtime;
+
+		delete this.commandPreviousStates_[commandName];
 	}
 
 	componentRegisterCommands(component:any, commands:any[]) {
@@ -210,11 +211,11 @@ export default class CommandService extends BaseService {
 	}
 
 	unregisterRuntime(commandName:string) {
-		// console.info('CommandService::unregisterRuntime:', commandName);
-
 		const command = this.commandByName(commandName, { mustExist: false });
 		if (!command || !command.runtime) return;
 		delete command.runtime;
+
+		delete this.commandPreviousStates_[commandName];
 	}
 
 	execute(commandName:string, args:any = null) {

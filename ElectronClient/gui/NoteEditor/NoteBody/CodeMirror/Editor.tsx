@@ -8,25 +8,62 @@ import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/scrollpastend';
+import 'codemirror/addon/scroll/annotatescrollbar';
+import 'codemirror/addon/search/matchesonscrollbar';
+import 'codemirror/addon/search/searchcursor';
 
 import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
+import useEditorSearch from './utils/useEditorSearch';
+import useJoplinMode from './utils/useJoplinMode';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
-import 'codemirror/mode/gfm/gfm';
-import 'codemirror/mode/xml/xml';
-// Modes for syntax highlighting inside of code blocks
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/diff/diff';
-import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/meta';
+
+const { reg } = require('lib/registry.js');
+
+// Based on http://pypl.github.io/PYPL.html
+// +XML (HTML) +CSS and Markdown added
+const topLanguages = [
+	'python',
+	'clike',
+	'javascript',
+	'jsx',
+	'php',
+	'r',
+	'swift',
+	'go',
+	'vb',
+	'vbscript',
+	'ruby',
+	'rust',
+	'dart',
+	'lua',
+	'groovy',
+	'perl',
+	'cobol',
+	'julia',
+	'haskell',
+	'pascal',
+	'css',
+	'xml',
+	'markdown',
+];
+// Load Top Modes
+for (let i = 0; i < topLanguages.length; i++) {
+	const mode = topLanguages[i];
+
+	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
+		require(`codemirror/mode/${mode}/${mode}`);
+	} else {
+		reg.logger().error('Cannot find CodeMirror mode: ', mode);
+	}
+}
 
 const eventManager = require('lib/eventManager');
 
@@ -54,6 +91,8 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
+	useEditorSearch(CodeMirror);
+	useJoplinMode(CodeMirror);
 
 	CodeMirror.keyMap.basic = {
 		'Left': 'goCharLeft',
@@ -164,7 +203,6 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, []);
 
-	// const divRef = useCallback(node => {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
@@ -219,25 +257,38 @@ function Editor(props: EditorProps, ref: any) {
 				editor.clearHistory();
 			}
 			editor.setOption('screenReaderLabel', props.value);
-			editor.setOption('theme', props.theme);
-			editor.setOption('mode', props.mode);
-			editor.setOption('readOnly', props.readOnly);
-			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
-			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
-	}, [props.value, props.theme, props.mode, props.readOnly, props.autoMatchBraces, props.keyMap]);
+	}, [props.value]);
 
 	useEffect(() => {
 		if (editor) {
-			// Need to let codemirror know that it's container's size has changed so that it can
-			// re-compute anything it needs to. This ensures the cursor (and anything that is
-			// based on window size will be correct
-			// Manually calling refresh here will cause a double refresh in some instances (when the
-			// windows size is changed for example) but this is a fairly quick operation so it's worth
-			// it.
-			editor.refresh();
+			editor.setOption('theme', props.theme);
 		}
-	}, [props.style.width, props.style.height]);
+	}, [props.theme]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('mode', props.mode);
+		}
+	}, [props.mode]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('readOnly', props.readOnly);
+		}
+	}, [props.readOnly]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
+		}
+	}, [props.autoMatchBraces]);
+
+	useEffect(() => {
+		if (editor) {
+			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
+		}
+	}, [props.keyMap]);
 
 	return <div style={props.style} ref={editorParent} />;
 }

@@ -13,10 +13,7 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
-const { stripMarkdown } = require('lib/markdownUtils');
-const striptags = require('striptags');
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlEntitiesDecode = new Entities().decode;
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 class GotoAnything {
 
@@ -158,12 +155,12 @@ class Dialog extends React.PureComponent {
 	}
 
 	scheduleListUpdate() {
-		if (this.listUpdateIID_) return;
+		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
 
 		this.listUpdateIID_ = setTimeout(async () => {
 			await this.updateList();
 			this.listUpdateIID_ = null;
-		}, 10);
+		}, 100);
 	}
 
 	makeSearchQuery(query) {
@@ -182,6 +179,12 @@ class Dialog extends React.PureComponent {
 	keywords(searchQuery) {
 		const parsedQuery = SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+	}
+
+	markupToHtml() {
+		if (this.markupToHtml_) return this.markupToHtml_;
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+		return this.markupToHtml_;
 	}
 
 	async updateList() {
@@ -215,7 +218,7 @@ class Dialog extends React.PureComponent {
 
 				resultsInBody = !!results.find(row => row.fields.includes('body'));
 
-				if (!resultsInBody) {
+				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
@@ -224,8 +227,8 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body'] });
-					const notesById = notes.reduce((obj, { id, body }) => ((obj[[id]] = body), obj), {});
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -236,7 +239,8 @@ class Dialog extends React.PureComponent {
 
 							if (i < limit) { // Display note fragments of search keyword matches
 								const indices = [];
-								const body = stripMarkdown(htmlEntitiesDecode(striptags(notesById[row.id])));
+								const note = notesById[row.id];
+								const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -257,12 +261,17 @@ class Dialog extends React.PureComponent {
 								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+
 							}
 
 							results[i] = Object.assign({}, row, { path, fragments });
 						} else {
 							results[i] = Object.assign({}, row, { path: path, fragments: '' });
 						}
+					}
+
+					if (!this.props.showCompletedTodos) {
+						results = results.filter((row) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
@@ -444,6 +453,7 @@ const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
 		theme: state.settings.theme,
+		showCompletedTodos: state.settings.showCompletedTodos,
 	};
 };
 

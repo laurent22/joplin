@@ -17,7 +17,7 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
-import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher';
+import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher/index';
 import CommandService from '../../lib/services/CommandService';
 
 const { themeStyle } = require('lib/theme');
@@ -156,17 +156,6 @@ function NoteEditor(props: NoteEditorProps) {
 			});
 		}
 	}, [props.isProvisional, formNote.id]);
-
-	useEffect(() => {
-		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
-		// yet saved, we need to save it now before the component is unmounted. However, we can't put
-		// formNote in the dependency array or that effect will run every time the note changes. We only
-		// want to run it once on unmount. So because of that we need to use that formNoteRef.
-		return () => {
-			isMountedRef.current = false;
-			saveNoteIfWillChange(formNoteRef.current);
-		};
-	}, []);
 
 	const previousNoteId = usePrevious(formNote.id);
 
@@ -399,6 +388,7 @@ function NoteEditor(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,// renderNoteToolbar(),
 		onScroll: onScroll,
+		setLocalSearchResultCount: setLocalSearchResultCount,
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
@@ -482,6 +472,17 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	function renderResourceWatchingNotification() {
+		if (!Object.keys(props.watchedResources).length) return null;
+		const resourceTitles = Object.keys(props.watchedResources).map(id => props.watchedResources[id].title);
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>{_('The following attachments are being watched for changes:')} <strong>{resourceTitles.join(', ')}</strong></p>
+				<p style={{ ...styles.resourceWatchBannerLine, marginBottom: 0 }}>{_('The attachments will no longer be watched when you switch to a different note.')}</p>
+			</div>
+		);
+	}
+
 	if (formNote.encryption_applied || !formNote.id || !props.noteId) {
 		return renderNoNotes(styles.root);
 	}
@@ -489,6 +490,7 @@ function NoteEditor(props: NoteEditorProps) {
 	return (
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				{renderResourceWatchingNotification()}
 				{renderTitleBar()}
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderNoteToolbar()}{renderTagBar()}
@@ -530,6 +532,7 @@ const mapStateToProps = (state: any) => {
 		selectedSearchId: state.selectedSearchId,
 		customCss: state.customCss,
 		noteVisiblePanes: state.noteVisiblePanes,
+		watchedResources: state.watchedResources,
 	};
 };
 

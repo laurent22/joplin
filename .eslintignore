@@ -66,6 +66,8 @@ CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
 CliClient/tests/support/plugins/withExternalModules/src/index.js
 ElectronClient/commands/copyDevCommand.js
+CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
@@ -112,6 +114,8 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
+ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useLineSorting.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
@@ -173,6 +177,8 @@ ReactNativeClient/lib/services/plugin_service/utils/types.js
 ReactNativeClient/lib/services/plugin_service/ViewController.js
 ReactNativeClient/lib/services/plugin_service/WebviewController.js
 ReactNativeClient/lib/services/ResourceEditWatcher.js
+ReactNativeClient/lib/services/ResourceEditWatcher/index.js
+ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/SettingUtils.js

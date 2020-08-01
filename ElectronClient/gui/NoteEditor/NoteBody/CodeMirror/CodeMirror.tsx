@@ -25,6 +25,7 @@ const markdownUtils = require('lib/markdownUtils');
 const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
+const { themeStyle } = require('lib/theme');
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };
@@ -47,6 +48,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	props_onChangeRef.current = props.onChange;
 	const contentKeyHasChangedRef = useRef(false);
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
+	const theme = themeStyle(props.theme);
 
 	const rootSize = useRootSize({ rootRef });
 
@@ -274,6 +276,65 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
+	useEffect(() => {
+		const element = document.createElement('style');
+		element.setAttribute('id', 'codemirrorStyle');
+		document.head.appendChild(element);
+		element.appendChild(document.createTextNode(`
+			/* These must be important to prevent the codemirror defaults from taking over*/
+			.CodeMirror {
+				font-family: monospace;
+				height: 100% !important;
+				width: 100% !important;
+				color: inherit !important;
+				background-color: inherit !important;
+				position: absolute !important;
+				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+			}
+			
+			.cm-header-1 {
+				font-size: 1.5em;
+			}
+			
+			.cm-header-2 {
+				font-size: 1.3em;
+			}
+			
+			.cm-header-3 {
+				font-size: 1.1em;
+			}
+			
+			.cm-header-4, .cm-header-5, .cm-header-6 {
+				font-size: 1em;
+			}
+			
+			.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
+				line-height: 1.5em;
+			}
+			
+			.cm-search-marker {
+				background: ${theme.searchMarkerBackgroundColor};
+				color: ${theme.searchMarkerColor} !important;
+			}
+			
+			.cm-search-marker-selected {
+				background: ${theme.selectedColor2};
+				color: ${theme.color2} !important;
+			}
+			
+			.cm-search-marker-scrollbar {
+				background: ${theme.searchMarkerBackgroundColor};
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				opacity: .5;
+			}
+		`));
+
+		return () => {
+			document.head.removeChild(element);
+		};
+	}, [props.theme]);
+
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
 	}, []);
@@ -331,9 +392,41 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+			// Force both viewers to be visible during search
+			// This view should only change when the search terms change, this means the user
+			// is always presented with the currently highlighted text, but can revert
+			// to the viewer if they only want to scroll through matches
+			if (!props.visiblePanes.includes('editor') && props.searchMarkers !== previousSearchMarkers) {
+				props.dispatch({
+					type: 'NOTE_VISIBLE_PANES_SET',
+					panes: ['editor', 'viewer'],
+				});
+			}
+			// SEARCHHACK
+			// TODO: remove this options hack when aceeditor is removed
+			// Currently the webviewRef will send out an ipcMessage to set the results count
+			// Also setting it here will start an infinite loop of repeating the search
+			// Unfortunately we can't remove the function in the webview setMarkers
+			// until the aceeditor is remove.
+			// The below search is more accurate than the webview based one as it searches
+			// the text and not rendered html (rendered html fails if there is a match
+			// in a katex block)
+			// Once AceEditor is removed the options definition below can be removed and
+			// props.searchMarkers.options can be directly passed to as the 3rd argument below
+			// (replacing options)
+			let options = { notFromAce: true };
+			if (props.searchMarkers.options) {
+				options = Object.assign({}, props.searchMarkers.options, options);
+			}
+			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, options);
+			//  SEARCHHACK
+			if (editorRef.current) {
+
+				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
+				props.setLocalSearchResultCount(matches);
+			}
 		}
-	}, [props.searchMarkers, renderedBody]);
+	}, [props.searchMarkers, props.setLocalSearchResultCount, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
@@ -358,17 +451,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
-	// The editor needs to be kept up to date on the actual space that it's filling
-	// Ogherwise we can get some rendering errors when the editor size is changed
-	// (this can happen when switching layout of when toggling sidebars for example)
-	const editorStyle = useMemo(() => {
-		const output = Object.assign({}, rootSize, styles.editor);
+	useEffect(() => {
+		if (!editorRef.current) return;
 
-		if (props.visiblePanes.includes('editor') && props.visiblePanes.includes('viewer')) {
-			output.width = Math.floor(rootSize.width / 2);
-		}
-
-		return output;
+		// Need to let codemirror know that it's container's size has changed so that it can
+		// re-compute anything it needs to. This ensures the cursor (and anything that is
+		// based on window size will be correct
+		// Codemirror will automatically refresh on window size changes but otherwise assumes
+		// that it's container size is stable, that is not true with Joplin, hence
+		// why we need to manually let codemirror know about resizes.
+		// Manually calling refresh here will cause a double refresh in some instances (when the
+		// window size is changed for example) but this is a fairly quick operation so it's worth
+		// it.
+		editorRef.current.refresh();
 	}, [rootSize, styles.editor, props.visiblePanes]);
 
 	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
@@ -380,9 +475,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Editor
 					value={props.content}
 					ref={editorRef}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'gfm'}
+					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					theme={styles.editor.codeMirrorTheme}
-					style={editorStyle}
+					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}

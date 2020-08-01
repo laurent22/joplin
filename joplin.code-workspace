@@ -368,7 +368,11 @@
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js": true,
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js": true,
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js": true,
-			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspaces.js": true
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspaces.js": true,
+			"CliClient/tests/support/amazon-s3-auth.json": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js": true,
+			"ReactNativeClient/lib/services/ResourceEditWatcher/index.js": true,
+			"ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js": true
 		},
 		"spellright.language": [
 			"en"
