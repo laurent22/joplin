@@ -88,7 +88,7 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "js-sha512": "^0.8.0",
-    "patch-package": "^6.2.0"
+    "patch-package": "^6.2.2"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -133,7 +133,7 @@
     "katex": "^0.11.1",
     "keytar": "^5.4.0",
     "levenshtein": "^1.0.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mark.js": "^8.11.1",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",

@@ -33,6 +33,7 @@ const CommandService = require('lib/services/CommandService').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 const PluginService = require('lib/services/plugin_service/PluginService.js').default;
+const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
 
 const commands = [
 	require('./gui/Header/commands/focusSearch'),
@@ -281,6 +282,10 @@ class Application extends BaseApplication {
 			error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 			throw error;
 		}
+
+		newState = resourceEditWatcherReducer(newState, action);
+
+		CommandService.instance().scheduleMapStateToProps(newState);
 
 		return super.reducer(newState, action);
 	}
