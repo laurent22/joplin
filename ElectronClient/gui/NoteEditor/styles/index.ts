@@ -1,9 +1,9 @@
 import { NoteEditorProps } from '../utils/types';
 
-const { buildStyle } = require('../../../theme.js');
+const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteEditorProps) {
-	return buildStyle('NoteEditor', props.theme, (theme: any) => {
+	return buildStyle(['NoteEditor', props.style.width, props.style.height], props.theme, (theme: any) => {
 		return {
 			root: {
 				...props.style,
@@ -52,6 +52,18 @@ export default function styles(props: NoteEditorProps) {
 				color: theme.colorFaded,
 				paddingLeft: 10,
 				paddingRight: 10,
+			},
+			resourceWatchBanner: {
+				...theme.textStyle,
+				padding: 10,
+				marginLeft: 5,
+				marginBottom: 10,
+				color: theme.colorWarn,
+				backgroundColor: theme.warningBackgroundColor,
+			},
+			resourceWatchBannerLine: {
+				marginTop: 0,
+				marginBottom: 10,
 			},
 		};
 	});

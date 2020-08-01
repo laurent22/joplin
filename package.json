@@ -5,7 +5,7 @@
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "watch": "gulp watch",
+    "watch": "node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
@@ -13,12 +13,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "npm run linter",
-      "git add"
-    ]
   },
   "repository": {
     "type": "git",
@@ -32,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "eslint": "^6.1.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.4.0",
     "fs-extra": "^8.1.0",
@@ -43,7 +38,8 @@
   },
   "dependencies": {
     "follow-redirects": "^1.11.0",
-    "joplin-turndown": "^4.0.27",
+    "immer": "^7.0.5",
+    "joplin-turndown": "^4.0.29",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "relative": "^3.0.2"
   }

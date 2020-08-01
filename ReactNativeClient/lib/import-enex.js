@@ -38,13 +38,28 @@ function extractRecognitionObjId(recognitionXml) {
 	return r && r.length >= 2 ? r[1] : null;
 }
 
-async function decodeBase64File(sourceFile, destFile) {
+async function decodeBase64File(sourceFilePath, destFilePath) {
 	return new Promise(function(resolve, reject) {
-		const sourceStream = fs.createReadStream(sourceFile);
-		const destStream = fs.createWriteStream(destFile);
+		// Note: we manually handle closing the file so that we can
+		// force flusing it before close. This is needed because
+		// "end" might be called before the file has been flushed
+		// to disk, thus resulting in the calling code to find a
+		// file with size 0.
+
+		const destFile = fs.openSync(destFilePath, 'w');
+		const sourceStream = fs.createReadStream(sourceFilePath);
+		const destStream = fs.createWriteStream(destFile, {
+			fd: destFile,
+			autoClose: false,
+		});
 		sourceStream.pipe(new Base64Decode()).pipe(destStream);
 
-		sourceStream.on('end', () => resolve());
+		sourceStream.on('end', () => {
+			fs.fdatasyncSync(destFile);
+			fs.closeSync(destFile);
+			resolve();
+		});
+
 		sourceStream.on('error', (error) => reject(error));
 	});
 }
@@ -135,17 +150,10 @@ async function processNoteResource(resource) {
 	return resource;
 }
 
-async function saveNoteResources(note, importOptions) {
+async function saveNoteResources(note) {
 	let resourcesCreated = 0;
 	for (let i = 0; i < note.resources.length; i++) {
-		let resource = note.resources[i];
-
-		try {
-			resource = await processNoteResource(resource);
-		} catch (error) {
-			importOptions.onError(error);
-			continue;
-		}
+		const resource = note.resources[i];
 
 		const toSave = Object.assign({}, resource);
 		delete toSave.dataFilePath;
@@ -283,6 +291,20 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				while (notes.length) {
 					const note = notes.shift();
+
+					for (let i = 0; i < note.resources.length; i++) {
+						let resource = note.resources[i];
+
+						try {
+							resource = await processNoteResource(resource);
+						} catch (error) {
+							importOptions.onError(error);
+							continue;
+						}
+
+						note.resources[i] = resource;
+					}
+
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources);

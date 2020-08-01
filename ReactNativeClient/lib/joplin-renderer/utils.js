@@ -123,7 +123,7 @@ utils.resourceStatus = function(ResourceModel, resourceInfo) {
 };
 
 utils.imageReplacement = function(ResourceModel, src, resources, resourceBaseUrl) {
-	if (!ResourceModel) return null;
+	if (!ResourceModel || !resources) return null;
 
 	if (!ResourceModel.isResourceUrl(src)) return null;
 
@@ -141,6 +141,7 @@ utils.imageReplacement = function(ResourceModel, src, resources, resourceBaseUrl
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
 		let newSrc = `./${ResourceModel.filename(resource)}`;
 		if (resourceBaseUrl) newSrc = resourceBaseUrl + newSrc;
+		newSrc += `?t=${resource.updated_time}`;
 		return {
 			'data-resource-id': resource.id,
 			src: newSrc,

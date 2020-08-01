@@ -79,7 +79,45 @@ async function removePoHeaderDate(filePath) {
 	await execCommand(`${sedPrefix} -e'/PO-Revision-Date:/d' "${filePath}"`);
 }
 
-async function createPotFile(potFilePath, sources) {
+async function createPotFile(potFilePath) {
+	const excludedDirs = [
+		'./.git/*',
+		'./.github/*',
+		'./Assets/*',
+		'./CliClient/build/*',
+		'./CliClient/locales-build/*',
+		'./CliClient/locales/*',
+		'./CliClient/node_modules/*',
+		'./CliClient/tests-build/*',
+		'./CliClient/tests/*',
+		'./Clipper/*',
+		'./docs/*',
+		'./ElectronClient/dist/*',
+		'./ElectronClient/gui/style/*',
+		'./ElectronClient/lib/*',
+		'./ElectronClient/node_modules/*',
+		'./ElectronClient/pluginAssets/*',
+		'./ElectronClient/tools/*',
+		'./ElectronClient/gui/note-viewer/pluginAssets/*',
+		'./ReactNativeClient/lib/joplin-renderer/assets/*',
+		'./Modules/*',
+		'./node_modules/*',
+		'./ReactNativeClient/lib/joplin-renderer/node_modules/*',
+		'./patches/*',
+		'./ReactNativeClient/android/*',
+		'./ReactNativeClient/ios/*',
+		'./ReactNativeClient/node_modules/*',
+		'./ReactNativeClient/pluginAssets/*',
+		'./ReactNativeClient/tools/*',
+		'./readme/*',
+		'./Tools/*',
+	];
+
+	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+
+	process.chdir(`${__dirname}/..`);
+	const files = (await execCommand(findCommand)).split('\n');
+
 	const baseArgs = [];
 	baseArgs.push('--from-code=utf-8');
 	baseArgs.push(`--output="${potFilePath}"`);
@@ -90,17 +128,14 @@ async function createPotFile(potFilePath, sources) {
 	// baseArgs.push('--no-location');
 	baseArgs.push('--keyword=_n:1,2');
 
-	for (let i = 0; i < sources.length; i++) {
-		const args = baseArgs.slice();
-		if (i > 0) args.push('--join-existing');
-		args.push(sources[i]);
-		let xgettextPath = 'xgettext';
-		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-		const cmd = `${xgettextPath} ${args.join(' ')}`;
-		const result = await execCommand(cmd);
-		if (result) console.error(result);
-		await removePoHeaderDate(potFilePath);
-	}
+	let args = baseArgs.slice();
+	args = args.concat(files);
+	let xgettextPath = 'xgettext';
+	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
+	const cmd = `${xgettextPath} ${args.join(' ')}`;
+	const result = await execCommand(cmd);
+	if (result) console.error(result);
+	await removePoHeaderDate(potFilePath);
 }
 
 async function mergePotToPo(potFilePath, poFilePath) {
@@ -252,20 +287,7 @@ async function main() {
 
 	const oldPotStatus = await translationStatus(false, potFilePath);
 
-	await createPotFile(potFilePath, [
-		`${cliDir}/app/*.js`,
-		`${cliDir}/app/gui/*.js`,
-		`${electronDir}/*.js`,
-		`${electronDir}/gui/*.js`,
-		`${electronDir}/gui/utils/*.js`,
-		`${electronDir}/plugins/*.js`,
-		`${rnDir}/lib/*.js`,
-		`${rnDir}/lib/models/*.js`,
-		`${rnDir}/lib/services/*.js`,
-		`${rnDir}/lib/components/*.js`,
-		`${rnDir}/lib/components/shared/*.js`,
-		`${rnDir}/lib/components/screens/*.js`,
-	]);
+	await createPotFile(potFilePath);
 
 	const newPotStatus = await translationStatus(false, potFilePath);
 

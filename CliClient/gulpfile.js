@@ -3,9 +3,11 @@ const fs = require('fs-extra');
 const utils = require('../Tools/gulp/utils');
 const tasks = {
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
+	tsc: require('../Tools/gulp/tasks/tsc'),
+	updateIgnoredTypeScriptBuild: require('../Tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 };
 
-tasks.build = {
+tasks.prepareBuild = {
 	fn: async () => {
 		const buildDir = `${__dirname}/build`;
 		await utils.copyDir(`${__dirname}/app`, buildDir, {
@@ -27,7 +29,7 @@ tasks.build = {
 	},
 };
 
-tasks.buildTests = {
+tasks.prepareTestBuild = {
 	fn: async () => {
 		const testBuildDir = `${__dirname}/tests-build`;
 
@@ -45,5 +47,14 @@ tasks.buildTests = {
 	},
 };
 
-gulp.task('build', tasks.build.fn);
-gulp.task('buildTests', tasks.buildTests.fn);
+utils.registerGulpTasks(gulp, tasks);
+
+gulp.task('build', gulp.series([
+	'prepareBuild',
+	'copyLib',
+]));
+
+gulp.task('buildTests', gulp.series([
+	'prepareTestBuild',
+	'copyLib',
+]));

@@ -4,13 +4,14 @@ import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } 
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
+import CommandService from '../../../../lib/services/CommandService';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
-const { themeStyle, buildStyle } = require('../../../../theme.js');
+const { themeStyle, buildStyle } = require('lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -158,7 +159,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
-	const lastOnChangeEventContent = useRef<string>('');
+	const lastOnChangeEventInfo = useRef<any>({
+		content: null,
+		resourceInfos: null,
+		contentKey: null,
+	});
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 	const editorRef = useRef<any>(null);
@@ -179,6 +184,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const insertResourcesIntoContent = useCallback(async (filePaths:string[] = null, options:any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
+		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		editor.insertContent(result.html);
 		// editor.fire('joplinChange');
@@ -600,10 +606,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						tooltip: _('Insert Date Time'),
 						icon: 'insert-time',
 						onAction: function() {
-							props.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'insertDateTime',
-							});
+							CommandService.instance().execute('insertDateTime');
 						},
 					});
 
@@ -720,7 +723,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
 		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
 
-		console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
+		// console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
 
 		if (cssFiles.length) {
 			for (const cssFile of cssFiles) {
@@ -761,25 +764,38 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			if (lastOnChangeEventContent.current !== props.content) {
+			if (lastOnChangeEventInfo.current.content !== props.content || lastOnChangeEventInfo.current.resourceInfos !== props.resourceInfos) {
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
-				lastOnChangeEventContent.current = props.content;
+
 				editor.setContent(result.html);
+
+				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
+					// Need to clear UndoManager to avoid this problem:
+					// - Load note 1
+					// - Make a change
+					// - Load note 2
+					// - Undo => content is that of note 1
+					//
+					// The doc is not very clear what's the different between
+					// clear() and reset() but it seems reset() works best, in
+					// particular for the onPaste bug.
+					//
+					// It seems the undo manager must be reset after having
+					// set the initial content (not before). Otherwise undoing multiple
+					// times would result in an empty note.
+					// https://github.com/laurent22/joplin/issues/3534
+					editor.undoManager.reset();
+				}
+
+				lastOnChangeEventInfo.current = {
+					content: props.content,
+					resourceInfos: props.resourceInfos,
+					contentKey: props.contentKey,
+				};
 			}
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
-
-			// Need to clear UndoManager to avoid this problem:
-			// - Load note 1
-			// - Make a change
-			// - Load note 2
-			// - Undo => content is that of note 1
-
-			// The doc is not very clear what's the different between
-			// clear() and reset() but it seems reset() works best, in
-			// particular for the onPaste bug.
-			editor.undoManager.reset();
 
 			dispatchDidUpdate(editor);
 		};
@@ -789,7 +805,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos]);
+	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -841,32 +857,60 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const prop_htmlToMarkdownRef = useRef<Function>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
+	const nextOnChangeEventInfo = useRef<any>(null);
+
+	async function execOnChangeEvent() {
+		const info = nextOnChangeEventInfo.current;
+		if (!info) return;
+
+		nextOnChangeEventInfo.current = null;
+
+		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
+
+		lastOnChangeEventInfo.current.content = contentMd;
+
+		props_onChangeRef.current({
+			changeId: info.changeId,
+			content: contentMd,
+		});
+
+		dispatchDidUpdate(info.editor);
+	}
+
+	// When the component unmount, we dispatch the change event
+	// that was scheduled so that the parent component can save
+	// the note.
+	useEffect(() => {
+		return () => {
+			execOnChangeEvent();
+		};
+	}, []);
+
+	const onChangeHandlerTimeoutRef = useRef<any>(null);
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		let onChangeHandlerIID:any = null;
-
 		function onChangeHandler() {
+			// First this component notifies the parent that a change is going to happen.
+			// Then the actual onChange event is fired after a timeout or when this
+			// component gets unmounted.
+
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
+			if (onChangeHandlerTimeoutRef.current) clearTimeout(onChangeHandlerTimeoutRef.current);
 
-			onChangeHandlerIID = setTimeout(async () => {
-				onChangeHandlerIID = null;
+			nextOnChangeEventInfo.current = {
+				changeId: changeId,
+				editor: editor,
+				contentMarkupLanguage: props.contentMarkupLanguage,
+				contentOriginalCss: props.contentOriginalCss,
+			};
 
-				const contentMd = await prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editor.getContent(), props.contentOriginalCss);
-
-				if (!editor) return;
-
-				lastOnChangeEventContent.current = contentMd;
-
-				props_onChangeRef.current({
-					changeId: changeId,
-					content: contentMd,
-				});
-
-				dispatchDidUpdate(editor);
+			onChangeHandlerTimeoutRef.current = setTimeout(async () => {
+				onChangeHandlerTimeoutRef.current = null;
+				execOnChangeEvent();
 			}, 1000);
 		}
 

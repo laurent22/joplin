@@ -210,7 +210,8 @@ function formatCommitMessage(msg, author, options) {
 		}
 
 		let authorMd = null;
-		if (author && (author.login || author.name) && author.login !== 'laurent22') {
+		const isLaurent = author.login === 'laurent22' || author.email === 'laurent22@users.noreply.github.com';
+		if (author && (author.login || author.name) && !isLaurent) {
 			if (author.login) {
 				const escapedLogin = author.login.replace(/\]/g, '');
 				authorMd = `[@${escapedLogin}](https://github.com/${encodeURI(author.login)})`;

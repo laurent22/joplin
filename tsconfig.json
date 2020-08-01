@@ -15,6 +15,7 @@
 		"strictFunctionTypes": true,
 		"sourceMap": true,
 		"jsx": "react",
+		"skipLibCheck": true,
 	},
     "include": [
         "ReactNativeClient/**/*",

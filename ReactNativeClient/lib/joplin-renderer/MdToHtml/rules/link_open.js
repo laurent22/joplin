@@ -16,15 +16,16 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
-		const isResourceUrl = !!resourceHrefInfo;
+		const isResourceUrl = ruleOptions.resources && !!resourceHrefInfo;
 		let title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
 
 		let resourceIdAttr = '';
 		let icon = '';
 		let hrefAttr = '#';
 		let mime = '';
+		let resourceId = '';
 		if (isResourceUrl) {
-			const resourceId = resourceHrefInfo.itemId;
+			resourceId = resourceHrefInfo.itemId;
 
 			const result = ruleOptions.resources[resourceId];
 			const resourceStatus = utils.resourceStatus(ruleOptions.ResourceModel, result);
@@ -62,7 +63,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		// https://github.com/laurent22/joplin/issues/2030
 		href = href.replace(/'/g, '%27');
 
-		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
+		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
 		if (ruleOptions.plainResourceRendering || pluginOptions.linkRenderingType === 2) {

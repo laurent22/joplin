@@ -25,6 +25,7 @@ class Note extends BaseItem {
 			title: _('title'),
 			user_updated_time: _('updated date'),
 			user_created_time: _('created date'),
+			order: _('custom order'),
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
@@ -139,7 +140,7 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
-		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
@@ -148,11 +149,11 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
-			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
+			const resourcePath = options.useAbsolutePaths ? `${`file://${Resource.fullPath(resource)}` + '?t='}${resource.updated_time}` : Resource.relativePath(resource);
+			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
-		this.logger().info('replaceResourceInternalToExternalLinks result', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -170,18 +171,28 @@ class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
-			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
-			const re = new RegExp(reString, 'gi');
-			body = body.replace(re, match => {
-				const id = Resource.pathToId(match);
-				return `:/${id}`;
-			});
+			const reStrings = [
+				// Handles file://path/to/abcdefg.jpg?t=12345678
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`,
+				// Handles file://path/to/abcdefg.jpg
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`,
+			];
+			for (const reString of reStrings) {
+				const re = new RegExp(reString, 'gi');
+				body = body.replace(re, match => {
+					const id = Resource.pathToId(match);
+					return `:/${id}`;
+				});
+			}
+
+			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
+			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks result', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}
@@ -248,16 +259,29 @@ class Note extends BaseItem {
 		});
 	}
 
-	static previewFields() {
-		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
-		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+	static previewFieldsWithDefaultValues(options = null) {
+		return Note.defaultValues(this.previewFields(options));
+	}
+
+	static previewFields(options = null) {
+		options = Object.assign({
+			includeTimestamps: true,
+		}, options);
+
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language'];
+
+		if (options.includeTimestamps) {
+			output.push('updated_time');
+			output.push('user_updated_time');
+			output.push('user_created_time');
+		}
+
+		return output;
 	}
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db()
-			.escapeFields(fields)
-			.join(',');
+		return this.db().escapeFields(fields).join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -553,8 +577,10 @@ class Note extends BaseItem {
 	static async save(o, options = null) {
 		const isNew = this.isNew(o, options);
 		const isProvisional = options && !!options.provisional;
+		const dispatchUpdateAction = options ? options.dispatchUpdateAction !== false : true;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
+		if (isNew && !('order' in o)) o.order = Date.now();
 
 		// We only keep the previous note content for "old notes" (see Revision Service for more info)
 		// In theory, we could simply save all the previous note contents, and let the revision service
@@ -572,11 +598,13 @@ class Note extends BaseItem {
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
-		this.dispatch({
-			type: 'NOTE_UPDATE_ONE',
-			note: note,
-			provisional: isProvisional,
-		});
+		if (dispatchUpdateAction) {
+			this.dispatch({
+				type: 'NOTE_UPDATE_ONE',
+				note: note,
+				provisional: isProvisional,
+			});
+		}
 
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
 			this.dispatch({
@@ -653,6 +681,138 @@ class Note extends BaseItem {
 		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
 	}
+
+	// When notes are sorted in "custom order", they are sorted by the "order" field first and,
+	// in those cases, where the order field is the same for some notes, by created time.
+	static customOrderByColumns(type = null) {
+		if (!type) type = 'object';
+		if (type === 'object') return [{ by: 'order', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }];
+		if (type === 'string') return 'ORDER BY `order` DESC, user_created_time DESC';
+		throw new Error(`Invalid type: ${type}`);
+	}
+
+	// Update the note "order" field without changing the user timestamps,
+	// which is generally what we want.
+	static async updateNoteOrder_(note, order) {
+		return Note.save(Object.assign({}, note, {
+			order: order,
+			user_updated_time: note.user_updated_time,
+		}), { autoTimestamp: false, dispatchUpdateAction: false });
+	}
+
+	// This method will disable the NOTE_UPDATE_ONE action to prevent a lot
+	// of unecessary updates, so it's the caller's responsability to update
+	// the UI once the call is finished. This is done by listening to the
+	// NOTE_IS_INSERTING_NOTES action in the application middleware.
+	static async insertNotesAt(folderId, noteIds, index) {
+		if (!noteIds.length) return;
+
+		const defer = () => {
+			this.dispatch({
+				type: 'NOTE_IS_INSERTING_NOTES',
+				value: false,
+			});
+		};
+
+		this.dispatch({
+			type: 'NOTE_IS_INSERTING_NOTES',
+			value: true,
+		});
+
+		try {
+			const noteSql = `
+				SELECT id, \`order\`, user_created_time, user_updated_time
+				FROM notes
+				WHERE is_conflict = 0 AND parent_id = ?
+			${this.customOrderByColumns('string')}`;
+
+			let notes = await this.modelSelectAll(noteSql, [folderId]);
+
+			// If the target index is the same as the source note index, exit now
+			for (let i = 0; i < notes.length; i++) {
+				const note = notes[i];
+				if (note.id === noteIds[0] && index === i) return defer();
+			}
+
+			// If some of the target notes have order = 0, set the order field to user_created_time
+			// (historically, all notes had the order field set to 0)
+			let hasSetOrder = false;
+			for (let i = 0; i < notes.length; i++) {
+				const note = notes[i];
+				if (!note.order) {
+					const updatedNote = await this.updateNoteOrder_(note, note.user_created_time);
+					notes[i] = updatedNote;
+					hasSetOrder = true;
+				}
+			}
+
+			if (hasSetOrder) notes = await this.modelSelectAll(noteSql, [folderId]);
+
+			// Find the order value for the first note to be inserted,
+			// and the increment between the order values of each inserted notes.
+			let newOrder = 0;
+			let intervalBetweenNotes = 0;
+			const defaultIntevalBetweeNotes = 60 * 60 * 1000;
+
+			if (!notes.length) { // If there's no notes in the target notebook
+				newOrder = Date.now();
+				intervalBetweenNotes = defaultIntevalBetweeNotes;
+			} else if (index >= notes.length) { // Insert at the end
+				intervalBetweenNotes = notes[notes.length - 1].order / (noteIds.length + 1);
+				newOrder = notes[notes.length - 1].order - intervalBetweenNotes;
+			} else if (index === 0) { // Insert at the beginning
+				const firstNoteOrder = notes[0].order;
+				if (firstNoteOrder >= Date.now()) {
+					intervalBetweenNotes = defaultIntevalBetweeNotes;
+					newOrder = firstNoteOrder + defaultIntevalBetweeNotes;
+				} else {
+					intervalBetweenNotes = (Date.now() - firstNoteOrder) / (noteIds.length + 1);
+					newOrder = firstNoteOrder + intervalBetweenNotes * noteIds.length;
+				}
+			} else { // Normal insert
+				let noteBefore = notes[index - 1];
+				let noteAfter = notes[index];
+
+				if (noteBefore.order === noteAfter.order) {
+					let previousOrder = noteBefore.order;
+					for (let i = index; i >= 0; i--) {
+						const n = notes[i];
+						if (n.order <= previousOrder) {
+							const o = previousOrder + defaultIntevalBetweeNotes;
+							const updatedNote = await this.updateNoteOrder_(n, o);
+							notes[i] = Object.assign({}, n, updatedNote);
+							previousOrder = o;
+						} else {
+							previousOrder = n.order;
+						}
+					}
+
+					noteBefore = notes[index - 1];
+					noteAfter = notes[index];
+				}
+
+				intervalBetweenNotes = (noteBefore.order - noteAfter.order) / (noteIds.length + 1);
+				newOrder = noteAfter.order + intervalBetweenNotes * noteIds.length;
+			}
+
+			// Set the order value for all the notes to be inserted
+			for (const noteId of noteIds) {
+				const note = await Note.load(noteId);
+				if (!note) throw new Error(`No such note: ${noteId}`);
+
+				await this.updateNoteOrder_({
+					id: noteId,
+					parent_id: folderId,
+					user_updated_time: note.user_updated_time,
+				}, newOrder);
+
+				newOrder -= intervalBetweenNotes;
+			}
+		} finally {
+			defer();
+		}
+	}
+
 }
 
 Note.updateGeolocationEnabled_ = true;

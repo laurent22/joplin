@@ -21,6 +21,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
+const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
@@ -33,13 +34,20 @@ const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const ResourceService = require('lib/services/ResourceService.js');
 const RevisionService = require('lib/services/RevisionService.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
+const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
+const md5 = require('md5');
+const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
 const synchronizers_ = [];
@@ -47,6 +55,7 @@ const encryptionServices_ = [];
 const revisionServices_ = [];
 const decryptionWorkers_ = [];
 const resourceServices_ = [];
+const resourceFetchers_ = [];
 const kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
@@ -77,11 +86,13 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
 const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('amazon_s3');
 const syncDir = `${__dirname}/../tests/sync`;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
@@ -106,7 +117,7 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', tempDir);
 
@@ -130,7 +141,9 @@ function currentClientId() {
 	return currentClient_;
 }
 
-async function switchClient(id) {
+async function switchClient(id, options = null) {
+	options = Object.assign({}, { keychainEnabled: false }, options);
+
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
 
 	await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
@@ -146,9 +159,8 @@ async function switchClient(id) {
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 
-	await Setting.load();
+	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
@@ -183,7 +195,9 @@ async function clearDatabase(id = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
-async function setupDatabase(id = null) {
+async function setupDatabase(id = null, options = null) {
+	options = Object.assign({}, { keychainEnabled: false }, options);
+
 	if (id === null) id = currentClient_;
 
 	Setting.cancelScheduleSave();
@@ -192,8 +206,7 @@ async function setupDatabase(id = null) {
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
-		await Setting.load();
-		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 		return;
 	}
 
@@ -210,8 +223,7 @@ async function setupDatabase(id = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
-	await Setting.load();
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 }
 
 function resourceDirName(id = null) {
@@ -224,12 +236,12 @@ function resourceDir(id = null) {
 	return `${__dirname}/data/${resourceDirName(id)}`;
 }
 
-async function setupDatabaseAndSynchronizer(id = null) {
+async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
 
-	await setupDatabase(id);
+	await setupDatabase(id, options);
 
 	EncryptionService.instance_ = null;
 	DecryptionWorker.instance_ = null;
@@ -250,6 +262,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
 	resourceServices_[id] = new ResourceService();
+	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
 
 	await fileApi().clearRoot();
@@ -292,6 +305,11 @@ function decryptionWorker(id = null) {
 function resourceService(id = null) {
 	if (id === null) id = currentClient_;
 	return resourceServices_[id];
+}
+
+function resourceFetcher(id = null) {
+	if (id === null) id = currentClient_;
+	return resourceFetchers_[id];
 }
 
 async function loadEncryptionMasterKey(id = null, useExisting = false) {
@@ -338,7 +356,14 @@ function fileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
+		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
+		const amazonS3Creds = require(amazonS3CredsPath);
+		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
+		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
+		fileApi_ = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	}
+
 
 	fileApi_.setLogger(logger);
 	fileApi_.setSyncTargetId(syncTargetId_);
@@ -359,6 +384,16 @@ async function checkThrowAsync(asyncFn) {
 	let hasThrown = false;
 	try {
 		await asyncFn();
+	} catch (error) {
+		hasThrown = true;
+	}
+	return hasThrown;
+}
+
+function checkThrow(fn) {
+	let hasThrown = false;
+	try {
+		fn();
 	} catch (error) {
 		hasThrown = true;
 	}
@@ -478,6 +513,10 @@ async function createNTestTags(n) {
 	return tags;
 }
 
+function tempFilePath(ext) {
+	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
+}
+
 // Application for feature integration testing
 class TestApp extends BaseApplication {
 	constructor(hasGui = true) {
@@ -546,4 +585,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { syncDir, kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

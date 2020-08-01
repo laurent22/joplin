@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const HelpButton = require('./HelpButton.min');
@@ -139,9 +139,9 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		// We try to get most links work though, except for internal (joplin://) links.
 
 		const msg = event.channel ? event.channel : '';
-		const args = event.args;
+		// const args = event.args;
 
-		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
+		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		try {
 			if (msg.indexOf('joplin://') === 0) {

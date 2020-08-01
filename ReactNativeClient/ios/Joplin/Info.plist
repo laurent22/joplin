@@ -39,6 +39,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To allow attaching a photo to a note</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

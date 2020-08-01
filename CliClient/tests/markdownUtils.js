@@ -51,6 +51,21 @@ describe('markdownUtils', function() {
 		}
 	}));
 
+	it('escape a markdown link', asyncTest(async () => {
+
+		const testCases = [
+			['file:///Users/who put spaces in their username??/.config/joplin', 'file:///Users/who%20put%20spaces%20in%20their%20username??/.config/joplin'],
+			['file:///Users/(and brackets???)/.config/joplin', 'file:///Users/%28and%20brackets???%29/.config/joplin'],
+			['file:///Users/thisisfine/.config/joplin', 'file:///Users/thisisfine/.config/joplin'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.escapeLinkUrl(md)).toBe(expected);
+		}
+	}));
+
 	it('escape a markdown link (title)', asyncTest(async () => {
 
 		const testCases = [
@@ -82,43 +97,6 @@ describe('markdownUtils', function() {
 			const md = testCases[i][0];
 			const expected = testCases[i][1];
 			expect(markdownUtils.titleFromBody(md)).toBe(expected);
-		}
-	}));
-
-	it('should remove Markdown syntax elements from the text', asyncTest(async () => {
-		const inputStrings = [
-			'', // Empty string
-			'This is some plain text', // Plain text
-			'## This is a header', // Header syntax
-			'This is a text with **bold** and *italicized* text', // Text with annotations
-			'This is a text with __bold__ and _italicized_ text', // Text with annotations alternate form
-			'[link to google](https://www.google.com/)', // Link
-			'> This is a blockquote\n And another line', // Blockquote
-			'* List item\n* List item', // Unordered list
-			'- List item\n- List item', // Unordered list
-			'1. List item\n2. List item', // Ordered list
-			'This is some `inline code`', // Inlined code
-		];
-
-		const expectedOutputStrings = [
-			'',
-			'This is some plain text',
-			'This is a header',
-			'This is a text with bold and italicized text',
-			'This is a text with bold and italicized text',
-			'link to google',
-			'This is a blockquote\n And another line',
-			'List item\nList item',
-			'List item\nList item',
-			'List item\nList item',
-			'This is some inline code',
-		];
-
-		expect(inputStrings.length).toBe(expectedOutputStrings.length);
-
-		for (let i = 0; i < inputStrings.length; i++) {
-			const outputString = markdownUtils.stripMarkdown(inputStrings[i]);
-			expect(outputString).toBe(expectedOutputStrings[i]);
 		}
 	}));
 

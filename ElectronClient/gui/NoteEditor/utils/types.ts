@@ -13,7 +13,6 @@ export interface NoteEditorProps {
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	bodyEditor: string;
-	windowCommand: any;
 	folders: any[];
 	notesParentType: string;
 	selectedNoteTags: any[];
@@ -23,6 +22,7 @@ export interface NoteEditorProps {
 	selectedSearchId: string,
 	customCss: string,
 	noteVisiblePanes: string[],
+	watchedResources: any,
 }
 
 export interface NoteBodyEditorProps {
@@ -43,6 +43,7 @@ export interface NoteBodyEditorProps {
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
+	setLocalSearchResultCount(count: number): void,
 	searchMarkers: any,
 	visiblePanes: string[],
 	keyboardMode: string,

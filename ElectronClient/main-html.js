@@ -74,8 +74,11 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-desktop');
+Setting.setConstant('appId', `net.cozic.joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`);
 Setting.setConstant('appType', 'desktop');
+
+console.info(`appId: ${Setting.value('appId')}`);
+console.info(`appType: ${Setting.value('appType')}`);
 
 shimInit();
 
@@ -95,6 +98,8 @@ document.addEventListener('click', (event) => event.preventDefault());
 app().start(bridge().processArgv()).then(() => {
 	require('./gui/Root.min.js');
 }).catch((error) => {
+	const env = bridge().env();
+
 	if (error.code == 'flagError') {
 		bridge().showErrorMessageBox(error.message);
 	} else {
@@ -104,8 +109,14 @@ app().start(bridge().processArgv()).then(() => {
 		if (error.fileName) msg.push(error.fileName);
 		if (error.lineNumber) msg.push(error.lineNumber);
 		if (error.stack) msg.push(error.stack);
-		bridge().showErrorMessageBox(msg.join('\n\n'));
+
+		if (env === 'dev') {
+			console.error(error);
+		} else {
+			bridge().showErrorMessageBox(msg.join('\n\n'));
+		}
 	}
 
-	bridge().electronApp().exit(1);
+	// In dev, we leave the app open as debug statements in the console can be useful
+	if (env !== 'dev') bridge().electronApp().exit(1);
 });

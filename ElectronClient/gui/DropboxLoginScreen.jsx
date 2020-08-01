@@ -1,8 +1,8 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header.min.js');
-const { themeStyle } = require('../theme.js');
+const { Header } = require('./Header/Header.min.js');
+const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const Shared = require('lib/components/shared/dropbox-login-shared');
 

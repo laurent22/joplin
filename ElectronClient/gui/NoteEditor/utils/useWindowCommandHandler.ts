@@ -1,11 +1,19 @@
 import { useEffect } from 'react';
-import { FormNote, EditorCommand } from './types';
+import { FormNote } from './types';
+import editorCommandDeclarations from '../commands/editorCommandDeclarations';
+import CommandService, { CommandDeclaration,  CommandRuntime } from '../../../lib/services/CommandService';
 const { time } = require('lib/time-utils.js');
+const BaseModel = require('lib/BaseModel');
 const { reg } = require('lib/registry.js');
-const NoteListUtils = require('../../utils/NoteListUtils');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+
+const commandsWithDependencies = [
+	require('../commands/showLocalSearch'),
+	require('../commands/focusElementNoteTitle'),
+	require('../commands/focusElementNoteBody'),
+];
 
 interface HookDependencies {
-	windowCommand: any,
 	formNote:FormNote,
 	setShowLocalSearch:Function,
 	dispatch:Function,
@@ -15,96 +23,73 @@ interface HookDependencies {
 	saveNoteAndWait: Function,
 }
 
+function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
+	return {
+		execute: (props:any) => {
+			console.info('Running editor command:', declaration.name, props);
+			if (!editorRef.current.execCommand) {
+				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
+			} else {
+				const execArgs = {
+					name: declaration.name,
+					value: props.value,
+				};
+
+				if (declaration.name === 'insertDateTime') {
+					execArgs.name = 'insertText';
+					execArgs.value = time.formatMsToLocal(new Date().getTime());
+				}
+
+				editorRef.current.execCommand(execArgs);
+			}
+		},
+		isEnabled: (props:any) => {
+			if (props.markdownEditorViewerOnly) return false;
+			if (!props.noteId) return false;
+			const note = BaseModel.byId(props.notes, props.noteId);
+			if (!note) return false;
+			return note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+		},
+		mapStateToProps: (state:any) => {
+			return {
+				// True when the Markdown editor is active, and only the viewer pane is visible
+				// In this case, all editor-related shortcuts are disabled.
+				markdownEditorViewerOnly: state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer',
+				noteVisiblePanes: state.noteVisiblePanes,
+				notes: state.notes,
+				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+			};
+		},
+	};
+}
+
 export default function useWindowCommandHandler(dependencies:HookDependencies) {
-	const { windowCommand, dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait } = dependencies;
+	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef } = dependencies;
 
 	useEffect(() => {
-		async function processCommand() {
-			const command = windowCommand;
-
-			if (!command || !formNote) return;
-
-			reg.logger().debug('NoteEditor::useWindowCommandHandler:', command);
-
-			const editorCmd: EditorCommand = { name: '', value: command.value };
-			let fn: Function = null;
-
-			// These commands can be forwarded directly to the note body editor
-			// without transformation.
-			const directMapCommands = [
-				'textCode',
-				'textBold',
-				'textItalic',
-				'textLink',
-				'attachFile',
-				'textNumberedList',
-				'textBulletedList',
-				'textCheckbox',
-				'textHeading',
-				'textHorizontalRule',
-			];
-
-			if (directMapCommands.includes(command.name)) {
-				editorCmd.name = command.name;
-			} else if (command.name === 'commandStartExternalEditing') {
-				fn = async () => {
-					await saveNoteAndWait(formNote);
-					NoteListUtils.startExternalEditing(formNote.id);
-				};
-			} else if (command.name === 'commandStopExternalEditing') {
-				fn = () => {
-					NoteListUtils.stopExternalEditing(formNote.id);
-				};
-			} else if (command.name === 'insertDateTime') {
-				editorCmd.name = 'insertText',
-				editorCmd.value = time.formatMsToLocal(new Date().getTime());
-			} else if (command.name === 'showLocalSearch') {
-				if (editorRef.current && editorRef.current.supportsCommand('search')) {
-					editorCmd.name = 'search';
-				} else {
-					fn = () => {
-						setShowLocalSearch(true);
-						if (noteSearchBarRef.current) noteSearchBarRef.current.wrappedInstance.focus();
-					};
-				}
-			} else if (command.name === 'insertTemplate') {
-				editorCmd.name = 'insertText',
-				editorCmd.value = time.formatMsToLocal(new Date().getTime());
-			}
-
-			if (command.name === 'focusElement' && command.target === 'noteTitle') {
-				fn = () => {
-					if (!titleInputRef.current) return;
-					titleInputRef.current.focus();
-				};
-			}
-
-			if (command.name === 'focusElement' && command.target === 'noteBody') {
-				editorCmd.name = 'focus';
-			}
-
-			reg.logger().debug('NoteEditor::useWindowCommandHandler: Dispatch:', editorCmd, fn);
-
-			if (!editorCmd.name && !fn) return;
-
-			dispatch({
-				type: 'WINDOW_COMMAND',
-				name: null,
-			});
-
-			requestAnimationFrame(() => {
-				if (fn) {
-					fn();
-				} else {
-					if (!editorRef.current.execCommand) {
-						reg.logger().warn('Received command, but editor cannot execute commands', editorCmd);
-					} else {
-						editorRef.current.execCommand(editorCmd);
-					}
-				}
-			});
+		for (const declaration of editorCommandDeclarations) {
+			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef));
 		}
 
-		processCommand();
-	}, [windowCommand, dispatch, formNote, saveNoteAndWait]);
+		const dependencies = {
+			editorRef,
+			setShowLocalSearch,
+			noteSearchBarRef,
+			titleInputRef,
+		};
+
+		for (const command of commandsWithDependencies) {
+			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(dependencies));
+		}
+
+		return () => {
+			for (const declaration of editorCommandDeclarations) {
+				CommandService.instance().unregisterRuntime(declaration.name);
+			}
+
+			for (const command of commandsWithDependencies) {
+				CommandService.instance().unregisterRuntime(command.declaration.name);
+			}
+		};
+	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef]);
 }

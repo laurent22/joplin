@@ -235,13 +235,36 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
-	processResults_(rows, parsedQuery) {
+	processBasicSearchResults_(rows, parsedQuery) {
+		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => term.valueRegex || term.value) : [];
+		const isTitleSearch = parsedQuery.keys.includes('title');
+		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
+
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			const offsets = row.offsets.split(' ').map(o => Number(o));
-			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
-			row.fields = this.fieldNamesFromOffsets_(offsets);
+			const testTitle = regex => new RegExp(regex, 'ig').test(row.title);
+			const matchedFields = {
+				title: isTitleSearch || valueRegexs.some(testTitle),
+				body: !isOnlyTitle,
+			};
+
+			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
+			row.weight = 0;
 		}
+	}
+
+	processResults_(rows, parsedQuery, isBasicSearchResults = false) {
+		if (isBasicSearchResults) {
+			this.processBasicSearchResults_(rows, parsedQuery);
+		} else {
+			for (let i = 0; i < rows.length; i++) {
+				const row = rows[i];
+				const offsets = row.offsets.split(' ').map(o => Number(o));
+				row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
+				row.fields = this.fieldNamesFromOffsets_(offsets);
+			}
+		}
+
 
 		rows.sort((a, b) => {
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
@@ -383,6 +406,8 @@ class SearchEngine {
 		const searchOptions = {};
 
 		for (const key of parsedQuery.keys) {
+			if (parsedQuery.terms[key].length === 0) continue;
+
 			const term = parsedQuery.terms[key][0].value;
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
@@ -415,10 +440,13 @@ class SearchEngine {
 		query = this.normalizeText_(query);
 
 		const searchType = this.determineSearchType_(query, options.searchType);
+		const parsedQuery = this.parseQuery(query);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
-			return this.basicSearch(query);
+			const rows = await this.basicSearch(query);
+			this.processResults_(rows, parsedQuery, true);
+			return rows;
 		} else { // SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
 			// we search for "this-phrase" it won't find it because it will only
@@ -426,7 +454,11 @@ class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 			query = query.replace(/-/g, ' ');
-			const parsedQuery = this.parseQuery(query);
+
+			// Note that when the search engine index is somehow corrupted, it might contain
+			// references to notes that don't exist. Not clear how it can happen, but anyway
+			// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
+			// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 			const sql = `
 				SELECT
 					notes_fts.id,
@@ -440,6 +472,7 @@ class SearchEngine {
 				FROM notes_fts
 				LEFT JOIN notes ON notes_fts.id = notes.id
 				WHERE notes_fts MATCH ?
+				AND notes.user_updated_time IS NOT NULL
 			`;
 			try {
 				const rows = await this.db().selectAll(sql, [query]);

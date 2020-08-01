@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Laurent Cozic",
   "scripts": {
-    "test": "gulp buildTests -L && jasmine --config=tests/support/jasmine.json",
+    "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
     "postinstall": "npm run build && patch-package --patch-dir ../patches",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --stack-trace-enabled --log-level debug --env dev"
@@ -27,7 +27,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "1.0.164",
+  "version": "1.0.165",
   "bin": {
     "joplin": "./main.js"
   },
@@ -37,6 +37,7 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "async-mutex": "^0.1.3",
+    "aws-sdk": "^2.588.0",
     "base-64": "^0.1.0",
     "base64-stream": "^1.0.0",
     "clean-html": "^1.5.0",
@@ -49,17 +50,18 @@
     "font-awesome-filetypes": "^2.1.0",
     "form-data": "^2.1.4",
     "fs-extra": "^5.0.0",
-    "highlight.js": "^9.17.1",
+    "highlight.js": "10.1.1",
     "html-entities": "^1.2.1",
     "html-minifier": "^3.5.15",
     "htmlparser2": "^4.1.0",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.27",
+    "joplin-turndown": "^4.0.29",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.0",
     "katex": "^0.11.1",
+    "keytar": "^5.4.0",
     "levenshtein": "^1.0.5",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",
@@ -91,7 +93,6 @@
     "read-chunk": "^2.1.0",
     "redux": "^3.7.2",
     "relative": "^3.0.2",
-    "remove-markdown": "^0.3.0",
     "request": "^2.88.0",
     "sax": "^1.2.4",
     "server-destroy": "^1.0.1",

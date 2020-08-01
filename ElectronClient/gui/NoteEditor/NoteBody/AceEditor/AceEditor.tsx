@@ -78,7 +78,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const [editor, setEditor] = useState(null);
-	const [lastKeys, setLastKeys] = useState([]);
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousRenderedBody = usePrevious(renderedBody);
@@ -101,6 +100,10 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	useListIdent({ editor });
 
 	const aceEditor_change = useCallback((newBody: string) => {
+		// Throw an error early to know what part of the code set the body to the
+		// wrong value. Otherwise it will trigger an error somewhere deep in React-Ace
+		// which will be hard to debug.
+		if (typeof newBody !== 'string') throw new Error('Body is not a string');
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
 
@@ -258,7 +261,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						wrapSelectionWithStrings('', '', '', cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
-						aceEditor_change(newBody);
+						if (newBody) aceEditor_change(newBody);
 					} else {
 						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
 					}
@@ -271,7 +274,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				if (!commandProcessed) {
 					const commands: any = {
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
-						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasized text')),
+						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
@@ -331,15 +334,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		wrapSelectionWithStrings('', '', resourceMds.join('\n'));
 	}, [wrapSelectionWithStrings]);
 
-	const onEditorKeyDown = useCallback((event: any) => {
-		setLastKeys(prevLastKeys => {
-			const keys = prevLastKeys.slice();
-			keys.push(event.key);
-			while (keys.length > 2) keys.splice(0, 1);
-			return keys;
-		});
-	}, []);
-
 	const editorCutText = useCallback(() => {
 		const text = selectedText(selectionRange(editor), props.content);
 		if (!text) return;
@@ -385,7 +379,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCutText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -395,7 +389,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCopyText();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -410,7 +404,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						onEditorPaste();
 					}
 				},
-			})
+			}),
 		);
 
 		menu.popup(bridge().window());
@@ -431,6 +425,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			cancelledKeys.push(`Command+${l}`);
 		}
 		cancelledKeys.push('Alt+E');
+		cancelledKeys.push('Command+Shift+L');
+		cancelledKeys.push('Ctrl+Shift+L');
 
 		for (let i = 0; i < cancelledKeys.length; i++) {
 			const k = cancelledKeys[i];
@@ -444,16 +440,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}
 
 		document.querySelector('#note-editor').addEventListener('paste', onEditorPaste, true);
-		document.querySelector('#note-editor').addEventListener('keydown', onEditorKeyDown);
 		document.querySelector('#note-editor').addEventListener('contextmenu', onEditorContextMenu);
 
 		// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 		// https://github.com/ajaxorg/ace/issues/2754
 		// @ts-ignore: Keep the function signature as-is despite unusued arguments
 		editor.getSession().getMode().getNextLineIndent = function(state: any, line: string) {
-			const ls = lastKeys;
-			if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
-
 			const leftSpaces = lineLeftSpaces(line);
 			const lineNoLeftSpaces = line.trimLeft();
 
@@ -469,10 +461,9 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 		return () => {
 			document.querySelector('#note-editor').removeEventListener('paste', onEditorPaste, true);
-			document.querySelector('#note-editor').removeEventListener('keydown', onEditorKeyDown);
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
-	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
+	}, [editor, onEditorPaste, onEditorContextMenu]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -516,6 +507,17 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			clearTimeout(timeoutId);
 		};
 	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+
+	useEffect(() => {
+		if (!editor) return;
+
+		if (contentKeyHasChangedRef.current) {
+			// editor.getSession().setMode(new CustomMdMode());
+			const undoManager = editor.getSession().getUndoManager();
+			undoManager.reset();
+			editor.getSession().setUndoManager(undoManager);
+		}
+	}, [props.content, editor]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
@@ -568,6 +570,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
+	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
+
 	function renderEditor() {
 		// Need to hard-code the editor width, otherwise various bugs pops up
 		let width = 0;
@@ -580,12 +584,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<AceEditorReact
 					value={props.content}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
-					theme={styles.editor.editorTheme}
+					theme={styles.editor.aceEditorTheme}
 					style={styles.editor}
 					width={`${width}px`}
 					fontSize={styles.editor.fontSize}
 					showGutter={false}
-					readOnly={props.visiblePanes.indexOf('editor') < 0}
+					readOnly={editorReadOnly}
 					name="note-editor"
 					wrapEnabled={true}
 					onScroll={editor_scroll}
@@ -630,6 +634,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					theme={props.theme}
 					dispatch={props.dispatch}
+					disabled={editorReadOnly}
 				/>
 				{props.noteToolbar}
 			</div>

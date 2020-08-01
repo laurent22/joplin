@@ -144,7 +144,8 @@ function shimInit() {
 
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
 		options = Object.assign({
-			resizeLargeImages: 'always', // 'always' or 'ask'
+			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+			userSideValidation: false,
 		}, options);
 
 		const readChunk = require('read-chunk');
@@ -159,7 +160,7 @@ function shimInit() {
 
 		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
 
-		let resource = Resource.new();
+		const resource = Resource.new();
 		resource.id = resourceId;
 		resource.mime = mimeUtils.fromFilename(filePath);
 		resource.title = basename(filePath);
@@ -182,19 +183,17 @@ function shimInit() {
 
 		const targetPath = Resource.fullPath(resource);
 
-		if (['image/jpeg', 'image/jpg', 'image/png'].includes(resource.mime)) {
+		if (options.resizeLargeImages !== 'never' && ['image/jpeg', 'image/jpg', 'image/png'].includes(resource.mime)) {
 			const ok = await handleResizeImage_(filePath, targetPath, resource.mime, options.resizeLargeImages);
 			if (!ok) return null;
 		} else {
-			// const stat = await shim.fsDriver().stat(filePath);
-			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
-
 			await fs.copy(filePath, targetPath, { overwrite: true });
 		}
 
-		if (defaultProps) {
-			resource = Object.assign({}, resource, defaultProps);
-		}
+		// While a whole object can be passed as defaultProps, we only just
+		// support the title and ID (used above). Any other prop should be
+		// derived from the provided file.
+		if ('title' in defaultProps) resource.title = defaultProps.title;
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
 		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
@@ -202,7 +201,9 @@ function shimInit() {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
-		return Resource.save(resource, { isNew: true });
+		const saveOptions =  { isNew: true };
+		if (options.userSideValidation) saveOptions.userSideValidation = true;
+		return Resource.save(resource, saveOptions);
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
@@ -211,7 +212,7 @@ function shimInit() {
 		}, options);
 
 		const { basename } = require('path');
-		const { escapeLinkText } = require('lib/markdownUtils');
+		const { escapeTitleText } = require('lib/markdownUtils');
 		const { toFileProtocolPath } = require('lib/path-utils');
 
 		let resource = null;
@@ -231,7 +232,7 @@ function shimInit() {
 		if (!options.createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
-			const filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			const filename = escapeTitleText(basename(filePath)); // to get same filename as standard drag and drop
 			const fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
 			newBody.push(fileURL);
 		}
@@ -452,6 +453,7 @@ function shimInit() {
 	shim.pathRelativeToCwd = (path) => {
 		return toRelative(process.cwd(), path);
 	};
+
 }
 
 module.exports = { shimInit };

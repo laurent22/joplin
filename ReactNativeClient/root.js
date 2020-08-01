@@ -1,5 +1,8 @@
+import setUpQuickActions from './setUpQuickActions';
+import PluginAssetsLoader from './PluginAssetsLoader';
+
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -54,12 +57,16 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
-// const ShareExtension = require('react-native-share-extension').default;
+const ShareExtension = require('lib/ShareExtension.js').default;
+const handleShared = require('lib/shareHandler').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
 const { uuid } = require('lib/uuid.js');
+
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriverMobile = require('lib/services/keychain/KeychainServiceDriver.mobile').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -68,6 +75,7 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 if (__DEV__) SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
@@ -75,14 +83,12 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
-
-import setUpQuickActions from './setUpQuickActions';
-import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
 
@@ -151,7 +157,7 @@ const generalMiddleware = store => next => async (action) => {
 		DecryptionWorker.instance().scheduleStart();
 	}
 
-	if (action.type === 'SYNC_CREATED_RESOURCE') {
+	if (action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 		ResourceFetcher.instance().autoAddResources();
 	}
 
@@ -365,6 +371,10 @@ function resourceFetcher_downloadComplete(event) {
 	}
 }
 
+function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
+	ResourceFetcher.instance().scheduleAutoAddResources();
+}
+
 async function initialize(dispatch) {
 	shimInit();
 
@@ -436,14 +446,15 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-70.sqlite' });
+			await db.open({ name: 'joplin-71.sqlite' });
 
 			// await db.clearForTesting();
 		}
 
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
-		await Setting.load();
+
+		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
@@ -493,6 +504,7 @@ async function initialize(dispatch) {
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
@@ -562,7 +574,9 @@ async function initialize(dispatch) {
 
 	await MigrationService.instance().run();
 
-	reg.scheduleSync().then(() => {
+	// When the app starts we want the full sync to
+	// start almost immediately to get the latest data.
+	reg.scheduleSync(1000).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		AlarmService.updateAllNotifications();
@@ -614,43 +628,6 @@ class AppComponent extends React.Component {
 			});
 		}
 
-		if (Platform.OS !== 'ios') {
-			// try {
-			// 	const { type, value } = await ShareExtension.data();
-
-			// 	// reg.logger().info('Got share data:', type, value);
-
-			// 	if (type != '' && this.props.selectedFolderId) {
-			// 		const newNote = await Note.save({
-			// 			title: Note.defaultTitleFromBody(value),
-			// 			body: value,
-			// 			parent_id: this.props.selectedFolderId,
-			// 		});
-
-			// 		// This is a bit hacky, but the surest way to go to
-			// 		// the needed note. We go back one screen in case there's
-			// 		// already a note open - if we don't do this, the dispatch
-			// 		// below will do nothing (because routeName wouldn't change)
-			// 		// Then we wait a bit for the state to be set correctly, and
-			// 		// finally we go to the new note.
-			// 		this.props.dispatch({
-			// 			type: 'NAV_BACK',
-			// 		});
-
-			// 		setTimeout(() => {
-			// 			this.props.dispatch({
-			// 				type: 'NAV_GO',
-			// 				routeName: 'Note',
-			// 				noteId: newNote.id,
-			// 			});
-			// 		}, 5);
-			// 	}
-
-			// } catch (e) {
-			// 	reg.logger().error('Error in ShareExtension.data', e);
-			// }
-		}
-
 		BackButtonService.initialize(this.backButtonHandler_);
 
 		AlarmService.setInAppNotificationHandler(async (alarmId) => {
@@ -660,6 +637,16 @@ class AppComponent extends React.Component {
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
+
+		const sharedData = await ShareExtension.data();
+		if (sharedData) {
+			reg.logger().info('Received shared data');
+			if (this.props.selectedFolderId) {
+				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger.info('Cannot handle share - default folder id is not set');
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -739,29 +726,34 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
+		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+
 		return (
-			<SideMenu
-				menu={sideMenuContent}
-				menuPosition={menuPosition}
-				onChange={(isOpen) => this.sideMenu_change(isOpen)}
-				onSliding={(percent) => {
-					this.props.dispatch({
-						type: 'SIDE_MENU_OPEN_PERCENT',
-						value: percent,
-					});
-				}}
-			>
-				<StatusBar barStyle="dark-content" />
-				<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor  }}>
-					<SafeAreaView style={{ flex: 1 }}>
-						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-							<AppNav screens={appNavInit} />
-						</View>
-						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-					</SafeAreaView>
-				</MenuContext>
-			</SideMenu>
+			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+				<SideMenu
+					menu={sideMenuContent}
+					edgeHitWidth={5}
+					menuPosition={menuPosition}
+					onChange={(isOpen) => this.sideMenu_change(isOpen)}
+					onSliding={(percent) => {
+						this.props.dispatch({
+							type: 'SIDE_MENU_OPEN_PERCENT',
+							value: percent,
+						});
+					}}
+				>
+					<StatusBar barStyle={statusBarStyle} />
+					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+						<SafeAreaView style={{ flex: 1 }}>
+							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+								<AppNav screens={appNavInit} />
+							</View>
+							<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+						</SafeAreaView>
+					</MenuContext>
+				</SideMenu>
+			</View>
 		);
 	}
 }

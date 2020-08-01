@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 const { _ } = require('lib/locale.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const { stripMarkdown } = require('lib/markdownUtils');
 const Countable = require('countable');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 interface NoteContentPropertiesDialogProps {
 	theme: number,
 	text: string,
+	markupLanguage: number,
 	onClose: Function,
 }
 
@@ -20,6 +21,13 @@ interface KeyToLabelMap {
 	[key: string]: string;
 }
 
+let markupToHtml_:any = null;
+function markupToHtml() {
+	if (markupToHtml_) return markupToHtml_;
+	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+	return markupToHtml_;
+}
+
 function countElements(text:string, wordSetter:Function, characterSetter:Function, characterNoSpaceSetter:Function, lineSetter:Function) {
 	Countable.count(text, (counter:any) => {
 		wordSetter(counter.words);
@@ -27,6 +35,14 @@ function countElements(text:string, wordSetter:Function, characterSetter:Functio
 		characterNoSpaceSetter(counter.characters);
 	});
 	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
+}
+
+function formatReadTime(readTimeMinutes: number) {
+	if (readTimeMinutes < 1) {
+		return '< 1';
+	}
+
+	return Math.ceil(readTimeMinutes).toString();
 }
 
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
@@ -42,15 +58,24 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	const [strippedWords, setStrippedWords] = useState<number>(0);
 	const [strippedCharacters, setStrippedCharacters] = useState<number>(0);
 	const [strippedCharactersNoSpace, setStrippedCharactersNoSpace] = useState<number>(0);
+	const [strippedReadTime, setStrippedReadTime] = useState<number>(0);
+	// This amount based on the following paper:
+	// https://www.researchgate.net/publication/332380784_How_many_words_do_we_read_per_minute_A_review_and_meta-analysis_of_reading_rate
+	const wordsPerMinute = 250;
 
 	useEffect(() => {
 		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setLines);
 	}, [props.text]);
 
 	useEffect(() => {
-		const strippedText: string = stripMarkdown(props.text);
+		const strippedText: string = markupToHtml().stripMarkup(props.markupLanguage, props.text);
 		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
 	}, [props.text]);
+
+	useEffect(() => {
+		const readTimeMinutes: number = strippedWords / wordsPerMinute;
+		setStrippedReadTime(readTimeMinutes);
+	}, [strippedWords]);
 
 	const textProperties: TextPropertiesMap = {
 		lines: lines,
@@ -60,7 +85,11 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	};
 
 	const strippedTextProperties: TextPropertiesMap = {
-		lines: strippedLines,
+		// The function stripMarkup() currently removes all new lines so we can't use the
+		// strippedLines property. Instead we simply use the lines property which should
+		// be a good approximation anyway.
+		// Also dummy check to silence TypeScript warning
+		lines: strippedLines === -5000 ? strippedLines : lines,
 		words: strippedWords,
 		characters: strippedCharacters,
 		charactersNoSpace: strippedCharactersNoSpace,
@@ -124,7 +153,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={theme.dialogBox}>
-				<div style={dialogBoxHeadingStyle}>{_('Content properties')}</div>
+				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 				<table>
 					<thead>
 						{tableHeader}
@@ -133,6 +162,9 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 						{tableBodyComps}
 					</tbody>
 				</table>
+				<div style={labelCompStyle}>
+					{_('Read time: %s min', formatReadTime(strippedReadTime))}
+				</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>

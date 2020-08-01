@@ -2,6 +2,8 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const CommandService = require('lib/services/CommandService').default;
+const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
 
 const defaultState = {
 	notes: [],
@@ -58,6 +60,7 @@ const defaultState = {
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
+	isInsertingNotes: false,
 };
 
 const MAX_HISTORY = 200;
@@ -76,13 +79,30 @@ const cacheEnabledOutput = (key, output) => {
 	return derivedStateCache_[key];
 };
 
+stateUtils.hasOneSelectedNote = function(state) {
+	return state.selectedNoteIds.length === 1;
+};
+
 stateUtils.notesOrder = function(stateSettings) {
-	return cacheEnabledOutput('notesOrder', [
-		{
-			by: stateSettings['notes.sortOrder.field'],
-			dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
-		},
-	]);
+	if (stateSettings['notes.sortOrder.field'] === 'order') {
+		return cacheEnabledOutput('notesOrder', [
+			{
+				by: 'order',
+				dir: 'DESC',
+			},
+			{
+				by: 'user_created_time',
+				dir: 'DESC',
+			},
+		]);
+	} else {
+		return cacheEnabledOutput('notesOrder', [
+			{
+				by: stateSettings['notes.sortOrder.field'],
+				dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
+			},
+		]);
+	}
 };
 
 stateUtils.foldersOrder = function(stateSettings) {
@@ -276,6 +296,21 @@ function updateOneItem(state, action, keyName = '') {
 	return newState;
 }
 
+function updateSelectedNotesFromExistingNotes(state) {
+	const newSelectedNoteIds = [];
+	for (const selectedNoteId of state.selectedNoteIds) {
+		for (const n of state.notes) {
+			if (n.id === selectedNoteId) {
+				newSelectedNoteIds.push(n.id);
+			}
+		}
+	}
+
+	return Object.assign({}, state, {
+		selectedNoteIds: newSelectedNoteIds,
+	});
+}
+
 function defaultNotesParentType(state, exclusion) {
 	let newNotesParentType = null;
 
@@ -453,14 +488,14 @@ function handleHistory(state, action) {
 
 		backwardHistoryNotes = backwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
 			return note;
 		});
 
 		forwardHistoryNotes = forwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
 			return note;
 		});
@@ -618,12 +653,12 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
-
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			newState.notesSource = action.notesSource;
+			newState = updateSelectedNotesFromExistingNotes(newState);
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -688,7 +723,6 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
 				} else {
@@ -713,6 +747,14 @@ const reducer = (state = defaultState, action) => {
 					t.splice(idx, 1);
 					newState.provisionalNoteIds = t;
 				}
+			}
+			break;
+
+		case 'NOTE_IS_INSERTING_NOTES':
+
+			if (state.isInsertingNotes !== action.value) {
+				newState = Object.assign({}, state);
+				newState.isInsertingNotes = action.value;
 			}
 			break;
 
@@ -993,6 +1035,10 @@ const reducer = (state = defaultState, action) => {
 	if (action.type === 'NOTE_DELETE') {
 		newState = handleHistory(newState, action);
 	}
+
+	newState = resourceEditWatcherReducer(newState, action);
+
+	CommandService.instance().scheduleMapStateToProps(newState);
 
 	return newState;
 };

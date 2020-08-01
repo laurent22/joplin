@@ -58,6 +58,9 @@ module.exports = {
 		"prefer-const": ["error"],
 		"no-var": ["error"],
 		"no-new-func": ["error"],
+		"import/prefer-default-export": ["error"],
+		"import/first": ["error"],
+		"no-array-constructor": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",
@@ -104,6 +107,7 @@ module.exports = {
 	"plugins": [
 		"react",
 		"@typescript-eslint",
-		"react-hooks"
+		"react-hooks",
+		"import",
 	],
 };

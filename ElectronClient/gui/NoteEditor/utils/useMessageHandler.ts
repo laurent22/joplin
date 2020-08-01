@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
 import contextMenu from './contextMenu';
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher/index';
 const BaseItem = require('lib/models/BaseItem');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
@@ -17,7 +18,7 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
+		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
 			const s = msg.split(':');
@@ -60,8 +61,13 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 					}
 					return;
 				}
-				const filePath = Resource.fullPath(item);
-				bridge().openItem(filePath);
+
+				try {
+					await ResourceEditWatcher.instance().openAndWatch(item.id);
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			} else if (item.type_ === BaseModel.TYPE_NOTE) {
 				dispatch({
 					type: 'FOLDER_AND_NOTE_SELECT',

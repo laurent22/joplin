@@ -1,16 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
-const { MarkupToHtml } = require('lib/joplin-renderer');
-const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 import AsyncActionQueue from '../../../lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const usePrevious = require('lib/hooks/usePrevious').default;
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const ResourceEditWatcher = require('lib/services/ResourceEditWatcher/index').default;
 
 export interface OnLoadEvent {
 	formNote: FormNote,
@@ -30,12 +31,30 @@ function installResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceFetcher.instance().on('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().on('downloadStarted', onResourceChangeHandler);
 	DecryptionWorker.instance().on('resourceDecrypted', onResourceChangeHandler);
+	ResourceEditWatcher.instance().on('resourceChange', onResourceChangeHandler);
 }
 
 function uninstallResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceFetcher.instance().off('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().off('downloadStarted', onResourceChangeHandler);
 	DecryptionWorker.instance().off('resourceDecrypted', onResourceChangeHandler);
+	ResourceEditWatcher.instance().off('resourceChange', onResourceChangeHandler);
+}
+
+function resourceInfosChanged(a:ResourceInfos, b:ResourceInfos):boolean {
+	if (Object.keys(a).length !== Object.keys(b).length) return true;
+
+	for (const id in a) {
+		const r1 = a[id];
+		const r2 = b[id];
+		if (!r2) return true;
+		if (r1.item.updated_time !== r2.item.updated_time) return true;
+		if (r1.item.encryption_applied !== r2.item.encryption_applied) return true;
+		if (r1.item.is_shared !== r2.item.is_shared) return true;
+		if (r1.localState.fetch_status !== r2.localState.fetch_status) return true;
+	}
+
+	return false;
 }
 
 export default function useFormNote(dependencies:HookDependencies) {
@@ -194,7 +213,9 @@ export default function useFormNote(dependencies:HookDependencies) {
 		async function runEffect() {
 			const r = await attachedResources(formNote.body);
 			if (cancelled) return;
-			setResourceInfos(r);
+			setResourceInfos((previous:ResourceInfos) => {
+				return resourceInfosChanged(previous, r) ? r : previous;
+			});
 		}
 
 		runEffect();

@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { dirname, basename } = require('lib/path-utils.js');
+const { shim } = require('lib/shim.js');
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -129,19 +130,14 @@ class FileApiDriverOneDrive {
 
 		let response = null;
 
-		try {
-			if (options.source == 'file') {
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, null, options);
-			} else {
-				options.headers = { 'Content-Type': 'text/plain' };
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
-			}
-		} catch (error) {
-			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
-				error.code = 'rejectedByTarget';
-				error.message = 'Resource exceeds OneDrive max file size (4MB)';
-			}
-			throw error;
+		if (options.source == 'file') {
+			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
+			const fileSize = (await shim.fsDriver().stat(options.path)).size;
+			path = fileSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
+			response = await this.api_.exec('PUT', path, null, null, options);
+		} else {
+			options.headers = { 'Content-Type': 'text/plain' };
+			response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
 		}
 
 		return response;

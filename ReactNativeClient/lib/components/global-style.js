@@ -1,56 +1,27 @@
 const Setting = require('lib/models/Setting.js');
 const { Platform } = require('react-native');
+const { themeById } = require('lib/theme');
 
-const globalStyle = {
+const baseStyle = {
+	appearance: 'light',
 	fontSize: 16,
+	noteViewerFontSize: 16,
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	backgroundColor: '#ffffff',
-	color: '#555555', // For regular text
-	colorError: 'red',
-	colorWarn: '#9A5B00',
-	colorFaded: '#777777', // For less important text
 	fontSizeSmaller: 14,
-	dividerColor: '#dddddd',
-	strongDividerColor: '#aaaaaa',
-	selectedColor: '#e5e5e5',
-	headerBackgroundColor: '#F0F0F0',
 	disabledOpacity: 0.2,
-	colorUrl: '#7B81FF',
-	textSelectionColor: '#0096FF',
-	appearance: 'light',
-
-	raisedBackgroundColor: '#0080EF',
-	raisedColor: '#003363',
-	raisedHighlightedColor: '#ffffff',
-
-	warningBackgroundColor: '#FFD08D',
-
-	// For WebView - must correspond to the properties above
-	htmlFontSize: '16px',
-	htmlColor: '#222222',
-	htmlBackgroundColor: 'white',
-	htmlDividerColor: 'rgb(230,230,230)',
-	htmlLinkColor: 'rgb(80,130,190)',
-	htmlLineHeight: '1.6em',
-
-	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
-	htmlCodeBorderColor: 'rgb(220, 220, 220)',
-	htmlCodeColor: 'rgb(0,0,0)',
-
-	codeThemeCss: 'atom-one-light.css',
+	lineHeight: '1.6em',
 };
-
-globalStyle.marginRight = globalStyle.margin;
-globalStyle.marginLeft = globalStyle.margin;
-globalStyle.marginTop = globalStyle.margin;
-globalStyle.marginBottom = globalStyle.margin;
-globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
 const themeCache_ = {};
 
 function addExtraStyles(style) {
+	style.marginRight = style.margin;
+	style.marginLeft = style.margin;
+	style.marginTop = style.margin;
+	style.marginBottom = style.margin;
+
 	style.icon = {
 		color: style.color,
 		fontSize: 30,
@@ -60,7 +31,7 @@ function addExtraStyles(style) {
 		color: style.color,
 		backgroundColor: style.backgroundColor,
 		borderBottomWidth: 1,
-		borderColor: style.strongDividerColor,
+		borderColor: style.dividerColor,
 		paddingBottom: 0,
 	};
 
@@ -82,7 +53,7 @@ function addExtraStyles(style) {
 	};
 
 	style.urlText = {
-		color: style.colorUrl,
+		color: style.urlColor,
 		fontSize: style.fontSize,
 	};
 
@@ -123,80 +94,12 @@ function themeStyle(theme) {
 		theme = Setting.THEME_LIGHT;
 	}
 
-	if (themeCache_[theme]) return themeCache_[theme];
+	const cacheKey = [theme].join('-');
+	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	const output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) {
-		return addExtraStyles(output);
-	} else if (theme == Setting.THEME_OLED_DARK) {
-		output.backgroundColor = '#000000';
-		output.color = '#dddddd';
-		output.colorFaded = '#777777';
-		output.dividerColor = '#555555';
-		output.strongDividerColor = '#888888';
-		output.selectedColor = '#333333';
-		output.textSelectionColor = '#00AEFF';
-		output.appearance = 'dark';
-		output.headerBackgroundColor = '#2D3136';
-
-		output.raisedBackgroundColor = '#0F2051';
-		output.raisedColor = '#788BC3';
-		output.raisedHighlightedColor = '#ffffff';
-
-		output.htmlColor = 'rgb(220,220,220)';
-		output.htmlBackgroundColor = 'rgb(0,0,0)';
-		output.htmlLinkColor = 'rgb(166,166,255)';
-
-		output.htmlDividerColor = '#3D444E';
-		output.htmlLinkColor = 'rgb(166,166,255)';
-		output.htmlCodeColor = '#ffffff';
-		output.htmlTableBackgroundColor = 'rgb(0, 0, 0)';
-		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
-		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
-
-		output.codeThemeCss = 'atom-one-dark-reasonable.css';
-
-		output.colorUrl = '#7B81FF';
-
-		output.colorBright = 'rgb(220,220,220)';
-
-		themeCache_[theme] = output;
-		return addExtraStyles(themeCache_[theme]);
-	}
-
-	output.backgroundColor = '#1D2024';
-	output.color = '#dddddd';
-	output.colorFaded = '#777777';
-	output.dividerColor = '#555555';
-	output.strongDividerColor = '#888888';
-	output.selectedColor = '#333333';
-	output.textSelectionColor = '#00AEFF';
-	output.appearance = 'dark';
-	output.headerBackgroundColor = '#2D3136';
-
-	output.raisedBackgroundColor = '#0F2051';
-	output.raisedColor = '#788BC3';
-	output.raisedHighlightedColor = '#ffffff';
-
-	output.htmlColor = 'rgb(220,220,220)';
-	output.htmlBackgroundColor = 'rgb(29,32,36)';
-	output.htmlLinkColor = 'rgb(166,166,255)';
-
-	output.htmlDividerColor = '#3D444E';
-	output.htmlLinkColor = 'rgb(166,166,255)';
-	output.htmlCodeColor = '#ffffff';
-	output.htmlTableBackgroundColor = 'rgb(40, 41, 42)';
-	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
-	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
-
-	output.codeThemeCss = 'atom-one-dark-reasonable.css';
-
-	output.colorUrl = '#7B81FF';
-
-	output.colorBright = 'rgb(220,220,220)';
-
-	themeCache_[theme] = output;
-	return addExtraStyles(themeCache_[theme]);
+	const output = Object.assign({}, baseStyle, themeById(theme));
+	themeCache_[cacheKey] = addExtraStyles(output);
+	return themeCache_[cacheKey];
 }
 
-module.exports = { globalStyle, themeStyle, editorFont };
+module.exports = { themeStyle, editorFont };

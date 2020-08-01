@@ -2,14 +2,12 @@ const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
 const { setupLinkify } = require('lib/joplin-renderer');
-const removeMarkdown = require('remove-markdown');
+
+// Taken from codemirror/addon/edit/continuelist.js
+const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
+const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
 
 const markdownUtils = {
-	// Not really escaping because that's not supported by marked.js
-	escapeLinkText(text) {
-		return text.replace(/(\[|\]|\(|\))/g, '_');
-	},
-
 	// Titles for markdown links only need escaping for [ and ]
 	escapeTitleText(text) {
 		return text.replace(/(\[|\])/g, '\\$1');
@@ -18,6 +16,7 @@ const markdownUtils = {
 	escapeLinkUrl(url) {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');
+		url = url.replace(/ /g, '%20');
 		return url;
 	},
 
@@ -60,9 +59,25 @@ const markdownUtils = {
 		return output;
 	},
 
+	// The match results has 5 items
+	// Full match array is
+	// [Full match, whitespace, list token, ol line number, whitespace following token]
 	olLineNumber(line) {
-		const match = line.match(/^(\d+)\.(\s.*|)$/);
-		return match ? Number(match[1]) : 0;
+		const match = line.match(listRegex);
+		return match ? Number(match[3]) : 0;
+	},
+
+	extractListToken(line) {
+		const match = line.match(listRegex);
+		return match ? match[2] : '';
+	},
+
+	isListItem(line) {
+		return listRegex.test(line);
+	},
+
+	isEmptyListItem(line) {
+		return emptyListRegex.test(line);
 	},
 
 	createMarkdownTable(headers, rows) {
@@ -101,11 +116,6 @@ const markdownUtils = {
 		const lines = body.trim().split('\n');
 		const title = lines[0].trim();
 		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
-	},
-
-	stripMarkdown(text, options = { gfm: false }) {
-		// Removes Markdown syntax elements from the given text
-		return removeMarkdown(text, options);
 	},
 };
 

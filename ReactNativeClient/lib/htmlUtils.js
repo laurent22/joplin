@@ -1,11 +1,34 @@
 const urlUtils = require('lib/urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
+const htmlparser2 = require('htmlparser2');
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+
+const selfClosingElements = [
+	'area',
+	'base',
+	'basefont',
+	'br',
+	'col',
+	'command',
+	'embed',
+	'frame',
+	'hr',
+	'img',
+	'input',
+	'isindex',
+	'keygen',
+	'link',
+	'meta',
+	'param',
+	'source',
+	'track',
+	'wbr',
+];
 
 class HtmlUtils {
 	headAndBodyHtml(doc) {
@@ -13,6 +36,10 @@ class HtmlUtils {
 		if (doc.head) output.push(doc.head.innerHTML);
 		if (doc.body) output.push(doc.body.innerHTML);
 		return output.join('\n');
+	}
+
+	isSelfClosingTag(tagName) {
+		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	extractImageUrls(html) {
@@ -80,6 +107,41 @@ class HtmlUtils {
 		}
 
 		return output.join(' ');
+	}
+
+	stripHtml(html) {
+		const output = [];
+
+		const tagStack = [];
+
+		const currentTag = () => {
+			if (!tagStack.length) return '';
+			return tagStack[tagStack.length - 1];
+		};
+
+		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
+
+		const parser = new htmlparser2.Parser({
+
+			onopentag: (name) => {
+				tagStack.push(name.toLowerCase());
+			},
+
+			ontext: (decodedText) => {
+				if (disallowedTags.includes(currentTag())) return;
+				output.push(decodedText);
+			},
+
+			onclosetag: (name) => {
+				if (currentTag() === name.toLowerCase()) tagStack.pop();
+			},
+
+		}, { decodeEntities: true });
+
+		parser.write(html);
+		parser.end();
+
+		return output.join('').replace(/\s+/g, ' ');
 	}
 }
 

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import AceEditor  from './NoteBody/AceEditor/AceEditor';
+import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import NoteToolbar from '../NoteToolbar/NoteToolbar';
@@ -16,8 +17,10 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher/index';
+import CommandService from '../../lib/services/CommandService';
 
-const { themeStyle } = require('../../theme.js');
+const { themeStyle } = require('lib/theme');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
@@ -28,9 +31,13 @@ const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const eventManager = require('../../eventManager');
+const eventManager = require('lib/eventManager');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const TagList = require('../TagList.min.js');
+
+const commands = [
+	require('./commands/showRevisions'),
+];
 
 function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
@@ -148,17 +155,6 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [props.isProvisional, formNote.id]);
 
-	useEffect(() => {
-		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
-		// yet saved, we need to save it now before the component is unmounted. However, we can't put
-		// formNote in the dependency array or that effect will run every time the note changes. We only
-		// want to run it once on unmount. So because of that we need to use that formNoteRef.
-		return () => {
-			isMountedRef.current = false;
-			saveNoteIfWillChange(formNoteRef.current);
-		};
-	}, []);
-
 	const previousNoteId = usePrevious(formNote.id);
 
 	useEffect(() => {
@@ -172,6 +168,8 @@ function NoteEditor(props: NoteEditorProps) {
 			type: props.selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
 			value: props.selectedNoteHash ? props.selectedNoteHash : props.lastEditorScrollPercents[props.noteId] || 0,
 		});
+
+		ResourceEditWatcher.instance().stopWatchingAll();
 	}, [formNote.id, previousNoteId]);
 
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -218,7 +216,7 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
-	useWindowCommandHandler({ windowCommand: props.windowCommand, dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
+	useWindowCommandHandler({ dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
 
 	const onDrop = useDropHandler({ editorRef });
 
@@ -234,17 +232,9 @@ function NoteEditor(props: NoteEditorProps) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteList',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteList' });
 			} else {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'focusElement',
-					target: 'noteBody',
-				});
+				CommandService.instance().execute('focusElement', { target: 'noteBody' });
 			}
 		}
 	}, [props.dispatch]);
@@ -310,52 +300,17 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 	}, [externalEditWatcher_noteChange, onNotePropertyChange]);
 
-	const noteToolbar_buttonClick = useCallback((event: any) => {
-		const cases: any = {
-
-			'startExternalEditing': async () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandStartExternalEditing',
-				});
-			},
-
-			'stopExternalEditing': () => {
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandStopExternalEditing',
-				});
-			},
-
-			'setTags': async () => {
-				await saveNoteAndWait(formNote);
-
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'setTags',
-					noteIds: [formNote.id],
-				});
-			},
-
-			'setAlarm': async () => {
-				await saveNoteAndWait(formNote);
-
-				props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'editAlarm',
-					noteId: formNote.id,
-				});
-			},
-
-			'showRevisions': () => {
-				setShowRevisions(true);
-			},
+	useEffect(() => {
+		const dependencies = {
+			setShowRevisions,
 		};
 
-		if (!cases[event.name]) throw new Error(`Unsupported event: ${event.name}`);
+		CommandService.instance().componentRegisterCommands(dependencies, commands);
 
-		cases[event.name]();
-	}, [formNote]);
+		return () => {
+			CommandService.instance().componentUnregisterCommands(commands);
+		};
+	}, [setShowRevisions]);
 
 	const onScroll = useCallback((event: any) => {
 		props.dispatch({
@@ -385,7 +340,6 @@ function NoteEditor(props: NoteEditorProps) {
 			theme={props.theme}
 			note={formNote}
 			style={toolbarStyle}
-			onButtonClick={noteToolbar_buttonClick}
 		/>;
 	}
 
@@ -432,6 +386,7 @@ function NoteEditor(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,// renderNoteToolbar(),
 		onScroll: onScroll,
+		setLocalSearchResultCount: setLocalSearchResultCount,
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
@@ -445,6 +400,8 @@ function NoteEditor(props: NoteEditorProps) {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'AceEditor') {
 		editor = <AceEditor {...editorProps}/>;
+	} else if (props.bodyEditor === 'CodeMirror') {
+		editor = <CodeMirror {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
@@ -468,7 +425,6 @@ function NoteEditor(props: NoteEditorProps) {
 			padding: theme.margin,
 			verticalAlign: 'top',
 			boxSizing: 'border-box',
-
 		};
 
 		return (
@@ -514,6 +470,17 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	function renderResourceWatchingNotification() {
+		if (!Object.keys(props.watchedResources).length) return null;
+		const resourceTitles = Object.keys(props.watchedResources).map(id => props.watchedResources[id].title);
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>{_('The following attachments are being watched for changes:')} <strong>{resourceTitles.join(', ')}</strong></p>
+				<p style={{ ...styles.resourceWatchBannerLine, marginBottom: 0 }}>{_('The attachments will no longer be watched when you switch to a different note.')}</p>
+			</div>
+		);
+	}
+
 	if (formNote.encryption_applied || !formNote.id || !props.noteId) {
 		return renderNoNotes(styles.root);
 	}
@@ -521,6 +488,7 @@ function NoteEditor(props: NoteEditorProps) {
 	return (
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				{renderResourceWatchingNotification()}
 				{renderTitleBar()}
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderNoteToolbar()}{renderTagBar()}
@@ -554,7 +522,6 @@ const mapStateToProps = (state: any) => {
 		syncStarted: state.syncStarted,
 		theme: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
-		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
 		selectedNoteTags: state.selectedNoteTags,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
@@ -563,6 +530,7 @@ const mapStateToProps = (state: any) => {
 		selectedSearchId: state.selectedSearchId,
 		customCss: state.customCss,
 		noteVisiblePanes: state.noteVisiblePanes,
+		watchedResources: state.watchedResources,
 	};
 };
 

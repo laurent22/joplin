@@ -3,8 +3,8 @@ const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const Setting = require('lib/models/Setting');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header.min.js');
-const { themeStyle } = require('../theme.js');
+const { Header } = require('./Header/Header.min.js');
+const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
 

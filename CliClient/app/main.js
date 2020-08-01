@@ -29,6 +29,9 @@ const { shimInit } = require('lib/shim-init-node.js');
 const { _ } = require('lib/locale.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const envFromArgs = require('lib/envFromArgs');
+
+const env = envFromArgs(process.argv);
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
@@ -46,7 +49,7 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-cli`);
 Setting.setConstant('appType', 'cli');
 
 shimInit();

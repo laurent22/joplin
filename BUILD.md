@@ -7,7 +7,10 @@ Note that all the applications share the same library, which, for historical rea
 ## Required dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
-- Install node - https://nodejs.org/en/
+- Install node 10+ - https://nodejs.org/en/
+- macOS, Linux: Install rsync - https://nodejs.org/en/
+- macOS: Install Cocoapods - `brew install cocoapods`
+- Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
 
 ## Building
 
@@ -66,6 +69,8 @@ You can specify additional parameters when running the desktop or CLI applicatio
 ## TypeScript
 
 Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
+
+In the current setup, `tsc` is executed from the root of the project, and will compile everything in CliClient, ElectronClient, etc. This is more convenient to have just one place to compile everything, and it also means there's only one watch command to run. However, one drawback is that TypeScript doesn't find types defined in node_modules folders in sub-directories. For example, if you install `immer` in ElectronClient, then try to use the package, TypeScript will report that it cannot find this module. In theory using `typeRoots`, it should be possible to make it find the right modules but it doesn't seem to work in this case. Currently the workaround is to install any such package at the root of the project. By doing so, TypeScript will find the type definitions and compilation will work. It's not ideal since the module is installed at the root even though it's not used, but for now that will work.
 
 ## Hot reload
 

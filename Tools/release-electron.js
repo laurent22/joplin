@@ -28,6 +28,8 @@ async function main() {
 	const release = await githubRelease('joplin', tagName, releaseOptions);
 
 	console.info(`Created GitHub release: ${release.html_url}`);
+	console.info('GitHub release page: https://github.com/laurent22/joplin/releases');
+	console.info(`To create changelog: node Tools/git-changelog.js ${version}`);
 }
 
 main().catch((error) => {

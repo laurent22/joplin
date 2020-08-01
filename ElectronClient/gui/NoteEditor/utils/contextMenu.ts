@@ -1,3 +1,5 @@
+import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher/index';
+
 const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -42,9 +44,12 @@ export function menuItems():ContextMenuItems {
 		open: {
 			label: _('Open...'),
 			onAction: async (options:ContextMenuOptions) => {
-				const { resourcePath } = await resourceInfo(options);
-				const ok = bridge().openExternal(`file://${resourcePath}`);
-				if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
+				try {
+					await ResourceEditWatcher.instance().openAndWatch(options.resourceId);
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			},
 			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},

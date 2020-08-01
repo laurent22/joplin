@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -315,6 +315,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
 <li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
@@ -568,7 +569,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 <tr>
 <td>order</td>
-<td>int</td>
+<td>numeric</td>
 <td></td>
 </tr>
 <tr>
@@ -653,7 +654,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </li>
 </ul>
 <h3>Creating a note with a specific ID<a name="creating-a-note-with-a-specific-id" href="#creating-a-note-with-a-specific-id" class="heading-anchor">🔗</a></h3>
-<p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a 32 characters long hexadecimal string. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
+<p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a <strong>32 characters long string</strong> in hexadecimal. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
 <pre><code>  curl --data '{ &quot;id&quot;: &quot;00a87474082744c1a8515da6aa5792d2&quot;, &quot;title&quot;: &quot;My note with custom ID&quot;}' http://127.0.0.1:41184/notes
 </code></pre>
 <h2>PUT /notes/:id<a name="put-notes-id" href="#put-notes-id" class="heading-anchor">🔗</a></h2>
@@ -890,6 +891,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <tr>
 <td>is_shared</td>
 <td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>text</td>
 <td></td>
 </tr>
 </tbody>
