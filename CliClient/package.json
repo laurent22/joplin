@@ -85,6 +85,7 @@
     "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
     "node-persist": "^2.1.0",
+    "open": "^7.0.4",
     "patch-package": "^6.2.0",
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",

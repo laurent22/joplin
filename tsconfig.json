@@ -2,6 +2,7 @@
     "compilerOptions": {
 		"module": "commonjs",
 		"target": "es2015",
+		"lib": ["es2020.string", "dom", "dom.iterable"],
 		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
 		"listEmittedFiles": false,
