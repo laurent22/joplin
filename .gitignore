@@ -52,13 +52,13 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
 CliClient/tests/support/plugins/withExternalModules/src/index.js
 ElectronClient/commands/copyDevCommand.js
-CliClient/app/LinkSelector.js
-CliClient/build/LinkSelector.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
@@ -167,7 +167,6 @@ ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
 ReactNativeClient/lib/services/plugin_service/ViewController.js
 ReactNativeClient/lib/services/plugin_service/WebviewController.js
-ReactNativeClient/lib/services/ResourceEditWatcher.js
 ReactNativeClient/lib/services/ResourceEditWatcher/index.js
 ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
