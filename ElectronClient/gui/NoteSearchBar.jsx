@@ -159,7 +159,7 @@ class NoteSearchBarComponent extends React.Component {
 
 		const viewerWarning = (
 			<div style={textStyle}>
-				{_('Jumping between matches is not available in the viewer, please toggle the editor')}
+				{'Jumping between matches is not available in the viewer, please toggle the editor'}
 			</div>
 		);
 
