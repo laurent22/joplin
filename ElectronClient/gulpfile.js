@@ -19,6 +19,7 @@ const tasks = {
 	},
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
 	tsc: require('../Tools/gulp/tasks/tsc'),
+	updateIgnoredTypeScriptBuild: require('../Tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 };
 
 utils.registerGulpTasks(gulp, tasks);
@@ -40,6 +41,7 @@ const buildParallel = [
 	'compilePackageInfo',
 	'copyPluginAssets',
 	'copyTinyMceLangs',
+	'updateIgnoredTypeScriptBuild',
 ];
 
 gulp.task('build', gulp.parallel(...buildParallel));
