@@ -110,6 +110,8 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+	dexOptions { javaMaxHeapSize "4g" }
     
     compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
@@ -120,8 +122,8 @@ android {
 		applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097569
-		versionName "1.0.333"
+		versionCode 2097571
+		versionName "1.0.335"
 		ndk {
 			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		}
