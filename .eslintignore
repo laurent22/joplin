@@ -145,6 +145,7 @@ ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/media.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
