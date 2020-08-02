@@ -6,12 +6,6 @@ import 'codemirror/mode/stex/stex';
 export default function useJoplinMode(CodeMirror: any) {
 
 	CodeMirror.defineMode('joplin-markdown', (config: any) => {
-		const stex = CodeMirror.getMode(config, { name: 'stex', inMathMode: true });
-		// const blocks = [{ open: '$$', close: '$$', mode: stex, delimStyle: 'katex-marker' },
-		//	// This regex states that an inline katex block must have a closing deliminator to be valid
-		//	// it also has some stipulations about the surrounding characters
-		//	{ open: /^\s\$(?=[^\s\$].*?[^\\\s\$]\$\s)/, close: /\$(?=\s)/, mode: stex, delimStyle: 'katex-marker' }];
-
 		const markdownConfig = {
 			name: 'markdown',
 			taskLists: true,
@@ -23,6 +17,7 @@ export default function useJoplinMode(CodeMirror: any) {
 		};
 
 		const markdownMode = CodeMirror.getMode(config, markdownConfig);
+		const stex = CodeMirror.getMode(config, { name: 'stex', inMathMode: true });
 
 		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?!\S))/;
 		const inlineKatexCloseRE = /(?<![\\\s$])\$(?!\S)/;
@@ -54,45 +49,51 @@ export default function useJoplinMode(CodeMirror: any) {
 			},
 
 			token: function(stream: any, state: any) {
-				if (!state.openCharacter) {
-					let nextTokenPos = stream.string.length;
-					const blockPos = findToken(stream, blockKatexRE);
-					if (blockPos !== -1) nextTokenPos = blockPos;
+				let currentMode = markdownMode;
+				let currentState = state.outer;
+				let tokenLabel = 'katex-marker-open';
+				let nextTokenPos = stream.string.length;
+				let closing = false;
+
+				const blockPos = findToken(stream, blockKatexRE);
+
+				if (state.openCharacter) {
+					currentMode = stex;
+					currentState = state.inner;
+					tokenLabel = 'katex-marker-close';
+					closing = true;
+
+					const inlinePos = findToken(stream, inlineKatexCloseRE);
+
+					if (state.openCharacter === '$$' && blockPos !== -1) nextTokenPos = blockPos;
+					if (state.openCharacter === '$' && inlinePos !== -1) nextTokenPos = inlinePos;
+				} else {
 					const inlinePos = findToken(stream, inlineKatexOpenRE);
+
+					if (blockPos !== -1) nextTokenPos = blockPos;
 					if (inlinePos !== -1 && inlinePos < nextTokenPos) nextTokenPos = inlinePos;
 
-					if (nextTokenPos === stream.pos) {
-						if (blockPos === stream.pos) state.openCharacter = '$$';
-						if (inlinePos === stream.pos) state.openCharacter = '$';
-						stream.match(state.openCharacter);
-						return 'katex-marker-open';
-					}
-					// If we found a token in this stream but haven;t reached it yet, then we will
-					// pass all the characters up to our token to markdown mode
-					const oldString = stream.string;
-					stream.string = oldString.slice(0, nextTokenPos);
-					const token = markdownMode.token(stream, state.outer);
-					stream.string = oldString;
-					return token;
-				} else {
-					let nextTokenPos = stream.string.length;
-					if (state.openCharacter === '$$') { nextTokenPos = findToken(stream, blockKatexRE); } else if (state.openCharacter === '$') { nextTokenPos = findToken(stream, inlineKatexCloseRE); }
-
-					if (nextTokenPos < 0) nextTokenPos = stream.string.length;
-
-					if (nextTokenPos === stream.pos) {
-						stream.match(state.openCharacter);
-						state.openCharacter = '';
-						return 'katex-marker-close';
-					}
-					// If we found a token in this stream but haven;t reached it yet, then we will
-					// pass all the characters up to our token to markdown mode
-					const oldString = stream.string;
-					stream.string = oldString.slice(0, nextTokenPos);
-					const token = stex.token(stream, state.inner);
-					stream.string = oldString;
-					return token;
+					if (blockPos === stream.pos) state.openCharacter = '$$';
+					if (inlinePos === stream.pos) state.openCharacter = '$';
 				}
+
+				if (nextTokenPos === stream.pos) {
+					stream.match(state.openCharacter);
+
+					if (closing) state.openCharacter = '';
+
+					return tokenLabel;
+				}
+
+				// If we found a token in this stream but haven;t reached it yet, then we will
+				// pass all the characters leading up to our token to markdown mode
+				const oldString = stream.string;
+
+				stream.string = oldString.slice(0, nextTokenPos);
+				const token = currentMode.token(stream, currentState);
+				stream.string = oldString;
+
+				return token;
 			},
 
 			indent: function(state: any, textAfter: string, line: any) {
