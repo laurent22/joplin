@@ -52,6 +52,8 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+CliClient/tests/synchronizer_LockHandler.js
+CliClient/tests/synchronizer_MigrationHandler.js
 CliClient/app/LinkSelector.js
 CliClient/build/LinkSelector.js
 ElectronClient/commands/focusElement.js
@@ -124,6 +126,7 @@ ElectronClient/gui/NoteList/commands/focusElementNoteList.js
 ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/ResourceScreen.js
+ElectronClient/gui/Root_UpgradeSyncTarget.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
 ReactNativeClient/lib/AsyncActionQueue.js
@@ -131,6 +134,7 @@ ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
+ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
 ReactNativeClient/lib/hooks/useEffectDebugger.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
@@ -152,6 +156,12 @@ ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/SettingUtils.js
+ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
+ReactNativeClient/lib/services/synchronizer/LockHandler.js
+ReactNativeClient/lib/services/synchronizer/MigrationHandler.js
+ReactNativeClient/lib/services/synchronizer/migrations/1.js
+ReactNativeClient/lib/services/synchronizer/migrations/2.js
+ReactNativeClient/lib/services/synchronizer/utils/types.js
 ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js

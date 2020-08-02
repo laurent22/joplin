@@ -225,7 +225,10 @@ class OneDriveApi {
 		// In general, `path` contains a path relative to the base URL, but in some
 		// cases the full URL is provided (for example, when it's a URL that was
 		// retrieved from the API).
-		if (url.indexOf('https://') !== 0) url = `https://graph.microsoft.com/v1.0${path}`;
+		if (url.indexOf('https://') !== 0) {
+			const slash = path.indexOf('/') === 0 ? '' : '/';
+			url = `https://graph.microsoft.com/v1.0${slash}${path}`;
+		}
 
 		if (query) {
 			url += url.indexOf('?') < 0 ? '?' : '&';

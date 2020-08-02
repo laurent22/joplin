@@ -44,6 +44,7 @@ const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
 const { DropboxLoginScreen } = require('lib/components/screens/dropbox-login.js');
+const UpgradeSyncTargetScreen = require('lib/components/screens/UpgradeSyncTargetScreen').default;
 const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
@@ -720,6 +721,7 @@ class AppComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
+			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },

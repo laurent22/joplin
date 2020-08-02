@@ -16,6 +16,10 @@
 		"sourceMap": true,
 		"jsx": "react",
 		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"lib/*": ["./ReactNativeClient/lib/*"],
+		},
 	},
     "include": [
         "ReactNativeClient/**/*",
