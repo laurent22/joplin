@@ -111,6 +111,9 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+	// To fix this error:
+	// > java.io.UncheckedIOException: java.io.IOException: Execution of compression failed. java.lang.OutOfMemoryError
+	// https://stackoverflow.com/q/57284812/561309
 	dexOptions { javaMaxHeapSize "4g" }
     
     compileOptions {
