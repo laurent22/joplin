@@ -34,6 +34,7 @@ const KeymapService = require('lib/services/KeymapService.js').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
+const versionInfo = require('lib/versionInfo').default;
 
 const commands = [
 	require('./gui/Header/commands/focusSearch'),
@@ -598,37 +599,17 @@ class Application extends BaseApplication {
 		}
 
 		function _showAbout() {
-			const p = packageInfo;
-			let gitInfo = '';
-			if ('git' in p) {
-				gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
-			}
-			const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
-			const message = [
-				p.description,
-				'',
-				copyrightText.replace('YYYY', new Date().getFullYear()),
-				_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
-				'',
-				_('Client ID: %s', Setting.value('clientId')),
-				_('Sync Version: %s', Setting.value('syncVersion')),
-				_('Profile Version: %s', reg.db().version()),
-				_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
-			];
-			if (gitInfo) {
-				message.push(`\n${gitInfo}`);
-				console.info(gitInfo);
-			}
-			const text = message.join('\n');
+			const v = versionInfo(packageInfo);
 
-			const copyToClipboard = bridge().showMessageBox(text, {
+			const copyToClipboard = bridge().showMessageBox(v.message, {
 				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
 				buttons: [_('Copy'), _('OK')],
 				cancelId: 1,
 				defaultId: 1,
 			});
+
 			if (copyToClipboard === 0) {
-				clipboard.writeText(message.splice(3).join('\n'));
+				clipboard.writeText(v.message);
 			}
 		}
 
@@ -1096,7 +1077,7 @@ class Application extends BaseApplication {
 			return { action: 'upgradeSyncTarget' };
 		}
 
-    const dir = Setting.value('profileDir');
+		const dir = Setting.value('profileDir');
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
