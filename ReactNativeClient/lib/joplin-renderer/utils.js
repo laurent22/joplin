@@ -124,6 +124,7 @@ utils.resourceStatus = function(ResourceModel, resourceInfo) {
 
 utils.resourceReplacement = function(ResourceModel, src, resources, resourceBaseUrl) {
 	if (!ResourceModel) return null;
+	if (!ResourceModel || !resources) return null;
 
 	if (!ResourceModel.isResourceUrl(src)) return null;
 

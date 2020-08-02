@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 
 export function cursorPositionToTextOffset(cursorPos: any, body: string) {
 	if (!body) return 0;
@@ -81,4 +81,23 @@ export function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Func
 	}, []);
 
 	return { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll };
+}
+
+
+export function useRootSize(dependencies:any) {
+	const { rootRef } = dependencies;
+
+	const [rootSize, setRootSize] = useState({ width: 0, height: 0 });
+
+	useEffect(() => {
+		if (!rootRef.current) return;
+
+		const { width, height } = rootRef.current.getBoundingClientRect();
+
+		if (rootSize.width !== width || rootSize.height !== height) {
+			setRootSize({ width: width, height: height });
+		}
+	});
+
+	return rootSize;
 }

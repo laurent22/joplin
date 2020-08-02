@@ -187,6 +187,9 @@ class Note extends BaseItem {
 					return `:/${id}`;
 				});
 			}
+
+			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
+			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
 		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
@@ -265,7 +268,7 @@ class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'encryption_applied'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -278,9 +281,7 @@ class Note extends BaseItem {
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db()
-			.escapeFields(fields)
-			.join(',');
+		return this.db().escapeFields(fields).join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {

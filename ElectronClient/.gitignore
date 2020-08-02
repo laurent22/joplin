@@ -2,8 +2,7 @@ node_modules/
 packageInfo.js
 dist/
 lib/
-gui/*.min.js
-plugins/*.min.js
+*.min.js
 .DS_Store
 gui/note-viewer/pluginAssets/
 pluginAssets/

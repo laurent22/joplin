@@ -1,6 +1,7 @@
 const urlUtils = require('lib/urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
+const htmlparser2 = require('htmlparser2');
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
@@ -106,6 +107,41 @@ class HtmlUtils {
 		}
 
 		return output.join(' ');
+	}
+
+	stripHtml(html) {
+		const output = [];
+
+		const tagStack = [];
+
+		const currentTag = () => {
+			if (!tagStack.length) return '';
+			return tagStack[tagStack.length - 1];
+		};
+
+		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
+
+		const parser = new htmlparser2.Parser({
+
+			onopentag: (name) => {
+				tagStack.push(name.toLowerCase());
+			},
+
+			ontext: (decodedText) => {
+				if (disallowedTags.includes(currentTag())) return;
+				output.push(decodedText);
+			},
+
+			onclosetag: (name) => {
+				if (currentTag() === name.toLowerCase()) tagStack.pop();
+			},
+
+		}, { decodeEntities: true });
+
+		parser.write(html);
+		parser.end();
+
+		return output.join('').replace(/\s+/g, ' ');
 	}
 }
 

@@ -296,6 +296,7 @@ user_updated_time | int | When the tag was last updated. It may differ from upda
 encryption_cipher_text | text |    
 encryption_applied | int |    
 is_shared | int |    
+parent_id | text |    
 
 ## GET /tags
 

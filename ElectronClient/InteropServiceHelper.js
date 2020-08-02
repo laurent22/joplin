@@ -1,6 +1,7 @@
 const { _ } = require('lib/locale');
 const { bridge } = require('electron').remote.require('./bridge');
 const InteropService = require('lib/services/InteropService');
+const CommandService = require('lib/services/CommandService').default;
 const Setting = require('lib/models/Setting');
 const Note = require('lib/models/Note.js');
 const { friendlySafeFilename } = require('lib/path-utils');
@@ -143,11 +144,7 @@ class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
-		dispatch({
-			type: 'WINDOW_COMMAND',
-			name: 'showModalMessage',
-			message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format),
-		});
+		CommandService.instance().execute('showModalMessage', { message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format) });
 
 		const exportOptions = {};
 		exportOptions.path = path;
@@ -167,10 +164,7 @@ class InteropServiceHelper {
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 
-		dispatch({
-			type: 'WINDOW_COMMAND',
-			name: 'hideModalMessage',
-		});
+		CommandService.instance().execute('hideModalMessage');
 	}
 
 }

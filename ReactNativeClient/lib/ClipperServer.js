@@ -4,7 +4,6 @@ const { Logger } = require('lib/logger.js');
 const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
-const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const multiparty = require('multiparty');
 
@@ -14,15 +13,18 @@ class ClipperServer {
 		this.startState_ = 'idle';
 		this.server_ = null;
 		this.port_ = null;
-		this.api_ = new Api(() => {
-			return Setting.value('api.token');
-		}, actionApi);
 	}
 
 	static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ClipperServer();
 		return this.instance_;
+	}
+
+	initialize(actionApi = null) {
+		this.api_ = new Api(() => {
+			return Setting.value('api.token');
+		}, actionApi);
 	}
 
 	setLogger(l) {

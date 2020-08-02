@@ -3,6 +3,11 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
+const CommandService = require('lib/services/CommandService').default;
+
+const commands = [
+	require('./commands/focusSearch'),
+];
 
 class HeaderComponent extends React.Component {
 	constructor() {
@@ -12,6 +17,10 @@ class HeaderComponent extends React.Component {
 			showSearchUsageLink: false,
 			showButtonLabels: true,
 		};
+
+		for (const command of commands) {
+			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(this));
+		}
 
 		this.scheduleSearchChangeEventIid_ = null;
 		this.searchOnQuery_ = null;
@@ -72,12 +81,6 @@ class HeaderComponent extends React.Component {
 		};
 	}
 
-	async UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.windowCommand) {
-			this.doCommand(nextProps.windowCommand);
-		}
-	}
-
 	componentDidUpdate(prevProps) {
 		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
 			this.resetSearch();
@@ -97,6 +100,10 @@ class HeaderComponent extends React.Component {
 			clearTimeout(this.hideSearchUsageLinkIID_);
 			this.hideSearchUsageLinkIID_ = null;
 		}
+
+		for (const command of commands) {
+			CommandService.instance().unregisterRuntime(command.declaration.name);
+		}
 	}
 
 	determineButtonLabelState() {
@@ -106,25 +113,6 @@ class HeaderComponent extends React.Component {
 		if (this.state.showButtonLabels !== showButtonLabels) {
 			this.setState({
 				showButtonLabels: !mediaQuery.matches,
-			});
-		}
-	}
-
-	async doCommand(command) {
-		if (!command) return;
-
-		let commandProcessed = true;
-
-		if (command.name === 'focusSearch' && this.searchElement_) {
-			this.searchElement_.focus();
-		} else {
-			commandProcessed = false;
-		}
-
-		if (commandProcessed) {
-			this.props.dispatch({
-				type: 'WINDOW_COMMAND',
-				name: null,
 			});
 		}
 	}
@@ -329,7 +317,6 @@ class HeaderComponent extends React.Component {
 const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
-		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
