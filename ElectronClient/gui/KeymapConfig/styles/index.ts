@@ -7,33 +7,44 @@ export default function styles(props: KeymapConfigScreenProps) {
 		return {
 			containerStyle: {
 				...theme.containerStyle,
-				padding: 10,
-				overflow: 'auto',
+				padding: 15,
 			},
 			topActionsStyle: {
-				...theme.containerStyle,
-				marginTop: 10,
 				display: 'flex',
 				flexDirection: 'row',
 			},
 			inlineButtonStyle: {
 				...theme.buttonStyle,
-				height: theme.inputStyle.height,
 				padding: 0,
 				marginLeft: 12,
 			},
 			filterInputStyle: {
 				...theme.inputStyle,
 				flexGrow: 1,
+				minHeight: theme.buttonStyle.minHeight,
 			},
 			tableStyle: {
 				...theme.containerStyle,
-				marginTop: 10,
+				marginTop: 15,
 				overflow: 'auto',
 				width: '100%',
 			},
+			tableShortcutColumnStyle: {
+				...theme.textStyle,
+				width: '65%',
+			},
+			tableCommandColumnStyle: {
+				...theme.textStyle,
+				width: 'auto',
+			},
+			tableRowStyle: {
+				minHeight: 25,
+			},
 			textStyle: {
 				...theme.textStyle,
+			},
+			inputStyle: {
+				...theme.inputStyle,
 			},
 		};
 	});

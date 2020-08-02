@@ -44,15 +44,18 @@ export const ShortcutRecorder = (props: ShortcutRecorderProps) => {
 		// props.updateIsEditing(false);
 	};
 
+	const placeholderText = _('Press the shortcut and hit Enter');
+
 	return (
 		<div onBlur={handleBlur}>
 			<input
 				value={accelerator}
-				placeholder={_('Press the shortcut and hit Enter')}
+				placeholder={placeholderText}
 				onKeyDown={handleKeydown}
 				readOnly
 				autoFocus
 				style={styles.inputStyle}
+				size={placeholderText.length}
 			/>
 
 			<button style={styles.inlineButtonStyle} onClick={handleRestore}>

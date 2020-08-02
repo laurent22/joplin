@@ -62,9 +62,9 @@ export const KeymapConfigScreen = (props: KeymapConfigScreenProps) => {
 			</div>;
 
 		return (
-			<tr key={item.command}>
-				<td style={styles.textStyle}>{item.label}</td>
-				<td style={styles.textStyle}>
+			<tr key={item.command} style={styles.tableRowStyle}>
+				<td style={styles.tableCommandColumnStyle}>{item.label}</td>
+				<td style={styles.tableShortcutColumnStyle}>
 					{cellContent}
 				</td>
 			</tr>
@@ -92,9 +92,9 @@ export const KeymapConfigScreen = (props: KeymapConfigScreenProps) => {
 
 			<table style={styles.tableStyle}>
 				<thead>
-					<tr>
-						<th style={styles.textStyle}>{_('Command')}</th>
-						<th style={styles.textStyle}>{_('Keyboard Shortcut')}</th>
+					<tr style={styles.tableRowStyle}>
+						<th style={styles.tableCommandColumnStyle}>{_('Command')}</th>
+						<th style={styles.tableShortcutColumnStyle}>{_('Keyboard Shortcut')}</th>
 					</tr>
 				</thead>
 				<tbody>
