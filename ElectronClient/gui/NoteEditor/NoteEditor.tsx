@@ -14,6 +14,7 @@ import useMessageHandler from './utils/useMessageHandler';
 import useWindowCommandHandler from './utils/useWindowCommandHandler';
 import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
+import useNoteToolbarButtons from './utils/useNoteToolbarButtons';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
@@ -392,6 +393,7 @@ function NoteEditor(props: NoteEditorProps) {
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
+		noteToolbarButtonInfos: useNoteToolbarButtons(),
 	};
 
 	let editor = null;

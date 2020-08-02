@@ -4,7 +4,8 @@ const { _ } = require('lib/locale');
 export const declaration:CommandDeclaration = {
 	name: 'historyBackward',
 	label: () => _('Back'),
-	iconName: 'fa-arrow-left',
+	// iconName: 'fa-arrow-left',
+	iconName: 'icon-back',
 };
 
 interface Props {

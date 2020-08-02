@@ -28,6 +28,14 @@ export interface Command {
 	runtime?: CommandRuntime,
 }
 
+export interface ToolbarButtonInfo {
+	tooltip: string,
+	iconName: string,
+	enabled: boolean,
+	onClick():void,
+	title: string,
+}
+
 interface Commands {
 	[key:string]: Command;
 }
@@ -255,7 +263,7 @@ export default class CommandService extends BaseService {
 		return {};
 	}
 
-	commandToToolbarButton(commandName:string, executeArgs:any = null) {
+	commandToToolbarButton(commandName:string, executeArgs:any = null):ToolbarButtonInfo {
 		const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
 
 		return {

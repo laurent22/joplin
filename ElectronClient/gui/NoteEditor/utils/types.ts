@@ -1,5 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import AsyncActionQueue from '../../../lib/AsyncActionQueue';
+import { ToolbarButtonInfo } from '../../../lib/services/CommandService';
+
+export interface ToolbarButtonInfos {
+	[key:string]: ToolbarButtonInfo;
+}
 
 export interface NoteEditorProps {
 	style: any;
@@ -50,6 +55,7 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos,
 	locale: string,
 	onDrop: Function,
+	noteToolbarButtonInfos: ToolbarButtonInfos,
 }
 
 export interface FormNote {

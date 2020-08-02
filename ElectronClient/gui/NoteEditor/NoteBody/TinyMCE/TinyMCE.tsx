@@ -3,15 +3,16 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
+import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
-import CommandService from '../../../../lib/services/CommandService';
+import CommandService, { ToolbarButtonInfo } from '../../../../lib/services/CommandService';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
-const { themeStyle, buildStyle } = require('lib/theme');
+const { themeStyle } = require('lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -111,31 +112,6 @@ const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
 	'textLink': { name: 'mceLink' },
 	'search': { name: 'SearchReplace' },
 };
-
-function styles_(props:NoteBodyEditorProps) {
-	return buildStyle('TinyMCE', props.theme, (/* theme:any */) => {
-		return {
-			disabledOverlay: {
-				zIndex: 10,
-				position: 'absolute',
-				backgroundColor: 'white',
-				opacity: 0.7,
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				padding: 20,
-				paddingTop: 50,
-				textAlign: 'center',
-				width: '100%',
-			},
-			rootStyle: {
-				position: 'relative',
-				...props.style,
-			},
-		};
-	});
-}
 
 let loadedCssFiles_:string[] = [];
 let loadedJsFiles_:string[] = [];
@@ -1036,6 +1012,30 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		};
 	}, []);
 
+	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
+		return (
+			<button key={key} style={{ display: 'flex' }} disabled={!info.enabled} aria-label={info.title} title={info.title} type="button" className="tox-tbtn" aria-pressed="false" onClick={info.onClick}>
+				<span className="tox-icon tox-tbtn__icon-wrap">
+					<span style={{ fontSize: 24 }} className={info.iconName}></span>
+				</span>
+			</button>
+		);
+	}
+
+	function renderExtraToolbarButtons() {
+		const buttons = [];
+		for (const buttonName in props.noteToolbarButtonInfos) {
+			const info = props.noteToolbarButtonInfos[buttonName];
+			buttons.push(renderExtraToolbarButton(buttonName, info));
+		}
+
+		return (
+			<div className="tox" style={{ display: 'flex', flexDirection: 'row', position: 'absolute', width: 100, height: 41, zIndex: 2, top: 1, left: 4 }}>
+				{buttons}
+			</div>
+		);
+	}
+
 	// Currently we don't handle resource "auto" and "manual" mode with TinyMCE
 	// as it is quite complex and probably rarely used.
 	function renderDisabledOverlay() {
@@ -1053,8 +1053,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	}
 
 	return (
-		<div style={styles.rootStyle}>
+		<div style={styles.rootStyle} className="joplin-tinymce">
 			{renderDisabledOverlay()}
+			{renderExtraToolbarButtons()}
 			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
 		</div>
 	);

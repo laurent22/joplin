@@ -170,3 +170,8 @@ a {
 	from {transform: rotate(0deg);}
 	to {transform: rotate(360deg);}
 }
+
+.joplin-tinymce .tox-editor-header {
+	padding-left: 100px;
+	padding-right: 100px;
+}
