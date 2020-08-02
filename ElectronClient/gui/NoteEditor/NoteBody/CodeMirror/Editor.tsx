@@ -155,7 +155,7 @@ function Editor(props: EditorProps, ref: any) {
 		};
 
 		if (shim.isMac()) {
-			CodeMirror.keymap.default = {
+			CodeMirror.keyMap.default = {
 				// MacOS
 				'Cmd-A': 'selectAll',
 				'Cmd-D': 'deleteLine',
