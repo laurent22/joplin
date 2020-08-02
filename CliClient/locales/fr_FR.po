@@ -254,7 +254,7 @@ msgstr "Activé"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: ReactNativeClient/lib/models/Setting.js:566
+#: ReactNativeClient/lib/models/Setting.js:607
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Désactivé"
@@ -807,7 +807,7 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ElectronClient/plugins/GotoAnything.min.js:450
+#: ElectronClient/plugins/GotoAnything.min.js:454
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
@@ -815,7 +815,7 @@ msgstr ""
 "Entrez le titre d’une note, ou entrez # suivit du nom d’une étiquette, ou @ "
 "suivit du nom d’un carnet."
 
-#: ElectronClient/plugins/GotoAnything.min.js:489
+#: ElectronClient/plugins/GotoAnything.min.js:493
 msgid "Goto Anything..."
 msgstr "Navigation rapide…"
 
@@ -1260,7 +1260,7 @@ msgid "URL"
 msgstr "URL"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1212
+#: ReactNativeClient/lib/models/Setting.js:1253
 msgid "Note History"
 msgstr "Historique des notes"
 
@@ -1595,7 +1595,7 @@ msgstr "Affichage"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ReactNativeClient/lib/models/Setting.js:329
+#: ReactNativeClient/lib/models/Setting.js:370
 msgid "Sort notes by"
 msgstr "Trier les notes par"
 
@@ -1817,46 +1817,46 @@ msgstr "Veuillez d'abord créer un carnet d'abord"
 msgid "Clear"
 msgstr "Supprimer"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:65
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
 msgstr "Mots"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:66
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
 msgstr "Caractères"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:67
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
 msgstr "Caractères sans espaces"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:68
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
 msgstr "Lignes"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:87
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
 msgid "Editor"
 msgstr "Éditeur"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:88
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Viewer"
 msgstr "Visionneuse"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:96
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:100
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:101
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "Fermer"
@@ -2231,6 +2231,10 @@ msgstr "Paramètre inconnu : %s"
 msgid "Unknown level ID: %s"
 msgstr "Paramètre inconnu : %s"
 
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -2371,11 +2375,23 @@ msgstr "WebDAV : Nom utilisateur"
 msgid "WebDAV password"
 msgstr "WebDAV : Mot de passe"
 
-#: ReactNativeClient/lib/models/Setting.js:195
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
 msgstr "Téléchargement des ressources"
 
-#: ReactNativeClient/lib/models/Setting.js:196
+#: ReactNativeClient/lib/models/Setting.js:225
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2386,188 +2402,188 @@ msgstr ""
 "ouvrez la note. En mode \"toujours\", toutes les ressources sont "
 "téléchargées, que vous ayez ouvert la note ou pas."
 
-#: ReactNativeClient/lib/models/Setting.js:199
+#: ReactNativeClient/lib/models/Setting.js:228
 msgid "Always"
 msgstr "Toujours"
 
-#: ReactNativeClient/lib/models/Setting.js:200
+#: ReactNativeClient/lib/models/Setting.js:229
 msgid "Manual"
 msgstr "Manuel"
 
-#: ReactNativeClient/lib/models/Setting.js:201
+#: ReactNativeClient/lib/models/Setting.js:230
 msgid "Auto"
 msgstr "Auto"
 
-#: ReactNativeClient/lib/models/Setting.js:206
+#: ReactNativeClient/lib/models/Setting.js:247
 msgid "Max concurrent connections"
 msgstr "Nombre maxi de connections simultanées"
 
-#: ReactNativeClient/lib/models/Setting.js:215
+#: ReactNativeClient/lib/models/Setting.js:256
 msgid "Language"
 msgstr "Langue"
 
-#: ReactNativeClient/lib/models/Setting.js:225
+#: ReactNativeClient/lib/models/Setting.js:266
 msgid "Date format"
 msgstr "Format de la date"
 
-#: ReactNativeClient/lib/models/Setting.js:244
+#: ReactNativeClient/lib/models/Setting.js:285
 msgid "Time format"
 msgstr "Format de l'heure"
 
-#: ReactNativeClient/lib/models/Setting.js:263
+#: ReactNativeClient/lib/models/Setting.js:304
 msgid "Theme"
 msgstr "Apparence"
 
-#: ReactNativeClient/lib/models/Setting.js:274
+#: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
 msgstr "Changer le thème automatiquement pour correspondre au thème système"
 
-#: ReactNativeClient/lib/models/Setting.js:286
+#: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
 msgstr "Thème clair préféré"
 
-#: ReactNativeClient/lib/models/Setting.js:300
+#: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
 msgstr "Thème sombre préféré"
 
-#: ReactNativeClient/lib/models/Setting.js:305
+#: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
 msgstr "Afficher le compte des notes"
 
-#: ReactNativeClient/lib/models/Setting.js:314
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 msgid "Split View"
 msgstr "Vue fractionnée"
 
-#: ReactNativeClient/lib/models/Setting.js:314
+#: ReactNativeClient/lib/models/Setting.js:355
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:315
-#: ReactNativeClient/lib/models/Setting.js:316
-#: ReactNativeClient/lib/models/Setting.js:317
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:320
+#: ReactNativeClient/lib/models/Setting.js:361
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
 
-#: ReactNativeClient/lib/models/Setting.js:321
+#: ReactNativeClient/lib/models/Setting.js:362
 msgid "Show completed to-dos"
 msgstr "Afficher les tâches complétées"
 
-#: ReactNativeClient/lib/models/Setting.js:346
+#: ReactNativeClient/lib/models/Setting.js:387
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-compléter les paires de parenthèses, guillemets, etc."
 
-#: ReactNativeClient/lib/models/Setting.js:354
+#: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
 msgstr "Utiliser CodeMirror comme éditeur de code (ATTENTION: BETA)."
 
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
 msgid "Reverse sort order"
 msgstr "Inverser l'ordre"
 
-#: ReactNativeClient/lib/models/Setting.js:363
+#: ReactNativeClient/lib/models/Setting.js:404
 msgid "Sort notebooks by"
 msgstr "Trier les carnets par"
 
-#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:416
 msgid "Save geo-location with notes"
 msgstr "Enregistrer les informations de géolocalisation des notes"
 
-#: ReactNativeClient/lib/models/Setting.js:394
+#: ReactNativeClient/lib/models/Setting.js:435
 msgid "When creating a new to-do:"
 msgstr "Lors de la création d'une tâche :"
 
-#: ReactNativeClient/lib/models/Setting.js:397
-#: ReactNativeClient/lib/models/Setting.js:412
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
 msgid "Focus title"
 msgstr "Curseur sur le titre"
 
-#: ReactNativeClient/lib/models/Setting.js:398
-#: ReactNativeClient/lib/models/Setting.js:413
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
 msgid "Focus body"
 msgstr "Curseur sur corps du message"
 
-#: ReactNativeClient/lib/models/Setting.js:409
+#: ReactNativeClient/lib/models/Setting.js:450
 msgid "When creating a new note:"
 msgstr "Lors de la création d'une note :"
 
-#: ReactNativeClient/lib/models/Setting.js:423
+#: ReactNativeClient/lib/models/Setting.js:464
 msgid "Enable soft breaks"
 msgstr "Activer retours à la ligne \"doux\""
 
-#: ReactNativeClient/lib/models/Setting.js:424
+#: ReactNativeClient/lib/models/Setting.js:465
 msgid "Enable typographer support"
 msgstr "Activer le typographe"
 
-#: ReactNativeClient/lib/models/Setting.js:425
+#: ReactNativeClient/lib/models/Setting.js:466
 msgid "Enable math expressions"
 msgstr "Activer les expressions mathématiques"
 
-#: ReactNativeClient/lib/models/Setting.js:426
+#: ReactNativeClient/lib/models/Setting.js:467
 msgid "Enable Fountain syntax support"
 msgstr "Activer la syntaxe \"Fountain\""
 
-#: ReactNativeClient/lib/models/Setting.js:427
+#: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable Mermaid diagrams support"
 msgstr "Activer les diagrammes Mermaid"
 
-#: ReactNativeClient/lib/models/Setting.js:429
+#: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable ==mark== syntax"
 msgstr "Activer la syntaxe pour ==surligner=="
 
-#: ReactNativeClient/lib/models/Setting.js:430
+#: ReactNativeClient/lib/models/Setting.js:471
 msgid "Enable footnotes"
 msgstr "Activer les notes de bas de page"
 
-#: ReactNativeClient/lib/models/Setting.js:431
+#: ReactNativeClient/lib/models/Setting.js:472
 msgid "Enable table of contents extension"
 msgstr "Activer la table des matières"
 
-#: ReactNativeClient/lib/models/Setting.js:432
+#: ReactNativeClient/lib/models/Setting.js:473
 msgid "Enable ~sub~ syntax"
 msgstr "Activer la syntaxe ~indice~"
 
-#: ReactNativeClient/lib/models/Setting.js:433
+#: ReactNativeClient/lib/models/Setting.js:474
 msgid "Enable ^sup^ syntax"
 msgstr "Activer la syntaxe ^exposant^"
 
-#: ReactNativeClient/lib/models/Setting.js:434
+#: ReactNativeClient/lib/models/Setting.js:475
 msgid "Enable deflist syntax"
 msgstr "Activer les listes de définitions"
 
-#: ReactNativeClient/lib/models/Setting.js:435
+#: ReactNativeClient/lib/models/Setting.js:476
 msgid "Enable abbreviation syntax"
 msgstr "Activer la syntaxe pour abréviations"
 
-#: ReactNativeClient/lib/models/Setting.js:436
+#: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable markdown emoji"
 msgstr "Activer la syntaxe émoji"
 
-#: ReactNativeClient/lib/models/Setting.js:437
+#: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable ++insert++ syntax"
 msgstr "Activer la syntaxe ++insertion++"
 
-#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:479
 msgid "Enable multimarkdown table extension"
 msgstr "Activer les tables multi-markdown"
 
-#: ReactNativeClient/lib/models/Setting.js:450
+#: ReactNativeClient/lib/models/Setting.js:491
 msgid "Show tray icon"
 msgstr "Afficher l'icône dans la zone de notifications"
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid "Note: Does not work in all desktop environments."
 msgstr "Note : Ne fonctionne pas dans tous les environnements de bureau."
 
-#: ReactNativeClient/lib/models/Setting.js:452
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2577,23 +2593,23 @@ msgstr ""
 "d'activer ce réglage pour que vos notes soient constamment synchronisées, "
 "donc réduire le nombre de conflits."
 
-#: ReactNativeClient/lib/models/Setting.js:456
+#: ReactNativeClient/lib/models/Setting.js:497
 msgid "Start application minimised in the tray icon"
 msgstr "Démarrer minimisé dans la zone de notification"
 
-#: ReactNativeClient/lib/models/Setting.js:475
+#: ReactNativeClient/lib/models/Setting.js:516
 msgid "Editor font size"
 msgstr "Taille police éditeur"
 
-#: ReactNativeClient/lib/models/Setting.js:483
+#: ReactNativeClient/lib/models/Setting.js:524
 msgid "Editor font"
 msgstr "Police de l'éditeur"
 
-#: ReactNativeClient/lib/models/Setting.js:507
+#: ReactNativeClient/lib/models/Setting.js:548
 msgid "Editor font family"
 msgstr "Police de l'éditeur"
 
-#: ReactNativeClient/lib/models/Setting.js:509
+#: ReactNativeClient/lib/models/Setting.js:550
 #, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
@@ -2604,50 +2620,50 @@ msgstr ""
 "correctement. Si la police est incorrecte ou non-spécifiée, une police "
 "monospace sera utilisée par défaut."
 
-#: ReactNativeClient/lib/models/Setting.js:548
+#: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Feuille de style pour l'application Joplin"
 
-#: ReactNativeClient/lib/models/Setting.js:554
+#: ReactNativeClient/lib/models/Setting.js:595
 msgid "Automatically update the application"
 msgstr "Mettre à jour le logiciel automatiquement"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
 msgstr "Recevoir les pré-release lors de la vérification des mises à jour"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Voir la page des pré-release pour plus de détails : %s"
 
-#: ReactNativeClient/lib/models/Setting.js:563
+#: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
 msgstr "Intervalle de synchronisation"
 
-#: ReactNativeClient/lib/models/Setting.js:567
-#: ReactNativeClient/lib/models/Setting.js:568
-#: ReactNativeClient/lib/models/Setting.js:569
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutes"
 
-#: ReactNativeClient/lib/models/Setting.js:570
+#: ReactNativeClient/lib/models/Setting.js:611
 #, javascript-format
 msgid "%d hour"
 msgstr "%d heure"
 
-#: ReactNativeClient/lib/models/Setting.js:571
-#: ReactNativeClient/lib/models/Setting.js:572
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
 #, javascript-format
 msgid "%d hours"
 msgstr "%d heures"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid "Text editor command"
 msgstr "Commande de l'éditeur de texte"
 
-#: ReactNativeClient/lib/models/Setting.js:581
+#: ReactNativeClient/lib/models/Setting.js:622
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2655,67 +2671,67 @@ msgstr ""
 "La commande de l'éditeur de texte (peut inclure des options) pour ouvrir et "
 "modifier les notes. Si non-spécifiée, elle sera détectée automatiquement."
 
-#: ReactNativeClient/lib/models/Setting.js:582
+#: ReactNativeClient/lib/models/Setting.js:623
 msgid "Page size for PDF export"
 msgstr "Taille de page pour l'export PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:584
+#: ReactNativeClient/lib/models/Setting.js:625
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:585
+#: ReactNativeClient/lib/models/Setting.js:626
 msgid "Letter"
 msgstr "Lettre"
 
-#: ReactNativeClient/lib/models/Setting.js:586
+#: ReactNativeClient/lib/models/Setting.js:627
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:587
+#: ReactNativeClient/lib/models/Setting.js:628
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:588
+#: ReactNativeClient/lib/models/Setting.js:629
 msgid "Tabloid"
 msgstr "Tabloïde"
 
-#: ReactNativeClient/lib/models/Setting.js:589
+#: ReactNativeClient/lib/models/Setting.js:630
 msgid "Legal"
 msgstr "Légal"
 
-#: ReactNativeClient/lib/models/Setting.js:592
+#: ReactNativeClient/lib/models/Setting.js:633
 msgid "Page orientation for PDF export"
 msgstr "Orientation de page pour l'export PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:594
+#: ReactNativeClient/lib/models/Setting.js:635
 msgid "Portrait"
 msgstr "Portrait"
 
-#: ReactNativeClient/lib/models/Setting.js:595
+#: ReactNativeClient/lib/models/Setting.js:636
 msgid "Landscape"
 msgstr "Paysage"
 
-#: ReactNativeClient/lib/models/Setting.js:606
+#: ReactNativeClient/lib/models/Setting.js:647
 msgid "Keyboard Mode"
 msgstr "Mode de clavier"
 
-#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:650
 msgid "Default"
 msgstr "Défaut"
 
-#: ReactNativeClient/lib/models/Setting.js:610
+#: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:611
+#: ReactNativeClient/lib/models/Setting.js:652
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:667
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personnalisés"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:668
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2728,15 +2744,15 @@ msgstr ""
 "paramètres TLS, vous devez enregistrer vos changements avant de cliquer sur "
 "\"Vérifier config synchronisation\"."
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: ReactNativeClient/lib/models/Setting.js:680
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer les erreurs de certificats TLS"
 
-#: ReactNativeClient/lib/models/Setting.js:648
+#: ReactNativeClient/lib/models/Setting.js:689
 msgid "Fail-safe"
 msgstr "Sécurité"
 
-#: ReactNativeClient/lib/models/Setting.js:649
+#: ReactNativeClient/lib/models/Setting.js:690
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2745,7 +2761,7 @@ msgstr ""
 "synchronisation est vide (souvent à cause d'un bug ou d'un problème de "
 "config)"
 
-#: ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:694
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2753,30 +2769,30 @@ msgstr ""
 "Détermine quel port sera utilisé par le serveur API. Si aucun n'est "
 "spécifié, un port par défaut sera utilisé."
 
-#: ReactNativeClient/lib/models/Setting.js:661
+#: ReactNativeClient/lib/models/Setting.js:702
 msgid "Enable note history"
 msgstr "Activer l'historique des notes"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 msgid "days"
 msgstr "jours"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:712
 #, javascript-format
 msgid "%d days"
 msgstr "%d jours"
 
-#: ReactNativeClient/lib/models/Setting.js:673
+#: ReactNativeClient/lib/models/Setting.js:714
 msgid "Keep note history for"
 msgstr "Garder l'historique des notes pour"
 
-#: ReactNativeClient/lib/models/Setting.js:700
+#: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
 msgstr "Facteur de croissance de la liste de carnets"
 
-#: ReactNativeClient/lib/models/Setting.js:702
-#: ReactNativeClient/lib/models/Setting.js:715
-#: ReactNativeClient/lib/models/Setting.js:728
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2789,52 +2805,52 @@ msgstr ""
 "facteur de 1. Veuillez redémarrer l'application pour appliquer les "
 "changements."
 
-#: ReactNativeClient/lib/models/Setting.js:713
+#: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
 msgstr "Facteur de croissance de la liste de notes"
 
-#: ReactNativeClient/lib/models/Setting.js:726
+#: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
 msgstr "Facteur de croissance de la zone de la note"
 
-#: ReactNativeClient/lib/models/Setting.js:878
+#: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#: ReactNativeClient/lib/models/Setting.js:1206
+#: ReactNativeClient/lib/models/Setting.js:1247
 msgid "General"
 msgstr "Général"
 
-#: ReactNativeClient/lib/models/Setting.js:1207
+#: ReactNativeClient/lib/models/Setting.js:1248
 msgid "Synchronisation"
 msgstr "Synchronisation"
 
-#: ReactNativeClient/lib/models/Setting.js:1208
+#: ReactNativeClient/lib/models/Setting.js:1249
 msgid "Appearance"
 msgstr "Apparence"
 
-#: ReactNativeClient/lib/models/Setting.js:1209
+#: ReactNativeClient/lib/models/Setting.js:1250
 msgid "Note"
 msgstr "Note"
 
-#: ReactNativeClient/lib/models/Setting.js:1210
+#: ReactNativeClient/lib/models/Setting.js:1251
 msgid "Plugins"
 msgstr "Modules"
 
-#: ReactNativeClient/lib/models/Setting.js:1211
+#: ReactNativeClient/lib/models/Setting.js:1252
 msgid "Application"
 msgstr "Application"
 
-#: ReactNativeClient/lib/models/Setting.js:1213
+#: ReactNativeClient/lib/models/Setting.js:1254
 msgid "Encryption"
 msgstr "Chiffrement"
 
-#: ReactNativeClient/lib/models/Setting.js:1214
+#: ReactNativeClient/lib/models/Setting.js:1255
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: ReactNativeClient/lib/models/Setting.js:1219
+#: ReactNativeClient/lib/models/Setting.js:1260
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2852,7 +2868,7 @@ msgstr ""
 "mise en forme du module. Il est indiqué ci-dessous quels modules sont "
 "compatible avec l'éditeur WYSIWYG."
 
-#: ReactNativeClient/lib/models/Setting.js:1220
+#: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
@@ -2937,14 +2953,14 @@ msgstr "Les objets chiffrés ne peuvent être modifiés"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dév (Pour tester uniquement)"
 
-#: ReactNativeClient/lib/BaseApplication.js:138
-#: ReactNativeClient/lib/BaseApplication.js:151
-#: ReactNativeClient/lib/BaseApplication.js:182
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilisation : %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:217
+#: ReactNativeClient/lib/BaseApplication.js:218
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"

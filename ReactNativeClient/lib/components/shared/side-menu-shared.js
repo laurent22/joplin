@@ -1,55 +1,39 @@
-const BaseItem = require('lib/models/BaseItem');
+const Folder = require('lib/models/Folder');
 const BaseModel = require('lib/BaseModel');
 
 const shared = {};
 
-function itemHasChildren_(items, itemId) {
-	for (let i = 0; i < items.length; i++) {
-		const item = items[i];
-		if (item.parent_id === itemId) return true;
+function folderHasChildren_(folders, folderId) {
+	for (let i = 0; i < folders.length; i++) {
+		const folder = folders[i];
+		if (folder.parent_id === folderId) return true;
 	}
 	return false;
 }
 
-function itemIsVisible(items, itemId, collapsedItemIds) {
-	if (!collapsedItemIds || !collapsedItemIds.length) return true;
+function folderIsVisible(folders, folderId, collapsedFolderIds) {
+	if (!collapsedFolderIds || !collapsedFolderIds.length) return true;
 
 	while (true) {
-		const item = BaseModel.byId(items, itemId);
-		if (!item) throw new Error(`No item with id ${itemId}`);
-		if (!item.parent_id) return true;
-		if (collapsedItemIds.indexOf(item.parent_id) >= 0) return false;
-		itemId = item.parent_id;
+		const folder = BaseModel.byId(folders, folderId);
+		if (!folder) throw new Error(`No folder with id ${folder.id}`);
+		if (!folder.parent_id) return true;
+		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return false;
+		folderId = folder.parent_id;
 	}
 }
 
-function renderItemsRecursive_(props, renderItem, items, parentId, depth, order, itemType) {
-	let itemsKey = '';
-	let notesParentType = '';
-	let collapsedItemsKey = '';
-	let selectedItemKey = '';
-	if (itemType === BaseModel.TYPE_FOLDER) {
-		itemsKey = 'folders';
-		notesParentType = 'Folder';
-		collapsedItemsKey = 'collapsedFolderIds';
-		selectedItemKey = 'selectedFolderId';
-	} else if (itemType === BaseModel.TYPE_TAG) {
-		itemsKey = 'tags';
-		notesParentType = 'Tag';
-		collapsedItemsKey = 'collapsedTagIds';
-		selectedItemKey = 'selectedTagId';
-	}
-
-	const propItems = props[itemsKey];
-	for (let i = 0; i < propItems.length; i++) {
-		const item = propItems[i];
-		if (!BaseItem.getClassByItemType(itemType).idsEqual(item.parent_id, parentId)) continue;
-		if (!itemIsVisible(props[itemsKey], item.id, props[collapsedItemsKey])) continue;
-		const hasChildren = itemHasChildren_(propItems, item.id);
-		order.push(item.id);
-		items.push(renderItem(item, props[selectedItemKey] == item.id && props.notesParentType == notesParentType, hasChildren, depth));
+function renderFoldersRecursive_(props, renderItem, items, parentId, depth, order) {
+	const folders = props.folders;
+	for (let i = 0; i < folders.length; i++) {
+		const folder = folders[i];
+		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
+		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
+		const hasChildren = folderHasChildren_(folders, folder.id);
+		order.push(folder.id);
+		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder', hasChildren, depth));
 		if (hasChildren) {
-			const result = renderItemsRecursive_(props, renderItem, items, item.id, depth + 1, order, itemType);
+			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
 			order = result.order;
 		}
@@ -61,11 +45,25 @@ function renderItemsRecursive_(props, renderItem, items, parentId, depth, order,
 }
 
 shared.renderFolders = function(props, renderItem) {
-	return renderItemsRecursive_(props, renderItem, [], '', 0, [], BaseModel.TYPE_FOLDER);
+	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
 shared.renderTags = function(props, renderItem) {
-	return renderItemsRecursive_(props, renderItem, [], '', 0, [], BaseModel.TYPE_TAG);
+	const tags = props.tags.slice();
+	tags.sort((a, b) => {
+		return a.title < b.title ? -1 : +1;
+	});
+	const tagItems = [];
+	const order = [];
+	for (let i = 0; i < tags.length; i++) {
+		const tag = tags[i];
+		order.push(tag.id);
+		tagItems.push(renderItem(tag, props.selectedTagId == tag.id && props.notesParentType == 'Tag'));
+	}
+	return {
+		items: tagItems,
+		order: order,
+	};
 };
 
 // shared.renderSearches = function(props, renderItem) {

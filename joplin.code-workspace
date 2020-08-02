@@ -354,7 +354,12 @@
 			"ElectronClient/commands/stopExternalEditing.js": true,
 			"ElectronClient/gui/NoteEditor/commands/showRevisions.js": true,
 			"ReactNativeClient/lib/commands/historyBackward.js": true,
-			"ReactNativeClient/lib/commands/historyForward.js": true
+			"ReactNativeClient/lib/commands/historyForward.js": true,
+			"CliClient/tests/support/amazon-s3-auth.json": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js": true,
+			"ReactNativeClient/lib/hooks/useEffectDebugger.js": true,
+			"ReactNativeClient/lib/services/ResourceEditWatcher/index.js": true,
+			"ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js": true
 		},
 		"spellright.language": [
 			"en"

@@ -2,7 +2,6 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
 const TagItem = require('./TagItem.min.js');
-const Tag = require('lib/models/Tag.js');
 
 class TagListComponent extends React.Component {
 	render() {
@@ -22,12 +21,12 @@ class TagListComponent extends React.Component {
 		if (tags && tags.length > 0) {
 			// Sort by id for now, but probably needs to be changed in the future.
 			tags.sort((a, b) => {
-				return Tag.getCachedFullTitle(a.id) < Tag.getCachedFullTitle(b.id) ? -1 : +1;
+				return a.title < b.title ? -1 : +1;
 			});
 
 			for (let i = 0; i < tags.length; i++) {
 				const props = {
-					title: Tag.getCachedFullTitle(tags[i].id),
+					title: tags[i].title,
 					key: tags[i].id,
 				};
 				tagItems.push(<TagItem {...props} />);

@@ -402,7 +402,6 @@ const SideMenuContent = connect(state => {
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,
-		collapsedTagIds: state.collapsedTagIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
 	};

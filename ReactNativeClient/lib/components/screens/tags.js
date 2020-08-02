@@ -70,7 +70,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 				}}
 			>
 				<View style={this.styles().listItem}>
-					<Text style={this.styles().listItemText}>{Tag.getCachedFullTitle(tag.id)}</Text>
+					<Text style={this.styles().listItemText}>{tag.title}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -83,7 +83,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		const tags = await Tag.allWithNotes();
 		tags.sort((a, b) => {
-			return Tag.getCachedFullTitle(a.id).toLowerCase() < Tag.getCachedFullTitle(b.id).toLowerCase() ? -1 : +1;
+			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
 		});
 		this.setState({ tags: tags });
 	}
