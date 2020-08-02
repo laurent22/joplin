@@ -1,5 +1,5 @@
+import KeymapService from './KeymapService';
 const BaseService = require('lib/services/BaseService');
-const KeymapService = require('lib/services/KeymapService.js');
 const eventManager = require('lib/eventManager');
 
 export interface CommandRuntime {
@@ -76,9 +76,9 @@ export default class CommandService extends BaseService {
 	private commandPreviousStates_:CommandStates = {};
 	private mapStateToPropsIID_:any = null;
 
-	private keymapService:typeof KeymapService = null;
+	private keymapService:KeymapService = null;
 
-	initialize(store:any, keymapService:typeof KeymapService) {
+	initialize(store:any, keymapService:KeymapService) {
 		utils.store = store;
 		this.keymapService = keymapService;
 	}

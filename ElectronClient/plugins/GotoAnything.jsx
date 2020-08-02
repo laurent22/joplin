@@ -14,7 +14,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-const KeymapService = require('lib/services/KeymapService.js');
+const KeymapService = require('lib/services/KeymapService.js').default;
 
 class GotoAnything {
 

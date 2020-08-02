@@ -30,7 +30,7 @@ const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const CommandService = require('lib/services/CommandService').default;
-const KeymapService = require('lib/services/KeymapService.js');
+const KeymapService = require('lib/services/KeymapService.js').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 
