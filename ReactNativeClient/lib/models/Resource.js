@@ -26,9 +26,16 @@ class Resource extends BaseItem {
 		return this.encryptionService_;
 	}
 
-	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
-		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
+	static mimeTypeToMediaType(type) {
+		if (type.startsWith('image/')) {
+			return 'image';
+		} else if (type.startsWith('audio/')) {
+			return 'audio';
+		} else if (type.startsWith('video/')) {
+			return 'video';
+		} else {
+			return 'unknown';
+		}
 	}
 
 	static fetchStatuses(resourceIds) {
@@ -205,7 +212,7 @@ class Resource extends BaseItem {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
-		if (Resource.isSupportedImageMimeType(resource.mime)) {
+		if (Resource.mimeTypeToMediaType(resource.mime) === 'image') {
 			lines.push('![');
 			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);

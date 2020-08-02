@@ -1,3 +1,4 @@
+import KeymapService from './KeymapService';
 const BaseService = require('lib/services/BaseService');
 const eventManager = require('lib/eventManager');
 
@@ -75,8 +76,11 @@ export default class CommandService extends BaseService {
 	private commandPreviousStates_:CommandStates = {};
 	private mapStateToPropsIID_:any = null;
 
-	initialize(store:any) {
+	private keymapService:KeymapService = null;
+
+	initialize(store:any, keymapService:KeymapService) {
 		utils.store = store;
+		this.keymapService = keymapService;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -265,7 +269,7 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	commandToMenuItem(commandName:string, accelerator:string = null, executeArgs:any = null) {
+	commandToMenuItem(commandName:string, executeArgs:any = null) {
 		const command = this.commandByName(commandName);
 
 		const item:any = {
@@ -276,8 +280,10 @@ export default class CommandService extends BaseService {
 			},
 		};
 
-		if (accelerator) item.accelerator = accelerator;
 		if (command.declaration.role) item.role = command.declaration.role;
+		if (this.keymapService.hasAccelerator(commandName)) {
+			item.accelerator = this.keymapService.getAccelerator(commandName);
+		}
 
 		return item;
 	}

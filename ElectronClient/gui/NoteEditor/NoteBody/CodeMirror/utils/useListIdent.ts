@@ -13,7 +13,7 @@ export default function useListIdent(CodeMirror: any) {
 	function getIndentLevel(cm: any, line: number) {
 		const tokens = cm.getLineTokens(line);
 		let indentLevel = 0;
-		if (tokens.length > 0 && tokens[0].string.match(/\s/)) {
+		if (tokens.length > 0 && tokens[0].string.match(/^\s/)) {
 			indentLevel = tokens[0].string.length;
 		}
 
@@ -63,79 +63,103 @@ export default function useListIdent(CodeMirror: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
 		const ranges = cm.listSelections();
-		for (let i = 0; i < ranges.length; i++) {
-			const { anchor, head } = ranges[i];
 
-			const line = cm.getLine(anchor.line);
+		cm.operation(() => {
+			for (let i = 0; i < ranges.length; i++) {
+				const { anchor, head } = ranges[i];
 
-			// This is an actual selection and we should indent
-			if (isSelection(anchor, head) || !isListItem(line)) {
-				cm.execCommand('defaultTab');
-			} else {
-				if (olLineNumber(line)) {
-					const tokens = cm.getLineTokens(anchor.line);
-					const { start, end } = getListSpan(tokens, line);
-					// Resets numbered list to 1.
-					cm.replaceRange('1. ',  { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+				const line = cm.getLine(anchor.line);
+
+				// This is an actual selection and we should indent
+				if (isSelection(anchor, head)) {
+					cm.execCommand('defaultTab');
+					// This will apply to all selections so it makes sense to stop processing here
+					// this is an edge case for users because there is no clear intended behavior
+					// if the use multicursor with a mix of selected and not selected
+					break;
+				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+					cm.replaceRange('\t', anchor, head);
+				} else {
+					if (olLineNumber(line)) {
+						const tokens = cm.getLineTokens(anchor.line);
+						const { start, end } = getListSpan(tokens, line);
+						// Resets numbered list to 1.
+						cm.replaceRange('1. ',  { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+					}
+
+					cm.indentLine(anchor.line, 'add');
 				}
-
-				cm.indentLine(anchor.line, 'add');
 			}
-		}
+		});
 	};
 
 	CodeMirror.commands.smartListUnindent = function(cm: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
 		const ranges = cm.listSelections();
-		for (let i = 0; i < ranges.length; i++) {
-			const { anchor, head } = ranges[i];
 
-			const line = cm.getLine(anchor.line);
+		cm.operation(() => {
+			for (let i = 0; i < ranges.length; i++) {
+				const { anchor, head } = ranges[i];
 
-			// This is an actual selection and we should unindent
-			if (isSelection(anchor, head) || !isListItem(line)) {
-				cm.execCommand('indentLess');
-			} else {
-				const newToken = newListToken(cm, anchor.line);
-				const tokens = cm.getLineTokens(anchor.line);
-				const { start, end } = getListSpan(tokens, line);
+				const line = cm.getLine(anchor.line);
 
-				cm.replaceRange(newToken, { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+				// This is an actual selection and we should unindent
+				if (isSelection(anchor, head)) {
+					cm.execCommand('indentLess');
+					// This will apply to all selections so it makes sense to stop processing here
+					// this is an edge case for users because there is no clear intended behavior
+					// if the use multicursor with a mix of selected and not selected
+					break;
+				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+					cm.indentLine(anchor.line, 'subtract');
+				} else {
+					const newToken = newListToken(cm, anchor.line);
+					const tokens = cm.getLineTokens(anchor.line);
+					const { start, end } = getListSpan(tokens, line);
 
-				cm.indentLine(anchor.line, 'subtract');
+					cm.replaceRange(newToken, { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+
+					cm.indentLine(anchor.line, 'subtract');
+				}
 			}
-		}
+		});
 	};
 
 	CodeMirror.commands.insertListElement = function(cm: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
 		const ranges = cm.listSelections();
-		for (let i = 0; i < ranges.length; i++) {
-			const { anchor } = ranges[i];
+		if (ranges.length === 0) return;
+		const { anchor } = ranges[0];
 
+		// Only perform the extra smart code if there is a single cursor
+		// otherwise fallback on the default codemirror behavior
+		if (ranges.length === 1) {
 			const line = cm.getLine(anchor.line);
 
 			if (isEmptyListItem(line)) {
 				const tokens = cm.getLineTokens(anchor.line);
 				//  A empty list item with an indent will have whitespace as the first token
-				if (tokens.length > 1 && tokens[0].string.match(/\s/)) {
+				if (tokens.length > 1 && tokens[0].string.match(/^\s/)) {
 					cm.execCommand('smartListUnindent');
 				} else {
 					cm.replaceRange('', { line: anchor.line, ch: 0 }, anchor);
 				}
-			} else {
-				// Disable automatic indent for html/xml outside of codeblocks
-				const state = cm.getTokenAt(anchor).state;
-				const mode = cm.getModeAt(anchor);
-				// html/xml inside of a codeblock is fair game for auto-indent
-				if (mode.name !== 'xml' || state.overlay.codeBlock) {
-					cm.execCommand('newlineAndIndentContinueMarkdownList');
-				} else {
-					cm.replaceSelection('\n');
-				}
+				return;
 			}
+		}
+
+		// Disable automatic indent for html/xml outside of codeblocks
+		const state = cm.getTokenAt(anchor).state;
+		const mode = cm.getModeAt(anchor);
+
+		// html/xml inside of a codeblock is fair game for auto-indent
+		// for states who's mode is xml, having the localState property means they are within a code block
+		if (mode.name !== 'xml' || !!state.outer.localState) {
+			cm.execCommand('newlineAndIndentContinueMarkdownList');
+		} else {
+			cm.replaceSelection('\n');
 		}
 	};
 }
