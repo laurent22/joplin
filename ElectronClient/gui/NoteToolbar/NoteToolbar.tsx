@@ -41,7 +41,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 	const [toolbarItems, setToolbarItems] = useState([]);
 	const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
 	const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
-	const folderTitle = selectedNoteFolder ? selectedNoteFolder.title : '';
+	const folderTitle = selectedNoteFolder && selectedNoteFolder.title ? selectedNoteFolder.title : '';
 
 	const cmdService = CommandService.instance();
 

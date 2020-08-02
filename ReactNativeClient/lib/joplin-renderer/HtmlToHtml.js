@@ -58,7 +58,7 @@ class HtmlToHtml {
 			html = htmlUtils.processImageTags(html, data => {
 				if (!data.src) return null;
 
-				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_);
+				const r = utils.resourceReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_);
 				if (!r) return null;
 
 				if (typeof r === 'string') {

@@ -267,7 +267,7 @@ class MainScreenComponent extends React.Component {
 
 		this.styles_.messageBox = {
 			width: width,
-			height: 30,
+			height: 50,
 			display: 'flex',
 			alignItems: 'center',
 			paddingLeft: 10,
@@ -362,8 +362,23 @@ class MainScreenComponent extends React.Component {
 			});
 		};
 
+		const onRestartAndUpgrade = async () => {
+			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
+			await Setting.saveAll();
+			bridge().restart();
+		};
+
 		let msg = null;
-		if (this.props.hasDisabledSyncItems) {
+		if (this.props.shouldUpgradeSyncTarget) {
+			msg = (
+				<span>
+					{_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.')}{' '}
+					<a href="#" onClick={() => onRestartAndUpgrade()}>
+						{_('Restart and upgrade')}
+					</a>
+				</span>
+			);
+		} else if (this.props.hasDisabledSyncItems) {
 			msg = (
 				<span>
 					{_('Some items cannot be synchronised.')}{' '}
@@ -418,7 +433,7 @@ class MainScreenComponent extends React.Component {
 	}
 
 	messageBoxVisible() {
-		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems;
+		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget;
 	}
 
 	registerCommands() {
@@ -562,6 +577,7 @@ const mapStateToProps = state => {
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(state.masterKeys).length,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
+		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		selectedFolderId: state.selectedFolderId,
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],

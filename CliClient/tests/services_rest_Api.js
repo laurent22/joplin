@@ -11,8 +11,6 @@ const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
 const { shim } = require('lib/shim');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });

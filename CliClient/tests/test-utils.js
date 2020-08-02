@@ -21,6 +21,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
+const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
@@ -43,6 +44,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const { OneDriveApi } = require('lib/onedrive-api');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
@@ -50,14 +52,15 @@ const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 
 const databases_ = [];
-const synchronizers_ = [];
+let synchronizers_ = [];
+const synchronizerContexts_ = {};
+const fileApis_ = {};
 const encryptionServices_ = [];
 const revisionServices_ = [];
 const decryptionWorkers_ = [];
 const resourceServices_ = [];
 const resourceFetchers_ = [];
 const kvStores_ = [];
-let fileApi_ = null;
 let currentClient_ = 1;
 
 // The line `process.on('unhandledRejection'...` in all the test files is going to
@@ -88,16 +91,39 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
-// const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
-// const syncTargetId_ = SyncTargetRegistry.nameToId('amazon_s3');
+let syncTargetName_ = '';
+let syncTargetId_ = null;
+let sleepTime = 0;
+let isNetworkSyncTarget_ = false;
+
+function syncTargetName() {
+	return syncTargetName_;
+}
+
+function setSyncTargetName(name) {
+	if (name === syncTargetName_) return syncTargetName_;
+	const previousName = syncTargetName_;
+	syncTargetName_ = name;
+	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
+	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3'].includes(syncTargetName_);
+	synchronizers_ = [];
+	return previousName;
+}
+
+setSyncTargetName('memory');
+// setSyncTargetName('nextcloud');
+// setSyncTargetName('dropbox');
+// setSyncTargetName('onedrive');
+// setSyncTargetName('amazon_s3');
+
+console.info(`Testing with sync target: ${syncTargetName_}`);
+
 const syncDir = `${__dirname}/../tests/sync`;
 
-const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-
-console.info(`Testing with sync target: ${SyncTargetRegistry.idToName(syncTargetId_)}`);
+let defaultJasmineTimeout = 90 * 1000;
+if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
@@ -129,11 +155,23 @@ function syncTargetId() {
 	return syncTargetId_;
 }
 
+function isNetworkSyncTarget() {
+	return isNetworkSyncTarget_;
+}
+
 function sleep(n) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve();
 		}, Math.round(n * 1000));
+	});
+}
+
+function msleep(ms) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
 	});
 }
 
@@ -252,9 +290,11 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
 		const syncTarget = new SyncTargetClass(db(id));
+		await initFileApi();
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
+		synchronizerContexts_[id] = null;
 	}
 
 	encryptionServices_[id] = new EncryptionService();
@@ -276,6 +316,19 @@ function db(id = null) {
 function synchronizer(id = null) {
 	if (id === null) id = currentClient_;
 	return synchronizers_[id];
+}
+
+// This is like calling synchronizer.start() but it handles the
+// complexity of passing around the sync context depending on
+// the client.
+async function synchronizerStart(id = null, extraOptions = null) {
+	if (id === null) id = currentClient_;
+	const context = synchronizerContexts_[id];
+	const options = Object.assign({}, extraOptions);
+	if (context) options.context = context;
+	const newContext = await synchronizer(id).start(options);
+	synchronizerContexts_[id] = newContext;
+	return newContext;
 }
 
 function encryptionService(id = null) {
@@ -331,44 +384,67 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 	return masterKey;
 }
 
-function fileApi() {
-	if (fileApi_) return fileApi_;
+async function initFileApi() {
+	if (fileApis_[syncTargetId_]) return;
 
+	let fileApi = null;
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
 		fs.mkdirpSync(syncDir, 0o755);
-		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
+		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
-		fileApi_ = new FileApi('/root', new FileApiDriverMemory());
+		fileApi = new FileApi('/root', new FileApiDriverMemory());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
-		const options = {
-			baseUrl: () => 'http://nextcloud.local/remote.php/dav/files/admin/JoplinTest',
-			username: () => 'admin',
-			password: () => '123456',
-		};
-
-		const api = new WebDavApi(options);
-		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
+		const options = require(`${__dirname}/../tests/support/nextcloud-auth.json`);
+		const api = new WebDavApi({
+			baseUrl: () => options.baseUrl,
+			username: () => options.username,
+			password: () => options.password,
+		});
+		fileApi = new FileApi('', new FileApiDriverWebDav(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
+		// To get a token, go to the App Console:
+		// https://www.dropbox.com/developers/apps/
+		// Then select "JoplinTest" and click "Generated access token"
 		const api = new DropboxApi();
 		const authTokenPath = `${__dirname}/support/dropbox-auth.txt`;
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
-		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+		fileApi = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
+		// To get a token, open the URL below, then copy the *complete*
+		// redirection URL in onedrive-auth.txt. Keep in mind that auth data
+		// only lasts 1h for OneDrive.
+		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		const { parameters, setEnvOverride } = require('lib/parameters.js');
+		Setting.setConstant('env', 'dev');
+		setEnvOverride('test');
+		const config = parameters().oneDriveTest;
+		const api = new OneDriveApi(config.id, config.secret, false);
+		const authData = fs.readFileSync(`${__dirname}/support/onedrive-auth.txt`, 'utf8');
+		const urlInfo = require('url-parse')(authData, true);
+		const auth = require('querystring').parse(urlInfo.hash.substr(1));
+		api.setAuth(auth);
+		const appDir = await api.appDirectory();
+		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
 		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
 		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
 		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
-		fileApi_ = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
+		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	}
 
+	fileApi.setLogger(logger);
+	fileApi.setSyncTargetId(syncTargetId_);
+	fileApi.requestRepeatCount_ = isNetworkSyncTarget_ ? 1 : 0;
 
-	fileApi_.setLogger(logger);
-	fileApi_.setSyncTargetId(syncTargetId_);
-	fileApi_.requestRepeatCount_ = 0;
-	return fileApi_;
+	fileApis_[syncTargetId_] = fileApi;
+}
+
+function fileApi() {
+	return fileApis_[syncTargetId_];
 }
 
 function objectsEqual(o1, o2) {
@@ -388,6 +464,41 @@ async function checkThrowAsync(asyncFn) {
 		hasThrown = true;
 	}
 	return hasThrown;
+}
+
+async function expectThrow(asyncFn, errorCode = undefined) {
+	let hasThrown = false;
+	let thrownError = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		hasThrown = true;
+		thrownError = error;
+	}
+
+	if (!hasThrown) {
+		expect('not throw').toBe('throw', 'Expected function to throw an error but did not');
+	} else if (thrownError.code !== errorCode) {
+		console.error(thrownError);
+		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
+	} else {
+		expect(true).toBe(true);
+	}
+}
+
+async function expectNotThrow(asyncFn) {
+	let thrownError = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		thrownError = error;
+	}
+
+	if (thrownError) {
+		expect(thrownError.message).toBe('', 'Expected function not to throw an error but it did');
+	} else {
+		expect(true).toBe(true);
+	}
 }
 
 function checkThrow(fn) {
@@ -427,13 +538,15 @@ function asyncTest(callback) {
 }
 
 async function allSyncTargetItemsEncrypted() {
-	const list = await fileApi().list();
+	const list = await fileApi().list('', { includeDirs: false });
 	const files = list.items;
 
 	let totalCount = 0;
 	let encryptedCount = 0;
 	for (let i = 0; i < files.length; i++) {
 		const file = files[i];
+		if (!BaseItem.isSystemPath(file.path)) continue;
+
 		const remoteContentString = await fileApi().get(file.path);
 		const remoteContent = await BaseItem.unserialize(remoteContentString);
 		const ItemClass = BaseItem.itemClass(remoteContent);
@@ -585,4 +698,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { syncDir, kvStore, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
