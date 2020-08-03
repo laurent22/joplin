@@ -354,7 +354,17 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderTagBar() {
-		return props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
+		const theme = themeStyle(props.theme);
+		let control = null;
+		if (!props.selectedNoteTags.length) {
+			control = <span onClick={() => { CommandService.instance().execute('setTags'); }} style={theme.clickableTextStyle}>Click to add some tags...</span>;
+		} else {
+			control = <TagList items={props.selectedNoteTags} />;
+		}
+
+		return (
+			<div style={{ paddingLeft: 8 }}>{control}</div>
+		);
 	}
 
 	function renderTitleBar() {
@@ -508,7 +518,7 @@ function NoteEditor(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>

@@ -143,6 +143,10 @@ function addExtraStyles(style) {
 		color: style.color,
 	};
 
+	style.clickableTextStyle = Object.assign({}, style.textStyle, {
+		userSelect: 'none',
+	});
+
 	style.textStyle2 = Object.assign({}, style.textStyle,
 		{ color: style.color2 },
 	);

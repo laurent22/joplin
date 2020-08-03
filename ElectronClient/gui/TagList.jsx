@@ -15,10 +15,9 @@ class TagListComponent extends React.Component {
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
 		style.whiteSpace = 'nowrap';
-		style.height = 40;
+		// style.height = 40;
 		style.paddingTop = 8;
 		style.paddingBottom = 8;
-		style.paddingLeft = 8;
 
 		const tagItems = [];
 		if (tags && tags.length > 0) {

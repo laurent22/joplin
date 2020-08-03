@@ -513,7 +513,7 @@ class MainScreenComponent extends React.Component {
 			},
 		});
 
-		headerItems.push(CommandService.instance().commandToToolbarButton('toggleVisiblePanes'));
+		// headerItems.push(CommandService.instance().commandToToolbarButton('toggleVisiblePanes'));
 
 		headerItems.push({
 			title: _('Search...'),

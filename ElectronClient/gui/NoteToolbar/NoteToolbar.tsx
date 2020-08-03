@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CommandService from '../../lib/services/CommandService';
 const { connect } = require('react-redux');
 const { buildStyle } = require('lib/theme');
 const Toolbar = require('../Toolbar.min.js');
-const Folder = require('lib/models/Folder');
-const { _ } = require('lib/locale');
-const { substrWithEllipsis } = require('lib/string-utils');
+// const Folder = require('lib/models/Folder');
+// const { _ } = require('lib/locale');
+// const { substrWithEllipsis } = require('lib/string-utils');
 
 interface ButtonClickEvent {
 	name: string,
@@ -40,30 +40,28 @@ function styles_(props:NoteToolbarProps) {
 function NoteToolbar(props:NoteToolbarProps) {
 	const styles = styles_(props);
 	const [toolbarItems, setToolbarItems] = useState([]);
-	const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
-	const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
-	const folderTitle = selectedNoteFolder && selectedNoteFolder.title ? selectedNoteFolder.title : '';
+	// const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
+	// const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
+	// const folderTitle = selectedNoteFolder && selectedNoteFolder.title ? selectedNoteFolder.title : '';
 
 	const cmdService = CommandService.instance();
 
-	const updateToolbarItems = useCallback(() => {
+	function updateToolbarItems() {
 		const output = [];
 
-		if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
-			output.push({
-				title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
-				iconName: 'fa-book',
-				onClick: () => {
-					props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: folderId,
-						noteId: props.note.id,
-					});
-				},
-			});
-		}
-
-		output.push(cmdService.commandToToolbarButton('showNoteProperties'));
+		// if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
+		// 	output.push({
+		// 		title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
+		// 		iconName: 'fa-book',
+		// 		onClick: () => {
+		// 			props.dispatch({
+		// 				type: 'FOLDER_AND_NOTE_SELECT',
+		// 				folderId: folderId,
+		// 				noteId: props.note.id,
+		// 			});
+		// 		},
+		// 	});
+		// }
 
 		// if (props.watchedNoteFiles.indexOf(props.note.id) >= 0) {
 		// 	output.push(cmdService.commandToToolbarButton('stopExternalEditing'));
@@ -72,11 +70,11 @@ function NoteToolbar(props:NoteToolbarProps) {
 		// }
 
 		output.push(cmdService.commandToToolbarButton('editAlarm'));
-
-		// output.push(cmdService.commandToToolbarButton('setTags'));
+		output.push(cmdService.commandToToolbarButton('toggleVisiblePanes'));
+		output.push(cmdService.commandToToolbarButton('showNoteProperties'));
 
 		setToolbarItems(output);
-	}, [props.note.id, folderId, folderTitle, props.watchedNoteFiles, props.notesParentType]);
+	}
 
 	useEffect(() => {
 		updateToolbarItems();
@@ -84,7 +82,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 		return () => {
 			cmdService.off('commandsEnabledStateChange', updateToolbarItems);
 		};
-	}, [updateToolbarItems]);
+	}, []);
 
 	return <Toolbar style={styles.root} items={toolbarItems} />;
 }

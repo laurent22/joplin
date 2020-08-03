@@ -285,10 +285,11 @@ class Application extends BaseApplication {
 		}
 
 		newState = resourceEditWatcherReducer(newState, action);
+		newState = super.reducer(newState, action);
 
 		CommandService.instance().scheduleMapStateToProps(newState);
 
-		return super.reducer(newState, action);
+		return newState;
 	}
 
 	toggleDevTools(visible) {
