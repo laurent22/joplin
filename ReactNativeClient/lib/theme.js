@@ -46,7 +46,7 @@ const globalStyle = {
 	lineHeight: '1.6em',
 	headerHeight: 35,
 	headerButtonHPadding: 6,
-	toolbarHeight: 35,
+	toolbarHeight: 25,
 	appearance: 'light',
 };
 
@@ -106,16 +106,17 @@ function addExtraStyles(style) {
 	style.tagStyle = {
 		fontSize: style.fontSize,
 		fontFamily: style.fontFamily,
-		paddingTop: 3,
-		paddingBottom: 3,
-		paddingRight: 8,
-		paddingLeft: 8,
-		backgroundColor: style.raisedBackgroundColor,
-		color: style.raisedColor,
+		paddingTop: 4,
+		paddingBottom: 4,
+		paddingRight: 10,
+		paddingLeft: 10,
+		backgroundColor: style.backgroundColor3,
+		color: style.color3,
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: 5,
+		marginRight: 8,
+		borderRadius: 100,
 	};
 
 	style.toolbarStyle = {
@@ -264,6 +265,7 @@ function themeStyle(theme) {
 	// without the need to restart
 	const fontSizes = {
 		fontSize: Math.round(12 * zoomRatio),
+		toolbarIconSize: 16,
 		editorFontSize: editorFontSize,
 		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 	};

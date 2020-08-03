@@ -15,11 +15,14 @@ class TagListComponent extends React.Component {
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
 		style.whiteSpace = 'nowrap';
-		style.height = 25;
+		style.height = 40;
+		style.paddingTop = 8;
+		style.paddingBottom = 8;
+		style.paddingLeft = 8;
 
 		const tagItems = [];
 		if (tags && tags.length > 0) {
-			// Sort by id for now, but probably needs to be changed in the future.
+
 			tags.sort((a, b) => {
 				return a.title < b.title ? -1 : +1;
 			});

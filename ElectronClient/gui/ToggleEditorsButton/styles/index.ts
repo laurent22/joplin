@@ -3,13 +3,18 @@ const { buildStyle } = require('lib/theme');
 
 export default function styles(props:Props) {
 	return buildStyle(['ToggleEditorsButton', props.value], props.theme, (theme: any) => {
+		const iconSize = 15;
+		const mdIconWidth = iconSize * 1.25;
+		const buttonHeight = theme.toolbarHeight - 8;
+		const mdIconPadding = Math.round((buttonHeight - iconSize) / 2) + 3;
+
 		const innerButton:any = {
 			borderStyle: 'solid',
 			borderColor: theme.color3,
 			borderWidth: 1,
 			borderRadius: 0,
-			width: 34,
-			height: 22,
+			width: mdIconWidth + mdIconPadding * 2,
+			height: buttonHeight,
 			display: 'flex',
 			justifyContent: 'center',
 		};
@@ -34,16 +39,16 @@ export default function styles(props:Props) {
 				borderBottomRightRadius: 4,
 			},
 			leftIcon: {
-				fontSize: 16,
+				fontSize: iconSize,
 				position: 'relative',
-				top: 3,
+				top: 1,
 				color: theme.color3,
 			},
 			rightIcon: {
-				fontSize: 14,
+				fontSize: iconSize - 1,
 				borderLeft: 'none',
 				position: 'relative',
-				top: 4,
+				top: 1,
 				color: theme.color3,
 			},
 		};

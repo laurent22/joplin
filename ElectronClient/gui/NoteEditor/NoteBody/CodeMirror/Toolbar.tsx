@@ -2,7 +2,7 @@ import * as React from 'react';
 import CommandService from '../../../../lib/services/CommandService';
 
 const ToolbarBase = require('../../../Toolbar.min.js');
-const { buildStyle, themeStyle } = require('lib/theme');
+const { buildStyle } = require('lib/theme');
 
 interface ToolbarProps {
 	theme: number,
@@ -11,13 +11,11 @@ interface ToolbarProps {
 }
 
 function styles_(props:ToolbarProps) {
-	return buildStyle('CodeMirrorToolbar', props.theme, (/* theme:any*/) => {
-		const theme = themeStyle(props.theme);
+	return buildStyle('CodeMirrorToolbar', props.theme, () => {
 		return {
 			root: {
 				flex: 1,
 				marginBottom: 0,
-				borderTop: `1px solid ${theme.dividerColor}`,
 			},
 		};
 	});
@@ -29,6 +27,11 @@ export default function Toolbar(props:ToolbarProps) {
 	const cmdService = CommandService.instance();
 
 	const toolbarItems = [
+		cmdService.commandToToolbarButton('historyBackward'),
+		cmdService.commandToToolbarButton('historyForward'),
+		cmdService.commandToToolbarButton('startExternalEditing'),
+
+		{ type: 'separator' },
 		cmdService.commandToToolbarButton('textBold'),
 		cmdService.commandToToolbarButton('textItalic'),
 		{ type: 'separator' },
@@ -42,6 +45,7 @@ export default function Toolbar(props:ToolbarProps) {
 		cmdService.commandToToolbarButton('textHeading'),
 		cmdService.commandToToolbarButton('textHorizontalRule'),
 		cmdService.commandToToolbarButton('insertDateTime'),
+
 		cmdService.commandToToolbarButton('toggleEditors'),
 	];
 

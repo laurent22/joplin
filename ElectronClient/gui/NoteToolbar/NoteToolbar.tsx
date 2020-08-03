@@ -26,11 +26,12 @@ interface NoteToolbarProps {
 }
 
 function styles_(props:NoteToolbarProps) {
-	return buildStyle('NoteToolbar', props.theme, (/* theme:any*/) => {
+	return buildStyle('NoteToolbar', props.theme, (theme:any) => {
 		return {
 			root: {
 				...props.style,
 				borderBottom: 'none',
+				backgroundColor: theme.backgroundColor,
 			},
 		};
 	});
@@ -48,14 +49,6 @@ function NoteToolbar(props:NoteToolbarProps) {
 	const updateToolbarItems = useCallback(() => {
 		const output = [];
 
-		output.push(
-			cmdService.commandToToolbarButton('historyBackward')
-		);
-
-		output.push(
-			cmdService.commandToToolbarButton('historyForward')
-		);
-
 		if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
 			output.push({
 				title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
@@ -72,15 +65,15 @@ function NoteToolbar(props:NoteToolbarProps) {
 
 		output.push(cmdService.commandToToolbarButton('showNoteProperties'));
 
-		if (props.watchedNoteFiles.indexOf(props.note.id) >= 0) {
-			output.push(cmdService.commandToToolbarButton('stopExternalEditing'));
-		} else {
-			output.push(cmdService.commandToToolbarButton('startExternalEditing'));
-		}
+		// if (props.watchedNoteFiles.indexOf(props.note.id) >= 0) {
+		// 	output.push(cmdService.commandToToolbarButton('stopExternalEditing'));
+		// } else {
+		// 	output.push(cmdService.commandToToolbarButton('startExternalEditing'));
+		// }
 
 		output.push(cmdService.commandToToolbarButton('editAlarm'));
 
-		output.push(cmdService.commandToToolbarButton('setTags'));
+		// output.push(cmdService.commandToToolbarButton('setTags'));
 
 		setToolbarItems(output);
 	}, [props.note.id, folderId, folderTitle, props.watchedNoteFiles, props.notesParentType]);

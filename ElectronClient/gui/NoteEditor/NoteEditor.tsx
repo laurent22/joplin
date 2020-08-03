@@ -22,6 +22,7 @@ import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher/index';
 import CommandService from '../../lib/services/CommandService';
 
 const { themeStyle } = require('lib/theme');
+const ToolbarButton = require('../ToolbarButton.min.js');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
@@ -344,6 +345,14 @@ function NoteEditor(props: NoteEditorProps) {
 		/>;
 	}
 
+	function renderTagButton() {
+		const info = CommandService.instance().commandToToolbarButton('setTags');
+		return <ToolbarButton
+			theme={props.theme}
+			toolbarButtonInfo={info}
+		/>;
+	}
+
 	function renderTagBar() {
 		return props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 	}
@@ -362,6 +371,7 @@ function NoteEditor(props: NoteEditorProps) {
 					value={formNote.title}
 				/>
 				{titleBarDate}
+				{renderNoteToolbar()}
 			</div>
 		);
 	}
@@ -492,14 +502,15 @@ function NoteEditor(props: NoteEditorProps) {
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
 				{renderTitleBar()}
-				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-					{renderNoteToolbar()}{renderTagBar()}
-				</div>
 				<div style={{ display: 'flex', flex: 1 }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
+				</div>
+				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+					{renderTagButton()}
+					{renderTagBar()}
 				</div>
 				{wysiwygBanner}
 			</div>

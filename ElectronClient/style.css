@@ -175,3 +175,7 @@ a {
 	padding-left: 100px;
 	padding-right: 150px;
 }
+
+*:focus {
+    outline: none;
+}
