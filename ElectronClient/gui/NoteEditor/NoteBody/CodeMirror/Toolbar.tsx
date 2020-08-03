@@ -42,6 +42,7 @@ export default function Toolbar(props:ToolbarProps) {
 		cmdService.commandToToolbarButton('textHeading'),
 		cmdService.commandToToolbarButton('textHorizontalRule'),
 		cmdService.commandToToolbarButton('insertDateTime'),
+		cmdService.commandToToolbarButton('toggleEditors'),
 	];
 
 	return <ToolbarBase disabled={props.disabled} style={styles.root} items={toolbarItems} />;

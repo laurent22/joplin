@@ -3,6 +3,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
 const ToolbarButton = require('./ToolbarButton.min.js');
 const ToolbarSpace = require('./ToolbarSpace.min.js');
+const ToggleEditorsButton = require('./ToggleEditorsButton/ToggleEditorsButton.js').default;
 
 class ToolbarComponent extends React.Component {
 	render() {
@@ -37,7 +38,14 @@ class ToolbarComponent extends React.Component {
 
 				if (this.props.disabled) props.disabled = true;
 
-				if (itemType === 'button') {
+				if (o.name === 'toggleEditors') {
+					itemComps.push(<ToggleEditorsButton
+						key={o.name}
+						value={'markdown'}
+						theme={this.props.theme}
+						toolbarButtonInfo={o}
+					/>);
+				} else if (itemType === 'button') {
 					itemComps.push(<ToolbarButton {...props} />);
 				} else if (itemType === 'separator') {
 					itemComps.push(<ToolbarSpace {...props} />);

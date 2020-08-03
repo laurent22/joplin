@@ -58,6 +58,7 @@ const commands = [
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSidebar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
+	require('./gui/MainScreen/commands/toggleEditors'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),

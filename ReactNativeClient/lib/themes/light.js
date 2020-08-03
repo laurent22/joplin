@@ -14,10 +14,14 @@ const lightStyle = {
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
 
-	backgroundColor2: '#162B3D',
-	color2: '#f5f5f5',
-	selectedColor2: '#0269C2',
+	backgroundColor2: '#313640',
+	color2: '#ffffff',
+	colorFaded2: '#8F99A3',
+	selectedColor2: '#131313',
 	colorError2: '#ff6c6c',
+
+	backgroundColor3: '#F4F5F6',
+	color3: '#798CA0',
 
 	raisedBackgroundColor: '#e5e5e5',
 	raisedColor: '#222222',

@@ -29,6 +29,7 @@ export interface Command {
 }
 
 export interface ToolbarButtonInfo {
+	name: string,
 	tooltip: string,
 	iconName: string,
 	enabled: boolean,
@@ -267,6 +268,7 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
 
 		return {
+			name: commandName,
 			tooltip: command.declaration.label(),
 			iconName: command.declaration.iconName,
 			enabled: this.isEnabled(commandName),

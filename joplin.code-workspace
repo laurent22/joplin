@@ -366,7 +366,24 @@
 			"ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js": true,
 			"ReactNativeClient/lib/hooks/useEffectDebugger.js": true,
 			"ReactNativeClient/lib/services/ResourceEditWatcher/index.js": true,
-			"ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js": true
+			"ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js": true,
+			"./CliClient/tests/support/nextcloud-auth.json": true,
+			"./CliClient/tests/support/onedrive-auth.txt": true,
+			"CliClient/app/LinkSelector.js": true,
+			"CliClient/build/LinkSelector.js": true,
+			"ElectronClient/gui/MainScreen/commands/toggleEditors.js": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js": true,
+			"ElectronClient/gui/NoteEditor/utils/useNoteToolbarButtons.js": true,
+			"ElectronClient/gui/ResizableLayout/ResizableLayout.js": true,
+			"ElectronClient/gui/ToggleEditorsButton/styles/index.js": true,
+			"ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js": true,
+			"ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js": true,
+			"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/media.js": true,
+			"ReactNativeClient/lib/services/KeymapService.js": true,
+			"ReactNativeClient/lib/services/synchronizer/migrations/1.js": true,
+			"ReactNativeClient/lib/versionInfo.js": true
 		},
 		"spellright.language": [
 			"en"

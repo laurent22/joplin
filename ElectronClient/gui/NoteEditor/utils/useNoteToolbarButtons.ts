@@ -9,7 +9,7 @@ export default function useNoteToolbarButtons():ToolbarButtonInfos {
 	const [noteToolbarButtons, setNoteToolbarButtons] = useState<ToolbarButtonInfos>({});
 
 	function update() {
-		const buttonNames = ['historyBackward', 'historyForward'];
+		const buttonNames = ['historyBackward', 'historyForward', 'toggleEditors', 'startExternalEditing'];
 		const output:ToolbarButtonInfos = {};
 
 		for (const buttonName of buttonNames) {

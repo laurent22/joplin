@@ -163,11 +163,12 @@ class SideBarComponent extends React.Component {
 				fontSize: theme.fontSize * 1.16,
 				textDecoration: 'none',
 				boxSizing: 'border-box',
-				color: theme.color2,
+				color: theme.colorFaded2,
 				paddingLeft: 8,
 				display: 'flex',
 				alignItems: 'center',
 				userSelect: 'none',
+				textTransform: 'uppercase',
 			},
 			button: {
 				padding: 6,

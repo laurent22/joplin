@@ -41,6 +41,7 @@ const commands = [
 	require('./commands/showNoteContentProperties'),
 	require('./commands/showNoteProperties'),
 	require('./commands/showShareNoteDialog'),
+	require('./commands/toggleEditors'),
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSidebar'),
 	require('./commands/toggleVisiblePanes'),

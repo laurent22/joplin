@@ -6,6 +6,7 @@ import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 import CommandService, { ToolbarButtonInfo } from '../../../../lib/services/CommandService';
+import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
@@ -364,8 +365,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-editor-header {
-				border-top: 1px solid ${theme.dividerColor};
-				border-bottom: 1px solid ${theme.dividerColor};
+				border: none;
 			}
 
 			.tox .tox-tbtn,
@@ -377,8 +377,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox input,
 			.tox .tox-label,
 			.tox .tox-toolbar-label {
-				color: ${theme.iconColor} !important;
-				fill: ${theme.iconColor} !important;
+				color: ${theme.color3} !important;
+				fill: ${theme.color3} !important;
 			}
 
 			.tox .tox-statusbar a,
@@ -408,17 +408,22 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox .tox-toolbar__primary,
 			.tox .tox-toolbar__overflow {
 				background: none;
+				background-color: ${theme.backgroundColor3} !important;
 			}
 
 			.tox-tinymce,
 			.tox .tox-toolbar__group,
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
 			.tox .tox-dialog__footer {
-				border-color: ${theme.dividerColor} !important;
+				border: none !important;
 			}
 
 			.tox-tinymce {
 				border-top: none !important;
+			}
+
+			.joplin-tinymce .tox-toolbar__group {
+				background-color: ${theme.backgroundColor3};
 			}
 		`));
 
@@ -475,6 +480,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				menubar: false,
 				relative_urls: false,
 				branding: false,
+				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
@@ -1014,23 +1020,49 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
 		return (
-			<button key={key} style={{ display: 'flex' }} disabled={!info.enabled} aria-label={info.title} title={info.title} type="button" className="tox-tbtn" aria-pressed="false" onClick={info.onClick}>
+			<button key={key} style={styles.extraToolbarButton} disabled={!info.enabled} aria-label={info.title} title={info.title} type="button" className="tox-tbtn" aria-pressed="false" onClick={info.onClick}>
 				<span className="tox-icon tox-tbtn__icon-wrap">
-					<span style={{ fontSize: 24 }} className={info.iconName}></span>
+					<span style={styles.extraToolbarButtonIcon} className={info.iconName}></span>
 				</span>
 			</button>
 		);
 	}
 
-	function renderExtraToolbarButtons() {
+	function renderLeftExtraToolbarButtons() {
 		const buttons = [];
 		for (const buttonName in props.noteToolbarButtonInfos) {
+			if (!['historyBackward', 'historyForward'].includes(buttonName)) continue;
 			const info = props.noteToolbarButtonInfos[buttonName];
 			buttons.push(renderExtraToolbarButton(buttonName, info));
 		}
 
 		return (
-			<div className="tox" style={{ display: 'flex', flexDirection: 'row', position: 'absolute', width: 100, height: 41, zIndex: 2, top: 1, left: 4 }}>
+			<div style={styles.leftExtraToolbarContainer}>
+				{buttons}
+			</div>
+		);
+	}
+
+	function renderRightExtraToolbarButtons() {
+		const buttons = [];
+		for (const buttonName in props.noteToolbarButtonInfos) {
+			if (['historyBackward', 'historyForward'].includes(buttonName)) continue;
+			const info = props.noteToolbarButtonInfos[buttonName];
+
+			if (buttonName === 'toggleEditors') {
+				buttons.push(<ToggleEditorsButton
+					key={buttonName}
+					value={ToggleEditorsButtonValue.RichText}
+					theme={props.theme}
+					toolbarButtonInfo={info}
+				/>);
+			} else {
+				buttons.push(renderExtraToolbarButton(buttonName, info));
+			}
+		}
+
+		return (
+			<div style={styles.rightExtraToolbarContainer}>
 				{buttons}
 			</div>
 		);
@@ -1055,7 +1087,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	return (
 		<div style={styles.rootStyle} className="joplin-tinymce">
 			{renderDisabledOverlay()}
-			{renderExtraToolbarButtons()}
+			{renderLeftExtraToolbarButtons()}
+			{renderRightExtraToolbarButtons()}
 			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
 		</div>
 	);
