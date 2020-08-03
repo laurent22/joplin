@@ -7,7 +7,6 @@ import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
-import 'codemirror/addon/scroll/scrollpastend';
 import 'codemirror/addon/scroll/annotatescrollbar';
 import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/search/searchcursor';
@@ -224,7 +223,6 @@ function Editor(props: EditorProps, ref: any) {
 			inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
 			lineWrapping: true,
 			lineNumbers: false,
-			scrollPastEnd: true,
 			indentWithTabs: true,
 			indentUnit: 4,
 			spellcheck: true,
