@@ -3,7 +3,7 @@ export default function useScrollUtils(CodeMirror: any) {
 	function getScrollHeight(cm: any) {
 		const info = cm.getScrollInfo();
 		const overdraw = cm.state.scrollPastEndPadding ? cm.state.scrollPastEndPadding : '0px';
-		return info.height - info.clientHeight - parseInt(overdraw);
+		return info.height - info.clientHeight - parseInt(overdraw, 10);
 	}
 
 	CodeMirror.defineExtension('getScrollPercent', function() {
