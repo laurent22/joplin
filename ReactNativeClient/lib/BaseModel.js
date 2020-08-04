@@ -446,7 +446,7 @@ class BaseModel {
 	}
 
 	static userSideValidation(o) {
-		if (('id' in o) && !o.id.match(/^[a-f0-9]{32}$/)) {
+		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
 
