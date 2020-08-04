@@ -8,7 +8,7 @@ export default function styles(props:NoteBodyEditorProps) {
 			display: 'flex',
 			flexDirection: 'row',
 			position: 'absolute',
-			height: 39,
+			height: theme.toolbarHeight,
 			zIndex: 2,
 			top: 0,
 		};
@@ -43,7 +43,7 @@ export default function styles(props:NoteBodyEditorProps) {
 				alignItems: 'center',
 				justifyContent: 'flex-end',
 				width: 160,
-				right: 0,
+				right: 6,
 			},
 			extraToolbarButton: {
 				display: 'flex',
@@ -51,7 +51,7 @@ export default function styles(props:NoteBodyEditorProps) {
 				background: 'none',
 			},
 			extraToolbarButtonIcon: {
-				fontSize: 24,
+				fontSize: theme.toolbarIconSize,
 				color: theme.color3,
 			},
 		};

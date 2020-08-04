@@ -7,6 +7,7 @@ import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 import CommandService, { ToolbarButtonInfo } from '../../../../lib/services/CommandService';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
+import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
@@ -400,9 +401,23 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-tbtn:hover {
-				background-color: ${theme.backgroundHover};
-				color: ${theme.colorHover};
-				fill: ${theme.colorHover};
+				color: ${theme.colorHover3} !important;
+				fill: ${theme.colorHover3} !important;
+				background-color: ${theme.backgroundColorHover3}
+			}
+
+			.tox .tox-tbtn {
+				width: ${theme.toolbarHeight}px;
+				height: ${theme.toolbarHeight}px;
+				min-width: ${theme.toolbarHeight}px;
+				min-height: ${theme.toolbarHeight}px;
+				margin: 0;
+			}
+
+			.tox .tox-tbtn > span,
+			.tox .tox-tbtn:active > span,
+			.tox .tox-tbtn:hover > span {
+				transform: scale(0.8);
 			}
 
 			.tox .tox-toolbar__primary,
@@ -1019,19 +1034,19 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	}, []);
 
 	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
-		return (
-			<button key={key} style={styles.extraToolbarButton} disabled={!info.enabled} aria-label={info.title} title={info.title} type="button" className="tox-tbtn" aria-pressed="false" onClick={info.onClick}>
-				<span className="tox-icon tox-tbtn__icon-wrap">
-					<span style={styles.extraToolbarButtonIcon} className={info.iconName}></span>
-				</span>
-			</button>
-		);
+		return <ToolbarButton
+			key={key}
+			theme={props.theme}
+			toolbarButtonInfo={info}
+		/>;
 	}
+
+	const leftButtonCommandNames = ['historyBackward', 'historyForward', 'startExternalEditing'];
 
 	function renderLeftExtraToolbarButtons() {
 		const buttons = [];
 		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (!['historyBackward', 'historyForward'].includes(buttonName)) continue;
+			if (!leftButtonCommandNames.includes(buttonName)) continue;
 			const info = props.noteToolbarButtonInfos[buttonName];
 			buttons.push(renderExtraToolbarButton(buttonName, info));
 		}
@@ -1046,7 +1061,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	function renderRightExtraToolbarButtons() {
 		const buttons = [];
 		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (['historyBackward', 'historyForward'].includes(buttonName)) continue;
+			if (leftButtonCommandNames.includes(buttonName)) continue;
 			const info = props.noteToolbarButtonInfos[buttonName];
 
 			if (buttonName === 'toggleEditors') {

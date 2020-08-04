@@ -6,7 +6,7 @@ interface RootProps {
 }
 
 export const StyledRoot = styled.a<RootProps>`
-	opacity: ${props => props.disabled ? 0.4 : 1};
+	opacity: ${props => props.disabled ? 0.3 : 1};
 	height: ${props => props.theme.toolbarHeight}px;
 	min-height: ${props => props.theme.toolbarHeight}px;
 	width: ${props => props.theme.toolbarHeight}px;
@@ -15,6 +15,11 @@ export const StyledRoot = styled.a<RootProps>`
 	align-items: center;
 	justify-content: center;
 	cursor: default;
+	border-radius: 3px;
+
+	&:hover {
+		background-color: ${props => props.disabled ? 'none' : props.theme.backgroundColorHover3};
+	}
 `;
 
 interface IconProps {
@@ -26,12 +31,6 @@ const iconStyle = css<IconProps>`
 	font-size: ${props => props.theme.toolbarIconSize}px;
 	color: ${props => props.theme.color3};
 	margin-right: ${props => props.title ? 5 : 0}px;
-	&:hover {
-		color: ${props => props.theme.colorHover3};
-	}
-	&:active {
-		color: ${props => props.theme.colorActive3};
-	}
 `;
 
 export const StyledIconI = styled.i`${iconStyle}`;

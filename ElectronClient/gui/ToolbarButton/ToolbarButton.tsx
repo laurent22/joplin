@@ -10,6 +10,7 @@ interface Props {
 	readonly tooltip?: string,
 	readonly iconName?: string,
 	readonly disabled?: boolean,
+	readonly backgroundHover?: boolean,
 }
 
 function isFontAwesomeIcon(iconName:string) {

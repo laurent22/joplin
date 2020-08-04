@@ -21,9 +21,8 @@ const lightStyle = {
 	colorError2: '#ff6c6c',
 
 	backgroundColor3: '#F4F5F6',
-	color3: '#798CA0',
-	colorHover3: '#6E9BF8',
-	colorActive3: '#2150A7',
+	backgroundColorHover3: '#DFE0E2',
+	color3: '#738598',
 
 	raisedBackgroundColor: '#e5e5e5',
 	raisedColor: '#222222',
