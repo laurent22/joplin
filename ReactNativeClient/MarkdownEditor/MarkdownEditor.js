@@ -153,7 +153,7 @@ export default class MarkdownEditor extends React.Component {
 							},
 						},
 						Formats,
-						markdownButton,
+						markdownButton
 					)}
 				</View>
 			</WrapperView>

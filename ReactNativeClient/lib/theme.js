@@ -143,21 +143,21 @@ function addExtraStyles(style) {
 	};
 
 	style.textStyle2 = Object.assign({}, style.textStyle,
-		{ color: style.color2 },
+		{ color: style.color2 }
 	);
 
 	style.textStyleMinor = Object.assign({}, style.textStyle,
 		{
 			color: style.colorFaded,
 			fontSize: style.fontSize * 0.8,
-		},
+		}
 	);
 
 	style.urlStyle = Object.assign({}, style.textStyle,
 		{
 			textDecoration: 'underline',
 			color: style.urlColor,
-		},
+		}
 	);
 
 	style.h1Style = Object.assign({},
@@ -166,7 +166,7 @@ function addExtraStyles(style) {
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.5,
 			fontWeight: 'bold',
-		},
+		}
 	);
 
 	style.h2Style = Object.assign({},
@@ -175,7 +175,7 @@ function addExtraStyles(style) {
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.3,
 			fontWeight: 'bold',
-		},
+		}
 	);
 
 	style.dialogModalLayer = {
@@ -284,7 +284,7 @@ function themeStyle(theme) {
 
 	output.icon = Object.assign({},
 		output.icon,
-		{ color: output.color },
+		{ color: output.color }
 	);
 
 	output.lineInput = Object.assign({},
@@ -292,7 +292,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		},
+		}
 	);
 
 	output.headerStyle = Object.assign({},
@@ -300,7 +300,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		},
+		}
 	);
 
 	output.inputStyle = Object.assign({},
@@ -309,7 +309,7 @@ function themeStyle(theme) {
 			color: output.color,
 			backgroundColor: output.backgroundColor,
 			borderColor: output.dividerColor,
-		},
+		}
 	);
 
 	output.containerStyle = Object.assign({},
@@ -317,7 +317,7 @@ function themeStyle(theme) {
 		{
 			color: output.color,
 			backgroundColor: output.backgroundColor,
-		},
+		}
 	);
 
 	output.buttonStyle = Object.assign({},
@@ -327,7 +327,7 @@ function themeStyle(theme) {
 			backgroundColor: output.backgroundColor,
 			borderColor: output.dividerColor,
 			userSelect: 'none',
-		},
+		}
 	);
 
 	output = addExtraStyles(output);

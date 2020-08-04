@@ -383,7 +383,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCutText();
 				},
-			}),
+			})
 		);
 
 		menu.append(
@@ -393,7 +393,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCopyText();
 				},
-			}),
+			})
 		);
 
 		menu.append(
@@ -408,7 +408,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 						onEditorPaste();
 					}
 				},
-			}),
+			})
 		);
 
 		menu.popup(bridge().window());
