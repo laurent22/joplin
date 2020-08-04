@@ -1,5 +1,12 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.166](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166) - 2020-08-02T14:03:26Z
+
+- New: Add support for AWS S3 synchronisation (Beta) (#2815 by [@alexchee](https://github.com/alexchee))
+- Fixed: Desktop-only scripts were incorrectly being loaded in CLI server tool (#3548)
+- Fixed: Fix filename when exporting notebook as Markdown (#3473)
+- Fixed: Fixed attachments being out of order when importing Enex file
+
 ## [cli-v1.0.165](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165) - 2020-07-10T18:51:42Z
 
 - New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by [@ffadilaputra](https://github.com/ffadilaputra))

@@ -3,7 +3,7 @@ const htmlUtils = require('../../htmlUtils.js');
 const utils = require('../../utils');
 
 function renderImageHtml(before, src, after, ruleOptions) {
-	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
+	const r = utils.resourceReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 	if (typeof r === 'string') return r;
 	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
 	return `[Image: ${src}]`;

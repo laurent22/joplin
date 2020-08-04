@@ -10,8 +10,6 @@ const Resource = require('lib/models/Resource.js');
 const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000; // The first test is slow because the database needs to be built
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });

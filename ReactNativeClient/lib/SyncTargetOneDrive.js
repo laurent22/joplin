@@ -33,8 +33,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 		return SyncTargetOneDrive.id();
 	}
 
+	isTesting() {
+		const p = parameters();
+		return !!p.oneDriveTest;
+	}
+
 	oneDriveParameters() {
-		return parameters().oneDrive;
+		const p = parameters();
+		if (p.oneDriveTest) return p.oneDriveTest;
+		return p.oneDrive;
 	}
 
 	authRouteName() {
@@ -42,6 +49,10 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	api() {
+		if (this.isTesting()) {
+			return this.fileApi_.driver().api();
+		}
+
 		if (this.api_) return this.api_;
 
 		const isPublic = Setting.value('appType') != 'cli' && Setting.value('appType') != 'desktop';

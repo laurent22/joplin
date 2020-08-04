@@ -28,7 +28,7 @@ Linux          | <a href='https://github.com/laurent22/joplin/releases/download/
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.333/joplin-v1.0.333.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.333/joplin-v1.0.333-32bit.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.335/joplin-v1.0.335.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.335/joplin-v1.0.335-32bit.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -81,10 +81,15 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
 	- [What is a conflict?](https://github.com/laurent22/joplin/blob/master/readme/conflict.md)
-	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
 	- [API documentation](https://github.com/laurent22/joplin/blob/master/readme/api.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/master/readme/faq.md)
+
+- Development
+
+	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md)
+	- [Note History spec](https://github.com/laurent22/joplin/blob/master/readme/spec/history.md)
+	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md)
 
 - Google Summer of Code 2020
 

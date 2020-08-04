@@ -357,20 +357,24 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}, 10);
 	}, [props.content, editor, aceEditor_change]);
 
+	function clipboardText() {
+		return clipboard.readText() ? clipboard.readText() : clipboard.readHTML();
+	}
+
 	const editorCopyText = useCallback(() => {
 		const text = selectedText(selectionRange(editor), props.content);
 		clipboard.writeText(text);
 	}, [props.content, editor]);
 
 	const editorPasteText = useCallback(() => {
-		wrapSelectionWithStrings(clipboard.readText(), '', '', '');
+		wrapSelectionWithStrings(clipboardText(), '', '', '');
 	}, [wrapSelectionWithStrings]);
 
 	const onEditorContextMenu = useCallback(() => {
 		const menu = new Menu();
 
 		const hasSelectedText = !!selectedText(selectionRange(editor), props.content);
-		const clipboardText = clipboard.readText();
+		const currentClipboardText = clipboardText();
 
 		menu.append(
 			new MenuItem({
@@ -397,7 +401,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				label: _('Paste'),
 				enabled: true,
 				click: async () => {
-					if (clipboardText) {
+					if (currentClipboardText) {
 						editorPasteText();
 					} else {
 						// To handle pasting images
