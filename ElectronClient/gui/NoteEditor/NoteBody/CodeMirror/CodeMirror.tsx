@@ -392,16 +392,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			// Force both viewers to be visible during search
-			// This view should only change when the search terms change, this means the user
-			// is always presented with the currently highlighted text, but can revert
-			// to the viewer if they only want to scroll through matches
-			if (!props.visiblePanes.includes('editor') && props.searchMarkers !== previousSearchMarkers) {
-				props.dispatch({
-					type: 'NOTE_VISIBLE_PANES_SET',
-					panes: ['editor', 'viewer'],
-				});
-			}
 			// SEARCHHACK
 			// TODO: remove this options hack when aceeditor is removed
 			// Currently the webviewRef will send out an ipcMessage to set the results count
@@ -421,9 +411,17 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, options);
 			//  SEARCHHACK
 			if (editorRef.current) {
-
 				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
-				props.setLocalSearchResultCount(matches);
+
+				// SEARCHHACK
+				// TODO: when aceeditor is removed then this check will be performed in the NoteSearchbar
+				// End the if statement can be removed in favor of simply returning matches
+				if (props.visiblePanes.includes('editor')) {
+					props.setLocalSearchResultCount(matches);
+				} else {
+					props.setLocalSearchResultCount(-1);
+				}
+				// end SEARCHHACK
 			}
 		}
 	}, [props.searchMarkers, props.setLocalSearchResultCount, renderedBody]);
