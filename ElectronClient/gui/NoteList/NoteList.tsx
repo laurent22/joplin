@@ -134,7 +134,7 @@ class NoteListComponent extends React.Component {
 	}
 
 	dragTargetNoteIndex_(event:any) {
-		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop()) / this.itemHeight));
+		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop()) / this.itemHeight)) - 1;
 	}
 
 	noteItem_noteDragOver(event:any) {
@@ -251,6 +251,7 @@ class NoteListComponent extends React.Component {
 			index={index}
 			theme={this.props.theme}
 			width={this.state.width}
+			height={this.itemHeight}
 			dragItemIndex={this.state.dragOverTargetNoteIndex}
 			highlightedWords={highlightedWords()}
 			isProvisional={this.props.provisionalNoteIds.includes(item.id)}
