@@ -59,6 +59,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 		if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
 			output.push({
 				title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
+				tooltip: folderTitle,
 				iconName: 'fa-book',
 				onClick: () => {
 					props.dispatch({
