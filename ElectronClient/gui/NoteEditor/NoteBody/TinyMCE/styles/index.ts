@@ -11,6 +11,7 @@ export default function styles(props:NoteBodyEditorProps) {
 			height: theme.toolbarHeight,
 			zIndex: 2,
 			top: 0,
+			padding: theme.toolbarPadding,
 		};
 
 		return {
@@ -35,15 +36,15 @@ export default function styles(props:NoteBodyEditorProps) {
 			},
 			leftExtraToolbarContainer: {
 				...extraToolbarContainer,
-				width: 100,
+				width: 80,
 				left: 4,
 			},
 			rightExtraToolbarContainer: {
 				...extraToolbarContainer,
 				alignItems: 'center',
 				justifyContent: 'flex-end',
-				width: 160,
-				right: 6,
+				width: 70,
+				right: 0,
 			},
 			extraToolbarButton: {
 				display: 'flex',

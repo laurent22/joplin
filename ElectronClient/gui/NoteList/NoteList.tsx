@@ -13,10 +13,17 @@ const Setting = require('lib/models/Setting');
 const NoteListUtils = require('../utils/NoteListUtils');
 const NoteListItem = require('../NoteListItem').default;
 const CommandService = require('lib/services/CommandService.js').default;
+const styled = require('styled-components').default;
 
 const commands = [
 	require('./commands/focusElementNoteList'),
 ];
+
+const StyledRoot = styled.div`
+	width: 100%;
+	height: 100%;
+	background-color: ${(props:any) => props.theme.backgroundColor3};
+`;
 
 class NoteListComponent extends React.Component {
 	constructor() {
@@ -478,10 +485,10 @@ class NoteListComponent extends React.Component {
 		});
 
 		return (
-			<div ref={this.noteListRef} style={{ width: '100%', height: '100%' }}>
+			<StyledRoot ref={this.noteListRef} theme={themeStyle(this.props.theme)}>
 				{this.renderEmptyList(style)}
 				{this.renderItemList(style)}
-			</div>
+			</StyledRoot>
 		);
 	}
 }

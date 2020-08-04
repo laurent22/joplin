@@ -16,7 +16,7 @@ const StyledRoot = styled.div`
 	display: flex;
 	align-items: stretch;
 	position: relative;
-	background-color: ${(props:any) => props.selected ? props.theme.selectedColor : props.theme.backgroundColor};
+	background-color: ${(props:any) => props.selected ? props.theme.selectedColor : 'none'};
 
 	border-style: solid;
 	border-color: ${(props:any) => props.theme.color};
@@ -29,10 +29,14 @@ const StyledRoot = styled.div`
 	&::before {
 		content: '';
 		border-bottom: 1px solid ${(props:any) => props.theme.dividerColor};
-		width: ${(props:any) => props.width - 20}px;
+		width: ${(props:any) => props.width - 32}px;
 		position: absolute;
 		bottom: 0;
-		left: 10px;
+		left: 16px;
+	}
+
+	&:hover {
+		background-color: ${(props:any) => props.theme.backgroundColorHover3};
 	}
 `;
 
@@ -60,7 +64,7 @@ interface NoteListItemProps {
 function NoteListItem(props:NoteListItemProps, ref:any) {
 	const item = props.item;
 	const theme = themeStyle(props.theme);
-	const hPadding = 10;
+	const hPadding = 16;
 
 	const anchorRef = useRef(null);
 

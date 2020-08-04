@@ -350,6 +350,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		element.setAttribute('id', 'tinyMceStyle');
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
+			.joplin-tinymce .tox-editor-header {
+				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
+			}
+			
 			.tox .tox-toolbar,
 			.tox .tox-toolbar__overflow,
 			.tox .tox-toolbar__primary,
@@ -414,6 +419,12 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				margin: 0;
 			}
 
+
+			.tox .tox-tbtn[aria-haspopup=true] {
+				width: ${theme.toolbarHeight + 15}px;
+				min-width: ${theme.toolbarHeight + 15}px;
+			}
+
 			.tox .tox-tbtn > span,
 			.tox .tox-tbtn:active > span,
 			.tox .tox-tbtn:hover > span {
@@ -439,6 +450,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 			.joplin-tinymce .tox-toolbar__group {
 				background-color: ${theme.backgroundColor3};
+				padding-top: ${theme.toolbarPadding}px;
+				padding-bottom: ${theme.toolbarPadding}px;
 			}
 		`));
 

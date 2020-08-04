@@ -71,9 +71,11 @@ a {
 	opacity: 0;
 }
 
+/*
 .note-list .list-item-container:hover {
 	background-color: rgba(0,160,255,0.1) !important;
 }
+*/
 
 /*
 .editor-toolbar .button:not(.disabled):hover,
@@ -163,10 +165,10 @@ a {
 	to {transform: rotate(360deg);}
 }
 
-.joplin-tinymce .tox-editor-header {
-	padding-left: 100px;
+/* .joplin-tinymce .tox-editor-header {
+	padding-left: 88px;
 	padding-right: 150px;
-}
+} */
 
 *:focus {
     outline: none;

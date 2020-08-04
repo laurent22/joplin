@@ -47,6 +47,7 @@ const globalStyle = {
 	headerHeight: 35,
 	headerButtonHPadding: 6,
 	toolbarHeight: 25,
+	toolbarPadding: 6,
 	appearance: 'light',
 };
 
@@ -104,6 +105,8 @@ function addExtraStyles(style) {
 	style.iconColor = Color(style.color).alpha(0.8);
 
 	if (!('backgroundColorHover3' in style)) style.backgroundColorHover3 = style.backgroundColor3;
+	if (!('selectionBackgroundColor3' in style)) style.selectionBackgroundColor3 = style.backgroundColor3;
+	if (!('selectionBorderColor3' in style)) style.selectionBorderColor3 = style.backgroundColor3;
 
 	style.tagStyle = {
 		fontSize: style.fontSize,
