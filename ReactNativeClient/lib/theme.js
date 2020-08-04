@@ -103,6 +103,9 @@ function addExtraStyles(style) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 
+	if (!('colorHover3' in style)) style.colorHover3 = style.color3;
+	if (!('colorActive3' in style)) style.colorActive3 = style.color3;
+
 	style.tagStyle = {
 		fontSize: style.fontSize,
 		fontFamily: style.fontFamily,

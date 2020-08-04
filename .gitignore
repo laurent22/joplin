@@ -135,6 +135,8 @@ ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js
 ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
+ElectronClient/gui/ToolbarButton/styles/index.js
+ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js

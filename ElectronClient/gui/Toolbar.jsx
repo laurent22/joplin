@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
-const ToolbarButton = require('./ToolbarButton.min.js');
+const ToolbarButton = require('./ToolbarButton/ToolbarButton.js').default;
 const ToolbarSpace = require('./ToolbarSpace.min.js');
 const ToggleEditorsButton = require('./ToggleEditorsButton/ToggleEditorsButton.js').default;
 
