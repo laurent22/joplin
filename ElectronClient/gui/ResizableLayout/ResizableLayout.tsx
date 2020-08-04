@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRef, useEffect } from 'react';
-import { Resizable, ResizeCallback } from 're-resizable';
 import produce from 'immer';
+const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 const debounce = require('debounce');
 
@@ -139,7 +139,7 @@ function ResizableLayout(props:Props) {
 				const enable = { top: false, right: true, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false };
 
 				return (
-					<Resizable key={container.key} style={style} size={size} onResizeStop={onResizeStop as ResizeCallback} enable={enable}>
+					<Resizable key={container.key} style={style} size={size} onResizeStop={onResizeStop} enable={enable}>
 						{childrenComponents}
 					</Resizable>
 				);

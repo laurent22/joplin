@@ -126,6 +126,7 @@ ElectronClient/gui/NoteEditor/utils/useNoteToolbarButtons.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js
 ElectronClient/gui/NoteList/commands/focusElementNoteList.js
+ElectronClient/gui/NoteList/NoteList.js
 ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/ResizableLayout/ResizableLayout.js

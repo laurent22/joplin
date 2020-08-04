@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+const styled = require('styled-components').default;
+const { css } = require('styled-components');
 
 interface RootProps {
 	readonly theme: any;
@@ -6,11 +7,11 @@ interface RootProps {
 }
 
 export const StyledRoot = styled.a<RootProps>`
-	opacity: ${props => props.disabled ? 0.3 : 1};
-	height: ${props => props.theme.toolbarHeight}px;
-	min-height: ${props => props.theme.toolbarHeight}px;
-	width: ${props => props.theme.toolbarHeight}px;
-	max-width: ${props => props.theme.toolbarHeight}px;
+	opacity: ${(props:RootProps) => props.disabled ? 0.3 : 1};
+	height: ${(props:RootProps) => props.theme.toolbarHeight}px;
+	min-height: ${(props:RootProps) => props.theme.toolbarHeight}px;
+	width: ${(props:RootProps) => props.theme.toolbarHeight}px;
+	max-width: ${(props:RootProps) => props.theme.toolbarHeight}px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -18,7 +19,7 @@ export const StyledRoot = styled.a<RootProps>`
 	border-radius: 3px;
 
 	&:hover {
-		background-color: ${props => props.disabled ? 'none' : props.theme.backgroundColorHover3};
+		background-color: ${(props:RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};
 	}
 `;
 
@@ -28,9 +29,9 @@ interface IconProps {
 }
 
 const iconStyle = css<IconProps>`
-	font-size: ${props => props.theme.toolbarIconSize}px;
-	color: ${props => props.theme.color3};
-	margin-right: ${props => props.title ? 5 : 0}px;
+	font-size: ${(props:IconProps) => props.theme.toolbarIconSize}px;
+	color: ${(props:IconProps) => props.theme.color3};
+	margin-right: ${(props:IconProps) => props.title ? 5 : 0}px;
 `;
 
 export const StyledIconI = styled.i`${iconStyle}`;

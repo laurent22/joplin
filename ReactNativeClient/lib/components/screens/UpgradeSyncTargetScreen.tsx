@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text, ScrollView } from 'react-native';
 import useSyncTargetUpgrade from 'lib/services/synchronizer/gui/useSyncTargetUpgrade';
+const { View, Text, ScrollView } = require('react-native');
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/components/global-style.js');

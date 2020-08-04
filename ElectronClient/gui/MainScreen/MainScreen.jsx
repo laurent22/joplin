@@ -2,7 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { Header } = require('../Header/Header.min.js');
 const { SideBar } = require('../SideBar/SideBar.min.js');
-const { NoteList } = require('../NoteList/NoteList.min.js');
+const NoteList = require('../NoteList/NoteList.js').default;
 const NoteEditor = require('../NoteEditor/NoteEditor.js').default;
 const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -484,7 +484,6 @@ class MainScreenComponent extends React.Component {
 			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
-		const notes = this.props.notes;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
 		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
@@ -496,24 +495,6 @@ class MainScreenComponent extends React.Component {
 		headerItems.push(CommandService.instance().commandToToolbarButton('newNote'));
 		headerItems.push(CommandService.instance().commandToToolbarButton('newTodo'));
 		headerItems.push(CommandService.instance().commandToToolbarButton('newNotebook'));
-
-		headerItems.push({
-			title: _('Code View'),
-			iconName: 'fa-file-code ',
-			enabled: !!notes.length,
-			type: 'checkbox',
-			checked: this.props.settingEditorCodeView,
-			onClick: () => {
-				// A bit of a hack, but for now don't allow changing code view
-				// while a note is being saved as it will cause a problem with
-				// TinyMCE because it won't have time to send its content before
-				// being switch to Ace Editor.
-				if (this.props.hasNotesBeingSaved) return;
-				Setting.toggle('editor.codeView');
-			},
-		});
-
-		// headerItems.push(CommandService.instance().commandToToolbarButton('toggleVisiblePanes'));
 
 		headerItems.push({
 			title: _('Search...'),
