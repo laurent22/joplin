@@ -86,6 +86,12 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'sync.upgradeState': {
+				value: Setting.SYNC_UPGRADE_STATE_IDLE,
+				type: Setting.TYPE_INT,
+				public: false,
+			},
+
 			'sync.2.path': {
 				value: '',
 				type: Setting.TYPE_STRING,
@@ -477,6 +483,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
 			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
 			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
+			'markdown.plugin.media': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable media players (audio and video)')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -1323,6 +1330,10 @@ Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
 Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
 Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
+Setting.SYNC_UPGRADE_STATE_IDLE = 0; // Doesn't need to be upgraded
+Setting.SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
+Setting.SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
+
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',
 	RENDERED_MARKDOWN: 'userstyle.css',
@@ -1343,7 +1354,7 @@ Setting.constants_ = {
 	templateDir: '',
 	tempDir: '',
 	flagOpenDevTools: false,
-	syncVersion: 1,
+	syncVersion: 2,
 };
 
 Setting.autoSaveEnabled = true;

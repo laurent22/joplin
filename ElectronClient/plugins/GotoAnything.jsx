@@ -14,6 +14,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const KeymapService = require('lib/services/KeymapService.js').default;
 
 class GotoAnything {
 
@@ -227,7 +228,7 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language'] });
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
@@ -268,6 +269,10 @@ class Dialog extends React.PureComponent {
 						} else {
 							results[i] = Object.assign({}, row, { path: path, fragments: '' });
 						}
+					}
+
+					if (!this.props.showCompletedTodos) {
+						results = results.filter((row) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
@@ -449,6 +454,7 @@ const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
 		theme: state.settings.theme,
+		showCompletedTodos: state.settings.showCompletedTodos,
 	};
 };
 
@@ -462,7 +468,7 @@ GotoAnything.manifest = {
 			name: 'main',
 			parent: 'tools',
 			label: _('Goto Anything...'),
-			accelerator: 'CommandOrControl+G',
+			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
 		},
 	],

@@ -11,8 +11,6 @@ const Resource = require('lib/models/Resource.js');
 const Note = require('lib/models/Note.js');
 const { shim } = require('lib/shim.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 const exportDir = `${__dirname}/export`;
 
 process.on('unhandledRejection', (reason, p) => {

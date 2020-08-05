@@ -12,19 +12,18 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
-const { filename, fileExtension } = require('lib/path-utils');
+// const { filename, fileExtension } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
-const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
+const LockHandler = require('lib/services/synchronizer/LockHandler').default;
+const MigrationHandler = require('lib/services/synchronizer/MigrationHandler').default;
+const { Dirnames } = require('lib/services/synchronizer/utils/types');
 
 class Synchronizer {
 	constructor(db, api, appType) {
 		this.state_ = 'idle';
 		this.db_ = db;
 		this.api_ = api;
-		this.syncDirName_ = '.sync';
-		this.lockDirName_ = '.lock';
-		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
@@ -64,6 +63,18 @@ class Synchronizer {
 
 	logger() {
 		return this.logger_;
+	}
+
+	lockHandler() {
+		if (this.lockHandler_) return this.lockHandler_;
+		this.lockHandler_ = new LockHandler(this.api());
+		return this.lockHandler_;
+	}
+
+	migrationHandler() {
+		if (this.migrationHandler_) return this.migrationHandler_;
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		return this.migrationHandler_;
 	}
 
 	maxResourceSize() {
@@ -205,71 +216,38 @@ class Synchronizer {
 		return state;
 	}
 
-	async acquireLock_() {
-		await this.checkLock_();
-		await this.api().put(`${this.lockDirName_}/${this.clientId()}_${Date.now()}.lock`, `${Date.now()}`);
-	}
-
-	async releaseLock_() {
-		const lockFiles = await this.lockFiles_();
-		for (const lockFile of lockFiles) {
-			const p = this.parseLockFilePath(lockFile.path);
-			if (p.clientId === this.clientId()) {
-				await this.api().delete(p.fullPath);
-			}
-		}
-	}
-
-	async lockFiles_() {
-		const output = await this.api().list(this.lockDirName_);
-		return output.items.filter((p) => {
-			const ext = fileExtension(p.path);
-			return ext === 'lock';
-		});
-	}
-
-	parseLockFilePath(path) {
-		const splitted = filename(path).split('_');
-		const fullPath = `${this.lockDirName_}/${path}`;
-		if (splitted.length !== 2) throw new Error(`Sync target appears to be locked but lock filename is invalid: ${fullPath}. Please delete it on the sync target to continue.`);
-		return {
-			clientId: splitted[0],
-			timestamp: Number(splitted[1]),
-			fullPath: fullPath,
-		};
-	}
-
-	async checkLock_() {
-		const lockFiles = await this.lockFiles_();
-		if (lockFiles.length) {
-			const lock = this.parseLockFilePath(lockFiles[0].path);
-
-			if (lock.clientId === this.clientId()) {
-				await this.releaseLock_();
-			} else {
-				throw new Error(`The sync target was locked by client ${lock.clientId} on ${time.unixMsToLocalDateTime(lock.timestamp)} and cannot be accessed. If no app is currently operating on the sync target, you can delete the files in the "${this.lockDirName_}" directory on the sync target to resume.`);
-			}
-		}
-	}
-
-	async checkSyncTargetVersion_() {
-		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetVersion = await this.api().get('.sync/version.txt');
-
-		if (!syncTargetVersion) {
-			await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
-		} else {
-			if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
-				throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
-			} else {
-				await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
-				// TODO: do upgrade job
-			}
-		}
-	}
-
 	isFullSync(steps) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
+	}
+
+	// TODO: test lockErrorStatus_
+	async lockErrorStatus_() {
+		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock('exclusive');
+		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
+
+		const hasActiveSyncLock = await this.lockHandler().hasActiveLock('sync', this.appType_, this.clientId_);
+		if (!hasActiveSyncLock) return 'syncLockGone';
+
+		return '';
+	}
+
+	async apiCall(fnName, ...args) {
+		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
+
+		try {
+			const output = await this.api()[fnName](...args);
+			return output;
+		} catch (error) {
+			const lockStatus = await this.lockErrorStatus_();
+			// When there's an error due to a lock, we re-wrap the error and change the error code so that error handling
+			// does not do special processing on the original error. For example, if a resource could not be downloaded,
+			// don't mark it as a "cannotSyncItem" since we don't know that.
+			if (lockStatus) {
+				throw new JoplinError(`Sync target lock error: ${lockStatus}. Original error was: ${error.message}`, 'lockError');
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	// Synchronisation is done in three major steps:
@@ -300,6 +278,7 @@ class Synchronizer {
 
 		const syncTargetId = this.api().syncTargetId();
 
+		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;
 
 		const masterKeysBefore = await MasterKey.count();
@@ -319,19 +298,38 @@ class Synchronizer {
 		};
 
 		const resourceRemotePath = resourceId => {
-			return `${this.resourceDirName_}/${resourceId}`;
+			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
 		let errorToThrow = null;
+		let syncLock = null;
 
 		try {
-			await this.api().mkdir(this.syncDirName_);
-			await this.api().mkdir(this.lockDirName_);
-			this.api().setTempDirName(this.syncDirName_);
-			await this.api().mkdir(this.resourceDirName_);
+			try {
+				const syncTargetInfo = await this.migrationHandler().checkCanSync();
 
-			await this.checkLock_();
-			await this.checkSyncTargetVersion_();
+				this.logger().info('Sync target info:', syncTargetInfo);
+
+				if (!syncTargetInfo.version) {
+					this.logger().info('Sync target is new - setting it up...');
+					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
+				}
+			} catch (error) {
+				if (error.code === 'outdatedSyncTarget') {
+					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
+				}
+				throw error;
+			}
+
+			this.api().setTempDirName(Dirnames.Temp);
+
+			syncLock = await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
+
+			this.lockHandler().startAutoLockRefresh(syncLock, (error) => {
+				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
+				this.syncTargetIsLocked_ = true;
+				this.cancel();
+			});
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -369,7 +367,7 @@ class Synchronizer {
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
-						const remote = await this.api().stat(path);
+						const remote = await this.apiCall('stat', path);
 						let action = null;
 
 						let reason = '';
@@ -407,7 +405,7 @@ class Synchronizer {
 							// OneDrive does not appear to have accurate timestamps as lastModifiedDateTime would occasionally be
 							// a few seconds ahead of what it was set with setTimestamp()
 							try {
-								remoteContent = await this.api().get(path);
+								remoteContent = await this.apiCall('get', path);
 							} catch (error) {
 								if (error.code === 'rejectedByTarget') {
 									this.progressReport_.errors.push(error);
@@ -450,7 +448,7 @@ class Synchronizer {
 										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
 									}
 
-									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
+									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 								} catch (error) {
 									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -467,7 +465,7 @@ class Synchronizer {
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 								const content = await ItemClass.serializeForSync(local);
-								await this.api().put(path, content);
+								await this.apiCall('put', path, content);
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -593,11 +591,11 @@ class Synchronizer {
 					const item = deletedItems[i];
 					const path = BaseItem.systemPath(item.item_id);
 					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
-					await this.api().delete(path);
+					await this.apiCall('delete', path);
 
 					if (item.item_type === BaseModel.TYPE_RESOURCE) {
 						const remoteContentPath = resourceRemotePath(item.item_id);
-						await this.api().delete(remoteContentPath);
+						await this.apiCall('delete', remoteContentPath);
 					}
 
 					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
@@ -628,7 +626,7 @@ class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					const listResult = await this.api().delta('', {
+					const listResult = await this.apiCall('delta', '', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -653,7 +651,7 @@ class Synchronizer {
 						if (this.cancelling()) break;
 
 						this.downloadQueue_.push(remote.path, async () => {
-							return this.api().get(remote.path);
+							return this.apiCall('get', remote.path);
 						});
 					}
 
@@ -669,7 +667,7 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							const task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
+							const task = await this.downloadQueue_.waitForResult(path); // await this.apiCall('get', path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);
@@ -832,13 +830,13 @@ class Synchronizer {
 		} catch (error) {
 			if (throwOnError) {
 				errorToThrow = error;
-			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
+			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe', 'lockError', 'outdatedSyncTarget'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
 
-				if (error.code === 'failSafe') {
+				if (error.code === 'failSafe' || error.code === 'lockError') {
 					// Get the message to display on UI, but not in testing to avoid poluting stdout
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
@@ -856,6 +854,13 @@ class Synchronizer {
 				}
 			}
 		}
+
+		if (syncLock) {
+			this.lockHandler().stopAutoLockRefresh(syncLock);
+			await this.lockHandler().releaseLock('sync', this.appType_, this.clientId_);
+		}
+
+		this.syncTargetIsLocked_ = false;
 
 		if (this.cancelling()) {
 			this.logger().info('Synchronisation was cancelled.');

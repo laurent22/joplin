@@ -38,6 +38,8 @@ tasks.prepareTestBuild = {
 				'lib/',
 				'locales/',
 				'node_modules/',
+				'*.ts',
+				'*.tsx',
 			],
 		});
 

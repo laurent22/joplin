@@ -81,10 +81,15 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
 	- [What is a conflict?](https://github.com/laurent22/joplin/blob/master/readme/conflict.md)
-	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
 	- [API documentation](https://github.com/laurent22/joplin/blob/master/readme/api.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/master/readme/faq.md)
+
+- Development
+
+	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md)
+	- [Note History spec](https://github.com/laurent22/joplin/blob/master/readme/spec/history.md)
+	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md)
 
 - Google Summer of Code 2020
 

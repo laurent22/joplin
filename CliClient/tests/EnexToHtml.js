@@ -4,8 +4,6 @@ const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-
 const { shim } = require('lib/shim');
 const { enexXmlToHtml } = require('lib/import-enex-html-gen.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
-
 process.on('unhandledRejection', (reason, p) => {
 	console.warn('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });

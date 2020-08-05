@@ -20,12 +20,13 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
-    "eslint": "^6.1.0",
+    "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.4.0",
@@ -33,10 +34,12 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
+    "jasmine": "^3.5.0",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"
   },
   "dependencies": {
+    "@types/react-native": "^0.63.1",
     "follow-redirects": "^1.11.0",
     "immer": "^7.0.5",
     "joplin-turndown": "^4.0.29",

@@ -4,7 +4,8 @@
   "license": "MIT",
   "author": "Laurent Cozic",
   "scripts": {
-    "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
+    "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --fail-fast=true --config=tests/support/jasmine.json",
+    "test-ci": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
     "postinstall": "npm run build && patch-package --patch-dir ../patches",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --stack-trace-enabled --log-level debug --env dev"
@@ -85,7 +86,8 @@
     "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
     "node-persist": "^2.1.0",
-    "patch-package": "^6.2.0",
+    "open": "^7.0.4",
+    "patch-package": "^6.2.2",
     "promise": "^7.1.1",
     "proper-lockfile": "^2.0.1",
     "query-string": "4.3.4",

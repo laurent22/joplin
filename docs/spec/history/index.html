@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/spec.md and any manual change
+This file was auto-generated from readme/spec/history.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/spec.md
+https://github.com/laurent22/joplin/blob/master/readme/spec/history.md
 
 -->
 
 <head>
-	<title>Specifications | Joplin</title>
+	<title>Note History Specifications | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -84,6 +84,9 @@ https://github.com/laurent22/joplin/blob/master/readme/spec.md
 		color: #555;
 	};
 	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc > ul > li {
 		margin-bottom: 10px;
 	}
 	#toc {
@@ -272,7 +275,7 @@ https://github.com/laurent22/joplin/blob/master/readme/spec.md
 
 <body>
 
-<div class="container page-spec">
+<div class="container page-history">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -316,10 +319,17 @@ https://github.com/laurent22/joplin/blob/master/readme/spec.md
 <li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
 </li>
 <li>
@@ -340,105 +350,37 @@ https://github.com/laurent22/joplin/blob/master/readme/spec.md
 </li>
 </ul>
 </div>
-<h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
-<p>Encrypted data is encoded to ASCII because encryption/decryption functions in React Native can only deal with strings. So for compatibility with all the apps we need to use the lowest common denominator.</p>
-<h2>Encrypted data format<a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a></h2>
-<h3>Header<a name="header" href="#header" class="heading-anchor">🔗</a></h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Size</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identifier</td>
-<td>3 chars (&quot;JED&quot;)</td>
-</tr>
-<tr>
-<td>Version number</td>
-<td>2 chars (Hexa string)</td>
-</tr>
-</tbody>
-</table>
-<p>This is followed by the encryption metadata:</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Size</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Length</td>
-<td>6 chars (Hexa string)</td>
-</tr>
-<tr>
-<td>Encryption method</td>
-<td>2 chars (Hexa string)</td>
-</tr>
-<tr>
-<td>Master key ID</td>
-<td>32 chars (Hexa string)</td>
-</tr>
-</tbody>
-</table>
-<p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
-<h3>Data chunk<a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a></h3>
-<p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Size</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Length</td>
-<td>6 chars (Hexa string)</td>
-</tr>
-<tr>
-<td>Data</td>
-<td>(&quot;Length&quot; bytes) (ASCII)</td>
-</tr>
-</tbody>
-</table>
-<h2>Master Keys<a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a></h2>
-<p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263">strong encryption method</a>.</p>
-<p>These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.</p>
-<p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
-<p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it's available to the current app and, if so, use this for decryption.</p>
-<h2>Encryption Service<a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a></h2>
-<p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
-<h2>Encryption workflow<a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a></h2>
-<p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
-<p>They are decrypted by DecryptionWorker in the background.</p>
-<p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
-<h2>Enabling and disabling encryption<a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a></h2>
-<p>Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:</p>
-<ul>
+<h1>Note history<a name="note-history" href="#note-history" class="heading-anchor">🔗</a></h1>
+<p>The note history preserves versions of the notes at regular interval. All the revisions are synced and shared across all devices.</p>
+<h2>Revision format<a name="revision-format" href="#revision-format" class="heading-anchor">🔗</a></h2>
+<p>To save space, only the diff of a note is saved: the title and body are saved as text diff, while the other properties are saved as an object diff (i.e. only the modified properties are saved).</p>
+<p>Advantages: it saves space, and writes are fast.</p>
+<p>Disadvantages: reading a note version back is slower since it needs to be rebuilt, starting from the oldest revision and applying diffs to it one at a time.</p>
+<h2>Revision service<a name="revision-service" href="#revision-service" class="heading-anchor">🔗</a></h2>
+<p>Every time an object is changed in Joplin, some metadata is added to the changed_items table. The revision service uses this to know what notes need a new revision. Specifically it will create a revision under these conditions:</p>
+<ol>
 <li>
-<p>If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did <em>not</em> change (because the item data itself has not changed, only its representation). Because of this, client 2 will not re-download the items - it does not need to do so anyway since it has already the item data.</p>
+<p>The note hadn't had a revision for more than 10 minutes</p>
 </li>
 <li>
-<p>When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it's encrypted on target too.</p>
+<p>The note was recently modified, but before that it hadn't had a revision for more than 7 days</p>
 </li>
-<li>
-<p>If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user <em>must</em> manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.</p>
-</li>
-<li>
-<p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
-</li>
-<li>
-<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
-</li>
-</ul>
+</ol>
+<p>Condition 1 saves the current state of the note (i.e. <strong>after</strong> the edit). Condition 2 saves the state has it was <strong>before</strong> the edit.</p>
+<p>The reason for that is that we save revisions every 10 minutes, but if you make many changes within a few minutes and then stop modifying the note, the final revision will not contain the current content of the note. Basically at one point (let's say at t1) the service will see there's a revision from less than 10 minutes, and will not save a new one.</p>
+<p>That's why when you change the note again more than 7 days later, we save that revision that wasn't saved at t1. The logic is a bit complicated but the goal is to preserve the last significant state of a note. If you make many changes to a note then stop editing it for several months, the last significant state was at the end of that series of edits, so we need to save that.</p>
+<p>Additionally, notes that were created before the service existed never had revisions. So the 7 days logic ensure that they get one the first time they are modified.</p>
+<h2>Revision deletion<a name="revision-deletion" href="#revision-deletion" class="heading-anchor">🔗</a></h2>
+<p>Revisions are deleted once they are older than a given interval as set in <code>revisionService.oldNoteInterval</code> (90 days by default).</p>
+<h2>Disabling the service<a name="disabling-the-service" href="#disabling-the-service" class="heading-anchor">🔗</a></h2>
+<p>When disabled, no new revision is saved, but the existing one remain there, and will only be deleted after the interval specified in <code>revisionService.oldNoteInterval</code>.</p>
+<h2>Revision settings are global<a name="revision-settings-are-global" href="#revision-settings-are-global" class="heading-anchor">🔗</a></h2>
+<p>Since all the revisions are synced across all devices, it means these settings are kind of global. So for example, if on one device you set it to keep revisions for 30 days, and on another to 100 days, the revisions older than 30 days will be deleted, and then this deletion will be synced. So in practice it means revisions are kept for whatever is the minimum number of days as set on any of the devices. In that particular case, the 100 days setting will be essentially ignored, and only the 30 days one will apply.</p>
+<h2>Why is there less than 10 minutes between some revisions?<a name="why-is-there-less-than-10-minutes-between-some-revisions" href="#why-is-there-less-than-10-minutes-between-some-revisions" class="heading-anchor">🔗</a></h2>
+<p>It can happen if a note is changed on two different devices within less than 10 minutes. A revision will be created on each device, then when they are synced it will appear that there's less than 10 min between the revisions.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec/history.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
