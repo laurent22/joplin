@@ -383,7 +383,13 @@
 			"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/media.js": true,
 			"ReactNativeClient/lib/services/KeymapService.js": true,
 			"ReactNativeClient/lib/services/synchronizer/migrations/1.js": true,
-			"ReactNativeClient/lib/versionInfo.js": true
+			"ReactNativeClient/lib/versionInfo.js": true,
+			"ElectronClient/gui/NoteList/NoteList.js": true,
+			"ElectronClient/gui/NoteListControls/NoteListControls.js": true,
+			"ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js": true,
+			"ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js": true,
+			"ElectronClient/gui/ToolbarButton/styles/index.js": true,
+			"ElectronClient/gui/ToolbarButton/ToolbarButton.js": true
 		},
 		"spellright.language": [
 			"en"

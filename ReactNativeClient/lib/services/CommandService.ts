@@ -257,6 +257,12 @@ export default class CommandService extends BaseService {
 		return command.runtime.title(command.runtime.props);
 	}
 
+	iconName(commandName:string):string {
+		const command = this.commandByName(commandName);
+		if (!command) throw new Error(`No such command: ${commandName}`);
+		return command.declaration.iconName;
+	}
+
 	private extractExecuteArgs(command:Command, executeArgs:any) {
 		if (executeArgs) return executeArgs;
 		if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);

@@ -517,7 +517,7 @@ class MainScreenComponent extends React.Component {
 			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
-			return <NoteListControls key={key} />;
+			return <NoteListControls key={key} themeId={this.props.theme} />;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);

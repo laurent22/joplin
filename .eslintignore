@@ -144,9 +144,12 @@ ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js
 ElectronClient/gui/ResizableLayout/ResizableLayout.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/Root_UpgradeSyncTarget.js
+ElectronClient/gui/SearchBar/hooks/useSearch.js
 ElectronClient/gui/SearchBar/SearchBar.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
+ElectronClient/gui/style/StyledInput.js
+ElectronClient/gui/style/StyledTextInput.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js
 ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
 ElectronClient/gui/ToolbarButton/styles/index.js

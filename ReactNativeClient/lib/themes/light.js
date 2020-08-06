@@ -5,10 +5,10 @@ const lightStyle = {
 	backgroundColor: '#ffffff',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: '#dddddd',
-	color: '#555555', // For regular text
+	color: '#32373F', // For regular text
 	colorError: 'red',
 	colorWarn: '#9A5B00',
-	colorFaded: '#777777', // For less important text
+	colorFaded: '#7C8B9E', // For less important text
 	colorBright: '#000000', // For important text
 	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
