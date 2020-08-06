@@ -366,7 +366,8 @@ class SearchEngine {
 		return {
 			termCount: termCount,
 			keys: keys,
-			terms: terms,
+			terms: terms, // text terms
+			allTerms: allTerms,
 		};
 	}
 
@@ -451,8 +452,7 @@ class SearchEngine {
 			const parsedQuery = this.parseQuery(searchString);
 
 			try {
-				const filters = filterParser(searchString);
-				const { query, params } = queryBuilder(filters);
+				const { query, params } = queryBuilder(parsedQuery.allTerms);
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
 				return rows;
