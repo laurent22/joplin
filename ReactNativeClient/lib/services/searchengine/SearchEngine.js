@@ -314,7 +314,13 @@ class SearchEngine {
 	parseQuery(query) {
 		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-		const allTerms = filterParser(query);
+		let allTerms = [];
+		try {
+			allTerms = filterParser(query);
+		} catch (error) {
+			console.warn(error);
+		}
+
 		const textTerms = allTerms.filter(x => x.name === 'text').map(x => trimQuotes(x.value));
 		const titleTerms = allTerms.filter(x => x.name === 'title').map(x => trimQuotes(x.value));
 		const bodyTerms = allTerms.filter(x => x.name === 'body').map(x => trimQuotes(x.value));
@@ -444,13 +450,9 @@ class SearchEngine {
 
 			const parsedQuery = this.parseQuery(searchString);
 
-			const filters = filterParser(searchString);
-			// console.log(filters);
-			const { query, params } = queryBuilder(filters);
-			// console.log('--debug--');
-			// console.log(query);
-			// console.log(params);
 			try {
+				const filters = filterParser(searchString);
+				const { query, params } = queryBuilder(filters);
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
 				return rows;

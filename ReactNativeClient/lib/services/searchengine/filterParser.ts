@@ -104,14 +104,6 @@ const parseQuery = (query: string): Term[] => {
 			}
 		}
 	}
-	return result;
-};
-
-const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
-
-export default function filterParser(searchString: string) {
-	searchString = searchString.trim();
-	const result =  parseQuery(searchString);
 
 	// validation
 	let incorrect = result.filter(term => term.name === 'type' || term.name === 'iscompleted' || term.name === 'notebook')
@@ -125,6 +117,17 @@ export default function filterParser(searchString: string) {
 	incorrect = result.filter(term => term.name === 'iscompleted')
 		.find(x => (x.value !== '1' && x.value !== '0'));
 	if (incorrect) throw new Error('The value of filter "iscompleted" must be "1" or "0"');
+
+
+	return result;
+};
+
+const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+
+export default function filterParser(searchString: string) {
+	searchString = searchString.trim();
+
+	const result =  parseQuery(searchString);
 
 	return result;
 }
