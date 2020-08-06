@@ -9,7 +9,7 @@ const styled = require('styled-components').default;
 
 const StyledRoot = styled.div`
 	width: ${(props:any) => props.width}px;
-	height: ${(props:any) => props.height}px;;
+	height: ${(props:any) => props.height}px;
 	opacity: ${(props:any) => props.isProvisional ? '0.5' : '1'};
 	max-width: 100%;
 	box-sizing: border-box;

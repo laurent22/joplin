@@ -416,6 +416,10 @@ class NoteListComponent extends React.Component {
 	}
 
 	updateSizeState() {
+		console.info({
+			width: this.noteListRef.current.clientWidth,
+			height: this.noteListRef.current.clientHeight,
+		});
 		this.setState({
 			width: this.noteListRef.current.clientWidth,
 			height: this.noteListRef.current.clientHeight,
@@ -442,21 +446,18 @@ class NoteListComponent extends React.Component {
 		CommandService.instance().componentUnregisterCommands(commands);
 	}
 
-	renderEmptyList(style:any) {
+	renderEmptyList() {
 		if (this.props.notes.length) return null;
 
 		const theme = themeStyle(this.props.theme);
 		const padding = 10;
-		const emptyDivStyle = Object.assign(
-			{
-				padding: `${padding}px`,
-				fontSize: theme.fontSize,
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-				fontFamily: theme.fontFamily,
-			},
-			style
-		);
+		const emptyDivStyle = {
+			padding: `${padding}px`,
+			fontSize: theme.fontSize,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			fontFamily: theme.fontFamily,
+		};
 		// emptyDivStyle.width = emptyDivStyle.width - padding * 2;
 		// emptyDivStyle.height = emptyDivStyle.height - padding * 2;
 		return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
@@ -480,14 +481,12 @@ class NoteListComponent extends React.Component {
 	}
 
 	render() {
-		const style = Object.assign({}, this.props.style, {
-			height: this.state.height,
-		});
+		if (!this.props.size) throw new Error('props.size is required');
 
 		return (
 			<StyledRoot ref={this.noteListRef} theme={themeStyle(this.props.theme)}>
-				{this.renderEmptyList(style)}
-				{this.renderItemList(style)}
+				{this.renderEmptyList()}
+				{this.renderItemList(this.props.size)}
 			</StyledRoot>
 		);
 	}

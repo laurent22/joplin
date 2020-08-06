@@ -9,6 +9,7 @@ const { PromptDialog } = require('../PromptDialog.min.js');
 const NoteContentPropertiesDialog = require('../NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const ShareNoteDialog = require('../ShareNoteDialog.js').default;
+const NoteListControls = require('../NoteListControls/NoteListControls.js').default;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim');
@@ -22,6 +23,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
 const ResizableLayout = require('../ResizableLayout/ResizableLayout').default;
 const { findItemByKey } = require('../ResizableLayout/ResizableLayout');
+const produce = require('immer').default;
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -51,6 +53,8 @@ class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
 
+		const rootLayoutSize = this.rootLayoutSize();
+
 		this.state = {
 			promptOptions: null,
 			modalLayer: {
@@ -64,6 +68,8 @@ class MainScreenComponent extends React.Component {
 				key: 'root',
 				direction: 'row',
 				resizable: false,
+				width: rootLayoutSize.width,
+				height: rootLayoutSize.height,
 				children: [
 					{
 						key: 'column1',
@@ -83,6 +89,10 @@ class MainScreenComponent extends React.Component {
 						width: Setting.value('style.noteList.width'),
 						children: [
 							{
+								height: 100,
+								key: 'noteListControls',
+							},
+							{
 								key: 'noteList',
 							},
 						],
@@ -91,7 +101,6 @@ class MainScreenComponent extends React.Component {
 						key: 'column3',
 						direction: 'column',
 						resizable: false,
-						widthExpand: true,
 						children: [
 							{
 								key: 'editor',
@@ -112,8 +121,16 @@ class MainScreenComponent extends React.Component {
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
-		this.resizableLayout_resizeStop = this.resizableLayout_resizeStop.bind(this);
+		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
+		this.window_resize = this.window_resize.bind(this);
+		this.rowHeight = this.rowHeight.bind(this);
+
+		window.addEventListener('resize', this.window_resize);
+	}
+
+	window_resize() {
+		this.updateRootLayoutSize();
 	}
 
 	setupAppCloseHandling() {
@@ -185,13 +202,24 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
+	updateRootLayoutSize() {
+		this.setState({ layout: produce(this.state.layout, (draftState) => {
+			const s = this.rootLayoutSize();
+			draftState.width = s.width;
+			draftState.height = s.height;
+		}) });
+	}s
+
 	componentDidMount() {
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+		this.updateRootLayoutSize();
 	}
 
 	componentWillUnmount() {
 		CommandService.instance().off('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
 		this.unregisterCommands();
+
+		window.removeEventListener('resize', this.window_resize);
 	}
 
 	toggleSidebar() {
@@ -252,6 +280,23 @@ class MainScreenComponent extends React.Component {
 		this.isPrinting_ = false;
 	}
 
+	rootLayoutSize() {
+		return {
+			width: window.innerWidth,
+			height: this.rowHeight(),
+		};
+	}
+
+	rowHeight() {
+		if (!this.props) return 0;
+		const theme = themeStyle(this.props.theme);
+		return this.props.style.height - theme.headerHeight - (this.messageBoxVisible() ? this.messageBoxHeight() : 0);
+	}
+
+	messageBoxHeight() {
+		return 50;
+	}
+
 	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth) {
 		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
@@ -268,7 +313,7 @@ class MainScreenComponent extends React.Component {
 
 		this.styles_.messageBox = {
 			width: width,
-			height: 50,
+			height: this.messageBoxHeight(),
 			display: 'flex',
 			alignItems: 'center',
 			paddingLeft: 10,
@@ -276,6 +321,8 @@ class MainScreenComponent extends React.Component {
 		};
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+
+		this.styles_.rowHeight = rowHeight;
 
 		this.styles_.verticalResizerSidebar = {
 			width: 5,
@@ -449,7 +496,7 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	resizableLayout_resizeStop(event) {
+	resizableLayout_resize(event) {
 		this.setState({ layout: event.layout });
 
 		const col1 = findItemByKey(event.layout, 'column1');
@@ -464,11 +511,13 @@ class MainScreenComponent extends React.Component {
 		if (key === 'sideBar') {
 			return <SideBar key={key} />;
 		} else if (key === 'noteList') {
-			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} />;
+			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} size={event.size}/>;
 		} else if (key === 'editor') {
 			const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
 			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+		} else if (key === 'noteListControls') {
+			return <NoteListControls key={key} />;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);
@@ -535,9 +584,10 @@ class MainScreenComponent extends React.Component {
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<ResizableLayout
-					style={styles.resizableLayout}
+					width={this.state.width}
+					height={styles.rowHeight}
 					layout={this.state.layout}
-					onResizeStop={this.resizableLayout_resizeStop}
+					onResize={this.resizableLayout_resize}
 					renderItem={this.resizableLayout_renderItem}
 				/>
 				{pluginDialog}
