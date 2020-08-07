@@ -14,6 +14,8 @@ interface Props {
 const Root = styled.div`
 	position: relative;
 	display: flex;
+	width: 100%;
+	height: ${(props:any) => `${props.theme.toolbarHeight}px`};
 `;
 
 const SearchButton = styled.button`
@@ -27,12 +29,13 @@ const SearchButton = styled.button`
 
 const SearchButtonIcon = styled.span`
 	font-size: ${(props:any) => props.theme.toolbarIconSize}px;
-	color: ${(props:any) => props.theme.color3};
+	color: ${(props:any) => props.theme.color4};
 `;
 
 const SearchInput = styled(StyledInput)`
 	padding-right: 20px;
 	flex: 1;
+	width: 10px;
 `;
 
 export default function SearchBar(props:Props) {
@@ -51,7 +54,7 @@ export default function SearchBar(props:Props) {
 	useSearch(query);
 
 	return (
-		<Root>
+		<Root theme={theme}>
 			<SearchInput value={query} type="text" theme={theme} placeholder={_('Search...')} onChange={onChange}/>
 			<SearchButton theme={theme} onClick={onSearchButtonClick}>
 				<SearchButtonIcon className={iconName} theme={theme}/>

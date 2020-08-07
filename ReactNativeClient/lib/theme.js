@@ -46,7 +46,7 @@ const globalStyle = {
 	lineHeight: '1.6em',
 	headerHeight: 35,
 	headerButtonHPadding: 6,
-	toolbarHeight: 25,
+	toolbarHeight: 26,
 	toolbarPadding: 6,
 	appearance: 'light',
 };

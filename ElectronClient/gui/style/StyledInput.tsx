@@ -5,7 +5,11 @@ const StyledInput = styled.input`
 	border-radius: 3px;
 	font-size: ${(props:any) => props.theme.fontSize}px;
 	color: ${(props:any) => props.theme.color};
-	padding: 4px 8px;
+	padding: 0 8px;
+	height: ${(props:any) => `${props.theme.toolbarHeight}px`};
+	max-height: ${(props:any) => `${props.theme.toolbarHeight}px`};
+	box-sizing: border-box;
+	background-color: ${(props:any) => props.theme.backgroundColor4};
 
 	&::placeholder {
 		color: ${(props:any) => props.theme.colorFaded};

@@ -17,6 +17,7 @@ export const StyledRoot = styled.a<RootProps>`
 	justify-content: center;
 	cursor: default;
 	border-radius: 3px;
+	box-sizing: border-box;
 
 	&:hover {
 		background-color: ${(props:RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};

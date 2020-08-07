@@ -25,6 +25,9 @@ const lightStyle = {
 	color3: '#738598',
 	selectionBackgroundColor3: '#DADEE2',
 
+	backgroundColor4: '#ffffff',
+	color4: '#2D6BDC',
+
 	raisedBackgroundColor: '#e5e5e5',
 	raisedColor: '#222222',
 	searchMarkerBackgroundColor: '#F7D26E',

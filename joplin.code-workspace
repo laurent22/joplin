@@ -389,7 +389,12 @@
 			"ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js": true,
 			"ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js": true,
 			"ElectronClient/gui/ToolbarButton/styles/index.js": true,
-			"ElectronClient/gui/ToolbarButton/ToolbarButton.js": true
+			"ElectronClient/gui/ToolbarButton/ToolbarButton.js": true,
+			"ElectronClient/gui/Button/Button.js": true,
+			"ElectronClient/gui/SearchBar/hooks/useSearch.js": true,
+			"ElectronClient/gui/SearchBar/SearchBar.js": true,
+			"ElectronClient/gui/style/StyledInput.js": true,
+			"ElectronClient/gui/style/StyledTextInput.js": true
 		},
 		"spellright.language": [
 			"en"
