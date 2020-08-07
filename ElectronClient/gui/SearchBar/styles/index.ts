@@ -5,7 +5,6 @@ export const Root = styled.div`
 	position: relative;
 	display: flex;
 	width: 100%;
-	height: ${(props:any) => `${props.theme.toolbarHeight}px`};
 `;
 
 export const SearchButton = styled.button`

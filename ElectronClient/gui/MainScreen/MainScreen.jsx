@@ -89,7 +89,7 @@ class MainScreenComponent extends React.Component {
 						width: Setting.value('style.noteList.width'),
 						children: [
 							{
-								height: theme.toolbarHeight + theme.mainPadding * 2,
+								height: theme.topRowHeight,// theme.toolbarHeight + theme.mainPadding * 2,
 								key: 'noteListControls',
 							},
 							{

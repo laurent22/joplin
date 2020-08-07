@@ -334,12 +334,12 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderNoteToolbar() {
-		const theme = themeStyle(props.themeId);
+		// const theme = themeStyle(props.themeId);
 
 		const toolbarStyle = {
 			marginBottom: 0,
-			paddingTop: theme.mainPadding,
-			paddingBottom: theme.mainPadding,
+			// paddingTop: theme.mainPadding,
+			// paddingBottom: theme.mainPadding,
 		};
 
 		return <NoteToolbar
@@ -372,9 +372,10 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderTitleBar() {
+		const theme = themeStyle(props.themeId);
 		const titleBarDate = <span style={styles.titleDate}>{time.formatMsToLocal(formNote.user_updated_time)}</span>;
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: theme.topRowHeight }}>
 				<input
 					type="text"
 					ref={titleInputRef}

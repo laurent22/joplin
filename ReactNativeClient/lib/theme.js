@@ -49,6 +49,7 @@ const globalStyle = {
 	toolbarPadding: 6,
 	appearance: 'light',
 	mainPadding: 12,
+	topRowHeight: 50,
 };
 
 globalStyle.marginRight = globalStyle.margin;

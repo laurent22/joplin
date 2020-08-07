@@ -44,13 +44,29 @@ const commands = [
 ];
 
 const StyledRoot = styled.div`
-	background-color: #313640;
+	background-color: ${(props:any) => props.theme.backgroundColor2};
 	width: 100%;
 	height: 100%;
-	overflowX: hidden;
-	overflowY: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
 	display: inline-flex;
 	flex-direction: column;
+`;
+
+const StyledHeader = styled.div`
+	height: ${(props:any) => props.theme.topRowHeight}px;
+	font-family: ${(props:any) => props.theme.fontFamily};
+	font-size: ${(props:any) => Math.round(props.theme.fontSize * 1.16)}px;
+	text-decoration: none;
+	box-sizing: border-box;
+	color: ${(props:any) => props.theme.colorFaded2};
+	padding: ${(props:any) => props.theme.mainPadding}px;
+	padding-left: 0;
+	display: flex;
+	align-items: center;
+	user-select: none;
+	text-transform: uppercase;
+	cursor: pointer;
 `;
 
 class SideBarComponent extends React.Component<Props, State> {
@@ -83,12 +99,12 @@ class SideBarComponent extends React.Component<Props, State> {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
-	};
+	}
 
 	onFolderDragOver_(event:any) {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
-	};
+	}
 
 	async onFolderDrop_(event:any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -116,7 +132,7 @@ class SideBarComponent extends React.Component<Props, State> {
 				await Folder.moveToFolder(folderIds[i], folderId);
 			}
 		}
-	};
+	}
 
 	async onTagDrop_(event:any) {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
@@ -131,7 +147,7 @@ class SideBarComponent extends React.Component<Props, State> {
 				await Tag.addNote(tagId, noteIds[i]);
 			}
 		}
-	};
+	}
 
 	async onFolderToggleClick_(event:any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -140,7 +156,7 @@ class SideBarComponent extends React.Component<Props, State> {
 			type: 'FOLDER_TOGGLE',
 			id: folderId,
 		});
-	};
+	}
 
 	style() {
 		const theme = themeStyle(this.props.themeId);
@@ -397,6 +413,13 @@ class SideBarComponent extends React.Component<Props, State> {
 		return <div style={this.style().noteCount}>({count})</div>;
 	}
 
+	renderExpandIcon(isExpanded:boolean, isVisible:boolean = true) {
+		const theme = themeStyle(this.props.themeId);
+		const style:any = { opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', width: 16, justifyContent: 'center' };
+		if (!isVisible) style.visibility = 'hidden';
+		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
+	}
+
 	folderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
 		let style = Object.assign({}, this.style().listItem);
 		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
@@ -406,15 +429,12 @@ class SideBarComponent extends React.Component<Props, State> {
 		let containerStyle = Object.assign({}, this.style().listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
-		containerStyle.paddingLeft = 8 + depth * 15;
+		containerStyle.paddingLeft = 23 + depth * 15;
 
 		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-		const expandIconStyle:any = {
-			visibility: hasChildren ? 'visible' : 'hidden',
-		};
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
-		const expandIcon = <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
+		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
+		const expandIcon = this.renderExpandIcon(isExpanded, hasChildren); // <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" data-folder-id={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
@@ -459,7 +479,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		let containerStyle = Object.assign({}, this.style().listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
-		containerStyle.paddingLeft = 8 + 1 * 15;
+		containerStyle.paddingLeft = 40;
 
 		return (
 			<div className={'list-item-container list-item-depth-1'} style={containerStyle} key="allNotesHeader">
@@ -510,11 +530,12 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 
 	makeHeader(key:string, label:string, iconName:string, extraProps:any = {}) {
-		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fas ${iconName}`} />;
+		const theme = themeStyle(this.props.themeId);
+		// const style = this.style().header;
+		const icon = <i style={{ fontSize: theme.toolbarIconSize, marginRight: 8 }} className={iconName} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
-			style.cursor = 'pointer';
+			// style.cursor = 'pointer';
 		}
 
 		const headerClick = extraProps.onClick || null;
@@ -525,18 +546,18 @@ class SideBarComponent extends React.Component<Props, State> {
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
 			const isExpanded = (this.state as any)[toggleKey];
-			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
+			toggleIcon = this.renderExpandIcon(isExpanded);
+			// toggleIcon = <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={{ fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', width: 16, justifyContent: 'center' }}></i>;
 		}
 		if (extraProps.selected) {
-			style.backgroundColor = this.style().listItemSelected.backgroundColor;
+			// style.backgroundColor = this.style().listItemSelected.backgroundColor;
 		}
 
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
-			<div
+			<StyledHeader
 				ref={ref}
-				style={style}
 				key={key}
 				{...extraProps}
 				onClick={(event:any) => {
@@ -547,10 +568,10 @@ class SideBarComponent extends React.Component<Props, State> {
 					this.onHeaderClick_(key, event);
 				}}
 			>
+				{toggleIcon}
 				{icon}
 				<span style={{ flex: 1 }}>{label}</span>
-				{toggleIcon}
-			</div>
+			</StyledHeader>
 		);
 	}
 
@@ -688,7 +709,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		const items = [];
 
 		items.push(
-			this.makeHeader('folderHeader', _('Notebooks'), 'fa-book', {
+			this.makeHeader('folderHeader', _('Notebooks'), 'icon-notebooks', {
 				onDrop: this.onFolderDrop_,
 				['data-folder-id']: '',
 				toggleblock: 1,
@@ -708,7 +729,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 
 		items.push(
-			this.makeHeader('tagHeader', _('Tags'), 'fa-tags', {
+			this.makeHeader('tagHeader', _('Tags'), 'icon-tags', {
 				toggleblock: 1,
 			})
 		);
