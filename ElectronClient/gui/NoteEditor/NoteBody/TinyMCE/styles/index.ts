@@ -37,7 +37,7 @@ export default function styles(props:NoteBodyEditorProps) {
 			leftExtraToolbarContainer: {
 				...extraToolbarContainer,
 				width: 80,
-				left: 4,
+				left: 0,
 			},
 			rightExtraToolbarContainer: {
 				...extraToolbarContainer,
@@ -45,6 +45,7 @@ export default function styles(props:NoteBodyEditorProps) {
 				justifyContent: 'flex-end',
 				width: 70,
 				right: 0,
+				paddingRight: theme.mainPadding,
 			},
 			extraToolbarButton: {
 				display: 'flex',

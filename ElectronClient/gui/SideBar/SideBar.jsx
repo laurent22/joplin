@@ -419,6 +419,34 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
+	allNotesItem(selected) {
+		const theme = themeStyle(this.props.themeId);
+
+		const style = Object.assign({}, this.style().listItem, {
+			color: theme.colorFaded2,
+			textTransform: 'uppercase',
+		});
+
+		let containerStyle = Object.assign({}, this.style().listItemContainer);
+		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
+		containerStyle.paddingLeft = 8 + 1 * 15;
+
+		return (
+			<div className={'list-item-container list-item-depth-1'} style={containerStyle} key="allNotesHeader">
+				<a
+					className="list-item"
+					href="#"
+					style={style}
+					onClick={() => {
+						this.onAllNotesClick_();
+					}}
+				>
+					{_('All notes')}
+				</a>
+			</div>
+		);
+	}
+
 	tagItem(tag, selected) {
 		let style = Object.assign({}, this.style().tagItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
@@ -655,12 +683,6 @@ class SideBarComponent extends React.Component {
 		});
 
 		const items = [];
-		items.push(
-			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
-				onClick: this.onAllNotesClick_,
-				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID,
-			})
-		);
 
 		items.push(
 			this.makeHeader('folderHeader', _('Notebooks'), 'fa-book', {
@@ -671,8 +693,9 @@ class SideBarComponent extends React.Component {
 		);
 
 		if (this.props.folders.length) {
+			const allNotesSelected = this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
-			const folderItems = result.items;
+			const folderItems = [this.allNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
 				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
