@@ -14,7 +14,7 @@ class HelpButtonComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign({}, this.props.style, { color: theme.color, textDecoration: 'none' });
 		const helpIconStyle = { flex: 0, width: 16, height: 16, marginLeft: 10 };
 		const extraProps = {};
@@ -29,7 +29,7 @@ class HelpButtonComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

@@ -10,7 +10,7 @@ const { _ } = require('lib/locale.js');
 function UpgradeSyncTargetScreen(props:any) {
 	const upgradeResult = useSyncTargetUpgrade();
 
-	const theme = themeStyle(props.theme);
+	const theme = themeStyle(props.themeId);
 
 	const lineStyle = { ...theme.normalText, marginBottom: 20 };
 	const stackTraceStyle = { ...theme.normalText, flexWrap: 'nowrap', fontSize: theme.fontSize * 0.5, color: theme.colorFaded };
@@ -67,6 +67,6 @@ function UpgradeSyncTargetScreen(props:any) {
 
 export default connect((state:any) => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(UpgradeSyncTargetScreen);

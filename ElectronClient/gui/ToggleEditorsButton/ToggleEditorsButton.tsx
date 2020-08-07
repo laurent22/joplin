@@ -8,7 +8,7 @@ export enum Value {
 }
 
 export interface Props {
-	theme: number,
+	themeId: number,
 	value: Value,
 	toolbarButtonInfo: ToolbarButtonInfo,
 }

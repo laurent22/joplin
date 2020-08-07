@@ -136,17 +136,17 @@ function NoteEditor(props: NoteEditorProps) {
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
-	const markupToHtml = useMarkupToHtml({ themeId: props.theme, customCss: props.customCss });
+	const markupToHtml = useMarkupToHtml({ themeId: props.themeId, customCss: props.customCss });
 
 	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
-		const theme = themeStyle(props.theme);
+		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 
 		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.theme]);
+	}, [props.themeId]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -339,7 +339,7 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 
 		return <NoteToolbar
-			theme={props.theme}
+			themeId={props.themeId}
 			note={formNote}
 			style={toolbarStyle}
 		/>;
@@ -348,13 +348,13 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagButton() {
 		const info = CommandService.instance().commandToToolbarButton('setTags');
 		return <ToolbarButton
-			theme={props.theme}
+			themeId={props.themeId}
 			toolbarButtonInfo={info}
 		/>;
 	}
 
 	function renderTagBar() {
-		const theme = themeStyle(props.theme);
+		const theme = themeStyle(props.themeId);
 		let control = null;
 		if (!props.selectedNoteTags.length) {
 			control = <span onClick={() => { CommandService.instance().execute('setTags'); }} style={theme.clickableTextStyle}>Click to add some tags...</span>;
@@ -403,7 +403,7 @@ function NoteEditor(props: NoteEditorProps) {
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
 		disabled: false,
-		theme: props.theme,
+		themeId: props.themeId,
 		dispatch: props.dispatch,
 		noteToolbar: null,// renderNoteToolbar(),
 		onScroll: onScroll,
@@ -439,7 +439,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}, []);
 
 	if (showRevisions) {
-		const theme = themeStyle(props.theme);
+		const theme = themeStyle(props.themeId);
 
 		const revStyle = {
 			...props.style,
@@ -458,7 +458,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	if (props.selectedNoteIds.length > 1) {
 		return <MultiNoteActions
-			theme={props.theme}
+			themeId={props.themeId}
 			selectedNoteIds={props.selectedNoteIds}
 			notes={props.notes}
 			dispatch={props.dispatch}
@@ -470,7 +470,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderSearchBar() {
 		if (!showLocalSearch) return false;
 
-		const theme = themeStyle(props.theme);
+		const theme = themeStyle(props.themeId);
 
 		return (
 			<NoteSearchBar
@@ -543,7 +543,7 @@ const mapStateToProps = (state: any) => {
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: state.notesParentType,
 		selectedNoteTags: state.selectedNoteTags,

@@ -5,13 +5,13 @@ const ToolbarBase = require('../../../Toolbar.min.js');
 const { buildStyle } = require('lib/theme');
 
 interface ToolbarProps {
-	theme: number,
+	themeId: number,
 	dispatch: Function,
 	disabled: boolean,
 }
 
 function styles_(props:ToolbarProps) {
-	return buildStyle('CodeMirrorToolbar', props.theme, () => {
+	return buildStyle('CodeMirrorToolbar', props.themeId, () => {
 		return {
 			root: {
 				flex: 1,

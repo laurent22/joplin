@@ -110,7 +110,7 @@ class SideBarComponent extends React.Component {
 	}
 
 	style() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const itemHeight = 25;
 
@@ -755,7 +755,7 @@ const mapStateToProps = state => {
 		selectedSmartFilterId: state.selectedSmartFilterId,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,

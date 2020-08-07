@@ -53,7 +53,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 	render() {
 		const style = this.props.style;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const logComps = [];
@@ -78,7 +78,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

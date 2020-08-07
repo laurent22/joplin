@@ -44,7 +44,7 @@ class NoteBodyViewer extends Component {
 		this.forceUpdate_ = false;
 
 		const note = this.props.note;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const bodyToRender = note ? note.body : '';
 

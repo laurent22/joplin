@@ -32,7 +32,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return {
 			body: {
 				flex: 1,
@@ -42,7 +42,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const renderBody = report => {
 			const baseStyle = {
@@ -138,7 +138,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		const body = renderBody(this.state.report);
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Status')} />
 				<View style={this.styles().body}>{body}</View>
 				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
@@ -149,7 +149,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 const StatusScreen = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(StatusScreenComponent);
 

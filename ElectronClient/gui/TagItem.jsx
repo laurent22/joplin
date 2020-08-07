@@ -4,7 +4,7 @@ const { themeStyle } = require('lib/theme');
 
 class TagItemComponent extends React.Component {
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign({}, theme.tagStyle);
 		const title = this.props.title;
 
@@ -13,7 +13,7 @@ class TagItemComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-	return { theme: state.settings.theme };
+	return { themeId: state.settings.theme };
 };
 
 const TagItem = connect(mapStateToProps)(TagItemComponent);

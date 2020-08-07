@@ -136,7 +136,7 @@ class HeaderComponent extends React.Component {
 			return <span style={{ display: 'flex', flexDirection: 'row' }}>{buttons}</span>;
 		}
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		let icon = null;
 		if (options.iconName) {
@@ -196,7 +196,7 @@ class HeaderComponent extends React.Component {
 	}
 
 	makeSearch(key, style, options, state) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const inputStyle = {
 			display: 'flex',
@@ -260,7 +260,7 @@ class HeaderComponent extends React.Component {
 
 	render() {
 		const style = Object.assign({}, this.props.style);
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const showBackButton = this.props.showBackButton === undefined || this.props.showBackButton === true;
 		style.height = theme.headerHeight;
 		style.display = 'flex';
@@ -316,7 +316,7 @@ class HeaderComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		notesParentType: state.notesParentType,
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,

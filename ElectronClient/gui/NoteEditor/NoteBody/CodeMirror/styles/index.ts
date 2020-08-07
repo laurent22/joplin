@@ -2,7 +2,7 @@ import { NoteBodyEditorProps } from '../../../utils/types';
 const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
-	return buildStyle('CodeMirror', props.theme, (theme: any) => {
+	return buildStyle('CodeMirror', props.themeId, (theme: any) => {
 		return {
 			root: {
 				position: 'relative',

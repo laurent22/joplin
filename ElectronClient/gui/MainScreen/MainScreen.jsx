@@ -289,7 +289,7 @@ class MainScreenComponent extends React.Component {
 
 	rowHeight() {
 		if (!this.props) return 0;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return this.props.style.height - theme.headerHeight - (this.messageBoxVisible() ? this.messageBoxHeight() : 0);
 	}
 
@@ -517,14 +517,14 @@ class MainScreenComponent extends React.Component {
 			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
-			return <NoteListControls key={key} themeId={this.props.theme} />;
+			return <NoteListControls key={key} themeId={this.props.themeId} />;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign(
 			{
 				color: theme.color,
@@ -535,7 +535,7 @@ class MainScreenComponent extends React.Component {
 		const promptOptions = this.state.promptOptions;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
 
 		const headerItems = [];
 
@@ -575,11 +575,11 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
-				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
+				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
-				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
+				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
@@ -598,7 +598,7 @@ class MainScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,

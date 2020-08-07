@@ -3,7 +3,7 @@ import { NoteEditorProps } from '../utils/types';
 const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteEditorProps) {
-	return buildStyle(['NoteEditor'], props.theme, (theme: any) => {
+	return buildStyle(['NoteEditor'], props.themeId, (theme: any) => {
 		return {
 			root: {
 				...props.style,

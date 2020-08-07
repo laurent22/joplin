@@ -636,7 +636,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		<div style={styles.root} ref={rootRef}>
 			<div style={styles.rowToolbar}>
 				<Toolbar
-					theme={props.theme}
+					themeId={props.themeId}
 					dispatch={props.dispatch}
 					disabled={editorReadOnly}
 				/>

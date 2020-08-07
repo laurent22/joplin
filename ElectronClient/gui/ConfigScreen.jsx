@@ -66,8 +66,8 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	screenFromName(screenName) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
-		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
@@ -108,7 +108,7 @@ class ConfigScreenComponent extends React.Component {
 		const description = Setting.sectionDescription(section.name);
 		if (!description) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return (
 			<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
 				{description}
@@ -117,7 +117,7 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	sectionToComponent(key, section, settings, selected) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const createSettingComponents = (advanced) => {
 			const output = [];
@@ -234,7 +234,7 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	settingToComponent(key, value) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const output = null;
 
@@ -500,7 +500,7 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BUTTON) {
-			const theme = themeStyle(this.props.theme);
+			const theme = themeStyle(this.props.themeId);
 			const buttonStyle = Object.assign({}, theme.buttonStyle, {
 				display: 'inline-block',
 				marginRight: 10,
@@ -542,7 +542,7 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = Object.assign(
 			{
@@ -594,7 +594,7 @@ class ConfigScreenComponent extends React.Component {
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.configMenuBar_selectionChange}
 					sections={sections}
-					theme={this.props.theme}
+					themeId={this.props.themeId}
 				/>
 				{screenComp}
 				<div style={containerStyle}>{settingComps}</div>
@@ -622,7 +622,7 @@ class ConfigScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		settings: state.settings,
 		locale: state.settings.locale,
 	};

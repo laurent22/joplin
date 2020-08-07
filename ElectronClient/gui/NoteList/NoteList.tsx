@@ -58,9 +58,9 @@ class NoteListComponent extends React.Component {
 	}
 
 	style() {
-		if (this.styleCache_ && this.styleCache_[this.props.theme]) return this.styleCache_[this.props.theme];
+		if (this.styleCache_ && this.styleCache_[this.props.themeId]) return this.styleCache_[this.props.themeId];
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = {
 			root: {
@@ -97,7 +97,7 @@ class NoteListComponent extends React.Component {
 		};
 
 		this.styleCache_ = {};
-		this.styleCache_[this.props.theme] = style;
+		this.styleCache_[this.props.themeId] = style;
 
 		return style;
 	}
@@ -256,7 +256,7 @@ class NoteListComponent extends React.Component {
 			style={this.style()}
 			item={item}
 			index={index}
-			theme={this.props.theme}
+			themeId={this.props.themeId}
 			width={this.state.width}
 			height={this.itemHeight}
 			dragItemIndex={this.state.dragOverTargetNoteIndex}
@@ -449,7 +449,7 @@ class NoteListComponent extends React.Component {
 	renderEmptyList() {
 		if (this.props.notes.length) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const padding = 10;
 		const emptyDivStyle = {
 			padding: `${padding}px`,
@@ -484,7 +484,7 @@ class NoteListComponent extends React.Component {
 		if (!this.props.size) throw new Error('props.size is required');
 
 		return (
-			<StyledRoot ref={this.noteListRef} theme={themeStyle(this.props.theme)}>
+			<StyledRoot ref={this.noteListRef} theme={themeStyle(this.props.themeId)}>
 				{this.renderEmptyList()}
 				{this.renderItemList(this.props.size)}
 			</StyledRoot>
@@ -498,7 +498,7 @@ const mapStateToProps = (state:any) => {
 		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedFolderId: state.selectedFolderId,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		notesParentType: state.notesParentType,
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,

@@ -14,7 +14,7 @@ interface Style {
 }
 
 interface Props {
-	theme: any;
+	themeId: number;
 	style: Style
 }
 
@@ -37,7 +37,7 @@ interface ResourceTable {
 	onResourceClick: (resource: Resource) => any
 	onResourceDelete: (resource: Resource) => any
 	onToggleSorting: (order: SortingOrder) => any
-	theme: any
+	themeId: number
 	style: Style
 }
 
@@ -50,17 +50,19 @@ interface ActiveSorting {
 }
 
 const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
+	const theme = themeStyle(props.themeId);
+
 	const sortOrderEngagedMarker = (s: SortingOrder) => {
 		return (
 			<a href="#"
-				style={{ color: props.theme.urlColor }}
+				style={{ color: theme.urlColor }}
 				onClick={() => props.onToggleSorting(s)}>{
 					(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴'}</a>
 		);
 	};
 
 	const titleCellStyle = {
-		...props.theme.textStyle,
+		...theme.textStyle,
 		textOverflow: 'ellipsis',
 		overflowX: 'hidden',
 		maxWidth: 1,
@@ -69,14 +71,14 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 	};
 
 	const cellStyle = {
-		...props.theme.textStyle,
+		...theme.textStyle,
 		whiteSpace: 'nowrap',
-		color: props.theme.colorFaded,
+		color: theme.colorFaded,
 		width: 1,
 	};
 
 	const headerStyle = {
-		...props.theme.textStyle,
+		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		width: 1,
 		fontWeight: 'bold',
@@ -97,7 +99,7 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 					<tr key={index}>
 						<td style={titleCellStyle} className="titleCell">
 							<a
-								style={{ color: props.theme.urlColor }}
+								style={{ color: theme.urlColor }}
 								href="#"
 								onClick={() => props.onResourceClick(resource)}>{resource.title || `(${_('Untitled')})`}
 							</a>
@@ -105,7 +107,7 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">{prettyBytes(resource.size)}</td>
 						<td style={cellStyle} className="dataCell">{resource.id}</td>
 						<td style={cellStyle} className="dataCell">
-							<button style={props.theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
+							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
 						</td>
 					</tr>
 				)}
@@ -202,7 +204,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 
 	render() {
 		const style = this.props.style;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const rootStyle:any = {
@@ -232,7 +234,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
 						}
 						{this.state.resources && <ResourceTable
-							theme={theme}
+							themeId={this.props.themeId}
 							style={style}
 							resources={this.state.resources}
 							sorting={this.state.sorting}
@@ -249,7 +251,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: any) => ({
-	theme: state.settings.theme,
+	themeId: state.settings.theme,
 });
 
 const ResourceScreen = connect(mapStateToProps)(ResourceScreenComponent);

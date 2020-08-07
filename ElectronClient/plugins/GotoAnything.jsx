@@ -58,11 +58,11 @@ class Dialog extends React.PureComponent {
 	}
 
 	style() {
-		const styleKey = [this.props.theme, this.state.resultsInBody ? '1' : '0'].join('-');
+		const styleKey = [this.props.themeId, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const itemHeight = this.state.resultsInBody ? 84 : 64;
 
@@ -341,7 +341,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	listItemRenderer(item) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
@@ -430,7 +430,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
 
@@ -453,7 +453,7 @@ class Dialog extends React.PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		showCompletedTodos: state.settings.showCompletedTodos,
 	};
 };

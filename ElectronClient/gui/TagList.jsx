@@ -6,7 +6,7 @@ const TagItem = require('./TagItem.min.js');
 class TagListComponent extends React.Component {
 	render() {
 		const style = Object.assign({}, this.props.style);
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const tags = this.props.items;
 
 		style.display = 'flex';
@@ -44,7 +44,7 @@ class TagListComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-	return { theme: state.settings.theme };
+	return { themeId: state.settings.theme };
 };
 
 const TagList = connect(mapStateToProps)(TagListComponent);

@@ -2,7 +2,7 @@ import { Props, Value } from '../ToggleEditorsButton';
 const { buildStyle } = require('lib/theme');
 
 export default function styles(props:Props) {
-	return buildStyle(['ToggleEditorsButton', props.value], props.theme, (theme: any) => {
+	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, (theme: any) => {
 		const iconSize = 15;
 		const mdIconWidth = iconSize * 1.25;
 		const buttonHeight = theme.toolbarHeight - 8;

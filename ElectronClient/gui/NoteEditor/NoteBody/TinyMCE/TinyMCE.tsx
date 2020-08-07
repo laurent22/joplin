@@ -148,7 +148,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	editorRef.current = editor;
 
 	const styles = styles_(props);
-	const theme = themeStyle(props.theme);
+	// const theme = themeStyle(props.themeId);
 
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
@@ -346,6 +346,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	useEffect(() => {
 		if (!editorReady) return () => {};
 
+		const theme = themeStyle(props.themeId);
+
 		const element = document.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
 		document.head.appendChild(element);
@@ -458,7 +460,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [editorReady, props.theme]);
+	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -712,6 +714,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		//                                  incorrectly stay.
 		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
 		// code would check this and either append the CSS or replace.
+
+		const theme = themeStyle(props.themeId);
 
 		let docHead_:any = null;
 
@@ -1049,7 +1053,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
 		return <ToolbarButton
 			key={key}
-			theme={props.theme}
+			themeId={props.themeId}
 			toolbarButtonInfo={info}
 		/>;
 	}
@@ -1081,7 +1085,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				buttons.push(<ToggleEditorsButton
 					key={buttonName}
 					value={ToggleEditorsButtonValue.RichText}
-					theme={props.theme}
+					themeId={props.themeId}
 					toolbarButtonInfo={info}
 				/>);
 			} else {
@@ -1101,6 +1105,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	function renderDisabledOverlay() {
 		const status = resourcesStatus(props.resourceInfos);
 		if (status === 'ready' && !draggingStarted) return null;
+
+		const theme = themeStyle(props.themeId);
 
 		const message = draggingStarted ? _('Drop notes or files here') : _('Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.', _('Code View'));
 		const statusComp = draggingStarted ? null : <p style={theme.textStyleMinor}>{`Status: ${status}`}</p>;

@@ -94,7 +94,7 @@ class ImportScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.props.style;
 		const messages = this.uniqueMessages();
 
@@ -125,7 +125,7 @@ class ImportScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

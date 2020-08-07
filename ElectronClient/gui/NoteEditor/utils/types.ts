@@ -9,7 +9,7 @@ export interface ToolbarButtonInfos {
 export interface NoteEditorProps {
 	style: any;
 	noteId: string;
-	theme: number;
+	themeId: number;
 	dispatch: Function;
 	selectedNoteIds: string[];
 	notes: any[];
@@ -33,7 +33,7 @@ export interface NoteEditorProps {
 export interface NoteBodyEditorProps {
 	style: any;
 	ref: any,
-	theme: number;
+	themeId: number;
 	content: string,
 	contentKey: string,
 	contentMarkupLanguage: number,

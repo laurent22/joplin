@@ -42,7 +42,7 @@ class StatusScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.props.style;
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
@@ -148,7 +148,7 @@ class StatusScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		settings: state.settings,
 		locale: state.settings.locale,
 	};

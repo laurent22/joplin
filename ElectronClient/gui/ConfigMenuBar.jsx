@@ -24,7 +24,7 @@ function ConfigMenuBar(props) {
 	for (const section of props.sections) {
 		buttons.push(<ConfigMenuBarButton
 			selected={props.selection === section.name}
-			theme={props.theme}
+			themeId={props.themeId}
 			key={section.name}
 			iconName={Setting.sectionNameToIcon(section.name)}
 			label={Setting.sectionNameToLabel(section.name)}

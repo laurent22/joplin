@@ -4,7 +4,7 @@ import { StyledRoot, StyledIconSpan, StyledIconI } from './styles';
 const { themeStyle } = require('lib/theme');
 
 interface Props {
-	readonly theme: number,
+	readonly themeId: number,
 	readonly toolbarButtonInfo?: ToolbarButtonInfo,
 	readonly title?: string,
 	readonly tooltip?: string,
@@ -25,7 +25,7 @@ function getProp(props:Props, name:string, defaultValue:any = null) {
 }
 
 export default function ToolbarButton(props:Props) {
-	const theme = themeStyle(props.theme);
+	const theme = themeStyle(props.themeId);
 
 	const title = getProp(props, 'title', '');
 	const tooltip = getProp(props, 'tooltip', title);

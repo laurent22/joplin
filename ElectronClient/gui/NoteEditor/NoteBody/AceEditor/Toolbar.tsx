@@ -5,14 +5,14 @@ const ToolbarBase = require('../../../Toolbar.min.js');
 const { buildStyle, themeStyle } = require('lib/theme');
 
 interface ToolbarProps {
-	theme: number,
+	themeId: number,
 	dispatch: Function,
 	disabled: boolean,
 }
 
 function styles_(props:ToolbarProps) {
-	return buildStyle('AceEditorToolbar', props.theme, (/* theme:any*/) => {
-		const theme = themeStyle(props.theme);
+	return buildStyle('AceEditorToolbar', props.themeId, (/* theme:any*/) => {
+		const theme = themeStyle(props.themeId);
 		return {
 			root: {
 				flex: 1,

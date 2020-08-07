@@ -116,7 +116,7 @@ class NoteTagsDialogComponent extends React.Component {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -155,7 +155,7 @@ class NoteTagsDialogComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const dialogContent = (
 			<View style={{ flex: 1 }}>
@@ -175,13 +175,13 @@ class NoteTagsDialogComponent extends React.Component {
 			</View>
 		);
 
-		return <ModalDialog theme={this.props.theme} ContentComponent={dialogContent} title={_('Type new tags or select from list')} onOkPress={this.okButton_press} onCancelPress={this.cancelButton_press} buttonBarEnabled={!this.state.savingTags} />;
+		return <ModalDialog themeId={this.props.themeId} ContentComponent={dialogContent} title={_('Type new tags or select from list')} onOkPress={this.okButton_press} onCancelPress={this.cancelButton_press} buttonBarEnabled={!this.state.savingTags} />;
 	}
 }
 
 const NoteTagsDialog = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		tags: state.tags,
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 	};

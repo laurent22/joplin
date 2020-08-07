@@ -41,7 +41,7 @@ const StyledRoot = styled.div`
 `;
 
 interface NoteListItemProps {
-	theme: number,
+	themeId: number,
 	width: number,
 	height: number,
 	style: any,
@@ -63,7 +63,7 @@ interface NoteListItemProps {
 
 function NoteListItem(props:NoteListItemProps, ref:any) {
 	const item = props.item;
-	const theme = themeStyle(props.theme);
+	const theme = themeStyle(props.themeId);
 	const hPadding = 16;
 
 	const anchorRef = useRef(null);

@@ -7,7 +7,7 @@ const ToggleEditorsButton = require('./ToggleEditorsButton/ToggleEditorsButton.j
 
 class ToolbarComponent extends React.Component {
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = Object.assign({
 			// height: theme.toolbarHeight,
@@ -42,7 +42,7 @@ class ToolbarComponent extends React.Component {
 				const props = Object.assign(
 					{
 						key: key,
-						theme: this.props.theme,
+						themeId: this.props.themeId,
 					},
 					o
 				);
@@ -53,7 +53,7 @@ class ToolbarComponent extends React.Component {
 					rightItemComps.push(<ToggleEditorsButton
 						key={o.name}
 						value={'markdown'}
-						theme={this.props.theme}
+						themeId={this.props.themeId}
 						toolbarButtonInfo={o}
 					/>);
 				} else if (itemType === 'button') {
@@ -82,7 +82,7 @@ class ToolbarComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-	return { theme: state.settings.theme };
+	return { themeId: state.settings.theme };
 };
 
 const Toolbar = connect(mapStateToProps)(ToolbarComponent);

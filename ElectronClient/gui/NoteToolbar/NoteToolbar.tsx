@@ -13,7 +13,7 @@ interface ButtonClickEvent {
 }
 
 interface NoteToolbarProps {
-	theme: number,
+	themeId: number,
 	style: any,
 	folders: any[],
 	watchedNoteFiles: string[],
@@ -26,7 +26,7 @@ interface NoteToolbarProps {
 }
 
 function styles_(props:NoteToolbarProps) {
-	return buildStyle('NoteToolbar', props.theme, (theme:any) => {
+	return buildStyle('NoteToolbar', props.themeId, (theme:any) => {
 		return {
 			root: {
 				...props.style,
