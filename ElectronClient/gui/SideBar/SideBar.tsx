@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
@@ -16,105 +16,138 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const styled = require('styled-components').default;
+
+interface Props {
+	themeId: number,
+	dispatch: Function,
+	folders: any[],
+	collapsedFolderIds: string[],
+	notesParentType: string,
+	selectedFolderId: string,
+	selectedTagId: string,
+	selectedSmartFilterId:string,
+	decryptionWorker: any,
+	resourceFetcher: any,
+	syncReport: any,
+	tags: any[],
+	syncStarted: boolean,
+}
+
+interface State {
+	tagHeaderIsExpanded: boolean,
+	folderHeaderIsExpanded: boolean,
+}
 
 const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
-class SideBarComponent extends React.Component {
-	constructor() {
-		super();
+const StyledRoot = styled.div`
+	background-color: #313640;
+	width: 100%;
+	height: 100%;
+	overflowX: hidden;
+	overflowY: hidden;
+	display: inline-flex;
+	flex-direction: column;
+`;
+
+class SideBarComponent extends React.Component<Props, State> {
+
+	private folderItemsOrder_:any[] = [];
+	private tagItemsOrder_:any[] = [];
+	private rootRef:any = null;
+	private anchorItemRefs:any = {};
+	private forceUpdateDuringSyncIID_:any = null;
+
+	constructor(props:any) {
+		super(props);
 
 		CommandService.instance().componentRegisterCommands(this, commands);
-
-		this.onFolderDragStart_ = event => {
-			const folderId = event.currentTarget.getAttribute('folderid');
-			if (!folderId) return;
-
-			event.dataTransfer.setDragImage(new Image(), 1, 1);
-			event.dataTransfer.clearData();
-			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
-		};
-
-		this.onFolderDragOver_ = event => {
-			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
-			if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
-		};
-
-		this.onFolderDrop_ = async event => {
-			const folderId = event.currentTarget.getAttribute('folderid');
-			const dt = event.dataTransfer;
-			if (!dt) return;
-
-			// folderId can be NULL when dropping on the sidebar Notebook header. In that case, it's used
-			// to put the dropped folder at the root. But for notes, folderId needs to always be defined
-			// since there's no such thing as a root note.
-
-			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
-				event.preventDefault();
-
-				if (!folderId) return;
-
-				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-				for (let i = 0; i < noteIds.length; i++) {
-					await Note.moveToFolder(noteIds[i], folderId);
-				}
-			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
-				event.preventDefault();
-
-				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				for (let i = 0; i < folderIds.length; i++) {
-					await Folder.moveToFolder(folderIds[i], folderId);
-				}
-			}
-		};
-
-		this.onTagDrop_ = async event => {
-			const tagId = event.currentTarget.getAttribute('tagid');
-			const dt = event.dataTransfer;
-			if (!dt) return;
-
-			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
-				event.preventDefault();
-
-				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-				for (let i = 0; i < noteIds.length; i++) {
-					await Tag.addNote(tagId, noteIds[i]);
-				}
-			}
-		};
-
-		this.onFolderToggleClick_ = async event => {
-			const folderId = event.currentTarget.getAttribute('folderid');
-
-			this.props.dispatch({
-				type: 'FOLDER_TOGGLE',
-				id: folderId,
-			});
-		};
-
-		this.folderItemsOrder_ = [];
-		this.tagItemsOrder_ = [];
-
-		this.onKeyDown = this.onKeyDown.bind(this);
-		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
-
-		this.rootRef = React.createRef();
-
-		this.anchorItemRefs = {};
 
 		this.state = {
 			tagHeaderIsExpanded: Setting.value('tagHeaderIsExpanded'),
 			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded'),
 		};
+
+		this.onFolderToggleClick_ = this.onFolderToggleClick_.bind(this);
+		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
 	}
+
+	onFolderDragStart_(event:any) {
+		const folderId = event.currentTarget.getAttribute('data-folder-id');
+		if (!folderId) return;
+
+		event.dataTransfer.setDragImage(new Image(), 1, 1);
+		event.dataTransfer.clearData();
+		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
+	};
+
+	onFolderDragOver_(event:any) {
+		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
+		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
+	};
+
+	async onFolderDrop_(event:any) {
+		const folderId = event.currentTarget.getAttribute('data-folder-id');
+		const dt = event.dataTransfer;
+		if (!dt) return;
+
+		// folderId can be NULL when dropping on the sidebar Notebook header. In that case, it's used
+		// to put the dropped folder at the root. But for notes, folderId needs to always be defined
+		// since there's no such thing as a root note.
+
+		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+			event.preventDefault();
+
+			if (!folderId) return;
+
+			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+			for (let i = 0; i < noteIds.length; i++) {
+				await Note.moveToFolder(noteIds[i], folderId);
+			}
+		} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
+			event.preventDefault();
+
+			const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
+			for (let i = 0; i < folderIds.length; i++) {
+				await Folder.moveToFolder(folderIds[i], folderId);
+			}
+		}
+	};
+
+	async onTagDrop_(event:any) {
+		const tagId = event.currentTarget.getAttribute('data-tag-id');
+		const dt = event.dataTransfer;
+		if (!dt) return;
+
+		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+			event.preventDefault();
+
+			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+			for (let i = 0; i < noteIds.length; i++) {
+				await Tag.addNote(tagId, noteIds[i]);
+			}
+		}
+	};
+
+	async onFolderToggleClick_(event:any) {
+		const folderId = event.currentTarget.getAttribute('data-folder-id');
+
+		this.props.dispatch({
+			type: 'FOLDER_TOGGLE',
+			id: folderId,
+		});
+	};
 
 	style() {
 		const theme = themeStyle(this.props.themeId);
 
 		const itemHeight = 25;
 
-		const style = {
+		const style:any = {
 			root: {
 				backgroundColor: theme.backgroundColor2,
 				width: '100%',
@@ -229,7 +262,7 @@ class SideBarComponent extends React.Component {
 		CommandService.instance().componentUnregisterCommands(commands);
 	}
 
-	async itemContextMenu(event) {
+	async itemContextMenu(event:any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
@@ -327,47 +360,44 @@ class SideBarComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	folderItem_click(folder) {
+	folderItem_click(folder:any) {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
 		});
 	}
 
-	tagItem_click(tag) {
+	tagItem_click(tag:any) {
 		this.props.dispatch({
 			type: 'TAG_SELECT',
 			id: tag ? tag.id : null,
 		});
 	}
 
-	// async sync_click() {
-	// 	await shared.synchronize_press(this);
-	// }
-
-	anchorItemRef(type, id) {
+	anchorItemRef(type:string, id:string) {
 		if (!this.anchorItemRefs[type]) this.anchorItemRefs[type] = {};
 		if (this.anchorItemRefs[type][id]) return this.anchorItemRefs[type][id];
 		this.anchorItemRefs[type][id] = React.createRef();
 		return this.anchorItemRefs[type][id];
 	}
 
-	firstAnchorItemRef(type) {
+	firstAnchorItemRef(type:string) {
 		const refs = this.anchorItemRefs[type];
 		if (!refs) return null;
 
 		const n = `${type}s`;
-		const item = this.props[n] && this.props[n].length ? this.props[n][0] : null;
+		const p = this.props as any;
+		const item = p[n] && p[n].length ? p[n][0] : null;
 		if (!item) return null;
 
 		return refs[item.id];
 	}
 
-	noteCountElement(count) {
+	noteCountElement(count:number) {
 		return <div style={this.style().noteCount}>({count})</div>;
 	}
 
-	folderItem(folder, selected, hasChildren, depth) {
+	folderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
 		let style = Object.assign({}, this.style().listItem);
 		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
 
@@ -379,14 +409,14 @@ class SideBarComponent extends React.Component {
 		containerStyle.paddingLeft = 8 + depth * 15;
 
 		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-		const expandIconStyle = {
+		const expandIconStyle:any = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 		};
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
 		const expandIcon = <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
-			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
+			<a style={expandLinkStyle} href="#" data-folder-id={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
 			</a>
 		) : (
@@ -397,7 +427,7 @@ class SideBarComponent extends React.Component {
 		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
 
 		return (
-			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
+			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} data-folder-id={folder.id}>
 				{expandLink}
 				<a
 					ref={anchorRef}
@@ -405,9 +435,9 @@ class SideBarComponent extends React.Component {
 					href="#"
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={event => this.itemContextMenu(event)}
+					onContextMenu={(event:any) => this.itemContextMenu(event)}
 					style={style}
-					folderid={folder.id}
+					data-folder-id={folder.id}
 					onClick={() => {
 						this.folderItem_click(folder);
 					}}
@@ -419,7 +449,7 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
-	allNotesItem(selected) {
+	allNotesItem(selected:boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = Object.assign({}, this.style().listItem, {
@@ -447,7 +477,7 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
-	tagItem(tag, selected) {
+	tagItem(tag:any, selected:boolean) {
 		let style = Object.assign({}, this.style().tagItem);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 
@@ -461,8 +491,8 @@ class SideBarComponent extends React.Component {
 				ref={anchorRef}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={event => this.itemContextMenu(event)}
-				tagid={tag.id}
+				onContextMenu={(event:any) => this.itemContextMenu(event)}
+				data-tag-id={tag.id}
 				key={tag.id}
 				style={style}
 				onDrop={this.onTagDrop_}
@@ -475,32 +505,11 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
-	// searchItem(search, selected) {
-	// 	let style = Object.assign({}, this.style().listItem);
-	// 	if (selected) style = Object.assign(style, this.style().listItemSelected);
-	// 	return (
-	// 		<a
-	// 			className="list-item"
-	// 			href="#"
-	// 			data-id={search.id}
-	// 			data-type={BaseModel.TYPE_SEARCH}
-	// 			onContextMenu={event => this.itemContextMenu(event)}
-	// 			key={search.id}
-	// 			style={style}
-	// 			onClick={() => {
-	// 				this.searchItem_click(search);
-	// 			}}
-	// 		>
-	// 			{search.title}
-	// 		</a>
-	// 	);
-	// }
-
-	makeDivider(key) {
+	makeDivider(key:string) {
 		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
-	makeHeader(key, label, iconName, extraProps = {}) {
+	makeHeader(key:string, label:string, iconName:string, extraProps:any = {}) {
 		const style = this.style().header;
 		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fas ${iconName}`} />;
 
@@ -515,7 +524,7 @@ class SideBarComponent extends React.Component {
 		let toggleIcon = null;
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
-			const isExpanded = this.state[toggleKey];
+			const isExpanded = (this.state as any)[toggleKey];
 			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 		if (extraProps.selected) {
@@ -530,7 +539,7 @@ class SideBarComponent extends React.Component {
 				style={style}
 				key={key}
 				{...extraProps}
-				onClick={event => {
+				onClick={(event:any) => {
 					// if a custom click event is attached, trigger that.
 					if (headerClick) {
 						headerClick(key, event);
@@ -555,7 +564,7 @@ class SideBarComponent extends React.Component {
 		return null;
 	}
 
-	onKeyDown(event) {
+	onKeyDown(event:any) {
 		const keyCode = event.keyCode;
 		const selectedItem = this.selectedItem();
 
@@ -628,13 +637,14 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	onHeaderClick_(key, event) {
+	onHeaderClick_(key:string, event:any) {
 		const currentHeader = event.currentTarget;
 		const toggleBlock = +currentHeader.getAttribute('toggleblock');
 		if (toggleBlock) {
 			const toggleKey = `${key}IsExpanded`;
-			const isExpanded = this.state[toggleKey];
-			this.setState({ [toggleKey]: !isExpanded });
+			const isExpanded = (this.state as any)[toggleKey];
+			const newState:any = { [toggleKey]: !isExpanded };
+			this.setState(newState);
 			Setting.setValue(toggleKey, !isExpanded);
 		}
 	}
@@ -646,11 +656,11 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
-	synchronizeButton(type) {
+	synchronizeButton(type:string) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
 		const iconName = 'fa-sync-alt';
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
-		const iconStyle = { fontSize: style.fontSize, marginRight: 5 };
+		const iconStyle:any = { fontSize: style.fontSize, marginRight: 5 };
 
 		if (type !== 'sync') {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
@@ -675,19 +685,12 @@ class SideBarComponent extends React.Component {
 	}
 
 	render() {
-		const style = Object.assign({}, this.style().root, {
-			overflowX: 'hidden',
-			overflowY: 'hidden',
-			display: 'inline-flex',
-			flexDirection: 'column',
-		});
-
 		const items = [];
 
 		items.push(
 			this.makeHeader('folderHeader', _('Notebooks'), 'fa-book', {
 				onDrop: this.onFolderDrop_,
-				folderid: '',
+				['data-folder-id']: '',
 				toggleblock: 1,
 			})
 		);
@@ -753,18 +756,18 @@ class SideBarComponent extends React.Component {
 		);
 
 		return (
-			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" style={style}>
+			<StyledRoot ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar">
 				<div style={{ flex: 1, overflowX: 'hidden', overflowY: 'auto' }}>{items}</div>
 				<div style={{ flex: 0 }}>
 					{syncReportComp}
 					{syncButton}
 				</div>
-			</div>
+			</StyledRoot>
 		);
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

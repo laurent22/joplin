@@ -150,6 +150,7 @@ ElectronClient/gui/SearchBar/SearchBar.js
 ElectronClient/gui/SearchBar/styles/index.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
+ElectronClient/gui/SideBar/SideBar.js
 ElectronClient/gui/style/StyledInput.js
 ElectronClient/gui/style/StyledTextInput.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js

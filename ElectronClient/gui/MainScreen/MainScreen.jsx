@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { SideBar } = require('../SideBar/SideBar.min.js');
+const { SideBar } = require('../SideBar/SideBar.js');
 const NoteList = require('../NoteList/NoteList.js').default;
 const NoteEditor = require('../NoteEditor/NoteEditor.js').default;
 const { stateUtils } = require('lib/reducer.js');
