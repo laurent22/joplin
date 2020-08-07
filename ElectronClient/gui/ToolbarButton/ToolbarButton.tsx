@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ToolbarButtonInfo } from 'lib/services/CommandService';
 import { StyledRoot, StyledIconSpan, StyledIconI } from './styles';
-const { themeStyle } = require('lib/theme');
 
 interface Props {
 	readonly themeId: number,
@@ -25,8 +24,6 @@ function getProp(props:Props, name:string, defaultValue:any = null) {
 }
 
 export default function ToolbarButton(props:Props) {
-	const theme = themeStyle(props.themeId);
-
 	const title = getProp(props, 'title', '');
 	const tooltip = getProp(props, 'tooltip', title);
 
@@ -34,7 +31,7 @@ export default function ToolbarButton(props:Props) {
 	const iconName = getProp(props, 'iconName');
 	if (iconName) {
 		const IconClass = isFontAwesomeIcon(iconName) ? StyledIconI : StyledIconSpan;
-		icon = <IconClass className={iconName} title={title} theme={theme}/>;
+		icon = <IconClass className={iconName} title={title}/>;
 	}
 
 	// Keep this for legacy compatibility but for consistency we should use "disabled" prop
@@ -51,7 +48,6 @@ export default function ToolbarButton(props:Props) {
 		<StyledRoot
 			className={classes.join(' ')}
 			disabled={!isEnabled}
-			theme={theme}
 			title={tooltip}
 			href="#"
 			onClick={() => {

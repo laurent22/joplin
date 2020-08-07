@@ -416,10 +416,6 @@ class NoteListComponent extends React.Component {
 	}
 
 	updateSizeState() {
-		console.info({
-			width: this.noteListRef.current.clientWidth,
-			height: this.noteListRef.current.clientHeight,
-		});
 		this.setState({
 			width: this.noteListRef.current.clientWidth,
 			height: this.noteListRef.current.clientHeight,
@@ -484,7 +480,7 @@ class NoteListComponent extends React.Component {
 		if (!this.props.size) throw new Error('props.size is required');
 
 		return (
-			<StyledRoot ref={this.noteListRef} theme={themeStyle(this.props.themeId)}>
+			<StyledRoot ref={this.noteListRef}>
 				{this.renderEmptyList()}
 				{this.renderItemList(this.props.size)}
 			</StyledRoot>

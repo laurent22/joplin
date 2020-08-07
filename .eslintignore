@@ -147,6 +147,7 @@ ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/Root_UpgradeSyncTarget.js
 ElectronClient/gui/SearchBar/hooks/useSearch.js
 ElectronClient/gui/SearchBar/SearchBar.js
+ElectronClient/gui/SearchBar/styles/index.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
 ElectronClient/gui/style/StyledInput.js

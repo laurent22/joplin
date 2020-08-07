@@ -1,5 +1,4 @@
 import * as React from 'react';
-const { themeStyle } = require('lib/theme.js');
 const styled = require('styled-components').default;
 
 export enum ButtonLevel {
@@ -9,7 +8,6 @@ export enum ButtonLevel {
 }
 
 interface Props {
-	themeId: number,
 	title?: string,
 	iconName?: string,
 	level: ButtonLevel,
@@ -60,12 +58,11 @@ const StyledIcon = styled.span`
 `;
 
 export default function Button(props:Props) {
-	const theme = themeStyle(props.themeId);
 	const iconOnly = props.iconName && !props.title;
 	return (
-		<StyledButton theme={theme} iconOnly={iconOnly} level={props.level}>
+		<StyledButton iconOnly={iconOnly} level={props.level}>
 			{props.title}
-			<StyledIcon theme={theme} className={props.iconName} level={props.level}/>
+			<StyledIcon className={props.iconName} level={props.level}/>
 		</StyledButton>
 	);
 }

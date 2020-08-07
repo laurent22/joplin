@@ -155,7 +155,6 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 	return (
 		<StyledRoot
 			className="list-item-container"
-			theme={theme}
 			onDragOver={props.onNoteDragOver}
 			onDrop={props.onNoteDrop}
 			width={props.width}

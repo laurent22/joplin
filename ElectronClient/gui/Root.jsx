@@ -16,6 +16,8 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { app } = require('../app');
+const { ThemeProvider } = require('styled-components');
+const { themeStyle } = require('lib/theme');
 
 const { bridge } = require('electron').remote.require('./bridge');
 
@@ -84,6 +86,8 @@ class RootComponent extends React.Component {
 			height: this.props.size.height / this.props.zoomFactor,
 		};
 
+		const theme = themeStyle(this.props.themeId);
+
 		const screens = {
 			Main: { screen: MainScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
@@ -94,7 +98,11 @@ class RootComponent extends React.Component {
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 
-		return <Navigator style={navigatorStyle} screens={screens} />;
+		return (
+			<ThemeProvider theme={theme}>
+				<Navigator style={navigatorStyle} screens={screens} />
+			</ThemeProvider>
+		);
 	}
 }
 
@@ -103,6 +111,7 @@ const mapStateToProps = state => {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
+		themeId: state.settings.theme,
 	};
 };
 

@@ -358,7 +358,6 @@ class SideBarComponent extends React.Component {
 
 		const n = `${type}s`;
 		const item = this.props[n] && this.props[n].length ? this.props[n][0] : null;
-		console.info('props', this.props[n], item);
 		if (!item) return null;
 
 		return refs[item.id];
