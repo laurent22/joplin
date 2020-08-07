@@ -2,7 +2,6 @@ const React = require('react');
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header/Header.min.js');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { ReportService } = require('lib/services/report.js');
@@ -45,7 +44,6 @@ class StatusScreenComponent extends React.Component {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.props.style;
 
-		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 		const retryStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
 		const retryAllStyle = Object.assign({}, theme.urlStyle, { marginTop: 5, display: 'inline-block' });
 
@@ -53,7 +51,7 @@ class StatusScreenComponent extends React.Component {
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: containerPadding,
-			height: style.height - theme.headerHeight - containerPadding * 2,
+			height: style.height - containerPadding * 2,
 		});
 
 		function renderSectionTitleHtml(key, title) {
@@ -134,7 +132,6 @@ class StatusScreenComponent extends React.Component {
 
 		return (
 			<div style={style}>
-				<Header style={headerStyle} />
 				<div style={containerStyle}>
 					<a style={theme.textStyle} onClick={() => this.exportDebugReportClick()} href="#">
 						Export debug report

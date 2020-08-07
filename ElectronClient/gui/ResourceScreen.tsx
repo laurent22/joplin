@@ -4,7 +4,6 @@ const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header/Header.min.js');
 const prettyBytes = require('pretty-bytes');
 const Resource = require('lib/models/Resource.js');
 
@@ -205,7 +204,6 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
-		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const rootStyle:any = {
 			...style,
@@ -219,7 +217,6 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily }}>
-				<Header style={headerStyle} />
 				<div style={rootStyle}>
 					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
 						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')

@@ -44,7 +44,6 @@ const globalStyle = {
 	editorFontSize: 12,
 	textAreaLineHeight: 17,
 	lineHeight: '1.6em',
-	headerHeight: 35,
 	headerButtonHPadding: 6,
 	toolbarHeight: 26,
 	toolbarPadding: 6,

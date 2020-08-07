@@ -3,7 +3,6 @@ const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const Setting = require('lib/models/Setting');
 const { bridge } = require('electron').remote.require('./bridge');
-const { Header } = require('./Header/Header.min.js');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
@@ -52,9 +51,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 	}
 
 	render() {
-		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
-		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
 		const logComps = [];
 		for (const l of this.state.authLog) {
@@ -67,7 +64,6 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 		return (
 			<div>
-				<Header style={headerStyle}/>
 				<div style={{ padding: 10 }}>
 					{logComps}
 				</div>

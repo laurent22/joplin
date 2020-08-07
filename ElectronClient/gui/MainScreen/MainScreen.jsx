@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { Header } = require('../Header/Header.min.js');
 const { SideBar } = require('../SideBar/SideBar.min.js');
 const NoteList = require('../NoteList/NoteList.js').default;
 const NoteEditor = require('../NoteEditor/NoteEditor.js').default;
@@ -290,8 +289,7 @@ class MainScreenComponent extends React.Component {
 
 	rowHeight() {
 		if (!this.props) return 0;
-		const theme = themeStyle(this.props.themeId);
-		return this.props.style.height - theme.headerHeight - (this.messageBoxVisible() ? this.messageBoxHeight() : 0);
+		return this.props.style.height - (this.messageBoxVisible() ? this.messageBoxHeight() : 0);
 	}
 
 	messageBoxHeight() {
@@ -321,7 +319,7 @@ class MainScreenComponent extends React.Component {
 			backgroundColor: theme.warningBackgroundColor,
 		};
 
-		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+		const rowHeight = height - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.rowHeight = rowHeight;
 
@@ -582,7 +580,6 @@ class MainScreenComponent extends React.Component {
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
-				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<ResizableLayout
 					width={this.state.width}

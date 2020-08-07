@@ -13,8 +13,9 @@ class ToolbarComponent extends React.Component {
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
-			padding: theme.mainPadding,
 			backgroundColor: theme.backgroundColor3,
+			padding: theme.toolbarPadding,
+			paddingRight: theme.mainPadding,
 		}, this.props.style);
 
 		const groupStyle = {

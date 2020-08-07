@@ -334,8 +334,12 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderNoteToolbar() {
+		const theme = themeStyle(props.themeId);
+
 		const toolbarStyle = {
 			marginBottom: 0,
+			paddingTop: theme.mainPadding,
+			paddingBottom: theme.mainPadding,
 		};
 
 		return <NoteToolbar

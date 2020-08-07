@@ -396,7 +396,8 @@
 			"ElectronClient/gui/style/StyledInput.js": true,
 			"ElectronClient/gui/style/StyledTextInput.js": true,
 			"ElectronClient/gui/NoteListControls/commands/focusSearch.js": true,
-			"ElectronClient/gui/SearchBar/styles/index.js": true
+			"ElectronClient/gui/SearchBar/styles/index.js": true,
+			"CliClient/locales-build": true
 		},
 		"spellright.language": [
 			"en"
