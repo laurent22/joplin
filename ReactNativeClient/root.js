@@ -44,6 +44,7 @@ const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
 const { DropboxLoginScreen } = require('lib/components/screens/dropbox-login.js');
+const UpgradeSyncTargetScreen = require('lib/components/screens/UpgradeSyncTargetScreen').default;
 const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
@@ -60,7 +61,7 @@ const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
 const handleShared = require('lib/shareHandler').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
 const { uuid } = require('lib/uuid.js');
@@ -75,6 +76,7 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 if (__DEV__) SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
@@ -82,6 +84,7 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
@@ -536,11 +539,6 @@ async function initialize(dispatch) {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		dispatch({
-			type: 'TAG_SET_COLLAPSED_ALL',
-			ids: Setting.value('collapsedTagIds'),
-		});
-
 		if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
@@ -577,7 +575,9 @@ async function initialize(dispatch) {
 
 	await MigrationService.instance().run();
 
-	reg.scheduleSync().then(() => {
+	// When the app starts we want the full sync to
+	// start almost immediately to get the latest data.
+	reg.scheduleSync(1000).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		AlarmService.updateAllNotifications();
@@ -721,6 +721,7 @@ class AppComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
+			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },

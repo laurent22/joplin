@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: yaozeye <yaozeye@outlook.com>\n"
+"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
 "Language-Team: zh_CN <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -14,6 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -2140,7 +2142,7 @@ msgstr "未知级别 ID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2280,15 +2282,15 @@ msgstr "WebDAV 密码"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 存储桶"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "AWS Access Key ID"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS Secret Access Key"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"

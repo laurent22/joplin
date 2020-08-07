@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -105,9 +107,9 @@ msgid "Do not ask for confirmation."
 msgstr "Nie pytaj o potwierdzenie."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Format źródłowy: %s"
+msgstr "Format docelowy: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -221,14 +223,16 @@ msgstr ""
 "w zależności od ilości danych."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Deszyfrowane obiekty: %s / %s"
+msgstr "Deszyfrowane obiekty: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Pominięte obiekty: %d (użyj --retry-failed-items żeby ponownie spróbować je "
+"odszyfrować)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -369,7 +373,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Serwis synchronizacji: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Nie można zainicjalizować synchronizatora."
 
@@ -558,9 +561,8 @@ msgstr ""
 "deszyfrowane w tle i będą dostępne wkrótce."
 
 #: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Nie pytaj o potwierdzenie."
+msgstr "Możesz też wpisać `status` po więcej informacji."
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -720,7 +722,7 @@ msgstr "N"
 
 #: CliClient/app/app.js:136
 msgid "y"
-msgstr "y"
+msgstr "t"
 
 #: CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -745,19 +747,20 @@ msgstr "Wyświetla podsumowanie o notatkach i notatnikach."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Żeby spróbować ponownie odszyfrować te obiekty, uruchom `e2ee decrypt --"
+"retry-failed-items`"
 
 #: CliClient/app/command-tag.js:14
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> może \"add\", \"remove\" lub \"list\" aby przypisać lub usunąć "
-"[tag] z [note], lub wyświetlić listę notatek połączonych z [tag]. Komenda "
-"`tag list` może zostać użyta do wyświetlenia wszystkich znaczników (użyj -l "
-"dla wyświetlenia długich)."
+"<tag-command> może być \"add\", \"remove\" lub \"list\" aby przypisać lub "
+"usunąć [tag] z [note], wyświetlić listę notatek połączonych z [tag], lub "
+"wyświetlić znaczniki powiązane z [note]. Komenda `tag list` może zostać "
+"użyta do wyświetlenia wszystkich znaczników (użyj -l dla długiego wypisania)."
 
 #: CliClient/app/command-tag.js:90
 #, javascript-format
@@ -812,13 +815,12 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: ElectronClient/plugins/GotoAnything.min.js:454
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Wpisz tytuł notatki, aby do niej przejść. Lub wpisz # i następnie nazwę "
-"tagu, lub @ i  następnie nazwę notatnika."
+"Wpisz tytuł notatki lub jej fragment, aby do niej przejść. Lub wpisz # i "
+"następnie nazwę tagu, lub @ i następnie nazwę notatnika."
 
 #: ElectronClient/plugins/GotoAnything.min.js:493
 msgid "Goto Anything..."
@@ -830,9 +832,9 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksportowanie do \"%s\" jako \"%s\". Proszę czekać..."
 
 #: ElectronClient/InteropServiceHelper.js:164
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Nie udało się zaktualizować klucza głównego: %s"
+msgstr "Nie udało się wyeksportować notatek: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -870,9 +872,8 @@ msgid "No"
 msgstr "Nie"
 
 #: ElectronClient/checkForUpdates.js:153
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "Całę informacje o wersji \\ Cały opis zmian"
+msgstr "Całe informacje o wersji / opis zmian"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -945,9 +946,9 @@ msgid "Delete"
 msgstr "Usuń"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
+msgstr "Usunąć znacznik \"%s\" i jemu pokrewne ze wszystkich notatek?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1001,9 +1002,9 @@ msgstr "Deszyfrowanie obiektów %d/%d"
 #: ElectronClient/gui/SideBar/SideBar.min.js:740
 #: ElectronClient/gui/SideBar.min.js:802
 #: ReactNativeClient/lib/components/side-menu-content.js:330
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Pobieranie zasobów: %d"
+msgstr "Pobieranie zasobów: %d/%d"
 
 #: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
 msgid "Sidebar"
@@ -1017,9 +1018,8 @@ msgstr "pogrubienie"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
-msgstr "podkreślenie"
+msgstr "wyszczególnienie"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
@@ -1077,9 +1077,8 @@ msgstr ""
 "edytować notatkę."
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "Pole wyboru"
+msgstr "Lista checkboxów"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1096,11 +1095,11 @@ msgstr "Załącz plik"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
 msgid "Code Block"
-msgstr ""
+msgstr "Blok kodu"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 msgid "Inline Code"
-msgstr ""
+msgstr "Kod w linii"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
@@ -1110,13 +1109,12 @@ msgstr "Wstaw stempel czasowy"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Upuść notatki lub pliki tutaj"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:401
-#, fuzzy
 msgid "Code View"
-msgstr "Kod"
+msgstr "Widok kodu"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #, javascript-format
@@ -1124,6 +1122,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Poczekaj na pobranie I odszyfrowanie wszystkich załączników. Możesz też "
+"przenieść się do %s żeby edytować notatkę."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1133,9 +1133,8 @@ msgstr "Wystąpił błąd pobierania załącznika:"
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
 #: ElectronClient/gui/NoteText.min.js:835
 #: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Załącznik nie został jeszcze pobrany lub deszyfrowany."
+msgstr "Załącznik nie został jeszcze pobrany lub deszyfrowany"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
 #: ElectronClient/gui/NoteText.min.js:778
@@ -1149,7 +1148,7 @@ msgstr "Zapisz jako..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Odkryj plik w folderze"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
@@ -1254,9 +1253,8 @@ msgid "Updated"
 msgstr "Zaaktualizowano"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Ukończono: %s"
+msgstr "Ukończono"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1328,7 +1326,7 @@ msgstr "Wyszukaj..."
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
-msgstr ""
+msgstr "Statystyki…"
 
 #: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:17
@@ -1351,9 +1349,8 @@ msgstr "Nowe zadanie"
 
 #: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
 #: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
-#, fuzzy
 msgid "Toggle note list"
-msgstr "Lista notatek"
+msgstr "Przełącz listę notatek"
 
 #: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
 #: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
@@ -1391,9 +1388,8 @@ msgstr "Przenieś do notatnika"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
 #: ElectronClient/gui/MainScreen.min.js:272
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Przenieś do notatnika..."
+msgstr "Przenieś do notatnika:"
 
 #: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
 msgid "Toggle editor layout"
@@ -1435,7 +1431,6 @@ msgstr "Drukuj"
 # Not sure about wydrukowana\drukowana here
 #: ElectronClient/gui/MainScreen/commands/print.js:25
 #: ElectronClient/gui/NoteText.min.js:1321
-#, fuzzy
 msgid "Only one note can be printed at a time."
 msgstr "Tylko jedna notatka może być wydrukowana w tym samym czasie."
 
@@ -1556,9 +1551,8 @@ msgid "Options"
 msgstr "Opcje"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "Załącz plik"
+msgstr "Załączniki notatki"
 
 #: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
 msgid "Synchronisation Status"
@@ -1574,7 +1568,7 @@ msgstr "Chrome Web Store"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "Pobierz teraz"
+msgstr "Pobierz teraz:"
 
 #: ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
@@ -1592,13 +1586,12 @@ msgstr "Wyślij"
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "Custom order"
-msgstr ""
+msgstr "Własny kierunek sortowania"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#, fuzzy
 msgid "View"
-msgstr "&Wyświetl"
+msgstr "Widok"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
@@ -1613,12 +1606,13 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Żeby posortować notatki ręcznie, kierunek sortowania musi zostać zmieniony "
+"na \"%s\" w menu \"%s\" > \"%s\""
 
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.min.js:153
-#, fuzzy
 msgid "Do it now"
-msgstr "Pobierz teraz"
+msgstr "Zrób to teraz"
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
@@ -1703,9 +1697,8 @@ msgid "Edit in external editor"
 msgstr "Edytuj w edytorze zewnętrznym"
 
 #: ElectronClient/gui/NoteText.min.js:1852
-#, fuzzy
 msgid "Content Properties"
-msgstr "Właściwośći notatki"
+msgstr "Właściwości zawartości"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
 #: ReactNativeClient/lib/components/screens/encryption-config.js:125
@@ -1752,7 +1745,6 @@ msgstr ""
 "metodą."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:185
-#, fuzzy, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1771,7 +1763,16 @@ msgstr ""
 "Aby to zrobić należy zaszyfrować i zsynchronizować wszystkie twoje dane, "
 "więc najlepiej będzie zrobić to przez noc.\n"
 "\n"
-"Aby rozpocząć postępuj zgodnie z instrukcją:"
+"Aby rozpocząć postępuj zgodnie z instrukcją:\n"
+"\n"
+"1. Zsynchronizuj wszystkie swoje urządzenia.\n"
+"2. Naciśnij \"%s%.\n"
+"3. Poczekaj na zakończenie. W trakcie tego procesu postaraj się nie zmieniać "
+"żadnych notatek na swoich urządzeniach, aby uniknąć konfliktów.\n"
+"4. Kiedy synchronizacja się zakończy na tym urządzeniu, zsynchronizuj inne "
+"urządzenia.\n"
+"\n"
+"Ważne: musisz wykonać powyższe kroki tylko RAZ na jednym urządzeniu."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1829,27 +1830,24 @@ msgstr "Wiersze"
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:357
-#, fuzzy
 msgid "Editor"
-msgstr "Edytuj"
+msgstr "Edytor"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:99
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:358
-#, fuzzy
 msgid "Viewer"
-msgstr "&Wyświetl"
+msgstr "Wyświetlacz"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
 msgid "Statistics"
-msgstr "Status"
+msgstr "Statystyki"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Czas czytania: %s min"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1866,9 +1864,8 @@ msgid "Check synchronisation configuration"
 msgstr "Sprawdź konfigurację synchronizacji"
 
 #: ElectronClient/gui/ConfigScreen.min.js:179
-#, fuzzy
 msgid "Unknown"
-msgstr "Nieznana flaga: %s"
+msgstr "Nieznany"
 
 #: ElectronClient/gui/ConfigScreen.min.js:183
 msgid "Checking..."
@@ -1921,7 +1918,6 @@ msgid "Usage"
 msgstr "Przykłady"
 
 #: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
-#, fuzzy
 msgid "Note list"
 msgstr "Historia notatek"
 
@@ -1938,9 +1934,8 @@ msgid "Size"
 msgstr "Rozmiar"
 
 #: ElectronClient/gui/ResourceScreen.js:39
-#, fuzzy
 msgid "Action"
-msgstr "Lokacja"
+msgstr "Akcja"
 
 #: ElectronClient/gui/ResourceScreen.js:42
 #: ReactNativeClient/lib/path-utils.js:65
@@ -1950,9 +1945,9 @@ msgid "Untitled"
 msgstr "Bez nazwy"
 
 #: ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Usunąć notatkę \"%s\"?"
+msgstr "Usunąć załącznik \"%s\"?"
 
 #: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1960,6 +1955,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"To zaawansowane narzędzie do wyświetlania załączników, które są powiązane z "
+"twoimi notatkami. Bądź ostrożny przy usuwaniu jednego z nich, ponieważ nie "
+"będzie on mógł zostać przywrócony."
 
 #: ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -2011,9 +2009,8 @@ msgstr[1] "Kopiuj udostępnione linki"
 msgstr[2] "Kopiuj udostępnione linki"
 
 #: ElectronClient/commands/stopExternalEditing.js:16
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Naciśnij aby skończyć edytowanie w programie zewnętrznym"
+msgstr "Zakończ edytowanie w programie zewnętrznym"
 
 #: ElectronClient/commands/startExternalEditing.js:29
 #, javascript-format
@@ -2034,14 +2031,12 @@ msgid "Create to-do from template"
 msgstr "Utwórz notatkę z szablonu"
 
 #: ElectronClient/app.js:534
-#, fuzzy
 msgid "Insert template"
-msgstr "Dodaj szablon"
+msgstr "Wstaw szablon"
 
 #: ElectronClient/app.js:541
-#, fuzzy
 msgid "Open template directory"
-msgstr "Katalog Joplin Export"
+msgstr "Otwórz katalog szablonów"
 
 #: ElectronClient/app.js:548
 msgid "Refresh templates"
@@ -2052,9 +2047,9 @@ msgid "Note attachments..."
 msgstr "Załączenia notatki..."
 
 #: ElectronClient/app.js:596
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "Rewizja: %s (%s)"
 
 #: ElectronClient/app.js:603
 #, javascript-format
@@ -2062,19 +2057,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: ElectronClient/app.js:605
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Ukończono: %s"
+msgstr "ID klienta: %s"
 
 #: ElectronClient/app.js:606
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Nowa wersja: %s"
+msgstr "Wersja synchronizacji: %s"
 
 #: ElectronClient/app.js:607
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Nowa wersja: %s"
+msgstr "Wersja profilu: %s"
 
 #: ElectronClient/app.js:608
 #, javascript-format
@@ -2206,7 +2201,6 @@ msgstr ""
 "organizacji."
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -2234,7 +2228,7 @@ msgstr "Nieznany poziom ID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2287,7 +2281,7 @@ msgstr "tak"
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
 msgid "no"
@@ -2331,12 +2325,11 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim ciemny"
 
 #: ReactNativeClient/lib/models/Setting.js:58
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Ciemny"
+msgstr "OLED ciemny"
 
 #: ReactNativeClient/lib/models/Setting.js:80
 msgid "Synchronisation target"
@@ -2380,15 +2373,15 @@ msgstr "Hasło użytkownika WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "Bucket AWS S3"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "Klucz AWS"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "Tajny klucz AWS"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
@@ -2439,20 +2432,19 @@ msgstr "Motyw"
 
 #: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Automatycznie dopasyj motyw do motywu systemowego"
 
 #: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Preferuj jasny motyw"
 
 #: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Preferuj ciemny  motyw"
 
 #: ReactNativeClient/lib/models/Setting.js:346
-#, fuzzy
 msgid "Show note counts"
-msgstr "Pokaż ikonę w zasobniku systemowym"
+msgstr "Pokaż liczbę notatek"
 
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:357
@@ -2461,9 +2453,9 @@ msgid "Split View"
 msgstr "Podzielony podgląd"
 
 #: ReactNativeClient/lib/models/Setting.js:355
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:357
@@ -2486,7 +2478,7 @@ msgstr "Zamykaj klamry, nawiasy, cudzysłowy itd."
 
 #: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr ""
+msgstr "Użyj CodeMirror jako edytora kodu (UWAGA: BETA)"
 
 #: ReactNativeClient/lib/models/Setting.js:397
 #: ReactNativeClient/lib/models/Setting.js:415
@@ -2524,23 +2516,20 @@ msgid "Enable soft breaks"
 msgstr "Aktywuj miękkie łamanie linii"
 
 #: ReactNativeClient/lib/models/Setting.js:465
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Aktywuj składnię ~sub~"
+msgstr "Aktywuj składnię typografu"
 
 #: ReactNativeClient/lib/models/Setting.js:466
 msgid "Enable math expressions"
 msgstr "Atywuj wyrażenia matematyczne"
 
 #: ReactNativeClient/lib/models/Setting.js:467
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "Aktywuj składnię ~sub~"
+msgstr "Aktywuj składnię Fountain"
 
 #: ReactNativeClient/lib/models/Setting.js:468
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Aktywuj składnię ~sub~"
+msgstr "Aktywuj składnię Mermaid"
 
 #: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable ==mark== syntax"
@@ -2617,7 +2606,6 @@ msgid "Editor font family"
 msgstr "Rodzina czcionek edytora"
 
 #: ReactNativeClient/lib/models/Setting.js:550
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -2690,9 +2678,8 @@ msgid "A4"
 msgstr "A4"
 
 #: ReactNativeClient/lib/models/Setting.js:626
-#, fuzzy
 msgid "Letter"
-msgstr "List\\Litera"
+msgstr "List"
 
 #: ReactNativeClient/lib/models/Setting.js:627
 msgid "A3"
@@ -2761,15 +2748,15 @@ msgstr "Ignoruj błędy certyfikatu TLS"
 
 #: ReactNativeClient/lib/models/Setting.js:689
 msgid "Fail-safe"
-msgstr ""
+msgstr "Bezpieczny"
 
 #: ReactNativeClient/lib/models/Setting.js:690
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Zabezpieczenie: nie usuwaj lokalnych danych kiedy cel synchronizacji jest "
-"pusty (często w wyniku nieprawidłowej konfiguracji lub błędu)"
+"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty "
+"(często w wyniku nieprawidłowej konfiguracji lub błędu)"
 
 #: ReactNativeClient/lib/models/Setting.js:694
 msgid ""
@@ -2797,7 +2784,7 @@ msgstr "Zachowuj historię przez"
 
 #: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Czynnik rośnięcia listy notatników"
 
 #: ReactNativeClient/lib/models/Setting.js:743
 #: ReactNativeClient/lib/models/Setting.js:756
@@ -2808,14 +2795,18 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Wartość czynnika ustala jak element będzie rósł, bądź zmniejszał się w "
+"odniesieniu do sąsiadujących elementów w kontenerze. Przykładowo, element z "
+"czynnikiem 2 będzie zajmował 2 razy więcej, niż ten z czynnikiem 1,. "
+"Zrestartuj aplikację, aby zobaczyć zmiany."
 
 #: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Czynnik rośnięcia listy notatek"
 
 #: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Czynnik rośnięcia pola notatek"
 
 #: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
@@ -2851,9 +2842,8 @@ msgid "Encryption"
 msgstr "Szyfrowanie"
 
 #: ReactNativeClient/lib/models/Setting.js:1255
-#, fuzzy
 msgid "Web Clipper"
-msgstr "Opcje Web clipper"
+msgstr "Web clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1260
 msgid ""
@@ -2865,6 +2855,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Te wtyczki usprawniają wyświtlanie Markdownu. Miej na uwadze, że mimo, że te "
+"znaczniki mogą być przydatne, to nie są one częścią standardowego Markdownu "
+"i z uwagi na to większość z nich będzie działała wyłącznie w Joplinie. "
+"Dodatkowo, część z nich jest *niekompatybilna* z edytorem WYSIWYG. Jeśli "
+"otworzysz notatkę używającą tego formatowania w tym edytorze, utracisz to "
+"formatowanie. Poniżej jest widoczne które pluginy są kompatybilne z edytorem "
+"WYSIWYG."
 
 #: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
@@ -2884,30 +2881,32 @@ msgid "Downloaded"
 msgstr "Pobrano"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Załączenia"
+msgstr "Konflikt załącznika: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Wystąpił błąd pobierania załącznika:"
+msgstr ""
+"Wystąpił [konflikt](%s) w załączniku poniżej.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Nie można przenieść notatnika do tej lokacji"
+msgstr "Nie można przenieść tagu do tej lokacji."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "Nazwa tagu nie może rozpoczynać ani kończyć się na `/`."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "Nazwa tagu nie może zawierać `//`."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -2920,7 +2919,7 @@ msgstr "data utworzenia"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "własny kierunek sortowania"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -3292,7 +3291,7 @@ msgstr "Tylko w celu debugowania: eksportuj profil na zewnętrzną kartę SD."
 
 #: ReactNativeClient/lib/components/screens/config.js:461
 msgid "More information"
-msgstr "Więcej informacji "
+msgstr "Więcej informacji"
 
 #: ReactNativeClient/lib/components/screens/config.js:471
 msgid ""
@@ -3527,10 +3526,9 @@ msgstr "System plików"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
-msgstr ""
+msgstr "Przekaż"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "Synchronizuj"
 
@@ -3585,9 +3583,8 @@ msgstr ""
 "odszyfrować."
 
 #: ReactNativeClient/lib/services/report.js:182
-#, fuzzy
 msgid "Attachments"
-msgstr "Załączenia"
+msgstr "Załączniki"
 
 #: ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and decrypted"
@@ -3596,23 +3593,22 @@ msgstr "Pobrane i odszyfrowane"
 #: ReactNativeClient/lib/services/report.js:190
 #: ReactNativeClient/lib/services/report.js:191
 #: ReactNativeClient/lib/services/report.js:194
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: ReactNativeClient/lib/services/report.js:191
 msgid "Downloaded and encrypted"
 msgstr "Pobrane i zaszyfrowane"
 
 #: ReactNativeClient/lib/services/report.js:204
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Obiekt \"%s\" nie może być pobrany: %s"
+msgstr "Załączniki nie mogą zostać pobrane"
 
 #: ReactNativeClient/lib/services/report.js:209
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s): %s"
-msgstr "%s %s (%s)"
+msgstr "%s (%s): %s"
 
 #: ReactNativeClient/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
@@ -3672,12 +3668,10 @@ msgid "Joplin Export Directory"
 msgstr "Katalog Joplin Export"
 
 #: ReactNativeClient/lib/services/InteropService.js:47
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
 msgstr "Plik eksportu Evernote (jako Markdown)"
 
 #: ReactNativeClient/lib/services/InteropService.js:55
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
 msgstr "Plik eksportu Evernote (jako HTML)"
 
@@ -3702,9 +3696,9 @@ msgid "Directory"
 msgstr "Katalog"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Nie można załadować modułu \"%s\" dla formatu \"%s\""
+msgstr "Nie można załadować modułu \"%s\" dla formatu \"%s\" i wyniku \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format

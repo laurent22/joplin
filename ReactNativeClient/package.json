@@ -32,7 +32,7 @@
     "htmlparser2": "^4.1.0",
     "jsc-android": "241213.1.0",
     "json-stringify-safe": "^5.0.1",
-    "katex": "^0.11.1",
+    "katex": "^0.12.0",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-anchor": "^5.2.5",

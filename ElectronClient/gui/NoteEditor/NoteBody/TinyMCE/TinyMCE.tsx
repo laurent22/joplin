@@ -162,6 +162,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const lastOnChangeEventInfo = useRef<any>({
 		content: null,
 		resourceInfos: null,
+		contentKey: null,
 	});
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
@@ -625,7 +626,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 							update: function(element:any) {
 								let itemType:ContextMenuItemType = ContextMenuItemType.None;
 								let resourceId = '';
-								let textToCopy = '';
 
 								if (element.nodeName === 'IMG') {
 									itemType = ContextMenuItemType.Image;
@@ -635,13 +635,20 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 									itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
 								} else {
 									itemType = ContextMenuItemType.Text;
-									textToCopy = editor.selection.getContent({ format: 'text' });
 								}
 
-								contextMenuActionOptions.current = { itemType, resourceId, textToCopy };
+								contextMenuActionOptions.current = {
+									itemType,
+									resourceId,
+									textToCopy: null,
+									htmlToCopy: editor.selection ? editor.selection.getContent() : '',
+									insertContent: (content:string) => {
+										editor.insertContent(content);
+									},
+									isReadOnly: false,
+								};
 
-
-								return item.isActive(itemType) ? itemNameNS : '';
+								return item.isActive(itemType, contextMenuActionOptions.current) ? itemNameNS : '';
 							},
 						});
 					}
@@ -722,7 +729,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
 		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
 
-		console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
+		// console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
 
 		if (cssFiles.length) {
 			for (const cssFile of cssFiles) {
@@ -767,12 +774,31 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
 
+				editor.setContent(result.html);
+
+				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
+					// Need to clear UndoManager to avoid this problem:
+					// - Load note 1
+					// - Make a change
+					// - Load note 2
+					// - Undo => content is that of note 1
+					//
+					// The doc is not very clear what's the different between
+					// clear() and reset() but it seems reset() works best, in
+					// particular for the onPaste bug.
+					//
+					// It seems the undo manager must be reset after having
+					// set the initial content (not before). Otherwise undoing multiple
+					// times would result in an empty note.
+					// https://github.com/laurent22/joplin/issues/3534
+					editor.undoManager.reset();
+				}
+
 				lastOnChangeEventInfo.current = {
 					content: props.content,
 					resourceInfos: props.resourceInfos,
+					contentKey: props.contentKey,
 				};
-
-				editor.setContent(result.html);
 			}
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
@@ -785,22 +811,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos]);
-
-	useEffect(() => {
-		if (!editor) return;
-
-		// Need to clear UndoManager to avoid this problem:
-		// - Load note 1
-		// - Make a change
-		// - Load note 2
-		// - Undo => content is that of note 1
-
-		// The doc is not very clear what's the different between
-		// clear() and reset() but it seems reset() works best, in
-		// particular for the onPaste bug.
-		editor.undoManager.reset();
-	}, [editor, props.contentKey]);
+	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -852,32 +863,60 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const prop_htmlToMarkdownRef = useRef<Function>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
+	const nextOnChangeEventInfo = useRef<any>(null);
+
+	async function execOnChangeEvent() {
+		const info = nextOnChangeEventInfo.current;
+		if (!info) return;
+
+		nextOnChangeEventInfo.current = null;
+
+		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
+
+		lastOnChangeEventInfo.current.content = contentMd;
+
+		props_onChangeRef.current({
+			changeId: info.changeId,
+			content: contentMd,
+		});
+
+		dispatchDidUpdate(info.editor);
+	}
+
+	// When the component unmount, we dispatch the change event
+	// that was scheduled so that the parent component can save
+	// the note.
+	useEffect(() => {
+		return () => {
+			execOnChangeEvent();
+		};
+	}, []);
+
+	const onChangeHandlerTimeoutRef = useRef<any>(null);
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		let onChangeHandlerIID:any = null;
-
 		function onChangeHandler() {
+			// First this component notifies the parent that a change is going to happen.
+			// Then the actual onChange event is fired after a timeout or when this
+			// component gets unmounted.
+
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
+			if (onChangeHandlerTimeoutRef.current) clearTimeout(onChangeHandlerTimeoutRef.current);
 
-			onChangeHandlerIID = setTimeout(async () => {
-				onChangeHandlerIID = null;
+			nextOnChangeEventInfo.current = {
+				changeId: changeId,
+				editor: editor,
+				contentMarkupLanguage: props.contentMarkupLanguage,
+				contentOriginalCss: props.contentOriginalCss,
+			};
 
-				const contentMd = await prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editor.getContent(), props.contentOriginalCss);
-
-				if (!editor) return;
-
-				lastOnChangeEventInfo.current.content = contentMd;
-
-				props_onChangeRef.current({
-					changeId: changeId,
-					content: contentMd,
-				});
-
-				dispatchDidUpdate(editor);
+			onChangeHandlerTimeoutRef.current = setTimeout(async () => {
+				onChangeHandlerTimeoutRef.current = null;
+				execOnChangeEvent();
 			}, 1000);
 		}
 

@@ -5,7 +5,7 @@ export default ({ getState, item, setState }) => {
 	const newText = replaceBetween(
 		text,
 		selection,
-		item.wrapper.concat(text.substring(selection.start, selection.end), item.wrapper),
+		item.wrapper.concat(text.substring(selection.start, selection.end), item.wrapper)
 	);
 	let newPosition;
 	if (selection.start === selection.end) {

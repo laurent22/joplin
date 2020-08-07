@@ -150,7 +150,7 @@ class Bridge {
 					const folders = await this.folderTree();
 					this.dispatch({ type: 'FOLDERS_SET', folders: folders });
 
-					const tags = await this.clipperApiExec('GET', 'tags', { fields: 'full_title' });
+					const tags = await this.clipperApiExec('GET', 'tags');
 					this.dispatch({ type: 'TAGS_SET', tags: tags });
 
 					bridge().restoreState();

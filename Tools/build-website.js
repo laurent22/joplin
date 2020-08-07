@@ -90,6 +90,9 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	#toc ul {
 		margin-bottom: 10px;
 	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
 	#toc {
 		padding-bottom: 1em;
 	}
@@ -572,23 +575,25 @@ async function main() {
 	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
 
 	const sources = [
-		['readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' }],
+		['readme/api.md', 'docs/api/index.html', { title: 'REST API' }],
 		['readme/changelog_cli.md', 'docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' }],
+		['readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' }],
 		['readme/clipper.md', 'docs/clipper/index.html', { title: 'Web Clipper' }],
+		['readme/conflict.md', 'docs/conflict/index.html', { title: 'What is a conflict?' }],
 		['readme/debugging.md', 'docs/debugging/index.html', { title: 'Debugging' }],
 		['readme/desktop.md', 'docs/desktop/index.html', { title: 'Desktop Application' }],
 		['readme/donate.md', 'docs/donate/index.html', { title: 'Donate' }],
 		['readme/e2ee.md', 'docs/e2ee/index.html', { title: 'End-To-End Encryption' }],
 		['readme/faq.md', 'docs/faq/index.html', { title: 'FAQ' }],
+		['readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' }],
 		['readme/mobile.md', 'docs/mobile/index.html', { title: 'Mobile Application' }],
-		['readme/spec.md', 'docs/spec/index.html', { title: 'Specifications' }],
+		['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
+		['readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' }],
+		['readme/spec/e2ee.md', 'docs/spec/e2ee/index.html', { title: 'E2EE Specifications' }],
+		['readme/spec/history.md', 'docs/spec/history/index.html', { title: 'Note History Specifications' }],
+		['readme/spec/sync_lock.md', 'docs/spec/sync_lock/index.html', { title: 'Sync Lock Specifications' }],
 		['readme/stats.md', 'docs/stats/index.html', { title: 'Statistics' }],
 		['readme/terminal.md', 'docs/terminal/index.html', { title: 'Terminal Application' }],
-		['readme/api.md', 'docs/api/index.html', { title: 'REST API' }],
-		['readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' }],
-		['readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' }],
-		['readme/conflict.md', 'docs/conflict/index.html', { title: 'What is a conflict?' }],
-		['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
 
 		['readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' }],
 		['readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas/index.html', { title: 'GSoC: Project Ideas' }],

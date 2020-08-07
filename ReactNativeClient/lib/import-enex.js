@@ -150,17 +150,10 @@ async function processNoteResource(resource) {
 	return resource;
 }
 
-async function saveNoteResources(note, importOptions) {
+async function saveNoteResources(note) {
 	let resourcesCreated = 0;
 	for (let i = 0; i < note.resources.length; i++) {
-		let resource = note.resources[i];
-
-		try {
-			resource = await processNoteResource(resource);
-		} catch (error) {
-			importOptions.onError(error);
-			continue;
-		}
+		const resource = note.resources[i];
 
 		const toSave = Object.assign({}, resource);
 		delete toSave.dataFilePath;
@@ -185,7 +178,7 @@ async function saveNoteTags(note) {
 		const tagTitle = note.tags[i];
 
 		let tag = await Tag.loadByTitle(tagTitle);
-		if (!tag) tag = await Tag.saveNested({}, tagTitle);
+		if (!tag) tag = await Tag.save({ title: tagTitle });
 
 		await Tag.addNote(tag.id, note.id);
 
@@ -298,6 +291,20 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				while (notes.length) {
 					const note = notes.shift();
+
+					for (let i = 0; i < note.resources.length; i++) {
+						let resource = note.resources[i];
+
+						try {
+							resource = await processNoteResource(resource);
+						} catch (error) {
+							importOptions.onError(error);
+							continue;
+						}
+
+						note.resources[i] = resource;
+					}
+
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources);
