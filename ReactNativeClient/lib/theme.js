@@ -49,6 +49,7 @@ const globalStyle = {
 	toolbarHeight: 26,
 	toolbarPadding: 6,
 	appearance: 'light',
+	mainPadding: 12,
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -103,6 +104,17 @@ globalStyle.buttonStyle = {
 function addExtraStyles(style) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
+
+	const bgColor4 = style.backgroundColor4;
+
+	style.backgroundColorHover4 = Color(bgColor4).alpha(0.5).rgb();
+	style.backgroundColorActive4 = Color(bgColor4).alpha(1).rgb();
+	style.backgroundColor4 = Color(bgColor4).alpha(0).rgb();
+
+	style.color5 = bgColor4;
+	style.backgroundColor5 = style.color4;
+	style.backgroundColorHover5 = Color(style.backgroundColor5).darken(0.2).hex();
+	style.backgroundColorActive5 = Color(style.backgroundColor5).darken(0.4).hex();
 
 	if (!('backgroundColorHover3' in style)) style.backgroundColorHover3 = style.backgroundColor3;
 	if (!('selectionBackgroundColor3' in style)) style.selectionBackgroundColor3 = style.backgroundColor3;

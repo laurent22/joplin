@@ -14,6 +14,10 @@ const StyledInput = styled.input`
 	&::placeholder {
 		color: ${(props:any) => props.theme.colorFaded};
 	}
+
+	&:focus {
+		background-color: ${(props:any) => props.theme.backgroundColorActive4};
+	}
 `;
 
 export default StyledInput;

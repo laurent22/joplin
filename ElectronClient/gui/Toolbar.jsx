@@ -10,14 +10,11 @@ class ToolbarComponent extends React.Component {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = Object.assign({
-			// height: theme.toolbarHeight,
 			display: 'flex',
 			flexDirection: 'row',
-			// borderBottom: `1px solid ${theme.dividerColor}`,
 			boxSizing: 'border-box',
-			paddingRight: 6,
+			padding: theme.mainPadding,
 			backgroundColor: theme.backgroundColor3,
-			padding: theme.toolbarPadding,
 		}, this.props.style);
 
 		const groupStyle = {

@@ -11,27 +11,11 @@ interface Props {
 	title?: string,
 	iconName?: string,
 	level: ButtonLevel,
+	className?:string,
+	onClick():void,
 }
 
-function levelToBgColor(props:any) {
-	if (props.level === ButtonLevel.Primary) return props.theme.color4;
-	if (props.level === ButtonLevel.Secondary) return props.theme.backgroundColor4;
-	throw new Error(`Invalid level: ${props.level}`);
-}
-
-function levelToColor(props:any) {
-	if (props.level === ButtonLevel.Primary) return props.theme.backgroundColor4;
-	if (props.level === ButtonLevel.Secondary) return props.theme.color4;
-	throw new Error(`Invalid level: ${props.level}`);
-}
-
-function levelToBorder(props:any) {
-	if (props.level === ButtonLevel.Primary) return 'none';
-	if (props.level === ButtonLevel.Secondary) return `1px solid ${props.theme.color4}`;
-	throw new Error(`Invalid level: ${props.level}`);
-}
-
-const StyledButton = styled.button`
+const StyledButtonBase = styled.button`
 	display: flex;
 	height: ${(props:any) => `${props.theme.toolbarHeight}px`};
 	min-height: ${(props:any) => `${props.theme.toolbarHeight}px`};
@@ -40,29 +24,60 @@ const StyledButton = styled.button`
 	${(props:any) => props.iconOnly ? `min-width: ${props.theme.toolbarHeight}px;` : ''}
 	${(props:any) => props.iconOnly ? `max-width: ${props.theme.toolbarHeight}px;` : ''}
 	box-sizing: border-box;
-	border: ${(props:any) => levelToBorder(props)};
 	border-radius: 3px;
-	background-color: ${(props:any) => levelToBgColor(props)};
 	font-size: ${(props:any) => props.theme.fontSize}px;
 	padding: 0 ${(props:any) => props.iconOnly ? 4 : 8}px;
 	justify-content: center;
+`;
 
-	&::hover {
-		color: ${(props:any) => props.theme.colorFaded};
+const StyledButtonPrimary = styled(StyledButtonBase)`
+	border: none;
+	background-color: ${(props:any) => props.theme.backgroundColor5};
+
+	&:hover {
+		background-color: ${(props:any) => props.theme.backgroundColorHover5};
+	}
+
+	&:active {
+		background-color: ${(props:any) => props.theme.backgroundColorActive5};
 	}
 `;
 
-const StyledIcon = styled.span`
+const StyledButtonSecondary = styled(StyledButtonBase)`
+	border: 1px solid ${(props:any) => props.theme.color4};
+	background-color: ${(props:any) => props.theme.backgroundColor4};
+
+	&:hover {
+		background-color: ${(props:any) => props.theme.backgroundColorHover4};
+	}
+
+	&:active {
+		background-color: ${(props:any) => props.theme.backgroundColorActive4};
+	}
+`;
+
+const StyledIconBase = styled.span`
 	font-size: ${(props:any) => props.theme.toolbarIconSize}px;
-	color: ${(props:any) => levelToColor(props)};
+`;
+
+const StyledIconPrimary = styled(StyledIconBase)`
+	color: ${(props:any) => props.theme.color5};
+`;
+
+const StyledIconSecondary = styled(StyledIconBase)`
+	color: ${(props:any) => props.theme.color4};
 `;
 
 export default function Button(props:Props) {
 	const iconOnly = props.iconName && !props.title;
+
+	const StyledButton = props.level === ButtonLevel.Primary ? StyledButtonPrimary : StyledButtonSecondary;
+	const StyledIcon = props.level === ButtonLevel.Primary ? StyledIconPrimary : StyledIconSecondary;
+
 	return (
-		<StyledButton iconOnly={iconOnly} level={props.level}>
+		<StyledButton className={props.className} iconOnly={iconOnly} onClick={props.onClick}>
 			{props.title}
-			<StyledIcon className={props.iconName} level={props.level}/>
+			<StyledIcon className={props.iconName}/>
 		</StyledButton>
 	);
 }

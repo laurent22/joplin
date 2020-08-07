@@ -5,7 +5,11 @@ import useSearch from './hooks/useSearch';
 import { Root, SearchInput, SearchButton, SearchButtonIcon } from './styles';
 const { _ } = require('lib/locale.js');
 
-export default function SearchBar() {
+interface Props {
+	inputRef?: any,
+}
+
+export default function SearchBar(props:Props) {
 	const [query, setQuery] = useState('');
 	const iconName = !query ? CommandService.instance().iconName('search') : 'fa fa-times';
 
@@ -21,7 +25,7 @@ export default function SearchBar() {
 
 	return (
 		<Root>
-			<SearchInput value={query} type="text" placeholder={_('Search...')} onChange={onChange}/>
+			<SearchInput ref={props.inputRef} value={query} type="text" placeholder={_('Search...')} onChange={onChange}/>
 			<SearchButton onClick={onSearchButtonClick}>
 				<SearchButtonIcon className={iconName}/>
 			</SearchButton>

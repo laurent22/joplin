@@ -16,7 +16,7 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { app } = require('../app');
-const { ThemeProvider } = require('styled-components');
+const { ThemeProvider, StyleSheetManager } = require('styled-components');
 const { themeStyle } = require('lib/theme');
 
 const { bridge } = require('electron').remote.require('./bridge');
@@ -99,9 +99,11 @@ class RootComponent extends React.Component {
 		};
 
 		return (
-			<ThemeProvider theme={theme}>
-				<Navigator style={navigatorStyle} screens={screens} />
-			</ThemeProvider>
+			<StyleSheetManager disableVendorPrefixes>
+				<ThemeProvider theme={theme}>
+					<Navigator style={navigatorStyle} screens={screens} />
+				</ThemeProvider>
+			</StyleSheetManager>
 		);
 	}
 }

@@ -1,21 +1,48 @@
 import * as React from 'react';
+import { useEffect, useRef } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel } from '../Button/Button';
+import CommandService from 'lib/services/CommandService';
+import { runtime as focusSearchRuntime } from './commands/focusSearch';
 const styled = require('styled-components').default;
 
 const StyledRoot = styled.div`
 	width: 100%;
-	height: 100px;
+	height: 100%;
 	display: flex;
 	flex-direction: row;
+	padding: ${(props:any) => props.theme.mainPadding}px;
+	background-color: ${(props:any) => props.theme.backgroundColor3};
+`;
+
+const StyledButton = styled(Button)`
+	margin-left: 8px;
 `;
 
 export default function NoteListControls() {
+	const searchBarRef = useRef(null);
+
+	useEffect(function() {
+		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
+
+		return function() {
+			CommandService.instance().unregisterRuntime('focusSearch');
+		};
+	}, []);
+
+	function onNewTodoButtonClick() {
+		CommandService.instance().execute('newTodo');
+	}
+
+	function onNewNoteButtonClick() {
+		CommandService.instance().execute('newNote');
+	}
+
 	return (
 		<StyledRoot>
-			<SearchBar/>
-			<Button iconName="icon-note" level={ButtonLevel.Primary}/>
-			<Button iconName="far fa-check-square" level={ButtonLevel.Secondary}/>
+			<SearchBar inputRef={searchBarRef}/>
+			<StyledButton iconName="far fa-check-square" level={ButtonLevel.Secondary} onClick={onNewTodoButtonClick}/>
+			<StyledButton iconName="icon-note" level={ButtonLevel.Primary} onClick={onNewNoteButtonClick}/>
 		</StyledRoot>
 	);
 }

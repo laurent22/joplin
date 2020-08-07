@@ -50,10 +50,11 @@ const commands = [
 ];
 
 class MainScreenComponent extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
 		const rootLayoutSize = this.rootLayoutSize();
+		const theme = themeStyle(props.themeId);
 
 		this.state = {
 			promptOptions: null,
@@ -89,7 +90,7 @@ class MainScreenComponent extends React.Component {
 						width: Setting.value('style.noteList.width'),
 						children: [
 							{
-								height: 100,
+								height: theme.toolbarHeight + theme.mainPadding * 2,
 								key: 'noteListControls',
 							},
 							{

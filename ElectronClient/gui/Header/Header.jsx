@@ -6,7 +6,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const CommandService = require('lib/services/CommandService').default;
 
 const commands = [
-	require('./commands/focusSearch'),
+	// require('./commands/focusSearch'),
 ];
 
 class HeaderComponent extends React.Component {

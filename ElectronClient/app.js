@@ -37,7 +37,7 @@ const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/red
 const versionInfo = require('lib/versionInfo').default;
 
 const commands = [
-	require('./gui/Header/commands/focusSearch'),
+	require('./gui/NoteListControls/commands/focusSearch'),
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
