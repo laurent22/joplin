@@ -40,7 +40,7 @@ const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const urlUtils = require('lib/urlUtils');
 
 class NoteScreenComponent extends BaseScreenComponent {
