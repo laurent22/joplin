@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 const BaseModel = require('lib/BaseModel.js');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 
 interface SearchMarkersOptions {
 	searchTimestamp: number,

@@ -50,6 +50,7 @@ const api = null;
 // 			const items = response.items;
 // 			expect(items.length).toBe(3);
 // 			expect(items[0].path).toBe('1');
+// 			expect(items[0].updated_time).toMatch(/^\d+$/); // make sure it's using epoch timestamp
 // 		}));
 
 // 		it('should default to only files on root directory', asyncTest(async () => {

@@ -10,8 +10,8 @@ export default ({ getState, item, setState }) => {
 			text.substring(selection.start, selection.end),
 			'\n',
 			item.wrapper,
-			'\n',
-		)}`,
+			'\n'
+		)}`
 	);
 	let newPosition;
 	if (selection.start === selection.end) {
@@ -24,8 +24,8 @@ export default ({ getState, item, setState }) => {
 				text.substring(selection.start, selection.end),
 				'\n',
 				item.wrapper,
-				'\n',
-			)}`,
+				'\n'
+			)}`
 		);
 	} else {
 		newPosition = selection.end + item.wrapper.length * 2 + 3; // +3 For three new lines
@@ -37,8 +37,8 @@ export default ({ getState, item, setState }) => {
 				text.substring(selection.start, selection.end),
 				'\n',
 				item.wrapper,
-				'\n',
-			)}`,
+				'\n'
+			)}`
 		);
 	}
 	const extra = {
