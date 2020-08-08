@@ -293,6 +293,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 
 			.CodeMirror-lines {
+				/* This is used to enable the scroll-past end behaviour. The same height should */
+				/* be applied to the viewer. */
 				padding-bottom: 400px !important;
 			}
 			
