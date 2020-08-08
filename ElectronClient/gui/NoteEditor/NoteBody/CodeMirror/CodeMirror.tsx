@@ -291,6 +291,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				position: absolute !important;
 				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
 			}
+
+			.CodeMirror-lines {
+				/* This is used to enable the scroll-past end behaviour. The same height should */
+				/* be applied to the viewer. */
+				padding-bottom: 400px !important;
+			}
 			
 			.cm-header-1 {
 				font-size: 1.5em;
