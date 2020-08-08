@@ -276,6 +276,85 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
+	const loadScript = async (script:any) => {
+		return new Promise((resolve) => {
+			let element:any = document.createElement('script');
+			if (script.src.indexOf('.css') >= 0) {
+				element = document.createElement('link');
+				element.rel = 'stylesheet';
+				element.href = script.src;
+			} else {
+				element.src = script.src;
+
+				if (script.attrs) {
+					for (const attr in script.attrs) {
+						element[attr] = script.attrs[attr];
+					}
+				}
+			}
+
+			element.id = script.id;
+
+			element.onload = () => {
+				resolve();
+			};
+
+			document.getElementsByTagName('head')[0].appendChild(element);
+		});
+	};
+
+	useEffect(() => {
+		let cancelled = false;
+
+		async function loadScripts() {
+			const scriptsToLoad:{src: string, id:string, loaded: boolean}[] = [
+				{
+					src: 'node_modules/codemirror/lib/codemirror.css',
+					id: 'codemirrorBaseStyle',
+					loaded: false,
+				},
+				{
+					src: 'node_modules/codemirror/addon/dialog/dialog.css',
+					id: 'codemirrorDialogStyle',
+					loaded: false,
+				},
+			];
+
+			// The default codemirror theme is defined in codemirror.css
+			// and doesn't have an extra css file
+			if (styles.editor.codeMirrorTheme !== 'default') {
+				// Solarized light and solarized dark are loaded by the single
+				// solarized.css file
+				let theme = styles.editor.codeMirrorTheme;
+				if (theme.indexOf('solarized') >= 0) theme = 'solarized';
+
+				scriptsToLoad.push({
+					src: `node_modules/codemirror/theme/${theme}.css`,
+					id: `codemirrorTheme${theme}`,
+					loaded: false,
+				});
+			}
+
+			for (const s of scriptsToLoad) {
+				if (document.getElementById(s.id)) {
+					s.loaded = true;
+					continue;
+				}
+
+				await loadScript(s);
+				if (cancelled) return;
+
+				s.loaded = true;
+			}
+		}
+
+		loadScripts();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [styles.editor.codeMirrorTheme]);
+
 	useEffect(() => {
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -333,6 +412,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
 				opacity: .5;
+			}
+
+			/* We need to use important to override theme specific values */
+			.cm-error {
+				color: inherit !important;
+				background-color: inherit !important;
+				border-bottom: 1px dotted #dc322f;
 			}
 		`));
 
