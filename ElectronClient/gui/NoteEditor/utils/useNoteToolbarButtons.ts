@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import CommandService, { ToolbarButtonInfo } from '../../../lib/services/CommandService';
+import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 
 interface ToolbarButtonInfos {
 	[key:string]: ToolbarButtonInfo;

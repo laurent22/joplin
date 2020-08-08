@@ -5,7 +5,7 @@ import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../.
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
-import CommandService, { ToolbarButtonInfo } from '../../../../lib/services/CommandService';
+import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 const { MarkupToHtml } = require('lib/joplin-renderer');
