@@ -80,8 +80,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const [webviewReady, setWebviewReady] = useState(false);
 
-	const previousRenderedBody = usePrevious(renderedBody);
-	const previousSearchMarkers = usePrevious(props.searchMarkers);
+	// const previousRenderedBody = usePrevious(renderedBody);
+	// const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
 	const editorRef = useRef(null);
@@ -534,10 +534,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-		}
-	}, [props.searchMarkers, renderedBody]);
+		webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+	});
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
