@@ -1,50 +1,54 @@
-import { KeymapConfigScreenProps } from '../KeymapConfigScreen';
-
 const { buildStyle } = require('lib/theme');
 
-export default function styles(props: KeymapConfigScreenProps) {
-	return buildStyle('KeymapConfigScreen', props.theme, (theme: any) => {
+export default function styles(theme: number) {
+	return buildStyle('KeymapConfigScreen', theme, (theme: any) => {
 		return {
-			containerStyle: {
+			container: {
 				...theme.containerStyle,
-				padding: 15,
+				padding: 16,
 			},
-			topActionsStyle: {
+			topActions: {
 				display: 'flex',
 				flexDirection: 'row',
 			},
-			inlineButtonStyle: {
-				...theme.buttonStyle,
-				padding: 0,
-				marginLeft: 12,
+			text: {
+				...theme.textStyle,
 			},
-			filterInputStyle: {
+			input: {
+				...theme.inputStyle,
+			},
+			filterInput: {
 				...theme.inputStyle,
 				flexGrow: 1,
 				minHeight: theme.buttonStyle.minHeight,
 			},
-			tableStyle: {
+			inlineButton: {
+				...theme.buttonStyle,
+				marginLeft: 12,
+			},
+			warning: {
+				backgroundColor: theme.warningBackgroundColor,
+				paddingLeft: 10,
+				paddingRight: 10,
+				paddingTop: 2,
+				paddingBottom: 2,
+			},
+			table: {
 				...theme.containerStyle,
 				marginTop: 15,
 				overflow: 'auto',
 				width: '100%',
 			},
-			tableShortcutColumnStyle: {
+			tableShortcutColumn: {
 				...theme.textStyle,
 				width: '65%',
 			},
-			tableCommandColumnStyle: {
+			tableCommandColumn: {
 				...theme.textStyle,
 				width: 'auto',
 			},
-			tableRowStyle: {
+			tableRow: {
 				minHeight: 25,
-			},
-			textStyle: {
-				...theme.textStyle,
-			},
-			inputStyle: {
-				...theme.inputStyle,
 			},
 		};
 	});

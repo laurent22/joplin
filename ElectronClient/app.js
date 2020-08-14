@@ -108,6 +108,8 @@ class Application extends BaseApplication {
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 
+		KeymapService.instance().setMenuRefreshCallback(this.refreshMenu.bind(this));
+
 		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
 	}
@@ -1086,7 +1088,7 @@ class Application extends BaseApplication {
 		const keymapService = KeymapService.instance();
 
 		try {
-			await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
+			await keymapService.loadKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
 			bridge().showErrorMessageBox(err.message);
 		}

@@ -1,3 +1,5 @@
+import { KeyboardEvent } from 'react';
+
 const fs = require('fs-extra');
 const BaseService = require('lib/services/BaseService');
 const { shim } = require('lib/shim.js');
@@ -87,16 +89,20 @@ interface Keymap {
 export default class KeymapService extends BaseService {
 	private keymap: Keymap;
 	private defaultKeymap: KeymapItem[];
+	private platform: string;
+	private keymapPath: string;
+	private refreshMenu: Function;
 
 	constructor() {
 		super();
 
-		// Automatically initialized for the current platform
+		// Automatically initialize for the current platform
 		this.initialize();
 	}
 
 	initialize(platform: string = shim.platformName()) {
-		this.keysRegExp = keysRegExp;
+		this.platform = platform;
+
 		switch (platform) {
 		case 'darwin':
 			this.defaultKeymap = defaultKeymap.darwin;
@@ -116,7 +122,7 @@ export default class KeymapService extends BaseService {
 	}
 
 	async loadKeymap(keymapPath: string) {
-		this.keymapPath = keymapPath; // Used for saving changes later..
+		this.keymapPath = keymapPath; // For saving the changes later
 
 		if (await fs.exists(keymapPath)) {
 			this.logger().info(`Loading keymap: ${keymapPath}`);
@@ -128,6 +134,17 @@ export default class KeymapService extends BaseService {
 				const msg = err.message ? err.message : '';
 				throw new Error(`Failed to load keymap: ${keymapPath}\n${msg}`);
 			}
+		}
+	}
+
+	async saveKeymap() {
+		this.logger().info(`Saving keymap: ${this.keymapPath}`);
+
+		try {
+			const customKeymap = this.generateCustomKeymap();
+			await fs.writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2));
+		} catch (err) {
+			throw new Error(`Failed to save keymap: ${this.keymapPath}\n${err}`);
 		}
 	}
 
@@ -153,6 +170,13 @@ export default class KeymapService extends BaseService {
 		else this.setAccelerator(command, defaultItem.accelerator);
 	}
 
+	getDefaultAccelerator(command: string) {
+		const defaultItem = this.defaultKeymap.find((item => item.command === command));
+
+		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
+		else return defaultItem.accelerator;
+	}
+
 	setKeymap(customKeymap: KeymapItem[]) {
 		for (let i = 0; i < customKeymap.length; i++) {
 			const item = customKeymap[i];
@@ -168,9 +192,37 @@ export default class KeymapService extends BaseService {
 		try {
 			this.validateKeymap(); // Throws whenever there are duplicate Accelerators used in the keymap
 		} catch (err) {
-			this.initialize();
-			throw new Error(`Keymap configuration contains duplicates\n${err.message}`);
+			this.initialize(); // Fallback to default keymap configuration
+			throw new Error(`Keymap configuration contains duplicates. \n${err.message}`);
 		}
+	}
+
+	getKeymap() {
+		return Object.values(this.keymap);
+	}
+
+	getCommands() {
+		return Object.keys(this.keymap);
+	}
+
+	setMenuRefreshCallback(callback: Function) {
+		this.refreshMenu = callback;
+	}
+
+	triggerMenuRefresh() {
+		this.refreshMenu();
+	}
+
+	generateCustomKeymap() {
+		const customKeymap: KeymapItem[] = [];
+		this.defaultKeymap.forEach(({ command, accelerator }) => {
+			const currentAccelerator = this.getAccelerator(command);
+			if (this.getAccelerator(command) !== accelerator) {
+				customKeymap.push({ command, accelerator: currentAccelerator });
+			}
+		});
+
+		return customKeymap;
 	}
 
 	private validateKeymapItem(item: KeymapItem) {
@@ -186,7 +238,7 @@ export default class KeymapService extends BaseService {
 			try {
 				this.validateAccelerator(item.accelerator);
 			} catch (err) {
-				throw new Error(`"${item.accelerator}" is not a valid accelerator`);
+				throw new Error(`"${item.accelerator}" is not a valid accelerator.`);
 			}
 		}
 	}
@@ -200,8 +252,8 @@ export default class KeymapService extends BaseService {
 			if (usedAccelerators.has(itemAccelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
 				throw new Error(
-					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands\n` +
-					'You have to change the accelerator for any of above commands'
+					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands. \n` +
+					'You have to change the accelerator for any of above commands.'
 				);
 			} else if (itemAccelerator !== null) {
 				usedAccelerators.add(itemAccelerator);
@@ -214,7 +266,7 @@ export default class KeymapService extends BaseService {
 
 		const parts = accelerator.split('+');
 		const isValid = parts.every((part, index) => {
-			const isKey = this.keysRegExp.test(part);
+			const isKey = keysRegExp.test(part);
 			const isModifier = this.modifiersRegExp.test(part);
 
 			if (isKey) {
@@ -229,6 +281,60 @@ export default class KeymapService extends BaseService {
 		});
 
 		if (!isValid) throw new Error(`Accelerator invalid: ${accelerator}`);
+	}
+
+	domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
+		const parts = [];
+		const { key, ctrlKey, metaKey, altKey, shiftKey } = event;
+
+		// First, the modifiers
+		if (ctrlKey) parts.push('Ctrl');
+		switch (this.platform) {
+		case 'darwin':
+			if (altKey) parts.push('Option');
+			if (shiftKey) parts.push('Shift');
+			if (metaKey) parts.push('Cmd');
+			break;
+		default:
+			if (altKey) parts.push('Alt');
+			if (shiftKey) parts.push('Shift');
+		}
+
+		// Finally, the key
+		const electronKey = KeymapService.domToElectronKey(key);
+		if (electronKey) parts.push(electronKey);
+
+		return parts.join('+');
+	}
+
+	static domToElectronKey(domKey: string) {
+		let electronKey;
+
+		if (/^([a-z])$/.test(domKey)) {
+			electronKey = domKey.toUpperCase();
+		} else if (/^Arrow(Up|Down|Left|Right)|Audio(VolumeUp|VolumeDown|VolumeMute)$/.test(domKey)) {
+			electronKey = domKey.slice(5);
+		} else {
+			switch (domKey) {
+			case ' ':
+				electronKey = 'Space';
+				break;
+			case '+':
+				electronKey = 'Plus';
+				break;
+			case 'MediaTrackNext':
+				electronKey = 'MediaNextTrack';
+				break;
+			case 'MediaTrackPrevious':
+				electronKey = 'MediaPreviousTrack';
+				break;
+			default:
+				electronKey = domKey;
+			}
+		}
+
+		if (keysRegExp.test(electronKey)) return electronKey;
+		else return null;
 	}
 
 	static instance() {

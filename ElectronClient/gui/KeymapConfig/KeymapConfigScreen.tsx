@@ -1,38 +1,59 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styles_ from './styles';
 import { ShortcutRecorder } from './ShortcutRecorder';
-const CommandService = require('lib/services/CommandService').default;
+import CommandService from '../../lib/services/CommandService';
+import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
+
 const { _ } = require('lib/locale.js');
+const { shim } = require('lib/shim.js');
+
+const keymapService = KeymapService.instance();
+const commandService = CommandService.instance();
+
+interface CommandLabels {
+	[commandName: string]: string
+}
+
+// Some commands aren't actually registered in CommandService
+// These hardcoded labels are used for those commands instead
+const commandLabels: CommandLabels = {
+	quit: _('Quit'),
+	insertTemplate: _('Insert template'),
+	zoomActualSize: _('Actual Size'),
+	// Conditionally set the label because it's different in macOS and other platforms
+	config: _(shim.isMac() ? 'Preferences' : 'Options'),
+	gotoAnything: _('Goto Anything...'),
+	help: _('Website and documentation'),
+};
+// Obtain the rest of the labels
+keymapService.getCommands().forEach((commandName: string) => {
+	commandLabels[commandName] = commandLabels[commandName] || commandService.label(commandName);
+});
+
+interface CommandEditing {
+	[commandName: string]: boolean
+}
 
 export interface KeymapConfigScreenProps {
 	theme: number
 }
 
-interface KeymapItem {
-	label: string,
-	accelerator: string,
-	command: string,
-	isEditing: boolean,
-}
-
-export const KeymapConfigScreen = (props: KeymapConfigScreenProps) => {
-	const styles = styles_(props);
+export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
+	const styles = styles_(theme);
 
 	const [filter, setFilter] = useState('');
-	const [keymap, setKeymap] = useState<KeymapItem[]>(
-		() => KeymapService_instance_getCommands().map(commandName => {
-			return {
-				label: CommandService.instance().label(commandName),
-				accelerator: KeymapService_instance_getAccelerator(commandName),
-				command: commandName,
-				isEditing: false,
-			};
-		})
+	const [errorMessage, setErrorMessage] = useState('');
+	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
+	const [editing, setEditing] = useState<CommandEditing>(() =>
+		keymapService.getCommands().reduce((accumulator: CommandEditing, command: string) => {
+			accumulator[command] = false;
+			return accumulator;
+		}, {})
 	);
 
-	const setAccelerator = (commandName: string, accelerator: string) => {
+	const setCommandAccelerator = (commandName: string, accelerator: string) => {
 		setKeymap(prevKeymap => {
 			const newKeymap = [...prevKeymap];
 
@@ -41,87 +62,102 @@ export const KeymapConfigScreen = (props: KeymapConfigScreenProps) => {
 		});
 	};
 
-	const setIsEditing = (commandName: string, isEditing: boolean) => {
+	const resetCommandAccelerator = (commandName: string) => {
 		setKeymap(prevKeymap => {
 			const newKeymap = [...prevKeymap];
+			const defaultAccelerator = keymapService.getDefaultAccelerator(commandName);
 
-			newKeymap.find(item => item.command === commandName).isEditing = isEditing;
+			newKeymap.find(item => item.command === commandName).accelerator = defaultAccelerator;
 			return newKeymap;
 		});
 	};
 
-	const renderKeymapRow = (item: KeymapItem) => {
-		const handleClick = () => setIsEditing(item.command, true);
-		const cellContent = item.isEditing ?
-			<ShortcutRecorder
-				updateAccelerator={(accelerator: string) => setAccelerator(item.command, accelerator)}
-				updateIsEditing={(isEditing: boolean) => setIsEditing(item.command, isEditing)}
-				theme={props.theme}
-			/> : <div onClick={handleClick}>
-				{item.accelerator.length ? item.accelerator : _('Disabled')}
+	const toggleEditing = (commandName: string) => {
+		setEditing(prevEditing => {
+			const newEditing = { ...prevEditing };
+
+			newEditing[commandName] = !newEditing[commandName];
+			return newEditing;
+		});
+	};
+
+	useEffect(() => {
+		try {
+			// Synchronize the keymap of KeymapService with the current keymap state
+			keymapService.setKeymap(keymap);
+			keymapService.saveKeymap(); // Save changes to the disk
+
+			// TODO: Use events instead?
+			keymapService.triggerMenuRefresh();
+
+			setErrorMessage('');
+		} catch (err) {
+			const message = err.message || '';
+			setErrorMessage(message);
+		}
+	}, [keymap]);
+
+	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
+		const handleClick = () => toggleEditing(command);
+		const cellContent = editing[command]
+			? <ShortcutRecorder
+				setAccelerator={(accelerator: string) => setCommandAccelerator(command, accelerator)}
+				resetAccelerator={() => resetCommandAccelerator(command)}
+				toggleEditing={() => toggleEditing(command)}
+				theme={theme}
+			/>
+			: <div onClick={handleClick}>
+				{accelerator.length ? accelerator : _('Disabled')}
 			</div>;
 
 		return (
-			<tr key={item.command} style={styles.tableRowStyle}>
-				<td style={styles.tableCommandColumnStyle}>{item.label}</td>
-				<td style={styles.tableShortcutColumnStyle}>
+			<tr key={command} style={styles.tableRow}>
+				<td style={styles.tableCommandColumn}>{commandLabels[command]}</td>
+				<td style={styles.tableShortcutColumn}>
 					{cellContent}
 				</td>
 			</tr>
 		);
 	};
 
+	const renderErrorMessage = (errorMessage: string) => {
+		if (errorMessage.length) {
+			return (
+				<div style={styles.warning}>
+					<p style={styles.text}>
+						<span>{errorMessage}</span>
+					</p>
+				</div>
+			);
+		} else { return null; }
+	};
+
 	return (
-		<div style={styles.containerStyle}>
-			<div style={styles.topActionsStyle}>
-				<input
-					value={filter}
-					onChange={event => setFilter(event.target.value)}
-					placeholder={_('Search..')}
-					style={styles.filterInputStyle}
-				/>
+		<>
+			{renderErrorMessage(errorMessage)}
 
-				<button style={styles.inlineButtonStyle} onClick={() => console.log('Import')}>
-					{_('Import')}
-				</button>
-
-				<button style={styles.inlineButtonStyle} onClick={() => console.log('Export')}>
-					{_('Export')}
-				</button>
+			<div style={styles.container}>
+				<div style={styles.topActions}>
+					<input
+						value={filter}
+						onChange={event => setFilter(event.target.value)}
+						placeholder={_('Search...')}
+						style={styles.filterInput}
+					/>
+				</div>
+				<table style={styles.table}>
+					<thead>
+						<tr style={styles.tableRow}>
+							<th style={styles.tableCommandColumn}>{_('Command')}</th>
+							<th style={styles.tableShortcutColumn}>{_('Keyboard Shortcut')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{keymap.map(item => renderKeymapRow(item))}
+					</tbody>
+				</table>
 			</div>
-
-			<table style={styles.tableStyle}>
-				<thead>
-					<tr style={styles.tableRowStyle}>
-						<th style={styles.tableCommandColumnStyle}>{_('Command')}</th>
-						<th style={styles.tableShortcutColumnStyle}>{_('Keyboard Shortcut')}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{keymap.map(item => renderKeymapRow(item))}
-				</tbody>
-			</table>
-		</div>
+		</>
 	);
 };
 
-// Placeholder
-const KeymapService_instance_getAccelerator = (commandName: string) => {
-	switch (commandName) {
-	case 'textCopy':
-		return 'Ctrl+C';
-	case 'textCut':
-		return 'Ctrl+X';
-	case 'textPaste':
-		return 'Ctrl+V';
-	default:
-		throw new Error('Invalid command');
-	}
-};
-
-// Placeholder
-const KeymapService_instance_getCommands = () => [
-	'textCopy',
-	'textCut',
-	'textPaste',
-];
