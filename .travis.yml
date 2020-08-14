@@ -9,6 +9,7 @@ rvm: 2.3.3
 branches:
   only:
     - master
+    - dev
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 matrix:

@@ -71,7 +71,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = () => {
-			if (this.dialogbox.state.isVisible) {
+			if (this.dialogbox && this.dialogbox.state && this.dialogbox.state.isVisible) {
 				this.dialogbox.close();
 				return true;
 			}
