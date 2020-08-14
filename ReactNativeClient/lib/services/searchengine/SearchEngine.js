@@ -280,25 +280,25 @@ class SearchEngine {
 		const TITLE_COLUMN = 1;
 		const BODY_COLUMN = 2;
 		const columns = [TITLE_COLUMN, BODY_COLUMN];
-		const NUM_COLS = 3;
+		// const NUM_COLS = 12;
 
 		const numPhrases = generalInfo[0]; // p
-		// const numColumns = generalInfo[1]; // c
+		const numColumns = generalInfo[1]; // c
 		const numRows = generalInfo[2]; // n
 
 		const avgTitleTokens = generalInfo[4]; // a
 		const avgBodyTokens = generalInfo[5];
 		const avgTokens = [null, avgTitleTokens, avgBodyTokens]; // we only need cols 1 and 2
 
-		const numTitleTokens = matchInfo.map(m => m[7]); // l
-		const numBodyTokens = matchInfo.map(m => m[8]);
+		const numTitleTokens = matchInfo.map(m => m[4 + numColumns]); // l
+		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
 		const numTokens = [null, numTitleTokens, numBodyTokens];
 
-		const X = matchInfo.map(m => m.slice(9)); // x
+		const X = matchInfo.map(m => m.slice(27)); // x
 
-		const hitsThisRow = (array, c, p) => array[3 * (c + p * NUM_COLS) + 0];
+		const hitsThisRow = (array, c, p) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
-		const docsWithHits = (array, c, p) => array[3 * (c + p * NUM_COLS) + 2];
+		const docsWithHits = (array, c, p) => array[3 * (c + p * numColumns) + 2];
 
 
 		// if a term occurs in over half the documents in the collection
