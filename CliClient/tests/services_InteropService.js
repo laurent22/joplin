@@ -15,8 +15,6 @@ const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -425,6 +423,23 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled (1).md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
+	}));
+
+	it('should export a notebook as MD', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'testexportfolder' });
+		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
+		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+
+		const service = new InteropService();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+			sourceFolderIds: [folder1.id],
+		});
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
 	}));
 
 });

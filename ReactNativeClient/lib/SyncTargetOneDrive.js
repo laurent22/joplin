@@ -33,8 +33,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 		return SyncTargetOneDrive.id();
 	}
 
+	isTesting() {
+		const p = parameters();
+		return !!p.oneDriveTest;
+	}
+
 	oneDriveParameters() {
-		return parameters().oneDrive;
+		const p = parameters();
+		if (p.oneDriveTest) return p.oneDriveTest;
+		return p.oneDrive;
 	}
 
 	authRouteName() {
@@ -42,6 +49,10 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	api() {
+		if (this.isTesting()) {
+			return this.fileApi_.driver().api();
+		}
+
 		if (this.api_) return this.api_;
 
 		const isPublic = Setting.value('appType') != 'cli' && Setting.value('appType') != 'desktop';
@@ -71,6 +82,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
+		let context = Setting.value(`sync.${this.syncTargetId()}.context`);
+		context = context === '' ? null : JSON.parse(context);
+		let accountProperties = context ? context.accountProperties : null;
+		if (!accountProperties) {
+			accountProperties = await this.api_.execAccountPropertiesRequest();
+			context ? context.accountProperties = accountProperties : context = { accountProperties: accountProperties };
+			Setting.setValue(`sync.${this.syncTargetId()}.context`, JSON.stringify(context));
+		}
+		this.api_.setAccountProperties(accountProperties);
 		const appDir = await this.api().appDirectory();
 		const fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.syncTargetId());
@@ -79,8 +99,15 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initSynchronizer() {
-		if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
-		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+		try {
+			if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
+			return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+		} catch (error) {
+			BaseSyncTarget.dispatch({ type: 'SYNC_REPORT_UPDATE', report: { errors: [error] } });
+			throw error;
+		}
+
+
 	}
 }
 

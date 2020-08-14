@@ -2,7 +2,7 @@ const Resource = require('lib/models/Resource');
 const Setting = require('lib/models/Setting');
 const BaseService = require('lib/services/BaseService');
 const ResourceService = require('lib/services/ResourceService');
-const BaseSyncTarget = require('lib/BaseSyncTarget');
+const { Dirnames } = require('lib/services/synchronizer/utils/types');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
 const { shim } = require('lib/shim');
@@ -17,7 +17,6 @@ class ResourceFetcher extends BaseService {
 		this.logger_ = new Logger();
 		this.queue_ = [];
 		this.fetchingItems_ = {};
-		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.maxDownloads_ = 3;
 		this.addingResources_ = false;
 		this.eventEmitter_ = new EventEmitter();
@@ -159,7 +158,7 @@ class ResourceFetcher extends BaseService {
 		this.fetchingItems_[resourceId] = resource;
 
 		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
-		const remoteResourceContentPath = `${this.resourceDirName_}/${resource.id}`;
+		const remoteResourceContentPath = `${Dirnames.Resources}/${resource.id}`;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
 

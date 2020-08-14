@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const { stripMarkdown } = require('lib/markdownUtils');
 const Countable = require('countable');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 interface NoteContentPropertiesDialogProps {
 	theme: number,
 	text: string,
+	markupLanguage: number,
 	onClose: Function,
 }
 
@@ -18,6 +19,13 @@ interface TextPropertiesMap {
 
 interface KeyToLabelMap {
 	[key: string]: string;
+}
+
+let markupToHtml_:any = null;
+function markupToHtml() {
+	if (markupToHtml_) return markupToHtml_;
+	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+	return markupToHtml_;
 }
 
 function countElements(text:string, wordSetter:Function, characterSetter:Function, characterNoSpaceSetter:Function, lineSetter:Function) {
@@ -60,7 +68,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	}, [props.text]);
 
 	useEffect(() => {
-		const strippedText: string = stripMarkdown(props.text);
+		const strippedText: string = markupToHtml().stripMarkup(props.markupLanguage, props.text);
 		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
 	}, [props.text]);
 
@@ -77,7 +85,11 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	};
 
 	const strippedTextProperties: TextPropertiesMap = {
-		lines: strippedLines,
+		// The function stripMarkup() currently removes all new lines so we can't use the
+		// strippedLines property. Instead we simply use the lines property which should
+		// be a good approximation anyway.
+		// Also dummy check to silence TypeScript warning
+		lines: strippedLines === -5000 ? strippedLines : lines,
 		words: strippedWords,
 		characters: strippedCharacters,
 		charactersNoSpace: strippedCharactersNoSpace,

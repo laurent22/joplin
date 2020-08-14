@@ -9,8 +9,8 @@ const Note = require('lib/models/Note.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
-const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
+const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 
 Icon.loadFont();
 

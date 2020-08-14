@@ -2,7 +2,6 @@ const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
 const { setupLinkify } = require('lib/joplin-renderer');
-const removeMarkdown = require('remove-markdown');
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -117,10 +116,6 @@ const markdownUtils = {
 		const lines = body.trim().split('\n');
 		const title = lines[0].trim();
 		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
-	},
-
-	stripMarkdown(text) {
-		return removeMarkdown(text, { gfm: false });
 	},
 };
 

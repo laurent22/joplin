@@ -48,7 +48,7 @@ function filterLogs(logs, platform) {
 	const revertedLogs = [];
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	let updatedTranslations = false;
+	// let updatedTranslations = false;
 
 	for (const log of logs) {
 
@@ -82,7 +82,7 @@ function filterLogs(logs, platform) {
 		// don't know country and language codes. So we catch all these and
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation: Update .*?\.po/)) {
-			updatedTranslations = true;
+			// updatedTranslations = true;
 			addIt = false;
 		}
 

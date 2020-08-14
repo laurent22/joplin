@@ -89,7 +89,7 @@ class FileApiDriverWebDav {
 
 	async delta(path, options) {
 		const getDirStats = async path => {
-			const result = await this.list(path);
+			const result = await this.list(path, { includeDirs: false });
 			return result.items;
 		};
 
@@ -130,13 +130,25 @@ class FileApiDriverWebDav {
 	}
 
 	async list(path) {
-		// See mkdir() call for explanation
-		if (!path.endsWith('/')) path = `${path}/`;
-
-		const result = await this.api().execPropFind(path, 1, ['d:getlastmodified', 'd:resourcetype']);
+		// See mkdir() call for explanation about trailing slash
+		const result = await this.api().execPropFind(!path.endsWith('/') ? `${path}/` : path, 1, ['d:getlastmodified', 'd:resourcetype']);
 
 		const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
-		const stats = this.statsFromResources_(resources);
+
+		const stats = this.statsFromResources_(resources).map((stat) => {
+			if (path && stat.path.indexOf(`${path}/`) === 0) {
+				const s = stat.path.substr(path.length + 1);
+				if (s.split('/').length === 1) {
+					return {
+						...stat,
+						path: stat.path.substr(path.length + 1),
+					};
+				}
+			}
+			return stat;
+		}).filter((stat) => {
+			return stat.path !== rtrimSlashes(path);
+		});
 
 		return {
 			items: stats,

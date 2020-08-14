@@ -41,7 +41,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 	const [toolbarItems, setToolbarItems] = useState([]);
 	const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
 	const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
-	const folderTitle = selectedNoteFolder ? selectedNoteFolder.title : '';
+	const folderTitle = selectedNoteFolder && selectedNoteFolder.title ? selectedNoteFolder.title : '';
 
 	const cmdService = CommandService.instance();
 
@@ -59,6 +59,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 		if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
 			output.push({
 				title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
+				tooltip: folderTitle,
 				iconName: 'fa-book',
 				onClick: () => {
 					props.dispatch({

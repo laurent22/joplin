@@ -16,7 +16,7 @@ const VersionInfo = require('react-native-version-info').default;
 const { ReportService } = require('lib/services/report.js');
 const { time } = require('lib/time-utils');
 const { shim } = require('lib/shim');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const RNFS = require('react-native-fs');
 const checkPermissions = require('lib/checkPermissions.js').default;
 
