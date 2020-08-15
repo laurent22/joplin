@@ -155,7 +155,10 @@ export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
 						</tr>
 					</thead>
 					<tbody>
-						{keymap.map(item => renderKeymapRow(item))}
+						{keymap.filter(({ command }) => {
+							const filterLowerCase = filter.toLowerCase();
+							return (command.toLowerCase().includes(filterLowerCase) || commandLabels[command].toLowerCase().includes(filterLowerCase));
+						}).map(item => renderKeymapRow(item))}
 					</tbody>
 				</table>
 			</div>
