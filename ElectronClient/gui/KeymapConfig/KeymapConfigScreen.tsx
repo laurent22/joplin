@@ -26,6 +26,8 @@ const commandLabels: CommandLabels = {
 	config: _(shim.isMac() ? 'Preferences' : 'Options'),
 	gotoAnything: _('Goto Anything...'),
 	help: _('Website and documentation'),
+	hideApp: _('Hide Joplin'),
+	closeWindow: _('Close Window'),
 };
 // Obtain the rest of the labels
 keymapService.getCommands().forEach((commandName: string) => {
