@@ -109,7 +109,7 @@ export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
 				theme={theme}
 			/>
 			: <div onClick={handleClick}>
-				{accelerator.length ? accelerator : _('Disabled')}
+				{accelerator || _('Disabled')}
 			</div>;
 
 		return (

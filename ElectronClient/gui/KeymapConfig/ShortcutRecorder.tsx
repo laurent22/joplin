@@ -38,7 +38,7 @@ export const ShortcutRecorder = ({ setAccelerator, resetAccelerator, toggleEditi
 	};
 
 	const handleSave = () => {
-		setAccelerator(newAccelerator);
+		setAccelerator(newAccelerator.length ? newAccelerator : null);
 		toggleEditing();
 	};
 
