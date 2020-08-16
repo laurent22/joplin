@@ -3,6 +3,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const { _ } = require('lib/locale');
+const { UNTAGGED_NOTES_FILTER_ID } = require('../reserved-ids');
 
 class Tag extends BaseItem {
 	static tableName() {
@@ -14,7 +15,13 @@ class Tag extends BaseItem {
 	}
 
 	static async noteIds(tagId) {
-		const rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
+		let rows = {};
+		if (tagId === UNTAGGED_NOTES_FILTER_ID) {
+			rows = await this.db().selectAll('SELECT notes.id note_id FROM notes LEFT JOIN note_tags ON note_tags.note_id = notes.id WHERE note_tags.note_id IS NULL');
+		} else {
+			rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
+		}
+
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].note_id);

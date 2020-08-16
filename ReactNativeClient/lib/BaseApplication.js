@@ -43,6 +43,7 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
+const { UNTAGGED_NOTES_FILTER_ID } = require('./reserved-ids');
 
 class BaseApplication {
 	constructor() {
@@ -284,7 +285,11 @@ class BaseApplication {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
-				notes = await Note.previews(parentId, options);
+				if (parentId === UNTAGGED_NOTES_FILTER_ID) {
+					notes = await Tag.notes(parentId, options);
+				} else {
+					notes = await Note.previews(parentId, options);
+				}
 			}
 		}
 

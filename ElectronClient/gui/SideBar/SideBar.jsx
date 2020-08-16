@@ -15,7 +15,8 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { ALL_NOTES_FILTER_ID, UNTAGGED_NOTES_FILTER_ID } = require('lib/reserved-ids');
+
 
 const commands = [
 	require('./commands/focusElementSideBar'),
@@ -338,6 +339,13 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
+	untaggedItem_click() {
+		this.props.dispatch({
+			type: 'SMART_FILTER_SELECT',
+			id: UNTAGGED_NOTES_FILTER_ID,
+		});
+	}
+
 	// async sync_click() {
 	// 	await shared.synchronize_press(this);
 	// }
@@ -441,6 +449,24 @@ class SideBarComponent extends React.Component {
 				}}
 			>
 				{Tag.displayTitle(tag)} {noteCount}
+			</a>
+		);
+	}
+
+	untaggedItem(selected) {
+		let style = Object.assign({}, this.style().tagItem);
+		if (selected) style = Object.assign(style, this.style().listItemSelected);
+
+		return (
+			<a
+				className="list-item"
+				href="#"
+				style={style}
+				onClick={() => {
+					this.untaggedItem_click();
+				}}
+			>
+				(Untagged)
 			</a>
 		);
 	}
@@ -685,17 +711,17 @@ class SideBarComponent extends React.Component {
 			})
 		);
 
-		if (this.props.tags.length) {
-			const result = shared.renderTags(this.props, this.tagItem.bind(this));
-			const tagItems = result.items;
-			this.tagItemsOrder_ = result.order;
+		const untaggedItem = shared.renderUntagged(this.props, this.untaggedItem.bind(this));
+		const result = shared.renderTags(this.props, this.tagItem.bind(this));
+		const tagItems = result.items;
+		this.tagItemsOrder_ = result.order;
 
-			items.push(
-				<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
-					{tagItems}
-				</div>
-			);
-		}
+		items.push(
+			<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
+				{untaggedItem}
+				{tagItems}
+			</div>
+		);
 
 		let decryptionReportText = '';
 		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {

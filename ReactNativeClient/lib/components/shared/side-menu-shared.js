@@ -1,5 +1,6 @@
 const Folder = require('lib/models/Folder');
 const BaseModel = require('lib/BaseModel');
+const { UNTAGGED_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 const shared = {};
 
@@ -64,6 +65,10 @@ shared.renderTags = function(props, renderItem) {
 		items: tagItems,
 		order: order,
 	};
+};
+
+shared.renderUntagged = function(props, renderItem) {
+	return renderItem(props.selectedSmartFilterId === UNTAGGED_NOTES_FILTER_ID && props.notesParentType == 'SmartFilter');
 };
 
 // shared.renderSearches = function(props, renderItem) {
