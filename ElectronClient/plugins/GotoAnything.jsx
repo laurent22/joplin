@@ -178,8 +178,10 @@ class Dialog extends React.PureComponent {
 	}
 
 	keywords(searchQuery) {
-		const parsedQuery = SearchEngine.instance().parseQuery(searchQuery);
-		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+		console.log(`searchQuery=${searchQuery}`);
+		return this.props.highlightedWords;
+		// const parsedQuery = SearchEngine.instance().parseQuery(searchQuery);
+		// return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
 	markupToHtml() {
@@ -455,6 +457,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		theme: state.settings.theme,
 		showCompletedTodos: state.settings.showCompletedTodos,
+		highlightedWords: state.highlightedWords,
 	};
 };
 

@@ -274,6 +274,7 @@ class BaseApplication {
 		});
 
 		let notes = [];
+		let highlightedWords = [];
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
@@ -283,9 +284,23 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
+				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+				console.log(highlightedWords);
+				// for (let key in parsedQuery.terms) {
+				// 	highlightedWords.push(...parsedQuery.terms[key].map(x => x.value));
+				// }
+				// console.log(highlightedWords);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
 				notes = await Note.previews(parentId, options);
 			}
+		}
+
+		if (highlightedWords.length) {
+			this.store().dispatch({
+				type: 'SET_HIGHLIGHTED',
+				words: highlightedWords,
+			});
 		}
 
 		this.store().dispatch({
@@ -701,6 +716,12 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if (Setting.value('db.fuzzySearchEnabled') === -1) {
+			const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
+			Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
+		}
+
+
 		if (Setting.value('encryption.shouldReencrypt') < 0) {
 			// We suggest re-encryption if the user has at least one notebook
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
@@ -753,6 +774,9 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
+
+
+
 		return argv;
 	}
 }

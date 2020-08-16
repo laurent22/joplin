@@ -10,7 +10,6 @@ const makeTerm = (name: string, value: string): Term => {
 	return { name: name, value: value, negated: false };
 };
 
-
 const quote = (s : string) => {
 	const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
 

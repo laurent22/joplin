@@ -544,6 +544,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			</View>
 		);
 
+		// settingComps.push(
+		// 	<View key="version_info_fuzzy" style={this.styles().settingContainer}>
+		// 		<Text style={this.styles().settingText}>{_('Fuzzy Search enabled: %d', this.props.settings['db.fuzzySearchEnabled'])}</Text>
+		// 	</View>
+		// );
+
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />

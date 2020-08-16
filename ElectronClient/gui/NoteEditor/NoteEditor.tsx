@@ -366,6 +366,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
+	// searchMarkers.keywords = props.highlightedWords;
 
 	const editorProps:NoteBodyEditorProps = {
 		ref: editorRef,
@@ -392,9 +393,12 @@ function NoteEditor(props: NoteEditorProps) {
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
+		highlightedWords: props.highlightedWords,
 	};
 
 	let editor = null;
+
+	// console.log(`Editor is ${props.bodyEditor}`);
 
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
@@ -531,6 +535,7 @@ const mapStateToProps = (state: any) => {
 		customCss: state.customCss,
 		noteVisiblePanes: state.noteVisiblePanes,
 		watchedResources: state.watchedResources,
+		highlightedWords: state.highlightedWords,
 	};
 };
 

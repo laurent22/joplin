@@ -80,8 +80,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const [webviewReady, setWebviewReady] = useState(false);
 
-	const previousRenderedBody = usePrevious(renderedBody);
-	const previousSearchMarkers = usePrevious(props.searchMarkers);
+	// const previousRenderedBody = usePrevious(renderedBody);
+	// const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
 	const editorRef = useRef(null);
@@ -534,10 +534,21 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-		}
-	}, [props.searchMarkers, renderedBody]);
+		// console.log(`highlightedWords are`);
+		// console.log(props.highlightedWords);
+
+		// console.log(`keywords are`);
+		// console.log(props.searchMarkers.keywords)
+
+		// const dummy = [ {type: "text", value: "naveen", scriptType: "en"}
+		// ,{type: "text", value: "maven", scriptType: "en"}
+		// ,{type: "text", value: "novem", scriptType: "en"}]
+		// if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
+		// 	console.log("Update!!!!");
+		webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords.length ? props.searchMarkers.keywords : props.highlightedWords, props.searchMarkers.options);
+		// }
+		// [props.searchMarkers, renderedBody]
+	});
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };

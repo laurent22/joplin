@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-const BaseModel = require('lib/BaseModel.js');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
+// const BaseModel = require('lib/BaseModel.js');
+// const SearchEngine = require('lib/services/searchengine/SearchEngine');
 
 interface SearchMarkersOptions {
 	searchTimestamp: number,
@@ -25,17 +25,18 @@ function defaultSearchMarkers():SearchMarkers {
 	};
 }
 
+
 export default function useSearchMarkers(showLocalSearch:boolean, localSearchMarkerOptions:Function, searches:any[], selectedSearchId:string) {
 	return useMemo(():SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
 
 		const output = defaultSearchMarkers();
 
-		const search = BaseModel.byId(searches, selectedSearchId);
-		if (search) {
-			const parsedQuery = SearchEngine.instance().parseQuery(search.query_pattern);
-			output.keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
-		}
+		// const search = BaseModel.byId(searches, selectedSearchId);
+		// if (search) {
+		// 	const parsedQuery = SearchEngine.instance().parseQuery_OLD(search.query_pattern);
+		// 	output.keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+		// }
 
 		return output;
 	}, [showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);

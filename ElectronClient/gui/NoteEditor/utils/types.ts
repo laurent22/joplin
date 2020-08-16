@@ -23,6 +23,7 @@ export interface NoteEditorProps {
 	customCss: string,
 	noteVisiblePanes: string[],
 	watchedResources: any,
+	highlightedWords: any[],
 }
 
 export interface NoteBodyEditorProps {
@@ -50,6 +51,8 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos,
 	locale: string,
 	onDrop: Function,
+	highlightedWords: any[],
+
 }
 
 export interface FormNote {

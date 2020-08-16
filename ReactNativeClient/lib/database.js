@@ -97,6 +97,11 @@ class Database {
 		return this.tryCall('selectOne', sql, params);
 	}
 
+	async loadExtension(path) {
+		const result = await this.driver()['loadExtension'](path);
+		return result;
+	}
+
 	async selectAll(sql, params = null) {
 		return this.tryCall('selectAll', sql, params);
 	}

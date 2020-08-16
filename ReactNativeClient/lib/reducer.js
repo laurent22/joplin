@@ -12,6 +12,7 @@ const defaultState = {
 	masterKeys: [],
 	notLoadedMasterKeys: [],
 	searches: [],
+	highlightedWords: [],
 	selectedNoteIds: [],
 	selectedNoteHash: '',
 	selectedFolderId: null,
@@ -945,6 +946,9 @@ const reducer = (state = defaultState, action) => {
 				newState.notesParentType = 'Search';
 			}
 			newState.selectedNoteIds = [];
+			break;
+		case 'SET_HIGHLIGHTED':
+			newState = Object.assign({}, state, { highlightedWords: action.words });
 			break;
 
 		case 'APP_STATE_SET':
