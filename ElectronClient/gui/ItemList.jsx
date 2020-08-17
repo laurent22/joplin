@@ -69,7 +69,7 @@ class ItemList extends React.Component {
 		} else {
 			scrollTop = this.props.itemHeight * itemIndex - (this.visibleItemCount() - 1) * this.props.itemHeight;
 		}
-		
+
 		if (scrollTop < 0) scrollTop = 0;
 
 		this.scrollTop_ = scrollTop;
