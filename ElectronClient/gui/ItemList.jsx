@@ -36,6 +36,10 @@ class ItemList extends React.Component {
 		return this.listRef.current ? this.listRef.current.offsetTop : 0;
 	}
 
+	offsetScroll() {
+		return this.scrollTop_;
+	}
+
 	UNSAFE_componentWillMount() {
 		this.updateStateItemIndexes();
 	}
@@ -57,6 +61,8 @@ class ItemList extends React.Component {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
 		const bottom = Math.max(0, this.state.bottomItemIndex);
 
+		// console.log('this.state.topItemIndex', this.state.topItemIndex)
+
 		if (itemIndex >= top && itemIndex <= bottom) return;
 
 		let scrollTop = 0;
@@ -65,6 +71,8 @@ class ItemList extends React.Component {
 		} else {
 			scrollTop = this.props.itemHeight * itemIndex - (this.visibleItemCount() - 1) * this.props.itemHeight;
 		}
+
+		// console.log('scrollTop', scrollTop);
 
 		if (scrollTop < 0) scrollTop = 0;
 
