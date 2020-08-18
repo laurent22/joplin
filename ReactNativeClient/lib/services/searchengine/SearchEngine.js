@@ -252,6 +252,84 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
+
+
+	calculateWeightBM25_(rows) {
+		// https://www.sqlite.org/fts3.html#matchinfo
+		// pcnalx are the arguments passed to matchinfo
+		// p - The number of matchable phrases in the query.
+		// c - The number of user defined columns in the FTS table
+		// n - The number of rows in the FTS4 table.
+		// a - avg number of tokens in the text values stored in the column.
+		// l - For each column, the length of the value stored in the current
+		// row of the FTS4 table, in tokens.
+		// x - For each distinct combination of a phrase and table column, the
+		// following three values:
+		// hits_this_row
+		// hits_all_rows
+		// docs_with_hits
+
+		if (rows.length === 0) return;
+
+		const matchInfo = rows.map(row => new Uint32Array(row.matchinfo.buffer));
+		const generalInfo = matchInfo[0];
+
+		const K1 = 1.2;
+		const B = 0.75;
+
+		const TITLE_COLUMN = 1;
+		const BODY_COLUMN = 2;
+		const columns = [TITLE_COLUMN, BODY_COLUMN];
+		// const NUM_COLS = 12;
+
+		const numPhrases = generalInfo[0]; // p
+		const numColumns = generalInfo[1]; // c
+		const numRows = generalInfo[2]; // n
+
+		const avgTitleTokens = generalInfo[4]; // a
+		const avgBodyTokens = generalInfo[5];
+		const avgTokens = [null, avgTitleTokens, avgBodyTokens]; // we only need cols 1 and 2
+
+		const numTitleTokens = matchInfo.map(m => m[4 + numColumns]); // l
+		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
+		const numTokens = [null, numTitleTokens, numBodyTokens];
+
+		const X = matchInfo.map(m => m.slice(27)); // x
+
+		const hitsThisRow = (array, c, p) => array[3 * (c + p * numColumns) + 0];
+		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
+		const docsWithHits = (array, c, p) => array[3 * (c + p * numColumns) + 2];
+
+
+		// if a term occurs in over half the documents in the collection
+		// then this model gives a negative term weight, which is presumably undesirable.
+		// But, assuming the use of a stop list, this normally doesn't happen,
+		// and the value for each summand can be given a floor of 0.
+		const IDF = (n, N) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+
+		// https://en.wikipedia.org/wiki/Okapi_BM25
+		const BM25 = (idf, freq, numTokens, avgTokens) => {
+			if (avgTokens === 0) {
+				return 0; // To prevent division by zero
+			}
+			return idf * (freq * (K1 + 1)) / (freq + K1 * (1 - B + B * (numTokens / avgTokens)));
+		};
+
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			row.weight = 0;
+			for (let j = 0; j < numPhrases; j++) {
+				columns.forEach(column => {
+					const rowsWithHits = docsWithHits(X[i], column, j);
+					const frequencyHits = hitsThisRow(X[i], column, j);
+
+					const idf = IDF(rowsWithHits, numRows);
+					row.weight += BM25(idf, frequencyHits, numTokens[column][i], avgTokens[column]);
+				});
+			}
+		}
+	}
+
 	processBasicSearchResults_(rows, parsedQuery) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => term.valueRegex || term.value) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
@@ -274,10 +352,10 @@ class SearchEngine {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
+			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 				const offsets = row.offsets.split(' ').map(o => Number(o));
-				row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
 		}
