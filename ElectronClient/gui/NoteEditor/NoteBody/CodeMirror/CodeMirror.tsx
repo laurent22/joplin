@@ -544,6 +544,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorRef.current) return;
 
+		// Anytime the user toggles the visible panes AND the editor is visible as a result
+		// we should focus the editor
+		// The intuition is that a panel toggle (with editor in view) is the equivalent of
+		// an editor interaction so users should expect the editor to be focused
+		if (props.visiblePanes.indexOf('editor') >= 0) {
+			editorRef.current.focus();
+		}
+	}, [props.visiblePanes]);
+
+	useEffect(() => {
+		if (!editorRef.current) return;
+
 		// Need to let codemirror know that it's container's size has changed so that it can
 		// re-compute anything it needs to. This ensures the cursor (and anything that is
 		// based on window size will be correct
