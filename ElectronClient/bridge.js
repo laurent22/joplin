@@ -1,6 +1,7 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
+const { shim } = require('lib/shim.js');
 
 class Bridge {
 
@@ -187,7 +188,16 @@ class Bridge {
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
 		const { app } = require('electron');
-		app.relaunch();
+
+		if (shim.isPortable()) {
+			const options = {
+				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
+			};
+			app.relaunch(options);
+		} else {
+			app.relaunch();
+		}
+
 		app.exit();
 	}
 

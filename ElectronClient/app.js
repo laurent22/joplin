@@ -1237,9 +1237,14 @@ class Application extends BaseApplication {
 		this.updateMenuItemStates();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		window.revisionService = RevisionService.instance();
-		window.migrationService = MigrationService.instance();
-		window.decryptionWorker = DecryptionWorker.instance();
+		window.joplin = () => {
+			return {
+				revisionService: RevisionService.instance(),
+				migrationService: MigrationService.instance(),
+				decryptionWorker: DecryptionWorker.instance(),
+				bridge: bridge(),
+			};
+		};
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 	}
