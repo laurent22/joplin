@@ -42,6 +42,11 @@ class SearchEngineUtils {
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
 
+
+		// Note that when the search engine index is somehow corrupted, it might contain
+		// references to notes that don't exist. Not clear how it can happen, but anyway
+		// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
+		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 		if (noteIds.length !== notes.length) {
 			// remove null objects
 			return sortedNotes.filter(n => n);

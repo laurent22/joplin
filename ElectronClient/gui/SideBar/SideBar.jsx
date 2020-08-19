@@ -255,7 +255,7 @@ class SideBarComponent extends React.Component {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', null, { parentId: itemId }))
+				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', { parentId: itemId }))
 			);
 		}
 
@@ -284,7 +284,7 @@ class SideBarComponent extends React.Component {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-			menu.append(new MenuItem(CommandService.instance().commandToMenuItem('renameFolder', null, { folderId: itemId })));
+			menu.append(new MenuItem(CommandService.instance().commandToMenuItem('renameFolder', { folderId: itemId })));
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
@@ -317,7 +317,7 @@ class SideBarComponent extends React.Component {
 
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
-				CommandService.instance().commandToMenuItem('renameTag', null, { tagId: itemId })
+				CommandService.instance().commandToMenuItem('renameTag', { tagId: itemId })
 			));
 		}
 
