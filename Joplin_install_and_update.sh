@@ -4,11 +4,11 @@ set -e
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------
-COLOR_RED=`tput setaf 1`
-COLOR_GREEN=`tput setaf 2`
-COLOR_YELLOW=`tput setaf 3`
-COLOR_BLUE=`tput setaf 4`
-COLOR_RESET=`tput sgr0`
+COLOR_RED=$(tput setaf 1)
+COLOR_GREEN=$(tput setaf 2)
+COLOR_YELLOW=$(tput setaf 3)
+COLOR_BLUE=$(tput setaf 4)
+COLOR_RESET=$(tput sgr0)
 SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
@@ -43,7 +43,7 @@ showHelp() {
     print "\t" "--silent" "\t" "Don't print any output"
     print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
 
-    if [[ ! -z $1 ]]; then
+    if [[ -n $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
     else
         exit 0
@@ -125,21 +125,21 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
-wget -qnv --show-progress -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
+wget -qnv --show-progress -O "${TEMP_DIR}"/Joplin.AppImage "https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage"
+wget -qnv --show-progress -O "${TEMP_DIR}"/joplin.png https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
 rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
 
-# Creates the folder where the binary will be stored
+# Create the folder where the binary will be stored
 mkdir -p ~/.joplin/
 
 # Download the latest version
-mv ${TEMP_DIR}/Joplin.AppImage ~/.joplin/Joplin.AppImage
+mv "${TEMP_DIR}"/Joplin.AppImage ~/.joplin/Joplin.AppImage
 
-# Gives execution privileges
+# Give execution privileges
 chmod +x ~/.joplin/Joplin.AppImage
 
 print "${COLOR_GREEN}OK${COLOR_RESET}"
@@ -147,7 +147,7 @@ print "${COLOR_GREEN}OK${COLOR_RESET}"
 #-----------------------------------------------------
 print 'Installing icon...'
 mkdir -p ~/.local/share/icons/hicolor/512x512/apps
-mv ${TEMP_DIR}/joplin.png ~/.local/share/icons/hicolor/512x512/apps/joplin.png
+mv "${TEMP_DIR}"/joplin.png ~/.local/share/icons/hicolor/512x512/apps/joplin.png
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
 # Detect desktop environment
@@ -166,9 +166,9 @@ then
     : "${TMPDIR:=$TEMP_DIR}"
     # This command extracts to squashfs-root by default and can't be changed...
     # So we run it in the tmp directory and clean up after ourselves
-    (cd $TMPDIR && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
-    APPIMAGE_VERSION=$(grep "^X-AppImage-Version=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d "=" -f 2)
-    rm -rf $TMPDIR/squashfs-root
+    (cd "$TMPDIR" && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
+    APPIMAGE_VERSION=$(grep "^X-AppImage-Version=" "$TMPDIR"/squashfs-root/joplin.desktop | head -n 1 | cut -d '=' -f 2)
+    rm -rf "$TMPDIR"/squashfs-root
     # Only delete the desktop file if it will be replaced
     rm -f ~/.local/share/applications/appimagekit-joplin.desktop
 
@@ -176,7 +176,7 @@ then
     mkdir -p ~/.local/share/applications
     echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
-    [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
+    [[ $(command -v update-desktop-database) ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
     print "${COLOR_GREEN}OK${COLOR_RESET}"
 else
     print "${COLOR_RED}NOT DONE, unknown desktop '${DESKTOP}'${COLOR_RESET}"
@@ -186,11 +186,11 @@ fi
 # FINISH INSTALLATION
 #-----------------------------------------------------
 
-# Informs the user that it has been installed
+# Inform the user that it has been installed
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo $RELEASE_VERSION > ~/.joplin/VERSION
+echo "$RELEASE_VERSION" > ~/.joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
@@ -200,5 +200,5 @@ fi
 
 #-----------------------------------------------------
 print "Cleaning up..."
-rm -rf $TEMP_DIR
+rm -rf "$TEMP_DIR"
 print "${COLOR_GREEN}OK${COLOR_RESET}"
