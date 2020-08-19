@@ -76,7 +76,7 @@
       "target": "AppImage",
       "extraFiles": [
         {
-          "from": "build/spellfix.so",
+          "from": "lib/sql-extensions/spellfix.so",
           "to": "usr/lib/spellfix.so"
         }
       ]

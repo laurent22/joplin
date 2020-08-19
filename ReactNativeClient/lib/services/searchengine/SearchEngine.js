@@ -415,7 +415,7 @@ class SearchEngine {
 		return await Promise.all(fuzzyMatches);
 	}
 
-	async parseQuery(query, fuzzy=false) {
+	async parseQuery(query, fuzzy = false) {
 		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
 		let allTerms = [];
@@ -436,26 +436,23 @@ class SearchEngine {
 			const fuzzyText = await this.fuzzifier(text);
 			const fuzzyTitle = await this.fuzzifier(title);
 			const fuzzyBody = await this.fuzzifier(body);
-	
+
 			const mergedFuzzyText = [].concat.apply([], fuzzyText).map(x => x.word);
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
 			const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
-	
+
 			console.log(`fuzzyText matches are ${mergedFuzzyText}`);
-	
 			console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
-	
 			console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
-	
+
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });
 			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x, negated: false }; });
-	
+
 			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
 
 			terms = { _: mergedFuzzyText, 'title': mergedFuzzyTitle, 'body': mergedFuzzyBody };
-		}
-		else {
+		} else {
 			terms = { _: text, 'title': title, 'body': body };
 		}
 
@@ -463,7 +460,6 @@ class SearchEngine {
 		// - Convert wildcards to regex
 		// - Remove columns with no results
 		// - Add count of terms
-
 		let termCount = 0;
 		const keys = [];
 		for (const col in terms) {
