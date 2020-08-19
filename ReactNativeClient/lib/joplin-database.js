@@ -904,12 +904,12 @@ class JoplinDatabase extends Database {
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
 
-		console.log('Trying to load spellfix');
+		// console.log('Trying to load spellfix');
 
 		// IF PROD
 		try {
 			await this.loadExtension(`${process.env.LD_LIBRARY_PATH.slice(0, -1)}/spellfix`);
-			console.log('Spellfix extension loaded for dist!');
+			// console.log('Spellfix extension loaded for dist!');
 		} catch (error) {
 			// console.info(error);
 		}
@@ -917,14 +917,14 @@ class JoplinDatabase extends Database {
 		// IF DEV
 		try {
 			await this.loadExtension('./lib/sql-extensions/spellfix');
-			console.log('Spellfix extension loaded for dev!');
+			// console.log('Spellfix extension loaded for dev!');
 		} catch (error) {
 			// console.info(error);
 		}
 
 		try {
 			await this.loadExtension('./build/lib/sql-extensions/spellfix');
-			console.log('Spellfix extension loaded for dev (CLI)!');
+			// console.log('Spellfix extension loaded for dev (CLI)!');
 		} catch (error) {
 			// console.info(error);
 		}

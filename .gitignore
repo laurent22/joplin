@@ -50,6 +50,7 @@ joplin-webclipper-source.zip
 Tools/commit_hook.txt
 .vscode/*
 *.map
+ReactNativeClient/lib/sql-extensions/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js

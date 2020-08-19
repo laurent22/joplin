@@ -155,13 +155,13 @@ class SearchEngine {
 
 				if (!changes.length) {
 					if (Setting.value('db.fuzzySearchEnabled') === 1) {
-						console.log('---------------START----------------');
+						// console.log('---------------START----------------');
 
 						queries.push({ sql: 'DELETE FROM notes_spellfix' });
 						queries.push({ sql: 'INSERT INTO notes_spellfix(word,rank) SELECT term, documents FROM search_aux WHERE col=\'*\'' });
 						await this.db().transactionExecBatch(queries);
 
-						console.log('---------------END----------------');
+						// console.log('---------------END----------------');
 					}
 					break;
 				}
@@ -441,9 +441,9 @@ class SearchEngine {
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
 			const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
 
-			console.log(`fuzzyText matches are ${mergedFuzzyText}`);
-			console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
-			console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
+			// console.log(`fuzzyText matches are ${mergedFuzzyText}`);
+			// console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
+			// console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
 
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });

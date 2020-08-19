@@ -286,8 +286,8 @@ class BaseApplication {
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, { fuzzy: search.fuzzy });
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern, search.fuzzy);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
-				console.log('Word to highlight are: ');
-				console.log(highlightedWords);
+				// console.log('Word to highlight are: ');
+				// console.log(highlightedWords);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
 				notes = await Note.previews(parentId, options);
 			}
