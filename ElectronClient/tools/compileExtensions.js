@@ -25,7 +25,7 @@ async function main() {
 	// 3. Move file to proper locations.
 	//
 
-	await compileSpellfix();
+	// await compileSpellfix();
 
 }
 

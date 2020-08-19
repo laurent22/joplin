@@ -16,6 +16,7 @@ class HeaderComponent extends React.Component {
 			searchQuery: '',
 			showSearchUsageLink: false,
 			showButtonLabels: true,
+			fuzzy: false,
 		};
 
 		for (const command of commands) {
@@ -28,7 +29,7 @@ class HeaderComponent extends React.Component {
 
 		const triggerOnQuery = query => {
 			clearTimeout(this.scheduleSearchChangeEventIid_);
-			if (this.searchOnQuery_) this.searchOnQuery_(query);
+			if (this.searchOnQuery_) this.searchOnQuery_(query, this.state.fuzzy);
 			this.scheduleSearchChangeEventIid_ = null;
 		};
 
@@ -78,6 +79,13 @@ class HeaderComponent extends React.Component {
 
 		this.searchUsageLink_click = () => {
 			bridge().openExternal('https://joplinapp.org/#searching');
+		};
+
+		this.toggleFuzzyValue = () => {
+			// console.log(`Current value is ${!this.state.fuzzy}`);
+			this.setState((prevState) => ({
+				fuzzy: !prevState.fuzzy,
+			}));
 		};
 	}
 
@@ -247,6 +255,27 @@ class HeaderComponent extends React.Component {
 			</a>
 		);
 
+
+		const fuzzyToggle = (
+			<div key={key + state.fuzzy.toString()}>
+				<div>
+					<input
+						id={`fuzzy_checkbox_${key}`}
+						type="checkbox"
+						checked={state.fuzzy}
+						onChange={this.toggleFuzzyValue}
+					/>
+					<label
+						onClick={this.toggleFuzzyValue}
+					// style={checkboxLabelStyle}
+					// htmlFor={`setting_checkbox_${key}`}
+					>
+						{'Fuzzy'}
+					</label>
+				</div>
+			</div>
+		);
+
 		return (
 			<div key={key} style={containerStyle}>
 				<input type="text" style={inputStyle} placeholder={options.title} value={state.searchQuery} onChange={this.search_onChange} ref={elem => (this.searchElement_ = elem)} onFocus={this.search_onFocus} onBlur={this.search_onBlur} onKeyDown={this.search_keyDown} />
@@ -254,6 +283,7 @@ class HeaderComponent extends React.Component {
 					{icon}
 				</a>
 				{usageLink}
+				{fuzzyToggle}
 			</div>
 		);
 	}

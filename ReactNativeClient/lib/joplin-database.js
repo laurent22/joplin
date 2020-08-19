@@ -913,7 +913,7 @@ class JoplinDatabase extends Database {
 		}
 
 		try {
-			await this.loadExtension('./build/spellfix');
+			await this.loadExtension('./lib/sql-extensions/spellfix');
 			console.log('Spellfix extension loaded for dev!');
 		} catch (error) {
 			// console.info(error);

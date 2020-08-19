@@ -415,10 +415,12 @@ class SearchEngine {
 		return await Promise.all(fuzzyMatches);
 	}
 
-	async parseQuery(query) {
+	async parseQuery(query, fuzzy=false) {
 		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
 		let allTerms = [];
+		let allFuzzyTerms = [];
+
 		try {
 			allTerms = filterParser(query);
 		} catch (error) {
@@ -429,34 +431,34 @@ class SearchEngine {
 		const title = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
 		const body = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
-		// console.log(`text = ${text}`);
-		const fuzzyText = await this.fuzzifier(text);
-		const fuzzyTitle = await this.fuzzifier(title);
-		const fuzzyBody = await this.fuzzifier(body);
+		let terms = null;
+		if (fuzzy) {
+			const fuzzyText = await this.fuzzifier(text);
+			const fuzzyTitle = await this.fuzzifier(title);
+			const fuzzyBody = await this.fuzzifier(body);
+	
+			const mergedFuzzyText = [].concat.apply([], fuzzyText).map(x => x.word);
+			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
+			const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
+	
+			console.log(`fuzzyText matches are ${mergedFuzzyText}`);
+	
+			console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
+	
+			console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
+	
+			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
+			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });
+			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x, negated: false }; });
+	
+			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
 
-		const mergedFuzzyText = [].concat.apply([], fuzzyText).map(x => x.word);
-		const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
-		const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
+			terms = { _: mergedFuzzyText, 'title': mergedFuzzyTitle, 'body': mergedFuzzyBody };
+		}
+		else {
+			terms = { _: text, 'title': title, 'body': body };
+		}
 
-		console.log(`fuzzyText matches are ${mergedFuzzyText}`);
-
-		console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
-
-		console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
-
-		const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
-		const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });
-		const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x, negated: false }; });
-
-		const allTermsFuzzy = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
-
-
-
-		// console.log("fuzzy search inside parseQuery")
-		// const fuzzyText = await this.db().selectAll('SELECT word FROM notes_spellfix WHERE word MATCH ? AND top=3', [text[0]]);
-		// console.log(fuzzyNames);
-
-		const terms = { _: mergedFuzzyText, 'title': mergedFuzzyTitle, 'body': mergedFuzzyBody };
 		// Filter terms:
 		// - Convert wildcards to regex
 		// - Remove columns with no results
@@ -497,7 +499,7 @@ class SearchEngine {
 			termCount: termCount,
 			keys: keys,
 			terms: terms, // text terms
-			allTerms: allTermsFuzzy,
+			allTerms: fuzzy ? allFuzzyTerms : allTerms,
 		};
 	}
 
@@ -541,22 +543,17 @@ class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	determineSearchType_(query, preferredSearchType) {
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
+	determineSearchType_(query, options) {
+		if (options.searchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
-
-
-		// console.log("hererererererererererer")
-
-
 
 		const st = scriptType(query);
 
 		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
-		} else if (Setting.value('db.fuzzySearchEnabled') === 1) {
+		} else if (Setting.value('db.fuzzySearchEnabled') === 1 && options.fuzzy) {
 			return SearchEngine.SEARCH_TYPE_FTS_FUZZY;
 		} else {
 			return SearchEngine.SEARCH_TYPE_FTS;
@@ -571,7 +568,7 @@ class SearchEngine {
 
 		searchString = this.normalizeText_(searchString);
 
-		const searchType = this.determineSearchType_(searchString, options.searchType);
+		const searchType = this.determineSearchType_(searchString, options);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
@@ -587,7 +584,7 @@ class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
-			const parsedQuery = await this.parseQuery(searchString);
+			const parsedQuery = await this.parseQuery(searchString, options.fuzzy);
 
 			try {
 				// const { query, params } = queryBuilder(parsedQuery.allTerms);
