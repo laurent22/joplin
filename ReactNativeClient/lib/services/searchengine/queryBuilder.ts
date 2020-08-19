@@ -389,6 +389,7 @@ export default function queryBuilder(terms: Term[]) {
 	notes_fts.id,
 	notes_fts.title,
 	offsets(notes_fts) AS offsets,
+	matchinfo(notes_fts, 'pcnalx') AS matchinfo,
 	notes_fts.user_created_time,
 	notes_fts.user_updated_time,
 	notes_fts.is_todo,
