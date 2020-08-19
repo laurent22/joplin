@@ -73,7 +73,13 @@
       "desktop": {
         "Icon": "joplin"
       },
-      "target": "AppImage"
+      "target": "AppImage",
+      "extraFiles": [
+        {
+          "from": "build/spellfix.so",
+          "to": "usr/lib/spellfix.so"
+        }
+      ]
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
