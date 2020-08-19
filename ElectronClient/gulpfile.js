@@ -17,6 +17,9 @@ const tasks = {
 	electronRebuild: {
 		fn: require('./tools/electronRebuild.js'),
 	},
+	compileExtensions: {
+		fn: require('./tools/compileExtensions.js'),
+	},
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
 	tsc: require('../Tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('../Tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
@@ -42,6 +45,7 @@ const buildParallel = [
 	'copyPluginAssets',
 	'copyTinyMceLangs',
 	'updateIgnoredTypeScriptBuild',
+	'compileExtensions',
 ];
 
 gulp.task('build', gulp.parallel(...buildParallel));

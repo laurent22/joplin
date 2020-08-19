@@ -904,13 +904,19 @@ class JoplinDatabase extends Database {
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
 
+		console.log('Trying to load spellfix');
 		try {
-			console.log('Trying to load spellfix');
-			console.log(`Current directory: ${process.cwd()}`);
-			await this.loadExtension('./lib/sql-extensions/spellfix');
-			console.log('Spellfix extension loaded!');
+			await this.loadExtension(`${process.env.LD_LIBRARY_PATH.slice(0, -1)}/spellfix`);
+			console.log('Spellfix extension loaded for dist!');
 		} catch (error) {
-			console.info(error);
+			// console.info(error);
+		}
+
+		try {
+			await this.loadExtension('./build/spellfix');
+			console.log('Spellfix extension loaded for dev!');
+		} catch (error) {
+			// console.info(error);
 		}
 
 		let versionRow = null;

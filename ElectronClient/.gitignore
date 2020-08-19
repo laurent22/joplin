@@ -6,3 +6,9 @@ lib/
 .DS_Store
 gui/note-viewer/pluginAssets/
 pluginAssets/
+build/spellfix.so
+tools/amalgamation.zip
+tools/spellfix.o
+tools/sqlite-amalgamation-3330000/
+tools/sqlite.tar.gz
+tools/sqlite/
