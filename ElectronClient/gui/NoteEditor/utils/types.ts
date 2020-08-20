@@ -7,7 +7,7 @@ export interface ToolbarButtonInfos {
 }
 
 export interface NoteEditorProps {
-	style: any;
+	// style: any;
 	noteId: string;
 	themeId: number;
 	dispatch: Function;

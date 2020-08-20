@@ -1,14 +1,18 @@
-const React = require('react');
+import * as React from 'react';
+import ResizableLayout, { findItemByKey } from '../ResizableLayout/ResizableLayout';
+import NoteList from '../NoteList/NoteList.js';
+import NoteEditor from '../NoteEditor/NoteEditor.js';
+import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog.js';
+import ShareNoteDialog from '../ShareNoteDialog.js';
+import NoteListControls from '../NoteListControls/NoteListControls.js';
+import CommandService from 'lib/services/CommandService';
+
+const produce = require('immer').default;
 const { connect } = require('react-redux');
 const { SideBar } = require('../SideBar/SideBar.js');
-const NoteList = require('../NoteList/NoteList.js').default;
-const NoteEditor = require('../NoteEditor/NoteEditor.js').default;
 const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('../PromptDialog.min.js');
-const NoteContentPropertiesDialog = require('../NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
-const ShareNoteDialog = require('../ShareNoteDialog.js').default;
-const NoteListControls = require('../NoteListControls/NoteListControls.js').default;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim');
@@ -17,12 +21,8 @@ const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
-const CommandService = require('lib/services/CommandService').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
-const ResizableLayout = require('../ResizableLayout/ResizableLayout').default;
-const { findItemByKey } = require('../ResizableLayout/ResizableLayout');
-const produce = require('immer').default;
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -48,8 +48,15 @@ const commands = [
 	require('./commands/toggleVisiblePanes'),
 ];
 
-class MainScreenComponent extends React.Component {
-	constructor(props) {
+class MainScreenComponent extends React.Component<any, any> {
+
+	waitForNotesSavedIID_:any;
+	isPrinting_:boolean;
+	styleKey_:string;
+	styles_:any;
+	promptOnClose_:Function;
+
+	constructor(props:any) {
 		super(props);
 
 		const rootLayoutSize = this.rootLayoutSize();
@@ -164,11 +171,11 @@ class MainScreenComponent extends React.Component {
 		});
 	}
 
-	sidebar_onDrag(event) {
+	sidebar_onDrag(event:any) {
 		Setting.setValue('style.sidebar.width', this.props.sidebarWidth + event.deltaX);
 	}
 
-	noteList_onDrag(event) {
+	noteList_onDrag(event:any) {
 		Setting.setValue('style.noteList.width', Setting.value('style.noteList.width') + event.deltaX);
 	}
 
@@ -184,7 +191,7 @@ class MainScreenComponent extends React.Component {
 		this.setState({ shareNoteDialogOptions: {} });
 	}
 
-	commandService_commandsEnabledStateChange(event) {
+	commandService_commandsEnabledStateChange(event:any) {
 		const buttonCommandNames = [
 			'toggleSidebar',
 			'toggleNoteList',
@@ -203,12 +210,12 @@ class MainScreenComponent extends React.Component {
 	}
 
 	updateRootLayoutSize() {
-		this.setState({ layout: produce(this.state.layout, (draftState) => {
+		this.setState({ layout: produce(this.state.layout, (draftState:any) => {
 			const s = this.rootLayoutSize();
 			draftState.width = s.width;
 			draftState.height = s.height;
 		}) });
-	}s
+	}
 
 	componentDidMount() {
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
@@ -234,14 +241,14 @@ class MainScreenComponent extends React.Component {
 		});
 	}
 
-	async waitForNoteToSaved(noteId) {
+	async waitForNoteToSaved(noteId:string) {
 		while (noteId && this.props.editorNoteStatuses[noteId] === 'saving') {
 			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
 			await time.msleep(100);
 		}
 	}
 
-	async printTo_(target, options) {
+	async printTo_(target:string, options:any) {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
 			console.info(`Printing ${options.path} to ${target} disallowed, already printing.`);
@@ -296,7 +303,7 @@ class MainScreenComponent extends React.Component {
 		return 50;
 	}
 
-	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth) {
+	styles(themeId:number, width:number, height:number, messageBoxVisible:boolean, isSidebarVisible:any, isNoteListVisible:any, sidebarWidth:number, noteListWidth:number) {
 		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -389,7 +396,7 @@ class MainScreenComponent extends React.Component {
 		return this.styles_;
 	}
 
-	renderNotification(theme, styles) {
+	renderNotification(theme:any, styles:any) {
 		if (!this.messageBoxVisible()) return null;
 
 		const onViewStatusScreen = () => {
@@ -495,7 +502,7 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	resizableLayout_resize(event) {
+	resizableLayout_resize(event:any) {
 		this.setState({ layout: event.layout });
 
 		const col1 = findItemByKey(event.layout, 'column1');
@@ -504,7 +511,7 @@ class MainScreenComponent extends React.Component {
 		Setting.setValue('style.noteList.width', col2.width);
 	}
 
-	resizableLayout_renderItem(key, event) {
+	resizableLayout_renderItem(key:string, event:any) {
 		const eventEmitter = event.eventEmitter;
 
 		if (key === 'sideBar') {
@@ -516,7 +523,7 @@ class MainScreenComponent extends React.Component {
 			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
-			return <NoteListControls key={key} themeId={this.props.themeId} />;
+			return <NoteListControls key={key} />;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);
@@ -547,14 +554,14 @@ class MainScreenComponent extends React.Component {
 		headerItems.push({
 			title: _('Search...'),
 			iconName: 'fa-search',
-			onQuery: query => {
+			onQuery: (query:string) => {
 				CommandService.instance().execute('search', { query });
 			},
 			type: 'search',
 		});
 
 		if (!this.promptOnClose_) {
-			this.promptOnClose_ = (answer, buttonType) => {
+			this.promptOnClose_ = (answer:any, buttonType:any) => {
 				return this.state.promptOptions.onClose(answer, buttonType);
 			};
 		}
@@ -574,7 +581,7 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
@@ -594,7 +601,7 @@ class MainScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],

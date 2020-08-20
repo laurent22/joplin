@@ -446,8 +446,8 @@ function NoteEditor(props: NoteEditorProps) {
 	if (showRevisions) {
 		const theme = themeStyle(props.themeId);
 
-		const revStyle = {
-			...props.style,
+		const revStyle:any = {
+			// ...props.style,
 			display: 'inline-flex',
 			padding: theme.margin,
 			verticalAlign: 'top',
@@ -468,7 +468,6 @@ function NoteEditor(props: NoteEditorProps) {
 			notes={props.notes}
 			dispatch={props.dispatch}
 			watchedNoteFiles={props.watchedNoteFiles}
-			style={props.style}
 		/>;
 	}
 

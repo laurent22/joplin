@@ -46,6 +46,8 @@ function formatReadTime(readTimeMinutes: number) {
 }
 
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
+
+	console.info('MMMMMMMMMMMM', props.markupLanguage);
 	const theme = themeStyle(props.themeId);
 	const tableBodyComps: JSX.Element[] = [];
 	// For the source Markdown

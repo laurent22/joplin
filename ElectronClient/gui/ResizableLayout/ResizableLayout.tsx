@@ -30,8 +30,8 @@ interface onResizeEvent {
 }
 
 interface Props {
-	themeId: number,
-	style: any,
+	// themeId: number,
+	// style: any,
 	layout: LayoutItem,
 	renderItem(key:string, event:any):JSX.Element;
 	onResize(event:onResizeEvent):void;
