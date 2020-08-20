@@ -133,13 +133,13 @@ print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
 rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
 
-# Creates the folder where the binary will be stored
+# Create the folder where the binary will be stored
 mkdir -p ~/.joplin/
 
 # Download the latest version
 mv ${TEMP_DIR}/Joplin.AppImage ~/.joplin/Joplin.AppImage
 
-# Gives execution privileges
+# Give execution privileges
 chmod +x ~/.joplin/Joplin.AppImage
 
 print "${COLOR_GREEN}OK${COLOR_RESET}"
@@ -186,7 +186,7 @@ fi
 # FINISH INSTALLATION
 #-----------------------------------------------------
 
-# Informs the user that it has been installed
+# Inform the user that it has been installed
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
