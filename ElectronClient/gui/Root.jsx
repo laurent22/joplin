@@ -5,7 +5,7 @@ const { connect, Provider } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 
-const { MainScreen } = require('.//MainScreen/MainScreen.min.js');
+const MainScreen = require('./MainScreen/MainScreen').default;
 const ErrorBoundary = require('./ErrorBoundary').default;
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { DropboxLoginScreen } = require('./DropboxLoginScreen.min.js');

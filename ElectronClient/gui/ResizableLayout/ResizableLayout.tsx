@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import produce from 'immer';
 import useWindowResizeEvent from './hooks/useWindowResizeEvent';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './hooks/useLayoutItemSizes';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
-enum LayoutItemDirection {
+export enum LayoutItemDirection {
 	Row = 'row',
 	Column = 'column',
 }
@@ -20,9 +20,12 @@ export interface LayoutItem {
 	key: string,
 	width?: number,
 	height?: number,
-	children: LayoutItem[]
-	direction: LayoutItemDirection,
-	resizable: boolean,
+	minWidth?: number,
+	minHeight?: number,
+	children?: LayoutItem[]
+	direction?: LayoutItemDirection,
+	resizable?: boolean,
+	visible?: boolean,
 }
 
 interface onResizeEvent {
@@ -30,8 +33,6 @@ interface onResizeEvent {
 }
 
 interface Props {
-	// themeId: number,
-	// style: any,
 	layout: LayoutItem,
 	renderItem(key:string, event:any):JSX.Element;
 	onResize(event:onResizeEvent):void;
@@ -77,9 +78,9 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResize:Function, children:JSX.Element[]):JSX.Element {
+function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:JSX.Element[]):JSX.Element {
 	const style:any = {
-		display: 'flex',
+		display: item.visible !== false ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
@@ -90,7 +91,18 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResize:Functi
 		const enable = { top: false, right: true, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false };
 
 		return (
-			<Resizable key={item.key} className={className} style={style} size={size} onResizeStop={onResize} enable={enable}>
+			<Resizable
+				key={item.key}
+				className={className}
+				style={style}
+				size={size}
+				onResizeStart={onResizeStart}
+				onResize={onResize}
+				onResizeStop={onResizeStop}
+				enable={enable}
+				minWidth={item.minWidth}
+				minHeight={item.minHeight}
+			>
 				{children}
 			</Resizable>
 		);
@@ -106,17 +118,32 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResize:Functi
 function ResizableLayout(props:Props) {
 	const eventEmitter = useRef(new EventEmitter());
 
+	const [resizedItem, setResizedItem] = useState<any>(null);
+
 	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes):JSX.Element {
 
-		const onResize = (_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) => {
-			const size = sizes[item.key];
+		function onResizeStart() {
+			setResizedItem({
+				key: item.key,
+				initialWidth: sizes[item.key].width,
+				initialHeight: sizes[item.key].height,
+			});
+		}
+
+		function onResize(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
 			const newLayout = updateLayoutItem(props.layout, item.key, {
-				width: size.width + delta.width,
+				width: resizedItem.initialWidth + delta.width,
+				height: resizedItem.initialHeight + delta.height,
 			});
 
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');
-		};
+		}
+
+		function onResizeStop(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
+			onResize(_event, _direction, _refToElement, delta);
+			setResizedItem(null);
+		}
 
 		if (!item.children) {
 			const comp = props.renderItem(item.key, {
@@ -125,14 +152,14 @@ function ResizableLayout(props:Props) {
 				size: sizes[item.key],
 			});
 
-			return renderContainer(item, sizes, onResize, [comp]);
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [comp]);
 		} else {
 			const childrenComponents = [];
 			for (const child of item.children) {
 				childrenComponents.push(renderLayoutItem(child, sizes));
 			}
 
-			return renderContainer(item, sizes, onResize, childrenComponents);
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents);
 		}
 	}
 

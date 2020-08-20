@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ResizableLayout, { findItemByKey } from '../ResizableLayout/ResizableLayout';
+import ResizableLayout, { findItemByKey, LayoutItem, LayoutItemDirection } from '../ResizableLayout/ResizableLayout';
 import NoteList from '../NoteList/NoteList.js';
 import NoteEditor from '../NoteEditor/NoteEditor.js';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog.js';
@@ -62,6 +62,56 @@ class MainScreenComponent extends React.Component<any, any> {
 		const rootLayoutSize = this.rootLayoutSize();
 		const theme = themeStyle(props.themeId);
 
+		const layout:LayoutItem = {
+			key: 'root',
+			direction: LayoutItemDirection.Row,
+			resizable: false,
+			width: rootLayoutSize.width,
+			height: rootLayoutSize.height,
+			children: [
+				{
+					key: 'sidebarColumn',
+					direction: LayoutItemDirection.Column,
+					resizable: true,
+					width: Setting.value('style.sidebar.width'),
+					visible: Setting.value('sidebarVisibility'),
+					minWidth: 200,
+					children: [
+						{
+							key: 'sideBar',
+						},
+					],
+				},
+				{
+					key: 'noteListColumn',
+					direction: LayoutItemDirection.Column,
+					resizable: true,
+					width: Setting.value('style.noteList.width'),
+					visible: Setting.value('noteListVisibility'),
+					minWidth: 200,
+					children: [
+						{
+							height: theme.topRowHeight,
+							key: 'noteListControls',
+						},
+						{
+							key: 'noteList',
+						},
+					],
+				},
+				{
+					key: 'editorColumn',
+					direction: LayoutItemDirection.Column,
+					resizable: false,
+					children: [
+						{
+							key: 'editor',
+						},
+					],
+				},
+			],
+		};
+
 		this.state = {
 			promptOptions: null,
 			modalLayer: {
@@ -71,51 +121,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
-			layout: {
-				key: 'root',
-				direction: 'row',
-				resizable: false,
-				width: rootLayoutSize.width,
-				height: rootLayoutSize.height,
-				children: [
-					{
-						key: 'column1',
-						direction: 'column',
-						resizable: true,
-						width: Setting.value('style.sidebar.width'),
-						children: [
-							{
-								key: 'sideBar',
-							},
-						],
-					},
-					{
-						key: 'column2',
-						direction: 'column',
-						resizable: true,
-						width: Setting.value('style.noteList.width'),
-						children: [
-							{
-								height: theme.topRowHeight,// theme.toolbarHeight + theme.mainPadding * 2,
-								key: 'noteListControls',
-							},
-							{
-								key: 'noteList',
-							},
-						],
-					},
-					{
-						key: 'column3',
-						direction: 'column',
-						resizable: false,
-						children: [
-							{
-								key: 'editor',
-							},
-						],
-					},
-				],
-			},
+			layout: layout,
 		};
 
 		this.registerCommands();
@@ -215,6 +221,18 @@ class MainScreenComponent extends React.Component<any, any> {
 			draftState.width = s.width;
 			draftState.height = s.height;
 		}) });
+	}
+
+	componentDidUpdate(prevProps:any) {
+		if (this.props.noteListVisibility !== prevProps.noteListVisibility || this.props.sidebarVisibility !== prevProps.sidebarVisibility) {
+			this.setState({ layout: produce(this.state.layout, (draftState:any) => {
+				const noteListColumn = findItemByKey(draftState, 'noteListColumn');
+				noteListColumn.visible = this.props.noteListVisibility;
+
+				const sidebarColumn = findItemByKey(draftState, 'sidebarColumn');
+				sidebarColumn.visible = this.props.sidebarVisibility;
+			}) });
+		}
 	}
 
 	componentDidMount() {
@@ -505,8 +523,8 @@ class MainScreenComponent extends React.Component<any, any> {
 	resizableLayout_resize(event:any) {
 		this.setState({ layout: event.layout });
 
-		const col1 = findItemByKey(event.layout, 'column1');
-		const col2 = findItemByKey(event.layout, 'column2');
+		const col1 = findItemByKey(event.layout, 'sidebarColumn');
+		const col2 = findItemByKey(event.layout, 'noteListColumn');
 		Setting.setValue('style.sidebar.width', col1.width);
 		Setting.setValue('style.noteList.width', col2.width);
 	}
@@ -627,6 +645,4 @@ const mapStateToProps = (state:any) => {
 	};
 };
 
-const MainScreen = connect(mapStateToProps)(MainScreenComponent);
-
-module.exports = { MainScreen };
+export default connect(mapStateToProps)(MainScreenComponent);

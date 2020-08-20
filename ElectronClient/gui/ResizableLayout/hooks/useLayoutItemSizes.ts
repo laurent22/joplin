@@ -26,8 +26,12 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	const noHeightChildren:LayoutItem[] = [];
 
 	for (const child of item.children) {
-		const w = 'width' in child ? child.width : null;
-		const h = 'height' in child ? child.height : null;
+		let w = 'width' in child ? child.width : null;
+		let h = 'height' in child ? child.height : null;
+		if (child.visible === false) {
+			w = 0;
+			h = 0;
+		}
 		sizes[child.key] = { width: w, height: h };
 		if (w !== null) remainingSize.width -= w;
 		if (h !== null) remainingSize.height -= h;
