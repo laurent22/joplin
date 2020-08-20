@@ -534,20 +534,13 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		// console.log(`highlightedWords are`);
-		// console.log(props.highlightedWords);
-
-		// console.log(`keywords are`);
-		// console.log(props.searchMarkers.keywords)
-
-		// const dummy = [ {type: "text", value: "naveen", scriptType: "en"}
-		// ,{type: "text", value: "maven", scriptType: "en"}
-		// ,{type: "text", value: "novem", scriptType: "en"}]
-		// if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-		// 	console.log("Update!!!!");
-		webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords.length ? props.searchMarkers.keywords : props.highlightedWords, props.searchMarkers.options);
-		// }
-		// [props.searchMarkers, renderedBody]
+		if (props.searchMarkers.keywords.length) {
+			// find-in-note highlighting
+			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+		} {
+			// search words highlighting
+			webviewRef.current.wrappedInstance.send('setMarkers', props.highlightedWords, props.searchMarkers.options);
+		}
 	});
 
 	const cellEditorStyle = useMemo(() => {

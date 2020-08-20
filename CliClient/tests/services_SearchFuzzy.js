@@ -62,7 +62,7 @@ describe('services_SearchFuzzy', function() {
 		expect(rows.length).toBe(1);
 		expect(rows[0].id).toBe(n1.id);
 
-		rows = await engine.search('Important', { fuzzy: true });
+		rows = await engine.search('Imprtant', { fuzzy: true });
 		expect(rows.length).toBe(1);
 		expect(rows[0].id).toBe(n2.id);
 		// console.log(rows);

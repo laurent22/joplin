@@ -4,6 +4,7 @@ const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const CommandService = require('lib/services/CommandService').default;
+const Setting = require('lib/models/Setting.js');
 
 const commands = [
 	require('./commands/focusSearch'),
@@ -283,7 +284,7 @@ class HeaderComponent extends React.Component {
 					{icon}
 				</a>
 				{usageLink}
-				{fuzzyToggle}
+				{(Setting.value('db.fuzzySearchEnabled') === 1) && fuzzyToggle}
 			</div>
 		);
 	}

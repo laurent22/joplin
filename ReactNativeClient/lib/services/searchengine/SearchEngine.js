@@ -83,7 +83,6 @@ class SearchEngine {
 
 			if (!noteIds.length && (Setting.value('db.fuzzySearchEnabled') == 1)) {
 				// On the last loop
-				console.log(`Setting.value('db.fuzzySearchEnabled') = ${Setting.value('db.fuzzySearchEnabled')}`);
 				queries.push({ sql: 'INSERT INTO notes_spellfix(word,rank) SELECT term, documents FROM search_aux WHERE col=\'*\'' });
 			}
 
@@ -155,13 +154,9 @@ class SearchEngine {
 
 				if (!changes.length) {
 					if (Setting.value('db.fuzzySearchEnabled') === 1) {
-						// console.log('---------------START----------------');
-
 						queries.push({ sql: 'DELETE FROM notes_spellfix' });
 						queries.push({ sql: 'INSERT INTO notes_spellfix(word,rank) SELECT term, documents FROM search_aux WHERE col=\'*\'' });
 						await this.db().transactionExecBatch(queries);
-
-						// console.log('---------------END----------------');
 					}
 					break;
 				}
@@ -549,7 +544,7 @@ class SearchEngine {
 
 		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
-		} else if (Setting.value('db.fuzzySearchEnabled') === 1 && options.fuzzy) {
+		} else if ((Setting.value('db.fuzzySearchEnabled') === 1) && options.fuzzy) {
 			return SearchEngine.SEARCH_TYPE_FTS_FUZZY;
 		} else {
 			return SearchEngine.SEARCH_TYPE_FTS;

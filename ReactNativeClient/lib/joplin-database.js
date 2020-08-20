@@ -276,9 +276,9 @@ class JoplinDatabase extends Database {
 					if (tableName == 'android_metadata') continue;
 					if (tableName == 'table_fields') continue;
 					if (tableName == 'sqlite_sequence') continue;
+					if (tableName.indexOf('notes_fts') === 0) continue;
 					if (tableName == 'notes_spellfix') continue;
 					if (tableName == 'search_aux') continue;
-					if (tableName.indexOf('notes_fts') === 0) continue;
 					chain.push(() => {
 						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
@@ -890,9 +890,7 @@ class JoplinDatabase extends Database {
 			this.logger().warn('Fuzzy search check failed', error);
 			return false;
 		}
-
 		this.logger().info('Fuzzy search check succeeded');
-
 		return true;
 	}
 
@@ -904,30 +902,28 @@ class JoplinDatabase extends Database {
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
 
-		// console.log('Trying to load spellfix');
-
-		// IF PROD
-		try {
-			await this.loadExtension(`${process.env.LD_LIBRARY_PATH.slice(0, -1)}/spellfix`);
-			// console.log('Spellfix extension loaded for dist!');
-		} catch (error) {
-			// console.info(error);
+		if (shim.isElectron()) {
+			// if prod
+			try {
+				await this.loadExtension(`${process.env.LD_LIBRARY_PATH.split(':')[0]}/spellfix`);
+			} catch (error) {
+				// console.info(error);
+			}
+			// if dev
+			try {
+				await this.loadExtension('./lib/sql-extensions/spellfix');
+			} catch (error) {
+				// console.info(error);
+			}
+		} else {
+			// if dev (CLI)
+			try {
+				await this.loadExtension('./build/lib/sql-extensions/spellfix');
+			} catch (error) {
+				// console.info(error);
+			}
 		}
 
-		// IF DEV
-		try {
-			await this.loadExtension('./lib/sql-extensions/spellfix');
-			// console.log('Spellfix extension loaded for dev!');
-		} catch (error) {
-			// console.info(error);
-		}
-
-		try {
-			await this.loadExtension('./build/lib/sql-extensions/spellfix');
-			// console.log('Spellfix extension loaded for dev (CLI)!');
-		} catch (error) {
-			// console.info(error);
-		}
 
 		let versionRow = null;
 		try {

@@ -473,13 +473,6 @@ async function initialize(dispatch) {
 			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
-
-		// if (Setting.value('db.fuzzySearchEnabled') === -1) {
-		// 	const fuzzySearchEnabled = await db.fuzzySearchEnabled();
-		// 	Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
-		// 	reg.logger().info('db.fuzzySearchEnabled = ', Setting.value('db.fuzzySearchEnabled'));
-		// }
-
 		if (Setting.value('env') === 'dev') {
 			Setting.setValue('welcome.enabled', false);
 		}
