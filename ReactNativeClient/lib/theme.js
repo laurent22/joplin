@@ -34,7 +34,7 @@ function themeById(themeId) {
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
 const globalStyle = {
-	fontFamily: 'sans-serif',
+	fontFamily: 'Roboto',// 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
@@ -105,11 +105,15 @@ function addExtraStyles(style) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 
+	style.colorFaded2 = Color(style.color2).alpha(0.5).rgb();
+	style.colorHover2 = Color(style.color2).alpha(0.7).rgb();
+	style.colorActive2 = Color(style.color2).alpha(0.9).rgb();
+
 	const bgColor4 = style.backgroundColor4;
 
-	style.backgroundColorHover4 = Color(bgColor4).alpha(0.5).rgb();
+	style.backgroundColorHover4 = Color(bgColor4).alpha(0.7).rgb();
 	style.backgroundColorActive4 = Color(bgColor4).alpha(1).rgb();
-	style.backgroundColor4 = Color(bgColor4).alpha(0).rgb();
+	style.backgroundColor4 = bgColor4;// Color(bgColor4).alpha(0).rgb();
 
 	style.color5 = bgColor4;
 	style.backgroundColor5 = style.color4;

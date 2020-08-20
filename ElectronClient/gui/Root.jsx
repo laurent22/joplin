@@ -16,10 +16,18 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { app } = require('../app');
-const { ThemeProvider, StyleSheetManager } = require('styled-components');
+const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const { themeStyle } = require('lib/theme');
 
 const { bridge } = require('electron').remote.require('./bridge');
+
+const GlobalStyle = createGlobalStyle`
+	div, span, a {
+		color: ${(props) => props.theme.color};
+		font-size: ${(props) => props.theme.fontSize}px;
+		font-family: ${(props) => props.theme.fontFamily};
+	}
+`;
 
 async function initialize() {
 	this.wcsTimeoutId_ = null;
@@ -101,6 +109,7 @@ class RootComponent extends React.Component {
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
+					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} />
 				</ThemeProvider>
 			</StyleSheetManager>

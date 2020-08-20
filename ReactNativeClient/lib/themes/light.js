@@ -16,7 +16,7 @@ const lightStyle = {
 
 	backgroundColor2: '#313640',
 	color2: '#ffffff',
-	colorFaded2: '#8F99A3',
+	// colorFaded2: '#8F99A3',
 	selectedColor2: '#131313',
 	colorError2: '#ff6c6c',
 

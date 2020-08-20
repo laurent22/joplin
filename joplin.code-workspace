@@ -3,11 +3,7 @@
 		{
 			"name": ".",
 			"path": "."
-		},
-		{
-			"name": "D:/Web/www/nextcloud/apps/joplin",
-			"path": "D:/Web/www/nextcloud/apps/joplin"
-		},
+		}
 	],
 	"settings": {
 		"files.exclude": {
@@ -323,7 +319,7 @@
 			"ElectronClient/gui/MainScreen/commands/hideModalMessage.js": true,
 			"ElectronClient/gui/MainScreen/commands/moveToFolder.js": true,
 			"ElectronClient/gui/MainScreen/commands/newNote.js": true,
-			"ElectronClient/gui/MainScreen/commands/newNotebook.js": true,
+			"ElectronClient/gui/MainScreen/commands/newFolder.js": true,
 			"ElectronClient/gui/MainScreen/commands/newTodo.js": true,
 			"ElectronClient/gui/MainScreen/commands/print.js": true,
 			"ElectronClient/gui/MainScreen/commands/renameFolder.js": true,

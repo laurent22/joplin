@@ -43,7 +43,7 @@ const commands = [
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newNote'),
-	require('./gui/MainScreen/commands/newNotebook'),
+	require('./gui/MainScreen/commands/newFolder'),
 	require('./gui/MainScreen/commands/newTodo'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
@@ -519,7 +519,7 @@ class Application extends BaseApplication {
 
 		const newNoteItem = cmdService.commandToMenuItem('newNote');
 		const newTodoItem = cmdService.commandToMenuItem('newTodo');
-		const newNotebookItem = cmdService.commandToMenuItem('newNotebook');
+		const newFolderItem = cmdService.commandToMenuItem('newFolder');
 		const printItem = cmdService.commandToMenuItem('print');
 
 		toolsItemsFirst.push(syncStatusItem, {
@@ -650,7 +650,7 @@ class Application extends BaseApplication {
 			},
 			shim.isMac() ? noItem : newNoteItem,
 			shim.isMac() ? noItem : newTodoItem,
-			shim.isMac() ? noItem : newNotebookItem, {
+			shim.isMac() ? noItem : newFolderItem, {
 				type: 'separator',
 				visible: shim.isMac() ? false : true,
 			}, {
@@ -699,7 +699,7 @@ class Application extends BaseApplication {
 			submenu: [
 				newNoteItem,
 				newTodoItem,
-				newNotebookItem, {
+				newFolderItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: shim.isMac() ? keymapService.getAccelerator('closeWindow') : null,

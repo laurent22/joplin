@@ -53,7 +53,6 @@ Tools/commit_hook.txt
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
-CliClient/build/LinkSelector.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/commands/focusElement.js
@@ -66,8 +65,8 @@ ElectronClient/gui/MainScreen/commands/editAlarm.js
 ElectronClient/gui/MainScreen/commands/exportPdf.js
 ElectronClient/gui/MainScreen/commands/hideModalMessage.js
 ElectronClient/gui/MainScreen/commands/moveToFolder.js
+ElectronClient/gui/MainScreen/commands/newFolder.js
 ElectronClient/gui/MainScreen/commands/newNote.js
-ElectronClient/gui/MainScreen/commands/newNotebook.js
 ElectronClient/gui/MainScreen/commands/newTodo.js
 ElectronClient/gui/MainScreen/commands/print.js
 ElectronClient/gui/MainScreen/commands/renameFolder.js
@@ -142,6 +141,7 @@ ElectronClient/gui/SearchBar/styles/index.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/SideBar/commands/focusElementSideBar.js
 ElectronClient/gui/SideBar/SideBar.js
+ElectronClient/gui/SideBar/styles/index.js
 ElectronClient/gui/style/StyledInput.js
 ElectronClient/gui/style/StyledTextInput.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js

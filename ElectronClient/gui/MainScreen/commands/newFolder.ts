@@ -4,7 +4,7 @@ const Folder = require('lib/models/Folder');
 const { bridge } = require('electron').remote.require('./bridge');
 
 export const declaration:CommandDeclaration = {
-	name: 'newNotebook',
+	name: 'newFolder',
 	label: () => _('New notebook'),
 	iconName: 'fa-book',
 };

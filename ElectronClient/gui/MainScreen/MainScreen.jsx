@@ -30,7 +30,7 @@ const commands = [
 	require('./commands/hideModalMessage'),
 	require('./commands/moveToFolder'),
 	require('./commands/newNote'),
-	require('./commands/newNotebook'),
+	require('./commands/newFolder'),
 	require('./commands/newTodo'),
 	require('./commands/print'),
 	require('./commands/renameFolder'),
@@ -190,7 +190,7 @@ class MainScreenComponent extends React.Component {
 			'toggleNoteList',
 			'newNote',
 			'newTodo',
-			'newNotebook',
+			'newFolder',
 			'toggleVisiblePanes',
 		];
 
@@ -542,7 +542,7 @@ class MainScreenComponent extends React.Component {
 		headerItems.push(CommandService.instance().commandToToolbarButton('toggleNoteList', { iconRotation: noteListVisibility ? 0 : 90 }));
 		headerItems.push(CommandService.instance().commandToToolbarButton('newNote'));
 		headerItems.push(CommandService.instance().commandToToolbarButton('newTodo'));
-		headerItems.push(CommandService.instance().commandToToolbarButton('newNotebook'));
+		headerItems.push(CommandService.instance().commandToToolbarButton('newFolder'));
 
 		headerItems.push({
 			title: _('Search...'),

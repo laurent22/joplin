@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { StyledRoot, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledNewFolderButton, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { ButtonLevel } from '../Button/Button';
+
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
@@ -16,7 +19,6 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
-const styled = require('styled-components').default;
 
 interface Props {
 	themeId: number,
@@ -43,32 +45,6 @@ const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
-const StyledRoot = styled.div`
-	background-color: ${(props:any) => props.theme.backgroundColor2};
-	width: 100%;
-	height: 100%;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	display: inline-flex;
-	flex-direction: column;
-`;
-
-const StyledHeader = styled.div`
-	height: ${(props:any) => props.theme.topRowHeight}px;
-	font-family: ${(props:any) => props.theme.fontFamily};
-	font-size: ${(props:any) => Math.round(props.theme.fontSize * 1.16)}px;
-	text-decoration: none;
-	box-sizing: border-box;
-	color: ${(props:any) => props.theme.colorFaded2};
-	padding: ${(props:any) => props.theme.mainPadding}px;
-	padding-left: 0;
-	display: flex;
-	align-items: center;
-	user-select: none;
-	text-transform: uppercase;
-	cursor: pointer;
-`;
-
 class SideBarComponent extends React.Component<Props, State> {
 
 	private folderItemsOrder_:any[] = [];
@@ -90,6 +66,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.onFolderToggleClick_ = this.onFolderToggleClick_.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
+		this.newFolderButton_click = this.newFolderButton_click.bind(this);
 	}
 
 	onFolderDragStart_(event:any) {
@@ -197,10 +174,12 @@ class SideBarComponent extends React.Component<Props, State> {
 				opacity: 0.8,
 				fontSize: theme.fontSize,
 				textDecoration: 'none',
-				paddingRight: 5,
+				paddingRight: 8,
 				display: 'flex',
 				alignItems: 'center',
-				width: 12,
+				width: 16,
+				maxWidth: 16,
+				minWidth: 16,
 			},
 			conflictFolder: {
 				color: theme.colorError2,
@@ -212,7 +191,7 @@ class SideBarComponent extends React.Component<Props, State> {
 				fontSize: theme.fontSize * 1.16,
 				textDecoration: 'none',
 				boxSizing: 'border-box',
-				color: theme.colorFaded2,
+				// color: theme.colorFaded2,
 				paddingLeft: 8,
 				display: 'flex',
 				alignItems: 'center',
@@ -307,7 +286,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(CommandService.instance().commandToMenuItem('newNotebook', { parentId: itemId }))
+				new MenuItem(CommandService.instance().commandToMenuItem('newFolder', { parentId: itemId }))
 			);
 		}
 
@@ -409,119 +388,96 @@ class SideBarComponent extends React.Component<Props, State> {
 		return refs[item.id];
 	}
 
-	noteCountElement(count:number) {
-		return <div style={this.style().noteCount}>({count})</div>;
+	renderNoteCount(count:number) {
+		return <StyledNoteCount>{count}</StyledNoteCount>;
 	}
 
 	renderExpandIcon(isExpanded:boolean, isVisible:boolean = true) {
 		const theme = themeStyle(this.props.themeId);
-		const style:any = { opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', width: 16, justifyContent: 'center' };
+		const style:any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
 		if (!isVisible) style.visibility = 'hidden';
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	}
 
-	folderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
-		let style = Object.assign({}, this.style().listItem);
-		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
+	renderAllNotesItem(selected:boolean) {
+		return (
+			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
+				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
+				<StyledListItemAnchor
+					className="list-item"
+					isSpecialItem={true}
+					href="#"
+					selected={selected}
+					onClick={() => {
+						this.onAllNotesClick_();
+					}}
+				>
+					({_('All notes')})
+				</StyledListItemAnchor>
+			</StyledListItem>
+		);
+	}
 
-		const itemTitle = Folder.displayTitle(folder);
-
-		let containerStyle = Object.assign({}, this.style().listItemContainer);
-		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
-
-		containerStyle.paddingLeft = 23 + depth * 15;
-
-		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-
+	renderFolderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
 		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
-		const expandIcon = this.renderExpandIcon(isExpanded, hasChildren); // <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
+		const expandIcon = this.renderExpandIcon(isExpanded, hasChildren);
 		const expandLink = hasChildren ? (
-			<a style={expandLinkStyle} href="#" data-folder-id={folder.id} onClick={this.onFolderToggleClick_}>
+			<StyledExpandLink href="#" data-folder-id={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
-			</a>
+			</StyledExpandLink>
 		) : (
-			<span style={expandLinkStyle}>{expandIcon}</span>
+			<StyledExpandLink>{expandIcon}</StyledExpandLink>
 		);
 
 		const anchorRef = this.anchorItemRef('folder', folder.id);
-		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
+		const noteCount = folder.note_count ? this.renderNoteCount(folder.note_count) : '';
 
 		return (
-			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} data-folder-id={folder.id}>
+			<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} data-folder-id={folder.id}>
 				{expandLink}
-				<a
+				<StyledListItemAnchor
 					ref={anchorRef}
 					className="list-item"
+					isConflictFolder={folder.id === Folder.conflictFolderId()}
 					href="#"
+					selected={selected}
 					data-id={folder.id}
 					data-type={BaseModel.TYPE_FOLDER}
 					onContextMenu={(event:any) => this.itemContextMenu(event)}
-					style={style}
 					data-folder-id={folder.id}
 					onClick={() => {
 						this.folderItem_click(folder);
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle} {noteCount}
-				</a>
-			</div>
+					{Folder.displayTitle(folder)} {noteCount}
+				</StyledListItemAnchor>
+			</StyledListItem>
 		);
 	}
 
-	allNotesItem(selected:boolean) {
-		const theme = themeStyle(this.props.themeId);
-
-		const style = Object.assign({}, this.style().listItem, {
-			color: theme.colorFaded2,
-			textTransform: 'uppercase',
-		});
-
-		let containerStyle = Object.assign({}, this.style().listItemContainer);
-		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
-		containerStyle.paddingLeft = 40;
+	renderTag(tag:any, selected:boolean) {
+		const anchorRef = this.anchorItemRef('tag', tag.id);
+		const noteCount = Setting.value('showNoteCounts') ? this.renderNoteCount(tag.note_count) : '';
 
 		return (
-			<div className={'list-item-container list-item-depth-1'} style={containerStyle} key="allNotesHeader">
-				<a
+			<StyledListItem selected={selected} className={'list-item-container'} key={tag.id} onDrop={this.onTagDrop_} data-tag-id={tag.id}>
+				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
+				<StyledListItemAnchor
+					ref={anchorRef}
 					className="list-item"
 					href="#"
-					style={style}
+					selected={selected}
+					data-id={tag.id}
+					data-type={BaseModel.TYPE_TAG}
+					onContextMenu={(event:any) => this.itemContextMenu(event)}
 					onClick={() => {
-						this.onAllNotesClick_();
+						this.tagItem_click(tag);
 					}}
 				>
-					{_('All notes')}
-				</a>
-			</div>
-		);
-	}
-
-	tagItem(tag:any, selected:boolean) {
-		let style = Object.assign({}, this.style().tagItem);
-		if (selected) style = Object.assign(style, this.style().listItemSelected);
-
-		const anchorRef = this.anchorItemRef('tag', tag.id);
-		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(tag.note_count) : '';
-
-		return (
-			<a
-				className="list-item"
-				href="#"
-				ref={anchorRef}
-				data-id={tag.id}
-				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={(event:any) => this.itemContextMenu(event)}
-				data-tag-id={tag.id}
-				key={tag.id}
-				style={style}
-				onDrop={this.onTagDrop_}
-				onClick={() => {
-					this.tagItem_click(tag);
-				}}
-			>
-				{Tag.displayTitle(tag)} {noteCount}
-			</a>
+					{Tag.displayTitle(tag)} {noteCount}
+				</StyledListItemAnchor>
+			</StyledListItem>
 		);
 	}
 
@@ -529,30 +485,13 @@ class SideBarComponent extends React.Component<Props, State> {
 		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
-	makeHeader(key:string, label:string, iconName:string, extraProps:any = {}) {
-		const theme = themeStyle(this.props.themeId);
-		// const style = this.style().header;
-		const icon = <i style={{ fontSize: theme.toolbarIconSize, marginRight: 8 }} className={iconName} />;
+	newFolderButton_click() {
+		CommandService.instance().execute('newFolder');
+	}
 
-		if (extraProps.toggleblock || extraProps.onClick) {
-			// style.cursor = 'pointer';
-		}
-
+	renderHeader(key:string, label:string, iconName:string, newButtonClickHandler:Function = null, extraProps:any = {}) {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
-
-		// check if toggling option is set.
-		let toggleIcon = null;
-		const toggleKey = `${key}IsExpanded`;
-		if (extraProps.toggleblock) {
-			const isExpanded = (this.state as any)[toggleKey];
-			toggleIcon = this.renderExpandIcon(isExpanded);
-			// toggleIcon = <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={{ fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', width: 16, justifyContent: 'center' }}></i>;
-		}
-		if (extraProps.selected) {
-			// style.backgroundColor = this.style().listItemSelected.backgroundColor;
-		}
-
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
@@ -560,17 +499,16 @@ class SideBarComponent extends React.Component<Props, State> {
 				ref={ref}
 				key={key}
 				{...extraProps}
-				onClick={(event:any) => {
+			>
+				<StyledHeaderIcon className={iconName}/>
+				<StyledHeaderLabel onClick={(event:any) => {
 					// if a custom click event is attached, trigger that.
 					if (headerClick) {
 						headerClick(key, event);
 					}
-					this.onHeaderClick_(key, event);
-				}}
-			>
-				{toggleIcon}
-				{icon}
-				<span style={{ flex: 1 }}>{label}</span>
+					this.onHeaderClick_(key);
+				}}>{label}</StyledHeaderLabel>
+				{ newButtonClickHandler && <StyledNewFolderButton iconName="icon-plus" onClick={newButtonClickHandler} /> }
 			</StyledHeader>
 		);
 	}
@@ -658,16 +596,12 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 	}
 
-	onHeaderClick_(key:string, event:any) {
-		const currentHeader = event.currentTarget;
-		const toggleBlock = +currentHeader.getAttribute('toggleblock');
-		if (toggleBlock) {
-			const toggleKey = `${key}IsExpanded`;
-			const isExpanded = (this.state as any)[toggleKey];
-			const newState:any = { [toggleKey]: !isExpanded };
-			this.setState(newState);
-			Setting.setValue(toggleKey, !isExpanded);
-		}
+	onHeaderClick_(key:string) {
+		const toggleKey = `${key}IsExpanded`;
+		const isExpanded = (this.state as any)[toggleKey];
+		const newState:any = { [toggleKey]: !isExpanded };
+		this.setState(newState);
+		Setting.setValue(toggleKey, !isExpanded);
 	}
 
 	onAllNotesClick_() {
@@ -677,39 +611,31 @@ class SideBarComponent extends React.Component<Props, State> {
 		});
 	}
 
-	synchronizeButton(type:string) {
-		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = 'fa-sync-alt';
+	renderSynchronizeButton(type:string) {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
-		const iconStyle:any = { fontSize: style.fontSize, marginRight: 5 };
+		const iconAnimation = type !== 'sync' ? 'icon-infinite-rotation 1s linear infinite' : '';
 
-		if (type !== 'sync') {
-			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
-		}
-
-		const icon = <i style={iconStyle} className={`fas ${iconName}`} />;
 		return (
-			<a
-				className="synchronize-button"
-				style={style}
-				href="#"
+			<StyledSynchronizeButton
+				level={ButtonLevel.SideBarSecondary}
+				iconName="icon-sync"
 				key="sync_button"
+				iconAnimation={iconAnimation}
+				title={label}
 				onClick={() => {
-					CommandService.instance().execute('synchronize');
-					// this.sync_click();
+					CommandService.instance().execute('synchronize', { syncStarted: type !== 'sync' });
 				}}
-			>
-				{icon}
-				{label}
-			</a>
+			/>
 		);
 	}
 
 	render() {
+		const theme = themeStyle(this.props.themeId);
+
 		const items = [];
 
 		items.push(
-			this.makeHeader('folderHeader', _('Notebooks'), 'icon-notebooks', {
+			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.newFolderButton_click, {
 				onDrop: this.onFolderDrop_,
 				['data-folder-id']: '',
 				toggleblock: 1,
@@ -718,24 +644,24 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (this.props.folders.length) {
 			const allNotesSelected = this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
-			const folderItems = [this.allNotesItem(allNotesSelected)].concat(result.items);
+			const result = shared.renderFolders(this.props, this.renderFolderItem.bind(this));
+			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
-				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
+				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}>
 					{folderItems}
 				</div>
 			);
 		}
 
 		items.push(
-			this.makeHeader('tagHeader', _('Tags'), 'icon-tags', {
+			this.renderHeader('tagHeader', _('Tags'), 'icon-tags', null, {
 				toggleblock: 1,
 			})
 		);
 
 		if (this.props.tags.length) {
-			const result = shared.renderTags(this.props, this.tagItem.bind(this));
+			const result = shared.renderTags(this.props, this.renderTag.bind(this));
 			const tagItems = result.items;
 			this.tagItemsOrder_ = result.order;
 
@@ -762,24 +688,24 @@ class SideBarComponent extends React.Component<Props, State> {
 		const syncReportText = [];
 		for (let i = 0; i < lines.length; i++) {
 			syncReportText.push(
-				<div key={i} style={{ wordWrap: 'break-word', width: '100%' }}>
+				<StyledSyncReportText key={i}>
 					{lines[i]}
-				</div>
+				</StyledSyncReportText>
 			);
 		}
 
-		const syncButton = this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync');
+		const syncButton = this.renderSynchronizeButton(this.props.syncStarted ? 'cancel' : 'sync');
 
 		const syncReportComp = !syncReportText.length ? null : (
-			<div style={this.style().syncReport} key="sync_report">
+			<StyledSyncReport key="sync_report">
 				{syncReportText}
-			</div>
+			</StyledSyncReport>
 		);
 
 		return (
 			<StyledRoot ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar">
 				<div style={{ flex: 1, overflowX: 'hidden', overflowY: 'auto' }}>{items}</div>
-				<div style={{ flex: 0 }}>
+				<div style={{ flex: 0, padding: theme.mainPadding }}>
 					{syncReportComp}
 					{syncButton}
 				</div>
