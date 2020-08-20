@@ -43,7 +43,7 @@ showHelp() {
     print "\t" "--silent" "\t" "Don't print any output"
     print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
 
-    if [[ ! -z $1 ]]; then
+    if [[ -n $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
     else
         exit 0
