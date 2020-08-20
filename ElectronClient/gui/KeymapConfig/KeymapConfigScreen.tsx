@@ -3,36 +3,12 @@ import { useState, useEffect } from 'react';
 
 import styles_ from './styles';
 import { ShortcutRecorder } from './ShortcutRecorder';
-import CommandService from '../../lib/services/CommandService';
 import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
+import getLabel from './utils/getLabel';
 
 const { _ } = require('lib/locale.js');
-const { shim } = require('lib/shim.js');
 
 const keymapService = KeymapService.instance();
-const commandService = CommandService.instance();
-
-interface CommandLabels {
-	[commandName: string]: string
-}
-
-// Some commands aren't actually registered in CommandService
-// These hardcoded labels are used for those commands instead
-const commandLabels: CommandLabels = {
-	quit: _('Quit'),
-	insertTemplate: _('Insert template'),
-	zoomActualSize: _('Actual Size'),
-	// Conditionally set the label because it's different in macOS and other platforms
-	config: _(shim.isMac() ? 'Preferences' : 'Options'),
-	gotoAnything: _('Goto Anything...'),
-	help: _('Website and documentation'),
-	hideApp: _('Hide Joplin'),
-	closeWindow: _('Close Window'),
-};
-// Obtain the rest of the labels
-keymapService.getCommands().forEach((commandName: string) => {
-	commandLabels[commandName] = commandLabels[commandName] || commandService.label(commandName);
-});
 
 interface CommandEditing {
 	[commandName: string]: boolean
@@ -114,7 +90,9 @@ export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
 
 		return (
 			<tr key={command} style={styles.tableRow}>
-				<td style={styles.tableCommandColumn}>{commandLabels[command]}</td>
+				<td style={styles.tableCommandColumn}>
+					{getLabel(command)}
+				</td>
 				<td style={styles.tableShortcutColumn}>
 					{cellContent}
 				</td>
@@ -157,7 +135,7 @@ export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
 					<tbody>
 						{keymap.filter(({ command }) => {
 							const filterLowerCase = filter.toLowerCase();
-							return (command.toLowerCase().includes(filterLowerCase) || commandLabels[command].toLowerCase().includes(filterLowerCase));
+							return (command.toLowerCase().includes(filterLowerCase) || getLabel(command).toLowerCase().includes(filterLowerCase));
 						}).map(item => renderKeymapRow(item))}
 					</tbody>
 				</table>

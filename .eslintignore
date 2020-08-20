@@ -74,6 +74,7 @@ ElectronClient/gui/Header/commands/focusSearch.js
 ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
 ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
 ElectronClient/gui/KeymapConfig/styles/index.js
+ElectronClient/gui/KeymapConfig/utils/getLabel.js
 ElectronClient/gui/MainScreen/commands/editAlarm.js
 ElectronClient/gui/MainScreen/commands/exportPdf.js
 ElectronClient/gui/MainScreen/commands/hideModalMessage.js
