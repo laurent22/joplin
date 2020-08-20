@@ -41,8 +41,18 @@ export default function NoteListControls() {
 	return (
 		<StyledRoot>
 			<SearchBar inputRef={searchBarRef}/>
-			<StyledButton iconName="far fa-check-square" level={ButtonLevel.Secondary} onClick={onNewTodoButtonClick}/>
-			<StyledButton iconName="icon-note" level={ButtonLevel.Primary} onClick={onNewNoteButtonClick}/>
+			<StyledButton
+				tooltip={CommandService.instance().title('newTodo')}
+				iconName="far fa-check-square"
+				level={ButtonLevel.Primary}
+				onClick={onNewTodoButtonClick}
+			/>
+			<StyledButton
+				tooltip={CommandService.instance().title('newNote')}
+				iconName="icon-note"
+				level={ButtonLevel.Primary}
+				onClick={onNewNoteButtonClick}
+			/>
 		</StyledRoot>
 	);
 }

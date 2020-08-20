@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledRoot, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledNewFolderButton, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 
 const { connect } = require('react-redux');
@@ -66,7 +66,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.onFolderToggleClick_ = this.onFolderToggleClick_.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
-		this.newFolderButton_click = this.newFolderButton_click.bind(this);
+		this.header_contextMenu = this.header_contextMenu.bind(this);
 	}
 
 	onFolderDragStart_(event:any) {
@@ -135,115 +135,6 @@ class SideBarComponent extends React.Component<Props, State> {
 		});
 	}
 
-	style() {
-		const theme = themeStyle(this.props.themeId);
-
-		const itemHeight = 25;
-
-		const style:any = {
-			root: {
-				backgroundColor: theme.backgroundColor2,
-				width: '100%',
-				height: '100%',
-			},
-			listItemContainer: {
-				boxSizing: 'border-box',
-				height: itemHeight,
-				display: 'flex',
-				flexDirection: 'row',
-			},
-			listItem: {
-				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize,
-				textDecoration: 'none',
-				color: theme.color2,
-				cursor: 'default',
-				opacity: 0.8,
-				whiteSpace: 'nowrap',
-				display: 'flex',
-				flex: 1,
-				alignItems: 'center',
-				userSelect: 'none',
-			},
-			listItemSelected: {
-				backgroundColor: theme.selectedColor2,
-			},
-			listItemExpandIcon: {
-				color: theme.color2,
-				cursor: 'default',
-				opacity: 0.8,
-				fontSize: theme.fontSize,
-				textDecoration: 'none',
-				paddingRight: 8,
-				display: 'flex',
-				alignItems: 'center',
-				width: 16,
-				maxWidth: 16,
-				minWidth: 16,
-			},
-			conflictFolder: {
-				color: theme.colorError2,
-				fontWeight: 'bold',
-			},
-			header: {
-				height: itemHeight * 1.8,
-				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize * 1.16,
-				textDecoration: 'none',
-				boxSizing: 'border-box',
-				// color: theme.colorFaded2,
-				paddingLeft: 8,
-				display: 'flex',
-				alignItems: 'center',
-				userSelect: 'none',
-				textTransform: 'uppercase',
-			},
-			button: {
-				padding: 6,
-				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize,
-				textDecoration: 'none',
-				boxSizing: 'border-box',
-				color: theme.color2,
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				border: '1px solid rgba(255,255,255,0.2)',
-				marginTop: 10,
-				marginLeft: 5,
-				marginRight: 5,
-				cursor: 'default',
-				userSelect: 'none',
-			},
-			syncReport: {
-				fontFamily: theme.fontFamily,
-				fontSize: Math.round(theme.fontSize * 0.9),
-				color: theme.color2,
-				opacity: 0.5,
-				display: 'flex',
-				alignItems: 'left',
-				justifyContent: 'top',
-				flexDirection: 'column',
-				marginTop: 10,
-				marginLeft: 5,
-				marginRight: 5,
-				marginBottom: 10,
-				wordWrap: 'break-word',
-			},
-			noteCount: {
-				paddingLeft: 5,
-				opacity: 0.5,
-				userSelect: 'none',
-			},
-		};
-
-		style.tagItem = Object.assign({}, style.listItem);
-		style.tagItem.paddingLeft = 23;
-		style.tagItem.height = itemHeight;
-
-		return style;
-	}
-
 	clearForceUpdateDuringSync() {
 		if (this.forceUpdateDuringSyncIID_) {
 			clearInterval(this.forceUpdateDuringSyncIID_);
@@ -255,6 +146,16 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.clearForceUpdateDuringSync();
 
 		CommandService.instance().componentUnregisterCommands(commands);
+	}
+
+	async header_contextMenu() {
+		const menu = new Menu();
+
+		menu.append(
+			new MenuItem(CommandService.instance().commandToMenuItem('newFolder'))
+		);
+
+		menu.popup(bridge().window());
 	}
 
 	async itemContextMenu(event:any) {
@@ -485,11 +386,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
-	newFolderButton_click() {
-		CommandService.instance().execute('newFolder');
-	}
-
-	renderHeader(key:string, label:string, iconName:string, newButtonClickHandler:Function = null, extraProps:any = {}) {
+	renderHeader(key:string, label:string, iconName:string, contextMenuHandler:Function = null, extraProps:any = {}) {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
 		const ref = this.anchorItemRef('headers', key);
@@ -499,16 +396,17 @@ class SideBarComponent extends React.Component<Props, State> {
 				ref={ref}
 				key={key}
 				{...extraProps}
-			>
-				<StyledHeaderIcon className={iconName}/>
-				<StyledHeaderLabel onClick={(event:any) => {
+				onContextMenu={contextMenuHandler}
+				onClick={(event:any) => {
 					// if a custom click event is attached, trigger that.
 					if (headerClick) {
 						headerClick(key, event);
 					}
 					this.onHeaderClick_(key);
-				}}>{label}</StyledHeaderLabel>
-				{ newButtonClickHandler && <StyledNewFolderButton iconName="icon-plus" onClick={newButtonClickHandler} /> }
+				}}
+			>
+				<StyledHeaderIcon className={iconName}/>
+				<StyledHeaderLabel>{label}</StyledHeaderLabel>
 			</StyledHeader>
 		);
 	}
@@ -635,7 +533,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		const items = [];
 
 		items.push(
-			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.newFolderButton_click, {
+			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.header_contextMenu, {
 				onDrop: this.onFolderDrop_,
 				['data-folder-id']: '',
 				toggleblock: 1,

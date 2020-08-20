@@ -44,8 +44,12 @@ export const StyledListItem = styled.div`
 	flex-direction: row;
 	padding-left: ${(props:any) => props.theme.mainPadding + ('depth' in props ? props.depth : 0) * 16}px;
 	background: ${(props:any) => props.selected ? props.theme.selectedColor2 : 'none'};
-	//color: ${(props:any) => props.theme.color2};
 	text-transform: ${(props:any) => props.isSpecialItem ? 'uppercase' : 'none'};
+	transition: 0.1s;
+
+	&:hover {
+		background-color: ${(props:any) =>  props.theme.backgroundColorHover2};
+	}
 `;
 
 function listItemTextColor(props:any) {
@@ -88,14 +92,14 @@ export const StyledNoteCount = styled.div`
 	user-select: none;
 `;
 
-export const StyledNewFolderButton = styled(Button)`
-	width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-	max-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-	min-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-	height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-	max-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-	min-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-`;
+// export const StyledNewFolderButton = styled(Button)`
+// 	width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// 	max-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// 	min-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// 	height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// 	max-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// 	min-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
+// `;
 
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;

@@ -17,6 +17,7 @@ interface Props {
 	onClick():void,
 	color?: string,
 	iconAnimation?: string,
+	tooltip?: string,
 }
 
 const StyledTitle = styled.span`
@@ -145,7 +146,7 @@ export default function Button(props:Props) {
 	}
 
 	return (
-		<StyledButton className={props.className} iconOnly={iconOnly} onClick={props.onClick}>
+		<StyledButton title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={props.onClick}>
 			{renderIcon()}
 			{renderTitle()}
 		</StyledButton>

@@ -111,6 +111,8 @@ function addExtraStyles(style) {
 
 	const bgColor4 = style.backgroundColor4;
 
+	style.backgroundColorHover2 = Color(style.selectedColor2).alpha(0.4).rgb();
+
 	style.backgroundColorHover4 = Color(bgColor4).alpha(0.7).rgb();
 	style.backgroundColorActive4 = Color(bgColor4).alpha(1).rgb();
 	style.backgroundColor4 = bgColor4;// Color(bgColor4).alpha(0).rgb();
