@@ -12,10 +12,11 @@ export interface ShortcutRecorderProps extends KeymapConfigScreenProps {
 	setAccelerator: (accelerator: string) => void,
 	resetAccelerator: () => void,
 	toggleEditing: () => void,
+	themeId: number
 }
 
-export const ShortcutRecorder = ({ setAccelerator, resetAccelerator, toggleEditing, theme }: ShortcutRecorderProps) => {
-	const styles = styles_(theme);
+export const ShortcutRecorder = ({ setAccelerator, resetAccelerator, toggleEditing, themeId }: ShortcutRecorderProps) => {
+	const styles = styles_(themeId);
 	const [newAccelerator, setNewAccelerator] = useState('');
 
 	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {

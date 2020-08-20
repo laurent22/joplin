@@ -69,7 +69,7 @@ class ConfigScreenComponent extends React.Component {
 	screenFromName(screenName) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
 		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
-		if (screenName === 'keymap') return <KeymapConfigScreen theme={this.props.theme}/>;
+		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.theme}/>;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}

@@ -15,11 +15,11 @@ interface CommandEditing {
 }
 
 export interface KeymapConfigScreenProps {
-	theme: number
+	themeId: number
 }
 
-export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
-	const styles = styles_(theme);
+export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
+	const styles = styles_(themeId);
 
 	const [filter, setFilter] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
@@ -82,7 +82,7 @@ export const KeymapConfigScreen = ({ theme }: KeymapConfigScreenProps) => {
 				setAccelerator={(accelerator: string) => setCommandAccelerator(command, accelerator)}
 				resetAccelerator={() => resetCommandAccelerator(command)}
 				toggleEditing={() => toggleEditing(command)}
-				theme={theme}
+				themeId={themeId}
 			/>
 			: <div onClick={handleClick}>
 				{accelerator || _('Disabled')}
