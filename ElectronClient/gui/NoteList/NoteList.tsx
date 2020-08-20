@@ -141,7 +141,7 @@ class NoteListComponent extends React.Component {
 	}
 
 	dragTargetNoteIndex_(event:any) {
-		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop()) / this.itemHeight)) - 1;
+		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop() + this.itemListRef.current.offsetScroll()) / this.itemHeight));
 	}
 
 	noteItem_noteDragOver(event:any) {
