@@ -136,7 +136,7 @@ export default class KeymapService extends BaseService {
 			this.logger().info(`Loading keymap: ${keymapPath}`);
 
 			try {
-				const keymapFile = await fs.readFile(keymapPath, 'utf-8');
+				const keymapFile = await shim.fsDriver().readFile(keymapPath, 'utf-8');
 				this.setKeymap(JSON.parse(keymapFile));
 			} catch (err) {
 				const msg = err.message ? err.message : '';
@@ -150,7 +150,7 @@ export default class KeymapService extends BaseService {
 
 		try {
 			const customKeymap = this.generateCustomKeymap();
-			await fs.writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2));
+			await shim.fsDriver().writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2));
 
 			// On successful save, refresh the menu items
 			eventManager.emit('keymapChange');
