@@ -7,7 +7,6 @@ import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
 import getLabel from './utils/getLabel';
 
 const { _ } = require('lib/locale.js');
-
 const keymapService = KeymapService.instance();
 
 interface CommandEditing {
@@ -31,16 +30,17 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		}, {})
 	);
 
-	const setCommandAccelerator = (commandName: string, accelerator: string) => {
+	const handleSave = (commandName: string, accelerator: string) => {
 		setKeymap(prevKeymap => {
 			const newKeymap = [...prevKeymap];
 
 			newKeymap.find(item => item.command === commandName).accelerator = accelerator;
 			return newKeymap;
 		});
+		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
-	const resetCommandAccelerator = (commandName: string) => {
+	const hanldeReset = (commandName: string) => {
 		setKeymap(prevKeymap => {
 			const newKeymap = [...prevKeymap];
 			const defaultAccelerator = keymapService.getDefaultAccelerator(commandName);
@@ -48,15 +48,11 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			newKeymap.find(item => item.command === commandName).accelerator = defaultAccelerator;
 			return newKeymap;
 		});
+		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
-	const toggleEditing = (commandName: string) => {
-		setEditing(prevEditing => {
-			const newEditing = { ...prevEditing };
-
-			newEditing[commandName] = !newEditing[commandName];
-			return newEditing;
-		});
+	const handleCancel = (commandName: string) => {
+		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
 	useEffect(() => {
@@ -76,12 +72,13 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	}, [keymap]);
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
-		const handleClick = () => toggleEditing(command);
+		const handleClick = () => setEditing(prevEditing => ({ ...prevEditing, [command]: true }));
 		const cellContent = editing[command]
 			? <ShortcutRecorder
-				setAccelerator={(accelerator: string) => setCommandAccelerator(command, accelerator)}
-				resetAccelerator={() => resetCommandAccelerator(command)}
-				toggleEditing={() => toggleEditing(command)}
+				onSave={handleSave}
+				onReset={hanldeReset}
+				onCancel={handleCancel}
+				commandName={command}
 				themeId={themeId}
 			/>
 			: <div onClick={handleClick}>
