@@ -212,7 +212,7 @@ export default class KeymapService extends BaseService {
 		return Object.values(this.keymap);
 	}
 
-	getCommands() {
+	getCommandNames() {
 		return Object.keys(this.keymap);
 	}
 

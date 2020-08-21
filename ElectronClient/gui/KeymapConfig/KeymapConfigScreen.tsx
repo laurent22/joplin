@@ -24,7 +24,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
 	const [editing, setEditing] = useState<CommandEditing>(() =>
-		keymapService.getCommands().reduce((accumulator: CommandEditing, command: string) => {
+		keymapService.getCommandNames().reduce((accumulator: CommandEditing, command: string) => {
 			accumulator[command] = false;
 			return accumulator;
 		}, {})
