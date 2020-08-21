@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import styles_ from './styles';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
 import getLabel from './utils/getLabel';
+import useKeymap from './utils/useKeymap';
 
 const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
@@ -21,8 +22,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
 	const [filter, setFilter] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
-	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
+	const [keymap, setCommandAccelerator, errorMessage] = useKeymap(keymapService);
 	const [editing, setEditing] = useState<CommandEditing>(() =>
 		keymapService.getCommandNames().reduce((accumulator: CommandEditing, command: string) => {
 			accumulator[command] = false;
@@ -31,42 +31,18 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	);
 
 	const handleSave = (commandName: string, accelerator: string) => {
-		setKeymap(prevKeymap => {
-			const newKeymap = [...prevKeymap];
-
-			newKeymap.find(item => item.command === commandName).accelerator = accelerator;
-			return newKeymap;
-		});
+		setCommandAccelerator(commandName, accelerator);
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
 	const hanldeReset = (commandName: string) => {
-		setKeymap(prevKeymap => {
-			const newKeymap = [...prevKeymap];
-			const defaultAccelerator = keymapService.getDefaultAccelerator(commandName);
-
-			newKeymap.find(item => item.command === commandName).accelerator = defaultAccelerator;
-			return newKeymap;
-		});
+		setCommandAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
 	const handleCancel = (commandName: string) => {
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
-
-	useEffect(() => {
-		try {
-			// Synchronize the keymap of KeymapService with the current keymap state
-			keymapService.setKeymap(keymap);
-			keymapService.saveKeymap(); // Save changes to the disk
-
-			setErrorMessage('');
-		} catch (err) {
-			const message = err.message || '';
-			setErrorMessage(message);
-		}
-	}, [keymap]);
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
 		const handleClick = () => setEditing(prevEditing => ({ ...prevEditing, [command]: true }));

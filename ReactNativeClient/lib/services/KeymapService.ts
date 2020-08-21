@@ -150,7 +150,7 @@ export default class KeymapService extends BaseService {
 
 		try {
 			const customKeymap = this.generateCustomKeymap();
-			await shim.fsDriver().writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2));
+			await shim.fsDriver().writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2), 'utf-8');
 
 			// On successful save, refresh the menu items
 			eventManager.emit('keymapChange');
