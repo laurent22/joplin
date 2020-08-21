@@ -94,7 +94,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		);
 	};
 
-	const renderErrorMessage = (errorMessage: string) => {
+	const renderErrorMessage = () => {
 		if (errorMessage.length) {
 			return (
 				<div style={styles.warning}>
@@ -108,7 +108,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	return (
 		<div>
-			{renderErrorMessage(errorMessage)}
+			{renderErrorMessage()}
 			<div style={styles.container}>
 				<div style={styles.topActions}>
 					<input
