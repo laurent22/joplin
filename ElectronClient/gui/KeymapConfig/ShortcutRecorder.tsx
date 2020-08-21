@@ -3,12 +3,11 @@ import { useState, KeyboardEvent } from 'react';
 
 import styles_ from './styles';
 import KeymapService from '../../lib/services/KeymapService';
-import { KeymapConfigScreenProps } from './KeymapConfigScreen';
 
 const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
 
-export interface ShortcutRecorderProps extends KeymapConfigScreenProps {
+export interface ShortcutRecorderProps {
 	onSave: (commandName: string, accelerator: string) => void,
 	onReset: (commandName: string) => void,
 	onCancel: (commandName: string) => void,
