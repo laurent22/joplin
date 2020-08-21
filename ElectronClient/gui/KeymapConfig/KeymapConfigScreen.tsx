@@ -116,6 +116,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						onChange={event => setFilter(event.target.value)}
 						placeholder={_('Search...')}
 						style={styles.filterInput}
+						aria-label="Search"
 					/>
 				</div>
 				<table style={styles.table}>
