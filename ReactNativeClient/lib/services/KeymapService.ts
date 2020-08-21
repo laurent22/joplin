@@ -2,6 +2,7 @@ import { KeyboardEvent } from 'react';
 
 const fs = require('fs-extra');
 const BaseService = require('lib/services/BaseService');
+const eventManager = require('lib/eventManager');
 const { shim } = require('lib/shim.js');
 
 const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
@@ -91,7 +92,6 @@ export default class KeymapService extends BaseService {
 	private defaultKeymap: KeymapItem[];
 	private platform: string;
 	private keymapPath: string;
-	private refreshMenu: Function;
 
 	constructor() {
 		super();
@@ -121,6 +121,14 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
+	public on(eventName: string, callback: Function) {
+		eventManager.on(eventName, callback);
+	}
+
+	public off(eventName: string, callback: Function) {
+		eventManager.off(eventName, callback);
+	}
+
 	async loadKeymap(keymapPath: string) {
 		this.keymapPath = keymapPath; // For saving the changes later
 
@@ -143,6 +151,9 @@ export default class KeymapService extends BaseService {
 		try {
 			const customKeymap = this.generateCustomKeymap();
 			await fs.writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2));
+
+			// On successful save, refresh the menu items
+			eventManager.emit('keymapChange');
 		} catch (err) {
 			throw new Error(`Failed to save keymap: ${this.keymapPath}\n${err}`);
 		}
@@ -203,14 +214,6 @@ export default class KeymapService extends BaseService {
 
 	getCommands() {
 		return Object.keys(this.keymap);
-	}
-
-	setMenuRefreshCallback(callback: Function) {
-		this.refreshMenu = callback;
-	}
-
-	triggerMenuRefresh() {
-		this.refreshMenu();
 	}
 
 	generateCustomKeymap() {

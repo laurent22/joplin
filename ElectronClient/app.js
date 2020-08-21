@@ -108,10 +108,10 @@ class Application extends BaseApplication {
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 
-		KeymapService.instance().setMenuRefreshCallback(this.refreshMenu.bind(this));
-
 		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+
+		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
 	}
 
 	commandService_commandsEnabledStateChange() {

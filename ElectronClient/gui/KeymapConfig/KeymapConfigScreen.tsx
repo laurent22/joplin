@@ -61,9 +61,6 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			keymapService.setKeymap(keymap);
 			keymapService.saveKeymap(); // Save changes to the disk
 
-			// TODO: Use events instead?
-			keymapService.triggerMenuRefresh();
-
 			setErrorMessage('');
 		} catch (err) {
 			const message = err.message || '';
