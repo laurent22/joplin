@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import styles_ from './styles';
-import { ShortcutRecorder } from './ShortcutRecorder';
 import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
+import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
+import styles_ from './styles';
 
 const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
@@ -71,15 +71,12 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const renderErrorMessage = () => {
-		if (errorMessage.length) {
-			return (
-				<div style={styles.warning}>
-					<p style={styles.text}>
-						<span>{errorMessage}</span>
-					</p>
-				</div>
-			);
-		} else { return null; }
+		errorMessage.length &&
+			<div style={styles.warning}>
+				<p style={styles.text}>
+					<span>{errorMessage}</span>
+				</p>
+			</div>;
 	};
 
 	return (
