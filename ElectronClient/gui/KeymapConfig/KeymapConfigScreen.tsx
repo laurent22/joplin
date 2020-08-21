@@ -107,9 +107,8 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	return (
-		<>
+		<div>
 			{renderErrorMessage(errorMessage)}
-
 			<div style={styles.container}>
 				<div style={styles.topActions}>
 					<input
@@ -134,7 +133,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 					</tbody>
 				</table>
 			</div>
-		</>
+		</div>
 	);
 };
 
