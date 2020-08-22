@@ -19,19 +19,15 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 	const styles = styles_(themeId);
 	const [newAccelerator, setNewAccelerator] = useState('');
 
-	const handleSave = () => onSave(commandName, newAccelerator);
-	const handleReset = () => onReset(commandName);
-	const handleCancel = () => onCancel(commandName);
-
 	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {
 		event.preventDefault();
 		const newAccelerator = keymapService.domToElectronAccelerator(event);
 
 		switch (newAccelerator) {
 		case 'Enter':
-			return handleSave();
+			return onSave(commandName, newAccelerator);
 		case 'Escape':
-			return handleCancel();
+			return onCancel(commandName);
 		default:
 			setNewAccelerator(newAccelerator);
 		}
@@ -47,12 +43,10 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 				readOnly
 				autoFocus
 			/>
-
-			<button style={styles.inlineButton} onClick={handleSave}>
+			<button style={styles.inlineButton} onClick={() => onSave(commandName, newAccelerator)}>
 				{_('Save')}
 			</button>
-
-			<button style={styles.inlineButton} onClick={handleReset}>
+			<button style={styles.inlineButton} onClick={() => onReset(commandName)}>
 				{_('Reset to default')}
 			</button>
 		</div>
