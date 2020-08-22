@@ -8,9 +8,9 @@ const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
 
 export interface ShortcutRecorderProps {
-	onSave: (commandName: string, accelerator: string) => void,
-	onReset: (commandName: string) => void,
-	onCancel: (commandName: string) => void,
+	onSave: (event: { commandName: string, accelerator: string }) => void,
+	onReset: (event: { commandName: string }) => void,
+	onCancel: (event: { commandName: string }) => void,
 	commandName: string,
 	themeId: number
 }
@@ -25,9 +25,9 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 
 		switch (newAccelerator) {
 		case 'Enter':
-			return onSave(commandName, newAccelerator);
+			return onSave({ commandName, accelerator });
 		case 'Escape':
-			return onCancel(commandName);
+			return onCancel({ commandName });
 		default:
 			setAccelerator(newAccelerator);
 		}
@@ -43,10 +43,10 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 				readOnly
 				autoFocus
 			/>
-			<button style={styles.inlineButton} onClick={() => onSave(commandName, accelerator)}>
+			<button style={styles.inlineButton} onClick={() => onSave({ commandName, accelerator })}>
 				{_('Save')}
 			</button>
-			<button style={styles.inlineButton} onClick={() => onReset(commandName)}>
+			<button style={styles.inlineButton} onClick={() => onReset({ commandName })}>
 				{_('Reset to default')}
 			</button>
 		</div>

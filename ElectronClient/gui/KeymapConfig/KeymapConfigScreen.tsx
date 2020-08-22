@@ -30,17 +30,23 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		}, {})
 	);
 
-	const handleSave = (commandName: string, accelerator: string) => {
+	const handleSave = (event: { commandName: string, accelerator: string }) => {
+		const { commandName, accelerator } = event;
+
 		setCommandAccelerator(commandName, accelerator);
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
-	const hanldeReset = (commandName: string) => {
+	const hanldeReset = (event : { commandName: string }) => {
+		const { commandName } = event;
+
 		setCommandAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
-	const handleCancel = (commandName: string) => {
+	const handleCancel = (event: { commandName: string }) => {
+		const { commandName } = event;
+
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
