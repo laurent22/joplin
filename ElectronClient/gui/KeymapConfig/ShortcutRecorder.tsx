@@ -49,6 +49,9 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 			<button style={styles.inlineButton} onClick={() => onReset({ commandName })}>
 				{_('Reset to default')}
 			</button>
+			<button style={styles.inlineButton} onClick={() => onCancel({ commandName })}>
+				{_('Cancel')}
+			</button>
 		</div>
 	);
 };
