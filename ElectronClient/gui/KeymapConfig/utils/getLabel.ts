@@ -2,11 +2,12 @@ import CommandService from '../../../lib/services/CommandService';
 
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
+const commandService = CommandService.instance();
 
 const getLabel = (commandName: string) => {
-	try {
-		return CommandService.instance().label(commandName);
-	} catch (err) {
+	if (commandService.exists(commandName)) {
+		return commandService.label(commandName);
+	} else {
 		switch (commandName) {
 		case 'quit':
 			return _('Quit');
@@ -25,7 +26,7 @@ const getLabel = (commandName: string) => {
 		case 'config':
 			return shim.isMac() ? _('Preferences') : _('Options');
 		default:
-			throw err;
+			throw new Error(`Command: ${commandName} is unknown`);
 		}
 	}
 };
