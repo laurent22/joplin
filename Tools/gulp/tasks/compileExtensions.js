@@ -2,51 +2,49 @@ const fs = require('fs-extra');
 const utils = require('../utils');
 
 
-
-async function compileSpellfix(dest) {
-	try {
-		await utils.execCommand(`wget -nc -q -O ${dest}/sqlite.tar.gz "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release"`);
-	} catch (e) {
-		// console.info(e);
-	}
-
-	try {
-		await utils.execCommand(`wget -nc -O ${dest}/amalgamation.tar.gz "https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz"`);
-	} catch (e) {
-		// console.info(e);
-	}
-
-	await utils.execCommand(`tar xzvf ${dest}/sqlite.tar.gz -C ${dest}`);
-	await utils.execCommand(`tar xzvf ${dest}/amalgamation.tar.gz -C ${dest}`);
-
-	if (utils.isLinux()) {
-		// console.info('Compiling sql extensions - Linux ');
-		await utils.execCommand(`gcc -shared -fPIC -Wall -I${dest}/sqlite-autoconf-3330000/ ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.so`);
-	}
-
-	if (utils.isMac()) {
-		// console.info('Compiling sql extensions - Mac ');
-		await utils.execCommand(`gcc -shared -fPIC -Wall -I${dest}/sqlite-autoconf-3330000/ -dynamiclib ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.dylib`);
-	}
-
-	return Promise.resolve();
+async function getSourceCode(dest) {
+	await utils.execCommand(`curl -o ${dest}/sqlite.tar.gz "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release"`);
+	await utils.execCommand(`curl -o ${dest}/amalgamation.tar.gz "https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz"`);
+	await utils.execCommand(`tar -xzvf ${dest}/sqlite.tar.gz -C ${dest}`);
+	await utils.execCommand(`tar -xzvf ${dest}/amalgamation.tar.gz -C ${dest}`);
 }
-
-
 
 async function main() {
 	const rootDir = utils.rootDir();
 	const dest = `${rootDir}/ReactNativeClient/lib/sql-extensions`;
 
-	fs.ensureDir(dest)
-		.then(async () => {
-			await compileSpellfix(dest);
-		})
-		.catch(err => {
-			console.error(err);
-		});
+	try {
+		await fs.ensureDir(dest);
 
-	return Promise.resolve();
+		if (utils.isLinux()) {
+			try {
+				await fs.promises.access(`${dest}/spellfix.so`);
+			} catch (e) {
+				await getSourceCode(dest);
+				await utils.execCommand(`gcc -shared -fPIC -Wall -I${dest}/sqlite-autoconf-3330000/ ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.so`);
+			}
+		}
+
+		if (utils.isMac()) {
+			try {
+				await fs.promises.access(`${dest}/spellfix.dylib`);
+			} catch (e) {
+				await getSourceCode(dest);
+				await utils.execCommand(`gcc -shared -fPIC -Wall -I${dest}/sqlite-autoconf-3330000/ -dynamiclib ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.dylib`);
+			}
+		}
+
+		if (utils.isWindows()) {
+			try {
+				await fs.promises.access(`${dest}/spellfix.dll`);
+			} catch (e) {
+				await getSourceCode(dest);
+				await utils.execCommand(`gcc -I ${dest}/sqlite-autoconf-3330000/ -g -shared ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.dll`);
+			}
+		}
+	} catch (e) {
+		console.warn(e);
+	}
 }
 
 module.exports = main;
