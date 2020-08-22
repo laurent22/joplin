@@ -78,6 +78,36 @@ const defaultKeymap = {
 	],
 };
 
+export interface KeymapErrorDetails {
+	missingAccelerator?: boolean,
+	missingCommand?: boolean
+	invalidAccelerator?: boolean,
+	invalidCommand?: boolean,
+	invalidKeymapItem?: KeymapItem,
+	duplicateAccelerators?: boolean,
+	duplicateKeymapItems?: [KeymapItem, KeymapItem]
+}
+
+export class KeymapError extends Error {
+	private details_: KeymapErrorDetails;
+
+	constructor(message: string, details: KeymapErrorDetails = {}) {
+		super(message);
+		this.details_ = {
+			missingAccelerator: false,
+			missingCommand: false,
+			invalidAccelerator: false,
+			invalidCommand: false,
+			duplicateAccelerators: false,
+			...details,
+		};
+	}
+
+	get details() {
+		return this.details_;
+	}
+}
+
 export interface KeymapItem {
 	accelerator: string;
 	command: string;
@@ -133,20 +163,20 @@ export default class KeymapService extends BaseService {
 		this.keymapPath = keymapPath; // For saving the changes later
 
 		if (await fs.exists(keymapPath)) {
-			this.logger().info(`Loading keymap: ${keymapPath}`);
+			this.logger().info(`KeymapService: Loading keymap: ${keymapPath}`);
 
 			try {
 				const keymapFile = await shim.fsDriver().readFile(keymapPath, 'utf-8');
 				this.setKeymap(JSON.parse(keymapFile));
 			} catch (err) {
 				const msg = err.message ? err.message : '';
-				throw new Error(`Failed to load keymap: ${keymapPath}\n${msg}`);
+				throw new Error(`KeymapService: Failed to load keymap: ${keymapPath}\n${msg}`);
 			}
 		}
 	}
 
 	async saveKeymap() {
-		this.logger().info(`Saving keymap: ${this.keymapPath}`);
+		this.logger().info(`KeymapService: Saving keymap: ${this.keymapPath}`);
 
 		try {
 			const customKeymap = this.generateCustomKeymap();
@@ -155,7 +185,7 @@ export default class KeymapService extends BaseService {
 			// On successful save, refresh the menu items
 			eventManager.emit('keymapChange');
 		} catch (err) {
-			throw new Error(`Failed to save keymap: ${this.keymapPath}\n${err}`);
+			throw new Error(`KeymapServiceL Failed to save keymap: ${this.keymapPath}\n${err}`);
 		}
 	}
 
@@ -192,20 +222,13 @@ export default class KeymapService extends BaseService {
 		for (let i = 0; i < customKeymap.length; i++) {
 			const item = customKeymap[i];
 
-			try {
-				this.validateKeymapItem(item); // Throws if there are any issues in the keymap item
-				this.setAccelerator(item.command, item.accelerator);
-			} catch (err) {
-				throw new Error(`Keymap item ${JSON.stringify(item)} is invalid: ${err.message}`);
-			}
+			// Throws if there are any issues in the keymap item
+			this.validateKeymapItem(item);
+			this.setAccelerator(item.command, item.accelerator);
 		}
 
-		try {
-			this.validateKeymap(); // Throws whenever there are duplicate Accelerators used in the keymap
-		} catch (err) {
-			this.initialize(); // Fallback to default keymap configuration
-			throw new Error(`Keymap configuration contains duplicates. \n${err.message}`);
-		}
+		// Throws whenever there are duplicate Accelerators used in the keymap
+		this.validateKeymap();
 	}
 
 	getKeymap() {
@@ -230,18 +253,30 @@ export default class KeymapService extends BaseService {
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new Error('"command" property is missing');
+			throw new KeymapError(
+				`Keymap item ${JSON.stringify(item)} is invalid because "command" property is missing.`,
+				{ invalidKeymapItem: item, missingCommand: true }
+			);
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(`"${item.command}" is not a valid command`);
+			throw new KeymapError(
+				`Keymap item ${JSON.stringify(item)} is invalid because "${item.command}" is not a valid command.`,
+				{ invalidKeymapItem: item, invalidCommand: true }
+			);
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error('"accelerator" property is missing');
+			throw new KeymapError(
+				`Keymap item ${JSON.stringify(item)} is invalid because  "accelerator" property is missing.`,
+				{ invalidKeymapItem: item, missingAccelerator: true }
+			);
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
-			} catch (err) {
-				throw new Error(`"${item.accelerator}" is not a valid accelerator.`);
+			} catch {
+				throw new KeymapError(
+					`Keymap item ${JSON.stringify(item)} is invalid because "${item.accelerator}" is not a valid accelerator.`,
+					{ invalidKeymapItem: item, invalidAccelerator: true }
+				);
 			}
 		}
 	}
@@ -254,9 +289,11 @@ export default class KeymapService extends BaseService {
 
 			if (usedAccelerators.has(itemAccelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
-				throw new Error(
-					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands. \n` +
-					'You have to change the accelerator for any of above commands.'
+				throw new KeymapError(
+					'Keymap configuration contains duplicates.\n' +
+					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands.\n` +
+					'You have to change the accelerator for any of above commands.',
+					{ duplicateAccelerators: true, duplicateKeymapItems: [item, originalItem] }
 				);
 			} else if (itemAccelerator !== null) {
 				usedAccelerators.add(itemAccelerator);

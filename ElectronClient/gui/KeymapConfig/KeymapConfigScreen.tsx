@@ -22,7 +22,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
 	const [filter, setFilter] = useState('');
-	const [keymap, setCommandAccelerator, errorMessage] = useKeymap(keymapService);
+	const [keymap, setAccelerator, error] = useKeymap();
 	const [editing, setEditing] = useState<CommandEditing>(() =>
 		keymapService.getCommandNames().reduce((accumulator: CommandEditing, command: string) => {
 			accumulator[command] = false;
@@ -33,14 +33,14 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const handleSave = (event: { commandName: string, accelerator: string }) => {
 		const { commandName, accelerator } = event;
 
-		setCommandAccelerator(commandName, accelerator);
+		setAccelerator(commandName, accelerator);
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
-	const hanldeReset = (event : { commandName: string }) => {
+	const hanldeReset = (event: { commandName: string }) => {
 		const { commandName } = event;
 
-		setCommandAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
+		setAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
@@ -76,18 +76,20 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		);
 	};
 
-	const renderErrorMessage = () => {
-		errorMessage.length &&
-			<div style={styles.warning}>
-				<p style={styles.text}>
-					<span>{errorMessage}</span>
-				</p>
-			</div>;
-	};
-
 	return (
 		<div>
-			{renderErrorMessage()}
+			{error &&
+				<div style={styles.warning}>
+					<p style={styles.text}>
+						<span>
+							{error.details.duplicateAccelerators
+								? _('Keymap configuration contains duplicates. Change or disable one of the shortcuts to continue.')
+								: error.message // Highly unlikely that any other error will occur at this point
+							}
+						</span>
+					</p>
+				</div>
+			}
 			<div style={styles.container}>
 				<div style={styles.topActions}>
 					<input
