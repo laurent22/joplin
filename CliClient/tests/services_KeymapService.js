@@ -282,13 +282,7 @@ describe('services_KeymapService', () => {
 
 			for (let i = 0; i < customKeymaps_Darwin.length; i++) {
 				const customKeymap = customKeymaps_Darwin[i];
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
 				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-				// All items should be reset to default values
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-				}
 			}
 
 			const customKeymaps_Linux = [
