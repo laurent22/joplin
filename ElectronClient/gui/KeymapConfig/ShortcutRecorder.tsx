@@ -29,6 +29,9 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator
 			return onSave({ commandName, accelerator });
 		case 'Escape':
 			return onCancel({ commandName });
+		case 'Backspace':
+		case 'Delete':
+			return setAccelerator('');
 		default:
 			setAccelerator(newAccelerator);
 		}
