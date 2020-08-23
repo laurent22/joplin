@@ -113,7 +113,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 							{error.details.duplicateAccelerators
 								? _('Keymap configuration contains duplicates. Change or disable one of the shortcuts to continue.')
 								: error.details.invalidAccelerator
-									? _('Keymap configuration an invalid shortcut. Change or disable it to continue.')
+									? _('Keymap configuration contains an invalid shortcut. Change or disable it to continue.')
 									: error.message // Highly unlikely that any other error will occur at this point
 							}
 						</span>
