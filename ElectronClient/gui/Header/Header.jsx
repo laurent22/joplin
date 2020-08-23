@@ -256,24 +256,16 @@ class HeaderComponent extends React.Component {
 			</a>
 		);
 
-
 		const fuzzyToggle = (
 			<div key={key + state.fuzzy.toString()}>
-				<div>
+				<label>
 					<input
-						id={`fuzzy_checkbox_${key}`}
 						type="checkbox"
 						checked={state.fuzzy}
 						onChange={this.toggleFuzzyValue}
 					/>
-					<label
-						onClick={this.toggleFuzzyValue}
-					// style={checkboxLabelStyle}
-					// htmlFor={`setting_checkbox_${key}`}
-					>
-						{'Fuzzy'}
-					</label>
-				</div>
+					{'Fuzzy'}
+				</label>
 			</div>
 		);
 

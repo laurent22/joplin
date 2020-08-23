@@ -436,10 +436,6 @@ class SearchEngine {
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
 			const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
 
-			// console.log(`fuzzyText matches are ${mergedFuzzyText}`);
-			// console.log(`fuzzyTitle matches are ${mergedFuzzyTitle}`);
-			// console.log(`fuzzyBody matches are ${mergedFuzzyBody}`);
-
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });
 			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x, negated: false }; });
@@ -455,6 +451,7 @@ class SearchEngine {
 		// - Convert wildcards to regex
 		// - Remove columns with no results
 		// - Add count of terms
+
 		let termCount = 0;
 		const keys = [];
 		for (const col in terms) {
@@ -578,7 +575,6 @@ class SearchEngine {
 			const parsedQuery = await this.parseQuery(searchString, options.fuzzy);
 
 			try {
-				// const { query, params } = queryBuilder(parsedQuery.allTerms);
 				const { query, params } =  (searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY) ? queryBuilder(parsedQuery.allTerms, true) : queryBuilder(parsedQuery.allTerms, false);
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);

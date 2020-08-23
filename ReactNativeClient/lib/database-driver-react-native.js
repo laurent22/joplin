@@ -51,9 +51,7 @@ class DatabaseDriverReactNative {
 	}
 
 	loadExtension(path) {
-		return new Promise(() => {
-			throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
-		});
+		throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
 	}
 
 	exec(sql, params = null) {

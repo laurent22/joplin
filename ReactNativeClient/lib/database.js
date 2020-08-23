@@ -98,7 +98,7 @@ class Database {
 	}
 
 	async loadExtension(path) {
-		const result = await this.driver()['loadExtension'](path);
+		const result = await this.driver().loadExtension(path);
 		return result;
 	}
 

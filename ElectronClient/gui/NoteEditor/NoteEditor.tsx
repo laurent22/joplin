@@ -366,7 +366,6 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
-	// searchMarkers.keywords = props.highlightedWords;
 
 	const editorProps:NoteBodyEditorProps = {
 		ref: editorRef,
@@ -397,8 +396,6 @@ function NoteEditor(props: NoteEditorProps) {
 	};
 
 	let editor = null;
-
-	// console.log(`Editor is ${props.bodyEditor}`);
 
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;

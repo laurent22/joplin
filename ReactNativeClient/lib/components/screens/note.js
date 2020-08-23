@@ -974,8 +974,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Currently keyword highlighting is supported only when FTS is available.
 			let keywords = [];
 			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				// const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
-				// keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 				keywords = this.props.highlightedWords;
 			}
 
@@ -1016,8 +1014,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Currently keyword highlighting is supported only when FTS is available.
 			let keywords = [];
 			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				// const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
-				// keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 				keywords = this.props.highlightedWords;
 			}
 

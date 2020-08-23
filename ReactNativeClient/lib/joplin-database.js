@@ -845,7 +845,6 @@ class JoplinDatabase extends Database {
 			if (targetVersion == 34) {
 				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
 				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
-
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

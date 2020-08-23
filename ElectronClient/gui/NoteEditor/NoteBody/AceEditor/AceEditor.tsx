@@ -80,8 +80,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const [webviewReady, setWebviewReady] = useState(false);
 
-	// const previousRenderedBody = usePrevious(renderedBody);
-	// const previousSearchMarkers = usePrevious(props.searchMarkers);
+	const previousRenderedBody = usePrevious(renderedBody);
+	const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
 	const editorRef = useRef(null);
@@ -534,14 +534,16 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (props.searchMarkers.keywords.length) {
-			// find-in-note highlighting
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-		} {
-			// search words highlighting
-			webviewRef.current.wrappedInstance.send('setMarkers', props.highlightedWords, props.searchMarkers.options);
+		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
+			if (props.searchMarkers.keywords.length) {
+				// find-in-note highlighting
+				webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+			} {
+				// search words highlighting (use props.highlightedWords instead of props.searchMarkers.keywords)
+				webviewRef.current.wrappedInstance.send('setMarkers', props.highlightedWords, props.searchMarkers.options);
+			}
 		}
-	});
+	}, [props.highlightedWords, props.searchMarkers, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
