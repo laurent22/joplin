@@ -68,6 +68,7 @@ ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
 ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
 ElectronClient/gui/KeymapConfig/styles/index.js
 ElectronClient/gui/KeymapConfig/utils/getLabel.js
+ElectronClient/gui/KeymapConfig/utils/useEditing.js
 ElectronClient/gui/KeymapConfig/utils/useKeymap.js
 ElectronClient/gui/MainScreen/commands/editAlarm.js
 ElectronClient/gui/MainScreen/commands/exportPdf.js

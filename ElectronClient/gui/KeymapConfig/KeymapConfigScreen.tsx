@@ -5,14 +5,11 @@ import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
+import useEditing from './utils/useEditing';
 import styles_ from './styles';
 
 const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
-
-interface CommandEditing {
-	[commandName: string]: boolean
-}
 
 export interface KeymapConfigScreenProps {
 	themeId: number
@@ -23,28 +20,23 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const [filter, setFilter] = useState('');
 	const [keymap, setAccelerator, error] = useKeymap();
-	const [editing, setEditing] = useState<CommandEditing>(() =>
-		keymapService.getCommandNames().reduce((accumulator: CommandEditing, command: string) => {
-			accumulator[command] = false;
-			return accumulator;
-		}, {})
-	);
+	const [editing, enableEditing, disableEditing] = useEditing();
 
 	const handleSave = (event: { commandName: string, accelerator: string }) => {
 		const { commandName, accelerator } = event;
 		setAccelerator(commandName, accelerator);
-		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
+		disableEditing(commandName);
 	};
 
 	const hanldeReset = (event: { commandName: string }) => {
 		const { commandName } = event;
 		setAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
-		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
+		disableEditing(commandName);
 	};
 
 	const handleCancel = (event: { commandName: string }) => {
 		const { commandName } = event;
-		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
+		disableEditing(commandName);
 	};
 
 	const renderAccelerator = (accelerator: string) => {
@@ -71,7 +63,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
-		const handleClick = () => setEditing(prevEditing => ({ ...prevEditing, [command]: true }));
+		const handleClick = () => enableEditing(command);
 		const cellContent = editing[command]
 			? <ShortcutRecorder
 				onSave={handleSave}
