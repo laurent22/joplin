@@ -1,15 +1,11 @@
 const { buildStyle } = require('lib/theme');
 
-export default function styles(theme: number) {
-	return buildStyle('KeymapConfigScreen', theme, (theme: any) => {
+export default function styles(themeId: number) {
+	return buildStyle('KeymapConfigScreen', themeId, (theme: any) => {
 		return {
 			container: {
 				...theme.containerStyle,
 				padding: 16,
-			},
-			topActions: {
-				display: 'flex',
-				flexDirection: 'row',
 			},
 			text: {
 				...theme.textStyle,
@@ -17,14 +13,20 @@ export default function styles(theme: number) {
 			input: {
 				...theme.inputStyle,
 			},
+			topActions: {
+				display: 'flex',
+				flexDirection: 'row',
+			},
 			filterInput: {
 				...theme.inputStyle,
 				flexGrow: 1,
-				minHeight: theme.buttonStyle.minHeight,
+			},
+			shortcutInput: {
+				...theme.inputStyle,
 			},
 			inlineButton: {
 				...theme.buttonStyle,
-				marginLeft: 12,
+				marginLeft: 8,
 			},
 			warning: {
 				backgroundColor: theme.warningBackgroundColor,
@@ -35,20 +37,41 @@ export default function styles(theme: number) {
 			},
 			table: {
 				...theme.containerStyle,
-				marginTop: 15,
+				marginTop: 16,
 				overflow: 'auto',
 				width: '100%',
 			},
 			tableShortcutColumn: {
 				...theme.textStyle,
-				width: '65%',
+				width: '60%',
 			},
 			tableCommandColumn: {
 				...theme.textStyle,
 				width: 'auto',
 			},
-			tableRow: {
-				minHeight: 25,
+			tableCell: {
+				display: 'flex',
+				flexDirection: 'row',
+				cursor: 'pointer',
+			},
+			tableCellShortcut: {
+				flexGrow: 1,
+			},
+			tableCellStatus: {
+				// No specific styling at the moment
+			},
+			kbd: {
+				fontFamily: 'sans-serif',
+				border: '1px solid',
+				borderRadius: 4,
+				backgroundColor: theme.raisedBackgroundColor,
+				padding: 2,
+				paddingLeft: 6,
+				paddingRight: 6,
+			},
+			disabled: {
+				color: theme.colorFaded,
+				fontStyle: 'italic',
 			},
 		};
 	});

@@ -306,13 +306,7 @@ describe('services_KeymapService', () => {
 
 			for (let i = 0; i < customKeymaps_Linux.length; i++) {
 				const customKeymap = customKeymaps_Linux[i];
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
 				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-				}
 			}
 		});
 	});

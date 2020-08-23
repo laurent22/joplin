@@ -79,10 +79,10 @@ const defaultKeymap = {
 };
 
 export interface KeymapErrorDetails {
-	missingAccelerator?: boolean,
-	missingCommand?: boolean
-	invalidAccelerator?: boolean,
 	invalidCommand?: boolean,
+	invalidAccelerator?: boolean,
+	missingCommand?: boolean
+	missingAccelerator?: boolean,
 	invalidKeymapItem?: KeymapItem,
 	duplicateAccelerators?: boolean,
 	duplicateKeymapItems?: [KeymapItem, KeymapItem]
@@ -164,13 +164,12 @@ export default class KeymapService extends BaseService {
 
 		if (await fs.exists(keymapPath)) {
 			this.logger().info(`KeymapService: Loading keymap: ${keymapPath}`);
-
 			try {
 				const keymapFile = await shim.fsDriver().readFile(keymapPath, 'utf-8');
 				this.setKeymap(JSON.parse(keymapFile));
 			} catch (err) {
-				const msg = err.message ? err.message : '';
-				throw new Error(`KeymapService: Failed to load keymap: ${keymapPath}\n${msg}`);
+				const message = err.message ? err.message : '';
+				throw new Error(`Failed to load keymap: ${keymapPath}\n${message}`);
 			}
 		}
 	}
@@ -181,11 +180,11 @@ export default class KeymapService extends BaseService {
 		try {
 			const customKeymap = this.generateCustomKeymap();
 			await shim.fsDriver().writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2), 'utf-8');
-
-			// On successful save, refresh the menu items
+			// Refresh the menu items
 			eventManager.emit('keymapChange');
 		} catch (err) {
-			throw new Error(`KeymapServiceL Failed to save keymap: ${this.keymapPath}\n${err}`);
+			const message = err.message ? err.message : '';
+			throw new Error(`Failed to save keymap: ${this.keymapPath}\n${message}`);
 		}
 	}
 
@@ -266,7 +265,7 @@ export default class KeymapService extends BaseService {
 
 		if (!item.hasOwnProperty('accelerator')) {
 			throw new KeymapError(
-				`Keymap item ${JSON.stringify(item)} is invalid because  "accelerator" property is missing.`,
+				`Keymap item ${JSON.stringify(item)} is invalid because "accelerator" property is missing.`,
 				{ invalidKeymapItem: item, missingAccelerator: true }
 			);
 		} else if (item.accelerator !== null) {

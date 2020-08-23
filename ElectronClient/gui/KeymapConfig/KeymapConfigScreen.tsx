@@ -32,22 +32,42 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const handleSave = (event: { commandName: string, accelerator: string }) => {
 		const { commandName, accelerator } = event;
-
 		setAccelerator(commandName, accelerator);
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
 	const hanldeReset = (event: { commandName: string }) => {
 		const { commandName } = event;
-
 		setAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
 	};
 
 	const handleCancel = (event: { commandName: string }) => {
 		const { commandName } = event;
-
 		setEditing(prevEditing => ({ ...prevEditing, [commandName]: false }));
+	};
+
+	const renderAccelerator = (accelerator: string) => {
+		return (
+			<div>
+				{accelerator.split('+').map(part => <kbd style={styles.kbd} key={part}>{part}</kbd>).reduce(
+					(accumulator, part) => (accumulator.length ? [...accumulator, ' + ', part] : [part]),
+					[]
+				)}
+			</div>
+		);
+	};
+
+	const renderStatus = (command: string) => {
+		if (!error) return null;
+		const { invalidAccelerator, invalidKeymapItem, duplicateAccelerators, duplicateKeymapItems } = error.details;
+
+		if ((invalidAccelerator && invalidKeymapItem.command === command) ||
+			(duplicateAccelerators && (duplicateKeymapItems[0].command === command || duplicateKeymapItems[1].command === command))) {
+			return '❌';
+		} else {
+			return null;
+		}
 	};
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
@@ -60,12 +80,20 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				commandName={command}
 				themeId={themeId}
 			/>
-			: <div onClick={handleClick}>
-				{accelerator || _('Disabled')}
+			: <div onClick={handleClick} style={styles.tableCell}>
+				<div style={styles.tableCellShortcut}>
+					{accelerator
+						? renderAccelerator(accelerator)
+						: <div style={styles.disabled}>{_('Disabled')}</div>
+					}
+				</div>
+				<div style={styles.tableCellStatus}>
+					{renderStatus(command)}
+				</div>
 			</div>;
 
 		return (
-			<tr key={command} style={styles.tableRow}>
+			<tr key={command}>
 				<td style={styles.tableCommandColumn}>
 					{getLabel(command)}
 				</td>
@@ -84,7 +112,9 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						<span>
 							{error.details.duplicateAccelerators
 								? _('Keymap configuration contains duplicates. Change or disable one of the shortcuts to continue.')
-								: error.message // Highly unlikely that any other error will occur at this point
+								: error.details.invalidAccelerator
+									? _('Keymap configuration an invalid shortcut. Change or disable it to continue.')
+									: error.message // Highly unlikely that any other error will occur at this point
 							}
 						</span>
 					</p>
@@ -102,7 +132,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				</div>
 				<table style={styles.table}>
 					<thead>
-						<tr style={styles.tableRow}>
+						<tr>
 							<th style={styles.tableCommandColumn}>{_('Command')}</th>
 							<th style={styles.tableShortcutColumn}>{_('Keyboard Shortcut')}</th>
 						</tr>

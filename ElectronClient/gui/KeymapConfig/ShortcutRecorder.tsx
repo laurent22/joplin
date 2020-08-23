@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, KeyboardEvent } from 'react';
 
-import styles_ from './styles';
 import KeymapService from '../../lib/services/KeymapService';
+import styles_ from './styles';
 
 const { _ } = require('lib/locale.js');
 const keymapService = KeymapService.instance();
@@ -34,12 +34,12 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 	};
 
 	return (
-		<div>
+		<div style={styles.tableCell}>
 			<input
 				value={accelerator}
 				placeholder={_('Press the shortcut')}
 				onKeyDown={handleKeydown}
-				style={styles.input}
+				style={styles.shortcutInput}
 				readOnly
 				autoFocus
 			/>
