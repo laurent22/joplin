@@ -11,13 +11,14 @@ export interface ShortcutRecorderProps {
 	onSave: (event: { commandName: string, accelerator: string }) => void,
 	onReset: (event: { commandName: string }) => void,
 	onCancel: (event: { commandName: string }) => void,
+	initialAccelerator: string
 	commandName: string,
 	themeId: number
 }
 
-export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, themeId }: ShortcutRecorderProps) => {
+export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {
 	const styles = styles_(themeId);
-	const [accelerator, setAccelerator] = useState('');
+	const [accelerator, setAccelerator] = useState(initialAccelerator);
 
 	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {
 		event.preventDefault();
@@ -34,12 +35,12 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 	};
 
 	return (
-		<div style={styles.tableCell}>
+		<div style={styles.recorderContainer}>
 			<input
 				value={accelerator}
 				placeholder={_('Press the shortcut')}
 				onKeyDown={handleKeydown}
-				style={styles.shortcutInput}
+				style={styles.recorderInput}
 				readOnly
 				autoFocus
 			/>
@@ -47,7 +48,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, commandName, theme
 				{_('Save')}
 			</button>
 			<button style={styles.inlineButton} onClick={() => onReset({ commandName })}>
-				{_('Reset to default')}
+				{_('Restore')}
 			</button>
 			<button style={styles.inlineButton} onClick={() => onCancel({ commandName })}>
 				{_('Cancel')}

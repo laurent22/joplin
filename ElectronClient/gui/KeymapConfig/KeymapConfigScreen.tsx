@@ -77,6 +77,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				onSave={handleSave}
 				onReset={hanldeReset}
 				onCancel={handleCancel}
+				initialAccelerator={accelerator}
 				commandName={command}
 				themeId={themeId}
 			/>
@@ -121,7 +122,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				</div>
 			}
 			<div style={styles.container}>
-				<div style={styles.topActions}>
+				<div style={styles.actionsContainer}>
 					<input
 						value={filter}
 						onChange={event => setFilter(event.target.value)}

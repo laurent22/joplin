@@ -7,33 +7,20 @@ export default function styles(themeId: number) {
 				...theme.containerStyle,
 				padding: 16,
 			},
-			text: {
-				...theme.textStyle,
-			},
-			input: {
-				...theme.inputStyle,
-			},
-			topActions: {
+			actionsContainer: {
 				display: 'flex',
 				flexDirection: 'row',
+			},
+			recorderContainer: {
+				padding: 2,
 			},
 			filterInput: {
 				...theme.inputStyle,
 				flexGrow: 1,
 			},
-			shortcutInput: {
+			recorderInput: {
 				...theme.inputStyle,
-			},
-			inlineButton: {
-				...theme.buttonStyle,
-				marginLeft: 8,
-			},
-			warning: {
-				backgroundColor: theme.warningBackgroundColor,
-				paddingLeft: 10,
-				paddingRight: 10,
-				paddingTop: 2,
-				paddingBottom: 2,
+				minHeight: 29,
 			},
 			table: {
 				...theme.containerStyle,
@@ -72,6 +59,18 @@ export default function styles(themeId: number) {
 			disabled: {
 				color: theme.colorFaded,
 				fontStyle: 'italic',
+			},
+			inlineButton: {
+				...theme.buttonStyle,
+				marginLeft: 8,
+			},
+			warning: {
+				...theme.textStyle,
+				backgroundColor: theme.warningBackgroundColor,
+				paddingLeft: 16,
+				paddingRight: 16,
+				paddingTop: 2,
+				paddingBottom: 2,
 			},
 		};
 	});
