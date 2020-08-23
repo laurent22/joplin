@@ -685,6 +685,18 @@ class BaseApplication {
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
+
+		if (Setting.value('env') === 'dev') {
+			if (shim.isElectron()) {
+				this.database_.addExtension('./lib/sql-extensions/spellfix');
+			}
+		} else {
+			if (shim.isElectron()) {
+				const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
+				this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+			}
+		}
+
 		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
