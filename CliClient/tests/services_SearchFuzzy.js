@@ -24,7 +24,6 @@ let engine = null;
 
 const ids = (array) => array.map(a => a.id);
 
-
 describe('services_SearchFuzzy', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -34,7 +33,6 @@ describe('services_SearchFuzzy', function() {
 		engine.setDb(db());
 
 		Setting.setValue('db.fuzzySearchEnabled', 1);
-
 		done();
 	});
 

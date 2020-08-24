@@ -264,7 +264,7 @@ class HeaderComponent extends React.Component {
 						checked={state.fuzzy}
 						onChange={this.toggleFuzzyValue}
 					/>
-					{'Fuzzy'}
+					{_('Fuzzy')}
 				</label>
 			</div>
 		);

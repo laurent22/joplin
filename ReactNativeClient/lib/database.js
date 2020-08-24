@@ -98,8 +98,13 @@ class Database {
 	}
 
 	async loadExtension(path) {
-		const result = await this.driver().loadExtension(path);
-		return result;
+		let result =  null;
+		try {
+			result = await this.driver().loadExtension(path);
+			return result;
+		} catch (e) {
+			throw new Error(`Could not load extension ${path}`);
+		}
 	}
 
 	async selectAll(sql, params = null) {

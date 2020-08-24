@@ -258,6 +258,7 @@ async function setupDatabase(id = null, options = null) {
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
 	databases_[id].setLogger(dbLogger);
+
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);

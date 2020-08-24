@@ -688,16 +688,16 @@ class BaseApplication {
 
 		if (Setting.value('env') === 'dev') {
 			if (shim.isElectron()) {
-				this.database_.addExtension('./lib/sql-extensions/spellfix');
+				this.database_.extensionToLoad = './lib/sql-extensions/spellfix';
 			}
 		} else {
 			if (shim.isElectron()) {
 				if (shim.isWindows()) {
 					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
-					this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
 				} else {
 					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
-					this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
 				}
 			}
 		}

@@ -125,11 +125,7 @@ class JoplinDatabase extends Database {
 		this.tableFields_ = null;
 		this.version_ = null;
 		this.tableFieldNames_ = {};
-		this.extensionsToLoad = [];
-	}
-
-	addExtension(path) {
-		this.extensionsToLoad.push(path);
+		this.extensionToLoad = './build/lib/sql-extensions/spellfix';
 	}
 
 	initialized() {
@@ -906,8 +902,10 @@ class JoplinDatabase extends Database {
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
 
-		for (let i = 0; i < this.extensionsToLoad.length; i++) {
-			await this.loadExtension(this.extensionsToLoad[i]);
+		try {
+			await this.loadExtension(this.extensionToLoad);
+		} catch (error) {
+			console.info(error);
 		}
 
 		let versionRow = null;
