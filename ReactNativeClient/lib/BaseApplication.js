@@ -692,8 +692,13 @@ class BaseApplication {
 			}
 		} else {
 			if (shim.isElectron()) {
-				const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
-				this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+				if (shim.isWindows()) {
+					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
+					this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+				} else {
+					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
+					this.database_.addExtension(`${appDir}/usr/lib/spellfix`);
+				}
 			}
 		}
 

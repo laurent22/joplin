@@ -34,14 +34,14 @@ async function main() {
 			}
 		}
 
-		if (utils.isWindows()) {
-			try {
-				await fs.promises.access(`${dest}/spellfix.dll`);
-			} catch (e) {
-				await getSourceCode(dest);
-				await utils.execCommand(`gcc -I ${dest}/sqlite-autoconf-3330000/ -g -shared ${dest}/sqlite/ext/misc/spellfix.c -o ${dest}/spellfix.dll`);
-			}
-		}
+		// if (utils.isWindows()) {
+		// 	try {
+		// 		await fs.promises.access(`${dest}/spellfix.dll`);
+		// 	} catch (e) {
+		// 		await getSourceCode(dest);
+		// 		await utils.execCommand(`cl /I ${dest}/sqlite-autoconf-3330000 ${dest}/sqlite/ext/misc/spellfix.c -link -dll -out:spellfix.dll `)
+		// 	}
+		// }
 	} catch (e) {
 		console.warn(e);
 	}
