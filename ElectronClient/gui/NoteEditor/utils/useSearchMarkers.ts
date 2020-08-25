@@ -23,11 +23,12 @@ function defaultSearchMarkers():SearchMarkers {
 }
 
 
-export default function useSearchMarkers(showLocalSearch:boolean, localSearchMarkerOptions:Function, searches:any[], selectedSearchId:string) {
+export default function useSearchMarkers(showLocalSearch:boolean, localSearchMarkerOptions:Function, searches:any[], selectedSearchId:string, highlightedWords: any[] = []) {
 	return useMemo(():SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
 
 		const output = defaultSearchMarkers();
+		output.keywords = highlightedWords;
 
 		return output;
 	}, [showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);

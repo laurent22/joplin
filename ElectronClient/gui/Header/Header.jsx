@@ -83,7 +83,6 @@ class HeaderComponent extends React.Component {
 		};
 
 		this.toggleFuzzyValue = () => {
-			// console.log(`Current value is ${!this.state.fuzzy}`);
 			this.setState((prevState) => ({
 				fuzzy: !prevState.fuzzy,
 			}));

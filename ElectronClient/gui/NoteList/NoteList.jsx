@@ -229,8 +229,6 @@ class NoteListComponent extends React.Component {
 				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (query) {
 					return this.props.highlightedWords;
-					// const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
-					// return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 				}
 			}
 			return [];

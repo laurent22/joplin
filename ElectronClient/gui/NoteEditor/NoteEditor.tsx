@@ -365,7 +365,7 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
+	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
 	const editorProps:NoteBodyEditorProps = {
 		ref: editorRef,
@@ -392,7 +392,6 @@ function NoteEditor(props: NoteEditorProps) {
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
-		highlightedWords: props.highlightedWords,
 	};
 
 	let editor = null;

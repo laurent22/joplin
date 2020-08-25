@@ -733,7 +733,6 @@ class BaseApplication {
 			Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
 		}
 
-
 		if (Setting.value('encryption.shouldReencrypt') < 0) {
 			// We suggest re-encryption if the user has at least one notebook
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1

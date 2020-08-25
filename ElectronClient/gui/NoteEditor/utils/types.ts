@@ -51,8 +51,6 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos,
 	locale: string,
 	onDrop: Function,
-	highlightedWords: any[],
-
 }
 
 export interface FormNote {

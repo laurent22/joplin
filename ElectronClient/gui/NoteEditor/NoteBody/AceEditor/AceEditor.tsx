@@ -535,15 +535,9 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			if (props.searchMarkers.keywords.length) {
-				// find-in-note highlighting
-				webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-			} {
-				// search words highlighting (use props.highlightedWords instead of props.searchMarkers.keywords)
-				webviewRef.current.wrappedInstance.send('setMarkers', props.highlightedWords, props.searchMarkers.options);
-			}
+			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 		}
-	}, [props.highlightedWords, props.searchMarkers, renderedBody]);
+	}, [props.searchMarkers, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };

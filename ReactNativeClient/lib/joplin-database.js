@@ -894,7 +894,6 @@ class JoplinDatabase extends Database {
 		return true;
 	}
 
-
 	version() {
 		return this.version_;
 	}
