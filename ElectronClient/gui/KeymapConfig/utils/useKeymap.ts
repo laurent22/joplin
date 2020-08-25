@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import KeymapService, { KeymapItem, KeymapError } from '../../../lib/services/KeymapService';
 
-const useKeymap = (): [KeymapItem[], (commandName: string, accelerator: string) => void, KeymapError] => {
-	const keymapService = KeymapService.instance();
+const keymapService = KeymapService.instance();
 
+const useKeymap = (): [KeymapItem[], (commandName: string, accelerator: string) => void, KeymapError] => {
 	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
 	const [error, setError] = useState<KeymapError>(null);
 

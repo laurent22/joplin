@@ -18,6 +18,7 @@ export interface ShortcutRecorderProps {
 
 export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {
 	const styles = styles_(themeId);
+
 	const [accelerator, setAccelerator] = useState(initialAccelerator);
 
 	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {

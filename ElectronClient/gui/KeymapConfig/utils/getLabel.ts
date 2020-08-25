@@ -2,6 +2,7 @@ import CommandService from '../../../lib/services/CommandService';
 
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
+
 const commandService = CommandService.instance();
 
 const getLabel = (commandName: string) => {
