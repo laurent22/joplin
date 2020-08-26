@@ -378,7 +378,6 @@ class SearchEngine {
 		rows.sort((a, b) => {
 			if (a.fuzziness < b.fuzziness) return -1;
 			if (a.fuzziness > b.fuzziness) return +1;
-			if (a.weight > b.weight) return -1;
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
