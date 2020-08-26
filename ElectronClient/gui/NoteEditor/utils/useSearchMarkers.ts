@@ -31,5 +31,5 @@ export default function useSearchMarkers(showLocalSearch:boolean, localSearchMar
 		output.keywords = highlightedWords;
 
 		return output;
-	}, [showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);
+	}, [highlightedWords, showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);
 }

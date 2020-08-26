@@ -266,7 +266,7 @@ class SearchEngine {
 
 
 
-	calculateWeightBM25_(rows) {
+	calculateWeightBM25_(rows, fuzzyScore) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -330,6 +330,7 @@ class SearchEngine {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			row.weight = 0;
+			row.fuzziness = 1000;
 			for (let j = 0; j < numPhrases; j++) {
 				columns.forEach(column => {
 					const rowsWithHits = docsWithHits(X[i], column, j);
@@ -337,6 +338,7 @@ class SearchEngine {
 
 					const idf = IDF(rowsWithHits, numRows);
 					row.weight += BM25(idf, frequencyHits, numTokens[column][i], avgTokens[column]);
+					row.fuzziness = (frequencyHits > 0) ? Math.min(row.fuzziness, fuzzyScore[j]) : row.fuzziness;
 				});
 			}
 		}
@@ -357,6 +359,7 @@ class SearchEngine {
 
 			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
 			row.weight = 0;
+			row.fuzziness = 0;
 		}
 	}
 
@@ -364,7 +367,7 @@ class SearchEngine {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
-			this.calculateWeightBM25_(rows);
+			this.calculateWeightBM25_(rows, parsedQuery.fuzzyScore);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 				const offsets = row.offsets.split(' ').map(o => Number(o));
@@ -372,8 +375,10 @@ class SearchEngine {
 			}
 		}
 
-
 		rows.sort((a, b) => {
+			if (a.fuzziness < b.fuzziness) return -1;
+			if (a.fuzziness > b.fuzziness) return +1;
+			if (a.weight > b.weight) return -1;
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
@@ -404,7 +409,7 @@ class SearchEngine {
 	async fuzzifier(words) {
 		const fuzzyMatches = [];
 		words.forEach(word => {
-			const fuzzyWords = this.db().selectAll('SELECT word FROM notes_spellfix WHERE word MATCH ? AND top=3', [word]);
+			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ? AND top=3', [word]);
 			fuzzyMatches.push(fuzzyWords);
 		});
 		return await Promise.all(fuzzyMatches);
@@ -426,24 +431,33 @@ class SearchEngine {
 		const title = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
 		const body = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
+		const fuzzyScore = [];
 		let terms = null;
 		if (fuzzy) {
 			const fuzzyText = await this.fuzzifier(text);
 			const fuzzyTitle = await this.fuzzifier(title);
 			const fuzzyBody = await this.fuzzifier(body);
 
-			const mergedFuzzyText = [].concat.apply([], fuzzyText).map(x => x.word);
-			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle).map(x => x.word);
-			const mergedFuzzyBody = [].concat.apply([], fuzzyBody).map(x => x.word);
+			const mergedFuzzyText = [].concat.apply([], fuzzyText);
+			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle);
+			const mergedFuzzyBody = [].concat.apply([], fuzzyBody);
 
-			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x, negated: false }; });
-			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x, negated: false }; });
-			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x, negated: false }; });
-
+			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x.word, negated: false, score: x.score }; });
+			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x.word, negated: false, score: x.score }; });
+			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x.word, negated: false, score: x.score }; });
 			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
 
-			terms = { _: mergedFuzzyText, 'title': mergedFuzzyTitle, 'body': mergedFuzzyBody };
+			const allTextTerms = allFuzzyTerms.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
+			for (let i = 0; i < allTextTerms.length; i++) {
+				fuzzyScore.push(allFuzzyTerms[i].score ? allFuzzyTerms[i].score : 0);
+			}
+
+			terms = { _: mergedFuzzyText.map(x => x.word), 'title': mergedFuzzyTitle.map(x => x.word), 'body': mergedFuzzyBody.map(x => x.word) };
 		} else {
+			const nonNegatedTextTerms = text.length + title.length + body.length;
+			for (let i = 0; i < nonNegatedTextTerms; i++) {
+				fuzzyScore.push(0);
+			}
 			terms = { _: text, 'title': title, 'body': body };
 		}
 
@@ -483,11 +497,14 @@ class SearchEngine {
 			keys.push(col);
 		}
 
+
+
 		return {
 			termCount: termCount,
 			keys: keys,
 			terms: terms, // text terms
 			allTerms: fuzzy ? allFuzzyTerms : allTerms,
+			fuzzyScore: fuzzyScore,
 		};
 	}
 

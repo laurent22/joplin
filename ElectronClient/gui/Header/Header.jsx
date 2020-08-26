@@ -17,7 +17,7 @@ class HeaderComponent extends React.Component {
 			searchQuery: '',
 			showSearchUsageLink: false,
 			showButtonLabels: true,
-			fuzzy: false,
+			fuzzy: true,
 		};
 
 		for (const command of commands) {
