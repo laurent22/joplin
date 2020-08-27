@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useState, KeyboardEvent } from 'react';
+import { useState, useEffect, KeyboardEvent } from 'react';
 
-import KeymapService from '../../lib/services/KeymapService';
+import KeymapService, { KeymapError } from '../../lib/services/KeymapService';
 import styles_ from './styles';
 
 const { _ } = require('lib/locale.js');
@@ -11,15 +11,30 @@ export interface ShortcutRecorderProps {
 	onSave: (event: { commandName: string, accelerator: string }) => void,
 	onReset: (event: { commandName: string }) => void,
 	onCancel: (event: { commandName: string }) => void,
+	onError: (event: { recorderError: KeymapError }) => void,
 	initialAccelerator: string
 	commandName: string,
 	themeId: number
 }
 
-export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {
+export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {
 	const styles = styles_(themeId);
 
 	const [accelerator, setAccelerator] = useState(initialAccelerator);
+	const [saveAllowed, setSaveAllowed] = useState(true);
+
+	useEffect(() => {
+		try {
+			keymapService.validateAccelerator(accelerator);
+			keymapService.validateKeymap({ accelerator, command: commandName });
+			// Discard previous errors
+			onError({ recorderError: null });
+			setSaveAllowed(true);
+		} catch (recorderError) {
+			onError({ recorderError });
+			setSaveAllowed(false);
+		}
+	}, [accelerator]);
 
 	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {
 		event.preventDefault();
@@ -27,7 +42,8 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator
 
 		switch (newAccelerator) {
 		case 'Enter':
-			return onSave({ commandName, accelerator });
+			if (saveAllowed) return onSave({ commandName, accelerator });
+			break;
 		case 'Escape':
 			return onCancel({ commandName });
 		case 'Backspace':
@@ -48,7 +64,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, initialAccelerator
 				readOnly
 				autoFocus
 			/>
-			<button style={styles.inlineButton} onClick={() => onSave({ commandName, accelerator })}>
+			<button style={styles.inlineButton} disabled={!saveAllowed} onClick={() => onSave({ commandName, accelerator })}>
 				{_('Save')}
 			</button>
 			<button style={styles.inlineButton} onClick={() => onReset({ commandName })}>

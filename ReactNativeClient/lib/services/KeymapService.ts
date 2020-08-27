@@ -3,7 +3,8 @@ import { KeyboardEvent } from 'react';
 const fs = require('fs-extra');
 const BaseService = require('lib/services/BaseService');
 const eventManager = require('lib/eventManager');
-const { shim } = require('lib/shim.js');
+const { shim } = require('lib/shim');
+const { _ } = require('lib/locale');
 
 const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
 const modifiersRegExp = {
@@ -78,33 +79,17 @@ const defaultKeymap = {
 	],
 };
 
-export interface KeymapErrorDetails {
-	invalidCommand?: boolean,
-	invalidAccelerator?: boolean,
-	missingCommand?: boolean
-	missingAccelerator?: boolean,
-	invalidKeymapItem?: KeymapItem,
-	duplicateAccelerators?: boolean,
-	duplicateKeymapItems?: [KeymapItem, KeymapItem]
-}
-
 export class KeymapError extends Error {
-	private details_: KeymapErrorDetails;
+	// Translated error message for the GUI
+	private altMessage_: string;
 
-	constructor(message: string, details: KeymapErrorDetails = {}) {
+	constructor(message: string, altMessage: string) {
 		super(message);
-		this.details_ = {
-			missingAccelerator: false,
-			missingCommand: false,
-			invalidAccelerator: false,
-			invalidCommand: false,
-			duplicateAccelerators: false,
-			...details,
-		};
+		this.altMessage_ = altMessage;
 	}
 
-	get details() {
-		return this.details_;
+	get altMessage() {
+		return this.altMessage_;
 	}
 }
 
@@ -252,55 +237,45 @@ export default class KeymapService extends BaseService {
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new KeymapError(
-				`Keymap item ${JSON.stringify(item)} is invalid because "command" property is missing.`,
-				{ invalidKeymapItem: item, missingCommand: true }
-			);
+			throw new Error(`Keymap item ${JSON.stringify(item)} is invalid because "command" property is missing.`);
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new KeymapError(
-				`Keymap item ${JSON.stringify(item)} is invalid because "${item.command}" is not a valid command.`,
-				{ invalidKeymapItem: item, invalidCommand: true }
-			);
+			throw new Error(`Keymap item ${JSON.stringify(item)} is invalid because "${item.command}" is not a valid command.`);
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new KeymapError(
-				`Keymap item ${JSON.stringify(item)} is invalid because "accelerator" property is missing.`,
-				{ invalidKeymapItem: item, missingAccelerator: true }
-			);
+			throw new Error(`Keymap item ${JSON.stringify(item)} is invalid because "accelerator" property is missing.`);
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
 			} catch {
-				throw new KeymapError(
-					`Keymap item ${JSON.stringify(item)} is invalid because "${item.accelerator}" is not a valid accelerator.`,
-					{ invalidKeymapItem: item, invalidAccelerator: true }
-				);
+				throw new Error(`Keymap item ${JSON.stringify(item)} is invalid because "${item.accelerator}" is not a valid accelerator.`);
 			}
 		}
 	}
 
-	private validateKeymap() {
+	validateKeymap(newItem: KeymapItem = null) {
 		const usedAccelerators = new Set();
+		if (newItem) usedAccelerators.add(newItem.accelerator);
 
 		for (const item of Object.values(this.keymap)) {
-			const itemAccelerator = item.accelerator;
+			const [itemAccelerator, itemCommand] = [item.accelerator, item.command];
+			if (newItem && itemCommand === newItem.command) continue;
 
-			if (usedAccelerators.has(itemAccelerator)) {
+			if (usedAccelerators.has(item.accelerator)) {
 				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
 				throw new KeymapError(
-					'Keymap configuration contains duplicates.\n' +
-					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands.\n` +
+					'Keymap configuration contains one or more duplicates.\n' +
+					`Accelerator "${item.accelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands.\n` +
 					'You have to change the accelerator for any of above commands.',
-					{ duplicateAccelerators: true, duplicateKeymapItems: [item, originalItem] }
+					_('Keymap configuration contains one or more duplicate keyboard shortcuts. This may lead to unexpected behaviour.')
 				);
-			} else if (itemAccelerator !== null) {
+			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);
 			}
 		}
 	}
 
-	private validateAccelerator(accelerator: string) {
+	validateAccelerator(accelerator: string) {
 		let keyFound = false;
 
 		const parts = accelerator.split('+');

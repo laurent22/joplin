@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
+import KeymapService, { KeymapItem, KeymapError } from '../../lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
-import useEditing from './utils/useEditing';
+import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 
 const { _ } = require('lib/locale.js');
@@ -18,9 +18,11 @@ export interface KeymapConfigScreenProps {
 export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
+	const [keymap, keymapError, setAccelerator] = useKeymap();
+	const [recorderError, setRecorderError] = useState<KeymapError>(null);
 	const [filter, setFilter] = useState('');
-	const [keymap, setAccelerator, error] = useKeymap();
-	const [editing, enableEditing, disableEditing] = useEditing();
+	const [editing, enableEditing, disableEditing] = useCommandStatus();
+	const [hovering, enableHovering, disableHovering] = useCommandStatus();
 
 	const handleSave = (event: { commandName: string, accelerator: string }) => {
 		const { commandName, accelerator } = event;
@@ -28,7 +30,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		disableEditing(commandName);
 	};
 
-	const hanldeReset = (event: { commandName: string }) => {
+	const handleReset = (event: { commandName: string }) => {
 		const { commandName } = event;
 		setAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
 		disableEditing(commandName);
@@ -37,6 +39,11 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const handleCancel = (event: { commandName: string }) => {
 		const { commandName } = event;
 		disableEditing(commandName);
+	};
+
+	const handleError = (event: { recorderError: KeymapError }) => {
+		const { recorderError } = event;
+		setRecorderError(recorderError);
 	};
 
 	const renderAccelerator = (accelerator: string) => {
@@ -50,37 +57,50 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		);
 	};
 
-	const renderStatus = (command: string) => {
-		if (!error) return null;
-		const { invalidAccelerator, invalidKeymapItem, duplicateAccelerators, duplicateKeymapItems } = error.details;
+	const renderStatus = (commandName: string) => {
+		if (editing[commandName]) {
+			return (recorderError && <i className="fa fa-exclamation-triangle" />);
+		} else if (hovering[commandName]) {
+			return (<i className="fa fa-pen" />);
+		} else { return null; }
+	};
 
-		if ((invalidAccelerator && invalidKeymapItem.command === command) ||
-			(duplicateAccelerators && (duplicateKeymapItems[0].command === command || duplicateKeymapItems[1].command === command))) {
-			return '❌';
-		} else {
-			return null;
-		}
+	const renderError = (error: KeymapError) => {
+		return (
+			<div style={styles.warning}>
+				<p style={styles.text}>
+					<span>
+						{error.altMessage}
+					</span>
+				</p>
+			</div>
+		);
 	};
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
 		const handleClick = () => enableEditing(command);
-		const cellContent = editing[command]
-			? <ShortcutRecorder
-				onSave={handleSave}
-				onReset={hanldeReset}
-				onCancel={handleCancel}
-				initialAccelerator={accelerator}
-				commandName={command}
-				themeId={themeId}
-			/>
-			: <div onClick={handleClick} style={styles.tableCell}>
-				<div style={styles.tableCellShortcut}>
-					{accelerator
-						? renderAccelerator(accelerator)
-						: <div style={styles.disabled}>{_('Disabled')}</div>
-					}
-				</div>
-				<div style={styles.tableCellStatus}>
+		const handleMouseEnter = () => enableHovering(command);
+		const handleMouseLeave = () => disableHovering(command);
+		const cellContent =
+			<div style={styles.tableCell} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+				{editing[command] ?
+					<ShortcutRecorder
+						onSave={handleSave}
+						onReset={handleReset}
+						onCancel={handleCancel}
+						onError={handleError}
+						initialAccelerator={accelerator}
+						commandName={command}
+						themeId={themeId}
+					/> :
+					<div style={styles.tableCellContent} onClick={handleClick}>
+						{accelerator
+							? renderAccelerator(accelerator)
+							: <div style={styles.disabled}>{_('Disabled')}</div>
+						}
+					</div>
+				}
+				<div style={styles.tableCellStatus} onClick={handleClick}>
 					{renderStatus(command)}
 				</div>
 			</div>;
@@ -99,20 +119,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	return (
 		<div>
-			{error &&
-				<div style={styles.warning}>
-					<p style={styles.text}>
-						<span>
-							{error.details.duplicateAccelerators
-								? _('Keymap configuration contains duplicates. Change or disable one of the shortcuts to continue.')
-								: error.details.invalidAccelerator
-									? _('Keymap configuration contains an invalid shortcut. Change or disable it to continue.')
-									: error.message // Highly unlikely that any other error will occur at this point
-							}
-						</span>
-					</p>
-				</div>
-			}
+			{keymapError && renderError(keymapError)}
 			<div style={styles.container}>
 				<div style={styles.actionsContainer}>
 					<input

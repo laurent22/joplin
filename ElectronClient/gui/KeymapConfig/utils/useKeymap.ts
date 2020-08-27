@@ -3,9 +3,9 @@ import KeymapService, { KeymapItem, KeymapError } from '../../../lib/services/Ke
 
 const keymapService = KeymapService.instance();
 
-const useKeymap = (): [KeymapItem[], (commandName: string, accelerator: string) => void, KeymapError] => {
+const useKeymap = (): [KeymapItem[], KeymapError, (commandName: string, accelerator: string) => void] => {
 	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
-	const [error, setError] = useState<KeymapError>(null);
+	const [keymapError, setKeymapError] = useState<KeymapError>(null);
 
 	const setAccelerator = (commandName: string, accelerator: string) => {
 		setKeymap(prevKeymap => {
@@ -18,16 +18,16 @@ const useKeymap = (): [KeymapItem[], (commandName: string, accelerator: string) 
 
 	useEffect(() => {
 		try {
-			keymapService.setKeymap(keymap);
-			// Save changes to the disk
+			// Save changes to the drive
 			keymapService.saveKeymap();
-			setError(null);
+			keymapService.setKeymap(keymap);
+			setKeymapError(null);
 		} catch (err) {
-			setError(err);
+			setKeymapError(err);
 		}
 	}, [keymap]);
 
-	return [keymap, setAccelerator, error];
+	return [keymap, keymapError, setAccelerator];
 };
 
 export default useKeymap;

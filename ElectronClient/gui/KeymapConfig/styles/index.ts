@@ -13,6 +13,7 @@ export default function styles(themeId: number) {
 			},
 			recorderContainer: {
 				padding: 2,
+				flexGrow: 1,
 			},
 			filterInput: {
 				...theme.inputStyle,
@@ -39,13 +40,14 @@ export default function styles(themeId: number) {
 			tableCell: {
 				display: 'flex',
 				flexDirection: 'row',
-				cursor: 'pointer',
 			},
-			tableCellShortcut: {
+			tableCellContent: {
 				flexGrow: 1,
+				alignSelf: 'center',
 			},
 			tableCellStatus: {
-				// No specific styling at the moment
+				height: '100%',
+				alignSelf: 'center',
 			},
 			kbd: {
 				fontFamily: 'sans-serif',
