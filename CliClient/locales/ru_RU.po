@@ -24,8 +24,8 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Дублирует заметки соответствующие выражению <note> в блокнот [notebook]. "
-"Если блокнот не указан - заметки дублируются в текущем блокноте."
+"Дублирует заметки, соответствующие выражению <note>, в блокнот [notebook]. "
+"Если блокнот не указан, заметки дублируются в текущем блокноте."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
 #: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
@@ -75,7 +75,7 @@ msgid ""
 msgstr ""
 "Отображает только элементы заданного типа(ов). Поддерживаемые типы: `n` для "
 "заметок, `t` для задач или `nt` для заметок и задач (напр. `-tt` выведет "
-"только задачи, в то время как `-ttd` выведет и заметки и задачи)."
+"только задачи, в то время как `-ttd` выведет и заметки, и задачи)."
 
 #: CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -230,7 +230,7 @@ msgstr "Расшифровано элементов: %d"
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
-"Пропущено элементов: %d (используйте команду --retry-failed-items чтобы "
+"Пропущено элементов: %d (используйте команду --retry-failed-items, чтобы "
 "повторить попытку расшифровки)"
 
 #: CliClient/app/command-e2ee.js:68
@@ -273,7 +273,7 @@ msgstr "Создает новый блокнот."
 #: CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr ""
-"Перемещает заметки соответствующие выражению <note> в блокнот [notebook]."
+"Перемещает заметки, соответствующие выражению <note>, в блокнот [notebook]."
 
 #: CliClient/app/command-config.js:13
 msgid ""
@@ -282,12 +282,12 @@ msgid ""
 "current configuration."
 msgstr ""
 "Выводит или задает значение параметра конфигурации. Если значение [value] не "
-"указано - выведет текущее значение параметра [name]. Если не указаны ни имя "
-"[name], ни значение [value] - выведет всю текущую конфигурацию."
+"указано, выведет текущее значение параметра [name]. Если не указаны ни имя "
+"[name], ни значение [value], выведет всю текущую конфигурацию."
 
 #: CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
-msgstr "Также выводит не установленные и скрытые параметры конфигурации."
+msgstr "Также выводит неустановленные и скрытые параметры конфигурации."
 
 #: CliClient/app/command-config.js:79
 #, javascript-format
@@ -364,7 +364,7 @@ msgid ""
 "operation."
 msgstr ""
 "Файл блокировки уже существует. Если вы уверены, что синхронизация не "
-"выполняется - вы можете вручную удалить файл блокировки \"%s\" и возобновить "
+"выполняется, вы можете вручную удалить файл блокировки \"%s\" и возобновить "
 "операцию."
 
 #: CliClient/app/command-sync.js:175
@@ -555,7 +555,7 @@ msgid ""
 msgstr ""
 "Один или несколько элементов зашифрованы. Для расшифровки может "
 "потребоваться мастер-пароль. Для начала расшифровки введите `e2ee decrypt`. "
-"Если мастер-пароль уже был введен - зашифрованные элементы уже "
+"Если мастер-пароль уже был введен, зашифрованные элементы уже "
 "расшифровываются в фоновом режиме и вскоре будут доступны."
 
 #: CliClient/app/gui/NoteWidget.js:50
@@ -647,7 +647,7 @@ msgid ""
 msgstr ""
 "В любой команде можно ссылаться на заметку или блокнот по названию или ID, "
 "либо используя ярлыки `$n` или `$b`, указывающие на текущую заметку или "
-"блокнот соответственно. С помощью `$c` можно ссылаться на текущий выбранный "
+"блокнот, соответственно. С помощью `$c` можно ссылаться на текущий выбранный "
 "элемент."
 
 #: CliClient/app/command-help.js:79
@@ -664,7 +664,7 @@ msgstr ""
 
 #: CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Чтобы развернуть/свернуть консоль используйте комбинацию \"tc\"."
+msgstr "Чтобы развернуть/свернуть консоль, используйте комбинацию \"tc\"."
 
 #: CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
@@ -678,7 +678,7 @@ msgstr "Для выхода из режима командной строки н
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Чтобы получить список сочетаний клавиш и настроек конфигурации введите `help "
+"Чтобы получить список сочетаний клавиш и настроек конфигурации, введите `help "
 "keymap`"
 
 #: CliClient/app/command-todo.js:14
@@ -690,7 +690,7 @@ msgid ""
 msgstr ""
 "<todo-command> может принимать значения \"toggle\" или \"clear\". \"toggle\" "
 "переключает статус выбранной задачи (с завершенной на незавершенную и "
-"наоборот). При применении к обычной заметке - заметка преобразуется в "
+"наоборот). При применении к обычной заметке она преобразуется в "
 "задачу. \"clear\" преобразует выбранную задачу в обычную заметку."
 
 #: CliClient/app/command-exit.js:11
@@ -815,7 +815,7 @@ msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Введите название заметки чтобы перейти к ней, либо введите #имя_метки или "
+"Введите название заметки, чтобы перейти к ней, либо введите #имя_метки или "
 "@имя_блокнота."
 
 #: ElectronClient/plugins/GotoAnything.min.js:493
@@ -1117,7 +1117,7 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Пожалуйста дождитесь окончания загрузки и расшифровки всех вложений. Вы "
+"Пожалуйста, дождитесь окончания загрузки и расшифровки всех вложений. Вы "
 "можете переключиться на %s для редактирования заметки."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
@@ -1218,7 +1218,7 @@ msgstr "Заголовок"
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
 #: ElectronClient/gui/NoteText.min.js:1770
 msgid "Horizontal Rule"
-msgstr "Горизотальный разделитель"
+msgstr "Горизонтальный разделитель"
 
 #: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
 msgid "Note title"
@@ -1762,7 +1762,7 @@ msgstr ""
 "\n"
 "1. Синхронизируйте все ваши устройства.\n"
 "2. Нажмите “%s”.\n"
-"3. Ждите завершения. Во время работы избегайте изменения заметок на других "
+"3. Ждите завершения. Во время работы не изменяйте заметки на других "
 "устройствах, чтобы избежать конфликтов.\n"
 "4. После завершения синхронизации на этом устройстве синхронизируйте все "
 "остальные устройства и ждите завершения.\n"
@@ -1782,7 +1782,7 @@ msgstr "Шифрование:"
 #: ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
 msgstr ""
-"Пожалуйста, выберите куда должен быть экспортирован статус синхронизации"
+"Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
 
 #: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:112
@@ -2194,7 +2194,7 @@ msgstr ""
 "Откройте следующую ссылку в вашем браузере для аутентификации приложения. "
 "Приложением будет создан отдельный каталог \"Apps/Joplin\", в котором будет "
 "происходить работа с файлами. У приложения не будет доступа ни к каким-либо "
-"файлам за пределами этого каталога ни к каким-либо другим личным данным. "
+"файлам за пределами этого каталога, ни к каким-либо другим личным данным. "
 "Никакая информация не будет передана третьим лицам."
 
 #: ReactNativeClient/lib/registry.js:156
@@ -2391,9 +2391,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"В режиме “Ручной” вложения загружаются толко если на них кликнуть. В режиме "
+"В режиме “Ручной” вложения загружаются, только если на них кликнуть. В режиме "
 "“Автоматически” вложения загружаются при открытии заметки. В режиме “Всегда” "
-"вложения загружаются не зависимо от того была заметка открыта или нет."
+"вложения загружаются вне зависимости от того, была заметка открыта или нет."
 
 #: ReactNativeClient/lib/models/Setting.js:228
 msgid "Always"
@@ -2433,11 +2433,11 @@ msgstr "Автоматическая смена темы в соответств
 
 #: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
-msgstr "Предпочитемая светлая тема"
+msgstr "Предпочитаемая светлая тема"
 
 #: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
-msgstr "Предпочитемая тёмная тема"
+msgstr "Предпочитаемая тёмная тема"
 
 #: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
@@ -2526,7 +2526,7 @@ msgstr "Включить поддержку синтаксиса Fountain"
 
 #: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable Mermaid diagrams support"
-msgstr "Включить поддержку Mermaid диаграм"
+msgstr "Включить поддержку диаграмм Mermaid"
 
 #: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable ==mark== syntax"
@@ -2609,7 +2609,7 @@ msgid ""
 "font."
 msgstr ""
 "Для корректного отображения требуется задать *моноширинный* шрифт. Если "
-"шрифт не был задан или выбран некорректный шрифт будет использован шрифт по "
+"шрифт не был задан или выбран некорректный шрифт, будет использован шрифт по "
 "умолчанию."
 
 #: ReactNativeClient/lib/models/Setting.js:589
@@ -2663,7 +2663,7 @@ msgid ""
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 "Команда запуска внешнего текстового редактора (может включать аргументы "
-"командной строки). Если команда не задана - будет произведена попытка "
+"командной строки). Если команда не задана, будет произведена попытка "
 "автоматического определения редактора по умолчанию."
 
 #: ReactNativeClient/lib/models/Setting.js:623
@@ -2734,7 +2734,7 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Разделенный запятыми список путей к файлам сертификатов (поддерживаются как "
-"каталоги так и абсолютные пути к отдельным файлам). Например: /my/cert_dir, /"
+"каталоги, так и абсолютные пути к отдельным файлам). Например: /my/cert_dir, /"
 "other/custom.pem. Обратите внимание, что если вы вносите изменения в "
 "настройки TLS, вы должны сохранить внесенные изменения перед нажатием на "
 "\"Проверить настройки синхронизации\"."
@@ -2793,7 +2793,7 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"Параметр \"фактор\" отвечает за то, как элемент будет расти или уменьшаться "
+"Параметр \"фактор\" отвечает за то, как элемент будет расти или уменьшаться, "
 "чтобы поместиться в свободное пространство контейнера. Элемент с фактором 2 "
 "займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
 "приложение, чтобы изменения вступили в силу."
@@ -2854,7 +2854,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 "Данные плагины расширяют отрисовщик Markdown доп. функциями. Учтите, что эти "
-"функции не являются стандартными для Markdown и большонство из них будет "
+"функции не являются стандартными для Markdown и большинство из них будет "
 "работать только в Joplin. Кроме того, некоторые из них *несовместимы* с "
 "редактором WYSIWYG. При открытии заметки с такими плагинами в WYSIWYG "
 "форматирование будет утеряно. Ниже отмечены плагины, совместимые с "
@@ -3235,7 +3235,7 @@ msgstr "Только ошибки"
 
 #: ReactNativeClient/lib/components/screens/config.js:50
 msgid "Warning"
-msgstr "Предупрежение"
+msgstr "Предупреждение"
 
 #: ReactNativeClient/lib/components/screens/config.js:50
 msgid ""
@@ -3744,7 +3744,7 @@ msgstr ""
 #~ "to continue?"
 #~ msgstr ""
 #~ "Отключение шифрования означает, что *все* ваши заметки и вложения будут "
-#~ "расшифрованы и отправлены в незашифрованом виде к цели синхронизации. Вы "
+#~ "расшифрованы и отправлены в незашифрованном виде к цели синхронизации. Вы "
 #~ "хотите продолжить?"
 
 #~ msgid "Master Keys"
