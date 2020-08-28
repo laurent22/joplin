@@ -824,7 +824,7 @@ msgstr "Exportando para \"%s\" com o formato \"%s\". Por favor, aguarde..."
 #: ElectronClient/InteropServiceHelper.js:164
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Não foi possível exportar a nota: %s"
+msgstr "Não foi possível exportar notas: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -2611,12 +2611,12 @@ msgstr "Atualizar automaticamente o aplicativo"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
-msgstr "Obter pre-releases quando for checar atualizações"
+msgstr "Obter pre-lançamentos quando checar por atualizações"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "Ver página de pre-release para mais detalhes: %s"
+msgstr "Ver página de pre-lançamentos para mais detalhes: %s"
 
 #: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
@@ -2699,7 +2699,7 @@ msgstr "Modo do Teclado"
 
 #: ReactNativeClient/lib/models/Setting.js:650
 msgid "Default"
-msgstr "Default"
+msgstr "Padrão"
 
 #: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
