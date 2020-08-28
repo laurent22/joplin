@@ -4,7 +4,7 @@ import { useState, useEffect, KeyboardEvent } from 'react';
 import KeymapService, { KeymapError } from '../../lib/services/KeymapService';
 import styles_ from './styles';
 
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const keymapService = KeymapService.instance();
 
 export interface ShortcutRecorderProps {

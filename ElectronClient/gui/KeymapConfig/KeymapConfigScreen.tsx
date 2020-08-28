@@ -8,7 +8,7 @@ import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const keymapService = KeymapService.instance();
 
 export interface KeymapConfigScreenProps {
