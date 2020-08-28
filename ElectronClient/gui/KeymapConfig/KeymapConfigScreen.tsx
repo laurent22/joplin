@@ -62,7 +62,9 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			return (recorderError && <i className="fa fa-exclamation-triangle" />);
 		} else if (hovering[commandName]) {
 			return (<i className="fa fa-pen" />);
-		} else { return null; }
+		} else {
+			return null;
+		}
 	};
 
 	const renderError = (error: KeymapError) => {
@@ -89,7 +91,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						onReset={handleReset}
 						onCancel={handleCancel}
 						onError={handleError}
-						initialAccelerator={accelerator}
+						initialAccelerator={accelerator || ''}
 						commandName={command}
 						themeId={themeId}
 					/> :

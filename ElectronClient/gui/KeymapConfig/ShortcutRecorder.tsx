@@ -25,8 +25,11 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 
 	useEffect(() => {
 		try {
-			keymapService.validateAccelerator(accelerator);
-			keymapService.validateKeymap({ accelerator, command: commandName });
+			if (accelerator) {
+				keymapService.validateAccelerator(accelerator);
+				keymapService.validateKeymap({ accelerator, command: commandName });
+			}
+
 			// Discard previous errors
 			onError({ recorderError: null });
 			setSaveAllowed(true);
