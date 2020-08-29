@@ -277,7 +277,13 @@ class BaseApplication {
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
-				notes = await Note.previews(parentId, options);
+				let folderIds = [parentId];
+				// TODO: put in state.settings
+				const showChildNotes = true;
+				if (showChildNotes) {
+					folderIds = folderIds.concat(await Folder.childrenIds(parentId));
+				}
+				notes = await Note.previews(folderIds, options);
 			} else if (parentType === Tag.modelType()) {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {

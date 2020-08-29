@@ -297,9 +297,11 @@ class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	static async previews(parentId, options = null) {
+	static async previews(parentIdOrIds, options = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
+
+		const initialOptions = Object.assign({}, options);
 
 		if (!options) options = {};
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
@@ -308,6 +310,19 @@ class Note extends BaseItem {
 		if (!options.fields) options.fields = this.previewFields();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
+
+		// recursively handle a list of parentIds
+		if (Array.isArray(parentIdOrIds)) {
+			let result = [];
+			await Promise.all(parentIdOrIds.map(async (childId) => {
+				const childOpts = Object.assign({}, initialOptions);
+				const childNotes = await this.previews(childId, childOpts);
+				result = result.concat(childNotes);
+			}));
+			return this.sortNotes(result, options.order, options.uncompletedTodosOnTop);
+		}
+
+		const parentId = parentIdOrIds;
 
 		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
