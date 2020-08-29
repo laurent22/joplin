@@ -278,9 +278,7 @@ class BaseApplication {
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
 				let folderIds = [parentId];
-				// TODO: put in state.settings
-				const showChildNotes = true;
-				if (showChildNotes) {
+				if (Setting.value('showChildNotes')) {
 					folderIds = folderIds.concat(await Folder.childrenIds(parentId));
 				}
 				notes = await Note.previews(folderIds, options);
@@ -471,15 +469,19 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showCompletedTodos') || action.type == 'SETTING_UPDATE_ALL')) {
+		const settingsToRefresh = ['showCompletedTodos', 'showChildNotes', 'uncompletedTodosOnTop'];
+		if (
+			this.hasGui()
+			&& ((action.type == 'SETTING_UPDATE_ONE' && settingsToRefresh.includes(action.key)))
+		) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0))) {
 			refreshNotes = true;
 		}
 

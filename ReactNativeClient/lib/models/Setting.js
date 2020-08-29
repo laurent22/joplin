@@ -349,6 +349,13 @@ class Setting extends BaseModel {
 				options: () => themeOptions(),
 			},
 
+			showChildNotes: {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				public: false,
+				appTypes: ['desktop'],
+				label: () => _('Display notes from subnotebooks'),
+			},
 			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {

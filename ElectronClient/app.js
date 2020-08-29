@@ -783,6 +783,14 @@ class Application extends BaseApplication {
 						screens: ['Main'],
 						submenu: sortFolderItems,
 					}, {
+						label: Setting.settingMetadata('showChildNotes').label(),
+						type: 'checkbox',
+						checked: Setting.value('showChildNotes'),
+						screens: ['Main'],
+						click: () => {
+							Setting.setValue('showChildNotes', !Setting.value('showChildNotes'));
+						},
+					}, {
 						label: Setting.settingMetadata('showNoteCounts').label(),
 						type: 'checkbox',
 						checked: Setting.value('showNoteCounts'),
