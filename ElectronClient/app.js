@@ -571,7 +571,7 @@ class Application extends BaseApplication {
 		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
-			accelerator: shim.isMac() ? null : keymapService.getAccelerator('config'),
+			accelerator: !shim.isMac() && keymapService.getAccelerator('config'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',
@@ -633,7 +633,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Preferences...'),
 				visible: shim.isMac() ? true : false,
-				accelerator: shim.isMac() ? keymapService.getAccelerator('config') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('config'),
 				click: () => {
 					this.dispatch({
 						type: 'NAV_GO',
@@ -682,7 +682,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Hide %s', 'Joplin'),
 				platforms: ['darwin'],
-				accelerator: shim.isMac() ? keymapService.getAccelerator('hideApp') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
 				click: () => { bridge().electronApp().hide(); },
 			}, {
 				type: 'separator',
@@ -702,7 +702,7 @@ class Application extends BaseApplication {
 				newNotebookItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
-					accelerator: shim.isMac() ? keymapService.getAccelerator('closeWindow') : null,
+					accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 					selector: 'performClose:',
 				}, {
 					type: 'separator',
@@ -1089,7 +1089,7 @@ class Application extends BaseApplication {
 		const keymapService = KeymapService.instance();
 
 		try {
-			await keymapService.loadKeymap(`${dir}/keymap-desktop.json`);
+			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
 			bridge().showErrorMessageBox(err.message);
 		}

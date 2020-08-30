@@ -17,13 +17,13 @@ const useCommandStatus = (): [CommandStatus, (commandName: string) => void, (com
 
 	const disableStatus = (commandName: string) => setStatus(prevStatus => ({ ...prevStatus, [commandName]: false }));
 	const enableStatus = (commandName: string) => setStatus(prevStatus => {
-		// Disable the state of all the commands
+		// Falsify all the commands; Only one command should be truthy at any given time
 		const newStatus = Object.keys(prevStatus).reduce((accumulator: CommandStatus, command: string) => {
 			accumulator[command] = false;
 			return accumulator;
 		}, {});
 
-		// Enable the state of the appropriate command
+		// Make the appropriate command truthful
 		newStatus[commandName] = true;
 		return newStatus;
 	});

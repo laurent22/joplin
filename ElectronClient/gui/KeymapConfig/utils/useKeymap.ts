@@ -1,51 +1,76 @@
 import { useState, useEffect } from 'react';
-import KeymapService, { KeymapItem, KeymapError } from '../../../lib/services/KeymapService';
+import KeymapService, { KeymapItem } from '../../../lib/services/KeymapService';
 
 const keymapService = KeymapService.instance();
 
-const useKeymap = (): [KeymapItem[], KeymapError, (keymapItems: KeymapItem[]) => void, (commandName: string, accelerator: string) => void] => {
-	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
-	const [keymapError, setKeymapError] = useState<KeymapError>(null);
+// This custom hook provides a synchronized snapshot of the keymap residing at KeymapService
+// All the logic regarding altering and interacting with the keymap is isolated from the components
+
+const useKeymap = (): [
+	KeymapItem[],
+	Error,
+	(keymapItems: KeymapItem[]) => void,
+	(customKeymapPath: string) => Promise<void>,
+	(commandName: string, accelerator: string) => void,
+	(commandName: string) => void
+] => {
+	const [keymapItems, setKeymapItems] = useState<KeymapItem[]>(() => keymapService.getKeymapItems());
+	const [keymapError, setKeymapError] = useState<Error>(null);
 
 	const setAccelerator = (commandName: string, accelerator: string) => {
-		setKeymap(prevKeymap => {
+		setKeymapItems(prevKeymap => {
 			const newKeymap = [...prevKeymap];
 
-			newKeymap.find(item => item.command === commandName).accelerator = accelerator || null;
+			newKeymap.find(item => item.command === commandName).accelerator = accelerator || null /* Disabled */;
 			return newKeymap;
 		});
 	};
 
-	const setKeymapWrapper = (keymapItems: KeymapItem[]) => {
-		const oldKeymap = [...keymap];
+	const resetAccelerator = (commandName: string) => {
+		const defaultAccelerator = keymapService.getDefaultAccelerator(commandName);
+		setKeymapItems(prevKeymap => {
+			const newKeymap = [...prevKeymap];
 
-		// Avoid new changes being merged with the old changes
-		keymapService.initialize();
+			newKeymap.find(item => item.command === commandName).accelerator = defaultAccelerator;
+			return newKeymap;
+		});
+	};
+
+	const overrideKeymapItems = (customKeymapItems: KeymapItem[]) => {
+		const oldKeymapItems = [...customKeymapItems];
+		keymapService.initialize(); // Start with a fresh keymap
+
 		try {
-			// Update the in-memory keymap of KeymapService
-			keymapService.overrideKeymap(keymapItems);
-			// Synchronize the state with KeymapService
+			// First, try to update the in-memory keymap of KeymapService
+			// This function will throw if there are any issues with the new custom keymap
+			keymapService.overrideKeymap(customKeymapItems);
+			// Then, update the state with the data from KeymapService
 			// Side-effect: Changes will also be saved to the disk
-			setKeymap(keymapService.getKeymap());
+			setKeymapItems(keymapService.getKeymapItems());
 		} catch (err) {
-			// Avoid partially-loading keymap files
-			keymapService.overrideKeymap(oldKeymap);
+			// oldKeymapItems includes even the unchanged keymap items
+			// However, it is not an issue because the logic accounts for such scenarios
+			keymapService.overrideKeymap(oldKeymapItems);
 			throw err;
 		}
 	};
 
+	const exportCustomKeymap = async (customKeymapPath: string) => {
+		// KeymapService is already synchronized automatically with the in-state keymap
+		await keymapService.saveCustomKeymap(customKeymapPath);
+	};
+
 	useEffect(() => {
 		try {
-			keymapService.overrideKeymap(keymap);
-			// Save changes to the disk
-			keymapService.saveKeymap();
+			keymapService.overrideKeymap(keymapItems);
+			keymapService.saveCustomKeymap();
 			setKeymapError(null);
 		} catch (err) {
 			setKeymapError(err);
 		}
-	}, [keymap]);
+	}, [keymapItems]);
 
-	return [keymap, keymapError, setKeymapWrapper, setAccelerator];
+	return [keymapItems, keymapError, overrideKeymapItems, exportCustomKeymap, setAccelerator, resetAccelerator];
 };
 
 export default useKeymap;

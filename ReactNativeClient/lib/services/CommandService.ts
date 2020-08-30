@@ -293,7 +293,7 @@ export default class CommandService extends BaseService {
 		};
 
 		if (command.declaration.role) item.role = command.declaration.role;
-		if (this.keymapService.hasAccelerator(commandName)) {
+		if (this.keymapService.acceleratorExists(commandName)) {
 			item.accelerator = this.keymapService.getAccelerator(commandName);
 		}
 

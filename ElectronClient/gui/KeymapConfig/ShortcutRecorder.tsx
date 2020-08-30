@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, KeyboardEvent } from 'react';
 
-import KeymapService, { KeymapError } from '../../lib/services/KeymapService';
+import KeymapService from '../../lib/services/KeymapService';
 import styles_ from './styles';
 
 const { _ } = require('lib/locale');
@@ -11,7 +11,7 @@ export interface ShortcutRecorderProps {
 	onSave: (event: { commandName: string, accelerator: string }) => void,
 	onReset: (event: { commandName: string }) => void,
 	onCancel: (event: { commandName: string }) => void,
-	onError: (event: { recorderError: KeymapError }) => void,
+	onError: (event: { recorderError: Error }) => void,
 	initialAccelerator: string
 	commandName: string,
 	themeId: number
@@ -25,6 +25,8 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 
 	useEffect(() => {
 		try {
+			// Only perform validations if there's an accelerator provided
+			// Otherwise performing a save means that it's going to be disabled
 			if (accelerator) {
 				keymapService.validateAccelerator(accelerator);
 				keymapService.validateKeymap({ accelerator, command: commandName });
@@ -67,6 +69,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 				readOnly
 				autoFocus
 			/>
+
 			<button style={styles.inlineButton} disabled={!saveAllowed} onClick={() => onSave({ commandName, accelerator })}>
 				{_('Save')}
 			</button>

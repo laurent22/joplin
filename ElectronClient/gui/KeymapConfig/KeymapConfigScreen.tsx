@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import KeymapService, { KeymapItem, KeymapError } from '../../lib/services/KeymapService';
+import { KeymapItem } from '../../lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
@@ -11,7 +11,6 @@ import styles_ from './styles';
 const { bridge } = require('electron').remote.require('./bridge');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
-const keymapService = KeymapService.instance();
 
 export interface KeymapConfigScreenProps {
 	themeId: number
@@ -20,9 +19,9 @@ export interface KeymapConfigScreenProps {
 export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
-	const [keymap, keymapError, setKeymap, setAccelerator] = useKeymap();
-	const [recorderError, setRecorderError] = useState<KeymapError>(null);
 	const [filter, setFilter] = useState('');
+	const [keymapItems, keymapError, overrideKeymapItems, exportCustomKeymap, setAccelerator, resetAccelerator] = useKeymap();
+	const [recorderError, setRecorderError] = useState<Error>(null);
 	const [editing, enableEditing, disableEditing] = useCommandStatus();
 	const [hovering, enableHovering, disableHovering] = useCommandStatus();
 
@@ -34,7 +33,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const handleReset = (event: { commandName: string }) => {
 		const { commandName } = event;
-		setAccelerator(commandName, keymapService.getDefaultAccelerator(commandName));
+		resetAccelerator(commandName);
 		disableEditing(commandName);
 	};
 
@@ -43,7 +42,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		disableEditing(commandName);
 	};
 
-	const handleError = (event: { recorderError: KeymapError }) => {
+	const handleError = (event: { recorderError: Error }) => {
 		const { recorderError } = event;
 		setRecorderError(recorderError);
 	};
@@ -51,31 +50,33 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const handleImport = async () => {
 		const filePath = bridge().showOpenDialog({
 			properties: ['openFile'],
-			filters: [{ name: 'Joplin Keymap', extensions: ['json'] }],
+			defaultPath: 'keymap-desktop',
+			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
 		});
 
 		if (filePath) {
 			const actualFilePath = filePath[0];
 			try {
 				const keymapFile = await shim.fsDriver().readFile(actualFilePath, 'utf-8');
-				setKeymap(JSON.parse(keymapFile));
+				overrideKeymapItems(JSON.parse(keymapFile));
 			} catch (err) {
-				bridge().showErrorMessageBox(_('Error importing keymap: %s', err.message));
+				bridge().showErrorMessageBox(`${_('An unexpected error occured while importing the keymap!')}\n${err.message}`);
 			}
 		}
 	};
 
 	const handleExport = async () => {
 		const filePath = bridge().showSaveDialog({
-			filters: [{ name: 'Joplin Keymap', extensions: ['json'] }],
+			defaultPath: 'keymap-desktop',
+			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
 		});
 
 		if (filePath) {
 			try {
 				// KeymapService is already synchronized with the in-state keymap
-				await keymapService.saveKeymap(filePath);
+				await exportCustomKeymap(filePath);
 			} catch (err) {
-				bridge().showErrorMessageBox(_('Error exporting keymap: %s', err.message));
+				bridge().showErrorMessageBox(`${_('An unexpected error occured while exporting the keymap!')}\n${err.message}`);
 			}
 		}
 	};
@@ -101,12 +102,12 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		}
 	};
 
-	const renderError = (error: KeymapError) => {
+	const renderError = (error: Error) => {
 		return (
 			<div style={styles.warning}>
 				<p style={styles.text}>
 					<span>
-						{error.altMessage}
+						{error.message}
 					</span>
 				</p>
 			</div>
@@ -125,7 +126,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						onReset={handleReset}
 						onCancel={handleCancel}
 						onError={handleError}
-						initialAccelerator={accelerator || ''}
+						initialAccelerator={accelerator || '' /* Because accelerator is null if disabled */}
 						commandName={command}
 						themeId={themeId}
 					/> :
@@ -168,6 +169,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 					<button style={styles.inlineButton} onClick={handleImport}>{_('Import')}</button>
 					<button style={styles.inlineButton} onClick={handleExport}>{_('Export')}</button>
 				</div>
+
 				<table style={styles.table}>
 					<thead>
 						<tr>
@@ -176,7 +178,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						</tr>
 					</thead>
 					<tbody>
-						{keymap.filter(({ command }) => {
+						{keymapItems.filter(({ command }) => {
 							const filterLowerCase = filter.toLowerCase();
 							return (command.toLowerCase().includes(filterLowerCase) || getLabel(command).toLowerCase().includes(filterLowerCase));
 						}).map(item => renderKeymapRow(item))}
