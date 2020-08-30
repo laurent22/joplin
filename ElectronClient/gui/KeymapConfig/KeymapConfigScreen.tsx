@@ -76,7 +76,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				// KeymapService is already synchronized with the in-state keymap
 				await exportCustomKeymap(filePath);
 			} catch (err) {
-				bridge().showErrorMessageBox(`${_('An unexpected error occured while exporting the keymap!')}\n${err.message}`);
+				bridge().showErrorMessageBox(err.message);
 			}
 		}
 	};
