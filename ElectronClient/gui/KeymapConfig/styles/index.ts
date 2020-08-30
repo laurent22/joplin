@@ -18,10 +18,17 @@ export default function styles(themeId: number) {
 			filterInput: {
 				...theme.inputStyle,
 				flexGrow: 1,
+				minHeight: 29,
+				alignSelf: 'center',
 			},
 			recorderInput: {
 				...theme.inputStyle,
 				minHeight: 29,
+			},
+			label: {
+				...theme.textStyle,
+				alignSelf: 'center',
+				marginRight: 10,
 			},
 			table: {
 				...theme.containerStyle,
@@ -64,7 +71,7 @@ export default function styles(themeId: number) {
 			},
 			inlineButton: {
 				...theme.buttonStyle,
-				marginLeft: 8,
+				marginLeft: 12,
 			},
 			warning: {
 				...theme.textStyle,

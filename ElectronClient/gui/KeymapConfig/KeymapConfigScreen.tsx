@@ -159,12 +159,12 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			{keymapError && renderError(keymapError)}
 			<div style={styles.container}>
 				<div style={styles.actionsContainer}>
+					<label style={styles.label}>{_('Search')}</label>
 					<input
 						value={filter}
 						onChange={event => setFilter(event.target.value)}
 						placeholder={_('Search...')}
 						style={styles.filterInput}
-						aria-label="Search"
 					/>
 					<button style={styles.inlineButton} onClick={handleImport}>{_('Import')}</button>
 					<button style={styles.inlineButton} onClick={handleExport}>{_('Export')}</button>
