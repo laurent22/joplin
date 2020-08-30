@@ -151,7 +151,7 @@ export default class KeymapService extends BaseService {
 			this.logger().info(`KeymapService: Loading keymap: ${keymapPath}`);
 			try {
 				const keymapFile = await shim.fsDriver().readFile(keymapPath, 'utf-8');
-				this.setKeymap(JSON.parse(keymapFile));
+				this.overrideKeymap(JSON.parse(keymapFile));
 			} catch (err) {
 				const message = err.message ? err.message : '';
 				throw new Error(`Failed to load keymap: ${keymapPath}\n${message}`);
@@ -159,17 +159,17 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	async saveKeymap() {
-		this.logger().info(`KeymapService: Saving keymap: ${this.keymapPath}`);
+	async saveKeymap(keymapPath: string = this.keymapPath) {
+		this.logger().info(`KeymapService: Saving keymap: ${keymapPath}`);
 
 		try {
 			const customKeymap = this.generateCustomKeymap();
-			await shim.fsDriver().writeFile(this.keymapPath, JSON.stringify(customKeymap, null, 2), 'utf-8');
+			await shim.fsDriver().writeFile(keymapPath, JSON.stringify(customKeymap, null, 2), 'utf-8');
 			// Refresh the menu items
 			eventManager.emit('keymapChange');
 		} catch (err) {
 			const message = err.message ? err.message : '';
-			throw new Error(`Failed to save keymap: ${this.keymapPath}\n${message}`);
+			throw new Error(`Failed to save keymap: ${keymapPath}\n${message}`);
 		}
 	}
 
@@ -202,7 +202,11 @@ export default class KeymapService extends BaseService {
 		else return defaultItem.accelerator;
 	}
 
-	setKeymap(customKeymap: KeymapItem[]) {
+	getDefaultKeymap() {
+		return [...this.defaultKeymap];
+	}
+
+	overrideKeymap(customKeymap: KeymapItem[]) {
 		for (let i = 0; i < customKeymap.length; i++) {
 			const item = customKeymap[i];
 

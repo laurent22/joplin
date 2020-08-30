@@ -8,6 +8,8 @@ import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 
+const { bridge } = require('electron').remote.require('./bridge');
+const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const keymapService = KeymapService.instance();
 
@@ -18,7 +20,7 @@ export interface KeymapConfigScreenProps {
 export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
-	const [keymap, keymapError, setAccelerator] = useKeymap();
+	const [keymap, keymapError, setKeymap, setAccelerator] = useKeymap();
 	const [recorderError, setRecorderError] = useState<KeymapError>(null);
 	const [filter, setFilter] = useState('');
 	const [editing, enableEditing, disableEditing] = useCommandStatus();
@@ -44,6 +46,38 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const handleError = (event: { recorderError: KeymapError }) => {
 		const { recorderError } = event;
 		setRecorderError(recorderError);
+	};
+
+	const handleImport = async () => {
+		const filePath = bridge().showOpenDialog({
+			properties: ['openFile'],
+			filters: [{ name: 'Joplin Keymap', extensions: ['json'] }],
+		});
+
+		if (filePath) {
+			const actualFilePath = filePath[0];
+			try {
+				const keymapFile = await shim.fsDriver().readFile(actualFilePath, 'utf-8');
+				setKeymap(JSON.parse(keymapFile));
+			} catch (err) {
+				bridge().showErrorMessageBox(_('Error importing keymap: %s', err.message));
+			}
+		}
+	};
+
+	const handleExport = async () => {
+		const filePath = bridge().showSaveDialog({
+			filters: [{ name: 'Joplin Keymap', extensions: ['json'] }],
+		});
+
+		if (filePath) {
+			try {
+				// KeymapService is already synchronized with the in-state keymap
+				await keymapService.saveKeymap(filePath);
+			} catch (err) {
+				bridge().showErrorMessageBox(_('Error exporting keymap: %s', err.message));
+			}
+		}
 	};
 
 	const renderAccelerator = (accelerator: string) => {
@@ -131,6 +165,8 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						style={styles.filterInput}
 						aria-label="Search"
 					/>
+					<button style={styles.inlineButton} onClick={handleImport}>{_('Import')}</button>
+					<button style={styles.inlineButton} onClick={handleExport}>{_('Export')}</button>
 				</div>
 				<table style={styles.table}>
 					<thead>

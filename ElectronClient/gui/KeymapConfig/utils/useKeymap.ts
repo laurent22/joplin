@@ -3,7 +3,7 @@ import KeymapService, { KeymapItem, KeymapError } from '../../../lib/services/Ke
 
 const keymapService = KeymapService.instance();
 
-const useKeymap = (): [KeymapItem[], KeymapError, (commandName: string, accelerator: string) => void] => {
+const useKeymap = (): [KeymapItem[], KeymapError, (keymapItems: KeymapItem[]) => void, (commandName: string, accelerator: string) => void] => {
 	const [keymap, setKeymap] = useState<KeymapItem[]>(() => keymapService.getKeymap());
 	const [keymapError, setKeymapError] = useState<KeymapError>(null);
 
@@ -16,18 +16,36 @@ const useKeymap = (): [KeymapItem[], KeymapError, (commandName: string, accelera
 		});
 	};
 
+	const setKeymapWrapper = (keymapItems: KeymapItem[]) => {
+		const oldKeymap = [...keymap];
+
+		// Avoid new changes being merged with the old changes
+		keymapService.initialize();
+		try {
+			// Update the in-memory keymap of KeymapService
+			keymapService.overrideKeymap(keymapItems);
+			// Synchronize the state with KeymapService
+			// Side-effect: Changes will also be saved to the disk
+			setKeymap(keymapService.getKeymap());
+		} catch (err) {
+			// Avoid partially-loading keymap files
+			keymapService.overrideKeymap(oldKeymap);
+			throw err;
+		}
+	};
+
 	useEffect(() => {
 		try {
-			// Save changes to the drive
+			keymapService.overrideKeymap(keymap);
+			// Save changes to the disk
 			keymapService.saveKeymap();
-			keymapService.setKeymap(keymap);
 			setKeymapError(null);
 		} catch (err) {
 			setKeymapError(err);
 		}
 	}, [keymap]);
 
-	return [keymap, keymapError, setAccelerator];
+	return [keymap, keymapError, setKeymapWrapper, setAccelerator];
 };
 
 export default useKeymap;
