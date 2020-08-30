@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { KeymapItem } from '../../lib/services/KeymapService';
+import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
@@ -12,6 +12,8 @@ const { bridge } = require('electron').remote.require('./bridge');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 
+const keymapService = KeymapService.instance();
+
 export interface KeymapConfigScreenProps {
 	themeId: number
 }
@@ -20,7 +22,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const styles = styles_(themeId);
 
 	const [filter, setFilter] = useState('');
-	const [keymapItems, keymapError, overrideKeymapItems, exportCustomKeymap, setAccelerator, resetAccelerator] = useKeymap();
+	const [keymapItems, keymapError, overrideKeymapItems, setAccelerator, resetAccelerator] = useKeymap();
 	const [recorderError, setRecorderError] = useState<Error>(null);
 	const [editing, enableEditing, disableEditing] = useCommandStatus();
 	const [hovering, enableHovering, disableHovering] = useCommandStatus();
@@ -74,7 +76,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 		if (filePath) {
 			try {
 				// KeymapService is already synchronized with the in-state keymap
-				await exportCustomKeymap(filePath);
+				await keymapService.saveCustomKeymap(filePath);
 			} catch (err) {
 				bridge().showErrorMessageBox(err.message);
 			}

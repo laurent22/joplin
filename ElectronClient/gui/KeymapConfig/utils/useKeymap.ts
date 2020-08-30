@@ -10,7 +10,6 @@ const useKeymap = (): [
 	KeymapItem[],
 	Error,
 	(keymapItems: KeymapItem[]) => void,
-	(customKeymapPath: string) => Promise<void>,
 	(commandName: string, accelerator: string) => void,
 	(commandName: string) => void
 ] => {
@@ -55,11 +54,6 @@ const useKeymap = (): [
 		}
 	};
 
-	const exportCustomKeymap = async (customKeymapPath: string) => {
-		// KeymapService is already synchronized automatically with the in-state keymap
-		await keymapService.saveCustomKeymap(customKeymapPath);
-	};
-
 	useEffect(() => {
 		try {
 			keymapService.overrideKeymap(keymapItems);
@@ -70,7 +64,7 @@ const useKeymap = (): [
 		}
 	}, [keymapItems]);
 
-	return [keymapItems, keymapError, overrideKeymapItems, exportCustomKeymap, setAccelerator, resetAccelerator];
+	return [keymapItems, keymapError, overrideKeymapItems, setAccelerator, resetAccelerator];
 };
 
 export default useKeymap;
