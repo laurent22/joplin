@@ -96,7 +96,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const renderStatus = (commandName: string) => {
 		if (editing[commandName]) {
-			return (recorderError && <i className="fa fa-exclamation-triangle" />);
+			return (recorderError && <i className="fa fa-exclamation-triangle" title={recorderError.message} />);
 		} else if (hovering[commandName]) {
 			return (<i className="fa fa-pen" />);
 		} else {

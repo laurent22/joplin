@@ -66,6 +66,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 				placeholder={_('Press the shortcut')}
 				onKeyDown={handleKeydown}
 				style={styles.recorderInput}
+				title={_('Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.')}
 				readOnly
 				autoFocus
 			/>

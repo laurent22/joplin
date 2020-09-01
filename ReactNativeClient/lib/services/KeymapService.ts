@@ -285,7 +285,7 @@ export default class KeymapService extends BaseService {
 			return isKey || isModifier;
 		});
 
-		if (!isValid) throw new Error(`Accelerator invalid: ${accelerator}`);
+		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
 	domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
