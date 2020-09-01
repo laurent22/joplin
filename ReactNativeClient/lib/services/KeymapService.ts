@@ -252,13 +252,16 @@ export default class KeymapService extends BaseService {
 			const [itemAccelerator, itemCommand] = [item.accelerator, item.command];
 			if (proposedKeymapItem && itemCommand === proposedKeymapItem.command) continue; // Ignore the original accelerator
 
-			if (usedAccelerators.has(item.accelerator)) {
-				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
+			if (usedAccelerators.has(itemAccelerator)) {
+				const originalItem = (proposedKeymapItem && proposedKeymapItem.accelerator === itemAccelerator)
+					? proposedKeymapItem
+					: Object.values(this.keymap).find(_item => _item.accelerator == itemAccelerator);
+
 				throw new Error(_(
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
-					item.accelerator,
-					item.command,
-					originalItem.command
+					itemAccelerator,
+					originalItem.command,
+					itemCommand
 				));
 			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);
