@@ -63,7 +63,7 @@ function useStyle() {
 
 function useRestartOnDone(upgradeResult:SyncTargetUpgradeResult) {
 	useEffect(function() {
-		if (upgradeResult.done) {
+		if (upgradeResult.done && !upgradeResult.error) {
 			bridge().restart();
 		}
 	}, [upgradeResult.done]);
