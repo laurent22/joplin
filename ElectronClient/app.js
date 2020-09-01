@@ -1075,8 +1075,12 @@ class Application extends BaseApplication {
 		argv = await super.start(argv);
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
+			reg.logger().info('app.start: doing upgradeSyncTarget action');
+			bridge().window().show();
 			return { action: 'upgradeSyncTarget' };
 		}
+
+		reg.logger().info('app.start: doing regular boot');
 
 		const dir = Setting.value('profileDir');
 

@@ -62,7 +62,6 @@ Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
-CliClient/build/LinkSelector.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/commands/focusElement.js
