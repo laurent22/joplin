@@ -331,15 +331,19 @@ class SearchEngine {
 			const row = rows[i];
 			row.weight = 0;
 			row.fuzziness = 1000;
+			row.wordFound = [];
 			for (let j = 0; j < numPhrases; j++) {
+				let found = false;
 				columns.forEach(column => {
 					const rowsWithHits = docsWithHits(X[i], column, j);
 					const frequencyHits = hitsThisRow(X[i], column, j);
-
 					const idf = IDF(rowsWithHits, numRows);
+					found = found ? found : (frequencyHits > 0);
+
 					row.weight += BM25(idf, frequencyHits, numTokens[column][i], avgTokens[column]);
 					row.fuzziness = (frequencyHits > 0) ? Math.min(row.fuzziness, fuzzyScore[j]) : row.fuzziness;
 				});
+				row.wordFound.push(found);
 			}
 		}
 	}
@@ -364,12 +368,24 @@ class SearchEngine {
 	}
 
 	processResults_(rows, parsedQuery, isBasicSearchResults = false) {
+		const rowContainsAllWords = (wordsFound, endIndices) => {
+			let start = 0;
+			for (let i = 0; i < endIndices.length; i++) {
+				if (!(wordsFound.slice(start, endIndices[i]).find(x => x))) {
+					return false;
+				}
+				start = endIndices[i];
+			}
+			return true;
+		};
+
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
 			this.calculateWeightBM25_(rows, parsedQuery.fuzzyScore);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
+				row.include = (parsedQuery.fuzzy && !parsedQuery.any) ? rowContainsAllWords(row.wordFound, parsedQuery.endIndices) : true;
 				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
@@ -431,11 +447,19 @@ class SearchEngine {
 		const body = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
 		const fuzzyScore = [];
+		let endIndices = [];
 		let terms = null;
 		if (fuzzy) {
 			const fuzzyText = await this.fuzzifier(text);
 			const fuzzyTitle = await this.fuzzifier(title);
 			const fuzzyBody = await this.fuzzifier(body);
+
+			const endIndicesText = fuzzyText.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length), []);
+			const lastIndexText = endIndicesText.length ? endIndicesText[endIndicesText.length - 1] : 0;
+			const endIndicesTitle = fuzzyTitle.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length + lastIndexText), []);
+			const lastIndexTitle = endIndicesTitle.length ? endIndicesTitle[endIndicesTitle.length - 1] : 0;
+			const endIndicesBody = fuzzyBody.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length + lastIndexTitle), []);
+			endIndices = endIndicesText.concat(endIndicesTitle).concat(endIndicesBody);
 
 			const mergedFuzzyText = [].concat.apply([], fuzzyText);
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle);
@@ -444,6 +468,9 @@ class SearchEngine {
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x.word, negated: false, score: x.score }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x.word, negated: false, score: x.score }; });
 			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x.word, negated: false, score: x.score }; });
+
+			allTerms = allTerms.filter(x => x.negated || (x.name !== 'text' && x.name !== 'title' && x.name !== 'body'));
+
 			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
 
 			const allTextTerms = allFuzzyTerms.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
@@ -496,14 +523,15 @@ class SearchEngine {
 			keys.push(col);
 		}
 
-
-
 		return {
 			termCount: termCount,
 			keys: keys,
 			terms: terms, // text terms
 			allTerms: fuzzy ? allFuzzyTerms : allTerms,
 			fuzzyScore: fuzzyScore,
+			endIndices: endIndices,
+			fuzzy: fuzzy,
+			any: !!allTerms.find(term => term.name === 'any'),
 		};
 	}
 
@@ -594,6 +622,9 @@ class SearchEngine {
 				const { query, params } =  (searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY) ? queryBuilder(parsedQuery.allTerms, true) : queryBuilder(parsedQuery.allTerms, false);
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
+				if (searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY && !parsedQuery.any) {
+					return rows.filter(row => row.include);
+				}
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

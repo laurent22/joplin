@@ -84,8 +84,27 @@ describe('services_SearchFuzzy', function() {
 		expect(rows[0].id).toBe(n1.id);
 		expect(rows[1].id).toBe(n3.id);
 		expect(rows[2].id).toBe(n2.id);
+	}));
 
+	it('should consider any:1', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'important' });
+		const n2 = await Note.save({ title: 'imprtant' });
+		const n3 = await Note.save({ title: 'importan' });
 
+		const n4 = await Note.save({ title: 'investment' });
+		const n5 = await Note.save({ title: 'investments' });
+		const n6 = await Note.save({ title: 'invstment' });
+
+		const n7 = await Note.save({ title: 'importan invstment' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('important investment', { fuzzy: true });
+		expect(rows.length).toBe(1);
+
+		rows = await engine.search('any:1 important investment', { fuzzy: true });
+		expect(rows.length).toBe(7);
 	}));
 
 

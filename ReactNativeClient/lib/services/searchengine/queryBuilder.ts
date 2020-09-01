@@ -379,9 +379,6 @@ export default function queryBuilder(terms: Term[], fuzzy: boolean) {
 	const params: string[] = [];
 	const withs: string[] = [];
 
-	// console.log("testing beep beep boop boop")
-	// console.log(terms);
-
 	const relation: Relation = getDefaultRelation(terms);
 
 	queryParts.push(`
