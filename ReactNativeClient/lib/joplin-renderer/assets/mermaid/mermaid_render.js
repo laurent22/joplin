@@ -15,6 +15,7 @@ function mermaidInit() {
 			console.error('Mermaid error', error);
 		}
 
+		// Resetting elements size - see mermaid.ts
 		const elements = document.getElementsByClassName('mermaid');
 		for (const element of elements) {
 			element.style.width = '100%';
