@@ -88,22 +88,22 @@ describe('services_SearchFuzzy', function() {
 
 	it('should consider any:1', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'important' });
-		const n2 = await Note.save({ title: 'imprtant' });
-		const n3 = await Note.save({ title: 'importan' });
+		const n1 = await Note.save({ title: 'cat' });
+		const n2 = await Note.save({ title: 'cats' });
+		const n3 = await Note.save({ title: 'cot' });
 
-		const n4 = await Note.save({ title: 'investment' });
-		const n5 = await Note.save({ title: 'investments' });
-		const n6 = await Note.save({ title: 'invstment' });
+		const n4 = await Note.save({ title: 'defenestrate' });
+		const n5 = await Note.save({ title: 'defenstrate' });
+		const n6 = await Note.save({ title: 'defenestrated' });
 
-		const n7 = await Note.save({ title: 'importan invstment' });
+		const n7 = await Note.save({ title: 'he defenestrated the cat' });
 
 		await engine.syncTables();
 
-		rows = await engine.search('important investment', { fuzzy: true });
+		rows = await engine.search('defenestrated cat', { fuzzy: true });
 		expect(rows.length).toBe(1);
 
-		rows = await engine.search('any:1 important investment', { fuzzy: true });
+		rows = await engine.search('any:1 defenestrated cat', { fuzzy: true });
 		expect(rows.length).toBe(7);
 	}));
 

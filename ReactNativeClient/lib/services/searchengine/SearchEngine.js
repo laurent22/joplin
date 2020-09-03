@@ -454,12 +454,7 @@ class SearchEngine {
 			const fuzzyTitle = await this.fuzzifier(title);
 			const fuzzyBody = await this.fuzzifier(body);
 
-			const endIndicesText = fuzzyText.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length), []);
-			const lastIndexText = endIndicesText.length ? endIndicesText[endIndicesText.length - 1] : 0;
-			const endIndicesTitle = fuzzyTitle.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length + lastIndexText), []);
-			const lastIndexTitle = endIndicesTitle.length ? endIndicesTitle[endIndicesTitle.length - 1] : 0;
-			const endIndicesBody = fuzzyBody.reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length + lastIndexTitle), []);
-			endIndices = endIndicesText.concat(endIndicesTitle).concat(endIndicesBody);
+			endIndices = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length), []);
 
 			const mergedFuzzyText = [].concat.apply([], fuzzyText);
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle);
