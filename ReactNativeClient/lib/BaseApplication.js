@@ -292,6 +292,8 @@ class BaseApplication {
 		}
 
 		if (highlightedWords.length) {
+			console.log('highlighted words = ');
+			console.log(highlightedWords);
 			this.store().dispatch({
 				type: 'SET_HIGHLIGHTED',
 				words: highlightedWords,

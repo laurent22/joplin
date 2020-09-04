@@ -368,13 +368,16 @@ class SearchEngine {
 	}
 
 	processResults_(rows, parsedQuery, isBasicSearchResults = false) {
-		const rowContainsAllWords = (wordsFound, endIndices) => {
+		const rowContainsAllWords = (wordsFound, numFuzzyMatches) => {
 			let start = 0;
-			for (let i = 0; i < endIndices.length; i++) {
-				if (!(wordsFound.slice(start, endIndices[i]).find(x => x))) {
+			let end = 0;
+			for (let i = 0; i < numFuzzyMatches.length; i++) {
+				end = end + numFuzzyMatches[i];
+				if (!(wordsFound.slice(start, end).find(x => x))) {
+					// This note doesn't contain any fuzzy matches for the word
 					return false;
 				}
-				start = endIndices[i];
+				start = end;
 			}
 			return true;
 		};
@@ -385,7 +388,7 @@ class SearchEngine {
 			this.calculateWeightBM25_(rows, parsedQuery.fuzzyScore);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
-				row.include = (parsedQuery.fuzzy && !parsedQuery.any) ? rowContainsAllWords(row.wordFound, parsedQuery.endIndices) : true;
+				row.include = (parsedQuery.fuzzy && !parsedQuery.any) ? rowContainsAllWords(row.wordFound, parsedQuery.numFuzzyMatches) : true;
 				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
@@ -447,14 +450,17 @@ class SearchEngine {
 		const body = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
 		const fuzzyScore = [];
-		let endIndices = [];
+		let numFuzzyMatches = [];
 		let terms = null;
 		if (fuzzy) {
 			const fuzzyText = await this.fuzzifier(text);
 			const fuzzyTitle = await this.fuzzifier(title);
 			const fuzzyBody = await this.fuzzifier(body);
 
-			endIndices = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).reduce((prev, curr) => prev.concat((prev.length ? prev[prev.length - 1] : 0) + curr.length), []);
+			// Save number of matches we got for each word
+			// fuzzifier() is currently set to return at most 3 matches)
+			// We need to know which fuzzy words go together so that we can filter out notes that don't contain a required word.
+			numFuzzyMatches = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).map(x => x.length);
 
 			const mergedFuzzyText = [].concat.apply([], fuzzyText);
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle);
@@ -524,7 +530,7 @@ class SearchEngine {
 			terms: terms, // text terms
 			allTerms: fuzzy ? allFuzzyTerms : allTerms,
 			fuzzyScore: fuzzyScore,
-			endIndices: endIndices,
+			numFuzzyMatches: numFuzzyMatches,
 			fuzzy: fuzzy,
 			any: !!allTerms.find(term => term.name === 'any'),
 		};
