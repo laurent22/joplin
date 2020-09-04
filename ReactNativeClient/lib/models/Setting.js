@@ -252,7 +252,12 @@ class Setting extends BaseModel {
 
 			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
+			// The active folder ID is guaranteed to be valid as long as there's at least one
+			// existing folder, so it is a good default in contexts where there's no currently
+			// selected folder. It corresponds in general to the currently selected folder or
+			// to the last folder that was selected.
 			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
+
 			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
 			locale: {
 				value: defaultLocale(),
