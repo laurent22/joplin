@@ -392,13 +392,13 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
-			'editor.betaCodeMirror': {
+			'editor.optOutCodeMirror': {
 				value: false,
 				type: Setting.TYPE_BOOL,
 				public: true,
 				section: 'note',
 				appTypes: ['desktop'],
-				label: () => _('Use CodeMirror as the code editor (WARNING: BETA).'),
+				label: () => 'Opt-out of the CodeMirror beta (this option will eventually be removed).',
 			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {

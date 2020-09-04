@@ -468,7 +468,7 @@ class MainScreenComponent extends React.Component {
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 
-		const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
+		const codeEditor = Setting.value('editor.optOutCodeMirror') ? 'AceEditor' : 'CodeMirror';
 		const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
 
 		return (
