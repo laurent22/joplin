@@ -452,7 +452,7 @@ async function initialize(dispatch, messageHandler) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-71.sqlite' });
+			await db.open({ name: 'joplin-76.sqlite' });
 
 			// await db.clearForTesting();
 		}

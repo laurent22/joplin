@@ -184,8 +184,10 @@ async function main() {
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
+	const releaseOptions = { isPreRelease: !!rcSuffix };
+
 	const oauthToken = await githubOauthToken();
-	const release = await githubRelease(projectName, tagName);
+	const release = await githubRelease(projectName, tagName, releaseOptions);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 
 	for (const releaseFilename in releaseFiles) {
