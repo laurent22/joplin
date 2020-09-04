@@ -2,22 +2,22 @@
 
 Name | Value
 --- | ---
-Total Windows downloads | 980,731
-Total macOs downloads | 378,497
-Total Linux downloads | 275,710
+Total Windows downloads | 980,811
+Total macOs downloads | 378,530
+Total Linux downloads | 275,728
 Windows % | 60%
 macOS % | 23%
 Linux % | 17%
 
 Version | Date | Windows | macOS | Linux | Total
 --- | --- | --- | --- | --- | ---
-[v1.0.241](https://github.com/laurent22/joplin/releases/tag/v1.0.241) | 2020-09-04T18:06:00Z | 2   | 1   | 0   | 3  
+[v1.0.241](https://github.com/laurent22/joplin/releases/tag/v1.0.241) | 2020-09-04T18:06:00Z | 71  | 29  | 16  | 116
 [v1.0.239](https://github.com/laurent22/joplin/releases/tag/v1.0.239) | 2020-09-01T21:56:36Z | 526 | 187 | 378 | 1,091
 [v1.0.237](https://github.com/laurent22/joplin/releases/tag/v1.0.237) | 2020-08-29T15:38:04Z | 548 | 853 | 321 | 1,722
-[v1.0.236](https://github.com/laurent22/joplin/releases/tag/v1.0.236) | 2020-08-28T09:16:54Z | 279 | 78  | 89  | 446
-[v1.0.235](https://github.com/laurent22/joplin/releases/tag/v1.0.235) | 2020-08-18T22:08:01Z | 1,581 | 455 | 899 | 2,935
+[v1.0.236](https://github.com/laurent22/joplin/releases/tag/v1.0.236) | 2020-08-28T09:16:54Z | 281 | 80  | 90  | 451
+[v1.0.235](https://github.com/laurent22/joplin/releases/tag/v1.0.235) | 2020-08-18T22:08:01Z | 1,582 | 455 | 899 | 2,936
 [v1.0.234](https://github.com/laurent22/joplin/releases/tag/v1.0.234) | 2020-08-17T23:13:02Z | 489 | 92  | 81  | 662
-[v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) | 2020-08-01T14:51:15Z | 41,474 | 17,973 | 12,256 | 71,703
+[v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) | 2020-08-01T14:51:15Z | 41,482 | 17,976 | 12,257 | 71,715
 [v1.0.232](https://github.com/laurent22/joplin/releases/tag/v1.0.232) | 2020-07-28T22:34:40Z | 621 | 194 | 165 | 980
 [v1.0.227](https://github.com/laurent22/joplin/releases/tag/v1.0.227) | 2020-07-07T20:44:54Z | 40,003 | 15,193 | 9,584 | 64,780
 [v1.0.226](https://github.com/laurent22/joplin/releases/tag/v1.0.226) | 2020-07-04T10:21:26Z | 4,773 | 2,203 | 674 | 7,650
