@@ -161,7 +161,6 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			{keymapError && renderError(keymapError)}
 			<div style={styles.container}>
 				<div style={styles.actionsContainer}>
-					<label style={styles.label}>{_('Search')}</label>
 					<input
 						value={filter}
 						onChange={event => setFilter(event.target.value)}
