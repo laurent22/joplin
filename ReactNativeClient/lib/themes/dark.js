@@ -28,7 +28,6 @@ const darkStyle = {
 	codeBackgroundColor: 'rgb(47, 48, 49)',
 	codeBorderColor: 'rgb(70, 70, 70)',
 
-	aceEditorTheme: 'twilight',
 	codeMirrorTheme: 'material-darker',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 

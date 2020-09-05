@@ -28,7 +28,6 @@ const solarizedDarkStyle = {
 	codeBorderColor: '#696969',
 	codeColor: '#fdf6e3',
 
-	aceEditorTheme: 'twilight',
 	codeMirrorTheme: 'solarized dark',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
