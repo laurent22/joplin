@@ -2,7 +2,7 @@ import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Text, Image } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -376,7 +376,7 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
-async function initialize(dispatch) {
+async function initialize(dispatch, messageHandler) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -414,8 +414,13 @@ async function initialize(dispatch) {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
+	const db_startUpgrade = (event) => {
+		messageHandler(`Upgrading database to v${event.version}...`);
+	};
+
 	const db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
+	db.eventEmitter().on('startMigration', db_startUpgrade);
 	reg.setDb(db);
 
 	reg.dispatch = dispatch;
@@ -447,13 +452,17 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-71.sqlite' });
+			await db.open({ name: 'joplin-76.sqlite' });
 
 			// await db.clearForTesting();
 		}
 
+		db.eventEmitter().removeListener('startMigration', db_startUpgrade);
+
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
+
+		messageHandler('Initialising application...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 
@@ -601,6 +610,7 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
+			initMessage: '',
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -614,47 +624,52 @@ class AppComponent extends React.Component {
 		};
 	}
 
-	async componentDidMount() {
-		if (this.props.appState == 'starting') {
+	componentDidMount() {
+		setTimeout(async () => {
+			// We run initialization code with a small delay to give time
+			// to the view to render "please wait" messages.
+
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch);
+			await initialize(this.props.dispatch, (message) => {
+				this.setState({ initMessage: message });
+			});
+
+			BackButtonService.initialize(this.backButtonHandler_);
+
+			AlarmService.setInAppNotificationHandler(async (alarmId) => {
+				const alarm = await Alarm.load(alarmId);
+				const notification = await Alarm.makeNotification(alarm);
+				this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+			});
+
+			AppState.addEventListener('change', this.onAppStateChange_);
+
+			const sharedData = await ShareExtension.data();
+			if (sharedData) {
+				reg.logger().info('Received shared data');
+				if (this.props.selectedFolderId) {
+					handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+				} else {
+					reg.logger.info('Cannot handle share - default folder id is not set');
+				}
+			}
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
-		}
-
-		BackButtonService.initialize(this.backButtonHandler_);
-
-		AlarmService.setInAppNotificationHandler(async (alarmId) => {
-			const alarm = await Alarm.load(alarmId);
-			const notification = await Alarm.makeNotification(alarm);
-			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
-		});
-
-		AppState.addEventListener('change', this.onAppStateChange_);
-
-		const sharedData = await ShareExtension.data();
-		if (sharedData) {
-			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
-				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
-			} else {
-				reg.logger.info('Cannot handle share - default folder id is not set');
-			}
-		}
+		}, 100);
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
-	componentDidUpdate(prevProps) {
+	async componentDidUpdate(prevProps) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -699,8 +714,22 @@ class AppComponent extends React.Component {
 		});
 	}
 
+	renderStartupScreen() {
+		return (
+			<View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+				<View style={{ alignItems: 'center' }}>
+					<Image style={{ marginBottom: 5 }} source={require('./images/StartUpIcon.png')} />
+					<Text style={{ color: '#444444' }}>{this.state.initMessage}</Text>
+				</View>
+			</View>
+		);
+	}
+
 	render() {
-		if (this.props.appState != 'ready') return null;
+		if (this.props.appState != 'ready') {
+			return this.renderStartupScreen();
+		}
+
 		const theme = themeStyle(this.props.theme);
 
 		let sideMenuContent = null;

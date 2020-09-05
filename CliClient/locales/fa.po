@@ -7,20 +7,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mehrad Mahmoudian <mehrad@mahmoudian.me>\n"
+"Last-Translator: Kourosh Firoozbakht <kourox@protonmail.com>\n"
 "Language-Team: \n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified "
+"the note is duplicated in the current notebook."
 msgstr ""
+"یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص "
+"نشده باشد یادداشت در دفترچه کنونی کپی می‌شود."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
 #: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
@@ -43,17 +47,21 @@ msgstr "«%s» یافت نشد."
 
 #: CliClient/app/command-ls.js:18
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of "
+"notebooks."
 msgstr ""
+"یادداشت های موجود در دفترچه کنونی را نمایش می‌دهد. برای نمایش لیست دفترچه ها از "
+"`ls /` استفاده کنید."
 
 #: CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
-msgstr ""
+msgstr "فقط <num> یادداشت اول را نمایش می‌دهد."
 
 #: CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
+"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، زمان "
+"ایجاد)."
 
 #: CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -61,10 +69,14 @@ msgstr "معکوس کردن ترتیب مرتب‌سازی."
 
 #: CliClient/app/command-ls.js:30
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for "
+"to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, "
+"while `-ttd` would display notes and to-dos."
 msgstr ""
+"تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، برای "
+"فهرست کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان مثال: `-"
+"tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-ttd` یادداشت‌ها و فهرست "
+"کار‌ها را نمایش خواهد داد.)"
 
 #: CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -75,6 +87,9 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"استفاده از فرمت لیست طولانی. فرمت به صورت ID (شناسه)، NOTE_COUNT (تعداد یادداشت "
+"(برای دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده (برای فهرست "
+"کار‌ها))، TITLE (عنوان) می‌باشد"
 
 #: CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -82,7 +97,7 @@ msgstr "لطفا ابتدا یه دفترچه مشخص کنید."
 
 #: CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
-msgstr "بارگذاری اطلاعات در جاپلین."
+msgstr "داده را در Joplin وارد می‌کند."
 
 #: CliClient/app/command-import.js:25
 #, javascript-format
@@ -94,9 +109,9 @@ msgid "Do not ask for confirmation."
 msgstr "برای تایید سوال نکن."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "فرمت مبدا: %s"
+msgstr "فرمت خروجی: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -116,7 +131,7 @@ msgstr "به‌روز شده: %d."
 #: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
-msgstr ""
+msgstr "رد شده: %d."
 
 #: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
@@ -130,12 +145,12 @@ msgstr "برچسب گذاری شده: %d."
 
 #: CliClient/app/command-import.js:65
 msgid "Importing notes..."
-msgstr "بارگذاری یادداشت‌ها..."
+msgstr "در حال وارد کردن یادداشت‌ها..."
 
 #: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr ""
+msgstr "یادداشت‌ها وارد شدند: %s"
 
 #: CliClient/app/help-utils.js:56
 msgid "Enum"
@@ -144,12 +159,12 @@ msgstr ""
 #: CliClient/app/help-utils.js:56
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "نوع: %s."
 
 #: CliClient/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "مقادیر احتمالی: %s."
 
 #: CliClient/app/help-utils.js:71
 #, javascript-format
@@ -166,30 +181,34 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که "
+"باید روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
 
 #: CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "سرور در حال حاضر بر روی پورت %d در حال اجراست"
 
 #: CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "سرور بر روی پورت %d در حال اجراست"
 
 #: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
 msgid "Server is not running."
-msgstr ""
+msgstr "سرور در حال اجرا نیست."
 
 #: CliClient/app/command-e2ee.js:18
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
+"تنظیمات E2EE را مدیریت می‌کند. دستورات شامل `enable`، `disable`، `decrypt`، "
+"`status`، `decrypt-file` و `target-status` هستند."
 
 #: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
 msgid "Enter master password:"
-msgstr "رمز اصلی را وارد کنید:"
+msgstr "گذرواژه اصلی را وارد کنید:"
 
 #: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
 #: CliClient/app/command-e2ee.js:79
@@ -198,19 +217,21 @@ msgstr "عملیات لغو شد"
 
 #: CliClient/app/command-e2ee.js:47
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
+"Starting decryption... Please wait as it may take several minutes depending on "
+"how much there is to decrypt."
 msgstr "شروع رمزگشایی... این کار ممکن است چند دقیقه طول بکشد، لطفا صبر کنید."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "موارد رمزگشایی شده: %s از %s"
+msgstr "موارد رمزگشایی شده: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"موارد رد شده: %d (از --retry-failed-items برای تلاش مجدد رمزگشایی آن‌ها استفاده "
+"کنید)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -218,15 +239,13 @@ msgstr "رمزگشایی کامل شد."
 
 #: CliClient/app/command-e2ee.js:77
 #: ReactNativeClient/lib/components/screens/encryption-config.js:163
-#, fuzzy
 msgid "Confirm password:"
-msgstr "رمز اصلی را وارد کنید:"
+msgstr "تایید گذرواژه:"
 
 #: CliClient/app/command-e2ee.js:83
 #: ReactNativeClient/lib/components/screens/encryption-config.js:140
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "رمز نمیتواند خالی باشد"
+msgstr "گذرواژه‌ها با یکدیگر مطابق نیستند!"
 
 #: CliClient/app/command-e2ee.js:108
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
@@ -253,18 +272,21 @@ msgstr "ایجاد دفترچه جدید."
 
 #: CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr ""
+msgstr "یادداشت‌هایی که مطابق <note> هستند را به [notebook] منتقل می‌کند."
 
 #: CliClient/app/command-config.js:13
 msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
+"Gets or sets a config value. If [value] is not provided, it will show the value "
+"of [name]. If neither [name] nor [value] is provided, it will list the current "
+"configuration."
 msgstr ""
+"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار "
+"[name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده "
+"نشده باشند، تنظیمات فعلی لیست می‌شود."
 
 #: CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
-msgstr ""
+msgstr "همچنین متغیر‌های تنظیماتی که تنظیم نشده یا مخفی هستند را نمایش می‌دهد."
 
 #: CliClient/app/command-config.js:79
 #, javascript-format
@@ -281,20 +303,21 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
+"به [notebook] تغییر می‌کند - تمامی فعالیت های آتی در این دفترچه انجام می‌گیرد."
 
 #: CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
-msgstr ""
+msgstr "با فضای ذخیره‌سازی ریموت همگام‌سازی می‌کند."
 
 #: CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr ""
+msgstr "همگام‌سازی با هدف داده شده (به طور پیش فرض مقدار تنظیمات sync.target)"
 
 #: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr ""
+msgstr "احراز هویت انجام نشد (توکن احراز هویت دریافت نشد)."
 
 #: CliClient/app/command-sync.js:86
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
@@ -302,54 +325,54 @@ msgstr ""
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
+"برای اینکه به Joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال "
+"کنید:"
 
 #: CliClient/app/command-sync.js:87
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
+"مرحله ۱: برای اجازه دادن به برنامه این آدرس اینترنتی را در مرورگر خود باز کنید:"
 
 #: CliClient/app/command-sync.js:89
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "مرحله ۲: کدی که توسط Dropbox داده شده را وارد کنید:"
 
 #: CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
+msgstr "با %s تایید نشد. لطفا هر گواهی‌نامه‌‌ای که وجود ندارد را ارائه کنید."
 
 #: CliClient/app/command-sync.js:124
-#, fuzzy
 msgid "Synchronisation is already in progress."
-msgstr "عملیات سینک در حال انجام است."
+msgstr "همگام سازی در حال حاضر در حال انجام است."
 
 #: CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"Lock file is already being hold. If you know that no synchronisation is taking "
+"place, you may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
 
 #: CliClient/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr ""
+msgstr "همگام‌سازی هدف: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
 msgid "Cannot initialise synchroniser."
-msgstr ""
+msgstr "نمی‌توان همگام‌ساز را شروع کرد."
 
 #: CliClient/app/command-sync.js:179
-#, fuzzy
 msgid "Starting synchronisation..."
-msgstr "شروع مراحل سینک..."
+msgstr "در حال شروع همگام سازی..."
 
 #: CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
-msgstr ""
+msgstr "در حال بارگیری منابع..."
 
 #: CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
@@ -357,26 +380,27 @@ msgstr "در حال لغو... لطفا منتظر بمانید."
 
 #: CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
+msgstr "تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>."
 
 #: CliClient/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
-msgstr "پاک کردن یادداشت مشخص شده."
+msgstr "دفترچه مشخص شده را حذف می‌کند."
 
 #: CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr ""
+msgstr "دفترچه را بدون پرسش برای تایید حذف می‌کند."
 
 #: CliClient/app/command-rmbook.js:26
 #: ReactNativeClient/lib/components/screens/notes.js:154
 msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
+"Delete notebook? All notes and sub-notebooks within this notebook will also be "
+"deleted."
 msgstr ""
+"دفترچه حذف شود؟ تمامی یادداشت‌ها و زیر-دفترچه‌های درون این دفترچه نیز حذف می‌شوند."
 
 #: CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr ""
+msgstr "یک فهرست کار جدید می‌سازد."
 
 #: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
 msgid "Notes can only be created within a notebook."
@@ -392,12 +416,14 @@ msgstr "مشخصات کامل یادداشت را نمایش بده."
 
 #: CliClient/app/command-edit.js:17
 msgid "Edit note."
-msgstr "تغییر یادداشت."
+msgstr "ویرایش یادداشت."
 
 #: CliClient/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
+"هیچ ویرایشگر متنی مشخص نشده. لطفا با استفاده از `config editor <editor-path>` "
+"آن را مشخص کنید"
 
 #: CliClient/app/command-edit.js:40
 msgid "No active notebook."
@@ -406,7 +432,7 @@ msgstr "دفترچه‌ی فعالی وجود ندارد."
 #: CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr ""
+msgstr "یادداشت وجود ندارد: «%s». ایجاد شود؟"
 
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
@@ -414,7 +440,7 @@ msgstr "برای حذف یک برچسب، این برچسب را از یاددا
 
 #: CliClient/app/app-gui.js:456
 msgid "Please select the note or notebook to be deleted first."
-msgstr "برای پاک کردن لطفاً ابتدا یادداشت یا دفترچه را انتخاب کنید."
+msgstr "لطفا ابتدا یادداشت یا دفترچه‌ای که قرار است حذف شود را انتخاب کنید."
 
 #: CliClient/app/app-gui.js:720
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -422,21 +448,21 @@ msgstr "برای خروج Ctrl+D را فشار دهید یا exit را تایپ 
 
 #: CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr ""
+msgstr "یادداشت‌هایی که مطابق <note-pattern> باشند را حذف می‌کند."
 
 #: CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr ""
+msgstr "یادداشت‌ها را بدون پرسش برای تایید حذف می‌کند."
 
 #: CliClient/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
+msgstr "%d یادداشت مطابق این الگو هستند. حذف شوند؟"
 
 #: CliClient/app/command-rmnote.js:27
 #: ReactNativeClient/lib/components/screens/note.js:461
 msgid "Delete note?"
-msgstr "پاک کردن یادداشت؟"
+msgstr "یادداشت حذف شود؟"
 
 #: CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -444,7 +470,7 @@ msgstr "فایل مشخص شده را به یادداشت پیوست کن."
 
 #: CliClient/app/command-version.js:11
 msgid "Displays version information"
-msgstr ""
+msgstr "اطلاعات نسخه را نمایش می‌دهد"
 
 #: CliClient/app/command-version.js:16
 #, javascript-format
@@ -453,13 +479,15 @@ msgstr "%s %s (%s)"
 
 #: CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr ""
+msgstr "یک فهرست کار را به عنوان کامل نشده علامت می‌زند."
 
 #: CliClient/app/command-export.js:13
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete "
+"database including notebooks, notes, tags and resources."
 msgstr ""
+"داده Joplin را در محل مورد نظر استخراج می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده "
+"شامل دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را استخراج می‌کند."
 
 #: CliClient/app/command-export.js:23
 #, javascript-format
@@ -468,25 +496,23 @@ msgstr "فرمت مقصد: %s"
 
 #: CliClient/app/command-export.js:23
 msgid "Exports only the given note."
-msgstr "فقط یادداشت مشخص شده را خروجی بده."
+msgstr "تنها یادداشت مشخص شده را استخراج می‌کند."
 
 #: CliClient/app/command-export.js:23
 msgid "Exports only the given notebook."
-msgstr "فقط دفترجه مشخص شده را خروجی بده."
+msgstr "تنها دفترچه مشخص شده را استخراج می‌کند."
 
 #: CliClient/app/command-mknote.js:12
 msgid "Creates a new note."
 msgstr "ایجاد یادداشت جدید."
 
 #: CliClient/app/main.js:80
-#, fuzzy
 msgid "Type `joplin help` for usage information."
-msgstr "نمایش اطلاعات مربوط به استفاده."
+msgstr "`joplin help` را برای راهنمای استفاده تایپ کنید."
 
 #: CliClient/app/main.js:82
-#, fuzzy
 msgid "Fatal error:"
-msgstr "آخرین خطا: %s"
+msgstr "خطای مهلک:"
 
 #: CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
@@ -496,24 +522,27 @@ msgstr "آدرس ژئولوکیشن یادداشت را نمایش بده."
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for "
+"usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 
 #: CliClient/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master "
+"password. To do so please type `e2ee decrypt`. If you have already supplied the "
+"password, the encrypted items are being decrypted in the background and will be "
+"available soon."
 msgstr ""
+"در حال حاضر یک یا چند مورد رمزنگاری شده‌اند و ممکن است شما به ارائه یک گذرواژه "
+"اصلی نیاز داشته باشید. برای اینکار لطفا «e2ee decrypt» را تایپ کنید. اگر در حال "
+"حاضر گذرواژه را ارائه کرده‌اید، موارد رمزنگاری شده در پس‌زمینه در حال رمزگشایی "
+"هستند و به زودی در دسترس خواهند بود."
 
 #: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "برای تایید سوال نکن."
+msgstr "شما همچنین می‌توانید `status` را برای اطلاعات بیشتر تایپ کنید."
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -521,7 +550,7 @@ msgstr "جستجو:"
 
 #: CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
+msgstr "برای <pattern> داده شده در همه یادداشت‌ها جستجو می‌کند."
 
 #: CliClient/app/command-set.js:22
 #, javascript-format
@@ -531,6 +560,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"ویژگی <name> از <note> داده شده را به [value] (مقدار) داده شده تغییر می‌دهد. "
+"ویژگی‌های احتمالی شامل:\n"
+"\n"
+"%s"
 
 #: CliClient/app/cli-utils.js:108
 #, javascript-format
@@ -561,7 +594,7 @@ msgstr "n"
 
 #: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
-msgstr "نمیتوان مورد رمزگذاری شده را تغییر داد"
+msgstr "نمی‌توان مورد رمزگذاری شده را تغییر داد"
 
 #: CliClient/app/command-help.js:13
 msgid "Displays usage information."
@@ -571,15 +604,16 @@ msgstr "نمایش اطلاعات مربوط به استفاده."
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
+"برای اطلاع راجع به اینکه چگونه میانبر‌ها را شخصی سازی کنید لطفا به %s مراجعه کنید"
 
 #: CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "کلید میانبر در حالت خط فرمان (CLI) کار نمیکند."
+msgstr "میانبر‌ها در حالت خط فرمان (CLI) کار نمی‌کنند."
 
 #: CliClient/app/command-help.js:71
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
+"Type `help [command]` for more information about a command; or type `help all` "
+"for the complete usage information."
 msgstr ""
 
 #: CliClient/app/command-help.js:73
@@ -587,12 +621,11 @@ msgid "The possible commands are:"
 msgstr "دستور های ممکن عبارتند از:"
 
 #: CliClient/app/command-help.js:77
-#, fuzzy
 msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr "در هر دستور، میتوان به یادداشت یا دفترچه توسط تیتر یا شناسه"
+"In any command, a note or notebook can be referred to by title or ID, or using "
+"the shortcuts `$n` or `$b` for, respectively, the currently selected note or "
+"notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
 
 #: CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -600,8 +633,8 @@ msgstr ""
 
 #: CliClient/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including "
+"this console)."
 msgstr ""
 
 #: CliClient/app/command-help.js:81
@@ -617,16 +650,15 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr "برای خروج از حالت خط فرمان، دکمه ی Esc را فشار دهید"
 
 #: CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
 #: CliClient/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle "
+"the given to-do between completed and uncompleted state (If the target is a "
+"regular note it will be converted to a to-do). Use \"clear\" to convert the to-"
+"do back to a regular note."
 msgstr ""
 
 #: CliClient/app/command-exit.js:11
@@ -655,9 +687,8 @@ msgid "y"
 msgstr "y"
 
 #: CliClient/app/app.js:169
-#, fuzzy
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "لغو سینک در پس‌زمینه... لطفا صبر کنید."
+msgstr "در حال لغو همگام سازی در پس‌زمینه... لطفا صبر کنید."
 
 #: CliClient/app/app.js:254
 #, javascript-format
@@ -671,34 +702,36 @@ msgstr "دستور «%s» فقط در حالت گرافیکی (GUI) کاربرد
 
 #: CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
-msgstr ""
+msgstr "خلاصه‌ای درباره یادداشت‌ها و دفترچه‌ها نمایش می‌دهد."
 
 #: CliClient/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا "
+"کنید"
 
 #: CliClient/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign "
+"or remove [tag] from [note], to list notes associated with [tag], or to list "
+"tags associated with [note]. The command `tag list` can be used to list all the "
+"tags (use -l for long option)."
 msgstr ""
 
 #: CliClient/app/command-tag.js:90
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "پاسخ نامعتبر: %s"
+msgstr "دستور نامعتبر: «%s»"
 
 #: CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
-msgstr "علامت زدن فهرست کارها به عنوان انجام شده."
+msgstr "یک فهرست کار را به عنوان انجام شده علامت می‌زند."
 
 #: CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr ""
+msgstr "یادداشت یک فهرست کار نیست: «%s»"
 
 #: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
 #: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
@@ -711,7 +744,7 @@ msgstr ""
 #: ReactNativeClient/lib/components/CameraView.js:182
 #: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
-msgstr ""
+msgstr "باشه"
 
 #: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
 #: ElectronClient/gui/DialogButtonRow.min.js:38
@@ -740,8 +773,8 @@ msgstr "لغو"
 
 #: ElectronClient/plugins/GotoAnything.min.js:454
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name."
+"Type a note title or part of its content to jump to it. Or type # followed by a "
+"tag name, or @ followed by a notebook name."
 msgstr ""
 
 #: ElectronClient/plugins/GotoAnything.min.js:493
@@ -751,12 +784,12 @@ msgstr "رفنت به هر چیزی..."
 #: ElectronClient/InteropServiceHelper.js:147
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
+msgstr "در حال استخراج به «%s» با فرمت «%s». لطفا صبر کنید..."
 
 #: ElectronClient/InteropServiceHelper.js:164
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "یادداشت‌ها استخراج نشدند: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -769,7 +802,7 @@ msgstr ""
 
 #: ElectronClient/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
-msgstr ""
+msgstr "یک بروزرسانی موجود است، آیا میخواهید هم اکنون بارگیری‌اش کنید؟"
 
 #: ElectronClient/checkForUpdates.js:152
 #, javascript-format
@@ -794,14 +827,13 @@ msgid "No"
 msgstr "خیر"
 
 #: ElectronClient/checkForUpdates.js:153
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "یادداشت های بازیابی شده"
+msgstr "انتشار کامل یادداشت‌ها"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -812,7 +844,7 @@ msgstr "این یادداشت هیچ تاریخچه ای ندارد"
 #: ElectronClient/gui/NoteText.min.js:865
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr ""
+msgstr "پیوند یا پیام پشتیبانی نشده: %s"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:177
 msgid "Restore"
@@ -821,14 +853,15 @@ msgstr "بازگرداندن"
 #: ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s"
+"\". The current version of the note will not be replaced or modified."
 msgstr ""
+"برای بازیابی یادداشت بر روی «%s» کلیک کنید. یادداشت در دفترچه‌ای به نام «%s» کپی "
+"می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/NoteText.min.js:1671
-#: ElectronClient/gui/ConfigScreen.min.js:744
-#: ElectronClient/gui/Header.min.js:316
+#: ElectronClient/gui/ConfigScreen.min.js:744 ElectronClient/gui/Header.min.js:316
 #: ElectronClient/gui/Header/Header.min.js:302
 #: ReactNativeClient/lib/commands/historyBackward.js:16
 msgid "Back"
@@ -837,7 +870,7 @@ msgstr "بازگشت"
 #: ElectronClient/gui/SideBar/SideBar.min.js:269
 #: ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
-msgstr ""
+msgstr "برداشتن"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:272
 #: ElectronClient/gui/SideBar.min.js:286
@@ -848,18 +881,20 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
+"دفترچه «%s» حذف شود؟\n"
+"\n"
+"تمامی یادداشت‌ها و زیر-دفترچه‌های درون این دفترچه نیز حذف می‌شوند."
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:273
 #: ElectronClient/gui/SideBar.min.js:287
 #: ElectronClient/gui/utils/NoteListUtils.js:161
 #: ElectronClient/gui/utils/NoteListUtils.js:184
-#: ElectronClient/gui/ResourceScreen.js:46
-#: ElectronClient/gui/ResourceScreen.js:94
+#: ElectronClient/gui/ResourceScreen.js:46 ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
 #: ReactNativeClient/lib/components/screens/note.js:868
 msgid "Delete"
-msgstr "پاک کردن"
+msgstr "حذف"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
 #, javascript-format
@@ -869,29 +904,27 @@ msgstr ""
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
-msgstr "این جستجو را از نواک کناری حذف شود؟"
+msgstr "این جستجو از نوار کناری حذف شود؟"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:337
 #: ElectronClient/gui/SideBar.min.js:382
 #: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:677
 #: ElectronClient/app.js:727
 msgid "Export"
-msgstr "خروجی"
+msgstr "استخراج"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:660
 #: ElectronClient/gui/SideBar.min.js:724
 #: ReactNativeClient/lib/components/side-menu-content.js:338
-#, fuzzy
 msgid "Synchronise"
-msgstr "سینک کردن"
+msgstr "همگام سازی"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:694
 #: ElectronClient/gui/SideBar.min.js:757
 #: ReactNativeClient/lib/components/side-menu-content.js:360
 #: ReactNativeClient/lib/components/screens/notes.js:189
-#, fuzzy
 msgid "All notes"
-msgstr "یادداشت"
+msgstr "همه یادداشت‌ها"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:699
 #: ElectronClient/gui/SideBar.min.js:762
@@ -901,8 +934,7 @@ msgstr "دفترچه ها"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:716
 #: ElectronClient/gui/MainScreen/commands/setTags.js:17
-#: ElectronClient/gui/SideBar.min.js:779
-#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/SideBar.min.js:779 ElectronClient/gui/NoteText.min.js:1634
 #: ElectronClient/gui/NoteText.min.js:1810
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
@@ -915,14 +947,14 @@ msgstr "برچسب‌ها"
 #: ReactNativeClient/lib/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr ""
+msgstr "در حال رمزگشایی موارد: %d/%d"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:740
 #: ElectronClient/gui/SideBar.min.js:802
 #: ReactNativeClient/lib/components/side-menu-content.js:330
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "آیتم های دریافت شده: %d از %d"
+msgstr "در حال دریافت منابع: %d/%d"
 
 #: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
 msgid "Sidebar"
@@ -943,7 +975,7 @@ msgstr ""
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
 #: ElectronClient/gui/NoteText.min.js:1616
 msgid "Insert Hyperlink"
-msgstr "وارد کردن لینک"
+msgstr "درج پیوند برجسته"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
@@ -951,12 +983,10 @@ msgstr "وارد کردن لینک"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
-#: ElectronClient/gui/NoteText.min.js:1591
-#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1591 ElectronClient/gui/NoteText.min.js:1595
 #: ElectronClient/gui/NoteText.min.js:1604
-#, fuzzy
 msgid "List item"
-msgstr "لیست"
+msgstr "لیست مورد"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:236
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
@@ -976,13 +1006,13 @@ msgstr "کپی"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
 msgid "Paste"
-msgstr ""
+msgstr "چسباندن"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
-msgstr ""
+msgstr "قالب"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
@@ -994,9 +1024,8 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "گزینه (چک‌باکس)"
+msgstr "لیست چک‌باکس"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1006,8 +1035,7 @@ msgstr "ویرایش"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:526
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
-#: ElectronClient/gui/NoteText.min.js:1627
-#: ElectronClient/gui/NoteText.min.js:1726
+#: ElectronClient/gui/NoteText.min.js:1627 ElectronClient/gui/NoteText.min.js:1726
 msgid "Attach file"
 msgstr "پیوست فایل"
 
@@ -1023,17 +1051,16 @@ msgstr ""
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
 #: ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
-msgstr "وارد کردن تاریخ و ساعت"
+msgstr "درج تاریخ و ساعت"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "یادداشت‌ها یا فایل‌ها را اینجا رها کنید"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:401
-#, fuzzy
 msgid "Code View"
-msgstr "کد"
+msgstr "نمای کد"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #, javascript-format
@@ -1041,17 +1068,19 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"لطفا صبر کنید تا همه پیوست ها بارگیری و رمزگشایی شوند. شما همچنین می‌توانید به "
+"%s برای ویرایش یادداشت بروید."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "یک خطا در بارگیری این پیوست بود:"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
 #: ElectronClient/gui/NoteText.min.js:835
 #: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr ""
+msgstr "این پیوست هنوز بارگیری یا رمزگشایی نشده"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
 #: ElectronClient/gui/NoteText.min.js:778
@@ -1060,28 +1089,27 @@ msgstr "باز کردن..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
 #: ElectronClient/gui/NoteText.min.js:786
-#, fuzzy
 msgid "Save as..."
-msgstr "ذخیره ی تغییرات"
+msgstr "ذخیره به عنوان..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "نمایش فایل در پوشه"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
 msgid "Copy path to clipboard"
-msgstr ""
+msgstr "کپی کردن مسیر در کلیپ بورد"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
 #: ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
-msgstr ""
+msgstr "کپی کردن آدرس پیوند"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:283
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "to-do"
-msgstr "فهرست کارها"
+msgstr "فهرست کار"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:283
 #: ElectronClient/gui/NoteText.min.js:2121
@@ -1090,9 +1118,9 @@ msgstr "یادداشت"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:283
 #: ElectronClient/gui/NoteText.min.js:2121
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Creating new %s..."
-msgstr "بارگذاری یادداشت‌ها..."
+msgstr "ایجاد یک %s جدید..."
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1111,7 +1139,7 @@ msgstr ""
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
 #: ElectronClient/gui/NoteText.min.js:1710
 msgid "Hyperlink"
-msgstr "لینک"
+msgstr "پیوند برجسته"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
 #: ElectronClient/gui/NoteText.min.js:1718
@@ -1120,9 +1148,8 @@ msgstr "کد"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
 #: ElectronClient/gui/NoteText.min.js:1738
-#, fuzzy
 msgid "Numbered List"
-msgstr "لیست ترتیبی"
+msgstr "لیست شماره گذاری شده"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
 #: ElectronClient/gui/NoteText.min.js:1746
@@ -1132,14 +1159,13 @@ msgstr "لیست بدون ترتیب"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
 #: ElectronClient/gui/NoteText.min.js:1754
-#, fuzzy
 msgid "Checkbox"
-msgstr "گزینه (چک‌باکس)"
+msgstr "چک‌باکس"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
 #: ElectronClient/gui/NoteText.min.js:1762
 msgid "Heading"
-msgstr ""
+msgstr "عنوان"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
 #: ElectronClient/gui/NoteText.min.js:1770
@@ -1148,7 +1174,7 @@ msgstr "خط افقی"
 
 #: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
 msgid "Note title"
-msgstr "موضوع یادداشت"
+msgstr "عنوان یادداشت"
 
 #: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
 msgid "Search in current note"
@@ -1174,9 +1200,8 @@ msgid "Updated"
 msgstr "به‌روز شده"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "کامل شد: %s"
+msgstr "کامل شده"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1184,7 +1209,7 @@ msgstr "مکان"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:31
 msgid "URL"
-msgstr ""
+msgstr "آدرس اینترنتی"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:32
 #: ReactNativeClient/lib/models/Setting.js:1253
@@ -1193,11 +1218,11 @@ msgstr "تاریخچه ی یادداشت"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
-msgstr ""
+msgstr "نشانه گذاری"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:305
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "نسخه‌های قبلی این یادداشت"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:382
 #: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
@@ -1207,43 +1232,39 @@ msgstr "جزییات یادداشت"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:295
 msgid "Some items cannot be synchronised."
-msgstr ""
+msgstr "بعضی از موارد نمی‌توانند همگام‌سازی شوند."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:300
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:312
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:336
 msgid "View them now"
-msgstr ""
+msgstr "هم‌اکنون ببینید"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:307
 msgid "Some items cannot be decrypted."
-msgstr ""
+msgstr "بعضی از موارد نمی‌توانند رمزگشایی شوند."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:319
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "رمز اصلی را وارد کنید:"
+msgstr "یک یا چند کلید اصلی به یک گذرواژه نیاز دارند."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:324
-#, fuzzy
 msgid "Set the password"
-msgstr "رمز اصلی را وارد کنید:"
+msgstr "گذرواژه را تعیین کنید"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:331
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "رمز اصلی را وارد کنید:"
+msgstr "یکی از کلید‌های اصلی شما از یک روش رمزنگاری منسوخ استفاده می‌کند."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:343
 msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
+"The default encryption method has been changed, you should re-encrypt your data."
 msgstr ""
+"روش رمزگذاری پیش فرض تغییر یافته است،‌ شما باید داده خود را دوباره رمزگذاری کنید."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:348
-#, fuzzy
 msgid "More info"
-msgstr "تنظیمات"
+msgstr "اطلاعات بیشتر"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:419
 msgid "Search..."
@@ -1251,7 +1272,7 @@ msgstr "جستجو..."
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
-msgstr ""
+msgstr "آمار..."
 
 #: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:17
@@ -1270,31 +1291,28 @@ msgstr "تغییر نام دفترچه:"
 #: ReactNativeClient/lib/components/action-button.js:64
 #: ReactNativeClient/setUpQuickActions.js:15
 msgid "New to-do"
-msgstr "فهرست کارهای جدید"
+msgstr "فهرست کار جدید"
 
 #: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
 #: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
-#, fuzzy
 msgid "Toggle note list"
-msgstr "لیست یادداشت"
+msgstr "تغییر وضعیت لیست یادداشت"
 
 #: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
 #: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
 msgid "Toggle sidebar"
-msgstr ""
+msgstr "تغییر وضعیت نوار کناری"
 
 #: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
-#: ElectronClient/gui/NoteText.min.js:1642
-#: ElectronClient/gui/NoteText.min.js:1828
+#: ElectronClient/gui/NoteText.min.js:1642 ElectronClient/gui/NoteText.min.js:1828
 #: ReactNativeClient/lib/components/screens/note.js:826
-#, fuzzy
 msgid "Set alarm"
-msgstr "انتخاب همه"
+msgstr "تنظیم هشدار"
 
 #: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
 #: ElectronClient/gui/MainScreen.min.js:417
 msgid "Set alarm:"
-msgstr ""
+msgstr "تنظیم هشدار:"
 
 #: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
 #: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
@@ -1310,20 +1328,17 @@ msgid "New note"
 msgstr "یادداشت جدید"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
-#, fuzzy
 msgid "Move to notebook"
-msgstr "انتقال به دفترچه..."
+msgstr "انتقال به دفترچه"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
 #: ElectronClient/gui/MainScreen.min.js:272
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "انتقال به دفترچه..."
+msgstr "انتقال به دفترچه:"
 
 #: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
-#, fuzzy
 msgid "Toggle editor layout"
-msgstr "لیست یادداشت"
+msgstr "تغییر وضعیت قالب ویرایشگر"
 
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:26
 #: ElectronClient/gui/MainScreen.min.js:313
@@ -1338,22 +1353,21 @@ msgstr "دفترچه جدید"
 #: ElectronClient/gui/MainScreen/commands/newNotebook.js:25
 #: ElectronClient/gui/MainScreen.min.js:178
 msgid "Notebook title:"
-msgstr "موضوع دفترچه:"
+msgstr "عنوان دفترچه:"
 
 #: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
-#, fuzzy
 msgid "Share note..."
-msgstr "یادداشت های بازیابی شده"
+msgstr "به اشتراک گذاری یادداشت..."
 
 #: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
 #: ElectronClient/gui/MainScreen.min.js:448
 msgid "Template file:"
-msgstr ""
+msgstr "فایل الگو:"
 
 #: ElectronClient/gui/MainScreen/commands/setTags.js:44
 #: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
-msgstr "اضافه یا حذف برچسب:"
+msgstr "اضافه یا حذف کردن برچسب‌ها:"
 
 #: ElectronClient/gui/MainScreen/commands/print.js:16
 msgid "Print"
@@ -1362,7 +1376,7 @@ msgstr "پرینت"
 #: ElectronClient/gui/MainScreen/commands/print.js:25
 #: ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
-msgstr ""
+msgstr "هر دفعه فقط یک یادداشت می‌تواند پرینت گرفته شود."
 
 #: ElectronClient/gui/NoteToolbar/NoteToolbar.js:32
 #: ElectronClient/gui/NoteText.min.js:1656
@@ -1373,16 +1387,15 @@ msgstr "در: %s"
 #: ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr ""
+msgstr "حذف برچسب «%s» از همه‌ی یادداشت‌ها؟"
 
 #: ElectronClient/gui/SideBar.min.js:304
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "دفترچه جدید"
+msgstr "زیر-دفترچه جدید"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "توکن در کلیپ بورد کپی شد!"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
@@ -1391,7 +1404,7 @@ msgstr ""
 #: ElectronClient/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr ""
+msgstr "وضعیت: آغاز شده بر روی پورت %d"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:82
 #, javascript-format
@@ -1412,8 +1425,8 @@ msgstr ""
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:122
 msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
+"Joplin Web Clipper allows saving web pages and screenshots from your browser to "
+"Joplin."
 msgstr ""
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:127
@@ -1427,8 +1440,8 @@ msgstr ""
 #: ElectronClient/gui/ClipperConfigScreen.min.js:140
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
+"enabling it your firewall may ask you to give permission to Joplin to listen to "
+"a particular port."
 msgstr ""
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:154
@@ -1437,7 +1450,7 @@ msgstr ""
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
-msgstr ""
+msgstr "افزونه های مرتبط را برای مرورگر خود بارگیری و نصب کنید:"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
@@ -1445,17 +1458,19 @@ msgstr "گزینه های پیشرفته"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
-msgstr ""
+msgstr "توکن مجوز:"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
-msgstr "کپی کرد توکن"
+msgstr "کپی کردن توکن"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:195
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به Joplin "
+"نیاز است."
 
 #: ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1468,24 +1483,23 @@ msgstr "ورود به Dropbox"
 #: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:673
 #: ElectronClient/app.js:724
 msgid "Import"
-msgstr "بارگذاری"
+msgstr "وارد کردن"
 
 #: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:561
 msgid "Options"
 msgstr "گزینه ها"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "پیوست فایل"
+msgstr "پیوست‌های یادداشت"
 
 #: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
 msgid "Synchronisation Status"
-msgstr ""
+msgstr "وضعیت همگام‌سازی"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "افزونه Firefox"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
@@ -1493,13 +1507,13 @@ msgstr ""
 
 #: ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "هم‌اکنون دریافت کنید:"
 
 #: ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
+msgstr "دفترچه جدید «%s» ساخته خواهد شد و فایل «%s» به آن وارد خواهد شد"
 
 #: ElectronClient/gui/DropboxLoginScreen.min.js:67
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:68
@@ -1509,12 +1523,12 @@ msgstr "ثبت"
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "Custom order"
-msgstr ""
+msgstr "ترتیب سفارشی"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "View"
-msgstr ""
+msgstr "نما"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
@@ -1529,27 +1543,26 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"برای مرتب‌سازی دستی یادداشت‌ها، ترتیب مرتب‌سازی باید به «%s» از منوی «%s» > «%s» "
+"تغییر پیدا کند"
 
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.min.js:153
 msgid "Do it now"
-msgstr ""
+msgstr "هم‌اکنون انجام بده"
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
-#, fuzzy
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
-"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک "
-"یادداشت جدید ایجاد کنید."
+msgstr "یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یکی ایجاد کنید."
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک "
-"یادداشت جدید ایجاد کنید."
+"در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک یادداشت "
+"جدید ایجاد کنید."
 
 #: ElectronClient/gui/utils/NoteListUtils.js:37
 #: ReactNativeClient/lib/components/screen-header.js:362
@@ -1563,57 +1576,55 @@ msgstr "%s - کپی"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:62
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "تغییر نوع میان یادداشت و فهرست کار"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:91
 msgid "Switch to note type"
-msgstr ""
+msgstr "تغییر نوع به یادداشت"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:100
 msgid "Switch to to-do type"
-msgstr ""
+msgstr "تغییر نوع به فهرست کار"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:110
 #: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
-msgstr "کپی کردن لینک Markdown"
+msgstr "کپی کردن پیوند Markdown"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:178
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "یادداشت «%s» پاک شود؟"
+msgstr "یادداشت «%s» حذف شود؟"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:180
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "تعداد %d یادداشت پاک شود؟"
+msgstr "تعداد %d یادداشت حذف شود؟"
 
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "نام"
 
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "آیکون"
 
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "جزییات یادداشت"
+msgstr "جزییات دفترچه"
 
 #: ElectronClient/gui/NoteText.min.js:781
 #, javascript-format
 msgid "This file could not be opened: %s"
-msgstr ""
+msgstr "این فایل نمی‌تواند باز شود: %s"
 
 #: ElectronClient/gui/NoteText.min.js:1551
 msgid "emphasized text"
 msgstr ""
 
 #: ElectronClient/gui/NoteText.min.js:1792
-#, fuzzy
 msgid "Click to stop external editing"
-msgstr "کلیک کنید تا ویرایشگر خارجی را متوقف کنید"
+msgstr "کلیک کنید تا ویرایش خارجی را متوقف کنید"
 
 #: ElectronClient/gui/NoteText.min.js:1793
 #, fuzzy
@@ -1623,12 +1634,11 @@ msgstr "در حال لغو..."
 #: ElectronClient/gui/NoteText.min.js:1801
 #: ElectronClient/commands/startExternalEditing.js:18
 msgid "Edit in external editor"
-msgstr "تنظیم ویرایشگر خارجی"
+msgstr "ویرایش در ویرایشگر خارجی"
 
 #: ElectronClient/gui/NoteText.min.js:1852
-#, fuzzy
 msgid "Content Properties"
-msgstr "جزییات یادداشت"
+msgstr "جزییات محتوا"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
 #: ReactNativeClient/lib/components/screens/encryption-config.js:125
@@ -1637,7 +1647,7 @@ msgstr "ذخیره"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "کلید‌های اصلی به ارتقا نیاز دارند"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1645,21 +1655,25 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"این کلید‌های اصلی از یک الگوریتم رمزنگاری تاریخ گذشته استفاده می‌کنند و پیشنهاد "
+"می‌شود که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق معمول قادر به "
+"رمزگشایی و رمزنگاری داده شما خواهد بود."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "ارتقا"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "انتخاب تاریخ"
+msgstr "رمزنگاری دوباره داده"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
-"The default encryption method has been changed to a more secure one and it "
-"is recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it is "
+"recommended that you apply it to your data."
 msgstr ""
+"روش پیش فرض رمزگذاری به یک روش امن‌تر تغییر پیدا کرده و پیشنهاد می‌شود که آن را "
+"بر داده خود اعمال کنید."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
@@ -1679,8 +1693,8 @@ msgid ""
 "2. Click \"%s\".\n"
 "3. Let it run to completion. While it runs, avoid changing any note on your "
 "other devices, to avoid conflicts.\n"
-"4. Once sync is done on this device, sync all your other devices and let it "
-"run to completion.\n"
+"4. Once sync is done on this device, sync all your other devices and let it run "
+"to completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
@@ -1693,139 +1707,129 @@ msgstr "وضعیت"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:437
 msgid "Encryption is:"
-msgstr ""
+msgstr "رمزگذاری:"
 
 #: ElectronClient/gui/StatusScreen.min.js:33
-#, fuzzy
 msgid "Please select where the sync status should be exported to"
-msgstr "برای پاک کردن لطفاً ابتدا یادداشت یا دفترچه را انتخاب کنید."
+msgstr "لطفا محلی که وضعیت همگام‌سازی باید استخراج شود را مشخص کنید"
 
 #: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:112
 msgid "Retry All"
-msgstr ""
+msgstr "تلاش مجدد همه"
 
 #: ElectronClient/gui/StatusScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/status.js:118
 msgid "Retry"
-msgstr ""
+msgstr "تلاش مجدد"
 
 #: ElectronClient/gui/MainScreen.min.js:165
 msgid "Please create a notebook first."
-msgstr ""
+msgstr "لطفا ابتدا یک دفترچه ایجاد کنید."
 
 #: ElectronClient/gui/MainScreen.min.js:171
 msgid "Please create a notebook first"
-msgstr ""
+msgstr "لطفا ابتدا یک دفترچه ایجاد کنید"
 
 #: ElectronClient/gui/PromptDialog.min.js:249
-#, fuzzy
 msgid "Clear"
 msgstr "پاک"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
-msgstr ""
+msgstr "کلمات"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
-msgstr ""
+msgstr "حروف"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "حروف به غیر از فاصله‌ها"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
-msgstr ""
+msgstr "خطوط"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:98
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:357
-#, fuzzy
 msgid "Editor"
-msgstr "ویرایش"
+msgstr "ویرایشگر"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:99
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:358
 msgid "Viewer"
-msgstr ""
+msgstr "بیننده"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
 msgid "Statistics"
-msgstr "وضعیت"
+msgstr "آمار"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "زمان خواندن: %s دقیقه"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
-msgstr ""
+msgstr "بستن"
 
 #: ElectronClient/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟"
 
 #: ElectronClient/gui/ConfigScreen.min.js:170
 #: ReactNativeClient/lib/components/screens/config.js:307
 msgid "Check synchronisation configuration"
-msgstr ""
+msgstr "بررسی تنظیمات همگام‌سازی"
 
 #: ElectronClient/gui/ConfigScreen.min.js:179
 msgid "Unknown"
-msgstr ""
+msgstr "ناشناس"
 
 #: ElectronClient/gui/ConfigScreen.min.js:183
-#, fuzzy
 msgid "Checking..."
-msgstr "در حال لغو..."
+msgstr "در حال بررسی..."
 
 #: ElectronClient/gui/ConfigScreen.min.js:187
 #: ReactNativeClient/lib/models/Resource.js:320
-#, fuzzy
 msgid "Error"
-msgstr "فقط خطا ها"
+msgstr "خطا"
 
 #: ElectronClient/gui/ConfigScreen.min.js:198
 msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
+"The Joplin Nextcloud App is either not installed or misconfigured. Please see "
+"the full error message below:"
 msgstr ""
 
 #: ElectronClient/gui/ConfigScreen.min.js:211
-#, fuzzy
 msgid "Show Log"
-msgstr "نمایش همه"
+msgstr "نمایش لاگ"
 
 #: ElectronClient/gui/ConfigScreen.min.js:224
 msgid "Joplin Nextcloud App status:"
 msgstr ""
 
 #: ElectronClient/gui/ConfigScreen.min.js:238
-#, fuzzy
 msgid "Check Status"
-msgstr "وضعیت"
+msgstr "بررسی وضعیت"
 
 #: ElectronClient/gui/ConfigScreen.min.js:245
-#, fuzzy
 msgid "Help"
-msgstr "&کمک"
+msgstr "کمک"
 
 #: ElectronClient/gui/ConfigScreen.min.js:264
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "گزینه های پیشرفته"
+msgstr "نمایش تنظیمات پیشرفته"
 
 #: ElectronClient/gui/ConfigScreen.min.js:521
 msgid "Browse..."
-msgstr ""
+msgstr "مرور..."
 
 #: ElectronClient/gui/ConfigScreen.min.js:761
 msgid "Apply"
@@ -1833,60 +1837,54 @@ msgstr "اعمال"
 
 #: ElectronClient/gui/Header.min.js:267
 #: ElectronClient/gui/Header/Header.min.js:253
-#, fuzzy
 msgid "Usage"
-msgstr "کارکرد: %s"
+msgstr "کارکرد"
 
 #: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
-#, fuzzy
 msgid "Note list"
-msgstr "تاریخچه ی یادداشت"
+msgstr "لیست یادداشت"
 
 #: ElectronClient/gui/Header/commands/focusSearch.js:15
 msgid "Search in all the notes"
 msgstr "جستجو در تمام یادداشت ها"
 
 #: ElectronClient/gui/ResourceScreen.js:31
-#, fuzzy
 msgid "Title"
-msgstr "موضوع"
+msgstr "عنوان"
 
 #: ElectronClient/gui/ResourceScreen.js:35
 msgid "Size"
-msgstr ""
+msgstr "اندازه"
 
 #: ElectronClient/gui/ResourceScreen.js:39
-#, fuzzy
 msgid "Action"
-msgstr "مکان"
+msgstr "عمل"
 
-#: ElectronClient/gui/ResourceScreen.js:42
-#: ReactNativeClient/lib/path-utils.js:65
+#: ElectronClient/gui/ResourceScreen.js:42 ReactNativeClient/lib/path-utils.js:65
 #: ReactNativeClient/lib/path-utils.js:101
 #: ReactNativeClient/lib/models/BaseItem.js:720
 msgid "Untitled"
-msgstr "بدون موضوع"
+msgstr "بدون عنوان"
 
 #: ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "یادداشت «%s» پاک شود؟"
+msgstr "پیوست «%s» حذف شود؟"
 
 #: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
-"This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be "
-"restored afterwards."
+"This is an advanced tool to show the attachments that are linked to your notes. "
+"Please be careful when deleting one of them as they cannot be restored "
+"afterwards."
 msgstr ""
 
 #: ElectronClient/gui/ResourceScreen.js:140
-#, fuzzy
 msgid "Please wait..."
-msgstr "در حال چک کرد... لطفا صبر کنید."
+msgstr "لطفا صبر کنید..."
 
 #: ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
-msgstr ""
+msgstr "منبعی یافت نشد!"
 
 #: ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
@@ -1894,83 +1892,72 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
 #: ElectronClient/gui/ShareNoteDialog.js:158
-#, fuzzy
 msgid "Synchronising..."
-msgstr "هدف سینک"
+msgstr "در حال همگام سازی..."
 
 #: ElectronClient/gui/ShareNoteDialog.js:160
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "بارگذاری یادداشت‌ها..."
-msgstr[1] "بارگذاری یادداشت‌ها..."
+msgstr[0] "در حال بوجود آوردن پیوند‌ها..."
+msgstr[1] "در حال بوجود آوردن پیوند..."
 
 #: ElectronClient/gui/ShareNoteDialog.js:162
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "پیوند‌ها در کلیپ بورد کپی شدند!"
+msgstr[1] "پیوند در کلیپ بورد کپی شد!"
 
 #: ElectronClient/gui/ShareNoteDialog.js:165
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
 #: ElectronClient/gui/ShareNoteDialog.js:170
-#, fuzzy
 msgid "Share Notes"
-msgstr "یادداشت های بازیابی شده"
+msgstr "به اشتراک گذاری یادداشت‌ها"
 
 #: ElectronClient/gui/ShareNoteDialog.js:172
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "اشتراک گذاری"
+msgstr[0] "کپی کردن پیوند قابل به اشتراک گذاری"
 msgstr[1] "اشتراک گذاری"
 
 #: ElectronClient/commands/stopExternalEditing.js:16
-#, fuzzy
 msgid "Stop external editing"
-msgstr "کلیک کنید تا ویرایشگر خارجی را متوقف کنید"
+msgstr "توقف ویرایش خارجی"
 
 #: ElectronClient/commands/startExternalEditing.js:29
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr ""
+msgstr "خطا در بازکردن یادداشت در ویرایشگر: %s"
 
 #: ElectronClient/app.js:460
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
+msgstr "در حال وارد کردن از «%s» با فرمت «%s». لطفا صبر کنید..."
 
 #: ElectronClient/app.js:522
-#, fuzzy
 msgid "Create note from template"
-msgstr "وارد کردن تاریخ و ساعت"
+msgstr "ساخت یادداشت از الگو"
 
 #: ElectronClient/app.js:528
 msgid "Create to-do from template"
-msgstr ""
+msgstr "ساخت فهرست کار از الگو"
 
 #: ElectronClient/app.js:534
-#, fuzzy
 msgid "Insert template"
-msgstr "وارد کردن تاریخ و ساعت"
+msgstr "درج الگو"
 
 #: ElectronClient/app.js:541
-#, fuzzy
 msgid "Open template directory"
-msgstr "فولدر خروجی Joplin"
+msgstr "بازکردن پوشه الگو"
 
 #: ElectronClient/app.js:548
-#, fuzzy
 msgid "Refresh templates"
-msgstr "وارد کردن تاریخ و ساعت"
+msgstr "تازه‌سازی الگو‌‌ها"
 
 #: ElectronClient/app.js:574
-#, fuzzy
 msgid "Note attachments..."
-msgstr "پیوست فایل"
+msgstr "پیوست‌های فایل..."
 
 #: ElectronClient/app.js:596
 #, fuzzy, javascript-format
@@ -1983,19 +1970,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s، %s)"
 
 #: ElectronClient/app.js:605
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "کامل شد: %s"
+msgstr "شناسه کاربر: %s"
 
 #: ElectronClient/app.js:606
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "ورژن جدید: %s"
+msgstr "نسخه همگام‌سازی: %s"
 
 #: ElectronClient/app.js:607
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "ورژن جدید: %s"
+msgstr "نسخه نمایه: %s"
 
 #: ElectronClient/app.js:608
 #, javascript-format
@@ -2003,9 +1990,8 @@ msgid "Keychain Supported: %s"
 msgstr ""
 
 #: ElectronClient/app.js:630 ElectronClient/app.js:706
-#, fuzzy
 msgid "&File"
-msgstr "فایل"
+msgstr "&فایل"
 
 #: ElectronClient/app.js:636 ElectronClient/app.js:905
 msgid "About Joplin"
@@ -2017,11 +2003,11 @@ msgstr "تنظیمات..."
 
 #: ElectronClient/app.js:653 ElectronClient/app.js:887
 msgid "Check for updates..."
-msgstr ""
+msgstr "بررسی برای ارتقا..."
 
 #: ElectronClient/app.js:666 ElectronClient/app.js:719
 msgid "Templates"
-msgstr ""
+msgstr "الگو‌ها"
 
 #: ElectronClient/app.js:692
 #, javascript-format
@@ -2038,36 +2024,35 @@ msgstr "بستن پنجره"
 
 #: ElectronClient/app.js:757
 msgid "&Edit"
-msgstr "و ویرایش"
+msgstr "&ویرایش"
 
 #: ElectronClient/app.js:776
 msgid "&View"
-msgstr ""
+msgstr "&نما"
 
 #: ElectronClient/app.js:782
 msgid "Layout button sequence"
-msgstr ""
+msgstr "توالی دکمه قالب"
 
 #: ElectronClient/app.js:822
 msgid "Focus"
-msgstr ""
+msgstr "تمرکز"
 
 #: ElectronClient/app.js:828
 msgid "Actual Size"
-msgstr ""
+msgstr "اندازه واقعی"
 
 #: ElectronClient/app.js:839 ElectronClient/app.js:845
 msgid "Zoom In"
-msgstr ""
+msgstr "بزرگنمایی"
 
 #: ElectronClient/app.js:852
 msgid "Zoom Out"
-msgstr ""
+msgstr "کوچک نمایی"
 
 #: ElectronClient/app.js:860
-#, fuzzy
 msgid "&Note"
-msgstr "یادداشت"
+msgstr "&یادداشت"
 
 #: ElectronClient/app.js:870
 msgid "&Tools"
@@ -2079,22 +2064,20 @@ msgstr "&کمک"
 
 #: ElectronClient/app.js:877
 msgid "Website and documentation"
-msgstr ""
+msgstr "وب‌سایت و مستندات"
 
 #: ElectronClient/app.js:881
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "فایل خروجی Joplin"
+msgstr "انجمن Joplin"
 
 #: ElectronClient/app.js:884
 #: ReactNativeClient/lib/components/screens/config.js:495
 msgid "Make a donation"
-msgstr ""
+msgstr "کمک کردن"
 
 #: ElectronClient/app.js:894
-#, fuzzy
 msgid "Toggle development tools"
-msgstr "لیست یادداشت"
+msgstr "تغییر وضعیت ابزار توسعه"
 
 #: ElectronClient/app.js:1037
 #, javascript-format
@@ -2106,8 +2089,7 @@ msgid "Exit"
 msgstr "خروج"
 
 #: ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr ""
 
 #: ReactNativeClient/lib/onedrive-api-node-utils.js:87
@@ -2116,19 +2098,19 @@ msgstr ""
 
 #: ReactNativeClient/lib/onedrive-api-node-utils.js:115
 msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"Please open the following URL in your browser to authenticate the application. "
+"The application will create a directory in \"Apps/Joplin\" and will only read "
+"and write files in this directory. It will have no access to any files outside "
+"this directory nor to any other personal data. No data will be shared with any "
+"third party."
 msgstr ""
 
 #: ReactNativeClient/lib/registry.js:156
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
+"This error often happens when using OneDrive for Business, which unfortunately "
+"cannot be supported.\n"
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
@@ -2145,7 +2127,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2155,23 +2137,22 @@ msgstr "Dropbox"
 #: ReactNativeClient/lib/components/screens/note.js:523
 #, javascript-format
 msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
+"You are about to attach a large image (%dx%d pixels). Would you like to resize "
+"it down to %d pixels before attaching it?"
 msgstr ""
 
 #: ReactNativeClient/lib/shim-init-node.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot access %s"
-msgstr "«%s» یافت نشد."
+msgstr "نمی‌توان به %s دسترسی یافت"
 
 #: ReactNativeClient/lib/models/Folder.js:28
 #: ReactNativeClient/lib/models/Note.js:25
 msgid "title"
-msgstr "موضوع"
+msgstr "عنوان"
 
 #: ReactNativeClient/lib/models/Folder.js:29
 #: ReactNativeClient/lib/models/Note.js:26
-#, fuzzy
 msgid "updated date"
 msgstr "تاریخ به‌روزرسانی"
 
@@ -2186,10 +2167,9 @@ msgstr "دفترچه را نمیتوان به این مکان انتقال دا�
 #: ReactNativeClient/lib/models/Folder.js:426
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "دفترچه نمیتوان نام «%s» داشته باشد، این نام رزرو شده."
+msgstr "دفترچه نمی‌تواند «%s» نام داشته باشد، این نام رزرو شده."
 
 #: ReactNativeClient/lib/models/Setting.js:39
-#, fuzzy
 msgid "yes"
 msgstr "بله"
 
@@ -2200,16 +2180,15 @@ msgid "(wysiwyg: %s)"
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:40
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "خیر"
 
 #: ReactNativeClient/lib/models/Setting.js:43
 #, javascript-format
 msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
+"Attention: If you change this location, make sure you copy all your content to "
+"it before syncing, otherwise all files will be removed! See the FAQ for more "
+"details: %s"
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:51
@@ -2246,9 +2225,8 @@ msgid "OLED Dark"
 msgstr "تیره"
 
 #: ReactNativeClient/lib/models/Setting.js:80
-#, fuzzy
 msgid "Synchronisation target"
-msgstr "هدف سینک"
+msgstr "هدف همگام‌سازی"
 
 #: ReactNativeClient/lib/models/Setting.js:82
 msgid ""
@@ -2270,7 +2248,7 @@ msgstr "نام کاربری Nextcloud"
 
 #: ReactNativeClient/lib/models/Setting.js:137
 msgid "Nextcloud password"
-msgstr "رمز Nextcloud"
+msgstr "گذرواژه Nextcloud"
 
 #: ReactNativeClient/lib/models/Setting.js:149
 msgid "WebDAV URL"
@@ -2282,7 +2260,7 @@ msgstr "نام کاربری WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:170
 msgid "WebDAV password"
-msgstr "رمز WebDAV"
+msgstr "گذرواژه WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
@@ -2298,13 +2276,13 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "رفتار بارگیری پیوست"
 
 #: ReactNativeClient/lib/models/Setting.js:225
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In "
+"\"Auto\", they are downloaded when you open the note. In \"Always\", all the "
+"attachments are downloaded whether you open the note or not."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:228
@@ -2337,11 +2315,11 @@ msgstr "فرمت ساعت"
 
 #: ReactNativeClient/lib/models/Setting.js:304
 msgid "Theme"
-msgstr ""
+msgstr "پوسته"
 
 #: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "به طور خودکار پوسته هماهنگ با پوسته سیستم تغییر کند"
 
 #: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
@@ -2353,33 +2331,33 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
-msgstr ""
+msgstr "نمایش تعداد یادداشت"
 
 #: ReactNativeClient/lib/models/Setting.js:355
 #: ReactNativeClient/lib/models/Setting.js:357
 #: ReactNativeClient/lib/models/Setting.js:358
 msgid "Split View"
-msgstr ""
+msgstr "تقسیم نما"
 
 #: ReactNativeClient/lib/models/Setting.js:355
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: ReactNativeClient/lib/models/Setting.js:356
 #: ReactNativeClient/lib/models/Setting.js:357
 #: ReactNativeClient/lib/models/Setting.js:358
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: ReactNativeClient/lib/models/Setting.js:361
 msgid "Uncompleted to-dos on top"
-msgstr ""
+msgstr "فهرست کار‌های کامل نشده در بالا"
 
 #: ReactNativeClient/lib/models/Setting.js:362
 msgid "Show completed to-dos"
-msgstr ""
+msgstr "نمایش فهرست کار‌های کامل شده"
 
 #: ReactNativeClient/lib/models/Setting.js:387
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -2400,11 +2378,11 @@ msgstr "مرتب سازی دفترچه ها با"
 
 #: ReactNativeClient/lib/models/Setting.js:416
 msgid "Save geo-location with notes"
-msgstr ""
+msgstr "ذخیره ژئولوکیشن با یادداشت‌ها"
 
 #: ReactNativeClient/lib/models/Setting.js:435
 msgid "When creating a new to-do:"
-msgstr ""
+msgstr "زمان ساخت یک فهرست کار جدید:"
 
 #: ReactNativeClient/lib/models/Setting.js:438
 #: ReactNativeClient/lib/models/Setting.js:453
@@ -2430,7 +2408,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:466
 msgid "Enable math expressions"
-msgstr ""
+msgstr "فعال‌سازی عبارت‌های ریاضی"
 
 #: ReactNativeClient/lib/models/Setting.js:467
 msgid "Enable Fountain syntax support"
@@ -2470,7 +2448,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "فعال‌سازی شکلک markdown"
 
 #: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable ++insert++ syntax"
@@ -2504,19 +2482,17 @@ msgid "Editor font size"
 msgstr "سایز فونت ویرایشگر"
 
 #: ReactNativeClient/lib/models/Setting.js:524
-#, fuzzy
 msgid "Editor font"
-msgstr "سایز فونت ویرایشگر"
+msgstr "فونت ویرایشگر"
 
 #: ReactNativeClient/lib/models/Setting.js:548
 msgid "Editor font family"
-msgstr ""
+msgstr "خانواده فونت ویرایشگر"
 
 #: ReactNativeClient/lib/models/Setting.js:550
 msgid ""
-"This should be a *monospace* font or some elements will render incorrectly. "
-"If the font is incorrect or empty, it will default to a generic monospace "
-"font."
+"This should be a *monospace* font or some elements will render incorrectly. If "
+"the font is incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:589
@@ -2538,7 +2514,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
-msgstr ""
+msgstr "بازه همگام‌سازی"
 
 #: ReactNativeClient/lib/models/Setting.js:608
 #: ReactNativeClient/lib/models/Setting.js:609
@@ -2559,19 +2535,18 @@ msgid "%d hours"
 msgstr "%d ساعت"
 
 #: ReactNativeClient/lib/models/Setting.js:622
-#, fuzzy
 msgid "Text editor command"
-msgstr "دستور ویراستار متنی"
+msgstr "دستور ویرایشگر متن"
 
 #: ReactNativeClient/lib/models/Setting.js:622
 msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. If "
+"none is provided it will try to auto-detect the default editor."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:623
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "اندازه صفحه برای استخراج PDF"
 
 #: ReactNativeClient/lib/models/Setting.js:625
 msgid "A4"
@@ -2599,7 +2574,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:633
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "جهت صفحه برای استخراج PDF"
 
 #: ReactNativeClient/lib/models/Setting.js:635
 msgid "Portrait"
@@ -2611,12 +2586,11 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:647
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "حالت صفحه کلید"
 
 #: ReactNativeClient/lib/models/Setting.js:650
-#, fuzzy
 msgid "Default"
-msgstr "پیشفرض: %s"
+msgstr "پیش فرض"
 
 #: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
@@ -2632,10 +2606,10 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:668
 msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"Comma-separated list of paths to directories to load the certificates from, or "
+"path to individual cert files. For example: /my/cert_dir, /other/custom.pem. "
+"Note that if you make changes to the TLS settings, you must save your changes "
+"before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:680
@@ -2654,8 +2628,8 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:694
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
+"Specify the port that should be used by the API server. If not set, a default "
+"will be used."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:702
@@ -2677,39 +2651,38 @@ msgstr "تاریخچه ی یادداشت را نگه دار به مدت"
 
 #: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "فاکتور رشد لیست دفترچه"
 
 #: ReactNativeClient/lib/models/Setting.js:743
 #: ReactNativeClient/lib/models/Setting.js:756
 #: ReactNativeClient/lib/models/Setting.js:769
 msgid ""
-"The factor property sets how the item will grow or shrink to fit the "
-"available space in its container with respect to the other items. Thus an "
-"item with a factor of 2 will take twice as much space as an item with a "
-"factor of 1.Restart app to see changes."
+"The factor property sets how the item will grow or shrink to fit the available "
+"space in its container with respect to the other items. Thus an item with a "
+"factor of 2 will take twice as much space as an item with a factor of 1.Restart "
+"app to see changes."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
-msgstr ""
+msgstr "فاکتور رشد لیست یادداشت"
 
 #: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
-msgstr ""
+msgstr "فاکتور رشد منطقه یادداشت"
 
 #: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr ""
+msgstr "مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
 
 #: ReactNativeClient/lib/models/Setting.js:1247
 msgid "General"
 msgstr "کلی"
 
 #: ReactNativeClient/lib/models/Setting.js:1248
-#, fuzzy
 msgid "Synchronisation"
-msgstr "هدف سینک"
+msgstr "همگام‌سازی"
 
 #: ReactNativeClient/lib/models/Setting.js:1249
 msgid "Appearance"
@@ -2728,9 +2701,8 @@ msgid "Application"
 msgstr "نرم‌افزار"
 
 #: ReactNativeClient/lib/models/Setting.js:1254
-#, fuzzy
 msgid "Encryption"
-msgstr "رمزنگاری: %s"
+msgstr "رمزنگاری"
 
 #: ReactNativeClient/lib/models/Setting.js:1255
 msgid "Web Clipper"
@@ -2739,35 +2711,34 @@ msgstr ""
 #: ReactNativeClient/lib/models/Setting.js:1260
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
-"note that, while these features might be useful, they are not standard "
-"Markdown and thus most of them will only work in Joplin. Additionally, some "
-"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
-"uses one of these plugins in that editor, you will lose the plugin "
-"formatting. It is indicated below which plugins are compatible or not with "
-"the WYSIWYG editor."
+"note that, while these features might be useful, they are not standard Markdown "
+"and thus most of them will only work in Joplin. Additionally, some of them are "
+"*incompatible* with the WYSIWYG editor. If you open a note that uses one of "
+"these plugins in that editor, you will lose the plugin formatting. It is "
+"indicated below which plugins are compatible or not with the WYSIWYG editor."
 msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:1261
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
+msgstr "یادداشت‌ها و تنظیمات در این محل ذخیره شده‌اند: %s"
 
 #: ReactNativeClient/lib/models/Resource.js:317
 msgid "Not downloaded"
-msgstr ""
+msgstr "بارگیری نشده"
 
 #: ReactNativeClient/lib/models/Resource.js:318
 msgid "Downloading"
-msgstr ""
+msgstr "در حال بارگیری"
 
 #: ReactNativeClient/lib/models/Resource.js:319
 msgid "Downloaded"
-msgstr ""
+msgstr "بارگیری شده"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "پیوست فایل"
+msgstr "تداخل پیوست: «%s»"
 
 #: ReactNativeClient/lib/models/Resource.js:372
 #, javascript-format
@@ -2776,24 +2747,26 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"یک [conflict] (%s) در پیوست زیر وجود داشت.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "دفترچه را نمیتوان به این مکان انتقال داد"
+msgstr "نمی‌توان برچسب را به این محل انتقال داد."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "نام برچسب نمی‌تواند با یک «/» شروع یا پایان یابد."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "نام برچسب نمی‌تواند دارای «//» باشد."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "برچسب «%s» وجود دارد. لطفا نام دیگری انتخاب کنی"
+msgstr "برچسب «%s» وجود دارد. لطفا نام دیگری انتخاب کنید."
 
 #: ReactNativeClient/lib/models/Note.js:27
 msgid "created date"
@@ -2801,11 +2774,11 @@ msgstr "تاریخ ایجاد"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "ترتیب سفارشی"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "این یادداشت اطلاعات ژئولوکیشن ندارد."
 
 #: ReactNativeClient/lib/models/Note.js:466
 #, javascript-format
@@ -2823,7 +2796,7 @@ msgstr "رمزنگاری شده"
 
 #: ReactNativeClient/lib/models/BaseItem.js:779
 msgid "Encrypted items cannot be modified"
-msgstr ""
+msgstr "موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند"
 
 #: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
@@ -2839,7 +2812,7 @@ msgstr "کارکرد: %s"
 #: ReactNativeClient/lib/BaseApplication.js:218
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "پرچم ناشناخته: %s"
 
 #: ReactNativeClient/lib/SyncTargetOneDrive.js:25
 msgid "OneDrive"
@@ -2847,11 +2820,11 @@ msgstr "OneDrive"
 
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
-msgstr ""
+msgstr "پاک کردن هشدار"
 
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:68
 msgid "Save alarm"
-msgstr ""
+msgstr "ذخیره هشدار"
 
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:86
 msgid "Select date"
@@ -2871,36 +2844,35 @@ msgstr "اجازه ی شما برای استفاده از دوربین شما ن
 
 #: ReactNativeClient/lib/components/screen-header.js:185
 msgid "Delete these notes?"
-msgstr "این یادداشت ها پاک شوند؟"
+msgstr "این یادداشت ها حذف شوند؟"
 
 #: ReactNativeClient/lib/components/screen-header.js:392
 msgid "Move to notebook..."
 msgstr "انتقال به دفترچه..."
 
 #: ReactNativeClient/lib/components/screen-header.js:433
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "انتقال به دفترچه..."
+msgstr "انتقال %d یادداشت به دفترچه «%s»؟"
 
 #: ReactNativeClient/lib/components/screen-header.js:451
 msgid "Press to set the decryption password."
-msgstr ""
+msgstr "برای تنظیم گذرواژه رمزگشایی بفشارید."
 
 #: ReactNativeClient/lib/components/screen-header.js:452
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr ""
+msgstr "بعضی از موارد نمی‌توانند همگام‌سازی شوند. برای اطلاعات بیشتر بفشارید."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "دفترچه ها"
+msgstr "دفترچه: %s"
 
 #: ReactNativeClient/lib/components/side-menu-content.js:132
 msgid "Encrypted notebooks cannot be renamed"
-msgstr ""
+msgstr "دفترچه‌های رمزگذاری شده نمی‌توانند تغییر نام داده شوند"
 
 #: ReactNativeClient/lib/components/side-menu-content.js:312
-#, fuzzy
 msgid "New Notebook"
 msgstr "دفترچه جدید"
 
@@ -2910,37 +2882,36 @@ msgid "Configuration"
 msgstr "تنظیمات"
 
 #: ReactNativeClient/lib/components/note-list.js:97
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "دفترچه‌ی فعالی وجود ندارد."
+msgstr "شما در حال حاضر دفترچه‌ای ندارید."
 
 #: ReactNativeClient/lib/components/note-list.js:101
-#, fuzzy
 msgid "Create a notebook"
-msgstr "ایجاد دفترچه جدید."
+msgstr "ایجاد یک دفترچه"
 
 #: ReactNativeClient/lib/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
+msgstr "در حال حاضر یادداشتی وجود ندارد. با کلیک بر روی دکمه (+) یکی بسازید."
 
 #: ReactNativeClient/lib/components/shared/config-shared.js:46
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "در حال چک کرد... لطفا صبر کنید."
+msgstr "در حال بررسی... لطفا صبر کنید."
 
 #: ReactNativeClient/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "موفقیت! تنظیمات سینک به نظر صحیح است."
+msgstr "موفقیت! تنظیمات همگام‌سازی به نظر صحیح است."
 
 #: ReactNativeClient/lib/components/shared/config-shared.js:50
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
+"Error. Please check that URL, username, password, etc. are correct and that the "
+"sync target is accessible. The reported error was:"
 msgstr ""
+"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و "
+"هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:"
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr ""
+msgstr "برنامه احراز هویت شد!"
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
@@ -2951,30 +2922,35 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"برنامه احراز هویت نشد:\n"
+"\n"
+"%s\n"
+"\n"
+"لطفا دوباره تلاش کنید."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
+msgid "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"لطفا تایید کنید که شما می‌خواهید دوباره تمام پایگاه داده خود را رمزگذاری نمایید."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "داده شما دوباره رمزگذاری و همگام‌سازی خواهد شد."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
+msgstr "لطفا قبل از ارتقای کلید گذرواژه خود را در لیست کلید اصلی زیر وارد کنید."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "کلید اصلی با موفقیت ارتقا یافت!"
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "کلید اصلی ارتقا نیافت: %s"
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -2984,16 +2960,15 @@ msgstr "موارد رمزگشایی شده: %s از %s"
 #: ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr ""
+msgstr "دفترچه نتوانست ذخیره شود: %s"
 
 #: ReactNativeClient/lib/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "ویرایش دفترچه"
 
 #: ReactNativeClient/lib/components/screens/folder.js:110
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "موضوع دفترچه:"
+msgstr "عنوان دفترچه را وارد کنید"
 
 #: ReactNativeClient/lib/components/screens/onedrive-login.js:109
 msgid "Login with OneDrive"
@@ -3003,7 +2978,7 @@ msgstr "ورود با OneDrive"
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
-msgstr ""
+msgstr "تازه‌‌سازی"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3011,7 +2986,7 @@ msgstr "برچسب جدید:"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "برچسب‌های جدید را تایپ کنید یا از لیست انتخاب کنید"
 
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -3022,9 +2997,9 @@ msgid "Enter code here"
 msgstr "کد را اینجا وارد کنید"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:119
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Master Key %s"
-msgstr "رمز اصلی %s"
+msgstr "کلید اصلی %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
 #: ReactNativeClient/lib/components/screens/note.js:773
@@ -3035,23 +3010,22 @@ msgstr "ایجاد شده: %s"
 #: ReactNativeClient/lib/components/screens/encryption-config.js:122
 #: ReactNativeClient/lib/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "رمز:"
+msgstr "گذرواژه:"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
-msgstr "رمز نمیتواند خالی باشد"
+msgstr "گذرواژه نمیتواند خالی باشد"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:139
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "رمز نمیتواند خالی باشد"
+msgstr "گذرواژه تایید نمی‌تواند خالی باشد"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:150
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent encrypted to the sync target. Do not lose the password "
+"as, for security purposes, this will be the *only* way to decrypt the data! To "
+"enable encryption, please enter your password below."
 msgstr ""
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:177
@@ -3060,14 +3034,17 @@ msgstr "فعال سازی"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:248
 msgid "Missing Master Keys"
-msgstr ""
+msgstr "کلید‌های اصلی یافت نشدند"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:249
 msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
+"The master keys with these IDs are used to encrypt some of your items, however "
+"the application does not currently have access to them. It is likely they will "
+"eventually be downloaded via synchronisation."
 msgstr ""
+"کلید‌های اصلی با این شناسه‌ها برای رمزنگاری بعضی از موارد شما استفاده شده‌اند، به "
+"هر حال برنامه در حال حاضر به آن‌ها دسترسی ندارد. احتمال دارد در نهایت با یک "
+"همگام‌سازی بارگیری شوند."
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:258
 msgid "Disable encryption"
@@ -3103,7 +3080,7 @@ msgstr "فقط خطا ها"
 
 #: ReactNativeClient/lib/components/screens/config.js:50
 msgid "Warning"
-msgstr ""
+msgstr "اخطار ها"
 
 #: ReactNativeClient/lib/components/screens/config.js:50
 msgid ""
@@ -3112,23 +3089,20 @@ msgid ""
 msgstr ""
 
 #: ReactNativeClient/lib/components/screens/config.js:436
-#, fuzzy
 msgid "Tools"
-msgstr "&ابزارها"
+msgstr "&ابزار‌ها"
 
 #: ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Sync Status"
-msgstr "وضعیت"
+msgstr "وضعیت همگام‌سازی"
 
 #: ReactNativeClient/lib/components/screens/config.js:441
-#, fuzzy
 msgid "Creating report..."
-msgstr "بارگذاری یادداشت‌ها..."
+msgstr "در حال ایجاد گزارش..."
 
 #: ReactNativeClient/lib/components/screens/config.js:441
 msgid "Export Debug Report"
-msgstr ""
+msgstr "استخراج گزارش دیباگ"
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid "Fixing search index..."
@@ -3140,48 +3114,49 @@ msgstr ""
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may "
+"take a long time depending on the number of notes."
 msgstr ""
 
 #: ReactNativeClient/lib/components/screens/config.js:446
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "بارگذاری یادداشت‌ها..."
+msgstr "در حال استخراج نمایه..."
 
 #: ReactNativeClient/lib/components/screens/config.js:446
-#, fuzzy
 msgid "Export profile"
-msgstr "فایل خروجی Joplin"
+msgstr "استخراج نمایه"
 
 #: ReactNativeClient/lib/components/screens/config.js:446
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "تنها برای دیباگ: استخراج نمایه شما به یک حافظه خارجی SD."
 
 #: ReactNativeClient/lib/components/screens/config.js:461
-#, fuzzy
 msgid "More information"
-msgstr "تنظیمات"
+msgstr "اطلاعات بیشتر"
 
 #: ReactNativeClient/lib/components/screens/config.js:471
 msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
+"To work correctly, the app needs the following permissions. Please enable them "
+"in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
+"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات "
+"گوشی خود در برنامه‌ها > Joplin > دسترسی‌ها فعال کنید"
 
 #: ReactNativeClient/lib/components/screens/config.js:474
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
+"- فضای ذخیره‌سازی: برای پیوست کردن فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی "
+"filesystem."
 
 #: ReactNativeClient/lib/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
+msgstr "- دوربین: برای عکس گرفتن به پیوست کردن آن به یک یادداشت."
 
 #: ReactNativeClient/lib/components/screens/config.js:480
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
+msgstr "- موقعیت: برای پیوست کردن اطلاعات ژئولوکیشن به یک یادداشت."
 
 #: ReactNativeClient/lib/components/screens/config.js:509
 msgid "Joplin website"
@@ -3193,13 +3168,13 @@ msgid "Database v%s"
 msgstr "پایگاه داده ورژن %s"
 
 #: ReactNativeClient/lib/components/screens/config.js:543
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "برچسب گذاری شده: %d."
+msgstr "FTS فعال شده: %d"
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "This note has been modified:"
-msgstr ""
+msgstr "این یادداشت تغییر یافته است:"
 
 #: ReactNativeClient/lib/components/screens/note.js:97
 msgid "Save changes"
@@ -3212,31 +3187,31 @@ msgstr "لغو تغییرات"
 #: ReactNativeClient/lib/components/screens/note.js:161
 #, javascript-format
 msgid "No item with ID %s"
-msgstr ""
+msgstr "هیچ موردی با شناسه %s وجود ندارد"
 
 #: ReactNativeClient/lib/components/screens/note.js:180
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "این پیوست هنوز بارگیری یا رمزگشایی نشده."
 
 #: ReactNativeClient/lib/components/screens/note.js:184
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
+msgstr "برنامه موبایل Joplin در حال حاضر از این پیوند پشتیبانی نمی‌کند: %s"
 
 #: ReactNativeClient/lib/components/screens/note.js:188
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "پیوند‌های دارای پروتکل «%s» پشتیبانی نمی‌شوند"
 
 #: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr ""
+msgstr "نوع تصویر پشتیبانی نشده: %s"
 
 #: ReactNativeClient/lib/components/screens/note.js:774
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "به‌روز شده: %d."
+msgstr "به‌روز شده: %s"
 
 #: ReactNativeClient/lib/components/screens/note.js:778
 msgid "View on map"
@@ -3247,14 +3222,12 @@ msgid "Go to source URL"
 msgstr "رفتن به آدرس منبع"
 
 #: ReactNativeClient/lib/components/screens/note.js:813
-#, fuzzy
 msgid "Attach..."
-msgstr "جستجو..."
+msgstr "پیوست..."
 
 #: ReactNativeClient/lib/components/screens/note.js:815
-#, fuzzy
 msgid "Choose an option"
-msgstr "نمایش گزینه های پیشرفته"
+msgstr "یک گزینه را انتخاب کنید"
 
 #: ReactNativeClient/lib/components/screens/note.js:815
 msgid "Take photo"
@@ -3281,19 +3254,17 @@ msgid "Convert to todo"
 msgstr "تبدیل به فهرست کارها"
 
 #: ReactNativeClient/lib/components/screens/note.js:862
-#, fuzzy
 msgid "Properties"
-msgstr "جزییات یادداشت"
+msgstr "جزییات"
 
 #: ReactNativeClient/lib/components/screens/note.js:1042
 #: ReactNativeClient/lib/components/screens/note.js:1100
 msgid "Add body"
-msgstr ""
+msgstr "افزودن بدنه"
 
 #: ReactNativeClient/lib/components/screens/note.js:1150
-#, fuzzy
 msgid "Add title"
-msgstr "موضوع"
+msgstr "افزودن عنوان"
 
 #: ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
@@ -3304,41 +3275,43 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
+"نمی‌توان توکن را تازه‌سازی کرد: داده های احراز هویت پیدا نشدند. شروع دوباره "
+"همگام‌سازی ممکن است این مشکل را حل کند."
 
 #: ReactNativeClient/lib/synchronizer.js:94
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "موارد محلی ایجاد شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:95
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "موارد محلی به‌روز شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:96
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "موارد ریموت ایجاد شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:97
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "موارد ریموت به‌روز شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:98
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "موارد محلی حذف شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:99
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "موارد ریموت حذف شده: %d."
 
 #: ReactNativeClient/lib/synchronizer.js:100
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "آیتم های دریافت شده: %d از %d"
+msgstr "آیتم های دریافت شده: %d از %d."
 
 #: ReactNativeClient/lib/synchronizer.js:102
 msgid "Cancelling..."
@@ -3365,8 +3338,8 @@ msgstr "درحال انجام"
 #: ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to the Joplin Nextcloud app. Please check the configuration "
+"in the Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -3388,13 +3361,12 @@ msgid "Forward"
 msgstr ""
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
-msgstr "سینک کردن"
+msgstr "همگام سازی"
 
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
-msgstr ""
+msgstr "داده‌ای برای استخراج وجود ندارد."
 
 #: ReactNativeClient/lib/services/RevisionService.js:215
 msgid "Restored Notes"
@@ -3402,11 +3374,11 @@ msgstr "یادداشت های بازیابی شده"
 
 #: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr ""
+msgstr "لطفا دفترچه‌ای که یادداشت‌ها باید به آن وارد شوند را مشخص کنید."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
-msgstr ""
+msgstr "مواردی که نمی‌توانند همگام‌سازی شوند"
 
 #: ReactNativeClient/lib/services/report.js:123
 msgid ""
@@ -3414,65 +3386,70 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
+"این موارد بر روی دستگاه باقی می‌مانند اما به هدف همگام‌سازی بارگذاری نمی‌شوند. این "
+"پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش داده شده‌اند) "
+"را جستجو کنید."
 
 #: ReactNativeClient/lib/services/report.js:130
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr ""
+msgstr "%s (%s) نمی‌تواند بارگذاری شود: %s"
 
 #: ReactNativeClient/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr ""
+msgstr "مورد «%s» بارگیری نشد: %s"
 
 #: ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
-msgstr ""
+msgstr "مواردی که نمی‌توانند رمزگشایی شوند"
 
 #: ReactNativeClient/lib/services/report.js:144
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are "
+"corrupted or too large. These items will remain on the device but Joplin will "
+"no longer attempt to decrypt them."
 msgstr ""
+"Joplin چندین بار نتوانست این موارد را رمزگشایی کند، احتمالا به این خاطر که خراب "
+"یا بسیار بزرگ هستند. این موارد بر روی دستگاه باقی می‌مانند اما Joplin دیگر تلاشی "
+"برای رمزگشایی آن‌ها نمی‌کند."
 
 #: ReactNativeClient/lib/services/report.js:182
-#, fuzzy
 msgid "Attachments"
-msgstr "پیوست فایل"
+msgstr "پیوست ها"
 
 #: ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "بارگیری شده و رمزگشایی شده"
 
 #: ReactNativeClient/lib/services/report.js:190
 #: ReactNativeClient/lib/services/report.js:191
 #: ReactNativeClient/lib/services/report.js:194
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: ReactNativeClient/lib/services/report.js:191
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "بارگیری شده و رمزنگاری شده"
 
 #: ReactNativeClient/lib/services/report.js:204
 msgid "Attachments that could not be downloaded"
-msgstr ""
+msgstr "پیوست هایی که بارگیری نشده"
 
 #: ReactNativeClient/lib/services/report.js:209
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s): %s"
-msgstr "%s %s (%s)"
+msgstr "%s (%s): %s"
 
 #: ReactNativeClient/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
-msgstr ""
+msgstr "وضعیت همگام‌سازی (موارد همگام‌سازی شده / کل موارد)"
 
 #: ReactNativeClient/lib/services/report.js:226
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d/%d"
-msgstr "مجموع: %d از %d"
+msgstr "%s: %d/%d"
 
 #: ReactNativeClient/lib/services/report.js:229
 #, javascript-format
@@ -3480,37 +3457,37 @@ msgid "Total: %d/%d"
 msgstr "مجموع: %d از %d"
 
 #: ReactNativeClient/lib/services/report.js:231
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Conflicted: %d"
-msgstr "تداخل ها"
+msgstr "تداخل پیدا کرده: %d"
 
 #: ReactNativeClient/lib/services/report.js:232
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "To delete: %d"
-msgstr "کامل شد: %s"
+msgstr "برای حذف: %d"
 
 #: ReactNativeClient/lib/services/report.js:236
 msgid "Folders"
-msgstr "فولدرها"
+msgstr "پوشه‌ها"
 
 #: ReactNativeClient/lib/services/report.js:244
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d notes"
-msgstr "%s: %s"
+msgstr "%s: %d یادداشت"
 
 #: ReactNativeClient/lib/services/report.js:252
 msgid "Coming alarms"
-msgstr ""
+msgstr "هشدار‌های آینده"
 
 #: ReactNativeClient/lib/services/report.js:257
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "On %s: %s"
-msgstr "%s: %s"
+msgstr "در %s: %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:29
 #: ReactNativeClient/lib/services/InteropService.js:68
 msgid "Joplin Export File"
-msgstr "فایل خروجی Joplin"
+msgstr "فایل استخراجی Joplin"
 
 #: ReactNativeClient/lib/services/InteropService.js:36
 #: ReactNativeClient/lib/services/InteropService.js:83
@@ -3520,31 +3497,27 @@ msgstr ""
 #: ReactNativeClient/lib/services/InteropService.js:41
 #: ReactNativeClient/lib/services/InteropService.js:73
 msgid "Joplin Export Directory"
-msgstr "فولدر خروجی Joplin"
+msgstr "پوشه استخراجی Joplin"
 
 #: ReactNativeClient/lib/services/InteropService.js:47
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "فولدر خروجی Evernote"
+msgstr "فایل استخراجی Evernote (به صورت Markdown)"
 
 #: ReactNativeClient/lib/services/InteropService.js:55
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "فولدر خروجی Evernote"
+msgstr "فایل استخراجی Evernote (به صورت HTML)"
 
 #: ReactNativeClient/lib/services/InteropService.js:78
 msgid "Json Export Directory"
-msgstr "فولدر خروجی JSON"
+msgstr "پوشه استخراجی JSON"
 
 #: ReactNativeClient/lib/services/InteropService.js:90
-#, fuzzy
 msgid "HTML File"
-msgstr "فایل"
+msgstr "فایل HTML"
 
 #: ReactNativeClient/lib/services/InteropService.js:95
-#, fuzzy
 msgid "HTML Directory"
-msgstr "فولدر"
+msgstr "پوشه HTML"
 
 #: ReactNativeClient/lib/services/InteropService.js:128
 msgid "File"
@@ -3552,17 +3525,17 @@ msgstr "فایل"
 
 #: ReactNativeClient/lib/services/InteropService.js:128
 msgid "Directory"
-msgstr "فولدر"
+msgstr "پوشه"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr ""
+msgstr "ماژول «%s» برای فرمت «%s» و خروجی «%s» بارگزاری نشد."
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr ""
+msgstr "لطفا فرمت وارد کردن را برای «%s» مشخص کنید"
 
 #: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
@@ -3570,6 +3543,8 @@ msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
+"این مورد در حال حاضر رمزنگاری شده است: %s «%s». لطفا تا رمزگشایی تمامی موارد "
+"صبر کرده و سپس دوباره امتحان کنید."
 
 #~ msgid "Link"
 #~ msgstr "لینک"
@@ -3655,8 +3630,7 @@ msgstr ""
 #~ msgid "Delete notebook"
 #~ msgstr "پاک کردن دفترچه"
 
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgid "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr ""
 #~ "شما هیچ دفترچه ای ندارید. با کلیک کردن بر روی (+) یک دفترچه ی جدید ایجاد "
 #~ "کنید."

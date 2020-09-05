@@ -87,6 +87,10 @@ It still requires you to quit the application each time you want it to rebuild, 
 2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
 3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm start"`, and hit enter).
 
+# Updating Markdown renderer packages
+
+The Markdown renderer is located under ReactNativeClient/lib/joplin-renderer. Whenever updating one of its dependencies, such as Mermaid or Katex, please run `npm run buildAssets` to make sure all assets such as fonts or CSS files are deployed correctly.
+
 # Troubleshooting
 
 Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/master/readme/build_troubleshooting.md) for various tips on how to get the build working.

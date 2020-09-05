@@ -495,7 +495,7 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre>
 <h1>URLs<a name="urls" href="#urls" class="heading-anchor">🔗</a></h1>
-<p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
+<p>When Ctrl+Clicking a URL (or opening with the shortcut 'o' while it is highlighted), most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
 <img src="https://joplinapp.org/images/UrlCut.png" width="300px">
 <p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.</p>
 <p>As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
@@ -554,6 +554,9 @@ dn                mv $n &quot;&quot;
 	{ &quot;keys&quot;: [&quot;ENTER&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;activate&quot; },
 	{ &quot;keys&quot;: [&quot;DELETE&quot;, &quot;BACKSPACE&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;delete&quot; },
 	{ &quot;keys&quot;: [&quot; &quot;], &quot;command&quot;: &quot;todo toggle $n&quot; },
+	{ &quot;keys&quot;: [&quot;n&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;next_link&quot; },
+	{ &quot;keys&quot;: [&quot;b&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;previous_link&quot; },
+	{ &quot;keys&quot;: [&quot;o&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;open_link&quot; },
 	{ &quot;keys&quot;: [&quot;tc&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_console&quot; },
 	{ &quot;keys&quot;: [&quot;tm&quot;], &quot;type&quot;: &quot;function&quot;, &quot;command&quot;: &quot;toggle_metadata&quot; },
 	{ &quot;keys&quot;: [&quot;/&quot;], &quot;type&quot;: &quot;prompt&quot;, &quot;command&quot;: &quot;search \&quot;\&quot;&quot;, &quot;cursorPosition&quot;: -2 },
@@ -586,7 +589,7 @@ dn                mv $n &quot;&quot;
 <td>The command that needs to be executed</td>
 </tr>
 <tr>
-<td><code>cusorPosition</code></td>
+<td><code>cursorPosition</code></td>
 <td>An integer. For prompt commands, tells where the cursor (caret) should start at. This is convenient for example to position the cursor between quotes. Use a negative value to set a position starting from the end. A value of &quot;0&quot; means positioning the caret at the first character. A value of &quot;-1&quot; means positioning it at the end.</td>
 </tr>
 </tbody>
@@ -627,6 +630,18 @@ dn                mv $n &quot;&quot;
 <tr>
 <td>page_down</td>
 <td>Page down</td>
+</tr>
+<tr>
+<td>next_link</td>
+<td>Select the next link in the currently opened note (the first link will be selected if no link is currently selected)</td>
+</tr>
+<tr>
+<td>previous_link</td>
+<td>Select the previous link in the currently opened note (the last link will be selected if no link is currently selected)</td>
+</tr>
+<tr>
+<td>open_link</td>
+<td>Open the currently selected link externally</td>
 </tr>
 <tr>
 <td>activate</td>

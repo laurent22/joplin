@@ -327,22 +327,15 @@ class OneDriveApi {
 	}
 
 	async execAccountPropertiesRequest() {
-		const response = await shim.fetch('https://graph.microsoft.com/v1.0/me/drive', {
-			method: 'GET',
-			headers: {
-				'Authorization': this.token(),
-			},
-		});
 
-		if (!response.ok) {
-			const text = await response.text();
-			throw new Error(`Could not retrieve account details (drive ID, Account type): ${response.status}: ${response.statusText}: ${text}`);
-		} else {
+		try {
+			const response = await this.exec('GET','https://graph.microsoft.com/v1.0/me/drive');
 			const data = await response.json();
 			const accountProperties = { accountType: data.driveType, driveId: data.id };
 			return accountProperties;
+		} catch (error) {
+			throw new Error(`Could not retrieve account details (drive ID, Account type. Error code: ${error.code}, Error message: ${error.message}`);
 		}
-
 	}
 
 	async execJson(method, path, query, data) {
