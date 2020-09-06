@@ -537,8 +537,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		} else if (key === 'noteList') {
 			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} size={event.size}/>;
 		} else if (key === 'editor') {
-			const codeEditor = Setting.value('editor.betaCodeMirror') ? 'CodeMirror' : 'AceEditor';
-			const bodyEditor = this.props.settingEditorCodeView ? codeEditor : 'TinyMCE';
+			const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
 			return <NoteListControls key={key} />;
@@ -560,23 +559,6 @@ class MainScreenComponent extends React.Component<any, any> {
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
-
-		const headerItems = [];
-
-		headerItems.push(CommandService.instance().commandToToolbarButton('toggleSidebar', { iconRotation: sidebarVisibility ? 0 : 90 }));
-		headerItems.push(CommandService.instance().commandToToolbarButton('toggleNoteList', { iconRotation: noteListVisibility ? 0 : 90 }));
-		headerItems.push(CommandService.instance().commandToToolbarButton('newNote'));
-		headerItems.push(CommandService.instance().commandToToolbarButton('newTodo'));
-		headerItems.push(CommandService.instance().commandToToolbarButton('newFolder'));
-
-		headerItems.push({
-			title: _('Search...'),
-			iconName: 'fa-search',
-			onQuery: (query:string) => {
-				CommandService.instance().execute('search', { query });
-			},
-			type: 'search',
-		});
 
 		if (!this.promptOnClose_) {
 			this.promptOnClose_ = (answer:any, buttonType:any) => {

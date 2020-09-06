@@ -97,6 +97,16 @@ class Database {
 		return this.tryCall('selectOne', sql, params);
 	}
 
+	async loadExtension(path) {
+		let result =  null;
+		try {
+			result = await this.driver().loadExtension(path);
+			return result;
+		} catch (e) {
+			throw new Error(`Could not load extension ${path}`);
+		}
+	}
+
 	async selectAll(sql, params = null) {
 		return this.tryCall('selectAll', sql, params);
 	}

@@ -3,6 +3,7 @@ interface Term {
 	name: string
 	value: string
 	negated: boolean
+	quoted?: boolean
 }
 
 const makeTerm = (name: string, value: string): Term => {
@@ -10,10 +11,9 @@ const makeTerm = (name: string, value: string): Term => {
 	return { name: name, value: value, negated: false };
 };
 
+const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
 
 const quote = (s : string) => {
-	const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
-
 	if (!quoted(s)) {
 		return `"${s}"`;
 	}
@@ -71,7 +71,6 @@ const parseQuery = (query: string): Term[] => {
 		'altitude', 'resource', 'sourceurl']);
 
 	const terms = getTerms(query);
-	// console.log(terms);
 
 	const result: Term[] = [];
 	for (let i = 0; i < terms.length; i++) {
@@ -98,9 +97,9 @@ const parseQuery = (query: string): Term[] => {
 			// Every word is quoted if not already.
 			// By quoting the word, FTS match query will take care of removing dashes and other word seperators.
 			if (value.startsWith('-')) {
-				result.push({ name: 'text', value: quote(value.slice(1)) , negated: true });
+				result.push({ name: 'text', value: quote(value.slice(1)) , negated: true, quoted: quoted(value) });
 			} else {
-				result.push({ name: 'text', value: quote(value), negated: false });
+				result.push({ name: 'text', value: quote(value), negated: false, quoted: quoted(value) });
 			}
 		}
 	}

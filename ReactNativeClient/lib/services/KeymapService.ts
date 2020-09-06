@@ -1,6 +1,9 @@
-const fs = require('fs-extra');
+import { KeyboardEvent } from 'react';
+
 const BaseService = require('lib/services/BaseService');
-const { shim } = require('lib/shim.js');
+const eventManager = require('lib/eventManager');
+const { shim } = require('lib/shim');
+const { _ } = require('lib/locale');
 
 const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
 const modifiersRegExp = {
@@ -8,7 +11,7 @@ const modifiersRegExp = {
 	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,
 };
 
-const defaultKeymap = {
+const defaultKeymapItems = {
 	darwin: [
 		{ accelerator: 'Cmd+N', command: 'newNote' },
 		{ accelerator: 'Cmd+T', command: 'newTodo' },
@@ -86,135 +89,192 @@ interface Keymap {
 
 export default class KeymapService extends BaseService {
 	private keymap: Keymap;
-	private defaultKeymap: KeymapItem[];
+	private platform: string;
+	private customKeymapPath: string;
+	private defaultKeymapItems: KeymapItem[];
 
 	constructor() {
 		super();
 
-		// Automatically initialized for the current platform
+		// By default, initialize for the current platform
+		// Manual initialization allows testing for other platforms
 		this.initialize();
 	}
 
 	initialize(platform: string = shim.platformName()) {
-		this.keysRegExp = keysRegExp;
+		this.platform = platform;
+
 		switch (platform) {
 		case 'darwin':
-			this.defaultKeymap = defaultKeymap.darwin;
+			this.defaultKeymapItems = defaultKeymapItems.darwin;
 			this.modifiersRegExp = modifiersRegExp.darwin;
 			break;
 		default:
-			this.defaultKeymap = defaultKeymap.default;
+			this.defaultKeymapItems = defaultKeymapItems.default;
 			this.modifiersRegExp = modifiersRegExp.default;
 		}
 
 		this.keymap = {};
-		for (let i = 0; i < this.defaultKeymap.length; i++) {
-			// Make a copy of the KeymapItem before assigning it
-			// Otherwise we're going to mess up the defaultKeymap array
-			this.keymap[this.defaultKeymap[i].command] = { ...this.defaultKeymap[i] };
+		for (let i = 0; i < this.defaultKeymapItems.length; i++) {
+			// Keep the original defaultKeymapItems array untouched
+			// Makes it possible to retrieve the original accelerator later, if needed
+			this.keymap[this.defaultKeymapItems[i].command] = { ...this.defaultKeymapItems[i] };
 		}
 	}
 
-	async loadKeymap(keymapPath: string) {
-		this.keymapPath = keymapPath; // Used for saving changes later..
+	async loadCustomKeymap(customKeymapPath: string) {
+		this.customKeymapPath = customKeymapPath; // Useful for saving the changes later
 
-		if (await fs.exists(keymapPath)) {
-			this.logger().info(`Loading keymap: ${keymapPath}`);
+		if (await shim.fsDriver().exists(customKeymapPath)) {
+			this.logger().info(`KeymapService: Loading keymap from file: ${customKeymapPath}`);
 
 			try {
-				const keymapFile = await fs.readFile(keymapPath, 'utf-8');
-				this.setKeymap(JSON.parse(keymapFile));
+				const customKeymapFile = await shim.fsDriver().readFile(customKeymapPath, 'utf-8');
+				// Custom keymaps are supposed to contain an array of keymap items
+				this.overrideKeymap(JSON.parse(customKeymapFile));
 			} catch (err) {
-				const msg = err.message ? err.message : '';
-				throw new Error(`Failed to load keymap: ${keymapPath}\n${msg}`);
+				const message = err.message || '';
+				throw new Error(`${_('Error loading the keymap from file: %s', customKeymapPath)}\n${message}`);
 			}
 		}
 	}
 
-	hasAccelerator(command: string) {
-		return !!this.keymap[command];
+	async saveCustomKeymap(customKeymapPath: string = this.customKeymapPath) {
+		this.logger().info(`KeymapService: Saving keymap to file: ${customKeymapPath}`);
+
+		try {
+			// Only the customized keymap items should be saved to the disk
+			const customKeymapItems = this.getCustomKeymapItems();
+			await shim.fsDriver().writeFile(customKeymapPath, JSON.stringify(customKeymapItems, null, 2), 'utf-8');
+
+			// Refresh the menu items so that the changes are reflected
+			eventManager.emit('keymapChange');
+		} catch (err) {
+			const message = err.message || '';
+			throw new Error(`${_('Error saving the keymap to file: %s', customKeymapPath)}\n${message}`);
+		}
 	}
 
-	getAccelerator(command: string) {
-		const item = this.keymap[command];
-
-		if (!item) throw new Error(`KeymapService: "${command}" command does not exist!`);
-		else return item.accelerator;
+	acceleratorExists(command: string) {
+		return !!this.keymap[command];
 	}
 
 	setAccelerator(command: string, accelerator: string) {
 		this.keymap[command].accelerator = accelerator;
 	}
 
-	resetAccelerator(command: string) {
-		const defaultItem = this.defaultKeymap.find((item => item.command === command));
+	getAccelerator(command: string) {
+		const item = this.keymap[command];
+		if (!item) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
-		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
-		else this.setAccelerator(command, defaultItem.accelerator);
+		return item.accelerator;
 	}
 
-	setKeymap(customKeymap: KeymapItem[]) {
-		for (let i = 0; i < customKeymap.length; i++) {
-			const item = customKeymap[i];
+	getDefaultAccelerator(command: string) {
+		const defaultItem = this.defaultKeymapItems.find((item => item.command === command));
+		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
-			try {
-				this.validateKeymapItem(item); // Throws if there are any issues in the keymap item
-				this.setAccelerator(item.command, item.accelerator);
-			} catch (err) {
-				throw new Error(`Keymap item ${JSON.stringify(item)} is invalid: ${err.message}`);
+		return defaultItem.accelerator;
+	}
+
+	getCommandNames() {
+		return Object.keys(this.keymap);
+	}
+
+	getKeymapItems() {
+		return Object.values(this.keymap);
+	}
+
+	getCustomKeymapItems() {
+		const customkeymapItems: KeymapItem[] = [];
+		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
+			const currentAccelerator = this.getAccelerator(command);
+
+			// Only the customized/changed keymap items are neccessary for the custom keymap
+			// Customizations can be merged with the original keymap at the runtime
+			if (this.getAccelerator(command) !== accelerator) {
+				customkeymapItems.push({ command, accelerator: currentAccelerator });
 			}
-		}
+		});
 
+		return customkeymapItems;
+	}
+
+	getDefaultKeymapItems() {
+		return [...this.defaultKeymapItems];
+	}
+
+	overrideKeymap(customKeymapItems: KeymapItem[]) {
 		try {
-			this.validateKeymap(); // Throws whenever there are duplicate Accelerators used in the keymap
+			for (let i = 0; i < customKeymapItems.length; i++) {
+				const item = customKeymapItems[i];
+				// Validate individual custom keymap items
+				// Throws if there are any issues in the keymap item
+				this.validateKeymapItem(item);
+				this.setAccelerator(item.command, item.accelerator);
+			}
+
+			// Validate the entire keymap for duplicates
+			// Throws whenever there are duplicate Accelerators used in the keymap
+			this.validateKeymap();
 		} catch (err) {
-			this.initialize();
-			throw new Error(`Keymap configuration contains duplicates\n${err.message}`);
+			this.initialize(); // Discard all the changes if there are any issues
+			throw err;
 		}
 	}
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new Error('"command" property is missing');
+			throw new Error(_('Keymap item %s is missing the required "command" property.', JSON.stringify(item)));
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(`"${item.command}" is not a valid command`);
+			throw new Error(_('Keymap item %s is invalid because %s is not a valid command.', JSON.stringify(item), item.command));
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error('"accelerator" property is missing');
+			throw new Error(_('Keymap item %s is missing the required "accelerator" property.', JSON.stringify(item)));
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
-			} catch (err) {
-				throw new Error(`"${item.accelerator}" is not a valid accelerator`);
+			} catch {
+				throw new Error(_('Keymap item %s is invalid because %s is not a valid accelerator.', JSON.stringify(item), item.accelerator));
 			}
 		}
 	}
 
-	private validateKeymap() {
+	validateKeymap(proposedKeymapItem: KeymapItem = null) {
 		const usedAccelerators = new Set();
 
+		// Validate as if the proposed change is already present in the current keymap
+		// Helpful for detecting any errors that'll occur, when the proposed change is performed on the keymap
+		if (proposedKeymapItem) usedAccelerators.add(proposedKeymapItem.accelerator);
+
 		for (const item of Object.values(this.keymap)) {
-			const itemAccelerator = item.accelerator;
+			const [itemAccelerator, itemCommand] = [item.accelerator, item.command];
+			if (proposedKeymapItem && itemCommand === proposedKeymapItem.command) continue; // Ignore the original accelerator
 
 			if (usedAccelerators.has(itemAccelerator)) {
-				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator == item.accelerator);
-				throw new Error(
-					`Accelerator "${itemAccelerator}" can't be used for both "${item.command}" and "${originalItem.command}" commands\n` +
-					'You have to change the accelerator for any of above commands'
-				);
-			} else if (itemAccelerator !== null) {
+				const originalItem = (proposedKeymapItem && proposedKeymapItem.accelerator === itemAccelerator)
+					? proposedKeymapItem
+					: Object.values(this.keymap).find(_item => _item.accelerator == itemAccelerator);
+
+				throw new Error(_(
+					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
+					itemAccelerator,
+					originalItem.command,
+					itemCommand
+				));
+			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);
 			}
 		}
 	}
 
-	private validateAccelerator(accelerator: string) {
+	validateAccelerator(accelerator: string) {
 		let keyFound = false;
 
 		const parts = accelerator.split('+');
 		const isValid = parts.every((part, index) => {
-			const isKey = this.keysRegExp.test(part);
+			const isKey = keysRegExp.test(part);
 			const isModifier = this.modifiersRegExp.test(part);
 
 			if (isKey) {
@@ -228,7 +288,69 @@ export default class KeymapService extends BaseService {
 			return isKey || isModifier;
 		});
 
-		if (!isValid) throw new Error(`Accelerator invalid: ${accelerator}`);
+		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
+	}
+
+	domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
+		const parts = [];
+		const { key, ctrlKey, metaKey, altKey, shiftKey } = event;
+
+		// First, the modifiers
+		if (ctrlKey) parts.push('Ctrl');
+		switch (this.platform) {
+		case 'darwin':
+			if (altKey) parts.push('Option');
+			if (shiftKey) parts.push('Shift');
+			if (metaKey) parts.push('Cmd');
+			break;
+		default:
+			if (altKey) parts.push('Alt');
+			if (shiftKey) parts.push('Shift');
+		}
+
+		// Finally, the key
+		const electronKey = KeymapService.domToElectronKey(key);
+		if (electronKey) parts.push(electronKey);
+
+		return parts.join('+');
+	}
+
+	static domToElectronKey(domKey: string) {
+		let electronKey;
+
+		if (/^([a-z])$/.test(domKey)) {
+			electronKey = domKey.toUpperCase();
+		} else if (/^Arrow(Up|Down|Left|Right)|Audio(VolumeUp|VolumeDown|VolumeMute)$/.test(domKey)) {
+			electronKey = domKey.slice(5);
+		} else {
+			switch (domKey) {
+			case ' ':
+				electronKey = 'Space';
+				break;
+			case '+':
+				electronKey = 'Plus';
+				break;
+			case 'MediaTrackNext':
+				electronKey = 'MediaNextTrack';
+				break;
+			case 'MediaTrackPrevious':
+				electronKey = 'MediaPreviousTrack';
+				break;
+			default:
+				electronKey = domKey;
+			}
+		}
+
+		if (keysRegExp.test(electronKey)) return electronKey;
+		else return null;
+	}
+
+	public on(eventName: string, callback: Function) {
+		eventManager.on(eventName, callback);
+	}
+
+	public off(eventName: string, callback: Function) {
+		eventManager.off(eventName, callback);
 	}
 
 	static instance() {

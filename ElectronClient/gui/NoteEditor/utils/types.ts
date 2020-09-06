@@ -28,6 +28,7 @@ export interface NoteEditorProps {
 	customCss: string,
 	noteVisiblePanes: string[],
 	watchedResources: any,
+	highlightedWords: any[],
 }
 
 export interface NoteBodyEditorProps {

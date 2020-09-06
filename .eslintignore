@@ -70,6 +70,13 @@ ElectronClient/commands/stopExternalEditing.js
 ElectronClient/global.d.js
 ElectronClient/gui/Button/Button.js
 ElectronClient/gui/ErrorBoundary.js
+ElectronClient/gui/Header/commands/focusSearch.js
+ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
+ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
+ElectronClient/gui/KeymapConfig/styles/index.js
+ElectronClient/gui/KeymapConfig/utils/getLabel.js
+ElectronClient/gui/KeymapConfig/utils/useCommandStatus.js
+ElectronClient/gui/KeymapConfig/utils/useKeymap.js
 ElectronClient/gui/MainScreen/commands/editAlarm.js
 ElectronClient/gui/MainScreen/commands/exportPdf.js
 ElectronClient/gui/MainScreen/commands/hideModalMessage.js
@@ -99,12 +106,6 @@ ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js
 ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js
 ElectronClient/gui/NoteEditor/commands/showLocalSearch.js
 ElectronClient/gui/NoteEditor/commands/showRevisions.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/styles/index.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/Toolbar.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/index.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/types.js
-ElectronClient/gui/NoteEditor/NoteBody/AceEditor/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Editor.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/styles/index.js

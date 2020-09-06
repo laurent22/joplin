@@ -1,4 +1,5 @@
 const { _, setLocale } = require('lib/locale.js');
+const { shim } = require('lib/shim');
 const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
 
@@ -187,7 +188,18 @@ class Bridge {
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
 		const { app } = require('electron');
-		app.relaunch();
+
+		if (shim.isPortable()) {
+			const options = {
+				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
+			};
+			app.relaunch(options);
+		} else if (shim.isLinux()) {
+			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+		} else {
+			app.relaunch();
+		}
+
 		app.exit();
 	}
 

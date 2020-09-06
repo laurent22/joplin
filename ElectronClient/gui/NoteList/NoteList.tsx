@@ -7,7 +7,6 @@ const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('lib/eventManager');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const NoteListUtils = require('../utils/NoteListUtils');
@@ -240,8 +239,7 @@ class NoteListComponent extends React.Component {
 			if (this.props.notesParentType === 'Search') {
 				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (query) {
-					const parsedQuery = SearchEngine.instance().parseQuery(query.query_pattern);
-					return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+					return this.props.highlightedWords;
 				}
 			}
 			return [];
@@ -502,6 +500,7 @@ const mapStateToProps = (state:any) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
+		highlightedWords: state.highlightedWords,
 	};
 };
 

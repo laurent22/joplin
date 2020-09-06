@@ -36,6 +36,10 @@ class DatabaseDriverNode {
 		});
 	}
 
+	loadExtension(path) {
+		return this.db_.loadExtension(path);
+	}
+
 	selectAll(sql, params = null) {
 		if (!params) params = {};
 		return new Promise((resolve, reject) => {

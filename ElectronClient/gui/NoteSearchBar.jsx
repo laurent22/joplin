@@ -148,14 +148,7 @@ class NoteSearchBarComponent extends React.Component {
 			</div>
 		) : null;
 
-		// Currently searching in the viewer does not support jumping between matches
-		// So we explicitly disable those commands when only the viewer is open (this is
-		// currently signaled by results count being set to -1, but once Ace editor is removed
-		// we can observe the visible panes directly).
-		// SEARCHHACK
-		// TODO: remove the props.resultCount check here and replace it by checking visible panes directly
-		const allowScrolling = this.props.resultCount !== -1;
-		// end SEARCHHACK
+		const allowScrolling = this.props.visiblePanes.indexOf('editor') >= 0;
 
 		const viewerWarning = (
 			<div style={textStyle}>

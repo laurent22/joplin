@@ -30,7 +30,7 @@ const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const CommandService = require('lib/services/CommandService').default;
-const KeymapService = require('lib/services/KeymapService.js').default;
+const KeymapService = require('lib/services/KeymapService').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
@@ -111,6 +111,8 @@ class Application extends BaseApplication {
 
 		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+
+		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
 	}
 
 	commandService_commandsEnabledStateChange() {
@@ -571,7 +573,7 @@ class Application extends BaseApplication {
 		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
-			accelerator: shim.isMac() ? null : keymapService.getAccelerator('config'),
+			accelerator: !shim.isMac() && keymapService.getAccelerator('config'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',
@@ -633,7 +635,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Preferences...'),
 				visible: shim.isMac() ? true : false,
-				accelerator: shim.isMac() ? keymapService.getAccelerator('config') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('config'),
 				click: () => {
 					this.dispatch({
 						type: 'NAV_GO',
@@ -682,7 +684,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Hide %s', 'Joplin'),
 				platforms: ['darwin'],
-				accelerator: shim.isMac() ? keymapService.getAccelerator('hideApp') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
 				click: () => { bridge().electronApp().hide(); },
 			}, {
 				type: 'separator',
@@ -702,7 +704,7 @@ class Application extends BaseApplication {
 				newFolderItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
-					accelerator: shim.isMac() ? keymapService.getAccelerator('closeWindow') : null,
+					accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 					selector: 'performClose:',
 				}, {
 					type: 'separator',
@@ -1042,11 +1044,9 @@ class Application extends BaseApplication {
 		// https://github.com/laurent22/joplin/issues/155
 
 		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
-		const ace_css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
-		styleTag.appendChild(document.createTextNode(ace_css));
 		document.head.appendChild(styleTag);
 	}
 
@@ -1076,9 +1076,15 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
+		await this.applySettingsSideEffects();
+
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
+			reg.logger().info('app.start: doing upgradeSyncTarget action');
+			bridge().window().show();
 			return { action: 'upgradeSyncTarget' };
 		}
+
+		reg.logger().info('app.start: doing regular boot');
 
 		const dir = Setting.value('profileDir');
 
@@ -1089,7 +1095,7 @@ class Application extends BaseApplication {
 		const keymapService = KeymapService.instance();
 
 		try {
-			await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
+			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
 			bridge().showErrorMessageBox(err.message);
 		}
@@ -1239,9 +1245,14 @@ class Application extends BaseApplication {
 		this.updateMenuItemStates();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		window.revisionService = RevisionService.instance();
-		window.migrationService = MigrationService.instance();
-		window.decryptionWorker = DecryptionWorker.instance();
+		window.joplin = () => {
+			return {
+				revisionService: RevisionService.instance(),
+				migrationService: MigrationService.instance(),
+				decryptionWorker: DecryptionWorker.instance(),
+				bridge: bridge(),
+			};
+		};
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 	}

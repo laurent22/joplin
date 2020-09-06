@@ -354,14 +354,14 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 <p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
 <h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
 <ul>
-<li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --log-level debug</code></li>
+<li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --debug --log-level debug</code></li>
 <li>Restart the application</li>
 <li>The development tools should now be opened. Click the &quot;Console&quot; tab</li>
 <li>Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.</li>
 </ul>
 <h2>CLI application<a name="cli-application" href="#cli-application" class="heading-anchor">🔗</a></h2>
 <ul>
-<li>Start the app with <code>joplin --log-level debug</code></li>
+<li>Start the app with <code>joplin --debug --log-level debug</code></li>
 <li>Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)</li>
 </ul>
 <h2>Mobile application<a name="mobile-application" href="#mobile-application" class="heading-anchor">🔗</a></h2>

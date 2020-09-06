@@ -3,6 +3,7 @@ const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim.js');
+const EventEmitter = require('events');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -125,6 +126,12 @@ class JoplinDatabase extends Database {
 		this.tableFields_ = null;
 		this.version_ = null;
 		this.tableFieldNames_ = {};
+		this.extensionToLoad = './build/lib/sql-extensions/spellfix';
+		this.eventEmitter_ = new EventEmitter();
+	}
+
+	eventEmitter() {
+		return this.eventEmitter_;
 	}
 
 	initialized() {
@@ -277,6 +284,8 @@ class JoplinDatabase extends Database {
 					if (tableName == 'table_fields') continue;
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
+					if (tableName == 'notes_spellfix') continue;
+					if (tableName == 'search_aux') continue;
 					chain.push(() => {
 						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
@@ -326,7 +335,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -349,6 +358,8 @@ class JoplinDatabase extends Database {
 			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
+
+			this.eventEmitter_.emit('startMigration', { version: targetVersion });
 
 			if (targetVersion == 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));
@@ -840,13 +851,20 @@ class JoplinDatabase extends Database {
 				queries.push(this.addMigrationFile(33));
 			}
 
+			if (targetVersion == 34) {
+				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
+				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
 				if (targetVersion === 15 || targetVersion === 18 || targetVersion === 33) {
-					this.logger().warn('Could not upgrade to database v15 or v18 or v33- FTS feature will not be used', error);
+					this.logger().warn('Could not upgrade to database v15 or v18 or v33 - FTS feature will not be used', error);
+				} else if (targetVersion === 34) {
+					this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
 				} else {
 					throw error;
 				}
@@ -873,12 +891,29 @@ class JoplinDatabase extends Database {
 		return true;
 	}
 
+	async fuzzySearchEnabled() {
+		try {
+			await this.selectOne('SELECT count(*) FROM notes_spellfix');
+		} catch (error) {
+			this.logger().warn('Fuzzy search check failed', error);
+			return false;
+		}
+		this.logger().info('Fuzzy search check succeeded');
+		return true;
+	}
+
 	version() {
 		return this.version_;
 	}
 
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
+
+		try {
+			await this.loadExtension(this.extensionToLoad);
+		} catch (error) {
+			console.info(error);
+		}
 
 		let versionRow = null;
 		try {

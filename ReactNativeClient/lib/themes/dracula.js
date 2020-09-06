@@ -28,7 +28,6 @@ const draculaStyle = {
 	codeBorderColor: '#f8f8f2',
 	codeColor: '#50fa7b',
 
-	aceEditorTheme: 'dracula',
 	codeMirrorTheme: 'dracula',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };

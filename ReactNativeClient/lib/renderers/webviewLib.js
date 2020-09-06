@@ -63,7 +63,7 @@ webviewLib.getParentAnchorElement = function(element) {
 		}
 
 		if (!element) return null;
-		if (element.nodeName === 'A') return element;
+		if (element.nodeName.toUpperCase() === 'A') return element;
 		element = element.parentElement;
 	}
 };
@@ -99,7 +99,7 @@ document.addEventListener('click', function(event) {
 
 	// Note that we already handle some links in html_inline.js, however not all of them
 	// go through this plugin, in particular links coming from third-party packages such
-	// as Katex.
+	// as Katex or Mermaid.
 	if (!anchor.hasAttribute('data-from-md')) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
 		event.preventDefault();
