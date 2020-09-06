@@ -107,5 +107,39 @@ describe('services_SearchFuzzy', function() {
 		expect(rows.length).toBe(7);
 	}));
 
+	it('should leave phrase searches alone', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc def' });
+		const n2 = await Note.save({ title: 'def ghi' });
+		const n3 = await Note.save({ title: 'ghi jkl' });
+		const n4 = await Note.save({ title: 'def abc' });
+		const n5 = await Note.save({ title: 'mno pqr ghi jkl' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('abc def', { fuzzy: true });
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n4.id);
+
+		rows = await engine.search('"abc def"', { fuzzy: true });
+		expect(rows.length).toBe(1);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+
+		rows = await engine.search('"ghi jkl"', { fuzzy: true });
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+		expect(rows.map(r=>r.id)).toContain(n5.id);
+
+		rows = await engine.search('"ghi jkl" mno', { fuzzy: true });
+		expect(rows.length).toBe(1);
+		expect(rows.map(r=>r.id)).toContain(n5.id);
+
+		rows = await engine.search('any:1 "ghi jkl" mno', { fuzzy: true });
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+		expect(rows.map(r=>r.id)).toContain(n5.id);
+	}));
+
 
 });

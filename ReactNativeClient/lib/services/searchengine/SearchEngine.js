@@ -434,6 +434,7 @@ class SearchEngine {
 	}
 
 	async parseQuery(query, fuzzy = false) {
+		// fuzzy = false;
 		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
 		let allTerms = [];
@@ -445,22 +446,26 @@ class SearchEngine {
 			console.warn(error);
 		}
 
-		const text = allTerms.filter(x => x.name === 'text' && !x.negated).map(x => trimQuotes(x.value));
-		const title = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
-		const body = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
+		const textTerms = allTerms.filter(x => x.name === 'text' && !x.negated);
+		const titleTerms = allTerms.filter(x => x.name === 'title' && !x.negated);
+		const bodyTerms = allTerms.filter(x => x.name === 'body' && !x.negated);
 
 		const fuzzyScore = [];
 		let numFuzzyMatches = [];
 		let terms = null;
 		if (fuzzy) {
-			const fuzzyText = await this.fuzzifier(text);
-			const fuzzyTitle = await this.fuzzifier(title);
-			const fuzzyBody = await this.fuzzifier(body);
+			const fuzzyText = await this.fuzzifier(textTerms.filter(x => !x.quoted).map(x => trimQuotes(x.value)));
+			const fuzzyTitle = await this.fuzzifier(titleTerms.map(x => trimQuotes(x.value)));
+			const fuzzyBody = await this.fuzzifier(bodyTerms.map(x => trimQuotes(x.value)));
+			const phraseSearches = textTerms.filter(x => x.quoted).map(x => x.value);
 
 			// Save number of matches we got for each word
 			// fuzzifier() is currently set to return at most 3 matches)
 			// We need to know which fuzzy words go together so that we can filter out notes that don't contain a required word.
 			numFuzzyMatches = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).map(x => x.length);
+			for (let i = 0; i < phraseSearches.length; i++) {
+				numFuzzyMatches.push(1); // Phrase searches are preserved without fuzzification
+			}
 
 			const mergedFuzzyText = [].concat.apply([], fuzzyText);
 			const mergedFuzzyTitle = [].concat.apply([], fuzzyTitle);
@@ -469,23 +474,24 @@ class SearchEngine {
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x.word, negated: false, score: x.score }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x.word, negated: false, score: x.score }; });
 			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x.word, negated: false, score: x.score }; });
+			const phraseTextTerms = phraseSearches.map(x => { return { name: 'text', value: x, negated: false, score: 0 }; });
 
-			allTerms = allTerms.filter(x => x.negated || (x.name !== 'text' && x.name !== 'title' && x.name !== 'body'));
+			allTerms = allTerms.filter(x => (x.name !== 'text' && x.name !== 'title' && x.name !== 'body'));
 
-			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms);
+			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms).concat(phraseTextTerms);
 
 			const allTextTerms = allFuzzyTerms.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
 			for (let i = 0; i < allTextTerms.length; i++) {
 				fuzzyScore.push(allFuzzyTerms[i].score ? allFuzzyTerms[i].score : 0);
 			}
 
-			terms = { _: mergedFuzzyText.map(x => x.word), 'title': mergedFuzzyTitle.map(x => x.word), 'body': mergedFuzzyBody.map(x => x.word) };
+			terms = { _: fuzzyTextTerms.concat(phraseTextTerms).map(x =>trimQuotes(x.value)), 'title': fuzzyTitleTerms.map(x =>trimQuotes(x.value)), 'body': fuzzyBodyTerms.map(x =>trimQuotes(x.value)) };
 		} else {
-			const nonNegatedTextTerms = text.length + title.length + body.length;
+			const nonNegatedTextTerms = textTerms.length + titleTerms.length + bodyTerms.length;
 			for (let i = 0; i < nonNegatedTextTerms; i++) {
 				fuzzyScore.push(0);
 			}
-			terms = { _: text, 'title': title, 'body': body };
+			terms = { _: textTerms.map(x =>trimQuotes(x.value)), 'title': titleTerms.map(x =>trimQuotes(x.value)), 'body': bodyTerms.map(x =>trimQuotes(x.value)) };
 		}
 
 		// Filter terms:
