@@ -427,7 +427,7 @@ class SearchEngine {
 	async fuzzifier(words) {
 		const fuzzyMatches = [];
 		words.forEach(word => {
-			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ? AND top=3', [word]);
+			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ?', [word]);
 			fuzzyMatches.push(fuzzyWords);
 		});
 		return await Promise.all(fuzzyMatches);
@@ -460,7 +460,6 @@ class SearchEngine {
 			const phraseSearches = textTerms.filter(x => x.quoted).map(x => x.value);
 
 			// Save number of matches we got for each word
-			// fuzzifier() is currently set to return at most 3 matches)
 			// We need to know which fuzzy words go together so that we can filter out notes that don't contain a required word.
 			numFuzzyMatches = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).map(x => x.length);
 			for (let i = 0; i < phraseSearches.length; i++) {

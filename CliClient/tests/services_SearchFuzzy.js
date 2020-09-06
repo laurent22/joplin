@@ -141,5 +141,19 @@ describe('services_SearchFuzzy', function() {
 		expect(rows.map(r=>r.id)).toContain(n5.id);
 	}));
 
+	it('should work with wild card searches', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc def' });
+		const n2 = await Note.save({ title: 'abcc ghi' });
+		const n3 = await Note.save({ title: 'wxy zzz' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('abc*', { fuzzy: true });
+
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
+	}));
 
 });
