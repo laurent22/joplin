@@ -115,6 +115,7 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteTitle', accelerator: 'Option+Shift+Cmd+T' },
 				{ command: 'focusElementNoteBody', accelerator: 'Ctrl+Option+Shift+Cmd+B' },
 			];
+
 			testCases_Darwin.forEach(({ command, accelerator }) => {
 				keymapService.setAccelerator(command, accelerator);
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
@@ -131,6 +132,7 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+T' },
 				{ command: 'focusElementNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
 			];
+
 			testCases_Linux.forEach(({ command, accelerator }) => {
 				keymapService.setAccelerator(command, accelerator);
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
@@ -138,10 +140,10 @@ describe('services_KeymapService', () => {
 		});
 	});
 
-	describe('resetAccelerator', () => {
+	describe('getDefaultAccelerator', () => {
 		beforeEach(() => keymapService.initialize());
 
-		it('should reset the Accelerator', () => {
+		it('should return the default accelerator', () => {
 			const testCases = [
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
 				{ command: 'synchronize', accelerator: null /* Disabled */ },
@@ -154,26 +156,22 @@ describe('services_KeymapService', () => {
 			];
 
 			testCases.forEach(({ command, accelerator }) => {
-				// Remember the default Accelerator value
-				const prevAccelerator = keymapService.getAccelerator(command);
+				// Remember the real default Accelerator value
+				const defaultAccelerator = keymapService.getAccelerator(command);
 
-				// Update the Accelerator,
+				// Update the Accelerator and then retrieve the default accelerator
 				keymapService.setAccelerator(command, accelerator);
-				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
-
-				// and then reset it..
-				keymapService.resetAccelerator(command);
-				expect(keymapService.getAccelerator(command)).toEqual(prevAccelerator);
+				expect(keymapService.getDefaultAccelerator(command)).toEqual(defaultAccelerator);
 			});
 		});
 	});
 
-	describe('setKeymap', () => {
+	describe('overrideKeymap', () => {
 		beforeEach(() => keymapService.initialize());
 
 		it('should update the keymap', () => {
 			keymapService.initialize('darwin');
-			const customKeymap_Darwin = [
+			const customKeymapItems_Darwin = [
 				{ command: 'newNote', accelerator: 'Option+Shift+Cmd+N' },
 				{ command: 'synchronize', accelerator: 'F11' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
@@ -187,14 +185,14 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteList', accelerator: 'Shift+Cmd+S' /* Default of focusElementSideBar */ },
 			];
 
-			expect(() => keymapService.setKeymap(customKeymap_Darwin)).not.toThrow();
-			customKeymap_Darwin.forEach(({ command, accelerator }) => {
+			expect(() => keymapService.overrideKeymap(customKeymapItems_Darwin)).not.toThrow();
+			customKeymapItems_Darwin.forEach(({ command, accelerator }) => {
 				// Also check if keymap is updated or not
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
 			});
 
 			keymapService.initialize('win32');
-			const customKeymap_Win32 = [
+			const customKeymapItems_Win32 = [
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
 				{ command: 'synchronize', accelerator: 'F11' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
@@ -208,8 +206,8 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteList', accelerator: 'Ctrl+Shift+S' /* Default of focusElementSideBar */ },
 			];
 
-			expect(() => keymapService.setKeymap(customKeymap_Win32)).not.toThrow();
-			customKeymap_Win32.forEach(({ command, accelerator }) => {
+			expect(() => keymapService.overrideKeymap(customKeymapItems_Win32)).not.toThrow();
+			customKeymapItems_Win32.forEach(({ command, accelerator }) => {
 				// Also check if keymap is updated or not
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
 			});
@@ -240,30 +238,30 @@ describe('services_KeymapService', () => {
 			];
 
 			for (let i = 0; i < customKeymaps.length; i++) {
-				const customKeymap = customKeymaps[i];
-				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
+				const customKeymapItems = customKeymaps[i];
+				expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 			}
 		});
 
 		it('should throw when the provided Accelerators are invalid', () => {
 			// Only one test case is provided since KeymapService.validateAccelerator() is already tested
-			const customKeymap = [
+			const customKeymapItems = [
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: 'Alt+P' },
 				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+J+O+P+L+I+N' },
 			];
 
-			expect(() => keymapService.setKeymap(customKeymap)).toThrow();
+			expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 		});
 
 		it('should throw when the provided commands are invalid', () => {
-			const customKeymap = [
+			const customKeymapItems = [
 				{ command: 'totallyInvalidCommand', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: 'Alt+P' },
 				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+J' },
 			];
 
-			expect(() => keymapService.setKeymap(customKeymap)).toThrow();
+			expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 		});
 
 		it('should throw when duplicate accelerators are provided', () => {
@@ -281,14 +279,8 @@ describe('services_KeymapService', () => {
 			];
 
 			for (let i = 0; i < customKeymaps_Darwin.length; i++) {
-				const customKeymap = customKeymaps_Darwin[i];
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
-				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-				// All items should be reset to default values
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-				}
+				const customKeymapItems = customKeymaps_Darwin[i];
+				expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 			}
 
 			const customKeymaps_Linux = [
@@ -305,14 +297,8 @@ describe('services_KeymapService', () => {
 			];
 
 			for (let i = 0; i < customKeymaps_Linux.length; i++) {
-				const customKeymap = customKeymaps_Linux[i];
-				const defaultAccelerators = customKeymap.map(({ command }) => keymapService.getAccelerator(command));
-
-				expect(() => keymapService.setKeymap(customKeymap)).toThrow();
-
-				for (let j = 0; j < customKeymap.length; j++) {
-					expect(keymapService.getAccelerator(customKeymap[j].command)).toEqual(defaultAccelerators[j]);
-				}
+				const customKeymapItems = customKeymaps_Linux[i];
+				expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 			}
 		});
 	});

@@ -53,6 +53,9 @@ Tools/commit_hook.txt
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
+CliClient/tests-build/synchronizer_LockHandler.js
+CliClient/tests-build/synchronizer_MigrationHandler.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/commands/focusElement.js
@@ -61,6 +64,12 @@ ElectronClient/commands/stopExternalEditing.js
 ElectronClient/global.d.js
 ElectronClient/gui/ErrorBoundary.js
 ElectronClient/gui/Header/commands/focusSearch.js
+ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
+ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
+ElectronClient/gui/KeymapConfig/styles/index.js
+ElectronClient/gui/KeymapConfig/utils/getLabel.js
+ElectronClient/gui/KeymapConfig/utils/useCommandStatus.js
+ElectronClient/gui/KeymapConfig/utils/useKeymap.js
 ElectronClient/gui/MainScreen/commands/editAlarm.js
 ElectronClient/gui/MainScreen/commands/exportPdf.js
 ElectronClient/gui/MainScreen/commands/hideModalMessage.js

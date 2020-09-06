@@ -1,4 +1,5 @@
 const { Logger } = require('lib/logger.js');
+const KeymapService = require('lib/services/KeymapService').default;
 
 class PluginManager {
 	constructor() {
@@ -80,6 +81,8 @@ class PluginManager {
 
 	menuItems() {
 		let output = [];
+		const keymapService = KeymapService.instance();
+
 		for (const name in this.plugins_) {
 			const menuItems = this.plugins_[name].Class.manifest.menuItems;
 			if (!menuItems) continue;
@@ -91,10 +94,7 @@ class PluginManager {
 						itemName: item.name,
 					});
 				};
-
-				if (item.accelerator instanceof Function) {
-					item.accelerator = item.accelerator();
-				}
+				item.accelerator = keymapService.getAccelerator(name);
 			}
 
 			output = output.concat(menuItems);

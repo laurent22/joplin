@@ -157,6 +157,7 @@ export default class CommandService extends BaseService {
 		options = {
 			mustExist: true,
 			runtimeMustBeRegistered: false,
+			...options,
 		};
 
 		const command = this.commands_[name];
@@ -248,6 +249,17 @@ export default class CommandService extends BaseService {
 		return command.runtime.title(command.runtime.props);
 	}
 
+	label(commandName:string):string {
+		const command = this.commandByName(commandName);
+		if (!command) throw new Error(`Command: ${commandName} is not declared`);
+		return command.declaration.label();
+	}
+
+	exists(commandName:string):boolean {
+		const command = this.commandByName(commandName, { mustExist: false });
+		return !!command;
+	}
+
 	private extractExecuteArgs(command:Command, executeArgs:any) {
 		if (executeArgs) return executeArgs;
 		if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);
@@ -281,7 +293,7 @@ export default class CommandService extends BaseService {
 		};
 
 		if (command.declaration.role) item.role = command.declaration.role;
-		if (this.keymapService.hasAccelerator(commandName)) {
+		if (this.keymapService.acceleratorExists(commandName)) {
 			item.accelerator = this.keymapService.getAccelerator(commandName);
 		}
 
