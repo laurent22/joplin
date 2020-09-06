@@ -70,7 +70,6 @@ ElectronClient/commands/stopExternalEditing.js
 ElectronClient/global.d.js
 ElectronClient/gui/Button/Button.js
 ElectronClient/gui/ErrorBoundary.js
-ElectronClient/gui/Header/commands/focusSearch.js
 ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
 ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
 ElectronClient/gui/KeymapConfig/styles/index.js
