@@ -30,7 +30,7 @@ const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const CommandService = require('lib/services/CommandService').default;
-const KeymapService = require('lib/services/KeymapService.js').default;
+const KeymapService = require('lib/services/KeymapService').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
@@ -110,6 +110,8 @@ class Application extends BaseApplication {
 
 		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
+
+		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
 	}
 
 	commandService_commandsEnabledStateChange() {
@@ -569,7 +571,7 @@ class Application extends BaseApplication {
 		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
-			accelerator: shim.isMac() ? null : keymapService.getAccelerator('config'),
+			accelerator: !shim.isMac() && keymapService.getAccelerator('config'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',
@@ -631,7 +633,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Preferences...'),
 				visible: shim.isMac() ? true : false,
-				accelerator: shim.isMac() ? keymapService.getAccelerator('config') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('config'),
 				click: () => {
 					this.dispatch({
 						type: 'NAV_GO',
@@ -680,7 +682,7 @@ class Application extends BaseApplication {
 			}, {
 				label: _('Hide %s', 'Joplin'),
 				platforms: ['darwin'],
-				accelerator: shim.isMac() ? keymapService.getAccelerator('hideApp') : null,
+				accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
 				click: () => { bridge().electronApp().hide(); },
 			}, {
 				type: 'separator',
@@ -700,7 +702,7 @@ class Application extends BaseApplication {
 				newNotebookItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
-					accelerator: shim.isMac() ? keymapService.getAccelerator('closeWindow') : null,
+					accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 					selector: 'performClose:',
 				}, {
 					type: 'separator',
@@ -1093,7 +1095,7 @@ class Application extends BaseApplication {
 		const keymapService = KeymapService.instance();
 
 		try {
-			await KeymapService.instance().loadKeymap(`${dir}/keymap-desktop.json`);
+			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
 			bridge().showErrorMessageBox(err.message);
 		}
