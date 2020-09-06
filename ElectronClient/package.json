@@ -99,7 +99,7 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^8.2.5",
+    "electron": "^8.3.2",
     "electron-builder": "22.3.2",
     "electron-rebuild": "^1.10.1",
     "glob": "^7.1.6",
