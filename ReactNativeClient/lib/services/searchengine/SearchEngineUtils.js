@@ -11,7 +11,7 @@ class SearchEngineUtils {
 			searchType = SearchEngine.SEARCH_TYPE_BASIC;
 		}
 
-		const results = await SearchEngine.instance().search(query, { searchType });
+		const results = await SearchEngine.instance().search(query, { searchType, fuzzy: options.fuzzy });
 		const noteIds = results.map(n => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not

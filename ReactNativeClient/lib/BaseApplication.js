@@ -280,6 +280,7 @@ class BaseApplication {
 		});
 
 		let notes = [];
+		let highlightedWords = [];
 
 		if (parentId) {
 			if (parentType === Folder.modelType()) {
@@ -288,10 +289,19 @@ class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, { fuzzy: search.fuzzy });
+				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern, search.fuzzy);
+				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
 				notes = await Note.previews(parentId, options);
 			}
+		}
+
+		if (highlightedWords.length) {
+			this.store().dispatch({
+				type: 'SET_HIGHLIGHTED',
+				words: highlightedWords,
+			});
 		}
 
 		this.store().dispatch({
@@ -681,6 +691,23 @@ class BaseApplication {
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
+
+		if (Setting.value('env') === 'dev') {
+			if (shim.isElectron()) {
+				this.database_.extensionToLoad = './lib/sql-extensions/spellfix';
+			}
+		} else {
+			if (shim.isElectron()) {
+				if (shim.isWindows()) {
+					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
+					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
+				} else {
+					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
+					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
+				}
+			}
+		}
+
 		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
@@ -705,6 +732,11 @@ class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
+		}
+
+		if (Setting.value('db.fuzzySearchEnabled') === -1) {
+			const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
+			Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
 		}
 
 		if (Setting.value('encryption.shouldReencrypt') < 0) {

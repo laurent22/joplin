@@ -506,6 +506,7 @@ class Setting extends BaseModel {
 
 			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
+			'db.fuzzySearchEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },

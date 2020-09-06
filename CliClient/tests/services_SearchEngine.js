@@ -426,7 +426,7 @@ describe('services_SearchEngine', function() {
 			const t = testCases[i];
 			const input = t[0];
 			const expected = t[1];
-			const actual = engine.parseQuery(input);
+			const actual = await engine.parseQuery(input);
 
 			const _Values = actual.terms._ ? actual.terms._.map(v => v.value) : undefined;
 			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;

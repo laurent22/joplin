@@ -40,7 +40,6 @@ const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const urlUtils = require('lib/urlUtils');
 
 class NoteScreenComponent extends BaseScreenComponent {
@@ -975,8 +974,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Currently keyword highlighting is supported only when FTS is available.
 			let keywords = [];
 			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
-				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+				keywords = this.props.highlightedWords;
 			}
 
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
@@ -1016,8 +1014,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Currently keyword highlighting is supported only when FTS is available.
 			let keywords = [];
 			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
-				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+				keywords = this.props.highlightedWords;
 			}
 
 			const onCheckboxChange = newBody => {
@@ -1202,6 +1199,7 @@ const NoteScreen = connect(state => {
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
+		highlightedWords: state.highlightedWords,
 	};
 })(NoteScreenComponent);
 

@@ -365,7 +365,7 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
+	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
 	const editorProps:NoteBodyEditorProps = {
 		ref: editorRef,
@@ -531,6 +531,7 @@ const mapStateToProps = (state: any) => {
 		customCss: state.customCss,
 		noteVisiblePanes: state.noteVisiblePanes,
 		watchedResources: state.watchedResources,
+		highlightedWords: state.highlightedWords,
 	};
 };
 

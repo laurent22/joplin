@@ -445,8 +445,8 @@ class MainScreenComponent extends React.Component {
 		headerItems.push({
 			title: _('Search...'),
 			iconName: 'fa-search',
-			onQuery: query => {
-				CommandService.instance().execute('search', { query });
+			onQuery: (query, fuzzy = false) => {
+				CommandService.instance().execute('search', { query, fuzzy });
 			},
 			type: 'search',
 		});

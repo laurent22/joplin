@@ -10,7 +10,7 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ query }:any) => {
+		execute: async ({ query, fuzzy }:any) => {
 			console.info('RUNTIME', query);
 
 			if (!comp.searchId_) comp.searchId_ = uuid.create();
@@ -23,6 +23,7 @@ export const runtime = (comp:any):CommandRuntime => {
 					query_pattern: query,
 					query_folder_id: null,
 					type_: BaseModel.TYPE_SEARCH,
+					fuzzy: fuzzy,
 				},
 			});
 
