@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.167](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167) - 2020-09-04T17:15:49Z
+
+- New: Add mechanism to lock and upgrade sync targets (#3524)
+- Improved: Add search filters (#3213) (#1877 by Naveen M V)
+- Improved: Add support for OneDrive for Business (#3433) (#1266 by [@jonath92](https://github.com/jonath92))
+- Improved: Added link navigation shortcuts (#3275) (#3217 by j-krl)
+- Improved: When searching, weight notes using Okapi BM25 score (#3454 by Naveen M V)
+- Fixed: Fixed sync fetching issue (#3599) (#3591 by [@alexchee](https://github.com/alexchee))
+
 ## [cli-v1.0.166](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166) - 2020-08-02T14:03:26Z
 
 - New: Add support for AWS S3 synchronisation (Beta) (#2815 by [@alexchee](https://github.com/alexchee))

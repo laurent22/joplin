@@ -8,9 +8,10 @@ const { ipcMain } = require('electron');
 
 class ElectronAppWrapper {
 
-	constructor(electronApp, env, profilePath) {
+	constructor(electronApp, env, profilePath, isDebugMode) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
+		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
 		this.win_ = null;
 		this.willQuitApp_ = false;
@@ -41,7 +42,7 @@ class ElectronAppWrapper {
 
 	createWindow() {
 		// Set to true to view errors if the application does not start
-		const debugEarlyBugs = this.env_ === 'dev';
+		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
 
 		const windowStateKeeper = require('electron-window-state');
 

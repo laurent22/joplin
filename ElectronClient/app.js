@@ -1074,9 +1074,15 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
+		await this.applySettingsSideEffects();
+
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
+			reg.logger().info('app.start: doing upgradeSyncTarget action');
+			bridge().window().show();
 			return { action: 'upgradeSyncTarget' };
 		}
+
+		reg.logger().info('app.start: doing regular boot');
 
 		const dir = Setting.value('profileDir');
 
@@ -1237,9 +1243,14 @@ class Application extends BaseApplication {
 		this.updateMenuItemStates();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		window.revisionService = RevisionService.instance();
-		window.migrationService = MigrationService.instance();
-		window.decryptionWorker = DecryptionWorker.instance();
+		window.joplin = () => {
+			return {
+				revisionService: RevisionService.instance(),
+				migrationService: MigrationService.instance(),
+				decryptionWorker: DecryptionWorker.instance(),
+				bridge: bridge(),
+			};
+		};
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 	}

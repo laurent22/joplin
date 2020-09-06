@@ -167,6 +167,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg == '--debug') {
+				// Currently only handled by ElectronAppWrapper (isDebugMode property)
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
 				argv.splice(0, 1);

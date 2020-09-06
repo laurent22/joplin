@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -822,7 +824,7 @@ msgstr "Exportando para \"%s\" com o formato \"%s\". Por favor, aguarde..."
 #: ElectronClient/InteropServiceHelper.js:164
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Não foi possível exportar a nota: %s"
+msgstr "Não foi possível exportar notas: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -932,9 +934,9 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Remover a tag \"%s\" de todas as notas?"
+msgstr "Remover a tag \"%s\" e seus descendentes de todas as notas?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1837,7 +1839,7 @@ msgstr "Estatísticas"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Tempo de leitura: %s min"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2214,7 +2216,7 @@ msgstr "Nível ID desconhecido: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2358,15 +2360,15 @@ msgstr "Senha do WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "AWS key"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
@@ -2609,12 +2611,12 @@ msgstr "Atualizar automaticamente o aplicativo"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
-msgstr "Obter pre-releases quando for checar atualizações"
+msgstr "Obter pre-lançamentos quando checar por atualizações"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "Ver página de pre-release para mais detalhes: %s"
+msgstr "Ver página de pre-lançamentos para mais detalhes: %s"
 
 #: ReactNativeClient/lib/models/Setting.js:604
 msgid "Synchronisation interval"
@@ -2697,7 +2699,7 @@ msgstr "Modo do Teclado"
 
 #: ReactNativeClient/lib/models/Setting.js:650
 msgid "Default"
-msgstr "Default"
+msgstr "Padrão"
 
 #: ReactNativeClient/lib/models/Setting.js:651
 msgid "Emacs"
@@ -2881,17 +2883,16 @@ msgstr ""
 "%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Não é possível mover a nota para este local"
+msgstr "Não é possível mover a tag para este local"
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "O nome da tag não pode começar ou terminar com `/`."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "O nome da tag não pode conter `//`."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -3514,7 +3515,6 @@ msgid "Forward"
 msgstr "Encaminhar"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "Sincronizar"
 
