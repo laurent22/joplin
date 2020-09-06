@@ -17,7 +17,7 @@ const { shim } = require('lib/shim.js');
 
 let keytar:any;
 try {
-	keytar = shim.isLinux() || shim.isPortable() ? null : require('keytar');
+	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? require('keytar') : null;
 } catch (error) {
 	console.error('Cannot load keytar - keychain support will be disabled', error);
 	keytar = null;
