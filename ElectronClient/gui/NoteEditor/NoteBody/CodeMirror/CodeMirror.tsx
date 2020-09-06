@@ -309,11 +309,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		async function loadScripts() {
 			const scriptsToLoad:{src: string, id:string, loaded: boolean}[] = [
 				{
-					src: 'node_modules/codemirror/lib/codemirror.css',
-					id: 'codemirrorBaseStyle',
-					loaded: false,
-				},
-				{
 					src: 'node_modules/codemirror/addon/dialog/dialog.css',
 					id: 'codemirrorDialogStyle',
 					loaded: false,
