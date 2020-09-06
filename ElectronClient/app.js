@@ -1042,11 +1042,9 @@ class Application extends BaseApplication {
 		// https://github.com/laurent22/joplin/issues/155
 
 		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
-		const ace_css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
-		styleTag.appendChild(document.createTextNode(ace_css));
 		document.head.appendChild(styleTag);
 	}
 

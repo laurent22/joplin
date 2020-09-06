@@ -267,7 +267,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					} else if (cmd.value.type === 'files') {
 						insertResourcesIntoContentRef.current(cmd.value.paths, { createFileURL: !!cmd.value.createFileURL });
 					} else {
-						reg.logger().warn('AceEditor: unsupported drop item: ', cmd);
+						reg.logger().warn('TinyMCE: unsupported drop item: ', cmd);
 					}
 				} else {
 					commandProcessed = false;
