@@ -665,7 +665,7 @@ class Application extends BaseApplication {
 				visible: shim.isMac() ? false : true,
 				submenu: importItems,
 			}, {
-				label: _('Export'),
+				label: _('Export all'),
 				visible: shim.isMac() ? false : true,
 				submenu: exportItems,
 			}, {
