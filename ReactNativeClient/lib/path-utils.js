@@ -61,7 +61,10 @@ for (let i = 0; i < 32; i++) {
 const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'];
 
 function friendlySafeFilename(e, maxLength = null) {
-	if (maxLength === null) maxLength = 255;
+	// Although Windows supports paths up to 255 characters, but that includes the filename and its
+	// parent directory path. Also there's generally no good reason for dir or file names
+	// to be so long, so keep it at 50, which should prevent various errors.
+	if (maxLength === null) maxLength = 50;
 	if (!e || !e.replace) return _('Untitled');
 
 	let output = '';

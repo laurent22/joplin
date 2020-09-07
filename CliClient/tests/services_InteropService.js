@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest, fileContentEqual, expectNotThrow, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const InteropService = require('lib/services/InteropService.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -440,6 +440,28 @@ describe('services_InteropService', function() {
 
 		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
+	}));
+
+	it('should not try to export folders with a non-existing parent', asyncTest(async () => {
+		// Handles and edge case where user has a folder but this folder with a parent
+		// that doesn't exist. Can happen for example in this case:
+		//
+		// - folder1/folder2
+		// - Client 1 sync folder2, but not folder1
+		// - Client 2 sync and get folder2 only
+		// - Client 2 export data
+		// => Crash if we don't handle this case
+
+		await Folder.save({ title: 'orphan', parent_id: '0c5bbd8a1b5a48189484a412a7e534cc' });
+
+		const service = new InteropService();
+
+		const result = await service.export({
+			path: exportDir(),
+			format: 'md',
+		});
+
+		expect(result.warnings.length).toBe(0);
 	}));
 
 });
