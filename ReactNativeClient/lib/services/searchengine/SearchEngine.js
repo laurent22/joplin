@@ -427,7 +427,7 @@ class SearchEngine {
 	async fuzzifier(words) {
 		const fuzzyMatches = [];
 		words.forEach(word => {
-			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ?', [word]);
+			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ? AND top=3', [word]);
 			fuzzyMatches.push(fuzzyWords);
 		});
 		return await Promise.all(fuzzyMatches);
