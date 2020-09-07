@@ -4,6 +4,7 @@ interface Term {
 	value: string
 	negated: boolean
 	quoted?: boolean
+	wildcard?: boolean
 }
 
 const makeTerm = (name: string, value: string): Term => {
@@ -88,7 +89,7 @@ const parseQuery = (query: string): Term[] => {
 				// eg. Split title:"hello world" to title:hello title:world
 				const values = trimQuotes(value).split(/[\s-_]+/);
 				values.forEach(value => {
-					result.push({ name, value, negated });
+					result.push({ name, value, negated, wildcard: value.indexOf('*') >= 0 });
 				});
 			} else {
 				result.push({ name, value, negated });
@@ -97,9 +98,21 @@ const parseQuery = (query: string): Term[] => {
 			// Every word is quoted if not already.
 			// By quoting the word, FTS match query will take care of removing dashes and other word seperators.
 			if (value.startsWith('-')) {
-				result.push({ name: 'text', value: quote(value.slice(1)) , negated: true, quoted: quoted(value) });
+				result.push({
+					name: 'text',
+					value: quote(value.slice(1)),
+					negated: true,
+					quoted: quoted(value),
+					wildcard: value.indexOf('*') >= 0,
+				});
 			} else {
-				result.push({ name: 'text', value: quote(value), negated: false, quoted: quoted(value) });
+				result.push({
+					name: 'text',
+					value: quote(value),
+					negated: false,
+					quoted: quoted(value),
+					wildcard: value.indexOf('*') >= 0,
+				});
 			}
 		}
 	}
