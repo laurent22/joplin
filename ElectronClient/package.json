@@ -78,7 +78,7 @@
       ]
     },
     "linux": {
-      "icon": "../Assets/LinuxIcons/256x256.png",
+      "icon": "../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
