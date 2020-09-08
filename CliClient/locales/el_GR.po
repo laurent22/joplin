@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -106,9 +108,9 @@ msgid "Do not ask for confirmation."
 msgstr "Χωρίς να ζητείται επιβεβαίωση."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Μορφή προέλευσης: %s"
+msgstr "Μορφή εξόδου: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -222,14 +224,16 @@ msgstr ""
 "αρκετά λεπτά ανάλογα με το μέγεθος αυτών που πρέπει να αποκρυπτογραφηθούν."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Αποκρυπτογραφημένα στοιχεία: %s / %s"
+msgstr "Αποκρυπτογραφημένα στοιχεία: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"Στοιχεία που έχουν παραλειφθεί: %d (χρήσιμοποίησε --retry-failed-items για "
+"επανάληψη της αποκρυπτογράφησης τους)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -373,7 +377,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Στόχος συγχρονισμού: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Δεν είναι δυνατή η προετοιμασία του συγχρονιστή."
 
@@ -839,14 +842,14 @@ msgid "Goto Anything..."
 msgstr "Γρήγορη Μετακίνηση..."
 
 #: ElectronClient/InteropServiceHelper.js:147
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
+msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Παρακαλώ περιμένετε..."
 
 #: ElectronClient/InteropServiceHelper.js:164
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
+msgstr "Δεν ήταν δυνατή η εξαγωγή σημειώσεων: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -959,9 +962,10 @@ msgid "Delete"
 msgstr "Διαγραφή"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
+msgstr ""
+"Κατάργηση ετικέτας \"%s\" και των απογόνων ετικετών από όλες τις σημειώσεις;"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1031,9 +1035,8 @@ msgstr "έντονη γραφή"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
-#, fuzzy
 msgid "emphasised text"
-msgstr "πλάγια γραφή"
+msgstr "κείμενο με έμφαση"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
@@ -1091,9 +1094,8 @@ msgstr ""
 "επεξεργαστείτε τη σημείωση στον editor."
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "Πλαίσιο ελέγχου"
+msgstr "Λίστα πλαισίων ελέγχου"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
 #: ElectronClient/gui/ConfigScreen.min.js:642
@@ -1110,11 +1112,11 @@ msgstr "Επισύναψη αρχείου"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
 msgid "Code Block"
-msgstr ""
+msgstr "Μπλοκ Κώδικα"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 msgid "Inline Code"
-msgstr ""
+msgstr "Ενσωματωμένος κώδικας"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
@@ -1124,13 +1126,12 @@ msgstr "Εισαγωγή Ημερομηνίας Ώρας"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Απόθεση σημειώσεων ή αρχείων εδώ"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:401
-#, fuzzy
 msgid "Code View"
-msgstr "Κώδικας"
+msgstr "Προβολή κώδικα"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
 #, javascript-format
@@ -1138,6 +1139,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Παρακαλώ περιμένετε να γίνει λήψη και αποκρυπτογράφηση όλων των συνημμένων. "
+"Μπορείτε επίσης να μεταβείτε στο %s για να επεξεργαστείτε τη σημείωση."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1162,7 +1165,7 @@ msgstr "Αποθήκευση ως..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Αποκάλυψη αρχείου στο φάκελο"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
@@ -1342,7 +1345,7 @@ msgstr "Αναζήτηση..."
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
-msgstr ""
+msgstr "Στατιστικά..."
 
 #: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:17
@@ -1605,13 +1608,12 @@ msgstr "Yποβολή"
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "Custom order"
-msgstr ""
+msgstr "Προσαρμοσμένη σειρά"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#, fuzzy
 msgid "View"
-msgstr "&Εμφάνιση"
+msgstr "Προβολή"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
@@ -1626,12 +1628,13 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"Για να ταξινομήσετε τις σημειώσεις χειροκίνητα, η σειρά ταξινόμησης πρέπει "
+"να αλλάξει σε \"%s\" στο μενού \"%s\" - \"%s\""
 
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.min.js:153
-#, fuzzy
 msgid "Do it now"
-msgstr "Λήψη τώρα:"
+msgstr "Κάνε το τώρα"
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
@@ -1870,14 +1873,13 @@ msgid "Viewer"
 msgstr "Εμφάνιση"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
 msgid "Statistics"
-msgstr "Κατάσταση"
+msgstr "Στατιστικά"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Χρόνος ανάγνωσης: %s min"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2102,7 +2104,7 @@ msgstr "Έκδοση προφίλ: %s"
 #: ElectronClient/app.js:608
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Υποστηριζόμενη κλειδοθήκη: %s"
 
 #: ElectronClient/app.js:630 ElectronClient/app.js:706
 msgid "&File"
@@ -2166,9 +2168,8 @@ msgid "Zoom Out"
 msgstr "Σμίκρινση"
 
 #: ElectronClient/app.js:860
-#, fuzzy
 msgid "&Note"
-msgstr "Σημείωση"
+msgstr "&Σημείωση"
 
 #: ElectronClient/app.js:870
 msgid "&Tools"
@@ -2230,7 +2231,6 @@ msgstr ""
 "δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
 
 #: ReactNativeClient/lib/registry.js:156
-#, fuzzy
 msgid ""
 "Could not synchronise with OneDrive.\n"
 "\n"
@@ -2241,10 +2241,10 @@ msgid ""
 msgstr ""
 "Δεν ήταν δυνατός ο συγχρονισμός με το OneDrive.\n"
 "\n"
-"Αυτό το σφάλμα συμβαίνει συχνά όταν χρησιμοποιείτε το OneDrive for Business, "
-"το οποίο δυστυχώς δεν υποστηρίζεται.\n"
+"Αυτό το σφάλμα συμβαίνει συχνά όταν χρησιμοποιείτε το OneDrive για "
+"επιχειρήσεις, το οποίο δυστυχώς δεν μπορεί να υποστηριχθεί.\n"
 "\n"
-"Παρακαλώ σκεφτείτε να χρησιμοποιήσετε έναν κανονικό λογαριασμό OneDrive."
+"Εξετάστε το ενδεχόμενο να χρησιμοποιήσετε έναν κανονικό λογαριασμό OneDrive."
 
 #: ReactNativeClient/lib/logger.js:178
 #, javascript-format
@@ -2258,7 +2258,7 @@ msgstr "Άγνωστο level ID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2404,15 +2404,15 @@ msgstr "WebDAV password"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "AWS key"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
@@ -2463,15 +2463,15 @@ msgstr "Θέμα"
 
 #: ReactNativeClient/lib/models/Setting.js:315
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "Αυτόματη εναλλαγή θέματος ώστε να ταιριάζει με το θέμα συστήματος"
 
 #: ReactNativeClient/lib/models/Setting.js:327
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Προτιμώμενο φωτεινό θέμα"
 
 #: ReactNativeClient/lib/models/Setting.js:341
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Προτιμώμενο σκοτεινό θέμα"
 
 #: ReactNativeClient/lib/models/Setting.js:346
 msgid "Show note counts"
@@ -2510,6 +2510,7 @@ msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεω
 #: ReactNativeClient/lib/models/Setting.js:395
 msgid "Use CodeMirror as the code editor (WARNING: BETA)."
 msgstr ""
+"Χρησιμοποιείστε το CodeMirror ως τον επεξεργαστή κώδικα (ΠΡΟΣΟΧΗ: BETA)"
 
 #: ReactNativeClient/lib/models/Setting.js:397
 #: ReactNativeClient/lib/models/Setting.js:415
@@ -2637,15 +2638,14 @@ msgid "Editor font family"
 msgstr "Οικογένεια γραμματοσειράς editor"
 
 #: ReactNativeClient/lib/models/Setting.js:550
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"H γραμματοσειρά πρέπει να είναι *monospace* αλλιώς δεν θα λειτουργήσει "
-"σωστά. Εάν η γραμματοσειρά είναι εσφαλμένη ή κενή, θα προεπιλεγεί μια γενική "
-"γραμματοσειρά *monospace*."
+"H γραμματοσειρά πρέπει να είναι *monospace* αλλιώς κάποια στοιχεία δεν θα "
+"εμφανιστούν σωστά. Εάν η γραμματοσειρά είναι εσφαλμένη ή κενή, θα "
+"προεπιλεγεί μια γενική γραμματοσειρά *monospace*."
 
 #: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2816,7 +2816,7 @@ msgstr "Διατήρηση ιστορικού σημειώσεων για"
 
 #: ReactNativeClient/lib/models/Setting.js:741
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "Συντελεστής ανάπτυξης λίστας σημειωματάριων"
 
 #: ReactNativeClient/lib/models/Setting.js:743
 #: ReactNativeClient/lib/models/Setting.js:756
@@ -2827,14 +2827,19 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"Ο συντελεστής ανάπτυξης καθορίζει το πόσο θα αναπτυχθεί ή θα συρρίκνωθεί το "
+"αντικειμένο ώστε να χωρά στον διαθέσιμο χώρο σε σχέση με τα άλλα "
+"αντικείμενα. Έτσι, ένα στοιχείο με συντελεστή 2 θα πάρει διπλάσιο χώρο από "
+"ένα στοιχείο με συντελεστή 1. Επανεκκινήστε την εφαρμογή για να δείτε "
+"αλλαγές."
 
 #: ReactNativeClient/lib/models/Setting.js:754
 msgid "Note list growth factor"
-msgstr ""
+msgstr "Συντελεστής ανάπτυξης λίστας σημειώσεων"
 
 #: ReactNativeClient/lib/models/Setting.js:767
 msgid "Note area growth factor"
-msgstr ""
+msgstr "Συντελεστής ανάπτυξης περιοχής σημειώσεων"
 
 #: ReactNativeClient/lib/models/Setting.js:919
 #, javascript-format
@@ -2910,30 +2915,32 @@ msgid "Downloaded"
 msgstr "Έχουν ληφθεί"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Επισυναπτόμενα"
+msgstr "Διένεξη συνημμένου: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
+msgstr ""
+"Υπήρξε μια [διένεξη](%s) στο παρακάτω συνημμένο.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
-#, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
+msgstr "Δεν είναι δυνατή η μετακίνηση της ετικέτας σε αυτήν τη θέση."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "Το όνομα της ετικέτας δεν μπορεί να ξεκινάει ή να τελειώνει με `/`."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "Το όνομα της ετικέτας δεν μπορεί να περιέχει `//`."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -2946,7 +2953,7 @@ msgstr "ημερομηνία δημιουργίας"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "προσαρμοσμένη σειρά"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -3564,12 +3571,11 @@ msgstr "File system"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
-msgstr ""
+msgstr "Μπροστά"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
-msgstr "Συγχρονισμός"
+msgstr "Συγχρόνισε"
 
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
@@ -3737,9 +3743,10 @@ msgid "Directory"
 msgstr "Φάκελος"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Δεν είναι δυνατή η φόρτωση του module \"%s\" για τη μορφή \"%s\""
+msgstr ""
+"Δεν είναι δυνατή η φόρτωση του \"%s\" module με μορφή \"%s\" και έξοδο \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
