@@ -53,6 +53,7 @@ Tools/commit_hook.txt
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
+CliClient/build/LinkSelector.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/commands/focusElement.js
@@ -142,6 +143,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/keychain/KeychainService.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
