@@ -1,7 +1,7 @@
 const ntpClient = require('lib/vendor/ntp-client');
 const Mutex = require('async-mutex').Mutex;
 
-let lastSyncTime = 0;
+let nextSyncTime = 0;
 let timeOffset = 0;
 const fetchingTimeMutex = new Mutex();
 
@@ -24,7 +24,7 @@ async function networkTime():Promise<Date> {
 }
 
 function shouldSyncTime() {
-	return !lastSyncTime || Date.now() - lastSyncTime >= 5 * 1000;
+	return !nextSyncTime || Date.now() > nextSyncTime;
 }
 
 export default async function():Promise<Date> {
@@ -34,9 +34,14 @@ export default async function():Promise<Date> {
 		try {
 			if (shouldSyncTime()) {
 				const date = await networkTime();
-				lastSyncTime = Date.now();
+				nextSyncTime = Date.now() + 60 * 1000;
 				timeOffset = date.getTime() - Date.now();
 			}
+		} catch (error) {
+			// Fallback to application time since
+			// most of the time it's actually correct
+			nextSyncTime = Date.now() + 20 * 1000;
+			timeOffset = 0;
 		} finally {
 			release();
 		}

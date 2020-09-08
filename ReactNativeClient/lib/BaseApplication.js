@@ -44,6 +44,9 @@ const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
 
+const ntpClient = require('lib/vendor/ntp-client');
+ntpClient.dgram = require('dgram');
+
 class BaseApplication {
 	constructor() {
 		this.logger_ = new Logger();

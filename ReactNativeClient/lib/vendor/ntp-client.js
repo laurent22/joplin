@@ -14,10 +14,10 @@
 (function (exports) {
     "use strict";
 
-    var dgram = require('dgram');
-
     exports.defaultNtpPort = 123;
     exports.defaultNtpServer = "pool.ntp.org";
+
+    exports.dgram = null;
 
     /**
      * Amount of acceptable time to await for a response from the remote server.
@@ -40,7 +40,9 @@
         server = server || exports.defaultNtpServer;
         port = port || exports.defaultNtpPort;
 
-        var client = dgram.createSocket("udp4"),
+        if (!exports.dgram) throw new Error('dgram package has not been set!!');
+
+        var client = exports.dgram.createSocket("udp4"),
             ntpData = new Buffer(48);
 
         // RFC 2030 -> LI = 0 (no warning, 2 bits), VN = 3 (IPv4 only, 3 bits), Mode = 3 (Client Mode, 3 bits) -> 1 byte
