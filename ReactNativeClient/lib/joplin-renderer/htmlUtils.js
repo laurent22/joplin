@@ -91,7 +91,7 @@ class HtmlUtils {
 		// that can break several plugins, such as Katex (which needs to load CSS
 		// files using a relative URL). For that reason it is disabled.
 		// More info: https://github.com/laurent22/joplin/issues/3021
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base'];
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed'];
 
 		const parser = new htmlparser2.Parser({
 

@@ -227,9 +227,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
+		let buttonFolderId = this.props.selectedFolderId != Folder.conflictFolderId() ? this.props.selectedFolderId : null;
+		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
+
+		const addFolderNoteButtons = !!buttonFolderId;
 		const thisComp = this;
-		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>;
+		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={buttonFolderId}></ActionButton>;
 
 		return (
 			<View style={rootStyle}>
@@ -250,6 +253,7 @@ const NotesScreen = connect(state => {
 	return {
 		folders: state.folders,
 		tags: state.tags,
+		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedTagId: state.selectedTagId,

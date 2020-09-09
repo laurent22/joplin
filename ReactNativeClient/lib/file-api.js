@@ -6,6 +6,7 @@ const JoplinError = require('lib/JoplinError');
 const ArrayUtils = require('lib/ArrayUtils');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
+const Mutex = require('async-mutex').Mutex;
 
 function requestCanBeRepeated(error) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
@@ -57,6 +58,65 @@ class FileApi {
 		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
 		this.requestRepeatCount_ = null; // For testing purpose only - normally this value should come from the driver
+		this.remoteDateOffset_ = 0;
+		this.remoteDateNextCheckTime_ = 0;
+		this.remoteDateMutex_ = new Mutex();
+	}
+
+
+	async fetchRemoteDateOffset_() {
+		const tempFile = `${this.tempDirName()}/timeCheck${Math.round(Math.random() * 1000000)}.txt`;
+		const startTime = Date.now();
+		await this.put(tempFile, 'timeCheck');
+
+		// Normally it should be possible to read the file back immediately but
+		// just in case, read it in a loop.
+		const loopStartTime = Date.now();
+		let stat = null;
+		while (Date.now() - loopStartTime < 5000) {
+			stat = await this.stat(tempFile);
+			if (stat) break;
+			await time.msleep(200);
+		}
+
+		if (!stat) throw new Error('Timed out trying to get sync target clock time');
+
+		this.delete(tempFile); // No need to await for this call
+
+		const endTime = Date.now();
+		const expectedTime = Math.round((endTime + startTime) / 2);
+		return stat.updated_time - expectedTime;
+	}
+
+	// Approximates the current time on the sync target. It caches the time offset to
+	// improve performance.
+	async remoteDate() {
+		const shouldSyncTime = () => {
+			return !this.remoteDateNextCheckTime_ || Date.now() > this.remoteDateNextCheckTime_;
+		};
+
+		if (shouldSyncTime()) {
+			const release = await this.remoteDateMutex_.acquire();
+
+			try {
+				// Another call might have refreshed the time while we were waiting for the mutex,
+				// so check again if we need to refresh.
+				if (shouldSyncTime()) {
+					this.remoteDateOffset_ = await this.fetchRemoteDateOffset_();
+					// The sync target clock should rarely change but the device one might,
+					// so we need to refresh relatively frequently.
+					this.remoteDateNextCheckTime_ = Date.now() + 10 * 60 * 1000;
+				}
+			} catch (error) {
+				this.logger().warn('Could not retrieve remote date - defaulting to device date:', error);
+				this.remoteDateOffset_ = 0;
+				this.remoteDateNextCheckTime_ = Date.now() + 60 * 1000;
+			} finally {
+				release();
+			}
+		}
+
+		return new Date(Date.now() + this.remoteDateOffset_);
 	}
 
 	// Ideally all requests repeating should be done at the FileApi level to remove duplicate code in the drivers, but

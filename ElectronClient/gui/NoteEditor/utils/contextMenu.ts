@@ -20,6 +20,7 @@ export enum ContextMenuItemType {
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType,
 	resourceId: string,
+	linkToCopy: string,
 	textToCopy: string,
 	htmlToCopy: string,
 	insertContent: Function,
@@ -114,7 +115,7 @@ export function menuItems():ContextMenuItems {
 		copyLinkUrl: {
 			label: _('Copy Link Address'),
 			onAction: async (options:ContextMenuOptions) => {
-				clipboard.writeText(options.textToCopy);
+				clipboard.writeText(options.linkToCopy !== null ? options.linkToCopy : options.textToCopy);
 			},
 			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Link,
 		},
