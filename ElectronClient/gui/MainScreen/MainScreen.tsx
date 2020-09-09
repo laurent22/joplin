@@ -61,6 +61,7 @@ class MainScreenComponent extends React.Component<any, any> {
 
 		const rootLayoutSize = this.rootLayoutSize();
 		const theme = themeStyle(props.themeId);
+		const sideBarMinWidth = 200;
 
 		const layout:LayoutItem = {
 			key: 'root',
@@ -73,9 +74,9 @@ class MainScreenComponent extends React.Component<any, any> {
 					key: 'sidebarColumn',
 					direction: LayoutItemDirection.Column,
 					resizable: true,
-					width: Setting.value('style.sidebar.width'),
+					width: Setting.value('style.sidebar.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.sidebar.width'),
 					visible: Setting.value('sidebarVisibility'),
-					minWidth: 200,
+					minWidth: sideBarMinWidth,
 					children: [
 						{
 							key: 'sideBar',
@@ -86,9 +87,9 @@ class MainScreenComponent extends React.Component<any, any> {
 					key: 'noteListColumn',
 					direction: LayoutItemDirection.Column,
 					resizable: true,
-					width: Setting.value('style.noteList.width'),
+					width: Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
 					visible: Setting.value('noteListVisibility'),
-					minWidth: 200,
+					minWidth: sideBarMinWidth,
 					children: [
 						{
 							height: theme.topRowHeight,
