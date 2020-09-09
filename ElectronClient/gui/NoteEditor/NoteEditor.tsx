@@ -360,7 +360,8 @@ function NoteEditor(props: NoteEditorProps) {
 		const theme = themeStyle(props.themeId);
 		let control = null;
 		if (!props.selectedNoteTags.length) {
-			control = <span onClick={() => { CommandService.instance().execute('setTags'); }} style={theme.clickableTextStyle}>Click to add some tags...</span>;
+			const noteIds = [formNote.id];
+			control = <span onClick={() => { CommandService.instance().execute('setTags', { noteIds }); }} style={theme.clickableTextStyle}>Click to add some tags...</span>;
 		} else {
 			control = <TagList items={props.selectedNoteTags} />;
 		}
