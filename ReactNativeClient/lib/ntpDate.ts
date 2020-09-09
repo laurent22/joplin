@@ -1,8 +1,11 @@
 const ntpClient = require('lib/vendor/ntp-client');
+const { Logger } = require('lib/logger.js');
 const Mutex = require('async-mutex').Mutex;
 
 let nextSyncTime = 0;
 let timeOffset = 0;
+let logger = new Logger();
+
 const fetchingTimeMutex = new Mutex();
 
 const server = {
@@ -27,6 +30,10 @@ function shouldSyncTime() {
 	return !nextSyncTime || Date.now() > nextSyncTime;
 }
 
+export function setLogger(v:any) {
+	logger = v;
+}
+
 export default async function():Promise<Date> {
 	if (shouldSyncTime()) {
 		const release = await fetchingTimeMutex.acquire();
@@ -38,7 +45,8 @@ export default async function():Promise<Date> {
 				timeOffset = date.getTime() - Date.now();
 			}
 		} catch (error) {
-			// Fallback to application time since
+			logger.warn('Could not get NTP time - falling back to device time:', error);
+			// Fallback to device time since
 			// most of the time it's actually correct
 			nextSyncTime = Date.now() + 20 * 1000;
 			timeOffset = 0;

@@ -11,6 +11,8 @@
 // it has several bugs and is currently unmaintained
 // ----------------------------------------------------------------------------------------
 
+const Buffer = require('buffer').Buffer;
+
 (function (exports) {
     "use strict";
 
@@ -89,47 +91,52 @@
             errorFired = true;
         });
 
-        client.send(ntpData, 0, ntpData.length, port, server, function (err) {
-            if (err) {
-                clearTimeout(timeout);
-                if (errorFired) {
+        // NOTE: To make it work in React Native (Android), a port need to be bound
+        // before calling client.send()
+
+        // client.bind(5555, '0.0.0.0', function() {
+            client.send(ntpData, 0, ntpData.length, port, server, function (err) {
+                if (err) {
+                    clearTimeout(timeout);
+                    if (errorFired) {
+                        return;
+                    }
+                    callback(err, null);
+                    errorFired = true;
+                    closeClient(client);
                     return;
                 }
-                callback(err, null);
-                errorFired = true;
-                closeClient(client);
-                return;
-            }
 
-            client.once('message', function (msg) {
-                clearTimeout(timeout);
-                closeClient(client);
+                client.once('message', function (msg) {
+                    clearTimeout(timeout);
+                    closeClient(client);
 
-                // Offset to get to the "Transmit Timestamp" field (time at which the reply
-                // departed the server for the client, in 64-bit timestamp format."
-                var offsetTransmitTime = 40,
-                    intpart = 0,
-                    fractpart = 0;
+                    // Offset to get to the "Transmit Timestamp" field (time at which the reply
+                    // departed the server for the client, in 64-bit timestamp format."
+                    var offsetTransmitTime = 40,
+                        intpart = 0,
+                        fractpart = 0;
 
-                // Get the seconds part
-                for (var i = 0; i <= 3; i++) {
-                    intpart = 256 * intpart + msg[offsetTransmitTime + i];
-                }
+                    // Get the seconds part
+                    for (var i = 0; i <= 3; i++) {
+                        intpart = 256 * intpart + msg[offsetTransmitTime + i];
+                    }
 
-                // Get the seconds fraction
-                for (i = 4; i <= 7; i++) {
-                    fractpart = 256 * fractpart + msg[offsetTransmitTime + i];
-                }
+                    // Get the seconds fraction
+                    for (i = 4; i <= 7; i++) {
+                        fractpart = 256 * fractpart + msg[offsetTransmitTime + i];
+                    }
 
-                var milliseconds = (intpart * 1000 + (fractpart * 1000) / 0x100000000);
+                    var milliseconds = (intpart * 1000 + (fractpart * 1000) / 0x100000000);
 
-                // **UTC** time
-                var date = new Date("Jan 01 1900 GMT");
-                date.setUTCMilliseconds(date.getUTCMilliseconds() + milliseconds);
+                    // **UTC** time
+                    var date = new Date("Jan 01 1900 GMT");
+                    date.setUTCMilliseconds(date.getUTCMilliseconds() + milliseconds);
 
-                callback(null, date);
+                    callback(null, date);
+                });
             });
-        });
+        // });
     };
 
     exports.demo = function (argv) {
