@@ -234,6 +234,10 @@ class MainScreenComponent extends React.Component<any, any> {
 				sidebarColumn.visible = this.props.sidebarVisibility;
 			}) });
 		}
+
+		if (prevProps.style.width !== this.props.style.width || prevProps.style.height !== this.props.style.height) {
+			this.updateRootLayoutSize();
+		}
 	}
 
 	componentDidMount() {
