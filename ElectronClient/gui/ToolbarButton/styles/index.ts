@@ -4,14 +4,15 @@ const { css } = require('styled-components');
 interface RootProps {
 	readonly theme: any;
 	readonly disabled: boolean;
+	readonly hasTitle: boolean;
 }
 
 export const StyledRoot = styled.a<RootProps>`
 	opacity: ${(props:RootProps) => props.disabled ? 0.3 : 1};
 	height: ${(props:RootProps) => props.theme.toolbarHeight}px;
 	min-height: ${(props:RootProps) => props.theme.toolbarHeight}px;
-	width: ${(props:RootProps) => props.theme.toolbarHeight}px;
-	max-width: ${(props:RootProps) => props.theme.toolbarHeight}px;
+	width: ${(props:RootProps) => props.hasTitle ? 'auto' : `${props.theme.toolbarHeight}px`};
+	max-width: ${(props:RootProps) => props.hasTitle ? 'auto' : `${props.theme.toolbarHeight}px`};
 	display: flex;
 	align-items: center;
 	justify-content: center;

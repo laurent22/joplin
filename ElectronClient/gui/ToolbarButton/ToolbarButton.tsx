@@ -50,6 +50,7 @@ export default function ToolbarButton(props:Props) {
 			disabled={!isEnabled}
 			title={tooltip}
 			href="#"
+			hasTitle={!!title}
 			onClick={() => {
 				if (isEnabled && onClick) onClick();
 			}}
