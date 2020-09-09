@@ -108,6 +108,9 @@ describe('filterParser should be correct filter for keyword', () => {
 
 		searchString = 'tag:bl*sphemy';
 		expect(filterParser(searchString)).toContain(makeTerm('tag', 'bl%sphemy', false));
+
+		searchString = 'tag:"space travel"';
+		expect(filterParser(searchString)).toContain(makeTerm('tag', 'space travel', false));
 	});
 
 	it('wildcard notebooks', () => {

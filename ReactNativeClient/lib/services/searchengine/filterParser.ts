@@ -82,7 +82,7 @@ const parseQuery = (query: string): Term[] => {
 			}
 
 			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
-				result.push({ name, value: value.replace(/[*]/g, '%'), negated }); // for wildcard search
+				result.push({ name, value: trimQuotes(value.replace(/[*]/g, '%')), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world
