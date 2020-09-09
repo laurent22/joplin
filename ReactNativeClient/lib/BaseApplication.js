@@ -58,6 +58,9 @@ class BaseApplication {
 		// state and UI out of sync.
 		this.currentFolder_ = null;
 
+		// This is used to prevent a rendering loop when setting folder and note
+		this.skipNextFolderAndNoteSelectAction_ = false;
+
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
@@ -313,12 +316,13 @@ class BaseApplication {
 			notesSource: source,
 		});
 
+		const selectAction = {
+			type: 'FOLDER_AND_NOTE_SELECT',
+		};
+
 		if (useSelectedNoteId) {
-			this.store().dispatch({
-				type: 'NOTE_SELECT',
-				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
-				hash: noteHash,
-			});
+			selectAction.noteId = state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
+			selectAction.hash = noteHash;
 		} else {
 			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
 			const foundIds = [];
@@ -341,11 +345,22 @@ class BaseApplication {
 				selectedNoteId = notes.length ? notes[0].id : null;
 			}
 
-			this.store().dispatch({
-				type: 'NOTE_SELECT',
-				id: selectedNoteId,
-			});
+			selectAction.noteId = selectedNoteId;
 		}
+
+		const selectedNote = BaseModel.byId(state.notes, selectAction.noteId);
+		const selectedFolder = selectedNote && selectedNote.parent_id ? state.folders.find(folder => folder.id === selectedNote.parent_id) : null;
+
+		if (selectedFolder) {
+			selectAction.folderId = selectedFolder.id;
+			this.skipNextFolderAndNoteSelectAction_ = true;
+		} else {
+			selectAction.type = 'NOTE_SELECT';
+			selectAction.id = selectAction.noteId;
+			delete selectAction.noteId;
+		}
+
+		this.store().dispatch(selectAction);
 	}
 
 	resourceFetcher_downloadComplete(event) {
@@ -470,13 +485,17 @@ class BaseApplication {
 		}
 
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
-			Setting.setValue('activeFolderId', newState.selectedFolderId);
-			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
-			refreshNotes = true;
+			if (action.type === 'FOLDER_AND_NOTE_SELECT' && this.skipNextFolderAndNoteSelectAction_) {
+				this.skipNextFolderAndNoteSelectAction_ = false;
+			} else {
+				Setting.setValue('activeFolderId', newState.selectedFolderId);
+				this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
+				refreshNotes = true;
 
-			if (action.type === 'FOLDER_AND_NOTE_SELECT') {
-				refreshNotesUseSelectedNoteId = true;
-				refreshNotesHash = action.hash;
+				if (action.type === 'FOLDER_AND_NOTE_SELECT') {
+					refreshNotesUseSelectedNoteId = true;
+					refreshNotesHash = action.hash;
+				}
 			}
 		}
 
