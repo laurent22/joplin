@@ -1,5 +1,4 @@
 import { Dirnames } from './utils/types';
-import ntpDate from 'lib/ntpDate';
 
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
@@ -114,7 +113,7 @@ export default class LockHandler {
 	// of that type instead.
 	async activeLock(lockType:LockType, clientType:string = null, clientId:string = null) {
 		const locks = await this.locks(lockType);
-		const currentDate = await ntpDate();
+		const currentDate = await this.api_.remoteDate();
 
 		if (lockType === LockType.Exclusive) {
 			const activeLocks = locks
