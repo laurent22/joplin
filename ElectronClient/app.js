@@ -1212,7 +1212,7 @@ class Application extends BaseApplication {
 		if (Setting.value('env') === 'dev') {
 			AlarmService.updateAllNotifications();
 		} else {
-			reg.scheduleSync().then(() => {
+			reg.scheduleSync(1000).then(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				AlarmService.updateAllNotifications();
