@@ -63,6 +63,31 @@ class FileApi {
 		this.remoteDateMutex_ = new Mutex();
 	}
 
+
+	async fetchRemoteDateOffset_() {
+		const tempFile = `${this.tempDirName()}/timeCheck${Math.round(Math.random() * 1000000)}.txt`;
+		const startTime = Date.now();
+		await this.put(tempFile, 'timeCheck');
+
+		// Normally it should be possible to read the file back immediately but
+		// just in case, read it in a loop.
+		const loopStartTime = Date.now();
+		let stat = null;
+		while (Date.now() - loopStartTime < 5000) {
+			stat = await this.stat(tempFile);
+			if (stat) break;
+			await time.msleep(200);
+		}
+
+		if (!stat) throw new Error('Timed out trying to get sync target clock time');
+
+		this.delete(tempFile); // No need to await for this call
+
+		const endTime = Date.now();
+		const expectedTime = Math.round((endTime + startTime) / 2);
+		return stat.updated_time - expectedTime;
+	}
+
 	// Approximates the current time on the sync target. It caches the time offset to
 	// improve performance.
 	async remoteDate() {
@@ -77,17 +102,10 @@ class FileApi {
 				// Another call might have refreshed the time while we were waiting for the mutex,
 				// so check again if we need to refresh.
 				if (shouldSyncTime()) {
-					const tempFile = `${this.tempDirName()}/timeCheck${Math.random() * 10000}.txt`;
-					const startTime = Date.now();
-					await this.put(tempFile, 'timeCheck');
-					const stat = await this.stat(tempFile);
-					const endTime = Date.now();
-					const expectedTime = Math.round((endTime + startTime) / 2);
-					this.remoteDateOffset_ = stat.updated_time.getTime() - expectedTime;
+					this.remoteDateOffset_ = await this.fetchRemoteDateOffset_();
 					// The sync target clock should rarely change but the device one might,
 					// so we need to refresh relatively frequently.
 					this.remoteDateNextCheckTime_ = Date.now() + 10 * 60 * 1000;
-					this.delete(tempFile); // No need to await for this call
 				}
 			} catch (error) {
 				this.logger().warn('Could not retrieve remote date - defaulting to device date:', error);
