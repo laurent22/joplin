@@ -31,7 +31,10 @@ function renderFoldersRecursive_(props, folders, renderItem, items, parentId, de
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder' || props.notesParentType == 'Search', hasChildren, depth));
+
+		const selected = props.selectedFolderId == folder.id && ['Folder', 'Search'].includes(props.notesParentType);
+
+		items.push(renderItem(folder, selected, hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, folders, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;

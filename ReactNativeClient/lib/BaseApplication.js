@@ -316,13 +316,13 @@ class BaseApplication {
 			notesSource: source,
 		});
 
-		const selectAction = {
-			type: 'FOLDER_AND_NOTE_SELECT',
-		};
+		let selectedNoteId = null;
+		let selectedFolderId = null;
+		let selectedHash = null;
 
 		if (useSelectedNoteId) {
-			selectAction.noteId = state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
-			selectAction.hash = noteHash;
+			selectedNoteId = state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
+			selectedHash = noteHash;
 		} else {
 			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
 			const foundIds = [];
@@ -338,29 +338,35 @@ class BaseApplication {
 				if (found) foundIds.push(noteId);
 			}
 
-			let selectedNoteId = null;
 			if (foundIds.length) {
 				selectedNoteId = foundIds[0];
 			} else {
 				selectedNoteId = notes.length ? notes[0].id : null;
 			}
-
-			selectAction.noteId = selectedNoteId;
 		}
 
-		const selectedNote = BaseModel.byId(state.notes, selectAction.noteId);
+		const selectedNote = BaseModel.byId(notes, selectedNoteId);
 		const selectedFolder = selectedNote && selectedNote.parent_id ? state.folders.find(folder => folder.id === selectedNote.parent_id) : null;
 
-		if (selectedFolder) {
-			selectAction.folderId = selectedFolder.id;
-			this.skipNextFolderAndNoteSelectAction_ = true;
-		} else {
-			selectAction.type = 'NOTE_SELECT';
-			selectAction.id = selectAction.noteId;
-			delete selectAction.noteId;
+		if ([BaseModel.TYPE_FOLDER, BaseModel.TYPE_SEARCH].includes(parentType)) {
+			selectedFolderId = selectedFolder ? selectedFolder.id : null;
 		}
 
-		this.store().dispatch(selectAction);
+		if (selectedFolderId) {
+			this.skipNextFolderAndNoteSelectAction_ = true;
+
+			this.store().dispatch({
+				type: 'FOLDER_AND_NOTE_SELECT',
+				folderId: selectedFolderId,
+				noteId: selectedNoteId,
+				hash: selectedHash,
+			});
+		} else {
+			this.store().dispatch({
+				type: 'NOTE_SELECT',
+				id: selectedNoteId,
+			});
+		}
 	}
 
 	resourceFetcher_downloadComplete(event) {

@@ -328,10 +328,13 @@ function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
 	const newState = Object.assign({}, state);
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
-	if (!newState.selectedFolderId) {
-		newState.notesParentType = defaultNotesParentType(state, 'Folder');
-	} else {
-		newState.notesParentType = 'Folder';
+
+	if (newState.notesParentType !== 'Search') {
+		if (!newState.selectedFolderId) {
+			newState.notesParentType = defaultNotesParentType(state, 'Folder');
+		} else {
+			newState.notesParentType = 'Folder';
+		}
 	}
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
