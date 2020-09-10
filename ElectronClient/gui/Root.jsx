@@ -6,12 +6,12 @@ const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 
 const MainScreen = require('./MainScreen/MainScreen').default;
+const ConfigScreen = require('./ConfigScreen/ConfigScreen').default;
 const ErrorBoundary = require('./ErrorBoundary').default;
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { DropboxLoginScreen } = require('./DropboxLoginScreen.min.js');
 const { StatusScreen } = require('./StatusScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
-const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');

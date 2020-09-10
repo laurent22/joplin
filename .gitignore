@@ -63,6 +63,7 @@ ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
 ElectronClient/global.d.js
 ElectronClient/gui/Button/Button.js
+ElectronClient/gui/ConfigScreen/ConfigScreen.js
 ElectronClient/gui/ErrorBoundary.js
 ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
 ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
