@@ -1,4 +1,5 @@
-const React = require('react');
+import * as React from 'react';
+import SideBar from './SideBar';
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/theme');
@@ -7,42 +8,51 @@ const { _ } = require('lib/locale.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const shared = require('lib/components/shared/config-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const ConfigMenuBar = require('../ConfigMenuBar.min.js');
 const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
-class ConfigScreenComponent extends React.Component {
-	constructor() {
-		super();
+class ConfigScreenComponent extends React.Component<any, any> {
+
+	rowStyle_:any = null;
+
+	constructor(props:any) {
+		super(props);
 
 		shared.init(this);
 
-		this.state.selectedSectionName = 'general';
-		this.state.screenName = '';
-
-		this.checkSyncConfig_ = async () => {
-			await shared.checkSyncConfig(this, this.state.settings);
-		};
-
-		this.checkNextcloudAppButton_click = async () => {
-			this.setState({ showNextcloudAppLog: true });
-			await shared.checkNextcloudApp(this, this.state.settings);
-		};
-
-		this.showLogButton_click = () => {
-			this.setState({ showNextcloudAppLog: true });
-		};
-
-		this.nextcloudAppHelpLink_click = () => {
-			bridge().openExternal('https://joplinapp.org/nextcloud_app');
+		this.state = {
+			selectedSectionName: 'general',
+			screenName: '',
+			changedSettingKeys: [],
 		};
 
 		this.rowStyle_ = {
 			marginBottom: 10,
 		};
 
-		this.configMenuBar_selectionChange = this.configMenuBar_selectionChange.bind(this);
+		this.sideBar_selectionChange = this.sideBar_selectionChange.bind(this);
+		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
+		this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
+		this.showLogButton_click = this.showLogButton_click.bind(this);
+		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
+	}
+
+	async checkSyncConfig_() {
+		await shared.checkSyncConfig(this, this.state.settings);
+	}
+
+	async checkNextcloudAppButton_click() {
+		this.setState({ showNextcloudAppLog: true });
+		await shared.checkNextcloudApp(this, this.state.settings);
+	}
+
+	showLogButton_click() {
+		this.setState({ showNextcloudAppLog: true });
+	}
+
+	nextcloudAppHelpLink_click() {
+		bridge().openExternal('https://joplinapp.org/nextcloud_app');
 	}
 
 	UNSAFE_componentWillMount() {
@@ -89,7 +99,7 @@ class ConfigScreenComponent extends React.Component {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
-	configMenuBar_selectionChange(event:any) {
+	sideBar_selectionChange(event:any) {
 		this.switchSection(event.section.name);
 	}
 
@@ -591,31 +601,32 @@ class ConfigScreenComponent extends React.Component {
 		const sections = shared.settingsSections({ device: 'desktop', settings });
 
 		return (
-			<div style={style}>
-				<ConfigMenuBar
+			<div style={{ display: 'flex', flexDirection: 'row' }}>
+				<SideBar
 					selection={this.state.selectedSectionName}
-					onSelectionChange={this.configMenuBar_selectionChange}
+					onSelectionChange={this.sideBar_selectionChange}
 					sections={sections}
-					themeId={this.props.themeId}
 				/>
-				{screenComp}
-				<div style={containerStyle}>{settingComps}</div>
-				<div style={buttonBarStyle}>
-					<button
-						onClick={() => {
-							this.onCancelClick();
-						}}
-						style={buttonStyle}
-					>
-						<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
-						{hasChanges && !screenComp ? _('Cancel') : _('Back')}
-					</button>
-					{ !screenComp && (
-						<div>
-							<button disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove}>{_('OK')}</button>
-							<button disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove}>{_('Apply')}</button>
-						</div>
-					)}
+				<div style={style}>
+					{screenComp}
+					<div style={containerStyle}>{settingComps}</div>
+					<div style={buttonBarStyle}>
+						<button
+							onClick={() => {
+								this.onCancelClick();
+							}}
+							style={buttonStyle}
+						>
+							<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
+							{hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						</button>
+						{ !screenComp && (
+							<div>
+								<button disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove}>{_('OK')}</button>
+								<button disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove}>{_('Apply')}</button>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		);

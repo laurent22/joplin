@@ -507,7 +507,20 @@
 			"Modules/TinyMCE/JoplinLists/*.log": true,
 			"Modules/TinyMCE/JoplinLists/**/ephox-*.tgz": true,
 			"Modules/TinyMCE/JoplinLists/**/package-lock.json": true,
-			"Modules/TinyMCE/JoplinLists/**/jenkins-plumbing": true
+			"Modules/TinyMCE/JoplinLists/**/jenkins-plumbing": true,
+			"**/ReactNativeClient/lib/sql-extensions/": true,
+			"ReactNativeClient/lib/sql-extensions/spellfix.dll": false,
+			"ElectronClient/gui/ConfigScreen/ConfigScreen.js": true,
+			"ElectronClient/gui/ConfigScreen/SideBar.js": true,
+			"ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js": true,
+			"ElectronClient/gui/KeymapConfig/ShortcutRecorder.js": true,
+			"ElectronClient/gui/KeymapConfig/styles/index.js": true,
+			"ElectronClient/gui/KeymapConfig/utils/getLabel.js": true,
+			"ElectronClient/gui/KeymapConfig/utils/useCommandStatus.js": true,
+			"ElectronClient/gui/KeymapConfig/utils/useKeymap.js": true,
+			"ElectronClient/gui/MainScreen/MainScreen.js": true,
+			"ElectronClient/gui/NoteEditor/utils/useFolder.js": true,
+			"ReactNativeClient/lib/ntpDate.js": true
 		},
 		"spellright.language": [
 			"en"
