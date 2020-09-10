@@ -18,6 +18,8 @@ interface Props {
 	color?: string,
 	iconAnimation?: string,
 	tooltip?: string,
+	disabled?: boolean,
+	style?:any,
 }
 
 const StyledTitle = styled.span`
@@ -41,6 +43,7 @@ const StyledButtonBase = styled.button`
 	font-size: ${(props:any) => props.theme.fontSize}px;
 	padding: 0 ${(props:any) => props.iconOnly ? 4 : 8}px;
 	justify-content: center;
+	opacity: ${(props:any) => props.disabled ? 0.5 : 1};
 `;
 
 const StyledIcon = styled(styled.span(space))`
@@ -83,6 +86,27 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 
 	${StyledIcon} {
 		color: ${(props:any) => props.theme.color4};
+	}
+`;
+
+const StyledButtonTertiary = styled(StyledButtonBase)`
+	border: 1px solid ${(props:any) => props.theme.color3};
+	background-color: ${(props:any) => props.theme.backgroundColor3};
+
+	&:hover {
+		background-color: ${(props:any) => props.theme.backgroundColorHover3};
+	}
+
+	&:active {
+		background-color: ${(props:any) => props.theme.backgroundColorActive3};
+	}
+
+	${StyledIcon} {
+		color: ${(props:any) => props.theme.color};
+	}
+
+	${StyledTitle} {
+		color: ${(props:any) => props.theme.color};
 	}
 `;
 
@@ -130,6 +154,7 @@ const StyledButtonSideBarSecondary = styled(StyledButtonBase)`
 
 function buttonClass(level:ButtonLevel) {
 	if (level === ButtonLevel.Primary) return StyledButtonPrimary;
+	if (level === ButtonLevel.Tertiary) return StyledButtonTertiary;
 	if (level === ButtonLevel.SideBarSecondary) return StyledButtonSideBarSecondary;
 	return StyledButtonSecondary;
 }
@@ -149,8 +174,13 @@ export default function Button(props:Props) {
 		return  <StyledTitle color={props.color}>{props.title}</StyledTitle>;
 	}
 
+	function onClick() {
+		if (props.disabled) return;
+		props.onClick();
+	}
+
 	return (
-		<StyledButton title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={props.onClick}>
+		<StyledButton style={props.style} disabled={props.disabled} title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={onClick}>
 			{renderIcon()}
 			{renderTitle()}
 		</StyledButton>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SideBar from './SideBar';
+import Button, { ButtonLevel } from '../Button/Button';
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/theme');
@@ -148,6 +149,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const sectionStyle:any = {
 			marginTop: 20,
 			marginBottom: 20,
+			maxWidth: 640,
 		};
 
 		if (!selected) sectionStyle.display = 'none';
@@ -171,9 +173,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 				settingComps.push(
 					<div key="check_sync_config_button" style={this.rowStyle_}>
-						<button disabled={this.state.checkSyncConfigResult === 'checking'} style={theme.buttonStyle} onClick={this.checkSyncConfig_}>
-							{_('Check synchronisation configuration')}
-						</button>
+						<Button
+							title={_('Check synchronisation configuration')}
+							level={ButtonLevel.Tertiary}
+							disabled={this.state.checkSyncConfigResult === 'checking'}
+							onClick={this.checkSyncConfig_}
+						/>
 						{statusComp}
 					</div>
 				);
@@ -214,9 +219,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						&nbsp;&nbsp;
 						{showLogButton}
 						&nbsp;&nbsp;
-						<button disabled={this.state.checkNextcloudAppResult === 'checking'} style={theme.buttonStyle} onClick={this.checkNextcloudAppButton_click}>
-							{_('Check Status')}
-						</button>
+						<Button level={ButtonLevel.Tertiary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
 						&nbsp;&nbsp;
 						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
 						{statusComp}
@@ -230,8 +233,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (advancedSettingComps.length) {
 			const iconName = this.state.showAdvancedSettings ? 'fa fa-angle-down' : 'fa fa-angle-right';
-			const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
-			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{ fontSize: 14 }} className={iconName}></i> {_('Show Advanced Settings')}</button>;
+			// const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
+			advancedSettingsButton = (
+				<div style={{ marginBottom: 10 }}>
+					<Button
+						level={ButtonLevel.Tertiary}
+						onClick={() => shared.advancedSettingsButton_click(this)}
+						iconName={iconName}
+						title={_('Show Advanced Settings')}
+					/>
+				</div>
+			);
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
@@ -250,25 +262,28 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const output:any = null;
 
-		const rowStyle = this.rowStyle_;
+		const rowStyle = {
+			marginBottom: theme.mainPadding,
+		};
 
 		const labelStyle = Object.assign({}, theme.textStyle, {
-			display: 'inline-block',
-			marginRight: 10,
+			display: 'block',
 			color: theme.color,
+			fontSize: theme.fontSize * 1.083333,
+			fontWeight: 500,
+			marginBottom: theme.mainPadding / 4,
 		});
 
 		const subLabel = Object.assign({}, labelStyle, {
+			display: 'block',
 			opacity: 0.7,
-			marginBottom: Math.round(rowStyle.marginBottom * 0.7),
-		});
-
-		const invisibleLabel = Object.assign({}, labelStyle, {
-			opacity: 0,
+			marginBottom: labelStyle.marginBottom,
 		});
 
 		const checkboxLabelStyle = Object.assign({}, labelStyle, {
 			marginLeft: 8,
+			display: 'inline',
+			backgroundColor: 'transparent',
 		});
 
 		const controlStyle = {
@@ -287,8 +302,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const textInputBaseStyle = Object.assign({}, controlStyle, {
 			border: '1px solid',
 			padding: '4px 6px',
-			borderColor: theme.dividerColor,
-			borderRadius: 4,
+			boxSizing: 'border-box',
+			borderColor: theme.color3,
+			borderRadius: 3,
+			paddingLeft: 6,
+			paddingRight: 6,
+			paddingTop: 4,
+			paddingBottom: 4,
 		});
 
 		const updateSettingValue = (key:string, value:any) => {
@@ -316,7 +336,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 
-			const selectStyle = Object.assign({}, controlStyle, { height: 22, borderColor: theme.dividerColor });
+			const selectStyle = Object.assign({}, controlStyle, {
+				paddingLeft: 6,
+				paddingRight: 6,
+				paddingTop: 4,
+				paddingBottom: 4,
+				borderColor: theme.color3,
+				borderRadius: 3,
+			});
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -340,12 +367,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				updateSettingValue(key, !value);
 			};
 
+			const checkboxSize = theme.fontSize * 1.1666666666666;
+
 			// Hack: The {key+value.toString()} is needed as otherwise the checkbox doesn't update when the state changes.
 			// There's probably a better way to do this but can't figure it out.
 
 			return (
 				<div key={key + value.toString()} style={rowStyle}>
-					<div style={controlStyle}>
+					<div style={{ ...controlStyle, backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
 						<input
 							id={`setting_checkbox_${key}`}
 							type="checkbox"
@@ -353,18 +382,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onChange={() => {
 								onCheckboxClick();
 							}}
+							style={{ marginLeft: 0, width: checkboxSize, height: checkboxSize }}
 						/>
 						<label
 							onClick={() => {
 								onCheckboxClick();
 							}}
-							style={checkboxLabelStyle}
+							style={{ ...checkboxLabelStyle, marginLeft: 5, marginBottom: 0 }}
 							htmlFor={`setting_checkbox_${key}`}
 						>
 							{md.label()}
 						</label>
-						{descriptionComp}
 					</div>
+					{descriptionComp}
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
@@ -415,49 +445,47 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 				return (
 					<div key={key} style={rowStyle}>
+						<div style={labelStyle}>
+							<label>{md.label()}</label>
+						</div>
 						<div style={{ display: 'flex' }}>
-							<div style={{ flex: 0, whiteSpace: 'nowrap' }}>
-								<div style={labelStyle}>
-									<label>{md.label()}</label>
-								</div>
-							</div>
-							<div style={{ flex: 0 }}>
-								<div style={subLabel}>Path:</div>
-								<div style={subLabel}>Arguments:</div>
-							</div>
 							<div style={{ flex: 1 }}>
-								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
+								<div style={{ ...rowStyle, marginBottom: 5 }}>
+									<div style={subLabel}>Path:</div>
+									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
+										<input
+											type={inputType}
+											style={Object.assign({}, inputStyle, { marginBottom: 0, marginRight: 5 })}
+											onChange={(event:any) => {
+												onPathChange(event);
+											}}
+											value={cmd[0]}
+										/>
+										<Button
+											level={ButtonLevel.Tertiary}
+											title={_('Browse...')}
+											onClick={browseButtonClick}
+										/>
+									</div>
+								</div>
+								<div style={{ ...rowStyle, marginBottom: 5 }}>
+									<div style={subLabel}>Arguments:</div>
 									<input
 										type={inputType}
-										style={Object.assign({}, inputStyle, { marginBottom: 0 })}
+										style={inputStyle}
 										onChange={(event:any) => {
-											onPathChange(event);
+											onArgsChange(event);
 										}}
-										value={cmd[0]}
+										value={cmd[1]}
 									/>
-									<button onClick={browseButtonClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 5 })}>
-										{_('Browse...')}
-									</button>
+									<div style={{ width: inputStyle.width }}>
+										{descriptionComp}
+									</div>
 								</div>
-								<input
-									type={inputType}
-									style={inputStyle}
-									onChange={(event:any) => {
-										onArgsChange(event);
-									}}
-									value={cmd[1]}
-								/>
 							</div>
 						</div>
 
-						<div style={{ display: 'flex' }}>
-							<div style={{ flex: 0, whiteSpace: 'nowrap' }}>
-								<div style={invisibleLabel}>
-									<label>{md.label()}</label>
-								</div>
-							</div>
-							<div style={{ flex: 1 }}>{descriptionComp}</div>
-						</div>
+
 					</div>
 				);
 			} else {
@@ -478,7 +506,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								onTextChange(event);
 							}}
 						/>
-						{descriptionComp}
+						<div style={{ width: inputStyle.width }}>
+							{descriptionComp}
+						</div>
 					</div>
 				);
 			}
@@ -512,20 +542,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BUTTON) {
-			const theme = themeStyle(this.props.themeId);
-			const buttonStyle = Object.assign({}, theme.buttonStyle, {
-				display: 'inline-block',
-				marginRight: 10,
-			});
-
 			return (
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}>
 						<label>{md.label()}</label>
 					</div>
-					<button style={buttonStyle} onClick={md.onClick}>
-						{_('Edit')}
-					</button>
+					<Button level={ButtonLevel.Tertiary} title={_('Edit')} onClick={md.onClick}/>
 					{descriptionComp}
 				</div>
 			);
@@ -556,21 +578,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style = Object.assign(
-			{
-				backgroundColor: theme.backgroundColor,
-			},
+		const style = Object.assign({},
 			this.props.style,
 			{
 				overflow: 'hidden',
 				display: 'flex',
 				flexDirection: 'column',
+				backgroundColor: theme.backgroundColor3,
 			}
 		);
 
 		const settings = this.state.settings;
 
-		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0, display: 'flex', flex: 1 });
+		const containerStyle = {
+			overflow: 'auto',
+			padding: theme.mainPadding * 2,
+			paddingTop: 0,
+			display: 'flex',
+			flex: 1,
+		};
 
 		const hasChanges = this.hasChanges();
 
@@ -611,19 +637,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					{screenComp}
 					<div style={containerStyle}>{settingComps}</div>
 					<div style={buttonBarStyle}>
-						<button
+						<Button
 							onClick={() => {
 								this.onCancelClick();
 							}}
-							style={buttonStyle}
-						>
-							<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
-							{hasChanges && !screenComp ? _('Cancel') : _('Back')}
-						</button>
+							level={ButtonLevel.Tertiary}
+							iconName="fa fa-chevron-left"
+							title={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						/>
 						{ !screenComp && (
 							<div>
-								<button disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove}>{_('OK')}</button>
-								<button disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove}>{_('Apply')}</button>
+								<Button level={ButtonLevel.Tertiary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove} title={_('OK')}/>
+								<Button level={ButtonLevel.Tertiary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove} title={_('Apply')}/>
 							</div>
 						)}
 					</div>
