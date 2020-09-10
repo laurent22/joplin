@@ -19,13 +19,11 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
-const { createSelector } = require('reselect');
 
 interface Props {
 	themeId: number,
 	dispatch: Function,
 	folders: any[],
-	notes: any[],
 	collapsedFolderIds: string[],
 	notesParentType: string,
 	selectedFolderId: string,
@@ -46,33 +44,6 @@ interface State {
 const commands = [
 	require('./commands/focusElementSideBar'),
 ];
-
-
-const foldersSelector = (_:any, props:Props) => props.folders;
-const notesSelector = (_:any, props:Props) => props.notes;
-
-const selectFolders = createSelector(
-	foldersSelector,
-	notesSelector,
-	(folders:any[], notes:any[]) => {
-		const folderIds:string[] = [];
-
-		for (const note of notes) {
-			if (folderIds.includes(note.parent_id)) continue;
-			folderIds.push(note.parent_id);
-		}
-
-		const output = [];
-
-		for (const folderId of folderIds) {
-			const folder = BaseModel.byId(folders, folderId);
-			if (!folder) continue;
-			output.push(folder);
-		}
-
-		return output;
-	}
-);
 
 class SideBarComponent extends React.Component<Props, State> {
 
@@ -330,8 +301,6 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 
 	renderAllNotesItem(selected:boolean) {
-		if (this.props.notesParentType === 'Search') return null;
-
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
@@ -560,6 +529,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 	render() {
 		const theme = themeStyle(this.props.themeId);
+
 		const items = [];
 
 		items.push(
@@ -570,14 +540,9 @@ class SideBarComponent extends React.Component<Props, State> {
 			})
 		);
 
-		let folders = this.props.folders;
-		if (this.props.notesParentType === 'Search') {
-			folders = selectFolders(this.state, this.props);
-		}
-
-		if (folders.length) {
+		if (this.props.folders.length) {
 			const allNotesSelected = this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-			const result = shared.renderFolders(this.props, folders, this.renderFolderItem.bind(this));
+			const result = shared.renderFolders(this.props, this.renderFolderItem.bind(this));
 			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
@@ -649,13 +614,11 @@ class SideBarComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state:any) => {
 	return {
-		notes: state.notes,
 		folders: state.folders,
 		tags: state.tags,
 		searches: state.searches,
 		syncStarted: state.syncStarted,
 		syncReport: state.syncReport,
-		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		selectedFolderId: state.selectedFolderId,
 		selectedTagId: state.selectedTagId,
 		selectedSearchId: state.selectedSearchId,

@@ -23,20 +23,17 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 	}
 }
 
-function renderFoldersRecursive_(props, folders, renderItem, items, parentId, depth, order) {
-	if (folders === null) folders = props.folders;
+function renderFoldersRecursive_(props, renderItem, items, parentId, depth, order) {
+	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
 		const folder = folders[i];
 		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-
-		const selected = props.selectedFolderId == folder.id && ['Folder', 'Search'].includes(props.notesParentType);
-
-		items.push(renderItem(folder, selected, hasChildren, depth));
+		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder', hasChildren, depth));
 		if (hasChildren) {
-			const result = renderFoldersRecursive_(props, folders, renderItem, items, folder.id, depth + 1, order);
+			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
 			order = result.order;
 		}
@@ -47,8 +44,8 @@ function renderFoldersRecursive_(props, folders, renderItem, items, parentId, de
 	};
 }
 
-shared.renderFolders = function(props, folders, renderItem) {
-	return renderFoldersRecursive_(props, folders, renderItem, [], '', 0, []);
+shared.renderFolders = function(props, renderItem) {
+	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
 };
 
 shared.renderTags = function(props, renderItem) {

@@ -207,18 +207,10 @@ class NoteListComponent extends React.Component {
 				id: item.id,
 			});
 		} else {
-			if (this.props.notesParentType === 'Search') {
-				this.props.dispatch({
-					type: 'FOLDER_AND_NOTE_SELECT',
-					noteId: item.id,
-					folderId: item.parent_id,
-				});
-			} else {
-				this.props.dispatch({
-					type: 'NOTE_SELECT',
-					id: item.id,
-				});
-			}
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id: item.id,
+			});
 		}
 	}
 
