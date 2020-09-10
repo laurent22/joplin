@@ -49,21 +49,6 @@ function NoteToolbar(props:NoteToolbarProps) {
 	function updateToolbarItems() {
 		const output = [];
 
-		// if (folderId && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
-		// 	output.push({
-		// 		title: _('In: %s', substrWithEllipsis(folderTitle, 0, 16)),
-		//		tooltip: folderTitle,
-		// 		iconName: 'fa-book',
-		// 		onClick: () => {
-		// 			props.dispatch({
-		// 				type: 'FOLDER_AND_NOTE_SELECT',
-		// 				folderId: folderId,
-		// 				noteId: props.note.id,
-		// 			});
-		// 		},
-		// 	});
-		// }
-
 		// if (props.watchedNoteFiles.indexOf(props.note.id) >= 0) {
 		// 	output.push(cmdService.commandToToolbarButton('stopExternalEditing'));
 		// } else {

@@ -63,6 +63,10 @@ const StyledButtonPrimary = styled(StyledButtonBase)`
 	${StyledIcon} {
 		color: ${(props:any) => props.theme.color5};
 	}
+
+	${StyledTitle} {
+		color: ${(props:any) => props.theme.color5};
+	}
 `;
 
 const StyledButtonSecondary = styled(StyledButtonBase)`

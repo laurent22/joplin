@@ -15,13 +15,16 @@ import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
 import useNoteToolbarButtons from './utils/useNoteToolbarButtons';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
+import useFolder from './utils/useFolder';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
 import ResourceEditWatcher from '../../lib/services/ResourceEditWatcher/index';
 import CommandService from 'lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
+import Button, { ButtonLevel } from '../Button/Button';
 
 const { themeStyle } = require('lib/theme');
+const { substrWithEllipsis } = require('lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
@@ -71,6 +74,8 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
+
+	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
 	const {
 		localSearch,
@@ -506,6 +511,30 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	function renderSearchInfo() {
+		if (formNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
+			return (
+				<div style={{ paddingTop: 10, paddingBottom: 10 }}>
+					<Button
+						iconName="icon-notebooks"
+						level={ButtonLevel.Primary}
+						title={_('In: %s', substrWithEllipsis(formNoteFolder.title, 0, 100))}
+						onClick={() => {
+							props.dispatch({
+								type: 'FOLDER_AND_NOTE_SELECT',
+								folderId: formNoteFolder.id,
+								noteId: formNote.id,
+							});
+						}}
+					/>
+					<div style={{ flex: 1 }}></div>
+				</div>
+			);
+		} else {
+			return null;
+		}
+	}
+
 	if (formNote.encryption_applied || !formNote.id || !props.noteId) {
 		return renderNoNotes(styles.root);
 	}
@@ -515,6 +544,7 @@ function NoteEditor(props: NoteEditorProps) {
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
 				{renderTitleBar()}
+				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1 }}>
 					{editor}
 				</div>
