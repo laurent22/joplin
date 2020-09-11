@@ -602,15 +602,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const hasChanges = this.hasChanges();
 
-		const buttonStyle = Object.assign({}, theme.buttonStyle, {
-			display: 'inline-block',
-			marginRight: 10,
-		});
-
-		const buttonStyleApprove = Object.assign({}, buttonStyle, {
-			opacity: hasChanges ? 1 : theme.disabledOpacity,
-		});
-
 		const settingComps = shared.settingsToComponents2(this, 'desktop', settings, this.state.selectedSectionName);
 
 		const buttonBarStyle:any = {
@@ -648,9 +639,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							title={hasChanges && !screenComp ? _('Cancel') : _('Back')}
 						/>
 						{ !screenComp && (
-							<div>
-								<Button level={ButtonLevel.Secondary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove} title={_('OK')}/>
-								<Button level={ButtonLevel.Secondary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove} title={_('Apply')}/>
+							<div style={{ display: 'flex', flexDirection: 'row', marginLeft: 30 }}>
+								<Button style={{ marginRight: 10 }} level={ButtonLevel.Primary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} title={_('OK')}/>
+								<Button level={ButtonLevel.Primary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} title={_('Apply')}/>
 							</div>
 						)}
 					</div>

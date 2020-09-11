@@ -35,6 +35,7 @@ const StyledButtonBase = styled.button`
 	max-height: ${(props:any) => `${props.theme.toolbarHeight}px`};
 	width: ${(props:any) => props.iconOnly ? `${props.theme.toolbarHeight}px` : 'auto'};
 	${(props:any) => props.iconOnly ? `min-width: ${props.theme.toolbarHeight}px;` : ''}
+	${(props:any) => !props.iconOnly ? 'min-width: 100px;' : ''}
 	${(props:any) => props.iconOnly ? `max-width: ${props.theme.toolbarHeight}px;` : ''}
 	box-sizing: border-box;
 	border-radius: 3px;
