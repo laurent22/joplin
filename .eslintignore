@@ -73,6 +73,7 @@ ElectronClient/gui/Button/Button.js
 ElectronClient/gui/ConfigScreen/ButtonBar.js
 ElectronClient/gui/ConfigScreen/ConfigScreen.js
 ElectronClient/gui/ConfigScreen/SideBar.js
+ElectronClient/gui/DropboxLoginScreen.js
 ElectronClient/gui/ErrorBoundary.js
 ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js
 ElectronClient/gui/KeymapConfig/ShortcutRecorder.js
@@ -145,6 +146,7 @@ ElectronClient/gui/NoteListControls/commands/focusSearch.js
 ElectronClient/gui/NoteListControls/NoteListControls.js
 ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
+ElectronClient/gui/OneDriveLoginScreen.js
 ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js
 ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js
 ElectronClient/gui/ResizableLayout/ResizableLayout.js

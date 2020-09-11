@@ -1,4 +1,6 @@
-const React = require('react');
+import * as React from 'react';
+import ButtonBar from './ConfigScreen/ButtonBar';
+
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
 const Setting = require('lib/models/Setting');
@@ -7,9 +9,13 @@ const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
 
-class OneDriveLoginScreenComponent extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	themeId: string,
+}
+
+class OneDriveLoginScreenComponent extends React.Component<any, any> {
+	constructor(props:Props) {
+		super(props);
 
 		this.state = {
 			authLog: [],
@@ -17,8 +23,8 @@ class OneDriveLoginScreenComponent extends React.Component {
 	}
 
 	async componentDidMount() {
-		const log = (s) => {
-			this.setState(state => {
+		const log = (s:any) => {
+			this.setState((state:any) => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };
@@ -29,7 +35,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 		const syncTarget = reg.syncTarget(syncTargetId);
 		const oneDriveApiUtils = new OneDriveApiNodeUtils(syncTarget.api());
 		const auth = await oneDriveApiUtils.oauthDance({
-			log: (s) => log(s),
+			log: (s:any) => log(s),
 		});
 
 		Setting.setValue(`sync.${syncTargetId}.auth`, auth ? JSON.stringify(auth) : null);
@@ -63,21 +69,23 @@ class OneDriveLoginScreenComponent extends React.Component {
 		}
 
 		return (
-			<div>
-				<div style={{ padding: 10 }}>
+			<div style={{display: 'flex', flexDirection: 'column', height:'100%'}}>
+				<div style={{ padding: theme.configScreenPadding, flex:1 }}>
 					{logComps}
 				</div>
+				<ButtonBar
+					onCancelClick={() => this.props.dispatch({ type: 'NAV_BACK' })}
+				/>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		themeId: state.settings.theme,
 	};
 };
 
-const OneDriveLoginScreen = connect(mapStateToProps)(OneDriveLoginScreenComponent);
+export default connect(mapStateToProps)(OneDriveLoginScreenComponent);
 
-module.exports = { OneDriveLoginScreen };
