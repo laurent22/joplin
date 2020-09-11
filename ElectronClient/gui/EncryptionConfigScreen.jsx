@@ -141,11 +141,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const masterKeys = this.props.masterKeys;
-		const containerPadding = 10;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
-			padding: containerPadding,
+			padding: theme.configScreenPadding,
 			overflow: 'auto',
+			backgroundColor: theme.backgroundColor3,
 		});
 
 		const mkComps = [];

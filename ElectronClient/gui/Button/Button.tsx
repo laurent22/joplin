@@ -44,6 +44,7 @@ const StyledButtonBase = styled.button`
 	padding: 0 ${(props:any) => props.iconOnly ? 4 : 8}px;
 	justify-content: center;
 	opacity: ${(props:any) => props.disabled ? 0.5 : 1};
+	user-select: none;
 `;
 
 const StyledIcon = styled(styled.span(space))`
@@ -73,7 +74,7 @@ const StyledButtonPrimary = styled(StyledButtonBase)`
 `;
 
 const StyledButtonSecondary = styled(StyledButtonBase)`
-	border: 1px solid ${(props:any) => props.theme.color4};
+	border: 1px solid ${(props:any) => props.theme.borderColor4};
 	background-color: ${(props:any) => props.theme.backgroundColor4};
 
 	&:hover {
@@ -87,6 +88,10 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	${StyledIcon} {
 		color: ${(props:any) => props.theme.color4};
 	}
+
+	${StyledTitle} {
+		color: ${(props:any) => props.theme.color4};
+	}
 `;
 
 const StyledButtonTertiary = styled(StyledButtonBase)`
@@ -94,7 +99,7 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 	background-color: ${(props:any) => props.theme.backgroundColor3};
 
 	&:hover {
-		background-color: ${(props:any) => props.theme.backgroundColorHover3};
+		background-color: ${(props:any) => props.theme.backgroundColorHoverDim3};
 	}
 
 	&:active {
@@ -107,6 +112,7 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 
 	${StyledTitle} {
 		color: ${(props:any) => props.theme.color};
+		opacity: 0.9;
 	}
 `;
 

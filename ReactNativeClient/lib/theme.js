@@ -96,7 +96,7 @@ globalStyle.buttonStyle = {
 	paddingRight: 12,
 	paddingTop: 6,
 	paddingBottom: 6,
-	boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
+	// boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
 	fontSize: globalStyle.fontSize,
 	borderRadius: 4,
 };
@@ -109,18 +109,24 @@ function addExtraStyles(style) {
 	style.colorHover2 = Color(style.color2).alpha(0.7).rgb();
 	style.colorActive2 = Color(style.color2).alpha(0.9).rgb();
 
+	style.backgroundColorHoverDim3 = Color(style.backgroundColorHover3).alpha(0.3).rgb();
+	style.backgroundColorActive3 = Color(style.backgroundColorHover3).alpha(0.5).rgb();
+
 	const bgColor4 = style.backgroundColor4;
 
 	style.backgroundColorHover2 = Color(style.selectedColor2).alpha(0.4).rgb();
 
-	style.backgroundColorHover4 = Color(bgColor4).alpha(0.7).rgb();
-	style.backgroundColorActive4 = Color(bgColor4).alpha(1).rgb();
-	style.backgroundColor4 = bgColor4;// Color(bgColor4).alpha(0).rgb();
+	style.backgroundColorHover4 = Color(style.backgroundColorHover3).alpha(0.3).rgb();
+	style.backgroundColorActive4 = Color(style.backgroundColorHover3).alpha(0.8).rgb();
+	style.borderColor4 = Color(style.color).alpha(0.3);
+	style.backgroundColor4 = bgColor4;
 
 	style.color5 = bgColor4;
 	style.backgroundColor5 = style.color4;
 	style.backgroundColorHover5 = Color(style.backgroundColor5).darken(0.2).hex();
 	style.backgroundColorActive5 = Color(style.backgroundColor5).darken(0.4).hex();
+
+	style.configScreenPadding = style.mainPadding * 2;
 
 	if (!('backgroundColorHover3' in style)) style.backgroundColorHover3 = style.backgroundColor3;
 	if (!('selectionBackgroundColor3' in style)) style.selectionBackgroundColor3 = style.backgroundColor3;
@@ -352,10 +358,11 @@ function themeStyle(theme) {
 	output.buttonStyle = Object.assign({},
 		output.buttonStyle,
 		{
-			color: output.color,
-			backgroundColor: output.backgroundColor,
-			borderColor: output.dividerColor,
+			color: output.color4,
+			backgroundColor: output.backgroundColor4,
+			borderColor: output.borderColor4,
 			userSelect: 'none',
+			cursor: 'pointer',
 		}
 	);
 

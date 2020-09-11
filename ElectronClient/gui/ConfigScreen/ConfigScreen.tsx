@@ -175,7 +175,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<div key="check_sync_config_button" style={this.rowStyle_}>
 						<Button
 							title={_('Check synchronisation configuration')}
-							level={ButtonLevel.Tertiary}
+							level={ButtonLevel.Secondary}
 							disabled={this.state.checkSyncConfigResult === 'checking'}
 							onClick={this.checkSyncConfig_}
 						/>
@@ -219,7 +219,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						&nbsp;&nbsp;
 						{showLogButton}
 						&nbsp;&nbsp;
-						<Button level={ButtonLevel.Tertiary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
+						<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
 						&nbsp;&nbsp;
 						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
 						{statusComp}
@@ -237,7 +237,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			advancedSettingsButton = (
 				<div style={{ marginBottom: 10 }}>
 					<Button
-						level={ButtonLevel.Tertiary}
+						level={ButtonLevel.Secondary}
 						onClick={() => shared.advancedSettingsButton_click(this)}
 						iconName={iconName}
 						title={_('Show Advanced Settings')}
@@ -289,6 +289,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const controlStyle = {
 			display: 'inline-block',
 			color: theme.color,
+			fontFamily: theme.fontFamily,
 			backgroundColor: theme.backgroundColor,
 		};
 
@@ -300,10 +301,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 
 		const textInputBaseStyle = Object.assign({}, controlStyle, {
+			fontFamily: theme.fontFamily,
 			border: '1px solid',
 			padding: '4px 6px',
 			boxSizing: 'border-box',
-			borderColor: theme.color3,
+			borderColor: theme.borderColor4,
 			borderRadius: 3,
 			paddingLeft: 6,
 			paddingRight: 6,
@@ -341,7 +343,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				paddingRight: 6,
 				paddingTop: 4,
 				paddingBottom: 4,
-				borderColor: theme.color3,
+				borderColor: theme.borderColor4,
 				borderRadius: 3,
 			});
 
@@ -462,7 +464,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											value={cmd[0]}
 										/>
 										<Button
-											level={ButtonLevel.Tertiary}
+											level={ButtonLevel.Secondary}
 											title={_('Browse...')}
 											onClick={browseButtonClick}
 										/>
@@ -547,7 +549,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<div style={labelStyle}>
 						<label>{md.label()}</label>
 					</div>
-					<Button level={ButtonLevel.Tertiary} title={_('Edit')} onClick={md.onClick}/>
+					<Button level={ButtonLevel.Secondary} title={_('Edit')} onClick={md.onClick}/>
 					{descriptionComp}
 				</div>
 			);
@@ -592,7 +594,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const containerStyle = {
 			overflow: 'auto',
-			padding: theme.mainPadding * 2,
+			padding: theme.configScreenPadding,
 			paddingTop: 0,
 			display: 'flex',
 			flex: 1,
@@ -641,14 +643,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={() => {
 								this.onCancelClick();
 							}}
-							level={ButtonLevel.Tertiary}
+							level={ButtonLevel.Secondary}
 							iconName="fa fa-chevron-left"
 							title={hasChanges && !screenComp ? _('Cancel') : _('Back')}
 						/>
 						{ !screenComp && (
 							<div>
-								<Button level={ButtonLevel.Tertiary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove} title={_('OK')}/>
-								<Button level={ButtonLevel.Tertiary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove} title={_('Apply')}/>
+								<Button level={ButtonLevel.Secondary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove} title={_('OK')}/>
+								<Button level={ButtonLevel.Secondary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove} title={_('Apply')}/>
 							</div>
 						)}
 					</div>

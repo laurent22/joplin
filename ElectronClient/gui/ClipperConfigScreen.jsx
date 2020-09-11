@@ -44,6 +44,8 @@ class ClipperConfigScreenComponent extends React.Component {
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			overflowY: 'scroll',
+			padding: theme.configScreenPadding,
+			backgroundColor: theme.backgroundColor3,
 		});
 
 		const buttonStyle = Object.assign({}, theme.buttonStyle, { marginRight: 10 });
@@ -106,8 +108,8 @@ class ClipperConfigScreenComponent extends React.Component {
 		return (
 			<div>
 				<div style={containerStyle}>
-					<div style={{ padding: theme.margin }}>
-						<p style={theme.textStyle}>{_('Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.')}</p>
+					<div>
+						<p style={Object.assign({}, theme.textStyle, { marginTop: 0 })}>{_('Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.')}</p>
 						<p style={theme.textStyle}>{_('In order to use the web clipper, you need to do the following:')}</p>
 
 						<div style={stepBoxStyle}>

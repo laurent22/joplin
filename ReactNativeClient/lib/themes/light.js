@@ -26,6 +26,7 @@ const lightStyle = {
 	selectionBackgroundColor3: '#DADEE2',
 
 	backgroundColor4: '#ffffff',
+	// backgroundColorActive4: '#ebf0ff',
 	color4: '#2D6BDC',
 
 	raisedBackgroundColor: '#e5e5e5',
