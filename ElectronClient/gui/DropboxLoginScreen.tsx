@@ -38,7 +38,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 		const inputStyle = Object.assign({}, theme.inputStyle, { width: 500 });
 
 		return (
-			<div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
+			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				<div style={containerStyle}>
 					<p style={theme.textStyle}>{_('To allow Joplin to synchronise with Dropbox, please follow the steps below:')}</p>
 					<p style={theme.textStyle}>{_('Step 1: Open this URL in your browser to authorise the application:')}</p>

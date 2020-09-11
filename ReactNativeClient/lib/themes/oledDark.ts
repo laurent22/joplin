@@ -17,6 +17,6 @@ const theme:Theme = {
 	codeBorderColor: 'rgb(70, 70, 70)',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 	colorBright: 'rgb(220,220,220)',
-}
+};
 
 export default theme;
