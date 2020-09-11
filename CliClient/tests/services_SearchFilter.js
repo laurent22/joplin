@@ -268,7 +268,7 @@ describe('services_SearchFilter', function() {
 
 		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
 		await Tag.setNoteTagsByTitles(n2.id, ['tag2', 'tag3']);
-		await Tag.setNoteTagsByTitles(n3.id, ['tag3', 'tag4']);
+		await Tag.setNoteTagsByTitles(n3.id, ['tag3', 'tag4', 'space travel']);
 
 		await engine.syncTables();
 
@@ -303,6 +303,10 @@ describe('services_SearchFilter', function() {
 		rows = await engine.search('any:1 -tag:tag2 -tag:tag3');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('tag:"space travel"');
+		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
