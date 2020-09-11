@@ -35,7 +35,7 @@ function increaseGradleVersionCode(content) {
 function increaseGradleVersionName(content) {
 	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
 		const n = Number(buildNum);
-		if (isNaN(n) || !n) throw new Error(`Invalid version code: ${buildNum}`);
+		if (isNaN(n)) throw new Error(`Invalid version code: ${buildNum}`);
 		return `${prefix + (n + 1)}"`;
 	});
 

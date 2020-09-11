@@ -305,6 +305,8 @@ class Synchronizer {
 		let syncLock = null;
 
 		try {
+			this.api().setTempDirName(Dirnames.Temp);
+
 			try {
 				const syncTargetInfo = await this.migrationHandler().checkCanSync();
 
@@ -320,8 +322,6 @@ class Synchronizer {
 				}
 				throw error;
 			}
-
-			this.api().setTempDirName(Dirnames.Temp);
 
 			syncLock = await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
 

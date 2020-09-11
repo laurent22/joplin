@@ -66,9 +66,6 @@ const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
 const { uuid } = require('lib/uuid.js');
 
-const ntpClient = require('lib/vendor/ntp-client');
-ntpClient.dgram = require('react-native-udp');
-
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriverMobile = require('lib/services/keychain/KeychainServiceDriver.mobile').default;
 
@@ -404,7 +401,7 @@ async function initialize(dispatch, messageHandler) {
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
 
 	BaseService.logger_ = mainLogger;
-	require('lib/ntpDate').setLogger(reg.logger());
+	// require('lib/ntpDate').setLogger(reg.logger());
 
 	reg.logger().info('====================================');
 	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
