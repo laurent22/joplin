@@ -104,8 +104,8 @@ globalStyle.buttonStyle = {
 };
 
 function addMissingProperties(theme:Theme) {
-	if (!('backgroundColor3' in theme)) theme.backgroundColor3 = theme.backgroundColor;
-	if (!('color3' in theme)) theme.color3 = theme.color;
+	// if (!('backgroundColor3' in theme)) theme.backgroundColor3 = theme.backgroundColor;
+	// if (!('color3' in theme)) theme.color3 = theme.color;
 	// if (!('selectionBackgroundColor3' in theme)) {
 	// 	if (theme.appearance === 'dark') {
 	// 		theme.selectionBackgroundColor3 = '#ffffff77';

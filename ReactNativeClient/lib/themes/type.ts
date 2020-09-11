@@ -29,9 +29,9 @@ export interface Theme {
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
-	backgroundColor3?: string,
-	backgroundColorHover3?: string,
-	color3?: string,
+	backgroundColor3: string,
+	backgroundColorHover3: string,
+	color3: string,
 
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.

@@ -32,14 +32,14 @@ const theme:Theme = {
 	color3: '#dddddd',
 
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
-	// button with blue text. // FIX
-	backgroundColor4: '#ffffff',
-	color4: '#2D6BDC',
+	// button with blue text.
+	backgroundColor4: '#1D2024',
+	color4: '#789FE9',
 
 	raisedBackgroundColor: '#474747',
 	raisedColor: '#ffffff',
-	searchMarkerBackgroundColor: '#F7D26E', // FIX
-	searchMarkerColor: 'black', // FIX
+	searchMarkerBackgroundColor: '#F7D26E',
+	searchMarkerColor: 'black',
 
 	warningBackgroundColor: '#CC6600',
 
@@ -50,8 +50,6 @@ const theme:Theme = {
 
 	codeMirrorTheme: 'material-darker',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
-
-	// highlightedColor: '#0066C7', // FIX
 };
 
 export default theme;
