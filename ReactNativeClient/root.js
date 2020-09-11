@@ -401,6 +401,7 @@ async function initialize(dispatch, messageHandler) {
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
 
 	BaseService.logger_ = mainLogger;
+	// require('lib/ntpDate').setLogger(reg.logger());
 
 	reg.logger().info('====================================');
 	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);

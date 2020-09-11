@@ -1,5 +1,6 @@
 import LockHandler from 'lib/services/synchronizer/LockHandler';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
+import { Dirnames } from 'lib/services/synchronizer/utils/types';
 
 // To create a sync target snapshot for the current syncVersion:
 // - In test-utils, set syncTargetName_ to "filesystem"
@@ -69,6 +70,14 @@ describe('synchronizer_MigrationHandler', function() {
 		setSyncTargetName(previousSyncTargetName);
 		done();
 	});
+
+	it('should init a new sync target', asyncTest(async () => {
+		// Check that basic folders "locks" and "temp" are created for new sync targets.
+		await migrationHandler().upgrade(1);
+		const result = await fileApi().list();
+		expect(result.items.filter((i:any) => i.path === Dirnames.Locks).length).toBe(1);
+		expect(result.items.filter((i:any) => i.path === Dirnames.Temp).length).toBe(1);
+	}), specTimeout);
 
 	it('should not allow syncing if the sync target is out-dated', asyncTest(async () => {
 		await synchronizer().start();

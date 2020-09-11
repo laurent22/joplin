@@ -1,4 +1,5 @@
 import { Dirnames } from './utils/types';
+
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
 const { fileExtension, filename } = require('lib/path-utils.js');
@@ -98,8 +99,8 @@ export default class LockHandler {
 		return output;
 	}
 
-	private lockIsActive(lock:Lock):boolean {
-		return Date.now() - lock.updatedTime < this.lockTtl;
+	private lockIsActive(lock:Lock, currentDate:Date):boolean {
+		return currentDate.getTime() - lock.updatedTime < this.lockTtl;
 	}
 
 	async hasActiveLock(lockType:LockType, clientType:string = null, clientId:string = null) {
@@ -112,11 +113,12 @@ export default class LockHandler {
 	// of that type instead.
 	async activeLock(lockType:LockType, clientType:string = null, clientId:string = null) {
 		const locks = await this.locks(lockType);
+		const currentDate = await this.api_.remoteDate();
 
 		if (lockType === LockType.Exclusive) {
 			const activeLocks = locks
 				.slice()
-				.filter((lock:Lock) => this.lockIsActive(lock))
+				.filter((lock:Lock) => this.lockIsActive(lock, currentDate))
 				.sort((a:Lock, b:Lock) => {
 					if (a.updatedTime === b.updatedTime) {
 						return a.clientId < b.clientId ? -1 : +1;
@@ -134,7 +136,7 @@ export default class LockHandler {
 			for (const lock of locks) {
 				if (clientType && lock.clientType !== clientType) continue;
 				if (clientId && lock.clientId !== clientId) continue;
-				if (this.lockIsActive(lock)) return lock;
+				if (this.lockIsActive(lock, currentDate)) return lock;
 			}
 			return null;
 		}
@@ -290,6 +292,12 @@ export default class LockHandler {
 			if (!this.refreshTimers_[handle]) return defer(); // Timeout has been cleared
 
 			if (!hasActiveLock) {
+				// If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients might have performed
+				// in the meantime operations that invalidates the current operation. For example, another client might have upgraded the
+				// sync target in the meantime, so any active operation should be cancelled here. Or if the current client was upgraded
+				// the sync target, another client might have synced since then, making any cached data invalid.
+				// In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex
+				// without much benefits.
 				error = new JoplinError('Lock has expired', 'lockExpired');
 			} else {
 				try {

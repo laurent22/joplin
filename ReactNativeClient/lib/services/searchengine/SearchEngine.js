@@ -434,7 +434,6 @@ class SearchEngine {
 	}
 
 	async parseQuery(query, fuzzy = false) {
-		// fuzzy = false;
 		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
 		let allTerms = [];
@@ -453,18 +452,22 @@ class SearchEngine {
 		const fuzzyScore = [];
 		let numFuzzyMatches = [];
 		let terms = null;
-		if (fuzzy) {
-			const fuzzyText = await this.fuzzifier(textTerms.filter(x => !x.quoted).map(x => trimQuotes(x.value)));
-			const fuzzyTitle = await this.fuzzifier(titleTerms.map(x => trimQuotes(x.value)));
-			const fuzzyBody = await this.fuzzifier(bodyTerms.map(x => trimQuotes(x.value)));
-			const phraseSearches = textTerms.filter(x => x.quoted).map(x => x.value);
 
-			// Save number of matches we got for each word
-			// fuzzifier() is currently set to return at most 3 matches)
+		if (fuzzy) {
+			const fuzzyText = await this.fuzzifier(textTerms.filter(x => !(x.quoted || x.wildcard)).map(x => trimQuotes(x.value)));
+			const fuzzyTitle = await this.fuzzifier(titleTerms.filter(x => !x.wildcard).map(x => trimQuotes(x.value)));
+			const fuzzyBody = await this.fuzzifier(bodyTerms.filter(x => !x.wildcard).map(x => trimQuotes(x.value)));
+
+			const phraseTextSearch = textTerms.filter(x => x.quoted);
+			const wildCardSearch = textTerms.concat(titleTerms).concat(bodyTerms).filter(x => x.wildcard);
+
+			// Save number of fuzzy matches we got for each word
+			// fuzzifier() is currently set to return at most 3 matches
 			// We need to know which fuzzy words go together so that we can filter out notes that don't contain a required word.
 			numFuzzyMatches = fuzzyText.concat(fuzzyTitle).concat(fuzzyBody).map(x => x.length);
-			for (let i = 0; i < phraseSearches.length; i++) {
-				numFuzzyMatches.push(1); // Phrase searches are preserved without fuzzification
+			for (let i = 0; i < phraseTextSearch.length + wildCardSearch.length; i++) {
+				// Phrase searches and wildcard searches are preserved without fuzzification (A single match)
+				numFuzzyMatches.push(1);
 			}
 
 			const mergedFuzzyText = [].concat.apply([], fuzzyText);
@@ -474,18 +477,33 @@ class SearchEngine {
 			const fuzzyTextTerms = mergedFuzzyText.map(x => { return { name: 'text', value: x.word, negated: false, score: x.score }; });
 			const fuzzyTitleTerms = mergedFuzzyTitle.map(x => { return { name: 'title', value: x.word, negated: false, score: x.score }; });
 			const fuzzyBodyTerms = mergedFuzzyBody.map(x => { return { name: 'body', value: x.word, negated: false, score: x.score }; });
-			const phraseTextTerms = phraseSearches.map(x => { return { name: 'text', value: x, negated: false, score: 0 }; });
 
+			// Remove previous text, title and body and replace with fuzzy versions
 			allTerms = allTerms.filter(x => (x.name !== 'text' && x.name !== 'title' && x.name !== 'body'));
 
-			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms).concat(phraseTextTerms);
+			// The order matters here!
+			// The text goes first, then title, then body, then phrase and finally wildcard
+			// This is because it needs to match with numFuzzyMathches.
+			allFuzzyTerms = allTerms.concat(fuzzyTextTerms).concat(fuzzyTitleTerms).concat(fuzzyBodyTerms).concat(phraseTextSearch).concat(wildCardSearch);
 
 			const allTextTerms = allFuzzyTerms.filter(x => x.name === 'title' || x.name === 'body' || x.name === 'text');
 			for (let i = 0; i < allTextTerms.length; i++) {
+				// Phrase searches and wildcard searches will get a fuzziness score of zero.
+				// This means that they will go first in the sort order (Even if there are other words with matches in the title)
+				// Undesirable?
 				fuzzyScore.push(allFuzzyTerms[i].score ? allFuzzyTerms[i].score : 0);
 			}
 
-			terms = { _: fuzzyTextTerms.concat(phraseTextTerms).map(x =>trimQuotes(x.value)), 'title': fuzzyTitleTerms.map(x =>trimQuotes(x.value)), 'body': fuzzyBodyTerms.map(x =>trimQuotes(x.value)) };
+			const wildCardTextTerms = wildCardSearch.filter(x => x.name === 'text').map(x =>trimQuotes(x.value));
+			const wildCardTitleTerms = wildCardSearch.filter(x => x.name === 'title').map(x =>trimQuotes(x.value));
+			const wildCardBodyTerms = wildCardSearch.filter(x => x.name === 'body').map(x =>trimQuotes(x.value));
+			const phraseTextTerms = phraseTextSearch.map(x => trimQuotes(x.value));
+
+			terms = {
+				_: fuzzyTextTerms.map(x => trimQuotes(x.value)).concat(phraseTextTerms).concat(wildCardTextTerms),
+				title: fuzzyTitleTerms.map(x => trimQuotes(x.value)).concat(wildCardTitleTerms),
+				body: fuzzyBodyTerms.map(x => trimQuotes(x.value)).concat(wildCardBodyTerms),
+			};
 		} else {
 			const nonNegatedTextTerms = textTerms.length + titleTerms.length + bodyTerms.length;
 			for (let i = 0; i < nonNegatedTextTerms; i++) {

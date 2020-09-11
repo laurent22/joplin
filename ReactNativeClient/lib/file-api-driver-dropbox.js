@@ -44,7 +44,7 @@ class FileApiDriverDropbox {
 	metadataToStat_(md, path) {
 		const output = {
 			path: path,
-			updated_time: md.server_modified ? new Date(md.server_modified) : new Date(),
+			updated_time: md.server_modified ? (new Date(md.server_modified)).getTime() : Date.now(),
 			isDir: md['.tag'] === 'folder',
 		};
 

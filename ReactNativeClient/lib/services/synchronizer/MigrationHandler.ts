@@ -90,9 +90,11 @@ export default class MigrationHandler extends BaseService {
 		// it the lock handler will break. So we create the directory now.
 		// Also if the sync target version is 0, it means it's a new one so we need the
 		// lock folder first before doing anything else.
+		// Temp folder is needed too to get remoteDate() call to work.
 		if (syncTargetInfo.version === 0 || syncTargetInfo.version === 1) {
-			this.logger().info('MigrationHandler: Sync target version is 0 or 1 - creating "locks" directory:', syncTargetInfo);
+			this.logger().info('MigrationHandler: Sync target version is 0 or 1 - creating "locks" and "temp" directory:', syncTargetInfo);
 			await this.api_.mkdir(Dirnames.Locks);
+			await this.api_.mkdir(Dirnames.Temp);
 		}
 
 		this.logger().info('MigrationHandler: Acquiring exclusive lock');

@@ -50,6 +50,7 @@ const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriv
 const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
+const { Dirnames } = require('lib/services/synchronizer/utils/types');
 
 const databases_ = [];
 let synchronizers_ = [];
@@ -438,6 +439,7 @@ async function initFileApi() {
 
 	fileApi.setLogger(logger);
 	fileApi.setSyncTargetId(syncTargetId_);
+	fileApi.setTempDirName(Dirnames.Temp);
 	fileApi.requestRepeatCount_ = isNetworkSyncTarget_ ? 1 : 0;
 
 	fileApis_[syncTargetId_] = fileApi;

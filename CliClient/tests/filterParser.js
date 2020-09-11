@@ -4,8 +4,10 @@ require('app-module-path').addPath(__dirname);
 const filterParser = require('lib/services/searchengine/filterParser.js').default;
 // import filterParser from 'lib/services/searchengine/filterParser.js';
 
-const makeTerm = (name, value, negated, quoted = false) => {
-	if (name !== 'text') { return { name, value, negated }; } else { return { name, value, negated, quoted }; }
+const makeTerm = (name, value, negated, quoted = false, wildcard = false) => {
+	if (name === 'text') { return { name, value, negated, quoted, wildcard }; }
+	if (name === 'title' | name === 'body') { return { name, value, negated, wildcard }; }
+	return { name, value, negated };
 };
 
 describe('filterParser should be correct filter for keyword', () => {
@@ -108,6 +110,9 @@ describe('filterParser should be correct filter for keyword', () => {
 
 		searchString = 'tag:bl*sphemy';
 		expect(filterParser(searchString)).toContain(makeTerm('tag', 'bl%sphemy', false));
+
+		searchString = 'tag:"space travel"';
+		expect(filterParser(searchString)).toContain(makeTerm('tag', 'space travel', false));
 	});
 
 	it('wildcard notebooks', () => {

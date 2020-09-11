@@ -141,5 +141,23 @@ describe('services_SearchFuzzy', function() {
 		expect(rows.map(r=>r.id)).toContain(n5.id);
 	}));
 
+	it('should leave wild card searches alone', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc def' });
+		const n2 = await Note.save({ title: 'abcc ghi' });
+		const n3 = await Note.save({ title: 'abccc ghi' });
+		const n4 = await Note.save({ title: 'abcccc ghi' });
+		const n5 = await Note.save({ title: 'wxy zzz' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('abc*', { fuzzy: true });
+
+		expect(rows.length).toBe(4);
+		expect(rows.map(r=>r.id)).toContain(n1.id);
+		expect(rows.map(r=>r.id)).toContain(n2.id);
+		expect(rows.map(r=>r.id)).toContain(n3.id);
+		expect(rows.map(r=>r.id)).toContain(n4.id);
+	}));
 
 });
