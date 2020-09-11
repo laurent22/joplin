@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ButtonBar from './ConfigScreen/ButtonBar';
 
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -14,7 +15,8 @@ interface Style {
 
 interface Props {
 	themeId: number;
-	style: Style
+	style: Style,
+	dispatch: Function,
 }
 
 interface Resource {
@@ -211,12 +213,16 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			color: theme.color,
 			padding: 20,
 			boxSizing: 'border-box',
+			flex: 1,
 		};
-		rootStyle.height = style.height - 35; // Minus the header height
+		// rootStyle.height = style.height - 35; // Minus the header height
+		delete rootStyle.height;
 		delete rootStyle.width;
 
+		const containerHeight = style.height;
+
 		return (
-			<div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily }}>
+			<div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily, height: containerHeight, display: 'flex', flexDirection: 'column' }}>
 				<div style={rootStyle}>
 					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
 						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
@@ -242,6 +248,9 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 					</div>
 					}
 				</div>
+				<ButtonBar
+					onCancelClick={() => this.props.dispatch({ type: 'NAV_BACK' })}
+				/>
 			</div>
 		);
 	}
