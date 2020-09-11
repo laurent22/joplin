@@ -35,9 +35,7 @@ export default function ButtonBar(props:Props) {
 	return (
 		<StyledRoot>
 			<Button
-				onClick={() => {
-					this.onCancelClick();
-				}}
+				onClick={props.onCancelClick}
 				level={ButtonLevel.Secondary}
 				iconName="fa fa-chevron-left"
 				title={props.backButtonTitle ? props.backButtonTitle : _('Back')}
