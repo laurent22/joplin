@@ -1,5 +1,8 @@
-const solarizedDarkStyle = {
-	appearance: 'dark',
+import { Theme } from './type';
+import theme_dark from './dark';
+
+const theme:Theme = {
+	...theme_dark,
 
 	backgroundColor: '#002b36',
 	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
@@ -32,4 +35,4 @@ const solarizedDarkStyle = {
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
-module.exports = solarizedDarkStyle;
+export default theme;

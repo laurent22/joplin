@@ -52,4 +52,6 @@ export interface Theme {
 
 	codeMirrorTheme: string,
 	codeThemeCss: string,
+
+	highlightedColor?: string,
 }

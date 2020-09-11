@@ -520,7 +520,21 @@
 			"ElectronClient/gui/KeymapConfig/utils/useKeymap.js": true,
 			"ElectronClient/gui/MainScreen/MainScreen.js": true,
 			"ElectronClient/gui/NoteEditor/utils/useFolder.js": true,
-			"ReactNativeClient/lib/ntpDate.js": true
+			"ReactNativeClient/lib/ntpDate.js": true,
+			"ElectronClient/gui/ConfigScreen/ButtonBar.js": true,
+			"ElectronClient/gui/DropboxLoginScreen.js": true,
+			"ElectronClient/gui/OneDriveLoginScreen.js": true,
+			"ElectronClient/gui/StatusScreen/StatusScreen.js": true,
+			"ReactNativeClient/lib/theme.js": true,
+			"ReactNativeClient/lib/themes/aritimDark.js": true,
+			"ReactNativeClient/lib/themes/dark.js": true,
+			"ReactNativeClient/lib/themes/dracula.js": true,
+			"ReactNativeClient/lib/themes/light.js": true,
+			"ReactNativeClient/lib/themes/nord.js": true,
+			"ReactNativeClient/lib/themes/oledDark.js": true,
+			"ReactNativeClient/lib/themes/solarizedDark.js": true,
+			"ReactNativeClient/lib/themes/solarizedLight.js": true,
+			"ReactNativeClient/lib/themes/type.js": true
 		},
 		"spellright.language": [
 			"en"

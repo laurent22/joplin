@@ -1,5 +1,8 @@
-const aritimStyle = {
-	appearance: 'dark',
+import { Theme } from './type';
+import theme_dark from './dark';
+
+const theme:Theme = {
+	...theme_dark,
 
 	backgroundColor: '#10151a', // Main background color
 	backgroundColorTransparent: 'rgba(16, 21, 26, 0.9)', //
@@ -34,4 +37,4 @@ const aritimStyle = {
 	highlightedColor: '#d3dae3',
 };
 
-module.exports = aritimStyle;
+export default theme;

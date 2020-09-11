@@ -1,5 +1,8 @@
-const solarizedLightStyle = {
-	appearance: 'light',
+import { Theme } from './type';
+import theme_light from './light';
+
+const theme:Theme = {
+	...theme_light,
 
 	backgroundColor: '#fdf6e3',
 	backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)',
@@ -32,4 +35,4 @@ const solarizedLightStyle = {
 	codeThemeCss: 'atom-one-light.css',
 };
 
-module.exports = solarizedLightStyle;
+export default theme;

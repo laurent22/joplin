@@ -15,6 +15,7 @@ export const StyledRoot = styled.div`
 	display: flex;
 	align-items: center;
 	padding: 10px;
+	background-color: ${(props:any) => props.theme.backgroundColor3};
 	padding-left: ${(props:any) => props.theme.configScreenPadding}px;
 	border-top-width: 1px;
 	border-top-style: solid;

@@ -1,5 +1,8 @@
-const draculaStyle = {
-	appearance: 'dark',
+import { Theme } from './type';
+import theme_dark from './dark';
+
+const theme:Theme = {
+	...theme_dark,
 
 	backgroundColor: '#282a36',
 	backgroundColorTransparent: 'rgba(40, 42, 54, 0.9)',
@@ -32,4 +35,4 @@ const draculaStyle = {
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
-module.exports = draculaStyle;
+export default theme;

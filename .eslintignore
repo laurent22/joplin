@@ -205,8 +205,14 @@ ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/lib/theme.js
+ReactNativeClient/lib/themes/aritimDark.js
 ReactNativeClient/lib/themes/dark.js
+ReactNativeClient/lib/themes/dracula.js
 ReactNativeClient/lib/themes/light.js
+ReactNativeClient/lib/themes/nord.js
+ReactNativeClient/lib/themes/oledDark.js
+ReactNativeClient/lib/themes/solarizedDark.js
+ReactNativeClient/lib/themes/solarizedLight.js
 ReactNativeClient/lib/themes/type.js
 ReactNativeClient/lib/versionInfo.js
 ReactNativeClient/PluginAssetsLoader.js

@@ -1,7 +1,8 @@
-const darkBase = require('./dark');
+import { Theme } from './type';
+import theme_dark from './dark';
 
-module.exports = Object.assign({}, darkBase, {
-	appearance: 'dark',
+const theme:Theme = {
+	...theme_dark,
 	backgroundColor: '#000000',
 	color: '#dddddd',
 	colorFaded: '#777777',
@@ -11,10 +12,11 @@ module.exports = Object.assign({}, darkBase, {
 	codeColor: '#ffffff',
 	raisedBackgroundColor: '#0F2051',
 	raisedColor: '#788BC3',
-	raisedHighlightedColor: '#ffffff',
 	tableBackgroundColor: 'rgb(0, 0, 0)',
 	codeBackgroundColor: 'rgb(47, 48, 49)',
 	codeBorderColor: 'rgb(70, 70, 70)',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 	colorBright: 'rgb(220,220,220)',
-});
+}
+
+export default theme;
