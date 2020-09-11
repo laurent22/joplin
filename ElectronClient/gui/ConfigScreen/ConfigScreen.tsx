@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SideBar from './SideBar';
+import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');
@@ -37,6 +38,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
 		this.showLogButton_click = this.showLogButton_click.bind(this);
 		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
+		this.onCancelClick = this.onCancelClick.bind(this);
+		this.onSaveClick = this.onSaveClick.bind(this);
+		this.onApplyClick = this.onApplyClick.bind(this);
 	}
 
 	async checkSyncConfig_() {
@@ -604,15 +608,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const settingComps = shared.settingsToComponents2(this, 'desktop', settings, this.state.selectedSectionName);
 
-		const buttonBarStyle:any = {
-			display: 'flex',
-			alignItems: 'center',
-			padding: 10,
-			borderTopWidth: 1,
-			borderTopStyle: 'solid',
-			borderTopColor: theme.dividerColor,
-		};
-
+		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
+		// These screens handle their own loading/saving of settings and have bespoke rendering.
+		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
@@ -629,22 +627,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				<div style={style}>
 					{screenComp}
 					<div style={containerStyle}>{settingComps}</div>
-					<div style={buttonBarStyle}>
-						<Button
-							onClick={() => {
-								this.onCancelClick();
-							}}
-							level={ButtonLevel.Secondary}
-							iconName="fa fa-chevron-left"
-							title={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-						/>
-						{ !screenComp && (
-							<div style={{ display: 'flex', flexDirection: 'row', marginLeft: 30 }}>
-								<Button style={{ marginRight: 10 }} level={ButtonLevel.Primary} disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} title={_('OK')}/>
-								<Button level={ButtonLevel.Primary} disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} title={_('Apply')}/>
-							</div>
-						)}
-					</div>
+					<ButtonBar
+						hasChanges={hasChanges}
+						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						onCancelClick={this.onCancelClick}
+						onSaveClick={screenComp ? null : this.onSaveClick}
+						onApplyClick={screenComp ? null : this.onApplyClick}
+					/>
 				</div>
 			</div>
 		);

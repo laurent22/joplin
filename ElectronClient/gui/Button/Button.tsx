@@ -14,7 +14,7 @@ interface Props {
 	iconName?: string,
 	level?: ButtonLevel,
 	className?:string,
-	onClick():void,
+	onClick:Function,
 	color?: string,
 	iconAnimation?: string,
 	tooltip?: string,
