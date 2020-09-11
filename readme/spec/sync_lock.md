@@ -13,6 +13,10 @@ For example, if a client is currently syncing, it must stop doing so if it could
 
 For example, if a client is upgrading a target, it must stop doing so if it couldn't refresh the lock within Y seconds.
 
+If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients, seeing no active lock, might have performed in the meantime operations that invalidates the current operation. For example, another client might have upgraded the sync target, so any active sync with an expired lock should be cancelled. Or if the current client was upgrading the sync target, another client might have synced since then, making any cached data invalid.
+
+In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex without much benefits.
+
 # Acquiring a SYNC lock
 
 - The client check if there is a valid EXCLUSIVE lock on the target

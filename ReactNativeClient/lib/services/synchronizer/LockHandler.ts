@@ -292,6 +292,12 @@ export default class LockHandler {
 			if (!this.refreshTimers_[handle]) return defer(); // Timeout has been cleared
 
 			if (!hasActiveLock) {
+				// If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients might have performed
+				// in the meantime operations that invalidates the current operation. For example, another client might have upgraded the
+				// sync target in the meantime, so any active operation should be cancelled here. Or if the current client was upgraded
+				// the sync target, another client might have synced since then, making any cached data invalid.
+				// In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex
+				// without much benefits.
 				error = new JoplinError('Lock has expired', 'lockExpired');
 			} else {
 				try {
