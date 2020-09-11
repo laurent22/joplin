@@ -105,7 +105,17 @@ class ElectronAppWrapper {
 		// Waiting for one of the ready events might work but they might not be triggered if there's an error, so
 		// the easiest is to use a timeout. Keep in mind that if you get a white window on Windows it might be due
 		// to this line though.
-		if (debugEarlyBugs) setTimeout(() => this.win_.webContents.openDevTools(), 3000);
+		if (debugEarlyBugs) {
+			setTimeout(() => {
+				try {
+					this.win_.webContents.openDevTools();
+				} catch (error) {
+				// This will throw an exception "Object has been destroyed" if the app is closed
+				// in less that the timeout interval. It can be ignored.
+					console.warn('Error opening dev tools', error);
+				}
+			}, 3000);
+		}
 
 		this.win_.on('close', (event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
