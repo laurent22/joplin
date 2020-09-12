@@ -619,6 +619,8 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_SELECT':
 			newState = changeSelectedFolder(newState, action, { clearSelectedNoteIds: true });
+			// Highlights should be cleared when moving away from search results
+			newState = Object.assign({}, newState, { highlightedWords: [] });
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
