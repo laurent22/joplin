@@ -49,6 +49,7 @@ Clipper/joplin-webclipper-source.zip
 joplin-webclipper-source.zip
 Tools/commit_hook.txt
 .vscode/*
+.vs/*
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
