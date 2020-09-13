@@ -33,6 +33,8 @@ class Dialog extends React.PureComponent {
 	constructor() {
 		super();
 
+		this.fuzzy_ = false;
+
 		this.state = {
 			query: '',
 			results: [],
@@ -178,7 +180,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	async keywords(searchQuery) {
-		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, false);
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
@@ -215,7 +217,7 @@ class Dialog extends React.PureComponent {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
+				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
 				resultsInBody = !!results.find(row => row.fields.includes('body'));
 
