@@ -26,10 +26,11 @@ describe('timeUtils', function() {
 		startDate =  new Date('3 Aug 2020 07:30:20');
 		expect(time.goBackInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
+		// Note: this test randomly fails - https://github.com/laurent22/joplin/issues/3722
 
-		startDate = new Date('11 Aug 2020');
-		endDate = new Date('9 Aug 2020'); // week start;
-		expect(time.goBackInTime(startDate, 0, 'week')).toBe(endDate.getTime().toString());
+		// startDate = new Date('11 Aug 2020');
+		// endDate = new Date('9 Aug 2020'); // week start;
+		// expect(time.goBackInTime(startDate, 0, 'week')).toBe(endDate.getTime().toString());
 
 		startDate = new Date('02 Feb 2020');
 		endDate = new Date('01 Jan 2020');
