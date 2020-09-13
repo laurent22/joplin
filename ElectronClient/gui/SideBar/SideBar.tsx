@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { StyledRoot, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
+import CommandService from 'lib/services/CommandService';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
-const CommandService = require('lib/services/CommandService.js').default;
 const BaseModel = require('lib/BaseModel.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
@@ -67,6 +67,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
 		this.header_contextMenu = this.header_contextMenu.bind(this);
+		this.onAddFolderButtonClick = this.onAddFolderButtonClick.bind(this);
 	}
 
 	onFolderDragStart_(event:any) {
@@ -386,28 +387,31 @@ class SideBarComponent extends React.Component<Props, State> {
 		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
-	renderHeader(key:string, label:string, iconName:string, contextMenuHandler:Function = null, extraProps:any = {}) {
+	renderHeader(key:string, label:string, iconName:string, contextMenuHandler:Function = null, onPlusButtonClick:Function = null, extraProps:any = {}) {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
-			<StyledHeader
-				ref={ref}
-				key={key}
-				{...extraProps}
-				onContextMenu={contextMenuHandler}
-				onClick={(event:any) => {
-					// if a custom click event is attached, trigger that.
-					if (headerClick) {
-						headerClick(key, event);
-					}
-					this.onHeaderClick_(key);
-				}}
-			>
-				<StyledHeaderIcon className={iconName}/>
-				<StyledHeaderLabel>{label}</StyledHeaderLabel>
-			</StyledHeader>
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<StyledHeader
+					ref={ref}
+					key={key}
+					{...extraProps}
+					onContextMenu={contextMenuHandler}
+					onClick={(event:any) => {
+						// if a custom click event is attached, trigger that.
+						if (headerClick) {
+							headerClick(key, event);
+						}
+						this.onHeaderClick_(key);
+					}}
+				>
+					<StyledHeaderIcon className={iconName}/>
+					<StyledHeaderLabel>{label}</StyledHeaderLabel>
+				</StyledHeader>
+				{ onPlusButtonClick && <StyledAddButton onClick={onPlusButtonClick} iconName="fas fa-plus" level={ButtonLevel.SideBarSecondary}/> }
+			</div>
 		);
 	}
 
@@ -527,13 +531,17 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 	}
 
+	onAddFolderButtonClick() {
+		CommandService.instance().execute('newFolder');
+	}
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
 
 		items.push(
-			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.header_contextMenu, {
+			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.header_contextMenu, this.onAddFolderButtonClick, {
 				onDrop: this.onFolderDrop_,
 				['data-folder-id']: '',
 				toggleblock: 1,
@@ -553,7 +561,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 
 		items.push(
-			this.renderHeader('tagHeader', _('Tags'), 'icon-tags', null, {
+			this.renderHeader('tagHeader', _('Tags'), 'icon-tags', null, null, {
 				toggleblock: 1,
 			})
 		);

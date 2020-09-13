@@ -119,8 +119,8 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 
 const StyledButtonSideBarSecondary = styled(StyledButtonBase)`
 	background: none;
-	border-color: ${(props:any) => props.theme.colorFaded2};
-	color: ${(props:any) => props.theme.colorFaded2};
+	border-color: ${(props:any) => props.theme.color2};
+	color: ${(props:any) => props.theme.color2};
 
 	&:hover {
 		color: ${(props:any) => props.theme.colorHover2};
@@ -151,11 +151,11 @@ const StyledButtonSideBarSecondary = styled(StyledButtonBase)`
 	}
 
 	${StyledTitle} {
-		color: ${(props:any) => props.theme.colorFaded2};
+		color: ${(props:any) => props.theme.color2};
 	}
 
 	${StyledIcon} {
-		color: ${(props:any) => props.theme.colorFaded2};
+		color: ${(props:any) => props.theme.color2};
 	}
 `;
 

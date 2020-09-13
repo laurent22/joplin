@@ -14,6 +14,7 @@ export const StyledRoot = styled.div`
 export const StyledHeader = styled.div`
 	//height: ${(props:any) => props.theme.topRowHeight}px;
 	//text-decoration: none;
+	flex: 1;
 	box-sizing: border-box;
 	padding: ${(props:any) => props.theme.mainPadding}px;
 	padding-bottom: ${(props:any) => props.theme.mainPadding / 2}px;
@@ -92,17 +93,14 @@ export const StyledNoteCount = styled.div`
 	user-select: none;
 `;
 
-// export const StyledNewFolderButton = styled(Button)`
-// 	width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// 	max-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// 	min-width: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// 	height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// 	max-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// 	min-height: ${(props:any) => props.theme.toolbarHeight * 0.8}px;
-// `;
-
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;
+`;
+
+export const StyledAddButton = styled(Button)`
+	border: none;
+	padding-right: 15px;
+	padding-top: 4px;
 `;
 
 export const StyledSyncReport = styled.div`
