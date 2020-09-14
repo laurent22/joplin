@@ -16,8 +16,6 @@ msgstr ""
 "X-Generator: Poedit 2.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -182,17 +180,17 @@ msgstr ""
 "Uruchom, zatrzymaj lub sprawdź serwer API. Aby określić port, na którym "
 "powinien działać ustaw zmienną api.port w konfiguracji. Polecenia to (%s)"
 
-#: CliClient/app/command-server.js:37
+#: CliClient/app/command-server.js:38
 #, javascript-format
 msgid "Server is already running on port %d"
 msgstr "Serwer jest już uruchomiony na porcie %d"
 
-#: CliClient/app/command-server.js:43
+#: CliClient/app/command-server.js:44
 #, javascript-format
 msgid "Server is running on port %d"
 msgstr "Serwer działa na porcie %d"
 
-#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
+#: CliClient/app/command-server.js:44 CliClient/app/command-server.js:47
 msgid "Server is not running."
 msgstr "Serwer nie został uruchomiony."
 
@@ -255,8 +253,9 @@ msgid "Enabled"
 msgstr "Aktywowano"
 
 #: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:109
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: ReactNativeClient/lib/models/Setting.js:607
+#: ReactNativeClient/lib/models/Setting.js:610
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Deaktywowano"
@@ -308,17 +307,21 @@ msgstr ""
 "Przełącza na [Notatnik] - wszystkie przyszłe operacje zostaną wykonane w tym "
 "notatniku."
 
-#: CliClient/app/command-sync.js:28
+#: CliClient/app/command-sync.js:29
 msgid "Synchronises with remote storage."
 msgstr "Synchronizuje z dyskiem zdalnym."
 
-#: CliClient/app/command-sync.js:32
+#: CliClient/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Synchronizuje z określonym serwisem (domyślnie z wartością konfiguracji sync."
 "target)"
 
-#: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
+#: CliClient/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr ""
+
+#: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -326,7 +329,7 @@ msgstr ""
 "Uwierzytelnianie nie zostało ukończone (nie otrzymano tokena "
 "uwierzytalniającego)."
 
-#: CliClient/app/command-sync.js:86
+#: CliClient/app/command-sync.js:90
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 msgid ""
@@ -335,29 +338,29 @@ msgstr ""
 "Aby pozwolić Joplin na synchronizację z Dropbox, proszę kieruj się krokami "
 "poniżej:"
 
-#: CliClient/app/command-sync.js:87
+#: CliClient/app/command-sync.js:91
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Krok 1: Otwórz odnośnik w swojej przeglądarce aby autoryzować aplikację:"
 
-#: CliClient/app/command-sync.js:89
+#: CliClient/app/command-sync.js:93
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Wpisz kod podany przez Dropbox:"
 
-#: CliClient/app/command-sync.js:101
+#: CliClient/app/command-sync.js:105
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Nie uwierzytelniono z %s. Proszę uzupełnij brakujące dane."
 
-#: CliClient/app/command-sync.js:124
+#: CliClient/app/command-sync.js:128
 msgid "Synchronisation is already in progress."
 msgstr "Synchronizacja w toku."
 
-#: CliClient/app/command-sync.js:129
+#: CliClient/app/command-sync.js:133
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -376,17 +379,13 @@ msgstr "Serwis synchronizacji: %s (%s)"
 msgid "Cannot initialise synchroniser."
 msgstr "Nie można zainicjalizować synchronizatora."
 
-#: CliClient/app/command-sync.js:179
+#: CliClient/app/command-sync.js:207
 msgid "Starting synchronisation..."
 msgstr "Rozpoczynanie synchronizacji..."
 
-#: CliClient/app/command-sync.js:202
+#: CliClient/app/command-sync.js:230
 msgid "Downloading resources..."
 msgstr "Pobieranie zasobów..."
-
-#: CliClient/app/command-sync.js:226
-msgid "Cancelling... Please wait."
-msgstr "Anulowanie... Proszę czekać."
 
 #: CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
@@ -445,16 +444,16 @@ msgstr "Brak aktywnego notatnika."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notatka nie istnieje: \"%s\". Utworzyć?"
 
-#: CliClient/app/app-gui.js:446
+#: CliClient/app/app-gui.js:450
 msgid "To delete a tag, untag the associated notes."
 msgstr "Aby usunąć znacznik, należy usunąć powiązane znaczniki z notatek."
 
-#: CliClient/app/app-gui.js:456
+#: CliClient/app/app-gui.js:460
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 "Proszę wybrać notatkę lub notatnik który ma zostać usunięty jako pierwszy."
 
-#: CliClient/app/app-gui.js:720
+#: CliClient/app/app-gui.js:748
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Naciśnij Ctrl+D lub wpisz \"exit\" aby wyjść z aplikacji"
 
@@ -472,7 +471,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notatki spełniają wzór. Usunąć je?"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:461
+#: ReactNativeClient/lib/components/screens/note.js:460
 msgid "Delete note?"
 msgstr "Usunąć notatkę?"
 
@@ -585,30 +584,30 @@ msgstr ""
 "\n"
 "%s"
 
-#: CliClient/app/cli-utils.js:108
+#: CliClient/app/cli-utils.js:109
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Brakujący wymagany argument: %s"
 
-#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
+#: CliClient/app/cli-utils.js:140 ReactNativeClient/lib/services/report.js:151
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: CliClient/app/cli-utils.js:143
+#: CliClient/app/cli-utils.js:144
 msgid "Your choice: "
 msgstr "Twój wybór: "
 
-#: CliClient/app/cli-utils.js:150
+#: CliClient/app/cli-utils.js:151
 #, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Nieprawidłowa odpowiedź: %s"
 
-#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
 msgid "Y"
 msgstr "T"
 
-#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
 msgid "n"
 msgstr "n"
 
@@ -776,29 +775,30 @@ msgstr "Oznacz zadanie jako wykonane."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notatka nie jest zadaniem: \"%s\""
 
-#: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
-#: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
+#: ElectronClient/bridge.js:102 ElectronClient/bridge.js:113
+#: ElectronClient/bridge.js:126 ElectronClient/bridge.js:136
 #: ElectronClient/checkForUpdates.js:139
 #: ElectronClient/gui/DialogButtonRow.min.js:30
 #: ElectronClient/gui/PromptDialog.min.js:235
-#: ElectronClient/gui/ConfigScreen.min.js:185
-#: ElectronClient/gui/ConfigScreen.min.js:754 ElectronClient/app.js:618
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ElectronClient/gui/ConfigScreen.min.js:756 ElectronClient/app.js:608
 #: ReactNativeClient/lib/components/ModalDialog.js:67
 #: ReactNativeClient/lib/components/CameraView.js:182
 #: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
 msgstr "OK"
 
-#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/bridge.js:113 ElectronClient/bridge.js:126
 #: ElectronClient/gui/DialogButtonRow.min.js:38
-#: ElectronClient/gui/SideBar/SideBar.min.js:296
-#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar/SideBar.min.js:264
+#: ElectronClient/gui/SideBar/SideBar.min.js:630
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
 #: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/utils/NoteListUtils.js:184
 #: ElectronClient/gui/PromptDialog.min.js:242
-#: ElectronClient/gui/ConfigScreen.min.js:744
-#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#: ElectronClient/gui/ConfigScreen.min.js:746
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/shim-init-node.js:91
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:70
@@ -809,12 +809,17 @@ msgstr "OK"
 #: ReactNativeClient/lib/components/side-menu-content.js:165
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: ReactNativeClient/lib/components/screens/note.js:97
-#: ReactNativeClient/lib/components/screens/note.js:526
+#: ReactNativeClient/lib/components/screens/note.js:96
+#: ReactNativeClient/lib/components/screens/note.js:525
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: ElectronClient/plugins/GotoAnything.min.js:454
+#: ElectronClient/bridge.js:198
+msgid ""
+"The app is now going to close. Please relaunch it to complete the process."
+msgstr ""
+
+#: ElectronClient/plugins/GotoAnything.min.js:446
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
@@ -822,7 +827,8 @@ msgstr ""
 "Wpisz tytuł notatki lub jej fragment, aby do niej przejść. Lub wpisz # i "
 "następnie nazwę tagu, lub @ i następnie nazwę notatnika."
 
-#: ElectronClient/plugins/GotoAnything.min.js:493
+#: ElectronClient/plugins/GotoAnything.min.js:486
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Idź do..."
 
@@ -859,15 +865,17 @@ msgstr "Twoja wersja: %s"
 msgid "New version: %s"
 msgstr "Nowa wersja: %s"
 
-#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ElectronClient/checkForUpdates.js:153
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:524
+#: ReactNativeClient/lib/components/screens/note.js:523
+#: ReactNativeClient/lib/versionInfo.js:23
 msgid "Yes"
 msgstr "Tak"
 
-#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ElectronClient/checkForUpdates.js:153
 #: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:525
+#: ReactNativeClient/lib/components/screens/note.js:524
+#: ReactNativeClient/lib/versionInfo.js:23
 msgid "No"
 msgstr "Nie"
 
@@ -885,13 +893,14 @@ msgid "This note has no history"
 msgstr "Notatka nie posiada historii"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:142
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:112
 #: ElectronClient/gui/NoteText.min.js:865
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Niewspierany odnośnik lub wiadomość: %s"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:177
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -907,19 +916,19 @@ msgstr ""
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/NoteText.min.js:1671
-#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/ConfigScreen.min.js:746
 #: ElectronClient/gui/Header.min.js:316
-#: ElectronClient/gui/Header/Header.min.js:302
+#: ElectronClient/gui/Header/Header.min.js:303
 #: ReactNativeClient/lib/commands/historyBackward.js:16
 msgid "Back"
 msgstr "Cofnij"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:269
+#: ElectronClient/gui/SideBar/SideBar.min.js:237
 #: ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
 msgstr "Usuń"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:272
+#: ElectronClient/gui/SideBar/SideBar.min.js:240
 #: ElectronClient/gui/SideBar.min.js:286
 #: ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
@@ -933,7 +942,7 @@ msgstr ""
 "Wszystkie notatki i notatniki podrzędne zawarte w tym notatniku także "
 "zostaną usunięte."
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:273
+#: ElectronClient/gui/SideBar/SideBar.min.js:241
 #: ElectronClient/gui/SideBar.min.js:287
 #: ElectronClient/gui/utils/NoteListUtils.js:161
 #: ElectronClient/gui/utils/NoteListUtils.js:184
@@ -941,65 +950,66 @@ msgstr ""
 #: ElectronClient/gui/ResourceScreen.js:94
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:868
+#: ReactNativeClient/lib/components/screens/note.js:867
 msgid "Delete"
 msgstr "Usuń"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:276
+#: ElectronClient/gui/SideBar/SideBar.min.js:244
+#: ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
-msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Usunąć znacznik \"%s\" i jemu pokrewne ze wszystkich notatek?"
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:278
+#: ElectronClient/gui/SideBar/SideBar.min.js:246
 #: ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
 msgstr "Usunąć wyszukiwanie z nawigatora?"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:337
+#: ElectronClient/gui/SideBar/SideBar.min.js:305
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: ElectronClient/gui/SideBar.min.js:382
-#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:677
-#: ElectronClient/app.js:727
+#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:718
 msgid "Export"
 msgstr "Eksportuj"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar/SideBar.min.js:630
 #: ElectronClient/gui/SideBar.min.js:724
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 msgid "Synchronise"
 msgstr "Synchronizuj"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:694
+#: ElectronClient/gui/SideBar/SideBar.min.js:664
 #: ElectronClient/gui/SideBar.min.js:757
 #: ReactNativeClient/lib/components/side-menu-content.js:360
-#: ReactNativeClient/lib/components/screens/notes.js:189
+#: ReactNativeClient/lib/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Wszystkie notatki"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:699
+#: ElectronClient/gui/SideBar/SideBar.min.js:669
 #: ElectronClient/gui/SideBar.min.js:762
 #: ReactNativeClient/lib/components/side-menu-content.js:364
 msgid "Notebooks"
 msgstr "Notatniki"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:716
-#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar/SideBar.min.js:686
+#: ElectronClient/gui/MainScreen/commands/setTags.js:16
 #: ElectronClient/gui/SideBar.min.js:779
 #: ElectronClient/gui/NoteText.min.js:1634
 #: ElectronClient/gui/NoteText.min.js:1810
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:841
+#: ReactNativeClient/lib/components/screens/note.js:840
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:735
+#: ElectronClient/gui/SideBar/SideBar.min.js:704
 #: ElectronClient/gui/SideBar.min.js:797
 #: ReactNativeClient/lib/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Deszyfrowanie obiektów %d/%d"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:740
+#: ElectronClient/gui/SideBar/SideBar.min.js:709
 #: ElectronClient/gui/SideBar.min.js:802
 #: ReactNativeClient/lib/components/side-menu-content.js:330
 #, javascript-format
@@ -1010,63 +1020,54 @@ msgstr "Pobieranie zasobów: %d/%d"
 msgid "Sidebar"
 msgstr "Nawigator"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:144
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:260
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:146
 #: ElectronClient/gui/NoteText.min.js:1547
 msgid "strong text"
 msgstr "pogrubienie"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
 msgid "emphasised text"
 msgstr "wyszczególnienie"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:149
 #: ElectronClient/gui/NoteText.min.js:1616
 msgid "Insert Hyperlink"
 msgstr "Wstaw Hyperlink"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:185
 #: ElectronClient/gui/NoteText.min.js:1591
 #: ElectronClient/gui/NoteText.min.js:1595
 #: ElectronClient/gui/NoteText.min.js:1604
 msgid "List item"
 msgstr "Obiekt listy"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:236
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:238
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:15
 msgid "Cut"
 msgstr "Wytnij"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:243
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:361
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:245
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:89
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:10
-#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:618
+#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:608
 msgid "Copy"
 msgstr "Kopiuj"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:250
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:101
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
 msgid "Paste"
 msgstr "Wklej"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:428
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "Układ"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
-#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:428
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1080,43 +1081,43 @@ msgstr ""
 msgid "Checkbox list"
 msgstr "Lista checkboxów"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
-#: ElectronClient/gui/ConfigScreen.min.js:642
-#: ReactNativeClient/lib/components/screens/note.js:1110
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:471
+#: ElectronClient/gui/ConfigScreen.min.js:644
+#: ReactNativeClient/lib/components/screens/note.js:1107
 msgid "Edit"
 msgstr "Edytuj"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:526
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:527
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
 #: ElectronClient/gui/NoteText.min.js:1627
 #: ElectronClient/gui/NoteText.min.js:1726
 msgid "Attach file"
 msgstr "Załącz plik"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:536
 msgid "Code Block"
 msgstr "Blok kodu"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:545
 msgid "Inline Code"
 msgstr "Kod w linii"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:560
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
 #: ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
 msgstr "Wstaw stempel czasowy"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
 msgid "Drop notes or files here"
 msgstr "Upuść notatki lub pliki tutaj"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:401
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
 msgid "Code View"
 msgstr "Widok kodu"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1125,14 +1126,14 @@ msgstr ""
 "Poczekaj na pobranie I odszyfrowanie wszystkich załączników. Możesz też "
 "przenieść się do %s żeby edytować notatkę."
 
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:72
 #: ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
 msgstr "Wystąpił błąd pobierania załącznika:"
 
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:75
 #: ElectronClient/gui/NoteText.min.js:835
-#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:165
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Załącznik nie został jeszcze pobrany lub deszyfrowany"
 
@@ -1155,26 +1156,36 @@ msgstr "Odkryj plik w folderze"
 msgid "Copy path to clipboard"
 msgstr "Skopiuj ścieżkę do schowka"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:109
 #: ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
 msgstr "Skopiuj adres odnośnika"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "to-do"
 msgstr "zadanie"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "note"
 msgstr "notatka"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
 #: ElectronClient/gui/NoteText.min.js:2121
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Tworzenie nowego %s..."
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:344
+msgid "The following attachments are being watched for changes:"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:347
+msgid ""
+"The attachments will no longer be watched when you switch to a different "
+"note."
+msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1265,7 +1276,7 @@ msgid "URL"
 msgstr "Odnośnik"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1253
+#: ReactNativeClient/lib/models/Setting.js:1256
 msgid "Note History"
 msgstr "Historia notatek"
 
@@ -1283,46 +1294,134 @@ msgstr "Poprzednie wersje notatki"
 msgid "Note properties"
 msgstr "Właściwośći notatki"
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:295
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
+msgid "An unexpected error occured while importing the keymap!"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
+msgid "Search..."
+msgstr "Wyszukaj..."
+
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:664
+#: ElectronClient/app.js:715
+msgid "Import"
+msgstr "Zaimportuj"
+
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
+msgid "Command"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
+#, fuzzy
+msgid "Keyboard Shortcut"
+msgstr "Tryb klawiatury"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
+#: ElectronClient/app.js:690
+msgid "Quit"
+msgstr "Wyjdź"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
+#: ElectronClient/app.js:545
+msgid "Insert template"
+msgstr "Wstaw szablon"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
+#: ElectronClient/app.js:820
+msgid "Actual Size"
+msgstr "Rozmiar rzeczywisty"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
+#: ElectronClient/app.js:868
+msgid "Website and documentation"
+msgstr "Strona internetowa i dokumentacja"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
+#, fuzzy
+msgid "Hide Joplin"
+msgstr "O aplikacji Joplin"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
+#: ElectronClient/app.js:703
+msgid "Close Window"
+msgstr "Zamknij okno"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+#, fuzzy
+msgid "Preferences"
+msgstr "Preferencje..."
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:572
+msgid "Options"
+msgstr "Opcje"
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+msgid "Press the shortcut"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+msgid ""
+"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
+"shortcut."
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Zapisz"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:301
+msgid ""
+"The sync target needs to be upgraded before Joplin can sync. The operation "
+"may take a few minutes to complete and the app needs to be restarted. To "
+"proceed please click on the link."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:306
+#, fuzzy
+msgid "Restart and upgrade"
+msgstr "Klucze główne do aktualizacji"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
 msgstr "Niektóre przedmioty nie mogą być zsynchornizowane."
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:300
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:312
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:336
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:318
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:330
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:354
 msgid "View them now"
 msgstr "Wyświetl je teraz"
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:307
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:325
 msgid "Some items cannot be decrypted."
 msgstr "Niektóre obiekty nie mogą być odszyfrowane."
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:319
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:337
 msgid "One or more master keys need a password."
 msgstr "Jeden lub więcej master kluczy potrzebuję hasła."
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:324
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:342
 msgid "Set the password"
 msgstr "Ustaw hasło"
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:331
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:349
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Jedno z twoich master kluczy ma przestarzałą metode szyfrowanie."
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:343
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:361
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 "Zmieniono domyślną metodę szyfrowania, należy ponownie zaszyfrować dane."
 
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:348
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:366
 msgid "More info"
 msgstr "Więcej informacji"
-
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
-msgid "Search..."
-msgstr "Wyszukaj..."
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
@@ -1360,7 +1459,7 @@ msgstr "Przełącz nawigator"
 #: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:826
+#: ReactNativeClient/lib/components/screens/note.js:825
 msgid "Set alarm"
 msgstr "Ustaw powiadomienie"
 
@@ -1419,7 +1518,7 @@ msgstr "Udostępnij notatke..."
 msgid "Template file:"
 msgstr "Plik szablonu:"
 
-#: ElectronClient/gui/MainScreen/commands/setTags.js:44
+#: ElectronClient/gui/MainScreen/commands/setTags.js:43
 #: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
 msgstr "Dodaj lub usuń znaczniki:"
@@ -1439,11 +1538,6 @@ msgstr "Tylko jedna notatka może być wydrukowana w tym samym czasie."
 #, javascript-format
 msgid "In: %s"
 msgstr "W: %s"
-
-#: ElectronClient/gui/SideBar.min.js:290
-#, javascript-format
-msgid "Remove tag \"%s\" from all notes?"
-msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
 
 #: ElectronClient/gui/SideBar.min.js:304
 msgid "New sub-notebook"
@@ -1541,20 +1635,11 @@ msgstr "Nazwa użytkownika OneDrive"
 msgid "Dropbox Login"
 msgstr "Nazwa użytkownika Dropbox"
 
-#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:673
-#: ElectronClient/app.js:724
-msgid "Import"
-msgstr "Zaimportuj"
-
-#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:561
-msgid "Options"
-msgstr "Opcje"
-
 #: ElectronClient/gui/Root.min.js:93
 msgid "Note attachments"
 msgstr "Załączniki notatki"
 
-#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:511
 msgid "Synchronisation Status"
 msgstr "Status synchronizacji"
 
@@ -1584,23 +1669,23 @@ msgid "Submit"
 msgstr "Wyślij"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
 msgid "Custom order"
 msgstr "Własny kierunek sortowania"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
 msgid "View"
 msgstr "Widok"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ReactNativeClient/lib/models/Setting.js:370
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ReactNativeClient/lib/models/Setting.js:381
 msgid "Sort notes by"
 msgstr "Sortuj notatki po"
 
 #: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
 #, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
@@ -1610,17 +1695,17 @@ msgstr ""
 "na \"%s\" w menu \"%s\" > \"%s\""
 
 #: ElectronClient/gui/NoteList.min.js:148
-#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
 msgid "Do it now"
 msgstr "Zrób to teraz"
 
 #: ElectronClient/gui/NoteList.min.js:452
-#: ElectronClient/gui/NoteList/NoteList.min.js:425
+#: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Brak notatek. Utwórz nową, naciskając na \"Nowa notatka\"."
 
 #: ElectronClient/gui/NoteList.min.js:452
-#: ElectronClient/gui/NoteList/NoteList.min.js:425
+#: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Brak notatników. Utwórz nowy, naciskając na \"Nowy notatnik\"."
@@ -1648,7 +1733,7 @@ msgid "Switch to to-do type"
 msgstr "Przełącz na zadanie"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:110
-#: ReactNativeClient/lib/components/screens/note.js:855
+#: ReactNativeClient/lib/components/screens/note.js:854
 msgid "Copy Markdown link"
 msgstr "Skopiuj odnośnik Markdown"
 
@@ -1700,11 +1785,6 @@ msgstr "Edytuj w edytorze zewnętrznym"
 msgid "Content Properties"
 msgstr "Właściwości zawartości"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
-#: ReactNativeClient/lib/components/screens/encryption-config.js:125
-msgid "Save"
-msgstr "Zapisz"
-
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
 msgstr "Klucze główne do aktualizacji"
@@ -1745,6 +1825,7 @@ msgstr ""
 "metodą."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#, fuzzy, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1827,16 +1908,16 @@ msgid "Lines"
 msgstr "Wiersze"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:98
-#: ReactNativeClient/lib/models/Setting.js:355
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:366
+#: ReactNativeClient/lib/models/Setting.js:367
+#: ReactNativeClient/lib/models/Setting.js:368
 msgid "Editor"
 msgstr "Edytor"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:99
-#: ReactNativeClient/lib/models/Setting.js:355
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:358
+#: ReactNativeClient/lib/models/Setting.js:366
+#: ReactNativeClient/lib/models/Setting.js:367
+#: ReactNativeClient/lib/models/Setting.js:369
 msgid "Viewer"
 msgstr "Wyświetlacz"
 
@@ -1854,29 +1935,29 @@ msgstr "Czas czytania: %s min"
 msgid "Close"
 msgstr "Zamknij"
 
-#: ElectronClient/gui/ConfigScreen.min.js:82
+#: ElectronClient/gui/ConfigScreen.min.js:84
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Otworzy się nowy ekran. Zapisać zmiany?"
 
-#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ElectronClient/gui/ConfigScreen.min.js:172
 #: ReactNativeClient/lib/components/screens/config.js:307
 msgid "Check synchronisation configuration"
 msgstr "Sprawdź konfigurację synchronizacji"
 
-#: ElectronClient/gui/ConfigScreen.min.js:179
+#: ElectronClient/gui/ConfigScreen.min.js:181
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: ElectronClient/gui/ConfigScreen.min.js:183
+#: ElectronClient/gui/ConfigScreen.min.js:185
 msgid "Checking..."
 msgstr "Sprawdzanie..."
 
-#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ElectronClient/gui/ConfigScreen.min.js:189
 #: ReactNativeClient/lib/models/Resource.js:320
 msgid "Error"
 msgstr "Błąd"
 
-#: ElectronClient/gui/ConfigScreen.min.js:198
+#: ElectronClient/gui/ConfigScreen.min.js:200
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
@@ -1884,36 +1965,36 @@ msgstr ""
 "Joplin Nextcloud App jest niezainstalowana albo źle skonfigurowana. Zobacz "
 "pełny opis błędu poniżej:"
 
-#: ElectronClient/gui/ConfigScreen.min.js:211
+#: ElectronClient/gui/ConfigScreen.min.js:213
 msgid "Show Log"
 msgstr "Pokaż dziennik"
 
-#: ElectronClient/gui/ConfigScreen.min.js:224
+#: ElectronClient/gui/ConfigScreen.min.js:226
 msgid "Joplin Nextcloud App status:"
 msgstr "Status Joplin Nextcloud App:"
 
-#: ElectronClient/gui/ConfigScreen.min.js:238
+#: ElectronClient/gui/ConfigScreen.min.js:240
 msgid "Check Status"
 msgstr "Sprawdź status"
 
-#: ElectronClient/gui/ConfigScreen.min.js:245
+#: ElectronClient/gui/ConfigScreen.min.js:247
 msgid "Help"
 msgstr "Pomoc"
 
-#: ElectronClient/gui/ConfigScreen.min.js:264
+#: ElectronClient/gui/ConfigScreen.min.js:266
 msgid "Show Advanced Settings"
 msgstr "Pokaż opcje zaawansowane"
 
-#: ElectronClient/gui/ConfigScreen.min.js:521
+#: ElectronClient/gui/ConfigScreen.min.js:523
 msgid "Browse..."
 msgstr "Przeglądaj..."
 
-#: ElectronClient/gui/ConfigScreen.min.js:761
+#: ElectronClient/gui/ConfigScreen.min.js:763
 msgid "Apply"
 msgstr "Zastosuj"
 
 #: ElectronClient/gui/Header.min.js:267
-#: ElectronClient/gui/Header/Header.min.js:253
+#: ElectronClient/gui/Header/Header.min.js:254
 msgid "Usage"
 msgstr "Przykłady"
 
@@ -1938,8 +2019,8 @@ msgid "Action"
 msgstr "Akcja"
 
 #: ElectronClient/gui/ResourceScreen.js:42
-#: ReactNativeClient/lib/path-utils.js:65
-#: ReactNativeClient/lib/path-utils.js:101
+#: ReactNativeClient/lib/path-utils.js:68
+#: ReactNativeClient/lib/path-utils.js:104
 #: ReactNativeClient/lib/models/BaseItem.js:720
 msgid "Untitled"
 msgstr "Bez nazwy"
@@ -2017,162 +2098,117 @@ msgstr "Zakończ edytowanie w programie zewnętrznym"
 msgid "Error opening note in editor: %s"
 msgstr "Błąd przy otwieraniu notatki w edytorze: %s"
 
-#: ElectronClient/app.js:460
+#: ElectronClient/app.js:471
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importowanie z \"%s\"  jako \"%s\". Proszę czekać..."
 
-#: ElectronClient/app.js:522
+#: ElectronClient/app.js:533
 msgid "Create note from template"
 msgstr "Stwórz notatkę z szablonu"
 
-#: ElectronClient/app.js:528
+#: ElectronClient/app.js:539
 msgid "Create to-do from template"
 msgstr "Utwórz notatkę z szablonu"
 
-#: ElectronClient/app.js:534
-msgid "Insert template"
-msgstr "Wstaw szablon"
-
-#: ElectronClient/app.js:541
+#: ElectronClient/app.js:552
 msgid "Open template directory"
 msgstr "Otwórz katalog szablonów"
 
-#: ElectronClient/app.js:548
+#: ElectronClient/app.js:559
 msgid "Refresh templates"
 msgstr "Odśwież szablony"
 
-#: ElectronClient/app.js:574
+#: ElectronClient/app.js:585
 msgid "Note attachments..."
 msgstr "Załączenia notatki..."
 
-#: ElectronClient/app.js:596
-#, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "Rewizja: %s (%s)"
-
-#: ElectronClient/app.js:603
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
-
-#: ElectronClient/app.js:605
-#, javascript-format
-msgid "Client ID: %s"
-msgstr "ID klienta: %s"
-
-#: ElectronClient/app.js:606
-#, javascript-format
-msgid "Sync Version: %s"
-msgstr "Wersja synchronizacji: %s"
-
-#: ElectronClient/app.js:607
-#, javascript-format
-msgid "Profile Version: %s"
-msgstr "Wersja profilu: %s"
-
-#: ElectronClient/app.js:608
-#, javascript-format
-msgid "Keychain Supported: %s"
-msgstr ""
-
-#: ElectronClient/app.js:630 ElectronClient/app.js:706
+#: ElectronClient/app.js:621 ElectronClient/app.js:697
 msgid "&File"
 msgstr "&Plik"
 
-#: ElectronClient/app.js:636 ElectronClient/app.js:905
+#: ElectronClient/app.js:627 ElectronClient/app.js:896
 msgid "About Joplin"
 msgstr "O aplikacji Joplin"
 
-#: ElectronClient/app.js:643
+#: ElectronClient/app.js:634
 msgid "Preferences..."
 msgstr "Preferencje..."
 
-#: ElectronClient/app.js:653 ElectronClient/app.js:887
+#: ElectronClient/app.js:644 ElectronClient/app.js:878
 msgid "Check for updates..."
 msgstr "Sprawdź dostępność aktualizacji..."
 
-#: ElectronClient/app.js:666 ElectronClient/app.js:719
+#: ElectronClient/app.js:657 ElectronClient/app.js:710
 msgid "Templates"
 msgstr "Szablony"
 
-#: ElectronClient/app.js:692
+#: ElectronClient/app.js:668
+#, fuzzy
+msgid "Export all"
+msgstr "Eksportuj"
+
+#: ElectronClient/app.js:683
 #, javascript-format
 msgid "Hide %s"
 msgstr "Schowaj %s"
 
-#: ElectronClient/app.js:699
-msgid "Quit"
-msgstr "Wyjdź"
-
-#: ElectronClient/app.js:712
-msgid "Close Window"
-msgstr "Zamknij okno"
-
-#: ElectronClient/app.js:757
+#: ElectronClient/app.js:748
 msgid "&Edit"
 msgstr "&Edytuj"
 
-#: ElectronClient/app.js:776
+#: ElectronClient/app.js:768
 msgid "&View"
 msgstr "&Wyświetl"
 
-#: ElectronClient/app.js:782
+#: ElectronClient/app.js:774
 msgid "Layout button sequence"
 msgstr "Układ przycisków"
 
-#: ElectronClient/app.js:822
+#: ElectronClient/app.js:814
 msgid "Focus"
 msgstr "Wyszczególnienie"
 
-#: ElectronClient/app.js:828
-msgid "Actual Size"
-msgstr "Rozmiar rzeczywisty"
-
-#: ElectronClient/app.js:839 ElectronClient/app.js:845
+#: ElectronClient/app.js:831 ElectronClient/app.js:837
 msgid "Zoom In"
 msgstr "Powiększ"
 
-#: ElectronClient/app.js:852
+#: ElectronClient/app.js:844
 msgid "Zoom Out"
 msgstr "Pomniejsz"
 
-#: ElectronClient/app.js:860
+#: ElectronClient/app.js:852
 #, fuzzy
 msgid "&Note"
 msgstr "Notatka"
 
-#: ElectronClient/app.js:870
+#: ElectronClient/app.js:861
 msgid "&Tools"
 msgstr "&Narzędzia"
 
-#: ElectronClient/app.js:874
+#: ElectronClient/app.js:865
 msgid "&Help"
 msgstr "&Pomoc"
 
-#: ElectronClient/app.js:877
-msgid "Website and documentation"
-msgstr "Strona internetowa i dokumentacja"
-
-#: ElectronClient/app.js:881
+#: ElectronClient/app.js:872
 msgid "Joplin Forum"
 msgstr "Forum Joplin"
 
-#: ElectronClient/app.js:884
+#: ElectronClient/app.js:875
 #: ReactNativeClient/lib/components/screens/config.js:495
 msgid "Make a donation"
 msgstr "Przekaż datek"
 
-#: ElectronClient/app.js:894
+#: ElectronClient/app.js:885
 msgid "Toggle development tools"
 msgstr "Włącz/wyłącz narzędzia programistyczne"
 
-#: ElectronClient/app.js:1037
+#: ElectronClient/app.js:1028
 #, javascript-format
 msgid "Open %s"
 msgstr "Otwórz %s"
 
-#: ElectronClient/app.js:1039
+#: ElectronClient/app.js:1030
 msgid "Exit"
 msgstr "Wyjdź"
 
@@ -2200,22 +2236,6 @@ msgstr ""
 "danych osobowych. Dane nie zostaną udostępnione jakiejkolwiek firmie/"
 "organizacji."
 
-#: ReactNativeClient/lib/registry.js:156
-msgid ""
-"Could not synchronise with OneDrive.\n"
-"\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
-"\n"
-"Please consider using a regular OneDrive account."
-msgstr ""
-"Nie można zsynchronizować z OneDrive.\n"
-"\n"
-"Ten błąd często występuje podczas korzystania z OneDrive dla Biznesu, który "
-"niestety nie może być wspierany.\n"
-"\n"
-"Rozważ korzystanie ze standardowego konta OneDrive."
-
 #: ReactNativeClient/lib/logger.js:178
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -2235,7 +2255,7 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:523
+#: ReactNativeClient/lib/components/screens/note.js:522
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -2244,30 +2264,30 @@ msgstr ""
 "Jesteś w trakcie załączenia dużego zdjęcia (%dx%d pikseli). Chciałbyś "
 "zmniejszyć rozmiar do %d pikseli przed załączeniem?"
 
-#: ReactNativeClient/lib/shim-init-node.js:156
+#: ReactNativeClient/lib/shim-init-node.js:157
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "Brak dostępu %s"
 
-#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Folder.js:27
 #: ReactNativeClient/lib/models/Note.js:25
 msgid "title"
 msgstr "tytuł"
 
-#: ReactNativeClient/lib/models/Folder.js:29
+#: ReactNativeClient/lib/models/Folder.js:28
 #: ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
 msgstr "data aktualizacji"
 
-#: ReactNativeClient/lib/models/Folder.js:89
+#: ReactNativeClient/lib/models/Folder.js:88
 msgid "Conflicts"
 msgstr "Konflikty"
 
-#: ReactNativeClient/lib/models/Folder.js:374
+#: ReactNativeClient/lib/models/Folder.js:388
 msgid "Cannot move notebook to this location"
 msgstr "Nie można przenieść notatnika do tej lokacji"
 
-#: ReactNativeClient/lib/models/Folder.js:426
+#: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
@@ -2343,51 +2363,51 @@ msgstr ""
 "Serwis z którym nastąpi snychronizacja. Każdy serwis może zawierać dodatkowe "
 "parametry, które są nazwane jako `sync.NUM.NAME` (udokumentowane poniżej)."
 
-#: ReactNativeClient/lib/models/Setting.js:104
+#: ReactNativeClient/lib/models/Setting.js:110
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Katalog z którym nastąpi synchronizacja (ścieżka absolutna)"
 
-#: ReactNativeClient/lib/models/Setting.js:116
+#: ReactNativeClient/lib/models/Setting.js:122
 msgid "Nextcloud WebDAV URL"
 msgstr "Odnośnik WebDAV Nextcloud"
 
-#: ReactNativeClient/lib/models/Setting.js:127
+#: ReactNativeClient/lib/models/Setting.js:133
 msgid "Nextcloud username"
 msgstr "Nazwa użytkownika Nextcloud"
 
-#: ReactNativeClient/lib/models/Setting.js:137
+#: ReactNativeClient/lib/models/Setting.js:143
 msgid "Nextcloud password"
 msgstr "Hasło użytkownika Nextcloud"
 
-#: ReactNativeClient/lib/models/Setting.js:149
+#: ReactNativeClient/lib/models/Setting.js:155
 msgid "WebDAV URL"
 msgstr "Odnośnik WebDAV"
 
-#: ReactNativeClient/lib/models/Setting.js:160
+#: ReactNativeClient/lib/models/Setting.js:166
 msgid "WebDAV username"
 msgstr "Nazwa użytkownika WebDAV"
 
-#: ReactNativeClient/lib/models/Setting.js:170
+#: ReactNativeClient/lib/models/Setting.js:176
 msgid "WebDAV password"
 msgstr "Hasło użytkownika WebDAV"
 
-#: ReactNativeClient/lib/models/Setting.js:189
+#: ReactNativeClient/lib/models/Setting.js:195
 msgid "AWS S3 bucket"
 msgstr "Bucket AWS S3"
 
-#: ReactNativeClient/lib/models/Setting.js:200
+#: ReactNativeClient/lib/models/Setting.js:206
 msgid "AWS key"
 msgstr "Klucz AWS"
 
-#: ReactNativeClient/lib/models/Setting.js:210
+#: ReactNativeClient/lib/models/Setting.js:216
 msgid "AWS secret"
 msgstr "Tajny klucz AWS"
 
-#: ReactNativeClient/lib/models/Setting.js:224
+#: ReactNativeClient/lib/models/Setting.js:230
 msgid "Attachment download behaviour"
 msgstr "Zachowanie przy pobieraniu załączników"
 
-#: ReactNativeClient/lib/models/Setting.js:225
+#: ReactNativeClient/lib/models/Setting.js:231
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2398,188 +2418,184 @@ msgstr ""
 "trybie \"Zawsze\", wszystkie załączniki zostaną pobrane bez względu "
 "naotwarcie notatki."
 
-#: ReactNativeClient/lib/models/Setting.js:228
+#: ReactNativeClient/lib/models/Setting.js:234
 msgid "Always"
 msgstr "Zawsze"
 
-#: ReactNativeClient/lib/models/Setting.js:229
+#: ReactNativeClient/lib/models/Setting.js:235
 msgid "Manual"
 msgstr "Ręczny"
 
-#: ReactNativeClient/lib/models/Setting.js:230
+#: ReactNativeClient/lib/models/Setting.js:236
 msgid "Auto"
 msgstr "Automatyczny"
 
-#: ReactNativeClient/lib/models/Setting.js:247
+#: ReactNativeClient/lib/models/Setting.js:253
 msgid "Max concurrent connections"
 msgstr "Maksymalne połączenia jednoczesne"
 
-#: ReactNativeClient/lib/models/Setting.js:256
+#: ReactNativeClient/lib/models/Setting.js:267
 msgid "Language"
 msgstr "Język"
 
-#: ReactNativeClient/lib/models/Setting.js:266
+#: ReactNativeClient/lib/models/Setting.js:277
 msgid "Date format"
 msgstr "Format daty"
 
-#: ReactNativeClient/lib/models/Setting.js:285
+#: ReactNativeClient/lib/models/Setting.js:296
 msgid "Time format"
 msgstr "Format czasu"
 
-#: ReactNativeClient/lib/models/Setting.js:304
+#: ReactNativeClient/lib/models/Setting.js:315
 msgid "Theme"
 msgstr "Motyw"
 
-#: ReactNativeClient/lib/models/Setting.js:315
+#: ReactNativeClient/lib/models/Setting.js:326
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatycznie dopasyj motyw do motywu systemowego"
 
-#: ReactNativeClient/lib/models/Setting.js:327
+#: ReactNativeClient/lib/models/Setting.js:338
 msgid "Preferred light theme"
 msgstr "Preferuj jasny motyw"
 
-#: ReactNativeClient/lib/models/Setting.js:341
+#: ReactNativeClient/lib/models/Setting.js:352
 msgid "Preferred dark theme"
 msgstr "Preferuj ciemny  motyw"
 
-#: ReactNativeClient/lib/models/Setting.js:346
+#: ReactNativeClient/lib/models/Setting.js:357
 msgid "Show note counts"
 msgstr "Pokaż liczbę notatek"
 
-#: ReactNativeClient/lib/models/Setting.js:355
-#: ReactNativeClient/lib/models/Setting.js:357
-#: ReactNativeClient/lib/models/Setting.js:358
+#: ReactNativeClient/lib/models/Setting.js:366
+#: ReactNativeClient/lib/models/Setting.js:368
+#: ReactNativeClient/lib/models/Setting.js:369
 msgid "Split View"
 msgstr "Podzielony podgląd"
 
-#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:366
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:356
-#: ReactNativeClient/lib/models/Setting.js:357
-#: ReactNativeClient/lib/models/Setting.js:358
+#: ReactNativeClient/lib/models/Setting.js:367
+#: ReactNativeClient/lib/models/Setting.js:368
+#: ReactNativeClient/lib/models/Setting.js:369
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:361
+#: ReactNativeClient/lib/models/Setting.js:372
 msgid "Uncompleted to-dos on top"
 msgstr "Nieukończone zadania na górze"
 
-#: ReactNativeClient/lib/models/Setting.js:362
+#: ReactNativeClient/lib/models/Setting.js:373
 msgid "Show completed to-dos"
 msgstr "Wyświetl ukończone zadania"
 
-#: ReactNativeClient/lib/models/Setting.js:387
+#: ReactNativeClient/lib/models/Setting.js:398
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Zamykaj klamry, nawiasy, cudzysłowy itd."
 
-#: ReactNativeClient/lib/models/Setting.js:395
-msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-msgstr "Użyj CodeMirror jako edytora kodu (UWAGA: BETA)"
-
-#: ReactNativeClient/lib/models/Setting.js:397
-#: ReactNativeClient/lib/models/Setting.js:415
+#: ReactNativeClient/lib/models/Setting.js:400
+#: ReactNativeClient/lib/models/Setting.js:418
 msgid "Reverse sort order"
 msgstr "Odwróć kierunek sortowania"
 
-#: ReactNativeClient/lib/models/Setting.js:404
+#: ReactNativeClient/lib/models/Setting.js:407
 msgid "Sort notebooks by"
 msgstr "Sortuj notatniki po"
 
-#: ReactNativeClient/lib/models/Setting.js:416
+#: ReactNativeClient/lib/models/Setting.js:419
 msgid "Save geo-location with notes"
 msgstr "Zapisz lokalizację geograficzną z notatkami"
 
-#: ReactNativeClient/lib/models/Setting.js:435
+#: ReactNativeClient/lib/models/Setting.js:438
 msgid "When creating a new to-do:"
 msgstr "Podczas tworzenia nowego zadania:"
 
-#: ReactNativeClient/lib/models/Setting.js:438
-#: ReactNativeClient/lib/models/Setting.js:453
+#: ReactNativeClient/lib/models/Setting.js:441
+#: ReactNativeClient/lib/models/Setting.js:456
 msgid "Focus title"
 msgstr "Przejdź do tytułu"
 
-#: ReactNativeClient/lib/models/Setting.js:439
-#: ReactNativeClient/lib/models/Setting.js:454
+#: ReactNativeClient/lib/models/Setting.js:442
+#: ReactNativeClient/lib/models/Setting.js:457
 msgid "Focus body"
 msgstr "Przejdź do zawartości"
 
-#: ReactNativeClient/lib/models/Setting.js:450
+#: ReactNativeClient/lib/models/Setting.js:453
 msgid "When creating a new note:"
 msgstr "Podczas tworzenia nowej notatki:"
 
-#: ReactNativeClient/lib/models/Setting.js:464
+#: ReactNativeClient/lib/models/Setting.js:467
 msgid "Enable soft breaks"
 msgstr "Aktywuj miękkie łamanie linii"
 
-#: ReactNativeClient/lib/models/Setting.js:465
+#: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable typographer support"
 msgstr "Aktywuj składnię typografu"
 
-#: ReactNativeClient/lib/models/Setting.js:466
+#: ReactNativeClient/lib/models/Setting.js:469
 msgid "Enable math expressions"
 msgstr "Atywuj wyrażenia matematyczne"
 
-#: ReactNativeClient/lib/models/Setting.js:467
+#: ReactNativeClient/lib/models/Setting.js:470
 msgid "Enable Fountain syntax support"
 msgstr "Aktywuj składnię Fountain"
 
-#: ReactNativeClient/lib/models/Setting.js:468
+#: ReactNativeClient/lib/models/Setting.js:471
 msgid "Enable Mermaid diagrams support"
 msgstr "Aktywuj składnię Mermaid"
 
-#: ReactNativeClient/lib/models/Setting.js:470
+#: ReactNativeClient/lib/models/Setting.js:473
 msgid "Enable ==mark== syntax"
 msgstr "Aktywuj składnię ==mark=="
 
-#: ReactNativeClient/lib/models/Setting.js:471
+#: ReactNativeClient/lib/models/Setting.js:474
 msgid "Enable footnotes"
 msgstr "Aktywuj stopki"
 
-#: ReactNativeClient/lib/models/Setting.js:472
+#: ReactNativeClient/lib/models/Setting.js:475
 msgid "Enable table of contents extension"
 msgstr "Aktywuj rozszerenie dla tabeli zawartości"
 
-#: ReactNativeClient/lib/models/Setting.js:473
+#: ReactNativeClient/lib/models/Setting.js:476
 msgid "Enable ~sub~ syntax"
 msgstr "Aktywuj składnię ~sub~"
 
-#: ReactNativeClient/lib/models/Setting.js:474
+#: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable ^sup^ syntax"
 msgstr "Aktywuj składnię ^sup^"
 
-#: ReactNativeClient/lib/models/Setting.js:475
+#: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable deflist syntax"
 msgstr "Aktywuj skladnię składnię deflist"
 
-#: ReactNativeClient/lib/models/Setting.js:476
+#: ReactNativeClient/lib/models/Setting.js:479
 msgid "Enable abbreviation syntax"
 msgstr "Aktywuj składnię skrótów"
 
-#: ReactNativeClient/lib/models/Setting.js:477
+#: ReactNativeClient/lib/models/Setting.js:480
 msgid "Enable markdown emoji"
 msgstr "Aktywuj emotikony markdown"
 
-#: ReactNativeClient/lib/models/Setting.js:478
+#: ReactNativeClient/lib/models/Setting.js:481
 msgid "Enable ++insert++ syntax"
 msgstr "Aktywuj składnię ++instert++"
 
-#: ReactNativeClient/lib/models/Setting.js:479
+#: ReactNativeClient/lib/models/Setting.js:482
 msgid "Enable multimarkdown table extension"
 msgstr "Aktywuj rozszerzenie dla tabeli multimarkdown"
 
-#: ReactNativeClient/lib/models/Setting.js:491
+#: ReactNativeClient/lib/models/Setting.js:494
 msgid "Show tray icon"
 msgstr "Pokaż ikonę w zasobniku systemowym"
 
-#: ReactNativeClient/lib/models/Setting.js:493
+#: ReactNativeClient/lib/models/Setting.js:496
 msgid "Note: Does not work in all desktop environments."
 msgstr "Informacja: Nie działa na wszystkich środowiskach sprzętowych."
 
-#: ReactNativeClient/lib/models/Setting.js:493
+#: ReactNativeClient/lib/models/Setting.js:496
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2589,23 +2605,23 @@ msgstr ""
 "ustawienie, przez co notatki będę stale synchronizowane, redukując liczbę "
 "błędów."
 
-#: ReactNativeClient/lib/models/Setting.js:497
+#: ReactNativeClient/lib/models/Setting.js:500
 msgid "Start application minimised in the tray icon"
 msgstr "Uruchom aplikację zminmalizowaną w zasobniku systemowym"
 
-#: ReactNativeClient/lib/models/Setting.js:516
+#: ReactNativeClient/lib/models/Setting.js:519
 msgid "Editor font size"
 msgstr "Wielkość czcionki edytora"
 
-#: ReactNativeClient/lib/models/Setting.js:524
+#: ReactNativeClient/lib/models/Setting.js:527
 msgid "Editor font"
 msgstr "Rodzaj czcionki edytora"
 
-#: ReactNativeClient/lib/models/Setting.js:548
+#: ReactNativeClient/lib/models/Setting.js:551
 msgid "Editor font family"
 msgstr "Rodzina czcionek edytora"
 
-#: ReactNativeClient/lib/models/Setting.js:550
+#: ReactNativeClient/lib/models/Setting.js:553
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -2615,52 +2631,52 @@ msgstr ""
 "działać niepoprawnie. Jeżeli czcionka jest nieprawidłowa lub pusta, zostanie "
 "zastąpiona standardową czcionką monospace."
 
-#: ReactNativeClient/lib/models/Setting.js:589
+#: ReactNativeClient/lib/models/Setting.js:592
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Własny arkusz stylów dla całej aplikacji Joplin"
 
-#: ReactNativeClient/lib/models/Setting.js:595
+#: ReactNativeClient/lib/models/Setting.js:598
 msgid "Automatically update the application"
 msgstr "Automatycznie aktualizuj aplikację"
 
-#: ReactNativeClient/lib/models/Setting.js:596
+#: ReactNativeClient/lib/models/Setting.js:599
 msgid "Get pre-releases when checking for updates"
 msgstr "Uwzględniaj wersje przedpremierowe podczas sprawdzania aktualizacji"
 
-#: ReactNativeClient/lib/models/Setting.js:596
+#: ReactNativeClient/lib/models/Setting.js:599
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "Sprawdź stronę wydań przedpremierowych w celu uzyskania większości "
 "informacji: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:604
+#: ReactNativeClient/lib/models/Setting.js:607
 msgid "Synchronisation interval"
 msgstr "Interwał synchronizacji"
 
-#: ReactNativeClient/lib/models/Setting.js:608
-#: ReactNativeClient/lib/models/Setting.js:609
-#: ReactNativeClient/lib/models/Setting.js:610
+#: ReactNativeClient/lib/models/Setting.js:611
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minut"
 
-#: ReactNativeClient/lib/models/Setting.js:611
+#: ReactNativeClient/lib/models/Setting.js:614
 #, javascript-format
 msgid "%d hour"
 msgstr "%d godzina"
 
-#: ReactNativeClient/lib/models/Setting.js:612
-#: ReactNativeClient/lib/models/Setting.js:613
+#: ReactNativeClient/lib/models/Setting.js:615
+#: ReactNativeClient/lib/models/Setting.js:616
 #, javascript-format
 msgid "%d hours"
 msgstr "%d godzin"
 
-#: ReactNativeClient/lib/models/Setting.js:622
+#: ReactNativeClient/lib/models/Setting.js:625
 msgid "Text editor command"
 msgstr "Ścieżka edytora tekstu"
 
-#: ReactNativeClient/lib/models/Setting.js:622
+#: ReactNativeClient/lib/models/Setting.js:625
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2669,67 +2685,67 @@ msgstr ""
 "aby otwierać notatkę. Jeżeli nie zostanie podana, program spróbuje wykryć "
 "domyślny edytor."
 
-#: ReactNativeClient/lib/models/Setting.js:623
+#: ReactNativeClient/lib/models/Setting.js:626
 msgid "Page size for PDF export"
 msgstr "Wielkość strony do eksportu PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:625
+#: ReactNativeClient/lib/models/Setting.js:628
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:629
 msgid "Letter"
 msgstr "List"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:630
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:628
+#: ReactNativeClient/lib/models/Setting.js:631
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:629
+#: ReactNativeClient/lib/models/Setting.js:632
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ReactNativeClient/lib/models/Setting.js:630
+#: ReactNativeClient/lib/models/Setting.js:633
 msgid "Legal"
 msgstr "Legal"
 
-#: ReactNativeClient/lib/models/Setting.js:633
+#: ReactNativeClient/lib/models/Setting.js:636
 msgid "Page orientation for PDF export"
 msgstr "Orientacja strony do eksportu PDF"
 
-#: ReactNativeClient/lib/models/Setting.js:635
+#: ReactNativeClient/lib/models/Setting.js:638
 msgid "Portrait"
 msgstr "Pionowo"
 
-#: ReactNativeClient/lib/models/Setting.js:636
+#: ReactNativeClient/lib/models/Setting.js:639
 msgid "Landscape"
 msgstr "Poziomio"
 
-#: ReactNativeClient/lib/models/Setting.js:647
+#: ReactNativeClient/lib/models/Setting.js:650
 msgid "Keyboard Mode"
 msgstr "Tryb klawiatury"
 
-#: ReactNativeClient/lib/models/Setting.js:650
+#: ReactNativeClient/lib/models/Setting.js:653
 msgid "Default"
 msgstr "Domyślne"
 
-#: ReactNativeClient/lib/models/Setting.js:651
+#: ReactNativeClient/lib/models/Setting.js:654
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:652
+#: ReactNativeClient/lib/models/Setting.js:655
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:667
+#: ReactNativeClient/lib/models/Setting.js:670
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe ceryfikaty TLS"
 
-#: ReactNativeClient/lib/models/Setting.js:668
+#: ReactNativeClient/lib/models/Setting.js:671
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2742,15 +2758,15 @@ msgstr ""
 "będzie wymagane zapisanie zmian przez naciśnięciem na \"Sprawdź konfigurację "
 "synchronizacji\"."
 
-#: ReactNativeClient/lib/models/Setting.js:680
+#: ReactNativeClient/lib/models/Setting.js:683
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoruj błędy certyfikatu TLS"
 
-#: ReactNativeClient/lib/models/Setting.js:689
+#: ReactNativeClient/lib/models/Setting.js:692
 msgid "Fail-safe"
 msgstr "Bezpieczny"
 
-#: ReactNativeClient/lib/models/Setting.js:690
+#: ReactNativeClient/lib/models/Setting.js:693
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2758,37 +2774,37 @@ msgstr ""
 "Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty "
 "(często w wyniku nieprawidłowej konfiguracji lub błędu)"
 
-#: ReactNativeClient/lib/models/Setting.js:694
+#: ReactNativeClient/lib/models/Setting.js:697
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 "Jeśli nie określisz portu używany przez serwer API, użyty zostanie domyślny."
 
-#: ReactNativeClient/lib/models/Setting.js:702
+#: ReactNativeClient/lib/models/Setting.js:705
 msgid "Enable note history"
 msgstr "Aktywuj historię notatek"
 
-#: ReactNativeClient/lib/models/Setting.js:712
+#: ReactNativeClient/lib/models/Setting.js:715
 msgid "days"
 msgstr "dni"
 
-#: ReactNativeClient/lib/models/Setting.js:712
+#: ReactNativeClient/lib/models/Setting.js:715
 #, javascript-format
 msgid "%d days"
 msgstr "%d dni"
 
-#: ReactNativeClient/lib/models/Setting.js:714
+#: ReactNativeClient/lib/models/Setting.js:717
 msgid "Keep note history for"
 msgstr "Zachowuj historię przez"
 
-#: ReactNativeClient/lib/models/Setting.js:741
+#: ReactNativeClient/lib/models/Setting.js:744
 msgid "Notebook list growth factor"
 msgstr "Czynnik rośnięcia listy notatników"
 
-#: ReactNativeClient/lib/models/Setting.js:743
-#: ReactNativeClient/lib/models/Setting.js:756
-#: ReactNativeClient/lib/models/Setting.js:769
+#: ReactNativeClient/lib/models/Setting.js:746
+#: ReactNativeClient/lib/models/Setting.js:759
+#: ReactNativeClient/lib/models/Setting.js:772
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2800,52 +2816,57 @@ msgstr ""
 "czynnikiem 2 będzie zajmował 2 razy więcej, niż ten z czynnikiem 1,. "
 "Zrestartuj aplikację, aby zobaczyć zmiany."
 
-#: ReactNativeClient/lib/models/Setting.js:754
+#: ReactNativeClient/lib/models/Setting.js:757
 msgid "Note list growth factor"
 msgstr "Czynnik rośnięcia listy notatek"
 
-#: ReactNativeClient/lib/models/Setting.js:767
+#: ReactNativeClient/lib/models/Setting.js:770
 msgid "Note area growth factor"
 msgstr "Czynnik rośnięcia pola notatek"
 
-#: ReactNativeClient/lib/models/Setting.js:919
+#: ReactNativeClient/lib/models/Setting.js:922
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nieznana wartość opcji: \"%s\". Możliwa wartość opcji: %s."
 
-#: ReactNativeClient/lib/models/Setting.js:1247
+#: ReactNativeClient/lib/models/Setting.js:1250
 msgid "General"
 msgstr "Ogólne"
 
-#: ReactNativeClient/lib/models/Setting.js:1248
+#: ReactNativeClient/lib/models/Setting.js:1251
 msgid "Synchronisation"
 msgstr "Synchronizacja"
 
-#: ReactNativeClient/lib/models/Setting.js:1249
+#: ReactNativeClient/lib/models/Setting.js:1252
 msgid "Appearance"
 msgstr "Wygląd"
 
-#: ReactNativeClient/lib/models/Setting.js:1250
+#: ReactNativeClient/lib/models/Setting.js:1253
 msgid "Note"
 msgstr "Notatka"
 
-#: ReactNativeClient/lib/models/Setting.js:1251
+#: ReactNativeClient/lib/models/Setting.js:1254
 msgid "Plugins"
 msgstr "Wtyczki"
 
-#: ReactNativeClient/lib/models/Setting.js:1252
+#: ReactNativeClient/lib/models/Setting.js:1255
 msgid "Application"
 msgstr "Aplikacja"
 
-#: ReactNativeClient/lib/models/Setting.js:1254
+#: ReactNativeClient/lib/models/Setting.js:1257
 msgid "Encryption"
 msgstr "Szyfrowanie"
 
-#: ReactNativeClient/lib/models/Setting.js:1255
+#: ReactNativeClient/lib/models/Setting.js:1258
 msgid "Web Clipper"
 msgstr "Web clipper"
 
-#: ReactNativeClient/lib/models/Setting.js:1260
+#: ReactNativeClient/lib/models/Setting.js:1259
+#, fuzzy
+msgid "Keyboard Shortcuts"
+msgstr "Tryb klawiatury"
+
+#: ReactNativeClient/lib/models/Setting.js:1264
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2863,7 +2884,7 @@ msgstr ""
 "formatowanie. Poniżej jest widoczne które pluginy są kompatybilne z edytorem "
 "WYSIWYG."
 
-#: ReactNativeClient/lib/models/Setting.js:1261
+#: ReactNativeClient/lib/models/Setting.js:1265
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notatki i ustawienia są przechowywane w: %s"
@@ -2896,19 +2917,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ReactNativeClient/lib/models/Tag.js:384
-msgid "Cannot move tag to this location."
-msgstr "Nie można przenieść tagu do tej lokacji."
-
-#: ReactNativeClient/lib/models/Tag.js:429
-msgid "Tag name cannot start or end with a `/`."
-msgstr "Nazwa tagu nie może rozpoczynać ani kończyć się na `/`."
-
-#: ReactNativeClient/lib/models/Tag.js:431
-msgid "Tag name cannot contain `//`."
-msgstr "Nazwa tagu nie może zawierać `//`."
-
-#: ReactNativeClient/lib/models/Tag.js:482
+#: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Znacznik \"%s\" istnieje. Proszę wybrać inną nazwę."
@@ -2925,12 +2934,12 @@ msgstr "własny kierunek sortowania"
 msgid "This note does not have geolocation information."
 msgstr "Notatka nie zawiera informacji o lokalizacji geograficznej."
 
-#: ReactNativeClient/lib/models/Note.js:466
+#: ReactNativeClient/lib/models/Note.js:469
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nie można skopiować notatki do notatnika \"%s\""
 
-#: ReactNativeClient/lib/models/Note.js:477
+#: ReactNativeClient/lib/models/Note.js:480
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nie można przenieść notatki do notatnika \"%s\""
@@ -2947,14 +2956,14 @@ msgstr "Zaszyfrowanie obiekty nie mogą być modyfikowane"
 msgid "OneDrive Dev (For testing only)"
 msgstr "Deweloperski OneDrive (jedynie w celu testów)"
 
-#: ReactNativeClient/lib/BaseApplication.js:139
-#: ReactNativeClient/lib/BaseApplication.js:152
-#: ReactNativeClient/lib/BaseApplication.js:183
+#: ReactNativeClient/lib/BaseApplication.js:142
+#: ReactNativeClient/lib/BaseApplication.js:155
+#: ReactNativeClient/lib/BaseApplication.js:192
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Przykłady: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:218
+#: ReactNativeClient/lib/BaseApplication.js:227
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Nieznana flaga: %s"
@@ -3007,6 +3016,10 @@ msgstr "Naciśnij, aby ustawić hasło szyfrowania."
 #: ReactNativeClient/lib/components/screen-header.js:452
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Niektóre przedmioty nie mogą być zsynchronizowane."
+
+#: ReactNativeClient/lib/components/screen-header.js:453
+msgid "The sync target needs to be upgraded. Press this banner to proceed."
+msgstr ""
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3127,6 +3140,10 @@ msgstr "Zaloguj się z OneDrive"
 msgid "Refresh"
 msgstr "Odśwież"
 
+#: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr ""
+
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
 msgstr "Nowe znaczniki:"
@@ -3149,7 +3166,7 @@ msgid "Master Key %s"
 msgstr "Klucz główny %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:773
+#: ReactNativeClient/lib/components/screens/note.js:772
 #, javascript-format
 msgid "Created: %s"
 msgstr "Utworzono: %s"
@@ -3335,98 +3352,98 @@ msgstr "Baza danych v%s"
 msgid "FTS enabled: %d"
 msgstr "FTS aktywowano: %d"
 
-#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:96
 msgid "This note has been modified:"
 msgstr "Notatka została zmodyfikowana:"
 
-#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:96
 msgid "Save changes"
 msgstr "Zapisz zmiany"
 
-#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:96
 msgid "Discard changes"
 msgstr "Odrzuć zmiany"
 
-#: ReactNativeClient/lib/components/screens/note.js:161
+#: ReactNativeClient/lib/components/screens/note.js:160
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Brak przedmiotu z ID %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:180
+#: ReactNativeClient/lib/components/screens/note.js:179
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Załącznik nie został jeszcze pobrany lub odszyfrowany."
 
-#: ReactNativeClient/lib/components/screens/note.js:184
+#: ReactNativeClient/lib/components/screens/note.js:183
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:188
+#: ReactNativeClient/lib/components/screens/note.js:187
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Odnośniki protokołu \"%s\" nie są wspierane"
 
-#: ReactNativeClient/lib/components/screens/note.js:618
+#: ReactNativeClient/lib/components/screens/note.js:617
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Niewspierany typ obrazu: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:774
+#: ReactNativeClient/lib/components/screens/note.js:773
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Zaktualizowano: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:778
+#: ReactNativeClient/lib/components/screens/note.js:777
 msgid "View on map"
 msgstr "Pokaż na mapie"
 
-#: ReactNativeClient/lib/components/screens/note.js:785
+#: ReactNativeClient/lib/components/screens/note.js:784
 msgid "Go to source URL"
 msgstr "Idź do adresu źródłowego odnośnika"
 
-#: ReactNativeClient/lib/components/screens/note.js:813
+#: ReactNativeClient/lib/components/screens/note.js:812
 msgid "Attach..."
 msgstr "Załącz..."
 
-#: ReactNativeClient/lib/components/screens/note.js:815
+#: ReactNativeClient/lib/components/screens/note.js:814
 msgid "Choose an option"
 msgstr "Wybierz opcję"
 
-#: ReactNativeClient/lib/components/screens/note.js:815
+#: ReactNativeClient/lib/components/screens/note.js:814
 msgid "Take photo"
 msgstr "Wykonaj zdjęcie"
 
-#: ReactNativeClient/lib/components/screens/note.js:815
+#: ReactNativeClient/lib/components/screens/note.js:814
 msgid "Attach photo"
 msgstr "Załącz zdjęcie"
 
-#: ReactNativeClient/lib/components/screens/note.js:815
+#: ReactNativeClient/lib/components/screens/note.js:814
 msgid "Attach any file"
 msgstr "Załącz plik"
 
-#: ReactNativeClient/lib/components/screens/note.js:834
+#: ReactNativeClient/lib/components/screens/note.js:833
 msgid "Share"
 msgstr "Udostępnij"
 
-#: ReactNativeClient/lib/components/screens/note.js:848
+#: ReactNativeClient/lib/components/screens/note.js:847
 msgid "Convert to note"
 msgstr "Przekonwertuj do notatki"
 
-#: ReactNativeClient/lib/components/screens/note.js:848
+#: ReactNativeClient/lib/components/screens/note.js:847
 msgid "Convert to todo"
 msgstr "Przekonwertuj do zadania"
 
-#: ReactNativeClient/lib/components/screens/note.js:862
+#: ReactNativeClient/lib/components/screens/note.js:861
 msgid "Properties"
 msgstr "Właściwości"
 
-#: ReactNativeClient/lib/components/screens/note.js:1042
-#: ReactNativeClient/lib/components/screens/note.js:1100
+#: ReactNativeClient/lib/components/screens/note.js:1039
+#: ReactNativeClient/lib/components/screens/note.js:1097
 msgid "Add body"
 msgstr "Dodaj tekst"
 
-#: ReactNativeClient/lib/components/screens/note.js:1150
+#: ReactNativeClient/lib/components/screens/note.js:1147
 msgid "Add title"
 msgstr "Dodaj tytuł"
 
@@ -3434,7 +3451,7 @@ msgstr "Dodaj tytuł"
 msgid "Search"
 msgstr "Wyszukaj"
 
-#: ReactNativeClient/lib/onedrive-api.js:342
+#: ReactNativeClient/lib/onedrive-api.js:363
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -3442,60 +3459,60 @@ msgstr ""
 "Nie można odświeżyć tokena: brak danych uwierzytelniających. Uruchomienie "
 "synchronizacji ponownie powinno rozwiązać ten problem."
 
-#: ReactNativeClient/lib/synchronizer.js:94
+#: ReactNativeClient/lib/synchronizer.js:104
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Utworzono lokalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:95
+#: ReactNativeClient/lib/synchronizer.js:105
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Zaaktualizowano lokalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:96
+#: ReactNativeClient/lib/synchronizer.js:106
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Utworzono zdalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:97
+#: ReactNativeClient/lib/synchronizer.js:107
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Zaaktualizowano zdalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:98
+#: ReactNativeClient/lib/synchronizer.js:108
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Usunięto lokalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:99
+#: ReactNativeClient/lib/synchronizer.js:109
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Usunięto zdalne obiekty: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:100
+#: ReactNativeClient/lib/synchronizer.js:110
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Pobieranie obiektów %d/%d."
 
-#: ReactNativeClient/lib/synchronizer.js:102
+#: ReactNativeClient/lib/synchronizer.js:112
 msgid "Cancelling..."
 msgstr "Anulowanie..."
 
-#: ReactNativeClient/lib/synchronizer.js:103
+#: ReactNativeClient/lib/synchronizer.js:113
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Ukończono: %s"
 
-#: ReactNativeClient/lib/synchronizer.js:104
+#: ReactNativeClient/lib/synchronizer.js:114
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Ostatni błąd: %s"
 
-#: ReactNativeClient/lib/synchronizer.js:204
+#: ReactNativeClient/lib/synchronizer.js:214
 msgid "Idle"
 msgstr "Spoczynek"
 
-#: ReactNativeClient/lib/synchronizer.js:205
+#: ReactNativeClient/lib/synchronizer.js:215
 msgid "In progress"
 msgstr "W trakcie"
 
@@ -3532,6 +3549,36 @@ msgstr "Przekaż"
 msgid "Synchronize"
 msgstr "Synchronizuj"
 
+#: ReactNativeClient/lib/versionInfo.js:10
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Rewizja: %s (%s)"
+
+#: ReactNativeClient/lib/versionInfo.js:18
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ReactNativeClient/lib/versionInfo.js:20
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "ID klienta: %s"
+
+#: ReactNativeClient/lib/versionInfo.js:21
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Wersja synchronizacji: %s"
+
+#: ReactNativeClient/lib/versionInfo.js:22
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Wersja profilu: %s"
+
+#: ReactNativeClient/lib/versionInfo.js:23
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
 msgstr "Brak danych do eksportu."
@@ -3543,6 +3590,48 @@ msgstr "Przywrócone notatki"
 #: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Proszę określić notatnik do którego będą zaimportowane notatki."
+
+#: ReactNativeClient/lib/services/KeymapService.js:124
+#, javascript-format
+msgid "Error loading the keymap from file: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:141
+#, javascript-format
+msgid "Error saving the keymap to file: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:204
+#, javascript-format
+msgid "Keymap item %s is missing the required \"command\" property."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:207
+#, javascript-format
+msgid "Keymap item %s is invalid because %s is not a valid command."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:210
+#, javascript-format
+msgid "Keymap item %s is missing the required \"accelerator\" property."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:217
+#, javascript-format
+msgid "Keymap item %s is invalid because %s is not a valid accelerator."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:235
+#, javascript-format
+msgid ""
+"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
+"unexpected behaviour."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:260
+#, javascript-format
+msgid "Accelerator \"%s\" is not valid."
+msgstr ""
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -3705,7 +3794,7 @@ msgstr "Nie można załadować modułu \"%s\" dla formatu \"%s\" i wyniku \"%s\"
 msgid "Please specify import format for %s"
 msgstr "Proszę określić format importu dla %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:361
+#: ReactNativeClient/lib/services/InteropService.js:363
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
@@ -3713,6 +3802,39 @@ msgid ""
 msgstr ""
 "Obiekt jest aktualnie zaszyfrowany: %s \"%s\". Proszę czekać, aż wszystkie "
 "obiekty zostaną deszyfrowane i spróbować ponownie."
+
+#~ msgid "Cancelling... Please wait."
+#~ msgstr "Anulowanie... Proszę czekać."
+
+#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+#~ msgstr "Usunąć znacznik \"%s\" i jemu pokrewne ze wszystkich notatek?"
+
+#~ msgid ""
+#~ "Could not synchronise with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Nie można zsynchronizować z OneDrive.\n"
+#~ "\n"
+#~ "Ten błąd często występuje podczas korzystania z OneDrive dla Biznesu, "
+#~ "który niestety nie może być wspierany.\n"
+#~ "\n"
+#~ "Rozważ korzystanie ze standardowego konta OneDrive."
+
+#~ msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+#~ msgstr "Użyj CodeMirror jako edytora kodu (UWAGA: BETA)"
+
+#~ msgid "Cannot move tag to this location."
+#~ msgstr "Nie można przenieść tagu do tej lokacji."
+
+#~ msgid "Tag name cannot start or end with a `/`."
+#~ msgstr "Nazwa tagu nie może rozpoczynać ani kończyć się na `/`."
+
+#~ msgid "Tag name cannot contain `//`."
+#~ msgstr "Nazwa tagu nie może zawierać `//`."
 
 #~ msgid "Add or remove tags"
 #~ msgstr "Dodaj lub usuń znaczniki"
