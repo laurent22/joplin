@@ -494,7 +494,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				props.setLocalSearchResultCount(matches);
 			}
 		}
-	}, [props.searchMarkers, props.setLocalSearchResultCount, props.content]);
+	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
