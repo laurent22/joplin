@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.168](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.168) - 2020-09-14T08:47:08Z
+
+- Improved: Implemented reliable way to sync device and server clocks
+
 ## [cli-v1.0.167](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167) - 2020-09-04T17:15:49Z
 
 - New: Add mechanism to lock and upgrade sync targets (#3524)
