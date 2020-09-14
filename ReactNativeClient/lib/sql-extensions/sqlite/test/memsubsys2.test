@@ -1,0 +1,176 @@
+# 2008 June 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests of the memory allocation subsystem.
+#
+# $Id: memsubsys2.test,v 1.2 2008/08/12 15:21:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+sqlite3_reset_auto_extension
+
+# This procedure constructs a new database in test.db.  It fills
+# this database with many small records (enough to force multiple
+# rebalance operations in the btree-layer and to require a large
+# page cache), verifies correct results, then returns.
+#
+proc build_test_db {testname pragmas} {
+  catch {db close}
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  db eval $pragmas
+  db eval {
+    CREATE TABLE t1(x, y);
+    CREATE TABLE t2(a, b);
+    CREATE INDEX i1 ON t1(x,y);
+    INSERT INTO t1 VALUES(1, 100);
+    INSERT INTO t1 VALUES(2, 200);
+  }
+  for {set i 2} {$i<5000} {incr i $i} {
+    db eval {INSERT INTO t2 SELECT * FROM t1}
+    db eval {INSERT INTO t1 SELECT a+$i, a+b*100 FROM t2}
+    db eval {DELETE FROM t2}
+  }
+  do_test $testname.1 {
+    db eval {SELECT count(*) FROM t1}
+  } 8192
+  integrity_check $testname.2
+}
+
+# Reset all of the highwater marks.
+#
+proc reset_highwater_marks {} {
+  sqlite3_status SQLITE_STATUS_MEMORY_USED 1
+  sqlite3_status SQLITE_STATUS_MALLOC_SIZE 1
+  sqlite3_status SQLITE_STATUS_PAGECACHE_USED 1
+  sqlite3_status SQLITE_STATUS_PAGECACHE_OVERFLOW 1
+  sqlite3_status SQLITE_STATUS_PAGECACHE_SIZE 1
+  sqlite3_status SQLITE_STATUS_SCRATCH_USED 1
+  sqlite3_status SQLITE_STATUS_SCRATCH_OVERFLOW 1
+  sqlite3_status SQLITE_STATUS_SCRATCH_SIZE 1
+  sqlite3_status SQLITE_STATUS_PARSER_STACK 1
+}
+
+# Test 1:  Verify that calling sqlite3_malloc(0) returns a NULL
+# pointer.
+#
+set highwater [sqlite3_memory_highwater 0]
+do_test memsubsys2-1.1 {
+  sqlite3_malloc 0
+} {0}
+do_test memsubsys2-1.2 {
+  sqlite3_memory_highwater 0
+} $highwater
+
+
+# Test 2:  Verify that the highwater mark increases after a large
+# allocation.
+#
+sqlite3_memory_highwater 1
+set highwater [sqlite3_memory_highwater 0]
+do_test memsubsys2-2.1 {
+  sqlite3_free [set x [sqlite3_malloc 100000]]
+  expr {$x!="0"}
+} {1}
+do_test memsubsys2-2.2.1 {
+  expr {[sqlite3_memory_highwater 0]>=[sqlite3_memory_used]+100000}
+} {1}
+do_test memsubsys2-2.2.2 {
+  expr {[sqlite3_memory_highwater 0]>=$highwater+50000}
+} {1}
+
+# Test 3: Verify that turning of memstatus disables the statistics
+# tracking.
+#
+db close
+sqlite3_shutdown
+sqlite3_config_memstatus 0
+sqlite3_initialize
+reset_highwater_marks
+set highwater [sqlite3_memory_highwater 0]
+do_test memsubsys2-3.1 {
+  set highwater
+} {0}
+do_test memsubsys2-3.2 {
+  sqlite3_malloc 0
+} {0}
+do_test memsubsys2-3.3 {
+  sqlite3_memory_highwater 0
+} {0}
+do_test memsubsys2-3.4 {
+  sqlite3_memory_used
+} {0}
+do_test memsubsys2-3.5 {
+  set ::allocation [sqlite3_malloc 100000]
+  expr {$::allocation!="0"}
+} {1}
+do_test memsubsys2-3.6 {
+  sqlite3_memory_highwater 0
+} {0}
+do_test memsubsys2-3.7 {
+  sqlite3_memory_used
+} {0}
+do_test memsubsys2-3.8 {
+  sqlite3_free $::allocation
+} {}
+do_test memsubsys2-3.9 {
+  sqlite3_free 0
+} {}
+  
+
+# Test 4: Verify that turning on memstatus reenables the statistics
+# tracking.
+#
+sqlite3_shutdown
+sqlite3_config_memstatus 1
+sqlite3_initialize
+reset_highwater_marks
+set highwater [sqlite3_memory_highwater 0]
+do_test memsubsys2-4.1 {
+  set highwater
+} {0}
+do_test memsubsys2-4.2 {
+  sqlite3_malloc 0
+} {0}
+do_test memsubsys2-4.3 {
+  sqlite3_memory_highwater 0
+} {0}
+do_test memsubsys2-4.4 {
+  sqlite3_memory_used
+} {0}
+do_test memsubsys2-4.5 {
+  set ::allocation [sqlite3_malloc 100000]
+  expr {$::allocation!="0"}
+} {1}
+do_test memsubsys2-4.6 {
+  expr {[sqlite3_memory_highwater 0]>=100000}
+} {1}
+do_test memsubsys2-4.7 {
+  expr {[sqlite3_memory_used]>=100000}
+} {1}
+do_test memsubsys2-4.8 {
+  sqlite3_free $::allocation
+} {}
+do_test memsubsys2-4.9 {
+  sqlite3_free 0
+} {}
+do_test memsubsys2-4.10 {
+  expr {[sqlite3_memory_highwater 0]>=100000}
+} {1}
+do_test memsubsys2-4.11 {
+  sqlite3_memory_used
+} {0}
+  
+
+
+
+autoinstall_test_functions
+finish_test

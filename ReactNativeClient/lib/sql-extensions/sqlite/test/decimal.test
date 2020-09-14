@@ -1,0 +1,186 @@
+# 2017 December 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix decimal
+
+if {[catch {load_static_extension db decimal} error]} {
+  puts "Skipping decimal tests, hit load error: $error"
+  finish_test; return
+}
+
+do_execsql_test 1000 {
+  SELECT decimal(1);
+} {1}
+do_execsql_test 1010 {
+  SELECT decimal(1.0);
+} {1.0}
+do_execsql_test 1020 {
+  SELECT decimal(0001.0);
+} {1.0}
+do_execsql_test 1030 {
+  SELECT decimal(+0001.0);
+} {1.0}
+do_execsql_test 1040 {
+  SELECT decimal(-0001.0);
+} {-1.0}
+do_execsql_test 1050 {
+  SELECT decimal(1.0e72);
+} {1000000000000000000000000000000000000000000000000000000000000000000000000}
+#   123456789 123456789 123456789 123456789 123456789 123456789 123456789 123
+do_execsql_test 1060 {
+  SELECT decimal(1.0e-72);
+} {0.0000000000000000000000000000000000000000000000000000000000000000000000010}
+#    123456789 123456789 123456789 123456789 123456789 123456789 123456789 123
+do_execsql_test 1070 {
+  SELECT decimal(-123e-4);
+} {-0.0123}
+do_execsql_test 1080 {
+  SELECT decimal(+123e+4);
+} {1230000.0}
+
+
+do_execsql_test 2000 {
+  CREATE TABLE t1(seq INTEGER PRIMARY KEY, val TEXT);
+  INSERT INTO t1 VALUES
+    (1, '-9999e99'),
+    (2, '-9998.000e+99'),
+    (3, '-9999.0'),
+    (4, '-1'),
+    (5, '-9999e-20'),
+    (6, '0'),
+    (7, '1e-30'),
+    (8, '1e-29'),
+    (9, '1'),
+    (10,'1.00000000000000001'),
+    (11,'+1.00001'),
+    (12,'99e+99');
+  SELECT *, '|'
+    FROM t1 AS a, t1 AS b
+   WHERE a.seq<b.seq
+     AND decimal_cmp(a.val,b.val)>=0;
+} {}
+do_execsql_test 2010 {
+  SELECT *, '|'
+    FROM t1 AS a, t1 AS b
+   WHERE a.seq<>b.seq
+     AND decimal_cmp(a.val,b.val)==0;
+} {}
+do_execsql_test 2020 {
+  SELECT *, '|'
+    FROM t1 AS a, t1 AS b
+   WHERE a.seq>b.seq
+     AND decimal_cmp(a.val,b.val)<=0;
+} {}
+do_execsql_test 2030 {
+  SELECT seq FROM t1 ORDER BY val COLLATE decimal;
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+do_execsql_test 2040 {
+  SELECT seq FROM t1 ORDER BY val COLLATE decimal DESC;
+} {12 11 10 9 8 7 6 5 4 3 2 1}
+
+do_execsql_test 3000 {
+  CREATE TABLE t3(seq INTEGER PRIMARY KEY, val TEXT);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION SELECT x+1 FROM c WHERE x<10)
+    INSERT INTO t3(seq, val) SELECT x, x FROM c;
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION SELECT x+1 FROM c WHERE x<5)
+    INSERT INTO t3(seq, val) SELECT x+10, x*1000 FROM c;
+  SELECT decimal(val) FROM t3 ORDER BY seq;
+} {1 2 3 4 5 6 7 8 9 10 1000 2000 3000 4000 5000}
+do_execsql_test 3020 {
+  SELECT decimal_add(val,'0.5') FROM t3 WHERE seq>5 ORDER BY seq
+} {6.5 7.5 8.5 9.5 10.5 1000.5 2000.5 3000.5 4000.5 5000.5}
+do_execsql_test 3030 {
+  SELECT decimal_add(val,'-10') FROM t3 ORDER BY seq;
+} {-9 -8 -7 -6 -5 -4 -3 -2 -1 0 990 1990 2990 3990 4990}
+
+do_execsql_test 4000 {
+  SELECT decimal_sum(val) FROM t3;
+} {15055}
+do_execsql_test 4010 {
+  SELECT decimal_sum(decimal_add(val,val||'e+10')) FROM t3;
+} {150550000015055}
+do_execsql_test 4010 {
+  SELECT decimal_sum(decimal_add(val||'e+20',decimal_add(val,val||'e-20')))
+    FROM t3;
+} {1505500000000000000015055.00000000000000015055}
+
+do_execsql_test 5000 {
+  WITH RECURSIVE c(x,y,z) AS (
+    VALUES(0,'1','1')
+    UNION ALL
+    SELECT x+1, decimal_mul(y,'2'), decimal_mul(z,'0.5')
+      FROM c WHERE x<32
+  )
+  SELECT count(*) FROM c WHERE decimal_mul(y,z)='1';
+} {33}
+
+do_execsql_test 5100 {
+  SELECT decimal_mul('1234.00','2.00');
+} {2468.00}
+do_execsql_test 5101 {
+  SELECT decimal_mul('1234.00','2.0000');
+} {2468.00}
+do_execsql_test 5102 {
+  SELECT decimal_mul('1234.0000','2.000');
+} {2468.000}
+do_execsql_test 5103 {
+  SELECT decimal_mul('1234.0000','2');
+} {2468}
+
+if {[catch {load_static_extension db ieee754} error]} {
+  puts "Skipping ieee754 tests, hit load error: $error"
+  finish_test; return
+}
+
+do_execsql_test 6000 {
+  CREATE TABLE pow2(x INTEGER PRIMARY KEY, v TEXT);
+  WITH RECURSIVE c(x,v) AS (
+    VALUES(0,'1')
+    UNION ALL
+    SELECT x+1, decimal_mul(v,'2') FROM c WHERE x+1<=971
+  ) INSERT INTO pow2(x,v) SELECT x, v FROM c;
+  WITH RECURSIVE c(x,v) AS (
+    VALUES(-1,'0.5')
+    UNION ALL
+    SELECT x-1, decimal_mul(v,'0.5') FROM c WHERE x-1>=-1075
+  ) INSERT INTO pow2(x,v) SELECT x, v FROM c;
+} {}
+do_execsql_test 6010 {
+  WITH c(n) AS (SELECT ieee754_from_blob(x'0000000000000001'))
+SELECT decimal_mul(ieee754_mantissa(c.n),pow2.v)
+  FROM pow2, c WHERE pow2.x=ieee754_exponent(c.n);
+} {0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625}
+do_execsql_test 6020 {
+  WITH c(n) AS (SELECT ieee754_from_blob(x'7fefffffffffffff'))
+SELECT decimal_mul(ieee754_mantissa(c.n),pow2.v)
+  FROM pow2, c WHERE pow2.x=ieee754_exponent(c.n);
+} {179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368}
+
+do_execsql_test 6100 {
+  SELECT ieee754(ieee754_from_blob(x'0000000000000001'));
+} {ieee754(1,-1074)}
+do_execsql_test 6110 {
+  SELECT ieee754(ieee754_from_blob(x'7fefffffffffffff'));
+} {ieee754(9007199254740991,971)}
+do_execsql_test 6120 {
+  SELECT printf('%.8e',ieee754_from_blob(x'0000000000000001'));
+} {4.94065646e-324}
+do_execsql_test 6130 {
+  SELECT printf('%.8e',ieee754_from_blob(x'ffefffffffffffff'));
+} {-1.79769313e+308}
+
+
+
+
+finish_test

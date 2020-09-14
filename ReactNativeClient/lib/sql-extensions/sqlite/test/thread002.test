@@ -1,0 +1,105 @@
+# 2007 September 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#   This test attempts to deadlock SQLite in shared-cache mode.
+#     
+#
+# $Id: thread002.test,v 1.9 2009/03/26 14:48:07 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+
+set do_not_use_codec 1
+source $testdir/tester.tcl
+if {[run_thread_tests]==0} { finish_test ; return }
+
+
+db close
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+set ::NTHREAD 10
+
+do_test thread002.1 {
+  # Create 3 databases with identical schemas:
+  for {set ii 0} {$ii < 3} {incr ii} {
+    forcedelete test${ii}.db
+    sqlite3 db test${ii}.db
+    execsql {
+      CREATE TABLE t1(k, v);
+      CREATE INDEX t1_i ON t1(v);
+      INSERT INTO t1(v) VALUES(1.0);
+    }
+    db close
+  }
+} {}
+
+set thread_program {
+  set ::DB [sqlite3_open test.db]
+  for {set ii 1} {$ii <= 3} {incr ii} {
+    set T [lindex $order [expr $ii-1]]
+    execsql "ATTACH 'test${T}.db' AS aux${ii}"
+  }
+
+  for {set ii 0} {$ii < 100} {incr ii} {
+    execsql { SELECT * FROM aux1.t1 }
+    execsql { INSERT INTO aux1.t1(v) SELECT sum(v) FROM aux2.t1 }
+  
+    execsql { SELECT * FROM aux2.t1 }
+    execsql { INSERT INTO aux2.t1(v) SELECT sum(v) FROM aux3.t1 }
+  
+    execsql { SELECT * FROM aux3.t1 }
+    execsql { INSERT INTO aux3.t1(v) SELECT sum(v) FROM aux1.t1 }
+
+    execsql { CREATE TABLE IF NOT EXISTS aux1.t2(a,b) }
+    execsql { DROP TABLE IF EXISTS aux1.t2 }
+
+    # if {($ii%10)==0} {puts -nonewline . ; flush stdout}
+    puts -nonewline . ; flush stdout
+  }
+
+  sqlite3_close $::DB
+  list OK
+}
+
+set order_list [list {0 1 2} {0 2 1} {1 0 2} {1 2 0} {2 0 1} {2 1 0}]
+
+array unset finished
+for {set ii 0} {$ii < $::NTHREAD} {incr ii} {
+  set order [lindex $order_list [expr $ii%6]]
+  thread_spawn finished($ii) $thread_procs "set order {$order}" $thread_program
+}
+
+# Wait for all threads to finish,  then check they all returned "OK".
+#
+for {set i 0} {$i < $::NTHREAD} {incr i} {
+  if {![info exists finished($i)]} {
+    vwait finished($i)
+  }
+  do_test thread002.2.$i {
+    set ::finished($i)
+  } OK
+}
+
+# Check all three databases are Ok.
+for {set ii 0} {$ii < 3} {incr ii} {
+  do_test thread002.3.$ii {
+    sqlite3 db test${ii}.db
+    set res [list                         \
+      [execsql {SELECT count(*) FROM t1}] \
+      [execsql {PRAGMA integrity_check}]  \
+    ]
+    db close
+    set res
+  } [list [expr 1 + $::NTHREAD*100] ok]
+}
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+set sqlite_open_file_count 0
+finish_test

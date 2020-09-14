@@ -1,0 +1,368 @@
+# 2008 September 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: in4.test,v 1.4 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix in4
+
+do_test in4-1.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a);
+  }
+} {}
+do_test in4-1.2 {
+  execsql {
+    SELECT * FROM t1 WHERE a IN ('aaa', 'bbb', 'ccc');
+  }
+} {}
+do_test in4-1.3 {
+  execsql {
+    INSERT INTO t1 VALUES('aaa', 1);
+    INSERT INTO t1 VALUES('ddd', 2);
+    INSERT INTO t1 VALUES('ccc', 3);
+    INSERT INTO t1 VALUES('eee', 4);
+    SELECT b FROM t1 WHERE a IN ('aaa', 'bbb', 'ccc');
+  }
+} {1 3}
+do_test in4-1.4 {
+  execsql {
+    SELECT a FROM t1 WHERE rowid IN (1, 3);
+  }
+} {aaa ccc}
+do_test in4-1.5 {
+  execsql {
+    SELECT a FROM t1 WHERE rowid IN ();
+  }
+} {}
+do_test in4-1.6 {
+  execsql {
+    SELECT a FROM t1 WHERE a IN ('ddd');
+  }
+} {ddd}
+
+do_test in4-2.1 {
+  execsql {
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b TEXT);
+    INSERT INTO t2 VALUES(-1, '-one');
+    INSERT INTO t2 VALUES(0, 'zero');
+    INSERT INTO t2 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(2, 'two');
+    INSERT INTO t2 VALUES(3, 'three');
+  }
+} {}
+
+do_test in4-2.2 {
+  execsql { SELECT b FROM t2 WHERE a IN (0, 2) }
+} {zero two}
+
+do_test in4-2.3 {
+  execsql { SELECT b FROM t2 WHERE a IN (2, 0) }
+} {zero two}
+
+do_test in4-2.4 {
+  execsql { SELECT b FROM t2 WHERE a IN (2, -1) }
+} {-one two}
+
+do_test in4-2.5 {
+  execsql { SELECT b FROM t2 WHERE a IN (NULL, 3) }
+} {three}
+
+do_test in4-2.6 {
+  execsql { SELECT b FROM t2 WHERE a IN (1.0, 2.1) }
+} {one}
+
+do_test in4-2.7 {
+  execsql { SELECT b FROM t2 WHERE a IN ('1', '2') }
+} {one two}
+
+do_test in4-2.8 {
+  execsql { SELECT b FROM t2 WHERE a IN ('', '0.0.0', '2') }
+} {two}
+
+# The following block of tests test expressions of the form:
+#
+#    <expr> IN ()
+#
+# i.e. IN expressions with a literal empty set. 
+# 
+# This has led to crashes on more than one occasion. Test case in4-3.2 
+# was added in reponse to a bug reported on the mailing list on 11/7/2008.
+# See also tickets #3602 and #185.
+#
+do_test in4-3.1 {
+  execsql {
+    DROP TABLE IF EXISTS t1;
+    DROP TABLE IF EXISTS t2;
+    CREATE TABLE t1(x, id);
+    CREATE TABLE t2(x, id);
+    INSERT INTO t1 VALUES(NULL, NULL);
+    INSERT INTO t1 VALUES(0, NULL);
+    INSERT INTO t1 VALUES(1, 3);
+    INSERT INTO t1 VALUES(2, 4);
+    INSERT INTO t1 VALUES(3, 5);
+    INSERT INTO t1 VALUES(4, 6);
+    INSERT INTO t2 VALUES(0, NULL);
+    INSERT INTO t2 VALUES(4, 1);
+    INSERT INTO t2 VALUES(NULL, 1);
+    INSERT INTO t2 VALUES(NULL, NULL);
+  }
+} {}
+do_test in4-3.2 {
+  execsql {
+    SELECT x FROM t1 WHERE id IN () AND x IN (SELECT x FROM t2 WHERE id=1)
+  }
+} {}
+do_test in4-3.3 {
+  execsql {
+    CREATE TABLE t3(x, y, z);
+    CREATE INDEX t3i1 ON t3(x, y);
+    INSERT INTO t3 VALUES(1, 1, 1);
+    INSERT INTO t3 VALUES(10, 10, 10);
+  }
+  execsql { SELECT * FROM t3 WHERE x IN () }
+} {}
+do_test in4-3.4 {
+  execsql { SELECT * FROM t3 WHERE x = 10 AND y IN () }
+} {}
+do_test in4-3.5 {
+  execsql { SELECT * FROM t3 WHERE x IN () AND y = 10 }
+} {}
+do_test in4-3.6 {
+  execsql { SELECT * FROM t3 WHERE x IN () OR x = 10 }
+} {10 10 10}
+do_test in4-3.7 {
+  execsql { SELECT * FROM t3 WHERE y IN () }
+} {}
+do_test in4-3.8 {
+  execsql { SELECT x IN() AS a FROM t3 WHERE a }
+} {}
+do_test in4-3.9 {
+  execsql { SELECT x IN() AS a FROM t3 WHERE NOT a }
+} {0 0}
+do_test in4-3.10 {
+  execsql { SELECT * FROM t3 WHERE oid IN () }
+} {}
+do_test in4-3.11 {
+  execsql { SELECT * FROM t3 WHERE x IN (1, 2) OR y IN ()}
+} {1 1 1}
+do_test in4-3.12 {
+  execsql { SELECT * FROM t3 WHERE x IN (1, 2) AND y IN ()}
+} {}
+
+# Tests for "... IN (?)" and "... NOT IN (?)".  In other words, tests
+# for when the RHS of IN is a single expression.  This should work the
+# same as the == and <> operators.
+#
+do_execsql_test in4-3.21 {
+  SELECT * FROM t3 WHERE x=10 AND y IN (10);
+} {10 10 10}
+do_execsql_test in4-3.22 {
+  SELECT * FROM t3 WHERE x IN (10) AND y=10;
+} {10 10 10}
+do_execsql_test in4-3.23 {
+  SELECT * FROM t3 WHERE x IN (10) AND y IN (10);
+} {10 10 10}
+do_execsql_test in4-3.24 {
+  SELECT * FROM t3 WHERE x=1 AND y NOT IN (10);
+} {1 1 1}
+do_execsql_test in4-3.25 {
+  SELECT * FROM t3 WHERE x  NOT IN (10) AND y=1;
+} {1 1 1}
+do_execsql_test in4-3.26 {
+  SELECT * FROM t3 WHERE x NOT IN (10) AND y NOT IN (10);
+} {1 1 1}
+
+# The query planner recognizes that "x IN (?)" only generates a
+# single match and can use this information to optimize-out ORDER BY
+# clauses.
+#
+do_execsql_test in4-3.31 {
+  DROP INDEX t3i1;
+  CREATE UNIQUE INDEX t3xy ON t3(x,y);
+
+  SELECT *, '|' FROM t3 A, t3 B
+   WHERE A.x=10 AND A.y IN (10)
+     AND B.x=1 AND B.y IN (1);
+} {10 10 10 1 1 1 |}
+do_execsql_test in4-3.32 {
+  EXPLAIN QUERY PLAN
+  SELECT *, '|' FROM t3 A, t3 B
+   WHERE A.x=10 AND A.y IN (10)
+     AND B.x=1 AND B.y IN (1);
+} {~/B-TREE/}  ;# No separate sorting pass
+do_execsql_test in4-3.33 {
+  SELECT *, '|' FROM t3 A, t3 B
+   WHERE A.x IN (10) AND A.y=10
+     AND B.x IN (1) AND B.y=1;
+} {10 10 10 1 1 1 |}
+do_execsql_test in4-3.34 {
+  EXPLAIN QUERY PLAN
+  SELECT *, '|' FROM t3 A, t3 B
+   WHERE A.x IN (10) AND A.y=10
+     AND B.x IN (1) AND B.y=1;
+} {~/B-TREE/}  ;# No separate sorting pass
+
+# An expression of the form "x IN (?,?)" creates an ephemeral table to
+# hold the list of values on the RHS.  But "x IN (?)" does not create
+# an ephemeral table.
+#
+do_execsql_test in4-3.41 {
+  SELECT * FROM t3 WHERE x IN (10,11);
+} {10 10 10}
+do_execsql_test in4-3.42 {
+  EXPLAIN
+  SELECT * FROM t3 WHERE x IN (10,11);
+} {/OpenEphemeral/}
+do_execsql_test in4-3.43 {
+  SELECT * FROM t3 WHERE x IN (10);
+} {10 10 10}
+
+# This test would verify that the "X IN (Y)" -> "X==Y" optimization
+# was working.  But we have now taken that optimization out.
+#do_execsql_test in4-3.44 {
+#  EXPLAIN
+#  SELECT * FROM t3 WHERE x IN (10);
+#} {~/OpenEphemeral/}
+do_execsql_test in4-3.45 {
+  SELECT * FROM t3 WHERE x NOT IN (10,11,99999);
+} {1 1 1}
+do_execsql_test in4-3.46 {
+  EXPLAIN
+  SELECT * FROM t3 WHERE x NOT IN (10,11,99999);
+} {/OpenEphemeral/}
+do_execsql_test in4-3.47 {
+  SELECT * FROM t3 WHERE x NOT IN (10);
+} {1 1 1}
+do_execsql_test in4-3.48 {
+  EXPLAIN
+  SELECT * FROM t3 WHERE x NOT IN (10);
+} {~/OpenEphemeral/}
+
+# Make sure that when "x IN (?)" is converted into "x==?" that collating
+# sequence and affinity computations do not get messed up.
+#
+do_execsql_test in4-4.1 {
+  CREATE TABLE t4a(a TEXT, b TEXT COLLATE nocase, c);
+  INSERT INTO t4a VALUES('ABC','abc',1);
+  INSERT INTO t4a VALUES('def','xyz',2);
+  INSERT INTO t4a VALUES('ghi','ghi',3);
+  SELECT c FROM t4a WHERE a=b ORDER BY c;
+} {3}
+do_execsql_test in4-4.2 {
+  SELECT c FROM t4a WHERE b=a ORDER BY c;
+} {1 3}
+do_execsql_test in4-4.3 {
+  SELECT c FROM t4a WHERE (a||'')=b ORDER BY c;
+} {1 3}
+do_execsql_test in4-4.4 {
+  SELECT c FROM t4a WHERE (a||'')=(b||'') ORDER BY c;
+} {3}
+do_execsql_test in4-4.5 {
+  SELECT c FROM t4a WHERE a IN (b) ORDER BY c;
+} {3}
+do_execsql_test in4-4.6 {
+  SELECT c FROM t4a WHERE (a||'') IN (b) ORDER BY c;
+} {3}
+
+
+do_execsql_test in4-4.11 {
+  CREATE TABLE t4b(a TEXT, b NUMERIC, c);
+  INSERT INTO t4b VALUES('1.0',1,4);
+  SELECT c FROM t4b WHERE a=b;
+} {4}
+do_execsql_test in4-4.12 {
+  SELECT c FROM t4b WHERE b=a;
+} {4}
+do_execsql_test in4-4.13 {
+  SELECT c FROM t4b WHERE +a=b;
+} {4}
+do_execsql_test in4-4.14 {
+  SELECT c FROM t4b WHERE a=+b;
+} {}
+do_execsql_test in4-4.15 {
+  SELECT c FROM t4b WHERE +b=a;
+} {}
+do_execsql_test in4-4.16 {
+  SELECT c FROM t4b WHERE b=+a;
+} {4}
+do_execsql_test in4-4.17 {
+  SELECT c FROM t4b WHERE a IN (b);
+} {}
+do_execsql_test in4-4.18 {
+  SELECT c FROM t4b WHERE b IN (a);
+} {4}
+do_execsql_test in4-4.19 {
+  SELECT c FROM t4b WHERE +b IN (a);
+} {}
+
+do_execsql_test in4-5.1 {
+  CREATE TABLE t5(c INTEGER PRIMARY KEY, d TEXT COLLATE nocase);
+  INSERT INTO t5 VALUES(17, 'fuzz');
+  SELECT 1 FROM t5 WHERE 'fuzz' IN (d);  -- match
+  SELECT 2 FROM t5 WHERE 'FUZZ' IN (d);  -- no match
+  SELECT 3 FROM t5 WHERE d IN ('fuzz');  -- match
+  SELECT 4 FROM t5 WHERE d IN ('FUZZ');  -- match
+} {1 3 4}
+
+# An expression of the form "x IN (y)" can be used as "x=y" by the
+# query planner when computing transitive constraints or to run the
+# query using an index on y.
+#
+do_execsql_test in4-6.1 {
+  CREATE TABLE t6a(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t6a VALUES(1,2),(3,4),(5,6);
+  CREATE TABLE t6b(c INTEGER PRIMARY KEY, d);
+  INSERT INTO t6b VALUES(4,44),(5,55),(6,66);
+
+  SELECT * FROM t6a, t6b WHERE a=3 AND b IN (c);
+} {3 4 4 44}
+do_execsql_test in4-6.1-eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t6a, t6b WHERE a=3 AND b IN (c);
+} {~/SCAN TABLE t6a/}
+do_execsql_test in4-6.2 {
+  SELECT * FROM t6a, t6b WHERE a=3 AND c IN (b);
+} {3 4 4 44}
+do_execsql_test in4-6.2-eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t6a, t6b WHERE a=3 AND c IN (b);
+} {~/SCAN/}
+
+reset_db
+do_execsql_test 7.0 {
+  CREATE TABLE t1(a, b, c);
+  CREATE TABLE t2(d, e);
+  CREATE INDEX t1bc ON t1(c, b);
+  INSERT INTO t2(e) VALUES(1);
+  INSERT INTO t1 VALUES(NULL, NULL, NULL);
+}
+
+do_execsql_test 7.1 {
+  SELECT * FROM t2 LEFT JOIN t1 ON c = d AND b IN (10,10,10);
+} {{} 1 {} {} {}}
+
+ifcapable rtree {
+  reset_db
+  do_execsql_test 7.2 {
+    CREATE VIRTUAL TABLE t1 USING rtree(a, b, c);
+    CREATE TABLE t2(d INTEGER, e INT);
+    INSERT INTO t2(e) VALUES(1);
+  }
+
+  do_execsql_test 7.3 {
+    SELECT * FROM t2 LEFT JOIN t1 ON c IN (d) AND b IN (10,10,10);
+  } {{} 1 {} {} {}}
+}
+
+finish_test

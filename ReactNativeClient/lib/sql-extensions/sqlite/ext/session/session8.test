@@ -1,0 +1,91 @@
+# 2011 July 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session8
+
+proc noop {args} {}
+
+# Like [dbcksum] in tester.tcl. Except this version is not sensitive
+# to changes in the value of implicit IPK columns.
+#
+proc udbcksum {db dbname} {
+  if {$dbname=="temp"} {
+    set master sqlite_temp_master
+  } else {
+    set master $dbname.sqlite_master
+  }
+  set alltab [$db eval "SELECT name FROM $master WHERE type='table'"]
+  set txt [$db eval "SELECT * FROM $master"]\n
+  foreach tab $alltab {
+    append txt [lsort [$db eval "SELECT * FROM $dbname.$tab"]]\n
+  }
+  return [md5 $txt]
+}
+
+proc do_then_undo {tn sql} {
+  set ck1 [udbcksum db main]
+
+  sqlite3session S db main
+  S attach *
+  db eval $sql
+
+  set ck2 [udbcksum db main]
+  
+  set invert [sqlite3changeset_invert [S changeset]]
+  S delete
+  sqlite3changeset_apply db $invert noop
+
+  set ck3 [udbcksum db main]
+
+  set a [expr {$ck1==$ck2}]
+  set b [expr {$ck1==$ck3}]
+  uplevel [list do_test $tn.1 "set {} $a" 0]
+  uplevel [list do_test $tn.2 "set {} $b" 1]
+}
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES("abc", "xyz");
+}
+do_then_undo 1.2 { INSERT INTO t1 VALUES(3, 4); }
+do_then_undo 1.3 { DELETE FROM t1 WHERE b=2; }
+do_then_undo 1.4 { UPDATE t1 SET b = 3 WHERE a = 1; }
+
+do_execsql_test 2.1 {
+  CREATE TABLE t2(a, b PRIMARY KEY);
+  INSERT INTO t2 VALUES(1, 2);
+  INSERT INTO t2 VALUES('abc', 'xyz');
+}
+do_then_undo 1.2 { INSERT INTO t2 VALUES(3, 4); }
+do_then_undo 1.3 { DELETE FROM t2 WHERE b=2; }
+do_then_undo 1.4 { UPDATE t1 SET a = '123' WHERE b = 'xyz'; }
+
+do_execsql_test 3.1 {
+  CREATE TABLE t3(a, b, c, d, e, PRIMARY KEY(c, e));
+  INSERT INTO t3 VALUES('x', 45, 0.0, 'abcdef', 12);
+  INSERT INTO t3 VALUES(45, 0.0, 'abcdef', 12, 'x');
+  INSERT INTO t3 VALUES(0.0, 'abcdef', 12, 'x', 45);
+}
+
+do_then_undo 3.2 { UPDATE t3 SET b=b||b WHERE e!='x' }
+do_then_undo 3.3 { UPDATE t3 SET a = 46 }
+
+finish_test

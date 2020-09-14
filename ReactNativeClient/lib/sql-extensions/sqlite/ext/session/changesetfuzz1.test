@@ -1,0 +1,84 @@
+# 2018 November 08
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix changesetfuzz1
+
+
+set CF [test_find_binary changesetfuzz]
+if {$CF==""} {
+  finish_test
+  return
+}
+
+proc writefile {zFile data} {
+  set fd [open $zFile w]
+  fconfigure $fd -translation binary -encoding binary
+  puts -nonewline $fd $data
+  close $fd
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, d, PRIMARY KEY(c, d));
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b, c);
+
+  INSERT INTO t1 VALUES ('one', 'two', 'three', 'four'), 
+                        ('five', 'six', 'seven', 'eight'), 
+                        ('nine', 'ten', 'eleven', 'twelve');
+  INSERT INTO t2 VALUES (1, 2, 3), (4, 5, 6), (7, 8, 9);
+}
+
+set C [changeset_from_sql {
+  INSERT INTO t2 VALUES(10, 11, 12);
+  DELETE FROM t2 WHERE a=1;
+  UPDATE t1 SET b='forty-five' WHERE a='one';
+  UPDATE t1 SET a='twenty-nine', b='seventy' WHERE a='five';
+}]
+writefile c1.changeset $C
+
+do_test 1.1 {
+  for {set j 0} {$j < 200} {incr j} {
+    forcecopy c1.changeset input.changeset
+    for {set i 0} {$i < 6} {incr i} {
+      exec $CF input.changeset $i 1
+      exec $CF input.changeset-0
+      forcecopy input.changeset-0 input.changeset
+    }
+  }
+} {}
+
+set P [patchset_from_sql {
+  INSERT INTO t2 VALUES(13, 14, 15);
+  DELETE FROM t2 WHERE a=4;
+  UPDATE t1 SET b='thirteen' WHERE a='one';
+  UPDATE t1 SET a='ninety-seven', b='twenty' WHERE a='five';
+}]
+writefile p1.patchset $P
+do_test 1.2 {
+  for {set j 0} {$j < 200} {incr j} {
+    forcecopy p1.patchset input.patchset
+    for {set i 0} {$i < 6} {incr i} {
+      exec $CF input.patchset $i 1
+      exec $CF input.patchset-0
+      forcecopy input.patchset-0 input.patchset
+    }
+  }
+} {}
+
+
+finish_test
+

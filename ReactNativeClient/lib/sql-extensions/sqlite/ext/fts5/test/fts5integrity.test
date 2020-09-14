@@ -1,0 +1,285 @@
+# 2015 Jan 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests focused on the integrity-check procedure.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5integrity
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE xx USING fts5(x);
+  INSERT INTO xx VALUES('term');
+}
+do_execsql_test 1.1 {
+  INSERT INTO xx(xx) VALUES('integrity-check');
+}
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE yy USING fts5(x, prefix=1);
+  INSERT INTO yy VALUES('term');
+}
+do_execsql_test 2.1 {
+  INSERT INTO yy(yy) VALUES('integrity-check');
+}
+
+#--------------------------------------------------------------------
+#
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE zz USING fts5(z);
+  INSERT INTO zz(zz, rank) VALUES('pgsz', 32);
+  INSERT INTO zz VALUES('b b b b b b b b b b b b b b');
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz SELECT z FROM zz;
+  INSERT INTO zz(zz) VALUES('optimize');
+}
+
+do_execsql_test 3.1 { INSERT INTO zz(zz) VALUES('integrity-check'); }
+
+#--------------------------------------------------------------------
+# Mess around with a docsize record. And the averages record. Then
+# check that integrity-check picks it up.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE aa USING fts5(zz);
+  INSERT INTO aa(zz) VALUES('a b c d e');
+  INSERT INTO aa(zz) VALUES('a b c d');
+  INSERT INTO aa(zz) VALUES('a b c');
+  INSERT INTO aa(zz) VALUES('a b');
+  INSERT INTO aa(zz) VALUES('a');
+  SELECT length(sz) FROM aa_docsize;
+} {1 1 1 1 1}
+do_execsql_test 4.1 { 
+  INSERT INTO aa(aa) VALUES('integrity-check'); 
+}
+
+sqlite3_db_config db DEFENSIVE 0
+do_catchsql_test 4.2 { 
+  BEGIN;
+    UPDATE aa_docsize SET sz = X'44' WHERE rowid = 3;
+    INSERT INTO aa(aa) VALUES('integrity-check'); 
+} {1 {database disk image is malformed}}
+
+do_catchsql_test 4.3 { 
+  ROLLBACK;
+  BEGIN;
+    UPDATE aa_data SET block = X'44' WHERE rowid = 1;
+    INSERT INTO aa(aa) VALUES('integrity-check'); 
+} {1 {database disk image is malformed}}
+
+do_catchsql_test 4.4 { 
+  ROLLBACK;
+  BEGIN;
+    INSERT INTO aa_docsize VALUES(23, X'04');
+    INSERT INTO aa(aa) VALUES('integrity-check'); 
+} {1 {database disk image is malformed}}
+
+do_catchsql_test 4.5 { 
+  ROLLBACK;
+  BEGIN;
+    INSERT INTO aa_docsize VALUES(23, X'00');
+    INSERT INTO aa_content VALUES(23, '');
+    INSERT INTO aa(aa) VALUES('integrity-check'); 
+} {1 {database disk image is malformed}}
+
+#db eval {SELECT rowid, fts5_decode(rowid, block) aS r FROM zz_data} {puts $r}
+#exit
+
+execsql { ROLLBACK }
+
+
+#-------------------------------------------------------------------------
+# Test that integrity-check works on a reasonably large db with many
+# different terms.
+
+# Document generator command.
+proc rnddoc {n} {
+  set doc [list]
+  for {set i 0} {$i<$n} {incr i} {
+    lappend doc [format %.5d [expr int(rand()*10000)]]
+  }
+  return $doc
+}
+db func rnddoc rnddoc
+
+expr srand(0)
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE gg USING fts5(a, prefix="1,2,3");
+  INSERT INTO gg(gg, rank) VALUES('pgsz', 256);
+  INSERT INTO gg VALUES(rnddoc(20));
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+  INSERT INTO gg SELECT rnddoc(20) FROM gg;
+}
+
+do_execsql_test 5.1 {
+  INSERT INTO gg(gg) VALUES('integrity-check');
+}
+
+do_execsql_test 5.2 {
+  INSERT INTO gg(gg) VALUES('optimize');
+}
+
+do_execsql_test 5.3 {
+  INSERT INTO gg(gg) VALUES('integrity-check');
+}
+
+do_test 5.4.1 {
+  set ok 0
+  for {set i 0} {$i < 10000} {incr i} {
+    set T [format %.5d $i]
+    set res  [db eval { SELECT rowid FROM gg($T) ORDER BY rowid ASC  }]
+    set res2 [db eval { SELECT rowid FROM gg($T) ORDER BY rowid DESC }]
+    if {$res == [lsort -integer $res2]} { incr ok }
+  }
+  set ok
+} {10000}
+
+do_test 5.4.2 {
+  set ok 0
+  for {set i 0} {$i < 100} {incr i} {
+    set T "[format %.3d $i]*"
+    set res  [db eval { SELECT rowid FROM gg($T) ORDER BY rowid ASC  }]
+    set res2 [db eval { SELECT rowid FROM gg($T) ORDER BY rowid DESC }]
+    if {$res == [lsort -integer $res2]} { incr ok }
+  }
+  set ok
+} {100}
+
+#-------------------------------------------------------------------------
+# Similar to 5.*.
+#
+foreach {tn pgsz} {
+  1  32
+  2  36
+  3  40
+  4  44
+  5  48
+} {
+  do_execsql_test 6.$tn.1 {
+    DROP TABLE IF EXISTS hh;
+    CREATE VIRTUAL TABLE hh USING fts5(y);
+    INSERT INTO hh(hh, rank) VALUES('pgsz', $pgsz);
+
+    WITH s(i) AS (SELECT 0 UNION ALL SELECT i+1 FROM s WHERE i<999)
+     INSERT INTO hh SELECT printf("%.3d%.3d%.3d %.3d%.3d%.3d",i,i,i,i+1,i+1,i+1)
+     FROM s;
+
+    WITH s(i) AS (SELECT 0 UNION ALL SELECT i+1 FROM s WHERE i<999)
+     INSERT INTO hh SELECT printf("%.3d%.3d%.3d %.3d%.3d%.3d",i,i,i,i+1,i+1,i+1)
+     FROM s;
+
+    INSERT INTO hh(hh) VALUES('optimize');
+  }
+
+  do_test 6.$tn.2 {
+    set ok 0
+    for {set i 0} {$i < 1000} {incr i} {
+      set T [format %.3d%.3d%.3d $i $i $i]
+      set res  [db eval { SELECT rowid FROM hh($T) ORDER BY rowid ASC  }]
+      set res2 [db eval { SELECT rowid FROM hh($T) ORDER BY rowid DESC }]
+      if {$res == [lsort -integer $res2]} { incr ok }
+    }
+    set ok
+  } {1000}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 7.0 {
+  PRAGMA encoding = 'UTF-16';
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+  INSERT INTO vt0 VALUES (x'46f0');
+  SELECT quote(c0) FROM vt0;
+} {X'46F0'}
+do_execsql_test 7.1 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+do_execsql_test 7.2 {
+  INSERT INTO vt0(vt0) VALUES('rebuild');
+}
+do_execsql_test 7.3 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+do_execsql_test 7.4 {
+  UPDATE vt0 SET c0='';
+}
+do_execsql_test 7.5 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+# Ticket 7a458c2a5f4
+#
+reset_db
+do_execsql_test 8.0 {
+  PRAGMA locking_mode = EXCLUSIVE;
+  PRAGMA journal_mode = PERSIST;
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+} {exclusive persist}
+do_execsql_test 8.1 {
+  PRAGMA data_version
+} {1}
+do_execsql_test 8.2 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+  PRAGMA data_version;
+} {1}
+do_execsql_test 8.1 {
+  INSERT INTO vt0(vt0, rank) VALUES('usermerge', 2);
+}
+
+#-------------------------------------------------------------------------
+# Ticket [771fe617]
+#
+reset_db
+do_execsql_test 9.0 {
+  PRAGMA encoding = 'UTF16';
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+}
+
+#explain_i { SELECT quote(SUBSTR(x'37', 0)); }
+#execsql { PRAGMA vdbe_trace = 1 }
+do_execsql_test 9.1.1 {
+  SELECT quote(SUBSTR(x'37', 0));
+} {X'37'}
+do_execsql_test 9.1.2 {
+  SELECT quote(x'37');
+} {X'37'}
+
+breakpoint
+do_execsql_test 9.2 {
+  INSERT INTO vt0 VALUES (SUBSTR(x'37', 0));
+--  INSERT INTO vt0 VALUES (x'37');
+}
+do_execsql_test 9.3 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+finish_test

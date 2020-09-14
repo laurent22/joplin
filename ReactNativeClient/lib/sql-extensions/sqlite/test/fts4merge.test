@@ -1,0 +1,347 @@
+# 2012 March 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the incremental merge function.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/fts3_common.tcl
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+proc fts3_integrity_check {tbl} {
+  db eval "INSERT INTO $tbl ($tbl) VALUES('integrity-check')"
+  return "ok"
+}
+
+foreach mod {fts3 fts4} {
+  set ::testprefix fts4merge-$mod
+  reset_db
+
+  #-------------------------------------------------------------------------
+  # Test cases 1.*
+  #
+  do_test 1.0 { fts3_build_db_1 -module $mod 1004 } {}
+  do_test 1.1 { fts3_integrity_check t1 } {ok}
+  do_execsql_test 1.1 { 
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level 
+  } {
+    0 {0 1 2 3 4 5 6 7 8 9 10 11} 
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12 13}
+    2 {0 1 2}
+  }
+  
+  for {set i 0} {$i<20} {incr i} {
+    do_execsql_test 1.2.$i.1 { INSERT INTO t1(t1) VALUES('merge=1') }
+    do_test 1.2.$i.2 { fts3_integrity_check t1 } ok
+    do_execsql_test 1.2.$i.3 { 
+      SELECT docid FROM t1 WHERE t1 MATCH 'zero one two three'
+    } {123 132 213 231 312 321}
+  }
+  
+  do_execsql_test 1.3 { 
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level 
+  } {
+    2 {0 1 2 3}
+  }
+  
+  for {set i 0} {$i<100} {incr i} {
+    do_execsql_test 1.4.$i { INSERT INTO t1(t1) VALUES('merge=1,4') }
+    do_test 1.4.$i.2 { fts3_integrity_check t1 } ok
+    do_execsql_test 1.4.$i.3 { 
+      SELECT docid FROM t1 WHERE t1 MATCH 'zero one two three'
+    } {123 132 213 231 312 321}
+  }
+  
+  do_execsql_test 1.5 { 
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level 
+  } {
+    3 0
+  }
+  
+  #-------------------------------------------------------------------------
+  # Test cases 2.* test that errors in the xxx part of the 'merge=xxx' are
+  # handled correctly.
+  #
+  do_execsql_test 2.0 "CREATE VIRTUAL TABLE t2 USING $mod"
+  
+  foreach {tn arg} {
+    1   {merge=abc}
+    2   {merge=%%%}
+    3   {merge=,}
+    4   {merge=5,}
+    5   {merge=6,%}
+    6   {merge=6,six}
+    7   {merge=6,1}
+  } {
+    do_catchsql_test 2.$tn { 
+      INSERT INTO t2(t2) VALUES($arg);
+    } {1 {SQL logic error}}
+  }
+  
+  #-------------------------------------------------------------------------
+  # Test cases 3.*
+  #
+  do_test 3.0 { 
+    reset_db
+    execsql { PRAGMA page_size = 512 }
+    fts3_build_db_2 -module $mod 30040 
+  } {}
+  do_test 3.1 { fts3_integrity_check t2 } {ok}
+  
+  do_execsql_test 3.2 { 
+    SELECT level, group_concat(idx, ' ') FROM t2_segdir GROUP BY level 
+  } {
+    0 {0 1 2 3 4 5 6} 
+    1 {0 1 2 3 4} 
+    2 {0 1 2 3 4} 
+    3 {0 1 2 3 4 5 6}
+  }
+  
+  do_execsql_test 3.3 { 
+    INSERT INTO t2(t2) VALUES('merge=1000000,2');
+    SELECT level, group_concat(idx, ' ') FROM t2_segdir GROUP BY level 
+  } {
+    4 0
+  }
+  
+  #-------------------------------------------------------------------------
+  # Test cases 4.*
+  #
+  reset_db
+  do_execsql_test 4.1 "
+    PRAGMA page_size = 512;
+    CREATE VIRTUAL TABLE t4 USING $mod;
+    PRAGMA main.page_size;
+  " {512}
+  
+  do_test 4.2 {
+    foreach x {a c b d e f g h i j k l m n o p} {
+      execsql "INSERT INTO t4 VALUES('[string repeat $x 600]')"
+    }
+    execsql {SELECT level, group_concat(idx, ' ') FROM t4_segdir GROUP BY level}
+  } {0 {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}}
+  
+  foreach {tn expect} {
+    1  "0 {0 1 2 3 4 5 6 7 8 9 10 11 12 13} 1 0"
+    2  "0 {0 1 2 3 4 5 6 7 8 9 10 11 12}    1 0"
+    3  "0 {0 1 2 3 4 5 6 7 8 9 10 11}       1 0"
+    4  "0 {0 1 2 3 4 5 6 7 8 9 10}          1 0"
+    5  "0 {0 1 2 3 4 5 6 7 8 9}             1 0"
+    6  "0 {0 1 2 3 4 5 6 7 8}               1 0"
+    7  "0 {0 1 2 3 4 5 6 7}                 1 0"
+    8  "0 {0 1 2 3 4 5 6}                   1 0"
+    9  "0 {0 1 2 3 4 5}                     1 0"
+  } {
+    do_execsql_test 4.3.$tn {
+      INSERT INTO t4(t4) VALUES('merge=1,16');
+      SELECT level, group_concat(idx, ' ') FROM t4_segdir GROUP BY level;
+    } $expect
+  }
+  
+  do_execsql_test 4.4.1 {
+    SELECT quote(value) FROM t4_stat WHERE rowid=1
+  } {X'0006'}
+  
+  sqlite3_db_config db DEFENSIVE 0
+  do_execsql_test 4.4.2 {
+    DELETE FROM t4_stat WHERE rowid=1;
+    INSERT INTO t4(t4) VALUES('merge=1,12');
+    SELECT level, group_concat(idx, ' ') FROM t4_segdir GROUP BY level;
+  } "0 {0 1 2 3 4 5}                     1 0"
+  
+  
+  #-------------------------------------------------------------------------
+  # Test cases 5.*
+  #
+  # Test that if a crisis-merge occurs that disrupts an ongoing incremental
+  # merge, the next call to "merge=A,B" identifies this and starts a new
+  # incremental merge. There are two scenarios:
+  #
+  #   * There are less segments on the input level that the disrupted
+  #     incremental merge operated on, or
+  #   
+  #   * Sufficient segments exist on the input level but the segments 
+  #     contain keys smaller than the largest key in the potential output 
+  #     segment.
+  # 
+  do_test 5.1 {
+    reset_db
+    fts3_build_db_1 -module $mod 1000
+  } {}
+  
+  do_execsql_test 5.2 {
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+  } {
+    0 {0 1 2 3 4 5 6 7} 
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12 13} 
+    2 {0 1 2}
+  }
+  
+  do_execsql_test 5.3 {
+    INSERT INTO t1(t1) VALUES('merge=1,5');
+    INSERT INTO t1(t1) VALUES('merge=1,5');
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+  } {
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14} 
+    2 {0 1 2 3}
+  }
+  
+  do_execsql_test 5.4 {SELECT quote(value) from t1_stat WHERE rowid=1} {X'010F'}
+  do_test 5.5 {
+    foreach docid [execsql {SELECT docid FROM t1}] {
+      execsql {INSERT INTO t1 SELECT * FROM t1 WHERE docid=$docid}
+    }
+  } {}
+  
+  do_execsql_test 5.6 {SELECT quote(value) from t1_stat WHERE rowid=1} {X'010F'}
+  
+  do_execsql_test 5.7 {
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+    SELECT quote(value) from t1_stat WHERE rowid=1;
+  } {
+    0 {0 1 2 3 4 5 6 7} 
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12} 
+    2 {0 1 2 3 4 5 6 7} 
+    X'010F'
+  }
+  
+  do_execsql_test 5.8 {
+    INSERT INTO t1(t1) VALUES('merge=1,6');
+    INSERT INTO t1(t1) VALUES('merge=1,6');
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+    SELECT quote(value) from t1_stat WHERE rowid=1;
+  } {
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12 13} 
+    2 {0 1 2 3 4 5 6 7 8} X'010E'
+  }
+  
+  do_test 5.8.1 { fts3_integrity_check t1 } ok
+  
+  do_test 5.9 {
+    set L [expr 16*16*7 + 16*3 + 12]
+    foreach docid [execsql {
+        SELECT docid FROM t1 UNION ALL SELECT docid FROM t1 LIMIT $L
+    }] {
+      execsql {INSERT INTO t1 SELECT * FROM t1 WHERE docid=$docid}
+    }
+  } {}
+  
+  do_execsql_test 5.10 {
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+    SELECT quote(value) from t1_stat WHERE rowid=1;
+  } {
+    0 {0 1 2 3 4 5 6 7 8 9 10 11} 1 0 2 0 3 0 X'010E'
+  }
+  
+  do_execsql_test 5.11 {
+    INSERT INTO t1(t1) VALUES('merge=1,6');
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level;
+    SELECT quote(value) from t1_stat WHERE rowid=1;
+  } {
+    1 {0 1} 2 0 3 0 X'010E'
+  }
+  
+  #-------------------------------------------------------------------------
+  # Test cases 6.*
+  #
+  # At one point the following test caused an assert() to fail (because the
+  # second 'merge=1,2' operation below actually "merges" a single input
+  # segment, which was unexpected).
+  #
+  do_test 6.1 {
+    reset_db
+    set a [string repeat a 900]
+    set b [string repeat b 900]
+    set c [string repeat c 900]
+    set d [string repeat d 900]
+
+    execsql "CREATE VIRTUAL TABLE t1 USING $mod"
+    execsql {
+      BEGIN;
+        INSERT INTO t1 VALUES($a);
+        INSERT INTO t1 VALUES($b);
+      COMMIT;
+      BEGIN;
+        INSERT INTO t1 VALUES($c);
+        INSERT INTO t1 VALUES($d);
+      COMMIT;
+    }
+  
+    execsql {
+      INSERT INTO t1(t1) VALUES('merge=1,2');
+      INSERT INTO t1(t1) VALUES('merge=1,2');
+    }
+  } {}
+  
+  #-------------------------------------------------------------------------
+  # Test cases 7.*
+  #
+  # Test that the value returned by sqlite3_total_changes() increases by
+  # 1 following a no-op "merge=A,B", or by more than 1 if actual work is
+  # performed.
+  #
+  do_test 7.0 {
+    reset_db
+    fts3_build_db_1 -module $mod 1000
+  } {}
+  
+  do_execsql_test 7.1 {
+    SELECT level, group_concat(idx, ' ') FROM t1_segdir GROUP BY level
+  } {
+    0 {0 1 2 3 4 5 6 7} 
+    1 {0 1 2 3 4 5 6 7 8 9 10 11 12 13} 
+    2 {0 1 2}
+  }
+  do_test 7.2 {
+    set x [db total_changes]
+    execsql { INSERT INTO t1(t1) VALUES('merge=2,10') }
+    expr { ([db total_changes] - $x)>1 }
+  } {1}
+  do_test 7.3 {
+    set x [db total_changes]
+    execsql { INSERT INTO t1(t1) VALUES('merge=200,10') }
+    expr { ([db total_changes] - $x)>1 }
+  } {1}
+  do_test 7.4 {
+    set x [db total_changes]
+    execsql { INSERT INTO t1(t1) VALUES('merge=200,10') }
+    expr { ([db total_changes] - $x)>1 }
+  } {0}
+  do_test 7.5 {
+    set x [db total_changes]
+    execsql { INSERT INTO t1(t1) VALUES('merge=200,10') }
+    expr { ([db total_changes] - $x)>1 }
+  } {0}
+}
+
+#-------------------------------------------------------------------------
+# Test cases 8.* - ticket [bf1aab89].
+#
+set testprefix fts4merge
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE t1 USING fts4(a, order=DESC);
+  INSERT INTO t1(a) VALUES (0);
+  INSERT INTO t1(a) VALUES (0);
+  UPDATE t1 SET a = NULL;
+} 
+
+do_execsql_test 8.1 {
+  INSERT INTO t1(t1) VALUES('merge=1,4');
+}
+
+finish_test

@@ -1,0 +1,85 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on the fts5 tokenizers
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5unicode
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc tokenize_test {tn tokenizer input output} {
+  uplevel [list do_test $tn [subst -nocommands {
+    set ret {}
+    foreach {z s e} [sqlite3_fts5_tokenize db {$tokenizer} {$input}] {
+      lappend ret [set z]
+    }
+    set ret
+  }] [list {*}$output]]
+}
+
+foreach {tn t} {1 ascii 2 unicode61} {
+  tokenize_test 1.$tn.0 $t {A B C D} {a b c d}
+  tokenize_test 1.$tn.1 $t {May you share freely,} {may you share freely}
+  tokenize_test 1.$tn.2 $t {..May...you.shAre.freely} {may you share freely}
+  tokenize_test 1.$tn.3 $t {} {}
+}
+
+#-------------------------------------------------------------------------
+# Check that "unicode61" really is the default tokenizer.
+#
+do_execsql_test 2.0 "
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  CREATE VIRTUAL TABLE t2 USING fts5(x, tokenize = unicode61);
+  CREATE VIRTUAL TABLE t3 USING fts5(x, tokenize = ascii);
+  INSERT INTO t1 VALUES('\xC0\xC8\xCC');
+  INSERT INTO t2 VALUES('\xC0\xC8\xCC');
+  INSERT INTO t3 VALUES('\xC0\xC8\xCC');
+"
+do_execsql_test 2.1 "
+  SELECT 't1' FROM t1 WHERE t1 MATCH '\xE0\xE8\xEC';
+  SELECT 't2' FROM t2 WHERE t2 MATCH '\xE0\xE8\xEC';
+  SELECT 't3' FROM t3 WHERE t3 MATCH '\xE0\xE8\xEC';
+" {t1 t2}
+
+#-------------------------------------------------------------------------
+# Check that codepoints that require 4 bytes to store in utf-8 (those that
+# require 17 or more bits to store).
+#
+
+set A [db one {SELECT char(0x1F75E)}]    ;# Type So
+set B [db one {SELECT char(0x1F5FD)}]    ;# Type So
+set C [db one {SELECT char(0x2F802)}]    ;# Type Lo
+set D [db one {SELECT char(0x2F808)}]    ;# Type Lo
+
+do_execsql_test 3.0 "
+  CREATE VIRTUAL TABLE xyz USING fts5(x,
+    tokenize = \"unicode61 separators '$C' tokenchars '$A'\"
+  );
+  CREATE VIRTUAL TABLE xyz_v USING fts5vocab(xyz, row);
+
+  INSERT INTO xyz VALUES('$A$B$C$D');
+"
+
+do_execsql_test 3.1 {
+  SELECT * FROM xyz_v;
+} [list $A 1 1 $D 1 1]
+  
+
+
+
+
+finish_test

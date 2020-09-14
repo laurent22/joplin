@@ -1,0 +1,246 @@
+# 2017 August 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5connect
+
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# The tests in this file test the outcome of a schema-reset happening 
+# within the xConnect() method of an FTS5 table. At one point this
+# was causing a problem in SQLite. Each test proceeds as follows:
+#
+#   1. Connection [db] opens the db and reads from some unrelated, non-FTS5
+#      table causing SQLite to load the db schema into memory.
+#
+#   2. Connection [db2] opens the db and modifies the db schema.
+#
+#   3. Connection [db] reads or writes an existing fts5 table. That the
+#      schema has been modified is detected inside the fts5 xConnect() 
+#      callback that is invoked by sqlite3_prepare(). 
+#
+#   4. Verify that the statement in 3 has worked. SQLite should detect
+#      that the schema has changed and successfully prepare the 
+#      statement against the new schema.
+#
+# Test plan:
+#
+#   1.*: Trigger the xConnect()/schema-reset using statements executed
+#        directly against an FTS5 table.
+#
+#   2.*: Using various statements executed by various BEFORE triggers.
+#
+#   3.*: Using various statements executed by various AFTER triggers.
+#
+#   4.*: Using various statements executed by various INSTEAD OF triggers.
+#
+
+
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE ft1 USING fts5(a, b);
+  CREATE TABLE abc(x INTEGER PRIMARY KEY);
+  CREATE TABLE t1(i INTEGER PRIMARY KEY, a, b);
+
+  INSERT INTO ft1 VALUES('one', 'two');
+  INSERT INTO ft1 VALUES('three', 'four');
+}
+
+foreach {tn sql res} {
+  1 "SELECT * FROM ft1" {one two three four}
+  2 "REPLACE INTO ft1(rowid, a, b) VALUES(1, 'five', 'six')" {}
+  3 "SELECT * FROM ft1" {five six three four}
+  4 "INSERT INTO ft1 VALUES('seven', 'eight')" {}
+  5 "SELECT * FROM ft1" {five six three four seven eight}
+  6 "DELETE FROM ft1 WHERE rowid=2" {}
+  7 "UPDATE ft1 SET b='nine' WHERE rowid=1" {}
+  8 "SELECT * FROM ft1" {five nine seven eight}
+} {
+
+  catch { db close }
+  catch { db2 close }
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+
+  do_test 1.$tn.1 {
+    db eval { INSERT INTO abc DEFAULT VALUES }
+    db2 eval { CREATE TABLE newtable(x,y); DROP TABLE newtable }
+  } {}
+
+  do_execsql_test 1.$tn.2 $sql $res
+
+  do_execsql_test 1.$tn.3 {
+    INSERT INTO ft1(ft1) VALUES('integrity-check');
+  }
+}
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE ft2 USING fts5(a, b);
+  CREATE TABLE t2(a, b);
+  CREATE TABLE log(txt);
+
+  CREATE TRIGGER t2_ai AFTER INSERT ON t2 BEGIN
+    INSERT INTO ft2(rowid, a, b) VALUES(new.rowid, new.a, new.b);
+    INSERT INTO log VALUES('insert');
+  END;
+
+  CREATE TRIGGER t2_ad AFTER DELETE ON t2 BEGIN
+    DELETE FROM ft2 WHERE rowid = old.rowid;
+    INSERT INTO log VALUES('delete');
+  END;
+
+  CREATE TRIGGER t2_au AFTER UPDATE ON t2 BEGIN
+    UPDATE ft2 SET a=new.a, b=new.b WHERE rowid=new.rowid;
+    INSERT INTO log VALUES('update');
+  END;
+
+  INSERT INTO t2 VALUES('one', 'two');
+  INSERT INTO t2 VALUES('three', 'four');
+}
+
+foreach {tn sql res} {
+  1 "SELECT * FROM t2" {one two three four}
+  2 "REPLACE INTO t2(rowid, a, b) VALUES(1, 'five', 'six')" {}
+  3 "SELECT * FROM ft2" {five six three four}
+  4 "INSERT INTO t2 VALUES('seven', 'eight')" {}
+  5 "SELECT * FROM ft2" {five six three four seven eight}
+  6 "DELETE FROM t2 WHERE rowid=2" {}
+  7 "UPDATE t2 SET b='nine' WHERE rowid=1" {}
+  8 "SELECT * FROM ft2" {five nine seven eight}
+} {
+
+  catch { db close }
+  catch { db2 close }
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+
+  do_test 2.$tn.1 {
+    db eval { INSERT INTO abc DEFAULT VALUES }
+    db2 eval { CREATE TABLE newtable(x,y); DROP TABLE newtable }
+  } {}
+
+  do_execsql_test 2.$tn.2 $sql $res
+
+  do_execsql_test 2.$tn.3 {
+    INSERT INTO ft2(ft2) VALUES('integrity-check');
+  }
+}
+
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE ft3 USING fts5(a, b);
+  CREATE TABLE t3(a, b);
+
+  CREATE TRIGGER t3_ai BEFORE INSERT ON t3 BEGIN
+    INSERT INTO ft3(rowid, a, b) VALUES(new.rowid, new.a, new.b);
+    INSERT INTO log VALUES('insert');
+  END;
+
+  CREATE TRIGGER t3_ad BEFORE DELETE ON t3 BEGIN
+    DELETE FROM ft3 WHERE rowid = old.rowid;
+    INSERT INTO log VALUES('delete');
+  END;
+
+  CREATE TRIGGER t3_au BEFORE UPDATE ON t3 BEGIN
+    UPDATE ft3 SET a=new.a, b=new.b WHERE rowid=new.rowid;
+    INSERT INTO log VALUES('update');
+  END;
+
+  INSERT INTO t3(rowid, a, b) VALUES(1, 'one', 'two');
+  INSERT INTO t3(rowid, a, b) VALUES(2, 'three', 'four');
+}
+
+foreach {tn sql res} {
+  1 "SELECT * FROM t3" {one two three four}
+  2 "REPLACE INTO t3(rowid, a, b) VALUES(1, 'five', 'six')" {}
+  3 "SELECT * FROM ft3" {five six three four}
+  4 "INSERT INTO t3(rowid, a, b) VALUES(3, 'seven', 'eight')" {}
+  5 "SELECT * FROM ft3" {five six three four seven eight}
+  6 "DELETE FROM t3 WHERE rowid=2" {}
+  7 "UPDATE t3 SET b='nine' WHERE rowid=1" {}
+  8 "SELECT * FROM ft3" {five nine seven eight}
+} {
+
+  catch { db close }
+  catch { db2 close }
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+
+  do_test 3.$tn.1 {
+    db eval { INSERT INTO abc DEFAULT VALUES }
+    db2 eval { CREATE TABLE newtable(x,y); DROP TABLE newtable }
+  } {}
+
+  do_execsql_test 3.$tn.2 $sql $res
+
+  do_execsql_test 3.$tn.3 {
+    INSERT INTO ft3(ft3) VALUES('integrity-check');
+  }
+}
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE ft4 USING fts5(a, b);
+  CREATE VIEW v4 AS SELECT rowid, * FROM ft4;
+
+  CREATE TRIGGER t4_ai INSTEAD OF INSERT ON v4 BEGIN
+    INSERT INTO ft4(rowid, a, b) VALUES(new.rowid, new.a, new.b);
+    INSERT INTO log VALUES('insert');
+  END;
+
+  CREATE TRIGGER t4_ad INSTEAD OF DELETE ON v4 BEGIN
+    DELETE FROM ft4 WHERE rowid = old.rowid;
+    INSERT INTO log VALUES('delete');
+  END;
+
+  CREATE TRIGGER t4_au INSTEAD OF UPDATE ON v4 BEGIN
+    UPDATE ft4 SET a=new.a, b=new.b WHERE rowid=new.rowid;
+    INSERT INTO log VALUES('update');
+  END;
+
+  INSERT INTO ft4(rowid, a, b) VALUES(1, 'one', 'two');
+  INSERT INTO ft4(rowid, a, b) VALUES(2, 'three', 'four');
+}
+
+foreach {tn sql res} {
+  1 "SELECT * FROM ft4" {one two three four}
+  2 "REPLACE INTO v4(rowid, a, b) VALUES(1, 'five', 'six')" {}
+  3 "SELECT * FROM ft4" {five six three four}
+  4 "INSERT INTO v4(rowid, a, b) VALUES(3, 'seven', 'eight')" {}
+  5 "SELECT * FROM ft4" {five six three four seven eight}
+  6 "DELETE FROM v4 WHERE rowid=2" {}
+  7 "UPDATE v4 SET b='nine' WHERE rowid=1" {}
+  8 "SELECT * FROM ft4" {five nine seven eight}
+} {
+
+  catch { db close }
+  catch { db2 close }
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+
+  do_test 4.$tn.1 {
+    db eval { INSERT INTO abc DEFAULT VALUES }
+    db2 eval { CREATE TABLE newtable(x,y); DROP TABLE newtable }
+  } {}
+
+  do_execsql_test 4.$tn.2 $sql $res
+
+  do_execsql_test 4.$tn.3 {
+    INSERT INTO ft3(ft3) VALUES('integrity-check');
+  }
+}
+
+finish_test

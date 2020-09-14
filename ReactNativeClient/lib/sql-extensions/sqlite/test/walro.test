@@ -1,0 +1,300 @@
+# 2011 May 09
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for using WAL databases in read-only mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set ::testprefix walro
+
+# These tests are only going to work on unix.
+#
+if {$::tcl_platform(platform) != "unix"} {
+  finish_test
+  return
+}
+
+# And only if the build is WAL-capable.
+#
+ifcapable !wal {
+  finish_test
+  return
+}
+
+do_multiclient_test tn {
+  
+  # Close all connections and delete the database.
+  #
+  code1 { db close  }
+  code2 { db2 close }
+  code3 { db3 close }
+  forcedelete test.db
+  forcedelete walro
+  
+  # Do not run tests with the connections in the same process.
+  #
+  if {$tn==2} continue
+
+  foreach c {code1 code2 code3} {
+    $c {
+      sqlite3_shutdown
+      sqlite3_config_uri 1
+    }
+  }
+
+  file mkdir walro
+
+  do_test 1.1.1 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { 
+      PRAGMA auto_vacuum = 0;
+      PRAGMA journal_mode = WAL;
+      CREATE TABLE t1(x, y);
+      INSERT INTO t1 VALUES('a', 'b');
+    }
+    file exists test.db-shm
+  } {1}
+
+  do_test 1.1.2 {
+    file attributes test.db-shm -permissions r--r--r--
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+  } {}
+
+  do_test 1.1.3 { sql1 "SELECT * FROM t1" }                {a b}
+  do_test 1.1.4 { sql2 "INSERT INTO t1 VALUES('c', 'd')" } {}
+  do_test 1.1.5 { sql1 "SELECT * FROM t1" }                {a b c d}
+
+  # Check that the read-only connection cannot write or checkpoint the db.
+  #
+  do_test 1.1.6 { 
+    csql1 "INSERT INTO t1 VALUES('e', 'f')" 
+  } {1 {attempt to write a readonly database}}
+  do_test 1.1.7 { 
+    csql1 "PRAGMA wal_checkpoint"
+  } {1 {attempt to write a readonly database}}
+
+  do_test 1.1.9  { sql2 "INSERT INTO t1 VALUES('e', 'f')" } {}
+  do_test 1.1.10 { sql1 "SELECT * FROM t1" }                {a b c d e f}
+
+  do_test 1.1.11 { 
+    sql2 {
+      INSERT INTO t1 VALUES('g', 'h');
+      PRAGMA wal_checkpoint;
+    }
+    set {} {}
+  } {}
+  do_test 1.1.12 { sql1 "SELECT * FROM t1" }                {a b c d e f g h}
+  do_test 1.1.13  { sql2 "INSERT INTO t1 VALUES('i', 'j')" } {}
+
+  do_test 1.2.1 {
+    code2 { db2 close }
+    code1 { db close }
+    list [file exists test.db-wal] [file exists test.db-shm]
+  } {1 1}
+
+  do_test 1.2.2 {
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    list [catch { sql1 { SELECT * FROM t1 } } msg] $msg
+  } {0 {a b c d e f g h i j}}
+
+  do_test 1.2.3 {
+    code1 { db close }
+    file attributes test.db-shm -permissions rw-r--r--
+    hexio_write test.db-shm 0 01020304 
+    file attributes test.db-shm -permissions r--r--r--
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    csql1 { SELECT * FROM t1 }
+  } {0 {a b c d e f g h i j}}
+  do_test 1.2.4 {
+    code1 { sqlite3_extended_errcode db } 
+  } {SQLITE_OK}
+
+  do_test 1.2.5 {
+    file attributes test.db-shm -permissions rw-r--r--
+    code2 { sqlite3 db2 test.db }
+    sql2 "SELECT * FROM t1" 
+  } {a b c d e f g h i j}
+  file attributes test.db-shm -permissions r--r--r--
+  do_test 1.2.6 { sql1 "SELECT * FROM t1" } {a b c d e f g h i j}
+
+  do_test 1.2.7 { 
+    sql2 {
+      PRAGMA wal_checkpoint;
+      INSERT INTO t1 VALUES('k', 'l');
+    }
+    set {} {}
+  } {}
+  do_test 1.2.8 { sql1 "SELECT * FROM t1" } {a b c d e f g h i j k l}
+
+  # Now check that if the readonly_shm option is not supplied, or if it
+  # is set to zero, it is not possible to connect to the database without
+  # read-write access to the shm.
+  # 
+  # UPDATE: os_unix.c now opens the *-shm file in readonly mode 
+  # automatically.
+  #
+  do_test 1.3.1 {
+    code1 { db close }
+    code1 { sqlite3 db test.db }
+    csql1 { SELECT * FROM t1 }
+  } {0 {a b c d e f g h i j k l}}
+
+  # Also test that if the -shm file can be opened for read/write access,
+  # it is not if readonly_shm=1 is present in the URI.
+  do_test 1.3.2.1 {
+    code1 { db close }
+    code2 { db2 close }
+    file exists test.db-shm
+  } {0}
+  do_test 1.3.2.2 {
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    csql1 { SELECT * FROM sqlite_master }
+  } {1 {unable to open database file}}
+  do_test 1.3.2.3 {
+    code1 { db close }
+    close [open test.db-shm w]
+    file attributes test.db-shm -permissions r--r--r--
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    csql1 { SELECT * FROM t1 }
+  } {0 {a b c d e f g h i j k l}}
+  do_test 1.3.2.4 {
+    code1 { sqlite3_extended_errcode db } 
+  } {SQLITE_OK}
+
+  #-----------------------------------------------------------------------
+  # Test cases 1.4.* check that checkpoints and log wraps don't prevent
+  # read-only connections from reading the database.
+  do_test 1.4.1 {
+    code1 { db close }
+    forcedelete test.db-shm
+    file exists test.db-shm
+  } {0}
+
+  # Open one read-only and one read-write connection. Write some data
+  # and then run a checkpoint using the read-write connection. Then
+  # check the read-only connection can still read.
+  do_test 1.4.2 {
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    code2 { sqlite3 db2 test.db }
+    csql2 { 
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t1 VALUES(3, 4);
+      INSERT INTO t1 VALUES(5, 6);
+      PRAGMA wal_checkpoint;
+    }
+  } {0 {0 3 3}}
+  do_test 1.4.3 {
+    csql1 { SELECT * FROM t1 }
+  } {0 {a b c d e f g h i j k l 1 2 3 4 5 6}}
+  
+  # Using the read-write connection, open a transaction and write lots
+  # of data - causing a cache spill and a log wrap. Then check that the 
+  # read-only connection can still read the database.
+  do_test 1.4.4.1 {
+    csql2 {
+      PRAGMA cache_size = 10;
+      BEGIN;
+      CREATE TABLE t2(x, y);
+      INSERT INTO t2 VALUES('abc', 'xyz');
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      INSERT INTO t2 SELECT x||y, y||x FROM t2;
+    }
+    file size test.db-wal
+  } [expr {[nonzero_reserved_bytes]?148848:147800}]
+  do_test 1.4.4.2 {
+    csql1 { SELECT * FROM t1 }
+  } {0 {a b c d e f g h i j k l 1 2 3 4 5 6}}
+  do_test 1.4.4.3 {
+    csql2 COMMIT
+    csql1 { SELECT count(*) FROM t2 }
+  } {0 512}
+  do_test 1.4.5 {
+    code2 { db2 close }
+    code1 { db close }
+  } {}
+}
+
+forcedelete test.db
+
+#-----------------------------------------------------------------------
+# Test cases 2.* check that a read-only connection may read the
+# database file while a checkpoint operation is ongoing.
+#
+do_multiclient_test tn {
+  
+  # Close all connections and delete the database.
+  #
+  code1 { db close  }
+  code2 { db2 close }
+  code3 { db3 close }
+  forcedelete test.db
+  forcedelete walro
+  
+  # Do not run tests with the connections in the same process.
+  #
+  if {$tn==2} continue
+
+  foreach c {code1 code2 code3} {
+    $c {
+      sqlite3_shutdown
+      sqlite3_config_uri 1
+    }
+  }
+  
+  proc tv_hook {x file args} {
+    if {[file tail $file]=="test.db-wal"} {
+      do_test 2.1.2 {
+        code2 { sqlite3 db2 file:test.db?readonly_shm=1 }
+        csql2 { SELECT count(*) FROM t2 }
+      } {0 4}
+      do_test 2.1.3 {
+        code2 { db2 close }
+      } {}
+    } 
+  }
+
+  do_test 2.1.1 {
+    testvfs tv -default 1 -fullshm 1
+    tv script tv_hook
+    tv filter {}
+    code1 { sqlite3 db test.db }
+    csql1 { 
+      PRAGMA auto_vacuum = 0;
+      PRAGMA journal_mode = WAL;
+      BEGIN;
+        CREATE TABLE t2(x, y);
+        INSERT INTO t2 VALUES('abc', 'xyz');
+        INSERT INTO t2 SELECT x||y, y||x FROM t2;
+        INSERT INTO t2 SELECT x||y, y||x FROM t2;
+      COMMIT;
+    }
+  } {0 wal}
+
+  tv filter xSync
+  set res [csql1 { PRAGMA wal_checkpoint }]
+  do_test 2.1.4 { set res } {0 {0 2 2}}
+
+  do_test 2.1.5 {
+    code1 { db close }
+    code1 { tv delete }
+  } {}
+}
+
+finish_test

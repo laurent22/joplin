@@ -1,0 +1,175 @@
+# 2008 August 01
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test script checks malloc failures in WHERE clause analysis.
+# 
+# $Id: mallocK.test,v 1.3 2009/01/08 21:00:03 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set testprefix mallocK
+
+set sql {SELECT * FROM t1, t2 WHERE (a=1 OR a=2)}
+for {set x 1} {$x<5} {incr x} {
+  append sql " AND b=y"
+  do_malloc_test mallocK-1.$x -sqlbody $sql -sqlprep {
+    CREATE TABLE t1(a,b);
+    CREATE TABLE t2(x,y);
+  }
+}
+
+set sql {SELECT * FROM t1 WHERE a GLOB 'xyz*' AND (a=1 OR a=2)}
+for {set x 1} {$x<5} {incr x} {
+  append sql " AND b!=$x"
+  do_malloc_test mallocK-2.$x -sqlbody $sql -sqlprep {
+    CREATE TABLE t1(a,b);
+  }
+}
+
+set sql {SELECT * FROM t1 WHERE a BETWEEN 5 AND 10}
+for {set x 1} {$x<5} {incr x} {
+  append sql " AND b=$x"
+  do_malloc_test mallocK-3.$x -sqlbody $sql -sqlprep {
+    CREATE TABLE t1(a,b);
+  }
+}
+
+set sql {SELECT * FROM t1 WHERE b=0}
+for {set x 1} {$x<5} {incr x} {
+  set term "(b=$x"
+  for {set y 0} {$y<$x} {incr y} {
+    append term " AND a!=$y"
+  }
+  append sql " OR $term)"
+  do_malloc_test mallocK-4.$x -sqlbody $sql -sqlprep {
+    CREATE TABLE t1(a,b);
+  }
+}
+
+ifcapable vtab {
+  set sql {SELECT * FROM t2 WHERE a MATCH 'xyz'}
+  for {set x 1} {$x<5} {incr x} {
+    append sql " AND b!=$x"
+    do_malloc_test mallocK-5.$x -sqlbody $sql -tclprep {
+      register_echo_module [sqlite3_connection_pointer db]
+      db eval {
+        CREATE TABLE t1(a,b);
+        CREATE VIRTUAL TABLE t2 USING echo(t1);
+      }
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that OOM errors are correctly handled by the code that uses stat4
+# data to estimate the number of rows visited by a skip-scan range query.
+#
+add_alignment_test_collations db
+do_execsql_test 6.0 {
+  CREATE TABLE t3(a TEXT, b TEXT COLLATE utf16_aligned, c);
+  INSERT INTO t3 VALUES('one', '.....', 0);
+  INSERT INTO t3 VALUES('one', '....x', 1);
+  INSERT INTO t3 VALUES('one', '...x.', 2);
+  INSERT INTO t3 VALUES('one', '...xx', 3);
+  INSERT INTO t3 VALUES('one', '..x..', 4);
+  INSERT INTO t3 VALUES('one', '..x.x', 5);
+  INSERT INTO t3 VALUES('one', '..xx.', 6);
+  INSERT INTO t3 VALUES('one', '..xxx', 7);
+  INSERT INTO t3 VALUES('one', '.x...', 8);
+  INSERT INTO t3 VALUES('one', '.x..x', 9);
+  INSERT INTO t3 VALUES('one', '.x.x.', 10);
+  INSERT INTO t3 VALUES('one', '.x.xx', 11);
+  INSERT INTO t3 VALUES('one', '.xx..', 12);
+  INSERT INTO t3 VALUES('one', '.xx.x', 13);
+  INSERT INTO t3 VALUES('one', '.xxx.', 14);
+  INSERT INTO t3 VALUES('one', '.xxxx', 15);
+
+  INSERT INTO t3 VALUES('two', 'x....', 16);
+  INSERT INTO t3 VALUES('two', 'x...x', 17);
+  INSERT INTO t3 VALUES('two', 'x..x.', 18);
+  INSERT INTO t3 VALUES('two', 'x..xx', 19);
+  INSERT INTO t3 VALUES('two', 'x.x..', 20);
+  INSERT INTO t3 VALUES('two', 'x.x.x', 21);
+  INSERT INTO t3 VALUES('two', 'x.xx.', 22);
+  INSERT INTO t3 VALUES('two', 'x.xxx', 23);
+  INSERT INTO t3 VALUES('two', 'xx...', 24);
+  INSERT INTO t3 VALUES('two', 'xx..x', 25);
+  INSERT INTO t3 VALUES('two', 'xx.x.', 26);
+  INSERT INTO t3 VALUES('two', 'xx.xx', 27);
+  INSERT INTO t3 VALUES('two', 'xxx..', 28);
+  INSERT INTO t3 VALUES('two', 'xxx.x', 29);
+  INSERT INTO t3 VALUES('two', 'xxxx.', 30);
+  INSERT INTO t3 VALUES('two', 'xxxxx', 31);
+
+  INSERT INTO t3 SELECT * FROM t3;
+
+  CREATE INDEX i3 ON t3(a, b);
+  ANALYZE;
+
+  SELECT 'x' > '.';
+} {1}
+
+ifcapable stat4 {
+  do_eqp_test 6.1 {
+    SELECT DISTINCT c FROM t3 WHERE b BETWEEN '.xx..' AND '.xxxx';
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    |--SEARCH TABLE t3 USING INDEX i3 (ANY(a) AND b>? AND b<?)
+    `--USE TEMP B-TREE FOR DISTINCT
+  }]
+}
+
+do_faultsim_test 6 -faults oom* -body {
+  db cache flush
+  db eval { SELECT DISTINCT c FROM t3 WHERE b BETWEEN '.xx..' AND '.xxxx' }
+} -test {
+  faultsim_test_result {0 {12 13 14 15}} 
+}
+
+do_execsql_test 7.1 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b);
+}
+do_faultsim_test 7.2 -faults oom* -body {
+  execsql { SELECT * FROM x1 WHERE a = (SELECT 1) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+reset_db
+
+proc isqrt {i} { expr { int(sqrt($i)) } }
+db func isqrt isqrt
+
+do_execsql_test 8.0 {
+  PRAGMA encoding = 'utf-16';
+  CREATE TABLE x2(x TEXT, y TEXT);
+  WITH data(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM data
+  )
+  INSERT INTO x2 SELECT isqrt(i), isqrt(i) FROM data LIMIT 400;
+  CREATE INDEX x2x ON x2(x);
+  CREATE INDEX x2y ON x2(y);
+  ANALYZE;
+  DELETE FROM x2;
+}
+
+proc str {a} { return $a }
+db func str -deterministic str
+
+do_faultsim_test 8 -faults oom* -body {
+  execsql { SELECT * FROM x2 WHERE x = str('19') AND y = str('4') }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+
+finish_test

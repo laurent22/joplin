@@ -1,0 +1,175 @@
+# 2007 May 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The focus
+# of this file is checking the libraries response to subtly corrupting
+# the database file by changing the values of pseudo-randomly selected
+# bytes.
+#
+# $Id: fuzz3.test,v 1.3 2009/01/05 17:19:03 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+test_set_config_pagecache 0 0
+
+
+expr srand(123)
+
+proc rstring {n} {
+  set str s
+  while {[string length $str] < $n} {
+    append str [expr rand()]
+  }
+  return [string range $str 0 $n]
+}
+
+# Return a randomly generated SQL literal.
+#
+proc rvalue {} {
+  switch -- [expr int(rand()*5)] {
+    0 { # SQL NULL value.
+      return NULL 
+    }
+    1 { # Integer value.
+      return [expr int(rand()*1024)] 
+    }
+    2 { # Real value.
+      return [expr rand()] 
+    }
+    3 { # String value.
+      set n [expr int(rand()*2500)]
+      return "'[rstring $n]'"
+    }
+    4 { # Blob value.
+      set n [expr int(rand()*2500)]
+      return "CAST('[rstring $n]' AS BLOB)"
+    }
+  }
+}
+
+proc db_checksum {} {
+  set    cksum [execsql { SELECT md5sum(a, b, c) FROM t1 }]
+  append cksum [execsql { SELECT md5sum(d, e, f) FROM t2 }]
+  set cksum
+}
+
+# Modify a single byte in the file 'test.db' using tcl IO commands. The
+# argument value, which must be an integer, determines both the offset of
+# the byte that is modified, and the value that it is set to. The lower
+# 8 bits of iMod determine the new byte value. The offset of the byte
+# modified is the value of ($iMod >> 8).
+#
+# The return value is the iMod value required to restore the file
+# to its original state. The command:
+#
+#   modify_database [modify_database $x]
+#
+# leaves the file in the same state as it was in at the start of the
+# command (assuming that the file is at least ($x>>8) bytes in size).
+#
+proc modify_database {iMod} {
+  set blob [binary format c [expr {$iMod&0xFF}]]
+  set offset [expr {$iMod>>8}]
+
+  set fd [open test.db r+]
+  fconfigure $fd -encoding binary -translation binary
+  seek $fd $offset
+  set old_blob [read $fd 1]
+  seek $fd $offset
+  puts -nonewline $fd $blob
+  close $fd
+
+  binary scan $old_blob c iOld
+  return [expr {($offset<<8) + ($iOld&0xFF)}]
+}
+
+proc purge_pcache {} {
+  ifcapable !memorymanage {
+    db close
+    sqlite3 db test.db
+  } else {
+    sqlite3_release_memory 10000000
+  }
+  if {[lindex [pcache_stats] 1] != 0} {
+    error "purge_pcache failed: [pcache_stats]"
+  }
+}
+
+# This block creates a database to work with. 
+#
+do_test fuzz3-1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(d, e, f);
+    CREATE INDEX i1 ON t1(a, b, c);
+    CREATE INDEX i2 ON t2(d, e, f);
+  }
+  for {set i 0} {$i < 50} {incr i} {
+    execsql "INSERT INTO t1 VALUES([rvalue], [rvalue], [rvalue])"
+    execsql "INSERT INTO t2 VALUES([rvalue], [rvalue], [rvalue])"
+  }
+  execsql COMMIT
+} {}
+
+set ::cksum [db_checksum]
+do_test fuzz3-2 {
+  db_checksum
+} $::cksum
+
+for {set ii 0} {$ii < 5000} {incr ii} {
+  purge_pcache
+
+  # Randomly modify a single byte of the database file somewhere within
+  # the first 100KB of the file.
+  set iNew [expr int(rand()*5*1024*256)]
+  set iOld [modify_database $iNew]
+
+  set iTest 0
+  foreach sql {
+    {SELECT * FROM t2 ORDER BY d}      
+    {SELECT * FROM t1}                 
+    {SELECT * FROM t2}                 
+    {SELECT * FROM t1 ORDER BY a}      
+    {SELECT * FROM t1 WHERE a = (SELECT a FROM t1 WHERE rowid=25)} 
+    {SELECT * FROM t2 WHERE d = (SELECT d FROM t2 WHERE rowid=1)}  
+    {SELECT * FROM t2 WHERE d = (SELECT d FROM t2 WHERE rowid=50)} 
+    {PRAGMA integrity_check}           
+  } {
+    do_test fuzz3-$ii.$iNew.[incr iTest] {
+      foreach {rc msg} [catchsql $sql] {}
+      if {$rc == 0 
+       || $msg eq "database or disk is full"
+       || $msg eq "database disk image is malformed"
+       || $msg eq "file is not a database"
+       || [string match "malformed database schema*" $msg]
+      } {
+        set msg ok
+      }
+      set msg
+    } {ok}
+  }
+
+  # Restore the original database file content. Test that the correct 
+  # checksum is now returned.
+  #
+  purge_pcache
+  modify_database $iOld
+  do_test fuzz3-$ii.$iNew.[incr iTest] {
+    db_checksum
+  } $::cksum
+}
+
+test_restore_config_pagecache
+finish_test

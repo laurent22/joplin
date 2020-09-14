@@ -1,0 +1,355 @@
+# 2003 December 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for miscellanous features that were
+# left out of other test files.
+#
+# $Id: misc3.test,v 1.20 2009/05/06 00:49:01 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable {integrityck} {
+  # Ticket #529.  Make sure an ABORT does not damage the in-memory cache
+  # that will be used by subsequent statements in the same transaction.
+  #
+  do_test misc3-1.1 {
+    execsql {
+      CREATE TABLE t1(a UNIQUE,b);
+      INSERT INTO t1
+        VALUES(1,'a23456789_b23456789_c23456789_d23456789_e23456789_');
+      UPDATE t1 SET b=b||b;
+      UPDATE t1 SET b=b||b;
+      UPDATE t1 SET b=b||b;
+      UPDATE t1 SET b=b||b;
+      UPDATE t1 SET b=b||b;
+      INSERT INTO t1 VALUES(2,'x');
+      UPDATE t1 SET b=substr(b,1,500);
+      BEGIN;
+    }
+    catchsql {UPDATE t1 SET a=CASE a WHEN 2 THEN 1 ELSE a END, b='y';}
+    execsql {
+      CREATE TABLE t2(x,y);
+      COMMIT;
+      PRAGMA integrity_check;
+    }
+  } ok
+}
+ifcapable {integrityck} {
+  do_test misc3-1.2 {
+    execsql {
+      DROP TABLE t1;
+      DROP TABLE t2;
+    }
+    ifcapable {vacuum} {execsql VACUUM}
+    execsql {
+      CREATE TABLE t1(a UNIQUE,b);
+      INSERT INTO t1
+      VALUES(1,'a23456789_b23456789_c23456789_d23456789_e23456789_');
+      INSERT INTO t1 SELECT a+1, b||b FROM t1;
+      INSERT INTO t1 SELECT a+2, b||b FROM t1;
+      INSERT INTO t1 SELECT a+4, b FROM t1;
+      INSERT INTO t1 SELECT a+8, b FROM t1;
+      INSERT INTO t1 SELECT a+16, b FROM t1;
+      INSERT INTO t1 SELECT a+32, b FROM t1;
+      INSERT INTO t1 SELECT a+64, b FROM t1;
+      BEGIN;
+    }
+    catchsql {UPDATE t1 SET a=CASE a WHEN 128 THEN 127 ELSE a END, b='';}
+    execsql {
+      INSERT INTO t1 VALUES(200,'hello out there');
+      COMMIT;
+      PRAGMA integrity_check;
+    }
+  } ok
+}
+
+# Tests of the sqliteAtoF() function in util.c
+#
+do_test misc3-2.1 {
+  execsql {SELECT 2e-25*0.5e25}
+} 1.0
+do_test misc3-2.2 {
+  execsql {SELECT 2.0e-25*000000.500000000000000000000000000000e+00025}
+} 1.0
+do_test misc3-2.3 {
+  execsql {SELECT 000000000002e-0000000025*0.5e25}
+} 1.0
+do_test misc3-2.4 {
+  execsql {SELECT 2e-25*0.5e250}
+} 1e+225
+do_test misc3-2.5 {
+  execsql {SELECT 2.0e-250*0.5e25}
+} 1e-225
+do_test misc3-2.6 {
+  execsql {SELECT '-2.0e-127' * '-0.5e27'}
+} 1e-100
+do_test misc3-2.7 {
+  execsql {SELECT '+2.0e-127' * '-0.5e27'}
+} -1e-100
+do_test misc3-2.8 {
+  execsql {SELECT 2.0e-27 * '+0.5e+127'}
+} 1e+100
+do_test misc3-2.9 {
+  execsql {SELECT 2.0e-27 * '+0.000005e+132'}
+} 1e+100
+
+# Ticket #522.  Make sure integer overflow is handled properly in
+# indices.
+#
+integrity_check misc3-3.1
+do_test misc3-3.2 {
+  execsql {
+    CREATE TABLE t2(a INT UNIQUE);
+  }
+} {}
+integrity_check misc3-3.2.1
+do_test misc3-3.3 {
+  execsql {
+    INSERT INTO t2 VALUES(2147483648);
+  }
+} {}
+integrity_check misc3-3.3.1
+do_test misc3-3.4 {
+  execsql {
+    INSERT INTO t2 VALUES(-2147483649);
+  }
+} {}
+integrity_check misc3-3.4.1
+do_test misc3-3.5 {
+  execsql {
+    INSERT INTO t2 VALUES(+2147483649);
+  }
+} {}
+integrity_check misc3-3.5.1
+do_test misc3-3.6 {
+  execsql {
+    INSERT INTO t2 VALUES(+2147483647);
+    INSERT INTO t2 VALUES(-2147483648);
+    INSERT INTO t2 VALUES(-2147483647);
+    INSERT INTO t2 VALUES(2147483646);
+    SELECT * FROM t2 ORDER BY a;
+  }
+} {-2147483649 -2147483648 -2147483647 2147483646 2147483647 2147483648 2147483649}
+do_test misc3-3.7 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=-2147483648 ORDER BY a;
+  }
+} {-2147483648 -2147483647 2147483646 2147483647 2147483648 2147483649}
+do_test misc3-3.8 {
+  execsql {
+    SELECT * FROM t2 WHERE a>-2147483648 ORDER BY a;
+  }
+} {-2147483647 2147483646 2147483647 2147483648 2147483649}
+do_test misc3-3.9 {
+  execsql {
+    SELECT * FROM t2 WHERE a>-2147483649 ORDER BY a;
+  }
+} {-2147483648 -2147483647 2147483646 2147483647 2147483648 2147483649}
+do_test misc3-3.10 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=0 AND a<2147483649 ORDER BY a DESC;
+  }
+} {2147483648 2147483647 2147483646}
+do_test misc3-3.11 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=0 AND a<=2147483648 ORDER BY a DESC;
+  }
+} {2147483648 2147483647 2147483646}
+do_test misc3-3.12 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=0 AND a<2147483648 ORDER BY a DESC;
+  }
+} {2147483647 2147483646}
+do_test misc3-3.13 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=0 AND a<=2147483647 ORDER BY a DESC;
+  }
+} {2147483647 2147483646}
+do_test misc3-3.14 {
+  execsql {
+    SELECT * FROM t2 WHERE a>=0 AND a<2147483647 ORDER BY a DESC;
+  }
+} {2147483646}
+
+# Ticket #565.  A stack overflow is occurring when the subquery to the
+# right of an IN operator contains many NULLs
+#
+do_test misc3-4.1 {
+  execsql {
+    CREATE TABLE t3(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t3(b) VALUES('abc');
+    INSERT INTO t3(b) VALUES('xyz');
+    INSERT INTO t3(b) VALUES(NULL);
+    INSERT INTO t3(b) VALUES(NULL);
+    INSERT INTO t3(b) SELECT b||'d' FROM t3;
+    INSERT INTO t3(b) SELECT b||'e' FROM t3;
+    INSERT INTO t3(b) SELECT b||'f' FROM t3;
+    INSERT INTO t3(b) SELECT b||'g' FROM t3;
+    INSERT INTO t3(b) SELECT b||'h' FROM t3;
+    SELECT count(a), count(b) FROM t3;
+  }
+} {128 64}
+ifcapable subquery {
+do_test misc3-4.2 {
+    execsql {
+      SELECT count(a) FROM t3 WHERE b IN (SELECT b FROM t3);
+    }
+  } {64}
+  do_test misc3-4.3 {
+    execsql {
+      SELECT count(a) FROM t3 WHERE b IN (SELECT b FROM t3 ORDER BY a+1);
+    }
+  } {64}
+}
+
+# Ticket #601:  Putting a left join inside "SELECT * FROM (<join-here>)"
+# gives different results that if the outer "SELECT * FROM ..." is omitted.
+#
+ifcapable subquery {
+  do_test misc3-5.1 {
+    execsql {
+      CREATE TABLE x1 (b, c);
+      INSERT INTO x1 VALUES('dog',3);
+      INSERT INTO x1 VALUES('cat',1);
+      INSERT INTO x1 VALUES('dog',4);
+      CREATE TABLE x2 (c, e);
+      INSERT INTO x2 VALUES(1,'one');
+      INSERT INTO x2 VALUES(2,'two');
+      INSERT INTO x2 VALUES(3,'three');
+      INSERT INTO x2 VALUES(4,'four');
+      SELECT x2.c AS c, e, b FROM x2 LEFT JOIN
+         (SELECT b, max(c)+0 AS c FROM x1 GROUP BY b)
+         USING(c);
+    }
+  } {1 one cat 2 two {} 3 three {} 4 four dog}
+  do_test misc3-5.2 {
+    execsql {
+      SELECT * FROM (
+        SELECT x2.c AS c, e, b FROM x2 LEFT JOIN
+           (SELECT b, max(c)+0 AS c FROM x1 GROUP BY b)
+           USING(c)
+      );
+    }
+  } {1 one cat 2 two {} 3 three {} 4 four dog}
+}
+
+ifcapable {explain} {
+  # Ticket #626:  make sure EXPLAIN prevents BEGIN and COMMIT from working.
+  #
+  do_test misc3-6.1 {
+    execsql {EXPLAIN BEGIN}
+    catchsql {BEGIN}
+  } {0 {}}
+  do_test misc3-6.2 {
+    execsql {EXPLAIN COMMIT}
+    catchsql {COMMIT}
+  } {0 {}}
+  do_test misc3-6.3 {
+    execsql {BEGIN; EXPLAIN ROLLBACK}
+    catchsql {ROLLBACK}
+  } {0 {}}
+
+  # Do some additional EXPLAIN operations to exercise the displayP4 logic.
+  do_test misc3-6.10 {
+    set x [execsql {
+      CREATE TABLE ex1(
+        a INTEGER DEFAULT 54321,
+        b TEXT DEFAULT "hello",
+        c REAL DEFAULT 3.1415926
+      );
+      CREATE UNIQUE INDEX ex1i1 ON ex1(a);
+      EXPLAIN REINDEX;
+    }]
+    ifcapable mergesort {
+      regexp { SorterCompare \d+ \d+ \d+ } $x
+    } else {
+      regexp { IsUnique \d+ \d+ \d+ \d+ } $x
+    }
+  } {1}
+  if {[regexp {16} [db one {PRAGMA encoding}]]} {
+    do_test misc3-6.11-utf16 {
+      set x [execsql {
+        EXPLAIN SELECT a+123456789012, b*4.5678, c FROM ex1 ORDER BY +a, b DESC
+      }]
+      set y [regexp { 123456789012 } $x]
+      lappend y [regexp { 4.5678 } $x]
+      lappend y [regexp {,-B} $x]
+    } {1 1 1}
+  } else {
+    do_test misc3-6.11-utf8 {
+      set x [execsql {
+        EXPLAIN SELECT a+123456789012, b*4.5678, c FROM ex1 ORDER BY +a, b DESC
+      }]
+      set y [regexp { 123456789012 } $x]
+      lappend y [regexp { 4.5678 } $x]
+      lappend y [regexp { hello } $x]
+      lappend y [regexp {,-B} $x]
+    } {1 1 1 1}
+  }
+}
+
+ifcapable {trigger} {
+# Ticket #640:  vdbe stack overflow with a LIMIT clause on a SELECT inside
+# of a trigger.
+#
+do_test misc3-7.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE y1(a);
+    CREATE TABLE y2(b);
+    CREATE TABLE y3(c);
+    CREATE TRIGGER r1 AFTER DELETE ON y1 FOR EACH ROW BEGIN
+      INSERT INTO y3(c) SELECT b FROM y2 ORDER BY b LIMIT 1;
+    END;
+    INSERT INTO y1 VALUES(1);
+    INSERT INTO y1 VALUES(2);
+    INSERT INTO y1 SELECT a+2 FROM y1;
+    INSERT INTO y1 SELECT a+4 FROM y1;
+    INSERT INTO y1 SELECT a+8 FROM y1;
+    INSERT INTO y1 SELECT a+16 FROM y1;
+    INSERT INTO y2 SELECT a FROM y1;
+    COMMIT;
+    SELECT count(*) FROM y1;
+  }
+} 32
+do_test misc3-7.2 {
+  execsql {
+    DELETE FROM y1;
+    SELECT count(*) FROM y1;
+  }
+} 0
+do_test misc3-7.3 {
+  execsql {
+    SELECT count(*) FROM y3;
+  }
+} 32
+} ;# endif trigger
+
+# Ticket #668:  VDBE stack overflow occurs when the left-hand side
+# of an IN expression is NULL and the result is used as an integer, not
+# as a jump.
+#
+ifcapable subquery {
+  do_test misc-8.1 {
+    execsql {
+      SELECT count(CASE WHEN b IN ('abc','xyz') THEN 'x' END) FROM t3
+    }
+  } {2}
+  do_test misc-8.2 {
+    execsql {
+      SELECT count(*) FROM t3 WHERE 1+(b IN ('abc','xyz'))==2
+    }
+  } {2}
+}
+
+finish_test

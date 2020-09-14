@@ -1,0 +1,174 @@
+# 2017-12-16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# Test cases for the sqlite_offset() function.
+#
+# Some of the tests in this file depend on the exact placement of content
+# within b-tree pages.  Such placement is at the implementations discretion,
+# and so it is possible for results to change from one release to the next.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !offset_sql_func {
+  finish_test
+  return
+}
+
+set bNullTrim 0
+ifcapable null_trim {
+  set bNullTrim 1
+}
+
+do_execsql_test func6-100 {
+  PRAGMA page_size=4096;
+  PRAGMA auto_vacuum=NONE;
+  CREATE TABLE t1(a,b,c,d);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+   INSERT INTO t1(a,b,c,d) SELECT printf('abc%03x',x), x, 1000-x, NULL FROM c;
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1bc ON t1(b,c);
+  CREATE TABLE t2(x TEXT PRIMARY KEY, y) WITHOUT ROWID;
+  INSERT INTO t2(x,y) SELECT a, b FROM t1;
+}
+
+# Load the contents of $file from disk and return it encoded as a hex
+# string.
+proc loadhex {file} {
+  set fd [open $file]
+  fconfigure $fd -translation binary -encoding binary
+  set data [read $fd]
+  close $fd
+  binary encode hex $data 
+}
+
+# Each argument is either an integer between 0 and 65535, a text value, or
+# an empty string representing an SQL NULL. This command builds an SQLite
+# record containing the values passed as arguments and returns it encoded
+# as a hex string.
+proc hexrecord {args} {
+  set hdr ""
+  set body ""
+
+  if {$::bNullTrim} {
+    while {[llength $args] && [lindex $args end]=={}} {
+      set args [lrange $args 0 end-1]
+    }
+  }
+
+  foreach x $args {
+    if {$x==""} {
+      append hdr 00
+    } elseif {[string is integer $x]==0} {
+      set n [string length $x]
+      append hdr [format %02x [expr $n*2 + 13]]
+      append body [binary encode hex $x]
+    } elseif {$x == 0} {
+      append hdr 08
+    } elseif {$x == 1} {
+      append hdr 09
+    } elseif {$x <= 127} {
+      append hdr 01
+      append body [format %02x $x]
+    } else {
+      append hdr 02
+      append body [format %04x $x]
+    }
+  }
+  set res [format %02x [expr 1 + [string length $hdr]/2]]
+  append res $hdr
+  append res $body
+}
+
+# Argument $off is an offset into the database image encoded as a hex string
+# in argument $hexdb. This command returns 0 if the offset contains the hex
+# $hexrec, or throws an exception otherwise.
+#
+proc offset_contains_record {off hexdb hexrec} {
+  set n [string length $hexrec]
+  set off [expr $off*2]
+  if { [string compare $hexrec [string range $hexdb $off [expr $off+$n-1]]] } {
+    error "record not found!"
+  }
+  return 0
+}
+
+# This command is the implementation of SQL function "offrec()". The first
+# argument to this is an offset value. The remaining values are used to
+# formulate an SQLite record. If database file test.db does not contain
+# an equivalent record at the specified offset, an exception is thrown.
+# Otherwise, 0 is returned.
+#
+proc offrec {args} {
+  set offset [lindex $args 0]
+  set rec [hexrecord {*}[lrange $args 1 end]]
+  offset_contains_record $offset $::F $rec
+}
+set F [loadhex test.db]
+db func offrec offrec
+
+# Test the sanity of the tests.
+if {$bNullTrim} {
+  set offset 8180
+} else {
+  set offset 8179
+}
+do_execsql_test func6-105 {
+  SELECT sqlite_offset(d) FROM t1 ORDER BY rowid LIMIT 1;
+} $offset
+do_test func6-106 {
+  set r [hexrecord abc001 1 999 {}]
+  offset_contains_record $offset $F $r
+} 0
+
+set z100 [string trim [string repeat "0 " 100]]
+
+# Test offsets within table b-tree t1.
+do_execsql_test func6-110 {
+  SELECT offrec(sqlite_offset(d), a, b, c, d) FROM t1 ORDER BY rowid
+} $z100
+
+do_execsql_test func6-120 {
+  SELECT a, typeof(sqlite_offset(+a)) FROM t1
+   ORDER BY rowid LIMIT 2;
+} {abc001 null abc002 null}
+
+# Test offsets within index b-tree t1a.
+do_execsql_test func6-130 {
+  SELECT offrec(sqlite_offset(a), a, rowid) FROM t1 ORDER BY a
+} $z100
+
+# Test offsets within table b-tree t1 with a temp b-tree ORDER BY.
+do_execsql_test func6-140 {
+  SELECT offrec(sqlite_offset(d), a, b, c, d) FROM t1 ORDER BY a
+} $z100
+
+# Test offsets from both index t1a and table t1 in the same query.
+do_execsql_test func6-150 {
+  SELECT offrec(sqlite_offset(a), a, rowid),
+         offrec(sqlite_offset(d), a, b, c, d)
+  FROM t1 ORDER BY a
+} [concat $z100 $z100]
+
+# Test offsets from both index t1bc and table t1 in the same query.
+do_execsql_test func6-160 {
+  SELECT offrec(sqlite_offset(b), b, c, rowid),
+         offrec(sqlite_offset(c), b, c, rowid),
+         offrec(sqlite_offset(d), a, b, c, d)
+  FROM t1
+  ORDER BY b
+} [concat $z100 $z100 $z100]
+
+# Test offsets in WITHOUT ROWID table t2.
+do_execsql_test func6-200 {
+  SELECT offrec( sqlite_offset(y), x, y ) FROM t2 ORDER BY x
+} $z100
+
+finish_test

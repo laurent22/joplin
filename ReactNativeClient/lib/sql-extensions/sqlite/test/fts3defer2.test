@@ -1,0 +1,165 @@
+# 2010 October 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+ifcapable !fts3||!fts4_deferred {
+  finish_test 
+  return
+}
+
+set testprefix fts3defer2
+
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+db func mit mit
+
+#-----------------------------------------------------------------------------
+# This block of tests - fts3defer2-1.* - test the interaction of deferred NEAR
+# expressions and the snippet, offsets and matchinfo functions.
+# 
+do_execsql_test 1.1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts4;
+}
+do_execsql_test 1.1.2 "INSERT INTO t1 VALUES('[string repeat {a } 20000]')"
+do_execsql_test 1.1.3 "INSERT INTO t1 VALUES('[string repeat {z } 20000]')"
+do_execsql_test 1.1.4 {
+  INSERT INTO t1 VALUES('a b c d e f a x y');
+  INSERT INTO t1 VALUES('');
+  INSERT INTO t1 VALUES('');
+  INSERT INTO t1 VALUES('');
+  INSERT INTO t1 VALUES('');
+  INSERT INTO t1 VALUES('');
+  INSERT INTO t1(t1) VALUES('optimize');
+}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 1.1.4 {
+  SELECT count(*) FROM t1_segments WHERE length(block)>10000;
+  UPDATE t1_segments SET block = zeroblob(length(block)) WHERE length(block)>10000;
+} {2}
+
+do_execsql_test 1.2.0 {
+  SELECT content FROM t1 WHERE t1 MATCH 'f (e a)';
+} {{a b c d e f a x y}}
+
+do_execsql_test 1.2.1 {
+  SELECT content FROM t1 WHERE t1 MATCH 'f (e NEAR/2 a)';
+} {{a b c d e f a x y}}
+
+
+do_execsql_test 1.2.2 {
+  SELECT snippet(t1, '[', ']'), offsets(t1), mit(matchinfo(t1, 'pcxnal'))
+  FROM t1 WHERE t1 MATCH 'f (e NEAR/2 a)';
+} [list                              \
+   {a b c d [e] [f] [a] x y}         \
+   {0 1 8 1 0 0 10 1 0 2 12 1}       \
+   [list 3 1   1 1 1   1 1 1   1 1 1   8 5001 9]
+]
+
+do_execsql_test 1.2.3 {
+  SELECT snippet(t1, '[', ']'), offsets(t1), mit(matchinfo(t1, 'pcxnal'))
+  FROM t1 WHERE t1 MATCH 'f (e NEAR/3 a)';
+} [list                                 \
+   {[a] b c d [e] [f] [a] x y}          \
+   {0 2 0 1 0 1 8 1 0 0 10 1 0 2 12 1}  \
+   [list 3 1   1 1 1   1 1 1   2 2 1   8 5001 9]
+]
+
+do_execsql_test 1.3.1 { DROP TABLE t1 }
+
+#-----------------------------------------------------------------------------
+# Test cases fts3defer2-2.* focus specifically on the matchinfo function.
+# 
+do_execsql_test 2.1.1 "CREATE VIRTUAL TABLE t2 USING fts4"
+do_execsql_test 2.1.2 "INSERT INTO t2 VALUES('[string repeat {a } 10000]')"
+do_execsql_test 2.1.3 "INSERT INTO t2 VALUES('b [string repeat {z } 10000]')"
+do_execsql_test 2.1.4 [string repeat "INSERT INTO t2 VALUES('x');" 50]
+do_execsql_test 2.1.5 {
+  INSERT INTO t2 VALUES('a b c d e f g z');
+  INSERT INTO t2 VALUES('a b c d e f g');
+}
+foreach {tn sql} {
+  1 {}
+  2 { INSERT INTO t2(t2) VALUES('optimize') }
+  3 { UPDATE t2_segments SET block = zeroblob(length(block)) 
+      WHERE length(block)>10000;
+  }
+} {
+  sqlite3_db_config db DEFENSIVE 0
+  execsql $sql
+
+  do_execsql_test 2.2.$tn.1 {
+    SELECT mit(matchinfo(t2, 'pcxnal')) FROM t2 WHERE t2 MATCH 'a b';
+  } [list                                          \
+    [list 2 1  1 54 54  1 3 3  54 372 8]        \
+    [list 2 1  1 54 54  1 3 3  54 372 7]        \
+  ]
+
+  do_execsql_test 2.2.$tn.2 {
+    SELECT mit(matchinfo(t2, 'x')) FROM t2 WHERE t2 MATCH 'g z';
+  } [list                                       \
+    [list 1 2 2  1 54 54]                       \
+  ]
+
+  set sqlite_fts3_enable_parentheses 1
+  do_execsql_test 2.2.$tn.3 {
+    SELECT mit(matchinfo(t2, 'x')) FROM t2 WHERE t2 MATCH 'g OR (g z)';
+  } [list                                       \
+    [list 1 2 2  1 2 2   1 54 54]               \
+    [list 1 2 2  1 2 2   0 54 54]               \
+  ]
+  set sqlite_fts3_enable_parentheses 0
+
+  do_execsql_test 2.2.$tn.4 {
+    SELECT mit(matchinfo(t2, 'x')) FROM t2 WHERE t2 MATCH 'e "g z"';
+  } [list                                       \
+    [list 1 2 2  1 2 2]                         \
+  ]
+}
+
+do_execsql_test 2.3.1 {
+  CREATE VIRTUAL TABLE t3 USING fts4;
+  INSERT INTO t3 VALUES('a b c d e f');
+  INSERT INTO t3 VALUES('x b c d e f');
+  INSERT INTO t3 VALUES('d e f a b c');
+  INSERT INTO t3 VALUES('b c d e f');
+  INSERT INTO t3 VALUES('');
+  INSERT INTO t3 VALUES('');
+  INSERT INTO t3 VALUES('');
+  INSERT INTO t3 VALUES('');
+  INSERT INTO t3 VALUES('');
+  INSERT INTO t3 VALUES('');
+}
+do_execsql_test 2.3.2 "
+  INSERT INTO t3 VALUES('f e d c b [string repeat {a } 10000]')
+"
+foreach {tn sql} {
+  1 {}
+  2 { INSERT INTO t3(t3) VALUES('optimize') }
+  3 { UPDATE t3_segments SET block = zeroblob(length(block)) 
+      WHERE length(block)>10000;
+  }
+} {
+  sqlite3_db_config db DEFENSIVE 0
+  execsql $sql
+  do_execsql_test 2.4.$tn {
+    SELECT docid, mit(matchinfo(t3, 'pcxnal')) FROM t3 WHERE t3 MATCH '"a b c"';
+  } {1 {1 1 1 4 4 11 912 6} 3 {1 1 1 4 4 11 912 6}}
+}
+
+
+finish_test

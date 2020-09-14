@@ -1,0 +1,85 @@
+# 2019 Dec 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5savepoint
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(c);
+  BEGIN;
+    SAVEPOINT one;
+      INSERT INTO ft VALUES('a');
+      SAVEPOINT two;
+        INSERT INTO ft VALUES('b');
+      RELEASE two;
+      SAVEPOINT four;
+        INSERT INTO ft VALUES('c');
+      RELEASE four;
+      SAVEPOINT three;
+        INSERT INTO ft VALUES('d');
+      ROLLBACK TO three;
+  COMMIT;
+  SELECT * FROM ft
+} {a b c}
+
+reset_db
+do_catchsql_test 2.0 {
+  CREATE VIRTUAL TABLE ft1 USING fts5(c);
+  CREATE VIRTUAL TABLE ft2 USING fts5(c);
+  DROP TABLE ft2_idx;
+  BEGIN;
+      INSERT INTO ft2 VALUES('a');
+      INSERT INTO ft1 VALUES('a');
+      SAVEPOINT two;
+        INSERT INTO ft1 VALUES('b');
+  COMMIT;
+} {1 {SQL logic error}}
+
+reset_db
+ifcapable fts3 {
+  do_execsql_test 3.0 {
+    CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+    CREATE VIRTUAL TABLE vt1 USING fts4(c0);
+    INSERT INTO vt1(c0) VALUES(0);
+  }
+
+  do_execsql_test 3.1 {
+    BEGIN;
+      UPDATE vt1 SET c0 = 0;
+      INSERT INTO vt1(c0) VALUES (0), (0);
+      UPDATE vt0 SET c0 = 0;
+      INSERT INTO vt1(c0) VALUES (0);
+      UPDATE vt1 SET c0 = 0;
+      INSERT INTO vt1(vt1) VALUES('automerge=1');
+      UPDATE vt1 SET c0 = 0;
+  }
+
+  do_catchsql_test 3.2 {
+    DROP TABLE vt1;
+  } {1 {SQL logic error}}
+
+  do_execsql_test 3.3 {
+    SAVEPOINT x;
+      INSERT INTO vt0 VALUES('x');
+    COMMIT;
+    INSERT INTO vt0(vt0) VALUES('integrity-check');
+  }
+}
+
+finish_test
+

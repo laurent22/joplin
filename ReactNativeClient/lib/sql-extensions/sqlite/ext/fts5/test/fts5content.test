@@ -1,0 +1,297 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the content= and content_rowid= options.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5content
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Contentless tables
+#
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a, b, content='');
+  INSERT INTO f1(rowid, a, b) VALUES(1, 'one',   'o n e');
+  INSERT INTO f1(rowid, a, b) VALUES(2, 'two',   't w o');
+  INSERT INTO f1(rowid, a, b) VALUES(3, 'three', 't h r e e');
+}
+
+do_execsql_test 1.2 {
+  SELECT rowid FROM f1 WHERE f1 MATCH 'o';
+} {1 2}
+
+do_execsql_test 1.3 {
+  INSERT INTO f1(a, b) VALUES('four',   'f o u r');
+  SELECT rowid FROM f1 WHERE f1 MATCH 'o';
+} {1 2 4}
+
+do_execsql_test 1.4 {
+  SELECT rowid, a, b FROM f1 WHERE f1 MATCH 'o';
+} {1 {} {} 2 {} {} 4 {} {}}
+
+do_execsql_test 1.5 {
+  SELECT rowid, highlight(f1, 0, '[', ']') FROM f1 WHERE f1 MATCH 'o';
+} {1 {} 2 {} 4 {}}
+
+do_execsql_test 1.6 {
+  SELECT rowid, highlight(f1, 0, '[', ']') IS NULL FROM f1 WHERE f1 MATCH 'o';
+} {1 1 2 1 4 1}
+
+do_execsql_test 1.7 {
+  SELECT rowid, snippet(f1, -1, '[', ']', '...', 5) IS NULL 
+  FROM f1 WHERE f1 MATCH 'o';
+} {1 1 2 1 4 1}
+
+do_execsql_test 1.8 {
+  SELECT rowid, snippet(f1, 1, '[', ']', '...', 5) IS NULL 
+  FROM f1 WHERE f1 MATCH 'o';
+} {1 1 2 1 4 1}
+
+do_execsql_test 1.9 {
+  SELECT rowid FROM f1;
+} {1 2 3 4}
+
+do_execsql_test 1.10 {
+  SELECT * FROM f1;
+} {{} {}  {} {}  {} {}  {} {}}
+
+do_execsql_test 1.11 {
+  SELECT rowid, a, b FROM f1 ORDER BY rowid ASC;
+} {1 {} {}  2 {} {}  3 {} {}  4 {} {}}
+
+do_execsql_test 1.12 {
+  SELECT a IS NULL FROM f1;
+} {1 1 1 1}
+
+do_catchsql_test 1.13 {
+  DELETE FROM f1 WHERE rowid = 2;
+} {1 {cannot DELETE from contentless fts5 table: f1}}
+
+do_catchsql_test 1.14 {
+  UPDATE f1 SET a = 'a b c' WHERE rowid = 2;
+} {1 {cannot UPDATE contentless fts5 table: f1}}
+
+do_execsql_test 1.15 {
+  INSERT INTO f1(f1, rowid, a, b) VALUES('delete', 2, 'two', 't w o');
+} {}
+
+do_execsql_test 1.16 {
+  SELECT rowid FROM f1 WHERE f1 MATCH 'o';
+} {1 4}
+
+do_execsql_test 1.17 {
+  SELECT rowid FROM f1;
+} {1 3 4}
+
+#-------------------------------------------------------------------------
+# External content tables
+#
+reset_db
+do_execsql_test 2.1 {
+  -- Create a table. And an external content fts5 table to index it.
+  CREATE TABLE tbl(a INTEGER PRIMARY KEY, b, c);
+  CREATE VIRTUAL TABLE fts_idx USING fts5(b, c, content='tbl', content_rowid='a');
+
+  -- Triggers to keep the FTS index up to date.
+  CREATE TRIGGER tbl_ai AFTER INSERT ON tbl BEGIN
+    INSERT INTO fts_idx(rowid, b, c) VALUES (new.a, new.b, new.c);
+  END;
+  CREATE TRIGGER tbl_ad AFTER DELETE ON tbl BEGIN
+    INSERT INTO fts_idx(fts_idx, rowid, b, c) 
+        VALUES('delete', old.a, old.b, old.c);
+  END;
+  CREATE TRIGGER tbl_au AFTER UPDATE ON tbl BEGIN
+    INSERT INTO fts_idx(fts_idx, rowid, b, c) 
+        VALUES('delete', old.a, old.b, old.c);
+    INSERT INTO fts_idx(rowid, b, c) VALUES (new.a, new.b, new.c);
+  END;
+}
+
+do_execsql_test 2.2 {
+  INSERT INTO tbl VALUES(1, 'one', 'o n e');
+  INSERT INTO tbl VALUES(NULL, 'two', 't w o');
+  INSERT INTO tbl VALUES(3, 'three', 't h r e e');
+}
+
+do_execsql_test 2.3 {
+  INSERT INTO fts_idx(fts_idx) VALUES('integrity-check');
+}
+
+do_execsql_test 2.4 {
+  DELETE FROM tbl WHERE rowid=2;
+  INSERT INTO fts_idx(fts_idx) VALUES('integrity-check');
+}
+
+do_execsql_test 2.5 {
+  UPDATE tbl SET c = c || ' x y z';
+  INSERT INTO fts_idx(fts_idx) VALUES('integrity-check');
+}
+
+do_execsql_test 2.6 {
+  SELECT * FROM fts_idx WHERE fts_idx MATCH 't AND x';
+} {three {t h r e e x y z}}
+
+do_execsql_test 2.7 {
+  SELECT highlight(fts_idx, 1, '[', ']') FROM fts_idx 
+  WHERE fts_idx MATCH 't AND x';
+} {{[t] h r e e [x] y z}}
+
+#-------------------------------------------------------------------------
+# Quick tests of the 'delete-all' command.
+#
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE t3 USING fts5(x, content='');
+  INSERT INTO t3 VALUES('a b c');
+  INSERT INTO t3 VALUES('d e f');
+}
+
+do_execsql_test 3.2 {
+  SELECT count(*) FROM t3_docsize;
+  SELECT count(*) FROM t3_data;
+} {2 4}
+
+do_execsql_test 3.3 {
+  INSERT INTO t3(t3) VALUES('delete-all');
+  SELECT count(*) FROM t3_docsize;
+  SELECT count(*) FROM t3_data;
+} {0 2}
+
+do_execsql_test 3.4 {
+  INSERT INTO t3 VALUES('a b c');
+  INSERT INTO t3 VALUES('d e f');
+  SELECT rowid FROM t3 WHERE t3 MATCH 'e';
+} {2}
+
+do_execsql_test 3.5 {
+  SELECT rowid FROM t3 WHERE t3 MATCH 'c';
+} {1}
+
+do_execsql_test 3.6 {
+  SELECT count(*) FROM t3_docsize;
+  SELECT count(*) FROM t3_data;
+} {2 4}
+
+do_execsql_test 3.7 {
+  CREATE VIRTUAL TABLE t4 USING fts5(x);
+} {}
+do_catchsql_test 3.8 {
+  INSERT INTO t4(t4) VALUES('delete-all');
+} {1 {'delete-all' may only be used with a contentless or external content fts5 table}}
+
+#-------------------------------------------------------------------------
+# Test an external content table with a more interesting schema.
+#
+do_execsql_test 4.1 {
+  CREATE TABLE x2(a, "key col" PRIMARY KEY, b, c) WITHOUT ROWID;
+  INSERT INTO x2 VALUES('a b',   1, 'c d' , 'e f');
+  INSERT INTO x2 VALUES('x y', -40, 'z z' , 'y x');
+
+  CREATE VIRTUAL TABLE t2 USING fts5(a, c, content=x2, content_rowid='key col');
+  INSERT INTO t2(t2) VALUES('rebuild');
+}
+
+do_execsql_test 4.2 { SELECT rowid FROM t2 } {-40 1}
+do_execsql_test 4.3 { SELECT rowid FROM t2 WHERE t2 MATCH 'c'} {}
+do_execsql_test 4.4 { SELECT rowid FROM t2 WHERE t2 MATCH 'a'} {1}
+do_execsql_test 4.5 { SELECT rowid FROM t2 WHERE t2 MATCH 'x'} {-40}
+
+do_execsql_test 4.6 { INSERT INTO t2(t2) VALUES('integrity-check') } {}
+
+do_execsql_test 4.7 { 
+  DELETE FROM x2 WHERE "key col" = 1;
+  INSERT INTO t2(t2, rowid, a, c) VALUES('delete', 1, 'a b', 'e f');
+  INSERT INTO t2(t2) VALUES('integrity-check');
+}
+
+do_execsql_test 4.8 { SELECT rowid FROM t2 WHERE t2 MATCH 'b'} {}
+do_execsql_test 4.9 { SELECT rowid FROM t2 WHERE t2 MATCH 'y'} {-40}
+
+#-------------------------------------------------------------------------
+# Test that if the 'rowid' field of a 'delete' is not an integer, no
+# changes are made to the FTS index.
+#
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE t5 USING fts5(a, b, content=);
+  INSERT INTO t5(rowid, a, b) VALUES(-1, 'one',   'two');
+  INSERT INTO t5(rowid, a, b) VALUES( 0, 'three', 'four');
+  INSERT INTO t5(rowid, a, b) VALUES( 1, 'five',  'six');
+}
+
+set ::checksum [execsql {SELECT md5sum(id, block) FROM t5_data}]
+
+do_execsql_test 5.1 {
+  INSERT INTO t5(t5, rowid, a, b) VALUES('delete', NULL, 'three', 'four');
+  SELECT md5sum(id, block) FROM t5_data;
+} $::checksum
+
+
+#-------------------------------------------------------------------------
+# Check that a contentless table can be dropped.
+#
+reset_db
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE xx USING fts5(x, y, content="");
+  SELECT name FROM sqlite_master;
+} {xx xx_data xx_idx xx_docsize xx_config}
+do_execsql_test 6.2 {
+  DROP TABLE xx;
+  SELECT name FROM sqlite_master;
+} {}
+
+#---------------------------------------------------------------------------
+# Check that an fts5 table cannot be its own content table.
+#
+reset_db
+do_execsql_test 7.1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, c=t1 );
+  INSERT INTO t1( a ) VALUES('abc');
+}
+do_catchsql_test 7.1.2 { 
+  SELECT * FROM t1; 
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.1.3 { 
+  SELECT * FROM t1('abc'); 
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.1.4 { 
+  SELECT count(*) FROM t1;
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.1.5 { 
+  SELECT * FROM t1('abc') ORDER BY rank;
+} {1 {recursively defined fts5 content table}}
+
+reset_db
+do_execsql_test 7.2.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, c=t2 );
+  CREATE VIRTUAL TABLE t2 USING fts5(a, c=t1 );
+  INSERT INTO t1( a ) VALUES('abc');
+}
+do_catchsql_test 7.2.2 { 
+  SELECT * FROM t1; 
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.2.3 { 
+  SELECT * FROM t1('abc'); 
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.2.4 { 
+  SELECT count(*) FROM t1;
+} {1 {recursively defined fts5 content table}}
+do_catchsql_test 7.2.5 { 
+  SELECT * FROM t1('abc') ORDER BY rank;
+} {1 {recursively defined fts5 content table}}
+
+finish_test
+

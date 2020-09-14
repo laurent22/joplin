@@ -1,0 +1,830 @@
+# 2010 November 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !compound {
+  finish_test
+  return
+}
+
+set testprefix eqp
+
+#-------------------------------------------------------------------------
+#
+# eqp-1.*:        Assorted tests.
+# eqp-2.*:        Tests for single select statements.
+# eqp-3.*:        Select statements that execute sub-selects.
+# eqp-4.*:        Compound select statements.
+# ...
+# eqp-7.*:        "SELECT count(*) FROM tbl" statements (VDBE code OP_Count).
+#
+
+proc det {args} { uplevel do_eqp_test $args }
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(a INT, b INT, ex TEXT);
+  CREATE INDEX i1 ON t1(a);
+  CREATE INDEX i2 ON t1(b);
+  CREATE TABLE t2(a INT, b INT, ex TEXT);
+  CREATE TABLE t3(a INT, b INT, ex TEXT);
+}
+
+do_eqp_test 1.2 {
+  SELECT * FROM t2, t1 WHERE t1.a=1 OR t1.b=2;
+} {
+  QUERY PLAN
+  |--MULTI-INDEX OR
+  |  |--INDEX 1
+  |  |  `--SEARCH TABLE t1 USING INDEX i1 (a=?)
+  |  `--INDEX 2
+  |     `--SEARCH TABLE t1 USING INDEX i2 (b=?)
+  `--SCAN TABLE t2
+}
+do_eqp_test 1.3 {
+  SELECT * FROM t2 CROSS JOIN t1 WHERE t1.a=1 OR t1.b=2;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t2
+  `--MULTI-INDEX OR
+     |--INDEX 1
+     |  `--SEARCH TABLE t1 USING INDEX i1 (a=?)
+     `--INDEX 2
+        `--SEARCH TABLE t1 USING INDEX i2 (b=?)
+}
+do_eqp_test 1.3 {
+  SELECT a FROM t1 ORDER BY a
+} {
+  QUERY PLAN
+  `--SCAN TABLE t1 USING COVERING INDEX i1
+}
+do_eqp_test 1.4 {
+  SELECT a FROM t1 ORDER BY +a
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 USING COVERING INDEX i1
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test 1.5 {
+  SELECT a FROM t1 WHERE a=4
+} {
+  QUERY PLAN
+  `--SEARCH TABLE t1 USING COVERING INDEX i1 (a=?)
+}
+do_eqp_test 1.6 {
+  SELECT DISTINCT count(*) FROM t3 GROUP BY a;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t3
+  |--USE TEMP B-TREE FOR GROUP BY
+  `--USE TEMP B-TREE FOR DISTINCT
+}
+
+do_eqp_test 1.7 {
+  SELECT * FROM t3 JOIN (SELECT 1)
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  `--SCAN CONSTANT ROW
+  |--SCAN SUBQUERY xxxxxx
+  `--SCAN TABLE t3
+}
+do_eqp_test 1.8 {
+  SELECT * FROM t3 JOIN (SELECT 1 UNION SELECT 2)
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  `--COMPOUND QUERY
+  |     |--LEFT-MOST SUBQUERY
+  |     |  `--SCAN CONSTANT ROW
+  |     `--UNION USING TEMP B-TREE
+  |        `--SCAN CONSTANT ROW
+  |--SCAN SUBQUERY xxxxxx
+  `--SCAN TABLE t3
+}
+do_eqp_test 1.9 {
+  SELECT * FROM t3 JOIN (SELECT 1 EXCEPT SELECT a FROM t3 LIMIT 17)
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  `--COMPOUND QUERY
+  |     |--LEFT-MOST SUBQUERY
+  |     |  `--SCAN CONSTANT ROW
+  |     `--EXCEPT USING TEMP B-TREE
+  |        `--SCAN TABLE t3
+  |--SCAN SUBQUERY xxxxxx
+  `--SCAN TABLE t3
+}
+do_eqp_test 1.10 {
+  SELECT * FROM t3 JOIN (SELECT 1 INTERSECT SELECT a FROM t3 LIMIT 17)
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  `--COMPOUND QUERY
+  |     |--LEFT-MOST SUBQUERY
+  |     |  `--SCAN CONSTANT ROW
+  |     `--INTERSECT USING TEMP B-TREE
+  |        `--SCAN TABLE t3
+  |--SCAN SUBQUERY xxxxxx
+  `--SCAN TABLE t3
+}
+
+do_eqp_test 1.11 {
+  SELECT * FROM t3 JOIN (SELECT 1 UNION ALL SELECT a FROM t3 LIMIT 17)
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  `--COMPOUND QUERY
+  |     |--LEFT-MOST SUBQUERY
+  |     |  `--SCAN CONSTANT ROW
+  |     `--UNION ALL
+  |        `--SCAN TABLE t3
+  |--SCAN SUBQUERY xxxxxx
+  `--SCAN TABLE t3
+}
+
+#-------------------------------------------------------------------------
+# Test cases eqp-2.* - tests for single select statements.
+#
+drop_all_tables
+do_execsql_test 2.1 {
+  CREATE TABLE t1(x INT, y INT, ex TEXT);
+
+  CREATE TABLE t2(x INT, y INT, ex TEXT);
+  CREATE INDEX t2i1 ON t2(x);
+}
+
+det 2.2.1 "SELECT DISTINCT min(x), max(x) FROM t1 GROUP BY x ORDER BY 1" {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  |--USE TEMP B-TREE FOR GROUP BY
+  |--USE TEMP B-TREE FOR DISTINCT
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+det 2.2.2 "SELECT DISTINCT min(x), max(x) FROM t2 GROUP BY x ORDER BY 1" {
+  QUERY PLAN
+  |--SCAN TABLE t2 USING COVERING INDEX t2i1
+  |--USE TEMP B-TREE FOR DISTINCT
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+det 2.2.3 "SELECT DISTINCT * FROM t1" {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--USE TEMP B-TREE FOR DISTINCT
+}
+det 2.2.4 "SELECT DISTINCT * FROM t1, t2" {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  |--SCAN TABLE t2
+  `--USE TEMP B-TREE FOR DISTINCT
+}
+det 2.2.5 "SELECT DISTINCT * FROM t1, t2 ORDER BY t1.x" {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  |--SCAN TABLE t2
+  |--USE TEMP B-TREE FOR DISTINCT
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+det 2.2.6 "SELECT DISTINCT t2.x FROM t1, t2 ORDER BY t2.x" {
+  QUERY PLAN
+  |--SCAN TABLE t2 USING COVERING INDEX t2i1
+  `--SCAN TABLE t1
+}
+
+det 2.3.1 "SELECT max(x) FROM t2" {
+  QUERY PLAN
+  `--SEARCH TABLE t2 USING COVERING INDEX t2i1
+}
+det 2.3.2 "SELECT min(x) FROM t2" {
+  QUERY PLAN
+  `--SEARCH TABLE t2 USING COVERING INDEX t2i1
+}
+det 2.3.3 "SELECT min(x), max(x) FROM t2" {
+  QUERY PLAN
+  `--SCAN TABLE t2 USING COVERING INDEX t2i1
+}
+
+det 2.4.1 "SELECT * FROM t1 WHERE rowid=?" {
+  QUERY PLAN
+  `--SEARCH TABLE t1 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+
+
+#-------------------------------------------------------------------------
+# Test cases eqp-3.* - tests for select statements that use sub-selects.
+#
+do_eqp_test 3.1.1 {
+  SELECT (SELECT x FROM t1 AS sub) FROM t1;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCALAR SUBQUERY xxxxxx
+     `--SCAN TABLE t1 AS sub
+}
+do_eqp_test 3.1.2 {
+  SELECT * FROM t1 WHERE (SELECT x FROM t1 AS sub);
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCALAR SUBQUERY xxxxxx
+     `--SCAN TABLE t1 AS sub
+}
+do_eqp_test 3.1.3 {
+  SELECT * FROM t1 WHERE (SELECT x FROM t1 AS sub ORDER BY y);
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCALAR SUBQUERY xxxxxx
+     |--SCAN TABLE t1 AS sub
+     `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test 3.1.4 {
+  SELECT * FROM t1 WHERE (SELECT x FROM t2 ORDER BY x);
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCALAR SUBQUERY xxxxxx
+     `--SCAN TABLE t2 USING COVERING INDEX t2i1
+}
+
+det 3.2.1 {
+  SELECT * FROM (SELECT * FROM t1 ORDER BY x LIMIT 10) ORDER BY y LIMIT 5
+} {
+  QUERY PLAN
+  |--CO-ROUTINE xxxxxx
+  |  |--SCAN TABLE t1
+  |  `--USE TEMP B-TREE FOR ORDER BY
+  |--SCAN SUBQUERY xxxxxx
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+det 3.2.2 {
+  SELECT * FROM 
+    (SELECT * FROM t1 ORDER BY x LIMIT 10) AS x1,
+    (SELECT * FROM t2 ORDER BY x LIMIT 10) AS x2
+  ORDER BY x2.y LIMIT 5
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  |--SCAN TABLE t1
+  |  `--USE TEMP B-TREE FOR ORDER BY
+  |--MATERIALIZE xxxxxx
+  |  `--SCAN TABLE t2 USING INDEX t2i1
+  |--SCAN SUBQUERY xxxxxx AS x1
+  |--SCAN SUBQUERY xxxxxx AS x2
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+det 3.3.1 {
+  SELECT * FROM t1 WHERE y IN (SELECT y FROM t2)
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--LIST SUBQUERY xxxxxx
+     `--SCAN TABLE t2
+}
+det 3.3.2 {
+  SELECT * FROM t1 WHERE y IN (SELECT y FROM t2 WHERE t1.x!=t2.x)
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--CORRELATED LIST SUBQUERY xxxxxx
+     `--SCAN TABLE t2
+}
+det 3.3.3 {
+  SELECT * FROM t1 WHERE EXISTS (SELECT y FROM t2 WHERE t1.x!=t2.x)
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--CORRELATED SCALAR SUBQUERY xxxxxx
+     `--SCAN TABLE t2
+}
+
+#-------------------------------------------------------------------------
+# Test cases eqp-4.* - tests for composite select statements.
+#
+do_eqp_test 4.1.1 {
+  SELECT * FROM t1 UNION ALL SELECT * FROM t2
+} {
+  QUERY PLAN
+  `--COMPOUND QUERY
+     |--LEFT-MOST SUBQUERY
+     |  `--SCAN TABLE t1
+     `--UNION ALL
+        `--SCAN TABLE t2
+}
+do_eqp_test 4.1.2 {
+  SELECT * FROM t1 UNION ALL SELECT * FROM t2 ORDER BY 2
+} {
+  QUERY PLAN
+  `--MERGE (UNION ALL)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2
+        `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test 4.1.3 {
+  SELECT * FROM t1 UNION SELECT * FROM t2 ORDER BY 2
+} {
+  QUERY PLAN
+  `--MERGE (UNION)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2
+        `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test 4.1.4 {
+  SELECT * FROM t1 INTERSECT SELECT * FROM t2 ORDER BY 2
+} {
+  QUERY PLAN
+  `--MERGE (INTERSECT)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2
+        `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test 4.1.5 {
+  SELECT * FROM t1 EXCEPT SELECT * FROM t2 ORDER BY 2
+} {
+  QUERY PLAN
+  `--MERGE (EXCEPT)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2
+        `--USE TEMP B-TREE FOR ORDER BY
+}
+
+do_eqp_test 4.2.2 {
+  SELECT * FROM t1 UNION ALL SELECT * FROM t2 ORDER BY 1
+} {
+  QUERY PLAN
+  `--MERGE (UNION ALL)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        `--SCAN TABLE t2 USING INDEX t2i1
+}
+do_eqp_test 4.2.3 {
+  SELECT * FROM t1 UNION SELECT * FROM t2 ORDER BY 1
+} {
+  QUERY PLAN
+  `--MERGE (UNION)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2 USING INDEX t2i1
+        `--USE TEMP B-TREE FOR RIGHT PART OF ORDER BY
+}
+do_eqp_test 4.2.4 {
+  SELECT * FROM t1 INTERSECT SELECT * FROM t2 ORDER BY 1
+} {
+  QUERY PLAN
+  `--MERGE (INTERSECT)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2 USING INDEX t2i1
+        `--USE TEMP B-TREE FOR RIGHT PART OF ORDER BY
+}
+do_eqp_test 4.2.5 {
+  SELECT * FROM t1 EXCEPT SELECT * FROM t2 ORDER BY 1
+} {
+  QUERY PLAN
+  `--MERGE (EXCEPT)
+     |--LEFT
+     |  |--SCAN TABLE t1
+     |  `--USE TEMP B-TREE FOR ORDER BY
+     `--RIGHT
+        |--SCAN TABLE t2 USING INDEX t2i1
+        `--USE TEMP B-TREE FOR RIGHT PART OF ORDER BY
+}
+
+do_eqp_test 4.3.1 {
+  SELECT x FROM t1 UNION SELECT x FROM t2
+} {
+  QUERY PLAN
+  `--COMPOUND QUERY
+     |--LEFT-MOST SUBQUERY
+     |  `--SCAN TABLE t1
+     `--UNION USING TEMP B-TREE
+        `--SCAN TABLE t2 USING COVERING INDEX t2i1
+}
+
+do_eqp_test 4.3.2 {
+  SELECT x FROM t1 UNION SELECT x FROM t2 UNION SELECT x FROM t1
+} {
+  QUERY PLAN
+  `--COMPOUND QUERY
+     |--LEFT-MOST SUBQUERY
+     |  `--SCAN TABLE t1
+     |--UNION USING TEMP B-TREE
+     |  `--SCAN TABLE t2 USING COVERING INDEX t2i1
+     `--UNION USING TEMP B-TREE
+        `--SCAN TABLE t1
+}
+do_eqp_test 4.3.3 {
+  SELECT x FROM t1 UNION SELECT x FROM t2 UNION SELECT x FROM t1 ORDER BY 1
+} {
+  QUERY PLAN
+  `--MERGE (UNION)
+     |--LEFT
+     |  `--MERGE (UNION)
+     |     |--LEFT
+     |     |  |--SCAN TABLE t1
+     |     |  `--USE TEMP B-TREE FOR ORDER BY
+     |     `--RIGHT
+     |        `--SCAN TABLE t2 USING COVERING INDEX t2i1
+     `--RIGHT
+        |--SCAN TABLE t1
+        `--USE TEMP B-TREE FOR ORDER BY
+}
+
+if 0 {
+#-------------------------------------------------------------------------
+# This next block of tests verifies that the examples on the 
+# lang_explain.html page are correct.
+#
+drop_all_tables
+
+# XVIDENCE-OF: R-47779-47605 sqlite> EXPLAIN QUERY PLAN SELECT a, b
+# FROM t1 WHERE a=1;
+# 0|0|0|SCAN TABLE t1
+#
+do_execsql_test 5.1.0 { CREATE TABLE t1(a INT, b INT, ex TEXT) }
+det 5.1.1 "SELECT a, b FROM t1 WHERE a=1" {
+  0 0 0 {SCAN TABLE t1}
+}
+
+# XVIDENCE-OF: R-55852-17599 sqlite> CREATE INDEX i1 ON t1(a);
+# sqlite> EXPLAIN QUERY PLAN SELECT a, b FROM t1 WHERE a=1;
+# 0|0|0|SEARCH TABLE t1 USING INDEX i1
+#
+do_execsql_test 5.2.0 { CREATE INDEX i1 ON t1(a) }
+det 5.2.1 "SELECT a, b FROM t1 WHERE a=1" {
+  0 0 0 {SEARCH TABLE t1 USING INDEX i1 (a=?)}
+}
+
+# XVIDENCE-OF: R-21179-11011 sqlite> CREATE INDEX i2 ON t1(a, b);
+# sqlite> EXPLAIN QUERY PLAN SELECT a, b FROM t1 WHERE a=1;
+# 0|0|0|SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)
+#
+do_execsql_test 5.3.0 { CREATE INDEX i2 ON t1(a, b) }
+det 5.3.1 "SELECT a, b FROM t1 WHERE a=1" {
+  0 0 0 {SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)}
+}
+
+# XVIDENCE-OF: R-09991-48941 sqlite> EXPLAIN QUERY PLAN
+# SELECT t1.*, t2.* FROM t1, t2 WHERE t1.a=1 AND t1.b>2;
+# 0|0|0|SEARCH TABLE t1 USING COVERING INDEX i2 (a=? AND b>?)
+# 0|1|1|SCAN TABLE t2
+#
+do_execsql_test 5.4.0 {CREATE TABLE t2(c INT, d INT, ex TEXT)}
+det 5.4.1 "SELECT t1.a, t2.c FROM t1, t2 WHERE t1.a=1 AND t1.b>2" {
+  0 0 0 {SEARCH TABLE t1 USING COVERING INDEX i2 (a=? AND b>?)}
+  0 1 1 {SCAN TABLE t2}
+}
+
+# XVIDENCE-OF: R-33626-61085 sqlite> EXPLAIN QUERY PLAN
+# SELECT t1.*, t2.* FROM t2, t1 WHERE t1.a=1 AND t1.b>2;
+# 0|0|1|SEARCH TABLE t1 USING COVERING INDEX i2 (a=? AND b>?)
+# 0|1|0|SCAN TABLE t2
+#
+det 5.5 "SELECT t1.a, t2.c FROM t2, t1 WHERE t1.a=1 AND t1.b>2" {
+  0 0 1 {SEARCH TABLE t1 USING COVERING INDEX i2 (a=? AND b>?)}
+  0 1 0 {SCAN TABLE t2}
+}
+
+# XVIDENCE-OF: R-04002-25654 sqlite> CREATE INDEX i3 ON t1(b);
+# sqlite> EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=1 OR b=2;
+# 0|0|0|SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)
+# 0|0|0|SEARCH TABLE t1 USING INDEX i3 (b=?)
+#
+do_execsql_test 5.5.0 {CREATE INDEX i3 ON t1(b)}
+det 5.6.1 "SELECT a, b FROM t1 WHERE a=1 OR b=2" {
+  0 0 0 {SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)}
+  0 0 0 {SEARCH TABLE t1 USING INDEX i3 (b=?)}
+}
+
+# XVIDENCE-OF: R-24577-38891 sqlite> EXPLAIN QUERY PLAN
+# SELECT c, d FROM t2 ORDER BY c;
+# 0|0|0|SCAN TABLE t2
+# 0|0|0|USE TEMP B-TREE FOR ORDER BY
+#
+det 5.7 "SELECT c, d FROM t2 ORDER BY c" {
+  0 0 0 {SCAN TABLE t2}
+  0 0 0 {USE TEMP B-TREE FOR ORDER BY}
+}
+
+# XVIDENCE-OF: R-58157-12355 sqlite> CREATE INDEX i4 ON t2(c);
+# sqlite> EXPLAIN QUERY PLAN SELECT c, d FROM t2 ORDER BY c;
+# 0|0|0|SCAN TABLE t2 USING INDEX i4
+#
+do_execsql_test 5.8.0 {CREATE INDEX i4 ON t2(c)}
+det 5.8.1 "SELECT c, d FROM t2 ORDER BY c" {
+  0 0 0 {SCAN TABLE t2 USING INDEX i4}
+}
+
+# XVIDENCE-OF: R-13931-10421 sqlite> EXPLAIN QUERY PLAN SELECT
+# (SELECT b FROM t1 WHERE a=0), (SELECT a FROM t1 WHERE b=t2.c) FROM t2;
+# 0|0|0|SCAN TABLE t2
+# 0|0|0|EXECUTE SCALAR SUBQUERY 1
+# 1|0|0|SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)
+# 0|0|0|EXECUTE CORRELATED SCALAR SUBQUERY 2
+# 2|0|0|SEARCH TABLE t1 USING INDEX i3 (b=?)
+#
+det 5.9 {
+  SELECT (SELECT b FROM t1 WHERE a=0), (SELECT a FROM t1 WHERE b=t2.c) FROM t2
+} {
+  0 0 0 {SCAN TABLE t2 USING COVERING INDEX i4}
+  0 0 0 {EXECUTE SCALAR SUBQUERY 1}
+  1 0 0 {SEARCH TABLE t1 USING COVERING INDEX i2 (a=?)}
+  0 0 0 {EXECUTE CORRELATED SCALAR SUBQUERY 2}
+  2 0 0 {SEARCH TABLE t1 USING INDEX i3 (b=?)}
+}
+
+# XVIDENCE-OF: R-50892-45943 sqlite> EXPLAIN QUERY PLAN
+# SELECT count(*) FROM (SELECT max(b) AS x FROM t1 GROUP BY a) GROUP BY x;
+# 1|0|0|SCAN TABLE t1 USING COVERING INDEX i2
+# 0|0|0|SCAN SUBQUERY 1
+# 0|0|0|USE TEMP B-TREE FOR GROUP BY
+#
+det 5.10 {
+  SELECT count(*) FROM (SELECT max(b) AS x FROM t1 GROUP BY a) GROUP BY x
+} {
+  1 0 0 {SCAN TABLE t1 USING COVERING INDEX i2}
+  0 0 0 {SCAN SUBQUERY 1}
+  0 0 0 {USE TEMP B-TREE FOR GROUP BY}
+}
+
+# XVIDENCE-OF: R-46219-33846 sqlite> EXPLAIN QUERY PLAN
+# SELECT * FROM (SELECT * FROM t2 WHERE c=1), t1;
+# 0|0|0|SEARCH TABLE t2 USING INDEX i4 (c=?)
+# 0|1|1|SCAN TABLE t1
+#
+det 5.11 "SELECT a, b FROM (SELECT * FROM t2 WHERE c=1), t1" {
+  0 0 0 {SEARCH TABLE t2 USING INDEX i4 (c=?)}
+  0 1 1 {SCAN TABLE t1 USING COVERING INDEX i2}
+}
+
+# XVIDENCE-OF: R-37879-39987 sqlite> EXPLAIN QUERY PLAN
+# SELECT a FROM t1 UNION SELECT c FROM t2;
+# 1|0|0|SCAN TABLE t1
+# 2|0|0|SCAN TABLE t2
+# 0|0|0|COMPOUND SUBQUERIES 1 AND 2 USING TEMP B-TREE (UNION)
+#
+det 5.12 "SELECT a,b FROM t1 UNION SELECT c, 99 FROM t2" {
+  1 0 0 {SCAN TABLE t1 USING COVERING INDEX i2}
+  2 0 0 {SCAN TABLE t2 USING COVERING INDEX i4}
+  0 0 0 {COMPOUND SUBQUERIES 1 AND 2 USING TEMP B-TREE (UNION)}
+}
+
+# XVIDENCE-OF: R-44864-63011 sqlite> EXPLAIN QUERY PLAN
+# SELECT a FROM t1 EXCEPT SELECT d FROM t2 ORDER BY 1;
+# 1|0|0|SCAN TABLE t1 USING COVERING INDEX i2
+# 2|0|0|SCAN TABLE t2 2|0|0|USE TEMP B-TREE FOR ORDER BY
+# 0|0|0|COMPOUND SUBQUERIES 1 AND 2 (EXCEPT)
+#
+det 5.13 "SELECT a FROM t1 EXCEPT SELECT d FROM t2 ORDER BY 1" {
+  1 0 0 {SCAN TABLE t1 USING COVERING INDEX i1}
+  2 0 0 {SCAN TABLE t2}
+  2 0 0 {USE TEMP B-TREE FOR ORDER BY}
+  0 0 0 {COMPOUND SUBQUERIES 1 AND 2 (EXCEPT)}
+}
+
+if {![nonzero_reserved_bytes]} {
+  #-------------------------------------------------------------------------
+  # The following tests - eqp-6.* - test that the example C code on 
+  # documentation page eqp.html works. The C code is duplicated in test1.c
+  # and wrapped in Tcl command [print_explain_query_plan] 
+  #
+  set boilerplate {
+    proc explain_query_plan {db sql} {
+      set stmt [sqlite3_prepare_v2 db $sql -1 DUMMY]
+      print_explain_query_plan $stmt
+      sqlite3_finalize $stmt
+    }
+    sqlite3 db test.db
+    explain_query_plan db {%SQL%}
+    db close
+    exit
+  }
+  
+  # Do a "Print Explain Query Plan" test.
+  proc do_peqp_test {tn sql res} {
+    set fd [open script.tcl w]
+    puts $fd [string map [list %SQL% $sql] $::boilerplate]
+    close $fd
+  
+    uplevel do_test $tn [list {
+      set fd [open "|[info nameofexec] script.tcl"]
+      set data [read $fd]
+      close $fd
+      set data
+    }] [list $res]
+  }
+  
+  do_peqp_test 6.1 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, 99 FROM t2 ORDER BY 1
+  } [string trimleft {
+1 0 0 SCAN TABLE t1 USING COVERING INDEX i2
+2 0 0 SCAN TABLE t2
+2 0 0 USE TEMP B-TREE FOR ORDER BY
+0 0 0 COMPOUND SUBQUERIES 1 AND 2 (EXCEPT)
+}]
+}
+}
+
+#-------------------------------------------------------------------------
+# The following tests - eqp-7.* - test that queries that use the OP_Count
+# optimization return something sensible with EQP.
+#
+drop_all_tables
+
+do_execsql_test 7.0 {
+  CREATE TABLE t1(a INT, b INT, ex CHAR(100));
+  CREATE TABLE t2(a INT, b INT, ex CHAR(100));
+  CREATE INDEX i1 ON t2(a);
+}
+
+det 7.1 "SELECT count(*) FROM t1" {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+
+det 7.2 "SELECT count(*) FROM t2" {
+  QUERY PLAN
+  `--SCAN TABLE t2 USING COVERING INDEX i1
+}
+
+do_execsql_test 7.3 {
+  INSERT INTO t1(a,b) VALUES(1, 2);
+  INSERT INTO t1(a,b) VALUES(3, 4);
+
+  INSERT INTO t2(a,b) VALUES(1, 2);
+  INSERT INTO t2(a,b) VALUES(3, 4);
+  INSERT INTO t2(a,b) VALUES(5, 6);
+ 
+  ANALYZE;
+}
+
+db close
+sqlite3 db test.db
+
+det 7.4 "SELECT count(*) FROM t1" {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+
+det 7.5 "SELECT count(*) FROM t2" {
+  QUERY PLAN
+  `--SCAN TABLE t2 USING COVERING INDEX i1
+}
+
+#-------------------------------------------------------------------------
+# The following tests - eqp-8.* - test that queries that use the OP_Count
+# optimization return something sensible with EQP.
+#
+drop_all_tables
+
+do_execsql_test 8.0 {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(b, c)) WITHOUT ROWID;
+  CREATE TABLE t2(a, b, c);
+}
+
+det 8.1.1 "SELECT * FROM t2" {
+  QUERY PLAN
+  `--SCAN TABLE t2
+}
+
+det 8.1.2 "SELECT * FROM t2 WHERE rowid=?" {
+  QUERY PLAN
+  `--SEARCH TABLE t2 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+det 8.1.3 "SELECT count(*) FROM t2" {
+  QUERY PLAN
+  `--SCAN TABLE t2
+}
+
+det 8.2.1 "SELECT * FROM t1" {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+
+det 8.2.2 "SELECT * FROM t1 WHERE b=?" {
+  QUERY PLAN
+  `--SEARCH TABLE t1 USING PRIMARY KEY (b=?)
+}
+
+det 8.2.3 "SELECT * FROM t1 WHERE b=? AND c=?" {
+  QUERY PLAN
+  `--SEARCH TABLE t1 USING PRIMARY KEY (b=? AND c=?)
+}
+
+det 8.2.4 "SELECT count(*) FROM t1" {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+
+# 2018-08-16:  While working on Fossil I discovered that EXPLAIN QUERY PLAN
+# did not describe IN operators implemented using a ROWID lookup.  These
+# test cases ensure that problem as been fixed.
+#
+do_execsql_test 9.0 {
+  -- Schema from Fossil 2018-08-16
+  CREATE TABLE forumpost(
+    fpid INTEGER PRIMARY KEY,
+    froot INT,
+    fprev INT,
+    firt INT,
+    fmtime REAL
+  );
+  CREATE INDEX forumthread ON forumpost(froot,fmtime);
+  CREATE TABLE blob(
+    rid INTEGER PRIMARY KEY,
+    rcvid INTEGER,
+    size INTEGER,
+    uuid TEXT UNIQUE NOT NULL,
+    content BLOB,
+    CHECK( length(uuid)>=40 AND rid>0 )
+  );
+  CREATE TABLE event(
+    type TEXT,
+    mtime DATETIME,
+    objid INTEGER PRIMARY KEY,
+    tagid INTEGER,
+    uid INTEGER REFERENCES user,
+    bgcolor TEXT,
+    euser TEXT,
+    user TEXT,
+    ecomment TEXT,
+    comment TEXT,
+    brief TEXT,
+    omtime DATETIME
+  );
+  CREATE INDEX event_i1 ON event(mtime);
+  CREATE TABLE private(rid INTEGER PRIMARY KEY);
+}
+do_eqp_test 9.1 {
+  WITH thread(age,duration,cnt,root,last) AS (
+    SELECT
+      julianday('now') - max(fmtime) AS age,
+      max(fmtime) - min(fmtime) AS duration,
+      sum(fprev IS NULL) AS msg_count,
+      froot,
+      (SELECT fpid FROM forumpost
+        WHERE froot=x.froot
+          AND fpid NOT IN private
+        ORDER BY fmtime DESC LIMIT 1)
+    FROM forumpost AS x
+    WHERE fpid NOT IN private  --- Ensure this table mentioned in EQP output!
+    GROUP BY froot
+    ORDER BY 1 LIMIT 26 OFFSET 5
+  )
+  SELECT
+    thread.age,
+    thread.duration,
+    thread.cnt,
+    blob.uuid,
+    substr(event.comment,instr(event.comment,':')+1)
+  FROM thread, blob, event
+  WHERE blob.rid=thread.last
+    AND event.objid=thread.last
+  ORDER BY 1;
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  |--SCAN TABLE forumpost AS x USING INDEX forumthread
+  |  |--USING ROWID SEARCH ON TABLE private FOR IN-OPERATOR
+  |  |--CORRELATED SCALAR SUBQUERY xxxxxx
+  |  |  |--SEARCH TABLE forumpost USING COVERING INDEX forumthread (froot=?)
+  |  |  `--USING ROWID SEARCH ON TABLE private FOR IN-OPERATOR
+  |  `--USE TEMP B-TREE FOR ORDER BY
+  |--SCAN SUBQUERY xxxxxx
+  |--SEARCH TABLE blob USING INTEGER PRIMARY KEY (rowid=?)
+  |--SEARCH TABLE event USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+finish_test

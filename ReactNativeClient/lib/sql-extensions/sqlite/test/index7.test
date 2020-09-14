@@ -1,0 +1,355 @@
+# 2013-11-04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for partial indices in WITHOUT ROWID tables
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+# Capture the output of a pragma in a TEMP table.
+#
+proc capture_pragma {db tabname sql} {
+  $db eval "DROP TABLE IF EXISTS temp.$tabname"
+  set once 1
+  $db eval $sql x {
+    if {$once} {
+      set once 0
+      set ins "INSERT INTO $tabname VALUES"
+      set crtab "CREATE TEMP TABLE $tabname "
+      set sep "("
+      foreach col $x(*) {
+        append ins ${sep}\$x($col)
+        append crtab ${sep}\"$col\"
+        set sep ,
+      }
+      append ins )
+      append crtab )
+      $db eval $crtab
+    }
+    $db eval $ins
+  }
+}
+
+
+load_static_extension db wholenumber;
+do_test index7-1.1 {
+  # Able to parse and manage partial indices
+  execsql {
+    CREATE TABLE t1(a,b,c PRIMARY KEY) WITHOUT rowid;
+    CREATE INDEX t1a ON t1(a) WHERE a IS NOT NULL;
+    CREATE INDEX t1b ON t1(b) WHERE b>10;
+    CREATE VIRTUAL TABLE nums USING wholenumber;
+    INSERT INTO t1(a,b,c)
+       SELECT CASE WHEN value%3!=0 THEN value END, value, value
+         FROM nums WHERE value<=20;
+    SELECT count(a), count(b) FROM t1;
+    PRAGMA integrity_check;
+  }
+} {14 20 ok}
+
+# (The "partial" column of the PRAGMA index_list output is...)
+# EVIDENCE-OF: R-34457-09668 "1" if the index is a partial index and "0"
+# if not.
+#
+do_test index7-1.1a {
+  capture_pragma db out {PRAGMA index_list(t1)}
+  db eval {SELECT "name", "partial", '|' FROM out ORDER BY "name"}
+} {sqlite_autoindex_t1_1 0 | t1a 1 | t1b 1 |}
+
+# Make sure the count(*) optimization works correctly with
+# partial indices.  Ticket [a5c8ed66cae16243be6] 2013-10-03.
+#
+do_execsql_test index7-1.1.1 {
+  SELECT count(*) FROM t1;
+} {20}
+
+# Error conditions during parsing...
+#
+do_test index7-1.2 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE x IS NOT NULL;
+  }
+} {1 {no such column: x}}
+do_test index7-1.3 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE EXISTS(SELECT * FROM t1);
+  }
+} {1 {subqueries prohibited in partial index WHERE clauses}}
+do_test index7-1.4 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a!=?1;
+  }
+} {1 {parameters prohibited in partial index WHERE clauses}}
+do_test index7-1.5 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a!=random();
+  }
+} {1 {non-deterministic functions prohibited in partial index WHERE clauses}}
+do_test index7-1.6 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a NOT LIKE 'abc%';
+  }
+} {0 {}}
+do_execsql_test index7-1.7 {
+  INSERT INTO t1(a,b,c)
+     VALUES('abcde',1,101),('abdef',2,102),('xyz',3,103),('abcz',4,104);
+  SELECT c FROM t1 WHERE a NOT LIKE 'abc%' AND a=7 ORDER BY +b;
+} {7}
+do_execsql_test index7-1.7eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t1 WHERE a NOT LIKE 'abc%' AND a=7 ORDER BY +b;
+} {/SEARCH TABLE t1 USING COVERING INDEX bad1 /}
+do_execsql_test index7-1.8 {
+  DELETE FROM t1 WHERE c>=101;
+  DROP INDEX IF EXISTS bad1;
+} {}
+
+do_test index7-1.10 {
+  execsql {
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {20 1} t1a {14 1} t1b {10 1} ok}
+
+# STAT1 shows the partial indices have a reduced number of
+# rows.
+#
+do_test index7-1.11 {
+  execsql {
+    UPDATE t1 SET a=b;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {20 1} t1a {20 1} t1b {10 1} ok}
+
+do_test index7-1.11b {
+  execsql {
+    UPDATE t1 SET a=NULL WHERE b%3!=0;
+    UPDATE t1 SET b=b+100;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {20 1} t1a {6 1} t1b {20 1} ok}
+
+do_test index7-1.12 {
+  execsql {
+    UPDATE t1 SET a=CASE WHEN b%3!=0 THEN b END;
+    UPDATE t1 SET b=b-100;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {20 1} t1a {13 1} t1b {10 1} ok}
+
+do_test index7-1.13 {
+  execsql {
+    DELETE FROM t1 WHERE b BETWEEN 8 AND 12;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {15 1} t1a {10 1} t1b {8 1} ok}
+
+do_test index7-1.14 {
+  execsql {
+    REINDEX;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {15 1} t1a {10 1} t1b {8 1} ok}
+
+do_test index7-1.15 {
+  execsql {
+    CREATE INDEX t1c ON t1(c);
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1 {15 1} t1a {10 1} t1b {8 1} t1c {15 1} ok}
+
+# Queries use partial indices at appropriate times.
+#
+do_test index7-2.1 {
+  execsql {
+    CREATE TABLE t2(a,b PRIMARY KEY) without rowid;
+    INSERT INTO t2(a,b) SELECT value, value FROM nums WHERE value<1000;
+    UPDATE t2 SET a=NULL WHERE b%5==0;
+    CREATE INDEX t2a1 ON t2(a) WHERE a IS NOT NULL;
+    SELECT count(*) FROM t2 WHERE a IS NOT NULL;
+  }
+} {800}
+do_test index7-2.2 {
+  execsql {
+    EXPLAIN QUERY PLAN
+    SELECT * FROM t2 WHERE a=5;
+  }
+} {/.* TABLE t2 USING COVERING INDEX t2a1 .*/}
+ifcapable stat4 {
+  do_test index7-2.3stat4 {
+    execsql {
+      EXPLAIN QUERY PLAN
+      SELECT * FROM t2 WHERE a IS NOT NULL;
+    }
+  } {/.* TABLE t2 USING COVERING INDEX t2a1 .*/}
+} else {
+  do_test index7-2.3stat4 {
+    execsql {
+      EXPLAIN QUERY PLAN
+      SELECT * FROM t2 WHERE a IS NOT NULL AND a>0;
+    }
+  } {/.* TABLE t2 USING COVERING INDEX t2a1 .*/}
+}
+do_test index7-2.4 {
+  execsql {
+    EXPLAIN QUERY PLAN
+    SELECT * FROM t2 WHERE a IS NULL;
+  }
+} {~/.*INDEX t2a1.*/}
+
+do_execsql_test index7-2.101 {
+  DROP INDEX t2a1;
+  UPDATE t2 SET a=b, b=b+10000;
+  SELECT b FROM t2 WHERE a=15;
+} {10015}
+do_execsql_test index7-2.102 {
+  CREATE INDEX t2a2 ON t2(a) WHERE a<100 OR a>200;
+  SELECT b FROM t2 WHERE a=15;
+  PRAGMA integrity_check;
+} {10015 ok}
+do_execsql_test index7-2.102eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=15;
+} {~/.*INDEX t2a2.*/}
+do_execsql_test index7-2.103 {
+  SELECT b FROM t2 WHERE a=15 AND a<100;
+} {10015}
+do_execsql_test index7-2.103eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=15 AND a<100;
+} {/.*INDEX t2a2.*/}
+do_execsql_test index7-2.104 {
+  SELECT b FROM t2 WHERE a=515 AND a>200;
+} {10515}
+do_execsql_test index7-2.104eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=515 AND a>200;
+} {/.*INDEX t2a2.*/}
+
+# Partial UNIQUE indices
+#
+do_execsql_test index7-3.1 {
+  CREATE TABLE t3(a,b PRIMARY KEY) without rowid;
+  INSERT INTO t3 SELECT value, value FROM nums WHERE value<200;
+  UPDATE t3 SET a=999 WHERE b%5!=0;
+  CREATE UNIQUE INDEX t3a ON t3(a) WHERE a<>999;
+} {}
+do_test index7-3.2 {
+  # unable to insert a duplicate row a-value that is not 999.
+  catchsql {
+    INSERT INTO t3(a,b) VALUES(150, 'test1');
+  }
+} {1 {UNIQUE constraint failed: t3.a}}
+do_test index7-3.3 {
+  # can insert multiple rows with a==999 because such rows are not
+  # part of the unique index.
+  catchsql {
+    INSERT INTO t3(a,b) VALUES(999, 'test1'), (999, 'test2');
+  }
+} {0 {}}
+do_execsql_test index7-3.4 {
+  SELECT count(*) FROM t3 WHERE a=999;
+} {162}
+integrity_check index7-3.5
+
+do_execsql_test index7-4.0 {
+  VACUUM;
+  PRAGMA integrity_check;
+} {ok}
+
+# Silently ignore database name qualifiers in partial indices.
+#
+do_execsql_test index7-5.0 {
+  CREATE INDEX t3b ON t3(b) WHERE xyzzy.t3.b BETWEEN 5 AND 10;
+                               /* ^^^^^-- ignored */
+  ANALYZE;
+  SELECT count(*) FROM t3 WHERE t3.b BETWEEN 5 AND 10;
+  SELECT stat+0 FROM sqlite_stat1 WHERE idx='t3b';
+} {6 6}
+
+# Verify that the problem identified by ticket [98d973b8f5] has been fixed.
+#
+do_execsql_test index7-6.1 {
+  CREATE TABLE t5(a, b);
+  CREATE TABLE t4(c, d);
+  INSERT INTO t5 VALUES(1, 'xyz');
+  INSERT INTO t4 VALUES('abc', 'not xyz');
+  SELECT * FROM (SELECT * FROM t5 WHERE a=1 AND b='xyz'), t4 WHERE c='abc';
+} {
+  1 xyz abc {not xyz}
+}
+do_execsql_test index7-6.2 {
+  CREATE INDEX i4 ON t4(c) WHERE d='xyz';
+  SELECT * FROM (SELECT * FROM t5 WHERE a=1 AND b='xyz'), t4 WHERE c='abc';
+} {
+  1 xyz abc {not xyz}
+}
+do_execsql_test index7-6.3 {
+  CREATE VIEW v4 AS SELECT * FROM t4;
+  INSERT INTO t4 VALUES('def', 'xyz');
+  SELECT * FROM v4 WHERE d='xyz' AND c='def'
+} {
+  def xyz
+}
+do_eqp_test index7-6.4 {
+  SELECT * FROM v4 WHERE d='xyz' AND c='def'
+} {SEARCH TABLE t4 USING INDEX i4 (c=?)}
+
+do_catchsql_test index7-6.5 {
+  CREATE INDEX t5a ON t5(a) WHERE a=#1;
+} {1 {near "#1": syntax error}}
+
+do_execsql_test index7-7.0 {
+  CREATE TABLE t6(x, y);
+  INSERT INTO t6 VALUES(1, 1);
+  INSERT INTO t6 VALUES(0, 0);
+  SELECT * FROM t6 WHERE y IS TRUE ORDER BY x;
+} {1 1}
+
+do_execsql_test index7-7.1 {
+  CREATE INDEX i6 ON t6(x) WHERE y IS NOT TRUE;
+  SELECT * FROM t6 WHERE y IS TRUE ORDER BY x;
+} {1 1}
+
+# 2020-05-27.  tag-20200527-1.
+# Incomplete stat1 information on a table with few rows should still use the
+# index.
+reset_db
+do_execsql_test index7-8.1 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+  CREATE INDEX t1y ON t1(y) WHERE y IS NOT NULL;
+  INSERT INTO t1(x) VALUES(1),(2);
+  ANALYZE;
+  EXPLAIN QUERY PLAN SELECT 1 FROM t1 WHERE y=5;
+} {/SEARCH TABLE t1 USING COVERING INDEX t1y/}
+
+
+finish_test

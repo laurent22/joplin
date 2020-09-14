@@ -1,0 +1,174 @@
+# 2018 January 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests of multiple RBU operations running
+# concurrently within the same process. 
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbumulti
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+autoinstall_test_functions
+
+proc build_db {db} {
+  $db eval {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE INDEX i1 ON t1(b);
+    CREATE INDEX i2 ON t1(c);
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<500 )
+    INSERT INTO t1 
+    SELECT randomblob(10), randomblob(100), randomblob(100) FROM s;
+  }
+}
+
+proc build_rbu {db} {
+  $db eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<100 )
+    INSERT INTO data_t1 
+    SELECT randomblob(10), randomblob(100), randomblob(100), 0 FROM s;
+  }
+}
+
+proc step_rbu2 {bOpenClose openr1 openr2} {
+
+  forcedelete teststate.db1
+  forcedelete teststate.db2
+
+  if {$bOpenClose!=0 && $bOpenClose!=1} { error $bOpenClose }
+  if {$bOpenClose==0} {
+    eval $openr1 
+    eval $openr2 
+  }
+
+  set b1 0
+  set b2 0
+
+  while {$b1==0 || $b2==0} {
+    if {$bOpenClose==1} {
+      if {$b1==0} { eval $openr1 teststate.db1 }
+      if {$b2==0} { eval $openr2 teststate.db2 }
+    }
+    if {$b1==0} {
+      set rc1 [r1 step]
+      if {$rc1 != "SQLITE_OK"} { set b1 1 }
+    }
+    if {$b2==0} {
+      set rc2 [r2 step]
+      if {$rc2 != "SQLITE_OK"} { set b2 1 }
+    }
+    if {$bOpenClose==1} {
+      if {$b1==0} { r1 close }
+      if {$b2==0} { r2 close }
+    }
+  }
+
+  set rc1 [r1 close]
+  set rc2 [r2 close]
+
+  list $rc1 $rc2
+}
+
+
+for {set i 0} {$i<=3} {incr i} {
+
+  if {$i & 0x01} {
+    sqlite3rbu_create_vfs -default myrbu ""
+  }
+  set bOpenClose [expr $i>>1]
+
+  forcedelete test.db
+  forcedelete test.db2
+  forcedelete rbu.db
+  forcedelete rbu.db2
+  
+  do_test 1.$i.0 {
+    sqlite3 db test.db
+    sqlite3 db2 test.db2
+    build_db db
+    build_db db2
+  
+    sqlite3 rbu1 rbu.db
+    sqlite3 rbu2 rbu.db2
+  
+    build_rbu rbu1
+    build_rbu rbu2
+  
+    rbu1 close
+    rbu2 close
+  } {}
+
+  set m1 [db eval {SELECT md5sum(a, b, c) FROM t1}]
+  set m2 [db2 eval {SELECT md5sum(a, b, c) FROM t1}]
+  
+  do_test 1.$i.1 {
+    step_rbu2 $bOpenClose {
+      sqlite3rbu r1 test.db rbu.db
+    } {
+      sqlite3rbu r2 test.db2 rbu.db2
+    }
+  } {SQLITE_DONE SQLITE_DONE}
+  
+  do_execsql_test -db db  1.$i.2.1 { PRAGMA integrity_check } ok
+  do_execsql_test -db db2 1.$i.2.2 { PRAGMA integrity_check } ok
+
+  do_execsql_test -db db  1.$i.3.1 { SELECT md5sum(a, b, c)==$m1 FROM t1 } 0
+  do_execsql_test -db db2 1.$i.3.2 { SELECT md5sum(a, b, c)==$m2 FROM t1 } 0
+  
+  catch { db close }
+  catch { db2 close }
+  #-----------------------------------------------------------------------
+  forcedelete test.db2
+  forcedelete test.db
+  forcedelete rbu.db2
+  
+  do_test 1.$i.4 {
+    sqlite3 db test.db
+    sqlite3 db2 test.db2
+    build_db db
+    build_db db2
+    sqlite3 rbu2 rbu.db2
+    build_rbu rbu2
+    rbu2 close
+  } {}
+
+  set m1 [db eval {SELECT md5sum(a, b, c) FROM t1}]
+  set m2 [db2 eval {SELECT md5sum(a, b, c) FROM t1}]
+
+  do_test 1.$i.5 {
+    step_rbu2 $bOpenClose {
+      sqlite3rbu_vacuum r1 test.db
+    } {
+      sqlite3rbu r2 test.db2 rbu.db2
+    }
+  } {SQLITE_DONE SQLITE_DONE}
+
+  do_execsql_test -db db  1.$i.6.1 { SELECT md5sum(a, b, c)==$m1 FROM t1 } 1
+  do_execsql_test -db db2 1.$i.6.2 { SELECT md5sum(a, b, c)==$m2 FROM t1 } 0
+
+  do_execsql_test -db db  1.$i.7.1 { PRAGMA integrity_check } ok
+  do_execsql_test -db db2 1.$i.7.2 { PRAGMA integrity_check } ok
+
+  catch { db close }
+  catch { db2 close }
+  if {$i & 0x01} {
+    sqlite3rbu_destroy_vfs myrbu
+  }
+
+}
+
+
+finish_test

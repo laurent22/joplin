@@ -1,0 +1,182 @@
+# 2016 May 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex3
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Virtual table callback for a virtual table named $tbl.
+#
+# The table created is:
+#
+#      "CREATE TABLE t1 (a, b, c)"
+#
+# This virtual table supports both LIKE and = operators on all columns.
+#  
+proc vtab_cmd {bOmit method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c)"
+    }
+
+    xBestIndex {
+      foreach {clist orderby mask} $args {}
+
+      set ret [list]
+      set use use
+      if {$bOmit} {set use omit}
+
+      for {set i 0} {$i < [llength $clist]} {incr i} {
+        array unset C
+        array set C [lindex $clist $i]
+        if {$C(usable) && ($C(op)=="like" || $C(op)=="eq")} {
+          lappend ret $use $i
+          lappend ret idxstr 
+          lappend ret "[lindex {a b c} $C(column)] [string toupper $C(op)] ?"
+          break
+        }
+      }
+
+      if {$ret==""} {
+        lappend ret cost 1000000 rows 1000000
+      } else {
+        lappend ret cost 100 rows 10
+      }
+      return $ret
+    }
+
+    xFilter {
+      foreach {idxnum idxstr param} $args {}
+      set where ""
+      if {$bOmit && $idxstr != ""} {
+        set where " WHERE [string map [list ? '$param' EQ =] $idxstr]"
+      }
+      return [list sql "SELECT rowid, * FROM ttt$where"]
+    }
+  }
+  return ""
+}
+
+register_tcl_module db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING tcl("vtab_cmd 0");
+}
+
+do_eqp_test 1.1 {
+  SELECT * FROM t1 WHERE a LIKE 'abc';
+} {SCAN TABLE t1 VIRTUAL TABLE INDEX 0:a LIKE ?}
+
+do_eqp_test 1.2 {
+  SELECT * FROM t1 WHERE a = 'abc';
+} {SCAN TABLE t1 VIRTUAL TABLE INDEX 0:a EQ ?}
+
+do_eqp_test 1.3 {
+  SELECT * FROM t1 WHERE a = 'abc' OR b = 'def';
+} {
+  QUERY PLAN
+  `--MULTI-INDEX OR
+     |--INDEX 1
+     |  `--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:a EQ ?
+     `--INDEX 2
+        `--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:b EQ ?
+}
+
+do_eqp_test 1.4 {
+  SELECT * FROM t1 WHERE a LIKE 'abc%' OR b = 'def';
+} {
+  QUERY PLAN
+  `--MULTI-INDEX OR
+     |--INDEX 1
+     |  `--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:a LIKE ?
+     `--INDEX 2
+        `--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:b EQ ?
+}
+
+do_execsql_test 1.5 {
+  CREATE TABLE ttt(a, b, c);
+
+  INSERT INTO ttt VALUES(1, 'two',   'three');
+  INSERT INTO ttt VALUES(2, 'one',   'two');
+  INSERT INTO ttt VALUES(3, 'three', 'one');
+  INSERT INTO ttt VALUES(4, 'y',     'one');
+  INSERT INTO ttt VALUES(5, 'x',     'two');
+  INSERT INTO ttt VALUES(6, 'y',     'three');
+}
+
+foreach omit {0 1} {
+  do_execsql_test 1.6.$omit.0 "
+    DROP TABLE t1;
+    CREATE VIRTUAL TABLE t1 USING tcl('vtab_cmd $omit');
+  "
+  do_execsql_test 1.6.$omit.1 { 
+    SELECT rowid FROM t1 WHERE c LIKE 'o%'
+  } {3 4}
+
+  do_execsql_test 1.6.$omit.2 { 
+    SELECT rowid FROM t1 WHERE c LIKE 'o%' OR b='y'
+  } {3 4 6}
+
+  do_execsql_test 1.6.$omit.3 { 
+    SELECT rowid FROM t1 WHERE c = 'three' OR c LIKE 'o%'
+  } {1 6 3 4}
+}
+
+#-------------------------------------------------------------------------
+# Test the same pattern works with ordinary tables.
+#
+# This test does not work if the ICU extension is enabled. ICU overrides
+# LIKE - and this optimization only works with the built-in LIKE function.
+#
+ifcapable !icu {
+  do_execsql_test 2.1 {
+    CREATE TABLE t2(x TEXT COLLATE nocase, y TEXT);
+    CREATE INDEX t2x ON t2(x COLLATE nocase);
+    CREATE INDEX t2y ON t2(y);
+  }
+
+  do_eqp_test 2.2 {
+    SELECT * FROM t2 WHERE x LIKE 'abc%' OR y = 'def'
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    `--MULTI-INDEX OR
+       |--INDEX 1
+       |  `--SEARCH TABLE t2 USING INDEX t2x (x>? AND x<?)
+       `--INDEX 2
+          `--SEARCH TABLE t2 USING INDEX t2y (y=?)
+  }]
+}
+
+#-------------------------------------------------------------------------
+# Test that any PRIMARY KEY within a sqlite3_decl_vtab() CREATE TABLE 
+# statement is currently ignored.
+#
+proc vvv_command {method args} {
+  switch -- $method {
+    xConnect { return "CREATE TABLE t1(a PRIMARY KEY, b, c)" }
+  }
+}
+proc yyy_command {method args} {
+  switch -- $method {
+    xConnect { return "CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b))" }
+  }
+}
+
+do_execsql_test 3.1 { CREATE VIRTUAL TABLE t3 USING tcl('vvv_command') }
+do_execsql_test 3.2 { CREATE VIRTUAL TABLE t4 USING tcl('yyy_command') }
+
+finish_test

@@ -1,0 +1,107 @@
+# 2014-10-04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+# This file implements tests for the ANALYZE command.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix analyzeD
+
+ifcapable {!stat4} {
+  finish_test
+  return
+}
+
+
+# Set up a table with the following properties:
+#
+#    * Contains 1000 rows.
+#    * Column a contains even integers between 0 and 18, inclusive (so that
+#      a=? for any such integer matches 100 rows).
+#    * Column b contains integers between 0 and 9, inclusive.
+#    * Column c contains integers between 0 and 199, inclusive (so that
+#      for any such integer, c=? matches 5 rows).
+#    * Then add 7 rows with a new value for "a" - 3001. The stat4 table will
+#      not contain any samples with a=3001.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c);
+}
+do_test 1.1 {
+  for {set i 1} {$i < 1000} {incr i} {
+    set c [expr $i % 200]
+    execsql { INSERT INTO t1(a, b, c) VALUES( 2*($i/100), $i%10, $c ) }
+  }
+
+  execsql {
+    INSERT INTO t1 VALUES(3001, 3001, 3001);
+    INSERT INTO t1 VALUES(3001, 3001, 3002);
+    INSERT INTO t1 VALUES(3001, 3001, 3003);
+    INSERT INTO t1 VALUES(3001, 3001, 3004);
+    INSERT INTO t1 VALUES(3001, 3001, 3005);
+    INSERT INTO t1 VALUES(3001, 3001, 3006);
+    INSERT INTO t1 VALUES(3001, 3001, 3007);
+
+    CREATE INDEX t1_ab ON t1(a, b);
+    CREATE INDEX t1_c ON t1(c);
+
+    ANALYZE;
+  }
+} {}
+
+# With full ANALYZE data, SQLite sees that c=150 (5 rows) is better than
+# a=3001 (7 rows).
+#
+do_eqp_test 1.2 {
+  SELECT * FROM t1 WHERE a=3001 AND c=150;
+} {SEARCH TABLE t1 USING INDEX t1_c (c=?)}
+
+do_test 1.3 {
+  execsql { DELETE FROM sqlite_stat1 }
+  db close
+  sqlite3 db test.db
+} {}
+
+# Without stat1, because 3001 is larger than all samples in the stat4
+# table, SQLite thinks that a=3001 matches just 1 row. So it (incorrectly)
+# chooses it over the c=150 index (5 rows). Even with stat1 data, things
+# worked this way before commit [e6f7f97dbc].
+#
+do_eqp_test 1.4 {
+  SELECT * FROM t1 WHERE a=3001 AND c=150;
+} {SEARCH TABLE t1 USING INDEX t1_ab (a=?)}
+
+do_test 1.5 {
+  execsql { 
+    UPDATE t1 SET a=13 WHERE a = 3001;
+    ANALYZE;
+  }
+} {}
+
+do_eqp_test 1.6 {
+  SELECT * FROM t1 WHERE a=13 AND c=150;
+} {SEARCH TABLE t1 USING INDEX t1_c (c=?)}
+
+do_test 1.7 {
+  execsql { DELETE FROM sqlite_stat1 }
+  db close
+  sqlite3 db test.db
+} {}
+
+# Same test as 1.4, except this time the 7 rows that match the a=? condition 
+# do not feature larger values than all rows in the stat4 table. So SQLite
+# gets this right, even without stat1 data.
+do_eqp_test 1.8 {
+  SELECT * FROM t1 WHERE a=13 AND c=150;
+} {SEARCH TABLE t1 USING INDEX t1_c (c=?)}
+
+finish_test

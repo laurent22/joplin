@@ -1,0 +1,141 @@
+# 2005 January 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: shared3.test,v 1.4 2008/08/20 14:49:25 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix shared3
+db close
+
+ifcapable !shared_cache {
+  finish_test
+  return
+}
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+# Ticket #1824
+#
+do_test shared3-1.1 {
+  forcedelete test.db test.db-journal
+  sqlite3 db1 test.db
+  db1 eval {
+    PRAGMA encoding=UTF16;
+    CREATE TABLE t1(x,y);
+    INSERT INTO t1 VALUES('abc','This is a test string');
+  }
+  db1 close
+  sqlite3 db1 test.db
+  db1 eval {SELECT * FROM t1}
+} {abc {This is a test string}}
+do_test shared3-1.2 {
+  sqlite3 db2 test.db
+  db2 eval {SELECT y FROM t1 WHERE x='abc'}
+} {{This is a test string}}
+
+db1 close
+db2 close
+
+do_test shared3-2.1 {
+  sqlite3 db1 test.db
+  execsql {
+    PRAGMA main.cache_size = 10;
+  } db1
+} {}
+do_test shared3-2.2 {
+  execsql { PRAGMA main.cache_size } db1
+} {10}
+do_test shared3-2.3 {
+  sqlite3 db2 test.db
+  execsql { PRAGMA main.cache_size } db1
+} {10}
+do_test shared3-2.4 {
+  execsql { PRAGMA main.cache_size } db2
+} {10}
+do_test shared3-2.5 {
+  execsql { PRAGMA main.cache_size } db1
+} {10}
+
+# The cache-size should now be 10 pages. However at one point there was
+# a bug that caused the cache size to return to the default value when
+# a second connection was opened on the shared-cache (as happened in
+# test case shared3-2.3 above). The goal of the following tests is to
+# ensure that the cache-size really is 10 pages.
+#
+if {$::tcl_platform(platform)=="unix"} {
+  set alternative_name ./test.db
+} else {
+  set alternative_name TEST.DB
+}
+do_test shared3-2.6 {
+  sqlite3 db3 $alternative_name
+  catchsql {select count(*) from sqlite_master} db3
+} {0 1}
+do_test shared3-2.7 {
+  execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(10, randomblob(5000))
+  } db1
+  catchsql {select count(*) from sqlite_master} db3
+} {0 1}
+do_test shared3-2.8 {
+  db3 close
+  execsql {
+    INSERT INTO t1 VALUES(10, randomblob(10000))
+  } db1
+
+  # If the pager-cache is really still limited to 10 pages, then the INSERT
+  # statement above should have caused the pager to grab an exclusive lock
+  # on the database file so that the cache could be spilled.
+  #
+  catch { sqlite3 db3 $alternative_name }
+  catchsql {select count(*) from sqlite_master} db3
+} {1 {database is locked}}
+
+db1 close
+db2 close
+db3 close
+
+#-------------------------------------------------------------------------
+# At one point this was causing a faulty assert to fail.
+#
+forcedelete test.db
+sqlite3 db test.db
+sqlite3 db2 test.db
+do_execsql_test 3.1 {
+  PRAGMA auto_vacuum = 2;
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(randomblob(500), randomblob(500));
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+  INSERT INTO t1 SELECT randomblob(500), randomblob(500) FROM t1;
+}
+do_test 3.2 {
+  execsql { SELECT count(*) FROM sqlite_master } db2
+} {1}
+do_execsql_test 3.3 {
+  BEGIN;
+    DELETE FROM t1 WHERE 1;
+    PRAGMA incremental_vacuum;
+} {}
+do_test 3.4 {
+  execsql { SELECT count(*) FROM sqlite_master } db2
+} {1}
+do_test 3.5 {
+  execsql { COMMIT }
+} {}
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

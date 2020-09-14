@@ -1,0 +1,186 @@
+# 2009 February 4
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the "backup" and "restore" methods
+# of the TCL interface - methods which are based on the
+# sqlite3_backup_XXX API.
+#
+# $Id: backup2.test,v 1.4 2009/04/07 14:14:23 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_not_use_codec
+
+ifcapable !trigger||!view { finish_test ; return }
+
+# Fill a database with test data.
+#
+do_test backup2-1 {
+  db eval {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(randstr(8000,8000));
+    INSERT INTO t1 VALUES(randstr(8000,8000));
+    INSERT INTO t1 VALUES(randstr(8000,8000));
+    INSERT INTO t1 VALUES(randstr(8000,8000));
+    INSERT INTO t1 VALUES(randstr(8000,8000));
+    CREATE VIEW v1 AS SELECT substr(x,10,10) FROM t1;
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2 VALUES(1,2);
+    INSERT INTO t2 VALUES(2,4);
+    INSERT INTO t2 SELECT a+2, (a+2)*2 FROM t2;
+    INSERT INTO t2 SELECT a+4, (a+4)*2 FROM t2;
+    INSERT INTO t2 SELECT a+8, (a+8)*2 FROM t2;
+    INSERT INTO t2 SELECT a+16, (a+16)*2 FROM t2;
+    INSERT INTO t2 SELECT a+32, (a+32)*2 FROM t2;
+    INSERT INTO t2 SELECT a+64, (a+64)*2 FROM t2;
+    INSERT INTO t2 SELECT a+128, (a+128)*2 FROM t2;
+    CREATE INDEX t2i1 ON t2(a,b);
+    CREATE TRIGGER r1 AFTER INSERT ON t2 BEGIN
+      SELECT 'hello';
+    END;
+    ANALYZE;
+    PRAGMA integrity_check;
+  }
+} {ok}
+
+# Remember a check-sum on the database file.
+#
+unset -nocomplain cksum
+set cksum [dbcksum db main]
+
+# Make a backup of the test data.  Verify that the backup copy
+# is identical to the original.
+#
+do_test backup2-2 {
+  forcedelete bu1.db
+  db backup bu1.db
+  sqlite3 db2 bu1.db
+  dbcksum db2 main
+} $cksum
+
+# Delete the original.  Restore from backup.  Verify the content is
+# unchanged.
+#
+do_test backup2-3.1 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  db2 eval {BEGIN EXCLUSIVE}
+  set rc [catch {db restore bu1.db} res]
+  lappend rc $res
+  db2 eval {ROLLBACK}
+  set rc
+} {1 {restore failed: source database busy}}
+do_test backup2-3.2 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  db restore bu1.db
+  dbcksum db main
+} $cksum
+
+# Use alternative databases - other than "main".
+#
+do_test backup2-4 {
+  db restore temp bu1.db
+  dbcksum db temp
+} $cksum
+do_test backup2-5 {
+  db2 close
+  forcedelete bu1.db bu2.db
+  db backup temp bu2.db
+  sqlite3 db2 bu2.db
+  dbcksum db2 main
+} $cksum
+
+# Try to backup to a readonly file.
+#
+do_test backup2-6 {
+  db2 close
+  catch {file attributes bu2.db -permissions r--------}
+  catch {file attributes bu2.db -readonly 1}
+  set rc [catch {db backup temp bu2.db} res]
+  lappend rc $res
+} {1 {backup failed: attempt to write a readonly database}}
+
+# Try to backup to something that is not a database file.
+#
+do_test backup2-7 {
+  catch {file attributes bu2.db -readonly 0}
+  catch {file attributes bu2.db -permissions rw-------}
+  set out [open bu2.db w]
+  puts $out "This is not a valid database file"
+  close $out
+  set rc [catch {db backup temp bu2.db} res]
+  lappend rc $res
+} {1 {backup failed: file is not a database}}
+
+# Try to backup database that does not exist
+#
+do_test backup2-8 {
+  forcedelete bu1.db
+  set rc [catch {db backup aux1 bu1.db} res]
+  lappend rc $res
+} {1 {backup failed: unknown database aux1}}
+
+# Invalid syntax on the backup method
+#
+do_test backup2-9 {
+  set rc [catch {db backup} res]
+  lappend rc $res
+} {1 {wrong # args: should be "db backup ?DATABASE? FILENAME"}}
+
+# Try to restore from an unreadable file.
+#
+if {$tcl_platform(platform)=="windows"} {
+  set msg {cannot open source database: unable to open database file}
+} elseif {[string match *BSD $tcl_platform(os)]} {
+  set msg {restore failed: file is not a database}
+} else {
+  set msg {cannot open source database: disk I/O error}
+}
+do_test backup2-10 {
+  forcedelete bu3.db
+  file mkdir bu3.db
+  set rc [catch {db restore temp bu3.db} res]
+  lappend rc $res
+} [list 1 $msg]
+
+# Try to restore from something that is not a database file.
+#
+do_test backup2-11 {
+  set rc [catch {db restore temp bu2.db} res]
+  lappend rc $res
+} {1 {restore failed: file is not a database}}
+
+# Try to restore a database that does not exist
+#
+do_test backup2-12 {
+  set rc [catch {db restore aux1 bu2.db} res]
+  lappend rc $res
+} {1 {restore failed: unknown database aux1}}
+do_test backup2-13 {
+  forcedelete bu4.db
+  set rc [catch {db restore bu4.db} res]
+  lappend rc $res
+} {1 {cannot open source database: unable to open database file}}
+
+# Invalid syntax on the restore method
+#
+do_test backup2-14 {
+  set rc [catch {db restore} res]
+  lappend rc $res
+} {1 {wrong # args: should be "db restore ?DATABASE? FILENAME"}}
+ 
+forcedelete bu1.db bu2.db bu3.db bu4.db
+
+finish_test

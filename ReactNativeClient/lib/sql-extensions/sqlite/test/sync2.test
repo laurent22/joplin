@@ -1,0 +1,161 @@
+# 2017 March 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# Specificly, it tests that "PRAGMA synchronous" appears to work.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix sync2
+
+#
+# These tests are only applicable when pager pragma are
+# enabled. Also, since every test uses an ATTACHed database, they
+# are only run when ATTACH is enabled.
+#
+ifcapable !pager_pragmas||!attach||!dirsync {
+  finish_test
+  return
+}
+if {$::tcl_platform(platform)!="unix" 
+  || [permutation] == "journaltest"
+  || [permutation] == "inmemory_journal"
+  || [atomic_batch_write test.db] 
+} {
+  finish_test
+  return
+}
+
+proc execsql_sync {sql} {
+  set s $::sqlite_sync_count
+  set res [execsql $sql]
+  concat [expr $::sqlite_sync_count-$s] $res
+}
+
+proc do_execsql_sync_test {tn sql res} {
+  uplevel [list do_test $tn [list execsql_sync $sql] [list {*}$res]]
+}
+
+#-----------------------------------------------------------------------
+# Tests for journal mode.
+#
+sqlite3 db test.db
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+}
+
+do_execsql_sync_test 1.1 { INSERT INTO t1 VALUES(3, 4) } 4
+
+# synchronous=normal. So, 1 sync on the directory, 1 on the journal, 1 
+# on the db file. 3 in total.
+do_execsql_test      1.2.1 { PRAGMA main.synchronous = NORMAL }
+do_execsql_test      1.2.2 { PRAGMA main.synchronous }     1
+do_execsql_sync_test 1.2.3 { INSERT INTO t1 VALUES(5, 6) } 3
+
+# synchronous=off. No syncs.
+do_execsql_test      1.3.1 { PRAGMA main.synchronous = OFF }
+do_execsql_test      1.3.2 { PRAGMA main.synchronous }     0
+do_execsql_sync_test 1.3.3 { INSERT INTO t1 VALUES(7, 8) } 0
+ 
+# synchronous=full, journal_mode=delete. So, 1 sync on the directory,
+# 2 on the journal, 1 on the db file. 4 in total.
+do_execsql_test      1.4.1 { PRAGMA main.synchronous = FULL }
+do_execsql_test      1.4.2 { PRAGMA main.synchronous }      2
+do_execsql_sync_test 1.4.3 { INSERT INTO t1 VALUES(9, 10) } 4
+
+#-----------------------------------------------------------------------
+# Tests for wal mode.
+#
+do_execsql_test      1.5 { PRAGMA journal_mode = wal } {wal}
+
+# sync=full, journal_mode=wal. One sync on the directory, two on the 
+# wal file.
+do_execsql_sync_test 1.6 { INSERT INTO t1 VALUES(11, 12) } 3
+
+# One sync on the wal file.
+do_execsql_sync_test 1.7 { INSERT INTO t1 VALUES(13, 14) } 1
+
+# No syncs.
+do_execsql_test      1.8.1 { PRAGMA main.synchronous = NORMAL }
+do_execsql_test      1.8.2 { PRAGMA main.synchronous }          1
+do_execsql_sync_test 1.8.3 { INSERT INTO t1 VALUES(15, 16) }    0
+
+# One sync on wal file, one on the db file.
+do_execsql_sync_test 1.9   { PRAGMA wal_checkpoint }  {2 0 3 3}
+
+# No syncs.
+do_execsql_test      1.10.1 { PRAGMA main.synchronous = OFF }
+do_execsql_test      1.10.2 { PRAGMA main.synchronous }          0
+do_execsql_sync_test 1.10.3 { INSERT INTO t1 VALUES(17, 18) }    0
+
+#-----------------------------------------------------------------------
+# Tests for the compile time settings SQLITE_DEFAULT_SYNCHRONOUS and
+# SQLITE_DEFAULT_WAL_SYNCHRONOUS. These tests only run if the former
+# is set to "2" and the latter to "1". This is not the default, but
+# it is currently the recommended configuration.
+#
+#   https://sqlite.org/compile.html#recommended_compile_time_options
+#
+if {$SQLITE_DEFAULT_SYNCHRONOUS==2 && $SQLITE_DEFAULT_WAL_SYNCHRONOUS==1} {
+
+  db close
+  sqlite3 db test.db
+
+  # Wal mode, sync=normal. The first transaction does one sync on directory,
+  # one on the wal file. The second does no syncs.
+  do_execsql_sync_test 1.11.1 { INSERT INTO t1 VALUES(19, 20) } 2
+  do_execsql_sync_test 1.11.2 { INSERT INTO t1 VALUES(21, 22) } 0
+  do_execsql_test 1.11.3      { PRAGMA main.synchronous }       1
+
+  # One sync on wal file, one on the db file.
+  do_execsql_sync_test 1.12   { PRAGMA wal_checkpoint }  {2 0 2 2}
+
+  # First transaction syncs the wal file once, the second not at all.
+  # one on the wal file. The second does no syncs.
+  do_execsql_sync_test 1.13.1 { INSERT INTO t1 VALUES(22, 23) } 1
+  do_execsql_sync_test 1.13.2 { INSERT INTO t1 VALUES(24, 25) } 0
+
+  do_execsql_test 1.14 { PRAGMA journal_mode = delete } {delete}
+  
+  # Delete mode, sync=full. The first transaction does one sync on 
+  # directory, two on the journal file, one on the db. The second does 
+  # the same.
+  do_execsql_sync_test 1.15.1 { INSERT INTO t1 VALUES(26, 27) } 4
+  do_execsql_sync_test 1.15.2 { INSERT INTO t1 VALUES(28, 29) } 4
+  do_execsql_test 1.15.3      { PRAGMA main.synchronous }       2
+
+  # Switch back to wal mode.
+  do_execsql_test 1.16 { PRAGMA journal_mode = wal } {wal}
+
+  do_execsql_sync_test 1.17.1 { INSERT INTO t1 VALUES(30, 31) } 2
+  do_execsql_sync_test 1.17.2 { INSERT INTO t1 VALUES(32, 33) } 0
+  do_execsql_test 1.17.3      { PRAGMA main.synchronous }       1
+
+  # Now set synchronous=off, then switch back to delete mode. Check
+  # that the db handle is still using synchronous=off.
+  do_execsql_test 1.18.3      { PRAGMA main.synchronous=off }
+  do_execsql_test 1.18 { PRAGMA journal_mode = delete } {delete}
+
+  do_execsql_sync_test 1.19.1 { INSERT INTO t1 VALUES(34, 35) } 0
+  do_execsql_sync_test 1.19.2 { INSERT INTO t1 VALUES(36, 37) } 0
+  do_execsql_test 1.19.3      { PRAGMA main.synchronous }       0
+
+  # Close and reopen the db. Back to synchronous=normal.
+  db close
+  sqlite3 db test.db
+  do_execsql_sync_test 1.20.1 { INSERT INTO t1 VALUES(38, 39) } 4
+  do_execsql_sync_test 1.20.2 { INSERT INTO t1 VALUES(40, 41) } 4
+  do_execsql_test 1.20.3      { PRAGMA main.synchronous }       2
+}
+
+finish_test

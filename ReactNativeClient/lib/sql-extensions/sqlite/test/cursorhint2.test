@@ -1,0 +1,204 @@
+# 2016 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. The
+# focus is on testing that cursor-hints are correct for queries
+# involving LEFT JOIN.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix cursorhint2
+
+ifcapable !cursorhints {
+  finish_test
+  return
+}
+
+proc extract_hints {sql} {
+
+  db eval "SELECT tbl_name, rootpage FROM sqlite_master where rootpage" {
+    set lookup($rootpage) $tbl_name
+  }
+
+  set ret [list]
+  db eval "EXPLAIN $sql" a {
+    switch -- $a(opcode) {
+      OpenRead {
+        set csr($a(p1)) $lookup($a(p2))
+      }
+      CursorHint { 
+        lappend ret $csr($a(p1)) $a(p4) 
+      }
+    }
+  }
+
+  set ret
+}
+
+proc do_extract_hints_test {tn sql ret} {
+  uplevel [list do_test $tn [list extract_hints $sql] [list {*}$ret]]
+}
+
+do_execsql_test 1.0 {
+  PRAGMA automatic_index = 0;
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(c, d);
+  CREATE TABLE t3(e, f);
+}
+
+do_extract_hints_test 1.1 {
+  SELECT * FROM t1 WHERE a=1;
+} {
+  t1 EQ(c0,1)
+}
+
+do_extract_hints_test 1.2 {
+  SELECT * FROM t1 CROSS JOIN t2 ON (a=c) WHERE d IS NULL;
+} {
+  t2 {AND(ISNULL(c1),EQ(r[1],c0))}
+}
+
+do_extract_hints_test 1.3 {
+  SELECT * FROM t1 LEFT JOIN t2 ON (a=c) WHERE d IS NULL;
+} {
+  t2 {EQ(r[2],c0)}
+}
+
+do_extract_hints_test 1.4 {
+  SELECT * FROM t1 LEFT JOIN t2 ON (a=c AND a=10) WHERE d IS NULL;
+} {
+  t2 {AND(EQ(r[2],c0),EQ(r[3],10))}
+}
+
+do_extract_hints_test 1.5 {
+  SELECT * FROM t1 CROSS JOIN t2 ON (a=c AND a=10) WHERE d IS NULL;
+} {
+  t1 EQ(c0,10) t2 {AND(ISNULL(c1),EQ(r[3],c0))}
+}
+
+do_extract_hints_test 1.6 {
+  SELECT * FROM t1 LEFT JOIN t2 ON (a=c) LEFT JOIN t3 ON (d=f);
+} {
+  t2 {EQ(r[2],c0)} t3 {EQ(r[6],c1)}
+}
+
+if 0 {
+  do_extract_hints_test 1.7 {
+    SELECT * FROM t1 LEFT JOIN t2 ON (a=c AND d=e) LEFT JOIN t3 ON (d=f);
+  } {
+    t2 {EQ(r[2],c0)} t3 {AND(EQ(r[6],c0),EQ(r[7],c1))}
+  }
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 2.0 {
+  CREATE TABLE x1(x, y);
+  CREATE TABLE x2(a, b);
+}
+
+do_extract_hints_test 2.1 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE b IS NULL;
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+do_extract_hints_test 2.2 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE b IS +NULL;
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+do_extract_hints_test 2.3 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE 1 = (b IS NULL)
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+do_extract_hints_test 2.4 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE 1 = coalesce(b, 1)
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+do_extract_hints_test 2.5 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE 1 = coalesce(b, 1)
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+if {0} {
+  # These tests no longer work due to the LEFT-JOIN strength reduction
+  # optimization
+  do_extract_hints_test 2.6 {
+    SELECT * FROM x1 CROSS JOIN x2 ON (a=x) WHERE 0 = (b IS NOT NULL)
+  } {
+    x2 {EQ(c0,r[2])}
+  }
+  
+  do_extract_hints_test 2.7 {
+    SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE 0 = (b IS NOT +NULL)
+  } {
+    x2 {EQ(c0,r[2])}
+  }
+  
+  do_extract_hints_test 2.8 {
+    SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE b IS NOT +NULL
+  } {
+    x2 {EQ(c0,r[2])}
+  }
+  
+  do_extract_hints_test 2.9 {
+    SELECT * FROM x1 LEFT JOIN x2 ON (a=x)
+      WHERE CASE b WHEN 0 THEN 0 ELSE 1 END;
+  } {
+    x2 {EQ(c0,r[2])}
+  }
+  
+  do_extract_hints_test 2.10 {
+    SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE x2.b = 32+32
+  } {
+    x2 {AND(EQ(c1,ADD(32,32)),EQ(c0,r[2]))}
+  }
+  
+  ifcapable !icu {
+    # This test only works using the built-in LIKE, not the ICU LIKE extension.
+    do_extract_hints_test 2.11 {
+      SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE x2.b LIKE 'abc%'
+    } {
+      x2 {AND(expr,EQ(c0,r[2]))}
+    }
+  }
+}
+  
+do_extract_hints_test 2.12 {
+  SELECT * FROM x1 LEFT JOIN x2 ON (a=x) WHERE coalesce(x2.b, 1)
+} {
+  x2 {EQ(c0,r[2])}
+}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1 (i1 TEXT);    
+  CREATE TABLE t2 (i2 TEXT UNIQUE);    
+  INSERT INTO t1 VALUES('0');
+  INSERT INTO t2 VALUES('0');
+}
+
+do_extract_hints_test 3.1 {
+  SELECT * FROM t1 CROSS JOIN t2 WHERE (t1.i1 = t2.i2) AND t2.i2 = 1;
+} {
+  t1 {EQ(c0,r[1])} t2 EQ(c0,1)
+}
+
+
+finish_test

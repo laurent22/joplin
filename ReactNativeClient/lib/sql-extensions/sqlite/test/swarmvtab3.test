@@ -1,0 +1,233 @@
+# 2017-07-15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is the "swarmvtab" extension
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix swarmvtab3
+do_not_use_codec
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+load_static_extension db unionvtab
+
+set nFile $sqlite_open_file_count
+
+do_execsql_test 1.0 {
+  CREATE TEMP TABLE swarm(id, tbl, minval, maxval);
+}
+
+# Set up 100 databases with filenames "remote_test.dbN", where N is between
+# 0 and 99.
+do_test 1.1 {
+  for {set i 0} {$i < 100} {incr i} {
+    set file remote_test.db$i
+    forcedelete $file
+    forcedelete test.db$i
+    sqlite3 rrr $file
+    rrr eval {
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+      INSERT INTO t1 VALUES($i, $i);
+    }
+    rrr close
+    db eval {
+      INSERT INTO swarm VALUES($i, 't1', $i, $i);
+    }
+    set ::dbcache(test.db$i) 0
+  }
+} {}
+
+proc missing_db {filename} {
+  set remote "remote_$filename"
+  forcedelete $filename
+  file copy $remote $filename
+}
+db func missing_db missing_db
+
+proc openclose_db {filename bClose} {
+  if {$bClose} {
+    incr ::dbcache($filename) -1
+  } else {
+    incr ::dbcache($filename) 1
+  }
+  if {$::dbcache($filename)==0} {
+    forcedelete $filename
+  }
+}
+db func openclose_db openclose_db
+
+proc check_dbcache {} {
+  set n 0
+  for {set i 0} {$i<100} {incr i} {
+    set exists [file exists test.db$i]
+    if {$exists!=($::dbcache(test.db$i)!=0)} {
+      error "inconsistent ::dbcache and disk ($i) - $exists"
+    }
+    incr n $exists
+  }
+  return $n
+}
+
+foreach {tn nMaxOpen cvt} {
+  1 5 {
+    CREATE VIRTUAL TABLE temp.s USING swarmvtab(
+        'SELECT :prefix || id, tbl, minval, minval FROM swarm',
+        :prefix='test.db',
+        missing=missing_db,
+        openclose=openclose_db,
+        maxopen=5
+    )
+  }
+
+  2 3 {
+    CREATE VIRTUAL TABLE temp.s USING swarmvtab(
+        'SELECT :prefix || id, tbl, minval, minval FROM swarm',
+        :prefix='test.db',
+        missing =       'missing_db',
+        openclose=[openclose_db],
+        maxopen = 3
+    )
+  }
+
+  3 1 {
+    CREATE VIRTUAL TABLE temp.s USING swarmvtab(
+        'SELECT :prefix||''.''||:suffix||id, tbl, minval, minval FROM swarm',
+        :prefix=test, :suffix=db,
+        missing =       'missing_db',
+        openclose=[openclose_db],
+        maxopen = 1
+    )
+  }
+
+} {
+  execsql { DROP TABLE IF EXISTS s }
+
+  do_execsql_test 1.$tn.1 $cvt
+
+  do_execsql_test 1.$tn.2 {
+    SELECT b FROM s WHERE a<10;
+  } {0 1 2 3 4 5 6 7 8 9}
+
+  do_test 1.$tn.3 { check_dbcache } $nMaxOpen
+
+  do_execsql_test 1.$tn.4 {
+    SELECT b FROM s WHERE (b%10)=0;
+  } {0 10 20 30 40 50 60 70 80 90}
+
+  do_test 1.$tn.5 { check_dbcache } $nMaxOpen
+}
+
+execsql { DROP TABLE IF EXISTS s }
+for {set i 0} {$i < 100} {incr i} {
+  forcedelete remote_test.db$i
+}
+
+#----------------------------------------------------------------------------
+#
+do_execsql_test 2.0 {
+  DROP TABLE IF EXISTS swarm;
+  CREATE TEMP TABLE swarm(file, tbl, minval, maxval, ctx);
+}
+
+catch { array unset ::dbcache }
+
+# Set up 100 databases with filenames "remote_test.dbN", where N is a
+# random integer between 0 and 1,000,000
+# 0 and 99.
+do_test 2.1 {
+  for {set i 0} {$i < 100} {incr i} {
+    while 1 {
+      set ctx [expr abs(int(rand() *1000000))]
+      if {[info exists ::dbcache($ctx)]==0} break
+    }
+
+    set file test_remote.db$ctx
+    forcedelete $file
+    forcedelete test.db$i
+    sqlite3 rrr $file
+    rrr eval {
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+      INSERT INTO t1 VALUES($i, $i);
+    }
+    rrr close
+    db eval {
+      INSERT INTO swarm VALUES('test.db' || $i, 't1', $i, $i, $file)
+    }
+    set ::dbcache(test.db$i) 0
+  }
+} {}
+
+proc missing_db {filename ctx} {
+  file copy $ctx $filename
+}
+db func missing_db missing_db
+
+proc openclose_db {filename ctx bClose} {
+  if {$bClose} {
+    incr ::dbcache($filename) -1
+  } else {
+    incr ::dbcache($filename) 1
+  }
+  if {$::dbcache($filename)==0} {
+    forcedelete $filename
+  }
+}
+db func openclose_db openclose_db
+
+proc check_dbcache {} {
+  set n 0
+  foreach k [array names ::dbcache] {
+    set exists [file exists $k]
+    if {$exists!=($::dbcache($k)!=0)} {
+      error "inconsistent ::dbcache and disk ($k) - $exists"
+    }
+    incr n $exists
+  }
+  return $n
+}
+
+foreach {tn nMaxOpen cvt} {
+  2 5 {
+    CREATE VIRTUAL TABLE temp.s USING swarmvtab(
+        'SELECT file, tbl, minval, minval, ctx FROM swarm',
+        missing=missing_db,
+        openclose=openclose_db,
+        maxopen=5
+    )
+  }
+} {
+  execsql { DROP TABLE IF EXISTS s }
+
+  do_execsql_test 3.$tn.1 $cvt
+
+  do_execsql_test 3.$tn.2 {
+    SELECT b FROM s WHERE a<10;
+  } {0 1 2 3 4 5 6 7 8 9}
+
+  do_test 3.$tn.3 { check_dbcache } $nMaxOpen
+
+  do_execsql_test 3.$tn.4 {
+    SELECT b FROM s WHERE (b%10)=0;
+  } {0 10 20 30 40 50 60 70 80 90}
+
+  do_test 3.$tn.5 { check_dbcache } $nMaxOpen
+}
+
+db close
+forcedelete {*}[glob test.db*]
+forcedelete {*}[glob test_remote.db*]
+
+finish_test

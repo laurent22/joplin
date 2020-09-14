@@ -1,0 +1,50 @@
+# 2011 March 2
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Make sure the rtreenode() testing function can handle entries with
+# 64-bit rowids.
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+
+ifcapable rtree_int_only {
+  do_test rtreeB-1.1-intonly {
+    db eval {
+      CREATE VIRTUAL TABLE t1 USING rtree(ii, x0, y0, x1, y1);
+      INSERT INTO t1 VALUES(1073741824, 0.0, 0.0, 100.0, 100.0);
+      INSERT INTO t1 VALUES(2147483646, 0.0, 0.0, 200.0, 200.0);
+      INSERT INTO t1 VALUES(4294967296, 0.0, 0.0, 300.0, 300.0);
+      INSERT INTO t1 VALUES(8589934592, 20.0, 20.0, 150.0, 150.0);
+      INSERT INTO t1 VALUES(9223372036854775807, 150, 150, 400, 400);
+      SELECT rtreenode(2, data) FROM t1_node;
+    }
+  } {{{1073741824 0 0 100 100} {2147483646 0 0 200 200} {4294967296 0 0 300 300} {8589934592 20 20 150 150} {9223372036854775807 150 150 400 400}}}
+} else {  
+  do_test rtreeB-1.1 {
+    db eval {
+      CREATE VIRTUAL TABLE t1 USING rtree(ii, x0, y0, x1, y1);
+      INSERT INTO t1 VALUES(1073741824, 0.0, 0.0, 100.0, 100.0);
+      INSERT INTO t1 VALUES(2147483646, 0.0, 0.0, 200.0, 200.0);
+      INSERT INTO t1 VALUES(4294967296, 0.0, 0.0, 300.0, 300.0);
+      INSERT INTO t1 VALUES(8589934592, 20.0, 20.0, 150.0, 150.0);
+      INSERT INTO t1 VALUES(9223372036854775807, 150, 150, 400, 400);
+      SELECT rtreenode(2, data) FROM t1_node;
+    }
+  } {{{1073741824 0 0 100 100} {2147483646 0 0 200 200} {4294967296 0 0 300 300} {8589934592 20 20 150 150} {9223372036854775807 150 150 400 400}}}
+}
+
+do_rtree_integrity_test rtreeB-1.2 t1
+
+finish_test

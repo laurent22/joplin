@@ -1,0 +1,69 @@
+# 2010 October 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set testprefix incrblobfault
+
+do_execsql_test 1.0 {
+  CREATE TABLE blob(x INTEGER PRIMARY KEY, v BLOB);
+  INSERT INTO blob VALUES(1, 'hello world');
+  INSERT INTO blob VALUES(2, 'world hello');
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+  INSERT INTO blob SELECT NULL, v FROM blob;
+}
+
+do_faultsim_test 1 -prep {
+  sqlite3 db test.db
+  set ::blob [db incrblob blob v 1]
+} -body {
+  if {[catch {sqlite3_blob_reopen $::blob 1000}]} {
+    error [sqlite3_errmsg db]
+  }
+} -test {
+  faultsim_test_result {0 {}}
+  close $::blob
+}
+
+do_faultsim_test 2 -prep {
+  sqlite3 db test.db
+  set ::blob [db incrblob blob v 1]
+} -body {
+  if {[catch {sqlite3_blob_reopen $::blob -1}]} {
+    error [sqlite3_errmsg db]
+  }
+} -test {
+  faultsim_test_result {1 {no such rowid: -1}} {1 {disk I/O error}}
+  close $::blob
+}
+
+do_faultsim_test 3 -prep {
+  sqlite3 db test.db
+} -body {
+  set ::blob [db incrblob blob v 1]
+  gets $::blob
+} -test {
+  faultsim_test_result {0 {hello world}}
+  catch { close $::blob }
+}
+
+finish_test

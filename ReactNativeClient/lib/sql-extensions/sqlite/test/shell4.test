@@ -1,0 +1,141 @@
+# 2010 July 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the CLI shell tool.
+# These tests are specific to the .stats command.
+#
+# 2015-03-19:  Added tests for .trace
+
+# Test plan:
+#
+#   shell4-1.*: Basic tests specific to the "stats" command.
+#   shell4-2.*: Basic tests for ".trace"
+#   shell4-3.*: The ".read" command takes the shell out of interactive mode
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set CLI [test_find_cli]
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+#----------------------------------------------------------------------------
+# Test cases shell4-1.*: Tests specific to the "stats" command.
+#
+
+# should default to off
+do_test shell4-1.1.1 {
+  set res [catchcmd "test.db" ".show"]
+  list [regexp {stats: off} $res]
+} {1}
+
+do_test shell4-1.1.2 {
+  set res [catchcmd "test.db" ".show"]
+  list [regexp {stats: on} $res]
+} {0}
+
+# -stats should turn it on
+do_test shell4-1.2.1 {
+  set res [catchcmd "-stats test.db" ".show"]
+  list [regexp {stats: on} $res]
+} {1}
+
+do_test shell4-1.2.2 {
+  set res [catchcmd "-stats test.db" ".show"]
+  list [regexp {stats: off} $res]
+} {0}
+
+# .stats ON|OFF          Turn stats on or off
+#do_test shell4-1.3.1 {
+#  catchcmd "test.db" ".stats"
+#} {1 {Usage: .stats on|off}}
+do_test shell4-1.3.2 {
+  catchcmd "test.db" ".stats ON"
+} {0 {}}
+do_test shell4-1.3.3 {
+  catchcmd "test.db" ".stats OFF"
+} {0 {}}
+do_test shell4-1.3.4 {
+  # too many arguments
+  catchcmd "test.db" ".stats OFF BAD"
+} {1 {Usage: .stats ?on|off?}}
+
+# NB. whitespace is important
+do_test shell4-1.4.1 {
+  set res [catchcmd "test.db" {.show}]
+  list [regexp {stats: off} $res]
+} {1}
+
+do_test shell4-1.4.2 {
+  set res [catchcmd "test.db" {.stats ON
+.show
+}]
+  list [regexp {stats: on} $res]
+} {1}
+
+do_test shell4-1.4.3 {
+  set res [catchcmd "test.db" {.stats OFF
+.show
+}]
+  list [regexp {stats: off} $res]
+} {1}
+
+# make sure stats not present when off
+do_test shell4-1.5.1 {
+  set res [catchcmd "test.db" {SELECT 1;}]
+  list [regexp {Memory Used} $res] \
+       [regexp {Heap Usage} $res] \
+       [regexp {Autoindex Inserts} $res]
+} {0 0 0}
+
+# make sure stats are present when on
+do_test shell4-1.5.2 {
+  set res [catchcmd "test.db" {.stats ON
+SELECT 1;
+}]
+  list [regexp {Memory Used} $res] \
+       [regexp {Heap Usage} $res] \
+       [regexp {Autoindex Inserts} $res]
+} {1 1 1}
+
+ifcapable trace {
+do_test shell4-2.1 {
+  catchcmd ":memory:" "CREATE TABLE t1(x);\n.trace --unknown"
+} {1 {Unknown option "--unknown" on ".trace"}}
+do_test shell4-2.2 {
+  catchcmd ":memory:" "CREATE TABLE t1(x);\n.trace off\n.trace off\n"
+} {0 {}}
+do_test shell4-2.3 {
+  catchcmd ":memory:" ".trace stdout\n.dump\n.trace off\n"
+} {/^0 {PRAGMA.*}$/}
+do_test shell4-2.4 {
+  catchcmd ":memory:" ".trace stdout\nCREATE TABLE t1(x);SELECT * FROM t1;"
+} {0 {CREATE TABLE t1(x);
+SELECT * FROM t1;}}
+do_test shell4-2.5 {
+  catchcmd ":memory:" "CREATE TABLE t1(x);\n.trace stdout\nSELECT * FROM t1;"
+} {0 {SELECT * FROM t1;}}
+}
+
+do_test shell4-3.1 {
+  set fd [open t1.txt wb]
+  puts $fd "SELECT 'squirrel';"
+  close $fd
+  exec $::CLI :memory: --interactive ".read t1.txt"
+} {squirrel}
+do_test shell4-3.2 {
+  set fd [open t1.txt wb]
+  puts $fd "SELECT 'pound: \302\243';"
+  close $fd
+  exec $::CLI :memory: --interactive ".read t1.txt"
+} {pound: £}
+
+finish_test

@@ -1,0 +1,145 @@
+# 2009 June 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: corruptD.test,v 1.2 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+#--------------------------------------------------------------------------
+# OVERVIEW
+#
+#   This test file attempts to verify that SQLite does not read past the 
+#   end of any in-memory buffers as a result of corrupted database page 
+#   images. Usually this happens because a field within a database page
+#   that contains an offset to some other structure within the same page
+#   is set to too large a value. A database page contains the following
+#   such fields:
+#
+#     1. The page header field that contains the offset to the first 
+#        free block of space.
+#
+#     2. The first two bytes of all but the last free block on the free-block
+#        list (the offset to the next free block).
+#
+#     3. The page header field containing the number of cells on the page
+#        (implicitly defines the offset to the final element in the cell offset
+#        array, which could potentially be off the end of the page).
+#
+#     4. The page header field containing the offset to the start of the cell
+#        content area.
+#
+#     5. The contents of the cell offset array.
+#
+#     6. The first few bytes of each cell determine the size of the cell
+#        stored within the page, and hence the offset to the final byte of
+#        the cell.
+#
+#   If any of the above fields are set to too large a value, then a buffer
+#   overread may occur. This test script creates and operates on various
+#   strategically corrupted database files to attempt to provoke such buffer
+#   overreads.
+#
+#   Very often, a buffer overread passes unnoticed, particularly in workstation
+#   environments. For this reason, this test script should be run using valgrind
+#   (or similar) in order to verify that no overreads occur.
+#
+# TEST PLAN
+# 
+#   Test cases corruptD-1.* are white-box tests. They attempt to corrupt
+#   one of the above fields, then exercise each part of the code in btree.c
+#   that uses said field.
+#   
+#   Offset variables 1, 2, 3 and 4 are all checked to make sure they
+#   will not result in buffer overruns as part of page initialization in
+#   sqlite3BtreeInitPage(). Offsets 5 and 6 cannot be tested as part of
+#   page initialization, as trying to do so causes a performance hit.
+#
+
+do_test corruptD-1.0 {
+  execsql { 
+    PRAGMA auto_vacuum = 0;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+  }
+  for {set ii 1} {$ii < 50} {incr ii} {
+    execsql { INSERT INTO t1 VALUES($ii, $ii * $ii) }
+  }
+  execsql {
+    DELETE FROM t1 WHERE a = 10;
+    DELETE FROM t1 WHERE a = 20;
+    DELETE FROM t1 WHERE a = 30;
+    DELETE FROM t1 WHERE a = 40;
+  }
+  forcecopy test.db test.bu
+} {}
+
+proc incr_change_counter {} {
+  hexio_write test.db 24 [
+    hexio_render_int32 [expr [hexio_get_int [hexio_read test.db 24 4]] + 1]
+  ]
+}
+
+proc restore_file {} {
+  db close
+  forcecopy test.bu test.db
+  sqlite3 db test.db
+}
+
+#-------------------------------------------------------------------------
+# The following tests, corruptD-1.1.*, focus on the page header field
+# containing the offset of the first free block in a page. 
+#
+do_test corruptD-1.1.1 {
+  incr_change_counter
+  hexio_write test.db [expr 1024+1] FFFF
+  catchsql { PRAGMA quick_check }
+} {0 {{*** in database main ***
+Page 2: free space corruption}}}
+do_test corruptD-1.1.2 {
+  incr_change_counter
+  hexio_write test.db [expr 1024+1] [hexio_render_int32 1021]
+  catchsql { SELECT * FROM t1 ORDER BY rowid }
+} {1 {database disk image is malformed}}
+
+#-------------------------------------------------------------------------
+# The following tests, corruptD-1.2.*, focus on the offsets contained
+# in the first 2 byte of each free-block on the free-list.
+#
+do_test corruptD-1.2.1 {
+  restore_file
+} {}
+do_test corruptD-1.2.2 {
+} {}
+
+#-------------------------------------------------------------------------
+# The following tests, corruptD-1.4.*, ...
+#
+
+
+#-------------------------------------------------------------------------
+# The following tests, corruptD-1.5.*, focus on the offsets contained
+# in the cell offset array.
+# 
+#   defragmentPage
+#
+
+finish_test

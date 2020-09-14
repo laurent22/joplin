@@ -1,0 +1,57 @@
+# 2015-05-11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Quick tests for the sqldiff tool
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set PROG [test_find_sqldiff]
+
+db close
+forcedelete test.db test2.db
+sqlite3 db test.db
+
+do_test sqldiff-1.0 {
+  db eval {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t2(a INT PRIMARY KEY, b) WITHOUT ROWID;
+    WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+    INSERT INTO t1(a,b) SELECT x, printf('abc-%d-xyz',x) FROM c;
+    INSERT INTO t2(a,b) SELECT a, b FROM t1;
+  }
+  db backup test2.db
+  db eval {
+    ATTACH 'test2.db' AS x2;
+    DELETE FROM x2.t1 WHERE a=49;
+    DELETE FROM x2.t2 WHERE a=48;
+    INSERT INTO x2.t1(a,b) VALUES(1234,'hello');
+    INSERT INTO x2.t2(a,b) VALUES(50.5,'xyzzy');
+    CREATE TABLE x2.t3(a,b,c);
+    INSERT INTO x2.t3 VALUES(111,222,333);
+    CREATE TABLE main.t4(x,y,z);
+    INSERT INTO t4 SELECT * FROM t3;
+  }
+  set line "exec $PROG test.db test2.db"
+  unset -nocomplain ::MSG
+  catch {eval $line} ::MSG
+} {0}
+do_test sqldiff-1.1 {
+  set ::MSG
+} {DELETE FROM t1 WHERE a=49;
+INSERT INTO t1(a,b) VALUES(1234,'hello');
+DELETE FROM t2 WHERE a=48;
+INSERT INTO t2(a,b) VALUES(50.5,'xyzzy');
+CREATE TABLE t3(a,b,c);
+INSERT INTO t3(rowid,a,b,c) VALUES(1,111,222,333);
+DROP TABLE t4;}
+
+finish_test

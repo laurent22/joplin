@@ -1,0 +1,592 @@
+# 2010 January 07
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# The tests in this file test the FTS3 auxillary functions offsets(), 
+# snippet() and matchinfo() work. At time of writing, running this file 
+# provides full coverage of fts3_snippet.c.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts3snippet
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+source $testdir/fts3_common.tcl
+
+set sqlite_fts3_enable_parentheses 1
+set DO_MALLOC_TEST 0
+
+# Transform the list $L to its "normal" form. So that it can be compared to
+# another list with the same set of elements using [string compare].
+#
+proc normalize {L} {
+  set ret [list]
+  foreach l $L {lappend ret $l}
+  return $ret
+}
+
+proc do_offsets_test {name expr args} {
+  set result [list]
+  foreach a $args {
+    lappend result [normalize $a]
+  }
+  do_select_test $name {
+    SELECT offsets(ft) FROM ft WHERE ft MATCH $expr
+  } $result
+}
+  
+# Document text used by a few tests. Contains the English names of all
+# integers between 1 and 300.
+#
+set numbers [normalize {
+  one two three four five six seven eight nine ten eleven twelve thirteen
+  fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone
+  twentytwo twentythree twentyfour twentyfive twentysix twentyseven
+  twentyeight twentynine thirty thirtyone thirtytwo thirtythree thirtyfour
+  thirtyfive thirtysix thirtyseven thirtyeight thirtynine forty fortyone
+  fortytwo fortythree fortyfour fortyfive fortysix fortyseven fortyeight
+  fortynine fifty fiftyone fiftytwo fiftythree fiftyfour fiftyfive fiftysix
+  fiftyseven fiftyeight fiftynine sixty sixtyone sixtytwo sixtythree sixtyfour
+  sixtyfive sixtysix sixtyseven sixtyeight sixtynine seventy seventyone
+  seventytwo seventythree seventyfour seventyfive seventysix seventyseven
+  seventyeight seventynine eighty eightyone eightytwo eightythree eightyfour
+  eightyfive eightysix eightyseven eightyeight eightynine ninety ninetyone
+  ninetytwo ninetythree ninetyfour ninetyfive ninetysix ninetyseven
+  ninetyeight ninetynine onehundred onehundredone onehundredtwo
+  onehundredthree onehundredfour onehundredfive onehundredsix onehundredseven
+  onehundredeight onehundrednine onehundredten onehundredeleven
+  onehundredtwelve onehundredthirteen onehundredfourteen onehundredfifteen
+  onehundredsixteen onehundredseventeen onehundredeighteen onehundrednineteen
+  onehundredtwenty onehundredtwentyone onehundredtwentytwo
+  onehundredtwentythree onehundredtwentyfour onehundredtwentyfive
+  onehundredtwentysix onehundredtwentyseven onehundredtwentyeight
+  onehundredtwentynine onehundredthirty onehundredthirtyone
+  onehundredthirtytwo onehundredthirtythree onehundredthirtyfour
+  onehundredthirtyfive onehundredthirtysix onehundredthirtyseven
+  onehundredthirtyeight onehundredthirtynine onehundredforty
+  onehundredfortyone onehundredfortytwo onehundredfortythree
+  onehundredfortyfour onehundredfortyfive onehundredfortysix
+  onehundredfortyseven onehundredfortyeight onehundredfortynine
+  onehundredfifty onehundredfiftyone onehundredfiftytwo onehundredfiftythree
+  onehundredfiftyfour onehundredfiftyfive onehundredfiftysix
+  onehundredfiftyseven onehundredfiftyeight onehundredfiftynine
+  onehundredsixty onehundredsixtyone onehundredsixtytwo onehundredsixtythree
+  onehundredsixtyfour onehundredsixtyfive onehundredsixtysix
+  onehundredsixtyseven onehundredsixtyeight onehundredsixtynine
+  onehundredseventy onehundredseventyone onehundredseventytwo
+  onehundredseventythree onehundredseventyfour onehundredseventyfive
+  onehundredseventysix onehundredseventyseven onehundredseventyeight
+  onehundredseventynine onehundredeighty onehundredeightyone
+  onehundredeightytwo onehundredeightythree onehundredeightyfour
+  onehundredeightyfive onehundredeightysix onehundredeightyseven
+  onehundredeightyeight onehundredeightynine onehundredninety
+  onehundredninetyone onehundredninetytwo onehundredninetythree
+  onehundredninetyfour onehundredninetyfive onehundredninetysix
+  onehundredninetyseven onehundredninetyeight onehundredninetynine twohundred
+  twohundredone twohundredtwo twohundredthree twohundredfour twohundredfive
+  twohundredsix twohundredseven twohundredeight twohundrednine twohundredten
+  twohundredeleven twohundredtwelve twohundredthirteen twohundredfourteen
+  twohundredfifteen twohundredsixteen twohundredseventeen twohundredeighteen
+  twohundrednineteen twohundredtwenty twohundredtwentyone twohundredtwentytwo
+  twohundredtwentythree twohundredtwentyfour twohundredtwentyfive
+  twohundredtwentysix twohundredtwentyseven twohundredtwentyeight
+  twohundredtwentynine twohundredthirty twohundredthirtyone
+  twohundredthirtytwo twohundredthirtythree twohundredthirtyfour
+  twohundredthirtyfive twohundredthirtysix twohundredthirtyseven
+  twohundredthirtyeight twohundredthirtynine twohundredforty
+  twohundredfortyone twohundredfortytwo twohundredfortythree
+  twohundredfortyfour twohundredfortyfive twohundredfortysix
+  twohundredfortyseven twohundredfortyeight twohundredfortynine
+  twohundredfifty twohundredfiftyone twohundredfiftytwo twohundredfiftythree
+  twohundredfiftyfour twohundredfiftyfive twohundredfiftysix
+  twohundredfiftyseven twohundredfiftyeight twohundredfiftynine
+  twohundredsixty twohundredsixtyone twohundredsixtytwo twohundredsixtythree
+  twohundredsixtyfour twohundredsixtyfive twohundredsixtysix
+  twohundredsixtyseven twohundredsixtyeight twohundredsixtynine
+  twohundredseventy twohundredseventyone twohundredseventytwo
+  twohundredseventythree twohundredseventyfour twohundredseventyfive
+  twohundredseventysix twohundredseventyseven twohundredseventyeight
+  twohundredseventynine twohundredeighty twohundredeightyone
+  twohundredeightytwo twohundredeightythree twohundredeightyfour
+  twohundredeightyfive twohundredeightysix twohundredeightyseven
+  twohundredeightyeight twohundredeightynine twohundredninety
+  twohundredninetyone twohundredninetytwo twohundredninetythree
+  twohundredninetyfour twohundredninetyfive twohundredninetysix
+  twohundredninetyseven twohundredninetyeight twohundredninetynine
+  threehundred
+}]
+
+foreach {DO_MALLOC_TEST enc} {
+  0 utf8
+  1 utf8
+  1 utf16
+} {
+
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+  sqlite3_db_config_lookaside db 0 0 0
+  db eval "PRAGMA encoding = \"$enc\""
+
+  # Set variable $T to the test name prefix for this iteration of the loop.
+  #
+  set T "fts3snippet-1.$enc"
+
+  ##########################################################################
+  # Test the offset function.
+  #
+  do_test $T.1.1 {
+    execsql {
+      CREATE VIRTUAL TABLE ft USING fts3;
+      INSERT INTO ft VALUES('xxx xxx xxx xxx');
+    }
+  } {}
+  do_offsets_test $T.1.2 {xxx} {0 0 0 3 0 0 4 3 0 0 8 3 0 0 12 3}
+  do_offsets_test $T.1.3 {"xxx xxx"} {
+      0 0  0 3     0 0  4 3     0 1  4 3     0 0  8 3 
+      0 1  8 3     0 1 12 3
+  }
+  do_offsets_test $T.1.4 {"xxx xxx" xxx} {
+      0 0  0 3     0 2  0 3     0 0  4 3     0 1  4 3 
+      0 2  4 3     0 0  8 3     0 1  8 3     0 2  8 3 
+      0 1 12 3     0 2 12 3
+  }
+  do_offsets_test $T.1.5 {xxx "xxx xxx"} {
+      0 0  0 3     0 1  0 3     0 0  4 3     0 1  4 3 
+      0 2  4 3     0 0  8 3     0 1  8 3     0 2  8 3 
+      0 0 12 3     0 2 12 3
+  }
+
+  do_test $T.2.1 {
+    set v1 [lrange $numbers 0 99]
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3(a, b);
+      INSERT INTO ft VALUES($v1, $numbers);
+      INSERT INTO ft VALUES($v1, NULL);
+    }
+  } {}
+
+  set off [string first "twohundred " $numbers]
+  do_offsets_test $T.2.1 {twohundred} [list 1 0 $off 10]
+
+  set off [string first "onehundred " $numbers]
+  do_offsets_test $T.2.2 {onehundred} \
+    [list 0 0 $off 10 1 0 $off 10] [list 0 0 $off 10]
+
+  # Test a corruption case:
+  sqlite3_db_config db DEFENSIVE 0
+  execsql { UPDATE ft_content SET c1b = 'hello world' WHERE c1b = $numbers }
+  do_error_test $T.2.3 {
+    SELECT offsets(ft) FROM ft WHERE ft MATCH 'onehundred'
+  } {database disk image is malformed}
+  
+  ##########################################################################
+  # Test the snippet function.
+  #
+  proc do_snippet_test {name expr iCol nTok args} {
+    set res [list]
+    foreach a $args { lappend res [string trim $a] }
+    do_select_test $name {
+      SELECT snippet(ft,'{','}','...',$iCol,$nTok) FROM ft WHERE ft MATCH $expr
+    } $res
+  }
+  do_test $T.3.1 {
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3;
+      INSERT INTO ft VALUES('one two three four five six seven eight nine ten');
+    }
+  } {}
+  do_snippet_test $T.3.2  one    0 5 "{one} two three four five..."
+  do_snippet_test $T.3.3  two    0 5 "one {two} three four five..."
+  do_snippet_test $T.3.4  three  0 5 "one two {three} four five..."
+  do_snippet_test $T.3.5  four   0 5 "...two three {four} five six..."
+  do_snippet_test $T.3.6  five   0 5 "...three four {five} six seven..."
+  do_snippet_test $T.3.7  six    0 5 "...four five {six} seven eight..."
+  do_snippet_test $T.3.8  seven  0 5 "...five six {seven} eight nine..."
+  do_snippet_test $T.3.9  eight  0 5 "...six seven {eight} nine ten"
+  do_snippet_test $T.3.10 nine   0 5 "...six seven eight {nine} ten"
+  do_snippet_test $T.3.11 ten    0 5 "...six seven eight nine {ten}"
+  
+  do_test $T.4.1 {
+    execsql {
+      INSERT INTO ft VALUES(
+           'one two three four five '
+        || 'six seven eight nine ten '
+        || 'eleven twelve thirteen fourteen fifteen '
+        || 'sixteen seventeen eighteen nineteen twenty '
+        || 'one two three four five '
+        || 'six seven eight nine ten '
+        || 'eleven twelve thirteen fourteen fifteen '
+        || 'sixteen seventeen eighteen nineteen twenty'
+      );
+    }
+  } {}
+  
+  do_snippet_test $T.4.2 {one nine} 0 5 {
+     {one} two three...eight {nine} ten
+  } {
+     {one} two three...eight {nine} ten...
+  }
+  
+  do_snippet_test $T.4.3 {one nine} 0 -5 {
+     {one} two three four five...six seven eight {nine} ten
+  } {
+     {one} two three four five...seven eight {nine} ten eleven...
+  }
+  do_snippet_test $T.4.3 {one nineteen} 0 -5 {
+     ...eighteen {nineteen} twenty {one} two...
+  }
+  do_snippet_test $T.4.4 {two nineteen} 0 -5 {
+     ...eighteen {nineteen} twenty one {two}...
+  }
+  do_snippet_test $T.4.5 {three nineteen} 0 -5 {
+     ...{nineteen} twenty one two {three}...
+  }
+  
+  do_snippet_test $T.4.6 {four nineteen} 0 -5 {
+     ...two three {four} five six...seventeen eighteen {nineteen} twenty one...
+  }
+  do_snippet_test $T.4.7 {four NEAR nineteen} 0 -5 {
+     ...seventeen eighteen {nineteen} twenty one...two three {four} five six...
+  }
+  
+  do_snippet_test $T.4.8 {four nineteen} 0 5 {
+     ...three {four} five...eighteen {nineteen} twenty...
+  }
+  do_snippet_test $T.4.9 {four NEAR nineteen} 0 5 {
+     ...eighteen {nineteen} twenty...three {four} five...
+  }
+  do_snippet_test $T.4.10 {four NEAR nineteen} 0 -5 {
+     ...seventeen eighteen {nineteen} twenty one...two three {four} five six...
+  }
+  do_snippet_test $T.4.11 {four NOT (nineteen twentyone)} 0 5 {
+     ...two three {four} five six...
+  } {
+     ...two three {four} five six...
+  }
+  do_snippet_test $T.4.12 {four OR nineteen NEAR twentyone} 0 5 {
+     ...two three {four} five six...
+  } {
+     ...two three {four} five six...
+  }
+  
+  do_test $T.5.1 {
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3(a, b, c);
+      INSERT INTO ft VALUES(
+        'one two three four five', 
+        'four five six seven eight', 
+        'seven eight nine ten eleven'
+      );
+    }
+  } {}
+  
+  do_snippet_test $T.5.2 {five} -1 3 {...three four {five}}
+  do_snippet_test $T.5.3 {five}  0 3 {...three four {five}}
+  do_snippet_test $T.5.4 {five}  1 3 {four {five} six...}
+  do_snippet_test $T.5.5 {five}  2 3 {seven eight nine...}
+  
+  do_test $T.5.6 {
+    execsql { UPDATE ft SET b = NULL }
+  } {}
+  
+  do_snippet_test $T.5.7  {five} -1 3 {...three four {five}}
+  do_snippet_test $T.5.8  {five}  0 3 {...three four {five}}
+  do_snippet_test $T.5.9  {five}  1 3 {}
+  do_snippet_test $T.5.10 {five}  2 3 {seven eight nine...}
+  
+  do_snippet_test $T.5.11 {one "seven eight nine"} -1 -3 {
+    {one} two three...{seven} {eight} {nine}...
+  }
+
+  do_test $T.6.1 {
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3(x);
+      INSERT INTO ft VALUES($numbers);
+    }
+  } {}
+  do_snippet_test $T.6.2 {
+    one fifty onehundred onehundredfifty twohundredfifty threehundred
+  } -1 4 {
+    {one}...{fifty}...{onehundred}...{onehundredfifty}...
+  }
+  do_snippet_test $T.6.3 {
+    one fifty onehundred onehundredfifty twohundredfifty threehundred
+  } -1 -4 {
+    {one} two three four...fortyeight fortynine {fifty} fiftyone...ninetyeight ninetynine {onehundred} onehundredone...onehundredfortyeight onehundredfortynine {onehundredfifty} onehundredfiftyone...
+  }
+
+  do_test $T.7.1 {
+    execsql {
+      BEGIN;
+        DROP TABLE IF EXISTS ft;
+        CREATE VIRTUAL TABLE ft USING fts3(x);
+    }
+    set testresults [list]
+    for {set i 1} {$i < 150} {incr i} {
+      set commas [string repeat , $i]
+      execsql {INSERT INTO ft VALUES('one' || $commas || 'two')}
+      lappend testresults "{one}$commas{two}"
+    }
+    execsql COMMIT
+  } {}
+  eval [list do_snippet_test $T.7.2 {one two} -1 3] $testresults
+  
+  ##########################################################################
+  # Test the matchinfo function.
+  #
+  proc mit {blob} {
+    set scan(littleEndian) i*
+    set scan(bigEndian) I*
+    binary scan $blob $scan($::tcl_platform(byteOrder)) r
+    return $r
+  }
+  db func mit mit
+  proc do_matchinfo_test {name expr args} {
+    set res [list]
+    foreach a $args { lappend res [normalize $a] }
+    do_select_test $name {
+      SELECT mit(matchinfo(ft)) FROM ft WHERE ft MATCH $expr
+    } $res
+  }
+  do_test $T.8.1 {
+    set ten {one two three four five six seven eight nine ten}
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3;
+      INSERT INTO ft VALUES($ten);
+      INSERT INTO ft VALUES($ten || ' ' || $ten);
+    }
+  } {}
+  
+  do_matchinfo_test $T.8.2 "one" {1 1  1 3 2} {1 1  2 3 2}
+  do_matchinfo_test $T.8.3 "one NEAR/3 ten" {2 1  1 1 1 1 1 1}
+  do_matchinfo_test $T.8.4 "five NEAR/4 ten" \
+    {2 1  1 3 2  1 3 2} {2 1  2 3 2  2 3 2}
+  do_matchinfo_test $T.8.5 "six NEAR/3 ten NEAR/3 two" \
+    {3 1  1 1 1  1 1 1  1 1 1}
+  do_matchinfo_test $T.8.6 "five NEAR/4 ten NEAR/3 two" \
+    {3 1  2 2 1  1 1 1  1 1 1}
+
+  do_test $T.9.1 {
+    execsql {
+      DROP TABLE IF EXISTS ft;
+      CREATE VIRTUAL TABLE ft USING fts3(x, y);
+    }
+    foreach n {1 2 3} {
+      set v1 [lrange $numbers 0 [expr $n*100]]
+      set v2 [string trim [string repeat "$numbers " $n]]
+      set docid [expr $n * 1000000]
+      execsql { INSERT INTO ft(docid, x, y) VALUES($docid, $v1, $v2) }
+    }
+  } {}
+  do_matchinfo_test $T.9.2 {two*}     \
+    { 1 2    1   105 3   101 606 3}   \
+    { 1 2    3   105 3   202 606 3}   \
+    { 1 2    101 105 3   303 606 3}
+
+  do_matchinfo_test $T.9.4 {"one* two*"}  \
+    { 1 2    1 5 3   2 12 3}              \
+    { 1 2    2 5 3   4 12 3}              \
+    { 1 2    2 5 3   6 12 3}
+
+  do_matchinfo_test $T.9.5 {twohundredfifty}  \
+    { 1 2    0 1 1   1 6 3}                   \
+    { 1 2    0 1 1   2 6 3}                   \
+    { 1 2    1 1 1   3 6 3}
+
+  do_matchinfo_test $T.9.6 {"threehundred one"} \
+    { 1 2    0 0 0   1 3 2}                     \
+    { 1 2    0 0 0   2 3 2}
+
+  do_matchinfo_test $T.9.7 {one OR fivehundred} \
+    { 2 2    1 3 3   1 6 3   0 0 0   0 0 0 }    \
+    { 2 2    1 3 3   2 6 3   0 0 0   0 0 0 }    \
+    { 2 2    1 3 3   3 6 3   0 0 0   0 0 0 }
+
+  do_matchinfo_test $T.9.8 {two OR "threehundred one"} \
+    { 2 2    1 3 3   1 6 3   0 0 0   0 3 2 }           \
+    { 2 2    1 3 3   2 6 3   0 0 0   1 3 2 }           \
+    { 2 2    1 3 3   3 6 3   0 0 0   2 3 2 }
+
+  do_select_test $T.9.9 {
+    SELECT mit(matchinfo(ft)), mit(matchinfo(ft))
+    FROM ft WHERE ft MATCH 'two OR "threehundred one"' 
+  } [normalize {
+    {2 2 1 3 3 1 6 3 0 0 0 0 3 2}
+    {2 2 1 3 3 1 6 3 0 0 0 0 3 2}
+    {2 2 1 3 3 2 6 3 0 0 0 1 3 2}
+    {2 2 1 3 3 2 6 3 0 0 0 1 3 2}
+    {2 2 1 3 3 3 6 3 0 0 0 2 3 2}          
+    {2 2 1 3 3 3 6 3 0 0 0 2 3 2}
+  }]
+
+  # EVIDENCE-OF: R-40630-02268 If used within a SELECT that uses the
+  # "query by rowid" or "linear scan" strategies, then the snippet and
+  # offsets both return an empty string, and the matchinfo function
+  # returns a blob value zero bytes in size.
+  #
+  set r 1000000                   ;# A rowid that exists in table ft
+  do_select_test $T.10.0 { SELECT rowid FROM ft WHERE rowid = $r } $r
+  do_select_test $T.10.1 {
+    SELECT length(offsets(ft)), typeof(offsets(ft)) FROM ft;
+  } {0 text 0 text 0 text}
+  do_select_test $T.10.2 {
+    SELECT length(offsets(ft)), typeof(offsets(ft)) FROM ft WHERE rowid = $r
+  } {0 text}
+  do_select_test $T.10.3 {
+    SELECT length(snippet(ft)), typeof(snippet(ft)) FROM ft;
+  } {0 text 0 text 0 text}
+  do_select_test $T.10.4 {
+    SELECT length(snippet(ft)), typeof(snippet(ft)) FROM ft WHERE rowid = $r;
+  } {0 text}
+  do_select_test $T.10.5 {
+    SELECT length(matchinfo(ft)), typeof(matchinfo(ft)) FROM ft;
+  } {0 blob 0 blob 0 blob}
+  do_select_test $T.10.6 {
+    SELECT length(matchinfo(ft)), typeof(matchinfo(ft)) FROM ft WHERE rowid = $r
+  } {0 blob}
+}
+
+#-------------------------------------------------------------------------
+# Test an interaction between the snippet() function and OR clauses.
+#
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4;
+  INSERT INTO t2 VALUES('one two three four five');
+  INSERT INTO t2 VALUES('two three four five one');
+  INSERT INTO t2 VALUES('three four five one two');
+  INSERT INTO t2 VALUES('four five one two three');
+  INSERT INTO t2 VALUES('five one two three four');
+}
+
+do_execsql_test 2.2 {
+  SELECT snippet(t2, '[', ']') FROM t2 WHERE t2 MATCH 'one OR (four AND six)'
+} {
+  {[one] two three [four] five}
+  {two three [four] five [one]}
+  {three [four] five [one] two}
+  {[four] five [one] two three}
+  {five [one] two three [four]}
+}
+
+do_execsql_test 2.3 {
+  SELECT snippet(t2, '[', ']') FROM t2 
+  WHERE t2 MATCH 'one OR (four AND six)' 
+  ORDER BY docid DESC
+} {
+  {five [one] two three [four]}
+  {[four] five [one] two three}
+  {three [four] five [one] two}
+  {two three [four] five [one]}
+  {[one] two three [four] five}
+}
+
+do_execsql_test 2.4 {
+  INSERT INTO t2 VALUES('six');
+}
+
+do_execsql_test 2.5 {
+  SELECT snippet(t2, '[', ']') FROM t2 WHERE t2 MATCH 'one OR (four AND six)'
+} {
+  {[one] two three [four] five}
+  {two three [four] five [one]}
+  {three [four] five [one] two}
+  {[four] five [one] two three}
+  {five [one] two three [four]}
+}
+
+do_execsql_test 2.6 {
+  SELECT snippet(t2, '[', ']') FROM t2 
+  WHERE t2 MATCH 'one OR (four AND six)' 
+  ORDER BY docid DESC
+} {
+  {five [one] two three [four]}
+  {[four] five [one] two three}
+  {three [four] five [one] two}
+  {two three [four] five [one]}
+  {[one] two three [four] five}
+}
+
+#-------------------------------------------------------------------------
+do_execsql_test 3 {
+  CREATE VIRTUAL TABLE t3 USING fts4;
+  INSERT INTO t3 VALUES('[one two three]');
+}
+do_execsql_test 3.1 {
+  SELECT snippet(t3) FROM t3 WHERE t3 MATCH 'one';
+} {{[<b>one</b> two three]}}
+do_execsql_test 3.2 {
+  SELECT snippet(t3) FROM t3 WHERE t3 MATCH 'two';
+} {{[one <b>two</b> three]}}
+do_execsql_test 3.3 {
+  SELECT snippet(t3) FROM t3 WHERE t3 MATCH 'three';
+} {{[one two <b>three</b>]}}
+do_execsql_test 3.4 {
+  SELECT snippet(t3) FROM t3 WHERE t3 MATCH 'one OR two OR three';
+} {{[<b>one</b> <b>two</b> <b>three</b>]}}
+
+#-------------------------------------------------------------------------
+# Request a snippet 0 tokens in size. This is always an empty string.
+do_execsql_test 4.1 {
+  CREATE VIRTUAL TABLE t4 USING fts4;
+  INSERT INTO t4 VALUES('a b c d');
+  SELECT snippet(t4, '[', ']', '...', 0, 0) FROM t4 WHERE t4 MATCH 'b';
+} {{}}
+
+do_test 4.2 {
+  set x35 [string trim [string repeat "x " 35]]
+  execsql "INSERT INTO t4 VALUES('$x35 E $x35 F $x35 G $x35');"
+  llength [db one {
+    SELECT snippet(t4, '', '', '', 0, 64) FROM t4 WHERE t4 MATCH 'E'
+  }]
+} {64}
+
+do_test 4.3 {
+  llength [db one {
+    SELECT snippet(t4, '', '', '', 0, 150) FROM t4 WHERE t4 MATCH 'E'
+  }]
+} {64}
+
+
+#-------------------------------------------------------------------------
+# Request a snippet from a query with more than 64 phrases.
+#
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE t5 USING fts3(x);
+  INSERT INTO t5 VALUES('a1 a2 a3');
+  INSERT INTO t5 VALUES('a4 a5 a6');
+  INSERT INTO t5 VALUES('a70 a71 a72');
+}
+
+do_execsql_test 5.1 {
+  SELECT snippet(t5, '[', ']') FROM t5 WHERE t5 MATCH 
+  'a1 OR a2 OR a3 OR a4 OR a5 OR a6 OR a7 OR a8 OR a9 OR a10 OR ' ||
+  'a11 OR a12 OR a13 OR a14 OR a15 OR a16 OR a17 OR a18 OR a19 OR a10 OR ' ||
+  'a21 OR a22 OR a23 OR a24 OR a25 OR a26 OR a27 OR a28 OR a29 OR a20 OR ' ||
+  'a31 OR a32 OR a33 OR a34 OR a35 OR a36 OR a37 OR a38 OR a39 OR a30 OR ' ||
+  'a41 OR a42 OR a43 OR a44 OR a45 OR a46 OR a47 OR a48 OR a49 OR a40 OR ' ||
+  'a51 OR a52 OR a53 OR a54 OR a55 OR a56 OR a57 OR a58 OR a59 OR a50 OR ' ||
+  'a61 OR a62 OR a63 OR a64 OR a65 OR a66 OR a67 OR a68 OR a69 OR a60 OR ' ||
+  'a71 OR a72 OR a73 OR a74 OR a75 OR a76 OR a77 OR a78 OR a79 OR a70'
+} {
+  {[a1] [a2] [a3]}
+  {[a4] [a5] [a6]}
+  {[a70] [a71] [a72]}
+}
+
+set sqlite_fts3_enable_parentheses 0
+finish_test

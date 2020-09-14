@@ -1,0 +1,82 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. More specifically, it
+# contains tests to ensure that it is an error to attempt to update
+# a wal mode database via RBU.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbuA
+
+set db_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+}
+set rbu_sql {
+  CREATE TABLE data_t1(a, b, c, rbu_control);
+  INSERT INTO data_t1 VALUES(1, 2, 3, 0);
+  INSERT INTO data_t1 VALUES(4, 5, 6, 0);
+  INSERT INTO data_t1 VALUES(7, 8, 9, 0);
+}
+
+do_test 1.0 {
+  db close
+  forcedelete test.db rbu.db
+
+  sqlite3 db test.db
+  db eval $db_sql
+  db eval { PRAGMA journal_mode = wal }
+  db close
+
+  sqlite3 db rbu.db
+  db eval $rbu_sql
+  db close
+
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_ERROR}
+do_test 1.1 {
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - cannot update wal mode database}}
+
+do_test 2.0 {
+  forcedelete test.db rbu.db
+
+  sqlite3 db test.db
+  db eval $db_sql
+  db close
+
+  sqlite3 db rbu.db
+  db eval $rbu_sql
+  db close
+
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+  rbu close
+} {SQLITE_OK}
+
+do_test 2.1 {
+  sqlite3 db test.db
+  db eval {PRAGMA journal_mode = wal}
+  db close
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_ERROR}
+
+do_test 2.2 {
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - cannot update wal mode database}}
+
+
+finish_test

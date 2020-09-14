@@ -1,0 +1,557 @@
+# 2015 Apr 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file focus on testing the fts5vocab module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5vocab
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+proc null_list_entries {iFirst nInterval L} {
+  for {set i $iFirst} {$i < [llength $L]} {incr i $nInterval} {
+    lset L $i {}
+  }
+  return $L
+}
+
+proc star_from_row {L} {
+  if {[detail_is_full]==0} {
+    set L [null_list_entries 2 3 $L]
+  }
+  return $L
+}
+
+proc star_from_col {L} {
+  if {[detail_is_col]} {
+    set L [null_list_entries 3 4 $L]
+  }
+  if {[detail_is_none]} {
+    set L [null_list_entries 1 4 $L]
+    set L [null_list_entries 3 4 $L]
+  }
+  return $L
+}
+
+proc row_to_col {L} {
+  if {[detail_is_none]==0} { error "this is for detail=none mode" }
+  set ret [list]
+  foreach {a b c} $L {
+    lappend ret $a {} $b {}
+  }
+  set ret
+}
+
+if 1 {
+
+do_execsql_test 1.1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(one, prefix=1, detail=%DETAIL%);
+  CREATE VIRTUAL TABLE v1 USING fts5vocab(t1, 'row');
+  PRAGMA table_info = v1;
+} {
+  0 term {} 0 {} 0
+  1 doc {} 0 {} 0
+  2 cnt {} 0 {} 0
+}
+
+do_execsql_test 1.1.2 {
+  CREATE VIRTUAL TABLE v2 USING fts5vocab(t1, 'col');
+  PRAGMA table_info = v2;
+} {
+  0 term {} 0 {} 0
+  1 col {} 0 {} 0
+  2 doc {} 0 {} 0
+  3 cnt {} 0 {} 0
+}
+
+do_execsql_test 1.2.1 { SELECT * FROM v1 } {}
+do_execsql_test 1.2.2 { SELECT * FROM v2 } {}
+
+do_execsql_test 1.3 {
+  INSERT INTO t1 VALUES('x y z');
+  INSERT INTO t1 VALUES('x x x');
+}
+
+do_execsql_test 1.4.1 {
+  SELECT * FROM v1;
+} [star_from_row {x 2 4  y 1 1  z 1 1}]
+
+do_execsql_test 1.4.2 {
+  SELECT * FROM v2;
+} [star_from_col {x one 2 4  y one 1 1  z one 1 1}]
+
+do_execsql_test 1.5.1 {
+  BEGIN;
+    INSERT INTO t1 VALUES('a b c');
+    SELECT * FROM v1 WHERE term<'d';
+} [star_from_row {a 1 1   b 1 1   c 1 1}]
+
+do_execsql_test 1.5.2 {
+    SELECT * FROM v2 WHERE term<'d';
+  COMMIT;
+} [star_from_col {a one 1 1  b one 1 1  c one 1 1}]
+
+do_execsql_test 1.6 {
+  DELETE FROM t1 WHERE one = 'a b c';
+  SELECT * FROM v1;
+} [star_from_row {x 2 4  y 1 1  z 1 1}]
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(a, b, detail=%DETAIL%);
+  INSERT INTO tt VALUES('d g b f d f', 'f c e c d a');
+  INSERT INTO tt VALUES('f a e a a b', 'e d c f d d');
+  INSERT INTO tt VALUES('b c a a a b', 'f f c c b c');
+  INSERT INTO tt VALUES('f d c a c e', 'd g d e g d');
+  INSERT INTO tt VALUES('g d e f a g x', 'f f d a a b');
+  INSERT INTO tt VALUES('g c f b c g', 'a g f d c b');
+  INSERT INTO tt VALUES('c e c f g b', 'f e d b g a');
+  INSERT INTO tt VALUES('g d e f d e', 'a c d b a g');
+  INSERT INTO tt VALUES('e f a c c b', 'b f e a f d y');
+  INSERT INTO tt VALUES('c c a a c f', 'd g a e b g');
+}
+
+set res_row [star_from_row {
+  a 10 20   b 9 14   c 9 20   d 9 19   
+  e 8 13   f 10 20   g 7 14   x 1 1   
+  y 1 1
+}]
+set res_col [star_from_col {
+  a a 6 11    a b 7 9
+  b a 6 7     b b 7 7 
+  c a 6 12    c b 5 8 
+  d a 4 6     d b 9 13 
+  e a 6 7     e b 6 6 
+  f a 9 10    f b 7 10 
+  g a 5 7     g b 5 7
+  x a 1 1     y b 1 1
+}]
+if {[detail_is_none]} {
+  set res_col [row_to_col $res_row]
+}
+
+foreach {tn tbl resname} {
+  1 "fts5vocab(tt, 'col')" res_col
+  2 "fts5vocab(tt, 'row')" res_row
+  3 "fts5vocab(tt, \"row\")" res_row
+  4 "fts5vocab(tt, [row])" res_row
+  5 "fts5vocab(tt, `row`)" res_row
+
+  6 "fts5vocab('tt', 'row')" res_row
+  7 "fts5vocab(\"tt\", \"row\")" res_row
+  8 "fts5vocab([tt], [row])" res_row
+  9 "fts5vocab(`tt`, `row`)" res_row
+} {
+  do_execsql_test 2.$tn "
+    DROP TABLE IF EXISTS tv;
+    CREATE VIRTUAL TABLE tv USING $tbl;
+    SELECT * FROM tv;
+  " [set $resname]
+}
+
+#-------------------------------------------------------------------------
+# Test errors in the CREATE VIRTUAL TABLE statement.
+#
+foreach {tn sql} {
+  1 { CREATE VIRTUAL TABLE aa USING fts5vocab() }
+  2 { CREATE VIRTUAL TABLE aa USING fts5vocab(x) }
+  3 { CREATE VIRTUAL TABLE aa USING fts5vocab(x,y,z) }
+  4 { CREATE VIRTUAL TABLE temp.aa USING fts5vocab(x,y,z,y) }
+} {
+  do_catchsql_test 3.$tn $sql {1 {wrong number of vtable arguments}}
+}
+
+do_catchsql_test 4.0 {
+  CREATE VIRTUAL TABLE cc USING fts5vocab(tbl, unknown);
+} {1 {fts5vocab: unknown table type: 'unknown'}}
+
+do_catchsql_test 4.1 {
+  ATTACH 'test.db' AS aux;
+  CREATE VIRTUAL TABLE aux.cc USING fts5vocab(main, tbl, row);
+} {1 {wrong number of vtable arguments}}
+
+#-------------------------------------------------------------------------
+# Test fts5vocab tables created in the temp schema. 
+#
+reset_db
+forcedelete test.db2
+do_execsql_test 5.0 {
+  ATTACH 'test.db2' AS aux;
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+  CREATE VIRTUAL TABLE temp.t1 USING fts5(x, detail=%DETAIL%);
+  CREATE VIRTUAL TABLE aux.t1 USING fts5(x, detail=%DETAIL%);
+
+  INSERT INTO main.t1 VALUES('a b c');
+  INSERT INTO main.t1 VALUES('d e f');
+  INSERT INTO main.t1 VALUES('a e c');
+
+  INSERT INTO temp.t1 VALUES('1 2 3');
+  INSERT INTO temp.t1 VALUES('4 5 6');
+  INSERT INTO temp.t1 VALUES('1 5 3');
+
+  INSERT INTO aux.t1 VALUES('x y z');
+  INSERT INTO aux.t1 VALUES('m n o');
+  INSERT INTO aux.t1 VALUES('x n z');
+}
+
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE temp.vm  USING fts5vocab(main, t1, row);
+  CREATE VIRTUAL TABLE temp.vt1 USING fts5vocab(t1, row);
+  CREATE VIRTUAL TABLE temp.vt2 USING fts5vocab(temp, t1, row);
+  CREATE VIRTUAL TABLE temp.va  USING fts5vocab(aux, t1, row);
+}
+
+do_execsql_test 5.2 { SELECT * FROM vm } [star_from_row {
+  a 2 2 b 1 1 c 2 2 d 1 1 e 2 2 f 1 1
+}]
+do_execsql_test 5.3 { SELECT * FROM vt1 } [star_from_row {
+  1 2 2 2 1 1 3 2 2 4 1 1 5 2 2 6 1 1
+}]
+do_execsql_test 5.4 { SELECT * FROM vt2 } [star_from_row {
+  1 2 2 2 1 1 3 2 2 4 1 1 5 2 2 6 1 1
+}]
+do_execsql_test 5.5 { SELECT * FROM va } [star_from_row {
+  m 1 1 n 2 2 o 1 1 x 2 2 y 1 1 z 2 2
+}]
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 6.0 {
+  CREATE TABLE iii(iii);
+  CREATE TABLE jjj(x);
+}
+
+do_catchsql_test 6.1 {
+  CREATE VIRTUAL TABLE vocab1 USING fts5vocab(iii, row);
+  SELECT * FROM vocab1;
+} {1 {no such fts5 table: main.iii}}
+
+do_catchsql_test 6.2 {
+  CREATE VIRTUAL TABLE vocab2 USING fts5vocab(jjj, row);
+  SELECT * FROM vocab2;
+} {1 {no such fts5 table: main.jjj}}
+
+do_catchsql_test 6.2 {
+  CREATE VIRTUAL TABLE vocab3 USING fts5vocab(lll, row);
+  SELECT * FROM vocab3;
+} {1 {no such fts5 table: main.lll}}
+
+#-------------------------------------------------------------------------
+# Test single term queries on fts5vocab tables (i.e. those with term=?
+# constraints in the WHERE clause).
+#
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE tx USING fts5(one, two, detail=%DETAIL%);
+  INSERT INTO tx VALUES('g a ggg g a b eee',      'cc d aa ff g ee');
+  INSERT INTO tx VALUES('dd fff i a i jjj',       'f fff hh jj e f');
+  INSERT INTO tx VALUES('ggg a f f fff dd aa',    'd ggg f f j gg ddd');
+  INSERT INTO tx VALUES('e bb h jjj ii gg',       'e aa e f c fff');
+  INSERT INTO tx VALUES('j ff aa a h',            'h a j bbb bb');
+  INSERT INTO tx VALUES('cc i ff c d f',          'dd ii fff f c cc d');
+  INSERT INTO tx VALUES('jjj g i bb cc eee',      'hhh iii aaa b bbb aaa');
+  INSERT INTO tx VALUES('hhh hhh hhh bb fff f',   'fff gg aa ii h a');
+  INSERT INTO tx VALUES('b c cc aaa iii ggg f',   'iii ff ee a ff c cc');
+  INSERT INTO tx VALUES('hhh b hhh aaa j i i',    'dd ee ee aa bbb iii');
+  INSERT INTO tx VALUES('hh dd h b g ff i',       'ccc bb cc ccc f a d');
+  INSERT INTO tx VALUES('g d b ggg jj',           'fff jj ff jj g gg ee');
+  INSERT INTO tx VALUES('g ee ggg ggg cc bb eee', 'aa j jjj bbb dd eee ff');
+  INSERT INTO tx VALUES('c jjj hh ddd dd h',      'e aaa h jjj gg');
+
+  CREATE VIRTUAL TABLE txr USING fts5vocab(tx, row);
+  CREATE VIRTUAL TABLE txc USING fts5vocab(tx, col);
+}
+
+proc cont {L elem} {
+  set n 0
+  foreach e $L { if {$elem==$e} {incr n} }
+  set n
+}
+db func cont cont
+
+foreach {term} {
+  a aa aaa
+  b bb bbb
+  c cc ccc
+  d dd ddd
+  e ee eee
+  f ff fff
+  g gg ggg
+  h hh hhh
+  i ii iii
+  j jj jjj
+} {
+  set resr [db eval {
+    SELECT $term, 
+      sum(cont(one || ' ' || two, $term) > 0),
+      sum(cont(one || ' ' || two, $term))
+    FROM tx
+  }]
+  if {[lindex $resr 1]==0} {set resr [list]}
+
+  set r1 [db eval {
+    SELECT $term, 'one', sum(cont(one, $term)>0), sum(cont(one, $term)) FROM tx
+  }]
+  if {[lindex $r1 2]==0} {set r1 [list]}
+
+  set r2 [db eval {
+    SELECT $term, 'two', sum(cont(two, $term)>0), sum(cont(two, $term)) FROM tx
+  }]
+  if {[lindex $r2 2]==0} {set r2 [list]}
+
+  set resc [concat $r1 $r2]
+
+  set resc [star_from_col $resc]
+  set resr [star_from_row $resr]
+  if {[detail_is_none]} { set resc [row_to_col $resr] }
+  do_execsql_test 7.$term.1 {SELECT * FROM txc WHERE term=$term} $resc
+  do_execsql_test 7.$term.2 {SELECT * FROM txr WHERE term=$term} $resr
+}
+
+do_execsql_test 7.1 {
+  CREATE TABLE txr_c AS SELECT * FROM txr;
+  CREATE TABLE txc_c AS SELECT * FROM txc;
+}
+
+# Test range queries on the fts5vocab tables created above.
+#
+foreach {tn a b} {
+  1   a   jjj
+  2   bb  j
+  3   ccc ddd
+  4   dd  xyz
+  5   xzy dd
+  6   h   hh
+} {
+  do_execsql_test 7.2.$tn.1 {
+    SELECT * FROM txr WHERE term>=$a
+  } [db eval {SELECT * FROM txr_c WHERE term>=$a}]
+  do_execsql_test 7.2.$tn.2 {
+    SELECT * FROM txr WHERE term<=$b
+  } [db eval {SELECT * FROM txr_c WHERE term <=$b}]
+  do_execsql_test 7.2.$tn.3 {
+    SELECT * FROM txr WHERE term>=$a AND term<=$b
+  } [db eval {SELECT * FROM txr_c WHERE term>=$a AND term <=$b}]
+
+  do_execsql_test 7.2.$tn.4 {
+    SELECT * FROM txc WHERE term>=$a
+  } [db eval {SELECT * FROM txc_c WHERE term>=$a}]
+  do_execsql_test 7.2.$tn.5 {
+    SELECT * FROM txc WHERE term<=$b
+  } [db eval {SELECT * FROM txc_c WHERE term <=$b}]
+  do_execsql_test 7.2.$tn.6 {
+    SELECT * FROM txc WHERE term>=$a AND term<=$b
+  } [db eval {SELECT * FROM txc_c WHERE term>=$a AND term <=$b}]
+
+  do_execsql_test 7.2.$tn.7 {
+    SELECT * FROM txr WHERE term>$a
+  } [db eval {SELECT * FROM txr_c WHERE term>$a}]
+  do_execsql_test 7.2.$tn.8 {
+    SELECT * FROM txr WHERE term<$b
+  } [db eval {SELECT * FROM txr_c WHERE term<$b}]
+  do_execsql_test 7.2.$tn.9 {
+    SELECT * FROM txr WHERE term>$a AND term<$b
+  } [db eval {SELECT * FROM txr_c WHERE term>$a AND term <$b}]
+
+  do_execsql_test 7.2.$tn.10 {
+    SELECT * FROM txc WHERE term>$a
+  } [db eval {SELECT * FROM txc_c WHERE term>$a}]
+  do_execsql_test 7.2.$tn.11 {
+    SELECT * FROM txc WHERE term<$b
+  } [db eval {SELECT * FROM txc_c WHERE term<$b}]
+  do_execsql_test 7.2.$tn.12 {
+    SELECT * FROM txc WHERE term>$a AND term<$b
+  } [db eval {SELECT * FROM txc_c WHERE term>$a AND term <$b}]
+}
+
+do_execsql_test 7.3.1 {
+  SELECT count(*) FROM txr, txr_c WHERE txr.term = txr_c.term;
+} {30}
+
+if {![detail_is_none]} {
+  do_execsql_test 7.3.2 {
+    SELECT count(*) FROM txc, txc_c
+      WHERE txc.term = txc_c.term AND txc.col=txc_c.col;
+  } {57}
+}
+
+}
+
+#-------------------------------------------------------------------------
+# Test the fts5vocab tables response to a specific types of corruption:
+# where the fts5 index contains hits for columns that do not exist.
+#
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a, b, c, detail=%DETAIL%);
+  INSERT INTO x1 VALUES('a b c', 'd e f', 'g h i');
+  INSERT INTO x1 VALUES('g h i', 'a b c', 'd e f');
+  INSERT INTO x1 VALUES('d e f', 'g h i', 'a b c');
+  CREATE VIRTUAL TABLE x1_r USING fts5vocab(x1, row);
+  CREATE VIRTUAL TABLE x1_c USING fts5vocab(x1, col);
+}
+
+set resr [star_from_row {a 3 3 b 3 3 c 3 3 d 3 3 e 3 3 f 3 3 g 3 3 h 3 3 i 3 3}]
+set resc [star_from_col {
+  a a 1 1 a b 1 1 a c 1 1 b a 1 1 
+  b b 1 1 b c 1 1 c a 1 1 c b 1 1 
+  c c 1 1 d a 1 1 d b 1 1 d c 1 1
+  e a 1 1 e b 1 1 e c 1 1 f a 1 1 
+  f b 1 1 f c 1 1 g a 1 1 g b 1 1 
+  g c 1 1 h a 1 1 h b 1 1 h c 1 1 
+  i a 1 1 i b 1 1 i c 1 1
+}]
+if {[detail_is_none]} { set resc [row_to_col $resr] }
+
+do_execsql_test 8.1.1 { SELECT * FROM x1_r; } $resr
+do_execsql_test 8.1.2 { SELECT * FROM x1_c } $resc
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 8.2 {
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_master 
+  SET sql = 'CREATE VIRTUAL TABLE x1 USING fts5(a, detail=%DETAIL%)'
+  WHERE name = 'x1';
+}
+db close
+sqlite3 db test.db
+sqlite3_fts5_may_be_corrupt 1
+
+do_execsql_test 8.2.1 { SELECT * FROM x1_r } $resr
+
+if {[detail_is_none]} {
+  do_execsql_test 8.2.2 { SELECT * FROM x1_c } $resc
+} else {
+  do_catchsql_test 8.2.2 { 
+    SELECT * FROM x1_c 
+  } {1 {database disk image is malformed}}
+}
+
+sqlite3_fts5_may_be_corrupt 0
+}
+
+#-------------------------------------------------------------------------
+# Test that both "ORDER BY term" and "ORDER BY term DESC" work.
+#
+reset_db
+do_execsql_test 9.1 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1 VALUES('def ABC ghi');
+  INSERT INTO x1 VALUES('DEF abc GHI');
+}
+
+do_execsql_test 9.2 {
+  CREATE VIRTUAL TABLE rrr USING fts5vocab(x1, row);
+  SELECT * FROM rrr
+} {
+  abc 2 2 def 2 2 ghi 2 2
+}
+do_execsql_test 9.3 {
+  SELECT * FROM rrr ORDER BY term ASC
+} {
+  abc 2 2 def 2 2 ghi 2 2
+}
+do_execsql_test 9.4 {
+  SELECT * FROM rrr ORDER BY term DESC
+} {
+  ghi 2 2 def 2 2 abc 2 2 
+}
+do_test 9.5 {
+  set e2 [db eval { EXPLAIN SELECT * FROM rrr ORDER BY term ASC }]
+  expr [lsearch $e2 SorterSort]<0
+} 1
+do_test 9.6 {
+  set e2 [db eval { EXPLAIN SELECT * FROM rrr ORDER BY term DESC }]
+  expr [lsearch $e2 SorterSort]<0
+} 0
+
+#-------------------------------------------------------------------------
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(a, b, c);
+  CREATE VIRTUAL TABLE t2 USING fts5vocab('ft','row');
+  CREATE VIRTUAL TABLE t3 USING fts5vocab('ft','row');
+}
+
+do_execsql_test 10.1 {
+  BEGIN;
+    INSERT INTO ft(b) VALUES('x y');
+}
+
+do_execsql_test 10.2 {
+  SELECT t2.term FROM t2;
+} {x y}
+
+do_execsql_test 10.3 {
+  SELECT t2.term, t3.term FROM t2, t3;
+} {x x x y y x y y}
+
+do_execsql_test 10.4 {
+  COMMIT;
+}
+
+do_execsql_test 10.5 {
+  BEGIN;
+    INSERT INTO ft(a) VALUES('1 2 3');
+    INSERT INTO ft(a) VALUES('4 5 6');
+    INSERT INTO ft(a) VALUES('1 2 3');
+    INSERT INTO ft(a) VALUES('4 5 6');
+    INSERT INTO ft(a) VALUES('1 2 3');
+    INSERT INTO ft(a) VALUES('4 5 6');
+}
+
+do_test 10.6 {
+  set res [list]
+  db eval { SELECT rowid FROM ft('4') } x {
+    db eval { SELECT * FROM t2 }
+    lappend res $x(rowid)
+  }
+  db eval COMMIT
+  set res
+} {3 5 7}
+
+do_execsql_test 10.6.1 {
+  SELECT * FROM t2 WHERE term<NULL;
+}
+do_execsql_test 10.6.2 {
+  SELECT * FROM t2 WHERE term>NULL;
+}
+do_execsql_test 10.6.3 {
+  SELECT * FROM t2 WHERE term=NULL;
+}
+do_execsql_test 10.7.1 {
+  SELECT * FROM t2 WHERE term<?;
+}
+do_execsql_test 10.7.2 {
+  SELECT * FROM t2 WHERE term>?;
+}
+do_execsql_test 10.7.3 {
+  SELECT * FROM t2 WHERE term=?;
+}
+
+# 2020-02-16  Detect recursively define fts5vocab() tables.
+# Error found by dbsqlfuzz.
+#
+reset_db
+do_execsql_test 11.100 {
+  CREATE VIRTUAL TABLE t3 USING fts5vocab(rowid , 'col');
+  CREATE VIRTUAL TABLE rowid USING fts5vocab(rowid , 'instance');
+} {}
+do_catchsql_test 11.110 {
+  SELECT rowid+1,rowid, * FROM t3 WHERE null>rowid ;
+} {1 {SQL logic error}}
+
+finish_test

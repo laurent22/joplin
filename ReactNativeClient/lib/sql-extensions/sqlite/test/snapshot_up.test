@@ -1,0 +1,183 @@
+# 2018 August 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests for calling sqlite3_snapshot_open() when there is already
+# a read transaction open on the database.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !snapshot {finish_test; return}
+set testprefix snapshot_up
+
+# This test does not work with the inmemory_journal permutation. The reason
+# is that each connection opened as part of this permutation executes
+# "PRAGMA journal_mode=memory", which fails if the database is in wal mode
+# and there are one or more existing connections.
+if {[permutation]=="inmemory_journal"} {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c);
+  PRAGMA journal_mode = wal;
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+} {wal}
+
+do_test 1.1 {
+  execsql BEGIN
+  set ::snap1 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+  execsql { INSERT INTO t1 VALUES(10, 11, 12); }
+  execsql BEGIN
+  set ::snap2 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+  execsql { INSERT INTO t1 VALUES(13, 14, 15); }
+  execsql BEGIN
+  set ::snap3 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+} {}
+
+do_execsql_test 1.2 {
+  BEGIN;
+    SELECT * FROM t1
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+
+do_test 1.3 {
+  sqlite3_snapshot_open db main $::snap1
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4 5 6 7 8 9}
+
+do_test 1.4 {
+  sqlite3_snapshot_open db main $::snap2
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+
+do_test 1.5 {
+  sqlite3 db2 test.db
+  execsql { PRAGMA wal_checkpoint } db2
+} {0 5 4}
+
+do_execsql_test 1.6 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+
+do_test 1.7 {
+  list [catch { sqlite3_snapshot_open db main $::snap1 } msg] $msg
+} {1 SQLITE_ERROR_SNAPSHOT}
+
+do_execsql_test 1.8 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+
+do_test 1.9 {
+  execsql { COMMIT ; BEGIN }
+  list [catch { sqlite3_snapshot_open db main $::snap1 } msg] $msg
+} {1 SQLITE_ERROR_SNAPSHOT}
+
+do_test 1.10 {
+  execsql { COMMIT }
+  execsql {
+    PRAGMA wal_checkpoint;
+    DELETE FROM t1 WHERE a = 1;
+  } db2
+  execsql BEGIN
+  set ::snap4 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+  execsql {
+    DELETE FROM t1 WHERE a = 4;
+  } db2
+} {}
+
+do_test 1.11 {
+  execsql { 
+    BEGIN;
+      SELECT * FROM t1
+  }
+} {7 8 9 10 11 12 13 14 15}
+do_test 1.12 {
+  sqlite3_snapshot_open db main $::snap4
+  execsql { SELECT * FROM t1 }
+} {4 5 6 7 8 9 10 11 12 13 14 15}
+
+do_test 1.13 {
+  list [catch { sqlite3_snapshot_open db main $::snap3 } msg] $msg
+} {1 SQLITE_ERROR_SNAPSHOT}
+do_test 1.14 {
+  execsql { SELECT * FROM t1 }
+} {4 5 6 7 8 9 10 11 12 13 14 15}
+
+db close
+db2 close
+sqlite3 db test.db
+do_execsql_test 1.15 {
+  BEGIN;
+    SELECT * FROM t1
+} {7 8 9 10 11 12 13 14 15}
+do_test 1.16 {
+  list [catch { sqlite3_snapshot_open db main $::snap4 } msg] $msg
+} {1 SQLITE_ERROR_SNAPSHOT}
+do_execsql_test 1.17 { COMMIT }
+
+sqlite3_snapshot_free $::snap1
+sqlite3_snapshot_free $::snap2
+sqlite3_snapshot_free $::snap3
+sqlite3_snapshot_free $::snap4
+
+#-------------------------------------------------------------------------
+catch { db close }
+sqlite3 db test.db
+sqlite3 db2 test.db
+sqlite3 db3 test.db
+
+proc xBusy {args} { return 1 }
+db3 busy xBusy
+
+do_test 2.1 {
+  execsql { INSERT INTO t1 VALUES(16, 17, 18) } db2
+  execsql BEGIN
+  set ::snap1 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+  execsql { INSERT INTO t1 VALUES(19, 20, 21) } db2
+  execsql BEGIN
+  set ::snap2 [sqlite3_snapshot_get db main]
+  execsql COMMIT
+  set {} {}
+} {}
+
+do_execsql_test -db db2 2.2 {
+  BEGIN;
+    INSERT INTO t1 VALUES(19, 20, 21);
+}
+
+do_test 2.3 {
+  execsql BEGIN
+  sqlite3_snapshot_open db main $::snap1
+  execsql { SELECT * FROM t1 }
+} {7 8 9 10 11 12 13 14 15 16 17 18}
+
+proc xBusy {args} { 
+  set ::res [list [catch { sqlite3_snapshot_open db main $::snap2 } msg] $msg]
+  return 1
+}
+db3 busy xBusy
+do_test 2.4 {
+  execsql {PRAGMA wal_checkpoint = restart} db3
+  set ::res
+} {1 SQLITE_BUSY}
+
+sqlite3_snapshot_free $::snap1
+sqlite3_snapshot_free $::snap2
+
+finish_test

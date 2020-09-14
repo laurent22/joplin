@@ -1,0 +1,240 @@
+# 2016-06-02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# Test cases for CSV virtual table.
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix csv01
+
+ifcapable !vtab||!cte { finish_test ; return }
+
+load_static_extension db csv
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE temp.t1 USING csv(
+    data=
+'1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    columns=4
+  );
+  SELECT * FROM t1 WHERE c1=10;
+} {9 10 11 12}
+do_execsql_test 1.1 {
+  SELECT * FROM t1 WHERE c1='10';
+} {9 10 11 12}
+do_execsql_test 1.2 {
+  SELECT rowid FROM t1;
+} {1 2 3 4}
+
+do_execsql_test 1.3 {
+  DROP TABLE temp.t1;
+  CREATE VIRTUAL TABLE temp.t1 USING csv(
+    data=
+'a,b,"mix-bloom-eel","soft opinion"
+1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    header=1
+  );
+  SELECT * FROM t1 WHERE "soft opinion"=12;
+} {9 10 11 12}
+do_execsql_test 1.4 {
+  SELECT name FROM pragma_table_xinfo('t1');
+} {a b mix-bloom-eel {soft opinion}}
+
+do_execsql_test 1.5 {
+  DROP TABLE temp.t1;
+  CREATE VIRTUAL TABLE temp.t1 USING csv(
+    data=
+'a,b,"mix-bloom-eel","soft opinion"
+1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    header=false
+  );
+  SELECT * FROM t1 WHERE c1='b';
+} {a b mix-bloom-eel {soft opinion}}
+do_execsql_test 1.6 {
+  SELECT name FROM pragma_table_xinfo('t1');
+} {c0 c1 c2 c3}
+
+do_execsql_test 1.7 {
+  DROP TABLE temp.t1;
+  CREATE VIRTUAL TABLE temp.t1 USING csv(
+    data=
+'a,b,"mix-bloom-eel","soft opinion"
+1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    header,
+    schema='CREATE TABLE x(x0,x1,x2,x3,x4)',
+    columns=5
+  );
+  SELECT * FROM t1 WHERE x1='6';
+} {5 6 7 8 {}}
+do_execsql_test 1.8 {
+  SELECT name FROM pragma_table_xinfo('t1');
+} {x0 x1 x2 x3 x4}
+
+
+do_execsql_test 2.0 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE temp.t2 USING csv(
+    data=
+'1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    columns=4,
+    schema='CREATE TABLE t2(a INT, b TEXT, c REAL, d BLOB)'
+  );
+  SELECT * FROM t2 WHERE a=9;
+} {9 10 11 12}
+do_execsql_test 2.1 {
+  SELECT * FROM t2 WHERE b=10;
+} {9 10 11 12}
+do_execsql_test 2.2 {
+  SELECT * FROM t2 WHERE c=11;
+} {9 10 11 12}
+do_execsql_test 2.3 {
+  SELECT * FROM t2 WHERE d=12;
+} {}
+do_execsql_test 2.4 {
+  SELECT * FROM t2 WHERE d='12';
+} {9 10 11 12}
+do_execsql_test 2.5 {
+  SELECT * FROM t2 WHERE a='9';
+} {9 10 11 12}
+
+do_execsql_test 3.0 {
+  DROP TABLE t2;
+  CREATE VIRTUAL TABLE temp.t3 USING csv(
+    data=
+'1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16
+',
+    columns=4,
+    schema=
+      'CREATE TABLE t3(a PRIMARY KEY,b TEXT,c TEXT,d TEXT) WITHOUT ROWID',
+    testflags=1
+  );
+  SELECT a FROM t3 WHERE b=6 OR c=7 OR d=12 ORDER BY +a;
+} {5 9}
+do_execsql_test 3.1 {
+  SELECT a FROM t3 WHERE +b=6 OR c=7 OR d=12 ORDER BY +a;
+} {5 9}
+
+# The rowid column is not visible on a WITHOUT ROWID virtual table
+do_catchsql_test 3.2 {
+  SELECT rowid, a FROM t3;
+} {1 {no such column: rowid}}
+
+# Multi-column WITHOUT ROWID virtual tables may not be writable.
+do_catchsql_test 4.0 {
+  DROP TABLE t3;
+  CREATE VIRTUAL TABLE temp.t4 USING csv_wr(
+    data=
+'1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16',
+    columns=4,
+    schema=
+      'CREATE TABLE t3(a,b,c,d,PRIMARY KEY(a,b)) WITHOUT ROWID',
+    testflags=1
+  );
+} {1 {bad schema: 'CREATE TABLE t3(a,b,c,d,PRIMARY KEY(a,b)) WITHOUT ROWID' - not an error}}
+
+# WITHOUT ROWID tables with a single-column PRIMARY KEY may be writable.
+do_catchsql_test 4.1 {
+  DROP TABLE IF EXISTS t4;
+  CREATE VIRTUAL TABLE temp.t4 USING csv_wr(
+    data=
+'1,2,3,4
+5,6,7,8
+9,10,11,12
+13,14,15,16',
+    columns=4,
+    schema=
+      'CREATE TABLE t3(a,b,c,d,PRIMARY KEY(b)) WITHOUT ROWID',
+    testflags=1
+  );
+} {0 {}}
+
+do_catchsql_test 4.2 {
+  DROP TABLE IF EXISTS t5;
+  CREATE VIRTUAL TABLE temp.t5 USING csv_wr(
+      data=
+      '1,2,3,4
+      5,6,7,8
+      9,10,11,12
+      13,14,15,16',
+      columns=4,
+      schema=
+      'CREATE TABLE t3(a,b,c,d) WITHOUT ROWID',
+      testflags=1
+      );
+} {1 {bad schema: 'CREATE TABLE t3(a,b,c,d) WITHOUT ROWID' - PRIMARY KEY missing on table t3}}
+
+# 2018-04-24
+# Memory leak reported on the sqlite-users mailing list by Ralf Junker.
+#
+do_catchsql_test 4.3 {
+  CREATE VIRTUAL TABLE IF NOT EXISTS temp.t1
+  USING csv(filename='FileDoesNotExist.csv');
+} {1 {cannot open 'FileDoesNotExist.csv' for reading}}
+
+# 2018-06-02
+# Problem with single-column CSV support reported on the mailing list
+# by Trent W. Buck.
+#
+do_execsql_test 4.4 {
+  CREATE VIRTUAL TABLE temp.trent USING csv(data='1');
+  SELECT * FROM trent;
+} {1}
+
+# 2018-12-26
+# Bug report on the mailing list
+#
+forcedelete csv01.csv
+set fd [open csv01.csv wb]
+puts $fd "a,b,c,d\r\n1,2,3,4\r\none,two,three,four\r\n5,6,7,8"
+close $fd
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE t5_1 USING csv(filename='csv01.csv');
+  SELECT name FROM temp.pragma_table_info('t5_1');
+} {c0 c1 c2 c3}
+do_execsql_test 5.2 {
+  SELECT *, '|' FROM t5_1;
+} {a b c d | 1 2 3 4 | one two three four | 5 6 7 8 |}
+do_execsql_test 5.3 {
+  DROP TABLE t5_1;
+  CREATE VIRTUAL TABLE t5_1 USING csv(filename='csv01.csv', header);
+  SELECT name FROM temp.pragma_table_info('t5_1');
+} {a b c d}
+do_execsql_test 5.4 {
+  SELECT *, '|' FROM t5_1;
+} {1 2 3 4 | one two three four | 5 6 7 8 |}
+
+finish_test

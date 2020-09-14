@@ -1,0 +1,311 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ae
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+do_execsql_test 1.1 {
+  INSERT INTO t1 VALUES('hello', 'world');
+  SELECT rowid FROM t1 WHERE t1 MATCH 'hello' ORDER BY rowid ASC;
+} {1}
+
+do_execsql_test 1.2 {
+  INSERT INTO t1 VALUES('world', 'hello');
+  SELECT rowid FROM t1 WHERE t1 MATCH 'hello' ORDER BY rowid ASC;
+} {1 2}
+
+do_execsql_test 1.3 {
+  INSERT INTO t1 VALUES('world', 'world');
+  SELECT rowid FROM t1 WHERE t1 MATCH 'hello' ORDER BY rowid ASC;
+} {1 2}
+
+do_execsql_test 1.4.1 {
+  INSERT INTO t1 VALUES('hello', 'hello');
+}
+
+do_execsql_test 1.4.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'hello' ORDER BY rowid ASC;
+} {1 2 4}
+
+fts5_aux_test_functions db
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t2 VALUES('u t l w w m s', 'm f m o l t k o p e');
+  INSERT INTO t2 VALUES('f g q e l n d m z x q', 'z s i i i m f w w f n g p');
+}
+
+do_execsql_test 2.1 {
+  SELECT rowid, fts5_test_poslist(t2) FROM t2 
+  WHERE t2 MATCH 'm' ORDER BY rowid;
+} {
+  1 {0.0.5 0.1.0 0.1.2} 
+  2 {0.0.7 0.1.5}
+}
+
+do_execsql_test 2.2 {
+  SELECT rowid, fts5_test_poslist(t2) FROM t2 
+  WHERE t2 MATCH 'u OR q' ORDER BY rowid;
+} {
+  1 {0.0.0}
+  2 {1.0.2 1.0.10}
+}
+
+if {[detail_is_full]} {
+  do_execsql_test 2.3 {
+    SELECT rowid, fts5_test_poslist(t2) FROM t2 
+      WHERE t2 MATCH 'y:o' ORDER BY rowid;
+  } {
+    1 {0.1.3 0.1.7}
+  }
+}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t3 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t3 VALUES( 'j f h o x x a z g b a f a m i b', 'j z c z y x w t');
+  INSERT INTO t3 VALUES( 'r c', '');
+}
+
+if {[detail_is_full]} {
+  do_execsql_test 3.1 {
+    SELECT rowid, fts5_test_poslist(t3) FROM t3 WHERE t3 MATCH 'NEAR(a b)';
+  } {
+    1 {0.0.6 1.0.9 0.0.10 0.0.12 1.0.15}
+  }
+
+  do_execsql_test 3.2 {
+    SELECT rowid, fts5_test_poslist(t3) FROM t3 WHERE t3 MATCH 'NEAR(r c)';
+  } {
+    2 {0.0.0 1.0.1}
+  }
+}
+
+do_execsql_test 3.3 {
+  INSERT INTO t3 
+  VALUES('k x j r m a d o i z j', 'r t t t f e b r x i v j v g o');
+  SELECT rowid, fts5_test_poslist(t3) 
+  FROM t3 WHERE t3 MATCH 'a OR b AND c';
+} {
+  1 {0.0.6 1.0.9 0.0.10 0.0.12 1.0.15 2.1.2}
+  3 0.0.5 
+}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t4 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t4 
+  VALUES('k x j r m a d o i z j', 'r t t t f e b r x i v j v g o');
+}
+
+do_execsql_test 4.1 {
+  SELECT rowid, fts5_test_poslist(t4) FROM t4 WHERE t4 MATCH 'a OR b AND c';
+} {
+  1 0.0.5
+}
+
+#-------------------------------------------------------------------------
+# Test that the xColumnSize() and xColumnAvgsize() APIs work.
+#
+reset_db
+fts5_aux_test_functions db
+
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE t5 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t5 VALUES('a b c d', 'e f g h i j');
+  INSERT INTO t5 VALUES('', 'a');
+  INSERT INTO t5 VALUES('a', '');
+}
+do_execsql_test 5.2 {
+  SELECT rowid, fts5_test_columnsize(t5) FROM t5 WHERE t5 MATCH 'a'
+  ORDER BY rowid DESC;
+} {
+  3 {1 0}
+  2 {0 1}
+  1 {4 6}
+}
+
+do_execsql_test 5.3 {
+  SELECT rowid, fts5_test_columntext(t5) FROM t5 WHERE t5 MATCH 'a'
+  ORDER BY rowid DESC;
+} {
+  3 {a {}}
+  2 {{} a}
+  1 {{a b c d} {e f g h i j}}
+}
+
+do_execsql_test 5.4 {
+  SELECT rowid, fts5_test_columntotalsize(t5) FROM t5 WHERE t5 MATCH 'a'
+  ORDER BY rowid DESC;
+} {
+  3 {5 7}
+  2 {5 7}
+  1 {5 7}
+}
+
+do_execsql_test 5.5 {
+  INSERT INTO t5 VALUES('x y z', 'v w x y z');
+  SELECT rowid, fts5_test_columntotalsize(t5) FROM t5 WHERE t5 MATCH 'a'
+  ORDER BY rowid DESC;
+} {
+  3 {8 12}
+  2 {8 12}
+  1 {8 12}
+}
+
+#-------------------------------------------------------------------------
+# Test the xTokenize() API
+#
+reset_db
+fts5_aux_test_functions db
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE t6 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t6 VALUES('There are more', 'things in heaven and earth');
+  INSERT INTO t6 VALUES(', Horatio, Than are', 'dreamt of in your philosophy.');
+}
+
+do_execsql_test 6.2 {
+  SELECT rowid, fts5_test_tokenize(t6) FROM t6 WHERE t6 MATCH 't*'
+} {
+  1 {{there are more} {things in heaven and earth}}
+  2 {{horatio than are} {dreamt of in your philosophy}}
+}
+
+#-------------------------------------------------------------------------
+# Test the xQueryPhrase() API
+#
+reset_db
+fts5_aux_test_functions db
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE t7 USING fts5(x, y, detail=%DETAIL%);
+}
+do_test 7.2 {
+  foreach {x y} {
+    {q i b w s a a e l o} {i b z a l f p t e u}
+    {b a z t a l o x d i} {b p a d b f h d w y}
+    {z m h n p p u i e g} {v h d v b x j j c z}
+    {a g i m v a u c b i} {p k s o t l r t b m}
+    {v v c j o d a s c p} {f f v o k p o f o g}
+  } {
+    execsql {INSERT INTO t7 VALUES($x, $y)}
+  }
+  execsql { SELECT count(*) FROM t7 }
+} {5}
+
+foreach {tn q res} {
+  1 a {{4 2}}
+  2 b {{3 4}}
+  3 c {{2 1}}
+  4 d {{2 2}}
+  5 {a AND b} {{4 2} {3 4}}
+  6 {a OR b OR c OR d} {{4 2} {3 4} {2 1} {2 2}}
+} {
+  do_execsql_test 7.3.$tn { 
+    SELECT fts5_test_queryphrase(t7) FROM t7 WHERE t7 MATCH $q LIMIT 1
+  } [list $res]
+}
+
+do_execsql_test 7.4 {
+  SELECT fts5_test_rowcount(t7) FROM t7 WHERE t7 MATCH 'a';
+} {5 5 5 5}
+
+#do_execsql_test 7.4 {
+#  SELECT rowid, bm25debug(t7) FROM t7 WHERE t7 MATCH 'a';
+#} {5 5 5 5}
+#
+
+#-------------------------------------------------------------------------
+#
+do_test 8.1 {
+  execsql { CREATE VIRTUAL TABLE t8 USING fts5(x, y, detail=%DETAIL%) }
+  foreach {rowid x y} {
+     0 {A o}   {o o o C o o o o o o o o}
+     1 {o o B} {o o o C C o o o o o o o}
+     2 {A o o} {o o o o D D o o o o o o}
+     3 {o B}   {o o o o o D o o o o o o}
+     4 {E o G} {H o o o o o o o o o o o}
+     5 {F o G} {I o J o o o o o o o o o}
+     6 {E o o} {H o J o o o o o o o o o}
+     7 {o o o} {o o o o o o o o o o o o}
+     9 {o o o} {o o o o o o o o o o o o}
+  } {
+    execsql { INSERT INTO t8(rowid, x, y) VALUES($rowid, $x, $y) }
+  }
+} {}
+
+foreach {tn q res} {
+  1 {a} {0 2}
+  2 {b} {3 1}
+  3 {c} {1 0}
+  4 {d} {2 3}
+  5 {g AND (e OR f)} {5 4}
+  6 {j AND (h OR i)} {5 6}
+} {
+  do_execsql_test 8.2.$tn.1 {
+    SELECT rowid FROM t8 WHERE t8 MATCH $q ORDER BY bm25(t8);
+  } $res
+
+  do_execsql_test 8.2.$tn.2 {
+    SELECT rowid FROM t8 WHERE t8 MATCH $q ORDER BY +rank;
+  } $res
+
+  do_execsql_test 8.2.$tn.3 {
+    SELECT rowid FROM t8 WHERE t8 MATCH $q ORDER BY rank;
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Test xPhraseCount() for some different queries.
+#
+do_test 9.1 {
+  execsql { CREATE VIRTUAL TABLE t9 USING fts5(x) }
+  foreach x {
+    "a b c" "d e f"
+  } {
+    execsql { INSERT INTO t9 VALUES($x) }
+  }
+} {}
+
+foreach {tn q cnt} {
+  1 {a AND b}      2
+  2 {a OR b}       2
+  3 {a OR b OR c}  3
+  4 {NEAR(a b)}    2
+} {
+  do_execsql_test 9.2.$tn {
+    SELECT fts5_test_phrasecount(t9) FROM t9 WHERE t9 MATCH $q LIMIT 1
+  } $cnt
+}
+
+}
+
+finish_test

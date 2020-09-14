@@ -1,0 +1,257 @@
+# 2014-09-10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# This file implements tests of the SQLITE_USER_AUTHENTICATION extension.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix userauth01
+
+ifcapable !userauth {
+  finish_test
+  return
+}
+
+# Create a no-authentication-required database
+#
+do_execsql_test userauth01-1.0 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(1),(2.5),('three'),(x'4444'),(NULL);
+  SELECT quote(x) FROM t1 ORDER BY x;
+  SELECT name FROM sqlite_master;
+} {NULL 1 2.5 'three' X'4444' t1}
+
+# Calling sqlite3_user_authenticate() on a no-authentication-required
+# database connection is a harmless no-op.  
+#
+do_test userauth01-1.1 {
+  sqlite3_user_authenticate db alice pw-4-alice
+  execsql {
+    SELECT quote(x) FROM t1 ORDER BY x;
+    SELECT name FROM sqlite_master;
+  }
+} {NULL 1 2.5 'three' X'4444' t1}
+
+# If sqlite3_user_add(D,U,P,N,A) is called on a no-authentication-required
+# database and A is false, then the call fails with an SQLITE_AUTH error.
+#
+do_test userauth01-1.2 {
+  sqlite3_user_add db bob pw-4-bob 0
+} {SQLITE_AUTH}
+do_test userauth01-1.3 {
+  execsql {
+    SELECT quote(x) FROM t1 ORDER BY x;
+    SELECT name FROM sqlite_master;
+  }
+} {NULL 1 2.5 'three' X'4444' t1}
+
+# When called on a no-authentication-required
+# database and when A is true, the sqlite3_user_add(D,U,P,N,A) routine
+# converts the database into an authentication-required database and
+# logs the database connection D in using user U with password P,N.
+#  
+do_test userauth01-1.4 {
+  sqlite3_user_add db alice pw-4-alice 1
+} {SQLITE_OK}
+do_test userauth01-1.5 {
+  execsql {
+    SELECT quote(x) FROM t1 ORDER BY x;
+    SELECT uname, isadmin FROM sqlite_user ORDER BY uname;
+    SELECT name FROM sqlite_master ORDER BY name;
+  }
+} {NULL 1 2.5 'three' X'4444' alice 1 sqlite_user t1}
+
+# The sqlite3_user_add() interface can be used (by an admin user only)
+# to create a new user.
+#
+do_test userauth01-1.6 {
+  sqlite3_user_add db bob pw-4-bob 0
+  sqlite3_user_add db cindy pw-4-cindy 0
+  sqlite3_user_add db david pw-4-david 0
+  execsql {
+    SELECT uname, isadmin FROM sqlite_user ORDER BY uname;
+  }
+} {alice 1 bob 0 cindy 0 david 0}
+
+# The sqlite_user table is inaccessible (unreadable and unwriteable) to
+# non-admin users and is read-only for admin users.  However, if the same
+#
+do_test userauth01-1.7 {
+  sqlite3 db2 test.db
+  sqlite3_user_authenticate db2 cindy pw-4-cindy
+  db2 eval {
+    SELECT quote(x) FROM t1 ORDER BY x;
+    SELECT name FROM sqlite_master ORDER BY name;
+  }
+} {NULL 1 2.5 'three' X'4444' sqlite_user t1}
+do_test userauth01-1.8 {
+  catchsql {
+    SELECT uname, isadmin FROM sqlite_user ORDER BY uname;
+  } db2
+} {1 {no such table: sqlite_user}}
+
+# Any user can change their own password.  
+#
+do_test userauth01-1.9 {
+  sqlite3_user_change db2 cindy xyzzy-cindy 0
+} {SQLITE_OK}
+do_test userauth01-1.10 {
+  sqlite3_user_authenticate db2 cindy pw-4-cindy
+} {SQLITE_AUTH}
+do_test userauth01-1.11 {
+  sqlite3_user_authenticate db2 cindy xyzzy-cindy
+} {SQLITE_OK}
+do_test userauth01-1.12 {
+  sqlite3_user_change db alice xyzzy-alice 1
+} {SQLITE_OK}
+do_test userauth01-1.13 {
+  sqlite3_user_authenticate db alice pw-4-alice
+} {SQLITE_AUTH}
+do_test userauth01-1.14 {
+  sqlite3_user_authenticate db alice xyzzy-alice
+} {SQLITE_OK}
+
+# No user may change their own admin privilege setting.
+#
+do_test userauth01-1.15 {
+  sqlite3_user_change db alice xyzzy-alice 0
+} {SQLITE_AUTH}
+do_test userauth01-1.16 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 0}
+do_test userauth01-1.17 {
+  sqlite3_user_change db2 cindy xyzzy-cindy 1
+} {SQLITE_AUTH}
+do_test userauth01-1.18 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 0}
+
+# The sqlite3_user_change() interface can be used to change a users
+# login credentials or admin privilege.
+#
+do_test userauth01-1.20 {
+  sqlite3_user_change db david xyzzy-david 1
+} {SQLITE_OK}
+do_test userauth01-1.21 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 1}
+do_test userauth01-1.22 {
+  sqlite3_user_authenticate db2 david xyzzy-david
+} {SQLITE_OK}
+do_test userauth01-1.23 {
+  db2 eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 1}
+do_test userauth01-1.24 {
+  sqlite3_user_change db david pw-4-david 0
+} {SQLITE_OK}
+do_test userauth01-1.25 {
+  sqlite3_user_authenticate db2 david pw-4-david
+} {SQLITE_OK}
+do_test userauth01-1.26 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 0}
+do_test userauth01-1.27 {
+  catchsql {SELECT uname, isadmin FROM sqlite_user ORDER BY uname} db2
+} {1 {no such table: sqlite_user}}
+
+# Only an admin user can change another users login
+# credentials or admin privilege setting.
+#
+do_test userauth01-1.30 {
+  sqlite3_user_change db2 bob xyzzy-bob 1
+} {SQLITE_AUTH}
+do_test userauth01-1.31 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 bob 0 cindy 0 david 0}
+
+# The sqlite3_user_delete() interface can be used (by an admin user only)
+# to delete a user.
+#
+do_test userauth01-1.40 {
+  sqlite3_user_delete db bob
+} {SQLITE_OK}
+do_test userauth01-1.41 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 cindy 0 david 0}
+do_test userauth01-1.42 {
+  sqlite3_user_delete db2 cindy
+} {SQLITE_AUTH}
+do_test userauth01-1.43 {
+  sqlite3_user_delete db2 alice
+} {SQLITE_AUTH}
+do_test userauth01-1.44 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 cindy 0 david 0}
+
+# The currently logged-in user cannot be deleted
+#
+do_test userauth01-1.50 {
+  sqlite3_user_delete db alice
+} {SQLITE_AUTH}
+do_test userauth01-1.51 {
+  db eval {SELECT uname, isadmin FROM sqlite_user ORDER BY uname}
+} {alice 1 cindy 0 david 0}
+
+# When ATTACH-ing new database files to a connection, each newly attached
+# database that is an authentication-required database is checked using
+# the same username and password as supplied to the main database.  If that
+# check fails, then the ATTACH command fails with an SQLITE_AUTH error.
+#
+do_test userauth01-1.60 {
+  forcedelete test3.db
+  sqlite3 db3 test3.db
+  sqlite3_user_add db3 alice xyzzy-alice 1
+} {SQLITE_OK}
+do_test userauth01-1.61 {
+  db3 eval {
+    CREATE TABLE t3(a,b,c); INSERT INTO t3 VALUES(1,2,3);
+    SELECT * FROM t3;
+  }
+} {1 2 3}
+do_test userauth01-1.62 {
+  db eval {
+    ATTACH 'test3.db' AS aux;
+    SELECT * FROM t1, t3 ORDER BY x LIMIT 1;
+    DETACH aux;
+  }
+} {{} 1 2 3}
+do_test userauth01-1.63 {
+  sqlite3_user_change db alice pw-4-alice 1
+  sqlite3_user_authenticate db alice pw-4-alice
+  catchsql {
+    ATTACH 'test3.db' AS aux;
+  }
+} {1 {unable to open database: test3.db}}
+do_test userauth01-1.64 {
+  sqlite3_extended_errcode db
+} {SQLITE_AUTH}
+do_test userauth01-1.65 {
+  db eval {PRAGMA database_list}
+} {~/test3.db/}
+
+# The sqlite3_set_authorizer() callback is modified to take a 7th parameter
+# which is the username of the currently logged in user, or NULL for a
+# no-authentication-required database.
+#
+proc auth {args} {
+  lappend ::authargs $args
+  return SQLITE_OK
+}
+do_test authuser01-2.1 {
+  unset -nocomplain ::authargs
+  db auth auth
+  db eval {SELECT x FROM t1}
+  set ::authargs
+} {/SQLITE_SELECT {} {} {} {} alice/}  
+
+
+finish_test

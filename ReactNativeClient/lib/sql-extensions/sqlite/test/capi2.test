@@ -1,0 +1,803 @@
+# 2003 January 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script testing the callback-free C/C++ API.
+#
+# $Id: capi2.test,v 1.37 2008/12/30 17:55:00 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Return the text values from the current row pointed at by STMT as a list.
+proc get_row_values {STMT} {
+  set VALUES [list]
+  for {set i 0} {$i < [sqlite3_data_count $STMT]} {incr i} {
+    lappend VALUES [sqlite3_column_text $STMT $i]
+  }
+  return $VALUES
+}
+
+# Return the column names followed by declaration types for the result set
+# of the SQL statement STMT.
+#
+# i.e. for:
+# CREATE TABLE abc(a text, b integer); 
+# SELECT * FROM abc;
+#
+# The result is {a b text integer}
+proc get_column_names {STMT} {
+  set VALUES [list]
+  for {set i 0} {$i < [sqlite3_column_count $STMT]} {incr i} {
+    lappend VALUES [sqlite3_column_name $STMT $i]
+  }
+  for {set i 0} {$i < [sqlite3_column_count $STMT]} {incr i} {
+    lappend VALUES [sqlite3_column_decltype $STMT $i]
+  }
+  return $VALUES
+}
+
+# Check basic functionality
+#
+do_test capi2-1.1 {
+  set DB [sqlite3_connection_pointer db]
+  execsql {CREATE TABLE t1(a,b,c)}
+  set VM [sqlite3_prepare $DB {SELECT name, rowid FROM sqlite_master} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-1.2 {
+  sqlite3_step $VM
+} {SQLITE_ROW}
+do_test capi2-1.3 {
+  sqlite3_data_count $VM
+} {2}
+do_test capi2-1.4 {
+  get_row_values $VM
+} {t1 1}
+do_test capi2-1.5 {
+  get_column_names $VM
+} {name rowid text INTEGER}
+do_test capi2-1.6 {
+  sqlite3_step $VM 
+} {SQLITE_DONE}
+do_test capi2-1.7 {
+  list [sqlite3_column_count $VM] [get_row_values $VM] [get_column_names $VM]
+} {2 {} {name rowid text INTEGER}}
+
+# This used to be SQLITE_MISUSE.  But now we automatically reset prepared
+# statements.
+ifcapable autoreset {
+  do_test capi2-1.8 {
+    sqlite3_step $VM
+  } {SQLITE_ROW}
+} else {
+  do_test capi2-1.8 {
+    sqlite3_step $VM
+  } {SQLITE_MISUSE}
+}
+
+# Update: In v2, once SQLITE_MISUSE is returned the statement handle cannot
+# be interrogated for more information. However in v3, since the column
+# count, names and types are determined at compile time, these are still
+# accessible after an SQLITE_MISUSE error.
+do_test capi2-1.9 {
+  sqlite3_reset $VM
+  list [sqlite3_column_count $VM] [get_row_values $VM] [get_column_names $VM]
+} {2 {} {name rowid text INTEGER}}
+do_test capi2-1.10 {
+  sqlite3_data_count $VM
+} {0}
+
+do_test capi2-1.11 {
+  sqlite3_finalize $VM
+} {SQLITE_OK}
+
+# Check to make sure that the "tail" of a multi-statement SQL script
+# is returned by sqlite3_prepare.
+#
+do_test capi2-2.1 {
+  set SQL {
+    SELECT name, rowid FROM sqlite_master;
+    SELECT name, rowid FROM sqlite_master WHERE 0;
+    -- A comment at the end
+  }
+  set VM [sqlite3_prepare $DB $SQL -1 SQL]
+  set SQL
+} {
+    SELECT name, rowid FROM sqlite_master WHERE 0;
+    -- A comment at the end
+  }
+do_test capi2-2.2 {
+  set r [sqlite3_step $VM]
+  lappend r [sqlite3_column_count $VM] \
+            [get_row_values $VM] \
+            [get_column_names $VM]
+} {SQLITE_ROW 2 {t1 1} {name rowid text INTEGER}}
+do_test capi2-2.3 {
+  set r [sqlite3_step $VM]
+  lappend r [sqlite3_column_count $VM] \
+            [get_row_values $VM] \
+            [get_column_names $VM]
+} {SQLITE_DONE 2 {} {name rowid text INTEGER}}
+do_test capi2-2.4 {
+  sqlite3_finalize $VM
+} {SQLITE_OK}
+do_test capi2-2.5 {
+  set VM [sqlite3_prepare $DB $SQL -1 SQL]
+  set SQL
+} {
+    -- A comment at the end
+  }
+do_test capi2-2.6 {
+  set r [sqlite3_step $VM]
+  lappend r [sqlite3_column_count $VM] \
+            [get_row_values $VM] \
+            [get_column_names $VM]
+} {SQLITE_DONE 2 {} {name rowid text INTEGER}}
+do_test capi2-2.7 {
+  sqlite3_finalize $VM
+} {SQLITE_OK}
+do_test capi2-2.8 {
+  set VM [sqlite3_prepare $DB $SQL -1 SQL]
+  list $SQL $VM
+} {{} {}}
+
+# Check the error handling.
+#
+do_test capi2-3.1 {
+  set rc [catch {
+      sqlite3_prepare $DB {select bogus from sqlite_master} -1 TAIL
+  } msg]
+  lappend rc $msg $TAIL
+} {1 {(1) no such column: bogus} {}}
+do_test capi2-3.2 {
+  set rc [catch {
+      sqlite3_prepare $DB {select bogus from } -1 TAIL
+  } msg]
+  lappend rc $msg $TAIL
+} {1 {(1) incomplete input} {}}
+do_test capi2-3.3 {
+  set rc [catch {
+      sqlite3_prepare $DB {;;;;select bogus from sqlite_master} -1 TAIL
+  } msg]
+  lappend rc $msg $TAIL
+} {1 {(1) no such column: bogus} {}}
+do_test capi2-3.4 {
+  set rc [catch {
+      sqlite3_prepare $DB {select bogus from sqlite_master;x;} -1 TAIL
+  } msg]
+  lappend rc $msg $TAIL
+} {1 {(1) no such column: bogus} {x;}}
+do_test capi2-3.5 {
+  set rc [catch {
+      sqlite3_prepare $DB {select bogus from sqlite_master;;;x;} -1 TAIL
+  } msg]
+  lappend rc $msg $TAIL
+} {1 {(1) no such column: bogus} {;;x;}}
+do_test capi2-3.6 {
+  set rc [catch {
+      sqlite3_prepare $DB {select 5/0;} -1 TAIL
+  } VM]
+  lappend rc $TAIL
+} {0 {}}
+do_test capi2-3.7 {
+  list [sqlite3_step $VM] \
+       [sqlite3_column_count $VM] \
+       [get_row_values $VM] \
+       [get_column_names $VM]
+} {SQLITE_ROW 1 {{}} {5/0 {}}}
+do_test capi2-3.8 {
+  sqlite3_finalize $VM
+} {SQLITE_OK}
+do_test capi2-3.9 {
+  execsql {CREATE UNIQUE INDEX i1 ON t1(a)}
+  set VM [sqlite3_prepare $DB {INSERT INTO t1 VALUES(1,2,3)} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-3.9b {db changes} {0}
+do_test capi2-3.10 {
+  list [sqlite3_step $VM] \
+       [sqlite3_column_count $VM] \
+       [get_row_values $VM] \
+       [get_column_names $VM]
+} {SQLITE_DONE 0 {} {}}
+
+# Update for v3 - the change has not actually happened until the query is
+# finalized. Is this going to cause trouble for anyone? Lee Nelson maybe?
+# (Later:) The change now happens just before SQLITE_DONE is returned.
+do_test capi2-3.10b {db changes} {1}
+do_test capi2-3.11 {
+  sqlite3_finalize $VM
+} {SQLITE_OK}
+do_test capi2-3.11b {db changes} {1}
+#do_test capi2-3.12-misuse {
+#  sqlite3_finalize $VM
+#} {SQLITE_MISUSE}
+do_test capi2-3.13 {
+  set VM [sqlite3_prepare $DB {INSERT INTO t1 VALUES(1,3,4)} -1 TAIL]
+  list [sqlite3_step $VM] \
+       [sqlite3_column_count $VM] \
+       [get_row_values $VM] \
+       [get_column_names $VM]
+} {SQLITE_ERROR 0 {} {}}
+
+# Update for v3: Preparing a statement does not affect the change counter.
+# (Test result changes from 0 to 1).  (Later:) change counter updates occur
+# when sqlite3_step returns, not at finalize time.
+do_test capi2-3.13b {db changes} {0}
+
+do_test capi2-3.14 {
+  list [sqlite3_finalize $VM] [sqlite3_errmsg $DB] \
+       [sqlite3_extended_errcode $DB]
+} {SQLITE_CONSTRAINT {UNIQUE constraint failed: t1.a} SQLITE_CONSTRAINT_UNIQUE}
+do_test capi2-3.15 {
+  set VM [sqlite3_prepare $DB {CREATE TABLE t2(a NOT NULL, b)} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-3.16 {
+  list [sqlite3_step $VM] \
+       [sqlite3_column_count $VM] \
+       [get_row_values $VM] \
+       [get_column_names $VM]
+} {SQLITE_DONE 0 {} {}}
+do_test capi2-3.17 {
+  list [sqlite3_finalize $VM] [sqlite3_errmsg $DB]
+} {SQLITE_OK {not an error}}
+do_test capi2-3.18 {
+  set VM [sqlite3_prepare $DB {INSERT INTO t2 VALUES(NULL,2)} -1 TAIL]
+  list [sqlite3_step $VM] \
+       [sqlite3_column_count $VM] \
+       [get_row_values $VM] \
+       [get_column_names $VM]
+} {SQLITE_ERROR 0 {} {}}
+do_test capi2-3.19 {
+  list [sqlite3_finalize $VM] [sqlite3_errmsg $DB] \
+       [sqlite3_extended_errcode $DB]
+} {SQLITE_CONSTRAINT {NOT NULL constraint failed: t2.a} SQLITE_CONSTRAINT_NOTNULL}
+
+do_test capi2-3.20 {
+  execsql {
+    CREATE TABLE a1(message_id, name , UNIQUE(message_id, name) );
+    INSERT INTO a1 VALUES(1, 1);
+  }
+} {}
+do_test capi2-3.21 {
+  set VM [sqlite3_prepare $DB {INSERT INTO a1 VALUES(1, 1)} -1 TAIL]
+  sqlite3_step $VM
+} {SQLITE_ERROR}
+do_test capi2-3.22 {
+  sqlite3_errcode $DB
+} {SQLITE_ERROR}
+do_test capi2-3.23 {
+  sqlite3_finalize $VM
+} {SQLITE_CONSTRAINT}
+do_test capi2-3.24 {
+  list [sqlite3_errcode $DB] [sqlite3_extended_errcode $DB]
+} {SQLITE_CONSTRAINT SQLITE_CONSTRAINT_UNIQUE}
+
+# Two or more virtual machines exists at the same time.
+#
+do_test capi2-4.1 {
+  set VM1 [sqlite3_prepare $DB {INSERT INTO t2 VALUES(1,2)} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-4.2 {
+  set VM2 [sqlite3_prepare $DB {INSERT INTO t2 VALUES(2,3)} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-4.3 {
+  set VM3 [sqlite3_prepare $DB {INSERT INTO t2 VALUES(3,4)} -1 TAIL]
+  set TAIL
+} {}
+do_test capi2-4.4 {
+  list [sqlite3_step $VM2] \
+       [sqlite3_column_count $VM2] \
+       [get_row_values $VM2] \
+       [get_column_names $VM2]
+} {SQLITE_DONE 0 {} {}}
+do_test capi2-4.5 {
+  execsql {SELECT * FROM t2 ORDER BY a}
+} {2 3}
+do_test capi2-4.6 {
+  sqlite3_finalize $VM2
+} {SQLITE_OK}
+do_test capi2-4.7 {
+  list [sqlite3_step $VM3] \
+       [sqlite3_column_count $VM3] \
+       [get_row_values $VM3] \
+       [get_column_names $VM3]
+} {SQLITE_DONE 0 {} {}}
+do_test capi2-4.8 {
+  execsql {SELECT * FROM t2 ORDER BY a}
+} {2 3 3 4}
+do_test capi2-4.9 {
+  sqlite3_finalize $VM3
+} {SQLITE_OK}
+do_test capi2-4.10 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_DONE 0 {} {}}
+do_test capi2-4.11 {
+  execsql {SELECT * FROM t2 ORDER BY a}
+} {1 2 2 3 3 4}
+do_test capi2-4.12 {
+  sqlite3_finalize $VM1
+} {SQLITE_OK}
+
+# Interleaved SELECTs
+#
+do_test capi2-5.1 {
+  set VM1 [sqlite3_prepare $DB {SELECT * FROM t2} -1 TAIL]
+  set VM2 [sqlite3_prepare $DB {SELECT * FROM t2} -1 TAIL]
+  set VM3 [sqlite3_prepare $DB {SELECT * FROM t2} -1 TAIL]
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 2 {2 3} {a b {} {}}}
+do_test capi2-5.2 {
+  list [sqlite3_step $VM2] \
+       [sqlite3_column_count $VM2] \
+       [get_row_values $VM2] \
+       [get_column_names $VM2]
+} {SQLITE_ROW 2 {2 3} {a b {} {}}}
+do_test capi2-5.3 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 2 {3 4} {a b {} {}}}
+do_test capi2-5.4 {
+  list [sqlite3_step $VM3] \
+       [sqlite3_column_count $VM3] \
+       [get_row_values $VM3] \
+       [get_column_names $VM3]
+} {SQLITE_ROW 2 {2 3} {a b {} {}}}
+do_test capi2-5.5 {
+  list [sqlite3_step $VM3] \
+       [sqlite3_column_count $VM3] \
+       [get_row_values $VM3] \
+       [get_column_names $VM3]
+} {SQLITE_ROW 2 {3 4} {a b {} {}}}
+do_test capi2-5.6 {
+  list [sqlite3_step $VM3] \
+       [sqlite3_column_count $VM3] \
+       [get_row_values $VM3] \
+       [get_column_names $VM3]
+} {SQLITE_ROW 2 {1 2} {a b {} {}}}
+do_test capi2-5.7 {
+  list [sqlite3_step $VM3] \
+       [sqlite3_column_count $VM3] \
+       [get_row_values $VM3] \
+       [get_column_names $VM3]
+} {SQLITE_DONE 2 {} {a b {} {}}}
+do_test capi2-5.8 {
+  sqlite3_finalize $VM3
+} {SQLITE_OK}
+do_test capi2-5.9 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 2 {1 2} {a b {} {}}}
+do_test capi2-5.10 {
+  sqlite3_finalize $VM1
+} {SQLITE_OK}
+do_test capi2-5.11 {
+  list [sqlite3_step $VM2] \
+       [sqlite3_column_count $VM2] \
+       [get_row_values $VM2] \
+       [get_column_names $VM2]
+} {SQLITE_ROW 2 {3 4} {a b {} {}}}
+do_test capi2-5.12 {
+  list [sqlite3_step $VM2] \
+       [sqlite3_column_count $VM2] \
+       [get_row_values $VM2] \
+       [get_column_names $VM2]
+} {SQLITE_ROW 2 {1 2} {a b {} {}}}
+do_test capi2-5.11 {
+  sqlite3_finalize $VM2
+} {SQLITE_OK}
+
+# Check for proper SQLITE_BUSY returns.
+#
+do_test capi2-6.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t3(x counter);
+    INSERT INTO t3 VALUES(1);
+    INSERT INTO t3 VALUES(2);
+    INSERT INTO t3 SELECT x+2 FROM t3;
+    INSERT INTO t3 SELECT x+4 FROM t3;
+    INSERT INTO t3 SELECT x+8 FROM t3;
+    COMMIT;
+  }
+  set VM1 [sqlite3_prepare $DB {SELECT * FROM t3} -1 TAIL]
+  sqlite3 db2 test.db
+  execsql {BEGIN} db2
+} {}
+# Update for v3: BEGIN doesn't write-lock the database. It is quite
+# difficult to get v3 to write-lock the database, which causes a few
+# problems for test scripts.
+#
+# do_test capi2-6.2 {
+#   list [sqlite3_step $VM1] \
+#        [sqlite3_column_count $VM1] \
+#        [get_row_values $VM1] \
+#        [get_column_names $VM1]
+# } {SQLITE_BUSY 0 {} {}}
+do_test capi2-6.3 {
+  execsql {COMMIT} db2
+} {}
+do_test capi2-6.4 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 1 {x counter}}
+do_test capi2-6.5 {
+  catchsql {INSERT INTO t3 VALUES(10);} db2
+} {1 {database is locked}}
+do_test capi2-6.6 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 2 {x counter}}
+do_test capi2-6.7 {
+  execsql {SELECT * FROM t2} db2
+} {2 3 3 4 1 2}
+do_test capi2-6.8 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 3 {x counter}}
+do_test capi2-6.9 {
+  execsql {SELECT * FROM t2} 
+} {2 3 3 4 1 2}
+do_test capi2-6.10 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 4 {x counter}}
+do_test capi2-6.11 {
+  execsql {BEGIN}
+} {}
+do_test capi2-6.12 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 5 {x counter}}
+
+# A read no longer blocks a write in the same connection.
+#do_test capi2-6.13 {
+#  catchsql {UPDATE t3 SET x=x+1}
+#} {1 {database table is locked}}
+
+do_test capi2-6.14 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 6 {x counter}}
+do_test capi2-6.15 {
+  execsql {SELECT * FROM t1}
+} {1 2 3}
+do_test capi2-6.16 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 7 {x counter}}
+do_test capi2-6.17 {
+  catchsql {UPDATE t1 SET b=b+1}
+} {0 {}}
+do_test capi2-6.18 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 8 {x counter}}
+do_test capi2-6.19 {
+  execsql {SELECT * FROM t1}
+} {1 3 3}
+do_test capi2-6.20 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 9 {x counter}}
+#do_test capi2-6.21 {
+#  execsql {ROLLBACK; SELECT * FROM t1}
+#} {1 2 3}
+do_test capi2-6.22 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 10 {x counter}}
+#do_test capi2-6.23 {
+#  execsql {BEGIN TRANSACTION;}
+#} {}
+do_test capi2-6.24 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 11 {x counter}}
+do_test capi2-6.25 {
+  execsql {
+    INSERT INTO t1 VALUES(2,3,4);
+    SELECT * FROM t1;
+  }
+} {1 3 3 2 3 4}
+do_test capi2-6.26 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 12 {x counter}}
+do_test capi2-6.27 {
+  catchsql {
+    INSERT INTO t1 VALUES(2,4,5);
+    SELECT * FROM t1;
+  }
+} {1 {UNIQUE constraint failed: t1.a}}
+do_test capi2-6.28 {
+  list [sqlite3_step $VM1] \
+       [sqlite3_column_count $VM1] \
+       [get_row_values $VM1] \
+       [get_column_names $VM1]
+} {SQLITE_ROW 1 13 {x counter}}
+do_test capi2-6.99 {
+  sqlite3_finalize $VM1
+} {SQLITE_OK}
+catchsql {ROLLBACK}
+
+do_test capi2-7.1 {
+  stepsql $DB {
+    SELECT * FROM t1
+  }
+} {0 1 2 3}
+do_test capi2-7.2 {
+  stepsql $DB {
+    PRAGMA count_changes=on
+  }
+} {0}
+do_test capi2-7.3 {
+  stepsql $DB {
+    UPDATE t1 SET a=a+10;
+  }
+} {0 1}
+do_test capi2-7.4 {
+  stepsql $DB {
+    INSERT INTO t1 SELECT a+1,b+1,c+1 FROM t1;
+  }
+} {0 1}
+do_test capi2-7.4b {sqlite3_changes $DB} {1}
+do_test capi2-7.5 {
+  stepsql $DB {
+    UPDATE t1 SET a=a+10;
+  }
+} {0 2}
+do_test capi2-7.5b {sqlite3_changes $DB} {2}
+do_test capi2-7.6 {
+  stepsql $DB {
+    SELECT * FROM t1;
+  }
+} {0 21 2 3 22 3 4}
+do_test capi2-7.7 {
+  stepsql $DB {
+    INSERT INTO t1 SELECT a+2,b+2,c+2 FROM t1;
+  }
+} {0 2}
+do_test capi2-7.8 {
+  sqlite3_changes $DB
+} {2}
+do_test capi2-7.9 {
+  stepsql $DB {
+    SELECT * FROM t1;
+  }
+} {0 21 2 3 22 3 4 23 4 5 24 5 6}
+do_test capi2-7.10 {
+  stepsql $DB {
+    UPDATE t1 SET a=a-20;
+    SELECT * FROM t1;
+  }
+} {0 4 1 2 3 2 3 4 3 4 5 4 5 6}
+
+# Update for version 3: A SELECT statement no longer resets the change
+# counter (Test result changes from 0 to 4).
+do_test capi2-7.11 {
+  sqlite3_changes $DB
+} {4}
+do_test capi2-7.11a {
+  execsql {SELECT count(*) FROM t1}
+} {4}
+
+ifcapable {explain} {
+  do_test capi2-7.12 {
+    set x [stepsql $DB {EXPLAIN SELECT * FROM t1}]
+    lindex $x 0
+  } {0}
+}
+
+# Ticket #261 - make sure we can finalize before the end of a query.
+#
+do_test capi2-8.1 {
+  set VM1 [sqlite3_prepare $DB {SELECT * FROM t2} -1 TAIL]
+  sqlite3_finalize $VM1
+} {SQLITE_OK}
+  
+# Tickets #384 and #385 - make sure the TAIL argument to sqlite3_prepare
+# and all of the return pointers in sqlite_step can be null.
+#
+do_test capi2-9.1 {
+  set VM1 [sqlite3_prepare $DB {SELECT * FROM t2} -1 DUMMY]
+  sqlite3_step $VM1
+  sqlite3_finalize $VM1
+} {SQLITE_OK}
+
+# Test that passing a NULL pointer to sqlite3_finalize() or sqlite3_reset
+# does not cause an error.
+do_test capi2-10.1 {
+  sqlite3_finalize 0
+} {SQLITE_OK}
+do_test capi2-10.2 {
+  sqlite3_reset 0
+} {SQLITE_OK}
+
+#---------------------------------------------------------------------------
+# The following tests - capi2-11.* - test the "column origin" APIs.
+#
+#   sqlite3_column_origin_name()
+#   sqlite3_column_database_name()
+#   sqlite3_column_table_name()
+#
+
+ifcapable columnmetadata {
+
+# This proc uses the database handle $::DB to compile the SQL statement passed
+# as a parameter. The return value of this procedure is a list with one
+# element for each column returned by the compiled statement. Each element of
+# this list is itself a list of length three, consisting of the origin
+# database, table and column for the corresponding returned column.
+proc check_origins {sql} {
+  set ret [list]
+  set ::STMT [sqlite3_prepare $::DB $sql -1 dummy]
+  for {set i 0} {$i < [sqlite3_column_count $::STMT]} {incr i} {
+    lappend ret [list                           \
+      [sqlite3_column_database_name $::STMT $i] \
+      [sqlite3_column_table_name $::STMT $i]    \
+      [sqlite3_column_origin_name $::STMT $i]   \
+    ]
+  }
+  sqlite3_finalize $::STMT
+  return $ret
+}
+do_test capi2-11.1 {
+  execsql {
+    CREATE TABLE tab1(col1, col2);
+  }
+} {}
+do_test capi2-11.2 {
+  check_origins {SELECT col2, col1 FROM tab1}
+} [list {main tab1 col2} {main tab1 col1}]
+do_test capi2-11.3 {
+  check_origins {SELECT col2 AS hello, col1 AS world FROM tab1}
+} [list {main tab1 col2} {main tab1 col1}]
+
+ifcapable subquery {
+  do_test capi2-11.4 {
+    check_origins {SELECT b, a FROM (SELECT col1 AS a, col2 AS b FROM tab1)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-11.5 {
+    check_origins {SELECT (SELECT col2 FROM tab1), (SELECT col1 FROM tab1)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-11.6 {
+    check_origins {SELECT (SELECT col2), (SELECT col1) FROM tab1}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-11.7 {
+    check_origins {SELECT * FROM tab1}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-11.8 {
+    check_origins {SELECT * FROM (SELECT * FROM tab1)}
+  } [list {main tab1 col1} {main tab1 col2}]
+}
+
+ifcapable view&&subquery {
+  do_test capi2-12.1 {
+    execsql {
+      CREATE VIEW view1 AS SELECT * FROM  tab1;
+    }
+  } {}
+  do_test capi2-12.2 {
+    check_origins {SELECT col2, col1 FROM view1}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-12.3 {
+    check_origins {SELECT col2 AS hello, col1 AS world FROM view1}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-12.4 {
+    check_origins {SELECT b, a FROM (SELECT col1 AS a, col2 AS b FROM view1)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-12.5 {
+    check_origins {SELECT (SELECT col2 FROM view1), (SELECT col1 FROM view1)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-12.6 {
+    check_origins {SELECT (SELECT col2), (SELECT col1) FROM view1}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-12.7 {
+    check_origins {SELECT * FROM view1}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-12.8 {
+    check_origins {select * from (select * from view1)}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-12.9 {
+    check_origins {select * from (select * from (select * from view1))}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-12.10 {
+    db close
+    sqlite3 db test.db
+    set ::DB [sqlite3_connection_pointer db]
+    check_origins {select * from (select * from (select * from view1))}
+  } [list {main tab1 col1} {main tab1 col2}]
+  
+  # This view will thwart the flattening optimization.
+  do_test capi2-13.1 {
+    execsql {
+      CREATE VIEW view2 AS SELECT * FROM tab1 limit 10 offset 10;
+    }
+  } {}
+  do_test capi2-13.2 {
+    check_origins {SELECT col2, col1 FROM view2}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-13.3 {
+    check_origins {SELECT col2 AS hello, col1 AS world FROM view2}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-13.4 {
+    check_origins {SELECT b, a FROM (SELECT col1 AS a, col2 AS b FROM view2)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-13.5 {
+    check_origins {SELECT (SELECT col2 FROM view2), (SELECT col1 FROM view2)}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-13.6 {
+    check_origins {SELECT (SELECT col2), (SELECT col1) FROM view2}
+  } [list {main tab1 col2} {main tab1 col1}]
+  do_test capi2-13.7 {
+    check_origins {SELECT * FROM view2}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-13.8 {
+    check_origins {select * from (select * from view2)}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-13.9 {
+    check_origins {select * from (select * from (select * from view2))}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-13.10 {
+    db close
+    sqlite3 db test.db
+    set ::DB [sqlite3_connection_pointer db]
+    check_origins {select * from (select * from (select * from view2))}
+  } [list {main tab1 col1} {main tab1 col2}]
+  do_test capi2-13.11 {
+    check_origins {select * from (select * from tab1 limit 10 offset 10)}
+  } [list {main tab1 col1} {main tab1 col2}]
+}
+
+
+} ;# ifcapable columnmetadata
+
+db2 close
+finish_test

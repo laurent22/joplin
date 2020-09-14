@@ -1,0 +1,88 @@
+# 2014 March 25.
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. 
+#
+# Specifically, the tests in this file attempt to verify that 
+# multi-threaded sorting works.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix sort2
+db close
+sqlite3_shutdown
+sqlite3_config_pmasz 10
+sqlite3_initialize
+sqlite3 db test.db
+
+foreach {tn script} {
+  1 { }
+  2 {
+    catch { db close }
+    reset_db
+    catch { db eval {PRAGMA threads=7} }
+  }
+} {
+  eval $script
+
+  do_execsql_test $tn.1 {
+    PRAGMA cache_size = 5;
+    WITH r(x,y) AS (
+      SELECT 1, randomblob(100)
+      UNION ALL
+      SELECT x+1, randomblob(100) FROM r
+      LIMIT 100000
+    )
+    SELECT count(x), length(y) FROM r GROUP BY (x%5)
+  } {
+    20000 100 20000 100 20000 100 20000 100 20000 100
+  }
+
+  do_execsql_test $tn.2.1 {
+    CREATE TABLE t1(a, b);
+    WITH r(x,y) AS (
+      SELECT 1, randomblob(100)
+      UNION ALL
+      SELECT x+1, randomblob(100) FROM r
+      LIMIT 10000
+    ) INSERT INTO t1 SELECT * FROM r;
+  }
+  
+  do_execsql_test $tn.2.2 {
+    CREATE UNIQUE INDEX i1 ON t1(b, a);
+  }
+  
+  do_execsql_test $tn.2.3 {
+    CREATE UNIQUE INDEX i2 ON t1(a);
+  }
+  
+  do_execsql_test $tn.2.4 { PRAGMA integrity_check } {ok}
+  
+  # Because it uses so much data, this test can take 12-13 seconds even on
+  # a modern workstation. So it is omitted from "veryquick" and other
+  # permutations.test tests.
+  if {[isquick]==0} {
+    do_execsql_test $tn.3 {
+      PRAGMA cache_size = 5;
+      WITH r(x,y) AS (
+          SELECT 1, randomblob(100)
+          UNION ALL
+          SELECT x+1, randomblob(100) FROM r
+          LIMIT 1000000
+          )
+        SELECT count(x), length(y) FROM r GROUP BY (x%5)
+    } {
+      200000 100 200000 100 200000 100 200000 100 200000 100
+    }
+  }
+}
+
+finish_test

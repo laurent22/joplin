@@ -1,0 +1,94 @@
+# 2015 July 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that an RBU data_xxx table may be a view instead of a regular
+# table.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set ::testprefix rbu14
+
+
+foreach {tn schema} {
+  1 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE TABLE t2(a PRIMARY KEY, b, c);
+  }
+  2 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE TABLE t2(a PRIMARY KEY, b, c);
+    CREATE INDEX i1 ON t1(b, c);
+    CREATE INDEX i2 ON t2(b, c);
+  }
+  3 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+    CREATE TABLE t2(a PRIMARY KEY, b, c) WITHOUT ROWID;
+  }
+  4 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+    CREATE TABLE t2(a PRIMARY KEY, b, c) WITHOUT ROWID;
+    CREATE INDEX i1 ON t1(b, c);
+    CREATE INDEX i2 ON t2(b, c);
+  }
+} {
+  reset_db
+
+  execsql $schema
+  execsql {
+    INSERT INTO t1 VALUES(50, 50, 50);
+    INSERT INTO t1 VALUES(51, 51, 51);
+    INSERT INTO t2 VALUES(50, 50, 50);
+    INSERT INTO t2 VALUES(51, 51, 51);
+  }
+
+  forcedelete rbu.db
+  do_execsql_test $tn.1 {
+    ATTACH 'rbu.db' AS rbu;
+    CREATE TABLE rbu.stuff(tbl, a, b, c, rbu_control);
+    INSERT INTO stuff VALUES
+      ('t1', 1, 2, 3, 0),                   -- insert into t1
+      ('t2', 4, 5, 6, 0),                   -- insert into t2
+      ('t1', 50, NULL, NULL, 1),            -- delete from t1
+      ('t2', 51, NULL, NULL, 1);            -- delete from t2
+
+    CREATE VIEW rbu.data_t1 AS 
+    SELECT a, b, c, rbu_control FROM stuff WHERE tbl='t1';
+    CREATE VIEW rbu.data_t2 AS 
+    SELECT a, b, c, rbu_control FROM stuff WHERE tbl='t2';
+  }
+
+  do_test $tn.2 {
+    while 1 {
+      sqlite3rbu rbu test.db rbu.db
+      set rc [rbu step]
+      rbu close
+      if {$rc != "SQLITE_OK"} break
+    }
+    set rc
+  } {SQLITE_DONE}
+
+  do_execsql_test $tn.3.1 {
+    SELECT * FROM t1 ORDER BY a;
+  } {1 2 3 51 51 51}
+
+  do_execsql_test $tn.3.2 {
+    SELECT * FROM t2 ORDER BY a;
+  } {4 5 6 50 50 50}
+
+  integrity_check $tn.4
+}
+
+
+finish_test

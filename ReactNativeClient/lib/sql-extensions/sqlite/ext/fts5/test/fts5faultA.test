@@ -1,0 +1,63 @@
+# 2016 February 2
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5faultA
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE o1 USING fts5(a, detail=%DETAIL%);
+    INSERT INTO o1(o1, rank) VALUES('pgsz', 32);
+  
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<300 )
+    INSERT INTO o1 SELECT 'A B C' FROM s;
+  
+    INSERT INTO o1 VALUES('A X C');
+  
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<300 )
+    INSERT INTO o1 SELECT 'A B C' FROM s;
+  }
+  
+  do_faultsim_test 1 -faults oom* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT rowid FROM o1('a NOT b') }
+  } -test {
+    faultsim_test_result {0 301}
+  }
+}
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE o2 USING fts5(a);
+  
+  INSERT INTO o2 VALUES('A B C');
+  WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<300 )
+  INSERT INTO o2 SELECT group_concat('A B C ') FROM s;
+}
+
+do_faultsim_test 2 -faults oom* -prep {
+  sqlite3 db test.db
+} -body {
+  execsql { SELECT rowid FROM o2('a+b+c NOT xyz') }
+} -test {
+  faultsim_test_result {0 {1 2}}
+}
+finish_test

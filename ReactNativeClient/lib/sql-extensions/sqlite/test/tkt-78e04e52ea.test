@@ -1,0 +1,66 @@
+# 2009 December 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# Verify that we can create zero-length tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_test tkt-78e04-1.0 {
+  execsql {
+    CREATE TABLE ""("" UNIQUE, x CHAR(100));
+    CREATE TABLE t2(x);
+    INSERT INTO ""("") VALUES(1);
+    INSERT INTO t2 VALUES(2);
+    SELECT * FROM "", t2;
+  }
+} {1 {} 2}
+do_test tkt-78e04-1.1 {
+  catchsql {
+    INSERT INTO ""("") VALUES(1);
+  }
+} {1 {UNIQUE constraint failed: .}}
+do_test tkt-78e04-1.2 {
+  execsql {
+    PRAGMA table_info("");
+  }
+} {0 {} {} 0 {} 0 1 x CHAR(100) 0 {} 0}
+do_test tkt-78e04-1.3 {
+  execsql {
+    CREATE INDEX i1 ON ""("" COLLATE nocase);
+  }
+} {}
+do_test tkt-78e04-1.4 {
+ db eval {EXPLAIN QUERY PLAN SELECT "" FROM "" WHERE "" LIKE '1e5%';}
+} {/*SCAN TABLE  USING COVERING INDEX i1*/}
+do_test tkt-78e04-1.5 {
+  execsql {
+    DROP TABLE "";
+    SELECT name FROM sqlite_master;
+  }
+} {t2}
+
+do_test tkt-78e04-2.1 {
+  execsql {
+    CREATE INDEX "" ON t2(x);
+    EXPLAIN QUERY PLAN SELECT * FROM t2 WHERE x=5;
+  }
+} {/*SEARCH TABLE t2 USING COVERING INDEX  (x=?)*/}
+do_test tkt-78e04-2.2 {
+  execsql {
+    DROP INDEX "";
+    EXPLAIN QUERY PLAN SELECT * FROM t2 WHERE x=2;
+  }
+} {/*SCAN TABLE t2*/}
+
+finish_test

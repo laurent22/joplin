@@ -1,0 +1,114 @@
+# 2012-12-21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for corrupt database files.
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !deserialize||!fts3 {
+  finish_test
+  return
+}
+database_may_be_corrupt
+
+do_test fts3fuzz001-100 {
+  sqlite3 db {}
+  db deserialize [decode_hexdb {
+| size 24576 pagesize 4096 filename c6.db
+| page 1 offset 0
+|      0: 53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00   SQLite format 3.
+|     16: 10 00 01 01 00 40 20 20 00 00 00 00 00 00 00 06   .....@  ........
+|     32: 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00 04   ................
+|     48: 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00   ................
+|     96: 00 00 00 00 0d 0e f9 00 06 0d ec 00 0f cd 0f 69   ...............i
+|    112: 0f 01 0e 10 0e c6 0d ec 00 00 00 00 00 00 00 00   ................
+|   3552: 00 00 00 00 00 00 00 00 00 00 00 00 22 06 06 17   ............"...
+|   3568: 11 11 01 31 74 61 62 6c 65 74 32 74 32 06 43 52   ...1tablet2t2.CR
+|   3584: 45 41 54 45 20 54 41 42 4c 45 20 74 32 28 78 29   EATE TABLE t2(x)
+|   3600: 81 33 04 07 17 1f 1f 01 82 35 74 61 62 6c 65 74   .3.......5tablet
+|   3616: 31 5f 73 65 67 64 69 72 74 31 5f 73 65 67 64 69   1_segdirt1_segdi
+|   3632: 72 04 43 52 45 41 54 45 20 54 41 42 4c 45 20 27   r.CREATE TABLE '
+|   3648: 74 31 5f 73 65 67 64 69 72 27 28 6c 65 76 65 6c   t1_segdir'(level
+|   3664: 20 49 4e 54 45 47 45 52 2c 69 64 78 20 49 4e 54    INTEGER,idx INT
+|   3680: 45 47 45 52 2c 73 74 61 72 74 5f 62 6c 6f 63 6b   EGER,start_block
+|   3696: 20 49 4e 54 45 47 45 52 2c 6c 65 61 76 65 73 5f    INTEGER,leaves_
+|   3712: 65 6e 64 5f 62 6c 6f 63 6b 20 49 4e 54 45 47 45   end_block INTEGE
+|   3728: 52 2c 65 6e 64 5f 62 6c 6f 63 6b 20 49 4e 54 45   R,end_block INTE
+|   3744: 47 45 52 2c 72 6f 6f 74 20 42 4c 4f 42 2c 50 52   GER,root BLOB,PR
+|   3760: 49 4d 41 52 59 20 4b 45 59 28 6c 65 76 65 6c 2c   IMARY KEY(level,
+|   3776: 20 69 64 78 29 29 31 05 06 17 45 1f 01 00 69 6e    idx))1...E...in
+|   3792: 64 65 78 73 71 6c 69 74 65 5f 61 75 74 6f 69 6e   dexsqlite_autoin
+|   3808: 64 65 78 5f 74 15 f7 36 56 76 46 97 25 f3 17 43   dex_t..6VvF.%..C
+|   3824: 15 5f 73 65 67 64 69 72 05 00 00 00 08 00 00 00   ._segdir........
+|   3840: 00 66 03 07 17 23 23 01 81 13 74 61 62 6c 65 74   .f...##...tablet
+|   3856: 31 5f 73 65 67 6d 65 6e 74 73 74 31 5f 73 65 67   1_segmentst1_seg
+|   3872: 6d 65 6e 74 73 03 43 52 45 41 54 45 20 54 41 42   ments.CREATE TAB
+|   3888: 4c 45 20 27 74 31 5f 73 65 67 6d 65 6e 74 73 27   LE 't1_segments'
+|   3904: 28 62 6c 6f 63 6b 69 64 20 49 4e 54 45 47 45 52   (blockid INTEGER
+|   3920: 20 50 52 49 4d 41 52 59 20 4b 45 59 2c 20 62 6c    PRIMARY KEY, bl
+|   3936: 6f 63 6b 20 42 4c 4f 42 29 62 02 07 17 21 21 01   ock BLOB)b...!!.
+|   3952: 81 0f 74 61 62 6c 65 74 31 5f 63 6f 6e 74 65 6e   ..tablet1_conten
+|   3968: 74 74 31 5f 63 6f 6e 74 65 6e 74 02 43 52 45 41   tt1_content.CREA
+|   3984: 54 45 20 54 41 42 4c 45 20 27 74 31 5f 63 6f 6e   TE TABLE 't1_con
+|   4000: 74 65 6e 74 27 28 64 6f 63 69 64 20 49 4e 54 45   tent'(docid INTE
+|   4016: 47 45 52 20 50 52 49 4d 41 52 59 20 4b 45 59 2c   GER PRIMARY KEY,
+|   4032: 20 27 63 30 63 6f 6e 74 65 6e 74 27 29 31 01 06    'c0content')1..
+|   4048: 17 11 11 08 51 74 61 62 6c 65 74 31 74 31 43 52   ....Qtablet1t1CR
+|   4064: 45 41 54 45 20 56 49 52 54 55 41 4c 20 54 41 42   EATE VIRTUAL TAB
+|   4080: 4c 45 20 74 31 20 55 53 49 4e 47 20 66 74 73 33   LE t1 USING fts3
+| page 2 offset 4096
+|      0: 0d 00 00 00 03 0f e0 00 0f f6 0f ec 0f e0 00 00   ................
+|   4064: 0a 03 03 00 1b 61 62 61 6e 64 6f 6e 08 02 03 00   .....abandon....
+|   4080: 17 61 62 61 66 74 08 01 03 00 17 61 62 61 63 6b   .abaft.....aback
+| page 3 offset 8192
+|      0: 0d 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00   ................
+| page 4 offset 12288
+|      0: 0d 00 00 00 01 0f d6 00 0f 00 00 00 00 00 00 00   ................
+|   4048: 00 00 00 00 00 00 28 01 07 08 08 08 08 15 46 30   ......(.......F0
+|   4064: 20 32 39 00 05 61 62 61 63 6b 03 01 02 00 03 02    29..aback......
+|   4080: 66 74 03 02 02 00 03 04 6e 64 6f 6e 03 03 02 00   ft......ndon....
+| page 5 offset 16384
+|      0: 0a 00 00 00 01 0f fb 00 0f fb 00 00 00 00 00 00   ................
+|   4080: 00 00 00 00 00 00 00 00 00 00 00 04 04 08 08 09   ................
+| page 6 offset 20480
+|      0: 0d 00 00 00 05 0f b8 00 0f f4 0f e9 0f d6 0f c7   ................
+|     16: 0f b8 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+|   4016: 00 00 00 00 00 00 00 00 0d 05 02 23 61 75 74 6f   ...........#auto
+|   4032: 6d 65 72 67 65 3d 35 0d 04 02 23 6d 65 72 67 65   merge=5...#merge
+|   4048: 3d 31 30 30 2c 38 11 03 02 2b 69 6e 74 65 67 72   =100,8...+integr
+|   4064: 69 74 79 3d 63 68 65 63 6b 09 02 02 1b 72 65 62   ity=check....reb
+|   4080: 75 69 6c 64 0a 01 02 1d 6f 70 74 69 6d 69 7a 65   uild....optimize
+| end c6.db
+  }]
+  catchsql {
+    PRAGMA writable_schema=on; -- disable schema corruption detection
+    INSERT INTO t1(t1) SELECT x FROM t2;
+  }
+} {1 {database disk image is malformed}}
+do_test fts3fuzz001-110 {
+  catchsql {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+} {1 {database disk image is malformed}}
+do_test fts3fuzz001-120 {
+  catchsql {
+    INSERT INTO t1(t1) VALUES('optimize');
+  }
+} {1 {database disk image is malformed}}
+do_test fts3fuzz001-121 {
+  catchsql {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+} {1 {database disk image is malformed}}
+
+
+finish_test

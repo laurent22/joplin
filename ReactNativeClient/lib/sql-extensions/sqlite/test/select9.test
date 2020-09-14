@@ -1,0 +1,472 @@
+# 2008 June 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. 
+#
+# $Id: select9.test,v 1.4 2008/07/01 14:39:35 danielk1977 Exp $
+
+# The tests in this file are focused on test compound SELECT statements 
+# that have any or all of an ORDER BY, LIMIT or OFFSET clauses. As of
+# version 3.6.0, SQLite contains code to use SQL indexes where possible 
+# to optimize such statements.
+#
+
+# TODO Points:
+#
+#   * Are there any "column affinity" issues to consider?
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+#-------------------------------------------------------------------------
+# test_compound_select TESTNAME SELECT RESULT
+#
+#   This command is used to run multiple LIMIT/OFFSET test cases based on 
+#   the single SELECT statement passed as the second argument. The SELECT
+#   statement may not contain a LIMIT or OFFSET clause. This proc tests
+#   many statements of the form:
+#    
+#     "$SELECT limit $X offset $Y"
+#    
+#   for various values of $X and $Y.
+#    
+#   The third argument, $RESULT, should contain the expected result of
+#   the command [execsql $SELECT].
+#    
+#   The first argument, $TESTNAME, is used as the base test case name to
+#   pass to [do_test] for each individual LIMIT OFFSET test case.
+# 
+proc test_compound_select {testname sql result} {
+
+  set nCol 1
+  db eval $sql A {
+    set nCol [llength $A(*)]
+    break
+  }
+  set nRow [expr {[llength $result] / $nCol}]
+
+  set ::compound_sql $sql
+  do_test $testname { 
+    execsql $::compound_sql
+  } $result
+#return
+
+  set iLimitIncr  1
+  set iOffsetIncr 1
+  if {[info exists ::G(isquick)] && $::G(isquick) && $nRow>=5} {
+    set iOffsetIncr [expr $nRow / 5]
+    set iLimitIncr [expr $nRow / 5]
+  }
+
+  set iLimitEnd   [expr $nRow+$iLimitIncr]
+  set iOffsetEnd  [expr $nRow+$iOffsetIncr]
+
+  for {set iOffset 0} {$iOffset < $iOffsetEnd} {incr iOffset $iOffsetIncr} {
+    for {set iLimit 0} {$iLimit < $iLimitEnd} {incr iLimit} {
+  
+      set ::compound_sql "$sql LIMIT $iLimit"
+      if {$iOffset != 0} {
+        append ::compound_sql " OFFSET $iOffset"
+      }
+  
+      set iStart [expr {$iOffset*$nCol}]
+      set iEnd [expr {($iOffset*$nCol) + ($iLimit*$nCol) -1}]
+  
+      do_test $testname.limit=$iLimit.offset=$iOffset { 
+        execsql $::compound_sql
+      } [lrange $result $iStart $iEnd]
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# test_compound_select_flippable TESTNAME SELECT RESULT
+#
+#   This command is for testing statements of the form:
+#
+#     <simple select 1> <compound op> <simple select 2> ORDER BY <order by>
+#
+#   where each <simple select> is a simple (non-compound) select statement
+#   and <compound op> is one of "INTERSECT", "UNION ALL" or "UNION".
+#
+#   This proc calls [test_compound_select] twice, once with the select
+#   statement as it is passed to this command, and once with the positions
+#   of <select statement 1> and <select statement 2> exchanged.
+#
+proc test_compound_select_flippable {testname sql result} {
+  test_compound_select $testname $sql $result
+
+  set select [string trim $sql]
+  set RE {(.*)(UNION ALL|INTERSECT|UNION)(.*)(ORDER BY.*)}
+  set rc [regexp $RE $select -> s1 op s2 order_by]
+  if {!$rc} {error "Statement is unflippable: $select"}
+
+  set flipsql "$s2 $op $s1 $order_by"
+  test_compound_select $testname.flipped $flipsql $result
+}
+
+#############################################################################
+# Begin tests.
+#
+
+# Create and populate a sample database.
+#
+do_test select9-1.0 {
+  execsql {
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(d, e, f);
+    BEGIN;
+      INSERT INTO t1 VALUES(1,  'one',   'I');
+      INSERT INTO t1 VALUES(3,  NULL,    NULL);
+      INSERT INTO t1 VALUES(5,  'five',  'V');
+      INSERT INTO t1 VALUES(7,  'seven', 'VII');
+      INSERT INTO t1 VALUES(9,  NULL,    NULL);
+      INSERT INTO t1 VALUES(2,  'two',   'II');
+      INSERT INTO t1 VALUES(4,  'four',  'IV');
+      INSERT INTO t1 VALUES(6,  NULL,    NULL);
+      INSERT INTO t1 VALUES(8,  'eight', 'VIII');
+      INSERT INTO t1 VALUES(10, 'ten',   'X');
+
+      INSERT INTO t2 VALUES(1,  'two',      'IV');
+      INSERT INTO t2 VALUES(2,  'four',     'VIII');
+      INSERT INTO t2 VALUES(3,  NULL,       NULL);
+      INSERT INTO t2 VALUES(4,  'eight',    'XVI');
+      INSERT INTO t2 VALUES(5,  'ten',      'XX');
+      INSERT INTO t2 VALUES(6,  NULL,       NULL);
+      INSERT INTO t2 VALUES(7,  'fourteen', 'XXVIII');
+      INSERT INTO t2 VALUES(8,  'sixteen',  'XXXII');
+      INSERT INTO t2 VALUES(9,  NULL,       NULL);
+      INSERT INTO t2 VALUES(10, 'twenty',   'XL');
+
+    COMMIT;
+  }
+} {}
+
+# Each iteration of this loop runs the same tests with a different set
+# of indexes present within the database schema. The data returned by
+# the compound SELECT statements in the test cases should be the same 
+# in each case.
+#
+set iOuterLoop 1
+foreach indexes [list {
+  /* Do not create any indexes. */
+} {
+  CREATE INDEX i1 ON t1(a)
+} {
+  CREATE INDEX i2 ON t1(b)
+} {
+  CREATE INDEX i3 ON t2(d)
+} {
+  CREATE INDEX i4 ON t2(e)
+}] {
+
+  do_test select9-1.$iOuterLoop.1 {
+    execsql $indexes
+  } {}
+
+  # Test some 2-way UNION ALL queries. No WHERE clauses.
+  #
+  test_compound_select select9-1.$iOuterLoop.2 {
+    SELECT a, b FROM t1 UNION ALL SELECT d, e FROM t2 
+  } {1 one 3 {} 5 five 7 seven 9 {} 2 two 4 four 6 {} 8 eight 10 ten 1 two 2 four 3 {} 4 eight 5 ten 6 {} 7 fourteen 8 sixteen 9 {} 10 twenty}
+  test_compound_select select9-1.$iOuterLoop.3 {
+    SELECT a, b FROM t1 UNION ALL SELECT d, e FROM t2 ORDER BY 1 
+  } {1 one 1 two 2 two 2 four 3 {} 3 {} 4 four 4 eight 5 five 5 ten 6 {} 6 {} 7 seven 7 fourteen 8 eight 8 sixteen 9 {} 9 {} 10 ten 10 twenty}
+  test_compound_select select9-1.$iOuterLoop.4 {
+    SELECT a, b FROM t1 UNION ALL SELECT d, e FROM t2 ORDER BY 2 
+  } {3 {} 9 {} 6 {} 3 {} 6 {} 9 {} 8 eight 4 eight 5 five 4 four 2 four 7 fourteen 1 one 7 seven 8 sixteen 10 ten 5 ten 10 twenty 2 two 1 two}
+  test_compound_select_flippable select9-1.$iOuterLoop.5 {
+    SELECT a, b FROM t1 UNION ALL SELECT d, e FROM t2 ORDER BY 1, 2
+  } {1 one 1 two 2 four 2 two 3 {} 3 {} 4 eight 4 four 5 five 5 ten 6 {} 6 {} 7 fourteen 7 seven 8 eight 8 sixteen 9 {} 9 {} 10 ten 10 twenty}
+  test_compound_select_flippable select9-1.$iOuterLoop.6 {
+    SELECT a, b FROM t1 UNION ALL SELECT d, e FROM t2 ORDER BY 2, 1
+  } {3 {} 3 {} 6 {} 6 {} 9 {} 9 {} 4 eight 8 eight 5 five 2 four 4 four 7 fourteen 1 one 7 seven 8 sixteen 5 ten 10 ten 10 twenty 1 two 2 two}
+
+  # Test some 2-way UNION queries.
+  #
+  test_compound_select select9-1.$iOuterLoop.7 {
+    SELECT a, b FROM t1 UNION SELECT d, e FROM t2 
+  } {1 one 1 two 2 four 2 two 3 {} 4 eight 4 four 5 five 5 ten 6 {} 7 fourteen 7 seven 8 eight 8 sixteen 9 {} 10 ten 10 twenty}
+
+  test_compound_select select9-1.$iOuterLoop.8 {
+    SELECT a, b FROM t1 UNION SELECT d, e FROM t2 ORDER BY 1 
+  } {1 one 1 two 2 four 2 two 3 {} 4 eight 4 four 5 five 5 ten 6 {} 7 fourteen 7 seven 8 eight 8 sixteen 9 {} 10 ten 10 twenty}
+
+  test_compound_select select9-1.$iOuterLoop.9 {
+    SELECT a, b FROM t1 UNION SELECT d, e FROM t2 ORDER BY 2 
+  } {3 {} 6 {} 9 {} 4 eight 8 eight 5 five 2 four 4 four 7 fourteen 1 one 7 seven 8 sixteen 5 ten 10 ten 10 twenty 1 two 2 two}
+
+  test_compound_select_flippable select9-1.$iOuterLoop.10 {
+    SELECT a, b FROM t1 UNION SELECT d, e FROM t2 ORDER BY 1, 2
+  } {1 one 1 two 2 four 2 two 3 {} 4 eight 4 four 5 five 5 ten 6 {} 7 fourteen 7 seven 8 eight 8 sixteen 9 {} 10 ten 10 twenty}
+
+  test_compound_select_flippable select9-1.$iOuterLoop.11 {
+    SELECT a, b FROM t1 UNION SELECT d, e FROM t2 ORDER BY 2, 1
+  } {3 {} 6 {} 9 {} 4 eight 8 eight 5 five 2 four 4 four 7 fourteen 1 one 7 seven 8 sixteen 5 ten 10 ten 10 twenty 1 two 2 two}
+
+  # Test some 2-way INTERSECT queries.
+  #
+  test_compound_select select9-1.$iOuterLoop.11 {
+    SELECT a, b FROM t1 INTERSECT SELECT d, e FROM t2 
+  } {3 {} 6 {} 9 {}}
+  test_compound_select_flippable select9-1.$iOuterLoop.12 {
+    SELECT a, b FROM t1 INTERSECT SELECT d, e FROM t2 ORDER BY 1
+  } {3 {} 6 {} 9 {}}
+  test_compound_select select9-1.$iOuterLoop.13 {
+    SELECT a, b FROM t1 INTERSECT SELECT d, e FROM t2 ORDER BY 2
+  } {3 {} 6 {} 9 {}}
+  test_compound_select_flippable select9-1.$iOuterLoop.14 {
+    SELECT a, b FROM t1 INTERSECT SELECT d, e FROM t2 ORDER BY 2, 1
+  } {3 {} 6 {} 9 {}}
+  test_compound_select_flippable select9-1.$iOuterLoop.15 {
+    SELECT a, b FROM t1 INTERSECT SELECT d, e FROM t2 ORDER BY 1, 2
+  } {3 {} 6 {} 9 {}}
+
+  # Test some 2-way EXCEPT queries.
+  #
+  test_compound_select select9-1.$iOuterLoop.16 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, e FROM t2 
+  } {1 one 2 two 4 four 5 five 7 seven 8 eight 10 ten}
+
+  test_compound_select select9-1.$iOuterLoop.17 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, e FROM t2 ORDER BY 1 
+  } {1 one 2 two 4 four 5 five 7 seven 8 eight 10 ten}
+
+  test_compound_select select9-1.$iOuterLoop.18 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, e FROM t2 ORDER BY 2 
+  } {8 eight 5 five 4 four 1 one 7 seven 10 ten 2 two}
+
+  test_compound_select select9-1.$iOuterLoop.19 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, e FROM t2 ORDER BY 1, 2
+  } {1 one 2 two 4 four 5 five 7 seven 8 eight 10 ten}
+
+  test_compound_select select9-1.$iOuterLoop.20 {
+    SELECT a, b FROM t1 EXCEPT SELECT d, e FROM t2 ORDER BY 2, 1
+  } {8 eight 5 five 4 four 1 one 7 seven 10 ten 2 two}
+
+  incr iOuterLoop
+}
+
+do_test select9-2.0 {
+  execsql {
+    DROP INDEX i1;
+    DROP INDEX i2;
+    DROP INDEX i3;
+    DROP INDEX i4;
+  }
+} {}
+
+proc reverse {lhs rhs} {
+  return [string compare $rhs $lhs]
+}
+db collate reverse reverse
+
+# This loop is similar to the previous one (test cases select9-1.*) 
+# except that the simple select statements have WHERE clauses attached
+# to them. Sometimes the WHERE clause may be satisfied using the same
+# index used for ORDER BY, sometimes not.
+#
+set iOuterLoop 1
+foreach indexes [list {
+  /* Do not create any indexes. */
+} {
+  CREATE INDEX i1 ON t1(a)
+} {
+  DROP INDEX i1;
+  CREATE INDEX i1 ON t1(b, a)
+} {
+  CREATE INDEX i2 ON t2(d DESC, e COLLATE REVERSE ASC);
+} {
+  CREATE INDEX i3 ON t1(a DESC);
+}] {
+  do_test select9-2.$iOuterLoop.1 {
+    execsql $indexes
+  } {}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.2 {
+    SELECT * FROM t1 WHERE a<5 UNION SELECT * FROM t2 WHERE d>=5 ORDER BY 1
+  } {1 one I 2 two II 3 {} {} 4 four IV 5 ten XX 6 {} {} 7 fourteen XXVIII 8 sixteen XXXII 9 {} {} 10 twenty XL}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.2 {
+    SELECT * FROM t1 WHERE a<5 UNION SELECT * FROM t2 WHERE d>=5 ORDER BY 2, 1
+  } {3 {} {} 6 {} {} 9 {} {} 4 four IV 7 fourteen XXVIII 1 one I 8 sixteen XXXII 5 ten XX 10 twenty XL 2 two II}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.3 {
+    SELECT * FROM t1 WHERE a<5 UNION SELECT * FROM t2 WHERE d>=5 
+    ORDER BY 2 COLLATE reverse, 1
+  } {3 {} {} 6 {} {} 9 {} {} 2 two II 10 twenty XL 5 ten XX 8 sixteen XXXII 1 one I 7 fourteen XXVIII 4 four IV}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.4 {
+    SELECT * FROM t1 WHERE a<5 UNION ALL SELECT * FROM t2 WHERE d>=5 ORDER BY 1
+  } {1 one I 2 two II 3 {} {} 4 four IV 5 ten XX 6 {} {} 7 fourteen XXVIII 8 sixteen XXXII 9 {} {} 10 twenty XL}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.5 {
+    SELECT * FROM t1 WHERE a<5 UNION ALL SELECT * FROM t2 WHERE d>=5 ORDER BY 2, 1
+  } {3 {} {} 6 {} {} 9 {} {} 4 four IV 7 fourteen XXVIII 1 one I 8 sixteen XXXII 5 ten XX 10 twenty XL 2 two II}
+
+  test_compound_select_flippable select9-2.$iOuterLoop.6 {
+    SELECT * FROM t1 WHERE a<5 UNION ALL SELECT * FROM t2 WHERE d>=5 
+    ORDER BY 2 COLLATE reverse, 1
+  } {3 {} {} 6 {} {} 9 {} {} 2 two II 10 twenty XL 5 ten XX 8 sixteen XXXII 1 one I 7 fourteen XXVIII 4 four IV}
+
+  test_compound_select select9-2.$iOuterLoop.4 {
+    SELECT a FROM t1 WHERE a<8 EXCEPT SELECT d FROM t2 WHERE d<=3 ORDER BY 1
+  } {4 5 6 7}
+
+  test_compound_select select9-2.$iOuterLoop.4 {
+    SELECT a FROM t1 WHERE a<8 INTERSECT SELECT d FROM t2 WHERE d<=3 ORDER BY 1
+  } {1 2 3}
+
+}
+
+do_test select9-2.X {
+  execsql {
+    DROP INDEX i1;
+    DROP INDEX i2;
+    DROP INDEX i3;
+  }
+} {}
+
+# This procedure executes the SQL.  Then it checks the generated program
+# for the SQL and appends a "nosort" to the result if the program contains the
+# SortCallback opcode.  If the program does not contain the SortCallback
+# opcode it appends "sort"
+#
+proc cksort {sql} {
+  set ::sqlite_sort_count 0
+  set data [execsql $sql]
+  if {$::sqlite_sort_count} {set x sort} {set x nosort}
+  lappend data $x
+  return $data
+}
+
+# If the right indexes exist, the following query:
+#
+#     SELECT t1.a FROM t1 UNION ALL SELECT t2.d FROM t2 ORDER BY 1
+#
+# can use indexes to run without doing a in-memory sort operation.
+# This block of tests (select9-3.*) is used to check if the same 
+# is possible with:
+#
+#     CREATE VIEW v1 AS SELECT a FROM t1 UNION ALL SELECT d FROM t2
+#     SELECT a FROM v1 ORDER BY 1
+#
+# It turns out that it is.
+#
+do_test select9-3.1 {
+  cksort { SELECT a FROM t1 ORDER BY 1 }
+} {1 2 3 4 5 6 7 8 9 10 sort}
+do_test select9-3.2 {
+  execsql { CREATE INDEX i1 ON t1(a) }
+  cksort { SELECT a FROM t1 ORDER BY 1 }
+} {1 2 3 4 5 6 7 8 9 10 nosort}
+do_test select9-3.3 {
+  cksort { SELECT a FROM t1 UNION ALL SELECT d FROM t2 ORDER BY 1 LIMIT 5 }
+} {1 1 2 2 3 sort}
+do_test select9-3.4 {
+  execsql { CREATE INDEX i2 ON t2(d) }
+  cksort { SELECT a FROM t1 UNION ALL SELECT d FROM t2 ORDER BY 1 LIMIT 5 }
+} {1 1 2 2 3 nosort}
+do_test select9-3.5 {
+  execsql { CREATE VIEW v1 AS SELECT a FROM t1 UNION ALL SELECT d FROM t2 }
+  cksort { SELECT a FROM v1 ORDER BY 1 LIMIT 5 }
+} {1 1 2 2 3 nosort}
+do_test select9-3.X {
+  execsql {
+    DROP INDEX i1;
+    DROP INDEX i2;
+    DROP VIEW v1;
+  }
+} {}
+
+# This block of tests is the same as the preceding one, except that
+# "UNION" is tested instead of "UNION ALL".
+#
+do_test select9-4.1 {
+  cksort { SELECT a FROM t1 ORDER BY 1 }
+} {1 2 3 4 5 6 7 8 9 10 sort}
+do_test select9-4.2 {
+  execsql { CREATE INDEX i1 ON t1(a) }
+  cksort { SELECT a FROM t1 ORDER BY 1 }
+} {1 2 3 4 5 6 7 8 9 10 nosort}
+do_test select9-4.3 {
+  cksort { SELECT a FROM t1 UNION SELECT d FROM t2 ORDER BY 1 LIMIT 5 }
+} {1 2 3 4 5 sort}
+do_test select9-4.4 {
+  execsql { CREATE INDEX i2 ON t2(d) }
+  cksort { SELECT a FROM t1 UNION SELECT d FROM t2 ORDER BY 1 LIMIT 5 }
+} {1 2 3 4 5 nosort}
+do_test select9-4.5 {
+  execsql { CREATE VIEW v1 AS SELECT a FROM t1 UNION SELECT d FROM t2 }
+  cksort { SELECT a FROM v1 ORDER BY 1 LIMIT 5 }
+} {1 2 3 4 5 sort}
+do_test select9-4.X {
+  execsql {
+    DROP INDEX i1;
+    DROP INDEX i2;
+    DROP VIEW v1;
+  }
+} {}
+
+# Testing to make sure that queries involving a view of a compound select
+# are planned efficiently.  This detects a problem reported on the mailing
+# list on 2012-04-26.  See
+#
+#  http://www.mail-archive.com/sqlite-users%40sqlite.org/msg69746.html
+#
+# For additional information.
+#
+do_test select9-5.1 {
+  db eval {
+    CREATE TABLE t51(x, y);
+    CREATE TABLE t52(x, y);
+    CREATE VIEW v5 as
+       SELECT x, y FROM t51
+       UNION ALL
+       SELECT x, y FROM t52;
+    CREATE INDEX t51x ON t51(x);
+    CREATE INDEX t52x ON t52(x);
+    EXPLAIN QUERY PLAN
+       SELECT * FROM v5 WHERE x='12345' ORDER BY y;
+  }
+} {~/SCAN TABLE/}  ;# Uses indices with "*"
+do_test select9-5.2 {
+  db eval {
+    EXPLAIN QUERY PLAN
+       SELECT x, y FROM v5 WHERE x='12345' ORDER BY y;
+  }
+} {~/SCAN TABLE/}  ;# Uses indices with "x, y"
+do_test select9-5.3 {
+  db eval {
+    EXPLAIN QUERY PLAN
+       SELECT x, y FROM v5 WHERE +x='12345' ORDER BY y;
+  }
+} {/SCAN TABLE/}   ;# Full table scan if the "+x" prevents index usage.
+
+# 2013-07-09:  Ticket [490a4b7235624298]: 
+# "WHERE 0" on the first element of a UNION causes an assertion fault
+#
+do_execsql_test select9-6.1 {
+  CREATE TABLE t61(a);
+  CREATE TABLE t62(b);
+  INSERT INTO t61 VALUES(111);
+  INSERT INTO t62 VALUES(222);
+  SELECT a FROM t61 WHERE 0 UNION SELECT b FROM t62;
+} {222}
+do_execsql_test select9-6.2 {
+  SELECT a FROM t61 WHERE 0 UNION ALL SELECT b FROM t62;
+} {222}
+do_execsql_test select9-6.3 {
+  SELECT a FROM t61 UNION SELECT b FROM t62 WHERE 0;
+} {111}
+
+
+
+finish_test

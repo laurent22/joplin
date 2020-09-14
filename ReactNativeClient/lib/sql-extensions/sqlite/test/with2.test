@@ -1,0 +1,418 @@
+# 2014 January 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the WITH clause.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix with2
+
+ifcapable {!cte} {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a);
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+}
+
+do_execsql_test 1.1 {
+  WITH x1 AS (SELECT * FROM t1)
+  SELECT sum(a) FROM x1;
+} {3}
+
+do_execsql_test 1.2 {
+  WITH x1 AS (SELECT * FROM t1)
+  SELECT (SELECT sum(a) FROM x1);
+} {3}
+
+do_execsql_test 1.3 {
+  WITH x1 AS (SELECT * FROM t1)
+  SELECT (SELECT sum(a) FROM x1);
+} {3}
+
+do_execsql_test 1.4 {
+  CREATE TABLE t2(i);
+  INSERT INTO t2 VALUES(2);
+  INSERT INTO t2 VALUES(3);
+  INSERT INTO t2 VALUES(5);
+
+  WITH x1   AS (SELECT i FROM t2),
+       i(a) AS (
+         SELECT min(i)-1 FROM x1 UNION SELECT a+1 FROM i WHERE a<10
+       )
+  SELECT a FROM i WHERE a NOT IN x1
+} {1 4 6 7 8 9 10}
+
+do_execsql_test 1.5 {
+  WITH x1 AS (SELECT a FROM t1),
+       x2 AS (SELECT i FROM t2),
+       x3 AS (SELECT * FROM x1, x2 WHERE x1.a IN x2 AND x2.i IN x1)
+  SELECT * FROM x3 
+} {2 2}
+
+do_execsql_test 1.6 {
+  CREATE TABLE t3 AS SELECT 3 AS x;
+  CREATE TABLE t4 AS SELECT 4 AS x;
+
+  WITH x1 AS (SELECT * FROM t3),
+       x2 AS (
+         WITH t3 AS (SELECT * FROM t4)
+         SELECT * FROM x1
+       )
+  SELECT * FROM x2;
+} {3}
+
+do_execsql_test 1.7 {
+  WITH x2 AS (
+         WITH t3 AS (SELECT * FROM t4)
+         SELECT * FROM t3
+       )
+  SELECT * FROM x2;
+} {4}
+
+do_execsql_test 1.8 {
+  WITH x2 AS (
+         WITH t3 AS (SELECT * FROM t4)
+         SELECT * FROM main.t3
+       )
+  SELECT * FROM x2;
+} {3}
+
+do_execsql_test 1.9 {
+  WITH x1 AS (SELECT * FROM t1)
+  SELECT (SELECT sum(a) FROM x1), (SELECT max(a) FROM x1);
+} {3 2}
+
+do_execsql_test 1.10 {
+  WITH x1 AS (SELECT * FROM t1)
+  SELECT (SELECT sum(a) FROM x1), (SELECT max(a) FROM x1), a FROM x1;
+} {3 2 1 3 2 2}
+
+do_execsql_test 1.11 {
+  WITH 
+  i(x) AS ( 
+    WITH 
+    j(x) AS ( SELECT * FROM i ), 
+    i(x) AS ( SELECT * FROM t1 )
+    SELECT * FROM j
+  )
+  SELECT * FROM i;
+} {1 2}
+
+do_execsql_test 1.12 {
+  WITH r(i) AS (
+    VALUES('.')
+    UNION ALL
+    SELECT i || '.' FROM r, (
+      SELECT x FROM x INTERSECT SELECT y FROM y
+    ) WHERE length(i) < 10
+  ),
+  x(x) AS ( VALUES(1) UNION ALL VALUES(2) UNION ALL VALUES(3) ),
+  y(y) AS ( VALUES(2) UNION ALL VALUES(4) UNION ALL VALUES(6) )
+
+  SELECT * FROM r;
+} {. .. ... .... ..... ...... ....... ........ ......... ..........}
+
+do_execsql_test 1.13 {
+  WITH r(i) AS (
+    VALUES('.')
+    UNION ALL
+    SELECT i || '.' FROM r, ( SELECT x FROM x WHERE x=2 ) WHERE length(i) < 10
+  ),
+  x(x) AS ( VALUES(1) UNION ALL VALUES(2) UNION ALL VALUES(3) )
+
+  SELECT * FROM r ORDER BY length(i) DESC;
+} {.......... ......... ........ ....... ...... ..... .... ... .. .}
+
+do_execsql_test 1.14 {
+  WITH 
+  t4(x) AS ( 
+    VALUES(4)
+    UNION ALL 
+    SELECT x+1 FROM t4 WHERE x<10
+  )
+  SELECT * FROM t4;
+} {4 5 6 7 8 9 10}
+
+do_execsql_test 1.15 {
+  WITH 
+  t4(x) AS ( 
+    VALUES(4)
+    UNION ALL 
+    SELECT x+1 FROM main.t4 WHERE x<10
+  )
+  SELECT * FROM t4;
+} {4 5}
+
+do_catchsql_test 1.16 {
+  WITH 
+  t4(x) AS ( 
+    VALUES(4)
+    UNION ALL 
+    SELECT x+1 FROM t4, main.t4, t4 WHERE x<10
+  )
+  SELECT * FROM t4;
+} {1 {multiple references to recursive table: t4}}
+
+
+#---------------------------------------------------------------------------
+# Check that variables can be used in CTEs.
+#
+set ::min [expr 3]
+set ::max [expr 9]
+do_execsql_test 2.1 {
+  WITH i(x) AS (
+    VALUES($min) UNION ALL SELECT x+1 FROM i WHERE x < $max
+  )
+  SELECT * FROM i;
+} {3 4 5 6 7 8 9}
+
+do_execsql_test 2.2 {
+  WITH i(x) AS (
+    VALUES($min) UNION ALL SELECT x+1 FROM i WHERE x < $max
+  )
+  SELECT x FROM i JOIN i AS j USING (x);
+} {3 4 5 6 7 8 9}
+
+#---------------------------------------------------------------------------
+# Check that circular references are rejected.
+#
+do_catchsql_test 3.1 {
+  WITH i(x, y) AS ( VALUES(1, (SELECT x FROM i)) )
+  SELECT * FROM i;
+} {1 {circular reference: i}}
+
+do_catchsql_test 3.2 {
+  WITH 
+  i(x) AS ( SELECT * FROM j ),
+  j(x) AS ( SELECT * FROM k ),
+  k(x) AS ( SELECT * FROM i )
+  SELECT * FROM i;
+} {1 {circular reference: i}}
+
+do_catchsql_test 3.3 {
+  WITH 
+  i(x) AS ( SELECT * FROM (SELECT * FROM j) ),
+  j(x) AS ( SELECT * FROM (SELECT * FROM i) )
+  SELECT * FROM i;
+} {1 {circular reference: i}}
+
+do_catchsql_test 3.4 {
+  WITH 
+  i(x) AS ( SELECT * FROM (SELECT * FROM j) ),
+  j(x) AS ( SELECT * FROM (SELECT * FROM i) )
+  SELECT * FROM j;
+} {1 {circular reference: j}}
+
+do_catchsql_test 3.5 {
+  WITH 
+  i(x) AS ( 
+    WITH j(x) AS ( SELECT * FROM i )
+    SELECT * FROM j
+  )
+  SELECT * FROM i;
+} {1 {circular reference: i}}
+
+#---------------------------------------------------------------------------
+# Try empty and very long column lists.
+#
+do_catchsql_test 4.1 {
+  WITH x() AS ( SELECT 1,2,3 )
+  SELECT * FROM x;
+} {1 {near ")": syntax error}}
+
+proc genstmt {n} {
+  for {set i 1} {$i<=$n} {incr i} {
+    lappend cols "c$i"
+    lappend vals $i
+  }
+  return "
+    WITH x([join $cols ,]) AS (SELECT [join $vals ,])
+    SELECT (c$n == $n) FROM x
+  "
+}
+
+do_execsql_test  4.2 [genstmt 10] 1
+do_execsql_test  4.3 [genstmt 100] 1
+do_execsql_test  4.4 [genstmt 255] 1
+set nLimit [sqlite3_limit db SQLITE_LIMIT_COLUMN -1]
+do_execsql_test  4.5 [genstmt [expr $nLimit-1]] 1
+do_execsql_test  4.6 [genstmt $nLimit] 1
+do_catchsql_test 4.7 [genstmt [expr $nLimit+1]] \
+  {1 {too many columns in result set}}
+
+#---------------------------------------------------------------------------
+# Check that adding a WITH clause to an INSERT disables the xfer 
+# optimization.
+#
+proc do_xfer_test {tn bXfer sql {res {}}} {
+  set ::sqlite3_xferopt_count 0
+  uplevel [list do_test $tn [subst -nocommands {
+    set dres [db eval {$sql}]
+    list [set ::sqlite3_xferopt_count] [set dres]
+  }] [list $bXfer $res]]
+}
+
+do_execsql_test 5.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a, b);
+}
+
+do_xfer_test 5.2 1 { INSERT INTO t1 SELECT * FROM t2 }
+do_xfer_test 5.3 0 { INSERT INTO t1 SELECT a, b FROM t2 }
+do_xfer_test 5.4 0 { INSERT INTO t1 SELECT b, a FROM t2 }
+do_xfer_test 5.5 0 { 
+  WITH x AS (SELECT a, b FROM t2) INSERT INTO t1 SELECT * FROM x 
+}
+do_xfer_test 5.6 0 { 
+  WITH x AS (SELECT a, b FROM t2) INSERT INTO t1 SELECT * FROM t2 
+}
+do_xfer_test 5.7 0 { 
+ INSERT INTO t1 WITH x AS ( SELECT * FROM t2 ) SELECT * FROM x
+}
+do_xfer_test 5.8 0 { 
+ INSERT INTO t1 WITH x(a,b) AS ( SELECT * FROM t2 ) SELECT * FROM x
+}
+
+#---------------------------------------------------------------------------
+# Check that syntax (and other) errors in statements with WITH clauses
+# attached to them do not cause problems (e.g. memory leaks).
+#
+do_execsql_test 6.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a, b);
+}
+
+do_catchsql_test 6.2 {
+  WITH x AS (SELECT * FROM t1)
+  INSERT INTO t2 VALUES(1, 2,);
+} {1 {near ")": syntax error}}
+
+do_catchsql_test 6.3 {
+  WITH x AS (SELECT * FROM t1)
+  INSERT INTO t2 SELECT a, b, FROM t1;
+} {1 {near "FROM": syntax error}}
+
+do_catchsql_test 6.3 {
+  WITH x AS (SELECT * FROM t1)
+  INSERT INTO t2 SELECT a, b FROM abc;
+} {1 {no such table: abc}}
+
+do_catchsql_test 6.4 {
+  WITH x AS (SELECT * FROM t1)
+  INSERT INTO t2 SELECT a, b, FROM t1 a a a;
+} {1 {near "FROM": syntax error}}
+
+do_catchsql_test 6.5 {
+  WITH x AS (SELECT * FROM t1)
+  DELETE FROM t2 WHERE;
+} {1 {near ";": syntax error}}
+
+do_catchsql_test 6.6 { 
+  WITH x AS (SELECT * FROM t1) DELETE FROM t2 WHERE
+} {1 {incomplete input}}
+
+do_catchsql_test 6.7 { 
+  WITH x AS (SELECT * FROM t1) DELETE FROM t2 WHRE 1;
+} {/1 {near .* syntax error}/}
+
+do_catchsql_test 6.8 { 
+  WITH x AS (SELECT * FROM t1) UPDATE t2 SET a = 10, b = ;
+} {/1 {near .* syntax error}/}
+
+do_catchsql_test 6.9 { 
+  WITH x AS (SELECT * FROM t1) UPDATE t2 SET a = 10, b = 1 WHERE a===b;
+} {/1 {near .* syntax error}/}
+
+do_catchsql_test 6.10 {
+  WITH x(a,b) AS (
+    SELECT 1, 1
+    UNION ALL
+    SELECT a*b,a+b FROM x WHERE c=2
+  )
+  SELECT * FROM x
+} {1 {no such column: c}}
+
+#-------------------------------------------------------------------------
+# Recursive queries in IN(...) expressions.
+#
+do_execsql_test 7.1 {
+  CREATE TABLE t5(x INTEGER);
+  CREATE TABLE t6(y INTEGER);
+
+  WITH s(x) AS ( VALUES(7) UNION ALL SELECT x+7 FROM s WHERE x<49 )
+  INSERT INTO t5 
+  SELECT * FROM s;
+
+  INSERT INTO t6 
+  WITH s(x) AS ( VALUES(2) UNION ALL SELECT x+2 FROM s WHERE x<49 )
+  SELECT * FROM s;
+}
+
+do_execsql_test 7.2 {
+  SELECT * FROM t6 WHERE y IN (SELECT x FROM t5)
+} {14 28 42}
+
+do_execsql_test 7.3 {
+  WITH ss AS (SELECT x FROM t5)
+  SELECT * FROM t6 WHERE y IN (SELECT x FROM ss)
+} {14 28 42}
+
+do_execsql_test 7.4 {
+  WITH ss(x) AS ( VALUES(7) UNION ALL SELECT x+7 FROM ss WHERE x<49 )
+  SELECT * FROM t6 WHERE y IN (SELECT x FROM ss)
+} {14 28 42}
+
+do_execsql_test 7.5 {
+  SELECT * FROM t6 WHERE y IN (
+    WITH ss(x) AS ( VALUES(7) UNION ALL SELECT x+7 FROM ss WHERE x<49 )
+    SELECT x FROM ss
+  )
+} {14 28 42}
+
+#-------------------------------------------------------------------------
+# At one point the following was causing an assertion failure and a 
+# memory leak.
+#
+do_execsql_test 8.1 {
+  CREATE TABLE t7(y);
+  INSERT INTO t7 VALUES(NULL);
+  CREATE VIEW v AS SELECT * FROM t7 ORDER BY y;
+}
+
+do_execsql_test 8.2 {
+  WITH q(a) AS (
+    SELECT 1
+    UNION 
+    SELECT a+1 FROM q, v WHERE a<5
+  )
+  SELECT * FROM q;
+} {1 2 3 4 5}
+
+do_execsql_test 8.3 {
+  WITH q(a) AS (
+    SELECT 1
+    UNION ALL
+    SELECT a+1 FROM q, v WHERE a<5
+  )
+  SELECT * FROM q;
+} {1 2 3 4 5}
+
+
+finish_test

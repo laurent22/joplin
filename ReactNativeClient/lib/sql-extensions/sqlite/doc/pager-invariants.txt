@@ -1,0 +1,76 @@
+ *** Throughout this document, a page is deemed to have been synced
+     automatically as soon as it is written when PRAGMA synchronous=OFF.
+     Otherwise, the page is not synced until the xSync method of the VFS
+     is called successfully on the file containing the page.
+
+ *** Definition:  A page of the database file is said to be "overwriteable" if
+     one or more of the following are true about the page:
+ 
+     (a)  The original content of the page as it was at the beginning of
+          the transaction has been written into the rollback journal and
+          synced.
+ 
+     (b)  The page was a freelist leaf page at the start of the transaction.
+ 
+     (c)  The page number is greater than the largest page that existed in
+          the database file at the start of the transaction.
+ 
+ (1) A page of the database file is never overwritten unless one of the
+     following are true:
+ 
+     (a) The page and all other pages on the same sector are overwriteable.
+ 
+     (b) The atomic page write optimization is enabled, and the entire
+         transaction other than the update of the transaction sequence
+         number consists of a single page change.
+ 
+ (2) The content of a page written into the rollback journal exactly matches
+     both the content in the database when the rollback journal was written
+     and the content in the database at the beginning of the current
+     transaction.
+ 
+ (3) Writes to the database file are an integer multiple of the page size
+     in length and are aligned to a page boundary.
+ 
+ (4) Reads from the database file are either aligned on a page boundary and
+     an integer multiple of the page size in length or are taken from the
+     first 100 bytes of the database file.
+ 
+ (5) All writes to the database file are synced prior to the rollback journal
+     being deleted, truncated, or zeroed.
+ 
+ (6) If a master journal file is used, then all writes to the database file
+     are synced prior to the master journal being deleted.
+ 
+ *** Definition: Two databases (or the same database at two points it time)
+     are said to be "logically equivalent" if they give the same answer to
+     all queries.  Note in particular the content of freelist leaf
+     pages can be changed arbitarily without effecting the logical equivalence
+     of the database.
+ 
+ (7) At any time, if any subset, including the empty set and the total set,
+     of the unsynced changes to a rollback journal are removed and the 
+     journal is rolled back, the resulting database file will be logical
+     equivalent to the database file at the beginning of the transaction.
+ 
+ (8) When a transaction is rolled back, the xTruncate method of the VFS
+     is called to restore the database file to the same size it was at
+     the beginning of the transaction.  (In some VFSes, the xTruncate
+     method is a no-op, but that does not change the fact the SQLite will
+     invoke it.)
+ 
+ (9) Whenever the database file is modified, at least one bit in the range
+     of bytes from 24 through 39 inclusive will be changed prior to releasing
+     the EXCLUSIVE lock.
+
+(10) The pattern of bits in bytes 24 through 39 shall not repeat in less
+     than one billion transactions.
+
+(11) A database file is well-formed at the beginning and at the conclusion
+     of every transaction.
+
+(12) An EXCLUSIVE lock must be held on the database file before making
+     any changes to the database file.
+
+(13) A SHARED lock must be held on the database file before reading any
+     content out of the database file.

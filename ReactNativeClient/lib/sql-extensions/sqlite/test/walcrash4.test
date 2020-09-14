@@ -1,0 +1,85 @@
+# 2010 May 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+ifcapable !wal {finish_test ; return }
+set testprefix walcrash4
+do_not_use_codec
+
+#-------------------------------------------------------------------------
+# At one point, if "PRAGMA synchronous=full" is set and the platform
+# does not support POWERSAFE_OVERWRITE, and the last frame written to 
+# the wal file in a transaction is aligned with a sector boundary, the
+# xSync() call was omitted. 
+#
+# The following test verifies that this has been fixed.
+#
+do_execsql_test 1.0 {
+  PRAGMA autovacuum = 0;
+  PRAGMA page_size = 1024;
+  PRAGMA journal_mode = wal;
+  PRAGMA main.synchronous = full;
+} {wal}
+
+faultsim_save_and_close
+
+# The error message is different on unix and windows
+#
+if {$::tcl_platform(platform)=="windows"} {
+ set msg "child killed: unknown signal"
+} else {
+ set msg "child process exited abnormally"
+}
+
+for {set nExtra 0} {$nExtra < 10} {incr nExtra} {
+  for {set i 0} {$i < 10} {incr i} {
+    do_test 1.nExtra=$nExtra.i=$i.1 {
+      faultsim_restore_and_reopen
+    
+      set fd [open crash.tcl w]
+      puts $fd [subst -nocommands {
+        sqlite3_crash_enable 1
+        sqlite3_test_control_pending_byte $::sqlite_pending_byte
+        sqlite3 db test.db -vfs crash
+        db eval {
+          PRAGMA main.synchronous=FULL;
+          BEGIN;
+          CREATE TABLE t1(x UNIQUE);
+        }
+        for {set e 2} {[set e] < ($nExtra+2)} {incr e} {
+          db eval "CREATE TABLE t[set e] (x)"
+        }
+        db eval {
+          INSERT INTO t1 VALUES( randomblob(170000) );
+          COMMIT;
+        }
+        sqlite3_crash_now
+      }]
+      close $fd
+    
+      set r [catch { exec [info nameofexec] crash.tcl >@stdout } msg]
+      list $r $msg
+    } "1 {$msg}"
+  
+    do_execsql_test 1.nExtra=$nExtra.i=$i.2 { 
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    } {1 ok}
+  } 
+}
+
+
+finish_test

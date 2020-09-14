@@ -1,0 +1,65 @@
+# 2016 March 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# Specifically, that the fts5 module is deterministic. At one point, when
+# segment ids were allocated using sqlite3_randomness(), this was not the
+# case.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5aa
+return_if_no_fts5 
+
+proc do_determin_test {tn} {
+  uplevel [list
+    do_execsql_test $tn {
+      SELECT (SELECT md5sum(id, block) FROM t1_data)==
+             (SELECT md5sum(id, block) FROM t2_data),
+             (SELECT md5sum(id, block) FROM t1_data)==
+             (SELECT md5sum(id, block) FROM t3_data)
+    } {1 1}
+  ]
+}
+
+foreach_detail_mode $::testprefix {
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix="1 2", detail=%DETAIL%);
+    CREATE VIRTUAL TABLE t2 USING fts5(a, b, prefix="1 2", detail=%DETAIL%);
+    CREATE VIRTUAL TABLE t3 USING fts5(a, b, prefix="1 2", detail=%DETAIL%);
+  }
+
+  do_test 1.1 {
+    foreach t {t1 t2 t3} {
+      execsql [string map [list TBL $t] {
+        INSERT INTO TBL VALUES('a b c', 'd e f');
+        INSERT INTO TBL VALUES('c1 c2 c3', 'c1 c2 c3');
+        INSERT INTO TBL VALUES('xyzxyzxyz', 'xyzxyzxyz');
+      }]
+    }
+  } {}
+
+  do_determin_test 1.2
+
+  do_test 1.3 {
+    foreach t {t1 t2 t3} {
+      execsql [string map [list TBL $t] {
+        INSERT INTO TBL(TBL) VALUES('optimize');
+      }]
+    }
+  } {}
+
+  do_determin_test 1.4
+}
+
+
+finish_test

@@ -1,0 +1,63 @@
+# 2010 April 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix wal64k
+
+ifcapable !wal {finish_test ; return }
+
+if {$tcl_platform(platform) != "unix"} {
+  finish_test
+  return
+}
+
+db close
+test_syscall pagesize 65536
+sqlite3 db test.db
+
+do_execsql_test 1.0 { 
+  PRAGMA journal_mode = WAL;
+  CREATE TABLE t1(x);
+  CREATE INDEX i1 ON t1(x);
+} {wal}
+do_test 1.1 { file size test.db-shm } {65536}
+
+do_test 1.2 {
+  execsql BEGIN
+  while {[file size test.db-shm]==65536} {
+    execsql { INSERT INTO t1 VALUES( randstr(900,1100) ) }
+  }
+  execsql COMMIT
+  file size test.db-shm
+} {131072}
+
+integrity_check 1.3
+
+db close
+forcedelete test.db
+sqlite3 db test.db -vfs unix-excl
+do_execsql_test 2.1 {
+  PRAGMA page_size=512;
+  PRAGMA journal_mode=WAL;
+  CREATE TABLE t1(a,b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<8200)
+  INSERT INTO t1(a,b) SELECT x, zeroblob(300) FROM c;
+  PRAGMA integrity_check;
+} {wal ok}
+
+db close
+test_syscall pagesize -1
+finish_test

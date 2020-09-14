@@ -1,0 +1,102 @@
+# 2013 May 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/fts3_common.tcl
+set ::testprefix fts4merge4
+
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+do_execsql_test 1.1 { CREATE VIRTUAL TABLE t1 USING fts4 }
+
+do_test 1.2 {
+  for {set i 0} {$i < 2000} {incr i} {
+    execsql {INSERT INTO t1 VALUES('a b c d e f g h i j k l');}
+  }
+} {}
+
+do_test 1.3 {
+  execsql BEGIN
+  for {set i 0} {$i < 2000} {incr i} {
+    execsql {INSERT INTO t1 VALUES('a b c d e f g h i j k l');}
+  }
+  execsql {
+    INSERT INTO t1(t1) VALUES('merge=8,50');
+    COMMIT
+  }
+} {}
+
+reset_db
+do_execsql_test 2.0 { CREATE VIRTUAL TABLE t1 USING fts4 }
+do_test 2.1 {
+  for {set i 0} {$i < 2000} {incr i} {
+    execsql {INSERT INTO t1 VALUES('a b c d e f g h i j k l');}
+  }
+} {}
+do_execsql_test 2.2 { SELECT count(*) FROM t1_segdir; } 35
+do_execsql_test 2.3 { INSERT INTO t1(t1) VALUES('optimize') } {}
+do_execsql_test 2.4 { SELECT count(*) FROM t1_segdir; } 1
+
+#-------------------------------------------------------------------------
+# Now test that the automerge=? option appears to work.
+#
+do_execsql_test 2.1 { CREATE VIRTUAL TABLE t2 USING fts4; }
+
+set doc ""
+foreach c1 "a b c d e f g h i j" {
+  foreach c2 "a b c d e f g h i j" {
+    foreach c3 "a b c d e f g h i j" {
+      lappend doc "$c1$c2$c3"
+    }
+  }
+}
+set doc [string repeat $doc 10]
+
+foreach {tn am expected} {
+  1 {automerge=2} {1 1   2 1   4 1   6 1}
+  2 {automerge=4} {1 2   2 1   3 1}
+  3 {automerge=8} {0 4   1 3   2 1}
+  4 {automerge=1} {0 4   1 3   2 1}
+} {
+  foreach {tn2 openclose} {1 {} 2 { db close ; sqlite3 db test.db }} {
+    do_test 2.2.$tn.$tn2 {
+      execsql { DELETE FROM t2 }
+      execsql { INSERT INTO t2(t2) VALUES($am) };
+
+      eval $openclose
+  
+      for {set i 0} {$i < 100} {incr i} {
+        execsql { 
+          BEGIN;
+            INSERT INTO t2 VALUES($doc);
+            INSERT INTO t2 VALUES($doc);
+            INSERT INTO t2 VALUES($doc);
+            INSERT INTO t2 VALUES($doc);
+            INSERT INTO t2 VALUES($doc);
+          COMMIT;
+        }
+      }
+  
+      execsql { SELECT level, count(*) FROM t2_segdir GROUP BY level }
+    } [list {*}$expected]
+  }
+}
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

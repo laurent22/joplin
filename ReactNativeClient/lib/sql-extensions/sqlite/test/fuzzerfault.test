@@ -1,0 +1,92 @@
+# 2012 February 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for TCL interface to the
+# SQLite library. 
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !vtab { finish_test ; return }
+set ::testprefix fuzzerfault
+
+load_static_extension db fuzzer
+
+do_test 1-pre1 {
+  execsql {
+    CREATE TABLE x1_rules(ruleset, cFrom, cTo, cost);
+    INSERT INTO x1_rules VALUES(0, 'a', 'b', 1);
+    INSERT INTO x1_rules VALUES(0, 'a', 'c', 2);
+    INSERT INTO x1_rules VALUES(0, 'a', 'd', 3);
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test 1 -prep {
+  faultsim_restore_and_reopen
+  load_static_extension db fuzzer
+} -body {
+  execsql { 
+    CREATE VIRTUAL TABLE x1 USING fuzzer(x1_rules);
+    SELECT word FROM x1 WHERE word MATCH 'xax';
+  }
+} -test {
+  faultsim_test_result {0 {xax xbx xcx xdx}}               \
+                       {1 {vtable constructor failed: x1}}
+}
+
+do_test 2-pre1 {
+  faultsim_delete_and_reopen
+  load_static_extension db fuzzer
+  execsql {
+    CREATE TABLE x2_rules(ruleset, cFrom, cTo, cost);
+    INSERT INTO x2_rules VALUES(0, 'a', 'x', 1);
+    INSERT INTO x2_rules VALUES(0, 'b', 'x', 2);
+    INSERT INTO x2_rules VALUES(0, 'c', 'x', 3);
+    CREATE VIRTUAL TABLE x2 USING fuzzer(x2_rules);
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 2 -prep {
+  faultsim_restore_and_reopen
+  load_static_extension db fuzzer
+} -body {
+  execsql { 
+    SELECT count(*) FROM x2 WHERE word MATCH 'abc';
+  }
+} -test {
+  faultsim_test_result {0 8} {1 {vtable constructor failed: x2}}
+}
+
+do_test 3-pre1 {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE TABLE x1_rules(ruleset, cFrom, cTo, cost);
+    INSERT INTO x1_rules VALUES(0, 'a', 
+      '123456789012345678901234567890a1234567890123456789', 10
+    );
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 3 -prep {
+  faultsim_restore_and_reopen
+  load_static_extension db fuzzer
+} -body {
+  execsql { 
+    CREATE VIRTUAL TABLE x1 USING fuzzer(x1_rules);
+    SELECT count(*) FROM (SELECT * FROM x1 WHERE word MATCH 'a' LIMIT 2);
+  }
+} -test {
+  faultsim_test_result {0 2} {1 {vtable constructor failed: x1}}
+}
+
+
+finish_test

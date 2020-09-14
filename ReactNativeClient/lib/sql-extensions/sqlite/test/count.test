@@ -1,0 +1,237 @@
+# 2009-02-24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing "SELECT count(*)" statements.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Test plan:
+#
+#  count-0.*: Make sure count(*) works on an empty database.  (Ticket #3774)
+#
+#  count-1.*: Test that the OP_Count instruction appears to work on both
+#             tables and indexes. Test both when they contain 0 entries,
+#             when all entries are on the root page, and when the b-tree
+#             forms a structure 2 and 3 levels deep.
+#
+#
+
+do_test count-0.1 {
+  db eval {
+     SELECT count(*) FROM sqlite_master;
+  }
+} {0}
+
+set iTest 0
+foreach zIndex [list {
+  /* no-op */
+} {
+  CREATE INDEX i1 ON t1(a);
+}] { 
+  incr iTest
+  do_test count-1.$iTest.1 {
+    execsql {
+      DROP TABLE IF EXISTS t1;
+      CREATE TABLE t1(a, b);
+    }
+    execsql $zIndex
+    execsql { SELECT count(*) FROM t1 }
+  } {0}
+  
+  do_test count-1.$iTest.2 {
+    execsql {
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t1 VALUES(3, 4);
+      SELECT count(*) FROM t1;
+    }
+  } {2}
+
+  do_test count-1.$iTest.3 {
+    execsql {
+      INSERT INTO t1 SELECT * FROM t1;          --   4
+      INSERT INTO t1 SELECT * FROM t1;          --   8
+      INSERT INTO t1 SELECT * FROM t1;          --  16
+      INSERT INTO t1 SELECT * FROM t1;          --  32
+      INSERT INTO t1 SELECT * FROM t1;          --  64
+      INSERT INTO t1 SELECT * FROM t1;          -- 128
+      INSERT INTO t1 SELECT * FROM t1;          -- 256
+      SELECT count(*) FROM t1;
+    }
+  } {256}
+  
+  do_test count-1.$iTest.4 {
+    execsql {
+      INSERT INTO t1 SELECT * FROM t1;          --  512
+      INSERT INTO t1 SELECT * FROM t1;          -- 1024
+      INSERT INTO t1 SELECT * FROM t1;          -- 2048
+      INSERT INTO t1 SELECT * FROM t1;          -- 4096
+      SELECT count(*) FROM t1;
+    }
+  } {4096}
+  
+  do_test count-1.$iTest.5 {
+    execsql {
+      BEGIN;
+      INSERT INTO t1 SELECT * FROM t1;          --  8192
+      INSERT INTO t1 SELECT * FROM t1;          -- 16384
+      INSERT INTO t1 SELECT * FROM t1;          -- 32768
+      INSERT INTO t1 SELECT * FROM t1;          -- 65536
+      COMMIT;
+      SELECT count(*) FROM t1;
+    }
+  } {65536}
+}
+
+proc uses_op_count {sql} {
+  if {[lsearch [execsql "EXPLAIN $sql"] Count]>=0} {
+    return 1;
+  }
+  return 0
+}
+
+do_test count-2.1 {
+  execsql {
+    CREATE TABLE t2(a, b);
+  }
+  uses_op_count {SELECT count(*) FROM t2}
+} {1}
+do_test count-2.2 {
+  catchsql {SELECT count(DISTINCT *) FROM t2}
+} {1 {near "*": syntax error}}
+do_test count-2.3 {
+  uses_op_count {SELECT count(DISTINCT a) FROM t2}
+} {0}
+do_test count-2.4 {
+  uses_op_count {SELECT count(a) FROM t2}
+} {0}
+do_test count-2.5 {
+  uses_op_count {SELECT count() FROM t2}
+} {1}
+do_test count-2.6 {
+  catchsql {SELECT count(DISTINCT) FROM t2}
+} {1 {DISTINCT aggregates must have exactly one argument}}
+do_test count-2.7 {
+  uses_op_count {SELECT count(*)+1 FROM t2}
+} {0}
+do_test count-2.8 {
+  uses_op_count {SELECT count(*) FROM t2 WHERE a IS NOT NULL}
+} {0}
+do_test count-2.9 {
+  catchsql {SELECT count(*) FROM t2 HAVING count(*)>1}
+} {1 {a GROUP BY clause is required before HAVING}}
+do_test count-2.10 {
+  uses_op_count {SELECT count(*) FROM (SELECT 1)}
+} {0}
+do_test count-2.11 {
+  execsql { CREATE VIEW v1 AS SELECT 1 AS a }
+  uses_op_count {SELECT count(*) FROM v1}
+} {0}
+do_test count-2.12 {
+  uses_op_count {SELECT count(*), max(a) FROM t2}
+} {0}
+do_test count-2.13 {
+  uses_op_count {SELECT count(*) FROM t1, t2}
+} {0}
+
+ifcapable vtab {
+  register_echo_module [sqlite3_connection_pointer db]
+  do_test count-2.14 {
+    execsql { CREATE VIRTUAL TABLE techo USING echo(t1); }
+    uses_op_count {SELECT count(*) FROM techo}
+  } {0}
+}
+
+do_test count-3.1 {
+  execsql {
+    CREATE TABLE t3(a, b);
+    SELECT a FROM (SELECT count(*) AS a FROM t3) WHERE a==0;
+  }
+} {0}
+do_test count-3.2 {
+  execsql {
+    SELECT a FROM (SELECT count(*) AS a FROM t3) WHERE a==1;
+  }
+} {}
+
+do_test count-4.1 {
+  execsql {
+    CREATE TABLE t4(a, b);
+    INSERT INTO t4 VALUES('a', 'b');
+    CREATE INDEX t4i1 ON t4(b, a);
+    SELECT count(*) FROM t4;
+  }
+} {1}
+do_test count-4.2 {
+  execsql {
+    CREATE INDEX t4i2 ON t4(b);
+    SELECT count(*) FROM t4;
+  }
+} {1}
+do_test count-4.3 {
+  execsql {
+    DROP INDEX t4i1;
+    CREATE INDEX t4i1 ON t4(b, a);
+    SELECT count(*) FROM t4;
+  }
+} {1}
+
+do_execsql_test count-5.1 {
+  CREATE TABLE t5(a TEXT PRIMARY KEY, b VARCHAR(50)) WITHOUT ROWID;
+  INSERT INTO t5 VALUES('bison','jazz');
+  SELECT count(*) FROM t5;
+} {1}
+
+do_catchsql_test count-6.1 {
+  CREATE TABLE t6(x);
+  SELECT count(DISTINCT) FROM t6 GROUP BY x;
+} {1 {DISTINCT aggregates must have exactly one argument}}
+
+# 2020-05-08.
+# The count() optimization should honor the NOT INDEXED clause
+#
+reset_db
+do_execsql_test count-7.1 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INT, c VARCHAR(1000));
+  CREATE INDEX t1b ON t1(b);
+  INSERT INTO t1(a,b,c) values(1,2,'count.test cases for NOT INDEXED');
+  ANALYZE;
+  UPDATE sqlite_stat1 SET stat='1000000 10' WHERE idx='t1b';
+  ANALYZE sqlite_master;
+}
+do_eqp_test count-7.2 {
+  SELECT count(1) FROM t1;
+} {
+  QUERY PLAN
+  `--SCAN TABLE t1 USING COVERING INDEX t1b
+}
+do_eqp_test count-7.3 {
+  SELECT count(1) FROM t1 NOT INDEXED
+} {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+do_eqp_test count-7.3 {
+  SELECT count(*) FROM t1;
+} {
+  QUERY PLAN
+  `--SCAN TABLE t1 USING COVERING INDEX t1b
+}
+do_eqp_test count-7.4 {
+  SELECT count(*) FROM t1 NOT INDEXED
+} {
+  QUERY PLAN
+  `--SCAN TABLE t1
+}
+
+
+finish_test

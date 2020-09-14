@@ -1,0 +1,217 @@
+# 2012 March 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library. The
+# focus of this script is testing the FTS 'integrity-check' function,
+# used to check if the current FTS index accurately reflects the content
+# of the table.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/fts3_common.tcl
+set ::testprefix fts4check
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+# Run the integrity-check on FTS table $tbl using database handle $db. If
+# the integrity-check passes, return "ok". Otherwise, throw an exception.
+#
+proc fts_integrity {db tbl} {
+  $db eval "INSERT INTO $tbl ($tbl) VALUES('integrity-check')"
+  return "ok"
+}
+
+#-------------------------------------------------------------------------
+# Test cases 1.*
+#
+#   1.0: Build a reasonably sized FTS table (5000 rows).
+#
+#   1.1: Run the integrity check code to check it passes.
+#
+#   1.2: Make a series of minor changes to the underlying FTS data structures
+#        (e.g. delete or insert a row from the %_content table). Check that
+#        this causes the integrity-check code to fail.
+#
+
+# Build an FTS table and check the integrity-check passes.
+#
+do_test 1.0 { fts3_build_db_1 5000 } {}
+do_test 1.1 { fts_integrity db t1 } {ok}
+
+# Mess around with the underlying tables. Check that this causes the
+# integrity-check test to fail.
+#
+foreach {tn disruption} {
+  1 {
+    INSERT INTO t1_content(docid, c0x, c1y) VALUES(NULL, 'a', 'b');
+  }
+  2 {
+    DELETE FROM t1_content WHERE docid = (SELECT max(docid) FROM t1_content);
+  }
+  3 {
+    DELETE FROM t1_segdir WHERE level=0 AND idx=(
+      SELECT max(idx) FROM t1_segdir WHERE level=0
+    );
+  }
+} {
+  sqlite3_db_config db DEFENSIVE 0
+  do_execsql_test  1.2.1.$tn "BEGIN; $disruption"
+  do_catchsql_test 1.2.2.$tn {
+    INSERT INTO t1 (t1) VALUES('integrity-check')
+  } {1 {database disk image is malformed}}
+  do_execsql_test  1.2.3.$tn "ROLLBACK"
+}
+
+do_test 1.3 { fts_integrity db t1 } {ok}
+
+#-------------------------------------------------------------------------
+# Test cases 2.*
+#
+#   2.0: Build a reasonably sized FTS table (20000 rows) that includes
+#        prefix indexes.
+#
+#   2.1: Run the integrity check code to check it passes.
+#
+#   2.2: Make a series of minor changes to the underlying FTS data structures
+#        (e.g. delete or insert a row from the %_content table). Check that
+#        this causes the integrity-check code to fail.
+#
+
+do_test 2.0 { fts3_build_db_2 -extra {prefix="3,1"} 20000 } {}
+do_test 2.1 { fts_integrity db t2 } {ok}
+foreach {tn disruption} {
+  1 {
+    INSERT INTO t2_content VALUES(NULL, 'xyz')
+  }
+  3 {
+    DELETE FROM t2_segdir WHERE level=0 AND idx=(
+      SELECT max(idx) FROM t2_segdir WHERE level=1024
+    );
+  }
+} {
+  sqlite3_db_config db DEFENSIVE 0
+  do_execsql_test  2.2.1.$tn "BEGIN; $disruption"
+  do_catchsql_test 2.2.2.$tn {
+    INSERT INTO t2 (t2) VALUES('integrity-check')
+  } {1 {database disk image is malformed}}
+  do_execsql_test  2.2.3.$tn "ROLLBACK"
+}
+
+
+#-------------------------------------------------------------------------
+# Test cases 3.*
+#
+#   3.0: Build a reasonably sized FTS table (5000 rows) that includes
+#        prefix indexes and uses the languageid= feature.
+#
+#   3.1: Run the integrity check code to check it passes.
+#
+#   3.2: Make a series of minor changes to the underlying FTS data structures
+#        (e.g. delete or insert a row from the %_content table). Check that
+#        this causes the integrity-check code to fail.
+#
+do_test 3.0 {
+  reset_db
+  fts3_build_db_1 5000
+  execsql {
+    CREATE VIRTUAL TABLE t3 USING fts4(x, y, prefix="2,3", languageid=langid);
+  }
+  foreach docid [execsql {SELECT docid FROM t1 ORDER BY 1 ASC}] {
+    execsql {
+      INSERT INTO t3(x, y, langid) 
+      SELECT x, y, (docid%9)*4 FROM t1 WHERE docid=$docid;
+    }
+  }
+} {}
+do_test 3.1 { fts_integrity db t3 } {ok}
+
+foreach {tn disruption} {
+  1 {
+    INSERT INTO t3_content(c0x, c1y, langid) VALUES(NULL, 'a', 0);
+  }
+  2 {
+    UPDATE t3_content SET langid=langid+1 WHERE rowid = (
+      SELECT max(rowid) FROM t3_content
+    )
+  }
+} {
+  sqlite3_db_config db DEFENSIVE 0
+  do_execsql_test  3.2.1.$tn "BEGIN; $disruption"
+  do_catchsql_test 3.2.2.$tn {
+    INSERT INTO t3 (t3) VALUES('integrity-check')
+  } {1 {database disk image is malformed}}
+  do_execsql_test  3.2.3.$tn "ROLLBACK"
+}
+
+#--------------------------------------------------------------------------
+# Test case 4.*
+#
+# Test that the integrity-check works if there are "notindexed" columns.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t4 USING fts4(a, b, c, notindexed=b);
+  INSERT INTO t4 VALUES('text one', 'text two', 'text three');
+  INSERT INTO t4(t4) VALUES('integrity-check');
+}
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 4.1 {
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_master 
+    SET sql = 'CREATE VIRTUAL TABLE t4 USING fts4(a, b, c)' 
+    WHERE name = 't4';
+}
+
+do_test 4.2 {
+  db close
+  sqlite3 db test.db
+  catchsql {
+    INSERT INTO t4(t4) VALUES('integrity-check');
+  }
+} {1 {database disk image is malformed}}
+reset_db
+
+#--------------------------------------------------------------------------
+# Test case 5.*
+#
+# Test that the integrity-check works if there is uncommitted data.
+#
+do_execsql_test 5.0 {
+  BEGIN;
+  CREATE VIRTUAL TABLE t5 USING fts4(a, prefix="1,2,3");
+  INSERT INTO t5 VALUES('And down by Kosiosko, where the reed-banks sweep');
+  INSERT INTO t5 VALUES('and sway, and the rolling plains are wide, the');
+  INSERT INTO t5 VALUES('man from snowy river is a household name today,');
+  INSERT INTO t5 VALUES('and the stockmen tell the story of his ride');
+}
+
+do_execsql_test 5.1 {
+  INSERT INTO t5(t5) VALUES('integrity-check');
+} {}
+
+sqlite3_db_config db DEFENSIVE 0
+do_catchsql_test 5.2 {
+  INSERT INTO t5_content VALUES(5, 'his hardy mountain pony');
+  INSERT INTO t5(t5) VALUES('integrity-check');
+} {1 {database disk image is malformed}}
+
+do_execsql_test 5.3 ROLLBACK
+
+do_execsql_test 5.4 {
+  CREATE VIRTUAL TABLE t5 USING fts4(a, prefix="1,2,3");
+  INSERT INTO t5(t5) VALUES('integrity-check');
+} {}
+
+finish_test

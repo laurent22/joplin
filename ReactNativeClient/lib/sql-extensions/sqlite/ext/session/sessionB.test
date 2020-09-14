@@ -1,0 +1,507 @@
+# 2014 August 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for sessions SQLite extension.
+# Specifically, this file contains tests for "patchset" changes.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionB
+
+#
+# 1.*: Test that the blobs returned by the session_patchset() API are 
+#      as expected. Also the sqlite3_changeset_iter functions.
+#
+# 2.*: Test that patchset blobs are handled by sqlite3changeset_apply().
+#
+# 3.*: Test that sqlite3changeset_invert() works with patchset blobs. 
+#      Correct behaviour is to return SQLITE_CORRUPT.
+
+proc do_sql2patchset_test {tn sql res} {
+  sqlite3session S db main
+  S attach *
+  execsql $sql
+  uplevel [list do_patchset_test $tn S $res]
+  S delete
+}
+
+#-------------------------------------------------------------------------
+# Run simple tests of the _patchset() API.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, d, PRIMARY KEY(d, a));
+  INSERT INTO t1 VALUES(1, 2, 3, 4);
+  INSERT INTO t1 VALUES(5, 6, 7, 8);
+  INSERT INTO t1 VALUES(9, 10, 11, 12);
+}
+
+do_test 1.1 {
+  sqlite3session S db main
+  S attach t1
+  execsql {
+    INSERT INTO t1 VALUES('w', 'x', 'y', 'z');
+    DELETE FROM t1 WHERE d=4;
+    UPDATE t1 SET c = 14 WHERE a=5;
+  }
+} {}
+
+do_patchset_test 1.2 S {
+  {UPDATE t1 0 X..X {i 5 {} {} {} {} i 8} {{} {} {} {} i 14 {} {}}}
+  {INSERT t1 0 X..X {} {t w t x t y t z}}
+  {DELETE t1 0 X..X {i 1 {} {} {} {} i 4} {}}
+}
+
+do_test 1.3 {
+  S delete
+} {}
+
+do_sql2patchset_test 1.4 {
+  DELETE FROM t1;
+} {
+  {DELETE t1 0 X..X {i 5 {} {} {} {} i 8} {}}
+  {DELETE t1 0 X..X {t w {} {} {} {} t z} {}}
+  {DELETE t1 0 X..X {i 9 {} {} {} {} i 12} {}}
+}
+
+do_sql2patchset_test 1.5 {
+  INSERT INTO t1 VALUES(X'61626364', NULL, NULL, 4.2);
+  INSERT INTO t1 VALUES(4.2, NULL, NULL, X'61626364');
+} {
+  {INSERT t1 0 X..X {} {f 4.2 n {} n {} b abcd}} 
+  {INSERT t1 0 X..X {} {b abcd n {} n {} f 4.2}}
+}
+
+do_sql2patchset_test 1.6 {
+  UPDATE t1 SET b=45 WHERE typeof(a)=='blob';
+  UPDATE t1 SET c='zzzz' WHERE typeof(a)!='blob';
+} {
+  {UPDATE t1 0 X..X {f 4.2 {} {} {} {} b abcd} {{} {} {} {} t zzzz {} {}}}
+  {UPDATE t1 0 X..X {b abcd {} {} {} {} f 4.2} {{} {} i 45 {} {} {} {}}}
+}
+
+do_sql2patchset_test 1.7 {
+  UPDATE t1 SET b='xyz' WHERE typeof(a)=='blob';
+  UPDATE t1 SET c='xyz' WHERE typeof(a)!='blob';
+  UPDATE t1 SET b=45 WHERE typeof(a)=='blob';
+  UPDATE t1 SET c='zzzz' WHERE typeof(a)!='blob';
+} {
+}
+
+do_sql2patchset_test 1.8 {
+  DELETE FROM t1;
+} {
+  {DELETE t1 0 X..X {f 4.2 {} {} {} {} b abcd} {}} 
+  {DELETE t1 0 X..X {b abcd {} {} {} {} f 4.2} {}}
+}
+
+#-------------------------------------------------------------------------
+# Run simple tests of _apply() with patchset objects.
+#
+reset_db
+
+proc noop {args} { error $args }
+proc exec_rollback_replay {sql} {
+  sqlite3session S db main
+  S attach *
+  execsql BEGIN
+  execsql $sql
+  set patchset [S patchset]
+  S delete
+  execsql ROLLBACK
+  sqlite3changeset_apply db $patchset noop
+}
+
+do_execsql_test 2.0 {
+  CREATE TABLE t2(a, b, c, d, PRIMARY KEY(b,c));
+  CREATE TABLE t3(w, x, y, z, PRIMARY KEY(w));
+}
+
+do_test 2.1 {
+  exec_rollback_replay {
+    INSERT INTO t2 VALUES(1, 2, 3, 4);
+    INSERT INTO t2 VALUES('w', 'x', 'y', 'z');
+  }
+  execsql { SELECT * FROM t2 }
+} {1 2 3 4 w x y z}
+
+do_test 2.2 {
+  exec_rollback_replay {
+    DELETE FROM t2 WHERE a=1;
+    UPDATE t2 SET d = 'a';
+  }
+  execsql { SELECT * FROM t2 }
+} {w x y a}
+
+#-------------------------------------------------------------------------
+# sqlite3changeset_invert()
+#
+reset_db
+
+do_execsql_test 3.1 { CREATE TABLE t1(x PRIMARY KEY, y) }
+do_test 3.2 {
+  sqlite3session S db main
+  S attach *
+  execsql { INSERT INTO t1 VALUES(1, 2) }
+  set patchset [S patchset]
+  S delete
+  list [catch { sqlite3changeset_invert $patchset } msg] [set msg]
+} {1 SQLITE_CORRUPT}
+
+
+#-------------------------------------------------------------------------
+# sqlite3changeset_concat()
+#
+reset_db
+
+proc do_patchconcat_test {tn args} {
+  set bRevert 0
+  if {[lindex $args 0] == "-revert"} {
+    set bRevert 1
+    set args [lrange $args 1 end]
+  }
+  set nSql [expr [llength $args]-1]
+  set res [lindex $args $nSql]
+  set patchlist [list]
+
+  execsql BEGIN
+  if {$bRevert} { execsql { SAVEPOINT x } }
+  foreach sql [lrange $args 0 end-1] {
+    sqlite3session S db main
+    S attach *
+    execsql $sql
+    lappend patchlist [S patchset]
+    S delete
+    if {$bRevert} { execsql { ROLLBACK TO x } }
+  }
+  execsql ROLLBACK
+
+  set patch [lindex $patchlist 0]
+  foreach p [lrange $patchlist 1 end] {
+    set patch [sqlite3changeset_concat $patch $p]
+  }
+
+  set x [list]
+  sqlite3session_foreach c $patch { lappend x $c }
+
+  uplevel [list do_test $tn [list set {} $x] [list {*}$res]]
+}
+
+do_execsql_test 4.1.1 {
+  CREATE TABLE t1(x PRIMARY KEY, y, z);
+}
+do_patchconcat_test 4.1.2 {
+  INSERT INTO t1 VALUES(1, 2, 3);
+} {
+  INSERT INTO t1 VALUES(4, 5, 6);
+} {
+  {INSERT t1 0 X.. {} {i 1 i 2 i 3}} 
+  {INSERT t1 0 X.. {} {i 4 i 5 i 6}}
+}
+
+do_execsql_test 4.2.1 {
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+}
+
+do_patchconcat_test 4.2.2 {
+  UPDATE t1 SET z = 'abc' WHERE x=1
+} {
+  UPDATE t1 SET z = 'def' WHERE x=4
+} {
+  {UPDATE t1 0 X.. {i 1 {} {} {} {}} {{} {} {} {} t abc}} 
+  {UPDATE t1 0 X.. {i 4 {} {} {} {}} {{} {} {} {} t def}}
+}
+
+do_patchconcat_test 4.2.3 {
+  DELETE FROM t1 WHERE x=1;
+} {
+  DELETE FROM t1 WHERE x=4;
+} {
+  {DELETE t1 0 X.. {i 1 {} {} {} {}} {}} 
+  {DELETE t1 0 X.. {i 4 {} {} {} {}} {}}
+}
+
+
+do_execsql_test 4.3.1 {
+  CREATE TABLE t2(a, b, c, d, PRIMARY KEY(c, b));
+  INSERT INTO t2 VALUES('.', 1, 1, '.');
+  INSERT INTO t2 VALUES('.', 1, 2, '.');
+  INSERT INTO t2 VALUES('.', 2, 1, '.');
+  INSERT INTO t2 VALUES('.', 2, 2, '.');
+}
+
+# INSERT + INSERT 
+do_patchconcat_test 4.3.2 -revert {
+  INSERT INTO t2 VALUES('a', 'a', 'a', 'a');
+} {
+  INSERT INTO t2 VALUES('b', 'a', 'a', 'b');
+} {
+  {INSERT t2 0 .XX. {} {t a t a t a t a}}
+}
+
+# INSERT + DELETE 
+do_patchconcat_test 4.3.3 {
+  INSERT INTO t2 VALUES('a', 'a', 'a', 'a');
+} {
+  DELETE FROM t2 WHERE c = 'a';
+} {}
+
+# INSERT + UPDATE
+do_patchconcat_test 4.3.4 {
+  INSERT INTO t2 VALUES('a', 'a', 'a', 'a');
+} {
+  UPDATE t2 SET d = 'b' WHERE c='a';
+} {
+  {INSERT t2 0 .XX. {} {t a t a t a t b}}
+}
+
+# UPDATE + UPDATE
+do_patchconcat_test 4.3.5 {
+  UPDATE t2 SET a = 'a' WHERE c=1 AND b=2;
+} {
+  UPDATE t2 SET d = 'd' WHERE c=1 AND b=2;
+} {
+  {UPDATE t2 0 .XX. {{} {} i 2 i 1 {} {}} {t a {} {} {} {} t d}}
+}
+
+# UPDATE + DELETE
+do_patchconcat_test 4.3.6 {
+  UPDATE t2 SET a = 'a' WHERE c=1 AND b=2;
+} {
+  DELETE FROM t2 WHERE c=1 AND b=2;
+} {
+  {DELETE t2 0 .XX. {{} {} i 2 i 1 {} {}} {}}
+}
+
+# DELETE + INSERT
+do_patchconcat_test 4.3.7 {
+  DELETE FROM t2 WHERE b=1;
+} {
+  INSERT INTO t2 VALUES('x', 1, 2, '.');
+} {
+  {DELETE t2 0 .XX. {{} {} i 1 i 1 {} {}} {}} 
+  {UPDATE t2 0 .XX. {{} {} i 1 i 2 {} {}} {t x {} {} {} {} t .}}
+}
+
+# DELETE + UPDATE
+do_patchconcat_test 4.3.8 -revert {
+  DELETE FROM t2 WHERE b=1 AND c=2;
+} {
+  UPDATE t2 SET a=5 WHERE b=1 AND c=2;
+} {
+  {DELETE t2 0 .XX. {{} {} i 1 i 2 {} {}} {}} 
+}
+
+# DELETE + UPDATE
+do_patchconcat_test 4.3.9 -revert {
+  DELETE FROM t2 WHERE b=1 AND c=2;
+} {
+  DELETE FROM t2 WHERE b=1;
+} {
+  {DELETE t2 0 .XX. {{} {} i 1 i 1 {} {}} {}} 
+  {DELETE t2 0 .XX. {{} {} i 1 i 2 {} {}} {}} 
+}
+
+#-------------------------------------------------------------------------
+# More rigorous testing of the _patchset(), _apply and _concat() APIs.
+#
+# The inputs to each test are a populate database and a list of DML 
+# statements. This test determines that the final database is the same
+# if:
+# 
+#   1) the statements are executed directly on the database.
+#
+#   2) a single patchset is collected while executing the statements and
+#      then applied to a copy of the original database file.
+#
+#   3) individual patchsets are collected for statement while executing
+#      them and concatenated together before being applied to a copy of
+#      the original database. The concatenation is done in a couple of
+#      different ways - linear, pairwise etc.
+#
+# All tests, as it happens, are run with both changesets and patchsets.
+# But the focus is on patchset capabilities.
+#
+
+# Return a checksum of the contents of the database file. Implicit IPK
+# columns are not included in the checksum - just modifying rowids does
+# not change the database checksum.
+#
+proc databasecksum {db} {
+  set alltab [$db eval {SELECT name FROM sqlite_master WHERE type='table'}]
+  foreach tab $alltab {
+    $db eval "SELECT * FROM $tab LIMIT 1" res { }
+    set slist [list]
+    foreach col [lsort $res(*)] {
+      lappend slist "quote($col)"
+    }
+    set sql "SELECT [join $slist ,] FROM $tab"
+    append txt "[lsort [$db eval $sql]]\n"
+  }
+  return [md5 $txt]
+}
+
+proc do_patchset_test {tn tstcmd lSql} {
+  if {$tstcmd != "patchset" && $tstcmd != "changeset"} {
+    error "have $tstcmd: must be patchset or changeset"
+  }
+
+  foreach fname {test.db2 test.db3 test.db4 test.db5} {
+    forcedelete $fname
+    forcecopy test.db $fname
+  }
+
+  # Execute the SQL statements on [db]. Collect a patchset for each 
+  # individual statement, as well as a single patchset for the entire 
+  # operation.
+  sqlite3session S db main
+  S attach *
+  foreach sql $lSql { 
+    sqlite3session T db main
+    T attach *
+    db eval $sql 
+    lappend lPatch [T $tstcmd]
+    T delete
+  }
+  set patchset [S $tstcmd]
+  S delete
+
+  # Calculate a checksum for the final database.
+  set cksum [databasecksum db]
+
+  # 1. Apply the single large patchset to test.db2
+  sqlite3 db2 test.db2
+  sqlite3changeset_apply db2 $patchset noop
+  uplevel [list do_test $tn.1 { databasecksum db2 } $cksum ]
+  db2 close
+  
+  # 2. Apply each of the single-statement patchsets to test.db3
+  sqlite3 db2 test.db3
+  foreach p $lPatch {
+    sqlite3changeset_apply db2 $p noop
+  }
+  uplevel [list do_test $tn.2 { databasecksum db2 } $cksum ]
+  db2 close
+
+  # 3. Concatenate all single-statement patchsets into a single large
+  #    patchset, then apply it to test.db4.
+  #
+  sqlite3 db2 test.db4
+  set big ""
+  foreach p $lPatch {
+    set big [sqlite3changeset_concat $big $p]
+  }
+  sqlite3changeset_apply db2 $big noop
+  uplevel [list do_test $tn.3 { databasecksum db2 } $cksum ]
+  db2 close
+
+  # 4. Concatenate all single-statement patchsets pairwise into a single
+  #    large patchset, then apply it to test.db5. Pairwise concatenation:
+  #
+  #         a b c d e f g h i j k
+  #      -> {a b} {c d} {e f} {g h} {i j} k
+  #      -> {a b c d} {e f g h} {i j k}
+  #      -> {a b c d e f g h} {i j k}
+  #      -> {a b c d e f g h i j k}
+  #      -> APPLY!
+  #
+  sqlite3 db2 test.db5
+  set L $lPatch
+  while {[llength $L] > 1} {
+    set O [list]
+    for {set i 0} {$i < [llength $L]} {incr i 2} {
+      if {$i==[llength $L]-1} {
+        lappend O [lindex $L $i]
+      } else {
+        set i1 [expr $i+1]
+        lappend O [sqlite3changeset_concat [lindex $L $i] [lindex $L $i1]]
+      }
+    }
+    set L $O
+  }
+  sqlite3changeset_apply db2 [lindex $L 0] noop
+  uplevel [list do_test $tn.4 { databasecksum db2 } $cksum ]
+  db2 close
+}
+
+proc do_patchset_changeset_test {tn initsql args} {
+  foreach tstcmd {patchset changeset} {
+    reset_db
+    execsql $initsql
+    set x 0
+    foreach sql $args {
+      incr x
+      set lSql [split $sql ";"]
+      uplevel [list do_patchset_test $tn.$tstcmd.$x $tstcmd $lSql]
+    }
+  }
+}
+
+do_patchset_changeset_test 5.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+} {
+  INSERT INTO t1 VALUES(4, 5, 6);
+  DELETE FROM t1 WHERE a=1;
+} {
+  INSERT INTO t1 VALUES(7, 8, 9);
+  UPDATE t1 SET c = 5;
+  INSERT INTO t1 VALUES(10, 11, 12);
+  UPDATE t1 SET c = 6;
+  INSERT INTO t1 VALUES(13, 14, 15);
+} {
+  UPDATE t1 SET c=c+1;
+  DELETE FROM t1 WHERE (a%2);
+} 
+
+do_patchset_changeset_test 5.2 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  CREATE TABLE t2(a, b, c, d, PRIMARY KEY(c, b));
+} {
+  INSERT INTO t1 VALUES(x'00', 0, 'zero');
+  INSERT INTO t1 VALUES(x'01', 1, 'one');
+  INSERT INTO t1 VALUES(x'02', 4, 'four');
+  INSERT INTO t1 VALUES(x'03', 9, 'nine');
+  INSERT INTO t1 VALUES(x'04', 16, 'sixteen');
+  INSERT INTO t1 VALUES(x'05', 25, 'twenty-five');
+} {
+  UPDATE t1 SET a = b WHERE b<=4;
+  INSERT INTO t2 SELECT NULL, * FROM t1;
+  DELETE FROM t1 WHERE b=25;
+} {
+  DELETE FROM t2;
+  INSERT INTO t2 SELECT NULL, * FROM t1;
+  DELETE FROM t1;
+  INSERT INTO t1 SELECT b, c, d FROM t2;
+  UPDATE t1 SET b = b+1;
+  UPDATE t1 SET b = b+1;
+  UPDATE t1 SET b = b+1;
+}
+
+set initsql { CREATE TABLE t1(a, b, c, PRIMARY KEY(c, b)); }
+for {set i 0} {$i < 1000} {incr i} {
+  append insert "INSERT INTO t1 VALUES($i, $i, $i);"
+  append delete "DELETE FROM t1 WHERE b=$i;"
+}
+do_patchset_changeset_test 5.3 \
+  $initsql $insert $delete     \
+  $insert $delete              \
+  "$insert $delete"            \
+  $delete
+
+
+finish_test

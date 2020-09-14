@@ -1,0 +1,170 @@
+# 2014 October 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_blobclose
+
+set dots [string repeat . 40]
+do_execsql_test 1.0 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b DOTS);
+  INSERT INTO x1 VALUES(-1, $dots);
+  INSERT INTO x1 VALUES(-10, $dots);
+  INSERT INTO x1 VALUES(-100, $dots);
+  INSERT INTO x1 VALUES(-1000, $dots);
+  INSERT INTO x1 VALUES(-10000, $dots);
+}
+
+# EVIDENCE-OF: R-03145-46390 This function closes an open BLOB handle.
+#
+#   It's not clear how to test that a blob handle really is closed.
+#   Attempting to use a closed blob handle will likely crash the process.
+#   Assume here that if the SHARED lock on the db file is released,
+#   the blob handle has been closed.
+#
+do_execsql_test 1.1 { PRAGMA lock_status } {main unlocked temp closed}
+sqlite3_blob_open db main x1 b -1 0 B
+do_execsql_test 1.2 { PRAGMA lock_status } {main shared temp closed}
+sqlite3_blob_close $B
+do_execsql_test 1.3 { PRAGMA lock_status } {main unlocked temp closed}
+
+
+# EVIDENCE-OF: R-34027-00617 If the blob handle being closed was opened
+# for read-write access, and if the database is in auto-commit mode and
+# there are no other open read-write blob handles or active write
+# statements, the current transaction is committed.
+#
+#   2.1.*: Transaction is not committed if there are other open 
+#          read-write blob handles.
+#
+#   2.2.*: Transaction is not committed if not in auto-commit mode.
+#
+#   2.3.*: Active write statements.
+#
+do_test 2.1.1 {
+  sqlite3_blob_open db main x1 b -100 1 B1
+  sqlite3_blob_open db main x1 b -1000 1 B2
+  sqlite3_blob_open db main x1 b -10000 1 B3
+  sqlite3_blob_open db main x1 b -10000 0 B4      ;# B4 is read-only!
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.1.2 {
+  sqlite3_blob_close $B1 
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.1.3 {
+  sqlite3_blob_close $B2 
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.1.4 {
+  sqlite3_blob_close $B3 
+  execsql { PRAGMA lock_status }
+} {main shared temp closed}
+do_test 2.1.5 {
+  sqlite3_blob_close $B4 
+  execsql { PRAGMA lock_status }
+} {main unlocked temp closed}
+
+do_test 2.2.1 {
+  sqlite3_blob_open db main x1 b -100 1 B1
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.2.2 {
+  execsql { BEGIN }
+  sqlite3_blob_close $B1 
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.2.3 {
+  execsql { COMMIT }
+  execsql { PRAGMA lock_status }
+} {main unlocked temp closed}
+
+proc val {} { 
+  sqlite3_blob_close $::B 
+  db eval { PRAGMA lock_status }
+}
+db func val val
+do_test 2.3.1 {
+  sqlite3_blob_open db main x1 b -100 1 B
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.3.2 {
+  execsql { INSERT INTO x1 VALUES(15, val()) }
+  execsql { PRAGMA lock_status }
+} {main unlocked temp closed}
+do_test 2.3.3 {
+  execsql { SELECT * FROM x1 WHERE a = 15 }
+} {15 {main reserved temp closed}}
+
+# A reader does not inhibit commit.
+do_test 2.3.4 {
+  sqlite3_blob_open db main x1 b -100 1 B
+  execsql { PRAGMA lock_status }
+} {main reserved temp closed}
+do_test 2.3.5 {
+  execsql { SELECT a, val() FROM x1 LIMIT 1 }
+} {-10000 {main shared temp closed}}
+
+
+do_test 3.1 {
+  sqlite3_blob_open db main x1 b -10 1 B
+  execsql {
+    INSERT INTO x1 VALUES(1, 'abc');
+    SELECT * FROM x1 WHERE a=1;
+  }
+} {1 abc}
+do_test 3.2 {
+  sqlite3_blob_write $B 0 "abcdefghij" 10
+  execsql { SELECT * FROM x1 WHERE a=-10 }
+} {-10 abcdefghij..............................}
+
+do_test 3.3 {
+  sqlite3 db2 test.db
+  execsql { BEGIN ; SELECT * FROM x1 } db2
+  sqlite3_blob_close $B 
+} {SQLITE_BUSY}
+
+# EVIDENCE-OF: R-41959-38737 Otherwise, if this function is passed a
+# valid open blob handle, the values returned by the sqlite3_errcode()
+# and sqlite3_errmsg() functions are set before returning.
+#
+do_test 3.4 {
+  list [sqlite3_errcode db] [sqlite3_errmsg db]
+} {SQLITE_BUSY {database is locked}}
+
+# EVIDENCE-OF: R-37801-37633 The BLOB handle is closed unconditionally.
+# Even if this routine returns an error code, the handle is still
+# closed.
+#
+#   Test that the lock has been released. Assume this means the handle
+#   is closed, even though blob_close() returned SQLITE_BUSY.
+#
+do_execsql_test 3.4 { PRAGMA lock_status } {main unlocked temp closed}
+
+# EVIDENCE-OF: R-35111-05628 If an error occurs while committing the
+# transaction, an error code is returned and the transaction rolled
+# back.
+#
+#   Row 1 is removed (it was inserted this transaction) and row -10
+#   is restored to its original state. Transaction has been rolled back.
+#
+do_execsql_test 3.5 {
+  SELECT * FROM x1 WHERE a IN (1, -10);
+} {-10 ........................................}
+
+# EVIDENCE-OF: R-25894-51060 Calling this routine with a null pointer
+# (such as would be returned by a failed call to sqlite3_blob_open()) is
+# a harmless no-op.
+#
+do_test 4.0 { sqlite3_blob_close 0 } {}
+
+finish_test

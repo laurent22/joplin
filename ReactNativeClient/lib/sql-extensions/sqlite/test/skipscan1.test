@@ -1,0 +1,422 @@
+# 2013-11-13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests of the "skip-scan" query strategy.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_execsql_test skipscan1-1.1 {
+  CREATE TABLE t1(a TEXT, b INT, c INT, d INT);
+  CREATE INDEX t1abc ON t1(a,b,c);
+  INSERT INTO t1 VALUES('abc',123,4,5);
+  INSERT INTO t1 VALUES('abc',234,5,6);
+  INSERT INTO t1 VALUES('abc',234,6,7);
+  INSERT INTO t1 VALUES('abc',345,7,8);
+  INSERT INTO t1 VALUES('def',567,8,9);
+  INSERT INTO t1 VALUES('def',345,9,10);
+  INSERT INTO t1 VALUES('bcd',100,6,11);
+
+  /* Fake the sqlite_stat1 table so that the query planner believes
+  ** the table contains thousands of rows and that the first few
+  ** columns are not selective. */
+  ANALYZE;
+  DELETE FROM sqlite_stat1;
+  INSERT INTO sqlite_stat1 VALUES('t1','t1abc','10000 5000 2000 10');
+  ANALYZE sqlite_master;
+} {}
+
+# Simple queries that leave the first one or two columns of the
+# index unconstrainted.
+#
+do_execsql_test skipscan1-1.2 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE b=345 ORDER BY a;
+} {abc 345 7 8 | def 345 9 10 |}
+do_execsql_test skipscan1-1.2eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE d<>99 AND b=345 ORDER BY a;
+} {/* USING INDEX t1abc (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-1.2sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE d<>99 AND b=345 ORDER BY a;
+} {~/*ORDER BY*/}
+
+do_execsql_test skipscan1-1.3 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE d<>99 AND b=345 ORDER BY a DESC;
+} {def 345 9 10 | abc 345 7 8 |}
+do_execsql_test skipscan1-1.3eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE d<>99 AND b=345 ORDER BY a DESC;
+} {/* USING INDEX t1abc (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-1.3sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE d<>99 AND b=345 ORDER BY a DESC;
+} {~/*ORDER BY*/}
+
+do_execsql_test skipscan1-1.4 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE c=6 ORDER BY a, b, c;
+} {abc 234 6 7 | bcd 100 6 11 |}
+do_execsql_test skipscan1-1.4eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c=6 ORDER BY a, b, c;
+} {/* USING INDEX t1abc (ANY(a) AND ANY(b) AND c=?)*/}
+do_execsql_test skipscan1-1.4sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c=6 ORDER BY a, b, c;
+} {~/*ORDER BY*/}
+
+do_execsql_test skipscan1-1.5 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE c IN (6,7) ORDER BY a, b, c;
+} {abc 234 6 7 | abc 345 7 8 | bcd 100 6 11 |}
+do_execsql_test skipscan1-1.5eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c IN (6,7) ORDER BY a, b, c;
+} {/* USING INDEX t1abc (ANY(a) AND ANY(b) AND c=?)*/}
+do_execsql_test skipscan1-1.5sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c IN (6,7) ORDER BY a, b, c;
+} {~/*ORDER BY*/}
+
+do_execsql_test skipscan1-1.6 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE c BETWEEN 6 AND 7 ORDER BY a, b, c;
+} {abc 234 6 7 | abc 345 7 8 | bcd 100 6 11 |}
+do_execsql_test skipscan1-1.6eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c BETWEEN 6 AND 7 ORDER BY a, b, c;
+} {/* USING INDEX t1abc (ANY(a) AND ANY(b) AND c>? AND c<?)*/}
+do_execsql_test skipscan1-1.6sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE c BETWEEN 6 AND 7 ORDER BY a, b, c;
+} {~/*ORDER BY*/}
+
+do_execsql_test skipscan1-1.7 {
+  SELECT a,b,c,d,'|' FROM t1 WHERE b IN (234, 345) AND c BETWEEN 6 AND 7
+   ORDER BY a, b;
+} {abc 234 6 7 | abc 345 7 8 |}
+do_execsql_test skipscan1-1.7eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE b IN (234, 345) AND c BETWEEN 6 AND 7
+   ORDER BY a, b;
+} {/* USING INDEX t1abc (ANY(a) AND b=? AND c>? AND c<?)*/}
+do_execsql_test skipscan1-1.7sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t1 WHERE b IN (234, 345) AND c BETWEEN 6 AND 7
+   ORDER BY a, b;
+} {~/*ORDER BY*/}
+
+
+# Joins
+#
+do_execsql_test skipscan1-1.51 {
+  CREATE TABLE t1j(x TEXT, y INTEGER);
+  INSERT INTO t1j VALUES('one',1),('six',6),('ninty-nine',99);
+  INSERT INTO sqlite_stat1 VALUES('t1j',null,'3');
+  ANALYZE sqlite_master;
+  SELECT x, a, b, c, d, '|' FROM t1j, t1 WHERE c=y ORDER BY +a;
+} {six abc 234 6 7 | six bcd 100 6 11 |}
+do_execsql_test skipscan1-1.51eqp {
+  EXPLAIN QUERY PLAN
+  SELECT x, a, b, c, d, '|' FROM t1j, t1 WHERE c=y ORDER BY +a;
+} {/* INDEX t1abc (ANY(a) AND ANY(b) AND c=?)*/}
+
+do_execsql_test skipscan1-1.52 {
+  SELECT x, a, b, c, d, '|' FROM t1j LEFT JOIN t1 ON c=y ORDER BY +y, +a;
+} {one {} {} {} {} | six abc 234 6 7 | six bcd 100 6 11 | ninty-nine {} {} {} {} |}
+do_execsql_test skipscan1-1.52eqp {
+  EXPLAIN QUERY PLAN
+  SELECT x, a, b, c, d, '|' FROM t1j LEFT JOIN t1 ON c=y ORDER BY +y, +a;
+} {/* INDEX t1abc (ANY(a) AND ANY(b) AND c=?)*/}
+
+do_execsql_test skipscan1-2.1 {
+  CREATE TABLE t2(a TEXT, b INT, c INT, d INT,
+                  PRIMARY KEY(a,b,c));
+  INSERT INTO t2 SELECT * FROM t1;
+
+  /* Fake the sqlite_stat1 table so that the query planner believes
+  ** the table contains thousands of rows and that the first few
+  ** columns are not selective. */
+  ANALYZE;
+  UPDATE sqlite_stat1 SET stat='10000 5000 2000 10' WHERE idx NOT NULL;
+  ANALYZE sqlite_master;
+} {}
+
+do_execsql_test skipscan1-2.2 {
+  SELECT a,b,c,d,'|' FROM t2 WHERE d<>99 AND b=345 ORDER BY a;
+} {abc 345 7 8 | def 345 9 10 |}
+do_execsql_test skipscan1-2.2eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t2 WHERE d<>99 AND b=345 ORDER BY a;
+} {/* USING INDEX sqlite_autoindex_t2_1 (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-2.2sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t2 WHERE d<>99 AND b=345 ORDER BY a;
+} {~/*ORDER BY*/}
+
+
+do_execsql_test skipscan1-3.1 {
+  CREATE TABLE t3(a TEXT, b INT, c INT, d INT,
+                  PRIMARY KEY(a,b,c)) WITHOUT ROWID;
+  INSERT INTO t3 SELECT * FROM t1;
+
+  /* Fake the sqlite_stat1 table so that the query planner believes
+  ** the table contains thousands of rows and that the first few
+  ** columns are not selective. */
+  ANALYZE;
+  UPDATE sqlite_stat1 SET stat='10000 5000 2000 10' WHERE idx NOT NULL;
+  ANALYZE sqlite_master;
+} {}
+
+do_execsql_test skipscan1-3.2 {
+  SELECT a,b,c,d,'|' FROM t3 WHERE b=345 ORDER BY a;
+} {abc 345 7 8 | def 345 9 10 |}
+do_execsql_test skipscan1-3.2eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t3 WHERE b=345 ORDER BY a;
+} {/* PRIMARY KEY (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-3.2sort {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t3 WHERE b=345 ORDER BY a;
+} {~/*ORDER BY*/}
+
+# Ticket 520070ec7fbaac: Array overrun in the skip-scan optimization
+# 2013-12-22
+#
+do_execsql_test skipscan1-4.1 {
+  CREATE TABLE t4(a,b,c,d,e,f,g,h,i);
+  CREATE INDEX t4all ON t4(a,b,c,d,e,f,g,h);
+  INSERT INTO t4 VALUES(1,2,3,4,5,6,7,8,9);
+  ANALYZE;
+  DELETE FROM sqlite_stat1;
+  INSERT INTO sqlite_stat1 
+    VALUES('t4','t4all','655360 163840 40960 10240 2560 640 160 40 10');
+  ANALYZE sqlite_master;
+  SELECT i FROM t4 WHERE a=1;
+  SELECT i FROM t4 WHERE b=2;
+  SELECT i FROM t4 WHERE c=3;
+  SELECT i FROM t4 WHERE d=4;
+  SELECT i FROM t4 WHERE e=5;
+  SELECT i FROM t4 WHERE f=6;
+  SELECT i FROM t4 WHERE g=7;
+  SELECT i FROM t4 WHERE h=8;
+} {9 9 9 9 9 9 9 9}
+
+# Make sure skip-scan cost computation in the query planner takes into
+# account the fact that the seek must occur multiple times.
+#
+# Prior to 2014-03-10, the costs were computed incorrectly which would
+# cause index t5i2 to be used instead of t5i1 on the skipscan1-5.3.
+#
+do_execsql_test skipscan1-5.1 {
+  CREATE TABLE t5(
+    id INTEGER PRIMARY KEY,
+    loc TEXT,
+    lang INTEGER,
+    utype INTEGER,
+    xa INTEGER,
+    xd INTEGER,
+    xh INTEGER
+  );
+  CREATE INDEX t5i1 on t5(loc, xh, xa, utype, lang);
+  CREATE INDEX t5i2 ON t5(xd,loc,utype,lang);
+  EXPLAIN QUERY PLAN
+    SELECT xh, loc FROM t5 WHERE loc >= 'M' AND loc < 'N';
+} {/.*COVERING INDEX t5i1 .*/}
+do_execsql_test skipscan1-5.2 {
+  ANALYZE;
+  DELETE FROM sqlite_stat1;
+  DROP TABLE IF EXISTS sqlite_stat4;
+  INSERT INTO sqlite_stat1 VALUES('t5','t5i1','2702931 3 2 2 2 2');
+  INSERT INTO sqlite_stat1 VALUES('t5','t5i2','2702931 686 2 2 2');
+  ANALYZE sqlite_master;
+} {}
+db cache flush
+do_execsql_test skipscan1-5.3 {
+  EXPLAIN QUERY PLAN
+    SELECT xh, loc FROM t5 WHERE loc >= 'M' AND loc < 'N';
+} {/.*COVERING INDEX t5i1 .*/}
+
+# The column used by the skip-scan needs to be sufficiently selective.
+# See the private email from Adi Zaimi to drh@sqlite.org on 2014-09-22.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test skipscan1-6.1 {
+  CREATE TABLE t1(a,b,c,d,e,f,g,h varchar(300));
+  CREATE INDEX t1ab ON t1(a,b);
+  ANALYZE sqlite_master;
+  -- Only two distinct values for the skip-scan column.  Skip-scan is not used.
+  INSERT INTO sqlite_stat1 VALUES('t1','t1ab','500000 250000 125000');
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {~/ANY/}
+do_execsql_test skipscan1-6.2 {
+  -- Four distinct values for the skip-scan column.  Skip-scan is used.
+  UPDATE sqlite_stat1 SET stat='500000 250000 62500';
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {/ANY.a. AND b=/}
+do_execsql_test skipscan1-6.3 {
+  -- Two distinct values for the skip-scan column again.  Skip-scan is not used.
+  UPDATE sqlite_stat1 SET stat='500000 125000 62500';
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {~/ANY/}
+
+# If the sqlite_stat1 entry includes the "noskipscan" token, then never use
+# skipscan with that index.
+#
+do_execsql_test skipscan1-7.1 {
+  UPDATE sqlite_stat1 SET stat='500000 125000 1 sz=100';
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {/ANY/}
+do_execsql_test skipscan1-7.2 {
+  UPDATE sqlite_stat1 SET stat='500000 125000 1 noskipscan sz=100';
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {~/ANY/}
+do_execsql_test skipscan1-7.3 {
+  UPDATE sqlite_stat1 SET stat='500000 125000 1 sz=100 noskipscan';
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=1;
+} {~/ANY/}
+
+# Ticket 8fd39115d8f46ece70e7d4b3c481d1bd86194746  2015-07-23
+# Incorrect code generated for a skipscan within an OR optimization
+# on a WITHOUT ROWID table.
+#
+do_execsql_test skipscan1-8.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(x, y, PRIMARY KEY(x,y)) WITHOUT ROWID;
+  INSERT INTO t1(x,y) VALUES(1,'AB');
+  INSERT INTO t1(x,y) VALUES(2,'CD');
+  ANALYZE;
+  DROP TABLE IF EXISTS sqlite_stat4;
+  DELETE FROM sqlite_stat1;
+  INSERT INTO sqlite_stat1(tbl,idx,stat) VALUES('t1','t1','1000000 100 1');
+  ANALYZE sqlite_master;
+  SELECT * FROM t1
+   WHERE (y = 'AB' AND x <= 4)
+      OR (y = 'EF' AND x = 5);
+} {1 AB}
+do_execsql_test skipscan1-8.1eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t1
+   WHERE (y = 'AB' AND x <= 4)
+      OR (y = 'EF' AND x = 5);
+} {/ANY/}
+do_execsql_test skipscan1-8.2 {
+  SELECT * FROM t1
+   WHERE y = 'AB' OR (y = 'CD' AND x = 2)
+  ORDER BY +x;
+} {1 AB 2 CD}
+
+# Segfault reported on the mailing list by Keith Medcalf on 2016-09-18.
+# A skip-scan with a "column IN (SELECT ...)" on the second term of the
+# index.
+#
+do_execsql_test skipscan1-9.2 {
+  CREATE TABLE t9a(a,b,c);
+  CREATE INDEX t9a_ab ON t9a(a,b);
+  CREATE TABLE t9b(x,y);
+  ANALYZE sqlite_master;
+  INSERT INTO sqlite_stat1 VALUES('t9a','t9a_ab','1000000 250000 1');
+  ANALYZE sqlite_master;
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t9a WHERE b IN (SELECT x FROM t9b WHERE y!=5);
+} {/USING INDEX t9a_ab .ANY.a. AND b=./}
+
+
+optimization_control db skip-scan 0
+do_execsql_test skipscan1-9.3 {
+  EXPLAIN QUERY PLAN
+  SELECT  * FROM t9a WHERE b IN (SELECT x FROM t9b WHERE y!=5);
+} {/{SCAN TABLE t9a}/}
+optimization_control db skip-scan 1
+
+do_execsql_test skipscan1-2.1 {
+  CREATE TABLE t6(a TEXT, b INT, c INT, d INT);
+  CREATE INDEX t6abc ON t6(a,b,c);
+  INSERT INTO t6 VALUES('abc',123,4,5);
+
+  ANALYZE;
+  DELETE FROM sqlite_stat1;
+  INSERT INTO sqlite_stat1 VALUES('t6','t6abc','10000 5000 2000 10');
+  ANALYZE sqlite_master;
+  DELETE FROM t6;
+} {}
+
+do_execsql_test skipscan1-2.2eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t6 WHERE d<>99 AND b=345 ORDER BY a;
+} {/* USING INDEX t6abc (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-2.2 {
+  SELECT a,b,c,d,'|' FROM t6 WHERE d<>99 AND b=345 ORDER BY a;
+} {}
+
+do_execsql_test skipscan1-2.3eqp {
+  EXPLAIN QUERY PLAN
+  SELECT a,b,c,d,'|' FROM t6 WHERE d<>99 AND b=345 ORDER BY a DESC;
+} {/* USING INDEX t6abc (ANY(a) AND b=?)*/}
+do_execsql_test skipscan1-2.3 {
+  SELECT a,b,c,d,'|' FROM t6 WHERE d<>99 AND b=345 ORDER BY a DESC;
+} {}
+
+# 2019-07-29 Ticket ced41c7c7d6b4d36
+# A skipscan query is not order-distinct
+#
+db close
+sqlite3 db :memory:
+do_execsql_test skipscan1-3.1 {
+  CREATE TABLE t1 (c1, c2, c3, c4, PRIMARY KEY(c4, c3));
+  INSERT INTO t1 VALUES(3,0,1,NULL);
+  INSERT INTO t1 VALUES(0,4,1,NULL);
+  INSERT INTO t1 VALUES(5,6,1,NULL);
+  INSERT INTO t1 VALUES(0,4,1,NULL);
+  ANALYZE sqlite_master;
+  INSERT INTO sqlite_stat1 VALUES('t1','sqlite_autoindex_t1_1','18 18 6');
+  ANALYZE sqlite_master;
+  SELECT DISTINCT quote(c1), quote(c2), quote(c3), quote(c4), '|'
+    FROM t1 WHERE t1.c3 = 1;
+} {3 0 1 NULL | 0 4 1 NULL | 5 6 1 NULL |}
+do_eqp_test skipscan1-3.2 {
+  SELECT DISTINCT quote(c1), quote(c2), quote(c3), quote(c4), '|'
+    FROM t1 WHERE t1.c3 = 1;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE t1 USING INDEX sqlite_autoindex_t1_1 (ANY(c4) AND c3=?)
+  `--USE TEMP B-TREE FOR DISTINCT
+}
+
+# 2020-01-06 ticket 304017f5f04a0035
+#
+reset_db
+do_execsql_test skipscan1-4.10 {
+  CREATE TABLE t1(a,b INT);
+  INSERT INTO t1(a,b) VALUES(1,2),(3,3),(4,5);
+  CREATE UNIQUE INDEX i1 ON t1(b,b,a,a,a,a,a,b,a);
+  ANALYZE;
+  DROP TABLE IF EXISTS sqlite_stat4;
+  INSERT INTO sqlite_stat1 VALUES('t1','i1','30 30 30 2 2 2 2 2 2 2');
+  ANALYZE sqlite_master;
+
+  SELECT DISTINCT a
+    FROM t1
+   WHERE a = b
+     AND a = 3
+     AND b IN (1,3,2,4)
+     AND b >= 0
+     AND a <= 10;
+} {3}
+
+finish_test

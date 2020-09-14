@@ -1,0 +1,405 @@
+# 2012 July 12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix spellfix
+
+ifcapable !vtab { finish_test ; return }
+
+load_static_extension db spellfix nextchar
+
+set vocab {
+rabbi rabbit rabbits rabble rabid rabies raccoon raccoons race raced racer
+racers races racetrack racial racially racing rack racked racket racketeer
+racketeering racketeers rackets racking racks radar radars radial radially
+radian radiance radiant radiantly radiate radiated radiates radiating radiation
+radiations radiator radiators radical radically radicals radices radii radio
+radioactive radioastronomy radioed radiography radioing radiology radios radish
+radishes radium radius radix radon raft rafter rafters rafts rag rage raged
+rages ragged raggedly raggedness raging rags ragweed raid raided raider raiders
+raiding raids rail railed railer railers railing railroad railroaded railroader
+railroaders railroading railroads rails railway railways raiment rain rainbow
+raincoat raincoats raindrop raindrops rained rainfall rainier rainiest raining
+rains rainstorm rainy raise raised raiser raisers raises raisin raising rake
+raked rakes raking rallied rallies rally rallying ram ramble rambler rambles
+rambling ramblings ramification ramifications ramp rampage rampant rampart
+ramps ramrod rams ran ranch ranched rancher ranchers ranches ranching rancid
+random randomization randomize randomized randomizes randomly randomness randy
+rang range ranged rangeland ranger rangers ranges ranging rangy rank ranked
+ranker rankers rankest ranking rankings rankle rankly rankness ranks ransack
+ransacked ransacking ransacks ransom ransomer ransoming ransoms rant ranted
+ranter ranters ranting rants rap rapacious rape raped raper rapes rapid
+rapidity rapidly rapids rapier raping rapport rapprochement raps rapt raptly
+rapture raptures rapturous rare rarely rareness rarer rarest rarity rascal
+rascally rascals rash rasher rashly rashness rasp raspberry rasped rasping
+rasps raster rat rate rated rater raters rates rather ratification ratified
+ratifies ratify ratifying rating ratings ratio ration rational rationale
+rationales rationalities rationality rationalization rationalizations
+rationalize rationalized rationalizes rationalizing rationally rationals
+rationing rations ratios rats rattle rattled rattler rattlers rattles
+rattlesnake rattlesnakes rattling raucous ravage ravaged ravager ravagers
+ravages ravaging rave raved raven ravening ravenous ravenously ravens raves
+ravine ravines raving ravings raw rawer rawest rawly rawness ray rays raze
+razor razors re reabbreviate reabbreviated reabbreviates reabbreviating reach
+reachability reachable reachably reached reacher reaches reaching reacquired
+react reacted reacting reaction reactionaries reactionary reactions reactivate
+reactivated reactivates reactivating reactivation reactive reactively
+reactivity reactor reactors reacts read readability readable reader readers
+readied readier readies readiest readily readiness reading readings readjusted
+readout readouts reads ready readying real realest realign realigned realigning
+realigns realism realist realistic realistically realists realities reality
+}
+
+do_test 1.1 {
+  execsql { CREATE VIRTUAL TABLE t1 USING spellfix1 }
+  foreach word $vocab {
+    execsql { INSERT INTO t1(word) VALUES($word) }
+  }
+} {}
+
+foreach {tn word res} {
+  1   raxpi*     {rasping 5 rasped 5 ragweed 5 raspberry 6 rasp 4}
+  2   ril*       {rail 4 railed 4 railer 4 railers 4 railing 4}
+  3   rilis*     {realism 6 realist 6 realistic 6 realistically 6 realists 6}
+  4   reail*     {real 3 realest 3 realign 3 realigned 3 realigning 3}
+  5   ras*       {rascal 3 rascally 3 rascals 3 rash 3 rasher 3}
+  6   realistss* {realists 8 realigns 8 realistic 9 realistically 9 realest 7}
+  7   realistss  {realists 8 realist 7 realigns 8 realistic 9 realest 7}
+  8   rllation*  {realities 9 reality 7 rallied 7 railed 4}
+  9   renstom*   {rainstorm 8 ransom 6 ransomer 6 ransoming 6 ransoms 6}
+} {
+  do_execsql_test 1.2.$tn {
+    SELECT word, matchlen FROM t1 WHERE word MATCH $word 
+     ORDER BY score, word LIMIT 5
+  } $res
+}
+
+# Tests of the next_char function.
+#
+do_test 1.10 {
+  db eval {
+    CREATE TABLE vocab(w TEXT PRIMARY KEY);
+    INSERT INTO vocab SELECT word FROM t1;
+  }
+} {}
+do_execsql_test 1.11 {
+  SELECT next_char('re','vocab','w');
+} {a}
+do_execsql_test 1.11sub {
+  SELECT next_char('re','(SELECT w AS x FROM vocab)','x');
+} {a}
+do_execsql_test 1.12 {
+  SELECT next_char('r','vocab','w');
+} {ae}
+do_execsql_test 1.13 {
+  SELECT next_char('','vocab','w');
+} {r}
+do_test 1.14 {
+  catchsql {SELECT next_char('','xyzzy','a')}
+} {1 {no such table: xyzzy}}
+
+do_execsql_test 1.20 {
+  CREATE TABLE vocab2(w TEXT);
+  CREATE INDEX vocab2w ON vocab2(w COLLATE nocase);
+  INSERT INTO vocab2 VALUES('abc'), ('ABD'), ('aBe'), ('AbF');
+  SELECT next_char('ab', 'vocab2', 'w', null, 'nocase');
+} {cDeF}
+do_execsql_test 1.21 {
+  SELECT next_char('ab','vocab2','w',null,null);
+} {c}
+do_execsql_test 1.22 {
+  SELECT next_char('AB','vocab2','w',null,'NOCASE');
+} {cDeF}
+do_execsql_test 1.23 {
+  SELECT next_char('ab','vocab2','w',null,'binary');
+} {c}
+
+do_execsql_test 1.30 {
+  SELECT rowid FROM t1 WHERE word='rabbit';
+} {2}
+do_execsql_test 1.31 {
+  UPDATE t1 SET rowid=2000 WHERE word='rabbit';
+  SELECT rowid FROM t1 WHERE word='rabbit';
+} {2000}
+do_execsql_test 1.32 {
+  INSERT INTO t1(rowid, word) VALUES(3000,'melody');
+  SELECT rowid, word, matchlen FROM t1 WHERE word MATCH 'melotti'
+   ORDER BY score LIMIT 3;
+} {3000 melody 6}
+do_test 1.33 {
+  catchsql {INSERT INTO t1(rowid, word) VALUES(3000,'garden');}
+} {1 {constraint failed}}
+
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE t2 USING spellfix1;
+  INSERT INTO t2 (word, soundslike) VALUES('school', 'skuul');
+  INSERT INTO t2 (word, soundslike) VALUES('psalm', 'sarm');
+  SELECT word, matchlen FROM t2 WHERE word MATCH 'sar*' LIMIT 5;
+} {psalm 4}
+
+do_execsql_test 2.2 {
+  SELECT word, matchlen FROM t2 WHERE word MATCH 'skol*' LIMIT 5;
+} {school 6}
+
+set vocab {
+kangaroo kanji kappa karate keel keeled keeling keels keen keener keenest
+keenly keenness keep keeper keepers keeping keeps ken kennel kennels kept
+kerchief kerchiefs kern kernel kernels kerosene ketchup kettle
+kettles key keyboard keyboards keyed keyhole keying keynote keypad keypads keys
+keystroke keystrokes keyword keywords kick kicked kicker kickers kicking
+kickoff kicks kid kidded kiddie kidding kidnap kidnapper kidnappers kidnapping
+kidnappings kidnaps kidney kidneys kids kill killed killer killers killing
+killingly killings killjoy kills kilobit kilobits kiloblock kilobyte kilobytes
+kilogram kilograms kilohertz kilohm kilojoule kilometer kilometers kiloton
+kilovolt kilowatt kiloword kimono kin kind kinder kindergarten kindest
+kindhearted kindle kindled kindles kindling kindly kindness kindred kinds
+kinetic king kingdom kingdoms kingly kingpin kings kink kinky kinship kinsman
+kiosk kiss kissed kisser kissers kisses kissing kit kitchen kitchenette
+kitchens kite kited kites kiting kits kitten kittenish kittens kitty klaxon
+kludge kludges klystron knack knapsack knapsacks knave knaves knead kneads knee
+kneecap kneed kneeing kneel kneeled kneeling kneels knees knell knells knelt
+knew knife knifed knifes knifing knight knighted knighthood knighting knightly
+knights knit knits knives knob knobs knock knockdown knocked knocker knockers
+knocking knockout knocks knoll knolls knot knots knotted knotting know knowable
+knower knowhow knowing knowingly knowledge knowledgeable known knows knuckle
+knuckled knuckles koala kosher kudo
+}
+
+do_execsql_test 3.1 {
+  CREATE TABLE costs(iLang, cFrom, cTo, iCost);
+  INSERT INTO costs VALUES(0, 'a', 'e', 1);
+  INSERT INTO costs VALUES(0, 'e', 'i', 1);
+  INSERT INTO costs VALUES(0, 'i', 'o', 1);
+  INSERT INTO costs VALUES(0, 'o', 'u', 1);
+  INSERT INTO costs VALUES(0, 'u', 'a', 1);
+  CREATE VIRTUAL TABLE t3 USING spellfix1(edit_cost_table=costs);
+}
+
+do_test 3.2 {
+  foreach w $vocab {
+    execsql { INSERT INTO t3(word) VALUES($w) }
+  }
+} {}
+
+foreach {tn word res} {
+  1   kos*     {kosher 3 kiosk 4 kudo 2 kiss 3 kissed 3}
+  2   kellj*   {killjoy 5 kill 4 killed 4 killer 4 killers 4}
+  3   kellj    {kill 4 kills 5 killjoy 7 keel 4 killed 6}
+} {
+  do_execsql_test 3.2.$tn {
+    SELECT word, matchlen FROM t3 WHERE word MATCH $word
+     ORDER BY score, word LIMIT 5
+  } $res
+}
+
+do_execsql_test 4.0 {
+  INSERT INTO t3(command) VALUES('edit_cost_table=NULL');
+}
+foreach {tn word res} {
+  1   kosher     {kosher 0 kisser 51 kissers 76 kissed 126 kisses 126}
+  2   kellj      {keels 60 killjoy 68 kills 80 keel 120 kill 125}
+  3   kashar     {kosher 80 kisser 91 kissers 116 kissed 166 kisses 166}
+} {
+  do_execsql_test 4.1.$tn {
+    SELECT word, distance FROM t3 WHERE word MATCH $word
+     ORDER BY score, word LIMIT 5
+  } $res
+}
+do_execsql_test 5.0 {
+  CREATE TABLE costs2(iLang, cFrom, cTo, iCost);
+  INSERT INTO costs2 VALUES(0, 'a', 'o', 1);
+  INSERT INTO costs2 VALUES(0, 'e', 'o', 4);
+  INSERT INTO costs2 VALUES(0, 'i', 'o', 8);
+  INSERT INTO costs2 VALUES(0, 'u', 'o', 16);
+  INSERT INTO t3(command) VALUES('edit_cost_table="costs2"');
+}
+
+foreach {tn word res} {
+  1   kasher     {kosher 1}
+  2   kesher     {kosher 4}
+  3   kisher     {kosher 8}
+  4   kosher     {kosher 0}
+  5   kusher     {kosher 16}
+} {
+  do_execsql_test 5.1.$tn {
+    SELECT word, distance FROM t3 WHERE word MATCH $word
+     ORDER BY score, word LIMIT 1
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Try some queries by rowid.
+#
+do_execsql_test 6.1.1 {
+  SELECT word FROM t3 WHERE rowid = 10;
+} {keener}
+do_execsql_test 6.1.2 {
+  SELECT word, distance FROM t3 WHERE rowid = 10;
+} {keener {}}
+do_execsql_test 6.1.3 {
+  SELECT word, distance FROM t3 WHERE rowid = 10 AND word MATCH 'kiiner';
+} {keener 300}
+
+ifcapable trace {
+  proc trace_callback {sql} {
+    if {[string range $sql 0 2] == "-- "} {
+      lappend ::trace [string range $sql 3 end]
+    }
+  }
+  
+  proc do_tracesql_test {tn sql {res {}}} {
+    set ::trace [list]
+    uplevel [list do_test $tn [subst -nocommands {
+      set vals [execsql {$sql}]
+      concat [set vals] [set ::trace]
+    }] [list {*}$res]]
+  }
+  
+  db trace trace_callback
+  do_tracesql_test 6.2.1 {
+    SELECT word FROM t3 WHERE rowid = 10;
+  } {keener
+    {SELECT word, rank, NULL, langid, id FROM "main"."t3_vocab" WHERE rowid=?}
+  }
+  do_tracesql_test 6.2.2 {
+    SELECT word, distance FROM t3 WHERE rowid = 10;
+  } {keener {}
+    {SELECT word, rank, NULL, langid, id FROM "main"."t3_vocab" WHERE rowid=?}
+  }
+  do_tracesql_test 6.2.3 {
+    SELECT word, distance FROM t3 WHERE rowid = 10 AND word MATCH 'kiiner';
+  } {keener 300
+    {SELECT id, word, rank, coalesce(k1,word)  FROM "main"."t3_vocab" WHERE langid=0 AND k2>=?1 AND k2<?2}
+  }
+}
+
+#------------------------------------------------------------------------- 
+# Test that the spellfix1 table supports conflict handling (OR REPLACE 
+# and so on).
+#
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE t4 USING spellfix1;
+  PRAGMA table_info = t4;
+} {
+  0 word {} 0 {} 0 
+  1 rank {} 0 {} 0 
+  2 distance {} 0 {} 0 
+  3 langid {} 0 {} 0 
+  4 score {} 0 {} 0 
+  5 matchlen {} 0 {} 0
+}
+
+do_execsql_test 7.2.1 {
+  INSERT INTO t4(rowid, word) VALUES(1, 'Archilles');
+  INSERT INTO t4(rowid, word) VALUES(2, 'Pluto');
+  INSERT INTO t4(rowid, word) VALUES(3, 'Atrides');
+  INSERT OR REPLACE INTO t4(rowid, word) VALUES(2, 'Apollo');
+  SELECT rowid, word FROM t4;
+} {
+  1 Archilles   2 Apollo   3 Atrides
+}
+do_catchsql_test 7.2.2 {
+  INSERT OR ABORT INTO t4(rowid, word) VALUES(1, 'Leto');
+} {1 {constraint failed}}
+do_catchsql_test 7.2.3 {
+  INSERT OR ROLLBACK INTO t4(rowid, word) VALUES(3, 'Zeus');
+} {1 {constraint failed}}
+do_catchsql_test 7.2.4 {
+  INSERT OR FAIL INTO t4(rowid, word) VALUES(3, 'Zeus');
+} {1 {constraint failed}}
+do_execsql_test 7.2.5 {
+  INSERT OR IGNORE INTO t4(rowid, word) VALUES(3, 'Zeus');
+  SELECT rowid, word FROM t4;
+} {
+  1 Archilles   2 Apollo   3 Atrides
+}
+
+do_execsql_test 7.3.1 {
+  UPDATE OR REPLACE t4 SET rowid=3 WHERE rowid=1;
+  SELECT rowid, word FROM t4;
+} {2 Apollo 3 Archilles}
+do_catchsql_test 7.3.2 {
+  UPDATE OR ABORT t4 SET rowid=3 WHERE rowid=2;
+} {1 {constraint failed}}
+do_catchsql_test 7.3.3 {
+  UPDATE OR ROLLBACK t4 SET rowid=3 WHERE rowid=2;
+} {1 {constraint failed}}
+do_catchsql_test 7.3.4 {
+  UPDATE OR FAIL t4 SET rowid=3 WHERE rowid=2;
+} {1 {constraint failed}}
+do_execsql_test 7.3.5 {
+  UPDATE OR IGNORE t4 SET rowid=3 WHERE rowid=2;
+  SELECT rowid, word FROM t4;
+} {2 Apollo  3 Archilles}
+
+do_execsql_test 7.4.1 {
+  DELETE FROM t4;
+  INSERT INTO t4(rowid, word) VALUES(10, 'Agamemnon');
+  INSERT INTO t4(rowid, word) VALUES(20, 'Patroclus');
+  INSERT INTO t4(rowid, word) VALUES(30, 'Chryses');
+
+  CREATE TABLE t5(i, w);
+  INSERT INTO t5 VALUES(5,  'Poseidon');
+  INSERT INTO t5 VALUES(20, 'Chronos');
+  INSERT INTO t5 VALUES(30, 'Hera');
+}
+
+db_save_and_close
+foreach {tn conflict err bRollback res} {
+  0 ""            {1 {constraint failed}} 0
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  1 "OR REPLACE"  {0 {}} 0
+                  {5 Poseidon 10 Agamemnon 20 Chronos 30 Hera}
+  2 "OR ABORT"    {1 {constraint failed}} 0
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  3 "OR ROLLBACK" {1 {constraint failed}} 1
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  5 "OR IGNORE"   {0 {}} 0
+                  {5 Poseidon 10 Agamemnon 20 Patroclus 30 Chryses}
+} {
+  db_restore_and_reopen
+  load_static_extension db spellfix nextchar
+
+  execsql BEGIN
+  set sql "INSERT $conflict INTO t4(rowid, word) SELECT i, w FROM t5"
+  do_catchsql_test 7.4.2.$tn.1 $sql $err
+  do_execsql_test 7.4.2.$tn.2 { SELECT rowid, word FROM t4 } $res
+
+  do_test 7.4.2.$tn.3 { sqlite3_get_autocommit db } $bRollback
+  catchsql ROLLBACK
+}
+
+foreach {tn conflict err bRollback res} {
+  0 ""            {1 {constraint failed}} 0
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  1 "OR REPLACE"  {0 {}} 0
+                  {15 Agamemnon 45 Chryses}
+  2 "OR ABORT"    {1 {constraint failed}} 0
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  3 "OR ROLLBACK" {1 {constraint failed}} 1
+                  {10 Agamemnon 20 Patroclus 30 Chryses}
+  5 "OR IGNORE"   {0 {}} 0
+                  {15 Agamemnon 20 Patroclus 45 Chryses}
+} {
+  db_restore_and_reopen
+  load_static_extension db spellfix nextchar
+
+  execsql BEGIN
+  set sql "UPDATE $conflict t4 SET rowid=rowid + (rowid/2)"
+  do_catchsql_test 7.5.2.$tn.1 $sql $err
+  do_execsql_test 7.5.2.$tn.2 { SELECT rowid, word FROM t4 } $res
+  do_test 7.5.2.$tn.3 { sqlite3_get_autocommit db } $bRollback
+  catchsql ROLLBACK
+}
+
+finish_test

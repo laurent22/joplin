@@ -1,0 +1,129 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbutemplimit
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+proc setup_databases {} {
+  forcedelete test.db2
+  forcedelete test.db
+  sqlite3 db test.db
+  execsql {
+    -- Create target database schema.
+    --
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB(100), c BLOB(100));
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b BLOB(100), c BLOB(100));
+    CREATE INDEX i1b ON t1(b);
+    CREATE INDEX i1c ON t1(c);
+    CREATE INDEX i2b ON t2(b);
+    CREATE INDEX i2c ON t2(c);
+  
+    -- Create a large RBU database.
+    --
+    ATTACH 'test.db2' AS rbu;
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+    WITH s(i) AS (
+      VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<10000
+    )
+    INSERT INTO data_t1 SELECT i, randomblob(100), randomblob(100), 0 FROM s;
+    CREATE TABLE rbu.data_t2(a, b, c, rbu_control);
+    WITH s(i) AS (
+      VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<15000
+    )
+    INSERT INTO data_t2 SELECT i, randomblob(100), randomblob(100), 0 FROM s;
+  }
+  db close
+}
+
+proc run_rbu_cachesize {target rbu cachesize temp_limit} {
+  sqlite3rbu rbu $target $rbu
+  rbu temp_size_limit $temp_limit
+  sqlite3_exec_nr [rbu db 1] "PRAGMA cache_size = $cachesize"
+  while 1 {
+    set rc [rbu step]
+    set ::A([rbu temp_size]) 1
+    if {$rc!="SQLITE_OK"} break
+  }
+  list [catch {rbu close} msg] $msg
+}
+
+proc step_rbu_cachesize {target rbu stepsize cachesize temp_limit} {
+  set res ""
+  while 1 {
+    sqlite3rbu rbu $target $rbu
+    rbu temp_size_limit $temp_limit
+    if { [rbu temp_size_limit -1]!=$temp_limit } { error "round trip problem!" }
+    sqlite3_exec_nr [rbu db 1] "PRAGMA cache_size = $cachesize"
+    for {set i 0} {$i < $stepsize} {incr i} {
+      set rc [rbu step]
+      set ::A([rbu temp_size]) 1
+      if {$rc!="SQLITE_OK"} break
+    }
+    set res [list [catch {rbu close} msg] $msg]
+    if {$res != "0 SQLITE_OK"} break
+  }
+  set res
+}
+
+do_test 1.1.0 { setup_databases } {}
+
+do_test 1.1.1 {
+  unset -nocomplain ::A
+  run_rbu_cachesize test.db test.db2 10 0
+} {0 SQLITE_DONE}
+
+do_test 1.1.2 { llength [array names ::A] } 3
+
+do_test 1.1.3 { 
+  foreach {a0 a1 a2} [lsort -integer [array names ::A]] {}
+  list [expr $a0==0]                         \
+       [expr $a1>1048576] [expr $a1<1200000] \
+       [expr $a2>1500000] [expr $a2<1700000]
+} {1 1 1 1 1}
+
+do_test 1.2.1 {
+  setup_databases
+  run_rbu_cachesize test.db test.db2 10 1000000
+} {1 SQLITE_FULL}
+do_test 1.2.2 { info commands rbu } {}
+
+do_test 1.3.1 {
+  setup_databases
+  run_rbu_cachesize test.db test.db2 10 1300000
+} {1 SQLITE_FULL}
+do_test 1.3.2 { info commands rbu } {}
+
+do_test 1.4.1 {
+  setup_databases
+  run_rbu_cachesize test.db test.db2 10 1800000
+} {0 SQLITE_DONE}
+do_test 1.4.2 { info commands rbu } {}
+
+do_test 1.5.1 {
+  setup_databases
+  unset -nocomplain ::A
+  step_rbu_cachesize test.db test.db2 1000 10 2400000
+} {0 SQLITE_DONE}
+do_test 1.5.2 { info commands rbu } {}
+
+do_test 1.6.1 {
+  setup_databases
+  unset -nocomplain ::A
+  step_rbu_cachesize test.db test.db2 1000 10 1400000
+} {1 SQLITE_FULL}
+do_test 1.6.2 { info commands rbu } {}
+
+finish_test

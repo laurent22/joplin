@@ -1,0 +1,243 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that focus on incremental merges of segments.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5merge
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+db func repeat [list string repeat]
+
+#-------------------------------------------------------------------------
+# Create an fts index so that:
+#
+#   * the index consists of two top-level segments
+#   * each segment contains records related to $nRowPerSeg rows
+#   * all rows consist of tokens "x" and "y" only.
+#
+# Then run ('merge', 1) until everything is completely merged.
+#
+proc do_merge1_test {testname nRowPerSeg} {
+  set ::nRowPerSeg [expr $nRowPerSeg]
+  do_execsql_test $testname.0 {
+    DROP TABLE IF EXISTS x8;
+    CREATE VIRTUAL TABLE x8 USING fts5(i);
+    INSERT INTO x8(x8, rank) VALUES('pgsz', 32);
+
+    WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<$::nRowPerSeg)
+      INSERT INTO x8 SELECT repeat('x y ', i % 16) FROM ii;
+
+    WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<$::nRowPerSeg)
+      INSERT INTO x8 SELECT repeat('x y ', i % 16) FROM ii;
+
+    INSERT INTO x8(x8, rank) VALUES('usermerge', 2);
+  }
+
+  for {set tn 1} {[lindex [fts5_level_segs x8] 0]>0} {incr tn} {
+    do_execsql_test $testname.$tn {
+      INSERT INTO x8(x8, rank) VALUES('merge', 1);
+      INSERT INTO x8(x8) VALUES('integrity-check');
+    }
+    if {$tn>5} break
+  }
+
+  do_test $testname.x [list expr "$tn < 5"] 1
+}
+
+do_merge1_test 1.1   1
+do_merge1_test 1.2   2
+do_merge1_test 1.3   3
+do_merge1_test 1.4   4
+do_merge1_test 1.5  10
+do_merge1_test 1.6  20
+do_merge1_test 1.7 100
+
+#-------------------------------------------------------------------------
+#
+proc do_merge2_test {testname nRow} {
+  db func rnddoc fts5_rnddoc
+
+  do_execsql_test $testname.0 {
+    DROP TABLE IF EXISTS x8;
+    CREATE VIRTUAL TABLE x8 USING fts5(i);
+    INSERT INTO x8(x8, rank) VALUES('pgsz', 32);
+  }
+
+  set ::nRow $nRow
+  do_test $testname.1 {
+    for {set i 0} {$i < $::nRow} {incr i} {
+      execsql { INSERT INTO x8 VALUES( rnddoc(($i%16) + 5) ) }
+      while {[not_merged x8]} {
+        execsql {
+          INSERT INTO x8(x8, rank) VALUES('usermerge', 2);
+          INSERT INTO x8(x8, rank) VALUES('merge', 1);
+          INSERT INTO x8(x8, rank) VALUES('usermerge', 16);
+          INSERT INTO x8(x8) VALUES('integrity-check');
+        }
+      }
+    }
+  } {}
+}
+proc not_merged {tbl} {
+  set segs [fts5_level_segs $tbl]
+  foreach s $segs { if {$s>1} { return 1 } }
+  return 0
+}
+
+do_merge2_test 2.1    5
+do_merge2_test 2.2   10
+do_merge2_test 2.3   20
+
+#-------------------------------------------------------------------------
+# Test that a merge will complete any merge that has already been
+# started, even if the number of input segments is less than the current
+# value of the 'usermerge' configuration parameter.
+#
+db func rnddoc fts5_rnddoc
+
+do_execsql_test 3.1 {
+  DROP TABLE IF EXISTS x8;
+  CREATE VIRTUAL TABLE x8 USING fts5(i);
+  INSERT INTO x8(x8, rank) VALUES('pgsz', 32);
+  INSERT INTO x8 VALUES(rnddoc(100));
+  INSERT INTO x8 VALUES(rnddoc(100));
+}
+do_test 3.2 {
+  execsql {
+    INSERT INTO x8(x8, rank) VALUES('usermerge', 4);
+    INSERT INTO x8(x8, rank) VALUES('merge', 1);
+  }
+  fts5_level_segs x8
+} {2}
+
+do_test 3.3 {
+  execsql {
+    INSERT INTO x8(x8, rank) VALUES('usermerge', 2);
+    INSERT INTO x8(x8, rank) VALUES('merge', 1);
+  }
+  fts5_level_segs x8
+} {2 1}
+
+do_test 3.4 {
+  execsql { INSERT INTO x8(x8, rank) VALUES('usermerge', 4) }
+  while {[not_merged x8]} {
+    execsql { INSERT INTO x8(x8, rank) VALUES('merge', 1) }
+  }
+  fts5_level_segs x8
+} {0 1}
+
+#-------------------------------------------------------------------------
+#
+proc mydoc {} {
+  set x [lindex {a b c d e f g h i j} [expr int(rand()*10)]]
+  return [string repeat "$x " 30]
+}
+db func mydoc mydoc
+
+proc mycount {} {
+  set res [list]
+  foreach x {a b c d e f g h i j} {
+    lappend res [db one {SELECT count(*) FROM x8 WHERE x8 MATCH $x}]
+  }
+  set res
+}
+
+  #1 32
+foreach {tn pgsz} {
+  2 1000
+} {
+  do_execsql_test 4.$tn.1 {
+    DROP TABLE IF EXISTS x8;
+    CREATE VIRTUAL TABLE x8 USING fts5(i);
+    INSERT INTO x8(x8, rank) VALUES('pgsz', $pgsz);
+  }
+
+  do_execsql_test 4.$tn.2 {
+    INSERT INTO x8(x8, rank) VALUES('merge', 1);
+  }
+
+  do_execsql_test 4.$tn.3 {
+    WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<100)
+      INSERT INTO x8 SELECT mydoc() FROM ii;
+    WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<100)
+      INSERT INTO x8 SELECT mydoc() FROM ii;
+    INSERT INTO x8(x8, rank) VALUES('usermerge', 2);
+  }
+
+  set expect [mycount]
+    for {set i 0} {$i < 20} {incr i} {
+      do_test 4.$tn.4.$i {
+        execsql { INSERT INTO x8(x8, rank) VALUES('merge', 1); }
+        mycount
+      } $expect
+      break
+    }
+#  db eval {SELECT fts5_decode(rowid, block) AS r FROM x8_data} { puts $r }
+}
+
+#-------------------------------------------------------------------------
+# Test that the 'merge' command does not modify the database if there is
+# no work to do. 
+
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE x9 USING fts5(one, two);
+  INSERT INTO x9(x9, rank) VALUES('pgsz', 32);
+  INSERT INTO x9(x9, rank) VALUES('automerge', 2);
+  INSERT INTO x9(x9, rank) VALUES('usermerge', 2);
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+  INSERT INTO x9 VALUES(rnddoc(100), rnddoc(100));
+}
+
+do_test 5.2 {
+  while 1 {
+    set nChange [db total_changes]
+    execsql { INSERT INTO x9(x9, rank) VALUES('merge', 1); }
+    set nChange [expr [db total_changes] - $nChange]
+    #puts $nChange
+    if {$nChange<2} break
+  }
+} {}
+
+
+#--------------------------------------------------------------------------
+# Test that running 'merge' on an empty database does not cause a 
+# problem.
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE g1 USING fts5(a, b);
+}
+do_execsql_test 6.1 {
+  INSERT INTO g1(g1, rank) VALUES('merge', 10);
+}
+do_execsql_test 6.2 {
+  INSERT INTO g1(g1, rank) VALUES('merge', -10);
+}
+do_execsql_test 6.3 {
+  INSERT INTO g1(g1) VALUES('integrity-check');
+}
+
+
+
+finish_test

@@ -1,0 +1,143 @@
+# 2005 July 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the use of indices in WHERE clauses
+# when the WHERE clause contains the BETWEEN operator.
+#
+# $Id: between.test,v 1.2 2006/01/17 09:35:02 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Build some test data
+#
+do_test between-1.0 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(w int, x int, y int, z int);
+  }
+  for {set i 1} {$i<=100} {incr i} {
+    set w $i
+    set x [expr {int(log($i)/log(2))}]
+    set y [expr {$i*$i + 2*$i + 1}]
+    set z [expr {$x+$y}]
+    ifcapable tclvar {
+      # Random unplanned test of the $varname variable syntax.
+      execsql {INSERT INTO t1 VALUES($::w,$::x,$::y,$::z)}
+    } else {
+      # If the $varname syntax is not available, use the regular variable
+      # declaration syntax.
+      execsql {INSERT INTO t1 VALUES(:w,:x,:y,:z)}
+    }
+  }
+  execsql {
+    CREATE UNIQUE INDEX i1w ON t1(w);
+    CREATE INDEX i1xy ON t1(x,y);
+    CREATE INDEX i1zyx ON t1(z,y,x);
+    COMMIT;
+  }
+} {}
+
+# This procedure executes the SQL.  Then it appends to the result the
+# "sort" or "nosort" keyword depending on whether or not any sorting
+# is done.  Then it appends the names of the table and index used.
+#
+proc queryplan {sql} {
+  set ::sqlite_sort_count 0
+  set data [execsql $sql]
+  if {$::sqlite_sort_count} {set x sort} {set x nosort}
+  lappend data $x
+  set eqp [execsql "EXPLAIN QUERY PLAN $sql"]
+  # puts eqp=$eqp
+  foreach {a b c x} $eqp {
+    if {[regexp { TABLE (\w+ AS )?(\w+) USING.* INDEX (\w+)\y} \
+        $x all as tab idx]} {
+      lappend data $tab $idx
+    } elseif {[regexp { TABLE (\w+ AS )?(\w+)\y} $x all as tab]} {
+      lappend data $tab *
+    }
+  }
+  return $data   
+}
+
+do_test between-1.1.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w BETWEEN 5 AND 6 ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 i1w}
+do_test between-1.1.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE +w BETWEEN 5 AND 6 ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 *}
+do_test between-1.2.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w BETWEEN 5 AND 65-y ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 i1w}
+do_test between-1.2.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE +w BETWEEN 5 AND 65-y ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 *}
+do_test between-1.3.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w BETWEEN 41-y AND 6 ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 i1w}
+do_test between-1.3.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE +w BETWEEN 41-y AND 6 ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 *}
+do_test between-1.4 {
+  queryplan {
+    SELECT * FROM t1 WHERE w BETWEEN 41-y AND 65-y ORDER BY +w
+  }
+} {5 2 36 38 6 2 49 51 sort t1 *}
+do_test between-1.5.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE 26 BETWEEN y AND z ORDER BY +w
+  }
+} {4 2 25 27 sort t1 i1zyx}
+do_test between-1.5.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE 26 BETWEEN +y AND z ORDER BY +w
+  }
+} {4 2 25 27 sort t1 i1zyx}
+do_test between-1.5.3 {
+  queryplan {
+    SELECT * FROM t1 WHERE 26 BETWEEN y AND +z ORDER BY +w
+  }
+} {4 2 25 27 sort t1 *}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test between-2.0 {
+  CREATE TABLE t1(x TEXT, y TEXT COLLATE nocase);
+  INSERT INTO t1 VALUES('0', 'abc');
+}
+
+foreach {tn expr res} {
+  1 "x                BETWEEN 1 AND '5'" 0
+  2 "x COLLATE binary BETWEEN 1 AND '5'" 0
+  3 "x COLLATE nocase BETWEEN 1 AND '5'" 0
+
+  4 "y                  BETWEEN 'A' AND 'B'" 1
+  5 "y COLLATE nocase   BETWEEN 'A' AND 'B'" 1
+  6 "y COLLATE binary   BETWEEN 'A' AND 'B'" 0
+  7 "(y COLLATE binary) BETWEEN 'A' AND 'B'" 0
+} {
+  set sql "SELECT $expr FROM t1"
+  do_execsql_test between-2.1.$tn $sql $res
+}
+
+finish_test

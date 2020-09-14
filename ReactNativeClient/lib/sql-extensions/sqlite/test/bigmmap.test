@@ -1,0 +1,104 @@
+# 2017 August 07
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script testing the ability of SQLite to use mmap
+# to access files larger than 4GiB.
+#
+
+if {[file exists skip-big-file]} return
+if {$tcl_platform(os)=="Darwin"} return
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bigmmap
+
+ifcapable !mmap||!vtab {
+  finish_test
+  return
+}
+
+set mmap_limit 0
+db eval { 
+  SELECT compile_options AS x FROM pragma_compile_options 
+  WHERE x LIKE 'max_mmap_size=%' 
+} {
+  regexp {MAX_MMAP_SIZE=([0-9]*)} $x -> mmap_limit
+}
+if {$mmap_limit < [expr 8 * 1<<30]} {
+  puts "Skipping bigmmap.test - requires SQLITE_MAX_MMAP_SIZE >= 8G"
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------------
+# Create the database file roughly 8GiB in size. Most pages are unused,
+# except that there is a table and index clustered around each 1GiB
+# boundary.
+#
+do_execsql_test 1.0 {
+  PRAGMA page_size = 4096;
+  CREATE TABLE t0(a INTEGER PRIMARY KEY, b, c, UNIQUE(b, c));
+  WITH  s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 100 )
+  INSERT INTO t0 SELECT i, 't0', randomblob(800) FROM s;
+}
+
+for {set i 1} {$i < 8} {incr i} {
+  fake_big_file [expr $i*1024] [get_pwd]/test.db
+  hexio_write test.db 28 [format %.8x [expr ($i*1024*1024*1024/4096) - 5]]
+
+  do_execsql_test 1.$i "
+    CREATE TABLE t$i (a INTEGER PRIMARY KEY, b, c, UNIQUE(b, c));
+    WITH  s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 100 )
+      INSERT INTO t$i SELECT i, 't$i', randomblob(800) FROM s;
+  "
+}
+
+#-------------------------------------------------------------------------
+# Check that data can be retrieved from the db with a variety of 
+# configured mmap size limits.
+#
+for {set i 0} {$i < 9} {incr i} {
+
+  # Configure a memory mapping $i GB in size.
+  #
+  set val [expr $i*1024*1024*1024]
+  execsql "PRAGMA main.mmap_size = $val"
+  do_execsql_test 2.$i.0 {
+    PRAGMA main.mmap_size
+  } $val
+
+  for {set t 0} {$t < 8} {incr t} {
+    do_execsql_test 2.$i.$t.1 "
+      SELECT count(*) FROM t$t;
+      SELECT count(b || c) FROM t$t GROUP BY b;
+    " {100 100}
+  
+    do_execsql_test 2.$i.$t.2 "
+      SELECT * FROM t$t AS o WHERE 
+        NOT EXISTS( SELECT * FROM t$t AS i WHERE a=o.a AND +b=o.b AND +c=o.c )
+      ORDER BY b, c;
+    " {}
+    
+    do_eqp_test 2.$i.$t.3 "
+      SELECT * FROM t$t AS o WHERE 
+        NOT EXISTS( SELECT * FROM t$t AS i WHERE a=o.a AND +b=o.b AND +c=o.c )
+      ORDER BY b, c;
+    " [string map {"\n    " "\n"} "
+      QUERY PLAN
+      |--SCAN TABLE t$t AS o USING COVERING INDEX sqlite_autoindex_t${t}_1
+      `--CORRELATED SCALAR SUBQUERY
+         `--SEARCH TABLE t$t AS i USING INTEGER PRIMARY KEY (rowid=?)
+    "]
+  }
+}
+
+finish_test

@@ -1,0 +1,110 @@
+#
+# 2006 February 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is the sqlite3_table_column_metadata() API.
+#
+# $Id: colmeta.test,v 1.4 2008/01/23 12:52:41 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Set up a schema in the main and temp test databases.
+do_test colmeta-0 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE abc2(a PRIMARY KEY COLLATE NOCASE, b VARCHAR(32), c);
+    CREATE TABLE abc3(a NOT NULL, b INTEGER PRIMARY KEY, c);
+    CREATE TABLE abc5(w,x,y,z,PRIMARY KEY(x,z)) WITHOUT ROWID;
+    CREATE TABLE abc6(rowid TEXT COLLATE rtrim, oid REAL, _rowid_ BLOB);
+  }
+  ifcapable autoinc {
+    execsql {
+      CREATE TABLE abc4(a, b INTEGER PRIMARY KEY AUTOINCREMENT, c);
+    }
+  }
+  ifcapable view {
+    execsql {
+      CREATE VIEW v1 AS SELECT * FROM abc2;
+    }
+  }
+} {}
+
+
+# Return values are of the form:
+#
+#   {<decl-type> <collation> <not null> <primary key> <auto increment>}
+#
+set tests {
+  1  {main abc a}                {0 {{} BINARY 0 0 0}}
+  2  {{} abc a}                  {0 {{} BINARY 0 0 0}}
+  3  {{} abc2 b}                 {0 {VARCHAR(32) BINARY 0 0 0}}
+  4  {main abc2 b}               {0 {VARCHAR(32) BINARY 0 0 0}}
+  5  {{} abc2 a}                 {0 {{} NOCASE 0 1 0}}
+  6  {{} abc3 a}                 {0 {{} BINARY 1 0 0}}
+  7  {{} abc3 b}                 {0 {INTEGER BINARY 0 1 0}}
+  13 {main abc rowid}            {0 {INTEGER BINARY 0 1 0}}
+  14 {main abc3 rowid}           {0 {INTEGER BINARY 0 1 0}}
+  16 {main abc d}                {1 {no such table column: abc.d}}
+  20 {main abc5 w}               {0 {{} BINARY 0 0 0}}
+  21 {main abc5 x}               {0 {{} BINARY 1 1 0}}
+  22 {main abc5 y}               {0 {{} BINARY 0 0 0}}
+  23 {main abc5 z}               {0 {{} BINARY 1 1 0}}
+  24 {main abc5 rowid}           {1 {no such table column: abc5.rowid}}
+  30 {main abc6 rowid}           {0 {TEXT rtrim 0 0 0}}
+  31 {main abc6 oid}             {0 {REAL BINARY 0 0 0}}
+  32 {main abc6 _rowid_}         {0 {BLOB BINARY 0 0 0}}
+}
+ifcapable autoinc {
+  set tests [concat $tests {
+    100 {{} abc4 b}              {0 {INTEGER BINARY 0 1 1}}
+    101 {main abc4 rowid}        {0 {INTEGER BINARY 0 1 1}}
+  }]
+}
+ifcapable view {
+  set tests [concat $tests {
+    200 {{} v1 a}                {1 {no such table column: v1.a}}
+    201 {main v1 b}              {1 {no such table column: v1.b}}
+    202 {main v1 badname}        {1 {no such table column: v1.badname}}
+    203 {main v1 rowid}          {1 {no such table column: v1.rowid}}
+  }]
+}
+
+foreach {tn params results} $tests {
+  set ::DB [sqlite3_connection_pointer db]
+
+  set tstbody [concat sqlite3_table_column_metadata $::DB $params] 
+  do_test colmeta-$tn.1 {
+    list [catch $tstbody msg] [set msg]
+  } $results
+
+  db close
+  sqlite3 db test.db
+
+  set ::DB [sqlite3_connection_pointer db]
+  set tstbody [concat sqlite3_table_column_metadata $::DB $params] 
+  do_test colmeta-$tn.2 {
+    list [catch $tstbody msg] [set msg]
+  } $results
+}
+
+# Calling sqlite3_table_column_metadata with a NULL column name merely
+# checks for the existance of the table.
+#
+do_test colmeta-300 {
+  catch {sqlite3_table_column_metadata $::DB main xyzzy} res
+} {1}
+do_test colmeta-301 {
+  catch {sqlite3_table_column_metadata $::DB main abc} res
+} {0}
+
+
+finish_test

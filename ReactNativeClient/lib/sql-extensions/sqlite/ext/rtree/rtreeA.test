@@ -1,0 +1,262 @@
+# 2010 September 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file contains tests for the r-tree module. Specifically, it tests
+# that corrupt or inconsistent databases do not cause crashes in the r-tree
+# module.
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+
+proc create_t1 {} {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    CREATE VIRTUAL TABLE t1 USING rtree(id, x1, x2, y1, y2);
+  }
+}
+proc populate_t1 {} {
+  execsql BEGIN
+  for {set i 0} {$i < 500} {incr i} {
+    set x2 [expr $i+5]
+    set y2 [expr $i+5]
+    execsql { INSERT INTO t1 VALUES($i, $i, $x2, $i, $y2) }
+  }
+  execsql COMMIT
+  sqlite3_db_config db DEFENSIVE 0
+}
+
+proc truncate_node {nodeno nTrunc} {
+  set blob [db one {SELECT data FROM t1_node WHERE nodeno=$nodeno}]
+  if {$nTrunc<0} {set nTrunc "end-$nTrunc"}
+  set blob [string range $blob 0 $nTrunc]
+  db eval { UPDATE t1_node SET data = $blob WHERE nodeno=$nodeno }
+}
+
+proc set_tree_depth {tbl {newvalue ""}} {
+  set blob [db one "SELECT data FROM ${tbl}_node WHERE nodeno=1"]
+
+  if {$newvalue == ""} {
+    binary scan $blob Su oldvalue
+    return $oldvalue
+  }
+
+  set blob [binary format Sua* $newvalue [string range $blob 2 end]]
+  db eval "UPDATE ${tbl}_node SET data = \$blob WHERE nodeno=1"
+  return [set_tree_depth $tbl]
+}
+
+proc set_entry_count {tbl nodeno {newvalue ""}} {
+  set blob [db one "SELECT data FROM ${tbl}_node WHERE nodeno=$nodeno"]
+
+  if {$newvalue == ""} {
+    binary scan [string range $blob 2 end] Su oldvalue
+    return $oldvalue
+  }
+
+  set blob [binary format a*Sua* \
+    [string range $blob 0 1] $newvalue [string range $blob 4 end]
+  ]
+  db eval "UPDATE ${tbl}_node SET data = \$blob WHERE nodeno=$nodeno"
+  return [set_entry_count $tbl $nodeno]
+}
+
+
+proc do_corruption_tests {prefix args} {
+  set testarray [lindex $args end]
+  set errormsg {database disk image is malformed}
+
+  foreach {z value} [lrange $args 0 end-1] {
+    set n [string length $z]
+    if {$n>=2 && [string equal -length $n $z "-error"]} {
+      set errormsg $value
+    }
+  }
+
+  foreach {tn sql} $testarray {
+    do_catchsql_test $prefix.$tn $sql [list 1 $errormsg]
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test the libraries response if the %_node table is completely empty
+# (i.e. the root node is missing), or has been removed from the database
+# entirely.
+#
+create_t1
+populate_t1
+do_execsql_test rtreeA-1.0 {
+  DELETE FROM t1_node;
+} {}
+
+do_corruption_tests rtreeA-1.1 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+  4   "SELECT * FROM t1 WHERE x1<10 AND x2>12"
+}
+
+do_execsql_test rtreeA-1.1.1 {
+  SELECT rtreecheck('main', 't1')
+} {{Node 1 missing from database
+Wrong number of entries in %_rowid table - expected 0, actual 500
+Wrong number of entries in %_parent table - expected 0, actual 23}}
+
+do_execsql_test  rtreeA-1.2.0 { DROP TABLE t1_node } {}
+do_corruption_tests rtreeA-1.2 -error "database disk image is malformed" {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+  4   "SELECT * FROM t1 WHERE x1<10 AND x2>12"
+}
+
+#-------------------------------------------------------------------------
+# Test the libraries response if some of the entries in the %_node table 
+# are the wrong size.
+#
+create_t1
+populate_t1
+do_test rtreeA-2.1.0 {
+  set nodes [db eval {select nodeno FROM t1_node}]
+  foreach {a b c} $nodes { truncate_node $c 200 }
+} {}
+do_corruption_tests rtreeA-2.1 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+  4   "SELECT * FROM t1 WHERE x1<10 AND x2>12"
+}
+
+create_t1
+populate_t1
+do_test rtreeA-2.2.0 { truncate_node 1 200 } {}
+do_corruption_tests rtreeA-2.2 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+  4   "SELECT * FROM t1 WHERE x1<10 AND x2>12"
+}
+
+#-------------------------------------------------------------------------
+# Set the "depth" of the tree stored on the root node incorrectly. Test
+# that this does not cause any problems.
+#
+create_t1
+populate_t1
+do_test rtreeA-3.1.0.1 { set_tree_depth t1 } {1}
+do_test rtreeA-3.1.0.2 { set_tree_depth t1 3 } {3}
+do_corruption_tests rtreeA-3.1 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+}
+
+do_execsql_test rtreeA-3.1.0.3 {
+  SELECT rtreecheck('main', 't1')!="ok"
+} {1}
+
+do_test rtreeA-3.2.0 { set_tree_depth t1 1000 } {1000}
+do_corruption_tests rtreeA-3.2 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+}
+
+create_t1
+populate_t1
+do_test rtreeA-3.3.0 { 
+  execsql { DELETE FROM t1 WHERE rowid = 0 }
+  set_tree_depth t1 65535
+} {65535}
+do_corruption_tests rtreeA-3.3 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+}
+
+do_execsql_test rtreeA-3.3.3.4 {
+  SELECT rtreecheck('main', 't1')
+} {{Rtree depth out of range (65535)
+Wrong number of entries in %_rowid table - expected 0, actual 499
+Wrong number of entries in %_parent table - expected 0, actual 23}}
+
+#-------------------------------------------------------------------------
+# Set the "number of entries" field on some nodes incorrectly.
+#
+create_t1
+populate_t1
+do_test rtreeA-4.1.0 { 
+  set_entry_count t1 1 4000
+} {4000}
+do_corruption_tests rtreeA-4.1 {
+  1   "SELECT * FROM t1"
+  2   "SELECT * FROM t1 WHERE rowid=5"
+  3   "INSERT INTO t1 VALUES(1000, 1, 2, 3, 4)"
+  4   "SELECT * FROM t1 WHERE x1<10 AND x2>12"
+}
+
+#-------------------------------------------------------------------------
+# Remove entries from the %_parent table and check that this does not
+# cause a crash.
+#
+create_t1
+populate_t1
+do_execsql_test rtreeA-5.1.0 { DELETE FROM t1_parent } {}
+do_corruption_tests rtreeA-5.1 {
+  1   "DELETE FROM t1 WHERE rowid = 5"
+  2   "DELETE FROM t1"
+}
+
+do_execsql_test rtreeA-5.2 {
+  SELECT rtreecheck('main', 't1')!="ok"
+} {1}
+
+#-------------------------------------------------------------------------
+# Add some bad entries to the %_parent table.
+#
+create_t1
+populate_t1
+do_execsql_test rtreeA-6.1.0 { 
+  UPDATE t1_parent set parentnode = parentnode+1
+} {}
+do_corruption_tests rtreeA-6.1 {
+  1   "DELETE FROM t1 WHERE rowid = 5"
+  2   "UPDATE t1 SET x1=x1+1, x2=x2+1"
+}
+
+do_execsql_test rtreeA-6.2 {
+  SELECT rtreecheck('main', 't1')!="ok"
+} {1}
+
+#-------------------------------------------------------------------------
+# Truncated blobs in the _node table.
+#
+create_t1
+populate_t1
+sqlite3 db test.db
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test rtreeA-7.100 { 
+  UPDATE t1_node SET data=x'' WHERE rowid=1;
+} {}
+do_catchsql_test rtreeA-7.110 {
+  SELECT * FROM t1 WHERE x1>0 AND x1<100 AND x2>0 AND x2<100;
+} {1 {undersize RTree blobs in "t1_node"}}
+do_test rtreeA-7.120 {
+  sqlite3_extended_errcode db
+} {SQLITE_CORRUPT_VTAB}
+
+
+finish_test

@@ -1,0 +1,860 @@
+# 2002 January 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for the conflict resolution extension
+# to SQLite.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !conflict {
+  finish_test
+  return
+}
+
+# Create tables for the first group of tests.
+#
+do_test conflict-1.0 {
+  execsql {
+    CREATE TABLE t1(a, b, c, UNIQUE(a,b));
+    CREATE TABLE t2(x);
+    SELECT c FROM t1 ORDER BY c;
+  }
+} {}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   cmd    An INSERT or REPLACE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "c" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t2
+#   t3     Number of temporary files created by this test
+#
+foreach {i cmd t0 t1 t2 t3} {
+  1 INSERT                  1 {}  1  0
+  2 {INSERT OR IGNORE}      0 3   1  0
+  3 {INSERT OR REPLACE}     0 4   1  0
+  4 REPLACE                 0 4   1  0
+  5 {INSERT OR FAIL}        1 {}  1  0
+  6 {INSERT OR ABORT}       1 {}  1  0
+  7 {INSERT OR ROLLBACK}    1 {}  {} 0
+} {
+  do_test conflict-1.$i {
+    set ::sqlite_opentemp_count 0
+    set r0 [catch {execsql [subst {
+      DELETE FROM t1;
+      DELETE FROM t2;
+      INSERT INTO t1 VALUES(1,2,3);
+      BEGIN;
+      INSERT INTO t2 VALUES(1); 
+      $cmd INTO t1 VALUES(1,2,4);
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {$r0} {set r1 {}} {set r1 [execsql {SELECT c FROM t1}]}
+    set r2 [execsql {SELECT x FROM t2}]
+    set r3 $::sqlite_opentemp_count
+    list $r0 $r1 $r2 $r3
+  } [list $t0 $t1 $t2 $t3]
+}
+
+# Create tables for the first group of tests.
+#
+do_test conflict-2.0 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, UNIQUE(a,b));
+    CREATE TABLE t2(x);
+    SELECT c FROM t1 ORDER BY c;
+  }
+} {}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   cmd    An INSERT or REPLACE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "c" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t2
+#
+foreach {i cmd t0 t1 t2} {
+  1 INSERT                  1 {}  1
+  2 {INSERT OR IGNORE}      0 3   1
+  3 {INSERT OR REPLACE}     0 4   1
+  4 REPLACE                 0 4   1
+  5 {INSERT OR FAIL}        1 {}  1
+  6 {INSERT OR ABORT}       1 {}  1
+  7 {INSERT OR ROLLBACK}    1 {}  {}
+} {
+  do_test conflict-2.$i {
+    set r0 [catch {execsql [subst {
+      DELETE FROM t1;
+      DELETE FROM t2;
+      INSERT INTO t1 VALUES(1,2,3);
+      BEGIN;
+      INSERT INTO t2 VALUES(1); 
+      $cmd INTO t1 VALUES(1,2,4);
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {$r0} {set r1 {}} {set r1 [execsql {SELECT c FROM t1}]}
+    set r2 [execsql {SELECT x FROM t2}]
+    list $r0 $r1 $r2
+  } [list $t0 $t1 $t2]
+}
+
+# Create tables for the first group of tests.
+#
+do_test conflict-3.0 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    CREATE TABLE t1(a, b, c INTEGER, PRIMARY KEY(c), UNIQUE(a,b));
+    CREATE TABLE t2(x);
+    SELECT c FROM t1 ORDER BY c;
+  }
+} {}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   cmd    An INSERT or REPLACE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "c" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t2
+#
+foreach {i cmd t0 t1 t2} {
+  1 INSERT                  1 {}  1
+  2 {INSERT OR IGNORE}      0 3   1
+  3 {INSERT OR REPLACE}     0 4   1
+  4 REPLACE                 0 4   1
+  5 {INSERT OR FAIL}        1 {}  1
+  6 {INSERT OR ABORT}       1 {}  1
+  7 {INSERT OR ROLLBACK}    1 {}  {}
+} {
+  do_test conflict-3.$i {
+    set r0 [catch {execsql [subst {
+      DELETE FROM t1;
+      DELETE FROM t2;
+      INSERT INTO t1 VALUES(1,2,3);
+      BEGIN;
+      INSERT INTO t2 VALUES(1); 
+      $cmd INTO t1 VALUES(1,2,4);
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {$r0} {set r1 {}} {set r1 [execsql {SELECT c FROM t1}]}
+    set r2 [execsql {SELECT x FROM t2}]
+    list $r0 $r1 $r2
+  } [list $t0 $t1 $t2]
+}
+
+do_test conflict-4.0 {
+  execsql {
+    DROP TABLE t2;
+    CREATE TABLE t2(x);
+    SELECT x FROM t2;
+  }
+} {}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   conf1  The conflict resolution algorithm on the UNIQUE constraint
+#   cmd    An INSERT or REPLACE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "c" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t2
+#
+foreach {i conf1 cmd t0 t1 t2} {
+  1 {}       INSERT                  1 {}  1
+  2 REPLACE  INSERT                  0 4   1
+  3 IGNORE   INSERT                  0 3   1
+  4 FAIL     INSERT                  1 {}  1
+  5 ABORT    INSERT                  1 {}  1
+  6 ROLLBACK INSERT                  1 {}  {}
+  7 REPLACE  {INSERT OR IGNORE}      0 3   1
+  8 IGNORE   {INSERT OR REPLACE}     0 4   1
+  9 FAIL     {INSERT OR IGNORE}      0 3   1
+ 10 ABORT    {INSERT OR REPLACE}     0 4   1
+ 11 ROLLBACK {INSERT OR IGNORE }     0 3   1
+} {
+  do_test conflict-4.$i {
+    if {$conf1!=""} {set conf1 "ON CONFLICT $conf1"}
+    set r0 [catch {execsql [subst {
+      DROP TABLE t1;
+      CREATE TABLE t1(a,b,c,UNIQUE(a,b) $conf1);
+      DELETE FROM t2;
+      INSERT INTO t1 VALUES(1,2,3);
+      BEGIN;
+      INSERT INTO t2 VALUES(1); 
+      $cmd INTO t1 VALUES(1,2,4);
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {$r0} {set r1 {}} {set r1 [execsql {SELECT c FROM t1}]}
+    set r2 [execsql {SELECT x FROM t2}]
+    list $r0 $r1 $r2
+  } [list $t0 $t1 $t2]
+}
+
+do_test conflict-5.0 {
+  execsql {
+    DROP TABLE t2;
+    CREATE TABLE t2(x);
+    SELECT x FROM t2;
+  }
+} {}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   conf1  The conflict resolution algorithm on the NOT NULL constraint
+#   cmd    An INSERT or REPLACE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "c" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t2
+#
+foreach {i conf1 cmd t0 t1 t2} {
+  1 {}       INSERT                  1 {}  1
+  2 REPLACE  INSERT                  0 5   1
+  3 IGNORE   INSERT                  0 {}  1
+  4 FAIL     INSERT                  1 {}  1
+  5 ABORT    INSERT                  1 {}  1
+  6 ROLLBACK INSERT                  1 {}  {}
+  7 REPLACE  {INSERT OR IGNORE}      0 {}  1
+  8 IGNORE   {INSERT OR REPLACE}     0 5   1
+  9 FAIL     {INSERT OR IGNORE}      0 {}  1
+ 10 ABORT    {INSERT OR REPLACE}     0 5   1
+ 11 ROLLBACK {INSERT OR IGNORE}      0 {}  1
+ 12 {}       {INSERT OR IGNORE}      0 {}  1
+ 13 {}       {INSERT OR REPLACE}     0 5   1
+ 14 {}       {INSERT OR FAIL}        1 {}  1
+ 15 {}       {INSERT OR ABORT}       1 {}  1
+ 16 {}       {INSERT OR ROLLBACK}    1 {}  {}
+} {
+  if {$t0} {set t1 {NOT NULL constraint failed: t1.c}}
+  do_test conflict-5.$i {
+    if {$conf1!=""} {set conf1 "ON CONFLICT $conf1"}
+    set r0 [catch {execsql [subst {
+      DROP TABLE t1;
+      CREATE TABLE t1(a,b,c NOT NULL $conf1 DEFAULT 5);
+      DELETE FROM t2;
+      BEGIN;
+      INSERT INTO t2 VALUES(1); 
+      $cmd INTO t1 VALUES(1,2,NULL);
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {!$r0} {set r1 [execsql {SELECT c FROM t1}]}
+    set r2 [execsql {SELECT x FROM t2}]
+    list $r0 $r1 $r2
+  } [list $t0 $t1 $t2]
+}
+
+do_test conflict-6.0 {
+  execsql {
+    DROP TABLE t2;
+    CREATE TABLE t2(a,b,c);
+    INSERT INTO t2 VALUES(1,2,1);
+    INSERT INTO t2 VALUES(2,3,2);
+    INSERT INTO t2 VALUES(3,4,1);
+    INSERT INTO t2 VALUES(4,5,4);
+    SELECT c FROM t2 ORDER BY b;
+    CREATE TABLE t3(x);
+    INSERT INTO t3 VALUES(1);
+  }
+} {1 2 1 4}
+
+# Six columns of configuration data as follows:
+#
+#   i      The reference number of the test
+#   conf1  The conflict resolution algorithm on the UNIQUE constraint
+#   cmd    An UPDATE command to execute against table t1
+#   t0     True if there is an error from $cmd
+#   t1     Content of "b" column of t1 assuming no error in $cmd
+#   t2     Content of "x" column of t3
+#   t3     Number of temporary files for tables
+#   t4     Number of temporary files for statement journals
+#
+# Update (2007-08-21): Since temporary table files are now opened lazily, 
+# and none of the following tests use large quantities of data, t3 is always 0.
+#
+# Update (2016-03-04): Subjournals now also open lazily, so t4 is also always 0.
+#
+foreach {i conf1 cmd t0 t1 t2 t3 t4} {
+  1 {}       UPDATE                  1 {6 7 8 9}  1 0 0
+  2 REPLACE  UPDATE                  0 {7 6 9}    1 0 0
+  3 IGNORE   UPDATE                  0 {6 7 3 9}  1 0 0
+  4 FAIL     UPDATE                  1 {6 7 3 4}  1 0 0
+  5 ABORT    UPDATE                  1 {1 2 3 4}  1 0 0
+  6 ROLLBACK UPDATE                  1 {1 2 3 4}  0 0 0
+  7 REPLACE  {UPDATE OR IGNORE}      0 {6 7 3 9}  1 0 0
+  8 IGNORE   {UPDATE OR REPLACE}     0 {7 6 9}    1 0 0
+  9 FAIL     {UPDATE OR IGNORE}      0 {6 7 3 9}  1 0 0
+ 10 ABORT    {UPDATE OR REPLACE}     0 {7 6 9}    1 0 0
+ 11 ROLLBACK {UPDATE OR IGNORE}      0 {6 7 3 9}  1 0 0
+ 12 {}       {UPDATE OR IGNORE}      0 {6 7 3 9}  1 0 0
+ 13 {}       {UPDATE OR REPLACE}     0 {7 6 9}    1 0 0
+ 14 {}       {UPDATE OR FAIL}        1 {6 7 3 4}  1 0 0
+ 15 {}       {UPDATE OR ABORT}       1 {1 2 3 4}  1 0 0
+ 16 {}       {UPDATE OR ROLLBACK}    1 {1 2 3 4}  0 0 0
+} {
+  if {$t0} {set t1 {UNIQUE constraint failed: t1.a}}
+  if {[info exists TEMP_STORE] && $TEMP_STORE==3} {
+    set t3 0
+  } else {
+    set t3 [expr {$t3+$t4}]
+  }
+  do_test conflict-6.$i {
+    db close
+    sqlite3 db test.db 
+    if {$conf1!=""} {set conf1 "ON CONFLICT $conf1"}
+    execsql {pragma temp_store=file}
+    set ::sqlite_opentemp_count 0
+    set r0 [catch {execsql [subst {
+      DROP TABLE t1;
+      CREATE TABLE t1(a,b,c, UNIQUE(a) $conf1);
+      INSERT INTO t1 SELECT * FROM t2;
+      UPDATE t3 SET x=0;
+      BEGIN;
+      $cmd t3 SET x=1;
+      $cmd t1 SET b=b*2;
+      $cmd t1 SET a=c+5;
+    }]} r1]
+    catch {execsql {COMMIT}}
+    if {!$r0} {set r1 [execsql {SELECT a FROM t1 ORDER BY b}]}
+    set r2 [execsql {SELECT x FROM t3}]
+    list $r0 $r1 $r2 $::sqlite_opentemp_count
+  } [list $t0 $t1 $t2 $t3]
+}
+
+# Test to make sure a lot of IGNOREs don't cause a stack overflow
+#
+do_test conflict-7.1 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+    CREATE TABLE t1(a unique, b);
+  }
+  for {set i 1} {$i<=50} {incr i} {
+    execsql "INSERT into t1 values($i,[expr {$i+1}]);"
+  }
+  execsql {
+    SELECT count(*), min(a), max(b) FROM t1;
+  }
+} {50 1 51}
+do_test conflict-7.2 {
+  execsql {
+    PRAGMA count_changes=on;
+    UPDATE OR IGNORE t1 SET a=1000;
+  }
+} {1}
+do_test conflict-7.2.1 {
+  db changes
+} {1}
+do_test conflict-7.3 {
+  execsql {
+    SELECT b FROM t1 WHERE a=1000;
+  }
+} {2}
+do_test conflict-7.4 {
+  execsql {
+    SELECT count(*) FROM t1;
+  }
+} {50}
+do_test conflict-7.5 {
+  execsql {
+    PRAGMA count_changes=on;
+    UPDATE OR REPLACE t1 SET a=1001;
+  }
+} {50}
+do_test conflict-7.5.1 {
+  db changes
+} {50}
+do_test conflict-7.6 {
+  execsql {
+    SELECT b FROM t1 WHERE a=1001;
+  }
+} {51}
+do_test conflict-7.7 {
+  execsql {
+    SELECT count(*) FROM t1;
+  }
+} {1}
+
+# Update for version 3: A SELECT statement no longer resets the change
+# counter (Test result changes from 0 to 50).
+do_test conflict-7.7.1 {
+  db changes
+} {50}
+
+# Make sure the row count is right for rows that are ignored on
+# an insert.
+#
+do_test conflict-8.1 {
+  execsql {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES(1,2);
+  }
+  execsql {
+    INSERT OR IGNORE INTO t1 VALUES(2,3);
+  }
+} {1}
+do_test conflict-8.1.1 {
+  db changes
+} {1}
+do_test conflict-8.2 {
+  execsql {
+    INSERT OR IGNORE INTO t1 VALUES(2,4);
+  }
+} {0}
+do_test conflict-8.2.1 {
+  db changes
+} {0}
+do_test conflict-8.3 {
+  execsql {
+    INSERT OR REPLACE INTO t1 VALUES(2,4);
+  }
+} {1}
+do_test conflict-8.3.1 {
+  db changes
+} {1}
+do_test conflict-8.4 {
+  execsql {
+    INSERT OR IGNORE INTO t1 SELECT * FROM t1;
+  }
+} {0}
+do_test conflict-8.4.1 {
+  db changes
+} {0}
+do_test conflict-8.5 {
+  execsql {
+    INSERT OR IGNORE INTO t1 SELECT a+2,b+2 FROM t1;
+  }
+} {2}
+do_test conflict-8.5.1 {
+  db changes
+} {2}
+do_test conflict-8.6 {
+  execsql {
+    INSERT OR IGNORE INTO t1 SELECT a+3,b+3 FROM t1;
+  }
+} {3}
+do_test conflict-8.6.1 {
+  db changes
+} {3}
+
+integrity_check conflict-8.99
+
+do_test conflict-9.1 {
+  execsql {
+    PRAGMA count_changes=0;
+    CREATE TABLE t2(
+      a INTEGER UNIQUE ON CONFLICT IGNORE,
+      b INTEGER UNIQUE ON CONFLICT FAIL,
+      c INTEGER UNIQUE ON CONFLICT REPLACE,
+      d INTEGER UNIQUE ON CONFLICT ABORT,
+      e INTEGER UNIQUE ON CONFLICT ROLLBACK
+    );
+    CREATE TABLE t3(x);
+    INSERT INTO t3 VALUES(1);
+    SELECT * FROM t3;
+  }
+} {1}
+do_test conflict-9.2 {
+  catchsql {
+    INSERT INTO t2 VALUES(1,1,1,1,1);
+    INSERT INTO t2 VALUES(2,2,2,2,2);
+    SELECT * FROM t2;
+  }
+} {0 {1 1 1 1 1 2 2 2 2 2}}
+do_test conflict-9.3 {
+  catchsql {
+    INSERT INTO t2 VALUES(1,3,3,3,3);
+    SELECT * FROM t2;
+  }
+} {0 {1 1 1 1 1 2 2 2 2 2}}
+do_test conflict-9.4 {
+  catchsql {
+    UPDATE t2 SET a=a+1 WHERE a=1;
+    SELECT * FROM t2;
+  }
+} {0 {1 1 1 1 1 2 2 2 2 2}}
+do_test conflict-9.5 {
+  catchsql {
+    INSERT INTO t2 VALUES(3,1,3,3,3);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.b}}
+do_test conflict-9.6 {
+  catchsql {
+    UPDATE t2 SET b=b+1 WHERE b=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.b}}
+do_test conflict-9.7 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    INSERT INTO t2 VALUES(3,1,3,3,3);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.b}}
+do_test conflict-9.8 {
+  execsql {COMMIT}
+  execsql {SELECT * FROM t3}
+} {2}
+do_test conflict-9.9 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    UPDATE t2 SET b=b+1 WHERE b=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.b}}
+do_test conflict-9.10 {
+  execsql {COMMIT}
+  execsql {SELECT * FROM t3}
+} {3}
+do_test conflict-9.11 {
+  catchsql {
+    INSERT INTO t2 VALUES(3,3,3,1,3);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.d}}
+do_test conflict-9.12 {
+  catchsql {
+    UPDATE t2 SET d=d+1 WHERE d=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.d}}
+do_test conflict-9.13 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    INSERT INTO t2 VALUES(3,3,3,1,3);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.d}}
+do_test conflict-9.14 {
+  execsql {COMMIT}
+  execsql {SELECT * FROM t3}
+} {4}
+do_test conflict-9.15 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    UPDATE t2 SET d=d+1 WHERE d=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.d}}
+do_test conflict-9.16 {
+  execsql {COMMIT}
+  execsql {SELECT * FROM t3}
+} {5}
+do_test conflict-9.17 {
+  catchsql {
+    INSERT INTO t2 VALUES(3,3,3,3,1);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.e}}
+do_test conflict-9.18 {
+  catchsql {
+    UPDATE t2 SET e=e+1 WHERE e=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.e}}
+do_test conflict-9.19 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    INSERT INTO t2 VALUES(3,3,3,3,1);
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.e}}
+verify_ex_errcode conflict-9.21b SQLITE_CONSTRAINT_UNIQUE
+do_test conflict-9.20 {
+  catch {execsql {COMMIT}}
+  execsql {SELECT * FROM t3}
+} {5}
+do_test conflict-9.21 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    UPDATE t2 SET e=e+1 WHERE e=1;
+    SELECT * FROM t2;
+  }
+} {1 {UNIQUE constraint failed: t2.e}}
+verify_ex_errcode conflict-9.21b SQLITE_CONSTRAINT_UNIQUE
+do_test conflict-9.22 {
+  catch {execsql {COMMIT}}
+  execsql {SELECT * FROM t3}
+} {5}
+do_test conflict-9.23 {
+  catchsql {
+    INSERT INTO t2 VALUES(3,3,1,3,3);
+    SELECT * FROM t2;
+  }
+} {0 {2 2 2 2 2 3 3 1 3 3}}
+do_test conflict-9.24 {
+  catchsql {
+    UPDATE t2 SET c=c-1 WHERE c=2;
+    SELECT * FROM t2;
+  }
+} {0 {2 2 1 2 2}}
+do_test conflict-9.25 {
+  catchsql {
+    BEGIN;
+    UPDATE t3 SET x=x+1;
+    INSERT INTO t2 VALUES(3,3,1,3,3);
+    SELECT * FROM t2;
+  }
+} {0 {3 3 1 3 3}}
+do_test conflict-9.26 {
+  catch {execsql {COMMIT}}
+  execsql {SELECT * FROM t3}
+} {6}
+
+do_test conflict-10.1 {
+  catchsql {
+    DELETE FROM t1;
+    BEGIN;
+    INSERT OR ROLLBACK INTO t1 VALUES(1,2);
+    INSERT OR ROLLBACK INTO t1 VALUES(1,3);
+    COMMIT;
+  }
+  execsql {SELECT * FROM t1}
+} {}
+do_test conflict-10.2 {
+  catchsql {
+    CREATE TABLE t4(x);
+    CREATE UNIQUE INDEX t4x ON t4(x);
+    BEGIN;
+    INSERT OR ROLLBACK INTO t4 VALUES(1);
+    INSERT OR ROLLBACK INTO t4 VALUES(1);
+    COMMIT;
+  }
+  execsql {SELECT * FROM t4}
+} {}
+
+# Ticket #1171.  Make sure statement rollbacks do not
+# damage the database.
+#
+do_test conflict-11.1 {
+  execsql {
+    -- Create a database object (pages 2, 3 of the file)
+    BEGIN;
+      CREATE TABLE abc(a UNIQUE, b, c);
+      INSERT INTO abc VALUES(1, 2, 3);
+      INSERT INTO abc VALUES(4, 5, 6);
+      INSERT INTO abc VALUES(7, 8, 9);
+    COMMIT;
+  }
+
+  
+  # Set a small cache size so that changes will spill into
+  # the database file.  
+  execsql {
+    PRAGMA cache_size = 10;
+  }
+  
+  # Make lots of changes.  Because of the small cache, some
+  # (most?) of these changes will spill into the disk file.
+  # In other words, some of the changes will not be held in
+  # cache.
+  #
+  execsql {
+    BEGIN;
+      -- Make sure the pager is in EXCLUSIVE state.
+      CREATE TABLE def(d, e, f);
+      INSERT INTO def VALUES
+          ('xxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyy', 'zzzzzzzzzzzzzzzz');
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      DELETE FROM abc WHERE a = 4;
+  }
+
+  # Execute a statement that does a statement rollback due to
+  # a constraint failure.
+  #
+  catchsql {
+    INSERT INTO abc SELECT 10, 20, 30 FROM def;
+  }
+
+  # Rollback the database.  Verify that the state of the ABC table
+  # is unchanged from the beginning of the transaction.  In other words,
+  # make sure the DELETE on table ABC that occurred within the transaction
+  # had no effect.
+  #
+  execsql {
+    ROLLBACK;
+    SELECT * FROM abc;
+  }
+} {1 2 3 4 5 6 7 8 9}
+integrity_check conflict-11.2
+
+# Repeat test conflict-11.1 but this time commit.
+#
+do_test conflict-11.3 {
+  execsql {
+    BEGIN;
+      -- Make sure the pager is in EXCLUSIVE state.
+      UPDATE abc SET a=a+1;
+      CREATE TABLE def(d, e, f);
+      INSERT INTO def VALUES
+          ('xxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyy', 'zzzzzzzzzzzzzzzz');
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      DELETE FROM abc WHERE a = 4;
+  }
+  catchsql {
+    INSERT INTO abc SELECT 10, 20, 30 FROM def;
+  }
+  execsql {
+    ROLLBACK;
+    SELECT * FROM abc;
+  }
+} {1 2 3 4 5 6 7 8 9}
+# Repeat test conflict-11.1 but this time commit.
+#
+do_test conflict-11.5 {
+  execsql {
+    BEGIN;
+      -- Make sure the pager is in EXCLUSIVE state.
+      CREATE TABLE def(d, e, f);
+      INSERT INTO def VALUES
+          ('xxxxxxxxxxxxxxx', 'yyyyyyyyyyyyyyyy', 'zzzzzzzzzzzzzzzz');
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      INSERT INTO def SELECT * FROM def;
+      DELETE FROM abc WHERE a = 4;
+  }
+  catchsql {
+    INSERT INTO abc SELECT 10, 20, 30 FROM def;
+  }
+  execsql {
+    COMMIT;
+    SELECT * FROM abc;
+  }
+} {1 2 3 7 8 9}
+integrity_check conflict-11.6
+
+# Make sure UPDATE OR REPLACE works on tables that have only
+# an INTEGER PRIMARY KEY.
+#
+do_test conflict-12.1 {
+  execsql {
+    CREATE TABLE t5(a INTEGER PRIMARY KEY, b text);
+    INSERT INTO t5 VALUES(1,'one');
+    INSERT INTO t5 VALUES(2,'two');
+    SELECT * FROM t5
+  }
+} {1 one 2 two}
+do_test conflict-12.2 {
+  execsql {
+    UPDATE OR IGNORE t5 SET a=a+1 WHERE a=1;
+    SELECT * FROM t5;
+  }
+} {1 one 2 two}
+do_test conflict-12.3 {
+  catchsql {
+    UPDATE t5 SET a=a+1 WHERE a=1;
+  }
+} {1 {UNIQUE constraint failed: t5.a}}
+verify_ex_errcode conflict-12.3b SQLITE_CONSTRAINT_PRIMARYKEY
+do_test conflict-12.4 {
+  execsql {
+    UPDATE OR REPLACE t5 SET a=a+1 WHERE a=1;
+    SELECT * FROM t5;
+  }
+} {2 one}
+do_test conflict-12.5 {
+  catchsql {
+    CREATE TABLE t5b(x);
+    INSERT INTO t5b(rowid, x) VALUES(1,10),(2,11);
+    UPDATE t5b SET rowid=rowid+1 WHERE x=10;
+  }
+} {1 {UNIQUE constraint failed: t5b.rowid}}
+verify_ex_errcode conflict-12.5b SQLITE_CONSTRAINT_ROWID
+
+
+# Ticket [c38baa3d969eab7946dc50ba9d9b4f0057a19437]
+# REPLACE works like ABORT on a CHECK constraint.
+#
+do_test conflict-13.1 {
+  execsql {
+    CREATE TABLE t13(a CHECK(a!=2));
+    BEGIN;
+    REPLACE INTO t13 VALUES(1);
+  }
+  catchsql {
+    REPLACE INTO t13 VALUES(2);
+  }
+} {1 {CHECK constraint failed: t13}}
+verify_ex_errcode conflict-13.1b SQLITE_CONSTRAINT_CHECK
+do_test conflict-13.2 {
+  execsql {
+    REPLACE INTO t13 VALUES(3);
+    COMMIT;
+    SELECT * FROM t13;
+  }
+} {1 3}
+
+
+# Ticket https://www.sqlite.org/src/tktview/e6f1f2e34dceeb1ed61531c7e9
+# Verify that it is not possible to sneak a NULL value into a NOT NULL
+# column using REPLACE.
+#
+do_catchsql_test conflict-14.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(x NOT NULL DEFAULT NULL);
+  REPLACE INTO t1 DEFAULT VALUES;
+} {1 {NOT NULL constraint failed: t1.x}}
+
+# 2019-12-15 gramfuzz1 find
+# Three UNIQUE constraints, where the third would is a duplicate except
+# that it adds ON CONFLICT REPLACE.  Verify that the indexes end up
+# sorted in the correct order (REPLACE last) so that constraint processing
+# works correctly.
+#
+reset_db
+do_execsql_test conflict-15.10 {
+  CREATE TABLE t1(
+    x PRIMARY KEY,
+    UNIQUE(x,x),
+    UNIQUE(x,x) ON CONFLICT REPLACE
+  );
+  INSERT INTO t1(x) VALUES(1);
+  SELECT * FROM t1;
+} {1}
+do_catchsql_test conflict-15.20 {
+  INSERT INTO t1(x) VALUES(1);
+} {1 {UNIQUE constraint failed: t1.x}}
+do_execsql_test conflict-15.30 {
+  SELECT * FROM t1;
+} {1}
+
+finish_test

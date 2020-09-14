@@ -1,0 +1,92 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+return_if_no_fts5
+set testprefix fts5fuzz1
+
+
+#-------------------------------------------------------------------------
+reset_db
+do_catchsql_test 1.1 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a b);
+} {/1 {parse error in.*}/}
+
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a, b);
+  INSERT INTO f1 VALUES('a b', 'c d');
+  INSERT INTO f1 VALUES('e f', 'a b');
+}
+
+do_execsql_test 2.2.1 {
+  SELECT rowid FROM f1('""');
+} {}
+
+do_execsql_test 2.2.2 {
+  SELECT rowid FROM f1('"" AND a');
+} {}
+
+
+do_execsql_test 2.2.3 {
+  SELECT rowid FROM f1('"" a');
+} {1 2}
+
+do_execsql_test 2.2.4 {
+  SELECT rowid FROM f1('"" OR a');
+} {1 2}
+
+do_execsql_test 2.3 {
+  SELECT a, b FROM f1('NEAR("")');
+} {}
+
+do_execsql_test 2.4 {
+  SELECT a, b FROM f1('NEAR("", 5)');
+} {}
+
+do_execsql_test 2.5 {
+  SELECT a, b FROM f1('NEAR("" c, 5)');
+} {{a b} {c d}}
+
+do_execsql_test 2.6 {
+  SELECT a, b FROM f1('NEAR("" c d, 5)');
+} {{a b} {c d}}
+
+do_execsql_test 2.7 {
+  SELECT a, b FROM f1('NEAR(c d, 5)');
+} {{a b} {c d}}
+
+do_execsql_test 2.8 {
+  SELECT rowid FROM f1('NEAR("a" "b", 5)');
+} {1 2}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 3.2 {
+  CREATE VIRTUAL TABLE f2 USING fts5(o, t, tokenize="ascii separators abc");
+  SELECT * FROM f2('a+4');
+} {}
+
+
+
+#-------------------------------------------------------------------------
+reset_db
+do_catchsql_test 4.1 {
+  CREATE VIRTUAL TABLE f2 USING fts5(o, t);
+  SELECT * FROM f2('(8 AND 9)`AND 10');
+} {1 {fts5: syntax error near "`"}}
+
+finish_test

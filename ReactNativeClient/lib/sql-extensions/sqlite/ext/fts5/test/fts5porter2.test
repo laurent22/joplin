@@ -1,0 +1,69 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on the fts5 porter stemmer implementation.
+#
+# These are extra tests added to those in fts5porter.test in order to
+# improve test coverage of the porter stemmer implementation.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5porter2
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+set test_vocab {
+  tion          tion
+  ation         ation
+  vation        vation
+  avation       avat
+  vion          vion
+  ion           ion
+  relational    relat
+  relation      relat
+  relate        relat
+  zzz           zzz
+  ii            ii
+  iiing         ii
+  xtional       xtional
+  xenci         xenci
+  xlogi         xlogi
+  realization   realiz
+  realize       realiz
+  xization      xizat
+  capitalism    capit
+  talism        talism
+  xiveness      xive
+  xfulness      xful
+  xousness      xous
+  xical         xical
+  xicate        xicat
+  xicity        xiciti
+  ies           ie
+  eed           e
+  eing           e
+  s             s
+}
+
+set i 0
+foreach {in out} $test_vocab {
+  do_test "1.$i.($in -> $out)" {
+    lindex [sqlite3_fts5_tokenize db porter $in] 0
+  } $out
+  incr i
+}
+
+
+finish_test

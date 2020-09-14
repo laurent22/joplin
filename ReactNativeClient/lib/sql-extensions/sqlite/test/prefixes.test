@@ -1,0 +1,88 @@
+# 2018-01-15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is prefixes.c extension
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix unionvtab
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+load_static_extension db prefixes
+
+foreach {tn zLeft zRight expected} {
+  1 abcdxxx abcyy    3
+  2 abcdxxx bcyyy    0
+  3 abcdxxx ab       2
+  4 ab      abcd     2
+
+  5 "xyz\u1234xz" "xyz\u1234xy" 5
+  6 "xyz\u1234"   "xyz\u1234xy" 4
+  7 "xyz\u1234"   "xyz\u1234"   4
+  8 "xyz\u1234xy" "xyz\u1234"   4
+  9 "xyz\u1234xy" "xyz\u1233"   3
+ 10 "xyz\u1234xy" "xyz\u1235"   3
+} {
+  do_execsql_test 1.$tn { SELECT prefix_length($zLeft, $zRight) } $expected
+}
+
+
+do_execsql_test 2.0 {
+  CREATE TABLE t1(k TEXT UNIQUE, v INTEGER);
+  INSERT INTO t1 VALUES
+    ('aback', 1),
+    ('abaft', 2),
+    ('abandon', 3),
+    ('abandoned', 4),
+    ('abandoning', 5),
+    ('abandonment', 6),
+    ('abandons', 7),
+    ('abase', 8),
+    ('abased', 9),
+    ('abasement', 10),
+    ('abasements', 11),
+    ('abases', 12),
+    ('abash', 13),
+    ('abashed', 14),
+    ('abashes', 15),
+    ('abashing', 16),
+    ('abasing', 17),
+    ('abate', 18),
+    ('abated', 19),
+    ('abatement', 20),
+    ('abatements', 21);
+}
+
+foreach {tn INPUT expected} {
+  1 abatementt   abatement
+  2 abashet      abash
+  3 abandonio    abandon
+  4 abasemenu    abase
+} {
+  do_execsql_test 2.$tn {
+    WITH finder(str) AS (
+      SELECT (SELECT max(k) FROM t1 WHERE k<=$INPUT)
+        UNION ALL
+        SELECT (
+          SELECT max(k) FROM t1 
+          WHERE k<=substr($INPUT, 1, prefix_length(finder.str, $INPUT))
+        ) FROM finder WHERE length(finder.str)>0
+      )
+    SELECT str FROM finder WHERE length(str)==prefix_length(str, $INPUT) LIMIT 1
+  } $expected
+}
+
+finish_test

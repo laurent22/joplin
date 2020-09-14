@@ -1,0 +1,61 @@
+# 2019 May 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5corrupt4
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+sqlite3_fts5_may_be_corrupt 1
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE ttt USING fts5(a, b); 
+  INSERT INTO ttt 
+     VALUES('e ee eee e ee eee e ee eee', 'eee ee e e e ee eee ee ee');
+  INSERT INTO ttt SELECT a||a, b||b FROM ttt;   
+  INSERT INTO ttt SELECT a||a, b||b FROM ttt;   
+}
+
+proc mutate {blob i} {
+  set o [expr {$i % [string length $blob]}]
+  set a [string range $blob 0 $o-1]
+  set b [string range $blob $o+1 end]
+  set v [expr int(rand()*255) - 127]
+  return "$a[binary format c $v]$b"
+}
+db func mutate mutate
+
+for {set j 1000} {$j <= 5000} {incr j 1000} {
+  do_test 1.$j {
+    for {set i 0} {$i < 1000} {incr i} {
+      execsql {
+        BEGIN;
+          UPDATE ttt_data SET block = mutate(block, $i) WHERE id>10;
+      }
+      foreach sql {
+        {SELECT snippet(ttt, -1, '.', '..', '[', ']'), * FROM ttt('e*')}
+        {SELECT snippet(ttt, -1, '.', '..', '[', ']'), * FROM ttt('e* NOT ee*')}
+      } {
+        catch { execsql $sql }
+      }
+      execsql ROLLBACK
+    }
+  } {}
+}
+
+sqlite3_fts5_may_be_corrupt 0
+finish_test
+

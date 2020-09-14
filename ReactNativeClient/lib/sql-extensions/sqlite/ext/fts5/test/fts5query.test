@@ -1,0 +1,91 @@
+# 2015 October 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5query
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+for {set tn 1 ; set pgsz 64} {$tn<32} {incr tn; incr pgsz 16} {
+  reset_db
+  do_test 1.$tn.1 {
+    execsql {
+      CREATE VIRTUAL TABLE t1 USING fts5(x);
+      INSERT INTO t1(t1, rank) VALUES('pgsz', $pgsz);
+      BEGIN;
+    }
+    foreach x [list aaa bbb ccc ddd eee fff ggg hhh iii jjj] {
+      set doc [string repeat "$x " 30]
+      execsql { INSERT INTO t1 VALUES($doc) }
+    }
+    execsql COMMIT
+  } {}
+
+  do_execsql_test 1.$tn.2 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  set ret 1
+  foreach x [list a b c d e f g h i j] {
+    do_execsql_test 1.$tn.3.$ret {
+      SELECT rowid FROM t1 WHERE t1 MATCH $x || '*';
+    } $ret
+    incr ret
+  }
+}
+
+for {set tn 1 ; set pgsz 64} {$tn<32} {incr tn; incr pgsz 16} {
+  reset_db
+  do_test 2.$tn.1 {
+    execsql {
+      CREATE VIRTUAL TABLE t1 USING fts5(x);
+      INSERT INTO t1(t1, rank) VALUES('pgsz', $pgsz);
+      BEGIN;
+    }
+    foreach x [list bbb ddd fff hhh jjj lll nnn ppp rrr ttt] {
+      set doc [string repeat "$x " 30]
+      execsql { INSERT INTO t1 VALUES($doc) }
+    }
+    execsql COMMIT
+  } {}
+
+  do_execsql_test 2.$tn.2 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  set ret 1
+  foreach x [list a c e g i k m o q s u] {
+    do_execsql_test 2.$tn.3.$ret {
+      SELECT rowid FROM t1 WHERE t1 MATCH $x || '*';
+    } {}
+    incr ret
+  }
+}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a);
+  INSERT INTO x1(rowid, a) VALUES(-1000000000000, 'toyota');
+  INSERT INTO x1(rowid, a) VALUES(1, 'tarago');
+}
+do_execsql_test 3.1 {
+  SELECT rowid FROM x1('t*');
+} {-1000000000000 1}
+
+
+finish_test

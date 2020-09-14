@@ -1,0 +1,209 @@
+
+1. OVERVIEW
+
+  This README file describes the syntax of the arguments that may be passed to
+  the FTS3 MATCH operator used for full-text queries. For example, if table 
+  "t1" is an Fts3 virtual table, the following SQL query:
+
+    SELECT * FROM t1 WHERE <col> MATCH <full-text query>
+
+  may be used to retrieve all rows that match a specified for full-text query. 
+  The text "<col>" should be replaced by either the name of the fts3 table 
+  (in this case "t1"), or by the name of one of the columns of the fts3 
+  table. <full-text-query> should be replaced by an SQL expression that 
+  computes to a string containing an Fts3 query.
+
+  If the left-hand-side of the MATCH operator is set to the name of the
+  fts3 table, then by default the query may be matched against any column
+  of the table. If it is set to a column name, then by default the query
+  may only match the specified column. In both cases this may be overriden
+  as part of the query text (see sections 2 and 3 below).
+
+  As of SQLite version 3.6.8, Fts3 supports two slightly different query 
+  formats; the standard syntax, which is used by default, and the enhanced
+  query syntax which can be selected by compiling with the pre-processor
+  symbol SQLITE_ENABLE_FTS3_PARENTHESIS defined.
+
+    -DSQLITE_ENABLE_FTS3_PARENTHESIS
+
+2. STANDARD QUERY SYNTAX
+
+  When using the standard Fts3 query syntax, a query usually consists of a 
+  list of terms (words) separated by white-space characters. To match a
+  query, a row (or column) of an Fts3 table must contain each of the specified
+  terms. For example, the following query:
+
+    <col> MATCH 'hello world'
+
+  matches rows (or columns, if <col> is the name of a column name) that 
+  contain at least one instance of the token "hello", and at least one 
+  instance of the token "world". Tokens may be grouped into phrases using
+  quotation marks. In this case, a matching row or column must contain each
+  of the tokens in the phrase in the order specified, with no intervening
+  tokens. For example, the query:
+
+    <col> MATCH '"hello world" joe"
+
+  matches the first of the following two documents, but not the second or
+  third:
+
+    "'Hello world', said Joe."
+    "One should always greet the world with a cheery hello, thought Joe."
+    "How many hello world programs could their be?"
+
+  As well as grouping tokens together by phrase, the binary NEAR operator 
+  may be used to search for rows that contain two or more specified tokens 
+  or phrases within a specified proximity of each other. The NEAR operator
+  must always be specified in upper case. The word "near" in lower or mixed
+  case is treated as an ordinary token. For example, the following query:
+
+    <col> MATCH 'engineering NEAR consultancy'
+
+  matches rows that contain both the "engineering" and "consultancy" tokens
+  in the same column with not more than 10 other words between them. It does
+  not matter which of the two terms occurs first in the document, only that
+  they be seperated by only 10 tokens or less. The user may also specify
+  a different required proximity by adding "/N" immediately after the NEAR
+  operator, where N is an integer. For example:
+
+    <col> MATCH 'engineering NEAR/5 consultancy'
+
+  searches for a row containing an instance of each specified token seperated
+  by not more than 5 other tokens. More than one NEAR operator can be used
+  in as sequence. For example this query:
+
+    <col> MATCH 'reliable NEAR/2 engineering NEAR/5 consultancy'
+
+  searches for a row that contains an instance of the token "reliable" 
+  seperated by not more than two tokens from an instance of "engineering",
+  which is in turn separated by not more than 5 other tokens from an
+  instance of the term "consultancy". Phrases enclosed in quotes may
+  also be used as arguments to the NEAR operator.
+
+  Similar to the NEAR operator, one or more tokens or phrases may be 
+  separated by OR operators. In this case, only one of the specified tokens
+  or phrases must appear in the document. For example, the query:
+
+    <col> MATCH 'hello OR world'
+
+  matches rows that contain either the term "hello", or the term "world",
+  or both. Note that unlike in many programming languages, the OR operator
+  has a higher precedence than the AND operators implied between white-space
+  separated tokens. The following query matches documents that contain the
+  term 'sqlite' and at least one of the terms 'fantastic' or 'impressive',
+  not those that contain both 'sqlite' and 'fantastic' or 'impressive':
+
+    <col> MATCH 'sqlite fantastic OR impressive'
+
+  Any token that is part of an Fts3 query expression, whether or not it is
+  part of a phrase enclosed in quotes, may have a '*' character appended to
+  it. In this case, the token matches all terms that begin with the characters
+  of the token, not just those that exactly match it. For example, the 
+  following query:
+
+    <col> MATCH 'sql*'
+
+  matches all rows that contain the term "SQLite", as well as those that
+  contain "SQL".
+
+  A token that is not part of a quoted phrase may be preceded by a '-'
+  character, which indicates that matching rows must not contain the 
+  specified term. For example, the following:
+
+    <col> MATCH '"database engine" -sqlite'
+
+  matches rows that contain the phrase "database engine" but do not contain
+  the term "sqlite". If the '-' character occurs inside a quoted phrase,
+  it is ignored. It is possible to use both the '-' prefix and the '*' postfix
+  on a single term. At this time, all Fts3 queries must contain at least
+  one term or phrase that is not preceded by the '-' prefix.
+
+  Regardless of whether or not a table name or column name is used on the 
+  left hand side of the MATCH operator, a specific column of the fts3 table
+  may be associated with each token in a query by preceding a token with
+  a column name followed by a ':' character. For example, regardless of what
+  is specified for <col>, the following query requires that column "col1"
+  of the table contains the term "hello", and that column "col2" of the
+  table contains the term "world". If the table does not contain columns
+  named "col1" and "col2", then an error is returned and the query is
+  not run.
+
+    <col> MATCH 'col1:hello col2:world'
+
+  It is not possible to associate a specific table column with a quoted 
+  phrase or a term preceded by a '-' operator. A '*' character may be
+  appended to a term associated with a specific column for prefix matching.
+
+3. ENHANCED QUERY SYNTAX
+
+  The enhanced query syntax is quite similar to the standard query syntax,
+  with the following four differences:
+
+  1) Parenthesis are supported. When using the enhanced query syntax,
+     parenthesis may be used to overcome the built-in precedence of the
+     supplied binary operators. For example, the following query:
+
+       <col> MATCH '(hello world) OR (simple example)'
+
+     matches documents that contain both "hello" and "world", and documents
+     that contain both "simple" and "example". It is not possible to forumlate
+     such a query using the standard syntax.
+
+  2) Instead of separating tokens and phrases by whitespace, an AND operator
+     may be explicitly specified. This does not change query processing at
+     all, but may be used to improve readability. For example, the following
+     query is handled identically to the one above:
+
+       <col> MATCH '(hello AND world) OR (simple AND example)'
+
+     As with the OR and NEAR operators, the AND operator must be specified
+     in upper case. The word "and" specified in lower or mixed case is 
+     handled as a regular token.
+
+  3) The '-' token prefix is not supported. Instead, a new binary operator,
+     NOT, is included. The NOT operator requires that the query specified
+     as its left-hand operator matches, but that the query specified as the
+     right-hand operator does not. For example, to query for all rows that
+     contain the term "example" but not the term "simple", the following
+     query could be used:
+
+       <col> MATCH 'example NOT simple'
+
+     As for all other operators, the NOT operator must be specified in
+     upper case. Otherwise it will be treated as a regular token.
+
+  4) Unlike in the standard syntax, where the OR operator has a higher
+     precedence than the implicit AND operator, when using the enhanced
+     syntax implicit and explict AND operators have a higher precedence
+     than OR operators. Using the enhanced syntax, the following two
+     queries are equivalent:
+
+       <col> MATCH 'sqlite fantastic OR impressive'
+       <col> MATCH '(sqlite AND fantastic) OR impressive'
+
+     however, when using the standard syntax, the query:
+
+       <col> MATCH 'sqlite fantastic OR impressive'
+
+     is equivalent to the enhanced syntax query:
+
+       <col> MATCH 'sqlite AND (fantastic OR impressive)'
+
+     The precedence of all enhanced syntax operators, in order from highest
+     to lowest, is:
+
+       NEAR       (highest precedence, tightest grouping)
+       NOT
+       AND
+       OR         (lowest precedence, loosest grouping)
+
+  Using the advanced syntax, it is possible to specify expressions enclosed
+  in parenthesis as operands to the NOT, AND and OR operators. However both
+  the left and right hand side operands of NEAR operators must be either
+  tokens or phrases. Attempting the following query will return an error:
+
+    <col> MATCH 'sqlite NEAR (fantastic OR impressive)'
+
+  Queries of this form must be re-written as:
+
+    <col> MATCH 'sqlite NEAR fantastic OR sqlite NEAR impressive'

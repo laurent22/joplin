@@ -1,0 +1,127 @@
+# 2014 November 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test RBU with virtual tables. And tables with no PRIMARY KEY declarations.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbu9
+
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE f1 USING fts4(a, b, c);
+  INSERT INTO f1(rowid, a, b, c) VALUES(11, 'a', 'b', 'c');
+  INSERT INTO f1(rowid, a, b, c) VALUES(12, 'd', 'e', 'f');
+  INSERT INTO f1(rowid, a, b, c) VALUES(13, 'g', 'h', 'i');
+}
+
+do_test 1.1 {
+  forcedelete rbu.db
+  sqlite3 db2 rbu.db
+  db2 eval {
+    CREATE TABLE data_f1(rbu_rowid, a, b, c, rbu_control);
+    INSERT INTO data_f1 VALUES(14, 'x', 'y', 'z', 0);         -- INSERT
+    INSERT INTO data_f1 VALUES(11, NULL, NULL, NULL, 1);      -- DELETE
+    INSERT INTO data_f1 VALUES(13, NULL, NULL, 'X', '..x');   -- UPDATE
+  }
+  db2 close
+} {}
+
+do_test 1.2.1 {
+  while 1 {
+    sqlite3rbu rbu test.db rbu.db
+    set rc [rbu step]
+    if {$rc != "SQLITE_OK"} break
+    rbu close
+  }
+  rbu close
+} {SQLITE_DONE}
+
+do_execsql_test 1.2.2 { SELECT rowid, * FROM f1 } { 
+  12 d e f
+  13 g h X
+  14 x y z
+}
+do_execsql_test 1.2.3 { INSERT INTO f1(f1) VALUES('integrity-check') }
+integrity_check 1.2.4
+
+#-------------------------------------------------------------------------
+# Tables with no PK declaration.
+#
+
+# Run the RBU in file $rbu on target database $target until completion.
+#
+proc run_rbu {target rbu} {
+  sqlite3rbu rbu $target $rbu
+  while { [rbu step]=="SQLITE_OK" } {}
+  rbu close
+}
+
+foreach {tn idx} {
+  1 { }
+  2 { 
+    CREATE INDEX i1 ON t1(a);
+  }
+  3 { 
+    CREATE INDEX i1 ON t1(b, c);
+    CREATE INDEX i2 ON t1(c, b);
+    CREATE INDEX i3 ON t1(a, a, a, b, b, b, c, c, c);
+  }
+} {
+
+  reset_db
+  do_execsql_test 2.$tn.1 {
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t1(rowid, a, b, c) VALUES(-1, 'a', 'b', 'c');
+    INSERT INTO t1(rowid, a, b, c) VALUES(-2, 'd', 'e', 'f');
+  }
+
+  db eval $idx
+  
+  do_test 2.$tn.2 {
+    forcedelete rbu.db
+    sqlite3 db2 rbu.db
+    db2 eval {
+      CREATE TABLE data_t1(rbu_rowid, a, b, c, rbu_control);
+      INSERT INTO data_t1 VALUES(3, 'x', 'y', 'z', 0);
+      INSERT INTO data_t1 VALUES(NULL, 'X', 'Y', 'Z', 0);
+      INSERT INTO data_t1 VALUES('1', NULL, NULL, NULL, 1);
+      INSERT INTO data_t1 VALUES(-2, NULL, NULL, 'fff', '..x');
+    }
+    db2 close
+  } {}
+  
+  run_rbu test.db rbu.db
+  
+  do_execsql_test 2.$tn.3 {
+    SELECT rowid, a, b, c FROM t1 ORDER BY rowid;
+  } {
+    -2 d e fff
+    -1 a b c
+     2 4 5 6
+     3 x y z
+     4 X Y Z
+  }
+  
+  integrity_check 2.$tn.4
+}
+
+
+finish_test

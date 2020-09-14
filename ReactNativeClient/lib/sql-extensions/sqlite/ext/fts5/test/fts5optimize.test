@@ -1,0 +1,108 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5optimize
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#
+# 1.* - Warm body tests for index optimization using ('optimize')
+#
+# 2.* - Warm body tests for index optimization using ('merge', -1)
+#
+
+proc rnddoc {nWord} {
+  set vocab {a b c d e f g h i j k l m n o p q r s t u v w x y z}
+  set nVocab [llength $vocab]
+  set ret [list]
+  for {set i 0} {$i < $nWord} {incr i} {
+    lappend ret [lindex $vocab [expr {int(rand() * $nVocab)}]]
+  }
+  return $ret
+}
+
+foreach {tn nStep} {
+  1 2
+  2 10
+  3 50
+  4 500
+} {
+  reset_db
+  db func rnddoc rnddoc
+  do_execsql_test 1.$tn.1 {
+    CREATE VIRTUAL TABLE t1 USING fts5(x, y);
+  }
+  do_test 1.$tn.2 {
+    for {set i 0} {$i < $nStep} {incr i} {
+      execsql { INSERT INTO t1 VALUES( rnddoc(5), rnddoc(5) ) }
+    }
+  } {}
+
+  do_execsql_test 1.$tn.3 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  do_execsql_test 1.$tn.4 {
+    INSERT INTO t1(t1) VALUES('optimize');
+  }
+
+  do_execsql_test 1.$tn.5 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  do_test 1.$tn.6 { fts5_segcount t1 } 1
+}
+
+foreach {tn nStep} {
+  1 2
+  2 10
+  3 50
+  4 500
+} {
+  reset_db
+  db func rnddoc rnddoc
+  do_execsql_test 1.$tn.1 {
+    CREATE VIRTUAL TABLE t1 USING fts5(x, y);
+  }
+  do_test 2.$tn.2 {
+    for {set i 0} {$i < $nStep} {incr i} {
+      execsql { INSERT INTO t1 VALUES( rnddoc(5), rnddoc(5) ) }
+    }
+  } {}
+
+  do_execsql_test 2.$tn.3 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  do_test 2.$tn.4 {
+    execsql { INSERT INTO t1(t1, rank) VALUES('merge', -1) }
+    while 1 {
+      set c [db total_changes]
+      execsql { INSERT INTO t1(t1, rank) VALUES('merge', 1) }
+      set c [expr [db total_changes]-$c]
+      if {$c<2} break
+    }
+  } {}
+
+  do_execsql_test 2.$tn.5 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+
+  do_test 2.$tn.6 { fts5_segcount t1 } 1
+}
+finish_test

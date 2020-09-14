@@ -1,0 +1,191 @@
+# 2009 Nov 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the CLI shell tool.
+#
+# $Id: shell2.test,v 1.7 2009/07/17 16:54:48 shaneh Exp $
+#
+
+# Test plan:
+#
+#   shell2-1.*: Misc. test of various tickets and reported errors.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set CLI [test_find_cli]
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+
+#----------------------------------------------------------------------------
+#   shell2-1.*: Misc. test of various tickets and reported errors.
+#
+
+# Batch mode not creating databases.  
+# Reported on mailing list by Ken Zalewski.
+# Ticket [aeff892c57].
+do_test shell2-1.1.1 {
+  forcedelete foo.db
+  set rc [ catchcmd "-batch foo.db" "CREATE TABLE t1(a);" ]
+  set fexist [file exist foo.db]
+  list $rc $fexist
+} {{0 {}} 1}
+
+# Shell silently ignores extra parameters.
+# Ticket [f5cb008a65].
+do_test shell2-1.2.1 {
+  set rc [catch { eval exec $CLI \":memory:\" \"select+3\" \"select+4\" } msg]
+  list $rc $msg
+} {0 {3
+4}}
+
+# Test a problem reported on the mailing list. The shell was at one point
+# returning the generic SQLITE_ERROR message ("SQL error or missing database")
+# instead of the "too many levels..." message in the test below.
+#
+do_test shell2-1.3 {
+  catchcmd "-batch test.db" {
+    PRAGMA recursive_triggers = ON;
+    CREATE TABLE t5(a PRIMARY KEY, b, c);
+    INSERT INTO t5 VALUES(1, 2, 3);
+    CREATE TRIGGER au_tble AFTER UPDATE ON t5 BEGIN
+      UPDATE OR IGNORE t5 SET a = new.a, c = 10;
+    END;
+
+    UPDATE OR REPLACE t5 SET a = 4 WHERE a = 1;
+  }
+} {1 {Error: near line 9: too many levels of trigger recursion}}
+
+
+
+# Shell not echoing all commands with echo on.
+# Ticket [eb620916be].
+
+# Test with echo off
+# NB. whitespace is important
+do_test shell2-1.4.1 {
+  forcedelete foo.db
+  catchcmd "foo.db" {CREATE TABLE foo(a);
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;}
+} {0 1}
+
+# Test with echo on using command line option
+# NB. whitespace is important
+do_test shell2-1.4.2 {
+  forcedelete foo.db
+  catchcmd "-echo foo.db" {CREATE TABLE foo(a);
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;}
+} {0 {CREATE TABLE foo(a);
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;
+1}}
+
+# Test with echo on using dot command
+# NB. whitespace is important
+do_test shell2-1.4.3 {
+  forcedelete foo.db
+  catchcmd "foo.db" {.echo ON
+CREATE TABLE foo(a);
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;}
+} {0 {CREATE TABLE foo(a);
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;
+1}}
+
+# Test with echo on using dot command and 
+# turning off mid- processing.
+# NB. whitespace is important
+do_test shell2-1.4.4 {
+  forcedelete foo.db
+  catchcmd "foo.db" {.echo ON
+CREATE TABLE foo(a);
+.echo OFF
+INSERT INTO foo(a) VALUES(1);
+SELECT * FROM foo;}
+} {0 {CREATE TABLE foo(a);
+.echo OFF
+1}}
+
+# Test with echo on using dot command and 
+# multiple commands per line.
+# NB. whitespace is important
+do_test shell2-1.4.5 {
+  forcedelete foo.db
+  catchcmd "foo.db" {.echo ON
+CREATE TABLE foo1(a);
+INSERT INTO foo1(a) VALUES(1);
+CREATE TABLE foo2(b);
+INSERT INTO foo2(b) VALUES(1);
+SELECT * FROM foo1; SELECT * FROM foo2;
+INSERT INTO foo1(a) VALUES(2); INSERT INTO foo2(b) VALUES(2);
+SELECT * FROM foo1; SELECT * FROM foo2;
+}
+} {0 {CREATE TABLE foo1(a);
+INSERT INTO foo1(a) VALUES(1);
+CREATE TABLE foo2(b);
+INSERT INTO foo2(b) VALUES(1);
+SELECT * FROM foo1;
+1
+SELECT * FROM foo2;
+1
+INSERT INTO foo1(a) VALUES(2);
+INSERT INTO foo2(b) VALUES(2);
+SELECT * FROM foo1;
+1
+2
+SELECT * FROM foo2;
+1
+2
+}}
+
+# Test with echo on and headers on using dot command and 
+# multiple commands per line.
+# NB. whitespace is important
+do_test shell2-1.4.6 {
+  forcedelete foo.db
+  catchcmd "foo.db" {.echo ON
+.headers ON
+CREATE TABLE foo1(a);
+INSERT INTO foo1(a) VALUES(1);
+CREATE TABLE foo2(b);
+INSERT INTO foo2(b) VALUES(1);
+SELECT * FROM foo1; SELECT * FROM foo2;
+INSERT INTO foo1(a) VALUES(2); INSERT INTO foo2(b) VALUES(2);
+SELECT * FROM foo1; SELECT * FROM foo2;
+}
+} {0 {.headers ON
+CREATE TABLE foo1(a);
+INSERT INTO foo1(a) VALUES(1);
+CREATE TABLE foo2(b);
+INSERT INTO foo2(b) VALUES(1);
+SELECT * FROM foo1;
+a
+1
+SELECT * FROM foo2;
+b
+1
+INSERT INTO foo1(a) VALUES(2);
+INSERT INTO foo2(b) VALUES(2);
+SELECT * FROM foo1;
+a
+1
+2
+SELECT * FROM foo2;
+b
+1
+2
+}}
+
+finish_test

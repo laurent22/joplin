@@ -1,0 +1,174 @@
+# 2007 June 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library. The focus 
+# of this script is testing the pluggable tokeniser feature of the 
+# FTS2 module.
+#
+# $Id: fts2token.test,v 1.3 2007/06/25 12:05:40 danielk1977 Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS2 is defined, omit this file.
+ifcapable !fts2 {
+  finish_test
+  return
+}
+
+proc escape_string {str} {
+  set out ""
+  foreach char [split $str ""] {
+    scan $char %c i
+    if {$i<=127} {
+      append out $char
+    } else {
+      append out [format {\x%.4x} $i]
+    }
+  }
+  set out
+}
+
+#--------------------------------------------------------------------------
+# Test cases fts2token-1.* are the warm-body test for the SQL scalar
+# function fts2_tokenizer(). The procedure is as follows:
+#
+#   1: Verify that there is no such fts2 tokenizer as 'blah'.
+#
+#   2: Query for the built-in tokenizer 'simple'. Insert a copy of the
+#      retrieved value as tokenizer 'blah'.
+#
+#   3: Test that the value returned for tokenizer 'blah' is now the
+#      same as that retrieved for 'simple'.
+#
+#   4: Test that it is now possible to create an fts2 table using 
+#      tokenizer 'blah' (it was not possible in step 1).
+#
+#   5: Test that the table created to use tokenizer 'blah' is usable.
+#
+do_test fts2token-1.1 {
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING fts2(content, tokenize blah);
+  }
+} {1 {unknown tokenizer: blah}}
+do_test fts2token-1.2 {
+  execsql {
+    SELECT fts2_tokenizer('blah', fts2_tokenizer('simple')) IS NULL;
+  }
+} {0}
+do_test fts2token-1.3 {
+  execsql {
+    SELECT fts2_tokenizer('blah') == fts2_tokenizer('simple');
+  }
+} {1}
+do_test fts2token-1.4 {
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING fts2(content, tokenize blah);
+  }
+} {0 {}}
+do_test fts2token-1.5 {
+  execsql {
+    INSERT INTO t1(content) VALUES('There was movement at the station');
+    INSERT INTO t1(content) VALUES('For the word has passed around');
+    INSERT INTO t1(content) VALUES('That the colt from ol regret had got away');
+    SELECT content FROM t1 WHERE content MATCH 'movement'
+  }
+} {{There was movement at the station}}
+
+#--------------------------------------------------------------------------
+# Test cases fts2token-2.* test error cases in the scalar function based
+# API for getting and setting tokenizers.
+#
+do_test fts2token-2.1 {
+  catchsql {
+    SELECT fts2_tokenizer('nosuchtokenizer');
+  }
+} {1 {unknown tokenizer: nosuchtokenizer}}
+
+#--------------------------------------------------------------------------
+# Test cases fts2token-3.* test the three built-in tokenizers with a
+# simple input string via the built-in test function. This is as much
+# to test the test function as the tokenizer implementations.
+#
+do_test fts2token-3.1 {
+  execsql {
+    SELECT fts2_tokenizer_test('simple', 'I don''t see how');
+  }
+} {{0 i I 1 don don 2 t t 3 see see 4 how how}}
+do_test fts2token-3.2 {
+  execsql {
+    SELECT fts2_tokenizer_test('porter', 'I don''t see how');
+  }
+} {{0 i I 1 don don 2 t t 3 see see 4 how how}}
+ifcapable icu {
+  do_test fts2token-3.3 {
+    execsql {
+      SELECT fts2_tokenizer_test('icu', 'I don''t see how');
+    }
+  } {{0 i I 1 don't don't 2 see see 3 how how}}
+}
+
+#--------------------------------------------------------------------------
+# Test cases fts2token-4.* test the ICU tokenizer. In practice, this
+# tokenizer only has two modes - "thai" and "everybody else". Some other
+# Asian languages (Lao, Khmer etc.) require the same special treatment as 
+# Thai, but ICU doesn't support them yet.
+#
+ifcapable icu {
+
+  proc do_icu_test {name locale input output} {
+    set ::out [db eval { SELECT fts2_tokenizer_test('icu', $locale, $input) }]
+    do_test $name {
+      lindex $::out 0
+    } $output
+  }
+  
+  do_icu_test fts2token-4.1 en_US  {}   {}
+  do_icu_test fts2token-4.2 en_US {Test cases fts2} [list \
+    0 test Test 1 cases cases 2 fts2 fts2
+  ]
+
+  # The following test shows that ICU is smart enough to recognise
+  # Thai chararacters, even when the locale is set to English/United 
+  # States.
+  #
+  set input "\u0e2d\u0e30\u0e44\u0e23\u0e19\u0e30\u0e04\u0e23\u0e31\u0e1a"
+  set output    "0 \u0e2d\u0e30\u0e44\u0e23 \u0e2d\u0e30\u0e44\u0e23 "
+  append output "1 \u0e19\u0e30 \u0e19\u0e30 "
+  append output "2 \u0e04\u0e23\u0e31\u0e1a \u0e04\u0e23\u0e31\u0e1a"
+
+  do_icu_test fts2token-4.3 th_TH  $input $output
+  do_icu_test fts2token-4.4 en_US  $input $output
+
+  # ICU handles an unknown locale by falling back to the default.
+  # So this is not an error.
+  do_icu_test fts2token-4.5 MiddleOfTheOcean  $input $output
+
+  set    longtoken "AReallyReallyLongTokenOneThatWillSurelyRequire"
+  append longtoken "AReallocInTheIcuTokenizerCode"
+
+  set    input "short tokens then "
+  append input $longtoken
+  set    output "0 short short "
+  append output "1 tokens tokens "
+  append output "2 then then "
+  append output "3 [string tolower $longtoken] $longtoken"
+
+  do_icu_test fts2token-4.6 MiddleOfTheOcean  $input $output
+  do_icu_test fts2token-4.7 th_TH  $input $output
+  do_icu_test fts2token-4.8 en_US  $input $output
+}
+
+do_test fts2token-internal {
+  execsql { SELECT fts2_tokenizer_internal_test() }
+} {ok}
+
+finish_test

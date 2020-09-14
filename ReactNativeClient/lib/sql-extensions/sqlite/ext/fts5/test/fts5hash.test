@@ -1,0 +1,131 @@
+# 2015 April 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file are focused on the code in fts5_hash.c.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5hash
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Return a list of tokens (a vocabulary) that all share the same hash
+# key value. This can be used to test hash collisions.
+#
+proc build_vocab1 {args} {
+
+  set O(-nslot) 1024
+  set O(-nword)   20
+  set O(-hash)    88
+  set O(-prefix)  ""
+
+  if {[llength $args] % 2} { error "bad args" }
+  array set O2 $args
+  foreach {k v} $args {
+    if {[info exists O($k)]==0} { error "bad option: $k" }
+    set O($k) $v
+  }
+
+  set L [list]
+  while {[llength $L] < $O(-nword)} {
+    set t "$O(-prefix)[random_token]"
+    set h [sqlite3_fts5_token_hash $O(-nslot) $t]
+    if {$O(-hash)==$h} { lappend L $t }
+  }
+  return $L
+}
+
+proc random_token {} {
+  set map [list 0 a  1 b  2 c  3 d  4 e  5 f  6 g  7 h  8 i  9 j]
+  set iVal [expr int(rand() * 2000000)]
+  return [string map $map $iVal]
+}
+
+proc random_doc {vocab nWord} {
+  set doc ""
+  set nVocab [llength $vocab]
+  for {set i 0} {$i<$nWord} {incr i} {
+    set j [expr {int(rand() * $nVocab)}]
+    lappend doc [lindex $vocab $j]
+  }
+  return $doc
+}
+
+foreach_detail_mode $testprefix {
+
+  set vocab [build_vocab1]
+  db func r random_doc 
+  
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE eee USING fts5(e, ee, detail=%DETAIL%);
+    BEGIN;
+      WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<100)
+      INSERT INTO eee SELECT r($vocab, 5), r($vocab, 7) FROM ii;
+      INSERT INTO eee(eee) VALUES('integrity-check');
+    COMMIT;
+    INSERT INTO eee(eee) VALUES('integrity-check');
+  }
+  
+  set hash [sqlite3_fts5_token_hash 1024 xyz]
+  set vocab [build_vocab1 -prefix xyz -hash $hash]
+  lappend vocab xyz
+  
+  do_execsql_test 1.1 {
+    CREATE VIRTUAL TABLE vocab USING fts5vocab(eee, 'row'); 
+    BEGIN;
+  }
+  do_test 1.2 {
+    for {set i 1} {$i <= 100} {incr i} {
+      execsql { INSERT INTO eee VALUES( r($vocab, 5), r($vocab, 7) ) }
+    }
+  } {}
+    
+  do_test 1.3 {
+    db eval { SELECT term, doc FROM vocab } {
+      set nRow [db one {SELECT count(*) FROM eee WHERE eee MATCH $term}]
+      if {$nRow != $doc} {
+        error "term=$term fts5vocab=$doc cnt=$nRow"
+      }
+    }
+    set {} {}
+  } {}
+  
+  do_execsql_test 1.4 {
+    COMMIT;
+    INSERT INTO eee(eee) VALUES('integrity-check');
+  }
+
+  #-----------------------------------------------------------------------
+  # Add a small and very large token with the same hash value to an
+  # empty table. At one point this would provoke an asan error.
+  #
+  do_test 2.0 {
+    set big [string repeat 12345 40]
+    set hash [sqlite3_fts5_token_hash 1024 $big]
+    while {1} {
+      set small [random_token]
+      if {[sqlite3_fts5_token_hash 1024 $small]==$hash} break
+    }
+
+    execsql { CREATE VIRTUAL TABLE t2 USING fts5(x, detail=%DETAIL%) }
+    execsql {
+      INSERT INTO t2 VALUES($small || ' ' || $big);
+    }
+  } {}
+
+} ;# foreach_detail_mode
+
+finish_test

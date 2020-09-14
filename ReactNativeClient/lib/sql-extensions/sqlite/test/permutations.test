@@ -1,0 +1,1229 @@
+# 2008 June 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+db close
+
+#-------------------------------------------------------------------------
+# test_suite NAME OPTIONS
+#
+# where available options are:  
+#
+#       -description TITLE                  (default "")
+#       -initialize  SCRIPT                 (default "")
+#       -shutdown    SCRIPT                 (default "")
+#       -presql      SQL                    (default "")
+#       -files       LIST-OF-FILES          (default $::ALLTESTS)
+#       -prefix      NAME                   (default "$::NAME.")
+#       -dbconfig    SCRIPT                 (default "")
+#
+proc test_suite {name args} {
+
+  set default(-shutdown)    ""
+  set default(-initialize)  ""
+  set default(-presql)      ""
+  set default(-description) "no description supplied (fixme)"
+  set default(-files)       ""
+  set default(-prefix)      "${name}."
+  set default(-dbconfig)    ""
+
+  array set options [array get default]
+  if {[llength $args]%2} {
+    error "uneven number of options/switches passed to test_suite"
+  }
+  foreach {k v} $args {
+    set o [array names options ${k}*]
+    if {[llength $o]>1}  { error "ambiguous option: $k" }
+    if {[llength $o]==0} { error "unknown option: $k" }
+    set options([lindex $o 0]) $v
+  }
+
+  set     ::testspec($name) [array get options]
+  lappend ::testsuitelist $name
+}
+
+#-------------------------------------------------------------------------
+# test_set ARGS...
+#
+proc test_set {args} {
+  set isExclude 0
+  foreach a $args {
+    if {[string match -* $a]} {
+      switch -- $a {
+        -include { set isExclude 0 }
+        -exclude { set isExclude 1 }
+        default {
+          error "Unknown switch: $a"
+        }
+      }
+    } elseif {$isExclude == 0} {
+      foreach f $a { set t($f) 1 }
+    } else {
+      foreach f $a { array unset t $f }
+      foreach f $a { array unset t */$f }
+    }
+  }
+
+  return [array names t]
+}
+
+#-------------------------------------------------------------------------
+# Set up the following global list variables containing the names of 
+# various test scripts:
+#
+#   $alltests
+#   $allquicktests
+#
+set alltests [list]
+foreach f [glob $testdir/*.test] { lappend alltests [file tail $f] }
+foreach f [glob -nocomplain            \
+    $testdir/../ext/rtree/*.test       \
+    $testdir/../ext/fts5/test/*.test   \
+    $testdir/../ext/expert/*.test      \
+    $testdir/../ext/lsm1/test/*.test   \
+] {
+  lappend alltests $f 
+}
+foreach f [glob -nocomplain $testdir/../ext/session/*.test] { 
+  lappend alltests $f 
+}
+
+if {$::tcl_platform(platform)!="unix"} {
+  set alltests [test_set $alltests -exclude crash.test crash2.test]
+}
+set alltests [test_set $alltests -exclude {
+  all.test        async.test         quick.test  veryquick.test
+  memleak.test    permutations.test  soak.test   fts3.test
+  mallocAll.test  rtree.test         full.test   extraquick.test
+  session.test    rbu.test
+}]
+
+set allquicktests [test_set $alltests -exclude {
+  async2.test async3.test backup_ioerr.test corrupt.test
+  corruptC.test crash.test crash2.test crash3.test crash4.test crash5.test
+  crash6.test crash7.test delete3.test e_fts3.test fts3rnd.test
+  fkey_malloc.test fuzz.test fuzz3.test fuzz_malloc.test in2.test loadext.test
+  misc7.test mutex2.test notify2.test onefile.test pagerfault2.test 
+  savepoint4.test savepoint6.test select9.test 
+  speed1.test speed1p.test speed2.test speed3.test speed4.test 
+  speed4p.test sqllimits1.test tkt2686.test thread001.test thread002.test
+  thread003.test thread004.test thread005.test trans2.test vacuum3.test 
+  incrvacuum_ioerr.test autovacuum_crash.test btree8.test shared_err.test
+  vtab_err.test walslow.test walcrash.test walcrash3.test
+  walthread.test rtree3.test indexfault.test securedel2.test
+  sort3.test sort4.test fts4growth.test fts4growth2.test
+  bigsort.test walprotocol.test mmap4.test fuzzer2.test
+  walcrash2.test e_fkey.test backup.test
+
+  fts4merge.test fts4merge2.test fts4merge4.test fts4check.test
+  fts4merge5.test
+  fts3cov.test fts3snippet.test fts3corrupt2.test fts3an.test
+  fts3defer.test fts4langid.test fts3sort.test fts5unicode.test
+
+  rtree4.test
+}]
+if {[info exists ::env(QUICKTEST_INCLUDE)]} {
+  set allquicktests [concat $allquicktests $::env(QUICKTEST_INCLUDE)]
+}
+if {[info exists ::env(QUICKTEST_OMIT)]} {
+  # If environment variable QUICKTEST_OMIT is set, it is a comma-separated
+  # list of regular expressions to match against test file names in
+  # the "allquicktests" set. Any matches are excluded. Only the filename
+  # is matched, not any directory component of the path.
+  set all [list]
+  foreach a $allquicktests {
+    set bIn 1
+    foreach x [split $::env(QUICKTEST_OMIT) ,] {
+      if {[regexp $x [file tail $a]]} {
+        set bIn 0
+        break
+      }
+    }
+    if {$bIn} {
+      lappend all $a
+    }
+  }
+  set allquicktests $all
+}
+
+# If the TEST_FAILURE environment variable is set, it means that we what to
+# deliberately provoke test failures in order to test the test infrastructure.
+# Only the main.test module is needed for this.
+#
+if {[info exists ::env(TEST_FAILURE)]} {
+  set allquicktests main.test
+}
+
+#############################################################################
+# Start of tests
+#
+
+#-------------------------------------------------------------------------
+# Define the generic test suites:
+#
+#   veryquick
+#   quick
+#   full
+#
+lappend ::testsuitelist xxx
+
+test_suite "veryquick" -prefix "" -description {
+  "Very" quick test suite. Runs in minutes on a workstation.
+  This test suite is the same as the "quick" tests, except that some files
+  that test malloc and IO errors are omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *bigfile* *_err* \
+      *fts5corrupt* *fts5big* *fts5aj*
+]
+
+test_suite "shell" -prefix "" -description {
+  Run tests of the command-line shell
+} -files [
+  test_set [glob $testdir/shell*.test]
+]
+
+test_suite "extraquick" -prefix "" -description {
+  "Extra" quick test suite. Runs in a few minutes on a workstation.
+  This test suite is the same as the "veryquick" tests, except that
+  slower tests are omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *bigfile* *_err* \
+     wal3.test fts4merge* sort2.test mmap1.test walcrash* \
+     percentile.test where8m.test walcksum.test savepoint3.test \
+     fuzzer1.test fuzzer3.test fts3expr3.test
+]
+
+test_suite "mmap" -prefix "mm-" -description {
+  Similar to veryquick. Except with memory mapping enabled.
+} -presql {
+  pragma mmap_size = 268435456;
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* -include malloc.test
+]
+
+test_suite "valgrind" -prefix "" -description {
+  Run the "veryquick" test suite with a couple of multi-process tests (that
+  fail under valgrind) omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *_err* wal.test \
+              shell*.test crash8.test atof1.test selectG.test \
+              tkt-fc62af4523.test numindex1.test corruptK.test
+] -initialize {
+  set ::G(valgrind) 1
+} -shutdown {
+  unset -nocomplain ::G(valgrind)
+}
+
+test_suite "valgrind-nolookaside" -prefix "" -description {
+  Run the "veryquick" test suite with a couple of multi-process tests (that
+  fail under valgrind) omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *_err* \
+      wal.test atof1.test
+] -initialize {
+  set ::G(valgrind) 1
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_lookaside 0 0
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_lookaside 100 500
+  sqlite3_initialize
+  autoinstall_test_functions
+  unset -nocomplain ::G(valgrind)
+}
+
+
+test_suite "quick" -prefix "" -description {
+  Quick test suite. Runs in around 10 minutes on a workstation.
+} -files [
+  test_set $allquicktests
+]
+
+test_suite "full" -prefix "" -description {
+  Full test suite. Takes a long time.
+} -files [ 
+  test_set $alltests 
+] -initialize {
+  unset -nocomplain ::G(isquick)
+}
+
+test_suite "threads" -prefix "" -description {
+  All multi-threaded tests.
+} -files {
+  notify2.test   thread001.test thread002.test thread003.test 
+  thread004.test thread005.test walthread.test
+}
+
+test_suite "fts3" -prefix "" -description {
+  All FTS3 tests except fts3rnd.test.
+} -files {
+  fts3aa.test fts3ab.test fts3ac.test fts3ad.test
+  fts3ae.test fts3af.test fts3ag.test fts3ah.test
+  fts3ai.test fts3aj.test fts3ak.test fts3al.test
+  fts3am.test fts3an.test fts3ao.test fts3atoken.test
+  fts3auto.test fts3aux1.test fts3aux2.test fts3b.test
+  fts3comp1.test fts3conf.test fts3corrupt2.test fts3corrupt.test
+  fts3corrupt4.test
+  fts3cov.test fts3c.test fts3defer2.test fts3defer3.test
+  fts3defer.test fts3drop.test fts3d.test fts3e.test
+  fts3expr2.test fts3expr3.test fts3expr4.test fts3expr5.test
+  fts3expr.test fts3fault2.test fts3fault.test fts3first.test
+  fts3join.test fts3malloc.test fts3matchinfo.test fts3near.test
+  fts3offsets.test fts3prefix2.test fts3prefix.test fts3query.test
+  fts3shared.test fts3snippet.test fts3sort.test fts3tok1.test
+  fts3tok_err.test fts3varint.test fts4aa.test fts4check.test
+  fts4content.test fts4docid.test fts4growth2.test fts4growth.test
+  fts4incr.test fts4langid.test fts4lastrowid.test fts4merge2.test
+  fts4merge4.test fts4merge.test fts4noti.test fts4onepass.test 
+  fts4opt.test fts4unicode.test
+  fts3corrupt3.test
+  fts3misc.test
+}
+
+test_suite "fts5" -prefix "" -description {
+  All FTS5 tests.
+} -files [glob -nocomplain $::testdir/../ext/fts5/test/*.test]
+
+test_suite "fts5-light" -prefix "" -description {
+  All FTS5 tests.
+} -files [
+  test_set \
+      [glob -nocomplain $::testdir/../ext/fts5/test/*.test] \
+      -exclude *corrupt* *fault* *big* *fts5aj*
+]
+
+test_suite "window" -prefix "" -description {
+  All window function related tests .
+} -files [
+  test_set [glob -nocomplain $::testdir/window*.test]
+]
+
+test_suite "lsm1" -prefix "" -description {
+  All LSM1 tests.
+} -files [glob -nocomplain $::testdir/../ext/lsm1/test/*.test]
+
+test_suite "nofaultsim" -prefix "" -description {
+  "Very" quick test suite. Runs in less than 5 minutes on a workstation. 
+  This test suite is the same as the "quick" tests, except that some files
+  that test malloc and IO errors are omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *_err*
+] -initialize {
+  catch {db close}
+  sqlite3_shutdown
+  install_malloc_faultsim 0
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  unset -nocomplain ::G(valgrind)
+}
+
+test_suite "queryplanner" -prefix "" -description {
+  Tests of the query planner and query optimizer
+} -files {
+  alter2.test alter3.test alter4.test alter.test analyze3.test
+  analyze4.test analyze5.test analyze6.test analyze7.test analyze8.test
+  analyze.test attach2.test attach3.test attach4.test
+  attach.test autoinc.test autoindex1.test between.test cast.test
+  check.test closure01.test coalesce.test collate1.test collate2.test
+  collate3.test collate4.test collate5.test collate6.test collate7.test
+  collate8.test collate9.test collateA.test colmeta.test colname.test
+  conflict.test count.test coveridxscan.test createtab.test cse.test
+  date.test dbstatus2.test dbstatus.test default.test delete2.test
+  delete3.test delete.test descidx1.test descidx2.test descidx3.test
+  distinctagg.test distinct.test e_createtable.test e_delete.test
+  e_droptrigger.test e_dropview.test e_expr.test e_insert.test
+  eqp.test e_reindex.test e_resolve.test e_select2.test e_select.test
+  e_update.test exists.test expr.test fkey1.test fkey2.test fkey3.test
+  fkey4.test fkey5.test func2.test func3.test func.test 
+  in3.test in4.test in5.test index2.test index3.test
+  index4.test index5.test indexedby.test index.test
+  insert2.test insert3.test insert4.test insert5.test insert.test
+  instr.test in.test intpkey.test join2.test join3.test join4.test
+  join5.test join6.test join.test like2.test like.test limit.test
+  minmax2.test minmax3.test minmax4.test minmax.test misc1.test misc2.test
+  misc3.test misc4.test misc5.test misc6.test misc7.test orderby1.test
+  orderby2.test orderby3.test orderby4.test randexpr1.test regexp1.test
+  reindex.test rowhash.test rowid.test schema2.test schema3.test
+  schema4.test schema5.test schema.test
+  select1.test select2.test select3.test select4.test select5.test
+  select6.test select7.test select8.test select9.test selectA.test
+  selectB.test selectC.test selectD.test selectE.test sidedelete.test
+  sort.test spellfix.test subquery2.test subquery.test subselect.test
+  substr.test tkt-02a8e81d44.test tkt1435.test tkt1443.test tkt1444.test
+  tkt1449.test tkt1473.test tkt1501.test tkt1512.test tkt1514.test
+  tkt1536.test tkt1537.test tkt1567.test tkt1644.test tkt1667.test
+  tkt1873.test tkt2141.test tkt2192.test tkt2213.test tkt2251.test
+  tkt2285.test tkt2332.test tkt2339.test tkt2391.test tkt2409.test
+  tkt2450.test tkt2565.test tkt2640.test tkt2643.test tkt2686.test
+  tkt-26ff0c2d1e.test tkt2767.test tkt2817.test tkt2820.test tkt2822.test
+  tkt2832.test tkt2854.test tkt2920.test tkt2927.test tkt2942.test
+  tkt-2a5629202f.test tkt-2d1a5c67d.test tkt-2ea2425d34.test tkt3080.test
+  tkt3093.test tkt3121.test tkt-31338dca7e.test tkt-313723c356.test
+  tkt3201.test tkt3292.test tkt3298.test tkt3334.test tkt3346.test
+  tkt3357.test tkt3419.test tkt3424.test tkt3442.test tkt3457.test
+  tkt3461.test tkt3493.test tkt3508.test tkt3522.test tkt3527.test
+  tkt3541.test tkt3554.test tkt3581.test tkt35xx.test tkt3630.test
+  tkt3718.test tkt3731.test tkt3757.test tkt3761.test tkt3762.test
+  tkt3773.test tkt3791.test tkt3793.test tkt3810.test tkt3824.test
+  tkt3832.test tkt3838.test tkt3841.test tkt-385a5b56b9.test tkt3871.test
+  tkt3879.test tkt-38cb5df375.test tkt3911.test tkt3918.test tkt3922.test
+  tkt3929.test tkt3935.test tkt3992.test tkt3997.test tkt-3998683a16.test
+  tkt-3a77c9714e.test tkt-3fe897352e.test tkt4018.test tkt-4a03edc4c8.test
+  tkt-4dd95f6943.test tkt-54844eea3f.test tkt-5d863f876e.test
+  tkt-5e10420e8d.test tkt-5ee23731f.test tkt-6bfb98dfc0.test
+  tkt-752e1646fc.test tkt-78e04e52ea.test tkt-7a31705a7e6.test
+  tkt-7bbfb7d442.test tkt-80ba201079.test tkt-80e031a00f.test
+  tkt-8454a207b9.test tkt-91e2e8ba6f.test tkt-94c04eaadb.test
+  tkt-9d68c883.test tkt-a7b7803e.test tkt-b1d3a2e531.test
+  tkt-b351d95f9.test tkt-b72787b1.test tkt-bd484a090c.test
+  tkt-bdc6bbbb38.test tkt-c48d99d690.test tkt-cbd054fa6b.test
+  tkt-d11f09d36e.test tkt-d635236375.test tkt-d82e3f3721.test
+  tkt-f3e5abed55.test tkt-f777251dc7a.test tkt-f7b4edec.test
+  tkt-f973c7ac31.test tkt-fa7bf5ec.test tkt-fc62af4523.test
+  tkt-fc7bd6358f.test trigger1.test trigger2.test trigger3.test
+  trigger4.test trigger5.test trigger6.test trigger7.test trigger8.test
+  trigger9.test triggerA.test triggerB.test triggerC.test triggerD.test
+  types2.test types3.test types.test unique.test unordered.test
+  update.test view.test vtab1.test vtab2.test vtab3.test vtab4.test
+  vtab5.test vtab6.test vtab7.test vtab8.test vtab9.test vtab_alter.test
+  vtabA.test vtabB.test vtabC.test vtabD.test vtabE.test
+  vtabF.test where2.test where3.test where4.test where5.test where6.test
+  where7.test where8m.test where8.test where9.test whereA.test whereB.test
+  whereC.test whereD.test whereE.test whereF.test wherelimit.test
+  where.test
+}
+
+test_suite "vfslog" -prefix "" -description {
+  "Vfslog" quick test suite. Like "veryquick" except does not omits
+  a few tests that do not work with a version 1 VFS. And the quota* tests,
+  which do not work with a VFS that uses the pVfs argument passed to
+  sqlite3_vfs methods.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* oserror.test \
+  pager1.test syscall.test sysfault.test tkt3457.test quota* superlock* \
+  wal* mmap*
+]
+
+test_suite "atomic-batch-write" -prefix "" -description {
+  Like veryquick.test, but must be run on a file-system that supports
+  atomic-batch-writes. Tests that depend on the journal file being present
+  are omitted.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *bigfile* *_err* \
+      *fts5corrupt* *fts5big* *fts5aj*  \
+      crash8.test delete_db.test        \
+      exclusive.test journal3.test      \
+      journal1.test                     \
+      jrnlmode.test jrnlmode2.test      \
+      lock4.test pager1.test            \
+      pager3.test sharedA.test          \
+      symlink.test stmt.test            \
+      sync.test sync2.test              \
+      tempdb.test tkt3457.test          \
+      vacuum5.test wal2.test            \
+      walmode.test zerodamage.test
+] -initialize {
+  if {[atomic_batch_write test.db]==0} {
+    error "File system does NOT support atomic-batch-write"
+  }
+}
+
+lappend ::testsuitelist xxx
+#-------------------------------------------------------------------------
+# Define the coverage related test suites:
+#
+#   coverage-wal
+#
+test_suite "coverage-wal" -description {
+  Coverage tests for file wal.c.
+} -files {
+  wal.test wal2.test wal3.test wal4.test wal5.test
+  wal64k.test wal6.test wal7.test wal8.test wal9.test
+  walbak.test walbig.test walblock.test walcksum.test walcrash2.test
+  walcrash3.test walcrash4.test walcrash.test walfault.test walhook.test
+  walmode.test walnoshm.test waloverwrite.test walpersist.test 
+  walprotocol2.test walprotocol.test walro2.test walrofault.test 
+  walro.test walshared.test walslow.test walvfs.test
+  walfault2.test
+  nockpt.test
+
+  snapshot2.test snapshot3.test snapshot4.test
+  snapshot_fault.test snapshot.test snapshot_up.test
+} 
+
+test_suite "coverage-pager" -description {
+  Coverage tests for file pager.c.
+} -files {
+  pager1.test    pager2.test  pagerfault.test  pagerfault2.test
+  walfault.test  walbak.test  journal2.test    tkt-9d68c883.test
+} 
+
+test_suite "coverage-analyze" -description {
+  Coverage tests for file analyze.c.
+} -files {
+  analyze3.test analyze4.test analyze5.test analyze6.test
+  analyze7.test analyze8.test analyze9.test
+  analyze.test mallocA.test
+} 
+
+test_suite "coverage-sorter" -description {
+  Coverage tests for file vdbesort.c.
+} -files {
+  sort.test sortfault.test
+} 
+
+
+lappend ::testsuitelist xxx
+#-------------------------------------------------------------------------
+# Define the permutation test suites:
+#
+
+# Run some tests using pre-allocated page blocks.
+#
+# mmap1.test is excluded because a good number of its tests depend on 
+# the page-cache being larger than the database. But this permutation
+# causes the effective limit on the page-cache to be just 24 pages.
+#
+test_suite "memsubsys1" -description {
+  Tests using pre-allocated page blocks
+} -files [
+  test_set $::allquicktests -exclude ioerr5.test malloc5.test mmap1.test
+] -initialize {
+  test_set_config_pagecache 4096 24
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  test_restore_config_pagecache
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_initialize
+  autoinstall_test_functions
+}
+
+# Run some tests using pre-allocated page blocks. This time
+# the allocations are too small to use in most cases.
+#
+# Both ioerr5.test and malloc5.test are excluded because they test the
+# sqlite3_soft_heap_limit() and sqlite3_release_memory() functionality.
+# This functionality is disabled if a pre-allocated page block is provided.
+#
+test_suite "memsubsys2" -description {
+  Tests using small pre-allocated page blocks
+} -files [
+  test_set $::allquicktests -exclude ioerr5.test malloc5.test
+] -initialize {
+  test_set_config_pagecache 512 5
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  test_restore_config_pagecache
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_initialize
+  autoinstall_test_functions
+}
+
+# Run all tests with the lookaside allocator disabled.
+#
+test_suite "nolookaside" -description {
+  OOM tests with lookaside disabled
+} -initialize {
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_lookaside 0 0
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_lookaside 100 500
+  sqlite3_initialize
+  autoinstall_test_functions
+} -files $::allquicktests
+
+# Run some tests in SQLITE_CONFIG_SINGLETHREAD mode.
+#
+test_suite "singlethread" -description {
+  Tests run in SQLITE_CONFIG_SINGLETHREAD mode
+} -initialize {
+  catch {db close}
+  sqlite3_shutdown
+  catch {sqlite3_config singlethread}
+  sqlite3_initialize
+  autoinstall_test_functions
+} -files {
+  delete.test   delete2.test  insert.test  rollback.test  select1.test
+  select2.test  trans.test    update.test  vacuum.test    types.test
+  types2.test   types3.test
+} -shutdown {
+  catch {db close}
+  sqlite3_shutdown
+  catch {sqlite3_config serialized}
+  sqlite3_initialize
+  autoinstall_test_functions
+}
+
+test_suite "nomutex" -description {
+  Tests run with the SQLITE_OPEN_MULTITHREADED flag passed to sqlite3_open().
+} -initialize {
+  set ::G(perm:sqlite3_args) [list -fullmutex 0 -nomutex 1]
+} -files {
+  delete.test   delete2.test  insert.test  rollback.test  select1.test
+  select2.test  trans.test    update.test  vacuum.test    types.test
+  types2.test   types3.test
+} 
+
+# Run some tests in SQLITE_CONFIG_MULTITHREAD mode.
+#
+test_suite "multithread" -description {
+  Tests run in SQLITE_CONFIG_MULTITHREAD mode
+} -initialize {
+  catch {db close}
+  sqlite3_shutdown
+  catch {sqlite3_config multithread}
+  sqlite3_initialize
+  autoinstall_test_functions
+} -files {
+  delete.test   delete2.test  insert.test  rollback.test  select1.test
+  select2.test  trans.test    update.test  vacuum.test    types.test
+  types2.test   types3.test   sort4.test
+} -shutdown {
+  catch {db close}
+  sqlite3_shutdown
+  catch {sqlite3_config serialized}
+  sqlite3_initialize
+  autoinstall_test_functions
+}
+
+# Run some tests in SQLITE_OPEN_FULLMUTEX mode.
+#
+test_suite "fullmutex" -description {
+  Tests run in SQLITE_OPEN_FULLMUTEX mode
+} -initialize {
+  set ::G(perm:sqlite3_args) [list -nomutex 0 -fullmutex 1]
+} -files {
+  delete.test   delete2.test  insert.test  rollback.test  select1.test
+  select2.test  trans.test    update.test  vacuum.test    types.test
+  types2.test   types3.test
+}
+
+# Run some tests using the "onefile" demo.
+#
+test_suite "onefile" -description {
+  Run some tests using the "test_onefile.c" demo
+} -initialize {
+  set ::G(perm:sqlite3_args) [list -vfs fs]
+} -files {
+  conflict.test  insert.test   insert2.test  insert3.test
+  rollback.test  select1.test  select2.test  select3.test
+}
+
+# Run some tests using UTF-16 databases.
+#
+test_suite "utf16" -description {
+  Run tests using UTF-16 databases
+} -presql {
+  pragma encoding = 'UTF-16'
+} -files {
+    alter.test alter3.test
+    analyze.test analyze3.test analyze4.test analyze5.test analyze6.test
+    analyze7.test analyze8.test analyze9.test
+    auth.test bind.test blob.test capi2.test capi3.test collate1.test
+    collate2.test collate3.test collate4.test collate5.test collate6.test
+    conflict.test date.test delete.test expr.test fkey1.test func.test
+    hook.test index.test insert2.test insert.test interrupt.test in.test
+    intpkey.test ioerr.test join2.test join.test lastinsert.test
+    laststmtchanges.test limit.test lock2.test lock.test main.test 
+    memdb.test minmax.test misc1.test misc2.test misc3.test notnull.test
+    null.test progress.test quote.test rowid.test select1.test select2.test
+    select3.test select4.test select5.test select6.test sort.test 
+    subselect.test tableapi.test table.test temptable.test
+    trace.test trigger1.test trigger2.test trigger3.test
+    trigger4.test types2.test types.test unique.test update.test
+    vacuum.test view.test where.test
+    bestindex1.test
+}
+
+# Run some tests in exclusive locking mode.
+#
+test_suite "exclusive" -description {
+  Run tests in exclusive locking mode.
+} -presql {
+  pragma locking_mode = 'exclusive'
+} -files {
+  rollback.test select1.test select2.test 
+  malloc.test ioerr.test
+} 
+
+# Run some tests in exclusive locking mode with truncated journals.
+#
+test_suite "exclusive-truncate" -description {
+  Run tests in exclusive locking mode and truncate journal mode.
+} -presql {
+  pragma locking_mode = 'exclusive';
+  pragma journal_mode = TRUNCATE;
+} -files {
+  delete.test delete2.test insert.test rollback.test select1.test
+  select2.test update.test malloc.test ioerr.test
+} 
+
+# Run some tests in persistent journal mode.
+#
+test_suite "persistent_journal" -description {
+  Run tests in persistent-journal mode.
+} -presql {
+  pragma journal_mode = persist
+} -files {
+  delete.test delete2.test insert.test rollback.test select1.test
+  select2.test trans.test update.test vacuum.test 
+}
+
+# Run some tests in truncating journal mode.
+#
+test_suite "truncate_journal" -description {
+  Run tests in persistent-journal mode.
+} -presql {
+  pragma journal_mode = truncate
+} -files {
+  delete.test delete2.test insert.test rollback.test select1.test
+  select2.test trans.test update.test vacuum.test 
+  malloc.test ioerr.test
+}
+
+# Run some error tests in persistent journal mode.
+#
+test_suite "persistent_journal_error" -description {
+  Run malloc.test and ioerr.test in persistent-journal mode.
+} -presql {
+  pragma journal_mode = persist
+} -files {
+  malloc.test ioerr.test
+}
+
+# Run some tests in no journal mode.
+#
+test_suite "no_journal" -description {
+  Run tests in no-journal mode.
+} -presql {
+  pragma journal_mode = persist
+} -files {
+  delete.test delete2.test insert.test rollback.test select1.test
+  select2.test trans.test update.test vacuum.test 
+}
+
+# Run some error tests in no journal mode.
+#
+test_suite "no_journal_error" -description {
+  Run malloc.test and ioerr.test in no-journal mode.
+} -presql {
+  pragma journal_mode = persist
+} -files {
+  malloc.test ioerr.test
+}
+
+# Run some crash-tests in autovacuum mode.
+#
+test_suite "autovacuum_crash" -description {
+  Run crash.test in autovacuum mode.
+} -presql {
+  pragma auto_vacuum = 1
+} -files crash.test
+
+# Run some ioerr-tests in autovacuum mode.
+#
+test_suite "autovacuum_ioerr" -description {
+  Run ioerr.test in autovacuum mode.
+} -presql {
+  pragma auto_vacuum = 1
+} -files ioerr.test
+
+# Run tests with an in-memory journal.
+#
+test_suite "inmemory_journal" -description {
+  Run tests with an in-memory journal file.
+} -presql {
+  pragma journal_mode = 'memory'
+} -files [test_set $::allquicktests -exclude {
+  # Exclude all tests that simulate IO errors.
+  autovacuum_ioerr2.test cffault.test incrvacuum_ioerr.test ioerr.test
+  ioerr.test ioerr2.test ioerr3.test ioerr4.test ioerr5.test
+  vacuum3.test incrblob_err.test diskfull.test backup_ioerr.test
+  e_fts3.test fts3cov.test fts3malloc.test fts3rnd.test
+  fts3snippet.test mmapfault.test sessionfault.test sessionfault2.test
+
+  # Exclude test scripts that use tcl IO to access journal files or count
+  # the number of fsync() calls.
+  pager.test exclusive.test jrnlmode.test sync.test misc1.test 
+  journal1.test conflict.test crash8.test tkt3457.test io.test
+  journal3.test 8_3_names.test shmlock.test
+
+  pager1.test async4.test corrupt.test filefmt.test pager2.test
+  corrupt5.test corruptA.test pageropt.test
+
+  # Exclude stmt.test, which expects sub-journals to use temporary files.
+  stmt.test symlink.test
+
+  zerodamage.test
+
+  # WAL mode is different.
+  wal* tkt-2d1a5c67d.test backcompat.test e_wal* rowallock.test
+
+  # This test does not work as the "PRAGMA journal_mode = memory"
+  # statement switches the database out of wal mode at inopportune
+  # times.
+  snapshot_fault.test
+  
+  # This test assumes a journal file is created on disk.
+  delete_db.test
+  
+  # This test depends on a successful recovery from the pager error 
+  # state. Which is not possible with an in-memory journal
+  fts5fault1.test
+}]
+
+ifcapable mem3 {
+  test_suite "memsys3" -description {
+    Run tests using the allocator in mem3.c.
+  } -files [test_set $::allquicktests -exclude {
+    autovacuum.test           delete3.test              manydb.test
+    bigrow.test               incrblob2.test            memdb.test
+    bitvec.test               index2.test               memsubsys1.test
+    capi3c.test               ioerr.test                memsubsys2.test
+    capi3.test                join3.test                pagesize.test
+    collate5.test             limit.test                backup_ioerr.test
+    backup_malloc.test
+  }] -initialize {
+    catch {db close}
+    sqlite3_reset_auto_extension
+    sqlite3_shutdown
+    sqlite3_config_heap 25000000 0
+    sqlite3_config_lookaside 0 0
+    ifcapable mem5 {
+      # If both memsys3 and memsys5 are enabled in the build, the call to
+      # [sqlite3_config_heap] will initialize the system to use memsys5.
+      # The following overrides this preference and installs the memsys3
+      # allocator.
+      sqlite3_install_memsys3
+    }
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  } -shutdown {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_heap 0 0
+    sqlite3_config_lookaside 100 500
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  }
+}
+
+ifcapable mem5 {
+  test_suite "memsys5" -description {
+    Run tests using the allocator in mem5.c.
+  } -files [test_set $::allquicktests -exclude {
+    autovacuum.test           delete3.test              manydb.test
+    bigrow.test               incrblob2.test            memdb.test
+    bitvec.test               index2.test               memsubsys1.test
+    capi3c.test               ioerr.test                memsubsys2.test
+    capi3.test                join3.test                pagesize.test
+    collate5.test             limit.test                zeroblob.test
+  }] -initialize {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_heap 25000000 64
+    sqlite3_config_lookaside 0 0
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  } -shutdown {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_heap 0 0
+    sqlite3_config_lookaside 100 500
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  }
+
+  test_suite "memsys5-2" -description {
+    Run tests using the allocator in mem5.c in a different configuration.
+  } -files {
+    select1.test 
+  } -initialize {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_memstatus 0
+    sqlite3_config_heap 40000000 16
+    sqlite3_config_lookaside 0 0
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  } -shutdown {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_heap 0 0
+    sqlite3_config_lookaside 100 500
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  }
+}
+
+ifcapable threadsafe {
+  test_suite "no_mutex_try" -description {
+     The sqlite3_mutex_try() interface always fails
+  } -files [
+    test_set $::allquicktests -exclude mutex1.test mutex2.test
+  ] -initialize {
+    catch {db close}
+    sqlite3_shutdown
+    install_mutex_counters 1
+    set ::disable_mutex_try 1
+    sqlite3_initialize
+    autoinstall_test_functions
+  } -shutdown {
+    catch {db close}
+    sqlite3_shutdown
+    install_mutex_counters 0
+    sqlite3_initialize
+    autoinstall_test_functions
+  }
+}
+
+# run_tests "crash_safe_append" -description {
+#   Run crash.test with persistent journals on a SAFE_APPEND file-system.
+# } -initialize {
+#   rename crashsql sa_crashsql
+#   proc crashsql {args} {
+#     set options [lrange $args 0 [expr {[llength $args]-2}]]
+#     lappend options -char safe_append
+#     set sql [lindex $args end]
+#     lappend options "
+#       PRAGMA journal_mode=persistent;
+#       $sql
+#     "
+#     set fd [open test.db-journal w]
+#     puts $fd [string repeat 1234567890 100000]
+#     close $fd
+#     eval sa_crashsql $options
+#   }
+# } -shutdown {
+#   rename crashsql {}
+#   rename sa_crashsql crashsql
+# } -files crash.test
+
+test_suite "safe_append" -description {
+  Run some tests on a SAFE_APPEND file-system.
+} -initialize {
+  set ::G(perm:sqlite3_args) [list -vfs devsym]
+  sqlite3_simulate_device -char safe_append
+} -files [
+  test_set $::allquicktests shared_err.test -exclude async3.test
+]
+
+# The set of tests to run on the alternative-pcache
+set perm-alt-pcache-testset {
+  async.test
+  attach.test
+  delete.test delete2.test
+  index.test
+  insert.test insert2.test
+  join.test join2.test
+  rollback.test
+  select1.test select2.test
+  trans.test
+  update.test
+}
+
+foreach discard_rate {0 10 50 90 100} {
+  test_suite "pcache${discard_rate}" -description "
+    Alternative pcache implementation with ${discard_rate}% random discard
+  " -initialize "
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_alt_pcache 1 $discard_rate 1
+    sqlite3_initialize
+    autoinstall_test_functions
+  " -shutdown {
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_alt_pcache 0 0 0
+    sqlite3_config_lookaside 100 500
+    install_malloc_faultsim 1 
+    sqlite3_initialize
+    autoinstall_test_functions
+  } -files ${perm-alt-pcache-testset}
+}
+
+test_suite "journaltest" -description {
+  Check that pages are synced before being written (test_journal.c).
+} -initialize {
+  catch {db close}
+  register_jt_vfs -default ""
+} -shutdown {
+  unregister_jt_vfs
+} -files [test_set $::allquicktests -exclude {
+  wal* incrvacuum.test ioerr.test corrupt4.test io.test crash8.test 
+  async4.test bigfile.test backcompat.test e_wal* fstat.test mmap2.test
+  pager1.test syscall.test tkt3457.test *malloc* mmap* multiplex* nolock*
+  pager2.test *fault* rowal* snapshot* superlock* symlink.test
+  delete_db.test shmlock.test chunksize.test
+  busy2.test
+}]
+
+if {[info commands register_demovfs] != ""} {
+  test_suite "demovfs" -description {
+    Check that the demovfs (code in test_demovfs.c) more or less works.
+  } -initialize {
+    register_demovfs
+  } -shutdown {
+    unregister_demovfs
+  } -files {
+    insert.test   insert2.test  insert3.test rollback.test 
+    select1.test  select2.test  select3.test
+  }
+}
+
+test_suite "wal" -description {
+  Run tests with journal_mode=WAL
+} -initialize {
+  set ::G(savepoint6_iterations) 100
+} -shutdown {
+  unset -nocomplain ::G(savepoint6_iterations)
+} -files {
+  savepoint.test     savepoint2.test     savepoint6.test
+  trans.test         avtrans.test
+
+  fts3aa.test  fts3ab.test  fts3ac.test  fts3ad.test
+  fts3ae.test  fts3af.test  fts3ag.test  fts3ah.test
+  fts3ai.test  fts3aj.test  fts3ak.test  fts3al.test
+  fts3am.test  fts3an.test  fts3ao.test  fts3b.test
+  fts3c.test   fts3d.test   fts3e.test   fts3query.test 
+}
+
+test_suite "rtree" -description {
+  All R-tree related tests. Provides coverage of source file rtree.c.
+} -files [glob -nocomplain $::testdir/../ext/rtree/*.test]
+
+test_suite "session" -description {
+  All session module related tests. 
+} -files [glob -nocomplain $::testdir/../ext/session/*.test]
+
+test_suite "session_eec" -description {
+  All session module related tests with sqlite3_extended_result_codes() set. 
+} -files [
+  glob -nocomplain $::testdir/../ext/session/*.test
+] -dbconfig {
+  sqlite3_extended_result_codes $::dbhandle 1
+}
+
+test_suite "session_strm" -description {
+  All session module related tests using the streaming APIs.
+} -files [
+  glob -nocomplain $::testdir/../ext/session/*.test
+] -dbconfig {
+  set ::sqlite3session_streams 1
+}
+
+test_suite "rbu" -description {
+  RBU tests.
+} -files [
+  test_set [glob -nocomplain $::testdir/../ext/rbu/*.test] -exclude rbu.test
+]
+
+test_suite "no_optimization" -description {
+  Run test scripts with optimizations disabled using the
+  sqlite3_test_control(SQLITE_TESTCTRL_OPTIMIZATIONS) interface.
+} -files [
+  test_set \
+    [glob -nocomplain $::testdir/window*.test]                       \
+    where.test where2.test where3.test where4.test where5.test       \
+    where6.test where7.test where8.test where9.test                  \
+    whereA.test whereB.test wherelimit.test                          \
+    select1.test select2.test select3.test select4.test select5.test \
+    select7.test select8.test selectA.test selectC.test     
+] -dbconfig {
+  optimization_control $::dbhandle all 0
+}
+
+test_suite "prepare" -description {
+  Run tests with the db connection using sqlite3_prepare() instead of _v2().
+} -dbconfig {
+  $::dbhandle version -use-legacy-prepare 1
+  #$::dbhandle cache size 0
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* \
+      stmtvtab1.test index9.test
+]
+
+test_suite "sorterref" -prefix "" -description {
+  Run the "veryquick" test suite with SQLITE_CONFIG_SORTERREF_SIZE set
+  to 0 so that sorter-references are used whenever possible.
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *bigfile* *_err* \
+      *fts5corrupt* *fts5big* *fts5aj*
+] -initialize {
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_sorterref 0
+  sqlite3_initialize
+  autoinstall_test_functions
+} -shutdown {
+  catch {db close}
+  sqlite3_shutdown
+  sqlite3_config_sorterref -1
+  sqlite3_initialize
+  autoinstall_test_functions
+}
+
+test_suite "maindbname" -prefix "" -description {
+  Run the "veryquick" test suite with SQLITE_DBCONFIG_MAINDBNAME used to
+  set the name of database 0 to "icecube".
+} -files [
+  test_set $allquicktests -exclude *malloc* *ioerr* *fault* *bigfile* *_err* \
+      *fts5corrupt* *fts5big* *fts5aj*
+] -dbconfig {
+  dbconfig_maindbname_icecube $::dbhandle
+}
+
+# End of tests
+#############################################################################
+
+# run_tests NAME OPTIONS
+#
+# where available options are:  
+#
+#       -description TITLE
+#       -initialize  SCRIPT
+#       -shutdown    SCRIPT
+#       -files       LIST-OF-FILES
+#       -prefix      NAME
+#       -dbconfig    SCRIPT
+#
+proc run_tests {name args} {
+  set options(-initialize) ""
+  set options(-shutdown) ""
+  set options(-prefix) ""
+  set options(-dbconfig) ""
+  set options(-presql) ""
+
+  array set options $args
+
+  set ::G(perm:name)         $name
+  set ::G(perm:prefix)       $options(-prefix)
+  set ::G(isquick)           1
+  set ::G(perm:dbconfig)     $options(-dbconfig)
+  set ::G(perm:presql)       $options(-presql)
+
+  foreach file [lsort $options(-files)] {
+    uplevel $options(-initialize)
+    if {[file tail $file] == $file} { set file [file join $::testdir $file] }
+    slave_test_file $file
+    uplevel $options(-shutdown)
+
+    unset -nocomplain ::G(perm:sqlite3_args)
+  }
+
+  unset ::G(perm:name)
+  unset ::G(perm:prefix)
+  unset ::G(perm:dbconfig)
+  unset ::G(perm:presql)
+}
+
+proc run_test_suite {name} {
+  if {[info exists ::testspec($name)]==0} {
+    error "No such test suite: $name"
+  }
+  uplevel run_tests $name $::testspec($name)
+}
+
+proc help {} {
+  puts "Usage: $::argv0 TESTSUITE ?TESTFILE?"
+  puts ""
+  puts "Available test-suites are:"
+
+  set iPos 0
+  foreach k $::testsuitelist {
+    if {[info exists ::testspec($k)]} {
+      switch $iPos {
+        0 {
+          puts ""
+          puts -nonewline "  [format %-30s $k]"
+        }
+
+        1 {
+          puts -nonewline [format %-30s $k]
+        }
+
+        2 {
+          puts -nonewline $k
+        }
+      }
+
+      set iPos [expr (($iPos+1) % 3)]
+    }
+  }
+  puts ""
+  exit -1
+}
+
+if {[file tail $argv0] == "permutations.test"} {
+  proc main {argv} {
+    if {[llength $argv]==0} {
+      help
+    } else {
+
+      # See if the first argument is a named test-suite.
+      #
+      set suite [file tail [lindex $argv 0]]
+      if {[info exists ::testspec($suite)]} {
+        set S $::testspec($suite)
+        set i 1
+      } else {
+        set S [list]
+        set i 0
+      }
+
+      set extra ""
+      if {$i < [llength $argv] && [string range [lindex $argv $i] 0 0]!="-" } {
+        set files [list]
+        for {} {$i < [llength $argv]} {incr i} {
+          set pattern [string map {% *} [lindex $argv $i]]
+          if {[string range $pattern 0 0]=="-"} break
+          foreach f $::alltests {
+            set tail [file tail $f]
+            if {[lsearch $files $f]<0 && [string match $pattern $tail]} {
+              lappend files $f
+            }
+          }
+        }
+        set extra [list -files $files]
+      }
+
+      eval run_tests $suite $S $extra
+    }
+  }
+  main $argv
+  finish_test
+}

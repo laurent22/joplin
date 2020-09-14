@@ -1,0 +1,180 @@
+# 2006 January 09
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the server mode of SQLite.
+#
+# This file is derived from thread1.test
+#
+# $Id: server1.test,v 1.5 2007/08/29 18:20:17 drh Exp $
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Skip this whole file if the server testing code is not enabled
+#
+if {[llength [info command client_step]]==0 || [sqlite3 -has-codec]} {
+  finish_test
+  return
+}
+
+# This test does not work on older PPC Macs due to problems in the
+# pthreads library.  So skip it.
+#
+if {$tcl_platform(machine)=="Power Macintosh" && 
+    $tcl_platform(byteOrder)=="bigEndian"} {
+  finish_test
+  return
+}
+
+# The sample server implementation does not work right when memory
+# management is enabled.
+#
+ifcapable (memorymanage||mutex_noop) {
+  finish_test
+  return
+}
+
+# Create some data to work with
+#
+do_test server1-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,'abcdefgh');
+    INSERT INTO t1 SELECT a+1, b||b FROM t1;
+    INSERT INTO t1 SELECT a+2, b||b FROM t1;
+    INSERT INTO t1 SELECT a+4, b||b FROM t1;
+    SELECT count(*), max(length(b)) FROM t1;
+  }
+} {8 64}
+
+# Interleave two threads on read access.  Then make sure a third
+# thread can write the database.  In other words:
+#
+#    read-lock A
+#    read-lock B
+#    unlock A
+#    unlock B
+#    write-lock C
+#
+do_test server1-1.2 {
+  client_create A test.db
+  client_create B test.db
+  client_create C test.db
+  client_compile A {SELECT a FROM t1}
+  client_step A
+  client_result A
+} SQLITE_ROW
+do_test server1-1.3 {
+  client_argc A
+} 1
+do_test server1-1.4 {
+  client_argv A 0
+} 1
+do_test server1-1.5 {
+  client_compile B {SELECT b FROM t1}
+  client_step B
+  client_result B
+} SQLITE_ROW
+do_test server1-1.6 {
+  client_argc B
+} 1
+do_test server1-1.7 {
+  client_argv B 0
+} abcdefgh
+do_test server1-1.8 {
+  client_finalize A
+  client_result A
+} SQLITE_OK
+do_test server1-1.9 {
+  client_finalize B
+  client_result B
+} SQLITE_OK
+do_test server1-1.10 {
+  client_compile C {CREATE TABLE t2(x,y)}
+  client_step C
+  client_result C
+} SQLITE_DONE
+do_test server1-1.11 {
+  client_finalize C
+  client_result C
+} SQLITE_OK
+do_test server1-1.12 {
+  catchsql {SELECT name FROM sqlite_master}
+  execsql {SELECT name FROM sqlite_master}
+} {t1 t2}
+
+
+# Read from table t1.  Do not finalize the statement.  This
+# will leave the lock pending.
+#
+do_test server1-2.1 {
+  client_halt *
+  client_create A test.db
+  client_compile A {SELECT a FROM t1}
+  client_step A
+  client_result A
+} SQLITE_ROW
+
+# Read from the same table from another thread.  This is allows.
+#
+do_test server1-2.2 {
+  client_create B test.db
+  client_compile B {SELECT b FROM t1}
+  client_step B
+  client_result B
+} SQLITE_ROW
+
+# Write to a different table from another thread.  This is allowed
+# because in server mode with a shared cache we have table-level locking.
+#
+do_test server1-2.3 {
+  client_create C test.db
+  client_compile C {INSERT INTO t2 VALUES(98,99)}
+  client_step C
+  client_result C
+  client_finalize C
+  client_result C
+} SQLITE_OK
+
+# But we cannot insert into table t1 because threads A and B have it locked.
+#
+do_test server1-2.4 {
+  client_compile C {INSERT INTO t1 VALUES(98,99)}
+  client_step C
+  client_result C
+  client_finalize C
+  client_result C
+} SQLITE_LOCKED
+do_test server1-2.5 {
+  client_finalize B
+  client_wait B
+  client_compile C {INSERT INTO t1 VALUES(98,99)}
+  client_step C
+  client_result C
+  client_finalize C
+  client_result C
+} SQLITE_LOCKED
+
+# Insert into t1 is successful after finishing the other two threads.
+do_test server1-2.6 {
+  client_finalize A
+  client_wait A
+  client_compile C {INSERT INTO t1 VALUES(98,99)}
+  client_step C
+  client_result C
+  client_finalize C
+  client_result C
+} SQLITE_OK
+
+client_halt *   
+sqlite3_enable_shared_cache 0
+finish_test

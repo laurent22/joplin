@@ -1,0 +1,58 @@
+# 2016 October 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test file focuses on interactions between RBU and the feature
+# enabled by SQLITE_DIRECT_OVERFLOW_READ - Direct Overflow Read.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbudor
+
+set bigA [string repeat a 5000]
+set bigB [string repeat b 5000]
+do_execsql_test 1.0 {
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB);
+  INSERT INTO t1 VALUES(1, $bigA);
+} {}
+
+do_test 1.1 {
+  forcedelete rbu.db
+  sqlite3 rbu rbu.db 
+  rbu eval {
+    CREATE TABLE data_t1(a, b, rbu_control);
+    INSERT INTO data_t1 VALUES(2, $bigB, 0);
+  }
+  rbu close
+} {}
+
+do_test 1.2 {
+  sqlite3rbu rbu test.db rbu.db
+  while {[rbu state]!="checkpoint"} {
+    rbu step
+  }
+  rbu step
+  db eval { SELECT * FROM t1 }
+} [list 1 $bigA 2 $bigB]
+
+do_test 1.3 {
+  while {[rbu step]=="SQLITE_OK"} {}
+  rbu close
+} {SQLITE_DONE}
+
+do_execsql_test 1.4 {
+  SELECT * FROM t1 
+} [list 1 $bigA 2 $bigB]
+
+finish_test

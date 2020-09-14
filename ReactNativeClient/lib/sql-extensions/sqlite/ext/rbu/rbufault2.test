@@ -1,0 +1,66 @@
+# 2014 October 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set ::testprefix rbufault2
+
+forcedelete rbu.db
+do_execsql_test 1.0 {
+  CREATE TABLE target(x UNIQUE, y, z, PRIMARY KEY(y));
+  INSERT INTO target VALUES(1, 2, 3);
+  INSERT INTO target VALUES(4, 5, 6);
+
+  ATTACH 'rbu.db' AS rbu;
+  CREATE TABLE rbu.data_target(x, y, z, rbu_control);
+  INSERT INTO data_target VALUES(7, 8, 9, 0);
+  INSERT INTO data_target VALUES(1, 11, 12, 0);
+  DETACH rbu;
+}
+db close
+
+forcecopy test.db test.db-bak 
+forcecopy rbu.db rbu.db-bak 
+
+do_faultsim_test 1 -faults oom* -prep {
+  forcecopy test.db-bak test.db
+  forcecopy rbu.db-bak rbu.db
+  forcedelete test.db-oal test.db-wal rbu.db-journal
+  sqlite3rbu rbu test.db rbu.db
+} -body {
+  while {[rbu step]=="SQLITE_OK"} { }
+  rbu close
+} -test {
+  faultsim_test_result      \
+      {1 {SQLITE_CONSTRAINT - UNIQUE constraint failed: target.x}} \
+      {1 SQLITE_CONSTRAINT} \
+      {1 SQLITE_NOMEM} \
+      {1 {SQLITE_NOMEM - unable to open a temporary database file for storing temporary tables}} \
+      {1 {SQLITE_NOMEM - out of memory}} 
+}
+
+
+sqlite3rbu_create_vfs -default rbu ""
+sqlite3 db test.db
+set ::vfsname [file_control_vfsname db]
+do_faultsim_test 2 -faults oom* -prep {
+} -body {
+  file_control_vfsname db
+} 
+db close
+sqlite3rbu_destroy_vfs rbu
+
+
+finish_test

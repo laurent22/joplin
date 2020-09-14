@@ -1,0 +1,252 @@
+# 2002 May 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The focus of
+# this file is testing the SQLite routines used for converting between the
+# various suported unicode encodings (UTF-8, UTF-16, UTF-16le and
+# UTF-16be).
+#
+# $Id: enc.test,v 1.7 2007/05/23 16:23:09 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Skip this test if the build does not support multiple encodings.
+#
+ifcapable {!utf16} {
+  finish_test
+  return
+}
+
+proc do_bincmp_test {testname got expect} {
+  binary scan $expect \c* expectvals
+  binary scan $got \c* gotvals
+  do_test $testname [list set dummy $gotvals] $expectvals
+}
+
+# $utf16 is a UTF-16 encoded string. Swap each pair of bytes around
+# to change the byte-order of the string.
+proc swap_byte_order {utf16} {
+  binary scan $utf16 \c* ints
+
+  foreach {a b} $ints {
+    lappend ints2 $b
+    lappend ints2 $a
+  }
+
+  return [binary format \c* $ints2]
+}
+
+#
+# Test that the SQLite routines for converting between UTF encodings
+# produce the same results as their TCL counterparts.
+#
+# $testname is the prefix to be used for the test names.
+# $str is a string to use for testing (encoded in UTF-8, as normal for TCL).
+#
+# The test procedure is:
+# 1. Convert the string from UTF-8 to UTF-16le and check that the TCL and
+#    SQLite routines produce the same results.
+#
+# 2. Convert the string from UTF-8 to UTF-16be and check that the TCL and
+#    SQLite routines produce the same results.
+#
+# 3. Use the SQLite routines to convert the native machine order UTF-16
+#    representation back to the original UTF-8. Check that the result
+#    matches the original representation.
+#
+# 4. Add a byte-order mark to each of the UTF-16 representations and
+#    check that the SQLite routines can convert them back to UTF-8.  For
+#    byte-order mark info, refer to section 3.10 of the unicode standard.
+#
+# 5. Take the byte-order marked UTF-16 strings from step 4 and ensure
+#    that SQLite can convert them both to native byte order UTF-16 
+#    strings, sans BOM.
+#
+# Coverage:
+#
+# sqlite_utf8to16be (step 2)
+# sqlite_utf8to16le (step 1)
+# sqlite_utf16to8 (steps 3, 4)
+# sqlite_utf16to16le (step 5)
+# sqlite_utf16to16be (step 5)
+#
+proc test_conversion {testname str} {
+ 
+  # Step 1.
+  set utf16le_sqlite3 [test_translate $str UTF8 UTF16LE]
+  set utf16le_tcl [encoding convertto unicode $str]
+  append utf16le_tcl "\x00\x00"
+  if { $::tcl_platform(byteOrder)!="littleEndian" } {
+    set utf16le_tcl [swap_byte_order $utf16le_tcl]
+  }
+  do_bincmp_test $testname.1 $utf16le_sqlite3 $utf16le_tcl
+  set utf16le $utf16le_tcl
+
+  # Step 2.
+  set utf16be_sqlite3 [test_translate $str UTF8 UTF16BE]
+  set utf16be_tcl [encoding convertto unicode $str]
+  append utf16be_tcl "\x00\x00"
+  if { $::tcl_platform(byteOrder)=="littleEndian" } {
+    set utf16be_tcl [swap_byte_order $utf16be_tcl]
+  }
+  do_bincmp_test $testname.2 $utf16be_sqlite3 $utf16be_tcl
+  set utf16be $utf16be_tcl
+ 
+  # Step 3.
+  if { $::tcl_platform(byteOrder)=="littleEndian" } {
+    set utf16 $utf16le
+  } else {
+    set utf16 $utf16be
+  }
+  set utf8_sqlite3 [test_translate $utf16 UTF16 UTF8]
+  do_bincmp_test $testname.3 $utf8_sqlite3 [binarize $str]
+
+  # Step 4 (little endian).
+  append utf16le_bom "\xFF\xFE" $utf16le
+  set utf8_sqlite3 [test_translate $utf16le_bom UTF16 UTF8 1]
+  do_bincmp_test $testname.4.le $utf8_sqlite3 [binarize $str]
+
+  # Step 4 (big endian).
+  append utf16be_bom "\xFE\xFF" $utf16be
+  set utf8_sqlite3 [test_translate $utf16be_bom UTF16 UTF8]
+  do_bincmp_test $testname.4.be $utf8_sqlite3 [binarize $str]
+
+  # Step 5 (little endian to little endian).
+  set utf16_sqlite3 [test_translate $utf16le_bom UTF16LE UTF16LE]
+  do_bincmp_test $testname.5.le.le $utf16_sqlite3 $utf16le
+
+  # Step 5 (big endian to big endian).
+  set utf16_sqlite3 [test_translate $utf16be_bom UTF16 UTF16BE]
+  do_bincmp_test $testname.5.be.be $utf16_sqlite3 $utf16be
+
+  # Step 5 (big endian to little endian).
+  set utf16_sqlite3 [test_translate $utf16be_bom UTF16 UTF16LE]
+  do_bincmp_test $testname.5.be.le $utf16_sqlite3 $utf16le
+
+  # Step 5 (little endian to big endian).
+  set utf16_sqlite3 [test_translate $utf16le_bom UTF16 UTF16BE]
+  do_bincmp_test $testname.5.le.be $utf16_sqlite3 $utf16be
+}
+
+translate_selftest
+
+test_conversion enc-1 "hello world"
+test_conversion enc-2 "sqlite"
+test_conversion enc-3 ""
+test_conversion enc-X "\u0100"
+test_conversion enc-4 "\u1234"
+test_conversion enc-5 "\u4321abc"
+test_conversion enc-6 "\u4321\u1234"
+test_conversion enc-7 [string repeat "abcde\u00EF\u00EE\uFFFCabc" 100]
+test_conversion enc-8 [string repeat "\u007E\u007F\u0080\u0081" 100]
+test_conversion enc-9 [string repeat "\u07FE\u07FF\u0800\u0801\uFFF0" 100]
+test_conversion enc-10 [string repeat "\uE000" 100]
+
+proc test_collate {enc zLeft zRight} {
+  return [string compare $zLeft $zRight]
+}
+add_test_collate $::DB 0 0 1
+do_test enc-11.1 {
+  execsql {
+    CREATE TABLE ab(a COLLATE test_collate, b);
+    INSERT INTO ab VALUES(CAST (X'C388' AS TEXT), X'888800');
+    INSERT INTO ab VALUES(CAST (X'C0808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808388' AS TEXT), X'888800');
+    CREATE INDEX ab_i ON ab(a, b);
+  }
+} {}
+do_test enc-11.2 {
+  set cp200 "\u00C8"
+  execsql {
+    SELECT count(*) FROM ab WHERE a = $::cp200;
+  }
+} {2}
+
+#-------------------------------------------------------------------------
+reset_db
+forcedelete test.db2
+forcedelete test.db3
+
+do_execsql_test enc-12.0 {
+  PRAGMA encoding = 'utf-8';
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  ATTACH 'test.db3' AS aux;
+  CREATE TABLE aux.t3(x, y, z);
+  INSERT INTO t3 VALUES('xxx', 'yyy', 'zzz');
+  PRAGMA encoding;
+} {UTF-8}
+
+do_test enc-12.1 {
+  sqlite3 db2 test.db2
+  db2 eval {
+    PRAGMA encoding = 'UTF-16le';
+    CREATE TABLE t2(d, e, f);
+    INSERT INTO t2 VALUES('d', 'e', 'f');
+    PRAGMA encoding;
+  }
+} {UTF-16le}
+
+do_test enc-12.2 {
+  db2 backup test.db
+  db2 close
+} {}
+
+do_catchsql_test enc-12.3 {
+  SELECT * FROM t2;
+} {1 {attached databases must use the same text encoding as main database}}
+
+db close
+sqlite3 db test.db3
+do_execsql_test enc-12.4 {
+  SELECT * FROM t3;
+  PRAGMA encoding = 'UTF-16le';
+  SELECT * FROM t3;
+} {xxx yyy zzz xxx yyy zzz}
+
+db close
+sqlite3 db test.db3
+breakpoint
+do_execsql_test enc-12.5 {
+  PRAGMA encoding = 'UTF-16le';
+  PRAGMA encoding;
+} {UTF-8}
+
+reset_db
+do_execsql_test enc-12.6 {
+  PRAGMA encoding = 'UTF-8';
+  CREATE TEMP TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES('xxx', 'yyy', 'zzz');
+}
+do_test enc-12.7 {
+  sqlite3 db2 test.db2
+  db2 backup test.db
+  db2 close
+  db eval {
+    SELECT * FROM t1;
+  }
+} {xxx yyy zzz}
+do_catchsql_test enc-12.8 {
+  SELECT * FROM t2;
+  SELECT * FROM t1;
+} {1 {attached databases must use the same text encoding as main database}}
+
+db close
+sqlite3 db test.db
+do_execsql_test enc-12.9 {
+  CREATE TEMP TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES('xxx', 'yyy', 'zzz');
+}
+do_execsql_test enc-12.10 {
+  SELECT * FROM t2;
+  SELECT * FROM t1;
+} {d e f xxx yyy zzz}
+
+finish_test

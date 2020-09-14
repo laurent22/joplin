@@ -1,0 +1,82 @@
+# 2014 May 7
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS3 module.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts3expr4
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3||!icu {
+  finish_test
+  return
+}
+
+set sqlite_fts3_enable_parentheses 1
+
+proc test_fts3expr {tokenizer expr} {
+  db one {SELECT fts3_exprtest($tokenizer, $expr, 'a', 'b', 'c')}
+}
+
+proc do_icu_expr_test {tn expr res} {
+  set res2 [list {*}$res]
+  uplevel [list do_test $tn [list test_fts3expr "icu en_US" $expr] $res2]
+}
+
+proc do_simple_expr_test {tn expr res} {
+  uplevel [list do_test $tn [list test_fts3expr simple $expr] [list {*}$res]]
+}
+
+#-------------------------------------------------------------------------
+#
+do_icu_expr_test 1.1 "abcd"    {PHRASE 3 0 abcd}
+do_icu_expr_test 1.2 " tag "   {PHRASE 3 0 tag}
+do_icu_expr_test 1.3 {"x y z"} {PHRASE 3 0 x y z}
+do_icu_expr_test 1.4 {x OR y}       {OR {PHRASE 3 0 x} {PHRASE 3 0 y}}
+do_icu_expr_test 1.5 {(x OR y)}     {OR {PHRASE 3 0 x} {PHRASE 3 0 y}}
+do_icu_expr_test 1.6 { "(x OR y)" } {PHRASE 3 0 ( x or y )}
+
+# In "col:word", if "col" is not the name of a column, the entire thing
+# is passed to the tokenizer.
+#
+do_icu_expr_test 1.7 {a:word} {PHRASE 0 0 word}
+do_icu_expr_test 1.8 {d:word} {PHRASE 3 0 d:word}
+
+set sqlite_fts3_enable_parentheses 0
+
+do_icu_expr_test 2.1 {
+  f (e NEAR/2 a)
+} {AND {AND {AND {PHRASE 3 0 f} {PHRASE 3 0 (}} {NEAR/2 {PHRASE 3 0 e} {PHRASE 3 0 a}}} {PHRASE 3 0 )}}
+
+#-------------------------------------------------------------------------
+#
+do_simple_expr_test 3.1 {*lOl* *h4h*} {
+  AND {PHRASE 3 0 lol+} {PHRASE 3 0 h4h+}
+}
+
+do_icu_expr_test 3.2 {*lOl* *h4h*} {
+  AND {AND {AND {PHRASE 3 0 *} {PHRASE 3 0 lol+}} {PHRASE 3 0 *}} {PHRASE 3 0 h4h+}
+}
+
+do_simple_expr_test 3.3 { * }    {}
+do_simple_expr_test 3.4 { *a }   { PHRASE 3 0 a }
+do_simple_expr_test 3.5 { a*b }  { AND {PHRASE 3 0 a+} {PHRASE 3 0 b} }
+do_simple_expr_test 3.6 { *a*b } { AND {PHRASE 3 0 a+} {PHRASE 3 0 b} }
+do_simple_expr_test 3.7 { *"abc" } { PHRASE 3 0 abc }
+do_simple_expr_test 3.8 { "abc"* } { PHRASE 3 0 abc }
+do_simple_expr_test 3.8 { "ab*c" } { PHRASE 3 0 ab+ c }
+
+do_icu_expr_test    3.9 { "ab*c" } { PHRASE 3 0 ab+ * c }
+do_icu_expr_test    3.10 { ab*c } { AND {PHRASE 3 0 ab+} {PHRASE 3 0 c}}
+
+finish_test

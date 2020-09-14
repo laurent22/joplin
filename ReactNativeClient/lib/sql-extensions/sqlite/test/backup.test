@@ -1,0 +1,972 @@
+# 2009 January 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the sqlite3_backup_XXX API.
+#
+# $Id: backup.test,v 1.11 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_not_use_codec
+
+#---------------------------------------------------------------------
+# Test organization:
+#
+# backup-1.*: Warm-body tests.
+#
+# backup-2.*: Test backup under various conditions. To and from in-memory
+#             databases. To and from empty/populated databases. etc.
+#
+# backup-3.*: Verify that the locking-page (pending byte page) is handled.
+#
+# backup-4.*: Test various error conditions.
+#
+# backup-5.*: Test the source database being modified during a backup.
+#
+# backup-6.*: Test the backup_remaining() and backup_pagecount() APIs.
+#
+# backup-7.*: Test SQLITE_BUSY and SQLITE_LOCKED errors.
+#
+# backup-8.*: Test multiple simultaneous backup operations.
+#
+# backup-9.*: Test that passing a negative argument to backup_step() is
+#             interpreted as "copy the whole file".
+# 
+# backup-10.*: Test writing the source database mid backup.
+#
+
+proc data_checksum {db file} { $db one "SELECT md5sum(a, b) FROM ${file}.t1" }
+proc test_contents {name db1 file1 db2 file2} {
+  $db2 eval {select * from sqlite_master}
+  $db1 eval {select * from sqlite_master}
+  set checksum [data_checksum $db2 $file2]
+  uplevel [list do_test $name [list data_checksum $db1 $file1] $checksum]
+}
+
+do_test backup-1.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+    INSERT INTO t1 VALUES(1, randstr(1000,1000));
+    INSERT INTO t1 VALUES(2, randstr(1000,1000));
+    INSERT INTO t1 VALUES(3, randstr(1000,1000));
+    INSERT INTO t1 VALUES(4, randstr(1000,1000));
+    INSERT INTO t1 VALUES(5, randstr(1000,1000));
+    COMMIT;
+  }
+} {}
+
+# Sanity check to verify that the [test_contents] proc works.
+#
+test_contents backup-1.2 db main db main
+
+# Check that it is possible to create and finish backup operations.
+#
+do_test backup-1.3.1 {
+  delete_file test2.db
+  sqlite3 db2 test2.db
+  sqlite3_backup B db2 main db main
+} {B}
+do_test backup-1.3.2 {
+  B finish
+} {SQLITE_OK}
+do_test backup-1.3.3 {
+  info commands B
+} {}
+
+# Simplest backup operation. Backup test.db to test2.db. test2.db is 
+# initially empty. test.db uses the default page size.
+# 
+do_test backup-1.4.1 {
+  sqlite3_backup B db2 main db main
+} {B}
+do_test backup-1.4.2 {
+  B step 200
+} {SQLITE_DONE}
+do_test backup-1.4.3 {
+  B finish
+} {SQLITE_OK}
+do_test backup-1.4.4 {
+  info commands B
+} {}
+test_contents backup-1.4.5 db2 main db main
+db close
+db2 close
+#
+# End of backup-1.* tests.
+#---------------------------------------------------------------------
+
+
+#---------------------------------------------------------------------
+# The following tests, backup-2.*, are based on the following procedure:
+#
+#   1) Populate the source database.
+#   2) Populate the destination database.
+#   3) Run the backup to completion. (backup-2.*.1)
+#   4) Integrity check the destination db. (backup-2.*.2)
+#   5) Check that the contents of the destination db is the same as that
+#      of the source db. (backup-2.*.3)
+# 
+# The test is run with all possible combinations of the following
+# input parameters, except that if the destination is an in-memory
+# database, the only page size tested is 1024 bytes (the same as the
+# source page-size).
+#
+#   * Source database is an in-memory database, OR
+#   * Source database is a file-backed database.
+#
+#   * Target database is an in-memory database, OR
+#   * Target database is a file-backed database.
+#
+#   * Destination database is a main file, OR
+#   * Destination database is an attached file, OR
+#   * Destination database is a temp database.
+#
+#   * Target database is empty (zero bytes), OR
+#   * Target database is larger than the source, OR
+#   * Target database is smaller than the source.
+#
+#   * Target database page-size is the same as the source, OR
+#   * Target database page-size is larger than the source, OR
+#   * Target database page-size is smaller than the source.
+#
+#   * Each call to step copies a single page, OR
+#   * A single call to step copies the entire source database.
+#
+set iTest 1
+foreach zSrcFile {test.db :memory:} {
+foreach zDestFile {test2.db :memory:} {
+foreach zOpenScript [list {
+  sqlite3 db $zSrcFile
+  sqlite3 db2 $zSrcFile
+  db2 eval "ATTACH '$zDestFile' AS bak"
+  set db_dest db2
+  set file_dest bak
+} {
+  sqlite3 db $zSrcFile
+  sqlite3 db2 $zDestFile
+  set db_dest db2
+  set file_dest main
+} {
+  sqlite3 db $zSrcFile
+  sqlite3 db2 $zDestFile
+  set db_dest db2
+  set file_dest temp
+}] {
+foreach rows_dest {0 3 10} {
+foreach pgsz_dest {512 1024 2048 4096} {
+foreach nPagePerStep {1 200} {
+
+  # Open the databases.
+  catch { delete_file test.db }
+  catch { delete_file test2.db }
+  eval $zOpenScript
+
+  # Set to true if copying to an in-memory destination. Copying to an 
+  # in-memory destination is only possible if the initial destination
+  # page size is the same as the source page size (in this case 1024 bytes).
+  #
+  set isMemDest [expr { $zDestFile eq ":memory:" || $file_dest eq "temp" }]
+
+  if 0 {
+    puts -nonewline "Test $iTest: src=$zSrcFile dest=$zDestFile"
+    puts -nonewline " (as $db_dest.$file_dest)"
+    puts -nonewline " rows_dest=$rows_dest pgsz_dest=$pgsz_dest"
+    puts ""
+  }
+
+  if { $isMemDest==0 || $pgsz_dest==1024 || $rows_dest==0 } {
+
+    # Set up the content of the source database.
+    execsql {
+      PRAGMA page_size = 1024;
+      BEGIN;
+      CREATE TABLE t1(a, b);
+      CREATE INDEX i1 ON t1(a, b);
+      INSERT INTO t1 VALUES(1, randstr(1000,1000));
+      INSERT INTO t1 VALUES(2, randstr(1000,1000));
+      INSERT INTO t1 VALUES(3, randstr(1000,1000));
+      INSERT INTO t1 VALUES(4, randstr(1000,1000));
+      INSERT INTO t1 VALUES(5, randstr(1000,1000));
+      COMMIT;
+    }
+    
+    
+
+    # Set up the content of the target database.
+    execsql "PRAGMA ${file_dest}.page_size = ${pgsz_dest}" $db_dest
+    if {$rows_dest != 0} {
+      execsql "
+        BEGIN; 
+        CREATE TABLE ${file_dest}.t1(a, b);
+        CREATE INDEX ${file_dest}.i1 ON t1(a, b);
+      " $db_dest
+      for {set ii 0} {$ii < $rows_dest} {incr ii} {
+        execsql "
+          INSERT INTO ${file_dest}.t1 VALUES(1, randstr(1000,1000))
+        " $db_dest
+      }
+      execsql COMMIT $db_dest
+    }
+  
+    # Backup the source database.
+    do_test backup-2.$iTest.1 {
+      sqlite3_backup B $db_dest $file_dest db main
+      while {[B step $nPagePerStep]=="SQLITE_OK"} {}
+      B finish
+    } {SQLITE_OK}
+    
+    # Run integrity check on the backup.
+    do_test backup-2.$iTest.2 {
+      execsql "PRAGMA ${file_dest}.integrity_check" $db_dest
+    } {ok}
+  
+    test_contents backup-2.$iTest.3 db main $db_dest $file_dest
+  
+  }
+
+  db close
+  catch {db2 close}
+  incr iTest
+
+} } } } } }
+#
+# End of backup-2.* tests.
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# These tests, backup-3.*, ensure that nothing goes wrong if either 
+# the source or destination database are large enough to include the
+# the locking-page (the page that contains the range of bytes that
+# the locks are applied to). These tests assume that the pending
+# byte is at offset 0x00010000 (64KB offset), as set by tester.tcl, 
+# not at the 1GB offset as it usually is.
+#
+# The test procedure is as follows (same procedure as used for 
+# the backup-2.* tests):
+#
+#   1) Populate the source database.
+#   2) Populate the destination database.
+#   3) Run the backup to completion. (backup-3.*.1)
+#   4) Integrity check the destination db. (backup-3.*.2)
+#   5) Check that the contents of the destination db is the same as that
+#      of the source db. (backup-3.*.3)
+#
+# The test procedure is run with the following parameters varied: 
+#
+#   * Source database includes pending-byte page.
+#   * Source database does not include pending-byte page.
+#
+#   * Target database includes pending-byte page.
+#   * Target database does not include pending-byte page.
+#
+#   * Target database page-size is the same as the source, OR
+#   * Target database page-size is larger than the source, OR
+#   * Target database page-size is smaller than the source.
+#
+set iTest 1
+foreach nSrcPg {10 64 65 66 100} {
+foreach nDestRow {10 100} {
+foreach nDestPgsz {512 1024 2048 4096} {
+
+  catch { delete_file test.db }
+  catch { delete_file test2.db }
+  sqlite3 db test.db
+  sqlite3 db2 test2.db
+
+  # Set up the content of the two databases.
+  #
+  execsql { PRAGMA page_size = 1024 }
+  execsql "PRAGMA page_size = $nDestPgsz" db2
+  foreach db {db db2} {
+    execsql {
+      BEGIN; 
+      CREATE TABLE t1(a, b);
+      CREATE INDEX i1 ON t1(a, b);
+      COMMIT;
+    } $db
+  }
+  while {[file size test.db]/1024 < $nSrcPg} {
+    execsql { INSERT INTO t1 VALUES($ii, randstr(200,200)) }
+  }
+
+  for {set ii 0} {$ii < $nDestRow} {incr ii} {
+    execsql { INSERT INTO t1 VALUES($ii, randstr(1000,1000)) } db2
+  }
+
+  # Backup the source database.
+  do_test backup-3.$iTest.1 {
+    sqlite3_backup B db main db2 main
+    while {[B step 10]=="SQLITE_OK"} {}
+    B finish
+  } {SQLITE_OK}
+    
+  # Run integrity check on the backup.
+  do_test backup-3.$iTest.2 {
+    execsql "PRAGMA integrity_check" db2
+  } {ok}
+  
+  test_contents backup-3.$iTest.3 db main db2 main
+
+  db close
+  db2 close
+  incr iTest
+}
+}
+}
+
+#--------------------------------------------------------------------
+do_test backup-3.$iTest.1 {
+  catch { forcedelete test.db }
+  catch { forcedelete test2.db }
+  sqlite3 db test.db
+  set iTab 1
+
+  db eval { PRAGMA page_size = 512 }
+  while {[file size test.db] <= $::sqlite_pending_byte} {
+    db eval "CREATE TABLE t${iTab}(a, b, c)"
+    incr iTab
+  }
+
+  sqlite3 db2 test2.db
+  db2 eval { PRAGMA page_size = 4096 }
+  while {[file size test2.db] < $::sqlite_pending_byte} {
+    db2 eval "CREATE TABLE t${iTab}(a, b, c)"
+    incr iTab
+  }
+
+  sqlite3_backup B db2 main db main
+  B step -1
+} {SQLITE_DONE}
+
+do_test backup-3.$iTest.2 {
+  B finish
+} {SQLITE_OK}
+
+#
+# End of backup-3.* tests.
+#---------------------------------------------------------------------
+
+
+#---------------------------------------------------------------------
+# The following tests, backup-4.*, test various error conditions:
+# 
+# backup-4.1.*: Test invalid database names.
+#
+# backup-4.2.*: Test that the source database cannot be detached while 
+#               a backup is in progress.
+#
+# backup-4.3.*: Test that the source database handle cannot be closed
+#               while a backup is in progress.
+#
+# backup-4.4.*: Test an attempt to specify the same handle for the
+#               source and destination databases.
+#
+# backup-4.5.*: Test that an in-memory destination with a different
+#               page-size to the source database is an error.
+#
+sqlite3 db test.db
+sqlite3 db2 test2.db
+
+do_test backup-4.1.1 {
+  catch { sqlite3_backup B db aux db2 main }
+} {1}
+do_test backup-4.1.2 {
+  sqlite3_errmsg db
+} {unknown database aux}
+do_test backup-4.1.3 {
+  catch { sqlite3_backup B db main db2 aux }
+} {1}
+do_test backup-4.1.4 {
+  sqlite3_errmsg db
+} {unknown database aux}
+
+do_test backup-4.2.1 {
+  catch { forcedelete test3.db }
+  catch { forcedelete test4.db }
+  execsql { 
+    ATTACH 'test3.db' AS aux1;
+    CREATE TABLE aux1.t1(a, b);
+  }
+  execsql { 
+    ATTACH 'test4.db' AS aux2;
+    CREATE TABLE aux2.t2(a, b);
+  } db2
+  sqlite3_backup B db aux1 db2 aux2
+} {B}
+do_test backup-4.2.2 {
+  catchsql { DETACH aux2 } db2
+} {1 {database aux2 is locked}}
+do_test backup-4.2.3 {
+  B step 50
+} {SQLITE_DONE}
+do_test backup-4.2.4 {
+  B finish
+} {SQLITE_OK}
+
+do_test backup-4.3.1 {
+  sqlite3_backup B db aux1 db2 aux2
+} {B}
+do_test backup-4.3.2 {
+  db2 cache flush
+  sqlite3_close db2
+} {SQLITE_BUSY}
+do_test backup-4.3.3 {
+  sqlite3_errmsg db2
+} {unable to close due to unfinalized statements or unfinished backups}
+do_test backup-4.3.4 {
+  B step 50
+} {SQLITE_DONE}
+do_test backup-4.3.5 {
+  B finish
+} {SQLITE_OK}
+
+do_test backup-4.4.1 {
+  set rc [catch {sqlite3_backup B db main db aux1}]
+  list $rc [sqlite3_errcode db] [sqlite3_errmsg db]
+} {1 SQLITE_ERROR {source and destination must be distinct}}
+db close
+db2 close
+
+do_test backup-4.5.1 {
+  catch { forcedelete test.db }
+  sqlite3 db test.db
+  sqlite3 db2 :memory:
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+  }
+  execsql {
+    PRAGMA page_size = 4096;
+    CREATE TABLE t2(a, b);
+    INSERT INTO t2 VALUES(3, 4);
+  } db2
+  sqlite3_backup B db2 main db main
+} {B}
+do_test backup-4.5.2 {
+  B step 5000
+} {SQLITE_READONLY}
+do_test backup-4.5.3 {
+  B finish
+} {SQLITE_READONLY}
+
+db close
+db2 close
+#
+# End of backup-4.* tests.
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# The following tests, backup-5.*, test that the backup works properly
+# when the source database is modified during the backup. Test cases
+# are organized as follows:
+#
+# backup-5.x.1.*: Nothing special. Modify the database mid-backup.
+#
+# backup-5.x.2.*: Modify the database mid-backup so that one or more
+#                 pages are written out due to cache stress. Then 
+#                 rollback the transaction.
+#
+# backup-5.x.3.*: Database is vacuumed.
+#
+# backup-5.x.4.*: Database is vacuumed and the page-size modified.
+#
+# backup-5.x.5.*: Database is shrunk via incr-vacuum.
+#
+# Each test is run three times, in the following configurations:
+#
+#   1) Backing up file-to-file. The writer writes via an external pager.
+#   2) Backing up file-to-file. The writer writes via the same pager as
+#      is used by the backup operation.
+#   3) Backing up memory-to-file. 
+#
+set iTest 0
+forcedelete bak.db-wal
+foreach {writer file} {db test.db db3 test.db db :memory:} {
+  incr iTest
+  catch { delete_file bak.db }
+  sqlite3 db2 bak.db
+  catch { delete_file $file }
+  sqlite3 db $file
+  sqlite3 db3 $file
+
+  do_test backup-5.$iTest.1.1 {
+    execsql {
+      BEGIN;
+      CREATE TABLE t1(a, b);
+      CREATE INDEX i1 ON t1(a, b);
+      INSERT INTO t1 VALUES(1, randstr(1000,1000));
+      INSERT INTO t1 VALUES(2, randstr(1000,1000));
+      INSERT INTO t1 VALUES(3, randstr(1000,1000));
+      INSERT INTO t1 VALUES(4, randstr(1000,1000));
+      INSERT INTO t1 VALUES(5, randstr(1000,1000));
+      COMMIT;
+    }
+    expr {[execsql {PRAGMA page_count}] > 10}
+  } {1}
+  do_test backup-5.$iTest.1.2 {
+    sqlite3_backup B db2 main db main
+    B step 5
+  } {SQLITE_OK}
+  do_test backup-5.$iTest.1.3 {
+    execsql { UPDATE t1 SET a = a + 1 } $writer
+    B step 50
+  } {SQLITE_DONE}
+  do_test backup-5.$iTest.1.4 {
+    B finish
+  } {SQLITE_OK} 
+  integrity_check backup-5.$iTest.1.5 db2
+  test_contents backup-5.$iTest.1.6 db main db2 main
+
+  do_test backup-5.$iTest.2.1 {
+    execsql {
+      PRAGMA cache_size = 10;
+      BEGIN;
+      INSERT INTO t1 SELECT '', randstr(1000,1000) FROM t1;
+      INSERT INTO t1 SELECT '', randstr(1000,1000) FROM t1;
+      INSERT INTO t1 SELECT '', randstr(1000,1000) FROM t1;
+      INSERT INTO t1 SELECT '', randstr(1000,1000) FROM t1;
+      COMMIT;
+    }
+  } {}
+  do_test backup-5.$iTest.2.2 {
+    sqlite3_backup B db2 main db main
+    B step 50
+  } {SQLITE_OK}
+  do_test backup-5.$iTest.2.3 {
+    execsql { 
+      BEGIN;
+      UPDATE t1 SET a = a + 1;
+      ROLLBACK;
+    } $writer
+    B step 5000
+  } {SQLITE_DONE}
+  do_test backup-5.$iTest.2.4 {
+    B finish
+  } {SQLITE_OK} 
+  integrity_check backup-5.$iTest.2.5 db2
+  test_contents backup-5.$iTest.2.6 db main db2 main
+
+  do_test backup-5.$iTest.3.1 {
+    execsql { UPDATE t1 SET b = randstr(1000,1000) }
+  } {}
+  do_test backup-5.$iTest.3.2 {
+    sqlite3_backup B db2 main db main
+    B step 50
+  } {SQLITE_OK}
+  do_test backup-5.$iTest.3.3 {
+    execsql { VACUUM } $writer
+    B step 5000
+  } {SQLITE_DONE}
+  do_test backup-5.$iTest.3.4 {
+    B finish
+  } {SQLITE_OK} 
+  integrity_check backup-5.$iTest.3.5 db2
+  test_contents backup-5.$iTest.3.6 db main db2 main
+
+  do_test backup-5.$iTest.4.1 {
+    execsql { UPDATE t1 SET b = randstr(1000,1000) }
+  } {}
+  do_test backup-5.$iTest.4.2 {
+    sqlite3_backup B db2 main db main
+    B step 50
+  } {SQLITE_OK}
+  do_test backup-5.$iTest.4.3 {
+    execsql { 
+      PRAGMA page_size = 2048;
+      VACUUM;
+    } $writer
+    B step 5000
+  } {SQLITE_DONE}
+  do_test backup-5.$iTest.4.4 {
+    B finish
+  } {SQLITE_OK} 
+  integrity_check backup-5.$iTest.4.5 db2
+  test_contents backup-5.$iTest.4.6 db main db2 main
+
+  catch {db close}
+  catch {db2 close}
+  catch {db3 close}
+  catch { delete_file bak.db }
+  sqlite3 db2 bak.db
+  catch { delete_file $file }
+  sqlite3 db $file
+  sqlite3 db3 $file
+  do_test backup-5.$iTest.5.1 {
+    execsql {
+      PRAGMA auto_vacuum = incremental;
+      BEGIN;
+      CREATE TABLE t1(a, b);
+      CREATE INDEX i1 ON t1(a, b);
+      INSERT INTO t1 VALUES(1, randstr(1000,1000));
+      INSERT INTO t1 VALUES(2, randstr(1000,1000));
+      INSERT INTO t1 VALUES(3, randstr(1000,1000));
+      INSERT INTO t1 VALUES(4, randstr(1000,1000));
+      INSERT INTO t1 VALUES(5, randstr(1000,1000));
+      COMMIT;
+    }
+  } {}
+  do_test backup-5.$iTest.5.2 {
+    sqlite3_backup B db2 main db main
+    B step 8
+  } {SQLITE_OK}
+  do_test backup-5.$iTest.5.3 {
+    execsql { 
+      DELETE FROM t1;
+      PRAGMA incremental_vacuum;
+    } $writer
+    B step 50
+  } {SQLITE_DONE}
+  do_test backup-5.$iTest.5.4 {
+    B finish
+  } {SQLITE_OK} 
+  integrity_check backup-5.$iTest.5.5 db2
+  test_contents backup-5.$iTest.5.6 db main db2 main
+  catch {db close}
+  catch {db2 close}
+  catch {db3 close}
+}
+#
+# End of backup-5.* tests.
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Test the sqlite3_backup_remaining() and backup_pagecount() APIs.
+#
+do_test backup-6.1 {
+  catch { forcedelete test.db }
+  catch { forcedelete test2.db }
+  sqlite3 db test.db
+  sqlite3 db2 test2.db
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+    INSERT INTO t1 VALUES(1, randstr(1000,1000));
+    INSERT INTO t1 VALUES(2, randstr(1000,1000));
+    INSERT INTO t1 VALUES(3, randstr(1000,1000));
+    INSERT INTO t1 VALUES(4, randstr(1000,1000));
+    INSERT INTO t1 VALUES(5, randstr(1000,1000));
+    COMMIT;
+  }
+} {}
+do_test backup-6.2 {
+  set nTotal [expr {[file size test.db]/1024}]
+  sqlite3_backup B db2 main db main
+  B step 1
+} {SQLITE_OK}
+do_test backup-6.3 {
+  B pagecount
+} $nTotal
+do_test backup-6.4 {
+  B remaining
+} [expr $nTotal-1]
+do_test backup-6.5 {
+  B step 5
+  list [B remaining] [B pagecount]
+} [list [expr $nTotal-6] $nTotal]
+do_test backup-6.6 {
+  execsql { CREATE TABLE t2(a PRIMARY KEY, b) }
+  B step 1
+  list [B remaining] [B pagecount]
+} [list [expr $nTotal-5] [expr $nTotal+2]]
+
+do_test backup-6.X {
+  B finish
+} {SQLITE_OK}
+
+catch {db close}
+catch {db2 close}
+
+#---------------------------------------------------------------------
+# Test cases backup-7.* test that SQLITE_BUSY and SQLITE_LOCKED errors
+# are returned correctly:
+#
+# backup-7.1.*: Source database is externally locked (return SQLITE_BUSY).
+#
+# backup-7.2.*: Attempt to step the backup process while a 
+#               write-transaction is underway on the source pager (return
+#               SQLITE_LOCKED).
+#
+# backup-7.3.*: Destination database is externally locked (return SQLITE_BUSY).
+#
+do_test backup-7.0 {
+  catch { forcedelete test.db }
+  catch { forcedelete test2.db }
+  sqlite3 db2 test2.db
+  sqlite3 db test.db
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+    INSERT INTO t1 VALUES(1, randstr(1000,1000));
+    INSERT INTO t1 SELECT a+ 1, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+ 2, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+ 4, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+ 8, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+16, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+32, randstr(1000,1000) FROM t1;
+    INSERT INTO t1 SELECT a+64, randstr(1000,1000) FROM t1;
+  }
+} {}
+
+do_test backup-7.1.1 {
+  sqlite3_backup B db2 main db main
+  B step 5
+} {SQLITE_OK}
+do_test backup-7.1.2 {
+  sqlite3 db3 test.db
+  execsql { BEGIN EXCLUSIVE } db3
+  B step 5
+} {SQLITE_BUSY}
+do_test backup-7.1.3 {
+  execsql { ROLLBACK } db3
+  B step 5
+} {SQLITE_OK}
+do_test backup-7.2.1 {
+  execsql { 
+    BEGIN;
+    INSERT INTO t1 VALUES(1, 4);
+  }
+} {}
+do_test backup-7.2.2 {
+  B step 5000
+} {SQLITE_BUSY}
+do_test backup-7.2.3 {
+  execsql { ROLLBACK }
+  B step 5000
+} {SQLITE_DONE}
+do_test backup-7.2.4 {
+  B finish
+} {SQLITE_OK}
+test_contents backup-7.2.5 db main db2 main
+integrity_check backup-7.3.6 db2
+
+do_test backup-7.3.1 {
+  db2 close
+  db3 close
+  forcedelete test2.db
+  sqlite3 db2 test2.db
+  sqlite3 db3 test2.db
+
+  sqlite3_backup B db2 main db main
+  execsql { BEGIN ; CREATE TABLE t2(a, b); } db3
+
+  B step 5
+} {SQLITE_BUSY}
+do_test backup-7.3.2 {
+  execsql { COMMIT } db3
+  B step 5000
+} {SQLITE_DONE}
+do_test backup-7.3.3 {
+  B finish
+} {SQLITE_OK}
+test_contents backup-7.3.4 db main db2 main
+integrity_check backup-7.3.5 db2
+catch { db2 close }
+catch { db3 close }
+
+#-----------------------------------------------------------------------
+# The following tests, backup-8.*, test attaching multiple backup
+# processes to the same source database. Also, reading from the source
+# database while a read transaction is active.
+#
+# These tests reuse the database "test.db" left over from backup-7.*.
+#
+do_test backup-8.1 {
+  catch { forcedelete test2.db }
+  catch { forcedelete test3.db }
+  sqlite3 db2 test2.db
+  sqlite3 db3 test3.db
+
+  sqlite3_backup B2 db2 main db main
+  sqlite3_backup B3 db3 main db main
+  list [B2 finish] [B3 finish]
+} {SQLITE_OK SQLITE_OK}
+do_test backup-8.2 {
+  sqlite3_backup B3 db3 main db main
+  sqlite3_backup B2 db2 main db main
+  list [B2 finish] [B3 finish]
+} {SQLITE_OK SQLITE_OK}
+do_test backup-8.3 {
+  sqlite3_backup B2 db2 main db main
+  sqlite3_backup B3 db3 main db main
+  B2 step 5
+} {SQLITE_OK}
+do_test backup-8.4 {
+  execsql {
+    BEGIN;
+    SELECT * FROM sqlite_master;
+  }
+  B3 step 5
+} {SQLITE_OK}
+do_test backup-8.5 {
+  list [B3 step 5000] [B3 finish]
+} {SQLITE_DONE SQLITE_OK}
+do_test backup-8.6 {
+  list [B2 step 5000] [B2 finish]
+} {SQLITE_DONE SQLITE_OK}
+test_contents backup-8.7 db main db2 main
+test_contents backup-8.8 db main db3 main
+do_test backup-8.9 {
+  execsql { PRAGMA lock_status }
+} {main shared temp closed}
+do_test backup-8.10 {
+  execsql COMMIT
+} {}
+catch { db2 close }
+catch { db3 close }
+
+#-----------------------------------------------------------------------
+# The following tests, backup-9.*, test that:
+# 
+#   * Passing 0 as an argument to sqlite3_backup_step() means no pages
+#     are backed up (backup-9.1.*), and 
+#   * Passing a negative value as an argument to sqlite3_backup_step() means 
+#     all pages are backed up (backup-9.2.*).
+#
+# These tests reuse the database "test.db" left over from backup-7.*.
+# 
+do_test backup-9.1.1 {
+  sqlite3 db2 test2.db
+  sqlite3_backup B db2 main db main
+  B step 1
+} {SQLITE_OK}
+do_test backup-9.1.2 {
+  set nRemaining [B remaining]
+  expr {$nRemaining>100}
+} {1}
+do_test backup-9.1.3 {
+  B step 0
+} {SQLITE_OK}
+do_test backup-9.1.4 {
+  B remaining
+} $nRemaining
+
+do_test backup-9.2.1 {
+  B step -1
+} {SQLITE_DONE}
+do_test backup-9.2.2 {
+  B remaining
+} {0}
+do_test backup-9.2.3 {
+  B finish
+} {SQLITE_OK}
+catch {db2 close}
+
+ifcapable memorymanage {
+  db close
+  forcedelete test.db
+  forcedelete bak.db
+
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  sqlite3 db3 bak.db
+
+  do_test backup-10.1.1 {
+    execsql {
+      BEGIN;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, randstr(1000,1000));
+      INSERT INTO t1 VALUES(2, randstr(1000,1000));
+      INSERT INTO t1 VALUES(3, randstr(1000,1000));
+      INSERT INTO t1 VALUES(4, randstr(1000,1000));
+      INSERT INTO t1 VALUES(5, randstr(1000,1000));
+      CREATE INDEX i1 ON t1(a, b);
+      COMMIT;
+    }
+  } {}
+  do_test backup-10.1.2 {
+    sqlite3_backup B db3 main db2 main
+    B step 5
+  } {SQLITE_OK}
+  do_test backup-10.1.3 {
+    execsql {
+      UPDATE t1 SET b = randstr(500,500);
+    }
+  } {}
+  sqlite3_release_memory [expr 1024*1024]
+  do_test backup-10.1.3 {
+    B step 50
+  } {SQLITE_DONE}
+  do_test backup-10.1.4 {
+    B finish
+  } {SQLITE_OK}
+  do_test backup-10.1.5 {
+    execsql { PRAGMA integrity_check } db3
+  } {ok}
+
+  db2 close
+  db3 close
+}
+
+
+#-----------------------------------------------------------------------
+# Test that if the database is written to via the same database handle being
+# used as the source by a backup operation:
+#
+#   10.1.*: If the db is in-memory, the backup is restarted.
+#   10.2.*: If the db is a file, the backup is not restarted.
+#
+db close
+forcedelete test.db test.db-journal
+foreach {tn file rc} {
+  1 test.db  SQLITE_DONE
+  2 :memory: SQLITE_OK
+} {
+  do_test backup-10.$tn.1 {
+    sqlite3 db $file
+    execsql { 
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB);
+      BEGIN;
+        INSERT INTO t1 VALUES(NULL, randomblob(200));
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+        INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+      COMMIT;
+      SELECT count(*) FROM t1;
+    }
+  } {256}
+
+  do_test backup-10.$tn.2 {
+    set pgs [execsql {pragma page_count}]
+    expr {$pgs > 50 && $pgs < 75}
+  } {1}
+
+  do_test backup-10.$tn.3 {
+    forcedelete bak.db bak.db-journal
+    sqlite3 db2 bak.db
+    sqlite3_backup B db2 main db main
+    B step 50
+  } {SQLITE_OK}
+
+  do_test backup-10.$tn.4 {
+    execsql { UPDATE t1 SET b = randomblob(200) WHERE a IN (1, 250) }
+  } {}
+
+  do_test backup-10.$tn.5 {
+    B step 50
+  } $rc
+
+  do_test backup-10.$tn.6 {
+    B finish
+  } {SQLITE_OK}
+
+  db2 close
+}
+
+finish_test

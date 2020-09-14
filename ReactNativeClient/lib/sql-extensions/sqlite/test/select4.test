@@ -1,0 +1,1029 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing UNION, INTERSECT and EXCEPT operators
+# in SELECT statements.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Most tests in this file depend on compound-select. But there are a couple
+# right at the end that test DISTINCT, so we cannot omit the entire file.
+#
+ifcapable compound {
+
+# Build some test data
+#
+execsql {
+  CREATE TABLE t1(n int, log int);
+  BEGIN;
+}
+for {set i 1} {$i<32} {incr i} {
+  for {set j 0} {(1<<$j)<$i} {incr j} {}
+  execsql "INSERT INTO t1 VALUES($i,$j)"
+}
+execsql {
+  COMMIT;
+}
+
+do_test select4-1.0 {
+  execsql {SELECT DISTINCT log FROM t1 ORDER BY log}
+} {0 1 2 3 4 5}
+
+# Union All operator
+#
+do_test select4-1.1a {
+  lsort [execsql {SELECT DISTINCT log FROM t1}]
+} {0 1 2 3 4 5}
+do_test select4-1.1b {
+  lsort [execsql {SELECT n FROM t1 WHERE log=3}]
+} {5 6 7 8}
+do_test select4-1.1c {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }
+} {0 1 2 3 4 5 5 6 7 8}
+do_test select4-1.1d {
+  execsql {
+    CREATE TABLE t2 AS
+      SELECT DISTINCT log FROM t1
+      UNION ALL
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log;
+    SELECT * FROM t2;
+  }
+} {0 1 2 3 4 5 5 6 7 8}
+execsql {DROP TABLE t2}
+do_test select4-1.1e {
+  execsql {
+    CREATE TABLE t2 AS
+      SELECT DISTINCT log FROM t1
+      UNION ALL
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log DESC;
+    SELECT * FROM t2;
+  }
+} {8 7 6 5 5 4 3 2 1 0}
+execsql {DROP TABLE t2}
+do_test select4-1.1f {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=2
+  }
+} {0 1 2 3 4 5 3 4}
+do_test select4-1.1g {
+  execsql {
+    CREATE TABLE t2 AS 
+      SELECT DISTINCT log FROM t1
+      UNION ALL
+      SELECT n FROM t1 WHERE log=2;
+    SELECT * FROM t2;
+  }
+} {0 1 2 3 4 5 3 4}
+execsql {DROP TABLE t2}
+ifcapable subquery {
+  do_test select4-1.2 {
+    execsql {
+      SELECT log FROM t1 WHERE n IN 
+        (SELECT DISTINCT log FROM t1 UNION ALL
+         SELECT n FROM t1 WHERE log=3)
+      ORDER BY log;
+    }
+  } {0 1 2 2 3 3 3 3}
+}
+
+# EVIDENCE-OF: R-02644-22131 In a compound SELECT statement, only the
+# last or right-most simple SELECT may have an ORDER BY clause.
+#
+do_test select4-1.3 {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {ORDER BY clause should come after UNION ALL not before}}
+do_catchsql_test select4-1.4 {
+  SELECT (VALUES(0) INTERSECT SELECT(0) UNION SELECT(0) ORDER BY 1 UNION
+          SELECT 0 UNION SELECT 0 ORDER BY 1);
+} {1 {ORDER BY clause should come after UNION not before}}
+
+# Union operator
+#
+do_test select4-2.1 {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    UNION
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }
+} {0 1 2 3 4 5 6 7 8}
+ifcapable subquery {
+  do_test select4-2.2 {
+    execsql {
+      SELECT log FROM t1 WHERE n IN 
+        (SELECT DISTINCT log FROM t1 UNION
+         SELECT n FROM t1 WHERE log=3)
+      ORDER BY log;
+    }
+  } {0 1 2 2 3 3 3 3}
+}
+do_test select4-2.3 {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log
+    UNION
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {ORDER BY clause should come after UNION not before}}
+do_test select4-2.4 {
+  set v [catch {execsql {
+    SELECT 0 ORDER BY (SELECT 0) UNION SELECT 0;
+  }} msg]
+  lappend v $msg
+} {1 {ORDER BY clause should come after UNION not before}}
+do_execsql_test select4-2.5 {
+  SELECT 123 AS x ORDER BY (SELECT x ORDER BY 1);
+} {123}
+
+# Except operator
+#
+do_test select4-3.1.1 {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    EXCEPT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }
+} {0 1 2 3 4}
+do_test select4-3.1.2 {
+  execsql {
+    CREATE TABLE t2 AS 
+      SELECT DISTINCT log FROM t1
+      EXCEPT
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log;
+    SELECT * FROM t2;
+  }
+} {0 1 2 3 4}
+execsql {DROP TABLE t2}
+do_test select4-3.1.3 {
+  execsql {
+    CREATE TABLE t2 AS 
+      SELECT DISTINCT log FROM t1
+      EXCEPT
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log DESC;
+    SELECT * FROM t2;
+  }
+} {4 3 2 1 0}
+execsql {DROP TABLE t2}
+ifcapable subquery {
+  do_test select4-3.2 {
+    execsql {
+      SELECT log FROM t1 WHERE n IN 
+        (SELECT DISTINCT log FROM t1 EXCEPT
+         SELECT n FROM t1 WHERE log=3)
+      ORDER BY log;
+    }
+  } {0 1 2 2}
+}
+do_test select4-3.3 {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log
+    EXCEPT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {ORDER BY clause should come after EXCEPT not before}}
+
+# Intersect operator
+#
+do_test select4-4.1.1 {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    INTERSECT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }
+} {5}
+
+do_test select4-4.1.2 {
+  execsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT 6
+    INTERSECT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY t1.log;
+  }
+} {5 6}
+
+do_test select4-4.1.3 {
+  execsql {
+    CREATE TABLE t2 AS
+      SELECT DISTINCT log FROM t1 UNION ALL SELECT 6
+      INTERSECT
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log;
+    SELECT * FROM t2;
+  }
+} {5 6}
+execsql {DROP TABLE t2}
+do_test select4-4.1.4 {
+  execsql {
+    CREATE TABLE t2 AS
+      SELECT DISTINCT log FROM t1 UNION ALL SELECT 6
+      INTERSECT
+      SELECT n FROM t1 WHERE log=3
+      ORDER BY log DESC;
+    SELECT * FROM t2;
+  }
+} {6 5}
+execsql {DROP TABLE t2}
+ifcapable subquery {
+  do_test select4-4.2 {
+    execsql {
+      SELECT log FROM t1 WHERE n IN 
+        (SELECT DISTINCT log FROM t1 INTERSECT
+         SELECT n FROM t1 WHERE log=3)
+      ORDER BY log;
+    }
+  } {3}
+}
+do_test select4-4.3 {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log
+    INTERSECT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {ORDER BY clause should come after INTERSECT not before}}
+do_catchsql_test select4-4.4 {
+  SELECT 3 IN (
+    SELECT 0 ORDER BY 1
+    INTERSECT
+    SELECT 1
+    INTERSECT 
+    SELECT 2
+    ORDER BY 1
+  );
+} {1 {ORDER BY clause should come after INTERSECT not before}}
+
+# Various error messages while processing UNION or INTERSECT
+#
+do_test select4-5.1 {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t2
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {no such table: t2}}
+do_test select4-5.2 {
+  set v [catch {execsql {
+    SELECT DISTINCT log AS "xyzzy" FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY xyzzy;
+  }} msg]
+  lappend v $msg
+} {0 {0 1 2 3 4 5 5 6 7 8}}
+do_test select4-5.2b {
+  set v [catch {execsql {
+    SELECT DISTINCT log AS xyzzy FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY "xyzzy";
+  }} msg]
+  lappend v $msg
+} {0 {0 1 2 3 4 5 5 6 7 8}}
+do_test select4-5.2c {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY "xyzzy";
+  }} msg]
+  lappend v $msg
+} {1 {1st ORDER BY term does not match any column in the result set}}
+do_test select4-5.2d {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1
+    INTERSECT
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY "xyzzy";
+  }} msg]
+  lappend v $msg
+} {1 {1st ORDER BY term does not match any column in the result set}}
+do_test select4-5.2e {
+  set v [catch {execsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY n;
+  }} msg]
+  lappend v $msg
+} {0 {0 1 2 3 4 5 5 6 7 8}}
+do_test select4-5.2f {
+  catchsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }
+} {0 {0 1 2 3 4 5 5 6 7 8}}
+do_test select4-5.2g {
+  catchsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY 1;
+  }
+} {0 {0 1 2 3 4 5 5 6 7 8}}
+do_test select4-5.2h {
+  catchsql {
+    SELECT DISTINCT log FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY 2;
+  }
+} {1 {1st ORDER BY term out of range - should be between 1 and 1}}
+do_test select4-5.2i {
+  catchsql {
+    SELECT DISTINCT 1, log FROM t1
+    UNION ALL
+    SELECT 2, n FROM t1 WHERE log=3
+    ORDER BY 2, 1;
+  }
+} {0 {1 0 1 1 1 2 1 3 1 4 1 5 2 5 2 6 2 7 2 8}}
+do_test select4-5.2j {
+  catchsql {
+    SELECT DISTINCT 1, log FROM t1
+    UNION ALL
+    SELECT 2, n FROM t1 WHERE log=3
+    ORDER BY 1, 2 DESC;
+  }
+} {0 {1 5 1 4 1 3 1 2 1 1 1 0 2 8 2 7 2 6 2 5}}
+do_test select4-5.2k {
+  catchsql {
+    SELECT DISTINCT 1, log FROM t1
+    UNION ALL
+    SELECT 2, n FROM t1 WHERE log=3
+    ORDER BY n, 1;
+  }
+} {0 {1 0 1 1 1 2 1 3 1 4 1 5 2 5 2 6 2 7 2 8}}
+do_test select4-5.3 {
+  set v [catch {execsql {
+    SELECT DISTINCT log, n FROM t1
+    UNION ALL
+    SELECT n FROM t1 WHERE log=3
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {1 {SELECTs to the left and right of UNION ALL do not have the same number of result columns}}
+do_test select4-5.3-3807-1 {
+  catchsql {
+    SELECT 1 UNION SELECT 2, 3 UNION SELECT 4, 5 ORDER BY 1;
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+do_test select4-5.4 {
+  set v [catch {execsql {
+    SELECT log FROM t1 WHERE n=2
+    UNION ALL
+    SELECT log FROM t1 WHERE n=3
+    UNION ALL
+    SELECT log FROM t1 WHERE n=4
+    UNION ALL
+    SELECT log FROM t1 WHERE n=5
+    ORDER BY log;
+  }} msg]
+  lappend v $msg
+} {0 {1 2 2 3}}
+
+do_test select4-6.1 {
+  execsql {
+    SELECT log, count(*) as cnt FROM t1 GROUP BY log
+    UNION
+    SELECT log, n FROM t1 WHERE n=7
+    ORDER BY cnt, log;
+  }
+} {0 1 1 1 2 2 3 4 3 7 4 8 5 15}
+do_test select4-6.2 {
+  execsql {
+    SELECT log, count(*) FROM t1 GROUP BY log
+    UNION
+    SELECT log, n FROM t1 WHERE n=7
+    ORDER BY count(*), log;
+  }
+} {0 1 1 1 2 2 3 4 3 7 4 8 5 15}
+
+# NULLs are indistinct for the UNION operator.
+# Make sure the UNION operator recognizes this
+#
+do_test select4-6.3 {
+  execsql {
+    SELECT NULL UNION SELECT NULL UNION
+    SELECT 1 UNION SELECT 2 AS 'x'
+    ORDER BY x;
+  }
+} {{} 1 2}
+do_test select4-6.3.1 {
+  execsql {
+    SELECT NULL UNION ALL SELECT NULL UNION ALL
+    SELECT 1 UNION ALL SELECT 2 AS 'x'
+    ORDER BY x;
+  }
+} {{} {} 1 2}
+
+# Make sure the DISTINCT keyword treats NULLs as indistinct.
+#
+ifcapable subquery {
+  do_test select4-6.4 {
+    execsql {
+      SELECT * FROM (
+         SELECT NULL, 1 UNION ALL SELECT NULL, 1
+      );
+    }
+  } {{} 1 {} 1}
+  do_test select4-6.5 {
+    execsql {
+      SELECT DISTINCT * FROM (
+         SELECT NULL, 1 UNION ALL SELECT NULL, 1
+      );
+    }
+  } {{} 1}
+  do_test select4-6.6 {
+    execsql {
+      SELECT DISTINCT * FROM (
+         SELECT 1,2  UNION ALL SELECT 1,2
+      );
+    }
+  } {1 2}
+}
+
+# Test distinctness of NULL in other ways.
+#
+do_test select4-6.7 {
+  execsql {
+    SELECT NULL EXCEPT SELECT NULL
+  }
+} {}
+
+
+# Make sure column names are correct when a compound select appears as
+# an expression in the WHERE clause.
+#
+do_test select4-7.1 {
+  execsql {
+    CREATE TABLE t2 AS SELECT log AS 'x', count(*) AS 'y' FROM t1 GROUP BY log;
+    SELECT * FROM t2 ORDER BY x;
+  }
+} {0 1 1 1 2 2 3 4 4 8 5 15}  
+ifcapable subquery {
+  do_test select4-7.2 {
+    execsql2 {
+      SELECT * FROM t1 WHERE n IN (SELECT n FROM t1 INTERSECT SELECT x FROM t2)
+      ORDER BY n
+    }
+  } {n 1 log 0 n 2 log 1 n 3 log 2 n 4 log 2 n 5 log 3}
+  do_test select4-7.3 {
+    execsql2 {
+      SELECT * FROM t1 WHERE n IN (SELECT n FROM t1 EXCEPT SELECT x FROM t2)
+      ORDER BY n LIMIT 2
+    }
+  } {n 6 log 3 n 7 log 3}
+  do_test select4-7.4 {
+    execsql2 {
+      SELECT * FROM t1 WHERE n IN (SELECT n FROM t1 UNION SELECT x FROM t2)
+      ORDER BY n LIMIT 2
+    }
+  } {n 1 log 0 n 2 log 1}
+} ;# ifcapable subquery
+
+} ;# ifcapable compound
+
+# Make sure DISTINCT works appropriately on TEXT and NUMERIC columns.
+do_test select4-8.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t3(a text, b float, c text);
+    INSERT INTO t3 VALUES(1, 1.1, '1.1');
+    INSERT INTO t3 VALUES(2, 1.10, '1.10');
+    INSERT INTO t3 VALUES(3, 1.10, '1.1');
+    INSERT INTO t3 VALUES(4, 1.1, '1.10');
+    INSERT INTO t3 VALUES(5, 1.2, '1.2');
+    INSERT INTO t3 VALUES(6, 1.3, '1.3');
+    COMMIT;
+  }
+  execsql {
+    SELECT DISTINCT b FROM t3 ORDER BY c;
+  }
+} {1.1 1.2 1.3}
+do_test select4-8.2 {
+  execsql {
+    SELECT DISTINCT c FROM t3 ORDER BY c;
+  }
+} {1.1 1.10 1.2 1.3}
+
+# Make sure the names of columns are taken from the right-most subquery
+# right in a compound query.  Ticket #1721
+#
+ifcapable compound {
+
+do_test select4-9.1 {
+  execsql2 {
+    SELECT x, y FROM t2 UNION SELECT a, b FROM t3 ORDER BY x LIMIT 1
+  }
+} {x 0 y 1}
+do_test select4-9.2 {
+  execsql2 {
+    SELECT x, y FROM t2 UNION ALL SELECT a, b FROM t3 ORDER BY x LIMIT 1
+  }
+} {x 0 y 1}
+do_test select4-9.3 {
+  execsql2 {
+    SELECT x, y FROM t2 EXCEPT SELECT a, b FROM t3 ORDER BY x LIMIT 1
+  }
+} {x 0 y 1}
+do_test select4-9.4 {
+  execsql2 {
+    SELECT x, y FROM t2 INTERSECT SELECT 0 AS a, 1 AS b;
+  }
+} {x 0 y 1}
+do_test select4-9.5 {
+  execsql2 {
+    SELECT 0 AS x, 1 AS y
+    UNION
+    SELECT 2 AS p, 3 AS q
+    UNION
+    SELECT 4 AS a, 5 AS b
+    ORDER BY x LIMIT 1
+  }
+} {x 0 y 1}
+
+ifcapable subquery {
+do_test select4-9.6 {
+  execsql2 {
+    SELECT * FROM (
+      SELECT 0 AS x, 1 AS y
+      UNION
+      SELECT 2 AS p, 3 AS q
+      UNION
+      SELECT 4 AS a, 5 AS b
+    ) ORDER BY 1 LIMIT 1;
+  }
+} {x 0 y 1}
+do_test select4-9.7 {
+  execsql2 {
+    SELECT * FROM (
+      SELECT 0 AS x, 1 AS y
+      UNION
+      SELECT 2 AS p, 3 AS q
+      UNION
+      SELECT 4 AS a, 5 AS b
+    ) ORDER BY x LIMIT 1;
+  }
+} {x 0 y 1}
+} ;# ifcapable subquery
+
+do_test select4-9.8 {
+  execsql {
+    SELECT 0 AS x, 1 AS y
+    UNION
+    SELECT 2 AS y, -3 AS x
+    ORDER BY x LIMIT 1;
+  }
+} {0 1}
+
+do_test select4-9.9.1 {
+  execsql2 {
+    SELECT 1 AS a, 2 AS b UNION ALL SELECT 3 AS b, 4 AS a
+  }
+} {a 1 b 2 a 3 b 4}
+
+ifcapable subquery {
+do_test select4-9.9.2 {
+  execsql2 {
+    SELECT * FROM (SELECT 1 AS a, 2 AS b UNION ALL SELECT 3 AS b, 4 AS a)
+     WHERE b=3
+  }
+} {}
+do_test select4-9.10 {
+  execsql2 {
+    SELECT * FROM (SELECT 1 AS a, 2 AS b UNION ALL SELECT 3 AS b, 4 AS a)
+     WHERE b=2
+  }
+} {a 1 b 2}
+do_test select4-9.11 {
+  execsql2 {
+    SELECT * FROM (SELECT 1 AS a, 2 AS b UNION ALL SELECT 3 AS e, 4 AS b)
+     WHERE b=2
+  }
+} {a 1 b 2}
+do_test select4-9.12 {
+  execsql2 {
+    SELECT * FROM (SELECT 1 AS a, 2 AS b UNION ALL SELECT 3 AS e, 4 AS b)
+     WHERE b>0
+  }
+} {a 1 b 2 a 3 b 4}
+} ;# ifcapable subquery
+
+# Try combining DISTINCT, LIMIT, and OFFSET.  Make sure they all work
+# together.
+#
+do_test select4-10.1 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log
+  }
+} {0 1 2 3 4 5}
+do_test select4-10.2 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT 4
+  }
+} {0 1 2 3}
+do_test select4-10.3 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT 0
+  }
+} {}
+do_test select4-10.4 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT -1
+  }
+} {0 1 2 3 4 5}
+do_test select4-10.5 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT -1 OFFSET 2
+  }
+} {2 3 4 5}
+do_test select4-10.6 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT 3 OFFSET 2
+  }
+} {2 3 4}
+do_test select4-10.7 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY +log LIMIT 3 OFFSET 20
+  }
+} {}
+do_test select4-10.8 {
+  execsql {
+    SELECT DISTINCT log FROM t1 ORDER BY log LIMIT 0 OFFSET 3
+  }
+} {}
+do_test select4-10.9 {
+  execsql {
+    SELECT DISTINCT max(n), log FROM t1 ORDER BY +log; -- LIMIT 2 OFFSET 1
+  }
+} {31 5}
+
+# Make sure compound SELECTs with wildly different numbers of columns
+# do not cause assertion faults due to register allocation issues.
+#
+do_test select4-11.1 {
+  catchsql {
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    UNION
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+do_test select4-11.2 {
+  catchsql {
+    SELECT x FROM t2
+    UNION
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+do_test select4-11.3 {
+  catchsql {
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION ALL do not have the same number of result columns}}
+do_test select4-11.4 {
+  catchsql {
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION ALL do not have the same number of result columns}}
+do_test select4-11.5 {
+  catchsql {
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of EXCEPT do not have the same number of result columns}}
+do_test select4-11.6 {
+  catchsql {
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+  }
+} {1 {SELECTs to the left and right of EXCEPT do not have the same number of result columns}}
+do_test select4-11.7 {
+  catchsql {
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    INTERSECT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of INTERSECT do not have the same number of result columns}}
+do_test select4-11.8 {
+  catchsql {
+    SELECT x FROM t2
+    INTERSECT
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+  }
+} {1 {SELECTs to the left and right of INTERSECT do not have the same number of result columns}}
+
+do_test select4-11.11 {
+  catchsql {
+    SELECT x FROM t2
+    UNION
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+    INTERSECT
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+  }
+} {1 {SELECTs to the left and right of INTERSECT do not have the same number of result columns}}
+do_test select4-11.12 {
+  catchsql {
+    SELECT x FROM t2
+    UNION
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of EXCEPT do not have the same number of result columns}}
+do_test select4-11.13 {
+  catchsql {
+    SELECT x FROM t2
+    UNION
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION ALL do not have the same number of result columns}}
+do_test select4-11.14 {
+  catchsql {
+    SELECT x FROM t2
+    UNION
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    UNION
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+do_test select4-11.15 {
+  catchsql {
+    SELECT x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x FROM t2
+    UNION
+    SELECT x FROM t2
+    INTERSECT
+    SELECT x FROM t2
+    UNION ALL
+    SELECT x FROM t2
+    EXCEPT
+    SELECT x FROM t2
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+do_test select4-11.16 {
+  catchsql {
+    INSERT INTO t2(rowid) VALUES(2) UNION SELECT 3,4 UNION SELECT 5,6 ORDER BY 1;
+  }
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+
+do_test select4-12.1 {
+  sqlite3 db2 :memory:
+  catchsql {
+    SELECT 1 UNION SELECT 2,3 UNION SELECT 4,5 ORDER BY 1;
+  } db2
+} {1 {SELECTs to the left and right of UNION do not have the same number of result columns}}
+
+} ;# ifcapable compound
+
+
+# Ticket [3557ad65a076c] - Incorrect DISTINCT processing with an
+# indexed query using IN.
+#
+do_test select4-13.1 {
+  sqlite3 db test.db
+  db eval {
+    CREATE TABLE t13(a,b);
+    INSERT INTO t13 VALUES(1,1);
+    INSERT INTO t13 VALUES(2,1);
+    INSERT INTO t13 VALUES(3,1);
+    INSERT INTO t13 VALUES(2,2);
+    INSERT INTO t13 VALUES(3,2);
+    INSERT INTO t13 VALUES(4,2);
+    CREATE INDEX t13ab ON t13(a,b);
+    SELECT DISTINCT b from t13 WHERE a IN (1,2,3);
+  }
+} {1 2}
+
+# 2014-02-18: Make sure compound SELECTs work with VALUES clauses
+#
+do_execsql_test select4-14.1 {
+  CREATE TABLE t14(a,b,c);
+  INSERT INTO t14 VALUES(1,2,3),(4,5,6);
+  SELECT * FROM t14 INTERSECT VALUES(3,2,1),(2,3,1),(1,2,3),(2,1,3);
+} {1 2 3}
+do_execsql_test select4-14.2 {
+  SELECT * FROM t14 INTERSECT VALUES(1,2,3);
+} {1 2 3}
+do_execsql_test select4-14.3 {
+  SELECT * FROM t14
+   UNION VALUES(3,2,1),(2,3,1),(1,2,3),(7,8,9),(4,5,6)
+   UNION SELECT * FROM t14 ORDER BY 1, 2, 3
+} {1 2 3 2 3 1 3 2 1 4 5 6 7 8 9}
+do_execsql_test select4-14.4 {
+  SELECT * FROM t14
+   UNION VALUES(3,2,1)
+   UNION SELECT * FROM t14 ORDER BY 1, 2, 3
+} {1 2 3 3 2 1 4 5 6}
+do_execsql_test select4-14.5 {
+  SELECT * FROM t14 EXCEPT VALUES(3,2,1),(2,3,1),(1,2,3),(2,1,3);
+} {4 5 6}
+do_execsql_test select4-14.6 {
+  SELECT * FROM t14 EXCEPT VALUES(1,2,3)
+} {4 5 6}
+do_execsql_test select4-14.7 {
+  SELECT * FROM t14 EXCEPT VALUES(1,2,3) EXCEPT VALUES(4,5,6)
+} {}
+do_execsql_test select4-14.8 {
+  SELECT * FROM t14 EXCEPT VALUES('a','b','c') EXCEPT VALUES(4,5,6)
+} {1 2 3}
+do_execsql_test select4-14.9 {
+  SELECT * FROM t14 UNION ALL VALUES(3,2,1),(2,3,1),(1,2,3),(2,1,3);
+} {1 2 3 4 5 6 3 2 1 2 3 1 1 2 3 2 1 3}
+do_execsql_test select4-14.10 {
+  SELECT (VALUES(1),(2),(3),(4))
+} {1}
+do_execsql_test select4-14.11 {
+  SELECT (SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4)
+} {1}
+do_execsql_test select4-14.12 {
+  VALUES(1) UNION VALUES(2);
+} {1 2}
+do_execsql_test select4-14.13 {
+  VALUES(1),(2),(3) EXCEPT VALUES(2);
+} {1 3}
+do_execsql_test select4-14.14 {
+  VALUES(1),(2),(3) EXCEPT VALUES(1),(3);
+} {2}
+do_execsql_test select4-14.15 {
+  SELECT * FROM (SELECT 123), (SELECT 456) ON likely(0 OR 1) OR 0;
+} {123 456}
+do_execsql_test select4-14.16 {
+  VALUES(1),(2),(3),(4) UNION ALL SELECT 5 LIMIT 99;
+} {1 2 3 4 5}
+do_execsql_test select4-14.17 {
+  VALUES(1),(2),(3),(4) UNION ALL SELECT 5 LIMIT 3;
+} {1 2 3}
+
+# Ticket https://www.sqlite.org/src/info/d06a25c84454a372
+# Incorrect answer due to two co-routines using the same registers and expecting
+# those register values to be preserved across a Yield.
+#
+do_execsql_test select4-15.1 {
+  DROP TABLE IF EXISTS tx;
+  CREATE TABLE tx(id INTEGER PRIMARY KEY, a, b);
+  INSERT INTO tx(a,b) VALUES(33,456);
+  INSERT INTO tx(a,b) VALUES(33,789);
+
+  SELECT DISTINCT t0.id, t0.a, t0.b
+    FROM tx AS t0, tx AS t1
+   WHERE t0.a=t1.a AND t1.a=33 AND t0.b=456
+  UNION
+  SELECT DISTINCT t0.id, t0.a, t0.b
+    FROM tx AS t0, tx AS t1
+   WHERE t0.a=t1.a AND t1.a=33 AND t0.b=789
+   ORDER BY 1;
+} {1 33 456 2 33 789}
+
+# Enhancement (2016-03-15):  Use a co-routine for subqueries if the
+# subquery is guaranteed to be the outer-most query
+#
+do_execsql_test select4-16.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,
+  PRIMARY KEY(a,b DESC)) WITHOUT ROWID;
+
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+  INSERT INTO t1(a,b,c,d)
+    SELECT x%10, x/10, x, printf('xyz%dabc',x) FROM c;
+
+  SELECT t3.c FROM 
+    (SELECT a,max(b) AS m FROM t1 WHERE a>=5 GROUP BY a) AS t2
+    JOIN t1 AS t3
+  WHERE t2.a=t3.a AND t2.m=t3.b
+  ORDER BY t3.a;
+} {95 96 97 98 99}
+do_execsql_test select4-16.2 {
+  SELECT t3.c FROM 
+    (SELECT a,max(b) AS m FROM t1 WHERE a>=5 GROUP BY a) AS t2
+    CROSS JOIN t1 AS t3
+  WHERE t2.a=t3.a AND t2.m=t3.b
+  ORDER BY t3.a;
+} {95 96 97 98 99}
+do_execsql_test select4-16.3 {
+  SELECT t3.c FROM 
+    (SELECT a,max(b) AS m FROM t1 WHERE a>=5 GROUP BY a) AS t2
+    LEFT JOIN t1 AS t3
+  WHERE t2.a=t3.a AND t2.m=t3.b
+  ORDER BY t3.a;
+} {95 96 97 98 99}
+
+# Ticket https://www.sqlite.org/src/tktview/f7f8c97e975978d45  on 2016-04-25
+#
+# The where push-down optimization from 2015-06-02 is suppose to disable
+# on aggregate subqueries.  But if the subquery is a compound where the
+# last SELECT is non-aggregate but some other SELECT is an aggregate, the
+# test is incomplete and the optimization is not properly disabled.
+# 
+# The following test cases verify that the fix works.
+#
+do_execsql_test select4-17.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a int, b int);
+  INSERT INTO t1 VALUES(1,2),(1,18),(2,19);
+  SELECT x, y FROM (
+    SELECT 98 AS x, 99 AS y
+    UNION
+    SELECT a AS x, sum(b) AS y FROM t1 GROUP BY a
+  ) AS w WHERE y>=20
+  ORDER BY +x;
+} {1 20 98 99}
+do_execsql_test select4-17.2 {
+  SELECT x, y FROM (
+    SELECT a AS x, sum(b) AS y FROM t1 GROUP BY a
+    UNION
+    SELECT 98 AS x, 99 AS y
+  ) AS w WHERE y>=20
+  ORDER BY +x;
+} {1 20 98 99}
+do_catchsql_test select4-17.3 {
+  SELECT x, y FROM (
+    SELECT a AS x, sum(b) AS y FROM t1 GROUP BY a LIMIT 3
+    UNION
+    SELECT 98 AS x, 99 AS y
+  ) AS w WHERE y>=20
+  ORDER BY +x;
+} {1 {LIMIT clause should come after UNION not before}}
+
+# 2020-04-03 ticket 51166be0159fd2ce from Yong Heng.
+# Adverse interaction between the constant propagation and push-down
+# optimizations.
+#
+reset_db
+do_execsql_test select4-18.1 {
+  CREATE VIEW v0(v0) AS WITH v0 AS(SELECT 0 v0) SELECT(SELECT min(v0) OVER()) FROM v0 GROUP BY v0;
+  SELECT *FROM v0 v1 JOIN v0 USING(v0) WHERE datetime(v0) = (v0.v0)AND v0 = 10;
+} {}
+do_execsql_test select4-18.2 {
+  CREATE VIEW t1(aa) AS
+     WITH t2(bb) AS (SELECT 123)
+     SELECT (SELECT min(bb) OVER()) FROM t2 GROUP BY bb;
+  SELECT * FROM t1;
+} {123}
+do_execsql_test select4-18.3 {
+  SELECT * FROM t1 AS z1 JOIN t1 AS z2 USING(aa)
+   WHERE abs(z1.aa)=z2.aa AND z1.aa=123;
+} {123}
+
+
+finish_test

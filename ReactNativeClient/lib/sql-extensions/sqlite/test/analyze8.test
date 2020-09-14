@@ -1,0 +1,115 @@
+# 2011 August 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests for SQLite library.  The focus of the tests
+# in this file is testing the capabilities of sqlite_stat4.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !stat4 {
+  finish_test
+  return
+}
+
+set testprefix analyze8
+
+proc eqp {sql {db db}} {
+  uplevel execsql [list "EXPLAIN QUERY PLAN $sql"] $db
+}
+
+# Scenario:
+#
+#    Two indices.  One has mostly singleton entries, but for a few
+#    values there are hundreds of entries.  The other has 10-20
+#    entries per value.
+#
+# Verify that the query planner chooses the first index for the singleton
+# entries and the second index for the others.
+#
+do_test 1.0 {
+  db eval {
+    CREATE TABLE t1(a,b,c,d);
+    CREATE INDEX t1a ON t1(a);
+    CREATE INDEX t1b ON t1(b);
+    CREATE INDEX t1c ON t1(c);
+  }
+  for {set i 0} {$i<1000} {incr i} {
+    if {$i%2==0} {set a $i} {set a [expr {($i%8)*100}]}
+    set b [expr {$i/10}]
+    set c [expr {$i/8}]
+    set c [expr {$c*$c*$c}]
+    db eval {INSERT INTO t1 VALUES($a,$b,$c,$i)}
+  }
+  db eval {ANALYZE}
+} {}
+
+# The a==100 comparison is expensive because there are many rows
+# with a==100.  And so for those cases, choose the t1b index.
+#
+# Buf ro a==99 and a==101, there are far fewer rows so choose
+# the t1a index.
+#
+do_test 1.1 {
+  eqp {SELECT * FROM t1 WHERE a=100 AND b=55}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+do_test 1.2 {
+  eqp {SELECT * FROM t1 WHERE a=99 AND b=55}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test 1.3 {
+  eqp {SELECT * FROM t1 WHERE a=101 AND b=55}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test 1.4 {
+  eqp {SELECT * FROM t1 WHERE a=100 AND b=56}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+do_test 1.5 {
+  eqp {SELECT * FROM t1 WHERE a=99 AND b=56}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test 1.6 {
+  eqp {SELECT * FROM t1 WHERE a=101 AND b=56}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test 2.1 {
+  eqp {SELECT * FROM t1 WHERE a=100 AND b BETWEEN 50 AND 54}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b>? AND b<?)*/}
+
+# There are many more values of c between 0 and 100000 than there are
+# between 800000 and 900000.  So t1c is more selective for the latter
+# range.
+# 
+# Test 3.2 is a little unstable. It depends on the planner estimating
+# that (b BETWEEN 30 AND 34) will match more rows than (c BETWEEN
+# 800000 AND 900000). Which is a pretty close call (50 vs. 32), so
+# the planner could get it wrong with an unlucky set of samples. This
+# case happens to work, but others ("b BETWEEN 40 AND 44" for example) 
+# will fail.
+#
+do_execsql_test 3.0 {
+  SELECT count(*) FROM t1 WHERE b BETWEEN 30 AND 34;
+  SELECT count(*) FROM t1 WHERE c BETWEEN 0 AND 100000;
+  SELECT count(*) FROM t1 WHERE c BETWEEN 800000 AND 900000;
+} {50 376 32}
+do_test 3.1 {
+  eqp {SELECT * FROM t1 WHERE b BETWEEN 30 AND 34 AND c BETWEEN 0 AND 100000}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b>? AND b<?)*/}
+do_test 3.2 {
+  eqp {SELECT * FROM t1
+       WHERE b BETWEEN 30 AND 34 AND c BETWEEN 800000 AND 900000}
+} {/*SEARCH TABLE t1 USING INDEX t1c (c>? AND c<?)*/}
+do_test 3.3 {
+  eqp {SELECT * FROM t1 WHERE a=100 AND c BETWEEN 0 AND 100000}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test 3.4 {
+  eqp {SELECT * FROM t1
+       WHERE a=100 AND c BETWEEN 800000 AND 900000}
+} {/*SEARCH TABLE t1 USING INDEX t1c (c>? AND c<?)*/}
+
+finish_test

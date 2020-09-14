@@ -1,0 +1,603 @@
+# 2001-09-15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the INSERT statement.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Try to insert into a non-existant table.
+#
+do_test insert-1.1 {
+  set v [catch {execsql {INSERT INTO test1 VALUES(1,2,3)}} msg]
+  lappend v $msg
+} {1 {no such table: test1}}
+
+# Try to insert into sqlite_master
+#
+do_test insert-1.2 {
+  set v [catch {execsql {INSERT INTO sqlite_master VALUES(1,2,3,4)}} msg]
+  lappend v $msg
+} {1 {table sqlite_master may not be modified}}
+
+# Try to insert the wrong number of entries.
+#
+do_test insert-1.3 {
+  execsql {CREATE TABLE test1(one int, two int, three int)}
+  set v [catch {execsql {INSERT INTO test1 VALUES(1,2)}} msg]
+  lappend v $msg
+} {1 {table test1 has 3 columns but 2 values were supplied}}
+do_test insert-1.3b {
+  set v [catch {execsql {INSERT INTO test1 VALUES(1,2,3,4)}} msg]
+  lappend v $msg
+} {1 {table test1 has 3 columns but 4 values were supplied}}
+do_test insert-1.3c {
+  set v [catch {execsql {INSERT INTO test1(one,two) VALUES(1,2,3,4)}} msg]
+  lappend v $msg
+} {1 {4 values for 2 columns}}
+do_test insert-1.3d {
+  set v [catch {execsql {INSERT INTO test1(one,two) VALUES(1)}} msg]
+  lappend v $msg
+} {1 {1 values for 2 columns}}
+
+# Try to insert into a non-existant column of a table.
+#
+do_test insert-1.4 {
+  set v [catch {execsql {INSERT INTO test1(one,four) VALUES(1,2)}} msg]
+  lappend v $msg
+} {1 {table test1 has no column named four}}
+
+# Make sure the inserts actually happen
+#
+do_test insert-1.5 {
+  execsql {INSERT INTO test1 VALUES(1,2,3)}
+  execsql {SELECT * FROM test1}
+} {1 2 3}
+do_test insert-1.5b {
+  execsql {INSERT INTO test1 VALUES(4,5,6)}
+  execsql {SELECT * FROM test1 ORDER BY one}
+} {1 2 3 4 5 6}
+do_test insert-1.5c {
+  execsql {INSERT INTO test1 VALUES(7,8,9)}
+  execsql {SELECT * FROM test1 ORDER BY one}
+} {1 2 3 4 5 6 7 8 9}
+
+do_test insert-1.6 {
+  execsql {DELETE FROM test1}
+  execsql {INSERT INTO test1(one,two) VALUES(1,2)}
+  execsql {SELECT * FROM test1 ORDER BY one}
+} {1 2 {}}
+do_test insert-1.6b {
+  execsql {INSERT INTO test1(two,three) VALUES(5,6)}
+  execsql {SELECT * FROM test1 ORDER BY one}
+} {{} 5 6 1 2 {}}
+do_test insert-1.6c {
+  execsql {INSERT INTO test1(three,one) VALUES(7,8)}
+  execsql {SELECT * FROM test1 ORDER BY one}
+} {{} 5 6 1 2 {} 8 {} 7}
+
+# A table to use for testing default values
+#
+do_test insert-2.1 {
+  execsql {
+    CREATE TABLE test2(
+      f1 int default -111, 
+      f2 real default +4.32,
+      f3 int default +222,
+      f4 int default 7.89
+    )
+  }
+  execsql {SELECT * from test2}
+} {}
+do_test insert-2.2 {
+  execsql {INSERT INTO test2(f1,f3) VALUES(+10,-10)}
+  execsql {SELECT * FROM test2}
+} {10 4.32 -10 7.89}
+do_test insert-2.3 {
+  execsql {INSERT INTO test2(f2,f4) VALUES(1.23,-3.45)}
+  execsql {SELECT * FROM test2 WHERE f1==-111}
+} {-111 1.23 222 -3.45}
+do_test insert-2.4 {
+  execsql {INSERT INTO test2(f1,f2,f4) VALUES(77,+1.23,3.45)}
+  execsql {SELECT * FROM test2 WHERE f1==77}
+} {77 1.23 222 3.45}
+do_test insert-2.10 {
+  execsql {
+    DROP TABLE test2;
+    CREATE TABLE test2(
+      f1 int default 111, 
+      f2 real default -4.32,
+      f3 text default hi,
+      f4 text default 'abc-123',
+      f5 varchar(10)
+    )
+  }
+  execsql {SELECT * from test2}
+} {}
+do_test insert-2.11 {
+  execsql {INSERT INTO test2(f2,f4) VALUES(-2.22,'hi!')}
+  execsql {SELECT * FROM test2}
+} {111 -2.22 hi hi! {}}
+do_test insert-2.12 {
+  execsql {INSERT INTO test2(f1,f5) VALUES(1,'xyzzy')}
+  execsql {SELECT * FROM test2 ORDER BY f1}
+} {1 -4.32 hi abc-123 xyzzy 111 -2.22 hi hi! {}}
+
+# Do additional inserts with default values, but this time
+# on a table that has indices.  In particular we want to verify
+# that the correct default values are inserted into the indices.
+#
+do_test insert-3.1 {
+  execsql {
+    DELETE FROM test2;
+    CREATE INDEX index9 ON test2(f1,f2);
+    CREATE INDEX indext ON test2(f4,f5);
+    SELECT * from test2;
+  }
+} {}
+
+# Update for sqlite3 v3:
+# Change the 111 to '111' in the following two test cases, because
+# the default value is being inserted as a string. TODO: It shouldn't be.
+do_test insert-3.2 {
+  execsql {INSERT INTO test2(f2,f4) VALUES(-3.33,'hum')}
+  execsql {SELECT * FROM test2 WHERE f1='111' AND f2=-3.33}
+} {111 -3.33 hi hum {}}
+do_test insert-3.3 {
+  execsql {INSERT INTO test2(f1,f2,f5) VALUES(22,-4.44,'wham')}
+  execsql {SELECT * FROM test2 WHERE f1='111' AND f2=-3.33}
+} {111 -3.33 hi hum {}}
+do_test insert-3.4 {
+  execsql {SELECT * FROM test2 WHERE f1=22 AND f2=-4.44}
+} {22 -4.44 hi abc-123 wham}
+ifcapable {reindex} {
+  do_test insert-3.5 {
+    execsql REINDEX
+  } {}
+}
+integrity_check insert-3.5
+
+# Test of expressions in the VALUES clause
+#
+do_test insert-4.1 {
+  execsql {
+    CREATE TABLE t3(a,b,c);
+    INSERT INTO t3 VALUES(1+2+3,4,5);
+    SELECT * FROM t3;
+  }
+} {6 4 5}
+do_test insert-4.2 {
+  ifcapable subquery {
+    execsql {INSERT INTO t3 VALUES((SELECT max(a) FROM t3)+1,5,6);}
+  } else {
+    set maxa [execsql {SELECT max(a) FROM t3}]
+    execsql "INSERT INTO t3 VALUES($maxa+1,5,6);"
+  }
+  execsql {
+    SELECT * FROM t3 ORDER BY a;
+  }
+} {6 4 5 7 5 6}
+ifcapable subquery {
+  do_test insert-4.3 {
+    catchsql {
+      INSERT INTO t3 VALUES((SELECT max(a) FROM t3)+1,t3.a,6);
+      SELECT * FROM t3 ORDER BY a;
+    }
+  } {1 {no such column: t3.a}}
+}
+do_test insert-4.4 {
+  ifcapable subquery {
+    execsql {INSERT INTO t3 VALUES((SELECT b FROM t3 WHERE a=0),6,7);}
+  } else {
+    set b [execsql {SELECT b FROM t3 WHERE a = 0}]
+    if {$b==""} {set b NULL}
+    execsql "INSERT INTO t3 VALUES($b,6,7);"
+  }
+  execsql {
+    SELECT * FROM t3 ORDER BY a;
+  }
+} {{} 6 7 6 4 5 7 5 6}
+do_test insert-4.5 {
+  execsql {
+    SELECT b,c FROM t3 WHERE a IS NULL;
+  }
+} {6 7}
+do_test insert-4.6 {
+  catchsql {
+    INSERT INTO t3 VALUES(notafunc(2,3),2,3);
+  }
+} {1 {no such function: notafunc}}
+do_test insert-4.7 {
+  execsql {
+    INSERT INTO t3 VALUES(min(1,2,3),max(1,2,3),99);
+    SELECT * FROM t3 WHERE c=99;
+  }
+} {1 3 99}
+
+# Test the ability to insert from a temporary table into itself.
+# Ticket #275.
+#
+ifcapable tempdb {
+  do_test insert-5.1 {
+    execsql {
+      CREATE TEMP TABLE t4(x);
+      INSERT INTO t4 VALUES(1);
+      SELECT * FROM t4;
+    }
+  } {1}
+  do_test insert-5.2 {
+    execsql {
+      INSERT INTO t4 SELECT x+1 FROM t4;
+      SELECT * FROM t4;
+    }
+  } {1 2}
+  ifcapable {explain} {
+    do_test insert-5.3 {
+      # verify that a temporary table is used to copy t4 to t4
+      set x [execsql {
+        EXPLAIN INSERT INTO t4 SELECT x+2 FROM t4;
+      }]
+      expr {[lsearch $x OpenEphemeral]>0}
+    } {1}
+  }
+  
+  do_test insert-5.4 {
+    # Verify that table "test1" begins on page 3.  This should be the same
+    # page number used by "t4" above.
+    #
+    # Update for v3 - the first table now begins on page 2 of each file, not 3.
+    execsql {
+      SELECT rootpage FROM sqlite_master WHERE name='test1';
+    }
+  } [expr $AUTOVACUUM?3:2]
+  do_test insert-5.5 {
+    # Verify that "t4" begins on page 3.
+    #
+    # Update for v3 - the first table now begins on page 2 of each file, not 3.
+    execsql {
+      SELECT rootpage FROM sqlite_temp_master WHERE name='t4';
+    }
+  } {2}
+  do_test insert-5.6 {
+    # This should not use an intermediate temporary table.
+    execsql {
+      INSERT INTO t4 SELECT one FROM test1 WHERE three=7;
+      SELECT * FROM t4
+    }
+  } {1 2 8}
+  ifcapable {explain} {
+    do_test insert-5.7 {
+      # verify that no temporary table is used to copy test1 to t4
+      set x [execsql {
+        EXPLAIN INSERT INTO t4 SELECT one FROM test1;
+      }]
+      expr {[lsearch $x OpenTemp]>0}
+    } {0}
+  }
+}
+
+# Ticket #334:  REPLACE statement corrupting indices.
+#
+ifcapable conflict {
+  # The REPLACE command is not available if SQLITE_OMIT_CONFLICT is 
+  # defined at compilation time.
+  do_test insert-6.1 {
+    execsql {
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b UNIQUE);
+      INSERT INTO t1 VALUES(1,2);
+      INSERT INTO t1 VALUES(2,3);
+      SELECT b FROM t1 WHERE b=2;
+    }
+  } {2}
+  do_test insert-6.2 {
+    execsql {
+      REPLACE INTO t1 VALUES(1,4);
+      SELECT b FROM t1 WHERE b=2;
+    }
+  } {}
+  do_test insert-6.3 {
+    execsql {
+      UPDATE OR REPLACE t1 SET a=2 WHERE b=4;
+      SELECT * FROM t1 WHERE b=4;
+    }
+  } {2 4}
+  do_test insert-6.4 {
+    execsql {
+      SELECT * FROM t1 WHERE b=3;
+    }
+  } {}
+  ifcapable {reindex} {
+    do_test insert-6.5 {
+      execsql REINDEX
+    } {}
+  }
+  do_test insert-6.6 {
+    execsql {
+      DROP TABLE t1;
+    }
+  } {}
+}
+
+# Test that the special optimization for queries of the form 
+# "SELECT max(x) FROM tbl" where there is an index on tbl(x) works with 
+# INSERT statments.
+do_test insert-7.1 {
+  execsql {
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    CREATE INDEX i1 ON t1(a);
+  }
+} {}
+do_test insert-7.2 {
+  execsql {
+    INSERT INTO t1 SELECT max(a) FROM t1;
+  }
+} {}
+do_test insert-7.3 {
+  execsql {
+    SELECT a FROM t1;
+  }
+} {1 2 2}
+
+# Ticket #1140:  Check for an infinite loop in the algorithm that tests
+# to see if the right-hand side of an INSERT...SELECT references the left-hand
+# side.
+#
+ifcapable subquery&&compound {
+  do_test insert-8.1 {
+    execsql {
+      INSERT INTO t3 SELECT * FROM (SELECT * FROM t3 UNION ALL SELECT 1,2,3)
+    }
+  } {}
+}
+
+# Make sure the rowid cache in the VDBE is reset correctly when
+# an explicit rowid is given.
+#
+do_test insert-9.1 {
+  execsql {
+    CREATE TABLE t5(x);
+    INSERT INTO t5 VALUES(1);
+    INSERT INTO t5 VALUES(2);
+    INSERT INTO t5 VALUES(3);
+    INSERT INTO t5(rowid, x) SELECT nullif(x*2+10,14), x+100 FROM t5;
+    SELECT rowid, x FROM t5;
+  }
+} {1 1 2 2 3 3 12 101 13 102 16 103}
+do_test insert-9.2 {
+  execsql {
+    CREATE TABLE t6(x INTEGER PRIMARY KEY, y);
+    INSERT INTO t6 VALUES(1,1);
+    INSERT INTO t6 VALUES(2,2);
+    INSERT INTO t6 VALUES(3,3);
+    INSERT INTO t6 SELECT nullif(y*2+10,14), y+100 FROM t6;
+    SELECT x, y FROM t6;
+  }
+} {1 1 2 2 3 3 12 101 13 102 16 103}
+
+# Multiple VALUES clauses
+#
+ifcapable compound {
+  do_test insert-10.1 {
+    execsql {
+      CREATE TABLE t10(a,b,c);
+      INSERT INTO t10 VALUES(1,2,3), (4,5,6), (7,8,9);
+      SELECT * FROM t10;
+    }
+  } {1 2 3 4 5 6 7 8 9}
+  do_test insert-10.2 {
+    catchsql {
+      INSERT INTO t10 VALUES(11,12,13), (14,15), (16,17,28);
+    }
+  } {1 {all VALUES must have the same number of terms}}
+}
+
+# Need for the OP_SoftNull opcode
+#
+do_execsql_test insert-11.1 {
+  CREATE TABLE t11a AS SELECT '123456789' AS x;
+  CREATE TABLE t11b (a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t11b SELECT x, x, x FROM t11a;
+  SELECT quote(a), quote(b), quote(c) FROM t11b;
+} {123456789 '123456789' '123456789'}
+
+
+# More columns of input than there are columns in the table.
+# Ticket http://www.sqlite.org/src/info/e9654505cfda9361
+#
+do_execsql_test insert-12.1 {
+  CREATE TABLE t12a(a,b,c,d,e,f,g);
+  INSERT INTO t12a VALUES(101,102,103,104,105,106,107);
+  CREATE TABLE t12b(x);
+  INSERT INTO t12b(x,rowid,x,x,x,x,x) SELECT * FROM t12a;
+  SELECT rowid, x FROM t12b;
+} {102 101}
+do_execsql_test insert-12.2 {
+  CREATE TABLE tab1( value INTEGER);
+  INSERT INTO tab1 (value, _rowid_) values( 11, 1);
+  INSERT INTO tab1 (value, _rowid_) SELECT 22,999;
+  SELECT * FROM tab1;
+} {11 22}
+do_execsql_test insert-12.3 {
+  CREATE TABLE t12c(a, b DEFAULT 'xyzzy', c);
+  INSERT INTO t12c(a, rowid, c) SELECT 'one', 999, 'two';
+  SELECT * FROM t12c;
+} {one xyzzy two}
+
+# 2018-06-11.  From OSSFuzz.  A column cache malfunction in
+# the constraint checking on an index of expressions causes
+# an assertion fault in a REPLACE.  Ticket
+# https://www.sqlite.org/src/info/c2432ef9089ee73b
+#
+do_execsql_test insert-13.1 {
+  DROP TABLE IF EXISTS t13;
+  CREATE TABLE t13(a INTEGER PRIMARY KEY,b UNIQUE);
+  CREATE INDEX t13x1 ON t13(-b=b);
+  INSERT INTO t13 VALUES(1,5),(6,2);
+  REPLACE INTO t13 SELECT b,0 FROM t13;
+  SELECT * FROM t13 ORDER BY +b;
+} {2 0 6 2 1 5}
+
+# 2019-01-17.  From the chromium fuzzer.
+#
+do_execsql_test insert-14.1 {
+  DROP TABLE IF EXISTS t14;
+  CREATE TABLE t14(x INTEGER PRIMARY KEY);
+  INSERT INTO t14 VALUES(CASE WHEN 1 THEN null END);
+  SELECT x FROM t14;
+} {1}
+
+integrity_check insert-14.2
+
+# 2019-08-12.
+#
+do_execsql_test insert-15.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT);
+  CREATE INDEX i1 ON t1(b);
+  CREATE TABLE t2(a, b);
+  INSERT INTO t2 VALUES(4, randomblob(31000));
+  INSERT INTO t2 VALUES(4, randomblob(32000));
+  INSERT INTO t2 VALUES(4, randomblob(33000));
+  REPLACE INTO t1 SELECT a, b FROM t2;
+  SELECT a, length(b) FROM t1;
+} {4 33000}
+
+# 2019-10-16
+# ticket https://www.sqlite.org/src/info/a8a4847a2d96f5de
+# On a REPLACE INTO, if an AFTER trigger adds back the conflicting
+# row, you can end up with the wrong number of rows in an index.
+#
+db close
+sqlite3 db :memory:
+do_catchsql_test insert-16.1 {
+  PRAGMA recursive_triggers = true;
+  CREATE TABLE t0(c0,c1);
+  CREATE UNIQUE INDEX i0 ON t0(c0);
+  INSERT INTO t0(c0,c1) VALUES(123,1);
+  CREATE TRIGGER tr0 AFTER DELETE ON t0
+  BEGIN
+    INSERT INTO t0 VALUES(123,2);
+  END;
+  REPLACE INTO t0(c0,c1) VALUES(123,3);
+} {1 {UNIQUE constraint failed: t0.c0}}
+do_execsql_test insert-16.2 {
+  SELECT * FROM t0;
+} {123 1}
+integrity_check insert-16.3
+do_catchsql_test insert-16.4 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  CREATE INDEX t1b ON t1(b);
+  INSERT INTO t1 VALUES(1, 'one');
+  CREATE TRIGGER tr3 AFTER DELETE ON t1 BEGIN
+    INSERT INTO t1 VALUES(1, 'three');
+  END;
+  REPLACE INTO t1 VALUES(1, 'two');
+} {1 {UNIQUE constraint failed: t1.a}}
+integrity_check insert-16.5
+do_catchsql_test insert-16.6 {
+  PRAGMA foreign_keys = 1;
+  CREATE TABLE p1(a, b UNIQUE);
+  CREATE TABLE c1(c, d REFERENCES p1(b) ON DELETE CASCADE);
+  CREATE TRIGGER tr6 AFTER DELETE ON c1 BEGIN
+    INSERT INTO p1 VALUES(4, 1);
+  END;
+  INSERT INTO p1 VALUES(1, 1);
+  INSERT INTO c1 VALUES(2, 1);
+  REPLACE INTO p1 VALUES(3, 1);2
+} {1 {UNIQUE constraint failed: p1.b}}
+integrity_check insert-16.7
+
+# 2019-10-25 ticket c1e19e12046d23fe
+do_catchsql_test insert-17.1 {
+  PRAGMA temp.recursive_triggers = true;
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(aa, bb);
+  CREATE UNIQUE INDEX t0bb ON t0(bb);
+  CREATE TRIGGER "r17.1" BEFORE DELETE ON t0
+    BEGIN INSERT INTO t0(aa,bb) VALUES(99,1);
+  END;
+  INSERT INTO t0(aa,bb) VALUES(10,20);
+  REPLACE INTO t0(aa,bb) VALUES(30,20);
+} {1 {UNIQUE constraint failed: t0.rowid}}
+integrity_check insert-17.2
+do_catchsql_test insert-17.3 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a, b UNIQUE, c UNIQUE);
+  INSERT INTO t1(a,b,c) VALUES(1,1,1),(2,2,2),(3,3,3),(4,4,4);
+  CREATE TRIGGER "r17.3" AFTER DELETE ON t1 WHEN OLD.c<>3 BEGIN
+    INSERT INTO t1(rowid,a,b,c) VALUES(100,100,100,3);
+  END;
+  REPLACE INTO t1(rowid,a,b,c) VALUES(200,1,2,3);
+} {1 {UNIQUE constraint failed: t1.c}}
+integrity_check insert-17.4
+do_execsql_test insert-17.5 {
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+  CREATE UNIQUE INDEX t2b ON t2(b);
+  INSERT INTO t2(a,b) VALUES(1,1),(2,2),(3,3),(4,4);
+  CREATE TABLE fire(x);
+  CREATE TRIGGER t2r1 AFTER DELETE ON t2 BEGIN
+    INSERT INTO fire VALUES(old.a);
+  END;
+  UPDATE OR REPLACE t2 SET a=4, b=3 WHERE a=1;
+  SELECT *, 'x' FROM t2 ORDER BY a;
+} {2 2 x 4 3 x}
+do_execsql_test insert-17.6 {
+  SELECT x FROM fire ORDER BY x;
+} {3 4}
+do_execsql_test insert-17.7 {
+  DELETE FROM t2;
+  DELETE FROM fire;
+  INSERT INTO t2(a,b) VALUES(1,1),(2,2),(3,3),(4,4);
+  UPDATE OR REPLACE t2 SET a=1, b=3 WHERE a=1;
+  SELECT *, 'x' FROM t2 ORDER BY a;
+} {1 3 x 2 2 x 4 4 x}
+do_execsql_test insert-17.8 {
+  SELECT x FROM fire ORDER BY x;
+} {3}
+do_execsql_test insert-17.10 {
+  CREATE TABLE t3(a INTEGER PRIMARY KEY, b INT, c INT, d INT);
+  CREATE UNIQUE INDEX t3bpi ON t3(b) WHERE c<=d;
+  CREATE UNIQUE INDEX t3d ON t3(d);
+  INSERT INTO t3(a,b,c,d) VALUES(1,1,1,1),(2,1,3,2),(3,4,5,6);
+  CREATE TRIGGER t3r1 AFTER DELETE ON t3 BEGIN
+    SELECT 'hi';
+  END;
+  REPLACE INTO t3(a,b,c,d) VALUES(4,4,8,9);
+} {}
+do_execsql_test insert-17.11 {
+  SELECT *, 'x' FROM t3 ORDER BY a;
+} {1 1 1 1 x 2 1 3 2 x 4 4 8 9 x}
+do_execsql_test insert-17.12 {
+  REPLACE INTO t3(a,b,c,d) VALUES(5,1,11,2);
+  SELECT *, 'x' FROM t3 ORDER BY a;
+} {1 1 1 1 x 4 4 8 9 x 5 1 11 2 x}
+
+do_execsql_test insert-17.13 {
+  DELETE FROM t3;
+  INSERT INTO t3(a,b,c,d) VALUES(1,1,1,1),(2,1,3,2),(3,4,5,6);
+  DROP TRIGGER t3r1;
+  CREATE TRIGGER t3r1 AFTER DELETE ON t3 BEGIN
+    INSERT INTO t3(b,c,d) VALUES(old.b,old.c,old.d);
+  END;
+} {}
+do_catchsql_test insert-17.14 {
+  REPLACE INTO t3(a,b,c,d) VALUES(4,4,8,9);
+} {1 {UNIQUE constraint failed: t3.b}}
+do_catchsql_test insert-17.15 {
+  REPLACE INTO t3(a,b,c,d) VALUES(5,1,11,2);
+} {1 {UNIQUE constraint failed: t3.d}}
+
+
+finish_test

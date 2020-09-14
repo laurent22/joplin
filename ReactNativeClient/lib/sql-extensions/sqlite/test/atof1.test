@@ -1,0 +1,84 @@
+# 2012 June 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# Tests of the sqlite3AtoF() function.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+if {$::longdouble_size<=8} {
+  finish_test
+  return
+}
+
+expr srand(1)
+for {set i 1} {$i<20000} {incr i} {
+  set pow [expr {int((rand()-0.5)*100)}]
+  set x [expr {pow((rand()-0.5)*2*rand(),$pow)}]
+  set xf [format %.32e $x]
+
+  # Verify that text->real conversions get exactly same ieee754 floating-
+  # point value in SQLite as they do in TCL.
+  #
+  do_test atof1-1.$i.1 {
+    set y [db eval "SELECT $xf=\$x"]
+    if {!$y} {
+      puts -nonewline \173[db eval "SELECT real2hex($xf), real2hex(\$x)"]\175
+      db eval "SELECT $xf+0.0 AS a, \$x AS b" {
+        puts [format "\n%.60e\n%.60e\n%.60e" $x $a $b]
+      }
+    }
+    set y
+  } {1}
+
+  # Verify that round-trip real->text->real conversions using the quote()
+  # function preserve the bits of the numeric value exactly.
+  #
+  do_test atof1-1.$i.2 {
+    set y [db eval {SELECT $x=CAST(quote($x) AS real)}]
+    if {!$y} {
+      db eval {SELECT real2hex($x) a, real2hex(CAST(quote($x) AS real)) b} {}
+      puts "\nIN:    $a $xf"
+      puts [format {QUOTE: %16s %s} {} [db eval {SELECT quote($x)}]]
+      db eval {SELECT CAST(quote($x) AS real) c} {}
+      puts "OUT:   $b [format %.32e $c]"
+    }
+    set y
+  } {1}
+}
+
+# 2020-01-08 ticket 9eda2697f5cc1aba
+# When running sqlite3AtoF() on a blob with an odd number of bytes using
+# UTF16, ignore the last byte so that the string has an integer number of
+# UTF16 code points.
+#
+reset_db
+do_execsql_test atof1-2.10 {
+  PRAGMA encoding = 'UTF16be';
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1(rowid,a) VALUES (1,x'00'),(2,3);
+  SELECT substr(a,',') is true FROM t1 ORDER BY rowid;
+} {0 1}
+do_execsql_test atof1-2.20 {
+  SELECT substr(a,',') is true FROM t1 ORDER BY rowid DESC;
+} {1 0}
+do_execsql_test atof1-2.30 {
+  CREATE INDEX i1 ON t1(a);
+  SELECT count(*) FROM t1 WHERE substr(a,',');
+} {1}
+
+
+
+
+
+
+finish_test

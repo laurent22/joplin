@@ -1,0 +1,160 @@
+# 2017 August 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source $testdir/tester.tcl
+set testprefix rtreecheck
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+proc swap_int32 {blob i0 i1} {
+  binary scan $blob I* L
+
+  set a [lindex $L $i0]
+  set b [lindex $L $i1]
+
+  lset L $i0 $b
+  lset L $i1 $a
+
+  binary format I* $L
+}
+
+proc set_int32 {blob idx val} {
+  binary scan $blob I* L
+  lset L $idx $val
+  binary format I* $L
+}
+
+do_catchsql_test 1.0 {
+  SELECT rtreecheck();
+} {1 {wrong number of arguments to function rtreecheck()}}
+
+do_catchsql_test 1.1 {
+  SELECT rtreecheck(0,0,0);
+} {1 {wrong number of arguments to function rtreecheck()}}
+
+
+proc setup_simple_db {{module rtree}} {
+  reset_db
+  db func swap_int32 swap_int32
+  execsql "
+    CREATE VIRTUAL TABLE r1 USING $module (id, x1, x2, y1, y2);
+    INSERT INTO r1 VALUES(1,  5, 5, 5, 5);  --  3
+    INSERT INTO r1 VALUES(2,  6, 6, 6, 6);  --  9
+    INSERT INTO r1 VALUES(3,  7, 7, 7, 7);  -- 15
+    INSERT INTO r1 VALUES(4,  8, 8, 8, 8);  -- 21
+    INSERT INTO r1 VALUES(5,  9, 9, 9, 9);  -- 27
+  "
+  sqlite3_db_config db DEFENSIVE 0
+}
+
+setup_simple_db
+do_execsql_test 2.1 { 
+  SELECT rtreecheck('r1') 
+} {ok}
+
+do_execsql_test 2.2 {
+  UPDATE r1_node SET data = swap_int32(data, 3, 9);
+  UPDATE r1_node SET data = swap_int32(data, 23, 29);
+}
+
+do_execsql_test 2.3 { 
+  SELECT rtreecheck('r1') 
+} {{Dimension 0 of cell 0 on node 1 is corrupt
+Dimension 1 of cell 3 on node 1 is corrupt}}
+
+setup_simple_db
+do_execsql_test 2.4 {
+  DELETE FROM r1_rowid WHERE rowid = 3;
+  SELECT rtreecheck('r1') 
+} {{Mapping (3 -> 1) missing from %_rowid table
+Wrong number of entries in %_rowid table - expected 5, actual 4}}
+
+setup_simple_db
+do_execsql_test 2.5 {
+  UPDATE r1_rowid SET nodeno=2 WHERE rowid=3;
+  SELECT rtreecheck('r1') 
+} {{Found (3 -> 2) in %_rowid table, expected (3 -> 1)}}
+
+reset_db
+do_execsql_test 3.0 { 
+  CREATE VIRTUAL TABLE r1 USING rtree_i32(id, x1, x2);
+  INSERT INTO r1 VALUES(1, 0x7FFFFFFF*-1, 0x7FFFFFFF);
+  INSERT INTO r1 VALUES(2, 0x7FFFFFFF*-1, 5);
+  INSERT INTO r1 VALUES(3, -5, 5);
+  INSERT INTO r1 VALUES(4, 5, 0x11111111);
+  INSERT INTO r1 VALUES(5, 5, 0x00800000);
+  INSERT INTO r1 VALUES(6, 5, 0x00008000);
+  INSERT INTO r1 VALUES(7, 5, 0x00000080);
+  INSERT INTO r1 VALUES(8, 5, 0x40490fdb);
+  INSERT INTO r1 VALUES(9, 0x7f800000, 0x7f900000);
+  SELECT rtreecheck('r1') 
+} {ok}
+
+do_execsql_test 3.1 { 
+  CREATE VIRTUAL TABLE r2 USING rtree_i32(id, x1, x2);
+  INSERT INTO r2 VALUES(2, -1*(1<<31), -1*(1<<31)+5);
+  SELECT rtreecheck('r2') 
+} {ok}
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 3.2 {
+  BEGIN;
+    UPDATE r2_node SET data = X'123456';
+    SELECT rtreecheck('r2')!="ok";
+} {1}
+
+do_execsql_test 3.3 {
+  ROLLBACK;
+  UPDATE r2_node SET data = X'00001234';
+  SELECT rtreecheck('r2')!="ok";
+} {1}
+
+do_execsql_test 4.0 {
+  CREATE TABLE notanrtree(i);
+  SELECT rtreecheck('notanrtree');
+} {{Schema corrupt or not an rtree}}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+db func set_int32 set_int32
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE r3 USING rtree_i32(id, x1, x2, y1, y2);
+  WITH x(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<1000
+  )
+  INSERT INTO r3 SELECT i, i, i, i, i FROM x;
+}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 5.1 {
+  BEGIN;
+    UPDATE r3_node SET data = set_int32(data, 3, 5000);
+    UPDATE r3_node SET data = set_int32(data, 4, 5000);
+    SELECT rtreecheck('r3')=='ok'
+} 0
+do_execsql_test 5.2 {
+  ROLLBACK;
+  BEGIN;
+    UPDATE r3_node SET data = set_int32(data, 3, 0);
+    UPDATE r3_node SET data = set_int32(data, 4, 0);
+    SELECT rtreecheck('r3')=='ok'
+} 0
+
+finish_test

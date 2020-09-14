@@ -1,0 +1,140 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on the fts5 tokenizers
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc fts3_unicode_path {file} {
+  file join .. [file dirname [info script]] .. .. fts3 unicode $file
+}
+
+source [fts3_unicode_path parseunicode.tcl]
+set testprefix fts5unicode3
+
+set CF [fts3_unicode_path CaseFolding.txt]
+set UD [fts3_unicode_path UnicodeData.txt]
+
+tl_load_casefolding_txt $CF
+foreach x [an_load_unicodedata_text $UD] {
+  set aNotAlnum($x) 1
+}
+
+foreach {y} [rd_load_unicodedata_text $UD] {
+  foreach {code ascii f} $y {}
+  if {$ascii==""} {
+    set int 0
+  } else {
+    binary scan $ascii c int
+  }
+  set aDiacritic($code,$f) $int
+  if {$f==0} { set aDiacritic($code,1) $int }
+}
+
+proc tcl_fold {i {bRemoveDiacritic 0}} {
+  global tl_lookup_table
+  global aDiacritic
+  set f [expr $bRemoveDiacritic==2]
+
+  if {[info exists tl_lookup_table($i)]} {
+    set i $tl_lookup_table($i)
+  }
+  if {$bRemoveDiacritic && [info exists aDiacritic($i,$f)]} {
+    set i $aDiacritic($i,$f)
+  }
+  expr $i
+}
+db func tcl_fold tcl_fold
+
+proc tcl_isalnum {i} {
+  global aNotAlnum
+  expr {![info exists aNotAlnum($i)]}
+}
+db func tcl_isalnum tcl_isalnum
+
+
+do_catchsql_test 1.0.1 {
+  SELECT fts5_isalnum(1, 2, 3);
+} {1 {wrong number of arguments to function fts5_isalnum}}
+do_catchsql_test 1.0.2 {
+  SELECT fts5_fold();
+} {1 {wrong number of arguments to function fts5_fold}}
+do_catchsql_test 1.0.3 {
+  SELECT fts5_fold(1,2,3);
+} {1 {wrong number of arguments to function fts5_fold}}
+
+do_execsql_test 1.1 {
+  WITH ii(i) AS (
+    SELECT -1
+    UNION ALL
+    SELECT i+1 FROM ii WHERE i<100000
+  )
+  SELECT count(*), min(i) FROM ii WHERE fts5_fold(i)!=CAST(tcl_fold(i) AS int);
+} {0 {}}
+
+do_execsql_test 1.2.1 {
+  WITH ii(i) AS (
+    SELECT -1
+    UNION ALL
+    SELECT i+1 FROM ii WHERE i<100000
+  )
+  SELECT count(*), min(i) FROM ii 
+  WHERE fts5_fold(i,1)!=CAST(tcl_fold(i,1) AS int);
+} {0 {}}
+
+do_execsql_test 1.2.2 {
+  WITH ii(i) AS (
+    SELECT -1
+    UNION ALL
+    SELECT i+1 FROM ii WHERE i<100000
+  )
+  SELECT count(*), min(i) FROM ii 
+  WHERE fts5_fold(i,2)!=CAST(tcl_fold(i,2) AS int);
+} {0 {}}
+
+do_execsql_test 1.3 {
+  WITH ii(i) AS (
+    SELECT -1
+    UNION ALL
+    SELECT i+1 FROM ii WHERE i<100000
+  )
+  SELECT count(*), min(i) FROM ii 
+  WHERE fts5_isalnum(i)!=CAST(tcl_isalnum(i) AS int);
+} {0 {}}
+
+do_test 1.4 {
+  set str {CREATE VIRTUAL TABLE f3 USING fts5(a, tokenize=}
+  append str {"unicode61 separators '}
+  for {set i 700} {$i<900} {incr i} {
+    append str [format %c $i]
+  }
+  append str {'");}
+  execsql $str
+} {}
+do_test 1.5 {
+  set str {CREATE VIRTUAL TABLE f5 USING fts5(a, tokenize=}
+  append str {"unicode61 tokenchars '}
+  for {set i 700} {$i<900} {incr i} {
+    append str [format %c $i]
+  }
+  append str {'");}
+  execsql $str
+} {}
+
+
+finish_test

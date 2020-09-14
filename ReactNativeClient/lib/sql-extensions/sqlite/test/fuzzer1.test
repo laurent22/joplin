@@ -1,0 +1,1820 @@
+# 2011 March 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for TCL interface to the
+# SQLite library. 
+#
+# The focus of the tests is the word-fuzzer virtual table.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+set ::testprefix fuzzer1
+load_static_extension db fuzzer
+
+# Check configuration errors.
+#
+do_catchsql_test fuzzer1-1.1 {
+  CREATE VIRTUAL TABLE f USING fuzzer;
+} {1 {fuzzer: wrong number of CREATE VIRTUAL TABLE arguments}}
+
+do_catchsql_test fuzzer1-1.2 {
+  CREATE VIRTUAL TABLE f USING fuzzer(one, two);
+} {1 {fuzzer: wrong number of CREATE VIRTUAL TABLE arguments}}
+
+do_catchsql_test fuzzer1-1.3 {
+  CREATE VIRTUAL TABLE f USING fuzzer(nosuchtable);
+} {1 {fuzzer: no such table: main.nosuchtable}}
+
+do_catchsql_test fuzzer1-1.4 {
+  CREATE TEMP TABLE nosuchtable(a, b, c, d);
+  CREATE VIRTUAL TABLE f USING fuzzer(nosuchtable);
+} {1 {fuzzer: no such table: main.nosuchtable}}
+
+do_catchsql_test fuzzer1-1.5 {
+  DROP TABLE temp.nosuchtable;
+  CREATE TABLE nosuchtable(a, b, c, d);
+  CREATE VIRTUAL TABLE temp.f USING fuzzer(nosuchtable);
+} {1 {fuzzer: no such table: temp.nosuchtable}}
+
+do_catchsql_test fuzzer1-1.6 {
+  DROP TABLE IF EXISTS f_rules;
+  CREATE TABLE f_rules(a, b, c);
+  CREATE VIRTUAL TABLE f USING fuzzer(f_rules);
+} {1 {fuzzer: f_rules has 3 columns, expected 4}}
+
+do_catchsql_test fuzzer1-1.7 {
+  DROP TABLE IF EXISTS f_rules;
+  CREATE TABLE f_rules(a, b, c, d, e);
+  CREATE VIRTUAL TABLE f USING fuzzer(f_rules);
+} {1 {fuzzer: f_rules has 5 columns, expected 4}}
+
+
+do_execsql_test fuzzer1-2.1 {
+  CREATE TABLE f1_rules(ruleset DEFAULT 0, cfrom, cto, cost);
+  INSERT INTO f1_rules(cfrom, cto, cost) VALUES('e','a',1);
+  INSERT INTO f1_rules(cfrom, cto, cost) VALUES('a','e',10);
+  INSERT INTO f1_rules(cfrom, cto, cost) VALUES('e','o',100);
+
+  CREATE VIRTUAL TABLE f1 USING fuzzer(f1_rules);
+} {}
+
+do_execsql_test fuzzer1-2.1 {
+    SELECT word, distance FROM f1 WHERE word MATCH 'abcde'
+} {
+  abcde 0   abcda 1   ebcde 10 
+  ebcda 11  abcdo 100 ebcdo 110 
+  obcde 110 obcda 111 obcdo 210
+}
+
+do_execsql_test fuzzer1-2.4 {
+  INSERT INTO f1_rules(ruleset, cfrom, cto, cost) VALUES(1,'b','x',1);
+  INSERT INTO f1_rules(ruleset, cfrom, cto, cost) VALUES(1,'d','y',10);
+  INSERT INTO f1_rules(ruleset, cfrom, cto, cost) VALUES(1,'y','z',100);
+
+  DROP TABLE f1;
+  CREATE VIRTUAL TABLE f1 USING fuzzer(f1_rules);
+} {}
+
+do_execsql_test fuzzer1-2.5 {
+  SELECT word, distance FROM f1 WHERE word MATCH 'abcde'
+} {
+  abcde 0   abcda 1   ebcde 10 
+  ebcda 11  abcdo 100 ebcdo 110 
+  obcde 110 obcda 111 obcdo 210
+}
+
+do_execsql_test fuzzer1-2.6 {
+  SELECT word, distance FROM f1 WHERE word MATCH 'abcde' AND ruleset=0
+} {
+  abcde 0   abcda 1   ebcde 10 
+  ebcda 11  abcdo 100 ebcdo 110 
+  obcde 110 obcda 111 obcdo 210
+}
+
+do_execsql_test fuzzer1-2.7 {
+  SELECT word, distance FROM f1 WHERE word MATCH 'abcde' AND ruleset=1
+} {
+  abcde 0 axcde 1 abcye 10 
+  axcye 11 abcze 110 axcze 111
+}
+
+do_test fuzzer1-1.8 {
+  db eval {
+    SELECT word, distance FROM f1 WHERE word MATCH 'abcde' AND distance<100
+  }
+} {abcde 0 abcda 1 ebcde 10 ebcda 11}
+do_test fuzzer1-1.9 {
+  db eval {
+    SELECT word, distance FROM f1 WHERE word MATCH 'abcde' AND distance<=100
+  }
+} {abcde 0 abcda 1 ebcde 10 ebcda 11 abcdo 100}
+do_test fuzzer1-1.10 {
+  db eval {
+    SELECT word, distance FROM f1
+     WHERE word MATCH 'abcde' AND distance<100 AND ruleset=0
+  }
+} {abcde 0 abcda 1 ebcde 10 ebcda 11}
+do_test fuzzer1-1.11 {
+  db eval {
+    SELECT word, distance FROM f1
+    WHERE word MATCH 'abcde' AND distance<=100 AND ruleset=0
+  }
+} {abcde 0 abcda 1 ebcde 10 ebcda 11 abcdo 100}
+do_test fuzzer1-1.12 {
+  db eval {
+    SELECT word, distance FROM f1
+     WHERE word MATCH 'abcde' AND distance<11 AND ruleset=1
+  }
+} {abcde 0 axcde 1 abcye 10}
+do_test fuzzer1-1.13 {
+  db eval {
+    SELECT word, distance FROM f1
+    WHERE word MATCH 'abcde' AND distance<=11 AND ruleset=1
+  }
+} {abcde 0 axcde 1 abcye 10 axcye 11}
+do_test fuzzer1-1.14 {
+  catchsql {INSERT INTO f1 VALUES(1)}
+} {1 {table f1 may not be modified}}
+do_test fuzzer1-1.15 {
+  catchsql {DELETE FROM f1}
+} {1 {table f1 may not be modified}}
+do_test fuzzer1-1.16 {
+  catchsql {UPDATE f1 SET rowid=rowid+10000}
+} {1 {table f1 may not be modified}}
+
+
+do_test fuzzer1-2.0 {
+  execsql {
+    -- costs based on English letter frequencies
+    CREATE TEMP TABLE f2_rules(ruleset DEFAULT 0, cFrom, cTo, cost);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('a','e',24);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('a','o',47);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('a','u',50);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('e','a',23);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('e','i',33);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('e','o',37);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('i','e',33);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('i','y',33);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('o','a',41);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('o','e',46);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('o','u',57);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('u','o',58);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('y','i',33);
+
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('t','th',70);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('th','t',66);
+ 
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('a','',84);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','b',106);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('b','',106);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','c',94);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('c','',94);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','d',89);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('d','',89);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','e',83);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('e','',83);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','f',97);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('f','',97);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','g',99);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('g','',99);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','h',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('h','',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','i',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('i','',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','j',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('j','',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','k',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('k','',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','l',89);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('l','',89);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','m',96);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('m','',96);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','n',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('n','',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','o',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('o','',85);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','p',100);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('p','',100);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','q',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('q','',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','r',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('r','',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','s',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('s','',86);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','t',84);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('t','',84);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','u',94);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('u','',94);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','v',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('v','',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','w',96);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('w','',96);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','x',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('x','',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','y',100);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('y','',100);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('','z',120);
+    INSERT INTO f2_rules(cFrom,cTo,cost) VALUES('z','',120);
+    INSERT INTO f2_rules(ruleset,cFrom,cTo,cost)
+      SELECT 1, cFrom, cTo, 100 FROM f2_rules WHERE ruleset=0;
+    INSERT INTO f2_rules(ruleset,cFrom,cTo,cost)
+      SELECT 2, cFrom, cTo, 200-cost FROM f2_rules WHERE ruleset=0;
+    INSERT INTO f2_rules(ruleset,cFrom,cTo,cost)
+      SELECT 3, cFrom, cTo, cost FROM f2_rules WHERE ruleset=0;
+    INSERT INTO f2_rules(ruleset,cFrom,cTo,cost)
+      VALUES(3, 'mallard','duck',50),
+            (3, 'duck', 'mallard', 50),
+            (3, 'rock', 'stone', 50),
+            (3, 'stone', 'rock', 50);
+
+
+    CREATE VIRTUAL TABLE temp.f2 USING fuzzer(f2_rules);
+
+    -- Street names for the 28269 ZIPCODE.
+    --
+    CREATE TEMP TABLE streetname(n TEXT UNIQUE);
+    INSERT INTO streetname VALUES('abbotsinch');
+    INSERT INTO streetname VALUES('abbottsgate');
+    INSERT INTO streetname VALUES('abbywood');
+    INSERT INTO streetname VALUES('abner');
+    INSERT INTO streetname VALUES('acacia ridge');
+    INSERT INTO streetname VALUES('acorn creek');
+    INSERT INTO streetname VALUES('acorn forest');
+    INSERT INTO streetname VALUES('adel');
+    INSERT INTO streetname VALUES('ainslie');
+    INSERT INTO streetname VALUES('airways');
+    INSERT INTO streetname VALUES('alabaster');
+    INSERT INTO streetname VALUES('alba');
+    INSERT INTO streetname VALUES('albertine');
+    INSERT INTO streetname VALUES('alden glen');
+    INSERT INTO streetname VALUES('alderson');
+    INSERT INTO streetname VALUES('allen');
+    INSERT INTO streetname VALUES('allen a brown');
+    INSERT INTO streetname VALUES('allness glen');
+    INSERT INTO streetname VALUES('aloysia');
+    INSERT INTO streetname VALUES('alpine');
+    INSERT INTO streetname VALUES('alwyn');
+    INSERT INTO streetname VALUES('amaranthus');
+    INSERT INTO streetname VALUES('amber glen');
+    INSERT INTO streetname VALUES('amber leigh way');
+    INSERT INTO streetname VALUES('amber meadows');
+    INSERT INTO streetname VALUES('amberway');
+    INSERT INTO streetname VALUES('ame');
+    INSERT INTO streetname VALUES('amesbury hill');
+    INSERT INTO streetname VALUES('anderson');
+    INSERT INTO streetname VALUES('andrew thomas');
+    INSERT INTO streetname VALUES('anduin falls');
+    INSERT INTO streetname VALUES('ankeny');
+    INSERT INTO streetname VALUES('annandale');
+    INSERT INTO streetname VALUES('annbick');
+    INSERT INTO streetname VALUES('antelope');
+    INSERT INTO streetname VALUES('anzack');
+    INSERT INTO streetname VALUES('apple glen');
+    INSERT INTO streetname VALUES('applevalley');
+    INSERT INTO streetname VALUES('appley mead');
+    INSERT INTO streetname VALUES('aragorn');
+    INSERT INTO streetname VALUES('arbor creek');
+    INSERT INTO streetname VALUES('arbor day');
+    INSERT INTO streetname VALUES('arbor meadows');
+    INSERT INTO streetname VALUES('arbor spring');
+    INSERT INTO streetname VALUES('arborview');
+    INSERT INTO streetname VALUES('arklow');
+    INSERT INTO streetname VALUES('armitage');
+    INSERT INTO streetname VALUES('arvin');
+    INSERT INTO streetname VALUES('ash cove');
+    INSERT INTO streetname VALUES('ashford leigh');
+    INSERT INTO streetname VALUES('ashmont');
+    INSERT INTO streetname VALUES('atlas');
+    INSERT INTO streetname VALUES('atwater');
+    INSERT INTO streetname VALUES('auburn hill');
+    INSERT INTO streetname VALUES('aulton link');
+    INSERT INTO streetname VALUES('austin dekota');
+    INSERT INTO streetname VALUES('austin knoll');
+    INSERT INTO streetname VALUES('auten');
+    INSERT INTO streetname VALUES('autumn harvest');
+    INSERT INTO streetname VALUES('autumn oak');
+    INSERT INTO streetname VALUES('autumn ridge');
+    INSERT INTO streetname VALUES('avalon forest');
+    INSERT INTO streetname VALUES('avalon loop');
+    INSERT INTO streetname VALUES('avon farm');
+    INSERT INTO streetname VALUES('avonhurst');
+    INSERT INTO streetname VALUES('avonlea');
+    INSERT INTO streetname VALUES('aynrand');
+    INSERT INTO streetname VALUES('azure valley');
+    INSERT INTO streetname VALUES('baberton');
+    INSERT INTO streetname VALUES('baffin');
+    INSERT INTO streetname VALUES('baggins');
+    INSERT INTO streetname VALUES('balata');
+    INSERT INTO streetname VALUES('ballantray');
+    INSERT INTO streetname VALUES('ballston');
+    INSERT INTO streetname VALUES('balsam tree');
+    INSERT INTO streetname VALUES('bambi');
+    INSERT INTO streetname VALUES('banwell');
+    INSERT INTO streetname VALUES('barbee');
+    INSERT INTO streetname VALUES('barefoot forest');
+    INSERT INTO streetname VALUES('barnview');
+    INSERT INTO streetname VALUES('baroda');
+    INSERT INTO streetname VALUES('barson');
+    INSERT INTO streetname VALUES('baskerville');
+    INSERT INTO streetname VALUES('battle creek');
+    INSERT INTO streetname VALUES('baucom');
+    INSERT INTO streetname VALUES('bay pines');
+    INSERT INTO streetname VALUES('beaker');
+    INSERT INTO streetname VALUES('beard');
+    INSERT INTO streetname VALUES('beardsley');
+    INSERT INTO streetname VALUES('bearoak');
+    INSERT INTO streetname VALUES('beauvista');
+    INSERT INTO streetname VALUES('beaver creek');
+    INSERT INTO streetname VALUES('beaver hollow');
+    INSERT INTO streetname VALUES('bedlington');
+    INSERT INTO streetname VALUES('beech cove');
+    INSERT INTO streetname VALUES('beech crest');
+    INSERT INTO streetname VALUES('beith');
+    INSERT INTO streetname VALUES('bell glen');
+    INSERT INTO streetname VALUES('bellmore');
+    INSERT INTO streetname VALUES('bells mill');
+    INSERT INTO streetname VALUES('bellville');
+    INSERT INTO streetname VALUES('belmar place');
+    INSERT INTO streetname VALUES('bembridge');
+    INSERT INTO streetname VALUES('bennett neely');
+    INSERT INTO streetname VALUES('bentgrass run');
+    INSERT INTO streetname VALUES('benthaven');
+    INSERT INTO streetname VALUES('bernardy');
+    INSERT INTO streetname VALUES('bernbrook shadow');
+    INSERT INTO streetname VALUES('berrybrook');
+    INSERT INTO streetname VALUES('berrybush');
+    INSERT INTO streetname VALUES('berwick');
+    INSERT INTO streetname VALUES('betterton');
+    INSERT INTO streetname VALUES('bickham');
+    INSERT INTO streetname VALUES('billingham');
+    INSERT INTO streetname VALUES('birchcroft');
+    INSERT INTO streetname VALUES('birchstone');
+    INSERT INTO streetname VALUES('birdwell');
+    INSERT INTO streetname VALUES('bisaner');
+    INSERT INTO streetname VALUES('bitterbush');
+    INSERT INTO streetname VALUES('bitterroot');
+    INSERT INTO streetname VALUES('black fox');
+    INSERT INTO streetname VALUES('black maple');
+    INSERT INTO streetname VALUES('black trail');
+    INSERT INTO streetname VALUES('blackbird');
+    INSERT INTO streetname VALUES('blake a dare');
+    INSERT INTO streetname VALUES('blasdell');
+    INSERT INTO streetname VALUES('blue aster');
+    INSERT INTO streetname VALUES('blue finch');
+    INSERT INTO streetname VALUES('blue lilac');
+    INSERT INTO streetname VALUES('blue sky');
+    INSERT INTO streetname VALUES('blue tick');
+    INSERT INTO streetname VALUES('bob beatty');
+    INSERT INTO streetname VALUES('bobcat');
+    INSERT INTO streetname VALUES('bolton');
+    INSERT INTO streetname VALUES('boomerang');
+    INSERT INTO streetname VALUES('boulder');
+    INSERT INTO streetname VALUES('boxer');
+    INSERT INTO streetname VALUES('boxmeer');
+    INSERT INTO streetname VALUES('brachnell view');
+    INSERT INTO streetname VALUES('bradford lake');
+    INSERT INTO streetname VALUES('bradwell');
+    INSERT INTO streetname VALUES('brady');
+    INSERT INTO streetname VALUES('braids bend');
+    INSERT INTO streetname VALUES('bralers');
+    INSERT INTO streetname VALUES('brandie glen');
+    INSERT INTO streetname VALUES('brandy ridge');
+    INSERT INTO streetname VALUES('brandybuck');
+    INSERT INTO streetname VALUES('branthurst');
+    INSERT INTO streetname VALUES('brassy creek');
+    INSERT INTO streetname VALUES('brathay');
+    INSERT INTO streetname VALUES('brawer farm');
+    INSERT INTO streetname VALUES('breezy morn');
+    INSERT INTO streetname VALUES('brenda');
+    INSERT INTO streetname VALUES('brenly');
+    INSERT INTO streetname VALUES('brenock');
+    INSERT INTO streetname VALUES('brianwood');
+    INSERT INTO streetname VALUES('briar rose');
+    INSERT INTO streetname VALUES('briarcrest');
+    INSERT INTO streetname VALUES('briarthorne');
+    INSERT INTO streetname VALUES('brick dust');
+    INSERT INTO streetname VALUES('bridgepath');
+    INSERT INTO streetname VALUES('bridle ridge');
+    INSERT INTO streetname VALUES('briggs');
+    INSERT INTO streetname VALUES('brightleaf');
+    INSERT INTO streetname VALUES('brigstock');
+    INSERT INTO streetname VALUES('broad ridge');
+    INSERT INTO streetname VALUES('brock');
+    INSERT INTO streetname VALUES('brockhampton');
+    INSERT INTO streetname VALUES('broken pine');
+    INSERT INTO streetname VALUES('brompton');
+    INSERT INTO streetname VALUES('brook falls');
+    INSERT INTO streetname VALUES('brookings');
+    INSERT INTO streetname VALUES('browne');
+    INSERT INTO streetname VALUES('brownes creek');
+    INSERT INTO streetname VALUES('brownes ferry');
+    INSERT INTO streetname VALUES('brownestone view');
+    INSERT INTO streetname VALUES('brumit');
+    INSERT INTO streetname VALUES('bryn athyn');
+    INSERT INTO streetname VALUES('buck');
+    INSERT INTO streetname VALUES('bucklebury');
+    INSERT INTO streetname VALUES('buckminister');
+    INSERT INTO streetname VALUES('buckspring');
+    INSERT INTO streetname VALUES('burch');
+    INSERT INTO streetname VALUES('burch shire');
+    INSERT INTO streetname VALUES('burkston');
+    INSERT INTO streetname VALUES('burmith');
+    INSERT INTO streetname VALUES('burnaby');
+    INSERT INTO streetname VALUES('butterfly');
+    INSERT INTO streetname VALUES('cabin creek');
+    INSERT INTO streetname VALUES('cairns mill');
+    INSERT INTO streetname VALUES('callender');
+    INSERT INTO streetname VALUES('cambellton');
+    INSERT INTO streetname VALUES('cambridge bay');
+    INSERT INTO streetname VALUES('canary');
+    INSERT INTO streetname VALUES('canbury');
+    INSERT INTO streetname VALUES('candle leaf');
+    INSERT INTO streetname VALUES('canipe');
+    INSERT INTO streetname VALUES('canipe farm');
+    INSERT INTO streetname VALUES('cannon');
+    INSERT INTO streetname VALUES('canopy');
+    INSERT INTO streetname VALUES('canso');
+    INSERT INTO streetname VALUES('canterbrook');
+    INSERT INTO streetname VALUES('cardinal glen');
+    INSERT INTO streetname VALUES('cardinal point');
+    INSERT INTO streetname VALUES('cardinals nest');
+    INSERT INTO streetname VALUES('carlota');
+    INSERT INTO streetname VALUES('carmathen');
+    INSERT INTO streetname VALUES('carver');
+    INSERT INTO streetname VALUES('carver pond');
+    INSERT INTO streetname VALUES('casa loma');
+    INSERT INTO streetname VALUES('caselton');
+    INSERT INTO streetname VALUES('castello');
+    INSERT INTO streetname VALUES('castle ridge');
+    INSERT INTO streetname VALUES('castleglen');
+    INSERT INTO streetname VALUES('castlemaine');
+    INSERT INTO streetname VALUES('cavett');
+    INSERT INTO streetname VALUES('caymus');
+    INSERT INTO streetname VALUES('cedardale ridge');
+    INSERT INTO streetname VALUES('cedarhurst');
+    INSERT INTO streetname VALUES('cemkey way');
+    INSERT INTO streetname VALUES('cerise');
+    INSERT INTO streetname VALUES('chaceview');
+    INSERT INTO streetname VALUES('chadsworth');
+    INSERT INTO streetname VALUES('chadwell');
+    INSERT INTO streetname VALUES('champions crest');
+    INSERT INTO streetname VALUES('chandler haven');
+    INSERT INTO streetname VALUES('chapel crossing');
+    INSERT INTO streetname VALUES('chapel ridge');
+    INSERT INTO streetname VALUES('charles crawford');
+    INSERT INTO streetname VALUES('charminster');
+    INSERT INTO streetname VALUES('chasewind');
+    INSERT INTO streetname VALUES('chavel');
+    INSERT INTO streetname VALUES('chelsea jade');
+    INSERT INTO streetname VALUES('chestnut knoll');
+    INSERT INTO streetname VALUES('cheviot');
+    INSERT INTO streetname VALUES('chickadee');
+    INSERT INTO streetname VALUES('chidley');
+    INSERT INTO streetname VALUES('chimney ridge');
+    INSERT INTO streetname VALUES('chimney springs');
+    INSERT INTO streetname VALUES('chinaberry');
+    INSERT INTO streetname VALUES('chinemist');
+    INSERT INTO streetname VALUES('chinquapin');
+    INSERT INTO streetname VALUES('chiswell');
+    INSERT INTO streetname VALUES('christenbury');
+    INSERT INTO streetname VALUES('christenbury hills');
+    INSERT INTO streetname VALUES('churchill');
+    INSERT INTO streetname VALUES('cindy');
+    INSERT INTO streetname VALUES('cinnamon teal');
+    INSERT INTO streetname VALUES('citadel');
+    INSERT INTO streetname VALUES('clare olivia');
+    INSERT INTO streetname VALUES('clarke creek');
+    INSERT INTO streetname VALUES('clarke ridge');
+    INSERT INTO streetname VALUES('clear day');
+    INSERT INTO streetname VALUES('clear stream');
+    INSERT INTO streetname VALUES('cleve brown');
+    INSERT INTO streetname VALUES('cliff cameron');
+    INSERT INTO streetname VALUES('cliffvale');
+    INSERT INTO streetname VALUES('cloverside');
+    INSERT INTO streetname VALUES('clymer');
+    INSERT INTO streetname VALUES('coatbridge');
+    INSERT INTO streetname VALUES('cobble glen');
+    INSERT INTO streetname VALUES('cochran farm');
+    INSERT INTO streetname VALUES('cochrane');
+    INSERT INTO streetname VALUES('coleridge');
+    INSERT INTO streetname VALUES('coleshire');
+    INSERT INTO streetname VALUES('collins');
+    INSERT INTO streetname VALUES('colvard');
+    INSERT INTO streetname VALUES('colvard park');
+    INSERT INTO streetname VALUES('condor');
+    INSERT INTO streetname VALUES('conner ridge');
+    INSERT INTO streetname VALUES('connery');
+    INSERT INTO streetname VALUES('cooper run');
+    INSERT INTO streetname VALUES('coopers ridge');
+    INSERT INTO streetname VALUES('copper hill');
+    INSERT INTO streetname VALUES('coppermine');
+    INSERT INTO streetname VALUES('cornelia');
+    INSERT INTO streetname VALUES('corner');
+    INSERT INTO streetname VALUES('cornerstone');
+    INSERT INTO streetname VALUES('cottage oaks');
+    INSERT INTO streetname VALUES('cougar');
+    INSERT INTO streetname VALUES('coves end');
+    INSERT INTO streetname VALUES('cragland');
+    INSERT INTO streetname VALUES('crail');
+    INSERT INTO streetname VALUES('cranberry nook');
+    INSERT INTO streetname VALUES('crawford brook');
+    INSERT INTO streetname VALUES('crayton');
+    INSERT INTO streetname VALUES('creek breeze');
+    INSERT INTO streetname VALUES('crescent ridge');
+    INSERT INTO streetname VALUES('crescent view');
+    INSERT INTO streetname VALUES('cresta');
+    INSERT INTO streetname VALUES('crestfield');
+    INSERT INTO streetname VALUES('crestland');
+    INSERT INTO streetname VALUES('crestwick');
+    INSERT INTO streetname VALUES('crisfield');
+    INSERT INTO streetname VALUES('crisp wood');
+    INSERT INTO streetname VALUES('croft haven');
+    INSERT INTO streetname VALUES('crofton springs');
+    INSERT INTO streetname VALUES('cross');
+    INSERT INTO streetname VALUES('crosspoint center');
+    INSERT INTO streetname VALUES('crownvista');
+    INSERT INTO streetname VALUES('crystal arms');
+    INSERT INTO streetname VALUES('crystal crest');
+    INSERT INTO streetname VALUES('crystal leaf');
+    INSERT INTO streetname VALUES('cunningham park');
+    INSERT INTO streetname VALUES('cypress pond');
+    INSERT INTO streetname VALUES('daffodil');
+    INSERT INTO streetname VALUES('daisyfield');
+    INSERT INTO streetname VALUES('dalecrest');
+    INSERT INTO streetname VALUES('dannelly park');
+    INSERT INTO streetname VALUES('daphne');
+    INSERT INTO streetname VALUES('daria');
+    INSERT INTO streetname VALUES('dartmouth');
+    INSERT INTO streetname VALUES('datha');
+    INSERT INTO streetname VALUES('david cox');
+    INSERT INTO streetname VALUES('davis');
+    INSERT INTO streetname VALUES('davis crossing');
+    INSERT INTO streetname VALUES('davis lake');
+    INSERT INTO streetname VALUES('davis ridge');
+    INSERT INTO streetname VALUES('dawnmist');
+    INSERT INTO streetname VALUES('daybreak');
+    INSERT INTO streetname VALUES('dearmon');
+    INSERT INTO streetname VALUES('dearview');
+    INSERT INTO streetname VALUES('deaton hill');
+    INSERT INTO streetname VALUES('deer cross');
+    INSERT INTO streetname VALUES('deerton');
+    INSERT INTO streetname VALUES('degrasse');
+    INSERT INTO streetname VALUES('delamere');
+    INSERT INTO streetname VALUES('dellfield');
+    INSERT INTO streetname VALUES('dellinger');
+    INSERT INTO streetname VALUES('demington');
+    INSERT INTO streetname VALUES('denmeade');
+    INSERT INTO streetname VALUES('derita');
+    INSERT INTO streetname VALUES('derita woods');
+    INSERT INTO streetname VALUES('deruyter');
+    INSERT INTO streetname VALUES('dervish');
+    INSERT INTO streetname VALUES('devas');
+    INSERT INTO streetname VALUES('devon croft');
+    INSERT INTO streetname VALUES('devonbridge');
+    INSERT INTO streetname VALUES('devongate');
+    INSERT INTO streetname VALUES('devonhill');
+    INSERT INTO streetname VALUES('dewmorn');
+    INSERT INTO streetname VALUES('distribution center');
+    INSERT INTO streetname VALUES('dominion crest');
+    INSERT INTO streetname VALUES('dominion green');
+    INSERT INTO streetname VALUES('dominion village');
+    INSERT INTO streetname VALUES('dorshire');
+    INSERT INTO streetname VALUES('double creek crossing');
+    INSERT INTO streetname VALUES('dow');
+    INSERT INTO streetname VALUES('downfield wood');
+    INSERT INTO streetname VALUES('downing creek');
+    INSERT INTO streetname VALUES('driscol');
+    INSERT INTO streetname VALUES('driwood');
+    INSERT INTO streetname VALUES('dry brook');
+    INSERT INTO streetname VALUES('dumont');
+    INSERT INTO streetname VALUES('dunblane');
+    INSERT INTO streetname VALUES('dunfield');
+    INSERT INTO streetname VALUES('dunoon');
+    INSERT INTO streetname VALUES('dunslow');
+    INSERT INTO streetname VALUES('dunstaff');
+    INSERT INTO streetname VALUES('durham');
+    INSERT INTO streetname VALUES('durston');
+    INSERT INTO streetname VALUES('dusty cedar');
+    INSERT INTO streetname VALUES('dusty trail');
+    INSERT INTO streetname VALUES('dutchess');
+    INSERT INTO streetname VALUES('duxford');
+    INSERT INTO streetname VALUES('eagle creek');
+    INSERT INTO streetname VALUES('eagles field');
+    INSERT INTO streetname VALUES('eargle');
+    INSERT INTO streetname VALUES('earlswood');
+    INSERT INTO streetname VALUES('early mist');
+    INSERT INTO streetname VALUES('earthenware');
+    INSERT INTO streetname VALUES('eastfield park');
+    INSERT INTO streetname VALUES('eastfield village');
+    INSERT INTO streetname VALUES('easy');
+    INSERT INTO streetname VALUES('eben');
+    INSERT INTO streetname VALUES('edgepine');
+    INSERT INTO streetname VALUES('edgewier');
+    INSERT INTO streetname VALUES('edinburgh');
+    INSERT INTO streetname VALUES('edinmeadow');
+    INSERT INTO streetname VALUES('edmonton');
+    INSERT INTO streetname VALUES('edwin jones');
+    INSERT INTO streetname VALUES('elberon');
+    INSERT INTO streetname VALUES('elderslie');
+    INSERT INTO streetname VALUES('elementary view');
+    INSERT INTO streetname VALUES('elendil');
+    INSERT INTO streetname VALUES('elizabeth');
+    INSERT INTO streetname VALUES('elm cove');
+    INSERT INTO streetname VALUES('elrond');
+    INSERT INTO streetname VALUES('elsenham');
+    INSERT INTO streetname VALUES('elven');
+    INSERT INTO streetname VALUES('emma lynn');
+    INSERT INTO streetname VALUES('english setter');
+    INSERT INTO streetname VALUES('enoch');
+    INSERT INTO streetname VALUES('equipment');
+    INSERT INTO streetname VALUES('ernest russell');
+    INSERT INTO streetname VALUES('ernie');
+    INSERT INTO streetname VALUES('esmeralda');
+    INSERT INTO streetname VALUES('evergreen hollow');
+    INSERT INTO streetname VALUES('eversfield');
+    INSERT INTO streetname VALUES('ewen');
+    INSERT INTO streetname VALUES('ewert cut');
+    INSERT INTO streetname VALUES('exbury');
+    INSERT INTO streetname VALUES('fair grounds park');
+    INSERT INTO streetname VALUES('fairbourne');
+    INSERT INTO streetname VALUES('fairchase');
+    INSERT INTO streetname VALUES('faircreek');
+    INSERT INTO streetname VALUES('fairglen');
+    INSERT INTO streetname VALUES('fairlea');
+    INSERT INTO streetname VALUES('fairmead');
+    INSERT INTO streetname VALUES('fairmeadows');
+    INSERT INTO streetname VALUES('fairstone');
+    INSERT INTO streetname VALUES('fairvista');
+    INSERT INTO streetname VALUES('fairway point');
+    INSERT INTO streetname VALUES('falconcrest');
+    INSERT INTO streetname VALUES('falls ridge');
+    INSERT INTO streetname VALUES('falmouth');
+    INSERT INTO streetname VALUES('far west');
+    INSERT INTO streetname VALUES('farlow');
+    INSERT INTO streetname VALUES('farris wheel');
+    INSERT INTO streetname VALUES('fawndale');
+    INSERT INTO streetname VALUES('feather bend');
+    INSERT INTO streetname VALUES('fernledge');
+    INSERT INTO streetname VALUES('fernmoss');
+    INSERT INTO streetname VALUES('ferrell commons');
+    INSERT INTO streetname VALUES('fieldstone');
+    INSERT INTO streetname VALUES('fillian');
+    INSERT INTO streetname VALUES('fincher');
+    INSERT INTO streetname VALUES('foggy meadow');
+    INSERT INTO streetname VALUES('fordyce');
+    INSERT INTO streetname VALUES('forest grove');
+    INSERT INTO streetname VALUES('forest path');
+    INSERT INTO streetname VALUES('forestridge commons');
+    INSERT INTO streetname VALUES('forestrock');
+    INSERT INTO streetname VALUES('fortunes ridge');
+    INSERT INTO streetname VALUES('founders club');
+    INSERT INTO streetname VALUES('fountaingrass');
+    INSERT INTO streetname VALUES('fox chase');
+    INSERT INTO streetname VALUES('fox glen');
+    INSERT INTO streetname VALUES('fox hill');
+    INSERT INTO streetname VALUES('fox point');
+    INSERT INTO streetname VALUES('fox trot');
+    INSERT INTO streetname VALUES('foxbriar');
+    INSERT INTO streetname VALUES('frank little');
+    INSERT INTO streetname VALUES('franzia');
+    INSERT INTO streetname VALUES('french woods');
+    INSERT INTO streetname VALUES('frostmoor');
+    INSERT INTO streetname VALUES('frye');
+    INSERT INTO streetname VALUES('furlong');
+    INSERT INTO streetname VALUES('galena view');
+    INSERT INTO streetname VALUES('gallery pointe');
+    INSERT INTO streetname VALUES('gammon');
+    INSERT INTO streetname VALUES('garden grove');
+    INSERT INTO streetname VALUES('gardendale');
+    INSERT INTO streetname VALUES('garganey');
+    INSERT INTO streetname VALUES('garnet field');
+    INSERT INTO streetname VALUES('garrison');
+    INSERT INTO streetname VALUES('garvin');
+    INSERT INTO streetname VALUES('garvis');
+    INSERT INTO streetname VALUES('gaskill');
+    INSERT INTO streetname VALUES('gemstone');
+    INSERT INTO streetname VALUES('gibbon');
+    INSERT INTO streetname VALUES('gibbon terrace');
+    INSERT INTO streetname VALUES('gibbons link');
+    INSERT INTO streetname VALUES('gillman');
+    INSERT INTO streetname VALUES('gladwood');
+    INSERT INTO streetname VALUES('gladwyne');
+    INSERT INTO streetname VALUES('glamorgan');
+    INSERT INTO streetname VALUES('glaze');
+    INSERT INTO streetname VALUES('glen brook');
+    INSERT INTO streetname VALUES('glen cove');
+    INSERT INTO streetname VALUES('glen hope');
+    INSERT INTO streetname VALUES('glen manor');
+    INSERT INTO streetname VALUES('glen olden');
+    INSERT INTO streetname VALUES('glencairn');
+    INSERT INTO streetname VALUES('glendock');
+    INSERT INTO streetname VALUES('glenolden');
+    INSERT INTO streetname VALUES('glenover');
+    INSERT INTO streetname VALUES('glenshire');
+    INSERT INTO streetname VALUES('glenstone');
+    INSERT INTO streetname VALUES('gold dust');
+    INSERT INTO streetname VALUES('golden pond');
+    INSERT INTO streetname VALUES('goldenblush');
+    INSERT INTO streetname VALUES('goldenfield');
+    INSERT INTO streetname VALUES('goose landing');
+    INSERT INTO streetname VALUES('gorham gate');
+    INSERT INTO streetname VALUES('grabill');
+    INSERT INTO streetname VALUES('graburns ford');
+    INSERT INTO streetname VALUES('graham');
+    INSERT INTO streetname VALUES('grahamson');
+    INSERT INTO streetname VALUES('granard');
+    INSERT INTO streetname VALUES('grand teton');
+    INSERT INTO streetname VALUES('grande heights');
+    INSERT INTO streetname VALUES('grandeur');
+    INSERT INTO streetname VALUES('granite creek');
+    INSERT INTO streetname VALUES('grasset');
+    INSERT INTO streetname VALUES('graypark');
+    INSERT INTO streetname VALUES('grays ridge');
+    INSERT INTO streetname VALUES('great bear');
+    INSERT INTO streetname VALUES('green clover');
+    INSERT INTO streetname VALUES('green hedge');
+    INSERT INTO streetname VALUES('green meadow');
+    INSERT INTO streetname VALUES('green pasture');
+    INSERT INTO streetname VALUES('greene');
+    INSERT INTO streetname VALUES('greenloch');
+    INSERT INTO streetname VALUES('greenock ridge');
+    INSERT INTO streetname VALUES('greenware');
+    INSERT INTO streetname VALUES('greenway village');
+    INSERT INTO streetname VALUES('grenelefe village');
+    INSERT INTO streetname VALUES('grey dogwood');
+    INSERT INTO streetname VALUES('greyhound');
+    INSERT INTO streetname VALUES('greylock ridge');
+    INSERT INTO streetname VALUES('grosbeak');
+    INSERT INTO streetname VALUES('grove');
+    INSERT INTO streetname VALUES('groveton');
+    INSERT INTO streetname VALUES('groveview');
+    INSERT INTO streetname VALUES('hackberry creek');
+    INSERT INTO streetname VALUES('hackberry grove');
+    INSERT INTO streetname VALUES('hackett');
+    INSERT INTO streetname VALUES('haddington');
+    INSERT INTO streetname VALUES('hagler');
+    INSERT INTO streetname VALUES('halcott');
+    INSERT INTO streetname VALUES('half dome');
+    INSERT INTO streetname VALUES('hallam');
+    INSERT INTO streetname VALUES('hamilton russell');
+    INSERT INTO streetname VALUES('hampton place');
+    INSERT INTO streetname VALUES('hankins');
+    INSERT INTO streetname VALUES('harburn forest');
+    INSERT INTO streetname VALUES('harringham');
+    INSERT INTO streetname VALUES('harrington woods');
+    INSERT INTO streetname VALUES('harris corners');
+    INSERT INTO streetname VALUES('harris cove');
+    INSERT INTO streetname VALUES('harris glen');
+    INSERT INTO streetname VALUES('harris hill');
+    INSERT INTO streetname VALUES('harris oak');
+    INSERT INTO streetname VALUES('harris pointe');
+    INSERT INTO streetname VALUES('harris pond');
+    INSERT INTO streetname VALUES('harris ridge');
+    INSERT INTO streetname VALUES('harris technology');
+    INSERT INTO streetname VALUES('harris woods');
+    INSERT INTO streetname VALUES('hartfield downs');
+    INSERT INTO streetname VALUES('hattie little');
+    INSERT INTO streetname VALUES('hatwynn');
+    INSERT INTO streetname VALUES('hawkins');
+    INSERT INTO streetname VALUES('hawksnest');
+    INSERT INTO streetname VALUES('haybridge');
+    INSERT INTO streetname VALUES('hayden');
+    INSERT INTO streetname VALUES('hazelcroft');
+    INSERT INTO streetname VALUES('hazlitt');
+    INSERT INTO streetname VALUES('hazy valley');
+    INSERT INTO streetname VALUES('hearst');
+    INSERT INTO streetname VALUES('heathcrest');
+    INSERT INTO streetname VALUES('heathcroft');
+    INSERT INTO streetname VALUES('hedge maple');
+    INSERT INTO streetname VALUES('hedgecrest');
+    INSERT INTO streetname VALUES('hedingham');
+    INSERT INTO streetname VALUES('heman');
+    INSERT INTO streetname VALUES('henderson');
+    INSERT INTO streetname VALUES('henderson oaks');
+    INSERT INTO streetname VALUES('henderson valley');
+    INSERT INTO streetname VALUES('hendry');
+    INSERT INTO streetname VALUES('heritage hills');
+    INSERT INTO streetname VALUES('heritage woods');
+    INSERT INTO streetname VALUES('heron cove');
+    INSERT INTO streetname VALUES('heron glen');
+    INSERT INTO streetname VALUES('hewitt');
+    INSERT INTO streetname VALUES('hey rock');
+    INSERT INTO streetname VALUES('heysham');
+    INSERT INTO streetname VALUES('hickory cove');
+    INSERT INTO streetname VALUES('hidden meadow');
+    INSERT INTO streetname VALUES('high glen');
+    INSERT INTO streetname VALUES('high laurel');
+    INSERT INTO streetname VALUES('high valley');
+    INSERT INTO streetname VALUES('highcroft');
+    INSERT INTO streetname VALUES('highland');
+    INSERT INTO streetname VALUES('highland commons');
+    INSERT INTO streetname VALUES('highland creek');
+    INSERT INTO streetname VALUES('highland glen');
+    INSERT INTO streetname VALUES('highland park');
+    INSERT INTO streetname VALUES('highlander');
+    INSERT INTO streetname VALUES('highstream');
+    INSERT INTO streetname VALUES('hilltop');
+    INSERT INTO streetname VALUES('hobbitshire');
+    INSERT INTO streetname VALUES('hoffman');
+    INSERT INTO streetname VALUES('hogans way');
+    INSERT INTO streetname VALUES('holbert');
+    INSERT INTO streetname VALUES('hollow ridge');
+    INSERT INTO streetname VALUES('holly vista');
+    INSERT INTO streetname VALUES('hollywood');
+    INSERT INTO streetname VALUES('hoover');
+    INSERT INTO streetname VALUES('hopkins');
+    INSERT INTO streetname VALUES('horace mann');
+    INSERT INTO streetname VALUES('hornbeam');
+    INSERT INTO streetname VALUES('horse pasture');
+    INSERT INTO streetname VALUES('hosta');
+    INSERT INTO streetname VALUES('howard');
+    INSERT INTO streetname VALUES('hubbard');
+    INSERT INTO streetname VALUES('hubbard falls');
+    INSERT INTO streetname VALUES('hubbard woods');
+    INSERT INTO streetname VALUES('hucks');
+    INSERT INTO streetname VALUES('hunters creek');
+    INSERT INTO streetname VALUES('hunters pointe');
+    INSERT INTO streetname VALUES('hunters spring');
+    INSERT INTO streetname VALUES('hunters whip');
+    INSERT INTO streetname VALUES('huntmeadow');
+    INSERT INTO streetname VALUES('hutchison mcdonald');
+    INSERT INTO streetname VALUES('ingleton');
+    INSERT INTO streetname VALUES('insdale');
+    INSERT INTO streetname VALUES('interstate 85 service');
+    INSERT INTO streetname VALUES('iola');
+    INSERT INTO streetname VALUES('iredell');
+    INSERT INTO streetname VALUES('iron brigade');
+    INSERT INTO streetname VALUES('irwin valley');
+    INSERT INTO streetname VALUES('irwin wood');
+    INSERT INTO streetname VALUES('ivy brook');
+    INSERT INTO streetname VALUES('ivy ridge');
+    INSERT INTO streetname VALUES('jack russell');
+    INSERT INTO streetname VALUES('jackson');
+    INSERT INTO streetname VALUES('jacob martin');
+    INSERT INTO streetname VALUES('jamison');
+    INSERT INTO streetname VALUES('jane');
+    INSERT INTO streetname VALUES('jaspar crest');
+    INSERT INTO streetname VALUES('jessica');
+    INSERT INTO streetname VALUES('jimmy oehler');
+    INSERT INTO streetname VALUES('jocelyn');
+    INSERT INTO streetname VALUES('johnston mill');
+    INSERT INTO streetname VALUES('johnston oehler');
+    INSERT INTO streetname VALUES('judal');
+    INSERT INTO streetname VALUES('junipeous');
+    INSERT INTO streetname VALUES('juniper');
+    INSERT INTO streetname VALUES('juniperus');
+    INSERT INTO streetname VALUES('kalispell');
+    INSERT INTO streetname VALUES('karylsturn');
+    INSERT INTO streetname VALUES('katelyn');
+    INSERT INTO streetname VALUES('kayron');
+    INSERT INTO streetname VALUES('keaton');
+    INSERT INTO streetname VALUES('keble');
+    INSERT INTO streetname VALUES('keels');
+    INSERT INTO streetname VALUES('keith');
+    INSERT INTO streetname VALUES('keithwood');
+    INSERT INTO streetname VALUES('kelden walker');
+    INSERT INTO streetname VALUES('kelsey emma');
+    INSERT INTO streetname VALUES('kendrick');
+    INSERT INTO streetname VALUES('kenmont');
+    INSERT INTO streetname VALUES('kennerly cove');
+    INSERT INTO streetname VALUES('kenninghall');
+    INSERT INTO streetname VALUES('kent village');
+    INSERT INTO streetname VALUES('kestral ridge');
+    INSERT INTO streetname VALUES('kestrel');
+    INSERT INTO streetname VALUES('kilmartin');
+    INSERT INTO streetname VALUES('kilty');
+    INSERT INTO streetname VALUES('kinglet');
+    INSERT INTO streetname VALUES('kingsland');
+    INSERT INTO streetname VALUES('kingsnorth');
+    INSERT INTO streetname VALUES('kinsmore');
+    INSERT INTO streetname VALUES('kirkgard');
+    INSERT INTO streetname VALUES('kirkmont');
+    INSERT INTO streetname VALUES('knightsgate');
+    INSERT INTO streetname VALUES('kobuk');
+    INSERT INTO streetname VALUES('kotlik');
+    INSERT INTO streetname VALUES('kotz');
+    INSERT INTO streetname VALUES('kyndall walk');
+    INSERT INTO streetname VALUES('laborde');
+    INSERT INTO streetname VALUES('lady bank');
+    INSERT INTO streetname VALUES('lagrande');
+    INSERT INTO streetname VALUES('lake');
+    INSERT INTO streetname VALUES('lakeridge commons');
+    INSERT INTO streetname VALUES('lakeview');
+    INSERT INTO streetname VALUES('lakewood edge');
+    INSERT INTO streetname VALUES('lakota');
+    INSERT INTO streetname VALUES('lambrook');
+    INSERT INTO streetname VALUES('lampkin');
+    INSERT INTO streetname VALUES('lampkin park');
+    INSERT INTO streetname VALUES('langham');
+    INSERT INTO streetname VALUES('lanzerac manor');
+    INSERT INTO streetname VALUES('larkmead forest');
+    INSERT INTO streetname VALUES('lattice');
+    INSERT INTO streetname VALUES('laurel crest');
+    INSERT INTO streetname VALUES('laurel ridge');
+    INSERT INTO streetname VALUES('laurel run');
+    INSERT INTO streetname VALUES('laurenfield');
+    INSERT INTO streetname VALUES('laveta');
+    INSERT INTO streetname VALUES('lazy day');
+    INSERT INTO streetname VALUES('leawood run');
+    INSERT INTO streetname VALUES('lee marie');
+    INSERT INTO streetname VALUES('legacy lake');
+    INSERT INTO streetname VALUES('legacy park');
+    INSERT INTO streetname VALUES('legato');
+    INSERT INTO streetname VALUES('legolas');
+    INSERT INTO streetname VALUES('leigh glen');
+    INSERT INTO streetname VALUES('lence');
+    INSERT INTO streetname VALUES('lenox hill');
+    INSERT INTO streetname VALUES('leonine');
+    INSERT INTO streetname VALUES('leslie');
+    INSERT INTO streetname VALUES('lester hill');
+    INSERT INTO streetname VALUES('levisey');
+    INSERT INTO streetname VALUES('liberty bell');
+    INSERT INTO streetname VALUES('linden berry');
+    INSERT INTO streetname VALUES('lisbon');
+    INSERT INTO streetname VALUES('little stoney');
+    INSERT INTO streetname VALUES('livengood');
+    INSERT INTO streetname VALUES('lochway');
+    INSERT INTO streetname VALUES('lockman');
+    INSERT INTO streetname VALUES('loganville');
+    INSERT INTO streetname VALUES('lone tree');
+    INSERT INTO streetname VALUES('long creek park');
+    INSERT INTO streetname VALUES('long forest');
+    INSERT INTO streetname VALUES('looking glass');
+    INSERT INTO streetname VALUES('lookout point');
+    INSERT INTO streetname VALUES('lowen');
+    INSERT INTO streetname VALUES('lusby');
+    INSERT INTO streetname VALUES('lyleton');
+    INSERT INTO streetname VALUES('lynn lee');
+    INSERT INTO streetname VALUES('lynnewood glen');
+    INSERT INTO streetname VALUES('machrie');
+    INSERT INTO streetname VALUES('mackinac');
+    INSERT INTO streetname VALUES('maddox');
+    INSERT INTO streetname VALUES('madison park');
+    INSERT INTO streetname VALUES('mallard');
+    INSERT INTO streetname VALUES('mallard cove');
+    INSERT INTO streetname VALUES('mallard forest');
+    INSERT INTO streetname VALUES('mallard grove');
+    INSERT INTO streetname VALUES('mallard hill');
+    INSERT INTO streetname VALUES('mallard park');
+    INSERT INTO streetname VALUES('mallard ridge');
+    INSERT INTO streetname VALUES('mallard view');
+    INSERT INTO streetname VALUES('manbey');
+    INSERT INTO streetname VALUES('manning');
+    INSERT INTO streetname VALUES('mantario');
+    INSERT INTO streetname VALUES('maple');
+    INSERT INTO streetname VALUES('maple cove');
+    INSERT INTO streetname VALUES('maple park');
+    INSERT INTO streetname VALUES('marathon hill');
+    INSERT INTO streetname VALUES('marbury');
+    INSERT INTO streetname VALUES('marett');
+    INSERT INTO streetname VALUES('marigold');
+    INSERT INTO streetname VALUES('marionwood');
+    INSERT INTO streetname VALUES('marshbank');
+    INSERT INTO streetname VALUES('mason');
+    INSERT INTO streetname VALUES('mayapple');
+    INSERT INTO streetname VALUES('maylandia');
+    INSERT INTO streetname VALUES('mayspring');
+    INSERT INTO streetname VALUES('mcadam');
+    INSERT INTO streetname VALUES('mcchesney');
+    INSERT INTO streetname VALUES('mccurdy');
+    INSERT INTO streetname VALUES('mcgrath');
+    INSERT INTO streetname VALUES('mckendree');
+    INSERT INTO streetname VALUES('mclaughlin');
+    INSERT INTO streetname VALUES('mctaggart');
+    INSERT INTO streetname VALUES('meadow green');
+    INSERT INTO streetname VALUES('meadow knoll');
+    INSERT INTO streetname VALUES('meadow post');
+    INSERT INTO streetname VALUES('meadowmont');
+    INSERT INTO streetname VALUES('meadowmont view');
+    INSERT INTO streetname VALUES('meadowview hills');
+    INSERT INTO streetname VALUES('melshire');
+    INSERT INTO streetname VALUES('melstrand');
+    INSERT INTO streetname VALUES('mentone');
+    INSERT INTO streetname VALUES('meridale crossing');
+    INSERT INTO streetname VALUES('merion hills');
+    INSERT INTO streetname VALUES('merlot');
+    INSERT INTO streetname VALUES('mersham');
+    INSERT INTO streetname VALUES('metromont');
+    INSERT INTO streetname VALUES('metromont industrial');
+    INSERT INTO streetname VALUES('michaw');
+    INSERT INTO streetname VALUES('milhaven');
+    INSERT INTO streetname VALUES('milhof');
+    INSERT INTO streetname VALUES('millstream ridge');
+    INSERT INTO streetname VALUES('mineral ridge');
+    INSERT INTO streetname VALUES('mint thistle');
+    INSERT INTO streetname VALUES('mintleaf');
+    INSERT INTO streetname VALUES('mintvale');
+    INSERT INTO streetname VALUES('misty');
+    INSERT INTO streetname VALUES('misty arbor');
+    INSERT INTO streetname VALUES('misty creek');
+    INSERT INTO streetname VALUES('misty oaks');
+    INSERT INTO streetname VALUES('misty wood');
+    INSERT INTO streetname VALUES('mitzi deborah');
+    INSERT INTO streetname VALUES('mobile');
+    INSERT INTO streetname VALUES('molly elizabeth');
+    INSERT INTO streetname VALUES('monmouth');
+    INSERT INTO streetname VALUES('montrose');
+    INSERT INTO streetname VALUES('moonlight');
+    INSERT INTO streetname VALUES('moose');
+    INSERT INTO streetname VALUES('morning dew');
+    INSERT INTO streetname VALUES('morningsong');
+    INSERT INTO streetname VALUES('morningview');
+    INSERT INTO streetname VALUES('morsey');
+    INSERT INTO streetname VALUES('moss glen');
+    INSERT INTO streetname VALUES('mossy bank');
+    INSERT INTO streetname VALUES('motor sport');
+    INSERT INTO streetname VALUES('mountain laurel');
+    INSERT INTO streetname VALUES('mourning dove');
+    INSERT INTO streetname VALUES('mozart');
+    INSERT INTO streetname VALUES('munsing');
+    INSERT INTO streetname VALUES('murray');
+    INSERT INTO streetname VALUES('nathan');
+    INSERT INTO streetname VALUES('netherhall');
+    INSERT INTO streetname VALUES('netherton');
+    INSERT INTO streetname VALUES('neuhoff');
+    INSERT INTO streetname VALUES('nevin');
+    INSERT INTO streetname VALUES('nevin brook');
+    INSERT INTO streetname VALUES('nevin glen');
+    INSERT INTO streetname VALUES('nevin place');
+    INSERT INTO streetname VALUES('new england');
+    INSERT INTO streetname VALUES('new house');
+    INSERT INTO streetname VALUES('newbary');
+    INSERT INTO streetname VALUES('newchurch');
+    INSERT INTO streetname VALUES('newfane');
+    INSERT INTO streetname VALUES('newgard');
+    INSERT INTO streetname VALUES('nicholas');
+    INSERT INTO streetname VALUES('nicole');
+    INSERT INTO streetname VALUES('nobility');
+    INSERT INTO streetname VALUES('norcroft');
+    INSERT INTO streetname VALUES('northridge');
+    INSERT INTO streetname VALUES('northside');
+    INSERT INTO streetname VALUES('northwoods business');
+    INSERT INTO streetname VALUES('norway');
+    INSERT INTO streetname VALUES('nottinghill');
+    INSERT INTO streetname VALUES('numenore');
+    INSERT INTO streetname VALUES('nyewood');
+    INSERT INTO streetname VALUES('oak');
+    INSERT INTO streetname VALUES('oak cove');
+    INSERT INTO streetname VALUES('oak pasture');
+    INSERT INTO streetname VALUES('oakburn');
+    INSERT INTO streetname VALUES('oakwinds');
+    INSERT INTO streetname VALUES('oakwood');
+    INSERT INTO streetname VALUES('obrien');
+    INSERT INTO streetname VALUES('ocala');
+    INSERT INTO streetname VALUES('old bridge');
+    INSERT INTO streetname VALUES('old fox');
+    INSERT INTO streetname VALUES('old potters');
+    INSERT INTO streetname VALUES('old statesville');
+    INSERT INTO streetname VALUES('old steine');
+    INSERT INTO streetname VALUES('old stoney creek');
+    INSERT INTO streetname VALUES('old sugar creek');
+    INSERT INTO streetname VALUES('old timber');
+    INSERT INTO streetname VALUES('old wagon');
+    INSERT INTO streetname VALUES('old willow');
+    INSERT INTO streetname VALUES('oldenway');
+    INSERT INTO streetname VALUES('oneida');
+    INSERT INTO streetname VALUES('ontario');
+    INSERT INTO streetname VALUES('oriole');
+    INSERT INTO streetname VALUES('orofino');
+    INSERT INTO streetname VALUES('orr');
+    INSERT INTO streetname VALUES('osage');
+    INSERT INTO streetname VALUES('osceola');
+    INSERT INTO streetname VALUES('osprey knoll');
+    INSERT INTO streetname VALUES('oxford hill');
+    INSERT INTO streetname VALUES('painted fern');
+    INSERT INTO streetname VALUES('painted pony');
+    INSERT INTO streetname VALUES('paisley');
+    INSERT INTO streetname VALUES('pale moss');
+    INSERT INTO streetname VALUES('palladium');
+    INSERT INTO streetname VALUES('palmutum');
+    INSERT INTO streetname VALUES('palustris');
+    INSERT INTO streetname VALUES('panglemont');
+    INSERT INTO streetname VALUES('panther');
+    INSERT INTO streetname VALUES('panthersville');
+    INSERT INTO streetname VALUES('paper whites');
+    INSERT INTO streetname VALUES('park');
+    INSERT INTO streetname VALUES('parker green');
+    INSERT INTO streetname VALUES('parkhouse');
+    INSERT INTO streetname VALUES('passour ridge');
+    INSERT INTO streetname VALUES('pasture view');
+    INSERT INTO streetname VALUES('patricia ann');
+    INSERT INTO streetname VALUES('patton');
+    INSERT INTO streetname VALUES('patton ridge');
+    INSERT INTO streetname VALUES('pawpaw');
+    INSERT INTO streetname VALUES('peach');
+    INSERT INTO streetname VALUES('peakwood');
+    INSERT INTO streetname VALUES('pebble creek');
+    INSERT INTO streetname VALUES('pecan cove');
+    INSERT INTO streetname VALUES('pedigree');
+    INSERT INTO streetname VALUES('pelorus');
+    INSERT INTO streetname VALUES('penmore');
+    INSERT INTO streetname VALUES('pensfold');
+    INSERT INTO streetname VALUES('pepperstone');
+    INSERT INTO streetname VALUES('peregrine');
+    INSERT INTO streetname VALUES('periwinkle');
+    INSERT INTO streetname VALUES('perkins');
+    INSERT INTO streetname VALUES('pete brown');
+    INSERT INTO streetname VALUES('phillips');
+    INSERT INTO streetname VALUES('pickway');
+    INSERT INTO streetname VALUES('piercy woods');
+    INSERT INTO streetname VALUES('pierpoint');
+    INSERT INTO streetname VALUES('pine');
+    INSERT INTO streetname VALUES('pine branch');
+    INSERT INTO streetname VALUES('pine meadow');
+    INSERT INTO streetname VALUES('pineleaf');
+    INSERT INTO streetname VALUES('pinewood');
+    INSERT INTO streetname VALUES('pintail');
+    INSERT INTO streetname VALUES('pipestone');
+    INSERT INTO streetname VALUES('placer maple');
+    INSERT INTO streetname VALUES('plover');
+    INSERT INTO streetname VALUES('plum');
+    INSERT INTO streetname VALUES('po box');
+    INSERT INTO streetname VALUES('pochard');
+    INSERT INTO streetname VALUES('pointview');
+    INSERT INTO streetname VALUES('polk and white');
+    INSERT INTO streetname VALUES('pond valley');
+    INSERT INTO streetname VALUES('pondridge');
+    INSERT INTO streetname VALUES('pope farm');
+    INSERT INTO streetname VALUES('poplar grove');
+    INSERT INTO streetname VALUES('poplar springs');
+    INSERT INTO streetname VALUES('portola');
+    INSERT INTO streetname VALUES('potters glen');
+    INSERT INTO streetname VALUES('powatan');
+    INSERT INTO streetname VALUES('prairie valley');
+    INSERT INTO streetname VALUES('prescott');
+    INSERT INTO streetname VALUES('presmann');
+    INSERT INTO streetname VALUES('prestigious');
+    INSERT INTO streetname VALUES('princess');
+    INSERT INTO streetname VALUES('prosperity');
+    INSERT INTO streetname VALUES('prosperity church');
+    INSERT INTO streetname VALUES('prosperity commons');
+    INSERT INTO streetname VALUES('prosperity park');
+    INSERT INTO streetname VALUES('prosperity point');
+    INSERT INTO streetname VALUES('prosperity ridge');
+    INSERT INTO streetname VALUES('prosperity view');
+    INSERT INTO streetname VALUES('purple finch');
+    INSERT INTO streetname VALUES('quail');
+    INSERT INTO streetname VALUES('queensbury');
+    INSERT INTO streetname VALUES('quinn');
+    INSERT INTO streetname VALUES('racine');
+    INSERT INTO streetname VALUES('radbourne');
+    INSERT INTO streetname VALUES('raddington');
+    INSERT INTO streetname VALUES('raku');
+    INSERT INTO streetname VALUES('rancliffe');
+    INSERT INTO streetname VALUES('ravencrest');
+    INSERT INTO streetname VALUES('reames');
+    INSERT INTO streetname VALUES('rebecca run');
+    INSERT INTO streetname VALUES('red bluff');
+    INSERT INTO streetname VALUES('red clay');
+    INSERT INTO streetname VALUES('red clover');
+    INSERT INTO streetname VALUES('red rose');
+    INSERT INTO streetname VALUES('red shed');
+    INSERT INTO streetname VALUES('red tail');
+    INSERT INTO streetname VALUES('redbridge');
+    INSERT INTO streetname VALUES('redstart');
+    INSERT INTO streetname VALUES('redstone view');
+    INSERT INTO streetname VALUES('reedmont');
+    INSERT INTO streetname VALUES('reeves');
+    INSERT INTO streetname VALUES('regal');
+    INSERT INTO streetname VALUES('reinbeck');
+    INSERT INTO streetname VALUES('retriever');
+    INSERT INTO streetname VALUES('ribbonwalk');
+    INSERT INTO streetname VALUES('richardson park');
+    INSERT INTO streetname VALUES('richfield');
+    INSERT INTO streetname VALUES('riddings');
+    INSERT INTO streetname VALUES('ridge');
+    INSERT INTO streetname VALUES('ridge cliff');
+    INSERT INTO streetname VALUES('ridge path');
+    INSERT INTO streetname VALUES('ridge peak');
+    INSERT INTO streetname VALUES('ridgefield');
+    INSERT INTO streetname VALUES('ridgeline');
+    INSERT INTO streetname VALUES('ridgeview commons');
+    INSERT INTO streetname VALUES('riley');
+    INSERT INTO streetname VALUES('riley woods');
+    INSERT INTO streetname VALUES('rillet');
+    INSERT INTO streetname VALUES('rindle');
+    INSERT INTO streetname VALUES('rivendell');
+    INSERT INTO streetname VALUES('robin');
+    INSERT INTO streetname VALUES('robins nest');
+    INSERT INTO streetname VALUES('robur');
+    INSERT INTO streetname VALUES('robyns glen');
+    INSERT INTO streetname VALUES('rock stream');
+    INSERT INTO streetname VALUES('rockwell');
+    INSERT INTO streetname VALUES('rockwell church');
+    INSERT INTO streetname VALUES('rocky brook');
+    INSERT INTO streetname VALUES('rocky ford club');
+    INSERT INTO streetname VALUES('rotary');
+    INSERT INTO streetname VALUES('rouda');
+    INSERT INTO streetname VALUES('royal bluff');
+    INSERT INTO streetname VALUES('royal celadon');
+    INSERT INTO streetname VALUES('rubin lura');
+    INSERT INTO streetname VALUES('runswyck');
+    INSERT INTO streetname VALUES('ruth ferrell');
+    INSERT INTO streetname VALUES('ruth polk');
+    INSERT INTO streetname VALUES('ryan jay');
+    INSERT INTO streetname VALUES('sackett');
+    INSERT INTO streetname VALUES('saddle pace');
+    INSERT INTO streetname VALUES('saddle run');
+    INSERT INTO streetname VALUES('saddle trail');
+    INSERT INTO streetname VALUES('saguaro');
+    INSERT INTO streetname VALUES('saint audrey');
+    INSERT INTO streetname VALUES('saint bernard');
+    INSERT INTO streetname VALUES('saint frances');
+    INSERT INTO streetname VALUES('sam roper');
+    INSERT INTO streetname VALUES('samara');
+    INSERT INTO streetname VALUES('sanders creek');
+    INSERT INTO streetname VALUES('saquache');
+    INSERT INTO streetname VALUES('sarnia');
+    INSERT INTO streetname VALUES('savannah springs');
+    INSERT INTO streetname VALUES('sawgrass ridge');
+    INSERT INTO streetname VALUES('saxonbury');
+    INSERT INTO streetname VALUES('scotch moss');
+    INSERT INTO streetname VALUES('seasons');
+    INSERT INTO streetname VALUES('serenity');
+    INSERT INTO streetname VALUES('seths');
+    INSERT INTO streetname VALUES('shadow lawn');
+    INSERT INTO streetname VALUES('shadow oaks');
+    INSERT INTO streetname VALUES('shadow pine');
+    INSERT INTO streetname VALUES('shadyside');
+    INSERT INTO streetname VALUES('shallow oak');
+    INSERT INTO streetname VALUES('shelley');
+    INSERT INTO streetname VALUES('shining oak');
+    INSERT INTO streetname VALUES('ship');
+    INSERT INTO streetname VALUES('shore haven');
+    INSERT INTO streetname VALUES('shuman');
+    INSERT INTO streetname VALUES('sidney');
+    INSERT INTO streetname VALUES('silver birch');
+    INSERT INTO streetname VALUES('silvermere');
+    INSERT INTO streetname VALUES('simonton');
+    INSERT INTO streetname VALUES('singing hills');
+    INSERT INTO streetname VALUES('singing oak');
+    INSERT INTO streetname VALUES('sipes');
+    INSERT INTO streetname VALUES('six point');
+    INSERT INTO streetname VALUES('skycrest');
+    INSERT INTO streetname VALUES('skyline');
+    INSERT INTO streetname VALUES('small');
+    INSERT INTO streetname VALUES('smith corners');
+    INSERT INTO streetname VALUES('smithwood');
+    INSERT INTO streetname VALUES('snow hill');
+    INSERT INTO streetname VALUES('soapstone');
+    INSERT INTO streetname VALUES('sobeck');
+    INSERT INTO streetname VALUES('socata');
+    INSERT INTO streetname VALUES('solace');
+    INSERT INTO streetname VALUES('solway');
+    INSERT INTO streetname VALUES('song sparrow');
+    INSERT INTO streetname VALUES('sorrento');
+    INSERT INTO streetname VALUES('spector');
+    INSERT INTO streetname VALUES('spin drift');
+    INSERT INTO streetname VALUES('spring crest');
+    INSERT INTO streetname VALUES('spring lee');
+    INSERT INTO streetname VALUES('spring park');
+    INSERT INTO streetname VALUES('spring terrace');
+    INSERT INTO streetname VALUES('spring trace');
+    INSERT INTO streetname VALUES('springhaven');
+    INSERT INTO streetname VALUES('squirrel trail');
+    INSERT INTO streetname VALUES('stardust');
+    INSERT INTO streetname VALUES('stargaze');
+    INSERT INTO streetname VALUES('starita');
+    INSERT INTO streetname VALUES('starmount');
+    INSERT INTO streetname VALUES('statesville');
+    INSERT INTO streetname VALUES('steed');
+    INSERT INTO streetname VALUES('steelewood');
+    INSERT INTO streetname VALUES('steepleglen');
+    INSERT INTO streetname VALUES('stephens farm');
+    INSERT INTO streetname VALUES('stewarton');
+    INSERT INTO streetname VALUES('stone park');
+    INSERT INTO streetname VALUES('stonebrook');
+    INSERT INTO streetname VALUES('stonefield');
+    INSERT INTO streetname VALUES('stoneglen');
+    INSERT INTO streetname VALUES('stonemarsh');
+    INSERT INTO streetname VALUES('stoney garden');
+    INSERT INTO streetname VALUES('stoney run');
+    INSERT INTO streetname VALUES('stoney valley');
+    INSERT INTO streetname VALUES('stoneykirk');
+    INSERT INTO streetname VALUES('stream bank');
+    INSERT INTO streetname VALUES('stream ridge');
+    INSERT INTO streetname VALUES('suburban');
+    INSERT INTO streetname VALUES('suffield');
+    INSERT INTO streetname VALUES('sugar creek');
+    INSERT INTO streetname VALUES('sugarberry');
+    INSERT INTO streetname VALUES('sugarstone');
+    INSERT INTO streetname VALUES('summer creek');
+    INSERT INTO streetname VALUES('summer valley');
+    INSERT INTO streetname VALUES('summercrest');
+    INSERT INTO streetname VALUES('summercroft');
+    INSERT INTO streetname VALUES('summerford');
+    INSERT INTO streetname VALUES('summergold');
+    INSERT INTO streetname VALUES('sunbeam');
+    INSERT INTO streetname VALUES('sunbridge');
+    INSERT INTO streetname VALUES('sunpath');
+    INSERT INTO streetname VALUES('sunset');
+    INSERT INTO streetname VALUES('sunset ridge');
+    INSERT INTO streetname VALUES('sunstone');
+    INSERT INTO streetname VALUES('suntrace');
+    INSERT INTO streetname VALUES('sunwalk');
+    INSERT INTO streetname VALUES('sutters hill');
+    INSERT INTO streetname VALUES('suttonview');
+    INSERT INTO streetname VALUES('swallow tail');
+    INSERT INTO streetname VALUES('swanston');
+    INSERT INTO streetname VALUES('sweet grove');
+    INSERT INTO streetname VALUES('sweet rose');
+    INSERT INTO streetname VALUES('sweetbriar ridge');
+    INSERT INTO streetname VALUES('sweetfield');
+    INSERT INTO streetname VALUES('sydney overlook');
+    INSERT INTO streetname VALUES('sylvan');
+    INSERT INTO streetname VALUES('symphony woods');
+    INSERT INTO streetname VALUES('tallia');
+    INSERT INTO streetname VALUES('tallu');
+    INSERT INTO streetname VALUES('talwyn');
+    INSERT INTO streetname VALUES('tanager');
+    INSERT INTO streetname VALUES('tanager park');
+    INSERT INTO streetname VALUES('tangley');
+    INSERT INTO streetname VALUES('taranasay');
+    INSERT INTO streetname VALUES('tarby');
+    INSERT INTO streetname VALUES('tarland');
+    INSERT INTO streetname VALUES('tarpway');
+    INSERT INTO streetname VALUES('tauten');
+    INSERT INTO streetname VALUES('taymouth');
+    INSERT INTO streetname VALUES('ten trees');
+    INSERT INTO streetname VALUES('terrace view');
+    INSERT INTO streetname VALUES('terrier');
+    INSERT INTO streetname VALUES('tesh');
+    INSERT INTO streetname VALUES('teton');
+    INSERT INTO streetname VALUES('tewkesbury');
+    INSERT INTO streetname VALUES('thelema');
+    INSERT INTO streetname VALUES('thistle bloom');
+    INSERT INTO streetname VALUES('thistledown');
+    INSERT INTO streetname VALUES('thomas ridge');
+    INSERT INTO streetname VALUES('thornbrook');
+    INSERT INTO streetname VALUES('tifton grass');
+    INSERT INTO streetname VALUES('tigerton');
+    INSERT INTO streetname VALUES('tomsie efird');
+    INSERT INTO streetname VALUES('tor');
+    INSERT INTO streetname VALUES('torphin');
+    INSERT INTO streetname VALUES('torrence');
+    INSERT INTO streetname VALUES('towering pine');
+    INSERT INTO streetname VALUES('towhee');
+    INSERT INTO streetname VALUES('toxaway');
+    INSERT INTO streetname VALUES('tracy glenn');
+    INSERT INTO streetname VALUES('tradition view');
+    INSERT INTO streetname VALUES('trailer');
+    INSERT INTO streetname VALUES('transport');
+    INSERT INTO streetname VALUES('trehurst');
+    INSERT INTO streetname VALUES('trexler');
+    INSERT INTO streetname VALUES('trillium fields');
+    INSERT INTO streetname VALUES('trimbach');
+    INSERT INTO streetname VALUES('tucker');
+    INSERT INTO streetname VALUES('tullamore');
+    INSERT INTO streetname VALUES('tullock creek');
+    INSERT INTO streetname VALUES('tunston');
+    INSERT INTO streetname VALUES('tupelo');
+    INSERT INTO streetname VALUES('turnabout');
+    INSERT INTO streetname VALUES('turney');
+    INSERT INTO streetname VALUES('turtle cross');
+    INSERT INTO streetname VALUES('turtleback');
+    INSERT INTO streetname VALUES('twelvestone');
+    INSERT INTO streetname VALUES('twin');
+    INSERT INTO streetname VALUES('twin brook');
+    INSERT INTO streetname VALUES('twin lakes');
+    INSERT INTO streetname VALUES('twisted pine');
+    INSERT INTO streetname VALUES('tyler finley');
+    INSERT INTO streetname VALUES('university station');
+    INSERT INTO streetname VALUES('uphill');
+    INSERT INTO streetname VALUES('valeview');
+    INSERT INTO streetname VALUES('valhalla');
+    INSERT INTO streetname VALUES('van');
+    INSERT INTO streetname VALUES('vance davis');
+    INSERT INTO streetname VALUES('vanhoy');
+    INSERT INTO streetname VALUES('veckman');
+    INSERT INTO streetname VALUES('victoria');
+    INSERT INTO streetname VALUES('victory');
+    INSERT INTO streetname VALUES('village glen');
+    INSERT INTO streetname VALUES('vireo');
+    INSERT INTO streetname VALUES('viscount');
+    INSERT INTO streetname VALUES('voeltz');
+    INSERT INTO streetname VALUES('wade e morgan');
+    INSERT INTO streetname VALUES('wake');
+    INSERT INTO streetname VALUES('wales');
+    INSERT INTO streetname VALUES('wallace ridge');
+    INSERT INTO streetname VALUES('waltham');
+    INSERT INTO streetname VALUES('wanamassa');
+    INSERT INTO streetname VALUES('warbler wood');
+    INSERT INTO streetname VALUES('washington');
+    INSERT INTO streetname VALUES('water');
+    INSERT INTO streetname VALUES('waterelm');
+    INSERT INTO streetname VALUES('waterford hills');
+    INSERT INTO streetname VALUES('waterford valley');
+    INSERT INTO streetname VALUES('waterloo');
+    INSERT INTO streetname VALUES('waterton leas');
+    INSERT INTO streetname VALUES('waverly lynn');
+    INSERT INTO streetname VALUES('waverlyglen');
+    INSERT INTO streetname VALUES('wayside');
+    INSERT INTO streetname VALUES('westbury lake');
+    INSERT INTO streetname VALUES('westray');
+    INSERT INTO streetname VALUES('whistlers chase');
+    INSERT INTO streetname VALUES('whistley green');
+    INSERT INTO streetname VALUES('whistling oak');
+    INSERT INTO streetname VALUES('whitcomb');
+    INSERT INTO streetname VALUES('white aspen');
+    INSERT INTO streetname VALUES('white cascade');
+    INSERT INTO streetname VALUES('white mist');
+    INSERT INTO streetname VALUES('white rock');
+    INSERT INTO streetname VALUES('white stag');
+    INSERT INTO streetname VALUES('whitegate');
+    INSERT INTO streetname VALUES('whitehill');
+    INSERT INTO streetname VALUES('whitetail');
+    INSERT INTO streetname VALUES('whitewood');
+    INSERT INTO streetname VALUES('wilburn park');
+    INSERT INTO streetname VALUES('wild garden');
+    INSERT INTO streetname VALUES('wild rose');
+    INSERT INTO streetname VALUES('wilkins terrace');
+    INSERT INTO streetname VALUES('william ficklen');
+    INSERT INTO streetname VALUES('wiltshire ridge');
+    INSERT INTO streetname VALUES('windchase');
+    INSERT INTO streetname VALUES('winding jordan');
+    INSERT INTO streetname VALUES('windy meadow');
+    INSERT INTO streetname VALUES('winghaven');
+    INSERT INTO streetname VALUES('wingmont');
+    INSERT INTO streetname VALUES('winslow');
+    INSERT INTO streetname VALUES('winter pine');
+    INSERT INTO streetname VALUES('winter view');
+    INSERT INTO streetname VALUES('wolf creek');
+    INSERT INTO streetname VALUES('wondering oak');
+    INSERT INTO streetname VALUES('woodard');
+    INSERT INTO streetname VALUES('woodfire');
+    INSERT INTO streetname VALUES('woodland commons');
+    INSERT INTO streetname VALUES('woodland hills');
+    INSERT INTO streetname VALUES('woodnotch');
+    INSERT INTO streetname VALUES('woodstone');
+    INSERT INTO streetname VALUES('worsley');
+    INSERT INTO streetname VALUES('wren creek');
+    INSERT INTO streetname VALUES('wrens nest');
+    INSERT INTO streetname VALUES('wrexham');
+    INSERT INTO streetname VALUES('wt harris');
+    INSERT INTO streetname VALUES('wylie meadow');
+    INSERT INTO streetname VALUES('wynborough');
+    INSERT INTO streetname VALUES('wynbrook');
+    INSERT INTO streetname VALUES('wyndham hill');
+    INSERT INTO streetname VALUES('yandem');
+    INSERT INTO streetname VALUES('yellow rose');
+    INSERT INTO streetname VALUES('yellow spaniel');
+    INSERT INTO streetname VALUES('yorkford');
+    INSERT INTO streetname VALUES('ziegler');
+    INSERT INTO streetname VALUES('zion renaissance');
+
+    SELECT count(*) FROM streetname;
+  }
+} {1228}
+
+do_test fuzzer1-2.1 {
+  execsql {
+    SELECT n, distance FROM f2, streetname
+     WHERE f2.word MATCH 'wersley'
+       AND f2.distance<=150
+       AND f2.word=streetname.n
+  }
+} {worsley 37}
+do_test fuzzer1-2.2 {
+  execsql {
+    SELECT n, distance FROM f2, streetname
+     WHERE f2.word MATCH 'testledown'
+       AND f2.distance<=150
+       AND f2.word=streetname.n
+  }
+} {thistledown 103}
+do_test fuzzer1-2.3 {
+  execsql {
+    SELECT DISTINCT streetname.n FROM f2, streetname
+     WHERE f2.word MATCH 'tayle'
+       AND f2.distance<=200
+       AND streetname.n>=f2.word AND streetname.n<=(f2.word || x'F7BFBFBF')
+  }
+} {{tyler finley} trailer taymouth steelewood tallia tallu talwyn thelema}
+do_test fuzzer1-2.4 {
+  execsql {
+    SELECT DISTINCT streetname.n
+      FROM f2 JOIN streetname
+        ON (streetname.n>=f2.word AND streetname.n<=(f2.word || 'zzzzzz'))
+     WHERE f2.word MATCH 'duck'
+       AND f2.distance<150
+       AND f2.ruleset=3
+     ORDER BY 1
+  }
+} {mallard {mallard cove} {mallard forest} {mallard grove} {mallard hill} {mallard park} {mallard ridge} {mallard view}}
+do_test fuzzer1-2.5 {
+  execsql {
+    SELECT DISTINCT streetname.n
+      FROM f2 JOIN streetname
+        ON (streetname.n>=f2.word AND streetname.n<=(f2.word || 'zzzzzz'))
+     WHERE f2.word MATCH 'duck'
+       AND f2.distance<150
+       AND f2.ruleset=2
+     ORDER BY 1
+  }
+} {}
+
+forcedelete test.db2
+do_execsql_test fuzzer1-4.1 {
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.f3_rules(ruleset, cfrom, cto, cost);
+  INSERT INTO f3_rules(ruleset, cfrom, cto, cost) VALUES(0, 'x','y', 10);
+  INSERT INTO f3_rules(ruleset, cfrom, cto, cost) VALUES(1, 'a','b', 10);
+  CREATE VIRTUAL TABLE aux.f3 USING fuzzer(f3_rules);
+  SELECT word FROM f3 WHERE word MATCH 'ax'
+} {ax ay}
+
+#-------------------------------------------------------------------------
+#
+#  1.5.1 - Check things work with a fuzzer data table name that requires
+#          quoting. Also that NULL entries in the "from" column of the
+#          data table are treated as zero length strings ('').
+#
+#  1.5.2 - Check that no-op rules (i.e. C->C) are ignored. Test NULL in
+#          the "to" column of a fuzzer data table.
+#  
+#  1.5.3 - Test out-of-range values for the cost field of the data table.
+#
+#  1.5.4 - Test out-of-range values for the string fields of the data table.
+#
+#  1.5.5 - Test out-of-range values for the ruleset field of the data table.
+#
+do_execsql_test 5.1 {
+  CREATE TABLE "fuzzer [x] rules table"(a, b, c, d);
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, NULL, 'abc', 10);
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+  SELECT word, distance FROM x WHERE word MATCH '123' LIMIT 4;
+} {123 0 abc123 10 1abc23 10 12abc3 10}
+
+do_execsql_test 5.2 {
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, 'x', NULL, 20);
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, NULL, NULL, 10);
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, 'x', 'x', 10);
+
+  DROP TABLE x;
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+
+  SELECT word, distance FROM x WHERE word MATCH 'xx';
+} {xx 0 x 20 {} 40}
+
+do_execsql_test 5.3.1 {
+  DROP TABLE IF EXISTS x;
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, 'c', 'd', 1001);
+}
+do_catchsql_test 5.3.2 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: cost must be between 1 and 1000}}
+
+do_execsql_test 5.3.3 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, 'd', 'c', 0);
+}
+do_catchsql_test 5.3.4 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: cost must be between 1 and 1000}}
+
+do_execsql_test 5.3.5 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(0, 'd', 'c', -20);
+}
+do_catchsql_test 5.3.6 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: cost must be between 1 and 1000}}
+
+do_execsql_test 5.4.1 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(
+    0, 'x', '12345678901234567890123456789012345678901234567890', 2
+  );
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+  SELECT word FROM x WHERE word MATCH 'x';
+} {x 12345678901234567890123456789012345678901234567890}
+
+do_execsql_test 5.4.2 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(
+    0, 'x', '123456789012345678901234567890123456789012345678901', 2
+  );
+} 
+do_catchsql_test 5.4.3 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: maximum string length is 50}}
+
+do_execsql_test 5.4.4 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(
+    0, '123456789012345678901234567890123456789012345678901', 'x', 2
+  );
+} 
+do_catchsql_test 5.4.5 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: maximum string length is 50}}
+
+do_execsql_test 5.5.1 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES(-1, 'x', 'y', 2);
+} 
+do_catchsql_test 5.5.2 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: ruleset must be between 0 and 2147483647}}
+
+do_execsql_test 5.5.3 {
+  DROP TABLE IF EXISTS x;
+  DELETE FROM "fuzzer [x] rules table";
+  INSERT INTO "fuzzer [x] rules table" VALUES((1<<32)+100, 'x', 'y', 2);
+} 
+do_catchsql_test 5.5.4 {
+  CREATE VIRTUAL TABLE x USING fuzzer('fuzzer [x] rules table');
+} {1 {fuzzer: ruleset must be between 0 and 2147483647}}
+
+#-------------------------------------------------------------------------
+# Test using different types of quotes with CREATE VIRTUAL TABLE 
+# arguments.
+#
+do_execsql_test 7.1 {
+  CREATE TABLE [x2 "rules] (a, b, c, d);
+  INSERT INTO [x2 "rules] VALUES(0, 'a', 'b', 5);
+}
+foreach {tn sql} {
+  1 { CREATE VIRTUAL TABLE x2 USING fuzzer( [x2 "rules] ) }
+  2 { CREATE VIRTUAL TABLE x2 USING fuzzer( "x2 ""rules" ) }
+  3 { CREATE VIRTUAL TABLE x2 USING fuzzer( 'x2 "rules' ) }
+  4 { CREATE VIRTUAL TABLE x2 USING fuzzer( `x2 "rules` ) }
+} {
+  do_execsql_test 7.2.$tn.1 { DROP TABLE IF EXISTS x2 }
+  do_execsql_test 7.2.$tn.2 $sql
+  do_execsql_test 7.2.$tn.3 { 
+    SELECT word FROM x2 WHERE word MATCH 'aaa' 
+  } {aaa baa aba aab bab abb bba bbb}
+}
+
+#-------------------------------------------------------------------------
+# Test using a fuzzer table in different contexts.
+#
+do_execsql_test 8.1 {
+  CREATE TABLE x3_rules(rule_set, cFrom, cTo, cost);
+  INSERT INTO x3_rules VALUES(2, 'a', 'x', 10);
+  INSERT INTO x3_rules VALUES(2, 'a', 'y',  9);
+  INSERT INTO x3_rules VALUES(2, 'a', 'z',  8);
+  CREATE VIRTUAL TABLE x3 USING fuzzer(x3_rules);
+}
+
+do_execsql_test 8.2.1 {
+  SELECT cFrom, cTo, word 
+    FROM x3_rules CROSS JOIN x3 
+    WHERE word MATCH 'a' AND cost=distance AND ruleset=2
+    ORDER BY +cTo;
+} {a x x a y y a z z}
+
+do_execsql_test 8.2.2 {
+  SELECT cFrom, cTo, word 
+    FROM x3 CROSS JOIN x3_rules
+    WHERE word MATCH 'a' AND cost=distance AND ruleset=2
+    ORDER BY +cTo DESC
+} {a z z a y y a x x}
+
+do_execsql_test 8.2.3 {
+  SELECT cFrom, cTo, word 
+    FROM x3_rules, x3 
+    WHERE word MATCH 'a' AND cost=distance AND ruleset=2
+    ORDER BY +cTo DESC;
+} {a z z a y y a x x}
+
+do_execsql_test 8.2.4 {
+  SELECT cFrom, cTo, word 
+    FROM x3, x3_rules
+    WHERE word MATCH 'a' AND cost=distance AND ruleset=2
+    ORDER BY +cTo DESC;
+} {a z z a y y a x x}
+
+do_execsql_test 8.2.5 {
+  CREATE INDEX i1 ON x3_rules(cost);
+  SELECT cFrom, cTo, word 
+    FROM x3_rules, x3 
+    WHERE word MATCH 'a' AND cost=distance AND ruleset=2
+    ORDER BY +cTo DESC;
+} {a z z a y y a x x}
+
+do_execsql_test 8.2.5 {
+  SELECT word FROM x3_rules, x3 WHERE word MATCH x3_rules.cFrom AND ruleset=2
+} {a z y x a z y x a z y x}
+
+do_execsql_test 8.2.6 {
+  SELECT word FROM x3_rules, x3 
+  WHERE word MATCH x3_rules.cFrom 
+    AND ruleset=2 
+    AND x3_rules.cost=8;
+} {a z y x}
+
+do_execsql_test 8.2.7 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i2 ON t1(b);
+  SELECT word, distance FROM x3, t1 
+    WHERE x3.word MATCH t1.a AND ruleset=2 AND distance=t1.b;
+} {}
+
+do_execsql_test 8.2.8 {
+  INSERT INTO x3_rules VALUES(1, 'a', 't',  5);
+  INSERT INTO x3_rules VALUES(1, 'a', 'u',  4);
+  INSERT INTO x3_rules VALUES(1, 'a', 'v',  3);
+  DROP TABLE x3;
+  CREATE VIRTUAL TABLE x3 USING fuzzer(x3_rules);
+  SELECT * FROM x3_rules;
+} {
+  2 a x 10 
+  2 a y 9 
+  2 a z 8 
+  1 a t 5 
+  1 a u 4 
+  1 a v 3
+}
+
+do_catchsql_test 8.2.9 {
+  SELECT word FROM x3 WHERE ruleset=2 AND word MATCH 'a' AND WORD MATCH 'b';
+} {1 {unable to use function MATCH in the requested context}}
+
+do_execsql_test 8.2.10 {
+  SELECT word FROM x3 WHERE ruleset=1 AND word MATCH 'a'
+} {a v u t}
+
+# The term "ruleset<=1" is not handled by the fuzzer module. Instead, it
+# is handled by SQLite, which assumes that all rows have a NULL value in
+# the ruleset column. Since NULL<=1 is never true, this query returns
+# no rows.
+do_execsql_test 8.2.11 {
+  SELECT word FROM x3 WHERE ruleset<=1 AND word MATCH 'a'
+} {}
+
+do_execsql_test 8.2.12 {
+  SELECT word FROM x3 WHERE ruleset=1 AND word MATCH 'a' ORDER BY distance ASC;
+} {a v u t}
+
+do_execsql_test 8.2.13 {
+  SELECT word FROM x3 WHERE ruleset=1 AND word MATCH 'a' ORDER BY distance DESC;
+} {t u v a}
+
+do_execsql_test 8.2.13 {
+  SELECT word FROM x3 WHERE ruleset=1 AND word MATCH 'a' ORDER BY word ASC;
+} {a t u v}
+
+do_execsql_test 8.2.14 {
+  SELECT word FROM x3 WHERE ruleset=1 AND word MATCH 'a' ORDER BY word DESC;
+} {v u t a}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 9.1 {
+  CREATE TABLE x4_rules(a, b, c, d);
+  INSERT INTO x4_rules VALUES(0, 'a', 'b', 10);
+  INSERT INTO x4_rules VALUES(0, 'a', 'c', 11);
+  INSERT INTO x4_rules VALUES(0, 'bx', 'zz', 20);
+  INSERT INTO x4_rules VALUES(0, 'cx', 'yy', 15);
+  INSERT INTO x4_rules VALUES(0, 'zz', '!!', 50);
+  CREATE VIRTUAL TABLE x4 USING fuzzer(x4_rules);
+}
+
+do_execsql_test 9.2 {
+  SELECT word, distance FROM x4 WHERE word MATCH 'ax';
+} {ax 0 bx 10 cx 11 yy 26 zz 30 !! 80}
+
+
+do_execsql_test 10.1 {
+  CREATE TABLE x5_rules(a, b, c, d);
+  CREATE VIRTUAL TABLE x5 USING fuzzer(x5_rules);
+}
+
+do_execsql_test 10.2 {
+  SELECT word, distance FROM x5 WHERE word MATCH 
+    'aaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaa' || 
+    'aaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaa' || 
+    'aaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaaXaaaaaaaaa'
+} {}
+
+do_execsql_test 10.3 {
+  INSERT INTO x5_rules VALUES(0, 'a', '0.1.2.3.4.5.6.7.8.9.a', 1);
+  DROP TABLE x5;
+  CREATE VIRTUAL TABLE x5 USING fuzzer(x5_rules);
+  SELECT length(word) FROM x5 WHERE word MATCH 'a' LIMIT 50;
+} {1 21 41 61 81}
+
+finish_test

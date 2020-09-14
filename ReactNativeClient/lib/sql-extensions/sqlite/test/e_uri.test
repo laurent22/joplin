@@ -1,0 +1,462 @@
+# 2011 May 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_uri
+do_not_use_codec
+db close
+
+proc parse_uri {uri} {
+  testvfs tvfs2
+  testvfs tvfs 
+  tvfs filter xOpen
+  tvfs script parse_uri_open_cb
+
+  set ::uri_open [list]
+  set DB [sqlite3_open_v2 $uri {
+    SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_WAL
+  } tvfs]
+  set fileName [sqlite3_db_filename $DB main]
+  sqlite3_close $DB
+  forcedelete $fileName
+  tvfs delete
+  tvfs2 delete
+
+  set ::uri_open
+}
+proc parse_uri_open_cb {method file arglist} {
+  set ::uri_open [list $file $arglist]
+}
+
+proc open_uri_error {uri} {
+  set flags {SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_WAL}
+  set DB [sqlite3_open_v2 $uri $flags ""]
+  set e [sqlite3_errmsg $DB]
+  sqlite3_close $DB
+  set e
+}
+
+# EVIDENCE-OF: R-35840-33204 If URI filename interpretation is enabled,
+# and the filename argument begins with "file:", then the filename is
+# interpreted as a URI.
+#
+# EVIDENCE-OF: R-27632-24205 URI filename interpretation is enabled if
+# the SQLITE_OPEN_URI flag is set in the third argument to
+# sqlite3_open_v2(), or if it has been enabled globally using the
+# SQLITE_CONFIG_URI option with the sqlite3_config() method or by the
+# SQLITE_USE_URI compile-time option.
+#
+if {$tcl_platform(platform) == "unix"} {
+  set flags [list SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE]
+
+  # Tests with SQLITE_CONFIG_URI configured to false. URI intepretation is
+  # only enabled if the SQLITE_OPEN_URI flag is specified.
+  sqlite3_shutdown
+  sqlite3_config_uri 0
+  do_test 1.1 {
+    forcedelete file:test.db test.db
+    set DB [sqlite3_open_v2 file:test.db [concat $flags SQLITE_OPEN_URI] ""]
+    list [file exists file:test.db] [file exists test.db]
+  } {0 1}
+  do_test 1.2 {
+    forcedelete file:test.db2 test.db2
+    set STMT [sqlite3_prepare $DB "ATTACH 'file:test.db2' AS aux" -1 dummy]
+    sqlite3_step $STMT
+    sqlite3_finalize $STMT
+    list [file exists file:test.db2] [file exists test.db2]
+  } {0 1}
+  sqlite3_close $DB
+  do_test 1.3 {
+    forcedelete file:test.db test.db
+    set DB [sqlite3_open_v2 file:test.db [concat $flags] ""]
+    list [file exists file:test.db] [file exists test.db]
+  } {1 0}
+  do_test 1.4 {
+    forcedelete file:test.db2 test.db2
+    set STMT [sqlite3_prepare $DB "ATTACH 'file:test.db2' AS aux" -1 dummy]
+    sqlite3_step $STMT
+    sqlite3_finalize $STMT
+    list [file exists file:test.db2] [file exists test.db2]
+  } {1 0}
+  sqlite3_close $DB
+
+  # Tests with SQLITE_CONFIG_URI configured to true. URI intepretation is
+  # enabled with or without SQLITE_OPEN_URI.
+  #
+  sqlite3_shutdown
+  sqlite3_config_uri 1
+  do_test 1.5 {
+    forcedelete file:test.db test.db
+    set DB [sqlite3_open_v2 file:test.db [concat $flags SQLITE_OPEN_URI] ""]
+    list [file exists file:test.db] [file exists test.db]
+  } {0 1}
+  do_test 1.6 {
+    forcedelete file:test.db2 test.db2
+    set STMT [sqlite3_prepare $DB "ATTACH 'file:test.db2' AS aux" -1 dummy]
+    sqlite3_step $STMT
+    sqlite3_finalize $STMT
+    list [file exists file:test.db2] [file exists test.db2]
+  } {0 1}
+  sqlite3_close $DB
+  do_test 1.7 {
+    forcedelete file:test.db test.db
+    set DB [sqlite3_open_v2 file:test.db [concat $flags] ""]
+    list [file exists file:test.db] [file exists test.db]
+  } {0 1}
+  do_test 1.8 {
+    forcedelete file:test.db2 test.db2
+    set STMT [sqlite3_prepare $DB "ATTACH 'file:test.db2' AS aux" -1 dummy]
+    sqlite3_step $STMT
+    sqlite3_finalize $STMT
+    list [file exists file:test.db2] [file exists test.db2]
+  } {0 1}
+  sqlite3_close $DB
+}
+
+# ensure uri processing enabled for the rest of the tests
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+# EVIDENCE-OF: R-06842-00595 If the URI contains an authority, then it
+# must be either an empty string or the string "localhost".
+#
+# EVIDENCE-OF: R-17482-00398 If the authority is not an empty string or
+# "localhost", an error is returned to the caller.
+#
+if {$tcl_platform(platform) == "unix"} {
+  set flags [list SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_URI]
+  foreach {tn uri error} "
+    1  {file://localhost[test_pwd /]test.db}   {not an error}
+    2  {file://[test_pwd /]test.db}            {not an error}
+    3  {file://x[test_pwd /]test.db}           {invalid uri authority: x}
+    4  {file://invalid[test_pwd /]test.db}     {invalid uri authority: invalid}
+  " {
+    do_test 2.$tn {
+      set DB [sqlite3_open_v2 $uri $flags ""]
+      set e [sqlite3_errmsg $DB]
+      sqlite3_close $DB
+      set e
+    } $error
+  }
+}
+
+# EVIDENCE-OF: R-45981-25528 The fragment component of a URI, if
+# present, is ignored.
+#
+#   It is difficult to test that something is ignored correctly. So these tests
+#   just show that adding a fragment does not interfere with the pathname or
+#   parameters passed through to the VFS xOpen() methods.
+#
+foreach {tn uri parse} "
+  1    {file:test.db#abc}      {[test_pwd / {}]test.db {}}
+  2    {file:test.db?a=b#abc}  {[test_pwd / {}]test.db {a b}}
+  3    {file:test.db?a=b#?c=d} {[test_pwd / {}]test.db {a b}}
+" {
+  do_filepath_test 3.$tn { parse_uri $uri } $parse
+}
+
+# EVIDENCE-OF: R-62557-09390 SQLite uses the path component of the URI
+# as the name of the disk file which contains the database.
+#
+# EVIDENCE-OF: R-28659-11035 If the path begins with a '/' character,
+# then it is interpreted as an absolute path.
+#
+# EVIDENCE-OF: R-46234-61323 If the path does not begin with a '/'
+# (meaning that the authority section is omitted from the URI) then the
+# path is interpreted as a relative path.
+#
+foreach {tn uri parse} "
+  1    {file:test.db}             {[test_pwd / {}]test.db {}}
+  2    {file:/test.db}            {/test.db {}}
+  3    {file:///test.db}          {/test.db {}}
+  4    {file://localhost/test.db} {/test.db {}}
+  5    {file:/a/b/c/test.db}      {/a/b/c/test.db {}}
+" {
+  do_filepath_test 4.$tn { parse_uri $uri } $parse
+}
+
+# EVIDENCE-OF: R-01612-30877 The "vfs" parameter may be used to specify
+# the name of a VFS object that provides the operating system interface
+# that should be used to access the database file on disk.
+#
+#   The above is tested by cases 1.* below.
+#
+# EVIDENCE-OF: R-52293-58497 If this option is set to an empty string
+# the default VFS object is used.
+#
+#   The above is tested by cases 2.* below.
+#
+# EVIDENCE-OF: R-31855-18665 If sqlite3_open_v2() is used and the vfs
+# option is present, then the VFS specified by the option takes
+# precedence over the value passed as the fourth parameter to
+# sqlite3_open_v2().
+#
+#   The above is tested by cases 3.* below.
+#
+proc vfs_open_cb {name args} {
+  set ::vfs $name
+}
+foreach {name default} {vfs1 0 vfs2 0 vfs3 1} {
+  testvfs $name -default $default
+  $name filter xOpen
+  $name script [list vfs_open_cb $name]
+}
+foreach {tn uri defvfs vfs} {
+  1.1    "file:test.db?vfs=vfs1"    ""    vfs1
+  1.2    "file:test.db?vfs=vfs2"    ""    vfs2
+
+  2.1    "file:test.db"             vfs1  vfs1
+  2.2    "file:test.db?vfs="        vfs1  vfs3
+
+  3.1    "file:test.db?vfs=vfs1"    vfs2  vfs1
+  3.2    "file:test.db?vfs=vfs2"    vfs1  vfs2
+  3.3    "file:test.db?xvfs=vfs1"   vfs2  vfs2
+  3.4    "file:test.db?xvfs=vfs2"   vfs1  vfs1
+} {
+  do_test 5.$tn {
+    set flags [list SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_URI]
+    sqlite3_close [
+      sqlite3_open_v2 $uri $flags $defvfs
+    ]
+    set ::vfs
+  } $vfs
+}
+vfs1 delete
+vfs2 delete
+vfs3 delete
+
+# EVIDENCE-OF: R-48365-36308 Specifying an unknown VFS is an error.
+#
+set flags [list SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_URI]
+do_test 6.1 {
+  set DB [sqlite3_open_v2 file:test.db?vfs=nosuchvfs $flags ""]
+  set errmsg [sqlite3_errmsg $DB]
+  sqlite3_close $DB
+  set errmsg
+} {no such vfs: nosuchvfs}
+
+
+# EVIDENCE-OF: R-44013-13102 The mode parameter may be set to either
+# "ro", "rw", "rwc", or "memory". Attempting to set it to any other
+# value is an error
+#
+sqlite3 db test.db
+db close
+foreach {tn uri error} "
+  1    {file:test.db?mode=ro}    {not an error}
+  2    {file:test.db?mode=rw}    {not an error}
+  3    {file:test.db?mode=rwc}   {not an error}
+  4    {file:test.db?mode=Ro}    {no such access mode: Ro}
+  5    {file:test.db?mode=Rw}    {no such access mode: Rw}
+  6    {file:test.db?mode=Rwc}   {no such access mode: Rwc}
+  7    {file:test.db?mode=memory} {not an error}
+  8    {file:test.db?mode=MEMORY} {no such access mode: MEMORY}
+" {
+  do_test 7.$tn { open_uri_error $uri } $error
+}
+
+
+# EVIDENCE-OF: R-43036-46756 If "ro" is specified, then the database is
+# opened for read-only access, just as if the SQLITE_OPEN_READONLY flag
+# had been set in the third argument to sqlite3_open_v2().
+#
+# EVIDENCE-OF: R-40137-26050 If the mode option is set to "rw", then the
+# database is opened for read-write (but not create) access, as if
+# SQLITE_OPEN_READWRITE (but not SQLITE_OPEN_CREATE) had been set.
+#
+# EVIDENCE-OF: R-26845-32976 Value "rwc" is equivalent to setting both
+# SQLITE_OPEN_READWRITE and SQLITE_OPEN_CREATE.
+#
+foreach {tn uri read write create} {
+  1    {file:test.db?mode=ro}     1 0 0
+  2    {file:test.db?mode=rw}     1 1 0
+  3    {file:test.db?mode=rwc}    1 1 1
+} {
+  set RES(c,0) {1 {unable to open database file}}
+  set RES(c,1) {0 {}}
+  set RES(w,0) {1 {attempt to write a readonly database}}
+  set RES(w,1) {0 {}}
+  set RES(r,0) {1 {this never happens}}
+  set RES(r,1) {0 {a b}}
+
+  # Test CREATE access:
+  forcedelete test.db
+  do_test 8.$tn.c { list [catch { sqlite3 db $uri } msg] $msg } $RES(c,$create)
+  catch { db close }
+
+  sqlite3 db test.db
+  db eval { CREATE TABLE t1(a, b) ; INSERT INTO t1 VALUES('a', 'b') ;}
+  db close
+  
+  # Test READ access:
+  do_test 8.$tn.r { 
+    sqlite3 db $uri
+    catchsql { SELECT * FROM t1 }
+  } $RES(r,$read)
+  
+  # Test WRITE access:
+  do_test 8.$tn.w { 
+    sqlite3 db $uri
+    catchsql { INSERT INTO t1 VALUES(1, 2) }
+  } $RES(w,$write)
+
+  catch {db close}
+}
+
+# EVIDENCE-OF: R-20590-08726 It is an error to specify a value for the
+# mode parameter that is less restrictive than that specified by the
+# flags passed in the third parameter to sqlite3_open_v2().
+#
+forcedelete test.db
+sqlite3 db test.db
+db close
+foreach {tn uri flags error} {
+  1   {file:test.db?mode=ro}   ro    {not an error}
+  2   {file:test.db?mode=ro}   rw    {not an error}
+  3   {file:test.db?mode=ro}   rwc   {not an error}
+
+  4   {file:test.db?mode=rw}   ro    {access mode not allowed: rw}
+  5   {file:test.db?mode=rw}   rw    {not an error}
+  6   {file:test.db?mode=rw}   rwc   {not an error}
+
+  7   {file:test.db?mode=rwc}  ro    {access mode not allowed: rwc}
+  8   {file:test.db?mode=rwc}  rw    {access mode not allowed: rwc}
+  9   {file:test.db?mode=rwc}  rwc   {not an error}
+} {
+  set f(ro)  [list SQLITE_OPEN_READONLY SQLITE_OPEN_URI]
+  set f(rw)  [list SQLITE_OPEN_READWRITE SQLITE_OPEN_URI]
+  set f(rwc) [list SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_URI]
+
+  set DB [sqlite3_open_v2 $uri $f($flags) ""]
+  set e [sqlite3_errmsg $DB]
+  sqlite3_close $DB
+
+  do_test 9.$tn { set e } $error
+}
+
+# EVIDENCE-OF: R-23182-54295 The cache parameter may be set to either
+# "shared" or "private".
+sqlite3 db test.db
+db close
+foreach {tn uri error} "
+  1    {file:test.db?cache=private}    {not an error}
+  2    {file:test.db?cache=shared}     {not an error}
+  3    {file:test.db?cache=yes}        {no such cache mode: yes}
+  4    {file:test.db?cache=}           {no such cache mode: }
+" {
+  do_test 10.$tn { open_uri_error $uri } $error
+}
+
+# EVIDENCE-OF: R-23027-03515 Setting it to "shared" is equivalent to
+# setting the SQLITE_OPEN_SHAREDCACHE bit in the flags argument passed
+# to sqlite3_open_v2().
+#
+# EVIDENCE-OF: R-49793-28525 Setting the cache parameter to "private" is
+# equivalent to setting the SQLITE_OPEN_PRIVATECACHE bit.
+#
+# EVIDENCE-OF: R-31773-41793 If sqlite3_open_v2() is used and the
+# "cache" parameter is present in a URI filename, its value overrides
+# any behavior requested by setting SQLITE_OPEN_PRIVATECACHE or
+# SQLITE_OPEN_SHAREDCACHE flag.
+#
+set orig [sqlite3_enable_shared_cache]
+foreach {tn uri flags shared_default isshared} {
+  1.1   "file:test.db"                  ""         0    0
+  1.2   "file:test.db"                  ""         1    1
+  1.3   "file:test.db"                  private    0    0
+  1.4   "file:test.db"                  private    1    0
+  1.5   "file:test.db"                  shared     0    1
+  1.6   "file:test.db"                  shared     1    1
+
+  2.1   "file:test.db?cache=private"    ""         0    0
+  2.2   "file:test.db?cache=private"    ""         1    0
+  2.3   "file:test.db?cache=private"    private    0    0
+  2.4   "file:test.db?cache=private"    private    1    0
+  2.5   "file:test.db?cache=private"    shared     0    0
+  2.6   "file:test.db?cache=private"    shared     1    0
+
+  3.1   "file:test.db?cache=shared"     ""         0    1
+  3.2   "file:test.db?cache=shared"     ""         1    1
+  3.3   "file:test.db?cache=shared"     private    0    1
+  3.4   "file:test.db?cache=shared"     private    1    1
+  3.5   "file:test.db?cache=shared"     shared     0    1
+  3.6   "file:test.db?cache=shared"     shared     1    1
+} {
+  forcedelete test.db
+  sqlite3_enable_shared_cache 1
+  sqlite3 db test.db
+  sqlite3_enable_shared_cache 0
+
+  db eval {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES('ok');
+  }
+
+  unset -nocomplain f
+  set f()        {SQLITE_OPEN_READWRITE SQLITE_OPEN_CREATE SQLITE_OPEN_URI}
+  set f(shared)  [concat $f() SQLITE_OPEN_SHAREDCACHE]
+  set f(private) [concat $f() SQLITE_OPEN_PRIVATECACHE]
+
+  sqlite3_enable_shared_cache $shared_default
+  set DB [sqlite3_open_v2 $uri $f($flags) ""]
+
+  set STMT [sqlite3_prepare $DB "SELECT * FROM t1" -1 dummy]
+
+  db eval {
+    BEGIN;
+      INSERT INTO t1 VALUES('ko');
+  }
+
+  sqlite3_step $STMT
+  sqlite3_finalize $STMT
+
+  set RES(0) {not an error}
+  set RES(1) {database table is locked: t1}
+
+  do_test 11.$tn { sqlite3_errmsg $DB } $RES($isshared)
+
+  sqlite3_close $DB
+  db close
+}
+sqlite3_enable_shared_cache $orig
+
+# EVIDENCE-OF: R-63472-46769 Specifying an unknown parameter in the
+# query component of a URI is not an error.
+#
+do_filepath_test 12.1 {
+  parse_uri file://localhost/test.db?an=unknown&parameter=is&ok=
+} {/test.db {an unknown parameter is ok {}}}
+do_filepath_test 12.2 {
+  parse_uri file://localhost/test.db?an&unknown&parameter&is&ok
+} {/test.db {an {} unknown {} parameter {} is {} ok {}}}
+
+# EVIDENCE-OF: R-27458-04043 URI hexadecimal escape sequences (%HH) are
+# supported within the path and query components of a URI.
+#
+# EVIDENCE-OF: R-52765-50368 Before the path or query components of a
+# URI filename are interpreted, they are encoded using UTF-8 and all
+# hexadecimal escape sequences replaced by a single byte containing the
+# corresponding octet.
+#
+#   The second of the two statements above is tested by creating a
+#   multi-byte utf-8 character using a sequence of %HH escapes.
+#
+foreach {tn uri parse} "
+  1  {file:/test.%64%62}                             {/test.db {}}
+  2  {file:/test.db?%68%65%6c%6c%6f=%77%6f%72%6c%64} {/test.db {hello world}}
+  3  {file:/%C3%BF.db}                               {/\xFF.db {}}
+" {
+  do_filepath_test 13.$tn { parse_uri $uri } $parse
+}
+
+finish_test

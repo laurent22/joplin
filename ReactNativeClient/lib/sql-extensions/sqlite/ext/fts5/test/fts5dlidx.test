@@ -1,0 +1,197 @@
+# 2015 April 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test is focused on uses of doclist-index records.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5dlidx
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+if { $tcl_platform(wordSize)<8 } {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+proc do_fb_test {tn sql res} {
+  set res2 [lsort -integer -decr $res]
+  uplevel [list do_execsql_test $tn.1 $sql $res]
+  uplevel [list do_execsql_test $tn.2 "$sql ORDER BY rowid DESC" $res2]
+}
+
+# This test populates the FTS5 table with $nEntry entries. Rows are 
+# numbered from 0 to ($nEntry-1). The rowid for row $i is:
+#
+#   ($iFirst + $i*$nStep)
+#
+# Each document is of the form "a b c a b c a b c...". If the row number ($i)
+# is an integer multiple of $spc1, then an "x" token is appended to the
+# document. If it is *also* a multiple of $spc2, a "y" token is also appended.
+#
+proc do_dlidx_test1 {tn spc1 spc2 nEntry iFirst nStep} {
+
+  do_execsql_test $tn.0 { DELETE FROM t1 }
+
+  set xdoc [list]
+  set ydoc [list]
+
+  execsql BEGIN
+  for {set i 0} {$i < $nEntry} {incr i} {
+    set rowid [expr $i * $nStep]
+    set doc [string trim [string repeat "a b c " 100]]
+    if {($i % $spc1)==0} {
+      lappend xdoc $rowid
+      append doc " x" 
+      if {($i % $spc2)==0} { 
+        lappend ydoc $rowid
+        append doc " y" 
+      }
+    }
+    execsql { INSERT INTO t1(rowid, x) VALUES($rowid, $doc) }
+  }
+  execsql COMMIT
+
+  do_test $tn.1 {
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+  } {}
+  
+  do_fb_test $tn.3.1 { SELECT rowid FROM t1 WHERE t1 MATCH 'a AND x' } $xdoc
+  do_fb_test $tn.3.2 { SELECT rowid FROM t1 WHERE t1 MATCH 'x AND a' } $xdoc
+  
+  do_fb_test $tn.4.1 { SELECT rowid FROM t1 WHERE t1 MATCH 'a AND y' } $ydoc
+  do_fb_test $tn.4.2 { SELECT rowid FROM t1 WHERE t1 MATCH 'y AND a' } $ydoc
+  
+  if {[detail_is_full]} {
+    do_fb_test $tn.5.1 { 
+      SELECT rowid FROM t1 WHERE t1 MATCH 'a + b + c + x' } $xdoc
+    do_fb_test $tn.5.2 { 
+      SELECT rowid FROM t1 WHERE t1 MATCH 'b + c + x + y' } $ydoc
+  }
+}
+
+
+foreach {tn pgsz} {
+  1 32
+  2 200
+} {
+  do_execsql_test $tn.0 { 
+    DROP TABLE IF EXISTS t1;
+    CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', $pgsz);
+  }
+
+  do_dlidx_test1 1.$tn.1     10 100 10000 0 1000
+  do_dlidx_test1 1.$tn.2     10 10  10000 0 128
+  do_dlidx_test1 1.$tn.3     10 10  66    0 36028797018963970
+  do_dlidx_test1 1.$tn.4     10 10  50    0 150000000000000000
+  do_dlidx_test1 1.$tn.5     10 10  200   0 [expr 1<<55]
+  do_dlidx_test1 1.$tn.6      10 10  30    0 [expr 1<<58]
+}
+
+proc do_dlidx_test2 {tn nEntry iFirst nStep} {
+  set str [string repeat "a " 500]
+  execsql {
+    BEGIN;
+    DROP TABLE IF EXISTS t1;
+    CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 64);
+    INSERT INTO t1 VALUES('b a');
+
+    WITH iii(ii, i) AS (
+      SELECT 1,     $iFirst UNION ALL 
+      SELECT ii+1, i+$nStep FROM iii WHERE ii<$nEntry
+    )
+    INSERT INTO t1(rowid,x) SELECT i, $str FROM iii;
+    COMMIT;
+  }
+
+  do_execsql_test $tn.1 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'b AND a'
+  } {1}
+  do_execsql_test $tn.2 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'b AND a' ORDER BY rowid DESC
+  } {1}
+}
+
+do_dlidx_test2 2.1 [expr 20] [expr 1<<57] [expr (1<<57) + 128]
+
+#--------------------------------------------------------------------
+#
+reset_db
+
+set ::vocab [list \
+  IteratorpItercurrentlypointstothefirstrowidofadoclist \
+  Thereisadoclistindexassociatedwiththefinaltermonthecurrent \
+  pageIfthecurrenttermisthelasttermonthepageloadthe \
+  doclistindexfromdiskandinitializeaniteratoratpIterpDlidx \
+  IteratorpItercurrentlypointstothefirstrowidofadoclist \
+  Thereisadoclistindexassociatedwiththefinaltermonthecurrent \
+  pageIfthecurrenttermisthelasttermonthepageloadthe \
+  doclistindexfromdiskandinitializeaniteratoratpIterpDlidx \
+]
+proc rnddoc {} {
+  global vocab
+  set nVocab [llength $vocab]
+  set ret [list]
+  for {set i 0} {$i < 64} {incr i} {
+    lappend ret [lindex $vocab [expr $i % $nVocab]]
+  }
+  set ret
+}
+db func rnddoc rnddoc
+
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, detail=%DETAIL%);
+  INSERT INTO abc(abc, rank) VALUES('pgsz', 32);
+
+  INSERT INTO abc VALUES ( rnddoc() );
+  INSERT INTO abc VALUES ( rnddoc() );
+  INSERT INTO abc VALUES ( rnddoc() );
+  INSERT INTO abc VALUES ( rnddoc() );
+
+  INSERT INTO abc SELECT rnddoc() FROM abc;
+  INSERT INTO abc SELECT rnddoc() FROM abc;
+}
+
+
+
+do_execsql_test 3.2 {
+  SELECT rowid FROM abc WHERE abc 
+  MATCH 'IteratorpItercurrentlypointstothefirstrowidofadoclist' 
+  ORDER BY rowid DESC;
+} {16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1}
+
+do_execsql_test 3.3 {
+  INSERT INTO abc(abc) VALUES('integrity-check');
+  INSERT INTO abc(abc) VALUES('optimize');
+  INSERT INTO abc(abc) VALUES('integrity-check');
+}
+
+set v [lindex $vocab 0]
+set i 0
+foreach v $vocab {
+  do_execsql_test 3.4.[incr i] {
+    SELECT rowid FROM abc WHERE abc MATCH $v
+  } {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16}
+}
+
+} ;# foreach_detail_mode
+
+
+
+finish_test

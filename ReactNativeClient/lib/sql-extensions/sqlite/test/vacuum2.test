@@ -1,0 +1,251 @@
+# 2005 February 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the VACUUM statement.
+#
+# $Id: vacuum2.test,v 1.10 2009/02/18 20:31:18 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix vacuum2
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# If the VACUUM statement is disabled in the current build, skip all
+# the tests in this file.
+#
+ifcapable {!vacuum||!autoinc} {
+  finish_test
+  return
+}
+if $AUTOVACUUM {
+  finish_test
+  return
+}
+
+# Ticket #1121 - make sure vacuum works if all autoincrement tables
+# have been deleted.
+#
+do_test vacuum2-1.1 {
+  execsql {
+    CREATE TABLE t1(x INTEGER PRIMARY KEY AUTOINCREMENT, y);
+    DROP TABLE t1;
+    VACUUM;
+  }
+} {}
+
+# Ticket #2518.  Make sure vacuum increments the change counter
+# in the database header.
+#
+do_test vacuum2-2.1 {
+  execsql {
+    CREATE TABLE t1(x);
+    CREATE TABLE t2(y);
+    INSERT INTO t1 VALUES(1);
+  }
+  hexio_get_int [hexio_read test.db 24 4]
+} [expr {[hexio_get_int [hexio_read test.db 24 4]]+3}]
+do_test vacuum2-2.1 {
+  execsql {
+    VACUUM
+  }
+  hexio_get_int [hexio_read test.db 24 4]
+} [expr {[hexio_get_int [hexio_read test.db 24 4]]+1}]
+
+############################################################################
+# Verify that we can use the auto_vacuum pragma to request a new
+# autovacuum setting, do a VACUUM, and the new setting takes effect.
+# Make sure this happens correctly even if there are multiple open
+# connections to the same database file.
+#
+sqlite3 db2 test.db
+set pageSize [db eval {pragma page_size}]
+
+# We are currently not autovacuuming so the database should be 3 pages
+# in size.  1 page for each of sqlite_master, t1, and t2.
+#
+do_test vacuum2-3.1 {
+  execsql {
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t2 VALUES('out there');
+  }
+  expr {[file size test.db]/$pageSize}
+} {3}
+set cksum [cksum]
+do_test vacuum2-3.2 {
+  cksum db2
+} $cksum
+
+# Convert the database to an autovacuumed database.
+ifcapable autovacuum {
+  do_test vacuum2-3.3 {
+    execsql {
+      PRAGMA auto_vacuum=FULL;
+      VACUUM;
+    }
+    expr {[file size test.db]/$pageSize}
+  } {4}
+}
+do_test vacuum2-3.4 {
+  cksum db2
+} $cksum
+do_test vacuum2-3.5 {
+  cksum
+} $cksum
+do_test vacuum2-3.6 {
+  execsql {PRAGMA integrity_check} db2
+} {ok}
+do_test vacuum2-3.7 {
+  execsql {PRAGMA integrity_check} db
+} {ok}
+
+# Convert the database back to a non-autovacuumed database.
+do_test vacuum2-3.13 {
+  execsql {
+    PRAGMA auto_vacuum=NONE;
+    VACUUM;
+  }
+  expr {[file size test.db]/$pageSize}
+} {3}
+do_test vacuum2-3.14 {
+  cksum db2
+} $cksum
+do_test vacuum2-3.15 {
+  cksum
+} $cksum
+do_test vacuum2-3.16 {
+  execsql {PRAGMA integrity_check} db2
+} {ok}
+do_test vacuum2-3.17 {
+  execsql {PRAGMA integrity_check} db
+} {ok}
+
+db2 close
+
+ifcapable autovacuum {
+  do_test vacuum2-4.1 {
+    db close
+    forcedelete test.db
+    sqlite3 db test.db
+    execsql {
+      pragma auto_vacuum=1;
+      create table t(a, b);
+      insert into t values(1, 2);
+      insert into t values(1, 2);
+      pragma auto_vacuum=0;
+      vacuum;
+      pragma auto_vacuum;
+    }
+  } {0}
+  do_test vacuum2-4.2 {
+    execsql {
+      pragma auto_vacuum=1;
+      vacuum;
+      pragma auto_vacuum;
+    }
+  } {1}
+  do_test vacuum2-4.3 {
+    execsql {
+      pragma integrity_check
+    }
+  } {ok}
+  do_test vacuum2-4.4 {
+    db close
+    sqlite3 db test.db
+    execsql {
+      pragma auto_vacuum;
+    }
+  } {1}
+  do_test vacuum2-4.5 {  # Ticket #3663
+    execsql {
+      pragma auto_vacuum=2;
+      vacuum;
+      pragma auto_vacuum;
+    }
+  } {2}
+  do_test vacuum2-4.6 {
+    execsql {
+      pragma integrity_check
+    }
+  } {ok}
+  do_test vacuum2-4.7 {
+    db close
+    sqlite3 db test.db
+    execsql {
+      pragma auto_vacuum;
+    }
+  } {2}
+}
+
+
+#-------------------------------------------------------------------------
+# The following block of tests verify the behaviour of the library when
+# a database is VACUUMed when there are one or more unfinalized SQL 
+# statements reading the same database using the same db handle.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test vacuum2-5.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b UNIQUE);
+  INSERT INTO t1 VALUES(1, randomblob(500));
+  INSERT INTO t1 SELECT a+1, randomblob(500) FROM t1;      -- 2
+  INSERT INTO t1 SELECT a+2, randomblob(500) FROM t1;      -- 4 
+  INSERT INTO t1 SELECT a+4, randomblob(500) FROM t1;      -- 8 
+  INSERT INTO t1 SELECT a+8, randomblob(500) FROM t1;      -- 16 
+} {}
+
+do_test vacuum2-5.2 {
+  list [catch {
+    db eval {SELECT a, b FROM t1} { if {$a == 8} { execsql VACUUM } }
+  } msg] $msg
+} {1 {cannot VACUUM - SQL statements in progress}}
+
+do_test vacuum2-5.3 {
+  list [catch {
+    db eval {SELECT 1, 2, 3} { execsql VACUUM }
+  } msg] $msg
+} {1 {cannot VACUUM - SQL statements in progress}}
+
+do_test vacuum2-5.4 {
+  set res ""
+  set res2 ""
+  db eval {SELECT a, b FROM t1 WHERE a<=10} {
+    if {$a==6} { set res [catchsql VACUUM] }
+    lappend res2 $a
+  }
+  lappend res2 $res
+} {1 2 3 4 5 6 7 8 9 10 {1 {cannot VACUUM - SQL statements in progress}}}
+
+#-------------------------------------------------------------------------
+# Check that if the definition of a collation sequence is changed and
+# VACUUM run, records are store in the (new) correct order following the
+# VACUUM. Even if the modified collation is attached to a PK of a WITHOUT
+# ROWID table.
+
+proc cmp {lhs rhs} { string compare $lhs $rhs }
+db collate cmp cmp
+do_execsql_test 6.0 {
+  CREATE TABLE t6(x PRIMARY KEY COLLATE cmp, y) WITHOUT ROWID;
+  CREATE INDEX t6y ON t6(y);
+  INSERT INTO t6 VALUES('i', 'one');
+  INSERT INTO t6 VALUES('ii', 'one');
+  INSERT INTO t6 VALUES('iii', 'one');
+}
+integrity_check 6.1
+proc cmp {lhs rhs} { string compare $rhs $lhs }
+do_execsql_test 6.2 VACUUM
+integrity_check 6.3
+
+finish_test

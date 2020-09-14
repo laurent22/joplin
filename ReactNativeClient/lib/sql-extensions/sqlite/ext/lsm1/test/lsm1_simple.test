@@ -1,0 +1,152 @@
+# 2017 July 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the lsm1 virtual table module.
+#
+
+source [file join [file dirname [info script]] lsm1_common.tcl]
+set testprefix lsm1_simple
+return_if_no_lsm1
+load_lsm1_vtab db
+
+forcedelete testlsm.db
+
+do_execsql_test 100 {
+  CREATE VIRTUAL TABLE x1 USING lsm1(testlsm.db,a,UINT,b,c,d);
+  PRAGMA table_info(x1);
+} {
+  0 a UINT 1 {} 1 
+  1 b {} 0 {} 0 
+  2 c {} 0 {} 0 
+  3 d {} 0 {} 0
+}
+
+do_execsql_test 110 {
+  INSERT INTO x1(a,b,c,d) VALUES(15, 11, 22, 33),(8,'banjo',x'333231',NULL),
+      (12,NULL,3.25,-559281390);
+  SELECT a, quote(b), quote(c), quote(d) FROM x1;
+} {8 'banjo' X'333231' NULL 12 NULL 3.25 -559281390 15 11 22 33}
+do_execsql_test 111 {
+  SELECT a, quote(lsm1_key), quote(lsm1_value) FROM x1;
+} {8 X'08' X'2162616E6A6F1633323105' 12 X'0C' X'05320000000000000A401FFB42ABE9DB' 15 X'0F' X'4284C6'}
+
+do_execsql_test 120 {
+  UPDATE x1 SET d = d+1.0 WHERE a=15;
+  SELECT a, quote(b), quote(c), quote(d) FROM x1;
+} {8 'banjo' X'333231' NULL 12 NULL 3.25 -559281390 15 11 22 34.0}
+
+do_execsql_test 130 {
+  UPDATE x1 SET a=123456789 WHERE a=12;
+  SELECT a, quote(b), quote(c), quote(d) FROM x1;
+} {8 'banjo' X'333231' NULL 15 11 22 34.0 123456789 NULL 3.25 -559281390}
+do_execsql_test 131 {
+  SELECT quote(lsm1_key), printf('0x%x',a) FROM x1 WHERE a > 100000000;
+} {X'FB075BCD15' 0x75bcd15}
+
+do_execsql_test 140 {
+  DELETE FROM x1 WHERE a=15;
+  SELECT a, quote(b), quote(c), quote(d) FROM x1;
+} {8 'banjo' X'333231' NULL 123456789 NULL 3.25 -559281390}
+
+do_test 150 {
+  lsort [glob testlsm.db*]
+} {testlsm.db testlsm.db-log testlsm.db-shm}
+
+db close
+do_test 160 {
+  lsort [glob testlsm.db*]
+} {testlsm.db}
+
+forcedelete testlsm.db
+forcedelete test.db
+sqlite3 db test.db
+load_lsm1_vtab db
+
+
+do_execsql_test 200 {
+  CREATE VIRTUAL TABLE x1 USING lsm1(testlsm.db,a,TEXT,b,c,d);
+  PRAGMA table_info(x1);
+} {
+  0 a TEXT 1 {} 1 
+  1 b {} 0 {} 0 
+  2 c {} 0 {} 0 
+  3 d {} 0 {} 0
+}
+do_execsql_test 210 {
+  INSERT INTO x1(a,b,c,d) VALUES(15, 11, 22, 33),(8,'banjo',x'333231',NULL),
+      (12,NULL,3.25,-559281390);
+  SELECT quote(a), quote(b), quote(c), quote(d), '|' FROM x1;
+} {'12' NULL 3.25 -559281390 | '15' 11 22 33 | '8' 'banjo' X'333231' NULL |}
+do_execsql_test 211 {
+  SELECT quote(a), quote(lsm1_key), quote(lsm1_value), '|' FROM x1;
+} {'12' X'3132' X'05320000000000000A401FFB42ABE9DB' | '15' X'3135' X'4284C6' | '8' X'38' X'2162616E6A6F1633323105' |}
+do_execsql_test 212 {
+  SELECT quote(a), quote(lsm1_key), quote(lsm1_value) FROM x1 WHERE a='12';
+} {'12' X'3132' X'05320000000000000A401FFB42ABE9DB'}
+
+#-------------------------------------------------------------------------
+reset_db
+forcedelete testlsm.db
+load_lsm1_vtab db
+do_execsql_test 300 {
+  CREATE VIRTUAL TABLE x1 USING lsm1(testlsm.db,a,TEXT,b,c,d);
+}
+do_eqp_test 310 {
+  SELECT * FROM x1 WHERE a=?
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 0:}
+
+do_eqp_test 320 {
+  SELECT * FROM x1 WHERE a>?
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 2:}
+
+do_eqp_test 330 {
+  SELECT * FROM x1 WHERE a<?
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 3:}
+do_eqp_test 340 {
+  SELECT * FROM x1 WHERE a BETWEEN ? AND ?
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 1:}
+
+#-------------------------------------------------------------------------
+reset_db
+forcedelete testlsm.db
+load_lsm1_vtab db
+do_execsql_test 400 {
+  CREATE VIRTUAL TABLE x1 USING lsm1(testlsm.db,a,TEXT,b);
+  INSERT INTO x1 VALUES('one', 1);
+  INSERT INTO x1 VALUES('two', 2);
+  INSERT INTO x1 VALUES('three', 3);
+  INSERT INTO x1 VALUES('four', 4);
+  INSERT INTO x1 VALUES('five', 5);
+}
+do_execsql_test 410 {
+  SELECT b FROM x1 WHERE a = 'two'
+} {2}
+do_execsql_test 411 {
+  SELECT b FROM x1 WHERE a = 'one'
+} {1}
+do_execsql_test 412 {
+  SELECT b FROM x1 WHERE a = 'five'
+} {5}
+
+do_execsql_test 420 {
+  SELECT b FROM x1 WHERE a BETWEEN 'one' AND 'three';
+} {1 3}
+do_execsql_test 421 {
+  SELECT b FROM x1 WHERE a BETWEEN 'five' AND 'two';
+} {5 4 1 3 2}
+do_execsql_test 421 {
+  SELECT b FROM x1 WHERE a > 'five';
+} {4 1 3 2}
+do_execsql_test 421 {
+  SELECT b FROM x1 WHERE a <= 'three';
+} {3 1 4 5}
+
+finish_test

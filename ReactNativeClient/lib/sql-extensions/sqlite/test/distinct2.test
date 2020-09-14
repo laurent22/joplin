@@ -1,0 +1,304 @@
+# 2016-04-15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is DISTINCT queries using the skip-ahead 
+# optimization.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set testprefix distinct2
+
+do_execsql_test 100 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY);
+  INSERT INTO t1 VALUES(0),(1),(2);
+  CREATE TABLE t2 AS
+     SELECT DISTINCT a.x AS aa, b.x AS bb
+      FROM t1 a, t1 b;
+  SELECT *, '|' FROM t2 ORDER BY aa, bb;
+} {0 0 | 0 1 | 0 2 | 1 0 | 1 1 | 1 2 | 2 0 | 2 1 | 2 2 |}
+do_execsql_test 110 {
+  DROP TABLE t2;
+  CREATE TABLE t2 AS
+     SELECT DISTINCT a.x AS aa, b.x AS bb
+       FROM t1 a, t1 b
+      WHERE a.x IN t1 AND b.x IN t1;
+  SELECT *, '|' FROM t2 ORDER BY aa, bb;
+} {0 0 | 0 1 | 0 2 | 1 0 | 1 1 | 1 2 | 2 0 | 2 1 | 2 2 |}
+do_execsql_test 120 {
+  CREATE TABLE t102 (i0 TEXT UNIQUE NOT NULL);
+  INSERT INTO t102 VALUES ('0'),('1'),('2');
+  DROP TABLE t2;
+  CREATE TABLE t2 AS
+    SELECT DISTINCT * 
+    FROM t102 AS t0 
+    JOIN t102 AS t4 ON (t2.i0 IN t102)
+    NATURAL JOIN t102 AS t3
+    JOIN t102 AS t1 ON (t0.i0 IN t102)
+    JOIN t102 AS t2 ON (t2.i0=+t0.i0 OR (t0.i0<>500 AND t2.i0=t1.i0));
+  SELECT *, '|' FROM t2 ORDER BY 1, 2, 3, 4, 5;
+} {0 0 0 0 | 0 0 1 0 | 0 0 1 1 | 0 0 2 0 | 0 0 2 2 | 0 1 0 0 | 0 1 1 0 | 0 1 1 1 | 0 1 2 0 | 0 1 2 2 | 0 2 0 0 | 0 2 1 0 | 0 2 1 1 | 0 2 2 0 | 0 2 2 2 | 1 0 0 0 | 1 0 0 1 | 1 0 1 1 | 1 0 2 1 | 1 0 2 2 | 1 1 0 0 | 1 1 0 1 | 1 1 1 1 | 1 1 2 1 | 1 1 2 2 | 1 2 0 0 | 1 2 0 1 | 1 2 1 1 | 1 2 2 1 | 1 2 2 2 | 2 0 0 0 | 2 0 0 2 | 2 0 1 1 | 2 0 1 2 | 2 0 2 2 | 2 1 0 0 | 2 1 0 2 | 2 1 1 1 | 2 1 1 2 | 2 1 2 2 | 2 2 0 0 | 2 2 0 2 | 2 2 1 1 | 2 2 1 2 | 2 2 2 2 |}
+
+do_execsql_test 400 {
+  CREATE TABLE t4(a,b,c,d,e,f,g,h,i,j);
+  INSERT INTO t4 VALUES(0,1,2,3,4,5,6,7,8,9);
+  INSERT INTO t4 SELECT * FROM t4;
+  INSERT INTO t4 SELECT * FROM t4;
+  CREATE INDEX t4x ON t4(c,d,e);
+  SELECT DISTINCT a,b,c FROM t4 WHERE a=0 AND b=1;
+} {0 1 2}
+do_execsql_test 410 {
+  SELECT DISTINCT a,b,c,d FROM t4 WHERE a=0 AND b=1;
+} {0 1 2 3}
+do_execsql_test 411 {
+  SELECT DISTINCT d,a,b,c FROM t4 WHERE a=0 AND b=1;
+} {3 0 1 2}
+do_execsql_test 420 {
+  SELECT DISTINCT a,b,c,d,e FROM t4 WHERE a=0 AND b=1;
+} {0 1 2 3 4}
+do_execsql_test 430 {
+  SELECT DISTINCT a,b,c,d,e,f FROM t4 WHERE a=0 AND b=1;
+} {0 1 2 3 4 5}
+
+do_execsql_test 500 {
+  CREATE TABLE t5(a INT, b INT);
+  CREATE UNIQUE INDEX t5x ON t5(a+b);
+  INSERT INTO t5(a,b) VALUES(0,0),(1,0),(1,1),(0,3);
+  CREATE TEMP TABLE out AS SELECT DISTINCT a+b FROM t5;
+  SELECT * FROM out ORDER BY 1;
+} {0 1 2 3}
+
+do_execsql_test 600 {
+  CREATE TABLE t6a(x INTEGER PRIMARY KEY);
+  INSERT INTO t6a VALUES(1);
+  CREATE TABLE t6b(y INTEGER PRIMARY KEY);
+  INSERT INTO t6b VALUES(2),(3);
+  SELECT DISTINCT x, x FROM t6a, t6b;
+} {1 1}
+
+do_execsql_test 700 {
+  CREATE TABLE t7(a, b, c);
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE (i+1)<200
+  )
+  INSERT INTO t7 SELECT i/100, i/50, i FROM s;
+}
+do_execsql_test 710 {
+  SELECT DISTINCT a, b FROM t7;
+} {
+  0 0    0 1
+  1 2    1 3
+}
+do_execsql_test 720 {
+  SELECT DISTINCT a, b+1 FROM t7;
+} {
+  0 1    0 2
+  1 3    1 4
+}
+do_execsql_test 730 {
+  CREATE INDEX i7 ON t7(a, b+1);
+  ANALYZE;
+  SELECT DISTINCT a, b+1 FROM t7;
+} {
+  0 1    0 2
+  1 3    1 4
+}
+
+do_execsql_test 800 {
+  CREATE TABLE t8(a, b, c);
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE (i+1)<100
+  )
+  INSERT INTO t8 SELECT i/40, i/20, i/40 FROM s;
+}
+
+do_execsql_test 820 {
+  SELECT DISTINCT a, b, c FROM t8;
+} {
+  0 0 0    0 1 0
+  1 2 1    1 3 1
+  2 4 2
+}
+
+do_execsql_test 820 {
+  SELECT DISTINCT a, b, c FROM t8 WHERE b=3;
+} {1 3 1}
+
+do_execsql_test 830 {
+  CREATE INDEX i8 ON t8(a, c);
+  ANALYZE;
+  SELECT DISTINCT a, b, c FROM t8 WHERE b=3;
+} {1 3 1}
+
+do_execsql_test 900 {
+  CREATE TABLE t9(v);
+  INSERT INTO t9 VALUES 
+    ('abcd'), ('Abcd'), ('aBcd'), ('ABcd'), ('abCd'), ('AbCd'), ('aBCd'), 
+    ('ABCd'), ('abcD'), ('AbcD'), ('aBcD'), ('ABcD'), ('abCD'), ('AbCD'), 
+    ('aBCD'), ('ABCD'),
+    ('wxyz'), ('Wxyz'), ('wXyz'), ('WXyz'), ('wxYz'), ('WxYz'), ('wXYz'), 
+    ('WXYz'), ('wxyZ'), ('WxyZ'), ('wXyZ'), ('WXyZ'), ('wxYZ'), ('WxYZ'), 
+    ('wXYZ'), ('WXYZ');
+}
+
+do_execsql_test 910 {
+  SELECT DISTINCT v COLLATE NOCASE, v FROM t9 ORDER BY +v;
+} {
+  ABCD ABCD ABCd ABCd ABcD ABcD ABcd ABcd AbCD
+  AbCD AbCd AbCd AbcD AbcD Abcd Abcd
+  WXYZ WXYZ WXYz WXYz WXyZ WXyZ WXyz WXyz WxYZ
+  WxYZ WxYz WxYz WxyZ WxyZ Wxyz Wxyz
+  aBCD aBCD aBCd aBCd aBcD aBcD aBcd aBcd abCD
+  abCD abCd abCd abcD abcD abcd abcd
+  wXYZ wXYZ wXYz wXYz wXyZ wXyZ wXyz wXyz wxYZ
+  wxYZ wxYz wxYz wxyZ wxyZ wxyz wxyz
+}
+
+do_execsql_test 920 {
+  CREATE INDEX i9 ON t9(v COLLATE NOCASE, v);
+  ANALYZE;
+
+  SELECT DISTINCT v COLLATE NOCASE, v FROM t9 ORDER BY +v;
+} {
+  ABCD ABCD ABCd ABCd ABcD ABcD ABcd ABcd AbCD
+  AbCD AbCd AbCd AbcD AbcD Abcd Abcd
+  WXYZ WXYZ WXYz WXYz WXyZ WXyZ WXyz WXyz WxYZ
+  WxYZ WxYz WxYz WxyZ WxyZ Wxyz Wxyz
+  aBCD aBCD aBCd aBCd aBcD aBcD aBcd aBcd abCD
+  abCD abCd abCd abcD abcD abcd abcd
+  wXYZ wXYZ wXYz wXYz wXyZ wXyZ wXyz wXyz wxYZ
+  wxYZ wxYz wxYz wxyZ wxyZ wxyz wxyz
+}
+
+# Ticket https://sqlite.org/src/info/ef9318757b152e3a on 2017-11-21
+# Incorrect result due to a skip-ahead-distinct optimization on a
+# join where no rows of the inner loop appear in the result set.
+#
+db close
+sqlite3 db :memory:
+do_execsql_test 1000 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER);
+  CREATE INDEX t1b ON t1(b);
+  CREATE TABLE t2(x INTEGER PRIMARY KEY, y INTEGER);
+  CREATE INDEX t2y ON t2(y);
+  WITH RECURSIVE c(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM c WHERE x<49)
+    INSERT INTO t1(b) SELECT x/10 - 1 FROM c;
+  WITH RECURSIVE c(x) AS (VALUES(-1) UNION ALL SELECT x+1 FROM c WHERE x<19)
+    INSERT INTO t2(x,y) SELECT x, 1 FROM c;
+  SELECT DISTINCT y FROM t1, t2 WHERE b=x AND b<>-1;
+  ANALYZE;
+  SELECT DISTINCT y FROM t1, t2 WHERE b=x AND b<>-1;
+} {1 1}
+db close
+sqlite3 db :memory:
+do_execsql_test 1010 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER);
+  CREATE INDEX t1b ON t1(b);
+  CREATE TABLE t2(x INTEGER PRIMARY KEY, y INTEGER);
+  CREATE INDEX t2y ON t2(y);
+  WITH RECURSIVE c(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM c WHERE x<49)
+    INSERT INTO t1(b) SELECT -(x/10 - 1) FROM c;
+  WITH RECURSIVE c(x) AS (VALUES(-1) UNION ALL SELECT x+1 FROM c WHERE x<19)
+    INSERT INTO t2(x,y) SELECT -x, 1 FROM c;
+  SELECT DISTINCT y FROM t1, t2 WHERE b=x AND b<>1 ORDER BY y DESC;
+  ANALYZE;
+  SELECT DISTINCT y FROM t1, t2 WHERE b=x AND b<>1 ORDER BY y DESC;
+} {1 1}
+db close
+sqlite3 db :memory:
+do_execsql_test 1020 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX t1a ON t1(a, b);
+  -- Lots of rows of (1, 'no'), followed by a single (1, 'yes').
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+    INSERT INTO t1(a, b) SELECT 1, 'no' FROM c;
+  INSERT INTO t1(a, b) VALUES(1, 'yes');
+  CREATE TABLE t2(x PRIMARY KEY);
+  INSERT INTO t2 VALUES('yes');
+  SELECT DISTINCT a FROM t1, t2 WHERE x=b;
+  ANALYZE;
+  SELECT DISTINCT a FROM t1, t2 WHERE x=b;
+} {1 1}
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 2000 {
+  CREATE TABLE t0 (c0, c1, c2, PRIMARY KEY (c0, c1));
+  CREATE TABLE t1 (c2);
+  INSERT INTO t0(c2) VALUES (0),(1),(3),(4),(5),(6),(7),(8),(9),(10),(11);
+  INSERT INTO t0(c1) VALUES ('a');
+  INSERT INTO t1(c2) VALUES (0);
+}
+do_execsql_test 2010 {
+  SELECT DISTINCT t0.c0, t1._rowid_, t0.c1 FROM t1 CROSS JOIN t0 ORDER BY t0.c0;
+} {{} 1 {} {} 1 a}
+do_execsql_test 1.2 {
+  ANALYZE;
+}
+do_execsql_test 2020 {
+  SELECT DISTINCT t0.c0, t1._rowid_, t0.c1 FROM t1 CROSS JOIN t0 ORDER BY t0.c0;
+} {{} 1 {} {} 1 a}
+
+
+do_execsql_test 2030 {
+  CREATE TABLE t2(a, b, c);
+  CREATE INDEX t2ab ON t2(a, b);
+  
+  WITH c(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM c WHERE i<64)
+    INSERT INTO t2 SELECT 'one', i%2, 'one' FROM c;
+
+  WITH c(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM c WHERE i<64)
+    INSERT INTO t2 SELECT 'two', i%2, 'two' FROM c;
+
+  CREATE TABLE t3(x INTEGER PRIMARY KEY);
+  INSERT INTO t3 VALUES(1);
+
+  ANALYZE;
+}
+do_execsql_test 2040 {
+  SELECT DISTINCT a, b, x FROM t3 CROSS JOIN t2 ORDER BY a; 
+} {
+  one 0 1
+  one 1 1
+  two 0 1
+  two 1 1
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3000 {
+  CREATE TABLE t0 (c0, c1 NOT NULL DEFAULT 1, c2, PRIMARY KEY (c0, c1));
+  INSERT INTO t0(c2) VALUES (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
+  INSERT INTO t0(c2) VALUES('a');
+}
+
+do_execsql_test 3010 {
+  SELECT DISTINCT * FROM t0 WHERE NULL IS t0.c0;
+} {
+  {} 1 {}
+  {} 1 a
+}
+
+do_execsql_test 3020 {
+  ANALYZE;
+}
+
+do_execsql_test 3030 {
+  SELECT DISTINCT * FROM t0 WHERE NULL IS c0;
+} {
+  {} 1 {}
+  {} 1 a
+}
+
+finish_test

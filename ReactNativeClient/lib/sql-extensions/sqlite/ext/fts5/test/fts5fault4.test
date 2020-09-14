@@ -1,0 +1,397 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault4
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# An OOM while dropping an fts5 table.
+#
+db func rnddoc fts5_rnddoc 
+do_test 1.0 {
+  execsql { CREATE VIRTUAL TABLE xx USING fts5(x) }
+} {}
+faultsim_save_and_close
+
+do_faultsim_test 1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM xx }
+} -body {
+  execsql { DROP TABLE xx }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+#-------------------------------------------------------------------------
+# An OOM while "reseeking" an FTS cursor.
+#
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE jj USING fts5(j);
+  INSERT INTO jj(rowid, j) VALUES(101, 'm t w t f s s');
+  INSERT INTO jj(rowid, j) VALUES(202, 't w t f s');
+  INSERT INTO jj(rowid, j) VALUES(303, 'w t f');
+  INSERT INTO jj(rowid, j) VALUES(404, 't');
+}
+faultsim_save_and_close
+
+do_faultsim_test 3 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM jj }
+} -body {
+  set res [list]
+  db eval { SELECT rowid FROM jj WHERE jj MATCH 't' } {
+    lappend res $rowid
+    if {$rowid==303} {
+      execsql { DELETE FROM jj WHERE rowid=404 }
+    }
+  }
+  set res
+} -test {
+  faultsim_test_result [list 0 {101 202 303}]
+}
+
+#-------------------------------------------------------------------------
+# An OOM within a special "*reads" query.
+#
+reset_db
+db func rnddoc fts5_rnddoc
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+
+  WITH ii(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<10 )
+  INSERT INTO x1 SELECT rnddoc(5) FROM ii;
+}
+
+set ::res [db eval {SELECT rowid, x1 FROM x1 WHERE x1 MATCH '*reads'}]
+
+do_faultsim_test 4 -faults oom-* -body {
+  db eval {SELECT rowid, x, x1 FROM x1 WHERE x1 MATCH '*reads'}
+} -test {
+  faultsim_test_result {0 {0 {} 3}}
+}
+
+#-------------------------------------------------------------------------
+# An OOM within a query that uses a custom rank function.
+#
+reset_db
+do_execsql_test 5.0 {
+  PRAGMA encoding='utf16';
+  CREATE VIRTUAL TABLE x2 USING fts5(x);
+  INSERT INTO x2(rowid, x) VALUES(10, 'a b c'); -- 3
+  INSERT INTO x2(rowid, x) VALUES(20, 'a b c'); -- 6
+  INSERT INTO x2(rowid, x) VALUES(30, 'a b c'); -- 2
+  INSERT INTO x2(rowid, x) VALUES(40, 'a b c'); -- 5
+  INSERT INTO x2(rowid, x) VALUES(50, 'a b c'); -- 1
+}
+
+proc rowidmod {cmd mod} { 
+  set row [$cmd xRowid]
+  expr {$row % $mod}
+}
+sqlite3_fts5_create_function db rowidmod rowidmod
+
+do_faultsim_test 5.1 -faults oom-* -body {
+  db eval {
+    SELECT rowid || '-' || rank FROM x2 WHERE x2 MATCH 'b' AND 
+    rank MATCH "rowidmod('7')" ORDER BY rank
+  }
+} -test {
+  faultsim_test_result {0 {50-1 30-2 10-3 40-5 20-6}}
+}
+
+proc rowidprefix {cmd prefix} { 
+  set row [$cmd xRowid]
+  set {} "${row}-${prefix}"
+}
+sqlite3_fts5_create_function db rowidprefix rowidprefix
+
+set str [string repeat abcdefghijklmnopqrstuvwxyz 10]
+do_faultsim_test 5.2 -faults oom-* -body {
+  db eval "
+    SELECT rank, x FROM x2 WHERE x2 MATCH 'b' AND 
+    rank MATCH 'rowidprefix(''$::str'')'
+    LIMIT 1
+  "
+} -test {
+  faultsim_test_result "0 {10-$::str {a b c}}"
+}
+
+
+#-------------------------------------------------------------------------
+# OOM errors within auxiliary functions.
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE x3 USING fts5(xxx);
+  INSERT INTO x3 VALUES('a b c d c b a');
+  INSERT INTO x3 VALUES('a a a a a a a');
+  INSERT INTO x3 VALUES('a a a a a a a');
+}
+
+do_faultsim_test 6.1 -faults oom-t* -body {
+  db eval { SELECT highlight(x3, 0, '*', '*') FROM x3 WHERE x3 MATCH 'c' }
+} -test {
+  faultsim_test_result {0 {{a b *c* d *c* b a}}}
+}
+
+proc firstinst {cmd} { 
+  foreach {p c o} [$cmd xInst 0] {}
+  expr $c*100 + $o
+}
+sqlite3_fts5_create_function db firstinst firstinst
+
+do_faultsim_test 6.2 -faults oom-t* -body {
+  db eval { SELECT firstinst(x3) FROM x3 WHERE x3 MATCH 'c' }
+} -test {
+  faultsim_test_result {0 2} {1 SQLITE_NOMEM}
+}
+
+proc previc {cmd} {
+  set res [$cmd xGetAuxdataInt 0]
+  $cmd xSetAuxdataInt [$cmd xInstCount]
+  return $res
+}
+sqlite3_fts5_create_function db previc  previc
+
+do_faultsim_test 6.2 -faults oom-t* -body {
+  db eval { SELECT previc(x3) FROM x3 WHERE x3 MATCH 'a' }
+} -test {
+  faultsim_test_result {0 {0 2 7}} {1 SQLITE_NOMEM}
+}
+
+#-------------------------------------------------------------------------
+# OOM error when querying for a phrase with many tokens.
+#
+reset_db
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(x, y);
+  INSERT INTO tt VALUES('f b g b c b', 'f a d c c b');  -- 1
+  INSERT INTO tt VALUES('d a e f e d', 'f b b d e e');  -- 2
+  INSERT INTO tt VALUES('f b g a d c', 'e f c f a d');  -- 3
+  INSERT INTO tt VALUES('f f c d g f', 'f a e b g b');  -- 4
+  INSERT INTO tt VALUES('a g b d a g', 'e g a e a c');  -- 5
+  INSERT INTO tt VALUES('c d b d e f', 'f g e g e e');  -- 6
+  INSERT INTO tt VALUES('e g f f b c', 'f c e f g f');  -- 7
+  INSERT INTO tt VALUES('e g c f c e', 'f e e a f g');  -- 8
+  INSERT INTO tt VALUES('e a e b e e', 'd c c f f f');  -- 9
+  INSERT INTO tt VALUES('f a g g c c', 'e g d g c e');  -- 10
+  INSERT INTO tt VALUES('c d b a e f', 'f g e h e e');  -- 11
+
+  CREATE VIRTUAL TABLE tt2 USING fts5(o);
+  INSERT INTO tt2(rowid, o) SELECT rowid, x||' '||y FROM tt;
+  INSERT INTO tt2(rowid, o) VALUES(12, 'a b c d e f g h i j k l');
+}
+
+do_faultsim_test 7.2 -faults oom-* -body {
+  db eval { SELECT rowid FROM tt WHERE tt MATCH 'f+g+e+g+e+e' }
+} -test {
+  faultsim_test_result {0 6} {1 SQLITE_NOMEM}
+}
+
+do_faultsim_test 7.3 -faults oom-* -body {
+  db eval { SELECT rowid FROM tt WHERE tt MATCH 'NEAR(a b c d e f)' }
+} -test {
+  faultsim_test_result {0 11} {1 SQLITE_NOMEM}
+}
+
+do_faultsim_test 7.4 -faults oom-t* -body {
+  db eval { SELECT rowid FROM tt2 WHERE tt2 MATCH '"g c f c e f e e a f"' }
+} -test {
+  faultsim_test_result {0 8} {1 SQLITE_NOMEM}
+}
+
+do_faultsim_test 7.5 -faults oom-* -body {
+  db eval {SELECT rowid FROM tt2 WHERE tt2 MATCH 'NEAR(a b c d e f g h i j k)'}
+} -test {
+  faultsim_test_result {0 12} {1 SQLITE_NOMEM}
+}
+
+do_faultsim_test 7.6 -faults oom-* -body {
+  db eval {SELECT rowid FROM tt WHERE tt MATCH 'y: "c c"'}
+} -test {
+  faultsim_test_result {0 {1 9}} {1 SQLITE_NOMEM}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(x);
+  INSERT INTO tt(tt, rank) VALUES('pgsz', 32);
+  BEGIN;
+    INSERT INTO tt(rowid, x) VALUES(1, 'a b c d x x');
+    WITH ii(i) AS (SELECT 2 UNION ALL SELECT i+1 FROM ii WHERE i<99)
+      INSERT INTO tt(rowid, x) SELECT i, 'a b c x x d' FROM ii;
+    INSERT INTO tt(rowid, x) VALUES(100, 'a b c d x x');
+  COMMIT;
+}
+
+do_faultsim_test 8.1 -faults oom-t* -body {
+  db eval { SELECT rowid FROM tt WHERE tt MATCH 'NEAR(a b c d, 2)' }
+} -test {
+  faultsim_test_result {0 {1 100}} {1 SQLITE_NOMEM}
+}
+
+do_faultsim_test 8.2 -faults oom-t* -body {
+  db eval { SELECT count(*) FROM tt WHERE tt MATCH 'a OR d' }
+} -test {
+  faultsim_test_result {0 100} {1 SQLITE_NOMEM}
+}
+
+
+#-------------------------------------------------------------------------
+# Fault in NOT query.
+#
+reset_db
+do_execsql_test 9.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(x);
+  INSERT INTO tt(tt, rank) VALUES('pgsz', 32);
+  BEGIN;
+    WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<200)
+      INSERT INTO tt(rowid, x) 
+      SELECT i, CASE WHEN (i%50)==0 THEN 'a a a a a a' ELSE 'a x a x a x' END 
+      FROM ii;
+  COMMIT;
+}
+
+do_faultsim_test 9.1 -faults oom-* -body {
+  db eval { SELECT rowid FROM tt WHERE tt MATCH 'a NOT x' }
+} -test {
+  faultsim_test_result {0 {50 100 150 200}} {1 SQLITE_NOMEM}
+}
+
+#-------------------------------------------------------------------------
+# OOM in fts5_expr() SQL function.
+#
+do_faultsim_test 10.1 -faults oom-t* -body {
+  db one { SELECT fts5_expr('a AND b NEAR(a b)') }
+} -test {
+  faultsim_test_result {0 {"a" AND "b" AND NEAR("a" "b", 10)}} 
+}
+
+do_faultsim_test 10.2 -faults oom-t* -body {
+  db one { SELECT fts5_expr_tcl('x:"a b c" AND b NEAR(a b)', 'ns', 'x') }
+} -test {
+  set res {AND [ns -col 0 -- {a b c}] [ns -- {b}] [ns -near 10 -- {a} {b}]}
+  faultsim_test_result [list 0 $res]
+}
+
+do_faultsim_test 10.3 -faults oom-t* -body {
+  db one { SELECT fts5_expr('x:a', 'x') }
+} -test {
+  faultsim_test_result {0 {x : "a"}}
+}
+
+#-------------------------------------------------------------------------
+# OOM while configuring 'rank' option.
+#
+reset_db
+do_execsql_test 11.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x);
+}
+do_faultsim_test 11.1 -faults oom-t* -body {
+  db eval { INSERT INTO ft(ft, rank) VALUES('rank', 'bm25(10.0, 5.0)') }
+} -test {
+  faultsim_test_result {0 {}} {1 {disk I/O error}}
+}
+
+#-------------------------------------------------------------------------
+# OOM while creating an fts5vocab table.
+#
+reset_db
+do_execsql_test 12.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x);
+}
+faultsim_save_and_close
+do_faultsim_test 12.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM sqlite_master }
+} -body {
+  db eval { CREATE VIRTUAL TABLE vv USING fts5vocab(ft, 'row') }
+} -test {
+  faultsim_test_result {0 {}} 
+}
+
+#-------------------------------------------------------------------------
+# OOM while querying an fts5vocab table.
+#
+reset_db
+do_execsql_test 13.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x);
+  INSERT INTO ft VALUES('a b');
+  CREATE VIRTUAL TABLE vv USING fts5vocab(ft, 'row');
+}
+faultsim_save_and_close
+do_faultsim_test 13.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM vv }
+} -body {
+  db eval { SELECT * FROM vv }
+} -test {
+  faultsim_test_result {0 {a 1 1 b 1 1}} 
+}
+
+#-------------------------------------------------------------------------
+# OOM in multi-column token query.
+#
+reset_db
+do_execsql_test 13.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x, y, z);
+  INSERT INTO ft(ft, rank) VALUES('pgsz', 32);
+  INSERT INTO ft VALUES(
+      'x x x x x x x x x x x x x x x x',
+      'y y y y y y y y y y y y y y y y',
+      'z z z z z z z z x x x x x x x x'
+  );
+  INSERT INTO ft SELECT * FROM ft;
+  INSERT INTO ft SELECT * FROM ft;
+  INSERT INTO ft SELECT * FROM ft;
+  INSERT INTO ft SELECT * FROM ft;
+}
+faultsim_save_and_close
+do_faultsim_test 13.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM ft }
+} -body {
+  db eval { SELECT rowid FROM ft WHERE ft MATCH '{x z}: x' }
+} -test {
+  faultsim_test_result {0 {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16}}
+}
+
+#-------------------------------------------------------------------------
+# OOM in an "ALTER TABLE RENAME TO"
+#
+reset_db
+do_execsql_test 14.0 {
+  CREATE VIRTUAL TABLE "tbl one" USING fts5(x, y, z);
+}
+faultsim_save_and_close
+do_faultsim_test 14.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM "tbl one" }
+} -body {
+  db eval { ALTER TABLE "tbl one" RENAME TO "tbl two" }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+finish_test

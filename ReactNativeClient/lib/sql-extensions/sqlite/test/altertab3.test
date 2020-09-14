@@ -1,0 +1,604 @@
+# 2019 January 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix altertab3
+
+# If SQLITE_OMIT_ALTERTABLE is defined, omit this file.
+ifcapable !altertable {
+  finish_test
+  return
+}
+
+ifcapable windowfunc {
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    SELECT sum(b) OVER w FROM t1 WINDOW w AS (ORDER BY a);
+  END;
+}
+
+do_execsql_test 1.1 {
+  ALTER TABLE t1 RENAME a TO aaa;
+}
+
+do_execsql_test 1.2 {
+  SELECT sql FROM sqlite_master WHERE name='tr1'
+} {{CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    SELECT sum(b) OVER w FROM t1 WINDOW w AS (ORDER BY aaa);
+  END}}
+
+do_execsql_test 1.3 {
+  INSERT INTO t1 VALUES(1, 2);
+}
+} ;# windowfunc
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a,b,c);
+  CREATE TABLE t2(a,b,c);
+  CREATE TRIGGER r1 AFTER INSERT ON t1 WHEN new.a NOT NULL BEGIN
+    SELECT a,b, a name FROM t1 
+      INTERSECT 
+    SELECT a,b,c FROM t1 WHERE b>='d' ORDER BY name;
+    SELECT new.c;
+  END;
+}
+
+do_execsql_test 2.1 {
+  ALTER TABLE t1 RENAME TO t1x;
+  SELECT sql FROM sqlite_master WHERE name = 'r1';
+} {{CREATE TRIGGER r1 AFTER INSERT ON "t1x" WHEN new.a NOT NULL BEGIN
+    SELECT a,b, a name FROM "t1x" 
+      INTERSECT 
+    SELECT a,b,c FROM "t1x" WHERE b>='d' ORDER BY name;
+    SELECT new.c;
+  END}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a, b, c, d);
+  CREATE VIEW v1 AS SELECT * FROM t1 WHERE a=1 OR (b IN ());
+}
+
+do_execsql_test 3.1 {
+  ALTER TABLE t1 RENAME b TO bbb;
+}
+
+do_execsql_test 3.2 {
+  SELECT sql FROM sqlite_master WHERE name = 'v1'
+} {{CREATE VIEW v1 AS SELECT * FROM t1 WHERE a=1 OR (b IN ())}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 4.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t3(e, f);
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    INSERT INTO t2 VALUES(new.a, new.b);
+  END;
+}
+
+do_catchsql_test 4.1.2 {
+  BEGIN;
+    ALTER TABLE t3 RENAME TO t4;
+} {1 {error in trigger tr1: no such table: main.t2}}
+do_execsql_test 4.1.2 {
+  COMMIT;
+}
+do_execsql_test 4.1.3 {
+  SELECT type, name, tbl_name, sql 
+  FROM sqlite_master WHERE type='table' AND name!='t1';
+} {table t3 t3 {CREATE TABLE t3(e, f)}}
+
+
+do_catchsql_test 4.2.1 {
+  BEGIN;
+    ALTER TABLE t3 RENAME e TO eee;
+} {1 {error in trigger tr1: no such table: main.t2}}
+do_execsql_test 4.2.2 {
+  COMMIT;
+}
+do_execsql_test 4.2.3 {
+  SELECT type, name, tbl_name, sql 
+  FROM sqlite_master WHERE type='table' AND name!='t1';
+} {table t3 t3 {CREATE TABLE t3(e, f)}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE t1 (
+      c1 integer, c2, PRIMARY KEY(c1 collate rtrim),
+      UNIQUE(c2)
+  )
+}
+do_execsql_test 5.1 {
+  ALTER TABLE t1 RENAME c1 TO c3;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 6.0 {
+  CREATE TEMPORARY TABLE Table0 (
+    Col0 INTEGER, 
+    PRIMARY KEY(Col0 COLLATE RTRIM), 
+    FOREIGN KEY (Col0) REFERENCES Table0
+  );
+}
+
+do_execsql_test 6.1 {
+  ALTER TABLE Table0 RENAME Col0 TO Col0;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 7.1.0 {
+  CREATE TABLE t1(a,b,c);
+  CREATE TRIGGER AFTER INSERT ON t1 BEGIN
+    SELECT a, rank() OVER w1 FROM t1
+    WINDOW w1 AS (PARTITION BY b, percent_rank() OVER w1);
+  END;
+}
+
+do_execsql_test 7.1.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+  SELECT sql FROM sqlite_master;
+} {
+  {CREATE TABLE "t1x"(a,b,c)}
+  {CREATE TRIGGER AFTER INSERT ON "t1x" BEGIN
+    SELECT a, rank() OVER w1 FROM "t1x"
+    WINDOW w1 AS (PARTITION BY b, percent_rank() OVER w1);
+  END}
+}
+
+do_execsql_test 7.2.1 {
+  DROP TRIGGER after;
+  CREATE TRIGGER AFTER INSERT ON t1x BEGIN
+    SELECT a, rank() OVER w1 FROM t1x
+    WINDOW w1 AS (PARTITION BY b, percent_rank() OVER w1 ORDER BY d);
+  END;
+}
+
+do_catchsql_test 7.2.2 {
+  ALTER TABLE t1x RENAME TO t1;
+} {1 {error in trigger AFTER: no such column: d}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 8.0 {
+  CREATE TABLE t0(c0);
+  CREATE INDEX i0 ON t0('1' IN ());
+}
+do_execsql_test 8.1 {
+  ALTER TABLE t0 RENAME TO t1;
+  SELECT sql FROM sqlite_master;
+} {
+  {CREATE TABLE "t1"(c0)}
+  {CREATE INDEX i0 ON "t1"('1' IN ())}
+}
+do_execsql_test 8.2.1 {
+  CREATE TABLE t2 (c0);
+  CREATE INDEX i2 ON t2((LIKELIHOOD(c0, 100) IN ()));
+  ALTER TABLE t2 RENAME COLUMN c0 TO c1;
+}
+do_execsql_test 8.2.2 {
+  SELECT sql FROM sqlite_master WHERE tbl_name = 't2';
+} {
+  {CREATE TABLE t2 (c1)} 
+  {CREATE INDEX i2 ON t2((LIKELIHOOD(c0, 100) IN ()))}
+}
+do_test 8.2.3 {
+  sqlite3 db2 test.db
+  db2 eval { INSERT INTO t2 VALUES (1), (2), (3) }
+  db close
+} {}
+db2 close
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 9.1 {
+  CREATE TABLE t1(a,b,c);
+  CREATE TRIGGER AFTER INSERT ON t1 WHEN new.a NOT NULL BEGIN
+    SELECT true WHERE (SELECT a, b FROM (t1)) IN ();
+  END;
+}
+do_execsql_test 9.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 10.1 {
+  CREATE TABLE t1(a, b, c);
+  CREATE TABLE t2(a, b, c);
+  CREATE VIEW v1 AS SELECT * FROM t1 WHERE (
+    SELECT t1.a FROM t1, t2
+  ) IN () OR t1.a=5;
+}
+
+do_execsql_test 10.2 {
+  ALTER TABLE t2 RENAME TO t3;
+  SELECT sql FROM sqlite_master WHERE name='v1';
+} {
+  {CREATE VIEW v1 AS SELECT * FROM t1 WHERE (
+    SELECT t1.a FROM t1, t2
+  ) IN () OR t1.a=5}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 11.1 {
+  CREATE TABLE t1(
+      a,b,c,d,e,f,g,h,j,jj,jjb,k,aa,bb,cc,dd,ee DEFAULT 3.14,
+      ff DEFAULT('hiccup'),Wg NOD NULL DEFAULT(false)
+  );
+
+  CREATE TRIGGER b AFTER INSERT ON t1 WHEN new.a BEGIN
+    SELECT a, sum() w3 FROM t1 
+    WINDOW b AS (ORDER BY NOT EXISTS(SELECT 1 FROM abc));
+  END;
+}
+
+do_catchsql_test 11.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+} {1 {error in trigger b: no such table: abc}}
+
+do_execsql_test 11.3 {
+  DROP TRIGGER b;
+  CREATE TRIGGER b AFTER INSERT ON t1 WHEN new.a BEGIN
+    SELECT a, sum() w3 FROM t1 
+    WINDOW b AS (ORDER BY NOT EXISTS(SELECT 1 FROM t1));
+  END;
+} {}
+
+do_execsql_test 11.4 {
+  ALTER TABLE t1 RENAME TO t1x;
+  SELECT sql FROM sqlite_master WHERE name = 'b';
+} {
+{CREATE TRIGGER b AFTER INSERT ON "t1x" WHEN new.a BEGIN
+    SELECT a, sum() w3 FROM "t1x" 
+    WINDOW b AS (ORDER BY NOT EXISTS(SELECT 1 FROM "t1x"));
+  END}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 12.1 {
+CREATE TABLE t1(a,b,c,d,e,f,g,h,j,jj,Zjj,k,aQ,bb,cc,dd,ee DEFAULT 3.14,
+ff DEFAULT('hiccup'),gg NOD NULL DEFAULT(false));
+CREATE TRIGGER AFTER INSERT ON t1 WHEN new.a NOT NULL BEGIN
+
+SELECT b () OVER , dense_rank() OVER d, d () OVER w1
+FROM t1
+WINDOW
+w1 AS
+( w1 ORDER BY d
+ROWS BETWEEN 2 NOT IN(SELECT a, sum(d) w2,max(d)OVER FROM t1
+WINDOW
+w1 AS
+(PARTITION BY d
+ROWS BETWEEN '' PRECEDING AND false FOLLOWING),
+d AS
+(PARTITION BY b ORDER BY d
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+) PRECEDING AND 1 FOLLOWING),
+w2 AS
+(PARTITION BY b ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
+w3 AS
+(PARTITION BY b ORDER BY d
+ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING)
+;
+SELECT a, sum(d) w2,max(d)OVER FROM t1
+WINDOW
+w1 AS
+(PARTITION BY d
+ROWS BETWEEN '' PRECEDING AND false FOLLOWING),
+d AS
+(PARTITION BY b ORDER BY d
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+;
+
+END;
+}
+
+do_execsql_test 12.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 13.1 {
+  CREATE TABLE t1(a);
+  CREATE TRIGGER r1 INSERT ON t1 BEGIN
+    SELECT a(*) OVER (ORDER BY (SELECT 1)) FROM t1;
+  END;
+}
+
+do_execsql_test 13.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 14.1 {
+  CREATE TABLE t1(a);
+  CREATE TABLE t2(b);
+  CREATE TRIGGER AFTER INSERT ON t1 BEGIN
+    SELECT sum() FILTER (WHERE (SELECT sum() FILTER (WHERE 0)) AND a);
+  END;
+}
+
+do_catchsql_test 14.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+} {1 {error in trigger AFTER: no such column: a}}
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 16.1 {
+  CREATE TABLE t1(x);
+  CREATE TRIGGER AFTER INSERT ON t1 BEGIN
+    SELECT (WITH t2 AS (WITH t3 AS (SELECT true)
+          SELECT * FROM t3 ORDER BY true COLLATE nocase)
+        SELECT 11);
+
+    WITH t4 AS (SELECT * FROM t1) SELECT 33;
+  END;
+}
+do_execsql_test 16.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 17.1 {
+  CREATE TABLE t1(a,b,c);
+  CREATE TRIGGER AFTER INSERT ON t1 WHEN new.a NOT NULL BEGIN
+    SELECT a () FILTER (WHERE a>0) FROM t1;
+  END;
+}
+
+do_execsql_test 17.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+  ALTER TABLE t1x RENAME a TO aaa;
+  SELECT sql FROM sqlite_master WHERE type='trigger';
+} {
+{CREATE TRIGGER AFTER INSERT ON "t1x" WHEN new.aaa NOT NULL BEGIN
+    SELECT a () FILTER (WHERE aaa>0) FROM "t1x";
+  END}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 18.1 {
+  CREATE TABLE t1(a,b);
+  CREATE TRIGGER r1 AFTER INSERT ON t1 BEGIN
+    SELECT a, b FROM t1
+    INTERSECT SELECT b,a FROM t1
+    ORDER BY b IN (
+        SELECT a UNION SELECT b
+        FROM t1
+        ORDER BY b COLLATE nocase
+        )
+    ;
+  END;
+}
+
+do_catchsql_test 18.2 {
+    SELECT a, b FROM t1
+    INTERSECT 
+    SELECT b,a FROM t1
+    ORDER BY b IN (
+        SELECT a UNION SELECT b
+        FROM t1
+        ORDER BY b COLLATE nocase
+        );
+} {1 {1st ORDER BY term does not match any column in the result set}}
+
+do_catchsql_test 18.3 {
+  ALTER TABLE t1 RENAME TO t1x;
+} {1 {error in trigger r1: 1st ORDER BY term does not match any column in the result set}}
+
+#-------------------------------------------------------------------------
+reset_db 
+do_execsql_test 19.0 {
+  CREATE TABLE a(a,h CONSTRAINT a UNIQUE ON CONFLICT FAIL,CONSTRAINT a);
+}
+
+foreach {tn v res} {
+  1 {
+    CREATE VIEW q AS SELECT 123
+    
+      WINDOW x AS (
+        RANGE BETWEEN UNBOUNDED PRECEDING AND INDEXED() OVER(
+          PARTITION BY ( WITH x AS(VALUES(col1)) VALUES(453) )
+        )
+      FOLLOWING
+    ) 
+  } {1 {error in view q: no such column: col1}}
+
+  2 {
+    CREATE VIEW q AS SELECT
+    CAST(CAST(CAST(CAST(CAST(CAST(CAST(CAST(CAST(CAST(CAST(RIGHT
+    AS)AS)AS)AS)AS)AS)AS)AS)AS)AS)AS)WINDOW x AS(RANGE BETWEEN UNBOUNDED
+    PRECEDING AND INDEXED(*)OVER(PARTITION BY
+    CROSS,CROSS,NATURAL,sqlite_master(*)OVER a,(WITH a AS(VALUES(LEFT)UNION
+    VALUES(LEFT)UNION VALUES(LEFT)UNION VALUES(LEFT)UNION VALUES(LEFT)UNION
+    VALUES(LEFT)UNION VALUES(LEFT))VALUES(LEFT))IN
+    STORED,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT)*LEFT FOLLOWING)ORDER BY
+    LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT LIMIT
+    LEFT,INDEXED(*)OVER(PARTITION BY
+    CROSS,CROSS,CROSS,LEFT,INDEXED(*)OVER(PARTITION BY
+    CROSS,CROSS,CROSS),INDEXED(*)OVER(PARTITION BY
+    LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT,LEFT),
+    LEFT,LEFT,INNER,CROSS,CROSS,CROSS,INNER,NATURAL ORDER BY
+    OUTER,NATURAL,NATURAL,NATURAL,NATURAL,NATURAL,NATURAL,NATURAL,INNER,
+    INNER,INNER NULLS LAST GROUPS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED
+    FOLLOWING); 
+  } {1 {error in view q: no such column: LEFT}}
+
+  3 {
+    CREATE VIEW q AS SELECT 99 WINDOW x AS (RANGE BETWEEN UNBOUNDED PRECEDING
+    AND count(*)OVER(PARTITION BY (WITH a AS(VALUES(2),(x3))VALUES(0)))
+    FOLLOWING)ORDER BY x2,sum(1)OVER(PARTITION BY avg(5)OVER(PARTITION BY x1));
+  } {1 {error in view q: no such column: x3}}
+} {
+  do_execsql_test 19.$tn.1 "
+    DROP VIEW IF EXISTS q;
+    $v
+  " {}
+
+  do_catchsql_test 19.$tn.2 {
+    ALTER TABLE a RENAME TO g;
+  } $res
+}
+
+# Verify that the "if( pParse->nErr ) return WRC_Abort" at the top of the
+# renameUnmapSelectCb() routine in alter.c (2019-12-04) is really required.
+#
+sqlite3 db :memory:
+do_catchsql_test 20.10 {
+  CREATE TABLE s(a, b, c);
+  CREATE INDEX k ON s( (WITH s AS( SELECT * ) VALUES(2) ) IN () );
+  ALTER TABLE s RENAME a TO a2;
+} {1 {error in index k: no tables specified}}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 21.1 {
+  CREATE TABLE s(col);
+  CREATE VIEW v AS SELECT ( 
+    WITH x(a) AS(SELECT * FROM s) VALUES(RIGHT) 
+  ) IN() ; 
+  CREATE TABLE a(a);
+  ALTER TABLE a RENAME a TO b;
+}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 22.1 {
+  CREATE TABLE t1(a);
+  CREATE VIEW v2(b) AS SELECT * FROM v2;
+}
+
+do_catchsql_test 22.2 {
+  ALTER TABLE t1 RENAME TO t4;
+} {1 {error in view v2: view v2 is circularly defined}}
+
+do_execsql_test 22.3 {
+  DROP VIEW v2;
+  CREATE VIEW v2(b) AS WITH t3 AS (SELECT b FROM v2) SELECT * FROM t3;
+}
+
+do_catchsql_test 22.4 {
+  ALTER TABLE t1 RENAME TO t4;
+} {1 {error in view v2: view v2 is circularly defined}}
+
+do_execsql_test 22.5 {
+  DROP VIEW v2;
+  CREATE VIEW v2(b) AS WITH t3 AS (SELECT b FROM v2) VALUES(1);
+}
+
+do_catchsql_test 22.6 {
+  ALTER TABLE t1 RENAME TO t4;
+} {0 {}}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 23.1 {
+  CREATE TABLE t1(x);
+  CREATE TRIGGER r1 AFTER INSERT ON t1 BEGIN
+    UPDATE t1 SET (c,d)=((SELECT 1 FROM t1 JOIN t2 ON b=x),1);
+  END;
+}
+
+do_catchsql_test 23.2 {
+  ALTER TABLE t1 RENAME TO t1x;
+} {1 {error in trigger r1: no such table: main.t2}}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 23.1 {
+  CREATE TABLE v0 (a);
+  CREATE VIEW v2 (v3) AS 
+    WITH x1 AS (SELECT * FROM v2) 
+    SELECT v3 AS x, v3 AS y FROM v2; 
+}
+
+do_catchsql_test 23.2 {
+  SELECT * FROM v2
+} {1 {view v2 is circularly defined}}
+
+db close
+sqlite3 db test.db
+
+do_catchsql_test 23.3 {
+  ALTER TABLE v0 RENAME TO t3 ;
+} {1 {error in view v2: view v2 is circularly defined}}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 24.1 {
+  CREATE TABLE v0 (v1); 
+  CREATE TABLE v2 (v3 INTEGER UNIQUE ON CONFLICT ABORT); 
+  CREATE TRIGGER x AFTER INSERT ON v2 WHEN ( 
+      ( SELECT v1 AS PROMO_REVENUE FROM v2 JOIN v0 USING ( VALUE ) ) AND 0 ) 
+  BEGIN 
+    DELETE FROM v2; 
+  END; 
+}
+do_catchsql_test 24.2 {
+  ALTER TABLE v0 RENAME TO x ;
+} {1 {error in trigger x: cannot join using column VALUE - column not present in both tables}}
+
+do_execsql_test 24.3 {
+  DROP TRIGGER x;
+  CREATE TRIGGER x AFTER INSERT ON v2 WHEN (
+    0 AND (SELECT rowid FROM v0)
+  ) BEGIN
+    DELETE FROM v2;
+  END;
+}
+
+do_execsql_test 24.4 {
+  ALTER TABLE v0 RENAME TO xyz;
+  SELECT sql FROM sqlite_master WHERE type='trigger'
+} {{CREATE TRIGGER x AFTER INSERT ON v2 WHEN (
+    0 AND (SELECT rowid FROM "xyz")
+  ) BEGIN
+    DELETE FROM v2;
+  END}}
+
+#------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 25.1 {
+  CREATE TABLE t1(a, b, c);
+  CREATE TABLE t2(a, b, c);
+  CREATE TRIGGER ttt AFTER INSERT ON t1 BEGIN
+    UPDATE t1 SET a=t2.a FROM t2 WHERE t1.a=t2.a; 
+  END;
+}
+#do_execsql_test 25.2 {
+#  ALTER TABLE t2 RENAME COLUMN a TO aaa;
+#}
+
+finish_test
+

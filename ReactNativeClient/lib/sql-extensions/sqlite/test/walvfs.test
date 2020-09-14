@@ -1,0 +1,429 @@
+# 2018 December 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+source $testdir/wal_common.tcl
+set testprefix walvfs
+
+ifcapable !wal {finish_test ; return }
+
+db close
+testvfs tvfs 
+tvfs script xSync
+tvfs filter xSync
+set ::sync_count 0
+proc xSync {method file args} {
+  if {[file tail $file]=="test.db-wal"} {
+    incr ::sync_count
+  }
+}
+
+
+#-------------------------------------------------------------------------
+# Test that if IOCAP_SEQUENTIAL is set, the wal-header is not synced to
+# disk immediately after it is written.
+#
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 1.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA journal_mode = wal;
+  PRAGMA synchronous = normal;
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+  PRAGMA wal_checkpoint;
+} {wal 0 5 5}
+
+set ::sync_count 0
+do_test 1.1 {
+  execsql { INSERT INTO t1 VALUES(10, 11, 12) }
+  set ::sync_count
+} 1
+
+db close
+tvfs devchar sequential
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 1.2 {
+  PRAGMA synchronous = normal;
+  INSERT INTO t1 VALUES(13, 14, 15);
+  INSERT INTO t1 VALUES(16, 17, 18);
+  PRAGMA wal_checkpoint;
+} {0 4 4}
+
+set ::sync_count 0
+do_test 1.3 {
+  execsql { INSERT INTO t1 VALUES(10, 11, 12) }
+  set ::sync_count
+} 0
+
+#-------------------------------------------------------------------------
+# Test that "PRAGMA journal_size_limit" works in wal mode.
+#
+reset_db
+do_execsql_test 2.0 {
+  PRAGMA journal_size_limit = 10000;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+  )
+  INSERT INTO t1 SELECT randomblob(750) FROM s;
+} {10000 wal}
+do_test 2.1 {
+  expr [file size test.db-wal]>12000
+} {1}
+do_test 2.2 {
+  execsql {
+    PRAGMA wal_checkpoint;
+    INSERT INTO t1 VALUES(randomblob(750));
+  }
+  file size test.db-wal
+} {10000}
+do_test 2.3 {
+  execsql {
+    PRAGMA journal_size_limit = 8000;
+    PRAGMA wal_checkpoint;
+    INSERT INTO t1 VALUES(randomblob(750));
+  }
+  file size test.db-wal
+} {8000}
+
+#-------------------------------------------------------------------------
+# Test that a checkpoint may be interrupted using sqlite3_interrupt().
+# And that the error code is SQLITE_NOMEM, not SQLITE_INTERRUPT, if
+# an OOM error occurs just before the sqlite3_interrupt() call.
+#
+reset_db
+db close
+sqlite3 db test.db -vfs tvfs
+tvfs filter {}
+
+do_execsql_test 3.0 {
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+  )
+  INSERT INTO t1 SELECT randomblob(750) FROM s;
+} {wal}
+
+tvfs filter xWrite
+tvfs script xWrite
+set ::cnt 2
+proc xWrite {method file args} {
+  if {[file tail $file]=="test.db"} {
+    incr ::cnt -1
+    if {$::cnt==0} {
+      sqlite3_interrupt db
+    }
+  }
+  return SQLITE_OK
+}
+
+do_catchsql_test 3.1 {
+  PRAGMA wal_checkpoint
+} {1 interrupted}
+
+set ::cnt 2
+proc xWrite {method file args} {
+  if {[file tail $file]=="test.db"} {
+    incr ::cnt -1
+    if {$::cnt==0} {
+      sqlite3_memdebug_fail 1 -repeat 0
+      catchsql { SELECT 'a big long string!' }
+      sqlite3_interrupt db
+    }
+  }
+  return SQLITE_OK
+}
+
+do_catchsql_test 3.2 {
+  PRAGMA wal_checkpoint
+} {1 {out of memory}}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+db close
+do_test 4.0 {
+  sqlite3 db test.db -vfs tvfs
+  execsql {
+    CREATE TABLE t1(x);
+    PRAGMA journal_mode = wal;
+    WITH s(i) AS (
+        SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+    )
+    INSERT INTO t1 SELECT randomblob(750) FROM s;
+  } db
+} {wal}
+db close
+
+tvfs filter xShmMap
+tvfs script xShmMap
+proc xShmMap {method file args} { 
+  return SQLITE_READONLY 
+}
+sqlite3 db test.db -vfs tvfs
+do_catchsql_test 4.1 {
+  SELECT count(*) FROM t1
+} {1 {attempt to write a readonly database}}
+
+set ::cnt 5
+tvfs filter {xShmMap xShmLock}
+proc xShmMap {method file name args} { 
+  switch -- $method {
+    xShmMap {  return SQLITE_READONLY }
+    xShmLock {
+      if {$args == "{0 1 lock shared}"} {
+        incr ::cnt -1
+        if {$::cnt>0} { return SQLITE_BUSY }
+      }
+    }
+  }
+  return SQLITE_OK
+}
+do_catchsql_test 4.2 {
+  SELECT count(*) FROM t1
+} {1 {attempt to write a readonly database}}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+db close 
+sqlite3 db test.db -vfs tvfs
+tvfs filter {}
+do_execsql_test 5.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS (
+      SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+  )
+  INSERT INTO t1 SELECT randomblob(750) FROM s;
+} {wal}
+
+do_execsql_test 5.1 {
+  SELECT count(*) FROM t1
+} {20}
+
+do_test 5.2 {
+  vfs_set_readmark db main 1 100
+  vfs_set_readmark db main 2 100
+  vfs_set_readmark db main 3 100
+  vfs_set_readmark db main 4 100
+} {100}
+
+do_execsql_test 5.3 {
+  SELECT count(*) FROM t1
+} {20}
+
+do_test 5.3 {
+  list [vfs_set_readmark db main 1] \
+       [vfs_set_readmark db main 2] \
+       [vfs_set_readmark db main 3] \
+       [vfs_set_readmark db main 4] 
+} {24 100 100 100}
+
+tvfs script xShmLock
+tvfs filter xShmLock
+set ::cnt 20
+proc xShmLock {args} {
+  incr ::cnt -1
+  if {$::cnt>0} { return SQLITE_BUSY }
+  return SQLITE_OK
+}
+
+do_test 5.4 {
+  vfs_set_readmark db main 1 100
+  execsql { SELECT count(*) FROM t1 }
+} {20}
+
+vfs_set_readmark db main 1 100
+vfs_set_readmark db main 2 100
+vfs_set_readmark db main 3 100
+vfs_set_readmark db main 4 100
+
+tvfs script xShmMapLock
+tvfs filter {xShmLock xShmMap}
+proc xShmMapLock {method args} {
+  if {$method=="xShmMap"} {
+    return "SQLITE_READONLY"
+  }
+  return SQLITE_BUSY
+}
+
+sqlite3 db2 test.db -vfs tvfs
+breakpoint
+do_test 5.5 {
+  list [catch { execsql { SELECT count(*) FROM t1 } db2 } msg] $msg
+} {1 {attempt to write a readonly database}}
+
+tvfs filter {}
+vfs_set_readmark db main 1 1
+
+do_test 5.6 {
+  list [catch { execsql { SELECT count(*) FROM t1 } db2 } msg] $msg
+} {0 20}
+db2 close
+db close
+
+#-------------------------------------------------------------------------
+# Cause an SQLITE_PROTOCOL while attempting to restart the wal file.
+#
+reset_db
+tvfs filter {}
+db close
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 6.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS (
+      SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+  )
+  INSERT INTO t1 SELECT randomblob(750) FROM s;
+} {wal}
+
+do_test 6.1 {
+  execsql { PRAGMA wal_checkpoint } 
+  set {} {}
+} {}
+
+tvfs filter xShmLock
+tvfs script xShmLock
+set ::flag 0
+proc xShmLock {method file handle spec} {
+  if {$::flag && [lrange $spec 2 end]=="lock shared"} {
+    return SQLITE_BUSY
+  }
+  if {$spec=="3 1 unlock shared"} {
+    set ::flag 1
+  }
+  return SQLITE_OK
+}
+
+puts "# WARNING: This next test takes around 12 seconds"
+do_catchsql_test 6.2 {
+  INSERT INTO t1 VALUES(1);
+} {1 {locking protocol}}
+
+#-------------------------------------------------------------------------
+# Check that a checkpoint fails if it cannot get the CHECKPOINTER lock
+#
+reset_db
+tvfs filter {}
+db close
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 7.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS (
+      SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20
+  )
+  INSERT INTO t1 SELECT randomblob(750) FROM s;
+} {wal}
+
+tvfs script xShmLock
+tvfs filter xShmLock
+proc xShmLock {method file handle spec} {
+  if {$spec=="1 1 lock exclusive"} {
+    return SQLITE_BUSY
+  }
+  return SQLITE_OK
+}
+
+do_execsql_test 7.1 {
+  PRAGMA wal_checkpoint
+} {1 -1 -1}
+
+#-------------------------------------------------------------------------
+# Check that the page cache is correctly flushed if a checkpointer using
+# a version 2 VFS makes a checkpoint with an out-of-date cache.
+#
+reset_db
+testvfs tvfs2 -iversion 2
+db close
+sqlite3 db test.db -vfs tvfs2
+do_execsql_test 8.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20 )
+  INSERT INTO t1 SELECT randomblob(75) FROM s;
+} {wal}
+
+do_execsql_test 8.1 { SELECT count(*) FROM t1 } {20}
+
+do_test 8.2 {
+  sqlite3 db2 test.db -vfs tvfs2
+  execsql {
+    INSERT INTO t1 VALUES(randomblob(75));
+  } db2
+  db2 close
+} {}
+
+do_execsql_test 8.3 { 
+  PRAGMA wal_checkpoint;
+  SELECT count(*) FROM t1 
+} {0 5 5 21}
+db close
+tvfs2 delete
+
+#-------------------------------------------------------------------------
+reset_db
+db close
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 9.0 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  PRAGMA journal_mode = wal;
+  WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s LIMIT 20 )
+  INSERT INTO t1 SELECT randomblob(75) FROM s;
+} {wal}
+
+sqlite3 db2 test.db -vfs tvfs
+tvfs filter {xShmMap xShmLock}
+tvfs script xShmMap
+proc xShmMap {method file handle args} {
+  switch -- $method {
+    xShmMap {
+      return "SQLITE_READONLY_CANTINIT"
+    }
+    xShmLock {
+      if {$args=="{3 1 lock shared}"} {
+        return "SQLITE_IOERR"
+      }
+    }
+  }
+}
+
+do_test 9.1 {
+  catchsql { SELECT count(*) FROM t1 } db2
+} {1 {disk I/O error}}
+
+db close
+db2 close
+tvfs delete
+finish_test

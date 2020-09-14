@@ -1,0 +1,135 @@
+# 2020 June 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file test the busy handler
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set testprefix busy2
+
+do_multiclient_test tn {
+  do_test 1.$tn.0 {
+    sql2 {
+      CREATE TABLE t1(a, b);
+      PRAGMA journal_mode = wal;
+      INSERT INTO t1 VALUES('A', 'B');
+    }
+  } {wal}
+
+  do_test 1.$tn.1 {
+    code1 { db timeout 1000 }
+    sql1 { SELECT * FROM t1 }
+  } {A B}
+
+  do_test 1.$tn.2 {
+    sql2 {
+      BEGIN;
+        INSERT INTO t1 VALUES('C', 'D');
+    }
+  } {}
+
+  do_test 1.$tn.3 {
+    set us [lindex [time { catch { sql1 { BEGIN EXCLUSIVE } } }] 0]
+    expr {$us>950000 && $us<1500000}
+  } {1}
+
+  do_test 1.$tn.4 {
+    sql2 {
+      COMMIT
+    }
+  } {}
+}
+
+#-------------------------------------------------------------------------
+
+do_multiclient_test tn {
+  # Make the db a WAL mode db. And add a table and a row to it. Then open
+  # a second connection within process 1. Process 1 now has connections
+  # [db] and [db1.2], process 2 has connection [db2] only.
+  #
+  # Configure all connections to use a 1000 ms timeout.
+  #
+  do_test 2.$tn.0 {
+    code1 {
+      sqlite3 db1.2 test.db
+    }
+    sql1 {
+      PRAGMA auto_vacuum = off;
+      PRAGMA journal_mode = wal;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    }
+    code2 {
+      db2 timeout 1000
+    }
+    code1 {
+      db1.2 timeout 1000
+      db    timeout 1000
+      db1.2 eval {SELECT * FROM t1}
+    }
+  } {1 2}
+
+  # Take a read lock with [db] in process 1.
+  #
+  do_test 2.$tn.1 {
+    sql1 {
+      BEGIN;
+        SELECT * FROM t1;
+    }
+  } {1 2}
+
+  # Insert a row using [db2] in process 2. Then try a passive checkpoint.
+  # It fails to checkpoint the final frame (due to the readlock taken by
+  # [db]), and returns in less than 250ms.
+  do_test 2.$tn.2 {
+    sql2 { INSERT INTO t1 VALUES(3, 4) }
+    set us [lindex [time {
+      set res [code2 { db2 eval { PRAGMA wal_checkpoint } }]
+    }] 0]
+    list [expr $us < 250000] $res
+  } {1 {0 4 3}}
+
+  # Now try a FULL checkpoint with [db2]. It returns SQLITE_BUSY. And takes
+  # over 950ms to do so.
+  do_test 2.$tn.3 {
+    set us [lindex [time {
+      set res [code2 { db2 eval { PRAGMA wal_checkpoint = FULL } }]
+    }] 0]
+    list [expr $us > 950000] $res
+  } {1 {1 4 3}}
+
+  # Passive checkpoint with [db1.2] (process 1). No SQLITE_BUSY, returns
+  # in under 250ms.
+  do_test 2.$tn.4 {
+    set us [lindex [time {
+      set res [code1 { db1.2 eval { PRAGMA wal_checkpoint } }]
+    }] 0]
+    list [expr $us < 250000] $res
+  } {1 {0 4 3}}
+
+  # Full checkpoint with [db1.2] (process 1). SQLITE_BUSY returned in
+  # a bit over 950ms.
+  do_test 2.$tn.5 {
+    set us [lindex [time {
+      set res [code1 { db1.2 eval { PRAGMA wal_checkpoint = FULL } }]
+    }] 0]
+    list [expr $us > 950000] $res
+  } {1 {1 4 3}}
+
+  code1 {
+    db1.2 close
+  }
+}
+
+finish_test
+

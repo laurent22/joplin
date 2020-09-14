@@ -1,0 +1,133 @@
+
+1. FTS2 Tokenizers
+
+  When creating a new full-text table, FTS2 allows the user to select
+  the text tokenizer implementation to be used when indexing text
+  by specifying a "tokenizer" clause as part of the CREATE VIRTUAL TABLE
+  statement:
+
+    CREATE VIRTUAL TABLE <table-name> USING fts2(
+      <columns ...> [, tokenizer <tokenizer-name> [<tokenizer-args>]]
+    );
+
+  The built-in tokenizers (valid values to pass as <tokenizer name>) are
+  "simple" and "porter".
+
+  <tokenizer-args> should consist of zero or more white-space separated
+  arguments to pass to the selected tokenizer implementation. The 
+  interpretation of the arguments, if any, depends on the individual 
+  tokenizer.
+
+2. Custom Tokenizers
+
+  FTS2 allows users to provide custom tokenizer implementations. The 
+  interface used to create a new tokenizer is defined and described in 
+  the fts2_tokenizer.h source file.
+
+  Registering a new FTS2 tokenizer is similar to registering a new 
+  virtual table module with SQLite. The user passes a pointer to a
+  structure containing pointers to various callback functions that
+  make up the implementation of the new tokenizer type. For tokenizers,
+  the structure (defined in fts2_tokenizer.h) is called
+  "sqlite3_tokenizer_module".
+
+  FTS2 does not expose a C-function that users call to register new
+  tokenizer types with a database handle. Instead, the pointer must
+  be encoded as an SQL blob value and passed to FTS2 through the SQL
+  engine by evaluating a special scalar function, "fts2_tokenizer()".
+  The fts2_tokenizer() function may be called with one or two arguments,
+  as follows:
+
+    SELECT fts2_tokenizer(<tokenizer-name>);
+    SELECT fts2_tokenizer(<tokenizer-name>, <sqlite3_tokenizer_module ptr>);
+  
+  Where <tokenizer-name> is a string identifying the tokenizer and
+  <sqlite3_tokenizer_module ptr> is a pointer to an sqlite3_tokenizer_module
+  structure encoded as an SQL blob. If the second argument is present,
+  it is registered as tokenizer <tokenizer-name> and a copy of it
+  returned. If only one argument is passed, a pointer to the tokenizer
+  implementation currently registered as <tokenizer-name> is returned,
+  encoded as a blob. Or, if no such tokenizer exists, an SQL exception
+  (error) is raised.
+
+  SECURITY: If the fts2 extension is used in an environment where potentially
+    malicious users may execute arbitrary SQL (i.e. gears), they should be
+    prevented from invoking the fts2_tokenizer() function, possibly using the
+    authorisation callback.
+
+  See "Sample code" below for an example of calling the fts2_tokenizer()
+  function from C code.
+
+3. ICU Library Tokenizers
+
+  If this extension is compiled with the SQLITE_ENABLE_ICU pre-processor 
+  symbol defined, then there exists a built-in tokenizer named "icu" 
+  implemented using the ICU library. The first argument passed to the
+  xCreate() method (see fts2_tokenizer.h) of this tokenizer may be
+  an ICU locale identifier. For example "tr_TR" for Turkish as used
+  in Turkey, or "en_AU" for English as used in Australia. For example:
+
+    "CREATE VIRTUAL TABLE thai_text USING fts2(text, tokenizer icu th_TH)"
+
+  The ICU tokenizer implementation is very simple. It splits the input
+  text according to the ICU rules for finding word boundaries and discards
+  any tokens that consist entirely of white-space. This may be suitable
+  for some applications in some locales, but not all. If more complex
+  processing is required, for example to implement stemming or 
+  discard punctuation, this can be done by creating a tokenizer 
+  implementation that uses the ICU tokenizer as part of its implementation.
+
+  When using the ICU tokenizer this way, it is safe to overwrite the
+  contents of the strings returned by the xNext() method (see
+  fts2_tokenizer.h).
+
+4. Sample code.
+
+  The following two code samples illustrate the way C code should invoke
+  the fts2_tokenizer() scalar function:
+
+      int registerTokenizer(
+        sqlite3 *db, 
+        char *zName, 
+        const sqlite3_tokenizer_module *p
+      ){
+        int rc;
+        sqlite3_stmt *pStmt;
+        const char zSql[] = "SELECT fts2_tokenizer(?, ?)";
+      
+        rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
+        if( rc!=SQLITE_OK ){
+          return rc;
+        }
+      
+        sqlite3_bind_text(pStmt, 1, zName, -1, SQLITE_STATIC);
+        sqlite3_bind_blob(pStmt, 2, &p, sizeof(p), SQLITE_STATIC);
+        sqlite3_step(pStmt);
+      
+        return sqlite3_finalize(pStmt);
+      }
+      
+      int queryTokenizer(
+        sqlite3 *db, 
+        char *zName,  
+        const sqlite3_tokenizer_module **pp
+      ){
+        int rc;
+        sqlite3_stmt *pStmt;
+        const char zSql[] = "SELECT fts2_tokenizer(?)";
+      
+        *pp = 0;
+        rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
+        if( rc!=SQLITE_OK ){
+          return rc;
+        }
+      
+        sqlite3_bind_text(pStmt, 1, zName, -1, SQLITE_STATIC);
+        if( SQLITE_ROW==sqlite3_step(pStmt) ){
+          if( sqlite3_column_type(pStmt, 0)==SQLITE_BLOB ){
+            memcpy(pp, sqlite3_column_blob(pStmt, 0), sizeof(*pp));
+          }
+        }
+      
+        return sqlite3_finalize(pStmt);
+      }

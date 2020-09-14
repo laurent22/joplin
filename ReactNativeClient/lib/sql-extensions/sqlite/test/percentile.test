@@ -1,0 +1,209 @@
+# 2013-05-28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is percentile.c extension
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Basic test of the percentile() function.
+#
+do_test percentile-1.0 {
+  load_static_extension db percentile
+  execsql {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(1),(4),(6),(7),(8),(9),(11),(11),(11);
+  }
+  execsql {SELECT percentile(x,0) FROM t1}
+} {1.0}
+foreach {in out} {
+  100    11.0
+   50     8.0
+   12.5   4.0
+   15     4.4
+   20     5.2
+   80    11.0
+   89    11.0
+} {
+  do_test percentile-1.1.$in {
+    execsql {SELECT percentile(x,$in) FROM t1}
+  } $out
+}
+
+# Add some NULL values.
+#
+do_test percentile-1.2 {
+  execsql {INSERT INTO t1 VALUES(NULL),(NULL);}
+} {}
+foreach {in out} {
+  100    11.0
+   50     8.0
+   12.5   4.0
+   15     4.4
+   20     5.2
+   80    11.0
+   89    11.0
+} {
+  do_test percentile-1.3.$in {
+    execsql {SELECT percentile(x,$in) FROM t1}
+  } $out
+}
+
+# The second argument to percentile can change some, but not much.
+#
+do_test percentile-1.4 {
+  catchsql {SELECT round(percentile(x, 15+0.000001*rowid),1) FROM t1}
+} {0 4.4}
+do_test percentile-1.5 {
+  catchsql {SELECT round(percentile(x, 15+0.1*rowid),1) FROM t1}
+} {1 {2nd argument to percentile() is not the same for all input rows}}
+
+# Input values in a random order
+#
+do_test percentile-1.6 {
+  execsql {
+    CREATE TABLE t2(x);
+    INSERT INTO t2 SELECT x+0.0 FROM t1 ORDER BY random();
+  }
+} {}
+foreach {in out} {
+  100    11.0
+   50     8.0
+   12.5   4.0
+   15     4.4
+   20     5.2
+   80    11.0
+   89    11.0
+} {
+  do_test percentile-1.7.$in {
+    execsql {SELECT percentile(x,$in) FROM t2}
+  } $out
+}
+
+# Wrong number of arguments
+#
+do_test percentile-1.8 {
+  catchsql {SELECT percentile(x,0,1) FROM t1}
+} {1 {wrong number of arguments to function percentile()}}
+do_test percentile-1.9 {
+  catchsql {SELECT percentile(x) FROM t1}
+} {1 {wrong number of arguments to function percentile()}}
+
+# Second argument must be numeric
+#
+do_test percentile-1.10 {
+  catchsql {SELECT percentile(x,null) FROM t1}
+} {1 {2nd argument to percentile() is not a number between 0.0 and 100.0}}
+do_test percentile-1.11 {
+  catchsql {SELECT percentile(x,'fifty') FROM t1}
+} {1 {2nd argument to percentile() is not a number between 0.0 and 100.0}}
+do_test percentile-1.12 {
+  catchsql {SELECT percentile(x,x'3530') FROM t1}
+} {1 {2nd argument to percentile() is not a number between 0.0 and 100.0}}
+
+# Second argument is out of range
+#
+do_test percentile-1.13 {
+  catchsql {SELECT percentile(x,-0.0000001) FROM t1}
+} {1 {2nd argument to percentile() is not a number between 0.0 and 100.0}}
+do_test percentile-1.14 {
+  catchsql {SELECT percentile(x,100.0000001) FROM t1}
+} {1 {2nd argument to percentile() is not a number between 0.0 and 100.0}}
+
+# First argument is not NULL and is not NUMERIC
+#
+do_test percentile-1.15 {
+  catchsql {
+    BEGIN;
+    UPDATE t1 SET x='50' WHERE x IS NULL;
+    SELECT percentile(x, 50) FROM t1;
+  }
+} {1 {1st argument to percentile() is not numeric}}
+do_test percentile-1.16 {
+  catchsql {
+    ROLLBACK;
+    BEGIN;
+    UPDATE t1 SET x=x'3530' WHERE x IS NULL;
+    SELECT percentile(x, 50) FROM t1;
+  }
+} {1 {1st argument to percentile() is not numeric}}
+do_test percentile-1.17 {
+  catchsql {
+    ROLLBACK;
+    SELECT percentile(x, 50) FROM t1;
+  }
+} {0 8.0}
+
+# No non-NULL entries.
+#
+do_test percentile-1.18 {
+  execsql {
+    UPDATE t1 SET x=NULL;
+    SELECT ifnull(percentile(x, 50),'NULL') FROM t1
+  } 
+} {NULL}
+
+# Exactly one non-NULL entry
+#
+do_test percentile-1.19 {
+  execsql {
+    UPDATE t1 SET x=12345 WHERE rowid=5;
+    SELECT percentile(x, 0), percentile(x, 50), percentile(x,100) FROM t1
+  } 
+} {12345.0 12345.0 12345.0}
+
+# Infinity as an input
+#
+do_test percentile-1.20 {
+  catchsql {
+    DELETE FROM t1;
+    INSERT INTO t1 SELECT x+0.0 FROM t2;
+    UPDATE t1 SET x=1.0e300*1.0e300 WHERE rowid=5;
+    SELECT percentile(x,50) from t1;
+  }
+} {1 {Inf input to percentile()}}
+do_test percentile-1.21 {
+  catchsql {
+    UPDATE t1 SET x=-1.0e300*1.0e300 WHERE rowid=5;
+    SELECT percentile(x,50) from t1;
+  }
+} {1 {Inf input to percentile()}}
+
+# Million-row Inputs
+#
+ifcapable vtab {
+  do_test percentile-2.0 {
+    load_static_extension db wholenumber
+    execsql {
+      CREATE VIRTUAL TABLE nums USING wholenumber;
+      CREATE TABLE t3(x);
+      INSERT INTO t3 SELECT value-1 FROM nums WHERE value BETWEEN 1 AND 500000;
+      INSERT INTO t3 SELECT value*10 FROM nums
+                      WHERE value BETWEEN 500000 AND 999999;
+      SELECT count(*) FROM t3;
+    }
+  } {1000000}
+  foreach {in out} {
+      0          0.0
+    100    9999990.0
+     50    2749999.5
+     10      99999.9
+  } {
+    do_test percentile-2.1.$in {
+      execsql {
+        SELECT round(percentile(x, $in),1) from t3;
+      }
+    } $out
+  }
+}
+
+finish_test

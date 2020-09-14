@@ -1,0 +1,265 @@
+# 2015 Jan 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file focuses on the code in fts5_config.c, which is largely concerned
+# with parsing the various configuration and CREATE TABLE options.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5config
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Try different types of quote characters.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5('a', "b", [c], `d`);
+  PRAGMA table_info = t1;
+} {
+  0 a {} 0 {} 0 
+  1 b {} 0 {} 0 
+  2 c {} 0 {} 0 
+  3 d {} 0 {} 0
+}
+
+#-------------------------------------------------------------------------
+# Syntax errors in the prefix= option.
+#
+foreach {tn opt} {
+  1 {prefix=x}  
+  2 {prefix='x'}
+  3 {prefix='$'}
+  4 {prefix='1,2,'}
+  5 {prefix=',1'}
+  6 {prefix='1,2,3...'}
+  7 {prefix='1,2,3xyz'}
+} {
+  set res [list 1 {malformed prefix=... directive}]
+  do_catchsql_test 2.$tn "CREATE VIRTUAL TABLE f1 USING fts5(x, $opt)" $res
+}
+
+#-------------------------------------------------------------------------
+# Syntax errors in the 'rank' option.
+#
+foreach {tn val} {
+  1 "f1(xyz)"
+  2 "f1(zyx)"
+  3 "f1(nzz)"
+  4 "f1(x'!!')"
+  5 "f1(x':;')"
+  6 "f1(x'[]')"
+  7 "f1(x'{}')"
+  8 "f1('abc)"
+} {
+  do_catchsql_test 3.$tn {
+    INSERT INTO t1(t1, rank) VALUES('rank', $val);
+  } {1 {SQL logic error}}
+}
+
+#-------------------------------------------------------------------------
+# The parsing of SQL literals specified as part of 'rank' options.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE zzz USING fts5(one);
+  INSERT INTO zzz VALUES('a b c');
+}
+proc first {cmd A} { return $A }
+sqlite3_fts5_create_function db first first
+
+foreach {tn arg} {
+  1 "123"
+  2 "'01234567890ABCDEF'"
+  3 "x'0123'"
+  4 "x'ABCD'"
+  5 "x'0123456789ABCDEF'"
+  6 "x'0123456789abcdef'"
+  7 "22.5"
+  8 "-91.5"
+  9 "-.5"
+  10 "''''"
+  11 "+.5"
+} {
+  set func [string map {' ''} "first($arg)"]
+  do_execsql_test 4.1.$tn "
+    INSERT INTO zzz(zzz, rank) VALUES('rank', '$func');
+    SELECT rank IS $arg FROM zzz WHERE zzz MATCH 'a + b + c'
+  " 1
+}
+
+do_execsql_test 4.2 {
+  INSERT INTO zzz(zzz, rank) VALUES('rank', 'f1()');
+} {}
+
+#-------------------------------------------------------------------------
+# Misquoting in tokenize= and other options. 
+#
+do_catchsql_test 5.1 {
+  CREATE VIRTUAL TABLE xx USING fts5(x, tokenize="porter 'ascii");
+} {1 {parse error in tokenize directive}} 
+
+do_catchsql_test 5.2 {
+  CREATE VIRTUAL TABLE xx USING fts5(x, [y[]);
+} {0 {}}
+
+do_catchsql_test 5.3 {
+  CREATE VIRTUAL TABLE yy USING fts5(x, [y]]);
+} {1 {unrecognized token: "]"}}
+
+#-------------------------------------------------------------------------
+# Errors in prefix= directives.
+#
+do_catchsql_test 6.2 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, prefix='1, 2, 1001');
+} {1 {prefix length out of range (max 999)}}
+do_catchsql_test 6.3 {
+  CREATE VIRTUAL TAbLE abc USING fts5(a, prefix='1, 2, 0000');
+} {1 {prefix length out of range (max 999)}}
+do_catchsql_test 6.4 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, prefix='1  , 1000000');
+} {1 {prefix length out of range (max 999)}}
+
+#-------------------------------------------------------------------------
+# Duplicate tokenize= and other options.
+#
+do_catchsql_test 7.1 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, tokenize=porter, tokenize=ascii);
+} {1 {multiple tokenize=... directives}}
+do_catchsql_test 7.2 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, content=porter, content=ascii);
+} {1 {multiple content=... directives}}
+do_catchsql_test 7.3 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, content_rowid=porter, content_rowid=a);
+} {1 {multiple content_rowid=... directives}}
+
+#-------------------------------------------------------------------------
+# Unrecognized option.
+#
+do_catchsql_test 8.0 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, nosuchoption=123);
+} {1 {unrecognized option: "nosuchoption"}}
+do_catchsql_test 8.1 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, "nosuchoption"=123);
+} {1 {parse error in ""nosuchoption"=123"}}
+
+#-------------------------------------------------------------------------
+# Errors in:
+#
+#   9.1.* 'pgsz' options.
+#   9.2.* 'automerge' options.
+#   9.3.* 'crisismerge' options.
+#   9.4.* a non-existant option.
+#   9.5.* 'hashsize' options.
+#
+do_execsql_test 9.0 {
+  CREATE VIRTUAL TABLE abc USING fts5(a, b);
+} {}
+do_catchsql_test 9.1.1 {
+  INSERT INTO abc(abc, rank) VALUES('pgsz', -5);
+} {1 {SQL logic error}}
+do_catchsql_test 9.1.2 {
+  INSERT INTO abc(abc, rank) VALUES('pgsz', 50000000);
+} {1 {SQL logic error}}
+do_catchsql_test 9.1.3 {
+  INSERT INTO abc(abc, rank) VALUES('pgsz', 66.67);
+} {1 {SQL logic error}}
+
+do_catchsql_test 9.2.1 {
+  INSERT INTO abc(abc, rank) VALUES('automerge', -5);
+} {1 {SQL logic error}}
+do_catchsql_test 9.2.2 {
+  INSERT INTO abc(abc, rank) VALUES('automerge', 50000000);
+} {1 {SQL logic error}}
+do_catchsql_test 9.2.3 {
+  INSERT INTO abc(abc, rank) VALUES('automerge', 66.67);
+} {1 {SQL logic error}}
+do_execsql_test 9.2.4 {
+  INSERT INTO abc(abc, rank) VALUES('automerge', 1);
+} {}
+
+do_catchsql_test 9.3.1 {
+  INSERT INTO abc(abc, rank) VALUES('crisismerge', -5);
+} {1 {SQL logic error}}
+do_catchsql_test 9.3.2 {
+  INSERT INTO abc(abc, rank) VALUES('crisismerge', 66.67);
+} {1 {SQL logic error}}
+do_execsql_test 9.3.3 {
+  INSERT INTO abc(abc, rank) VALUES('crisismerge', 1);
+} {}
+do_execsql_test 9.3.4 {
+  INSERT INTO abc(abc, rank) VALUES('crisismerge', 50000000);
+} {}
+
+do_catchsql_test 9.4.1 {
+  INSERT INTO abc(abc, rank) VALUES('nosuchoption', 1);
+} {1 {SQL logic error}}
+
+do_catchsql_test 9.5.1 {
+  INSERT INTO abc(abc, rank) VALUES('hashsize', 'not an integer');
+} {1 {SQL logic error}}
+do_catchsql_test 9.5.2 {
+  INSERT INTO abc(abc, rank) VALUES('hashsize', -500000);
+} {1 {SQL logic error}}
+do_catchsql_test 9.5.3 {
+  INSERT INTO abc(abc, rank) VALUES('hashsize', 500000);
+} {0 {}}
+
+#-------------------------------------------------------------------------
+# Too many prefix indexes. Maximum allowed is 31.
+#
+foreach {tn spec} {
+  1 {prefix="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32"}
+  2 {prefix="1 2 3 4", prefix="5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32"}
+} {
+  set sql "CREATE VIRTUAL TABLE xyz USING fts5(x, $spec)"
+  do_catchsql_test 10.$tn $sql {1 {too many prefix indexes (max 31)}}
+}
+
+#-------------------------------------------------------------------------
+# errors in the detail= option.
+#
+foreach {tn opt} {
+  1 {detail=x}  
+  2 {detail='x'}
+  3 {detail='$'}
+  4 {detail='1,2,'}
+  5 {detail=',1'}
+  6 {detail=''}
+} {
+  set res [list 1 {malformed detail=... directive}]
+  do_catchsql_test 11.$tn "CREATE VIRTUAL TABLE f1 USING fts5(x, $opt)" $res
+}
+
+do_catchsql_test 12.1 {
+  INSERT INTO t1(t1, rank) VALUES('rank', NULL);;
+} {1 {SQL logic error}}
+
+#-------------------------------------------------------------------------
+# errors in the 'usermerge' option
+#
+do_execsql_test 13.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(ttt);
+}
+foreach {tn val} {
+  1     -1
+  2     4.2
+  3     17
+  4     1
+} {
+  set sql "INSERT INTO tt(tt, rank) VALUES('usermerge', $val)"
+  do_catchsql_test 13.$tn $sql {1 {SQL logic error}}
+}
+
+finish_test

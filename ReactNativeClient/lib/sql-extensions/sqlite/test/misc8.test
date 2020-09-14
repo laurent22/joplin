@@ -1,0 +1,141 @@
+# 2014-11-10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+# The focus of this script is testing the "eval.c" loadable extension.
+# 
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+load_static_extension db eval
+do_execsql_test misc8-1.0 {
+  CREATE TABLE t1(a,b,c);
+  INSERT INTO t1 VALUES(1,2,3),(4,5,6);
+  SELECT quote(eval('SELECT * FROM t1 ORDER BY a','-abc-'));
+} {'1-abc-2-abc-3-abc-4-abc-5-abc-6'}
+do_execsql_test misc8-1.1 {
+  SELECT quote(eval('SELECT * FROM t1 ORDER BY a'));
+} {{'1 2 3 4 5 6'}}
+do_catchsql_test misc8-1.2 {
+  SELECT quote(eval('SELECT d FROM t1 ORDER BY a'));
+} {1 {no such column: d}}
+do_execsql_test misc8-1.3 {
+  INSERT INTO t1 VALUES(7,null,9);
+  SELECT eval('SELECT * FROM t1 ORDER BY a',',');
+} {1,2,3,4,5,6,7,,9}
+do_catchsql_test misc8-1.4 {
+  BEGIN;
+  INSERT INTO t1 VALUES(10,11,12);
+  SELECT a, coalesce(b, eval('ROLLBACK; SELECT ''bam'';')), c
+   FROM t1 ORDER BY a;
+} {0 {1 2 3 4 5 6 7 bam 9}}
+do_catchsql_test misc8-1.5 {
+  INSERT INTO t1 VALUES(10,11,12);
+  SELECT a, coalesce(b, eval('SELECT ''bam''')), c
+    FROM t1
+   ORDER BY rowid;
+} {0 {1 2 3 4 5 6 7 bam 9 10 11 12}}
+do_catchsql_test misc8-1.6 {
+  SELECT a, coalesce(b, eval('DELETE FROM t1; SELECT ''bam''')), c
+    FROM t1
+   ORDER BY rowid;
+} {0 {1 2 3 4 5 6 7 bam {}}}
+do_catchsql_test misc8-1.7 {
+  INSERT INTO t1 VALUES(1,2,3),(4,5,6),(7,null,9);
+  BEGIN;
+  CREATE TABLE t2(x);
+  SELECT a, coalesce(b, eval('ROLLBACK; SELECT ''bam''')), c
+    FROM t1
+   ORDER BY rowid;
+} {1 {abort due to ROLLBACK}}
+
+do_catchsql_test misc8-1.8 {
+  PRAGMA empty_result_callbacks = 1;
+  SELECT eval('SELECT * FROM t1 WHERE 1 = 0;');
+} {0 {{}}}
+
+reset_db
+
+proc dbeval {sql} { db eval $sql }
+db func eval dbeval
+
+do_execsql_test misc8-2.1 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INTEGER) WITHOUT ROWID;
+  CREATE TABLE t2(c INTEGER PRIMARY KEY, d INTEGER, x BLOB);
+  INSERT INTO t1 VALUES(0,0);
+  INSERT INTO t1 VALUES(10,10);
+  INSERT INTO t2 VALUES(1,1,zeroblob(200));
+  INSERT INTO t2 VALUES(2,2,zeroblob(200));
+  INSERT INTO t2 VALUES(3,3,zeroblob(200));
+  INSERT INTO t2 VALUES(4,4,zeroblob(200));
+  INSERT INTO t2 VALUES(5,5,zeroblob(200));
+  INSERT INTO t2 VALUES(6,6,zeroblob(200));
+  INSERT INTO t2 VALUES(7,7,zeroblob(200));
+  INSERT INTO t2 VALUES(8,8,zeroblob(200));
+  INSERT INTO t2 VALUES(9,9,zeroblob(200));
+  INSERT INTO t2 VALUES(10,10,zeroblob(200));
+  SELECT a, c, eval(
+      printf('DELETE FROM t2 WHERE c=%d AND %d>5', a+c, a+c)
+  ) FROM t1, t2;
+} {
+  0 1 {} 10 1 {} 
+  0 2 {} 10 2 {} 
+  0 3 {} 10 3 {} 
+  0 4 {} 10 4 {} 
+  0 5 {} 10 5 {} 
+  0 6 {} 10 {} {} 
+  0 7 {} 10 {} {} 
+  0 8 {} 10 {} {}
+  0 9 {} 10 {} {} 
+  0 10 {} 10 {} {}
+}
+
+# 2016-02-26: An assertion fault found by the libFuzzer project
+#
+do_execsql_test misc8-3.0 {
+  SELECT *
+    FROM
+         (
+           (SELECT 0 AS i) AS x1,
+           (SELECT 1) AS x2
+         ) AS x3,
+         (SELECT 6 AS j UNION ALL SELECT 7) AS x4
+   WHERE i<rowid
+   ORDER BY 1;
+} {0 1 6 0 1 7}
+
+# The SQLITE_DBCONFIG_MAINDBNAME interface
+#
+db close
+forcedelete test.db test2.db
+sqlite3 db test.db
+do_execsql_test misc8-4.0 {
+  CREATE TABLE t1(a,b,c);
+  INSERT INTO t1 VALUES(1,2,3);
+  ATTACH 'test2.db' AS aux2;
+  CREATE TABLE aux2.t2(c,d,e);
+  INSERT INTO t2 VALUES(4,5,6);
+  SELECT * FROM t1, t2;
+} {1 2 3 4 5 6}
+do_execsql_test misc8-4.1 {
+  PRAGMA database_list;
+} {/0 main .* 2 aux2/}
+dbconfig_maindbname_icecube db
+do_execsql_test misc8-4.2 {
+  SELECT name FROM icecube.sqlite_master;
+} {t1}
+do_test misc8-4.3 {
+  regexp {0 icecube .* 2 aux2} [db eval {PRAGMA database_list}] 
+} 1
+
+
+
+finish_test

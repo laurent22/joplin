@@ -1,0 +1,60 @@
+# 2014-12-05
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Open two database connections on the same database in shared cache
+# mode.  Hold one open while repeatedly closing, reopening, and using
+# the second.
+#
+# This test is designed to demostrate that the fix for ticket
+# [e4a18565a36884b00edf66541f38c693827968ab] works.  
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+if {[run_thread_tests]==0} { finish_test ; return }
+db close
+set ::testprefix sharedB
+
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+#-------------------------------------------------------------------------
+#
+do_test 1.1 {
+  sqlite3 db1 test.db
+  sqlite3 db2 test.db
+
+  db1 eval {
+    CREATE TABLE t1(x,y TEXT COLLATE nocase);
+    WITH RECURSIVE
+      c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<100)
+    INSERT INTO t1(x,y) SELECT i, printf('x%03dy',i) FROM c;
+    CREATE INDEX t1yx ON t1(y,x);
+  }
+  db2 eval {
+    SELECT x FROM t1 WHERE y='X014Y';
+  }
+} {14}
+
+for {set j 1} {$j<=100} {incr j} {
+  do_test 1.2.$j {
+    db2 close
+    sqlite3 db2 test.db
+    db2 eval {
+      SELECT x FROM t1 WHERE y='X014Y';
+    }
+  } {14}
+}
+
+db1 close
+db2 close
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

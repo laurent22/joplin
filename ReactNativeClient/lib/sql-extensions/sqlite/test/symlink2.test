@@ -1,0 +1,116 @@
+# 2019 November 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing that SQLite can follow symbolic links.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix symlink2
+
+# This only runs on Windows.
+if {$::tcl_platform(platform)!="windows"} {
+  finish_test
+  return
+}
+
+proc createWin32Symlink { link target } {
+  exec -- $::env(ComSpec) /c mklink \
+      [file nativename $link] [file nativename $target]
+  return ""
+}
+
+proc deleteWin32Symlink { link } {
+  exec -- $::env(ComSpec) /c del [file nativename $link]
+  return ""
+}
+
+proc canCreateWin32Symlink {} {
+  set link [file join $::testdir lnk[pid].sym]
+  if {[file exists $link]} { return 0 }
+  set target [info nameofexecutable]
+  if {[catch {createWin32Symlink $link $target}] == 0} {
+    deleteWin32Symlink $link
+    return 1
+  }
+  return 0
+}
+
+# Creating symlinks may require administrator privileges on Windows.
+if {![canCreateWin32Symlink]} {
+  finish_test
+  return
+}
+
+# Ensure that test.db has been created.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1,9999);
+}
+
+do_test 2.0 {
+  createWin32Symlink link.db test.db
+} {}
+
+do_test 2.1 {
+  file exists test.db
+} {1}
+
+do_test 2.2 {
+  file exists link.db
+} {1}
+
+do_test 3.1 {
+  execsql { SELECT x, y FROM t1; } db
+} {1 9999}
+
+do_test 3.2 {
+  sqlite3 db2 link.db
+  execsql { SELECT x, y FROM t1; } db2
+} {1 9999}
+
+do_test 3.3 {
+  sqlite3 db3 test.db -nofollow true
+  execsql { SELECT x, y FROM t1; } db3
+} {1 9999}
+
+do_test 3.4 {
+  db3 close
+} {}
+
+do_test 3.5 {
+  list [catch {
+    sqlite3 db4 link.db -nofollow true
+    execsql { SELECT x, y FROM t1; } db4
+  } res] $res
+} {1 {unable to open database file}}
+
+catch {db4 close}
+
+do_test 4.0 {
+  db2 close
+  deleteWin32Symlink link.db
+} {}
+
+do_test 4.1 {
+  file exists test.db
+} {1}
+
+do_test 4.2 {
+  file exists link.db
+} {0}
+
+do_test 5.1 {
+  execsql { SELECT x, y FROM t1; } db
+} {1 9999}
+
+finish_test

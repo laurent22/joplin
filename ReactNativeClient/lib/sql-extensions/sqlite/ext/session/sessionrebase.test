@@ -1,0 +1,476 @@
+# 2018 March 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionrebase
+
+set ::lConflict [list]
+proc xConflict {args} {
+  set res [lindex $::lConflict 0]
+  set ::lConflict [lrange $::lConflict 1 end]
+  return $res
+}
+
+#-------------------------------------------------------------------------
+# The following test cases - 1.* - test that the rebase blobs output by
+# sqlite3_changeset_apply_v2 look correct in some simple cases. The blob
+# is itself a changeset, containing records determined as follows:
+#
+#   * For each conflict resolved with REPLACE, the rebase blob contains
+#     a DELETE record. All fields other than the PK fields are undefined.
+#
+#   * For each conflict resolved with OMIT, the rebase blob contains an
+#     INSERT record. For an INSERT or UPDATE operation, the indirect flag
+#     is clear and all updated fields are defined. For a DELETE operation,
+#     the indirect flag is set and all non-PK fields left undefined.
+#
+proc do_apply_v2_test {tn sql modsql conflict_handler res} {
+  
+  execsql BEGIN
+  sqlite3session S db main
+  S attach *
+  execsql $sql
+  set changeset [S changeset]
+  S delete
+  execsql ROLLBACK
+
+  execsql BEGIN
+  execsql $modsql
+  set ::lConflict $conflict_handler
+  set blob [sqlite3changeset_apply_v2 db $changeset xConflict]
+  execsql ROLLBACK
+
+  uplevel [list do_test $tn [list changeset_to_list $blob] [list {*}$res]]
+}
+
+
+set ::lConflict [list]
+proc xConflict {args} {
+  set res [lindex $::lConflict 0]
+  set ::lConflict [lrange $::lConflict 1 end]
+  return $res
+}
+
+# Take a copy of database test.db in file test.db2. Execute $sql1
+# against test.db and $sql2 against test.db2. Capture a changeset
+# for each. Then send the test.db2 changeset to test.db and apply
+# it with the conflict handlers in $conflict_handler. Patch the
+# test.db changeset and then execute it against test.db2. Test that
+# the two databases come out the same.
+#
+proc do_rebase_test {tn sql1 sql2 conflict_handler {testsql ""} {testres ""}} {
+
+  for {set i 1} {$i <= 2} {incr i} {
+    forcedelete test.db2 test.db2-journal test.db2-wal
+    forcecopy test.db test.db2
+    sqlite3 db2 test.db2
+
+    db eval BEGIN
+
+    sqlite3session S1 db main
+    S1 attach *
+    execsql $sql1 db
+    set c1 [S1 changeset]
+    S1 delete
+
+    if {$i==1} {
+      sqlite3session S2 db2 main
+      S2 attach *
+      execsql $sql2 db2
+      set c2 [S2 changeset]
+      S2 delete
+    } else {
+      set c2 [list]
+      foreach sql [split $sql2 ";"] {
+        if {[string is space $sql]} continue
+        sqlite3session S2 db2 main
+        S2 attach *
+        execsql $sql db2
+        lappend c2 [S2 changeset]
+        S2 delete
+      }
+    }
+
+    set ::lConflict $conflict_handler
+    set rebase [list]
+    if {$i==1} {
+      lappend rebase [sqlite3changeset_apply_v2 db $c2 xConflict]
+    } else {
+      foreach c $c2 {
+#puts "apply_v2: [changeset_to_list $c]"
+        lappend rebase [sqlite3changeset_apply_v2 db $c xConflict]
+      }
+      #puts "llength: [llength $rebase]"
+    }
+    #if {$tn=="2.1.4"} { puts [changeset_to_list $rebase] ; breakpoint }
+    #puts [changeset_to_list [lindex $rebase 0]] ; breakpoint
+    #puts [llength $rebase]
+  
+    sqlite3rebaser_create R
+    foreach r $rebase {
+#puts [changeset_to_list $r]
+      R configure $r
+    }
+    set c1r [R rebase $c1]
+    R delete
+    #if {$tn=="2.1.4"} { puts [changeset_to_list $c1r] }
+  
+    sqlite3changeset_apply_v2 db2 $c1r xConflictAbort
+  
+    if {[string range $tn end end]!="*"} {
+      uplevel [list do_test $tn.$i.1 [list compare_db db db2] {}]
+    }
+    db2 close
+  
+    if {$testsql!=""} {
+      uplevel [list do_execsql_test $tn.$i.2 $testsql $testres]
+    }
+  
+    db eval ROLLBACK
+  }
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, 'value A');
+}
+
+do_apply_v2_test 1.1.1 {
+  UPDATE t1 SET b = 'value B' WHERE a=1;
+} {
+  UPDATE t1 SET b = 'value C' WHERE a=1;
+} {
+  OMIT
+} {
+  {INSERT t1 0 X. {} {i 1 t {value B}}}
+}
+
+do_apply_v2_test 1.1.2 {
+  UPDATE t1 SET b = 'value B' WHERE a=1;
+} {
+  UPDATE t1 SET b = 'value C' WHERE a=1;
+} {
+  REPLACE
+} {
+  {INSERT t1 1 X. {} {i 1 t {value B}}}
+}
+
+do_apply_v2_test 1.2.1 {
+  INSERT INTO t1 VALUES(2, 'first');
+} {
+  INSERT INTO t1 VALUES(2, 'second');
+} {
+  OMIT
+} {
+  {INSERT t1 0 X. {} {i 2 t first}}
+}
+do_apply_v2_test 1.2.2 {
+  INSERT INTO t1 VALUES(2, 'first');
+} {
+  INSERT INTO t1 VALUES(2, 'second');
+} {
+  REPLACE
+} {
+  {INSERT t1 1 X. {} {i 2 t first}}
+}
+
+do_apply_v2_test 1.3.1 {
+  DELETE FROM t1 WHERE a=1;
+} {
+  UPDATE t1 SET b='value D' WHERE a=1;
+} {
+  OMIT
+} {
+  {DELETE t1 0 X. {i 1 t {value A}} {}}
+}
+do_apply_v2_test 1.3.2 {
+  DELETE FROM t1 WHERE a=1;
+} {
+  UPDATE t1 SET b='value D' WHERE a=1;
+} {
+  REPLACE
+} {
+  {DELETE t1 1 X. {i 1 t {value A}} {}}
+}
+
+#-------------------------------------------------------------------------
+# Test cases 2.* - simple tests of rebasing actual changesets.
+#
+#    2.1.1 - 1u2u1r
+#    2.1.2 - 1u2u2r
+#    2.1.3 - 1d2d
+#    2.1.4 - 1d2u1r
+#    2.1.5 - 1d2u2r !!
+#    2.1.6 - 1u2d1r
+#    2.1.7 - 1u2d2r
+#
+#    2.1.8 - 1i2i2r
+#    2.1.9 - 1i2i1r
+#
+
+proc xConflictAbort {args} {
+  return "ABORT"
+}
+
+reset_db
+do_execsql_test 2.1.0 {
+  CREATE TABLE t1 (a INTEGER PRIMARY KEY, b TEXT);
+  INSERT INTO t1 VALUES(1, 'one');
+  INSERT INTO t1 VALUES(2, 'two');
+  INSERT INTO t1 VALUES(3, 'three');
+}
+do_rebase_test 2.1.1 {
+  UPDATE t1 SET b = 'two.1' WHERE a=2
+} {
+  UPDATE t1 SET b = 'two.2' WHERE a=2;
+} {
+  OMIT
+} { SELECT * FROM t1 } {1 one 2 two.1 3 three}
+
+do_rebase_test 2.1.2 {
+  UPDATE t1 SET b = 'two.1' WHERE a=2
+} {
+  UPDATE t1 SET b = 'two.2' WHERE a=2;
+} {
+  REPLACE
+} { SELECT * FROM t1 } {1 one 2 two.2 3 three}
+
+do_rebase_test 2.1.3 {
+  DELETE FROM t1 WHERE a=3
+} {
+  DELETE FROM t1 WHERE a=3;
+} {
+  OMIT
+} { SELECT * FROM t1 } {1 one 2 two}
+
+do_rebase_test 2.1.4 {
+  DELETE FROM t1 WHERE a=1
+} {
+  UPDATE t1 SET b='one.2' WHERE a=1
+} {
+  OMIT
+} { SELECT * FROM t1 } {2 two 3 three}
+
+#do_rebase_test 2.1.5 {
+#  DELETE FROM t1 WHERE a=1;
+#} {
+#  UPDATE t1 SET b='one.2' WHERE a=1
+#} {
+#  REPLACE
+#} { SELECT * FROM t1 } {2 two 3 three}
+
+do_rebase_test 2.1.6 {
+  UPDATE t1 SET b='three.1' WHERE a=3
+} {
+  DELETE FROM t1 WHERE a=3;
+} {
+  OMIT
+} { SELECT * FROM t1 } {1 one 2 two 3 three.1}
+
+do_rebase_test 2.1.7 {
+  UPDATE t1 SET b='three.1' WHERE a=3
+} {
+  DELETE FROM t1 WHERE a=3;
+} {
+  REPLACE
+} { SELECT * FROM t1 } {1 one 2 two}
+
+do_rebase_test 2.1.8 {
+  INSERT INTO t1 VALUES(4, 'four.1')
+} {
+  INSERT INTO t1 VALUES(4, 'four.2');
+} {
+  REPLACE
+} { SELECT * FROM t1 } {1 one 2 two 3 three 4 four.2}
+
+do_rebase_test 2.1.9 {
+  INSERT INTO t1 VALUES(4, 'four.1')
+} {
+  INSERT INTO t1 VALUES(4, 'four.2');
+} {
+  OMIT
+} { SELECT * FROM t1 } {1 one 2 two 3 three 4 four.1}
+
+do_execsql_test 2.2.0 {
+  CREATE TABLE t2(x, y, z PRIMARY KEY);
+  INSERT INTO t2 VALUES('i', 'a', 'A');
+  INSERT INTO t2 VALUES('ii', 'b', 'B');
+  INSERT INTO t2 VALUES('iii', 'c', 'C');
+
+  CREATE TABLE t3(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t3 VALUES(-1, 'z', 'Z');
+  INSERT INTO t3 VALUES(-2, 'y', 'Y');
+}
+
+do_rebase_test 2.2.1 {
+  UPDATE t2 SET x=1 WHERE z='A'
+} {
+  UPDATE t2 SET y='one' WHERE z='A';
+} {
+} { SELECT * FROM t2 WHERE z='A' } { 1 one A }
+
+do_rebase_test 2.2.2 {
+  UPDATE t2 SET x=1, y='one' WHERE z='B'
+} {
+  UPDATE t2 SET y='two' WHERE z='B';
+} {
+  REPLACE
+} { SELECT * FROM t2 WHERE z='B' } { 1 two B }
+
+do_rebase_test 2.2.3 {
+  UPDATE t2 SET x=1, y='one' WHERE z='B'
+} {
+  UPDATE t2 SET y='two' WHERE z='B';
+} {
+  OMIT
+} { SELECT * FROM t2 WHERE z='B' } { 1 one B }
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t3(a, b, c, PRIMARY KEY(b, c));
+  CREATE TABLE abcdefghijkl(x PRIMARY KEY, y, z);
+
+  INSERT INTO t3 VALUES(1, 2, 3);
+  INSERT INTO t3 VALUES(4, 2, 5);
+  INSERT INTO t3 VALUES(7, 2, 9);
+
+  INSERT INTO abcdefghijkl VALUES('a', 'b', 'c');
+  INSERT INTO abcdefghijkl VALUES('d', 'e', 'f');
+  INSERT INTO abcdefghijkl VALUES('g', 'h', 'i');
+}
+
+breakpoint
+#  do_rebase_test 3.6.tn {
+#    UPDATE abcdefghijkl SET z='X', y='X' WHERE x='d';
+#  } {
+#    UPDATE abcdefghijkl SET y=1 WHERE x='d';
+#    UPDATE abcdefghijkl SET z=1 WHERE x='d';
+#  } [list REPLACE REPLACE REPLACE]
+
+foreach {tn p} {
+    1 OMIT 2 REPLACE
+} {
+  do_rebase_test 3.1.$tn {
+    INSERT INTO t3 VALUES(1, 1, 1);
+    UPDATE abcdefghijkl SET y=2;
+  } {
+    INSERT INTO t3 VALUES(4, 1, 1);
+    DELETE FROM abcdefghijkl;
+  } [list $p $p $p $p $p $p $p $p]
+
+  do_rebase_test 3.2.$tn {
+    INSERT INTO abcdefghijkl SELECT * FROM t3;
+    UPDATE t3 SET b=b+1;
+  } {
+    INSERT INTO t3 VALUES(3, 3, 3);
+    INSERT INTO abcdefghijkl SELECT * FROM t3;
+  } [list $p $p $p $p $p $p $p $p]
+
+  do_rebase_test 3.3.$tn {
+    INSERT INTO abcdefghijkl VALUES(22, 23, 24);
+  } {
+    INSERT INTO abcdefghijkl VALUES(22, 25, 26);
+    UPDATE abcdefghijkl SET y=400 WHERE x=22;
+  } [list $p $p $p $p $p $p $p $p]
+
+  do_rebase_test 3.4.$tn {
+    INSERT INTO abcdefghijkl VALUES(22, 23, 24);
+  } {
+    INSERT INTO abcdefghijkl VALUES(22, 25, 26);
+    UPDATE abcdefghijkl SET y=400 WHERE x=22;
+  } [list REPLACE $p]
+
+  do_rebase_test 3.5.$tn* {
+    UPDATE abcdefghijkl SET y='X' WHERE x='d';
+  } {
+    DELETE FROM abcdefghijkl WHERE x='d';
+    INSERT INTO abcdefghijkl VALUES('d', NULL, NULL);
+  } [list $p $p $p]
+  do_rebase_test 3.5.$tn {
+    UPDATE abcdefghijkl SET y='X' WHERE x='d';
+  } {
+    DELETE FROM abcdefghijkl WHERE x='d';
+    INSERT INTO abcdefghijkl VALUES('d', NULL, NULL);
+  } [list REPLACE $p $p]
+
+  do_rebase_test 3.6.$tn {
+    UPDATE abcdefghijkl SET z='X', y='X' WHERE x='d';
+  } {
+    UPDATE abcdefghijkl SET y=1 WHERE x='d';
+    UPDATE abcdefghijkl SET z=1 WHERE x='d';
+  } [list REPLACE $p $p]
+}
+
+#-------------------------------------------------------------------------
+# Check that apply_v2() does not create a rebase buffer for a patchset.
+# And that it is not possible to rebase a patchset.
+#
+do_execsql_test 4.0 {
+  CREATE TABLE t5(o PRIMARY KEY, p, q);
+  INSERT INTO t5 VALUES(1, 2, 3);
+  INSERT INTO t5 VALUES(4, 5, 6);
+}
+foreach {tn cmd rebasable} {
+  1 patchset 0
+  2 changeset 1
+} {
+  proc xConflict {args} { return "OMIT" }
+  do_test 4.1.$tn {
+    execsql {
+      BEGIN;
+      DELETE FROM t5 WHERE o=4;
+    }
+
+    sqlite3session S db main
+    S attach *
+    execsql {
+      INSERT INTO t5 VALUES(4, 'five', 'six');
+    }
+    set P [S $cmd]
+    S delete
+
+    execsql ROLLBACK;
+
+    set ::rebase [sqlite3changeset_apply_v2 db $P xConflict]
+    expr [llength $::rebase]>0
+  } $rebasable
+}
+
+foreach {tn cmd rebasable} {
+  1 patchset 0
+  2 changeset 1
+} {
+  do_test 4.2.$tn {
+    sqlite3session S db main
+    S attach *
+    execsql {
+      INSERT INTO t5 VALUES(5+$tn, 'five', 'six');
+    }
+    set P [S $cmd]
+    S delete
+
+    sqlite3rebaser_create R
+    R configure $::rebase
+    expr [catch {R rebase $P}]==0
+  } $rebasable
+
+  catch { R delete }
+}
+finish_test

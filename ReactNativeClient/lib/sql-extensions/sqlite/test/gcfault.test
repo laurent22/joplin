@@ -1,0 +1,56 @@
+# 2016 December 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing OOM error handling within the built-in 
+# group_concat() function.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix gcfault
+
+
+foreach {enc} {
+  utf16
+  utf8
+} {
+  reset_db
+  sqlite3_db_config_lookaside db 0 0 0
+  execsql "PRAGMA encoding = $enc"
+
+  do_execsql_test 1.$enc.1 {
+    CREATE TABLE s(i, s);
+    INSERT INTO s VALUES(1, ',0123456789,');
+    INSERT INTO s VALUES(2, X'2c303132333435363738392c');
+
+    CREATE TABLE e(e);
+    INSERT INTO e VALUES('v1'), ('v2');
+  } {}
+
+  do_faultsim_test 1.$enc.1 -faults oom* -body {
+    execsql { SELECT group_concat(e, (SELECT s FROM s WHERE i=1)) FROM e }
+  }
+
+  do_faultsim_test 1.$enc.2 -faults oom-t* -body {
+    execsql { SELECT group_concat(e, (SELECT s FROM s WHERE i=2)) FROM e }
+  }
+
+  do_faultsim_test 1.$enc.3 -faults oom-t* -prep {
+    set ::STMT [sqlite3_prepare db {SELECT group_concat(e, ?) FROM e} -1 dummy]
+    sqlite3_bind_text $::STMT 1 ",0123456789," 12
+  } -body {
+    while { "SQLITE_ROW"==[sqlite3_step $::STMT] } { }
+  } -test {
+    sqlite3_finalize $::STMT
+  }
+}
+
+finish_test

@@ -1,0 +1,268 @@
+# 2010 November 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+
+set testprefix superlock
+do_not_use_codec
+
+# Test organization:
+#
+#   1.*: Test superlock on a rollback database. Test that once the db is
+#        superlocked, it is not possible for a second client to read from
+#        it.
+#
+#   2.*: Test superlock on a WAL database with zero frames in the WAL file.
+#        Test that once the db is superlocked, it is not possible to read,
+#        write or checkpoint the db.
+#
+#   3.*: As 2.*, for WAL databases with one or more frames in the WAL.
+#
+#   4.*: As 2.*, for WAL databases with one or more checkpointed frames 
+#        in the WAL.
+#
+#   5.*: Test that a call to sqlite3demo_superlock() uses the busy handler
+#        correctly to wait for existing clients to clear on a WAL database.
+#        And returns SQLITE_BUSY if no busy handler is defined or the busy
+#        handler returns 0 before said clients relinquish their locks.
+#
+#   6.*: Test that if a superlocked WAL database is overwritten, existing
+#        clients run the recovery to build the new wal-index after the 
+#        superlock is released.
+#        
+#
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  PRAGMA journal_mode = DELETE;
+} {delete}
+
+ifcapable !wal {
+  finish_test
+  return
+}
+
+do_test 1.2 { sqlite3demo_superlock unlock test.db } {unlock}
+do_catchsql_test 1.3 { SELECT * FROM t1 } {1 {database is locked}}
+do_test 1.4 { unlock } {}
+
+do_execsql_test 2.1 { 
+  INSERT INTO t1 VALUES(3, 4);
+  PRAGMA journal_mode = WAL;
+} {wal}
+
+do_test 2.2 { sqlite3demo_superlock unlock test.db } {unlock}
+do_catchsql_test 2.3 { SELECT * FROM t1 }           {1 {database is locked}}
+do_catchsql_test 2.4 { INSERT INTO t1 VALUES(5, 6)} {1 {database is locked}}
+do_catchsql_test 2.5 { PRAGMA wal_checkpoint }      {0 {1 -1 -1}}
+do_test 2.6 { unlock } {}
+
+do_execsql_test 3.1 { INSERT INTO t1 VALUES(3, 4) } 
+
+do_test 3.2 { sqlite3demo_superlock unlock test.db } {unlock}
+do_catchsql_test 3.3 { SELECT * FROM t1 }           {1 {database is locked}}
+do_catchsql_test 3.4 { INSERT INTO t1 VALUES(5, 6)} {1 {database is locked}}
+do_catchsql_test 3.5 { PRAGMA wal_checkpoint }      {0 {1 -1 -1}}
+do_test 3.6 { unlock } {}
+
+# At this point the WAL file consists of a single frame only - written
+# by test case 3.1. If the ZERO_DAMAGE flag were not set, it would consist
+# of two frames - the frame written by 3.1 and a padding frame.
+do_execsql_test 4.1 { PRAGMA wal_checkpoint } {0 1 1}
+
+do_test 4.2 { sqlite3demo_superlock unlock test.db } {unlock}
+do_catchsql_test 4.3 { SELECT * FROM t1 }           {1 {database is locked}}
+do_catchsql_test 4.4 { INSERT INTO t1 VALUES(5, 6)} {1 {database is locked}}
+do_catchsql_test 4.5 { PRAGMA wal_checkpoint }      {0 {1 -1 -1}}
+do_test 4.6 { unlock } {}
+
+do_multiclient_test tn {
+
+  proc busyhandler {x} {
+    switch -- $x {
+      1 { sql1 "COMMIT" }
+      2 { sql2 "COMMIT" }
+      3 { sql3 "COMMIT" }
+    }
+    lappend ::busylist $x
+    return 1
+  }
+  set ::busylist [list]
+
+  do_test 5.$tn.1 {
+    sql1 {
+      CREATE TABLE t1(a, b);
+      PRAGMA journal_mode = WAL;
+      INSERT INTO t1 VALUES(1, 2);
+    }
+  } {wal}
+
+  do_test 5.$tn.2 {
+    sql1 { BEGIN ; SELECT * FROM t1 }
+    sql2 { BEGIN ; INSERT INTO t1 VALUES(3, 4) }
+    sql3 { BEGIN ; SELECT * FROM t1 }
+  } {1 2}
+
+  do_test 5.$tn.3 {
+    set ::busylist [list]
+    sqlite3demo_superlock unlock test.db "" busyhandler
+    set ::busylist
+  } {0 1 2 3}
+
+  do_test 5.$tn.4 { csql2 { SELECT * FROM t1 } } {1 {database is locked}}
+  do_test 5.$tn.5 { 
+    csql3 { INSERT INTO t1 VALUES(5, 6) } 
+  } {1 {database is locked}}
+  do_test 5.$tn.6 { csql1 "PRAGMA wal_checkpoint" } {0 {1 -1 -1}}
+
+  do_test 5.$tn.7 { unlock } {}
+
+  
+  do_test 5.$tn.8 {
+    sql1 { BEGIN ; SELECT * FROM t1 }
+    sql2 { BEGIN ; INSERT INTO t1 VALUES(5, 6) }
+    sql3 { BEGIN ; SELECT * FROM t1 }
+  } {1 2 3 4}
+
+  do_test 5.$tn.9 { 
+    list [catch {sqlite3demo_superlock unlock test.db} msg] $msg
+  } {1 {database is locked}}
+  do_test 5.$tn.10 { 
+    sql1 COMMIT
+    list [catch {sqlite3demo_superlock unlock test.db} msg] $msg
+  } {1 {database is locked}}
+  do_test 5.$tn.11 { 
+    sql2 COMMIT
+    list [catch {sqlite3demo_superlock unlock test.db} msg] $msg
+  } {1 {database is locked}}
+  do_test 5.$tn.12 { 
+    sql3 COMMIT
+    list [catch {sqlite3demo_superlock unlock test.db} msg] $msg
+  } {0 unlock}
+  unlock
+
+
+  do_test 5.$tn.13 { sql1 { SELECT * FROM t1 } } {1 2 3 4 5 6}
+  do_test 5.$tn.14 { sql2 { SELECT * FROM t1 } } {1 2 3 4 5 6}
+  do_test 5.$tn.15 { sqlite3demo_superlock unlock test.db } {unlock}
+  do_test 5.$tn.16 { unlock } {}
+  do_test 5.$tn.17 { sql2 { SELECT * FROM t1 } } {1 2 3 4 5 6}
+  do_test 5.$tn.18 { sql1 { SELECT * FROM t1 } } {1 2 3 4 5 6}
+  do_test 5.$tn.19 { sql2 { SELECT * FROM t1 } } {1 2 3 4 5 6}
+}
+
+proc read_content {file} {
+  if {[file exists $file]==0} {return ""}
+  set fd [open $file]
+  fconfigure $fd -encoding binary -translation binary
+  set content [read $fd]
+  close $fd
+  return $content
+}
+
+proc write_content {file content} {
+  set fd [open $file w+]
+  fconfigure $fd -encoding binary -translation binary
+  puts -nonewline $fd $content
+  close $fd
+}
+
+# Both $file1 and $file2 are database files. This function takes a 
+# superlock on each, then exchanges the content of the two files (i.e.
+# overwrites $file1 with the initial contents of $file2, and overwrites
+# $file2 with the initial contents of $file1). The contents of any WAL 
+# file is also exchanged.
+#
+proc db_swap {file1 file2} {
+  sqlite3demo_superlock unlock1 $file1
+  sqlite3demo_superlock unlock2 $file2
+
+  set db1 [read_content $file1]
+  set db2 [read_content $file2]
+  write_content $file1 $db2
+  write_content $file2 $db1
+
+  set wal1 [read_content ${file1}-wal]
+  set wal2 [read_content ${file2}-wal]
+  write_content ${file1}-wal $wal2
+  write_content ${file2}-wal $wal1
+
+  unlock1
+  unlock2
+}
+
+forcedelete test.db
+sqlite3 db  test.db
+do_execsql_test 6.1 {
+  ATTACH 'test.db2' AS aux;
+  PRAGMA aux.journal_mode = wal;
+  CREATE TABLE aux.t2(x, y);
+  INSERT INTO aux.t2 VALUES('a', 'b');
+  PRAGMA schema_version = 450;
+  DETACH aux;
+
+  PRAGMA main.journal_mode = wal;
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  SELECT * FROM t1;
+} {wal wal 1 2 3 4}
+
+
+db_swap test.db2 test.db
+do_catchsql_test 6.2 { SELECT * FROM t1 } {1 {no such table: t1}}
+do_catchsql_test 6.3 { SELECT * FROM t2 } {0 {a b}}
+
+db_swap test.db2 test.db
+do_catchsql_test 6.4 { SELECT * FROM t1 } {0 {1 2 3 4}}
+do_catchsql_test 6.5 { SELECT * FROM t2 } {1 {no such table: t2}}
+
+do_execsql_test  6.6 { PRAGMA wal_checkpoint } {0 0 0}
+
+db_swap test.db2 test.db
+do_catchsql_test 6.7 { SELECT * FROM t1 } {1 {no such table: t1}}
+do_catchsql_test 6.8 { SELECT * FROM t2 } {0 {a b}}
+
+db_swap test.db2 test.db
+do_catchsql_test 6.9 { SELECT * FROM t1 } {0 {1 2 3 4}}
+do_catchsql_test 6.10 { SELECT * FROM t2 } {1 {no such table: t2}}
+
+if {[nonzero_reserved_bytes]} {
+  # Vacuum with a size change is not allowed with the codec
+  do_execsql_test  6.11codec { 
+    PRAGMA journal_mode = delete;
+    VACUUM;
+    PRAGMA journal_mode = wal;
+    INSERT INTO t1 VALUES(5, 6);
+  } {delete wal}
+} else {
+  do_execsql_test  6.11 { 
+    PRAGMA journal_mode = delete;
+    PRAGMA page_size = 512;
+    VACUUM;
+    PRAGMA journal_mode = wal;
+    INSERT INTO t1 VALUES(5, 6);
+  } {delete wal}
+}
+
+db_swap test.db2 test.db
+do_catchsql_test 6.12 { SELECT * FROM t1 } {1 {no such table: t1}}
+do_catchsql_test 6.13 { SELECT * FROM t2 } {0 {a b}}
+
+db_swap test.db2 test.db
+do_catchsql_test 6.14 { SELECT * FROM t1 } {0 {1 2 3 4 5 6}}
+do_catchsql_test 6.15 { SELECT * FROM t2 } {1 {no such table: t2}}
+
+finish_test

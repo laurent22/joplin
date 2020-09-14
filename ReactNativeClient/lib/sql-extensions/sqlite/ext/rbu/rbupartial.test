@@ -1,0 +1,99 @@
+# 2019 April 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbupartial
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+foreach {tn without_rowid a b c d} {
+  1 ""              a b c d
+  2 "WITHOUT ROWID" aaa bbb ccc ddd
+  3 "WITHOUT ROWID" "\"hello\"" {"one'two"}  {[c]} ddd
+  4 "WITHOUT ROWID" {`a b`} {"one'two"}  {[c c c]} ddd
+  5 "" a b c {"d""d"}
+  6 "" {'one''two'} b {"c""c"} {"d""d"}
+} {
+  eval [string map [list \
+    %WITHOUT_ROWID% $without_rowid %A% $a %B% $b %C% $c %D% $d
+  ] {
+  reset_db
+  do_execsql_test $tn.1.0 {
+    CREATE TABLE t1(%A% PRIMARY KEY, %B%, %C%, %D%) %WITHOUT_ROWID% ;
+    CREATE INDEX i1b  ON t1(%B%);
+    CREATE INDEX i1b2 ON t1(%B%) WHERE %C%<5;
+    CREATE INDEX i1b3 ON t1(%B%) WHERE %C%>=5;
+
+    CREATE INDEX i1c  ON t1(%C%);
+    CREATE INDEX i1c2 ON t1(%C%) WHERE %C% IS NULL;
+    CREATE INDEX i1c3 ON t1(%C%) WHERE %C% IS NOT NULL;
+
+    CREATE INDEX i1c4 ON t1(%C%) WHERE %D% < 'd';
+    CREATE INDEX i1c5 ON t1(
+        %C%                   -- for (c = ... expressions
+    ) WHERE %D% < 'd';
+    CREATE INDEX i1c6 ON t1(
+        %C% /* Again, for (c=... expr */, %D%
+    ) WHERE %D% < 'd';
+
+    CREATE INDEX i1c7 ON t1(
+        %C% /* As before, for (c=... "expr */) WHERE %D% < 'd';
+  }
+
+  do_execsql_test $tn.1.1 {
+    INSERT INTO t1 VALUES(0, NULL, NULL, 'a');
+    INSERT INTO t1 VALUES(1, 2, 3, 'b');
+    INSERT INTO t1 VALUES(4, 5, 6, 'c');
+    INSERT INTO t1 VALUES(7, 8, 9, 'd');
+  }
+
+  forcedelete rbu.db
+  do_test $tn.1.2 {
+    sqlite3 rbu rbu.db
+    rbu eval {
+      CREATE TABLE data_t1(%A%, %B%, %C%, %D%, rbu_control);
+
+      INSERT INTO data_t1 VALUES(10, 11, 12, 'e', 0);
+      INSERT INTO data_t1 VALUES(13, 14, NULL, 'f', 0);
+
+      INSERT INTO data_t1 VALUES(0, NULL, NULL, NULL, 1);
+      INSERT INTO data_t1 VALUES(4, NULL, NULL, NULL, 1);
+
+      INSERT INTO data_t1 VALUES(7, NULL, 4, NULL, '..x.');
+      INSERT INTO data_t1 VALUES(1, 10, NULL, NULL, '.xx.');
+    }
+    rbu close
+  } {}
+
+  do_test $tn.1.3 {
+    run_rbu test.db rbu.db
+    execsql { PRAGMA integrity_check }
+  } {ok}
+
+  do_execsql_test $tn.1.4 {
+    SELECT * FROM t1 ORDER BY %A%;
+  } {
+    1 10 {} b   7 8 4 d   10 11 12 e   13 14 {} f
+  }
+
+  set step 0
+  do_rbu_vacuum_test $tn.1.5 0
+
+  do_test $tn.1.6 {
+    execsql { PRAGMA integrity_check }
+  } {ok}
+  }]
+}
+
+finish_test

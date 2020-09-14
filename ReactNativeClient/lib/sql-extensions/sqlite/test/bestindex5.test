@@ -1,0 +1,249 @@
+# 2017 September 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test the virtual table interface. In particular the xBestIndex
+# method.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex4
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Virtual table callback for a virtual table named $tbl.
+#  
+proc vtab_cmd {method args} {
+
+  set binops(ne)    !=
+  set binops(eq)    =
+  set binops(isnot) "IS NOT"
+  set binops(is)    "IS"
+
+  set unops(isnotnull) "IS NOT NULL"
+  set unops(isnull)    "IS NULL"
+
+  set cols(0) a
+  set cols(1) b
+  set cols(2) c
+
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c)"
+    }
+
+    xBestIndex {
+      foreach {clist orderby mask} $args {}
+
+      set cost 1000000.0
+      set ret [list]
+      set str [list]
+
+      set v 0
+      for {set i 0} {$i < [llength $clist]} {incr i} {
+        array unset C
+        array set C [lindex $clist $i]
+        if {$C(usable)} {
+          if {[info exists binops($C(op))]} {
+            lappend ret omit $i
+            lappend str "$cols($C(column)) $binops($C(op)) %$v%"
+            incr v
+            set cost [expr $cost / 2]
+          }
+          if {[info exists unops($C(op))]} {
+            lappend ret omit $i
+            lappend str "$cols($C(column)) $unops($C(op))"
+            incr v
+            set cost [expr $cost / 2]
+          }
+        }
+      }
+
+      lappend ret idxstr [join $str " AND "]
+      lappend ret cost $cost
+      return $ret
+    }
+
+    xFilter {
+      set q [lindex $args 1]
+      set a [lindex $args 2]
+      for {set v 0} {$v < [llength $a]} {incr v} {
+        set val [lindex $a $v]
+        set q [string map [list %$v% '$val'] $q]
+      }
+      if {$q==""} { set q 1 }
+      lappend ::xFilterQueries "WHERE $q"
+      return [list sql "SELECT rowid, * FROM t1x WHERE $q"]
+    }
+  }
+  return ""
+}
+
+proc vtab_simple {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t2(x)"
+    }
+    xBestIndex {
+      return [list cost 999999.0]
+    }
+    xFilter {
+      return [list sql "SELECT rowid, * FROM t2x"]
+    }
+  }
+  return ""
+}
+
+register_tcl_module db
+
+proc do_vtab_query_test {tn query result} {
+  set ::xFilterQueries [list]
+  uplevel [list
+    do_test $tn [string map [list %QUERY% $query] {
+      set r [execsql {%QUERY%}]
+      set r [concat $::xFilterQueries $r]
+      set r
+    }] [list {*}$result]
+  ]
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING tcl('vtab_cmd');
+  CREATE TABLE t1x(a INTEGER, b TEXT, c REAL);
+  INSERT INTO t1x VALUES(1, 2, 3);
+  INSERT INTO t1x VALUES(4, 5, 6);
+  INSERT INTO t1x VALUES(7, 8, 9);
+
+  CREATE VIRTUAL TABLE t2 USING tcl('vtab_simple');
+  CREATE TABLE t2x(x INTEGER);
+  INSERT INTO t2x VALUES(1);
+}
+
+do_vtab_query_test 1.1 { SELECT * FROM t1 WHERE a!='hello'; } {
+  "WHERE a != 'hello'"
+  1 2 3.0 4 5 6.0 7 8 9.0
+}
+
+do_vtab_query_test 1.2.1 { SELECT * FROM t1 WHERE b!=8 } {
+  "WHERE b != '8'"
+  1 2 3.0 4 5 6.0
+}
+do_vtab_query_test 1.2.2 { SELECT * FROM t1 WHERE 8!=b } {
+  "WHERE b != '8'"
+  1 2 3.0 4 5 6.0
+}
+
+do_vtab_query_test 1.3 { SELECT * FROM t1 WHERE c IS NOT 3 } {
+  "WHERE c IS NOT '3'"
+  4 5 6.0 7 8 9.0
+}
+do_vtab_query_test 1.3.2 { SELECT * FROM t1 WHERE 3 IS NOT c } {
+  "WHERE c IS NOT '3'"
+  4 5 6.0 7 8 9.0
+}
+
+do_vtab_query_test 1.4.1 { SELECT * FROM t1, t2 WHERE x != a } {
+  "WHERE a != '1'"
+  4 5 6.0 1   7 8 9.0 1
+}
+do_vtab_query_test 1.4.2 { SELECT * FROM t1, t2 WHERE a != x } {
+  "WHERE a != '1'"
+  4 5 6.0 1   7 8 9.0 1
+}
+
+do_vtab_query_test 1.5.1 { SELECT * FROM t1 WHERE a IS NOT NULL } {
+  "WHERE a IS NOT NULL"
+  1 2 3.0 4 5 6.0 7 8 9.0
+}
+do_vtab_query_test 1.5.2 { SELECT * FROM t1 WHERE NULL IS NOT a } {
+  "WHERE a IS NOT ''"
+  1 2 3.0 4 5 6.0 7 8 9.0
+}
+
+do_vtab_query_test 1.6.1 { SELECT * FROM t1 WHERE a IS NULL } {
+  "WHERE a IS NULL"
+}
+
+do_vtab_query_test 1.6.2 { SELECT * FROM t1 WHERE NULL IS a } {
+  "WHERE a IS ''"
+}
+
+do_vtab_query_test 1.7.1 { SELECT * FROM t1 WHERE (a, b) IS (1, 2) } {
+  "WHERE a IS '1' AND b IS '2'"
+  1 2 3.0
+}
+do_vtab_query_test 1.7.2 { SELECT * FROM t1 WHERE (5, 4) IS (b, a) } {
+  {WHERE b IS '5' AND a IS '4'} 
+  4 5 6.0
+}
+
+#---------------------------------------------------------------------
+do_execsql_test 2.0.0 {
+  DELETE FROM t1x;
+  INSERT INTO t1x VALUES('a', 'b', 'c');
+}
+do_execsql_test 2.0.1 { SELECT * FROM t1 } {a b c}
+do_execsql_test 2.0.2 { SELECT * FROM t1 WHERE (a, b) != ('a', 'b'); } {}
+
+do_execsql_test 2.1.0 {
+  DELETE FROM t1x;
+  INSERT INTO t1x VALUES(7, 8, 9);
+}
+do_execsql_test 2.1.1 { SELECT * FROM t1 } {7 8 9.0}
+do_execsql_test 2.1.2 { SELECT * FROM t1 WHERE (a, b) != (7, '8') } {}
+do_execsql_test 2.1.3 { SELECT * FROM t1 WHERE a!=7 OR b!='8' }
+do_execsql_test 2.1.4 { SELECT * FROM t1 WHERE a!=7 OR b!='8' }
+
+
+do_execsql_test 2.2.1 {
+  CREATE TABLE t3(a INTEGER, b TEXT);
+  INSERT INTO t3 VALUES(45, 46);
+}
+do_execsql_test 2.2.2 { SELECT * FROM t3 WHERE (a, b) != (45, 46); }
+do_execsql_test 2.2.3 { SELECT * FROM t3 WHERE (a, b) != ('45', '46'); }
+do_execsql_test 2.2.4 { SELECT * FROM t3 WHERE (a, b) == (45, 46); } {45 46}
+do_execsql_test 2.2.5 { SELECT * FROM t3 WHERE (a, b) == ('45', '46'); } {45 46}
+
+#---------------------------------------------------------------------
+# Test the != operator on a virtual table with column affinities.
+#
+proc vtab_simple_integer {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t4(x INTEGER)"
+    }
+    xBestIndex {
+      return [list cost 999999.0]
+    }
+    xFilter {
+      return [list sql "SELECT rowid, * FROM t4x"]
+    }
+  }
+  return ""
+}
+
+do_execsql_test 3.0 {
+  CREATE TABLE t4x(a INTEGER);
+  INSERT INTO t4x VALUES(245);
+  CREATE VIRTUAL TABLE t4 USING tcl('vtab_simple_integer');
+}
+do_execsql_test 3.1 { SELECT rowid, * FROM t4 WHERE x=245; } {1 245}
+do_execsql_test 3.2 { SELECT rowid, * FROM t4 WHERE x='245'; } {1 245}
+do_execsql_test 3.3 { SELECT rowid, * FROM t4 WHERE x!=245; } {}
+do_execsql_test 3.4 { SELECT rowid, * FROM t4 WHERE x!='245'; } {}
+
+do_execsql_test 3.5 { SELECT rowid, * FROM t4 WHERE rowid!=1 OR x!='245'; } {}
+
+
+finish_test

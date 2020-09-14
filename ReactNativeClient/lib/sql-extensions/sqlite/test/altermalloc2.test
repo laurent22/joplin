@@ -1,0 +1,101 @@
+# 2018 August 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set testprefix altermalloc2
+
+# If SQLITE_OMIT_ALTERTABLE is defined, omit this file.
+ifcapable !altertable {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(abcd, efgh);
+}
+faultsim_save_and_close
+
+do_faultsim_test 1 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    ALTER TABLE t1 RENAME abcd TO dcba
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+catch {db close}
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 2.0 {
+  PRAGMA encoding = 'utf-16';
+  CREATE TABLE t1(abcd, efgh);
+}
+faultsim_save_and_close
+
+do_faultsim_test 2 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    ALTER TABLE t1 RENAME abcd TO dcba
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(abcd, efgh);
+  CREATE VIEW v1 AS SELECT * FROM t1 WHERE abcd>efgh;
+}
+faultsim_save_and_close
+
+do_faultsim_test 3 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    ALTER TABLE t1 RENAME abcd TO dcba
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+reset_db
+do_execsql_test 4.0 {
+  CREATE TABLE rr(a, b);
+  CREATE VIEW vv AS SELECT * FROM rr;
+
+  CREATE TRIGGER vv1 INSTEAD OF INSERT ON vv BEGIN
+    SELECT 1, 2, 3;
+  END;
+  CREATE TRIGGER tr1 AFTER INSERT ON rr BEGIN
+    INSERT INTO vv VALUES(new.a, new.b);
+  END;
+} {}
+
+faultsim_save_and_close
+do_faultsim_test 4 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM sqlite_master }
+} -body {
+  execsql {
+    ALTER TABLE rr RENAME a TO c;
+  }
+} -test {
+  faultsim_test_result {0 {}} 
+}
+
+finish_test

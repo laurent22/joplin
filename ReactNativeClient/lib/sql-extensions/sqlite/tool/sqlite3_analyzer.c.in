@@ -1,0 +1,29 @@
+/*
+** Read an SQLite database file and analyze its space utilization.  Generate
+** text on standard output.
+*/
+#define TCLSH_INIT_PROC sqlite3_analyzer_init_proc
+#define SQLITE_ENABLE_DBSTAT_VTAB 1
+#undef SQLITE_THREADSAFE
+#define SQLITE_THREADSAFE 0
+#undef SQLITE_ENABLE_COLUMN_METADATA
+#define SQLITE_OMIT_DECLTYPE 1
+#define SQLITE_OMIT_DEPRECATED 1
+#define SQLITE_OMIT_PROGRESS_CALLBACK 1
+#define SQLITE_OMIT_SHARED_CACHE 1
+#define SQLITE_DEFAULT_MEMSTATUS 0
+#define SQLITE_MAX_EXPR_DEPTH 0
+#define SQLITE_OMIT_LOAD_EXTENSION 1
+#ifndef USE_EXTERNAL_SQLITE
+INCLUDE sqlite3.c
+#endif
+INCLUDE $ROOT/src/tclsqlite.c
+
+const char *sqlite3_analyzer_init_proc(Tcl_Interp *interp){
+  (void)interp;
+  return
+BEGIN_STRING
+INCLUDE $ROOT/tool/spaceanal.tcl
+END_STRING
+;
+}

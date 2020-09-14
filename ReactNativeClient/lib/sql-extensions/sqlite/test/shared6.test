@@ -1,0 +1,255 @@
+# 2009 April 01
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: shared6.test,v 1.4 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !shared_cache { finish_test ; return }
+
+do_test shared6-1.1.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE TABLE t2(c, d);
+    CREATE TABLE t3(e, f);
+  }
+  db close
+} {}
+do_test shared6-1.1.2 {
+  set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+  sqlite3_enable_shared_cache
+} {1}
+
+do_test shared6-1.1.3 {
+  sqlite3 db1 test.db
+  sqlite3 db2 test.db
+} {}
+
+# Exclusive shared-cache locks. Test the following:
+#
+#   1.2.1: If [db1] has an exclusive lock, [db2] cannot read.
+#   1.2.2: If [db1] has an exclusive lock, [db1] can read.
+#   1.2.3: If [db1] has a non-exclusive write-lock, [db2] can read.
+# 
+do_test shared6-1.2.1 {
+  execsql { SELECT * FROM t1 } db2    ;# Cache a compiled statement
+  execsql { BEGIN EXCLUSIVE } db1
+  catchsql { SELECT * FROM t1 } db2   ;# Execute the cached compiled statement
+} {1 {database table is locked}}
+do_test shared6-1.2.2 {
+  execsql { SELECT * FROM t1 } db1
+} {}
+do_test shared6-1.2.3 {
+  execsql {
+    COMMIT;
+    BEGIN;
+    INSERT INTO t2 VALUES(3, 4);
+  } db1
+  execsql { SELECT * FROM t1 } db2
+} {}
+do_test shared6-1.2.X {
+  execsql { COMMIT } db1
+} {}
+
+# Regular shared-cache locks. Verify the following:
+#
+#   1.3.1: If [db1] has a write-lock on t1, [db1] can read from t1.
+#   1.3.2: If [db1] has a write-lock on t1, [db2] can read from t2.
+#   1.3.3: If [db1] has a write-lock on t1, [db2] cannot read from t1.
+#   1.3.4: If [db1] has a write-lock on t1, [db2] cannot write to t1.
+#   1.3.5: If [db1] has a read-lock on t1, [db2] can read from t1.
+#   1.3.6: If [db1] has a read-lock on t1, [db2] cannot write to t1.
+#
+do_test shared6-1.3.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(1, 2);
+  } db1
+  execsql { SELECT * FROM t1 } db1
+} {1 2}
+do_test shared6-1.3.2 {
+  execsql { SELECT * FROM t2 } db2
+} {3 4}
+do_test shared6-1.3.3 {
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database table is locked: t1}}
+do_test shared6-1.3.4 {
+  catchsql { INSERT INTO t2 VALUES(1, 2) } db2
+} {1 {database table is locked}}
+do_test shared6-1.3.5 {
+  execsql {
+    COMMIT;
+    BEGIN;
+    SELECT * FROM t1;
+  } db1
+  execsql { SELECT * FROM t1 } db2
+} {1 2}
+do_test shared6-1.3.5 {
+  catchsql { INSERT INTO t1 VALUES(5, 6) } db2
+} {1 {database table is locked: t1}}
+do_test shared6-1.3.X {
+  execsql { COMMIT } db1
+} {}
+
+# Read-uncommitted mode.
+#
+# For these tests, connection [db2] is in read-uncommitted mode.
+#
+#   1.4.1: If [db1] has a write-lock on t1, [db2] can still read from t1.
+#   1.4.2: If [db1] has a write-lock on the db schema (sqlite_master table), 
+#          [db2] cannot read from the schema.
+#   1.4.3: If [db1] has a read-lock on t1, [db2] cannot write to t1.
+#
+do_test shared6-1.4.1 {
+  execsql { PRAGMA read_uncommitted = 1 } db2
+  execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(5, 6);
+  } db1
+  execsql { SELECT * FROM t1 } db2
+} {1 2 5 6}
+do_test shared6-1.4.2 {
+  execsql { CREATE TABLE t4(a, b) } db1
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database table is locked}}
+do_test shared6-1.4.3 {
+  execsql {
+    COMMIT;
+    BEGIN;
+    SELECT * FROM t1;
+  } db1
+  catchsql { INSERT INTO t1 VALUES(7, 8) } db2
+} {1 {database table is locked: t1}}
+
+do_test shared6-1.X {
+  db1 close
+  db2 close
+} {}
+
+#-------------------------------------------------------------------------
+# The following tests - shared6-2.* - test that two database connections
+# that connect to the same file using different VFS implementations do
+# not share a cache.
+#
+if {$::tcl_platform(platform) eq "unix"} {
+  do_test shared6-2.1 {
+    sqlite3 db1 test.db -vfs unix
+    sqlite3 db2 test.db -vfs unix
+    sqlite3 db3 test.db -vfs unix-none
+    sqlite3 db4 test.db -vfs unix-none
+  } {}
+
+  do_test shared6-2.2 {
+    execsql { BEGIN; INSERT INTO t1 VALUES(9, 10); } db1
+    catchsql { SELECT * FROM t1 } db2
+  } {1 {database table is locked: t1}}
+  do_test shared6-2.3 {
+    execsql { SELECT * FROM t1 } db3
+  } {1 2 5 6}
+
+  do_test shared6-2.3 {
+    execsql { COMMIT } db1
+    execsql { BEGIN; INSERT INTO t1 VALUES(11, 12); } db3
+    catchsql { SELECT * FROM t1 } db4
+  } {1 {database table is locked: t1}}
+
+  do_test shared6-2.4 {
+    execsql { SELECT * FROM t1 } db1
+  } {1 2 5 6 9 10}
+
+  do_test shared6-2.5 {
+    execsql { COMMIT } db3
+  } {}
+
+  do_test shared6-2.X {
+    db1 close
+    db2 close
+    db3 close
+    db4 close
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# Test that it is possible to open an exclusive transaction while 
+# already holding a read-lock on the database file. And that it is
+# not possible if some other connection holds such a lock.
+#
+do_test shared6-3.1 {
+  sqlite3 db1 test.db
+  sqlite3 db2 test.db
+  sqlite3 db3 test.db
+} {}
+db1 eval {SELECT * FROM t1} {
+  # Within this block [db1] is holding a read-lock on t1. Test that
+  # this means t1 cannot be written by [db2].
+  #
+  do_test shared6-3.2 {
+    catchsql { INSERT INTO t1 VALUES(1, 2) } db2
+  } {1 {database table is locked: t1}}
+
+  do_test shared6-3.3 {
+    execsql { BEGIN EXCLUSIVE } db1
+  } {}
+  break
+}
+do_test shared6-3.4 {
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database schema is locked: main}}
+do_test shared6-3.5 {
+  execsql COMMIT db1
+} {}
+db2 eval {SELECT * FROM t1} {
+  do_test shared6-3.6 {
+    catchsql { BEGIN EXCLUSIVE } db1
+  } {1 {database table is locked}}
+  break
+}
+do_test shared6-3.7 {
+  execsql { BEGIN } db1
+  execsql { BEGIN } db2
+} {}
+db2 eval {SELECT * FROM t1} {
+  do_test shared6-3.8 {
+    catchsql { INSERT INTO t1 VALUES(1, 2) } db1
+  } {1 {database table is locked: t1}}
+  break
+}
+do_test shared6-3.9 {
+  execsql { BEGIN ; ROLLBACK } db3
+} {}
+do_test shared6-3.10 {
+  catchsql { SELECT * FROM t1 } db3
+} {1 {database table is locked}}
+do_test shared6-3.X {
+  db1 close
+  db2 close
+  db3 close
+} {}
+
+do_test shared6-4.1 {
+  #forcedelete test.db test.db-journal
+  sqlite3 db1 test.db
+  sqlite3 db2 test.db
+
+  set ::STMT [sqlite3_prepare_v2 db1 "SELECT * FROM t1" -1 DUMMY]
+  execsql { CREATE TABLE t5(a, b) } db2
+} {}
+do_test shared6-4.2 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+do_test shared6-4.X {
+  
+  db1 close
+  db2 close
+} {}
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

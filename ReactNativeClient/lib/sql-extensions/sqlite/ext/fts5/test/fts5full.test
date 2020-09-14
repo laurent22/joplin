@@ -1,0 +1,42 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that SQLITE_FULL is returned if the FTS5 table cannot find a free 
+# segid to use. In practice this can only really happen when automerge and
+# crisismerge are both disabled.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5full
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE x8 USING fts5(i);
+  INSERT INTO x8(x8, rank) VALUES('automerge', 0);
+  INSERT INTO x8(x8, rank) VALUES('crisismerge', 100000);
+}
+
+db func rnddoc fts5_rnddoc
+do_test 1.1 {
+  list [catch {
+    for {set i 0} {$i < 2500} {incr i} {
+      execsql { INSERT INTO x8 VALUES( rnddoc(5) ); }
+    }
+  } msg] $msg
+} {0 {}}
+
+
+finish_test

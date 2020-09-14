@@ -1,0 +1,244 @@
+# 2018-04-12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for UPSERT
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix zipfile
+
+do_execsql_test upsert1-100 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT, c DEFAULT 0);
+  CREATE UNIQUE INDEX t1x1 ON t1(b);
+  INSERT INTO t1(a,b) VALUES(1,2) ON CONFLICT DO NOTHING;
+  INSERT INTO t1(a,b) VALUES(1,99),(99,2) ON CONFLICT DO NOTHING;
+  SELECT * FROM t1;
+} {1 2 0}
+do_execsql_test upsert1-101 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(2,3) ON CONFLICT(a) DO NOTHING;
+  INSERT INTO t1(a,b) VALUES(2,99) ON CONFLICT(a) DO NOTHING;
+  SELECT * FROM t1;
+} {2 3 0}
+do_execsql_test upsert1-102 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(3,4) ON CONFLICT(b) DO NOTHING;
+  INSERT INTO t1(a,b) VALUES(99,4) ON CONFLICT(b) DO NOTHING;
+  SELECT * FROM t1;
+} {3 4 0}
+do_catchsql_test upsert1-110 {
+  INSERT INTO t1(a,b) VALUES(5,6) ON CONFLICT(x) DO NOTHING;
+  SELECT * FROM t1;
+} {1 {no such column: x}}
+do_catchsql_test upsert1-120 {
+  INSERT INTO t1(a,b) VALUES(5,6) ON CONFLICT(c) DO NOTHING;
+  SELECT * FROM t1;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+breakpoint
+do_catchsql_test upsert1-130 {
+  INSERT INTO t1(a,b) VALUES(5,6) ON CONFLICT(b COLLATE nocase) DO NOTHING;
+  SELECT * FROM t1;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+do_execsql_test upsert1-140 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(5,6) ON CONFLICT(b COLLATE binary) DO NOTHING;
+  SELECT * FROM t1;
+} {5 6 0}
+
+do_catchsql_test upsert1-200 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INT, c DEFAULT 0);
+  CREATE UNIQUE INDEX t1x1 ON t1(a+b);
+  INSERT INTO t1(a,b) VALUES(7,8) ON CONFLICT(a+b) DO NOTHING;
+  INSERT INTO t1(a,b) VALUES(8,7),(9,6) ON CONFLICT(a+b) DO NOTHING;
+  SELECT * FROM t1;
+} {0 {7 8 0}}
+do_catchsql_test upsert1-201 {
+  INSERT INTO t1(a,b) VALUES(8,7),(9,6) ON CONFLICT(a) DO NOTHING;
+} {1 {UNIQUE constraint failed: index 't1x1'}}
+do_catchsql_test upsert1-210 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(9,10) ON CONFLICT(a+(+b)) DO NOTHING;
+  SELECT * FROM t1;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+
+do_catchsql_test upsert1-300 {
+  DROP INDEX t1x1;
+  DELETE FROM t1;
+  CREATE UNIQUE INDEX t1x1 ON t1(b) WHERE b>10;
+  INSERT INTO t1(a,b) VALUES(1,2),(3,2) ON CONFLICT(b) DO NOTHING;
+  SELECT * FROM t1;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+do_catchsql_test upsert1-310 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(1,2),(3,2) ON CONFLICT(b) WHERE b!=10 DO NOTHING;
+  SELECT * FROM t1;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+do_execsql_test upsert1-320 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b) VALUES(1,2),(3,2),(4,20),(5,20)
+         ON CONFLICT(b) WHERE b>10 DO NOTHING;
+  SELECT *, 'x' FROM t1 ORDER BY b, a;
+} {1 2 0 x 3 2 0 x 4 20 0 x}
+
+# Upsert works with count_changes=on;
+do_execsql_test upsert1-400 {
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t2(a TEXT UNIQUE, b INT DEFAULT 1);
+  INSERT INTO t2(a) VALUES('one'),('two'),('three');
+  PRAGMA count_changes=ON;
+  INSERT INTO t2(a) VALUES('one'),('one'),('three'),('four')
+      ON CONFLICT(a) DO UPDATE SET b=b+1;
+} {1}
+do_execsql_test upsert1-410 {
+  PRAGMA count_changes=OFF;
+  SELECT a, b FROM t2 ORDER BY a;
+} {four 1 one 3 three 2 two 1}
+
+# Problem found by AFL prior to any release
+do_execsql_test upsert1-500 {
+  DROP TABLE t1;
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, y INT UNIQUE);
+  INSERT INTO t1(x,y) SELECT 1,2 WHERE true
+    ON CONFLICT(x) DO UPDATE SET y=max(t1.y,excluded.y) AND true;
+  SELECT * FROM t1;
+} {1 2}
+
+# 2018-07-11
+# Ticket https://sqlite.org/src/tktview/79cad5e4b2e219dd197242e9e5f4
+# UPSERT leads to a corrupt index.
+#
+do_execsql_test upsert1-600 {
+  DROP TABLE t1;
+  CREATE TABLE t1(b UNIQUE, a INT PRIMARY KEY) WITHOUT ROWID;
+  INSERT OR IGNORE INTO t1(a) VALUES('1') ON CONFLICT(a) DO NOTHING;
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test upsert1-610 {
+  DELETE FROM t1;
+  INSERT OR IGNORE INTO t1(a) VALUES('1'),(1) ON CONFLICT(a) DO NOTHING;
+  PRAGMA integrity_check;
+} {ok}
+
+# 2018-08-14
+# Ticket https://www.sqlite.org/src/info/908f001483982c43
+# If there are multiple uniqueness contraints, the UPSERT should fire
+# if the one constraint it targets fails, regardless of whether or not
+# the other constraints pass or fail.  In other words, the UPSERT constraint
+# should be tested first.
+#
+do_execsql_test upsert1-700 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b INT, c INT, d INT, e INT);
+  CREATE UNIQUE INDEX t1b ON t1(b);
+  CREATE UNIQUE INDEX t1e ON t1(e);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(e) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-710 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(a) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-720 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(b) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-730 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a INT, b INT, c INT, d INT, e INT);
+  CREATE UNIQUE INDEX t1a ON t1(a);
+  CREATE UNIQUE INDEX t1b ON t1(b);
+  CREATE UNIQUE INDEX t1e ON t1(e);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(e) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-740 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(a) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-750 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(b) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-760 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a INT PRIMARY KEY, b INT, c INT, d INT, e INT) WITHOUT ROWID;
+  CREATE UNIQUE INDEX t1a ON t1(a);
+  CREATE UNIQUE INDEX t1b ON t1(b);
+  CREATE UNIQUE INDEX t1e ON t1(e);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(e) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-770 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(a) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+do_execsql_test upsert1-780 {
+  DELETE FROM t1;
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,3,4,5);
+  INSERT INTO t1(a,b,c,d,e) VALUES(1,2,33,44,5)
+    ON CONFLICT(b) DO UPDATE SET c=excluded.c;
+  SELECT * FROM t1;
+} {1 2 33 4 5}
+
+# 2019-08-30 ticket https://sqlite.org/src/info/5a3dba8104421320
+do_execsql_test upsert1-800 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(c0 REAL UNIQUE, c1);
+  CREATE UNIQUE INDEX test800i0 ON t0(0 || c1);
+  INSERT INTO t0(c0, c1) VALUES (1, 2),  (2, 1);
+  INSERT INTO t0(c0) VALUES (1) ON CONFLICT(c0) DO UPDATE SET c1=excluded.c0;
+  PRAGMA integrity_check;
+  REINDEX;
+} {ok}
+
+# 2019-12-06 gramfuzz find
+sqlite3 db :memory:
+do_execsql_test upsert1-900 {
+  CREATE VIEW t1(a) AS SELECT 1;
+  CREATE TRIGGER t1r1 INSTEAD OF INSERT ON t1 BEGIN
+     SELECT 2;
+  END;
+}
+do_catchsql_test upsert1-910 {
+  INSERT INTO t1 VALUES(3) ON CONFLICT(x) DO NOTHING;
+} {1 {cannot UPSERT a view}}
+
+# 2019-12-26 ticket 7c13db5c3bf74001
+reset_db
+do_catchsql_test upsert1-1000 {
+  CREATE TABLE t0(c0 PRIMARY KEY, c1, c2 UNIQUE) WITHOUT ROWID;
+  INSERT OR FAIL INTO t0(c2) VALUES (0), (NULL)
+    ON CONFLICT(c2) DO UPDATE SET c1 = c0;
+} {1 {NOT NULL constraint failed: t0.c0}}
+
+finish_test

@@ -1,0 +1,51 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file runs all tests.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/permutations.test
+
+run_test_suite full
+
+ifcapable rbu { run_test_suite rbu }
+run_test_suite no_optimization 
+run_test_suite memsubsys1 
+run_test_suite memsubsys2 
+run_test_suite singlethread 
+run_test_suite multithread 
+run_test_suite onefile 
+run_test_suite utf16 
+run_test_suite exclusive
+run_test_suite persistent_journal 
+run_test_suite persistent_journal_error 
+run_test_suite no_journal 
+run_test_suite no_journal_error
+run_test_suite autovacuum_ioerr 
+run_test_suite no_mutex_try 
+run_test_suite fullmutex 
+run_test_suite journaltest 
+run_test_suite inmemory_journal
+run_test_suite pcache0 
+run_test_suite pcache10 
+run_test_suite pcache50 
+run_test_suite pcache90 
+run_test_suite pcache100
+run_test_suite prepare
+run_test_suite mmap
+
+if {$::tcl_platform(platform)=="unix"} {
+  ifcapable !default_autovacuum {
+    run_test_suite autovacuum_crash
+  }
+}
+
+finish_test

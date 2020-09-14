@@ -1,0 +1,140 @@
+# 2020 February 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing UPDATE statements with FROM clauses
+# against FTS4 tables.
+#
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts4upfrom
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+foreach {tn create_table} {
+  0 { CREATE VIRTUAL TABLE ft USING fts5(a, b, c) }
+  1 { CREATE VIRTUAL TABLE ft USING fts3(a, b, c) }
+  2 { CREATE TABLE ft(a, b, c) }
+  3 { 
+    CREATE TABLE real(a, b, c);
+    CREATE INDEX i1 ON real(a);
+    CREATE VIEW ft AS SELECT rowid, a, b, c FROM real;
+    CREATE TRIGGER tr1 INSTEAD OF INSERT ON ft BEGIN
+      INSERT INTO real(rowid, a, b, c) VALUES(new.rowid, new.a, new.b, new.c);
+    END;
+    CREATE TRIGGER tr2 INSTEAD OF UPDATE ON ft BEGIN
+      UPDATE real SET rowid=new.rowid, a=new.a, b=new.b, c=new.c 
+      WHERE rowid=old.rowid;
+    END;
+  }
+} {
+  if {$tn==0} { ifcapable !fts5 { continue } }
+  catchsql { DROP VIEW IF EXISTS changes }
+  catchsql { DROP TABLE IF EXISTS ft }
+  catchsql { DROP VIEW IF EXISTS ft }
+  execsql $create_table
+
+  do_execsql_test 1.$tn.0 {
+    INSERT INTO ft(a, b, c) VALUES('a', NULL, 'apple');
+    INSERT INTO ft(a, b, c) VALUES('b', NULL, 'banana');
+    INSERT INTO ft(a, b, c) VALUES('c', NULL, 'cherry');
+    INSERT INTO ft(a, b, c) VALUES('d', NULL, 'damson plum');
+  }
+  
+  do_execsql_test 1.$tn.1 {
+    SELECT a, b, c FROM ft ORDER BY rowid;
+  } {
+    a {} apple
+    b {} banana
+    c {} cherry
+    d {} {damson plum}
+  }
+  
+  do_execsql_test 1.$tn.2 {
+    UPDATE ft SET b=o.c FROM ft AS o WHERE (ft.a == char(unicode(o.a)+1))
+  }
+  
+  do_execsql_test 1.$tn.3 {
+    SELECT a, b, c FROM ft ORDER BY rowid;
+  } {
+    a {} apple
+    b apple banana
+    c banana cherry
+    d cherry {damson plum}
+  }
+
+  do_catchsql_test 1.$tn.4 {
+    UPDATE ft SET c=v FROM changes WHERE a=k;
+  } {1 {no such table: changes}}
+
+  do_execsql_test 1.$tn.5 {
+    create view changes(k, v) AS 
+      VALUES( 'd', 'dewberry' ) UNION ALL
+      VALUES( 'c', 'clementine' ) UNION ALL
+      VALUES( 'b', 'blueberry' ) UNION ALL
+      VALUES( 'a', 'apricot' ) 
+    ;
+  }
+
+  do_execsql_test 1.$tn.6 {
+    UPDATE ft SET c=v FROM changes WHERE a=k;
+  }
+
+  do_execsql_test 1.$tn.7 {
+    SELECT rowid, a, b, c FROM ft ORDER BY rowid;
+  } {
+    1 a {} apricot
+    2 b apple blueberry
+    3 c banana clementine
+    4 d cherry dewberry
+  }
+
+  do_execsql_test 1.$tn.8 "
+    WITH x1(o, n) AS (
+        VALUES(1, 11) UNION ALL
+        VALUES(2, 12) UNION ALL
+        VALUES(3, 13) UNION ALL
+        VALUES(4, 14)
+    )
+    SELECT ft.rowid, a, b, c, o, n FROM ft, x1 WHERE ft.rowid = o;
+  " {
+    1 a {} apricot 1 11
+    2 b apple blueberry 2 12
+    3 c banana clementine 3 13
+    4 d cherry dewberry 4 14
+  }
+
+  set ROWID rowid
+  if {$tn==1} { set ROWID docid }
+  do_execsql_test 1.$tn.9 "
+    WITH x1(o, n) AS (
+        VALUES(1, 11) UNION ALL
+        VALUES(2, 12) UNION ALL
+        VALUES(3, 13) UNION ALL
+        VALUES(4, 14)
+    )
+    UPDATE ft SET $ROWID = n FROM x1 WHERE ft.rowid = o;
+    SELECT rowid, a, b, c FROM ft ORDER BY rowid;
+  " {
+    11 a {} apricot
+    12 b apple blueberry
+    13 c banana clementine
+    14 d cherry dewberry
+  }
+}
+
+finish_test
+

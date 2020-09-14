@@ -1,0 +1,87 @@
+# 2013 March 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file tests the effect of the mmap() or mremap() system calls 
+# returning an error on the library. 
+#
+# If either mmap() or mremap() fails, SQLite should log an error 
+# message, then continue accessing the database using read() and 
+# write() exclusively.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix mmap2
+
+if {$::tcl_platform(platform)!="unix" || [test_syscall defaultvfs] != "unix"} {
+  finish_test
+  return
+}
+ifcapable !mmap {
+  finish_test
+  return
+}
+
+db close
+sqlite3_shutdown
+test_sqlite3_log xLog
+proc xLog {error_code msg} {
+  if {[string match os_unix.c* $msg]} {
+    lappend ::log $msg 
+  }
+}
+
+foreach syscall {mmap mremap} {
+  test_syscall uninstall 
+  if {[catch {test_syscall install $syscall}]} continue
+
+  for {set i 1} {$i < 20} {incr i} {
+    reset_db
+    execsql { PRAGMA mmap_size = 8000000 }
+
+    test_syscall fault $i 1
+    test_syscall errno $syscall ENOMEM
+    set ::log ""
+
+    do_execsql_test 1.$syscall.$i.1 {
+      CREATE TABLE t1(a, b, UNIQUE(a, b));
+      INSERT INTO t1 VALUES(randomblob(1000), randomblob(1000));
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+      INSERT INTO t1 SELECT randomblob(1000), randomblob(1000) FROM t1;
+    }
+
+    set nFail [test_syscall fault 0 0]
+
+    do_execsql_test 1.$syscall.$i.2 {
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    } {64 ok}
+
+    do_test 1.$syscall.$i.3 {
+      expr {$nFail==0 || $nFail==1}
+    } {1}
+
+    do_test 1.$syscall.$i.4.nFail=$nFail {
+      regexp ".*${syscall}.*" $::log
+    } [expr $nFail>0]
+  }
+}
+
+db close
+test_syscall uninstall 
+sqlite3_shutdown
+test_sqlite3_log 
+sqlite3_initialize
+finish_test

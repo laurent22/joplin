@@ -1,0 +1,50 @@
+# 2014 November 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bigsort
+
+#--------------------------------------------------------------------
+# At one point there was an overflow problem if the product of the 
+# cache-size and page-size was larger than 2^31. Causing an infinite 
+# loop if the product was also an integer multiple of 2^32, or 
+# inefficiency otherwise.
+#
+# This test causes thrashing on machines with smaller amounts of
+# memory.  Make sure the host has at least 8GB available before running
+# this test.
+#
+if {[catch {exec free | grep Mem:} out] || [lindex $out 1]<8000000} {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(a, b);
+  BEGIN;
+  WITH data(x,y) AS (
+    SELECT 1, zeroblob(10000)
+    UNION ALL
+    SELECT x+1, y FROM data WHERE x < 300000
+  )
+  INSERT INTO t1 SELECT * FROM data;
+  COMMIT;
+}
+do_execsql_test 1.1 {
+  PRAGMA cache_size = 4194304;
+  CREATE INDEX i1 ON t1(a, b);
+}
+
+
+finish_test

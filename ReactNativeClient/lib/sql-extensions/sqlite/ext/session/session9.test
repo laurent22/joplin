@@ -1,0 +1,287 @@
+# 2013 July 04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file tests that the sessions module handles foreign key constraint
+# violations when applying changesets as required.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix session9
+
+
+#--------------------------------------------------------------------
+# Basic tests.
+#
+proc populate_db {} {
+  drop_all_tables
+  execsql {
+    PRAGMA foreign_keys = 1;
+    CREATE TABLE p1(a PRIMARY KEY, b);
+    CREATE TABLE c1(a PRIMARY KEY, b REFERENCES p1);
+    CREATE TABLE c2(a PRIMARY KEY, 
+        b REFERENCES p1 DEFERRABLE INITIALLY DEFERRED
+    );
+
+    INSERT INTO p1 VALUES(1, 'one');
+    INSERT INTO p1 VALUES(2, 'two');
+    INSERT INTO p1 VALUES(3, 'three');
+    INSERT INTO p1 VALUES(4, 'four');
+  }
+}
+
+proc capture_changeset {sql} {
+  sqlite3session S db main
+
+  foreach t [db eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    S attach $t
+  }
+  execsql $sql
+  set ret [S changeset]
+  S delete
+
+  return $ret
+}
+
+do_test 1.1 {
+  populate_db
+  set cc [capture_changeset {
+    INSERT INTO c1 VALUES('ii', 2);
+    INSERT INTO c2 VALUES('iii', 3);
+  }]
+  set {} {}
+} {}
+
+proc xConflict {args} {
+  lappend ::xConflict {*}$args
+  return $::conflictret
+}
+
+foreach {tn delrow trans conflictargs conflictret} {
+  1   2 0 {FOREIGN_KEY 1} OMIT
+  2   3 0 {FOREIGN_KEY 1} OMIT
+  3   2 1 {FOREIGN_KEY 1} OMIT
+  4   3 1 {FOREIGN_KEY 1} OMIT
+  5   2 0 {FOREIGN_KEY 1} ABORT
+  6   3 0 {FOREIGN_KEY 1} ABORT
+  7   2 1 {FOREIGN_KEY 1} ABORT
+  8   3 1 {FOREIGN_KEY 1} ABORT
+} {
+
+  set A(OMIT)  {0 {}}
+  set A(ABORT) {1 SQLITE_CONSTRAINT}
+  do_test 1.2.$tn.1 {
+    populate_db
+    execsql { DELETE FROM p1 WHERE a=($delrow+0) }
+    if {$trans} { execsql BEGIN }
+
+    set ::xConflict [list]
+    list [catch {sqlite3changeset_apply db $::cc xConflict} msg] $msg
+  } $A($conflictret)
+
+  do_test 1.2.$tn.2 { set ::xConflict } $conflictargs
+
+  set A(OMIT)  {1 1}
+  set A(ABORT) {0 0}
+  do_test 1.2.$tn.3 {
+    execsql { SELECT count(*) FROM c1 UNION ALL SELECT count(*) FROM c2 }
+  } $A($conflictret)
+
+  do_test 1.2.$tn.4 { expr ![sqlite3_get_autocommit db] } $trans
+  do_test 1.2.$tn.5 {
+    if { $trans } { execsql COMMIT }
+  } {}
+}
+
+#--------------------------------------------------------------------
+# Test that closing a transaction clears the defer_foreign_keys flag.
+#
+foreach {tn open noclose close} {
+  1 BEGIN {} COMMIT
+  2 BEGIN {} ROLLBACK
+
+  3 {SAVEPOINT one} {}                {RELEASE one}
+  4 {SAVEPOINT one} {ROLLBACK TO one} {RELEASE one}
+} {
+  execsql $open
+  do_execsql_test 2.$tn.1 { PRAGMA defer_foreign_keys } {0}
+
+  do_execsql_test 2.$tn.2 {
+    PRAGMA defer_foreign_keys = 1;
+    PRAGMA defer_foreign_keys;
+  } {1}
+
+  execsql $noclose
+  do_execsql_test 2.$tn.3 { PRAGMA defer_foreign_keys } {1}
+
+  execsql $close
+  do_execsql_test 2.$tn.4 { PRAGMA defer_foreign_keys } {0}
+}
+
+#--------------------------------------------------------------------
+# Test that a cyclic relationship can be inserted and deleted.
+#
+# This situation does not come up in practice, but testing it serves to 
+# show that it does not matter which order parent and child keys 
+# are processed in internally when applying a changeset.
+#
+drop_all_tables
+
+do_execsql_test 3.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+}
+
+# Create changesets as follows:
+# 
+#   $cc1    - Insert a row into t1.
+#   $cc2    - Insert a row into t2.
+#   $cc     - Combination of $cc1 and $cc2.
+#
+#   $ccdel1 - Delete the row from t1.
+#   $ccdel2 - Delete the row from t2.
+#   $ccdel  - Combination of $cc1 and $cc2.
+#
+do_test 3.2 {
+  set cc1 [capture_changeset {
+    INSERT INTO t1 VALUES('one', 'value one');
+  }]
+  set ccdel1 [capture_changeset { DELETE FROM t1; }]
+  set cc2 [capture_changeset {
+    INSERT INTO t2 VALUES('value one', 'one');
+  }]
+  set ccdel2 [capture_changeset { DELETE FROM t2; }]
+  set cc [capture_changeset {
+    INSERT INTO t1 VALUES('one', 'value one');
+    INSERT INTO t2 VALUES('value one', 'one');
+  }]
+  set ccdel [capture_changeset {
+    DELETE FROM t1;
+    DELETE FROM t2;
+  }]
+  set {} {}
+} {}
+
+# Now modify the database schema to create a cyclic foreign key dependency
+# between tables t1 and t2. This means that although changesets $cc and
+# $ccdel can be applied, none of the others may without violating the
+# foreign key constraints. 
+# 
+do_test 3.3 {
+
+  drop_all_tables
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b REFERENCES t2);
+    CREATE TABLE t2(x PRIMARY KEY, y REFERENCES t1);
+  }
+
+
+  proc conflict_handler {args} { return "ABORT" }
+  sqlite3changeset_apply db $cc conflict_handler
+
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {one {value one} {value one} one}
+
+do_test 3.3.1 {
+  list [catch {sqlite3changeset_apply db $::ccdel1 conflict_handler} msg] $msg
+} {1 SQLITE_CONSTRAINT}
+
+do_test 3.3.2 {
+  list [catch {sqlite3changeset_apply db $::ccdel2 conflict_handler} msg] $msg
+} {1 SQLITE_CONSTRAINT}
+
+do_test 3.3.4.1 {
+  list [catch {sqlite3changeset_apply db $::ccdel conflict_handler} msg] $msg
+} {0 {}}
+do_execsql_test 3.3.4.2 {
+  SELECT * FROM t1;
+  SELECT * FROM t2;
+} {}
+
+do_test 3.5.1 {
+  list [catch {sqlite3changeset_apply db $::cc1 conflict_handler} msg] $msg
+} {1 SQLITE_CONSTRAINT}
+do_test 3.5.2 {
+  list [catch {sqlite3changeset_apply db $::cc2 conflict_handler} msg] $msg
+} {1 SQLITE_CONSTRAINT}
+
+#--------------------------------------------------------------------
+# Test that if a change that affects FK processing is not applied 
+# due to a separate constraint, SQLite does not get confused and
+# increment FK counters anyway.
+#
+drop_all_tables
+do_execsql_test 4.1 {
+  CREATE TABLE p1(x PRIMARY KEY, y);
+  CREATE TABLE c1(a PRIMARY KEY, b REFERENCES p1);
+  INSERT INTO p1 VALUES(1,1);
+}
+
+do_execsql_test 4.2.1 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    INSERT INTO c1 VALUES('x', 'x');
+}
+do_catchsql_test 4.2.2 { COMMIT } {1 {FOREIGN KEY constraint failed}}
+do_catchsql_test 4.2.3 { ROLLBACK } {0 {}}
+
+do_execsql_test 4.3.1 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    INSERT INTO c1 VALUES(1, 1);
+}
+do_catchsql_test 4.3.2 { 
+  INSERT INTO c1 VALUES(1, 'x') 
+} {1 {UNIQUE constraint failed: c1.a}}
+
+do_catchsql_test 4.3.3 { COMMIT } {0 {}}
+do_catchsql_test 4.3.4 { BEGIN ; COMMIT } {0 {}}
+
+#--------------------------------------------------------------------
+# Test that if a DELETE change cannot be applied due to an 
+# SQLITE_CONSTRAINT error thrown by a trigger program, things do not
+# go awry.
+
+drop_all_tables
+reset_db
+do_execsql_test 5.1 {
+  CREATE TABLE x1(x PRIMARY KEY, y);
+  CREATE TABLE x2(x PRIMARY KEY, y);
+  INSERT INTO x2 VALUES(1, 1);
+  INSERT INTO x1 VALUES(1, 1);
+}
+
+set ::cc [changeset_from_sql { DELETE FROM x1; }]
+
+do_execsql_test 5.2 {
+  INSERT INTO x1 VALUES(1, 1);
+  CREATE TRIGGER tr1 AFTER DELETE ON x1 BEGIN
+    INSERT INTO x2 VALUES(old.x, old.y);
+  END;
+} {}
+
+proc conflict_handler {args} { return "ABORT" }
+do_test 5.3 {
+  list [catch {sqlite3changeset_apply db $::cc conflict_handler} msg] $msg
+} {1 SQLITE_ABORT}
+
+do_execsql_test 5.4 {
+  SELECT * FROM X1;
+} {1 1}
+
+finish_test

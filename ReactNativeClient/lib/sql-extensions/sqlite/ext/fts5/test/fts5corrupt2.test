@@ -1,0 +1,273 @@
+# 2015 Apr 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file tests that FTS5 handles corrupt databases (i.e. internal
+# inconsistencies in the backing tables) correctly. In this case 
+# "correctly" means without crashing.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5corrupt2
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+sqlite3_fts5_may_be_corrupt 1
+
+# Create a simple FTS5 table containing 100 documents. Each document 
+# contains 10 terms, each of which start with the character "x".
+#
+expr srand(0)
+db func rnddoc fts5_rnddoc
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  WITH ii(i) AS (SELECT 1 UNION SELECT i+1 FROM ii WHERE i<100)
+  INSERT INTO t1 SELECT rnddoc(10) FROM ii;
+}
+set mask [expr 31 << 31]
+
+if 0 {
+
+# Test 1:
+#
+#   For each page in the t1_data table, open a transaction and DELETE
+#   the t1_data entry. Then run:
+#
+#     * an integrity-check, and
+#     * unless the deleted block was a b-tree node, a query for "t1 MATCH 'x*'"
+#
+#   and check that the corruption is detected in both cases. The 
+#   rollback the transaction.
+#
+# Test 2:
+#
+#   Same thing, except instead of deleting a row from t1_data, replace its
+#   blob content with integer value 14.
+#
+foreach {tno stmt} {
+  1 { DELETE FROM t1_data WHERE rowid=$rowid }
+  2 { UPDATE t1_data SET block=14 WHERE rowid=$rowid }
+} {
+  set tn 0
+  foreach rowid [db eval {SELECT rowid FROM t1_data WHERE rowid>10}] {
+    incr tn
+    #if {$tn!=224} continue
+  
+    do_test 1.$tno.$tn.1.$rowid {
+      execsql { BEGIN }
+      execsql $stmt
+      catchsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+    } {1 {database disk image is malformed}}
+  
+    if {($rowid & $mask)==0} {
+      # Node is a leaf node, not a b-tree node.
+      do_catchsql_test 1.$tno.$tn.2.$rowid {
+        SELECT rowid FROM t1 WHERE t1 MATCH 'x*'
+      } {1 {database disk image is malformed}}
+    }
+  
+    do_execsql_test 1.$tno.$tn.3.$rowid {
+      ROLLBACK;
+      INSERT INTO t1(t1) VALUES('integrity-check');
+    } {}
+  }
+}
+
+}
+
+# Using the same database as the 1.* tests.
+#
+# Run N-1 tests, where N is the number of bytes in the rightmost leaf page
+# of the fts index. For test $i, truncate the rightmost leafpage to $i
+# bytes. Then test both the integrity-check detects the corruption.
+#
+# Also tested is that "MATCH 'x*'" does not crash and sometimes reports
+# corruption. It may not report the db as corrupt because truncating the
+# final leaf to some sizes may create a valid leaf page.
+#
+set lrowid [db one {SELECT max(rowid) FROM t1_data WHERE (rowid & $mask)=0}] 
+set nbyte [db one {SELECT length(block) FROM t1_data WHERE rowid=$lrowid}]
+set all [db eval {SELECT rowid FROM t1}]
+sqlite3_db_config db DEFENSIVE 0
+for {set i [expr $nbyte-2]} {$i>=0} {incr i -1} {
+  do_execsql_test 2.$i.1 {
+    BEGIN;
+      UPDATE t1_data SET block = substr(block, 1, $i) WHERE rowid=$lrowid;
+  }
+
+  do_catchsql_test 2.$i.2 {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  } {1 {database disk image is malformed}}
+
+  do_test 2.$i.3 {
+    set res [catchsql {SELECT rowid FROM t1 WHERE t1 MATCH 'x*'}]
+    expr {
+        $res=="1 {database disk image is malformed}" 
+     || $res=="0 {$all}" 
+    }
+  } 1
+
+  do_execsql_test 2.$i.4 {
+    ROLLBACK;
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# Test that corruption in leaf page headers is detected by queries that use
+# doclist-indexes.
+#
+set doc "A B C D E F G H I J "
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE x3 USING fts5(tt);
+  INSERT INTO x3(x3, rank) VALUES('pgsz', 32);
+  WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<1000) 
+  INSERT INTO x3 
+  SELECT ($doc || CASE WHEN (i%50)==0 THEN 'X' ELSE 'Y' END) FROM ii;
+}
+
+foreach {tn hdr} {
+  1 "\x00\x00\x00\x00"
+  2 "\xFF\xFF\xFF\xFF"
+  3 "\x44\x45"
+} {
+  set tn2 0
+  set nCorrupt 0
+  set nCorrupt2 0
+  foreach rowid [db eval {SELECT rowid FROM x3_data WHERE rowid>10}] {
+    if {$rowid & $mask} continue
+    incr tn2
+    do_test 3.$tn.$tn2.1 {
+      execsql BEGIN
+
+      set fd [db incrblob main x3_data block $rowid]
+      fconfigure $fd -encoding binary -translation binary
+      set existing [read $fd [string length $hdr]]
+      seek $fd 0
+      puts -nonewline $fd $hdr
+      close $fd
+
+      set res [catchsql {SELECT rowid FROM x3 WHERE x3 MATCH 'x AND a'}]
+      if {$res == "1 {database disk image is malformed}"} {incr nCorrupt}
+      set {} 1
+    } {1}
+
+    if {($tn2 % 10)==0 && $existing != $hdr} {
+      do_test 3.$tn.$tn2.2 {
+        catchsql { INSERT INTO x3(x3) VALUES('integrity-check') }
+      } {1 {database disk image is malformed}}
+    }
+
+    execsql ROLLBACK
+  }
+
+  do_test 3.$tn.x { expr $nCorrupt>0 } 1
+}
+
+#--------------------------------------------------------------------
+#
+set doc "A B C D E F G H I J "
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x4 USING fts5(tt);
+  INSERT INTO x4(x4, rank) VALUES('pgsz', 32);
+  WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<10) 
+  INSERT INTO x4 
+  SELECT ($doc || CASE WHEN (i%50)==0 THEN 'X' ELSE 'Y' END) FROM ii;
+}
+
+foreach {tn nCut} {
+  1 1
+  2 10
+} {
+  set tn2 0
+  set nCorrupt 0
+  foreach rowid [db eval {SELECT rowid FROM x4_data WHERE rowid>10}] {
+    if {$rowid & $mask} continue
+    incr tn2
+    do_test 4.$tn.$tn2 {
+      execsql {
+        BEGIN;
+          UPDATE x4_data SET block = substr(block, 1, length(block)-$nCut) 
+          WHERE id = $rowid;
+      }
+
+      set res [catchsql {
+        SELECT rowid FROM x4 WHERE x4 MATCH 'a' ORDER BY 1 DESC
+      }]
+      if {$res == "1 {database disk image is malformed}"} {incr nCorrupt}
+      set {} 1
+    } {1}
+
+    execsql ROLLBACK
+  }
+
+  # do_test 4.$tn.x { expr $nCorrupt>0 } 1
+}
+
+set doc [string repeat "A B C " 1000]
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE x5 USING fts5(tt);
+  INSERT INTO x5(x5, rank) VALUES('pgsz', 32);
+  WITH ii(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<10) 
+  INSERT INTO x5 SELECT $doc FROM ii;
+}
+
+foreach {tn hdr} {
+  1 "\x00\x01"
+} {
+  set tn2 0
+  set nCorrupt 0
+  foreach rowid [db eval {SELECT rowid FROM x5_data WHERE rowid>10}] {
+    if {$rowid & $mask} continue
+    incr tn2
+    do_test 5.$tn.$tn2 {
+      execsql BEGIN
+
+      set fd [db incrblob main x5_data block $rowid]
+      fconfigure $fd -encoding binary -translation binary
+      puts -nonewline $fd $hdr
+      close $fd
+
+      catchsql { INSERT INTO x5(x5) VALUES('integrity-check') }
+      set {} {}
+    } {}
+
+    execsql ROLLBACK
+  }
+}
+
+#--------------------------------------------------------------------
+reset_db
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE x5 USING fts5(tt);
+  INSERT INTO x5 VALUES('a');
+  INSERT INTO x5 VALUES('a a');
+  INSERT INTO x5 VALUES('a a a');
+  INSERT INTO x5 VALUES('a a a a');
+
+  UPDATE x5_docsize SET sz = X'' WHERE id=3;
+}
+proc colsize {cmd i} { 
+  $cmd xColumnSize $i
+}
+sqlite3_fts5_create_function db colsize colsize
+
+do_catchsql_test 6.2 {
+  SELECT colsize(x5, 0) FROM x5 WHERE x5 MATCH 'a'
+} {1 SQLITE_CORRUPT_VTAB}
+
+
+sqlite3_fts5_may_be_corrupt 0
+finish_test

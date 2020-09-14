@@ -1,0 +1,166 @@
+
+# 2011 December 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for error (IO, OOM etc.) handling when using
+# the multiplexor extension with 8.3 filenames.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set ::testprefix multiplex3
+
+ifcapable !8_3_names {
+  puts -nonewline "SQLite compiled without SQLITE_ENABLE_8_3_NAMES. "
+  puts            "Skipping tests multiplex3-*."
+  finish_test
+  return
+}
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+autoinstall_test_functions
+
+sqlite3_multiplex_initialize "" 1
+
+proc destroy_vfs_stack {} {
+  generic_unregister stack
+  sqlite3_multiplex_shutdown
+}
+
+proc multiplex_delete_db {} {
+  forcedelete test.db
+  for {set i 1} {$i <= 1000} {incr i} {
+    forcedelete test.[format %03d $i]
+  }
+}
+
+# Procs to save and restore the current muliplexed database.
+#
+proc multiplex_save_db {} {
+  foreach f [glob -nocomplain sv_test.*] { forcedelete $f }
+  foreach f [glob -nocomplain test.*]    { forcecopy $f "sv_$f" }
+}
+proc multiplex_restore_db {} {
+  foreach f [glob -nocomplain test.*]    {forcedelete $f}
+  foreach f [glob -nocomplain sv_test.*] {forcecopy $f [string range $f 3 end]} }
+
+proc setup_and_save_db {} {
+  multiplex_delete_db
+  sqlite3 db file:test.db?8_3_names=1
+  sqlite3_multiplex_control db main chunk_size [expr 256*1024]
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(randomblob(15), randomblob(2000));
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --   2
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --   4
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --   8
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --  16
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --  32
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    --  64
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    -- 128
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    -- 256
+    INSERT INTO t1 SELECT randomblob(15), randomblob(2000) FROM t1;    -- 512
+  }
+  set ::cksum1 [execsql {SELECT md5sum(a, b) FROM t1 ORDER BY a}]
+  db close
+  multiplex_save_db
+}
+
+do_test 1.0 { setup_and_save_db } {}
+do_faultsim_test 1 -prep {
+  multiplex_restore_db
+  sqlite3 db file:test.db?8_3_names=1
+  sqlite3_multiplex_control db main chunk_size [expr 256*1024]
+} -body {
+  execsql {
+    UPDATE t1 SET a=randomblob(12), b=randomblob(1500) WHERE (rowid%32)=0
+  }
+} -test {
+  faultsim_test_result {0 {}}
+  if {$testrc!=0} {
+    set cksum2 [execsql {SELECT md5sum(a, b) FROM t1 ORDER BY a}]
+    if {$cksum2 != $::cksum1} { error "data mismatch" }
+  }
+}
+
+#-------------------------------------------------------------------------
+# The following tests verify that hot-journal rollback works. As follows:
+#
+#   1. Create a large database.
+#   2. Set the pager cache to be very small.
+#   3. Open a transaction. 
+#   4. Run the following 100 times:
+#      a. Update a row.
+#      b. Copy all files on disk to a new db location, including the journal.
+#      c. Verify that the new db can be opened and that the content matches
+#         the database created in step 1 (proving the journal was rolled
+#         back).
+
+do_test 2.0 { 
+  setup_and_save_db
+  multiplex_restore_db
+  sqlite3 db file:test.db?8_3_names=1
+  execsql { PRAGMA cache_size = 10 }
+  execsql { BEGIN }
+} {}
+
+for {set iTest 1} {$iTest<=100} {incr iTest} {
+  do_test 2.$iTest {
+    execsql { 
+      UPDATE t1 SET a=randomblob(12), b=randomblob(1400) WHERE rowid=5*$iTest
+    }
+    foreach f [glob -nocomplain test.*] {forcecopy $f "xx_$f"}
+    sqlite3 db2 file:xx_test.db?8_3_names=1
+    execsql {SELECT md5sum(a, b) FROM t1 ORDER BY a} db2
+  } $::cksum1
+
+  db2 close
+}
+catch { db close }
+
+
+do_test 3.0 { setup_and_save_db } {}
+do_faultsim_test 3 -faults ioerr-trans* -prep {
+
+  forcedelete test2.db
+  set fd [open test2.wal w]
+  seek $fd 4095
+  puts -nonewline $fd x
+  close $fd
+
+  multiplex_restore_db
+  sqlite3 db file:test.db?8_3_names=1
+  sqlite3 db2 file:test2.db?8_3_names=1
+  sqlite3_multiplex_control db main chunk_size [expr 256*1024]
+  sqlite3_multiplex_control db2 main chunk_size [expr 256*1024]
+} -body {
+  sqlite3_backup B db2 main db main
+  B step 100000
+  set rc [B finish]
+  if { [string match SQLITE_IOERR_* $rc] } {error "disk I/O error"}
+  set rc
+} -test {
+  faultsim_test_result {0 SQLITE_OK}
+  if {$testrc==0} {
+    set cksum2 [execsql {SELECT md5sum(a, b) FROM t1 ORDER BY a} db2]
+    if {$cksum2 != $::cksum1} { error "data mismatch" }
+  }
+  catch { B finish }
+  catch { db close }
+  catch { db2 close }
+}
+
+catch { db close }
+sqlite3_multiplex_shutdown
+finish_test

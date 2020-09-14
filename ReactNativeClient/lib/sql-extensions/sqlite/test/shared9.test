@@ -1,0 +1,230 @@
+# 2012 October 5
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file are intended to show if two connections attach
+# to the same shared cache using different database names, views and
+# virtual tables may still be accessed.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set testprefix shared9
+
+ifcapable !view||!trigger {
+  finish_test
+  return
+}
+
+db close
+set enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+sqlite3 db1 test.db
+sqlite3 db2 test.db
+forcedelete test.db2
+
+do_test 1.1 {
+  db1 eval {
+    ATTACH 'test.db2' AS 'fred';
+    CREATE TABLE fred.t1(a, b, c);
+    CREATE VIEW fred.v1 AS SELECT * FROM t1;
+
+    CREATE TABLE fred.t2(a, b);
+    CREATE TABLE fred.t3(a, b);
+    CREATE TRIGGER fred.trig AFTER INSERT ON t2 BEGIN
+      DELETE FROM t3;
+      INSERT INTO t3 SELECT * FROM t2;
+    END;
+    INSERT INTO t2 VALUES(1, 2);
+    SELECT * FROM t3;
+  }
+} {1 2}
+
+do_test 1.2 { db2 eval "ATTACH 'test.db2' AS 'jones'" } {}
+do_test 1.3 { db2 eval "SELECT * FROM v1"             } {}
+do_test 1.4 { db2 eval "INSERT INTO t2 VALUES(3, 4)"  } {}
+
+ifcapable fts3 {
+  do_test 1.5 {
+    db1 eval {
+      CREATE VIRTUAL TABLE fred.t4 USING fts4;
+      INSERT INTO t4 VALUES('hello world');
+    }
+  } {}
+
+  do_test 1.6 {
+    db2 eval {
+      INSERT INTO t4 VALUES('shared cache');
+      SELECT * FROM t4 WHERE t4 MATCH 'hello';
+    }
+  } {{hello world}}
+
+  do_test 1.7 {
+    db1 eval {
+      SELECT * FROM t4 WHERE t4 MATCH 'c*';
+    }
+  } {{shared cache}}
+}
+
+db1 close
+db2 close
+
+#-------------------------------------------------------------------------
+# The following tests attempt to find a similar problem with collation 
+# sequence names - pointers to database handle specific allocations leaking 
+# into schema objects and being used after the original handle has been
+# closed.
+#
+forcedelete test.db test.db2
+sqlite3 db1 test.db
+sqlite3 db2 test.db
+foreach x {collate1 collate2 collate3} {
+  proc $x {a b} { string compare $a $b }
+  db1 collate $x $x
+  db2 collate $x $x
+}
+do_test 2.1 {
+  db1 eval {
+    CREATE TABLE t1(a, b, c COLLATE collate1);
+    CREATE INDEX i1 ON t1(a COLLATE collate2, c, b);
+  }
+} {}
+do_test 2.2 {
+  db1 close
+  db2 eval "INSERT INTO t1 VALUES('abc', 'def', 'ghi')"
+} {}
+db2 close
+
+#-------------------------------------------------------------------------
+# At one point, the following would cause a collation sequence belonging
+# to connection [db1] to be invoked by a call to [db2 eval]. Which is a
+# problem if [db1] has already been closed.
+#
+forcedelete test.db test.db2
+sqlite3 db1 test.db
+sqlite3 db2 test.db
+
+proc mycollate_db1 {a b} {set ::invoked_mycollate_db1 1 ; string compare $a $b}
+proc mycollate_db2 {a b} {string compare $a $b}
+
+db1 collate mycollate mycollate_db1
+db2 collate mycollate mycollate_db2
+
+do_test 2.3 {
+  set ::invoked_mycollate_db1 0
+  db1 eval {
+    CREATE TABLE t1(a COLLATE mycollate, CHECK (a IN ('one', 'two', 'three')));
+    INSERT INTO t1 VALUES('one');
+  }
+  db1 close
+  set ::invoked_mycollate_db1
+} {1}
+do_test 2.4 {
+  set ::invoked_mycollate_db1 0
+  db2 eval {
+    INSERT INTO t1 VALUES('two');
+  }
+  db2 close
+  set ::invoked_mycollate_db1
+} {0}
+
+forcedelete test.db test.db2
+sqlite3 db1 test.db
+sqlite3 db2 test.db
+db1 collate mycollate mycollate_db1
+db2 collate mycollate mycollate_db2
+
+do_test 2.13 {
+  set ::invoked_mycollate_db1 0
+  db1 eval {
+    CREATE TABLE t1(a, CHECK (a COLLATE mycollate IN ('one', 'two', 'three')));
+    INSERT INTO t1 VALUES('one');
+  }
+  db1 close
+  set ::invoked_mycollate_db1
+} {1}
+do_test 2.14 {
+  set ::invoked_mycollate_db1 0
+  db2 eval {
+    INSERT INTO t1 VALUES('two');
+  }
+  db2 close
+  set ::invoked_mycollate_db1
+} {0}
+
+#-------------------------------------------------------------------------
+# This test verifies that a bug causing a busy-handler belonging to one
+# shared-cache connection to be executed as a result of an sqlite3_step()
+# on another has been fixed.
+#
+forcedelete test.db test.db2
+sqlite3 db1 test.db
+sqlite3 db2 test.db
+
+proc busyhandler {handle args} {
+  set ::busyhandler_invoked_for $handle
+  return 1
+}
+db1 busy [list busyhandler db1]
+db2 busy [list busyhandler db2]
+
+do_test 3.1 {
+  db1 eval {
+    BEGIN; 
+      CREATE TABLE t1(a, b);
+      CREATE TABLE t2(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t2 VALUES(1, 2);
+  }
+  # Keep this next COMMIT as a separate statement. This ensures that COMMIT
+  # has already been compiled and loaded into the tcl interface statement 
+  # cache when it is attempted below.
+  db1 eval COMMIT
+  db1 eval {
+    BEGIN;
+      INSERT INTO t1 VALUES(3, 4);
+  }
+} {}
+
+do_test 3.2 {
+  set ::tf [launch_testfixture]
+  testfixture $::tf {
+    sqlite3 db test.db
+    db eval {
+      BEGIN;
+        SELECT * FROM t1;
+    }
+  }
+} {1 2}
+
+do_test 3.3 {
+  db2 eval { SELECT * FROM t2 }
+} {1 2}
+
+do_test 3.4 {
+  list [catch { db1 eval COMMIT } msg] $msg
+} {1 {database is locked}}
+
+# At one point the following would fail, showing that the busy-handler
+# belonging to [db2] was invoked instead.
+do_test 3.5 {
+  set ::busyhandler_invoked_for
+} {db1}
+do_test 3.6 {
+  close $::tf
+  db1 eval COMMIT
+} {}
+  
+db1 close
+db2 close
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

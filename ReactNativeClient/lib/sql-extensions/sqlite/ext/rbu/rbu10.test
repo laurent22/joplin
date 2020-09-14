@@ -1,0 +1,187 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbu10
+
+
+#--------------------------------------------------------------------
+# Test that UPDATE commands work even if the input columns are in a 
+# different order to the output columns. 
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1, 'b', 'c');
+}
+
+proc apply_rbu {sql} {
+  forcedelete rbu.db
+  sqlite3 db2 rbu.db
+  db2 eval $sql
+  db2 close
+  sqlite3rbu rbu test.db rbu.db
+  while { [rbu step]=="SQLITE_OK" } {}
+  rbu close
+}
+
+do_test 1.1 {
+  apply_rbu {
+    CREATE TABLE data_t1(a, c, b, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 'xxx', NULL, '.x.');
+  }
+  db eval { SELECT * FROM t1 }
+} {1 b xxx}
+
+#--------------------------------------------------------------------
+# Test that the hidden languageid column of an fts4 table can be 
+# written.
+#
+ifcapable fts3 {
+  do_execsql_test 2.0 {
+    CREATE VIRTUAL TABLE ft USING fts4(a, b, languageid='langid');
+  }
+  do_test 2.1 {
+    apply_rbu {
+      CREATE TABLE data_ft(a, b, rbu_rowid, langid, rbu_control);
+      INSERT INTO data_ft VALUES('a', 'b', 22, 1, 0);    -- insert
+      INSERT INTO data_ft VALUES('a', 'b', 23, 10, 0);   -- insert
+      INSERT INTO data_ft VALUES('a', 'b', 24, 100, 0);  -- insert
+    }
+    db eval { SELECT a, b, rowid, langid FROM ft }
+  } [list {*}{
+    a b 22 1
+    a b 23 10
+    a b 24 100
+  }]
+  
+  # Or not - this data_xxx table has no langid column, so langid 
+  # defaults to 0.
+  #
+  do_test 2.2 {
+    apply_rbu {
+      CREATE TABLE data_ft(a, b, rbu_rowid, rbu_control);
+      INSERT INTO data_ft VALUES('a', 'b', 25, 0);    -- insert
+    }
+    db eval { SELECT a, b, rowid, langid FROM ft }
+  } [list {*}{
+    a b 22 1
+    a b 23 10
+    a b 24 100
+    a b 25 0
+  }]
+  
+  # Update langid.
+  #
+  do_test 2.3 {
+    apply_rbu {
+      CREATE TABLE data_ft(a, b, rbu_rowid, langid, rbu_control);
+      INSERT INTO data_ft VALUES(NULL, NULL, 23, 50, '..x');
+      INSERT INTO data_ft VALUES(NULL, NULL, 25, 500, '..x');
+    }
+    db eval { SELECT a, b, rowid, langid FROM ft }
+  } [list {*}{
+    a b 22 1
+    a b 23 50
+    a b 24 100
+    a b 25 500
+  }]
+}
+
+#--------------------------------------------------------------------
+# Test that if writing a hidden virtual table column is an error, 
+# attempting to do so via rbu is also an error.
+#
+ifcapable fts3 {
+  do_execsql_test 3.0 {
+    CREATE VIRTUAL TABLE xt USING fts4(a);
+  }
+  do_test 3.1 {
+    list [catch {
+      apply_rbu {
+        CREATE TABLE data_xt(a, xt, rbu_rowid, rbu_control);
+        INSERT INTO data_xt VALUES('a', 'b', 1, 0);
+      }
+    } msg] $msg
+  } {1 {SQLITE_ERROR - SQL logic error}}
+}
+
+#--------------------------------------------------------------------
+# Test that it is not possible to violate a NOT NULL constraint by
+# applying an RBU update.
+#
+do_execsql_test 4.1 {
+  CREATE TABLE t2(a INTEGER NOT NULL, b TEXT NOT NULL, c PRIMARY KEY);
+  CREATE TABLE t3(a INTEGER NOT NULL, b TEXT NOT NULL, c INTEGER PRIMARY KEY);
+  CREATE TABLE t4(a, b, PRIMARY KEY(a, b)) WITHOUT ROWID;
+
+  INSERT INTO t2 VALUES(10, 10, 10);
+  INSERT INTO t3 VALUES(10, 10, 10);
+  INSERT INTO t4 VALUES(10, 10);
+}
+
+foreach {tn error rbu} {
+  2 {SQLITE_CONSTRAINT - NOT NULL constraint failed: t2.a} {
+    INSERT INTO data_t2 VALUES(NULL, 'abc', 1, 0);
+  }
+  3 {SQLITE_CONSTRAINT - NOT NULL constraint failed: t2.b} {
+    INSERT INTO data_t2 VALUES(2, NULL, 1, 0);
+  }
+  4 {SQLITE_CONSTRAINT - NOT NULL constraint failed: t2.c} {
+    INSERT INTO data_t2 VALUES(1, 'abc', NULL, 0);
+  }
+
+  5 {SQLITE_MISMATCH - datatype mismatch} {
+    INSERT INTO data_t3 VALUES(1, 'abc', NULL, 0);
+  }
+
+  6 {SQLITE_CONSTRAINT - NOT NULL constraint failed: t4.b} {
+    INSERT INTO data_t4 VALUES('a', NULL, 0);
+  }
+  7 {SQLITE_CONSTRAINT - NOT NULL constraint failed: t4.a} {
+    INSERT INTO data_t4 VALUES(NULL, 'a', 0);
+  }
+  8  {SQLITE_CONSTRAINT - NOT NULL constraint failed: t2.a} {
+    INSERT INTO data_t2 VALUES(NULL, 0, 10, 'x..');
+  }
+  9  {SQLITE_CONSTRAINT - NOT NULL constraint failed: t3.b} {
+    INSERT INTO data_t3 VALUES(10, NULL, 10, '.x.');
+  }
+
+  10 {SQLITE_MISMATCH - datatype mismatch} {
+    INSERT INTO data_t3 VALUES(1, 'abc', 'text', 0);
+  }
+} {
+  set rbu "
+    CREATE TABLE data_t2(a, b, c, rbu_control);
+    CREATE TABLE data_t3(a, b, c, rbu_control);
+    CREATE TABLE data_t4(a, b, rbu_control);
+    $rbu
+  "
+  do_test 4.2.$tn {
+    list [catch { apply_rbu $rbu } msg] $msg
+  } [list 1 $error]
+}
+
+do_test 4.3 {
+  set rbu {
+    CREATE TABLE data_t3(a, b, c, rbu_control);
+    INSERT INTO data_t3 VALUES(1, 'abc', '5', 0);
+    INSERT INTO data_t3 VALUES(1, 'abc', '-6.0', 0);
+  }
+  list [catch { apply_rbu $rbu } msg] $msg
+} {0 SQLITE_DONE}
+
+
+finish_test

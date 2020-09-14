@@ -1,0 +1,234 @@
+# 2017-03-03
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix corruptK
+
+if {[permutation]=="mmap"} {
+  finish_test
+  return
+}
+
+# This module uses hard-coded offsets which do not work if the reserved_bytes
+# value is nonzero.
+if {[nonzero_reserved_bytes]} {finish_test; return;}
+database_may_be_corrupt
+
+# Initialize the database.
+# 
+do_execsql_test 1.1 {
+  PRAGMA page_size=1024;
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(x);
+
+  INSERT INTO t1 VALUES(randomblob(20));
+  INSERT INTO t1 VALUES(randomblob(100));   -- make this into a free slot
+  INSERT INTO t1 VALUES(randomblob(27));    -- this one will be corrupt
+  INSERT INTO t1 VALUES(randomblob(800));
+
+  DELETE FROM t1 WHERE rowid=2;  -- free the 100 byte slot
+  PRAGMA page_count
+} {2}
+
+
+# Corrupt the database so that the blob stored immediately before 
+# the free slot (rowid==3) has an overlarge length field. So that
+# we can use sqlite3_blob_write() to manipulate the size field of
+# the free slot.
+#
+# Then use sqlite3_blob_write() to set the size of said free slot
+# to 24 bytes (instead of the actual 100).
+#
+# Then use the new 24 byte slot. Leaving the in-memory version of
+# the page with zero free slots and a large nFree value. Then try
+# to allocate another slot to get to defragmentPage().
+#
+do_test 1.2 {
+  db close
+  hexio_write test.db [expr 1024 + 0x360] 21
+  hexio_write test.db [expr 1024 + 0x363] [format %x [expr 31*2 + 12]]
+  sqlite3 db test.db
+
+  set fd [db incrblob t1 x 3]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd 30
+  puts -nonewline $fd "\x18"
+  close $fd
+} {}
+do_execsql_test 1.3 {
+  INSERT INTO t1 VALUES(randomblob(20));
+}
+
+# This test no longer functions due to the deferred computation of
+# MemPage.nFree.
+#
+if 0 {
+do_catchsql_test 1.4 {
+  INSERT INTO t1 VALUES(randomblob(90));
+} {1 {database disk image is malformed}}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.1 {
+  PRAGMA page_size=1024;
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(x);
+
+  INSERT INTO t1 VALUES(randomblob(20));
+  INSERT INTO t1 VALUES(randomblob(20));    -- free this one
+  INSERT INTO t1 VALUES(randomblob(20));
+  INSERT INTO t1 VALUES(randomblob(20));    -- and this one
+  INSERT INTO t1 VALUES(randomblob(20));    -- corrupt this one.
+
+  DELETE FROM t1 WHERE rowid IN(2, 4);
+  PRAGMA page_count
+} {2}
+
+do_test 2.2 {
+  db close
+  hexio_write test.db [expr 1024 + 0x388] 53
+  hexio_write test.db [expr 1024 + 0x38A] 03812C
+
+  sqlite3 db test.db
+  set fd [db incrblob t1 x 5]
+  fconfigure $fd -translation binary -encoding binary
+
+  seek $fd 22
+  puts -nonewline $fd "\x5d"
+  close $fd
+} {}
+
+do_catchsql_test 2.3 {
+  INSERT INTO t1 VALUES(randomblob(900));
+} {1 {database disk image is malformed}}
+
+#-------------------------------------------------------------------------
+
+ifcapable vtab {
+if {[permutation]!="inmemory_journal"} {
+
+  proc hex2blob {hex} {
+    # Split on newlines:
+    set bytes [list]
+    foreach l [split $hex "\n"] {
+      if {[string is space $l]} continue
+      set L [list]
+      foreach b [split $l] {
+        if {[string is xdigit $b] && [string length $b]==2} { 
+          lappend L [expr "0x$b"]
+        }
+      }
+      if {[llength $L]!=16} {
+        error "Badly formed hex (1)"
+      }
+      set bytes [concat $bytes $L]
+    }
+  
+    binary format c* $bytes
+  }
+  
+  reset_db
+  db func hex2blob hex2blob
+  
+  do_execsql_test 3.1 {
+    PRAGMA page_size=1024;
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(a, b, c);
+    CREATE TABLE t3(a, b, c);
+    CREATE TABLE t4(a, b, c);
+    CREATE TABLE t5(a, b, c);
+  }
+  sqlite3_db_config db DEFENSIVE 0
+  do_execsql_test 3.2 {
+    UPDATE sqlite_dbpage SET data = hex2blob('
+   000: 53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00 SQLite format 3.
+   010: 04 00 01 01 20 40 20 20 00 00 3e d9 00 00 00 06 .... @  ..>.....
+   020: 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 04 ................
+   030: 0f 00 00 00 00 00 00 00 00 00 00 01 00 00 83 00 ................
+   040: 00 00 00 00 00 00 00 00 00 00 00 00 00 38 00 00 .............8..
+   050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3e d9 ..............>.
+   060: 00 2d e6 07 0d 00 00 00 01 03 a0 00 03 e0 00 00 .-..............
+   070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   090: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   0a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   0b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   0c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   0d0: 00 00 00 00 00 c1 00 00 00 00 00 00 00 00 00 00 ................
+   0e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   0f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   110: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   120: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   130: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   140: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   150: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   160: 00 83 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   170: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   180: 00 00 00 00 00 00 00 00 00 00 07 00 30 00 00 00 ............0...
+   190: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   1a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   1b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   1c0: 02 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 ................
+   1d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   1e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   1f0: 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   210: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   220: 00 00 0e 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   230: 0c 00 00 00 00 00 00 60 00 00 00 06 00 00 c3 00 .......`........
+   240: 00 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   250: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   260: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   270: 00 00 00 18 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   290: 04 00 0e 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   2a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   2b0: 00 00 00 00 83 00 8c 00 00 00 00 00 00 00 00 00 ................
+   2c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   2d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   2e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   2f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   310: 00 78 00 00 00 00 00 00 00 00 00 00 00 00 70 00 .x............p.
+   320: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   330: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   340: 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   350: 00 00 00 00 00 68 00 00 00 00 00 00 00 00 00 00 .....h..........
+   360: 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 00 ................
+   370: 00 00 00 00 00 00 00 00 00 00 00 00 00 08 00 00 ................
+   380: 00 00 00 00 70 00 00 00 00 00 00 00 00 00 00 00 ....p...........
+   390: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   3a0: 5e 01 07 17 1b 1b 01 81 13 74 61 62 6c 65 73 65 ^........tablese
+   3b0: 6e 73 6f 32 73 73 65 6e 73 6f 72 73 02 43 52 45 nso2ssensors.CRE
+   3c0: 41 54 45 20 54 41 42 4c 45 20 73 65 6e 73 6f 72 ATE TABLE sensor
+   3d0: 73 20 0a 20 20 24 20 20 20 20 20 20 20 20 20 20 s .  $          
+   3e0: b8 6e 61 6d 65 21 74 65 78 74 2c 20 79 61 6c 20 .name!text, yal 
+   3f0: 72 65 61 6c 2c 20 74 69 6d 65 20 74 65 78 74 29 real, time text)
+    ') WHERE pgno=1
+  }
+  
+  db close
+  sqlite3 db test.db
+  
+  do_catchsql_test 3.3 {
+    PRAGMA integrity_check;
+  } {1 {database disk image is malformed}}
+
+} ;# [permutation]!="inmemory_journal"
+} ;# ifcapable vtab
+
+
+
+finish_test

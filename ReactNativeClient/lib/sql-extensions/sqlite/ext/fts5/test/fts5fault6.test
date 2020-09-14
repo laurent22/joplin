@@ -1,0 +1,293 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault6
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------------
+# OOM while rebuilding an FTS5 table.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(a, b);
+  INSERT INTO tt VALUES('c d c g g f', 'a a a d g a');
+  INSERT INTO tt VALUES('c d g b f d', 'b g e c g c');
+  INSERT INTO tt VALUES('c c f d e d', 'c e g d b c');
+  INSERT INTO tt VALUES('e a f c e f', 'g b a c d g');
+  INSERT INTO tt VALUES('c g f b b d', 'g c d c f g');
+  INSERT INTO tt VALUES('d a g a b b', 'g c g g c e');
+  INSERT INTO tt VALUES('e f a b c e', 'f d c d c c');
+  INSERT INTO tt VALUES('e c a g c d', 'b b g f f b');
+  INSERT INTO tt VALUES('g b d d e b', 'f f b d a c');
+  INSERT INTO tt VALUES('e a d a e d', 'c e a e f g');
+}
+faultsim_save_and_close
+
+do_faultsim_test 1.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { INSERT INTO tt(tt) VALUES('rebuild') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 1.2 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { REPLACE INTO tt(rowid, a, b) VALUES(6, 'x y z', 'l l l'); }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+
+#-------------------------------------------------------------------------
+# OOM within a special delete.
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(a, content="");
+  INSERT INTO tt VALUES('c d c g g f');
+  INSERT INTO tt VALUES('c d g b f d');
+  INSERT INTO tt VALUES('c c f d e d');
+  INSERT INTO tt VALUES('e a f c e f');
+  INSERT INTO tt VALUES('c g f b b d');
+  INSERT INTO tt VALUES('d a g a b b');
+  INSERT INTO tt VALUES('e f a b c e');
+  INSERT INTO tt VALUES('e c a g c d');
+  INSERT INTO tt VALUES('g b d d e b');
+  INSERT INTO tt VALUES('e a d a e d');
+}
+faultsim_save_and_close
+
+do_faultsim_test 2.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { INSERT INTO tt(tt, rowid, a) VALUES('delete', 3, 'c d g b f d'); }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 2.2 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { INSERT INTO tt(tt) VALUES('delete-all') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 2.3 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { INSERT INTO tt VALUES('x y z') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+# OOM in the ASCII tokenizer with very large tokens. 
+#
+# Also the unicode tokenizer.
+#
+set t1 [string repeat wxyz 20]
+set t2 [string repeat wxyz 200]
+set t3 [string repeat wxyz 2000]
+set doc "$t1 $t2 $t3"
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE xyz USING fts5(c, tokenize=ascii, content="");
+  CREATE VIRTUAL TABLE xyz2 USING fts5(c, content="");
+}
+faultsim_save_and_close
+
+do_faultsim_test 3.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM xyz }
+} -body {
+  db eval { INSERT INTO xyz VALUES($::doc) }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 3.2 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM xyz2 }
+} -body {
+  db eval { INSERT INTO xyz2 VALUES($::doc) }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+# OOM while initializing a unicode61 tokenizer.
+#
+reset_db
+faultsim_save_and_close
+do_faultsim_test 4.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { 
+    CREATE VIRTUAL TABLE yu USING fts5(x, tokenize="unicode61 separators abc");
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+#
+# 5.2.* OOM while running a query that includes synonyms and matchinfo().
+#
+# 5.3.* OOM while running a query that returns a row containing instances
+#       of more than 4 synonyms for a single term.
+#
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+proc tcl_tokenize {tflags text} {
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    sqlite3_fts5_token $w $iStart $iEnd
+    if {$tflags=="query" && [string length $w]==1} {
+      for {set i 2} {$i < 7} {incr i} {
+        sqlite3_fts5_token -colo [string repeat $w $i] $iStart $iEnd
+      }
+    }
+  }
+}
+proc tcl_create {args} { return "tcl_tokenize" }
+reset_db
+sqlite3_fts5_create_tokenizer db tcl tcl_create
+db func mit mit
+sqlite3_fts5_register_matchinfo db
+do_test 5.0 {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts5(a, tokenize=tcl) }
+  execsql { INSERT INTO t1(t1, rank) VALUES('pgsz', 32) }
+  foreach {rowid text} {
+    1 {aaaa cc b aaaaa cc aa} 
+    2 {aa aa bb a bbb}
+    3 {bb aaaaa aaaaa b aaaa aaaaa}
+    4 {aa a b aaaa aa}
+    5 {aa b ccc aaaaa cc}
+    6 {aa aaaaa bbbb cc aaa}
+    7 {aaaaa aa aa ccccc bb}
+    8 {ccc bbbbb ccccc bbb c}
+    9 {cccccc bbbb a aaa cccc c}
+
+    20 {ddd f ddd eeeee fff ffff eeee ddd fff eeeee dddddd eeee}
+    21 {fffff eee dddd fffff dd ee ee eeeee eee eeeeee ee dd e}
+    22 {fffff d eeee dddd fffff dddddd ffff ddddd eeeee ee eee dddd ddddd}
+    23 {ddddd fff ddd eeeee ffff eeee ddd ff ff ffffff eeeeee dddd ffffff}
+    24 {eee dd ee dddd dddd eeeeee e eee fff ffff}
+    25 {ddddd ffffff dddddd fff ddd ddddd ddd f eeee fff dddd f}
+    26 {f ffff fff fff eeeeee dddd d dddddd ddddd eee ff eeeee}
+    27 {eee fff dddddd eeeee eeeee dddd ddddd ffff f eeeee eee dddddd ddddd d}
+    28 {dd ddddd d ddd d fff d dddd ee dddd ee ddd dddddd dddddd}
+    29 {eeee dddd ee dddd eeee dddd dd fffff f ddd eeeee ddd ee}
+    30 {ff ffffff eeeeee eeeee eee ffffff ff ffff f fffff eeeee}
+    31 {fffff eeeeee dddd eeee eeee eeeeee eee fffff d ddddd ffffff ffff dddddd}
+    32 {dddddd fffff ee eeeeee eeee ee fff dddd fff eeee ffffff eeeeee ffffff}
+    33 {ddddd eeee dd ffff dddddd fff eeee ddddd ffff eeee ddd}
+    34 {ee dddd ddddd dddddd eeee eeeeee f dd ee dddddd ffffff}
+    35 {ee dddd dd eeeeee ddddd eee d eeeeee dddddd eee dddd fffff}
+    36 {eee ffffff ffffff e fffff eeeee ff dddddd dddddd fff}
+    37 {eeeee fffff dddddd dddd ffffff fff f dd ee dd dd eeeee}
+    38 {eeeeee ee d ff eeeeee eeeeee eee eeeee ee ffffff dddd eeee dddddd ee}
+    39 {eeeeee ddd fffff e dddd ee eee eee ffffff ee f d dddd}
+    40 {ffffff dddddd eee ee ffffff eee eeee ddddd ee eeeeee f}
+    41 {ddd ddd fff fffff ee fffff f fff ddddd fffff}
+    42 {dddd ee ff d f ffffff fff ffffff ff dd dddddd f eeee}
+    43 {d dd fff fffff d f fff e dddd ee ee}
+    44 {ff ffff eee ddd d dd ffff dddd d eeee d eeeeee}
+    45 {eeee f eeeee ee e ffff f ddd e fff}
+    46 {ffff d ffff eeee ffff eeeee f ffff ddddd eee}
+    47 {dd dd dddddd ddddd fffff dddddd ddd ddddd eeeeee ffff eeee eee ee}
+    48 {ffff ffff e dddd ffffff dd dd dddd f fffff}
+    49 {ffffff d dddddd ffff eeeee f ffff ffff d dd fffff eeeee}
+
+    50 {x e}
+  } {
+    execsql { INSERT INTO t1(rowid, a) VALUES($rowid, $text) }
+  }
+} {}
+
+set res [list {*}{
+  1 {3 24 8 2 12 6}
+  5 {2 24 8 2 12 6}
+  6 {3 24 8 1 12 6}
+  7 {3 24 8 1 12 6}
+  9 {2 24 8 3 12 6}
+}]
+do_execsql_test 5.1.1 {
+  SELECT rowid, mit(matchinfo(t1, 'x')) FROM t1 WHERE t1 MATCH 'a AND c'
+} $res
+do_execsql_test 5.1.2 {
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'd e f'
+} 29
+
+faultsim_save_and_close
+do_faultsim_test 5.2 -faults oom* -prep {
+  faultsim_restore_and_reopen
+  sqlite3_fts5_create_tokenizer db tcl tcl_create
+  sqlite3_fts5_register_matchinfo db
+  db func mit mit
+} -body {
+  db eval { 
+    SELECT rowid, mit(matchinfo(t1, 'x')) FROM t1 WHERE t1 MATCH 'a AND c'
+  }
+} -test {
+  faultsim_test_result [list 0 $::res] {1 {SQL logic error}}
+}
+
+do_faultsim_test 5.3 -faults oom* -prep {
+  faultsim_restore_and_reopen
+  sqlite3_fts5_create_tokenizer db tcl tcl_create
+} -body {
+  db eval { 
+    SELECT count(*) FROM t1 WHERE t1 MATCH 'd AND e AND f'
+  }
+} -test {
+  faultsim_test_result {0 29} {1 {SQL logic error}}
+}
+
+do_faultsim_test 5.4 -faults oom* -prep {
+  faultsim_restore_and_reopen
+  sqlite3_fts5_create_tokenizer db tcl tcl_create
+} -body {
+  db eval { 
+    SELECT count(*) FROM t1 WHERE t1 MATCH 'x + e'
+  }
+} -test {
+  faultsim_test_result {0 1} {1 {SQL logic error}}
+}
+
+#-------------------------------------------------------------------------
+catch { db close }
+do_faultsim_test 6 -faults oom* -prep {
+  sqlite_orig db test.db
+  sqlite3_db_config_lookaside db 0 0 0
+} -test {
+  faultsim_test_result {0 {}} {1 {initialization of fts5 failed: }}
+  if {$testrc==0} {
+    db eval { CREATE VIRTUAL TABLE temp.t1 USING fts5(x) }
+  }
+  db close
+}
+finish_test

@@ -1,0 +1,190 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+# 
+# More specifically, the tests in this file focus on the built-in 
+# snippet() function.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5af
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, detail=%DETAIL%);
+}
+
+proc do_snippet_test {tn doc match res} {
+
+  uplevel #0 [list set v1 $doc]
+  uplevel #0 [list set v2 $match]
+
+  do_execsql_test $tn.1 {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES($v1, NULL);
+    SELECT snippet(t1, -1, '[', ']', '...', 7) FROM t1 WHERE t1 MATCH $v2;
+  } [list $res]
+
+  do_execsql_test $tn.2 {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES(NULL, $v1);
+    SELECT snippet(t1, -1, '[', ']', '...', 7) FROM t1 WHERE t1 MATCH $v2;
+  } [list $res]
+
+  do_execsql_test $tn.3 {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES($v1, NULL);
+    SELECT snippet(t1, -1, '[', ']', '...', 7) FROM t1 WHERE t1 MATCH $v2
+    ORDER BY rank DESC;
+  } [list $res]
+
+
+}
+
+
+foreach {tn doc res} {
+
+  1.1 {X o o o o o o} {[X] o o o o o o}
+  1.2 {o X o o o o o} {o [X] o o o o o}
+  1.3 {o o X o o o o} {o o [X] o o o o}
+  1.4 {o o o X o o o} {o o o [X] o o o}
+  1.5 {o o o o X o o} {o o o o [X] o o}
+  1.6 {o o o o o X o} {o o o o o [X] o}
+  1.7 {o o o o o o X} {o o o o o o [X]}
+
+  2.1 {X o o o o o o o} {[X] o o o o o o...}
+  2.2 {o X o o o o o o} {o [X] o o o o o...}
+  2.3 {o o X o o o o o} {o o [X] o o o o...}
+  2.4 {o o o X o o o o} {o o o [X] o o o...}
+  2.5 {o o o o X o o o} {o o o o [X] o o...}
+  2.6 {o o o o o X o o} {o o o o o [X] o...}
+  2.7 {o o o o o o X o} {o o o o o o [X]...}
+  2.8 {o o o o o o o X} {...o o o o o o [X]}
+
+  2.9  {o o o o o o o X o}       {...o o o o o [X] o}
+  2.10 {o o o o o o o X o o}     {...o o o o [X] o o}
+  2.11 {o o o o o o o X o o o}   {...o o o [X] o o o}
+  2.12 {o o o o o o o X o o o o} {...o o o [X] o o o...}
+
+
+  3.1 {X o o o o o o o o} {[X] o o o o o o...}
+  3.2 {o X o o o o o o o} {o [X] o o o o o...}
+  3.3 {o o X o o o o o o} {o o [X] o o o o...}
+  3.4 {o o o X o o o o o} {o o o [X] o o o...}
+
+  3.5 {o o o o o o o X o o o o} {...o o o [X] o o o...}
+  3.6 {o o o o o o o o X o o o} {...o o o [X] o o o}
+  3.7 {o o o o o o o o o X o o} {...o o o o [X] o o}
+  3.8 {o o o o o o o o o o X o} {...o o o o o [X] o}
+  3.9 {o o o o o o o o o o o X} {...o o o o o o [X]}
+
+  4.1 {X o o o o o X o o} {[X] o o o o o [X]...}
+  4.2 {o o o o o o o X o o o o o X o} {...[X] o o o o o [X]...}
+  4.3 {o o o o o o o o X o o o o o X} {...[X] o o o o o [X]}
+
+  5.1 {X o o o o X o o o} {[X] o o o o [X] o...}
+  5.2 {o o o o o o o X o o o o X o o} {...[X] o o o o [X] o...}
+  5.3 {o o o o o o o o X o o o o X o} {...[X] o o o o [X] o}
+  5.4 {o o o o o o o o o X o o o o X} {...o [X] o o o o [X]}
+
+  6.1 {X o o o X o o o} {[X] o o o [X] o o...}
+  6.2 {o X o o o X o o o} {o [X] o o o [X] o...}
+  6.3 {o o o o o o o X o o o X o o} {...o [X] o o o [X] o...}
+  6.4 {o o o o o o o o X o o o X o} {...o [X] o o o [X] o}
+  6.5 {o o o o o o o o o X o o o X} {...o o [X] o o o [X]}
+
+  7.1 {X o o X o o o o o} {[X] o o [X] o o o...}
+  7.2 {o X o o X o o o o} {o [X] o o [X] o o...}
+  7.3 {o o o o o o o X o o X o o o} {...o [X] o o [X] o o...}
+  7.4 {o o o o o o o o X o o X o o} {...o [X] o o [X] o o}
+  7.5 {o o o o o o o o o X o o X o} {...o o [X] o o [X] o}
+  7.6 {o o o o o o o o o o X o o X} {...o o o [X] o o [X]}
+
+  8.1 {o o o o o o o o o X o o o o o o o o o o o o o o o o X X X o o o}
+      {...o o [X] [X] [X] o o...}
+  8.2 {o o o o o o o. o o X o o o o o o o o o o o o o o o o X X X o o o} 
+      {...o o [X] o o o o...}
+  8.3 {o o o o X o o o o o o o o o o o o o o o o o o o o o X X X o o o} 
+      {o o o o [X] o o...}
+} {
+  do_snippet_test 1.$tn $doc X $res
+}
+
+if {[detail_is_full]} {
+  foreach {tn doc res} {
+    1.1 {X Y o o o o o} {[X Y] o o o o o}
+    1.2 {o X Y o o o o} {o [X Y] o o o o}
+    1.3 {o o X Y o o o} {o o [X Y] o o o}
+    1.4 {o o o X Y o o} {o o o [X Y] o o}
+    1.5 {o o o o X Y o} {o o o o [X Y] o}
+    1.6 {o o o o o X Y} {o o o o o [X Y]}
+
+    2.1 {X Y o o o o o o} {[X Y] o o o o o...}
+    2.2 {o X Y o o o o o} {o [X Y] o o o o...}
+    2.3 {o o X Y o o o o} {o o [X Y] o o o...}
+    2.4 {o o o o o o o X Y o o o} {...o o [X Y] o o o}
+    2.5 {o o o o o o o o X Y o o} {...o o o [X Y] o o}
+    2.6 {o o o o o o o o o X Y o} {...o o o o [X Y] o}
+    2.7 {o o o o o o o o o o X Y} {...o o o o o [X Y]}
+
+    3.1 {X Y o o o o o o o} {[X Y] o o o o o...}
+    3.2 {o X Y o o o o o o} {o [X Y] o o o o...}
+    3.3 {o o X Y o o o o o} {o o [X Y] o o o...}
+    3.4 {o o o o o o o X Y o o o o} {...o o [X Y] o o o...}
+    3.5 {o o o o o o o o X Y o o o} {...o o [X Y] o o o}
+    3.6 {o o o o o o o o o X Y o o} {...o o o [X Y] o o}
+    3.7 {o o o o o o o o o o X Y o} {...o o o o [X Y] o}
+    3.8 {o o o o o o o o o o o X Y} {...o o o o o [X Y]}
+  } {
+    do_snippet_test 2.$tn $doc "X + Y" $res
+  }
+}
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a, b);
+  INSERT INTO x1 VALUES('xyz', '1 2 3 4 5 6 7 8 9 10 11 12 13');
+  SELECT snippet(x1, 1, '[', ']', '...', 5) FROM x1('xyz');
+} {
+  {1 2 3 4 5...}
+}
+
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE p1 USING fts5(a, b);
+  INSERT INTO p1 VALUES(
+    'x a a a a a a a a a a',
+    'a a a a a a a a a a a a a a a a a a a x'
+  );
+}
+do_execsql_test 5.1 {
+  SELECT snippet(p1, 0, '[', ']', '...', 6) FROM p1('x');
+} {{[x] a a a a a...}}
+
+do_execsql_test 5.2 {
+  SELECT snippet(p1, 0, '[', ']', NULL, 6) FROM p1('x');
+} {{[x] a a a a a}}
+do_execsql_test 5.3 {
+  SELECT snippet(p1, 0, NULL, ']', '...', 6) FROM p1('x');
+} {{x] a a a a a...}}
+do_execsql_test 5.4 {
+  SELECT snippet(p1, 0, '[', NULL, '...', 6) FROM p1('x');
+} {{[x a a a a a...}}
+
+} ;# foreach_detail_mode 
+
+finish_test

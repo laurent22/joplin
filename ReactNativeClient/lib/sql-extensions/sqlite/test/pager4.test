@@ -1,0 +1,99 @@
+# 2013-12-06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests for the SQLITE_READONLY_DBMOVED error condition: the database file
+# is unlinked or renamed out from under SQLite.
+#
+
+if {$tcl_platform(platform)!="unix"} return
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+if {[permutation]=="inmemory_journal"} {
+  finish_test
+  return
+}
+
+# Create a database file for testing
+#
+do_execsql_test pager4-1.1 {
+  CREATE TABLE t1(a,b,c);
+  INSERT INTO t1 VALUES(673,'stone','philips');
+  SELECT * FROM t1;
+} {673 stone philips}
+
+# After renaming the database file while it is open, one can still
+# read from the database, but writing returns a READONLY error.
+#
+file delete -force test-xyz.db
+file rename test.db test-xyz.db
+do_catchsql_test pager4-1.2 {
+  SELECT * FROM t1;
+} {0 {673 stone philips}}
+do_catchsql_test pager4-1.3 {
+  UPDATE t1 SET a=537;
+} {1 {attempt to write a readonly database}}
+
+# Creating a different database file with the same name of the original
+# is detected and still leaves the database read-only.
+#
+sqlite3 db2 test.db
+db2 eval {CREATE TABLE t2(x,y,z)}
+do_catchsql_test pager4-1.4 {
+  UPDATE t1 SET a=948;
+} {1 {attempt to write a readonly database}}
+
+# Changing the name back clears the READONLY error
+#
+db2 close
+file delete -force test.db
+file rename test-xyz.db test.db
+do_catchsql_test pager4-1.5 {
+  SELECT * FROM t1;
+} {0 {673 stone philips}}
+do_catchsql_test pager4-1.6 {
+  UPDATE t1 SET a=537;
+  SELECT * FROM t1;
+} {0 {537 stone philips}}
+
+# We can write to a renamed database if journal_mode=OFF or
+# journal_mode=MEMORY.
+#
+file rename test.db test-xyz.db
+do_catchsql_test pager4-1.7 {
+  PRAGMA journal_mode=OFF;
+  UPDATE t1 SET a=107;
+  SELECT * FROM t1;
+} {0 {off 107 stone philips}}
+do_catchsql_test pager4-1.8 {
+  PRAGMA journal_mode=MEMORY;
+  UPDATE t1 SET b='magpie';
+  SELECT * FROM t1;
+} {0 {memory 107 magpie philips}}
+
+# Any other journal mode gives a READONLY error
+#
+do_catchsql_test pager4-1.9 {
+  PRAGMA journal_mode=DELETE;
+  UPDATE t1 SET c='jaguar';
+} {1 {attempt to write a readonly database}}
+do_catchsql_test pager4-1.10 {
+  PRAGMA journal_mode=TRUNCATE;
+  UPDATE t1 SET c='jaguar';
+} {1 {attempt to write a readonly database}}
+do_catchsql_test pager4-1.11 {
+  PRAGMA journal_mode=PERSIST;
+  UPDATE t1 SET c='jaguar';
+} {1 {attempt to write a readonly database}}
+
+
+finish_test

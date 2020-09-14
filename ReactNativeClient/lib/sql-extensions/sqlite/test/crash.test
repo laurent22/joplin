@@ -1,0 +1,411 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# The focus of this file is testing the ability of the database to
+# uses its rollback journal to recover intact (no database corruption)
+# from a power failure during the middle of a COMMIT.  The OS interface
+# modules are overloaded using the modified I/O routines found in test6.c.  
+# These routines allow us to simulate the kind of file damage that 
+# occurs after a power failure.
+#
+# $Id: crash.test,v 1.27 2008/01/08 15:18:52 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !crashtest {
+  finish_test
+  return
+}
+
+set repeats 100
+#set repeats 10
+
+# The following procedure computes a "signature" for table "abc".  If
+# abc changes in any way, the signature should change.  
+proc signature {} {
+  return [db eval {SELECT count(*), md5sum(a), md5sum(b), md5sum(c) FROM abc}]
+}
+proc signature2 {} {
+  return [db eval {SELECT count(*), md5sum(a), md5sum(b), md5sum(c) FROM abc2}]
+}
+
+#--------------------------------------------------------------------------
+# Simple crash test:
+#
+# crash-1.1: Create a database with a table with two rows.
+# crash-1.2: Run a 'DELETE FROM abc WHERE a = 1' that crashes during
+#            the first journal-sync.
+# crash-1.3: Ensure the database is in the same state as after crash-1.1.
+# crash-1.4: Run a 'DELETE FROM abc WHERE a = 1' that crashes during
+#            the first database-sync.
+# crash-1.5: Ensure the database is in the same state as after crash-1.1.
+# crash-1.6: Run a 'DELETE FROM abc WHERE a = 1' that crashes during
+#            the second journal-sync.
+# crash-1.7: Ensure the database is in the same state as after crash-1.1.
+#
+# Tests 1.8 through 1.11 test for crashes on the third journal sync and
+# second database sync.  Neither of these is required in such a small test
+# case, so these tests are just to verify that the test infrastructure
+# operates as expected.
+#
+do_test crash-1.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(1, 2, 3);
+    INSERT INTO abc VALUES(4, 5, 6);
+  }
+  set ::sig [signature]
+  expr 0
+} {0}
+for {set i 0} {$i<10} {incr i} {
+  set seed [expr {int(abs(rand()*10000))}]
+  do_test crash-1.2.$i {
+    crashsql -delay 1 -file test.db-journal -seed $seed {
+      DELETE FROM abc WHERE a = 1;
+    }
+  } {1 {child process exited abnormally}}
+  do_test crash-1.3.$i {
+    signature
+  } $::sig
+}
+do_test crash-1.4 {
+  crashsql -delay 1 -file test.db {
+    DELETE FROM abc WHERE a = 1;
+  }
+} {1 {child process exited abnormally}}
+do_test crash-1.5 {
+  signature
+} $::sig
+do_test crash-1.6 {
+  crashsql -delay 2 -file test.db-journal {
+    DELETE FROM abc WHERE a = 1;
+  }
+} {1 {child process exited abnormally}}
+do_test crash-1.7 {
+  catchsql {
+    SELECT * FROM abc;
+  }
+} {0 {1 2 3 4 5 6}}
+
+do_test crash-1.8 {
+  crashsql -delay 3 -file test.db-journal {
+    DELETE FROM abc WHERE a = 1;
+  }
+} {0 {}}
+do_test crash-1.9 {
+  catchsql {
+    SELECT * FROM abc;
+  }
+} {0 {4 5 6}}
+do_test crash-1.10 {
+  crashsql -delay 2 -file test.db {
+    DELETE FROM abc WHERE a = 4;
+  }
+} {0 {}}
+do_test crash-1.11 {
+  catchsql {
+    SELECT * FROM abc;
+  }
+} {0 {}}
+
+#--------------------------------------------------------------------------
+# The following tests test recovery when both the database file and the
+# journal file contain corrupt data. This can happen after pages are
+# written to the database file before a transaction is committed due to
+# cache-pressure.
+#
+# crash-2.1: Insert 18 pages of data into the database.
+# crash-2.2: Check the database file size looks ok.
+# crash-2.3: Delete 15 or so pages (with a 10 page page-cache), then crash.
+# crash-2.4: Ensure the database is in the same state as after crash-2.1.
+#
+# Test cases crash-2.5 and crash-2.6 check that the database is OK if the 
+# crash occurs during the main database file sync. But this isn't really
+# different from the crash-1.* cases.
+#
+do_test crash-2.1 {
+  execsql { BEGIN }
+  for {set n 0} {$n < 1000} {incr n} {
+    execsql "INSERT INTO abc VALUES($n, [expr 2*$n], [expr 3*$n])"
+  }
+  execsql { COMMIT }
+  set ::sig [signature]
+  execsql { SELECT sum(a), sum(b), sum(c) from abc }
+} {499500 999000 1498500}
+do_test crash-2.2 {
+  expr ([file size test.db] / 1024)>16
+} {1}
+do_test crash-2.3 {
+  crashsql -delay 2 -file test.db-journal {
+    DELETE FROM abc WHERE a < 800;
+  }
+} {1 {child process exited abnormally}}
+do_test crash-2.4 {
+  signature
+} $sig
+do_test crash-2.5 {
+  crashsql -delay 1 -file test.db {
+    DELETE FROM abc WHERE a<800;
+  }
+} {1 {child process exited abnormally}}
+do_test crash-2.6 {
+  signature
+} $sig
+
+#--------------------------------------------------------------------------
+# The crash-3.* test cases are essentially the same test as test case
+# crash-2.*, but with a more complicated data set. 
+#
+# The test is repeated a few times with different seeds for the random
+# number generator in the crashing executable. Because there is no way to
+# seed the random number generator directly, some SQL is added to the test
+# case to 'use up' a different quantity random numbers before the test SQL
+# is executed.
+#
+
+# Make sure the file is much bigger than the pager-cache (10 pages). This
+# ensures that cache-spills happen regularly.
+do_test crash-3.0 {
+  execsql {
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+  }
+  expr ([file size test.db] / 1024) > 450
+} {1}
+for {set i 1} {$i < $repeats} {incr i} {
+  set sig [signature]
+  do_test crash-3.$i.1 {
+     set seed [expr {int(abs(rand()*10000))}]
+     crashsql -delay [expr $i%5 + 1] -file test.db-journal -seed $seed "
+       BEGIN;
+       SELECT random() FROM abc LIMIT $i;
+       INSERT INTO abc VALUES(randstr(10,10), 0, 0);
+       DELETE FROM abc WHERE random()%10!=0;
+       COMMIT;
+     "
+  } {1 {child process exited abnormally}}
+  do_test crash-3.$i.2 {
+    signature
+  } $sig
+} 
+
+#--------------------------------------------------------------------------
+# The following test cases - crash-4.* - test the correct recovery of the
+# database when a crash occurs during a multi-file transaction.
+#
+# crash-4.1.*: Test recovery when crash occurs during sync() of the 
+#              main database journal file.
+# crash-4.2.*: Test recovery when crash occurs during sync() of an 
+#              attached database journal file.
+# crash-4.3.*: Test recovery when crash occurs during sync() of the master
+#              journal file. 
+#
+ifcapable attach {
+  do_test crash-4.0 {
+    forcedelete test2.db
+    forcedelete test2.db-journal
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      PRAGMA aux.default_cache_size = 10;
+      CREATE TABLE aux.abc2 AS SELECT 2*a as a, 2*b as b, 2*c as c FROM abc;
+    }
+    expr ([file size test2.db] / 1024) > 450
+  } {1}
+  
+  set fin 0
+  for {set i 1} {$i<$repeats} {incr i} {
+    set seed [expr {int(abs(rand()*10000))}]
+    set sig [signature]
+    set sig2 [signature2]
+    do_test crash-4.1.$i.1 {
+       set c [crashsql -delay $i -file test.db-journal -seed $::seed "
+         ATTACH 'test2.db' AS aux;
+         BEGIN;
+         SELECT randstr($i,$i) FROM abc LIMIT $i;
+         INSERT INTO abc VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc WHERE random()%10!=0;
+         INSERT INTO abc2 VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc2 WHERE random()%10!=0;
+         COMMIT;
+       "]
+       if { $c == {0 {}} } {
+         set ::fin 1
+         set c {1 {child process exited abnormally}}
+       }
+       set c
+    } {1 {child process exited abnormally}}
+    if {$::fin} break
+    do_test crash-4.1.$i.2 {
+      signature
+    } $sig
+    do_test crash-4.1.$i.3 {
+      signature2
+    } $sig2
+  } 
+  set i 0
+  set fin 0
+  while {[incr i]} {
+    set seed [expr {int(abs(rand()*10000))}]
+    set sig [signature]
+    set sig2 [signature2]
+    set ::fin 0
+    do_test crash-4.2.$i.1 {
+       set c [crashsql -delay $i -file test2.db-journal -seed $::seed "
+         ATTACH 'test2.db' AS aux;
+         BEGIN;
+         SELECT randstr($i,$i) FROM abc LIMIT $i;
+         INSERT INTO abc VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc WHERE random()%10!=0;
+         INSERT INTO abc2 VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc2 WHERE random()%10!=0;
+         COMMIT;
+       "]
+       if { $c == {0 {}} } {
+         set ::fin 1
+         set c {1 {child process exited abnormally}}
+       }
+       set c
+    } {1 {child process exited abnormally}}
+    if { $::fin } break
+    do_test crash-4.2.$i.2 {
+      signature
+    } $sig
+    do_test crash-4.2.$i.3 {
+      signature2
+    } $sig2
+  } 
+  for {set i 1} {$i < 5} {incr i} {
+    set sig [signature]
+    set sig2 [signature2]
+    do_test crash-4.3.$i.1 {
+       crashsql -delay 1 -file test.db-mj* "
+         ATTACH 'test2.db' AS aux;
+         BEGIN;
+         SELECT random() FROM abc LIMIT $i;
+         INSERT INTO abc VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc WHERE random()%10!=0;
+         INSERT INTO abc2 VALUES(randstr(10,10), 0, 0);
+         DELETE FROM abc2 WHERE random()%10!=0;
+         COMMIT;
+       "
+    } {1 {child process exited abnormally}}
+    do_test crash-4.3.$i.2 {
+      signature
+    } $sig
+    do_test crash-4.3.$i.3 {
+      signature2
+    } $sig2
+  }
+}
+
+#--------------------------------------------------------------------------
+# The following test cases - crash-5.* - exposes a bug that existed in the
+# sqlite3pager_movepage() API used by auto-vacuum databases.
+# database when a crash occurs during a multi-file transaction. See comments
+# in test crash-5.3 for details.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_test crash-5.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);                          -- Root page 3
+    INSERT INTO abc VALUES(randstr(1500,1500), 0, 0);   -- Overflow page 4
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+    INSERT INTO abc SELECT * FROM abc;
+  }
+} {}
+do_test crash-5.2 {
+  expr [file size test.db] / 1024
+} [expr [string match [execsql {pragma auto_vacuum}] 1] ? 11 : 10]
+set sig [signature]
+do_test crash-5.3 {
+# The SQL below is used to expose a bug that existed in
+# sqlite3pager_movepage() during development of the auto-vacuum feature. It
+# functions as follows:
+# 
+# 1: Begin a transaction.
+# 2: Put page 4 on the free-list (was the overflow page for the row deleted).
+# 3: Write data to page 4 (it becomes the overflow page for the row inserted).
+#    The old page 4 data has been written to the journal file, but the
+#    journal file has not been sync()hronized.
+# 4: Create a table, which calls sqlite3pager_movepage() to move page 4
+#    to the end of the database (page 12) to make room for the new root-page.
+# 5: Put pressure on the pager-cache. This results in page 4 being written
+#    to the database file to make space in the cache to load a new page. The
+#    bug was that page 4 was written to the database file before the journal
+#    is sync()hronized.
+# 6: Commit. A crash occurs during the sync of the journal file.
+#
+# End result: Before the bug was fixed, data has been written to page 4 of the
+# database file and the journal file does not contain trustworthy rollback
+# data for this page.
+#
+  crashsql -delay 1 -file test.db-journal {
+    BEGIN;                                             -- 1
+    DELETE FROM abc WHERE oid = 1;                     -- 2
+    INSERT INTO abc VALUES(randstr(1500,1500), 0, 0);  -- 3
+    CREATE TABLE abc2(a, b, c);                        -- 4
+    SELECT * FROM abc;                                 -- 5
+    COMMIT;                                            -- 6
+  }
+} {1 {child process exited abnormally}}
+integrity_check crash-5.4
+do_test crash-5.5 {
+  signature
+} $sig
+
+#--------------------------------------------------------------------------
+# The following test cases - crash-6.* - test that a DROP TABLE operation
+# is correctly rolled back in the event of a crash while the database file
+# is being written. This is mainly to test that all pages are written to the
+# journal file before truncation in an auto-vacuum database.
+#
+do_test crash-6.1 {
+  crashsql -delay 1 -file test.db {
+    DROP TABLE abc;
+  }
+} {1 {child process exited abnormally}}
+do_test crash-6.2 {
+  signature
+} $sig
+
+#--------------------------------------------------------------------------
+# These test cases test the case where the master journal file name is 
+# corrupted slightly so that the corruption has to be detected by the
+# checksum.
+do_test crash-7.1 {
+  crashsql -delay 1 -file test.db {
+    ATTACH 'test2.db' AS aux;
+    BEGIN;
+    INSERT INTO abc VALUES(randstr(1500,1500), 0, 0);
+    INSERT INTO abc2 VALUES(randstr(1500,1500), 0, 0);
+    COMMIT;
+  }
+
+  # Change the checksum value for the master journal name.
+  set f [open test.db-journal a]
+  fconfigure $f -encoding binary
+  seek $f [expr [file size test.db-journal] - 12]
+  puts -nonewline $f "\00\00\00\00"
+  close $f
+} {}
+do_test crash-7.2 {
+  signature
+} $sig
+
+finish_test

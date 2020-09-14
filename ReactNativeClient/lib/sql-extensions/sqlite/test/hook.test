@@ -1,0 +1,960 @@
+# 2004 Jan 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for TCL interface to the
+# SQLite library. 
+#
+# The focus of the tests in this file is the  following interface:
+#
+#      sqlite_commit_hook    (tests hook-1..hook-3 inclusive)
+#      sqlite_update_hook    (tests hook-4-*)
+#      sqlite_rollback_hook  (tests hook-5.*)
+#
+# $Id: hook.test,v 1.15 2009/04/07 14:14:23 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix hook
+
+do_test hook-1.2 {
+  db commit_hook
+} {}
+
+
+do_test hook-3.1 {
+  set commit_cnt 0
+  proc commit_hook {} {
+    incr ::commit_cnt
+    return 0
+  }
+  db commit_hook ::commit_hook
+  db commit_hook
+} {::commit_hook}
+do_test hook-3.2 {
+  set commit_cnt
+} {0}
+do_test hook-3.3 {
+  execsql {
+    CREATE TABLE t2(a,b);
+  }
+  set commit_cnt
+} {1}
+do_test hook-3.4 {
+  execsql {
+    INSERT INTO t2 VALUES(1,2);
+    INSERT INTO t2 SELECT a+1, b+1 FROM t2;
+    INSERT INTO t2 SELECT a+2, b+2 FROM t2;
+  }
+  set commit_cnt
+} {4}
+do_test hook-3.5 {
+  set commit_cnt {}
+  proc commit_hook {} {
+    set ::commit_cnt [execsql {SELECT * FROM t2}]
+    return 0
+  }
+  execsql {
+    INSERT INTO t2 VALUES(5,6);
+  }
+  set commit_cnt
+} {1 2 2 3 3 4 4 5 5 6}
+do_test hook-3.6 {
+  set commit_cnt {}
+  proc commit_hook {} {
+    set ::commit_cnt [execsql {SELECT * FROM t2}] 
+    return 1
+  }
+  catchsql {
+    INSERT INTO t2 VALUES(6,7);
+  }
+} {1 {constraint failed}}
+verify_ex_errcode hook-3.6b SQLITE_CONSTRAINT_COMMITHOOK
+do_test hook-3.7 {
+  set ::commit_cnt
+} {1 2 2 3 3 4 4 5 5 6 6 7}
+do_test hook-3.8 {
+  execsql {SELECT * FROM t2}
+} {1 2 2 3 3 4 4 5 5 6}
+
+# Test turnning off the commit hook
+#
+do_test hook-3.9 {
+  db commit_hook {}
+  set ::commit_cnt {}
+  execsql {
+    INSERT INTO t2 VALUES(7,8);
+  }
+  set ::commit_cnt
+} {}
+
+# Ticket #3564.
+#
+do_test hook-3.10 {
+  forcedelete test2.db test2.db-journal
+  sqlite3 db2 test2.db
+  proc commit_hook {} {
+    set y [db2 one {SELECT y FROM t3 WHERE y>10}]
+    return [expr {$y>10}]
+  }
+  db2 eval {CREATE TABLE t3(x,y)}
+  db2 commit_hook commit_hook
+  catchsql {INSERT INTO t3 VALUES(1,2)} db2
+  catchsql {INSERT INTO t3 VALUES(11,12)} db2
+  catchsql {INSERT INTO t3 VALUES(3,4)} db2
+  db2 eval {
+    SELECT * FROM t3 ORDER BY x;
+  }
+} {1 2 3 4}
+db2 close
+
+
+#----------------------------------------------------------------------------
+# Tests for the update-hook.
+#
+# 4.1.* - Very simple tests. Test that the update hook is invoked correctly 
+#         for INSERT, DELETE and UPDATE statements, including DELETE 
+#         statements with no WHERE clause.
+# 4.2.* - Check that the update-hook is invoked for rows modified by trigger
+#         bodies. Also that the database name is correctly reported when 
+#         an attached database is modified.
+# 4.3.* - Do some sorting, grouping, compound queries, population and 
+#         depopulation of indices, to make sure the update-hook is not 
+#         invoked incorrectly.
+#
+# EVIDENCE-OF: R-21999-45122 The sqlite3_update_hook() interface
+# registers a callback function with the database connection identified
+# by the first argument to be invoked whenever a row is updated,
+# inserted or deleted in a rowid table.
+
+# Simple tests
+do_test hook-4.1.1a {
+  catchsql {
+    DROP TABLE t1;
+  }
+  unset -nocomplain ::update_hook
+  set ::update_hook {}
+  db update_hook [list lappend ::update_hook]
+  #
+  # EVIDENCE-OF: R-24531-54682 The update hook is not invoked when
+  # internal system tables are modified (i.e. sqlite_sequence).
+  #
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t1w(a INT PRIMARY KEY, b) WITHOUT ROWID;
+  }
+  set ::update_hook
+} {}
+do_test hook-4.1.1b {
+  execsql {
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(3, 'three');
+    INSERT INTO t1w SELECT * FROM t1;
+  }
+} {}
+
+# EVIDENCE-OF: R-15506-57666 The second callback argument is one of
+# SQLITE_INSERT, SQLITE_DELETE, or SQLITE_UPDATE, depending on the
+# operation that caused the callback to be invoked.
+#
+# EVIDENCE-OF: R-29213-61195 The third and fourth arguments to the
+# callback contain pointers to the database and table name containing
+# the affected row.
+#
+# EVIDENCE-OF: R-30809-57812 The final callback parameter is the rowid
+# of the row.
+#
+do_test hook-4.1.2 {
+  set ::update_hook {}
+  execsql {
+    INSERT INTO t1 VALUES(4, 'four');
+    DELETE FROM t1 WHERE b = 'two';
+    UPDATE t1 SET b = '' WHERE a = 1 OR a = 3;
+    DELETE FROM t1 WHERE 1; -- Avoid the truncate optimization (for now)
+  }
+  set ::update_hook
+} [list \
+    INSERT main t1 4 \
+    DELETE main t1 2 \
+    UPDATE main t1 1 \
+    UPDATE main t1 3 \
+    DELETE main t1 1 \
+    DELETE main t1 3 \
+    DELETE main t1 4 \
+]
+
+# EVIDENCE-OF: R-61808-14344 The sqlite3_update_hook() interface does
+# not fire callbacks for changes to a WITHOUT ROWID table.
+#
+# EVIDENCE-OF: R-33257-44249 The update hook is not invoked when WITHOUT
+# ROWID tables are modified.
+#
+do_test hook-4.1.2w {
+  set ::update_hook {}
+  execsql {
+    INSERT INTO t1w VALUES(4, 'four');
+    DELETE FROM t1w WHERE b = 'two';
+    UPDATE t1w SET b = '' WHERE a = 1 OR a = 3;
+    DELETE FROM t1w WHERE 1; -- Avoid the truncate optimization (for now)
+  }
+  set ::update_hook
+} {}
+
+ifcapable trigger {
+  # Update hook is not invoked for changes to sqlite_master
+  #
+  do_test hook-4.1.3 {
+    set ::update_hook {}
+    execsql {
+      CREATE TRIGGER r1 AFTER INSERT ON t1 BEGIN SELECT RAISE(IGNORE); END;
+    }
+    set ::update_hook
+  } {}
+  do_test hook-4.1.4 {
+    set ::update_hook {}
+    execsql {
+      DROP TRIGGER r1;
+    }
+    set ::update_hook
+  } {}
+  
+  set ::update_hook {}
+  do_test hook-4.2.1 {
+    catchsql {
+      DROP TABLE t2;
+    }
+    execsql {
+      CREATE TABLE t2(c INTEGER PRIMARY KEY, d);
+      CREATE TRIGGER t1_trigger AFTER INSERT ON t1 BEGIN
+        INSERT INTO t2 VALUES(new.a, new.b);
+        UPDATE t2 SET d = d || ' via trigger' WHERE new.a = c;
+        DELETE FROM t2 WHERE new.a = c;
+      END;
+    }
+  } {}
+  do_test hook-4.2.2 {
+    execsql {
+      INSERT INTO t1 VALUES(1, 'one');
+      INSERT INTO t1 VALUES(2, 'two');
+    }
+    set ::update_hook
+  } [list \
+      INSERT main t1 1 \
+      INSERT main t2 1 \
+      UPDATE main t2 1 \
+      DELETE main t2 1 \
+      INSERT main t1 2 \
+      INSERT main t2 2 \
+      UPDATE main t2 2 \
+      DELETE main t2 2 \
+  ]
+} else {
+  execsql {
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+  }
+}
+
+# Update-hook + ATTACH
+set ::update_hook {}
+ifcapable attach {
+  do_test hook-4.2.3 {
+    forcedelete test2.db
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      CREATE TABLE aux.t3(a INTEGER PRIMARY KEY, b);
+      INSERT INTO aux.t3 SELECT * FROM t1;
+      UPDATE t3 SET b = 'two or so' WHERE a = 2;
+      DELETE FROM t3 WHERE 1; -- Avoid the truncate optimization (for now)
+    }
+    set ::update_hook
+  } [list \
+      INSERT aux t3 1 \
+      INSERT aux t3 2 \
+      UPDATE aux t3 2 \
+      DELETE aux t3 1 \
+      DELETE aux t3 2 \
+  ]
+}
+
+ifcapable trigger {
+  execsql {
+    DROP TRIGGER t1_trigger;
+  }
+}
+
+# Test that other vdbe operations involving btree structures do not 
+# incorrectly invoke the update-hook.
+set ::update_hook {}
+do_test hook-4.3.1 {
+  execsql {
+    CREATE INDEX t1_i ON t1(b);
+    INSERT INTO t1 VALUES(3, 'three');
+    UPDATE t1 SET b = '';
+    DELETE FROM t1 WHERE a > 1;
+  }
+  set ::update_hook
+} [list \
+    INSERT main t1 3 \
+    UPDATE main t1 1 \
+    UPDATE main t1 2 \
+    UPDATE main t1 3 \
+    DELETE main t1 2 \
+    DELETE main t1 3 \
+]
+set ::update_hook {}
+ifcapable compound&&attach {
+  do_test hook-4.3.2 {
+    execsql {
+      SELECT * FROM t1 UNION SELECT * FROM t3;
+      SELECT * FROM t1 UNION ALL SELECT * FROM t3;
+      SELECT * FROM t1 INTERSECT SELECT * FROM t3;
+      SELECT * FROM t1 EXCEPT SELECT * FROM t3;
+      SELECT * FROM t1 ORDER BY b;
+      SELECT * FROM t1 GROUP BY b;
+    }
+    set ::update_hook
+  } [list]
+}
+
+do_test hook-4.4 {
+  execsql {
+    CREATE TABLE t4(a UNIQUE, b);
+    INSERT INTO t4 VALUES(1, 'a');
+    INSERT INTO t4 VALUES(2, 'b');
+  }
+  set ::update_hook [list]
+  execsql {
+    REPLACE INTO t4 VALUES(1, 'c');
+  }
+  set ::update_hook
+} [list INSERT main t4 3 ]
+do_execsql_test hook-4.4.1 {
+  SELECT * FROM t4 ORDER BY a;
+} {1 c 2 b}
+do_test hook-4.4.2 {
+  set ::update_hook [list]
+  execsql {
+    PRAGMA recursive_triggers = on;
+    REPLACE INTO t4 VALUES(1, 'd');
+  }
+  set ::update_hook
+} [list INSERT main t4 4 ]
+do_execsql_test hook-4.4.3 {
+  SELECT * FROM t4 ORDER BY a;
+} {1 d 2 b}
+
+db update_hook {}
+#
+#----------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------
+# Test the rollback-hook. The rollback-hook is a bit more complicated than
+# either the commit or update hooks because a rollback can happen 
+# explicitly (an sql ROLLBACK statement) or implicitly (a constraint or 
+# error condition).
+#
+# hook-5.1.* - Test explicit rollbacks.
+# hook-5.2.* - Test implicit rollbacks caused by constraint failure.
+#
+# hook-5.3.* - Test implicit rollbacks caused by IO errors.
+# hook-5.4.* - Test implicit rollbacks caused by malloc() failure.
+# hook-5.5.* - Test hot-journal rollbacks. Or should the rollback hook 
+#              not be called for these?
+#
+
+do_test hook-5.0 {
+  # Configure the rollback hook to increment global variable 
+  # $::rollback_hook each time it is invoked.
+  set ::rollback_hook 0
+  db rollback_hook [list incr ::rollback_hook]
+} {}
+
+# Test explicit rollbacks. Not much can really go wrong here.
+#
+do_test hook-5.1.1 {
+  set ::rollback_hook 0
+  execsql {
+    BEGIN;
+    ROLLBACK;
+  }
+  set ::rollback_hook
+} {1}
+
+# Test implicit rollbacks caused by constraints.
+#
+do_test hook-5.2.1 {
+  set ::rollback_hook 0
+  catchsql {
+    DROP TABLE t1;
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES('one', 'I');
+    INSERT INTO t1 VALUES('one', 'I');
+  }
+  set ::rollback_hook
+} {1}
+do_test hook-5.2.2 {
+  # Check that the INSERT transaction above really was rolled back.
+  execsql {
+    SELECT count(*) FROM t1;
+  }
+} {1}
+
+#
+# End rollback-hook testing.
+#----------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------
+# Test that if a commit-hook returns non-zero (causing a rollback), the
+# rollback-hook is invoked.
+#
+proc commit_hook {} {
+  lappend ::hooks COMMIT
+  return 1
+}
+proc rollback_hook {} {
+  lappend ::hooks ROLLBACK
+}
+do_test hook-6.1 {
+  set ::hooks [list]
+  db commit_hook commit_hook
+  db rollback_hook rollback_hook
+  catchsql {
+    BEGIN;
+      INSERT INTO t1 VALUES('two', 'II');
+    COMMIT;
+  }
+  execsql { SELECT * FROM t1 }
+} {one I}
+do_test hook-6.2 {
+  set ::hooks
+} {COMMIT ROLLBACK}
+unset ::hooks
+
+#----------------------------------------------------------------------------
+# The following tests - hook-7.* - test the pre-update hook.
+#
+ifcapable !preupdate {
+  finish_test
+  return
+}
+#
+# 7.1.1 - INSERT statement.
+# 7.1.2 - INSERT INTO ... SELECT statement.
+# 7.1.3 - REPLACE INTO ... (rowid conflict)
+# 7.1.4 - REPLACE INTO ... (other index conflicts)
+# 7.1.5 - REPLACE INTO ... (both rowid and other index conflicts)
+#
+# 7.2.1 - DELETE statement.
+# 7.2.2 - DELETE statement that uses the truncate optimization.
+#
+# 7.3.1 - UPDATE statement.
+# 7.3.2 - UPDATE statement that modifies the rowid.
+# 7.3.3 - UPDATE OR REPLACE ... (rowid conflict).
+# 7.3.4 - UPDATE OR REPLACE ... (other index conflicts)
+# 7.3.4 - UPDATE OR REPLACE ... (both rowid and other index conflicts)
+#
+# 7.4.1 - Test that the pre-update-hook is invoked only once if a row being
+#         deleted is removed by a BEFORE trigger.
+#
+# 7.4.2 - Test that the pre-update-hook is invoked if a BEFORE trigger 
+#         removes a row being updated. In this case the update hook should
+#         be invoked with SQLITE_INSERT as the opcode when inserting the
+#         new version of the row.
+#         
+# TODO: Short records (those created before a column is added to a table 
+#       using ALTER TABLE)
+#
+
+proc do_preupdate_test {tn sql x} {
+  set X [list]
+  foreach elem $x {lappend X $elem}
+  uplevel do_test $tn [list "
+    set ::preupdate \[list\]
+    execsql { $sql }
+    set ::preupdate
+  "] [list $X]
+}
+
+proc preupdate_hook {args} {
+  set type [lindex $args 0]
+  eval lappend ::preupdate $args
+  if {$type != "INSERT"} {
+    for {set i 0} {$i < [db preupdate count]} {incr i} {
+      lappend ::preupdate [db preupdate old $i]
+    }
+  }
+  if {$type != "DELETE"} {
+    for {set i 0} {$i < [db preupdate count]} {incr i} {
+      set rc [catch { db preupdate new $i } v]
+      lappend ::preupdate $v
+    }
+  }
+}
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+db preupdate hook preupdate_hook
+
+# Set up a schema to use for tests 7.1.* to 7.3.*.
+do_execsql_test 7.0 { 
+  CREATE TABLE t1(a, b); 
+  CREATE TABLE t2(x, y); 
+  CREATE TABLE t3(i, j, UNIQUE(i));
+
+  INSERT INTO t2 VALUES('a', 'b');
+  INSERT INTO t2 VALUES('c', 'd');
+
+  INSERT INTO t3 VALUES(4, 16);
+  INSERT INTO t3 VALUES(5, 25);
+  INSERT INTO t3 VALUES(6, 36);
+} 
+
+do_preupdate_test 7.1.1 {
+  INSERT INTO t1 VALUES('x', 'y')
+} {INSERT main t1 1 1  x y}
+
+# 7.1.2.1 does not use the xfer optimization. 7.1.2.2 does.
+do_preupdate_test 7.1.2.1 {
+  INSERT INTO t1 SELECT y, x FROM t2;
+} {INSERT main t1 2 2 b a   INSERT main t1 3 3 d c}
+do_preupdate_test 7.1.2.2 {
+  INSERT INTO t1 SELECT * FROM t2;
+} {INSERT main t1 4 4 a b   INSERT main t1 5 5 c d}
+
+do_preupdate_test 7.1.3 {
+  REPLACE INTO t1(rowid, a, b) VALUES(1, 1, 1);
+} {
+  DELETE main t1 1 1   x y
+  INSERT main t1 1 1   1 1
+}
+
+do_preupdate_test 7.1.4 {
+  REPLACE INTO t3 VALUES(4, NULL);
+} {
+  DELETE main t3 1 1   4 16
+  INSERT main t3 4 4   4 {}
+}
+
+do_preupdate_test 7.1.5 {
+  REPLACE INTO t3(rowid, i, j) VALUES(2, 6, NULL);
+} {
+  DELETE main t3 2 2  5 25
+  DELETE main t3 3 3  6 36
+  INSERT main t3 2 2  6 {}
+}
+
+do_execsql_test 7.2.0 { SELECT rowid FROM t1 } {1 2 3 4 5}
+
+do_preupdate_test 7.2.1 {
+  DELETE FROM t1 WHERE rowid = 3
+} {
+  DELETE main t1 3 3  d c
+}
+do_preupdate_test 7.2.2 {
+  DELETE FROM t1
+} {
+  DELETE main t1 1 1   1 1
+  DELETE main t1 2 2   b a
+  DELETE main t1 4 4   a b
+  DELETE main t1 5 5   c d
+}
+
+do_execsql_test 7.3.0 { 
+  DELETE FROM t1;
+  DELETE FROM t2;
+  DELETE FROM t3;
+
+  INSERT INTO t2 VALUES('a', 'b');
+  INSERT INTO t2 VALUES('c', 'd');
+
+  INSERT INTO t3 VALUES(4, 16);
+  INSERT INTO t3 VALUES(5, 25);
+  INSERT INTO t3 VALUES(6, 36);
+}
+
+do_preupdate_test 7.3.1 {
+  UPDATE t2 SET y = y||y;
+} {
+  UPDATE main t2 1 1   a b  a bb
+  UPDATE main t2 2 2   c d  c dd
+}
+
+do_preupdate_test 7.3.2 {
+  UPDATE t2 SET rowid = rowid-1;
+} {
+  UPDATE main t2 1 0   a bb  a bb
+  UPDATE main t2 2 1   c dd  c dd
+}
+
+do_preupdate_test 7.3.3 {
+  UPDATE OR REPLACE t2 SET rowid = 1 WHERE x = 'a'
+} {
+  DELETE main t2 1 1   c dd
+  UPDATE main t2 0 1   a bb  a bb
+}
+
+do_preupdate_test 7.3.4.1 {
+  UPDATE OR REPLACE t3 SET i = 5 WHERE i = 6
+} {
+  DELETE main t3 2 2   5 25
+  UPDATE main t3 3 3   6 36  5 36
+}
+
+do_execsql_test 7.3.4.2 {
+  INSERT INTO t3 VALUES(10, 100);
+  SELECT rowid, * FROM t3;
+} {1 4 16   3 5 36   4 10 100}
+
+do_preupdate_test 7.3.5 {
+  UPDATE OR REPLACE t3 SET rowid = 1, i = 5 WHERE j = 100;
+} {
+  DELETE main t3 1 1    4  16
+  DELETE main t3 3 3    5  36
+  UPDATE main t3 4 1   10 100  5 100
+}
+
+do_execsql_test 7.4.1.0 {
+  CREATE TABLE t4(a, b);
+  INSERT INTO t4 VALUES('a', 1);
+  INSERT INTO t4 VALUES('b', 2);
+  INSERT INTO t4 VALUES('c', 3);
+
+  CREATE TRIGGER t4t BEFORE DELETE ON t4 BEGIN
+    DELETE FROM t4 WHERE b = 1;
+  END;
+}
+
+do_preupdate_test 7.4.1.1 {
+  DELETE FROM t4 WHERE b = 3
+} {
+  DELETE main t4 1 1   a 1
+  DELETE main t4 3 3   c 3
+}
+
+do_execsql_test 7.4.1.2 {
+  INSERT INTO t4(rowid, a, b) VALUES(1, 'a', 1);
+  INSERT INTO t4(rowid, a, b) VALUES(3, 'c', 3);
+}
+do_preupdate_test 7.4.1.3 {
+  DELETE FROM t4 WHERE b = 1
+} {
+  DELETE main t4 1 1   a 1
+}
+
+do_execsql_test 7.4.2.0 {
+  CREATE TABLE t5(a, b);
+  INSERT INTO t5 VALUES('a', 1);
+  INSERT INTO t5 VALUES('b', 2);
+  INSERT INTO t5 VALUES('c', 3);
+
+  CREATE TRIGGER t5t BEFORE UPDATE ON t5 BEGIN
+    DELETE FROM t5 WHERE b = 1;
+  END;
+}
+do_preupdate_test 7.4.2.1 {
+  UPDATE t5 SET b = 4 WHERE a = 'c'
+} {
+  DELETE main t5 1 1   a 1
+  UPDATE main t5 3 3   c 3  c 4
+}
+
+do_execsql_test 7.4.2.2 {
+  INSERT INTO t5(rowid, a, b) VALUES(1, 'a', 1);
+}
+
+do_preupdate_test 7.4.2.3 {
+  UPDATE t5 SET b = 5 WHERE a = 'a'
+} {
+  DELETE main t5 1 1   a 1
+}
+
+do_execsql_test 7.5.1.0 {
+  CREATE TABLE t7(a, b);
+  INSERT INTO t7 VALUES('one', 'two');
+  INSERT INTO t7 VALUES('three', 'four');
+  ALTER TABLE t7 ADD COLUMN c DEFAULT NULL;
+}
+
+do_preupdate_test 7.5.1.1 {
+  DELETE FROM t7 WHERE a = 'one'
+} {
+  DELETE main t7 1 1   one two {}
+}
+
+do_preupdate_test 7.5.1.2 {
+  UPDATE t7 SET b = 'five'
+} {
+  UPDATE main t7 2 2   three four {}  three five {}
+}
+
+do_execsql_test 7.5.2.0 {
+  CREATE TABLE t8(a, b);
+  INSERT INTO t8 VALUES('one', 'two');
+  INSERT INTO t8 VALUES('three', 'four');
+  ALTER TABLE t8 ADD COLUMN c DEFAULT 'xxx';
+}
+
+if 0 {
+  # At time of writing, these two are broken. They demonstrate that the
+  # sqlite3_preupdate_old() method does not handle the case where ALTER TABLE
+  # has been used to add a column with a default value other than NULL.
+  #
+  do_preupdate_test 7.5.2.1 {
+    DELETE FROM t8 WHERE a = 'one'
+  } {
+    DELETE main t8 1 1   one two xxx
+  }
+  do_preupdate_test 7.5.2.2 {
+    UPDATE t8 SET b = 'five'
+  } {
+    UPDATE main t8 2 2   three four xxx  three five xxx
+  }
+}
+
+# This block of tests verifies that IPK values are correctly reported
+# by the sqlite3_preupdate_old() and sqlite3_preupdate_new() functions.
+#
+do_execsql_test 7.6.1 { CREATE TABLE t9(a, b INTEGER PRIMARY KEY, c) }
+do_preupdate_test 7.6.2 {
+  INSERT INTO t9 VALUES(1, 2, 3);
+  UPDATE t9 SET b = b+1, c = c+1;
+  DELETE FROM t9 WHERE a = 1;
+} {
+  INSERT main t9 2 2   1 2 3
+  UPDATE main t9 2 3   1 2 3   1 3 4
+  DELETE main t9 3 3   1 3 4
+}
+
+#--------------------------------------------------------------------------
+# Test that the sqlite3_preupdate_depth() API seems to work.
+#
+proc preupdate_hook {args} {
+  set type [lindex $args 0]
+  eval lappend ::preupdate $args
+  eval lappend ::preupdate [db preupdate depth]
+
+  if {$type != "INSERT"} {
+    for {set i 0} {$i < [db preupdate count]} {incr i} {
+      lappend ::preupdate [db preupdate old $i]
+    }
+  }
+  if {$type != "DELETE"} {
+    for {set i 0} {$i < [db preupdate count]} {incr i} {
+      set rc [catch { db preupdate new $i } v]
+      lappend ::preupdate $v
+    }
+  }
+}
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+db preupdate hook preupdate_hook
+
+do_execsql_test 7.6.1 { 
+  CREATE TABLE t1(x PRIMARY KEY);
+  CREATE TABLE t2(x PRIMARY KEY);
+  CREATE TABLE t3(x PRIMARY KEY);
+  CREATE TABLE t4(x PRIMARY KEY);
+
+  CREATE TRIGGER a AFTER INSERT ON t1 BEGIN INSERT INTO t2 VALUES(new.x); END;
+  CREATE TRIGGER b AFTER INSERT ON t2 BEGIN INSERT INTO t3 VALUES(new.x); END;
+  CREATE TRIGGER c AFTER INSERT ON t3 BEGIN INSERT INTO t4 VALUES(new.x); END;
+
+  CREATE TRIGGER d AFTER UPDATE ON t1 BEGIN UPDATE t2 SET x = new.x; END;
+  CREATE TRIGGER e AFTER UPDATE ON t2 BEGIN UPDATE t3 SET x = new.x; END;
+  CREATE TRIGGER f AFTER UPDATE ON t3 BEGIN UPDATE t4 SET x = new.x; END;
+
+  CREATE TRIGGER g AFTER DELETE ON t1 BEGIN DELETE FROM t2 WHERE 1; END;
+  CREATE TRIGGER h AFTER DELETE ON t2 BEGIN DELETE FROM t3 WHERE 1; END;
+  CREATE TRIGGER i AFTER DELETE ON t3 BEGIN DELETE FROM t4 WHERE 1; END;
+}
+
+do_preupdate_test 7.6.2 {
+  INSERT INTO t1 VALUES('xyz');
+} {
+  INSERT main t1 1 1   0      xyz
+  INSERT main t2 1 1   1      xyz
+  INSERT main t3 1 1   2      xyz
+  INSERT main t4 1 1   3      xyz
+}
+do_preupdate_test 7.6.3 {
+  UPDATE t1 SET x = 'abc';
+} {
+  UPDATE main t1 1 1   0      xyz abc
+  UPDATE main t2 1 1   1      xyz abc
+  UPDATE main t3 1 1   2      xyz abc
+  UPDATE main t4 1 1   3      xyz abc
+}
+do_preupdate_test 7.6.4 {
+  DELETE FROM t1 WHERE 1;
+} {
+  DELETE main t1 1 1   0      abc
+  DELETE main t2 1 1   1      abc
+  DELETE main t3 1 1   2      abc
+  DELETE main t4 1 1   3      abc
+}
+
+do_execsql_test 7.6.5 { 
+  DROP TRIGGER a; DROP TRIGGER b; DROP TRIGGER c;
+  DROP TRIGGER d; DROP TRIGGER e; DROP TRIGGER f;
+  DROP TRIGGER g; DROP TRIGGER h; DROP TRIGGER i;
+
+  CREATE TRIGGER a BEFORE INSERT ON t1 BEGIN INSERT INTO t2 VALUES(new.x); END;
+  CREATE TRIGGER b BEFORE INSERT ON t2 BEGIN INSERT INTO t3 VALUES(new.x); END;
+  CREATE TRIGGER c BEFORE INSERT ON t3 BEGIN INSERT INTO t4 VALUES(new.x); END;
+
+  CREATE TRIGGER d BEFORE UPDATE ON t1 BEGIN UPDATE t2 SET x = new.x; END;
+  CREATE TRIGGER e BEFORE UPDATE ON t2 BEGIN UPDATE t3 SET x = new.x; END;
+  CREATE TRIGGER f BEFORE UPDATE ON t3 BEGIN UPDATE t4 SET x = new.x; END;
+
+  CREATE TRIGGER g BEFORE DELETE ON t1 BEGIN DELETE FROM t2 WHERE 1; END;
+  CREATE TRIGGER h BEFORE DELETE ON t2 BEGIN DELETE FROM t3 WHERE 1; END;
+  CREATE TRIGGER i BEFORE DELETE ON t3 BEGIN DELETE FROM t4 WHERE 1; END;
+}
+
+do_preupdate_test 7.6.6 {
+  INSERT INTO t1 VALUES('xyz');
+} {
+  INSERT main t4 1 1   3      xyz
+  INSERT main t3 1 1   2      xyz
+  INSERT main t2 1 1   1      xyz
+  INSERT main t1 1 1   0      xyz
+}
+do_preupdate_test 7.6.3 {
+  UPDATE t1 SET x = 'abc';
+} {
+  UPDATE main t4 1 1   3      xyz abc
+  UPDATE main t3 1 1   2      xyz abc
+  UPDATE main t2 1 1   1      xyz abc
+  UPDATE main t1 1 1   0      xyz abc
+}
+do_preupdate_test 7.6.4 {
+  DELETE FROM t1 WHERE 1;
+} {
+  DELETE main t4 1 1   3      abc
+  DELETE main t3 1 1   2      abc
+  DELETE main t2 1 1   1      abc
+  DELETE main t1 1 1   0      abc
+}
+
+# No preupdate callbacks for modifying sqlite_master.
+do_preupdate_test 8.1 { CREATE TABLE x1(x, y); } { }
+do_preupdate_test 8.2 { ALTER TABLE x1 ADD COLUMN z } { }
+do_preupdate_test 8.3 { ALTER TABLE x1 RENAME TO y1 } { }
+do_preupdate_test 8.4 { CREATE INDEX y1x ON y1(x) } { }
+do_preupdate_test 8.5 { CREATE VIEW v1 AS SELECT * FROM y1 } { }
+do_preupdate_test 8.6 { DROP TABLE y1 } { }
+
+#-------------------------------------------------------------------------
+reset_db
+db preupdate hook preupdate_hook
+do_execsql_test 9.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE TABLE t2(a, b INTEGER PRIMARY KEY);
+}
+do_preupdate_test 9.1 {
+  INSERT INTO t1 VALUES(456, NULL, NULL);
+} {
+  INSERT main t1 456 456  0  456 {} {}
+}
+do_execsql_test 9.2 {
+  ALTER TABLE t1 ADD COLUMN d;
+}
+do_preupdate_test 9.3 {
+  INSERT INTO t1(a, b, c) VALUES(457, NULL, NULL);
+} {
+  INSERT main t1 457 457  0  457 {} {} {}
+}
+do_preupdate_test 9.4 {
+  DELETE FROM t1 WHERE a=456
+} {
+  DELETE main t1 456 456  0  456 {} {} {}
+}
+do_preupdate_test 9.5 {
+  INSERT INTO t2 DEFAULT VALUES;
+} {
+  INSERT main t2 1 1  0  {} 1
+} 
+do_preupdate_test 9.6 {
+  INSERT INTO t1 DEFAULT VALUES;
+} {
+  INSERT main t1 458 458  0  458 {} {} {}
+} 
+
+
+do_execsql_test 10.0 {
+  CREATE TABLE t3(a, b INTEGER PRIMARY KEY);
+}
+do_preupdate_test 10.1 {
+  INSERT INTO t3 DEFAULT VALUES
+} {
+  INSERT main t3 1 1 0 {} 1
+}
+do_execsql_test 10.2 { SELECT * FROM t3 } {{} 1}
+do_preupdate_test 10.3 {
+  DELETE FROM t3 WHERE b=1
+} {DELETE main t3 1 1 0 {} 1}
+
+#-------------------------------------------------------------------------
+# Test that the "update" hook is not fired for operations on the 
+# sqlite_stat1 table performed by ANALYZE, even if a pre-update hook is
+# registered.
+ifcapable analyze {
+  reset_db
+  do_execsql_test 11.1 {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX idx1 ON t1(a);
+    CREATE INDEX idx2 ON t1(b);
+
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+    INSERT INTO t1 VALUES(5, 6);
+    INSERT INTO t1 VALUES(7, 8);
+  }
+
+  db preupdate hook preupdate_cb
+  db update_hook update_cb
+
+  proc preupdate_cb {args} { lappend ::res "preupdate" $args }
+  proc update_cb {args} { lappend ::res "update" $args }
+
+  set ::res [list]
+  do_test 11.2 {
+    execsql ANALYZE
+    set ::res
+  } [list {*}{
+    preupdate {INSERT main sqlite_stat1 1 1}
+    preupdate {INSERT main sqlite_stat1 2 2}
+  }]
+
+  do_execsql_test 11.3 {
+    INSERT INTO t1 VALUES(9, 10);
+    INSERT INTO t1 VALUES(11, 12);
+    INSERT INTO t1 VALUES(13, 14);
+    INSERT INTO t1 VALUES(15, 16);
+  }
+
+  set ::res [list]
+  do_test 11.4 {
+    execsql ANALYZE
+    set ::res
+  } [list {*}{
+    preupdate {DELETE main sqlite_stat1 1 1}
+    preupdate {DELETE main sqlite_stat1 2 2}
+    preupdate {INSERT main sqlite_stat1 1 1}
+    preupdate {INSERT main sqlite_stat1 2 2}
+  }]
+}
+
+
+finish_test

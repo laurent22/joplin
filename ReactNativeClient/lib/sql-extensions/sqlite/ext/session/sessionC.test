@@ -1,0 +1,197 @@
+# 2014 August 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionC
+
+#-------------------------------------------------------------------------
+# Test the outcome of a DELETE operation made as part of applying a
+# changeset failing with SQLITE_CONSTRAINT. This may happen if an
+# ON DELETE RESTRICT foreign key action is triggered, or if a trigger
+# program raises a constraint somehow.
+#
+# UPDATE: The above is no longer true, as "PRAGMA defer_foreign_keys"
+# now disables "RESTRICT" processing. The test below has been rewritten 
+# to use a trigger instead of a foreign key to test this case.
+#
+do_execsql_test 1.0 {
+  PRAGMA foreign_keys = 1;
+
+  CREATE TABLE p(a PRIMARY KEY, b, c);
+  CREATE TABLE c(d PRIMARY KEY, e /* REFERENCES p ON DELETE RESTRICT */);
+
+  CREATE TRIGGER restrict_trig BEFORE DELETE ON p BEGIN
+    SELECT raise(ABORT, 'error!') FROM c WHERE e=old.a;
+  END;
+
+  INSERT INTO p VALUES('one', 1, 1);
+  INSERT INTO p VALUES('two', 2, 2);
+  INSERT INTO p VALUES('three', 3, 3);
+
+  INSERT INTO c VALUES(1, 'one');
+  INSERT INTO c VALUES(3, 'three');
+}
+
+do_test 1.1 {
+  execsql BEGIN
+  set C [changeset_from_sql {
+    INSERT INTO c VALUES(4, 'one');
+    DELETE FROM p WHERE a='two';
+  }]
+  execsql ROLLBACK
+  execsql {
+    INSERT INTO c VALUES(2, 'two');
+  }
+} {}
+
+do_test 1.2.1 {
+  proc xConflict {args} { return "ABORT" }
+  catch { sqlite3changeset_apply db $C xConflict } msg
+  set msg
+} {SQLITE_ABORT}
+do_execsql_test 1.2.2 { SELECT * FROM c } {1 one 3 three 2 two}
+
+do_test 1.3.1 {
+  proc xConflict {args} { return "OMIT" }
+  catch { sqlite3changeset_apply db $C xConflict } msg
+  set msg
+} {}
+do_execsql_test 1.3.2 { SELECT * FROM c } {1 one 3 three 2 two 4 one}
+do_execsql_test 1.3.3 { 
+  SELECT * FROM p;
+} {one 1 1 two 2 2 three 3 3}
+
+
+#-------------------------------------------------------------------------
+# Test that concatenating a changeset with a patchset does not work.
+# Any attempt to do so returns SQLITE_ERROR.
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE x1(t, v PRIMARY KEY);
+  INSERT INTO x1 VALUES(12, 55);
+  INSERT INTO x1 VALUES(55, 14);
+}
+
+do_test 2.1 {
+  execsql BEGIN
+
+  sqlite3session S1 db main
+  S1 attach *
+  execsql {
+    UPDATE x1 SET t=13 WHERE v=55;
+    INSERT INTO x1 VALUES(99, 123);
+  }
+  set patchset [S1 patchset]
+  S1 delete
+
+  sqlite3session S1 db main
+  S1 attach *
+  execsql {
+    UPDATE x1 SET t=56 WHERE v=14;
+    INSERT INTO x1 VALUES(22, 998);
+  }
+  set changeset [S1 changeset]
+  S1 delete
+
+  execsql ROLLBACK
+} {}
+
+do_test 2.2 {
+  set rc [catch { sqlite3changeset_concat $patchset $changeset } msg]
+  list $rc $msg
+} {1 SQLITE_ERROR}
+
+do_test 2.3 {
+  set rc [catch { sqlite3changeset_concat $changeset $patchset } msg]
+  list $rc $msg
+} {1 SQLITE_ERROR}
+
+do_test 2.4 {
+  set rc [catch { sqlite3changeset_concat {} $patchset } msg]
+  list $rc $msg
+} [list 0 $patchset]
+
+do_test 2.5 {
+  set rc [catch { sqlite3changeset_concat $patchset {} } msg]
+  list $rc $msg
+} [list 0 $patchset]
+
+do_test 2.6 {
+  set rc [catch { sqlite3changeset_concat {} $changeset } msg]
+  list $rc $msg
+} [list 0 $changeset]
+
+do_test 2.7 {
+  set rc [catch { sqlite3changeset_concat $changeset {} } msg]
+  list $rc $msg
+} [list 0 $changeset]
+
+do_test 2.8 {
+  set rc [catch { sqlite3changeset_concat {} {} } msg]
+  list $rc $msg
+} [list 0 {}]
+
+
+#-------------------------------------------------------------------------
+# Test that the xFilter argument to sqlite3changeset_apply() works.
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  CREATE TABLE t3(a PRIMARY KEY, b);
+}
+do_test 3.1 {
+  execsql BEGIN
+  set changeset [changeset_from_sql {
+    INSERT INTO t1 VALUES(1, 1);
+    INSERT INTO t2 VALUES(2, 2);
+    INSERT INTO t3 VALUES(3, 3);
+  }]
+  execsql ROLLBACK
+} {}
+do_test 3.2 {
+  proc xFilter {zName} {
+    if {$zName == "t1"} { return 1 }
+    return 0
+  }
+  sqlite3changeset_apply db $changeset noop xFilter
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+    SELECT * FROM t3;
+  }
+} {1 1}
+do_test 3.3 {
+  proc xFilter {zName} {
+    if {$zName == "t3"} { return 1 }
+    return 0
+  }
+  sqlite3changeset_apply db $changeset noop xFilter
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+    SELECT * FROM t3;
+  }
+} {1 1 3 3}
+
+
+
+finish_test

@@ -1,0 +1,927 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  This
+# file is a copy of "trans.test" modified to run under autovacuum mode.
+# the point is to stress the autovacuum logic and try to get it to fail.
+#
+# $Id: avtrans.test,v 1.6 2007/09/12 17:01:45 danielk1977 Exp $
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+# Create several tables to work with.
+#
+do_test avtrans-1.0 {
+  execsql { PRAGMA auto_vacuum=full }
+  wal_set_journal_mode
+  execsql { 
+    CREATE TABLE one(a int PRIMARY KEY, b text);
+    INSERT INTO one VALUES(1,'one');
+    INSERT INTO one VALUES(2,'two');
+    INSERT INTO one VALUES(3,'three');
+    SELECT b FROM one ORDER BY a;
+  }
+} {one two three}
+do_test avtrans-1.0.1 { execsql { PRAGMA auto_vacuum } } 1
+do_test avtrans-1.1 {
+  execsql {
+    CREATE TABLE two(a int PRIMARY KEY, b text);
+    INSERT INTO two VALUES(1,'I');
+    INSERT INTO two VALUES(5,'V');
+    INSERT INTO two VALUES(10,'X');
+    SELECT b FROM two ORDER BY a;
+  }
+} {I V X}
+do_test avtrans-1.9 {
+  sqlite3 altdb test.db
+  execsql {SELECT b FROM one ORDER BY a} altdb
+} {one two three}
+do_test avtrans-1.10 {
+  execsql {SELECT b FROM two ORDER BY a} altdb
+} {I V X}
+integrity_check avtrans-1.11
+wal_check_journal_mode avtrans-1.12
+
+# Basic transactions
+#
+do_test avtrans-2.1 {
+  set v [catch {execsql {BEGIN}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.2 {
+  set v [catch {execsql {END}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.3 {
+  set v [catch {execsql {BEGIN TRANSACTION}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.4 {
+  set v [catch {execsql {COMMIT TRANSACTION}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.5 {
+  set v [catch {execsql {BEGIN TRANSACTION 'foo'}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.6 {
+  set v [catch {execsql {ROLLBACK TRANSACTION 'foo'}} msg]
+  lappend v $msg
+} {0 {}}
+do_test avtrans-2.10 {
+  execsql {
+    BEGIN;
+    SELECT a FROM one ORDER BY a;
+    SELECT a FROM two ORDER BY a;
+    END;
+  }
+} {1 2 3 1 5 10}
+integrity_check avtrans-2.11
+wal_check_journal_mode avtrans-2.12
+
+# Check the locking behavior
+#
+sqlite3_soft_heap_limit 0
+do_test avtrans-3.1 {
+  execsql {
+    BEGIN;
+    UPDATE one SET a = 0 WHERE 0;
+    SELECT a FROM one ORDER BY a;
+  }
+} {1 2 3}
+do_test avtrans-3.2 {
+  catchsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb
+} {0 {1 5 10}}
+do_test avtrans-3.3 {
+  catchsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb
+} {0 {1 2 3}}
+do_test avtrans-3.4 {
+  catchsql {
+    INSERT INTO one VALUES(4,'four');
+  }
+} {0 {}}
+do_test avtrans-3.5 {
+  catchsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb
+} {0 {1 5 10}}
+do_test avtrans-3.6 {
+  catchsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb
+} {0 {1 2 3}}
+do_test avtrans-3.7 {
+  catchsql {
+    INSERT INTO two VALUES(4,'IV');
+  }
+} {0 {}}
+do_test avtrans-3.8 {
+  catchsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb
+} {0 {1 5 10}}
+do_test avtrans-3.9 {
+  catchsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb
+} {0 {1 2 3}}
+do_test avtrans-3.10 {
+  execsql {END TRANSACTION}
+} {}
+do_test avtrans-3.11 {
+  set v [catch {execsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb} msg]
+  lappend v $msg
+} {0 {1 4 5 10}}
+do_test avtrans-3.12 {
+  set v [catch {execsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb} msg]
+  lappend v $msg
+} {0 {1 2 3 4}}
+do_test avtrans-3.13 {
+  set v [catch {execsql {
+    SELECT a FROM two ORDER BY a;
+  } db} msg]
+  lappend v $msg
+} {0 {1 4 5 10}}
+do_test avtrans-3.14 {
+  set v [catch {execsql {
+    SELECT a FROM one ORDER BY a;
+  } db} msg]
+  lappend v $msg
+} {0 {1 2 3 4}}
+sqlite3_soft_heap_limit $cmdlinearg(soft-heap-limit)
+integrity_check avtrans-3.15
+
+do_test avtrans-4.1 {
+  set v [catch {execsql {
+    COMMIT;
+  } db} msg]
+  lappend v $msg
+} {1 {cannot commit - no transaction is active}}
+do_test avtrans-4.2 {
+  set v [catch {execsql {
+    ROLLBACK;
+  } db} msg]
+  lappend v $msg
+} {1 {cannot rollback - no transaction is active}}
+do_test avtrans-4.3 {
+  catchsql {
+    BEGIN TRANSACTION;
+    UPDATE two SET a = 0 WHERE 0;
+    SELECT a FROM two ORDER BY a;
+  } db
+} {0 {1 4 5 10}}
+do_test avtrans-4.4 {
+  catchsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb
+} {0 {1 4 5 10}}
+do_test avtrans-4.5 {
+  catchsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb
+} {0 {1 2 3 4}}
+do_test avtrans-4.6 {
+  catchsql {
+    BEGIN TRANSACTION;
+    SELECT a FROM one ORDER BY a;
+  } db
+} {1 {cannot start a transaction within a transaction}}
+do_test avtrans-4.7 {
+  catchsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb
+} {0 {1 4 5 10}}
+do_test avtrans-4.8 {
+  catchsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb
+} {0 {1 2 3 4}}
+do_test avtrans-4.9 {
+  set v [catch {execsql {
+    END TRANSACTION;
+    SELECT a FROM two ORDER BY a;
+  } db} msg]
+  lappend v $msg
+} {0 {1 4 5 10}}
+do_test avtrans-4.10 {
+  set v [catch {execsql {
+    SELECT a FROM two ORDER BY a;
+  } altdb} msg]
+  lappend v $msg
+} {0 {1 4 5 10}}
+do_test avtrans-4.11 {
+  set v [catch {execsql {
+    SELECT a FROM one ORDER BY a;
+  } altdb} msg]
+  lappend v $msg
+} {0 {1 2 3 4}}
+integrity_check avtrans-4.12
+do_test avtrans-4.98 {
+  altdb close
+  execsql {
+    DROP TABLE one;
+    DROP TABLE two;
+  }
+} {}
+integrity_check avtrans-4.99
+
+# Check out the commit/rollback behavior of the database
+#
+do_test avtrans-5.1 {
+  execsql {SELECT name FROM sqlite_master WHERE type='table' ORDER BY name}
+} {}
+do_test avtrans-5.2 {
+  execsql {BEGIN TRANSACTION}
+  execsql {SELECT name FROM sqlite_master WHERE type='table' ORDER BY name}
+} {}
+do_test avtrans-5.3 {
+  execsql {CREATE TABLE one(a text, b int)}
+  execsql {SELECT name FROM sqlite_master WHERE type='table' ORDER BY name}
+} {one}
+do_test avtrans-5.4 {
+  execsql {SELECT a,b FROM one ORDER BY b}
+} {}
+do_test avtrans-5.5 {
+  execsql {INSERT INTO one(a,b) VALUES('hello', 1)}
+  execsql {SELECT a,b FROM one ORDER BY b}
+} {hello 1}
+do_test avtrans-5.6 {
+  execsql {ROLLBACK}
+  execsql {SELECT name FROM sqlite_master WHERE type='table' ORDER BY name}
+} {}
+do_test avtrans-5.7 {
+  set v [catch {
+    execsql {SELECT a,b FROM one ORDER BY b}
+  } msg]
+  lappend v $msg
+} {1 {no such table: one}}
+
+# Test commits and rollbacks of table CREATE TABLEs, CREATE INDEXs
+# DROP TABLEs and DROP INDEXs
+#
+do_test avtrans-5.8 {
+  execsql {
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name
+  }
+} {}
+do_test avtrans-5.9 {
+  execsql {
+    BEGIN TRANSACTION;
+    CREATE TABLE t1(a int, b int, c int);
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {t1}
+do_test avtrans-5.10 {
+  execsql {
+    CREATE INDEX i1 ON t1(a);
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i1 t1}
+do_test avtrans-5.11 {
+  execsql {
+    COMMIT;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i1 t1}
+do_test avtrans-5.12 {
+  execsql {
+    BEGIN TRANSACTION;
+    CREATE TABLE t2(a int, b int, c int);
+    CREATE INDEX i2a ON t2(a);
+    CREATE INDEX i2b ON t2(b);
+    DROP TABLE t1;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i2a i2b t2}
+do_test avtrans-5.13 {
+  execsql {
+    ROLLBACK;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i1 t1}
+do_test avtrans-5.14 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {t1}
+do_test avtrans-5.15 {
+  execsql {
+    ROLLBACK;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i1 t1}
+do_test avtrans-5.16 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    CREATE TABLE t2(x int, y int, z int);
+    CREATE INDEX i2x ON t2(x);
+    CREATE INDEX i2y ON t2(y);
+    INSERT INTO t2 VALUES(1,2,3);
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i2x i2y t1 t2}
+do_test avtrans-5.17 {
+  execsql {
+    COMMIT;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i2x i2y t1 t2}
+do_test avtrans-5.18 {
+  execsql {
+    SELECT * FROM t2;
+  }
+} {1 2 3}
+do_test avtrans-5.19 {
+  execsql {
+    SELECT x FROM t2 WHERE y=2;
+  }
+} {1}
+do_test avtrans-5.20 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    DROP TABLE t2;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {}
+do_test avtrans-5.21 {
+  set r [catch {execsql {
+    SELECT * FROM t2
+  }} msg]
+  lappend r $msg
+} {1 {no such table: t2}}
+do_test avtrans-5.22 {
+  execsql {
+    ROLLBACK;
+    SELECT name fROM sqlite_master 
+    WHERE type='table' OR type='index'
+    ORDER BY name;
+  }
+} {i2x i2y t1 t2}
+do_test avtrans-5.23 {
+  execsql {
+    SELECT * FROM t2;
+  }
+} {1 2 3}
+integrity_check avtrans-5.23
+
+
+# Try to DROP and CREATE tables and indices with the same name
+# within a transaction.  Make sure ROLLBACK works.
+#
+do_test avtrans-6.1 {
+  execsql2 {
+    INSERT INTO t1 VALUES(1,2,3);
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(p,q,r);
+    ROLLBACK;
+    SELECT * FROM t1;
+  }
+} {a 1 b 2 c 3}
+do_test avtrans-6.2 {
+  execsql2 {
+    INSERT INTO t1 VALUES(1,2,3);
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(p,q,r);
+    COMMIT;
+    SELECT * FROM t1;
+  }
+} {}
+do_test avtrans-6.3 {
+  execsql2 {
+    INSERT INTO t1 VALUES(1,2,3);
+    SELECT * FROM t1;
+  }
+} {p 1 q 2 r 3}
+do_test avtrans-6.4 {
+  execsql2 {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(4,5,6);
+    SELECT * FROM t1;
+    DROP TABLE t1;
+  }
+} {a 4 b 5 c 6}
+do_test avtrans-6.5 {
+  execsql2 {
+    ROLLBACK;
+    SELECT * FROM t1;
+  }
+} {p 1 q 2 r 3}
+do_test avtrans-6.6 {
+  execsql2 {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(4,5,6);
+    SELECT * FROM t1;
+    DROP TABLE t1;
+  }
+} {a 4 b 5 c 6}
+do_test avtrans-6.7 {
+  catchsql {
+    COMMIT;
+    SELECT * FROM t1;
+  }
+} {1 {no such table: t1}}
+
+# Repeat on a table with an automatically generated index.
+#
+do_test avtrans-6.10 {
+  execsql2 {
+    CREATE TABLE t1(a unique,b,c);
+    INSERT INTO t1 VALUES(1,2,3);
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(p unique,q,r);
+    ROLLBACK;
+    SELECT * FROM t1;
+  }
+} {a 1 b 2 c 3}
+do_test avtrans-6.11 {
+  execsql2 {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(p unique,q,r);
+    COMMIT;
+    SELECT * FROM t1;
+  }
+} {}
+do_test avtrans-6.12 {
+  execsql2 {
+    INSERT INTO t1 VALUES(1,2,3);
+    SELECT * FROM t1;
+  }
+} {p 1 q 2 r 3}
+do_test avtrans-6.13 {
+  execsql2 {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(a unique,b,c);
+    INSERT INTO t1 VALUES(4,5,6);
+    SELECT * FROM t1;
+    DROP TABLE t1;
+  }
+} {a 4 b 5 c 6}
+do_test avtrans-6.14 {
+  execsql2 {
+    ROLLBACK;
+    SELECT * FROM t1;
+  }
+} {p 1 q 2 r 3}
+do_test avtrans-6.15 {
+  execsql2 {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(a unique,b,c);
+    INSERT INTO t1 VALUES(4,5,6);
+    SELECT * FROM t1;
+    DROP TABLE t1;
+  }
+} {a 4 b 5 c 6}
+do_test avtrans-6.16 {
+  catchsql {
+    COMMIT;
+    SELECT * FROM t1;
+  }
+} {1 {no such table: t1}}
+
+do_test avtrans-6.20 {
+  execsql {
+    CREATE TABLE t1(a integer primary key,b,c);
+    INSERT INTO t1 VALUES(1,-2,-3);
+    INSERT INTO t1 VALUES(4,-5,-6);
+    SELECT * FROM t1;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.21 {
+  execsql {
+    CREATE INDEX i1 ON t1(b);
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.22 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    SELECT * FROM t1 WHERE b<1;
+    ROLLBACK;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.23 {
+  execsql {
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.24 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    ROLLBACK;
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+
+do_test avtrans-6.25 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    CREATE INDEX i1 ON t1(c);
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.26 {
+  execsql {
+    SELECT * FROM t1 WHERE c<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.27 {
+  execsql {
+    ROLLBACK;
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.28 {
+  execsql {
+    SELECT * FROM t1 WHERE c<1;
+  }
+} {1 -2 -3 4 -5 -6}
+
+# The following repeats steps 6.20 through 6.28, but puts a "unique"
+# constraint the first field of the table in order to generate an
+# automatic index.
+#
+do_test avtrans-6.30 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    CREATE TABLE t1(a int unique,b,c);
+    COMMIT;
+    INSERT INTO t1 VALUES(1,-2,-3);
+    INSERT INTO t1 VALUES(4,-5,-6);
+    SELECT * FROM t1 ORDER BY a;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.31 {
+  execsql {
+    CREATE INDEX i1 ON t1(b);
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.32 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    SELECT * FROM t1 WHERE b<1;
+    ROLLBACK;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.33 {
+  execsql {
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.34 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP TABLE t1;
+    ROLLBACK;
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+
+do_test avtrans-6.35 {
+  execsql {
+    BEGIN TRANSACTION;
+    DROP INDEX i1;
+    CREATE INDEX i1 ON t1(c);
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.36 {
+  execsql {
+    SELECT * FROM t1 WHERE c<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.37 {
+  execsql {
+    DROP INDEX i1;
+    SELECT * FROM t1 WHERE c<1;
+  }
+} {1 -2 -3 4 -5 -6}
+do_test avtrans-6.38 {
+  execsql {
+    ROLLBACK;
+    SELECT * FROM t1 WHERE b<1;
+  }
+} {4 -5 -6 1 -2 -3}
+do_test avtrans-6.39 {
+  execsql {
+    SELECT * FROM t1 WHERE c<1;
+  }
+} {1 -2 -3 4 -5 -6}
+integrity_check avtrans-6.40
+
+ifcapable !floatingpoint {
+  finish_test
+  return
+}
+
+# Test to make sure rollback restores the database back to its original
+# state.
+#
+do_test avtrans-7.1 {
+  execsql {BEGIN}
+  for {set i 0} {$i<1000} {incr i} {
+    set r1 [expr {rand()}]
+    set r2 [expr {rand()}]
+    set r3 [expr {rand()}]
+    execsql "INSERT INTO t2 VALUES($r1,$r2,$r3)"
+  }
+  execsql {COMMIT}
+  set ::checksum [execsql {SELECT md5sum(x,y,z) FROM t2}]
+  set ::checksum2 [
+    execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+  ]
+  execsql {SELECT count(*) FROM t2}
+} {1001}
+do_test avtrans-7.2 {
+  execsql {SELECT md5sum(x,y,z) FROM t2}
+} $checksum
+do_test avtrans-7.2.1 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+do_test avtrans-7.3 {
+  execsql {
+    BEGIN;
+    DELETE FROM t2;
+    ROLLBACK;
+    SELECT md5sum(x,y,z) FROM t2;
+  }
+} $checksum
+do_test avtrans-7.4 {
+  execsql {
+    BEGIN;
+    INSERT INTO t2 SELECT * FROM t2;
+    ROLLBACK;
+    SELECT md5sum(x,y,z) FROM t2;
+  }
+} $checksum
+do_test avtrans-7.5 {
+  execsql {
+    BEGIN;
+    DELETE FROM t2;
+    ROLLBACK;
+    SELECT md5sum(x,y,z) FROM t2;
+  }
+} $checksum
+do_test avtrans-7.6 {
+  execsql {
+    BEGIN;
+    INSERT INTO t2 SELECT * FROM t2;
+    ROLLBACK;
+    SELECT md5sum(x,y,z) FROM t2;
+  }
+} $checksum
+do_test avtrans-7.7 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t3 AS SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t3;
+    ROLLBACK;
+    SELECT md5sum(x,y,z) FROM t2;
+  }
+} $checksum
+do_test avtrans-7.8 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+ifcapable tempdb {
+  do_test avtrans-7.9 {
+    execsql {
+      BEGIN;
+      CREATE TEMP TABLE t3 AS SELECT * FROM t2;
+      INSERT INTO t2 SELECT * FROM t3;
+      ROLLBACK;
+      SELECT md5sum(x,y,z) FROM t2;
+    }
+  } $checksum
+}
+do_test avtrans-7.10 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+ifcapable tempdb {
+  do_test avtrans-7.11 {
+    execsql {
+      BEGIN;
+      CREATE TEMP TABLE t3 AS SELECT * FROM t2;
+      INSERT INTO t2 SELECT * FROM t3;
+      DROP INDEX i2x;
+      DROP INDEX i2y;
+      CREATE INDEX i3a ON t3(x);
+      ROLLBACK;
+      SELECT md5sum(x,y,z) FROM t2;
+    }
+  } $checksum
+}
+do_test avtrans-7.12 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+ifcapable tempdb {
+  do_test avtrans-7.13 {
+    execsql {
+      BEGIN;
+      DROP TABLE t2;
+      ROLLBACK;
+      SELECT md5sum(x,y,z) FROM t2;
+    }
+  } $checksum
+}
+do_test avtrans-7.14 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+integrity_check avtrans-7.15
+
+# Arrange for another process to begin modifying the database but abort
+# and die in the middle of the modification.  Then have this process read
+# the database.  This process should detect the journal file and roll it
+# back.  Verify that this happens correctly.
+#
+set fd [open test.tcl w]
+puts $fd {
+  sqlite3 db test.db
+  db eval {
+    PRAGMA default_cache_size=20;
+    BEGIN;
+    CREATE TABLE t3 AS SELECT * FROM t2;
+    DELETE FROM t2;
+  }
+  sqlite_abort
+}
+close $fd
+do_test avtrans-8.1 {
+  catch {exec [info nameofexec] test.tcl}
+  execsql {SELECT md5sum(x,y,z) FROM t2}
+} $checksum
+do_test avtrans-8.2 {
+  execsql {SELECT md5sum(type,name,tbl_name,rootpage,sql) FROM sqlite_master}
+} $checksum2
+integrity_check avtrans-8.3
+
+# In the following sequence of tests, compute the MD5 sum of the content
+# of a table, make lots of modifications to that table, then do a rollback.
+# Verify that after the rollback, the MD5 checksum is unchanged.
+#
+do_test avtrans-9.1 {
+  execsql {
+    PRAGMA default_cache_size=10;
+  }
+  db close
+  sqlite3 db test.db
+  execsql {
+    BEGIN;
+    CREATE TABLE t3(x TEXT);
+    INSERT INTO t3 VALUES(randstr(10,400));
+    INSERT INTO t3 VALUES(randstr(10,400));
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    INSERT INTO t3 SELECT randstr(10,400) FROM t3;
+    COMMIT;
+    SELECT count(*) FROM t3;
+  }
+} {1024}
+
+# The following procedure computes a "signature" for table "t3".  If
+# T3 changes in any way, the signature should change.  
+#
+# This is used to test ROLLBACK.  We gather a signature for t3, then
+# make lots of changes to t3, then rollback and take another signature.
+# The two signatures should be the same.
+#
+proc signature {} {
+  return [db eval {SELECT count(*), md5sum(x) FROM t3}]
+}
+
+# Repeat the following group of tests 20 times for quick testing and
+# 40 times for full testing.  Each iteration of the test makes table
+# t3 a little larger, and thus takes a little longer, so doing 40 tests
+# is more than 2.0 times slower than doing 20 tests.  Considerably more.
+#
+if {[info exists G(isquick)]} {
+  set limit 20
+} else {
+  set limit 40
+}
+
+# Do rollbacks.  Make sure the signature does not change.
+#
+for {set i 2} {$i<=$limit} {incr i} {
+  set ::sig [signature]
+  set cnt [lindex $::sig 0]
+  if {$i%2==0} {
+    execsql {PRAGMA fullfsync=ON}
+  } else {
+    execsql {PRAGMA fullfsync=OFF}
+  }
+  set sqlite_sync_count 0
+  set sqlite_fullsync_count 0
+  do_test avtrans-9.$i.1-$cnt {
+     execsql {
+       BEGIN;
+       DELETE FROM t3 WHERE random()%10!=0;
+       INSERT INTO t3 SELECT randstr(10,10)||x FROM t3;
+       INSERT INTO t3 SELECT randstr(10,10)||x FROM t3;
+       ROLLBACK;
+     }
+     signature
+  } $sig
+  do_test avtrans-9.$i.2-$cnt {
+     execsql {
+       BEGIN;
+       DELETE FROM t3 WHERE random()%10!=0;
+       INSERT INTO t3 SELECT randstr(10,10)||x FROM t3;
+       DELETE FROM t3 WHERE random()%10!=0;
+       INSERT INTO t3 SELECT randstr(10,10)||x FROM t3;
+       ROLLBACK;
+     }
+     signature
+  } $sig
+  if {$i<$limit} {
+    do_test avtrans-9.$i.3-$cnt {
+       execsql {
+         INSERT INTO t3 SELECT randstr(10,400) FROM t3 WHERE random()%10==0;
+       }
+    } {}
+    if {$tcl_platform(platform)=="unix"} {
+      do_test avtrans-9.$i.4-$cnt {
+         expr {$sqlite_sync_count>0}
+      } 1
+      ifcapable pager_pragmas {
+        do_test avtrans-9.$i.5-$cnt {
+           expr {$sqlite_fullsync_count>0}
+        } [expr {$i%2==0}]
+      } else {
+        do_test avtrans-9.$i.5-$cnt {
+           expr {$sqlite_fullsync_count==0}
+        } {1}
+      }
+    }
+    wal_check_journal_mode avtrans-9.$i-6.$cnt
+  }
+  set ::pager_old_format 0
+}
+integrity_check avtrans-10.1
+wal_check_journal_mode avtrans-10.2
+   
+finish_test

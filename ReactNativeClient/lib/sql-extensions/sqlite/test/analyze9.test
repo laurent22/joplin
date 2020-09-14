@@ -1,0 +1,1235 @@
+# 2013 August 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains automated tests used to verify that the sqlite_stat4
+# functionality is working.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix analyze9
+
+ifcapable !stat4 {
+  finish_test
+  return
+}
+
+proc s {blob} {
+  set ret ""
+  binary scan $blob c* bytes
+  foreach b $bytes {
+    set t [binary format c $b]
+    if {[string is print $t]} {
+      append ret $t
+    } else {
+      append ret .
+    }
+  }
+  return $ret
+}
+db function s s
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a TEXT, b TEXT); 
+  INSERT INTO t1 VALUES('(0)', '(0)');
+  INSERT INTO t1 VALUES('(1)', '(1)');
+  INSERT INTO t1 VALUES('(2)', '(2)');
+  INSERT INTO t1 VALUES('(3)', '(3)');
+  INSERT INTO t1 VALUES('(4)', '(4)');
+  CREATE INDEX i1 ON t1(a, b);
+} {}
+
+
+do_execsql_test 1.1 {
+  ANALYZE;
+} {}
+
+do_execsql_test 1.2 {
+  SELECT tbl,idx,nEq,nLt,nDLt,test_decode(sample) FROM sqlite_stat4;
+} {
+  t1 i1 {1 1 1} {0 0 0} {0 0 0} {(0) (0) 1}
+  t1 i1 {1 1 1} {1 1 1} {1 1 1} {(1) (1) 2}
+  t1 i1 {1 1 1} {2 2 2} {2 2 2} {(2) (2) 3}
+  t1 i1 {1 1 1} {3 3 3} {3 3 3} {(3) (3) 4}
+  t1 i1 {1 1 1} {4 4 4} {4 4 4} {(4) (4) 5}
+}
+
+if {[permutation] != "utf16"} {
+  do_execsql_test 1.3 {
+    SELECT tbl,idx,nEq,nLt,nDLt,s(sample) FROM sqlite_stat4;
+  } {
+    t1 i1 {1 1 1} {0 0 0} {0 0 0} ....(0)(0)
+    t1 i1 {1 1 1} {1 1 1} {1 1 1} ....(1)(1).
+    t1 i1 {1 1 1} {2 2 2} {2 2 2} ....(2)(2).
+    t1 i1 {1 1 1} {3 3 3} {3 3 3} ....(3)(3).
+    t1 i1 {1 1 1} {4 4 4} {4 4 4} ....(4)(4).
+  }
+}
+
+
+#-------------------------------------------------------------------------
+# This is really just to test SQL user function "test_decode".
+#
+reset_db
+do_execsql_test 2.1 {
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES('some text', 14, NULL);
+  INSERT INTO t1 VALUES(22.0, NULL, x'656667');
+  CREATE INDEX i1 ON t1(a, b, c);
+  ANALYZE;
+  SELECT test_decode(sample) FROM sqlite_stat4;
+} {
+  {22.0 NULL x'656667' 2} 
+  {{some text} 14 NULL 1}
+}
+
+#-------------------------------------------------------------------------
+# 
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a, b);
+  BEGIN;
+}
+
+do_test 3.2 {
+  for {set i 0} {$i < 1000} {incr i} {
+    set a [expr $i / 10]
+    set b [expr int(rand() * 15.0)]
+    execsql { INSERT INTO t2 VALUES($a, $b) }
+  }
+  execsql COMMIT
+} {}
+
+db func lindex lindex
+
+# Each value of "a" occurs exactly 10 times in the table.
+#
+do_execsql_test 3.3.1 {
+  SELECT count(*) FROM t2 GROUP BY a;
+} [lrange [string repeat "10 " 100] 0 99]
+
+# The first element in the "nEq" list of all samples should therefore be 10.
+#
+do_execsql_test 3.3.2 {
+  ANALYZE;
+  SELECT lindex(nEq, 0) FROM sqlite_stat4;
+} [lrange [string repeat "10 " 100] 0 23]
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 3.4 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1, 1, 'one-a');
+  INSERT INTO t1 VALUES(11, 1, 'one-b');
+  INSERT INTO t1 VALUES(21, 1, 'one-c');
+  INSERT INTO t1 VALUES(31, 1, 'one-d');
+  INSERT INTO t1 VALUES(41, 1, 'one-e');
+  INSERT INTO t1 VALUES(51, 1, 'one-f');
+  INSERT INTO t1 VALUES(61, 1, 'one-g');
+  INSERT INTO t1 VALUES(71, 1, 'one-h');
+  INSERT INTO t1 VALUES(81, 1, 'one-i');
+  INSERT INTO t1 VALUES(91, 1, 'one-j');
+  INSERT INTO t1 SELECT a+1,2,'two' || substr(c,4) FROM t1;
+  INSERT INTO t1 SELECT a+2,3,'three'||substr(c,4) FROM t1 WHERE c GLOB 'one-*';
+  INSERT INTO t1 SELECT a+3,4,'four'||substr(c,4) FROM t1 WHERE c GLOB 'one-*';
+  INSERT INTO t1 SELECT a+4,5,'five'||substr(c,4) FROM t1 WHERE c GLOB 'one-*';
+  INSERT INTO t1 SELECT a+5,6,'six'||substr(c,4) FROM t1 WHERE c GLOB 'one-*';	
+  CREATE INDEX t1b ON t1(b);
+  ANALYZE;
+  SELECT c FROM t1 WHERE b=3 AND a BETWEEN 30 AND 60;
+} {three-d three-e three-f}
+
+
+#-------------------------------------------------------------------------
+# These tests verify that the sample selection for stat4 appears to be 
+# working as designed.
+#
+
+reset_db
+db func lindex lindex
+db func lrange lrange
+
+do_execsql_test 4.0 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a, b, c);
+  CREATE INDEX i1 ON t1(c, b, a);
+}
+
+
+proc insert_filler_rows_n {iStart args} {
+  set A(-ncopy) 1
+  set A(-nval) 1
+
+  foreach {k v} $args {
+    if {[info exists A($k)]==0} { error "no such option: $k" }
+    set A($k) $v
+  }
+  if {[llength $args] % 2} {
+    error "option requires an argument: [lindex $args end]"
+  }
+
+  for {set i 0} {$i < $A(-nval)} {incr i} {
+    set iVal [expr $iStart+$i]
+    for {set j 0} {$j < $A(-ncopy)} {incr j} {
+      execsql { INSERT INTO t1 VALUES($iVal, $iVal, $iVal) }
+    }
+  }
+}
+
+do_test 4.1 {
+  execsql { BEGIN }
+  insert_filler_rows_n  0  -ncopy 10 -nval 19
+  insert_filler_rows_n 20  -ncopy  1 -nval 100
+
+  execsql {
+    INSERT INTO t1(c, b, a) VALUES(200, 1, 'a');
+    INSERT INTO t1(c, b, a) VALUES(200, 1, 'b');
+    INSERT INTO t1(c, b, a) VALUES(200, 1, 'c');
+
+    INSERT INTO t1(c, b, a) VALUES(200, 2, 'e');
+    INSERT INTO t1(c, b, a) VALUES(200, 2, 'f');
+
+    INSERT INTO t1(c, b, a) VALUES(201, 3, 'g');
+    INSERT INTO t1(c, b, a) VALUES(201, 4, 'h');
+
+    ANALYZE;
+    SELECT count(*) FROM sqlite_stat4;
+    SELECT count(*) FROM t1;
+  }
+} {24 297}
+
+do_execsql_test 4.2 {
+  SELECT 
+    neq,
+    lrange(nlt, 0, 2),
+    lrange(ndlt, 0, 2),
+    lrange(test_decode(sample), 0, 2)
+    FROM sqlite_stat4
+  ORDER BY rowid LIMIT 16;
+} {
+  {10 10 10 1} {0 0 0} {0 0 0} {0 0 0}
+  {10 10 10 1} {10 10 10} {1 1 1} {1 1 1}
+  {10 10 10 1} {20 20 20} {2 2 2} {2 2 2}
+  {10 10 10 1} {30 30 30} {3 3 3} {3 3 3}
+  {10 10 10 1} {40 40 40} {4 4 4} {4 4 4}
+  {10 10 10 1} {50 50 50} {5 5 5} {5 5 5}
+  {10 10 10 1} {60 60 60} {6 6 6} {6 6 6}
+  {10 10 10 1} {70 70 70} {7 7 7} {7 7 7}
+  {10 10 10 1} {80 80 80} {8 8 8} {8 8 8}
+  {10 10 10 1} {90 90 90} {9 9 9} {9 9 9}
+  {10 10 10 1} {100 100 100} {10 10 10} {10 10 10}
+  {10 10 10 1} {110 110 110} {11 11 11} {11 11 11}
+  {10 10 10 1} {120 120 120} {12 12 12} {12 12 12}
+  {10 10 10 1} {130 130 130} {13 13 13} {13 13 13}
+  {10 10 10 1} {140 140 140} {14 14 14} {14 14 14}
+  {10 10 10 1} {150 150 150} {15 15 15} {15 15 15}
+}
+
+do_execsql_test 4.3 {
+  SELECT 
+    neq,
+    lrange(nlt, 0, 2),
+    lrange(ndlt, 0, 2),
+    lrange(test_decode(sample), 0, 1)
+    FROM sqlite_stat4
+  ORDER BY rowid DESC LIMIT 2;
+} {
+  {2 1 1 1} {295 296 296} {120 122 125} {201 4} 
+  {5 3 1 1} {290 290 290} {119 119 119} {200 1}
+}
+
+do_execsql_test 4.4 { SELECT count(DISTINCT c) FROM t1 WHERE c<201 } 120
+do_execsql_test 4.5 { SELECT count(DISTINCT c) FROM t1 WHERE c<200 } 119
+
+# Check that the perioidic samples are present.
+do_execsql_test 4.6 {
+  SELECT count(*) FROM sqlite_stat4
+  WHERE lindex(test_decode(sample), 3) IN 
+    ('34', '68', '102', '136', '170', '204', '238', '272')
+} {8}
+
+reset_db
+do_test 4.7 {
+  execsql { 
+    BEGIN;
+    CREATE TABLE t1(o,t INTEGER PRIMARY KEY);
+    CREATE INDEX i1 ON t1(o);
+  }
+  for {set i 0} {$i<10000} {incr i [expr (($i<1000)?1:10)]} {
+    execsql { INSERT INTO t1 VALUES('x', $i) }
+  }
+  execsql {
+    COMMIT;
+    ANALYZE;
+    SELECT count(*) FROM sqlite_stat4;
+  }
+} {8}
+do_execsql_test 4.8 {
+  SELECT test_decode(sample) FROM sqlite_stat4;
+} {
+  {x 211} {x 423} {x 635} {x 847} 
+  {x 1590} {x 3710} {x 5830} {x 7950}
+}
+
+
+#-------------------------------------------------------------------------
+# The following would cause a crash at one point.
+#
+reset_db
+do_execsql_test 5.1 {
+  PRAGMA encoding = 'utf-16';
+  CREATE TABLE t0(v);
+  ANALYZE;
+}
+
+#-------------------------------------------------------------------------
+# This was also crashing (corrupt sqlite_stat4 table).
+#
+reset_db
+do_execsql_test 6.1 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a);
+  CREATE INDEX i2 ON t1(b);
+  INSERT INTO t1 VALUES(1, 1);
+  INSERT INTO t1 VALUES(2, 2);
+  INSERT INTO t1 VALUES(3, 3);
+  INSERT INTO t1 VALUES(4, 4);
+  INSERT INTO t1 VALUES(5, 5);
+  ANALYZE;
+  PRAGMA writable_schema = 1;
+  CREATE TEMP TABLE x1 AS
+    SELECT tbl,idx,neq,nlt,ndlt,sample FROM sqlite_stat4
+    ORDER BY (rowid%5), rowid;
+  DELETE FROM sqlite_stat4;
+  INSERT INTO sqlite_stat4 SELECT * FROM x1;
+  PRAGMA writable_schema = 0;
+  ANALYZE sqlite_master;
+}
+do_execsql_test 6.2 {
+  SELECT * FROM t1 WHERE a = 'abc';
+}
+
+#-------------------------------------------------------------------------
+# The following tests experiment with adding corrupted records to the
+# 'sample' column of the sqlite_stat4 table.
+#
+reset_db
+sqlite3_db_config_lookaside db 0 0 0
+
+database_may_be_corrupt
+do_execsql_test 7.1 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+  INSERT INTO t1 VALUES(1, 1);
+  INSERT INTO t1 VALUES(2, 2);
+  INSERT INTO t1 VALUES(3, 3);
+  INSERT INTO t1 VALUES(4, 4);
+  INSERT INTO t1 VALUES(5, 5);
+  ANALYZE;
+  UPDATE sqlite_stat4 SET sample = X'' WHERE rowid = 1;
+  ANALYZE sqlite_master;
+}
+
+do_execsql_test 7.2 {
+  UPDATE sqlite_stat4 SET sample = X'FFFF';
+  ANALYZE sqlite_master;
+  SELECT * FROM t1 WHERE a = 1;
+} {1 1}
+
+do_execsql_test 7.3 {
+  ANALYZE;
+  UPDATE sqlite_stat4 SET neq = '0 0 0';
+  ANALYZE sqlite_master;
+  SELECT * FROM t1 WHERE a = 1;
+} {1 1}
+
+do_execsql_test 7.4 {
+  ANALYZE;
+  UPDATE sqlite_stat4 SET ndlt = '0 0 0';
+  ANALYZE sqlite_master;
+  SELECT * FROM t1 WHERE a = 3;
+} {3 3}
+
+do_execsql_test 7.5 {
+  ANALYZE;
+  UPDATE sqlite_stat4 SET nlt = '0 0 0';
+  ANALYZE sqlite_master;
+  SELECT * FROM t1 WHERE a = 5;
+} {5 5}
+
+database_never_corrupt
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.1 {
+  CREATE TABLE t1(x TEXT);
+  CREATE INDEX i1 ON t1(x);
+  INSERT INTO t1 VALUES('1');
+  INSERT INTO t1 VALUES('2');
+  INSERT INTO t1 VALUES('3');
+  INSERT INTO t1 VALUES('4');
+  ANALYZE;
+}
+do_execsql_test 8.2 {
+  SELECT * FROM t1 WHERE x = 3;
+} {3}
+
+#-------------------------------------------------------------------------
+# Check that the bug fixed by [91733bc485] really is fixed.
+#
+reset_db
+do_execsql_test 9.1 {
+  CREATE TABLE t1(a, b, c, d, e);
+  CREATE INDEX i1 ON t1(a, b, c, d);
+  CREATE INDEX i2 ON t1(e);
+}
+do_test 9.2 {
+  execsql BEGIN;
+  for {set i 0} {$i < 100} {incr i} {
+    execsql "INSERT INTO t1 VALUES('x', 'y', 'z', $i, [expr $i/2])"
+  }
+  for {set i 0} {$i < 20} {incr i} {
+    execsql "INSERT INTO t1 VALUES('x', 'y', 'z', 101, $i)"
+  }
+  for {set i 102} {$i < 200} {incr i} {
+    execsql "INSERT INTO t1 VALUES('x', 'y', 'z', $i, [expr $i/2])"
+  }
+  execsql COMMIT
+  execsql ANALYZE
+} {}
+
+do_eqp_test 9.3.1 {
+  SELECT * FROM t1 WHERE a='x' AND b='y' AND c='z' AND d=101 AND e=5;
+} {/t1 USING INDEX i2/}
+do_eqp_test 9.3.2 {
+  SELECT * FROM t1 WHERE a='x' AND b='y' AND c='z' AND d=99 AND e=5;
+} {/t1 USING INDEX i1/}
+
+set value_d [expr 101]
+do_eqp_test 9.4.1 {
+  SELECT * FROM t1 WHERE a='x' AND b='y' AND c='z' AND d=$value_d AND e=5
+} {/t1 USING INDEX i2/}
+set value_d [expr 99]
+do_eqp_test 9.4.2 {
+  SELECT * FROM t1 WHERE a='x' AND b='y' AND c='z' AND d=$value_d AND e=5
+} {/t1 USING INDEX i1/}
+
+#-------------------------------------------------------------------------
+# Check that the planner takes stat4 data into account when considering
+# "IS NULL" and "IS NOT NULL" constraints.
+#
+do_execsql_test 10.1.1 {
+  DROP TABLE IF EXISTS t3;
+  CREATE TABLE t3(a, b);
+  CREATE INDEX t3a ON t3(a);
+  CREATE INDEX t3b ON t3(b);
+}
+do_test 10.1.2 {
+  for {set i 1} {$i < 100} {incr i} {
+    if {$i>90} { set a $i } else { set a NULL }
+    set b [expr $i % 5]
+    execsql "INSERT INTO t3 VALUES($a, $b)"
+  }
+  execsql ANALYZE
+} {}
+do_eqp_test 10.1.3 {
+  SELECT * FROM t3 WHERE a IS NULL AND b = 2
+} {/t3 USING INDEX t3b/}
+do_eqp_test 10.1.4 {
+  SELECT * FROM t3 WHERE a IS NOT NULL AND b = 2
+} {/t3 USING INDEX t3a/}
+
+do_execsql_test 10.2.1 {
+  DROP TABLE IF EXISTS t3;
+  CREATE TABLE t3(x, a, b);
+  CREATE INDEX t3a ON t3(x, a);
+  CREATE INDEX t3b ON t3(x, b);
+}
+do_test 10.2.2 {
+  for {set i 1} {$i < 100} {incr i} {
+    if {$i>90} { set a $i } else { set a NULL }
+    set b [expr $i % 5]
+    execsql "INSERT INTO t3 VALUES('xyz', $a, $b)"
+  }
+  execsql ANALYZE
+} {}
+do_eqp_test 10.2.3 {
+  SELECT * FROM t3 WHERE x = 'xyz' AND a IS NULL AND b = 2
+} {/t3 USING INDEX t3b/}
+do_eqp_test 10.2.4 {
+  SELECT * FROM t3 WHERE x = 'xyz' AND a IS NOT NULL AND b = 2
+} {/t3 USING INDEX t3a/}
+
+#-------------------------------------------------------------------------
+# Check that stat4 data is used correctly with non-default collation
+# sequences.
+#
+foreach {tn schema} {
+  1 {
+    CREATE TABLE t4(a COLLATE nocase, b);
+    CREATE INDEX t4a ON t4(a);
+    CREATE INDEX t4b ON t4(b);
+  }
+  2 {
+    CREATE TABLE t4(a, b);
+    CREATE INDEX t4a ON t4(a COLLATE nocase);
+    CREATE INDEX t4b ON t4(b);
+  }
+} {
+  drop_all_tables
+  do_test 11.$tn.1 { execsql $schema } {}
+
+  do_test 11.$tn.2 {
+    for {set i 0} {$i < 100} {incr i} {
+      if { ($i % 10)==0 } { set a ABC } else { set a DEF }
+      set b [expr $i % 5]
+        execsql { INSERT INTO t4 VALUES($a, $b) }
+    }
+    execsql ANALYZE
+  } {}
+
+  do_eqp_test 11.$tn.3 {
+    SELECT * FROM t4 WHERE a = 'def' AND b = 3;
+  } {/t4 USING INDEX t4b/}
+
+  if {$tn==1} {
+    set sql "SELECT * FROM t4 WHERE a = 'abc' AND b = 3;"
+    do_eqp_test 11.$tn.4 $sql {/t4 USING INDEX t4a/}
+  } else {
+
+    set sql "SELECT * FROM t4 WHERE a = 'abc' COLLATE nocase AND b = 3;"
+    do_eqp_test 11.$tn.5 $sql {/t4 USING INDEX t4a/}
+
+    set sql "SELECT * FROM t4 WHERE a COLLATE nocase = 'abc' AND b = 3;"
+    do_eqp_test 11.$tn.6 $sql {/t4 USING INDEX t4a/}
+  }
+}
+
+foreach {tn schema} {
+  1 {
+    CREATE TABLE t4(x, a COLLATE nocase, b);
+    CREATE INDEX t4a ON t4(x, a);
+    CREATE INDEX t4b ON t4(x, b);
+  }
+  2 {
+    CREATE TABLE t4(x, a, b);
+    CREATE INDEX t4a ON t4(x, a COLLATE nocase);
+    CREATE INDEX t4b ON t4(x, b);
+  }
+} {
+  drop_all_tables
+  do_test 12.$tn.1 { execsql $schema } {}
+
+  do_test 12.$tn.2 {
+    for {set i 0} {$i < 100} {incr i} {
+      if { ($i % 10)==0 } { set a ABC } else { set a DEF }
+      set b [expr $i % 5]
+        execsql { INSERT INTO t4 VALUES(X'abcdef', $a, $b) }
+    }
+    execsql ANALYZE
+  } {}
+
+  do_eqp_test 12.$tn.3 {
+    SELECT * FROM t4 WHERE x=X'abcdef' AND a = 'def' AND b = 3;
+  } {/t4 USING INDEX t4b/}
+
+  if {$tn==1} {
+    set sql "SELECT * FROM t4 WHERE x=X'abcdef' AND a = 'abc' AND b = 3;"
+    do_eqp_test 12.$tn.4 $sql {/t4 USING INDEX t4a/}
+  } else {
+    set sql {
+      SELECT * FROM t4 WHERE x=X'abcdef' AND a = 'abc' COLLATE nocase AND b = 3
+    }
+    do_eqp_test 12.$tn.5 $sql {/t4 USING INDEX t4a/}
+    set sql {
+      SELECT * FROM t4 WHERE x=X'abcdef' AND a COLLATE nocase = 'abc' AND b = 3
+    }
+    do_eqp_test 12.$tn.6 $sql {/t4 USING INDEX t4a/}
+  }
+}
+
+#-------------------------------------------------------------------------
+# Check that affinities are taken into account when using stat4 data to
+# estimate the number of rows scanned by a rowid constraint.
+#
+drop_all_tables
+do_test 13.1 {
+  execsql {
+    CREATE TABLE t1(a, b, c, d);
+    CREATE INDEX i1 ON t1(a);
+    CREATE INDEX i2 ON t1(b, c);
+  }
+  for {set i 0} {$i<100} {incr i} {
+    if {$i %2} {set a abc} else {set a def}
+    execsql { INSERT INTO t1(rowid, a, b, c) VALUES($i, $a, $i, $i) }
+  }
+  execsql ANALYZE
+} {}
+do_eqp_test 13.2.1 {
+  SELECT * FROM t1 WHERE a='abc' AND rowid<15 AND b<12
+} {/SEARCH TABLE t1 USING INDEX i1/}
+do_eqp_test 13.2.2 {
+  SELECT * FROM t1 WHERE a='abc' AND rowid<'15' AND b<12
+} {/SEARCH TABLE t1 USING INDEX i1/}
+do_eqp_test 13.3.1 {
+  SELECT * FROM t1 WHERE a='abc' AND rowid<100 AND b<12
+} {/SEARCH TABLE t1 USING INDEX i2/}
+do_eqp_test 13.3.2 {
+  SELECT * FROM t1 WHERE a='abc' AND rowid<'100' AND b<12
+} {/SEARCH TABLE t1 USING INDEX i2/}
+
+#-------------------------------------------------------------------------
+# Check also that affinities are taken into account when using stat4 data 
+# to estimate the number of rows scanned by any other constraint on a 
+# column other than the leftmost.
+#
+drop_all_tables
+do_test 14.1 {
+  execsql { CREATE TABLE t1(a, b INTEGER, c) }
+  for {set i 0} {$i<100} {incr i} {
+    set c [expr $i % 3]
+    execsql { INSERT INTO t1 VALUES('ott', $i, $c) }
+  }
+  execsql {
+    CREATE INDEX i1 ON t1(a, b);
+    CREATE INDEX i2 ON t1(c);
+    ANALYZE;
+  }
+} {}
+do_eqp_test 13.2.1 {
+  SELECT * FROM t1 WHERE a='ott' AND b<10 AND c=1
+} {/SEARCH TABLE t1 USING INDEX i1/}
+do_eqp_test 13.2.2 {
+  SELECT * FROM t1 WHERE a='ott' AND b<'10' AND c=1
+} {/SEARCH TABLE t1 USING INDEX i1/}
+
+#-------------------------------------------------------------------------
+# By default, 16 non-periodic samples are collected for the stat4 table.
+# The following tests attempt to verify that the most common keys are
+# being collected.
+#
+proc check_stat4 {tn} {
+  db eval ANALYZE
+  db eval {SELECT a, b, c, d FROM t1} {
+    incr k($a)
+    incr k([list $a $b])
+    incr k([list $a $b $c])
+    if { [info exists k([list $a $b $c $d])]==0 } { incr nRow }
+    incr k([list $a $b $c $d])
+  }
+
+  set L [list]
+  foreach key [array names k] {
+    lappend L [list $k($key) $key]
+  }
+
+  set nSample $nRow
+  if {$nSample>16} {set nSample 16}
+
+  set nThreshold [lindex [lsort -decr -integer -index 0 $L] [expr $nSample-1] 0]
+  foreach key [array names k] {
+    if {$k($key)>$nThreshold} {
+      set expect($key) 1
+    }
+    if {$k($key)==$nThreshold} {
+      set possible($key) 1
+    }
+  }
+
+
+  set nPossible [expr $nSample - [llength [array names expect]]]
+
+  #puts "EXPECT: [array names expect]"
+  #puts "POSSIBLE($nPossible/[array size possible]): [array names possible]"
+  #puts "HAVE: [db eval {SELECT test_decode(sample) FROM sqlite_stat4 WHERE idx='i1'}]"
+
+  db eval {SELECT test_decode(sample) AS s FROM sqlite_stat4 WHERE idx='i1'} {
+    set seen 0
+    for {set i 0} {$i<4} {incr i} {
+      unset -nocomplain expect([lrange $s 0 $i])
+      if {[info exists possible([lrange $s 0 $i])]} {
+        set seen 1
+        unset -nocomplain possible([lrange $s 0 $i])
+      }
+    }
+    if {$seen} {incr nPossible -1}
+  }
+  if {$nPossible<0} {set nPossible 0}
+
+  set res [list [llength [array names expect]] $nPossible]
+  uplevel [list do_test $tn [list set {} $res] {0 0}]
+}
+
+drop_all_tables
+do_test 14.1.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c,d);
+    CREATE INDEX i1 ON t1(a,b,c,d);
+  }
+  for {set i 0} {$i < 160} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i,$i,$i,$i) }
+    if {($i % 10)==0} { execsql { INSERT INTO t1 VALUES($i,$i,$i,$i) } }
+  }
+} {}
+check_stat4 14.1.2
+
+do_test 14.2.1 {
+  execsql { DELETE FROM t1 }
+  for {set i 0} {$i < 1600} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i/10,$i/17,$i/27,$i/37) }
+  }
+} {}
+check_stat4 14.2.2
+
+do_test 14.3.1 {
+  for {set i 0} {$i < 10} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+    execsql { INSERT INTO t1 VALUES($i*50,$i*50,$i*50,$i*50) }
+  }
+} {}
+check_stat4 14.3.2
+
+do_test 14.4.1 {
+  execsql {DELETE FROM t1}
+  for {set i 1} {$i < 160} {incr i} {
+    set b [expr $i % 10]
+    if {$b==0 || $b==2} {set b 1}
+    execsql { INSERT INTO t1 VALUES($i/10,$b,$i,$i) }
+  }
+} {}
+check_stat4 14.4.2
+db func lrange lrange
+db func lindex lindex
+do_execsql_test 14.4.3 {
+  SELECT lrange(test_decode(sample), 0, 1) AS s FROM sqlite_stat4
+  WHERE lindex(s, 1)=='1' ORDER BY rowid
+} {
+  {0 1} {1 1} {2 1} {3 1} 
+  {4 1} {5 1} {6 1} {7 1} 
+  {8 1} {9 1} {10 1} {11 1} 
+  {12 1} {13 1} {14 1} {15 1}
+}
+
+#-------------------------------------------------------------------------
+# Test that nothing untoward happens if the stat4 table contains entries
+# for indexes that do not exist. Or NULL values in the idx column.
+# Or NULL values in any of the other columns.
+#
+drop_all_tables
+do_execsql_test 15.1 {
+  CREATE TABLE x1(a, b, UNIQUE(a, b));
+  INSERT INTO x1 VALUES(1, 2);
+  INSERT INTO x1 VALUES(3, 4);
+  INSERT INTO x1 VALUES(5, 6);
+  ANALYZE;
+  INSERT INTO sqlite_stat4 VALUES(NULL, NULL, NULL, NULL, NULL, NULL);
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.2 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+do_execsql_test 15.3 {
+  INSERT INTO sqlite_stat4 VALUES(42, 42, 42, 42, 42, 42);
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.4 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+do_execsql_test 15.5 {
+  UPDATE sqlite_stat1 SET stat = NULL;
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.6 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+do_execsql_test 15.7 {
+  ANALYZE;
+  UPDATE sqlite_stat1 SET tbl = 'no such tbl';
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.8 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+do_execsql_test 15.9 {
+  ANALYZE;
+  UPDATE sqlite_stat4 SET neq = NULL, nlt=NULL, ndlt=NULL;
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.10 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+# This is just for coverage....
+do_execsql_test 15.11 {
+  ANALYZE;
+  UPDATE sqlite_stat1 SET stat = stat || ' unordered';
+}
+db close
+sqlite3 db test.db
+do_execsql_test 15.12 { SELECT * FROM x1 } {1 2 3 4 5 6}
+
+#-------------------------------------------------------------------------
+# Test that allocations used for sqlite_stat4 samples are included in
+# the quantity returned by SQLITE_DBSTATUS_SCHEMA_USED.
+#
+set one [string repeat x 1000]
+set two [string repeat x 2000]
+do_test 16.1 {
+  reset_db
+  execsql {
+    CREATE TABLE t1(a, UNIQUE(a));
+    INSERT INTO t1 VALUES($one);
+    ANALYZE;
+  }
+  set nByte [lindex [sqlite3_db_status db SCHEMA_USED 0] 1]
+
+  reset_db
+  execsql {
+    CREATE TABLE t1(a, UNIQUE(a));
+    INSERT INTO t1 VALUES($two);
+    ANALYZE;
+  }
+  set nByte2 [lindex [sqlite3_db_status db SCHEMA_USED 0] 1]
+  puts -nonewline " (nByte=$nByte nByte2=$nByte2)"
+
+  expr {$nByte2 > $nByte+900 && $nByte2 < $nByte+1100}
+} {1}
+
+#-------------------------------------------------------------------------
+# Test that stat4 data may be used with partial indexes.
+#
+do_test 17.1 {
+  reset_db
+  execsql {
+    CREATE TABLE t1(a, b, c, d);
+    CREATE INDEX i1 ON t1(a, b) WHERE d IS NOT NULL;
+    INSERT INTO t1 VALUES(-1, -1, -1, NULL);
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+    INSERT INTO t1 SELECT 2*a,2*b,2*c,d FROM t1;
+  }
+
+  for {set i 0} {$i < 32} {incr i} {
+    if {$i<8} {set b 0} else { set b $i }
+    execsql { INSERT INTO t1 VALUES($i%2, $b, $i/2, 'abc') }
+  }
+  execsql {ANALYZE main.t1}
+} {}
+
+do_catchsql_test 17.1.2 {
+  ANALYZE temp.t1;
+} {1 {no such table: temp.t1}}
+
+do_eqp_test 17.2 {
+  SELECT * FROM t1 WHERE d IS NOT NULL AND a=0 AND b=10 AND c=10;
+} {/USING INDEX i1/}
+do_eqp_test 17.3 {
+  SELECT * FROM t1 WHERE d IS NOT NULL AND a=0 AND b=0 AND c=10;
+} {/USING INDEX i1/}
+
+do_execsql_test 17.4 {
+  CREATE INDEX i2 ON t1(c, d);
+  ANALYZE main.i2;
+}
+do_eqp_test 17.5 {
+  SELECT * FROM t1 WHERE d IS NOT NULL AND a=0 AND b=10 AND c=10;
+} {/USING INDEX i1/}
+do_eqp_test 17.6 {
+  SELECT * FROM t1 WHERE d IS NOT NULL AND a=0 AND b=0 AND c=10;
+} {/USING INDEX i2/}
+
+#-------------------------------------------------------------------------
+#
+do_test 18.1 {
+  reset_db
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+  }
+  for {set i 0} {$i < 9} {incr i} {
+    execsql {
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+      INSERT INTO t1 VALUES($i, 0);
+    }
+  }
+  execsql ANALYZE
+  execsql { SELECT count(*) FROM sqlite_stat4 }
+} {9}
+
+#-------------------------------------------------------------------------
+# For coverage.
+#
+ifcapable view {
+  do_test 19.1 {
+    reset_db 
+    execsql {
+      CREATE TABLE t1(x, y);
+      CREATE INDEX i1 ON t1(x, y);
+      CREATE VIEW v1 AS SELECT * FROM t1;
+      ANALYZE;
+    }
+  } {}
+}
+ifcapable auth {
+  proc authproc {op args} {
+    if {$op == "SQLITE_ANALYZE"} { return "SQLITE_DENY" }
+    return "SQLITE_OK"
+  }
+  do_test 19.2 {
+    reset_db 
+    db auth authproc
+    execsql {
+      CREATE TABLE t1(x, y);
+      CREATE VIEW v1 AS SELECT * FROM t1;
+    }
+    catchsql ANALYZE
+  } {1 {not authorized}}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+proc r {args} { expr rand() }
+db func r r
+db func lrange lrange
+do_test 20.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c,d);
+    CREATE INDEX i1 ON t1(a,b,c,d);
+  }
+  for {set i 0} {$i < 16} {incr i} {
+    execsql {
+      INSERT INTO t1 VALUES($i, r(), r(), r());
+      INSERT INTO t1 VALUES($i, $i,  r(), r());
+      INSERT INTO t1 VALUES($i, $i,  $i,  r());
+      INSERT INTO t1 VALUES($i, $i,  $i,  $i);
+      INSERT INTO t1 VALUES($i, $i,  $i,  $i);
+      INSERT INTO t1 VALUES($i, $i,  $i,  r());
+      INSERT INTO t1 VALUES($i, $i,  r(), r());
+      INSERT INTO t1 VALUES($i, r(), r(), r());
+    }
+  }
+} {}
+do_execsql_test 20.2 { ANALYZE }
+for {set i 0} {$i<16} {incr i} {
+    set val "$i $i $i $i"
+    do_execsql_test 20.3.$i {
+      SELECT count(*) FROM sqlite_stat4 
+      WHERE lrange(test_decode(sample), 0, 3)=$val
+    } {1}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+
+do_execsql_test 21.0 {
+  CREATE TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a);
+}
+
+do_test 21.1 {
+  for {set i 1} {$i < 100} {incr i} {
+    execsql { 
+      INSERT INTO t2 VALUES(CASE WHEN $i < 80 THEN 'one' ELSE 'two' END, $i) 
+    }
+  }
+  execsql ANALYZE
+} {}
+
+# Condition (a='one') matches 80% of the table. (rowid<10) reduces this to
+# 10%, but (rowid<50) only reduces it to 50%. So in the first case below
+# the index is used. In the second, it is not. 
+#
+do_eqp_test 21.2 {
+  SELECT * FROM t2 WHERE a='one' AND rowid < 10
+} {/*USING INDEX i2 (a=? AND rowid<?)*/}
+do_eqp_test 21.3 {
+  SELECT * FROM t2 WHERE a='one' AND rowid < 50
+} {/*USING INTEGER PRIMARY KEY*/}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 22.0 {
+  CREATE TABLE t3(a, b, c, d, PRIMARY KEY(a, b)) WITHOUT ROWID;
+  SELECT * FROM t3;
+} {}
+do_execsql_test 22.1 {
+  WITH r(x) AS (
+    SELECT 1
+    UNION ALL
+    SELECT x+1 FROM r WHERE x<=100
+  )
+
+  INSERT INTO t3 SELECT
+    CASE WHEN (x>45 AND x<96) THEN 'B' ELSE 'A' END,  /* Column "a" */
+    x,                                                /* Column "b" */
+    CASE WHEN (x<51) THEN 'one' ELSE 'two' END,       /* Column "c" */
+    x                                                 /* Column "d" */
+  FROM r;
+
+  CREATE INDEX i3 ON t3(c);
+  CREATE INDEX i4 ON t3(d);
+  ANALYZE;
+}
+
+# Expression (c='one' AND a='B') matches 5 table rows. But (c='one' AND a=A')
+# matches 45. Expression (d<?) matches 20. Neither index is a covering index.
+#
+# Therefore, with stat4 data, SQLite prefers (c='one' AND a='B') over (d<20),
+# and (d<20) over (c='one' AND a='A').
+foreach {tn where res} {
+  1 "c='one' AND a='B' AND d < 20"   {/*INDEX i3 (c=? AND a=?)*/}
+  2 "c='one' AND a='A' AND d < 20"   {/*INDEX i4 (d<?)*/}
+} {
+  do_eqp_test 22.2.$tn "SELECT * FROM t3 WHERE $where" $res
+}
+
+proc int_to_char {i} {
+  set ret ""
+  set char [list a b c d e f g h i j]
+  foreach {div} {1000 100 10 1} {
+    append ret [lindex $char [expr ($i / $div) % 10]]
+  }
+  set ret
+}
+db func int_to_char int_to_char
+
+do_execsql_test 23.0 {
+  CREATE TABLE t4(
+    a COLLATE nocase, b, c, 
+    d, e, f, 
+    PRIMARY KEY(c, b, a)
+  ) WITHOUT ROWID;
+  CREATE INDEX i41 ON t4(e);
+  CREATE INDEX i42 ON t4(f);
+
+  WITH data(a, b, c, d, e, f) AS (
+    SELECT int_to_char(0), 'xyz', 'zyx', '*', 0, 0
+    UNION ALL
+    SELECT 
+      int_to_char(f+1), b, c, d, (e+1) % 2, f+1
+    FROM data WHERE f<1024
+  )
+  INSERT INTO t4 SELECT a, b, c, d, e, f FROM data;
+  ANALYZE;
+} {}
+
+do_eqp_test 23.1 {
+  SELECT * FROM t4 WHERE 
+    (e=1 AND b='xyz' AND c='zyx' AND a<'AEA') AND f<300
+  -- Formerly used index i41.  But i41 is not a covering index whereas
+  -- the PRIMARY KEY is a covering index, and so as of 2017-10-15, the
+  -- PRIMARY KEY is preferred.
+} {SEARCH TABLE t4 USING PRIMARY KEY (c=? AND b=? AND a<?)}
+do_eqp_test 23.2 {
+  SELECT * FROM t4 WHERE 
+    (e=1 AND b='xyz' AND c='zyx' AND a<'JJJ') AND f<300
+} {SEARCH TABLE t4 USING INDEX i42 (f<?)}
+
+do_execsql_test 24.0 {
+  CREATE TABLE t5(c, d, b, e, a, PRIMARY KEY(a, b, c)) WITHOUT ROWID;
+  WITH data(a, b, c, d, e) AS (
+    SELECT 'z', 'y', 0, 0, 0
+    UNION ALL
+    SELECT 
+      a, CASE WHEN b='y' THEN 'n' ELSE 'y' END, c+1, e/250, e+1 
+    FROM data
+    WHERE e<1000
+  )
+  INSERT INTO t5(a, b, c, d, e) SELECT * FROM data;
+  CREATE INDEX t5d ON t5(d);
+  CREATE INDEX t5e ON t5(e);
+  ANALYZE;
+}
+
+foreach {tn where eqp} {
+  1 "d=0 AND a='z' AND b='n' AND e<200" {/*t5d (d=? AND a=? AND b=?)*/}
+  2 "d=0 AND a='z' AND b='n' AND e<100" {/*t5e (e<?)*/}
+
+  3 "d=0 AND e<300"                     {/*t5d (d=?)*/}
+  4 "d=0 AND e<200"                     {/*t5e (e<?)*/}
+} {
+  do_eqp_test 24.$tn "SeLeCt * FROM t5 WHERE $where" $eqp
+}
+
+#-------------------------------------------------------------------------
+# Test that if stat4 data is available but cannot be used because the
+# rhs of a range constraint is a complex expression, the default estimates
+# are used instead.
+ifcapable stat4&&cte {
+  do_execsql_test 25.1 {
+    CREATE TABLE t6(a, b);
+    WITH ints(i,j) AS (
+      SELECT 1,1 UNION ALL SELECT i+1,j+1 FROM ints WHERE i<100
+    ) INSERT INTO t6 SELECT * FROM ints;
+    CREATE INDEX aa ON t6(a);
+    CREATE INDEX bb ON t6(b);
+    ANALYZE;
+  }
+
+  # Term (b<?) is estimated at 25%. Better than (a<30) but not as
+  # good as (a<20).
+  do_eqp_test 25.2.1 { SELECT * FROM t6 WHERE a<30 AND b<? } \
+    {SEARCH TABLE t6 USING INDEX bb (b<?)}
+  do_eqp_test 25.2.2 { SELECT * FROM t6 WHERE a<20 AND b<? } \
+    {SEARCH TABLE t6 USING INDEX aa (a<?)}
+
+  # Term (b BETWEEN ? AND ?) is estimated at 1/64.
+  do_eqp_test 25.3.1 { 
+    SELECT * FROM t6 WHERE a BETWEEN 5 AND 10 AND b BETWEEN ? AND ? 
+  } {SEARCH TABLE t6 USING INDEX bb (b>? AND b<?)}
+  
+  # Term (b BETWEEN ? AND 60) is estimated to return roughly 15 rows -
+  # 60 from (b<=60) multiplied by 0.25 for the b>=? term. Better than
+  # (a<20) but not as good as (a<10).
+  do_eqp_test 25.4.1 { 
+    SELECT * FROM t6 WHERE a < 10 AND (b BETWEEN ? AND 60)
+  } {SEARCH TABLE t6 USING INDEX aa (a<?)}
+
+  do_eqp_test 25.4.2 { 
+    SELECT * FROM t6 WHERE a < 20 AND (b BETWEEN ? AND 60)
+  } {SEARCH TABLE t6 USING INDEX bb (b>? AND b<?)}
+}
+
+#-------------------------------------------------------------------------
+# Check that a problem in they way stat4 data is used has been 
+# resolved (see below).
+#
+reset_db
+do_test 26.1.1 {
+  db transaction {
+    execsql { 
+      CREATE TABLE t1(x, y, z);
+      CREATE INDEX t1xy ON t1(x, y);
+      CREATE INDEX t1z ON t1(z);
+    }
+    for {set i 0} {$i < 10000} {incr i} {
+      execsql { INSERT INTO t1(x, y) VALUES($i, $i) }
+    }
+    for {set i 0} {$i < 10} {incr i} {
+      execsql {
+        WITH cnt(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM cnt WHERE x<100)
+        INSERT INTO t1(x, y) SELECT 10000+$i, x FROM cnt;
+        INSERT INTO t1(x, y) SELECT 10000+$i, 100;
+      }
+    }
+    execsql {
+      UPDATE t1 SET z = rowid / 20;
+      ANALYZE;
+    }
+  }
+} {}
+
+do_execsql_test 26.1.2 {
+  SELECT count(*) FROM t1 WHERE x = 10000 AND y < 50;
+} {49}
+do_execsql_test 26.1.3 {
+  SELECT count(*) FROM t1 WHERE z = 444;
+} {20}
+
+# The analyzer knows that any (z=?) expression matches 20 rows. So it
+# will use index "t1z" if the estimate of hits for (x=10000 AND y<50)
+# is greater than 20 rows.
+#
+# And it should be. The analyzer has a stat4 sample as follows:
+#
+#   sample=(x=10000, y=100) nLt=(10000 10099)
+#
+# There should be no other samples that start with (x=10000). So it knows 
+# that (x=10000 AND y<50) must match somewhere between 0 and 99 rows, but
+# no more than that. Guessing less than 20 is therefore unreasonable.
+#
+# At one point though, due to a problem in whereKeyStats(), the planner was
+# estimating that (x=10000 AND y<50) would match only 2 rows.
+#
+do_eqp_test 26.1.4 {
+  SELECT * FROM t1 WHERE x = 10000 AND y < 50 AND z = 444;
+} {SEARCH TABLE t1 USING INDEX t1z (z=?)}
+
+
+# This test - 26.2.* - tests that another manifestation of the same problem
+# is no longer present in the library. Assuming:
+# 
+#   CREATE INDEX t1xy ON t1(x, y)
+#
+# and that have samples for index t1xy as follows:
+#
+#
+#   sample=('A', 70)        nEq=(100, 2)        nLt=(900, 970)
+#   sample=('B', 70)        nEq=(100, 2)        nLt=(1000, 1070)    
+#
+# the planner should estimate that (x = 'B' AND y > 25) matches 76 rows
+# (70 * 2/3 + 30). Before, due to the problem, the planner was estimating 
+# that this matched 100 rows.
+# 
+reset_db
+do_execsql_test 26.2.1 {
+  BEGIN;
+    CREATE TABLE t1(x, y, z);
+    CREATE INDEX i1 ON t1(x, y);
+    CREATE INDEX i2 ON t1(z);
+  
+    WITH 
+    cnt(y) AS (SELECT 0 UNION ALL SELECT y+1 FROM cnt WHERE y<99),
+    letters(x) AS (
+      SELECT 'A' UNION SELECT 'B' UNION SELECT 'C' UNION SELECT 'D'
+    )
+    INSERT INTO t1(x, y) SELECT x, y FROM letters, cnt;
+  
+    WITH
+    letters(x) AS (
+      SELECT 'A' UNION SELECT 'B' UNION SELECT 'C' UNION SELECT 'D'
+    )
+    INSERT INTO t1(x, y) SELECT x, 70 FROM letters;
+  
+    WITH
+    cnt(i) AS (SELECT 0 UNION ALL SELECT i+1 FROM cnt WHERE i<9999)
+    INSERT INTO t1(x, y) SELECT i, i FROM cnt;
+  
+    UPDATE t1 SET z = (rowid / 95);
+    ANALYZE;
+  COMMIT;
+}
+
+do_eqp_test 26.2.2 {
+  SELECT * FROM t1 WHERE x='B' AND y>25 AND z=?;
+} {SEARCH TABLE t1 USING INDEX i1 (x=? AND y>?)}
+
+
+finish_test

@@ -1,0 +1,327 @@
+# 2016-03-01
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex1
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_tcl_module db
+
+proc vtab_command {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c)"
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      if {[llength $clist]!=1} { error "unexpected constraint list" }
+      catch { array unset C }
+      array set C [lindex $clist 0]
+      if {$C(usable)} {
+        return "omit 0 cost 0 rows 1 idxnum 555 idxstr eq!"
+      } else {
+        return "cost 1000000 rows 0 idxnum 0 idxstr scan..."
+      }
+    }
+
+  }
+
+  return {}
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE x1 USING tcl(vtab_command);
+} {}
+
+do_eqp_test 1.1 {
+  SELECT * FROM x1 WHERE a = 'abc'
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 555:eq!}
+
+do_eqp_test 1.2 {
+  SELECT * FROM x1 WHERE a IN ('abc', 'def');
+} {SCAN TABLE x1 VIRTUAL TABLE INDEX 555:eq!}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+register_tcl_module db
+
+# Parameter $mode may be one of:
+#
+#   "omit" - Implement filtering. Set the omit flag.
+#   "use"  - Implement filtering. Use the constraint, but do not set omit.
+#   "use2" - Do not implement filtering. Use the constraint anyway.
+#
+#   
+proc t1_vtab {mode method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b)"
+    }
+
+    xBestIndex {
+      set SQL_FILTER {SELECT * FROM t1x WHERE a='%1%'}
+      set SQL_SCAN   {SELECT * FROM t1x}
+
+      set clist [lindex $args 0]
+      set idx 0
+      for {set idx 0} {$idx < [llength $clist]} {incr idx} {
+        array unset C
+        array set C [lindex $clist $idx]
+        if {$C(column)==0 && $C(op)=="eq" && $C(usable)} {
+          switch -- $mode {
+            "omit" {
+              return [list omit $idx rows 10 cost 10 idxstr $SQL_FILTER]
+            }
+            "use" {
+              return [list use $idx rows 10 cost 10 idxstr $SQL_FILTER]
+            }
+            "use2" {
+              return [list use $idx rows 10 cost 10 idxstr $SQL_SCAN]
+            }
+            default {
+              error "Bad mode - $mode"
+            }
+          }
+        }
+      }
+
+      return [list idxstr {SELECT * FROM t1x}]
+    }
+
+    xFilter {
+      set map [list %1% [lindex $args 2 0]]
+      set sql [string map $map [lindex $args 1]]
+      return [list sql $sql]
+    }
+  }
+
+  return {}
+}
+
+do_execsql_test 2.1 {
+  CREATE TABLE t1x(i INTEGER PRIMARY KEY, a, b);
+  INSERT INTO t1x VALUES(1, 'one', 1);
+  INSERT INTO t1x VALUES(2, 'two', 2);
+  INSERT INTO t1x VALUES(3, 'three', 3);
+  INSERT INTO t1x VALUES(4, 'four', 4);
+}
+
+foreach {tn mode} {
+  1 use 2 omit 3 use2
+} {
+  do_execsql_test 2.2.$mode.1 "
+    DROP TABLE IF EXISTS t1;
+    CREATE VIRTUAL TABLE t1 USING tcl(t1_vtab $mode);
+  "
+
+  do_execsql_test 2.2.$mode.2 {SELECT * FROM t1} {one 1 two 2 three 3 four 4}
+  do_execsql_test 2.2.$mode.3 {SELECT rowid FROM t1} {1 2 3 4}
+  do_execsql_test 2.2.$mode.4 {SELECT rowid FROM t1 WHERE a='two'} {2} 
+
+  do_execsql_test 2.2.$mode.5 {
+    SELECT rowid FROM t1 WHERE a IN ('one', 'four') ORDER BY +rowid
+  } {1 4} 
+
+  set plan(use) {
+    QUERY PLAN
+    |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:SELECT * FROM t1x WHERE a='%1%'
+    `--USE TEMP B-TREE FOR ORDER BY
+  }
+  set plan(omit) {
+    QUERY PLAN
+    |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:SELECT * FROM t1x WHERE a='%1%'
+    `--USE TEMP B-TREE FOR ORDER BY
+  }
+  set plan(use2) {
+    QUERY PLAN
+    |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:SELECT * FROM t1x
+    `--USE TEMP B-TREE FOR ORDER BY
+  }
+
+  do_eqp_test 2.2.$mode.6 { 
+    SELECT rowid FROM t1 WHERE a IN ('one', 'four') ORDER BY +rowid
+  } [string map {"\n  " "\n"} $plan($mode)]
+}
+
+# 2016-04-09.
+# Demonstrate a register overwrite problem when using two virtual
+# tables where the outer loop uses the IN operator.
+#
+set G(collist) [list PrimaryKey flagA columnA]
+set G(cols) [join $G(collist) ,]
+set G(nulls) "NULL"
+
+proc vtab_command {method args} {
+  global G
+
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1($G(cols))"
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      #puts $clist
+      set W [list]
+      set U [list]
+
+      set i 0
+      for {set idx 0} {$idx < [llength $clist]} {incr idx} {
+        array set c [lindex $clist $idx]
+        if {$c(op)=="eq" && $c(usable)} {
+          lappend W "[lindex $G(collist) $c(column)] = %$i%"
+          lappend U use $idx
+          incr i
+        }
+      }
+
+      if {$W==""} {
+        set sql "SELECT rowid, * FROM t1"
+      } else {
+        set sql "SELECT rowid, * FROM t1 WHERE [join $W { AND }]"
+      }
+
+      return [concat [list idxstr $sql] $U]
+    }
+
+    xFilter {
+      foreach {idxnum idxstr vals} $args {}
+
+      set map [list]
+      for {set i 0} {$i < [llength $vals]} {incr i} {
+        lappend map "%$i%" 
+        set v [lindex $vals $i]
+        if {[string is integer $v]} { 
+          lappend map $v 
+        } else {
+          lappend map "'$v'"
+        }
+      }
+      set sql [string map $map $idxstr]
+
+      #puts "SQL: $sql"
+      return [list sql $sql]
+    }
+  }
+
+  return {}
+}
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+register_tcl_module db
+
+do_execsql_test 3.1 "
+  CREATE TABLE t1($G(cols));
+  INSERT INTO t1 VALUES(1, 0, 'ValueA');
+  INSERT INTO t1 VALUES(2, 0, 'ValueA');
+  INSERT INTO t1 VALUES(3, 0, 'ValueB');
+  INSERT INTO t1 VALUES(4, 0, 'ValueB');
+"
+
+do_execsql_test 3.2 {
+  CREATE VIRTUAL TABLE VirtualTableA USING tcl(vtab_command);
+  CREATE VIRTUAL TABLE VirtualTableB USING tcl(vtab_command);
+}
+
+do_execsql_test 3.3 { SELECT primarykey FROM VirtualTableA } {1 2 3 4}
+
+do_execsql_test 3.4 {
+  SELECT * FROM 
+  VirtualTableA a CROSS JOIN VirtualTableB b ON b.PrimaryKey=a.PrimaryKey
+  WHERE a.ColumnA IN ('ValueA', 'ValueB') AND a.FlagA=0
+} {
+  1 0 ValueA 1 0 ValueA
+  2 0 ValueA 2 0 ValueA
+  3 0 ValueB 3 0 ValueB
+  4 0 ValueB 4 0 ValueB
+}
+
+do_execsql_test 3.5 {
+  SELECT * FROM 
+  VirtualTableA a CROSS JOIN VirtualTableB b ON b.PrimaryKey=a.PrimaryKey
+  WHERE a.FlagA=0 AND a.ColumnA IN ('ValueA', 'ValueB') 
+} {
+  1 0 ValueA 1 0 ValueA
+  2 0 ValueA 2 0 ValueA
+  3 0 ValueB 3 0 ValueB
+  4 0 ValueB 4 0 ValueB
+}
+
+#-------------------------------------------------------------------------
+# If there is an IN(..) condition in the WHERE clause of a query on a
+# virtual table, the xBestIndex method is first invoked with the IN(...)
+# represented by a "usable" SQLITE_INDEX_CONSTRAINT_EQ constraint. If
+# the virtual table elects to use the IN(...) constraint, then the 
+# xBestIndex method is invoked again, this time with the IN(...) marked
+# as "not usable". Depending on the relative costs of the two plans as
+# defined by the virtual table implementation, and the cardinality of the
+# IN(...) operator, SQLite chooses the most efficient plan. 
+#
+# At one point the second invocation of xBestIndex() was only being made
+# for join queries. The following tests check that this problem has been
+# fixed.
+#
+proc vtab_command {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c, d)"
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      lappend ::bestindex_calls $clist
+      set ret "cost 1000000 idxnum 555"
+      for {set i 0} {$i < [llength $clist]} {incr i} {
+        array set C [lindex $clist $i]
+        if {$C(usable)} { lappend ret use $i }
+      }
+      return $ret
+    }
+  }
+  return {}
+}
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x1 USING tcl(vtab_command);
+} {}
+
+do_test 4.1 {
+  set ::bestindex_calls [list]
+  execsql {
+    SELECT * FROM x1 WHERE a=? AND b BETWEEN ? AND ? AND c IN (1, 2, 3, 4);
+  }
+  set ::bestindex_calls
+} [list \
+    [list {op eq column 0 usable 1} \
+          {op eq column 2 usable 1} \
+          {op ge column 1 usable 1} \
+          {op le column 1 usable 1} \
+    ] \
+    [list {op eq column 0 usable 1} \
+          {op eq column 2 usable 0} \
+          {op ge column 1 usable 1} \
+          {op le column 1 usable 1}
+    ]
+]
+
+
+finish_test

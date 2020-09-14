@@ -1,0 +1,441 @@
+# 2011 October 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_changes
+
+# Like [do_execsql_test], except it appends the value returned by 
+# [db changes] to the result of executing the SQL script.
+#
+proc do_changes_test {tn sql res} {
+  uplevel [list \
+    do_test $tn "concat \[execsql {$sql}\] \[db changes\]" $res
+  ]
+}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-15996-49369 This function returns the number of rows
+# modified, inserted or deleted by the most recently completed INSERT,
+# UPDATE or DELETE statement on the database connection specified by the
+# only parameter.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(x, y, PRIMARY KEY(x, y)) WITHOUT ROWID;
+  CREATE INDEX i1 ON t1(a);
+  CREATE INDEX i2 ON t2(y);
+}
+foreach {tn schema} {
+  1 { 
+      CREATE TABLE t1(a, b);
+      CREATE INDEX i1 ON t1(b);
+  }
+  2 { 
+      CREATE TABLE t1(a, b, PRIMARY KEY(a, b)) WITHOUT ROWID;
+      CREATE INDEX i1 ON t1(b);
+  }
+} {
+  reset_db
+  execsql $schema
+
+  # Insert 1 row.
+  do_changes_test 1.$tn.1 { INSERT INTO t1 VALUES(0, 0) } 1
+
+  # Insert 10 rows.
+  do_changes_test 1.$tn.2 {
+    WITH rows(i, j) AS (
+        SELECT 1, 1 UNION ALL SELECT i+1, j+i FROM rows WHERE i<10
+    )
+    INSERT INTO t1 SELECT * FROM rows
+  } 10
+
+  # Modify 5 rows.
+  do_changes_test 1.$tn.3 {
+    UPDATE t1 SET b=b+1 WHERE a<5;
+  } 5
+
+  # Delete 4 rows
+  do_changes_test 1.$tn.4 {
+    DELETE FROM t1 WHERE a>6
+  } 4
+
+  # Check the "on the database connecton specified" part of hte
+  # requirement - changes made by other connections do not show up in
+  # the return value of sqlite3_changes().
+  do_test 1.$tn.5 {
+    sqlite3 db2 test.db
+    execsql { INSERT INTO t1 VALUES(-1, -1) } db2
+    db2 changes
+  } 1
+  do_test 1.$tn.6 {
+    db changes
+  } 4
+  db2 close
+
+  # Test that statements that modify no rows because they hit UNIQUE
+  # constraints set the sqlite3_changes() value to 0. Regardless of
+  # whether or not they are executed inside an explicit transaction.
+  #
+  #   1.$tn.8-9: outside of a transaction
+  #   1.$tn.10-12: inside a transaction
+  #
+  do_changes_test 1.$tn.7 {
+    CREATE UNIQUE INDEX i2 ON t1(a);
+  } 4
+  do_catchsql_test 1.$tn.8 {
+    INSERT INTO t1 VALUES('a', 0), ('b', 0), ('c', 0), (0, 11);
+  } {1 {UNIQUE constraint failed: t1.a}}
+  do_test 1.$tn.9 { db changes } 0
+  do_catchsql_test 1.$tn.10 {
+    BEGIN;
+      INSERT INTO t1 VALUES('a', 0), ('b', 0), ('c', 0), (0, 11);
+  } {1 {UNIQUE constraint failed: t1.a}}
+  do_test 1.$tn.11 { db changes } 0
+  do_changes_test 1.$tn.12 COMMIT 0
+
+}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-44877-05564 Executing any other type of SQL statement
+# does not modify the value returned by this function.
+#
+reset_db
+do_changes_test 2.1 { CREATE TABLE t1(x)          } 0
+do_changes_test 2.2 { 
+  WITH d(y) AS (SELECT 1 UNION ALL SELECT y+1 FROM d WHERE y<47)
+  INSERT INTO t1 SELECT y FROM d;
+} 47
+
+# The statement above set changes() to 47. Check that none of the following
+# modify this.
+do_changes_test 2.3 { SELECT count(x) FROM t1 } {47 47}
+do_changes_test 2.4 { DROP TABLE t1               } 47
+do_changes_test 2.5 { CREATE TABLE t1(x)          } 47
+do_changes_test 2.6 { ALTER TABLE t1 ADD COLUMN b } 47
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-53938-27527 Only changes made directly by the INSERT,
+# UPDATE or DELETE statement are considered - auxiliary changes caused
+# by triggers, foreign key actions or REPLACE constraint resolution are
+# not counted.
+#
+#   3.1.*: triggers
+#   3.2.*: foreign key actions
+#   3.3.*: replace constraints
+#
+reset_db
+do_execsql_test 3.1.0 {
+  CREATE TABLE log(x);
+  CREATE TABLE p1(one PRIMARY KEY, two);
+
+  CREATE TRIGGER tr_ai AFTER INSERT ON p1 BEGIN
+    INSERT INTO log VALUES('insert');
+  END;
+  CREATE TRIGGER tr_bd BEFORE DELETE ON p1 BEGIN
+    INSERT INTO log VALUES('delete');
+  END;
+  CREATE TRIGGER tr_au AFTER UPDATE ON p1 BEGIN
+    INSERT INTO log VALUES('update');
+  END;
+
+}
+
+do_changes_test 3.1.1 {
+  INSERT INTO p1 VALUES('a', 'A'), ('b', 'B'), ('c', 'C');
+} 3
+do_changes_test 3.1.2 {
+  UPDATE p1 SET two = two||two;
+} 3
+do_changes_test 3.1.3 {
+  DELETE FROM p1 WHERE one IN ('a', 'c');
+} 2
+do_execsql_test 3.1.4 {
+  -- None of the inserts on table log were counted.
+  SELECT count(*) FROM log
+} 8
+
+do_execsql_test 3.2.0 {
+  DELETE FROM p1;
+  INSERT INTO p1 VALUES('a', 'A'), ('b', 'B'), ('c', 'C');
+
+  CREATE TABLE c1(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE SET NULL);
+  CREATE TABLE c2(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE SET DEFAULT);
+  CREATE TABLE c3(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE CASCADE);
+  INSERT INTO c1 VALUES('a', 'aaa');
+  INSERT INTO c2 VALUES('b', 'bbb');
+  INSERT INTO c3 VALUES('c', 'ccc');
+
+  INSERT INTO p1 VALUES('d', 'D'), ('e', 'E'), ('f', 'F');
+  CREATE TABLE c4(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE SET NULL);
+  CREATE TABLE c5(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE SET DEFAULT);
+  CREATE TABLE c6(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE CASCADE);
+  INSERT INTO c4 VALUES('d', 'aaa');
+  INSERT INTO c5 VALUES('e', 'bbb');
+  INSERT INTO c6 VALUES('f', 'ccc');
+
+  PRAGMA foreign_keys = ON;
+}
+
+do_changes_test 3.2.1 { DELETE FROM p1 WHERE one = 'a' } 1
+do_changes_test 3.2.2 { DELETE FROM p1 WHERE one = 'b' } 1
+do_changes_test 3.2.3 { DELETE FROM p1 WHERE one = 'c' } 1
+do_execsql_test 3.2.4 { 
+  SELECT * FROM c1;
+  SELECT * FROM c2;
+  SELECT * FROM c3;
+} {{} aaa {} bbb}
+
+do_changes_test 3.2.5 { UPDATE p1 SET one = 'g' WHERE one = 'd' } 1
+do_changes_test 3.2.6 { UPDATE p1 SET one = 'h' WHERE one = 'e' } 1
+do_changes_test 3.2.7 { UPDATE p1 SET one = 'i' WHERE one = 'f' } 1
+do_execsql_test 3.2.8 { 
+  SELECT * FROM c4;
+  SELECT * FROM c5;
+  SELECT * FROM c6;
+} {{} aaa {} bbb i ccc}
+
+do_execsql_test 3.3.0 {
+  CREATE TABLE r1(a UNIQUE, b UNIQUE);
+  INSERT INTO r1 VALUES('i', 'i');
+  INSERT INTO r1 VALUES('ii', 'ii');
+  INSERT INTO r1 VALUES('iii', 'iii');
+  INSERT INTO r1 VALUES('iv', 'iv');
+  INSERT INTO r1 VALUES('v', 'v');
+  INSERT INTO r1 VALUES('vi', 'vi');
+  INSERT INTO r1 VALUES('vii', 'vii');
+}
+
+do_changes_test 3.3.1 { INSERT OR REPLACE INTO r1 VALUES('i', 1)    }   1
+do_changes_test 3.3.2 { INSERT OR REPLACE INTO r1 VALUES('iv', 'v') }   1
+do_changes_test 3.3.3 { UPDATE OR REPLACE r1 SET b='v' WHERE a='iii' }  1
+do_changes_test 3.3.4 { UPDATE OR REPLACE r1 SET b='vi',a='vii' WHERE a='ii' } 1
+do_execsql_test 3.3.5 { 
+  SELECT * FROM r1 ORDER BY a;
+} {i 1   iii v   vii vi}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-09813-48563 The value returned by sqlite3_changes()
+# immediately after an INSERT, UPDATE or DELETE statement run on a view
+# is always zero.
+#
+reset_db
+do_execsql_test 4.1 {
+  CREATE TABLE log(log);
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+
+  CREATE VIEW v1 AS SELECT * FROM t1;
+  CREATE TRIGGER v1_i INSTEAD OF INSERT ON v1 BEGIN
+    INSERT INTO log VALUES('insert');
+  END;
+  CREATE TRIGGER v1_u INSTEAD OF UPDATE ON v1 BEGIN
+    INSERT INTO log VALUES('update'), ('update');
+  END;
+  CREATE TRIGGER v1_d INSTEAD OF DELETE ON v1 BEGIN
+    INSERT INTO log VALUES('delete'), ('delete'), ('delete');
+  END;
+}
+
+do_changes_test 4.2.1 { INSERT INTO t1 SELECT * FROM t1 }  3
+do_changes_test 4.2.2 { INSERT INTO v1 VALUES(1, 2) }      0
+
+do_changes_test 4.3.1 { INSERT INTO t1 SELECT * FROM t1 }  6
+do_changes_test 4.3.2 { UPDATE v1 SET y='xyz' WHERE x=1 }  0
+
+do_changes_test 4.4.1 { INSERT INTO t1 SELECT * FROM t1 } 12
+do_changes_test 4.4.2 { DELETE FROM v1 WHERE x=5 }         0
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-32918-61474 Before entering a trigger program the value
+# returned by sqlite3_changes() function is saved. After the trigger
+# program has finished, the original value is restored.
+#
+reset_db
+db func my_changes my_changes
+set ::changes [list]
+proc my_changes {x} {
+  set res [db changes]
+  lappend ::changes $x $res
+  return $res
+}
+
+do_execsql_test 5.1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  CREATE TABLE t2(x);
+  INSERT INTO t1 VALUES(1, NULL);
+  INSERT INTO t1 VALUES(2, NULL);
+  INSERT INTO t1 VALUES(3, NULL);
+  CREATE TRIGGER AFTER UPDATE ON t1 BEGIN
+    INSERT INTO t2 VALUES('a'), ('b'), ('c');
+    SELECT my_changes('trigger');
+  END;
+}
+
+do_execsql_test 5.1.1 {
+  INSERT INTO t2 VALUES('a'), ('b');
+  UPDATE t1 SET b = my_changes('update');
+  SELECT * FROM t1;
+} {1 2 2 2 3 2}
+
+# Value is being restored to "2" when the trigger program exits.
+do_test 5.1.2 {
+  set ::changes
+} {update 2 trigger 3 update 2 trigger 3 update 2 trigger 3}
+
+
+reset_db
+do_execsql_test 5.2.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE log(x);
+  INSERT INTO t1 VALUES(1, 0);
+  INSERT INTO t1 VALUES(2, 0);
+  INSERT INTO t1 VALUES(3, 0);
+  CREATE TRIGGER t1_a_u AFTER UPDATE ON t1 BEGIN
+    INSERT INTO log VALUES(old.b || ' -> ' || new.b || ' c = ' || changes() );
+  END;
+  CREATE TABLE t2(a);
+  INSERT INTO t2 VALUES(1), (2), (3);
+  UPDATE t1 SET b = changes();
+}
+do_execsql_test 5.2.1 {
+  SELECT * FROM t1;
+} {1 3 2 3 3 3}
+do_execsql_test 5.2.2 {
+  SELECT * FROM log;
+} {{0 -> 3 c = 3} {0 -> 3 c = 3} {0 -> 3 c = 3}}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-17146-37073 Within a trigger program each INSERT,
+# UPDATE and DELETE statement sets the value returned by
+# sqlite3_changes() upon completion as normal. Of course, this value
+# will not include any changes performed by sub-triggers, as the
+# sqlite3_changes() value will be saved and restored after each
+# sub-trigger has run.
+reset_db
+do_execsql_test 6.0 {
+
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a, b);
+  CREATE TABLE t3(a, b);
+  CREATE TABLE log(x);
+
+  CREATE TRIGGER t1_i BEFORE INSERT ON t1 BEGIN
+    INSERT INTO t2 VALUES(new.a, new.b), (new.a, new.b);
+    INSERT INTO log VALUES('t2->' || changes());
+  END;
+
+  CREATE TRIGGER t2_i AFTER INSERT ON t2 BEGIN
+    INSERT INTO t3 VALUES(new.a, new.b), (new.a, new.b), (new.a, new.b);
+    INSERT INTO log VALUES('t3->' || changes());
+  END;
+
+  CREATE TRIGGER t1_u AFTER UPDATE ON t1 BEGIN
+    UPDATE t2 SET b=new.b WHERE a=old.a;
+    INSERT INTO log VALUES('t2->' || changes());
+  END;
+
+  CREATE TRIGGER t2_u BEFORE UPDATE ON t2 BEGIN
+    UPDATE t3 SET b=new.b WHERE a=old.a;
+    INSERT INTO log VALUES('t3->' || changes());
+  END;
+
+  CREATE TRIGGER t1_d AFTER DELETE ON t1 BEGIN
+    DELETE FROM t2 WHERE a=old.a AND b=old.b;
+    INSERT INTO log VALUES('t2->' || changes());
+  END;
+
+  CREATE TRIGGER t2_d BEFORE DELETE ON t2 BEGIN
+    DELETE FROM t3 WHERE a=old.a AND b=old.b;
+    INSERT INTO log VALUES('t3->' || changes());
+  END;
+}
+
+do_changes_test 6.1 {
+  INSERT INTO t1 VALUES('+', 'o');
+  SELECT * FROM log;
+} {t3->3 t3->3 t2->2 1}
+
+do_changes_test 6.2 {
+  DELETE FROM log;
+  UPDATE t1 SET b='*';
+  SELECT * FROM log;
+} {t3->6 t3->6 t2->2 1}
+
+do_changes_test 6.3 {
+  DELETE FROM log;
+  DELETE FROM t1;
+  SELECT * FROM log;
+} {t3->6 t3->0 t2->2 1}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-43399-09409 This means that if the changes() SQL
+# function (or similar) is used by the first INSERT, UPDATE or DELETE
+# statement within a trigger, it returns the value as set when the
+# calling statement began executing.
+#
+# EVIDENCE-OF: R-53215-27584 If it is used by the second or subsequent
+# such statement within a trigger program, the value returned reflects
+# the number of rows modified by the previous INSERT, UPDATE or DELETE
+# statement within the same trigger.
+#
+reset_db
+do_execsql_test 7.1 {
+  CREATE TABLE q1(t);
+  CREATE TABLE q2(u, v);
+  CREATE TABLE q3(w);
+
+  CREATE TRIGGER q2_insert BEFORE INSERT ON q2 BEGIN
+
+    /* changes() returns value from previous I/U/D in callers context */
+    INSERT INTO q1 VALUES('1:' || changes());
+
+    /* changes() returns value of previous I/U/D in this context */
+    INSERT INTO q3 VALUES(changes()), (2), (3);
+    INSERT INTO q1 VALUES('2:' || changes());
+    INSERT INTO q3 VALUES(changes() + 3), (changes()+4);
+    SELECT 'this does not affect things!';
+    INSERT INTO q1 VALUES('3:' || changes());
+    UPDATE q3 SET w = w+10 WHERE w%2;
+    INSERT INTO q1 VALUES('4:' || changes());
+    DELETE FROM q3;
+    INSERT INTO q1 VALUES('5:' || changes());
+  END;
+}
+
+do_execsql_test 7.2 {
+  INSERT INTO q2 VALUES('x', 'y');
+  SELECT * FROM q1;
+} {
+  1:0   2:3   3:2   4:3   5:5
+}
+
+do_execsql_test 7.3 {
+  DELETE FROM q1;
+  INSERT INTO q2 VALUES('x', 'y');
+  SELECT * FROM q1;
+} {
+  1:5   2:3   3:2   4:3   5:5
+}
+
+
+
+finish_test

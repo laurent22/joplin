@@ -1,0 +1,419 @@
+# 2009 January 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test verifies a couple of specific potential data corruption 
+# scenarios involving crashes or power failures.
+#
+# Later: Also, some other specific scenarios required for coverage
+# testing that do not lead to corruption.
+#
+# $Id: crash8.test,v 1.4 2009/01/11 00:44:48 drh Exp $
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !crashtest {
+  finish_test
+  return
+}
+do_not_use_codec
+
+do_test crash8-1.1 {
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+    INSERT INTO t1 VALUES(1, randstr(1000,1000));
+    INSERT INTO t1 VALUES(2, randstr(1000,1000));
+    INSERT INTO t1 VALUES(3, randstr(1000,1000));
+    INSERT INTO t1 VALUES(4, randstr(1000,1000));
+    INSERT INTO t1 VALUES(5, randstr(1000,1000));
+    INSERT INTO t1 VALUES(6, randstr(1000,1000));
+    CREATE TABLE t2(a, b);
+    CREATE TABLE t3(a, b);
+    CREATE TABLE t4(a, b);
+    CREATE TABLE t5(a, b);
+    CREATE TABLE t6(a, b);
+    CREATE TABLE t7(a, b);
+    CREATE TABLE t8(a, b);
+    CREATE TABLE t9(a, b);
+    CREATE TABLE t10(a, b);
+    PRAGMA integrity_check
+  }
+} {ok}
+
+
+# Potential corruption scenario 1. A second process opens the database 
+# and modifies a large portion of it. It then opens a second transaction
+# and modifies a small part of the database, but crashes before it commits
+# the transaction. 
+#
+# When the first process accessed the database again, it was rolling back
+# the aborted transaction, but was not purging its in-memory cache (which
+# was loaded before the second process made its first, successful, 
+# modification). Producing an inconsistent cache.
+#
+do_test crash8-1.2 {
+  crashsql -delay 2 -file test.db {
+    PRAGMA cache_size = 10;
+    UPDATE t1 SET b = randstr(1000,1000);
+    INSERT INTO t9 VALUES(1, 2);
+  }
+} {1 {child process exited abnormally}}
+do_test crash8-1.3 {
+  execsql {PRAGMA integrity_check}
+} {ok}
+
+# Potential corruption scenario 2. The second process, operating in
+# persistent-journal mode, makes a large change to the database file
+# with a small in-memory cache. Such that more than one journal-header
+# was written to the file. It then opens a second transaction and makes
+# a smaller change that requires only a single journal-header to be
+# written to the journal file. The second change is such that the 
+# journal content written to the persistent journal file exactly overwrites
+# the first journal-header and set of subsequent records written by the
+# first, successful, change. The second process crashes before it can
+# commit its second change.
+#
+# When the first process accessed the database again, it was rolling back
+# the second aborted transaction, then continuing to rollback the second
+# and subsequent journal-headers written by the first, successful, change.
+# Database corruption.
+#
+do_test crash8.2.1 {
+  crashsql -delay 2 -file test.db {
+    PRAGMA journal_mode = persist;
+    PRAGMA cache_size = 10;
+    UPDATE t1 SET b = randstr(1000,1000);
+    PRAGMA cache_size = 100;
+    BEGIN;
+      INSERT INTO t2 VALUES('a', 'b');
+      INSERT INTO t3 VALUES('a', 'b');
+      INSERT INTO t4 VALUES('a', 'b');
+      INSERT INTO t5 VALUES('a', 'b');
+      INSERT INTO t6 VALUES('a', 'b');
+      INSERT INTO t7 VALUES('a', 'b');
+      INSERT INTO t8 VALUES('a', 'b');
+      INSERT INTO t9 VALUES('a', 'b');
+      INSERT INTO t10 VALUES('a', 'b');
+    COMMIT;
+  }
+} {1 {child process exited abnormally}}
+
+do_test crash8-2.3 {
+  execsql {PRAGMA integrity_check}
+} {ok}
+
+proc read_file {zFile} {
+  set fd [open $zFile]
+  fconfigure $fd -translation binary 
+  set zData [read $fd]
+  close $fd
+  return $zData
+}
+proc write_file {zFile zData} {
+  set fd [open $zFile w]
+  fconfigure $fd -translation binary 
+  puts -nonewline $fd $zData
+  close $fd
+}
+
+# The following tests check that SQLite will not roll back a hot-journal
+# file if the sector-size field in the first journal file header is
+# suspect. Definition of suspect:
+# 
+#    a) Not a power of 2, or                (crash8-3.5)
+#    b) Greater than 0x01000000 (16MB), or  (crash8-3.6)
+#    c) Less than 512.                      (crash8-3.7)
+#
+# Also test that SQLite will not rollback a hot-journal file with a
+# suspect page-size. In this case "suspect" means:
+# 
+#    a) Not a power of 2, or
+#    b) Less than 512, or
+#    c) Greater than SQLITE_MAX_PAGE_SIZE
+#
+if {[atomic_batch_write test.db]==0} {
+do_test crash8-3.1 {
+  list [file exists test.db-joural] [file exists test.db]
+} {0 1}
+do_test crash8-3.2 {
+  execsql {
+    PRAGMA synchronous = off;
+    BEGIN;
+    DELETE FROM t1;
+    SELECT count(*) FROM t1;
+  }
+} {0}
+do_test crash8-3.3 {
+  set zJournal [read_file test.db-journal]
+  execsql { 
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }
+} {0}
+do_test crash8-3.4 {
+  binary scan [string range $zJournal 20 23] I nSector
+  set nSector
+} {512}
+
+do_test crash8-3.5 {
+  set zJournal2 [string replace $zJournal 20 23 [binary format I 513]]
+  write_file test.db-journal $zJournal2
+
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+do_test crash8-3.6 {
+  set zJournal2 [string replace $zJournal 20 23 [binary format I 0x2000000]]
+  write_file test.db-journal $zJournal2
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+do_test crash8-3.7 {
+  set zJournal2 [string replace $zJournal 20 23 [binary format I 256]]
+  write_file test.db-journal $zJournal2
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+
+do_test crash8-3.8 {
+  set zJournal2 [string replace $zJournal 24 27 [binary format I 513]]
+  write_file test.db-journal $zJournal2
+
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+do_test crash8-3.9 {
+  set big [expr $SQLITE_MAX_PAGE_SIZE * 2]
+  set zJournal2 [string replace $zJournal 24 27 [binary format I $big]]
+  write_file test.db-journal $zJournal2
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+do_test crash8-3.10 {
+  set zJournal2 [string replace $zJournal 24 27 [binary format I 256]]
+  write_file test.db-journal $zJournal2
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {0 ok}
+
+do_test crash8-3.11 {
+  set fd [open test.db-journal w]
+  fconfigure $fd -translation binary 
+  puts -nonewline $fd $zJournal
+  close $fd
+  execsql { 
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check
+  }
+} {6 ok}
+}
+
+
+# If a connection running in persistent-journal mode is part of a 
+# multi-file transaction, it must ensure that the master-journal name
+# appended to the journal file contents during the commit is located
+# at the end of the physical journal file. If there was already a
+# large journal file allocated at the start of the transaction, this
+# may mean truncating the file so that the master journal name really
+# is at the physical end of the file.
+#
+# This block of tests test that SQLite correctly truncates such
+# journal files, and that the results behave correctly if a hot-journal
+# rollback occurs.
+#
+ifcapable pragma {
+  reset_db
+  forcedelete test2.db
+
+  do_test crash8-4.1 {
+    execsql {
+      PRAGMA journal_mode = persist;
+      CREATE TABLE ab(a, b);
+      INSERT INTO ab VALUES(0, 'abc');
+      INSERT INTO ab VALUES(1, NULL);
+      INSERT INTO ab VALUES(2, NULL);
+      INSERT INTO ab VALUES(3, NULL);
+      INSERT INTO ab VALUES(4, NULL);
+      INSERT INTO ab VALUES(5, NULL);
+      INSERT INTO ab VALUES(6, NULL);
+      UPDATE ab SET b = randstr(1000,1000);
+      ATTACH 'test2.db' AS aux;
+      PRAGMA aux.journal_mode = persist;
+      CREATE TABLE aux.ab(a, b);
+      INSERT INTO aux.ab SELECT * FROM main.ab;
+
+      UPDATE aux.ab SET b = randstr(1000,1000) WHERE a>=1;
+      UPDATE ab SET b = randstr(1000,1000) WHERE a>=1;
+    }
+  } {persist persist}
+  if {[atomic_batch_write test.db]==0} {
+    do_test crash8.4.1.1 {
+      list [file exists test.db-journal] [file exists test2.db-journal]
+    } {1 1}
+  }
+
+  do_test crash8-4.2 {
+    execsql {
+      BEGIN;
+        UPDATE aux.ab SET b = 'def' WHERE a = 0;
+        UPDATE main.ab SET b = 'def' WHERE a = 0;
+      COMMIT;
+    }
+  } {}
+
+  do_test crash8-4.3 {
+    execsql {
+      UPDATE aux.ab SET b = randstr(1000,1000) WHERE a>=1;
+      UPDATE ab SET b = randstr(1000,1000) WHERE a>=1;
+    }
+  } {}
+
+  set contents_main [db eval {SELECT b FROM main.ab WHERE a = 1}]
+  set contents_aux  [db eval {SELECT b FROM  aux.ab WHERE a = 1}]
+
+  do_test crash8-4.4 {
+    crashsql -file test2.db -delay 1 {
+      ATTACH 'test2.db' AS aux;
+      BEGIN;
+        UPDATE aux.ab SET b = 'ghi' WHERE a = 0;
+        UPDATE main.ab SET b = 'ghi' WHERE a = 0;
+      COMMIT;
+    }
+  } {1 {child process exited abnormally}}
+
+  do_test crash8-4.5 {
+    list [file exists test.db-journal] [file exists test2.db-journal]
+  } {1 1}
+
+  do_test crash8-4.6 {
+    execsql {
+      SELECT b FROM main.ab WHERE a = 0;
+      SELECT b FROM aux.ab WHERE a = 0;
+    }
+  } {def def}
+
+  do_test crash8-4.7 {
+    crashsql -file test2.db -delay 1 {
+      ATTACH 'test2.db' AS aux;
+      BEGIN;
+        UPDATE aux.ab SET b = 'jkl' WHERE a = 0;
+        UPDATE main.ab SET b = 'jkl' WHERE a = 0;
+      COMMIT;
+    }
+  } {1 {child process exited abnormally}}
+
+  do_test crash8-4.8 {
+    set fd [open test.db-journal]
+    fconfigure $fd -translation binary
+    seek $fd -16 end
+    binary scan [read $fd 4] I len
+
+    seek $fd [expr {-1 * ($len + 16)}] end
+    set zMasterJournal [read $fd $len]
+    close $fd
+
+    file exists $zMasterJournal
+  } {1}
+
+  do_test crash8-4.9 {
+    execsql { SELECT b FROM aux.ab WHERE a = 0 }
+  } {def}
+
+  do_test crash8-4.10 {
+    delete_file $zMasterJournal
+    execsql { SELECT b FROM main.ab WHERE a = 0 }
+  } {jkl}
+}
+
+#
+# Since the following tests (crash8-5.*) rely upon being able
+# to copy a file while open, they will not work on Windows.
+#
+# They also depend on being able to copy the journal file, which
+# is not created on F2FS file-systems that support atomic
+# write. So do not run these tests in that case either.
+#
+if {$::tcl_platform(platform)=="unix" && [atomic_batch_write test.db]==0 } {
+  for {set i 1} {$i < 10} {incr i} {
+    catch { db close }
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    do_test crash8-5.$i.1 {
+      execsql {
+        CREATE TABLE t1(x PRIMARY KEY);
+        INSERT INTO t1 VALUES(randomblob(900));
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;          /* 64 rows */
+      }
+      crashsql -file test.db -delay [expr ($::i%2) + 1] {
+        PRAGMA cache_size = 10;
+        BEGIN;
+          UPDATE t1 SET x = randomblob(900);
+        ROLLBACK;
+        INSERT INTO t1 VALUES(randomblob(900));
+      }
+      execsql { PRAGMA integrity_check }
+    } {ok}
+  
+    catch { db close }
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    do_test crash8-5.$i.2 {
+      execsql {
+        PRAGMA cache_size = 10;
+        CREATE TABLE t1(x PRIMARY KEY);
+        INSERT INTO t1 VALUES(randomblob(900));
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;
+        INSERT INTO t1 SELECT randomblob(900) FROM t1;          /* 64 rows */
+        BEGIN;
+          UPDATE t1 SET x = randomblob(900);
+      }
+      forcedelete testX.db testX.db-journal testX.db-wal
+      forcecopy test.db testX.db
+      forcecopy test.db-journal testX.db-journal
+      db close
+
+      crashsql -file test.db -delay [expr ($::i%2) + 1] {
+        SELECT * FROM sqlite_master;
+        INSERT INTO t1 VALUES(randomblob(900));
+      }
+
+      sqlite3 db2 testX.db
+      execsql { PRAGMA integrity_check } db2
+    } {ok}
+  }
+  catch {db2 close}
+}
+
+finish_test

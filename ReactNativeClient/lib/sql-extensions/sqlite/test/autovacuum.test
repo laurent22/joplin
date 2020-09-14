@@ -1,0 +1,716 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the SELECT statement.
+#
+# $Id: autovacuum.test,v 1.29 2009/04/06 17:50:03 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If this build of the library does not support auto-vacuum, omit this
+# whole file.
+ifcapable {!autovacuum || !pragma} {
+  finish_test
+  return
+}
+
+# Return a string $len characters long. The returned string is $char repeated
+# over and over. For example, [make_str abc 8] returns "abcabcab".
+proc make_str {char len} {
+  set str [string repeat $char. $len]
+  return [string range $str 0 [expr $len-1]]
+}
+
+# Return the number of pages in the file test.db by looking at the file system.
+proc file_pages {} {
+  return [expr [file size test.db] / 1024]
+}
+
+#-------------------------------------------------------------------------
+# Test cases autovacuum-1.* work as follows:
+#
+# 1. A table with a single indexed field is created.
+# 2. Approximately 20 rows are inserted into the table. Each row is long 
+#    enough such that it uses at least 2 overflow pages for both the table 
+#    and index entry.
+# 3. The rows are deleted in a psuedo-random order. Sometimes only one row
+#    is deleted per transaction, sometimes more than one.
+# 4. After each transaction the table data is checked to ensure it is correct
+#    and a "PRAGMA integrity_check" is executed.
+# 5. Once all the rows are deleted the file is checked to make sure it 
+#    consists of exactly 4 pages.
+#
+# Steps 2-5 are repeated for a few different psuedo-random delete patterns 
+# (defined by the $delete_orders list).
+set delete_orders [list]
+lappend delete_orders {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20}
+lappend delete_orders {20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1} 
+lappend delete_orders {8 18 2 4 14 11 13 3 10 7 9 5 12 17 19 15 20 6 16 1}
+lappend delete_orders {10 3 11 17 19 20 7 4 13 6 1 14 16 12 9 18 8 15 5 2}
+lappend delete_orders {{1 2 3 4 5 6 7 8 9 10} {11 12 13 14 15 16 17 18 19 20}}
+lappend delete_orders {{19 8 17 15} {16 11 9 14} {18 5 3 1} {13 20 7 2} {6 12}}
+
+# The length of each table entry. 
+# set ENTRY_LEN 3500
+set ENTRY_LEN 3500
+
+do_test autovacuum-1.1 {
+  execsql {
+    PRAGMA auto_vacuum = 1;
+    CREATE TABLE av1(a);
+    CREATE INDEX av1_idx ON av1(a);
+  }
+} {}
+
+set tn 0
+foreach delete_order $delete_orders {
+  incr tn
+
+  # Set up the table.
+  set ::tbl_data [list]
+  foreach i [lsort -integer [eval concat $delete_order]] {
+    execsql "INSERT INTO av1 (oid, a) VALUES($i, '[make_str $i $ENTRY_LEN]')"
+    lappend ::tbl_data [make_str $i $ENTRY_LEN]
+  }
+
+  # Make sure the integrity check passes with the initial data.
+  ifcapable {integrityck} {
+    do_test autovacuum-1.$tn.1 {
+      execsql {
+        pragma integrity_check
+      }
+    } {ok}
+  }
+
+  foreach delete $delete_order {
+    # Delete one set of rows from the table.
+    do_test autovacuum-1.$tn.($delete).1 {
+      execsql "
+        DELETE FROM av1 WHERE oid = [join $delete " OR oid = "]
+      "
+    } {}
+
+    # Do the integrity check.
+    ifcapable {integrityck} {
+      do_test autovacuum-1.$tn.($delete).2 {
+        execsql {
+          pragma integrity_check
+        }
+      } {ok}
+    }
+    # Ensure the data remaining in the table is what was expected.
+    foreach d $delete {
+      set idx [lsearch $::tbl_data [make_str $d $ENTRY_LEN]]
+      set ::tbl_data [lreplace $::tbl_data $idx $idx]
+    }
+    do_test autovacuum-1.$tn.($delete).3 {
+      execsql {
+        select a from av1 order by rowid
+      }
+    } $::tbl_data
+  }
+
+  # All rows have been deleted. Ensure the file has shrunk to 4 pages.
+  do_test autovacuum-1.$tn.3 {
+    file_pages
+  } {4}
+}
+
+#---------------------------------------------------------------------------
+# Tests cases autovacuum-2.* test that root pages are allocated 
+# and deallocated correctly at the start of the file. Operation is roughly as
+# follows:
+#
+# autovacuum-2.1.*: Drop the tables that currently exist in the database.
+# autovacuum-2.2.*: Create some tables. Ensure that data pages can be
+#                   moved correctly to make space for new root-pages.
+# autovacuum-2.3.*: Drop one of the tables just created (not the last one),
+#                   and check that one of the other tables is moved to
+#                   the free root-page location.
+# autovacuum-2.4.*: Check that a table can be created correctly when the
+#                   root-page it requires is on the free-list.
+# autovacuum-2.5.*: Check that a table with indices can be dropped. This
+#                   is slightly tricky because dropping one of the
+#                   indices/table btrees could move the root-page of another.
+#                   The code-generation layer of SQLite overcomes this problem
+#                   by dropping the btrees in descending order of root-pages.
+#                   This test ensures that this actually happens.
+#
+do_test autovacuum-2.1.1 {
+  execsql {
+    DROP TABLE av1;
+  }
+} {}
+do_test autovacuum-2.1.2 {
+  file_pages
+} {1}
+
+# Create a table and put some data in it.
+do_test autovacuum-2.2.1 {
+  execsql {
+    CREATE TABLE av1(x);
+    SELECT rootpage FROM sqlite_master ORDER BY rootpage;
+  }
+} {3}
+do_test autovacuum-2.2.2 {
+  execsql "
+    INSERT INTO av1 VALUES('[make_str abc 3000]');
+    INSERT INTO av1 VALUES('[make_str def 3000]');
+    INSERT INTO av1 VALUES('[make_str ghi 3000]');
+    INSERT INTO av1 VALUES('[make_str jkl 3000]');
+  "
+  set ::av1_data [db eval {select * from av1}]
+  file_pages
+} {15}
+
+# Create another table. Check it is located immediately after the first.
+# This test case moves the second page in an over-flow chain.
+do_test autovacuum-2.2.3 {
+  execsql {
+    CREATE TABLE av2(x);
+    SELECT rootpage FROM sqlite_master ORDER BY rootpage;
+  }
+} {3 4}
+do_test autovacuum-2.2.4 {
+  file_pages
+} {16}
+
+# Create another table. Check it is located immediately after the second.
+# This test case moves the first page in an over-flow chain.
+do_test autovacuum-2.2.5 {
+  execsql {
+    CREATE TABLE av3(x);
+    SELECT rootpage FROM sqlite_master ORDER BY rootpage;
+  }
+} {3 4 5}
+do_test autovacuum-2.2.6 {
+  file_pages
+} {17}
+
+# Create another table. Check it is located immediately after the second.
+# This test case moves a btree leaf page.
+do_test autovacuum-2.2.7 {
+  execsql {
+    CREATE TABLE av4(x);
+    SELECT rootpage FROM sqlite_master ORDER BY rootpage;
+  }
+} {3 4 5 6}
+do_test autovacuum-2.2.8 {
+  file_pages
+} {18}
+do_test autovacuum-2.2.9 {
+  execsql {
+    select * from av1
+  }
+} $av1_data
+
+do_test autovacuum-2.3.1 {
+  execsql {
+    INSERT INTO av2 SELECT 'av1' || x FROM av1;
+    INSERT INTO av3 SELECT 'av2' || x FROM av1;
+    INSERT INTO av4 SELECT 'av3' || x FROM av1;
+  }
+  set ::av2_data [execsql {select x from av2}]
+  set ::av3_data [execsql {select x from av3}]
+  set ::av4_data [execsql {select x from av4}]
+  file_pages
+} {54}
+do_test autovacuum-2.3.2 {
+  execsql {
+    DROP TABLE av2;
+    SELECT rootpage FROM sqlite_master ORDER BY rootpage;
+  }
+} {3 4 5}
+do_test autovacuum-2.3.3 {
+  file_pages
+} {41}
+do_test autovacuum-2.3.4 {
+  execsql {
+    SELECT x FROM av3;
+  }
+} $::av3_data
+do_test autovacuum-2.3.5 {
+  execsql {
+    SELECT x FROM av4;
+  }
+} $::av4_data
+
+# Drop all the tables in the file. This puts all pages except the first 2
+# (the sqlite_master root-page and the first pointer map page) on the 
+# free-list.
+do_test autovacuum-2.4.1 {
+  execsql {
+    DROP TABLE av1;
+    DROP TABLE av3;
+    BEGIN;
+    DROP TABLE av4;
+  }
+  file_pages
+} {15}
+do_test autovacuum-2.4.2 {
+  for {set i 3} {$i<=10} {incr i} {
+    execsql "CREATE TABLE av$i (x)"
+  }
+  file_pages
+} {15}
+do_test autovacuum-2.4.3 {
+  execsql {
+    SELECT rootpage FROM sqlite_master ORDER by rootpage
+  }
+} {3 4 5 6 7 8 9 10}
+
+# Right now there are 5 free pages in the database. Consume and then free
+# all 520 pages. Then create 520 tables. This ensures that at least some of the
+# desired root-pages reside on the second free-list trunk page, and that the
+# trunk itself is required at some point.
+do_test autovacuum-2.4.4 {
+  execsql "
+    INSERT INTO av3 VALUES ('[make_str abcde [expr 1020*520 + 500]]');
+    DELETE FROM av3;
+  "
+} {}
+set root_page_list [list]
+set pending_byte_page [expr ($::sqlite_pending_byte / 1024) + 1]
+
+# unusable_pages
+# These are either the pending_byte page or the pointer map pages
+#
+unset -nocomplain unusable_page
+if {[sqlite3 -has-codec]} {
+  array set unusable_page {205 1 408 1}
+} else {
+  array set unusable_page {207 1 412 1}
+}
+set unusable_page($pending_byte_page) 1
+
+for {set i 3} {$i<=532} {incr i} {
+  if {![info exists unusable_page($i)]} {
+    lappend root_page_list $i
+  }
+}
+if {$i >= $pending_byte_page} {
+  lappend root_page_list $i
+}
+do_test autovacuum-2.4.5 {
+  for {set i 11} {$i<=530} {incr i} {
+    execsql "CREATE TABLE av$i (x)"
+  }
+  execsql {
+    SELECT rootpage FROM sqlite_master ORDER by rootpage
+  }
+} $root_page_list
+
+# Just for fun, delete all those tables and see if the database is 1 page.
+do_test autovacuum-2.4.6 {
+  execsql COMMIT;
+  file_pages
+} [expr 561 + (($i >= $pending_byte_page)?1:0)]
+integrity_check autovacuum-2.4.6
+do_test autovacuum-2.4.7 {
+  execsql BEGIN
+  for {set i 3} {$i<=530} {incr i} {
+    execsql "DROP TABLE av$i"
+  }
+  execsql COMMIT
+  file_pages
+} 1
+
+# Create some tables with indices to drop.
+do_test autovacuum-2.5.1 {
+  execsql {
+    CREATE TABLE av1(a PRIMARY KEY, b, c);
+    INSERT INTO av1 VALUES('av1 a', 'av1 b', 'av1 c');
+
+    CREATE TABLE av2(a PRIMARY KEY, b, c);
+    CREATE INDEX av2_i1 ON av2(b);
+    CREATE INDEX av2_i2 ON av2(c);
+    INSERT INTO av2 VALUES('av2 a', 'av2 b', 'av2 c');
+
+    CREATE TABLE av3(a PRIMARY KEY, b, c);
+    CREATE INDEX av3_i1 ON av3(b);
+    INSERT INTO av3 VALUES('av3 a', 'av3 b', 'av3 c');
+
+    CREATE TABLE av4(a, b, c);
+    CREATE INDEX av4_i1 ON av4(a);
+    CREATE INDEX av4_i2 ON av4(b);
+    CREATE INDEX av4_i3 ON av4(c);
+    CREATE INDEX av4_i4 ON av4(a, b, c);
+    INSERT INTO av4 VALUES('av4 a', 'av4 b', 'av4 c');
+  }
+} {}
+
+do_test autovacuum-2.5.2 {
+  execsql {
+    SELECT name, rootpage FROM sqlite_master;
+  }
+} [list av1 3  sqlite_autoindex_av1_1 4 \
+        av2 5  sqlite_autoindex_av2_1 6 av2_i1 7 av2_i2 8 \
+        av3 9 sqlite_autoindex_av3_1 10 av3_i1 11 \
+        av4 12 av4_i1 13 av4_i2 14 av4_i3 15 av4_i4 16 \
+]
+
+# The following 4 tests are SELECT queries that use the indices created.
+# If the root-pages in the internal schema are not updated correctly when
+# a table or indice is moved, these queries will fail. They are repeated
+# after each table is dropped (i.e. as test cases 2.5.*.[1..4]).
+do_test autovacuum-2.5.2.1 {
+  execsql {
+    SELECT * FROM av1 WHERE a = 'av1 a';
+  }
+} {{av1 a} {av1 b} {av1 c}}
+do_test autovacuum-2.5.2.2 {
+  execsql {
+    SELECT * FROM av2 WHERE a = 'av2 a' AND b = 'av2 b' AND c = 'av2 c'
+  }
+} {{av2 a} {av2 b} {av2 c}}
+do_test autovacuum-2.5.2.3 {
+  execsql {
+    SELECT * FROM av3 WHERE a = 'av3 a' AND b = 'av3 b';
+  }
+} {{av3 a} {av3 b} {av3 c}}
+do_test autovacuum-2.5.2.4 {
+  execsql {
+    SELECT * FROM av4 WHERE a = 'av4 a' AND b = 'av4 b' AND c = 'av4 c';
+  }
+} {{av4 a} {av4 b} {av4 c}}
+
+# Drop table av3. Indices av4_i2, av4_i3 and av4_i4 are moved to fill the two
+# root pages vacated. The operation proceeds as:
+# Step 1: Delete av3_i1 (root-page 11). Move root-page of av4_i4 to page 11.
+# Step 2: Delete av3 (root-page 10). Move root-page of av4_i3 to page 10.
+# Step 3: Delete sqlite_autoindex_av1_3 (root-page 9). Move av4_i2 to page 9.
+do_test autovacuum-2.5.3 {
+  execsql {
+    DROP TABLE av3;
+    SELECT name, rootpage FROM sqlite_master;
+  }
+} [list av1 3  sqlite_autoindex_av1_1 4 \
+        av2 5  sqlite_autoindex_av2_1 6 av2_i1 7 av2_i2 8 \
+        av4 12 av4_i1 13 av4_i2 9 av4_i3 10 av4_i4 11 \
+]
+do_test autovacuum-2.5.3.1 {
+  execsql {
+    SELECT * FROM av1 WHERE a = 'av1 a';
+  }
+} {{av1 a} {av1 b} {av1 c}}
+do_test autovacuum-2.5.3.2 {
+  execsql {
+    SELECT * FROM av2 WHERE a = 'av2 a' AND b = 'av2 b' AND c = 'av2 c'
+  }
+} {{av2 a} {av2 b} {av2 c}}
+do_test autovacuum-2.5.3.3 {
+  execsql {
+    SELECT * FROM av4 WHERE a = 'av4 a' AND b = 'av4 b' AND c = 'av4 c';
+  }
+} {{av4 a} {av4 b} {av4 c}}
+
+# Drop table av1:
+# Step 1: Delete av1 (root page 4). Root-page of av4_i1 fills the gap.
+# Step 2: Delete sqlite_autoindex_av1_1 (root page 3). Move av4 to the gap.
+do_test autovacuum-2.5.4 {
+  execsql {
+    DROP TABLE av1;
+    SELECT name, rootpage FROM sqlite_master;
+  }
+} [list av2 5  sqlite_autoindex_av2_1 6 av2_i1 7 av2_i2 8 \
+        av4 3 av4_i1 4 av4_i2 9 av4_i3 10 av4_i4 11 \
+]
+do_test autovacuum-2.5.4.2 {
+  execsql {
+    SELECT * FROM av2 WHERE a = 'av2 a' AND b = 'av2 b' AND c = 'av2 c'
+  }
+} {{av2 a} {av2 b} {av2 c}}
+do_test autovacuum-2.5.4.4 {
+  execsql {
+    SELECT * FROM av4 WHERE a = 'av4 a' AND b = 'av4 b' AND c = 'av4 c';
+  }
+} {{av4 a} {av4 b} {av4 c}}
+
+# Drop table av4:
+# Step 1: Delete av4_i4.
+# Step 2: Delete av4_i3.
+# Step 3: Delete av4_i2.
+# Step 4: Delete av4_i1. av2_i2 replaces it.
+# Step 5: Delete av4. av2_i1 replaces it.
+do_test autovacuum-2.5.5 {
+  execsql {
+    DROP TABLE av4;
+    SELECT name, rootpage FROM sqlite_master;
+  }
+} [list av2 5 sqlite_autoindex_av2_1 6 av2_i1 3 av2_i2 4]
+do_test autovacuum-2.5.5.2 {
+  execsql {
+    SELECT * FROM av2 WHERE a = 'av2 a' AND b = 'av2 b' AND c = 'av2 c'
+  }
+} {{av2 a} {av2 b} {av2 c}}
+
+#--------------------------------------------------------------------------
+# Test cases autovacuum-3.* test the operation of the "PRAGMA auto_vacuum"
+# command.
+#
+do_test autovacuum-3.1 {
+  execsql {
+    PRAGMA auto_vacuum;
+  }
+} {1}
+do_test autovacuum-3.2 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum;
+  }
+} {1}
+do_test autovacuum-3.3 {
+  execsql {
+    PRAGMA auto_vacuum = 0;
+    PRAGMA auto_vacuum;
+  }
+} {1}
+
+do_test autovacuum-3.4 {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum;
+  }
+} $AUTOVACUUM
+do_test autovacuum-3.5 {
+  execsql {
+    CREATE TABLE av1(x);
+    PRAGMA auto_vacuum;
+  }
+} $AUTOVACUUM
+do_test autovacuum-3.6 {
+  execsql {
+    PRAGMA auto_vacuum = 1;
+    PRAGMA auto_vacuum;
+  }
+} [expr $AUTOVACUUM ? 1 : 0]
+do_test autovacuum-3.7 {
+  execsql {
+    DROP TABLE av1;
+  }
+  file_pages
+} [expr $AUTOVACUUM?1:2]
+
+
+#-----------------------------------------------------------------------
+# Test that if a statement transaction around a CREATE INDEX statement is
+# rolled back no corruption occurs.
+#
+do_test autovacuum-4.0 {
+  # The last round of tests may have left the db in non-autovacuum mode.
+  # Reset everything just in case.
+  #
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum = 1;
+    PRAGMA auto_vacuum;
+  }
+} {1}
+do_test autovacuum-4.1 {
+  execsql {
+    CREATE TABLE av1(a, b);
+    BEGIN;
+  }
+  for {set i 0} {$i<100} {incr i} {
+    execsql "INSERT INTO av1 VALUES($i, '[string repeat X 200]');"
+  }
+  execsql "INSERT INTO av1 VALUES(99, '[string repeat X 200]');"
+  execsql {
+    SELECT sum(a) FROM av1;
+  }
+} {5049}
+do_test autovacuum-4.2 {
+  catchsql {
+    CREATE UNIQUE INDEX av1_i ON av1(a);
+  }
+} {1 {UNIQUE constraint failed: av1.a}}
+do_test autovacuum-4.3 {
+  execsql {
+    SELECT sum(a) FROM av1;
+  }
+} {5049}
+do_test autovacuum-4.4 {
+  execsql {
+    COMMIT;
+  }
+} {}
+
+ifcapable integrityck {
+
+# Ticket #1727
+do_test autovacuum-5.1 {
+  db close
+  sqlite3 db :memory:
+  db eval {
+    PRAGMA auto_vacuum=1;
+    CREATE TABLE t1(a);
+    CREATE TABLE t2(a);
+    DROP TABLE t1;
+    PRAGMA integrity_check;
+  }
+} ok
+
+}
+
+# Ticket #1728.
+#
+# In autovacuum mode, when tables or indices are deleted, the rootpage
+# values in the symbol table have to be updated.  There was a bug in this
+# logic so that if an index/table was moved twice, the second move might
+# not occur.  This would leave the internal symbol table in an inconsistent
+# state causing subsequent statements to fail.
+#
+# The problem is difficult to reproduce.  The sequence of statements in
+# the following test are carefully designed make it occur and thus to
+# verify that this very obscure bug has been resolved.
+# 
+ifcapable integrityck&&memorydb {
+
+do_test autovacuum-6.1 {
+  db close
+  sqlite3 db :memory:
+  db eval {
+    PRAGMA auto_vacuum=1;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a);
+    CREATE TABLE t2(a);
+    CREATE INDEX i2 ON t2(a);
+    CREATE TABLE t3(a);
+    CREATE INDEX i3 ON t2(a);
+    CREATE INDEX x ON t1(b);
+    DROP TABLE t3;
+    PRAGMA integrity_check;
+    DROP TABLE t2;
+    PRAGMA integrity_check;
+    DROP TABLE t1;
+    PRAGMA integrity_check;
+  }
+} {ok ok ok}
+
+}
+
+#---------------------------------------------------------------------
+# Test cases autovacuum-7.X test the case where a page must be moved
+# and the destination location collides with at least one other
+# entry in the page hash-table (internal to the pager.c module. 
+#
+do_test autovacuum-7.1 {
+  db close
+  forcedelete test.db
+  forcedelete test.db-journal
+  sqlite3 db test.db
+
+  execsql {
+    PRAGMA auto_vacuum=1;
+    CREATE TABLE t1(a, b, PRIMARY KEY(a, b));
+    INSERT INTO t1 VALUES(randstr(400,400),randstr(400,400));
+    INSERT INTO t1 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 2
+    INSERT INTO t1 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 4
+    INSERT INTO t1 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 8
+    INSERT INTO t1 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 16
+    INSERT INTO t1 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 32
+  }
+
+  expr {[file size test.db] / 1024}
+} {73}
+
+do_test autovacuum-7.2 {
+  execsql {
+    CREATE TABLE t2(a, b, PRIMARY KEY(a, b));
+    INSERT INTO t2 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 2
+    CREATE TABLE t3(a, b, PRIMARY KEY(a, b));
+    INSERT INTO t3 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 2
+    CREATE TABLE t4(a, b, PRIMARY KEY(a, b));
+    INSERT INTO t4 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 2
+    CREATE TABLE t5(a, b, PRIMARY KEY(a, b));
+    INSERT INTO t5 SELECT randstr(400,400), randstr(400,400) FROM t1; -- 2
+  }
+  expr {[file size test.db] / 1024}
+} {354}
+
+do_test autovacuum-7.3 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    BEGIN;
+    DELETE FROM t4;
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }
+  expr {[file size test.db] / 1024}
+} {286}
+
+#------------------------------------------------------------------------
+# Additional tests.
+#
+# Try to determine the autovacuum setting for a database that is locked.
+#
+do_test autovacuum-8.1 {
+  db close
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  db eval {PRAGMA auto_vacuum}
+} {1}
+if {[permutation] == ""} {
+  do_test autovacuum-8.2 {
+    db eval {BEGIN EXCLUSIVE}
+    catchsql {PRAGMA auto_vacuum} db2
+  } {1 {database is locked}}
+  catch {db2 close}
+  catch {db eval {COMMIT}}
+}
+
+do_test autovacuum-9.1 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+    DROP TABLE t4;
+    DROP TABLE t5;
+    PRAGMA page_count;
+  }
+} {1}
+do_test autovacuum-9.2 {
+  file size test.db
+} 1024
+do_test autovacuum-9.3 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(NULL, randstr(50,50));
+  }
+  for {set ii 0} {$ii < 10} {incr ii} {
+    db eval { INSERT INTO t1 SELECT NULL, randstr(50,50) FROM t1 }
+  }
+  file size test.db
+} $::sqlite_pending_byte
+do_test autovacuum-9.4 {
+  execsql { INSERT INTO t1 SELECT NULL, randstr(50,50) FROM t1 }
+} {}
+do_test autovacuum-9.5 {
+  execsql { DELETE FROM t1 WHERE rowid > (SELECT max(a)/2 FROM t1) }
+  file size test.db
+} $::sqlite_pending_byte
+ 
+do_execsql_test autovacuum-10.1 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(25, randomblob(104));
+  REPLACE INTO t1 VALUES(25, randomblob(1117));
+  PRAGMA integrity_check;
+} {ok}
+
+finish_test

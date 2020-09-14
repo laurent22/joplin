@@ -1,0 +1,299 @@
+# 2014 November 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# Specifically, this function tests the %_config table.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5al
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE ft1 USING fts5(x, detail=%DETAIL%);
+  SELECT * FROM ft1_config;
+} {version 4}
+
+do_execsql_test 1.2 {
+  INSERT INTO ft1(ft1, rank) VALUES('pgsz', 32);
+  SELECT * FROM ft1_config;
+} {pgsz 32 version 4}
+
+do_execsql_test 1.3 {
+  INSERT INTO ft1(ft1, rank) VALUES('pgsz', 64);
+  SELECT * FROM ft1_config;
+} {pgsz 64 version 4}
+
+#--------------------------------------------------------------------------
+# Test the logic for parsing the rank() function definition.
+#
+foreach {tn defn} {
+  1 "fname()"
+  2 "fname(1)"
+  3 "fname(1,2)"
+  4 "fname(null,NULL,nUlL)"
+  5 "  fname    (   null  ,   NULL  ,  nUlL  )  "
+  6 "fname('abc')"
+  7 "fname('a''bc')"
+  8 "fname('''abc')"
+  9 "fname('abc''')"
+
+  7 "fname(  'a''bc'  )"
+  8 "fname('''abc'  )"
+  9 "fname(  'abc''' )"
+
+  10 "fname(X'1234ab')"
+
+  11 "myfunc(1.2)"
+  12 "myfunc(-1.0)"
+  13 "myfunc(.01,'abc')"
+} {
+  do_execsql_test 2.1.$tn {
+    INSERT INTO ft1(ft1, rank) VALUES('rank', $defn);
+  }
+}
+
+foreach {tn defn} {
+  1 ""
+  2 "fname"
+  3 "fname(X'234ab')"
+  4 "myfunc(-1.,'abc')"
+} {
+  do_test 2.2.$tn {
+    catchsql { INSERT INTO ft1(ft1, rank) VALUES('rank', $defn) }
+  } {1 {SQL logic error}}
+}
+
+#-------------------------------------------------------------------------
+# Assorted tests of the tcl interface for creating extension functions.
+#
+
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('q w e r t y');
+  INSERT INTO t1 VALUES('y t r e w q');
+}
+
+proc argtest {cmd args} { return $args }
+sqlite3_fts5_create_function db argtest argtest
+
+do_execsql_test 3.2.1 {
+  SELECT argtest(t1, 123) FROM t1 WHERE t1 MATCH 'q'
+} {123 123}
+
+do_execsql_test 3.2.2 {
+  SELECT argtest(t1, 123, 456) FROM t1 WHERE t1 MATCH 'q'
+} {{123 456} {123 456}}
+
+proc rowidtest {cmd} { $cmd xRowid }
+sqlite3_fts5_create_function db rowidtest rowidtest
+
+do_execsql_test 3.3.1 {
+  SELECT rowidtest(t1) FROM t1 WHERE t1 MATCH 'q'
+} {1 2}
+
+proc insttest {cmd} {
+  set res [list]
+  for {set i 0} {$i < [$cmd xInstCount]} {incr i} {
+    lappend res [$cmd xInst $i]
+  }
+  set res
+}
+sqlite3_fts5_create_function db insttest insttest
+
+do_execsql_test 3.4.1 {
+  SELECT insttest(t1) FROM t1 WHERE t1 MATCH 'q'
+} {
+  {{0 0 0}}
+  {{0 0 5}} 
+}
+
+if {[detail_is_full]} {
+  do_execsql_test 3.4.2 {
+    SELECT insttest(t1) FROM t1 WHERE t1 MATCH 'r+e OR w'
+  } {
+    {{1 0 1}}
+    {{0 0 2} {1 0 4}} 
+  }
+}
+
+proc coltest {cmd} {
+  list [$cmd xColumnSize 0] [$cmd xColumnText 0]
+}
+sqlite3_fts5_create_function db coltest coltest
+
+do_execsql_test 3.5.1 {
+  SELECT coltest(t1) FROM t1 WHERE t1 MATCH 'q'
+} {
+  {6 {q w e r t y}}
+  {6 {y t r e w q}} 
+}
+
+#-------------------------------------------------------------------------
+# Tests for remapping the "rank" column.
+#
+#   4.1.*: Mapped to a function with no arguments.
+#   4.2.*: Mapped to a function with one or more arguments.
+#
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, b, detail=%DETAIL%);
+  INSERT INTO t2 VALUES('a s h g s b j m r h', 's b p a d b b a o e');
+  INSERT INTO t2 VALUES('r h n t a g r d d i', 'l d n j r c f t o q');
+  INSERT INTO t2 VALUES('q k n i k c a a e m', 'c h n j p g s c i t');
+  INSERT INTO t2 VALUES('h j g t r e l s g s', 'k q k c i i c k n s');
+  INSERT INTO t2 VALUES('b l k h d n n n m i', 'p t i a r b t q o l');
+  INSERT INTO t2 VALUES('k r i l j b g i p a', 't q c h a i m g n l');
+  INSERT INTO t2 VALUES('a e c q n m o m d g', 'l c t g i s q g q e');
+  INSERT INTO t2 VALUES('b o j h f o g b p e', 'r t l h s b g i c p');
+  INSERT INTO t2 VALUES('s q k f q b j g h f', 'n m a o p e i e k t');
+  INSERT INTO t2 VALUES('o q g g q c o k a b', 'r t k p t f t h p c');
+}
+
+proc firstinst {cmd} { 
+  foreach {p c o} [$cmd xInst 0] {}
+  expr $c*100 + $o
+}
+sqlite3_fts5_create_function db firstinst firstinst
+
+do_execsql_test 4.1.1 {
+  SELECT rowid, firstinst(t2) FROM t2 WHERE t2 MATCH 'a' ORDER BY rowid ASC
+} {
+  1 0 2 4 3 6   5  103
+  6 9 7 0 9 102 10 8
+}
+
+do_execsql_test 4.1.2 {
+  SELECT rowid, rank FROM t2 
+  WHERE t2 MATCH 'a' AND rank MATCH 'firstinst()' 
+  ORDER BY rowid ASC
+} {
+  1 0 2 4 3 6   5  103
+  6 9 7 0 9 102 10 8
+}
+
+do_execsql_test 4.1.3 {
+  SELECT rowid, rank FROM t2 
+  WHERE t2 MATCH 'a' AND rank MATCH 'firstinst()'
+  ORDER BY rank DESC
+} {
+  5 103  9 102  6 9  10 8  3 6  2 4  1 0  7 0  
+}
+
+do_execsql_test 4.1.4 {
+  INSERT INTO t2(t2, rank) VALUES('rank', 'firstinst()');
+  SELECT rowid, rank FROM t2 WHERE t2 MATCH 'a' ORDER BY rowid ASC
+} {
+  1 0 2 4 3 6   5  103
+  6 9 7 0 9 102 10 8
+}
+
+do_execsql_test 4.1.5 {
+  SELECT rowid, rank FROM t2 WHERE t2 MATCH 'a' ORDER BY rank DESC
+} {
+  5 103  9 102  6 9  10 8  3 6  2 4  1 0  7 0  
+}
+
+do_execsql_test 4.1.6 {
+  INSERT INTO t2(t2, rank) VALUES('rank', 'firstinst (    ) ');
+  SELECT rowid, rank FROM t2 WHERE t2 MATCH 'a' ORDER BY rank DESC
+} {
+  5 103  9 102  6 9  10 8  3 6  2 4   1 0  7 0  
+}
+
+proc rowidplus {cmd ival} { 
+  expr [$cmd xRowid] + $ival
+}
+sqlite3_fts5_create_function db rowidplus rowidplus
+
+if {[detail_is_full]} {
+  do_execsql_test 4.2.1 {
+    INSERT INTO t2(t2, rank) VALUES('rank', 'rowidplus(100) ');
+    SELECT rowid, rank FROM t2 WHERE t2 MATCH 'o + q + g'
+  } {
+    10 110
+  }
+  do_execsql_test 4.2.2 {
+    INSERT INTO t2(t2, rank) VALUES('rank', 'rowidplus(111) ');
+    SELECT rowid, rank FROM t2 WHERE t2 MATCH 'o + q + g'
+  } {
+    10 121
+  }
+
+  do_execsql_test 4.2.3 {
+    SELECT rowid, rank FROM t2 
+      WHERE t2 MATCH 'o + q + g' AND rank MATCH 'rowidplus(112)'
+  } {
+    10 122
+  }
+}
+
+proc rowidmod {cmd imod} { 
+  expr [$cmd xRowid] % $imod
+}
+sqlite3_fts5_create_function db rowidmod rowidmod
+do_execsql_test 4.3.1 {
+  CREATE VIRTUAL TABLE t3 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t3 VALUES('a one');
+  INSERT INTO t3 VALUES('a two');
+  INSERT INTO t3 VALUES('a three');
+  INSERT INTO t3 VALUES('a four');
+  INSERT INTO t3 VALUES('a five');
+  INSERT INTO t3(t3, rank) VALUES('rank', 'bm25()');
+}
+
+do_execsql_test 4.3.2 {
+  SELECT * FROM t3
+  WHERE t3 MATCH 'a' AND rank MATCH 'rowidmod(4)' 
+  ORDER BY rank ASC
+} {
+  {a four} {a one} {a five} {a two} {a three}
+}
+
+do_execsql_test 4.3.3 {
+  SELECT *, rank FROM t3
+  WHERE t3 MATCH 'a' AND rank MATCH 'rowidmod(3)' 
+  ORDER BY rank ASC
+} {
+  {a three} 0 {a one} 1 {a four} 1 {a two} 2 {a five} 2 
+}
+
+do_execsql_test 4.3.4 {
+  SELECT * FROM t3('a', 'rowidmod(4)') ORDER BY rank ASC;
+} {
+  {a four} {a one} {a five} {a two} {a three}
+}
+
+do_execsql_test 4.3.5 {
+  SELECT *, rank FROM t3('a', 'rowidmod(3)') ORDER BY rank ASC
+} {
+  {a three} 0 {a one} 1 {a four} 1 {a two} 2 {a five} 2 
+}
+
+do_catchsql_test 4.4.3 {
+  SELECT *, rank FROM t3 WHERE t3 MATCH 'a' AND rank MATCH 'xyz(3)' 
+} {1 {no such function: xyz}}
+do_catchsql_test 4.4.4 {
+  SELECT *, rank FROM t3 WHERE t3 MATCH 'a' AND rank MATCH NULL
+} {1 {parse error in rank function: }}
+
+} ;# foreach_detail_mode
+
+
+finish_test

@@ -1,0 +1,85 @@
+# 2006 October 19
+#
+# The author disclaims copyright to this source code.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing deletions in the FTS1 module.
+#
+# $Id: fts1e.test,v 1.1 2006/10/19 23:28:35 shess Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS1 is defined, omit this file.
+ifcapable !fts1 {
+  finish_test
+  return
+}
+
+# Construct a full-text search table containing keywords which are the
+# ordinal numbers of the bit positions set for a sequence of integers,
+# which are used for the rowid.  There are a total of 30 INSERT and
+# DELETE statements, so that we'll test both the segmentMerge() merge
+# (over the first 16) and the termSelect() merge (over the level-1
+# segment and 14 level-0 segments).
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts1(content);
+  INSERT INTO t1 (rowid, content) VALUES(1, 'one');
+  INSERT INTO t1 (rowid, content) VALUES(2, 'two');
+  INSERT INTO t1 (rowid, content) VALUES(3, 'one two');
+  INSERT INTO t1 (rowid, content) VALUES(4, 'three');
+  DELETE FROM t1 WHERE rowid = 1;
+  INSERT INTO t1 (rowid, content) VALUES(5, 'one three');
+  INSERT INTO t1 (rowid, content) VALUES(6, 'two three');
+  INSERT INTO t1 (rowid, content) VALUES(7, 'one two three');
+  DELETE FROM t1 WHERE rowid = 4;
+  INSERT INTO t1 (rowid, content) VALUES(8, 'four');
+  INSERT INTO t1 (rowid, content) VALUES(9, 'one four');
+  INSERT INTO t1 (rowid, content) VALUES(10, 'two four');
+  DELETE FROM t1 WHERE rowid = 7;
+  INSERT INTO t1 (rowid, content) VALUES(11, 'one two four');
+  INSERT INTO t1 (rowid, content) VALUES(12, 'three four');
+  INSERT INTO t1 (rowid, content) VALUES(13, 'one three four');
+  DELETE FROM t1 WHERE rowid = 10;
+  INSERT INTO t1 (rowid, content) VALUES(14, 'two three four');
+  INSERT INTO t1 (rowid, content) VALUES(15, 'one two three four');
+  INSERT INTO t1 (rowid, content) VALUES(16, 'five');
+  DELETE FROM t1 WHERE rowid = 13;
+  INSERT INTO t1 (rowid, content) VALUES(17, 'one five');
+  INSERT INTO t1 (rowid, content) VALUES(18, 'two five');
+  INSERT INTO t1 (rowid, content) VALUES(19, 'one two five');
+  DELETE FROM t1 WHERE rowid = 16;
+  INSERT INTO t1 (rowid, content) VALUES(20, 'three five');
+  INSERT INTO t1 (rowid, content) VALUES(21, 'one three five');
+  INSERT INTO t1 (rowid, content) VALUES(22, 'two three five');
+  DELETE FROM t1 WHERE rowid = 19;
+  DELETE FROM t1 WHERE rowid = 22;
+}
+
+do_test fts1f-1.1 {
+  execsql {SELECT COUNT(*) FROM t1}
+} {14}
+
+do_test fts1e-2.1 {
+  execsql {SELECT rowid FROM t1 WHERE content MATCH 'one'}
+} {3 5 9 11 15 17 21}
+
+do_test fts1e-2.2 {
+  execsql {SELECT rowid FROM t1 WHERE content MATCH 'two'}
+} {2 3 6 11 14 15 18}
+
+do_test fts1e-2.3 {
+  execsql {SELECT rowid FROM t1 WHERE content MATCH 'three'}
+} {5 6 12 14 15 20 21}
+
+do_test fts1e-2.4 {
+  execsql {SELECT rowid FROM t1 WHERE content MATCH 'four'}
+} {8 9 11 12 14 15}
+
+do_test fts1e-2.5 {
+  execsql {SELECT rowid FROM t1 WHERE content MATCH 'five'}
+} {17 18 20 21}
+
+finish_test

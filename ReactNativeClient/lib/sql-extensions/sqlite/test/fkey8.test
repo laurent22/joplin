@@ -1,0 +1,231 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for foreign keys.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fkey8
+
+ifcapable {!foreignkey} {
+  finish_test
+  return
+}
+do_execsql_test 1.0 { PRAGMA foreign_keys = 1; }
+
+
+foreach {tn use_stmt sql schema} {
+  1   1 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1);
+  }
+
+  2.1     0 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE);
+  }
+  2.2   0 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE SET NULL);
+  }
+  2.3   1 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE SET DEFAULT);
+  }
+
+  3   1 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE);
+    CREATE TRIGGER ct1 AFTER DELETE ON c1 BEGIN
+      INSERT INTO p1 VALUES('x');
+    END;
+  }
+
+  4   1 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE, c PRIMARY KEY);
+    CREATE TABLE cc1(d REFERENCES c1);
+  }
+
+  5.1   0 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE, c PRIMARY KEY);
+    CREATE TABLE cc1(d REFERENCES c1 ON DELETE CASCADE);
+  }
+  5.2   0 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE, c PRIMARY KEY);
+    CREATE TABLE cc1(d REFERENCES c1 ON DELETE SET NULL);
+  }
+  5.3   1 "DELETE FROM p1" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON DELETE CASCADE, c PRIMARY KEY);
+    CREATE TABLE cc1(d REFERENCES c1 ON DELETE SET DEFAULT);
+  }
+
+  6.1   1 "UPDATE p1 SET a = ?" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON UPDATE SET NULL, c);
+  }
+  6.2   0 "UPDATE OR IGNORE p1 SET a = ?" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON UPDATE SET NULL, c);
+  }
+  6.3   1 "UPDATE OR IGNORE p1 SET a = ?" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b REFERENCES p1 ON UPDATE CASCADE, c);
+  }
+  6.4   1 "UPDATE OR IGNORE p1 SET a = ?" {
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(b NOT NULL REFERENCES p1 ON UPDATE SET NULL, c);
+  }
+
+} {
+  drop_all_tables
+  do_test 1.$tn {
+    execsql $schema
+    set stmt [sqlite3_prepare_v2 db $sql -1 dummy]
+    set ret [uses_stmt_journal $stmt]
+    sqlite3_finalize $stmt
+    set ret
+  } $use_stmt
+}
+
+#-------------------------------------------------------------------------
+# The following tests check that foreign key constaint counters are
+# correctly updated for any implicit DELETE operations that occur
+# when a REPLACE command is executed against a WITHOUT ROWID table
+# that has no triggers or auxiliary indexes.
+#
+reset_db
+do_execsql_test 2.1.0 {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE p1(a PRIMARY KEY, b) WITHOUT ROWID;
+  CREATE TABLE c1(x REFERENCES p1 DEFERRABLE INITIALLY DEFERRED);
+
+  INSERT INTO p1 VALUES(1, 'one');
+  INSERT INTO p1 VALUES(2, 'two');
+  INSERT INTO c1 VALUES(1);
+  INSERT INTO c1 VALUES(2);
+}
+
+do_catchsql_test 2.1.2 {
+  BEGIN;
+    DELETE FROM p1 WHERE a=1;
+    INSERT OR REPLACE INTO p1 VALUES(2, 'two');
+  COMMIT;
+} {1 {FOREIGN KEY constraint failed}}
+
+reset_db
+do_execsql_test 2.2.0 {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE p2(a PRIMARY KEY, b);
+  CREATE TABLE c2(
+    x PRIMARY KEY,
+    y REFERENCES p2 DEFERRABLE INITIALLY DEFERRED
+  ) WITHOUT ROWID;
+}
+
+do_catchsql_test 2.2.1 {
+  BEGIN;
+    INSERT INTO c2 VALUES(13, 13);
+    INSERT OR REPLACE INTO c2 VALUES(13, 13);
+    DELETE FROM c2;
+  COMMIT;
+} {0 {}}
+
+reset_db
+do_execsql_test 2.3.0 {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE p3(a PRIMARY KEY, b) WITHOUT ROWID;
+  CREATE TABLE c3(x REFERENCES p3);
+
+  INSERT INTO p3 VALUES(1, 'one');
+  INSERT INTO p3 VALUES(2, 'two');
+  INSERT INTO c3 VALUES(1);
+  INSERT INTO c3 VALUES(2);
+
+  CREATE TRIGGER p3d AFTER DELETE ON p3 WHEN old.a=1 BEGIN
+    INSERT OR REPLACE INTO p3 VALUES(2, 'three');
+  END;
+}
+
+do_catchsql_test 2.3.1 {
+  DELETE FROM p3 WHERE a=1
+} {1 {FOREIGN KEY constraint failed}}
+
+
+do_execsql_test 3.0 {
+  PRAGMA foreign_keys=ON;
+  CREATE TABLE t2(
+    a PRIMARY KEY, b, c, d, e,
+      FOREIGN KEY(b, c) REFERENCES t2(d, e)
+  ) WITHOUT ROWID;
+  CREATE UNIQUE INDEX idx ON t2(d, e);
+
+  INSERT INTO t2 VALUES(1, 'one', 'one', 'one', 'one'); -- row is parent of self
+  INSERT INTO t2 VALUES(2, 'one', 'one', 'one', NULL);  -- parent is row 1
+}
+
+do_catchsql_test 3.1 {
+  DELETE FROM t2 WHERE a=1;
+} {1 {FOREIGN KEY constraint failed}}
+
+do_execsql_test 4.0 {
+  CREATE TABLE t1 (
+      c1 PRIMARY KEY,
+      c2 NUMERIC,
+      FOREIGN KEY(c1) REFERENCES t1(c2)
+      ) WITHOUT ROWID ;
+  CREATE INDEX t1c1 ON t1(c1);
+  CREATE UNIQUE INDEX t1c1unique ON t1(c2);
+}
+do_catchsql_test 4.1 {
+  INSERT OR REPLACE INTO t1 VALUES(10000, 20000);
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test 4.2 {
+  INSERT OR REPLACE INTO t1 VALUES(20000, 20000);
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.0 {
+  PRAGMA foreign_keys = true;
+  CREATE TABLE parent(
+    p TEXT PRIMARY KEY
+  );
+  CREATE TABLE child(
+    c INTEGER UNIQUE, 
+    FOREIGN KEY(c) REFERENCES parent(p) DEFERRABLE INITIALLY DEFERRED
+  );
+  BEGIN;
+    INSERT INTO child VALUES(123);
+    INSERT INTO parent VALUES('123');
+  COMMIT;
+}
+do_execsql_test 5.1 {
+  PRAGMA integrity_check;
+} {ok}
+
+do_execsql_test 5.2 {
+  INSERT INTO parent VALUES(1200);
+  BEGIN;
+    INSERT INTO child VALUES(456);
+    UPDATE parent SET p = '456' WHERE p=1200;
+  COMMIT;
+}
+do_execsql_test 5.3 {
+  PRAGMA integrity_check;
+} {ok}
+
+finish_test

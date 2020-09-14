@@ -1,0 +1,647 @@
+# 2016 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the SELECT statement.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue
+
+do_execsql_test 0.0 {
+  CREATE TABLE one(o);
+  INSERT INTO one VALUES(1);
+}
+
+foreach {tn v1 v2 eq ne is isnot} {
+  1 "1, 2, 3"    "1, 2, 3"                   1  0     1 0
+  2 "1, 0, 3"    "1, 2, 3"                   0  1     0 1
+  3 "1, 2, NULL" "1, 2, 3"                   {} {}    0 1
+  4 "1, 2, NULL" "1, 2, NULL"                {} {}    1 0
+  5 "NULL, NULL, NULL" "NULL, NULL, NULL"    {} {}    1 0
+
+  6 "1, NULL, 1" "1, 1, 1"                   {} {}    0 1
+  7 "1, NULL, 1" "1, 1, 2"                   0  1     0 1
+} {
+  do_execsql_test 1.$tn.eq "SELECT ($v1) == ($v2)" [list $eq]
+  do_execsql_test 1.$tn.ne "SELECT ($v1) != ($v2)" [list $ne]
+
+  do_execsql_test 1.$tn.is    "SELECT ($v1) IS ($v2)"     [list $is]
+  do_execsql_test 1.$tn.isnot "SELECT ($v1) IS NOT ($v2)" [list $isnot]
+
+  do_execsql_test 1.$tn.2.eq "SELECT (SELECT $v1) == (SELECT $v2)" [list $eq]
+  do_execsql_test 1.$tn.2.ne "SELECT (SELECT $v1) != (SELECT $v2)" [list $ne]
+}
+
+foreach {tn v1 v2 lt gt le ge} {
+  1 "(1, 1, 3)"    "(1, 2, 3)"                   1 0      1 0
+  2 "(1, 2, 3)"    "(1, 2, 3)"                   0 0      1 1
+  3 "(1, 3, 3)"    "(1, 2, 3)"                   0 1      0 1
+
+  4 "(1, NULL, 3)"    "(1, 2, 3)"                {} {}      {} {}
+  5 "(1, 3, 3)"    "(1, NULL, 3)"                {} {}      {} {}
+  6 "(1, NULL, 3)"    "(1, NULL, 3)"             {} {}      {} {}
+} {
+  foreach {tn2 expr res} [list \
+    2.$tn.lt "$v1 < $v2" $lt   \
+    2.$tn.gt "$v1 > $v2" $gt   \
+    2.$tn.le "$v1 <= $v2" $le   \
+    2.$tn.ge "$v1 >= $v2" $ge   \
+  ] {
+    do_execsql_test $tn2 "SELECT $expr" [list $res]
+
+    set map(0) [list]
+    set map() [list]
+    set map(1) [list 1]
+    do_execsql_test $tn2.where1 "SELECT * FROM one WHERE $expr" $map($res)
+
+    set map(0) [list 1]
+    set map() [list]
+    set map(1) [list]
+    do_execsql_test $tn2.where2 "SELECT * FROM one WHERE NOT $expr" $map($res)
+  }
+}
+
+do_execsql_test 3.0 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, 1);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(2, 3);
+  INSERT INTO t1 VALUES(2, 4);
+  INSERT INTO t1 VALUES(3, 5);
+  INSERT INTO t1 VALUES(3, 6);
+}
+
+foreach {tn r order} {
+  1 "(1, 1)"           "ORDER BY y"
+  2 "(1, 1)"           "ORDER BY x, y"
+  3 "(1, 2)"           "ORDER BY x, y DESC"
+  4 "(3, 6)"           "ORDER BY x DESC, y DESC"
+  5 "((3, 5))"         "ORDER BY x DESC, y"
+  6 "(SELECT 3, 5)"    "ORDER BY x DESC, y"
+} {
+  do_execsql_test 3.$tn.1 "SELECT $r == (SELECT x,y FROM t1 $order)" 1
+  do_execsql_test 3.$tn.2 "SELECT $r == (SELECT * FROM t1 $order)" 1
+
+  do_execsql_test 3.$tn.3 "
+    SELECT (SELECT * FROM t1 $order) == (SELECT * FROM t1 $order)
+  " 1
+  do_execsql_test 3.$tn.4 "
+    SELECT (SELECT 0, 0) == (SELECT * FROM t1 $order)
+  " 0
+}
+
+foreach {tn expr res} {
+  1 {(2, 2) BETWEEN (2, 2) AND (3, 3)} 1
+  2 {(2, 2) BETWEEN (2, NULL) AND (3, 3)} {}
+  3 {(2, 2) BETWEEN (3, NULL) AND (3, 3)} 0
+} {
+  do_execsql_test 4.$tn "SELECT $expr" [list $res]
+}
+
+foreach {tn expr res} {
+  1 {(2, 4) IN (SELECT * FROM t1)} 1
+  2 {(3, 4) IN (SELECT * FROM t1)} 0
+
+  3 {(NULL, 4) IN (SELECT * FROM t1)} {}
+  4 {(NULL, 0) IN (SELECT * FROM t1)} 0
+
+  5 {(NULL, 4) NOT IN (SELECT * FROM t1)} {}
+  6 {(NULL, 0) NOT IN (SELECT * FROM t1)} 1
+} {
+  do_execsql_test 5.$tn "SELECT $expr" [list $res]
+}
+
+do_execsql_test 6.0 {
+  CREATE TABLE hh(a, b, c);
+  INSERT INTO hh VALUES('abc', 1, 'i');
+  INSERT INTO hh VALUES('ABC', 1, 'ii');
+  INSERT INTO hh VALUES('def', 2, 'iii');
+  INSERT INTO hh VALUES('DEF', 2, 'iv');
+  INSERT INTO hh VALUES('GHI', 3, 'v');
+  INSERT INTO hh VALUES('ghi', 3, 'vi');
+
+  CREATE INDEX hh_ab ON hh(a, b); 
+}
+
+do_execsql_test 6.1 {
+  SELECT c FROM hh WHERE (a, b) = (SELECT 'abc', 1);
+} {i}
+do_execsql_test 6.2 {
+  SELECT c FROM hh WHERE (a, b) = (SELECT 'abc' COLLATE nocase, 1);
+} {i}
+do_execsql_test 6.3 {
+  SELECT c FROM hh WHERE a = (SELECT 'abc' COLLATE nocase) AND b = (SELECT 1);
+} {i}
+do_execsql_test 6.4 {
+  SELECT c FROM hh WHERE +a = (SELECT 'abc' COLLATE nocase) AND b = (SELECT 1);
+} {i}
+do_execsql_test 6.5 {
+  SELECT c FROM hh WHERE a = (SELECT 'abc') COLLATE nocase AND b = (SELECT 1);
+} {i ii}
+do_catchsql_test 6.6 {
+  SELECT c FROM hh WHERE (a, b) = (SELECT 'abc', 1) COLLATE nocase;
+} {1 {row value misused}}
+do_catchsql_test 6.7 {
+  SELECT c FROM hh WHERE (a, b) = 1;
+} {1 {row value misused}}
+do_execsql_test 6.8 {
+  SELECT c FROM hh WHERE (a COLLATE nocase, b) = (SELECT 'def', 2);
+} {iii iv}
+do_execsql_test 6.9 {
+  SELECT c FROM hh WHERE (a COLLATE nocase, b) IS NOT (SELECT 'def', 2);
+} {i ii v vi}
+do_execsql_test 6.10 {
+  SELECT c FROM hh WHERE (b, a) = (SELECT 2, 'def');
+} {iii}
+
+do_execsql_test 7.0 {
+  CREATE TABLE xy(i INTEGER PRIMARY KEY, j, k);
+  INSERT INTO xy VALUES(1, 1, 1);
+  INSERT INTO xy VALUES(2, 2, 2);
+  INSERT INTO xy VALUES(3, 3, 3);
+  INSERT INTO xy VALUES(4, 4, 4);
+}
+
+
+foreach {tn sql res eqp} {
+  1 "SELECT * FROM xy WHERE (i, j) IS (2, 2)" {2 2 2} 
+    "SEARCH TABLE xy USING INTEGER PRIMARY KEY (rowid=?)"
+
+  2 "SELECT * FROM xy WHERE (k, j) < (2, 3)" {1 1 1 2 2 2}
+    "SCAN TABLE xy"
+
+  3 "SELECT * FROM xy WHERE (i, j) < (2, 3)" {1 1 1 2 2 2}
+    "SEARCH TABLE xy USING INTEGER PRIMARY KEY (rowid<?)"
+
+  4 "SELECT * FROM xy WHERE (i, j) > (2, 1)" {2 2 2 3 3 3 4 4 4}
+    "SEARCH TABLE xy USING INTEGER PRIMARY KEY (rowid>?)"
+
+  5 "SELECT * FROM xy WHERE (i, j) > ('2', 1)" {2 2 2 3 3 3 4 4 4}
+    "SEARCH TABLE xy USING INTEGER PRIMARY KEY (rowid>?)"
+
+} {
+  do_eqp_test 7.$tn.1 $sql $eqp
+  do_execsql_test 7.$tn.2 $sql $res
+}
+
+do_execsql_test 8.0 {
+  CREATE TABLE j1(a);
+}
+do_execsql_test 8.1 {
+  SELECT * FROM j1 WHERE (select min(a) FROM j1) IN (?, ?, ?)
+}
+
+do_execsql_test 9.0 {
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t2 VALUES(1, 1, 1);
+  INSERT INTO t2 VALUES(2, 2, 2);
+  INSERT INTO t2 VALUES(3, 3, 3);
+  INSERT INTO t2 VALUES(4, 4, 4);
+  INSERT INTO t2 VALUES(5, 5, 5);
+}
+
+foreach {tn q res} {
+  1 "(a, b) > (2, 1)" {2 3 4 5}
+  2 "(a, b) > (2, 2)" {3 4 5}
+  3 "(a, b) < (4, 5)" {1 2 3 4}
+  4 "(a, b) < (4, 3)" {1 2 3}
+} {
+  do_execsql_test 9.$tn "SELECT c FROM t2 WHERE $q" $res
+} 
+
+do_execsql_test 10.0 {
+  CREATE TABLE dual(dummy); INSERT INTO dual(dummy) VALUES('X');
+  CREATE TABLE t3(a TEXT,b TEXT,c TEXT,d TEXT,e TEXT,f TEXT);
+  CREATE INDEX t3x ON t3(b,c,d,e,f);
+
+  SELECT a FROM t3
+    WHERE (c,d) IN (SELECT 'c','d' FROM dual)
+    AND (a,b,e) IN (SELECT 'a','b','d' FROM dual);
+}
+
+do_catchsql_test 11.1 {
+  CREATE TABLE t11(a);
+  SELECT * FROM t11 WHERE (a,a)<=1;
+} {1 {row value misused}}
+do_catchsql_test 11.2 {
+  SELECT * FROM t11 WHERE (a,a)<1;
+} {1 {row value misused}}
+do_catchsql_test 11.3 {
+  SELECT * FROM t11 WHERE (a,a)>=1;
+} {1 {row value misused}}
+do_catchsql_test 11.4 {
+  SELECT * FROM t11 WHERE (a,a)>1;
+} {1 {row value misused}}
+do_catchsql_test 11.5 {
+  SELECT * FROM t11 WHERE (a,a)==1;
+} {1 {row value misused}}
+do_catchsql_test 11.6 {
+  SELECT * FROM t11 WHERE (a,a)<>1;
+} {1 {row value misused}}
+do_catchsql_test 11.7 {
+  SELECT * FROM t11 WHERE (a,a) IS 1;
+} {1 {row value misused}}
+do_catchsql_test 11.8 {
+  SELECT * FROM t11 WHERE (a,a) IS NOT 1;
+} {1 {row value misused}}
+
+# 2016-10-27: https://www.sqlite.org/src/tktview/fef4bb4bd9185ec8f
+# Incorrect result from a LEFT JOIN with a row-value constraint
+#
+do_execsql_test 12.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b); INSERT INTO t1 VALUES(1,2);
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t2(x,y); INSERT INTO t2 VALUES(3,4);
+  SELECT *,'x' FROM t1 LEFT JOIN t2 ON (a,b)=(x,y);
+} {1 2 {} {} x}
+
+
+foreach {tn sql} {
+  0 "SELECT (1,2) AS x WHERE x=3"
+  1 "SELECT (1,2) BETWEEN 1 AND 2"
+  2 "SELECT 1 BETWEEN (1,2) AND 2"
+  3 "SELECT 2 BETWEEN 1 AND (1,2)"
+  4 "SELECT (1,2) FROM (SELECT 1) ORDER BY 1"
+  5 "SELECT (1,2) FROM (SELECT 1) GROUP BY 1"
+} {
+  do_catchsql_test 13.$tn $sql {1 {row value misused}}
+}
+
+do_execsql_test 14.0 {
+  CREATE TABLE t12(x);
+  INSERT INTO t12 VALUES(2), (4);
+}
+do_execsql_test 14.1 "SELECT 1 WHERE (2,2) BETWEEN (1,1) AND (3,3)" 1
+do_execsql_test 14.2 "SELECT CASE (2,2) WHEN (1, 1) THEN 2 ELSE 1 END" 1
+do_execsql_test 14.3 "SELECT CASE (SELECT 2,2) WHEN (1, 1) THEN 2 ELSE 1 END" 1
+do_execsql_test 14.4 "SELECT 1 WHERE (SELECT 2,2) BETWEEN (1,1) AND (3,3)" 1
+do_execsql_test 14.5 "SELECT 1 FROM t12 WHERE (x,1) BETWEEN (1,1) AND (3,3)" 1
+do_execsql_test 14.6 {
+  SELECT 1 FROM t12 WHERE (1,x) BETWEEN (1,1) AND (3,3)
+} {1 1}
+
+#-------------------------------------------------------------------------
+# Test that errors are not concealed by the SELECT flattening or
+# WHERE-clause push-down optimizations.
+do_execsql_test 14.1 {
+  CREATE TABLE x1(a PRIMARY KEY, b);
+  CREATE TABLE x2(a INTEGER PRIMARY KEY, b);
+}
+
+foreach {tn n sql} {
+  1 0 "SELECT * FROM (SELECT (1, 1) AS c FROM x1) WHERE c=1"
+  2 2 "SELECT * FROM (SELECT 1 AS x, (SELECT 8,9) AS y) WHERE y<1"
+  3 3 "SELECT * FROM (SELECT 1 AS x, (SELECT 8,9,10) AS y) WHERE y<1"
+  4 0 "SELECT * FROM (SELECT (a, b) AS c FROM x1), x2 WHERE c=a"
+  5 0 "SELECT * FROM (SELECT a AS c, (1, 2, 3) FROM x1), x2 WHERE c=a"
+  6 0 "SELECT * FROM (SELECT 1 AS c, (1, 2, 3) FROM x1) WHERE c=1"
+} {
+  if {$n==0} {
+    set err "row value misused"
+  } else {
+    set err "sub-select returns $n columns - expected 1"
+  }
+  do_catchsql_test 14.2.$tn $sql [list 1 $err]
+}
+
+#--------------------------------------------------------------------------
+# Test for vector size mismatches concealed by unexpanded subqueries.
+#
+do_catchsql_test 15.1 {
+  DETACH (SELECT * FROM (SELECT 1,2))<3;
+} {1 {row value misused}}
+do_catchsql_test 15.2 {
+  UPDATE x1 SET a=(SELECT * FROM (SELECT b,2))<3;
+} {1 {row value misused}}
+do_catchsql_test 15.3 {
+  UPDATE x1 SET a=NULL WHERE  a<(SELECT * FROM (SELECT b,2));
+} {1 {sub-select returns 2 columns - expected 1}}
+do_catchsql_test 15.4 {
+  DELETE FROM x1 WHERE  a<(SELECT * FROM (SELECT b,2));
+} {1 {sub-select returns 2 columns - expected 1}}
+do_catchsql_test 15.5 {
+  INSERT INTO x1(a,b) VALUES(1,(SELECT * FROM (SELECT 1,2))<3);
+} {1 {row value misused}}
+
+#-------------------------------------------------------------------------
+# Row-values used in UPDATE statements within TRIGGERs
+#
+# Ticket https://www.sqlite.org/src/info/8c9458e703666e1a
+#
+do_execsql_test 16.1 {
+  CREATE TABLE t16a(a,b,c);
+  INSERT INTO t16a VALUES(1,2,3);
+  CREATE TABLE t16b(x);
+  INSERT INTO t16b(x) VALUES(1);
+  CREATE TRIGGER t16r AFTER UPDATE ON t16b BEGIN
+     UPDATE t16a SET (a,b,c)=(SELECT new.x,new.x+1,new.x+2);
+  END;
+  UPDATE t16b SET x=7;
+  SELECT * FROM t16a;
+} {7 8 9}
+do_execsql_test 16.2 {
+  UPDATE t16b SET x=97;
+  SELECT * FROM t16a;
+} {97 98 99}
+
+do_execsql_test 16.3 {
+  CREATE TABLE t16c(a, b, c, d, e);
+  INSERT INTO t16c VALUES(1, 'a', 'b', 'c', 'd');
+  CREATE TRIGGER t16c1 AFTER INSERT ON t16c BEGIN
+    UPDATE t16c SET (c, d) = (SELECT 'A', 'B'), (e, b) = (SELECT 'C', 'D')
+      WHERE a = new.a-1;
+  END;
+
+  SELECT * FROM t16c;
+} {1 a b c d}
+
+do_execsql_test 16.4 {
+  INSERT INTO t16c VALUES(2, 'w', 'x', 'y', 'z');
+  SELECT * FROM t16c;
+} {
+  1 D A B C 
+  2 w x y z
+}
+
+do_execsql_test 16.5 {
+  DROP TRIGGER t16c1;
+  PRAGMA recursive_triggers = 1;
+  INSERT INTO t16c VALUES(3, 'i', 'ii', 'iii', 'iv');
+  CREATE TRIGGER t16c1 AFTER UPDATE ON t16c WHEN new.a>1 BEGIN
+    UPDATE t16c SET (e, d) = (
+      SELECT b, c FROM t16c WHERE a = new.a-1
+    ), (c, b) = (
+      SELECT d, e FROM t16c WHERE a = new.a-1
+    ) WHERE a = new.a-1;
+  END;
+
+  UPDATE t16c SET a=a WHERE a=3;
+  SELECT * FROM t16c;
+} {
+  1 C B A D
+  2 z y x w
+  3 i ii iii iv
+}
+
+do_execsql_test 17.0 {
+  CREATE TABLE b1(a, b);
+  CREATE TABLE b2(x);
+}
+
+do_execsql_test 17.1 {
+  SELECT * FROM b2 CROSS JOIN b1 
+  WHERE b2.x=b1.a AND (b1.a, 2) 
+  IN (VALUES(1, 2));
+} {}
+
+do_execsql_test 18.0 {
+  CREATE TABLE b3 ( a, b, PRIMARY KEY (a, b) );
+  CREATE TABLE b4 ( a );
+  CREATE TABLE b5 ( a, b );
+  INSERT INTO b3 VALUES (1, 1), (1, 2);
+  INSERT INTO b4 VALUES (1);
+  INSERT INTO b5 VALUES (1, 1), (1, 2);
+}
+
+do_execsql_test 18.1 {
+  SELECT * FROM b3 WHERE (SELECT b3.a, b3.b) IN ( SELECT a, b FROM b5 )
+} {1 1 1 2}
+do_execsql_test 18.2 {
+  SELECT * FROM b3 WHERE (VALUES(b3.a, b3.b)) IN ( SELECT a, b FROM b5 );
+} {1 1 1 2}
+do_execsql_test 18.3 {
+  SELECT * FROM b3 WHERE (b3.a, b3.b) IN ( SELECT a, b FROM b5 ); 
+} {1 1 1 2}
+do_execsql_test 18.4 {
+  SELECT * FROM b3 JOIN b4 ON b4.a = b3.a
+  WHERE (SELECT b3.a, b3.b) IN ( SELECT a, b FROM b5 ); 
+} {1 1 1 1 2 1}
+do_execsql_test 18.5 {
+  SELECT * FROM b3 JOIN b4 ON b4.a = b3.a
+  WHERE (VALUES(b3.a, b3.b)) IN ( SELECT a, b FROM b5 ); 
+} {1 1 1 1 2 1}
+do_execsql_test 18.6 {
+  SELECT * FROM b3 JOIN b4 ON b4.a = b3.a
+  WHERE (b3.a, b3.b) IN ( SELECT a, b FROM b5 ); 
+} {1 1 1 1 2 1}
+
+ 
+# 2018-02-13 Ticket https://www.sqlite.org/src/tktview/f484b65f3d6230593c3
+# Incorrect result from a row-value comparison in the WHERE clause.
+#
+do_execsql_test 19.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY,b);
+  INSERT INTO t1(a,b) VALUES(1,11),(2,22),(3,33),(4,44);
+  SELECT * FROM t1 WHERE (a,b)>(0,0) ORDER BY a;
+} {1 11 2 22 3 33 4 44}
+do_execsql_test 19.2 {
+  SELECT * FROM t1 WHERE (a,b)>=(0,0) ORDER BY a;
+} {1 11 2 22 3 33 4 44}
+do_execsql_test 19.3 {
+  SELECT * FROM t1 WHERE (a,b)<(5,0) ORDER BY a DESC;
+} {4 44 3 33 2 22 1 11}
+do_execsql_test 19.4 {
+  SELECT * FROM t1 WHERE (a,b)<=(5,0) ORDER BY a DESC;
+} {4 44 3 33 2 22 1 11}
+do_execsql_test 19.5 {
+  SELECT * FROM t1 WHERE (a,b)>(3,0) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.6 {
+  SELECT * FROM t1 WHERE (a,b)>=(3,0) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.7 {
+  SELECT * FROM t1 WHERE (a,b)<(3,0) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.8 {
+  SELECT * FROM t1 WHERE (a,b)<=(3,0) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.9 {
+  SELECT * FROM t1 WHERE (a,b)>(3,32) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.10 {
+  SELECT * FROM t1 WHERE (a,b)>(3,33) ORDER BY a;
+} {4 44}
+do_execsql_test 19.11 {
+  SELECT * FROM t1 WHERE (a,b)>=(3,33) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.12 {
+  SELECT * FROM t1 WHERE (a,b)>=(3,34) ORDER BY a;
+} {4 44}
+do_execsql_test 19.13 {
+  SELECT * FROM t1 WHERE (a,b)<(3,34) ORDER BY a DESC;
+} {3 33 2 22 1 11}
+do_execsql_test 19.14 {
+  SELECT * FROM t1 WHERE (a,b)<(3,33) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.15 {
+  SELECT * FROM t1 WHERE (a,b)<=(3,33) ORDER BY a DESC;
+} {3 33 2 22 1 11}
+do_execsql_test 19.16 {
+  SELECT * FROM t1 WHERE (a,b)<=(3,32) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.21 {
+  SELECT * FROM t1 WHERE (0,0)<(a,b) ORDER BY a;
+} {1 11 2 22 3 33 4 44}
+do_execsql_test 19.22 {
+  SELECT * FROM t1 WHERE (0,0)<=(a,b) ORDER BY a;
+} {1 11 2 22 3 33 4 44}
+do_execsql_test 19.23 {
+  SELECT * FROM t1 WHERE (5,0)>(a,b) ORDER BY a DESC;
+} {4 44 3 33 2 22 1 11}
+do_execsql_test 19.24 {
+  SELECT * FROM t1 WHERE (5,0)>=(a,b) ORDER BY a DESC;
+} {4 44 3 33 2 22 1 11}
+do_execsql_test 19.25 {
+  SELECT * FROM t1 WHERE (3,0)<(a,b) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.26 {
+  SELECT * FROM t1 WHERE (3,0)<=(a,b) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.27 {
+  SELECT * FROM t1 WHERE (3,0)>(a,b) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.28 {
+  SELECT * FROM t1 WHERE (3,0)>=(a,b) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.29 {
+  SELECT * FROM t1 WHERE (3,32)<(a,b) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.30 {
+  SELECT * FROM t1 WHERE (3,33)<(a,b) ORDER BY a;
+} {4 44}
+do_execsql_test 19.31 {
+  SELECT * FROM t1 WHERE (3,33)<=(a,b) ORDER BY a;
+} {3 33 4 44}
+do_execsql_test 19.32 {
+  SELECT * FROM t1 WHERE (3,34)<=(a,b) ORDER BY a;
+} {4 44}
+do_execsql_test 19.33 {
+  SELECT * FROM t1 WHERE (3,34)>(a,b) ORDER BY a DESC;
+} {3 33 2 22 1 11}
+do_execsql_test 19.34 {
+  SELECT * FROM t1 WHERE (3,33)>(a,b) ORDER BY a DESC;
+} {2 22 1 11}
+do_execsql_test 19.35 {
+  SELECT * FROM t1 WHERE (3,33)>=(a,b) ORDER BY a DESC;
+} {3 33 2 22 1 11}
+do_execsql_test 19.36 {
+  SELECT * FROM t1 WHERE (3,32)>=(a,b) ORDER BY a DESC;
+} {2 22 1 11}
+
+# 2018-02-18: Memory leak nexted row-value.  Detected by OSSFuzz.
+#
+do_catchsql_test 20.1 {
+  SELECT 1 WHERE (2,(2,0)) IS (2,(2,0));
+} {0 1}
+
+# 2018-11-03: Ticket https://www.sqlite.org/src/info/1a84668dcfdebaf1
+# Assertion fault when doing row-value operations on a primary key
+# containing duplicate columns.
+#
+do_execsql_test 21.0 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b,PRIMARY KEY(b,b));
+  INSERT INTO t1 VALUES(1,2),(3,4),(5,6);
+  SELECT * FROM t1 WHERE (a,b) IN (VALUES(1,2));  
+} {1 2}
+
+# 2019-08-09: Multi-column subquery on the RHS of an IN operator.
+#
+do_execsql_test 22.100 {
+  SELECT (SELECT 3,4 UNION SELECT 5,6 ORDER BY 1) IN (SELECT 3,4);
+  SELECT (SELECT 3,4 UNION SELECT 5,6 ORDER BY 1) IN (SELECT 5,6);
+  SELECT (SELECT 5,6 UNION SELECT 3,4 ORDER BY 1) IN (SELECT 3,4);
+  SELECT (SELECT 5,6 UNION SELECT 3,4 ORDER BY 1) IN (SELECT 5,6);
+  SELECT (SELECT 3,4 UNION SELECT 5,6 ORDER BY 1 DESC) IN (SELECT 3,4);
+  SELECT (SELECT 3,4 UNION SELECT 5,6 ORDER BY 1 DESC) IN (SELECT 5,6);
+  SELECT (SELECT 5,6 UNION SELECT 3,4 ORDER BY 1 DESC) IN (SELECT 3,4);
+  SELECT (SELECT 5,6 UNION SELECT 3,4 ORDER BY 1 DESC) IN (SELECT 5,6);
+} {1 0 1 0 0 1 0 1}
+
+# 2019-10-21 Ticket b47e3627ecaadbde
+#
+do_execsql_test 23.100 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(aa COLLATE NOCASE, bb);
+  INSERT INTO t0 VALUES('a', 'A');
+  SELECT (+bb,1) >= (aa, 1), (aa,1)<=(+bb,1) FROM t0;
+  SELECT 2 FROM t0 WHERE (+bb,1) >= (aa,1);
+  SELECT 3 FROM t0 WHERE (aa,1) <= (+bb,1);
+} {0 1 3}
+do_execsql_test 23.110 {
+  SELECT (SELECT +bb,1) >= (aa, 1), (aa,1)<=(SELECT +bb,1) FROM t0;
+  SELECT 2 FROM t0 WHERE (SELECT +bb,1) >= (aa,1);
+  SELECT 3 FROM t0 WHERE (aa,1) <= (SELECT +bb,1);
+} {0 1 3}
+
+# 2019-10-22 Ticket 6ef984af8972c2eb
+do_execsql_test 24.100 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0 TEXT PRIMARY KEY);
+  INSERT INTO t0(c0) VALUES ('');
+  SELECT (t0.c0, TRUE) > (CAST(0 AS REAL), FALSE) FROM t0;
+  SELECT 2 FROM t0 WHERE (t0.c0, TRUE) > (CAST('' AS REAL), FALSE);
+} {1 2}
+
+# 2019-10-23 Ticket 135c9da7513e5a97
+do_execsql_test 25.10 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0 UNIQUE);
+  INSERT INTO t0(c0) VALUES('a');
+  SELECT (t0.c0, 0) < ('B' COLLATE NOCASE, 0) FROM t0;
+  SELECT 2 FROM t0 WHERE (t0.c0, 0) < ('B' COLLATE NOCASE, 0);
+} {1 2}
+do_execsql_test 25.20 {
+  SELECT ('B' COLLATE NOCASE, 0)> (t0.c0, 0) FROM t0;
+  SELECT 2 FROM t0 WHERE ('B' COLLATE NOCASE, 0)> (t0.c0, 0);
+} {1 2}
+do_execsql_test 25.30 {
+  SELECT ('B', 0)> (t0.c0 COLLATE nocase, 0) FROM t0;
+  SELECT 2 FROM t0 WHERE ('B', 0)> (t0.c0 COLLATE nocase, 0);
+} {1 2}
+do_execsql_test 25.40 {
+  SELECT (t0.c0 COLLATE nocase, 0) < ('B', 0) FROM t0;
+  SELECT 2 FROM t0 WHERE (t0.c0 COLLATE nocase, 0) < ('B', 0);
+} {1 2}
+
+# 2019-11-04 Ticket 02aa2bd02f97d0f2
+# The TK_VECTOR operator messes up sqlite3ExprImpliesNonNull() which
+# causes incorrect LEFT JOIN strength reduction.  TK_VECTOR should be
+# treated the same as TK_OR.
+#
+db close
+sqlite3 db :memory:
+do_execsql_test 26.10 {
+  CREATE TABLE t0(c0);
+  CREATE TABLE t1(c1);
+  INSERT INTO t1(c1) VALUES (0);
+  SELECT (c0, x'') != (NULL, 0) FROM t1 LEFT JOIN t0;
+} {1}
+do_execsql_test 26.20 {
+  SELECT 2 FROM t1 LEFT JOIN t0 ON (c0, x'') != (NULL, 0);
+} {2}
+do_execsql_test 26.30 {
+  SELECT 3 FROM t1 LEFT JOIN t0 WHERE (c0, x'') != (NULL, 0);
+} {3}
+
+# 2019-12-30 ticket 892575cdba4e1e36
+#
+reset_db
+do_catchsql_test 27.10 {
+  CREATE TABLE t0(c0 CHECK(((0, 0) > (0, c0))));
+  INSERT INTO t0(c0) VALUES(0) ON CONFLICT(c0) DO UPDATE SET c0 = 3;
+} {1 {ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint}}
+
+finish_test

@@ -1,0 +1,198 @@
+# 2020 May 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set testprefix walsetlk
+
+ifcapable !wal {finish_test ; return }
+db timeout 1000
+
+#-------------------------------------------------------------------------
+# 1.*: Test that nothing goes wrong if recovery is forced while opening
+#      a write transaction or performing a checkpoint with blocking locks.
+#
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x, y);
+  PRAGMA journal_mode = wal;
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+  INSERT INTO t1 VALUES(7, 8);
+} {wal}
+
+sqlite3 db2 test.db
+db2 timeout 1000
+
+do_execsql_test -db db2 1.1 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8}
+
+set fd [open test.db-shm r+]
+puts $fd "blahblahblahblah"
+flush $fd
+
+do_execsql_test 1.2 {
+  BEGIN;
+    INSERT INTO t1 VALUES(9, 10);
+}
+
+do_execsql_test -db db2 1.3 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8}
+
+do_test 1.4 {
+  list [catch {db2 eval { BEGIN EXCLUSIVE }} msg] $msg
+} {1 {database is locked}}
+
+do_execsql_test 1.5 { COMMIT }
+do_execsql_test -db db2 1.6 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8 9 10}
+
+puts $fd "blahblahblahblah"
+flush $fd
+
+do_execsql_test -db db2 1.7 {
+  PRAGMA wal_checkpoint = TRUNCATE
+} {0 0 0}
+
+do_test 1.8 {
+  file size test.db-wal
+} 0
+
+close $fd
+db close
+db2 close
+#-------------------------------------------------------------------------
+
+do_multiclient_test tn {
+  do_test 2.$tn.1 {
+    sql1 {
+      PRAGMA journal_mode = wal;
+      CREATE TABLE t1(s, v);
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t1 VALUES(3, 4);
+      INSERT INTO t1 VALUES(5, 6);
+    }
+    code1 { db timeout 2000 }
+  } {}
+
+  do_test 2.$tn.2 {
+    sql2 {
+      BEGIN;
+        INSERT INTO t1 VALUES(7, 8);
+    }
+  } {}
+
+  do_test 2.$tn.3 {
+    set us [lindex [time { catch {db eval "BEGIN EXCLUSIVE"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+
+  do_test 2.$tn.4 {
+    sql2 { COMMIT }
+    sql1 { SELECT * FROM t1 }
+  } {1 2 3 4 5 6 7 8}
+
+  do_test 2.$tn.5 {
+    sql2 {
+      BEGIN;
+        INSERT INTO t1 VALUES(9, 10);
+    }
+  } {}
+
+  do_test 2.$tn.6 {
+    set us [lindex [time { catch {db eval "PRAGMA wal_checkpoint=RESTART"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+
+  do_test 2.$tn.7 {
+    sql2 {
+      COMMIT;
+      BEGIN;
+        SELECT * FROM t1;
+    }
+  } {1 2 3 4 5 6 7 8 9 10}
+
+  do_test 2.$tn.8 {
+    set us [lindex [time { catch {db eval "PRAGMA wal_checkpoint=RESTART"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+
+  do_test 2.$tn.9 {
+    sql3 {
+      INSERT INTO t1 VALUES(11, 12);
+    }
+    sql2 {
+      COMMIT;
+      BEGIN;
+        SELECT * FROM t1;
+    }
+    sql3 {
+      INSERT INTO t1 VALUES(13, 14);
+    }
+  } {}
+
+  do_test 2.$tn.10 {
+    set us [lindex [time { catch {db eval "PRAGMA wal_checkpoint=RESTART"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+
+  do_test 2.$tn.11 {
+    sql3 {
+      BEGIN;
+        SELECT * FROM t1;
+    }
+    sql1 { INSERT INTO t1 VALUES(15, 16); }
+  } {}
+
+  do_test 2.$tn.12 {
+    set us [lindex [time { catch {db eval "PRAGMA wal_checkpoint=RESTART"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+
+  do_test 2.$tn.13 {
+    sql2 {
+      COMMIT;
+      BEGIN;
+        SELECT * FROM t1;
+    }
+    sql1 { INSERT INTO t1 VALUES(17, 18); }
+  } {}
+
+  do_test 2.$tn.14 {
+    set us [lindex [time { catch {db eval "PRAGMA wal_checkpoint=RESTART"} }] 0]
+    expr $us>1000000 && $us<4000000
+  } {1}
+  
+}
+
+#-------------------------------------------------------------------------
+reset_db
+sqlite3 db2 test.db
+db2 timeout 1000
+do_execsql_test 3.0 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE x1(x, y);
+  BEGIN;
+    INSERT INTO x1 VALUES(1, 2);
+} {wal}
+
+do_test 3.1 {
+  list [catch { db2 eval {BEGIN EXCLUSIVE} } msg] $msg
+} {1 {database is locked}}
+
+finish_test
+

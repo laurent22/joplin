@@ -1,0 +1,293 @@
+# 2009 December 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests of fts3 queries that have been useful during
+# the development process as well as some that have been useful in tracking
+# down bugs. They are not focused on any particular functionality.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If this build does not include FTS3, skip the tests in this file.
+#
+ifcapable !fts3 { finish_test ; return }
+source $testdir/malloc_common.tcl
+source $testdir/fts3_common.tcl
+set DO_MALLOC_TEST 0
+
+set testprefix fts3query
+
+do_test fts3query-1.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t1 USING fts3(x);
+    BEGIN;
+      INSERT INTO t1 VALUES('The source code for SQLite is in the public');
+  }
+} {}
+
+do_select_test fts3query-1.2 {
+  SELECT * FROM t1;
+} {{The source code for SQLite is in the public}}
+do_select_test fts3query-1.3 {
+  SELECT * FROM t1 WHERE t1 MATCH 'sqlite'
+} {{The source code for SQLite is in the public}}
+
+do_test fts3query-1.4 { execsql {COMMIT} } {}
+
+do_select_test fts3query-1.5 {
+  SELECT * FROM t1;
+} {{The source code for SQLite is in the public}}
+do_select_test fts3query-1.6 {
+  SELECT * FROM t1 WHERE t1 MATCH 'sqlite'
+} {{The source code for SQLite is in the public}}
+
+
+set sqlite_fts3_enable_parentheses 1
+do_test fts3query-2.1 {
+  execsql {
+    CREATE VIRTUAL TABLE zoink USING fts3;
+    INSERT INTO zoink VALUES('The apple falls far from the tree');
+  }
+} {}
+do_test fts3query-2.2 {
+  execsql {
+    SELECT docid FROM zoink WHERE zoink MATCH '(apple oranges) AND apple'
+  }
+} {}
+do_test fts3query-2.3 {
+  execsql {
+    SELECT docid FROM zoink WHERE zoink MATCH 'apple AND (oranges apple)'
+  }
+} {}
+set sqlite_fts3_enable_parentheses 0
+
+do_test fts3query-3.1 {
+  execsql {
+    CREATE VIRTUAL TABLE foobar using FTS3(description, tokenize porter);
+    INSERT INTO foobar (description) values ('
+      Filed under: Emerging Technologies, EV/Plug-in, Hybrid, Chevrolet, GM, 
+      ZENN 2011 Chevy Volt - Click above for high-res image gallery There are 
+      16 days left in the month of December. Besides being time for most 
+      Americans to kick their Christmas shopping sessions into high gear and
+      start planning their resolutions for 2010, it also means that there''s
+      precious little time for EEStor to "deliver functional technology" to
+      Zenn Motors as promised. Still, the promises held out by the secretive
+      company are too great for us to forget about entirely. We''d love for
+      EEStor''s claims to be independently verified and proven accurate, as
+      would just about anyone else looking to break free of petroleum in fav
+    '); 
+  }
+} {}
+
+do_test fts3query-3.2 {
+  execsql { SELECT docid FROM foobar WHERE description MATCH '"high sp d"' }
+} {}
+
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+db func mit mit
+
+do_test fts3query-3.3 {
+  execsql { SELECT mit(matchinfo(foobar)) FROM foobar WHERE foobar MATCH 'the' }
+} {{1 1 3 3 1}}
+
+# The following tests check that ticket 775b39dd3c has been fixed.
+#
+do_test fts3query-4.1 {
+  execsql {
+    DROP TABLE IF EXISTS t1;
+    CREATE TABLE t1(number INTEGER PRIMARY KEY, date);
+    CREATE INDEX i1 ON t1(date);
+    CREATE VIRTUAL TABLE ft USING fts3(title);
+    CREATE TABLE bt(title);
+  }
+} {}
+do_eqp_test fts3query-4.2 {
+  SELECT t1.number FROM t1, ft WHERE t1.number=ft.rowid ORDER BY t1.date
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 USING COVERING INDEX i1
+  `--SCAN TABLE ft VIRTUAL TABLE INDEX 1:
+}
+do_eqp_test fts3query-4.3 {
+  SELECT t1.number FROM ft, t1 WHERE t1.number=ft.rowid ORDER BY t1.date
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 USING COVERING INDEX i1
+  `--SCAN TABLE ft VIRTUAL TABLE INDEX 1:
+}
+do_eqp_test fts3query-4.4 {
+  SELECT t1.number FROM t1, bt WHERE t1.number=bt.rowid ORDER BY t1.date
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 USING COVERING INDEX i1
+  `--SEARCH TABLE bt USING INTEGER PRIMARY KEY (rowid=?)
+}
+do_eqp_test fts3query-4.5 {
+  SELECT t1.number FROM bt, t1 WHERE t1.number=bt.rowid ORDER BY t1.date
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 USING COVERING INDEX i1
+  `--SEARCH TABLE bt USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+
+# Test that calling matchinfo() with the wrong number of arguments, or with
+# an invalid argument returns an error.
+#
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE t2 USING FTS4;
+  INSERT INTO t2 VALUES('it was the first time in history');
+}
+do_select_tests 5.2 -errorformat {
+  wrong number of arguments to function %s()
+} {
+  1 "SELECT matchinfo() FROM t2 WHERE t2 MATCH 'history'"       matchinfo
+  3 "SELECT snippet(t2, 1, 2, 3, 4, 5, 6) FROM t2 WHERE t2 MATCH 'history'" 
+    snippet
+}
+do_select_tests 5.3 -errorformat {
+  illegal first argument to %s
+} {
+  1 "SELECT matchinfo(content) FROM t2 WHERE t2 MATCH 'history'" matchinfo
+  2 "SELECT offsets(content) FROM t2 WHERE t2 MATCH 'history'"   offsets
+  3 "SELECT snippet(content) FROM t2 WHERE t2 MATCH 'history'"   snippet
+  4 "SELECT optimize(content) FROM t2 WHERE t2 MATCH 'history'"  optimize
+}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 5.4.0 { UPDATE t2_content SET c0content = X'1234' }
+do_select_tests 5.4 -errorformat {
+  illegal first argument to %s
+} {
+  1 "SELECT matchinfo(content) FROM t2 WHERE t2 MATCH 'history'" matchinfo
+  2 "SELECT offsets(content) FROM t2 WHERE t2 MATCH 'history'"   offsets
+  3 "SELECT snippet(content) FROM t2 WHERE t2 MATCH 'history'"   snippet
+  4 "SELECT optimize(content) FROM t2 WHERE t2 MATCH 'history'"  optimize
+}
+do_catchsql_test 5.5.1 {
+  SELECT matchinfo(t2, 'abcd') FROM t2 WHERE t2 MATCH 'history'
+} {1 {unrecognized matchinfo request: d}}
+
+do_execsql_test 5.5 { DROP TABLE t2 }
+
+
+# Test the snippet() function with 1 to 6 arguments.
+# 
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE t3 USING FTS4(a, b);
+  INSERT INTO t3 VALUES('no gestures', 'another intriguing discovery by observing the hand gestures (called beats) people make while speaking. Research has shown that such gestures do more than add visual emphasis to our words (many people gesture while they''re on the telephone, for example); it seems they actually help our brains find words');
+}
+do_select_tests 6.2 {
+  1 "SELECT snippet(t3) FROM t3 WHERE t3 MATCH 'gestures'"
+  {{<b>...</b>hand <b>gestures</b> (called beats) people make while speaking. Research has shown that such <b>gestures</b> do<b>...</b>}}
+
+  2 "SELECT snippet(t3, 'XXX') FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{<b>...</b>hand XXXgestures</b> (called beats) people make while speaking. Research has shown that such XXXgestures</b> do<b>...</b>}}
+
+  3 "SELECT snippet(t3, 'XXX', 'YYY') FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{<b>...</b>hand XXXgesturesYYY (called beats) people make while speaking. Research has shown that such XXXgesturesYYY do<b>...</b>}}
+
+  4 "SELECT snippet(t3, 'XXX', 'YYY', 'ZZZ') FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{ZZZhand XXXgesturesYYY (called beats) people make while speaking. Research has shown that such XXXgesturesYYY doZZZ}}
+
+  5 "SELECT snippet(t3, 'XXX', 'YYY', 'ZZZ', 1) FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{ZZZhand XXXgesturesYYY (called beats) people make while speaking. Research has shown that such XXXgesturesYYY doZZZ}}
+
+  6 "SELECT snippet(t3, 'XXX', 'YYY', 'ZZZ', 0) FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{no XXXgesturesYYY}}
+
+  7 "SELECT snippet(t3, 'XXX', 'YYY', 'ZZZ', 1, 5) FROM t3 WHERE t3 MATCH 'gestures'" 
+  {{ZZZthe hand XXXgesturesYYY (called beatsZZZ}}
+}
+
+# Test some range queries on the rowid field.
+# 
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE ft4 USING fts4(x);
+  CREATE TABLE t4(x);
+}
+
+set SMALLINT -9223372036854775808
+set LARGEINT  9223372036854775807
+do_test 7.2 {
+  db transaction {
+    foreach {iFirst nEntry} [subst {
+      0                      100
+      $SMALLINT              100
+      [expr $LARGEINT - 99]  100
+    }] {
+      for {set i 0} {$i < $nEntry} {incr i} {
+        set iRowid [expr $i + $iFirst]
+        execsql {
+          INSERT INTO ft4(rowid, x) VALUES($iRowid, 'x y z');
+          INSERT INTO  t4(rowid, x) VALUES($iRowid, 'x y z');
+        }
+      }
+    }
+  }
+} {}
+
+foreach {tn iFirst iLast} [subst {
+  1   5 10
+  2   $SMALLINT [expr $SMALLINT+5]
+  3   $SMALLINT [expr $SMALLINT+50]
+  4   [expr $LARGEINT-5] $LARGEINT
+  5   $LARGEINT $LARGEINT
+  6   $SMALLINT $LARGEINT
+  7   $SMALLINT $SMALLINT
+  8   $LARGEINT $SMALLINT
+}] {
+  set res [db eval { 
+    SELECT rowid FROM t4 WHERE rowid BETWEEN $iFirst AND $iLast 
+  } ]
+
+  do_execsql_test 7.2.$tn.1.[llength $res] {
+    SELECT rowid FROM ft4 WHERE rowid BETWEEN $iFirst AND $iLast
+  } $res
+  set res [db eval { 
+    SELECT rowid FROM t4 WHERE rowid BETWEEN $iFirst AND $iLast 
+     ORDER BY +rowid DESC
+  } ]
+  do_execsql_test 7.2.$tn.2.[llength $res] {
+    SELECT rowid FROM ft4 WHERE rowid BETWEEN $iFirst AND $iLast
+    ORDER BY rowid DESC
+  } $res
+}
+
+foreach ii [db eval {SELECT rowid FROM t4}] {
+  set res1 [db eval {SELECT rowid FROM t4 WHERE rowid > $ii}]
+  set res2 [db eval {SELECT rowid FROM t4 WHERE rowid < $ii}]
+  set res1s [db eval {SELECT rowid FROM t4 WHERE rowid > $ii ORDER BY +rowid DESC}]
+  set res2s [db eval {SELECT rowid FROM t4 WHERE rowid < $ii ORDER BY +rowid DESC}]
+
+  do_execsql_test 7.3.$ii.1 {
+    SELECT rowid FROM ft4 WHERE rowid > $ii
+  } $res1
+
+  do_execsql_test 7.3.$ii.2 {
+    SELECT rowid FROM ft4 WHERE rowid < $ii
+  } $res2
+
+  do_execsql_test 7.3.$ii.3 {
+    SELECT rowid FROM ft4 WHERE rowid > $ii ORDER BY rowid DESC
+  } $res1s
+
+  do_execsql_test 7.3.$ii.4 {
+    SELECT rowid FROM ft4 WHERE rowid < $ii ORDER BY rowid DESC
+  } $res2s
+}
+
+finish_test

@@ -1,0 +1,67 @@
+# 2008 July 22
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file runs all tests.
+#
+# $Id: fts2.test,v 1.2 2008/07/23 18:17:32 drh Exp $
+
+proc lshift {lvar} {
+  upvar $lvar l
+  set ret [lindex $l 0]
+  set l [lrange $l 1 end]
+  return $ret
+}
+while {[set arg [lshift argv]] != ""} {
+  switch -- $arg {
+    -sharedpagercache {
+      sqlite3_enable_shared_cache 1
+    }
+    -soak {
+       set G(issoak) 1
+    }
+    default {
+      set argv [linsert $argv 0 $arg]
+      break
+    }
+  }
+}
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+# If SQLITE_ENABLE_FTS2 is defined, omit this file.
+ifcapable !fts2 {
+  return
+}
+rename finish_test really_finish_test
+proc finish_test {} {}
+set G(isquick) 1
+
+set EXCLUDE {
+  fts2.test
+}
+
+# Files to include in the test.  If this list is empty then everything
+# that is not in the EXCLUDE list is run.
+#
+set INCLUDE {
+}
+
+foreach testfile [lsort -dictionary [glob $testdir/fts2*.test]] {
+  set tail [file tail $testfile]
+  if {[lsearch -exact $EXCLUDE $tail]>=0} continue
+  if {[llength $INCLUDE]>0 && [lsearch -exact $INCLUDE $tail]<0} continue
+  source $testfile
+  catch {db close}
+  if {$sqlite_open_file_count>0} {
+    puts "$tail did not close all files: $sqlite_open_file_count"
+    fail_test $tail
+    set sqlite_open_file_count 0
+  }
+}
+
+set sqlite_open_file_count 0
+really_finish_test

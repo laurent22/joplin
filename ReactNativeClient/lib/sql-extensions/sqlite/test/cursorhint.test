@@ -1,0 +1,162 @@
+# 2014 July 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix cursorhint
+
+ifcapable !cursorhints {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a,b,c,d);
+  CREATE TABLE t2(x,y,z);
+  INSERT INTO t1(a,b) VALUES(10, 15);
+  INSERT INTO t1(a,b) VALUES(20, 25);
+  INSERT INTO t2(x,y) VALUES('ten', 'fifteen');
+  INSERT INTO t2(x,y) VALUES('twenty', 'twentyfive');
+  CREATE TABLE t3(id TEXT PRIMARY KEY, a, b, c, d) WITHOUT ROWID;
+  INSERT INTO t3(id,a,b,c,d) SELECT rowid, a, b, c, d FROM t1;
+  PRAGMA automatic_index = 0;
+}
+
+# Run EXPLAIN on $sql.  Return a list of P4 values for all $opcode
+# opcodes.
+#
+proc p4_of_opcode {db opcode sql} {
+  set res {}
+  $db eval "EXPLAIN $sql" x {
+    if {$x(opcode)==$opcode} {lappend res $x(p4)}
+  }
+  return $res
+}
+
+# Run EXPLAIN on $sql.  Return a list of P5 values for all $opcode
+# opcodes that contain regexp $comment in their comment
+#
+proc p5_of_opcode {db opcode sql} {
+  set res {}
+  $db eval "EXPLAIN $sql" x {
+    if {$x(opcode)==$opcode} {
+      lappend res $x(p5)
+    }
+  }
+  return $res
+}
+
+# Verify that when t1 is in the outer loop and t2 is in the inner loop,
+# no cursor hints occur for t1 (since it is a full table scan) but that
+# each t2 access has a cursor hint based on the current t1.a value.
+#
+do_test 1.1 {
+  p4_of_opcode db CursorHint {
+     SELECT * FROM t1 CROSS JOIN t2 WHERE a=x
+  }
+} {{EQ(r[1],c0)}}
+do_test 1.2 {
+  p5_of_opcode db OpenRead {
+     SELECT * FROM t1 CROSS JOIN t2 WHERE a=x
+  }
+} {0 0}
+
+# Do the same test the other way around.
+#
+do_test 2.1 {
+  p4_of_opcode db CursorHint {
+     SELECT * FROM t2 CROSS JOIN t1 WHERE a=x
+  }
+} {{EQ(c0,r[1])}}
+do_test 2.2 {
+  p5_of_opcode db OpenRead {
+     SELECT * FROM t2 CROSS JOIN t1 WHERE a=x
+  }
+} {0 0}
+
+# Various expressions captured by CursorHint
+#
+do_test 3.1 {
+  p4_of_opcode db CursorHint {
+    SELECT * FROM t1 WHERE a=15 AND c=22 AND rowid!=98
+  }
+} {AND(AND(EQ(c0,15),EQ(c2,22)),NE(rowid,98))}
+do_test 3.2 {
+  p4_of_opcode db CursorHint {
+    SELECT * FROM t3 WHERE a<15 AND b>22 AND id!=98
+  }
+} {AND(AND(LT(c1,15),GT(c2,22)),NE(c0,98))}
+
+# Indexed queries
+#
+do_test 4.1asc {
+  db eval {
+    CREATE INDEX t1bc ON t1(b,c);
+    CREATE INDEX t2yz ON t2(y,z);
+  }
+  p4_of_opcode db CursorHint {
+    SELECT * FROM t1 WHERE b>11 ORDER BY b ASC;
+  }
+} {}
+do_test 4.1desc {
+  p4_of_opcode db CursorHint {
+    SELECT * FROM t1 WHERE b>11 ORDER BY b DESC;
+  }
+} {GT(c0,11)}
+do_test 4.2 {
+  p5_of_opcode db OpenRead {
+    SELECT * FROM t1 WHERE b>11;
+  }
+} {2 0}
+do_test 4.3asc {
+  p4_of_opcode db CursorHint {
+    SELECT c FROM t1 WHERE b<11 ORDER BY b ASC;
+  }
+} {LT(c0,11)}
+do_test 4.3desc {
+  p4_of_opcode db CursorHint {
+    SELECT c FROM t1 WHERE b<11 ORDER BY b DESC;
+  }
+} {}
+do_test 4.4 {
+  p5_of_opcode db OpenRead {
+    SELECT c FROM t1 WHERE b<11;
+  }
+} {0}
+
+do_test 4.5asc {
+  p4_of_opcode db CursorHint {
+    SELECT c FROM t1 WHERE b>=10 AND b<=20 ORDER BY b ASC;
+  }
+} {LE(c0,20)}
+do_test 4.5desc {
+  p4_of_opcode db CursorHint {
+    SELECT c FROM t1 WHERE b>=10 AND b<=20 ORDER BY b DESC;
+  }
+} {GE(c0,10)}
+
+# If there are any equality terms used in the constraint, then all terms
+# should be hinted.
+#
+do_test 4.6asc {
+  p4_of_opcode db CursorHint {
+    SELECT rowid FROM t1 WHERE b=22 AND c>=10 AND c<=20 ORDER BY b,c ASC;
+  }
+} {AND(AND(EQ(c0,22),GE(c1,10)),LE(c1,20))}
+do_test 4.6desc {
+  p4_of_opcode db CursorHint {
+    SELECT rowid FROM t1 WHERE b=22 AND c>=10 AND c<=20 ORDER BY b,c DESC;
+  }
+} {AND(AND(EQ(c0,22),GE(c1,10)),LE(c1,20))}
+
+finish_test

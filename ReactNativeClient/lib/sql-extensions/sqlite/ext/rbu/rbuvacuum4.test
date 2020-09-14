@@ -1,0 +1,116 @@
+# 2019 Jan 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. More specifically, it
+# contains tests to ensure that the sqlite3rbu_vacuum() API works as
+# expected.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set testprefix rbuvacuum4
+
+set step 1
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+}
+do_rbu_vacuum_test 1.1 1
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b, c)) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+}
+do_rbu_vacuum_test 2.1 1
+do_execsql_test 2.2 {
+  SELECT * FROM t1;
+} {1 2 3 4 5 6 7 8 9}
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX i1 oN t1(b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+
+  CREATE TABLE t2(a, b, c INTEGER, PRIMARY KEY(c));
+  CREATE INDEX i2 oN t2(b, a);
+  INSERT INTO t2 VALUES('a', 'b', -1);
+  INSERT INTO t2 VALUES('c', 'd', -2);
+  INSERT INTO t2 VALUES('e', 'f', -3);
+}
+
+do_rbu_vacuum_test 3.1 1
+
+do_execsql_test 3.2 {
+  SELECT * FROM t1;
+  SELECT * FROM t2;
+} {1 2 3 4 5 6 7 8 9 e f -3 c d -2 a b -1}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 4.0 {
+  CREATE TABLE x1(a, b, c, d, PRIMARY KEY(c, b)) WITHOUT ROWID;
+  INSERT INTO x1 VALUES(1, 1, 1, 1);
+  INSERT INTO x1 VALUES(1, 1, 2, 1);
+  INSERT INTO x1 VALUES(1, 2, 2, 1);
+
+  INSERT INTO x1 VALUES(NULL, 2, 3, NULL);
+  INSERT INTO x1 VALUES(NULL, 2, 4, NULL);
+  INSERT INTO x1 VALUES(NULL, 2, 5, NULL);
+
+  CREATE INDEX x1ad ON x1(d, a);
+  CREATE INDEX x1null ON x1(d, a) WHERE d>15;
+}
+
+do_rbu_vacuum_test 4.1.1 1
+
+do_execsql_test 4.2 {
+  SELECT count(*) fROM x1
+} 6
+
+do_rbu_vacuum_test 4.1.2 0
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE "a b c"(a, "b b" PRIMARY KEY, "c c");
+  CREATE INDEX abc1 ON "a b c"(a, "c c");
+
+  INSERT INTO "a b c" VALUES(NULL, 'a', NULL);
+  INSERT INTO "a b c" VALUES(NULL, 'b', NULL);
+  INSERT INTO "a b c" VALUES(NULL, 'c', NULL);
+
+  INSERT INTO "a b c" VALUES(1, 2, 3);
+  INSERT INTO "a b c" VALUES(3, 9, 1);
+  INSERT INTO "a b c" VALUES('aaa', 'bbb', 'ccc');
+
+  CREATE INDEX abc2 ON "a b c"("c c" DESC, a);
+
+  CREATE TABLE x(a);
+  INSERT INTO x VALUES('a'), ('b'), ('d');
+  CREATE UNIQUE INDEX y ON x(a);
+}
+
+do_rbu_vacuum_test 5.1 1
+
+finish_test
+

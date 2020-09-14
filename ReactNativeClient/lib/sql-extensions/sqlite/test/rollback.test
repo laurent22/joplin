@@ -1,0 +1,152 @@
+# 2004 June 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is verifying that a rollback in one statement
+# caused by an ON CONFLICT ROLLBACK clause aborts any other pending
+# statements.
+#
+# $Id: rollback.test,v 1.11 2009/06/26 07:12:07 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set DB [sqlite3_connection_pointer db]
+
+do_test rollback-1.1 {
+  execsql {
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(4);
+    SELECT * FROM t1;
+  }
+} {1 2 3 4}
+
+ifcapable conflict {
+  do_test rollback-1.2 {
+    execsql {
+      CREATE TABLE t3(a unique on conflict rollback);
+      INSERT INTO t3 SELECT a FROM t1;
+      BEGIN;
+      INSERT INTO t1 SELECT * FROM t1;
+    }
+  } {}
+}
+do_test rollback-1.3 {
+  set STMT [sqlite3_prepare $DB "SELECT a FROM t1" -1 TAIL]
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+
+ifcapable conflict {
+  # This causes a ROLLBACK, which deletes the table out from underneath the
+  # SELECT statement.
+  #
+  do_test rollback-1.4 {
+    catchsql {
+      INSERT INTO t3 SELECT a FROM t1;
+    }
+  } {1 {UNIQUE constraint failed: t3.a}}
+  
+  # Try to continue with the SELECT statement
+  #
+  do_test rollback-1.5 {
+    sqlite3_step $STMT
+  } {SQLITE_ROW}
+
+  # Restart the SELECT statement
+  #
+  do_test rollback-1.6 { sqlite3_reset $STMT } {SQLITE_OK}
+} else {
+  do_test rollback-1.6 { sqlite3_reset $STMT } {SQLITE_OK}
+}
+
+do_test rollback-1.7 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test rollback-1.8 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test rollback-1.9 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+
+if {$tcl_platform(platform) == "unix" 
+ && [permutation] ne "onefile"
+ && [permutation] ne "inmemory_journal"
+ && [permutation] ne "atomic-batch-write"
+ && [atomic_batch_write test.db]==0
+} {
+  do_test rollback-2.1 {
+    execsql {
+      BEGIN;
+      INSERT INTO t3 VALUES('hello world');
+    }
+    forcecopy test.db testA.db
+    forcecopy test.db-journal testA.db-journal
+    execsql {
+      COMMIT;
+    }
+  } {}
+
+  # At this point files testA.db and testA.db-journal are present in the
+  # file system. This block adds a master-journal file pointer to the
+  # end of testA.db-journal. The master-journal file does not exist.
+  # 
+  set mj [file normalize testA.db-mj-123]
+  binary scan $mj c* a
+  set cksum 0
+  foreach i $a { incr cksum $i }
+  set mj_pgno [expr $sqlite_pending_byte / 1024]
+  set zAppend [binary format Ia*IIa8 $mj_pgno $mj [string length $mj] $cksum \
+    "\xd9\xd5\x05\xf9\x20\xa1\x63\xd7"
+  ]
+  set iOffset [expr (([file size testA.db-journal] + 511)/512)*512]
+  set fd [open testA.db-journal a+]
+  fconfigure $fd -encoding binary -translation binary
+  seek $fd $iOffset
+  puts -nonewline $fd $zAppend
+
+  # Also, fix the first journal-header in the journal-file. Because the
+  # journal file has not yet been synced, the 8-byte magic string at the
+  # start of the first journal-header has not been written by SQLite.
+  # So write it now.
+  seek $fd 0
+  puts -nonewline $fd "\xd9\xd5\x05\xf9\x20\xa1\x63\xd7"
+  close $fd
+
+  # Open a handle on testA.db and use it to query the database. At one
+  # point the first query would attempt a hot rollback, attempt to open
+  # the master-journal file and return SQLITE_CANTOPEN when it could not
+  # be opened. This is incorrect, it should simply delete the journal
+  # file and proceed with the query.
+  # 
+  do_test rollback-2.2 {
+    sqlite3 db2 testA.db
+    execsql {
+      SELECT distinct tbl_name FROM sqlite_master;
+    } db2
+  } {t1 t3}
+  if {[lsearch {exclusive persistent_journal no_journal} [permutation]]<0} {
+    do_test rollback-2.3 {
+      file exists testA.db-journal
+    } 0
+  }
+  do_test rollback-2.4 {
+    execsql {
+      SELECT distinct tbl_name FROM sqlite_master;
+    } db2
+  } {t1 t3}
+
+  db2 close
+}
+
+finish_test

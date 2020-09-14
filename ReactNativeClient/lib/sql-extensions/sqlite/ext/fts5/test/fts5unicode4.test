@@ -1,0 +1,31 @@
+# 2018 July 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5unicode4
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE sss USING fts5(a, prefix=3); 
+}
+
+do_execsql_test 1.1 {
+  INSERT INTO sss VALUES('まりや');
+}
+
+finish_test

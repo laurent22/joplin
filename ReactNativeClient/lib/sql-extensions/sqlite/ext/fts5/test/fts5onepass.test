@@ -1,0 +1,180 @@
+# 2015 Sep 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5onepass
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(content);
+  INSERT INTO ft(rowid, content) VALUES(1, '1 2 3');
+  INSERT INTO ft(rowid, content) VALUES(2, '4 5 6');
+  INSERT INTO ft(rowid, content) VALUES(3, '7 8 9');
+}
+
+#-------------------------------------------------------------------------
+# Check that UPDATE and DELETE statements that feature "WHERE rowid=?" or 
+# or "WHERE rowid=?" clauses do not use statement journals. But that other
+# DELETE and UPDATE statements do.
+#
+# Note: "MATCH ? AND rowid=?" does use a statement journal.
+#
+foreach {tn sql uses} {
+  1.1 { DELETE FROM ft } 1
+  1.2 { DELETE FROM ft WHERE rowid=? } 0
+  1.3 { DELETE FROM ft WHERE rowid=? } 0
+  1.4 { DELETE FROM ft WHERE ft MATCH '1' } 1
+  1.5 { DELETE FROM ft WHERE ft MATCH '1' AND rowid=? } 1
+  1.6 { DELETE FROM ft WHERE ft MATCH '1' AND rowid=? } 1
+
+  2.1 { UPDATE ft SET content='a b c' } 1
+  2.2 { UPDATE ft SET content='a b c' WHERE rowid=? } 0
+  2.3 { UPDATE ft SET content='a b c' WHERE rowid=? } 0
+  2.4 { UPDATE ft SET content='a b c' WHERE ft MATCH '1' } 1
+  2.5 { UPDATE ft SET content='a b c' WHERE ft MATCH '1' AND rowid=? } 1
+  2.6 { UPDATE ft SET content='a b c' WHERE ft MATCH '1' AND rowid=? } 1
+} {
+  do_test 1.$tn { sql_uses_stmt db $sql } $uses
+}
+
+#-------------------------------------------------------------------------
+# Check that putting a "DELETE/UPDATE ... WHERE rowid=?" statement in a
+# trigger program does not prevent the VM from using a statement 
+# transaction. Even if the calling statement cannot hit a constraint.
+#
+do_execsql_test 2.0 {
+  CREATE TABLE t1(x);
+
+  CREATE TRIGGER t1_ai AFTER INSERT ON t1 BEGIN
+    DELETE FROM ft WHERE rowid=new.x;
+  END;
+
+  CREATE TRIGGER t1_ad AFTER DELETE ON t1 BEGIN
+    UPDATE ft SET content = 'a b c' WHERE rowid=old.x;
+  END;
+
+  CREATE TRIGGER t1_bu BEFORE UPDATE ON t1 BEGIN
+    DELETE FROM ft WHERE rowid=old.x;
+  END;
+}
+
+foreach {tn sql uses} {
+  1 { INSERT INTO t1 VALUES(1)      } 1
+  2 { DELETE FROM t1 WHERE x=4      } 1
+  3 { UPDATE t1 SET x=10 WHERE x=11 } 1
+} {
+  do_test 2.$tn { sql_uses_stmt db $sql } $uses
+}
+
+#-------------------------------------------------------------------------
+# Test that an "UPDATE ... WHERE rowid=?" works and does not corrupt the
+# index when it strikes a constraint. Both inside and outside a 
+# transaction.
+#
+foreach {tn tcl1 tcl2}  {
+  1 {} {}
+
+  2 {
+    execsql BEGIN
+  } {
+    if {[sqlite3_get_autocommit db]==1} { error "transaction rolled back!" }
+    execsql COMMIT
+  }
+} {
+
+  do_execsql_test 3.$tn.0 {
+    DROP TABLE IF EXISTS ft2;
+    CREATE VIRTUAL TABLE ft2 USING fts5(content);
+    INSERT INTO ft2(rowid, content) VALUES(1, 'a b c');
+    INSERT INTO ft2(rowid, content) VALUES(2, 'a b d');
+    INSERT INTO ft2(rowid, content) VALUES(3, 'a b e');
+  }
+
+  eval $tcl1
+  foreach {tn2 sql content} {
+    1 { UPDATE ft2 SET rowid=2 WHERE rowid=1 }
+      { 1 {a b c} 2 {a b d} 3 {a b e} }
+
+    2 { 
+      INSERT INTO ft2(rowid, content) VALUES(4, 'a b f');
+      UPDATE ft2 SET rowid=5 WHERE rowid=4;
+      UPDATE ft2 SET rowid=3 WHERE rowid=5;
+    } { 1 {a b c} 2 {a b d} 3 {a b e} 5 {a b f} }
+
+    3 {
+      UPDATE ft2 SET rowid=3 WHERE rowid=4;           -- matches 0 rows
+      UPDATE ft2 SET rowid=2 WHERE rowid=3;
+    } { 1 {a b c} 2 {a b d} 3 {a b e} 5 {a b f} }
+
+    4 {
+      INSERT INTO ft2(rowid, content) VALUES(4, 'a b g');
+      UPDATE ft2 SET rowid=-1 WHERE rowid=4;
+      UPDATE ft2 SET rowid=3 WHERE rowid=-1;
+    } {-1 {a b g} 1 {a b c} 2 {a b d} 3 {a b e} 5 {a b f} }
+
+    5 {
+      DELETE FROM ft2 WHERE rowid=451;
+      DELETE FROM ft2 WHERE rowid=-1;
+      UPDATE ft2 SET rowid = 2 WHERE rowid = 1;
+    } {1 {a b c} 2 {a b d} 3 {a b e} 5 {a b f} }
+  } {
+    do_catchsql_test 3.$tn.$tn2.a $sql {1 {constraint failed}}
+    do_execsql_test  3.$tn.$tn2.b { SELECT rowid, content FROM ft2 } $content
+
+    do_execsql_test  3.$tn.$tn2.c { 
+      INSERT INTO ft2(ft2) VALUES('integrity-check');
+    }
+  }
+  eval $tcl2
+}
+
+#-------------------------------------------------------------------------
+# Check that DELETE and UPDATE operations can be done without flushing
+# the in-memory hash table to disk.
+#
+reset_db
+do_execsql_test 4.1.1 {
+  CREATE VIRTUAL TABLE ttt USING fts5(x);
+  BEGIN;
+    INSERT INTO ttt(rowid, x) VALUES(1, 'a b c');
+    INSERT INTO ttt(rowid, x) VALUES(2, 'a b c');
+    INSERT INTO ttt(rowid, x) VALUES(3, 'a b c');
+  COMMIT
+}
+do_test 4.1.2 { fts5_level_segs ttt } {1}
+
+do_execsql_test 4.2.1 {
+  BEGIN;
+    DELETE FROM ttt WHERE rowid=1;
+    DELETE FROM ttt WHERE rowid=3;
+    INSERT INTO ttt(rowid, x) VALUES(4, 'd e f');
+    INSERT INTO ttt(rowid, x) VALUES(5, 'd e f');
+  COMMIT;
+} {}
+do_test 4.2.2 { fts5_level_segs ttt } {2}
+
+
+do_execsql_test 4.3.1 {
+  BEGIN;
+    UPDATE ttt SET x = 'd e f' WHERE rowid = 2;
+    UPDATE ttt SET x = 'A B C' WHERE rowid = 4;
+    INSERT INTO ttt(rowid, x) VALUES(6, 'd e f');
+  COMMIT;
+} {}
+do_test 4.2.2 { fts5_level_segs ttt } {3}
+
+finish_test

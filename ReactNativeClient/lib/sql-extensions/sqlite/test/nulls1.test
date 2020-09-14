@@ -1,0 +1,343 @@
+# 2019 August 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix nulls1
+
+do_execsql_test 1.0 {
+  DROP TABLE IF EXISTS t3;
+  CREATE TABLE t3(a INTEGER);
+  INSERT INTO t3 VALUES(NULL), (10), (30), (20), (NULL);
+} {}
+
+for {set a 0} {$a < 3} {incr a} {
+  foreach {tn limit} {
+    1 ""
+    2 "LIMIT 10"
+  } {
+    do_execsql_test 1.$a.$tn.1 "
+      SELECT a FROM t3 ORDER BY a nULLS FIRST $limit
+    " {{}   {}   10   20   30}
+    
+    do_execsql_test 1.$a.$tn.2 "
+      SELECT a FROM t3 ORDER BY a nULLS LAST $limit
+    " {10   20   30   {}   {}}
+    
+    do_execsql_test 1.$a.$tn.3 "
+      SELECT a FROM t3 ORDER BY a DESC nULLS FIRST $limit
+    " {{}   {}   30   20   10}
+    
+    do_execsql_test 1.$a.$tn.4 "
+      SELECT a FROM t3 ORDER BY a DESC nULLS LAST $limit
+    " {30   20   10   {}   {}}
+  }
+
+  switch $a {
+    0 {
+      execsql { CREATE INDEX i1 ON t3(a) }
+    }
+    1 {
+      execsql { DROP INDEX i1 ; CREATE INDEX i1 ON t3(a DESC) }
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t2(a, b, c);
+  CREATE INDEX i2 ON t2(a, b);
+  INSERT INTO t2 VALUES(1, 1, 1);
+  INSERT INTO t2 VALUES(1, NULL, 2);
+  INSERT INTO t2 VALUES(1, NULL, 3);
+  INSERT INTO t2 VALUES(1, 4, 4);
+}
+
+do_execsql_test 2.1 {
+  SELECT * FROM t2 WHERE a=1 ORDER BY b NULLS LAST
+} {
+  1 1 1    1 4 4   1 {} 2   1 {} 3
+}
+
+do_execsql_test 2.2 {
+  SELECT * FROM t2 WHERE a=1 ORDER BY b DESC NULLS FIRST
+} {
+  1 {} 3
+  1 {} 2     
+  1 4 4     
+  1 1 1
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a, b, c, d, UNIQUE (b));
+}
+foreach {tn sql err}  {
+  1 { CREATE INDEX i1 ON t1(a ASC NULLS LAST) }           LAST
+  2 { CREATE INDEX i1 ON t1(a ASC NULLS FIRST) }          FIRST
+  3 { CREATE INDEX i1 ON t1(a, b ASC NULLS LAST) }        LAST
+  4 { CREATE INDEX i1 ON t1(a, b ASC NULLS FIRST) }       FIRST
+  5 { CREATE INDEX i1 ON t1(a DESC NULLS LAST) }          LAST
+  6 { CREATE INDEX i1 ON t1(a DESC NULLS FIRST) }         FIRST
+  7 { CREATE INDEX i1 ON t1(a, b DESC NULLS LAST) }       LAST
+  8 { CREATE INDEX i1 ON t1(a, b DESC NULLS FIRST) }      FIRST
+  9  { CREATE TABLE t2(a, b, PRIMARY KEY(a DESC, b NULLS FIRST)) } FIRST
+  10 { CREATE TABLE t2(a, b, UNIQUE(a DESC NULLS FIRST, b)) }      FIRST
+  11 { INSERT INTO t1 VALUES(1, 2, 3, 4)
+          ON CONFLICT (b DESC NULLS LAST) DO UPDATE SET a = a+1 } LAST
+  12 {
+    CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      INSERT INTO t1 VALUES(1, 2, 3, 4)
+      ON CONFLICT (b DESC NULLS FIRST) DO UPDATE SET a = a+1;
+    END
+  } FIRST
+} {
+  do_catchsql_test 3.1.$tn $sql "1 {unsupported use of NULLS $err}"
+}
+
+do_execsql_test 3.2 {
+  CREATE TABLE first(nulls, last);
+  INSERT INTO first(last, nulls) VALUES(100,200), (300,400), (200,300);
+  SELECT * FROM first ORDER BY nulls;
+} {
+  200 100
+  300 200
+  400 300
+}
+
+#-------------------------------------------------------------------------
+#
+ifcapable vtab {
+  register_echo_module db
+  do_execsql_test 4.0 {
+    CREATE TABLE tx(a INTEGER PRIMARY KEY, b, c);
+    CREATE INDEX i1 ON tx(b);
+    INSERT INTO tx VALUES(1, 1, 1);
+    INSERT INTO tx VALUES(2, NULL, 2);
+    INSERT INTO tx VALUES(3, 3, 3);
+    INSERT INTO tx VALUES(4, NULL, 4);
+    INSERT INTO tx VALUES(5, 5, 5);
+    CREATE VIRTUAL TABLE te USING echo(tx);
+  }
+
+  do_execsql_test 4.1 {
+    SELECT * FROM tx ORDER BY b NULLS FIRST;
+  } {2 {} 2  4 {} 4  1 1 1  3 3 3  5 5 5}
+  do_execsql_test 4.2 {
+    SELECT * FROM te ORDER BY b NULLS FIRST;
+  } {2 {} 2  4 {} 4  1 1 1  3 3 3  5 5 5}
+
+  do_execsql_test 4.3 {
+    SELECT * FROM tx ORDER BY b NULLS LAST;
+  } {1 1 1  3 3 3  5 5 5  2 {} 2  4 {} 4}
+  do_execsql_test 4.4 {
+    SELECT * FROM te ORDER BY b NULLS LAST;
+  } {1 1 1  3 3 3  5 5 5  2 {} 2  4 {} 4}
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 5.0 {
+  CREATE TABLE t4(a, b, c);
+  INSERT INTO t4 VALUES(1, 1, 11);
+  INSERT INTO t4 VALUES(1, 2, 12);
+  INSERT INTO t4 VALUES(1, NULL, 1);
+
+  INSERT INTO t4 VALUES(2, NULL, 1);
+  INSERT INTO t4 VALUES(2, 2, 12);
+  INSERT INTO t4 VALUES(2, 1, 11);
+
+  INSERT INTO t4 VALUES(3, NULL, 1);
+  INSERT INTO t4 VALUES(3, 2, 12);
+  INSERT INTO t4 VALUES(3, NULL, 3);
+}
+
+do_execsql_test 5.1 {
+  SELECT * FROM t4 WHERE a IN (1, 2, 3) ORDER BY a, b NULLS LAST
+} {
+  1 1 11   1 2 12   1 {} 1   
+  2 1 11   2 2 12   2 {} 1 
+  3 2 12   3 {} 1   3 {} 3
+}
+do_execsql_test 5.2 {
+  CREATE INDEX t4ab ON t4(a, b);
+  SELECT * FROM t4 WHERE a IN (1, 2, 3) ORDER BY a, b NULLS LAST
+} {
+  1 1 11   1 2 12   1 {} 1   
+  2 1 11   2 2 12   2 {} 1 
+  3 2 12   3 {} 1   3 {} 3
+}
+do_eqp_test 5.3 {
+  SELECT * FROM t4 WHERE a IN (1, 2, 3) ORDER BY a, b NULLS LAST
+} {
+  QUERY PLAN
+  `--SEARCH TABLE t4 USING INDEX t4ab (a=?)
+}
+
+do_execsql_test 5.4 {
+  SELECT * FROM t4 WHERE a IN (1, 2, 3) ORDER BY a DESC, b DESC NULLS FIRST
+} {
+  3 {} 3   3 {} 1   3 2 12   
+  2 {} 1   2 2 12   2 1 11   
+  1 {} 1   1 2 12   1 1 11   
+}
+do_eqp_test 5.5 {
+  SELECT * FROM t4 WHERE a IN (1, 2, 3) ORDER BY a DESC, b DESC NULLS FIRST
+} {
+  QUERY PLAN
+  `--SEARCH TABLE t4 USING INDEX t4ab (a=?)
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 6.0 {
+  CREATE TABLE t5(a, b, c);
+  WITH s(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<200
+  ) 
+  INSERT INTO t5 SELECT i%2, CASE WHEN (i%10)==0 THEN NULL ELSE i END, i FROM s;
+}
+
+set res1 [db eval { SELECT a,b FROM t5 WHERE a=1 ORDER BY b NULLS LAST, c }]
+set res2 [db eval { 
+  SELECT a,b FROM t5 WHERE a=1 ORDER BY b DESC NULLS FIRST, c DESC 
+}]
+
+do_execsql_test 6.1.1 {
+  CREATE INDEX t5ab ON t5(a, b, c);
+  SELECT a,b FROM t5 WHERE a=1 ORDER BY b NULLS LAST, c;
+} $res1
+do_eqp_test 6.1.2 {
+  SELECT a,b FROM t5 WHERE a=1 ORDER BY b NULLS LAST, c;
+} {
+  QUERY PLAN
+  `--SEARCH TABLE t5 USING COVERING INDEX t5ab (a=?)
+}
+do_execsql_test 6.2.1 {
+  SELECT a,b FROM t5 WHERE a=1 ORDER BY b DESC NULLS FIRST, c DESC 
+} $res2
+do_eqp_test 6.2.2 {
+  SELECT a,b FROM t5 WHERE a=1 ORDER BY b DESC NULLS FIRST, c DESC 
+} {
+  QUERY PLAN
+  `--SEARCH TABLE t5 USING COVERING INDEX t5ab (a=?)
+}
+
+#-------------------------------------------------------------------------
+do_execsql_test 7.0 {
+  CREATE TABLE t71(a, b, c);
+  CREATE INDEX t71abc ON t71(a, b, c);
+
+  SELECT * FROM t71 WHERE a=1 AND b=2 ORDER BY c NULLS LAST;
+  SELECT * FROM t71 WHERE a=1 AND b=2 ORDER BY c DESC NULLS FIRST;
+
+  SELECT * FROM t71 ORDER BY a NULLS LAST;
+  SELECT * FROM t71 ORDER BY a DESC NULLS FIRST;
+}
+
+# 2019-12-18 gramfuzz1 find
+# NULLS LAST not allows on an INTEGER PRIMARY KEY.
+#
+do_catchsql_test 8.0 {
+  CREATE TABLE t80(a, b INTEGER, PRIMARY KEY(b NULLS LAST)) WITHOUT ROWID;
+} {1 {unsupported use of NULLS LAST}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 9.0 {
+  CREATE TABLE v0 (c1, c2, c3);
+  CREATE INDEX v3 ON v0 (c1, c2, c3);
+}
+do_execsql_test 9.1 {
+  ANALYZE sqlite_master;
+  INSERT INTO sqlite_stat1 VALUES('v0','v3','648 324 81');
+  ANALYZE sqlite_master;
+}
+
+do_execsql_test 9.2 {
+  INSERT INTO v0 VALUES
+      (1, 10, 'b'),
+      (1, 10, 'd'),
+      (1, 10, NULL),
+      (2, 10, 'a'),
+      (2, 10, NULL),
+      (1, 10, 'c'),
+      (2, 10, 'b'),
+      (1, 10, 'a'),
+      (1, 10, NULL),
+      (2, 10, NULL),
+      (2, 10, 'd'),
+      (2, 10, 'c');
+}
+
+do_execsql_test 9.3 {
+  SELECT c1, c2, ifnull(c3, 'NULL') FROM v0 
+  WHERE c2=10 ORDER BY c1, c3 NULLS LAST
+} {
+  1 10 a 1 10 b 1 10 c 1 10 d 1 10 NULL 1 10 NULL
+  2 10 a 2 10 b 2 10 c 2 10 d 2 10 NULL 2 10 NULL
+}
+
+do_eqp_test 9.4 {
+  SELECT c1, c2, ifnull(c3, 'NULL') FROM v0 
+  WHERE c2=10 ORDER BY c1, c3 NULLS LAST
+} {SEARCH TABLE v0 USING COVERING INDEX v3 (ANY(c1) AND c2=?)}
+
+
+# 2020-03-01 ticket e12a0ae526bb51c7
+# NULLS LAST on a LEFT JOIN
+#
+reset_db
+do_execsql_test 10.10 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1(x) VALUES('X');
+  CREATE TABLE t2(c, d);
+  CREATE INDEX t2dc ON t2(d, c);
+  SELECT c FROM t1 LEFT JOIN t2 ON d=NULL ORDER BY d, c NULLS LAST;
+} {{}}
+do_execsql_test 10.20 {
+  INSERT INTO t2(c,d) VALUES(5,'X'),(6,'Y'),(7,'Z'),(3,'A'),(4,'B');
+  SELECT c FROM t1 LEFT JOIN t2 ON d=x ORDER BY d, c NULLS LAST;
+} {5}
+do_execsql_test 10.30 {
+  UPDATE t2 SET d='X';
+  UPDATE t2 SET c=NULL WHERE c=6;
+  SELECT c FROM t1 LEFT JOIN t2 ON d=x ORDER BY d NULLS FIRST, c NULLS FIRST;
+} {{} 3 4 5 7}
+do_execsql_test 10.40 {
+  SELECT c FROM t1 LEFT JOIN t2 ON d=x ORDER BY d NULLS LAST, c NULLS LAST;
+} {3 4 5 7 {}}
+do_execsql_test 10.41 {
+  SELECT c FROM t1 LEFT JOIN t2 ON d=x ORDER BY c NULLS LAST;
+} {3 4 5 7 {}}
+do_execsql_test 10.42 {
+  SELECT c FROM t1 LEFT JOIN t2 ON d=x ORDER BY +d NULLS LAST, +c NULLS LAST;
+} {3 4 5 7 {}}
+do_execsql_test 10.50 {
+  INSERT INTO t1(x) VALUES(NULL),('Y');
+  SELECT x, c, d, '|' FROM t1 LEFT JOIN t2 ON d=x
+   ORDER BY d NULLS LAST, c NULLS LAST;
+} {X 3 X | X 4 X | X 5 X | X 7 X | X {} X | {} {} {} | Y {} {} |}
+do_execsql_test 10.51 {
+  SELECT x, c, d, '|' FROM t1 LEFT JOIN t2 ON d=x
+   ORDER BY +d NULLS LAST, +c NULLS LAST;
+} {X 3 X | X 4 X | X 5 X | X 7 X | X {} X | {} {} {} | Y {} {} |}
+
+
+
+
+
+finish_test

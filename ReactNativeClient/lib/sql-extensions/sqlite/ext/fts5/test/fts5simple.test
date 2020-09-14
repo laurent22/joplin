@@ -1,0 +1,483 @@
+# 2015 September 05
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5simple
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+if 1 {
+
+#-------------------------------------------------------------------------
+#
+set doc "x x [string repeat {y } 50]z z"
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  BEGIN;
+    INSERT INTO t1 VALUES($doc);
+  COMMIT;
+}
+
+do_execsql_test 1.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  INSERT INTO t1 VALUES('a b c');
+  INSERT INTO t1 VALUES('d e f');
+  INSERT INTO t1(t1) VALUES('optimize');
+}
+
+do_execsql_test 2.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, prefix='1,2');
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  BEGIN;
+  INSERT INTO t1 VALUES('one');
+  SELECT * FROM t1 WHERE t1 MATCH 'o*';
+} {one}
+
+do_execsql_test 3.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 4.1 {
+  CREATE VIRTUAL TABLE t11 USING fts5(content);
+  INSERT INTO t11(t11, rank) VALUES('pgsz', 32);
+  INSERT INTO t11 VALUES('another');
+  INSERT INTO t11 VALUES('string');
+  INSERT INTO t11 VALUES('of');
+  INSERT INTO t11 VALUES('text');
+}
+do_test 4.2 {
+  execsql { INSERT INTO t11(t11) VALUES('optimize') }
+} {}
+do_execsql_test 4.3 {
+  INSERT INTO t11(t11) VALUES('integrity-check');
+} {}
+
+#db eval { SELECT fts5_decode(rowid, block) as x FROM t11_data } { puts $x }
+
+#-------------------------------------------------------------------------
+reset_db
+set doc [string repeat "x y " 5]
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE yy USING fts5(content);
+  INSERT INTO yy(yy, rank) VALUES('pgsz', 32);
+  BEGIN;
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+    INSERT INTO yy VALUES($doc);
+  COMMIT;
+}
+
+do_execsql_test 5.2 {
+  SELECT rowid FROM yy WHERE yy MATCH 'y' ORDER BY rowid ASC
+} {1 2 3 4 5 6 7 8}
+
+do_execsql_test 5.3 {
+  SELECT rowid FROM yy WHERE yy MATCH 'y' ORDER BY rowid DESC
+} {8 7 6 5 4 3 2 1}
+
+#db eval { SELECT fts5_decode(rowid, block) as x FROM yy_data } { puts $x }
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE tt USING fts5(content);
+  INSERT INTO tt(tt, rank) VALUES('pgsz', 32);
+  INSERT INTO tt VALUES('aa');
+}
+
+do_execsql_test 5.2 {
+  SELECT rowid FROM tt WHERE tt MATCH 'a*';
+} {1}
+
+do_execsql_test 5.3 {
+  DELETE FROM tt;
+  BEGIN;
+    INSERT INTO tt VALUES('aa');
+    INSERT INTO tt VALUES('ab');
+  COMMIT;
+} {}
+
+do_execsql_test 5.4 {
+  SELECT rowid FROM tt WHERE tt MATCH 'a*';
+} {1 2}
+
+do_execsql_test 5.5 {
+  DELETE FROM tt;
+  BEGIN;
+    INSERT INTO tt VALUES('aa');
+    INSERT INTO tt VALUES('ab');
+    INSERT INTO tt VALUES('aa');
+    INSERT INTO tt VALUES('ab');
+    INSERT INTO tt VALUES('aa');
+    INSERT INTO tt VALUES('ab');
+    INSERT INTO tt VALUES('aa');
+    INSERT INTO tt VALUES('ab');
+  COMMIT;
+  SELECT rowid FROM tt WHERE tt MATCH 'a*';
+} {1 2 3 4 5 6 7 8}
+
+do_execsql_test 5.6 {
+  INSERT INTO tt(tt) VALUES('integrity-check');
+}
+
+reset_db
+do_execsql_test 5.7 {
+  CREATE VIRTUAL TABLE tt USING fts5(content);
+  INSERT INTO tt(tt, rank) VALUES('pgsz', 32);
+  INSERT INTO tt VALUES('aa ab ac ad ae af');
+}
+
+do_execsql_test 5.8 {
+  SELECT rowid FROM tt WHERE tt MATCH 'a*';
+} {1}
+
+#-------------------------------------------------------------------------
+
+reset_db
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE xyz USING fts5(x, y, z);
+  INSERT INTO xyz VALUES('x', 'y', 'z');
+}
+
+do_catchsql_test 6.2 { 
+  SELECT * FROM xyz WHERE xyz MATCH '' 
+} {1 {fts5: syntax error near ""}}
+do_catchsql_test 6.3 { 
+  SELECT * FROM xyz WHERE xyz MATCH NULL 
+} {1 {fts5: syntax error near ""}}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE ft2 USING fts5(content);
+  INSERT INTO ft2(rowid, content) VALUES(1, 'a b c');
+  INSERT INTO ft2(rowid, content) VALUES(2, 'a b d');
+} 
+
+do_catchsql_test 7.2 {
+  BEGIN;
+    UPDATE ft2 SET rowid=2 WHERE rowid=1;
+} {1 {constraint failed}} 
+
+do_execsql_test 7.3 {
+  COMMIT;
+  INSERT INTO ft2(ft2) VALUES('integrity-check');
+} {}
+
+do_execsql_test 7.4 {
+  SELECT * FROM ft2;
+} {{a b c} {a b d}}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.1 {
+  CREATE VIRTUAL TABLE ft2 USING fts5(content);
+  INSERT INTO ft2(rowid, content) VALUES(1, 'a b');
+}
+
+do_execsql_test 8.2 {
+  BEGIN;
+    INSERT INTO ft2(rowid, content) VALUES(4, 'a x');
+}
+
+do_execsql_test 8.3 {
+  INSERT INTO ft2(ft2) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+# Check that the "table function" syntax works.
+#
+reset_db
+do_execsql_test 9.1 {
+  CREATE VIRTUAL TABLE ft2 USING fts5(content);
+  INSERT INTO ft2(rowid, content) VALUES(1, 'a b');
+  INSERT INTO ft2(rowid, content) VALUES(2, 'a b c d');
+  INSERT INTO ft2(rowid, content) VALUES(3, 'c d e f');
+}
+
+do_execsql_test 9.2 {
+  SELECT rowid FROM ft2('a');
+} {1 2}
+
+do_execsql_test 9.3 {
+  SELECT rowid FROM ft2('b AND c');
+} {2}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE t3 USING fts5(a, b, c);
+  INSERT INTO t3 VALUES('bac aab bab', 'c bac c', 'acb aba abb'); -- 1
+  INSERT INTO t3 VALUES('bab abc c', 'acb c abb', 'c aaa c');     -- 2
+}
+
+do_execsql_test 10.1 {
+  SELECT rowid FROM t3('c: c*');
+} {2}
+
+do_execsql_test 10.2 {
+  SELECT rowid FROM t3('b: acb');
+} {2}
+
+#-------------------------------------------------------------------------
+# Test that character 0x1A is allowed in fts5 barewords.
+#
+do_test 11.0 {
+  execsql "CREATE VIRTUAL TABLE t4 USING fts5(x, tokenize=\"ascii tokenchars '\x1A'\")"
+  execsql "
+    INSERT INTO t4 VALUES('a b c \x1A');
+    INSERT INTO t4 VALUES('a b c d\x1A');
+    INSERT INTO t4 VALUES('a b c \x1Ag');
+    INSERT INTO t4 VALUES('a b c d');
+  "
+} {}
+
+do_test 11.1 {
+  execsql "SELECT rowid FROM t4('\x1A')"
+} {1}
+do_test 11.2 {
+  execsql "SELECT rowid FROM t4('\x1A*')"
+} {1 3}
+do_test 11.3 {
+  execsql "SELECT rowid FROM t4('d\x1A')"
+} {2}
+
+do_test 11.4 {
+  catchsql "SELECT rowid FROM t4('d\x1B')"
+} {/fts5: syntax error/}
+do_test 11.5 {
+  catchsql "SELECT rowid FROM t4('d\x19')"
+} {/fts5: syntax error/}
+
+#-------------------------------------------------------------------------
+#
+do_test 12.1 {
+  execsql {
+    CREATE VIRTUAL TABLE xx USING fts5(x,y);
+    BEGIN;
+      INSERT INTO xx VALUES('1 2 3', 'a b c');
+  }
+} {}
+
+do_execsql_test 12.2 {
+  SELECT rowid FROM xx('x:a');
+  COMMIT;
+} {}
+
+#-------------------------------------------------------------------------
+# Try an UPDATE OR REPLACE query.
+#
+do_execsql_test 13.1 {
+  CREATE VIRTUAL TABLE xy USING fts5(x);
+  INSERT INTO xy(rowid, x) VALUES(1, '1 2 3');
+  INSERT INTO xy(rowid, x) VALUES(2, '2 3 4');
+  INSERT INTO xy(rowid, x) VALUES(3, '3 4 5');
+}
+
+do_execsql_test 13.2 {
+  UPDATE OR REPLACE xy SET rowid=3 WHERE rowid = 2;
+  SELECT rowid, x FROM xy;
+} {
+  1 {1 2 3}
+  3 {2 3 4}
+}
+
+do_execsql_test 13.3 {
+  INSERT INTO xy(xy) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 14.1 {
+  CREATE VIRTUAL TABLE ttt USING fts5(x);
+  BEGIN;
+    INSERT INTO ttt(rowid, x) VALUES(1, 'a b c');
+    INSERT INTO ttt(rowid, x) VALUES(2, 'a b c');
+    INSERT INTO ttt(rowid, x) VALUES(3, 'a b c');
+  COMMIT;
+}
+do_test 14.2 { 
+  fts5_level_segs ttt 
+} {1}
+
+#-------------------------------------------------------------------------
+db func rnddoc fts5_rnddoc
+do_execsql_test 14.3 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+
+  WITH ii(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM ii WHERE i<10 )
+  INSERT INTO x1 SELECT rnddoc(5) FROM ii;
+}
+
+do_execsql_test 14.4 {
+  SELECT rowid, x, x1 FROM x1 WHERE x1 MATCH '*reads'
+} {0 {} 3}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 15.0 {
+  CREATE VIRTUAL TABLE x2 USING fts5(x, prefix=1);
+  INSERT INTO x2 VALUES('ab');
+}
+
+do_execsql_test 15.1 {
+  INSERT INTO x2(x2) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+foreach_detail_mode $testprefix {
+  reset_db
+  fts5_aux_test_functions db
+  do_execsql_test 16.0 {
+    CREATE VIRTUAL TABLE x3 USING fts5(x, detail=%DETAIL%);
+    INSERT INTO x3 VALUES('a b c d e f');
+  }
+  do_execsql_test 16.1 {
+    SELECT fts5_test_poslist(x3) FROM x3('(a NOT b) OR c');
+  } {2.0.2}
+
+  do_execsql_test 16.1 {
+    SELECT fts5_test_poslist(x3) FROM x3('a OR c');
+  } {{0.0.0 1.0.2}}
+}
+
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 17.0 {
+  CREATE VIRTUAL TABLE x3 USING fts5(x);
+  INSERT INTO x3 VALUES('a b c');
+}
+
+do_execsql_test 17.1 {
+  SELECT rowid FROM x3('b AND d');
+}
+
+#-------------------------------------------------------------------------
+do_execsql_test 18.1 {
+  CREATE VIRTUAL TABLE x4 USING fts5(x);
+  SELECT rowid FROM x4('""');
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 19.1 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a,b,c);
+}
+
+do_catchsql_test 19.2 {
+  SELECT * FROM x1 WHERE x1 MATCH 'c0 AND (c1 AND (c2 AND (c3 AND (c4 AND (c5 AND (c6 AND (c7 AND (c8 AND (c9 AND (c10 AND (c11 AND (c12 AND (c13 AND (c14 AND (c15 AND (c16 AND (c17 AND (c18 AND (c19 AND (c20 AND (c21 AND (c22 AND (c23 AND (c24 AND (c25 AND (c26 AND (c27 AND (c28 AND (c29 AND (c30 AND (c31 AND (c32 AND (c33 AND (c34 AND (c35 AND (c36 AND (c37 AND (c38 AND (c39 AND (c40 AND (c41 AND (c42 AND (c43 AND (c44 AND (c45 AND (c46 AND (c47 AND (c48 AND (c49 AND (c50 AND (c51 AND (c52 AND (c53 AND (c54 AND (c55 AND (c56 AND (c57 AND (c58 AND (c59 AND (c60 AND (c61 AND (c62 AND (c63 AND (c64 AND (c65 AND (c66 AND (c67 AND (c68 AND (c69 AND (c70 AND (c71 AND (c72 AND (c73 AND (c74 AND (c75 AND (c76 AND (c77 AND (c78 AND (c79 AND (c80 AND (c81 AND (c82 AND (c83 AND (c84 AND (c85 AND (c86 AND (c87 AND (c88 AND (c89 AND (c90 AND (c91 AND (c92 AND (c93 AND (c94 AND (c95 AND (c96 AND (c97 AND (c98 AND (c99 AND (c100 AND (c101 AND (c102 AND (c103 AND (c104 AND (c105 AND (c106 AND (c107 AND (c108 AND (c109 AND (c110 AND (c111 AND (c112 AND (c113 AND (c114 AND (c115 AND (c116 AND (c117 AND (c118 AND (c119 AND (c120 AND (c121 AND (c122 AND (c123 AND (c124 AND (c125 AND (c126 AND (c127 AND (c128 AND (c129 AND (c130 AND (c131 AND (c132 AND (c133 AND (c134 AND (c135 AND (c136 AND (c137 AND (c138 AND (c139 AND (c140 AND (c141 AND (c142 AND (c143 AND (c144 AND (c145 AND (c146 AND (c147 AND (c148 AND (c149 AND (c150 AND (c151 AND (c152 AND (c153 AND (c154 AND (c155 AND (c156 AND (c157 AND (c158 AND (c159 AND (c160 AND (c161 AND (c162 AND (c163 AND (c164 AND (c165 AND (c166 AND (c167 AND (c168 AND (c169 AND (c170 AND (c171 AND (c172 AND (c173 AND (c174 AND (c175 AND (c176 AND (c177 AND (c178 AND (c179 AND (c180 AND (c181 AND (c182 AND (c183 AND (c184 AND (c185 AND (c186 AND (c187 AND (c188 AND (c189 AND (c190 AND (c191 AND (c192 AND (c193 AND (c194 AND (c195 AND (c196 AND (c197 AND (c198 AND (c199 AND c200)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))';
+} {1 {fts5: parser stack overflow}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 20.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+  INSERT INTO x1(rowid, x) VALUES(11111, 'onetwothree');
+}
+do_test 20.1 {
+  for {set i 1} {$i <= 200} {incr i} {
+    execsql { INSERT INTO x1(rowid, x) VALUES($i, 'one two three'); }
+  }
+  execsql { INSERT INTO x1(x1) VALUES('optimize'); }
+  execsql { DELETE FROM x1 WHERE rowid = 4; }
+} {}
+do_execsql_test 20.2 {
+  INSERT INTO x1(x1) VALUES('optimize');
+  INSERT INTO x1(x1) VALUES('integrity-check');
+} {}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 20.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+  INSERT INTO x1(rowid, x) VALUES(11111, 'onetwothree');
+}
+do_test 20.1 {
+  for {set i 1} {$i <= 200} {incr i} {
+    execsql { INSERT INTO x1(rowid, x) VALUES($i, 'one two three'); }
+  }
+  execsql { INSERT INTO x1(x1) VALUES('optimize'); }
+  execsql { DELETE FROM x1 WHERE rowid = 4; }
+} {}
+do_execsql_test 20.2 {
+  INSERT INTO x1(x1) VALUES('optimize');
+  INSERT INTO x1(x1) VALUES('integrity-check');
+} {}
+
+#-------------------------------------------------------------------------
+reset_db
+set doc "a b [string repeat x 100000]"
+do_execsql_test 21.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(rowid, x) VALUES(11111, $doc);
+  INSERT INTO x1(rowid, x) VALUES(11112, $doc);
+}
+do_execsql_test 21.1 {
+  INSERT INTO x1(x1) VALUES('integrity-check');
+}
+do_execsql_test 21.2 {
+  SELECT rowid FROM x1($doc);
+} {11111 11112}
+do_execsql_test 21.3 {
+  DELETE FROM x1 WHERE rowid=11111;
+  INSERT INTO x1(x1) VALUES('integrity-check');
+  SELECT rowid FROM x1($doc);
+} {11112}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 22.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x) VALUES('a b c');
+  INSERT INTO x1(x) VALUES('x y z');
+  INSERT INTO x1(x) VALUES('c b a');
+  INSERT INTO x1(x) VALUES('z y x');
+}
+
+do_catchsql_test 22.1 {SELECT * FROM x1('')}   {1 {fts5: syntax error near ""}}
+do_catchsql_test 22.2 {SELECT * FROM x1(NULL)} {1 {fts5: syntax error near ""}}
+
+finish_test

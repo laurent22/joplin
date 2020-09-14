@@ -1,0 +1,173 @@
+# 2016 February 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5faultB
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+db func mit mit
+
+
+#-------------------------------------------------------------------------
+# Errors while registering the matchinfo() demo function.
+#
+do_faultsim_test 1 -faults oom* -prep {
+  sqlite3 db test.db
+} -body {
+  sqlite3_fts5_register_matchinfo db
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_ERROR} {1 SQLITE_NOMEM}
+}
+
+
+#-------------------------------------------------------------------------
+# Errors while executing the matchinfo() demo function.
+#
+reset_db
+sqlite3_fts5_register_matchinfo db
+db func mit mit
+do_execsql_test 2 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b);
+  INSERT INTO t1 VALUES('x y z', '1 2 3');
+  INSERT INTO t1 VALUES('x', '1 2 3 4 5 6 7');
+}
+
+do_faultsim_test 2.1 -faults oom* -body {
+  execsql { SELECT mit(matchinfo(t1, 'a')) FROM t1('x') }
+} -test {
+  faultsim_test_result {0 {{2 5} {2 5}}} 
+}
+
+do_faultsim_test 2.2 -faults oom* -body {
+  execsql { SELECT mit(matchinfo(t1, 'l')) FROM t1('x') }
+} -test {
+  faultsim_test_result {0 {{3 3} {1 7}}} 
+}
+
+do_execsql_test 2.3 {
+  INSERT INTO t1 VALUES('a b c d e f', 'a b d e f c');
+  INSERT INTO t1 VALUES('l m b c a', 'n o a b c z');
+}
+
+do_faultsim_test 2.4 -faults oom* -body {
+  execsql { SELECT mit(matchinfo(t1, 's')) FROM t1('a b c') }
+} -test {
+  faultsim_test_result {0 {{3 2} {2 3}}} 
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db 
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(z);
+}
+
+do_faultsim_test 3.1 -faults oom* -body {
+  execsql {
+    SELECT rowid FROM x1('c') WHERE rowid>1;
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_execsql_test 3.2 {
+  INSERT INTO x1 VALUES('a b c');
+  INSERT INTO x1 VALUES('b c d');
+  INSERT INTO x1 VALUES('c d e');
+  INSERT INTO x1 VALUES('d e f');
+}
+do_faultsim_test 3.3 -faults oom* -body {
+  execsql {
+    SELECT rowid FROM x1('c') WHERE rowid>1;
+  }
+} -test {
+  faultsim_test_result {0 {2 3}}
+}
+
+#-------------------------------------------------------------------------
+# Test OOM injection with nested colsets.
+#
+reset_db
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, c, d);
+  INSERT INTO t1 VALUES('a', 'b', 'c', 'd');  -- 1
+  INSERT INTO t1 VALUES('d', 'a', 'b', 'c');  -- 2
+  INSERT INTO t1 VALUES('c', 'd', 'a', 'b');  -- 3
+  INSERT INTO t1 VALUES('b', 'c', 'd', 'a');  -- 4
+}
+do_faultsim_test 4.1 -faults oom* -body {
+  execsql { SELECT rowid FROM t1('{a b c} : (b:a AND c:b)'); }
+} -test {
+  faultsim_test_result {0 2}
+}
+
+do_faultsim_test 4.2 -faults oom* -body {
+  execsql { SELECT rowid FROM t1('{a b c} : (a AND d)') }
+} -test {
+  faultsim_test_result {0 {2 3}}
+}
+
+#-------------------------------------------------------------------------
+# Test OOM injection while parsing a CARET expression
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a);
+  INSERT INTO t1 VALUES('a b c d');  -- 1
+  INSERT INTO t1 VALUES('d a b c');  -- 2
+  INSERT INTO t1 VALUES('c d a b');  -- 3
+  INSERT INTO t1 VALUES('b c d a');  -- 4
+}
+do_faultsim_test 5.1 -faults oom* -body {
+  execsql { SELECT rowid FROM t1('^a OR ^b') }
+} -test {
+  faultsim_test_result {0 {1 4}}
+}
+
+#-------------------------------------------------------------------------
+# Test OOM injection in a query with two MATCH expressions
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a);
+  INSERT INTO t1 VALUES('a b c d');  -- 1
+  INSERT INTO t1 VALUES('d a b c');  -- 2
+  INSERT INTO t1 VALUES('c d a b');  -- 3
+  INSERT INTO t1 VALUES('b c d a');  -- 4
+}
+do_faultsim_test 6.1 -faults oom* -body {
+  execsql { SELECT rowid FROM t1 WHERE t1 MATCH 'a' AND t1 MATCH 'b' }
+} -test {
+  faultsim_test_result {0 {1 2 3 4}}
+}
+do_faultsim_test 6.2 -faults oom* -body {
+  execsql { SELECT rowid FROM t1 WHERE t1 MATCH 'a OR b' AND t1 MATCH 'c OR d' }
+} -test {
+  faultsim_test_result {0 {1 2 3 4}}
+}
+
+
+finish_test

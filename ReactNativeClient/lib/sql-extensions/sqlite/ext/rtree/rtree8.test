@@ -1,0 +1,209 @@
+# 2010 February 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+
+#-------------------------------------------------------------------------
+# The following block of tests - rtree8-1.* - feature reading and writing
+# an r-tree table while there exist open cursors on it.
+#
+proc populate_t1 {n} {
+  execsql { DELETE FROM t1 }
+  for {set i 1} {$i <= $n} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i, $i, $i+2) }
+  }
+}
+
+# A DELETE while a cursor is reading the table.
+#
+do_test rtree8-1.1.1 {
+  execsql { PRAGMA page_size = 512 }
+  execsql { CREATE VIRTUAL TABLE t1 USING rtree_i32(id, x1, x2) }
+  populate_t1 5
+} {}
+do_test rtree8-1.1.2 {
+  set res [list]
+  set rc [catch {
+    db eval { SELECT * FROM t1 } { 
+      lappend res $x1 $x2
+      if {$id==3} { db eval { DELETE FROM t1 WHERE id>3 } }
+    }
+  } msg];
+  lappend rc $msg
+  set rc
+} {1 {database table is locked}}
+do_test rtree8-1.1.2b {
+  db eval { SELECT * FROM t1 ORDER BY +id } { 
+    if {$id==3} { db eval { DELETE FROM t1 WHERE id>3 } }
+  }
+  db eval {SELECT x1, x2 FROM t1}
+} {1 3 2 4 3 5}
+do_test rtree8-1.1.3 {
+  execsql { SELECT * FROM t1 }
+} {1 1 3 2 2 4 3 3 5}
+
+# Many SELECTs on the same small table.
+#
+proc nested_select {n} {
+  set ::max $n
+  db eval { SELECT * FROM t1 } {
+    if {$id == $n} { nested_select [expr $n+1] }
+  }
+  return $::max
+}
+do_test rtree8-1.2.1 { populate_t1 50  } {}
+do_test rtree8-1.2.2 { nested_select 1 } {51}
+
+# This test runs many SELECT queries simultaneously against a large 
+# table, causing a collision in the hash-table used to store r-tree 
+# nodes internally.
+#
+populate_t1 1500
+do_rtree_integrity_test rtree8-1.3.0 t1
+do_execsql_test rtree8-1.3.1 { SELECT max(nodeno) FROM t1_node } {164}
+do_test rtree8-1.3.2 {
+  set rowids [execsql {SELECT min(rowid) FROM t1_rowid GROUP BY nodeno}]
+  set stmt_list [list]
+  foreach row $rowids {
+    set stmt [sqlite3_prepare db "SELECT * FROM t1 WHERE id = $row" -1 tail]
+    sqlite3_step $stmt
+    lappend res_list [sqlite3_column_int $stmt 0]
+    lappend stmt_list $stmt 
+  }
+} {}
+do_test rtree8-1.3.3 { set res_list } $rowids
+do_execsql_test rtree8-1.3.4 { SELECT count(*) FROM t1 } {1500}
+do_test rtree8-1.3.5 { 
+  foreach stmt $stmt_list { sqlite3_finalize $stmt }
+} {}
+
+
+#-------------------------------------------------------------------------
+# The following block of tests - rtree8-2.* - test a couple of database
+# corruption cases. In this case things are not corrupted at the b-tree
+# level, but the contents of the various tables used internally by an
+# r-tree table are inconsistent.
+#
+populate_t1 50
+do_execsql_test rtree8-2.1.1 { SELECT max(nodeno) FROM t1_node } {5}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test rtree8-2.1.2 { DELETE FROM t1_node } {}
+for {set i 1} {$i <= 50} {incr i} {
+  do_catchsql_test rtree8-2.1.3.$i { 
+    SELECT * FROM t1 WHERE id = $i 
+  } {1 {database disk image is malformed}}
+}
+do_catchsql_test rtree8-2.1.4 { 
+  SELECT * FROM t1
+} {1 {database disk image is malformed}}
+do_catchsql_test rtree8-2.1.5 { 
+  DELETE FROM t1
+} {1 {database disk image is malformed}}
+
+do_execsql_test rtree8-2.1.6 { 
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING rtree_i32(id, x1, x2);
+} {}
+
+
+populate_t1 50
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test rtree8-2.2.1 {
+  DELETE FROM t1_parent
+} {}
+do_catchsql_test rtree8-2.2.2 {
+  DELETE FROM t1 WHERE id=25
+} {1 {database disk image is malformed}}
+do_execsql_test rtree8-2.2.3 { 
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING rtree_i32(id, x1, x2);
+} {}
+
+
+#-------------------------------------------------------------------------
+# Test that trying to use the MATCH operator with the r-tree module does
+# not confuse it. 
+#
+populate_t1 10
+do_catchsql_test rtree8-3.1 { 
+  SELECT * FROM t1 WHERE x1 MATCH '1234'
+} {1 {SQL logic error}}
+
+#-------------------------------------------------------------------------
+# Test a couple of invalid arguments to rtreedepth().
+#
+do_catchsql_test rtree8-4.1 {
+  SELECT rtreedepth('hello world')
+} {1 {Invalid argument to rtreedepth()}}
+do_catchsql_test rtree8-4.2 {
+  SELECT rtreedepth(X'00')
+} {1 {Invalid argument to rtreedepth()}}
+
+
+#-------------------------------------------------------------------------
+# Delete half of a lopsided tree.
+#
+do_execsql_test rtree8-5.1 { 
+  CREATE VIRTUAL TABLE t2 USING rtree_i32(id, x1, x2) 
+} {}
+do_test rtree8-5.2 {
+  execsql BEGIN
+  for {set i 0} {$i < 100} {incr i} {
+    execsql { INSERT INTO t2 VALUES($i, 100, 101) }
+  }
+  for {set i 100} {$i < 200} {incr i} {
+    execsql { INSERT INTO t2 VALUES($i, 1000, 1001) }
+  }
+  execsql COMMIT
+} {}
+do_rtree_integrity_test rtree8-5.3 t2
+do_test rtree8-5.4 {
+  execsql BEGIN
+  for {set i 0} {$i < 200} {incr i} {
+    execsql { DELETE FROM t2 WHERE id = $i }
+  }
+  execsql COMMIT
+} {}
+do_rtree_integrity_test rtree8-5.5 t2
+
+# 2018-05-24
+# The following script caused an assertion fault and/or segfault
+# prior to the fix that prevents simultaneous reads and writes on
+# the same rtree virtual table.
+#
+do_test rtree8-6.1 {
+  db close
+  sqlite3 db :memory:
+  db eval {
+    PRAGMA page_size=512;
+    CREATE VIRTUAL TABLE t1 USING rtree(id,x1,x2,y1,y2);
+    WITH RECURSIVE c(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM c WHERE x<49)
+    INSERT INTO t1 SELECT x, x, x+1, x, x+1 FROM c;
+  }
+  set rc [catch {
+    db eval {SELECT id FROM t1} x {
+      db eval {DELETE FROM t1 WHERE id=$x(id)}
+    }
+  } msg]
+  lappend rc $msg
+} {1 {database table is locked}}
+
+
+
+
+finish_test

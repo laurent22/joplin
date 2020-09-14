@@ -1,0 +1,101 @@
+# 2009 Dec 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the CLI shell tool.
+#
+# $Id: shell2.test,v 1.7 2009/07/17 16:54:48 shaneh Exp $
+#
+
+# Test plan:
+#
+#   shell3-1.*: Basic tests for running SQL statments from command line.
+#   shell3-2.*: Basic tests for running SQL file from command line.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set CLI [test_find_cli]
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+# There are inconsistencies in command-line argument quoting on Windows.
+# In particular, individual applications are responsible for command-line
+# parsing in Windows, not the shell.  Depending on whether the sqlite3.exe
+# program is compiled with MinGW or MSVC, the command-line parsing is
+# different.  This causes problems for the tests below.  To avoid
+# issues, these tests are disabled for windows.
+#
+if {$::tcl_platform(platform)=="windows"} {
+  finish_test
+  return
+}
+
+#----------------------------------------------------------------------------
+#   shell3-1.*: Basic tests for running SQL statments from command line.
+#
+
+# Run SQL statement from command line
+do_test shell3-1.1 {
+  forcedelete foo.db
+  set rc [ catchcmd "foo.db \"CREATE TABLE t1(a);\"" ]
+  set fexist [file exist foo.db]
+  list $rc $fexist
+} {{0 {}} 1}
+do_test shell3-1.2 {
+  catchcmd "foo.db" ".tables"
+} {0 t1}
+do_test shell3-1.3 {
+  catchcmd "foo.db \"DROP TABLE t1;\""
+} {0 {}}
+do_test shell3-1.4 {
+  catchcmd "foo.db" ".tables"
+} {0 {}}
+do_test shell3-1.5 {
+  catchcmd "foo.db \"CREATE TABLE t1(a); DROP TABLE t1;\""
+} {0 {}}
+do_test shell3-1.6 {
+  catchcmd "foo.db" ".tables"
+} {0 {}}
+do_test shell3-1.7 {
+  catchcmd "foo.db \"CREATE TABLE\""
+} {1 {Error: incomplete input}}
+
+#----------------------------------------------------------------------------
+#   shell3-2.*: Basic tests for running SQL file from command line.
+#
+
+# Run SQL file from command line
+do_test shell3-2.1 {
+  forcedelete foo.db
+  set rc [ catchcmd "foo.db" "CREATE TABLE t1(a);" ]
+  set fexist [file exist foo.db]
+  list $rc $fexist
+} {{0 {}} 1}
+do_test shell3-2.2 {
+  catchcmd "foo.db" ".tables"
+} {0 t1}
+do_test shell3-2.3 {
+  catchcmd "foo.db" "DROP TABLE t1;"
+} {0 {}}
+do_test shell3-2.4 {
+  catchcmd "foo.db" ".tables"
+} {0 {}}
+do_test shell3-2.5 {
+  catchcmd "foo.db" "CREATE TABLE t1(a); DROP TABLE t1;"
+} {0 {}}
+do_test shell3-2.6 {
+  catchcmd "foo.db" ".tables"
+} {0 {}}
+do_test shell3-2.7 {
+  catchcmd "foo.db" "CREATE TABLE"
+} {1 {Error: near line 1: incomplete input}}
+
+finish_test

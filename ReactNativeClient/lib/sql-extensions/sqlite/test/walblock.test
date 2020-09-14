@@ -1,0 +1,114 @@
+# 2015 Mar 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+
+finish_test; return;    #  Feature currently not implemented.
+ifcapable !wal {finish_test ; return }
+if {$::tcl_platform(platform)!="unix"} { finish_test ; return }
+set testprefix walblock
+
+catch { db close }
+testvfs tvfs -fullshm 1
+foreach f [glob test.db*] { forcedelete $f }
+
+sqlite3 db test.db -vfs tvfs
+do_execsql_test 1.1.0 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+  PRAGMA journal_mode = wal;
+  INSERT INTO t1 VALUES(7, 8);
+} {wal}
+
+do_test 1.1.1 { 
+  lsort [glob test.db*] 
+} {test.db test.db-shm test.db-wal}
+
+do_test 1.1.2 { 
+  set C [launch_testfixture]
+  testfixture $C {
+    sqlite3 db test.db
+    db eval { SELECT * FROM t1 }
+  }
+} {1 2 3 4 5 6 7 8}
+
+do_test 1.1.3 { 
+  set ::out [list]
+  testfixture $C {
+    db eval { SELECT * FROM t1 }
+  } [list set ::out]
+  set ::out
+} {}
+
+do_test 1.1.4 { 
+  vwait ::out
+  set ::out
+} {1 2 3 4 5 6 7 8}
+
+#
+# Test that if a read client cannot read the wal-index header because a
+# write client is in the middle of updating it, the reader blocks until
+# the writer finishes.
+#
+#   1. Open a write transaction using client [db] in this process.
+#
+#   2. Attempt to commit the write transaction. Intercept the xShmBarrier()
+#      call made by the writer between updating the two copies of the
+#      wal-index header.
+#
+#   3. Within the xShmBarrier() callback, make an asynchronous request to
+#      the other process to read from the database. It should block, as it
+#      cannot get read the wal-index header.
+#
+#   4. Still in xShmBarrier(), wait for 5 seconds. Check that the other
+#      process has not answered the request.
+#
+#   5: Finish committing the transaction. Then wait for 0.5 seconds more.
+#      Ensure that the second process has by this stage read the database
+#      and that the snapshot it read included the transaction committed in
+#      step (4).
+#
+do_execsql_test 1.2.1 {
+  BEGIN;
+    INSERT INTO t1 VALUES(9, 10);
+} {}
+
+tvfs script barrier_callback
+tvfs filter xShmBarrier
+proc barrier_callback {method args} {
+  set ::out ""
+  testfixture $::C { db eval { SELECT * FROM t1 } } {set ::out}
+
+  do_test "1.2.2.(blocking 10 seconds)" { 
+    set ::continue 0
+    after 10000 {set ::continue 1}
+    vwait ::continue
+    set ::out 
+  } {}
+}
+
+execsql COMMIT
+
+do_test "1.2.3.(blocking 0.5 seconds)" { 
+  set ::continue 0
+  after 500 {set ::continue 1}
+  vwait ::continue
+  set ::out 
+} {1 2 3 4 5 6 7 8 9 10}
+
+
+finish_test

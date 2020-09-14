@@ -1,0 +1,256 @@
+# 2008 January 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. Specifically,
+# it tests some compiler optimizations for SQL statements featuring
+# triggers:
+#
+#
+#
+
+# trigger9-1.* -   Test that if there are no references to OLD.* cols, or a
+#                  reference to only OLD.rowid, the data is not loaded.
+#
+# trigger9-2.* -   Test that for NEW.* records populated by UPDATE 
+#                  statements, unused fields are populated with NULL values. 
+#
+# trigger9-3.* -   Test that the temporary tables used for OLD.* references
+#                  in "INSTEAD OF" triggers have NULL values in unused 
+#                  fields.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable {!trigger} {
+  finish_test
+  return
+}
+set ::testprefix trigger9
+
+proc has_rowdata {sql} {
+  expr {[lsearch [execsql "explain $sql"] RowData]>=0}
+}
+
+do_test trigger9-1.1 {
+  execsql {
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(x, y, z);
+    INSERT INTO t1 VALUES('1', randstr(10000,10000), '2');
+    INSERT INTO t1 VALUES('2', randstr(10000,10000), '4');
+    INSERT INTO t1 VALUES('3', randstr(10000,10000), '6');
+    CREATE TABLE t2(x);
+  }
+} {}
+
+do_test trigger9-1.2.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE DELETE ON t1 BEGIN
+        INSERT INTO t2 VALUES(old.rowid);
+      END;
+      DELETE FROM t1;
+      SELECT * FROM t2;
+  }
+} {1 2 3}
+do_test trigger9-1.2.3 {
+  has_rowdata {DELETE FROM t1}
+} 0
+do_test trigger9-1.2.4 { execsql { ROLLBACK } } {}
+
+do_test trigger9-1.3.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE DELETE ON t1 BEGIN
+        INSERT INTO t2 VALUES(old.x);
+      END;
+      DELETE FROM t1;
+      SELECT * FROM t2;
+  }
+} {1 2 3}
+do_test trigger9-1.3.2 {
+  has_rowdata {DELETE FROM t1}
+} 0
+do_test trigger9-1.3.3 { execsql { ROLLBACK } } {}
+
+do_test trigger9-1.4.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE DELETE ON t1 WHEN old.x='1' BEGIN
+        INSERT INTO t2 VALUES(old.rowid);
+      END;
+      DELETE FROM t1;
+      SELECT * FROM t2;
+  }
+} {1}
+do_test trigger9-1.4.2 {
+  has_rowdata {DELETE FROM t1}
+} 0
+do_test trigger9-1.4.3 { execsql { ROLLBACK } } {}
+
+do_test trigger9-1.5.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE UPDATE ON t1 BEGIN
+        INSERT INTO t2 VALUES(old.rowid);
+      END;
+      UPDATE t1 SET y = '';
+      SELECT * FROM t2;
+  }
+} {1 2 3}
+do_test trigger9-1.5.2 {
+  has_rowdata {UPDATE t1 SET y = ''}
+} 0
+do_test trigger9-1.5.3 { execsql { ROLLBACK } } {}
+
+do_test trigger9-1.6.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE UPDATE ON t1 BEGIN
+        INSERT INTO t2 VALUES(old.x);
+      END;
+      UPDATE t1 SET y = '';
+      SELECT * FROM t2;
+  }
+} {1 2 3}
+do_test trigger9-1.6.2 {
+  has_rowdata {UPDATE t1 SET y = ''}
+} 0
+do_test trigger9-1.6.3 { execsql { ROLLBACK } } {}
+
+do_test trigger9-1.7.1 {
+  execsql {
+    BEGIN;
+      CREATE TRIGGER trig1 BEFORE UPDATE ON t1 WHEN old.x>='2' BEGIN
+        INSERT INTO t2 VALUES(old.x);
+      END;
+      UPDATE t1 SET y = '';
+      SELECT * FROM t2;
+  }
+} {2 3}
+do_test trigger9-1.7.2 {
+  has_rowdata {UPDATE t1 SET y = ''}
+} 0
+do_test trigger9-1.7.3 { execsql { ROLLBACK } } {}
+
+do_test trigger9-3.1 {
+  execsql {
+    CREATE TABLE t3(a, b);
+    INSERT INTO t3 VALUES(1, 'one');
+    INSERT INTO t3 VALUES(2, 'two');
+    INSERT INTO t3 VALUES(3, 'three');
+  }
+} {}
+do_test trigger9-3.2 {
+  execsql {
+    BEGIN;
+      CREATE VIEW v1 AS SELECT * FROM t3;
+      CREATE TRIGGER trig1 INSTEAD OF UPDATE ON v1 BEGIN
+        INSERT INTO t2 VALUES(old.a);
+      END;
+      UPDATE v1 SET b = 'hello';
+      SELECT * FROM t2;
+    ROLLBACK;
+  }
+} {1 2 3}
+do_test trigger9-3.3 {
+  # In this test the 'c' column of the view is not required by
+  # the INSTEAD OF trigger, but the expression is reused internally as
+  # part of the view's WHERE clause. Check that this does not cause
+  # a problem.
+  #
+  execsql {
+    BEGIN;
+      CREATE VIEW v1 AS SELECT a, b AS c FROM t3 WHERE c > 'one';
+      CREATE TRIGGER trig1 INSTEAD OF UPDATE ON v1 BEGIN
+        INSERT INTO t2 VALUES(old.a);
+      END;
+      UPDATE v1 SET c = 'hello';
+      SELECT * FROM t2;
+    ROLLBACK;
+  }
+} {2 3}
+do_test trigger9-3.4 {
+  execsql {
+    BEGIN;
+      INSERT INTO t3 VALUES(3, 'three');
+      INSERT INTO t3 VALUES(3, 'four');
+      CREATE VIEW v1 AS SELECT DISTINCT a, b FROM t3;
+      CREATE TRIGGER trig1 INSTEAD OF UPDATE ON v1 BEGIN
+        INSERT INTO t2 VALUES(old.a);
+      END;
+      UPDATE v1 SET b = 'hello';
+      SELECT * FROM t2;
+    ROLLBACK;
+  }
+} {1 2 3 3}
+
+ifcapable compound {
+  do_test trigger9-3.5 {
+    execsql {
+      BEGIN;
+        INSERT INTO t3 VALUES(1, 'uno');
+        CREATE VIEW v1 AS SELECT a, b FROM t3 EXCEPT SELECT 1, 'one';
+        CREATE TRIGGER trig1 INSTEAD OF UPDATE ON v1 BEGIN
+          INSERT INTO t2 VALUES(old.a);
+        END;
+        UPDATE v1 SET b = 'hello';
+        SELECT * FROM t2;
+      ROLLBACK;
+    }
+  } {1 2 3}
+  do_test trigger9-3.6 {
+    execsql {
+      BEGIN;
+        INSERT INTO t3 VALUES(1, 'zero');
+        CREATE VIEW v1 AS 
+          SELECT sum(a) AS a, max(b) AS b FROM t3 GROUP BY t3.a HAVING b>'two';
+        CREATE TRIGGER trig1 INSTEAD OF UPDATE ON v1 BEGIN
+          INSERT INTO t2 VALUES(old.a);
+        END;
+        UPDATE v1 SET b = 'hello';
+        SELECT * FROM t2;
+      ROLLBACK;
+    }
+  } {2}
+}
+
+reset_db
+do_execsql_test 4.1 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE log(x);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  CREATE VIEW v1 AS SELECT a, b FROM t1;
+
+  CREATE TRIGGER tr1 INSTEAD OF DELETE ON v1 BEGIN
+    INSERT INTO log VALUES('delete');
+  END;
+
+  CREATE TRIGGER tr2 INSTEAD OF UPDATE ON v1 BEGIN
+    INSERT INTO log VALUES('update');
+  END;
+
+  CREATE TRIGGER tr3 INSTEAD OF INSERT ON v1 BEGIN
+    INSERT INTO log VALUES('insert');
+  END;
+}
+
+do_execsql_test 4.2 {
+  DELETE FROM v1 WHERE rowid=1;
+} {}
+
+do_execsql_test 4.3 {
+  UPDATE v1 SET a=b WHERE rowid=2;
+} {}
+
+
+
+
+finish_test

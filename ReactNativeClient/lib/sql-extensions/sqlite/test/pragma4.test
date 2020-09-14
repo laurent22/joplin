@@ -1,0 +1,268 @@
+# 2017 Jan 4
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix pragma4
+
+proc do_pragma_ncol_test {tn sql nCol} {
+  set ::stmt 0
+  set ::stmt [sqlite3_prepare_v2 db $sql -1 dummy]
+  uplevel [list do_test $tn { sqlite3_column_count $::stmt } $nCol]
+  sqlite3_finalize $::stmt
+}
+
+# If there is no RHS argument, the following PRAGMA statements operate as
+# queries, returning a single row containing a single column.
+#
+# Or, if there is RHS argument, they return zero rows of zero columns.
+#
+foreach {tn sql} {
+  1 "PRAGMA application_id = 10"
+  2 "PRAGMA automatic_index = 1"
+  3 "PRAGMA auto_vacuum = 1"
+  4 "PRAGMA cache_size = -100"
+  5 "PRAGMA cache_spill = 1"
+  6 "PRAGMA cell_size_check = 1"
+  7 "PRAGMA checkpoint_fullfsync = 1"
+  8 "PRAGMA count_changes = 1"
+  9 "PRAGMA default_cache_size = 100"
+ 10 "PRAGMA defer_foreign_keys = 1"
+ 11 "PRAGMA empty_result_callbacks = 1"
+ 12 "PRAGMA encoding = 'utf-8'"
+ 13 "PRAGMA foreign_keys = 1"
+ 14 "PRAGMA full_column_names = 1"
+ 15 "PRAGMA fullfsync = 1"
+ 16 "PRAGMA ignore_check_constraints = 1"
+ 18 "PRAGMA page_size = 511"
+ 19 "PRAGMA page_size = 512"
+ 20 "PRAGMA query_only = false"
+ 21 "PRAGMA read_uncommitted = true"
+ 22 "PRAGMA recursive_triggers = false"
+ 23 "PRAGMA reverse_unordered_selects = false"
+ 24 "PRAGMA schema_version = 211"
+ 25 "PRAGMA short_column_names = 1"
+ 26 "PRAGMA synchronous = full"
+ 29 "PRAGMA temp_store = memory"
+ 30 "PRAGMA user_version = 405"
+ 31 "PRAGMA writable_schema = 1"
+} {
+  reset_db
+
+  # Without RHS:
+  do_pragma_ncol_test 1.$tn.1 [lindex [split $sql =] 0] 1
+
+  # With RHS:
+  do_pragma_ncol_test 1.$tn.2 $sql  0
+}
+
+# These pragmas should never return any values.
+#
+foreach {tn sql} {
+  1 "PRAGMA shrink_memory"
+  2 "PRAGMA shrink_memory = 10"
+  3 "PRAGMA case_sensitive_like = 0"
+  4 "PRAGMA case_sensitive_like = 1"
+  5 "PRAGMA case_sensitive_like"
+} {
+
+  do_pragma_ncol_test 1.$tn.1 $sql 0
+}
+
+# EXPLAIN on a PRAGMA integrity_check.
+# Verify that that P4_INTARRAY argument to OP_IntegrityCk is rendered
+# correctly.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_test pragma4-2.100 {
+  db eval {
+    PRAGMA page_size=512;
+    CREATE TABLE t1(x);
+    WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<10000)
+    INSERT INTO t1(x) SELECT zeroblob(300) FROM c;
+    CREATE TABLE t2(y);
+    DROP TABLE t1;
+  }
+  string map {\[ x \] x \173 {} \175 {}} \
+    [db eval {EXPLAIN PRAGMA integrity_check}]
+} {/ IntegrityCk 2 2 1 x[0-9]+,1x /}
+
+
+#--------------------------------------------------------------------------
+#
+reset_db
+forcedelete test.db2
+do_execsql_test 4.1.1 {
+  CREATE TABLE t1(a, b, c);
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t2(d, e, f);
+}
+do_execsql_test 4.1.2 { PRAGMA table_info = t1 } {
+  0 a {} 0 {} 0 1 b {} 0 {} 0 2 c {} 0 {} 0
+}
+do_execsql_test 4.1.3 { PRAGMA table_info = t2 } {
+  0 d {} 0 {} 0 1 e {} 0 {} 0 2 f {} 0 {} 0
+}
+do_test 4.1.4 { 
+  sqlite3 db3 test.db
+  sqlite3 db2 test.db2
+  execsql { DROP TABLE t1 } db3
+  execsql { DROP TABLE t2 } db2
+} {}  
+if {[permutation]=="prepare"} {
+  do_catchsql_test 4.1.5a { 
+    PRAGMA table_info(t1) 
+  } {1 {database schema has changed}}
+}
+do_execsql_test 4.1.5 { 
+  PRAGMA table_info(t1) 
+}
+do_execsql_test 4.1.6 { PRAGMA table_info(t2) }
+
+db2 close
+db3 close
+reset_db
+forcedelete test.db2
+do_execsql_test 4.2.1 {
+  CREATE TABLE t1(a, b, c);
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t2(d, e, f);
+}
+ifcapable vtab {
+  do_execsql_test 4.2.2 { SELECT * FROM pragma_table_info('t1') } {
+    0 a {} 0 {} 0 1 b {} 0 {} 0 2 c {} 0 {} 0
+  }
+  do_execsql_test 4.2.3 { SELECT * FROM pragma_table_info('t2') } {
+    0 d {} 0 {} 0 1 e {} 0 {} 0 2 f {} 0 {} 0
+  }
+}
+do_test 4.2.4 { 
+  sqlite3 db3 test.db
+  sqlite3 db2 test.db2
+  execsql { DROP TABLE t1 } db3
+  execsql { DROP TABLE t2 } db2
+} {}
+ifcapable vtab {
+  do_execsql_test 4.2.5 { SELECT * FROM pragma_table_info('t1') } 
+  do_execsql_test 4.2.6 { SELECT * FROM pragma_table_info('t2') } 
+}
+
+db2 close
+db3 close
+reset_db
+forcedelete test.db2
+do_execsql_test 4.3.1 {
+  CREATE TABLE t1(a, b, c);
+  CREATE INDEX i1 ON t1(b);
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t2(d, e, f);
+  CREATE INDEX aux.i2 ON t2(e);
+}
+ifcapable vtab {
+  do_execsql_test 4.3.2 { SELECT * FROM pragma_index_info('i1') } {0 1 b}
+  do_execsql_test 4.3.3 { SELECT * FROM pragma_index_info('i2') } {0 1 e}
+}
+do_test 4.3.4 { 
+  sqlite3 db3 test.db
+  sqlite3 db2 test.db2
+  execsql { DROP INDEX i1 } db3
+  execsql { DROP INDEX i2 } db2
+} {}
+if {[permutation]=="prepare"} { catchsql { SELECT * FROM sqlite_master } }
+ifcapable vtab {
+  do_execsql_test 4.3.5 { SELECT * FROM pragma_index_info('i1') } 
+  do_execsql_test 4.3.6 { SELECT * FROM pragma_index_info('i2') } 
+}
+
+execsql {SELECT * FROM main.sqlite_master, aux.sqlite_master}
+do_execsql_test 4.4.0 {
+  CREATE INDEX main.i1 ON t1(b, c);
+  CREATE INDEX aux.i2 ON t2(e, f);
+}
+ifcapable vtab {
+  do_execsql_test 4.4.1 { SELECT * FROM pragma_index_list('t1') } {0 i1 0 c 0}
+  do_execsql_test 4.4.2 { SELECT * FROM pragma_index_list('t2') } {0 i2 0 c 0}
+}
+do_test 4.4.3 { 
+  execsql { DROP INDEX i1 } db3
+  execsql { DROP INDEX i2 } db2
+} {}
+if {[permutation]=="prepare"} { 
+  catchsql { SELECT * FROM sqlite_master, aux.sqlite_master }
+}
+ifcapable vtab {
+  do_execsql_test 4.4.5 { SELECT * FROM pragma_index_list('t1') } {}
+  do_execsql_test 4.4.6 { SELECT * FROM pragma_index_list('t2') } {}
+}
+execsql {SELECT * FROM main.sqlite_master, aux.sqlite_master}
+
+do_execsql_test 4.5.0 {
+  CREATE UNIQUE INDEX main.i1 ON t1(a);
+  CREATE UNIQUE INDEX aux.i2 ON t2(d);
+  CREATE TABLE main.c1 (a, b, c REFERENCES t1(a));
+  CREATE TABLE aux.c2 (d, e, r REFERENCES t2(d));
+}
+ifcapable vtab {
+  do_execsql_test 4.5.1 { SELECT * FROM pragma_foreign_key_list('c1') } {
+    0 0 t1 c a {NO ACTION} {NO ACTION} NONE
+  }
+  do_execsql_test 4.5.2 { SELECT * FROM pragma_foreign_key_list('c2') } {
+    0 0 t2 r d {NO ACTION} {NO ACTION} NONE
+  }
+}
+do_test 4.5.3 { 
+  execsql { DROP TABLE c1 } db3
+  execsql { DROP TABLE c2 } db2
+} {}
+if {[permutation]=="prepare"} { 
+  catchsql { SELECT * FROM sqlite_master, aux.sqlite_master }
+}
+ifcapable vtab {
+  do_execsql_test 4.5.4 { SELECT * FROM pragma_foreign_key_list('c1') }
+  do_execsql_test 4.5.5 { SELECT * FROM pragma_foreign_key_list('c2') } 
+}
+execsql {SELECT * FROM main.sqlite_master, aux.sqlite_master}
+
+do_execsql_test 4.6.0 {
+  CREATE TABLE main.c1 (a, b, c REFERENCES t1(a));
+  CREATE TABLE aux.c2 (d, e, r REFERENCES t2(d));
+  INSERT INTO main.c1 VALUES(1, 2, 3);
+  INSERT INTO aux.c2 VALUES(4, 5, 6);
+}
+do_execsql_test 4.6.1 { pragma foreign_key_check('c1') } {
+  c1 1 t1 0
+}
+do_execsql_test 4.6.2 { pragma foreign_key_check('c2') } {
+  c2 1 t2 0
+}
+do_test 4.6.3 { 
+  execsql { DROP TABLE c2 } db2
+} {}
+do_execsql_test 4.6.4 { pragma foreign_key_check('c1') } {c1 1 t1 0}
+do_catchsql_test 4.6.5 { 
+  pragma foreign_key_check('c2') 
+} {1 {no such table: c2}}
+
+do_execsql_test 5.0 {
+  CREATE TABLE t4(a DEFAULT 'abc' /* comment */, b DEFAULT -1 -- comment
+     , c DEFAULT +4.0 /* another comment */
+  );
+  PRAGMA table_info = t4;
+} {
+  0 a {} 0 'abc' 0 1 b {} 0 -1 0 2 c {} 0 +4.0 0
+}
+
+
+finish_test

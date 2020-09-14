@@ -1,0 +1,60 @@
+# 2015-11-06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# Tests of the iee754 extension
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+load_static_extension db ieee754
+
+foreach {id float rep} {
+   1       1.0                            1,0
+   2       2.0                            2,0
+   3       0.5                            1,-1
+   4       1.5                            3,-1
+   5       0.0                            0,-1075
+   6       4.9406564584124654e-324        1,-1074
+   7       2.2250738585072009e-308        4503599627370495,-1074
+   8       2.2250738585072014e-308        1,-1022
+} {
+  do_test ieee754-100-$id-1 {
+    db eval "SELECT ieee754($float);"
+  } "ieee754($rep)"
+  do_test ieee754-100-$id-2 {
+    db eval "SELECT ieee754($rep)==$float;"
+  } {1}
+  if {$float!=0.0} {
+    do_test ieee754-100-$id-3 {
+      db eval "SELECT ieee754(-$float);"
+    } "ieee754(-$rep)"
+    do_test ieee754-100-$id-4 {
+      db eval "SELECT ieee754(-$rep)==-$float;"
+    } {1}
+  }
+}
+
+do_test ieee754-110 {
+  string tolower [
+    db eval {SELECT ieee754(1,1024), ieee754(4503599627370495,972);}
+  ]
+} {inf 1.79769313486232e+308}
+do_test ieee754-111 {
+  string tolower [
+    db eval {SELECT ieee754(-1,1024), ieee754(-4503599627370495,972);}
+  ]
+} {-inf -1.79769313486232e+308}
+do_execsql_test ieee754-112 {
+  SELECT ieee754(4503599627370495,973) is null;
+} {1}
+
+finish_test

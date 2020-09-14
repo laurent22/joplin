@@ -1,0 +1,99 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# Test the fts5 expression parser directly using the fts5_expr() SQL
+# test function.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ea
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc do_syntax_error_test {tn expr err} {
+  set ::se_expr $expr
+  do_catchsql_test $tn {SELECT fts5_expr($se_expr)} [list 1 $err]
+}
+
+proc do_syntax_test {tn expr res} {
+  set ::se_expr $expr
+  do_execsql_test $tn {SELECT fts5_expr($se_expr)} [list $res]
+}
+
+foreach {tn expr res} {
+  1  {abc}                           {"abc"}
+  2  {abc def}                       {"abc" AND "def"}
+  3  {abc*}                          {"abc" *}
+  4  {"abc def ghi" *}               {"abc" + "def" + "ghi" *}
+  5  {one AND two}                   {"one" AND "two"}
+  6  {one+two}                       {"one" + "two"}
+  7  {one AND two OR three}          {("one" AND "two") OR "three"}
+  8  {one OR two AND three}          {"one" OR ("two" AND "three")}
+  9  {NEAR(one two)}                 {NEAR("one" "two", 10)}
+  10 {NEAR("one three"* two, 5)}     {NEAR("one" + "three" * "two", 5)}
+  11 {a OR b NOT c}                  {"a" OR ("b" NOT "c")}
+  12 "\x20one\x20two\x20three"       {"one" AND "two" AND "three"}
+  13 "\x09one\x0Atwo\x0Dthree"       {"one" AND "two" AND "three"}
+  14 {"abc""def"}                    {"abc" + "def"}
+} {
+  do_execsql_test 1.$tn {SELECT fts5_expr($expr)} [list $res]
+}
+
+foreach {tn expr res} {
+  1 {c1:abc}                           
+    {c1 : "abc"}
+  2 {c2 : NEAR(one two) c1:"hello world"} 
+    {c2 : NEAR("one" "two", 10) AND c1 : "hello" + "world"}
+} {
+  do_execsql_test 2.$tn {SELECT fts5_expr($expr, 'c1', 'c2')} [list $res]
+}
+
+foreach {tn expr err} {
+  1 {AND}                          {fts5: syntax error near "AND"}
+  2 {abc def AND}                  {fts5: syntax error near ""}
+  3 {abc OR AND}                   {fts5: syntax error near "AND"}
+  4 {(a OR b) abc}                 {fts5: syntax error near "abc"}
+  5 {NEaR (a b)}                   {fts5: syntax error near "NEaR"}
+  6 {NEa (a b)}                    {fts5: syntax error near "NEa"}
+  7 {(a OR b) NOT c)}              {fts5: syntax error near ")"}
+  8 {nosuch: a nosuch2: b}         {no such column: nosuch}
+  9 {addr: a nosuch2: b}           {no such column: nosuch2}
+  10 {NOT}                          {fts5: syntax error near "NOT"}
+  11 {a AND "abc}                  {unterminated string}
+
+  12 {NEAR(a b, xyz)}              {expected integer, got "xyz"}
+  13 {NEAR(a b, // )}              {fts5: syntax error near "/"}
+  14 {NEAR(a b, "xyz" )}           {expected integer, got ""xyz""}
+} {
+  do_catchsql_test 3.$tn {SELECT fts5_expr($expr, 'name', 'addr')} [list 1 $err]
+}
+
+#-------------------------------------------------------------------------
+# Experiment with a tokenizer that considers " to be a token character.
+#
+do_execsql_test 4.0 {
+  SELECT fts5_expr('a AND """"', 'x', 'tokenize="unicode61 tokenchars ''""''"');
+} {{"a" AND """"}}
+
+#-------------------------------------------------------------------------
+# Experiment with a tokenizer that considers " to be a token character.
+#
+do_catchsql_test 5.0 {
+  SELECT fts5_expr('abc | def');
+} {1 {fts5: syntax error near "|"}}
+
+
+
+finish_test

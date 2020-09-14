@@ -1,0 +1,146 @@
+# 2007 September 7
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: thread001.test,v 1.10 2009/03/26 14:48:07 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+
+source $testdir/tester.tcl
+if {[run_thread_tests]==0} { finish_test ; return }
+
+set ::enable_shared_cache [sqlite3_enable_shared_cache]
+
+set ::NTHREAD 10
+
+# Run this test three times: 
+# 
+#    1) All threads use the same database handle.
+#    2) All threads use their own database handles.
+#    3) All threads use their own database handles, shared-cache is enabled.
+#
+#
+#
+foreach {tn same_db shared_cache} [list \
+         1  1       0                   \
+         2  0       0                   \
+         3  0       1                   \
+] {
+  # Empty the database.
+  #
+  catchsql { DROP TABLE ab; }
+
+  do_test thread001.$tn.0 {
+    db close
+    sqlite3_enable_shared_cache $shared_cache
+    sqlite3_enable_shared_cache $shared_cache
+  } $shared_cache
+  sqlite3 db test.db -fullmutex 1 -key xyzzy
+
+  set dbconfig ""
+  if {$same_db} {
+    set dbconfig [list set ::DB [sqlite3_connection_pointer db]]
+  }
+
+  # Set up a database and a schema. The database contains a single
+  # table with two columns. The first column ("a") is an INTEGER PRIMARY 
+  # KEY. The second contains the md5sum of all rows in the table with
+  # a smaller value stored in column "a".
+  #
+  do_test thread001.$tn.1 {
+    execsql {
+      CREATE TABLE ab(a INTEGER PRIMARY KEY, b);
+      CREATE INDEX ab_i ON ab(b);
+      INSERT INTO ab SELECT NULL, md5sum(a, b) FROM ab;
+      SELECT count(*) FROM ab;
+    }
+  } {1}
+  do_test thread001.$tn.2 {
+    execsql {
+      SELECT 
+        (SELECT md5sum(a, b) FROM ab WHERE a < (SELECT max(a) FROM ab)) ==
+        (SELECT b FROM ab WHERE a = (SELECT max(a) FROM ab))
+    }
+  } {1}
+  do_test thread001.$tn.3 {
+    execsql { PRAGMA integrity_check }
+  } {ok}
+
+  set thread_program {
+    #sqlthread parent {puts STARTING..}
+    set needToClose 0
+    if {![info exists ::DB]} {
+      set ::DB [sqlthread open test.db xyzzy]
+      #sqlthread parent "puts \"OPEN $::DB\""
+      set needToClose 1
+    }
+  
+    for {set i 0} {$i < 100} {incr i} {
+      # Test that the invariant is true.
+      do_test t1 {
+        execsql {
+          SELECT 
+            (SELECT md5sum(a, b) FROM ab WHERE +a < (SELECT max(a) FROM ab)) ==
+            (SELECT b FROM ab WHERE a = (SELECT max(a) FROM ab))
+        }
+      } {1}
+  
+      # Add another row to the database.
+      execsql { INSERT INTO ab SELECT NULL, md5sum(a, b) FROM ab }
+    }
+  
+    if {$needToClose} {
+      #sqlthread parent "puts \"CLOSE $::DB\""
+      sqlite3_close $::DB
+    }
+    #sqlthread parent "puts \"DONE\""
+  
+    list OK
+  }
+  
+  # Kick off $::NTHREAD threads:
+  #
+  array unset finished
+  for {set i 0} {$i < $::NTHREAD} {incr i} {
+    thread_spawn finished($i) $dbconfig $thread_procs $thread_program
+  }
+  
+  # Wait for all threads to finish,  then check they all returned "OK".
+  #
+  for {set i 0} {$i < $::NTHREAD} {incr i} {
+    if {![info exists finished($i)]} {
+      vwait finished($i)
+    }
+    do_test thread001.$tn.4.$i {
+      set ::finished($i)
+    } OK
+  }
+  
+  # Check the database still looks Ok.
+  #
+  do_test thread001.$tn.5 {
+    execsql { SELECT count(*) FROM ab; }
+  } [expr {1 + $::NTHREAD*100}]
+  do_test thread001.$tn.6 {
+    execsql {
+      SELECT 
+        (SELECT md5sum(a, b) FROM ab WHERE +a < (SELECT max(a) FROM ab)) ==
+        (SELECT b FROM ab WHERE a = (SELECT max(a) FROM ab))
+    }
+  } {1}
+  do_test thread001.$tn.7 {
+    execsql { PRAGMA integrity_check }
+  } {ok}
+}
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+catch { db close }
+set sqlite_open_file_count 0
+finish_test

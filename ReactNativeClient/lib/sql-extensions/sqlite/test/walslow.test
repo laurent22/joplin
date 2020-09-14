@@ -1,0 +1,231 @@
+# 2010 March 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode. The tests in this file use 
+# brute force methods, so may take a while to run.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/wal_common.tcl
+source $testdir/lock_common.tcl
+
+ifcapable !wal {finish_test ; return }
+
+set testprefix walslow
+
+proc reopen_db {} {
+  catch { db close }
+  forcedelete test.db test.db-wal
+  sqlite3 db test.db
+  execsql { PRAGMA journal_mode = wal }
+}
+
+db close
+save_prng_state
+for {set seed 1} {$seed<10} {incr seed} {
+  expr srand($seed)
+  restore_prng_state
+  reopen_db
+  do_test walslow-1.seed=$seed.0 {
+    execsql { CREATE TABLE t1(a, b) }
+    execsql { CREATE INDEX i1 ON t1(a) }
+    execsql { CREATE INDEX i2 ON t1(b) }
+  } {}
+
+  for {set iTest 1} {$iTest < 100} {incr iTest} {
+
+    do_test walslow-1.seed=$seed.$iTest.1 {
+      set w [expr int(rand()*2000)]
+      set x [expr int(rand()*2000)]
+      execsql { INSERT INTO t1 VALUES(randomblob($w), randomblob($x)) }
+      execsql { PRAGMA integrity_check }
+    } {ok}
+
+    do_test walslow-1.seed=$seed.$iTest.2 {
+      execsql "PRAGMA wal_checkpoint;"
+      execsql { PRAGMA integrity_check }
+    } {ok}
+
+    do_test walslow-1.seed=$seed.$iTest.3 {
+      forcedelete testX.db testX.db-wal
+      copy_file test.db testX.db
+      copy_file test.db-wal testX.db-wal
+  
+      sqlite3 db2 testX.db
+      execsql { PRAGMA journal_mode = WAL } db2
+      execsql { PRAGMA integrity_check } db2
+    } {ok}
+  
+    do_test walslow-1.seed=$seed.$iTest.4 {
+      execsql { SELECT count(*) FROM t1 WHERE a!=b } db2
+    } [execsql { SELECT count(*) FROM t1 WHERE a!=b }]
+    db2 close
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test case walslow-3.* tests that the checksum calculation detects single 
+# byte changes to frame or frame-header data and considers the frame
+# invalid as a result.
+#
+reset_db
+do_test 3.1 {
+
+  execsql {
+    PRAGMA synchronous = NORMAL;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, randomblob(300));
+    INSERT INTO t1 VALUES(2, randomblob(300));
+    PRAGMA journal_mode = WAL;
+    INSERT INTO t1 VALUES(3, randomblob(300));
+  }
+
+  file size test.db-wal
+} [wal_file_size 1 1024]
+do_test 3.2 {
+  forcecopy test.db-wal test2.db-wal
+  forcecopy test.db test2.db
+  sqlite3 db2 test2.db
+  execsql { SELECT a FROM t1 } db2
+} {1 2 3}
+db2 close
+forcecopy test.db test2.db
+
+foreach incr {1 2 3 20 40 60 80 100 120 140 160 180 200 220 240 253 254 255} {
+  do_test 3.3.$incr {
+    set FAIL 0
+    for {set iOff 0} {$iOff < [wal_file_size 1 1024]} {incr iOff} {
+
+      forcecopy test.db-wal test2.db-wal
+      set fd [open test2.db-wal r+]
+      fconfigure $fd -encoding binary
+      fconfigure $fd -translation binary
+  
+      seek $fd $iOff
+      binary scan [read $fd 1] c x
+      seek $fd $iOff
+      puts -nonewline $fd [binary format c [expr {($x+$incr)&0xFF}]]
+      close $fd
+    
+      sqlite3 db2 test2.db
+      if { [execsql { SELECT a FROM t1 } db2] != "1 2" } {set FAIL 1}
+      db2 close
+    }
+    set FAIL
+  } {0}
+}
+
+
+#-------------------------------------------------------------------------
+# Test large log summaries.
+#
+# In this case "large" usually means a log file that requires a wal-index
+# mapping larger than 64KB (the default initial allocation). A 64KB wal-index
+# is large enough for a log file that contains approximately 13100 frames.
+# So the following tests create logs containing at least this many frames.
+#
+# 4.1.*: This test case creates a very large log file within the
+#        file-system (around 200MB). The log file does not contain
+#        any valid frames. Test that the database file can still be
+#        opened and queried, and that the invalid log file causes no 
+#        problems.
+#
+# 4.2.*: Test that a process may create a large log file and query
+#        the database (including the log file that it itself created).
+#
+# 4.3.*: Test that if a very large log file is created, and then a
+#        second connection is opened on the database file, it is possible
+#        to query the database (and the very large log) using the
+#        second connection.
+#
+# 4.4.*: Same test as wal-13.3.*. Except in this case the second
+#        connection is opened by an external process.
+#
+set ::blobcnt 0
+proc blob {nByte} {
+  incr ::blobcnt
+  return [string range [string repeat "${::blobcnt}x" $nByte] 1 $nByte]
+}
+
+reset_db
+do_execsql_test 4.1 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE t1(x, y);
+  INSERT INTO "t1" VALUES('A',0);
+  CREATE TABLE t2(x, y);
+  INSERT INTO "t2" VALUES('B',2);
+} {wal}
+db close
+
+do_test 4.1.1 {
+  list [file exists test.db] [file exists test.db-wal]
+} {1 0}
+do_test 4.1.2 {
+  set fd [open test.db-wal w]
+  seek $fd [expr 200*1024*1024]
+  puts $fd ""
+  close $fd
+  sqlite3 db test.db
+  execsql { SELECT * FROM t2 }
+} {B 2}
+do_test 4.1.3 {
+  db close
+  file exists test.db-wal
+} {0}
+
+do_test 4.2.1 {
+  sqlite3 db test.db
+  execsql { SELECT count(*) FROM t2 }
+} {1}
+do_test 4.2.2 {
+  db function blob blob
+  for {set i 0} {$i < 16} {incr i} {
+    execsql { INSERT INTO t2 SELECT blob(400), blob(400) FROM t2 }
+  }
+  execsql { SELECT count(*) FROM t2 }
+} [expr int(pow(2, 16))]
+do_test 4.2.3 {
+  expr [file size test.db-wal] > [wal_file_size 33000 1024]
+} 1
+
+do_multiclient_test tn {
+  incr tn 2
+
+  do_test 4.$tn.0 {
+    sql1 {
+      PRAGMA journal_mode = WAL;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 SELECT randomblob(800);
+    }
+    sql1 { SELECT count(*) FROM t1 }
+  } {1}
+
+  for {set ii 1} {$ii<16} {incr ii} {
+    do_test 4.$tn.$ii.a {
+      sql2 { INSERT INTO t1 SELECT randomblob(800) FROM t1 }
+      sql2 { SELECT count(*) FROM t1 }
+    } [expr (1<<$ii)]
+    do_test 4.$tn.$ii.b {
+      sql1 { SELECT count(*) FROM t1 }
+    } [expr (1<<$ii)]
+    do_test 4.$tn.$ii.c {
+      sql1 { SELECT count(*) FROM t1 }
+    } [expr (1<<$ii)]
+    do_test 4.$tn.$ii.d {
+      sql1 { PRAGMA integrity_check }
+    } {ok}
+  }
+}
+
+finish_test

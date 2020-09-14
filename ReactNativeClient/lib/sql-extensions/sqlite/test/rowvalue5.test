@@ -1,0 +1,115 @@
+# 2016 July 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is syntax errors involving row-values and
+# virtual tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue5
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+proc vtab_command {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c, d, expr)"
+    }
+
+    xBestIndex {
+      set COL(0) a
+      set COL(1) b
+      set COL(2) c
+      set COL(3) d
+      set COL(4) expr
+
+      set OP(eq) =
+      set OP(ne) !=
+      set OP(gt) >
+      set OP(le) <=
+      set OP(lt) <
+      set OP(ge) >=
+      set OP(match) MATCH
+      set OP(like) LIKE
+      set OP(glob) GLOB
+      set OP(regexp) REGEXP
+
+      set clist [lindex $args 0]
+      set ret [list]
+      set elist [list]
+      set i 0
+      foreach c $clist {
+        array set C $c
+        if {$C(usable)} {
+          lappend ret omit $i
+          lappend elist "$COL($C(column)) $OP($C(op)) %$i%"
+        }
+        incr i
+      }
+
+      lappend ret idxstr [join $elist " AND "]
+      #puts "xBestIndex: $ret"
+      return $ret
+    }
+
+    xFilter {
+      foreach {idxnum idxstr arglist} $args {}
+      set i 0
+      set ee $idxstr
+      foreach a $arglist {
+        if {[string is double $a]==0} {
+          set a "'[string map {' ''} $a]'"
+        }
+        set ee [string map [list "%$i%" $a] $ee]
+        incr i
+      }
+      set ee [string map [list "'" "''"] $ee]
+
+      set ret [list sql "SELECT 1, 'a', 'b', 'c', 'd', '$ee'"]
+      #puts "xFilter: $ret"
+      return $ret
+    }
+  }
+
+  return {}
+}
+
+register_tcl_module db
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE x1 USING tcl(vtab_command);
+} {}
+
+
+foreach {tn where res} {
+  1 "1"                              {{}}
+  2 "a=1"                            {{a = 1}}
+  3 "a=1 AND 4 = b"                  {{a = 1 AND b = 4}}
+  4 "c>'hello'"                      {{c > 'hello'}}
+  5 "c<='hel''lo'"                   {{c <= 'hel''lo'}}
+  6 "(a, b) = (SELECT 9, 10)"        {{a = 9 AND b = 10}}
+  7 "(+a, b) = (SELECT 'a', 'b')"    {{b = 'b'}}
+  8 "(a, +b) = (SELECT 'a', 'b')"    {{a = 'a'}}
+  11 "(+a, b) IN (SELECT 'a', 'b')"  {{b = 'b'}}
+  12 "(a, +b) IN (SELECT 'a', 'b')"  {{a = 'a'}}
+
+  13 "(a, b) < ('d', 'e')"           {{a <= 'd'}}
+  14 "(a, b) < ('a', 'c')"           {{a <= 'a'}}
+  15 "(a, b) <= ('a', 'b')"          {{a <= 'a'}}
+  16 "(a, b) < ('a', 'b')"           {}
+} {
+  do_execsql_test 1.$tn "SELECT expr FROM x1 WHERE $where" $res
+}
+
+finish_test

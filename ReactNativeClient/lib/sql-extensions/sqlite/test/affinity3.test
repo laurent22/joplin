@@ -1,0 +1,91 @@
+# 2017-01-16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for bugs:
+#
+#    https://www.sqlite.org/src/info/91e2e8ba6ff2e2
+#    https://www.sqlite.org/src/info/7ffd1ca1d2ad4ecf
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Ticket https://www.sqlite.org/src/info/91e2e8ba6ff2e2 (2011-09-19)
+# Automatic index causes undesired type conversions
+#
+do_execsql_test affinity3-100 {
+  CREATE TABLE customer (id INT PRIMARY KEY);
+  CREATE TABLE apr (id INT PRIMARY KEY, apr REAL);
+  
+  CREATE VIEW v1 AS
+  SELECT c.id, i.apr
+  FROM customer c
+  LEFT JOIN apr i ON i.id=c.id;
+  
+  CREATE VIEW v2 AS
+  SELECT c.id, v1.apr
+  FROM customer c
+  LEFT JOIN v1 ON v1.id=c.id;
+  
+  INSERT INTO customer (id) VALUES (1);
+  INSERT INTO apr (id, apr) VALUES (1, 12);
+  INSERT INTO customer (id) VALUES (2);
+  INSERT INTO apr (id, apr) VALUES (2, 12.01);
+}
+do_execsql_test affinity3-110 {
+  PRAGMA automatic_index=ON;
+  SELECT id, (apr / 100), typeof(apr) apr_type  FROM v1;
+} {1 0.12 real 2 0.1201 real}
+do_execsql_test affinity3-120 {
+  SELECT id, (apr / 100), typeof(apr) apr_type  FROM v2;
+} {1 0.12 real 2 0.1201 real}
+do_execsql_test affinity3-130 {
+  PRAGMA automatic_index=OFF;
+  SELECT id, (apr / 100), typeof(apr) apr_type  FROM v1;
+} {1 0.12 real 2 0.1201 real}
+do_execsql_test affinity3-140 {
+  SELECT id, (apr / 100), typeof(apr) apr_type  FROM v2;
+} {1 0.12 real 2 0.1201 real}
+
+# Ticket https://www.sqlite.org/src/info/7ffd1ca1d2ad4ecf  (2017-01-16)
+# Incorrect affinity when using automatic indexes 
+#
+do_execsql_test affinity3-200 {
+  CREATE TABLE map_integer (id INT, name);
+  INSERT INTO map_integer VALUES(1,'a');
+  CREATE TABLE map_text (id TEXT, name);
+  INSERT INTO map_text VALUES('4','e');
+  CREATE TABLE data (id TEXT, name);
+  INSERT INTO data VALUES(1,'abc');
+  INSERT INTO data VALUES('4','xyz');
+  CREATE VIEW idmap as
+      SELECT * FROM map_integer
+      UNION SELECT * FROM map_text;
+  CREATE TABLE mzed AS SELECT * FROM idmap;
+}
+
+do_execsql_test affinity3-210 {
+  PRAGMA automatic_index=ON;
+  SELECT * FROM data JOIN idmap USING(id);
+} {1 abc a 4 xyz e}
+do_execsql_test affinity3-220 {
+  SELECT * FROM data JOIN mzed USING(id);
+} {1 abc a 4 xyz e}
+
+do_execsql_test affinity3-250 {
+  PRAGMA automatic_index=OFF;
+  SELECT * FROM data JOIN idmap USING(id);
+} {1 abc a 4 xyz e}
+do_execsql_test affinity3-260 {
+  SELECT * FROM data JOIN mzed USING(id);
+} {1 abc a 4 xyz e}
+
+finish_test

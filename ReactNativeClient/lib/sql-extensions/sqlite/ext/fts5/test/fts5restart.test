@@ -1,0 +1,151 @@
+# 2015 April 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file focuses on testing the planner (xBestIndex function).
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5restart
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE f1 USING fts5(ff);
+}
+
+#-------------------------------------------------------------------------
+# Run the 'optimize' command. Check that it does not disturb ongoing
+# full-text queries.
+#
+do_test 1.1 {
+  for {set i 1} {$i < 1000} {incr i} {
+    execsql { INSERT INTO f1 VALUES('a b c d e') }
+    lappend lRowid $i
+  }
+} {}
+
+do_execsql_test 1.2 {
+  SELECT rowid FROM f1 WHERE f1 MATCH 'c';
+} $lRowid
+
+do_test 1.3 {
+  set res [list]
+  db eval { SELECT rowid FROM f1 WHERE f1 MATCH 'c' } {
+    if {$rowid == 100} {
+      execsql { INSERT INTO f1(f1) VALUES('optimize') }
+    }
+    lappend res $rowid
+  }
+  set res
+} $lRowid
+
+do_test 1.4.1 {
+  sqlite3 db2 test.db
+  set res [list]
+  db2 eval { SELECT rowid FROM f1 WHERE f1 MATCH 'c' } {
+    if {$rowid == 100} {
+      set cres [catchsql { INSERT INTO f1(f1) VALUES('optimize') }]
+    }
+    lappend res $rowid
+  }
+  set res
+} $lRowid
+
+do_test 1.4.2 {
+  db2 close
+  set cres
+} {1 {database is locked}}
+
+#-------------------------------------------------------------------------
+# Open a couple of cursors. Then close them in the same order.
+#
+do_test 2.1 {
+  set ::s1 [sqlite3_prepare db "SELECT rowid FROM f1 WHERE f1 MATCH 'b'" -1 X]
+  set ::s2 [sqlite3_prepare db "SELECT rowid FROM f1 WHERE f1 MATCH 'c'" -1 X]
+
+  sqlite3_step $::s1
+} {SQLITE_ROW}
+do_test 2.2 {
+  sqlite3_step $::s2
+} {SQLITE_ROW}
+
+do_test 2.1 {
+  sqlite3_finalize $::s1
+  sqlite3_finalize $::s2
+} {SQLITE_OK}
+
+#-------------------------------------------------------------------------
+# Copy data between two FTS5 tables.
+#
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE f2 USING fts5(gg);
+  INSERT INTO f2 SELECT ff FROM f1 WHERE f1 MATCH 'b+c+d';
+}
+do_execsql_test 3.2 {
+  SELECT rowid FROM f2 WHERE f2 MATCH 'a+b+c+d+e'
+} $lRowid
+
+#-------------------------------------------------------------------------
+# Remove the row that an FTS5 cursor is currently pointing to. And 
+# various other similar things. Check that this does not disturb 
+# ongoing scans.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE n4 USING fts5(n);
+  INSERT INTO n4(rowid, n) VALUES(100, '1 2 3 4 5');
+  INSERT INTO n4(rowid, n) VALUES(200, '1 2 3 4');
+  INSERT INTO n4(rowid, n) VALUES(300, '2 3 4');
+  INSERT INTO n4(rowid, n) VALUES(400, '2 3');
+  INSERT INTO n4(rowid, n) VALUES(500, '3');
+}
+
+do_test 4.1 {
+  set res [list]
+  db eval { SELECT rowid FROM n4 WHERE n4 MATCH '3' } {
+    if {$rowid==300} {
+      execsql { DELETE FROM n4 WHERE rowid=300 }
+    }
+    lappend res $rowid
+  }
+  set res
+} {100 200 300 400 500}
+
+do_test 4.2 {
+  execsql { INSERT INTO n4(rowid, n) VALUES(300, '2 3 4') }
+  set res [list]
+  db eval { SELECT rowid FROM n4 WHERE n4 MATCH '3' ORDER BY rowid DESC} {
+    if {$rowid==300} {
+      execsql { DELETE FROM n4 WHERE rowid=300 }
+    }
+    lappend res $rowid
+  }
+  set res
+} {500 400 300 200 100}
+
+do_test 4.3 {
+  execsql { INSERT INTO n4(rowid, n) VALUES(300, '2 3 4') }
+  set res [list]
+  db eval { SELECT rowid FROM n4 WHERE n4 MATCH '3' ORDER BY rowid DESC} {
+    if {$rowid==300} {
+      execsql { DELETE FROM n4  }
+    }
+    lappend res $rowid
+  }
+  set res
+} {500 400 300}
+
+
+
+finish_test

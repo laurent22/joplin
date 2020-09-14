@@ -1,0 +1,465 @@
+# 2001 October 12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing for correct handling of I/O errors
+# such as writes failing because the disk is full.
+# 
+# The tests in this file use special facilities that are only
+# available in the SQLite test fixture.
+#
+# $Id: ioerr.test,v 1.43 2009/04/06 17:50:03 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_DEFAULT_AUTOVACUUM is set to true, then a simulated IO error
+# on the 8th IO operation in the SQL script below doesn't report an error.
+#
+# This is because the 8th IO call attempts to read page 2 of the database
+# file when the file on disk is only 1 page. The pager layer detects that
+# this has happened and suppresses the error returned by the OS layer.
+#
+do_ioerr_test ioerr-1 -erc 1 -ckrefcount 1 -sqlprep {
+  SELECT * FROM sqlite_master;
+} -sqlbody {
+  CREATE TABLE t1(a,b,c);
+  SELECT * FROM sqlite_master;
+  BEGIN TRANSACTION;
+  INSERT INTO t1 VALUES(1,2,3);
+  INSERT INTO t1 VALUES(4,5,6);
+  ROLLBACK;
+  SELECT * FROM t1;
+  BEGIN TRANSACTION;
+  INSERT INTO t1 VALUES(1,2,3);
+  INSERT INTO t1 VALUES(4,5,6);
+  COMMIT;
+  SELECT * FROM t1;
+  DELETE FROM t1 WHERE a<100;
+} -exclude [expr [string match [execsql {pragma auto_vacuum}] 1] ? 4 : 0]
+
+# Test for IO errors during a VACUUM. 
+#
+# The first IO call is excluded from the test. This call attempts to read
+# the file-header of the temporary database used by VACUUM. Since the
+# database doesn't exist at that point, the IO error is not detected.
+# 
+# Additionally, if auto-vacuum is enabled, the 12th IO error is not 
+# detected. Same reason as the 8th in the test case above.
+# 
+ifcapable vacuum {
+  do_ioerr_test ioerr-2 -cksum true -ckrefcount true -sqlprep { 
+    BEGIN; 
+    CREATE TABLE t1(a, b, c); 
+    INSERT INTO t1 VALUES(1, randstr(50,50), randstr(50,50)); 
+    INSERT INTO t1 SELECT a+2, b||'-'||rowid, c||'-'||rowid FROM t1; 
+    INSERT INTO t1 SELECT a+4, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+8, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+16, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+32, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+64, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+128, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 VALUES(1, randstr(600,600), randstr(600,600));
+    CREATE TABLE t2 AS SELECT * FROM t1;
+    CREATE TABLE t3 AS SELECT * FROM t1;
+    COMMIT;
+    DROP TABLE t2;
+  } -sqlbody {
+    VACUUM;
+  } -exclude [list \
+      1 [expr [string match [execsql {pragma auto_vacuum}] 1]?9:-1]]
+}
+
+do_ioerr_test ioerr-3 -ckrefcount true -tclprep {
+  execsql {
+    PRAGMA cache_size = 10;
+    BEGIN;
+    CREATE TABLE abc(a);
+    INSERT INTO abc VALUES(randstr(1500,1500)); -- Page 4 is overflow
+  }
+  for {set i 0} {$i<150} {incr i} {
+    execsql {
+      INSERT INTO abc VALUES(randstr(100,100)); 
+    }
+  }
+  execsql COMMIT
+} -sqlbody {
+  CREATE TABLE abc2(a);
+  BEGIN;
+  DELETE FROM abc WHERE length(a)>100;
+  UPDATE abc SET a = randstr(90,90);
+  COMMIT;
+  CREATE TABLE abc3(a);
+} 
+
+# Test IO errors that can occur retrieving a record header that flows over
+# onto an overflow page.
+do_ioerr_test ioerr-4 -ckrefcount true -tclprep {
+  set sql "CREATE TABLE abc(a1"
+  for {set i 2} {$i<1300} {incr i} {
+    append sql ", a$i"
+  }
+  append sql ");"
+  execsql $sql
+  execsql {INSERT INTO abc (a1) VALUES(NULL)}
+} -sqlbody {
+ SELECT * FROM abc;
+}
+
+
+# Test IO errors that may occur during a multi-file commit.
+#
+# Tests 8 and 17 are excluded when auto-vacuum is enabled for the same 
+# reason as in test cases ioerr-1.XXX
+ifcapable attach {
+  set ex ""
+  if {[string match [execsql {pragma auto_vacuum}] 1]} {
+    set ex [list 4 17]
+  }
+  do_ioerr_test ioerr-5 -restoreprng 0 -ckrefcount true -sqlprep {
+    ATTACH 'test2.db' AS test2;
+  } -sqlbody {
+    BEGIN;
+    CREATE TABLE t1(a,b,c);
+    CREATE TABLE test2.t2(a,b,c);
+    COMMIT;
+  } -exclude $ex
+}
+
+# Test IO errors when replaying two hot journals from a 2-file 
+# transaction. This test only runs on UNIX.
+#
+# It cannot be run under the "exclusive" permutation. In that case, the
+# locks held by the connection in the local (this) process prevent a 
+# second connection from attempting the multi-file transaction.
+#
+ifcapable crashtest&&attach {
+  if {![catch {sqlite3 -has-codec} r] && !$r && [permutation]!="exclusive"} {
+    do_ioerr_test ioerr-6 -ckrefcount true -tclprep {
+      execsql {
+        ATTACH 'test2.db' as aux;
+        CREATE TABLE tx(a, b);
+        CREATE TABLE aux.ty(a, b);
+      }
+      set rc [crashsql -delay 2 -file test2.db-journal {
+        ATTACH 'test2.db' as aux;
+        PRAGMA cache_size = 10;
+        BEGIN;
+        CREATE TABLE aux.t2(a, b, c);
+        CREATE TABLE t1(a, b, c);
+        COMMIT;
+      }]
+      if {$rc!="1 {child process exited abnormally}"} {
+        error "Wrong error message: $rc"
+      }
+    } -sqlbody {
+      SELECT * FROM sqlite_master;
+      SELECT * FROM aux.sqlite_master;
+    }
+  }
+} 
+
+# Test handling of IO errors that occur while rolling back hot journal
+# files.
+#
+# These tests can't be run on windows because the windows version of 
+# SQLite holds a mandatory exclusive lock on journal files it has open.
+#
+if {$tcl_platform(platform)!="windows" && ![atomic_batch_write test.db]} {
+  do_ioerr_test ioerr-7 -tclprep {
+    db close
+    sqlite3 db2 test2.db
+    db2 eval {
+      PRAGMA synchronous = 0;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+      BEGIN;
+      INSERT INTO t1 VALUES(3, 4);
+    }
+    forcecopy test2.db test.db
+    forcecopy test2.db-journal test.db-journal
+    db2 close
+  } -tclbody {
+    sqlite3 db test.db
+    db eval {
+      SELECT * FROM t1;
+    }
+  } -exclude 1
+}
+
+# For test coverage:  Cause an I/O failure while trying to read a
+# short field (one that fits into a Mem buffer without mallocing
+# for space).
+#
+do_ioerr_test ioerr-8 -ckrefcount true -tclprep {
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(randstr(200,200), randstr(1000,1000), 2);
+  }
+  db close
+  sqlite3 db test.db
+} -sqlbody {
+  SELECT c FROM t1;
+}
+
+# For test coverage: Cause an IO error whilst reading the master-journal
+# name from a journal file.
+if {$tcl_platform(platform)=="unix" && [atomic_batch_write test.db]==0} {
+  do_ioerr_test ioerr-9 -ckrefcount true -tclprep {
+    execsql {
+      CREATE TABLE t1(a,b,c);
+      INSERT INTO t1 VALUES(randstr(200,200), randstr(1000,1000), 2);
+      BEGIN;
+      INSERT INTO t1 VALUES(randstr(200,200), randstr(1000,1000), 2);
+    }
+    forcecopy test.db-journal test2.db-journal
+    execsql {
+      COMMIT;
+    }
+    forcecopy test2.db-journal test.db-journal
+    set f [open test.db-journal a]
+    fconfigure $f -encoding binary
+    puts -nonewline $f "hello"
+    puts -nonewline $f "\x00\x00\x00\x05\x01\x02\x03\x04"
+    puts -nonewline $f "\xd9\xd5\x05\xf9\x20\xa1\x63\xd7"
+    close $f
+  } -sqlbody {
+    SELECT a FROM t1;
+  }
+}
+
+# For test coverage: Cause an IO error during statement playback (i.e. 
+# a constraint).
+do_ioerr_test ioerr-10 -ckrefcount true -tclprep {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a PRIMARY KEY, b);
+  }
+  for {set i 0} {$i < 500} {incr i} {
+    execsql {INSERT INTO t1 VALUES(:i, 'hello world');}
+  }
+  execsql {
+    COMMIT;
+  }
+} -tclbody {
+
+  catch {execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES('abc', 123);
+    INSERT INTO t1 VALUES('def', 123);
+    INSERT INTO t1 VALUES('ghi', 123);
+    INSERT INTO t1 SELECT (a+500)%900, 'good string' FROM t1;
+  }} msg
+
+  if {$msg != "UNIQUE constraint failed: t1.a"} {
+    error $msg
+  }
+}
+
+# Assertion fault bug reported by alex dimitrov.
+#
+do_ioerr_test ioerr-11 -ckrefcount true -erc 1 -sqlprep {
+   CREATE TABLE A(Id INTEGER, Name TEXT);
+   INSERT INTO A(Id, Name) VALUES(1, 'Name');
+} -sqlbody {
+   UPDATE A SET Id = 2, Name = 'Name2' WHERE Id = 1;
+}
+
+# Test that an io error encountered in a sync() caused by a call to
+# sqlite3_release_memory() is handled Ok. Only try this if 
+# memory-management is enabled.
+#
+ifcapable memorymanage {
+  do_ioerr_test memmanage-ioerr1 -ckrefcount true -sqlprep {
+    BEGIN;
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(randstr(50,50), randstr(100,100), randstr(10,10));
+    INSERT INTO t1 SELECT randstr(50,50), randstr(9,9), randstr(90,90) FROM t1;
+    INSERT INTO t1 SELECT randstr(50,50), randstr(9,9), randstr(90,90) FROM t1;
+    INSERT INTO t1 SELECT randstr(50,50), randstr(9,9), randstr(90,90) FROM t1;
+    INSERT INTO t1 SELECT randstr(50,50), randstr(9,9), randstr(90,90) FROM t1;
+    INSERT INTO t1 SELECT randstr(50,50), randstr(9,9), randstr(90,90) FROM t1;
+  } -tclbody {
+    sqlite3_release_memory 
+  } -sqlbody {
+    COMMIT;
+  }
+}
+
+ifcapable pager_pragmas&&autovacuum {
+  do_ioerr_test ioerr-12 -ckrefcount true -erc 1 -sqlprep {
+     PRAGMA page_size = 512;
+     PRAGMA auto_vacuum = incremental;
+     CREATE TABLE t1(x);
+     INSERT INTO t1 VALUES( randomblob(1   * (512-4)) );
+     INSERT INTO t1 VALUES( randomblob(110 * (512-4)) );
+     INSERT INTO t1 VALUES( randomblob(2   * (512-4)) );
+     INSERT INTO t1 VALUES( randomblob(110 * (512-4)) );
+     INSERT INTO t1 VALUES( randomblob(3 * (512-4)) );
+     DELETE FROM t1 WHERE rowid = 3;
+     PRAGMA incremental_vacuum = 2;
+     DELETE FROM t1 WHERE rowid = 1;
+  } -sqlbody {
+     PRAGMA incremental_vacuum = 1;
+  }
+}
+
+# Usually, after a new page is allocated from the end of the file, it does
+# not need to be written to the journal. The exception is when the new page
+# shares its sector with an existing page that does need to be journalled.
+# This test case provokes this condition to test for the sake of coverage
+# that an IO error while journalling the coresident page is handled correctly.
+#
+sqlite3_simulate_device -char {} -sectorsize 2048
+do_ioerr_test ioerr-12 -ckrefcount true -erc 1 -tclprep {
+  db close
+  sqlite3 db test.db -vfs devsym
+
+  # Create a test database. Page 2 is the root page of table t1. The only
+  # row inserted into t1 has an overflow page - page 3. Page 3 will be
+  # coresident on the 2048 byte sector with the next page to be allocated.
+  # 
+  db eval { PRAGMA page_size = 1024 }
+  db eval { CREATE TABLE t1(x) }
+  db eval { INSERT INTO t1 VALUES(randomblob(1100)); }
+} -tclbody {
+  db eval { INSERT INTO t1 VALUES(randomblob(2000)); }
+}
+sqlite3_simulate_device -char {} -sectorsize 0
+catch {db close}
+
+do_ioerr_test ioerr-13 -ckrefcount true -erc 1 -sqlprep {
+  PRAGMA auto_vacuum = incremental;
+  CREATE TABLE t1(x);
+  CREATE TABLE t2(x);
+  INSERT INTO t2 VALUES(randomblob(1500));
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t1 VALUES(randomblob(20));
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;             /* 64 entries in t1 */
+  INSERT INTO t1 SELECT x FROM t1 LIMIT 14;    /* 78 entries in t1 */
+  DELETE FROM t2 WHERE rowid = 3;
+} -sqlbody {
+  -- This statement uses the balance_quick() optimization. The new page
+  -- is appended to the database file. But the overflow page used by
+  -- the new record will be positioned near the start of the database
+  -- file, in the gap left by the "DELETE FROM t2 WHERE rowid=3" statement
+  -- above.
+  --
+  -- The point of this is that the statement wil need to update two pointer
+  -- map pages. Which introduces another opportunity for an IO error.
+  --
+  INSERT INTO t1 VALUES(randomblob(2000));
+}
+
+do_ioerr_test ioerr-14 -ckrefcount true -erc 1 -sqlprep {
+  PRAGMA auto_vacuum = incremental;
+  CREATE TABLE t1(x);
+  CREATE TABLE t2(x);
+  INSERT INTO t2 VALUES(randomblob(1500));
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+  INSERT INTO t2 SELECT randomblob(1500) FROM t2;
+
+  -- This statement inserts a row into t1 with an overflow page at the
+  -- end of the file. A long way from its parent (the root of t1).
+  INSERT INTO t1 VALUES(randomblob(1500));
+  DELETE FROM t2 WHERE rowid<10;
+} -sqlbody {
+  -- This transaction will cause the root-page of table t1 to divide
+  -- (by calling balance_deeper()). When it does, the "parent" page of the
+  -- overflow page inserted in the -sqlprep block above will change and
+  -- the corresponding pointer map page be updated. This test case attempts
+  -- to cause an IO error during the pointer map page update.
+  --
+  BEGIN;
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  INSERT INTO t1 VALUES(randomblob(100));
+  COMMIT;
+}
+
+do_ioerr_test ioerr-15 -tclprep {
+  db eval {
+    BEGIN;
+    PRAGMA cache_size = 10;
+    CREATE TABLE t1(a);
+    CREATE INDEX i1 ON t1(a);
+    CREATE TABLE t2(a);
+  }
+  for {set ii 1} {$ii < 100} {incr ii} {
+    set v [string range [string repeat [format %.3d $ii] 200] 0 220]
+    db eval {INSERT INTO t1 VALUES($v)}
+  }
+  db eval {
+    DELETE FROM t1 WHERE oid > 85;
+    COMMIT;
+  }
+} -sqlbody {
+  BEGIN;
+  INSERT INTO t2 VALUES(randstr(22000,22000));
+  DELETE FROM t1 WHERE oid = 83;
+  COMMIT;
+} 
+
+# This test verifies that IO errors that occur within the obscure branch
+# of code executed by tkt3762.test are correctly reported.
+#
+ifcapable vacuum&&autovacuum&&pragma {
+  do_ioerr_test ioerr-16 -erc 1 -ckrefcount 1 -sqlprep {
+    PRAGMA auto_vacuum=INCREMENTAL;
+    PRAGMA page_size=1024;
+    BEGIN;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(zeroblob(900));
+    INSERT INTO t1 VALUES(zeroblob(900));
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    INSERT INTO t1 SELECT x FROM t1;
+    DELETE FROM t1 WHERE rowid>202;
+    COMMIT;
+    VACUUM;
+    PRAGMA cache_size = 10;
+    BEGIN;
+    DELETE FROM t1 WHERE rowid IN (10,11,12) ;
+  } -sqlbody {
+    PRAGMA incremental_vacuum(10);
+    COMMIT;
+  }
+}
+
+finish_test

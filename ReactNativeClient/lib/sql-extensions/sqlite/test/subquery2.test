@@ -1,0 +1,218 @@
+# 2011 September 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing correlated subqueries
+#
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix subquery2
+
+ifcapable !subquery {
+  finish_test
+  return
+}
+
+do_test subquery2-1.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,2);
+    INSERT INTO t1 VALUES(3,4);
+    INSERT INTO t1 VALUES(5,6);
+    INSERT INTO t1 VALUES(7,8);
+    CREATE TABLE t2(c,d);
+    INSERT INTO t2 VALUES(1,1);
+    INSERT INTO t2 VALUES(3,9);
+    INSERT INTO t2 VALUES(5,25);
+    INSERT INTO t2 VALUES(7,49);
+    CREATE TABLE t3(e,f);
+    INSERT INTO t3 VALUES(1,1);
+    INSERT INTO t3 VALUES(3,27);
+    INSERT INTO t3 VALUES(5,125);
+    INSERT INTO t3 VALUES(7,343);
+    COMMIT;
+  }
+  execsql {
+    SELECT a FROM t1
+     WHERE b IN (SELECT x+1 FROM (SELECT DISTINCT f/(a*a) AS x FROM t3));
+  }
+} {1 3 5 7}
+do_test subquery2-1.2 {
+  execsql {
+    CREATE INDEX t1b ON t1(b);
+    SELECT a FROM t1
+     WHERE b IN (SELECT x+1 FROM (SELECT DISTINCT f/(a*a) AS x FROM t3));
+  }
+} {1 3 5 7}
+
+do_test subquery2-1.11 {
+  execsql {
+    SELECT a FROM t1
+     WHERE +b=(SELECT x+1 FROM (SELECT DISTINCT f/(a*a) AS x FROM t3));
+  }
+} {1}
+do_test subquery2-1.12 {
+  execsql {
+    SELECT a FROM t1
+     WHERE b=(SELECT x+1 FROM (SELECT DISTINCT f/(a*a) AS x FROM t3));
+  }
+} {1}
+
+do_test subquery2-1.21 {
+  execsql {
+    SELECT a FROM t1
+     WHERE +b=(SELECT x+1 FROM 
+                 (SELECT DISTINCT f/d AS x FROM t2 JOIN t3 ON d*a=f))
+  }
+} {1 3 5 7}
+do_test subquery2-1.22 {
+  execsql {
+    SELECT a FROM t1
+     WHERE b=(SELECT x+1 FROM 
+                 (SELECT DISTINCT f/d AS x FROM t2 JOIN t3 ON d*a=f))
+  }
+} {1 3 5 7}
+
+#-------------------------------------------------------------------------
+# Test that ticket d6b36be38a has been fixed.
+do_execsql_test 2.1 {
+  CREATE TABLE t4(a, b);
+  CREATE TABLE t5(a, b);
+  INSERT INTO t5 VALUES(3, 5);
+
+  INSERT INTO t4 VALUES(1, 1);
+  INSERT INTO t4 VALUES(2, 3);
+  INSERT INTO t4 VALUES(3, 6);
+  INSERT INTO t4 VALUES(4, 10);
+  INSERT INTO t4 VALUES(5, 15);
+}
+
+do_execsql_test 2.2 {
+  SELECT * 
+  FROM (SELECT * FROM t4 ORDER BY a LIMIT -1 OFFSET 1) 
+  LIMIT (SELECT a FROM t5)
+} {2 3   3 6   4 10}
+
+############################################################################
+# Ticket http://www.sqlite.org/src/info/d11a6e908f (2014-09-20)
+# Query planner fault on three-way nested join with compound inner SELECT 
+#
+do_execsql_test 3.0 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1 (id INTEGER PRIMARY KEY, data TEXT);
+  INSERT INTO t1(id,data) VALUES(9,'nine-a');
+  INSERT INTO t1(id,data) VALUES(10,'ten-a');
+  INSERT INTO t1(id,data) VALUES(11,'eleven-a');
+  CREATE TABLE t2 (id INTEGER PRIMARY KEY, data TEXT);
+  INSERT INTO t2(id,data) VALUES(9,'nine-b');
+  INSERT INTO t2(id,data) VALUES(10,'ten-b');
+  INSERT INTO t2(id,data) VALUES(11,'eleven-b');
+  
+  SELECT id FROM (
+    SELECT id,data FROM (
+       SELECT * FROM t1 UNION ALL SELECT * FROM t2
+    )
+    WHERE id=10 ORDER BY data
+  );
+} {10 10}
+do_execsql_test 3.1 {
+  SELECT data FROM (
+     SELECT 'dummy', data FROM (
+       SELECT data FROM t1 UNION ALL SELECT data FROM t1
+     ) ORDER BY data
+  );
+} {eleven-a eleven-a nine-a nine-a ten-a ten-a}
+do_execsql_test 3.2 {
+  DROP TABLE IF EXISTS t3;
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t3(id INTEGER, data TEXT);
+  CREATE TABLE t4(id INTEGER, data TEXT);
+  INSERT INTO t3 VALUES(4, 'a'),(2,'c');
+  INSERT INTO t4 VALUES(3, 'b'),(1,'d');
+
+  SELECT data, id FROM (
+    SELECT id, data FROM (
+       SELECT * FROM t3 UNION ALL SELECT * FROM t4
+    ) ORDER BY data
+  );
+} {a 4 b 3 c 2 d 1}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 4.0 {
+  CREATE TABLE t6(x);
+}
+
+foreach {tn sql} {
+  1 {
+    SELECT 'abc' FROM (
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6
+    )
+  }
+  2 {
+    SELECT 'abc' FROM (
+        SELECT x FROM t6
+        UNION ALL
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6
+    )
+  }
+  3 {
+    SELECT 'abc' FROM (
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6
+    )
+  }
+  4 {
+    SELECT 'abc' FROM (
+        SELECT x FROM t6
+        UNION ALL
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6 ORDER BY 1
+        UNION ALL
+        SELECT x FROM t6
+    )
+  }
+} {
+  do_catchsql_test 4.$tn $sql [list {*}{
+    1 {ORDER BY clause should come after UNION ALL not before}
+  }]
+}
+
+#-------------------------------------------------------------------------
+# Test that ticket [9cdc5c46] is fixed.
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES('ALFKI');
+  INSERT INTO t1 VALUES('ANATR');
+
+  CREATE TABLE t2(y, z);
+  CREATE INDEX t2y ON t2 (y);
+  INSERT INTO t2 VALUES('ANATR', '1997-08-08 00:00:00');
+  INSERT INTO t2 VALUES('ALFKI', '1997-08-25 00:00:00');
+}
+do_execsql_test 5.1 {
+  SELECT ( SELECT y FROM t2 WHERE x = y ORDER BY y, z) FROM t1;
+} {ALFKI ANATR}
+
+finish_test

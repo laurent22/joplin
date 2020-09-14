@@ -1,0 +1,846 @@
+# 2017 December 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+package require Tcl 8.6
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix zipfile
+
+ifcapable !vtab {
+  finish_test; return
+}
+if {[catch {load_static_extension db zipfile} error]} {
+  puts "Skipping zipfile tests, hit load error: $error"
+  finish_test; return
+}
+if {[catch {load_static_extension db fileio} error]} {
+  puts "Skipping zipfile tests, hit load error: $error"
+  finish_test; return
+}
+
+proc readfile {f} {
+  set fd [open $f]
+  fconfigure $fd -translation binary -encoding binary
+  set data [read $fd]
+  close $fd
+  set data
+}
+
+unset -nocomplain ::UNZIP
+
+if {[catch {exec unzip} msg]==0 && \
+    [regexp -line {^UnZip \d+\.\d+ .*? Info-ZIP\.} $msg]} {
+  set ::UNZIP unzip
+  proc fix_stat_mode {name mode} {
+    if {$::tcl_platform(platform)=="windows"} {
+      #
+      # NOTE: Set or unset the write bits of the file permissions
+      #       based on the read-only attribute because the Win32
+      #       version of UnZip does this.
+      #
+      set writebits 0x12; # 0o22
+      set result $mode
+      if {[file attributes $name -readonly]} {
+        set result [expr {$result | $writebits}]
+      } else {
+        set result [expr {$result & ~$writebits}]
+      }
+      return $result
+    } else {
+      return $mode
+    }
+  }
+  proc do_unzip {file} {
+    forcedelete test_unzip
+    file mkdir test_unzip
+    exec $::UNZIP -d test_unzip $file
+
+    db func modefix fix_stat_mode
+
+    set res [db eval {
+      SELECT replace(name,'test_unzip/',''),modefix(name,mode),mtime,data
+      FROM fsdir('test_unzip') 
+      WHERE name!='test_unzip'
+      ORDER BY name
+    }]
+    set res
+  }
+}
+
+
+# The argument is a blob (not a hex string) containing a zip archive.
+# This proc removes the extended timestamp fields from the archive
+# and returns the result.
+#
+proc remove_timestamps {blob} {
+  set hex [binary encode hex $blob]
+  set hex [string map {55540500 00000500} $hex]
+  binary decode hex $hex
+}
+
+
+# Argument $file is the name of a zip archive on disk. This function
+# executes test cases to check that the results of each of the following 
+# are the same:
+#
+#         SELECT * FROM zipfile($file)
+#         SELECT * FROM zipfile( readfile($file) )
+#         SELECT * FROM zipfile( 
+#           (SELECT zipfile(name,mode,mtime,data,method) FROM zipfile($file))
+#         )
+#
+proc do_zipfile_blob_test {tn file} {
+
+  db func r readfile
+  set q1 {SELECT name,mode,mtime,method,quote(data) FROM zipfile($file)}
+  set q2 {SELECT name,mode,mtime,method,quote(data) FROM zipfile( r($file) )}
+  set q3 {SELECT name,mode,mtime,method,quote(data) FROM zipfile(
+    ( SELECT zipfile(name,mode,mtime,data,method) FROM zipfile($file) )
+  )}
+
+
+  set r1 [db eval $q1]
+  set r2 [db eval $q2]
+  set r3 [db eval $q3]
+  #puts $r1
+  #puts $r2
+  #puts $r3
+
+  uplevel [list do_test $tn.1 [list set {} $r2] $r1]
+  uplevel [list do_test $tn.2 [list set {} $r3] $r1]
+}
+
+# Argument $file is a zip file on disk. This command runs tests to:
+#
+#   1. Unpack the archive with unix command [unzip] and compare the 
+#      results to reading the same archive using the zipfile() table
+#      valued function.
+#
+#   2. Creates a new archive with the same contents using the zipfile()
+#      aggregate function as follows:
+#
+#      SELECT writefile('test_unzip.zip',
+#          ( SELECT zipfile(name,mode,mtime,data,method) FROM zipfile($file) )
+#      );
+#
+#      Then tests that unpacking the new archive using [unzip] produces
+#      the same results as in (1).
+#
+proc do_unzip_test {tn file} {
+  db func sss strip_slash
+
+  db eval {
+    SELECT writefile('test_unzip.zip',
+        ( SELECT zipfile(name,mode,mtime,data,method) FROM zipfile($file) )
+    );
+  }
+
+  set r1 [db eval { 
+    SELECT sss(name),mode,mtime,data FROM zipfile($file) ORDER BY name
+  }]
+  set r2 [do_unzip $file]
+  set r3 [do_unzip test_unzip.zip]
+
+  uplevel [list do_test $tn.1 [list set {} $r2] $r1]
+  uplevel [list do_test $tn.2 [list set {} $r3] $r1]
+}
+proc strip_slash {in} { regsub {/$} $in {} }
+
+proc do_zip_tests {tn file} {
+  uplevel do_zipfile_blob_test $tn.1 $file
+  if {[info exists ::UNZIP]} {
+    uplevel do_unzip_test $tn.2 $file
+  }
+}
+
+forcedelete test.zip
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE temp.zz USING zipfile('test.zip');
+  PRAGMA table_info(zz);
+} {
+  0 name {} 1 {} 1 
+  1 mode {} 0 {} 0 
+  2 mtime {} 0 {} 0 
+  3 sz {} 0 {} 0 
+  4 rawdata {} 0 {} 0
+  5 data {} 0 {} 0
+  6 method {} 0 {} 0
+}
+
+do_catchsql_test 1.1.0.1 {
+  INSERT INTO zz(name, mode, mtime, sz, rawdata, method) 
+  VALUES('f.txt', '-rw-r--r--', 1000000000, 5, 'abcde', 0);
+} {1 {rawdata must be NULL}}
+do_catchsql_test 1.1.0.2 {
+  INSERT INTO zz(name, mtime, sz, data, method) 
+  VALUES('g.txt', 1000000002, 5, '12345', 0);
+} {1 {sz must be NULL}}
+do_catchsql_test 1.1.0.3 {
+  INSERT INTO zz(name, mtime, rawdata, method) 
+  VALUES('g.txt', 1000000002, '12345', 0);
+} {1 {rawdata must be NULL}}
+do_catchsql_test 1.1.0.4 {
+  INSERT INTO zz(name, data, method) 
+  VALUES('g.txt', '12345', 7);
+} {1 {unknown compression method: 7}}
+
+do_execsql_test 1.1.1 {
+  INSERT INTO zz(name, mode, mtime, data, method) 
+  VALUES('f.txt', '-rw-r--r--', 1000000000, 'abcde', 0);
+}
+do_execsql_test 1.1.2 {
+  INSERT INTO zz(name, mode, mtime, data, method) 
+  VALUES('g.txt', NULL, 1000000002, '12345', 0);
+}
+
+do_execsql_test 1.2 {
+  SELECT name, mtime, data FROM zipfile('test.zip')
+} {
+  f.txt 1000000000 abcde 
+  g.txt 1000000002 12345
+}
+do_zip_tests 1.2a test.zip
+
+do_execsql_test 1.3 {
+  INSERT INTO zz(name, mode, mtime, data) VALUES('h.txt', 
+    '-rw-r--r--', 1000000004, 'aaaaaaaaaabbbbbbbbbb'
+  );
+}
+do_zip_tests 1.3a test.zip
+
+do_execsql_test 1.4 {
+  SELECT name, mtime, data, method FROM zipfile('test.zip');
+} {
+  f.txt 1000000000 abcde 0
+  g.txt 1000000002 12345 0
+  h.txt 1000000004 aaaaaaaaaabbbbbbbbbb 8
+}
+
+ifcapable json1 {
+  do_execsql_test 1.4.1 {
+    SELECT name, json_extract( zipfile_cds(z) , '$.crc32')!=0
+    FROM zipfile('test.zip');
+  } {
+    f.txt 1
+    g.txt 1
+    h.txt 1
+  }
+}
+do_catchsql_test 1.4.2 {
+  SELECT zipfile_cds(mode) FROM zipfile('test.zip');
+} {0 {{} {} {}}}
+
+do_execsql_test 1.5.1 {
+  BEGIN;
+    INSERT INTO zz(name, mode, mtime, data, method)
+    VALUES('i.txt', '-rw-r--r--', 1000000006, 'zxcvb', 0);
+    SELECT name FROM zz;
+  COMMIT;
+} {f.txt g.txt h.txt i.txt}
+do_execsql_test 1.5.2 {
+  SELECT name FROM zz;
+} {f.txt g.txt h.txt i.txt}
+do_execsql_test 1.5.3 {
+  SELECT data FROM zz WHERE name='i.txt';
+} {zxcvb}
+
+do_execsql_test 1.6.0 {
+  DELETE FROM zz WHERE name='g.txt';
+  SELECT name FROM zz;
+} {f.txt h.txt i.txt}
+
+do_execsql_test 1.6.1 {
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} {
+  f.txt 33188 1000000000 abcde 0
+  h.txt 33188 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 1000000006 zxcvb 0
+}
+do_zip_tests 1.6.1a test.zip
+
+do_execsql_test 1.6.2 {
+  UPDATE zz SET mtime=4 WHERE name='i.txt';
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} {
+  f.txt 33188 1000000000 abcde 0
+  h.txt 33188 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}
+
+if {$::tcl_platform(platform)=="unix"} {
+  set modes -rw-r--r-x
+  set perms 33189
+} else {
+  set modes -rw-r--r--; # no execute bits on Win32
+  set perms 33188
+}
+
+do_execsql_test 1.6.3 {
+  UPDATE zz SET mode=$modes WHERE name='h.txt';
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  f.txt 33188 1000000000 abcde 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}]
+do_zip_tests 1.6.3a test.zip
+
+do_execsql_test 1.6.4 {
+  UPDATE zz SET name = 'blue.txt' WHERE name='f.txt';
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  blue.txt 33188 1000000000 abcde 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}]
+do_zip_tests 1.6.4a test.zip
+
+do_execsql_test 1.6.5 {
+  UPDATE zz SET data = 'edcba' WHERE name='blue.txt';
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  blue.txt 33188 1000000000 edcba 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}]
+
+do_execsql_test 1.6.6 {
+  UPDATE zz SET mode=NULL, data = NULL WHERE name='blue.txt';
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  blue.txt/ 16877 1000000000 {} 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}]
+
+do_catchsql_test 1.6.7 {
+  UPDATE zz SET data=NULL WHERE name='i.txt'
+} {1 {zipfile: mode does not match data}}
+do_execsql_test 1.6.8 {
+  SELECT name, mode, mtime, data, method FROM zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  blue.txt/ 16877 1000000000 {} 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 zxcvb 0
+}]
+
+do_execsql_test 1.6.9 {
+  UPDATE zz SET data = '' WHERE name='i.txt';
+  SELECT name,mode,mtime,data,method from zipfile('test.zip');
+} [string map [list %perms% $perms] {
+  blue.txt/ 16877 1000000000 {} 0
+  h.txt %perms% 1000000004 aaaaaaaaaabbbbbbbbbb 8
+  i.txt 33188 4 {} 0
+}]
+
+do_execsql_test 1.6.10 {
+  SELECT a.name, a.data 
+  FROM zz AS a, zz AS b 
+  WHERE a.name=+b.name AND +a.mode=b.mode
+} {
+  blue.txt/ {}
+  h.txt aaaaaaaaaabbbbbbbbbb
+  i.txt {}
+}
+
+do_execsql_test 1.6.11 {
+  SELECT name, data FROM zz WHERE name LIKE '%txt'
+} {
+  h.txt aaaaaaaaaabbbbbbbbbb
+  i.txt {}
+}
+
+do_execsql_test 1.7 {
+  DELETE FROM zz;
+  SELECT * FROM zz;
+} {}
+
+#-------------------------------------------------------------------------
+db close
+forcedelete test.zip
+reset_db
+load_static_extension db fileio
+load_static_extension db zipfile
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE zzz USING zipfile('test.zip');
+  INSERT INTO zzz(name, mode) VALUES('dirname', 'drwxr-xr-x');
+  SELECT name, mode, data FROM zzz;
+} {dirname/ 16877 {}}
+do_execsql_test 2.2 {
+  INSERT INTO zzz(name, data) VALUES('dirname2', NULL);
+  INSERT INTO zzz(name, data) VALUES('dirname2/file1.txt', 'abcdefghijklmnop');
+  SELECT name, mode, data FROM zzz;
+} {
+  dirname/ 16877 {}
+  dirname2/ 16877 {}
+  dirname2/file1.txt 33188 abcdefghijklmnop
+}
+
+do_catchsql_test 2.3 {
+  UPDATE zzz SET name = 'dirname3' WHERE name = 'dirname/';
+} {0 {}}
+do_execsql_test 2.4 {
+  SELECT name, mode, data FROM zzz;
+} {
+  dirname3/ 16877 {}
+  dirname2/ 16877 {}
+  dirname2/file1.txt 33188 abcdefghijklmnop
+}
+do_zip_tests 2.4a test.zip
+
+# Check that the [unzip] utility can unpack our archive.
+#
+if {[info exists ::UNZIP]} {
+  do_test 2.5.1 {
+    forcedelete dirname
+    forcedelete dirname2
+    if {$::tcl_platform(platform)=="unix"} {
+      set null /dev/null
+    } else {
+      set null NUL
+    }
+    set rc [catch { exec $::UNZIP test.zip > $null } msg]
+    list $rc $msg
+  } {0 {}}
+  do_test 2.5.2 { file isdir dirname3 } 1
+  do_test 2.5.3 { file isdir dirname2 } 1
+  do_test 2.5.4 { file isdir dirname2/file1.txt } 0
+  do_test 2.5.5 { 
+    set fd [open dirname2/file1.txt]
+    set data [read $fd]
+    close $fd
+    set data
+  } {abcdefghijklmnop}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+forcedelete test.zip
+load_static_extension db zipfile
+load_static_extension db fileio
+
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE temp.x1 USING zipfile('test.zip');
+  INSERT INTO x1(name, data) VALUES('dir1/', NULL);
+  INSERT INTO x1(name, data) VALUES('file1', '1234');
+  INSERT INTO x1(name, data) VALUES('dir1/file2', '5678');
+}
+foreach {tn fname} {
+  1 dir1
+  2 file1
+  3 dir1/file2
+} {
+  do_catchsql_test 3.1.$tn.0 {
+    INSERT INTO x1(name, data) VALUES($fname, NULL);
+  } [list 1 "duplicate name: \"$fname/\""]
+  do_catchsql_test 3.1.$tn.1 {
+    INSERT INTO x1(name, data) VALUES($fname || '/', NULL);
+  } [list 1 "duplicate name: \"$fname/\""]
+  do_catchsql_test 3.1.$tn.2 {
+    INSERT INTO x1(name, data) VALUES($fname, 'abcd');
+  } [list 1 "duplicate name: \"$fname\""]
+}
+
+do_catchsql_test 3.2 {
+  SELECT rowid FROM x1
+} {1 {no such column: rowid}}
+
+#-------------------------------------------------------------------------
+# Test some error conditions.
+#
+do_catchsql_test 4.1 {
+  CREATE VIRTUAL TABLE yyy USING zipfile();
+} {1 {zipfile constructor requires one argument}}
+do_catchsql_test 4.2 {
+  CREATE VIRTUAL TABLE yyy USING zipfile('test.zip', 'test.zip');
+} {1 {zipfile constructor requires one argument}}
+
+do_catchsql_test 4.3 {
+  SELECT * FROM zipfile()
+} {1 {zipfile() function requires an argument}}
+
+do_catchsql_test 4.4 {
+  SELECT * FROM zipfile('/path/that/does/not/exist')
+} {1 {cannot open file: /path/that/does/not/exist}}
+
+foreach {tn mode} {
+  1 abcd
+  2 brwxrwxrwx
+  3 lrwxrrxrwx
+} {
+  do_catchsql_test 4.5.$tn {
+    WITH m(m) AS ( SELECT $mode)
+    SELECT zipfile('a.txt', m, 1000, 'xyz') FROM m
+  } [list 1 "zipfile: parse error in mode: $mode"]
+}
+
+do_catchsql_test 4.6 {
+  WITH c(name,data) AS ( SELECT 'a.txt', 'abc')
+  SELECT zipfile(name) FROM c
+} {1 {wrong number of arguments to function zipfile()}}
+
+do_catchsql_test 4.7 {
+  WITH c(name,data) AS ( 
+    SELECT 'a.txt', 'abc' UNION ALL
+    SELECT NULL, 'def'
+  )
+  SELECT zipfile(name,data) FROM c
+} {1 {first argument to zipfile() must be non-NULL}}
+
+do_catchsql_test 4.8 {
+  WITH c(name,data,method) AS ( 
+    SELECT 'a.txt', 'abc', 0
+    UNION SELECT 'b.txt', 'def', 8
+    UNION SELECT 'c.txt', 'ghi', 16
+  )
+  SELECT zipfile(name,NULL,NULL,data,method) FROM c
+} {1 {illegal method value: 16}}
+
+do_catchsql_test 4.9 {
+  WITH c(name,data) AS ( 
+    SELECT 'a.txt', 'abc'
+    UNION SELECT 'b.txt', 'def'
+    UNION SELECT 'c.txt/', 'ghi'
+  )
+  SELECT zipfile(name,NULL,NULL,data) FROM c
+} {1 {non-directory name must not end with /}}
+
+#--------------------------------------------------------------------------
+
+db func rt remove_timestamps
+do_execsql_test 5.0 {
+  WITH c(name,mtime,data) AS (
+    SELECT 'a.txt', 946684800, 'abc'
+  )
+  SELECT name,mtime,data FROM zipfile(
+    ( SELECT rt( zipfile(name,NULL,mtime,data,NULL) ) FROM c )
+  )
+} {
+  a.txt 946684800 abc
+}
+
+if {[info exists ::UNZIP]} {
+ifcapable datetime {
+  forcedelete test1.zip test2.zip
+  do_test 6.0 {
+    execsql {
+      WITH c(name,mtime,data) AS (
+        SELECT 'a.txt', 946684800, 'abc' UNION ALL
+        SELECT 'b.txt', 1000000000, 'abc' UNION ALL
+        SELECT 'c.txt', 1111111000, 'abc'
+      )
+      SELECT writefile('test1.zip', rt( zipfile(name, NULL, mtime, data) ) ),
+             writefile('test2.zip',   ( zipfile(name, NULL, mtime, data) ) ) 
+      FROM c;
+    }
+    forcedelete test_unzip
+    file mkdir test_unzip
+    exec $::UNZIP -d test_unzip test1.zip
+
+    db eval {
+      SELECT name, strftime('%s', mtime, 'unixepoch', 'localtime') 
+      FROM fsdir('test_unzip') WHERE name!='test_unzip'
+      ORDER BY name
+    }
+  } [list {*}{
+    test_unzip/a.txt 946684800
+    test_unzip/b.txt 1000000000 
+    test_unzip/c.txt 1111111000 
+  }]
+
+  # fsdir() issue reported on the mailing list on 2018-03-14 by Jack Thaw.
+  do_test 6.0b {
+    db eval {
+      SELECT sum(name LIKE '%/a.txt')
+      FROM (VALUES(1),(2),(3)) CROSS JOIN fsdir('test_unzip')
+    }
+  } {3}
+
+  do_execsql_test 6.1 {
+    SELECT name, mtime, data FROM zipfile('test1.zip')
+  } {
+    a.txt 946684800   abc
+    b.txt 1000000000  abc
+    c.txt 1111111000  abc
+  }
+
+  do_test 6.2 {
+    forcedelete test_unzip
+    file mkdir test_unzip
+    exec $::UNZIP -d test_unzip test2.zip
+
+    db eval {
+      SELECT name, mtime 
+      FROM fsdir('test_unzip') WHERE name!='test_unzip'
+      ORDER BY name
+    }
+  } [list {*}{
+    test_unzip/a.txt 946684800
+    test_unzip/b.txt 1000000000 
+    test_unzip/c.txt 1111111000 
+  }]
+
+  do_execsql_test 6.3 {
+    SELECT name, mtime, sz, rawdata, data FROM zipfile('test2.zip')
+  } {
+    a.txt 946684800   3 abc abc
+    b.txt 1000000000  3 abc abc
+    c.txt 1111111000  3 abc abc
+  }
+}
+}
+
+#-------------------------------------------------------------------------
+# Force an IO error by truncating the zip archive to zero bytes in size
+# while it is being read.
+forcedelete test.zip
+do_test 7.0 {
+  execsql {
+    WITH c(name,data) AS (
+        SELECT '1', randomblob(1000000) UNION ALL
+        SELECT '2', randomblob(1000000) UNION ALL
+        SELECT '3', randomblob(1000000) 
+    )
+    SELECT writefile('test.zip', zipfile(name, data) ) FROM c;
+  }
+
+  list [catch {
+    db eval { SELECT name, data FROM zipfile('test.zip') } {
+      if {$name==2} { close [open test.zip w+] }
+    }
+  } msg] $msg
+} {1 {error in fread()}}
+
+forcedelete test.zip
+do_execsql_test 8.0.1 {
+  CREATE VIRTUAL TABLE zz USING zipfile('test.zip');
+  BEGIN;
+    INSERT INTO zz(name, data) VALUES('a.txt', '1');
+    INSERT INTO zz(name, data) VALUES('b.txt', '2');
+    INSERT INTO zz(name, data) VALUES('c.txt', '1');
+    INSERT INTO zz(name, data) VALUES('d.txt', '2');
+    SELECT name, data FROM zz;
+} {
+  a.txt 1 b.txt 2 c.txt 1 d.txt 2
+}
+do_test 8.0.2 {
+  db eval { SELECT name, data FROM zz } {
+    if { $data=="2" } { db eval { DELETE FROM zz WHERE name=$name } }
+  }
+  execsql { SELECT name, data FROM zz } 
+} {a.txt 1 c.txt 1}
+do_test 8.0.3 {
+  db eval { SELECT name, data FROM zz } {
+    db eval { DELETE FROM zz WHERE name=$name }
+  }
+  execsql { SELECT name, data FROM zz } 
+} {}
+execsql COMMIT
+
+catch { forcedelete test_unzip }
+catch { file mkdir test_unzip }
+do_execsql_test 8.1.1 {
+  CREATE VIRTUAL TABLE nogood USING zipfile('test_unzip');
+}
+do_catchsql_test 8.1.2 {
+  INSERT INTO nogood(name, data) VALUES('abc', 'def');
+} {1 {zipfile: failed to open file test_unzip for writing}}
+
+do_execsql_test 8.2.1 {
+  DROP TABLE nogood;
+  BEGIN;
+    CREATE VIRTUAL TABLE nogood USING zipfile('test_unzip');
+}
+do_catchsql_test 8.2.2 {
+    INSERT INTO nogood(name, data) VALUES('abc', 'def');
+} {1 {zipfile: failed to open file test_unzip for writing}}
+do_execsql_test 8.2.3 {
+  COMMIT;
+}
+
+forcedelete test.zip
+do_execsql_test 8.3.1 {
+  BEGIN;
+    CREATE VIRTUAL TABLE ok USING zipfile('test.zip');
+    INSERT INTO ok(name, data) VALUES ('sqlite3', 'elf');
+  COMMIT;
+}
+
+#-------------------------------------------------------------------------
+# Test that the zipfile aggregate correctly adds and removes "/" from
+# the ends of directory file names.
+do_execsql_test 9.0 {
+  WITH src(nm) AS (
+    VALUES('dir1') UNION ALL
+    VALUES('dir2/') UNION ALL
+    VALUES('dir3//') UNION ALL
+    VALUES('dir4///') UNION ALL
+    VALUES('/') 
+  )
+  SELECT name FROM zipfile((SELECT zipfile(nm, NULL) FROM src))
+} {dir1/ dir2/ dir3/ dir4/ /}
+
+#-------------------------------------------------------------------------
+# INSERT OR REPLACE and INSERT OR IGNORE
+#
+catch {db close}
+forcedelete test.zip test.db
+sqlite3 db :memory:
+load_static_extension db zipfile
+load_static_extension db fileio
+
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE z USING zipfile('test.zip');
+} {}
+do_catchsql_test 10.1 {
+  INSERT INTO z(name,data) VALUES('a0','one'),('a0','two');
+} {1 {duplicate name: "a0"}}
+do_execsql_test 10.2 {
+  SELECT name, data FROM z;
+} {a0 one}
+do_execsql_test 10.3 {
+  REPLACE INTO z(name,data) VALUES('a0','three'),('a0','four');
+} {}
+do_execsql_test 10.4 {
+  SELECT name, data FROM z;
+} {a0 four}
+do_execsql_test 10.5 {
+  INSERT OR IGNORE INTO z(name,data) VALUES('a0','five'),('a0','six');
+} {}
+do_execsql_test 10.6 {
+  SELECT name, data FROM z;
+} {a0 four}
+
+do_execsql_test 11.1 {
+  DELETE FROM z;
+} {}
+do_execsql_test 11.2 {
+  SELECT name, data FROM z;
+} {}
+do_execsql_test 11.3 {
+  INSERT INTO z (name,data) VALUES ('b0','one');
+  SELECT name, data FROM z;
+} {b0 one}
+do_execsql_test 11.4 {
+  UPDATE z SET name = 'b1' WHERE name = 'b0';
+  SELECT name, data FROM z;
+} {b1 one}
+do_execsql_test 11.5 {
+  INSERT INTO z (name,data) VALUES ('b0','one');
+  SELECT name, data FROM z ORDER BY name;
+} {b0 one b1 one}
+do_catchsql_test 11.6 {
+  UPDATE z SET name = 'b1' WHERE name = 'b0';
+} {1 {duplicate name: "b1"}}
+do_execsql_test 11.7 {
+  UPDATE z SET data = 'two' WHERE name = 'b0';
+  SELECT name, data FROM z ORDER BY name;
+} {b0 two b1 one}
+do_catchsql_test 11.8 {
+  UPDATE z SET name = 'b1';
+} {1 {duplicate name: "b1"}}
+do_catchsql_test 11.9 {
+  UPDATE z SET name = 'b2';
+} {1 {duplicate name: "b2"}}
+do_execsql_test 11.10 {
+  UPDATE z SET name = name;
+  SELECT name, data FROM z ORDER BY name;
+} {b0 two b2 one}
+do_execsql_test 11.11 {
+  UPDATE z SET name = name || 'suffix';
+  SELECT name, data FROM z ORDER BY name;
+} {b0suffix two b2suffix one}
+
+
+if {$tcl_platform(platform)!="windows"} {
+  do_test 12.0 {
+    catch { file delete -force subdir }
+    foreach {path sz} {
+      subdir/x1.txt     143
+      subdir/x2.txt     153
+    } {
+      set dir [file dirname $path]
+      catch { file mkdir $dir }
+      set fd [open $path w]
+      puts -nonewline $fd [string repeat 1 $sz]
+      close $fd
+    }
+  } {}
+  
+  do_execsql_test 12.1 {
+    SELECT name FROM fsdir('subdir') ORDER BY 1;
+  } {subdir subdir/x1.txt subdir/x2.txt}
+  
+  do_execsql_test 12.2 {
+    CREATE TABLE d AS SELECT 'subdir' d;
+    CREATE TABLE x AS SELECT 1 x;
+  }
+  
+  do_execsql_test 12.4 {
+    SELECT name FROM d JOIN x JOIN fsdir(d) ORDER BY 1;
+  } {subdir subdir/x1.txt subdir/x2.txt}
+
+  do_execsql_test 12.5 {
+    SELECT name FROM d JOIN x JOIN fsdir('.', d) ORDER BY 1;
+  } {. ./x1.txt ./x2.txt}
+}
+
+# 2019-12-18 Yongheng and Rui fuzzer
+#
+do_execsql_test 13.10 {
+  DROP TABLE IF EXISTS t0;
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t0(a,b,c,d,e,f,g);
+  REPLACE INTO t0(c,b,f) VALUES(10,10,10);
+  CREATE VIRTUAL TABLE t1 USING zipfile('h.zip');
+  REPLACE INTO t1 SELECT * FROM t0;
+  SELECT quote(name),quote(mode),quote(mtime),quote(sz),quote(rawdata),
+         quote(data),quote(method) FROM t1;
+} {'' 10 10 2 X'3130' X'3130' 0}
+
+# 2019-12-23 Yongheng and Rui fuzzer
+# Run using valgrind to see the problem.
+#
+do_execsql_test 14.10 {
+  DROP TABLE t1;
+  CREATE TABLE t1(x char);
+  INSERT INTO t1(x) VALUES('1');
+  INSERT INTO t1(x) SELECT zipfile(x, 'xyz') FROM t1;
+  INSERT INTO t1(x) SELECT zipfile(x, 'uvw') FROM t1;
+  SELECT count(*) FROM t1;
+  PRAGMA integrity_check;
+} {3 ok}
+
+# 2019-12-26 More problems in zipfile from the Yongheng and Rui fuzzer
+#
+do_execsql_test 15.10 {
+  DROP TABLE IF EXISTS t1;
+  CREATE VIRTUAL TABLE t1 USING zipfile(null);
+  REPLACE INTO t1 VALUES(null,null,0,null,null,null,null);
+} {}
+do_execsql_test 15.20 {
+  DROP TABLE IF EXISTS t2;
+  CREATE VIRTUAL TABLE t2 USING zipfile(null);
+  REPLACE INTO t2 values(null,null,null,null,null,10,null);
+} {}
+
+# 2020-01-02 Yongheng fuzzer discovery
+#
+do_catchsql_test 16.10 {
+  DELETE FROM zipfile;
+} {1 {zipfile: missing filename}}
+do_catchsql_test 16.20 {
+  REPLACE INTO zipfile VALUES(null,null,null,null,null,123,null);
+} {1 {zipfile: missing filename}}
+
+finish_test

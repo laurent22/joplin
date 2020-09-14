@@ -1,0 +1,230 @@
+# 2011 May 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_wal
+
+db close
+testvfs oldvfs -iversion 1
+
+
+# EVIDENCE-OF: R-58297-14483 WAL databases can be created, read, and
+# written even if shared memory is unavailable as long as the
+# locking_mode is set to EXCLUSIVE before the first attempted access.
+#
+# EVIDENCE-OF: R-00449-33772 This feature allows WAL databases to be
+# created, read, and written by legacy VFSes that lack the "version 2"
+# shared-memory methods xShmMap, xShmLock, xShmBarrier, and xShmUnmap on
+# the sqlite3_io_methods object.
+#
+# 1.1: "create" tests.
+# 1.2: "read" tests.
+# 1.3: "write" tests.
+#
+# All three done with VFS "oldvfs", which has iVersion==1 and so does
+# not support shared memory.
+# 
+sqlite3 db test.db -vfs oldvfs
+do_execsql_test 1.1.1 {
+  PRAGMA journal_mode = WAL;
+} {delete}
+do_execsql_test 1.1.2 {
+  PRAGMA locking_mode = EXCLUSIVE;
+  PRAGMA journal_mode = WAL;
+} {exclusive wal}
+do_execsql_test 1.1.3 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, 2);
+} {}
+do_test 1.1.4 {
+  list [file exists test.db-shm] [file exists test.db-wal]
+} {0 1}
+
+do_test 1.2.1 {
+  db close
+  sqlite3 db test.db -vfs oldvfs
+  catchsql { SELECT * FROM t1 }
+} {1 {unable to open database file}}
+do_test 1.2.2 {
+  execsql { PRAGMA locking_mode = EXCLUSIVE }
+  execsql { SELECT * FROM t1 }
+} {1 2}
+do_test 1.2.3 {
+  list [file exists test.db-shm] [file exists test.db-wal]
+} {0 1}
+
+do_test 1.3.1 {
+  db close
+  sqlite3 db test.db -vfs oldvfs
+  catchsql { INSERT INTO t1 VALUES(3, 4) }
+} {1 {unable to open database file}}
+do_test 1.3.2 {
+  execsql { PRAGMA locking_mode = EXCLUSIVE }
+  execsql { INSERT INTO t1 VALUES(3, 4) }
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test 1.3.3 {
+  list [file exists test.db-shm] [file exists test.db-wal]
+} {0 1}
+
+# EVIDENCE-OF: R-31969-57825 If EXCLUSIVE locking mode is set prior to
+# the first WAL-mode database access, then SQLite never attempts to call
+# any of the shared-memory methods and hence no shared-memory wal-index
+# is ever created.
+#
+db close
+sqlite3 db test.db
+do_execsql_test 2.1.1 {
+  PRAGMA locking_mode = EXCLUSIVE;
+  SELECT * FROM t1;
+} {exclusive 1 2 3 4}
+do_test 2.1.2 {
+  list [file exists test.db-shm] [file exists test.db-wal]
+} {0 1}
+
+# EVIDENCE-OF: R-36328-16367 In that case, the database connection
+# remains in EXCLUSIVE mode as long as the journal mode is WAL; attempts
+# to change the locking mode using "PRAGMA locking_mode=NORMAL;" are
+# no-ops.
+#
+do_execsql_test 2.2.1 {
+  PRAGMA locking_mode = NORMAL;
+  SELECT * FROM t1;
+} {exclusive 1 2 3 4}
+do_test 2.2.2 {
+  sqlite3 db2 test.db
+  catchsql {SELECT * FROM t1} db2
+} {1 {database is locked}}
+db2 close
+
+# EVIDENCE-OF: R-63522-46088 The only way to change out of EXCLUSIVE
+# locking mode is to first change out of WAL journal mode.
+#
+do_execsql_test 2.3.1 {
+  PRAGMA journal_mode = DELETE;
+  SELECT * FROM t1;
+} {delete 1 2 3 4}
+do_test 2.3.2 {
+  sqlite3 db2 test.db
+  catchsql {SELECT * FROM t1} db2
+} {1 {database is locked}}
+do_execsql_test 2.3.3 {
+  PRAGMA locking_mode = NORMAL;
+  SELECT * FROM t1;
+} {normal 1 2 3 4}
+do_test 2.3.4 {
+  sqlite3 db2 test.db
+  catchsql {SELECT * FROM t1} db2
+} {0 {1 2 3 4}}
+db2 close
+db close
+
+
+# EVIDENCE-OF: R-57239-11845 If NORMAL locking mode is in effect for the
+# first WAL-mode database access, then the shared-memory wal-index is
+# created.
+#
+do_test 3.0 {
+  sqlite3 db test.db
+  execsql { PRAGMA journal_mode = WAL }
+  db close
+} {}
+do_test 3.1 {
+  sqlite3 db test.db
+  execsql { SELECT * FROM t1 }
+  list [file exists test.db-shm] [file exists test.db-wal]
+} {1 1}
+
+# EVIDENCE-OF: R-13779-07711 As long as exactly one connection is using
+# a shared-memory wal-index, the locking mode can be changed freely
+# between NORMAL and EXCLUSIVE.
+#
+do_execsql_test 3.2.1 {
+  PRAGMA locking_mode = EXCLUSIVE;
+  PRAGMA locking_mode = NORMAL;
+  PRAGMA locking_mode = EXCLUSIVE;
+  INSERT INTO t1 VALUES(5, 6);
+} {exclusive normal exclusive}
+do_test 3.2.2 {
+  sqlite3 db2 test.db
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database is locked}}
+
+# EVIDENCE-OF: R-10993-11647 It is only when the shared-memory wal-index
+# is omitted, when the locking mode is EXCLUSIVE prior to the first
+# WAL-mode database access, that the locking mode is stuck in EXCLUSIVE.
+#
+do_execsql_test 3.2.3 {
+  PRAGMA locking_mode = NORMAL;
+  SELECT * FROM t1;
+} {normal 1 2 3 4 5 6}
+do_test 3.2.4 {
+  catchsql { SELECT * FROM t1 } db2
+} {0 {1 2 3 4 5 6}}
+
+do_catchsql_test 3.2.5 {
+  PRAGMA locking_mode = EXCLUSIVE;
+  INSERT INTO t1 VALUES(7, 8);
+} {1 {database is locked}}
+
+db2 close
+
+# EVIDENCE-OF: R-46197-42811 This means that the underlying VFS must
+# support the "version 2" shared-memory.
+#
+# EVIDENCE-OF: R-55316-21772 If the VFS does not support shared-memory
+# methods, then the attempt to open a database that is already in WAL
+# mode, or the attempt convert a database into WAL mode, will fail.
+#
+db close
+do_test 3.4.1 {
+  sqlite3 db test.db -vfs oldvfs
+  catchsql { SELECT * FROM t1 }
+} {1 {unable to open database file}}
+db close
+do_test 3.4.2 {
+  forcedelete test.db2
+  sqlite3 db test.db2 -vfs oldvfs
+  catchsql { PRAGMA journal_mode = WAL }
+} {0 delete}
+db close
+
+
+# EVIDENCE-OF: R-45540-25505 To prevent older versions of SQLite (prior
+# to version 3.7.0, 2010-07-22) from trying to recover a WAL-mode
+# database (and making matters worse) the database file format version
+# numbers (bytes 18 and 19 in the database header) are increased from 1
+# to 2 in WAL mode.
+#
+reset_db
+do_execsql_test 4.1.1 { CREATE TABLE t1(x, y) }
+do_test 4.1.2 { hexio_read test.db 18 2 } {0101}
+do_execsql_test 4.1.3 { PRAGMA journal_mode = wAL } {wal}
+do_test 4.1.4 { hexio_read test.db 18 2 } {0202}
+
+
+# EVIDENCE-OF: R-02535-05811 One can explicitly change out of WAL mode
+# using a pragma such as this: PRAGMA journal_mode=DELETE;
+#
+do_execsql_test 4.2.1 { INSERT INTO t1 VALUES(1, 1); } {}
+do_test 4.2.2 { file exists test.db-wal } {1}
+do_execsql_test 4.2.3 { PRAGMA journal_mode = delete } {delete}
+do_test 4.2.4 { file exists test.db-wal } {0}
+
+# EVIDENCE-OF: R-60175-02388 Deliberately changing out of WAL mode
+# changes the database file format version numbers back to 1 so that
+# older versions of SQLite can once again access the database file.
+#
+do_test 4.3 { hexio_read test.db 18 2 } {0101}
+
+finish_test

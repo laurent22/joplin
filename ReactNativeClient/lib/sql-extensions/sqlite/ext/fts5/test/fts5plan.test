@@ -1,0 +1,65 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file focuses on testing the planner (xBestIndex function).
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5plan
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x, y);
+  CREATE VIRTUAL TABLE f1 USING fts5(ff);
+}
+
+do_eqp_test 1.1 {
+  SELECT * FROM t1, f1 WHERE f1 MATCH t1.x
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCAN TABLE f1 VIRTUAL TABLE INDEX 0:m
+}
+
+do_eqp_test 1.2 {
+  SELECT * FROM t1, f1 WHERE f1 > t1.x
+} {
+  QUERY PLAN
+  |--SCAN TABLE f1 VIRTUAL TABLE INDEX 0:
+  `--SCAN TABLE t1
+}
+
+do_eqp_test 1.3 {
+  SELECT * FROM f1 WHERE f1 MATCH ? ORDER BY ff
+} {
+  QUERY PLAN
+  |--SCAN TABLE f1 VIRTUAL TABLE INDEX 0:m
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+do_eqp_test 1.4 {
+  SELECT * FROM f1 ORDER BY rank
+} {
+  QUERY PLAN
+  |--SCAN TABLE f1 VIRTUAL TABLE INDEX 0:
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+do_eqp_test 1.5 {
+  SELECT * FROM f1 WHERE rank MATCH ?
+} {SCAN TABLE f1 VIRTUAL TABLE INDEX 0:r}
+
+finish_test

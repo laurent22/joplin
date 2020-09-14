@@ -1,0 +1,349 @@
+# 2004 August 30 {}
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure SQLite does not crash or
+# segfault if it sees a corrupt database file.
+#
+# $Id: corrupt.test,v 1.12 2009/07/13 09:41:45 danielk1977 Exp $
+
+catch {forcedelete test.db test.db-journal test.bu}
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+# Construct a large database for testing.
+#
+do_test corrupt-1.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(randstr(100,100));
+    INSERT INTO t1 VALUES(randstr(90,90));
+    INSERT INTO t1 VALUES(randstr(80,80));
+    INSERT INTO t1 SELECT x || randstr(5,5) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(6,6) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(7,7) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(8,8) FROM t1;
+    INSERT INTO t1 VALUES(randstr(3000,3000));
+    INSERT INTO t1 SELECT x || randstr(9,9) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(10,10) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(11,11) FROM t1;
+    INSERT INTO t1 SELECT x || randstr(12,12) FROM t1;
+    CREATE INDEX t1i1 ON t1(x);
+    CREATE TABLE t2 AS SELECT * FROM t1;
+    DELETE FROM t2 WHERE rowid%5!=0;
+    COMMIT;
+  }
+} {}
+integrity_check corrupt-1.2
+
+# Setup for the tests.  Make a backup copy of the good database in test.bu.
+# Create a string of garbage data that is 256 bytes long.
+#
+forcecopy test.db test.bu
+set fsize [file size test.db]
+set junk "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+while {[string length $junk]<256} {append junk $junk}
+set junk [string range $junk 0 255]
+
+# Go through the database and write garbage data into each 256 segment
+# of the file.  Then do various operations on the file to make sure that
+# the database engine can recover gracefully from the corruption.
+#
+for {set i [expr {1*256}]} {$i<$fsize-256} {incr i 256} {
+  set tn [expr {$i/256}]
+  db close
+  forcecopy test.bu test.db
+  set fd [open test.db r+]
+  fconfigure $fd -translation binary
+  seek $fd $i
+  puts -nonewline $fd $junk
+  close $fd
+  do_test corrupt-2.$tn.1 {
+    sqlite3 db test.db
+    catchsql {SELECT count(*) FROM sqlite_master}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.2 {
+    catchsql {SELECT count(*) FROM t1}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.3 {
+    catchsql {SELECT count(*) FROM t1 WHERE x>'abcdef'}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.4 {
+    catchsql {SELECT count(*) FROM t2}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.5 {
+    catchsql {CREATE TABLE t3 AS SELECT * FROM t1}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.6 {
+    catchsql {DROP TABLE t1}
+    set x {}
+  } {}
+  do_test corrupt-2.$tn.7 {
+    catchsql {PRAGMA integrity_check}
+    set x {}
+  } {}
+
+  # Check that no page references were leaked.
+  do_test corrupt-2.$tn.8 {
+    set bt [btree_from_db db]
+    db_enter db
+    array set stats [btree_pager_stats $bt]
+    db_leave db
+    set stats(ref)
+  } {0}
+}  
+
+#------------------------------------------------------------------------
+# For these tests, swap the rootpage entries of t1 (a table) and t1i1 (an
+# index on t1) in sqlite_master. Then perform a few different queries
+# and make sure this is detected as corruption.
+#
+do_test corrupt-3.1 {
+  db close
+  forcecopy test.bu test.db
+  sqlite3 db test.db
+  list
+} {}
+do_test corrupt-3.2 {
+  set t1_r [execsql {SELECT rootpage FROM sqlite_master WHERE name = 't1i1'}]
+  set t1i1_r [execsql {SELECT rootpage FROM sqlite_master WHERE name = 't1'}]
+  set cookie [expr [execsql {PRAGMA schema_version}] + 1]
+  sqlite3_db_config db DEFENSIVE 0
+  execsql "
+    PRAGMA writable_schema = 1;
+    UPDATE sqlite_master SET rootpage = $t1_r WHERE name = 't1';
+    UPDATE sqlite_master SET rootpage = $t1i1_r WHERE name = 't1i1';
+    PRAGMA writable_schema = 0;
+    PRAGMA schema_version = $cookie;
+  "
+} {}
+
+# This one tests the case caught by code in checkin [2313].
+do_test corrupt-3.3 {
+  db close
+  sqlite3 db test.db
+  catchsql {
+    INSERT INTO t1 VALUES('abc');
+  }
+} {1 {database disk image is malformed}}
+do_test corrupt-3.4 {
+  db close
+  sqlite3 db test.db
+  catchsql {
+    SELECT * FROM t1;
+  }
+} {1 {database disk image is malformed}}
+do_test corrupt-3.5 {
+  db close
+  sqlite3 db test.db
+  catchsql {
+    SELECT * FROM t1 WHERE oid = 10;
+  }
+} {1 {database disk image is malformed}}
+do_test corrupt-3.6 {
+  db close
+  sqlite3 db test.db
+  catchsql {
+    SELECT * FROM t1 WHERE x = 'abcde';
+  }
+} {1 {database disk image is malformed}}
+
+do_test corrupt-4.1 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT);
+  }
+  for {set i 0} {$i < 10} {incr i} {
+    set text [string repeat $i 220]
+    execsql { INSERT INTO t1 VALUES($i, $text) }
+  }
+  execsql { CREATE INDEX i1 ON t1(b) }
+} {}
+do_test corrupt-4.2 {
+  set iRoot [db one {SELECT rootpage FROM sqlite_master WHERE name = 'i1'}]
+  set iOffset [hexio_get_int [hexio_read test.db [expr 12+($iRoot-1)*1024] 2]]
+  set data [hexio_render_int32 [expr $iRoot - 1]]
+  hexio_write test.db [expr ($iRoot-1)*1024 + $iOffset] $data
+  db close
+  sqlite3 db test.db
+
+  # The following DELETE statement attempts to delete a cell stored on the
+  # root page of index i1. After this cell is deleted it must be replaced
+  # by a cell retrieved from the child page (a leaf) of the deleted cell.
+  # This will fail, as the block modified the database image so that the
+  # child page of the deleted cell is from a table (intkey) b-tree, not an
+  # index b-tree as expected. At one point this was causing an assert()
+  # to fail.
+  catchsql { DELETE FROM t1 WHERE rowid = 3 }
+} {1 {database disk image is malformed}}
+
+do_test corrupt-5.1 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+
+  execsql { PRAGMA page_size = 1024 }
+  set ct "CREATE TABLE t1(c0 "
+  set i 0
+  while {[string length $ct] < 950} { append ct ", c[incr i]" }
+  append ct ")"
+  execsql $ct
+} {}
+
+do_test corrupt-5.2 {
+  db close
+  hexio_write test.db 108 00000000 
+  sqlite3 db test.db
+  catchsql { SELECT * FROM sqlite_master }
+} {1 {database disk image is malformed}}
+
+# At one point, the specific corruption caused by this test case was
+# causing a buffer overwrite. Although a crash was never demonstrated,
+# running this testcase under valgrind revealed the problem.
+do_test corrupt-6.1 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  execsql { 
+    PRAGMA page_size = 1024; CREATE TABLE t1(x);
+  }
+
+  # The root page of t1 is 1024 bytes in size. The header is 8 bytes, and
+  # each of the cells inserted by the following INSERT statements consume
+  # 16 bytes (including the 2 byte cell-offset array entry). So the page
+  # can contain up to 63 cells.
+  for {set i 0} {$i < 63} {incr i} {
+    execsql { INSERT INTO t1 VALUES( randomblob(10) ) }
+  }
+
+  # Free the cell stored right at the end of the page (at offset pgsz-14).
+  execsql { DELETE FROM t1 WHERE rowid=1 }
+  set rootpage [db one {SELECT rootpage FROM sqlite_master WHERE name = 't1'}]
+  db close
+
+  set offset [expr ($rootpage * 1024)-14+2]
+  hexio_write test.db $offset 00FF
+  sqlite3 db test.db 
+
+  catchsql { INSERT INTO t1 VALUES( randomblob(10) ) }
+} {1 {database disk image is malformed}}
+
+ifcapable oversize_cell_check {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  execsql { 
+    PRAGMA page_size = 1024; CREATE TABLE t1(x);
+  }
+
+  do_test corrupt-7.1 {
+    for {set i 0} {$i < 39} {incr i} {
+      execsql {
+        INSERT INTO t1 VALUES(X'000100020003000400050006000700080009000A');
+      }
+    }
+  } {}
+  db close
+  
+  # Corrupt the root page of table t1 so that the first offset in the 
+  # cell-offset array points to the data for the SQL blob associated with
+  # record (rowid=10). The root page still passes the checks in btreeInitPage(),
+  # because the start of said blob looks like the start of a legitimate 
+  # page cell.
+  #
+  # Test case cc-2 overwrites the blob so that it no longer looks like a
+  # real cell. But, by the time it is overwritten, btreeInitPage() has already
+  # initialized the root page, so no corruption is detected.
+  #
+  # Test case cc-3 inserts an extra record into t1, forcing balance-deeper
+  # to run. After copying the contents of the root page to the new child,
+  # btreeInitPage() is called on the child. This time, it detects corruption
+  # (because the start of the blob associated with the (rowid=10) record
+  # no longer looks like a real cell). At one point the code assumed that 
+  # detecting corruption was not possible at that point, and an assert() failed.
+  #
+  set fd [open test.db r+]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd [expr 1024+8]
+  puts -nonewline $fd "\x03\x14"
+  close $fd
+  
+  sqlite3 db test.db
+  do_test corrupt-7.2 {
+    execsql { 
+      UPDATE t1 SET x = X'870400020003000400050006000700080009000A' 
+      WHERE rowid = 10;
+    }
+  } {}
+  do_test corrupt-7.3 {
+    catchsql {
+      INSERT INTO t1 VALUES(X'000100020003000400050006000700080009000A');
+    }
+  } {1 {database disk image is malformed}}
+}
+
+db close
+forcedelete test.db test.db-journal
+do_test corrupt-8.1 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    PRAGMA secure_delete = on;
+    PRAGMA auto_vacuum = 0;
+    CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+    INSERT INTO t1 VALUES(5, randomblob(1900));
+  }
+
+  hexio_write test.db 2044 [hexio_render_int32 2]
+  hexio_write test.db 24   [hexio_render_int32 45]
+
+  catchsql { INSERT OR REPLACE INTO t1 VALUES(5, randomblob(1900)) }
+} {1 {database disk image is malformed}}
+
+db close
+forcedelete test.db test.db-journal
+do_test corrupt-8.2 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    PRAGMA secure_delete = on;
+    PRAGMA auto_vacuum = 0;
+    CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+    INSERT INTO t1 VALUES(5, randomblob(900));
+    INSERT INTO t1 VALUES(6, randomblob(900));
+  }
+
+  hexio_write test.db 2047 FF
+  hexio_write test.db 24   [hexio_render_int32 45]
+
+  catchsql { INSERT INTO t1 VALUES(4, randomblob(1900)) }
+} {1 {database disk image is malformed}}
+
+finish_test

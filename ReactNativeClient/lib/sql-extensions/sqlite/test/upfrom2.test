@@ -1,0 +1,371 @@
+# 2020 April 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix upfrom2
+
+# Test cases:
+#
+#   1.*: Test that triggers are fired correctly for UPDATE FROM statements,
+#        and only once for each row. Except for INSTEAD OF triggers on 
+#        views - these are fired once for each row returned by the join, 
+#        including duplicates.
+#
+#   2.*: Test adding ORDER BY and LIMIT clauses with UPDATE FROM statements.
+#
+#   5.*: Test that specifying the target table name or alias in the FROM
+#        clause of an UPDATE statement is an error.
+#
+
+foreach {tn wo} {
+  1 ""
+  2 "WITHOUT ROWID"
+} {
+  reset_db
+
+  eval [string map [list %WO% $wo %TN% $tn] {
+  do_execsql_test 1.%TN%.0 {
+    CREATE TABLE log(t TEXT);
+    CREATE TABLE t1(x PRIMARY KEY, y, z UNIQUE) %WO%;
+    CREATE INDEX t1y ON t1(y);
+
+    INSERT INTO t1 VALUES(1, 'i',   'one');
+    INSERT INTO t1 VALUES(2, 'ii',  'two');
+    INSERT INTO t1 VALUES(3, 'iii', 'three');
+    INSERT INTO t1 VALUES(4, 'iv',  'four');
+
+    CREATE TRIGGER tr1 BEFORE UPDATE ON t1 BEGIN
+      INSERT INTO log VALUES(old.z || '->' || new.z);
+    END;
+    CREATE TRIGGER tr2 AFTER UPDATE ON t1 BEGIN
+      INSERT INTO log VALUES(old.y || '->' || new.y);
+    END;
+  }
+
+  do_execsql_test 1.%TN%.1 {
+    WITH data(k, v) AS (
+      VALUES(3, 'thirty'), (1, 'ten')
+    )
+    UPDATE t1 SET z=v FROM data WHERE x=k;
+
+    SELECT * FROM t1;
+    SELECT * FROM log;
+  } {
+    1 i ten   2 ii two   3 iii thirty   4 iv four
+    one->ten        i->i
+    three->thirty   iii->iii
+  }
+
+  do_execsql_test 1.%TN%.2 {
+    CREATE TABLE t2(a, b);
+    CREATE TABLE t3(k, v);
+  
+    INSERT INTO t3 VALUES(5,   'v');
+    INSERT INTO t3 VALUES(12, 'xii');
+  
+    INSERT INTO t2 VALUES(2, 12);
+    INSERT INTO t2 VALUES(3, 5);
+  
+    DELETE FROM log;
+    UPDATE t1 SET y=v FROM t2, t3 WHERE t1.x=t2.a AND t3.k=t2.b;
+  
+    SELECT * FROM t1;
+    SELECT * FROM log;
+  } {
+    1 i ten   2 xii two   3 v thirty   4 iv four
+    two->two         ii->xii
+    thirty->thirty   iii->v
+  }
+
+  do_execsql_test 1.%TN%.3 {
+    DELETE FROM log;
+    WITH data(k, v) AS (
+      VALUES(1, 'seven'), (1, 'eight'), (2, 'eleven'), (2, 'twelve')
+    )
+    UPDATE t1 SET z=v FROM data WHERE x=k;
+  
+    SELECT * FROM t1;
+    SELECT * FROM log;
+  } {
+    1 i eight   2 xii twelve   3 v thirty   4 iv four
+    ten->eight        i->i
+    two->twelve       xii->xii
+  }
+
+  do_test 1.%TN%.4 { db changes } {2}
+
+  do_execsql_test 1.%TN%.5 { 
+    CREATE VIEW v1 AS SELECT * FROM t1;
+    CREATE TRIGGER v1tr INSTEAD OF UPDATE ON v1 BEGIN
+      UPDATE t1 SET y=new.y, z=new.z WHERE x=new.x;
+    END;
+
+    DELETE FROM log;
+    WITH data(k, v) AS (
+      VALUES(3, 'thirteen'), (3, 'fourteen'), (4, 'fifteen'), (4, 'sixteen')
+    )
+    UPDATE v1 SET z=v FROM data WHERE x=k;
+  }
+
+  do_execsql_test 1.%TN%.6 {
+    SELECT * FROM v1;
+    SELECT * FROM log;
+  } {
+    1 i eight   2 xii twelve   3 v fourteen   4 iv sixteen
+    thirty->thirteen  v->v
+    thirteen->fourteen  v->v
+    four->fifteen  iv->iv
+    fifteen->sixteen  iv->iv
+  }
+
+  #--------------------------------------------------------------
+
+  do_execsql_test 1.%TN%.7 {
+    CREATE TABLE o1(w, x, y, z UNIQUE, PRIMARY KEY(w, x)) %WO%;
+    CREATE INDEX o1y ON t1(y);
+
+    INSERT INTO o1 VALUES(0, 0, 'i', 'one');
+    INSERT INTO o1 VALUES(0, 1, 'ii', 'two');
+    INSERT INTO o1 VALUES(1, 0, 'iii', 'three');
+    INSERT INTO o1 VALUES(1, 1, 'iv', 'four');
+
+    CREATE TRIGGER tro1 BEFORE UPDATE ON o1 BEGIN
+      INSERT INTO log VALUES(old.z || '->' || new.z);
+    END;
+    CREATE TRIGGER tro2 AFTER UPDATE ON o1 BEGIN
+      INSERT INTO log VALUES(old.y || '->' || new.y);
+    END;
+  }
+
+  do_execsql_test 1.%TN%.8 {
+    DELETE FROM log;
+    WITH data(k, v) AS (
+      VALUES(3, 'thirty'), (1, 'ten')
+    )
+    UPDATE o1 SET z=v FROM data WHERE (1+x+w*2)=k;
+
+    SELECT * FROM o1;
+    SELECT * FROM log;
+  } {
+    0 0 i ten   0 1 ii two   1 0 iii thirty   1 1 iv four
+    one->ten        i->i
+    three->thirty   iii->iii
+  }
+
+  do_execsql_test 1.%TN%.9 {
+    DELETE FROM log;
+    UPDATE o1 SET y=v FROM t2, t3 WHERE (1+o1.w*2+o1.x)=t2.a AND t3.k=t2.b;
+  
+    SELECT * FROM o1;
+    SELECT * FROM log;
+  } {
+    0 0 i ten   0 1 xii two   1 0 v thirty   1 1 iv four
+    two->two         ii->xii
+    thirty->thirty   iii->v
+  }
+
+  do_execsql_test 1.%TN%.10 {
+    DELETE FROM log;
+    WITH data(k, v) AS (
+      VALUES(1, 'seven'), (1, 'eight'), (2, 'eleven'), (2, 'twelve')
+    )
+    UPDATE o1 SET z=v FROM data WHERE (1+w*2+x)=k;
+  
+    SELECT * FROM o1;
+    SELECT * FROM log;
+  } {
+    0 0 i eight   0 1 xii twelve   1 0 v thirty   1 1 iv four
+    ten->eight        i->i
+    two->twelve       xii->xii
+  }
+
+  do_test 1.%TN%.11 { db changes } {2}
+
+  do_execsql_test 1.%TN%.12 { 
+    CREATE VIEW w1 AS SELECT * FROM o1;
+    CREATE TRIGGER w1tr INSTEAD OF UPDATE ON w1 BEGIN
+      UPDATE o1 SET y=new.y, z=new.z WHERE w=new.w AND x=new.x;
+    END;
+
+    DELETE FROM log;
+    WITH data(k, v) AS (
+      VALUES(3, 'thirteen'), (3, 'fourteen'), (4, 'fifteen'), (4, 'sixteen')
+    )
+    UPDATE w1 SET z=v FROM data WHERE (1+w*2+x)=k;
+  }
+
+  do_execsql_test 1.%TN%.13 {
+    SELECT * FROM w1;
+    SELECT * FROM log;
+  } {
+    0 0 i eight   0 1 xii twelve   1 0 v fourteen   1 1 iv sixteen
+    thirty->thirteen  v->v
+    thirteen->fourteen  v->v
+    four->fifteen  iv->iv
+    fifteen->sixteen  iv->iv
+  }
+
+}]
+}
+
+ifcapable update_delete_limit {
+foreach {tn wo} {
+  1 ""
+  2 "WITHOUT ROWID"
+} {
+  reset_db
+
+eval [string map [list %WO% $wo %TN% $tn] {
+  do_execsql_test 2.%TN%.1 {
+    CREATE TABLE x1(a INTEGER PRIMARY KEY, b) %WO%;
+    INSERT INTO x1 VALUES
+        (1, 'one'), (2, 'two'), (3, 'three'), (4, 'four'),
+        (5, 'five'), (6, 'six'), (7, 'seven'), (8, 'eight');
+  }
+
+  do_execsql_test 2.%TN%.2 {
+    CREATE TABLE data1(x, y);
+    INSERT INTO data1 VALUES
+    (1, 'eleven'), (1, 'twenty-one'), (2, 'twelve'), (2, 'twenty-two'),
+    (3, 'thirteen'), (3, 'twenty-three'), (4, 'fourteen'), (4, 'twenty-four');
+  }
+
+  do_execsql_test 2.%TN%.3 {
+    UPDATE x1 SET b=y FROM data1 WHERE a=x ORDER BY a LIMIT 3;
+    SELECT * FROM x1;
+  } {
+    1 eleven 2 twelve 3 thirteen 4 four 5 five 6 six 7 seven 8 eight
+  }
+
+  do_execsql_test 2.%TN%.4 {
+    UPDATE x1 SET b=b||y FROM data1 WHERE a=x ORDER BY b LIMIT 3;
+    SELECT * FROM x1;
+  } {
+    1 eleveneleven 2 twelve 3 thirteenthirteen 4 fourfourteen 
+    5 five 6 six 7 seven 8 eight
+  }
+
+  do_catchsql_test 2.%TN%.5 {
+    UPDATE x1 SET b=b||b ORDER BY b;
+  } {1 {ORDER BY without LIMIT on UPDATE}}
+  do_catchsql_test 2.%TN%.6 {
+    UPDATE x1 SET b=b||y FROM data1 WHERE a=x ORDER BY b;
+  } {1 {ORDER BY without LIMIT on UPDATE}}
+
+  #-----------------------------------------------------------------------
+
+  do_execsql_test 2.%TN%.6 {
+    DROP TABLE x1;
+    CREATE TABLE x1(u, v, b, PRIMARY KEY(u, v)) %WO%;
+    INSERT INTO x1 VALUES
+        (0, 1, 'one'), (1, 0, 'two'), (1, 1, 'three'), (2, 0, 'four'),
+        (2, 1, 'five'), (3, 0, 'six'), (3, 1, 'seven'), (4, 0, 'eight');
+  }
+
+  do_execsql_test 2.%TN%.7 {
+    UPDATE x1 SET b=y FROM data1 WHERE (u*2+v)=x ORDER BY u, v LIMIT 3;
+    SELECT * FROM x1;
+  } {
+    0 1 eleven 1 0 twelve 1 1 thirteen 2 0 four 
+    2 1 five 3 0 six 3 1 seven 4 0 eight
+  }
+
+  do_execsql_test 2.%TN%.8 {
+    UPDATE x1 SET b=b||y FROM data1 WHERE (u*2+v)=x ORDER BY b LIMIT 3;
+    SELECT * FROM x1;
+  } {
+    0 1 eleveneleven 1 0 twelve 1 1 thirteenthirteen 2 0 fourfourteen 
+    2 1 five  3 0 six 3 1 seven 4 0 eight
+  }
+
+
+}]
+}}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE data(x, y, z);
+  CREATE VIEW t1 AS SELECT * FROM data;
+  CREATE TRIGGER t1_insert INSTEAD OF INSERT ON t1 BEGIN
+    INSERT INTO data VALUES(new.x, new.y, new.z);
+  END;
+  CREATE TRIGGER t1_update INSTEAD OF UPDATE ON t1 BEGIN
+    INSERT INTO log VALUES(old.z || '->' || new.z);
+  END;
+
+  CREATE TABLE log(t TEXT);
+
+  INSERT INTO t1 VALUES(1, 'i',   'one');
+  INSERT INTO t1 VALUES(2, 'ii',  'two');
+  INSERT INTO t1 VALUES(3, 'iii', 'three');
+  INSERT INTO t1 VALUES(4, 'iv',  'four');
+}
+
+do_execsql_test 3.1 {
+  WITH input(k, v) AS (
+      VALUES(3, 'thirty'), (1, 'ten')
+  )
+  UPDATE t1 SET z=v FROM input WHERE x=k;
+}
+
+foreach {tn sql} {
+  2 { 
+    CREATE TABLE x1(a INT PRIMARY KEY, b, c) WITHOUT ROWID;
+  }
+  1 { 
+    CREATE TABLE x1(a INTEGER PRIMARY KEY, b, c);
+  }
+  3 { 
+    CREATE TABLE x1(a INT PRIMARY KEY, b, c);
+  }
+} {
+
+  reset_db
+  execsql $sql
+
+  do_execsql_test 4.$tn.0 {
+    INSERT INTO x1 VALUES(1, 1, 1);
+    INSERT INTO x1 VALUES(2, 2, 2);
+    INSERT INTO x1 VALUES(3, 3, 3);
+    INSERT INTO x1 VALUES(4, 4, 4);
+    INSERT INTO x1 VALUES(5, 5, 5);
+    CREATE TABLE map(o, t);
+    INSERT INTO map VALUES(3, 30), (4, 40), (1, 10);
+  }
+
+  do_execsql_test 4.$tn.1 {
+    UPDATE x1 SET a=t FROM map WHERE a=o;
+    SELECT * FROM x1 ORDER BY a;
+  } {2 2 2   5 5 5   10 1 1  30 3 3  40 4 4}
+}
+
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE x1(a, b, c);
+  CREATE TABLE x2(a, b, c);
+}
+
+foreach {tn update nm} {
+  1 "UPDATE x1 SET a=5 FROM x1" x1
+  2 "UPDATE x1 AS grapes SET a=5 FROM x1 AS grapes" grapes
+  3 "UPDATE x1 SET a=5 FROM x2, x1" x1
+  4 "UPDATE x1 AS grapes SET a=5 FROM x2, x1 AS grapes" grapes
+} {
+  do_catchsql_test 5.$tn $update \
+    "1 {target object/alias may not appear in FROM clause: $nm}"
+}
+
+
+finish_test
+
+

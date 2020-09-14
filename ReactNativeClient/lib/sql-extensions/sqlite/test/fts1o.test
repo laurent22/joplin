@@ -1,0 +1,138 @@
+# 2007 July 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The focus
+# of this script is testing the FTS1 module rename functionality.  Mostly
+# copied from fts2o.test.
+#
+# $Id: fts1o.test,v 1.2 2007/08/30 20:01:33 shess Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS1 is not defined, omit this file.
+ifcapable !fts1 {
+  finish_test
+  return
+}
+
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts1(a, b, c);
+  INSERT INTO t1(a, b, c) VALUES('one three four', 'one four', 'one four two');
+}
+
+#---------------------------------------------------------------------
+# Test that it is possible to rename an fts1 table.
+#
+do_test fts1o-1.1 {
+  execsql { SELECT tbl_name FROM sqlite_master WHERE type = 'table'}
+} {t1 t1_content t1_term}
+do_test fts1o-1.2 {
+  execsql { ALTER TABLE t1 RENAME to fts_t1; }
+} {}
+do_test fts1o-1.3 {
+  execsql { SELECT rowid, snippet(fts_t1) FROM fts_t1 WHERE a MATCH 'four'; }
+} {1 {one three <b>four</b>}}
+do_test fts1o-1.4 {
+  execsql { SELECT tbl_name FROM sqlite_master WHERE type = 'table'}
+} {fts_t1 fts_t1_content fts_t1_term}
+
+# See what happens when renaming the fts1 table fails.
+#
+do_test fts1o-2.1 {
+  catchsql {
+    CREATE TABLE t1_term(a, b, c);
+    ALTER TABLE fts_t1 RENAME to t1;
+  }
+} {1 {SQL logic error}}
+do_test fts1o-2.2 {
+  execsql { SELECT rowid, snippet(fts_t1) FROM fts_t1 WHERE a MATCH 'four'; }
+} {1 {one three <b>four</b>}}
+do_test fts1o-2.3 {
+  execsql { SELECT tbl_name FROM sqlite_master WHERE type = 'table'}
+} {fts_t1 fts_t1_content fts_t1_term t1_term}
+
+# See what happens when renaming the fts1 table fails inside a transaction.
+#
+do_test fts1o-3.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO fts_t1(a, b, c) VALUES('one two three', 'one four', 'one two');
+  }
+} {}
+do_test fts1o-3.2 {
+  catchsql {
+    ALTER TABLE fts_t1 RENAME to t1;
+  }
+} {1 {SQL logic error}}
+# NOTE(shess) rowid AS rowid to defeat caching.  Otherwise, this
+# seg-faults, I suspect that there's something up with a stale
+# virtual-table reference, but I'm not quite sure how it happens here
+# but not for fts2o.test.
+do_test fts1o-3.3 {
+  execsql { SELECT rowid AS rowid, snippet(fts_t1) FROM fts_t1 WHERE a MATCH 'four'; }
+} {1 {one three <b>four</b>}}
+do_test fts1o-3.4 {
+  execsql { SELECT tbl_name FROM sqlite_master WHERE type = 'table'}
+} {fts_t1 fts_t1_content fts_t1_term t1_term}
+do_test fts1o-3.5 {
+  execsql COMMIT
+  execsql {SELECT a FROM fts_t1}
+} {{one three four} {one two three}}
+do_test fts1o-3.6 {
+  execsql { SELECT a, b, c FROM fts_t1 WHERE c MATCH 'four'; }
+} {{one three four} {one four} {one four two}}
+
+#---------------------------------------------------------------------
+# Test that it is possible to rename an fts1 table in an attached 
+# database.
+#
+forcedelete test2.db test2.db-journal
+
+do_test fts1o-4.1 {
+  execsql {
+    DROP TABLE t1_term;
+    ALTER TABLE fts_t1 RENAME to t1;
+    SELECT a, b, c FROM t1 WHERE c MATCH 'two';
+  }
+} {{one three four} {one four} {one four two} {one two three} {one four} {one two}}
+
+do_test fts1o-4.2 {
+  execsql {
+    ATTACH 'test2.db' AS aux;
+    CREATE VIRTUAL TABLE aux.t1 USING fts1(a, b, c);
+    INSERT INTO aux.t1(a, b, c) VALUES(
+      'neung song sahm', 'neung see', 'neung see song'
+    );
+  }
+} {}
+
+do_test fts1o-4.3 {
+  execsql { SELECT a, b, c FROM aux.t1 WHERE a MATCH 'song'; }
+} {{neung song sahm} {neung see} {neung see song}}
+
+do_test fts1o-4.4 {
+  execsql { SELECT a, b, c FROM t1 WHERE c MATCH 'two'; }
+} {{one three four} {one four} {one four two} {one two three} {one four} {one two}}
+
+do_test fts1o-4.5 {
+  execsql { ALTER TABLE aux.t1 RENAME TO t2 }
+} {}
+
+do_test fts1o-4.6 {
+  execsql { SELECT a, b, c FROM t2 WHERE a MATCH 'song'; }
+} {{neung song sahm} {neung see} {neung see song}}
+
+do_test fts1o-4.7 {
+  execsql { SELECT a, b, c FROM t1 WHERE c MATCH 'two'; }
+} {{one three four} {one four} {one four two} {one two three} {one four} {one two}}
+
+finish_test

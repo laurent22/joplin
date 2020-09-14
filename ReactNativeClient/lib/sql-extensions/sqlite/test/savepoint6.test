@@ -1,0 +1,281 @@
+# 2009 January 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: savepoint6.test,v 1.4 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+proc sql {zSql} {
+  uplevel db eval [list $zSql]
+  #puts stderr "$zSql ;"
+}
+
+set DATABASE_SCHEMA {
+    PRAGMA auto_vacuum = incremental;
+    CREATE TABLE t1(x, y);
+    CREATE UNIQUE INDEX i1 ON t1(x);
+    CREATE INDEX i2 ON t1(y);
+}
+
+if {0==[info exists ::G(savepoint6_iterations)]} {
+  set ::G(savepoint6_iterations) 1000
+}
+
+#--------------------------------------------------------------------------
+# In memory database state.
+#
+# ::lSavepoint is a list containing one entry for each active savepoint. The
+# first entry in the list corresponds to the most recently opened savepoint.
+# Each entry consists of two elements:
+#
+#   1. The savepoint name.
+#
+#   2. A serialized Tcl array representing the contents of table t1 at the
+#      start of the savepoint. The keys of the array are the x values. The
+#      values are the y values.
+#  
+# Array ::aEntry contains the contents of database table t1. Array keys are
+# x values, the array data values are y values.
+#
+set lSavepoint [list]
+array set aEntry [list]
+
+proc x_to_y {x} {
+  set nChar [expr int(rand()*250) + 250]
+  set str " $nChar [string repeat $x. $nChar]"
+  string range $str 1 $nChar
+}
+#--------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# Procs to operate on database:
+#
+#   savepoint NAME
+#   rollback  NAME
+#   release   NAME
+#
+#   insert_rows XVALUES
+#   delete_rows XVALUES
+#
+proc savepoint {zName} {
+  catch { sql "SAVEPOINT $zName" }
+  lappend ::lSavepoint [list $zName [array get ::aEntry]]
+}
+
+proc rollback {zName} {
+  catch { sql "ROLLBACK TO $zName" }
+  for {set i [expr {[llength $::lSavepoint]-1}]} {$i>=0} {incr i -1} {
+    set zSavepoint [lindex $::lSavepoint $i 0]
+    if {$zSavepoint eq $zName} {
+      unset -nocomplain ::aEntry
+      array set ::aEntry [lindex $::lSavepoint $i 1]
+
+
+      if {$i+1 < [llength $::lSavepoint]} {
+        set ::lSavepoint [lreplace $::lSavepoint [expr $i+1] end]
+      }
+      break
+    }
+  }
+}
+
+proc release {zName} {
+  catch { sql "RELEASE $zName" }
+  for {set i [expr {[llength $::lSavepoint]-1}]} {$i>=0} {incr i -1} {
+    set zSavepoint [lindex $::lSavepoint $i 0]
+    if {$zSavepoint eq $zName} {
+      set ::lSavepoint [lreplace $::lSavepoint $i end]
+      break
+    }
+  }
+
+  if {[llength $::lSavepoint] == 0} {
+    #puts stderr "-- End of transaction!!!!!!!!!!!!!"
+  }
+}
+
+proc insert_rows {lX} {
+  foreach x $lX {
+    set y [x_to_y $x]
+
+    # Update database [db]
+    sql "INSERT OR REPLACE INTO t1 VALUES($x, '$y')"
+
+    # Update the Tcl database.
+    set ::aEntry($x) $y
+  }
+}
+
+proc delete_rows {lX} {
+  foreach x $lX {
+    # Update database [db]
+    sql "DELETE FROM t1 WHERE x = $x"
+
+    # Update the Tcl database.
+    unset -nocomplain ::aEntry($x)
+  }
+}
+#-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# Proc to compare database content with the in-memory representation.
+#
+#   checkdb
+#
+proc checkdb {} {
+  set nEntry [db one {SELECT count(*) FROM t1}]
+  set nEntry2 [array size ::aEntry]
+  if {$nEntry != $nEntry2} {
+    error "$nEntry entries in database, $nEntry2 entries in array"
+  }
+  db eval {SELECT x, y FROM t1} {
+    if {![info exists ::aEntry($x)]} {
+      error "Entry $x exists in database, but not in array"
+    }
+    if {$::aEntry($x) ne $y} {
+      error "Entry $x is set to {$y} in database, {$::aEntry($x)} in array"
+    }
+  }
+
+  db eval { PRAGMA integrity_check }
+}
+#-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# Proc to return random set of x values.
+#
+#   random_integers
+#
+proc random_integers {nRes nRange} {
+  set ret [list]
+  for {set i 0} {$i<$nRes} {incr i} {
+    lappend ret [expr int(rand()*$nRange)]
+  }
+  return $ret
+} 
+#-------------------------------------------------------------------------
+
+proc database_op {} {
+  set i [expr int(rand()*2)] 
+  if {$i==0} {
+    insert_rows [random_integers 100 1000]
+  }
+  if {$i==1} {
+    delete_rows [random_integers 100 1000]
+    set i [expr int(rand()*3)] 
+    if {$i==0} {
+      sql {PRAGMA incremental_vacuum}
+    }
+  }
+}
+
+proc savepoint_op {} {
+  set names {one two three four five}
+  set cmds  {savepoint savepoint savepoint savepoint release rollback}
+
+  set C [lindex $cmds [expr int(rand()*6)]]
+  set N [lindex $names [expr int(rand()*5)]]
+
+  #puts stderr "   $C $N ;  "
+  #flush stderr
+
+  $C $N
+  return ok
+}
+
+expr srand(0)
+
+############################################################################
+############################################################################
+# Start of test cases.
+
+do_test savepoint6-1.1 {
+  sql $DATABASE_SCHEMA
+} {}
+do_test savepoint6-1.2 {
+  insert_rows {
+    497 166 230 355 779 588 394 317 290 475 362 193 805 851 564 
+    763 44 930 389 819 765 760 966 280 538 414 500 18 25 287 320 
+    30 382 751 87 283 981 429 630 974 421 270 810 405 
+  }
+
+  savepoint one
+  insert_rows 858
+  delete_rows 930
+  savepoint two
+    execsql {PRAGMA incremental_vacuum}
+    savepoint three
+      insert_rows 144
+     rollback three
+    rollback two
+  release one
+
+  execsql {SELECT count(*) FROM t1}
+} {44}
+
+foreach zSetup [list {
+  set testname normal
+  sqlite3 db test.db
+} {
+  if {[wal_is_wal_mode]} continue
+  set testname tempdb
+  sqlite3 db ""
+} {
+  if {[permutation] eq "journaltest"} {
+    continue
+  }
+  set testname nosync
+  sqlite3 db test.db
+  sql { PRAGMA synchronous = off }
+} {
+  set testname smallcache
+  sqlite3 db test.db
+  sql { PRAGMA cache_size = 10 }
+}] {
+
+  unset -nocomplain ::lSavepoint
+  unset -nocomplain ::aEntry
+
+  catch { db close }
+  forcedelete test.db test.db-wal test.db-journal
+  eval $zSetup
+  sql $DATABASE_SCHEMA
+
+  wal_set_journal_mode
+
+  do_test savepoint6-$testname.setup {
+    savepoint one
+    insert_rows [random_integers 100 1000]
+    release one
+    checkdb
+  } {ok}
+  
+  for {set i 0} {$i < $::G(savepoint6_iterations)} {incr i} {
+    do_test savepoint6-$testname.$i.1 {
+      savepoint_op
+      checkdb
+    } {ok}
+  
+    do_test savepoint6-$testname.$i.2 {
+      database_op
+      database_op
+      checkdb
+    } {ok}
+  }
+
+  wal_check_journal_mode savepoint6-$testname.walok
+}
+
+unset -nocomplain ::lSavepoint
+unset -nocomplain ::aEntry
+
+finish_test

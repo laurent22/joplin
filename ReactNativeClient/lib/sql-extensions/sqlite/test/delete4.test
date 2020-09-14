@@ -1,0 +1,264 @@
+# 2005 August 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is a test of the DELETE command.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix delete4
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+  INSERT INTO t1 VALUES(1, 0);
+  INSERT INTO t1 VALUES(2, 1);
+  INSERT INTO t1 VALUES(3, 0);
+  INSERT INTO t1 VALUES(4, 1);
+  INSERT INTO t1 VALUES(5, 0);
+  INSERT INTO t1 VALUES(6, 1);
+  INSERT INTO t1 VALUES(7, 0);
+  INSERT INTO t1 VALUES(8, 1);
+}
+do_execsql_test 1.2 {
+  DELETE FROM t1 WHERE y=1;
+}
+do_execsql_test 1.3 {
+  SELECT x FROM t1;
+} {1 3 5 7}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 2.1 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, y, z);
+  INSERT INTO t1 VALUES(1, 0, randomblob(200));
+  INSERT INTO t1 VALUES(2, 1, randomblob(200));
+  INSERT INTO t1 VALUES(3, 0, randomblob(200));
+  INSERT INTO t1 VALUES(4, 1, randomblob(200));
+  INSERT INTO t1 VALUES(5, 0, randomblob(200));
+  INSERT INTO t1 VALUES(6, 1, randomblob(200));
+  INSERT INTO t1 VALUES(7, 0, randomblob(200));
+  INSERT INTO t1 VALUES(8, 1, randomblob(200));
+}
+do_execsql_test 2.2 {
+  DELETE FROM t1 WHERE y=1;
+}
+do_execsql_test 2.3 {
+  SELECT x FROM t1;
+} {1 3 5 7}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE t1(a, b, PRIMARY KEY(a, b)) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(2, 4);
+  INSERT INTO t1 VALUES(1, 5);
+  DELETE FROM t1 WHERE a=1;
+  SELECT * FROM t1;
+} {2 4}
+
+#-------------------------------------------------------------------------
+# DELETE statement that uses the OR optimization
+#
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE t1(i INTEGER PRIMARY KEY, a, b);
+  CREATE INDEX i1a ON t1(a);
+  CREATE INDEX i1b ON t1(b);
+  INSERT INTO t1 VALUES(1, 'one', 'i');
+  INSERT INTO t1 VALUES(2, 'two', 'ii');
+  INSERT INTO t1 VALUES(3, 'three', 'iii');
+  INSERT INTO t1 VALUES(4, 'four', 'iv');
+  INSERT INTO t1 VALUES(5, 'one', 'i');
+  INSERT INTO t1 VALUES(6, 'two', 'ii');
+  INSERT INTO t1 VALUES(7, 'three', 'iii');
+  INSERT INTO t1 VALUES(8, 'four', 'iv');
+} {}
+
+do_execsql_test 3.2 {
+  DELETE FROM t1 WHERE a='two' OR b='iv';
+}
+
+do_execsql_test 3.3 {
+  SELECT i FROM t1 ORDER BY i;
+} {1 3 5 7}
+
+do_execsql_test 3.4 { 
+  PRAGMA integrity_check; 
+} {ok}
+
+# Between 2015-09-14 and 2015-09-28, the following test cases would result
+# in corruption (wrong # of entries in index) due to a bug in the ONEPASS
+# optimization.
+#
+do_execsql_test 4.1 {
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t4(col0, col1);
+  INSERT INTO "t4" VALUES(14, 'abcde');
+  CREATE INDEX idx_t4_0 ON t4 (col1, col0);
+  CREATE INDEX idx_t4_3 ON t4 (col0);
+  DELETE FROM t4 WHERE col0=69 OR col0>7;
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test 4.2 {
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t4(col0, col1);
+  INSERT INTO "t4" VALUES(14, 'abcde');
+  CREATE INDEX idx_t4_3 ON t4 (col0);
+  CREATE INDEX idx_t4_0 ON t4 (col1, col0);
+  DELETE FROM t4 WHERE col0=69 OR col0>7;
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test 4.11 {
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t4(col0, col1, pk PRIMARY KEY) WITHOUT ROWID;
+  INSERT INTO t4 VALUES(14, 'abcde','xyzzy');
+  CREATE INDEX idx_t4_0 ON t4 (col1, col0);
+  CREATE INDEX idx_t4_3 ON t4 (col0);
+  DELETE FROM t4 WHERE col0=69 OR col0>7;
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test 4.12 {
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t4(col0, col1, pk PRIMARY KEY) WITHOUT ROWID;
+  INSERT INTO t4 VALUES(14, 'abcde','xyzzy');
+  CREATE INDEX idx_t4_3 ON t4 (col0);
+  CREATE INDEX idx_t4_0 ON t4 (col1, col0);
+  DELETE FROM t4 WHERE col0=69 OR col0>7;
+  PRAGMA integrity_check;
+} {ok}
+
+# 2016-04-09
+# Ticket https://sqlite.org/src/info/a306e56ff68b8fa5
+# Failure to completely delete when reverse_unordered_selects is
+# engaged.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 5.0 {
+  PRAGMA page_size=1024;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX x1 ON t1(b, c);
+  INSERT INTO t1(a,b,c) VALUES(1, 1, zeroblob(80));
+  INSERT INTO t1(a,b,c) SELECT a+1, 1, c FROM t1;
+  INSERT INTO t1(a,b,c) SELECT a+2, 1, c FROM t1;
+  INSERT INTO t1(a,b,c) SELECT a+10, 2, c FROM t1 WHERE b=1;
+  INSERT INTO t1(a,b,c) SELECT a+20, 3, c FROM t1 WHERE b=1;
+  PRAGMA reverse_unordered_selects = ON;
+  DELETE FROM t1 WHERE b=2;
+  SELECT a FROM t1 WHERE b=2;
+} {}
+
+# 2016-05-02
+# Ticket https://www.sqlite.org/src/tktview/dc6ebeda93960877
+# A subquery in the WHERE clause of a one-pass DELETE can cause an
+# incorrect answer.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 6.0 {
+  CREATE TABLE t2(x INT);
+  INSERT INTO t2(x) VALUES(1),(2),(3),(4),(5);
+  DELETE FROM t2 WHERE EXISTS(SELECT 1 FROM t2 AS v WHERE v.x=t2.x-1);
+  SELECT x FROM t2;
+} {1}
+do_execsql_test 6.1 {
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t2(x INT);
+  INSERT INTO t2(x) VALUES(1),(2),(3),(4),(5);
+  DELETE FROM t2 WHERE EXISTS(SELECT 1 FROM t2 AS v WHERE v.x=t2.x+1);
+  SELECT x FROM t2;
+} {5}
+
+#-------------------------------------------------------------------------
+# Test the effect of failing to find a table row based on an index key
+# within a DELETE. Either because the db is corrupt, or a trigger on another
+# row already deleted the entry, or because a BEFORE trigger on the current
+# row has already deleted it.
+#
+do_execsql_test 7.1.0 {
+  CREATE TABLE t3(id INT PRIMARY KEY, a, b) WITHOUT ROWID;
+  CREATE INDEX t3a ON t3(a);
+  CREATE INDEX t3b ON t3(b);
+
+  INSERT INTO t3 VALUES(1, 1, 1);
+  INSERT INTO t3 VALUES(2, 2, 2);
+  INSERT INTO t3 VALUES(3, 3, 3);
+  INSERT INTO t3 VALUES(4, 4, 1);
+}
+do_execsql_test 7.1.1 {
+  DELETE FROM t3 WHERE a=4 OR b=1;
+}
+do_execsql_test 7.1.2 {
+  SELECT * FROM t3;
+} { 2 2 2   3 3 3 }
+
+do_execsql_test 7.2.0 {
+  CREATE TABLE t4(a PRIMARY KEY, b) WITHOUT ROWID;
+  CREATE INDEX t4i ON t4(b);
+  INSERT INTO t4 VALUES(1, 'hello');
+  INSERT INTO t4 VALUES(2, 'world');
+
+  CREATE TABLE t5(a PRIMARY KEY, b) WITHOUT ROWID;
+  CREATE INDEX t5i ON t5(b);
+  INSERT INTO t5 VALUES(1, 'hello');
+  INSERT INTO t5 VALUES(3, 'world');
+
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_master SET rootpage = (
+    SELECT rootpage FROM sqlite_master WHERE name = 't5'
+  ) WHERE name = 't4';
+}
+
+db close
+sqlite3 db test.db
+do_execsql_test 7.2.1 {
+  DELETE FROM t4 WHERE b='world'
+}
+reset_db
+
+do_execsql_test 7.3.0 {
+  CREATE TABLE t3(id INT PRIMARY KEY, a, b) WITHOUT ROWID;
+  INSERT INTO t3 VALUES(1, 2, 3);
+  INSERT INTO t3 VALUES(4, 5, 6);
+  INSERT INTO t3 VALUES(7, 8, 9);
+  CREATE TRIGGER t3t BEFORE DELETE ON t3 BEGIN
+    DELETE FROM t3 WHERE id=old.id+3;
+  END;
+}
+
+do_execsql_test 7.3.1 {
+  DELETE FROM t3 WHERE a IN(2, 5, 8);
+  SELECT * FROM t3;
+} {}
+
+do_execsql_test 7.3.2 {
+  DROP TRIGGER t3t;
+  INSERT INTO t3 VALUES(1, 2, 3);
+  INSERT INTO t3 VALUES(4, 5, 6);
+  INSERT INTO t3 VALUES(7, 8, 9);
+  CREATE TRIGGER t3t BEFORE DELETE ON t3 BEGIN
+    DELETE FROM t3 WHERE id=old.id;
+  END;
+}
+
+do_execsql_test 7.3.3 {
+  DELETE FROM t3 WHERE a IN(2, 5, 8);
+  SELECT * FROM t3;
+} {}
+
+
+finish_test

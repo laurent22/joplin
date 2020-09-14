@@ -1,0 +1,77 @@
+# 2005 September 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the ATTACH statement and
+# specifically out-of-memory conditions within that command.
+#
+# $Id: attachmalloc.test,v 1.10 2008/10/22 10:45:38 danielk1977 Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !attach {
+  finish_test
+  return
+}
+
+source $testdir/malloc_common.tcl
+
+do_malloc_test attachmalloc-1 -tclprep {
+  catch { db close }
+  for {set i 2} {$i<=4} {incr i} {
+    catch { db$i close }
+    forcedelete test$i.db
+    forcedelete test$i.db-journal
+  }
+} -tclbody {
+  if {[catch {sqlite3 db test.db}]} {
+    error "out of memory"
+  }
+  sqlite3_db_config_lookaside db 0 0 0
+  sqlite3_extended_result_codes db 1
+} -sqlbody {
+  ATTACH 'test2.db' AS two;
+  CREATE TABLE two.t1(x);
+  ATTACH 'test3.db' AS three;
+  CREATE TABLE three.t1(x);
+  ATTACH 'test4.db' AS four;
+  CREATE TABLE four.t1(x);
+}
+
+do_malloc_test attachmalloc-2 -tclprep {
+  forcedelete test2.db
+  forcedelete test2.db-journal
+  sqlite3 db2 test2.db
+  db2 eval {
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX i1 ON t1(a, b);
+  }
+  db2 close
+} -sqlbody {
+  CREATE TABLE t1(d, e, f);
+  ATTACH 'test2.db' AS db1;
+}
+
+set enable_shared_cache [sqlite3_enable_shared_cache 1]
+sqlite3 dbaux test3.db
+dbaux eval {SELECT * FROM sqlite_master}
+do_malloc_test attachmalloc-3 -sqlbody {
+  SELECT * FROM sqlite_master;
+  ATTACH 'test3.db' AS three;
+} -cleanup {
+  db eval { DETACH three }
+}
+dbaux close
+sqlite3_enable_shared_cache $enable_shared_cache
+
+
+finish_test

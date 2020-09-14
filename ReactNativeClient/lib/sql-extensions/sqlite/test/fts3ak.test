@@ -1,0 +1,105 @@
+# 2007 March 9
+#
+# The author disclaims copyright to this source code.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  These
+# make sure that fts3 insertion buffering is fully transparent when
+# using transactions.
+#
+# $Id: fts3ak.test,v 1.1 2007/08/20 17:38:42 shess Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts3(content);
+  INSERT INTO t1 (rowid, content) VALUES(1, "hello world");
+  INSERT INTO t1 (rowid, content) VALUES(2, "hello there");
+  INSERT INTO t1 (rowid, content) VALUES(3, "cruel world");
+}
+
+# Test that possibly-buffered inserts went through after commit.
+do_test fts3ak-1.1 {
+  execsql {
+    BEGIN TRANSACTION;
+    INSERT INTO t1 (rowid, content) VALUES(4, "false world");
+    INSERT INTO t1 (rowid, content) VALUES(5, "false door");
+    COMMIT TRANSACTION;
+    SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+  }
+} {1 3 4}
+
+# Test that buffered inserts are seen by selects in the same
+# transaction.
+do_test fts3ak-1.2 {
+  execsql {
+    BEGIN TRANSACTION;
+    INSERT INTO t1 (rowid, content) VALUES(6, "another world");
+    INSERT INTO t1 (rowid, content) VALUES(7, "another test");
+    SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+    COMMIT TRANSACTION;
+  }
+} {1 3 4 6}
+
+# Test that buffered inserts are seen within a transaction.  This is
+# really the same test as 1.2.
+do_test fts3ak-1.3 {
+  execsql {
+    BEGIN TRANSACTION;
+    INSERT INTO t1 (rowid, content) VALUES(8, "second world");
+    INSERT INTO t1 (rowid, content) VALUES(9, "second sight");
+    SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+    ROLLBACK TRANSACTION;
+  }
+} {1 3 4 6 8}
+
+# Double-check that the previous result doesn't persist past the
+# rollback!
+do_test fts3ak-1.4 {
+  execsql {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+  }
+} {1 3 4 6}
+
+# Test it all together.
+do_test fts3ak-1.5 {
+  execsql {
+    BEGIN TRANSACTION;
+    INSERT INTO t1 (rowid, content) VALUES(10, "second world");
+    INSERT INTO t1 (rowid, content) VALUES(11, "second sight");
+    ROLLBACK TRANSACTION;
+    SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+  }
+} {1 3 4 6}
+
+# Test that the obvious case works.
+do_test fts3ak-1.6 {
+  execsql {
+    BEGIN;
+    INSERT INTO t1 (rowid, content) VALUES(12, "third world");
+    COMMIT;
+    SELECT rowid FROM t1 WHERE t1 MATCH 'third';
+  }
+} {12}
+
+# This is exactly the same as the previous test, except that older
+# code loses the INSERT due to an SQLITE_SCHEMA error.
+do_test fts3ak-1.7 {
+  execsql {
+    BEGIN;
+    INSERT INTO t1 (rowid, content) VALUES(13, "third dimension");
+    CREATE TABLE x (c);
+    COMMIT;
+    SELECT rowid FROM t1 WHERE t1 MATCH 'dimension';
+  }
+} {13}
+
+finish_test

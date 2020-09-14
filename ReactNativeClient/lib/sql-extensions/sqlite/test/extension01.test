@@ -1,0 +1,83 @@
+# 2014-06-16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# This file implements tests for various small extensions.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix extension01
+
+load_static_extension db fileio
+do_test 1.0 {
+  forcedelete file1.txt
+  set out [open ./file1.txt wb]
+  puts -nonewline $out "This is a text file without a line ending"
+  close $out
+  db eval {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT);
+    INSERT INTO t1 VALUES(1, readfile('./file1.txt'));
+    SELECT * FROM t1;
+  }
+} {1 {This is a text file without a line ending}}
+do_test 1.1 {
+  forcedelete file2.txt
+  db nullvalue nil
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES(2, readfile(NULL)),(3, readfile('file2.txt'));
+    SELECT a, b, typeof(b) FROM t1;
+  }
+} {2 nil null 3 nil null}
+
+do_test 1.2 {
+  db eval {
+    SELECT writefile('./file2.txt', 'A second test line');
+  }
+} {18}
+do_test 1.3 {
+  set in [open ./file2.txt rb]
+  set x [read $in]
+  close $in
+  list $x [file size file2.txt]
+} {{A second test line} 18}
+
+do_test 1.4 {
+  db eval {
+    SELECT writefile('./file2.txt', NULL);
+  }
+} {0}
+do_test 1.5 {
+  file size ./file2.txt
+} {0}
+
+do_test 1.6 {
+  if {$::tcl_platform(platform)=="unix"} {
+    file attributes ./file2.txt -permissions r--r--r--
+  } else {
+    file attributes ./file2.txt -readonly 1
+  }
+  db eval {
+    SELECT writefile('./file2.txt', 'Another test');
+  }
+} {nil}
+do_test 1.7 {
+  if {$::tcl_platform(platform)=="unix"} {
+    file attributes ./file2.txt -permissions rw-r--r--
+  } else {
+    file attributes ./file2.txt -readonly 0
+  }
+  db eval {
+    SELECT writefile(NULL, 'Another test');
+  }
+} {nil}
+
+finish_test

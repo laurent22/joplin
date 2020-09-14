@@ -1,0 +1,114 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on the fts5 xSetAuxdata() and xGetAuxdata() APIs.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5auxdata
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a, b);
+  INSERT INTO f1(rowid, a, b) VALUES(1, 'a', 'b1');
+  INSERT INTO f1(rowid, a, b) VALUES(2, 'a', 'b2');
+  INSERT INTO f1(rowid, a, b) VALUES(3, 'a', 'b3');
+  INSERT INTO f1(rowid, a, b) VALUES(4, 'a', 'b4');
+  INSERT INTO f1(rowid, a, b) VALUES(5, 'a', 'b5');
+}
+
+proc aux_function_1 {cmd tn} {
+  switch [$cmd xRowid] {
+    1 {
+      do_test $tn.1 [list $cmd xGetAuxdata 0 ] {}
+      $cmd xSetAuxdata "one"
+    }
+
+    2 {
+      do_test $tn.2 [list $cmd xGetAuxdata 0 ] {one}
+      $cmd xSetAuxdata "two"
+    }
+
+    3 {
+      do_test $tn.3 [list $cmd xGetAuxdata 0 ] {two}
+    }
+
+    4 {
+      do_test $tn.4 [list $cmd xGetAuxdata 1 ] {two}
+    }
+
+    5 {
+      do_test $tn.5 [list $cmd xGetAuxdata 0 ] {}
+    }
+  }
+}
+
+sqlite3_fts5_create_function db aux_function_1 aux_function_1
+db eval { 
+  SELECT aux_function_1(f1, 1) FROM f1 WHERE f1 MATCH 'a'
+  ORDER BY rowid ASC
+}
+
+proc aux_function_2 {cmd tn inst} {
+  if {$inst == "A"} {
+    switch [$cmd xRowid] {
+      1 {
+        do_test $tn.1.$inst [list $cmd xGetAuxdata 0 ] {}
+        $cmd xSetAuxdata "one $inst"
+      }
+      2 {
+        do_test $tn.2.$inst [list $cmd xGetAuxdata 0 ] "one $inst"
+        $cmd xSetAuxdata "two $inst"
+      }
+      3 {
+        do_test $tn.3.$inst [list $cmd xGetAuxdata 0 ] "two $inst"
+      }
+      4 {
+        do_test $tn.4.$inst [list $cmd xGetAuxdata 1 ] "two $inst"
+      }
+      5 {
+        do_test $tn.5.$inst [list $cmd xGetAuxdata 0 ] {}
+      }
+    }
+  } else {
+    switch [$cmd xRowid] {
+      1 {
+        do_test $tn.1.$inst [list $cmd xGetAuxdata 0 ] "one A"
+      }
+      2 {
+        do_test $tn.2.$inst [list $cmd xGetAuxdata 0 ] "two A"
+      }
+      3 {
+        do_test $tn.3.$inst [list $cmd xGetAuxdata 0 ] "two A"
+      }
+      4 {
+        do_test $tn.4.$inst [list $cmd xGetAuxdata 0 ] {}
+      }
+      5 {
+        do_test $tn.5.$inst [list $cmd xGetAuxdata 0 ] {}
+      }
+    }
+  }
+}
+
+sqlite3_fts5_create_function db aux_function_2 aux_function_2
+db eval { 
+  SELECT aux_function_2(f1, 2, 'A'), aux_function_2(f1, 2, 'B') 
+  FROM f1 WHERE f1 MATCH 'a'
+  ORDER BY rowid ASC
+}
+
+finish_test

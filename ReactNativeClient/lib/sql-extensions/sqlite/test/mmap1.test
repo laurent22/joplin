@@ -1,0 +1,323 @@
+# 2013 March 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !mmap {
+  finish_test
+  return
+}
+source $testdir/lock_common.tcl
+set testprefix mmap1
+
+proc nRead {db} {
+  set bt [btree_from_db $db]
+  db_enter $db
+  array set stats [btree_pager_stats $bt]
+  db_leave $db
+  # puts [array get stats]
+  return $stats(read)
+}
+
+# Return a Tcl script that registers a user-defined scalar function 
+# named rblob() with database handle $dbname. The function returns a
+# sequence of pseudo-random blobs based on seed value $seed.
+#
+proc register_rblob_code {dbname seed} {
+  return [subst -nocommands {
+    set ::rcnt $seed
+    proc rblob {n} {
+      set ::rcnt [expr (([set ::rcnt] << 3) + [set ::rcnt] + 456) & 0xFFFFFFFF]
+      set str [format %.8x [expr [set ::rcnt] ^ 0xbdf20da3]]
+      string range [string repeat [set str] [expr [set n]/4]] 1 [set n]
+    }
+    $dbname func rblob rblob
+  }]
+}
+
+
+# For cases 1.1 and 1.4, the number of pages read using xRead() is 4 on
+# unix and 9 on windows. The difference is that windows only ever maps
+# an integer number of OS pages (i.e. creates mappings that are a multiple
+# of 4KB in size). Whereas on unix any sized mapping may be created.
+#
+foreach {t mmap_size nRead c2init} {
+  1.1 { PRAGMA mmap_size = 67108864 } /[49]/ {PRAGMA mmap_size = 0}
+  1.2 { PRAGMA mmap_size =    53248 } 150    {PRAGMA mmap_size = 0}
+  1.3 { PRAGMA mmap_size =        0 } 344    {PRAGMA mmap_size = 0}
+  1.4 { PRAGMA mmap_size = 67108864 } /[49]/ {PRAGMA mmap_size = 67108864 }
+  1.5 { PRAGMA mmap_size =    53248 } 150    {PRAGMA mmap_size = 67108864 }
+  1.6 { PRAGMA mmap_size =        0 } 344    {PRAGMA mmap_size = 67108864 }
+} {
+
+  do_multiclient_test tn {
+    sql1 {PRAGMA cache_size=2000}
+    sql2 {PRAGMA cache_size=2000}
+
+    sql1 {PRAGMA page_size=1024}
+    sql1 $mmap_size
+    sql2 $c2init
+
+    code2 [register_rblob_code db2 0]
+
+    sql2 {
+      PRAGMA page_size=1024;
+      PRAGMA auto_vacuum = 1;
+      CREATE TABLE t1(a, b, UNIQUE(a, b));
+      INSERT INTO t1 VALUES(rblob(500), rblob(500));
+      INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    2
+      INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    4
+      INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    8
+      INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --   16
+      INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --   32
+    }
+    do_test $t.$tn.1 {
+      sql1 "SELECT count(*) FROM t1; PRAGMA integrity_check ; PRAGMA page_count"
+    } {32 ok 77}
+
+    # Have connection 2 shrink the file. Check connection 1 can still read it.
+    sql2 { DELETE FROM t1 WHERE rowid%2; }
+    do_test $t.$tn.2 {
+      sql1 "SELECT count(*) FROM t1; PRAGMA integrity_check ; PRAGMA page_count"
+    } "16 ok [expr {42+[nonzero_reserved_bytes]}]"
+
+    # Have connection 2 grow the file. Check connection 1 can still read it.
+    sql2 { INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1 }
+    do_test $t.$tn.3 {
+      sql1 "SELECT count(*) FROM t1; PRAGMA integrity_check ; PRAGMA page_count"
+    } {32 ok 79}
+
+    # Have connection 2 grow the file again. Check connection 1 is still ok.
+    sql2 { INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1 }
+    do_test $t.$tn.4 {
+      sql1 "SELECT count(*) FROM t1; PRAGMA integrity_check ; PRAGMA page_count"
+    } {64 ok 149}
+
+    # Check that the number of pages read by connection 1 indicates that the
+    # "PRAGMA mmap_size" command worked.
+    if {[nonzero_reserved_bytes]==0} {
+      do_test $t.$tn.5 { nRead db } $nRead
+    }
+  }
+}
+
+set ::rcnt 0
+proc rblob {n} {
+  set ::rcnt [expr (($::rcnt << 3) + $::rcnt + 456) & 0xFFFFFFFF]
+  set str [format %.8x [expr $::rcnt ^ 0xbdf20da3]]
+  string range [string repeat $str [expr $n/4]] 1 $n
+}
+
+reset_db
+db func rblob rblob
+
+ifcapable wal {
+  do_execsql_test 2.1 {
+    PRAGMA auto_vacuum = 1;
+    PRAGMA mmap_size = 67108864;
+    PRAGMA journal_mode = wal;
+    CREATE TABLE t1(a, b, UNIQUE(a, b));
+    INSERT INTO t1 VALUES(rblob(500), rblob(500));
+    INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    2
+    INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    4
+    INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    8
+    INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --   16
+    INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --   32
+    PRAGMA wal_checkpoint;
+  } {67108864 wal 0 103 103}
+
+  do_execsql_test 2.2 {
+    PRAGMA auto_vacuum;
+    SELECT count(*) FROM t1;
+  } {1 32}
+
+  if {[permutation] != "inmemory_journal"} {
+    do_test 2.3 {
+      sqlite3 db2 test.db
+      db2 func rblob rblob
+      db2 eval {
+        DELETE FROM t1 WHERE (rowid%4);
+          PRAGMA wal_checkpoint;
+      }
+      db2 eval {
+        INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    16
+        SELECT count(*) FROM t1;
+      }
+    } {16}
+
+    do_execsql_test 2.4 {
+      PRAGMA wal_checkpoint;
+    } {0 24 24}
+    db2 close
+  }
+}
+
+reset_db
+execsql { PRAGMA mmap_size = 67108864; }
+db func rblob rblob
+do_execsql_test 3.1 {
+  PRAGMA auto_vacuum = 1;
+
+  CREATE TABLE t1(a, b, UNIQUE(a, b));
+  INSERT INTO t1 VALUES(rblob(500), rblob(500));
+  INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    2
+  INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    4
+  INSERT INTO t1 SELECT rblob(500), rblob(500) FROM t1; --    8
+
+  CREATE TABLE t2(a, b, UNIQUE(a, b));
+  INSERT INTO t2 SELECT * FROM t1;
+} {}
+
+do_test 3.2 {
+  set nRow 0
+  db eval {SELECT * FROM t2 ORDER BY a, b} {
+    if {$nRow==4} { db eval { DELETE FROM t1 } }
+    incr nRow
+  }
+  set nRow
+} {8}
+
+#-------------------------------------------------------------------------
+# Ensure that existing cursors using xFetch() pages see changes made
+# to rows using the incrblob API.
+#
+reset_db
+execsql { PRAGMA mmap_size = 67108864; }
+set aaa [string repeat a 400]
+set bbb [string repeat b 400]
+set ccc [string repeat c 400]
+set ddd [string repeat d 400]
+set eee [string repeat e 400]
+
+do_execsql_test 4.1 {
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES($aaa);
+  INSERT INTO t1 VALUES($bbb);
+  INSERT INTO t1 VALUES($ccc);
+  INSERT INTO t1 VALUES($ddd);
+  SELECT * FROM t1;
+  BEGIN;
+} [list $aaa $bbb $ccc $ddd]
+
+do_test 4.2 {
+  set ::STMT [sqlite3_prepare db "SELECT * FROM t1 ORDER BY rowid" -1 dummy]
+  sqlite3_step $::STMT
+  sqlite3_column_text $::STMT 0
+} $aaa
+
+do_test 4.3 {
+  foreach r {2 3 4} {
+    set fd [db incrblob t1 x $r]
+    puts -nonewline $fd $eee
+    close $fd
+  }
+
+  set res [list]
+  while {"SQLITE_ROW" == [sqlite3_step $::STMT]} {
+    lappend res [sqlite3_column_text $::STMT 0]
+  }
+  set res
+} [list $eee $eee $eee]
+
+do_test 4.4 {
+  sqlite3_finalize $::STMT
+} SQLITE_OK
+
+do_execsql_test 4.5 { COMMIT }
+
+#-------------------------------------------------------------------------
+# Ensure that existing cursors holding xFetch() references are not
+# confused if those pages are moved to make way for the root page of a
+# new table or index.
+#
+reset_db
+execsql { PRAGMA mmap_size = 67108864; }
+do_execsql_test 5.1 {
+  PRAGMA auto_vacuum = 2;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES($aaa);
+  INSERT INTO t1 VALUES($bbb);
+  INSERT INTO t1 VALUES($ccc);
+  INSERT INTO t1 VALUES($ddd);
+
+  PRAGMA auto_vacuum;
+  SELECT * FROM t1;
+} [list 2 $aaa $bbb $ccc $ddd]
+
+do_test 5.2 {
+  set ::STMT [sqlite3_prepare db "SELECT * FROM t1 ORDER BY rowid" -1 dummy]
+  sqlite3_step $::STMT
+  sqlite3_column_text $::STMT 0
+} $aaa
+
+do_execsql_test 5.3 {
+  CREATE TABLE t2(x);
+  INSERT INTO t2 VALUES('tricked you!');
+  INSERT INTO t2 VALUES('tricked you!');
+}
+
+do_test 5.4 {
+  sqlite3_step $::STMT
+  sqlite3_column_text $::STMT 0
+} $bbb
+
+do_test 5.5 {
+  sqlite3_finalize $::STMT
+} SQLITE_OK
+
+#
+# The "6.*" tests are designed to test the interaction of mmap with file
+# truncation (e.g. on Win32) via the VACUUM command.
+#
+forcedelete test2.db
+sqlite3 db2 test2.db
+do_test 6.0 {
+  db2 eval {
+    PRAGMA auto_vacuum = 0;
+    PRAGMA page_size = 4096;
+  }
+} {}
+do_test 6.1 {
+  db2 eval {
+    CREATE TABLE t1(x);
+    INSERT INTO t1(x) VALUES(randomblob(1000000));
+  }
+} {}
+do_test 6.2 {
+  db2 eval {
+    PRAGMA mmap_size = 1048576;
+  }
+} {1048576}
+do_test 6.3 {
+  expr {[file size test2.db] > 1000000}
+} {1}
+do_test 6.4 {
+  db2 eval {
+    DELETE FROM t1;
+  }
+} {}
+do_test 6.5 {
+  expr {[file size test2.db] > 1000000}
+} {1}
+do_test 6.6 {
+  db2 eval {
+    VACUUM;
+  }
+} {}
+do_test 6.7 {
+  expr {[file size test2.db] < 1000000}
+} {1}
+db2 close
+
+finish_test

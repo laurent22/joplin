@@ -1,0 +1,123 @@
+# 2010 November 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+
+set testprefix fts3offsets
+set sqlite_fts3_enable_parentheses 1
+
+proc extract {offsets text} {
+  set res ""
+
+  set off [list]
+  foreach {t i s n} $offsets {
+    lappend off [list $s $n]
+  }
+  set off [lsort -integer -index 0 $off]
+
+  set iOff 0
+  foreach e $off {
+    foreach {s n} $e {}
+    append res [string range $text $iOff $s-1]
+    append res "("
+    append res [string range $text $s [expr $s+$n-1]]
+    append res ")"
+    set iOff [expr $s+$n]
+  }
+  append res [string range $text $iOff end]
+  
+  set res
+}
+db func extract extract
+
+
+do_execsql_test 1.1.0 {
+  CREATE VIRTUAL TABLE xx USING fts3(x);
+  INSERT INTO xx VALUES('A x x x B C x x');
+  INSERT INTO xx VALUES('A B C x B x x C');
+  INSERT INTO xx VALUES('A x x B C x x x');
+}
+do_execsql_test 1.1.1 {
+  SELECT oid,extract(offsets(xx), x) FROM xx WHERE xx MATCH 'a OR (b NEAR/1 c)';
+} {
+  1 {(A) x x x (B) (C) x x} 
+  2 {(A) (B) (C) x (B) x x C} 
+  3 {(A) x x (B) (C) x x x}
+}
+
+do_execsql_test 1.2 {
+  DELETE FROM xx;
+  INSERT INTO xx VALUES('A x x x B C x x');
+  INSERT INTO xx VALUES('A x x C x x x C');
+  INSERT INTO xx VALUES('A x x B C x x x');
+}
+do_execsql_test 1.2.1 {
+  SELECT oid,extract(offsets(xx), x) FROM xx WHERE xx MATCH 'a OR (b NEAR/1 c)';
+} {
+  1 {(A) x x x (B) (C) x x}
+  2 {(A) x x C x x x C} 
+  3 {(A) x x (B) (C) x x x}
+}
+
+do_execsql_test 1.3 {
+  DELETE FROM xx;
+  INSERT INTO xx(rowid, x) VALUES(1, 'A B C');
+  INSERT INTO xx(rowid, x) VALUES(2, 'A x');
+  INSERT INTO xx(rowid, x) VALUES(3, 'A B C');
+  INSERT INTO xx(rowid, x) VALUES(4, 'A B C x x x x x x x B');
+  INSERT INTO xx(rowid, x) VALUES(5, 'A x x x x x x x x x C');
+  INSERT INTO xx(rowid, x) VALUES(6, 'A x x x x x x x x x x x B');
+  INSERT INTO xx(rowid, x) VALUES(7, 'A B C');
+}
+do_execsql_test 1.3.1 {
+  SELECT oid,extract(offsets(xx), x) FROM xx WHERE xx MATCH 'a OR (b NEAR/1 c)';
+} {
+  1 {(A) (B) (C)}
+  2 {(A) x}
+  3 {(A) (B) (C)}
+  4 {(A) (B) (C) x x x x x x x B}
+  5 {(A) x x x x x x x x x C}
+  6 {(A) x x x x x x x x x x x B} 
+  7 {(A) (B) (C)}
+}
+
+
+do_execsql_test 1.4 {
+  DELETE FROM xx;
+  INSERT INTO xx(rowid, x) VALUES(7, 'A B C');
+  INSERT INTO xx(rowid, x) VALUES(6, 'A x');
+  INSERT INTO xx(rowid, x) VALUES(5, 'A B C');
+  INSERT INTO xx(rowid, x) VALUES(4, 'A B C x x x x x x x B');
+  INSERT INTO xx(rowid, x) VALUES(3, 'A x x x x x x x x x C');
+  INSERT INTO xx(rowid, x) VALUES(2, 'A x x x x x x x x x x x B');
+  INSERT INTO xx(rowid, x) VALUES(1, 'A B C');
+}
+do_execsql_test 1.4.1 {
+  SELECT oid,extract(offsets(xx), x) FROM xx WHERE xx MATCH 'a OR (b NEAR/1 c)'
+  ORDER BY docid DESC;
+} {
+  7 {(A) (B) (C)}
+  6 {(A) x}
+  5 {(A) (B) (C)}
+  4 {(A) (B) (C) x x x x x x x B}
+  3 {(A) x x x x x x x x x C}
+  2 {(A) x x x x x x x x x x x B} 
+  1 {(A) (B) (C)}
+}
+
+
+set sqlite_fts3_enable_parentheses 0
+finish_test

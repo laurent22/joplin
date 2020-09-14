@@ -1,0 +1,105 @@
+# 2017 March 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbucrash2
+
+db close
+forcedelete test.db-oal rbu.db
+sqlite3_shutdown
+sqlite3_config_uri 1
+reset_db
+
+# Set up a target database and an rbu update database. The target
+# db is the usual "test.db", the rbu db is "test.db2".
+#
+forcedelete test.db2
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a), UNIQUE(b));
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+
+  ATTACH 'test.db2' AS rbu;
+  CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+  INSERT INTO data_t1 VALUES('one', randomblob(3500), NULL, 0);
+  INSERT INTO data_t1 VALUES('two', randomblob(3500), NULL, 0);
+  INSERT INTO data_t1 VALUES('three', randomblob(3500), NULL, 0);
+  INSERT INTO data_t1 VALUES('four', randomblob(3500), NULL, 0);
+  INSERT INTO data_t1 VALUES('five', randomblob(3500), NULL, 0);
+  INSERT INTO data_t1 VALUES('six', randomblob(3500), NULL, 0);
+}
+db_save_and_close
+
+proc do_rbu_crash_test2 {tn script} {
+
+  foreach {f blksz} {
+    test.db   512
+    test.db2  512
+    test.db   4096
+    test.db2  4096
+  } {
+    set bDone 0
+    for {set iDelay 1} {$bDone==0} {incr iDelay} {
+      forcedelete test.db2 test.db2-journal test.db test.db-oal test.db-wal
+      db_restore
+  
+      set res [
+        crashsql -file $f -delay $iDelay -tclbody $script -dflt 1 -opendb {} \
+            -blocksize $blksz {}
+      ]
+  
+      set bDone 1
+      if {$res == "1 {child process exited abnormally}"} {
+        set bDone 0
+      } elseif {$res != "0 {}"} {
+        error "unexected catchsql result: $res"
+      }
+  
+      sqlite3rbu rbu test.db test.db2
+      while {[rbu step]=="SQLITE_OK"} {}
+      rbu close
+  
+      sqlite3 db test.db
+      do_execsql_test $tn.delay=$iDelay.f=$f.blksz=$blksz {
+        PRAGMA integrity_check;
+      } {ok}
+      db close
+    }
+  }
+}
+
+for {set x 1} {$x < 10} {incr x} {
+  do_rbu_crash_test2 1.$x {
+    sqlite3rbu rbu test.db test.db2
+    while {[rbu step]=="SQLITE_OK"} {
+      rbu savestate
+    }
+    rbu close
+  }
+}
+
+for {set x 1} {$x < 2} {incr x} {
+  do_rbu_crash_test2 2.$x {
+    sqlite3rbu rbu test.db test.db2
+    while {[rbu step]=="SQLITE_OK"} {
+      rbu close
+      sqlite3rbu rbu test.db test.db2
+    }
+    rbu close
+  }
+}
+
+finish_test

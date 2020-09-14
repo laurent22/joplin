@@ -1,0 +1,196 @@
+# 2008 June 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is database locks.
+#
+# $Id: lock5.test,v 1.6 2008/12/04 12:34:16 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# This file is only run if using the unix backend compiled with the
+# SQLITE_ENABLE_LOCKING_STYLE macro.
+db close
+if {[catch {sqlite3 db test.db -vfs unix-none} msg]} {
+  finish_test
+  return
+}
+db close
+forcedelete test.db.lock
+
+ifcapable lock_proxy_pragmas {
+  set ::using_proxy 0
+  foreach {name value} [array get env SQLITE_FORCE_PROXY_LOCKING] {
+    set ::using_proxy $value
+  }
+  # Disable the proxy locking for these tests
+  set env(SQLITE_FORCE_PROXY_LOCKING) "0"
+}
+
+
+do_test lock5-dotfile.1 {
+  sqlite3 db test.db -vfs unix-dotfile
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b);
+  }
+} {}
+
+do_test lock5-dotfile.2 {
+  file exists test.db.lock
+} {1}
+
+do_test lock5-dotfile.3 {
+  execsql COMMIT
+  file exists test.db.lock
+} {0}
+
+do_test lock5-dotfile.4 {
+  sqlite3 db2 test.db -vfs unix-dotfile
+  execsql {
+    INSERT INTO t1 VALUES('a', 'b');
+    SELECT * FROM t1;
+  } db2
+} {a b}
+
+do_test lock5-dotfile.5 {
+  execsql {
+    BEGIN;
+    SELECT * FROM t1;
+  } db2
+} {a b}
+
+do_test lock5-dotfile.6 {
+  file exists test.db.lock
+} {1}
+
+do_test lock5-dotfile.7 {
+  catchsql { SELECT * FROM t1; }
+} {1 {database is locked}}
+
+do_test lock5-dotfile.8 {
+  execsql {
+    SELECT * FROM t1;
+    ROLLBACK;
+  } db2
+} {a b}
+
+do_test lock5-dotfile.9 {
+  catchsql { SELECT * FROM t1; }
+} {0 {a b}}
+
+do_test lock5-dotfile.10 {
+  file exists test.db.lock
+} {0}
+
+do_test lock5-dotfile.X {
+  db2 close
+  execsql {BEGIN EXCLUSIVE}
+  db close
+  file exists test.db.lock
+} {0}
+
+#####################################################################
+
+forcedelete test.db
+if {[catch {sqlite3 db test.db -vfs unix-flock} msg]} {
+  finish_test
+  return
+}
+
+do_test lock5-flock.1 {
+  sqlite3 db test.db -vfs unix-flock
+  execsql {
+    CREATE TABLE t1(a, b);
+    BEGIN;
+    INSERT INTO t1 VALUES(1, 2);
+  }
+} {}
+
+# Make sure we are not accidentally using the dotfile locking scheme.
+do_test lock5-flock.2 {
+  file exists test.db.lock
+} {0}
+
+do_test lock5-flock.3 {
+  catch { sqlite3 db2 test.db -vfs unix-flock }
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database is locked}}
+
+do_test lock5-flock.4 {
+  execsql COMMIT
+  catchsql { SELECT * FROM t1 } db2
+} {0 {1 2}}
+
+do_test lock5-flock.5 {
+  execsql BEGIN
+  catchsql { SELECT * FROM t1 } db2
+} {0 {1 2}}
+
+do_test lock5-flock.6 {
+  execsql {SELECT * FROM t1}
+  catchsql { SELECT * FROM t1 } db2
+} {1 {database is locked}}
+
+do_test lock5-flock.7 {
+  db close
+  catchsql { SELECT * FROM t1 } db2
+} {0 {1 2}}
+
+do_test lock5-flock.8 {
+  db2 close
+} {}
+
+#####################################################################
+
+do_test lock5-none.1 {
+  sqlite3 db test.db -vfs unix-none
+  sqlite3 db2 test.db -vfs unix-none
+  execsql { PRAGMA mmap_size = 0 } db2
+  execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(3, 4);
+  }
+} {}
+do_test lock5-none.2 {
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test lock5-none.3 {
+  execsql { SELECT * FROM t1; } db2
+} {1 2}
+do_test lock5-none.4 {
+  execsql { 
+    BEGIN;
+    SELECT * FROM t1;
+  } db2
+} {1 2}
+do_test lock5-none.5 {
+  execsql COMMIT
+  execsql {SELECT * FROM t1} db2
+} {1 2}
+
+ifcapable memorymanage {
+  do_test lock5-none.6 {
+    sqlite3_release_memory 1000000
+    execsql {SELECT * FROM t1} db2
+  } {1 2 3 4}
+}
+
+do_test lock5-none.X {
+  db close
+  db2 close
+} {}
+
+ifcapable lock_proxy_pragmas {
+  set env(SQLITE_FORCE_PROXY_LOCKING) $::using_proxy
+}
+
+finish_test

@@ -1,0 +1,99 @@
+# 2014 September 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5multi
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+fts5_aux_test_functions db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, c);
+  INSERT INTO t1 VALUES('gg bb bb'   ,'gg ff gg'   ,'ii ii');
+  INSERT INTO t1 VALUES('dd dd hh kk','jj'         ,'aa');
+  INSERT INTO t1 VALUES('kk gg ee'   ,'hh cc'      ,'hh jj aa cc');
+  INSERT INTO t1 VALUES('hh'         ,'bb jj cc'   ,'kk ii');
+  INSERT INTO t1 VALUES('kk dd kk ii','aa ee aa'   ,'ee');
+  INSERT INTO t1 VALUES('ee'         ,'ff gg kk aa','ee ff ee');
+  INSERT INTO t1 VALUES('ff jj'      ,'gg ee'      ,'kk ee gg kk');
+  INSERT INTO t1 VALUES('ff ee dd hh','kk ee'      ,'gg dd');
+  INSERT INTO t1 VALUES('bb'         ,'aa'         ,'bb aa');
+  INSERT INTO t1 VALUES('hh cc bb'   ,'ff bb'      ,'cc');
+  INSERT INTO t1 VALUES('jj'         ,'ff dd bb aa','dd dd ff ff');
+  INSERT INTO t1 VALUES('ff dd gg dd','gg aa bb ff','cc');
+  INSERT INTO t1 VALUES('ff aa cc jj','kk'         ,'ii dd');
+  INSERT INTO t1 VALUES('jj dd'      ,'cc'         ,'ii hh ee aa');
+  INSERT INTO t1 VALUES('ff ii hh'   ,'dd'         ,'gg');
+  INSERT INTO t1 VALUES('ff dd gg hh','hh'         ,'ff dd');
+  INSERT INTO t1 VALUES('cc cc'      ,'ff dd ff'   ,'bb');
+  INSERT INTO t1 VALUES('ii'         ,'bb ii'      ,'jj kk');
+  INSERT INTO t1 VALUES('ff hh'      ,'hh bb'      ,'bb dd ee');
+  INSERT INTO t1 VALUES('jj kk'      ,'jj'         ,'gg ff cc');
+  INSERT INTO t1 VALUES('dd kk'      ,'ii gg'      ,'dd');
+  INSERT INTO t1 VALUES('cc'         ,'aa ff'      ,'ii');
+  INSERT INTO t1 VALUES('bb ff bb ii','bb kk bb aa','hh ff ii dd');
+  INSERT INTO t1 VALUES('aa'         ,'ee bb jj jj','dd');
+  INSERT INTO t1 VALUES('kk dd cc'   ,'aa jj'      ,'ee aa ff');
+  INSERT INTO t1 VALUES('aa gg aa'   ,'jj'         ,'ii kk hh gg');
+  INSERT INTO t1 VALUES('ff hh aa'   ,'jj ii'      ,'hh dd bb jj');
+  INSERT INTO t1 VALUES('hh'         ,'aa gg kk'   ,'bb ee');
+  INSERT INTO t1 VALUES('bb'         ,'ee'         ,'gg');
+  INSERT INTO t1 VALUES('dd kk'      ,'kk bb aa'   ,'ee');
+}
+
+foreach {tn c1 e1 c2 e2} {
+  1     t1 aa     t1 bb
+  2     a  aa     b  bb
+  3     a  "aa OR bb OR cc"    b  "jj OR ii OR hh"
+  4     t1  "aa AND bb"       t1  "cc"
+  5     c   "kk"               b  "aa OR bb OR cc OR dd OR ee"
+} {
+  if {$c1=="t1"} {
+    set lhs "( $e1 )"
+  } else {
+    set lhs "$c1 : ( $e1 )"
+  }
+  if {$c2=="t1"} {
+    set rhs "( $e2 )"
+  } else {
+    set rhs "$c2 : ( $e2 )"
+  }
+
+  set q1 "t1 MATCH '($lhs) AND ($rhs)'"
+  set q2 "$c1 MATCH '$e1' AND $c2 MATCH '$e2'"
+
+  set ret [execsql "SELECT rowid FROM t1 WHERE $q1"]
+  set N [llength $ret]
+  do_execsql_test 1.$tn.1.($N) "SELECT rowid FROM t1 WHERE $q2" $ret
+
+  set ret [execsql "SELECT fts5_test_poslist(t1) FROM t1 WHERE $q1"]
+  do_execsql_test 1.$tn.2.($N) "
+    SELECT fts5_test_poslist(t1) FROM t1 WHERE $q2
+  " $ret
+}
+
+do_catchsql_test 2.1.1 {
+  SELECT rowid FROM t1 WHERE t1 MATCH '(NOT' AND t1 MATCH 'aa bb';
+} {1 {fts5: syntax error near "NOT"}}
+do_catchsql_test 2.1.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'aa bb' AND t1 MATCH '(NOT';
+} {1 {fts5: syntax error near "NOT"}}
+
+finish_test
+

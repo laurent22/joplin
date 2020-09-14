@@ -1,0 +1,311 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on the auxiliary function APIs.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5aux
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc inst {cmd i} { 
+  $cmd xInst $i
+}
+sqlite3_fts5_create_function db inst inst
+
+proc colsize {cmd i} { 
+  $cmd xColumnSize $i
+}
+sqlite3_fts5_create_function db colsize colsize
+
+proc totalsize {cmd i} { 
+  $cmd xColumnTotalSize $i
+}
+sqlite3_fts5_create_function db totalsize totalsize
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a, b);
+  INSERT INTO f1 VALUES('one two', 'two one zero');
+  INSERT INTO f1 VALUES('one one', 'one one one');
+}
+
+do_catchsql_test 1.1 {
+  SELECT inst(f1, -1) FROM f1 WHERE f1 MATCH 'two';
+} {1 SQLITE_RANGE}
+do_catchsql_test 1.2 {
+  SELECT inst(f1, 0) FROM f1 WHERE f1 MATCH 'two';
+} {0 {{0 0 1}}}
+do_catchsql_test 1.3 {
+  SELECT inst(f1, 1) FROM f1 WHERE f1 MATCH 'two';
+} {0 {{0 1 0}}}
+do_catchsql_test 1.4 {
+  SELECT inst(f1, 2) FROM f1 WHERE f1 MATCH 'two';
+} {1 SQLITE_RANGE}
+
+do_catchsql_test 2.1 {
+  SELECT colsize(f1, 2) FROM f1 WHERE f1 MATCH 'two';
+} {1 SQLITE_RANGE}
+do_execsql_test 2.2 {
+  SELECT colsize(f1, 0), colsize(f1, 1) FROM f1 WHERE f1 MATCH 'zero';
+} {2 3}
+do_execsql_test 2.3 {
+  SELECT colsize(f1, -1) FROM f1 WHERE f1 MATCH 'zero';
+} {5}
+
+do_execsql_test 2.4.1 {
+  SELECT totalsize(f1, -1) FROM f1 WHERE f1 MATCH 'zero';
+} {10}
+do_execsql_test 2.4.2 {
+  SELECT totalsize(f1, 0) FROM f1 WHERE f1 MATCH 'zero';
+} {4}
+do_execsql_test 2.4.3 {
+  SELECT totalsize(f1, 1) FROM f1 WHERE f1 MATCH 'zero';
+} {6}
+do_catchsql_test 2.4.4 {
+  SELECT totalsize(f1, 2) FROM f1 WHERE f1 MATCH 'zero';
+} {1 SQLITE_RANGE}
+
+#-------------------------------------------------------------------------
+# Test the xSet and xGetAuxdata APIs with a NULL destructor.
+#
+proc prevrowid {add cmd} {
+  set res [$cmd xGetAuxdataInt 0]
+  set r [$cmd xRowid]
+  $cmd xSetAuxdataInt $r
+  return [expr $res + $add]
+}
+sqlite3_fts5_create_function db prevrowid  [list prevrowid 0]
+sqlite3_fts5_create_function db prevrowid1 [list prevrowid 1]
+
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE e5 USING fts5(x);
+  INSERT INTO e5 VALUES('a b c');
+  INSERT INTO e5 VALUES('d e f');
+  INSERT INTO e5 VALUES('a b c');
+  INSERT INTO e5 VALUES('d e f');
+  INSERT INTO e5 VALUES('a b c');
+}
+
+do_execsql_test 3.1 {
+  SELECT prevrowid(e5) || '+' || rowid FROM e5 WHERE e5 MATCH 'c'
+} {0+1   1+3   3+5}
+
+do_execsql_test 3.2 {
+  SELECT prevrowid(e5) || '+' || prevrowid1(e5) || '+' || rowid 
+  FROM e5 WHERE e5 MATCH 'e'
+} {0+1+2    2+3+4}
+
+#-------------------------------------------------------------------------
+# Test that if the xQueryPhrase callback returns other than SQLITE_OK,
+# the query is abandoned. And that if it returns an error code other than 
+# SQLITE_DONE, the error is propagated back to the caller.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE e7 USING fts5(x);
+  INSERT INTO e7 VALUES('a x a');
+  INSERT INTO e7 VALUES('b x b');
+  INSERT INTO e7 VALUES('c x c');
+  INSERT INTO e7 VALUES('d x d');
+  INSERT INTO e7 VALUES('e x e');
+}
+
+proc xCallback {rowid code cmd} {
+  set r [$cmd xRowid]
+  lappend ::cb $r
+  if {$r==$rowid} { return $code }
+  return ""
+}
+
+proc phrasequery {cmd code} {
+  set ::cb [list]
+  $cmd xQueryPhrase 1 [list xCallback [$cmd xRowid] $code]
+  set ::cb
+}
+
+sqlite3_fts5_create_function db phrasequery phrasequery
+
+do_execsql_test 4.1 {
+  SELECT phrasequery(e7, 'SQLITE_OK') FROM e7 WHERE e7 MATCH 'c x'
+} {{1 2 3 4 5}}
+
+do_execsql_test 4.2 {
+  SELECT phrasequery(e7, 'SQLITE_DONE') FROM e7 WHERE e7 MATCH 'c x'
+} {{1 2 3}}
+
+do_catchsql_test 4.3 {
+  SELECT phrasequery(e7, 'SQLITE_ERROR') FROM e7 WHERE e7 MATCH 'c x'
+} {1 SQLITE_ERROR}
+
+#-------------------------------------------------------------------------
+# Auxiliary function calls with many cursors in the global cursor list.
+#
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE e9 USING fts5(y);
+  INSERT INTO e9(rowid, y) VALUES(1, 'i iii');
+  INSERT INTO e9(rowid, y) VALUES(2, 'ii iv');
+  INSERT INTO e9(rowid, y) VALUES(3, 'ii');
+  INSERT INTO e9(rowid, y) VALUES(4, 'i iv');
+  INSERT INTO e9(rowid, y) VALUES(5, 'iii');
+}
+
+proc my_rowid {cmd} { $cmd xRowid }
+sqlite3_fts5_create_function db my_rowid my_rowid
+
+foreach {var q} {
+  s1 i
+  s2 ii
+  s3 iii
+  s4 iv
+} {
+  set sql "SELECT my_rowid(e9) FROM e9 WHERE e9 MATCH '$q'"
+  set $var [sqlite3_prepare db $sql -1 dummy]
+}
+
+do_test 5.1.1 { sqlite3_step $s1 ; sqlite3_column_int $s1 0 } 1
+do_test 5.1.2 { sqlite3_step $s2 ; sqlite3_column_int $s2 0 } 2
+do_test 5.1.3 { sqlite3_step $s3 ; sqlite3_column_int $s3 0 } 1
+do_test 5.1.4 { sqlite3_step $s4 ; sqlite3_column_int $s4 0 } 2
+
+do_test 5.2.1 { sqlite3_step $s1 ; sqlite3_column_int $s1 0 } 4
+do_test 5.2.2 { sqlite3_step $s2 ; sqlite3_column_int $s2 0 } 3
+do_test 5.2.3 { sqlite3_step $s3 ; sqlite3_column_int $s3 0 } 5
+do_test 5.2.4 { sqlite3_step $s4 ; sqlite3_column_int $s4 0 } 4
+
+sqlite3_finalize $s1
+sqlite3_finalize $s2
+sqlite3_finalize $s3
+sqlite3_finalize $s4
+
+#-------------------------------------------------------------------------
+# Passing an invalid first argument to an auxiliary function is detected.
+#
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE e11 USING fts5(y, z);
+  INSERT INTO e11(rowid, y, z) VALUES(1, 'a b', 45);
+  INSERT INTO e11(rowid, y, z) VALUES(2, 'b c', 46);
+}
+
+do_catchsql_test 6.1 {
+  SELECT my_rowid(z) FROM e11 WHERE e11 MATCH 'b'
+} {1 {no such cursor: 45}}
+
+do_catchsql_test 6.2 {
+  SELECT my_rowid(y) FROM e11 WHERE e11 MATCH 'b'
+} {1 {no such cursor: 0}}
+
+#-------------------------------------------------------------------------
+# Test passing an out-of-range phrase number to xPhraseSize (should 
+# return 0).
+#
+proc my_phrasesize {cmd iPhrase} { $cmd xPhraseSize $iPhrase }
+sqlite3_fts5_create_function db my_phrasesize my_phrasesize
+
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a);
+  INSERT INTO t1 VALUES('a b c');
+}
+do_execsql_test 7.2 {
+  SELECT 
+    my_phrasesize(t1, -1),
+    my_phrasesize(t1, 0),
+    my_phrasesize(t1, 1),
+    my_phrasesize(t1, 2)
+  FROM t1 WHERE t1 MATCH 'a OR b+c'
+} {0 1 2 0}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a);
+}
+
+foreach {tn lRow res} {
+  4  {"a a a" "b" "a d"} {"[a] [a] [a]" "[a] d"}
+  1  {"b d" "a b"}       {"[b] [d]" "[a] b"}
+  2  {"d b" "a d"}       {"[d] [b]" "[a] d"}
+  3  {"a a d"}           {"[a] [a] d"}
+} {
+  execsql { DELETE FROM x1 }
+  foreach row $lRow { execsql { INSERT INTO x1 VALUES($row) } }
+  do_execsql_test 8.$tn {
+    SELECT highlight(x1, 0, '[', ']') FROM x1 WHERE x1 MATCH 'a OR (b AND d)';
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Test the built-in bm25() demo.
+#
+reset_db
+do_execsql_test 9.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b);
+  INSERT INTO t1 VALUES('a',   NULL);           -- 1
+  INSERT INTO t1 VALUES('a',   NULL);           -- 2
+  INSERT INTO t1 VALUES('a',   NULL);           -- 3
+  INSERT INTO t1 VALUES('a',   NULL);           -- 4
+  INSERT INTO t1 VALUES('a',   NULL);           -- 5
+  INSERT INTO t1 VALUES('a',   NULL);           -- 6
+  INSERT INTO t1 VALUES('a',   NULL);           -- 7
+  INSERT INTO t1 VALUES('a',   NULL);           -- 8
+  INSERT INTO t1 VALUES(NULL,  'a a b');        -- 9
+  INSERT INTO t1 VALUES(NULL,  'b b a');        -- 10
+}
+
+do_execsql_test 9.2 {
+  SELECT rowid FROM t1('a AND b') ORDER BY rank;
+} {
+  10 9
+}
+
+do_execsql_test 9.3 {
+  SELECT rowid FROM t1('b:a AND b:b') ORDER BY rank;
+} {
+  9 10
+}
+
+#-------------------------------------------------------------------------
+# Test that aux. functions may not be used in aggregate queries.
+#
+reset_db
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, z);
+  INSERT INTO t1 VALUES('a', 'one two', 1);
+  INSERT INTO t1 VALUES('b', 'two three', 2);
+  INSERT INTO t1 VALUES('c', 'three four', 1);
+  INSERT INTO t1 VALUES('d', 'four five', 2);
+  INSERT INTO t1 VALUES('e', 'five six', 1);
+  INSERT INTO t1 VALUES('f', 'six seven', 2);
+}
+
+proc firstcol {cmd} { $cmd xColumnText 0 }
+sqlite3_fts5_create_function db firstcol firstcol
+
+do_execsql_test 10.1.1 {
+  SELECT firstcol(t1) FROM t1
+} {a b c d e f}
+do_execsql_test 10.1.2 {
+  SELECT group_concat(x, '.') FROM t1
+} {a.b.c.d.e.f}
+
+do_catchsql_test 10.1.3 {
+  SELECT group_concat(firstcol(t1), '.') FROM t1
+} {1 {unable to use function firstcol in the requested context}}
+
+do_catchsql_test 10.1.4 {
+  SELECT group_concat(firstcol(t1), '.') FROM t1 GROUP BY rowid
+} {1 {unable to use function firstcol in the requested context}}
+
+finish_test
+

@@ -1,0 +1,230 @@
+# 2013 June 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the notindexed=xxx FTS4 option.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix fts4noti
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------------
+# Test that typos in "notindexed=" column names are detected.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE cc(a, b, c);
+}
+foreach {tn arg res} {
+  1 "(b, c, notindexed=a)"                  {1 {no such column: a}}
+  2 "(a, b, notindexed=a)"                                   {0 {}}
+  3 "(a, b, notindexed=a, notindexed=a)"                     {0 {}}
+  4 "(notindexed=a, a, b)"                                   {0 {}}
+  5 "(notindexed=a, notindexed=b, notindexed=c, a, b, c, d)" {0 {}}
+  6 "(notindexed=a, notindexed=B, notindexed=c, a, b, c, d)" {0 {}}
+  7 "(notindexed=a, notindexed=b, notindexed=c, a, B, c, d)" {0 {}}
+  8 "(notindexed=d, content=cc)" {1 {no such column: d}}
+  9 "(notindexed=a, content=cc)" {0 {}}
+  10 "(notindexed=a, notindexed=b, a)" {1 {no such column: b}}
+  11 "(notindexed=a, notindexed=b, b)" {1 {no such column: a}}
+} {
+  do_catchsql_test 1.$tn "CREATE VIRTUAL TABLE t1 USING fts4 $arg" $res
+  if {[lindex $res 0]==0} { execsql "DROP TABLE t1" }
+}
+
+do_execsql_test 1.x { SELECT name FROM sqlite_master } {cc}
+
+
+#-------------------------------------------------------------------------
+# Test that notindexed columns are not indexed.
+#
+foreach {tn schema} {
+  1 { 
+    CREATE VIRTUAL TABLE t1 USING fts4(a, b, c, notindexed=b); 
+  }
+  2 { 
+    CREATE TABLE c1(a, b, c);
+    INSERT INTO c1 VALUES('one two', 'three four', 'five six');
+    INSERT INTO c1 VALUES('three four', 'five six', 'one two');
+    CREATE VIRTUAL TABLE t1 USING fts4(content=c1, notindexed=b); 
+  }
+  3 { 
+    CREATE VIRTUAL TABLE t1 USING fts4(content="", a, b, c, notindexed=b); 
+  }
+} {
+  execsql $schema
+
+  do_execsql_test 2.$tn.1 {
+    INSERT INTO t1(docid,a,b,c) VALUES(1, 'one two', 'three four', 'five six');
+    INSERT INTO t1(docid,a,b,c) VALUES(2, 'three four', 'five six', 'one two');
+  }
+
+  do_execsql_test 2.$tn.2 { SELECT docid FROM t1 WHERE t1 MATCH 'one' } {1 2}
+  do_execsql_test 2.$tn.3 { SELECT docid FROM t1 WHERE t1 MATCH 'three' } {2}
+  do_execsql_test 2.$tn.4 { SELECT docid FROM t1 WHERE t1 MATCH 'five' } {1}
+
+  do_execsql_test 2.$tn.5 { INSERT INTO t1(t1) VALUES('optimize') }
+
+  do_execsql_test 2.$tn.6 { SELECT docid FROM t1 WHERE t1 MATCH 'one' } {1 2}
+  do_execsql_test 2.$tn.7 { SELECT docid FROM t1 WHERE t1 MATCH 'three' } {2}
+  do_execsql_test 2.$tn.8 { SELECT docid FROM t1 WHERE t1 MATCH 'five' } {1}
+
+  if {$tn!=3} {
+    do_execsql_test 2.$tn.9 { INSERT INTO t1(t1) VALUES('rebuild') }
+  
+    do_execsql_test 2.$tn.10 { SELECT docid FROM t1 WHERE t1 MATCH 'one' } {1 2}
+    do_execsql_test 2.$tn.11 { SELECT docid FROM t1 WHERE t1 MATCH 'three' } {2}
+    do_execsql_test 2.$tn.12 { SELECT docid FROM t1 WHERE t1 MATCH 'five' } {1}
+  
+    do_execsql_test 2.$tn.13 { 
+      SELECT a,b,c FROM t1 WHERE docid=1
+    } {{one two} {three four} {five six}}
+    do_execsql_test 2.$tn.14 { 
+      SELECT a,b,c FROM t1 WHERE docid=2
+    } {{three four} {five six} {one two}}
+  }
+
+  do_execsql_test 2.x { DROP TABLE t1 }
+}
+
+#-------------------------------------------------------------------------
+# Test that notindexed columns are not scanned for deferred tokens.
+#
+
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4(x, y, notindexed=x);
+}
+do_test 3.2 {
+  set v [string repeat " 1" 50000]
+  set v1 "x $v"
+  set v2 "y $v"
+  execsql { 
+    INSERT INTO t2 VALUES(1, 'x y z');
+    INSERT INTO t2 VALUES(2, $v1);
+    INSERT INTO t2 VALUES(3, $v2);
+    INSERT INTO t2 VALUES(4, $v2);
+    INSERT INTO t2 VALUES(5, $v2);
+    INSERT INTO t2 VALUES(6, $v2);
+  }
+} {}
+
+do_execsql_test 3.3 { SELECT x FROM t2 WHERE t2 MATCH '2' } {}
+do_execsql_test 3.4 { SELECT x FROM t2 WHERE t2 MATCH '1' } {2 3 4 5 6}
+do_execsql_test 3.5 { SELECT x FROM t2 WHERE t2 MATCH 'x' } {1 2}
+do_execsql_test 3.6 { SELECT x FROM t2 WHERE t2 MATCH 'x 1' } {2}
+
+do_execsql_test 3.x { DROP TABLE t2 }
+  
+#-------------------------------------------------------------------------
+# Test that the types of notindexed columns are not modified.
+#
+do_execsql_test 4.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4(poi, addr, notindexed=poi);
+  INSERT INTO t2 VALUES(114, 'x x x');
+  INSERT INTO t2 VALUES(X'1234', 'y y y');
+  INSERT INTO t2 VALUES(NULL, 'z z z');
+  INSERT INTO t2 VALUES(113.2, 'w w w');
+  INSERT INTO t2 VALUES('poi', 'v v v');
+}
+do_execsql_test 4.2 { SELECT typeof(poi) FROM t2 WHERE t2 MATCH 'x' } {integer}
+do_execsql_test 4.3 { SELECT typeof(poi) FROM t2 WHERE t2 MATCH 'y' } {blob}
+do_execsql_test 4.4 { SELECT typeof(poi) FROM t2 WHERE t2 MATCH 'z' } {null}
+do_execsql_test 4.5 { SELECT typeof(poi) FROM t2 WHERE t2 MATCH 'w' } {real}
+do_execsql_test 4.6 { SELECT typeof(poi) FROM t2 WHERE t2 MATCH 'v' } {text}
+
+do_execsql_test 4.x { DROP TABLE t2 }
+
+#-------------------------------------------------------------------------
+# Test that multiple notindexed options on a single table work as expected.
+#
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4(
+      notindexed="three", one, two, three, notindexed="one",
+  );
+  INSERT INTO t2 VALUES('a', 'b', 'c');
+  INSERT INTO t2 VALUES('c', 'a', 'b');
+  INSERT INTO t2 VALUES('b', 'c', 'a');
+}
+do_execsql_test 5.2 { SELECT docid FROM t2 WHERE t2 MATCH 'a' } {2}
+do_execsql_test 5.3 { SELECT docid FROM t2 WHERE t2 MATCH 'b' } {1}
+do_execsql_test 5.4 { SELECT docid FROM t2 WHERE t2 MATCH 'c' } {3}
+
+do_execsql_test 5.x { DROP TABLE t2 }
+
+#-------------------------------------------------------------------------
+# Check that if an indexed column name is a prefix of a notindexed column
+# name, the column is still correctly tokenized. This was a problem at one
+# point.
+do_execsql_test 6.1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts4(
+    poiCategory, poiCategoryId, notindexed=poiCategoryId
+  );
+  INSERT INTO t1(poiCategory, poiCategoryId) values ("Restaurant", 6021);
+}
+
+do_execsql_test 6.1.2 {
+  SELECT * FROM t1 WHERE t1 MATCH 'restaurant';
+} { Restaurant 6021 }
+do_execsql_test 6.1.3 {
+  SELECT * FROM t1 WHERE t1 MATCH 're*';
+} { Restaurant 6021 }
+do_execsql_test 6.1.4 {
+  SELECT * FROM t1 WHERE t1 MATCH '6021';
+} {}
+do_execsql_test 6.1.5 {
+  SELECT * FROM t1 WHERE t1 MATCH '60*';
+} {}
+
+do_execsql_test 6.2.1 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING fts4(
+    poiCategory, poiCategoryId, notindexed=poiCategory
+  );
+  INSERT INTO t1(poiCategory, poiCategoryId) values ("Restaurant", 6021);
+}
+
+do_execsql_test 6.2.2 {
+  SELECT * FROM t1 WHERE t1 MATCH 'restaurant';
+} {}
+do_execsql_test 6.2.3 {
+  SELECT * FROM t1 WHERE t1 MATCH 're*';
+} {}
+do_execsql_test 6.2.4 {
+  SELECT * FROM t1 WHERE t1 MATCH '6021';
+} { Restaurant 6021 }
+do_execsql_test 6.2.5 {
+  SELECT * FROM t1 WHERE t1 MATCH '60*';
+} { Restaurant 6021 }
+
+do_execsql_test 6.3.1 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING fts4(abc, ab, a, notindexed=abc);
+  CREATE VIRTUAL TABLE t2 USING fts4(a, ab, abc, notindexed=abc);
+
+  INSERT INTO t1 VALUES('no', 'yes', 'yep');
+  INSERT INTO t2 VALUES('yep', 'yes', 'no');
+
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'no';
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'yes';
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'yep';
+
+  SELECT count(*) FROM t2 WHERE t2 MATCH 'no';
+  SELECT count(*) FROM t2 WHERE t2 MATCH 'yes';
+  SELECT count(*) FROM t2 WHERE t2 MATCH 'yep';
+} {0 1 1 0 1 1}
+
+finish_test

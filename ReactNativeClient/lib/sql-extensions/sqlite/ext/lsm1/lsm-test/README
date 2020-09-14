@@ -1,0 +1,40 @@
+
+
+Organization of test case files:
+
+  lsmtest1.c: Data tests. Tests that perform many inserts and deletes on a 
+              database file, then verify that the contents of the database can
+              be queried.
+
+  lsmtest2.c: Crash tests. Tests that attempt to verify that the database 
+              recovers correctly following an application or system crash.
+
+  lsmtest3.c: Rollback tests. Tests that focus on the explicit rollback of
+              transactions and sub-transactions.
+
+  lsmtest4.c: Multi-client tests.
+
+  lsmtest5.c: Multi-client tests with a different thread for each client.
+
+  lsmtest6.c: OOM injection tests.
+
+  lsmtest7.c: API tests.
+
+  lsmtest8.c: Writer crash tests. Tests in this file attempt to verify that
+              the system recovers and other clients proceed unaffected if
+              a process fails in the middle of a write transaction.
+
+              The difference from lsmtest2.c is that this file tests
+              live-recovery (recovery from a failure that occurs while other
+              clients are still running) whereas lsmtest2.c tests recovery
+              from a system or power failure.
+
+  lsmtest9.c: More data tests. These focus on testing that calling
+              lsm_work(nMerge=1) to compact the database does not corrupt it.
+              In other words, that databases containing block-redirects
+              can be read and written.
+
+
+
+
+

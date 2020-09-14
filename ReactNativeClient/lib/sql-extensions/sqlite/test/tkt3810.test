@@ -1,0 +1,87 @@
+# 2009 August 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests to make sure #3810 is fixed.
+#
+# $Id: tkt3810.test,v 1.4 2009/08/06 17:43:31 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable {!trigger} {
+  finish_test
+  return
+}
+
+# Create a table using the first database connection.
+#
+do_test tkt3810-1.1 {
+  execsql {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(123);
+    SELECT * FROM t1;
+    CREATE TABLE t2(y);
+    CREATE TABLE t3(z);
+  }
+} 123
+
+# Create a second connection to the same database.  Make sure the
+# schema of the database has been parsed by the second connection.
+#
+do_test tkt3810-2 {
+  sqlite3 db2 test.db
+  execsql {
+    SELECT * FROM t1;
+  } db2
+} 123
+
+# DROP the table using the second connection.  The table no longer exists
+# but the first connection does not yet know this.  Then try to create a TEMP
+# trigger in the first connection that references the table that was dropped.
+#
+do_test tkt3810-3 {
+  execsql {DROP TABLE t1} db2
+  execsql {
+     CREATE TEMP TRIGGER r1 AFTER INSERT ON t1 BEGIN
+       INSERT INTO t2 VALUES(new.rowid);
+     END;
+  }
+  catchsql {
+    SELECT * FROM t3;
+  }
+} {0 {}}
+
+# Trigger still exists in the sqlite_temp_master table, but now it is
+# an orphan.
+#
+do_test tkt3810-4 {
+  execsql {SELECT name FROM temp.sqlite_master ORDER BY name}
+} {r1}
+
+# Because it is an orphan, it cannot be dropped.
+#
+do_test tkt3810-5 {
+  catchsql {DROP TRIGGER r1}
+} {1 {no such trigger: r1}}
+
+# Create a table t1 then drop the table in order to drop the orphaned
+# trigger.
+#
+do_test tkt3810-6 {
+  execsql {CREATE TABLE t1(x)} db2
+  execsql {DROP TABLE t1}
+  execsql {
+    SELECT name FROM sqlite_temp_master;
+  }
+} {}
+
+db2 close
+
+finish_test

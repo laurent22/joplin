@@ -1,0 +1,259 @@
+# 2010 June 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set ::testprefix fts3fault
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+
+# Test error handling in the sqlite3Fts3Init() function. This is the 
+# function that registers the FTS3 module and various support functions
+# with SQLite.
+#
+do_faultsim_test 1 -body { 
+  sqlite3 db test.db 
+  expr 0
+} -test {
+  catch { db close }
+}
+
+# Test error handling in an "ALTER TABLE ... RENAME TO" statement on an
+# FTS3 table. Specifically, test renaming the table within a transaction
+# after it has been written to.
+#
+faultsim_delete_and_reopen
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts3;
+  INSERT INTO t1 VALUES('test renaming the table');
+  INSERT INTO t1 VALUES(' after it has been written');
+}
+do_faultsim_test 2 -prep { 
+  sqlite3 db test.db
+  execsql {
+    BEGIN;
+      INSERT INTO t1 VALUES('registers the FTS3 module');
+      INSERT INTO t1 VALUES('various support functions');
+  }
+} -body {
+  execsql { ALTER TABLE t1 RENAME TO t2 }
+} -test {
+  faultsim_test_result {0 {}} 
+}
+
+# Test error handling in the special case where a single prefix query 
+# matches terms that reside on a large range of leaf nodes.
+#
+do_test fts3fault-3.0 {
+  sqlite3 db test.db
+  execsql { CREATE VIRTUAL TABLE t3 USING fts4; }
+  execsql { INSERT INTO t3(t3) VALUES('nodesize=50') }
+  execsql { BEGIN }
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql { INSERT INTO t3 VALUES('aaa' || $i) }
+  }
+  execsql { COMMIT }
+} {}
+
+do_faultsim_test 3 -faults oom-transient -prep { 
+  sqlite3 db test.db
+  execsql { SELECT * FROM t3 WHERE t3 MATCH 'x' }
+} -body {
+  execsql { SELECT count(rowid) FROM t3 WHERE t3 MATCH 'aa*' }
+} -test {
+  faultsim_test_result {0 1000} 
+}
+
+do_test fts3fault-4.0 {
+  faultsim_delete_and_reopen
+  execsql { 
+    CREATE VIRTUAL TABLE t4 USING fts4; 
+    INSERT INTO t4 VALUES('The British Government called on');
+    INSERT INTO t4 VALUES('as pesetas then became much');
+  }
+} {}
+faultsim_save_and_close
+do_faultsim_test 4 -prep { 
+  faultsim_restore_and_reopen
+  execsql { SELECT content FROM t4 }
+} -body {
+  execsql { SELECT optimize(t4) FROM t4 LIMIT 1 }
+} -test {
+  faultsim_test_result {0 {{Index optimized}}}
+}
+
+do_test fts3fault-5.0 {
+  faultsim_delete_and_reopen
+  execsql { 
+    CREATE VIRTUAL TABLE t5 USING fts4; 
+    INSERT INTO t5 VALUES('The British Government called on');
+    INSERT INTO t5 VALUES('as pesetas then became much');
+  }
+} {}
+faultsim_save_and_close
+do_faultsim_test 5 -prep { 
+  faultsim_restore_and_reopen
+  execsql { 
+    BEGIN;
+      INSERT INTO t5 VALUES('influential in shaping his future outlook');
+      INSERT INTO t5 VALUES('might be acceptable to the British electorate');
+  }
+} -body {
+  execsql { SELECT rowid FROM t5 WHERE t5 MATCH 'british' }
+} -test {
+  faultsim_test_result {0 {1 4}}
+}
+
+do_test fts3fault-6.0 {
+  faultsim_delete_and_reopen
+  execsql { CREATE VIRTUAL TABLE t6 USING fts4 }
+} {}
+faultsim_save_and_close
+do_faultsim_test 6 -prep { 
+  faultsim_restore_and_reopen
+  execsql { SELECT rowid FROM t6 }
+} -body {
+  execsql { DROP TABLE t6 }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+# Test various malloc failures while processing FTS4 parameters.
+#
+do_faultsim_test 7.1 -prep { 
+  faultsim_delete_and_reopen
+} -body {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts4(a, b, matchinfo=fts3) }
+} -test {
+  faultsim_test_result {0 {}}
+}
+do_faultsim_test 7.2 -prep { 
+  faultsim_delete_and_reopen
+} -body {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts4(a, b, matchinfo=fs3) }
+} -test {
+  faultsim_test_result {1 {unrecognized matchinfo: fs3}} \
+                       {1 {vtable constructor failed: t1}} \
+                       {1 {SQL logic error}}
+}
+do_faultsim_test 7.3 -prep { 
+  faultsim_delete_and_reopen
+} -body {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts4(a, b, matchnfo=fts3) }
+} -test {
+  faultsim_test_result {1 {unrecognized parameter: matchnfo=fts3}} \
+                       {1 {vtable constructor failed: t1}} \
+                       {1 {SQL logic error}}
+}
+
+
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+
+do_test 8.0 {
+  faultsim_delete_and_reopen
+  execsql { CREATE VIRTUAL TABLE t8 USING fts4 }
+  execsql "INSERT INTO t8 VALUES('a b c')"
+  execsql "INSERT INTO t8 VALUES('b b b')"
+  execsql "INSERT INTO t8 VALUES('[string repeat {c } 50000]')"
+  execsql "INSERT INTO t8 VALUES('d d d')"
+  execsql "INSERT INTO t8 VALUES('e e e')"
+  execsql "INSERT INTO t8(t8) VALUES('optimize')"
+  faultsim_save_and_close
+} {}
+
+ifcapable fts4_deferred {
+  do_faultsim_test 8.1 -faults oom-t* -prep { 
+    faultsim_restore_and_reopen
+    db func mit mit
+  } -body {
+    execsql { SELECT mit(matchinfo(t8, 'x')) FROM t8 WHERE t8 MATCH 'a b c' }
+  } -test {
+    faultsim_test_result {0 {{1 1 1 1 4 2 1 5 5}}}
+  }
+}
+
+do_faultsim_test 8.2 -faults oom-t* -prep { 
+  faultsim_restore_and_reopen
+  db func mit mit
+} -body {
+  execsql { SELECT mit(matchinfo(t8, 's')) FROM t8 WHERE t8 MATCH 'a b c' }
+} -test {
+  faultsim_test_result {0 3}
+}
+do_faultsim_test 8.3 -prep { 
+  faultsim_restore_and_reopen
+  db func mit mit
+} -body {
+  execsql { SELECT mit(matchinfo(t8, 'a')) FROM t8 WHERE t8 MATCH 'a b c' }
+} -test {
+  faultsim_test_result {0 10002}
+}
+do_faultsim_test 8.4 -prep { 
+  faultsim_restore_and_reopen
+  db func mit mit
+} -body {
+  execsql { SELECT mit(matchinfo(t8, 'l')) FROM t8 WHERE t8 MATCH 'a b c' }
+} -test {
+  faultsim_test_result {0 3}
+}
+
+do_test 9.0 {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE VIRTUAL TABLE t9 USING fts4(tokenize=porter);
+    INSERT INTO t9 VALUES(
+      'this record is used toooooooooooooooooooooooooooooooooooooo try to'
+    );
+    SELECT offsets(t9) FROM t9 WHERE t9 MATCH 'to*';
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test 9.1 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { SELECT offsets(t9) FROM t9 WHERE t9 MATCH 'to*' }
+} -test {
+  faultsim_test_result {0 {{0 0 20 39 0 0 64 2}}}
+}
+
+do_faultsim_test 10.1 -prep {
+  faultsim_delete_and_reopen
+} -body {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts4(a, b, languageid=d) }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 11.0 {
+  CREATE VIRTUAL TABLE t1 USING fts3(a, b);
+}
+faultsim_save_and_close
+
+do_faultsim_test 11 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { DROP TABLE t1 }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+
+finish_test

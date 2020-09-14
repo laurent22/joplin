@@ -1,0 +1,204 @@
+# 2013-11-26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Requirements testing for WITHOUT ROWID tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+# EVIDENCE-OF: R-36924-43758 By default, every row in SQLite has a
+# special column, usually called the "rowid", that uniquely identifies
+# that row within the table.
+#
+# EVIDENCE-OF: R-32341-39358 However if the phrase "WITHOUT ROWID" is
+# added to the end of a CREATE TABLE statement, then the special "rowid"
+# column is omitted.
+#
+do_execsql_test without_rowid5-1.1 {
+  CREATE TABLE t1(a PRIMARY KEY,b,c);
+  CREATE TABLE t1w(a PRIMARY KEY,b,c) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1565,681,1148),(1429,1190,1619),(425,358,1306);
+  INSERT INTO t1w SELECT a,b,c FROM t1;
+  SELECT rowid, _rowid_, oid FROM t1 ORDER BY a DESC;
+} {1 1 1 2 2 2 3 3 3}
+do_catchsql_test without_rowid5-1.2 {
+  SELECT rowid FROM t1w;
+} {1 {no such column: rowid}}
+do_catchsql_test without_rowid5-1.3 {
+  SELECT _rowid_ FROM t1w;
+} {1 {no such column: _rowid_}}
+do_catchsql_test without_rowid5-1.4 {
+  SELECT oid FROM t1w;
+} {1 {no such column: oid}}
+
+# EVIDENCE-OF: R-00217-01605 To create a WITHOUT ROWID table, simply add
+# the keywords "WITHOUT ROWID" to the end of the CREATE TABLE statement.
+# For example: CREATE TABLE IF NOT EXISTS wordcount( word TEXT PRIMARY
+# KEY, cnt INTEGER ) WITHOUT ROWID;
+#
+do_execsql_test without_rowid5-2.1 {
+  CREATE TABLE IF NOT EXISTS wordcount(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) WITHOUT ROWID;
+  INSERT INTO wordcount VALUES('one',1);
+} {}
+do_catchsql_test without_rowid5-2.2 {
+  SELECT rowid FROM wordcount;
+} {1 {no such column: rowid}}
+
+# EVIDENCE-OF: R-24770-17719 As with all SQL syntax, the case of the
+# keywords does not matter. One can write "WITHOUT rowid" or "without
+# rowid" or "WiThOuT rOwId" and it will mean the same thing.
+#
+do_execsql_test without_rowid5-2.3 {
+  CREATE TABLE IF NOT EXISTS wordcount_b(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) WITHOUT rowid;
+  INSERT INTO wordcount_b VALUES('one',1);
+} {}
+do_catchsql_test without_rowid5-2.4 {
+  SELECT rowid FROM wordcount_b;
+} {1 {no such column: rowid}}
+do_execsql_test without_rowid5-2.5 {
+  CREATE TABLE IF NOT EXISTS wordcount_c(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) without rowid;
+  INSERT INTO wordcount_c VALUES('one',1);
+} {}
+do_catchsql_test without_rowid5-2.6 {
+  SELECT rowid FROM wordcount_c;
+} {1 {no such column: rowid}}
+do_execsql_test without_rowid5-2.7 {
+  CREATE TABLE IF NOT EXISTS wordcount_d(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) WITHOUT rowid;
+  INSERT INTO wordcount_d VALUES('one',1);
+} {}
+do_catchsql_test without_rowid5-2.8 {
+  SELECT rowid FROM wordcount_d;
+} {1 {no such column: rowid}}
+
+# EVIDENCE-OF: R-01418-51310 However, only "rowid" works as the keyword
+# in the CREATE TABLE statement.
+#
+do_catchsql_test without_rowid5-3.1 {
+  CREATE TABLE IF NOT EXISTS error1(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) WITHOUT _rowid_;
+} {1 {unknown table option: _rowid_}}  
+do_catchsql_test without_rowid5-3.2 {
+  CREATE TABLE IF NOT EXISTS error2(
+    word TEXT PRIMARY KEY,
+    cnt INTEGER
+  ) WITHOUT oid;
+} {1 {unknown table option: oid}}  
+
+# EVIDENCE-OF: R-58033-17334 An error is raised if a CREATE TABLE
+# statement with the WITHOUT ROWID clause lacks a PRIMARY KEY.
+#
+# EVIDENCE-OF: R-63443-09418 Every WITHOUT ROWID table must have a
+# PRIMARY KEY.
+#
+# EVIDENCE-OF: R-27966-31616 An attempt to create a WITHOUT ROWID table
+# without a PRIMARY KEY results in an error.
+#
+do_catchsql_test without_rowid5-4.1 {
+  CREATE TABLE IF NOT EXISTS error3(
+    word TEXT UNIQUE,
+    cnt INTEGER
+  ) WITHOUT ROWID;
+} {1 {PRIMARY KEY missing on table error3}}
+
+# EVIDENCE-OF: R-48230-36247 The special behaviors associated "INTEGER
+# PRIMARY KEY" do not apply on WITHOUT ROWID tables.
+#
+do_execsql_test without_rowid5-5.1 {
+  CREATE TABLE ipk(key INTEGER PRIMARY KEY, val TEXT) WITHOUT ROWID;
+  INSERT INTO ipk VALUES('rival','bonus'); -- ok to insert non-integer key
+  SELECT * FROM ipk;
+} {rival bonus}
+do_catchsql_test without_rowid5-5.2a {
+  BEGIN;
+  INSERT INTO ipk VALUES(NULL,'sample'); -- no automatic generation of keys
+} {1 {NOT NULL constraint failed: ipk.key}}
+do_execsql_test without_rowid5-5.2b {
+  ROLLBACK;
+} {}
+
+# EVIDENCE-OF: R-33142-02092 AUTOINCREMENT does not work on WITHOUT
+# ROWID tables.
+#
+# EVIDENCE-OF: R-53084-07740 An error is raised if the "AUTOINCREMENT"
+# keyword is used in the CREATE TABLE statement for a WITHOUT ROWID
+# table.
+#
+do_catchsql_test without_rowid5-5.3 {
+  CREATE TABLE ipk2(key INTEGER PRIMARY KEY AUTOINCREMENT, val TEXT)WITHOUT ROWID;
+} {1 {AUTOINCREMENT not allowed on WITHOUT ROWID tables}}
+
+# EVIDENCE-OF: R-27831-00579 NOT NULL is enforced on every column of the
+# PRIMARY KEY in a WITHOUT ROWID table.
+#
+# EVIDENCE-OF: R-29781-51289 So, ordinary rowid tables in SQLite violate
+# the SQL standard and allow NULL values in PRIMARY KEY fields.
+#
+# EVIDENCE-OF: R-27472-62612 But WITHOUT ROWID tables do follow the
+# standard and will throw an error on any attempt to insert a NULL into
+# a PRIMARY KEY column.
+#
+do_execsql_test without_rowid5-5.4 {
+  CREATE TABLE nn(a, b, c, d, e, PRIMARY KEY(c,a,e));
+  CREATE TABLE nnw(a, b, c, d, e, PRIMARY KEY(c,a,e)) WITHOUT ROWID;
+  INSERT INTO nn VALUES(1,2,3,4,5);
+  INSERT INTO nnw VALUES(1,2,3,4,5);
+} {}
+do_execsql_test without_rowid5-5.5 {
+  INSERT INTO nn VALUES(NULL, 3,4,5,6);
+  INSERT INTO nn VALUES(3,4,NULL,7,8);
+  INSERT INTO nn VALUES(4,5,6,7,NULL);
+  SELECT count(*) FROM nn;
+} {4}
+do_catchsql_test without_rowid5-5.6 {
+  INSERT INTO nnw VALUES(NULL, 3,4,5,6);
+} {1 {NOT NULL constraint failed: nnw.a}}
+do_catchsql_test without_rowid5-5.7 {
+  INSERT INTO nnw VALUES(3,4,NULL,7,8)
+} {1 {NOT NULL constraint failed: nnw.c}}
+do_catchsql_test without_rowid5-5.8 {
+  INSERT INTO nnw VALUES(4,5,6,7,NULL)
+} {1 {NOT NULL constraint failed: nnw.e}}
+do_execsql_test without_rowid5-5.9 {
+  SELECT count(*) FROM nnw;
+} {1}
+
+# EVIDENCE-OF: R-12643-30541 The incremental blob I/O mechanism does not
+# work for WITHOUT ROWID tables.
+#
+# EVIDENCE-OF: R-40134-30296 Table zTable is a WITHOUT ROWID table
+#
+do_execsql_test without_rowid5-6.1 {
+  CREATE TABLE b1(a INTEGER PRIMARY KEY, b BLOB) WITHOUT ROWID;
+  INSERT INTO b1 VALUES(1,x'0102030405060708090a0b0c0d0e0f');
+} {}
+do_test without_rowid5-6.2 {
+  set rc [catch {db incrblob b1 b 1} msg]
+  lappend rc $msg
+} {1 {cannot open table without rowid: b1}}
+
+
+finish_test

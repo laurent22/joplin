@@ -1,0 +1,646 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing SELECT statements that contain
+# aggregate min() and max() functions and which are handled as
+# as a special case.
+#
+# $Id: minmax.test,v 1.21 2008/07/08 18:05:26 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix minmax
+
+do_test minmax-1.0 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(x, y);
+    INSERT INTO t1 VALUES(1,1);
+    INSERT INTO t1 VALUES(2,2);
+    INSERT INTO t1 VALUES(3,2);
+    INSERT INTO t1 VALUES(4,3);
+    INSERT INTO t1 VALUES(5,3);
+    INSERT INTO t1 VALUES(6,3);
+    INSERT INTO t1 VALUES(7,3);
+    INSERT INTO t1 VALUES(8,4);
+    INSERT INTO t1 VALUES(9,4);
+    INSERT INTO t1 VALUES(10,4);
+    INSERT INTO t1 VALUES(11,4);
+    INSERT INTO t1 VALUES(12,4);
+    INSERT INTO t1 VALUES(13,4);
+    INSERT INTO t1 VALUES(14,4);
+    INSERT INTO t1 VALUES(15,4);
+    INSERT INTO t1 VALUES(16,5);
+    INSERT INTO t1 VALUES(17,5);
+    INSERT INTO t1 VALUES(18,5);
+    INSERT INTO t1 VALUES(19,5);
+    INSERT INTO t1 VALUES(20,5);
+    COMMIT;
+    SELECT DISTINCT y FROM t1 ORDER BY y;
+  }
+} {1 2 3 4 5}
+
+do_test minmax-1.1 {
+  set sqlite_search_count 0
+  execsql {SELECT min(x) FROM t1}
+} {1}
+do_test minmax-1.2 {
+  set sqlite_search_count
+} {19}
+do_test minmax-1.3 {
+  set sqlite_search_count 0
+  execsql {SELECT max(x) FROM t1}
+} {20}
+do_test minmax-1.4 {
+  set sqlite_search_count
+} {19}
+do_test minmax-1.5 {
+  execsql {CREATE INDEX t1i1 ON t1(x)}
+  set sqlite_search_count 0
+  execsql {SELECT min(x) FROM t1}
+} {1}
+do_test minmax-1.6 {
+  set sqlite_search_count
+} {1}
+do_test minmax-1.7 {
+  set sqlite_search_count 0
+  execsql {SELECT max(x) FROM t1}
+} {20}
+do_test minmax-1.8 {
+  set sqlite_search_count
+} {0}
+do_test minmax-1.9 {
+  set sqlite_search_count 0
+  execsql {SELECT max(y) FROM t1}
+} {5}
+do_test minmax-1.10 {
+  set sqlite_search_count
+} {19}
+
+do_test minmax-1.21 {
+  execsql {SELECT min(x) FROM t1 WHERE x=5}
+} {5}
+do_test minmax-1.22 {
+  execsql {SELECT min(x) FROM t1 WHERE x>=5}
+} {5}
+do_test minmax-1.23 {
+  execsql {SELECT min(x) FROM t1 WHERE x>=4.5}
+} {5}
+do_test minmax-1.24 {
+  execsql {SELECT min(x) FROM t1 WHERE x<4.5}
+} {1}
+
+do_test minmax-2.0 {
+  execsql {
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t2 SELECT * FROM t1;
+  }
+  set sqlite_search_count 0
+  execsql {SELECT min(a) FROM t2}
+} {1}
+do_test minmax-2.1 {
+  set sqlite_search_count
+} {0}
+do_test minmax-2.2 {
+  set sqlite_search_count 0
+  execsql {SELECT max(a) FROM t2}
+} {20}
+do_test minmax-2.3 {
+  set sqlite_search_count
+} {0}
+
+do_test minmax-3.0 {
+  ifcapable subquery {
+    execsql {INSERT INTO t2 VALUES((SELECT max(a) FROM t2)+1,999)}
+  } else {
+    db function max_a_t2 {execsql {SELECT max(a) FROM t2}}
+    execsql {INSERT INTO t2 VALUES(max_a_t2()+1,999)}
+  }
+  set sqlite_search_count 0
+  execsql {SELECT max(a) FROM t2}
+} {21}
+do_test minmax-3.1 {
+  set sqlite_search_count
+} {0}
+do_test minmax-3.2 {
+  ifcapable subquery {
+    execsql {INSERT INTO t2 VALUES((SELECT max(a) FROM t2)+1,999)}
+  } else {
+    db function max_a_t2 {execsql {SELECT max(a) FROM t2}}
+    execsql {INSERT INTO t2 VALUES(max_a_t2()+1,999)}
+  }
+  set sqlite_search_count 0
+  ifcapable subquery {
+    execsql { SELECT b FROM t2 WHERE a=(SELECT max(a) FROM t2) }
+  } else {
+    execsql { SELECT b FROM t2 WHERE a=max_a_t2() }
+  }
+} {999}
+do_test minmax-3.3 {
+  set sqlite_search_count
+} {0}
+
+ifcapable {compound && subquery} {
+  do_test minmax-4.1 {
+    execsql {
+      SELECT coalesce(min(x+0),-1), coalesce(max(x+0),-1) FROM
+        (SELECT * FROM t1 UNION SELECT NULL as 'x', NULL as 'y')
+    }
+  } {1 20}
+  do_test minmax-4.2 {
+    execsql {
+      SELECT y, coalesce(sum(x),0) FROM
+        (SELECT null AS x, y+1 AS y FROM t1 UNION SELECT * FROM t1)
+      GROUP BY y ORDER BY y;
+    }
+  } {1 1 2 5 3 22 4 92 5 90 6 0}
+  do_test minmax-4.3 {
+    execsql {
+      SELECT y, count(x), count(*) FROM
+        (SELECT null AS x, y+1 AS y FROM t1 UNION SELECT * FROM t1)
+      GROUP BY y ORDER BY y;
+    }
+  } {1 1 1 2 2 3 3 4 5 4 8 9 5 5 6 6 0 1}
+} ;# ifcapable compound
+
+# Make sure the min(x) and max(x) optimizations work on empty tables
+# including empty tables with indices. Ticket #296.
+#
+do_test minmax-5.1 {
+  execsql {
+    CREATE TABLE t3(x INTEGER UNIQUE NOT NULL);
+    SELECT coalesce(min(x),999) FROM t3;
+  }
+} {999}
+do_test minmax-5.2 {
+  execsql {
+    SELECT coalesce(min(rowid),999) FROM t3;
+  }
+} {999}
+do_test minmax-5.3 {
+  execsql {
+    SELECT coalesce(max(x),999) FROM t3;
+  }
+} {999}
+do_test minmax-5.4 {
+  execsql {
+    SELECT coalesce(max(rowid),999) FROM t3;
+  }
+} {999}
+do_test minmax-5.5 {
+  execsql {
+    SELECT coalesce(max(rowid),999) FROM t3 WHERE rowid<25;
+  }
+} {999}
+
+# Make sure the min(x) and max(x) optimizations work when there
+# is a LIMIT clause.  Ticket #396.
+#
+do_test minmax-6.1 {
+  execsql {
+    SELECT min(a) FROM t2 LIMIT 1
+  }
+} {1}
+do_test minmax-6.2 {
+  execsql {
+    SELECT max(a) FROM t2 LIMIT 3
+  }
+} {22}
+do_test minmax-6.3 {
+  execsql {
+    SELECT min(a) FROM t2 LIMIT 0,100
+  }
+} {1}
+do_test minmax-6.4 {
+  execsql {
+    SELECT max(a) FROM t2 LIMIT 1,100
+  }
+} {}
+do_test minmax-6.5 {
+  execsql {
+    SELECT min(x) FROM t3 LIMIT 1
+  }
+} {{}}
+do_test minmax-6.6 {
+  execsql {
+    SELECT max(x) FROM t3 LIMIT 0
+  }
+} {}
+do_test minmax-6.7 {
+  execsql {
+    SELECT max(a) FROM t2 LIMIT 0
+  }
+} {}
+
+# Make sure the max(x) and min(x) optimizations work for nested
+# queries.  Ticket #587.
+#
+do_test minmax-7.1 {
+  execsql {
+    SELECT max(x) FROM t1;
+  }
+} 20
+ifcapable subquery {
+  do_test minmax-7.2 {
+    execsql {
+      SELECT * FROM (SELECT max(x) FROM t1);
+    }
+  } 20
+}
+do_test minmax-7.3 {
+  execsql {
+    SELECT min(x) FROM t1;
+  }
+} 1
+ifcapable subquery {
+  do_test minmax-7.4 {
+    execsql {
+      SELECT * FROM (SELECT min(x) FROM t1);
+    }
+  } 1
+}
+
+# Make sure min(x) and max(x) work correctly when the datatype is
+# TEXT instead of NUMERIC.  Ticket #623.
+#
+do_test minmax-8.1 {
+  execsql {
+    CREATE TABLE t4(a TEXT);
+    INSERT INTO t4 VALUES('1234');
+    INSERT INTO t4 VALUES('234');
+    INSERT INTO t4 VALUES('34');
+    SELECT min(a), max(a) FROM t4;
+  }
+} {1234 34}
+do_test minmax-8.2 {
+  execsql {
+    CREATE TABLE t5(a INTEGER);
+    INSERT INTO t5 VALUES('1234');
+    INSERT INTO t5 VALUES('234');
+    INSERT INTO t5 VALUES('34');
+    SELECT min(a), max(a) FROM t5;
+  }
+} {34 1234}
+
+# Ticket #658:  Test the min()/max() optimization when the FROM clause
+# is a subquery.
+#
+ifcapable {compound && subquery} {
+  do_test minmax-9.1 {
+    execsql {
+      SELECT max(rowid) FROM (
+        SELECT max(rowid) FROM t4 UNION SELECT max(rowid) FROM t5
+      )
+    }
+  } {{}}
+  do_test minmax-9.2 {
+    execsql {
+      SELECT max(rowid) FROM (
+        SELECT max(rowid) FROM t4 EXCEPT SELECT max(rowid) FROM t5
+      )
+    }
+  } {{}}
+} ;# ifcapable compound&&subquery
+
+# If there is a NULL in an aggregate max() or min(), ignore it.  An
+# aggregate min() or max() will only return NULL if all values are NULL.
+#
+do_test minmax-10.1 {
+  execsql {
+    CREATE TABLE t6(x);
+    INSERT INTO t6 VALUES(1);
+    INSERT INTO t6 VALUES(2);
+    INSERT INTO t6 VALUES(NULL);
+    SELECT coalesce(min(x),-1) FROM t6;
+  }
+} {1}
+do_test minmax-10.2 {
+  execsql {
+    SELECT max(x) FROM t6;
+  }
+} {2}
+do_test minmax-10.3 {
+  execsql {
+    CREATE INDEX i6 ON t6(x);
+    SELECT coalesce(min(x),-1) FROM t6;
+  }
+} {1}
+do_test minmax-10.4 {
+  execsql {
+    SELECT max(x) FROM t6;
+  }
+} {2}
+do_test minmax-10.5 {
+  execsql {
+    DELETE FROM t6 WHERE x NOT NULL;
+    SELECT count(*) FROM t6;
+  }
+} 1
+do_test minmax-10.6 {
+  execsql {
+    SELECT count(x) FROM t6;
+  }
+} 0
+ifcapable subquery {
+  do_test minmax-10.7 {
+    execsql {
+      SELECT (SELECT min(x) FROM t6), (SELECT max(x) FROM t6);
+    }
+  } {{} {}}
+}
+do_test minmax-10.8 {
+  execsql {
+    SELECT min(x), max(x) FROM t6;
+  }
+} {{} {}}
+do_test minmax-10.9 {
+  execsql {
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    SELECT count(*) FROM t6;
+  }
+} 1024
+do_test minmax-10.10 {
+  execsql {
+    SELECT count(x) FROM t6;
+  }
+} 0
+ifcapable subquery {
+  do_test minmax-10.11 {
+    execsql {
+      SELECT (SELECT min(x) FROM t6), (SELECT max(x) FROM t6);
+    }
+  } {{} {}}
+}
+do_test minmax-10.12 {
+  execsql {
+    SELECT min(x), max(x) FROM t6;
+  }
+} {{} {}}
+
+
+do_test minmax-11.1 {
+  execsql {
+    CREATE INDEX t1i2 ON t1(y,x);
+    SELECT min(x) FROM t1 WHERE y=5;
+  }
+} {16}
+do_test minmax-11.2 {
+  execsql {
+    SELECT max(x) FROM t1 WHERE y=5;
+  }
+} {20}
+do_test minmax-11.3 {
+  execsql {
+    SELECT min(x) FROM t1 WHERE y=6;
+  }
+} {{}}
+do_test minmax-11.4 {
+  execsql {
+    SELECT max(x) FROM t1 WHERE y=6;
+  }
+} {{}}
+do_test minmax-11.5 {
+  execsql {
+    SELECT min(x) FROM t1 WHERE y=1;
+  }
+} {1}
+do_test minmax-11.6 {
+  execsql {
+    SELECT max(x) FROM t1 WHERE y=1;
+  }
+} {1}
+do_test minmax-11.7 {
+  execsql {
+    SELECT min(x) FROM t1 WHERE y=0;
+  }
+} {{}}
+do_test minmax-11.8 {
+  execsql {
+    SELECT max(x) FROM t1 WHERE y=0;
+  }
+} {{}}
+do_test minmax-11.9 {
+  execsql {
+    SELECT min(x) FROM t1 WHERE y=5 AND x>=17.5;
+  }
+} {18}
+do_test minmax-11.10 {
+  execsql {
+    SELECT max(x) FROM t1 WHERE y=5 AND x>=17.5;
+  }
+} {20}
+
+do_test minmax-12.1 {
+  execsql {
+    CREATE TABLE t7(a,b,c);
+    INSERT INTO t7 SELECT y, x, x*y FROM t1;
+    INSERT INTO t7 SELECT y, x, x*y+1000 FROM t1;
+    CREATE INDEX t7i1 ON t7(a,b,c);
+    SELECT min(a) FROM t7;
+  }
+} {1}
+do_test minmax-12.2 {
+  execsql {
+    SELECT max(a) FROM t7;
+  }
+} {5}
+do_test minmax-12.3 {
+  execsql {
+    SELECT max(a) FROM t7 WHERE a=5;
+  }
+} {5}
+do_test minmax-12.4 {
+  execsql {
+    SELECT min(b) FROM t7 WHERE a=5;
+  }
+} {16}
+do_test minmax-12.5 {
+  execsql {
+    SELECT max(b) FROM t7 WHERE a=5;
+  }
+} {20}
+do_test minmax-12.6 {
+  execsql {
+    SELECT min(b) FROM t7 WHERE a=4;
+  }
+} {8}
+do_test minmax-12.7 {
+  execsql {
+    SELECT max(b) FROM t7 WHERE a=4;
+  }
+} {15}
+do_test minmax-12.8 {
+  execsql {
+    SELECT min(c) FROM t7 WHERE a=4 AND b=10;
+  }
+} {40}
+do_test minmax-12.9 {
+  execsql {
+    SELECT max(c) FROM t7 WHERE a=4 AND b=10;
+  }
+} {1040}
+do_test minmax-12.10 {
+  execsql {
+    SELECT min(rowid) FROM t7;
+  }
+} {1}
+do_test minmax-12.11 {
+  execsql {
+    SELECT max(rowid) FROM t7;
+  }
+} {40}
+do_test minmax-12.12 {
+  execsql {
+    SELECT min(rowid) FROM t7 WHERE a=3;
+  }
+} {4}
+do_test minmax-12.13 {
+  execsql {
+    SELECT max(rowid) FROM t7 WHERE a=3;
+  }
+} {27}
+do_test minmax-12.14 {
+  execsql {
+    SELECT min(rowid) FROM t7 WHERE a=3 AND b=5;
+  }
+} {5}
+do_test minmax-12.15 {
+  execsql {
+    SELECT max(rowid) FROM t7 WHERE a=3 AND b=5;
+  }
+} {25}
+do_test minmax-12.16 {
+  execsql {
+    SELECT min(rowid) FROM t7 WHERE a=3 AND b=5 AND c=1015;
+  }
+} {25}
+do_test minmax-12.17 {
+  execsql {
+    SELECT max(rowid) FROM t7 WHERE a=3 AND b=5 AND c=15;
+  }
+} {5}
+
+#-------------------------------------------------------------------------
+reset_db
+
+proc do_test_13 {op name sql1 sql2 res} {
+  set ::sqlite_search_count 0
+  uplevel [list do_execsql_test $name.1 $sql1 $res]
+  set a $::sqlite_search_count
+
+  set ::sqlite_search_count 0
+  uplevel [list do_execsql_test $name.2 $sql2 $res]
+  set b $::sqlite_search_count
+
+  uplevel [list do_test $name.3 [list expr "$a $op $b"] 1]
+}
+
+# Run a test named $name. Check that SQL statements $sql1 and $sql2 both
+# return the same result, but that $sql2 increments the $sqlite_search_count
+# variable more often (indicating that it is visiting more rows to determine
+# the result).
+#
+proc do_test_13_opt {name sql1 sql2 res} {
+  uplevel [list do_test_13 < $name $sql1 $sql2 $res]
+}
+
+# Like [do_test_13_noopt], except this time check that the $sqlite_search_count
+# variable is incremented the same number of times by both SQL statements.
+#
+proc do_test_13_noopt {name sql1 sql2 res} {
+  uplevel [list do_test_13 == $name $sql1 $sql2 $res]
+}
+
+do_execsql_test 13.1 {
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES('a', 1, 1);
+  INSERT INTO t1 VALUES('b', 6, 6);
+  INSERT INTO t1 VALUES('c', 5, 5);
+  INSERT INTO t1 VALUES('a', 4, 4);
+  INSERT INTO t1 VALUES('a', 5, 5);
+  INSERT INTO t1 VALUES('c', 6, 6);
+  INSERT INTO t1 VALUES('b', 4, 4);
+  INSERT INTO t1 VALUES('c', 7, 7);
+  INSERT INTO t1 VALUES('b', 2, 2);
+  INSERT INTO t1 VALUES('b', 3, 3);
+  INSERT INTO t1 VALUES('a', 3, 3);
+  INSERT INTO t1 VALUES('b', 5, 5);
+  INSERT INTO t1 VALUES('c', 4, 4);
+  INSERT INTO t1 VALUES('c', 3, 3);
+  INSERT INTO t1 VALUES('a', 2, 2);
+  SELECT * FROM t1 ORDER BY a, b, c;
+} {a 1 1 a 2 2 a 3 3 a 4 4 a 5 5
+   b 2 2 b 3 3 b 4 4 b 5 5 b 6 6
+   c 3 3 c 4 4 c 5 5 c 6 6 c 7 7
+}
+do_execsql_test 13.2 { CREATE INDEX i1 ON t1(a, b, c) }
+
+do_test_13_opt 13.3 {
+  SELECT min(b) FROM t1 WHERE a='b'
+} {
+  SELECT min(c) FROM t1 WHERE a='b'
+} {2}
+
+do_test_13_opt 13.4 {
+  SELECT a, min(b) FROM t1 WHERE a='b'
+} {
+  SELECT a, min(c) FROM t1 WHERE a='b'
+} {b 2}
+
+do_test_13_opt 13.4 {
+  SELECT a||c, max(b)+4 FROM t1 WHERE a='c'
+} {
+  SELECT a||c, max(c)+4 FROM t1 WHERE a='c'
+} {c7 11}
+
+do_test_13_noopt 13.5 {
+  SELECT a||c, max(b+1) FROM t1 WHERE a='c'
+} {
+  SELECT a||c, max(c+1) FROM t1 WHERE a='c'
+} {c7 8}
+
+do_test_13_noopt 13.6 {
+  SELECT count(b) FROM t1 WHERE a='c'
+} {
+  SELECT count(c) FROM t1 WHERE a='c'
+} {5}
+
+do_test_13_noopt 13.7 {
+  SELECT min(b), count(b) FROM t1 WHERE a='a';
+} {
+  SELECT min(c), count(c) FROM t1 WHERE a='a';
+} {1 5}
+
+# 2016-07-26.  https://www.sqlite.org/src/info/a0bac8b3c3d1bb75
+# Incorrect result on a min() query after a CREATE INDEX.
+#
+do_execsql_test 14.1 {
+  CREATE TABLE t14(a INTEGER, b INTEGER);
+  INSERT INTO t14(a,b) VALUES(100,2),(200,2),(300,2),(400,1),(500,2);
+  SELECT min(a) FROM t14 WHERE b='2' AND a>'50';
+} {100}
+do_execsql_test 14.2 {
+  CREATE INDEX t14ba ON t14(b,a);
+  SELECT min(a) FROM t14 WHERE b='2' AND a>'50';
+} {100}
+
+
+
+finish_test

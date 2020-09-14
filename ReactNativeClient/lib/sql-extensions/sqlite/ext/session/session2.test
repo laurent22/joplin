@@ -1,0 +1,591 @@
+# 2011 Mar 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the session module.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session2
+
+proc test_reset {} {
+  catch { db close }
+  catch { db2 close }
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  sqlite3 db2 test.db2
+}
+
+##########################################################################
+# End of proc definitions. Start of tests.
+##########################################################################
+
+test_reset
+do_execsql_test 1.0 { 
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('i', 'one');
+}
+do_iterator_test 1.1 t1 {
+  DELETE FROM t1 WHERE a = 'i';
+  INSERT INTO t1 VALUES('ii', 'two');
+} {
+  {DELETE t1 0 X. {t i t one} {}} 
+  {INSERT t1 0 X. {} {t ii t two}}
+}
+
+do_iterator_test 1.2 t1 {
+  INSERT INTO t1 VALUES(1.5, 99.9)
+} {
+  {INSERT t1 0 X. {} {f 1.5 f 99.9}}
+}
+
+do_iterator_test 1.3 t1 {
+  UPDATE t1 SET b = 100.1 WHERE a = 1.5;
+  UPDATE t1 SET b = 99.9 WHERE a = 1.5;
+} { }
+
+do_iterator_test 1.4 t1 {
+  UPDATE t1 SET b = 100.1 WHERE a = 1.5;
+} {
+  {UPDATE t1 0 X. {f 1.5 f 99.9} {{} {} f 100.1}}
+}
+
+
+# Execute each of the following blocks of SQL on database [db1]. Collect
+# changes using a session object. Apply the resulting changeset to
+# database [db2]. Then check that the contents of the two databases are
+# identical.
+#
+
+set set_of_tests {
+  1 { INSERT INTO %T1% VALUES(1, 2) } 
+
+  2 {
+    INSERT INTO %T2% VALUES(1, NULL);
+    INSERT INTO %T2% VALUES(2, NULL);
+    INSERT INTO %T2% VALUES(3, NULL);
+    DELETE FROM %T2% WHERE a = 2;
+    INSERT INTO %T2% VALUES(4, NULL);
+    UPDATE %T2% SET b=0 WHERE b=1;
+  } 
+
+  3 { INSERT INTO %T3% SELECT *, NULL FROM %T2% }
+
+  4 {
+    INSERT INTO %T3% SELECT a||a, b||b, NULL FROM %T3%;
+    DELETE FROM %T3% WHERE rowid%2;
+  }
+
+  5 { UPDATE %T3% SET c = a||b }
+
+  6 { UPDATE %T1% SET a = 32 }
+
+  7 { 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%; 
+    DELETE FROM %T1% WHERE (rowid%3)==0;
+  }
+
+  8 {
+    BEGIN;
+      INSERT INTO %T1% SELECT randomblob(32), randomblob(32) FROM %T1%;
+    ROLLBACK;
+  }
+  9 {
+    BEGIN;
+      UPDATE %T1% SET b = 'xxx';
+    ROLLBACK;
+  }
+  10 {
+    BEGIN;
+      DELETE FROM %T1% WHERE 1;
+    ROLLBACK;
+  }
+  11 {
+    INSERT INTO %T1% VALUES(randomblob(21000), randomblob(0));
+    INSERT INTO %T1% VALUES(1.5, 1.5);
+    INSERT INTO %T1% VALUES(4.56, -99.999999999999999999999);
+  }
+  12 {
+    INSERT INTO %T2% VALUES(NULL, NULL);
+  }
+
+  13 {
+    DELETE FROM %T1% WHERE 1;
+
+    -- Insert many rows with real primary keys. Enough to force the session
+    -- objects hash table to resize. 
+    INSERT INTO %T1% VALUES(0.1, 0.1);
+    INSERT INTO %T1% SELECT a+0.1, b+0.1 FROM %T1%;
+    INSERT INTO %T1% SELECT a+0.2, b+0.2 FROM %T1%;
+    INSERT INTO %T1% SELECT a+0.4, b+0.4 FROM %T1%;
+    INSERT INTO %T1% SELECT a+0.8, b+0.8 FROM %T1%;
+    INSERT INTO %T1% SELECT a+1.6, b+1.6 FROM %T1%;
+    INSERT INTO %T1% SELECT a+3.2, b+3.2 FROM %T1%;
+    INSERT INTO %T1% SELECT a+6.4, b+6.4 FROM %T1%;
+    INSERT INTO %T1% SELECT a+12.8, b+12.8 FROM %T1%;
+    INSERT INTO %T1% SELECT a+25.6, b+25.6 FROM %T1%;
+    INSERT INTO %T1% SELECT a+51.2, b+51.2 FROM %T1%;
+    INSERT INTO %T1% SELECT a+102.4, b+102.4 FROM %T1%;
+    INSERT INTO %T1% SELECT a+204.8, b+204.8 FROM %T1%;
+  }
+
+  14 {
+    DELETE FROM %T1% WHERE 1;
+  }
+
+  15 {
+    INSERT INTO %T1% VALUES(1, 1);
+    INSERT INTO %T1% SELECT a+2, b+2 FROM %T1%;
+    INSERT INTO %T1% SELECT a+4, b+4 FROM %T1%;
+    INSERT INTO %T1% SELECT a+8, b+8 FROM %T1%;
+    INSERT INTO %T1% SELECT a+256, b+256 FROM %T1%;
+  }
+
+  16 {
+    INSERT INTO %T4% VALUES('abc', 'def');
+    INSERT INTO %T4% VALUES('def', 'abc');
+  }
+  17 { UPDATE %T4% SET b = 1 }
+
+  18 { DELETE FROM %T4% WHERE 1 }
+
+  19 { 
+    INSERT INTO t1 VALUES('', '');
+    INSERT INTO t1 VALUES(X'', X'');
+  }
+  20 { 
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('', NULL);
+  }
+}
+
+test_reset
+do_common_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(a, b INTEGER PRIMARY KEY);
+  CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b));
+  CREATE TABLE t4(a, b, PRIMARY KEY(b, a));
+}
+
+foreach {tn sql} [string map {%T1% t1 %T2% t2 %T3% t3 %T4% t4} $set_of_tests] {
+  do_then_apply_sql $sql
+  do_test 2.$tn { compare_db db db2 } {}
+}
+
+# The following block of tests is similar to the last, except that the
+# session object is recording changes made to an attached database. The
+# main database contains a table of the same name as the table being
+# modified within the attached db.
+#
+test_reset
+forcedelete test.db3
+sqlite3 db3 test.db3
+do_test 3.0 {
+  execsql {
+    ATTACH 'test.db3' AS 'aux';
+    CREATE TABLE t1(a, b PRIMARY KEY);
+    CREATE TABLE t2(x, y, z);
+    CREATE TABLE t3(a);
+
+    CREATE TABLE aux.t1(a PRIMARY KEY, b);
+    CREATE TABLE aux.t2(a, b INTEGER PRIMARY KEY);
+    CREATE TABLE aux.t3(a, b, c, PRIMARY KEY(a, b));
+    CREATE TABLE aux.t4(a, b, PRIMARY KEY(b, a));
+  }
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    CREATE TABLE t2(a, b INTEGER PRIMARY KEY);
+    CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b));
+    CREATE TABLE t4(a, b, PRIMARY KEY(b, a));
+  } db2
+} {}
+
+proc xTrace {args} { puts $args }
+
+foreach {tn sql} [
+  string map {%T1% aux.t1 %T2% aux.t2 %T3% aux.t3 %T4% aux.t4} $set_of_tests
+] {
+  do_then_apply_sql $sql aux
+  do_test 3.$tn { compare_db db2 db3 } {}
+}
+catch {db3 close}
+
+
+#-------------------------------------------------------------------------
+# The following tests verify that NULL values in primary key columns are
+# handled correctly by the session module.
+#
+test_reset
+do_execsql_test 4.0 {
+  CREATE TABLE t1(a PRIMARY KEY);
+  CREATE TABLE t2(a, b, c, PRIMARY KEY(c, b));
+  CREATE TABLE t3(a, b INTEGER PRIMARY KEY);
+}
+
+foreach {tn sql changeset} {
+  1 {
+    INSERT INTO t1 VALUES(123);
+    INSERT INTO t1 VALUES(NULL);
+    INSERT INTO t1 VALUES(456);
+  } {
+    {INSERT t1 0 X {} {i 456}} 
+    {INSERT t1 0 X {} {i 123}}
+  }
+
+  2 {
+    UPDATE t1 SET a = NULL;
+  } {
+    {DELETE t1 0 X {i 456} {}}
+    {DELETE t1 0 X {i 123} {}}
+  }
+
+  3 { DELETE FROM t1 } { }
+
+  4 { 
+    INSERT INTO t3 VALUES(NULL, NULL)
+  } {
+    {INSERT t3 0 .X {} {n {} i 1}} 
+  }
+
+  5 { INSERT INTO t2 VALUES(1, 2, NULL) }    { }
+  6 { INSERT INTO t2 VALUES(1, NULL, 3) }    { }
+  7 { INSERT INTO t2 VALUES(1, NULL, NULL) } { }
+  8 { INSERT INTO t2 VALUES(1, 2, 3) }    { {INSERT t2 0 .XX {} {i 1 i 2 i 3}} }
+  9 { DELETE FROM t2 WHERE 1 }            { {DELETE t2 0 .XX {i 1 i 2 i 3} {}} }
+
+} {
+  do_iterator_test 4.$tn {t1 t2 t3} $sql $changeset
+}
+
+
+#-------------------------------------------------------------------------
+# Test that if NULL is passed to sqlite3session_attach(), all database
+# tables are attached to the session object.
+#
+test_reset
+do_execsql_test 5.0 {
+  CREATE TABLE t1(a PRIMARY KEY);
+  CREATE TABLE t2(x, y PRIMARY KEY);
+}
+
+foreach {tn sql changeset} {
+  1 { INSERT INTO t1 VALUES(35) }     { {INSERT t1 0 X {} {i 35}} }
+  2 { INSERT INTO t2 VALUES(36, 37) } { {INSERT t2 0 .X {} {i 36 i 37}} }
+  3 { 
+    DELETE FROM t1 WHERE 1;
+    UPDATE t2 SET x = 34;
+  } { 
+    {DELETE t1 0 X {i 35} {}}
+    {UPDATE t2 0 .X {i 36 i 37} {i 34 {} {}}}
+  }
+} {
+  do_iterator_test 5.$tn * $sql $changeset
+}
+
+#-------------------------------------------------------------------------
+# The next block of tests verify that the "indirect" flag is set 
+# correctly within changesets. The indirect flag is set for a change
+# if either of the following are true:
+#
+#   * The sqlite3session_indirect() API has been used to set the session
+#     indirect flag to true, or
+#   * The change was made by a trigger.
+#
+# If the same row is updated more than once during a session, then the 
+# change is considered indirect only if all changes meet the criteria 
+# above.
+#
+test_reset
+db function indirect [list S indirect]
+
+do_execsql_test 6.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+
+  CREATE TABLE t2(x PRIMARY KEY, y);
+  CREATE TRIGGER AFTER INSERT ON t2 WHEN new.x%2 BEGIN
+    INSERT INTO t2 VALUES(new.x+1, NULL);
+  END;
+}
+
+do_iterator_test 6.1.1 * {
+  INSERT INTO t1 VALUES(1, 'one', 'i');
+  SELECT indirect(1);
+  INSERT INTO t1 VALUES(2, 'two', 'ii');
+  SELECT indirect(0);
+  INSERT INTO t1 VALUES(3, 'three', 'iii');
+} {
+  {INSERT t1 0 X.. {} {i 1 t one t i}}
+  {INSERT t1 1 X.. {} {i 2 t two t ii}}
+  {INSERT t1 0 X.. {} {i 3 t three t iii}}
+}
+
+do_iterator_test 6.1.2 * {
+  SELECT indirect(1);
+  UPDATE t1 SET c = 'I' WHERE a = 1;
+  SELECT indirect(0);
+} {
+  {UPDATE t1 1 X.. {i 1 {} {} t i} {{} {} {} {} t I}}
+}
+do_iterator_test 6.1.3 * {
+  SELECT indirect(1);
+  UPDATE t1 SET c = '.' WHERE a = 1;
+  SELECT indirect(0);
+  UPDATE t1 SET c = 'o' WHERE a = 1;
+} {
+  {UPDATE t1 0 X.. {i 1 {} {} t I} {{} {} {} {} t o}}
+}
+do_iterator_test 6.1.4 * {
+  SELECT indirect(0);
+  UPDATE t1 SET c = 'x' WHERE a = 1;
+  SELECT indirect(1);
+  UPDATE t1 SET c = 'i' WHERE a = 1;
+} {
+  {UPDATE t1 0 X.. {i 1 {} {} t o} {{} {} {} {} t i}}
+}
+do_iterator_test 6.1.4 * {
+  SELECT indirect(1);
+  UPDATE t1 SET c = 'y' WHERE a = 1;
+  SELECT indirect(1);
+  UPDATE t1 SET c = 'I' WHERE a = 1;
+} {
+  {UPDATE t1 1 X.. {i 1 {} {} t i} {{} {} {} {} t I}}
+}
+
+do_iterator_test 6.1.5 * {
+  INSERT INTO t2 VALUES(1, 'x');
+} {
+  {INSERT t2 0 X. {} {i 1 t x}}
+  {INSERT t2 1 X. {} {i 2 n {}}}
+}
+
+do_iterator_test 6.1.6 * {
+  SELECT indirect(1);
+  INSERT INTO t2 VALUES(3, 'x');
+  SELECT indirect(0);
+  UPDATE t2 SET y = 'y' WHERE x>2;
+} {
+  {INSERT t2 0 X. {} {i 3 t y}}
+  {INSERT t2 0 X. {} {i 4 t y}}
+}
+
+do_iterator_test 6.1.7 * {
+  SELECT indirect(1);
+  DELETE FROM t2 WHERE x = 4;
+  SELECT indirect(0);
+  INSERT INTO t2 VALUES(4, 'new');
+} {
+  {UPDATE t2 0 X. {i 4 t y} {{} {} t new}}
+}
+
+do_iterator_test 6.1.8 * {
+  CREATE TABLE t3(a, b PRIMARY KEY);
+  CREATE TABLE t4(a, b PRIMARY KEY);
+  CREATE TRIGGER t4t AFTER UPDATE ON t4 BEGIN
+    UPDATE t3 SET a = new.a WHERE b = new.b;
+  END;
+
+  SELECT indirect(1);
+  INSERT INTO t3 VALUES('one', 1);
+  INSERT INTO t4 VALUES('one', 1);
+  SELECT indirect(0);
+  UPDATE t4 SET a = 'two' WHERE b = 1;
+} {
+  {INSERT t3 1 .X {} {t two i 1}}
+  {INSERT t4 0 .X {} {t two i 1}} 
+}
+
+sqlite3session S db main
+do_execsql_test 6.2.1 {
+  SELECT indirect(0);
+  SELECT indirect(-1);
+  SELECT indirect(45);
+  SELECT indirect(-100);
+} {0 0 1 1}
+S delete
+
+#-------------------------------------------------------------------------
+# Test that if a conflict-handler that has been passed either NOTFOUND or
+# CONSTRAINT returns REPLACE - the sqlite3changeset_apply() call returns
+# MISUSE and rolls back any changes made so far.
+#
+#   7.1.*: NOTFOUND conflict-callback.
+#   7.2.*: CONSTRAINT conflict-callback.
+#
+proc xConflict {args} {return REPLACE}
+test_reset
+
+do_execsql_test 7.1.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, 'one');
+  INSERT INTO t1 VALUES(2, 'two');
+}
+do_test 7.1.2 {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b NOT NULL);
+    INSERT INTO t1 VALUES(1, 'one');
+  } db2
+} {}
+do_test 7.1.3 {
+  set changeset [changeset_from_sql {
+    UPDATE t1 SET b = 'five' WHERE a = 1;
+    UPDATE t1 SET b = 'six' WHERE a = 2;
+  }]
+  set x [list]
+  sqlite3session_foreach c $changeset { lappend x $c }
+  set x
+} [list \
+  {UPDATE t1 0 X. {i 1 t one} {{} {} t five}} \
+  {UPDATE t1 0 X. {i 2 t two} {{} {} t six}}  \
+]
+do_test 7.1.4 {
+  list [catch {sqlite3changeset_apply db2 $changeset xConflict} msg] $msg
+} {1 SQLITE_MISUSE}
+do_test 7.1.5 { execsql { SELECT * FROM t1 } db2 } {1 one}
+
+do_test 7.2.1 {
+  set changeset [changeset_from_sql { UPDATE t1 SET b = NULL WHERE a = 1 }]
+
+  set x [list]
+  sqlite3session_foreach c $changeset { lappend x $c }
+  set x
+} [list \
+  {UPDATE t1 0 X. {i 1 t five} {{} {} n {}}} \
+]
+do_test 7.2.2 {
+  list [catch {sqlite3changeset_apply db2 $changeset xConflict} msg] $msg
+} {1 SQLITE_MISUSE}
+do_test 7.2.3 { execsql { SELECT * FROM t1 } db2 } {1 one}
+
+#-------------------------------------------------------------------------
+# Test that if a conflict-handler returns ABORT, application of the 
+# changeset is rolled back and the sqlite3changeset_apply() method returns
+# SQLITE_ABORT.
+#
+# Also test that the same thing happens if a conflict handler returns an
+# unrecognized integer value. Except, in this case SQLITE_MISUSE is returned
+# instead of SQLITE_ABORT.
+#
+foreach {tn conflict_return apply_return} {
+  1    ABORT   SQLITE_ABORT
+  2    567     SQLITE_MISUSE
+} {
+  test_reset
+  proc xConflict {args} [list return $conflict_return]
+
+  do_test 8.$tn.0 {
+    do_common_sql { 
+      CREATE TABLE t1(x, y, PRIMARY KEY(x, y));
+      INSERT INTO t1 VALUES('x', 'y');
+    }
+    execsql { INSERT INTO t1 VALUES('w', 'w') }
+
+    set changeset [changeset_from_sql { DELETE FROM t1 WHERE 1 }]
+
+    set x [list]
+    sqlite3session_foreach c $changeset { lappend x $c }
+    set x
+  } [list \
+    {DELETE t1 0 XX {t w t w} {}} \
+    {DELETE t1 0 XX {t x t y} {}} \
+  ]
+
+  do_test 8.$tn.1 {
+    list [catch {sqlite3changeset_apply db2 $changeset xConflict} msg] $msg
+  } [list 1 $apply_return]
+
+  do_test 8.$tn.2 {
+    execsql {SELECT * FROM t1} db2
+  } {x y}
+}
+
+
+#-------------------------------------------------------------------------
+# Try to cause an infinite loop as follows:
+#
+#   1. Have a changeset insert a row that causes a CONFLICT callback,
+#   2. Have the conflict handler return REPLACE,
+#   3. After the session module deletes the conflicting row, have a trigger
+#      re-insert it.
+#   4. Goto step 1...
+#
+# This doesn't work, as the second invocation of the conflict handler is a
+# CONSTRAINT, not a CONFLICT. There is at most one CONFLICT callback for
+# each change in the changeset.
+#
+test_reset
+proc xConflict {type args} { 
+  if {$type == "CONFLICT"} { return REPLACE }
+  return OMIT
+}
+do_test 9.1 {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+  }
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES('x', 2);
+    CREATE TRIGGER tr1 AFTER DELETE ON t1 BEGIN
+      INSERT INTO t1 VALUES(old.a, old.b);
+    END;
+  } db2
+} {}
+do_test 9.2 {
+  set changeset [changeset_from_sql { INSERT INTO t1 VALUES('x', 1) }]
+  sqlite3changeset_apply db2 $changeset xConflict
+} {}
+do_test 9.3 {
+  execsql { SELECT * FROM t1 } db2
+} {x 2}
+
+#-------------------------------------------------------------------------
+#
+test_reset
+db function enable [list S enable]
+
+do_common_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('x', 'X');
+}
+
+do_iterator_test 10.1 t1 {
+  INSERT INTO t1 VALUES('y', 'Y');
+  SELECT enable(0);
+  INSERT INTO t1 VALUES('z', 'Z');
+  SELECT enable(1);
+} {
+  {INSERT t1 0 X. {} {t y t Y}}
+}
+
+sqlite3session S db main
+do_execsql_test 10.2 {
+  SELECT enable(0);
+  SELECT enable(-1);
+  SELECT enable(1);
+  SELECT enable(-1);
+} {0 0 1 1}
+S delete
+
+finish_test

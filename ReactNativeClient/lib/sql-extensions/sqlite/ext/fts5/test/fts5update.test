@@ -1,0 +1,157 @@
+# 2016 Jan 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5update
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+set docs {
+  "eight zero iv eight 7"            "ix one 8 one three ii one"        
+  "1 9 9 three viii"                 "5 zero ii 6 nine ix 3"            
+  "3 zero 5 2 seven nine"            "two eight viii eight 1"           
+  "4 six two 5 9 vii"                "viii ii four 8 i i iv"            
+  "vii 0 iv seven 7 viii"            "five 1 nine vi seven"             
+  "1 zero zero iii 1"                "one one six 6 nine seven"         
+  "one v 4 zero 4 iii ii"            "2 3 eight six ix"                 
+  "six iv 7 three 5"                 "ix zero 0 8 ii 7 3"               
+  "four six nine 2 vii 3"            "five viii 5 8 0 7"                
+}
+
+foreach_detail_mode $::testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+} {}
+
+do_test 1.1 {
+  foreach {a b} $docs {
+    execsql {INSERT INTO t1 VALUES($a, $b)}
+  }
+} {}
+
+proc update {iRowid iA iB} {
+  set a [lindex $::docs $iA]
+  set b [lindex $::docs $iB]
+  execsql { UPDATE t1 SET a=$a, b=$b WHERE rowid=$iRowid }
+}
+
+set nDoc [llength $::docs]
+foreach n {1 5 10 50 100} {
+  do_test 1.2.$n {
+    execsql BEGIN
+    for {set i 1} {$i <= 1000} {incr i} {
+      set iRowid [expr {int(rand() * ($nDoc/2)) + 1}]
+      set iA [expr {int(rand() * $nDoc)}]
+      set iB [expr {int(rand() * $nDoc)}]
+      update $iRowid $iA $iB
+
+      if {($i % $n)==0} {
+        execsql { COMMIT; BEGIN }
+      }
+
+      if {($i % $n)==100} {
+        execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+      }
+    }
+    execsql COMMIT
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+  } {}
+}
+
+do_execsql_test 1.3 {
+  UPDATE t1 SET a=a AND b=b;
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+do_test 1.4 {
+  execsql { INSERT INTO t1(t1, rank) VALUES('pgsz', 32) }
+  for {set i 0} {$i < 50} {incr i} {
+    execsql { UPDATE t1 SET a=a AND b=b }
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+  }
+} {}
+
+#-------------------------------------------------------------------------
+# Lots of deletes/inserts of the same document with the same rowid.
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE x2 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO x2(x2, rank) VALUES('crisismerge', 2);
+  INSERT INTO x2 VALUES('a b c');
+  INSERT INTO x2 VALUES('a b c');
+}
+do_test 2.1 {
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql { DELETE FROM x2 WHERE rowid = 2 }
+    execsql { INSERT INTO x2(rowid, x) VALUES(2, 'a b c') }
+  }
+} {}
+do_execsql_test 2.1.integrity {
+  INSERT INTO x2(x2) VALUES('integrity-check');
+}
+
+do_test 2.2 {
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql { UPDATE x2 SET x=x WHERE rowid=2 }
+  }
+} {}
+do_execsql_test 2.2.integrity {
+  INSERT INTO x2(x2) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE x3 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO x3 VALUES('one');
+  INSERT INTO x3 VALUES('two');
+  INSERT INTO x3 VALUES('one');
+  INSERT INTO x3 VALUES('two');
+  INSERT INTO x3 VALUES('one');
+}
+
+do_test 3.1 {
+  db eval { SELECT * FROM x3('one') } {
+    db eval {
+      INSERT INTO x3(x3) VALUES('optimize');
+    }
+  }
+} {}
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x4 USING fts5(a, detail=%DETAIL%);
+  INSERT INTO x4 VALUES('one two three');
+  INSERT INTO x4(rowid, a) VALUES('2', 'one two three');
+  INSERT INTO x4(rowid, a) VALUES('3.0', 'one two three');
+}
+do_catchsql_test 4.1 {
+  INSERT INTO x4(rowid, a) VALUES('four', 'one two three');
+} {1 {datatype mismatch}}
+
+do_catchsql_test 4.2 {
+  UPDATE x4 SET rowid = 'four' WHERE rowid=1;
+} {1 {datatype mismatch}}
+
+
+}
+
+reset_db
+do_catchsql_test 4.0 { CREATE VIRTUAL TABLE t1 USING fts5(a,b,c); } {0 {}}
+do_catchsql_test 4.1 { DELETE FROM t1 WHERE t1 MATCH 'f*'; } {0 {}}
+finish_test

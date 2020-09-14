@@ -1,0 +1,140 @@
+# 2020 April 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix upfromfault
+
+foreach {tn sql} {
+  1 {
+    CREATE TABLE t1(x PRIMARY KEY, y, z UNIQUE);
+    CREATE INDEX t1y ON t1(y);
+  }
+  2 {
+    CREATE TABLE t1(x PRIMARY KEY, y, z UNIQUE) WITHOUT ROWID;
+    CREATE INDEX t1y ON t1(y);
+  }
+  3 {
+    CREATE TABLE t1(x, y, z UNIQUE, PRIMARY KEY(x,y)) WITHOUT ROWID;
+  }
+  4 {
+    CREATE VIRTUAL TABLE t1 USING fts5(x, y, z);
+  }
+  5 {
+    CREATE TABLE real(x, y, z);
+    CREATE VIEW t1 AS SELECT * FROM real;
+    CREATE TRIGGER t1_insert INSTEAD OF INSERT ON t1 BEGIN
+      INSERT INTO real VALUES(new.x, new.y, new.z);
+    END;
+    CREATE TRIGGER t1_update INSTEAD OF UPDATE ON t1 BEGIN
+      INSERT INTO log VALUES(old.z || '->' || new.z);
+      UPDATE real SET y=new.y, z=new.z WHERE x=old.x;
+    END;
+  }
+} {
+if {$tn<5} continue
+  reset_db
+
+  ifcapable !fts5 { if {$tn==4} continue }
+
+  execsql $sql
+  do_execsql_test 1.$tn.0 {
+    CREATE TABLE log(t TEXT);
+
+    INSERT INTO t1 VALUES(1, 'i',   'one');
+    INSERT INTO t1 VALUES(2, 'ii',  'two');
+    INSERT INTO t1 VALUES(3, 'iii', 'three');
+    INSERT INTO t1 VALUES(4, 'iv',  'four');
+  }
+  if {$tn!=4 && $tn!=5} {
+    do_execsql_test 1.$tn.0b {
+      CREATE TRIGGER tr1 BEFORE UPDATE ON t1 BEGIN
+        INSERT INTO log VALUES(old.z || '->' || new.z);
+      END;
+      CREATE TRIGGER tr2 AFTER UPDATE ON t1 BEGIN
+        INSERT INTO log VALUES(old.y || '->' || new.y);
+      END;
+    }
+  }
+  
+  faultsim_save_and_close
+
+  do_faultsim_test 1.$tn -prep {
+    faultsim_restore_and_reopen
+    execsql { SELECT * FROM t1 }
+  } -body {
+    execsql {
+      WITH data(k, v) AS (
+          VALUES(3, 'thirty'), (1, 'ten')
+      )
+      UPDATE t1 SET z=v FROM data WHERE x=k;
+    }
+  } -test {
+    faultsim_test_result {0 {}} {1 {vtable constructor failed: t1}}
+    if {$testrc==0} {
+      set res [execsql { SELECT * FROM t1 }]
+      if {$res!="1 i ten 2 ii two 3 iii thirty 4 iv four"} {
+        error "unexpected result: $res"
+      }
+    }
+  }
+}
+
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a, b, c);
+  CREATE TABLE t2(x, y, z);
+}
+faultsim_save_and_close
+do_faultsim_test 2.1 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      UPDATE t2 SET x=a FROM t1 WHERE c=z;
+    END;
+  }
+} -test {
+    faultsim_test_result {0 {}}
+}
+
+faultsim_restore_and_reopen
+do_execsql_test 2.2 {
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    UPDATE t1 SET a=x FROM t2 WHERE c=z;
+  END;
+
+  INSERT INTO t2 VALUES(1, 1, 1);
+  INSERT INTO t2 VALUES(2, 2, 2);
+  INSERT INTO t2 VALUES(3, 3, 3);
+} 
+faultsim_save_and_close
+
+do_faultsim_test 2.3 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    INSERT INTO t1 VALUES(NULL, NULL, 1), (NULL, NULL, 3);
+  }
+} -test {
+  faultsim_test_result {0 {}}
+  if {$testrc==0} {
+    set res [execsql { SELECT * FROM t1 }]
+    if {$res!="1 {} 1 3 {} 3"} {
+      error "unexpected result: $res"
+    }
+  }
+}
+
+
+finish_test
+

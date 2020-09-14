@@ -1,0 +1,214 @@
+# 2011 March 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for the session module. More
+# specifically, it focuses on testing the session modules response to
+# database schema modifications and mismatches.
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session3
+
+#-------------------------------------------------------------------------
+# These tests - session3-1.* - verify that the session module behaves
+# correctly when confronted with a schema mismatch when applying a 
+# changeset (in function sqlite3changeset_apply()).
+#
+#   session3-1.1.*: Table does not exist in target db.
+#   session3-1.2.*: Table has wrong number of columns in target db.
+#   session3-1.3.*: Table has wrong PK columns in target db.
+#
+db close
+sqlite3_shutdown
+test_sqlite3_log log
+sqlite3 db test.db
+
+proc log {code msg} { lappend ::log $code $msg }
+
+forcedelete test.db2
+sqlite3 db2 test.db2
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+}
+do_test 1.1 {
+  set ::log {}
+  do_then_apply_sql {
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+  }
+  set ::log
+} {SQLITE_SCHEMA {sqlite3changeset_apply(): no such table: t1}}
+
+do_test 1.2.0 {
+  execsql { CREATE TABLE t1(a PRIMARY KEY, b, c) } db2
+} {}
+do_test 1.2.1 {
+  set ::log {}
+  do_then_apply_sql {
+    INSERT INTO t1 VALUES(5, 6);
+    INSERT INTO t1 VALUES(7, 8);
+  }
+  set ::log
+} {}
+do_test 1.2.2 {
+  db2 eval { SELECT * FROM t1 }
+} {5 6 {} 7 8 {}}
+
+do_test 1.3.0 {
+  execsql { 
+    DROP TABLE t1;
+    CREATE TABLE t1(a, b PRIMARY KEY);
+  } db2
+} {}
+do_test 1.3.1 {
+  set ::log {}
+  do_then_apply_sql {
+    INSERT INTO t1 VALUES(9, 10);
+    INSERT INTO t1 VALUES(11, 12);
+  }
+  set ::log
+} {SQLITE_SCHEMA {sqlite3changeset_apply(): primary key mismatch for table t1}}
+
+#-------------------------------------------------------------------------
+# These tests - session3-2.* - verify that the session module behaves
+# correctly when the schema of an attached table is modified during the
+# session.
+#
+#   session3-2.1.*: Table is dropped midway through the session.
+#   session3-2.2.*: Table is dropped and recreated with a different # cols.
+#   session3-2.3.*: Table is dropped and recreated with a different PK.
+#
+# In all of these scenarios, the call to sqlite3session_changeset() will
+# return SQLITE_SCHEMA. Also:
+#   
+#   session3-2.4.*: Table is dropped and recreated with an identical schema.
+#                   In this case sqlite3session_changeset() returns SQLITE_OK.
+#
+
+do_test 2.1 {
+  execsql { CREATE TABLE t2(a, b PRIMARY KEY) }
+  sqlite3session S db main
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2);
+    DROP TABLE t2;
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+
+do_test 2.2.1 {
+  S delete
+  sqlite3session S db main
+  execsql { CREATE TABLE t2(a, b PRIMARY KEY, c) }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2, 3);
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY);
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+do_test 2.2.2 {
+  S delete
+  sqlite3session S db main
+  execsql { 
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY, c);
+  }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2, 3);
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY, c, d);
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+do_test 2.2.3 {
+  S delete
+  sqlite3session S db main
+  execsql { 
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY, c);
+  }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2, 3);
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY);
+    INSERT INTO t2 VALUES(4, 5);
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+do_test 2.2.4 {
+  S delete
+  sqlite3session S db main
+  execsql { 
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY, c);
+  }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2, 3);
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY, c, d);
+    INSERT INTO t2 VALUES(4, 5, 6, 7);
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+
+do_test 2.3 {
+  S delete
+  sqlite3session S db main
+  execsql { 
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY);
+  }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2);
+    DROP TABLE t2;
+    CREATE TABLE t2(a PRIMARY KEY, b);
+  }
+  list [catch { S changeset } msg] $msg
+} {1 SQLITE_SCHEMA}
+
+do_test 2.4 {
+  S delete
+  sqlite3session S db main
+  execsql { 
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY);
+  }
+  S attach t2
+  execsql {
+    INSERT INTO t2 VALUES(1, 2);
+    DROP TABLE t2;
+    CREATE TABLE t2(a, b PRIMARY KEY);
+  }
+  list [catch { S changeset } msg] $msg
+} {0 {}}
+
+S delete
+
+
+catch { db close }
+catch { db2 close }
+sqlite3_shutdown
+test_sqlite3_log
+sqlite3_initialize
+
+finish_test

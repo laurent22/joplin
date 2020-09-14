@@ -1,0 +1,134 @@
+# 2014-12-28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Verify that WITHOUT ROWID tables work correctly when the PRIMARY KEY
+# has redundant columns.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+proc do_execsql_test_if_vtab {tn sql {res {}}} {
+  ifcapable vtab { uplevel [list do_execsql_test $tn $sql $res] }
+}
+
+do_execsql_test without_rowid6-100 {
+  CREATE TABLE t1(a,b,c,d,e, PRIMARY KEY(a,b,c,a,b,c,d,a,b,c)) WITHOUT ROWID;
+  CREATE INDEX t1a ON t1(b, b);
+  WITH RECURSIVE
+    c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<1000)
+  INSERT INTO t1(a,b,c,d,e) SELECT i, i+1000, printf('x%dy',i), 0, 0 FROM c;
+  ANALYZE;
+} {}
+do_execsql_test_if_vtab without_rowid6-101 {
+  SELECT name, key FROM pragma_index_xinfo('t1');
+} {a 1 b 1 c 1 d 1 e 0}
+do_execsql_test without_rowid6-110 {
+  SELECT c FROM t1 WHERE a=123;
+} {x123y}
+do_execsql_test without_rowid6-120 {
+  SELECT c FROM t1 WHERE b=1123;
+} {x123y}
+do_execsql_test without_rowid6-130 {
+  SELECT c FROM t1 ORDER BY a DESC LIMIT 5;
+} {x1000y x999y x998y x997y x996y}
+do_execsql_test without_rowid6-140 {
+  SELECT c FROM t1 ORDER BY b LIMIT 5;
+} {x1y x2y x3y x4y x5y}
+
+# Column t1.b starts out as a unique index, but that index is
+# subsequently converted into a PRIMARY KEY.
+#
+do_execsql_test without_rowid6-200 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(
+    a UNIQUE,
+    b UNIQUE,
+    c UNIQUE,
+    PRIMARY KEY(b)
+  ) WITHOUT ROWID;
+  INSERT INTO t1(a,b,c) VALUES(1,8,3),(4,5,6),(7,2,9);
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {4 1}
+do_execsql_test_if_vtab without_rowid6-201 {
+  SELECT name, key FROM pragma_index_xinfo('t1');
+} {b 1 a 0 c 0}
+do_execsql_test without_rowid6-210 {
+  EXPLAIN QUERY PLAN
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {/SEARCH TABLE t1 USING PRIMARY KEY .b>../}
+do_execsql_test without_rowid6-220 {
+  PRAGMA index_list(t1);
+} {/sqlite_autoindex_t1_2 1 pk/}
+
+do_execsql_test without_rowid6-300 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(
+    a UNIQUE,
+    b PRIMARY KEY,
+    c UNIQUE,
+    UNIQUE(b)
+  ) WITHOUT ROWID;
+  INSERT INTO t1(a,b,c) VALUES(1,8,3),(4,5,6),(7,2,9);
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {4 1}
+do_execsql_test without_rowid6-310 {
+  EXPLAIN QUERY PLAN
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {/SEARCH TABLE t1 USING PRIMARY KEY .b>../}
+do_execsql_test without_rowid6-320 {
+  PRAGMA index_list(t1);
+} {/sqlite_autoindex_t1_2 1 pk/}
+
+do_execsql_test without_rowid6-400 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(
+    a UNIQUE,
+    b UNIQUE PRIMARY KEY,
+    c UNIQUE
+  ) WITHOUT ROWID;
+  INSERT INTO t1(a,b,c) VALUES(1,8,3),(4,5,6),(7,2,9);
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {4 1}
+do_execsql_test without_rowid6-410 {
+  EXPLAIN QUERY PLAN
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {/SEARCH TABLE t1 USING PRIMARY KEY .b>../}
+do_execsql_test without_rowid6-420 {
+  PRAGMA index_list(t1);
+} {/sqlite_autoindex_t1_2 1 pk/}
+
+do_execsql_test without_rowid6-500 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b,c,
+    UNIQUE(b,c),
+    PRIMARY KEY(b,c)
+  ) WITHOUT ROWID;
+  INSERT INTO t1(a,b,c) VALUES(1,8,3),(4,5,6),(7,2,9);
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {4 1}
+do_execsql_test_if_vtab without_rowid6-501 {
+  SELECT name, key FROM pragma_index_xinfo('t1');
+} {b 1 c 1 a 0}
+do_execsql_test without_rowid6-510 {
+  EXPLAIN QUERY PLAN
+  SELECT a FROM t1 WHERE b>3 ORDER BY b;
+} {/SEARCH TABLE t1 USING PRIMARY KEY .b>../}
+do_execsql_test without_rowid6-520 {
+  PRAGMA index_list(t1);
+} {/sqlite_autoindex_t1_1 1 pk/}
+
+do_catchsql_test without_rowid6-600 {
+  CREATE TABLE t6(a,b,c,PRIMARY KEY(a,rowid,b))WITHOUT ROWID;
+} {1 {no such column: rowid}}
+
+
+finish_test

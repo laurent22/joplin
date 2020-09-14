@@ -1,0 +1,55 @@
+# 2014 March 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Miscellaneous tests for errors in the rtree constructor.
+#
+
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+ifcapable !rtree||!builtin_test {
+  finish_test
+  return
+}
+set testprefix rtreeD
+
+#-------------------------------------------------------------------------
+# Test that if an SQLITE_BUSY is encountered within the vtable 
+# constructor, a relevant error message is returned.
+#
+do_multiclient_test tn {
+  do_test 1.$tn.1 {
+    sql1 {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1,2);
+      CREATE VIRTUAL TABLE rt USING rtree(id, minx, maxx, miny, maxy);
+      INSERT INTO rt VALUES(1,2,3,4,5);
+    }
+  } {}
+
+  do_test 1.$tn.2 {
+    sql2 { SELECT * FROM t1; }
+  } {1 2}
+
+  do_test 1.$tn.3 {
+    sql1 { BEGIN EXCLUSIVE; INSERT INTO t1 VALUES(3, 4); }
+  } {}
+
+  do_test 1.$tn.4 {
+    list [catch { sql2 { SELECT * FROM rt } } msg] $msg
+  } {1 {database is locked}}
+}
+
+finish_test

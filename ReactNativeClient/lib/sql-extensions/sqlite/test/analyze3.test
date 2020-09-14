@@ -1,0 +1,729 @@
+# 2009 August 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for SQLite library. This file 
+# implements tests for range and LIKE constraints that use bound variables
+# instead of literal constant arguments.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix analyze3
+
+ifcapable !stat4 {
+  finish_test
+  return
+}
+
+#----------------------------------------------------------------------
+# Test Organization:
+#
+# analyze3-1.*: Test that the values of bound parameters are considered 
+#               in the same way as constants when planning queries that
+#               use range constraints.
+#
+# analyze3-2.*: Test that the values of bound parameters are considered 
+#               in the same way as constants when planning queries that
+#               use LIKE expressions in the WHERE clause.
+#
+# analyze3-3.*: Test that binding to a variable does not invalidate the 
+#               query plan when there is no way in which replanning the
+#               query may produce a superior outcome.
+#
+# analyze3-4.*: Test that SQL or authorization callback errors occuring
+#               within sqlite3Reprepare() are handled correctly.
+#
+# analyze3-5.*: Check that the query plans of applicable statements are
+#               invalidated if the values of SQL parameter are modified
+#               using the clear_bindings() or transfer_bindings() APIs.
+# 
+# analyze3-6.*: Test that the problem fixed by commit [127a5b776d] is fixed.
+#
+# analyze3-7.*: Test that some memory leaks discovered by fuzz testing 
+#               have been fixed.
+#
+
+proc getvar {varname} { uplevel #0 set $varname }
+db function var getvar
+
+proc eqp {sql {db db}} {
+  uplevel execsql [list "EXPLAIN QUERY PLAN $sql"] $db
+}
+
+proc sf_execsql {sql {db db}} {
+  set ::sqlite_search_count 0
+  set r [uplevel [list execsql $sql $db]]
+
+  concat $::sqlite_search_count [$db status step] $r
+}
+
+#-------------------------------------------------------------------------
+#
+# analyze3-1.1.1: 
+#   Create a table with two columns. Populate the first column (affinity 
+#   INTEGER) with integer values from 100 to 1100. Create an index on this 
+#   column. ANALYZE the table.
+#
+# analyze3-1.1.2 - 3.1.3
+#   Show that there are two possible plans for querying the table with
+#   a range constraint on the indexed column - "full table scan" or "use 
+#   the index". When the range is specified using literal values, SQLite
+#   is able to pick the best plan based on the samples in sqlite_stat3.
+#
+# analyze3-1.1.4 - 3.1.9
+#   Show that using SQL variables produces the same results as using
+#   literal values to constrain the range scan.
+#
+#   These tests also check that the compiler code considers column 
+#   affinities when estimating the number of rows scanned by the "use 
+#   index strategy".
+#
+do_test analyze3-1.1.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(x INTEGER, y);
+    CREATE INDEX i1 ON t1(x);
+  }
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i+100, $i) }
+  }
+  execsql {
+    COMMIT;
+    ANALYZE;
+  }
+
+  execsql { SELECT count(*)>0 FROM sqlite_stat4; }
+} {1}
+
+do_execsql_test analyze3-1.1.x {
+  SELECT count(*) FROM t1 WHERE x>200 AND x<300;
+  SELECT count(*) FROM t1 WHERE x>0 AND x<1100;
+} {99 1000}
+
+# The first of the following two SELECT statements visits 99 rows. So
+# it is better to use the index. But the second visits every row in 
+# the table (1000 in total) so it is better to do a full-table scan.
+#
+do_eqp_test analyze3-1.1.2 {
+  SELECT sum(y) FROM t1 WHERE x>200 AND x<300
+} {SEARCH TABLE t1 USING INDEX i1 (x>? AND x<?)}
+do_eqp_test analyze3-1.1.3 {
+  SELECT sum(y) FROM t1 WHERE x>0 AND x<1100 
+} {SCAN TABLE t1}
+
+# 2017-06-26:  Verify that the SQLITE_DBCONFIG_ENABLE_QPSG setting disables
+# the use of bound parameters by STAT4
+#
+db cache flush
+unset -nocomplain l
+unset -nocomplain u
+do_eqp_test analyze3-1.1.3.100 {
+  SELECT sum(y) FROM t1 WHERE x>$l AND x<$u
+} {SEARCH TABLE t1 USING INDEX i1 (x>? AND x<?)}
+set l 200
+set u 300
+do_eqp_test analyze3-1.1.3.101 {
+  SELECT sum(y) FROM t1 WHERE x>$l AND x<$u
+} {SEARCH TABLE t1 USING INDEX i1 (x>? AND x<?)}
+set l 0
+set u 1100
+do_eqp_test analyze3-1.1.3.102 {
+  SELECT sum(y) FROM t1 WHERE x>$l AND x<$u
+} {SCAN TABLE t1}
+db cache flush
+sqlite3_db_config db ENABLE_QPSG 1
+do_eqp_test analyze3-1.1.3.103 {
+  SELECT sum(y) FROM t1 WHERE x>$l AND x<$u
+} {SEARCH TABLE t1 USING INDEX i1 (x>? AND x<?)}
+db cache flush
+sqlite3_db_config db ENABLE_QPSG 0
+do_eqp_test analyze3-1.1.3.104 {
+  SELECT sum(y) FROM t1 WHERE x>$l AND x<$u
+} {SCAN TABLE t1}
+
+do_test analyze3-1.1.4 {
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>200 AND x<300 }
+} {199 0 14850}
+do_test analyze3-1.1.5 {
+  set l [string range "200" 0 end]
+  set u [string range "300" 0 end]
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>$l AND x<$u }
+} {199 0 14850}
+do_test analyze3-1.1.6 {
+  set l [expr int(200)]
+  set u [expr int(300)]
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>$l AND x<$u }
+} {199 0 14850}
+do_test analyze3-1.1.7 {
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>0 AND x<1100 }
+} {999 999 499500}
+do_test analyze3-1.1.8 {
+  set l [string range "0" 0 end]
+  set u [string range "1100" 0 end]
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>$l AND x<$u }
+} {999 999 499500}
+do_test analyze3-1.1.9 {
+  set l [expr int(0)]
+  set u [expr int(1100)]
+  sf_execsql { SELECT sum(y) FROM t1 WHERE x>$l AND x<$u }
+} {999 999 499500}
+
+
+# The following tests are similar to the block above. The difference is
+# that the indexed column has TEXT affinity in this case. In the tests
+# above the affinity is INTEGER.
+#
+do_test analyze3-1.2.1 {
+  execsql {
+    BEGIN;
+      CREATE TABLE t2(x TEXT, y);
+      INSERT INTO t2 SELECT * FROM t1;
+      CREATE INDEX i2 ON t2(x);
+    COMMIT;
+    ANALYZE;
+  }
+} {}
+do_execsql_test analyze3-2.1.x {
+  SELECT count(*) FROM t2 WHERE x>1 AND x<2;
+  SELECT count(*) FROM t2 WHERE x>0 AND x<99;
+} {200 990}
+do_eqp_test analyze3-1.2.2 {
+  SELECT sum(y) FROM t2 WHERE x>1 AND x<2
+} {SEARCH TABLE t2 USING INDEX i2 (x>? AND x<?)}
+do_eqp_test analyze3-1.2.3 {
+  SELECT sum(y) FROM t2 WHERE x>0 AND x<99
+} {SCAN TABLE t2}
+
+do_test analyze3-1.2.4 {
+  sf_execsql { SELECT sum(y) FROM t2 WHERE x>12 AND x<20 }
+} {161 0 4760}
+do_test analyze3-1.2.5 {
+  set l [string range "12" 0 end]
+  set u [string range "20" 0 end]
+  sf_execsql {SELECT typeof($l), typeof($u), sum(y) FROM t2 WHERE x>$l AND x<$u}
+} {161 0 text text 4760}
+do_test analyze3-1.2.6 {
+  set l [expr int(12)]
+  set u [expr int(20)]
+  sf_execsql {SELECT typeof($l), typeof($u), sum(y) FROM t2 WHERE x>$l AND x<$u}
+} {161 0 integer integer 4760}
+do_test analyze3-1.2.7 {
+  sf_execsql { SELECT sum(y) FROM t2 WHERE x>0 AND x<99 }
+} {999 999 490555}
+do_test analyze3-1.2.8 {
+  set l [string range "0" 0 end]
+  set u [string range "99" 0 end]
+  sf_execsql {SELECT typeof($l), typeof($u), sum(y) FROM t2 WHERE x>$l AND x<$u}
+} {999 999 text text 490555}
+do_test analyze3-1.2.9 {
+  set l [expr int(0)]
+  set u [expr int(99)]
+  sf_execsql {SELECT typeof($l), typeof($u), sum(y) FROM t2 WHERE x>$l AND x<$u}
+} {999 999 integer integer 490555}
+
+# Same tests a third time. This time, column x has INTEGER affinity and
+# is not the leftmost column of the table. This triggered a bug causing
+# SQLite to use sub-optimal query plans in 3.6.18 and earlier.
+#
+do_test analyze3-1.3.1 {
+  execsql {
+    BEGIN;
+      CREATE TABLE t3(y TEXT, x INTEGER);
+      INSERT INTO t3 SELECT y, x FROM t1;
+      CREATE INDEX i3 ON t3(x);
+    COMMIT;
+    ANALYZE;
+  }
+} {}
+do_execsql_test analyze3-1.3.x {
+  SELECT count(*) FROM t3 WHERE x>200 AND x<300;
+  SELECT count(*) FROM t3 WHERE x>0 AND x<1100
+} {99 1000}
+do_eqp_test analyze3-1.3.2 {
+  SELECT sum(y) FROM t3 WHERE x>200 AND x<300
+} {SEARCH TABLE t3 USING INDEX i3 (x>? AND x<?)}
+do_eqp_test analyze3-1.3.3 {
+  SELECT sum(y) FROM t3 WHERE x>0 AND x<1100
+} {SCAN TABLE t3}
+
+do_test analyze3-1.3.4 {
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>200 AND x<300 }
+} {199 0 14850}
+do_test analyze3-1.3.5 {
+  set l [string range "200" 0 end]
+  set u [string range "300" 0 end]
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>$l AND x<$u }
+} {199 0 14850}
+do_test analyze3-1.3.6 {
+  set l [expr int(200)]
+  set u [expr int(300)]
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>$l AND x<$u }
+} {199 0 14850}
+do_test analyze3-1.3.7 {
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>0 AND x<1100 }
+} {999 999 499500}
+do_test analyze3-1.3.8 {
+  set l [string range "0" 0 end]
+  set u [string range "1100" 0 end]
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>$l AND x<$u }
+} {999 999 499500}
+do_test analyze3-1.3.9 {
+  set l [expr int(0)]
+  set u [expr int(1100)]
+  sf_execsql { SELECT sum(y) FROM t3 WHERE x>$l AND x<$u }
+} {999 999 499500}
+
+#-------------------------------------------------------------------------
+# Test that the values of bound SQL variables may be used for the LIKE
+# optimization.
+#
+drop_all_tables
+do_test analyze3-2.1 {
+  execsql {
+    PRAGMA case_sensitive_like=off;
+    BEGIN;
+    CREATE TABLE t1(a, b TEXT COLLATE nocase);
+    CREATE INDEX i1 ON t1(b);
+  }
+  for {set i 0} {$i < 1000} {incr i} {
+    set t ""
+    append t [lindex {a b c d e f g h i j} [expr $i/100]]
+    append t [lindex {a b c d e f g h i j} [expr ($i/10)%10]]
+    append t [lindex {a b c d e f g h i j} [expr ($i%10)]]
+    execsql { INSERT INTO t1 VALUES($i, $t) }
+  }
+  execsql COMMIT
+} {}
+do_eqp_test analyze3-2.2 {
+  SELECT count(a) FROM t1 WHERE b LIKE 'a%'
+} {SEARCH TABLE t1 USING INDEX i1 (b>? AND b<?)}
+do_eqp_test analyze3-2.3 {
+  SELECT count(a) FROM t1 WHERE b LIKE '%a'
+} {SCAN TABLE t1}
+
+# Return the first argument if like_match_blobs is true (the default)
+# or the second argument if not
+#
+proc ilmb {a b} {
+  ifcapable like_match_blobs {return $a}
+  return $b
+}
+
+do_test analyze3-2.4 {
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE 'a%' }
+} [list [ilmb 102 101] 0 100]
+do_test analyze3-2.5 {
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE '%a' }
+} {999 999 100}
+
+do_test analyze3-2.6 {
+  set like "a%"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} [list [ilmb 102 101] 0 100]
+do_test analyze3-2.7 {
+  set like "%a"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} {999 999 100}
+do_test analyze3-2.8 {
+  set like "a"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} [list [ilmb 102 101] 0 0]
+do_test analyze3-2.9 {
+  set like "ab"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} [list [ilmb 12 11] 0 0]
+do_test analyze3-2.10 {
+  set like "abc"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} [list [ilmb 3 2] 0 1]
+do_test analyze3-2.11 {
+  set like "a_c"
+  sf_execsql { SELECT count(*) FROM t1 WHERE b LIKE $like }
+} [list [ilmb 102 101] 0 10]
+
+
+#-------------------------------------------------------------------------
+# This block of tests checks that statements are correctly marked as
+# expired when the values bound to any parameters that may affect the 
+# query plan are modified.
+#
+drop_all_tables
+db auth auth
+proc auth {args} {
+  set ::auth 1
+  return SQLITE_OK
+}
+
+do_test analyze3-3.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX i1 ON t1(b);
+  }
+  for {set i 0} {$i < 100} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i, $i, $i) }
+  }
+  execsql COMMIT
+  execsql ANALYZE
+} {}
+do_test analyze3-3.2.1 {
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE b>?" -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.2.2 {
+  sqlite3_bind_text $S 1 "abc" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.2.4 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.2.5 {
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE b=?" -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.2.6 {
+  sqlite3_bind_text $S 1 "abc" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.2.7 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.4.1 {
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE a=? AND b>?" -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.4.2 {
+  sqlite3_bind_text $S 1 "abc" 3
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.4.3 {
+  sqlite3_bind_text $S 2 "def" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.4.4 {
+  sqlite3_bind_text $S 2 "ghi" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.4.5 {
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.4.6 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.5.1 {
+  set S [sqlite3_prepare_v2 db {
+    SELECT * FROM t1 WHERE a IN (
+      ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
+      ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
+      ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31
+    ) AND b>?32;
+  } -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.5.2 {
+  sqlite3_bind_text $S 31 "abc" 3
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.5.3 {
+  sqlite3_bind_text $S 32 "def" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.5.5 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.6.1 {
+  set S [sqlite3_prepare_v2 db {
+    SELECT * FROM t1 WHERE a IN (
+      ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
+      ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
+      ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32
+    ) AND b>?33;
+  } -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.6.2 {
+  sqlite3_bind_text $S 32 "abc" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.6.3 {
+  sqlite3_bind_text $S 33 "def" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.6.5 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.7.1 {
+  set S [sqlite3_prepare_v2 db {
+    SELECT * FROM t1 WHERE a IN (
+      ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?33,
+      ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
+      ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32
+    ) AND b>?10;
+  } -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.7.2 {
+  sqlite3_bind_text $S 32 "abc" 3
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.7.3 {
+  sqlite3_bind_text $S 33 "def" 3
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.7.4 {
+  sqlite3_bind_text $S 10 "def" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.7.6 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-3.8.1 {
+  execsql {
+    CREATE TABLE t4(x, y TEXT COLLATE NOCASE);
+    CREATE INDEX i4 ON t4(y);
+  }
+} {}
+do_test analyze3-3.8.2 {
+  set S [sqlite3_prepare_v2 db {
+    SELECT * FROM t4 WHERE x != ? AND y LIKE ?
+  } -1 dummy]
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.8.3 {
+  sqlite3_bind_text $S 1 "abc" 3
+  sqlite3_expired $S
+} {0}
+do_test analyze3-3.8.4 {
+  sqlite3_bind_text $S 2 "def" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.7 {
+  sqlite3_bind_text $S 2 "ghi%" 4
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.8 {
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.9 {
+  sqlite3_bind_text $S 2 "ghi%def" 7
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.10 {
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.11 {
+  sqlite3_bind_text $S 2 "%ab" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.12 {
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.12 {
+  sqlite3_bind_text $S 2 "%de" 3
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.13 {
+  sqlite3_expired $S
+} {1}
+do_test analyze3-3.8.14 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+#-------------------------------------------------------------------------
+# These tests check that errors encountered while repreparing an SQL
+# statement within sqlite3Reprepare() are handled correctly.
+#
+
+# Check a schema error.
+#
+do_test analyze3-4.1.1 {
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE a=? AND b>?" -1 dummy]
+  sqlite3_step $S
+} {SQLITE_DONE}
+do_test analyze3-4.1.2 {
+  sqlite3_reset $S
+  sqlite3_bind_text $S 2 "abc" 3
+  execsql { DROP TABLE t1 }
+  sqlite3_step $S
+} {SQLITE_ERROR}
+do_test analyze3-4.1.3 {
+  sqlite3_finalize $S
+} {SQLITE_ERROR}
+
+# Check an authorization error.
+#
+do_test analyze3-4.2.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX i1 ON t1(b);
+  }
+  for {set i 0} {$i < 100} {incr i} {
+    execsql { INSERT INTO t1 VALUES($i, $i, $i) }
+  }
+  execsql COMMIT
+  execsql ANALYZE
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE a=? AND b>?" -1 dummy]
+  sqlite3_step $S
+} {SQLITE_DONE}
+db auth auth
+proc auth {args} {
+  if {[lindex $args 0] == "SQLITE_READ"} {return SQLITE_DENY}
+  return SQLITE_OK
+}
+do_test analyze3-4.2.2 {
+  sqlite3_reset $S
+  sqlite3_bind_text $S 2 "abc" 3
+  sqlite3_step $S
+} {SQLITE_AUTH}
+do_test analyze3-4.2.4 {
+  sqlite3_finalize $S
+} {SQLITE_AUTH}
+
+# Check the effect of an authorization error that occurs in a re-prepare
+# performed by sqlite3_step() is the same as one that occurs within
+# sqlite3Reprepare().
+#
+do_test analyze3-4.3.1 {
+  db auth {}
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE a=? AND b>?" -1 dummy]
+  execsql { CREATE TABLE t2(d, e, f) }
+  db auth auth
+  sqlite3_step $S
+} {SQLITE_AUTH}
+do_test analyze3-4.3.2 {
+  sqlite3_finalize $S
+} {SQLITE_AUTH}
+db auth {}
+
+#-------------------------------------------------------------------------
+# Test that modifying bound variables using the clear_bindings() or
+# transfer_bindings() APIs works.
+#
+#   analyze3-5.1.*: sqlite3_clear_bindings()
+#   analyze3-5.2.*: sqlite3_transfer_bindings()
+#
+do_test analyze3-5.1.1 {
+  drop_all_tables
+  execsql {
+    CREATE TABLE t1(x TEXT COLLATE NOCASE);
+    CREATE INDEX i1 ON t1(x);
+    INSERT INTO t1 VALUES('aaa');
+    INSERT INTO t1 VALUES('abb');
+    INSERT INTO t1 VALUES('acc');
+    INSERT INTO t1 VALUES('baa');
+    INSERT INTO t1 VALUES('bbb');
+    INSERT INTO t1 VALUES('bcc');
+  }
+
+  set S [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE x LIKE ?" -1 dummy]
+  sqlite3_bind_text $S 1 "a%" 2
+  set R [list]
+  while { "SQLITE_ROW" == [sqlite3_step $S] } {
+    lappend R [sqlite3_column_text $S 0]
+  }
+  concat [sqlite3_reset $S] $R
+} {SQLITE_OK aaa abb acc}
+do_test analyze3-5.1.2 {
+  sqlite3_clear_bindings $S
+  set R [list]
+  while { "SQLITE_ROW" == [sqlite3_step $S] } {
+    lappend R [sqlite3_column_text $S 0]
+  }
+  concat [sqlite3_reset $S] $R
+} {SQLITE_OK}
+do_test analyze3-5.1.3 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+do_test analyze3-5.1.1 {
+  set S1 [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE x LIKE ?" -1 dummy]
+  sqlite3_bind_text $S1 1 "b%" 2
+  set R [list]
+  while { "SQLITE_ROW" == [sqlite3_step $S1] } {
+    lappend R [sqlite3_column_text $S1 0]
+  }
+  concat [sqlite3_reset $S1] $R
+} {SQLITE_OK baa bbb bcc}
+
+do_test analyze3-5.1.2 {
+  set S2 [sqlite3_prepare_v2 db "SELECT * FROM t1 WHERE x = ?" -1 dummy]
+  sqlite3_bind_text $S2 1 "a%" 2
+  sqlite3_transfer_bindings $S2 $S1
+  set R [list]
+  while { "SQLITE_ROW" == [sqlite3_step $S1] } {
+    lappend R [sqlite3_column_text $S1 0]
+  }
+  concat [sqlite3_reset $S1] $R
+} {SQLITE_OK aaa abb acc}
+do_test analyze3-5.1.3 {
+  sqlite3_finalize $S2
+  sqlite3_finalize $S1
+} {SQLITE_OK}
+
+#-------------------------------------------------------------------------
+
+do_test analyze3-6.1 {
+  execsql { DROP TABLE IF EXISTS t1 }
+  execsql BEGIN
+  execsql { CREATE TABLE t1(a, b, c) }
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql "INSERT INTO t1 VALUES([expr $i/100], 'x', [expr $i/10])"
+  }
+  execsql {
+    CREATE INDEX i1 ON t1(a, b);
+    CREATE INDEX i2 ON t1(c);
+  }
+  execsql COMMIT
+  execsql ANALYZE
+} {}
+
+do_eqp_test analyze3-6-3 {
+  SELECT * FROM t1 WHERE a = 5 AND c = 13;
+} {SEARCH TABLE t1 USING INDEX i2 (c=?)}
+
+do_eqp_test analyze3-6-2 {
+  SELECT * FROM t1 WHERE a = 5 AND b > 'w' AND c = 13;
+} {SEARCH TABLE t1 USING INDEX i2 (c=?)}
+
+#-----------------------------------------------------------------------------
+# 2015-04-20.
+# Memory leak in sqlite3Stat4ProbeFree().  (Discovered while fuzzing.)
+#
+do_execsql_test analyze-7.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1,1,'0000');
+  CREATE INDEX t0b ON t1(b);
+  ANALYZE;
+  SELECT c FROM t1 WHERE b=3 AND a BETWEEN 30 AND hex(1);
+} {}
+
+# At one point duplicate stat1 entries were causing a memory leak.
+#
+reset_db
+do_execsql_test 7.2 {
+  CREATE TABLE t1(a,b,c);
+  CREATE INDEX t1a ON t1(a);
+  ANALYZE;
+  SELECT * FROM sqlite_stat1;
+  INSERT INTO sqlite_stat1(tbl,idx,stat) VALUES('t1','t1a','12000');
+  INSERT INTO sqlite_stat1(tbl,idx,stat) VALUES('t1','t1a','12000');
+  ANALYZE sqlite_master;
+}
+
+finish_test

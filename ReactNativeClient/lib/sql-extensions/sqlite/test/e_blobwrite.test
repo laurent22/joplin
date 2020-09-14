@@ -1,0 +1,203 @@
+# 2014 October 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_blobwrite
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-62898-22698 This function is used to write data into an
+# open BLOB handle from a caller-supplied buffer. N bytes of data are
+# copied from the buffer Z into the open BLOB, starting at offset
+# iOffset.
+#
+set dots [string repeat . 40]
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, t TEXT);
+  INSERT INTO t1 VALUES(-1, $dots);
+  INSERT INTO t1 VALUES(-2, $dots);
+  INSERT INTO t1 VALUES(-3, $dots);
+  INSERT INTO t1 VALUES(-4, $dots);
+  INSERT INTO t1 VALUES(-5, $dots);
+  INSERT INTO t1 VALUES(-6, $dots);
+}
+
+proc blob_write_test {tn id iOffset blob nData final} {
+  sqlite3_blob_open db main t1 t $id 1 B
+
+  # EVIDENCE-OF: R-45864-01884 On success, sqlite3_blob_write() returns
+  # SQLITE_OK. Otherwise, an error code or an extended error code is
+  # returned.
+  #
+  #   This block tests the SQLITE_OK case in the requirement above (the
+  #   Tcl sqlite3_blob_write() wrapper uses an empty string in place of
+  #   "SQLITE_OK"). The error cases are tested by the "blob_write_error_test"
+  #   tests below.
+  #
+  set res [sqlite3_blob_write $B $iOffset $blob $nData]
+  uplevel [list do_test $tn.1 [list set {} $res] {}]
+
+  sqlite3_blob_close $B
+  uplevel [list do_execsql_test $tn.3 "SELECT t FROM t1 WHERE a=$id" $final]
+}
+
+set blob "0123456789012345678901234567890123456789"
+blob_write_test 1.1 -1 0 $blob 10  { 0123456789.............................. }
+blob_write_test 1.2 -2 8 $blob 10  { ........0123456789...................... }
+blob_write_test 1.3 -3 8 $blob 1   { ........0............................... }
+blob_write_test 1.4 -4 18 $blob 22 { ..................0123456789012345678901 }
+blob_write_test 1.5 -5 18 $blob 0  { ........................................ }
+blob_write_test 1.6 -6 0 $blob 40  { 0123456789012345678901234567890123456789 }
+
+
+proc blob_write_error_test {tn B iOffset blob nData errcode errmsg} {
+
+  # In cases where the underlying sqlite3_blob_write() function returns
+  # SQLITE_OK, the Tcl wrapper returns an empty string. If the underlying
+  # function returns an error, the Tcl wrapper throws an exception with
+  # the error code as the Tcl exception message.
+  #
+  if {$errcode=="SQLITE_OK"} {
+    set ret ""
+    set isError 0
+  } else {
+    set ret $errcode
+    set isError 1
+  }
+
+  set cmd [list sqlite3_blob_write $B $iOffset $blob $nData]
+  uplevel [list do_test $tn.1 [subst -nocommands {
+    list [catch {$cmd} msg] [set msg]              
+  }] [list $isError $ret]]
+
+  # EVIDENCE-OF: R-34782-18311 Unless SQLITE_MISUSE is returned, this
+  # function sets the database connection error code and message
+  # accessible via sqlite3_errcode() and sqlite3_errmsg() and related
+  # functions.
+  #
+  if {$errcode == "SQLITE_MISUSE"} { error "test proc misuse!" }
+  uplevel [list do_test $tn.2 [list sqlite3_errcode db] $errcode]
+  uplevel [list do_test $tn.3 [list sqlite3_errmsg db] $errmsg]
+}
+
+do_execsql_test 2.0 {
+  CREATE TABLE t2(a TEXT, b INTEGER PRIMARY KEY);
+  INSERT INTO t2 VALUES($dots, 43);
+  INSERT INTO t2 VALUES($dots, 44);
+  INSERT INTO t2 VALUES($dots, 45);
+}
+
+# EVIDENCE-OF: R-63341-57517 If the BLOB handle passed as the first
+# argument was not opened for writing (the flags parameter to
+# sqlite3_blob_open() was zero), this function returns SQLITE_READONLY.
+#
+sqlite3_blob_open db main t2 a 43 0 B
+blob_write_error_test 2.1 $B 0 $blob 10   \
+    SQLITE_READONLY {attempt to write a readonly database}
+sqlite3_blob_close $B
+
+# EVIDENCE-OF: R-29804-27366 If offset iOffset is less than N bytes from
+# the end of the BLOB, SQLITE_ERROR is returned and no data is written.
+#
+sqlite3_blob_open db main t2 a 44 3 B
+blob_write_error_test 2.2.1 $B 31 $blob 10   \
+    SQLITE_ERROR {SQL logic error}
+
+# Make a successful write to the blob handle. This shows that the
+# sqlite3_errcode() and sqlite3_errmsg() values are set even if the
+# blob_write() call succeeds (see requirement in the [blob_write_error_test]
+# proc).
+blob_write_error_test 2.2.1 $B 30 $blob 10 SQLITE_OK {not an error}
+
+# EVIDENCE-OF: R-58570-38916 If N or iOffset are less than zero
+# SQLITE_ERROR is returned and no data is written.
+#
+blob_write_error_test 2.2.2 $B 31 $blob -1   \
+    SQLITE_ERROR {SQL logic error}
+blob_write_error_test 2.2.3 $B 20 $blob 10 SQLITE_OK {not an error}
+blob_write_error_test 2.2.4 $B -1 $blob 10   \
+    SQLITE_ERROR {SQL logic error}
+sqlite3_blob_close $B
+
+# EVIDENCE-OF: R-20958-54138 An attempt to write to an expired BLOB
+# handle fails with an error code of SQLITE_ABORT.
+#
+do_test 2.3 {
+  sqlite3_blob_open db main t2 a 43 0 B
+  execsql { DELETE FROM t2 WHERE b=43 }
+} {}
+blob_write_error_test 2.3.1 $B 5 $blob 5 \
+    SQLITE_ABORT {query aborted}
+do_test 2.3.2 {
+  execsql { SELECT 1, 2, 3 }
+  sqlite3_errcode db
+} {SQLITE_OK}
+blob_write_error_test 2.3.3 $B 5 $blob 5 \
+    SQLITE_ABORT {query aborted}
+sqlite3_blob_close $B
+
+# EVIDENCE-OF: R-08382-59936 Writes to the BLOB that occurred before the
+# BLOB handle expired are not rolled back by the expiration of the
+# handle, though of course those changes might have been overwritten by
+# the statement that expired the BLOB handle or by other independent
+# statements.
+#
+#   3.1.*: not rolled back, 
+#   3.2.*: overwritten.
+#
+do_execsql_test 3.0 {
+  CREATE TABLE t3(i INTEGER PRIMARY KEY, j TEXT, k TEXT);
+  INSERT INTO t3 VALUES(1, $dots, $dots);
+  INSERT INTO t3 VALUES(2, $dots, $dots);
+  SELECT * FROM t3 WHERE i=1;
+} {
+  1
+  ........................................
+  ........................................
+}
+sqlite3_blob_open db main t3 j 1 1 B
+blob_write_error_test 3.1.1 $B 5 $blob 10 SQLITE_OK {not an error}
+do_execsql_test 3.1.2 {
+  UPDATE t3 SET k = 'xyz' WHERE i=1;
+  SELECT * FROM t3 WHERE i=1;
+} {
+  1 .....0123456789......................... xyz
+}
+blob_write_error_test 3.1.3 $B 15 $blob 10 \
+    SQLITE_ABORT {query aborted}
+sqlite3_blob_close $B
+do_execsql_test 3.1.4 {
+  SELECT * FROM t3 WHERE i=1;
+} {
+  1 .....0123456789......................... xyz
+}
+
+sqlite3_blob_open db main t3 j 2 1 B
+blob_write_error_test 3.2.1 $B 5 $blob 10 SQLITE_OK {not an error}
+do_execsql_test 3.2.2 {
+  UPDATE t3 SET j = 'xyz' WHERE i=2;
+  SELECT * FROM t3 WHERE i=2;
+} {
+  2 xyz ........................................
+}
+blob_write_error_test 3.2.3 $B 15 $blob 10 \
+    SQLITE_ABORT {query aborted}
+sqlite3_blob_close $B
+do_execsql_test 3.2.4 {
+  SELECT * FROM t3 WHERE i=2;
+} {
+  2 xyz ........................................
+}
+
+
+
+finish_test

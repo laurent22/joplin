@@ -1,0 +1,343 @@
+# 2011 April 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Test organization:
+#
+#   1.*: That file names are correctly extracted from URIs.
+#   2.*: That URI options (query parameters) are correctly extracted from URIs.
+#   3.*: That specifying an unknown VFS causes an error.
+#   4.*: Tests for specifying other options (other than "vfs").
+#   5.*: Test using a different VFS with an attached database.
+#   6.*: Test that authorities other than "" and localhost cause errors.
+#   7.*: Test that a read-write db can be attached to a read-only connection.
+#
+
+set testprefix uri
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+#-------------------------------------------------------------------------
+# Test that file names are correctly extracted from URIs.
+#
+foreach {tn uri file} {
+  1      test.db                              test.db
+  2      file:test.db                         test.db
+  3      file://PWD/test.db                   test.db
+  4      file:PWD/test.db                     test.db
+  5      file:test.db?mork=1                  test.db
+  6      file:test.db?mork=1&tonglor=2        test.db
+  7      file:test.db?mork=1#boris            test.db
+  8      file:test.db#boris                   test.db
+  9      test.db#boris                        test.db#boris
+  10     file:test%2Edb                       test.db
+  11     file                                 file
+  12     http:test.db                         http:test.db
+  13     file:test.db%00extra                 test.db
+  14     file:testdb%00.db%00extra            testdb
+
+  15     test.db?mork=1#boris                 test.db?mork=1#boris
+  16     file://localhostPWD/test.db%3Fhello  test.db?hello
+} {
+  
+
+  ifcapable !curdir { if {$tn==3} break }
+
+  ifcapable uri_00_error {
+    if {[string first %00 $uri]>=0} continue
+  }
+
+  if {$tcl_platform(platform)=="windows"} {
+    #
+    # NOTE: Due to limits on legal characters for file names imposed by
+    #       Windows, we must skip the final two tests here (i.e. the
+    #       question mark is illegal in a file name on Windows).
+    #
+    if {$tn>14} break
+
+    #
+    # NOTE: When running on Tcl 8.6 (or higher?) on Windows, a colon within
+    #       the file name no longer tries to access an alternate data stream
+    #       (ADS) named "test.db" for the "http" file, causing some spurious
+    #       failures of this test.
+    #
+    if {$tn==12 && $::tcl_version>=8.6} continue
+
+    #
+    # NOTE: On Windows, we need to account for the fact that the current
+    #       directory does not start with a forward slash.
+    #
+    set uri  [string map [list PWD/ /[test_pwd /]] $uri]
+  } else {
+    set uri  [string map [list PWD/ [test_pwd /]] $uri]
+  }
+
+  if {[file isdir $file]} {error "$file is a directory"}
+  forcedelete $file
+  do_test 1.$tn.1 { file exists $file } 0
+  set DB [sqlite3_open $uri]
+  do_test 1.$tn.2 { file exists $file } 1
+  sqlite3_close $DB
+  forcedelete $file
+
+  do_test 1.$tn.3 { file exists $file } 0
+  sqlite3 db xxx.db
+  catchsql { ATTACH $uri AS aux }
+  do_test 1.$tn.4 { file exists $file } 1
+  db close
+}
+
+#-------------------------------------------------------------------------
+# Test that URI query parameters are passed through to the VFS layer
+# correctly.
+#
+testvfs tvfs2
+testvfs tvfs -default 1
+tvfs filter xOpen
+tvfs script open_method
+proc open_method {method file arglist} {
+  set ::arglist $arglist
+}
+foreach {tn uri kvlist} {
+  1      file:test.db?hello=world                     {hello world}
+  2      file:test.db?hello&world                     {hello {} world {}}
+  3      file:test.db?hello=1&world=2&vfs=tvfs        {hello 1 world 2 vfs tvfs}
+  4      file:test.db?hello=1&world=2&vfs=tvfs2        {}
+  5      file:test.db?%68%65%6C%6C%6F=%77%6F%72%6C%64 {hello world}
+  6      file:testdb%00.db?hello%00extra=world%00ex   {hello world}
+  7      file:testdb%00.db?hello%00=world%00          {hello world}
+  8      file:testdb%00.db?=world&xyz=abc             {xyz abc}
+  9      file:test.db?%00hello=world&xyz=abc          {xyz abc}
+  10     file:test.db?hello=%00world&xyz=             {hello {} xyz {}}
+  11     file:test.db?=#ravada                        {}
+  12     file:test.db?&&&&&&&&hello=world&&&&&&&      {hello world}
+
+  13     test.db?&&&&&&&&hello=world&&&&&&&           {}
+  14     http:test.db?hello&world                     {}
+} {
+
+  ifcapable uri_00_error {
+    if {[string first %00 $uri]>=0} continue
+  }
+
+  if {$tcl_platform(platform) == "windows" && $tn>12} {
+    continue
+  }
+
+  set ::arglist ""
+  set DB [sqlite3_open $uri]
+  do_test 2.$tn.1 { set ::arglist } $kvlist
+  sqlite3_close $DB
+
+  sqlite3 db xxx.db
+  set ::arglist ""
+  execsql { ATTACH $uri AS aux }
+  do_test 2.$tn.2 { set ::arglist } $kvlist
+  db close
+}
+tvfs delete
+tvfs2 delete
+
+#-------------------------------------------------------------------------
+# Test that specifying a non-existent VFS raises an error.
+#
+do_test 3.1 {
+  list [catch { sqlite3 db "file:test.db?vfs=nosuchvfs" } msg] $msg
+} {1 {no such vfs: nosuchvfs}}
+
+#-------------------------------------------------------------------------
+# Test some of the other options (other than "vfs").
+#
+foreach {tn mode create_ok write_ok readonly_ok} {
+  1    ro    0   0   1
+  2    rw    0   1   0
+  3    rwc   1   1   0
+} {
+  catch { db close }
+  forcedelete test.db
+
+  set A(1) {0 {}}
+  set A(0) {1 {unable to open database file}}
+  do_test 4.1.$tn.1 {
+    list [catch {sqlite3 db "file:test.db?mode=$mode"} msg] $msg
+  } $A($create_ok)
+
+  catch { db close }
+  forcedelete test.db
+  sqlite3 db test.db
+  db eval { CREATE TABLE t1(a, b) }
+  db close
+
+  set A(1) {0 {}}
+  set A(0) {1 {attempt to write a readonly database}}
+  do_test 4.1.$tn.2 {
+    sqlite3 db "file:test.db?mode=$mode"
+    catchsql { INSERT INTO t1 VALUES(1, 2) }
+  } $A($write_ok)
+
+  set A(1) {0 {}}
+  set A(0) [list 1 "access mode not allowed: $mode"]
+  do_test 4.1.$tn.3 {
+    list [catch {sqlite3 db "file:test.db?mode=$mode" -readonly 1} msg] $msg
+  } $A($readonly_ok)
+}
+
+set orig [sqlite3_enable_shared_cache]
+foreach {tn options sc_default is_shared} {
+  1    ""                1   1
+  2    "cache=private"   1   0
+  3    "cache=shared"    1   1
+  4    ""                0   0
+  5    "cache=private"   0   0
+  6    "cache=shared"    0   1
+} {
+  catch { db close }
+  forcedelete test.db
+
+  sqlite3_enable_shared_cache 1
+  sqlite3 db2 test.db
+  db2 eval {CREATE TABLE t1(a, b)}
+
+  sqlite3_enable_shared_cache $sc_default
+  sqlite3 db "file:test.db?$options"
+  db eval {SELECT * FROM t1}
+
+  set A(1) {1 {database table is locked: t1}}
+  set A(0) {0 {}}
+  do_test 4.2.$tn {
+    db2 eval {BEGIN; INSERT INTO t1 VALUES(1, 2);}
+    catchsql { SELECT * FROM t1 }
+  } $A($is_shared)
+
+  db2 close
+}
+
+do_test 4.3.1 {
+  list [catch {sqlite3 db "file:test.db?mode=rc"} msg] $msg
+} {1 {no such access mode: rc}}
+do_test 4.3.2 {
+  list [catch {sqlite3 db "file:test.db?cache=public"} msg] $msg
+} {1 {no such cache mode: public}}
+
+#-------------------------------------------------------------------------
+# Test that things work if an ATTACHed database uses a different VFS than
+# the main database. The important point is that for all operations 
+# involving the ATTACHed database, the correct versions of the following
+# VFS are used for all operations involving the attached database.
+#
+#     xOpen
+#     xDelete
+#     xAccess
+#     xFullPathname
+#
+
+# This block of code creates two VFS - "tvfs1" and "tvfs2". Each time one
+# of the above methods is called using "tvfs1", global variable ::T1(X) is
+# set, where X is the file-name the method is called on. Calls to the above
+# methods using "tvfs2" set entries in the global T2 array.
+#
+ifcapable wal {
+  testvfs tvfs1 
+  tvfs1 filter {xOpen xDelete xAccess xFullPathname}
+  tvfs1 script tvfs1_callback
+  proc tvfs1_callback {method filename args} { 
+    set ::T1([file tail $filename]) 1 
+    return SQLITE_OK
+  }
+  testvfs tvfs2 
+  tvfs2 filter {xOpen xDelete xAccess xFullPathname}
+  tvfs2 script tvfs2_callback
+  proc tvfs2_callback {method filename args} { 
+    set ::T2([file tail $filename]) 1 
+    return SQLITE_OK
+  }
+  
+  catch {db close}
+  eval forcedelete [glob test.db*]
+  do_test 5.1.1 {
+    sqlite3 db file:test.db1?vfs=tvfs1
+    execsql {
+      ATTACH 'file:test.db2?vfs=tvfs2' AS aux;
+      PRAGMA main.journal_mode = PERSIST;
+      PRAGMA aux.journal_mode = PERSIST;
+      CREATE TABLE t1(a, b);
+      CREATE TABLE aux.t2(a, b);
+      PRAGMA main.journal_mode = WAL;
+      PRAGMA aux.journal_mode = WAL;
+      INSERT INTO t1 VALUES('x', 'y');
+      INSERT INTO t2 VALUES('x', 'y');
+    }
+    lsort [array names ::T1]
+  } {test.db1 test.db1-journal test.db1-wal}
+  
+  do_test 5.1.2 {
+    lsort [array names ::T2]
+  } {test.db2 test.db2-journal test.db2-wal}
+  db close
+  
+  tvfs1 delete
+  tvfs2 delete
+}
+
+#-------------------------------------------------------------------------
+# Check that only "" and "localhost" are acceptable as authorities.
+#
+catch {db close}
+foreach {tn uri res} {
+  1     "file://localhost/PWD/test.db"   {not an error}
+  2     "file:///PWD/test.db"            {not an error}
+  3     "file:/PWD/test.db"              {not an error}
+  4     "file://l%6Fcalhost/PWD/test.db" {invalid uri authority: l%6Fcalhost}
+  5     "file://lbcalhost/PWD/test.db"   {invalid uri authority: lbcalhost}
+  6     "file://x/PWD/test.db"           {invalid uri authority: x}
+} {
+
+  if {$tcl_platform(platform)=="windows"} {
+    set uri  [string map [list PWD [string range [get_pwd] 3 end]] $uri]
+  } else {
+    set uri  [string map [list PWD [string range [get_pwd] 1 end]] $uri]
+  }
+
+  do_test 6.$tn {
+    set DB [sqlite3_open $uri]
+    sqlite3_errmsg $DB
+  } $res
+  catch { sqlite3_close $DB }
+}
+
+forcedelete test.db test.db2
+do_test 7.1 {
+  sqlite3 db test.db
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+    ATTACH 'test.db2' AS aux;
+    CREATE TABLE aux.t2(a, b);
+    INSERT INTO t1 VALUES('a', 'b');
+  }
+  db close
+} {}
+do_test 7.2 {
+  sqlite3 db file:test.db?mode=ro
+  execsql { ATTACH 'file:test.db2?mode=rw' AS aux }
+} {}
+do_execsql_test  7.3 { 
+  INSERT INTO t2 VALUES('c', 'd') 
+} {}
+do_catchsql_test 7.4 { 
+  INSERT INTO t1 VALUES(3, 4) 
+} {1 {attempt to write a readonly database}}
+
+finish_test

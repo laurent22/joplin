@@ -1,0 +1,353 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault1
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+# Simple tests:
+#
+#   1: CREATE VIRTUAL TABLE
+#   2: INSERT statement
+#   3: DELETE statement
+#   4: MATCH expressions
+#
+#
+
+faultsim_save_and_close
+do_faultsim_test 1 -faults ioerr-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix='1, 2, 3') }
+} -test {
+  faultsim_test_result {0 {}} {1 {vtable constructor failed: t1}}
+}
+
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix='1, 2, 3');
+}
+faultsim_save_and_close
+do_faultsim_test 2 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { 
+    INSERT INTO t1 VALUES('a b c', 'a bc def ghij klmno');
+  }
+} -test {
+  faultsim_test_result {0 {}} {1 {vtable constructor failed: t1}}
+}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix='1, 2, 3');
+  INSERT INTO t1 VALUES('a b c', 'a bc def ghij klmno');
+}
+faultsim_save_and_close
+do_faultsim_test 3 -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { DELETE FROM t1 }
+} -test {
+  faultsim_test_result {0 {}} {1 {vtable constructor failed: t1}}
+}
+
+reset_db
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, b);
+  INSERT INTO t2 VALUES('m f a jj th q gi ar',   'hj n h h sg j i m');
+  INSERT INTO t2 VALUES('nr s t g od j kf h',    'sb h aq rg op rb n nl');
+  INSERT INTO t2 VALUES('do h h pb p p q fr',    'c rj qs or cr a l i');
+  INSERT INTO t2 VALUES('lk gp t i lq mq qm p',  'h mr g f op ld aj h');
+  INSERT INTO t2 VALUES('ct d sq kc qi k f j',   'sn gh c of g s qt q');
+  INSERT INTO t2 VALUES('d ea d d om mp s ab',   'dm hg l df cm ft pa c');
+  INSERT INTO t2 VALUES('tc dk c jn n t sr ge',  'a a kn bc n i af h');
+  INSERT INTO t2 VALUES('ie ii d i b sa qo rf',  'a h m aq i b m fn');
+  INSERT INTO t2 VALUES('gs r fo a er m h li',   'tm c p gl eb ml q r');
+  INSERT INTO t2 VALUES('k fe fd rd a gi ho kk', 'ng m c r d ml rm r');
+}
+faultsim_save_and_close
+
+foreach {tn expr res} {
+  1 { dk  }           7
+  2 { m f }           1
+  3 { f*  }           {1 3 4 5 6 8 9 10}
+  4 { m OR f }        {1 4 5 8 9 10}
+  5 { sn + gh }       {5}
+  6 { "sn gh" }       {5}
+  7 { NEAR(r a, 5) }  {9}
+  8 { m* f* }         {1 4 6 8 9 10}
+  9 { m* + f* }       {1 8}
+  10 { c NOT p }       {5 6 7 10}
+} {
+  do_faultsim_test 4.$tn -prep {
+    faultsim_restore_and_reopen
+  } -body "
+    execsql { SELECT rowid FROM t2 WHERE t2 MATCH '$expr' }
+  " -test "
+    faultsim_test_result {[list 0 $res]} {1 {vtable constructor failed: t2}}
+  "
+}
+
+
+#-------------------------------------------------------------------------
+# The following tests use a larger database populated with random data.
+#
+# The database page size is set to 512 bytes and the FTS5 page size left
+# at the default 1000 bytes. This means that reading a node may require
+# pulling an overflow page from disk, which is an extra opportunity for
+# an error to occur.
+#
+reset_db
+do_execsql_test 5.0.1 { 
+  PRAGMA main.page_size = 512;
+  CREATE VIRTUAL TABLE x1 USING fts5(a, b);
+  PRAGMA main.page_size;
+} {512}
+
+proc rnddoc {n} {
+  set map [list 0 a  1 b  2 c  3 d  4 e  5 f  6 g  7 h  8 i  9 j]
+  set doc [list]
+  for {set i 0} {$i < $n} {incr i} {
+    lappend doc [string map $map [format %.3d [expr int(rand()*1000)]]]
+  }
+  set doc
+}
+db func rnddoc rnddoc
+
+do_execsql_test 5.0.2 {
+  WITH r(a, b) AS (
+    SELECT rnddoc(6), rnddoc(6) UNION ALL
+    SELECT rnddoc(6), rnddoc(6) FROM r
+  )
+  INSERT INTO x1 SELECT * FROM r LIMIT 10000;
+}
+
+set res [db one {
+  SELECT count(*) FROM x1 WHERE x1.a LIKE '%abc%' OR x1.b LIKE '%abc%'}
+]
+
+do_faultsim_test 5.1 -faults oom* -body {
+  execsql { SELECT count(*) FROM x1 WHERE x1 MATCH 'abc' }
+} -test {
+  faultsim_test_result [list 0 $::res]
+}
+do_faultsim_test 5.2 -faults oom* -body {
+  execsql { SELECT count(*) FROM x1 WHERE x1 MATCH 'abcd' }
+} -test {
+  faultsim_test_result [list 0 0]
+}
+
+proc test_astar {a b} {
+  return [expr { [regexp {a[^ ][^ ]} $a] || [regexp {a[^ ][^ ]} $b] }]
+}
+db func test_astar test_astar
+
+set res [db one { SELECT count(*) FROM x1 WHERE test_astar(a, b) } ]
+do_faultsim_test 5.3 -faults oom* -body {
+  execsql { SELECT count(*) FROM x1 WHERE x1 MATCH 'a*' }
+} -test {
+  faultsim_test_result [list 0 $::res]
+}
+
+do_faultsim_test 5.4 -faults oom* -prep {
+  db close
+  sqlite3 db test.db
+} -body {
+  execsql { INSERT INTO x1 VALUES('a b c d', 'e f g h') }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+do_faultsim_test 5.5.1 -faults oom* -body {
+  execsql { 
+    SELECT count(fts5_decode(rowid, block)) FROM x1_data WHERE rowid=1
+  }
+} -test {
+  faultsim_test_result [list 0 1]
+}
+do_faultsim_test 5.5.2 -faults oom* -body {
+  execsql { 
+    SELECT count(fts5_decode(rowid, block)) FROM x1_data WHERE rowid=10
+  }
+} -test {
+  faultsim_test_result [list 0 1]
+}
+do_faultsim_test 5.5.3 -faults oom* -body {
+  execsql { 
+    SELECT count(fts5_decode(rowid, block)) FROM x1_data WHERE rowid = (
+      SELECT min(rowid) FROM x1_data WHERE rowid>20
+    )
+  }
+} -test {
+  faultsim_test_result [list 0 1]
+}
+do_faultsim_test 5.5.4 -faults oom* -body {
+  execsql { 
+    SELECT count(fts5_decode(rowid, block)) FROM x1_data WHERE rowid = (
+      SELECT max(rowid) FROM x1_data 
+    )
+  }
+} -test {
+  faultsim_test_result [list 0 1]
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x);
+  INSERT INTO x1(x1, rank) VALUES('automerge', 0);
+
+  INSERT INTO x1 VALUES('a b c'); -- 1
+  INSERT INTO x1 VALUES('a b c'); -- 2
+  INSERT INTO x1 VALUES('a b c'); -- 3
+  INSERT INTO x1 VALUES('a b c'); -- 4
+  INSERT INTO x1 VALUES('a b c'); -- 5
+  INSERT INTO x1 VALUES('a b c'); -- 6
+  INSERT INTO x1 VALUES('a b c'); -- 7
+  INSERT INTO x1 VALUES('a b c'); -- 8
+  INSERT INTO x1 VALUES('a b c'); -- 9
+  INSERT INTO x1 VALUES('a b c'); -- 10
+  INSERT INTO x1 VALUES('a b c'); -- 11
+  INSERT INTO x1 VALUES('a b c'); -- 12
+  INSERT INTO x1 VALUES('a b c'); -- 13
+  INSERT INTO x1 VALUES('a b c'); -- 14
+  INSERT INTO x1 VALUES('a b c'); -- 15
+
+  SELECT count(*) FROM x1_data;
+} {17}
+
+faultsim_save_and_close
+
+do_faultsim_test 6.1 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO x1 VALUES('d e f') }
+} -test {
+  faultsim_test_result [list 0 {}]
+  if {$testrc==0} {
+    set nCnt [db one {SELECT count(*) FROM x1_data}]
+    if {$nCnt!=3} { error "expected 3 entries but there are $nCnt" }
+  }
+}
+
+do_faultsim_test 6.2 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO x1(x1, rank) VALUES('pgsz', 32) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+do_faultsim_test 6.3 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO x1(x1) VALUES('integrity-check') }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+do_faultsim_test 6.4 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO x1(x1) VALUES('optimize') }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+#-------------------------------------------------------------------------
+#
+do_faultsim_test 7.0 -faults oom* -prep {
+  catch { db close }
+} -body {
+  sqlite3 db test.db
+} -test {
+  faultsim_test_result [list 0 {}] {1 {}} {1 {initialization of fts5 failed: }}
+}
+
+#-------------------------------------------------------------------------
+# A prefix query against a large document set.
+#
+proc rnddoc {n} {
+  set map [list 0 a  1 b  2 c  3 d  4 e  5 f  6 g  7 h  8 i  9 j]
+  set doc [list]
+  for {set i 0} {$i < $n} {incr i} {
+    lappend doc "x[string map $map [format %.3d [expr int(rand()*1000)]]]"
+  }
+  set doc
+}
+
+reset_db
+db func rnddoc rnddoc
+
+do_test 8.0 {
+  execsql { CREATE VIRTUAL TABLE x1 USING fts5(a) }
+  set ::res [list]
+  for {set i 1} {$i<100} {incr i 1} {
+    execsql { INSERT INTO x1 VALUES( rnddoc(50) ) }
+    lappend ::res $i
+  }
+} {}
+
+do_faultsim_test 8.1 -faults oom* -prep {
+} -body {
+  execsql { 
+    SELECT rowid FROM x1 WHERE x1 MATCH 'x*'
+  }
+} -test {
+  faultsim_test_result [list 0 $::res]
+}
+
+#-------------------------------------------------------------------------
+# Segment promotion.
+#
+do_test 9.0 {
+  reset_db
+  db func rnddoc fts5_rnddoc
+  execsql {
+    CREATE VIRTUAL TABLE s2 USING fts5(x);
+    INSERT INTO s2(s2, rank) VALUES('pgsz', 32);
+    INSERT INTO s2(s2, rank) VALUES('automerge', 0);
+  }
+
+  for {set i 1} {$i <= 16} {incr i} {
+    execsql { INSERT INTO s2 VALUES(rnddoc(5)) }
+  }
+  fts5_level_segs s2
+} {0 1}
+set insert_doc [db one {SELECT rnddoc(160)}]
+faultsim_save_and_close
+
+do_faultsim_test 9.1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO s2 VALUES($::insert_doc) }
+} -test {
+  faultsim_test_result {0 {}}
+  if {$testrc==0} {
+    set ls [fts5_level_segs s2]
+    if {$ls != "2 0"} { error "fts5_level_segs says {$ls}" }
+  }
+}
+
+
+
+finish_test

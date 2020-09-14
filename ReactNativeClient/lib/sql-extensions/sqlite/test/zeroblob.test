@@ -1,0 +1,331 @@
+# 2007 May 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing of the zero-filled blob functionality
+# including the sqlite3_bind_zeroblob(), sqlite3_result_zeroblob(),
+# and the built-in zeroblob() SQL function.
+#
+# $Id: zeroblob.test,v 1.14 2009/07/14 02:33:02 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix zeroblob
+
+ifcapable !incrblob {
+  finish_test
+  return
+}
+
+test_set_config_pagecache 0 0
+
+# When zeroblob() is used for the last field of a column, then the
+# content of the zeroblob is never instantiated on the VDBE stack.
+# But it does get inserted into the database correctly.
+#
+db eval {PRAGMA cache_size=10}
+sqlite3_memory_highwater 1
+unset -nocomplain memused
+set memused [sqlite3_memory_used]
+do_test zeroblob-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c,d);
+  }
+  set ::sqlite3_max_blobsize 0
+  execsql {
+    INSERT INTO t1 VALUES(2,3,4,zeroblob(1000000));
+  }
+  set ::sqlite3_max_blobsize
+} {10}
+
+do_test zeroblob-1.1.1 {
+  expr {[sqlite3_memory_highwater]<$::memused+35000}
+} {1}
+do_test zeroblob-1.2 {
+  execsql {
+    SELECT length(d) FROM t1
+  }
+} {1000000}
+
+# If a non-NULL column follows the zeroblob, then the content of
+# the zeroblob must be instantiated.
+#
+do_test zeroblob-1.3 {
+  set ::sqlite3_max_blobsize 0
+  execsql {
+    INSERT INTO t1 VALUES(3,4,zeroblob(10000),5);
+  }
+  set ::sqlite3_max_blobsize
+} {10010}
+do_test zeroblob-1.4 {
+  execsql {
+    SELECT length(c), length(d) FROM t1
+  }
+} {1 1000000 10000 1}
+
+# Multiple zeroblobs can appear at the end of record.  No instantiation
+# of the blob content occurs on the stack.
+#
+do_test zeroblob-1.5 {
+  set ::sqlite3_max_blobsize 0
+  execsql {
+    INSERT INTO t1 VALUES(4,5,zeroblob(10000),zeroblob(10000));
+  }
+  set ::sqlite3_max_blobsize
+} {11}
+do_test zeroblob-1.6 {
+  execsql {
+    SELECT length(c), length(d) FROM t1
+  }
+} {1 1000000 10000 1 10000 10000}
+
+# NULLs can follow the zeroblob() or be intermixed with zeroblobs and
+# no instantiation of the zeroblobs occurs on the stack.
+#
+do_test zeroblob-1.7 {
+  set ::sqlite3_max_blobsize 0
+  execsql {
+    INSERT INTO t1 VALUES(5,zeroblob(10000),NULL,zeroblob(10000));
+  }
+  set ::sqlite3_max_blobsize
+} {10}
+do_test zeroblob-1.8 {
+  execsql {
+    SELECT length(b), length(d) FROM t1 WHERE a=5
+  }
+} {10000 10000}
+
+# Comparisons against zeroblobs work.
+#
+do_test zeroblob-2.1 {
+  execsql {
+    SELECT a FROM t1 WHERE b=zeroblob(10000)
+  }
+} {5}
+
+# Comparisons against zeroblobs work even when indexed.
+#
+do_test zeroblob-2.2 {
+  execsql {
+    CREATE INDEX i1_1 ON t1(b);
+    SELECT a FROM t1 WHERE b=zeroblob(10000);
+  }
+} {5}
+
+# DISTINCT works for zeroblobs
+#
+ifcapable bloblit&&subquery&&compound {
+  do_test zeroblob-3.1 {
+    execsql {
+      SELECT count(DISTINCT a) FROM (
+        SELECT x'00000000000000000000' AS a
+        UNION ALL
+        SELECT zeroblob(10) AS a
+      )
+    }
+  } {1}
+}
+
+# Concatentation works with zeroblob
+#
+ifcapable bloblit {
+  do_test zeroblob-4.1 {
+    execsql {
+      SELECT hex(zeroblob(2) || x'61')
+    }
+  } {000061}
+}
+
+# Check various CAST(...) operations on zeroblob.
+#
+do_test zeroblob-5.1 {
+  execsql {
+    SELECT CAST (zeroblob(100) AS REAL);
+  }
+} {0.0}
+do_test zeroblob-5.2 {
+  execsql {
+    SELECT CAST (zeroblob(100) AS INTEGER);
+  }
+} {0}
+do_test zeroblob-5.3 {
+  execsql {
+    SELECT CAST (zeroblob(100) AS TEXT);
+  }
+} {{}}
+do_test zeroblob-5.4 {
+  execsql {
+    SELECT CAST(zeroblob(100) AS BLOB);
+  }
+} [execsql {SELECT zeroblob(100)}]
+  
+
+# Check for malicious use of zeroblob.  Make sure nothing crashes.
+#
+do_test zeroblob-6.1.1 { 
+  execsql {select zeroblob(-1)} 
+} {{}} 
+do_test zeroblob-6.1.2 { 
+  execsql {select zeroblob(-10)} 
+} {{}} 
+do_test zeroblob-6.1.3 { 
+  execsql {select zeroblob(-100)} 
+} {{}} 
+do_test zeroblob-6.2 { 
+  execsql {select length(zeroblob(-1))} 
+} {0} 
+do_test zeroblob-6.3 { 
+  execsql {select zeroblob(-1)|1} 
+} {1} 
+do_test zeroblob-6.4 { 
+  catchsql {select length(zeroblob(2147483648))} 
+} {1 {string or blob too big}} 
+do_test zeroblob-6.5 { 
+  catchsql {select zeroblob(2147483648)} 
+} {1 {string or blob too big}}
+do_test zeroblob-6.6 {
+  execsql {select hex(zeroblob(-1))}
+} {{}}
+do_test zeroblob-6.7 {
+  execsql {select typeof(zeroblob(-1))}
+} {blob}
+
+# Test bind_zeroblob()
+#
+sqlite3_memory_highwater 1
+unset -nocomplain memused
+set memused [sqlite3_memory_used]
+do_test zeroblob-7.1 {
+  set ::STMT [sqlite3_prepare $::DB "SELECT length(?)" -1 DUMMY]
+  set ::sqlite3_max_blobsize 0
+  sqlite3_bind_zeroblob $::STMT 1 450000
+  sqlite3_step $::STMT
+} {SQLITE_ROW}
+do_test zeroblob-7.2 {
+  sqlite3_column_int $::STMT 0
+} {450000}
+do_test zeroblob-7.3 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+do_test zeroblob-7.4 {
+  set ::sqlite3_max_blobsize
+} {0}
+do_test zeroblob-7.5 {
+  expr {[sqlite3_memory_highwater]<$::memused+10000}
+} {1}
+
+# Test that MakeRecord can handle a value with some real content
+# and a zero-blob tail.
+#
+do_test zeroblob-8.1 {
+  llength [execsql {
+    SELECT 'hello' AS a, zeroblob(10) as b from t1 ORDER BY a, b;
+  }]
+} {8}
+
+
+# Ticket #3965
+# zeroblobs on either size of an IN operator
+#
+do_test zeroblob-9.1 {
+  db eval {SELECT x'0000' IN (x'000000')}
+} {0}
+do_test zeroblob-9.2 {
+  db eval {SELECT x'0000' IN (x'0000')}
+} {1}
+do_test zeroblob-9.3 {
+  db eval {SELECT zeroblob(2) IN (x'000000')}
+} {0}
+do_test zeroblob-9.4 {
+  db eval {SELECT zeroblob(2) IN (x'0000')}
+} {1}
+do_test zeroblob-9.5 {
+  db eval {SELECT x'0000' IN (zeroblob(3))}
+} {0}
+do_test zeroblob-9.6 {
+  db eval {SELECT x'0000' IN (zeroblob(2))}
+} {1}
+do_test zeroblob-9.7 {
+  db eval {SELECT zeroblob(2) IN (zeroblob(3))}
+} {0}
+do_test zeroblob-9.8 {
+  db eval {SELECT zeroblob(2) IN (zeroblob(2))}
+} {1}
+
+# Oversized zeroblob records
+#
+do_test zeroblob-10.1 {
+  db eval {
+    CREATE TABLE t10(a,b,c);
+  }
+  catchsql {INSERT INTO t10 VALUES(zeroblob(1e9),zeroblob(1e9),zeroblob(1e9))}
+} {1 {string or blob too big}}
+
+#-------------------------------------------------------------------------
+# Test the zeroblob() function on its own with negative or oversized 
+# arguments.
+#
+do_execsql_test 11.0 { 
+  SELECT length(zeroblob(-1444444444444444));
+} {0}
+do_catchsql_test 11.1 { 
+  SELECT zeroblob(5000 * 1024 * 1024);
+} {1 {string or blob too big}}
+do_catchsql_test 11.2 { 
+  SELECT quote(zeroblob(5000 * 1024 * 1024));
+} {1 {string or blob too big}}
+do_catchsql_test 11.3 { 
+  SELECT quote(zeroblob(-1444444444444444));
+} {0 X''}
+do_catchsql_test 11.4 {
+  SELECT quote(test_zeroblob(-1));
+} {0 X''}
+
+#-------------------------------------------------------------------------
+# Test the sqlite3_bind_zeroblob64() API.
+#
+proc bind_and_run {stmt nZero} {
+  sqlite3_bind_zeroblob64 $stmt 1 $nZero
+  sqlite3_step $stmt
+  set ret [sqlite3_column_int $stmt 0]
+  sqlite3_reset $stmt
+  set ret
+}
+set stmt [sqlite3_prepare db "SELECT length(?)" -1 dummy]
+
+do_test 12.1 { bind_and_run $stmt 40 } 40
+do_test 12.2 { bind_and_run $stmt  0 }  0
+do_test 12.3 { bind_and_run $stmt 1000 } 1000
+
+do_test 12.4 { 
+  list [catch { bind_and_run $stmt [expr 5000 * 1024 * 1024] } msg] $msg 
+} {1 SQLITE_TOOBIG}
+do_test 12.5 {
+  sqlite3_step $stmt
+  set ret [sqlite3_column_int $stmt 0]
+  sqlite3_reset $stmt
+  set ret
+} {1000}
+
+sqlite3_finalize $stmt
+
+# 2019-01-25 https://sqlite.org/src/tktview/bb4bdb9f7f654b0bb9f34cfbac
+# Zeroblob truncated by an index on expression
+#
+do_execsql_test 13.100 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b,c);
+  CREATE INDEX t1bbc ON t1(b, b+c);
+  INSERT INTO t1(a,b,c) VALUES(1,zeroblob(8),3);
+  SELECT a, quote(b), length(b), c FROM t1;
+} {1 X'0000000000000000' 8 3}
+
+test_restore_config_pagecache
+finish_test

@@ -1,0 +1,53 @@
+/*
+** This script is called from crash01.test and config02.test and perhaps other
+** script.  After the database file has been set up, make a big rollback 
+** journal in client 1, then crash client 1.
+** Then in the other clients, do an integrity check.
+*/
+--task 1 leave-hot-journal
+  --sleep 5
+  --finish
+  PRAGMA cache_size=10;
+  BEGIN;
+  UPDATE t1 SET b=randomblob(20000);
+  UPDATE t2 SET b=randomblob(20000);
+  UPDATE t3 SET b=randomblob(20000);
+  UPDATE t4 SET b=randomblob(20000);
+  UPDATE t5 SET b=randomblob(20000);
+  UPDATE t1 SET b=NULL;
+  UPDATE t2 SET b=NULL;
+  UPDATE t3 SET b=NULL;
+  UPDATE t4 SET b=NULL;
+  UPDATE t5 SET b=NULL;
+  --print Task one crashing an incomplete transaction
+  --exit 1
+--end
+--task 2 integrity_check-2
+  SELECT count(*) FROM t1;
+  --match 64
+  --sleep 100
+  PRAGMA integrity_check(10);
+  --match ok
+--end
+--task 3 integrity_check-3
+  SELECT count(*) FROM t1;
+  --match 64
+  --sleep 100
+  PRAGMA integrity_check(10);
+  --match ok
+--end
+--task 4 integrity_check-4
+  SELECT count(*) FROM t1;
+  --match 64
+  --sleep 100
+  PRAGMA integrity_check(10);
+  --match ok
+--end
+--task 5 integrity_check-5
+  SELECT count(*) FROM t1;
+  --match 64
+  --sleep 100
+  PRAGMA integrity_check(10);
+  --match ok
+--end
+--wait all

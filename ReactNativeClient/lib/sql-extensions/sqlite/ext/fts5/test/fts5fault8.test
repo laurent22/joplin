@@ -1,0 +1,84 @@
+# 2015 September 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault8
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+  fts5_aux_test_functions db
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+    INSERT INTO t1 VALUES('a b c d', '1 2 3 4');
+    INSERT INTO t1 VALUES('a b a b', NULL);
+    INSERT INTO t1 VALUES(NULL, '1 2 1 2');
+  }
+  
+  do_faultsim_test 1 -faults oom-* -body {
+    execsql { 
+      SELECT rowid, fts5_test_poslist(t1) FROM t1 WHERE t1 MATCH 'b OR 2' 
+    }
+  } -test {
+    faultsim_test_result {0 {1 {0.0.1 1.1.1} 2 {0.0.1 0.0.3} 3 {1.1.1 1.1.3}}} \
+                         {1 SQLITE_NOMEM}
+  }
+  
+  do_faultsim_test 2 -faults oom-* -body {
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+  } -test {
+    faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  }
+
+  if {[detail_is_none]==0} {
+    do_faultsim_test 3 -faults oom-* -body {
+      execsql { SELECT rowid FROM t1('b:2') }
+    } -test {
+      faultsim_test_result {0 {1 3}} {1 SQLITE_NOMEM}
+    }
+  }
+
+} ;# foreach_detail_mode...
+
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE x2 USING fts5(a);
+  INSERT INTO x2(x2, rank) VALUES('crisismerge', 2);
+  INSERT INTO x2(x2, rank) VALUES('pgsz', 32);
+  INSERT INTO x2 VALUES('a b c d');
+  INSERT INTO x2 VALUES('e f g h');
+  INSERT INTO x2 VALUES('i j k l');
+  INSERT INTO x2 VALUES('m n o p');
+  INSERT INTO x2 VALUES('q r s t');
+  INSERT INTO x2 VALUES('u v w x');
+  INSERT INTO x2 VALUES('y z a b');
+}
+faultsim_save_and_close
+
+do_faultsim_test 4 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO x2(x2) VALUES('optimize') }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+
+
+finish_test

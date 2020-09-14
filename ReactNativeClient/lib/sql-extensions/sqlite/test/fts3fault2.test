@@ -1,0 +1,247 @@
+# 2011 February 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix fts3fault2
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+
+do_test 1.0 {
+  execsql {
+    CREATE VIRTUAL TABLE t1 USING fts4(x);
+    INSERT INTO t1 VALUES('a b c');
+    INSERT INTO t1 VALUES('c d e');
+    CREATE VIRTUAL TABLE terms USING fts4aux(t1);
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 1.1 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql "CREATE VIRTUAL TABLE terms2 USING fts4aux(t1)"
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 1.2 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql "SELECT * FROM terms"
+} -test {
+  faultsim_test_result {0 {a * 1 1 a 0 1 1 b * 1 1 b 0 1 1 c * 2 2 c 0 2 2 d * 1 1 d 0 1 1 e * 1 1 e 0 1 1}}
+}
+
+do_faultsim_test 1.3 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql "SELECT * FROM terms WHERE term>'a' AND TERM < 'd'"
+} -test {
+  faultsim_test_result {0 {b * 1 1 b 0 1 1 c * 2 2 c 0 2 2}}
+}
+
+do_faultsim_test 1.4 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql "SELECT * FROM terms WHERE term='c'"
+} -test {
+  faultsim_test_result {0 {c * 2 2 c 0 2 2}}
+}
+
+do_test 2.0 {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE VIRTUAL TABLE tx USING fts4(a, b);
+    INSERT INTO tx VALUES('a b c', 'x y z');
+    CREATE VIRTUAL TABLE terms2 USING fts4aux(tx);
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 2.1 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql "SELECT * FROM terms2"
+} -test {
+  faultsim_test_result {0 {a * 1 1 a 0 1 1 b * 1 1 b 0 1 1 c * 1 1 c 0 1 1 x * 1 1 x 1 1 1 y * 1 1 y 1 1 1 z * 1 1 z 1 1 1}}
+}
+
+do_faultsim_test 3.0 -faults oom* -prep {
+  faultsim_delete_and_reopen
+  db eval { CREATE TABLE 'xx yy'(a, b); }
+} -body {
+  execsql {
+    CREATE VIRTUAL TABLE tt USING fts4(content="xx yy");
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 3.1 -faults oom* -prep {
+  faultsim_delete_and_reopen
+  db func zip zip
+  db func unzip unzip
+} -body {
+  execsql {
+    CREATE VIRTUAL TABLE tt USING fts4(compress=zip, uncompress=unzip);
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_test 4.0 {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE VIRTUAL TABLE ft USING fts4(a, b);
+    INSERT INTO ft VALUES('U U T C O', 'F N D E S');
+    INSERT INTO ft VALUES('P H X G B', 'I D M R U');
+    INSERT INTO ft VALUES('P P X D M', 'Y V N T C');
+    INSERT INTO ft VALUES('Z L Q O W', 'D F U N Q');
+    INSERT INTO ft VALUES('A J D U P', 'C H M Q E');
+    INSERT INTO ft VALUES('P S A O H', 'S Z C W D');
+    INSERT INTO ft VALUES('T B N L W', 'C A K T I');
+    INSERT INTO ft VALUES('K E Z L O', 'L L Y C E');
+    INSERT INTO ft VALUES('C R E S V', 'Q V F W P');
+    INSERT INTO ft VALUES('S K H G W', 'R W Q F G');
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test 4.1 -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql { INSERT INTO ft(ft) VALUES('rebuild') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+ifcapable fts3_unicode {
+  do_test 5.0 {
+    faultsim_delete_and_reopen
+    execsql {
+      CREATE VIRTUAL TABLE ft USING fts4(a, tokenize=unicode61);
+    }
+    faultsim_save_and_close
+  } {}
+  
+  do_faultsim_test 5.1 -faults oom* -prep {
+    faultsim_restore_and_reopen
+    db eval {SELECT * FROM sqlite_master}
+  } -body {
+    execsql { INSERT INTO ft VALUES('the quick brown fox'); }
+    execsql { INSERT INTO ft VALUES(
+       'theunusuallylongtokenthatjustdragsonandonandonandthendragsonsomemoreeof'
+      );
+    }
+    execsql { SELECT docid FROM ft WHERE ft MATCH 'th*' }
+  } -test {
+    faultsim_test_result {0 {1 2}}
+  }
+}
+
+reset_db
+do_test 6.0 {
+  execsql {
+    CREATE VIRTUAL TABLE t6 USING fts4(x,order=DESC);
+    INSERT INTO t6(docid, x) VALUES(-1,'a b');
+    INSERT INTO t6(docid, x) VALUES(1, 'b');
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 6.1 -faults oom* -prep {
+  faultsim_restore_and_reopen
+  db eval {SELECT * FROM sqlite_master}
+} -body {
+  execsql { SELECT docid FROM t6 WHERE t6 MATCH '"a* b"' }
+} -test {
+  faultsim_test_result {0 -1}
+}
+
+#-------------------------------------------------------------------------
+# Inject faults into a query for an N-byte prefix that uses a prefix=N+1
+# index.
+reset_db
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE t7 USING fts4(x,prefix=2);
+  INSERT INTO t7 VALUES('the quick brown fox');
+  INSERT INTO t7 VALUES('jumped over the');
+  INSERT INTO t7 VALUES('lazy dog');
+}
+do_faultsim_test 7.1 -faults oom* -body {
+  execsql { SELECT docid FROM t7 WHERE t7 MATCH 't*' }
+} -test {
+  faultsim_test_result {0 {1 2}}
+}
+
+#-------------------------------------------------------------------------
+# Inject faults into a opening an existing fts3 table that has been 
+# upgraded to add an %_stat table.
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE t8 USING fts3;
+  INSERT INTO t8 VALUES('the quick brown fox');
+  INSERT INTO t8 VALUES('jumped over the');
+  INSERT INTO t8 VALUES('lazy dog');
+  INSERT INTO t8(t8) VALUES('automerge=8');
+  SELECT name FROM sqlite_master WHERE name LIKE 't8%';
+} {
+  t8 t8_content t8_segments t8_segdir t8_stat
+}
+faultsim_save_and_close
+
+do_faultsim_test 8.1 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO t8 VALUES('one two three') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 8.2 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { ALTER TABLE t8 RENAME TO t8ii }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+set chunkconfig [fts3_configure_incr_load 1 1]
+do_execsql_test 9.0 {
+  PRAGMA page_size = 512;
+  CREATE VIRTUAL TABLE t9 USING fts3;
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<50
+  )
+  INSERT INTO t9 SELECT 'one two three' FROM s;
+}
+
+do_faultsim_test 8.2 -faults io* -body {
+  execsql { SELECT count(*) FROM t9 WHERE t9 MATCH '"one two three"' }
+} -test {
+  faultsim_test_result {0 50}
+}
+
+eval fts3_configure_incr_load $chunkconfig
+
+
+finish_test

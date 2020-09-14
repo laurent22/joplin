@@ -1,0 +1,47 @@
+# 2016 March 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/lock_common.tcl
+
+set testprefix fts5multiclient
+return_if_no_fts5
+
+foreach_detail_mode $testprefix {
+
+do_multiclient_test tn {
+
+  do_test 1.$tn.1 {
+    sql1 { CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%) }
+    sql1 { INSERT INTO t1 VALUES('a b c') }
+    sql2 { SELECT rowid FROM t1('b') }
+  } {1}
+
+  do_test 1.$tn.2 {
+    sql2 { INSERT INTO t1 VALUES('a b c') }
+    sql1 { SELECT rowid FROM t1('b') }
+  } {1 2}
+
+  do_test 1.$tn.3 {
+    sql2 { INSERT INTO t1 VALUES('a b c') }
+    sql1 { SELECT rowid FROM t1('b') }
+  } {1 2 3}
+
+  do_test 1.$tn.4 {
+    sql2 { INSERT INTO t1 VALUES('a b c') }
+    sql1 { INSERT INTO t1 VALUES('a b c') }
+    sql3 { INSERT INTO t1(t1) VALUES('integrity-check') }
+  } {}
+
+};# do_multiclient_test
+};# foreach_detail_mode
+finish_test

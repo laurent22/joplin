@@ -1,0 +1,296 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ab
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('hello', 'world');
+  INSERT INTO t1 VALUES('one two', 'three four');
+  INSERT INTO t1(rowid, a, b) VALUES(45, 'forty', 'five');
+}
+
+do_execsql_test 1.1 {
+  SELECT * FROM t1 ORDER BY rowid DESC;
+} { forty five {one two} {three four} hello world }
+
+do_execsql_test 1.2 {
+  SELECT rowid FROM t1 ORDER BY rowid DESC;
+} {45 2 1}
+
+do_execsql_test 1.3 {
+  SELECT rowid FROM t1 ORDER BY rowid ASC;
+} {1 2 45}
+
+do_execsql_test 1.4 {
+  SELECT * FROM t1 WHERE rowid=2;
+} {{one two} {three four}}
+
+do_execsql_test 1.5 {
+  SELECT * FROM t1 WHERE rowid=2.01;
+} {}
+
+do_execsql_test 1.6 {
+  SELECT * FROM t1 WHERE rowid=1.99;
+} {}
+
+#-------------------------------------------------------------------------
+
+reset_db
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  INSERT INTO t1 VALUES('one');
+  INSERT INTO t1 VALUES('two');
+  INSERT INTO t1 VALUES('three');
+}
+
+do_catchsql_test 2.2 {
+  SELECT rowid, * FROM t1 WHERE t1 MATCH 'AND AND'
+} {1 {fts5: syntax error near "AND"}}
+
+do_execsql_test 2.3 { SELECT rowid, * FROM t1 WHERE t1 MATCH 'two' } {2 two}
+do_execsql_test 2.4 { SELECT rowid, * FROM t1 WHERE t1 MATCH 'three' } {3 three}
+do_execsql_test 2.5 { SELECT rowid, * FROM t1 WHERE t1 MATCH 'one' } {1 one}
+
+do_execsql_test 2.6 {
+  INSERT INTO t1 VALUES('a b c d e f g');
+  INSERT INTO t1 VALUES('b d e a a a i');
+  INSERT INTO t1 VALUES('x y z b c c c');
+}
+
+foreach {tn expr res} {
+  1  a    {5 4}
+  2  b    {6 5 4}
+  3  c    {6 4}
+  4  d    {5 4}
+  5  e    {5 4}
+  6  f    {4}
+  7  g    {4}
+  8  x    {6}
+  9  y    {6}
+  10 z    {6}
+} {
+  do_execsql_test 2.7.$tn.1 { 
+    SELECT rowid FROM t1 WHERE t1 MATCH $expr ORDER BY rowid DESC
+  } $res
+  do_execsql_test 2.7.$tn.2 { 
+    SELECT rowid FROM t1 WHERE t1 MATCH $expr ORDER BY rowid ASC
+  } [lsort -integer $res]
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a,b);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+foreach {tn a b} {
+   1 {abashed abandons abase abash abaft} {abases abased}
+   2 {abasing abases abaft abated abandons} {abases abandoned}
+   3 {abatement abash abash abated abase} {abasements abashing}
+   4 {abaft abasements abase abasement abasing} {abasement abases}
+   5 {abaft abashing abatement abash abasements} {abandons abandoning}
+   6 {aback abate abasements abashes abandoned} {abasement abased}
+   7 {abandons abated abased aback abandoning} {abases abandoned}
+   8 {abashing abases abasement abaft abashing} {abashed abate}
+   9 {abash abase abate abashing abashed} {abandon abandoned}
+   10 {abate abandoning abandons abasement aback} {abandon abandoning}
+} {
+  do_execsql_test 3.1.$tn.1 { INSERT INTO t1 VALUES($a, $b) } 
+  do_execsql_test 3.1.$tn.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+}
+
+foreach {tn expr res} {
+  1 {abash} {9 5 3 1}
+  2 {abase} {9 4 3 1}
+  3 {abase + abash} {1}
+  4 {abash + abase} {9}
+  5 {abaft + abashing} {8 5}
+  6 {abandon + abandoning} {10}
+  7 {"abashing abases abasement abaft abashing"} {8}
+} {
+  do_execsql_test 3.2.$tn {
+    SELECT rowid FROM t1 WHERE t1 MATCH $expr ORDER BY rowid DESC
+  } $res
+}
+
+do_execsql_test 3.3 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'NEAR(aback abate, 2)'
+} {6}
+
+foreach {tn expr res} {
+  1 {abash} {1 3 5 9}
+  2 {abase} {1 3 4 9}
+  3 {abase + abash} {1}
+  4 {abash + abase} {9}
+  5 {abaft + abashing} {5 8}
+  6 {abandon + abandoning} {10}
+  7 {"abashing abases abasement abaft abashing"} {8}
+} {
+  do_execsql_test 3.4.$tn {
+    SELECT rowid FROM t1 WHERE t1 MATCH $expr
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Documents with more than 2M tokens.
+#
+
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE s1 USING fts5(x, detail=%DETAIL%);
+}
+foreach {tn doc} [list \
+  1 [string repeat {a x } 1500000]       \
+  2 "[string repeat {a a } 1500000] x"   \
+] {
+  do_execsql_test 4.$tn { INSERT INTO s1 VALUES($doc) }
+}
+
+do_execsql_test 4.3 {
+  SELECT rowid FROM s1 WHERE s1 MATCH 'x'
+} {1 2}
+
+if {[detail_is_full]} {
+  do_execsql_test 4.4 {
+    SELECT rowid FROM s1 WHERE s1 MATCH '"a x"'
+  } {1 2}
+}
+
+do_execsql_test 4.5 {
+  SELECT rowid FROM s1 WHERE s1 MATCH 'a x'
+} {1 2}
+
+#-------------------------------------------------------------------------
+# Check that a special case of segment promotion works. The case is where
+# a new segment is written to level L, but the oldest segment within level
+# (L-2) is larger than it.
+#
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE s2 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO s2(s2, rank) VALUES('pgsz', 32);
+  INSERT INTO s2(s2, rank) VALUES('automerge', 0);
+}
+
+proc rnddoc {n} {
+  set map [list 0 a  1 b  2 c  3 d  4 e  5 f  6 g  7 h  8 i  9 j]
+  set doc [list]
+  for {set i 0} {$i < $n} {incr i} {
+    lappend doc [string map $map [format %.3d [expr int(rand()*1000)]]]
+  }
+  set doc
+}
+db func rnddoc rnddoc
+
+do_test 5.1 {
+  for {set i 1} {$i <= 65} {incr i} {
+    execsql { INSERT INTO s2 VALUES(rnddoc(10)) }
+  }
+  for {set i 1} {$i <= 63} {incr i} {
+    execsql { DELETE FROM s2 WHERE rowid = $i }
+  }
+  fts5_level_segs s2
+} {0 8}
+
+do_test 5.2 {
+  execsql {
+    INSERT INTO s2(s2, rank) VALUES('automerge', 8);
+  }
+  for {set i 0} {$i < 7} {incr i} {
+    execsql { INSERT INTO s2 VALUES(rnddoc(50)) }
+  }
+  fts5_level_segs s2
+} {8 0 0}
+
+# Test also the other type of segment promotion - when a new segment is written
+# that is larger than segments immediately following it.
+do_test 5.3 {
+  execsql {
+    DROP TABLE s2;
+    CREATE VIRTUAL TABLE s2 USING fts5(x, detail=%DETAIL%);
+    INSERT INTO s2(s2, rank) VALUES('pgsz', 32);
+    INSERT INTO s2(s2, rank) VALUES('automerge', 0);
+  }
+
+  for {set i 1} {$i <= 16} {incr i} {
+    execsql { INSERT INTO s2 VALUES(rnddoc(5)) }
+  }
+  fts5_level_segs s2
+} {0 1}
+
+do_test 5.4 {
+  execsql { INSERT INTO s2 VALUES(rnddoc(160)) }
+  fts5_level_segs s2
+} {2 0}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE s3 USING fts5(x, detail=%DETAIL%);
+  BEGIN;
+    INSERT INTO s3 VALUES('a b c');
+    INSERT INTO s3 VALUES('A B C');
+}
+
+do_execsql_test 6.1.1 {
+  SELECT rowid FROM s3 WHERE s3 MATCH 'a'
+} {1 2}
+
+do_execsql_test 6.1.2 {
+  SELECT rowid FROM s3 WHERE s3 MATCH 'a' ORDER BY rowid DESC
+} {2 1}
+
+do_execsql_test 6.2 {
+  COMMIT;
+}
+
+do_execsql_test 6.3 {
+  SELECT rowid FROM s3 WHERE s3 MATCH 'a'
+} {1 2}
+
+do_test 6.4 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    BEGIN;
+      INSERT INTO s3(s3) VALUES('optimize');
+    ROLLBACK;
+  }
+} {}
+
+#-------------------------------------------------------------------------
+#
+set doc [string repeat "a b c " 500]
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+  INSERT INTO x1 VALUES($doc);
+}
+
+} ;# foreach_detail_mode...
+
+
+finish_test

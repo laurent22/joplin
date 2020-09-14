@@ -1,0 +1,71 @@
+# 2016 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set ::testprefix rowvaluefault
+
+do_execsql_test 1.0 {
+  CREATE TABLE xyz(one, two, thr, fou);
+  INSERT INTO xyz VALUES('A', 'A', 'A',  1);
+  INSERT INTO xyz VALUES('B', 'B', 'B',  2);
+  INSERT INTO xyz VALUES('C', 'C', 'C',  3);
+  INSERT INTO xyz VALUES('D', 'D', 'D',  4);
+
+  CREATE UNIQUE INDEX xyz_one_two ON xyz(one, two);
+}
+
+do_faultsim_test 1 -faults oom* -body {
+  execsql { SELECT fou FROM xyz WHERE (one, two, thr) = ('B', 'B', 'B') }
+} -test {
+  faultsim_test_result {0 2} 
+}
+
+do_faultsim_test 2 -faults oom* -body {
+  execsql { SELECT fou FROM xyz WHERE (two, thr) IS ('C', 'C') }
+} -test {
+  faultsim_test_result {0 3} 
+}
+
+do_faultsim_test 3 -faults oom* -body {
+  execsql { SELECT fou FROM xyz WHERE (one, two, thr) > ('B', 'B', 'B') }
+} -test {
+  faultsim_test_result {0 {3 4}} 
+}
+
+do_faultsim_test 4 -faults oom* -body {
+  execsql { SELECT fou FROM xyz WHERE (one, two) IN (SELECT one, two FROM xyz) }
+} -test {
+  faultsim_test_result {0 {1 2 3 4}} 
+}
+
+do_faultsim_test 5 -faults oom* -body {
+  execsql { 
+    SELECT fou FROM xyz 
+    WHERE (one, two, thr) IN (SELECT one, two, thr FROM xyz) 
+  }
+} -test {
+  faultsim_test_result {0 {1 2 3 4}} 
+}
+
+do_faultsim_test 6 -faults oom* -body {
+  execsql { 
+    SELECT fou FROM xyz 
+    WHERE (one, two, thr) BETWEEN ('B', 'B', 'B') AND ('C', 'C', 'C') }
+} -test {
+  faultsim_test_result {0 {2 3}} 
+}
+
+finish_test

@@ -1,0 +1,157 @@
+# 2014 November 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# Specifically, the auxiliary function "highlight".
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ak
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE ft1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO ft1 VALUES('i d d a g i b g d d');
+  INSERT INTO ft1 VALUES('h d b j c c g a c a');
+  INSERT INTO ft1 VALUES('e j a e f h b f h h');
+  INSERT INTO ft1 VALUES('j f h d g h i b d f');
+  INSERT INTO ft1 VALUES('d c j d c j b c g e');
+  INSERT INTO ft1 VALUES('i a d e g j g d a a');
+  INSERT INTO ft1 VALUES('j f c e d a h j d b');
+  INSERT INTO ft1 VALUES('i c c f a d g h j e');
+  INSERT INTO ft1 VALUES('i d i g c d c h b f');
+  INSERT INTO ft1 VALUES('g d a e h a b c f j');
+
+  CREATE VIRTUAL TABLE ft2 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO ft2 VALUES('a b c d e f g h i j');
+}
+
+do_execsql_test 1.2 {
+  SELECT highlight(ft1, 0, '[', ']') FROM ft1 WHERE ft1 MATCH 'e';
+} {
+  {[e] j a [e] f h b f h h}
+  {d c j d c j b c g [e]}
+  {i a d [e] g j g d a a}
+  {j f c [e] d a h j d b}
+  {i c c f a d g h j [e]}
+  {g d a [e] h a b c f j}
+}
+
+do_execsql_test 1.3 {
+  SELECT highlight(ft1, 0, '[', ']') FROM ft1 WHERE ft1 MATCH 'e e e'
+} {
+  {[e] j a [e] f h b f h h}
+  {d c j d c j b c g [e]}
+  {i a d [e] g j g d a a}
+  {j f c [e] d a h j d b}
+  {i c c f a d g h j [e]}
+  {g d a [e] h a b c f j}
+}
+
+do_execsql_test 1.4 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'f d'
+} {
+  {a b c [d] e [f] g h i j}
+}
+
+do_execsql_test 1.5 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'd f'
+} {
+  {a b c [d] e [f] g h i j}
+}
+
+#-------------------------------------------------------------------------
+# Tests below this point require detail=full.
+#-------------------------------------------------------------------------
+if {[detail_is_full]==0} continue
+
+
+do_execsql_test 2.1 {
+  SELECT highlight(ft1, 0, '[', ']') FROM ft1 WHERE ft1 MATCH 'h + d';
+} {
+  {[h d] b j c c g a c a}
+  {j f [h d] g h i b d f} 
+}
+
+do_execsql_test 2.2 {
+  SELECT highlight(ft1, 0, '[', ']') FROM ft1 WHERE ft1 MATCH 'd + d';
+} {
+  {i [d d] a g i b g [d d]}
+}
+
+do_execsql_test 2.3 {
+  SELECT highlight(ft1, 0, '[', ']') FROM ft1 WHERE ft1 MATCH 'd + d d + d';
+} {
+  {i [d d] a g i b g [d d]}
+}
+
+do_execsql_test 2.4 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'b+c+d c+d+e'
+} {{a [b c d e] f g h i j}}
+
+do_execsql_test 2.5 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'b+c+d e+f+g'
+} {
+  {a [b c d] [e f g] h i j}
+}
+
+do_execsql_test 2.6 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'b+c+d c'
+} {
+  {a [b c d] e f g h i j}
+}
+
+do_execsql_test 2.7 {
+  SELECT highlight(ft2, 0, '[', ']') FROM ft2 WHERE ft2 MATCH 'b+c c+d+e'
+} {
+  {a [b c d e] f g h i j}
+}
+
+#-------------------------------------------------------------------------
+# The example from the docs.
+#
+do_execsql_test 3.1 {
+  -- Assuming this:
+  CREATE VIRTUAL TABLE ft USING fts5(a, detail=%DETAIL%);
+  INSERT INTO ft VALUES('a b c x c d e');
+  INSERT INTO ft VALUES('a b c c d e');
+  INSERT INTO ft VALUES('a b c d e');
+
+  -- The following SELECT statement returns these three rows:
+  --   '[a b c] x [c d e]'
+  --   '[a b c] [c d e]'
+  --   '[a b c d e]'
+  SELECT highlight(ft, 0, '[', ']') FROM ft WHERE ft MATCH 'a+b+c AND c+d+e';
+} {
+  {[a b c] x [c d e]}
+  {[a b c] [c d e]}
+  {[a b c d e]}
+}
+
+do_execsql_test 3.2 {
+  SELECT highlight(ft, 0, NULL, NULL) FROM ft WHERE ft MATCH 'a+b+c AND c+d+e';
+} {
+  {a b c x c d e}
+  {a b c c d e}
+  {a b c d e}
+}
+
+}
+
+finish_test

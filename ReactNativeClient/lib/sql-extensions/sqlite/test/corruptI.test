@@ -1,0 +1,263 @@
+# 2014-01-20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix corruptI
+
+if {[permutation]=="mmap"} {
+  finish_test
+  return
+}
+
+# This module uses hard-coded offsets which do not work if the reserved_bytes
+# value is nonzero.
+if {[nonzero_reserved_bytes]} {finish_test; return;}
+
+database_may_be_corrupt
+
+# Initialize the database.
+#
+do_execsql_test 1.1 {
+  PRAGMA page_size=1024;
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(a);
+  CREATE INDEX i1 ON t1(a);
+  INSERT INTO t1 VALUES('abcdefghijklmnop');
+} {}
+db close
+
+do_test 1.2 {
+  set offset [hexio_get_int [hexio_read test.db [expr 2*1024 + 8] 2]]
+  set off [expr 2*1024 + $offset + 1]
+  hexio_write test.db $off 7f06
+  sqlite3 db test.db
+  catchsql { SELECT * FROM t1 WHERE a = 10 }
+} {0 {}}
+
+do_test 1.3 {
+  db close
+  set offset [hexio_get_int [hexio_read test.db [expr 2*1024 + 8] 2]]
+  set off [expr 2*1024 + $offset + 1]
+  hexio_write test.db $off FFFF7f02
+  sqlite3 db test.db
+  catchsql { SELECT * FROM t1 WHERE a = 10 }
+} {1 {database disk image is malformed}}
+
+do_test 2.0 {
+  execsql {
+    CREATE TABLE r(x);
+    INSERT INTO r VALUES('ABCDEFGHIJK');
+    CREATE INDEX r1 ON r(x);
+  }
+  set pg [db one {SELECT rootpage FROM sqlite_master WHERE name = 'r1'}]
+} {5}
+
+do_test 2.1 {
+  db close
+  set offset [hexio_get_int [hexio_read test.db [expr (5-1)*1024 + 8] 2]]
+  set off [expr (5-1)*1024 + $offset + 1]
+  hexio_write test.db $off FFFF0004
+  sqlite3 db test.db
+  catchsql { SELECT * FROM r WHERE x >= 10.0 }
+} {1 {database disk image is malformed}}
+
+do_test 2.2 {
+  catchsql { SELECT * FROM r WHERE x >= 10 }
+} {1 {database disk image is malformed}}
+
+if {[db one {SELECT sqlite_compileoption_used('ENABLE_OVERSIZE_CELL_CHECK')}]} {
+  # The following tests only work if OVERSIZE_CELL_CHECK is disabled
+} else {
+  reset_db
+  do_execsql_test 3.1 {
+     PRAGMA auto_vacuum=0;
+     PRAGMA page_size = 512;
+     CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+     WITH s(a, b) AS (
+       SELECT 2, 'abcdefghij'
+       UNION ALL
+       SELECT a+2, b FROM s WHERe a < 40
+     )
+     INSERT INTO t1 SELECT * FROM s;
+   } {}
+   
+   do_test 3.2 {
+     hexio_write test.db [expr 512+3] 0054
+     db close
+     sqlite3 db test.db
+     execsql { INSERT INTO t1 VALUES(5, 'klmnopqrst') }
+     execsql { INSERT INTO t1 VALUES(7, 'klmnopqrst') }
+   } {}
+   
+   db close
+   sqlite3 db test.db
+   do_catchsql_test 3.3 {
+     INSERT INTO t1 VALUES(9, 'klmnopqrst');
+   } {1 {database disk image is malformed}}
+} ;# end-if !defined(ENABLE_OVERSIZE_CELL_CHECK)
+
+
+#-------------------------------------------------------------------------
+# Test that an assert() failure discovered by AFL corrupt database file
+# testing has been fixed.
+#
+reset_db
+do_execsql_test 4.0 {
+  PRAGMA page_size = 65536;
+  PRAGMA autovacuum = 0;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(-1, 'abcdefghij');
+  INSERT INTO t1 VALUES(0, 'abcdefghij');
+}
+
+set root [db one {SELECT rootpage FROM sqlite_master}]
+set offset [expr ($root-1) * 65536]
+
+ifcapable oversize_cell_check {
+  set res {1 {database disk image is malformed}}
+} else {
+  set res {0 {}}
+}
+do_test 4.1 {
+  db close
+  hexio_write test.db [expr $offset + 8 + 2] 0000
+  hexio_write test.db [expr $offset + 5] 0000
+  sqlite3 db test.db
+  catchsql { DELETE FROM t1 WHERE a=0 }
+} $res
+
+
+#-------------------------------------------------------------------------
+# Database properties:
+#
+#   * Incremental vacuum mode.
+#   * Database root table has a single leaf page.
+#   * Free list consists of a single trunk page.
+#
+# The db is then corrupted by adding the root table leaf page as a free-list
+# leaf page (so that it is referenced twice).
+#
+# Then, a new table is created. The new root page is the current free-list
+# trunk. This means that the root table leaf page is made into the new
+# free list trunk, which corrupts its header. Then, when the new entry is
+# inserted into the root table, things would get chaotic.
+#
+reset_db
+do_test 5.0 {
+  execsql {
+    PRAGMA page_size = 512;
+    PRAGMA auto_vacuum = 2;
+  }
+  for {set i 3} {1} {incr i} {
+    execsql "CREATE TABLE t${i}(x)"
+    if {[db one {PRAGMA page_count}]>$i} break
+  }
+  set nPage [db one {PRAGMA page_count}]
+  execsql {
+    CREATE TABLE t100(x);
+    DROP TABLE t100;
+  }
+} {}
+
+do_execsql_test 5.1 { 
+  PRAGMA page_count 
+} [expr $nPage+1]
+
+do_test 5.2 { 
+  # The last page of the db is now the only leaf of the sqlite_master table.
+  # Corrupt the db by adding it to the free-list as well (the second last
+  # page of the db is the free-list trunk).
+  db close
+  hexio_write test.db [expr 512*($nPage-1)] [
+    format "%.8X%.8X%.8X" 0 1 [expr $nPage+1]
+  ]
+} {12}
+
+do_test 5.3 {
+  sqlite3 db test.db
+  catchsql { CREATE TABLE tx(x); }
+} {1 {database disk image is malformed}}
+
+
+#-------------------------------------------------------------------------
+# Set the payload size of a cell to just less than 2^32 bytes (not
+# possible in an uncorrupted db). Then try to delete the cell. At one
+# point this led to an integer overflow that caused an assert() to fail.
+#
+reset_db
+do_execsql_test 6.0 {
+  PRAGMA page_size = 512;
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(zeroblob(300));
+  INSERT INTO t1 VALUES(zeroblob(600));
+} {}
+do_test 6.1 {
+  db close
+  hexio_write test.db 616 8FFFFFFF7F02
+  sqlite3 db test.db
+  execsql { DELETE FROM t1 WHERE rowid=2 }
+} {}
+
+#-------------------------------------------------------------------------
+# See what happens if the sqlite_master entry associated with a PRIMARY
+# KEY or UNIQUE index is removed. 
+#
+reset_db
+do_execsql_test 7.0 {
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(x PRIMARY KEY, y);
+  INSERT INTO t1 VALUES('a', 'A');
+  INSERT INTO t1 VALUES('b', 'A');
+  INSERT INTO t1 VALUES('c', 'A');
+  SELECT name FROM sqlite_master;
+} {t1 sqlite_autoindex_t1_1}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 7.1 {
+  PRAGMA writable_schema = 1;
+  DELETE FROM sqlite_master WHERE name = 'sqlite_autoindex_t1_1';
+}
+do_test 7.2 {
+  db close
+  sqlite3 db test.db
+  catchsql { UPDATE t1 SET x='d' AND y='D' WHERE rowid = 2 }
+} {1 {database disk image is malformed}}
+
+#-------------------------------------------------------------------------
+# At one point an assert() would fail if attempt was made to free page 1.
+#
+reset_db
+do_execsql_test 8.0 {
+  PRAGMA auto_vacuum=0;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(zeroblob(300));
+  INSERT INTO t1 VALUES(zeroblob(300));
+  INSERT INTO t1 VALUES(zeroblob(300));
+  INSERT INTO t1 VALUES(zeroblob(300));
+} {}
+
+do_test 8.1 {
+  db close
+  hexio_write test.db [expr 1024 + 8] 00000001
+  sqlite3 db test.db
+  catchsql { DELETE FROM t1 }
+} {1 {database disk image is malformed}}
+
+do_test 8.2 {
+  db close
+  sqlite3 db test.db
+  execsql { PRAGMA integrity_check }
+} {/.*in database main.*/}
+
+
+finish_test

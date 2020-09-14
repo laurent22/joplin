@@ -1,0 +1,155 @@
+# 2017-03-22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements tests for json_patch(A,B) SQL function.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix json104
+
+ifcapable !json1 {
+  finish_test
+  return
+}
+
+# This is the example from pages 2 and 3 of RFC-7396
+do_execsql_test json104-100 {
+  SELECT json_patch('{
+       "a": "b",
+       "c": {
+         "d": "e",
+         "f": "g"
+       }
+     }','{
+       "a":"z",
+       "c": {
+         "f": null
+       }
+     }');
+} {{{"a":"z","c":{"d":"e"}}}}
+
+
+# This is the example from pages 4 and 5 of RFC-7396 
+do_execsql_test json104-110 {
+  SELECT json_patch('{
+       "title": "Goodbye!",
+       "author" : {
+         "givenName" : "John",
+         "familyName" : "Doe"
+       },
+       "tags":[ "example", "sample" ],
+       "content": "This will be unchanged"
+     }','{
+       "title": "Hello!",
+       "phoneNumber": "+01-123-456-7890",
+       "author": {
+         "familyName": null
+       },
+       "tags": [ "example" ]
+     }');
+} {{{"title":"Hello!","author":{"givenName":"John"},"tags":["example"],"content":"This will be unchanged","phoneNumber":"+01-123-456-7890"}}}
+
+do_execsql_test json104-200 {
+  SELECT json_patch('[1,2,3]','{"x":null}');
+} {{{}}}
+do_execsql_test json104-210 {
+  SELECT json_patch('[1,2,3]','{"x":null,"y":1,"z":null}');
+} {{{"y":1}}}
+do_execsql_test json104-220 {
+  SELECT json_patch('{}','{"a":{"bb":{"ccc":null}}}');
+} {{{"a":{"bb":{}}}}}
+do_execsql_test json104-221 {
+  SELECT json_patch('{}','{"a":{"bb":{"ccc":[1,null,3]}}}');
+} {{{"a":{"bb":{"ccc":[1,null,3]}}}}}
+do_execsql_test json104-222 {
+  SELECT json_patch('{}','{"a":{"bb":{"ccc":[1,{"dddd":null},3]}}}');
+} {{{"a":{"bb":{"ccc":[1,{"dddd":null},3]}}}}}
+
+# Example test cases at the end of the RFC-7396 document
+do_execsql_test json104-300 {
+  SELECT json_patch('{"a":"b"}','{"a":"c"}');
+} {{{"a":"c"}}}
+do_execsql_test json104-300a {
+  SELECT coalesce(json_patch(null,'{"a":"c"}'), 'real-null');
+} {{real-null}}
+do_execsql_test json104-301 {
+  SELECT json_patch('{"a":"b"}','{"b":"c"}');
+} {{{"a":"b","b":"c"}}}
+do_execsql_test json104-302 {
+  SELECT json_patch('{"a":"b"}','{"a":null}');
+} {{{}}}
+do_execsql_test json104-303 {
+  SELECT json_patch('{"a":"b","b":"c"}','{"a":null}');
+} {{{"b":"c"}}}
+do_execsql_test json104-304 {
+  SELECT json_patch('{"a":["b"]}','{"a":"c"}');
+} {{{"a":"c"}}}
+do_execsql_test json104-305 {
+  SELECT json_patch('{"a":"c"}','{"a":["b"]}');
+} {{{"a":["b"]}}}
+do_execsql_test json104-306 {
+  SELECT json_patch('{"a":{"b":"c"}}','{"a":{"b":"d","c":null}}');
+} {{{"a":{"b":"d"}}}}
+do_execsql_test json104-307 {
+  SELECT json_patch('{"a":[{"b":"c"}]}','{"a":[1]}');
+} {{{"a":[1]}}}
+do_execsql_test json104-308 {
+  SELECT json_patch('["a","b"]','["c","d"]');
+} {{["c","d"]}}
+do_execsql_test json104-309 {
+  SELECT json_patch('{"a":"b"}','["c"]');
+} {{["c"]}}
+do_execsql_test json104-310 {
+  SELECT json_patch('{"a":"foo"}','null');
+} {{null}}
+do_execsql_test json104-310a {
+  SELECT coalesce(json_patch('{"a":"foo"}',null), 'real-null');
+} {{real-null}}
+do_execsql_test json104-311 {
+  SELECT json_patch('{"a":"foo"}','"bar"');
+} {{"bar"}}
+do_execsql_test json104-312 {
+  SELECT json_patch('{"e":null}','{"a":1}');
+} {{{"e":null,"a":1}}}
+do_execsql_test json104-313 {
+  SELECT json_patch('[1,2]','{"a":"b","c":null}');
+} {{{"a":"b"}}}
+do_execsql_test json104-314 {
+  SELECT json_patch('{}','{"a":{"bb":{"ccc":null}}}');
+} {{{"a":{"bb":{}}}}}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 401 {
+  CREATE TABLE obj(x);
+  INSERT INTO obj VALUES('{"a":1,"b":2}');
+  SELECT * FROM obj;
+} {{{"a":1,"b":2}}}
+do_execsql_test 402 {
+  UPDATE obj SET x = json_insert(x, '$.c', 3);
+  SELECT * FROM obj;
+} {{{"a":1,"b":2,"c":3}}}
+do_execsql_test 403 {
+  SELECT json_extract(x, '$.b') FROM obj;
+  SELECT json_extract(x, '$."b"') FROM obj;
+} {2 2}
+do_execsql_test 404 {
+  UPDATE obj SET x = json_set(x, '$."b"', 555);
+  SELECT json_extract(x, '$.b') FROM obj;
+  SELECT json_extract(x, '$."b"') FROM obj;
+} {555 555}
+do_execsql_test 405 {
+  UPDATE obj SET x = json_set(x, '$."d"', 4);
+  SELECT json_extract(x, '$."d"') FROM obj;
+} {4}
+
+
+finish_test

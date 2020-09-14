@@ -1,0 +1,62 @@
+# 2018 March 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbucollate
+
+ifcapable !icu_collations {
+  finish_test
+  return
+}
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+reset_db
+ 
+# Create a simple RBU database. That expects to write to a table:
+#
+#   CREATE TABLE t1(a PRIMARY KEY, b, c);
+#
+proc create_rbu1 {filename} {
+  forcedelete $filename
+  sqlite3 rbu1 $filename  
+  rbu1 eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES('a', 'one', 1, 0);
+    INSERT INTO data_t1 VALUES('b', 'two', 2, 0);
+    INSERT INTO data_t1 VALUES('c', 'three', 3, 0);
+  }
+  rbu1 close
+  return $filename
+}
+
+do_execsql_test 1.0 {
+  SELECT icu_load_collation('en_US', 'my-collate');
+  CREATE TABLE t1(a COLLATE "my-collate" PRIMARY KEY, b, c);
+} {{}}
+
+do_test 1.2 {
+  create_rbu1 testrbu.db
+  sqlite3rbu rbu test.db testrbu.db
+  rbu dbMain_eval { SELECT icu_load_collation('en_US', 'my-collate') }
+  rbu dbRbu_eval { SELECT icu_load_collation('en_US', 'my-collate') }
+  while 1 {
+    set rc [rbu step]
+    if {$rc!="SQLITE_OK"} break
+  }
+  rbu close
+  db eval { SELECT * FROM t1 }
+} {a one 1 b two 2 c three 3}
+
+#forcedelete testrbu.db
+finish_test

@@ -1,0 +1,74 @@
+# 2014 October 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_blobbytes
+
+do_execsql_test 1.0 {
+  CREATE TABLE q1(r INTEGER PRIMARY KEY, s TEXT);
+  WITH d(a, b) AS (
+    SELECT 0, '' 
+      UNION ALL
+    SELECT a+1, b||'.' FROM d WHERE a<10000
+  )
+  INSERT INTO q1 SELECT * FROM d;
+}
+
+
+# EVIDENCE-OF: R-07796-55423 Returns the size in bytes of the BLOB
+# accessible via the successfully opened BLOB handle in its only
+# argument.
+#
+proc check_blob_size {tn rowid bytes} {
+  uplevel [list do_test $tn [subst -nocommands {
+    sqlite3_blob_open db main q1 s $rowid 0 B
+    set res [sqlite3_blob_bytes [set B]]
+    sqlite3_blob_close [set B]
+    set res
+  }] $bytes]
+}
+check_blob_size 1.1 43 43
+check_blob_size 1.2 391 391
+check_blob_size 1.3 6349 6349
+check_blob_size 1.4 2621 2621
+check_blob_size 1.5 7771 7771
+check_blob_size 1.6 7949 7949
+check_blob_size 1.7 4374 4374
+check_blob_size 1.8 2578 2578
+check_blob_size 1.9 7004 7004
+check_blob_size 1.10 2180 2180
+check_blob_size 1.11 3796 3796
+check_blob_size 1.12 7101 7101
+check_blob_size 1.13 7449 7449
+check_blob_size 1.14 7224 7224
+check_blob_size 1.15 3038 3038
+check_blob_size 1.16 1083 1083
+check_blob_size 1.17 5157 5157
+check_blob_size 1.18 6686 6686
+check_blob_size 1.19 6592 6592
+check_blob_size 1.20 0 0
+
+
+# EVIDENCE-OF: R-53088-19343 The incremental blob I/O routines can only
+# read or overwriting existing blob content; they cannot change the size
+# of a blob.
+#
+#   Also demonstrated in other e_blobXXX.test files.
+#
+do_test 2.1 {
+  sqlite3_blob_open db main q1 s 86 1 B
+  list [catch { sqlite3_blob_write $B 86 "1" 1 } msg] $msg
+} {1 SQLITE_ERROR}
+sqlite3_blob_close $B
+
+finish_test

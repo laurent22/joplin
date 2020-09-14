@@ -1,0 +1,213 @@
+# 2011 May 06
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_totalchanges
+
+# Like [do_execsql_test], except it appends the value returned by 
+# [db total_changes] to the result of executing the SQL script.
+#
+proc do_tc_test {tn sql res} {
+  uplevel [list \
+    do_test $tn "concat \[execsql {$sql}\] \[db total_changes\]" $res
+  ]
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX t1_b ON t1(b);
+  CREATE TABLE t2(x, y, PRIMARY KEY(x, y)) WITHOUT ROWID;
+  CREATE INDEX t2_y ON t2(y);
+}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-65438-26258 This function returns the total number of
+# rows inserted, modified or deleted by all INSERT, UPDATE or DELETE
+# statements completed since the database connection was opened,
+# including those executed as part of trigger programs.
+#
+#   1.1.*: different types of I/U/D statements,
+#   1.2.*: trigger programs.
+#
+do_tc_test 1.1.1 {
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  UPDATE t1 SET a = a+1;
+  DELETE FROM t1;
+} {6}
+do_tc_test 1.1.2 {
+  DELETE FROM t1
+} {6}
+
+do_tc_test 1.1.3 {
+  WITH data(a,b) AS (
+      SELECT 0, 0 UNION ALL SELECT a+1, b+1 FROM data WHERE a<99
+  )
+  INSERT INTO t1 SELECT * FROM data;
+} {106}
+
+do_tc_test 1.1.4 {
+  INSERT INTO t2 SELECT * FROM t1 WHERE a<50;
+  UPDATE t2 SET y=y+1;
+} {206}
+
+do_tc_test 1.1.5 {
+  DELETE FROM t2 WHERE y<=25
+} {231}
+
+do_execsql_test 1.2.1 {
+  DELETE FROM t1;
+  DELETE FROM t2;
+}
+sqlite3 db test.db     ; # To reset total_changes
+do_tc_test 1.2.2 {
+  CREATE TABLE log(detail);
+  CREATE TRIGGER t1_after_insert AFTER INSERT ON t1 BEGIN 
+    INSERT INTO log VALUES('inserted into t1');
+  END;
+
+  CREATE TRIGGER t1_before_delete BEFORE DELETE ON t1 BEGIN 
+    INSERT INTO log VALUES('deleting from t1');
+    INSERT INTO log VALUES('here we go!');
+  END;
+
+  CREATE TRIGGER t1_after_update AFTER UPDATE ON t1 BEGIN 
+    INSERT INTO log VALUES('update');
+    DELETE FROM log;
+  END;
+
+  INSERT INTO t1 VALUES('a', 'b');   -- 1 + 1
+  UPDATE t1 SET b='c';               -- 1 + 1 + 2
+  DELETE FROM t1;                    -- 1 + 1 + 1
+} {9}
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-61766-15253 Executing any other type of SQL statement
+# does not affect the value returned by sqlite3_total_changes().
+do_tc_test 2.1 {
+  INSERT INTO t1 VALUES(1, 2), (3, 4);
+  INSERT INTO t2 VALUES(1, 2), (3, 4);
+} {15}
+do_tc_test 2.2 {
+  SELECT count(*) FROM t1;
+} {2 15}
+do_tc_test 2.3 {
+  CREATE TABLE t4(a, b);
+  ALTER TABLE t4 ADD COLUMN c;
+  CREATE INDEX i4 ON t4(c);
+  ALTER TABLE t4 RENAME TO t5;
+  ANALYZE;
+  BEGIN;
+  DROP TABLE t2;
+  ROLLBACK;
+  VACUUM;
+} {15}
+
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-36043-10590 Changes made as part of foreign key
+# actions are included in the count, but those made as part of REPLACE
+# constraint resolution are not.
+#
+#   3.1.*: foreign key actions
+#   3.2.*: REPLACE constraints.
+#
+sqlite3 db test.db     ; # To reset total_changes
+do_tc_test 3.1.1 {
+  CREATE TABLE p1(c PRIMARY KEY, d);
+  CREATE TABLE c1(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE SET NULL);
+  CREATE TABLE c2(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE CASCADE);
+  CREATE TABLE c3(a, b, FOREIGN KEY(a) REFERENCES p1 ON DELETE SET DEFAULT);
+
+  INSERT INTO p1 VALUES(1, 'one');
+  INSERT INTO p1 VALUES(2, 'two');
+  INSERT INTO p1 VALUES(3, 'three');
+  INSERT INTO p1 VALUES(4, 'four');
+
+  INSERT INTO c1 VALUES(1, 'i');
+  INSERT INTO c2 VALUES(2, 'ii');
+  INSERT INTO c3 VALUES(3, 'iii');
+  PRAGMA foreign_keys = ON;
+} {7}
+
+do_tc_test 3.1.2 { DELETE FROM p1 WHERE c=1; } {9}
+do_tc_test 3.1.3 { DELETE FROM p1 WHERE c=2; } {11}
+do_tc_test 3.1.4 { DELETE FROM p1 WHERE c=3; } {13}
+do_tc_test 3.1.5 { DELETE FROM p1 WHERE c=4; } {14}  ; # only 1 this time.
+
+sqlite3 db test.db     ; # To reset total_changes
+do_tc_test 3.1.6 {
+  DROP TABLE c1;
+  DROP TABLE c2;
+  DROP TABLE c3;
+  CREATE TABLE c1(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE SET NULL);
+  CREATE TABLE c2(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE CASCADE);
+  CREATE TABLE c3(a, b, FOREIGN KEY(a) REFERENCES p1 ON UPDATE SET DEFAULT);
+
+  INSERT INTO p1 VALUES(1, 'one');
+  INSERT INTO p1 VALUES(2, 'two');
+  INSERT INTO p1 VALUES(3, 'three');
+  INSERT INTO p1 VALUES(4, 'four');
+
+  INSERT INTO c1 VALUES(1, 'i');
+  INSERT INTO c2 VALUES(2, 'ii');
+  INSERT INTO c3 VALUES(3, 'iii');
+  PRAGMA foreign_keys = ON;
+} {7}
+
+do_tc_test 3.1.7  { UPDATE p1 SET c=c+4 WHERE c=1; } {9}
+do_tc_test 3.1.8  { UPDATE p1 SET c=c+4 WHERE c=2; } {11}
+do_tc_test 3.1.9  { UPDATE p1 SET c=c+4 WHERE c=3; } {13}
+do_tc_test 3.1.10 { UPDATE p1 SET c=c+4 WHERE c=4; } {14}  ; # only 1 this time.
+
+sqlite3 db test.db     ; # To reset total_changes
+do_tc_test 3.2.1 {
+  CREATE TABLE t3(a UNIQUE, b UNIQUE);
+  INSERT INTO t3 VALUES('one', 'one');
+  INSERT INTO t3 VALUES('two', 'two');
+  INSERT OR REPLACE INTO t3 VALUES('one', 'two');
+} {3}
+
+do_tc_test 3.2.2 {
+  INSERT INTO t3 VALUES('three', 'one');
+  UPDATE OR REPLACE t3 SET b='two' WHERE b='one';
+  SELECT * FROM t3;
+} {three two 5}
+
+#--------------------------------------------------------------------------
+# EVIDENCE-OF: R-54872-08741 Changes to a view that are intercepted by
+# INSTEAD OF triggers are not counted.
+#
+sqlite3 db test.db     ; # To reset total_changes
+do_tc_test 4.1 {
+  CREATE TABLE t6(x);
+  CREATE VIEW v1 AS SELECT * FROM t6;
+  CREATE TRIGGER v1_tr1 INSTEAD OF INSERT ON v1 BEGIN
+    SELECT 'no-op';
+  END;
+
+  INSERT INTO v1 VALUES('a');
+  INSERT INTO v1 VALUES('b');
+} {0}
+do_tc_test 4.2 {
+  CREATE TRIGGER v1_tr2 INSTEAD OF INSERT ON v1 BEGIN
+    INSERT INTO t6 VALUES(new.x);
+  END;
+
+  INSERT INTO v1 VALUES('c');
+  INSERT INTO v1 VALUES('d');
+} {2}
+
+
+finish_test

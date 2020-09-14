@@ -1,0 +1,50 @@
+# 2012 April 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# The tests in this file were used while developing the SQLite 4 code. 
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix tkt-385a5b56b9
+
+do_execsql_test 1.0 { 
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, NULL);
+  INSERT INTO t1 VALUES(2, NULL);
+  INSERT INTO t1 VALUES(1, NULL);
+}
+
+do_execsql_test 1.1 { SELECT DISTINCT x, y FROM t1 } {1 {} 2 {}}
+do_execsql_test 1.2 { CREATE UNIQUE INDEX i1 ON t1(x, y) }
+do_execsql_test 1.3 { SELECT DISTINCT x, y FROM t1 } {1 {} 2 {}}
+
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 2.0 {
+  CREATE TABLE t2(x, y NOT NULL);
+  CREATE UNIQUE INDEX t2x ON t2(x);
+  CREATE UNIQUE INDEX t2y ON t2(y);
+}
+
+do_eqp_test 2.1 { SELECT DISTINCT x FROM t2 } \
+  {SCAN TABLE t2 USING COVERING INDEX t2x}
+
+do_eqp_test 2.2 { SELECT DISTINCT y FROM t2 } \
+  {SCAN TABLE t2 USING COVERING INDEX t2y}
+
+do_eqp_test 2.3 { SELECT DISTINCT x, y FROM t2 WHERE y=10 } \
+  {SEARCH TABLE t2 USING INDEX t2y (y=?)}
+
+do_eqp_test 2.4 { SELECT DISTINCT x, y FROM t2 WHERE x=10 } \
+  {SEARCH TABLE t2 USING INDEX t2x (x=?)}
+
+
+finish_test

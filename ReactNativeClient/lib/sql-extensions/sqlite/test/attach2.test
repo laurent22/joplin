@@ -1,0 +1,391 @@
+# 2003 July 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the ATTACH and DETACH commands
+# and related functionality.
+#
+# $Id: attach2.test,v 1.38 2007/12/13 21:54:11 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !attach {
+  finish_test
+  return
+}
+
+# Ticket #354
+#
+# Databases test.db and test2.db contain identical schemas.  Make
+# sure we can attach test2.db from test.db.
+#
+do_test attach2-1.1 {
+  db eval {
+    CREATE TABLE t1(a,b);
+    CREATE INDEX x1 ON t1(a);
+  }
+  forcedelete test2.db
+  forcedelete test2.db-journal
+  sqlite3 db2 test2.db
+  db2 eval {
+    CREATE TABLE t1(a,b);
+    CREATE INDEX x1 ON t1(a);
+  }
+  catchsql {
+    ATTACH 'test2.db' AS t2;
+  }
+} {0 {}}
+
+# Ticket #514
+#
+proc db_list {db} {
+  set list {}
+  foreach {idx name file} [execsql {PRAGMA database_list} $db] {
+    lappend list $idx $name
+  }
+  return $list
+}
+db eval {DETACH t2}
+do_test attach2-2.1 {
+  # lock test2.db then try to attach it.  This is no longer an error because
+  # db2 just RESERVES the database.  It does not obtain a write-lock until
+  # we COMMIT.
+  db2 eval {BEGIN}
+  db2 eval {UPDATE t1 SET a = 0 WHERE 0}
+  catchsql {
+    ATTACH 'test2.db' AS t2;
+  }
+} {0 {}}
+ifcapable schema_pragmas {
+do_test attach2-2.2 {
+  # make sure test2.db did get attached.
+  db_list db
+} {0 main 2 t2}
+} ;# ifcapable schema_pragmas
+db2 eval {COMMIT}
+
+do_test attach2-2.5 {
+  # Make sure we can read test2.db from db
+  catchsql {
+    SELECT name FROM t2.sqlite_master;
+  }
+} {0 {t1 x1}}
+do_test attach2-2.6 {
+  # lock test2.db and try to read from it.  This should still work because
+  # the lock is only a RESERVED lock which does not prevent reading.
+  #
+  db2 eval BEGIN
+  db2 eval {UPDATE t1 SET a = 0 WHERE 0}
+  catchsql {
+    SELECT name FROM t2.sqlite_master;
+  }
+} {0 {t1 x1}}
+do_test attach2-2.7 {
+  # but we can still read from test1.db even though test2.db is locked.
+  catchsql {
+    SELECT name FROM main.sqlite_master;
+  }
+} {0 {t1 x1}}
+do_test attach2-2.8 {
+  # start a transaction on test.db even though test2.db is locked.
+  catchsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(8,9);
+  }
+} {0 {}}
+do_test attach2-2.9 {
+  execsql {
+    SELECT * FROM t1
+  }
+} {8 9}
+do_test attach2-2.10 {
+  # now try to write to test2.db.  the write should fail
+  catchsql {
+    INSERT INTO t2.t1 VALUES(1,2);
+  }
+} {1 {database is locked}}
+do_test attach2-2.11 {
+  # when the write failed in the previous test, the transaction should
+  # have rolled back.
+  # 
+  # Update for version 3: A transaction is no longer rolled back if a
+  #                       database is found to be busy.
+  execsql {rollback}
+  db2 eval ROLLBACK
+  execsql {
+    SELECT * FROM t1
+  }
+} {}
+do_test attach2-2.12 {
+  catchsql {
+    COMMIT
+  }
+} {1 {cannot commit - no transaction is active}}
+
+# Ticket #574:  Make sure it works using the non-callback API
+#
+do_test attach2-3.1 {
+  set DB [sqlite3_connection_pointer db]
+  set rc [catch {sqlite3_prepare $DB "ATTACH 'test2.db' AS t2" -1 TAIL} VM]
+  if {$rc} {lappend rc $VM}
+  sqlite3_step $VM
+  sqlite3_finalize $VM
+  set rc
+} {0}
+do_test attach2-3.2 {
+  set rc [catch {sqlite3_prepare $DB "DETACH t2" -1 TAIL} VM]
+  if {$rc} {lappend rc $VM}
+  sqlite3_step $VM
+  sqlite3_finalize $VM
+  set rc
+} {0}
+
+db close
+for {set i 2} {$i<=15} {incr i} {
+  catch {db$i close}
+}
+
+# A procedure to verify the status of locks on a database.
+#
+proc lock_status {testnum db expected_result} {
+  # If the database was compiled with OMIT_TEMPDB set, then 
+  # the lock_status list will not contain an entry for the temp
+  # db. But the test code doesn't know this, so its easiest 
+  # to filter it out of the $expected_result list here.
+  ifcapable !tempdb {
+    set expected_result [concat \
+        [lrange $expected_result 0 1] \
+        [lrange $expected_result 4 end] \
+    ]
+  }
+  do_test attach2-$testnum [subst {
+    $db cache flush  ;# The lock_status pragma should not be cached
+    execsql {PRAGMA lock_status} $db
+  }] $expected_result
+}
+set sqlite_os_trace 0
+
+# Tests attach2-4.* test that read-locks work correctly with attached
+# databases.
+do_test attach2-4.1 {
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  execsql {ATTACH 'test2.db' as file2}
+  execsql {ATTACH 'test2.db' as file2} db2
+} {}
+
+lock_status 4.1.1 db {main unlocked temp closed file2 unlocked}
+lock_status 4.1.2 db2 {main unlocked temp closed file2 unlocked}
+
+do_test attach2-4.2 {
+  # Handle 'db' read-locks test.db
+  execsql {BEGIN}
+  execsql {SELECT * FROM t1}
+  # Lock status:
+  #    db  - shared(main)
+  #    db2 -
+} {}
+
+lock_status 4.2.1 db {main shared temp closed file2 unlocked}
+lock_status 4.2.2 db2 {main unlocked temp closed file2 unlocked}
+
+do_test attach2-4.3 {
+  # The read lock held by db does not prevent db2 from reading test.db
+  execsql {SELECT * FROM t1} db2
+} {}
+
+lock_status 4.3.1 db {main shared temp closed file2 unlocked}
+lock_status 4.3.2 db2 {main unlocked temp closed file2 unlocked}
+
+do_test attach2-4.4 {
+  # db is holding a read lock on test.db, so we should not be able
+  # to commit a write to test.db from db2
+  catchsql {
+    INSERT INTO t1 VALUES(1, 2)
+  } db2 
+} {1 {database is locked}}
+
+lock_status 4.4.1 db {main shared temp closed file2 unlocked}
+lock_status 4.4.2 db2 {main unlocked temp closed file2 unlocked}
+
+# We have to make sure that the cache_size and the soft_heap_limit
+# are large enough to hold the entire change in memory.  If either
+# is set too small, then changes will spill to the database, forcing
+# a reserved lock to promote to exclusive.  That will mess up our
+# test results. 
+
+set soft_limit [sqlite3_soft_heap_limit 0]
+
+
+do_test attach2-4.5 {
+  # Handle 'db2' reserves file2.
+  execsql {BEGIN} db2
+  execsql {INSERT INTO file2.t1 VALUES(1, 2)} db2
+  # Lock status:
+  #    db  - shared(main)
+  #    db2 - reserved(file2)
+} {}
+
+lock_status 4.5.1 db {main shared temp closed file2 unlocked}
+lock_status 4.5.2 db2 {main unlocked temp closed file2 reserved}
+
+do_test attach2-4.6.1 {
+  # Reads are allowed against a reserved database.
+  catchsql {
+    SELECT * FROM file2.t1;
+  }
+  # Lock status:
+  #    db  - shared(main), shared(file2)
+  #    db2 - reserved(file2)
+} {0 {}}
+
+lock_status 4.6.1.1 db {main shared temp closed file2 shared}
+lock_status 4.6.1.2 db2 {main unlocked temp closed file2 reserved}
+
+do_test attach2-4.6.2 {
+  # Writes against a reserved database are not allowed.
+  catchsql {
+    UPDATE file2.t1 SET a=0;
+  }
+} {1 {database is locked}}
+
+lock_status 4.6.2.1 db {main shared temp closed file2 shared}
+lock_status 4.6.2.2 db2 {main unlocked temp closed file2 reserved}
+
+do_test attach2-4.7 {
+  # Ensure handle 'db' retains the lock on the main file after
+  # failing to obtain a write-lock on file2.
+  catchsql {
+    INSERT INTO t1 VALUES(1, 2)
+  } db2 
+} {0 {}}
+
+lock_status 4.7.1 db {main shared temp closed file2 shared}
+lock_status 4.7.2 db2 {main reserved temp closed file2 reserved}
+
+do_test attach2-4.8 {
+  # We should still be able to read test.db from db2
+  execsql {SELECT * FROM t1} db2
+} {1 2}
+
+lock_status 4.8.1 db {main shared temp closed file2 shared}
+lock_status 4.8.2 db2 {main reserved temp closed file2 reserved}
+
+do_test attach2-4.9 {
+  # Try to upgrade the handle 'db' lock.
+  catchsql {
+    INSERT INTO t1 VALUES(1, 2)
+  }
+} {1 {database is locked}}
+
+lock_status 4.9.1 db {main shared temp closed file2 shared}
+lock_status 4.9.2 db2 {main reserved temp closed file2 reserved}
+
+do_test attach2-4.10 {
+  # We cannot commit db2 while db is holding a read-lock
+  catchsql {COMMIT} db2
+} {1 {database is locked}}
+
+lock_status 4.10.1 db {main shared temp closed file2 shared}
+lock_status 4.10.2 db2 {main pending temp closed file2 reserved}
+
+set sqlite_os_trace 0
+do_test attach2-4.11 {
+  # db is able to commit.
+  catchsql {COMMIT}
+} {0 {}}
+
+lock_status 4.11.1 db {main unlocked temp closed file2 unlocked}
+lock_status 4.11.2 db2 {main pending temp closed file2 reserved}
+
+do_test attach2-4.12 {
+  # Now we can commit db2
+  catchsql {COMMIT} db2
+} {0 {}}
+
+lock_status 4.12.1 db {main unlocked temp closed file2 unlocked}
+lock_status 4.12.2 db2 {main unlocked temp closed file2 unlocked}
+
+do_test attach2-4.13 {
+  execsql {SELECT * FROM file2.t1}
+} {1 2}
+do_test attach2-4.14 {
+  execsql {INSERT INTO t1 VALUES(1, 2)}
+} {}
+do_test attach2-4.15 {
+  execsql {SELECT * FROM t1} db2
+} {1 2 1 2}
+
+db close
+db2 close
+forcedelete test2.db
+sqlite3_soft_heap_limit $soft_limit
+
+# These tests - attach2-5.* - check that the master journal file is deleted
+# correctly when a multi-file transaction is committed or rolled back.
+#
+# Update: It's not actually created if a rollback occurs, so that test
+# doesn't really prove too much.
+foreach f [glob test.db*] {forcedelete $f}
+do_test attach2-5.1 {
+  sqlite3 db test.db
+  execsql {
+    ATTACH 'test.db2' AS aux;
+  }
+} {}
+do_test attach2-5.2 {
+  execsql {
+    BEGIN;
+    CREATE TABLE tbl(a, b, c);
+    CREATE TABLE aux.tbl(a, b, c);
+    COMMIT;
+  }
+} {}
+do_test attach2-5.3 {
+  lsort [glob test.db*]
+} {test.db test.db2}
+do_test attach2-5.4 {
+  execsql {
+    BEGIN;
+    DROP TABLE aux.tbl;
+    DROP TABLE tbl;
+    ROLLBACK;
+  }
+} {}
+do_test attach2-5.5 {
+  lsort [glob test.db*]
+} {test.db test.db2}
+
+# Check that a database cannot be ATTACHed or DETACHed during a transaction.
+do_test attach2-6.1 {
+  execsql {
+    BEGIN;
+  }
+} {}
+do_test attach2-6.2 {
+  catchsql {
+    ATTACH 'test3.db' as aux2;
+    DETACH aux2;
+  }
+} {0 {}}
+
+# As of version 3.21.0: it is ok to DETACH from within a transaction
+#
+do_test attach2-6.3 {
+  catchsql {
+    DETACH aux;
+  }
+} {0 {}}
+
+db close
+
+finish_test

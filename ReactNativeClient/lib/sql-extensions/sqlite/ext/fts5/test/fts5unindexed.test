@@ -1,0 +1,78 @@
+# 2015 Apr 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file focus on "unindexed" columns.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5unindexed
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b UNINDEXED);
+  INSERT INTO t1 VALUES('a b c', 'd e f');
+  INSERT INTO t1 VALUES('g h i', 'j k l');
+} {}
+
+do_execsql_test 1.2 { SELECT rowid FROM t1 WHERE t1 MATCH 'b' } {1}
+do_execsql_test 1.3 { SELECT rowid FROM t1 WHERE t1 MATCH 'e' } {}
+
+do_execsql_test 1.4 { INSERT INTO t1(t1) VALUES('integrity-check') } {}
+do_execsql_test 1.5 { INSERT INTO t1(t1) VALUES('rebuild') } {}
+do_execsql_test 1.6 { INSERT INTO t1(t1) VALUES('integrity-check') } {}
+
+do_execsql_test 1.7 { SELECT rowid FROM t1 WHERE t1 MATCH 'b' } {1}
+do_execsql_test 1.8 { SELECT rowid FROM t1 WHERE t1 MATCH 'e' } {}
+
+do_execsql_test 1.9 { DELETE FROM t1 WHERE t1 MATCH 'b' } {}
+
+do_execsql_test 1.10 { INSERT INTO t1(t1) VALUES('integrity-check') } {}
+do_execsql_test 1.11 { INSERT INTO t1(t1) VALUES('rebuild') } {}
+do_execsql_test 1.12 { INSERT INTO t1(t1) VALUES('integrity-check') } {}
+
+do_execsql_test 1.13 { SELECT rowid FROM t1 WHERE t1 MATCH 'i' } {2}
+do_execsql_test 1.14 { SELECT rowid FROM t1 WHERE t1 MATCH 'l' } {}
+
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a UNINDEXED, b UNINDEXED);
+  INSERT INTO t1 VALUES('a b c', 'd e f');
+  INSERT INTO t1 VALUES('g h i', 'j k l');
+  SELECT rowid FROM t2_data;
+} {1 10}
+do_execsql_test 2.2 {
+  INSERT INTO t2(t2) VALUES('rebuild');
+  INSERT INTO t2(t2) VALUES('integrity-check');
+  SELECT rowid FROM t2_data;
+} {1 10}
+
+do_execsql_test 3.1 {
+  CREATE TABLE x4(i INTEGER PRIMARY KEY, a, b, c);
+  CREATE VIRTUAL TABLE t4 USING fts5(a, b UNINDEXED, c, content=x4);
+  INSERT INTO x4 VALUES(10, 'a b c', 'd e f', 'g h i');
+  INSERT INTO x4 VALUES(20, 'j k l', 'm n o', 'p q r');
+  INSERT INTO t4(t4) VALUES('rebuild');
+  INSERT INTO t4(t4) VALUES('integrity-check');
+} {}
+
+do_execsql_test 3.2 {
+  INSERT INTO t4(t4, rowid, a, b, c) VALUES('delete', 20, 'j k l', '', 'p q r');
+  DELETE FROM x4 WHERE rowid=20;
+  INSERT INTO t4(t4) VALUES('integrity-check');
+} {}
+
+
+finish_test

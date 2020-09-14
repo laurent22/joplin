@@ -1,0 +1,183 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file focuses on testing queries that use the "rank" column.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5rank
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------------
+# "ORDER BY rank" + highlight() + large poslists.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE xyz USING fts5(z);
+}
+do_test 1.1 {
+  set doc [string trim [string repeat "x y " 500]]
+  execsql { INSERT INTO xyz VALUES($doc) }
+} {}
+do_execsql_test 1.2 {
+  SELECT highlight(xyz, 0, '[', ']') FROM xyz WHERE xyz MATCH 'x' ORDER BY rank
+} [list [string map {x [x]} $doc]]
+
+do_execsql_test 1.3 {
+  SELECT highlight(xyz, 0, '[', ']') FROM xyz
+  WHERE xyz MATCH 'x AND y' ORDER BY rank
+} [list [string map {x [x] y [y]} $doc]]
+
+#-------------------------------------------------------------------------
+# Check that the 'rank' option really is persistent.
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(a);
+  INSERT INTO tt VALUES('a x x x x');
+  INSERT INTO tt VALUES('x x a a a');
+  INSERT INTO tt VALUES('x a a x x');
+}
+
+proc firstinst {cmd} { 
+  foreach {p c o} [$cmd xInst 0] {}
+  return $o
+}
+sqlite3_fts5_create_function db firstinst firstinst
+
+do_execsql_test 2.1 {
+  SELECT rowid FROM tt('a') ORDER BY rank;
+} {2 3 1}
+
+do_execsql_test 2.2 {
+  SELECT rowid FROM tt('a', 'firstinst()') ORDER BY rank;
+} {1 3 2}
+
+do_execsql_test 2.3 {
+  INSERT INTO tt(tt, rank) VALUES('rank', 'firstinst()');
+  SELECT rowid FROM tt('a') ORDER BY rank;
+} {1 3 2}
+
+do_test 2.4 {
+  sqlite3 db2 test.db
+  catchsql { SELECT rowid FROM tt('a') ORDER BY rank; } db2
+} {1 {no such function: firstinst}}
+
+do_test 2.5 {
+  db2 close
+  sqlite3 db2 test.db
+  sqlite3_fts5_create_function db2 firstinst firstinst
+  execsql { SELECT rowid FROM tt('a') ORDER BY rank; } db2
+} {1 3 2}
+
+do_test 2.6 {
+  execsql { SELECT rowid FROM tt('a') ORDER BY rank; } db2
+} {1 3 2}
+
+do_test 2.7 {
+  execsql { SELECT rowid FROM tt('a') ORDER BY rank; } db
+} {1 3 2}
+
+db2 close
+
+#--------------------------------------------------------------------------
+# At one point there was a problem with queries such as:
+#
+#   ... MATCH 'x OR y' ORDER BY rank;
+#
+# if there were zero occurrences of token 'y' in the dataset. The
+# following tests verify that that problem has been addressed.
+#
+foreach_detail_mode $::testprefix {
+  do_execsql_test 3.1.0 {
+    CREATE VIRTUAL TABLE y1 USING fts5(z, detail=%DETAIL%);
+    INSERT INTO y1 VALUES('test xyz');
+    INSERT INTO y1 VALUES('test test xyz test');
+    INSERT INTO y1 VALUES('test test xyz');
+  }
+
+  do_execsql_test 3.1.1 {
+    SELECT rowid FROM y1('test OR tset');
+  } {1 2 3}
+
+  do_execsql_test 3.1.2 {
+    SELECT rowid FROM y1('test OR tset') ORDER BY bm25(y1)
+  } {2 3 1}
+
+  do_execsql_test 3.1.3 {
+    SELECT rowid FROM y1('test OR tset') ORDER BY +rank
+  } {2 3 1}
+
+  do_execsql_test 3.1.4 {
+    SELECT rowid FROM y1('test OR tset') ORDER BY rank
+  } {2 3 1}
+
+  do_execsql_test 3.1.5 {
+    SELECT rowid FROM y1('test OR xyz') ORDER BY rank
+  } {3 2 1}
+
+
+  do_execsql_test 3.2.1 {
+    CREATE VIRTUAL TABLE z1 USING fts5(a, detail=%DETAIL%);
+    INSERT INTO z1 VALUES('wrinkle in time');
+    SELECT * FROM z1 WHERE z1 MATCH 'wrinkle in time OR a wrinkle in time';
+  } {{wrinkle in time}}
+}
+
+do_execsql_test 4.1 {
+  DROP TABLE IF EXISTS VTest;
+  CREATE virtual TABLE VTest USING FTS5(
+    Title, AUthor, tokenize ='porter unicode61 remove_diacritics 1', 
+    columnsize='1', detail=full
+  );
+  INSERT INTO VTest (Title, Author) VALUES ('wrinkle in time', 'Bill Smith');
+
+  SELECT * FROM VTest WHERE 
+  VTest MATCH 'wrinkle in time OR a wrinkle in time' ORDER BY rank;
+} {{wrinkle in time} {Bill Smith}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE ttt USING fts5(a);
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<100
+  )
+  INSERT INTO ttt SELECT 'word ' || i FROM s;
+}
+
+do_execsql_test 5.1 {
+  SELECT rowid FROM ttt('word') WHERE rowid BETWEEN 30 AND 40 ORDER BY rank;
+} {30 31 32 33 34 35 36 37 38 39 40}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE "My.Table" USING fts5(Text);
+
+  INSERT INTO "My.Table" VALUES ('hello this is a test');
+  INSERT INTO "My.Table" VALUES ('of trying to order by');
+  INSERT INTO "My.Table" VALUES ('rank on an fts5 table');
+  INSERT INTO "My.Table" VALUES ('that have periods in');
+  INSERT INTO "My.Table" VALUES ('the table names.');
+  INSERT INTO "My.Table" VALUES ('table table table');
+}
+do_execsql_test 6.1 {
+  SELECT * FROM "My.Table" WHERE Text MATCH 'table' ORDER BY rank;
+} {
+  {table table table} {the table names.} {rank on an fts5 table}
+}
+
+finish_test

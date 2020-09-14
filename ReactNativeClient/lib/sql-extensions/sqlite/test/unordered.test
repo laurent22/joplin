@@ -1,0 +1,69 @@
+# 2011 April 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set testprefix unordered
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a);
+  INSERT INTO t1 VALUES(1, 'xxx');
+  INSERT INTO t1 SELECT a+1, b FROM t1;
+  INSERT INTO t1 SELECT a+2, b FROM t1;
+  INSERT INTO t1 SELECT a+4, b FROM t1;
+  INSERT INTO t1 SELECT a+8, b FROM t1;
+  INSERT INTO t1 SELECT a+16, b FROM t1;
+  INSERT INTO t1 SELECT a+32, b FROM t1;
+  INSERT INTO t1 SELECT a+64, b FROM t1;
+  ANALYZE;
+} {}
+
+foreach idxmode {ordered unordered} {
+  catchsql { DELETE FROM sqlite_stat2 }
+  catchsql { DELETE FROM sqlite_stat3 }
+  if {$idxmode == "unordered"} {
+    execsql { UPDATE sqlite_stat1 SET stat = stat || ' unordered' }
+  }
+  db close
+  sqlite3 db test.db
+  foreach {tn sql r(ordered) r(unordered)} {
+    1   "SELECT * FROM t1 ORDER BY a"
+        {SCAN TABLE t1 USING INDEX i1}
+        {SCAN TABLE t1*USE TEMP B-TREE FOR ORDER BY}
+    2   "SELECT * FROM t1 WHERE a > 100"
+        {SEARCH TABLE t1 USING INDEX i1 (a>?)}
+        {SCAN TABLE t1}
+    3   "SELECT * FROM t1 WHERE a = ? ORDER BY rowid"
+        {SEARCH TABLE t1 USING INDEX i1 (a=?)}
+        {SEARCH TABLE t1 USING INDEX i1 (a=?)*USE TEMP B-TREE FOR ORDER BY}
+    4   "SELECT max(a) FROM t1"
+        {SEARCH TABLE t1 USING COVERING INDEX i1}
+        {SEARCH TABLE t1}
+    5   "SELECT group_concat(b) FROM t1 GROUP BY a"
+        {SCAN TABLE t1 USING INDEX i1}
+        {SCAN TABLE t1*USE TEMP B-TREE FOR GROUP BY}
+
+    6   "SELECT * FROM t1 WHERE a = ?"
+        {SEARCH TABLE t1 USING INDEX i1 (a=?)}
+        {SEARCH TABLE t1 USING INDEX i1 (a=?)}
+    7   "SELECT count(*) FROM t1"
+        {SCAN TABLE t1 USING COVERING INDEX i1}
+        {SCAN TABLE t1}
+  } {
+    do_eqp_test 1.$idxmode.$tn $sql $r($idxmode)
+  }
+}
+
+finish_test

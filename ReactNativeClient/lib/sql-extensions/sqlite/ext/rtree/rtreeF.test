@@ -1,0 +1,84 @@
+# 2014-08-21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file contains tests for the r-tree module.
+#
+# This file contains test cases for the ticket
+# [369d57fb8e5ccdff06f197a37147a88f9de95cda] (2014-08-21)
+#
+#  The following SQL causes an assertion fault while running
+#  sqlite3_prepare() on the DELETE statement:
+#
+#     CREATE TABLE t1(x);
+#     CREATE TABLE t2(y);
+#     CREATE VIRTUAL TABLE t3 USING rtree(a,b,c);
+#     CREATE TRIGGER t2del AFTER DELETE ON t2 WHEN (SELECT 1 from t1) BEGIN 
+#       DELETE FROM t3 WHERE a=old.y; 
+#     END;
+#     DELETE FROM t2 WHERE y=1;
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+
+do_execsql_test rtreeF-1.1 {
+  CREATE TABLE t1(x);
+  CREATE TABLE t2(y);
+  CREATE VIRTUAL TABLE t3 USING rtree(a,b,c);
+  CREATE TRIGGER t2dwl AFTER DELETE ON t2 WHEN (SELECT 1 from t1) BEGIN 
+    DELETE FROM t3 WHERE a=old.y; 
+  END;
+
+  INSERT INTO t1(x) VALUES(999);
+  INSERT INTO t2(y) VALUES(1),(2),(3),(4),(5);
+  INSERT INTO t3(a,b,c) VALUES(1,2,3),(2,3,4),(3,4,5),(4,5,6),(5,6,7);
+
+  SELECT a FROM t3 ORDER BY a;
+  SELECT '|';
+  SELECT y FROM t2 ORDER BY y;
+} {1 2 3 4 5 | 1 2 3 4 5}
+do_execsql_test rtreeF-1.2 {
+  DELETE FROM t2 WHERE y=3;
+
+  SELECT a FROM t3 ORDER BY a;
+  SELECT '|';
+  SELECT y FROM t2 ORDER BY y;
+} {1 2 4 5 | 1 2 4 5}
+do_execsql_test rtreeF-1.3 {
+  DELETE FROM t1;
+  DELETE FROM t2 WHERE y=5;
+
+  SELECT a FROM t3 ORDER BY a;
+  SELECT '|';
+  SELECT y FROM t2 ORDER BY y;
+} {1 2 4 5 | 1 2 4}
+do_execsql_test rtreeF-1.4 {
+  INSERT INTO t1 DEFAULT VALUES;
+  DELETE FROM t2 WHERE y=5;
+
+  SELECT a FROM t3 ORDER BY a;
+  SELECT '|';
+  SELECT y FROM t2 ORDER BY y;
+} {1 2 4 5 | 1 2 4}
+do_execsql_test rtreeF-1.5 {
+  DELETE FROM t2 WHERE y=2;
+
+  SELECT a FROM t3 ORDER BY a;
+  SELECT '|';
+  SELECT y FROM t2 ORDER BY y;
+} {1 4 5 | 1 4}
+
+do_rtree_integrity_test rtreeF-1.6 t3
+
+finish_test

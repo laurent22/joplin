@@ -1,0 +1,153 @@
+# 2013 Feb 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for the SQLite library, focusing
+# on the incremental vacuum feature.
+#
+# The tests in this file were added at the same time as optimizations 
+# were made to:
+#
+#   * Truncate the database after a rollback mode commit, and
+#
+#   * Avoid moving pages to locations from which they may need to be moved
+#     a second time if an incremental-vacuum proccess is allowed to vacuum
+#     the entire database.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix incrvacuum3
+
+# If this build of the library does not support auto-vacuum, omit this
+# whole file.
+ifcapable {!autovacuum || !pragma} {
+  finish_test
+  return
+}
+
+proc check_on_disk {} {
+
+  # Copy the wal and journal files for database "test.db" to "test2.db".
+  forcedelete test2.db test2.db-journal test2.db-wal
+  if {[file exists test.db-journal]} { 
+    forcecopy test.db-journal test2.db-journal 
+  }
+  if {[file exists test.db-wal]} { 
+    forcecopy test.db-wal test2.db-wal 
+  }
+
+  # Now copy the database file itself. Do this using open/read/puts
+  # instead of the [file copy] command in order to avoid attempting
+  # to read the 512 bytes begining at offset $sqlite_pending_byte.
+  #
+  set sz [file size test.db]
+  set fd [open test.db]
+  set fd2 [open test2.db w]
+  fconfigure $fd  -encoding binary -translation binary
+  fconfigure $fd2 -encoding binary -translation binary
+  if {$sz>$::sqlite_pending_byte} {
+    puts -nonewline $fd2 [read $fd $::sqlite_pending_byte]
+    seek $fd [expr $::sqlite_pending_byte+512]
+    seek $fd2 [expr $::sqlite_pending_byte+512]
+  }
+  puts -nonewline $fd2 [read $fd]
+  close $fd2
+  close $fd
+
+  # Open "test2.db" and check it is Ok.
+  sqlite3 dbcheck test2.db
+  set ret [dbcheck eval { PRAGMA integrity_check }]
+  dbcheck close
+  set ret
+}
+
+# Run these tests once in rollback journal mode, and once in wal mode.
+#
+foreach {T jrnl_mode} {
+  1 delete
+  2 wal
+} {
+  catch { db close }
+  forcedelete test.db test.db-journal test.db-wal
+  sqlite3 db test.db
+  db eval {
+    PRAGMA cache_size = 5;
+    PRAGMA page_size = 1024;
+    PRAGMA auto_vacuum = 2;
+  }
+  db eval "PRAGMA journal_mode = $jrnl_mode"
+  
+  foreach {tn sql} {
+    1 {
+      CREATE TABLE t1(x UNIQUE);
+      INSERT INTO t1 VALUES(randomblob(400));
+      INSERT INTO t1 VALUES(randomblob(400));
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    --   4
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    --   8
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  16
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  32
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  64
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 128
+      INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 256
+    }
+  
+    2 {
+      DELETE FROM t1 WHERE rowid%8;
+    }
+  
+    3 { 
+      BEGIN;
+        PRAGMA incremental_vacuum = 100;
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  64
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 128
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 256
+      ROLLBACK;
+    }
+  
+    4 { 
+      BEGIN;
+        SAVEPOINT one;
+          PRAGMA incremental_vacuum = 100;
+          SAVEPOINT two;
+            INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  64
+            INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 128
+            INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 256
+    }
+  
+    5 {   ROLLBACK to two }
+  
+    6 { ROLLBACK to one }
+  
+    7 { 
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  64
+        PRAGMA incremental_vacuum = 1000;
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 128
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    -- 256
+      ROLLBACK;
+    }
+  
+    8 { 
+      BEGIN;
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  64
+        PRAGMA incremental_vacuum = 1000;
+        INSERT INTO t1 SELECT randomblob(400) FROM t1;    --  128
+      COMMIT;
+    }
+  } {
+    do_execsql_test $T.1.$tn.1 $sql
+    do_execsql_test $T.1.$tn.2 {PRAGMA integrity_check} ok
+    do_test         $T.1.$tn.3 { check_on_disk }        ok
+  }
+
+  do_execsql_test $T.1.x.1 { PRAGMA freelist_count   } 0
+  do_execsql_test $T.1.x.2 { SELECT count(*) FROM t1 } 128
+}
+
+finish_test

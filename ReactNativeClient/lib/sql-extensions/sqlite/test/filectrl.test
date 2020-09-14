@@ -1,0 +1,72 @@
+# 2008 Jan 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: filectrl.test,v 1.2 2008/11/21 00:10:35 aswift Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+do_test filectrl-1.1 {
+  file_control_test db
+} {}
+do_test filectrl-1.2 {
+  db eval {CREATE TEMP TABLE x(y);}
+  file_control_test db
+} {}
+do_test filectrl-1.3 {
+  db close
+  sqlite3 db :memory:
+  file_control_test db
+} {}
+do_test filectrl-1.4 {
+  sqlite3 db test.db
+  file_control_lasterrno_test db
+} {}
+do_test filectrl-1.5 {
+  db close
+  sqlite3 db test_control_lockproxy.db
+  file_control_lockproxy_test db [get_pwd]
+} {}
+do_test filectrl-1.6 {
+  sqlite3 db test.db
+  set fn [file_control_tempfilename db]
+  set fn
+} {/etilqs_/}
+db close
+forcedelete .test_control_lockproxy.db-conch test.proxy
+forcedelete test.db test2.db
+
+if {$tcl_platform(platform)=="windows"} {
+  do_test filectrl-2.1 {
+    sqlite3 db test2.db
+    set size [file size test2.db]
+    set handle [file_control_win32_get_handle db]
+    db close
+    forcedelete test2.db
+    list $size $handle [expr {$handle != 0}]
+  } {/^0 \{0 [0-9A-Fa-f]+\} 1$/}
+
+  do_test filectrl-2.2 {
+    sqlite3 db test2.db
+    execsql {
+      CREATE TABLE t1(x);
+      INSERT INTO t1 (x) VALUES(RANDOMBLOB(1048576));
+    }
+    set size [file size test2.db]
+    set handle [file_control_win32_get_handle db]
+    db close
+    forcedelete test2.db
+    list $size $handle [expr {$handle != 0}]
+  } {/^1\d+ \{0 [0-9A-Fa-f]+\} 1$/}
+}
+
+finish_test

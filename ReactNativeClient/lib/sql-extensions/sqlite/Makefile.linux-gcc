@@ -1,0 +1,115 @@
+#!/usr/make
+#
+# Makefile for SQLITE
+#
+# This is a template makefile for SQLite.  Most people prefer to
+# use the autoconf generated "configure" script to generate the
+# makefile automatically.  But that does not work for everybody
+# and in every situation.  If you are having problems with the
+# "configure" script, you might want to try this makefile as an
+# alternative.  Create a copy of this file, edit the parameters
+# below and type "make".
+#
+
+#### The toplevel directory of the source tree.  This is the directory
+#    that contains this "Makefile.in" and the "configure.in" script.
+#
+TOP = ../sqlite
+
+#### C Compiler and options for use in building executables that
+#    will run on the platform that is doing the build.
+#
+BCC = gcc -g -O0
+#BCC = /opt/ancic/bin/c89 -0
+
+#### If the target operating system supports the "usleep()" system
+#    call, then define the HAVE_USLEEP macro for all C modules.
+#
+#USLEEP = 
+USLEEP = -DHAVE_USLEEP=1
+
+#### If you want the SQLite library to be safe for use within a 
+#    multi-threaded program, then define the following macro
+#    appropriately:
+#
+#THREADSAFE = -DTHREADSAFE=1
+THREADSAFE = -DTHREADSAFE=0
+
+#### Specify any extra linker options needed to make the library
+#    thread safe
+#
+THREADLIB = -lpthread -lm -ldl
+#THREADLIB = 
+
+#### Specify any extra libraries needed to access required functions.
+#
+#TLIBS = -lrt    # fdatasync on Solaris 8
+TLIBS = 
+
+#### Leave SQLITE_DEBUG undefined for maximum speed.  Use SQLITE_DEBUG=1
+#    to check for memory leaks.  Use SQLITE_DEBUG=2 to print a log of all
+#    malloc()s and free()s in order to track down memory leaks.
+#    
+#    SQLite uses some expensive assert() statements in the inner loop.
+#    You can make the library go almost twice as fast if you compile
+#    with -DNDEBUG=1
+#
+OPTS += -DSQLITE_DEBUG=1
+OPTS += -DSQLITE_ENABLE_WHERETRACE
+OPTS += -DSQLITE_ENABLE_SELECTTRACE
+
+#### The suffix to add to executable files.  ".exe" for windows.
+#    Nothing for unix.
+#
+#EXE = .exe
+EXE =
+
+#### C Compile and options for use in building executables that 
+#    will run on the target platform.  This is usually the same
+#    as BCC, unless you are cross-compiling.
+#
+TCC = gcc -O0
+#TCC = gcc -g -O0 -Wall
+#TCC = gcc -g -O0 -Wall -fprofile-arcs -ftest-coverage
+#TCC = /opt/mingw/bin/i386-mingw32-gcc -O6
+#TCC = /opt/ansic/bin/c89 -O +z -Wl,-a,archive
+
+#### Tools used to build a static library.
+#
+AR = ar cr
+#AR = /opt/mingw/bin/i386-mingw32-ar cr
+RANLIB = ranlib
+#RANLIB = /opt/mingw/bin/i386-mingw32-ranlib
+
+MKSHLIB = gcc -shared
+SO = so
+SHPREFIX = lib
+# SO = dll
+# SHPREFIX =
+
+#### Extra compiler options needed for programs that use the TCL library.
+#
+TCL_FLAGS = -I/home/drh/tcl/include/tcl8.6
+
+#### Linker options needed to link against the TCL library.
+#
+#LIBTCL = -ltcl -lm -ldl
+LIBTCL = /home/drh/tcl/lib/libtcl8.6.a -lm -lpthread -ldl -lz
+
+#### Additional objects for SQLite library when TCL support is enabled.
+#TCLOBJ =
+TCLOBJ = tclsqlite.o
+
+#### Compiler options needed for programs that use the readline() library.
+#
+READLINE_FLAGS =
+#READLINE_FLAGS = -DHAVE_READLINE=1 -I/usr/include/readline
+
+#### Linker options needed by programs using readline() must link against.
+#
+LIBREADLINE =
+#LIBREADLINE = -static -lreadline -ltermcap
+
+# You should not have to change anything below this line
+###############################################################################
+include $(TOP)/main.mk

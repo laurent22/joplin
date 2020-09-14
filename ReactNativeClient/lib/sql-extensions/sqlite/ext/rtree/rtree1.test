@@ -1,0 +1,733 @@
+# 2008 Feb 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the r-tree extension.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+set testprefix rtree1
+
+# Test plan:
+#
+#   rtree-1.*: Creating/destroying r-tree tables.
+#   rtree-2.*: Test the implicit constraints - unique rowid and
+#              (coord[N]<=coord[N+1]) for even values of N. Also
+#              automatic assigning of rowid values.
+#   rtree-3.*: Linear scans of r-tree data.
+#   rtree-4.*: Test INSERT
+#   rtree-5.*: Test DELETE
+#   rtree-6.*: Test UPDATE
+#   rtree-7.*: Test renaming an r-tree table.
+#   rtree-8.*: Test constrained scans of r-tree data.
+#
+#   rtree-12.*: Test that on-conflict clauses are supported.
+#   rtree-13.*: Test that bug [d2889096e7bdeac6d] has been fixed.
+#   rtree-14.*: Test if a non-integer is inserted into the PK column of an
+#               r-tree table, it is converted to an integer before being
+#               inserted. Also that if a non-numeric is inserted into one
+#               of the min/max dimension columns, it is converted to the
+#               required type before being inserted.
+#   rtree-15.*: Check that DROP TABLE works within a transaction that
+#               writes to an r-tree table.
+#
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-1.* test CREATE and DROP table statements.
+#
+
+# Test creating and dropping an rtree table.
+#
+do_test rtree-1.1.1 {
+  execsql { CREATE VIRTUAL TABLE t1 USING rtree(ii, x1, x2, y1, y2) }
+} {}
+do_test rtree-1.1.2 {
+  execsql { SELECT name FROM sqlite_master ORDER BY name }
+} {t1 t1_node t1_parent t1_rowid}
+do_test rtree-1.1.3 {
+  execsql { 
+    DROP TABLE t1; 
+    SELECT name FROM sqlite_master ORDER BY name;
+  }
+} {}
+
+# Test creating and dropping an rtree table with an odd name in
+# an attached database.
+#
+do_test rtree-1.2.1 {
+  file delete -force test2.db
+  execsql {
+    ATTACH 'test2.db' AS aux;
+    CREATE VIRTUAL TABLE aux.'a" "b' USING rtree(ii, x1, x2, y1, y2);
+  }
+} {}
+do_test rtree-1.2.2 {
+  execsql { SELECT name FROM sqlite_master ORDER BY name }
+} {}
+do_test rtree-1.2.3 {
+  execsql { SELECT name FROM aux.sqlite_master ORDER BY name }
+} {{a" "b} {a" "b_node} {a" "b_parent} {a" "b_rowid}}
+do_test rtree-1.2.4 {
+  execsql { 
+    DROP TABLE aux.'a" "b'; 
+    SELECT name FROM aux.sqlite_master ORDER BY name;
+  }
+} {}
+
+# Test that the logic for checking the number of columns specified
+# for an rtree table. Acceptable values are odd numbers between 3 and
+# 11, inclusive.
+#
+set cols [list i1 i2 i3 i4 i5 i6 i7 i8 i9 iA iB iC iD iE iF iG iH iI iJ iK]
+for {set nCol 1} {$nCol<[llength $cols]} {incr nCol} {
+
+  set columns [join [lrange $cols 0 [expr {$nCol-1}]] ,]
+
+  set X {0 {}}
+  if {$nCol%2 == 0}  { set X {1 {Wrong number of columns for an rtree table}} }
+  if {$nCol < 3}     { set X {1 {Too few columns for an rtree table}} }
+  if {$nCol > 11}    { set X {1 {Too many columns for an rtree table}} }
+
+  do_test rtree-1.3.$nCol {
+    catchsql " 
+      CREATE VIRTUAL TABLE t1 USING rtree($columns);
+    "
+  } $X
+
+  catchsql { DROP TABLE t1 }
+}
+do_catchsql_test rtree-1.3.1000 {
+  CREATE VIRTUAL TABLE t1000 USING rtree;
+} {1 {Too few columns for an rtree table}}
+
+# Like execsql except display output as integer where that can be
+# done without loss of information.
+#
+proc execsql_intout {sql} {
+  set out {}
+  foreach term [execsql $sql] {
+    regsub {\.0$} $term {} term
+    lappend out $term
+  }
+  return $out
+}
+
+# Test that it is possible to open an existing database that contains
+# r-tree tables.
+#
+do_execsql_test rtree-1.4.1a {
+  CREATE VIRTUAL TABLE t1 USING rtree(ii, x1, x2);
+  INSERT INTO t1 VALUES(1, 5.0, 10.0);
+  SELECT substr(hex(data),1,40) FROM t1_node;
+} {00000001000000000000000140A0000041200000}
+do_execsql_test rtree-1.4.1b {
+  INSERT INTO t1 VALUES(2, 15.0, 20.0);
+} {}
+do_test rtree-1.4.2 {
+  db close
+  sqlite3 db test.db
+  execsql_intout { SELECT * FROM t1 ORDER BY ii }
+} {1 5 10 2 15 20}
+do_test rtree-1.4.3 {
+  execsql { DROP TABLE t1 }
+} {}
+
+# Test that it is possible to create an r-tree table with ridiculous
+# column names.
+#
+do_test rtree-1.5.1 {
+  execsql_intout {
+    CREATE VIRTUAL TABLE t1 USING rtree("the key", "x dim.", "x2'dim");
+    INSERT INTO t1 VALUES(1, 2, 3);
+    SELECT "the key", "x dim.", "x2'dim" FROM t1;
+  }
+} {1 2 3}
+do_test rtree-1.5.1 {
+  execsql { DROP TABLE t1 }
+} {}
+
+# Force the r-tree constructor to fail.
+#
+do_test rtree-1.6.1 {
+  execsql { CREATE TABLE t1_rowid(a); }
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING rtree("the key", "x dim.", "x2'dim");
+  }
+} {1 {table "t1_rowid" already exists}}
+do_test rtree-1.6.1 {
+  execsql { DROP TABLE t1_rowid }
+} {}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-2.* 
+#
+do_test rtree-2.1.1 {
+  execsql { 
+    CREATE VIRTUAL TABLE t1 USING rtree(ii, x1, x2, y1, y2);
+    SELECT * FROM t1;
+  }
+} {}
+
+do_test rtree-2.1.2 {
+  execsql { INSERT INTO t1 VALUES(NULL, 1, 3, 2, 4) }
+  execsql_intout { SELECT * FROM t1 }
+} {1 1 3 2 4}
+do_test rtree-2.1.3 {
+  execsql { INSERT INTO t1 VALUES(NULL, 1, 3, 2, 4) }
+  execsql { SELECT rowid FROM t1 ORDER BY rowid }
+} {1 2}
+do_test rtree-2.1.3 {
+  execsql { INSERT INTO t1 VALUES(NULL, 1, 3, 2, 4) }
+  execsql { SELECT ii FROM t1 ORDER BY ii }
+} {1 2 3}
+
+do_test rtree-2.2.1 {
+  catchsql { INSERT INTO t1 VALUES(2, 1, 3, 2, 4) }
+} {1 {UNIQUE constraint failed: t1.ii}}
+do_test rtree-2.2.2 {
+  catchsql { INSERT INTO t1 VALUES(4, 1, 3, 4, 2) }
+} {1 {rtree constraint failed: t1.(y1<=y2)}}
+do_test rtree-2.2.3 {
+  catchsql { INSERT INTO t1 VALUES(4, 3, 1, 2, 4) }
+} {1 {rtree constraint failed: t1.(x1<=x2)}}
+do_test rtree-2.2.4 {
+  execsql { SELECT ii FROM t1 ORDER BY ii }
+} {1 2 3}
+
+do_test rtree-2.X {
+  execsql { DROP TABLE t1 }
+} {}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-3.* test linear scans of r-tree table data. To test
+# this we have to insert some data into an r-tree, but that is not the
+# focus of these tests.
+#
+do_test rtree-3.1.1 {
+  execsql { 
+    CREATE VIRTUAL TABLE t1 USING rtree(ii, x1, x2, y1, y2);
+    SELECT * FROM t1;
+  }
+} {}
+do_test rtree-3.1.2 {
+  execsql_intout { 
+    INSERT INTO t1 VALUES(5, 1, 3, 2, 4);
+    SELECT * FROM t1;
+  }
+} {5 1 3 2 4}
+do_test rtree-3.1.3 {
+  execsql_intout {
+    INSERT INTO t1 VALUES(6, 2, 6, 4, 8);
+    SELECT * FROM t1;
+  }
+} {5 1 3 2 4 6 2 6 4 8}
+
+# Test the constraint on the coordinates (c[i]<=c[i+1] where (i%2==0)):
+do_test rtree-3.2.1 {
+  catchsql { INSERT INTO t1 VALUES(7, 2, 6, 4, 3) }
+} {1 {rtree constraint failed: t1.(y1<=y2)}}
+do_test rtree-3.2.2 {
+  catchsql { INSERT INTO t1 VALUES(8, 2, 6, 3, 3) }
+} {0 {}}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-5.* test DELETE operations.
+#
+do_test rtree-5.1.1 {
+  execsql { CREATE VIRTUAL TABLE t2 USING rtree(ii, x1, x2) }
+} {}
+do_test rtree-5.1.2 {
+  execsql_intout { 
+    INSERT INTO t2 VALUES(1, 10, 20);
+    INSERT INTO t2 VALUES(2, 30, 40);
+    INSERT INTO t2 VALUES(3, 50, 60);
+    SELECT * FROM t2 ORDER BY ii;
+  }
+} {1 10 20 2 30 40 3 50 60}
+do_test rtree-5.1.3 {
+  execsql_intout { 
+    DELETE FROM t2 WHERE ii=2;
+    SELECT * FROM t2 ORDER BY ii;
+  }
+} {1 10 20 3 50 60}
+do_test rtree-5.1.4 {
+  execsql_intout { 
+    DELETE FROM t2 WHERE ii=1;
+    SELECT * FROM t2 ORDER BY ii;
+  }
+} {3 50 60}
+do_test rtree-5.1.5 {
+  execsql { 
+    DELETE FROM t2 WHERE ii=3;
+    SELECT * FROM t2 ORDER BY ii;
+  }
+} {}
+do_test rtree-5.1.6 {
+  execsql { SELECT * FROM t2_rowid }
+} {}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-5.* test UPDATE operations.
+#
+do_test rtree-6.1.1 {
+  execsql { CREATE VIRTUAL TABLE t3 USING rtree(ii, x1, x2, y1, y2) }
+} {}
+do_test rtree-6.1.2 {
+  execsql_intout {
+    INSERT INTO t3 VALUES(1, 2, 3, 4, 5);
+    UPDATE t3 SET x2=5;
+    SELECT * FROM t3;
+  }
+} {1 2 5 4 5}
+do_test rtree-6.1.3 {
+  execsql { UPDATE t3 SET ii = 2 }
+  execsql_intout { SELECT * FROM t3 }
+} {2 2 5 4 5}
+
+#----------------------------------------------------------------------------
+# Test cases rtree-7.* test rename operations.
+#
+do_test rtree-7.1.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t4 USING rtree(ii, x1, x2, y1, y2, z1, z2);
+    INSERT INTO t4 VALUES(1, 2, 3, 4, 5, 6, 7);
+  }
+} {}
+do_test rtree-7.1.2 {
+  execsql { ALTER TABLE t4 RENAME TO t5 }
+  execsql_intout { SELECT * FROM t5 }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.1.3 {
+  db close
+  sqlite3 db test.db
+  execsql_intout { SELECT * FROM t5 }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.1.4 {
+  execsql { ALTER TABLE t5 RENAME TO 'raisara "one"'''}
+  execsql_intout { SELECT * FROM "raisara ""one""'" }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.1.5 {
+  execsql_intout { SELECT * FROM 'raisara "one"''' }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.1.6 {
+  execsql { ALTER TABLE "raisara ""one""'" RENAME TO "abc 123" }
+  execsql_intout { SELECT * FROM "abc 123" }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.1.7 {
+  db close
+  sqlite3 db test.db
+  execsql_intout { SELECT * FROM "abc 123" }
+} {1 2 3 4 5 6 7}
+
+# An error midway through a rename operation.
+do_test rtree-7.2.1 {
+  execsql { 
+    CREATE TABLE t4_node(a);
+  }
+  catchsql { ALTER TABLE "abc 123" RENAME TO t4 }
+} {1 {SQL logic error}}
+do_test rtree-7.2.2 {
+  execsql_intout { SELECT * FROM "abc 123" }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.2.3 {
+  execsql { 
+    DROP TABLE t4_node;
+    CREATE TABLE t4_rowid(a);
+  }
+  catchsql { ALTER TABLE "abc 123" RENAME TO t4 }
+} {1 {SQL logic error}}
+do_test rtree-7.2.4 {
+  db close
+  sqlite3 db test.db
+  execsql_intout { SELECT * FROM "abc 123" }
+} {1 2 3 4 5 6 7}
+do_test rtree-7.2.5 {
+  execsql { DROP TABLE t4_rowid }
+  execsql { ALTER TABLE "abc 123" RENAME TO t4 }
+  execsql_intout { SELECT * FROM t4 }
+} {1 2 3 4 5 6 7}
+
+
+#----------------------------------------------------------------------------
+# Test cases rtree-8.*
+#
+
+# Test that the function to determine if a leaf cell is part of the
+# result set works.
+do_test rtree-8.1.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t6 USING rtree(ii, x1, x2);
+    INSERT INTO t6 VALUES(1, 3, 7);
+    INSERT INTO t6 VALUES(2, 4, 6);
+  }
+} {}
+do_test rtree-8.1.2 { execsql { SELECT ii FROM t6 WHERE x1>2 } }   {1 2}
+do_test rtree-8.1.3 { execsql { SELECT ii FROM t6 WHERE x1>3 } }   {2}
+do_test rtree-8.1.4 { execsql { SELECT ii FROM t6 WHERE x1>4 } }   {}
+do_test rtree-8.1.5 { execsql { SELECT ii FROM t6 WHERE x1>5 } }   {}
+do_test rtree-8.1.6 { execsql { SELECT ii FROM t6 WHERE x1>''} }   {}
+do_test rtree-8.1.7 { execsql { SELECT ii FROM t6 WHERE x1>null}}  {}
+do_test rtree-8.1.8 { execsql { SELECT ii FROM t6 WHERE x1>'2'} }   {1 2}
+do_test rtree-8.1.9 { execsql { SELECT ii FROM t6 WHERE x1>'3'} }   {2}
+do_test rtree-8.2.2 { execsql { SELECT ii FROM t6 WHERE x1>=2 } }  {1 2}
+do_test rtree-8.2.3 { execsql { SELECT ii FROM t6 WHERE x1>=3 } }  {1 2}
+do_test rtree-8.2.4 { execsql { SELECT ii FROM t6 WHERE x1>=4 } }  {2}
+do_test rtree-8.2.5 { execsql { SELECT ii FROM t6 WHERE x1>=5 } }  {}
+do_test rtree-8.2.6 { execsql { SELECT ii FROM t6 WHERE x1>=''} }  {}
+do_test rtree-8.2.7 { execsql { SELECT ii FROM t6 WHERE x1>=null}} {}
+do_test rtree-8.2.8 { execsql { SELECT ii FROM t6 WHERE x1>='4'} } {2}
+do_test rtree-8.2.9 { execsql { SELECT ii FROM t6 WHERE x1>='5'} } {}
+do_test rtree-8.3.2 { execsql { SELECT ii FROM t6 WHERE x1<2 } }   {}
+do_test rtree-8.3.3 { execsql { SELECT ii FROM t6 WHERE x1<3 } }   {}
+do_test rtree-8.3.4 { execsql { SELECT ii FROM t6 WHERE x1<4 } }   {1}
+do_test rtree-8.3.5 { execsql { SELECT ii FROM t6 WHERE x1<5 } }   {1 2}
+do_test rtree-8.3.6 { execsql { SELECT ii FROM t6 WHERE x1<''} }   {1 2}
+do_test rtree-8.3.7 { execsql { SELECT ii FROM t6 WHERE x1<null}}  {}
+do_test rtree-8.3.8 { execsql { SELECT ii FROM t6 WHERE x1<'3'} }  {}
+do_test rtree-8.3.9 { execsql { SELECT ii FROM t6 WHERE x1<'4'} }  {1}
+do_test rtree-8.4.2 { execsql { SELECT ii FROM t6 WHERE x1<=2 } }  {}
+do_test rtree-8.4.3 { execsql { SELECT ii FROM t6 WHERE x1<=3 } }  {1}
+do_test rtree-8.4.4 { execsql { SELECT ii FROM t6 WHERE x1<=4 } }  {1 2}
+do_test rtree-8.4.5 { execsql { SELECT ii FROM t6 WHERE x1<=5 } }  {1 2}
+do_test rtree-8.4.6 { execsql { SELECT ii FROM t6 WHERE x1<=''} }  {1 2}
+do_test rtree-8.4.7 { execsql { SELECT ii FROM t6 WHERE x1<=null}} {}
+do_test rtree-8.5.2 { execsql { SELECT ii FROM t6 WHERE x1=2 } }   {}
+do_test rtree-8.5.3 { execsql { SELECT ii FROM t6 WHERE x1=3 } }   {1}
+do_test rtree-8.5.4 { execsql { SELECT ii FROM t6 WHERE x1=4 } }   {2}
+do_test rtree-8.5.5 { execsql { SELECT ii FROM t6 WHERE x1=5 } }   {}
+do_test rtree-8.5.6 { execsql { SELECT ii FROM t6 WHERE x1=''} }   {}
+do_test rtree-8.5.7 { execsql { SELECT ii FROM t6 WHERE x1=null}}  {}
+
+
+#----------------------------------------------------------------------------
+# Test cases rtree-9.*
+#
+# Test that ticket #3549 is fixed.
+do_test rtree-9.1 {
+  execsql {
+    CREATE TABLE foo (id INTEGER PRIMARY KEY);
+    CREATE VIRTUAL TABLE bar USING rtree (id, minX, maxX, minY, maxY);
+    INSERT INTO foo VALUES (null);
+    INSERT INTO foo SELECT null FROM foo;
+    INSERT INTO foo SELECT null FROM foo;
+    INSERT INTO foo SELECT null FROM foo;
+    INSERT INTO foo SELECT null FROM foo;
+    INSERT INTO foo SELECT null FROM foo;
+    INSERT INTO foo SELECT null FROM foo;
+    DELETE FROM foo WHERE id > 40;
+    INSERT INTO bar SELECT NULL, 0, 0, 0, 0 FROM foo;
+  }
+} {}
+
+# This used to crash.
+do_test rtree-9.2 {
+  execsql {
+    SELECT count(*) FROM bar b1, bar b2, foo s1 WHERE s1.id = b1.id;
+  }
+} {1600}
+do_test rtree-9.3 {
+  execsql {
+    SELECT count(*) FROM bar b1, bar b2, foo s1 
+    WHERE b1.minX <= b2.maxX AND s1.id = b1.id;
+  }
+} {1600}
+
+#-------------------------------------------------------------------------
+# Ticket #3970: Check that the error message is meaningful when a 
+# keyword is used as a column name.
+#
+do_test rtree-10.1 {
+  catchsql { CREATE VIRTUAL TABLE t7 USING rtree(index, x1, y1, x2, y2) }
+} {1 {near "index": syntax error}}
+
+#-------------------------------------------------------------------------
+# Test last_insert_rowid().
+# 
+do_test rtree-11.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t8 USING rtree(idx, x1, x2, y1, y2);
+    INSERT INTO t8 VALUES(1, 1.0, 1.0, 2.0, 2.0);
+    SELECT last_insert_rowid();
+  }
+} {1}
+do_test rtree-11.2 {
+  execsql {
+    INSERT INTO t8 VALUES(NULL, 1.0, 1.0, 2.0, 2.0);
+    SELECT last_insert_rowid();
+  }
+} {2}
+
+#-------------------------------------------------------------------------
+# Test on-conflict clause handling.
+#
+db_delete_and_reopen
+do_execsql_test 12.0.1 {
+  CREATE VIRTUAL TABLE t1 USING rtree_i32(idx, x1, x2, y1, y2);
+  INSERT INTO t1 VALUES(1,   1, 2, 3, 4);
+  SELECT substr(hex(data),1,56) FROM t1_node;
+} {00000001000000000000000100000001000000020000000300000004}
+do_execsql_test 12.0.2 {
+  INSERT INTO t1 VALUES(2,   2, 3, 4, 5);
+  INSERT INTO t1 VALUES(3,   3, 4, 5, 6);
+
+  CREATE TABLE source(idx, x1, x2, y1, y2);
+  INSERT INTO source VALUES(5, 8, 8, 8, 8);
+  INSERT INTO source VALUES(2, 7, 7, 7, 7);
+}
+db_save_and_close
+foreach {tn sql_template testdata} {
+  1    "INSERT %CONF% INTO t1 VALUES(2, 7, 7, 7, 7)" {
+    ROLLBACK 0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6}
+    ABORT    0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    IGNORE   0 0 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    FAIL     0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    REPLACE  0 0 {1 1 2 3 4   2 7 7 7 7   3 3 4 5 6   4 4 5 6 7}
+  }
+
+  2    "INSERT %CONF% INTO t1 SELECT * FROM source" {
+    ROLLBACK 1 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6}
+    ABORT    1 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    IGNORE   1 0 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7  5 8 8 8 8}
+    FAIL     1 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7  5 8 8 8 8}
+    REPLACE  1 0 {1 1 2 3 4   2 7 7 7 7   3 3 4 5 6   4 4 5 6 7  5 8 8 8 8}
+  }
+
+  3    "UPDATE %CONF% t1 SET idx = 2 WHERE idx = 4" {
+    ROLLBACK 0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6}
+    ABORT    0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    IGNORE   0 0 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    FAIL     0 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    REPLACE  0 0 {1 1 2 3 4   2 4 5 6 7   3 3 4 5 6}
+  }
+
+  3    "UPDATE %CONF% t1 SET idx = ((idx+1)%5)+1 WHERE idx > 2" {
+    ROLLBACK 1 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6}
+    ABORT    1 1 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    IGNORE   1 0 {1 1 2 3 4   2 2 3 4 5               4 4 5 6 7   5 3 4 5 6}
+    FAIL     1 1 {1 1 2 3 4   2 2 3 4 5               4 4 5 6 7   5 3 4 5 6}
+    REPLACE  1 0 {1 4 5 6 7   2 2 3 4 5                           5 3 4 5 6}
+  }
+
+  4    "INSERT %CONF% INTO t1 VALUES(2, 7, 6, 7, 7)" {
+    ROLLBACK 0 2 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6}
+    ABORT    0 2 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    IGNORE   0 0 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    FAIL     0 2 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+    REPLACE  0 2 {1 1 2 3 4   2 2 3 4 5   3 3 4 5 6   4 4 5 6 7}
+  }
+
+} {
+  foreach {mode uses error data} $testdata {
+    db_restore_and_reopen
+
+    set sql [string map [list %CONF% "OR $mode"] $sql_template]
+    set testname "12.$tn.[string tolower $mode]"
+
+    execsql {
+      BEGIN;
+        INSERT INTO t1 VALUES(4,   4, 5, 6, 7);
+    }
+
+    set res(0) {0 {}}
+    set res(1) {1 {UNIQUE constraint failed: t1.idx}}
+    set res(2) {1 {rtree constraint failed: t1.(x1<=x2)}}
+
+    do_catchsql_test $testname.1 $sql $res($error)
+    do_test $testname.2 [list sql_uses_stmt db $sql] $uses
+    do_execsql_test $testname.3 { SELECT * FROM t1 ORDER BY idx } $data
+
+    do_rtree_integrity_test $testname.4 t1
+    db close
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that bug [d2889096e7bdeac6d] has been fixed.
+#
+reset_db
+do_execsql_test 13.1 {
+  CREATE VIRTUAL TABLE t9 USING rtree(id, xmin, xmax);
+  INSERT INTO t9 VALUES(1,0,0);            
+  INSERT INTO t9 VALUES(2,0,0);
+  SELECT * FROM t9 WHERE id IN (1, 2);
+} {1 0.0 0.0 2 0.0 0.0}
+
+do_execsql_test 13.2 {
+  WITH r(x) AS (
+    SELECT 1 UNION ALL
+    SELECT 2 UNION ALL
+    SELECT 3
+  )
+  SELECT * FROM r CROSS JOIN t9 WHERE id=x;
+} {1 1 0.0 0.0 2 2 0.0 0.0}
+
+#-------------------------------------------------------------------------
+# Test if a non-integer is inserted into the PK column of an r-tree
+# table, it is converted to an integer before being inserted. Also
+# that if a non-numeric is inserted into one of the min/max dimension
+# columns, it is converted to the required type before being inserted.
+#
+do_execsql_test 14.1 {
+  CREATE VIRTUAL TABLE t10 USING rtree(ii, x1, x2);
+}
+
+do_execsql_test 14.2 {
+  INSERT INTO t10 VALUES(NULL,   1, 2);
+  INSERT INTO t10 VALUES(NULL,   2, 3);
+  INSERT INTO t10 VALUES('4xxx', 3, 4);
+  INSERT INTO t10 VALUES(5.0,    4, 5);
+  INSERT INTO t10 VALUES(6.4,    5, 6);
+}
+do_execsql_test 14.3 {
+  SELECT * FROM t10;
+} {
+  1 1.0 2.0   2 2.0 3.0   4 3.0 4.0   5 4.0 5.0   6 5.0 6.0
+}
+
+do_execsql_test 14.4 {
+  DELETE FROM t10;
+  INSERT INTO t10 VALUES(1, 'one', 'two');
+  INSERT INTO t10 VALUES(2, '52xyz', '81...');
+}
+do_execsql_test 14.5 {
+  SELECT * FROM t10;
+} {
+  1 0.0 0.0
+  2 52.0 81.0
+}
+do_execsql_test 14.6 {
+  INSERT INTO t10 VALUES(0,10,20);
+  SELECT * FROM t10 WHERE ii=NULL;
+} {}
+do_execsql_test 14.7 {
+  SELECT * FROM t10 WHERE ii='xyz';
+} {}
+do_execsql_test 14.8 {
+  SELECT * FROM t10 WHERE ii='0.0';
+} {0 10.0 20.0}
+do_execsql_test 14.9 {
+  SELECT * FROM t10 WHERE ii=0.0;
+} {0 10.0 20.0}
+
+
+do_execsql_test 14.104 {
+  DROP TABLE t10;
+  CREATE VIRTUAL TABLE t10 USING rtree_i32(ii, x1, x2);
+  INSERT INTO t10 VALUES(1, 'one', 'two');
+  INSERT INTO t10 VALUES(2, '52xyz', '81...');
+  INSERT INTO t10 VALUES(3, 42.3, 49.9);
+}
+do_execsql_test 14.105 {
+  SELECT * FROM t10;
+} {
+  1 0 0
+  2 52 81
+  3 42 49
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 15.0 {
+  CREATE VIRTUAL TABLE rt USING rtree(id, x1,x2, y1,y2);
+  CREATE TEMP TABLE t13(a, b, c);
+}
+do_execsql_test 15.1 {
+  BEGIN;
+  INSERT INTO rt VALUES(1,2,3,4,5);
+}
+do_execsql_test 15.2 {
+  DROP TABLE t13;
+  COMMIT;
+}
+
+# Test cases for the new auxiliary columns feature
+#
+do_catchsql_test 16.100 {
+  CREATE VIRTUAL TABLE t16 USING rtree(id,x0,x1,y0,+aux1,x1);
+} {1 {Auxiliary rtree columns must be last}}
+do_test 16.110 {
+  set sql {
+    CREATE VIRTUAL TABLE t16 USING rtree(
+      id, x00, x01, x10, x11, x20, x21, x30, x31, x40, x41
+  }
+  for {set i 12} {$i<=100} {incr i} {
+     append sql ", +a$i"
+  }
+  append sql ");"
+  execsql $sql
+} {}
+do_test 16.120 {
+  set sql {
+    CREATE VIRTUAL TABLE t16b USING rtree(
+      id, x00, x01, x10, x11, x20, x21, x30, x31, x40, x41
+  }
+  for {set i 12} {$i<=101} {incr i} {
+     append sql ", +a$i"
+  }
+  append sql ");"
+  catchsql $sql
+} {1 {Too many columns for an rtree table}}
+
+do_execsql_test 16.130 {
+  DROP TABLE IF EXISTS rt1;
+  CREATE VIRTUAL TABLE rt1 USING rtree(id, x1, x2, +aux);
+  INSERT INTO rt1 VALUES(1, 1, 2, 'aux1');
+  INSERT INTO rt1 VALUES(2, 2, 3, 'aux2');
+  INSERT INTO rt1 VALUES(3, 3, 4, 'aux3');
+  INSERT INTO rt1 VALUES(4, 4, 5, 'aux4');
+  SELECT * FROM rt1 WHERE id IN (1, 2, 3, 4);
+} {1 1.0 2.0 aux1 2 2.0 3.0 aux2 3 3.0 4.0 aux3 4 4.0 5.0 aux4}
+
+reset_db
+do_execsql_test 17.0 {
+  CREATE VIRTUAL TABLE t1 USING rtree(id, x1 PRIMARY KEY, x2, y1, y2);
+  CREATE VIRTUAL TABLE t2 USING rtree(id, x1, x2, y1, y2 UNIQUE);
+}
+do_execsql_test 17.1 {
+  REINDEX t1;
+  REINDEX t2;
+} {}
+
+do_execsql_test 17.2 {
+  REINDEX;
+} {}
+
+reset_db
+do_execsql_test 18.0 {
+  CREATE VIRTUAL TABLE rt0 USING rtree(c0, c1, c2);
+  INSERT INTO rt0(c0,c1,c2) VALUES(9,2,3);
+  SELECT c0 FROM rt0 WHERE rt0.c1 > '-1'; 
+  SELECT rt0.c1 > '-1' FROM rt0;
+} {9 1}
+
+expand_all_sql db
+
+# 2020-02-28 ticket e63b4d1a65546532
+reset_db
+do_execsql_test 19.0 {
+  CREATE VIRTUAL TABLE rt0 USING rtree(a,b,c);
+  INSERT INTO rt0(a,b,c) VALUES(0,0.0,0.0);
+  CREATE VIEW v0(x) AS SELECT DISTINCT rt0.b FROM rt0;
+  SELECT v0.x FROM v0, rt0;
+} {0.0}
+do_execsql_test 19.1 {
+  SELECT v0.x FROM v0, rt0 WHERE v0.x = rt0.b;
+} {0.0}
+
+finish_test

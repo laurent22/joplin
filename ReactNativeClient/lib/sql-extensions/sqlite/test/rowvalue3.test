@@ -1,0 +1,220 @@
+# 2016 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing "(...) IN (SELECT ...)" expressions
+# where the SELECT statement returns more than one column.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue3
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c);
+  CREATE INDEX i1 ON t1(a, b);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+}
+
+foreach {tn sql res} {
+  1  "SELECT 1 WHERE (4, 5) IN (SELECT a, b FROM t1)"  1
+  2  "SELECT 1 WHERE (5, 5) IN (SELECT a, b FROM t1)"  {}
+  3  "SELECT 1 WHERE (5, 4) IN (SELECT a, b FROM t1)"  {}
+  4  "SELECT 1 WHERE (5, 4) IN (SELECT b, a FROM t1)"  1
+  5  "SELECT 1 WHERE (SELECT a, b FROM t1 WHERE c=6) IN (SELECT a, b FROM t1)" 1
+  6  "SELECT (5, 4) IN (SELECT a, b FROM t1)" 0
+  7  "SELECT 1 WHERE (5, 4) IN (SELECT +b, +a FROM t1)"  1
+  8  "SELECT (5, 4) IN (SELECT +b, +a FROM t1)"  1
+  9  "SELECT (1, 2) IN (SELECT rowid, b FROM t1)"  1
+  10 "SELECT 1 WHERE (1, 2) IN (SELECT rowid, b FROM t1)"  1
+  11 "SELECT 1 WHERE (1, NULL) IN (SELECT rowid, b FROM t1)"  {}
+  12 "SELECT 1 FROM t1 WHERE (a, b) = (SELECT +a, +b FROM t1)" {1}
+} {
+  do_execsql_test 1.$tn $sql $res
+}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 2.0 {
+  CREATE TABLE z1(x, y, z);
+  CREATE TABLE kk(a, b);
+
+  INSERT INTO z1 VALUES('a', 'b', 'c');
+  INSERT INTO z1 VALUES('d', 'e', 'f');
+  INSERT INTO z1 VALUES('g', 'h', 'i');
+
+  -- INSERT INTO kk VALUES('y', 'y');
+  INSERT INTO kk VALUES('d', 'e');
+  -- INSERT INTO kk VALUES('x', 'x');
+
+}
+
+foreach {tn idx} {
+  1 { }
+  2 { CREATE INDEX z1idx ON z1(x, y) }
+  3 { CREATE UNIQUE INDEX z1idx ON z1(x, y) }
+  4 { CREATE INDEX z1idx ON kk(a, b) }
+} {
+  execsql "DROP INDEX IF EXISTS z1idx"
+  execsql $idx
+
+  do_execsql_test 2.$tn.1 {
+    SELECT * FROM z1 WHERE x IN (SELECT a FROM kk)
+  } {d e f}
+
+  do_execsql_test 2.$tn.2 {
+    SELECT * FROM z1 WHERE (x,y) IN (SELECT a, b FROM kk)
+  } {d e f}
+
+  do_execsql_test 2.$tn.3 {
+    SELECT * FROM z1 WHERE (x, +y) IN (SELECT a, b FROM kk)
+  } {d e f}
+  
+  do_execsql_test 2.$tn.4 {
+    SELECT * FROM z1 WHERE (x, +y) IN (SELECT a, b||'x' FROM kk)
+  } {}
+
+  do_execsql_test 2.$tn.5 {
+    SELECT * FROM z1 WHERE (+x, y) IN (SELECT a, b FROM kk)
+  } {d e f}
+}
+
+#-------------------------------------------------------------------------
+#
+
+do_execsql_test 3.0 {
+  CREATE TABLE c1(a, b, c, d);
+  INSERT INTO c1(rowid, a, b) VALUES(1,   NULL, 1);
+  INSERT INTO c1(rowid, a, b) VALUES(2,   2, NULL);
+  INSERT INTO c1(rowid, a, b) VALUES(3,   2, 2);
+  INSERT INTO c1(rowid, a, b) VALUES(4,   3, 3);
+
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(101, 'a', 'b', 1, 1);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(102, 'a', 'b', 1, 2);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(103, 'a', 'b', 1, 3);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(104, 'a', 'b', 2, 1);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(105, 'a', 'b', 2, 2);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(106, 'a', 'b', 2, 3);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(107, 'a', 'b', 3, 1);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(108, 'a', 'b', 3, 2);
+  INSERT INTO c1(rowid, a, b, c, d) VALUES(109, 'a', 'b', 3, 3);
+}
+
+
+foreach {tn idx} {
+  1 { }
+  2 { CREATE INDEX c1ab ON c1(a, b); }
+  3 { CREATE INDEX c1ba ON c1(b, a); }
+
+  4 { CREATE INDEX c1cd ON c1(c, d); }
+  5 { CREATE INDEX c1dc ON c1(d, c); }
+} {
+  drop_all_indexes
+
+  foreach {tn2 sql res} {
+    1 "SELECT (1, 2) IN (SELECT a, b FROM c1)" {0}
+    2 "SELECT (1, 1) IN (SELECT a, b FROM c1)" {{}}
+    3 "SELECT (2, 1) IN (SELECT a, b FROM c1)" {{}}
+    4 "SELECT (2, 2) IN (SELECT a, b FROM c1)" {1}
+    5 "SELECT c, d FROM c1 WHERE (c, d) IN (SELECT d, c FROM c1)"
+      { 1 1 1 2 1 3   2 1 2 2 2 3   3 1 3 2 3 3 }
+
+    6 "SELECT c, d FROM c1 WHERE (c,d) IN (SELECT d, c FROM c1) ORDER BY c DESC"
+      { 3 1 3 2 3 3   2 1 2 2 2 3   1 1 1 2 1 3 }
+
+    7 {
+        SELECT c, d FROM c1 WHERE (c,d) IN (SELECT d, c FROM c1) 
+        ORDER BY c DESC, d ASC
+      } { 3 1 3 2 3 3   2 1 2 2 2 3   1 1 1 2 1 3 }
+
+    8 {
+        SELECT c, d FROM c1 WHERE (c,d) IN (SELECT d, c FROM c1) 
+        ORDER BY c ASC, d DESC
+      } { 1 3 1 2 1 1   2 3 2 2 2 1   3 3 3 2 3 1 }
+
+    9 {
+        SELECT c, d FROM c1 WHERE (c,d) IN (SELECT d, c FROM c1) 
+        ORDER BY c ASC, d ASC
+      } { 1 1 1 2 1 3   2 1 2 2 2 3   3 1 3 2 3 3 }
+    10 {
+        SELECT c, d FROM c1 WHERE (c,d) IN (SELECT d, c FROM c1) 
+        ORDER BY c DESC, d DESC
+      } { 3 3 3 2 3 1   2 3 2 2 2 1   1 3 1 2 1 1 }
+
+  } {
+    do_execsql_test 3.$tn.$tn2 $sql $res
+  }
+}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 4.0 {
+  CREATE TABLE hh(a, b, c);
+
+  INSERT INTO hh VALUES('a', 'a', 1);
+  INSERT INTO hh VALUES('a', 'b', 2);
+  INSERT INTO hh VALUES('b', 'a', 3);
+  INSERT INTO hh VALUES('b', 'b', 4);
+
+  CREATE TABLE k1(x, y);
+  INSERT INTO k1 VALUES('a', 'a');
+  INSERT INTO k1 VALUES('b', 'b');
+  INSERT INTO k1 VALUES('a', 'b');
+  INSERT INTO k1 VALUES('b', 'a');
+}
+
+foreach {tn idx} {
+  1 { }
+  2 { CREATE INDEX h1 ON hh(a, b); }
+  3 { CREATE UNIQUE INDEX k1idx ON k1(x, y) }
+  4 { CREATE UNIQUE INDEX k1idx ON k1(x, y DESC) }
+  5 { 
+    CREATE INDEX h1 ON hh(a, b);
+    CREATE UNIQUE INDEX k1idx ON k1(x, y); 
+  }
+  6 { 
+    CREATE INDEX h1 ON hh(a, b);
+    CREATE UNIQUE INDEX k1idx ON k1(x, y DESC); 
+  }
+} {
+  drop_all_indexes
+  execsql $idx
+  foreach {tn2 orderby res} {
+    1 "a ASC, b ASC"  {1 2 3 4}
+    2 "a ASC, b DESC" {2 1 4 3}
+    3 "a DESC, b ASC" {3 4 1 2}
+    4 "a DESC, b DESC" {4 3 2 1}
+  } {
+    do_execsql_test 4.$tn.$tn2 "
+      SELECT c FROM hh WHERE (a, b) in (SELECT x, y FROM k1) ORDER BY $orderby
+    " $res
+  }
+}
+
+#-------------------------------------------------------------------------
+
+# 2016-11-17.  Query flattening in a vector SELECT on the RHS of an IN
+# operator.  Ticket https://www.sqlite.org/src/info/da7841375186386c
+#
+do_execsql_test 5.0 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE T1(a TEXT);
+  INSERT INTO T1(a) VALUES ('aaa');
+  CREATE TABLE T2(a TEXT PRIMARY KEY,n INT);
+  INSERT INTO T2(a, n) VALUES('aaa',0);
+  SELECT * FROM T2
+  WHERE (a,n) IN (SELECT T1.a, V.n FROM T1, (SELECT * FROM (SELECT 0 n)) V);
+} {aaa 0}
+
+
+finish_test

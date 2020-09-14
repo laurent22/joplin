@@ -1,0 +1,43 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5leftjoin
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE vt USING fts5(x);
+  INSERT INTO vt VALUES('abc');
+  INSERT INTO vt VALUES('xyz');
+
+  CREATE TABLE t1(a INTEGER PRIMARY KEY);
+  INSERT INTO t1 VALUES(1), (2);
+}
+
+do_execsql_test 1.1 {
+  SELECT * FROM t1 LEFT JOIN (
+    SELECT rowid AS rrr, * FROM vt WHERE vt MATCH 'abc'
+  ) ON t1.a = rrr
+} {1 1 abc 2 {} {}}
+
+do_execsql_test 1.2 {
+  SELECT * FROM t1 LEFT JOIN vt ON (vt MATCH 'abc')
+} {1 abc 2 abc}
+
+finish_test

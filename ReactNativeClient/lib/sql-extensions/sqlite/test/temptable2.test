@@ -1,0 +1,357 @@
+# 2016 March 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix temptable2
+
+do_execsql_test 1.1 {
+  CREATE TEMP TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+}
+
+do_execsql_test 1.2 {
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<100000 )
+  INSERT INTO t1 SELECT randomblob(100), randomblob(100) FROM X;
+} {}
+
+do_execsql_test 1.3 {
+  PRAGMA temp.integrity_check;
+} {ok}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 2.1 {
+  CREATE TEMP TABLE t2(a, b);
+  INSERT INTO t2 VALUES(1, 2);
+} {}
+
+do_execsql_test 2.2 {
+  BEGIN;
+    INSERT INTO t2 VALUES(3, 4);
+    SELECT * FROM t2;
+} {1 2 3 4}
+
+do_execsql_test 2.3 {
+  ROLLBACK;
+  SELECT * FROM t2;
+} {1 2}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.1.1 {
+  PRAGMA main.cache_size = 10;
+  PRAGMA temp.cache_size = 10;
+
+  CREATE TEMP TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<1000 )
+  INSERT INTO t1 SELECT randomblob(100), randomblob(100) FROM x;
+
+  SELECT count(*) FROM t1;
+} {1000}
+do_execsql_test 3.1.2 {
+  BEGIN;
+    UPDATE t1 SET b=randomblob(100) WHERE (rowid%10)==0;
+  ROLLBACK;
+}
+do_execsql_test 3.1.3 {
+  SELECT count(*) FROM t1;
+} {1000}
+do_execsql_test 3.1.4 { PRAGMA temp.integrity_check } {ok}
+
+do_execsql_test 3.2.1 {
+  BEGIN;
+    UPDATE t1 SET b=randomblob(100) WHERE (rowid%10)==0;
+    SAVEPOINT abc;
+      UPDATE t1 SET b=randomblob(100) WHERE (rowid%10)==1;
+    ROLLBACK TO abc;
+    UPDATE t1 SET b=randomblob(100) WHERE (rowid%10)==2;
+  COMMIT;
+}
+do_execsql_test 3.2.2 { PRAGMA temp.integrity_check } {ok}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 4.1.1 {
+  PRAGMA main.cache_size = 10;
+  PRAGMA temp.cache_size = 10;
+
+  CREATE TEMP TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<10 )
+  INSERT INTO t1 SELECT randomblob(100), randomblob(100) FROM x;
+
+  SELECT count(*) FROM t1;
+  PRAGMA temp.page_count;
+} {10 9}
+
+do_execsql_test 4.1.2 {
+  BEGIN;
+    UPDATE t1 SET b=randomblob(100);
+  ROLLBACK;
+}
+
+do_execsql_test 4.1.3 {
+  CREATE TEMP TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a, b);
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<500 )
+  INSERT INTO t2 SELECT randomblob(100), randomblob(100) FROM x;
+
+  SELECT count(*) FROM t2;
+  SELECT count(*) FROM t1;
+} {500 10}
+
+do_test 4.1.4 {
+  set n [db one { PRAGMA temp.page_count }]
+  expr ($n >280 && $n < 300) 
+} 1
+
+do_execsql_test 4.1.4 { PRAGMA temp.integrity_check } {ok}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 5.1.1 {
+  PRAGMA main.cache_size = 10;
+  PRAGMA temp.cache_size = 10;
+
+  CREATE TEMP TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a, b);
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<500 )
+  INSERT INTO t2 SELECT randomblob(100), randomblob(100) FROM x;
+
+  CREATE TEMP TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+}
+
+# Test that the temp database is now much bigger than the configured
+# cache size (10 pages).
+do_test 5.1.2 {
+  set n [db one { PRAGMA temp.page_count }]
+  expr ($n > 270 && $n < 290)
+} {1}
+
+do_execsql_test 5.1.3 {
+  BEGIN;
+    UPDATE t1 SET a=2;
+    UPDATE t2 SET a=randomblob(100);
+    SELECT count(*) FROM t1;
+  ROLLBACK;
+} {1}
+
+do_execsql_test 5.1.4 {
+  UPDATE t2 SET a=randomblob(100);
+
+  SELECT * FROM t1;
+} {1 2}
+
+do_execsql_test 5.1.5 { PRAGMA temp.integrity_check } {ok}
+
+#-------------------------------------------------------------------------
+# Test this:
+#
+#   1. Page is DIRTY at the start of a transaction.
+#   2. Page is written out as part of the transaction.
+#   3. Page is then read back in.
+#   4. Transaction is rolled back. Is the page now clean or dirty?
+#
+# This actually does work. Step 4 marks the page as clean. But it also
+# writes to the database file itself. So marking it clean is correct - 
+# the page does match the contents of the db file.
+#
+reset_db
+
+do_execsql_test 6.1 {
+  PRAGMA main.cache_size = 10;
+  PRAGMA temp.cache_size = 10;
+
+  CREATE TEMP TABLE t1(x);
+  INSERT INTO t1 VALUES('one');
+
+  CREATE TEMP TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a, b);
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<500 )
+  INSERT INTO t2 SELECT randomblob(100), randomblob(100) FROM x;
+}
+
+do_execsql_test 6.2 {
+  UPDATE t1 SET x='two';             -- step 1
+  BEGIN;
+    UPDATE t2 SET a=randomblob(100); -- step 2
+    SELECT * FROM t1;                -- step 3
+  ROLLBACK;                          -- step 4
+
+  SELECT count(*) FROM t2;
+  SELECT * FROM t1;
+} {two 500 two}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+sqlite3 db ""
+do_execsql_test 7.1 {
+  PRAGMA auto_vacuum=INCREMENTAL;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(zeroblob(900));
+  INSERT INTO t1 VALUES(zeroblob(900));
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  INSERT INTO t1 SELECT x FROM t1;
+  BEGIN;
+  DELETE FROM t1 WHERE rowid%2;
+  PRAGMA incremental_vacuum(4);
+  ROLLBACK;
+  PRAGMA integrity_check;
+} {ok}
+
+#-------------------------------------------------------------------------
+# Try changing the page size using a backup operation when pages are
+# stored in main-memory only.
+#
+reset_db
+do_execsql_test 8.1 {
+  PRAGMA auto_vacuum = OFF;
+  CREATE TABLE t2(a, b);
+  CREATE INDEX i2 ON t2(a, b);
+  WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<20 )
+  INSERT INTO t2 SELECT randomblob(100), randomblob(100) FROM x ORDER BY 1, 2;
+  PRAGMA page_count;
+} {13}
+
+do_test 8.2 {
+  sqlite3 tmp ""
+  execsql {
+    PRAGMA auto_vacuum = OFF;
+    PRAGMA page_size = 8192;
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a, b);
+    WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<100 )
+    INSERT INTO t1 SELECT randomblob(100), randomblob(100) FROM x ORDER BY 1, 2;
+    PRAGMA page_count;
+  } tmp
+} {10}
+
+do_test 8.3 {
+  sqlite3_backup B tmp main db main
+  B step 5
+  B finish
+} {SQLITE_READONLY}
+
+do_test 8.4 {
+  execsql {
+    SELECT count(*) FROM t1;
+    PRAGMA integrity_check;
+    PRAGMA page_size;
+  } tmp
+} {100 ok 8192}
+
+do_test 8.5 { 
+  tmp eval { UPDATE t1 SET a=randomblob(100) }
+} {}
+
+do_test 8.6 {
+  sqlite3_backup B tmp main db main
+  B step 1000
+  B finish
+} {SQLITE_READONLY}
+
+tmp close
+
+#-------------------------------------------------------------------------
+# Try inserts and deletes with a large db in auto-vacuum mode. Check
+#
+foreach {tn mode} {
+  1 delete
+  2 wal
+} {
+  reset_db
+  sqlite3 db ""
+  do_execsql_test 9.$tn.1.1 {
+    PRAGMA cache_size = 15;
+    PRAGMA auto_vacuum = 1;
+  }
+  execsql "PRAGMA journal_mode = $mode"
+
+  do_execsql_test 9.$tn.1.2 {
+    CREATE TABLE tx(a, b);
+    CREATE INDEX i1 ON tx(a);
+    CREATE INDEX i2 ON tx(b);
+    WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<1000 )
+      INSERT INTO tx SELECT randomblob(100), randomblob(100) FROM x;
+  }
+
+  for {set i 2} {$i<20} {incr i} {
+    do_execsql_test 9.$tn.$i.1 { DELETE FROM tx WHERE (random()%3)==0 }
+
+    do_execsql_test 9.$tn.$i.2 { PRAGMA integrity_check } ok
+
+      do_execsql_test 9.$tn.$i.3 { 
+        WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<400 )
+          INSERT INTO tx SELECT randomblob(100), randomblob(100) FROM x;
+      }
+
+    do_execsql_test 9.$tn.$i.4 { PRAGMA integrity_check } ok
+
+    do_execsql_test 9.$tn.$i.5 { 
+      BEGIN;
+      DELETE FROM tx WHERE (random()%3)==0;
+      WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<500 )
+        INSERT INTO tx SELECT randomblob(100), randomblob(100) FROM x;
+      COMMIT;
+    }
+
+    do_execsql_test 9.$tn.$i.6 { PRAGMA integrity_check } ok
+  }
+}
+
+#-------------------------------------------------------------------------
+# When using mmap mode with a temp file, SQLite must search the cache 
+# before using a mapped page even when there is no write transaction
+# open. For a temp file, the on-disk version may not be up to date.
+#
+sqlite3 db ""
+do_execsql_test 10.0 {
+  PRAGMA cache_size = 50;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(a, b, PRIMARY KEY(a)) WITHOUT ROWID;
+  CREATE INDEX i1 ON t1(a);
+  CREATE TABLE t2(x, y);
+  INSERT INTO t2 VALUES(1, 2);
+}
+
+do_execsql_test 10.1 {
+  BEGIN;
+    WITH x(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM x WHERE i<500 )
+      INSERT INTO t1 SELECT randomblob(100), randomblob(100) FROM x;
+  COMMIT;
+  INSERT INTO t2 VALUES(3, 4);
+}
+
+ifcapable mmap {
+  if {[permutation]!="journaltest" && $::TEMP_STORE<2} {
+    # The journaltest permutation does not support mmap, so this part of
+    # the test is omitted.
+    do_execsql_test 10.2 { PRAGMA mmap_size = 512000 } 512000
+  }
+}
+
+do_execsql_test 10.3 { SELECT * FROM t2 } {1 2 3 4}
+do_execsql_test 10.4 { PRAGMA integrity_check } ok
+
+finish_test

@@ -1,0 +1,72 @@
+# 2005 March 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure that leftover journals from
+# prior databases do not try to rollback into new databases.
+#
+# $Id: journal1.test,v 1.2 2005/03/20 22:54:56 drh Exp $
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# These tests will not work on windows because windows uses
+# manditory file locking which breaks the copy_file command.
+#
+# Or with atomic_batch_write systems, as journal files are
+# not created.
+#
+if {$tcl_platform(platform)=="windows"
+ || [atomic_batch_write test.db]
+} {
+  finish_test
+  return
+}
+
+# Create a smaple database
+#
+do_test journal1-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,randstr(10,400));
+    INSERT INTO t1 VALUES(2,randstr(10,400));
+    INSERT INTO t1 SELECT a+2, a||b FROM t1;
+    INSERT INTO t1 SELECT a+4, a||b FROM t1;
+    SELECT count(*) FROM t1;
+  }
+} 8
+
+# Make changes to the database and save the journal file.
+# Then delete the database.  Replace the journal file
+# and try to create a new database with the same name.  The
+# old journal should not attempt to rollback into the new
+# database.
+#
+do_test journal1-1.2 {
+  execsql {
+    BEGIN;
+    DELETE FROM t1;
+  }
+  forcecopy test.db-journal test.db-journal-bu
+  execsql {
+    ROLLBACK;
+  }
+  db close
+  delete_file test.db
+  copy_file test.db-journal-bu test.db-journal
+  sqlite3 db test.db
+  catchsql {
+    SELECT * FROM sqlite_master
+  }
+} {0 {}}
+
+finish_test

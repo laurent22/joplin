@@ -1,0 +1,243 @@
+# 2018 January 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+package require Tcl 8.6
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix zipfile2
+
+ifcapable !vtab {
+  finish_test; return
+}
+if {[catch {load_static_extension db zipfile} error]} {
+  puts "Skipping zipfile2 tests, hit load error: $error"
+  finish_test; return
+}
+
+proc blobliteral {str} {
+  set concat [string map {" " "" "\n" ""} $str]
+  return "X'$concat'"
+}
+
+proc blob {str} {
+  binary decode hex $str
+}
+
+proc findall {needle haystack} {
+  set L [list]
+  set start 0
+  while { [set idx [string first $needle $haystack $start]]>=0 } {
+    lappend L $idx
+    set start [expr $idx+1]
+  }
+  set L
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE aaa USING zipfile('testzip');
+  CREATE VIRTUAL TABLE bbb USING zipfile("testzip");
+  CREATE VIRTUAL TABLE ccc USING zipfile(`testzip`);
+  CREATE VIRTUAL TABLE ddd USING zipfile([testzip]);
+  CREATE VIRTUAL TABLE eee USING zipfile(testzip);
+  CREATE VIRTUAL TABLE fff USING zipfile('test''zip');
+}
+
+do_test 2.0 {
+  forcedelete testdir
+  file mkdir testdir
+  execsql { CREATE VIRTUAL TABLE hhh USING zipfile('testdir') }
+  lindex [catchsql { 
+    SELECT * FROM hhh;
+    INSERT INTO hhh(name, data) VALUES('1.txt', 'file data');
+  }] 0 
+} 1
+
+
+set archive {
+  504B0304140000080000D4A52BEC09F3B6E0110000001100000005000900612E
+  747874555405000140420F00636F6E74656E7473206F6620612E747874504B03
+  04140000080000D4A52BECD98916A7110000001100000005000900622E747874
+  555405000140420F00636F6E74656E7473206F6620622E747874504B01021E03
+  140000080000D4A52BEC09F3B6E0110000001100000005000900000000000000
+  0000A48100000000612E747874555405000140420F00504B01021E0314000008
+  0000D4A52BECD98916A71100000011000000050009000000000000000000A481
+  3D000000622E747874555405000140420F00504B050600000000020002007800
+  00007A0000000000
+}
+
+if 0 {
+  # This test is broken - the archive generated is slightly different
+  # depending on the zlib version used.
+  do_execsql_test 3.1 {
+    WITH contents(name,mtime,data) AS (
+        VALUES('a.txt', 1000000, 'contents of a.txt') UNION ALL
+        VALUES('b.txt', 1000000, 'contents of b.txt')
+    ) SELECT quote( zipfile(name,NULL,mtime,data) ) FROM contents;
+  } [blobliteral $archive]
+}
+
+
+set blob [blob $archive]
+do_execsql_test 3.2 {
+  SELECT name,mtime,data FROM zipfile($blob)
+} {
+  a.txt 1000000 {contents of a.txt} 
+  b.txt 1000000 {contents of b.txt}
+}
+
+# Corrupt each of the 0x50 0x4B (ascii "PK") headers in the file
+# Test that in each case this causes an error.
+#
+set L [findall 504B $archive]
+for {set i 0} {$i < [llength $L]} {incr i} {
+  set idx [lindex $L $i]
+  set a [string replace $archive $idx [expr $idx+3] 0000]
+  set blob [blob $a]
+  do_catchsql_test 3.3.$i {
+    SELECT name,mtime,data FROM zipfile($blob)
+  } {/1 .*/}
+}
+
+# Change the "extra info id" for all extended-timestamp fields.
+set L [findall 5554 $archive]
+for {set i 0} {$i < [llength $L]} {incr i} {
+  set idx [lindex $L $i]
+  set a [string replace $archive $idx [expr $idx+3] 1234]
+  set blob [blob $a]
+  do_execsql_test 3.4.$i {
+    SELECT name,data FROM zipfile($blob)
+  } {
+    a.txt {contents of a.txt} 
+    b.txt {contents of b.txt}
+  }
+}
+
+for {set i 0} {$i < [llength $L]} {incr i} {
+  set idx [lindex $L $i]
+  set a [string replace $archive [expr $idx+8] [expr $idx+9] 00]
+  set blob [blob $a]
+  do_execsql_test 3.5.$i {
+    SELECT name,data FROM zipfile($blob)
+  } {
+    a.txt {contents of a.txt} 
+    b.txt {contents of b.txt}
+  }
+}
+
+# set blob [db one {
+#   WITH contents(name,mtime,data) AS (
+#     VALUES('a.txt', 1000000, 'aaaaaaaaaaaaaaaaaaaaaaa')
+#   ) SELECT quote( zipfile(name,NULL,mtime,data) ) FROM contents;
+# }]
+# set blob [string range $blob 2 end]
+# set blob [string range $blob 0 end-1]
+# while {[string length $blob]>0} {
+#   puts [string range $blob 0 63]
+#   set blob [string range $blob 64 end]
+# }
+# exit
+
+set archive2 {
+  504B0304140000080800D4A52BEC08F54C6E050000001700000005000900612E
+  747874555405000140420F004B4CC40A00504B01021E03140000080800D4A52B
+  EC08F54C6E0500000017000000050009000000000000000000A4810000000061
+  2E747874555405000140420F00504B050600000000010001003C000000310000
+  000000
+}
+set blob [blob $archive2]
+do_execsql_test 4.0 {
+  SELECT name,mtime,data,method FROM zipfile($blob)
+} {
+  a.txt 1000000 aaaaaaaaaaaaaaaaaaaaaaa 8
+}
+
+set L [findall 17000000 $archive2]
+set a $archive2
+foreach i $L { set a [string replace $a $i [expr $i+7] 16000000] }
+set blob [blob $a]
+do_catchsql_test 4.1 {
+  SELECT name,mtime,data,method FROM zipfile($blob)
+} {1 {inflate() failed (0)}}
+
+# Check the response to an unknown compression method (set data to NULL).
+set blob [blob [string map {0800 0900} $archive2]]
+do_execsql_test 4.2 {
+  SELECT name,mtime,data IS NULL,method FROM zipfile($blob)
+} {a.txt 1000000 1 9}
+
+# Corrupt the EOCDS signature bytes in various ways.
+foreach {tn sub} {
+  1 {504B0500}
+  2 {504B0006}
+  3 {50000506}
+  4 {004B0506}
+} {
+  set blob [blob [string map [list 504B0506 $sub] $archive2]]
+  do_catchsql_test 4.3.$tn {
+    SELECT * FROM zipfile($blob)
+  } {1 {cannot find end of central directory record}}
+}
+
+#-------------------------------------------------------------------------
+# Test that a zero-length file with a '/' at the end is treated as
+# a directory (data IS NULL). Even if the mode doesn't indicate
+# that it is a directory.
+
+do_test 5.0 {
+  set blob [db one {
+    WITH c(n, d) AS (
+      SELECT 'notadir', ''
+    )
+    SELECT zipfile(n, d) FROM c
+ }]
+
+  set hex [binary encode hex $blob]
+  set hex [string map {6e6f7461646972 6e6f746164692f} $hex] 
+  set blob2 [binary decode hex $hex]
+
+  execsql { SELECT name, data IS NULL FROM zipfile($blob2) }
+} {notadi/ 1}
+
+#-------------------------------------------------------------------------
+# Test that duplicate entries may not be created using UPDATE
+# statements.
+#
+forcedelete test.zip
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE temp.zip USING zipfile('test.zip'); 
+  INSERT INTO temp.zip (name,data) VALUES ('test1','test'); 
+  INSERT INTO temp.zip (name,data) VALUES ('test2','test'); 
+}
+do_catchsql_test 6.1 {
+  UPDATE temp.zip SET name='test1' WHERE name='test2'
+} {1 {duplicate name: "test1"}}
+
+forcedelete test.zip
+do_catchsql_test 6.2 {
+  DROP TABLE zip;
+  CREATE VIRTUAL TABLE temp.zip USING zipfile('test.zip'); 
+  INSERT INTO temp.zip (name,data) VALUES ('test','test'); 
+  UPDATE  temp.zip set name=name||'new' where name='test'; 
+  INSERT INTO temp.zip (name,data) VALUES ('test','test'); 
+  UPDATE  temp.zip set name=name||'new' where name='test'; 
+} {1 {duplicate name: "testnew"}}
+
+forcedelete test.zip
+do_execsql_test 6.3 {
+  INSERT INTO temp.zip (name,data) VALUES ('test1','test'); 
+  INSERT INTO temp.zip (name,data) VALUES ('test2','test'); 
+  UPDATE OR REPLACE zip SET name='test2' WHERE name='test1';
+  SELECT name FROM zip;
+} {test2}
+
+finish_test

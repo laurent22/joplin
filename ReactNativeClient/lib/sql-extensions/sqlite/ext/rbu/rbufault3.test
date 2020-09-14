@@ -1,0 +1,95 @@
+# 2016 April 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains fault injection tests for RBU vacuum operations.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+source $testdir/malloc_common.tcl
+set ::testprefix rbufault3
+
+foreach {fault errlist} {
+  oom-* {
+    {1 SQLITE_NOMEM}
+    {1 SQLITE_IOERR_NOMEM}
+    {1 {SQLITE_NOMEM - out of memory}}
+  }
+
+  ioerr-* {
+    {1 {SQLITE_IOERR - disk I/O error}}
+    {1 SQLITE_IOERR} 
+    {1 SQLITE_IOERR_WRITE} 
+    {1 SQLITE_IOERR_FSYNC} 
+    {1 SQLITE_IOERR_READ} 
+    {1 {SQLITE_IOERR - unable to open database: test.db2}} 
+    {1 {SQLITE_ERROR - unable to open database: test.db2}} 
+    {1 {SQLITE_ERROR - SQL logic error}}
+  }
+
+  cantopen* {
+    {1 {SQLITE_CANTOPEN - unable to open database: test.db2}}  
+    {1 {SQLITE_CANTOPEN - unable to open database: test.db2}}  
+    {1 {SQLITE_CANTOPEN - unable to open database file}}  
+    {1 SQLITE_CANTOPEN} 
+  }
+
+} {
+
+  reset_db
+  do_execsql_test 0 {
+    CREATE TABLE target(x UNIQUE, y, z, PRIMARY KEY(y));
+    INSERT INTO target VALUES(1, 2, 3);
+    INSERT INTO target VALUES(4, 5, 6);
+    INSERT INTO target VALUES(7, 8, 9);
+    CREATE INDEX i1 ON target(z);
+  }
+  faultsim_save_and_close
+
+  do_faultsim_test 1 -faults $fault -prep {
+    faultsim_restore_and_reopen
+    forcedelete test.db2
+  } -body {
+    sqlite3rbu_vacuum rbu test.db test.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } -test {
+    eval [list faultsim_test_result {0 SQLITE_DONE} {*}$::errlist]
+  }
+
+  do_faultsim_test 2 -faults $fault -prep {
+    faultsim_restore_and_reopen
+    forcedelete test.db2
+  } -body {
+    sqlite3rbu_vacuum rbu test.db test.db2
+    rbu step
+    rbu close
+  } -test {
+    eval [list faultsim_test_result {0 SQLITE_OK} {*}$::errlist]
+  }
+
+  forcedelete test.db2
+  sqlite3rbu_vacuum rbu test.db test.db2
+  rbu step
+  rbu close
+  faultsim_save_and_close
+
+  do_faultsim_test 3 -faults $fault -prep {
+    faultsim_restore_and_reopen
+  } -body {
+    sqlite3rbu_vacuum rbu test.db test.db2
+    rbu step
+    rbu close
+  } -test {
+    eval [list faultsim_test_result {0 SQLITE_OK} {*}$::errlist]
+  }
+}
+
+finish_test

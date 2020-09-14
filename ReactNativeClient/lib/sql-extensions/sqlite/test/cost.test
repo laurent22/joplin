@@ -1,0 +1,289 @@
+# 2014-04-26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix cost
+
+
+do_execsql_test 1.1 {
+  CREATE TABLE t3(id INTEGER PRIMARY KEY, b NOT NULL);
+  CREATE TABLE t4(c, d, e);
+  CREATE UNIQUE INDEX i3 ON t3(b);
+  CREATE UNIQUE INDEX i4 ON t4(c, d);
+}
+do_eqp_test 1.2 {
+  SELECT e FROM t3, t4 WHERE b=c ORDER BY b, d;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t3 USING COVERING INDEX i3
+  `--SEARCH TABLE t4 USING INDEX i4 (c=?)
+}
+
+
+do_execsql_test 2.1 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a);
+}
+
+# It is better to use an index for ORDER BY than sort externally, even 
+# if the index is a non-covering index.
+do_eqp_test 2.2 {
+  SELECT * FROM t1 ORDER BY a;
+} {SCAN TABLE t1 USING INDEX i1}
+
+do_execsql_test 3.1 {
+  CREATE TABLE t5(a INTEGER PRIMARY KEY,b,c,d,e,f,g);
+  CREATE INDEX t5b ON t5(b);
+  CREATE INDEX t5c ON t5(c);
+  CREATE INDEX t5d ON t5(d);
+  CREATE INDEX t5e ON t5(e);
+  CREATE INDEX t5f ON t5(f);
+  CREATE INDEX t5g ON t5(g);
+}
+
+do_eqp_test 3.2 {
+  SELECT a FROM t5 
+  WHERE b IS NULL OR c IS NULL OR d IS NULL 
+  ORDER BY a;
+} {
+  QUERY PLAN
+  |--MULTI-INDEX OR
+  |  |--INDEX 1
+  |  |  `--SEARCH TABLE t5 USING INDEX t5b (b=?)
+  |  |--INDEX 2
+  |  |  `--SEARCH TABLE t5 USING INDEX t5c (c=?)
+  |  `--INDEX 3
+  |     `--SEARCH TABLE t5 USING INDEX t5d (d=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+#-------------------------------------------------------------------------
+# If there is no likelihood() or stat3 data, SQLite assumes that a closed
+# range scan (e.g. one constrained by "col BETWEEN ? AND ?" constraint)
+# visits 1/64 of the rows in a table.
+#
+# Note: 1/63 =~ 0.016
+# Note: 1/65 =~ 0.015
+#
+reset_db
+do_execsql_test 4.1 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a);
+  CREATE INDEX i2 ON t1(b);
+}
+do_eqp_test 4.2 {
+  SELECT * FROM t1 WHERE likelihood(a=?, 0.014) AND b BETWEEN ? AND ?;
+} {SEARCH TABLE t1 USING INDEX i1 (a=?)}
+
+do_eqp_test 4.3 {
+  SELECT * FROM t1 WHERE likelihood(a=?, 0.016) AND b BETWEEN ? AND ?;
+} {SEARCH TABLE t1 USING INDEX i2 (b>? AND b<?)}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 5.1 {
+  CREATE TABLE t2(x, y);
+  CREATE INDEX t2i1 ON t2(x);
+}
+
+do_eqp_test 5.2 {
+  SELECT * FROM t2 ORDER BY x, y;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t2 USING INDEX t2i1
+  `--USE TEMP B-TREE FOR RIGHT PART OF ORDER BY
+}
+
+do_eqp_test 5.3 {
+  SELECT * FROM t2 WHERE x BETWEEN ? AND ? ORDER BY rowid;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE t2 USING INDEX t2i1 (x>? AND x<?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+# where7.test, where8.test:
+#
+do_execsql_test 6.1 {
+  CREATE TABLE t3(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX t3i1 ON t3(b);
+  CREATE INDEX t3i2 ON t3(c);
+}
+
+do_eqp_test 6.2 {
+  SELECT a FROM t3 WHERE (b BETWEEN 2 AND 4) OR c=100 ORDER BY a
+} {
+  QUERY PLAN
+  |--MULTI-INDEX OR
+  |  |--INDEX 1
+  |  |  `--SEARCH TABLE t3 USING INDEX t3i1 (b>? AND b<?)
+  |  `--INDEX 2
+  |     `--SEARCH TABLE t3 USING INDEX t3i2 (c=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 7.1 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY,b,c,d,e,f,g);
+  CREATE INDEX t1b ON t1(b);
+  CREATE INDEX t1c ON t1(c);
+  CREATE INDEX t1d ON t1(d);
+  CREATE INDEX t1e ON t1(e);
+  CREATE INDEX t1f ON t1(f);
+  CREATE INDEX t1g ON t1(g);
+}
+
+do_eqp_test 7.2 {
+  SELECT a FROM t1
+     WHERE (b>=950 AND b<=1010) OR (b IS NULL AND c NOT NULL)
+  ORDER BY a
+} {
+  QUERY PLAN
+  |--MULTI-INDEX OR
+  |  |--INDEX 1
+  |  |  `--SEARCH TABLE t1 USING INDEX t1b (b>? AND b<?)
+  |  `--INDEX 2
+  |     `--SEARCH TABLE t1 USING INDEX t1b (b=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+do_eqp_test 7.3 {
+  SELECT rowid FROM t1
+  WHERE (+b IS NULL AND c NOT NULL AND d NOT NULL)
+        OR (b NOT NULL AND c IS NULL AND d NOT NULL)
+        OR (b NOT NULL AND c NOT NULL AND d IS NULL)
+} {SCAN TABLE t1}
+
+do_eqp_test 7.4 {
+  SELECT rowid FROM t1 WHERE (+b IS NULL AND c NOT NULL) OR c IS NULL
+} {SCAN TABLE t1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.1 {
+  CREATE TABLE composer(
+    cid INTEGER PRIMARY KEY,
+    cname TEXT
+  );
+  CREATE TABLE album(
+    aid INTEGER PRIMARY KEY,
+    aname TEXT
+  );
+  CREATE TABLE track(
+    tid INTEGER PRIMARY KEY,
+    cid INTEGER REFERENCES composer,
+    aid INTEGER REFERENCES album,
+    title TEXT
+  );
+  CREATE INDEX track_i1 ON track(cid);
+  CREATE INDEX track_i2 ON track(aid);
+}
+
+do_eqp_test 8.2 {
+  SELECT DISTINCT aname
+    FROM album, composer, track
+   WHERE cname LIKE '%bach%'
+     AND unlikely(composer.cid=track.cid)
+     AND unlikely(album.aid=track.aid);
+} {
+  QUERY PLAN
+  |--SCAN TABLE track
+  |--SEARCH TABLE album USING INTEGER PRIMARY KEY (rowid=?)
+  |--SEARCH TABLE composer USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR DISTINCT
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 9.1 {
+  CREATE TABLE t1(
+    a,b,c,d,e, f,g,h,i,j,
+    k,l,m,n,o, p,q,r,s,t
+  );
+  CREATE INDEX i1 ON t1(k,l,m,n,o,p,q,r,s,t);
+}
+do_test 9.2 {
+  for {set i 0} {$i < 100} {incr i} {
+    execsql { INSERT INTO t1 DEFAULT VALUES }
+  }
+  execsql {
+    ANALYZE;
+    CREATE INDEX i2 ON t1(a,b,c,d,e,f,g,h,i,j);
+  }
+} {}
+
+set L [list a=? b=? c=? d=? e=? f=? g=? h=? i=? j=?]
+foreach {tn nTerm nRow} {
+  1   1 10
+  2   2 10
+  3   3  8
+  4   4  7
+  5   5  7
+  6   6  5
+  7   7  5
+  8   8  5
+  9   9  5
+  10 10  5
+} {
+  set w [join [lrange $L 0 [expr $nTerm-1]] " AND "]
+  set p1 [expr ($nRow-1) / 100.0]
+  set p2 [expr ($nRow+1) / 100.0]
+
+  set sql1 "SELECT * FROM t1 WHERE likelihood(k=?, $p1) AND $w"
+  set sql2 "SELECT * FROM t1 WHERE likelihood(k=?, $p2) AND $w"
+
+  do_eqp_test 9.3.$tn.1 $sql1 {/INDEX i1/}
+  do_eqp_test 9.3.$tn.2 $sql2 {/INDEX i2/}
+}
+
+
+#-------------------------------------------------------------------------
+#
+
+ifcapable stat4 {
+  do_execsql_test 10.1 {
+    CREATE TABLE t6(a, b, c);
+    CREATE INDEX t6i1 ON t6(a, b);
+    CREATE INDEX t6i2 ON t6(c);
+  }
+  
+  do_test 10.2 {
+    for {set i 0} {$i < 16} {incr i} {
+      execsql { INSERT INTO t6 VALUES($i%4, 'xyz', $i%8) }
+    }
+    execsql ANALYZE
+  } {}
+
+  do_eqp_test 10.3 {
+    SELECT rowid FROM t6 WHERE a=0 AND c=0
+  } {SEARCH TABLE t6 USING INDEX t6i2 (c=?)}
+
+  do_eqp_test 10.4 {
+    SELECT rowid FROM t6 WHERE a=0 AND b='xyz' AND c=0
+  } {SEARCH TABLE t6 USING INDEX t6i2 (c=?)}
+
+  do_eqp_test 10.5 {
+    SELECT rowid FROM t6 WHERE likelihood(a=0, 0.1) AND c=0
+  } {SEARCH TABLE t6 USING INDEX t6i1 (a=?)}
+
+  do_eqp_test 10.6 {
+    SELECT rowid FROM t6 WHERE likelihood(a=0, 0.1) AND b='xyz' AND c=0
+  } {SEARCH TABLE t6 USING INDEX t6i1 (a=? AND b=?)}
+}
+
+finish_test

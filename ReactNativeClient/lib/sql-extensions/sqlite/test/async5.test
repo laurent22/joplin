@@ -1,0 +1,68 @@
+# 2009 July 19
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file tests that asynchronous IO is compatible with multi-file
+# transactions.
+#
+# $Id: async5.test,v 1.1 2009/07/18 11:52:04 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+if {[info commands sqlite3async_initialize] eq ""} {
+  # The async logic is not built into this system
+  finish_test
+  return
+}
+
+db close
+forcedelete test2.db
+sqlite3async_initialize "" 1
+sqlite3async_control halt never
+sqlite3 db test.db
+
+do_test async5-1.1 {
+  execsql {
+    ATTACH 'test2.db' AS next;
+    CREATE TABLE main.t1(a, b);
+    CREATE TABLE next.t2(a, b);
+    BEGIN;
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t2 VALUES(3, 4);
+    COMMIT;
+  }
+} {}
+do_test async5-1.2 {
+  execsql { SELECT * FROM t1 }
+} {1 2}
+do_test async5-1.3 {
+  execsql { SELECT * FROM t2 }
+} {3 4}
+do_test async5-1.4 {
+  execsql {
+    BEGIN;
+      INSERT INTO t1 VALUES('a', 'b');
+      INSERT INTO t2 VALUES('c', 'd');
+    COMMIT;
+  }
+} {}
+do_test async5-1.5 {
+  execsql { SELECT * FROM t1 }
+} {1 2 a b}
+do_test async5-1.6 {
+  execsql { SELECT * FROM t2 }
+} {3 4 c d}
+
+db close
+
+sqlite3async_control halt idle
+sqlite3async_start
+sqlite3async_wait
+sqlite3async_control halt never
+sqlite3async_shutdown
+set sqlite3async_trace 0
+finish_test

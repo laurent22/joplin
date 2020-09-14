@@ -1,0 +1,262 @@
+# 2020 July 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix upfrom3
+
+# Test plan:
+#
+#   1.*: Test UPDATE ... FROM statements that modify IPK fields. And that
+#        modify "INTEGER PRIMARY KEY" fields on WITHOUT ROWID tables.
+#
+#   2.*: Test UPDATE ... FROM statements that modify PK fields of WITHOUT
+#        ROWID tables.
+#
+#   3.*: Test that UPDATE ... FROM statements are not confused if there
+#        are multiple tables of the same name in attached databases.
+#
+#   4.*: Tests for UPDATE ... FROM statements and foreign keys.
+#
+
+foreach {tn wo} {
+  1 ""
+  2 "WITHOUT ROWID"
+} {
+  reset_db
+  eval [string map [list %WO% $wo %TN% $tn] {
+
+  do_execsql_test 1.%TN%.0 {
+    CREATE TABLE log(t TEXT);
+    CREATE TABLE t1(x INTEGER PRIMARY KEY, y, z UNIQUE) %WO%;
+    CREATE INDEX t1y ON t1(y);
+
+    INSERT INTO t1 VALUES(1, 'i',   'one');
+    INSERT INTO t1 VALUES(2, 'ii',  'two');
+    INSERT INTO t1 VALUES(3, 'iii', 'three');
+    INSERT INTO t1 VALUES(4, 'iv',  'four');
+  }
+
+  do_execsql_test 1.%TN%.1 {
+    CREATE TABLE x1(o, n);
+    INSERT INTO x1 VALUES(1, 11);
+    INSERT INTO x1 VALUES(2, 12);
+    INSERT INTO x1 VALUES(3, 13);
+    INSERT INTO x1 VALUES(4, 14);
+    UPDATE t1 SET x=n FROM x1 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    11 i one
+    12 ii two
+    13 iii three
+    14 iv four
+  }
+
+  do_test 1.%TN%.2 { db changes } 4
+
+  do_execsql_test 1.%TN%.3 {
+    INSERT INTO x1 VALUES(11, 21);
+    INSERT INTO x1 VALUES(12, 22);
+    INSERT INTO x1 VALUES(13, 23);
+    INSERT INTO x1 VALUES(14, 24);
+
+    INSERT INTO x1 VALUES(21, 31);
+    INSERT INTO x1 VALUES(22, 32);
+    INSERT INTO x1 VALUES(23, 33);
+    INSERT INTO x1 VALUES(24, 34);
+    UPDATE t1 SET x=n FROM x1 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    21 i one
+    22 ii two
+    23 iii three
+    24 iv four
+  }
+
+  do_execsql_test 1.%TN%.4 {
+    UPDATE t1 SET x=n FROM x1 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    31 i one
+    32 ii two
+    33 iii three
+    34 iv four
+  }
+
+  do_execsql_test 1.%TN%.5 {
+    INSERT INTO x1 VALUES(31, 32);
+    INSERT INTO x1 VALUES(33, 34);
+    UPDATE OR REPLACE t1 SET x=n FROM x1 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    32 i one
+    34 iii three
+  }
+
+  do_execsql_test 1.%TN%.6 {
+    INSERT INTO t1 VALUES(33, 'ii', 'two');
+    INSERT INTO t1 VALUES(35, 'iv', 'four');
+  }
+
+  do_execsql_test 1.%TN%.7 {
+    CREATE TABLE x2(o, n, zz);
+    INSERT INTO x2 VALUES(32, 41, 'four');
+    INSERT INTO x2 VALUES(33, 42, 'three');
+    UPDATE OR IGNORE t1 SET x=n, z=zz FROM x2 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    32 i one 
+    33 ii two 
+    34 iii three 
+    35 iv four
+  }
+
+  do_execsql_test 1.%TN%.8 {
+    UPDATE OR REPLACE t1 SET x=n, z=zz FROM x2 WHERE x=o;
+    SELECT x, y, z FROM t1 ORDER BY 1;
+  } {
+    41 i four
+    42 ii three
+  }
+
+  }]
+}
+
+do_execsql_test 2.1.1 {
+  CREATE TABLE u1(a, b, c, PRIMARY KEY(b, c)) WITHOUT ROWID;
+  INSERT INTO u1 VALUES(0, 0, 0);
+  INSERT INTO u1 VALUES(1, 0, 1);
+  INSERT INTO u1 VALUES(2, 1, 0);
+  INSERT INTO u1 VALUES(3, 1, 1);
+}
+
+do_execsql_test 2.1.2 {
+  CREATE TABLE map(f, t);
+  INSERT INTO map VALUES(0, 10);
+  INSERT INTO map VALUES(1, 11);
+  UPDATE u1 SET c=t FROM map WHERE c=f;
+  SELECT * FROM u1 ORDER BY a;
+} {
+  0 0 10
+  1 0 11
+  2 1 10
+  3 1 11
+}
+
+do_execsql_test 2.1.3 {
+  UPDATE u1 SET b=t FROM map WHERE b=f;
+  SELECT * FROM u1 ORDER BY a;
+} {
+  0 10 10
+  1 10 11
+  2 11 10
+  3 11 11
+}
+
+do_execsql_test 2.1.4 {
+  CREATE TABLE map2(o1, o2, n1, n2);
+  INSERT INTO map2 VALUES
+    (10, 10, 50, 50), (10, 11, 50, 60), 
+    (11, 10, 60, 50), (11, 11, 60, 60);
+  UPDATE u1 SET b=n1, c=n2 FROM map2 WHERE b=o1 AND c=o2;
+  SELECT * FROM u1 ORDER BY a;
+} {
+  0 50 50
+  1 50 60
+  2 60 50
+  3 60 60
+}
+
+#-------------------------------------------------------------------------
+foreach {tn wo} {
+  1 ""
+  2 "WITHOUT ROWID"
+} {
+  reset_db
+  forcedelete test.db2
+  eval [string map [list %WO% $wo %TN% $tn] {
+    do_execsql_test 3.$tn.1 {
+      CREATE TABLE g1(a, b, c, PRIMARY KEY(a, b)) %WO%;
+      INSERT INTO g1 VALUES(1, 1, 1);
+
+      ATTACH 'test.db2' AS aux;
+      CREATE TABLE aux.g1(a, b, c, PRIMARY KEY(a, b)) %WO%;
+      INSERT INTO aux.g1 VALUES(10, 1, 10);
+      INSERT INTO aux.g1 VALUES(20, 2, 20);
+      INSERT INTO aux.g1 VALUES(30, 3, 30);
+    }
+
+    do_execsql_test 3.$tn.2 {
+      UPDATE aux.g1 SET c=101 FROM main.g1;
+    }
+    do_execsql_test 3.$tn.3 {
+      SELECT * FROM aux.g1;
+    } {10 1 101  20 2 101  30 3 101}
+
+    do_execsql_test 3.$tn.4 {
+      UPDATE g1 SET c=101 FROM g1 AS g2;
+    }
+    do_execsql_test 3.$tn.5 {
+      SELECT * FROM g1;
+    } {1 1 101}
+  }]
+}
+
+#-------------------------------------------------------------------------
+reset_db
+foreach {tn wo} {
+  1 ""
+  2 "WITHOUT ROWID"
+} {
+  reset_db
+  forcedelete test.db2
+  eval [string map [list %WO% $wo %TN% $tn] {
+
+    do_execsql_test 4.$tn.1 {
+      CREATE TABLE p1(a INTEGER PRIMARY KEY, b) %WO%;
+      CREATE TABLE c1(x PRIMARY KEY, y REFERENCES p1 ON UPDATE CASCADE) %WO%;
+      PRAGMA foreign_keys = 1;
+
+      INSERT INTO p1 VALUES(1, 'one');
+      INSERT INTO p1 VALUES(11, 'eleven');
+      INSERT INTO p1 VALUES(111, 'eleventyone');
+
+      INSERT INTO c1 VALUES('a', 1);
+      INSERT INTO c1 VALUES('b', 11);
+      INSERT INTO c1 VALUES('c', 111);
+    }
+
+    do_execsql_test 4.$tn.2 {
+      CREATE TABLE map(f, t);
+      INSERT INTO map VALUES('a', 111);
+      INSERT INTO map VALUES('c', 112);
+    }
+
+    do_catchsql_test 4.$tn.3 {
+      UPDATE c1 SET y=t FROM map WHERE x=f;
+    } {1 {FOREIGN KEY constraint failed}}
+
+    do_execsql_test 4.$tn.4 {
+      INSERT INTO map VALUES('eleven', 12);
+      INSERT INTO map VALUES('eleventyone', 112);
+      UPDATE p1 SET a=t FROM map WHERE b=f;
+    }
+
+    do_execsql_test 4.$tn.5 {
+      SELECT * FROM c1
+    } {a 1  b 12  c 112}
+
+  }]
+}
+
+finish_test
+

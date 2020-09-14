@@ -1,0 +1,41 @@
+# 2019-05-24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test cases for rounding behavior of floating point values.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix round1
+
+expr srand(0)
+unset -nocomplain iTest
+for {set iTest 1} {$iTest<=50000} {incr iTest} {
+   set x1 [expr int(rand()*100000)]
+   set x2 [expr int(rand()*100000)+1000*int(rand()*10000)]
+   set n [expr int(rand()*8)+1]
+   set x3 [string range [format %09d $x2] [expr {9-$n}] end]
+   set r $x1.$x3
+   set ans [string trimright $r 0]
+   if {[string match *. $ans]} {set ans ${ans}0}
+   do_test $iTest/$n/${r}4=>$ans {
+     set x [db one "SELECT round(${r}4,$n)"]
+   } $ans
+   set x4 [string range [format %09d [expr {$x2+1}]] [expr {9-$n}] end]
+   if {[string trim $x3 9]==""} {incr x1}
+   set r2 $x1.$x4
+   set ans [string trimright $r2 0]
+   if {[string match *. $ans]} {set ans ${ans}0}
+   do_test $iTest/$n/${r}5=>$ans {
+     set x [db one "SELECT round(${r}5,$n)"]
+   } $ans
+}
+
+finish_test

@@ -1,0 +1,152 @@
+# 2010 June 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the sqlite3_unlock_notify() API.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# This script only runs if shared-cache and unlock-notify are available.
+#
+ifcapable !unlock_notify||!shared_cache { 
+  finish_test 
+  return 
+}
+
+set esc [sqlite3_enable_shared_cache 1]
+
+sqlite3 db  test.db
+forcedelete test.db2 test.db2-journal test.db2-wal
+sqlite3 db2 test.db2
+
+do_test notify3-1.1 {
+  execsql { 
+    CREATE TABLE t1(a, b); 
+    INSERT INTO t1 VALUES('t1 A', 't1 B');
+  }
+} {}
+do_test notify3-1.2 {
+  execsql { 
+    CREATE TABLE t2(a, b);
+    INSERT INTO t2 VALUES('t2 A', 't2 B');
+  } db2
+} {}
+
+do_test notify3-1.3 {
+  execsql { 
+    BEGIN EXCLUSIVE;
+    INSERT INTO t2 VALUES('t2 C', 't2 D');
+  } db2
+} {}
+do_test notify3-1.4 {
+  catchsql { ATTACH 'test.db2' AS aux }
+} {0 {}}
+
+do_test notify3-1.5 {
+  catchsql { SELECT * FROM t2 }
+} {1 {database schema is locked: aux}}
+
+do_test notify3-1.6 {
+  list [sqlite3_errcode db] [sqlite3_extended_errcode db]
+} {SQLITE_LOCKED SQLITE_LOCKED_SHAREDCACHE}
+
+do_test notify3-1.7 {
+  sqlite3_extended_result_codes db 1
+  catch { set ::stmt [sqlite3_prepare_v2 db "SELECT * FROM t2" -1 tail] } msg
+  set msg
+} {(262) database schema is locked: aux}
+
+do_test notify3-1.8 {
+  set ::when 1
+  db unlock_notify { set ::res $::when }
+  set ::when 2
+  execsql { COMMIT } db2
+  set ::res
+} {2}
+do_test notify3-1.9 {
+  catchsql { SELECT * FROM t2 }
+} {0 {{t2 A} {t2 B} {t2 C} {t2 D}}}
+db close
+
+
+set err   {{1 {unable to open database: test.db2}}}
+set noerr {{0 {}}}
+
+# When a new database is attached, the connection doing the attaching 
+# tries to load any unloaded schemas for both the new database and any
+# already attached databases (including the main database). If it is
+# unable to load any such schemas, then the ATTACH statement fails.
+#
+# This block tests that if the loading of schemas as a result of an
+# ATTACH fails due to locks on the schema table held by other shared-cache
+# connections the extended error code is SQLITE_LOCKED_SHAREDCACHE and
+# it is possible to use the unlock-notify mechanism to determine when
+# the ATTACH might succeed.
+#
+# This test does not work for test-permutations that specify SQL to
+# be executed as part of the [sqlite3] command that opens the database.
+# Executing such SQL causes SQLite to load the database schema into memory 
+# earlier than expected, causing test cases to fail.
+#
+if {[presql] == ""} {
+  foreach {
+    tn
+    db1_loaded
+    db2_loaded
+    enable_extended_errors
+    result
+    error1 error2
+  } "
+    0   0 0 0   $err     SQLITE_LOCKED               SQLITE_LOCKED_SHAREDCACHE
+    1   0 0 1   $err     SQLITE_LOCKED_SHAREDCACHE   SQLITE_LOCKED_SHAREDCACHE
+    2   0 1 0   $err     SQLITE_LOCKED               SQLITE_LOCKED_SHAREDCACHE
+    3   0 1 1   $err     SQLITE_LOCKED_SHAREDCACHE   SQLITE_LOCKED_SHAREDCACHE
+    4   1 0 0   $err     SQLITE_LOCKED               SQLITE_LOCKED_SHAREDCACHE
+    5   1 0 1   $err     SQLITE_LOCKED_SHAREDCACHE   SQLITE_LOCKED_SHAREDCACHE
+    6   1 1 0   $noerr   SQLITE_OK                   SQLITE_OK
+    7   1 1 1   $noerr   SQLITE_OK                   SQLITE_OK
+  " {
+  
+    do_test notify3-2.$tn.1 {
+      catch { db1 close }
+      catch { db2 close }
+      sqlite3 db1 test.db
+      sqlite3 db2 test.db2
+  
+      sqlite3_extended_result_codes db1 $enable_extended_errors
+      sqlite3_extended_result_codes db2 $enable_extended_errors
+  
+      if { $db1_loaded } { db1 eval "SELECT * FROM sqlite_master" }
+      if { $db2_loaded } { db2 eval "SELECT * FROM sqlite_master" }
+  
+      db2 eval "BEGIN EXCLUSIVE"
+      catchsql "ATTACH 'test.db2' AS two" db1
+    } $result
+  
+    do_test notify3-2.$tn.2 {
+      list [sqlite3_errcode db1] [sqlite3_extended_errcode db1]
+    } [list $error1 $error2]
+  
+    do_test notify3-2.$tn.3 {
+      db1 unlock_notify {set invoked 1}
+      set invoked 0
+      db2 eval commit
+      set invoked
+    } [lindex $result 0]
+  }
+}
+catch { db1 close }
+catch { db2 close }
+
+
+sqlite3_enable_shared_cache $esc
+finish_test

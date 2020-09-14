@@ -1,0 +1,115 @@
+# 2011 January 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS3 module.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !fts3 { finish_test ; return }
+set ::testprefix fts3comp1
+
+# Create a pretend compression system. 
+#
+# Each time the [zip] function is called, an entry is added to the ::strings
+# array mapping from an integer key to the string argument to zip. The key
+# is returned. Later on, when the key is passed to [unzip], the original
+# string is retrieved from the ::strings array and returned.
+#
+set next_x 0
+proc zip {x} {
+ incr ::next_x
+ set ::strings($::next_x) $x
+ return $::next_x
+}
+proc unzip {x} {
+  return $::strings($x)
+}
+
+foreach {tn zip unzip} {
+  1   zip   unzip
+  2   {z.i.p!!}    {un "zip"}
+} {
+
+  set next_x 0
+  catch {db close}
+  forcedelete test.db
+  sqlite3 db test.db
+  db func $zip zip
+  db func $unzip unzip
+  
+  # Create a table that uses zip/unzip. Check that content inserted into
+  # the table can be read back (using a full-scan query). Check that the
+  # underlying %_content table contains the compressed (integer) values.
+  #
+  do_execsql_test 1.$tn.0 "
+    CREATE VIRTUAL TABLE t1 USING fts4(
+      a, b, 
+      compress='$zip', uncompress='$unzip'
+    );
+  "
+  do_execsql_test 1.$tn.1 {
+    INSERT INTO t1 VALUES('one two three', 'two four six');
+    SELECT a, b FROM t1;
+  } {{one two three} {two four six}}
+  do_execsql_test 1.$tn.2 {
+    SELECT c0a, c1b FROM t1_content;
+  } {1 2}
+  
+  # Insert another row and check that it can be read back. Also that the
+  # %_content table still contains all compressed content. This time, try
+  # full-text index and by-docid queries too.
+  #
+  do_execsql_test 1.$tn.3 {
+    INSERT INTO t1 VALUES('three six nine', 'four eight twelve');
+    SELECT a, b FROM t1;
+  } {{one two three} {two four six} {three six nine} {four eight twelve}}
+  do_execsql_test 1.$tn.4 {
+    SELECT c0a, c1b FROM t1_content;
+  } {1 2 3 4}
+  
+  do_execsql_test 1.$tn.5 {
+    SELECT a, b FROM t1 WHERE docid = 2
+  } {{three six nine} {four eight twelve}}
+  do_execsql_test 1.$tn.6 {
+    SELECT a, b FROM t1 WHERE t1 MATCH 'two'
+  } {{one two three} {two four six}}
+  
+  # Delete a row and check that the full-text index is correctly updated.
+  # Inspect the full-text index using an fts4aux table.
+  #
+  do_execsql_test 1.$tn.7 {
+    CREATE VIRTUAL TABLE terms USING fts4aux(t1);
+    SELECT term, documents, occurrences FROM terms WHERE col = '*';
+  } {
+    eight 1 1    four 2 2    nine 1 1    one 1 1 
+    six 2 2      three 2 2   twelve 1 1  two 1 2
+  }
+  do_execsql_test 1.$tn.8 {
+    DELETE FROM t1 WHERE docid = 1;
+    SELECT term, documents, occurrences FROM terms WHERE col = '*';
+  } {
+    eight 1 1   four 1 1    nine 1 1 
+    six 1 1     three 1 1   twelve 1 1
+  }
+  do_execsql_test 1.$tn.9 { SELECT c0a, c1b FROM t1_content } {3 4}
+}
+
+# Test that is an error to specify just one of compress and uncompress.
+#
+do_catchsql_test 2.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4(x, compress=zip)
+} {1 {missing uncompress parameter in fts4 constructor}}
+do_catchsql_test 2.2 {
+  CREATE VIRTUAL TABLE t2 USING fts4(x, uncompress=unzip)
+} {1 {missing compress parameter in fts4 constructor}}
+
+finish_test

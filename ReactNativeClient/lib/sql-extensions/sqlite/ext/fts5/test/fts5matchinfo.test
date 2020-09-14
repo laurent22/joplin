@@ -1,0 +1,523 @@
+# 2015 August 05
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5matchinfo
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 { finish_test ; return }
+
+foreach_detail_mode $testprefix {
+
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+db func mit mit
+
+sqlite3_fts5_register_matchinfo db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(content, detail=%DETAIL%);
+} 
+
+do_execsql_test 1.1 {
+  INSERT INTO t1(content) VALUES('I wandered lonely as a cloud');
+  INSERT INTO t1(content) VALUES('That floats on high o''er vales and hills,');
+  INSERT INTO t1(content) VALUES('When all at once I saw a crowd,');
+  INSERT INTO t1(content) VALUES('A host, of golden daffodils,');
+  SELECT mit(matchinfo(t1)) FROM t1 WHERE t1 MATCH 'I';
+} {{1 1 1 2 2} {1 1 1 2 2}}
+
+# Now create an FTS4 table that does not specify matchinfo=fts3.
+#
+do_execsql_test 1.2 {
+  CREATE VIRTUAL TABLE t2 USING fts5(content, detail=%DETAIL%);
+  INSERT INTO t2 SELECT * FROM t1;
+  SELECT mit(matchinfo(t2)) FROM t2 WHERE t2 MATCH 'I';
+} {{1 1 1 2 2} {1 1 1 2 2}}
+
+
+#--------------------------------------------------------------------------
+# Proc [do_matchinfo_test] is used to test the FTSX matchinfo() function.
+#
+# The first argument - $tn - is a test identifier. This may be either a
+# full identifier (i.e. "fts3matchinfo-1.1") or, if global var $testprefix
+# is set, just the numeric component (i.e. "1.1").
+#
+# The second argument is the name of an FTSX table. The third is the 
+# full text of a WHERE/MATCH expression to query the table for 
+# (i.e. "t1 MATCH 'abc'"). The final argument - $results - should be a
+# key-value list (serialized array) with matchinfo() format specifiers
+# as keys, and the results of executing the statement:
+#
+#   SELECT matchinfo($tbl, '$key') FROM $tbl WHERE $expr
+#
+# For example:
+#
+#   CREATE VIRTUAL TABLE t1 USING fts4;
+#   INSERT INTO t1 VALUES('abc');
+#   INSERT INTO t1 VALUES('def');
+#   INSERT INTO t1 VALUES('abc abc');
+#
+#   do_matchinfo_test 1.1 t1 "t1 MATCH 'abc'" {
+#     n {3 3}
+#     p {1 1}
+#     c {1 1}
+#     x {{1 3 2} {2 3 2}}
+#   }
+#
+# If the $results list contains keys mapped to "-" instead of a matchinfo()
+# result, then this command computes the expected results based on other
+# mappings to test the matchinfo() function. For example, the command above
+# could be changed to:
+#
+#   do_matchinfo_test 1.1 t1 "t1 MATCH 'abc'" {
+#     n {3 3} p {1 1} c {1 1} x {{1 3 2} {2 3 2}}
+#     pcx -
+#   }
+#
+# And this command would compute the expected results for matchinfo(t1, 'pcx')
+# based on the results of matchinfo(t1, 'p'), matchinfo(t1, 'c') and 
+# matchinfo(t1, 'x') in order to test 'pcx'.
+#
+proc do_matchinfo_test {tn tbl expr results} {
+
+  foreach {fmt res} $results {
+    if {$res == "-"} continue
+    set resarray($fmt) $res
+  }
+
+  set nRow 0
+  foreach {fmt res} [array get resarray] {
+    if {[llength $res]>$nRow} { set nRow [llength $res] }
+  }
+
+  # Construct expected results for any formats for which the caller 
+  # supplied result is "-".
+  #
+  foreach {fmt res} $results {
+    if {$res == "-"} {
+      set res [list]
+      for {set iRow 0} {$iRow<$nRow} {incr iRow} {
+        set rowres [list]
+        foreach c [split $fmt ""] {
+          set rowres [concat $rowres [lindex $resarray($c) $iRow]]
+        }
+        lappend res $rowres
+      }
+      set resarray($fmt) $res
+    }
+  }
+
+  # Test each matchinfo() request individually.
+  #
+  foreach {fmt res} [array get resarray] {
+    set sql "SELECT mit(matchinfo($tbl, '$fmt')) FROM $tbl WHERE $expr"
+    do_execsql_test $tn.$fmt $sql [normalize2 $res]
+  }
+
+  # Test them all executed together (multiple invocations of matchinfo()).
+  #
+  set exprlist [list]
+  foreach {format res} [array get resarray] {
+    lappend exprlist "mit(matchinfo($tbl, '$format'))"
+  }
+  set allres [list]
+  for {set iRow 0} {$iRow<$nRow} {incr iRow} {
+    foreach {format res} [array get resarray] {
+      lappend allres [lindex $res $iRow]
+    }
+  }
+  set sql "SELECT [join $exprlist ,] FROM $tbl WHERE $expr"
+  do_execsql_test $tn.multi $sql [normalize2 $allres]
+}
+proc normalize2 {list_of_lists} {
+  set res [list]
+  foreach elem $list_of_lists {
+    lappend res [list {*}$elem]
+  }
+  return $res
+}
+
+# Similar to [do_matchinfo_test], except that this is a no-op if the FTS5
+# mode is not detail=full.
+#
+proc do_matchinfo_p_test {tn tbl expr results} {
+  if {[detail_is_full]} {
+    uplevel [list do_matchinfo_test $tn $tbl $expr $results]
+  }
+}
+
+do_execsql_test 4.1.0 {
+  CREATE VIRTUAL TABLE t4 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t4 VALUES('a b c d e', 'f g h i j');
+  INSERT INTO t4 VALUES('f g h i j', 'a b c d e');
+}
+
+do_matchinfo_test 4.1.1 t4 {t4 MATCH 'a b c'} {
+  s {{3 0} {0 3}}
+}
+
+do_matchinfo_test 4.1.1 t4 {t4 MATCH 'a b c'} {
+  p {3 3}
+  x {
+    {1 1 1   0 1 1   1 1 1   0 1 1   1 1 1   0 1 1}
+    {0 1 1   1 1 1   0 1 1   1 1 1   0 1 1   1 1 1}
+  }
+}
+
+do_matchinfo_test 4.1.1 t4 {t4 MATCH 'a b c'} {
+  p {3 3}
+  c {2 2}
+  x {
+    {1 1 1   0 1 1   1 1 1   0 1 1   1 1 1   0 1 1}
+    {0 1 1   1 1 1   0 1 1   1 1 1   0 1 1   1 1 1}
+  }
+  n {2 2}
+  l {{5 5} {5 5}}
+  a {{5 5} {5 5}}
+
+  s {{3 0} {0 3}}
+
+  xxxxxxxxxxxxxxxxxx - pcx - xpc - ccc - pppxpcpcx - laxnpc -
+  xpxsscplax -
+}
+
+do_matchinfo_p_test 4.1.2 t4 {t4 MATCH '"g h i"'} {
+  p {1 1}
+  c {2 2}
+  x {
+    {0 1 1   1 1 1}
+    {1 1 1   0 1 1}
+  }
+  n {2 2}
+  l {{5 5} {5 5}}
+  a {{5 5} {5 5}}
+
+  s {{0 1} {1 0}}
+
+  xxxxxxxxxxxxxxxxxx - pcx - xpc - ccc - pppxpcpcx - laxnpc -
+  sxsxs -
+}
+
+do_matchinfo_test 4.1.3 t4 {t4 MATCH 'a b'}     { s {{2 0} {0 2}} }
+do_matchinfo_p_test 4.1.4 t4 {t4 MATCH '"a b" c'} { s {{2 0} {0 2}} }
+do_matchinfo_p_test 4.1.5 t4 {t4 MATCH 'a "b c"'} { s {{2 0} {0 2}} }
+do_matchinfo_test 4.1.6 t4 {t4 MATCH 'd d'}     { s {{1 0} {0 1}} }
+do_matchinfo_test 4.1.7 t4 {t4 MATCH 'f OR abcd'} {
+  x { 
+    {0 1 1  1 1 1  0 0 0  0 0 0} 
+    {1 1 1  0 1 1  0 0 0  0 0 0}
+  }
+}
+do_matchinfo_test 4.1.8 t4 {t4 MATCH 'f NOT abcd'} {
+  x { 
+    {0 1 1  1 1 1  0 0 0  0 0 0}
+    {1 1 1  0 1 1  0 0 0  0 0 0}
+  }
+}
+
+do_execsql_test 4.2.0 {
+  CREATE VIRTUAL TABLE t5 USING fts5(content, detail=%DETAIL%);
+  INSERT INTO t5 VALUES('a a a a a');
+  INSERT INTO t5 VALUES('a b a b a');
+  INSERT INTO t5 VALUES('c b c b c');
+  INSERT INTO t5 VALUES('x x x x x');
+}
+do_matchinfo_test 4.2.1 t5 {t5 MATCH 'a a'}         { 
+  x {{5 8 2   5 8 2} {3 8 2   3 8 2}}
+  s {2 1} 
+}
+do_matchinfo_test 4.2.2 t5 {t5 MATCH 'a b'}         { s {2} }
+do_matchinfo_test 4.2.3 t5 {t5 MATCH 'a b a'}       { s {3} }
+do_matchinfo_test 4.2.4 t5 {t5 MATCH 'a a a'}       { s {3 1} }
+do_matchinfo_p_test 4.2.5 t5 {t5 MATCH '"a b" "a b"'} { s {2} }
+do_matchinfo_test 4.2.6 t5 {t5 MATCH 'a OR b'}      { s {1 2 1} }
+
+do_execsql_test 4.3.0 "INSERT INTO t5 VALUES('x y [string repeat {b } 50000]')";
+
+# It used to be that the second 'a' token would be deferred. That doesn't
+# work any longer.
+if 0 {
+  do_matchinfo_test 4.3.1 t5 {t5 MATCH 'a a'} { 
+    x {{5 8 2   5 5 5} {3 8 2   3 5 5}}
+    s {2 1} 
+  }
+}
+
+do_matchinfo_test 4.3.2 t5 {t5 MATCH 'a b'}         { s {2} }
+do_matchinfo_test 4.3.3 t5 {t5 MATCH 'a b a'}       { s {3} }
+do_matchinfo_test 4.3.4 t5 {t5 MATCH 'a a a'}       { s {3 1} }
+do_matchinfo_p_test 4.3.5 t5 {t5 MATCH '"a b" "a b"'} { s {2} }
+do_matchinfo_test 4.3.6 t5 {t5 MATCH 'a OR b'}      { s {1 2 1 1} }
+
+do_execsql_test 4.4.0.1 { INSERT INTO t5(t5) VALUES('optimize') }
+
+do_matchinfo_test 4.4.2 t5 {t5 MATCH 'a b'}         { s {2} }
+do_matchinfo_test 4.4.1 t5 {t5 MATCH 'a a'}         { s {2 1} }
+do_matchinfo_test 4.4.2 t5 {t5 MATCH 'a b'}         { s {2} }
+do_matchinfo_test 4.4.3 t5 {t5 MATCH 'a b a'}       { s {3} }
+do_matchinfo_test 4.4.4 t5 {t5 MATCH 'a a a'}       { s {3 1} }
+do_matchinfo_p_test 4.4.5 t5 {t5 MATCH '"a b" "a b"'} { s {2} }
+
+do_execsql_test 4.5.0 {
+  CREATE VIRTUAL TABLE t6 USING fts5(a, b, c, detail=%DETAIL%);
+  INSERT INTO t6 VALUES('a', 'b', 'c');
+}
+do_matchinfo_test 4.5.1 t6 {t6 MATCH 'a b c'}       { s {{1 1 1}} }
+
+
+#-------------------------------------------------------------------------
+# Test the outcome of matchinfo() when used within a query that does not
+# use the full-text index (i.e. lookup by rowid or full-table scan).
+#
+do_execsql_test 7.1 {
+  CREATE VIRTUAL TABLE t10 USING fts5(content, detail=%DETAIL%);
+  INSERT INTO t10 VALUES('first record');
+  INSERT INTO t10 VALUES('second record');
+}
+do_execsql_test 7.2 {
+  SELECT typeof(matchinfo(t10)), length(matchinfo(t10)) FROM t10;
+} {blob 8 blob 8}
+do_execsql_test 7.3 {
+  SELECT typeof(matchinfo(t10)), length(matchinfo(t10)) FROM t10 WHERE rowid=1;
+} {blob 8}
+do_execsql_test 7.4 {
+  SELECT typeof(matchinfo(t10)), length(matchinfo(t10)) 
+  FROM t10 WHERE t10 MATCH 'record'
+} {blob 20 blob 20}
+
+#-------------------------------------------------------------------------
+# Test a special case - matchinfo('nxa') with many zero length documents. 
+# Special because "x" internally uses a statement used by both "n" and "a". 
+# This was causing a problem at one point in the obscure case where the
+# total number of bytes of data stored in an fts3 table was greater than
+# the number of rows. i.e. when the following query returns true:
+#
+#   SELECT sum(length(content)) < count(*) FROM fts4table;
+#
+do_execsql_test 8.1 {
+  CREATE VIRTUAL TABLE t11 USING fts5(content, detail=%DETAIL%);
+  INSERT INTO t11(t11, rank) VALUES('pgsz', 32);
+  INSERT INTO t11 VALUES('quitealongstringoftext');
+  INSERT INTO t11 VALUES('anotherquitealongstringoftext');
+  INSERT INTO t11 VALUES('athirdlongstringoftext');
+  INSERT INTO t11 VALUES('andonemoreforgoodluck');
+}
+do_test 8.2 {
+  for {set i 0} {$i < 200} {incr i} {
+    execsql { INSERT INTO t11 VALUES('') }
+  }
+  execsql { INSERT INTO t11(t11) VALUES('optimize') }
+} {}
+do_execsql_test 8.3 {
+  SELECT mit(matchinfo(t11, 'nxa')) FROM t11 WHERE t11 MATCH 'a*'
+} {{204 1 3 3 0} {204 1 3 3 0} {204 1 3 3 0}}
+
+#-------------------------------------------------------------------------
+
+if {[detail_is_full]} {
+  do_execsql_test 9.1 {
+    CREATE VIRTUAL TABLE t12 USING fts5(content, detail=%DETAIL%);
+    INSERT INTO t12 VALUES('a b c d');
+    SELECT mit(matchinfo(t12,'x')) FROM t12 WHERE t12 MATCH 'NEAR(a d, 1) OR a';
+  } {{0 1 1 0 1 1 1 1 1}}
+  do_execsql_test 9.2 {
+    INSERT INTO t12 VALUES('a d c d');
+    SELECT mit(matchinfo(t12,'x')) FROM t12 WHERE t12 MATCH 'NEAR(a d, 1) OR a';
+  } {
+    {0 2 2 0 3 2 1 2 2} {1 2 2 1 3 2 1 2 2}
+  }
+  do_execsql_test 9.3 {
+    INSERT INTO t12 VALUES('a d d a');
+    SELECT mit(matchinfo(t12,'x')) FROM t12 WHERE t12 MATCH 'NEAR(a d, 1) OR a';
+  } {
+    {0 4 3 0 5 3 1 4 3} {1 4 3 1 5 3 1 4 3} {2 4 3 2 5 3 2 4 3}
+  }
+}
+
+#---------------------------------------------------------------------------
+# Test for a memory leak
+#
+do_execsql_test 10.1 {
+  DROP TABLE t10;
+  CREATE VIRTUAL TABLE t10 USING fts5(idx, value, detail=%DETAIL%);
+  INSERT INTO t10 values (1, 'one'),(2, 'two'),(3, 'three');
+  SELECT t10.rowid, t10.*
+    FROM t10
+    JOIN (SELECT 1 AS idx UNION SELECT 2 UNION SELECT 3) AS x
+   WHERE t10 MATCH x.idx
+     AND matchinfo(t10) not null
+   GROUP BY t10.rowid
+   ORDER BY 1;
+} {1 1 one 2 2 two 3 3 three}
+  
+#---------------------------------------------------------------------------
+# Test the 'y' matchinfo flag
+#
+reset_db
+sqlite3_fts5_register_matchinfo db
+do_execsql_test 11.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO tt VALUES('c d a c d d', 'e a g b d a');   -- 1
+  INSERT INTO tt VALUES('c c g a e b', 'c g d g e c');   -- 2
+  INSERT INTO tt VALUES('b e f d e g', 'b a c b c g');   -- 3
+  INSERT INTO tt VALUES('a c f f g d', 'd b f d e g');   -- 4
+  INSERT INTO tt VALUES('g a c f c f', 'd g g b c c');   -- 5
+  INSERT INTO tt VALUES('g a c e b b', 'd b f b g g');   -- 6
+  INSERT INTO tt VALUES('f d a a f c', 'e e a d c f');   -- 7
+  INSERT INTO tt VALUES('a c b b g f', 'a b a e d f');   -- 8
+  INSERT INTO tt VALUES('b a f e c c', 'f d b b a b');   -- 9
+  INSERT INTO tt VALUES('f d c e a c', 'f a f a a f');   -- 10
+}
+
+db func mit mit
+foreach {tn expr res} {
+  1 "a" {
+      1 {1 2}   2 {1 0}   3 {0 1}   4 {1 0}   5 {1 0}
+      6 {1 0}   7 {2 1}   8 {1 2}   9 {1 1}  10 {1 3}
+  }
+
+  2 "b" {
+      1 {0 1}   2 {1 0}   3 {1 2}   4 {0 1}   5 {0 1}
+      6 {2 2}             8 {2 1}   9 {1 3}            
+  }
+
+  3 "y:a" {
+      1 {0 2}             3 {0 1}                    
+                7 {0 1}   8 {0 2}   9 {0 1}  10 {0 3}
+  }
+
+  4 "x:a" {
+      1 {1 0}   2 {1 0}             4 {1 0}   5 {1 0}
+      6 {1 0}   7 {2 0}   8 {1 0}   9 {1 0}  10 {1 0}
+  }
+
+  5 "a OR b" {
+      1 {1 2 0 1}   2 {1 0 1 0}   3 {0 1 1 2}   4 {1 0 0 1}   5 {1 0 0 1}
+      6 {1 0 2 2}   7 {2 1 0 0}   8 {1 2 2 1}   9 {1 1 1 3}  10 {1 3 0 0}
+  }
+
+  6 "a AND b" {
+      1 {1 2 0 1}   2 {1 0 1 0}   3 {0 1 1 2}   4 {1 0 0 1}   5 {1 0 0 1}
+      6 {1 0 2 2}                 8 {1 2 2 1}   9 {1 1 1 3}              
+  }
+
+  7 "a OR (a AND b)" {
+      1 {1 2 1 2 0 1}   2 {1 0 1 0 1 0}   3 {0 1 0 1 1 2}   4 {1 0 1 0 0 1}   
+      5 {1 0 1 0 0 1}   6 {1 0 1 0 2 2}   7 {2 1 0 0 0 0}   8 {1 2 1 2 2 1}   
+      9 {1 1 1 1 1 3}  10 {1 3 0 0 0 0}
+  }
+
+} {
+
+  if {[string match *:* $expr] && [detail_is_none]} continue
+  do_execsql_test 11.1.$tn.1  {
+    SELECT rowid, mit(matchinfo(tt, 'y')) FROM tt WHERE tt MATCH $expr
+  } $res
+
+  set r2 [list]
+  foreach {rowid L} $res {
+    lappend r2 $rowid
+    set M [list]
+    foreach {a b} $L {
+      lappend M [expr ($a ? 1 : 0) + ($b ? 2 : 0)]
+    }
+    lappend r2 $M
+  }
+
+  do_execsql_test 11.1.$tn.2  {
+    SELECT rowid, mit(matchinfo(tt, 'b')) FROM tt WHERE tt MATCH $expr
+  } $r2
+
+  do_execsql_test 11.1.$tn.2  {
+    SELECT rowid, mit(matchinfo(tt, 'b')) FROM tt WHERE tt MATCH $expr
+  } $r2
+}
+
+#---------------------------------------------------------------------------
+# Test the 'b' matchinfo flag
+#
+reset_db
+sqlite3_fts5_register_matchinfo db
+db func mit mit
+
+do_test 12.0 {
+  set cols [list]
+  for {set i 0} {$i < 50} {incr i} { lappend cols "c$i" }
+  execsql "CREATE VIRTUAL TABLE tt USING fts5([join $cols ,], detail=%DETAIL%)"
+} {}
+
+do_execsql_test 12.1 {
+  INSERT INTO tt (rowid, c4, c45) VALUES(1, 'abc', 'abc');
+  SELECT mit(matchinfo(tt, 'b')) FROM tt WHERE tt MATCH 'abc';
+} [list [list [expr 1<<4] [expr 1<<(45-32)]]]
+
+} ;# foreach_detail_mode
+
+#-------------------------------------------------------------------------
+# Test that a bad fts5() return is detected
+#
+reset_db
+proc xyz {} {}
+db func fts5 -argcount 1 xyz
+do_test 13.1 {
+  list [catch { sqlite3_fts5_register_matchinfo db } msg] $msg
+} {1 SQLITE_ERROR}
+
+#-------------------------------------------------------------------------
+# Test that an invalid matchinfo() flag is detected
+#
+reset_db
+sqlite3_fts5_register_matchinfo db
+do_execsql_test 14.1 {
+  CREATE VIRTUAL TABLE x1 USING fts5(z);
+  INSERT INTO x1 VALUES('a b c a b c a b c');
+} {}
+
+do_catchsql_test 14.2 {
+  SELECT matchinfo(x1, 'd') FROM x1('a b c');
+} {1 {unrecognized matchinfo flag: d}}
+
+#-------------------------------------------------------------------------
+# Test using matchinfo() and similar on a non-full-text query
+#
+do_execsql_test 15.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y);
+  INSERT INTO t1 VALUES('a', 'b');
+  INSERT INTO t1 VALUES('c', 'd');
+}
+
+if {$tcl_platform(byteOrder)=="littleEndian"} {
+  set res {X'02000000'}
+} else {
+  set res {X'00000002'}
+}
+do_execsql_test 15.1 {
+  SELECT quote(matchinfo(t1, 'n')) FROM t1 LIMIT 1;
+} $res
+do_execsql_test 15.2 {
+  DELETE FROM t1_content WHERE rowid=1;
+  SELECT quote(matchinfo(t1, 'n')) FROM t1 LIMIT 1;
+} $res
+
+fts5_aux_test_functions db
+do_execsql_test 15.3 {
+  SELECT fts5_test_all(t1) FROM t1 LIMIT 1;
+} {
+  {columnsize {0 0} columntext {c d} columntotalsize {2 2} poslist {} tokenize {c d} rowcount 2}
+}
+
+finish_test

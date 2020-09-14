@@ -1,0 +1,318 @@
+# 2010 July 09
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the SELECT statement.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix stat
+
+ifcapable !vtab||!compound {
+  finish_test
+  return
+}
+
+# This module uses hard-coded results that depend on exact measurements of
+# pages sizes at the byte level, and hence will not work if the reserved_bytes
+# value is nonzero.
+if {[nonzero_reserved_bytes]} {finish_test; return;}
+
+set ::asc 1
+proc a_string {n} { string range [string repeat [incr ::asc]. $n] 1 $n }
+db func a_string a_string
+
+register_dbstat_vtab db
+do_execsql_test stat-0.0 {
+  PRAGMA table_info(dbstat);
+} {/0 name TEXT .* 1 path TEXT .* 9 pgsize INTEGER/}
+
+# Attempts to drop an eponymous virtual table are a no-op.
+do_execsql_test stat-0.1 {
+  DROP TABLE dbstat;
+  PRAGMA table_info=dbstat;
+} {/0 name TEXT .* 1 path TEXT .* 9 pgsize INTEGER/}
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+db func a_string a_string
+register_dbstat_vtab db
+do_execsql_test stat-0.2 {
+  PRAGMA auto_vacuum = OFF;
+  CREATE VIRTUAL TABLE temp.stat USING dbstat;
+  SELECT * FROM stat;
+} {}
+
+
+if {[wal_is_capable]} {
+  do_execsql_test stat-0.1 {
+    PRAGMA journal_mode = WAL;
+    PRAGMA journal_mode = delete;
+    SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+      FROM stat;
+  } {wal delete sqlite_schema / 1 leaf 0 0 916 0}
+}
+
+do_test stat-1.0 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(b);
+    INSERT INTO t1(rowid, a, b) VALUES(2, 2, 3);
+    INSERT INTO t1(rowid, a, b) VALUES(3, 4, 5);
+  }
+} {}
+do_test stat-1.1 {
+  execsql {
+    SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+      FROM stat WHERE name = 't1';
+  }
+} {t1 / 2 leaf 2 10 998 5}
+do_test stat-1.2 {
+  execsql {
+    SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+      FROM stat WHERE name = 'i1';
+  }
+} {i1 / 3 leaf 2 10 1000 5}
+do_test stat-1.3 {
+  execsql {
+    SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+      FROM stat WHERE name = 'sqlite_schema';
+  }
+} {sqlite_schema / 1 leaf 2 77 831 40}
+do_test stat-1.4 {
+  execsql {
+    DROP TABLE t1;
+  }
+} {}
+
+do_execsql_test stat-2.1 {
+  CREATE TABLE t3(a PRIMARY KEY, b);
+  INSERT INTO t3(rowid, a, b) VALUES(2, a_string(111), a_string(222));
+  INSERT INTO t3 SELECT a_string(110+rowid), a_string(221+rowid) FROM t3
+   ORDER BY rowid;
+  INSERT INTO t3 SELECT a_string(110+rowid), a_string(221+rowid) FROM t3
+   ORDER BY rowid;
+  INSERT INTO t3 SELECT a_string(110+rowid), a_string(221+rowid) FROM t3
+   ORDER BY rowid;
+  INSERT INTO t3 SELECT a_string(110+rowid), a_string(221+rowid) FROM t3
+   ORDER BY rowid;
+  INSERT INTO t3 SELECT a_string(110+rowid), a_string(221+rowid) FROM t3
+   ORDER BY rowid;
+  SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+    FROM stat WHERE name != 'sqlite_schema' ORDER BY name;
+} [list \
+  sqlite_autoindex_t3_1 / 3 internal 3 368 623 125       \
+  sqlite_autoindex_t3_1 /000/ 8 leaf 8 946 46 123        \
+  sqlite_autoindex_t3_1 /001/ 9 leaf 8 988 2 131         \
+  sqlite_autoindex_t3_1 /002/ 15 leaf 7 857 137 132      \
+  sqlite_autoindex_t3_1 /003/ 20 leaf 6 739 257 129      \
+  t3 / 2 internal 15 0 907 0                             \
+  t3 /000/ 4 leaf 2 678 328 340                          \
+  t3 /001/ 5 leaf 2 682 324 342                          \
+  t3 /002/ 6 leaf 2 682 324 342                          \
+  t3 /003/ 7 leaf 2 690 316 346                          \
+  t3 /004/ 10 leaf 2 682 324 342                         \
+  t3 /005/ 11 leaf 2 690 316 346                         \
+  t3 /006/ 12 leaf 2 698 308 350                         \
+  t3 /007/ 13 leaf 2 706 300 354                         \
+  t3 /008/ 14 leaf 2 682 324 342                         \
+  t3 /009/ 16 leaf 2 690 316 346                         \
+  t3 /00a/ 17 leaf 2 698 308 350                         \
+  t3 /00b/ 18 leaf 2 706 300 354                         \
+  t3 /00c/ 19 leaf 2 714 292 358                         \
+  t3 /00d/ 21 leaf 2 722 284 362                         \
+  t3 /00e/ 22 leaf 2 730 276 366                         \
+  t3 /00f/ 23 leaf 2 738 268 370                         \
+]
+
+do_execsql_test stat-2.1agg {
+  SELECT * FROM dbstat WHERE aggregate=TRUE ORDER BY name;
+} [list \
+  sqlite_autoindex_t3_1 {}  5 {} 32  3898 1065 132 {}  5120 \
+  sqlite_schema         {}  1 {}  2    84  824  49 {}  1024 \
+  t3                    {} 17 {} 47 11188 5815 370 {} 17408 \
+]
+
+# With every index entry overflowing, make sure no pages are missed 
+# (other than the locking page which is 64 in this test build.)
+#
+do_execsql_test stat-2.2 {
+  UPDATE t3 SET a=a||hex(randomblob(700));
+  VACUUM;
+  SELECT pageno FROM stat EXCEPT SELECT pageno-1 FROM stat;
+} {64 136}
+
+do_execsql_test stat-2.3 { DROP TABLE t3; VACUUM; } {}
+
+do_execsql_test stat-3.1 {
+  CREATE TABLE t4(x);
+  CREATE INDEX i4 ON t4(x);
+  INSERT INTO t4(rowid, x) VALUES(2, a_string(7777));
+  SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+    FROM stat WHERE name != 'sqlite_schema' ORDER BY name;
+} [list \
+  i4 / 3 leaf 1 103 905 7782                 \
+  i4 /000+000000 4 overflow 0 1020 0 0       \
+  i4 /000+000001 5 overflow 0 1020 0 0      \
+  i4 /000+000002 6 overflow 0 1020 0 0      \
+  i4 /000+000003 7 overflow 0 1020 0 0      \
+  i4 /000+000004 8 overflow 0 1020 0 0      \
+  i4 /000+000005 9 overflow 0 1020 0 0      \
+  i4 /000+000006 10 overflow 0 1020 0 0      \
+  i4 /000+000007 11 overflow 0 539 481 0     \
+  t4 / 2 leaf 1 640 367 7780                 \
+  t4 /000+000000 12 overflow 0 1020 0 0      \
+  t4 /000+000001 13 overflow 0 1020 0 0      \
+  t4 /000+000002 14 overflow 0 1020 0 0      \
+  t4 /000+000003 15 overflow 0 1020 0 0      \
+  t4 /000+000004 16 overflow 0 1020 0 0      \
+  t4 /000+000005 17 overflow 0 1020 0 0      \
+  t4 /000+000006 18 overflow 0 1020 0 0      \
+]
+
+do_execsql_test stat-3.2 {
+  SELECT *, '|' FROM dbstat WHERE aggregate=TRUE ORDER BY name;
+} [list \
+  i4            {} 9 {} 1 7782 1386 7782 {} 9216 | \
+  sqlite_schema {} 1 {} 2   74  834   40 {} 1024 | \
+  t4            {} 8 {} 1 7780  367 7780 {} 8192 | \
+]
+
+
+do_execsql_test stat-4.1 {
+  CREATE TABLE t5(x);
+  CREATE INDEX i5 ON t5(x);
+  SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+    FROM stat WHERE name = 't5' OR name = 'i5';
+} [list  \
+  i5 / 20 leaf 0 0 1016 0 \
+  t5 / 19 leaf 0 0 1016 0 \
+]
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+register_dbstat_vtab db
+do_execsql_test stat-5.1 {
+  PRAGMA auto_vacuum = OFF;
+  CREATE TABLE tx(y);
+  ATTACH ':memory:' AS aux1;
+  CREATE VIRTUAL TABLE temp.stat USING dbstat(aux1);
+  CREATE TABLE aux1.t1(x);
+  INSERT INTO t1 VALUES(zeroblob(1513));
+  INSERT INTO t1 VALUES(zeroblob(1514));
+  SELECT name, path, pageno, pagetype, ncell, payload, unused, mx_payload
+    FROM stat WHERE name = 't1';
+} [list \
+  t1 / 2 leaf 2 993 5 1517                \
+  t1 /000+000000 3 overflow 0 1020 0 0    \
+  t1 /001+000000 4 overflow 0 1020 0 0    \
+]
+
+do_execsql_test stat-5.20 {
+  SELECT name, quote(path), pageno, quote(pagetype), ncell, payload,
+         unused, mx_payload, '|' FROM dbstat('main',1);
+} {sqlite_schema NULL 1 NULL 1 34 878 34 | tx NULL 1 NULL 0 0 1016 0 |}
+do_execsql_test stat-5.21 {
+  SELECT name, quote(path), pageno, quote(pagetype), ncell, payload,
+         unused, mx_payload, '|' FROM dbstat('aux1',1);
+} {sqlite_schema NULL 1 NULL 1 34 878 34 | t1 NULL 3 NULL 2 3033 5 1517 |}
+
+
+do_catchsql_test stat-6.1 {
+  CREATE VIRTUAL TABLE temp.s2 USING dbstat(mainx);
+} {1 {no such database: mainx}}
+
+#-------------------------------------------------------------------------
+# Test that the argument passed to the dbstat constructor is dequoted
+# before it is matched against the names of attached databases.
+#
+forcedelete test.db2
+do_execsql_test 7.1 {
+  ATTACH 'test.db2' AS '123';
+  PRAGMA "123".auto_vacuum = OFF;
+  CREATE TABLE "123".x1(a, b);
+  INSERT INTO x1 VALUES(1, 2);
+}
+
+do_execsql_test 7.1.1 {
+  SELECT * FROM dbstat('123');
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+do_execsql_test 7.1.2 {
+  SELECT * FROM dbstat(123);
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+do_execsql_test 7.1.3 {
+  CREATE VIRTUAL TABLE x2 USING dbstat('123');
+  SELECT * FROM x2;
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+do_execsql_test 7.1.4 {
+  CREATE VIRTUAL TABLE x3 USING dbstat(123);
+  SELECT * FROM x3;
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+
+do_execsql_test 7.2 {
+  DETACH 123;
+  DROP TABLE x2;
+  DROP TABLE x3;
+  ATTACH 'test.db2' AS '123corp';
+}
+do_execsql_test 7.2.1 {
+  SELECT * FROM dbstat('123corp');
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+do_catchsql_test 7.2.2 {
+  SELECT * FROM dbstat(123corp);
+} {1 {unrecognized token: "123corp"}}
+do_execsql_test 7.2.3 {
+  CREATE VIRTUAL TABLE x2 USING dbstat('123corp');
+  SELECT * FROM x2;
+} {
+  sqlite_schema / 1 leaf 1 37 875 37 0 1024 
+  x1 / 2 leaf 1 4 1008 4 1024 1024
+}
+do_catchsql_test 7.2.4 {
+  CREATE VIRTUAL TABLE x3 USING dbstat(123corp);
+  SELECT * FROM x3;
+} {1 {unrecognized token: "123corp"}}
+
+
+do_execsql_test 8.1 {
+  CREATE VIRTUAL TABLE st4 USING dbstat;
+}
+do_execsql_test 8.2 {
+  SELECT * FROM st4 WHERE st4.aggregate = NULL;
+}
+do_execsql_test 8.3 {
+  SELECT aggregate=1 FROM st4 WHERE aggregate = 5
+}
+do_execsql_test 8.4 {
+  SELECT * FROM st4 WHERE name = NULL;
+} {}
+do_execsql_test 8.5 {
+  SELECT * FROM st4 WHERE schema = NULL;
+} {}
+
+finish_test

@@ -1,0 +1,90 @@
+# 2011 July 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite sessions extension.
+# Specifically, it tests that sessions work when the database is modified
+# using incremental blob handles.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session6
+
+proc do_then_apply_tcl {tcl {dbname main}} {
+  proc xConflict args { return "OMIT" }
+  set rc [catch {
+    sqlite3session S db $dbname
+    db eval "SELECT name FROM $dbname.sqlite_master WHERE type = 'table'" {
+      S attach $name
+    }
+    eval $tcl
+    sqlite3changeset_apply db2 [S changeset] xConflict
+  } msg]
+
+  catch { S delete }
+  if {$rc} {error $msg}
+}
+
+test_sqlite3_log x
+proc x {args} {puts $args}
+
+forcedelete test.db2
+sqlite3 db2 test.db2
+
+do_common_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(c PRIMARY KEY, d);
+}
+
+# Test a blob update.
+#
+do_test 1.1 {
+  do_then_apply_tcl {
+    db eval { INSERT INTO t1 VALUES(1, 'helloworld') }
+    db eval { INSERT INTO t2 VALUES(2, 'onetwothree') }
+  }
+  compare_db db db2
+} {}
+do_test 1.2 {
+  do_then_apply_tcl {
+    set fd [db incrblob t1 b 1]
+    puts -nonewline $fd 1234567890
+    close $fd
+  }
+  compare_db db db2
+} {}
+
+# Test an attached database.
+#
+do_test 2.1 {
+  forcedelete test.db3
+  file copy test.db2 test.db3
+  execsql { ATTACH 'test.db3' AS aux; }
+
+  do_then_apply_tcl {
+    set fd [db incrblob aux t2 d 1]
+    puts -nonewline $fd fourfivesix
+    close $fd
+  } aux
+
+  sqlite3 db3 test.db3
+  compare_db db2 db3
+} {}
+
+
+db3 close
+db2 close
+
+finish_test

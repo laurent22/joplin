@@ -1,0 +1,501 @@
+# 2013-07-31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for partial indices
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+load_static_extension db wholenumber;
+do_test index6-1.1 {
+  # Able to parse and manage partial indices
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    CREATE INDEX t1a ON t1(a) WHERE a IS NOT NULL;
+    CREATE INDEX t1b ON t1(b) WHERE b>10;
+    CREATE VIRTUAL TABLE nums USING wholenumber;
+    INSERT INTO t1(a,b,c)
+       SELECT CASE WHEN value%3!=0 THEN value END, value, value
+         FROM nums WHERE value<=20;
+    SELECT count(a), count(b) FROM t1;
+    PRAGMA integrity_check;
+  }
+} {14 20 ok}
+
+# Make sure the count(*) optimization works correctly with
+# partial indices.  Ticket [a5c8ed66cae16243be6] 2013-10-03.
+#
+do_execsql_test index6-1.1.1 {
+  SELECT count(*) FROM t1;
+} {20}
+
+# Error conditions during parsing...
+#
+do_test index6-1.2 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE x IS NOT NULL;
+  }
+} {1 {no such column: x}}
+do_test index6-1.3 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE EXISTS(SELECT * FROM t1);
+  }
+} {1 {subqueries prohibited in partial index WHERE clauses}}
+do_test index6-1.4 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a!=?1;
+  }
+} {1 {parameters prohibited in partial index WHERE clauses}}
+do_test index6-1.5 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a!=random();
+  }
+} {1 {non-deterministic functions prohibited in partial index WHERE clauses}}
+do_test index6-1.6 {
+  catchsql {
+    CREATE INDEX bad1 ON t1(a,b) WHERE a NOT LIKE 'abc%';
+  }
+} {0 {}}
+do_execsql_test index6-1.7 {
+  DROP INDEX IF EXISTS bad1;
+}
+
+do_test index6-1.10 {
+  execsql {
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 20 t1a {14 1} t1b {10 1} ok}
+
+# STAT1 shows the partial indices have a reduced number of
+# rows.
+#
+do_test index6-1.11 {
+  execsql {
+    UPDATE t1 SET a=b;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 20 t1a {20 1} t1b {10 1} ok}
+
+do_test index6-1.11 {
+  execsql {
+    UPDATE t1 SET a=NULL WHERE b%3!=0;
+    UPDATE t1 SET b=b+100;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 20 t1a {6 1} t1b {20 1} ok}
+
+do_test index6-1.12 {
+  execsql {
+    UPDATE t1 SET a=CASE WHEN b%3!=0 THEN b END;
+    UPDATE t1 SET b=b-100;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 20 t1a {13 1} t1b {10 1} ok}
+
+do_test index6-1.13 {
+  execsql {
+    DELETE FROM t1 WHERE b BETWEEN 8 AND 12;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 15 t1a {10 1} t1b {8 1} ok}
+
+do_test index6-1.14 {
+  execsql {
+    REINDEX;
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {{} 15 t1a {10 1} t1b {8 1} ok}
+
+do_test index6-1.15 {
+  execsql {
+    CREATE INDEX t1c ON t1(c);
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+    PRAGMA integrity_check;
+  }
+} {t1a {10 1} t1b {8 1} t1c {15 1} ok}
+
+# Queries use partial indices as appropriate times.
+#
+do_test index6-2.1 {
+  execsql {
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2(a,b) SELECT value, value FROM nums WHERE value<1000;
+    UPDATE t2 SET a=NULL WHERE b%2==0;
+    CREATE INDEX t2a1 ON t2(a) WHERE a IS NOT NULL;
+    SELECT count(*) FROM t2 WHERE a IS NOT NULL;
+  }
+} {500}
+do_test index6-2.2 {
+  execsql {
+    EXPLAIN QUERY PLAN
+    SELECT * FROM t2 WHERE a=5;
+  }
+} {/.* TABLE t2 USING INDEX t2a1 .*/}
+ifcapable stat4 {
+  execsql ANALYZE
+  do_test index6-2.3stat4 {
+    execsql {
+      EXPLAIN QUERY PLAN
+      SELECT * FROM t2 WHERE a IS NOT NULL;
+    }
+  } {/.* TABLE t2 USING INDEX t2a1 .*/}
+} else {
+  do_test index6-2.3stat4 {
+    execsql {
+      EXPLAIN QUERY PLAN
+      SELECT * FROM t2 WHERE a IS NOT NULL AND a>0;
+    }
+  } {/.* TABLE t2 USING INDEX t2a1 .*/}
+}
+do_test index6-2.4 {
+  execsql {
+    EXPLAIN QUERY PLAN
+    SELECT * FROM t2 WHERE a IS NULL;
+  }
+} {~/.*INDEX t2a1.*/}
+
+do_execsql_test index6-2.101 {
+  DROP INDEX t2a1;
+  UPDATE t2 SET a=b, b=b+10000;
+  SELECT b FROM t2 WHERE a=15;
+} {10015}
+do_execsql_test index6-2.102 {
+  CREATE INDEX t2a2 ON t2(a) WHERE a<100 OR a>200;
+  SELECT b FROM t2 WHERE a=15;
+  PRAGMA integrity_check;
+} {10015 ok}
+do_execsql_test index6-2.102eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=15;
+} {~/.*INDEX t2a2.*/}
+do_execsql_test index6-2.103 {
+  SELECT b FROM t2 WHERE a=15 AND a<100;
+} {10015}
+do_execsql_test index6-2.103eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=15 AND a<100;
+} {/.*INDEX t2a2.*/}
+do_execsql_test index6-2.104 {
+  SELECT b FROM t2 WHERE a=515 AND a>200;
+} {10515}
+do_execsql_test index6-2.104eqp {
+  EXPLAIN QUERY PLAN
+  SELECT b FROM t2 WHERE a=515 AND a>200;
+} {/.*INDEX t2a2.*/}
+
+# Partial UNIQUE indices
+#
+do_execsql_test index6-3.1 {
+  CREATE TABLE t3(a,b);
+  INSERT INTO t3 SELECT value, value FROM nums WHERE value<200;
+  UPDATE t3 SET a=999 WHERE b%5!=0;
+  CREATE UNIQUE INDEX t3a ON t3(a) WHERE a<>999;
+} {}
+do_test index6-3.2 {
+  # unable to insert a duplicate row a-value that is not 999.
+  catchsql {
+    INSERT INTO t3(a,b) VALUES(150, 'test1');
+  }
+} {1 {UNIQUE constraint failed: t3.a}}
+do_test index6-3.3 {
+  # can insert multiple rows with a==999 because such rows are not
+  # part of the unique index.
+  catchsql {
+    INSERT INTO t3(a,b) VALUES(999, 'test1'), (999, 'test2');
+  }
+} {0 {}}
+do_execsql_test index6-3.4 {
+  SELECT count(*) FROM t3 WHERE a=999;
+} {162}
+integrity_check index6-3.5
+
+do_execsql_test index6-4.0 {
+  VACUUM;
+  PRAGMA integrity_check;
+} {ok}
+
+# Silently ignore database name qualifiers in partial indices.
+#
+do_execsql_test index6-5.0 {
+  CREATE INDEX t3b ON t3(b) WHERE xyzzy.t3.b BETWEEN 5 AND 10;
+                               /* ^^^^^-- ignored */
+  ANALYZE;
+  SELECT count(*) FROM t3 WHERE t3.b BETWEEN 5 AND 10;
+  SELECT stat+0 FROM sqlite_stat1 WHERE idx='t3b';
+} {6 6}
+
+# Test case for ticket [2ea3e9fe6379fc3f6ce7e090ce483c1a3a80d6c9] from
+# 2014-04-13: Partial index causes assertion fault on UPDATE OR REPLACE.
+#
+do_execsql_test index6-6.0 {
+  CREATE TABLE t6(a,b);
+  CREATE UNIQUE INDEX t6ab ON t1(a,b);
+  CREATE INDEX t6b ON t6(b) WHERE b=1;
+  INSERT INTO t6(a,b) VALUES(123,456);
+  SELECT * FROM t6;
+} {123 456}
+do_execsql_test index6-6.1 {
+  UPDATE OR REPLACE t6 SET b=789;
+  SELECT * FROM t6;
+} {123 789}
+do_execsql_test index6-6.2 {
+  PRAGMA integrity_check;
+} {ok}
+
+# Test case for ticket [2326c258d02ead33d69faa63de8f4686b9b1b9d9] on
+# 2015-02-24.  Any use of a partial index qualifying constraint inside
+# the ON clause of a LEFT JOIN was causing incorrect results for all
+# versions of SQLite 3.8.0 through 3.8.8.
+#
+do_execsql_test index6-7.0 {
+  CREATE TABLE t7a(x);
+  CREATE TABLE t7b(y);
+  INSERT INTO t7a(x) VALUES(1);
+  CREATE INDEX t7ax ON t7a(x) WHERE x=99;
+  PRAGMA automatic_index=OFF;
+  SELECT * FROM t7a LEFT JOIN t7b ON (x=99) ORDER BY x;
+} {1 {}}
+do_execsql_test index6-7.1 {
+  INSERT INTO t7b(y) VALUES(2);
+  SELECT * FROM t7a JOIN t7b ON (x=99) ORDER BY x;
+} {}
+do_execsql_test index6-7.2 {
+  INSERT INTO t7a(x) VALUES(99);
+  SELECT * FROM t7a LEFT JOIN t7b ON (x=99) ORDER BY x;
+} {1 {} 99 2}
+do_execsql_test index6-7.3 {
+  SELECT * FROM t7a JOIN t7b ON (x=99) ORDER BY x;
+} {99 2}
+do_execsql_test index6-7.4 {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t7a JOIN t7b ON (x=99) ORDER BY x;
+} {/USING COVERING INDEX t7ax/}
+
+
+do_execsql_test index6-8.0 {
+  CREATE TABLE t8a(a,b);
+  CREATE TABLE t8b(x,y);
+  CREATE INDEX i8c ON t8b(y) WHERE x = 'value';
+
+  INSERT INTO t8a VALUES(1, 'one');
+  INSERT INTO t8a VALUES(2, 'two');
+  INSERT INTO t8a VALUES(3, 'three');
+
+  INSERT INTO t8b VALUES('value', 1);
+  INSERT INTO t8b VALUES('dummy', 2);
+  INSERT INTO t8b VALUES('value', 3);
+  INSERT INTO t8b VALUES('dummy', 4);
+} {}
+
+do_eqp_test index6-8.1 {
+  SELECT * FROM t8a LEFT JOIN t8b ON (x = 'value' AND y = a)
+} {
+  QUERY PLAN
+  |--SCAN TABLE t8a
+  `--SEARCH TABLE t8b USING INDEX i8c (y=?)
+}
+
+do_execsql_test index6-8.2 {
+  SELECT * FROM t8a LEFT JOIN t8b ON (x = 'value' AND y = a)
+} {
+  1 one value 1 
+  2 two {} {} 
+  3 three value 3
+}
+
+# 2015-06-11.  Assertion fault found by AFL
+#
+do_execsql_test index6-9.1 {
+  CREATE TABLE t9(a int, b int, c int);
+  CREATE INDEX t9ca ON t9(c,a) WHERE a in (10,12,20);
+  INSERT INTO t9 VALUES(1,1,9),(10,2,35),(11,15,82),(20,19,5),(NULL,7,3);
+  UPDATE t9 SET b=c WHERE a in (10,12,20);
+  SELECT a,b,c,'|' FROM t9 ORDER BY a;
+} {{} 7 3 | 1 1 9 | 10 35 35 | 11 15 82 | 20 5 5 |}
+do_execsql_test index6-9.2 {
+  DROP TABLE t9;
+  CREATE TABLE t9(a int, b int, c int, PRIMARY KEY(a)) WITHOUT ROWID;
+  CREATE INDEX t9ca ON t9(c,a) WHERE a in (10,12,20);
+  INSERT INTO t9 VALUES(1,1,9),(10,2,35),(11,15,82),(20,19,5);
+  UPDATE t9 SET b=c WHERE a in (10,12,20);
+  SELECT a,b,c,'|' FROM t9 ORDER BY a;
+} {1 1 9 | 10 35 35 | 11 15 82 | 20 5 5 |}
+
+# AND-connected terms in the WHERE clause of a partial index
+#
+do_execsql_test index6-10.1 {
+  CREATE TABLE t10(a,b,c,d,e INTEGER PRIMARY KEY);
+  INSERT INTO t10 VALUES
+    (1,2,3,4,5),
+    (2,3,4,5,6),
+    (3,4,5,6,7),
+    (1,2,3,8,9);
+  CREATE INDEX t10x ON t10(d) WHERE a=1 AND b=2 AND c=3;
+  SELECT e FROM t10 WHERE a=1 AND b=2 AND c=3 ORDER BY d;
+} {5 9}
+do_execsql_test index6-10.1eqp {
+  EXPLAIN QUERY PLAN
+  SELECT e FROM t10 WHERE a=1 AND b=2 AND c=3 ORDER BY d;
+} {/USING INDEX t10x/}
+do_execsql_test index6-10.2 {
+  SELECT e FROM t10 WHERE c=3 AND 2=b AND a=1 ORDER BY d DESC;
+} {9 5}
+do_execsql_test index6-10.2eqp {
+  EXPLAIN QUERY PLAN
+  SELECT e FROM t10 WHERE c=3 AND 2=b AND a=1 ORDER BY d DESC;
+} {/USING INDEX t10x/}
+do_execsql_test index6-10.3 {
+  SELECT e FROM t10 WHERE a=1 AND b=2 ORDER BY d DESC;
+} {9 5}
+do_execsql_test index6-10.3eqp {
+  EXPLAIN QUERY PLAN
+  SELECT e FROM t10 WHERE a=1 AND b=2 ORDER BY d DESC;
+} {~/USING INDEX t10x/}
+
+# A partial index will be used for a full table scan, where possible
+do_execsql_test index6-11.1 {
+  CREATE TABLE t11(a,b,c);
+  CREATE INDEX t11x ON t11(a) WHERE b<>99;
+  EXPLAIN QUERY PLAN SELECT a FROM t11 WHERE b<>99;
+} {/USING INDEX t11x/}
+do_execsql_test index6-11.2 {
+  EXPLAIN QUERY PLAN SELECT a FROM t11 WHERE b<>99 AND c<>98;
+} {/USING INDEX t11x/}
+
+# 2018-12-08
+# Ticket https://www.sqlite.org/src/info/1d958d90596593a7
+# NOT IN operator fails when using a partial index.
+#
+do_execsql_test index6-12.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a,b);
+  INSERT INTO t1 VALUES(1,1);
+  INSERT INTO t1 VALUES(2,2);
+  CREATE TABLE t2(x);
+  INSERT INTO t2 VALUES(1);
+  INSERT INTO t2 VALUES(2);
+  SELECT 'one', * FROM t2 WHERE x NOT IN (SELECT a FROM t1);
+  CREATE INDEX t1a ON t1(a) WHERE b=1;
+  SELECT 'two', * FROM t2 WHERE x NOT IN (SELECT a FROM t1);
+} {}
+do_execsql_test index6-12.2 {
+  SELECT x FROM t2 WHERE x IN (SELECT a FROM t1) ORDER BY +x;
+} {1 2}
+
+# 2019-05-04
+# Ticket https://www.sqlite.org/src/tktview/5c6955204c392ae763a95
+# Theorem prover error
+#
+do_execsql_test index6-13.1 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(c0);
+  CREATE INDEX index_0 ON t0(c0) WHERE c0 NOT NULL;
+  INSERT INTO t0(c0) VALUES (NULL);
+  SELECT * FROM t0 WHERE c0 OR 1;
+} {{}}
+
+# 2019-05-11
+# Ticket https://sqlite.org/src/tktview/8025674847
+reset_db
+do_execsql_test index6-14.1 {
+  CREATE TABLE IF NOT EXISTS t0 (c0, c1);
+  CREATE INDEX IF NOT EXISTS i0 ON t0(c0, c1) WHERE c0 NOT NULL;
+  INSERT INTO t0(c0, c1) VALUES(NULL, 'row');
+  SELECT * FROM t0 WHERE t0.c0 IS NOT 1;
+} {{} row}
+
+do_execsql_test index6-14.2 {
+  SELECT * FROM t0 WHERE CASE c0 WHEN 0 THEN 0 ELSE 1 END;
+} {{} row}
+
+# 2019-08-30
+# Ticket https://www.sqlite.org/src/info/a6408d42b9f44462
+# Ticket https://www.sqlite.org/src/info/fba33c8b1df6a915
+# https://sqlite.org/src/info/bac716244fddac1fe841
+#
+do_execsql_test index6-15.1 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0);
+  INSERT INTO t0(c0) VALUES (NULL);
+  CREATE INDEX i0 ON t0(1) WHERE c0 NOT NULL;
+  SELECT 1 FROM t0 WHERE (t0.c0 IS FALSE) IS FALSE;
+} {1}
+do_execsql_test index6-15.2 {
+  SELECT 1 FROM t0 WHERE (t0.c0 IS FALSE) BETWEEN FALSE AND TRUE;
+} {1}
+do_execsql_test index6-15.3 {
+  SELECT 1 FROM t0 WHERE TRUE BETWEEN (t0.c0 IS FALSE) AND TRUE;
+} {1}
+do_execsql_test index6-15.4 {
+  SELECT 1 FROM t0 WHERE FALSE BETWEEN FALSE AND (t0.c0 IS FALSE);
+} {1}
+do_execsql_test index6-15.5 {
+  SELECT 1 FROM t0 WHERE (c0 IS FALSE) IN (FALSE);
+} {1}
+
+# 2019-09-03
+# Ticket https://sqlite.org/src/info/767a8cbc6d20bd68
+do_execsql_test index6-16.1 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0 COLLATE NOCASE, c1);
+  CREATE INDEX i0 ON t0(0) WHERE c0 >= c1;
+  INSERT INTO t0 VALUES('a', 'B');
+  SELECT c1 <= c0, c0 >= c1 FROM t0;
+} {1 0}
+do_execsql_test index6-16.2 {
+  SELECT 2 FROM t0 WHERE c0 >= c1;
+} {}
+do_execsql_test index6-16.3 {
+  SELECT 3 FROM t0 WHERE c1 <= c0;
+} {3}
+
+# 2019-11-02
+# Ticket https://sqlite.org/src/tktview/a9efb42811fa41ee286e8
+db close
+sqlite3 db :memory:
+do_execsql_test index6-17.1 {
+  CREATE TABLE t0(c0);
+  CREATE INDEX i0 ON t0(0) WHERE c0 GLOB c0;
+  INSERT INTO t0 VALUES (0);
+  CREATE UNIQUE INDEX i1 ON t0(0);
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test index6-17.2 {
+  CREATE UNIQUE INDEX i2 ON t0(0);
+  REPLACE INTO t0 VALUES(0);
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test index6-17.3 {
+  SELECT COUNT(*) FROM t0 WHERE t0.c0 GLOB t0.c0;
+} {1}
+
+finish_test

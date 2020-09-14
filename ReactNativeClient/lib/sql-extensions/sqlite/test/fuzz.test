@@ -1,0 +1,379 @@
+# 2007 May 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is generating semi-random strings of SQL
+# (a.k.a. "fuzz") and sending it into the parser to try to 
+# generate errors.
+#
+# The tests in this file are really about testing fuzzily generated
+# SQL parse-trees. The majority of the fuzzily generated SQL is 
+# valid as far as the parser is concerned. 
+#
+# The most complicated trees are for SELECT statements.
+#
+# $Id: fuzz.test,v 1.19 2009/04/28 11:10:39 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set ::REPEATS 5000
+
+# If running quick.test, don't do so many iterations.
+if {[info exists ::G(isquick)]} {
+  if {$::G(isquick)} { set ::REPEATS 20 }
+}
+
+source $testdir/fuzz_common.tcl
+expr srand(0)
+
+#----------------------------------------------------------------
+# These tests caused errors that were first caught by the tests
+# in this file. They are still here.
+do_test fuzz-1.1 {
+  execsql {
+    SELECT 'abc' LIKE X'ABCD';
+  }
+} {0}
+do_test fuzz-1.2 {
+  execsql {
+    SELECT 'abc' LIKE zeroblob(10);
+  }
+} {0}
+do_test fuzz-1.3 {
+  execsql {
+    SELECT zeroblob(10) LIKE 'abc';
+  }
+} {0}
+do_test fuzz-1.4 {
+  execsql {
+    SELECT (- -21) % NOT (456 LIKE zeroblob(10));
+  }
+} {0}
+do_test fuzz-1.5 {
+  execsql {
+    SELECT (SELECT (
+        SELECT (SELECT -2147483648) FROM (SELECT 1) ORDER BY 1
+    ))
+  }
+} {-2147483648}
+do_test fuzz-1.6 {
+  execsql {
+    SELECT 'abc', zeroblob(1) FROM (SELECT 1) ORDER BY 1
+  }
+} [execsql {SELECT 'abc', zeroblob(1)}]
+
+do_test fuzz-1.7 {
+  execsql {
+    SELECT ( SELECT zeroblob(1000) FROM ( 
+      SELECT * FROM (SELECT 'first') ORDER BY NOT 'in') 
+    )
+  }
+} [execsql {SELECT zeroblob(1000)}]
+
+do_test fuzz-1.8 {
+  # Problems with opcode OP_ToText (did not account for MEM_Zero).
+  # Also MemExpandBlob() was marking expanded blobs as nul-terminated.
+  # They are not.
+  execsql {
+    SELECT CAST(zeroblob(1000) AS text);
+  }
+} {{}}
+
+do_test fuzz-1.9 {
+  # This was causing a NULL pointer dereference of Expr.pList.
+  execsql {
+    SELECT 1 FROM (SELECT * FROM sqlite_master WHERE random())
+  }
+} {}
+
+do_test fuzz-1.10 {
+  # Bug in calculation of Parse.ckOffset causing an assert() 
+  # to fail. Probably harmless.
+  execsql {
+    SELECT coalesce(1, substr( 1, 2, length('in' IN (SELECT 1))))
+  }
+} {1}
+
+do_test fuzz-1.11 {
+  # The literals (A, B, C, D) are not important, they are just used
+  # to make the EXPLAIN output easier to read.
+  #
+  # The problem here is that the EXISTS(...) expression leaves an
+  # extra value on the VDBE stack. This is confusing the parent and
+  # leads to an assert() failure when OP_Insert encounters an integer
+  # when it expects a record blob.
+  #
+  # Update: Any query with (LIMIT 0) was leaking stack.
+  #
+  execsql {
+    SELECT 'A' FROM (SELECT 'B') ORDER BY EXISTS (
+      SELECT 'C' FROM (SELECT 'D' LIMIT 0)
+    )
+  }
+} {A}
+
+do_test fuzz-1.12.1 {
+  # Create a table with a single row.
+  execsql {
+    CREATE TABLE abc(b);
+    INSERT INTO abc VALUES('ABCDE');
+  }
+
+  # The following query was crashing. The later subquery (in the FROM)
+  # clause was flattened into the parent, but the code was not repairng
+  # the "b" reference in the other sub-query. When the query was executed,
+  # that "b" refered to a non-existant vdbe table-cursor.
+  #
+  execsql {
+    SELECT 1 IN ( SELECT b UNION SELECT 1 ) FROM (SELECT b FROM abc);
+  }
+} {1}
+do_test fuzz-1.12.2 {
+  # Clean up after the previous query.
+  execsql {
+    DROP TABLE abc;
+  }
+} {}
+
+
+do_test fuzz-1.13 {
+  # The problem here was that when there were more expressions in
+  # the ORDER BY list than the result-set list. The temporary b-tree
+  # used for sorting was being misconfigured in this case.
+  #
+  execsql {
+    SELECT 'abcd' UNION SELECT 'efgh' ORDER BY 1 ASC, 1 ASC;
+  }
+} {abcd efgh}
+
+do_test fuzz-1.14.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(123, 456, 789);
+  }
+ 
+  # The [a] reference in the sub-select was causing a problem. Because
+  # the internal walkSelectExpr() function was not considering compound
+  # SELECT operators.
+  execsql {
+    SELECT 1 FROM abc
+    GROUP BY c HAVING EXISTS (SELECT a UNION SELECT 123);
+  }
+} {1}
+do_test fuzz-1.14.2 {
+  execsql {
+    DROP TABLE abc;
+  }
+} {}
+
+# Making sure previously discovered errors have been fixed.
+#
+do_test fuzz-1.15 {
+  execsql {
+    SELECT hex(CAST(zeroblob(1000) AS integer))
+  }
+} {30}
+
+do_test fuzz-1.16.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE def(a, b, c);
+    CREATE TABLE ghi(a, b, c);
+  }
+} {}
+do_test fuzz-1.16.2 {
+  catchsql {
+    SELECT DISTINCT EXISTS(
+       SELECT 1
+       FROM (
+         SELECT C FROM (SELECT 1)
+       )
+       WHERE (SELECT c)
+    )
+    FROM abc
+  }
+} {0 {}}
+do_test fuzz-1.16.3 {
+  catchsql {
+    SELECT DISTINCT substr(-456 ISNULL,zeroblob(1000), EXISTS(
+         SELECT DISTINCT EXISTS(
+           SELECT DISTINCT b FROM abc
+           ORDER BY EXISTS (
+             SELECT DISTINCT 2147483647 UNION ALL SELECT -2147483648
+           ) ASC
+         )
+         FROM (
+           SELECT c, c FROM (
+             SELECT 456, 'injection' ORDER BY 56.1 ASC, -56.1 DESC
+           )
+         )
+         GROUP BY (SELECT ALL (SELECT DISTINCT 'hardware')) 
+         HAVING (
+           SELECT DISTINCT c
+           FROM (
+             SELECT ALL -2147483648, 'experiments'
+             ORDER BY -56.1 ASC, -56.1 DESC
+           )
+           GROUP BY (SELECT DISTINCT 456) IN 
+                   (SELECT DISTINCT 'injection') NOT IN (SELECT ALL -456)
+           HAVING EXISTS (
+             SELECT ALL 'injection'
+           )
+         )
+         UNION ALL
+         SELECT a IN (
+           SELECT -2147483647
+           UNION ALL
+           SELECT ALL 'injection'
+         )
+         FROM sqlite_master
+       ) -- end EXISTS
+    ) /* end SUBSTR() */, c NOTNULL ISNULL
+    FROM abc
+    ORDER BY CAST(-56.1 AS blob) ASC
+  }
+} {0 {}}
+do_test fuzz-1.16.4 {
+  execsql {
+    DROP TABLE abc; DROP TABLE def; DROP TABLE ghi;
+  }
+} {}
+
+do_test fuzz-1.17 {
+  catchsql {
+    SELECT 'hardware', 56.1 NOTNULL, random()&0
+    FROM (
+       SELECT ALL lower(~ EXISTS (
+           SELECT 1 NOT IN (SELECT ALL 1)
+       )), CAST(456 AS integer), -2147483647
+       FROM (
+         SELECT DISTINCT -456, CAST(1 AS integer) ISNULL
+         FROM (SELECT ALL 2147483647, typeof(2147483649))
+       )
+    )
+    GROUP BY CAST(CAST('experiments' AS blob) AS blob)
+    HAVING random()
+  }
+} {0 {hardware 1 0}}
+
+do_test fuzz-1.18 {
+  catchsql {
+     SELECT -2147483649 << upper('fault' NOT IN (
+        SELECT ALL (
+           SELECT ALL -1
+           ORDER BY -2147483649
+           LIMIT (
+              SELECT ALL (
+                 SELECT 0 EXCEPT SELECT DISTINCT 'experiments' ORDER BY 1 ASC
+              )
+           )
+           OFFSET EXISTS (
+              SELECT ALL 
+                  (SELECT ALL -2147483648) NOT IN (
+                     SELECT ALL 123456789.1234567899
+                  ) IN (SELECT 2147483649) 
+              FROM sqlite_master
+           ) NOT IN (SELECT ALL 'The')
+        )
+     ))
+  }
+} {0 {{}}}
+
+# At one point the following INSERT statement caused an assert() to fail.
+# 
+do_test fuzz-1.19 {
+  execsql { CREATE TABLE t1(a) }
+  catchsql {
+    INSERT INTO t1 VALUES( 
+      CASE WHEN NULL THEN NULL ELSE ( SELECT 0 ORDER BY 456 ) END 
+    )
+  }
+} {1 {1st ORDER BY term out of range - should be between 1 and 1}}
+do_test fuzz-1.20 {
+  execsql { DROP TABLE t1 }
+} {}
+
+#----------------------------------------------------------------
+# Test some fuzzily generated expressions.
+#
+do_fuzzy_test fuzz-2 -template  { SELECT [Expr] }
+
+do_test fuzz-3.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE def(a, b, c);
+    CREATE TABLE ghi(a, b, c);
+  }
+} {}
+set ::TableList  [list abc def ghi]
+
+#----------------------------------------------------------------
+# Test some fuzzily generated SELECT statements.
+#
+do_fuzzy_test fuzz-3.2 -template  {[Select]}
+
+#----------------------------------------------------------------
+# Insert a small amount of data into the database and then run 
+# some more generated SELECT statements.
+#
+do_test fuzz-4.1 {
+  execsql {
+    INSERT INTO abc VALUES(1, 2, 3);
+    INSERT INTO abc VALUES(4, 5, 6);
+    INSERT INTO abc VALUES(7, 8, 9);
+    INSERT INTO def VALUES(1, 2, 3);
+    INSERT INTO def VALUES(4, 5, 6);
+    INSERT INTO def VALUES(7, 8, 9);
+    INSERT INTO ghi VALUES(1, 2, 3);
+    INSERT INTO ghi VALUES(4, 5, 6);
+    INSERT INTO ghi VALUES(7, 8, 9);
+    CREATE INDEX abc_i ON abc(a, b, c);
+    CREATE INDEX def_i ON def(c, a, b);
+    CREATE INDEX ghi_i ON ghi(b, c, a);
+  }
+} {}
+do_fuzzy_test fuzz-4.2 -template {[Select]}
+
+#----------------------------------------------------------------
+# Test some fuzzy INSERT statements:
+#
+do_test         fuzz-5.1 {execsql BEGIN} {}
+do_fuzzy_test   fuzz-5.2 -template  {[Insert]} -errorlist table
+integrity_check fuzz-5.2.integrity
+do_test         fuzz-5.3 {execsql COMMIT} {}
+integrity_check fuzz-5.4.integrity
+
+#----------------------------------------------------------------
+# Now that there is data in the database, run some more SELECT 
+# statements
+#
+set ::ColumnList [list a b c]
+set E {{no such col} {ambiguous column name}}
+do_fuzzy_test fuzz-6.1 -template {[Select]} -errorlist $E
+
+#----------------------------------------------------------------
+# Run some SELECTs, INSERTs, UPDATEs and DELETEs in a transaction.
+#
+set E {{no such col} {ambiguous column name} {table}}
+do_test         fuzz-7.1 {execsql BEGIN} {}
+do_fuzzy_test   fuzz-7.2 -template {[Statement]} -errorlist $E
+integrity_check fuzz-7.3.integrity
+do_test         fuzz-7.4 {execsql COMMIT} {}
+integrity_check fuzz-7.5.integrity
+
+#----------------------------------------------------------------
+# Many CREATE and DROP TABLE statements:
+#
+set E [list table duplicate {no such col} {ambiguous column name} {use DROP}]
+do_fuzzy_test fuzz-8.1 -template {[CreateOrDropTableOrView]} -errorlist $E
+
+close $::log
+finish_test

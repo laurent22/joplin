@@ -1,0 +1,150 @@
+# 2015-03-12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test that deterministic scalar functions passed constant arguments
+# are used with stat4 data.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix analyzeF
+
+ifcapable {!stat4} {
+  finish_test
+  return
+}
+
+proc isqrt {i} { expr { int(sqrt($i)) } }
+db func isqrt isqrt
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x INTEGER, y INTEGER);
+  WITH data(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM data
+  )
+  INSERT INTO t1 SELECT isqrt(i), isqrt(i) FROM data LIMIT 400;
+  CREATE INDEX t1x ON t1(x);
+  CREATE INDEX t1y ON t1(y);
+  ANALYZE;
+}
+
+proc str {a} { return $a }
+db func str str
+
+# Note: tests 7 to 12 might be unstable - as they assume SQLite will
+# prefer the expression to the right of the AND clause. Which of
+# course could change.
+#
+# Note 2: tests 9 and 10 depend on the tcl interface creating functions
+# without the SQLITE_DETERMINISTIC flag set.
+#
+foreach {tn where idx} {
+  1 "x = 4 AND y = 19"     {t1x (x=?)}
+  2 "x = 19 AND y = 4"     {t1y (y=?)}
+  3 "x = '4' AND y = '19'" {t1x (x=?)}
+  4 "x = '19' AND y = '4'" {t1y (y=?)}
+  5 "x = substr('5195', 2, 2) AND y = substr('145', 2, 1)" {t1y (y=?)}
+  6 "x = substr('145', 2, 1) AND y = substr('5195', 2, 2)" {t1x (x=?)}
+
+  7  "x = substr('5195', 2, 2+0) AND y = substr('145', 2, 1+0)" {t1y (y=?)}
+  8  "x = substr('145', 2, 1+0) AND y = substr('5195', 2, 2+0)" {t1y (y=?)}
+
+  9  "x = str('19') AND y = str('4')" {t1y (y=?)}
+  10 "x = str('4') AND y = str('19')" {t1y (y=?)}
+
+  11 "x = nullif('19', 0) AND y = nullif('4', 0)" {t1y (y=?)}
+  12 "x = nullif('4', 0) AND y = nullif('19', 0)" {t1y (y=?)}
+} {
+  set res "SEARCH TABLE t1 USING INDEX $idx"
+  do_eqp_test 1.$tn "SELECT * FROM t1 WHERE $where" $res
+}
+
+# Test that functions that do not exist - "func()" - do not cause an error.
+#
+do_catchsql_test 2.1 {
+  SELECT * FROM t1 WHERE x = substr('145', 2, 1) AND y = func(1, 2, 3)
+} {1 {no such function: func}}
+do_catchsql_test 2.2 {
+  UPDATE t1 SET y=y+1 WHERE x = substr('145', 2, 1) AND y = func(1, 2, 3)
+} {1 {no such function: func}}
+
+
+# Check that functions that accept zero arguments do not cause problems.
+#
+proc ret {x} { return $x }
+
+db func det4 -deterministic [list ret 4]
+db func nondet4 [list ret 4]
+db func det19 -deterministic [list ret 19]
+db func nondet19 [list ret 19]
+
+foreach {tn where idx} {
+  1 "x = det4() AND y = det19()"     {t1x (x=?)}
+  2 "x = det19() AND y = det4()"     {t1y (y=?)}
+
+  3 "x = nondet4() AND y = nondet19()"     {t1y (y=?)}
+  4 "x = nondet19() AND y = nondet4()"     {t1y (y=?)}
+} {
+  set res "SEARCH TABLE t1 USING INDEX $idx"
+  do_eqp_test 3.$tn "SELECT * FROM t1 WHERE $where" $res
+}
+
+
+execsql { DELETE FROM t1 }
+
+proc throw_error {err} { error $err }
+db func error -deterministic throw_error
+do_catchsql_test 4.1 {
+  SELECT * FROM t1 WHERE x = error('error one') AND y = 4;
+} {1 {error one}}
+
+do_catchsql_test 4.2 {
+  SELECT * FROM t1 WHERE x = zeroblob(2200000000) AND y = 4;
+} {1 {string or blob too big}}
+
+sqlite3_limit db SQLITE_LIMIT_LENGTH 1000000
+proc dstr {} { return [string repeat x 1100000] }
+db func dstr -deterministic dstr
+do_catchsql_test 4.3 {
+  SELECT * FROM t1 WHERE x = dstr() AND y = 11;
+} {1 {string or blob too big}}
+
+do_catchsql_test 4.4 {
+  SELECT * FROM t1 WHERE x = test_zeroblob(1100000) AND y = 4;
+} {1 {string or blob too big}}
+
+# 2016-12-08: Constraints of the form "x=? AND x IS NOT NULL" were being
+# mishandled.  The sqlite3Stat4ProbeSetValue() routine was assuming that
+# valueNew() was returning a Mem object that was preset to NULL, which is
+# not the case.  The consequence was the the "x IS NOT NULL" constraint
+# was used to drive the index (via the "x>NULL" pseudo-constraint) rather
+# than the "x=?" constraint.
+#
+do_execsql_test 5.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT, c INT);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<10000)
+    INSERT INTO t1(a, c) SELECT x, x FROM c;
+  UPDATE t1 SET b=printf('x%02x',a/500) WHERE a>4000;
+  UPDATE t1 SET b='xyz' where a>=9998;
+  CREATE INDEX t1b ON t1(b);
+  ANALYZE;
+  SELECT count(*), b FROM t1 GROUP BY 2 ORDER BY 2;
+} {4000 {} 499 x08 500 x09 500 x0a 500 x0b 500 x0c 500 x0d 500 x0e 500 x0f 500 x10 500 x11 500 x12 498 x13 3 xyz}
+do_execsql_test 5.2 {
+  explain query plan
+  SELECT * FROM t1 WHERE b='xyz' AND b IS NOT NULL ORDER BY +a;
+  /*                  v---- Should be "=", not ">"  */
+} {/USING INDEX t1b .b=/}
+do_execsql_test 5.3 {
+  SELECT * FROM t1 WHERE b='xyz' AND b IS NOT NULL ORDER BY +a;
+} {9998 xyz 9998 9999 xyz 9999 10000 xyz 10000}
+
+finish_test

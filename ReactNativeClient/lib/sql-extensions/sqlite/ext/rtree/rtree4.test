@@ -1,0 +1,254 @@
+# 2008 May 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Randomized test cases for the rtree extension.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+set ::NROW 2500
+if {[info exists G(isquick)] && $G(isquick)} {
+  set ::NROW 250
+}
+
+ifcapable !rtree_int_only {
+  # Return a floating point number between -X and X.
+  # 
+  proc rand {X} {
+    return [expr {int((rand()-0.5)*1024.0*$X)/512.0}]
+  }
+  
+  # Return a positive floating point number less than or equal to X
+  #
+  proc randincr {X} {
+    while 1 {
+      set r [expr {int(rand()*$X*32.0)/32.0}]
+      if {$r>0.0} {return $r}
+    }
+  }
+} else {
+  # For rtree_int_only, return an number between -X and X.
+  # 
+  proc rand {X} {
+    return [expr {int((rand()-0.5)*2*$X)}]
+  }
+  
+  # Return a positive integer less than or equal to X
+  #
+  proc randincr {X} {
+    while 1 {
+      set r [expr {int(rand()*$X)+1}]
+      if {$r>0} {return $r}
+    }
+  }
+}
+  
+# Scramble the $inlist into a random order.
+#
+proc scramble {inlist} {
+  set y {}
+  foreach x $inlist {
+    lappend y [list [expr {rand()}] $x]
+  }
+  set y [lsort $y]
+  set outlist {}
+  foreach x $y {
+    lappend outlist [lindex $x 1]
+  }
+  return $outlist
+}
+
+# Always use the same random seed so that the sequence of tests
+# is repeatable.
+#
+expr {srand(1234)}
+
+# Run these tests for all number of dimensions between 1 and 5.
+#
+for {set nDim 1} {$nDim<=5} {incr nDim} {
+
+  # Construct an rtree virtual table and an ordinary btree table
+  # to mirror it.  The ordinary table should be much slower (since
+  # it has to do a full table scan) but should give the exact same
+  # answers.
+  #
+  do_test rtree4-$nDim.1 {
+    set clist {}
+    set cklist {}
+    for {set i 0} {$i<$nDim} {incr i} {
+      lappend clist mn$i mx$i
+      lappend cklist "mn$i<mx$i"
+    }
+    db eval "DROP TABLE IF EXISTS rx"
+    db eval "DROP TABLE IF EXISTS bx"
+    db eval "CREATE VIRTUAL TABLE rx USING rtree(id, [join $clist ,])"
+    db eval "CREATE TABLE bx(id INTEGER PRIMARY KEY,\
+                [join $clist ,], CHECK( [join $cklist { AND }] ))"
+  } {}
+
+  # Do many insertions of small objects.  Do both overlapping and
+  # contained-within queries after each insert to verify that all
+  # is well.
+  #
+  unset -nocomplain where
+  for {set i 1} {$i<$::NROW} {incr i} {
+    # Do a random insert
+    #
+    do_test rtree4-$nDim.2.$i.1 {
+      set vlist {}
+      for {set j 0} {$j<$nDim} {incr j} {
+        set mn [rand 10000]
+        set mx [expr {$mn+[randincr 50]}]
+        lappend vlist $mn $mx
+      }
+      db eval "INSERT INTO rx VALUES(NULL, [join $vlist ,])"
+      db eval "INSERT INTO bx VALUES(NULL, [join $vlist ,])"
+    } {}
+
+    # Do a contained-in query on all dimensions
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mn$j>=$mn mx$j<=$mx
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.2 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do an overlaps query on all dimensions
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mx$j>=$mn mn$j<=$mx
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.3 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do a contained-in query with surplus contraints at the beginning.
+    # This should force a full-table scan on the rtree.
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      lappend where mn$j>-10000 mx$j<10000
+    }
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mn$j>=$mn mx$j<=$mx
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.3 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do an overlaps query with surplus contraints at the beginning.
+    # This should force a full-table scan on the rtree.
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      lappend where mn$j>=-10000 mx$j<=10000
+    }
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mx$j>$mn mn$j<$mx
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.4 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do a contained-in query with surplus contraints at the end
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mn$j>=$mn mx$j<$mx
+    }
+    for {set j [expr {$nDim-1}]} {$j>=0} {incr j -1} {
+      lappend where mn$j>=-10000 mx$j<10000
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.5 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do an overlaps query with surplus contraints at the end
+    #
+    set where {}
+    for {set j [expr {$nDim-1}]} {$j>=0} {incr j -1} {
+      set mn [rand 10000]
+      set mx [expr {$mn+[randincr 500]}]
+      lappend where mx$j>$mn mn$j<=$mx
+    }
+    for {set j 0} {$j<$nDim} {incr j} {
+      lappend where mx$j>-10000 mn$j<=10000
+    }
+    set where "WHERE [join $where { AND }]"
+    do_test rtree4-$nDim.2.$i.6 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do a contained-in query with surplus contraints where the 
+    # constraints appear in a random order.
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn1 [rand 10000]
+      set mn2 [expr {$mn1+[randincr 100]}]
+      set mx1 [expr {$mn2+[randincr 400]}]
+      set mx2 [expr {$mx1+[randincr 100]}]
+      lappend where mn$j>=$mn1 mn$j>$mn2 mx$j<$mx1 mx$j<=$mx2
+    }
+    set where "WHERE [join [scramble $where] { AND }]"
+    do_test rtree4-$nDim.2.$i.7 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+
+    # Do an overlaps query with surplus contraints where the
+    # constraints appear in a random order.
+    #
+    set where {}
+    for {set j 0} {$j<$nDim} {incr j} {
+      set mn1 [rand 10000]
+      set mn2 [expr {$mn1+[randincr 100]}]
+      set mx1 [expr {$mn2+[randincr 400]}]
+      set mx2 [expr {$mx1+[randincr 100]}]
+      lappend where mx$j>=$mn1 mx$j>$mn2 mn$j<$mx1 mn$j<=$mx2
+    }
+    set where "WHERE [join [scramble $where] { AND }]"
+    do_test rtree4-$nDim.2.$i.8 {
+      list $where [db eval "SELECT id FROM rx $where ORDER BY id"]
+    } [list $where [db eval "SELECT id FROM bx $where ORDER BY id"]]
+  }
+
+  do_rtree_integrity_test rtree4-$nDim.3 rx
+}
+
+expand_all_sql db
+finish_test

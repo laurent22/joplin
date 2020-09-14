@@ -1,0 +1,399 @@
+# 2016 April 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. More specifically, it
+# contains tests to ensure that the sqlite3rbu_vacuum() API works as
+# expected.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbuvacuum
+
+foreach step {0 1} {
+
+  set ::testprefix rbuvacuum-step=$step
+  reset_db
+
+  # Simplest possible vacuum.
+  do_execsql_test 1.0 {
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t1 VALUES(7, 8, 9);
+    PRAGMA integrity_check;
+  } {ok}
+  do_rbu_vacuum_test 1.1 $step
+
+  # A vacuum that actually reclaims space.
+  do_execsql_test 1.2.1 {
+    INSERT INTO t1 VALUES(8, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(9, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(10, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(11, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(12, randomblob(900), randomblob(900));
+    PRAGMA page_count;
+  } {12}
+  do_execsql_test 1.2.2 {
+    DELETE FROM t1 WHERE rowid BETWEEN 8 AND 11;
+    PRAGMA page_count;
+  } {12}
+  do_rbu_vacuum_test 1.2.3 $step
+  do_execsql_test 1.2.4 {
+    PRAGMA page_count;
+  } {3}
+  
+  # Add an index to the table.
+  do_execsql_test 1.3.1 {
+    CREATE INDEX t1b ON t1(b);
+    INSERT INTO t1 VALUES(13, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(14, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(15, randomblob(900), randomblob(900));
+    INSERT INTO t1 VALUES(16, randomblob(900), randomblob(900));
+    PRAGMA page_count;
+  } {18}
+  do_execsql_test 1.3.2 {
+    DELETE FROM t1 WHERE rowid BETWEEN 12 AND 15;
+    PRAGMA page_count;
+  } {18}
+  do_rbu_vacuum_test 1.3.3 $step
+  do_execsql_test 1.3.4 {
+    PRAGMA page_count;
+  } {5}
+
+  # WITHOUT ROWID table.
+  do_execsql_test 1.4.1 {
+    CREATE TABLE t2(a, b, c, PRIMARY KEY(a, b)) WITHOUT ROWID;
+
+    INSERT INTO t2 VALUES(randomblob(900), 1, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 2, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 3, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 4, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 6, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 7, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 8, randomblob(900));
+
+    DELETE FROM t2 WHERE b BETWEEN 2 AND 7;
+    PRAGMA page_count;
+  } {20}
+  do_rbu_vacuum_test 1.4.2 $step
+  do_execsql_test 1.4.3 {
+    PRAGMA page_count;
+  } {10}
+  
+  # WITHOUT ROWID table with an index.
+  do_execsql_test 1.4.1 {
+    CREATE INDEX t2c ON t2(c);
+
+    INSERT INTO t2 VALUES(randomblob(900), 9, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 10, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 11, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 12, randomblob(900));
+    INSERT INTO t2 VALUES(randomblob(900), 13, randomblob(900));
+
+    DELETE FROM t2 WHERE b BETWEEN 8 AND 12;
+    PRAGMA page_count;
+  } {35}
+  do_rbu_vacuum_test 1.4.2 $step
+  do_execsql_test 1.4.3 {
+    PRAGMA page_count;
+  } {15}
+  do_execsql_test 1.4.4 {
+    VACUUM;
+    PRAGMA page_count;
+  } {15}
+
+  do_execsql_test 1.5.1 {
+    CREATE TABLE t3(a, b, c);
+    INSERT INTO t3 VALUES('a', 'b', 'c');
+    INSERT INTO t3 VALUES('d', 'e', 'f');
+    INSERT INTO t3 VALUES('g', 'h', 'i');
+  }
+  do_rbu_vacuum_test 1.5.2 $step
+  do_execsql_test 1.5.3 {
+    SELECT * FROM t3
+  } {a b c d e f g h i}
+  do_execsql_test 1.5.4 {
+    CREATE INDEX t3a ON t3(a);
+    CREATE INDEX t3b ON t3(b);
+    CREATE INDEX t3c ON t3(c);
+    INSERT INTO t3 VALUES('j', 'k', 'l');
+    DELETE FROM t3 WHERE a = 'g';
+  }
+  do_rbu_vacuum_test 1.5.5 $step
+  do_execsql_test 1.5.6 {
+    SELECT rowid, * FROM t3 ORDER BY b
+  } {1 a b c 2 d e f 4 j k l}
+
+  do_execsql_test 1.6.1 {
+    CREATE TABLE t4(a PRIMARY KEY, b, c);
+    INSERT INTO t4 VALUES('a', 'b', 'c');
+    INSERT INTO t4 VALUES('d', 'e', 'f');
+    INSERT INTO t4 VALUES('g', 'h', 'i');
+  }
+  do_rbu_vacuum_test 1.6.2 $step
+  do_execsql_test 1.6.3 {
+    SELECT * FROM t4
+  } {a b c d e f g h i}
+  do_execsql_test 1.6.4 {
+    CREATE INDEX t4a ON t4(a);
+    CREATE INDEX t4b ON t4(b);
+    CREATE INDEX t4c ON t4(c);
+    
+    INSERT INTO t4 VALUES('j', 'k', 'l');
+    DELETE FROM t4 WHERE a='g';
+  }
+  do_rbu_vacuum_test 1.6.5 $step
+  do_execsql_test 1.6.6 {
+    SELECT * FROM t4 ORDER BY b
+  } {a b c d e f j k l}
+
+  reset_db
+  do_execsql_test 1.7.0 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY AUTOINCREMENT, b);
+    INSERT INTO t1 VALUES(NULL, 'one');
+    INSERT INTO t1 VALUES(NULL, 'two');
+    DELETE FROM t1 WHERE a=2;
+    INSERT INTO t1 VALUES(NULL, 'three');
+    INSERT INTO t1 VALUES(NULL, 'four');
+    DELETE FROM t1 WHERE a=4;
+    INSERT INTO t1 VALUES(NULL, 'five');
+    INSERT INTO t1 VALUES(NULL, 'six');
+    DELETE FROM t1 WHERE a=6;
+    SELECT * FROM t1;
+  } {1 one 3 three 5 five}
+  do_rbu_vacuum_test 1.7.1 $step
+  do_execsql_test 1.7.2 {
+    INSERT INTO t1 VALUES(NULL, 'seven');
+    SELECT * FROM t1;
+  } {1 one 3 three 5 five 7 seven}
+
+  reset_db
+  do_execsql_test 1.8.0 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY AUTOINCREMENT, b);
+    CREATE INDEX i1 ON t1(b);
+    INSERT INTO t1 VALUES(NULL, 'one');
+    INSERT INTO t1 VALUES(NULL, 'two');
+    INSERT INTO t1 VALUES(NULL, 'three');
+    INSERT INTO t1 VALUES(NULL, 'four');
+    INSERT INTO t1 VALUES(NULL, 'five');
+    INSERT INTO t1 VALUES(NULL, 'six');
+    ANALYZE;
+    SELECT * FROM sqlite_stat1;
+  } {t1 i1 {6 1}}
+  do_rbu_vacuum_test 1.8.1 $step
+  do_execsql_test 1.7.2 {
+    SELECT * FROM sqlite_stat1;
+  } {t1 i1 {6 1}}
+
+  reset_db
+  do_execsql_test 1.9.0 {
+    PRAGMA page_size = 8192;
+    PRAGMA auto_vacuum = 2;
+    PRAGMA user_version = 412;
+    PRAGMA application_id = 413;
+
+    CREATE TABLE t1(a INTEGER PRIMARY KEY AUTOINCREMENT, b);
+    CREATE INDEX i1 ON t1(b);
+    INSERT INTO t1 VALUES(NULL, 'one');
+    INSERT INTO t1 VALUES(NULL, 'two');
+    INSERT INTO t1 VALUES(NULL, 'three');
+    INSERT INTO t1 VALUES(NULL, 'four');
+    INSERT INTO t1 VALUES(NULL, 'five');
+    INSERT INTO t1 VALUES(NULL, 'six');
+
+    PRAGMA main.page_size;
+    PRAGMA main.auto_vacuum;
+    PRAGMA main.user_version;
+    PRAGMA main.application_id;
+  } {8192 2 412 413}
+
+  do_rbu_vacuum_test 1.9.1 $step
+  do_execsql_test 1.9.2 {
+    PRAGMA main.page_size;
+    PRAGMA main.auto_vacuum;
+    PRAGMA main.user_version;
+    PRAGMA main.application_id;
+  } {8192 2 412 413}
+
+  # Vacuum a database with a large sqlite_master table.
+  #
+  reset_db
+  do_test 1.10.1 {
+    for {set i 1} {$i < 50} {incr i} {
+      execsql "PRAGMA page_size = 1024"
+      execsql "CREATE TABLE t$i (a, b, c, PRIMARY KEY(a, b));"
+      execsql "
+        INSERT INTO t$i VALUES(1, 2, 3);
+        INSERT INTO t$i VALUES(4, 5, 6);
+      "
+    }
+  } {}
+  do_rbu_vacuum_test 1.10.2 $step
+
+  # Database with empty tables.
+  #
+  reset_db
+  do_execsql_test 1.11.1 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t3(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t4(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t4 VALUES(1, 2);
+  }
+  do_rbu_vacuum_test 1.11.2 $step
+  do_execsql_test 1.11.3 {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+    SELECT * FROM t3;
+    SELECT * FROM t4;
+  } {1 2}
+  reset_db
+  do_execsql_test 1.12.1 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t3(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t4(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, 2);
+  }
+  do_rbu_vacuum_test 1.12.2 $step
+  do_execsql_test 1.12.3 {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+    SELECT * FROM t3;
+    SELECT * FROM t4;
+  } {1 2}
+}
+set ::testprefix rbuvacuum
+
+#-------------------------------------------------------------------------
+# Test some error cases:
+#
+#   2.1.* the db being vacuumed being in wal mode already.
+#   2.2.* database modified mid vacuum.
+#
+reset_db
+do_execsql_test 2.1.0 {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+  INSERT INTO t1 VALUES(7, 8);
+  PRAGMA journal_mode = wal;
+  INSERT INTO t1 VALUES(9, 10);
+} wal
+do_test 2.1.1 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  rbu step
+} {SQLITE_ERROR}
+do_test 2.1.2 {
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - cannot vacuum wal mode database}}
+
+do_test 2.1.3 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  rbu step
+} {SQLITE_ERROR}
+do_test 2.1.4 {
+  list [catch { rbu close_no_error } msg] $msg
+} {1 SQLITE_ERROR}
+
+reset_db
+do_execsql_test 2.2.0 {
+  CREATE TABLE tx(a PRIMARY KEY, b BLOB);
+  INSERT INTO tx VALUES(1, randomblob(900));
+  INSERT INTO tx SELECT a+1, randomblob(900) FROM tx;
+  INSERT INTO tx SELECT a+2, randomblob(900) FROM tx;
+  INSERT INTO tx SELECT a+4, randomblob(900) FROM tx;
+  INSERT INTO tx SELECT a+8, randomblob(900) FROM tx;
+}
+db_save_and_close
+for {set i 1} 1 {incr i} {
+  db_restore_and_reopen
+
+  sqlite3rbu_vacuum rbu test.db state.db
+  for {set step 0} {$step<$i} {incr step} { rbu step }
+  rbu close
+  if {[file exists test.db-wal]} break
+
+  execsql { INSERT INTO tx VALUES(20, 20) }
+
+  do_test 2.2.$i.1 {
+    sqlite3rbu_vacuum rbu test.db state.db 
+    rbu step
+  } {SQLITE_BUSY}
+  do_test 2.2.$i.2 {
+    list [catch { rbu close } msg] $msg
+  } {1 {SQLITE_BUSY - database modified during rbu vacuum}}
+}
+
+#-------------------------------------------------------------------------
+# Test that a database that uses custom collation sequences can be RBU
+# vacuumed.
+#
+reset_db
+forcedelete state.db
+proc noop {args} {}
+proc length_cmp {x y} {
+  set n1 [string length $x]
+  set n2 [string length $y]
+  return [expr $n1 - $n2]
+}
+sqlite3_create_collation_v2 db length length_cmp noop
+
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, 'i');
+  INSERT INTO t1 VALUES(2, 'iiii');
+  INSERT INTO t1 VALUES(3, 'ii');
+  INSERT INTO t1 VALUES(4, 'iii');
+  SELECT a FROM t1 ORDER BY b COLLATE length;
+} {1 3 4 2}
+do_execsql_test 3.1 {
+  CREATE INDEX i1 ON t1(b COLLATE length);
+}
+
+do_test 3.2 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  while {[rbu step]=="SQLITE_OK"} {}
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - no such collation sequence: length}}
+
+do_test 3.3 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  set db1 [rbu db 0]
+  sqlite3_create_collation_v2 $db1 length length_cmp noop
+  while {[rbu step]=="SQLITE_OK"} {}
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - no such collation sequence: length}}
+
+do_test 3.4 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  set db1 [rbu db 1]
+  sqlite3_create_collation_v2 $db1 length length_cmp noop
+  while {[rbu step]=="SQLITE_OK"} {}
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - no such collation sequence: length}}
+
+do_test 3.5 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  set db1 [rbu db 0]
+  set db2 [rbu db 1]
+
+  sqlite3_create_collation_v2 $db1 length length_cmp noop
+  sqlite3_create_collation_v2 $db2 length length_cmp noop
+
+  while {[rbu step]=="SQLITE_OK"} {}
+  list [catch { rbu close } msg] $msg
+} {0 SQLITE_DONE}
+
+catch { db close }
+finish_test

@@ -1,0 +1,459 @@
+# 2010 August 4
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the CLI shell tool.
+# These tests are specific to the .import command.
+#
+# $Id: shell5.test,v 1.7 2009/07/17 16:54:48 shaneh Exp $
+#
+
+# Test plan:
+#
+#   shell5-1.*: Basic tests specific to the ".import" command.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set CLI [test_find_cli]
+db close
+forcedelete test.db test.db-journal test.db-wal
+
+#----------------------------------------------------------------------------
+# Test cases shell5-1.*: Basic handling of the .import and .separator commands.
+#
+
+# .import FILE TABLE     Import data from FILE into TABLE
+do_test shell5-1.1.1 {
+  catchcmd "test.db" ".import"
+} {/1 .ERROR: missing FILE argument.*/}
+do_test shell5-1.1.2 {
+  catchcmd "test.db" ".import FOO"
+} {/1 .ERROR: missing TABLE argument.*/}
+do_test shell5-1.1.3 {
+  # too many arguments
+  catchcmd "test.db" ".import FOO BAR BAD"
+} {/1 .ERROR: extra argument.*/}
+
+# .separator STRING      Change separator used by output mode and .import
+do_test shell5-1.2.1 {
+  catchcmd "test.db" ".separator"
+} {1 {Usage: .separator COL ?ROW?}}
+do_test shell5-1.2.2 {
+  catchcmd "test.db" ".separator ONE"
+} {0 {}}
+do_test shell5-1.2.3 {
+  catchcmd "test.db" ".separator ONE TWO"
+} {0 {}}
+do_test shell5-1.2.4 {
+  # too many arguments
+  catchcmd "test.db" ".separator ONE TWO THREE"
+} {1 {Usage: .separator COL ?ROW?}}
+
+# column separator should default to "|"
+do_test shell5-1.3.1.1 {
+  set res [catchcmd "test.db" ".show"]
+  list [regexp {colseparator: \"\|\"} $res]
+} {1}
+
+# row separator should default to "\n"
+do_test shell5-1.3.1.2 {
+  set res [catchcmd "test.db" ".show"]
+  list [regexp {rowseparator: \"\\n\"} $res]
+} {1}
+
+# set separator to different value.
+# check that .show reports new value
+do_test shell5-1.3.2 {
+  set res [catchcmd "test.db" {.separator ,
+.show}]
+  list [regexp {separator: \",\"} $res]
+} {1}
+
+# import file doesn't exist
+do_test shell5-1.4.1 {
+  forcedelete FOO
+  set res [catchcmd "test.db" {CREATE TABLE t1(a, b);
+.import FOO t1}]
+} {1 {Error: cannot open "FOO"}}
+
+# empty import file
+do_test shell5-1.4.2 {
+  forcedelete shell5.csv
+  set in [open shell5.csv w]
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 0}
+
+# import file with 1 row, 1 column (expecting 2 cols)
+do_test shell5-1.4.3 {
+  set in [open shell5.csv w]
+  puts $in "1"
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1}]
+} {1 {shell5.csv:1: expected 2 columns but found 1 - filling the rest with NULL}}
+
+# import file with 1 row, 3 columns (expecting 2 cols)
+do_test shell5-1.4.4 {
+  set in [open shell5.csv w]
+  puts $in "1|2|3"
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1}]
+} {1 {shell5.csv:1: expected 2 columns but found 3 - extras ignored}}
+
+# import file with 1 row, 2 columns
+do_test shell5-1.4.5 {
+  set in [open shell5.csv w]
+  puts $in "1|2"
+  close $in
+  set res [catchcmd "test.db" {DELETE FROM t1;
+.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 1}
+
+# import file with 2 rows, 2 columns
+# note we end up with 3 rows because of the 1 row 
+# imported above.
+do_test shell5-1.4.6 {
+  set in [open shell5.csv w]
+  puts $in "2|3"
+  puts $in "3|4"
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 3}
+
+# import file with 1 row, 2 columns, using a comma
+do_test shell5-1.4.7 {
+  set in [open shell5.csv w]
+  puts $in "4,5"
+  close $in
+  set res [catchcmd "test.db" {.separator ,
+.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 4}
+
+# import file with 1 row, 2 columns, text data
+do_test shell5-1.4.8.1 {
+  set in [open shell5.csv w]
+  puts $in "5|Now is the time for all good men to come to the aid of their country."
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 5}
+
+do_test shell5-1.4.8.2 {
+  catchcmd "test.db" {SELECT b FROM t1 WHERE a='5';}
+} {0 {Now is the time for all good men to come to the aid of their country.}}
+
+# import file with 1 row, 2 columns, quoted text data
+# note that currently sqlite doesn't support quoted fields, and
+# imports the entire field, quotes and all.
+do_test shell5-1.4.9.1 {
+  set in [open shell5.csv w]
+  puts $in "6|'Now is the time for all good men to come to the aid of their country.'"
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 6}
+
+do_test shell5-1.4.9.2 {
+  catchcmd "test.db" {SELECT b FROM t1 WHERE a='6';}
+} {0 {'Now is the time for all good men to come to the aid of their country.'}}
+
+# import file with 1 row, 2 columns, quoted text data
+do_test shell5-1.4.10.1 {
+  set in [open shell5.csv w]
+  puts $in "7|\"Now is the time for all good men to come to the aid of their country.\""
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT COUNT(*) FROM t1;}]
+} {0 7}
+
+do_test shell5-1.4.10.2 {
+  catchcmd "test.db" {SELECT b FROM t1 WHERE a='7';}
+} {0 {Now is the time for all good men to come to the aid of their country.}}
+
+# import file with 2 rows, 2 columns and an initial BOM
+#
+do_test shell5-1.4.11 {
+  set in [open shell5.csv wb]
+  puts -nonewline $in "\xef\xbb\xbf"
+  puts $in "2|3"
+  puts $in "4|5"
+  close $in
+  set res [catchcmd "test.db" {CREATE TABLE t2(x INT, y INT);
+.import shell5.csv t2
+.mode quote
+.header on
+SELECT * FROM t2;}]
+ string map {\n | \n\r |} $res
+} {0 {'x','y'|2,3|4,5}}
+
+# import file with 2 rows, 2 columns or text with an initial BOM
+#
+do_test shell5-1.4.12 {
+  set in [open shell5.csv wb]
+  puts $in "\xef\xbb\xbf\"two\"|3"
+  puts $in "4|5"
+  close $in
+  set res [catchcmd "test.db" {DELETE FROM t2;
+.import shell5.csv t2
+.mode quote
+.header on
+SELECT * FROM t2;}]
+ string map {\n | \n\r |} $res
+} {0 {'x','y'|'two',3|4,5}}
+
+# check importing very long field
+do_test shell5-1.5.1 {
+  set str [string repeat X 999]
+  set in [open shell5.csv w]
+  puts $in "8|$str"
+  close $in
+  set res [catchcmd "test.db" {.import shell5.csv t1
+SELECT length(b) FROM t1 WHERE a='8';}]
+} {0 999}
+
+# try importing into a table with a large number of columns.
+# This is limited by SQLITE_MAX_VARIABLE_NUMBER, which defaults to 999.
+set cols 999
+do_test shell5-1.6.1 {
+  set data {}
+  for {set i 1} {$i<$cols} {incr i} {
+    append data "c$i|"
+  }
+  append data "c$cols\n";
+  for {set i 1} {$i<$cols} {incr i} {
+    append data "$i|"
+  }
+  append data "$cols"
+  set in [open shell5.csv w]
+  puts $in $data
+  close $in
+  set res [catchcmd "test.db" {DROP TABLE IF EXISTS t2;
+.import shell5.csv t2
+SELECT COUNT(*) FROM t2;}]
+} {0 1}
+
+# try importing a large number of rows
+set rows 9999
+do_test shell5-1.7.1 {
+  set in [open shell5.csv w]
+  puts $in a
+  for {set i 1} {$i<=$rows} {incr i} {
+    puts $in $i
+  }
+  close $in
+  set res [catchcmd "test.db" {.mode csv
+.import shell5.csv t3
+SELECT COUNT(*) FROM t3;}]
+} [list 0 $rows]
+
+# Inport from a pipe.  (Unix only, as it requires "awk")
+if {$tcl_platform(platform)=="unix"} {
+  do_test shell5-1.8 {
+    forcedelete test.db
+    catchcmd test.db {.mode csv
+.import "|awk 'END{print \"x,y\";for(i=1;i<=5;i++){print i \",this is \" i}}'" t1
+SELECT * FROM t1;}
+  } {0 {1,"this is 1"
+2,"this is 2"
+3,"this is 3"
+4,"this is 4"
+5,"this is 5"}}
+}
+
+# Import columns containing quoted strings
+do_test shell5-1.9 {
+  set out [open shell5.csv w]
+  fconfigure $out -translation lf
+  puts $out {1,"",11}
+  puts $out {2,"x",22}
+  puts $out {3,"""",33}
+  puts $out {4,"hello",44}
+  puts $out "5,55,\"\"\r"
+  puts $out {6,66,"x"}
+  puts $out {7,77,""""}
+  puts $out {8,88,"hello"}
+  puts $out {"",9,99}
+  puts $out {"x",10,110}
+  puts $out {"""",11,121}
+  puts $out {"hello",12,132}
+  close $out
+  forcedelete test.db
+  catchcmd test.db {.mode csv
+    CREATE TABLE t1(a,b,c);
+.import shell5.csv t1
+  }
+  sqlite3 db test.db
+  db eval {SELECT *, '|' FROM t1 ORDER BY rowid}
+} {1 {} 11 | 2 x 22 | 3 {"} 33 | 4 hello 44 | 5 55 {} | 6 66 x | 7 77 {"} | 8 88 hello | {} 9 99 | x 10 110 | {"} 11 121 | hello 12 132 |}
+db close
+
+# Import columns containing quoted strings
+do_test shell5-1.10 {
+  set out [open shell5.csv w]
+  fconfigure $out -translation lf
+  puts $out {column1,column2,column3,column4}
+  puts $out "field1,field2,\"x3 \"\"\r\ndata\"\" 3\",field4"
+  puts $out "x1,x2,\"x3 \"\"\ndata\"\" 3\",x4"
+  close $out
+  forcedelete test.db
+  catchcmd test.db {.mode csv
+    CREATE TABLE t1(a,b,c,d);
+.import shell5.csv t1
+  }
+  sqlite3 db test.db
+  db eval {SELECT hex(c) FROM t1 ORDER BY rowid}
+} {636F6C756D6E33 783320220D0A64617461222033 783320220A64617461222033}
+
+# Blank last column with \r\n line endings.
+do_test shell5-1.11 {
+  set out [open shell5.csv w]
+  fconfigure $out -translation binary
+  puts $out "column1,column2,column3\r"
+  puts $out "a,b, \r"
+  puts $out "x,y,\r"
+  puts $out "p,q,r\r"
+  close $out
+  catch {db close}
+  forcedelete test.db
+  catchcmd test.db {.mode csv
+.import shell5.csv t1
+  }
+  sqlite3 db test.db
+  db eval {SELECT *, '|' FROM t1}
+} {a b { } | x y {} | p q r |}
+db close
+
+#----------------------------------------------------------------------------
+# 
+reset_db
+sqlite3 db test.db
+do_test shell5-2.1 {
+  set fd [open shell5.csv w]
+  puts $fd ",hello"
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t1(a, b);
+.import shell5.csv t1
+  }]
+  db eval { SELECT * FROM t1 }
+} {{} hello}
+
+do_test shell5-2.2 {
+  set fd [open shell5.csv w]
+  puts $fd {"",hello}
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t2(a, b);
+.import shell5.csv t2
+  }]
+  db eval { SELECT * FROM t2 }
+} {{} hello}
+
+do_test shell5-2.3 {
+  set fd [open shell5.csv w]
+  puts $fd {"x""y",hello}
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t3(a, b);
+.import shell5.csv t3
+  }]
+  db eval { SELECT * FROM t3 }
+} {x\"y hello}
+
+do_test shell5-2.4 {
+  set fd [open shell5.csv w]
+  puts $fd {"xy""",hello}
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t4(a, b);
+.import shell5.csv t4
+  }]
+  db eval { SELECT * FROM t4 }
+} {xy\" hello}
+
+do_test shell5-2.5 {
+  set fd [open shell5.csv w]
+  puts $fd {"one","2"}
+  puts $fd {}
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t4(a, b);
+.import shell5.csv t4
+  }]
+  db eval { SELECT * FROM t4 }
+} {xy\" hello one 2 {} {}}
+
+#----------------------------------------------------------------------------
+# Tests for the shell "ascii" import/export mode.
+#
+do_test shell5-3.1 {
+  set fd [open shell5.csv w]
+  fconfigure $fd -encoding binary -translation binary
+  puts -nonewline $fd "\"test 1\"\x1F,test 2\r\n\x1E"
+  puts -nonewline $fd "test 3\x1Ftest 4\n"
+  close $fd
+  catchcmd test.db {
+.mode ascii
+CREATE TABLE t5(a, b);
+.import shell5.csv t5
+  }
+  db eval { SELECT * FROM t5 }
+} "\{\"test 1\"} \{,test 2\r\n\} \{test 3\} \{test 4\n\}"
+
+do_test shell5-3.2 {
+  set x [catchcmd test.db {
+.mode ascii
+SELECT * FROM t5;
+  }]
+  # Handle platform end-of-line differences
+  regsub -all {[\n\r]?\n} $x <EOL> x
+  set x
+} "0 \{\"test 1\"\x1F,test 2<EOL>\x1Etest 3\x1Ftest 4<EOL>\x1E\}"
+
+do_test shell5-4.1 {
+  forcedelete shell5.csv
+  set fd [open shell5.csv w]
+  puts $fd "1,2,3"
+  puts $fd "4,5"
+  puts $fd "6,7,8"
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t6(a, b, c);
+.import shell5.csv t6
+  }]
+  db eval { SELECT * FROM t6 ORDER BY a }
+} {1 2 3 4 5 {} 6 7 8}
+
+do_test shell5-4.2 {
+  forcedelete shell5.csv
+  set fd [open shell5.csv w]
+  puts $fd "1,2,3"
+  puts $fd "4,5"
+  puts $fd "6,7,8,9"
+  close $fd
+  catchcmd test.db [string trim {
+.mode csv
+CREATE TABLE t7(a, b, c);
+.import shell5.csv t7
+  }]
+  db eval { SELECT * FROM t7 ORDER BY a }
+} {1 2 3 4 5 {} 6 7 8}
+
+finish_test

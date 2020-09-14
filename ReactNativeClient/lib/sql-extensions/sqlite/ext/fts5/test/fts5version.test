@@ -1,0 +1,65 @@
+# 2015 Apr 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file focus on testing that unrecognized file-format
+# versions are detected and reported.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5version
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(one);
+  INSERT INTO t1 VALUES('a b c d');
+} {}
+
+do_execsql_test 1.2 {
+  SELECT * FROM t1_config WHERE k='version'
+} {version 4}
+
+do_execsql_test 1.3 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'a';
+} {1}
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 1.4 {
+  UPDATE t1_config set v=5 WHERE k='version';
+}
+
+do_test 1.5 {
+  db close
+  sqlite3 db test.db
+  catchsql { SELECT * FROM t1 WHERE t1 MATCH 'a' }
+} {1 {invalid fts5 file format (found 5, expected 4) - run 'rebuild'}}
+
+do_test 1.6 {
+  db close
+  sqlite3 db test.db
+  catchsql { INSERT INTO t1 VALUES('x y z') }
+} {1 {invalid fts5 file format (found 5, expected 4) - run 'rebuild'}}
+
+do_test 1.7 {
+  sqlite3_db_config db DEFENSIVE 0
+  execsql { DELETE FROM t1_config WHERE k='version' }
+  db close
+  sqlite3 db test.db
+  catchsql { SELECT * FROM t1 WHERE t1 MATCH 'a' }
+} {1 {invalid fts5 file format (found 0, expected 4) - run 'rebuild'}}
+
+
+finish_test

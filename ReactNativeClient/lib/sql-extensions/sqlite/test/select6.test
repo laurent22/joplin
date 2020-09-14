@@ -1,0 +1,632 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing SELECT statements that contain
+# subqueries in their FROM clause.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Omit this whole file if the library is build without subquery support.
+ifcapable !subquery {
+  finish_test
+  return
+}
+set ::testprefix select6
+
+do_test select6-1.0 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(x, y);
+    INSERT INTO t1 VALUES(1,1);
+    INSERT INTO t1 VALUES(2,2);
+    INSERT INTO t1 VALUES(3,2);
+    INSERT INTO t1 VALUES(4,3);
+    INSERT INTO t1 VALUES(5,3);
+    INSERT INTO t1 VALUES(6,3);
+    INSERT INTO t1 VALUES(7,3);
+    INSERT INTO t1 VALUES(8,4);
+    INSERT INTO t1 VALUES(9,4);
+    INSERT INTO t1 VALUES(10,4);
+    INSERT INTO t1 VALUES(11,4);
+    INSERT INTO t1 VALUES(12,4);
+    INSERT INTO t1 VALUES(13,4);
+    INSERT INTO t1 VALUES(14,4);
+    INSERT INTO t1 VALUES(15,4);
+    INSERT INTO t1 VALUES(16,5);
+    INSERT INTO t1 VALUES(17,5);
+    INSERT INTO t1 VALUES(18,5);
+    INSERT INTO t1 VALUES(19,5);
+    INSERT INTO t1 VALUES(20,5);
+    COMMIT;
+    SELECT DISTINCT y FROM t1 ORDER BY y;
+  }
+} {1 2 3 4 5}
+
+do_test select6-1.1 {
+  execsql2 {SELECT * FROM (SELECT x, y FROM t1 WHERE x<2)}
+} {x 1 y 1}
+do_test select6-1.2 {
+  execsql {SELECT count(*) FROM (SELECT y FROM t1)}
+} {20}
+do_test select6-1.3 {
+  execsql {SELECT count(*) FROM (SELECT DISTINCT y FROM t1)}
+} {5}
+do_test select6-1.4 {
+  execsql {SELECT count(*) FROM (SELECT DISTINCT * FROM (SELECT y FROM t1))}
+} {5}
+do_test select6-1.5 {
+  execsql {SELECT count(*) FROM (SELECT * FROM (SELECT DISTINCT y FROM t1))}
+} {5}
+
+do_test select6-1.6 {
+  execsql {
+    SELECT * 
+    FROM (SELECT count(*),y FROM t1 GROUP BY y) AS a,
+         (SELECT max(x),y FROM t1 GROUP BY y) as b
+    WHERE a.y=b.y ORDER BY a.y
+  }
+} {1 1 1 1 2 2 3 2 4 3 7 3 8 4 15 4 5 5 20 5}
+do_test select6-1.7 {
+  execsql {
+    SELECT a.y, a.[count(*)], [max(x)], [count(*)]
+    FROM (SELECT count(*),y FROM t1 GROUP BY y) AS a,
+         (SELECT max(x),y FROM t1 GROUP BY y) as b
+    WHERE a.y=b.y ORDER BY a.y
+  }
+} {1 1 1 1 2 2 3 2 3 4 7 4 4 8 15 8 5 5 20 5}
+do_test select6-1.8 {
+  execsql {
+    SELECT q, p, r
+    FROM (SELECT count(*) as p , y as q FROM t1 GROUP BY y) AS a,
+         (SELECT max(x) as r, y as s FROM t1 GROUP BY y) as b
+    WHERE q=s ORDER BY s
+  }
+} {1 1 1 2 2 3 3 4 7 4 8 15 5 5 20}
+do_test select6-1.9 {
+  execsql {
+    SELECT q, p, r, b.[min(x)+y]
+    FROM (SELECT count(*) as p , y as q FROM t1 GROUP BY y) AS a,
+         (SELECT max(x) as r, y as s, min(x)+y FROM t1 GROUP BY y) as b
+    WHERE q=s ORDER BY s
+  }
+} {1 1 1 2 2 2 3 4 3 4 7 7 4 8 15 12 5 5 20 21}
+
+do_test select6-2.0 {
+  execsql {
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t2 SELECT * FROM t1;
+    SELECT DISTINCT b FROM t2 ORDER BY b;
+  }
+} {1 2 3 4 5}
+do_test select6-2.1 {
+  execsql2 {SELECT * FROM (SELECT a, b FROM t2 WHERE a<2)}
+} {a 1 b 1}
+do_test select6-2.2 {
+  execsql {SELECT count(*) FROM (SELECT b FROM t2)}
+} {20}
+do_test select6-2.3 {
+  execsql {SELECT count(*) FROM (SELECT DISTINCT b FROM t2)}
+} {5}
+do_test select6-2.4 {
+  execsql {SELECT count(*) FROM (SELECT DISTINCT * FROM (SELECT b FROM t2))}
+} {5}
+do_test select6-2.5 {
+  execsql {SELECT count(*) FROM (SELECT * FROM (SELECT DISTINCT b FROM t2))}
+} {5}
+
+do_test select6-2.6 {
+  execsql {
+    SELECT * 
+    FROM (SELECT count(*),b FROM t2 GROUP BY b) AS a,
+         (SELECT max(a),b FROM t2 GROUP BY b) as b
+    WHERE a.b=b.b ORDER BY a.b
+  }
+} {1 1 1 1 2 2 3 2 4 3 7 3 8 4 15 4 5 5 20 5}
+do_test select6-2.7 {
+  execsql {
+    SELECT a.b, a.[count(*)], [max(a)], [count(*)]
+    FROM (SELECT count(*),b FROM t2 GROUP BY b) AS a,
+         (SELECT max(a),b FROM t2 GROUP BY b) as b
+    WHERE a.b=b.b ORDER BY a.b
+  }
+} {1 1 1 1 2 2 3 2 3 4 7 4 4 8 15 8 5 5 20 5}
+do_test select6-2.8 {
+  execsql {
+    SELECT q, p, r
+    FROM (SELECT count(*) as p , b as q FROM t2 GROUP BY b) AS a,
+         (SELECT max(a) as r, b as s FROM t2 GROUP BY b) as b
+    WHERE q=s ORDER BY s
+  }
+} {1 1 1 2 2 3 3 4 7 4 8 15 5 5 20}
+do_test select6-2.9 {
+  execsql {
+    SELECT a.q, a.p, b.r
+    FROM (SELECT count(*) as p , b as q FROM t2 GROUP BY q) AS a,
+         (SELECT max(a) as r, b as s FROM t2 GROUP BY s) as b
+    WHERE a.q=b.s ORDER BY a.q
+  }
+} {1 1 1 2 2 3 3 4 7 4 8 15 5 5 20}
+
+do_test select6-3.1 {
+  execsql2 {
+    SELECT * FROM (SELECT * FROM (SELECT * FROM t1 WHERE x=3));
+  }
+} {x 3 y 2}
+do_test select6-3.2 {
+  execsql {
+    SELECT * FROM
+      (SELECT a.q, a.p, b.r
+       FROM (SELECT count(*) as p , b as q FROM t2 GROUP BY q) AS a,
+            (SELECT max(a) as r, b as s FROM t2 GROUP BY s) as b
+       WHERE a.q=b.s ORDER BY a.q)
+    ORDER BY "a.q"
+  }
+} {1 1 1 2 2 3 3 4 7 4 8 15 5 5 20}
+do_test select6-3.3 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1)
+  }
+} {10.5 3.7 14.2}
+do_test select6-3.4 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1 WHERE y=4)
+  }
+} {11.5 4.0 15.5}
+do_test select6-3.5 {
+  execsql {
+    SELECT x,y,x+y FROM (SELECT avg(a) as 'x', avg(b) as 'y' FROM t2 WHERE a=4)
+  }
+} {4.0 3.0 7.0}
+do_test select6-3.6 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1)
+    WHERE a>10
+  }
+} {10.5 3.7 14.2}
+do_test select6-3.7 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1)
+    WHERE a<10
+  }
+} {}
+do_test select6-3.8 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1 WHERE y=4)
+    WHERE a>10
+  }
+} {11.5 4.0 15.5}
+do_test select6-3.9 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', avg(y) as 'b' FROM t1 WHERE y=4)
+    WHERE a<10
+  }
+} {}
+do_test select6-3.10 {
+  execsql {
+    SELECT a,b,a+b FROM (SELECT avg(x) as 'a', y as 'b' FROM t1 GROUP BY b)
+    ORDER BY a
+  }
+} {1.0 1 2.0 2.5 2 4.5 5.5 3 8.5 11.5 4 15.5 18.0 5 23.0}
+do_test select6-3.11 {
+  execsql {
+    SELECT a,b,a+b FROM 
+       (SELECT avg(x) as 'a', y as 'b' FROM t1 GROUP BY b)
+    WHERE b<4 ORDER BY a
+  }
+} {1.0 1 2.0 2.5 2 4.5 5.5 3 8.5}
+do_test select6-3.12 {
+  execsql {
+    SELECT a,b,a+b FROM 
+       (SELECT avg(x) as 'a', y as 'b' FROM t1 GROUP BY b HAVING a>1)
+    WHERE b<4 ORDER BY a
+  }
+} {2.5 2 4.5 5.5 3 8.5}
+do_test select6-3.13 {
+  execsql {
+    SELECT a,b,a+b FROM 
+       (SELECT avg(x) as 'a', y as 'b' FROM t1 GROUP BY b HAVING a>1)
+    ORDER BY a
+  }
+} {2.5 2 4.5 5.5 3 8.5 11.5 4 15.5 18.0 5 23.0}
+do_test select6-3.14 {
+  execsql {
+    SELECT [count(*)],y FROM (SELECT count(*), y FROM t1 GROUP BY y)
+    ORDER BY [count(*)]
+  }
+} {1 1 2 2 4 3 5 5 8 4}
+do_test select6-3.15 {
+  execsql {
+    SELECT [count(*)],y FROM (SELECT count(*), y FROM t1 GROUP BY y)
+    ORDER BY y
+  }
+} {1 1 2 2 4 3 8 4 5 5}
+
+do_test select6-4.1 {
+  execsql {
+    SELECT a,b,c FROM 
+      (SELECT x AS 'a', y AS 'b', x+y AS 'c' FROM t1 WHERE y=4)
+    WHERE a<10 ORDER BY a;
+  }
+} {8 4 12 9 4 13}
+do_test select6-4.2 {
+  execsql {
+    SELECT y FROM (SELECT DISTINCT y FROM t1) WHERE y<5 ORDER BY y
+  }
+} {1 2 3 4}
+do_test select6-4.3 {
+  execsql {
+    SELECT DISTINCT y FROM (SELECT y FROM t1) WHERE y<5 ORDER BY y
+  }
+} {1 2 3 4}
+do_test select6-4.4 {
+  execsql {
+    SELECT avg(y) FROM (SELECT DISTINCT y FROM t1) WHERE y<5 ORDER BY y
+  }
+} {2.5}
+do_test select6-4.5 {
+  execsql {
+    SELECT avg(y) FROM (SELECT DISTINCT y FROM t1 WHERE y<5) ORDER BY y
+  }
+} {2.5}
+
+do_test select6-5.1 {
+  execsql {
+    SELECT a,x,b FROM
+      (SELECT x+3 AS 'a', x FROM t1 WHERE y=3) AS 'p',
+      (SELECT x AS 'b' FROM t1 WHERE y=4) AS 'q'
+    WHERE a=b
+    ORDER BY a
+  }
+} {8 5 8 9 6 9 10 7 10}
+do_test select6-5.2 {
+  execsql {
+    SELECT a,x,b FROM
+      (SELECT x+3 AS 'a', x FROM t1 WHERE y=3),
+      (SELECT x AS 'b' FROM t1 WHERE y=4)
+    WHERE a=b
+    ORDER BY a
+  }
+} {8 5 8 9 6 9 10 7 10}
+
+# Tests of compound sub-selects
+#
+do_test select6-6.1 {
+  execsql {
+    DELETE FROM t1 WHERE x>4;
+    SELECT * FROM t1
+  }
+} {1 1 2 2 3 2 4 3}
+ifcapable compound {
+  do_test select6-6.2 {
+    execsql {
+      SELECT * FROM (
+        SELECT x AS 'a' FROM t1 UNION ALL SELECT x+10 AS 'a' FROM t1
+      ) ORDER BY a;
+    }
+  } {1 2 3 4 11 12 13 14}
+  do_test select6-6.3 {
+    execsql {
+      SELECT * FROM (
+        SELECT x AS 'a' FROM t1 UNION ALL SELECT x+1 AS 'a' FROM t1
+      ) ORDER BY a;
+    }
+  } {1 2 2 3 3 4 4 5}
+  do_test select6-6.4 {
+    execsql {
+      SELECT * FROM (
+        SELECT x AS 'a' FROM t1 UNION SELECT x+1 AS 'a' FROM t1
+      ) ORDER BY a;
+    }
+  } {1 2 3 4 5}
+  do_test select6-6.5 {
+    execsql {
+      SELECT * FROM (
+        SELECT x AS 'a' FROM t1 INTERSECT SELECT x+1 AS 'a' FROM t1
+      ) ORDER BY a;
+    }
+  } {2 3 4}
+  do_test select6-6.6 {
+    execsql {
+      SELECT * FROM (
+        SELECT x AS 'a' FROM t1 EXCEPT SELECT x*2 AS 'a' FROM t1
+      ) ORDER BY a;
+    }
+  } {1 3}
+} ;# ifcapable compound
+
+# Subselects with no FROM clause
+#
+do_test select6-7.1 {
+  execsql {
+    SELECT * FROM (SELECT 1)
+  }
+} {1}
+do_test select6-7.2 {
+  execsql {
+    SELECT c,b,a,* FROM (SELECT 1 AS 'a', 2 AS 'b', 'abc' AS 'c')
+  }
+} {abc 2 1 1 2 abc}
+do_test select6-7.3 {
+  execsql {
+    SELECT c,b,a,* FROM (SELECT 1 AS 'a', 2 AS 'b', 'abc' AS 'c' WHERE 0)
+  }
+} {}
+do_test select6-7.4 {
+  execsql2 {
+    SELECT c,b,a,* FROM (SELECT 1 AS 'a', 2 AS 'b', 'abc' AS 'c' WHERE 1)
+  }
+} {c abc b 2 a 1 a 1 b 2 c abc}
+
+# The remaining tests in this file depend on the EXPLAIN keyword.
+# Skip these tests if EXPLAIN is disabled in the current build.
+#
+ifcapable {!explain} {
+  finish_test
+  return
+}
+
+# The following procedure compiles the SQL given as an argument and returns
+# TRUE if that SQL uses any transient tables and returns FALSE if no
+# transient tables are used.  This is used to make sure that the
+# sqliteFlattenSubquery() routine in select.c is doing its job.
+#
+proc is_flat {sql} {
+  return [expr 0>[lsearch [execsql "EXPLAIN $sql"] OpenEphemeral]]
+}
+
+# Check that the flattener works correctly for deeply nested subqueries
+# involving joins.
+#
+do_test select6-8.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t3(p,q);
+    INSERT INTO t3 VALUES(1,11);
+    INSERT INTO t3 VALUES(2,22);
+    CREATE TABLE t4(q,r);
+    INSERT INTO t4 VALUES(11,111);
+    INSERT INTO t4 VALUES(22,222);
+    COMMIT;
+    SELECT * FROM t3 NATURAL JOIN t4;
+  }
+} {1 11 111 2 22 222}
+do_test select6-8.2 {
+  execsql {
+    SELECT y, p, q, r FROM
+       (SELECT t1.y AS y, t2.b AS b FROM t1, t2 WHERE t1.x=t2.a) AS m,
+       (SELECT t3.p AS p, t3.q AS q, t4.r AS r FROM t3 NATURAL JOIN t4) as n
+    WHERE  y=p
+  }
+} {1 1 11 111 2 2 22 222 2 2 22 222}
+# If view support is omitted from the build, then so is the query 
+# "flattener". So omit this test and test select6-8.6 in that case.
+ifcapable view {
+do_test select6-8.3 {
+  is_flat {
+    SELECT y, p, q, r FROM
+       (SELECT t1.y AS y, t2.b AS b FROM t1, t2 WHERE t1.x=t2.a) AS m,
+       (SELECT t3.p AS p, t3.q AS q, t4.r AS r FROM t3 NATURAL JOIN t4) as n
+    WHERE  y=p
+  }
+} {1}
+} ;# ifcapable view
+do_test select6-8.4 {
+  execsql {
+    SELECT DISTINCT y, p, q, r FROM
+       (SELECT t1.y AS y, t2.b AS b FROM t1, t2 WHERE t1.x=t2.a) AS m,
+       (SELECT t3.p AS p, t3.q AS q, t4.r AS r FROM t3 NATURAL JOIN t4) as n
+    WHERE  y=p
+  }
+} {1 1 11 111 2 2 22 222}
+do_test select6-8.5 {
+  execsql {
+    SELECT * FROM 
+      (SELECT y, p, q, r FROM
+         (SELECT t1.y AS y, t2.b AS b FROM t1, t2 WHERE t1.x=t2.a) AS m,
+         (SELECT t3.p AS p, t3.q AS q, t4.r AS r FROM t3 NATURAL JOIN t4) as n
+      WHERE  y=p) AS e,
+      (SELECT r AS z FROM t4 WHERE q=11) AS f
+    WHERE e.r=f.z
+  }
+} {1 1 11 111 111}
+ifcapable view {
+do_test select6-8.6 {
+  is_flat {
+    SELECT * FROM 
+      (SELECT y, p, q, r FROM
+         (SELECT t1.y AS y, t2.b AS b FROM t1, t2 WHERE t1.x=t2.a) AS m,
+         (SELECT t3.p AS p, t3.q AS q, t4.r AS r FROM t3 NATURAL JOIN t4) as n
+      WHERE  y=p) AS e,
+      (SELECT r AS z FROM t4 WHERE q=11) AS f
+    WHERE e.r=f.z
+  }
+} {1}
+} ;# ifcapable view
+
+# Ticket #1634
+#
+do_test select6-9.1 {
+  execsql {
+    SELECT a.x, b.x FROM t1 AS a, (SELECT x FROM t1 LIMIT 2) AS b
+     ORDER BY 1, 2
+  }
+} {1 1 1 2 2 1 2 2 3 1 3 2 4 1 4 2}
+do_test select6-9.2 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT 2);
+  }
+} {1 2}
+do_test select6-9.3 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT 2 OFFSET 1);
+  }
+} {2 3}
+do_test select6-9.4 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1) LIMIT 2;
+  }
+} {1 2}
+do_test select6-9.5 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1) LIMIT 2 OFFSET 1;
+  }
+} {2 3}
+do_test select6-9.6 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT 2) LIMIT 3;
+  }
+} {1 2}
+do_test select6-9.7 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT -1) LIMIT 3;
+  }
+} {1 2 3}
+do_test select6-9.8 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT -1);
+  }
+} {1 2 3 4}
+do_test select6-9.9 {
+  execsql {
+    SELECT x FROM (SELECT x FROM t1 LIMIT -1 OFFSET 1);
+  }
+} {2 3 4}
+do_test select6-9.10 {
+  execsql {
+    SELECT x, y FROM (SELECT x, (SELECT 10+x) y FROM t1 LIMIT -1 OFFSET 1);
+  }
+} {2 12 3 13 4 14}
+do_test select6-9.11 {
+  execsql {
+    SELECT x, y FROM (SELECT x, (SELECT 10)+x y FROM t1 LIMIT -1 OFFSET 1);
+  }
+} {2 12 3 13 4 14}
+
+
+#-------------------------------------------------------------------------
+# Test that if a UNION ALL sub-query that would otherwise be eligible for
+# flattening consists of two or more SELECT statements that do not all 
+# return the same number of result columns, the error is detected.
+#
+do_execsql_test 10.1 {
+  CREATE TABLE t(i,j,k);
+  CREATE TABLE j(l,m);
+  CREATE TABLE k(o);
+}
+
+set err [list 1 {SELECTs to the left and right of UNION ALL do not have the same number of result columns}]
+
+do_execsql_test 10.2 {
+  SELECT * FROM (SELECT * FROM t), j;
+}
+do_catchsql_test 10.3 {
+  SELECT * FROM t UNION ALL SELECT * FROM j
+} $err
+do_catchsql_test 10.4 {
+  SELECT * FROM (SELECT i FROM t UNION ALL SELECT l, m FROM j)
+} $err
+do_catchsql_test 10.5 {
+  SELECT * FROM (SELECT j FROM t UNION ALL SELECT * FROM j)
+} $err
+do_catchsql_test 10.6 {
+  SELECT * FROM (SELECT * FROM t UNION ALL SELECT * FROM j)
+} $err
+do_catchsql_test 10.7 {
+  SELECT * FROM (
+    SELECT * FROM t UNION ALL 
+    SELECT l,m,l FROM j UNION ALL
+    SELECT * FROM k
+  )
+} $err
+do_catchsql_test 10.8 {
+  SELECT * FROM (
+    SELECT * FROM k UNION ALL
+    SELECT * FROM t UNION ALL 
+    SELECT l,m,l FROM j 
+  )
+} $err
+
+# 2015-02-09 Ticket [2f7170d73bf9abf80339187aa3677dce3dbcd5ca]
+# "misuse of aggregate" error if aggregate column from FROM
+# subquery is used in correlated subquery 
+#
+do_execsql_test 11.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(w INT, x INT);
+  INSERT INTO t1(w,x)
+   VALUES(1,10),(2,20),(3,30),
+         (2,21),(3,31),
+         (3,32);
+  CREATE INDEX t1wx ON t1(w,x);
+
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t2(w INT, y VARCHAR(8));
+  INSERT INTO t2(w,y) VALUES(1,'one'),(2,'two'),(3,'three'),(4,'four');
+  CREATE INDEX t2wy ON t2(w,y);
+
+  SELECT cnt, xyz, (SELECT y FROM t2 WHERE w=cnt), '|'
+    FROM (SELECT count(*) AS cnt, w AS xyz FROM t1 GROUP BY 2)
+   ORDER BY cnt, xyz;
+} {1 1 one | 2 2 two | 3 3 three |}
+do_execsql_test 11.2 {
+  SELECT cnt, xyz, lower((SELECT y FROM t2 WHERE w=cnt)), '|'
+    FROM (SELECT count(*) AS cnt, w AS xyz FROM t1 GROUP BY 2)
+   ORDER BY cnt, xyz;
+} {1 1 one | 2 2 two | 3 3 three |}
+do_execsql_test 11.3 {
+  SELECT cnt, xyz, '|'
+    FROM (SELECT count(*) AS cnt, w AS xyz FROM t1 GROUP BY 2)
+   WHERE (SELECT y FROM t2 WHERE w=cnt)!='two'
+   ORDER BY cnt, xyz;
+} {1 1 | 3 3 |}
+do_execsql_test 11.4 {
+  SELECT cnt, xyz, '|'
+    FROM (SELECT count(*) AS cnt, w AS xyz FROM t1 GROUP BY 2)
+   ORDER BY lower((SELECT y FROM t2 WHERE w=cnt));
+} {1 1 | 3 3 | 2 2 |}
+do_execsql_test 11.5 {
+  SELECT cnt, xyz, 
+         CASE WHEN (SELECT y FROM t2 WHERE w=cnt)=='two'
+              THEN 'aaa' ELSE 'bbb'
+          END, '|'
+    FROM (SELECT count(*) AS cnt, w AS xyz FROM t1 GROUP BY 2)
+   ORDER BY +cnt;
+} {1 1 bbb | 2 2 aaa | 3 3 bbb |}
+
+do_execsql_test 11.100 {
+  DROP TABLE t1;
+  DROP TABLE t2;
+  CREATE TABLE t1(x);
+  CREATE TABLE t2(y, z);
+  SELECT ( SELECT y FROM t2 WHERE z = cnt )
+    FROM ( SELECT count(*) AS cnt FROM t1 );
+} {{}}
+
+# 2019-05-29 ticket https://www.sqlite.org/src/info/c41afac34f15781f
+# A LIMIT clause in a subquery is incorrectly applied to a subquery.
+#
+do_execsql_test 12.100 {
+  DROP TABLE t1;
+  DROP TABLE t2;
+  CREATE TABLE t1(a);
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+  CREATE TABLE t2(b);
+  INSERT INTO t2 VALUES(3);
+  SELECT * FROM (
+    SELECT * FROM (SELECT * FROM t1 LIMIT 1)
+    UNION ALL
+    SELECT * from t2);
+} {1 3}
+
+finish_test

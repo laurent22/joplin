@@ -1,0 +1,1186 @@
+# 2005 December 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: shared.test,v 1.36 2009/03/16 13:19:36 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+db close
+
+# These tests cannot be run without the ATTACH command.
+#
+ifcapable !shared_cache||!attach {
+  finish_test
+  return
+}
+
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+
+foreach av [list 0 1] {
+
+# Open the database connection and execute the auto-vacuum pragma
+forcedelete test.db
+sqlite3 db test.db
+
+ifcapable autovacuum {
+  do_test shared-[expr $av+1].1.0 {
+    execsql "pragma auto_vacuum=$::av"
+    execsql {pragma auto_vacuum}
+  } "$av"
+} else {
+  if {$av} {
+    db close
+    break
+  }
+}
+
+# if we're using proxy locks, we use 2 filedescriptors for a db
+# that is open but NOT yet locked, after a lock is taken we'll have 3, 
+# normally sqlite uses 1 (proxy locking adds the conch and the local lock)
+set using_proxy 0
+foreach {name value} [array get env SQLITE_FORCE_PROXY_LOCKING] {
+  set using_proxy $value
+}
+set extrafds_prelock 0
+set extrafds_postlock 0
+if {$using_proxy>0} {
+  set extrafds_prelock 1
+  set extrafds_postlock 2
+} 
+
+# $av is currently 0 if this loop iteration is to test with auto-vacuum turned
+# off, and 1 if it is turned on. Increment it so that (1 -> no auto-vacuum) 
+# and (2 -> auto-vacuum). The sole reason for this is so that it looks nicer
+# when we use this variable as part of test-case names.
+#
+incr av
+
+# Test organization:
+#
+# shared-1.*: Simple test to verify basic sanity of table level locking when
+#             two connections share a pager cache.
+# shared-2.*: Test that a read transaction can co-exist with a 
+#             write-transaction, including a simple test to ensure the 
+#             external locking protocol is still working.
+# shared-3.*: Simple test of read-uncommitted mode.
+# shared-4.*: Check that the schema is locked and unlocked correctly.
+# shared-5.*: Test that creating/dropping schema items works when databases
+#             are attached in different orders to different handles.
+# shared-6.*: Locking, UNION ALL queries and sub-queries.
+# shared-7.*: Autovacuum and shared-cache.
+# shared-8.*: Tests related to the text encoding of shared-cache databases.
+# shared-9.*: TEMP triggers and shared-cache databases.
+# shared-10.*: Tests of sqlite3_close().
+# shared-11.*: Test transaction locking.
+#
+
+do_test shared-$av.1.1 {
+  # Open a second database on the file test.db. It should use the same pager
+  # cache and schema as the original connection. Verify that only 1 file is 
+  # opened.
+  sqlite3 db2 test.db
+  set ::sqlite_open_file_count
+  expr $sqlite_open_file_count-$extrafds_postlock
+} {1}
+do_test shared-$av.1.2 {
+  # Add a table and a single row of data via the first connection. 
+  # Ensure that the second connection can see them.
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(1, 2, 3);
+  } db
+  execsql {
+    SELECT * FROM abc;
+  } db2
+} {1 2 3}
+do_test shared-$av.1.3 {
+  # Have the first connection begin a transaction and obtain a read-lock
+  # on table abc. This should not prevent the second connection from 
+  # querying abc.
+  execsql {
+    BEGIN;
+    SELECT * FROM abc;
+  }
+  execsql {
+    SELECT * FROM abc;
+  } db2
+} {1 2 3}
+do_test shared-$av.1.4 {
+  # Try to insert a row into abc via connection 2. This should fail because
+  # of the read-lock connection 1 is holding on table abc (obtained in the
+  # previous test case).
+  catchsql {
+    INSERT INTO abc VALUES(4, 5, 6);
+  } db2
+} {1 {database table is locked: abc}}
+do_test shared-$av.1.5 {
+  # Using connection 2 (the one without the open transaction), try to create
+  # a new table. This should fail because of the open read transaction 
+  # held by connection 1.
+  catchsql {
+    CREATE TABLE def(d, e, f);
+  } db2
+} {1 {database table is locked: sqlite_master}}
+do_test shared-$av.1.6 {
+  # Upgrade connection 1's transaction to a write transaction. Create
+  # a new table - def - and insert a row into it. Because the connection 1
+  # transaction modifies the schema, it should not be possible for 
+  # connection 2 to access the database at all until the connection 1 
+  # has finished the transaction.
+  execsql {
+    CREATE TABLE def(d, e, f);
+    INSERT INTO def VALUES('IV', 'V', 'VI');
+  }
+} {}
+do_test shared-$av.1.7 {
+  # Read from the sqlite_master table with connection 1 (inside the 
+  # transaction). Then test that we can not do this with connection 2. This
+  # is because of the schema-modified lock established by connection 1 
+  # in the previous test case.
+  execsql {
+    SELECT * FROM sqlite_master;
+  }
+  catchsql {
+    SELECT * FROM sqlite_master;
+  } db2
+} {1 {database schema is locked: main}}
+do_test shared-$av.1.8 {
+  # Commit the connection 1 transaction.
+  execsql {
+    COMMIT;
+  }
+} {}
+
+do_test shared-$av.2.1 {
+  # Open connection db3 to the database. Use a different path to the same
+  # file so that db3 does *not* share the same pager cache as db and db2
+  # (there should be two open file handles).
+  if {$::tcl_platform(platform)=="unix"} {
+    sqlite3 db3 ./test.db
+  } else {
+    sqlite3 db3 TEST.DB
+  }
+  set ::sqlite_open_file_count
+  expr $sqlite_open_file_count-($extrafds_prelock+$extrafds_postlock)
+} {2}
+do_test shared-$av.2.2 {
+  # Start read transactions on db and db2 (the shared pager cache). Ensure
+  # db3 cannot write to the database.
+  execsql {
+    BEGIN;
+    SELECT * FROM abc;
+  }
+  execsql {
+    BEGIN;
+    SELECT * FROM abc;
+  } db2
+  catchsql {
+    INSERT INTO abc VALUES(1, 2, 3);
+  } db2
+} {1 {database table is locked: abc}}
+do_test shared-$av.2.3 {
+  # Turn db's transaction into a write-transaction. db3 should still be
+  # able to read from table def (but will not see the new row). Connection
+  # db2 should not be able to read def (because of the write-lock).
+
+# Todo: The failed "INSERT INTO abc ..." statement in the above test
+# has started a write-transaction on db2 (should this be so?). This 
+# would prevent connection db from starting a write-transaction. So roll the
+# db2 transaction back and replace it with a new read transaction.
+  execsql {
+    ROLLBACK;
+    BEGIN;
+    SELECT * FROM abc;
+  } db2
+
+  execsql {
+    INSERT INTO def VALUES('VII', 'VIII', 'IX');
+  }
+  concat [
+    catchsql { SELECT * FROM def; } db3
+  ] [
+    catchsql { SELECT * FROM def; } db2
+  ]
+} {0 {IV V VI} 1 {database table is locked: def}}
+do_test shared-$av.2.4 {
+  # Commit the open transaction on db. db2 still holds a read-transaction.
+  # This should prevent db3 from writing to the database, but not from 
+  # reading.
+  execsql {
+    COMMIT;
+  }
+  concat [
+    catchsql { SELECT * FROM def; } db3
+  ] [
+    catchsql { INSERT INTO def VALUES('X', 'XI', 'XII'); } db3
+  ]
+} {0 {IV V VI VII VIII IX} 1 {database is locked}}
+
+catchsql COMMIT db2
+
+do_test shared-$av.3.1.1 {
+  # This test case starts a linear scan of table 'seq' using a 
+  # read-uncommitted connection. In the middle of the scan, rows are added
+  # to the end of the seq table (ahead of the current cursor position).
+  # The uncommitted rows should be included in the results of the scan.
+  execsql "
+    CREATE TABLE seq(i PRIMARY KEY, x);
+    INSERT INTO seq VALUES(1, '[string repeat X 500]');
+    INSERT INTO seq VALUES(2, '[string repeat X 500]');
+  "
+  execsql {SELECT * FROM sqlite_master} db2
+  execsql {PRAGMA read_uncommitted = 1} db2
+
+  set ret [list]
+  db2 eval {SELECT i FROM seq ORDER BY i} {
+    if {$i < 4} {
+      set max [execsql {SELECT max(i) FROM seq}]
+      db eval {
+        INSERT INTO seq SELECT i + :max, x FROM seq;
+      }
+    }
+    lappend ret $i
+  }
+  set ret
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16}
+do_test shared-$av.3.1.2 {
+  # Another linear scan through table seq using a read-uncommitted connection.
+  # This time, delete each row as it is read. Should not affect the results of
+  # the scan, but the table should be empty after the scan is concluded 
+  # (test 3.1.3 verifies this).
+  set ret [list]
+  db2 eval {SELECT i FROM seq} {
+    db eval {DELETE FROM seq WHERE i = :i}
+    lappend ret $i
+  }
+  set ret
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16}
+do_test shared-$av.3.1.3 {
+  execsql {
+    SELECT * FROM seq;
+  }
+} {}
+
+catch {db close}
+catch {db2 close}
+catch {db3 close}
+
+#--------------------------------------------------------------------------
+# Tests shared-4.* test that the schema locking rules are applied 
+# correctly. i.e.:
+#
+# 1. All transactions require a read-lock on the schemas of databases they
+#    access.
+# 2. Transactions that modify a database schema require a write-lock on that
+#    schema.
+# 3. It is not possible to compile a statement while another handle has a 
+#    write-lock on the schema.
+#
+
+# Open two database handles db and db2. Each has a single attach database
+# (as well as main):
+#
+#     db.main   ->   ./test.db
+#     db.test2  ->   ./test2.db
+#     db2.main  ->   ./test2.db
+#     db2.test  ->   ./test.db
+#
+forcedelete test.db
+forcedelete test2.db
+forcedelete test2.db-journal
+sqlite3 db  test.db
+sqlite3 db2 test2.db
+do_test shared-$av.4.1.1 {
+  set sqlite_open_file_count
+  expr $sqlite_open_file_count-($extrafds_prelock*2)
+} {2}
+do_test shared-$av.4.1.2 {
+  execsql {ATTACH 'test2.db' AS test2}
+  set sqlite_open_file_count
+  expr $sqlite_open_file_count-($extrafds_postlock*2)
+} {2}
+do_test shared-$av.4.1.3 {
+  execsql {ATTACH 'test.db' AS test} db2
+  set sqlite_open_file_count
+  expr $sqlite_open_file_count-($extrafds_postlock*2)
+} {2}
+
+# Sanity check: Create a table in ./test.db via handle db, and test that handle
+# db2 can "see" the new table immediately. A handle using a seperate pager
+# cache would have to reload the database schema before this were possible.
+#
+do_test shared-$av.4.2.1 {
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE def(d, e, f);
+    INSERT INTO abc VALUES('i', 'ii', 'iii');
+    INSERT INTO def VALUES('I', 'II', 'III');
+  }
+} {}
+do_test shared-$av.4.2.2 {
+  execsql {
+    SELECT * FROM test.abc;
+  } db2
+} {i ii iii}
+
+# Open a read-transaction and read from table abc via handle 2. Check that
+# handle 1 can read table abc. Check that handle 1 cannot modify table abc
+# or the database schema. Then check that handle 1 can modify table def.
+#
+do_test shared-$av.4.3.1 {
+  execsql {
+    BEGIN;
+    SELECT * FROM test.abc;
+  } db2
+} {i ii iii}
+do_test shared-$av.4.3.2 {
+  catchsql {
+    INSERT INTO abc VALUES('iv', 'v', 'vi');
+  }
+} {1 {database table is locked: abc}}
+do_test shared-$av.4.3.3 {
+  catchsql {
+    CREATE TABLE ghi(g, h, i);
+  }
+} {1 {database table is locked: sqlite_master}}
+do_test shared-$av.4.3.3 {
+  catchsql {
+    INSERT INTO def VALUES('IV', 'V', 'VI');
+  }
+} {0 {}}
+do_test shared-$av.4.3.4 {
+  # Cleanup: commit the transaction opened by db2.
+  execsql {
+    COMMIT
+  } db2
+} {}
+
+# Open a write-transaction using handle 1 and modify the database schema.
+# Then try to execute a compiled statement to read from the same 
+# database via handle 2 (fails to get the lock on sqlite_master). Also
+# try to compile a read of the same database using handle 2 (also fails).
+# Finally, compile a read of the other database using handle 2. This
+# should also fail.
+#
+ifcapable compound {
+  do_test shared-$av.4.4.1.2 {
+    # Sanity check 1: Check that the schema is what we think it is when viewed
+    # via handle 1.
+    execsql {
+      CREATE TABLE test2.ghi(g, h, i);
+      SELECT 'test.db:'||name FROM sqlite_master 
+      UNION ALL
+      SELECT 'test2.db:'||name FROM test2.sqlite_master;
+    }
+  } {test.db:abc test.db:def test2.db:ghi}
+  do_test shared-$av.4.4.1.2 {
+    # Sanity check 2: Check that the schema is what we think it is when viewed
+    # via handle 2.
+    execsql {
+      SELECT 'test2.db:'||name FROM sqlite_master 
+      UNION ALL
+      SELECT 'test.db:'||name FROM test.sqlite_master;
+    } db2
+  } {test2.db:ghi test.db:abc test.db:def}
+}
+
+do_test shared-$av.4.4.2 {
+  set ::DB2 [sqlite3_connection_pointer db2]
+  set sql {SELECT * FROM abc}
+  set ::STMT1 [sqlite3_prepare $::DB2 $sql -1 DUMMY]
+  execsql {
+    BEGIN;
+    CREATE TABLE jkl(j, k, l);
+  }
+  sqlite3_step $::STMT1
+} {SQLITE_ERROR}
+do_test shared-$av.4.4.3 {
+  sqlite3_finalize $::STMT1
+} {SQLITE_LOCKED}
+do_test shared-$av.4.4.4 {
+  set rc [catch {
+    set ::STMT1 [sqlite3_prepare $::DB2 $sql -1 DUMMY]
+  } msg]
+  list $rc $msg
+} {1 {(6) database schema is locked: test}}
+do_test shared-$av.4.4.5 {
+  set rc [catch {
+    set ::STMT1 [sqlite3_prepare $::DB2 "SELECT * FROM ghi" -1 DUMMY]
+  } msg]
+  list $rc $msg
+} {1 {(6) database schema is locked: test}}
+
+
+catch {db2 close}
+catch {db close}
+
+#--------------------------------------------------------------------------
+# Tests shared-5.* 
+#
+foreach db [list test.db test1.db test2.db test3.db] {
+  forcedelete $db ${db}-journal
+}
+do_test shared-$av.5.1.1 {
+  sqlite3 db1 test.db
+  sqlite3 db2 test.db
+  execsql {
+    ATTACH 'test1.db' AS test1;
+    ATTACH 'test2.db' AS test2;
+    ATTACH 'test3.db' AS test3;
+  } db1
+  execsql {
+    ATTACH 'test3.db' AS test3;
+    ATTACH 'test2.db' AS test2;
+    ATTACH 'test1.db' AS test1;
+  } db2
+} {}
+do_test shared-$av.5.1.2 {
+  execsql {
+    CREATE TABLE test1.t1(a, b);
+    CREATE INDEX test1.i1 ON t1(a, b);
+  } db1
+} {}
+ifcapable view {
+  do_test shared-$av.5.1.3 {
+    execsql {
+      CREATE VIEW test1.v1 AS SELECT * FROM t1;
+    } db1
+  } {}
+}
+ifcapable trigger {
+  do_test shared-$av.5.1.4 {
+    execsql {
+      CREATE TRIGGER test1.trig1 AFTER INSERT ON t1 BEGIN
+        INSERT INTO t1 VALUES(new.a, new.b);
+      END;
+    } db1
+  } {}
+}
+do_test shared-$av.5.1.5 {
+  execsql {
+    DROP INDEX i1;
+  } db2
+} {}
+ifcapable view {
+  do_test shared-$av.5.1.6 {
+    execsql {
+      DROP VIEW v1;
+    } db2
+  } {}
+}
+ifcapable trigger {
+  do_test shared-$av.5.1.7 {
+    execsql {
+      DROP TRIGGER trig1;
+    } db2
+  } {}
+}
+do_test shared-$av.5.1.8 {
+  execsql {
+    DROP TABLE t1;
+  } db2
+} {}
+ifcapable compound {
+  do_test shared-$av.5.1.9 {
+    execsql {
+      SELECT * FROM sqlite_master UNION ALL SELECT * FROM test1.sqlite_master
+    } db1
+  } {}
+}
+
+#--------------------------------------------------------------------------
+# Tests shared-6.* test that a query obtains all the read-locks it needs
+# before starting execution of the query. This means that there is no chance
+# some rows of data will be returned before a lock fails and SQLITE_LOCK
+# is returned.
+#
+do_test shared-$av.6.1.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE TABLE t2(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t2 VALUES(3, 4);
+  } db1
+} {}
+ifcapable compound {
+  do_test shared-$av.6.1.2 {
+    execsql {
+      SELECT * FROM t1 UNION ALL SELECT * FROM t2;
+    } db2
+  } {1 2 3 4}
+}
+do_test shared-$av.6.1.3 {
+  # Establish a write lock on table t2 via connection db2. Then make a 
+  # UNION all query using connection db1 that first accesses t1, followed 
+  # by t2. If the locks are grabbed at the start of the statement (as 
+  # they should be), no rows are returned. If (as was previously the case)
+  # they are grabbed as the tables are accessed, the t1 rows will be 
+  # returned before the query fails.
+  #
+  execsql {
+    BEGIN;
+    INSERT INTO t2 VALUES(5, 6);
+  } db2
+  set ret [list]
+  catch {
+    db1 eval {SELECT * FROM t1 UNION ALL SELECT * FROM t2} {
+      lappend ret $a $b
+    }
+  }
+  set ret
+} {}
+do_test shared-$av.6.1.4 {
+  execsql {
+    COMMIT;
+    BEGIN;
+    INSERT INTO t1 VALUES(7, 8);
+  } db2
+  set ret [list]
+  catch {
+    db1 eval {
+      SELECT (CASE WHEN a>4 THEN (SELECT a FROM t1) ELSE 0 END) AS d FROM t2;
+    } {
+      lappend ret $d
+    }
+  }
+  set ret
+} {}
+
+catch {db1 close}
+catch {db2 close}
+foreach f [list test.db test2.db] {
+  forcedelete $f ${f}-journal
+}
+
+#--------------------------------------------------------------------------
+# Tests shared-7.* test auto-vacuum does not invalidate cursors from
+# other shared-cache users when it reorganizes the database on 
+# COMMIT.
+#
+do_test shared-$av.7.1 {
+  # This test case sets up a test database in auto-vacuum mode consisting 
+  # of two tables, t1 and t2. Both have a single index. Table t1 is 
+  # populated first (so consists of pages toward the start of the db file), 
+  # t2 second (pages toward the end of the file). 
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    CREATE TABLE t2(a PRIMARY KEY, b);
+  }
+  set ::contents {}
+  for {set i 0} {$i < 100} {incr i} {
+    set a [string repeat "$i " 20]
+    set b [string repeat "$i " 20]
+    db eval {
+      INSERT INTO t1 VALUES(:a, :b);
+    }
+    lappend ::contents [list [expr $i+1] $a $b]
+  }
+  execsql {
+    INSERT INTO t2 SELECT * FROM t1;
+    COMMIT;
+  }
+} {}
+do_test shared-$av.7.2 {
+  # This test case deletes the contents of table t1 (the one at the start of
+  # the file) while many cursors are open on table t2 and its index. All of
+  # the non-root pages will be moved from the end to the start of the file
+  # when the DELETE is committed - this test verifies that moving the pages
+  # does not disturb the open cursors.
+  #
+
+  proc lockrow {db tbl oids body} {
+    set ret [list]
+    db eval "SELECT oid AS i, a, b FROM $tbl ORDER BY a" {
+      if {$i==[lindex $oids 0]} {
+        set noids [lrange $oids 1 end]
+        if {[llength $noids]==0} {
+          set subret [eval $body]
+        } else {
+          set subret [lockrow $db $tbl $noids $body]
+        }
+      }
+      lappend ret [list $i $a $b]
+    }
+    return [linsert $subret 0 $ret]
+  }
+  proc locktblrows {db tbl body} {
+    set oids [db eval "SELECT oid FROM $tbl"]
+    lockrow $db $tbl $oids $body
+  }
+
+  set scans [locktblrows db t2 {
+    execsql {
+      DELETE FROM t1;
+    } db2
+  }]
+  set error 0
+
+  # Test that each SELECT query returned the expected contents of t2.
+  foreach s $scans {
+    if {[lsort -integer -index 0 $s]!=$::contents} {
+      set error 1
+    }
+  }
+  set error
+} {0}
+
+catch {db close}
+catch {db2 close}
+unset -nocomplain contents
+
+#--------------------------------------------------------------------------
+# The following tests try to trick the shared-cache code into assuming
+# the wrong encoding for a database.
+#
+forcedelete test.db test.db-journal
+ifcapable utf16 {
+  do_test shared-$av.8.1.1 {
+    sqlite3 db test.db
+    execsql {
+      PRAGMA encoding = 'UTF-16';
+      SELECT * FROM sqlite_master;
+    }
+  } {}
+  do_test shared-$av.8.1.2 {
+    string range [execsql {PRAGMA encoding;}] 0 end-2
+  } {UTF-16}
+
+  do_test shared-$av.8.1.3 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA encoding = 'UTF-8';
+      CREATE TABLE abc(a, b, c);
+    } db2
+  } {}
+  do_test shared-$av.8.1.4 {
+    execsql {
+      SELECT * FROM sqlite_master;
+    }
+  } "table abc abc [expr $AUTOVACUUM?3:2] {CREATE TABLE abc(a, b, c)}"
+  do_test shared-$av.8.1.5 {
+    db2 close
+    execsql {
+      PRAGMA encoding;
+    }
+  } {UTF-8}
+
+  forcedelete test2.db test2.db-journal
+  do_test shared-$av.8.2.1 {
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      SELECT * FROM aux.sqlite_master;
+    }
+  } {}
+  do_test shared-$av.8.2.2 {
+    sqlite3 db2 test2.db
+    execsql {
+      PRAGMA encoding = 'UTF-16';
+      CREATE TABLE def(d, e, f);
+    } db2
+    string range [execsql {PRAGMA encoding;} db2] 0 end-2
+  } {UTF-16}
+
+  catch {db close}
+  catch {db2 close}
+  forcedelete test.db test2.db
+
+  do_test shared-$av.8.3.2 {
+    sqlite3 db test.db
+    execsql { CREATE TABLE def(d, e, f) }
+    execsql { PRAGMA encoding }
+  } {UTF-8}
+  do_test shared-$av.8.3.3 {
+    set zDb16 "[encoding convertto unicode test.db]\x00\x00"
+    set db16 [sqlite3_open16 $zDb16 {}]
+
+    set stmt [sqlite3_prepare $db16 "SELECT sql FROM sqlite_master" -1 DUMMY]
+    sqlite3_step $stmt
+    set sql [sqlite3_column_text $stmt 0]
+    sqlite3_finalize $stmt
+    set sql
+  } {CREATE TABLE def(d, e, f)}
+  do_test shared-$av.8.3.4 {
+    set stmt [sqlite3_prepare $db16 "PRAGMA encoding" -1 DUMMY]
+    sqlite3_step $stmt
+    set enc [sqlite3_column_text $stmt 0]
+    sqlite3_finalize $stmt
+    set enc
+  } {UTF-8}
+
+  sqlite3_close $db16
+
+# Bug #2547 is causing this to fail.
+if 0 {
+  do_test shared-$av.8.2.3 {
+    catchsql {
+      SELECT * FROM aux.sqlite_master;
+    }
+  } {1 {attached databases must use the same text encoding as main database}}
+}
+}
+
+catch {db close}
+catch {db2 close}
+forcedelete test.db test2.db
+
+#---------------------------------------------------------------------------
+# The following tests - shared-9.* - test interactions between TEMP triggers
+# and shared-schemas.
+#
+ifcapable trigger&&tempdb {
+
+do_test shared-$av.9.1 {
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE abc_mirror(a, b, c);
+    CREATE TEMP TRIGGER BEFORE INSERT ON abc BEGIN 
+      INSERT INTO abc_mirror(a, b, c) VALUES(new.a, new.b, new.c);
+    END;
+    INSERT INTO abc VALUES(1, 2, 3);
+    SELECT * FROM abc_mirror;
+  }
+} {1 2 3}
+do_test shared-$av.9.2 {
+  execsql {
+    INSERT INTO abc VALUES(4, 5, 6);
+    SELECT * FROM abc_mirror;
+  } db2
+} {1 2 3}
+do_test shared-$av.9.3 {
+  db close
+  db2 close
+} {}
+
+} ; # End shared-9.*
+
+#---------------------------------------------------------------------------
+# The following tests - shared-10.* - test that the library behaves 
+# correctly when a connection to a shared-cache is closed. 
+#
+do_test shared-$av.10.1 {
+  # Create a small sample database with two connections to it (db and db2).
+  forcedelete test.db
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+  execsql {
+    CREATE TABLE ab(a PRIMARY KEY, b);
+    CREATE TABLE de(d PRIMARY KEY, e);
+    INSERT INTO ab VALUES('Chiang Mai', 100000);
+    INSERT INTO ab VALUES('Bangkok', 8000000);
+    INSERT INTO de VALUES('Ubon', 120000);
+    INSERT INTO de VALUES('Khon Kaen', 200000);
+  }
+} {}
+do_test shared-$av.10.2 {
+  # Open a read-transaction with the first connection, a write-transaction
+  # with the second.
+  execsql {
+    BEGIN;
+    SELECT * FROM ab;
+  }
+  execsql {
+    BEGIN;
+    INSERT INTO de VALUES('Pataya', 30000);
+  } db2
+} {}
+do_test shared-$av.10.3 {
+  # An external connection should be able to read the database, but not
+  # prepare a write operation.
+  if {$::tcl_platform(platform)=="unix"} {
+    sqlite3 db3 ./test.db
+  } else {
+    sqlite3 db3 TEST.DB
+  }
+  execsql {
+    SELECT * FROM ab;
+  } db3
+  catchsql {
+    BEGIN;
+    INSERT INTO de VALUES('Pataya', 30000);
+  } db3
+} {1 {database is locked}}
+do_test shared-$av.10.4 {
+  # Close the connection with the write-transaction open
+  db2 close
+} {}
+do_test shared-$av.10.5 {
+  # Test that the db2 transaction has been automatically rolled back.
+  # If it has not the ('Pataya', 30000) entry will still be in the table.
+  execsql {
+    SELECT * FROM de;
+  }
+} {Ubon 120000 {Khon Kaen} 200000}
+do_test shared-$av.10.5 {
+  # Closing db2 should have dropped the shared-cache back to a read-lock.
+  # So db3 should be able to prepare a write...
+  catchsql {INSERT INTO de VALUES('Pataya', 30000);} db3
+} {0 {}}
+do_test shared-$av.10.6 {
+  # ... but not commit it.
+  catchsql {COMMIT} db3
+} {1 {database is locked}}
+do_test shared-$av.10.7 {
+  # Commit the (read-only) db transaction. Check via db3 to make sure the 
+  # contents of table "de" are still as they should be.
+  execsql {
+    COMMIT;
+  }
+  execsql {
+    SELECT * FROM de;
+  } db3
+} {Ubon 120000 {Khon Kaen} 200000 Pataya 30000}
+do_test shared-$av.10.9 {
+  # Commit the external transaction.
+  catchsql {COMMIT} db3
+} {0 {}}
+integrity_check shared-$av.10.10
+do_test shared-$av.10.11 {
+  db close
+  db3 close
+} {}
+
+do_test shared-$av.11.1 {
+  forcedelete test.db
+  sqlite3 db  test.db
+  sqlite3 db2 test.db
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    CREATE TABLE abc2(a, b, c);
+    BEGIN;
+    INSERT INTO abc VALUES(1, 2, 3);
+  }
+} {}
+do_test shared-$av.11.2 {
+  catchsql {BEGIN;} db2
+  catchsql {SELECT * FROM abc;} db2
+} {1 {database table is locked: abc}}
+do_test shared-$av.11.3 {
+  catchsql {BEGIN} db2
+} {1 {cannot start a transaction within a transaction}}
+do_test shared-$av.11.4 {
+  catchsql {SELECT * FROM abc2;} db2
+} {0 {}}
+do_test shared-$av.11.5 {
+  catchsql {INSERT INTO abc2 VALUES(1, 2, 3);} db2
+} {1 {database table is locked}}
+do_test shared-$av.11.6 {
+  catchsql {SELECT * FROM abc2}
+} {0 {}}
+do_test shared-$av.11.6 {
+  execsql {
+    ROLLBACK;
+    PRAGMA read_uncommitted = 1;
+  } db2
+} {}
+do_test shared-$av.11.7 {
+  execsql {
+    INSERT INTO abc2 VALUES(4, 5, 6);
+    INSERT INTO abc2 VALUES(7, 8, 9);
+  }
+} {}
+do_test shared-$av.11.8 {
+  set res [list]
+  db2 eval {
+    SELECT abc.a as I, abc2.a as II FROM abc, abc2;
+  } {
+    execsql {
+      DELETE FROM abc WHERE 1;
+    }
+    lappend res $I $II
+  }
+  set res
+} {1 4 {} 7}
+if {[llength [info command sqlite3_shared_cache_report]]==1} {
+  ifcapable curdir {
+    do_test shared-$av.11.9 {
+      string tolower [sqlite3_shared_cache_report]
+    } [string tolower [list [file nativename [file normalize test.db]] 2]]
+  }
+}
+
+do_test shared-$av.11.11 {
+  db close
+  db2 close
+} {}
+
+# This tests that if it is impossible to free any pages, SQLite will
+# exceed the limit set by PRAGMA cache_size.
+forcedelete test.db test.db-journal
+sqlite3 db test.db 
+ifcapable pager_pragmas {
+  do_test shared-$av.12.1 {
+    execsql {
+      PRAGMA cache_size = 10;
+      PRAGMA cache_size;
+    }
+  } {10}
+}
+do_test shared-$av.12.2 {
+  set ::db_handles [list]
+  for {set i 1} {$i < 15} {incr i} {
+    lappend ::db_handles db$i
+    sqlite3 db$i test.db 
+    execsql "CREATE TABLE db${i}(a, b, c)" db$i 
+    execsql "INSERT INTO db${i} VALUES(1, 2, 3)"
+  }
+} {}
+proc nested_select {handles} {
+  [lindex $handles 0] eval "SELECT * FROM [lindex $handles 0]" {
+    lappend ::res $a $b $c
+    if {[llength $handles]>1} {
+      nested_select [lrange $handles 1 end]
+    }
+  }
+}
+do_test shared-$av.12.3 {
+  set ::res [list]
+  nested_select $::db_handles
+  set ::res
+} [string range [string repeat "1 2 3 " [llength $::db_handles]] 0 end-1]
+
+do_test shared-$av.12.X {
+  db close
+  foreach h $::db_handles { 
+    $h close
+  }
+} {}
+
+# Internally, locks are acquired on shared B-Tree structures in the order
+# that the structures appear in the virtual memory address space. This
+# test case attempts to cause the order of the structures in memory 
+# to be different from the order in which they are attached to a given
+# database handle. This covers an extra line or two.
+#
+do_test shared-$av.13.1 {
+  forcedelete test2.db test3.db test4.db test5.db
+  sqlite3 db :memory:
+  execsql {
+    ATTACH 'test2.db' AS aux2;
+    ATTACH 'test3.db' AS aux3;
+    ATTACH 'test4.db' AS aux4;
+    ATTACH 'test5.db' AS aux5;
+    DETACH aux2;
+    DETACH aux3;
+    DETACH aux4;
+    ATTACH 'test2.db' AS aux2;
+    ATTACH 'test3.db' AS aux3;
+    ATTACH 'test4.db' AS aux4;
+  }
+} {}
+do_test shared-$av.13.2 {
+  execsql {
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE aux2.t2(a, b, c);
+    CREATE TABLE aux3.t3(a, b, c);
+    CREATE TABLE aux4.t4(a, b, c);
+    CREATE TABLE aux5.t5(a, b, c);
+    SELECT count(*) FROM 
+      aux2.sqlite_master, 
+      aux3.sqlite_master, 
+      aux4.sqlite_master, 
+      aux5.sqlite_master
+  }
+} {1}
+do_test shared-$av.13.3 {
+  db close
+} {}
+
+# Test that nothing horrible happens if a connection to a shared B-Tree 
+# structure is closed while some other connection has an open cursor.
+#
+do_test shared-$av.14.1 {
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  execsql {SELECT name FROM sqlite_master}
+} {db1 db2 db3 db4 db5 db6 db7 db8 db9 db10 db11 db12 db13 db14}
+do_test shared-$av.14.2 {
+  set res [list]
+  db eval {SELECT name FROM sqlite_master} {
+    if {$name eq "db7"} {
+      db2 close
+    }
+    lappend res $name
+  }
+  set res
+} {db1 db2 db3 db4 db5 db6 db7 db8 db9 db10 db11 db12 db13 db14}
+do_test shared-$av.14.3 {
+  db close
+} {}
+
+# Populate a database schema using connection [db]. Then drop it using
+# [db2]. This is to try to find any points where shared-schema elements
+# are allocated using the lookaside buffer of [db].
+# 
+# Mutexes are enabled for this test as that activates a couple of useful
+# assert() statements in the C code.
+#
+do_test shared-$av-15.1 {
+  forcedelete test.db
+  sqlite3 db test.db -fullmutex 1
+  sqlite3 db2 test.db -fullmutex 1
+  execsql {
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX i1 ON t1(a, b);
+    CREATE VIEW v1 AS SELECT * FROM t1; 
+    CREATE VIEW v2 AS SELECT * FROM t1, v1 
+                      WHERE t1.c=v1.c GROUP BY t1.a ORDER BY v1.b; 
+    CREATE TRIGGER tr1 AFTER INSERT ON t1 
+      WHEN new.a!=1
+    BEGIN
+      DELETE FROM t1 WHERE a=5;
+      INSERT INTO t1 VALUES(1, 2, 3);
+      UPDATE t1 SET c=c+1;
+    END;
+
+    INSERT INTO t1 VALUES(5, 6, 7);
+    INSERT INTO t1 VALUES(8, 9, 10);
+    INSERT INTO t1 VALUES(11, 12, 13);
+    ANALYZE;
+    SELECT * FROM t1;
+  }
+} {1 2 6 8 9 12 1 2 5 11 12 14 1 2 4}
+do_test shared-$av-15.2 {
+  execsql { DROP TABLE t1 } db2
+} {}
+db close
+db2 close
+
+# Shared cache on a :memory: database.  This only works for URI filenames.
+#
+do_test shared-$av-16.1 {
+  sqlite3 db1 file::memory: -uri 1
+  sqlite3 db2 file::memory: -uri 1
+  db1 eval {
+    CREATE TABLE t1(x); INSERT INTO t1 VALUES(1),(2),(3);
+  }
+  db2 eval {
+    SELECT x FROM t1 ORDER BY x;
+  }
+} {1 2 3}
+do_test shared-$av-16.2 {
+  db2 eval {
+    INSERT INTO t1 VALUES(99);
+    DELETE FROM t1 WHERE x=2;
+  }
+  db1 eval {
+    SELECT x FROM t1 ORDER BY x;
+  }
+} {1 3 99}
+
+# Verify that there is no cache sharing ordinary (non-URI) filenames are
+# used.
+#
+do_test shared-$av-16.3 {
+  db1 close
+  db2 close
+  sqlite3 db1 :memory:
+  sqlite3 db2 :memory:
+  db1 eval {
+    CREATE TABLE t1(x); INSERT INTO t1 VALUES(4),(5),(6);
+  }
+  catchsql {
+    SELECT * FROM t1;
+  } db2
+} {1 {no such table: t1}}
+
+# Shared cache on named memory databases.
+#
+do_test shared-$av-16.4 {
+  db1 close
+  db2 close
+  forcedelete test.db test.db-wal test.db-journal
+  sqlite3 db1 file:test.db?mode=memory -uri 1
+  sqlite3 db2 file:test.db?mode=memory -uri 1
+  db1 eval {
+    CREATE TABLE t1(x); INSERT INTO t1 VALUES(1),(2),(3);
+  }
+  db2 eval {
+    SELECT x FROM t1 ORDER BY x;
+  }
+} {1 2 3}
+do_test shared-$av-16.5 {
+  db2 eval {
+    INSERT INTO t1 VALUES(99);
+    DELETE FROM t1 WHERE x=2;
+  }
+  db1 eval {
+    SELECT x FROM t1 ORDER BY x;
+  }
+} {1 3 99}
+do_test shared-$av-16.6 {
+  file exists test.db
+} {0}  ;# Verify that the database is in-memory
+
+# Shared cache on named memory databases with different names.
+#
+do_test shared-$av-16.7 {
+  db1 close
+  db2 close
+  forcedelete test1.db test2.db
+  sqlite3 db1 file:test1.db?mode=memory -uri 1
+  sqlite3 db2 file:test2.db?mode=memory -uri 1
+  db1 eval {
+    CREATE TABLE t1(x); INSERT INTO t1 VALUES(1),(2),(3);
+  }
+  catchsql {
+    SELECT x FROM t1 ORDER BY x;
+  } db2
+} {1 {no such table: t1}}
+do_test shared-$av-16.8 {
+  file exists test1.db
+} {0}  ;# Verify that the database is in-memory
+
+# Shared cache on named memory databases attached to readonly connections.
+#
+if {![sqlite3 -has-codec]} {
+  do_test shared-$av-16.8.1 {
+    db1 close
+    db2 close
+  
+    sqlite3 db test1.db
+    db eval { 
+      CREATE TABLE yy(a, b);
+      INSERT INTO yy VALUES(77, 88);
+    }
+    db close
+  
+    sqlite3 db1 test1.db -uri 1 -readonly 1
+    sqlite3 db2 test2.db -uri 1 
+  
+    db1 eval { 
+      ATTACH 'file:mem?mode=memory&cache=shared' AS shared; 
+      CREATE TABLE shared.xx(a, b);
+      INSERT INTO xx VALUES(55, 66);
+    }
+    db2 eval { 
+      ATTACH 'file:mem?mode=memory&cache=shared' AS shared;
+      SELECT * FROM xx;
+    }
+  } {55 66}
+  
+  do_test shared-$av-16.8.2 { db1 eval { SELECT * FROM yy } } {77 88}
+  do_test shared-$av-16.8.3 { 
+    list [catch {db1 eval { INSERT INTO yy VALUES(1, 2) }} msg] $msg
+  } {1 {attempt to write a readonly database}}
+  
+  db1 close
+  db2 close
+}
+
+}  ;# end of autovacuum on/off loop
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+finish_test

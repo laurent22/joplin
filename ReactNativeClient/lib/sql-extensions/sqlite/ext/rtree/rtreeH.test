@@ -1,0 +1,103 @@
+# 2018-05-16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file contains tests for the r-tree module, specifically the
+# auxiliary column mechanism.
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+
+do_execsql_test rtreeH-100 {
+  CREATE VIRTUAL TABLE t1 USING rtree(id,x0,x1,y0,y1,+label,+other);
+  INSERT INTO t1(x0,x1,y0,y1,label) VALUES
+    (0,10,0,10,'lower-left corner'),
+    (0,10,90,100,'upper-left corner'),
+    (90,100,0,10,'lower-right corner'),
+    (90,100,90,100,'upper-right corner'),
+    (40,60,40,60,'center'),
+    (0,5,0,100,'left edge'),
+    (95,100,0,100,'right edge'),
+    (0,100,0,5,'bottom edge'),
+    (0,100,95,100,'top edge'),
+    (0,100,0,100,'the whole thing'),
+    (0,50,0,100,'left half'),
+    (51,100,0,100,'right half'),
+    (0,100,0,50,'bottom half'),
+    (0,100,51,100,'top half');
+} {}
+do_execsql_test rtreeH-101 {
+  SELECT * FROM t1_rowid ORDER BY rowid
+} {1 1 {lower-left corner} {} 2 1 {upper-left corner} {} 3 1 {lower-right corner} {} 4 1 {upper-right corner} {} 5 1 center {} 6 1 {left edge} {} 7 1 {right edge} {} 8 1 {bottom edge} {} 9 1 {top edge} {} 10 1 {the whole thing} {} 11 1 {left half} {} 12 1 {right half} {} 13 1 {bottom half} {} 14 1 {top half} {}}
+
+do_execsql_test rtreeH-102 {
+  SELECT * FROM t1 WHERE rowid=5;
+} {5 40.0 60.0 40.0 60.0 center {}}
+do_execsql_test rtreeH-102b {
+  SELECT * FROM t1 WHERE rowid=5.0;
+} {5 40.0 60.0 40.0 60.0 center {}}
+do_execsql_test rtreeH-102c {
+  SELECT * FROM t1 WHERE rowid='5';
+} {5 40.0 60.0 40.0 60.0 center {}}
+do_execsql_test rtreeH-102d {
+  SELECT * FROM t1 WHERE rowid='0005';
+} {5 40.0 60.0 40.0 60.0 center {}}
+do_execsql_test rtreeH-102e {
+  SELECT * FROM t1 WHERE rowid='+5.0e+0';
+} {5 40.0 60.0 40.0 60.0 center {}}
+do_execsql_test rtreeH-103 {
+  SELECT * FROM t1 WHERE label='center';
+} {5 40.0 60.0 40.0 60.0 center {}}
+
+do_execsql_test rtreeH-104 {
+  SELECT * FROM t1 WHERE rowid='+5.0e+0x';
+} {}
+do_execsql_test rtreeH-105 {
+  SELECT * FROM t1 WHERE rowid=x'35';
+} {}
+do_execsql_test rtreeH-106 {
+  SELECT * FROM t1 WHERE rowid=null;
+} {}
+
+
+do_rtree_integrity_test rtreeH-110 t1
+
+do_execsql_test rtreeH-120 {
+  SELECT label FROM t1 WHERE x1<=50 ORDER BY id
+} {{lower-left corner} {upper-left corner} {left edge} {left half}}
+do_execsql_test rtreeH-121 {
+  SELECT label FROM t1 WHERE x1<=50 AND label NOT LIKE '%corner%' ORDER BY id
+} {{left edge} {left half}}
+
+do_execsql_test rtreeH-200 {
+  WITH RECURSIVE
+    c1(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM c1 WHERE x<99),
+    c2(y) AS (VALUES(0) UNION ALL SELECT y+1 FROM c2 WHERE y<99)
+  INSERT INTO t1(id, x0,x1,y0,y1,label)
+    SELECT 1000+x+y*100, x, x+1, y, y+1, printf('box-%d,%d',x,y) FROM c1, c2;
+} {}
+
+do_execsql_test rtreeH-210 {
+  SELECT label FROM t1 WHERE x0>=48 AND x1<=50 AND y0>=48 AND y1<=50
+     ORDER BY id;
+} {box-48,48 box-49,48 box-48,49 box-49,49}
+
+do_execsql_test rtreeH-300 {
+  UPDATE t1 SET label='x'||label
+    WHERE x0>=49 AND x1<=50 AND y0>=49 AND y1<=50;
+  SELECT label FROM t1 WHERE x0>=48 AND x1<=50 AND y0>=48 AND y1<=50
+     ORDER BY id;
+} {box-48,48 box-49,48 box-48,49 xbox-49,49}
+
+
+finish_test

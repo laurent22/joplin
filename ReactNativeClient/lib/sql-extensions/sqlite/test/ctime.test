@@ -1,0 +1,258 @@
+# 2009 February 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for the compile time diagnostic 
+# functions.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Test organization:
+#
+# ctime-1.*: Test pragma support.
+# ctime-2.*: Test function support.
+#
+
+ifcapable !pragma||!compileoption_diags {
+  finish_test
+  return
+}
+
+#####################
+# ctime-1.*: Test pragma support.
+
+do_test ctime-1.1.1 {
+  catchsql {
+    PRAGMA compile_options();
+  }
+} {1 {near ")": syntax error}}
+do_test ctime-1.1.2 {
+  catchsql {
+    PRAGMA compile_options(NULL);
+  }
+} {1 {near "NULL": syntax error}}
+do_test ctime-1.1.3 {
+  catchsql {
+    PRAGMA compile_options *;
+  }
+} {1 {near "*": syntax error}}
+
+do_test ctime-1.2.1 {
+  set ans [ catchsql {
+    PRAGMA compile_options;
+  } ]
+  list [ lindex $ans 0 ]
+} {0}
+# the results should be in sorted order already
+do_test ctime-1.2.2 {
+  set ans [ catchsql {
+    PRAGMA compile_options;
+  } ]
+  list [ lindex $ans 0 ] [ expr { [lsort [lindex $ans 1]]==[lindex $ans 1] } ]
+} {0 1}
+
+# Check the THREADSAFE option for SQLITE_THREADSAFE=2 builds (there are
+# a couple of these configurations in releasetest.tcl).
+#
+ifcapable threadsafe2 {
+  foreach {tn opt res} {
+    1 SQLITE_THREADSAFE     1
+    2 THREADSAFE            1
+    3 THREADSAFE=0          0
+    4 THREADSAFE=1          0
+    5 THREADSAFE=2          1
+    6 THREADSAFE=           0
+  } {
+    do_execsql_test ctime-1.3.$tn {
+      SELECT sqlite_compileoption_used($opt)
+    } $res
+  }
+}
+
+# SQLITE_THREADSAFE should pretty much always be defined
+# one way or the other, and it must have a value of 0 or 1.
+do_test ctime-1.4.1 {
+  catchsql {
+    SELECT sqlite_compileoption_used('SQLITE_THREADSAFE');
+  }
+} {0 1}
+do_test ctime-1.4.2 {
+  catchsql {
+    SELECT sqlite_compileoption_used('THREADSAFE');
+  }
+} {0 1}
+do_test ctime-1.4.3 {
+  catchsql {
+    SELECT sqlite_compileoption_used("THREADSAFE");
+  }
+} {0 1}
+
+do_test ctime-1.5 {
+  set ans1 [ catchsql {
+    SELECT sqlite_compileoption_used('THREADSAFE=0');
+  } ]
+  set ans2 [ catchsql {
+    SELECT sqlite_compileoption_used('THREADSAFE=1');
+  } ]
+  set ans3 [ catchsql {
+    SELECT sqlite_compileoption_used('THREADSAFE=2');
+  } ]
+  lsort [ list $ans1 $ans2 $ans3 ]
+} {{0 0} {0 0} {0 1}}
+
+do_test ctime-1.6 {
+  execsql {
+    SELECT sqlite_compileoption_used('THREADSAFE=');
+  }
+} {0}
+
+do_test ctime-1.7.1 {
+  execsql {
+    SELECT sqlite_compileoption_used('SQLITE_OMIT_COMPILEOPTION_DIAGS');
+  }
+} {0}
+do_test ctime-1.7.2 {
+  execsql {
+    SELECT sqlite_compileoption_used('OMIT_COMPILEOPTION_DIAGS');
+  }
+} {0}
+
+#####################
+# ctime-2.*: Test function support.
+
+do_test ctime-2.1.1 {
+  catchsql {
+    SELECT sqlite_compileoption_used();
+  }
+} {1 {wrong number of arguments to function sqlite_compileoption_used()}}
+do_test ctime-2.1.2 {
+  catchsql {
+    SELECT sqlite_compileoption_used(NULL);
+  }
+} {0 {{}}}
+do_test ctime-2.1.3 {
+  catchsql {
+    SELECT sqlite_compileoption_used("");
+  }
+} {0 0}
+do_test ctime-2.1.4 {
+  catchsql {
+    SELECT sqlite_compileoption_used('');
+  }
+} {0 0}
+do_test ctime-2.1.5 {
+  catchsql {
+    SELECT sqlite_compileoption_used(foo);
+  }
+} {1 {no such column: foo}}
+do_test ctime-2.1.6 {
+  catchsql {
+    SELECT sqlite_compileoption_used('THREADSAFE', 0);
+  }
+} {1 {wrong number of arguments to function sqlite_compileoption_used()}}
+do_test ctime-2.1.7 {
+  catchsql {
+    SELECT sqlite_compileoption_used(0);
+  }
+} {0 0}
+do_test ctime-2.1.8 {
+  catchsql {
+    SELECT sqlite_compileoption_used('0');
+  }
+} {0 0}
+do_test ctime-2.1.9 {
+  catchsql {
+    SELECT sqlite_compileoption_used(1.0);
+  }
+} {0 0}
+
+do_test ctime-2.2.1 {
+  catchsql {
+    SELECT sqlite_compileoption_get();
+  }
+} {1 {wrong number of arguments to function sqlite_compileoption_get()}}
+do_test ctime-2.2.2 {
+  catchsql {
+    SELECT sqlite_compileoption_get(0, 0);
+  }
+} {1 {wrong number of arguments to function sqlite_compileoption_get()}}
+
+# This assumes there is at least 1 compile time option
+# (see SQLITE_THREADSAFE above).
+do_test ctime-2.3 {
+  catchsql {
+    SELECT sqlite_compileoption_used(sqlite_compileoption_get(0));
+  }
+} {0 1}
+
+# This assumes there is at least 1 compile time option
+# (see SQLITE_THREADSAFE above).
+do_test ctime-2.4 {
+  set ans [ catchsql {
+    SELECT sqlite_compileoption_get(0);
+  } ]
+  list [lindex $ans 0]
+} {0}
+
+# Get the list of defines using the pragma,
+# then try querying each one with the functions.
+set ans [ catchsql {
+  PRAGMA compile_options;
+} ]
+set opts [ lindex $ans 1 ]
+set tc 1
+foreach opt $opts {
+  do_test ctime-2.5.$tc {
+    set N [ expr {$tc-1} ]
+    set ans1 [catch {db one {
+      SELECT sqlite_compileoption_get($N);
+    }} msg]
+    lappend ans1 $msg
+    set ans2 [ catchsql {
+      SELECT sqlite_compileoption_used($opt);
+    } ]
+    list [ lindex $ans1 0 ] [ expr { [lindex $ans1 1]==$opt } ] \
+         [ expr { $ans2 } ]
+  } {0 1 {0 1}}
+  incr tc 1
+}
+# test 1 past array bounds
+do_test ctime-2.5.$tc {
+  set N [ expr {$tc-1} ]
+  set ans [ catchsql {
+    SELECT sqlite_compileoption_get($N);
+  } ]
+} {0 {{}}}
+incr tc 1
+# test 1 before array bounds (N=-1)
+do_test ctime-2.5.$tc {
+  set N -1
+  set ans [ catchsql {
+    SELECT sqlite_compileoption_get($N);
+  } ]
+} {0 {{}}}
+
+#--------------------------------------------------------------------------
+# Test that SQLITE_DIRECT_OVERFLOW_READ is reflected in the output of
+# "PRAGMA compile_options".
+#
+ifcapable direct_read {
+  set res 1
+} else {
+  set res 0
+}
+do_test ctime-3.0.1 {
+  expr [lsearch [db eval {PRAGMA compile_options}] DIRECT_OVERFLOW_READ]>=0
+} $res
+
+finish_test

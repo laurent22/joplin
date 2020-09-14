@@ -1,0 +1,380 @@
+# 2005 July 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+# This file implements tests for the ANALYZE command.
+#
+# $Id: analyze.test,v 1.9 2008/08/11 18:44:58 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# There is nothing to test if ANALYZE is disable for this build.
+#
+ifcapable {!analyze} {
+  finish_test
+  return
+}
+
+# Basic sanity checks.
+#
+do_test analyze-1.1 {
+  catchsql {
+    ANALYZE no_such_table
+  }
+} {1 {no such table: no_such_table}}
+do_test analyze-1.2 {
+  execsql {
+    SELECT count(*) FROM sqlite_master WHERE name='sqlite_stat1'
+  }
+} {0}
+do_test analyze-1.3 {
+  catchsql {
+    ANALYZE no_such_db.no_such_table
+  }
+} {1 {unknown database no_such_db}}
+do_test analyze-1.4 {
+  execsql {
+    SELECT count(*) FROM sqlite_master WHERE name='sqlite_stat1'
+  }
+} {0}
+do_test analyze-1.5.1 {
+  catchsql {
+    ANALYZE
+  }
+} {0 {}}
+do_test analyze-1.5.2 {
+  catchsql {
+    PRAGMA empty_result_callbacks=1;
+    ANALYZE
+  }
+} {0 {}}
+do_test analyze-1.6 {
+  execsql {
+    SELECT count(*) FROM sqlite_master WHERE name='sqlite_stat1'
+  }
+} {1}
+do_test analyze-1.6.2 {
+  catchsql {
+    CREATE INDEX stat1idx ON sqlite_stat1(idx);
+  }
+} {1 {table sqlite_stat1 may not be indexed}}
+do_test analyze-1.6.3 {
+  catchsql {
+    CREATE INDEX main.stat1idx ON SQLite_stat1(idx);
+  }
+} {1 {table sqlite_stat1 may not be indexed}}
+do_test analyze-1.7 {
+  execsql {
+    SELECT * FROM sqlite_stat1 WHERE idx NOT NULL
+  }
+} {}
+do_test analyze-1.8 {
+  catchsql {
+    ANALYZE main
+  }
+} {0 {}}
+do_test analyze-1.9 {
+  execsql {
+    SELECT * FROM sqlite_stat1 WHERE idx NOT NULL
+  }
+} {}
+do_test analyze-1.10 {
+  catchsql {
+    CREATE TABLE t1(a,b);
+    ANALYZE main.t1;
+  }
+} {0 {}}
+do_test analyze-1.11 {
+  execsql {
+    SELECT * FROM sqlite_stat1
+  }
+} {}
+do_test analyze-1.12 {
+  catchsql {
+    ANALYZE t1;
+  }
+} {0 {}}
+do_test analyze-1.13 {
+  execsql {
+    SELECT * FROM sqlite_stat1
+  }
+} {}
+
+# Create some indices that can be analyzed.  But do not yet add
+# data.  Without data in the tables, no analysis is done.
+#
+do_test analyze-2.1 {
+  execsql {
+    CREATE INDEX t1i1 ON t1(a);
+    ANALYZE main.t1;
+    SELECT * FROM sqlite_stat1 ORDER BY idx;
+  }
+} {}
+do_test analyze-2.2 {
+  execsql {
+    CREATE INDEX t1i2 ON t1(b);
+    ANALYZE t1;
+    SELECT * FROM sqlite_stat1 ORDER BY idx;
+  }
+} {}
+do_test analyze-2.3 {
+  execsql {
+    CREATE INDEX t1i3 ON t1(a,b);
+    ANALYZE main;
+    SELECT * FROM sqlite_stat1 ORDER BY idx;
+  }
+} {}
+
+# Start adding data to the table.  Verify that the analysis
+# is done correctly.
+#
+do_test analyze-3.1 {
+  execsql {
+    INSERT INTO t1 VALUES(1,2);
+    INSERT INTO t1 VALUES(1,3);
+    ANALYZE main.t1;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {2 2} t1i2 {2 1} t1i3 {2 2 1}}
+do_test analyze-3.2 {
+  execsql {
+    INSERT INTO t1 VALUES(1,4);
+    INSERT INTO t1 VALUES(1,5);
+    ANALYZE t1;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {4 4} t1i2 {4 1} t1i3 {4 4 1}}
+do_test analyze-3.3 {
+  execsql {
+    INSERT INTO t1 VALUES(2,5);
+    ANALYZE main;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {5 3} t1i2 {5 2} t1i3 {5 3 1}}
+do_test analyze-3.4 {
+  execsql {
+    CREATE TABLE t2 AS SELECT * FROM t1;
+    CREATE INDEX t2i1 ON t2(a);
+    CREATE INDEX t2i2 ON t2(b);
+    CREATE INDEX t2i3 ON t2(a,b);
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {5 3} t1i2 {5 2} t1i3 {5 3 1} t2i1 {5 3} t2i2 {5 2} t2i3 {5 3 1}}
+do_test analyze-3.5 {
+  execsql {
+    DROP INDEX t2i3;
+    ANALYZE t1;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {5 3} t1i2 {5 2} t1i3 {5 3 1} t2i1 {5 3} t2i2 {5 2}}
+do_test analyze-3.6 {
+  execsql {
+    ANALYZE t2;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {5 3} t1i2 {5 2} t1i3 {5 3 1} t2i1 {5 3} t2i2 {5 2}}
+do_test analyze-3.7 {
+  execsql {
+    DROP INDEX t2i2;
+    ANALYZE t2;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t1i1 {5 3} t1i2 {5 2} t1i3 {5 3 1} t2i1 {5 3}}
+do_test analyze-3.8 {
+  execsql {
+    CREATE TABLE t3 AS SELECT a, b, rowid AS c, 'hi' AS d FROM t1;
+    CREATE INDEX t3i1 ON t3(a);
+    CREATE INDEX t3i2 ON t3(a,b,c,d);
+    CREATE INDEX t3i3 ON t3(d,b,c,a);
+    DROP TABLE t1;
+    DROP TABLE t2;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {}
+do_test analyze-3.9 {
+  execsql {
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t3i1 {5 3} t3i2 {5 3 1 1 1} t3i3 {5 5 2 1 1}}
+
+do_test analyze-3.10 {
+  execsql {
+    CREATE TABLE [silly " name](a, b, c);
+    CREATE INDEX 'foolish '' name' ON [silly " name](a, b);
+    CREATE INDEX 'another foolish '' name' ON [silly " name](c);
+    INSERT INTO [silly " name] VALUES(1, 2, 3);
+    INSERT INTO [silly " name] VALUES(4, 5, 6);
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {{another foolish ' name} {2 1} {foolish ' name} {2 1 1} t3i1 {5 3} t3i2 {5 3 1 1 1} t3i3 {5 5 2 1 1}}
+do_test analyze-3.11 {
+  execsql {
+    DROP INDEX "foolish ' name";
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {{another foolish ' name} {2 1} t3i1 {5 3} t3i2 {5 3 1 1 1} t3i3 {5 5 2 1 1}}
+do_test analyze-3.11 {
+  execsql {
+    DROP TABLE "silly "" name";
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t3i1 {5 3} t3i2 {5 3 1 1 1} t3i3 {5 5 2 1 1}}
+
+# Try corrupting the sqlite_stat1 table and make sure the
+# database is still able to function.
+#
+do_test analyze-4.0 {
+  sqlite3 db2 test.db
+  db2 eval {
+    CREATE TABLE t4(x,y,z);
+    CREATE INDEX t4i1 ON t4(x);
+    CREATE INDEX t4i2 ON t4(y);
+    INSERT INTO t4 SELECT a,b,c FROM t3;
+  }
+  db2 close
+  db close
+  sqlite3 db test.db
+  execsql {
+    ANALYZE;
+    SELECT idx, stat FROM sqlite_stat1 ORDER BY idx;
+  }
+} {t3i1 {5 3} t3i2 {5 3 1 1 1} t3i3 {5 5 2 1 1} t4i1 {5 3} t4i2 {5 2}}
+do_test analyze-4.1 {
+  execsql {
+    PRAGMA writable_schema=on;
+    INSERT INTO sqlite_stat1 VALUES(null,null,null);
+    PRAGMA writable_schema=off;
+  }
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM t4 WHERE x=1234;
+  }
+} {}
+do_test analyze-4.2 {
+  execsql {
+    PRAGMA writable_schema=on;
+    DELETE FROM sqlite_stat1;
+    INSERT INTO sqlite_stat1 VALUES('t4','t4i1','nonsense');
+    INSERT INTO sqlite_stat1 VALUES('t4','t4i2','120897349817238741092873198273409187234918720394817209384710928374109827172901827349871928741910');
+    PRAGMA writable_schema=off;
+  }
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM t4 WHERE x=1234;
+  }
+} {}
+do_test analyze-4.3 {
+  execsql {
+    INSERT INTO sqlite_stat1 VALUES('t4','xyzzy','0 1 2 3');
+  }
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM t4 WHERE x=1234;
+  }
+} {}
+
+# Verify that DROP TABLE and DROP INDEX remove entries from the 
+# sqlite_stat1 and sqlite_stat4 tables.
+#
+do_test analyze-5.0 {
+  execsql {
+    DELETE FROM t3;
+    DELETE FROM t4;
+    INSERT INTO t3 VALUES(1,2,3,4);
+    INSERT INTO t3 VALUES(5,6,7,8);
+    INSERT INTO t3 SELECT a+8, b+8, c+8, d+8 FROM t3;
+    INSERT INTO t3 SELECT a+16, b+16, c+16, d+16 FROM t3;
+    INSERT INTO t3 SELECT a+32, b+32, c+32, d+32 FROM t3;
+    INSERT INTO t3 SELECT a+64, b+64, c+64, d+64 FROM t3;
+    INSERT INTO t4 SELECT a, b, c FROM t3;
+    ANALYZE;
+    SELECT DISTINCT idx FROM sqlite_stat1 ORDER BY 1;
+    SELECT DISTINCT tbl FROM sqlite_stat1 ORDER BY 1;
+  }
+} {t3i1 t3i2 t3i3 t4i1 t4i2 t3 t4}
+ifcapable stat4 {
+  do_test analyze-5.1 {
+    execsql {
+      SELECT DISTINCT idx FROM sqlite_stat4 ORDER BY 1;
+      SELECT DISTINCT tbl FROM sqlite_stat4 ORDER BY 1;
+    }
+  } {t3i1 t3i2 t3i3 t4i1 t4i2 t3 t4}
+}
+do_test analyze-5.2 {
+  execsql {
+    DROP INDEX t3i2;
+    SELECT DISTINCT idx FROM sqlite_stat1 ORDER BY 1;
+    SELECT DISTINCT tbl FROM sqlite_stat1 ORDER BY 1;
+  }
+} {t3i1 t3i3 t4i1 t4i2 t3 t4}
+ifcapable stat4 {
+  do_test analyze-5.3 {
+    execsql {
+      SELECT DISTINCT idx FROM sqlite_stat4 ORDER BY 1;
+      SELECT DISTINCT tbl FROM sqlite_stat4 ORDER BY 1;
+    }
+  } {t3i1 t3i3 t4i1 t4i2 t3 t4}
+}
+do_test analyze-5.4 {
+  execsql {
+    DROP TABLE t3;
+    SELECT DISTINCT idx FROM sqlite_stat1 ORDER BY 1;
+    SELECT DISTINCT tbl FROM sqlite_stat1 ORDER BY 1;
+  }
+} {t4i1 t4i2 t4}
+ifcapable stat4 {
+  do_test analyze-5.5 {
+    execsql {
+      SELECT DISTINCT idx FROM sqlite_stat4 ORDER BY 1;
+      SELECT DISTINCT tbl FROM sqlite_stat4 ORDER BY 1;
+    }
+  } {t4i1 t4i2 t4}
+}
+
+# This test corrupts the database file so it must be the last test
+# in the series.
+#
+do_test analyze-5.99 {
+  sqlite3_db_config db DEFENSIVE 0
+  execsql {
+    PRAGMA writable_schema=on;
+    UPDATE sqlite_master SET sql='nonsense' WHERE name='sqlite_stat1';
+  }
+  db close
+  catch { sqlite3 db test.db }
+  catchsql {
+    ANALYZE
+  }
+} {1 {malformed database schema (sqlite_stat1)}}
+
+# Verify that tables whose names begin with "sqlite" but not
+# "sqlite_" are analyzed.
+#
+db close
+sqlite3 db :memory:
+do_execsql_test analyze-6.1 {
+  CREATE TABLE sqliteDemo(a);
+  INSERT INTO sqliteDemo(a) VALUES(1),(2),(3),(4),(5);
+  CREATE TABLE SQLiteDemo2(a INTEGER PRIMARY KEY AUTOINCREMENT);
+  INSERT INTO SQLiteDemo2 SELECT * FROM sqliteDemo;
+  CREATE TABLE t1(b);
+  INSERT INTO t1(b) SELECT a FROM sqliteDemo;
+  ANALYZE;
+  SELECT tbl FROM sqlite_stat1 WHERE idx IS NULL ORDER BY tbl;
+} {SQLiteDemo2 sqliteDemo t1}
+
+finish_test

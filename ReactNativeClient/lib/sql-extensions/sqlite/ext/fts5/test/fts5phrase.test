@@ -1,0 +1,118 @@
+# 2014 Jan 08
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focused on phrase queries.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5phrase
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t3 USING fts5(a, b, c);
+  INSERT INTO t3 VALUES('d e a', 'd i j j f', 'i j i e b f h'); -- 1
+  INSERT INTO t3 VALUES('g a e', 'f g i g a', 'h d g i g h c'); -- 2
+  INSERT INTO t3 VALUES('e a d', 'e i h a f', 'c e h i f b i'); -- 3
+  INSERT INTO t3 VALUES('a g c', 'd j d j c', 'c d f j i g j'); -- 4
+  INSERT INTO t3 VALUES('b c b', 'j g c d f', 'j c j d g f b'); -- 5
+  INSERT INTO t3 VALUES('j a d', 'e b i h h', 'c c f g d i d'); -- 6
+  INSERT INTO t3 VALUES('a d f', 'h g i i i', 'e a g c i f b'); -- 7
+  INSERT INTO t3 VALUES('g f d', 'f c g b j', 'b b h h h j j'); -- 8
+  INSERT INTO t3 VALUES('f h g', 'c j f g j', 'd h d f e b h'); -- 9
+  INSERT INTO t3 VALUES('f h d', 'c i a d b', 'g b j b a d e'); -- 10
+  INSERT INTO t3 VALUES('j h h', 'j i h a g', 'd e i e a g j'); -- 11
+  INSERT INTO t3 VALUES('a b e', 'h g a g c', 'h c a a d e g'); -- 12
+  INSERT INTO t3 VALUES('a j g', 'i h i f i', 'a g h j g i b'); -- 13
+  INSERT INTO t3 VALUES('j h e', 'f e d i e', 'i d c f e d c'); -- 14
+  INSERT INTO t3 VALUES('d j d', 'd b i a c', 'g d h i d b e'); -- 15
+  INSERT INTO t3 VALUES('h j e', 'e b b c f', 'j a f g h d j'); -- 16
+  INSERT INTO t3 VALUES('c b j', 'c a b a i', 'h f i d a d c'); -- 17
+  INSERT INTO t3 VALUES('e e d', 'i d f c c', 'g i d a f e a'); -- 18
+  INSERT INTO t3 VALUES('e i g', 'e a b i h', 'i f d d a d f'); -- 19
+  INSERT INTO t3 VALUES('h g f', 'b h h j d', 'i f d e g j a'); -- 20
+  INSERT INTO t3 VALUES('e h f', 'j c b c f', 'j a j g h a c'); -- 21
+  INSERT INTO t3 VALUES('d c h', 'b g i c e', 'i i c d e h i'); -- 22
+  INSERT INTO t3 VALUES('a h i', 'a g d f f', 'e f i i b b h'); -- 23
+  INSERT INTO t3 VALUES('d d g', 'c c b c g', 'g c h e b c e'); -- 24
+  INSERT INTO t3 VALUES('a b b', 'b f a d i', 'd a h a b c i'); -- 25
+  INSERT INTO t3 VALUES('a f d', 'a j e a h', 'j i h j a i f'); -- 26
+  INSERT INTO t3 VALUES('d j d', 'h a d i a', 'h h f j h g a'); -- 27
+  INSERT INTO t3 VALUES('g a e', 'd g f a g', 'i d b c g g j'); -- 28
+  INSERT INTO t3 VALUES('j e h', 'g h j h g', 'd a e j a a h'); -- 29
+  INSERT INTO t3 VALUES('e j e', 'g e j g c', 'f c e b e e a'); -- 30
+  INSERT INTO t3 VALUES('h f f', 'i j g e c', 'j j f c a i j'); -- 31
+  INSERT INTO t3 VALUES('a g c', 'c g d b i', 'g h c b a a f'); -- 32
+  INSERT INTO t3 VALUES('c h i', 'j d h e e', 'a h i d c c j'); -- 33
+  INSERT INTO t3 VALUES('d a c', 'e d d b j', 'c e b b h i h'); -- 34
+  INSERT INTO t3 VALUES('d f h', 'c a f c c', 'j b b c c j f'); -- 35
+  INSERT INTO t3 VALUES('b g h', 'g c c c f', 'c g c f h e e'); -- 36
+  INSERT INTO t3 VALUES('f e a', 'b h f j h', 'j g h f d g f'); -- 37
+  INSERT INTO t3 VALUES('h f a', 'a e i j g', 'f d a f d f c'); -- 38
+  INSERT INTO t3 VALUES('f i c', 'f i i i i', 'e c f d h j f'); -- 39
+  INSERT INTO t3 VALUES('h h d', 'd i e d i', 'd f e i a h a'); -- 40
+  INSERT INTO t3 VALUES('f g c', 'd a f c h', 'b b g j c e g'); -- 41
+  INSERT INTO t3 VALUES('h i h', 'h d j d e', 'e d b b i e g'); -- 42
+  INSERT INTO t3 VALUES('b h i', 'j e i d a', 'j j h e e c a'); -- 43
+  INSERT INTO t3 VALUES('g i g', 'f c c f d', 'a c i c a d a'); -- 44
+  INSERT INTO t3 VALUES('c c f', 'a b j d b', 'c a e g f e c'); -- 45
+  INSERT INTO t3 VALUES('d h j', 'g c b j d', 'e a h f h j g'); -- 46
+  INSERT INTO t3 VALUES('a a d', 'j e j a i', 'i d c f f f b'); -- 47
+  INSERT INTO t3 VALUES('b g j', 'e c i h f', 'd d h b g a d'); -- 48
+  INSERT INTO t3 VALUES('c i a', 'a c c c c', 'e h i e h i e'); -- 49
+  INSERT INTO t3 VALUES('f f c', 'f f b i i', 'f f a j e c i'); -- 50
+}
+
+proc pmatch {col expr} {
+  return [expr {[string first $expr $col]>=0}]
+}
+db func pmatch pmatch
+
+foreach {tn cols tokens} {
+  1 a         "c c"
+  2 b         "c c"
+  3 c         "c c"
+  4 {a b c}   "c c"
+  5 {a b c}   "b h"
+  6 {a b}     "b h"
+  7 {a c}     "b h"
+  8 {c a}     "b h"
+  9 {c}       "i e"
+  10 {b}      "i e"
+  11 {a}      "i e"
+} {
+  set fts   "{$cols}:[join $tokens +]"
+  set where [list]
+  foreach c $cols { lappend where "pmatch($c, '$tokens')" }
+  set where [join $where " OR "]
+
+  set res [db eval "SELECT rowid FROM t3 WHERE $where"]
+  do_execsql_test "1.$tn.$fts->([llength $res] rows)" { 
+    SELECT rowid FROM t3($fts) 
+  } $res
+}
+
+do_execsql_test 2.0 {
+  SELECT rowid,
+    highlight(t3, 0, '*', '*'),
+    highlight(t3, 1, '*', '*'),
+    highlight(t3, 2, '*', '*')
+  FROM t3('a:f+f')
+} {
+  31 {h *f f*} {i j g e c} {j j f c a i j} 
+  50 {*f f* c} {f f b i i} {f f a j e c i}
+}
+
+finish_test

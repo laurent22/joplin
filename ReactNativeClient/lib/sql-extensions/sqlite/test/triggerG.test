@@ -1,0 +1,94 @@
+# 2017-03-24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice', here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix triggerG
+ifcapable {!trigger} {
+  finish_test
+  return
+}
+
+# Test cases for ticket 
+# https://www.sqlite.org/src/tktview/06796225f59c057cd120f
+#
+# The OP_Once opcode was not working correctly for recursive triggers.
+#
+do_execsql_test 100 {
+  PRAGMA recursive_triggers = 1;
+  
+  CREATE TABLE t1(a);
+  CREATE INDEX i1 ON t1(a);
+  INSERT INTO t1(a) VALUES(0),(2),(3),(8),(9);
+  CREATE TABLE t2(b);
+  CREATE TABLE t3(c);
+  
+  CREATE TRIGGER tr AFTER INSERT ON t3 BEGIN
+    INSERT INTO t3 SELECT new.c+1 WHERE new.c<5;
+    INSERT INTO t2 SELECT new.c*100+a FROM t1 WHERE a IN (1, 2, 3, 4);
+  END;
+  
+  INSERT INTO t3 VALUES(2);
+  SELECT c FROM t3 ORDER BY c;;
+} {2 3 4 5}
+do_execsql_test 110 {
+  SELECT b FROM t2 ORDER BY b;
+} {202 203 302 303 402 403 502 503}
+
+do_execsql_test 200 {
+  DELETE FROM t1;
+  INSERT INTO t1(a) VALUES(0),(2),(3),(8),(9);
+  DELETE FROM t2;
+  DELETE FROM t3;
+  DROP TRIGGER tr;
+  CREATE TRIGGER tr AFTER INSERT ON t3 BEGIN
+    INSERT INTO t3 SELECT new.c+1 WHERE new.c<5;
+    INSERT INTO t2 SELECT new.c*10000+xx.a*100+yy.a
+                     FROM t1 AS xx, t1 AS yy
+                    WHERE xx.a IN (1,2,3,4)
+                      AND yy.a IN (2,3,4,5);
+  END;
+
+  INSERT INTO t3 VALUES(2);
+  SELECT b FROM t2 ORDER BY b;
+} {20202 20203 20302 20303 30202 30203 30302 30303 40202 40203 40302 40303 50202 50203 50302 50303}
+
+# At one point the following was causing an assert() to fail.
+#
+do_execsql_test 300 {
+  CREATE TABLE t4(x);
+  CREATE TRIGGER tr4 AFTER INSERT ON t4 BEGIN
+    SELECT 0x2147483648e0e0099 AS y WHERE y;
+  END;
+}
+
+do_catchsql_test 310 {
+  INSERT INTO t4 VALUES(1);
+} {1 {hex literal too big: 0x2147483648e0e0099}}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 400 {
+  CREATE VIEW v0(a) AS SELECT 1234;
+  CREATE TRIGGER t0001 INSTEAD OF DELETE ON v0 BEGIN
+    SELECT old.a;
+  END;
+}
+do_execsql_test 405 {
+  SELECT a FROM v0;
+} {1234}
+do_execsql_test 410 {
+  DELETE FROM v0;
+}
+
+
+finish_test

@@ -1,0 +1,121 @@
+# 2007 April 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure SQLite does not crash or
+# segfault if it sees a corrupt database file.
+#
+# $Id: corrupt3.test,v 1.2 2007/04/06 21:42:22 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# This module uses hard-coded offsets which do not work if the reserved_bytes
+# value is nonzero.
+if {[nonzero_reserved_bytes]} {finish_test; return;}
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+# We must have the page_size pragma for these tests to work.
+#
+ifcapable !pager_pragmas||direct_read {
+  finish_test
+  return
+}
+
+# Create a database with an overflow page.
+#
+do_test corrupt3-1.1 {
+  set bigstring [string repeat 0123456789 200]
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    PRAGMA page_size=1024;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES($bigstring);
+  }
+  file size test.db
+} [expr {1024*3}]
+
+# Verify that the file format is as we expect.  The page size
+# should be 1024 bytes.  The only record should have a single
+# overflow page.  The overflow page is page 3.  The pointer to
+# the overflow page is on the last 4 bytes of page 2.
+#
+do_test corrupt3-1.2 {
+  hexio_get_int [hexio_read test.db 16 2]
+} 1024   ;# The page size is 1024
+do_test corrupt3-1.3 {
+  hexio_get_int [hexio_read test.db 20 1]
+} 0      ;# Unused bytes per page is 0
+do_test corrupt3-1.4 {
+  hexio_get_int [hexio_read test.db 2044 4]
+} 3      ;# Overflow page is 3
+do_test corrupt3-1.5 {
+  hexio_get_int [hexio_read test.db 2048 4]
+} 0      ;# First chained overflow is 0
+
+integrity_check corrupt3-1.6
+
+# Make the overflow chain loop back on itself.   See if the
+# corruption is detected.
+#
+do_test corrupt3-1.7 {
+  db close
+  hexio_write test.db 2048 [hexio_render_int32 3]
+  sqlite3 db test.db
+  catchsql {
+    SELECT x FROM t1
+  }
+} [list 0 $bigstring]
+do_test corrupt3-1.8 {
+  catchsql {
+    PRAGMA integrity_check
+  }
+} {0 {{*** in database main ***
+On tree page 2 cell 0: 2nd reference to page 3}}}
+
+# Change the pointer for the first page of the overflow
+# change to be a non-existant page.
+#
+do_test corrupt3-1.9 {
+  db close
+  hexio_write test.db 2044 [hexio_render_int32 4]
+  sqlite3 db test.db
+  catchsql {
+    SELECT substr(x,1,10) FROM t1
+  }
+} [list 1 {database disk image is malformed}]
+do_test corrupt3-1.10 {
+  catchsql {
+    PRAGMA integrity_check
+  }
+} {0 {{*** in database main ***
+On tree page 2 cell 0: invalid page number 4
+Page 3 is never used}}}
+do_test corrupt3-1.11 {
+  db close
+  hexio_write test.db 2044 [hexio_render_int32 0]
+  sqlite3 db test.db
+  catchsql {
+    SELECT substr(x,1,10) FROM t1
+  }
+} [list 1 {database disk image is malformed}]
+do_test corrupt3-1.12 {
+  catchsql {
+    PRAGMA integrity_check
+  }
+} {0 {{*** in database main ***
+On tree page 2 cell 0: overflow list length is 0 but should be 1
+Page 3 is never used}}}
+
+finish_test

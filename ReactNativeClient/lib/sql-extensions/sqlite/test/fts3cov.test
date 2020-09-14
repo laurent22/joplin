@@ -1,0 +1,434 @@
+# 2009 December 03
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file are structural coverage tests for FTS3.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If this build does not include FTS3, skip the tests in this file.
+#
+ifcapable !fts3 { finish_test ; return }
+source $testdir/fts3_common.tcl
+source $testdir/malloc_common.tcl
+
+set DO_MALLOC_TEST 0
+set testprefix fts3cov
+
+#--------------------------------------------------------------------------
+# When it first needs to read a block from the %_segments table, the FTS3 
+# module compiles an SQL statement for that purpose. The statement is 
+# stored and reused each subsequent time a block is read. This test case 
+# tests the effects of an OOM error occuring while compiling the statement.
+#
+# Similarly, when FTS3 first needs to scan through a set of segment leaves
+# to find a set of documents that matches a term, it allocates a string
+# containing the text of the required SQL, and compiles one or more 
+# statements to traverse the leaves. This test case tests that OOM errors
+# that occur while allocating this string and statement are handled correctly
+# also.
+#
+do_test fts3cov-1.1 {
+  execsql { 
+    CREATE VIRTUAL TABLE t1 USING fts3(x);
+    INSERT INTO t1(t1) VALUES('nodesize=24');
+    BEGIN;
+      INSERT INTO t1 VALUES('Is the night chilly and dark?');
+      INSERT INTO t1 VALUES('The night is chilly, but not dark.');
+      INSERT INTO t1 VALUES('The thin gray cloud is spread on high,');
+      INSERT INTO t1 VALUES('It covers but not hides the sky.');
+    COMMIT;
+    SELECT count(*)>0 FROM t1_segments;
+  }
+} {1}
+
+set DO_MALLOC_TEST 1
+do_restart_select_test fts3cov-1.2 {
+  SELECT docid FROM t1 WHERE t1 MATCH 'chilly';
+} {1 2}
+set DO_MALLOC_TEST 0
+
+#--------------------------------------------------------------------------
+# When querying the full-text index, if an expected internal node block is 
+# missing from the %_segments table, or if a NULL value is stored in the 
+# %_segments table instead of a binary blob, database corruption should be 
+# reported.
+#
+# Even with tiny 24 byte nodes, it takes a fair bit of data to produce a
+# segment b-tree that uses the %_segments table to store internal nodes. 
+#
+do_test fts3cov-2.1 {
+  execsql {
+    INSERT INTO t1(t1) VALUES('nodesize=24');
+    BEGIN;
+      INSERT INTO t1 VALUES('The moon is behind, and at the full;');
+      INSERT INTO t1 VALUES('And yet she looks both small and dull.');
+      INSERT INTO t1 VALUES('The night is chill, the cloud is gray:');
+      INSERT INTO t1 VALUES('''T is a month before the month of May,');
+      INSERT INTO t1 VALUES('And the Spring comes slowly up this way.');
+      INSERT INTO t1 VALUES('The lovely lady, Christabel,');
+      INSERT INTO t1 VALUES('Whom her father loves so well,');
+      INSERT INTO t1 VALUES('What makes her in the wood so late,');
+      INSERT INTO t1 VALUES('A furlong from the castle gate?');
+      INSERT INTO t1 VALUES('She had dreams all yesternight');
+      INSERT INTO t1 VALUES('Of her own betrothed knight;');
+      INSERT INTO t1 VALUES('And she in the midnight wood will pray');
+      INSERT INTO t1 VALUES('For the weal of her lover that''s far away.');
+    COMMIT;
+  }
+  execsql {
+    INSERT INTO t1(t1) VALUES('optimize');
+    SELECT substr(hex(root), 1, 2) FROM t1_segdir;
+  }
+} {03}
+
+# Test the "missing entry" case:
+sqlite3_db_config db DEFENSIVE 0
+do_test fts3cov-2.2 {
+  set root [db one {SELECT root FROM t1_segdir}]
+  read_fts3varint [string range $root 1 end] left_child
+  execsql { DELETE FROM t1_segments WHERE blockid = $left_child }
+} {}
+do_error_test fts3cov-2.3 {
+  SELECT * FROM t1 WHERE t1 MATCH 'c*'
+} {database disk image is malformed}
+
+# Test the "replaced with NULL" case:
+do_test fts3cov-2.4 {
+  execsql { INSERT INTO t1_segments VALUES($left_child, NULL) }
+} {}
+do_error_test fts3cov-2.5 {
+  SELECT * FROM t1 WHERE t1 MATCH 'cloud'
+} {database disk image is malformed}
+
+#--------------------------------------------------------------------------
+# The following tests are to test the effects of OOM errors while storing
+# terms in the pending-hash table. Specifically, while creating doclist
+# blobs to store in the table. More specifically, to test OOM errors while
+# appending column numbers to doclists. For example, if a doclist consists
+# of:
+#
+#   <docid> <column 0 offset-list> 0x01 <column N> <column N offset-list>
+#
+# The following tests check that malloc errors encountered while appending
+# the "0x01 <column N>" data to the dynamically growable blob used to 
+# accumulate the doclist in memory are handled correctly.
+#
+do_test fts3cov-3.1 {
+  set cols [list]
+  set vals [list]
+  for {set i 0} {$i < 120} {incr i} {
+    lappend cols "col$i"
+    lappend vals "'word'"
+  }
+  execsql "CREATE VIRTUAL TABLE t2 USING fts3([join $cols ,])"
+} {}
+set DO_MALLOC_TEST 1 
+do_write_test fts3cov-3.2 t2_content "
+  INSERT INTO t2(docid, [join $cols ,]) VALUES(1, [join $vals ,])
+"
+do_write_test fts3cov-3.3 t2_content "
+  INSERT INTO t2(docid, [join $cols ,]) VALUES(200, [join $vals ,])
+"
+do_write_test fts3cov-3.4 t2_content "
+  INSERT INTO t2(docid, [join $cols ,]) VALUES(60000, [join $vals ,])
+"
+
+#-------------------------------------------------------------------------
+# If too much data accumulates in the pending-terms hash table, it is
+# flushed to the database automatically, even if the transaction has not
+# finished. The following tests check the effects of encountering an OOM 
+# while doing this.
+#
+do_test fts3cov-4.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t3 USING fts3(x);
+    INSERT INTO t3(t3) VALUES('nodesize=24');
+    INSERT INTO t3(t3) VALUES('maxpending=100');
+  }
+} {}
+set DO_MALLOC_TEST 1 
+do_write_test fts3cov-4.2 t3_content {
+  INSERT INTO t3(docid, x)
+    SELECT 1, 'Then Christabel stretched forth her hand,' UNION ALL
+    SELECT 3, 'And comforted fair Geraldine:'             UNION ALL
+    SELECT 4, '''O well, bright dame, may you command'    UNION ALL
+    SELECT 5, 'The service of Sir Leoline;'               UNION ALL
+    SELECT 2, 'And gladly our stout chivalry'             UNION ALL
+    SELECT 7, 'Will he send forth, and friends withal,'   UNION ALL
+    SELECT 8, 'To guide and guard you safe and free'      UNION ALL
+    SELECT 6, 'Home to your noble father''s hall.'''
+}
+
+#-------------------------------------------------------------------------
+# When building the internal tree structure for each segment b-tree, FTS3
+# assumes that the content of each internal node will be less than
+# $nodesize bytes, where $nodesize is the advisory node size. If this turns
+# out to be untrue, then an extra buffer must be malloc'd for each term.
+# This test case tests these paths and the effects of said mallocs failing
+# by inserting insert a document with some fairly large terms into a
+# full-text table with a very small node-size. 
+#
+# Test this handling of large terms in three contexts:
+#
+#   1. When flushing the pending-terms table.
+#   2. When optimizing the data structures using the INSERT syntax. 
+#   2. When optimizing the data structures using the deprecated SELECT syntax. 
+#
+do_test fts3cov-5.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t4 USING fts3(x);
+    INSERT INTO t4(t4) VALUES('nodesize=24');
+  }
+} {}
+set DO_MALLOC_TEST 1
+
+# Test when flushing pending-terms table.
+do_write_test fts3cov-5.2 t4_content {
+  INSERT INTO t4
+    SELECT 'ItisanancientMarinerAndhestoppethoneofthreeAA' UNION ALL
+    SELECT 'ItisanancientMarinerAndhestoppethoneofthreeBB' UNION ALL
+    SELECT 'ItisanancientMarinerAndhestoppethoneofthreeCC' UNION ALL
+    SELECT 'BythylonggreybeardandglitteringeyeNowwhereforestoppstAA' UNION ALL
+    SELECT 'BythylonggreybeardandglitteringeyeNowwhereforestoppstBB' UNION ALL
+    SELECT 'BythylonggreybeardandglitteringeyeNowwhereforestoppstCC'
+}
+
+# Test when optimizing via INSERT.
+do_test fts3cov-5.3 { execsql { INSERT INTO t4 VALUES('extra!') } } {}
+do_write_test fts3cov-5.2 t4_segments { INSERT INTO t4(t4) VALUES('optimize') }
+
+# Test when optimizing via SELECT.
+do_test fts3cov-5.5 { execsql { INSERT INTO t4 VALUES('more extra!') } } {}
+do_write_test fts3cov-5.6 t4_segments {
+  SELECT * FROM (SELECT optimize(t4) FROM t4 LIMIT 1)
+  EXCEPT SELECT 'Index optimized'
+}
+
+#-------------------------------------------------------------------------
+# When merging all segments at a given level to create a single segment
+# at level+1, FTS3 runs a query of the form:
+#
+#   SELECT count(*) FROM %_segdir WHERE level = ?
+#
+# The query is compiled the first time this operation is required and
+# reused thereafter. This test aims to test the effects of an OOM while
+# preparing and executing this query for the first time.
+#
+# Then, keep inserting rows into the table so that the effects of an OOM
+# while re-executing the same query can also be tested.
+#
+do_test fts3cov-6.1 {
+  execsql { CREATE VIRTUAL TABLE t5 USING fts3(x) }
+  for {set i 0} {$i<16} {incr i} { execsql "INSERT INTO t5 VALUES('term$i')" }
+  execsql { SELECT count(*) FROM t5_segdir }
+} {16}
+
+# First time.
+db close
+sqlite3 db test.db
+do_write_test fts3cov-6.2 t5_content {
+  INSERT INTO t5 VALUES('segment number 16!');
+}
+
+# Second time.
+do_test fts3cov-6.3 {
+  for {set i 1} {$i<16} {incr i} { execsql "INSERT INTO t5 VALUES('term$i')" }
+  execsql { SELECT count(*) FROM t5_segdir }
+} {17}
+do_write_test fts3cov-6.4 t5_content {
+  INSERT INTO t5 VALUES('segment number 16!');
+}
+
+#-------------------------------------------------------------------------
+# Update the docid of a row. Test this in two scenarios:
+#
+#   1. When the row being updated is the only row in the table.
+#   2. When it is not.
+#
+# The two cases above take different paths because in case 1 all data 
+# structures can simply be emptied before inserting the new row record.
+# In case 2, the data structures actually have to be updated.
+#
+do_test fts3cov-7.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t7 USING fts3(a, b, c);
+    INSERT INTO t7 VALUES('A', 'B', 'C');
+    UPDATE t7 SET docid = 5;
+    SELECT docid, * FROM t7;
+  }
+} {5 A B C}
+do_test fts3cov-7.2 {
+  execsql {
+    INSERT INTO t7 VALUES('D', 'E', 'F');
+    UPDATE t7 SET docid = 1 WHERE docid = 6;
+    SELECT docid, * FROM t7;
+  }
+} {1 D E F 5 A B C}
+
+#-------------------------------------------------------------------------
+# If a set of documents are modified within a transaction, the 
+# pending-terms table must be flushed each time a document with a docid
+# less than or equal to the previous docid is modified. 
+#
+# This test checks the effects of an OOM error occuring when the 
+# pending-terms table is flushed for this reason as part of a DELETE 
+# statement.
+#
+do_malloc_test fts3cov-8 -sqlprep {
+  BEGIN;
+    CREATE VIRTUAL TABLE t8 USING fts3;
+    INSERT INTO t8 VALUES('the output of each batch run');
+    INSERT INTO t8 VALUES('(possibly a day''s work)');
+    INSERT INTO t8 VALUES('was written to two separate disks');
+  COMMIT;
+} -sqlbody {
+  BEGIN;
+    DELETE FROM t8 WHERE rowid = 3;
+    DELETE FROM t8 WHERE rowid = 2;
+    DELETE FROM t8 WHERE rowid = 1;
+  COMMIT;
+}
+
+#-------------------------------------------------------------------------
+# Test some branches in the code that handles "special" inserts like:
+#
+#   INSERT INTO t1(t1) VALUES('optimize');
+#
+# Also test that an optimize (INSERT method) works on an empty table.
+#
+set DO_MALLOC_TEST 0
+do_test fts3cov-9.1 {
+  execsql { CREATE VIRTUAL TABLE xx USING fts3 }
+} {}
+do_error_test fts3cov-9.2 {
+  INSERT INTO xx(xx) VALUES('optimise');   -- British spelling
+} {SQL logic error}
+do_error_test fts3cov-9.3 {
+  INSERT INTO xx(xx) VALUES('short');
+} {SQL logic error}
+do_error_test fts3cov-9.4 {
+  INSERT INTO xx(xx) VALUES('waytoolongtobecorrect');
+} {SQL logic error}
+do_test fts3cov-9.5 {
+  execsql { INSERT INTO xx(xx) VALUES('optimize') }
+} {}
+
+#-------------------------------------------------------------------------
+# Test that a table can be optimized in the middle of a transaction when
+# the pending-terms table is non-empty. This case involves some extra
+# branches because data must be read not only from the database, but
+# also from the pending-terms table.
+#
+do_malloc_test fts3cov-10 -sqlprep {
+  CREATE VIRTUAL TABLE t10 USING fts3;
+  INSERT INTO t10 VALUES('Optimising images for the web is a tricky business');
+  BEGIN;
+    INSERT INTO t10 VALUES('You have to get the right balance between');
+} -sqlbody {
+  INSERT INTO t10(t10) VALUES('optimize');
+}
+
+#-------------------------------------------------------------------------
+# Test a full-text query for a term that was once in the index, but is
+# no longer.
+#
+do_test fts3cov-11.1 {
+  execsql { 
+    CREATE VIRTUAL TABLE xx USING fts3;
+    INSERT INTO xx VALUES('one two three');
+    INSERT INTO xx VALUES('four five six');
+    DELETE FROM xx WHERE docid = 1;
+  }
+  execsql { SELECT * FROM xx WHERE xx MATCH 'two' }
+} {}
+
+
+do_malloc_test fts3cov-12 -sqlprep {
+  CREATE VIRTUAL TABLE t12 USING fts3;
+  INSERT INTO t12 VALUES('is one of the two togther');
+  BEGIN;
+    INSERT INTO t12 VALUES('one which was appropriate at the time');
+} -sqlbody {
+  SELECT * FROM t12 WHERE t12 MATCH 'one'
+}
+
+do_malloc_test fts3cov-13 -sqlprep {
+  PRAGMA encoding = 'UTF-16';
+  CREATE VIRTUAL TABLE t13 USING fts3;
+  INSERT INTO t13 VALUES('two scalar functions');
+  INSERT INTO t13 VALUES('scalar two functions');
+  INSERT INTO t13 VALUES('functions scalar two');
+} -sqlbody {
+  SELECT snippet(t13, '%%', '%%', '#') FROM t13 WHERE t13 MATCH 'two';
+  SELECT snippet(t13, '%%', '%%') FROM t13 WHERE t13 MATCH 'two';
+  SELECT snippet(t13, '%%') FROM t13 WHERE t13 MATCH 'two';
+}
+
+do_execsql_test 14.0 {
+  CREATE VIRTUAL TABLE t14 USING fts4(a, b);
+  INSERT INTO t14 VALUES('one two three', 'one three four');
+  INSERT INTO t14 VALUES('a b c', 'd e a');
+}
+do_execsql_test 14.1 {
+  SELECT rowid FROM t14 WHERE t14 MATCH '"one two three"'
+} {1}
+do_execsql_test 14.2 {
+  SELECT rowid FROM t14 WHERE t14 MATCH '"one four"'
+} {}
+do_execsql_test 14.3 {
+  SELECT rowid FROM t14 WHERE t14 MATCH '"e a"'
+} {2}
+do_execsql_test 14.5 {
+  SELECT rowid FROM t14 WHERE t14 MATCH '"e b"'
+} {}
+do_catchsql_test 14.6 {
+  SELECT rowid FROM t14 WHERE rowid MATCH 'one'
+} {1 {unable to use function MATCH in the requested context}}
+do_catchsql_test 14.7 {
+  SELECT rowid FROM t14 WHERE docid MATCH 'one'
+} {1 {unable to use function MATCH in the requested context}}
+
+do_execsql_test 15.0 {
+  CREATE VIRTUAL TABLE t15 USING fts4(a, b, c);
+  INSERT INTO t15 VALUES('abc def ghi', 'abc2 def2 ghi2', 'abc3 def3 ghi3');
+  INSERT INTO t15 VALUES('abc2 def2 ghi2', 'abc2 def2 ghi2', 'abc def3 ghi3');
+}
+do_execsql_test 15.1 {
+  SELECT rowid FROM t15 WHERE t15 MATCH '"abc* def2"'
+} {1 2}
+
+# Test a corruption case.
+#
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 16.1 {
+  CREATE VIRTUAL TABLE t16 USING fts4;
+  INSERT INTO t16 VALUES('theoretical work to examine the relationship');
+  INSERT INTO t16 VALUES('solution of our problems on the invisible');
+  DELETE FROM t16_content WHERE rowid = 2;
+}
+do_catchsql_test 16.2 {
+  SELECT * FROM t16 WHERE t16 MATCH 'invisible'
+} {1 {database disk image is malformed}}
+
+# And another corruption test case.
+#
+do_execsql_test 17.1 {
+  CREATE VIRTUAL TABLE t17 USING fts4;
+  INSERT INTO t17(content) VALUES('one one one');
+  UPDATE t17_segdir SET root = X'00036F6E65FFFFFFFFFFFFFFFFFFFFFF02030300'
+} {}
+do_catchsql_test 17.2 {
+  SELECT * FROM t17 WHERE t17 MATCH 'one'
+} {1 {database disk image is malformed}}
+
+
+
+
+finish_test

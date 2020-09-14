@@ -1,0 +1,66 @@
+# 2016 Jan 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5bigtok
+return_if_no_fts5
+
+proc rndterm {} {
+  set L [list a b c d e f g h i j k l m n o p q r s t u v w x y z]
+  set l [lindex $L [expr int(rand() * [llength $L])]]
+  string repeat $l [expr int(rand() * 5) + 60]
+}
+
+proc rnddoc {n} {
+  set res [list]
+  for {set i 0} {$i < $n} {incr i} {
+    lappend res [rndterm]
+  }
+  set res
+}
+
+foreach_detail_mode $::testprefix {
+  db func rnddoc rnddoc
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+    CREATE VIRTUAL TABLE t1vocab USING fts5vocab(t1, row);
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<10 )
+    INSERT INTO t1 SELECT rnddoc(3) FROM s;
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<10 )
+    INSERT INTO t1 SELECT rnddoc(3) FROM s;
+  }
+
+  foreach v [db eval {SELECT term FROM t1vocab}] {
+    set res [db eval {SELECT rowid FROM t1($v)}]
+    do_execsql_test 1.[string range $v 0 0] {
+      SELECT rowid FROM t1($v) ORDER BY rowid DESC
+    } [lsort -integer -decr $res]
+  }
+
+  do_execsql_test 2.0 {
+    INSERT INTO t1(t1) VALUES('optimize');
+  }
+
+  foreach v [db eval {SELECT term FROM t1vocab}] {
+    set res [db eval {SELECT rowid FROM t1($v)}]
+    do_execsql_test 2.[string range $v 0 0] {
+      SELECT rowid FROM t1($v) ORDER BY rowid DESC
+    } [lsort -integer -decr $res]
+  }
+}
+
+finish_test

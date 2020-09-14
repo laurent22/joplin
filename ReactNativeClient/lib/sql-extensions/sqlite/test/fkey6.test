@@ -1,0 +1,229 @@
+# 2012 December 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file tests the PRAGMA defer_foreign_keys and 
+# SQLITE_DBSTATUS_DEFERRED_FKS
+#
+# EVIDENCE-OF: R-18981-16292 When the defer_foreign_keys PRAGMA is on,
+# enforcement of all foreign key constraints is delayed until the
+# outermost transaction is committed.
+#
+# EVIDENCE-OF: R-28911-57501 The defer_foreign_keys pragma defaults to
+# OFF so that foreign key constraints are only deferred if they are
+# created as "DEFERRABLE INITIALLY DEFERRED".
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fkey6
+
+ifcapable {!foreignkey} {
+  finish_test
+  return
+}
+
+do_execsql_test fkey6-1.0 {
+  PRAGMA defer_foreign_keys;
+} {0}
+
+do_execsql_test fkey6-1.1 {
+  PRAGMA foreign_keys=ON;
+  CREATE TABLE t1(x INTEGER PRIMARY KEY);
+  CREATE TABLE t2(y INTEGER PRIMARY KEY,
+          z INTEGER REFERENCES t1(x) DEFERRABLE INITIALLY DEFERRED);
+  CREATE INDEX t2z ON t2(z);
+  CREATE TABLE t3(u INTEGER PRIMARY KEY, v INTEGER REFERENCES t1(x));
+  CREATE INDEX t3v ON t3(v);
+  INSERT INTO t1 VALUES(1),(2),(3),(4),(5);
+  INSERT INTO t2 VALUES(1,1),(2,2);
+  INSERT INTO t3 VALUES(3,3),(4,4);
+} {}
+do_test fkey6-1.2 {
+  catchsql {DELETE FROM t1 WHERE x=2;}
+} {1 {FOREIGN KEY constraint failed}}
+do_test fkey6-1.3 {
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 0 0}
+do_test fkey6-1.4 {
+  execsql {
+    BEGIN;
+    DELETE FROM t1 WHERE x=1;
+  }
+} {}
+do_test fkey6-1.5.1 {
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 1
+} {0 1 0}
+do_test fkey6-1.5.2 {
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 1 0}
+do_test fkey6-1.6 {
+  execsql {
+    ROLLBACK;
+  }
+} {}
+do_test fkey6-1.7 {
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 0 0}
+do_test fkey6-1.8 {
+  execsql {
+    PRAGMA defer_foreign_keys=ON;
+    BEGIN;
+    DELETE FROM t1 WHERE x=3;
+  }
+} {}
+do_test fkey6-1.9 {
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 1 0}
+
+# EVIDENCE-OF: R-21752-26913 The defer_foreign_keys pragma is
+# automatically switched off at each COMMIT or ROLLBACK. Hence, the
+# defer_foreign_keys pragma must be separately enabled for each
+# transaction.
+do_execsql_test fkey6-1.10.1 {
+  PRAGMA defer_foreign_keys;
+  ROLLBACK;
+  PRAGMA defer_foreign_keys;
+  BEGIN;
+  PRAGMA defer_foreign_keys=ON;
+  PRAGMA defer_foreign_keys;
+  COMMIT;
+  PRAGMA defer_foreign_keys;
+  BEGIN;
+} {1 0 1 0}
+do_test fkey6-1.10.2 {
+  catchsql {DELETE FROM t1 WHERE x=3}
+} {1 {FOREIGN KEY constraint failed}}
+db eval {ROLLBACK}
+
+do_test fkey6-1.20 {
+  execsql {
+    BEGIN;
+    DELETE FROM t1 WHERE x=1;
+  }
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 1 0}
+do_test fkey6-1.21 {
+  execsql {
+    DELETE FROM t2 WHERE y=1;
+  }
+  sqlite3_db_status db DBSTATUS_DEFERRED_FKS 0
+} {0 0 0}
+do_test fkey6-1.22 {
+  execsql {
+    COMMIT;
+  }
+} {}
+
+do_execsql_test fkey6-2.1 {
+  CREATE TABLE p1(a PRIMARY KEY);
+  INSERT INTO p1 VALUES('one'), ('two');
+  CREATE TABLE c1(x REFERENCES p1);
+  INSERT INTO c1 VALUES('two'), ('one');
+}
+
+do_execsql_test fkey6-2.2 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    DELETE FROM p1;
+  ROLLBACK;
+  PRAGMA defer_foreign_keys;
+} {0}
+
+do_execsql_test fkey6-2.3 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    DROP TABLE p1;
+    PRAGMA vdbe_trace = 0;
+  ROLLBACK;
+  PRAGMA defer_foreign_keys;
+} {0}
+
+do_execsql_test fkey6-2.4 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    DELETE FROM p1;
+    DROP TABLE c1;
+  COMMIT;
+  PRAGMA defer_foreign_keys;
+} {0}
+
+do_execsql_test fkey6-2.5 {
+  DROP TABLE p1;
+  CREATE TABLE p1(a PRIMARY KEY);
+  INSERT INTO p1 VALUES('one'), ('two');
+  CREATE TABLE c1(x REFERENCES p1);
+  INSERT INTO c1 VALUES('two'), ('one');
+}
+
+do_execsql_test fkey6-2.6 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    INSERT INTO c1 VALUES('three');
+    DROP TABLE c1;
+  COMMIT;
+  PRAGMA defer_foreign_keys;
+} {0}
+
+#--------------------------------------------------------------------------
+# Test that defer_foreign_keys disables RESTRICT.
+#
+do_execsql_test 3.1 {
+  CREATE TABLE p2(a PRIMARY KEY, b);
+  CREATE TABLE c2(x, y REFERENCES p2 ON DELETE RESTRICT ON UPDATE RESTRICT);
+  INSERT INTO p2 VALUES(1, 'one');
+  INSERT INTO p2 VALUES(2, 'two');
+  INSERT INTO c2 VALUES('i', 1);
+}
+
+do_catchsql_test 3.2.1 {
+  BEGIN;
+    UPDATE p2 SET a=a-1;
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test 3.2.2 { COMMIT }
+
+do_execsql_test 3.2.3 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    UPDATE p2 SET a=a-1;
+  COMMIT;
+}
+
+do_execsql_test 3.2.4 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    UPDATE p2 SET a=a-1;
+}
+do_catchsql_test 3.2.5 {
+  COMMIT;
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test 3.2.6 { ROLLBACK }
+
+do_execsql_test 3.3.1 {
+  CREATE TRIGGER p2t AFTER DELETE ON p2 BEGIN
+    INSERT INTO p2 VALUES(old.a, 'deleted!');
+  END;
+}
+do_catchsql_test 3.3.2 {
+  BEGIN;
+    DELETE FROM p2 WHERE a=1;
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test 3.3.3 { COMMIT }
+
+do_execsql_test 3.3.4 {
+  BEGIN;
+    PRAGMA defer_foreign_keys = 1;
+    DELETE FROM p2 WHERE a=1;
+  COMMIT;
+  SELECT * FROM p2;
+} {0 one 1 deleted!}
+
+
+finish_test

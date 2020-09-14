@@ -1,0 +1,524 @@
+# 2010 August 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing that the current version of SQLite
+# is capable of reading and writing databases created by previous
+# versions, and vice-versa.
+#
+# To use this test, old versions of the testfixture process should be
+# copied into the working directory alongside the new version. The old
+# versions should be named "testfixtureXXX" (or testfixtureXXX.exe on
+# windows), where XXX can be any string.
+#
+# This test file uses the tcl code for controlling a second testfixture
+# process located in lock_common.tcl. See the commments in lock_common.tcl 
+# for documentation of the available commands.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+source $testdir/bc_common.tcl
+db close
+
+if {"" == [bc_find_binaries backcompat.test]} {
+  finish_test
+  return
+}
+
+proc do_backcompat_test {rv bin1 bin2 script} {
+
+  forcedelete test.db
+
+  if {$bin1 != ""} { set ::bc_chan1 [launch_testfixture $bin1] }
+  set ::bc_chan2 [launch_testfixture $bin2]
+
+  if { $rv } {
+    proc code2 {tcl} { uplevel #0 $tcl }
+    if {$bin1 != ""} { proc code2 {tcl} { testfixture $::bc_chan1 $tcl } }
+    proc code1 {tcl} { testfixture $::bc_chan2 $tcl }
+  } else {
+    proc code1 {tcl} { uplevel #0 $tcl }
+    if {$bin1 != ""} { proc code1 {tcl} { testfixture $::bc_chan1 $tcl } }
+    proc code2 {tcl} { testfixture $::bc_chan2 $tcl }
+  }
+
+  proc sql1 sql { code1 [list db eval $sql] }
+  proc sql2 sql { code2 [list db eval $sql] }
+
+  code1 { sqlite3 db test.db }
+  code2 { sqlite3 db test.db }
+
+  foreach c {code1 code2} {
+    $c {
+      set v [split [db version] .]
+      if {[llength $v]==3} {lappend v 0}
+      set ::sqlite_libversion [format \
+        "%d%.2d%.2d%.2d" [lindex $v 0] [lindex $v 1] [lindex $v 2] [lindex $v 3]
+      ]
+    }
+  }
+
+  uplevel $script
+
+  catch { code1 { db close } }
+  catch { code2 { db close } }
+  catch { close $::bc_chan2 }
+  catch { close $::bc_chan1 }
+
+
+}
+
+array set ::incompatible [list]
+proc do_allbackcompat_test {script} {
+
+  foreach bin $::BC(binaries) {
+    set nErr [set_test_counter errors]
+    foreach dir {0 1} {
+
+      set bintag $bin
+      regsub {.*testfixture\.} $bintag {} bintag
+      set bintag [string map {\.exe {}} $bintag]
+      if {$bintag == ""} {set bintag self}
+      set ::bcname ".$bintag.$dir."
+
+      rename do_test _do_test
+      proc do_test {nm sql res} {
+        set nm [regsub {\.} $nm $::bcname]
+        uplevel [list _do_test $nm $sql $res]
+      }
+
+      do_backcompat_test $dir {} $bin $script
+
+      rename do_test {}
+      rename _do_test do_test
+    }
+    if { $nErr < [set_test_counter errors] } {
+      set ::incompatible([get_version $bin]) 1
+    }
+  }
+}
+
+proc read_file {zFile} {
+  set zData {}
+  if {[file exists $zFile]} {
+    set fd [open $zFile]
+    fconfigure $fd -translation binary -encoding binary
+
+    if {[file size $zFile]<=$::sqlite_pending_byte || $zFile != "test.db"} {
+      set zData [read $fd]
+    } else {
+      set zData [read $fd $::sqlite_pending_byte]
+      append zData [string repeat x 512]
+      seek $fd [expr $::sqlite_pending_byte+512] start
+      append zData [read $fd]
+    }
+
+    close $fd
+  }
+  return $zData
+}
+proc write_file {zFile zData} {
+  set fd [open $zFile w]
+  fconfigure $fd -translation binary -encoding binary
+  puts -nonewline $fd $zData
+  close $fd
+}
+proc read_file_system {} {
+  set ret [list]
+  foreach f {test.db test.db-journal test.db-wal} { lappend ret [read_file $f] }
+  set ret
+}
+proc write_file_system {data} {
+  foreach f {test.db test.db-journal test.db-wal} d $data { 
+    if {[string length $d] == 0} {
+      forcedelete $f
+    } else {
+      write_file $f $d
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Actual tests begin here.
+#
+# This first block of tests checks to see that the same database and 
+# journal files can be used by old and new versions. WAL and wal-index
+# files are tested separately below.
+#
+do_allbackcompat_test {
+
+  # Test that database files are backwards compatible.
+  #
+  do_test backcompat-1.1.1 { sql1 { 
+    CREATE TABLE t1(a PRIMARY KEY, b UNIQUE);
+    INSERT INTO t1 VALUES('abc', 'def');
+  } } {}
+  do_test backcompat-1.1.2 { sql2 { SELECT * FROM t1; } } {abc def}
+  do_test backcompat-1.1.3 { sql2 { INSERT INTO t1 VALUES('ghi', 'jkl'); } } {}
+  do_test backcompat-1.1.4 { sql1 { SELECT * FROM t1; } } {abc def ghi jkl}
+  do_test backcompat-1.1.5 { sql1 { PRAGMA integrity_check } } {ok}
+  do_test backcompat-1.1.6 { sql2 { PRAGMA integrity_check } } {ok}
+
+  # Test that one version can roll back a hot-journal file left in the
+  # file-system by the other version.
+  #
+  # Each test case is named "backcompat-1.X...", where X is either 0 or
+  # 1. If it is 0, then the current version creates a journal file that
+  # the old versions try to read. Otherwise, if X is 1, then the old version
+  # creates the journal file and we try to read it with the current version.
+  #
+  do_test backcompat-1.2.1 { sql1 {
+    PRAGMA cache_size = 10;
+    BEGIN;
+      INSERT INTO t1 VALUES(randomblob(400), randomblob(400));
+      INSERT INTO t1 SELECT randomblob(400), randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT randomblob(400), randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT randomblob(400), randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT randomblob(400), randomblob(400) FROM t1;
+    COMMIT;
+  } } {}
+  set cksum1 [sql1 {SELECT md5sum(a), md5sum(b) FROM t1}]
+  set cksum2 [sql2 {SELECT md5sum(a), md5sum(b) FROM t1}]
+  do_test backcompat-1.2.2 [list string compare $cksum1 $cksum2] 0
+
+  do_test backcompat-1.2.3 { sql1 {
+    BEGIN;
+      UPDATE t1 SET a = randomblob(500);
+  } } {}
+  set data [read_file_system]
+
+  do_test backcompat-1.2.4 { sql1 { COMMIT } } {}
+
+  set same [expr {[sql2 {SELECT md5sum(a), md5sum(b) FROM t1}] == $cksum2}]
+  do_test backcompat-1.2.5 [list set {} $same] 0
+
+  code1 { db close }
+  code2 { db close }
+  write_file_system $data
+  code1 { sqlite3 db test.db }
+  code2 { sqlite3 db test.db }
+
+  set same [expr {[sql2 {SELECT md5sum(a), md5sum(b) FROM t1}] == $cksum2}]
+  do_test backcompat-1.2.6 [list set {} $same] 1
+
+  do_test backcompat-1.2.7 { sql1 { PRAGMA integrity_check } } {ok}
+  do_test backcompat-1.2.8 { sql2 { PRAGMA integrity_check } } {ok}
+
+  do_test backcompat-2.1 {
+    sql1 {
+      CREATE TABLE t2(a UNIQUE, b PRIMARY KEY, c UNIQUE);
+      INSERT INTO t2 VALUES(1,9,5);
+      INSERT INTO t2 VALUES(5,5,1);
+      INSERT INTO t2 VALUES(9,1,9);
+      SELECT * FROM t2 ORDER BY a;
+    }
+  } {1 9 5 5 5 1 9 1 9}
+  do_test backcompat-2.2 {
+    sql2 {
+      SELECT * FROM sqlite_master WHERE rootpage=-1;
+      SELECT * FROM t2 ORDER BY a;
+    }
+  } {1 9 5 5 5 1 9 1 9}
+  do_test backcompat-2.3 {
+    sql1 {
+      SELECT * FROM t2 ORDER BY b;
+    }
+  } {9 1 9 5 5 1 1 9 5}
+  do_test backcompat-2.4 {
+    sql2 {
+      SELECT * FROM t2 ORDER BY b;
+    }
+  } {9 1 9 5 5 1 1 9 5}
+  do_test backcompat-2.5 {
+    sql1 {
+      SELECT * FROM t2 ORDER BY c;
+    }
+  } {5 5 1 1 9 5 9 1 9}
+  do_test backcompat-2.6 {
+    sql2 {
+      SELECT * FROM t2 ORDER BY c;
+    }
+  } {5 5 1 1 9 5 9 1 9}
+}
+foreach k [lsort [array names ::incompatible]] {
+  puts "ERROR: Detected journal incompatibility with version $k"
+}
+unset ::incompatible
+
+
+#-------------------------------------------------------------------------
+# Test that WAL and wal-index files may be shared between different 
+# SQLite versions.
+#
+do_allbackcompat_test {
+  if {[code1 {sqlite3 -version}] >= "3.7.0"
+   && [code1 {set ::sqlite_options(wal)}]
+   && [code2 {sqlite3 -version}] >= "3.7.0"
+   && [code2 {set ::sqlite_options(wal)}]
+  } {
+
+    do_test backcompat-2.1.1 { sql1 {
+      PRAGMA journal_mode = WAL;
+      CREATE TABLE t1(a PRIMARY KEY, b UNIQUE);
+      INSERT INTO t1 VALUES('I', 1);
+      INSERT INTO t1 VALUES('II', 2);
+      INSERT INTO t1 VALUES('III', 3);
+      SELECT * FROM t1;
+    } } {wal I 1 II 2 III 3}
+    do_test backcompat-2.1.2 { sql2 {
+      SELECT * FROM t1;
+    } } {I 1 II 2 III 3}
+
+    set data [read_file_system]
+    code1 {db close}
+    code2 {db close}
+    write_file_system $data
+    code1 {sqlite3 db test.db}
+    code2 {sqlite3 db test.db}
+
+    # The WAL file now in the file-system was created by the [code1]
+    # process. Check that the [code2] process can recover the log.
+    #
+    do_test backcompat-2.1.3 { sql2 {
+      SELECT * FROM t1;
+    } } {I 1 II 2 III 3}
+    do_test backcompat-2.1.4 { sql1 {
+      SELECT * FROM t1;
+    } } {I 1 II 2 III 3}
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that FTS3 tables may be read/written by different versions of 
+# SQLite. 
+#
+ifcapable fts3 {
+  set contents {
+    CREATE VIRTUAL TABLE t1 USING fts3(a, b);
+  }
+  foreach {num doc} {
+    one "jk zm jk eczkjblu urvysbnykk sk gnl jk ttvgf hmjf"
+    two "jk bnhc jjrxpjkb mjpavjuhw fibokdry igju jk zm zm xh"
+    three "wxe ogttbykvt uhzq xr iaf zf urvysbnykk aayxpmve oacaxgjoo mjpavjuhw"
+    four "gazrt jk ephknonq myjp uenvbm wuvajhwqz jk zm xnxhf nvfasfh"
+    five "zm aayxpmve csjqxhgj xnxhf xr jk aayxpmve xnxhf zm zm"
+    six "sokcyf zm ogyavjvv jk zm fibokdry zm jk igju igju"
+    seven "vgsld bvgimjik xuprtlyle jk akmikrqyt jk aayxpmve hkfoudzftq ddjj"
+    eight "zm uhzq ovkyevlgv zk uenvbm csjqxhgj jk vgsld pgybs jk"
+    nine  "zm agmckuiu zexh fibokdry jk uhzq bu tugflixoex xnxhf sk"
+  } {
+    append contents "INSERT INTO t1 VALUES('$num', '$doc');"
+  }
+  do_allbackcompat_test {
+    if {[code1 {set ::sqlite_options(fts3)}]
+     && [code2 {set ::sqlite_options(fts3)}]
+    } {
+  
+      do_test backcompat-3.1 { sql1 $contents } {}
+  
+      foreach {n q} {
+        1    "SELECT * FROM t1 ORDER BY a, b"
+        2    "SELECT rowid FROM t1 WHERE a MATCH 'five'"
+        3    "SELECT * FROM t1 WHERE a MATCH 'five'"
+        4    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'jk'"
+        5    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'tug* OR eight'"
+      } {
+        do_test backcompat-3.2 [list sql1 $q] [sql2 $q]
+      }
+  
+      do_test backcompat-3.3 { sql1 {
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+        INSERT INTO t1 SELECT * FROM t1;
+      } } {}
+  
+      foreach {n q} {
+        1    "SELECT * FROM t1 ORDER BY a, b"
+        2    "SELECT rowid FROM t1 WHERE a MATCH 'five'"
+        3    "SELECT * FROM t1 WHERE a MATCH 'five'"
+        4    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'jk'"
+        5    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'tug* OR eight'"
+      } {
+        do_test backcompat-3.4 [list sql1 $q] [sql2 $q]
+      }
+  
+      set alphabet "a b c d e f g h i j k l m n o p q r s t u v w x y z 1 2 3 4"
+      for {set i 0} {$i < 900} {incr i} {
+        set term "[lindex $alphabet [expr $i/30]][lindex $alphabet [expr $i%30]] "
+        sql1 "INSERT INTO t1 VALUES($i, '[string repeat $term 14]')"
+      }
+  
+      foreach {n q} {
+        1    "SELECT * FROM t1 ORDER BY a, b"
+        2    "SELECT rowid FROM t1 WHERE a MATCH 'five'"
+        3    "SELECT * FROM t1 WHERE a MATCH 'five'"
+        4    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'jk'"
+        5    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'tug* OR eight'"
+  
+        6    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'aa'"
+        7    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH '44'"
+        8    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'a*'"
+      } {
+        do_test backcompat-3.5 [list sql1 $q] [sql2 $q]
+      }
+  
+      do_test backcompat-3.6 { 
+        sql1 "SELECT optimize(t1) FROM t1 LIMIT 1" 
+      } {{Index optimized}}
+  
+      foreach {n q} {
+        1    "SELECT * FROM t1 ORDER BY a, b"
+        2    "SELECT rowid FROM t1 WHERE a MATCH 'five'"
+        3    "SELECT * FROM t1 WHERE a MATCH 'five'"
+        4    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'jk'"
+        5    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'tug* OR eight'"
+  
+        6    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'aa'"
+        7    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH '44'"
+        8    "SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'a*'"
+      } {
+        do_test backcompat-3.7 [list sql1 $q] [sql2 $q]
+      }
+
+      # Now test that an incremental merge can be started by one version
+      # and finished by another. And that the integrity-check still 
+      # passes.
+      do_test backcompat-3.8 {
+        sql1 { 
+          DROP TABLE IF EXISTS t1;
+          DROP TABLE IF EXISTS t2;
+          CREATE TABLE t1(docid, words);
+          CREATE VIRTUAL TABLE t2 USING fts3(words);
+        }
+        code1 [list source $testdir/genesis.tcl]
+        code1 { fts_kjv_genesis }
+        sql1 {
+          INSERT INTO t2 SELECT words FROM t1;
+          INSERT INTO t2 SELECT words FROM t1;
+          INSERT INTO t2 SELECT words FROM t1;
+          INSERT INTO t2 SELECT words FROM t1;
+          INSERT INTO t2 SELECT words FROM t1;
+          INSERT INTO t2 SELECT words FROM t1;
+          SELECT level, group_concat(idx, ' ') FROM t2_segdir GROUP BY level;
+        }
+      } {0 {0 1 2 3 4 5}}
+
+      if {[code1 { set ::sqlite_libversion }] >=3071200 
+       && [code2 { set ::sqlite_libversion }] >=3071200 
+      } {
+        if {[code1 { set ::sqlite_libversion }]<3120000} {
+          set res {0 {0 1} 1 0}
+        } else {
+          set res {1 0}
+        }
+
+        do_test backcompat-3.9 {
+          sql1 { INSERT INTO t2(t2) VALUES('merge=100,4'); }
+          sql2 { INSERT INTO t2(t2) VALUES('merge=100,4'); }
+          sql1 { INSERT INTO t2(t2) VALUES('merge=100,4'); }
+          sql2 { INSERT INTO t2(t2) VALUES('merge=2500,4'); }
+          sql2 {
+            SELECT level, group_concat(idx, ' ') FROM t2_segdir GROUP BY level;
+          }
+        } $res
+
+        do_test backcompat-3.10 {
+          sql1 { INSERT INTO t2(t2) VALUES('integrity-check') }
+          sql2 { INSERT INTO t2(t2) VALUES('integrity-check') }
+        } {}
+      }
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that Rtree tables may be read/written by different versions of 
+# SQLite. 
+#
+ifcapable rtree {
+  set contents {
+    CREATE VIRTUAL TABLE t1 USING rtree(id, x1, x2, y1, y2);
+  }
+  foreach {id x1 x2 y1 y2} {
+    1    -47.64 43.87    33.86 34.42        2    -21.51 17.32    2.05 31.04
+    3    -43.67 -38.33    -19.79 3.43       4    32.41 35.16    9.12 19.82
+    5    33.28 34.87    14.78 28.26         6    49.31 116.59    -9.87 75.09
+    7    -14.93 34.51    -17.64 64.09       8    -43.05 23.43    -1.19 69.44
+    9    44.79 133.56    28.09 80.30        10    -2.66 81.47    -41.38 -10.46
+    11    -42.89 -3.54    15.76 71.63       12    -3.50 84.96    -11.64 64.95
+    13    -45.69 26.25    11.14 55.06       14    -44.09 11.23    17.52 44.45
+    15    36.23 133.49    -19.38 53.67      16    -17.89 81.54    14.64 50.61
+    17    -41.97 -24.04    -39.43 28.95     18    -5.85 7.76    -6.38 47.02
+    19    18.82 27.10    42.82 100.09       20    39.17 113.45    26.14 73.47
+    21    22.31 103.17    49.92 106.05      22    -43.06 40.38    -1.75 76.08
+    23    2.43 57.27    -14.19 -3.83        24    -47.57 -4.35    8.93 100.06
+    25    -37.47 49.14    -29.11 8.81       26    -7.86 75.72    49.34 107.42
+    27    1.53 45.49    20.36 49.74         28    -48.48 32.54    28.81 54.45
+    29    2.67 39.77    -4.05 13.67         30    4.11 62.88    -47.44 -5.72
+    31    -21.47 51.75    37.25 116.09      32    45.59 111.37    -6.43 43.64
+    33    35.23 48.29    23.54 113.33       34    16.61 68.35    -14.69 65.97
+    35    13.98 16.60    48.66 102.87       36    19.74 23.84    31.15 77.27
+    37    -27.61 24.43    7.96 94.91        38    -34.77 12.05    -22.60 -6.29
+    39    -25.83 8.71    -13.48 -12.53      40    -17.11 -1.01    18.06 67.89
+    41    14.13 71.72    -3.78 39.25        42    23.75 76.00    -16.30 8.23
+    43    -39.15 28.63    38.12 125.88      44    48.62 86.09    36.49 102.95
+    45    -31.39 -21.98    2.52 89.78       46    5.65 56.04    15.94 89.10
+    47    18.28 95.81    46.46 143.08       48    30.93 102.82    -20.08 37.36
+    49    -20.78 -3.48    -5.58 35.46       50    49.85 90.58    -24.48 46.29
+  } {
+  if {$x1 >= $x2 || $y1 >= $y2} { error "$x1 $x2 $y1 $y2" }
+    append contents "INSERT INTO t1 VALUES($id, $x1, $x2, $y1, $y2);"
+  }
+  set queries {
+    1    "SELECT id FROM t1 WHERE x1>10 AND x2<44"
+    2    "SELECT id FROM t1 WHERE y1<100"
+    3    "SELECT id FROM t1 WHERE y1<100 AND x1>0"
+    4    "SELECT id FROM t1 WHERE y1>10 AND x1>0 AND x2<50 AND y2<550"
+  }
+  do_allbackcompat_test {
+    if {[code1 {set ::sqlite_options(fts3)}]
+     && [code2 {set ::sqlite_options(fts3)}]
+    } {
+  
+      do_test backcompat-4.1 { sql1 $contents } {}
+  
+      foreach {n q} $::queries {
+        do_test backcompat-4.2.$n [list sql1 $q] [sql2 $q]
+      }
+  
+      do_test backcompat-4.3 { sql1 {
+        INSERT INTO t1 SELECT id+100, x1+10.0, x2+10.0, y1-10.0, y2-10.0 FROM t1;
+      } } {}
+  
+      foreach {n q} $::queries {
+        do_test backcompat-4.4.$n [list sql1 $q] [sql2 $q]
+      }
+  
+      do_test backcompat-4.5 { sql2 {
+        INSERT INTO t1 SELECT id+200, x1+20.0, x2+20.0, y1-20.0, y2-20.0 FROM t1;
+      } } {}
+  
+      foreach {n q} $::queries {
+        do_test backcompat-4.6.$n [list sql1 $q] [sql2 $q]
+      }
+  
+    }
+  }
+}
+
+finish_test

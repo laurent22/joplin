@@ -1,0 +1,63 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# Specifically, it tests transactions and savepoints
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ai
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=%DETAIL%);
+} {}
+
+do_execsql_test 1.1 {
+  BEGIN;
+    INSERT INTO t1 VALUES('a b c');
+    INSERT INTO t1 VALUES('d e f');
+    SAVEPOINT one;
+      INSERT INTO t1 VALUES('g h i');
+      SAVEPOINT two;
+        INSERT INTO t1 VALUES('j k l');
+    ROLLBACK TO one;
+      INSERT INTO t1 VALUES('m n o');
+        SAVEPOINT two;
+        INSERT INTO t1 VALUES('p q r');
+    RELEASE one;
+    SAVEPOINT one;
+      INSERT INTO t1 VALUES('s t u');
+    ROLLBACK TO one;
+  COMMIT;
+}
+
+do_execsql_test 1.2 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+do_execsql_test 1.3 {
+  SAVEPOINT one;
+    INSERT INTO t1 VALUES('v w x');
+  ROLLBACK TO one;
+}
+}
+
+
+finish_test

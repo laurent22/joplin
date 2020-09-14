@@ -1,0 +1,166 @@
+# 2009 January 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS3 module syntax parser.
+#
+# $Id: fts3expr2.test,v 1.2 2009/06/05 17:09:12 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+# Test overview:
+# 
+#   The tests in this file are pseudo-randomly generated. They test
+#   the fts3 match expression parser via the test interface
+#   SQL function "fts3_exprtest" (see comments in fts3_expr.c).
+#
+#   Each test case works as follows:
+#   
+#     1. A random expression tree is generated using proc [random_expr_tree].
+#     2. The expression tree is converted to the text of an equivalent
+#        fts3 expression using proc [tree_to_expr].
+#     3. The test SQL function "fts3_exprtest" is used to parse the 
+#        expression text generated in step (2), returning a parsed expression
+#        tree.
+#     4. Test that the tree returned in step (3) matches that generated in 
+#        step (1).
+#
+#   In step (2), 4 different fts3 expressions are created from each 
+#   expression tree by varying the following boolean properties:
+#
+#     * Whether or not superflous parenthesis are included. i.e. if
+#       "a OR b AND (c OR d)" or "a OR (b AND (c OR d))" is generated.
+#
+#     * Whether or not explict AND operators are used. i.e. if
+#     "a OR b AND c" or "a OR b c" is generated.
+#
+
+set sqlite_fts3_enable_parentheses 1
+
+proc strip_phrase_data {L} {
+  if {[lindex $L 0] eq "PHRASE"} {
+    return [list P [lrange $L 3 end]]
+  }
+  return [list \
+    [lindex $L 0] \
+    [strip_phrase_data [lindex $L 1]] \
+    [strip_phrase_data [lindex $L 2]] \
+  ]
+}
+proc test_fts3expr2 {expr} {
+  strip_phrase_data [
+    db one {SELECT fts3_exprtest('simple', $expr, 'a', 'b', 'c')}
+  ]
+}
+
+proc rnd {nMax} { expr {int(rand()*$nMax)} }
+
+proc random_phrase {} {
+  set phrases [list one two three four "one two" "three four"]
+  list P [lindex $phrases [rnd [llength $phrases]]]
+}
+
+# Generate and return a pseudo-random expression tree. Using the same 
+# format returned by the [test_fts3expr2] proc.
+#
+proc random_expr_tree {iHeight} {
+  if {$iHeight==0 || [rnd 3]==0} {
+    return [random_phrase]
+  }
+
+  set operators [list NEAR NOT AND OR]
+  set op [lindex $operators [rnd 4]]
+
+  if {$op eq "NEAR"} {
+    set iDistance [rnd 15]
+    return [list $op/$iDistance [random_phrase] [random_phrase]]
+  }
+
+  set iNH [expr {$iHeight - 1}]
+  return [list $op [random_expr_tree $iNH] [random_expr_tree $iNH]]
+}
+
+# Given an expression tree, generate a corresponding expression.
+#
+proc tree_to_expr {tree all_brackets implicit_and} {
+  set prec(NOT) 2
+  set prec(AND) 3
+  set prec()    3
+  set prec(OR)  4
+
+  set op [lindex $tree 0]
+
+  if {$op eq "P"} {
+    set phrase [lindex $tree 1]
+    if {[llength $phrase]>1} {
+      return "\"$phrase\""
+    } else {
+      return $phrase
+    }
+  }
+
+  if {$op eq "NEAR/10"} {
+    set op "NEAR"
+  }
+  if {$op eq "AND" && $implicit_and} {
+    set op ""
+  }
+
+  set lhs [lindex $tree 1]
+  set rhs [lindex $tree 2]
+  set zLeft  [tree_to_expr $lhs $all_brackets $implicit_and]
+  set zRight [tree_to_expr $rhs $all_brackets $implicit_and]
+
+  set iPrec 5
+  set iLeftPrec 0
+  set iRightPrec 0
+
+  catch {set iPrec      $prec($op)}
+  catch {set iLeftPrec  $prec([lindex $lhs 0])}
+  catch {set iRightPrec $prec([lindex $rhs 0])}
+
+  if {$iLeftPrec > $iPrec || $all_brackets} {
+    set zLeft "($zLeft)"
+  } 
+  if {$iRightPrec >= $iPrec || $all_brackets} {
+    set zRight "($zRight)"
+  } 
+
+  return "$zLeft $op $zRight"
+}
+
+proc do_exprparse_test {name expr tree} {
+  uplevel do_test $name [list "test_fts3expr2 {$expr}"] [list $tree]
+}
+
+for {set iTest 1} {$iTest<500} {incr iTest} {
+  set t [random_expr_tree 4]
+
+  set e1 [tree_to_expr $t 0 0]
+  set e2 [tree_to_expr $t 0 1]
+  set e3 [tree_to_expr $t 1 0]
+  set e4 [tree_to_expr $t 1 1]
+
+  do_exprparse_test fts3expr2-$iTest.1 $e1 $t
+  do_exprparse_test fts3expr2-$iTest.2 $e2 $t
+  do_exprparse_test fts3expr2-$iTest.3 $e3 $t
+  do_exprparse_test fts3expr2-$iTest.4 $e4 $t
+}
+
+set sqlite_fts3_enable_parentheses 0
+finish_test

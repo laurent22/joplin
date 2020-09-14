@@ -1,0 +1,478 @@
+# 2005 June 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the CAST operator.
+#
+# $Id: cast.test,v 1.10 2008/11/06 15:33:04 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Only run these tests if the build includes the CAST operator
+ifcapable !cast {
+  finish_test
+  return
+}
+
+# Tests for the CAST( AS blob), CAST( AS text) and CAST( AS numeric) built-ins
+#
+ifcapable bloblit {
+  do_test cast-1.1 {
+    execsql {SELECT x'616263'}
+  } abc
+  do_test cast-1.2 {
+    execsql {SELECT typeof(x'616263')}
+  } blob
+  do_test cast-1.3 {
+    execsql {SELECT CAST(x'616263' AS text)}
+  } abc
+  do_test cast-1.4 {
+    execsql {SELECT typeof(CAST(x'616263' AS text))}
+  } text
+  do_test cast-1.5 {
+    execsql {SELECT CAST(x'616263' AS numeric)}
+  } 0
+  do_test cast-1.6 {
+    execsql {SELECT typeof(CAST(x'616263' AS numeric))}
+  } integer
+  do_test cast-1.7 {
+    execsql {SELECT CAST(x'616263' AS blob)}
+  } abc
+  do_test cast-1.8 {
+    execsql {SELECT typeof(CAST(x'616263' AS blob))}
+  } blob
+  do_test cast-1.9 {
+    execsql {SELECT CAST(x'616263' AS integer)}
+  } 0
+  do_test cast-1.10 {
+    execsql {SELECT typeof(CAST(x'616263' AS integer))}
+  } integer
+}
+do_test cast-1.11 {
+  execsql {SELECT null}
+} {{}}
+do_test cast-1.12 {
+  execsql {SELECT typeof(NULL)}
+} null
+do_test cast-1.13 {
+  execsql {SELECT CAST(NULL AS text)}
+} {{}}
+do_test cast-1.14 {
+  execsql {SELECT typeof(CAST(NULL AS text))}
+} null
+do_test cast-1.15 {
+  execsql {SELECT CAST(NULL AS numeric)}
+} {{}}
+do_test cast-1.16 {
+  execsql {SELECT typeof(CAST(NULL AS numeric))}
+} null
+do_test cast-1.17 {
+  execsql {SELECT CAST(NULL AS blob)}
+} {{}}
+do_test cast-1.18 {
+  execsql {SELECT typeof(CAST(NULL AS blob))}
+} null
+do_test cast-1.19 {
+  execsql {SELECT CAST(NULL AS integer)}
+} {{}}
+do_test cast-1.20 {
+  execsql {SELECT typeof(CAST(NULL AS integer))}
+} null
+do_test cast-1.21 {
+  execsql {SELECT 123}
+} {123}
+do_test cast-1.22 {
+  execsql {SELECT typeof(123)}
+} integer
+do_test cast-1.23 {
+  execsql {SELECT CAST(123 AS text)}
+} {123}
+do_test cast-1.24 {
+  execsql {SELECT typeof(CAST(123 AS text))}
+} text
+do_test cast-1.25 {
+  execsql {SELECT CAST(123 AS numeric)}
+} 123
+do_test cast-1.26 {
+  execsql {SELECT typeof(CAST(123 AS numeric))}
+} integer
+do_test cast-1.27 {
+  execsql {SELECT CAST(123 AS blob)}
+} {123}
+do_test cast-1.28 {
+  execsql {SELECT typeof(CAST(123 AS blob))}
+} blob
+do_test cast-1.29 {
+  execsql {SELECT CAST(123 AS integer)}
+} {123}
+do_test cast-1.30 {
+  execsql {SELECT typeof(CAST(123 AS integer))}
+} integer
+do_test cast-1.31 {
+  execsql {SELECT 123.456}
+} {123.456}
+do_test cast-1.32 {
+  execsql {SELECT typeof(123.456)}
+} real
+do_test cast-1.33 {
+  execsql {SELECT CAST(123.456 AS text)}
+} {123.456}
+do_test cast-1.34 {
+  execsql {SELECT typeof(CAST(123.456 AS text))}
+} text
+do_test cast-1.35 {
+  execsql {SELECT CAST(123.456 AS numeric)}
+} 123.456
+do_test cast-1.36 {
+  execsql {SELECT typeof(CAST(123.456 AS numeric))}
+} real
+do_test cast-1.37 {
+  execsql {SELECT CAST(123.456 AS blob)}
+} {123.456}
+do_test cast-1.38 {
+  execsql {SELECT typeof(CAST(123.456 AS blob))}
+} blob
+do_test cast-1.39 {
+  execsql {SELECT CAST(123.456 AS integer)}
+} {123}
+do_test cast-1.38 {
+  execsql {SELECT typeof(CAST(123.456 AS integer))}
+} integer
+do_test cast-1.41 {
+  execsql {SELECT '123abc'}
+} {123abc}
+do_test cast-1.42 {
+  execsql {SELECT typeof('123abc')}
+} text
+do_test cast-1.43 {
+  execsql {SELECT CAST('123abc' AS text)}
+} {123abc}
+do_test cast-1.44 {
+  execsql {SELECT typeof(CAST('123abc' AS text))}
+} text
+do_test cast-1.45 {
+  execsql {SELECT CAST('123abc' AS numeric)}
+} 123
+do_test cast-1.46 {
+  execsql {SELECT typeof(CAST('123abc' AS numeric))}
+} integer
+do_test cast-1.47 {
+  execsql {SELECT CAST('123abc' AS blob)}
+} {123abc}
+do_test cast-1.48 {
+  execsql {SELECT typeof(CAST('123abc' AS blob))}
+} blob
+do_test cast-1.49 {
+  execsql {SELECT CAST('123abc' AS integer)}
+} 123
+do_test cast-1.50 {
+  execsql {SELECT typeof(CAST('123abc' AS integer))}
+} integer
+do_test cast-1.51 {
+  execsql {SELECT CAST('123.5abc' AS numeric)}
+} 123.5
+do_test cast-1.53 {
+  execsql {SELECT CAST('123.5abc' AS integer)}
+} 123
+
+do_test cast-1.60 {
+  execsql {SELECT CAST(null AS REAL)}
+} {{}}
+do_test cast-1.61 {
+  execsql {SELECT typeof(CAST(null AS REAL))}
+} {null}
+do_test cast-1.62 {
+  execsql {SELECT CAST(1 AS REAL)}
+} {1.0}
+do_test cast-1.63 {
+  execsql {SELECT typeof(CAST(1 AS REAL))}
+} {real}
+do_test cast-1.64 {
+  execsql {SELECT CAST('1' AS REAL)}
+} {1.0}
+do_test cast-1.65 {
+  execsql {SELECT typeof(CAST('1' AS REAL))}
+} {real}
+do_test cast-1.66 {
+  execsql {SELECT CAST('abc' AS REAL)}
+} {0.0}
+do_test cast-1.67 {
+  execsql {SELECT typeof(CAST('abc' AS REAL))}
+} {real}
+do_test cast-1.68 {
+  execsql {SELECT CAST(x'31' AS REAL)}
+} {1.0}
+do_test cast-1.69 {
+  execsql {SELECT typeof(CAST(x'31' AS REAL))}
+} {real}
+
+
+# Ticket #1662.  Ignore leading spaces in numbers when casting.
+#
+do_test cast-2.1 {
+  execsql {SELECT CAST('   123' AS integer)}
+} 123
+do_test cast-2.2 {
+  execsql {SELECT CAST('   -123.456' AS real)}
+} -123.456
+
+# ticket #2364.  Use full percision integers if possible when casting
+# to numeric.  Do not fallback to real (and the corresponding 48-bit
+# mantissa) unless absolutely necessary.
+#
+do_test cast-3.1 {
+  execsql {SELECT CAST(9223372036854774800 AS integer)}
+} 9223372036854774800
+do_test cast-3.2 {
+  execsql {SELECT CAST(9223372036854774800 AS numeric)}
+} 9223372036854774800
+do_realnum_test cast-3.3 {
+  execsql {SELECT CAST(9223372036854774800 AS real)}
+} 9.22337203685477e+18
+do_test cast-3.4 {
+  execsql {SELECT CAST(CAST(9223372036854774800 AS real) AS integer)}
+} 9223372036854774784
+do_test cast-3.5 {
+  execsql {SELECT CAST(-9223372036854774800 AS integer)}
+} -9223372036854774800
+do_test cast-3.6 {
+  execsql {SELECT CAST(-9223372036854774800 AS numeric)}
+} -9223372036854774800
+do_realnum_test cast-3.7 {
+  execsql {SELECT CAST(-9223372036854774800 AS real)}
+} -9.22337203685477e+18
+do_test cast-3.8 {
+  execsql {SELECT CAST(CAST(-9223372036854774800 AS real) AS integer)}
+} -9223372036854774784
+do_test cast-3.11 {
+  execsql {SELECT CAST('9223372036854774800' AS integer)}
+} 9223372036854774800
+do_test cast-3.12 {
+  execsql {SELECT CAST('9223372036854774800' AS numeric)}
+} 9223372036854774800
+do_realnum_test cast-3.13 {
+  execsql {SELECT CAST('9223372036854774800' AS real)}
+} 9.22337203685477e+18
+ifcapable long_double {
+  do_test cast-3.14 {
+    execsql {SELECT CAST(CAST('9223372036854774800' AS real) AS integer)}
+  } 9223372036854774784
+}
+do_test cast-3.15 {
+  execsql {SELECT CAST('-9223372036854774800' AS integer)}
+} -9223372036854774800
+do_test cast-3.16 {
+  execsql {SELECT CAST('-9223372036854774800' AS numeric)}
+} -9223372036854774800
+do_realnum_test cast-3.17 {
+  execsql {SELECT CAST('-9223372036854774800' AS real)}
+} -9.22337203685477e+18
+ifcapable long_double {
+  do_test cast-3.18 {
+    execsql {SELECT CAST(CAST('-9223372036854774800' AS real) AS integer)}
+  } -9223372036854774784
+}
+if {[db eval {PRAGMA encoding}]=="UTF-8"} {
+  do_test cast-3.21 {
+    execsql {SELECT CAST(x'39323233333732303336383534373734383030' AS integer)}
+  } 9223372036854774800
+  do_test cast-3.22 {
+    execsql {SELECT CAST(x'39323233333732303336383534373734383030' AS numeric)}
+  } 9223372036854774800
+  do_realnum_test cast-3.23 {
+    execsql {SELECT CAST(x'39323233333732303336383534373734383030' AS real)}
+  } 9.22337203685477e+18
+  ifcapable long_double {
+    do_test cast-3.24 {
+      execsql {
+        SELECT CAST(CAST(x'39323233333732303336383534373734383030' AS real)
+                    AS integer)
+      }
+    } 9223372036854774784
+  }
+}
+do_test cast-3.31 {
+  execsql {SELECT CAST(NULL AS numeric)}
+} {{}}
+
+# Test to see if it is possible to trick SQLite into reading past 
+# the end of a blob when converting it to a number.
+do_test cast-3.32.1 {
+  set blob "1234567890"
+  set DB [sqlite3_connection_pointer db]
+  set ::STMT [sqlite3_prepare $DB {SELECT CAST(? AS real)} -1 TAIL]
+  sqlite3_bind_blob -static $::STMT 1 $blob 5
+  sqlite3_step $::STMT
+} {SQLITE_ROW}
+do_test cast-3.32.2 {
+  sqlite3_column_int $::STMT 0
+} {12345}
+do_test cast-3.32.3 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+
+
+do_test cast-4.1 {
+  db eval {
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES('abc');
+    SELECT a, CAST(a AS integer) FROM t1;
+  }
+} {abc 0}
+do_test cast-4.2 {
+  db eval {
+    SELECT CAST(a AS integer), a FROM t1;
+  }
+} {0 abc}
+do_test cast-4.3 {
+  db eval {
+    SELECT a, CAST(a AS integer), a FROM t1;
+  }
+} {abc 0 abc}
+do_test cast-4.4 {
+  db eval {
+    SELECT CAST(a AS integer), a, CAST(a AS real), a FROM t1;
+  }
+} {0 abc 0.0 abc}
+
+# Added 2018-01-26
+#
+# EVIDENCE-OF: R-48741-32454 If the prefix integer is greater than
+# +9223372036854775807 then the result of the cast is exactly
+# +9223372036854775807.
+do_execsql_test cast-5.1 {
+  SELECT CAST('9223372036854775808' AS integer);
+  SELECT CAST('  +000009223372036854775808' AS integer);
+  SELECT CAST('12345678901234567890123' AS INTEGER);
+} {9223372036854775807 9223372036854775807 9223372036854775807}
+
+# EVIDENCE-OF: R-06028-16857 Similarly, if the prefix integer is less
+# than -9223372036854775808 then the result of the cast is exactly
+# -9223372036854775808.
+do_execsql_test cast-5.2 {
+  SELECT CAST('-9223372036854775808' AS integer);
+  SELECT CAST('-9223372036854775809' AS integer);
+  SELECT CAST('-12345678901234567890123' AS INTEGER);
+} {-9223372036854775808 -9223372036854775808 -9223372036854775808}
+
+# EVIDENCE-OF: R-33990-33527 When casting to INTEGER, if the text looks
+# like a floating point value with an exponent, the exponent will be
+# ignored because it is no part of the integer prefix.
+# EVIDENCE-OF: R-24225-46995 For example, "(CAST '123e+5' AS INTEGER)"
+# results in 123, not in 12300000.
+do_execsql_test cast-5.3 {
+  SELECT CAST('123e+5' AS INTEGER);
+  SELECT CAST('123e+5' AS NUMERIC);
+  SELECT CAST('123e+5' AS REAL);
+} {123 12300000 12300000.0}
+
+
+# The following does not have anything to do with the CAST operator,
+# but it does deal with affinity transformations.
+#
+do_execsql_test cast-6.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a NUMERIC);
+  INSERT INTO t1 VALUES
+     ('9000000000000000001'),
+     ('9000000000000000001 '),
+     (' 9000000000000000001'),
+     (' 9000000000000000001 ');
+  SELECT * FROM t1;
+} {9000000000000000001 9000000000000000001 9000000000000000001 9000000000000000001}
+
+# 2019-06-07
+# https://www.sqlite.org/src/info/4c2d7639f076aa7c
+do_execsql_test cast-7.1 {
+  SELECT CAST('-' AS NUMERIC);
+} {0}
+do_execsql_test cast-7.2 {
+  SELECT CAST('-0' AS NUMERIC);
+} {0}
+do_execsql_test cast-7.3 {
+  SELECT CAST('+' AS NUMERIC);
+} {0}
+do_execsql_test cast-7.4 {
+  SELECT CAST('/' AS NUMERIC);
+} {0}
+
+# 2019-06-07
+# https://www.sqlite.org/src/info/e8bedb2a184001bb
+do_execsql_test cast-7.10 {
+  SELECT '' - 2851427734582196970;
+} {-2851427734582196970}
+do_execsql_test cast-7.11 {
+  SELECT 0 - 2851427734582196970;
+} {-2851427734582196970}
+do_execsql_test cast-7.12 {
+  SELECT '' - 1;
+} {-1}
+
+# 2019-06-10
+# https://www.sqlite.org/src/info/dd6bffbfb6e61db9
+#
+# EVIDENCE-OF: R-55084-10555 Casting a TEXT or BLOB value into NUMERIC
+# yields either an INTEGER or a REAL result.
+#
+do_execsql_test cast-7.20 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0 (c0 TEXT);
+  INSERT INTO t0(c0) VALUES ('1.0');
+  SELECT CAST(c0 AS NUMERIC) FROM t0;
+} {1}
+
+# 2019-06-10
+# https://sqlite.org/src/info/27de823723a41df45af3
+#
+do_execsql_test cast-7.30 {
+  SELECT -'.';
+} 0
+do_execsql_test cast-7.31 {
+  SELECT '.'+0;
+} 0
+do_execsql_test cast-7.32 {
+  SELECT CAST('.' AS numeric);
+} 0
+do_execsql_test cast-7.33 {
+  SELECT -CAST('.' AS numeric);
+} 0
+
+# 2019-06-12
+# https://www.sqlite.org/src/info/674385aeba91c774
+#
+do_execsql_test cast-7.40 {
+  SELECT CAST('-0.0' AS numeric);
+} 0
+do_execsql_test cast-7.41 {
+  SELECT CAST('0.0' AS numeric);
+} 0
+do_execsql_test cast-7.42 {
+  SELECT CAST('+0.0' AS numeric);
+} 0
+do_execsql_test cast-7.43 {
+  SELECT CAST('-1.0' AS numeric);
+} -1
+
+ifcapable utf16 {
+  reset_db
+  execsql { PRAGMA encoding='utf16' }
+
+  do_execsql_test cast-8.1 {
+    SELECT quote(X'310032003300')==quote(substr(X'310032003300', 1))
+  } 1
+  do_execsql_test cast-8.2 {
+    SELECT CAST(X'310032003300' AS TEXT)
+         ==CAST(substr(X'310032003300', 1) AS TEXT)
+  } 1
+}
+
+
+finish_test

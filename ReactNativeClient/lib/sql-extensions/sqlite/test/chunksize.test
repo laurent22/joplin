@@ -1,0 +1,41 @@
+# 2019 June 5
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix chunksize
+
+if {$::tcl_platform(platform)!="unix"} {
+  finish_test
+  return
+}
+
+foreach {tn jrnlmode} {
+  1 delete
+  2 wal
+} {
+  reset_db
+  file_control_chunksize_test db main 32768
+  do_execsql_test $tn.0 " PRAGMA journal_mode = $jrnlmode " $jrnlmode
+  do_execsql_test $tn.1 {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+  }
+
+  execsql { PRAGMA wal_checkpoint }
+
+  do_test $tn.2 {
+    file size test.db
+  } 32768
+}
+
+finish_test

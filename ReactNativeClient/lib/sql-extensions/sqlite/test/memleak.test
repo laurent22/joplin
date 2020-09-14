@@ -1,0 +1,97 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file runs all tests.
+#
+# $Id: memleak.test,v 1.10 2007/03/30 17:17:52 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+rename finish_test memleak_finish_test
+proc finish_test {} {
+  catch {db close}
+  memleak_check
+}
+
+if {[file exists ./sqlite_test_count]} {
+  set COUNT [exec cat ./sqlite_test_count]
+} else {
+  set COUNT 3
+}
+
+# LeakList will hold a list of the number of unfreed mallocs after
+# each round of the test.  This number should be constant.  If it
+# grows, it may mean there is a memory leak in the library.
+#
+set LeakList {}
+
+set EXCLUDE {
+  all.test
+  quick.test
+  misuse.test
+  memleak.test
+  btree2.test
+  async.test
+  async2.test
+  trans.test
+  crash.test
+  autovacuum_crash.test
+}
+# Test files btree2.test and btree4.test don't work if the 
+# SQLITE_DEFAULT_AUTOVACUUM macro is defined to true (because they depend
+# on tables being allocated starting at page 2).
+#
+ifcapable default_autovacuum {
+  lappend EXCLUDE btree2.test
+  lappend EXCLUDE btree4.test
+}
+
+if {[sqlite3 -has-codec]} {
+  # lappend EXCLUDE 
+}
+if {[llength $argv]>0} {
+  set FILELIST $argv
+  set argv {}
+} else {
+  set FILELIST [lsort -dictionary [glob $testdir/*.test]]
+}
+
+foreach testfile $FILELIST {
+  set tail [file tail $testfile]
+  if {[lsearch -exact $EXCLUDE $tail]>=0} continue
+  set LeakList {}
+  for {set COUNTER 0} {$COUNTER<$COUNT} {incr COUNTER} {
+    source $testfile
+    if {[info exists Leak]} {
+      lappend LeakList $Leak
+    }
+  }
+  if {$LeakList!=""} {
+    puts -nonewline memory-leak-test-$tail...
+    incr_ntest
+    foreach x $LeakList {
+      if {$x!=[lindex $LeakList 0]} {
+         puts " failed! ($LeakList)"
+         fail_test memory-leak-test-$tail
+         break
+       }
+    }
+    puts " Ok"
+  }
+}
+memleak_finish_test
+
+# Run the malloc tests and the misuse test after memory leak detection.
+# Both tests leak memory.
+#
+#catch {source $testdir/misuse.test}
+#catch {source $testdir/malloc.test}
+
+memleak_finish_test

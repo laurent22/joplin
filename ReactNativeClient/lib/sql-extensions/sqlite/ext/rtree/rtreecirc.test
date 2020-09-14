@@ -1,0 +1,66 @@
+# 2018 Dec 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+set testprefix rtreecirc
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE rt USING rtree(id, x1, x2, y1, y2);
+  SELECT name FROM sqlite_master ORDER BY 1;
+} {
+  rt rt_node rt_parent rt_rowid
+}
+db_save_and_close
+
+foreach {tn schema sql} {
+  1 {
+    CREATE TRIGGER tr1 AFTER INSERT ON rt_node BEGIN
+      SELECT * FROM rt;
+    END;
+  } {
+    INSERT INTO rt VALUES(1, 2, 3, 4, 5);
+  }
+  2 {
+    CREATE TRIGGER tr1 AFTER INSERT ON rt_parent BEGIN
+      SELECT * FROM rt;
+    END;
+  } {
+    INSERT INTO rt VALUES(1, 2, 3, 4, 5);
+  }
+  3 {
+    CREATE TRIGGER tr1 AFTER INSERT ON rt_rowid BEGIN
+      SELECT * FROM rt;
+    END;
+  } {
+    INSERT INTO rt VALUES(1, 2, 3, 4, 5);
+  }
+} {
+  db_restore_and_reopen
+  do_execsql_test  1.1.$tn.1 $schema
+  do_catchsql_test 1.1.$tn.2 $sql {1 {no such table: main.rt}}
+  db close
+}
+
+
+finish_test
+

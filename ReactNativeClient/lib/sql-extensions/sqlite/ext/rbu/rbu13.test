@@ -1,0 +1,64 @@
+# 2015 February 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test an RBU update that features lots of different rbu_control strings
+# for UPDATE statements. This tests RBU's internal UPDATE statement cache.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set ::testprefix rbu13
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c, d, e, f, g, h);
+  WITH ii(i) AS (SELECT 0 UNION ALL SELECT i+1 FROM ii WHERE i<127)
+  INSERT INTO t1 SELECT i, 0, 0, 0, 0, 0, 0, 0 FROM ii;
+}
+
+forcedelete rbu.db
+do_execsql_test 1.1 {
+  ATTACH 'rbu.db' AS rbu;
+  CREATE TABLE rbu.data_t1(a, b, c, d, e, f, g, h, rbu_control);
+}
+
+do_test 1.2 {
+  for {set i 0} {$i<128} {incr i} {
+    set control "."
+    for {set bit 6} {$bit>=0} {incr bit -1} {
+      if { $i & (1<<$bit) } {
+        append control "x"
+      } else {
+        append control "."
+      }
+    }
+    execsql { INSERT INTO data_t1 VALUES($i, 1, 1, 1, 1, 1, 1, 1, $control) }
+  }
+} {}
+
+do_test 1.3 {
+  sqlite3rbu rbu test.db rbu.db
+  while 1 {
+    set rc [rbu step]
+    if {$rc!="SQLITE_OK"} break
+  }
+  rbu close
+} {SQLITE_DONE}
+
+do_execsql_test 1.4 {
+  SELECT count(*) FROM t1 WHERE
+  a == ( (b<<6) + (c<<5) + (d<<4) + (e<<3) + (f<<2) + (g<<1) + (h<<0) )
+} {128}
+
+
+finish_test

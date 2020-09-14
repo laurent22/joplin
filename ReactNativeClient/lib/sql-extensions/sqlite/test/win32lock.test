@@ -1,0 +1,182 @@
+# 2011 July 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is recovery from transient manditory locks
+# that sometimes appear on database files due to anti-virus software.
+#
+
+if {$tcl_platform(platform)!="windows"} return
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set testprefix win32lock
+
+db close
+sqlite3_shutdown
+test_sqlite3_log xLog
+proc xLog {error_code msg} {
+  lappend ::log $msg
+}
+sqlite3 db test.db
+db eval {PRAGMA mmap_size=0}
+
+do_test win32lock-1.1 {
+  db eval {
+    PRAGMA cache_size=10;
+    CREATE TABLE t1(x,y);
+    INSERT INTO t1 VALUES(1,randomblob(100000));
+    INSERT INTO t1 VALUES(2,randomblob(50000));
+    INSERT INTO t1 VALUES(3,randomblob(25000));
+    INSERT INTO t1 VALUES(4,randomblob(12500));
+    SELECT x, length(y) FROM t1 ORDER BY rowid;
+  }
+} {1 100000 2 50000 3 25000 4 12500}
+
+unset -nocomplain delay1 rc msg
+set old_pending_byte [sqlite3_test_control_pending_byte 0x40000000]
+
+set win32_lock_ok [list]
+set win32_lock_error [list]
+set delay1 25
+while {1} {
+  lock_win32_file test.db 0 $::delay1
+  set ::log {}
+  set rc [catch {db eval {SELECT x, length(y) FROM t1 ORDER BY rowid}} msg]
+  if {$rc} {
+    lappend win32_lock_error $::delay1
+    do_test win32lock-1.2-$delay1-error {
+       set ::msg
+    } {disk I/O error}
+  } else {
+    lappend win32_lock_ok $::delay1
+    do_test win32lock-1.2-$delay1-ok {
+       set ::msg
+    } {1 100000 2 50000 3 25000 4 12500}
+    if {[info exists ::log] && $::log!=""} {
+      do_test win32lock-1.2-$delay1-log1 {
+        regsub {\d+} $::log # x
+        regsub { at line \d+} $x "" x
+        set x
+      } {{delayed #ms for lock/sharing conflict}}
+    }
+  }
+  if {[llength $win32_lock_ok] && [llength $win32_lock_error]} break
+  incr delay1 25
+  if {$delay1 > 12500} {
+    puts "Timed out waiting for \"ok\" and \"error\" results."
+    break
+  }
+  sqlite3_sleep 10
+}
+
+do_test win32lock-2.0 {
+  file_control_win32_av_retry db -1 -1
+} {0 10 25}
+do_test win32lock-2.1 {
+  file_control_win32_av_retry db 1 1
+} {0 1 1}
+
+#
+# NOTE: It is known that the win32lock-2.2-* tests may fail if the system is
+#       experiencing heavy load (i.e. they are very timing sensitive).  This is
+#       primarily due to the AV retry delay being set to 1 millisecond in the
+#       win32lock-2.1 test (above).  While it is important to test this corner
+#       case for the AV retry logic, a failure of this test should probably not
+#       be interpreted as a bug in SQLite or these test cases.
+#
+set win32_lock_ok [list]
+set win32_lock_error [list]
+set delay1 1
+while {1} {
+  lock_win32_file test.db 0 $::delay1
+  set ::log {}
+  set rc [catch {db eval {SELECT x, length(y) FROM t1 ORDER BY rowid}} msg]
+  if {$rc} {
+    lappend win32_lock_error $::delay1
+    do_test win32lock-2.2-$delay1-error {
+       set ::msg
+    } {disk I/O error}
+  } else {
+    lappend win32_lock_ok $::delay1
+    do_test win32lock-2.2-$delay1-ok {
+       set ::msg
+    } {1 100000 2 50000 3 25000 4 12500}
+    if {[info exists ::log] && $::log!=""} {
+      do_test win32lock-2.2-$delay1-log1 {
+        regsub {\d+} $::log # x
+        regsub { at line \d+} $x "" x
+        set x
+      } {{delayed #ms for lock/sharing conflict}}
+    }
+  }
+  if {[llength $win32_lock_ok] && [llength $win32_lock_error]} break
+  incr delay1 1
+  if {$delay1 > 500} {
+    puts "Timed out waiting for \"ok\" and \"error\" results."
+    break
+  }
+  sqlite3_sleep 10
+}
+
+file_control_win32_av_retry db 10 25
+sqlite3_test_control_pending_byte $old_pending_byte
+db close
+forcedelete test.db
+
+sqlite3 db test.db
+sqlite3 db2 test.db
+
+do_test win32lock-3.0 {
+  db eval {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+  }
+} {}
+
+do_test win32lock-3.1 {
+  db eval {
+    BEGIN EXCLUSIVE;
+    INSERT INTO t1 VALUES(4);
+  }
+} {}
+
+do_test win32lock-3.2 {
+  catchsql {
+    BEGIN EXCLUSIVE;
+    INSERT INTO t1 VALUES(5);
+    COMMIT;
+  } db2
+} {1 {database is locked}}
+
+do_test win32lock-3.3 {
+  db eval {
+    COMMIT;
+  }
+} {}
+
+do_test win32lock-3.4 {
+  set handle [lindex [file_control_win32_set_handle db 0] end]
+  list [catchsql {
+    BEGIN EXCLUSIVE;
+    INSERT INTO t1 VALUES(6);
+    COMMIT;
+  }] [file_control_win32_set_handle db $handle] [sqlite3_extended_errcode db]
+} {{1 {disk I/O error}} {0 0} SQLITE_IOERR_LOCK}
+
+db2 close
+db close
+sqlite3_shutdown
+test_sqlite3_log
+sqlite3_initialize
+finish_test

@@ -1,0 +1,236 @@
+# 2014 October 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set ::testprefix rbufault
+
+proc copy_if_exists {src target} {
+  if {[file exists $src]} {
+    forcecopy $src $target
+  } else {
+    forcedelete $target
+  }
+}
+
+foreach {tn2 setup sql expect} {
+  1 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+    CREATE INDEX t1cb ON t1(c, b);
+    INSERT INTO t1 VALUES(1, 1, 1);
+    INSERT INTO t1 VALUES(2, 2, 2);
+    INSERT INTO t1 VALUES(3, 3, 3);
+
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(2, NULL, NULL, 1);
+    INSERT INTO data_t1 VALUES(3, 'three', NULL, '.x.');
+    INSERT INTO data_t1 VALUES(4, 4, 4, 0);
+  } {
+    SELECT * FROM t1
+  } {1 1 1   3 three 3   4 4 4}
+
+  2 {
+    CREATE TABLE t2(a PRIMARY KEY, b, c) WITHOUT ROWID;
+    CREATE INDEX t2cb ON t2(c, b);
+    INSERT INTO t2 VALUES('a', 'a', 'a');
+    INSERT INTO t2 VALUES('b', 'b', 'b');
+    INSERT INTO t2 VALUES('c', 'c', 'c');
+
+    CREATE TABLE rbu.data_t2(a, b, c, rbu_control);
+    INSERT INTO data_t2 VALUES('b', NULL, NULL, 1);
+    INSERT INTO data_t2 VALUES('c', 'see', NULL, '.x.');
+    INSERT INTO data_t2 VALUES('d', 'd', 'd', 0);
+  } {
+    SELECT * FROM t2
+  } {a a a   c see c     d d d}
+
+  3 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+    CREATE TABLE t2(a PRIMARY KEY, b, c) WITHOUT ROWID;
+    CREATE INDEX t1cb ON t1(c, b);
+    CREATE INDEX t2cb ON t2(c, b);
+
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+    CREATE TABLE rbu.data_t2(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 2, 3, 0);
+    INSERT INTO data_t2 VALUES(4, 5, 6, 0);
+  } {
+    SELECT * FROM t1 UNION ALL SELECT * FROM t2
+  } {1 2 3 4 5 6}
+
+  4 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE INDEX t1c ON t1(c);
+    INSERT INTO t1 VALUES('A', 'B', 'C');
+    INSERT INTO t1 VALUES('D', 'E', 'F');
+
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES('D', NULL, NULL, 1);
+    INSERT INTO data_t1 VALUES('A', 'Z', NULL, '.x.');
+    INSERT INTO data_t1 VALUES('G', 'H', 'I', 0);
+  } {
+    SELECT * FROM t1 ORDER BY a;
+  } {A Z C G H I}
+
+  5 {
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX t1c ON t1(c, b);
+
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_rowid, rbu_control);
+    INSERT INTO data_t1 VALUES('a', 'b', 'c', 1, 0);
+    INSERT INTO data_t1 VALUES('d', 'e', 'f', '2', 0);
+  } {
+    SELECT * FROM t1 ORDER BY a;
+  } {a b c d e f}
+
+} {
+  catch {db close}
+  forcedelete rbu.db test.db
+  sqlite3 db test.db
+  execsql {
+    PRAGMA encoding = utf16;
+    ATTACH 'rbu.db' AS rbu;
+  }
+  execsql $setup
+  db close
+
+  forcecopy test.db test.db.bak
+  forcecopy rbu.db rbu.db.bak
+
+  foreach {tn f reslist} {
+    1 oom-tra*  {
+      {0 SQLITE_DONE} 
+      {1 {SQLITE_NOMEM - out of memory}} 
+      {1 SQLITE_NOMEM} 
+      {1 SQLITE_IOERR_NOMEM} 
+      {1 {SQLITE_NOMEM - unable to open a temporary database file for storing temporary tables}}
+    }
+  
+    2 ioerr-*  {
+      {0 SQLITE_DONE} 
+      {1 {SQLITE_IOERR - disk I/O error}}
+      {1 SQLITE_IOERR}
+      {1 SQLITE_IOERR_WRITE}
+      {1 SQLITE_IOERR_READ}
+      {1 SQLITE_IOERR_FSYNC}
+      {1 {SQLITE_ERROR - SQL logic error}}
+      {1 {SQLITE_ERROR - unable to open database: rbu.db}}
+      {1 {SQLITE_IOERR - unable to open database: rbu.db}}
+    }
+
+    3 shmerr-*  {
+      {0 SQLITE_DONE} 
+      {1 {SQLITE_IOERR - disk I/O error}}
+      {1 SQLITE_IOERR}
+    }
+  } {
+
+    catch {db close}
+    sqlite3_shutdown
+    set lookaside_config [sqlite3_config_lookaside 0 0]
+    sqlite3_initialize
+    autoinstall_test_functions
+
+    do_faultsim_test 2.$tn2 -faults $::f -prep {
+      catch { db close }
+      forcedelete test.db-journal test.db-wal rbu.db-journal rbu.db-wal
+      forcecopy test.db.bak test.db
+      forcecopy rbu.db.bak  rbu.db
+    } -body {
+      sqlite3rbu rbu test.db rbu.db
+      while {[rbu step]=="SQLITE_OK"} {}
+      rbu close
+    } -test {
+      faultsim_test_result {*}$::reslist
+      if {$testrc==0} {
+        sqlite3 db test.db
+        faultsim_integrity_check
+        set res [db eval $::sql]
+        if {$res != [list {*}$::expect]} {
+          puts ""
+          puts "res: $res"
+          puts "exp: $expect"
+          error "data not as expected!"
+        }
+      }
+    }
+
+    catch {db close}
+    sqlite3_shutdown
+    sqlite3_config_lookaside {*}$lookaside_config
+    sqlite3_initialize
+    autoinstall_test_functions
+
+
+    for {set iStep 0} {$iStep<=21} {incr iStep} {
+    
+      forcedelete test.db-journal test.db-wal rbu.db-journal rbu.db-wal
+    
+      copy_if_exists test.db.bak test.db
+      copy_if_exists rbu.db.bak rbu.db
+    
+      sqlite3rbu rbu test.db rbu.db
+      for {set x 0} {$x < $::iStep} {incr x} { rbu step }
+      rbu close
+  
+# sqlite3 x rbu.db ; puts "XYZ [x eval { SELECT * FROM rbu_state } ]" ; x close
+    
+      copy_if_exists test.db     test.db.bak.2
+      copy_if_exists test.db-wal test.db.bak.2-wal
+      copy_if_exists test.db-oal test.db.bak.2-oal
+      copy_if_exists rbu.db      rbu.db.bak.2
+    
+      do_faultsim_test 3.$tn.$iStep -faults $::f -prep {
+        catch { db close }
+        forcedelete test.db-journal test.db-wal rbu.db-journal rbu.db-wal
+        copy_if_exists test.db.bak.2 test.db
+        copy_if_exists test.db.bak.2-wal test.db-wal
+        copy_if_exists test.db.bak.2-oal test.db-oal
+        copy_if_exists rbu.db.bak.2  rbu.db
+      } -body {
+        sqlite3rbu rbu test.db rbu.db
+        rbu step
+        rbu close
+      } -test {
+
+        if {$testresult=="SQLITE_OK"} {set testresult "SQLITE_DONE"}
+        faultsim_test_result {*}$::reslist
+      
+        if {$testrc==0} {
+          # No error occurred. If the RBU has not already been fully applied,
+          # apply the rest of it now. Then ensure that the final state of the
+          # target db is as expected. And that "PRAGMA integrity_check"
+          # passes.
+          sqlite3rbu rbu test.db rbu.db
+          while {[rbu step] == "SQLITE_OK"} {}
+          rbu close
+
+          sqlite3 db test.db
+          faultsim_integrity_check
+
+          set res [db eval $::sql]
+          if {$res != [list {*}$::expect]} {
+            puts ""
+            puts "res: $res"
+            puts "exp: $::expect"
+            error "data not as expected!"
+          }
+        }
+      }
+    }
+  }
+}
+
+finish_test

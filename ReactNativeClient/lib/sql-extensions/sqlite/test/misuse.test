@@ -1,0 +1,210 @@
+# 2002 May 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for the SQLITE_MISUSE detection logic.
+# This test file leaks memory and file descriptors.
+#
+# $Id: misuse.test,v 1.11 2006/01/03 00:33:50 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+proc catchsql2 {sql} {
+  set r [
+    catch {
+      set res [list]
+      db eval $sql data {
+        if { $res==[list] } {
+          foreach f $data(*) {lappend res $f}
+        }
+        foreach f $data(*) {lappend res $data($f)}
+      }
+      set res
+    } msg
+  ]
+  lappend r $msg
+}
+
+
+# Make sure the test logic works
+#
+do_test misuse-1.1 {
+  db close
+  catch {forcedelete test2.db}
+  catch {forcedelete test2.db-journal}
+  sqlite3 db test2.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,2);
+  }
+  catchsql2 {
+    SELECT * FROM t1
+  }
+} {0 {a b 1 2}}
+do_test misuse-1.2 {
+  catchsql2 {
+    SELECT x_coalesce(NULL,a) AS 'xyz' FROM t1
+  }
+} {1 {no such function: x_coalesce}}
+do_test misuse-1.3 {
+  sqlite3_create_function $::DB
+  catchsql2 {
+    SELECT x_coalesce(NULL,a) AS 'xyz' FROM t1
+  }
+} {0 {xyz 1}}
+
+# Use the x_sqlite_exec() SQL function to simulate the effect of two
+# threads trying to use the same database at the same time.
+#
+# It used to be prohibited to invoke sqlite_exec() from within a function,
+# but that has changed.  The following tests used to cause errors but now
+# they do not.
+#
+ifcapable {utf16} {
+  do_test misuse-1.4 {
+    catchsql2 {
+       SELECT x_sqlite_exec('SELECT * FROM t1') AS xyz;
+    } 
+  } {0 {xyz {1 2}}}
+}
+do_test misuse-1.5 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+do_test misuse-1.6 {
+  catchsql {
+    SELECT * FROM t1
+  }
+} {0 {1 2}}
+
+# Attempt to register a new SQL function while an sqlite_exec() is active.
+#
+do_test misuse-2.1 {
+  db close
+  sqlite3 db test2.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    SELECT * FROM t1
+  }
+} {1 2}
+do_test misuse-2.2 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+
+# We used to disallow creating new function from within an exec().
+# But now this is acceptable.
+do_test misuse-2.3 {
+  set v [catch {
+    db eval {SELECT * FROM t1} {} {
+      sqlite3_create_function $::DB
+    }
+  } msg]
+  lappend v $msg
+} {0 {}}
+do_test misuse-2.4 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+do_test misuse-2.5 {
+  catchsql {
+    SELECT * FROM t1
+  }
+} {0 {1 2}}
+
+# Attempt to register a new SQL aggregate while an sqlite_exec() is active.
+#
+do_test misuse-3.1 {
+  db close
+  sqlite3 db test2.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    SELECT * FROM t1
+  }
+} {1 2}
+do_test misuse-3.2 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+
+# We used to disallow creating new function from within an exec().
+# But now this is acceptable.
+do_test misuse-3.3 {
+  set v [catch {
+    db eval {SELECT * FROM t1} {} {
+      sqlite3_create_aggregate $::DB
+    }
+  } msg]
+  lappend v $msg
+} {0 {}}
+do_test misuse-3.4 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+do_test misuse-3.5 {
+  catchsql {
+    SELECT * FROM t1
+  }
+} {0 {1 2}}
+
+# Attempt to close the database from an sqlite_exec callback.
+#
+# Update for v3: The db cannot be closed because there are active
+# VMs. The sqlite3_close call would return SQLITE_BUSY.
+do_test misuse-4.1 {
+  db close
+  sqlite3 db test2.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    SELECT * FROM t1
+  }
+} {1 2}
+do_test misuse-4.2 {
+  catchsql2 {SELECT * FROM t1}
+} {0 {a b 1 2}}
+do_test misuse-4.3 {
+  set v [catch {
+    db eval {SELECT * FROM t1} {} {
+      set r [sqlite3_close $::DB]
+    }
+  } msg]
+  lappend v $msg $r
+} {0 {} SQLITE_BUSY}
+
+if {[clang_sanitize_address]==0} {
+  do_test misuse-4.4 {
+  # Flush the TCL statement cache here, otherwise the sqlite3_close() will
+  # fail because there are still un-finalized() VDBEs.
+    db cache flush
+      sqlite3_close $::DB
+      catchsql2 {SELECT * FROM t1}
+  } {1 {bad parameter or other API misuse}}
+  do_test misuse-4.5 {
+    catchsql {
+      SELECT * FROM t1
+    }
+  } {1 {bad parameter or other API misuse}}
+
+  # Attempt to use a database after it has been closed.
+  #
+  do_test misuse-5.1 {
+    db close
+      sqlite3 db test2.db; set ::DB [sqlite3_connection_pointer db]
+      execsql {
+        SELECT * FROM t1
+      }
+  } {1 2}
+  do_test misuse-5.2 {
+    catchsql2 {SELECT * FROM t1}
+  } {0 {a b 1 2}}
+  do_test misuse-5.3 {
+    db close
+      set r [catch {
+        sqlite3_prepare $::DB {SELECT * FROM t1} -1 TAIL
+      } msg]
+    lappend r $msg
+  } {1 {(21) bad parameter or other API misuse}}
+}
+
+finish_test

@@ -1,0 +1,113 @@
+# 2015 June 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for the sessions module.
+# Specifically, it tests that operations on tables without primary keys
+# are ignored.
+#
+
+
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessionE
+
+#
+# Test plan:
+#
+#    1.*: Test that non-PK tables are not auto-attached.
+#    2.*: Test that explicitly attaching a non-PK table is a no-op.
+#    3.*: Test that sqlite3session_diff() on a non-PK table is a no-op.
+#
+
+
+#--------------------------------------------------------------------------
+reset_db
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a PRIMARY KEY, b);
+}
+do_test 1.1 {
+  sqlite3session S db main
+  S attach *
+  execsql {
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t2 VALUES(1, 2);
+  }
+} {}
+do_changeset_test 1.2 S {
+  {INSERT t2 0 X. {} {i 1 i 2}}
+}
+S delete
+
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a PRIMARY KEY, b);
+}
+do_test 2.1 {
+  sqlite3session S db main
+  S attach t1
+  S attach t2
+  execsql {
+    INSERT INTO t1 VALUES(3, 4);
+    INSERT INTO t2 VALUES(3, 4);
+    INSERT INTO t1 VALUES(5, 6);
+    INSERT INTO t2 VALUES(5, 6);
+  }
+} {}
+do_changeset_test 2.2 S {
+  {INSERT t2 0 X. {} {i 3 i 4}}
+  {INSERT t2 0 X. {} {i 5 i 6}}
+}
+S delete
+
+reset_db
+forcedelete test.db2
+do_execsql_test 3.0 {
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t1(a, b);
+  CREATE TABLE aux.t2(a PRIMARY KEY, b);
+
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a PRIMARY KEY, b);
+
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t2 VALUES(3, 4);
+}
+do_test 3.1 {
+  sqlite3session S db main
+  S attach t1
+  S diff aux t1
+
+  S attach t2
+  S diff aux t2
+} {}
+do_changeset_test 3.2 S {
+  {INSERT t2 0 X. {} {i 3 i 4}}
+}
+do_execsql_test 3.3 {
+  INSERT INTO t1 VALUES(5, 6);
+  INSERT INTO t2 VALUES(7, 8);
+}
+do_changeset_test 3.4 S {
+  {INSERT t2 0 X. {} {i 3 i 4}}
+  {INSERT t2 0 X. {} {i 7 i 8}}
+}
+
+
+S delete
+
+finish_test

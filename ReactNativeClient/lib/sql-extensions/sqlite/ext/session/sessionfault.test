@@ -1,0 +1,589 @@
+# 2011 Mar 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the session module.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionfault
+
+forcedelete test.db2
+sqlite3 db2 test.db2
+do_common_sql {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b));
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+}
+faultsim_save_and_close
+db2 close
+
+#-------------------------------------------------------------------------
+# Test OOM error handling when collecting and applying a simple changeset.
+#
+# Test 1.1 attaches tables individually by name to the session object. 
+# Whereas test 1.2 passes NULL to sqlite3session_attach() to attach all
+# tables.
+#
+do_faultsim_test 1.1 -faults oom-* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+} -body {
+  do_then_apply_sql {
+    INSERT INTO t1 VALUES('a string value', 8, 9);
+    UPDATE t1 SET c = 10 WHERE a = 1;
+    DELETE FROM t1 WHERE a = 4;
+  }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  faultsim_integrity_check
+  if {$testrc==0} { compare_db db db2 }
+}
+
+do_faultsim_test 1.2 -faults oom-* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3session S db main
+  S attach *
+  execsql {
+    INSERT INTO t1 VALUES('a string value', 8, 9);
+    UPDATE t1 SET c = 10 WHERE a = 1;
+    DELETE FROM t1 WHERE a = 4;
+  }
+  set ::changeset [S changeset]
+  set {} {}
+} -test {
+  catch { S delete }
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  faultsim_integrity_check
+  if {$testrc==0} { 
+    proc xConflict {args} { return "OMIT" }
+    sqlite3 db2 test.db2
+    sqlite3changeset_apply db2 $::changeset xConflict
+    compare_db db db2 
+  }
+}
+
+#-------------------------------------------------------------------------
+# The following block of tests - 2.* - are designed to check 
+# the handling of faults in the sqlite3changeset_apply() function.
+#
+catch {db close}
+catch {db2 close}
+forcedelete test.db2 test.db
+sqlite3 db2 test.db2
+sqlite3 db test.db
+do_common_sql {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b));
+  INSERT INTO t1 VALUES('apple', 'orange', 'pear');
+
+  CREATE TABLE t2(x PRIMARY KEY, y);
+}
+db2 close
+faultsim_save_and_close
+
+
+foreach {tn conflict_policy sql sql2} {
+  1 OMIT { INSERT INTO t1 VALUES('one text', 'two text', X'00ff00') } {}
+  2 OMIT { DELETE FROM t1 WHERE a = 'apple' }                         {}
+  3 OMIT { UPDATE t1 SET c = 'banana' WHERE b = 'orange' }            {}
+  4 REPLACE { INSERT INTO t2 VALUES('keyvalue', 'value 1') } {
+    INSERT INTO t2 VALUES('keyvalue', 'value 2');
+  }
+} {
+  proc xConflict args [list return $conflict_policy]
+
+  do_faultsim_test 2.$tn -faults oom-transient -prep {
+    catch {db2 close}
+    catch {db close}
+    faultsim_restore_and_reopen
+    set ::changeset [changeset_from_sql $::sql]
+    sqlite3 db2 test.db2
+    sqlite3_db_config_lookaside db2 0 0 0
+    execsql $::sql2 db2
+  } -body {
+    sqlite3changeset_apply db2 $::changeset xConflict
+  } -test {
+    faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+    faultsim_integrity_check
+    if {$testrc==0} { compare_db db db2 }
+  }
+}
+
+#-------------------------------------------------------------------------
+# This test case is designed so that a malloc() failure occurs while
+# resizing the session object hash-table from 256 to 512 buckets. This
+# is not an error, just a sub-optimal condition.
+#
+do_faultsim_test 3 -faults oom-* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+
+  sqlite3session S db main
+  S attach t1
+  execsql { BEGIN }
+  for {set i 0} {$i < 125} {incr i} {
+    execsql {INSERT INTO t1 VALUES(10+$i, 10+$i, 10+$i)}
+  }
+} -body {
+  for {set i 125} {$i < 133} {incr i} {
+    execsql {INSERT INTO t1 VALUES(10+$i, 10+$i, 1-+$i)}
+  }
+  S changeset
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} { 
+    sqlite3changeset_apply db2 [S changeset] xConflict
+    compare_db db db2 
+  }
+  catch { S delete }
+  faultsim_integrity_check
+}
+
+catch { db close }
+catch { db2 close }
+forcedelete test.db2 test.db
+sqlite3 db2 test.db2
+sqlite3 db test.db
+
+proc xConflict {op tbl type args} {
+  if { $type=="CONFLICT" || $type=="DATA" } {
+    return "REPLACE"
+  }
+  return "OMIT"
+}
+
+do_test 4.0 {
+  execsql {
+    PRAGMA encoding = 'utf16';
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(5, 32);
+  }
+  execsql {
+    PRAGMA encoding = 'utf16';
+    CREATE TABLE t1(a PRIMARY KEY, b NOT NULL);
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(2, 4);
+    INSERT INTO t1 VALUES(4, 16);
+  } db2
+} {}
+
+faultsim_save_and_close
+db2 close
+
+do_faultsim_test 4 -faults oom-* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+  sqlite3session S db main
+  S attach t1
+  execsql {
+    INSERT INTO t1 VALUES(1, 45);
+    INSERT INTO t1 VALUES(2, 55);
+    INSERT INTO t1 VALUES(3, 55);
+    UPDATE t1 SET a = 4 WHERE a = 5;
+  }
+} -body {
+  sqlite3changeset_apply db2 [S changeset] xConflict
+} -test {
+  catch { S delete }
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} { compare_db db db2 }
+}
+
+#-------------------------------------------------------------------------
+# This block of tests verifies that OOM faults in the 
+# sqlite3changeset_invert() function are handled correctly.
+#
+catch {db close}
+catch {db2 close}
+forcedelete test.db
+sqlite3 db test.db
+execsql {
+  CREATE TABLE t1(a, b, PRIMARY KEY(b));
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('string', 1);
+  INSERT INTO t1 VALUES(4, 2);
+  INSERT INTO t1 VALUES(X'FFAAFFAAFFAA', 3);
+}
+set changeset [changeset_from_sql {
+  INSERT INTO t1 VALUES('xxx', 'yyy');
+  DELETE FROM t1 WHERE a = 'string';
+  UPDATE t1 SET a = 20 WHERE b = 2;
+}]
+db close
+
+do_faultsim_test 5.1 -faults oom* -body {
+  set ::inverse [sqlite3changeset_invert $::changeset]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    set x [list]
+    sqlite3session_foreach c $::inverse { lappend x $c }
+    foreach c {
+        {DELETE t1 0 .X {t xxx t yyy} {}} 
+        {INSERT t1 0 .X {} {t string i 1}} 
+        {UPDATE t1 0 .X {i 20 i 2} {i 4 {} {}}}
+    } { lappend y $c }
+    if {$x != $y} { error "changeset no good" }
+  }
+}
+
+catch {db close}
+catch {db2 close}
+forcedelete test.db
+sqlite3 db test.db
+execsql {
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t2 VALUES(1, 'abc');
+  INSERT INTO t2 VALUES(2, 'def');
+}
+set changeset [changeset_from_sql {
+  UPDATE t2 SET b = (b || b || b || b);
+  UPDATE t2 SET b = (b || b || b || b);
+  UPDATE t2 SET b = (b || b || b || b);
+  UPDATE t2 SET b = (b || b || b || b);
+}]
+db close
+set abc [string repeat abc 256]
+set def [string repeat def 256]
+
+do_faultsim_test 5.2 -faults oom-tra* -body {
+  set ::inverse [sqlite3changeset_invert $::changeset]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    set x [list]
+    sqlite3session_foreach c $::inverse { lappend x $c }
+    foreach c "
+        {UPDATE t2 0 X. {i 1 t $::abc} {{} {} t abc}}
+        {UPDATE t2 0 X. {i 2 t $::def} {{} {} t def}}
+    " { lappend y $c }
+    if {$x != $y} { error "changeset no good" }
+  }
+}
+
+catch {db close}
+catch {db2 close}
+forcedelete test.db
+sqlite3 db test.db
+set abc [string repeat abc 256]
+set def [string repeat def 256]
+execsql "
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t2 VALUES(1, '$abc');
+"
+set changeset [changeset_from_sql "
+  INSERT INTO t2 VALUES(2, '$def');
+  DELETE FROM t2 WHERE a = 1;
+"]
+db close
+
+do_faultsim_test 5.3 -faults oom-tra* -body {
+  set ::inverse [sqlite3changeset_invert $::changeset]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    set x [list]
+    sqlite3session_foreach c $::inverse { lappend x $c }
+    foreach c "
+        {INSERT t2 0 X. {} {i 1 t $::abc}}
+        {DELETE t2 0 X. {i 2 t $::def} {}}
+    " { lappend y $c }
+    if {$x != $y} { error "changeset no good" }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that OOM errors in sqlite3changeset_concat() are handled correctly.
+#
+catch {db close}
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 5.prep1 {
+  CREATE TABLE t1(a, b, PRIMARY KEY(b));
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('string', 1);
+  INSERT INTO t1 VALUES(4, 2);
+  INSERT INTO t1 VALUES(X'FFAAFFAAFFAA', 3);
+}
+
+do_test 6.prep2 {
+  sqlite3session M db main
+  M attach *
+  set ::c2 [changeset_from_sql {
+    INSERT INTO t2 VALUES(randomblob(1000), randomblob(1000));
+    INSERT INTO t2 VALUES('one', 'two');
+    INSERT INTO t2 VALUES(1, NULL);
+    UPDATE t1 SET a = 5 WHERE a = 2;
+  }]
+  set ::c1 [changeset_from_sql {
+    DELETE FROM t2 WHERE a = 1;
+    UPDATE t1 SET a = 4 WHERE a = 2;
+    INSERT INTO t2 VALUES('x', 'y');
+  }]
+  set ::total [changeset_to_list [M changeset]]
+  M delete
+} {}
+
+do_faultsim_test 6 -faults oom-* -body {
+  set ::result [sqlite3changeset_concat $::c1 $::c2]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    set v [changeset_to_list $::result]
+    if {$v != $::total} { error "result no good" }
+  }
+}
+
+faultsim_delete_and_reopen
+do_execsql_test 7.prep1 {
+  CREATE TABLE t1(a, b, PRIMARY KEY(a));
+}
+faultsim_save_and_close
+
+set res [list]
+for {set ::i 0} {$::i < 480} {incr ::i 4} {
+  lappend res "INSERT t1 0 X. {} {i $::i i $::i}"
+}
+set res [lsort $res]
+do_faultsim_test 7 -faults oom-transient -prep {
+  catch { S delete }
+  faultsim_restore_and_reopen
+  sqlite3session S db main
+  S attach *
+} -body {
+  for {set ::i 0} {$::i < 480} {incr ::i 4} {
+    execsql {INSERT INTO t1 VALUES($::i, $::i)}
+  }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    set cres [list [catch {changeset_to_list [S changeset]} msg] $msg]
+    S delete
+    if {$cres != "1 SQLITE_NOMEM" && $cres != "0 {$::res}"} {
+      error "Expected {0 $::res} Got {$cres}"
+    }
+  } else {
+    catch { S changeset }
+    catch { S delete }
+  }
+}
+
+faultsim_delete_and_reopen
+do_test 8.prep {
+  sqlite3session S db main
+  S attach *
+  execsql { 
+    CREATE TABLE t1(a, b, PRIMARY KEY(a)); 
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+    INSERT INTO t1 VALUES(5, 6);
+  }
+  set ::changeset [S changeset]
+  S delete
+} {}
+
+set expected [normalize_list {
+  {INSERT t1 0 X. {} {i 1 i 2}} 
+  {INSERT t1 0 X. {} {i 3 i 4}} 
+  {INSERT t1 0 X. {} {i 5 i 6}}
+}]
+do_faultsim_test 8.1 -faults oom* -body {
+  set ::res [list]
+  sqlite3session_foreach -next v $::changeset { lappend ::res $v }
+  normalize_list $::res
+} -test {
+  faultsim_test_result [list 0 $::expected] {1 SQLITE_NOMEM}
+}
+do_faultsim_test 8.2 -faults oom* -body {
+  set ::res [list]
+  sqlite3session_foreach v $::changeset { lappend ::res $v }
+  normalize_list $::res
+} -test {
+  faultsim_test_result [list 0 $::expected] {1 SQLITE_NOMEM}
+}
+
+faultsim_delete_and_reopen
+do_test 9.1.prep {
+  execsql { 
+    PRAGMA encoding = 'utf16';
+    CREATE TABLE t1(a PRIMARY KEY, b);
+  }
+} {}
+faultsim_save_and_close
+
+set answers [list {0 {}} {1 SQLITE_NOMEM} \
+                  {1 {callback requested query abort}} \
+                  {1 {abort due to ROLLBACK}}]
+do_faultsim_test 9.1 -faults oom-transient -prep {
+  catch { unset ::c }
+  faultsim_restore_and_reopen
+  sqlite3session S db main
+  S attach *
+} -body {
+  execsql {
+    INSERT INTO t1 VALUES('abcdefghijklmnopqrstuv', 'ABCDEFGHIJKLMNOPQRSTUV');
+  }
+  set ::c [S changeset]
+  set {} {}
+} -test {
+  S delete
+  eval faultsim_test_result $::answers
+  if {[info exists ::c]} {
+    set expected [normalize_list {
+      {INSERT t1 0 X. {} {t abcdefghijklmnopqrstuv t ABCDEFGHIJKLMNOPQRSTUV}}
+    }]
+    if { [changeset_to_list $::c] != $expected } {
+      error "changeset mismatch"
+    }
+  }
+}
+
+faultsim_delete_and_reopen
+do_test 9.2.prep {
+  execsql { 
+    PRAGMA encoding = 'utf16';
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES('abcdefghij', 'ABCDEFGHIJKLMNOPQRSTUV');
+  }
+} {}
+faultsim_save_and_close
+
+set answers [list {0 {}} {1 SQLITE_NOMEM} \
+                  {1 {callback requested query abort}} \
+                  {1 {abort due to ROLLBACK}}]
+do_faultsim_test 9.2 -faults oom-transient -prep {
+  catch { unset ::c }
+  faultsim_restore_and_reopen
+  sqlite3session S db main
+  S attach *
+} -body {
+  execsql {
+    UPDATE t1 SET b = 'xyz';
+  }
+  set ::c [S changeset]
+  set {} {}
+} -test {
+  S delete
+  eval faultsim_test_result $::answers
+  if {[info exists ::c]} {
+    set expected [normalize_list {
+      {UPDATE t1 0 X. {t abcdefghij t ABCDEFGHIJKLMNOPQRSTUV} {{} {} t xyz}}
+    }]
+    if { [changeset_to_list $::c] != $expected } {
+      error "changeset mismatch"
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that if a conflict-handler encounters an OOM in 
+# sqlite3_value_text() but goes on to return SQLITE_CHANGESET_REPLACE
+# anyway, the OOM is picked up by the sessions module.
+set bigstr [string repeat abcdefghij 100]
+faultsim_delete_and_reopen
+do_test 10.prep.1  {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES($bigstr, $bigstr);
+  }
+
+  sqlite3session S db main
+  S attach *
+  execsql { UPDATE t1 SET b = b||'x' }
+  set C [S changeset]
+  S delete
+  execsql { UPDATE t1 SET b = b||'xyz' }
+} {}
+faultsim_save_and_close
+
+faultsim_restore_and_reopen
+do_test 10.prep.2  {
+  proc xConflict {args} { return "ABORT" }
+  list [catch { sqlite3changeset_apply db $C xConflict } msg] $msg
+} {1 SQLITE_ABORT}
+do_execsql_test 10.prep.3 { SELECT b=$bigstr||'x' FROM t1 } 0
+do_test 10.prep.4  {
+  proc xConflict {args} { return "REPLACE" }
+  list [catch { sqlite3changeset_apply db $C xConflict } msg] $msg
+} {0 {}}
+do_execsql_test 10.prep.5 { SELECT b=$bigstr||'x' FROM t1 } 1
+db close
+
+do_faultsim_test 10 -faults oom-tra* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3changeset_apply_replace_all db $::C 
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    if {[db one {SELECT b=$bigstr||'x' FROM t1}]==0} {
+      error "data does not look right"
+    }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test an OOM with an sqlite3changeset_apply() filter callback.
+#
+reset_db
+do_test 11.prep {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    CREATE TABLE t2(x PRIMARY KEY, y);
+    BEGIN;
+  }
+
+  set ::cs [changeset_from_sql { 
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t2 VALUES('x', 'y');
+  }]
+
+  execsql ROLLBACK
+  set {} {}
+} {}
+
+proc filter {x} { return [string equal t1 $x] } 
+faultsim_save_and_close
+
+do_faultsim_test 11 -faults oom-tra* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3changeset_apply db $::cs {} filter
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  if {$testrc==0} {
+    if {[db eval {SELECT * FROM t1 UNION ALL SELECT * FROM t2}] != "1 2"} {
+      error "data does not look right"
+    }
+  }
+}
+
+
+finish_test

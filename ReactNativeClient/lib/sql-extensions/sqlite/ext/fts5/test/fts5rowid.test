@@ -1,0 +1,219 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests of the scalar fts5_rowid() and fts5_decode() functions.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5rowid
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_catchsql_test 1.1 {
+  SELECT fts5_rowid()
+} {1 {should be: fts5_rowid(subject, ....)}}
+
+do_catchsql_test 1.2 {
+  SELECT fts5_rowid('segment')
+} {1 {should be: fts5_rowid('segment', segid, pgno))}}
+
+do_execsql_test 1.3 {
+  SELECT fts5_rowid('segment', 1, 1)
+} {137438953473}
+
+do_catchsql_test 1.4 {
+  SELECT fts5_rowid('nosucharg');
+} {1 {first arg to fts5_rowid() must be 'segment'}} 
+
+
+#-------------------------------------------------------------------------
+# Tests of the fts5_decode() function.
+#
+reset_db
+do_execsql_test 2.1 { 
+  CREATE VIRTUAL TABLE x1 USING fts5(a, b);
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 32);
+} {}
+
+proc rnddoc {n} {
+  set map [list 0 a  1 b  2 c  3 d  4 e  5 f  6 g  7 h  8 i  9 j]
+  set doc [list]
+  for {set i 0} {$i < $n} {incr i} {
+    lappend doc [string map $map [format %.3d [expr int(rand()*100)]]]
+  }
+  set doc
+}
+db func rnddoc rnddoc
+
+do_execsql_test 2.2 {
+  WITH r(a, b) AS (
+    SELECT rnddoc(6), rnddoc(6) UNION ALL
+    SELECT rnddoc(6), rnddoc(6) FROM r
+  )
+  INSERT INTO x1 SELECT * FROM r LIMIT 10000;
+  DELETE FROM x1 WHERE (rowid%2);
+}
+
+set res [db one {SELECT count(*) FROM x1_data}]
+do_execsql_test 2.3 {
+  SELECT count(fts5_decode(rowid, block)) FROM x1_data;
+} $res
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 2.4 {
+  UPDATE x1_data SET block = X'';
+  SELECT count(fts5_decode(rowid, block)) FROM x1_data;
+} $res
+
+do_execsql_test 2.5 {
+  INSERT INTO x1(x1, rank) VALUES('pgsz', 1024);
+  INSERT INTO x1(x1) VALUES('rebuild');
+}
+
+set res [db one {SELECT count(*) FROM x1_data}]
+do_execsql_test 2.6 {
+  SELECT count(fts5_decode(rowid, block)) FROM x1_data;
+} $res
+
+# This is really a corruption test...
+#do_execsql_test 2.7 {
+#  UPDATE x1_data SET block = X'';
+#  SELECT count(fts5_decode(rowid, block)) FROM x1_data;
+#} $res
+
+do_execsql_test 2.8 {
+  SELECT fts5_decode(fts5_rowid('segment', 1000, 1), X'AB')
+} {corrupt}
+
+#-------------------------------------------------------------------------
+# Tests with very large tokens.
+#
+set strlist [list \
+  "[string repeat x 400]"                       \
+  "[string repeat x 300][string repeat w 100]"  \
+  "[string repeat x 300][string repeat y 100]"  \
+  "[string repeat x 300][string repeat z 600]"  \
+]
+do_test 3.0 {
+  execsql {
+    BEGIN;
+    CREATE VIRTUAL TABLE x2 USING fts5(a);
+  }
+  foreach str $strlist { execsql { INSERT INTO x2 VALUES($str) } }
+  execsql COMMIT
+} {}
+
+for {set tn 0} {$tn<[llength $strlist]} {incr tn} {
+  set str [lindex $strlist $tn]
+  do_execsql_test 3.1.$tn {
+    SELECT rowid FROM x2 WHERE x2 MATCH $str
+  } [expr $tn+1]
+}
+
+set res [db one {SELECT count(*) FROM x2_data}]
+do_execsql_test 3.2 {
+  SELECT count(fts5_decode(rowid, block)) FROM x2_data;
+} $res
+
+#-------------------------------------------------------------------------
+# Leaf pages with no terms or rowids at all.
+#
+set strlist [list \
+  "[string repeat {w } 400]"  \
+  "[string repeat {x } 400]"  \
+  "[string repeat {y } 400]"  \
+  "[string repeat {z } 400]"  \
+]
+do_test 4.0 {
+  execsql {
+    BEGIN;
+    CREATE VIRTUAL TABLE x3 USING fts5(a);
+    INSERT INTO x3(x3, rank) VALUES('pgsz', 32);
+  }
+  foreach str $strlist { execsql { INSERT INTO x3 VALUES($str) } }
+  execsql COMMIT
+} {}
+
+for {set tn 0} {$tn<[llength $strlist]} {incr tn} {
+  set str [lindex $strlist $tn]
+  do_execsql_test 4.1.$tn {
+    SELECT rowid FROM x3 WHERE x3 MATCH $str
+  } [expr $tn+1]
+}
+
+set res [db one {SELECT count(*) FROM x3_data}]
+do_execsql_test 4.2 {
+  SELECT count(fts5_decode(rowid, block)) FROM x3_data;
+} $res
+
+#-------------------------------------------------------------------------
+# Position lists with large values.
+#
+set strlist [list \
+  "[string repeat {w } 400]a"  \
+  "[string repeat {x } 400]a"  \
+  "[string repeat {y } 400]a"  \
+  "[string repeat {z } 400]a"  \
+]
+do_test 5.0 {
+  execsql {
+    BEGIN;
+    CREATE VIRTUAL TABLE x4 USING fts5(a);
+    INSERT INTO x4(x4, rank) VALUES('pgsz', 32);
+  }
+  foreach str $strlist { execsql { INSERT INTO x4 VALUES($str) } }
+  execsql COMMIT
+} {}
+
+do_execsql_test 5.1 {
+  SELECT rowid FROM x4 WHERE x4 MATCH 'a'
+} {1 2 3 4}
+
+set res [db one {SELECT count(*) FROM x4_data}]
+do_execsql_test 5.2 {
+  SELECT count(fts5_decode(rowid, block)) FROM x4_data;
+} $res
+
+#-------------------------------------------------------------------------
+#
+
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE x5 USING fts5(x, detail=none);
+  INSERT INTO x5(x5, rank) VALUES('pgsz', 32);
+  INSERT INTO x5 VALUES('a b c d e f');
+  INSERT INTO x5 VALUES('a b c d e f');
+  INSERT INTO x5 VALUES('a b c d e f');
+  BEGIN;
+    WITH s(i) AS (
+      SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<100
+    ) INSERT INTO x5 SELECT 'a b c d e f' FROM s;
+  COMMIT;
+  SELECT count(fts5_decode_none(rowid, block)) FROM x5_data;
+} {32}
+
+do_execsql_test 6.1 {
+  DELETE FROM x5 WHERE rowid <= 2;
+  SELECT count(fts5_decode_none(rowid, block)) FROM x5_data;
+} {34}
+
+do_execsql_test 6.2 {
+  UPDATE x5 SET x='a b c d e f' WHERE rowid=3;
+  SELECT count(fts5_decode_none(rowid, block)) FROM x5_data;
+} {36}
+
+#db eval {SELECT rowid, fts5_decode_none(rowid, block) aS r FROM x5_data} {puts $r}
+
+
+
+finish_test

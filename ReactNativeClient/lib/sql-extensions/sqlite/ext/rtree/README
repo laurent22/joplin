@@ -1,0 +1,120 @@
+
+This directory contains an SQLite extension that implements a virtual 
+table type that allows users to create, query and manipulate r-tree[1] 
+data structures inside of SQLite databases. Users create, populate 
+and query r-tree structures using ordinary SQL statements.
+
+    1.  SQL Interface
+
+        1.1  Table Creation
+        1.2  Data Manipulation
+        1.3  Data Querying
+        1.4  Introspection and Analysis
+
+    2.  Compilation and Deployment
+
+    3.  References
+
+
+1. SQL INTERFACE
+
+  1.1 Table Creation.
+
+    All r-tree virtual tables have an odd number of columns between
+    3 and 11. Unlike regular SQLite tables, r-tree tables are strongly 
+    typed. 
+
+    The leftmost column is always the pimary key and contains 64-bit 
+    integer values. Each subsequent column contains a 32-bit real
+    value. For each pair of real values, the first (leftmost) must be 
+    less than or equal to the second. R-tree tables may be 
+    constructed using the following syntax:
+
+      CREATE VIRTUAL TABLE <name> USING rtree(<column-names>)
+
+    For example:
+
+      CREATE VIRTUAL TABLE boxes USING rtree(boxno, xmin, xmax, ymin, ymax);
+      INSERT INTO boxes VALUES(1, 1.0, 3.0, 2.0, 4.0);
+
+    Constructing a virtual r-tree table <name> creates the following three
+    real tables in the database to store the data structure:
+
+      <name>_node
+      <name>_rowid
+      <name>_parent
+
+    Dropping or modifying the contents of these tables directly will
+    corrupt the r-tree structure. To delete an r-tree from a database,
+    use a regular DROP TABLE statement:
+
+      DROP TABLE <name>;
+
+    Dropping the main r-tree table automatically drops the automatically
+    created tables. 
+
+  1.2 Data Manipulation (INSERT, UPDATE, DELETE).
+
+    The usual INSERT, UPDATE or DELETE syntax is used to manipulate data
+    stored in an r-tree table. Please note the following:
+
+      * Inserting a NULL value into the primary key column has the
+        same effect as inserting a NULL into an INTEGER PRIMARY KEY
+        column of a regular table. The system automatically assigns
+        an unused integer key value to the new record. Usually, this
+        is one greater than the largest primary key value currently
+        present in the table.
+
+      * Attempting to insert a duplicate primary key value fails with
+        an SQLITE_CONSTRAINT error.
+
+      * Attempting to insert or modify a record such that the value
+        stored in the (N*2)th column is greater than that stored in
+        the (N*2+1)th column fails with an SQLITE_CONSTRAINT error.
+
+      * When a record is inserted, values are always converted to 
+        the required type (64-bit integer or 32-bit real) as if they
+        were part of an SQL CAST expression. Non-numeric strings are
+        converted to zero.
+
+  1.3 Queries.
+
+    R-tree tables may be queried using all of the same SQL syntax supported
+    by regular tables. However, some query patterns are more efficient
+    than others.
+
+    R-trees support fast lookup by primary key value (O(logN), like 
+    regular tables).
+
+    Any combination of equality and range (<, <=, >, >=) constraints
+    on spatial data columns may be used to optimize other queries. This
+    is the key advantage to using r-tree tables instead of creating 
+    indices on regular tables.
+
+  1.4 Introspection and Analysis.
+
+    TODO: Describe rtreenode() and rtreedepth() functions.
+
+
+2. COMPILATION AND USAGE
+
+  The easiest way to compile and use the RTREE extension is to build
+  and use it as a dynamically loadable SQLite extension. To do this
+  using gcc on *nix:
+
+    gcc -shared rtree.c -o libSqliteRtree.so
+
+  You may need to add "-I" flags so that gcc can find sqlite3ext.h
+  and sqlite3.h. The resulting shared lib, libSqliteRtree.so, may be
+  loaded into sqlite in the same way as any other dynamicly loadable
+  extension.
+
+
+3. REFERENCES
+
+  [1]  Atonin Guttman, "R-trees - A Dynamic Index Structure For Spatial 
+       Searching", University of California Berkeley, 1984.
+
+  [2]  Norbert Beckmann, Hans-Peter Kriegel, Ralf Schneider, Bernhard Seeger,
+       "The R*-tree: An Efficient and Robust Access Method for Points and
+       Rectangles", Universitaet Bremen, 1990.

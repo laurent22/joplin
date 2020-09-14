@@ -1,0 +1,177 @@
+# 2017 December 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test the shell tool ".ar" command.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix shell8
+
+ifcapable !vtab {
+  finish_test; return
+}
+set CLI [test_find_cli]
+
+# Check to make sure the shell has been compiled with ".archive" support.
+#
+if {[string match {*unknown command*} [catchcmd :memory: .archive]]} {
+  finish_test; return
+}
+
+proc populate_dir {dirname spec} {
+  # First delete the current tree, if one exists.
+  file delete -force $dirname
+  
+  # Recreate the root of the new tree.
+  file mkdir $dirname
+
+  # Add each file to the new tree.
+  foreach {f d} $spec {
+    set path [file join $dirname $f]
+    file mkdir [file dirname $path]
+    set fd [open $path w]
+    puts -nonewline $fd $d
+    close $fd
+  }
+}
+
+proc dir_to_list {dirname {n -1}} {
+  if {$n<0} {set n [llength [file split $dirname]]}
+
+  set res [list]
+  foreach f [glob -nocomplain $dirname/*] {
+    set mtime [file mtime $f]
+    if {$::tcl_platform(platform)!="windows"} {
+      set perm [file attributes $f -perm]
+    } else {
+      set perm 0
+    }
+    set relpath [file join {*}[lrange [file split $f] $n end]]
+    lappend res 
+    if {[file isdirectory $f]} {
+      lappend res [list $relpath / $mtime $perm]
+      lappend res {*}[dir_to_list $f]
+    } else {
+      set fd [open $f]
+      set data [read $fd]
+      close $fd
+      lappend res [list $relpath $data $mtime $perm]
+    }
+  }
+  lsort $res
+}
+
+proc dir_compare {d1 d2} {
+  set l1 [dir_to_list $d1]
+  set l2 [dir_to_list $d1]
+  string compare $l1 $l2
+}
+
+foreach {tn tcl} {
+  1 {
+    set c1 ".ar c ar1"
+    set x1 ".ar x"
+
+    set c2 ".ar cC ar1 ."
+    set x2 ".ar Cx ar3"
+
+    set c3 ".ar cCf ar1 test_xyz.db ."
+    set x3 ".ar Cfx ar3 test_xyz.db"
+  }
+
+  2 {
+    set c1 ".ar -c ar1"
+    set x1 ".ar -x"
+
+    set c2 ".ar -cC ar1 ."
+    set x2 ".ar -xC ar3"
+
+    set c3 ".ar -cCar1 -ftest_xyz.db ."
+    set x3 ".ar -x -C ar3 -f test_xyz.db"
+  }
+
+  3 {
+    set c1 ".ar --create ar1"
+    set x1 ".ar --extract"
+
+    set c2 ".ar --directory ar1 --create ."
+    set x2 ".ar --extract --dir ar3"
+
+    set c3 ".ar --creat --dir ar1 --file test_xyz.db ."
+    set x3 ".ar --e  --dir ar3 --f test_xyz.db"
+  }
+
+  4 {
+    set c1 ".ar --cr ar1"
+    set x1 ".ar --e"
+
+    set c2 ".ar -C ar1 -c ."
+    set x2 ".ar -x -C ar3"
+
+    set c3 ".ar -c --directory ar1 --file test_xyz.db ."
+    set x3 ".ar -x --directory ar3 --file test_xyz.db"
+  }
+} {
+  eval $tcl
+
+  # Populate directory "ar1" with some files.
+  #
+  populate_dir ar1 {
+    file1 "abcd" 
+    file2 "efgh"
+    dir1/file3 "ijkl"
+  }
+  set expected [dir_to_list ar1]
+
+  do_test 1.$tn.1 {
+    catchcmd test_ar.db $c1
+    file delete -force ar1
+    catchcmd test_ar.db $x1
+    dir_to_list ar1
+  } $expected
+
+  do_test 1.$tn.2 {
+    file delete -force ar3
+    catchcmd test_ar.db $c2
+    catchcmd test_ar.db $x2
+    dir_to_list ar3
+  } $expected
+
+  do_test 1.$tn.3 {
+    file delete -force ar3
+    file delete -force test_xyz.db
+    catchcmd ":memory:" $c3
+    catchcmd ":memory:" $x3
+    dir_to_list ar3
+  } $expected
+
+  # This is a repeat of test 1.$tn.1, except that there is a 2 second 
+  # pause between creating the archive and extracting its contents.
+  # This is to test that timestamps are set correctly.
+  #
+  # Because it is slow, only do this for $tn==1.
+  if {$tn==1} {
+    do_test 1.$tn.1 {
+      catchcmd test_ar.db $c1
+      file delete -force ar1
+      after 2000
+      catchcmd test_ar.db $x1
+      dir_to_list ar1
+    } $expected
+  }
+}
+
+finish_test
+
+
+
+finish_test

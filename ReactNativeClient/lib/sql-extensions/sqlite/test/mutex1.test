@@ -1,0 +1,215 @@
+# 2008 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: mutex1.test,v 1.20 2009/04/23 14:58:40 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !mutex {
+  finish_test
+  return
+}
+if {[info exists tester_do_binarylog]} {
+  finish_test
+  return
+}
+
+sqlite3_reset_auto_extension
+clear_mutex_counters
+
+proc mutex_counters {varname} {
+  upvar $varname var
+  set var(total) 0
+  foreach {name value} [read_mutex_counters] {
+    set var($name) $value
+    incr var(total) $value
+  }
+}
+
+#-------------------------------------------------------------------------
+# Tests mutex1-1.* test that sqlite3_config() returns SQLITE_MISUSE if
+# is called at the wrong time. And that the first time sqlite3_initialize
+# is called it obtains the 'static_main' mutex 3 times and a recursive
+# mutex (sqlite3Config.pInitMutex) twice. Subsequent calls are no-ops
+# that do not require any mutexes.
+#
+do_test mutex1-1.0 {
+  install_mutex_counters 1
+} {SQLITE_MISUSE}
+
+do_test mutex1-1.1 {
+  db close
+  install_mutex_counters 1
+} {SQLITE_MISUSE}
+
+do_test mutex1-1.2 {
+  sqlite3_shutdown
+  install_mutex_counters 1
+} {SQLITE_OK}
+
+do_test mutex1-1.3 {
+  install_mutex_counters 0
+} {SQLITE_OK}
+
+do_test mutex1-1.4 {
+  install_mutex_counters 1
+} {SQLITE_OK}
+
+do_test mutex1-1.5 {
+  mutex_counters counters
+  set counters(total)
+} {0}
+
+do_test mutex1-1.6 {
+  sqlite3_initialize
+} {SQLITE_OK}
+
+do_test mutex1-1.7 {
+  mutex_counters counters
+  # list $counters(total) $counters(static_main)
+  expr {$counters(total)>0}
+} {1}
+
+do_test mutex1-1.8 {
+  clear_mutex_counters
+  sqlite3_initialize
+} {SQLITE_OK}
+
+do_test mutex1-1.9 {
+  mutex_counters counters
+  list $counters(total) $counters(static_main)
+} {0 0}
+
+#-------------------------------------------------------------------------
+# Tests mutex1-2.* test the three thread-safety related modes that
+# can be selected using sqlite3_config:
+#
+#   * Serialized mode,
+#   * Multi-threaded mode,
+#   * Single-threaded mode.
+#
+ifcapable threadsafe1&&shared_cache {
+  set enable_shared_cache [sqlite3_enable_shared_cache 1]
+  foreach {mode mutexes} {
+    singlethread {}
+    multithread  {
+      fast static_app1 static_app2 static_app3
+      static_lru static_main static_mem static_open
+      static_prng static_pmem static_vfs1 static_vfs2
+      static_vfs3
+    }
+    serialized  {
+      fast recursive static_app1 static_app2
+      static_app3 static_lru static_main static_mem
+      static_open static_prng static_pmem static_vfs1
+      static_vfs2 static_vfs3
+    }
+  } {
+
+    do_test mutex1.2.$mode.1 {
+      catch {db close}
+      sqlite3_shutdown
+      sqlite3_config $mode
+    } SQLITE_OK
+
+    do_test mutex1.2.$mode.2 {
+      sqlite3_initialize
+      clear_mutex_counters
+      sqlite3 db test.db -nomutex 0 -fullmutex 0
+      catchsql { CREATE TABLE abc(a, b, c) }
+      db eval {
+        INSERT INTO abc VALUES(1, 2, 3);
+      }
+    } {}
+    ifcapable !memorymanage {
+      regsub { static_lru} $mutexes {} mutexes
+    }
+    if {$mode ne "singlethread"} {
+      do_test mutex1.2.$mode.3 {
+        #
+        # NOTE: Make sure all the app and vfs mutexes get used.
+        #
+        enter_static_mutex static_app1
+        leave_static_mutex static_app1
+        enter_static_mutex static_app2
+        leave_static_mutex static_app2
+        enter_static_mutex static_app3
+        leave_static_mutex static_app3
+        enter_static_mutex static_vfs1
+        leave_static_mutex static_vfs1
+        enter_static_mutex static_vfs2
+        leave_static_mutex static_vfs2
+        enter_static_mutex static_vfs3
+        leave_static_mutex static_vfs3
+      } {}
+    }
+    do_test mutex1.2.$mode.4 {
+      mutex_counters counters
+
+      set res [list]
+      foreach {key value} [array get counters] {
+        if {$key ne "total" && $value > 0} {
+          lappend res $key
+        }
+      }
+      lsort $res
+    } [lsort $mutexes]
+  }
+  sqlite3_enable_shared_cache $enable_shared_cache
+
+  # Open and use a connection in "nomutex" mode. Test that no recursive
+  # mutexes are obtained.
+  do_test mutex1.3.1 {
+    catch {db close}
+    clear_mutex_counters
+    sqlite3 db test.db -nomutex 1
+    execsql { SELECT * FROM abc }
+  } {1 2 3 1 2 3 1 2 3}
+  do_test mutex1.3.2 {
+    mutex_counters counters
+    set counters(recursive)
+  } {0}
+}
+
+# Test the sqlite3_db_mutex() function.
+#
+do_test mutex1.4.1 {
+  catch {db close}
+  sqlite3 db test.db
+  enter_db_mutex db
+  db eval {SELECT 1, 2, 3}
+} {1 2 3}
+do_test mutex1.4.2 {
+  leave_db_mutex db
+  db eval {SELECT 1, 2, 3}
+} {1 2 3}
+do_test mutex1.4.3 {
+  catch {db close}
+  sqlite3 db test.db -nomutex 1
+  enter_db_mutex db
+  db eval {SELECT 1, 2, 3}
+} {1 2 3}
+do_test mutex1.4.4 {
+  leave_db_mutex db
+  db eval {SELECT 1, 2, 3}
+} {1 2 3}
+
+do_test mutex1-X {
+  catch {db close}
+  sqlite3_shutdown
+  clear_mutex_counters
+  install_mutex_counters 0
+  sqlite3_initialize
+} {SQLITE_OK}
+
+autoinstall_test_functions
+finish_test

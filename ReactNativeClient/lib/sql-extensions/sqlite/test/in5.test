@@ -1,0 +1,269 @@
+# 2012 September 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix in5
+
+do_test in5-1.1 {
+  execsql {
+    CREATE TABLE t1x(x INTEGER PRIMARY KEY);
+    INSERT INTO t1x VALUES(1),(3),(5),(7),(9);
+    CREATE TABLE t1y(y INTEGER UNIQUE);
+    INSERT INTO t1y VALUES(2),(4),(6),(8);
+    CREATE TABLE t1z(z TEXT UNIQUE);
+    INSERT INTO t1z VALUES('a'),('c'),('e'),('g');
+    CREATE TABLE t2(a INTEGER, b INTEGER, c TEXT, d TEXT);
+    INSERT INTO t2 VALUES(1,2,'a','12a'),(1,2,'b','12b'),
+                         (2,3,'g','23g'),(3,5,'c','35c'),
+                         (4,6,'h','46h'),(5,6,'e','56e');
+    CREATE TABLE t3x AS SELECT x FROM t1x;
+    CREATE TABLE t3y AS SELECT y FROM t1y;
+    CREATE TABLE t3z AS SELECT z FROM t1z;
+    SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z ORDER BY c;
+  }
+} {12a 56e}
+do_test in5-1.2 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t1y AND b IN t1x AND c IN t1z ORDER BY d;
+  }
+} {23g}
+do_test in5-1.3 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t3x AND b IN t3y AND c IN t3z ORDER BY d;
+  }
+} {12a 56e}
+
+
+do_test in5-2.1 {
+  execsql {
+    CREATE INDEX t2abc ON t2(a,b,c);
+    SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z ORDER BY d;
+  }
+} {12a 56e}
+do_test in5-2.2 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t1y AND b IN t1x AND c IN t1z ORDER BY d;
+  }
+} {23g}
+do_test in5-2.3 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z
+  }]
+} {0}
+do_test in5-2.4 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t3x AND b IN t3y AND c IN t3z ORDER BY d;
+  }
+} {12a 56e}
+do_test in5-2.5.1 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t3x AND b IN t1y AND c IN t1z
+  }]
+} {1}
+do_test in5-2.5.2 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t3y AND c IN t1z
+  }]
+} {1}
+do_test in5-2.5.3 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t3z
+  }]
+} {1}
+
+do_test in5-3.1 {
+  execsql {
+    DROP INDEX t2abc;
+    CREATE INDEX t2ab ON t2(a,b);
+    SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z ORDER BY d;
+  }
+} {12a 56e}
+do_test in5-3.2 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t1y AND b IN t1x AND c IN t1z ORDER BY d;
+  }
+} {23g}
+do_test in5-3.3 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z
+  }]
+} {0}
+
+do_test in5-4.1 {
+  execsql {
+    DROP INDEX t2ab;
+    CREATE INDEX t2abcd ON t2(a,b,c,d);
+    SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z ORDER BY d;
+  }
+} {12a 56e}
+do_test in5-4.2 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t1y AND b IN t1x AND c IN t1z ORDER BY d;
+  }
+} {23g}
+do_test in5-4.3 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z
+  }]
+} {0}
+
+
+do_test in5-5.1 {
+  execsql {
+    DROP INDEX t2abcd;
+    CREATE INDEX t2cbad ON t2(c,b,a,d);
+    SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z ORDER BY d;
+  }
+} {12a 56e}
+do_test in5-5.2 {
+  execsql {
+    SELECT d FROM t2 WHERE a IN t1y AND b IN t1x AND c IN t1z ORDER BY d;
+  }
+} {23g}
+do_test in5-5.3 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT d FROM t2 WHERE a IN t1x AND b IN t1y AND c IN t1z
+  }]
+} {0}
+
+#-------------------------------------------------------------------------
+# At one point SQLite was removing the DISTINCT keyword from expressions
+# similar to:
+#
+#   <expr1> IN (SELECT DISTINCT <expr2> FROM...)
+#
+# However, there are a few obscure cases where this is incorrect. For
+# example, if the SELECT features a LIMIT clause, or if the collation
+# sequence or affinity used by the DISTINCT does not match the one used
+# by the IN(...) expression.
+#
+do_execsql_test 6.1.1 {
+  CREATE TABLE t1(a COLLATE nocase);
+  INSERT INTO t1 VALUES('one');
+  INSERT INTO t1 VALUES('ONE');
+}
+do_execsql_test 6.1.2 {
+  SELECT count(*) FROM t1 WHERE a COLLATE BINARY IN (SELECT DISTINCT a FROM t1)
+} {1}
+
+do_execsql_test 6.2.1 {
+  CREATE TABLE t3(a, b);
+  INSERT INTO t3 VALUES(1, 1);
+  INSERT INTO t3 VALUES(1, 2);
+  INSERT INTO t3 VALUES(1, 3);
+  INSERT INTO t3 VALUES(2, 4);
+  INSERT INTO t3 VALUES(2, 5);
+  INSERT INTO t3 VALUES(2, 6);
+  INSERT INTO t3 VALUES(3, 7);
+  INSERT INTO t3 VALUES(3, 8);
+  INSERT INTO t3 VALUES(3, 9);
+}
+do_execsql_test 6.2.2 {
+  SELECT count(*) FROM t3 WHERE b IN (SELECT DISTINCT a FROM t3 LIMIT 5);
+} {3}
+do_execsql_test 6.2.3 {
+  SELECT count(*) FROM t3 WHERE b IN (SELECT          a FROM t3 LIMIT 5);
+} {2}
+
+do_execsql_test 6.3.1 {
+  CREATE TABLE x1(a);
+  CREATE TABLE x2(b);
+  INSERT INTO x1 VALUES(1), (1), (2);
+  INSERT INTO x2 VALUES(1), (2);
+  SELECT count(*) FROM x2 WHERE b IN (SELECT DISTINCT a FROM x1 LIMIT 2);
+} {2}
+
+#-------------------------------------------------------------------------
+# Test to confirm that bug [5e3c886796e5] is fixed.
+#
+do_execsql_test 7.1 {
+  CREATE TABLE y1(a, b);
+  CREATE TABLE y2(c);
+
+  INSERT INTO y1 VALUES(1,     'one');
+  INSERT INTO y1 VALUES('two', 'two');
+  INSERT INTO y1 VALUES(3,     'three');
+
+  INSERT INTO y2 VALUES('one');
+  INSERT INTO y2 VALUES('two');
+  INSERT INTO y2 VALUES('three');
+} {}
+
+do_execsql_test 7.2.1 {
+  SELECT a FROM y1 WHERE b NOT IN (SELECT a FROM y2);
+} {1 3}
+do_execsql_test 7.2.2 {
+  SELECT a FROM y1 WHERE b IN (SELECT a FROM y2);
+} {two}
+
+do_execsql_test 7.3.1 {
+  CREATE INDEX y2c ON y2(c);
+  SELECT a FROM y1 WHERE b NOT IN (SELECT a FROM y2);
+} {1 3}
+do_execsql_test 7.3.2 {
+  SELECT a FROM y1 WHERE b IN (SELECT a FROM y2);
+} {two}
+
+#-------------------------------------------------------------------------
+# Tests to confirm that indexes on the rowid column do not confuse
+# the query planner. See ticket [0eab1ac7591f511d].
+#
+do_execsql_test 8.0 {
+  CREATE TABLE n1(a INTEGER PRIMARY KEY, b VARCHAR(500));
+  CREATE UNIQUE INDEX n1a ON n1(a);
+}
+
+do_execsql_test 8.1 {
+  SELECT count(*) FROM n1 WHERE a IN (1, 2, 3)
+} 0
+do_execsql_test 8.2 {
+  SELECT count(*) FROM n1 WHERE a IN (SELECT +a FROM n1)
+} 0
+do_execsql_test 8.3 {
+  INSERT INTO n1 VALUES(1, NULL), (2, NULL), (3, NULL);
+  SELECT count(*) FROM n1 WHERE a IN (1, 2, 3)
+} 3
+do_execsql_test 8.4 {
+  SELECT count(*) FROM n1 WHERE a IN (SELECT +a FROM n1)
+} 3
+
+#-------------------------------------------------------------------------
+# Test that ticket 61fe97454c is fixed.
+#
+do_execsql_test 9.0 {
+  CREATE TABLE t9(a INTEGER PRIMARY KEY);
+  INSERT INTO t9 VALUES (44), (45);
+}
+do_execsql_test 9.1 {
+  SELECT * FROM t9 WHERE a IN (44, 45, 44, 45)
+} {44 45}
+
+#-------------------------------------------------------------------------
+# Test that ticket c7a117190 is fixed.
+#
+reset_db
+do_execsql_test 9.0 {
+  CREATE TABLE t0(c0);
+  CREATE VIEW v0(c0) AS SELECT LOWER(CAST('1e500' AS TEXT)) FROM t0;
+  INSERT INTO t0(c0) VALUES (NULL);
+}
+
+do_execsql_test 9.1 {
+  SELECT lower('1e500') FROM t0 WHERE rowid NOT IN (0, 0, lower('1e500'));
+} {1e500}
+
+do_execsql_test 9.2 {
+  SELECT lower('1e500') FROM t0 WHERE rowid != lower('1e500');
+} {1e500}
+
+finish_test

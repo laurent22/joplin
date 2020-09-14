@@ -1,0 +1,68 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# Specifically, this tests that, provided the amount of data remains 
+# constant, the FTS index does not grow indefinitely as rows are inserted 
+# and deleted,
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5aj
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc doc {} {
+  set dict [list a b c d e f g h i j k l m n o p q r s t u v w x y z]
+  set res [list]
+  for {set i 0} {$i < 20} {incr i} {
+    lappend res [lindex $dict [expr int(rand() * 26)]]
+  }
+  set res
+}
+
+proc structure {} {
+  set val [db one {SELECT fts5_decode(rowid,block) FROM t1_data WHERE rowid=10}]
+  foreach lvl [lrange $val 1 end] {
+    lappend res [expr [llength $lvl]-2]
+  }
+  set res
+}
+
+expr srand(0)
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 64);
+}
+
+for {set iTest 0} {$iTest < 50000} {incr iTest} {
+  if {$iTest > 1000} { execsql { DELETE FROM t1 WHERE rowid=($iTest-1000) } }
+  set new [doc]
+  execsql { INSERT INTO t1 VALUES($new) }
+  if {$iTest==10000} { set sz1 [db one {SELECT count(*) FROM t1_data}] }
+  if {0==($iTest % 1000)} {
+    set sz [db one {SELECT count(*) FROM t1_data}]
+    set s [structure]
+    do_execsql_test 1.$iTest.$sz.{$s} {
+      INSERT INTO t1(t1) VALUES('integrity-check') 
+    }
+  }
+}
+
+do_execsql_test 2.0 { INSERT INTO t1(t1) VALUES('integrity-check') }
+
+
+finish_test

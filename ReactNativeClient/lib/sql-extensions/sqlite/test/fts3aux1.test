@@ -1,0 +1,531 @@
+# 2011 January 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS3 module.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !fts3 { finish_test ; return }
+set ::testprefix fts3aux1
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts4;
+  INSERT INTO t1 VALUES('one two three four');
+  INSERT INTO t1 VALUES('three four five six');
+  INSERT INTO t1 VALUES('one three five seven');
+
+  CREATE VIRTUAL TABLE terms USING fts4aux(t1);
+  SELECT term, documents, occurrences FROM terms WHERE col = '*';
+} {
+  five  2 2     four  2 2     one   2 2     seven 1 1 
+  six   1 1     three 3 3     two   1 1
+}
+
+do_execsql_test 1.2 {
+  INSERT INTO t1 VALUES('one one one three three three');
+  SELECT term, documents, occurrences FROM terms WHERE col = '*';
+} { 
+  five  2 2     four  2 2     one   3 5     seven 1 1 
+  six   1 1     three 4 6     two   1 1
+}
+
+do_execsql_test 1.3.1 { DELETE FROM t1; }
+do_execsql_test 1.3.2 {
+  SELECT term, documents, occurrences FROM terms WHERE col = '*';
+}
+
+do_execsql_test 1.4 {
+  INSERT INTO t1 VALUES('a b a b a b a');
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  SELECT term, documents, occurrences FROM terms WHERE col = '*';
+} {a 256 1024    b 256 768}
+
+#-------------------------------------------------------------------------
+# The following tests verify that the fts4aux module uses the full-text
+# index to reduce the number of rows scanned in the following circumstances:
+#
+#   * when there is equality comparison against the term column using the 
+#     BINARY collating sequence. 
+#
+#   * when there is a range constraint on the term column using the BINARY 
+#     collating sequence. 
+#
+# And also uses the full-text index to optimize ORDER BY clauses of the 
+# form "ORDER BY term ASC" or equivalent.
+#
+# Test organization is:
+#
+#   fts3aux1-2.1.*: equality constraints.
+#   fts3aux1-2.2.*: range constraints.
+#   fts3aux1-2.3.*: ORDER BY optimization.
+# 
+
+do_execsql_test 2.0 {
+  DROP TABLE t1;
+  DROP TABLE terms;
+
+  CREATE VIRTUAL TABLE x1 USING fts4(x);
+  INSERT INTO x1(x1) VALUES('nodesize=24');
+  CREATE VIRTUAL TABLE terms USING fts4aux(x1);
+
+  CREATE VIEW terms_v AS 
+  SELECT term, documents, occurrences FROM terms WHERE col = '*';
+
+  INSERT INTO x1 VALUES('braes brag bragged bragger bragging');
+  INSERT INTO x1 VALUES('brags braid braided braiding braids');
+  INSERT INTO x1 VALUES('brain brainchild brained braining brains');
+  INSERT INTO x1 VALUES('brainstem brainstems brainstorm brainstorms'); 
+}
+
+proc rec {varname x} {
+  global $varname
+  incr $varname
+  return 1
+}
+db func rec rec
+
+# Use EQP to show that the WHERE expression "term='braid'" uses a different
+# index number (1) than "+term='braid'" (0).
+#
+do_execsql_test 2.1.1.1 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE term='braid'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 1:*/}
+do_execsql_test 2.1.1.2 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE +term='braid'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 0:*/}
+
+# Now show that using "term='braid'" means the virtual table returns
+# only 1 row to SQLite, but "+term='braid'" means all 19 are returned.
+#
+do_test 2.1.2.1 {
+  set cnt 0
+  execsql { SELECT * FROM terms_v WHERE rec('cnt', term) AND term='braid' }
+  set cnt
+} {1}
+do_test 2.1.2.2 {
+  set cnt 0
+  execsql { SELECT * FROM terms_v WHERE rec('cnt', term) AND +term='braid' }
+  set cnt
+} {19}
+
+# Similar to the test immediately above, but using a term ("breakfast") that 
+# is not featured in the dataset.
+#
+do_test 2.1.3.1 {
+  set cnt 0
+  execsql { SELECT * FROM terms_v WHERE rec('cnt', term) AND term='breakfast' }
+  set cnt
+} {0}
+do_test 2.1.3.2 {
+  set cnt 0
+  execsql { SELECT * FROM terms_v WHERE rec('cnt', term) AND +term='breakfast' }
+  set cnt
+} {19}
+
+do_execsql_test 2.1.4.1 { SELECT * FROM terms_v WHERE term='braid' } {braid 1 1}
+do_execsql_test 2.1.4.2 { SELECT * FROM terms_v WHERE +term='braid'} {braid 1 1}
+do_execsql_test 2.1.4.3 { SELECT * FROM terms_v WHERE term='breakfast'  } {}
+do_execsql_test 2.1.4.4 { SELECT * FROM terms_v WHERE +term='breakfast' } {}
+
+do_execsql_test 2.1.4.5 { SELECT * FROM terms_v WHERE term='cba'  } {}
+do_execsql_test 2.1.4.6 { SELECT * FROM terms_v WHERE +term='cba' } {}
+do_execsql_test 2.1.4.7 { SELECT * FROM terms_v WHERE term='abc'  } {}
+do_execsql_test 2.1.4.8 { SELECT * FROM terms_v WHERE +term='abc' } {}
+
+# Special case: term=NULL
+#
+do_execsql_test 2.1.5 { SELECT * FROM terms WHERE term=NULL } {}
+
+do_execsql_test 2.2.1.1 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE term>'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 2:*/}
+do_execsql_test 2.2.1.2 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE +term>'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 0:*/}
+
+do_execsql_test 2.2.1.3 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE term<'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 4:*/}
+do_execsql_test 2.2.1.4 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE +term<'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 0:*/}
+
+do_execsql_test 2.2.1.5 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE term BETWEEN 'brags' AND 'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 6:*/}
+do_execsql_test 2.2.1.6 {
+  EXPLAIN QUERY PLAN SELECT * FROM terms WHERE +term BETWEEN 'brags' AND 'brain'
+} {/*SCAN TABLE terms VIRTUAL TABLE INDEX 0:*/}
+
+do_test 2.2.2.1 {
+  set cnt 0
+  execsql { SELECT * FROM terms WHERE rec('cnt', term) AND term>'brain' }
+  set cnt
+} {18}
+do_test 2.2.2.2 {
+  set cnt 0
+  execsql { SELECT * FROM terms WHERE rec('cnt', term) AND +term>'brain' }
+  set cnt
+} {38}
+do_execsql_test 2.2.2.3 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term>'brain'
+} {
+  brainchild 1 1 brained 1 1 braining 1 1 brains 1 1 
+  brainstem 1 1 brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+do_execsql_test 2.2.2.4 {
+  SELECT term, documents, occurrences FROM terms_v WHERE +term>'brain'
+} {
+  brainchild 1 1 brained 1 1 braining 1 1 brains 1 1 
+  brainstem 1 1 brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+do_execsql_test 2.2.2.5 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term>='brain'
+} {
+  brain 1 1
+  brainchild 1 1 brained 1 1 braining 1 1 brains 1 1 
+  brainstem 1 1 brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+do_execsql_test 2.2.2.6 {
+  SELECT term, documents, occurrences FROM terms_v WHERE +term>='brain'
+} {
+  brain 1 1
+  brainchild 1 1 brained 1 1 braining 1 1 brains 1 1 
+  brainstem 1 1 brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+
+do_execsql_test 2.2.2.7 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term>='abc'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 
+  bragging 1 1 brags 1 1 braid 1 1 braided 1 1 
+  braiding 1 1 braids 1 1 brain 1 1 brainchild 1 1 
+  brained 1 1 braining 1 1 brains 1 1 brainstem 1 1 
+  brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+do_execsql_test 2.2.2.8 {
+  SELECT term, documents, occurrences FROM terms_v WHERE +term>='abc'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 
+  bragging 1 1 brags 1 1 braid 1 1 braided 1 1 
+  braiding 1 1 braids 1 1 brain 1 1 brainchild 1 1 
+  brained 1 1 braining 1 1 brains 1 1 brainstem 1 1 
+  brainstems 1 1 brainstorm 1 1 brainstorms 1 1
+}
+
+do_execsql_test 2.2.2.9 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term>='brainstorms'
+} {brainstorms 1 1}
+do_execsql_test 2.2.2.10 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term>='brainstorms'
+} {brainstorms 1 1}
+do_execsql_test 2.2.2.11 { SELECT * FROM terms_v WHERE term>'brainstorms' } {}
+do_execsql_test 2.2.2.12 { SELECT * FROM terms_v WHERE term>'brainstorms' } {}
+
+do_execsql_test 2.2.2.13 { SELECT * FROM terms_v WHERE term>'cba' } {}
+do_execsql_test 2.2.2.14 { SELECT * FROM terms_v WHERE term>'cba' } {}
+
+do_test 2.2.3.1 {
+  set cnt 0
+  execsql { SELECT * FROM terms WHERE rec('cnt', term) AND term<'brain' }
+  set cnt
+} {22}
+do_test 2.2.3.2 {
+  set cnt 0
+  execsql { SELECT * FROM terms WHERE rec('cnt', term) AND +term<'brain' }
+  set cnt
+} {38}
+do_execsql_test 2.2.3.3 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term<'brain'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 bragging 1 1 
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+}
+do_execsql_test 2.2.3.4 {
+  SELECT term, documents, occurrences FROM terms_v WHERE +term<'brain'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 bragging 1 1 
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+}
+do_execsql_test 2.2.3.5 {
+  SELECT term, documents, occurrences FROM terms_v WHERE term<='brain'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 bragging 1 1 
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+  brain 1 1
+}
+do_execsql_test 2.2.3.6 {
+  SELECT term, documents, occurrences FROM terms_v WHERE +term<='brain'
+} {
+  braes 1 1 brag 1 1 bragged 1 1 bragger 1 1 bragging 1 1 
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+  brain 1 1
+}
+
+do_test 2.2.4.1 {
+  set cnt 0
+  execsql { 
+    SELECT term, documents, occurrences FROM terms 
+    WHERE rec('cnt', term) AND term BETWEEN 'brags' AND 'brain' 
+  }
+  set cnt
+} {12}
+do_test 2.2.4.2 {
+  set cnt 0
+  execsql { 
+    SELECT term, documents, occurrences FROM terms 
+    WHERE rec('cnt', term) AND +term BETWEEN 'brags' AND 'brain' 
+  }
+  set cnt
+} {38}
+do_execsql_test 2.2.4.3 {
+  SELECT term, documents, occurrences FROM terms_v 
+  WHERE rec('cnt', term) AND term BETWEEN 'brags' AND 'brain' 
+} {
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1 brain 1 1 
+}
+do_execsql_test 2.2.4.4 {
+  SELECT term, documents, occurrences FROM terms_v 
+  WHERE rec('cnt', term) AND +term BETWEEN 'brags' AND 'brain' 
+} {
+  brags 1 1 braid 1 1 braided 1 1 braiding 1 1 braids 1 1 brain 1 1 
+}
+do_execsql_test 2.2.4.5 {
+  SELECT term, documents, occurrences FROM terms_v 
+  WHERE rec('cnt', term) AND term > 'brags' AND term < 'brain' 
+} {
+  braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+}
+do_execsql_test 2.2.4.6 {
+  SELECT term, documents, occurrences FROM terms_v 
+  WHERE rec('cnt', term) AND +term > 'brags' AND +term < 'brain' 
+} {
+  braid 1 1 braided 1 1 braiding 1 1 braids 1 1
+}
+
+# Check that "ORDER BY term ASC" and equivalents are sorted by the
+# virtual table implementation. Any other ORDER BY clause requires
+# SQLite to sort results using a temporary b-tree.
+#
+foreach {tn sort orderby} {
+  1    0    "ORDER BY term ASC"
+  2    0    "ORDER BY term"
+  3    1    "ORDER BY term DESC"
+  4    1    "ORDER BY documents ASC"
+  5    1    "ORDER BY documents"
+  6    1    "ORDER BY documents DESC"
+  7    1    "ORDER BY occurrences ASC"
+  8    1    "ORDER BY occurrences"
+  9    1    "ORDER BY occurrences DESC"
+} {
+
+  set res {SCAN TABLE terms VIRTUAL TABLE INDEX 0:}
+  if {$sort} { append res {*USE TEMP B-TREE FOR ORDER BY} }
+  set res "/*$res*/"
+
+  set sql "SELECT * FROM terms $orderby"
+  do_execsql_test 2.3.1.$tn "EXPLAIN QUERY PLAN $sql" $res
+}
+
+#-------------------------------------------------------------------------
+# The next set of tests, fts3aux1-3.*, test error conditions in the 
+# fts4aux module. Except, fault injection testing (OOM, IO error etc.) is 
+# done in fts3fault2.test
+#
+
+do_execsql_test 3.1.1 {
+  CREATE VIRTUAL TABLE t2 USING fts4;
+}
+
+do_catchsql_test 3.1.2 {
+  CREATE VIRTUAL TABLE terms2 USING fts4aux;
+} {1 {invalid arguments to fts4aux constructor}}
+do_catchsql_test 3.1.3 {
+  CREATE VIRTUAL TABLE terms2 USING fts4aux(t2, t2);
+} {1 {invalid arguments to fts4aux constructor}}
+
+do_execsql_test 3.2.1 {
+  CREATE VIRTUAL TABLE terms3 USING fts4aux(does_not_exist)
+}
+do_catchsql_test 3.2.2 {
+  SELECT * FROM terms3
+} {1 {SQL logic error}}
+do_catchsql_test 3.2.3 {
+  SELECT * FROM terms3 WHERE term = 'abc'
+} {1 {SQL logic error}}
+
+do_catchsql_test 3.3.1 {
+  INSERT INTO terms VALUES(1,2,3);
+} {1 {table terms may not be modified}}
+do_catchsql_test 3.3.2 {
+  DELETE FROM terms
+} {1 {table terms may not be modified}}
+do_catchsql_test 3.3.3 {
+  UPDATE terms set documents = documents+1;
+} {1 {table terms may not be modified}}
+
+
+#-------------------------------------------------------------------------
+# The following tests - fts4aux-4.* - test that joins work with fts4aux
+# tables. And that fts4aux provides reasonably sane cost information via
+# xBestIndex to the query planner.
+#
+db close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 4.1 {
+  CREATE VIRTUAL TABLE x1 USING fts4(x);
+  CREATE VIRTUAL TABLE terms USING fts4aux(x1);
+  CREATE TABLE x2(y);
+  CREATE TABLE x3(y);
+  CREATE INDEX i1 ON x3(y);
+
+  INSERT INTO x1 VALUES('a b c d e');
+  INSERT INTO x1 VALUES('f g h i j');
+  INSERT INTO x1 VALUES('k k l l a');
+
+  INSERT INTO x2 SELECT term FROM terms WHERE col = '*';
+  INSERT INTO x3 SELECT term FROM terms WHERE col = '*';
+}
+
+proc do_plansql_test {tn sql r1 r2} {
+  do_eqp_test $tn.eqp $sql $r1
+  do_execsql_test $tn $sql $r2
+}
+
+do_plansql_test 4.2 {
+  SELECT y FROM x2, terms WHERE y = term AND col = '*'
+} {
+  QUERY PLAN
+  |--SCAN TABLE x2
+  `--SCAN TABLE terms VIRTUAL TABLE INDEX 1:
+} {
+  a b c d e f g h i j k l
+}
+
+do_plansql_test 4.3 {
+  SELECT y FROM terms, x2 WHERE y = term AND col = '*'
+} {
+  QUERY PLAN
+  |--SCAN TABLE x2
+  `--SCAN TABLE terms VIRTUAL TABLE INDEX 1:
+} {
+  a b c d e f g h i j k l
+}
+
+do_plansql_test 4.4 {
+  SELECT y FROM x3, terms WHERE y = term AND col = '*'
+} {
+  QUERY PLAN
+  |--SCAN TABLE terms VIRTUAL TABLE INDEX 0:
+  `--SEARCH TABLE x3 USING COVERING INDEX i1 (y=?)
+} {
+  a b c d e f g h i j k l
+}
+
+do_plansql_test 4.5 {
+  SELECT y FROM terms, x3 WHERE y = term AND occurrences>1 AND col = '*'
+} {
+  QUERY PLAN
+  |--SCAN TABLE terms VIRTUAL TABLE INDEX 0:
+  `--SEARCH TABLE x3 USING COVERING INDEX i1 (y=?)
+} {
+  a k l
+}
+
+#-------------------------------------------------------------------------
+# The following tests check that fts4aux can handle an fts table with an
+# odd name (one that requires quoting for use in SQL statements). And that
+# the argument to the fts4aux constructor is properly dequoted before use.
+#
+do_execsql_test 5.1 {
+  CREATE VIRTUAL TABLE "abc '!' def" USING fts4(x, y);
+  INSERT INTO "abc '!' def" VALUES('XX', 'YY');
+
+  CREATE VIRTUAL TABLE terms3 USING fts4aux("abc '!' def");
+  SELECT * FROM terms3;
+} {xx * 1 1 xx 0 1 1 yy * 1 1 yy 1 1 1}
+
+do_execsql_test 5.2 {
+  CREATE VIRTUAL TABLE "%%^^%%" USING fts4aux('abc ''!'' def');
+  SELECT * FROM "%%^^%%";
+} {xx * 1 1 xx 0 1 1 yy * 1 1 yy 1 1 1}
+
+#-------------------------------------------------------------------------
+# Test that we can create an fts4aux table in the temp database.
+#
+forcedelete test.db2
+do_execsql_test 6.1 {
+  CREATE VIRTUAL TABLE ft1 USING fts4(x, y);
+  INSERT INTO ft1 VALUES('a b', 'c d');
+  INSERT INTO ft1 VALUES('e e', 'c d');
+  INSERT INTO ft1 VALUES('a a', 'b b');
+  CREATE VIRTUAL TABLE temp.aux1 USING fts4aux(main, ft1);
+  SELECT * FROM aux1;
+} {
+    a * 2 3 a 0 2 3 
+    b * 2 3 b 0 1 1 b 1 1 2 
+    c * 2 2 c 1 2 2 
+    d * 2 2 d 1 2 2 
+    e * 1 2 e 0 1 2
+}
+
+do_execsql_test 6.2 {
+  ATTACH 'test.db2' AS att;
+  CREATE VIRTUAL TABLE att.ft1 USING fts4(x, y);
+  INSERT INTO att.ft1 VALUES('v w', 'x y');
+  INSERT INTO att.ft1 VALUES('z z', 'x y');
+  INSERT INTO att.ft1 VALUES('v v', 'w w');
+  CREATE VIRTUAL TABLE temp.aux2 USING fts4aux(att, ft1);
+  SELECT * FROM aux2;
+} {
+    v * 2 3 v 0 2 3 
+    w * 2 3 w 0 1 1 w 1 1 2 
+    x * 2 2 x 1 2 2 
+    y * 2 2 y 1 2 2 
+    z * 1 2 z 0 1 2
+}
+
+foreach {tn q res1 res2} {
+  1  { SELECT * FROM %%% WHERE term = 'a' } {a * 2 3 a 0 2 3} {}
+  2  { SELECT * FROM %%% WHERE term = 'x' } {} {x * 2 2 x 1 2 2} 
+
+  3  { SELECT * FROM %%% WHERE term >= 'y' } 
+     {} {y * 2 2 y 1 2 2 z * 1 2 z 0 1 2}
+
+  4  { SELECT * FROM %%% WHERE term <= 'c' } 
+     {a * 2 3 a 0 2 3 b * 2 3 b 0 1 1 b 1 1 2 c * 2 2 c 1 2 2} {}
+} {
+  set sql1 [string map {%%% aux1} $q]
+  set sql2 [string map {%%% aux2} $q]
+
+  do_execsql_test 7.$tn.1 $sql1 $res1
+  do_execsql_test 7.$tn.2 $sql2 $res2
+}
+
+do_test 8.1 {
+  catchsql { CREATE VIRTUAL TABLE att.aux3 USING fts4aux(main, ft1) }
+} {1 {invalid arguments to fts4aux constructor}}
+
+do_test 8.2 {
+  execsql {DETACH att}
+  catchsql { SELECT * FROM aux2 }
+} {1 {SQL logic error}}
+
+finish_test

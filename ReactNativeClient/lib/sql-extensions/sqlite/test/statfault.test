@@ -1,0 +1,45 @@
+# 2015 April 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set testprefix statfault
+
+ifcapable !vtab||!compound {
+  finish_test
+  return
+}
+
+register_dbstat_vtab db
+do_execsql_test statfault-1 {
+  CREATE TABLE t1(a, b UNIQUE);
+  INSERT INTO t1 VALUES(1, randomblob(500));
+  INSERT INTO t1 VALUES(randomblob(500), 1);
+  INSERT INTO t1 VALUES(2, randomblob(250));
+  INSERT INTO t1 VALUES(randomblob(250), 2);
+  CREATE VIRTUAL TABLE sss USING dbstat;
+} {}
+faultsim_save_and_close
+
+do_faultsim_test 1 -faults * -prep {
+  faultsim_restore_and_reopen
+  register_dbstat_vtab db
+  execsql { SELECT 1 FROM sqlite_master LIMIT 1 }
+} -body {
+  execsql { SELECT count(*) FROM sss }
+} -test {
+  faultsim_test_result {0 8} 
+}
+
+
+finish_test

@@ -1,0 +1,103 @@
+# 2018-12-07
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the VACUUM INTO statement.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If the VACUUM statement is disabled in the current build, skip all
+# the tests in this file.
+#
+ifcapable {!vacuum} {
+  omit_test vacuum.test {Compiled with SQLITE_OMIT_VACUUM}
+  finish_test
+  return
+}
+
+forcedelete out.db
+do_execsql_test vacuum-into-100 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+  INSERT INTO t1(a,b) SELECT x, randomblob(600) FROM c;
+  CREATE INDEX t1b ON t1(b);
+  DELETE FROM t1 WHERE a%2;
+  SELECT count(*), sum(a), sum(length(b)) FROM t1;
+} {50 2550 30000}
+do_execsql_test vacuum-into-110 {
+  VACUUM main INTO 'out.db';
+} {}
+sqlite3 db2 out.db
+do_test vacuum-into-120 {
+  db2 eval {SELECT count(*), sum(a), sum(length(b)) FROM t1}
+} {50 2550 30000}
+do_catchsql_test vacuum-into-130 {
+  VACUUM INTO 'out.db';
+} {1 {output file already exists}}
+forcedelete out2.db
+do_catchsql_test vacuum-into-140 {
+  VACUUM INTO 'out2.db';
+} {0 {}}
+do_catchsql_test vacuum-into-150 {
+  VACUUM INTO 'out2.db';
+} {1 {output file already exists}}
+
+do_catchsql_test vacuum-into-200 {
+  VACUUM main INTO ':memory:';
+} {0 {}}
+
+# The INTO argument can be an arbitrary expression.
+#
+do_execsql_test vacuum-into-300 {
+  CREATE TABLE t2(name TEXT);
+  INSERT INTO t2 VALUES(':memory:');
+  VACUUM main INTO (SELECT name FROM t2);
+} {}
+do_catchsql_test vacuum-into-310 {
+  VACUUM INTO null;
+} {1 {non-text filename}}
+do_catchsql_test vacuum-into-320 {
+  VACUUM INTO x;
+} {1 {no such column: x}}
+do_catchsql_test vacuum-into-330 {
+  VACUUM INTO t1.nosuchcol;
+} {1 {no such column: t1.nosuchcol}}
+do_catchsql_test vacuum-into-340 {
+  VACUUM INTO main.t1.nosuchcol;
+} {1 {no such column: main.t1.nosuchcol}}
+
+forcedelete test.db2
+db func target target
+proc target {} { return "test.db2" }
+do_test vacuum-into-410 {
+  execsql { VACUUM INTO target() }
+  file exists test.db2
+} 1
+do_catchsql_test vacuum-into-420 {
+  VACUUM INTO target2()
+} {1 {no such function: target2}}
+
+# The ability to VACUUM INTO a read-only database
+db close
+sqlite3 db test.db -readonly 1
+forcedelete test.db2
+do_execsql_test vacuum-into-500 {
+  VACUUM INTO 'test.db2';
+}
+sqlite3 db2 test.db2
+do_test vacuum-into-510 {
+  db2 eval {SELECT name FROM sqlite_master ORDER BY 1}
+} {t1 t1b t2}
+db2 close
+db close
+
+finish_test

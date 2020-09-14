@@ -1,0 +1,141 @@
+# 2015-01-30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests for SQLite library.
+#
+# The focus of this file is adding extra entries in the symbol table
+# using sqlite3_test_control(SQLITE_TESTCTRL_IMPOSTER) and verifying that
+# SQLite handles those as expected.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix imposter
+
+# Create a bunch of data to sort against
+#
+do_test imposter-1.0 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, d NOT NULL);
+    CREATE INDEX t1b ON t1(b);
+    CREATE UNIQUE INDEX t1c ON t1(c);
+    WITH RECURSIVE c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<30)
+      INSERT INTO t1(a,b,c,d) SELECT i,1000+i,2000+i,3000+i FROM c;
+  }
+  set t1_root [db one {SELECT rootpage FROM sqlite_master WHERE name='t1'}]
+  set t1b_root [db one {SELECT rootpage FROM sqlite_master WHERE name='t1b'}]
+  set t1c_root [db one {SELECT rootpage FROM sqlite_master WHERE name='t1c'}]
+
+  # Create an imposter table that uses the same b-tree as t1 but which does
+  # not have the indexes
+  #
+  sqlite3_test_control SQLITE_TESTCTRL_IMPOSTER db main 1 $t1_root
+  db eval {CREATE TABLE xt1(a,b,c,d)}
+
+  # And create an imposter table for the t1c index.
+  sqlite3_test_control SQLITE_TESTCTRL_IMPOSTER db main 1 $t1c_root
+  db eval {CREATE TABLE xt1c(c,rowid,PRIMARY KEY(c,rowid))WITHOUT ROWID;}
+
+  # Go out of imposter mode for now.
+  sqlite3_test_control SQLITE_TESTCTRL_IMPOSTER db main 0 0
+
+  # Create triggers to record changes to xt1.
+  #
+  db eval {
+    CREATE TEMP TABLE chnglog(desc TEXT);
+    CREATE TEMP TRIGGER xt1_del AFTER DELETE ON xt1 BEGIN
+      INSERT INTO chnglog VALUES(
+           printf('DELETE t1: rowid=%d, a=%s, b=%s, c=%s, d=%s',
+                  old.rowid, quote(old.a), quote(old.b), quote(old.c),
+                  quote(old.d)));
+    END;
+    CREATE TEMP TRIGGER xt1_ins AFTER INSERT ON xt1 BEGIN
+      INSERT INTO chnglog VALUES(
+           printf('INSERT t1:  rowid=%d, a=%s, b=%s, c=%s, d=%s',
+                  new.rowid, quote(new.a), quote(new.b), quote(new.c),
+                  quote(new.d)));
+    END;
+  }
+} {}
+
+# The xt1 table has separate xt1.rowid and xt1.a columns.  The xt1.rowid
+# column corresponds to t1.rowid and t1.a, but the xt1.a column is always
+# NULL
+#
+do_execsql_test imposter-1.1 {
+  SELECT rowid FROM xt1 WHERE a IS NOT NULL;
+} {}
+do_execsql_test imposter-1.2 {
+  SELECT a,b,c,d FROM t1 EXCEPT SELECT rowid,b,c,d FROM xt1;
+  SELECT rowid,b,c,d FROM xt1 EXCEPT SELECT a,b,c,d FROM t1;
+} {}
+
+
+# Make changes via the xt1 shadow table.  This will not update the
+# indexes on t1 nor check the uniqueness constraint on t1.c nor check
+# the NOT NULL constraint on t1.d, resulting in a logically inconsistent
+# database.
+#
+do_execsql_test imposter-1.3 {
+  DELETE FROM xt1 WHERE rowid=5;
+  INSERT INTO xt1(rowid,a,b,c,d) VALUES(99,'hello',1099,2022,NULL);
+  SELECT * FROM chnglog ORDER BY rowid;
+} [list \
+  {DELETE t1: rowid=5, a=NULL, b=1005, c=2005, d=3005} \
+  {INSERT t1:  rowid=99, a='hello', b=1099, c=2022, d=NULL} \
+]
+
+do_execsql_test imposter-1.4a {
+  PRAGMA integrity_check;
+} {/NULL value in t1.d/}
+do_execsql_test imposter-1.4b {
+  PRAGMA integrity_check;
+} {/row # missing from index t1b/}
+do_execsql_test imposter-1.4c {
+  PRAGMA integrity_check;
+} {/row # missing from index t1c/}
+
+# Cleanup the corruption.
+# Then demonstrate that the xt1c imposter table can insert non-unique
+# and NULL values into the UNIQUE index.
+#
+do_execsql_test imposter-2.0 {
+  DELETE FROM t1;
+  WITH RECURSIVE c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<10)
+   INSERT INTO t1(a,b,c,d) SELECT i,i,i,i FROM c;
+  UPDATE xt1c SET c=NULL WHERE rowid=5;
+  PRAGMA integrity_check;
+} {/row # missing from index t1c/}
+
+do_execsql_test imposter-2.1 {
+  DELETE FROM t1;
+  WITH RECURSIVE c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<10)
+   INSERT INTO t1(a,b,c,d) SELECT i,i,i,i FROM c;
+  UPDATE xt1c SET c=99 WHERE rowid IN (5,7,9);
+  SELECT c FROM t1 ORDER BY c;
+} {1 2 3 4 6 8 10 99 99 99}
+do_execsql_test imposter-2.2 {
+  UPDATE xt1 SET c=99 WHERE rowid IN (5,7,9);
+  PRAGMA integrity_check;
+} {/non-unique entry in index t1c/}
+
+# Erase the imposter tables
+#
+do_test imposter-3.1 {
+  sqlite3_test_control SQLITE_TESTCTRL_IMPOSTER db main 0 1
+  db eval {
+    DELETE FROM t1 WHERE rowid IN (5,7,9);
+    PRAGMA integrity_check;
+  }
+} {ok}
+
+
+finish_test

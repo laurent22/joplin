@@ -1,0 +1,641 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5aa
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $::testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, c);
+  SELECT name, sql FROM sqlite_master;
+} {
+  t1 {CREATE VIRTUAL TABLE t1 USING fts5(a, b, c)}
+  t1_data {CREATE TABLE 't1_data'(id INTEGER PRIMARY KEY, block BLOB)}
+  t1_idx {CREATE TABLE 't1_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID}
+  t1_content {CREATE TABLE 't1_content'(id INTEGER PRIMARY KEY, c0, c1, c2)}
+  t1_docsize {CREATE TABLE 't1_docsize'(id INTEGER PRIMARY KEY, sz BLOB)}
+  t1_config {CREATE TABLE 't1_config'(k PRIMARY KEY, v) WITHOUT ROWID}
+}
+
+do_execsql_test 1.1 {
+  DROP TABLE t1;
+  SELECT name, sql FROM sqlite_master;
+} {}
+
+#-------------------------------------------------------------------------
+#
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, detail=%DETAIL%);
+}
+do_execsql_test 2.1 {
+  INSERT INTO t1 VALUES('a b c', 'd e f');
+}
+
+do_test 2.2 {
+  execsql { SELECT fts5_decode(id, block) FROM t1_data WHERE id==10 }
+} {/{{structure} {lvl=0 nMerge=0 nSeg=1 {id=[0123456789]* leaves=1..1}}}/}
+
+foreach w {a b c d e f} {
+  do_execsql_test 2.3.$w.asc {
+    SELECT rowid FROM t1 WHERE t1 MATCH $w;
+  } {1}
+  do_execsql_test 2.3.$w.desc {
+    SELECT rowid FROM t1 WHERE t1 MATCH $w ORDER BY rowid DESC;
+  } {1}
+}
+
+do_execsql_test 2.4 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y, detail=%DETAIL%);
+}
+foreach {i x y} {
+   1  {g f d b f} {h h e i a}
+   2  {f i g j e} {i j c f f}
+   3  {e e i f a} {e h f d f}
+   4  {h j f j i} {h a c f j}
+   5  {d b j c g} {f e i b e}
+   6  {a j a e e} {j d f d e}
+   7  {g i j c h} {j d h c a}
+   8  {j j i d d} {e e d f b}
+   9  {c j j d c} {h j i f g}
+   10 {b f h i a} {c f b b j}
+} {
+  do_execsql_test 3.$i.1 { INSERT INTO t1 VALUES($x, $y) }
+  do_execsql_test 3.$i.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+  if {[set_test_counter errors]} break
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+foreach {i x y} {
+   1  {g f d b f} {h h e i a}
+   2  {f i g j e} {i j c f f}
+   3  {e e i f a} {e h f d f}
+   4  {h j f j i} {h a c f j}
+   5  {d b j c g} {f e i b e}
+   6  {a j a e e} {j d f d e}
+   7  {g i j c h} {j d h c a}
+   8  {j j i d d} {e e d f b}
+   9  {c j j d c} {h j i f g}
+   10 {b f h i a} {c f b b j}
+} {
+  do_execsql_test 4.$i.1 { INSERT INTO t1 VALUES($x, $y) }
+  do_execsql_test 4.$i.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+  if {[set_test_counter errors]} break
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+foreach {i x y} {
+   1  {dd abc abc abc abcde} {aaa dd ddd ddd aab}
+   2  {dd aab d aaa b} {abcde c aaa aaa aaa}
+   3  {abcde dd b b dd} {abc abc d abc ddddd}
+   4  {aaa abcde dddd dddd abcde} {abc b b abcde abc}
+   5  {aab dddd d dddd c} {ddd abcde dddd abcde c}
+   6  {ddd dd b aab abcde} {d ddddd dddd c abc}
+   7  {d ddddd ddd c abcde} {c aab d abcde ddd}
+   8  {abcde aaa aab c c} {ddd c dddd b aaa}
+   9  {abcde aab ddddd c aab} {dddd dddd b c dd}
+   10 {ddd abcde dddd dd c} {dddd c c d abcde}
+} {
+  do_execsql_test 5.$i.1 { INSERT INTO t1 VALUES($x, $y) }
+  do_execsql_test 5.$i.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+  if {[set_test_counter errors]} break
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+do_execsql_test 6.1 {
+  INSERT  INTO t1(rowid, x, y) VALUES(22, 'a b c', 'c b a');
+  REPLACE INTO t1(rowid, x, y) VALUES(22, 'd e f', 'f e d');
+}
+
+do_execsql_test 6.2 {
+  INSERT INTO t1(t1) VALUES('integrity-check') 
+}
+
+do_execsql_test 6.3 {
+  REPLACE INTO t1(rowid, x, y) VALUES('22', 'l l l', 'l l l');
+}
+
+do_execsql_test 6.4 {
+  REPLACE INTO t1(x, y) VALUES('x y z', 'x y z');
+}
+
+do_execsql_test 6.5 {
+  INSERT INTO t1(t1) VALUES('integrity-check') 
+}
+
+do_execsql_test 6.6 {
+  SELECT rowid, * FROM t1;
+} {
+  22 {l l l} {l l l}
+  23 {x y z} {x y z}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+expr srand(0)
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y,z);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+proc doc {} {
+  set v [list aaa aab abc abcde b c d dd ddd dddd ddddd]
+  set ret [list]
+  for {set j 0} {$j < 20} {incr j} {
+    lappend ret [lindex $v [expr int(rand()*[llength $v])]]
+  }
+  return $ret
+}
+
+proc dump_structure {} {
+  db eval {SELECT fts5_decode(id, block) AS t FROM t1_data WHERE id=10} {
+    foreach lvl [lrange $t 1 end] {
+      set seg [string repeat . [expr [llength $lvl]-2]]
+      puts "[lrange $lvl 0 1] $seg"
+    }
+  }
+}
+
+for {set i 1} {$i <= 10} {incr i} {
+  do_test 7.$i {
+    for {set j 0} {$j < 10} {incr j} {
+      set x [doc]
+      set y [doc]
+      set z [doc]
+      set rowid [expr int(rand() * 100)]
+      execsql { REPLACE INTO t1(rowid,x,y,z) VALUES($rowid, $x, $y, $z) }
+    }
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check'); }
+  } {}
+  if {[set_test_counter errors]} break
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, prefix="1,2,3");
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+do_execsql_test 8.1 {
+  INSERT INTO t1 VALUES('the quick brown fox');
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+
+expr srand(0)
+
+do_execsql_test 9.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y,z, prefix="1,2,3");
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+}
+
+proc doc {} {
+  set v [list aaa aab abc abcde b c d dd ddd dddd ddddd]
+  set ret [list]
+  for {set j 0} {$j < 20} {incr j} {
+    lappend ret [lindex $v [expr int(rand()*[llength $v])]]
+  }
+  return $ret
+}
+
+proc dump_structure {} {
+  db eval {SELECT fts5_decode(id, block) AS t FROM t1_data WHERE id=10} {
+    foreach lvl [lrange $t 1 end] {
+      set seg [string repeat . [expr [llength $lvl]-2]]
+      puts "[lrange $lvl 0 1] $seg"
+    }
+  }
+}
+
+for {set i 1} {$i <= 10} {incr i} {
+  do_test 9.$i {
+    for {set j 0} {$j < 100} {incr j} {
+      set x [doc]
+      set y [doc]
+      set z [doc]
+      set rowid [expr int(rand() * 100)]
+      execsql { REPLACE INTO t1(rowid,x,y,z) VALUES($rowid, $x, $y, $z) }
+    }
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check'); }
+  } {}
+  if {[set_test_counter errors]} break
+}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x,y, detail=%DETAIL%);
+}
+set d10 {
+   1  {g f d b f} {h h e i a}
+   2  {f i g j e} {i j c f f}
+   3  {e e i f a} {e h f d f}
+   4  {h j f j i} {h a c f j}
+   5  {d b j c g} {f e i b e}
+   6  {a j a e e} {j d f d e}
+   7  {g i j c h} {j d h c a}
+   8  {j j i d d} {e e d f b}
+   9  {c j j d c} {h j i f g}
+  10  {b f h i a} {c f b b j}
+}
+foreach {rowid x y} $d10 {
+  do_execsql_test 10.1.$rowid.1 { INSERT INTO t1 VALUES($x, $y) }
+  do_execsql_test 10.1.$rowid.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+}
+foreach rowid {5 9 8 1 2 4 10 7 3 5 6} {
+  do_execsql_test 10.2.$rowid.1 { DELETE FROM t1 WHERE rowid = $rowid }
+  do_execsql_test 10.2.$rowid.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+}
+foreach {rowid x y} $d10 {
+  do_execsql_test 10.3.$rowid.1 { INSERT INTO t1 VALUES($x, $y) }
+  do_execsql_test 10.3.$rowid.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+}
+
+do_execsql_test 10.4.1 { DELETE FROM t1 }
+do_execsql_test 10.4.2 { INSERT INTO t1(t1) VALUES('integrity-check') }
+
+#-------------------------------------------------------------------------
+#
+do_catchsql_test 11.1 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, b, c, rank, detail=%DETAIL%);
+} {1 {reserved fts5 column name: rank}}
+do_catchsql_test 11.2 {
+  CREATE VIRTUAL TABLE rank USING fts5(a, b, c, detail=%DETAIL%);
+} {1 {reserved fts5 table name: rank}}
+do_catchsql_test 11.3 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, b, c, rowid, detail=%DETAIL%);
+} {1 {reserved fts5 column name: rowid}}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 12.1 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x,y, detail=%DETAIL%);
+} {}
+
+do_catchsql_test 12.2 {
+  SELECT t2 FROM t2 WHERE t2 MATCH '*stuff'
+} {1 {unknown special query: stuff}}
+
+do_test 12.3 {
+  set res [db eval { SELECT t2 FROM t2 WHERE t2 MATCH '* reads ' }]
+  string is integer $res
+} {1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 13.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t1(rowid, x) VALUES(1, 'o n e'), (2, 't w o');
+} {}
+
+do_execsql_test 13.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'o';
+} {1 2}
+
+do_execsql_test 13.4 {
+  DELETE FROM t1 WHERE rowid=2;
+} {}
+
+do_execsql_test 13.5 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'o';
+} {1}
+
+do_execsql_test 13.6 {
+  SELECT rowid FROM t1 WHERE t1 MATCH '""';
+} {}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 14.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  WITH d(x,y) AS (
+    SELECT NULL, 'xyz xyz xyz xyz xyz xyz'
+    UNION ALL 
+    SELECT NULL, 'xyz xyz xyz xyz xyz xyz' FROM d
+  )
+  INSERT INTO t1 SELECT * FROM d LIMIT 200;
+}
+
+do_execsql_test 15.x {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+do_test 14.2 {
+  set nRow 0
+  db eval { SELECT * FROM t1 WHERE t1 MATCH 'xyz' } {
+    db eval {
+      BEGIN;
+        CREATE TABLE t2(a, b);
+      ROLLBACK;
+    }
+    incr nRow
+  }
+  set nRow
+} {200}
+
+do_test 14.3 {
+  set nRow 0
+  db eval { BEGIN; }
+  db eval { SELECT * FROM t1 WHERE t1 MATCH 'xyz' } {
+    db eval {
+      SAVEPOINT aaa;
+        CREATE TABLE t2(a, b);
+      ROLLBACK TO aaa;
+      RELEASE aaa;
+    }
+    incr nRow
+  }
+  set nRow
+} {200}
+
+do_execsql_test 15.0 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 15.1 {
+  UPDATE t1_content SET c1 = 'xyz xyz xyz xyz xyz abc' WHERE rowid = 1;
+}
+do_catchsql_test 15.2 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {1 {database disk image is malformed}}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 16.1 {
+  CREATE VIRTUAL TABLE n1 USING fts5(a);
+  INSERT INTO n1 VALUES('a b c d');
+}
+
+proc funk {} {
+  db eval { UPDATE n1_config SET v=50 WHERE k='version' }
+  set fd [db incrblob main n1_data block 10]
+  fconfigure $fd -encoding binary -translation binary
+#  puts -nonewline $fd "\x44\x45"
+  close $fd
+}
+db func funk funk
+
+# This test case corrupts the structure record within the first invocation
+# of function funk(). Which used to cause the bm25() function to throw an
+# exception. But since bm25() can now used the cached structure record,
+# it never sees the corruption introduced by funk() and so the following 
+# statement no longer fails.
+#
+do_catchsql_test 16.2 {
+  SELECT funk(), bm25(n1), funk() FROM n1 WHERE n1 MATCH 'a+b+c+d'
+} {0 {{} -1e-06 {}}}
+# {1 {SQL logic error}}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 17.1 {
+  CREATE VIRTUAL TABLE b2 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO b2 VALUES('a');
+  INSERT INTO b2 VALUES('b');
+  INSERT INTO b2 VALUES('c');
+}
+
+do_test 17.2 {
+  set res [list]
+  db eval { SELECT * FROM b2 ORDER BY rowid ASC } {
+    lappend res [execsql { SELECT * FROM b2 ORDER BY rowid ASC }]
+  }
+  set res
+} {{a b c} {a b c} {a b c}}
+
+if {[string match n* %DETAIL%]==0} {
+  reset_db
+  do_execsql_test 17.3 {
+    CREATE VIRTUAL TABLE c2 USING fts5(x, y, detail=%DETAIL%);
+    INSERT INTO c2 VALUES('x x x', 'x x x');
+    SELECT rowid FROM c2 WHERE c2 MATCH 'y:x';
+  } {1}
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 17.1 {
+  CREATE VIRTUAL TABLE uio USING fts5(ttt, detail=%DETAIL%);
+  INSERT INTO uio VALUES(NULL);
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  INSERT INTO uio SELECT NULL FROM uio;
+  SELECT count(*) FROM uio;
+} {256}
+
+do_execsql_test 17.2 {
+  SELECT count(*) FROM uio WHERE rowid BETWEEN 8 AND 17
+} {10}
+do_execsql_test 17.3 {
+  SELECT rowid FROM uio WHERE rowid BETWEEN 8 AND 17
+} {8 9 10 11 12 13 14 15 16 17}
+do_execsql_test 17.4 {
+  SELECT rowid FROM uio WHERE rowid BETWEEN 8 AND 17 ORDER BY rowid DESC
+} {17 16 15 14 13 12 11 10 9 8}
+do_execsql_test 17.5 {
+  SELECT count(*) FROM uio
+} {256}
+
+do_execsql_test 17.6 {
+  INSERT INTO uio(rowid) VALUES(9223372036854775807);
+  INSERT INTO uio(rowid) VALUES(-9223372036854775808);
+  SELECT count(*) FROM uio;
+} {258}
+do_execsql_test 17.7 {
+  SELECT min(rowid), max(rowid) FROM uio;
+} {-9223372036854775808 9223372036854775807}
+
+do_execsql_test 17.8 {
+  INSERT INTO uio DEFAULT VALUES;
+  SELECT min(rowid), max(rowid), count(*) FROM uio;
+} {-9223372036854775808 9223372036854775807 259}
+
+do_execsql_test 17.9 {
+  SELECT min(rowid), max(rowid), count(*) FROM uio WHERE rowid < 10;
+} {-9223372036854775808 9 10}
+
+#--------------------------------------------------------------------
+#
+do_execsql_test 18.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+  CREATE VIRTUAL TABLE t2 USING fts5(c, d, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('abc*', NULL);
+  INSERT INTO t2 VALUES(1, 'abcdefg');
+}
+do_execsql_test 18.2 {
+  SELECT t1.rowid, t2.rowid FROM t1, t2 WHERE t2 MATCH t1.a AND t1.rowid = t2.c
+} {1 1}
+do_execsql_test 18.3 {
+  SELECT t1.rowid, t2.rowid FROM t2, t1 WHERE t2 MATCH t1.a AND t1.rowid = t2.c
+} {1 1}
+
+#--------------------------------------------------------------------
+# fts5 table in the temp schema.
+#
+reset_db
+do_execsql_test 19.0 {
+  CREATE VIRTUAL TABLE temp.t1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('x y z');
+  INSERT INTO t1 VALUES('w x 1');
+  SELECT rowid FROM t1 WHERE t1 MATCH 'x';
+} {1 2}
+
+#--------------------------------------------------------------------
+# Test that 6 and 7 byte varints can be read.
+#
+reset_db
+do_execsql_test 20.0 {
+  CREATE VIRTUAL TABLE temp.tmp USING fts5(x, detail=%DETAIL%);
+}
+set ::ids [list \
+  0 [expr 1<<36] [expr 2<<36] [expr 1<<43] [expr 2<<43]
+]
+do_test 20.1 {
+  foreach id $::ids {
+    execsql { INSERT INTO tmp(rowid, x) VALUES($id, 'x y z') }
+  }
+  execsql { SELECT rowid FROM tmp WHERE tmp MATCH 'y' }
+} $::ids
+
+#--------------------------------------------------------------------
+# Test that a DROP TABLE may be executed within a transaction that
+# writes to an FTS5 table.
+#
+do_execsql_test 21.0 {
+  CREATE TEMP TABLE t8(a, b);
+  CREATE VIRTUAL TABLE ft USING fts5(x, detail=%DETAIL%);
+}
+
+do_execsql_test 21.1 {
+  BEGIN;
+    INSERT INTO ft VALUES('a b c');
+    DROP TABLE t8;
+  COMMIT;
+}
+
+do_execsql_test 22.0 {
+  CREATE VIRTUAL TABLE t9 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t9(rowid, x) VALUES(2, 'bbb');
+  BEGIN;
+    INSERT INTO t9(rowid, x) VALUES(1, 'aaa');
+    DELETE FROM t9 WHERE rowid = 2;
+    INSERT INTO t9(rowid, x) VALUES(3, 'bbb');
+  COMMIT;
+}
+
+do_execsql_test 22.1 {
+  SELECT rowid FROM t9('a*')
+} {1}
+
+#-------------------------------------------------------------------------
+do_execsql_test 23.0 {
+  CREATE VIRTUAL TABLE t10 USING fts5(x, detail=%DETAIL%);
+  CREATE TABLE t11(x);
+}
+do_execsql_test 23.1 {
+  SELECT * FROM t11, t10 WHERE t11.x = t10.x AND t10.rowid IS NULL;
+}
+do_execsql_test 23.2 {
+  SELECT * FROM t11, t10 WHERE t10.rowid IS NULL;
+}
+
+#-------------------------------------------------------------------------
+do_execsql_test 24.0 {
+  CREATE VIRTUAL TABLE t12 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t12 VALUES('aaaa');
+}
+do_execsql_test 24.1 {
+  BEGIN;
+    DELETE FROM t12 WHERE rowid=1;
+    SELECT * FROM t12('aaaa');
+    INSERT INTO t12 VALUES('aaaa');
+  END;
+}
+do_execsql_test 24.2 {
+  INSERT INTO t12(t12) VALUES('integrity-check');
+}
+do_execsql_test 24.3 {
+    SELECT * FROM t12('aaaa');
+} {aaaa}
+
+#-------------------------------------------------------------------------
+do_execsql_test 25.0 {
+  CREATE VIRTUAL TABLE t13 USING fts5(x, detail=%DETAIL%);
+}
+do_execsql_test 25.1 {
+  BEGIN;
+  INSERT INTO t13 VALUES('AAAA');
+SELECT * FROM t13('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB*');
+
+  END;
+}
+
+
+}
+
+expand_all_sql db
+finish_test

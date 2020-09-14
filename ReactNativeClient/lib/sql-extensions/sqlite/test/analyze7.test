@@ -1,0 +1,114 @@
+# 2011 April 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+# This file implements tests for the ANALYZE command when an idnex
+# name is given as the argument.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# There is nothing to test if ANALYZE is disable for this build.
+#
+ifcapable {!analyze||!vtab} {
+  finish_test
+  return
+}
+
+# Generate some test data
+#
+do_test analyze7-1.0 {
+  load_static_extension db wholenumber
+  execsql {
+    CREATE TABLE t1(a,b,c,d);
+    CREATE INDEX t1a ON t1(a);
+    CREATE INDEX t1b ON t1(b);
+    CREATE INDEX t1cd ON t1(c,d);
+    CREATE VIRTUAL TABLE nums USING wholenumber;
+    INSERT INTO t1 SELECT value, value, value/100, value FROM nums
+                    WHERE value BETWEEN 1 AND 256;
+    EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123;
+  }
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test analyze7-1.1 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=123;}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+do_test analyze7-1.2 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=2;}
+} {/*SEARCH TABLE t1 USING INDEX t1cd (c=?)*/}
+
+# Run an analyze on one of the three indices.  Verify that this
+# effects the row-count estimate on the one query that uses that
+# one index.
+#
+do_test analyze7-2.0 {
+  execsql {ANALYZE t1a;}
+  db cache flush
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123;}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test analyze7-2.1 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=123;}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+do_test analyze7-2.2 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=2;}
+} {/*SEARCH TABLE t1 USING INDEX t1cd (c=?)*/}
+
+# Verify that since the query planner now things that t1a is more
+# selective than t1b, it prefers to use t1a.
+#
+do_test analyze7-2.3 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123 AND b=123}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+
+# Run an analysis on another of the three indices.  Verify  that this
+# new analysis works and does not disrupt the previous analysis.
+#
+do_test analyze7-3.0 {
+  execsql {ANALYZE t1cd;}
+  db cache flush;
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123;}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+do_test analyze7-3.1 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE b=123;}
+} {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+do_test analyze7-3.2.1 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=?;}
+} {/*SEARCH TABLE t1 USING INDEX t1cd (c=?)*/}
+ifcapable stat4 {
+  # If ENABLE_STAT4 is defined, SQLite comes up with a different estimated
+  # row count for (c=2) than it does for (c=?).
+  do_test analyze7-3.2.2 {
+    execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=2;}
+  } {/*SEARCH TABLE t1 USING INDEX t1cd (c=?)*/}
+} else {
+  # If ENABLE_STAT4 is not defined, the expected row count for (c=2) is the
+  # same as that for (c=?).
+  do_test analyze7-3.2.3 {
+    execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=2;}
+  } {/*SEARCH TABLE t1 USING INDEX t1cd (c=?)*/}
+}
+do_test analyze7-3.3 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123 AND b=123}
+} {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+
+ifcapable {!stat4} {
+  do_test analyze7-3.4 {
+    execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=123 AND b=123}
+  } {/*SEARCH TABLE t1 USING INDEX t1b (b=?)*/}
+  do_test analyze7-3.5 {
+    execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE a=123 AND c=123}
+  } {/*SEARCH TABLE t1 USING INDEX t1a (a=?)*/}
+}
+do_test analyze7-3.6 {
+  execsql {EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE c=123 AND d=123 AND b=123}
+} {/*SEARCH TABLE t1 USING INDEX t1cd (c=? AND d=?)*/}
+
+finish_test

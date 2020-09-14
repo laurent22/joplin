@@ -1,0 +1,65 @@
+# 2014 October 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set ::testprefix rbufault4
+
+for {set tn 1} {1} {incr tn} {
+  reset_db
+  do_execsql_test 1.0 {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+    CREATE INDEX i1b ON t1(b);
+    CREATE INDEX i1c ON t1(c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+  }
+
+  forcedelete test.db2
+  sqlite3rbu_vacuum rbu test.db test.db2
+  for {set i 0} {$i < $tn} {incr i} { rbu step }
+  set rc [rbu close]
+  if {$rc!="SQLITE_OK"} { 
+    if {$rc!="SQLITE_DONE"} {error $rc}
+    break
+  }
+  faultsim_save
+
+  do_faultsim_test $tn -faults oom-t* -prep {
+    faultsim_restore
+  } -body {
+    sqlite3rbu_vacuum rbu test.db test.db2
+    while 1 {
+      set rc [rbu step]
+      if {$rc=="SQLITE_DONE"} break
+      if {$rc!="SQLITE_OK"} { error $rc }
+    }
+  } -test {
+    catch {rbu close}
+    faultsim_test_result {0 {}} {1 SQLITE_NOMEM} {1 SQLITE_IOERR_NOMEM}
+
+    sqlite3rbu_vacuum rbu test.db test.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    set trc [rbu close]
+    if {$trc!="SQLITE_DONE"} { error "Got $trc instead of SQLITE_DONE!" }
+
+    set rc [db one {PRAGMA integrity_check}]
+    if {$rc!="ok"} { error "Got $rc instead of ok!" }
+  }
+}
+
+
+
+finish_test

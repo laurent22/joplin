@@ -1,0 +1,753 @@
+# 2014 December 04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+set testprefix e_walckpt
+
+# The following two commands are used to determine if any of the files
+# "test.db", "test.db2" and "test.db3" are modified by a test case.
+#
+# The [save_db_hashes] command saves a hash of the current contents of
+# all three files in global variables. The [compare_db_hashes] compares
+# the current contents with the saved hashes and returns a list of the
+# files that have changed.
+#
+proc save_db_hashes {} {
+  global H
+  foreach f {test.db test.db2 test.db3} {
+    set H($f) 0
+    catch { set H($f) [md5file $f] }
+  }
+}
+proc compare_db_hashes {} {
+  global H
+  set ret [list]
+  foreach f {test.db test.db2 test.db3} {
+    set expect 0
+    catch { set expect [md5file $f] }
+    if {$H($f) != $expect} { lappend ret $f }
+  }
+  set ret
+}
+
+#-------------------------------------------------------------------------
+# All calls to the [sqlite3_wal_checkpoint_v2] command made within this
+# file use this wrapper. It's sole purpose is to throw an error if the
+# following requirement is violated:
+#
+# EVIDENCE-OF: R-60567-47780 Unless it returns SQLITE_MISUSE, the
+# sqlite3_wal_checkpoint_v2() interface sets the error information that
+# is queried by sqlite3_errcode() and sqlite3_errmsg().
+#
+proc wal_checkpoint_v2 {db args} {
+  set rc [catch {
+    uplevel sqlite3_wal_checkpoint_v2 $db $args
+  } msg]
+
+  set errcode "SQLITE_OK"
+  if {$rc} {
+    set errcode [lindex [split $msg " "] 0]
+  } elseif { [lindex $msg 0] } {
+    set errcode "SQLITE_BUSY"
+  }
+
+  if {$errcode != "SQLITE_MISUSE" && [sqlite3_errcode $db] != $errcode} {
+    error "sqlite3_errcode mismatch! (1) $errcode!=[sqlite3_errcode $db]"
+  }
+
+  if {$rc==0} {
+    return $msg
+  } else {
+    error $msg
+  }
+}
+
+
+# The following tests are run 3 times, each using a different method of 
+# invoking a checkpoint:
+#
+#   1) Using sqlite3_wal_checkpoint_v2()
+#   2) Using "PRAGMA wal_checkpoint"
+#   3) Using sqlite3_wal_checkpoint() in place of checkpoint_v2(PASSIVE)
+#
+# Cases (2) and (3) are to show that the following statements are 
+# correct, respectively:
+#
+# EVIDENCE-OF: R-36706-10507 The PRAGMA wal_checkpoint command can be
+# used to invoke this interface from SQL.
+#
+# EVIDENCE-OF: R-41613-20553 The sqlite3_wal_checkpoint(D,X) is
+# equivalent to
+# sqlite3_wal_checkpoint_v2(D,X,SQLITE_CHECKPOINT_PASSIVE,0,0).
+# 
+foreach {tn script} {
+  1 {
+    proc checkpoint {db mode args} {
+      eval wal_checkpoint_v2 [list $db] [list $mode] $args
+    }
+  }
+
+  2 {
+    proc checkpoint {db mode args} {
+      set sql "PRAGMA wal_checkpoint = $mode"
+      if {[llength $args] && [lindex $args 0]!=""} {
+        set sql "PRAGMA [lindex $args 0].wal_checkpoint = $mode"
+      }
+      set rc [catch { $db eval $sql } msg]
+      if {$rc} {
+        regsub {database} $msg {database:} msg
+        error "[sqlite3_errcode $db] - $msg"
+      }
+      set msg
+    }
+  }
+
+  3 {
+    proc checkpoint {db mode args} {
+      if {$mode == "passive"} {
+        set rc [eval sqlite3_wal_checkpoint [list $db] $args]
+        if {$rc != "SQLITE_OK"} {
+          error "$rc - [sqlite3_errmsg $db]"
+        }
+      } else {
+        eval wal_checkpoint_v2 [list $db] [list $mode] $args
+      }
+    }
+  }
+
+} {
+
+  eval $script
+
+  reset_db
+  forcedelete test.db2 test.db3 test.db4
+  execsql {
+    ATTACH 'test.db2' AS aux;
+    ATTACH 'test.db3' AS aux2;
+    ATTACH 'test.db4' AS aux3;
+    CREATE TABLE t1(x);
+    CREATE TABLE aux.t2(x);
+    CREATE TABLE aux2.t3(x);
+    CREATE TABLE aux3.t4(x);
+    PRAGMA main.journal_mode = WAL;
+    PRAGMA aux.journal_mode = WAL;
+    PRAGMA aux2.journal_mode = WAL;
+    /* Leave aux4 in rollback mode */
+  }
+
+  # EVIDENCE-OF: R-49787-09095 The sqlite3_wal_checkpoint_v2(D,X,M,L,C)
+  # interface runs a checkpoint operation on database X of database
+  # connection D in mode M. Status information is written back into
+  # integers pointed to by L and C.
+  #
+  #     Tests 1, 2 and 3 below verify the "on database X" part of the
+  #     above. Other parts of this requirement are tested below.
+  #
+  # EVIDENCE-OF: R-00653-06026 If parameter zDb is NULL or points to a
+  # zero length string, then the specified operation is attempted on all
+  # WAL databases attached to database connection db.
+  #
+  #     Tests 4 and 5 below test this.
+  #
+  foreach {tn2 zDb dblist} {
+    1 main  test.db
+    2 aux   test.db2
+    3 aux2  test.db3
+    4 ""    {test.db test.db2 test.db3}
+    5 -     {test.db test.db2 test.db3}
+    6 temp  {}
+  } {
+    do_test $tn.1.$tn2 {
+      execsql {
+        INSERT INTO t1 VALUES(1);
+        INSERT INTO t2 VALUES(2);
+        INSERT INTO t3 VALUES(3);
+      }
+      save_db_hashes
+
+      if {$zDb == "-"} {
+        checkpoint db passive
+      } else {
+        checkpoint db passive $zDb
+      }
+
+      compare_db_hashes
+    } $dblist
+  }
+
+  # EVIDENCE-OF: R-38207-48996 If zDb is not NULL (or a zero length
+  # string) and is not the name of any attached database, SQLITE_ERROR is
+  # returned to the caller.
+  do_test $tn.2.1 {
+    list [catch { checkpoint db passive notadb } msg] $msg
+  } {1 {SQLITE_ERROR - unknown database: notadb}}
+
+  # EVIDENCE-OF: R-14303-42483 If database zDb is the name of an attached
+  # database that is not in WAL mode, SQLITE_OK is returned and both
+  # *pnLog and *pnCkpt set to -1.
+  #
+  if {$tn==3} {
+    # With sqlite3_wal_checkpoint() the two output variables cannot be 
+    # tested. So just test that no error is returned when attempting to
+    # checkpoint a db in rollback mode.
+    do_test $tn.2.2.a { checkpoint db passive aux3 } {}
+  } else {
+    do_test $tn.2.2.b { checkpoint db passive aux3 } {0 -1 -1}
+  }
+
+  # EVIDENCE-OF: R-62028-47212 All calls obtain an exclusive "checkpoint"
+  # lock on the database file.
+  db close
+  testvfs tvfs
+  tvfs filter xShmLock
+  tvfs script filelock
+  proc filelock {method file handle details} {
+    # Test for an exclusive checkpoint lock. A checkpoint lock locks a
+    # single byte starting at offset 1.
+    if {$details == "1 1 lock exclusive"} { set ::seen_checkpoint_lock 1 }
+  }
+  sqlite3 db test.db -vfs tvfs
+  do_test $tn.3.1 {
+    execsql { INSERT INTO t1 VALUES('xyz') }
+    unset -nocomplain ::seen_checkpoint_lock
+    checkpoint db passive
+    set ::seen_checkpoint_lock
+  } {1}
+  db close
+  tvfs delete
+  reset_db
+
+
+ 
+
+  #-----------------------------------------------------------------------
+  # EVIDENCE-OF: R-10421-19736 If any other process is running a
+  # checkpoint operation at the same time, the lock cannot be obtained and
+  # SQLITE_BUSY is returned.
+  #
+  # EVIDENCE-OF: R-53820-33897 Even if there is a busy-handler configured,
+  # it will not be invoked in this case.
+  #
+  testvfs tvfs
+  tvfs filter xWrite
+  sqlite3 db test.db -vfs tvfs
+  sqlite3 db2 test.db -vfs tvfs
+
+  do_test $tn.3.2.1 {
+    db2 eval {
+      PRAGMA auto_vacuum = 0;
+      PRAGMA journal_mode = WAL;
+      CREATE TABLE t1(x, y);
+      INSERT INTO t1 VALUES(1,2);
+      INSERT INTO t1 VALUES(3,4);
+      INSERT INTO t1 VALUES(5,6);
+    }
+    file size test.db-wal
+  } [wal_file_size 5 1024]
+
+
+  # Connection [db] runs a checkpoint. During this checkpoint, each
+  # time it calls xWrite() to write a page into the database file, we
+  # attempt to start a checkpoint using [db2]. According to the 
+  # first requirement being tested, this should return SQLITE_BUSY. According
+  # to the second, the busy-handler belonging to [db2] should not be
+  # invoked.
+  #
+  set ::write_count 0
+  set ::write_errors [list]
+  proc busy_callback {args} {
+    lappend ::write_errors "busy handler called!"
+  }
+  proc write_callback {args} {
+    set rc [catch {checkpoint db2 passive} msg]
+    if {0==[regexp "database is locked" $msg] && $msg!="1 -1 -1"} {
+      lappend ::write_errors "$rc $msg"
+    } 
+    incr ::write_count
+  }
+  db2 busy busy_callback
+  tvfs script write_callback
+
+  do_test $tn.3.2.2 {
+    db eval {SELECT * FROM sqlite_master}
+    checkpoint db full
+    set ::write_count
+  } {2}
+
+  do_test $tn.3.2.3 {
+    set ::write_errors
+  } {}
+
+  db close
+  db2 close
+  tvfs delete
+
+  proc busy_handler {mode busy_handler_mode n} {
+    incr ::busy_handler_counter
+    switch -- $busy_handler_mode {
+      1 {
+        # Do nothing. Do not block.
+        return 1
+      }
+
+      2 {
+        # Close first the reader, then later the writer. Give up before
+        # closing the [db6] reader.
+        if {$n==5}  { catch {db2 eval commit} }
+        if {$n==10} { catch {db3 eval commit} }
+        if {$n==15} { return 1 }
+        return 0
+      }
+
+      3 {
+        # Close first the writer, then later the reader. And finally the 
+        # [db6] reader.
+        if {$n==5}  { catch {db2 eval commit} }
+        if {$n==10} { catch {db3 eval commit} }
+        if {$n==15} { catch {db6 eval commit} }
+        return 0
+      }
+    }
+  }
+
+  foreach {mode busy_handler_mode} { 
+    passive  1
+    full     1       full     2       full    3
+    restart  1       restart  2       restart  3
+    truncate 1       truncate 2       truncate 3
+  } {
+    set tp "$tn.$mode.$busy_handler_mode"
+
+    set ::sync_counter 0
+
+    # Set up a callback function for xSync and xWrite calls made during
+    # the checkpoint.
+    #
+    set ::checkpoint_ongoing 0
+    proc tvfs_callback {method args} {
+      if {$::checkpoint_ongoing==0} return
+
+      set tail [file tail [lindex $args 0]]
+      if {$method == "xSync" && $tail == "test.db"} {
+        incr ::sync_counter
+      }
+      if {$method == "xWrite" && $tail=="test.db"} {
+        if {$::write_ok < 0} {
+          set ::write_ok [expr ![catch {db5 eval { BEGIN IMMEDIATE }}]]
+          catch { db5 eval ROLLBACK }
+        }
+        if {$::read_ok < 0} {
+          set ::read_ok [expr ![catch {db5 eval { SELECT * FROM t1 }}]]
+        }
+
+        # If one has not already been opened, open a read-transaction using
+        # connection [db6]
+        catch { db6 eval { BEGIN ; SELECT * FROM sqlite_master } } msg
+      }
+      if {$method == "xShmLock" } {
+        set details [lindex $args 2]
+        if {$details == "0 1 lock exclusive"} { set ::seen_writer_lock 1 }
+      }
+    }
+
+    catch { db close }
+    forcedelete test.db
+    testvfs tvfs
+    sqlite3 db test.db -vfs tvfs
+    #tvfs filter xSync
+    tvfs script tvfs_callback
+
+    do_execsql_test $tp.0 {
+      CREATE TABLE t1(a, b);
+      CREATE TABLE t2(a, b);
+      PRAGMA journal_mode = wal;
+      INSERT INTO t1 VALUES(1, 2);
+      INSERT INTO t1 VALUES(3, 4);
+      INSERT INTO t1 VALUES(5, 6);
+    } {wal}
+
+    # Open a reader on the current database snapshot.
+    do_test $tp.1 {
+      sqlite3 db2 test.db -vfs tvfs
+      execsql {
+        BEGIN;
+          SELECT * FROM t1 UNION ALL SELECT * FROM t2;
+      } db2
+    } {1 2 3 4 5 6}
+
+    # Open a writer. Write a transaction. Then begin, but do not commit,
+    # a second transaction.
+    do_test $tp.2 {
+      sqlite3 db3 test.db -vfs tvfs
+      execsql {
+        INSERT INTO t2 VALUES(7, 8);
+        BEGIN;
+          INSERT INTO t2 VALUES(9, 10);
+          SELECT * FROM t1 UNION ALL SELECT * FROM t2;
+      } db3
+    } {1 2 3 4 5 6 7 8 9 10}
+
+    sqlite3 db5 test.db -vfs tvfs
+    sqlite3 db6 test.db -vfs tvfs
+
+    # Register a busy-handler with connection [db].
+    #
+    db busy [list busy_handler $mode $busy_handler_mode]
+    set ::sync_counter 0
+    set ::busy_handler_counter 0
+    set ::read_ok -1
+    set ::write_ok -1
+    set ::seen_writer_lock 0
+    
+    set ::checkpoint_ongoing 1
+    do_test $tp.3 {
+      checkpoint db $mode main
+      set {} {}
+    } {}
+    set ::checkpoint_ongoing 0
+    set ::did_restart_blocking [expr {[catch {db6 eval commit}]}]
+
+    if { $mode=="passive" } {
+      # EVIDENCE-OF: R-16333-64433 Checkpoint as many frames as possible
+      # without waiting for any database readers or writers to finish, then
+      # sync the database file if all frames in the log were checkpointed.
+      #
+      #   "As many frames as possible" means all but the last two transactions
+      #   (the two that write to table t2, of which the scond is unfinished).
+      #   So copying the db file only we see the t1 change, but not the t2
+      #   modifications.
+      #
+      #   The busy handler is not invoked (see below) and the db reader and
+      #   writer are still active - so the checkpointer did not wait for either
+      #   readers or writers. As a result the checkpoint was not finished and
+      #   so the db file is not synced.
+      #
+      # EVIDENCE-OF: R-62920-47450 The busy-handler callback is never invoked
+      # in the SQLITE_CHECKPOINT_PASSIVE mode.
+      #
+      #   It's not. Test case "$tp.6".
+      #
+      do_test $tp.4 {
+        forcecopy test.db abc.db
+        sqlite3 db4 abc.db
+        db4 eval { SELECT * FROM t1 UNION ALL SELECT * FROM t2 }
+      } {1 2 3 4 5 6}
+      do_test $tp.5 { set ::sync_counter } 0
+      do_test $tp.6 { set ::busy_handler_counter } 0
+      db4 close
+  
+      db2 eval COMMIT
+      db3 eval COMMIT
+  
+      # EVIDENCE-OF: R-65499-53765 On the other hand, passive mode might leave
+      # the checkpoint unfinished if there are concurrent readers or writers.
+      #
+      #   The reader and writer have now dropped their locks. And so a 
+      #   checkpoint now is able to checkpoint more frames. Showing that the
+      #   attempt above was left "unfinished".
+      #
+      #   Also, because the checkpoint finishes this time, the db is synced.
+      #   Which is part of R-16333-64433 above.
+      #
+      set ::checkpoint_ongoing 1
+      do_test $tp.7 {
+        checkpoint db $mode main
+        forcecopy test.db abc.db
+        sqlite3 db4 abc.db
+        db4 eval { SELECT * FROM t1 UNION ALL SELECT * FROM t2 }
+      } {1 2 3 4 5 6 7 8 9 10}
+      set ::checkpoint_ongoing 0
+      do_test $tp.7 { set ::sync_counter } 1
+      do_test $tp.8 { set ::busy_handler_counter } 0
+      db4 close
+    }
+
+    if { $mode=="full" || $mode=="restart" || $mode=="truncate" } {
+
+      # EVIDENCE-OF: R-59782-36818 The SQLITE_CHECKPOINT_FULL, RESTART and
+      # TRUNCATE modes also obtain the exclusive "writer" lock on the 
+      # database file.
+      #
+      #   Or at least attempts to obtain.
+      #
+      do_test $tp.9 {
+        set ::seen_writer_lock
+      } {1}
+
+      if {$busy_handler_mode==2 || $busy_handler_mode==3} {
+        # EVIDENCE-OF: R-59171-47567 This mode blocks (it invokes the
+        # busy-handler callback) until there is no database writer and all
+        # readers are reading from the most recent database snapshot.
+        #
+        #   The test below shows that both the reader and writer have 
+        #   finished:
+        #
+        #   Also restated by the following two. That both busy_handler_mode
+        #   values 2 and 3 work show that both of the following are true - as
+        #   they release the reader and writer transactions in different
+        #   orders.
+        #
+        # EVIDENCE-OF: R-60642-04082 If the writer lock cannot be obtained
+        # immediately, and a busy-handler is configured, it is invoked and the
+        # writer lock retried until either the busy-handler returns 0 or the
+        # lock is successfully obtained.
+        #
+        # EVIDENCE-OF: R-48107-00250 The busy-handler is also invoked while
+        # waiting for database readers as described above.
+        #
+        do_test $tp.7 {
+          list [catchsql COMMIT db2] [catchsql COMMIT db3]
+        } [list                                             \
+            {1 {cannot commit - no transaction is active}}  \
+            {1 {cannot commit - no transaction is active}}  \
+        ]
+
+        # EVIDENCE-OF: R-29177-48281 It then checkpoints all frames in the log
+        # file and syncs the database file.
+        #
+        do_test $tp.8 {
+          forcecopy test.db abc.db
+          sqlite3 db4 abc.db
+          db4 eval { SELECT * FROM t1 UNION ALL SELECT * FROM t2 }
+        } {1 2 3 4 5 6 7 8 9 10}
+        do_test $tp.9 { set ::sync_counter } 1
+        db4 close
+
+        # EVIDENCE-OF: R-51867-44713 This mode blocks new database writers
+        # while it is pending, but new database readers are allowed to continue
+        # unimpeded.
+        #
+        # EVIDENCE-OF: R-47276-58266 Like SQLITE_CHECKPOINT_FULL, this mode
+        # blocks new database writer attempts while it is pending, but does not
+        # impede readers.
+        #
+        #   The first of the above two refers to "full" mode. The second
+        #   to "restart".
+        #
+        do_test $tp.10.1 {
+          list $::write_ok $::read_ok
+        } {0 1}
+
+        # EVIDENCE-OF: R-12410-31217 This mode works the same way as
+        # SQLITE_CHECKPOINT_FULL with the addition that after checkpointing the
+        # log file it blocks (calls the busy-handler callback) until all
+        # readers are reading from the database file only.
+        #
+        #     The stuff above passed, so the first part of this requirement
+        #     is met. The second part is tested below. If the checkpoint mode
+        #     was "restart" or "truncate", then the busy-handler will have
+        #     been called to block on wal-file readers.
+        #
+        do_test $tp.11 {
+          set ::did_restart_blocking
+        } [expr {($mode=="restart"||$mode=="truncate")&&$busy_handler_mode==3}]
+
+        # EVIDENCE-OF: R-44699-57140 This mode works the same way as
+        # SQLITE_CHECKPOINT_RESTART with the addition that it also truncates
+        # the log file to zero bytes just prior to a successful return.
+        if {$mode=="truncate" && $busy_handler_mode==3} {
+          do_test $tp.12 {
+            file size test.db-wal
+          } 0
+        }
+      } elseif {$busy_handler_mode==1} {
+
+        # EVIDENCE-OF: R-34519-06271 SQLITE_BUSY is returned in this case.
+        if {$tn!=2} {
+          # ($tn==2) is the loop that uses "PRAGMA wal_checkpoint"
+          do_test $tp.13 { sqlite3_errcode db } {SQLITE_BUSY}
+        }
+
+        # EVIDENCE-OF: R-49155-63541 If the busy-handler returns 0 before the
+        # writer lock is obtained or while waiting for database readers, the
+        # checkpoint operation proceeds from that point in the same way as
+        # SQLITE_CHECKPOINT_PASSIVE - checkpointing as many frames as possible
+        # without blocking any further.
+        do_test $tp.14 {
+          forcecopy test.db abc.db
+            sqlite3 db4 abc.db
+            db4 eval { SELECT * FROM t1 UNION ALL SELECT * FROM t2 }
+        } {1 2 3 4 5 6}
+        do_test $tp.15 { set ::sync_counter } 0
+        do_test $tp.16 { set ::busy_handler_counter } 1
+        db4 close
+      }
+    }
+
+    db2 close
+    db3 close
+    db5 close
+    db6 close
+  }
+
+  db close
+  tvfs delete
+}
+
+#-----------------------------------------------------------------------
+# EVIDENCE-OF: R-03996-12088 The M parameter must be a valid checkpoint
+# mode:
+#
+#   Valid checkpoint modes are 0, 1, 2 and 3.
+#
+sqlite3 db test.db
+foreach {tn mode res} {
+  0 -1001    {1 {SQLITE_MISUSE - not an error}}
+  1 -1       {1 {SQLITE_MISUSE - not an error}}
+  2  0       {0 {0 -1 -1}}
+  3  1       {0 {0 -1 -1}}
+  4  2       {0 {0 -1 -1}}
+  5  3       {0 {0 -1 -1}}
+  6  4       {1 {SQLITE_MISUSE - not an error}}
+  7  114     {1 {SQLITE_MISUSE - not an error}}
+  8  1000000 {1 {SQLITE_MISUSE - not an error}}
+} {
+  do_test 4.$tn {
+    list [catch "wal_checkpoint_v2 db $mode" msg] $msg
+  } $res
+}
+db close
+
+foreach tn {1 2 3} {
+  forcedelete test.db test.db2 test.db3
+  testvfs tvfs
+
+  sqlite3 db test.db -vfs tvfs
+  execsql {
+    ATTACH 'test.db2' AS aux2;
+    ATTACH 'test.db3' AS aux3;
+    PRAGMA main.journal_mode = WAL;
+    PRAGMA aux2.journal_mode = WAL;
+    PRAGMA aux3.journal_mode = WAL;
+
+    CREATE TABLE main.t1(x,y);
+    CREATE TABLE aux2.t2(x,y);
+    CREATE TABLE aux3.t3(x,y);
+
+    INSERT INTO t1 VALUES('a', 'b');
+    INSERT INTO t2 VALUES('a', 'b');
+    INSERT INTO t3 VALUES('a', 'b');
+  }
+  sqlite3 db2 test.db2 -vfs tvfs
+
+  switch -- $tn {
+    1 {
+      # EVIDENCE-OF: R-41299-52117 If no error (SQLITE_BUSY or otherwise) is
+      # encountered while processing the attached databases, SQLITE_OK is
+      # returned.
+      do_test 5.$tn.1 {
+        lindex [wal_checkpoint_v2 db truncate] 0
+      } {0}    ;# 0 -> SQLITE_OK
+      do_test 5.$tn.2 {
+        list [expr [file size test.db-wal]==0]  \
+             [expr [file size test.db2-wal]==0] \
+             [expr [file size test.db3-wal]==0]
+      } {1 1 1}
+    }
+
+    2 {
+      # EVIDENCE-OF: R-38578-34175 If an SQLITE_BUSY error is encountered when
+      # processing one or more of the attached WAL databases, the operation is
+      # still attempted on any remaining attached databases and SQLITE_BUSY is
+      # returned at the end.
+      db2 eval { BEGIN; INSERT INTO t2 VALUES('d', 'e'); }
+      do_test 5.$tn.1 {
+        lindex [wal_checkpoint_v2 db truncate] 0
+      } {1}    ;# 1 -> SQLITE_BUSY
+      do_test 5.$tn.2 {
+        list [expr [file size test.db-wal]==0]  \
+             [expr [file size test.db2-wal]==0] \
+             [expr [file size test.db3-wal]==0]
+      } {1 0 1}
+      db2 eval ROLLBACK
+    }
+
+    3 {
+      # EVIDENCE-OF: R-38049-07913 If any other error occurs while processing
+      # an attached database, processing is abandoned and the error code is
+      # returned to the caller immediately.
+      tvfs filter xWrite
+      tvfs script inject_ioerr
+      proc inject_ioerr {method file args} {
+        if {[file tail $file]=="test.db2"} {
+          return "SQLITE_IOERR"
+        }
+        return 0
+      }
+      do_test 5.$tn.1 {
+        list [catch { wal_checkpoint_v2 db truncate } msg] $msg
+      } {1 {SQLITE_IOERR - disk I/O error}}
+      do_test 5.$tn.2 {
+        list [expr [file size test.db-wal]==0]  \
+             [expr [file size test.db2-wal]==0] \
+             [expr [file size test.db3-wal]==0]
+      } {1 0 0}
+      tvfs script ""
+    }
+  }
+
+  db close
+  db2 close
+}
+
+reset_db
+sqlite3 db2 test.db
+
+do_test 6.1 {
+  execsql {
+    PRAGMA auto_vacuum = 0; 
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+  }
+  file size test.db-wal
+} [wal_file_size 3 1024]
+
+do_test 6.2 {
+  db2 eval { BEGIN; SELECT * FROM t1; }
+  db  eval { INSERT INTO t1 VALUES(3, 4) }
+  file size test.db-wal
+} [wal_file_size 4 1024]
+
+#   At this point the log file contains 4 frames. 3 of which it should
+#   be possible to checkpoint.
+#
+# EVIDENCE-OF: R-16642-42503 If pnLog is not NULL, then *pnLog is set to
+# the total number of frames in the log file or to -1 if the checkpoint
+# could not run because of an error or because the database is not in
+# WAL mode.
+#
+# EVIDENCE-OF: R-10514-25250 If pnCkpt is not NULL,then *pnCkpt is set
+# to the total number of checkpointed frames in the log file (including
+# any that were already checkpointed before the function was called) or
+# to -1 if the checkpoint could not run due to an error or because the
+# database is not in WAL mode.
+#
+do_test 6.4 {
+  lrange [wal_checkpoint_v2 db passive] 1 2
+} {4 3} 
+
+# EVIDENCE-OF: R-37257-17813 Note that upon successful completion of an
+# SQLITE_CHECKPOINT_TRUNCATE, the log file will have been truncated to
+# zero bytes and so both *pnLog and *pnCkpt will be set to zero.
+#
+do_test 6.5 {
+  db2 eval COMMIT
+  wal_checkpoint_v2 db truncate
+} {0 0 0}
+
+
+
+finish_test

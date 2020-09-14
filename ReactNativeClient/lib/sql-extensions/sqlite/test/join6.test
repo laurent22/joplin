@@ -1,0 +1,160 @@
+# 2009 December 9
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for N-way joins (N>2) which make
+# use of USING or NATURAL JOIN.  For such joins, the USING and
+# NATURAL JOIN processing needs to search all tables to the left
+# of the join looking for a match.  See ticket [f74beaabde]
+# for additional information.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+# The problem as initially reported on the mailing list:
+#
+do_test join6-1.1 {
+  execsql {
+    CREATE TABLE t1(a);
+    CREATE TABLE t2(a);
+    CREATE TABLE t3(a,b);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t3 VALUES(1,2);
+
+    SELECT * FROM t1 LEFT JOIN t2 USING(a) LEFT JOIN t3 USING(a);
+  }
+} {1 2}
+do_test join6-1.2 {
+  execsql {
+    SELECT t1.a, t3.b 
+      FROM t1 LEFT JOIN t2 ON t1.a=t2.a LEFT JOIN t3 ON t2.a=t3.a;
+  }
+} {1 {}}
+do_test join6-1.3 {
+  execsql {
+    SELECT t1.a, t3.b
+      FROM t1 LEFT JOIN t2 ON t1.a=t2.a LEFT JOIN t3 ON t1.a=t3.a;
+  }
+} {1 2}
+
+
+do_test join6-2.1 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+
+    CREATE TABLE t1(x,y);
+    CREATE TABLE t2(y,z);
+    CREATE TABLE t3(x,z);
+
+    INSERT INTO t1 VALUES(1,2);
+    INSERT INTO t1 VALUES(3,4);
+
+    INSERT INTO t2 VALUES(2,3);
+    INSERT INTO t2 VALUES(4,5);
+
+    INSERT INTO t3 VALUES(1,3);
+    INSERT INTO t3 VALUES(3,5);
+
+    SELECT * FROM t1 JOIN t2 USING (y) JOIN t3 USING(x);
+  }
+} {1 2 3 3 3 4 5 5}
+do_test join6-2.2 {
+  execsql {
+    SELECT * FROM t1 NATURAL JOIN t2 NATURAL JOIN t3;
+  }
+} {1 2 3 3 4 5}
+
+
+do_test join6-3.1 {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+
+    CREATE TABLE t1(a,x,y);
+    INSERT INTO t1 VALUES(1,91,92);
+    INSERT INTO t1 VALUES(2,93,94);
+    
+    CREATE TABLE t2(b,y,z);
+    INSERT INTO t2 VALUES(3,92,93);
+    INSERT INTO t2 VALUES(4,94,95);
+    
+    CREATE TABLE t3(c,x,z);
+    INSERT INTO t3 VALUES(5,91,93);
+    INSERT INTO t3 VALUES(6,99,95);
+    
+    SELECT * FROM t1 NATURAL JOIN t2 NATURAL JOIN t3;
+  }
+} {1 91 92 3 93 5}
+do_test join6-3.2 {
+  execsql {
+    SELECT * FROM t1 JOIN t2 NATURAL JOIN t3;
+  }
+} {1 91 92 3 92 93 5}
+do_test join6-3.3 {
+  execsql {
+    SELECT * FROM t1 JOIN t2 USING(y) NATURAL JOIN t3;
+  }
+} {1 91 92 3 93 5}
+do_test join6-3.4 {
+  execsql {
+    SELECT * FROM t1 NATURAL JOIN t2 JOIN t3 USING(x,z);
+  }
+} {1 91 92 3 93 5}
+do_test join6-3.5 {
+  execsql {
+    SELECT * FROM t1 NATURAL JOIN t2 JOIN t3 USING(x);
+  }
+} {1 91 92 3 93 5 93}
+do_test join6-3.6 {
+  execsql {
+    SELECT * FROM t1 NATURAL JOIN t2 JOIN t3 USING(z);
+  }
+} {1 91 92 3 93 5 91 2 93 94 4 95 6 99}
+
+ifcapable compound {
+  do_test join6-4.1 {
+    execsql {
+      SELECT * FROM
+         (SELECT 1 AS a, 91 AS x, 92 AS y UNION SELECT 2, 93, 94)
+         NATURAL JOIN t2 NATURAL JOIN t3
+    }
+  } {1 91 92 3 93 5}
+  do_test join6-4.2 {
+    execsql {
+      SELECT * FROM t1 NATURAL JOIN
+         (SELECT 3 AS b, 92 AS y, 93 AS z UNION SELECT 4, 94, 95)
+         NATURAL JOIN t3
+    }
+  } {1 91 92 3 93 5}
+  do_test join6-4.3 {
+    execsql {
+      SELECT * FROM t1 NATURAL JOIN t2 NATURAL JOIN
+         (SELECT 5 AS c, 91 AS x, 93 AS z UNION SELECT 6, 99, 95)
+    }
+  } {1 91 92 3 93 5}
+}
+
+
+
+
+
+
+
+
+
+
+
+finish_test

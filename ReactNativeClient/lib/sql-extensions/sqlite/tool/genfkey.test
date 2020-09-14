@@ -1,0 +1,353 @@
+
+package require sqlite3
+
+proc do_test {name cmd expected} {
+  puts -nonewline "$name ..."
+  set res [uplevel $cmd]
+  if {$res eq $expected} {
+    puts Ok
+  } else {
+    puts Error
+    puts "  Got: $res"
+    puts "  Expected: $expected"
+    exit
+  }
+}
+
+proc execsql {sql} {
+  uplevel [list db eval $sql]
+}
+
+proc catchsql {sql} {
+  set rc [catch {uplevel [list db eval $sql]} msg]
+  list $rc $msg
+}
+
+file delete -force test.db test.db.journal
+sqlite3 db test.db
+
+# The following tests - genfkey-1.* - test RESTRICT foreign keys.
+#
+do_test genfkey-1.1 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, UNIQUE(b, c));
+    CREATE TABLE t2(e REFERENCES t1, f);
+    CREATE TABLE t3(g, h, i, FOREIGN KEY (h, i) REFERENCES t1(b, c));
+  }
+} {}
+do_test genfkey-1.2 {
+  execsql [exec ./sqlite3 test.db .genfkey]
+} {}
+do_test genfkey-1.3 {
+  catchsql { INSERT INTO t2 VALUES(1, 2) }
+} {1 {constraint failed}}
+do_test genfkey-1.4 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t2 VALUES(1, 2);
+  }
+} {}
+do_test genfkey-1.5 {
+  execsql { INSERT INTO t2 VALUES(NULL, 3) }
+} {}
+do_test genfkey-1.6 {
+  catchsql { UPDATE t2 SET e = 5 WHERE e IS NULL }
+} {1 {constraint failed}}
+do_test genfkey-1.7 {
+  execsql { UPDATE t2 SET e = 1 WHERE e IS NULL }
+} {}
+do_test genfkey-1.8 {
+  execsql { UPDATE t2 SET e = NULL WHERE f = 3 }
+} {}
+do_test genfkey-1.9 {
+  catchsql { UPDATE t1 SET a = 10 }
+} {1 {constraint failed}}
+do_test genfkey-1.9a {
+  catchsql { UPDATE t1 SET a = NULL }
+} {1 {datatype mismatch}}
+do_test genfkey-1.10 {
+  catchsql { DELETE FROM t1 }
+} {1 {constraint failed}}
+do_test genfkey-1.11 {
+  execsql { UPDATE t2 SET e = NULL }
+} {}
+do_test genfkey-1.12 {
+  execsql { 
+    UPDATE t1 SET a = 10 ;
+    DELETE FROM t1;
+    DELETE FROM t2;
+  }
+} {}
+
+do_test genfkey-1.13 {
+  execsql {
+    INSERT INTO t3 VALUES(1, NULL, NULL);
+    INSERT INTO t3 VALUES(1, 2, NULL);
+    INSERT INTO t3 VALUES(1, NULL, 3);
+  }
+} {}
+do_test genfkey-1.14 {
+  catchsql { INSERT INTO t3 VALUES(3, 1, 4) }
+} {1 {constraint failed}}
+do_test genfkey-1.15 {
+  execsql { 
+    INSERT INTO t1 VALUES(1, 1, 4);
+    INSERT INTO t3 VALUES(3, 1, 4);
+  }
+} {}
+do_test genfkey-1.16 {
+  catchsql { DELETE FROM t1 }
+} {1 {constraint failed}}
+do_test genfkey-1.17 {
+  catchsql { UPDATE t1 SET b = 10}
+} {1 {constraint failed}}
+do_test genfkey-1.18 {
+  execsql { UPDATE t1 SET a = 10}
+} {}
+do_test genfkey-1.19 {
+  catchsql { UPDATE t3 SET h = 'hello' WHERE i = 3}
+} {1 {constraint failed}}
+
+do_test genfkey-1.X {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+  }
+} {}
+
+# The following tests - genfkey-2.* - test CASCADE foreign keys.
+#
+do_test genfkey-2.1 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, UNIQUE(b, c));
+    CREATE TABLE t2(e REFERENCES t1 ON UPDATE CASCADE ON DELETE CASCADE, f);
+    CREATE TABLE t3(g, h, i, 
+        FOREIGN KEY (h, i) 
+        REFERENCES t1(b, c) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+  }
+} {}
+do_test genfkey-2.2 {
+  execsql [exec ./sqlite3 test.db .genfkey]
+} {}
+do_test genfkey-2.3 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t2 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(4, 'four');
+  }
+} {}
+do_test genfkey-2.4 {
+  execsql {
+    UPDATE t1 SET a = 2 WHERE a = 1;
+    SELECT * FROM t2;
+  }
+} {2 one 4 four}
+do_test genfkey-2.5 {
+  execsql {
+    DELETE FROM t1 WHERE a = 4;
+    SELECT * FROM t2;
+  }
+} {2 one}
+do_test genfkey-2.6 {
+  execsql {
+    INSERT INTO t3 VALUES('hello', 2, 3);
+    UPDATE t1 SET c = 2;
+    SELECT * FROM t3;
+  }
+} {hello 2 2}
+do_test genfkey-2.7 {
+  execsql {
+    DELETE FROM t1;
+    SELECT * FROM t3;
+  }
+} {}
+do_test genfkey-2.X {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+  }
+} {}
+
+
+# The following tests - genfkey-3.* - test SET NULL foreign keys.
+#
+do_test genfkey-3.1 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, UNIQUE(c, b));
+    CREATE TABLE t2(e REFERENCES t1 ON UPDATE SET NULL ON DELETE SET NULL, f);
+    CREATE TABLE t3(g, h, i, 
+        FOREIGN KEY (h, i) 
+        REFERENCES t1(b, c) ON UPDATE SET NULL ON DELETE SET NULL
+    );
+  }
+} {}
+do_test genfkey-3.2 {
+  execsql [exec ./sqlite3 test.db .genfkey]
+} {}
+do_test genfkey-3.3 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t2 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(4, 'four');
+  }
+} {}
+do_test genfkey-3.4 {
+  execsql {
+    UPDATE t1 SET a = 2 WHERE a = 1;
+    SELECT * FROM t2;
+  }
+} {{} one 4 four}
+do_test genfkey-3.5 {
+  execsql {
+    DELETE FROM t1 WHERE a = 4;
+    SELECT * FROM t2;
+  }
+} {{} one {} four}
+do_test genfkey-3.6 {
+  execsql {
+    INSERT INTO t3 VALUES('hello', 2, 3);
+    UPDATE t1 SET c = 2;
+    SELECT * FROM t3;
+  }
+} {hello {} {}}
+do_test genfkey-2.7 {
+  execsql {
+    UPDATE t3 SET h = 2, i = 2;
+    DELETE FROM t1;
+    SELECT * FROM t3;
+  }
+} {hello {} {}}
+do_test genfkey-3.X {
+  execsql {
+    DROP TABLE t1;
+    DROP TABLE t2;
+    DROP TABLE t3;
+  }
+} {}
+
+# The following tests - genfkey-4.* - test that errors in the schema
+# are detected correctly.
+#
+do_test genfkey-4.1 {
+  execsql {
+    CREATE TABLE t1(a REFERENCES nosuchtable, b);
+    CREATE TABLE t2(a REFERENCES t1, b);
+
+    CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b));
+    CREATE TABLE t4(a, b, c, FOREIGN KEY(c, b) REFERENCES t3);
+
+    CREATE TABLE t5(a REFERENCES t4(d), b, c);
+    CREATE TABLE t6(a REFERENCES t4(a), b, c);
+    CREATE TABLE t7(a REFERENCES t3(a), b, c);
+    CREATE TABLE t8(a REFERENCES nosuchtable(a), b, c);
+  }
+} {}
+
+do_test genfkey-4.X {
+  set rc [catch {exec ./sqlite3 test.db .genfkey} msg]
+  list $rc $msg
+} "1 {[string trim {
+Error in table t5: foreign key columns do not exist
+Error in table t8: foreign key columns do not exist
+Error in table t4: implicit mapping to composite primary key
+Error in table t1: implicit mapping to non-existant primary key
+Error in table t2: implicit mapping to non-existant primary key
+Error in table t6: foreign key is not unique
+Error in table t7: foreign key is not unique
+}]}"
+
+# Test that ticket #3800 has been resolved.
+#
+do_test genfkey-5.1 {
+  execsql {
+    DROP TABLE t1; DROP TABLE t2; DROP TABLE t3;
+    DROP TABLE t4; DROP TABLE t5; DROP TABLE t6;
+    DROP TABLE t7; DROP TABLE t8;
+  }
+} {}
+do_test genfkey-5.2 {
+  execsql {
+    CREATE TABLE "t.3" (c1 PRIMARY KEY);
+    CREATE TABLE t13 (c1, foreign key(c1) references "t.3"(c1));
+  }
+} {}
+do_test genfkey-5.3 {
+  set rc [catch {exec ./sqlite3 test.db .genfkey} msg]
+} {0}
+do_test genfkey-5.4 {
+  db eval $msg
+} {}
+do_test genfkey-5.5 {
+  catchsql { INSERT INTO t13 VALUES(1) }
+} {1 {constraint failed}}
+do_test genfkey-5.5 {
+  catchsql { 
+    INSERT INTO "t.3" VALUES(1);
+    INSERT INTO t13 VALUES(1);
+  }
+} {0 {}}
+
+# Test also column names that require quoting.
+do_test genfkey-6.1 {
+  execsql {
+    DROP TABLE "t.3";
+    DROP TABLE t13;
+    CREATE TABLE p(
+      "a.1 first", "b.2 second", 
+      UNIQUE("a.1 first", "b.2 second")
+    );
+    CREATE TABLE c(
+      "c.1 I", "d.2 II", 
+        FOREIGN KEY("c.1 I", "d.2 II") 
+        REFERENCES p("a.1 first", "b.2 second")
+        ON UPDATE CASCADE ON DELETE CASCADE
+    );
+  }
+} {}
+do_test genfkey-6.2 {
+  set rc [catch {exec ./sqlite3 test.db .genfkey} msg]
+} {0}
+do_test genfkey-6.3 {
+  execsql $msg
+  execsql {
+    INSERT INTO p VALUES('A', 'B');
+    INSERT INTO p VALUES('C', 'D');
+    INSERT INTO c VALUES('A', 'B');
+    INSERT INTO c VALUES('C', 'D');
+    UPDATE p SET "a.1 first" = 'X' WHERE rowid = 1;
+    DELETE FROM p WHERE rowid = 2;
+  }
+  execsql { SELECT * FROM c }
+} {X B}
+
+do_test genfkey-6.4 {
+  execsql {
+    DROP TABLE p;
+    DROP TABLE c;
+    CREATE TABLE parent("a.1", PRIMARY KEY("a.1"));
+    CREATE TABLE child("b.2", FOREIGN KEY("b.2") REFERENCES parent("a.1"));
+  }
+  set rc [catch {exec ./sqlite3 test.db .genfkey} msg]
+} {0}
+do_test genfkey-6.5 {
+  execsql $msg
+  execsql {
+    INSERT INTO parent VALUES(1);
+    INSERT INTO child VALUES(1);
+  }
+  catchsql { UPDATE parent SET "a.1"=0 }
+} {1 {constraint failed}}
+do_test genfkey-6.6 {
+  catchsql { UPDATE child SET "b.2"=7 }
+} {1 {constraint failed}}
+do_test genfkey-6.7 {
+  execsql {
+    SELECT * FROM parent;
+    SELECT * FROM child;
+  }
+} {1 1}

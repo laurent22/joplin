@@ -1,0 +1,56 @@
+# 2018-08-04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+set testprefix countofview
+
+do_execsql_test 1.0 {
+  CREATE TABLE t2(c);
+  CREATE TABLE t3(f);
+
+  INSERT INTO t2 VALUES(1), (2);
+  INSERT INTO t3 VALUES(3);
+}
+
+do_execsql_test 1.1 {
+  select c from t2 union all select f from t3 limit 1 offset 1
+} {2}
+
+do_execsql_test 1.2 {
+  select count(*) from (
+    select c from t2 union all select f from t3 limit 1 offset 1
+  )
+} {1}
+
+do_execsql_test 1.3 {
+  select count(*) from (
+    select c from t2 union all select f from t3
+  )
+} {3}
+
+# 2019-05-15
+do_execsql_test 2.0 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(1),(99),('abc');
+  CREATE VIEW v1(x,y) AS SELECT x,1 FROM t1 UNION ALL SELECT x,2 FROM t1;
+  SELECT count(*) FROM v1 WHERE x<>1;
+} {4}
+do_execsql_test 2.1 {
+  SELECT count(*) FROM v1 GROUP BY y;
+} {3 3}
+
+
+
+finish_test

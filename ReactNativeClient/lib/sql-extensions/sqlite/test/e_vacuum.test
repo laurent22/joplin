@@ -1,0 +1,347 @@
+# 2010 September 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests to verify that the "testable statements" in 
+# the lang_vacuum.html document are correct.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+sqlite3_test_control_pending_byte 0x1000000
+
+proc create_db {{sql ""}} {
+  catch { db close }
+  forcedelete test.db
+  sqlite3 db test.db
+
+  db transaction {
+    execsql { PRAGMA page_size = 1024; }
+    execsql $sql
+    execsql {
+      CREATE TABLE t1(a PRIMARY KEY, b UNIQUE);
+      INSERT INTO t1 VALUES(1, randomblob(400));
+      INSERT INTO t1 SELECT a+1,  randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+2,  randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+4,  randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+8,  randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+16, randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+32, randomblob(400) FROM t1;
+      INSERT INTO t1 SELECT a+64, randomblob(400) FROM t1;
+
+      CREATE TABLE t2(a PRIMARY KEY, b UNIQUE);
+      INSERT INTO t2 SELECT * FROM t1;
+    }
+  }
+
+  return [expr {[file size test.db] / 1024}]
+}
+
+# This proc returns the number of contiguous blocks of pages that make up
+# the table or index named by the only argument. For example, if the table
+# occupies database pages 3, 4, 8 and 9, then this command returns 2 (there
+# are 2 fragments - one consisting of pages 3 and 4, the other of fragments
+# 8 and 9).
+#
+proc fragment_count {name} {
+  execsql { CREATE VIRTUAL TABLE temp.stat USING dbstat }
+  set nFrag 1
+  db eval {SELECT pageno FROM stat WHERE name = 't1' ORDER BY pageno} {
+    if {[info exists prevpageno] && $prevpageno != $pageno-1} {
+      incr nFrag
+    }
+    set prevpageno $pageno
+  }
+  execsql { DROP TABLE temp.stat }
+  set nFrag
+}
+
+
+# -- syntax diagram vacuum-stmt
+#
+do_execsql_test e_vacuum-0.1 { VACUUM } {}
+
+# EVIDENCE-OF: R-51469-36013 Unless SQLite is running in
+# "auto_vacuum=FULL" mode, when a large amount of data is deleted from
+# the database file it leaves behind empty space, or "free" database
+# pages.
+#
+# EVIDENCE-OF: R-60541-63059 Running VACUUM to rebuild the database
+# reclaims this space and reduces the size of the database file.
+#
+foreach {tn avmode sz} {
+  1 none        7 
+  2 full        8 
+  3 incremental 8
+} {
+  set nPage [create_db "PRAGMA auto_vacuum = $avmode"]
+
+  do_execsql_test e_vacuum-1.1.$tn.1 {
+    DELETE FROM t1;
+    DELETE FROM t2;
+  } {}
+
+  if {$avmode == "full"} {
+    # This branch tests the "unless ... auto_vacuum=FULL" in the requirement
+    # above. If auto_vacuum is set to FULL, then no empty space is left in
+    # the database file.
+    do_execsql_test e_vacuum-1.1.$tn.2 {PRAGMA freelist_count} 0
+  } else {
+    set freelist [expr {$nPage - $sz}]
+    if {$avmode == "incremental"} { 
+      # The page size is 1024 bytes. Therefore, assuming the database contains
+      # somewhere between 207 and 411 pages (it does), there are 2 pointer-map
+      # pages.
+      incr freelist -2
+    }
+    do_execsql_test e_vacuum-1.1.$tn.3 {PRAGMA freelist_count} $freelist
+    do_execsql_test e_vacuum-1.1.$tn.4 {VACUUM} {}
+  }
+
+  do_test e_vacuum-1.1.$tn.5 { expr {[file size test.db] / 1024} } $sz
+}
+
+# EVIDENCE-OF: R-50943-18433 Frequent inserts, updates, and deletes can
+# cause the database file to become fragmented - where data for a single
+# table or index is scattered around the database file.
+#
+# EVIDENCE-OF: R-05791-54928 Running VACUUM ensures that each table and
+# index is largely stored contiguously within the database file.
+#
+#   e_vacuum-1.2.1 - Perform many INSERT, UPDATE and DELETE ops on table t1.
+#   e_vacuum-1.2.2 - Verify that t1 and its indexes are now quite fragmented.
+#   e_vacuum-1.2.3 - Run VACUUM.
+#   e_vacuum-1.2.4 - Verify that t1 and its indexes are now much 
+#                    less fragmented.
+#
+ifcapable vtab&&compound {
+  create_db 
+  register_dbstat_vtab db
+  do_execsql_test e_vacuum-1.2.1 {
+    DELETE FROM t1 WHERE a%2;
+    INSERT INTO t1 SELECT b, a FROM t2 WHERE a%2;
+    UPDATE t1 SET b=randomblob(600) WHERE (a%2)==0;
+  } {}
+  
+  do_test e_vacuum-1.2.2.1 { expr [fragment_count t1]>100 } 1
+  do_test e_vacuum-1.2.2.2 { expr [fragment_count sqlite_autoindex_t1_1]>100 } 1
+  do_test e_vacuum-1.2.2.3 { expr [fragment_count sqlite_autoindex_t1_2]>100 } 1
+  
+  do_execsql_test e_vacuum-1.2.3 { VACUUM } {}
+  
+  # In practice, the tables and indexes each end up stored as two fragments -
+  # one containing the root page and another containing all other pages.
+  #
+  do_test e_vacuum-1.2.4.1 { fragment_count t1 }                    2
+  do_test e_vacuum-1.2.4.2 { fragment_count sqlite_autoindex_t1_1 } 2
+  do_test e_vacuum-1.2.4.3 { fragment_count sqlite_autoindex_t1_2 } 2
+}
+
+# EVIDENCE-OF: R-20474-44465 Normally, the database page_size and
+# whether or not the database supports auto_vacuum must be configured
+# before the database file is actually created.
+#
+do_test e_vacuum-1.3.1.1 {
+  create_db "PRAGMA page_size = 1024 ; PRAGMA auto_vacuum = FULL"
+  execsql { PRAGMA page_size ; PRAGMA auto_vacuum }
+} {1024 1}
+do_test e_vacuum-1.3.1.2 {
+  execsql { PRAGMA page_size = 2048 }
+  execsql { PRAGMA auto_vacuum = NONE }
+  execsql { PRAGMA page_size ; PRAGMA auto_vacuum }
+} {1024 1}
+
+if {![nonzero_reserved_bytes]} {
+  # EVIDENCE-OF: R-08570-19916 However, when not in write-ahead log mode,
+  # the page_size and/or auto_vacuum properties of an existing database
+  # may be changed by using the page_size and/or pragma auto_vacuum
+  # pragmas and then immediately VACUUMing the database.
+  #
+  do_test e_vacuum-1.3.2.1 {
+    execsql { PRAGMA journal_mode = delete }
+    execsql { PRAGMA page_size = 2048 }
+    execsql { PRAGMA auto_vacuum = NONE }
+    execsql VACUUM
+    execsql { PRAGMA page_size ; PRAGMA auto_vacuum }
+  } {2048 0}
+  
+  # EVIDENCE-OF: R-48521-51450 When in write-ahead log mode, only the
+  # auto_vacuum support property can be changed using VACUUM.
+  #
+  if {[wal_is_capable]} {
+    do_test e_vacuum-1.3.3.1 {
+      execsql { PRAGMA journal_mode = wal }
+      execsql { PRAGMA page_size ; PRAGMA auto_vacuum }
+    } {2048 0}
+    do_test e_vacuum-1.3.3.2 {
+      execsql { PRAGMA page_size = 1024 }
+      execsql { PRAGMA auto_vacuum = FULL }
+      execsql VACUUM
+      execsql { PRAGMA page_size ; PRAGMA auto_vacuum }
+    } {2048 1}
+  }
+}
+  
+# EVIDENCE-OF: R-55119-57913 By default, VACUUM only works only on the
+# main database.
+forcedelete test.db2
+create_db { PRAGMA auto_vacuum = NONE }
+do_execsql_test e_vacuum-2.1.1 {
+  ATTACH 'test.db2' AS aux;
+  PRAGMA aux.page_size = 1024;
+  CREATE TABLE aux.t3 AS SELECT * FROM t1;
+  DELETE FROM t3;
+} {}
+set original_size [file size test.db2]
+
+# Vacuuming the main database does not affect aux
+do_execsql_test e_vacuum-2.1.3 { VACUUM } {}
+do_test e_vacuum-2.1.6 { expr {[file size test.db2]==$::original_size} } 1
+
+# EVIDENCE-OF: R-36598-60500 Attached databases can be vacuumed by
+# appending the appropriate schema-name to the VACUUM statement.
+do_execsql_test e_vacuum-2.1.7 { VACUUM aux; } {}
+do_test e_vacuum-2.1.8 { expr {[file size test.db2]<$::original_size} } 1
+
+# EVIDENCE-OF: R-17495-17419 The VACUUM command may change the ROWIDs of
+# entries in any tables that do not have an explicit INTEGER PRIMARY
+# KEY.
+#
+#   Tests e_vacuum-3.1.1 - 3.1.2 demonstrate that rowids can change when
+#   a database is VACUUMed. Tests e_vacuum-3.1.3 - 3.1.4 show that adding
+#   an INTEGER PRIMARY KEY column to a table stops this from happening.
+#
+#   Update 2019-01-07:  Rowids are now preserved by VACUUM.
+#
+do_execsql_test e_vacuum-3.1.1 {
+  CREATE TABLE t4(x);
+  INSERT INTO t4(x) VALUES('x');
+  INSERT INTO t4(x) VALUES('y');
+  INSERT INTO t4(x) VALUES('z');
+  DELETE FROM t4 WHERE x = 'y';
+  SELECT rowid, x FROM t4;
+} {1 x 3 z}
+do_execsql_test e_vacuum-3.1.2 {
+  VACUUM;
+  SELECT rowid, x FROM t4;
+} {1 x 2 z}
+
+# Rowids are preserved if an INTEGER PRIMARY KEY is used
+do_execsql_test e_vacuum-3.1.3 {
+  CREATE TABLE t5(x, y INTEGER PRIMARY KEY);
+  INSERT INTO t5(x) VALUES('x');
+  INSERT INTO t5(x) VALUES('y');
+  INSERT INTO t5(x) VALUES('z');
+  DELETE FROM t5 WHERE x = 'y';
+  SELECT rowid, x FROM t5;
+} {1 x 3 z}
+do_execsql_test e_vacuum-3.1.4 {
+  VACUUM;
+  SELECT rowid, x FROM t5;
+} {1 x 3 z}
+
+# Rowid is preserved for VACUUM INTO
+do_execsql_test e_vacuum-3.1.5 {
+  DROP TABLE t5;
+  CREATE TABLE t5(x);
+  INSERT INTO t5(x) VALUES('x');
+  INSERT INTO t5(x) VALUES('y');
+  INSERT INTO t5(x) VALUES('z');
+  DELETE FROM t5 WHERE x = 'y';
+  SELECT rowid, x FROM t5;
+} {1 x 3 z}
+forcedelete test2.db
+do_execsql_test e_vacuum-3.1.6 {
+  VACUUM INTO 'test2.db';
+  ATTACH 'test2.db' AS aux1;
+  SELECT rowid, x FROM aux1.t5;
+  DETACH aux1;
+} {1 x 3 z}
+
+# Rowids are not renumbered if the table being vacuumed
+# has indexes.
+do_execsql_test e_vacuum-3.1.7 {
+  DROP TABLE t5;
+  CREATE TABLE t5(x,y,z);
+  INSERT INTO t5(x) VALUES('x');
+  INSERT INTO t5(x) VALUES('y');
+  INSERT INTO t5(x) VALUES('z');
+  UPDATE t5 SET y=x, z=random();
+  DELETE FROM t5 WHERE x = 'y';
+  CREATE INDEX t5x ON t5(x);
+  CREATE UNIQUE INDEX t5y ON t5(y);
+  CREATE INDEX t5zxy ON t5(z,x,y);
+  SELECT rowid, x FROM t5;
+} {1 x 3 z}
+do_execsql_test e_vacuum-3.1.8 {
+  VACUUM;
+  SELECT rowid, x FROM t5;
+} {1 x 3 z}
+
+# EVIDENCE-OF: R-12218-18073 A VACUUM will fail if there is an open
+# transaction on the database connection that is attempting to run the
+# VACUUM.
+#
+do_execsql_test  e_vacuum-3.2.1.1 { BEGIN } {}
+do_catchsql_test e_vacuum-3.2.1.2 { 
+  VACUUM 
+} {1 {cannot VACUUM from within a transaction}}
+do_execsql_test  e_vacuum-3.2.1.3 { COMMIT } {}
+do_execsql_test  e_vacuum-3.2.1.4 { VACUUM } {}
+do_execsql_test  e_vacuum-3.2.1.5 { SAVEPOINT x } {}
+do_catchsql_test e_vacuum-3.2.1.6 { 
+  VACUUM 
+} {1 {cannot VACUUM from within a transaction}}
+do_execsql_test  e_vacuum-3.2.1.7 { COMMIT } {}
+do_execsql_test  e_vacuum-3.2.1.8 { VACUUM } {}
+
+create_db
+do_test e_vacuum-3.2.2.1 {
+  set res ""
+  db eval { SELECT a FROM t1 } {
+    if {$a == 10} { set res [catchsql VACUUM] }
+  }
+  set res
+} {1 {cannot VACUUM - SQL statements in progress}}
+
+
+# EVIDENCE-OF: R-55138-13241 An alternative to using the VACUUM command
+# to reclaim space after data has been deleted is auto-vacuum mode,
+# enabled using the auto_vacuum pragma.
+#
+do_test e_vacuum-3.3.1 {
+  create_db { PRAGMA auto_vacuum = FULL }
+  execsql { PRAGMA auto_vacuum }
+} {1}
+
+# EVIDENCE-OF: R-64844-34873 When auto_vacuum is enabled for a database
+# free pages may be reclaimed after deleting data, causing the file to
+# shrink, without rebuilding the entire database using VACUUM.
+#
+do_test e_vacuum-3.3.2.1 {
+  create_db { PRAGMA auto_vacuum = FULL }
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+  }
+  expr {[file size test.db] / 1024}
+} {8}
+do_test e_vacuum-3.3.2.2 {
+  create_db { PRAGMA auto_vacuum = INCREMENTAL }
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+    PRAGMA incremental_vacuum;
+  }
+  expr {[file size test.db] / 1024}
+} {8}
+
+finish_test

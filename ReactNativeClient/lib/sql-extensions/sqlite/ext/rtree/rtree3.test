@@ -1,0 +1,266 @@
+# 2008 Feb 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing that the r-tree correctly handles
+# out-of-memory conditions.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+# Test summary:
+#
+#   rtree3-1: Test OOM in simple CREATE TABLE, INSERT, DELETE and SELECT 
+#             commands on an almost empty table.
+#
+#   rtree3-2: Test OOM in a DROP TABLE command.
+#
+#   rtree3-3a: Test OOM during a transaction to insert 100 pseudo-random rows.
+#
+#   rtree3-3b: Test OOM during a transaction deleting all entries in the
+#              database constructed in [rtree3-3a] in pseudo-random order.
+#
+#   rtree3-4a: OOM during "SELECT count(*) FROM ..." on a big table.
+#
+#   rtree3-4b: OOM while deleting rows from a big table.
+#
+#   rtree3-5: Test OOM while inserting rows into a big table.
+#
+#   rtree3-6: Test OOM while deleting all rows of a table, one at a time.
+#
+#   rtree3-7: OOM during an ALTER TABLE RENAME TABLE command.
+#
+#   rtree3-8: Test OOM while registering the r-tree module with sqlite.
+#
+#   rtree3-11: OOM following a constraint failure
+#
+do_faultsim_test rtree3-1 -faults oom* -prep {
+  faultsim_delete_and_reopen
+} -body {
+  execsql {
+    BEGIN TRANSACTION;
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+    INSERT INTO rt VALUES(NULL, 3, 5, 7, 9);
+    INSERT INTO rt VALUES(NULL, 13, 15, 17, 19);
+    DELETE FROM rt WHERE ii = 1;
+    SELECT * FROM rt;
+    SELECT ii FROM rt WHERE ii = 2;
+    COMMIT;
+  }
+}
+
+do_test rtree3-2.prep {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+    INSERT INTO rt VALUES(NULL, 3, 5, 7, 9);
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-2 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { DROP TABLE rt } 
+}
+
+do_malloc_test rtree3-3.prep {
+  faultsim_delete_and_reopen
+  execsql {
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2, +a1, +a2);
+    INSERT INTO rt VALUES(NULL, 3, 5, 7, 9);
+  }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test rtree3-3a -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval BEGIN
+  for {set ii 0} {$ii < 100} {incr ii} {
+    set f [expr rand()]
+    db eval {INSERT INTO rt VALUES(NULL, $f*10.0, $f*10.0, $f*15.0, $f*15.0)}
+  }
+  db eval COMMIT
+}
+faultsim_save_and_close
+
+do_faultsim_test rtree3-3b -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval BEGIN
+  for {set ii 0} {$ii < 100} {incr ii} {
+    set f [expr rand()]
+    db eval { DELETE FROM rt WHERE x1<($f*10.0) AND x1>($f*10.5) }
+  }
+  db eval COMMIT
+} 
+
+do_test rtree3-4.prep {
+  faultsim_delete_and_reopen
+  execsql {
+    BEGIN;
+    PRAGMA page_size = 512;
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+  }
+  for {set i 0} {$i < 1500} {incr i} {
+    execsql { INSERT INTO rt VALUES($i, $i, $i+1, $i, $i+1) }
+  }
+  execsql { COMMIT }
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test rtree3-4a -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { SELECT count(*) FROM rt }
+} -test {
+  faultsim_test_result {0 1500}
+}
+
+do_faultsim_test rtree3-4b -faults oom-transient -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { DELETE FROM rt WHERE ii BETWEEN 1 AND 100 }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_test rtree3-5.prep {
+  faultsim_delete_and_reopen
+  execsql {
+    BEGIN;
+    PRAGMA page_size = 512;
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+  }
+  for {set i 0} {$i < 100} {incr i} {
+    execsql { INSERT INTO rt VALUES($i, $i, $i+1, $i, $i+1) }
+  }
+  execsql { COMMIT }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-5 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  for {set i 100} {$i < 110} {incr i} {
+    execsql { INSERT INTO rt VALUES($i, $i, $i+1, $i, $i+1) }
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_test rtree3-6.prep {
+  faultsim_delete_and_reopen
+  execsql {
+    BEGIN;
+    PRAGMA page_size = 512;
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+  }
+  for {set i 0} {$i < 50} {incr i} {
+    execsql { INSERT INTO rt VALUES($i, $i, $i+1, $i, $i+1) }
+  }
+  execsql { COMMIT }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-6 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql BEGIN
+  for {set i 0} {$i < 50} {incr i} {
+    execsql { DELETE FROM rt WHERE ii=$i }
+  }
+  execsql COMMIT
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_test rtree3-7.prep {
+  faultsim_delete_and_reopen
+  execsql { CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2) }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-7 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { ALTER TABLE rt RENAME TO rt2 }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test rtree3-8 -faults oom-* -prep {
+  catch { db close }
+} -body {
+  sqlite3 db test.db
+} 
+
+do_faultsim_test rtree3-9 -faults oom-* -prep {
+  sqlite3 db :memory:
+} -body {
+  set rc [register_cube_geom db]
+  if {$rc != "SQLITE_OK"} { error $rc }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+
+do_test rtree3-10.prep {
+  faultsim_delete_and_reopen
+  execsql { 
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2, z1, z2);
+    INSERT INTO rt VALUES(1,  10, 10, 10, 11, 11, 11);
+    INSERT INTO rt VALUES(2,  5, 6, 6, 7, 7, 8);
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-10 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  register_cube_geom db
+  execsql { SELECT * FROM rt }
+} -body {
+  execsql { SELECT ii FROM rt WHERE ii MATCH cube(4.5, 5.5, 6.5, 1, 1, 1) }
+} -test {
+  faultsim_test_result {0 2}
+}
+
+
+do_test rtree3-11.prep {
+  faultsim_delete_and_reopen
+  execsql { 
+    CREATE VIRTUAL TABLE rt USING rtree(ii, x1, x2, y1, y2);
+    INSERT INTO rt VALUES(1, 2, 3, 4, 5);
+  }
+  faultsim_save_and_close
+} {}
+do_faultsim_test rtree3-10.1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM rt }
+} -body {
+  execsql { INSERT INTO rt VALUES(1, 2, 3, 4, 5) }
+} -test {
+  faultsim_test_result {1 {UNIQUE constraint failed: rt.ii}} \
+                       {1 {constraint failed}}
+}
+do_faultsim_test rtree3-10.2 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM rt }
+} -body {
+  execsql { INSERT INTO rt VALUES(2, 2, 3, 5, 4) }
+} -test {
+  faultsim_test_result {1 {rtree constraint failed: rt.(y1<=y2)}} \
+                       {1 {constraint failed}}
+}
+
+finish_test

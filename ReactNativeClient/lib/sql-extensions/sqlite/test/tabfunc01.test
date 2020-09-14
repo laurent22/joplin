@@ -1,0 +1,236 @@
+# 2015-08-19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# This file implements tests for table-valued-functions implemented using
+# eponymous virtual tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix tabfunc01
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+load_static_extension db series
+load_static_extension db carray
+load_static_extension db remember
+
+do_execsql_test tabfunc01-1.1 {
+  SELECT *, '|' FROM generate_series WHERE start=1 AND stop=9 AND step=2;
+} {1 | 3 | 5 | 7 | 9 |}
+do_execsql_test tabfunc01-1.1b {
+  PRAGMA table_xinfo(generate_series);
+} {0 value {} 0 {} 0 0 1 start {} 0 {} 0 1 2 stop {} 0 {} 0 1 3 step {} 0 {} 0 1}
+do_execsql_test tabfunc01-1.2 {
+  SELECT *, '|' FROM generate_series LIMIT 5;
+} {0 | 1 | 2 | 3 | 4 |}
+do_catchsql_test tabfunc01-1.3 {
+  CREATE VIRTUAL TABLE t1 USING generate_series;
+} {1 {no such module: generate_series}}
+do_execsql_test tabfunc01-1.4 {
+  SELECT * FROM generate_series(1,9,2);
+} {1 3 5 7 9}
+do_execsql_test tabfunc01-1.5 {
+  SELECT * FROM generate_series(1,9);
+} {1 2 3 4 5 6 7 8 9}
+do_execsql_test tabfunc01-1.6 {
+  SELECT * FROM generate_series(1,10) WHERE step=3;
+} {1 4 7 10}
+do_catchsql_test tabfunc01-1.7 {
+  SELECT * FROM generate_series(1,9,2,11);
+} {1 {too many arguments on generate_series() - max 3}}
+
+do_execsql_test tabfunc01-1.8 {
+  SELECT * FROM generate_series(0,32,5) ORDER BY rowid DESC;
+} {30 25 20 15 10 5 0}
+do_execsql_test tabfunc01-1.9 {
+  SELECT rowid, * FROM generate_series(0,32,5) ORDER BY value DESC;
+} {1 30 2 25 3 20 4 15 5 10 6 5 7 0}
+do_execsql_test tabfunc01-1.10 {
+  SELECT rowid, * FROM generate_series(0,32,5) ORDER BY +value DESC;
+} {7 30 6 25 5 20 4 15 3 10 2 5 1 0}
+
+do_execsql_test tabfunc01-1.20 {
+  CREATE VIEW v1(a,b) AS VALUES(1,2),(3,4);
+  SELECT * FROM v1;
+} {1 2 3 4}
+do_catchsql_test tabfunc01-1.21.1 {
+  SELECT * FROM v1(55);
+} {1 {'v1' is not a function}}
+do_catchsql_test tabfunc01-1.21.2 {
+  SELECT * FROM v1();
+} {1 {'v1' is not a function}}
+do_execsql_test tabfunc01-1.22 {
+  CREATE VIEW v2(x) AS SELECT value FROM generate_series(1,5);
+  SELECT * FROM v2;
+} {1 2 3 4 5}
+do_catchsql_test tabfunc01-1.23.1 {
+  SELECT * FROM v2(55);
+} {1 {'v2' is not a function}}
+do_catchsql_test tabfunc01-1.23.2 {
+  SELECT * FROM v2();
+} {1 {'v2' is not a function}}
+do_execsql_test tabfunc01-1.24 {
+  CREATE TABLE t0(x);
+  INSERT INTO t0(x) VALUES(123),(456),(789);
+  SELECT * FROM t0 ORDER BY x;
+} {123 456 789}
+do_catchsql_test tabfunc01-1.25 {
+  SELECT * FROM t0(55) ORDER BY x;
+} {1 {'t0' is not a function}}
+do_catchsql_test tabfunc01-1.26 {
+  WITH w0 AS (SELECT * FROM t0)
+  INSERT INTO t0(x) SELECT * FROM w0()
+} {1 {'w0' is not a function}}
+
+do_execsql_test tabfunc01-2.1 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1(x) VALUES(2),(3);
+  SELECT *, '|' FROM t1, generate_series(1,x) ORDER BY 1, 2
+} {2 1 | 2 2 | 3 1 | 3 2 | 3 3 |}
+do_execsql_test tabfunc01-2.2 {
+  SELECT *, '|' FROM (SELECT x FROM t1) AS y, generate_series(1,y.x)
+  ORDER BY 1, 2;
+} {2 1 | 2 2 | 3 1 | 3 2 | 3 3 |}
+
+do_execsql_test tabfunc01-2.50 {
+  SELECT * FROM generate_series() LIMIT 5;
+} {0 1 2 3 4}
+
+do_execsql_test tabfunc01-3.1 {
+  SELECT DISTINCT value FROM generate_series(1,x), t1 ORDER BY 1;
+} {1 2 3}
+
+# Eponymous virtual table exists in all schemas.
+#
+do_execsql_test tabfunc01-4.1 {
+  SELECT * FROM main.generate_series(1,4)
+} {1 2 3 4}
+do_execsql_test tabfunc01-4.2 {
+  SELECT * FROM temp.generate_series(1,4)
+} {1 2 3 4}
+do_execsql_test tabfunc01-4.3 {
+  ATTACH ':memory:' AS aux1;
+  CREATE TABLE aux1.t1(a,b,c);
+  SELECT * FROM aux1.generate_series(1,4)
+} {1 2 3 4}
+
+# 2018-12-03: Fix bug reported by by private email.
+do_execsql_test tabfunc01-4.4 {
+  SELECT * FROM (generate_series(1,5,2)) AS x LIMIT 10;
+} {1 3 5}
+
+# The next series of tests is verifying that virtual table are able
+# to optimize the IN operator, even on terms that are not marked "omit".
+# When the generate_series virtual table is compiled for the testfixture,
+# the special -DSQLITE_SERIES_CONSTRAINT_VERIFY=1 option is used, which
+# causes the xBestIndex method of generate_series to leave the
+# sqlite3_index_constraint_usage.omit flag set to 0, which should cause
+# the SQLite core to verify the start=, stop=, and step= constraints on
+# each step of output.  At one point, the IN operator could not be used
+# by virtual tables unless omit was set.
+#
+do_execsql_test tabfunc01-500 {
+  SELECT * FROM generate_series WHERE start IN (1,7) AND stop=20 AND step=10
+  ORDER BY +1;
+} {1 7 11 17}
+
+# Table-valued functions on the RHS of an IN operator
+#
+do_execsql_test tabfunc01-600 {
+  CREATE TABLE t600(a INTEGER PRIMARY KEY, b TEXT);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+    INSERT INTO t600(a,b) SELECT x, printf('(%03d)',x) FROM c;
+  SELECT b FROM t600 WHERE a IN generate_series(2,52,10);
+} {(002) (012) (022) (032) (042) (052)}
+
+
+do_test tabfunc01-700 {
+  set PTR1 [intarray_addr 5 7 13 17 23]
+  db eval {
+    SELECT b FROM t600, carray(inttoptr($PTR1),5) WHERE a=value;
+  }
+} {(005) (007) (013) (017) (023)}
+do_test tabfunc01-701 {
+  db eval {
+    SELECT b FROM t600 WHERE a IN carray(inttoptr($PTR1),5,'int32');
+  }
+} {(005) (007) (013) (017) (023)}
+do_test tabfunc01-702 {
+  db eval {
+    SELECT b FROM t600 WHERE a IN carray(inttoptr($PTR1),4,'int32');
+  }
+} {(005) (007) (013) (017)}
+do_catchsql_test tabfunc01-710 {
+  SELECT b FROM t600 WHERE a IN carray(inttoptr($PTR1),5,'int33');
+} {1 {unknown datatype: 'int33'}}
+
+do_test tabfunc01-720 {
+  set PTR2 [int64array_addr 5 7 13 17 23]
+  db eval {
+    SELECT b FROM t600, carray(inttoptr($PTR2),5,'int64') WHERE a=value;
+  }
+} {(005) (007) (013) (017) (023)}
+do_test tabfunc01-721 {
+  db eval {
+    SELECT remember(123,inttoptr($PTR2));
+    SELECT value FROM carray(inttoptr($PTR2),5,'int64');
+  }
+} {123 123 7 13 17 23}
+do_test tabfunc01-722 {
+  set PTR3 [expr {$PTR2+16}]
+  db eval {
+    SELECT remember(987,inttoptr($PTR3));
+    SELECT value FROM carray(inttoptr($PTR2),5,'int64');
+  }
+} {987 123 7 987 17 23}
+
+do_test tabfunc01-730 {
+  set PTR4 [doublearray_addr 5.0 7.0 13.0 17.0 23.0]
+  db eval {
+    SELECT b FROM t600, carray(inttoptr($PTR4),5,'double') WHERE a=value;
+  }
+} {(005) (007) (013) (017) (023)}
+
+do_test tabfunc01-740 {
+  set PTR5 [textarray_addr x5 x7 x13 x17 x23]
+  db eval {
+    SELECT b FROM t600, carray(inttoptr($PTR5),5,'char*')
+     WHERE a=trim(value,'x');
+  }
+} {(005) (007) (013) (017) (023)}
+
+do_test tabfunc01-750 {
+  db eval {
+    SELECT aa.value, bb.value, '|'
+      FROM carray(inttoptr($PTR4),5,'double') AS aa
+      JOIN carray(inttoptr($PTR5),5,'char*') AS bb ON aa.rowid=bb.rowid;
+  }
+} {5.0 x5 | 7.0 x7 | 13.0 x13 | 17.0 x17 | 23.0 x23 |}
+
+# ticket https://www.sqlite.org/src/info/2ae0c599b735d59e
+do_test tabfunc01-751 {
+  db eval {
+    SELECT aa.value, bb.value, '|'
+      FROM carray(inttoptr($PTR4),5,'double') AS aa
+      LEFT JOIN carray(inttoptr($PTR5),5,'char*') AS bb ON aa.rowid=bb.rowid;
+  }
+} {5.0 x5 | 7.0 x7 | 13.0 x13 | 17.0 x17 | 23.0 x23 |}
+
+# Free up memory allocations
+intarray_addr
+int64array_addr
+doublearray_addr
+textarray_addr
+
+finish_test

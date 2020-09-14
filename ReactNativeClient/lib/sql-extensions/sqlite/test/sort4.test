@@ -1,0 +1,208 @@
+# 2014 May 6.
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. 
+#
+# The tests in this file are brute force tests of the multi-threaded
+# sorter.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix sort4
+db close
+sqlite3_shutdown
+sqlite3_config_pmasz 10
+sqlite3_initialize
+sqlite3 db test.db
+
+
+# Configure the sorter to use 3 background threads.
+#
+# EVIDENCE-OF: R-19249-32353 SQLITE_LIMIT_WORKER_THREADS The maximum
+# number of auxiliary worker threads that a single prepared statement
+# may start.
+#
+do_test sort4-init001 {
+  db eval {PRAGMA threads=5}
+  sqlite3_limit db SQLITE_LIMIT_WORKER_THREADS -1
+} {5}
+do_test sort4-init002 {
+  sqlite3_limit db SQLITE_LIMIT_WORKER_THREADS 3
+  db eval {PRAGMA threads}
+} {3}
+
+
+# Minimum number of seconds to run for. If the value is 0, each test
+# is run exactly once. Otherwise, tests are repeated until the timeout
+# expires.
+set SORT4TIMEOUT 0
+if {[permutation] == "multithread"} { set SORT4TIMEOUT 300 }
+
+#--------------------------------------------------------------------
+# Set up a table "t1" containing $nRow rows. Each row contains also
+# contains blob fields that collectively contain at least $nPayload 
+# bytes of content. The table schema is as follows:
+#
+#   CREATE TABLE t1(a INTEGER, <extra-columns>, b INTEGER);
+#
+# For each row, the values of columns "a" and "b" are set to the same
+# pseudo-randomly selected integer. The "extra-columns", of which there
+# are at most eight, are named c0, c1, c2 etc. Column c0 contains a 4
+# byte string. Column c1 an 8 byte string. Field c2 16 bytes, and so on.
+#
+# This table is intended to be used for testing queries of the form: 
+#
+#   SELECT a, <cols>, b FROM t1 ORDER BY a;
+#
+# The test code checks that rows are returned in order, and that the 
+# values of "a" and "b" are the same for each row (the idea being that
+# if field "b" at the end of the sorter record has not been corrupted, 
+# the rest of the record is probably Ok as well).
+#
+proc populate_table {nRow nPayload} {
+  set nCol 0
+
+  set n 0
+  for {set nCol 0} {$n < $nPayload} {incr nCol} {
+    incr n [expr (4 << $nCol)]
+  }
+
+  set cols [lrange [list xxx c0 c1 c2 c3 c4 c5 c6 c7] 1 $nCol]
+  set data [lrange [list xxx \
+      randomblob(4) randomblob(8) randomblob(16) randomblob(32) \
+      randomblob(64) randomblob(128) randomblob(256) randomblob(512) \
+  ] 1 $nCol]
+
+  execsql { DROP TABLE IF EXISTS t1 }
+
+  db transaction {
+    execsql "CREATE TABLE t1(a, [join $cols ,], b);"
+    set insert "INSERT INTO t1 VALUES(:k, [join $data ,], :k)"
+    for {set i 0} {$i < $nRow} {incr i} {
+      set k [expr int(rand()*1000000000)]
+      execsql $insert
+    }
+  }
+}
+
+# Helper for [do_sorter_test]
+#
+proc sorter_test {nRow nRead nPayload} {
+  set res [list]
+
+  set nLoad [expr ($nRow > $nRead) ? $nRead : $nRow]
+
+  set nPayload [expr (($nPayload+3)/4) * 4]
+  set cols [list]
+  foreach {mask col} { 
+    0x04  c0 0x08  c1 0x10  c2 0x20  c3 
+    0x40  c4 0x80  c5 0x100 c6 0x200 c7 
+  } {
+    if {$nPayload & $mask} { lappend cols $col }
+  }
+
+  # Create two SELECT statements. Statement $sql1 uses the sorter to sort
+  # $nRow records of a bit over $nPayload bytes each read from the "t1"
+  # table created by [populate_table] proc above. Rows are sorted in order
+  # of the integer field in each "t1" record.
+  #
+  # The second SQL statement sorts the same set of rows as the first, but
+  # uses a LIMIT clause, causing SQLite to use a temp table instead of the
+  # sorter for sorting.
+  #
+  set sql1 "SELECT a, [join $cols ,], b FROM t1 WHERE rowid<=$nRow ORDER BY a"
+  set sql2 "SELECT a FROM t1 WHERE rowid<=$nRow ORDER BY a LIMIT $nRead"
+
+  # Pass the two SQL statements to a helper command written in C. This
+  # command steps statement $sql1 $nRead times and compares the integer
+  # values in the rows returned with the results of executing $sql2. If
+  # the comparison fails (indicating some bug in the sorter), a Tcl
+  # exception is thrown.
+  #
+  sorter_test_sort4_helper db $sql1 $nRead $sql2
+  set {} {} 
+}
+
+# Usage:
+#
+#   do_sorter_test <testname> <args>...
+#
+# where <args> are any of the following switches:
+#
+#   -rows N          (number of rows to have sorter sort)
+#   -read N          (number of rows to read out of sorter)
+#   -payload N       (bytes of payload to read with each row)
+#   -cachesize N     (Value for "PRAGMA cache_size = ?")
+#   -repeats N       (number of times to repeat test)
+#   -fakeheap BOOL   (true to use separate allocations for in-memory records)
+#
+proc do_sorter_test {tn args} {
+  set a(-rows)      1000
+  set a(-repeats)   1
+  set a(-read)      100
+  set a(-payload)   100
+  set a(-cachesize) 100
+  set a(-fakeheap)  0
+
+  foreach {s val} $args {
+    if {[info exists a($s)]==0} { 
+      unset a(-cachesize)
+      set optlist "[join [array names a] ,] or -cachesize"
+      error "Unknown option $s, expected $optlist"
+    }
+    set a($s) $val
+  }
+  if {[permutation] == "memsys3" || [permutation] == "memsys5"} {
+    set a(-fakeheap) 0
+  }
+  if {$a(-fakeheap)} { sorter_test_fakeheap 1 }
+
+
+  db eval "PRAGMA cache_size = $a(-cachesize)"
+  do_test $tn [subst -nocommands {
+    for {set i 0} {[set i] < $a(-repeats)} {incr i} {
+      sorter_test $a(-rows) $a(-read) $a(-payload)
+    }
+  }] {}
+
+  if {$a(-fakeheap)} { sorter_test_fakeheap 0 }
+}
+
+proc clock_seconds {} {
+  db one {SELECT strftime('%s')}
+}
+
+#-------------------------------------------------------------------------
+# Begin tests here.
+
+# Create a test database.
+do_test 1 {
+  execsql "PRAGMA page_size = 4096"
+  populate_table 100000 500
+} {}
+
+set iTimeLimit [expr [clock_seconds] + $SORT4TIMEOUT]
+
+for {set t 2} {1} {incr tn} {
+  do_sorter_test $t.2 -repeats 10 -rows 1000   -read 100
+  do_sorter_test $t.3 -repeats 10 -rows 100000 -read 1000
+  do_sorter_test $t.4 -repeats 10 -rows 100000 -read 1000 -payload 500
+  do_sorter_test $t.5 -repeats 10 -rows 100000 -read 100000 -payload 8
+  do_sorter_test $t.6 -repeats 10 -rows 100000 -read 10 -payload 8
+  do_sorter_test $t.7 -repeats 10 -rows 10000 -read 10000 -payload 8 -fakeheap 1
+  do_sorter_test $t.8 -repeats 10 -rows 100000 -read 10000 -cachesize 250
+
+  set iNow [clock_seconds]
+  if {$iNow>=$iTimeLimit} break
+  do_test "$testprefix-([expr $iTimeLimit-$iNow] seconds remain)" {} {}
+}
+
+finish_test

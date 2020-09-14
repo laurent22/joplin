@@ -1,0 +1,102 @@
+#
+# This Makefile is designed for use with Makefile.msc in the root directory
+# of this project.  The Makefile.msc should contain:
+#
+#    LSMDIR=$(TOP)\ext\lsm1
+#    !INCLUDE $(LSMDIR)\Makefile.msc
+#
+# The most useful targets are [lsmtest.exe] and [lsm.dll].
+#
+
+LSMOBJ    = \
+  lsm_ckpt.lo \
+  lsm_file.lo \
+  lsm_log.lo \
+  lsm_main.lo \
+  lsm_mem.lo \
+  lsm_mutex.lo \
+  lsm_shared.lo \
+  lsm_sorted.lo \
+  lsm_str.lo \
+  lsm_tree.lo \
+  lsm_unix.lo \
+  lsm_win32.lo \
+  lsm_varint.lo \
+  lsm_vtab.lo
+
+LSMHDR   = \
+  $(LSMDIR)\lsm.h \
+  $(LSMDIR)\lsmInt.h
+
+LSMTESTSRC = $(LSMDIR)\lsm-test\lsmtest1.c $(LSMDIR)\lsm-test\lsmtest2.c     \
+             $(LSMDIR)\lsm-test\lsmtest3.c $(LSMDIR)\lsm-test\lsmtest4.c     \
+             $(LSMDIR)\lsm-test\lsmtest5.c $(LSMDIR)\lsm-test\lsmtest6.c     \
+             $(LSMDIR)\lsm-test\lsmtest7.c $(LSMDIR)\lsm-test\lsmtest8.c     \
+             $(LSMDIR)\lsm-test\lsmtest9.c                                   \
+             $(LSMDIR)\lsm-test\lsmtest_datasource.c \
+             $(LSMDIR)\lsm-test\lsmtest_func.c $(LSMDIR)\lsm-test\lsmtest_io.c  \
+             $(LSMDIR)\lsm-test\lsmtest_main.c $(LSMDIR)\lsm-test\lsmtest_mem.c \
+             $(LSMDIR)\lsm-test\lsmtest_tdb.c $(LSMDIR)\lsm-test\lsmtest_tdb3.c \
+             $(LSMDIR)\lsm-test\lsmtest_util.c $(LSMDIR)\lsm-test\lsmtest_win32.c
+
+# all: lsm.dll lsmtest.exe
+
+LSMOPTS = $(NO_WARN) -DLSM_MUTEX_WIN32=1 -I$(LSMDIR)
+
+!IF $(DEBUG)>2
+LSMOPTS = $(LSMOPTS) -DLSM_DEBUG=1
+!ENDIF
+
+!IF $(MEMDEBUG)!=0
+LSMOPTS = $(LSMOPTS) -DLSM_DEBUG_MEM=1
+!ENDIF
+
+lsm_ckpt.lo:	$(LSMDIR)\lsm_ckpt.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_ckpt.c
+
+lsm_file.lo:	$(LSMDIR)\lsm_file.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_file.c
+
+lsm_log.lo:	$(LSMDIR)\lsm_log.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_log.c
+
+lsm_main.lo:	$(LSMDIR)\lsm_main.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_main.c
+
+lsm_mem.lo:	$(LSMDIR)\lsm_mem.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_mem.c
+
+lsm_mutex.lo:	$(LSMDIR)\lsm_mutex.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_mutex.c
+
+lsm_shared.lo:	$(LSMDIR)\lsm_shared.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_shared.c
+
+lsm_sorted.lo:	$(LSMDIR)\lsm_sorted.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_sorted.c
+
+lsm_str.lo:	$(LSMDIR)\lsm_str.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_str.c
+
+lsm_tree.lo:	$(LSMDIR)\lsm_tree.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_tree.c
+
+lsm_unix.lo:	$(LSMDIR)\lsm_unix.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_unix.c
+
+lsm_win32.lo:	$(LSMDIR)\lsm_win32.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_win32.c
+
+lsm_varint.lo:	$(LSMDIR)\lsm_varint.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_varint.c
+
+lsm_vtab.lo:	$(LSMDIR)\lsm_vtab.c $(LSMHDR) $(SQLITE3H)
+	$(LTCOMPILE) $(LSMOPTS) -c $(LSMDIR)\lsm_vtab.c
+
+lsm.dll:	$(LSMOBJ)
+	$(LD) $(LDFLAGS) $(LTLINKOPTS) $(LTLIBPATHS) /DLL /OUT:$@ $(LSMOBJ)
+	copy /Y $@ $(LSMDIR)\$@
+
+lsmtest.exe: $(LSMOBJ) $(LSMTESTSRC) $(LSMTESTHDR) $(LIBOBJ)
+	$(LTLINK) $(LSMOPTS) $(LSMTESTSRC) /link $(LSMOBJ) $(LIBOBJ)
+	copy /Y $@ $(LSMDIR)\$@

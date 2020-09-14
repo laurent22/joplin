@@ -1,0 +1,144 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ag
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# This file attempts to verify that the extension APIs work with 
+# "ORDER BY rank" queries. This is done by comparing the results of
+# the fts5_test() function when run with queries of the form:
+#
+#      ... WHERE fts MATCH ? ORDER BY bm25(fts) [ASC|DESC]
+#
+# and
+#
+#      ... WHERE fts MATCH ? ORDER BY rank [ASC|DESC]
+#
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, z, detail=%DETAIL%);
+}
+
+do_test 1.1 {
+  foreach {x y z} {
+    {j s m y m r n l u k} {z k f u z g h s w g} {r n o s s b v n w w}
+    {m v g n d x q r r s} {q t d a q a v l h j} {s k l f s i n v q v}
+    {m f f d h h s o h a} {y e v r q i u m h d} {b c k q m z l z h n}
+    {j e m v k p e c j m} {m p v z d x l n i a} {v p u p m t p q i f}
+    {v r w l e e t d z p} {c s b w k m n k o u} {w g y f v w v w v p}
+    {k d g o u j p z n o} {t g e q l z i g b j} {f i q q j y h b g h}
+    {j s w x o t j b t m} {v a v v r t x c q a} {r t k x w u l h a g}
+    {j y b i u d e m d w} {y s o j h i n a u p} {n a g b u c w e b m}
+    {b c k s c w j p w b} {m o c o w o b d q q} {n t y o y z y r z e}
+    {p n q l e l h z q c} {n s e i h c v b b u} {m p d i t a o o f f}
+    {k c o n v e z l b m} {s m n i n s d e s u} {t a u e q d a o u c}
+    {h d t o i a g b b p} {k x c i g f g b b k} {x f i v n a n n j i}
+    {f z k r b u s k z e} {n z v z w l e r h t} {t i s v v a v p n s}
+    {k f e c t z r e f d} {f m g r c w q k b v} {v y s y f r b f e f}
+    {z r c t d q q h x b} {u c g z n z u v s s} {y t n f f x b f d x}
+    {u n p n u t i m e j} {p j j d m f k p m z} {d o l v c o e a h w}
+    {h o q w t f v i c y} {c q u n r z s l l q} {z x a q w s b w s y}
+    {y m s x k i m n x c} {b i a n v h z n k a} {w l q p b h h g d y}
+    {z v s j f p v l f w} {c s b i z e k i g c} {x b v d w j f e d z}
+    {r k k j e o m k g b} {h b d c h m y b t u} {u j s h k z c u d y}
+    {v h i v s y z i k l} {d t m w q w c a z p} {r s e s x v d w k b}
+    {u r e q j y h o o s} {x x z r x y t f j s} {k n h x i i u e c v}
+    {q l f d a p w l q o} {y z q w j o p b o v} {s u h z h f d f n l}
+    {q o e o x x l g q i} {j g m h q q w c d b} {o m d h w a g b f n}
+    {m x k t s s y l v a} {j x t c a u w b w g} {n f j b v x y p u t}
+    {u w k a q b u w k w} {a h j u o w f s k p} {j o f s h y t j h g}
+    {x v b l m t l m h l} {t p y i y i q b q a} {k o o z w a c h c f}
+    {j g c d k w b d t v} {a k v c m a v h v p} {i c a i j g h l j h}
+    {l m v l c z j b p b} {z p z f l n k i b a} {j v q k g i x g i b}
+    {m c i w u z m i s z} {i z r f n l q z k w} {x n b p b q r g i z}
+    {d g i o o x l f x d} {r t m f b n q y c b} {i u g k w x n m p o}
+    {t o s i q d z x d t} {v a k s q z j c o o} {z f n n r l y w v v}
+    {w k h d t l j g n n} {r z m v y b l n c u} {v b v s c l n k g v}
+    {m a g r a b u u n z} {u y l h v w v k b f} {x l p g i s j f x v}
+    {v s g x k z a k a r} {l t g v j q l k p l} {f h n a x t v s t y}
+    {z u v u x p s j y t} {g b q e e g l n w g} {e n p j i g j f u r}
+    {q z l t w o l m p e} {t s g h r p r o t z} {y b f a o n u m z g}
+    {d t w n y b o g f o} {d a j e r l g g s h} {d z e l w q l t h f}
+    {f l u w q v x j a h} {f n u l l d m h h w} {d x c c e r o d q j}
+    {b y f q s q f u l g} {u z w l f d b i a g} {m v q b g u o z e z}
+    {h z p t s e x i v m} {l h q m e o x x x j} {e e d n p r m g j f}
+    {k h s g o n s d a x} {u d t t s j o v h a} {z r b a e u v o e s}
+    {m b b g a f c p a t} {w c m j o d b l g e} {f p j p m o s y v j}
+    {c r n h d w c a b l} {s g e u s d n j b g} {b o n a x a b x y l}
+    {r h u x f c d z n o} {x y l g u m i i w d} {t f h b z v r s r g}
+    {t i o r b v g g p a} {d x l u q k m o s u} {j f h t u n z u k m}
+    {g j t y d c n j y g} {w e s k v c w i g t} {g a h r g v g h r o}
+    {e j l a q j g i n h} {d z k c u p n u p p} {t u e e v z v r r g}
+    {l j s g k j k h z l} {p v d a t x d e q u} {r l u z b m g k s j}
+    {i e y d u x d i n l} {p f z k m m w p u l} {z l p m r q w n d a}
+  } {
+    execsql { INSERT INTO t1 VALUES($x, $y, $z) }
+  }
+  set {} {}
+} {}
+
+fts5_aux_test_functions db
+
+proc do_fts5ag_test {tn E} {
+  set q1 {SELECT fts5_test_all(t1) FROM t1 WHERE t1 MATCH $E ORDER BY rank}
+  set q2 {SELECT fts5_test_all(t1) FROM t1 WHERE t1 MATCH $E ORDER BY bm25(t1)}
+
+  set res [execsql $q1]
+  set expected [execsql $q2]
+  uplevel [list do_test $tn.1 [list set {} $res] $expected]
+
+  append q1 " DESC"
+  append q2 " DESC"
+
+  set res [execsql $q1]
+  set expected [execsql $q2]
+  uplevel [list do_test $tn.2 [list set {} $res] $expected]
+}
+
+foreach {tn expr} {
+  2.1 a
+  2.2 b
+  2.3 c
+  2.4 d
+
+  3.0 {a AND b}
+  3.1 {a OR b}
+  3.2 {b OR c AND d}
+} {
+  do_fts5ag_test $tn $expr
+}
+
+if {[detail_is_full]} {
+  foreach {tn expr} {
+    4.1 {"m m"}
+    4.2 {e + s}
+    4.3 {NEAR(c d)}
+  } {
+    do_fts5ag_test $tn $expr
+  }
+}
+
+} ;# foreach_detail_mode
+
+
+finish_test

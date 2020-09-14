@@ -1,0 +1,234 @@
+# 2015 February 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set ::testprefix rbu12
+
+set setup_sql {
+  DROP TABLE IF EXISTS xx;
+  DROP TABLE IF EXISTS xy;
+  CREATE TABLE xx(a, b, c PRIMARY KEY);
+  INSERT INTO xx VALUES(1, 2, 3);
+  CREATE TABLE xy(a, b, c PRIMARY KEY);
+
+  ATTACH 'rbu.db' AS rbu;
+    DROP TABLE IF EXISTS data_xx;
+    CREATE TABLE rbu.data_xx(a, b, c, rbu_control);
+    INSERT INTO data_xx VALUES(4, 5, 6, 0);
+    INSERT INTO data_xx VALUES(7, 8, 9, 0);
+    CREATE TABLE rbu.data_xy(a, b, c, rbu_control);
+    INSERT INTO data_xy VALUES(10, 11, 12, 0);
+  DETACH rbu;
+}
+
+do_multiclient_test tn {
+
+  # Initialize a target (test.db) and rbu (rbu.db) database.
+  #
+  forcedelete rbu.db
+  sql1 $setup_sql
+
+  # Using connection 2, open a read transaction on the target database.
+  # RBU will still be able to generate "test.db-oal", but it will not be
+  # able to rename it to "test.db-wal".
+  #
+  do_test 1.$tn.1 {
+    sql2 { BEGIN; SELECT * FROM xx; }
+  } {1 2 3}
+  do_test 1.$tn.2 {
+    sqlite3rbu rbu test.db rbu.db
+    while 1 {
+      set res [rbu step]
+      if {$res!="SQLITE_OK"} break
+    }
+    set res
+  } {SQLITE_BUSY}
+
+  do_test 1.$tn.3 { sql2 { SELECT * FROM xx; } } {1 2 3}
+  do_test 1.$tn.4 { sql2 { SELECT * FROM xy; } } {}
+  do_test 1.$tn.5 {
+    list [file exists test.db-wal] [file exists test.db-oal]
+  } {0 1}
+  do_test 1.$tn.6 { sql2 COMMIT } {}
+
+  # The rbu object that hit the SQLITE_BUSY error above cannot be reused.
+  # It is stuck in a permanent SQLITE_BUSY state at this point.
+  #
+  do_test 1.$tn.7 { rbu step } {SQLITE_BUSY}
+  do_test 1.$tn.8 { 
+    list [catch { rbu close } msg] $msg 
+  } {1 SQLITE_BUSY}
+
+  do_test 1.$tn.9.1 { sql2 { BEGIN EXCLUSIVE } } {}
+  do_test 1.$tn.9.2 {
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_BUSY}
+  do_test 1.$tn.9.3 {
+    list [catch { rbu close } msg] $msg 
+  } {1 {SQLITE_BUSY - database is locked}}
+  do_test 1.$tn.9.4 { sql2 COMMIT } {}
+
+  sqlite3rbu rbu test.db rbu.db
+  do_test 1.$tn.10.1 { sql2 { BEGIN EXCLUSIVE } } {}
+  do_test 1.$tn.10.2 {
+    rbu step
+  } {SQLITE_BUSY}
+  do_test 1.$tn.10.3 {
+    list [catch { rbu close } msg] $msg 
+  } {1 SQLITE_BUSY}
+  do_test 1.$tn.10.4 { sql2 COMMIT } {}
+
+  # A new rbu object can finish the work though.
+  #
+  do_test 1.$tn.11 {
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_OK}
+  do_test 1.$tn.12 {
+    list [file exists test.db-wal] [file exists test.db-oal]
+  } {1 0}
+  do_test 1.$tn.13 {
+    while 1 {
+      set res [rbu step]
+      if {$res!="SQLITE_OK"} break
+    }
+    set res
+  } {SQLITE_DONE}
+
+  do_test 1.$tn.14 {
+    rbu close
+  } {SQLITE_DONE}
+}
+
+do_multiclient_test tn {
+
+  # Initialize a target (test.db) and rbu (rbu.db) database.
+  #
+  forcedelete rbu.db
+  sql1 $setup_sql
+
+  do_test 2.$tn.1 {
+    sqlite3rbu rbu test.db rbu.db
+    while {[file exists test.db-wal]==0} {
+      if {[rbu step]!="SQLITE_OK"} {error "problem here...."}
+    }
+    rbu close
+  } {SQLITE_OK}
+
+
+  do_test 2.$tn.2 { sql2 { BEGIN IMMEDIATE } } {}
+
+  do_test 2.$tn.3 { 
+    sqlite3rbu rbu test.db rbu.db
+    rbu step 
+  } {SQLITE_BUSY}
+
+  do_test 2.$tn.4 { list [catch { rbu close } msg] $msg } {1 SQLITE_BUSY}
+
+  do_test 2.$tn.5 { 
+    sql2 { SELECT * FROM xx ; COMMIT }
+  } {1 2 3 4 5 6 7 8 9}
+
+  do_test 2.$tn.6 {
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+    rbu close
+  } {SQLITE_OK}
+
+  do_test 2.$tn.7 { sql2 { BEGIN EXCLUSIVE } } {}
+
+  do_test 2.$tn.8 { 
+    sqlite3rbu rbu test.db rbu.db
+    rbu step 
+  } {SQLITE_BUSY}
+  do_test 2.$tn.9 { list [catch { rbu close } msg] $msg } {1 SQLITE_BUSY}
+  do_test 2.$tn.10 { 
+    sql2 { SELECT * FROM xx ; COMMIT }
+  } {1 2 3 4 5 6 7 8 9}
+
+  do_test 2.$tn.11 {
+    sqlite3rbu rbu test.db rbu.db
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } {SQLITE_DONE}
+
+}
+
+#-------------------------------------------------------------------------
+# Test that "PRAGMA data_version" works when an RBU client writes the
+# database.
+#
+do_multiclient_test tn {
+
+  # Initialize a target (test.db) and rbu (rbu.db) database.
+  #
+  forcedelete rbu.db
+  sql1 $setup_sql
+
+  # Check the initial database contains table "xx" with a single row.
+  # Also save the current values of "PRAGMA data-version" for [db1] 
+  # and [db2].
+  #
+  do_test 2.$tn.1 {
+    list [sql1 { SELECT count(*) FROM xx }] [sql2 { SELECT count(*) FROM xx }]
+  } {1 1}
+  set V1 [sql1 {PRAGMA data_version}] 
+  set V2 [sql2 {PRAGMA data_version}]
+
+  # Check the values of data-version have not magically changed.
+  #
+  do_test 2.$tn.2 {
+    list [sql1 {PRAGMA data_version}] [sql2 {PRAGMA data_version}]
+  } [list $V1 $V2]
+
+  # Start stepping the RBU. From the point of view of [db1] and [db2], the 
+  # data-version values remain unchanged until the database contents are
+  # modified. At which point the values are incremented.
+  #
+  sqlite3rbu rbu test.db rbu.db
+  set x 0
+  while {[db one {SELECT count(*) FROM xx}]==1} {
+    do_test 2.$tn.3.[incr x] {
+      list [sql1 {PRAGMA data_version}] [sql2 {PRAGMA data_version}]
+    } [list $V1 $V2]
+    rbu step
+  }
+  do_test 2.$tn.5.1 { expr {$V1 < [sql1 {PRAGMA data_version}]} } 1
+  do_test 2.$tn.5.2 { expr {$V2 < [sql2 {PRAGMA data_version}]} } 1
+
+  # Check the db contents is as expected.
+  #
+  do_test 2.$tn.4 {
+    list [sql1 {SELECT count(*) FROM xx}] [sql2 {SELECT count(*) FROM xx}]
+  } {3 3}
+
+  set V1 [sql1 {PRAGMA data_version}] 
+  set V2 [sql2 {PRAGMA data_version}]
+
+  # Finish applying the RBU (i.e. do the incremental checkpoint). Check that
+  # this does not cause the data-version values to change.
+  #
+  while {[rbu step]=="SQLITE_OK"} { }
+  rbu close
+
+  do_test 2.$tn.6 {
+    list [sql1 {PRAGMA data_version}] [sql2 {PRAGMA data_version}]
+  } [list $V1 $V2]
+
+}
+
+finish_test

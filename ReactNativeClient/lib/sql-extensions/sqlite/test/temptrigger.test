@@ -1,0 +1,279 @@
+# 2009 February 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# $Id: temptrigger.test,v 1.3 2009/04/15 13:07:19 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix temptrigger
+
+ifcapable {!trigger || !shared_cache} { finish_test ; return }
+
+# Test cases:
+#
+#   temptrigger-1.*: Shared cache problem.
+#   temptrigger-2.*: A similar shared cache problem.
+#   temptrigger-3.*: Attached database problem.
+#
+
+#-------------------------------------------------------------------------
+# Test case temptrigger-1.* demonstrates a problem with temp triggers
+# in shared-cache mode. If process 1 connections to a shared-cache and
+# creates a temp trigger, the temp trigger is linked into the shared-cache
+# schema. If process 2 reloads the shared-cache schema from disk, then
+# it does not recreate the temp trigger belonging to process 1. From the
+# point of view of process 1, the temp trigger just disappeared.
+# 
+#   temptrigger-1.1: In shared cache mode, create a table in the main 
+#                    database and add a temp trigger to it.
+#
+#   temptrigger-1.2: Check that the temp trigger is correctly fired. Check
+#                    that the temp trigger is not fired by statements
+#                    executed by a second connection connected to the 
+#                    same shared cache.
+#
+#   temptrigger-1.3: Using the second connection to the shared-cache, cause
+#                    the shared-cache schema to be reloaded.
+#
+#   temptrigger-1.4: Check that the temp trigger is still fired correctly.
+#
+#   temptrigger-1.5: Check that the temp trigger can be dropped without error.
+#
+db close
+set ::enable_shared_cache [sqlite3_enable_shared_cache]
+sqlite3_enable_shared_cache 1
+
+sqlite3 db test.db
+sqlite3 db2 test.db
+
+do_test temptrigger-1.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE TEMP TABLE tt1(a, b);
+    CREATE TEMP TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      INSERT INTO tt1 VALUES(new.a, new.b);
+    END;
+  }
+} {}
+
+do_test temptrigger-1.2.1 {
+  execsql { INSERT INTO t1 VALUES(1, 2) }
+  execsql { SELECT * FROM t1 }
+} {1 2}
+do_test temptrigger-1.2.2 {
+  execsql { SELECT * FROM tt1 }
+} {1 2}
+do_test temptrigger-1.2.3 {
+  execsql { INSERT INTO t1 VALUES(3, 4) } db2
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test temptrigger-1.2.4 {
+  execsql { SELECT * FROM tt1 }
+} {1 2}
+
+# Cause the shared-cache schema to be reloaded.
+#
+do_test temptrigger-1.3 {
+  execsql { BEGIN; CREATE TABLE t3(a, b); ROLLBACK; } db2
+} {}
+
+do_test temptrigger-1.4 {
+  execsql { INSERT INTO t1 VALUES(5, 6) }
+  execsql { SELECT * FROM tt1 }
+} {1 2 5 6}
+
+do_test temptrigger-1.5 {
+  # Before the bug was fixed, the following 'DROP TRIGGER' hit an 
+  # assert if executed.
+  #execsql { DROP TRIGGER tr1 }
+} {}
+
+catch {db close}
+catch {db2 close}
+
+#-------------------------------------------------------------------------
+# Tests temptrigger-2.* are similar to temptrigger-1.*, except that
+# temptrigger-2.3 simply opens and closes a connection to the shared-cache.
+# It does not do anything special to cause the schema to be reloaded.
+# 
+do_test temptrigger-2.1 {
+  sqlite3 db test.db
+  execsql {
+    DELETE FROM t1;
+    CREATE TEMP TABLE tt1(a, b);
+    CREATE TEMP TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      INSERT INTO tt1 VALUES(new.a, new.b);
+    END;
+  }
+} {}
+do_test temptrigger-2.2 {
+  execsql {
+    INSERT INTO t1 VALUES(10, 20);
+    SELECT * FROM tt1;
+  }
+} {10 20}
+do_test temptrigger-2.3 {
+  sqlite3 db2 test.db
+  db2 close
+} {}
+do_test temptrigger-2.4 {
+  execsql {
+    INSERT INTO t1 VALUES(30, 40);
+    SELECT * FROM tt1;
+  }
+} {10 20 30 40}
+do_test temptrigger-2.5 {
+  #execsql { DROP TRIGGER tr1 }
+} {}
+
+catch {db close}
+catch {db2 close}
+sqlite3_enable_shared_cache $::enable_shared_cache
+
+#-------------------------------------------------------------------------
+# Test case temptrigger-3.* demonstrates a problem with temp triggers
+# on tables located in attached databases. At one point when SQLite reloaded 
+# the schema of an attached database (because some other connection had 
+# changed the schema cookie) it was not re-creating temp triggers attached 
+# to tables located within the attached database.
+# 
+#   temptrigger-3.1: Attach database 'test2.db' to connection [db]. Add a
+#                    temp trigger to a table in 'test2.db'.
+#
+#   temptrigger-3.2: Check that the temp trigger is correctly fired.
+#
+#   temptrigger-3.3: Update the schema of 'test2.db' using an external
+#                    connection. This forces [db] to reload the 'test2.db'
+#                    schema. Check that the temp trigger is still fired
+#                    correctly.
+#
+#   temptrigger-3.4: Check that the temp trigger can be dropped without error.
+# 
+do_test temptrigger-3.1 {
+  catch { forcedelete test2.db test2.db-journal }
+  catch { forcedelete test.db test.db-journal }
+  sqlite3 db test.db 
+  sqlite3 db2 test2.db 
+  execsql { CREATE TABLE t2(a, b) } db2
+  execsql {
+    ATTACH 'test2.db' AS aux;
+    CREATE TEMP TABLE tt2(a, b);
+    CREATE TEMP TRIGGER tr2 AFTER INSERT ON aux.t2 BEGIN
+      INSERT INTO tt2 VALUES(new.a, new.b);
+    END;
+  }
+} {}
+
+do_test temptrigger-3.2.1 {
+  execsql { 
+    INSERT INTO aux.t2 VALUES(1, 2);
+    SELECT * FROM aux.t2;
+  }
+} {1 2}
+do_test temptrigger-3.2.2 {
+  execsql { SELECT * FROM tt2 }
+} {1 2}
+
+do_test temptrigger-3.3.1 {
+  execsql { CREATE TABLE t3(a, b) } db2
+  execsql { 
+    INSERT INTO aux.t2 VALUES(3, 4);
+    SELECT * FROM aux.t2;
+  }
+} {1 2 3 4}
+do_test temptrigger-3.3.2 {
+  execsql { SELECT * FROM tt2 }
+} {1 2 3 4}
+
+do_test temptrigger-3.4 {
+  # Before the bug was fixed, the following 'DROP TRIGGER' hit an 
+  # assert if executed.
+  #execsql { DROP TRIGGER tr2 }
+} {}
+
+catch { db close }
+catch { db2 close }
+
+
+#-------------------------------------------------------------------------
+# Test that creating a temp table after a temp trigger on the same name
+# has been created is an error.
+#
+reset_db
+do_execsql_test 4.0 {
+  CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN
+    SELECT 1,2,3;
+  END;
+}
+
+do_execsql_test 4.1 {
+  CREATE TEMP TABLE t1(x);
+}
+
+#-------------------------------------------------------------------------
+# Test that no harm is done if the table a temp trigger is attached to is
+# deleted by an external connection.
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN SELECT 1,2,3; END;
+}
+
+do_test 5.1 {
+  sqlite3 db2 test.db
+  execsql { DROP TABLE t1 } db2
+} {}
+
+do_execsql_test 5.2 {
+  SELECT * FROM sqlite_master;
+  SELECT * FROM temp.sqlite_master;
+} {
+  trigger tr1 t1 0 
+  {CREATE TRIGGER tr1 BEFORE INSERT ON t1 BEGIN SELECT 1,2,3; END}
+}
+db2 close
+
+#-------------------------------------------------------------------------
+# Check that if a second connection creates a table in an attached database
+# with the same name as a table in the main database that has a temp
+# trigger attached to it nothing goes awry.
+#
+reset_db
+forcedelete test.db2
+
+do_execsql_test 6.0 {
+  CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN 
+    SELECT raise(ABORT, 'error'); 
+  END;
+  ATTACH 'test.db2' AS aux;
+}
+
+do_test 6.1 {
+  sqlite3 db2 test.db2
+  execsql { CREATE TABLE t1(a, b, c); } db2
+} {}
+
+do_execsql_test 6.2 {
+  SELECT type,name,tbl_name,sql FROM aux.sqlite_master;
+  INSERT INTO aux.t1 VALUES(1,2,3);
+} {
+  table t1 t1 {CREATE TABLE t1(a, b, c)}
+}
+
+do_catchsql_test 6.3 {
+  INSERT INTO main.t1 VALUES(1);
+} {1 error}
+db2 close
+
+finish_test

@@ -1,0 +1,164 @@
+Activate the user authentication logic by including the
+ext/userauth/userauth.c source code file in the build and
+adding the -DSQLITE_USER_AUTHENTICATION compile-time option.
+The ext/userauth/sqlite3userauth.h header file is available to
+applications to define the interface.
+
+When using the SQLite amalgamation, it is sufficient to append
+the ext/userauth/userauth.c source file onto the end of the
+amalgamation.
+
+The following new APIs are available when user authentication is
+activated:
+
+   int sqlite3_user_authenticate(
+     sqlite3 *db,           /* The database connection */
+     const char *zUsername, /* Username */
+     const char *aPW,       /* Password or credentials */
+     int nPW                /* Number of bytes in aPW[] */
+   );
+   
+   int sqlite3_user_add(
+     sqlite3 *db,           /* Database connection */
+     const char *zUsername, /* Username to be added */
+     const char *aPW,       /* Password or credentials */
+     int nPW,               /* Number of bytes in aPW[] */
+     int isAdmin            /* True to give new user admin privilege */
+   );
+   
+   int sqlite3_user_change(
+     sqlite3 *db,           /* Database connection */
+     const char *zUsername, /* Username to change */
+     const void *aPW,       /* Modified password or credentials */
+     int nPW,               /* Number of bytes in aPW[] */
+     int isAdmin            /* Modified admin privilege for the user */
+   );
+   
+   int sqlite3_user_delete(
+     sqlite3 *db,           /* Database connection */
+     const char *zUsername  /* Username to remove */
+   );
+
+With this extension, a database can be marked as requiring authentication.
+By default a database does not require authentication.
+
+The sqlite3_open(), sqlite3_open16(), and sqlite3_open_v2() interfaces
+work as before: they open a new database connection.  However, if the
+database being opened requires authentication, then attempts to read
+or write from the database will fail with an SQLITE_AUTH error until 
+after sqlite3_user_authenticate() has been called successfully.  The 
+sqlite3_user_authenticate() call will return SQLITE_OK if the 
+authentication credentials are accepted and SQLITE_ERROR if not.
+
+Calling sqlite3_user_authenticate() on a no-authentication-required
+database connection is a harmless no-op.  
+
+If the database is encrypted, then sqlite3_key_v2() must be called first,
+with the correct decryption key, prior to invoking sqlite3_user_authenticate().
+
+To recapitulate: When opening an existing unencrypted authentication-
+required database, the call sequence is:
+
+    sqlite3_open_v2()
+    sqlite3_user_authenticate();
+    /* Database is now usable */
+
+To open an existing, encrypted, authentication-required database, the
+call sequence is:
+
+    sqlite3_open_v2();
+    sqlite3_key_v2();
+    sqlite3_user_authenticate();
+    /* Database is now usable */
+
+When opening a no-authentication-required database, the database
+connection is treated as if it was authenticated as an admin user.
+
+When ATTACH-ing new database files to a connection, each newly attached
+database that is an authentication-required database is checked using
+the same username and password as supplied to the main database.  If that
+check fails, then the ATTACH command fails with an SQLITE_AUTH error.
+
+The sqlite3_user_add() interface can be used (by an admin user only)
+to create a new user.  When called on a no-authentication-required
+database and when A is true, the sqlite3_user_add(D,U,P,N,A) routine
+converts the database into an authentication-required database and
+logs in the database connection D as user U with password P,N.
+To convert a no-authentication-required database into an authentication-
+required database, the isAdmin parameter must be true.  If
+sqlite3_user_add(D,U,P,N,A) is called on a no-authentication-required
+database and A is false, then the call fails with an SQLITE_AUTH error.
+
+Any call to sqlite3_user_add() by a non-admin user results in an error.
+
+Hence, to create a new, unencrypted, authentication-required database,
+the call sequence is:
+
+    sqlite3_open_v2();
+    sqlite3_user_add();
+
+And to create a new, encrypted, authentication-required database, the call
+sequence is:
+
+    sqlite3_open_v2();
+    sqlite3_key_v2();
+    sqlite3_user_add();
+
+The sqlite3_user_delete() interface can be used (by an admin user only)
+to delete a user.  The currently logged-in user cannot be deleted,
+which guarantees that there is always an admin user and hence that
+the database cannot be converted into a no-authentication-required
+database.
+
+The sqlite3_user_change() interface can be used to change a users
+login credentials or admin privilege.  Any user can change their own
+password.  Only an admin user can change another users login
+credentials or admin privilege setting.  No user may change their own 
+admin privilege setting.
+
+The sqlite3_set_authorizer() callback is modified to take a 7th parameter
+which is the username of the currently logged in user, or NULL for a
+no-authentication-required database.
+
+-----------------------------------------------------------------------------
+Implementation notes:
+
+An authentication-required database is identified by the presence of a
+new table:
+
+    CREATE TABLE sqlite_user(
+      uname TEXT PRIMARY KEY,
+      isAdmin BOOLEAN,
+      pw BLOB
+    ) WITHOUT ROWID;
+
+The sqlite_user table is inaccessible (unreadable and unwriteable) to
+non-admin users and is read-only for admin users.  However, if the same
+database file is opened by a version of SQLite that omits
+the -DSQLITE_USER_AUTHENTICATION compile-time option, then the sqlite_user
+table will be readable by anybody and writeable by anybody if
+the "PRAGMA writable_schema=ON" statement is run first.
+
+The sqlite_user.pw field is encoded by a built-in SQL function
+"sqlite_crypt(X,Y)".  The two arguments are both BLOBs.  The first argument
+is the plaintext password supplied to the sqlite3_user_authenticate()
+interface.  The second argument is the sqlite_user.pw value and is supplied
+so that the function can extract the "salt" used by the password encoder.
+The result of sqlite_crypt(X,Y) is another blob which is the value that
+ends up being stored in sqlite_user.pw.  To verify credentials X supplied
+by the sqlite3_user_authenticate() routine, SQLite runs:
+
+    sqlite_user.pw == sqlite_crypt(X, sqlite_user.pw)
+
+To compute an appropriate sqlite_user.pw value from a new or modified
+password X, sqlite_crypt(X,NULL) is run.  A new random salt is selected
+when the second argument is NULL.
+
+The built-in version of of sqlite_crypt() uses a simple Ceasar-cypher
+which prevents passwords from being revealed by searching the raw database
+for ASCII text, but is otherwise trivally broken.  For better password
+security, the database should be encrypted using the SQLite Encryption
+Extension or similar technology.  Or, the application can use the
+sqlite3_create_function() interface to provide an alternative
+implementation of sqlite_crypt() that computes a stronger password hash,
+perhaps using a cryptographic hash function like SHA1.

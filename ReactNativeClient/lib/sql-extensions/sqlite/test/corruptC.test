@@ -1,0 +1,428 @@
+# 2004 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure SQLite does not crash or
+# segfault if it sees a corrupt database file.  It creates a base
+# data base file, then tests that single byte corruptions in 
+# increasingly larger quantities are handled gracefully.
+#
+# $Id: corruptC.test,v 1.14 2009/07/11 06:55:34 danielk1977 Exp $
+
+catch {forcedelete test.db test.db-journal test.bu}
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+# Construct a compact, dense database for testing.
+#
+do_test corruptC-1.1 {
+  sqlite3_db_config db LEGACY_FILE_FORMAT 1
+  execsql {
+    PRAGMA auto_vacuum = 0;
+    BEGIN;
+    CREATE TABLE t1(x,y);
+    INSERT INTO t1 VALUES(1,1);
+    INSERT OR IGNORE INTO t1 SELECT x*2,y FROM t1;
+    INSERT OR IGNORE INTO t1 SELECT x*3,y FROM t1;
+    INSERT OR IGNORE INTO t1 SELECT x*5,y FROM t1;
+    INSERT OR IGNORE INTO t1 SELECT x*7,y FROM t1;
+    INSERT OR IGNORE INTO t1 SELECT x*11,y FROM t1;
+    INSERT OR IGNORE INTO t1 SELECT x*13,y FROM t1;
+    CREATE INDEX t1i1 ON t1(x);
+    CREATE TABLE t2 AS SELECT x,2 as y FROM t1 WHERE rowid%5!=0;
+    COMMIT;
+  }
+} {}
+
+ifcapable {integrityck} {
+  integrity_check corruptC-1.2
+}
+
+# Generate random integer
+#
+proc random {range} {
+  return [expr {round(rand()*$range)}]
+}
+
+# Setup for the tests.  Make a backup copy of the good database in test.bu.
+#
+db close
+forcecopy test.db test.bu
+sqlite3 db test.db
+set fsize [file size test.db]
+
+# Set a quasi-random random seed. 
+if {[info exists ::G(issoak)]} {
+  # If we are doing SOAK tests, we want a different
+  # random seed for each run.  Ideally we would like 
+  # to use [clock clicks] or something like that here.
+  set qseed [file mtime test.db]
+} else {
+  # If we are not doing soak tests,
+  # make it repeatable.
+  set qseed 0
+}
+expr srand($qseed)
+
+#
+# First test some specific corruption tests found from earlier runs
+# with specific seeds.
+#
+
+# test that a corrupt content offset size is handled (seed 5577)
+do_test corruptC-2.1 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 2053 [format %02x 0x04]
+
+  sqlite3 db test.db
+  catchsql {PRAGMA integrity_check}
+} {0 {{*** in database main ***
+Page 3: free space corruption}}}
+
+# test that a corrupt content offset size is handled (seed 5649)
+#
+# Update 2016-12-27:  As of check-in [0b86fbca66] "In sqlite3BtreeInsert() when
+# replacing a re-existing row, try to overwrite the cell directly rather than
+# deallocate and reallocate the cell" on 2016-12-09, this test case no longer
+# detects the offset size problem during the UPDATE.  We have to run a subsequent
+# integrity_check to see it.
+do_test corruptC-2.2 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 27   [format %02x 0x08]
+  hexio_write test.db 233  [format %02x 0x6a]
+  hexio_write test.db 328  [format %02x 0x67]
+  hexio_write test.db 750  [format %02x 0x1f]
+  hexio_write test.db 1132 [format %02x 0x52]
+  hexio_write test.db 1133 [format %02x 0x84]
+  hexio_write test.db 1220 [format %02x 0x01]
+  hexio_write test.db 3688 [format %02x 0xc1]
+  hexio_write test.db 3714 [format %02x 0x58]
+  hexio_write test.db 3746 [format %02x 0x9a]
+
+  sqlite3 db test.db
+  db eval {UPDATE t1 SET y=1}
+  db eval {PRAGMA integrity_check}
+} {/Offset .* out of range/}
+
+# test that a corrupt free cell size is handled (seed 13329)
+do_test corruptC-2.3 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 1094 [format %02x 0x76]
+
+  sqlite3 db test.db
+  catchsql {UPDATE t1 SET y=1}
+} {1 {database disk image is malformed}}
+
+# test that a corrupt free cell size is handled (seed 169571)
+do_test corruptC-2.4 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 3119 [format %02x 0xdf]
+
+  sqlite3 db test.db
+  catchsql {UPDATE t2 SET y='abcdef-uvwxyz'}
+} {1 {database disk image is malformed}}
+
+# test that a corrupt free cell size is handled (seed 169571)
+do_test corruptC-2.5 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 3119 [format %02x 0xdf]
+  hexio_write test.db 4073 [format %02x 0xbf]
+
+  sqlite3 db test.db
+  catchsql {BEGIN; UPDATE t2 SET y='abcdef-uvwxyz'; ROLLBACK;}
+  catchsql {PRAGMA integrity_check}
+} {0 {{*** in database main ***
+On tree page 4 cell 19: Extends off end of page} {database disk image is malformed}}}
+
+# {0 {{*** in database main ***
+# Corruption detected in cell 710 on page 4
+# Multiple uses for byte 661 of page 4
+# Fragmented space is 249 byte reported as 21 on page 4}}}
+
+# test that a corrupt free cell size is handled (seed 169595)
+do_test corruptC-2.6 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 619 [format %02x 0xe2]
+  hexio_write test.db 3150 [format %02x 0xa8]
+
+  sqlite3 db test.db
+  catchsql {BEGIN; UPDATE t2 SET y='abcdef-uvwxyz'; ROLLBACK;}
+} {1 {database disk image is malformed}}
+
+# corruption (seed 178692)
+do_test corruptC-2.7 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 3074 [format %02x 0xa0]
+
+  sqlite3 db test.db
+  catchsql {BEGIN; UPDATE t2 SET y='abcdef-uvwxyz'; ROLLBACK;}
+} {1 {database disk image is malformed}}
+
+
+# corruption (seed 179069)
+# Obsolete.  With single-pass DELETE the corruption in the
+# main database is not detected.
+if 0 {
+do_test corruptC-2.8 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 1393 [format %02x 0x7d]
+  hexio_write test.db 84 [format %02x 0x19]
+  hexio_write test.db 3287 [format %02x 0x3b]
+  hexio_write test.db 2564 [format %02x 0xed]
+  hexio_write test.db 2139 [format %02x 0x55]
+
+  sqlite3 db test.db
+  catchsql {BEGIN; DELETE FROM t1 WHERE x>13; ROLLBACK;}
+} {1 {database disk image is malformed}}
+}
+
+# corruption (seed 170434)
+#
+# UPDATE: Prior to 3.8.2, this used to return SQLITE_CORRUPT. It no longer
+# does. That is Ok, the point of these tests is to verify that no buffer
+# overruns or overreads can be caused by corrupt databases.
+do_test corruptC-2.9 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 2095 [format %02x 0xd6]
+
+  sqlite3 db test.db
+  catchsql {BEGIN; DELETE FROM t1 WHERE x>13; ROLLBACK;}
+} {0 {}}
+
+# corruption (seed 186504)
+do_test corruptC-2.10 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 3130 [format %02x 0x02]
+  
+  sqlite3 db test.db
+  catchsql {BEGIN; UPDATE t2 SET y='abcdef-uvwxyz'; ROLLBACK;}
+} {1 {database disk image is malformed}}
+
+# corruption (seed 1589)
+do_test corruptC-2.11 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 55 [format %02x 0xa7]
+  
+  sqlite3 db test.db
+  catchsql {BEGIN; CREATE TABLE t3 AS SELECT x,3 as y FROM t2 WHERE rowid%5!=0; ROLLBACK;}
+} {1 {database disk image is malformed}}
+
+# corruption (seed 14166)
+do_test corruptC-2.12 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 974 [format %02x 0x2e]
+  
+  sqlite3 db test.db
+  catchsql {SELECT count(*) FROM sqlite_master;}
+} {1 {malformed database schema (t1i1) - corrupt database}}
+
+# corruption (seed 218803)
+do_test corruptC-2.13 {
+  db close
+  forcecopy test.bu test.db
+
+  # insert corrupt byte(s)
+  hexio_write test.db 102 [format %02x 0x12]
+  
+  sqlite3 db test.db
+  catchsql {BEGIN; CREATE TABLE t3 AS SELECT x,3 as y FROM t2 WHERE rowid%5!=0; ROLLBACK;}
+} {1 {database disk image is malformed}}
+
+do_test corruptC-2.14 {
+  db close
+  forcecopy test.bu test.db
+
+  sqlite3 db test.db
+  set blob [string repeat abcdefghij 10000]
+  execsql { INSERT INTO t1 VALUES (1, $blob) }
+
+  sqlite3 db test.db
+  set filesize [file size test.db]
+  hexio_write test.db [expr $filesize-2048] 00000001
+  catchsql {DELETE FROM t1 WHERE rowid = (SELECT max(rowid) FROM t1)}
+} {1 {database disk image is malformed}}
+
+# At one point this particular corrupt database was causing a buffer
+# overread. Which caused a crash in a run of all.test once.
+#
+do_test corruptC-2.15 {
+  db close
+  forcecopy test.bu test.db
+  hexio_write test.db 986 b9
+  sqlite3 db test.db
+  catchsql {SELECT count(*) FROM sqlite_master;}
+} {1 {database disk image is malformed}}
+
+#
+# Now test for a series of quasi-random seeds.
+# We loop over the entire file size and touch
+# each byte at least once.
+for {set tn 0} {$tn<$fsize} {incr tn 1} {
+
+  # setup for test
+  db close
+  forcecopy test.bu test.db
+  sqlite3 db test.db
+
+  # Seek to a random location in the file, and write a random single byte
+  # value.  Then do various operations on the file to make sure that
+  # the database engine can handle the corruption gracefully.
+  #
+  set last 0
+  for {set i 1} {$i<=512 && !$last} {incr i 1} {
+
+    db close
+    if {$i==1} {
+      # on the first corrupt value, use location $tn
+      # this ensures that we touch each location in the 
+      # file at least once.
+      set roffset $tn
+    } else { 
+      # insert random byte at random location
+      set roffset [random $fsize]
+    }
+    set rbyte [format %02x [random 255]]
+
+    # You can uncomment the following to have it trace
+    # exactly how it's corrupting the file.  This is 
+    # useful for generating the "seed specific" tests
+    # above.
+    # set rline "$roffset $rbyte"
+    # puts stdout $rline
+
+    hexio_write test.db $roffset $rbyte
+    sqlite3 db test.db
+
+    # do a few random operations to make sure that if 
+    # they error, they error gracefully instead of crashing.
+    do_test corruptC-3.$tn.($qseed).$i.1 {
+      catchsql {SELECT count(*) FROM sqlite_master}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.2 {
+      catchsql {SELECT count(*) FROM t1}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.3 {
+      catchsql {SELECT count(*) FROM t1 WHERE x>13}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.4 {
+      catchsql {SELECT count(*) FROM t2}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.5 {
+      catchsql {SELECT count(*) FROM t2 WHERE x<13}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.6 {
+      catchsql {BEGIN; UPDATE t1 SET y=1; ROLLBACK;}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.7 {
+      catchsql {BEGIN; UPDATE t2 SET y='abcdef-uvwxyz'; ROLLBACK;}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.8 {
+      catchsql {BEGIN; DELETE FROM t1 WHERE x>13; ROLLBACK;}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.9 {
+      catchsql {BEGIN; DELETE FROM t2 WHERE x<13; ROLLBACK;}
+      set x {}
+    } {}
+    do_test corruptC-3.$tn.($qseed).$i.10 {
+      catchsql {BEGIN; CREATE TABLE t3 AS SELECT x,3 as y FROM t2 WHERE rowid%5!=0; ROLLBACK;}
+      set x {}
+    } {}
+
+    # check the integrity of the database.
+    # once the corruption is detected, we can stop.
+    ifcapable {integrityck} {
+      set res [ catchsql {PRAGMA integrity_check} ]
+      set ans [lindex $res 1]
+      if { [ string compare $ans "ok" ] != 0 } {
+        set last -1
+      }
+    }
+    # if we are not capable of doing an integrity check,
+    # stop after corrupting 5 bytes.
+    ifcapable {!integrityck} {
+      if { $i > 5 } {
+        set last -1
+      }
+    }
+
+    # Check that no page references were leaked.
+    # TBD:  need to figure out why this doesn't work
+    # work with ROLLBACKs...
+    if {0} {
+      do_test corruptC-3.$tn.($qseed).$i.11 {
+        set bt [btree_from_db db]
+        db_enter db
+        array set stats [btree_pager_stats $bt]
+        db_leave db
+        set stats(ref)
+      } {0}
+    }
+  }
+  # end for i
+
+}
+# end for tn
+
+finish_test

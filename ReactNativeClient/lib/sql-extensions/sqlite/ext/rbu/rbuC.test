@@ -1,0 +1,141 @@
+# 2016 March 7
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Tests for RBU focused on the REPLACE operation (rbu_control column
+# contains integer value 2).
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbuC
+
+#-------------------------------------------------------------------------
+# This test is actually of an UPDATE directive. Just to establish that
+# these work with UNIQUE indexes before preceding to REPLACE.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(i INTEGER PRIMARY KEY, a, b, c UNIQUE);
+  INSERT INTO t1 VALUES(1, 'a', 'b', 'c');
+}
+
+forcedelete rbu.db
+do_execsql_test 1.1 {
+  ATTACH 'rbu.db' AS rbu;
+  CREATE TABLE rbu.data_t1(i, a, b, c, rbu_control);
+  INSERT INTO data_t1 VALUES(1, 'a', 'b', 'c', '.xxx');
+}
+
+do_test 1.2 {
+  step_rbu test.db rbu.db
+} {SQLITE_DONE}
+
+do_execsql_test 1.3 {
+  SELECT * FROM t1
+} {
+  1 a b c
+}
+
+#-------------------------------------------------------------------------
+#
+foreach {tn schema} {
+  1 {
+    CREATE TABLE t1(i INTEGER PRIMARY KEY, a, b, c UNIQUE);
+    CREATE INDEX t1a ON t1(a);
+  }
+  2 {
+    CREATE TABLE t1(i PRIMARY KEY, a, b, c UNIQUE);
+    CREATE INDEX t1a ON t1(a);
+  }
+  3 {
+    CREATE TABLE t1(i PRIMARY KEY, a, b, c UNIQUE) WITHOUT ROWID;
+    CREATE INDEX t1a ON t1(a);
+  }
+} {
+  reset_db
+  forcedelete rbu.db
+  execsql $schema
+
+  do_execsql_test 2.$tn.0 {
+    INSERT INTO t1 VALUES(1, 'a', 'b', 'c');
+    INSERT INTO t1 VALUES(2, 'b', 'c', 'd');
+    INSERT INTO t1 VALUES(3, 'c', 'd', 'e');
+  }
+  
+  do_execsql_test 2.$tn.1 {
+    ATTACH 'rbu.db' AS rbu;
+    CREATE TABLE rbu.data_t1(i, a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 1, 2, 3, 2);
+    INSERT INTO data_t1 VALUES(3, 'c', 'd', 'e', 2);
+    INSERT INTO data_t1 VALUES(4, 'd', 'e', 'f', 2);
+  }
+  
+  do_test 2.$tn.2 {
+    step_rbu test.db rbu.db
+  } {SQLITE_DONE}
+  
+  do_execsql_test 2.$tn.3 {
+    SELECT * FROM t1 ORDER BY i
+  } {
+    1 1 2 3
+    2 b c d
+    3 c d e
+    4 d e f
+  }
+  
+  integrity_check 2.$tn.4
+}
+
+foreach {tn schema} {
+  1 {
+    CREATE TABLE t1(a, b, c UNIQUE);
+    CREATE INDEX t1a ON t1(a);
+  }
+
+  2 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, c);
+  }
+} {
+  if {$tn==2} { ifcapable !fts5 break }
+  reset_db
+  forcedelete rbu.db
+  execsql $schema
+
+  do_execsql_test 3.$tn.0 {
+    INSERT INTO t1 VALUES('a', 'b', 'c');
+    INSERT INTO t1 VALUES('b', 'c', 'd');
+    INSERT INTO t1 VALUES('c', 'd', 'e');
+  }
+  
+  do_execsql_test 3.$tn.1 {
+    ATTACH 'rbu.db' AS rbu;
+    CREATE TABLE rbu.data_t1(rbu_rowid, a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 1, 2, 3, 2);
+    INSERT INTO data_t1 VALUES(3, 'c', 'd', 'e', 2);
+    INSERT INTO data_t1 VALUES(4, 'd', 'e', 'f', 2);
+  }
+  
+  do_test 3.$tn.2 {
+    step_rbu test.db rbu.db
+  } {SQLITE_DONE}
+  
+  do_execsql_test 3.$tn.3 {
+    SELECT rowid, * FROM t1 ORDER BY 1
+  } {
+    1 1 2 3
+    2 b c d
+    3 c d e
+    4 d e f
+  }
+  
+  integrity_check 3.$tn.4
+}
+
+
+
+finish_test

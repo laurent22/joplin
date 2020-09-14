@@ -1,0 +1,143 @@
+# 2010 August 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file contains tests for the r-tree module. Specifically, it tests
+# that new-style custom r-tree queries (geometry callbacks) work.
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+ifcapable !rtree { finish_test ; return }
+ifcapable rtree_int_only { finish_test; return }
+
+
+#-------------------------------------------------------------------------
+# Test the example 2d "circle" geometry callback.
+#
+register_circle_geom db
+
+do_execsql_test rtreeE-1.0.0 {
+  PRAGMA page_size=512;
+  CREATE VIRTUAL TABLE rt1 USING rtree(id,x0,x1,y0,y1);
+  
+  /* A tight pattern of small boxes near 0,0 */
+  WITH RECURSIVE
+    x(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM x WHERE x<4),
+    y(y) AS (VALUES(0) UNION ALL SELECT y+1 FROM y WHERE y<4)
+  INSERT INTO rt1 SELECT x+5*y, x, x+2, y, y+2 FROM x, y;
+
+  /* A looser pattern of small boxes near 100, 0 */
+  WITH RECURSIVE
+    x(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM x WHERE x<4),
+    y(y) AS (VALUES(0) UNION ALL SELECT y+1 FROM y WHERE y<4)
+  INSERT INTO rt1 SELECT 100+x+5*y, x*3+100, x*3+102, y*3, y*3+2 FROM x, y;
+
+  /* A looser pattern of larger boxes near 0, 200 */
+  WITH RECURSIVE
+    x(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM x WHERE x<4),
+    y(y) AS (VALUES(0) UNION ALL SELECT y+1 FROM y WHERE y<4)
+  INSERT INTO rt1 SELECT 200+x+5*y, x*7, x*7+15, y*7+200, y*7+215 FROM x, y;
+} {}
+do_rtree_integrity_test rtreeE-1.0.1 rt1
+
+# Queries against each of the three clusters */
+do_execsql_test rtreeE-1.1 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle(0.0, 0.0, 50.0, 3) ORDER BY id;
+} {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24}
+do_execsql_test rtreeE-1.1x {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle('x:0 y:0 r:50.0 e:3') ORDER BY id;
+} {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24}
+do_execsql_test rtreeE-1.2 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle(100.0, 0.0, 50.0, 3) ORDER BY id;
+} {100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124}
+do_execsql_test rtreeE-1.3 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle(0.0, 200.0, 50.0, 3) ORDER BY id;
+} {200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224}
+
+# The Qcircle geometry function gives a lower score to larger leaf-nodes.
+# This causes the 200s to sort before the 100s and the 0s to sort before
+# last.
+#
+do_execsql_test rtreeE-1.4 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle('r:1000 e:3') AND id%100==0
+} {200 100 0}
+
+# Exclude odd rowids on a depth-first search
+do_execsql_test rtreeE-1.5 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle('r:1000 e:4') ORDER BY +id
+} {0 2 4 6 8 10 12 14 16 18 20 22 24 100 102 104 106 108 110 112 114 116 118 120 122 124 200 202 204 206 208 210 212 214 216 218 220 222 224}
+
+# Exclude odd rowids on a breadth-first search.
+do_execsql_test rtreeE-1.6 {
+  SELECT id FROM rt1 WHERE id MATCH Qcircle(0,0,1000,5) ORDER BY +id
+} {0 2 4 6 8 10 12 14 16 18 20 22 24 100 102 104 106 108 110 112 114 116 118 120 122 124 200 202 204 206 208 210 212 214 216 218 220 222 224}
+
+# Test that rtree prefers MATCH to lookup-by-rowid.
+#
+do_execsql_test rtreeE-1.7 {
+  SELECT id FROM rt1 WHERE id=18 AND id MATCH Qcircle(0,0,1000,5)
+} {18}
+
+
+# Construct a large 2-D RTree with thousands of random entries.
+#
+do_test rtreeE-2.1 {
+  db eval {
+    CREATE TABLE t2(id,x0,x1,y0,y1);
+    CREATE VIRTUAL TABLE rt2 USING rtree(id,x0,x1,y0,y1);
+    BEGIN;
+  }
+  expr srand(0)
+  for {set i 1} {$i<=10000} {incr i} {
+    set dx [expr {int(rand()*40)+1}]
+    set dy [expr {int(rand()*40)+1}]
+    set x0 [expr {int(rand()*(10000 - $dx))}]
+    set x1 [expr {$x0+$dx}]
+    set y0 [expr {int(rand()*(10000 - $dy))}]
+    set y1 [expr {$y0+$dy}]
+    set id [expr {$i+10000}]
+    db eval {INSERT INTO t2 VALUES($id,$x0,$x1,$y0,$y1)}
+  }
+  db eval {
+    INSERT INTO rt2 SELECT * FROM t2;
+    COMMIT;
+  }
+} {}
+do_rtree_integrity_test rtreeE-2.1.1 rt2
+
+for {set i 1} {$i<=200} {incr i} {
+  set dx [expr {int(rand()*100)}]
+  set dy [expr {int(rand()*100)}]
+  set x0 [expr {int(rand()*(10000 - $dx))}]
+  set x1 [expr {$x0+$dx}]
+  set y0 [expr {int(rand()*(10000 - $dy))}]
+  set y1 [expr {$y0+$dy}]
+  set ans [db eval {SELECT id FROM t2 WHERE x1>=$x0 AND x0<=$x1 AND y1>=$y0 AND y0<=$y1 ORDER BY id}]
+  do_execsql_test rtreeE-2.2.$i {
+    SELECT id FROM rt2 WHERE id MATCH breadthfirstsearch($x0,$x1,$y0,$y1) ORDER BY id
+  } $ans
+}
+
+# Run query that have very deep priority queues
+#
+set ans [db eval {SELECT id FROM t2 WHERE x1>=0 AND x0<=5000 AND y1>=0 AND y0<=5000 ORDER BY id}]
+do_execsql_test rtreeE-2.3 {
+  SELECT id FROM rt2 WHERE id MATCH breadthfirstsearch(0,5000,0,5000) ORDER BY id
+} $ans
+set ans [db eval {SELECT id FROM t2 WHERE x1>=0 AND x0<=10000 AND y1>=0 AND y0<=10000 ORDER BY id}]
+do_execsql_test rtreeE-2.4 {
+  SELECT id FROM rt2 WHERE id MATCH breadthfirstsearch(0,10000,0,10000) ORDER BY id
+} $ans
+
+
+finish_test

@@ -1,0 +1,277 @@
+# 2018 May 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix windowfault
+
+ifcapable !windowfunc {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, d);
+  INSERT INTO t1 VALUES(1, 2, 3, 4);
+  INSERT INTO t1 VALUES(5, 6, 7, 8);
+  INSERT INTO t1 VALUES(9, 10, 11, 12);
+}
+faultsim_save_and_close
+
+do_faultsim_test 1 -start 1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT row_number() OVER win,
+           rank() OVER win,
+           dense_rank() OVER win,
+           ntile(2) OVER win,
+           first_value(d) OVER win,
+           last_value(d) OVER win,
+           nth_value(d,2) OVER win,
+           lead(d) OVER win,
+           lag(d) OVER win,
+           max(d) OVER win,
+           min(d) OVER win
+    FROM t1
+    WINDOW win AS (ORDER BY a)
+  }
+} -test {
+  faultsim_test_result {0 {1 1 1 1 4 4 {} 8 {} 4 4 2 2 2 1 4 8 8 12 4 8 4 3 3 3 2 4 12 8 {} 8 12 4}}
+}
+
+do_faultsim_test 1.1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT row_number() OVER win,
+           rank() OVER win,
+           dense_rank() OVER win
+    FROM t1
+    WINDOW win AS (PARTITION BY c<7 ORDER BY a)
+  }
+} -test {
+  faultsim_test_result {0 {1 1 1 2 2 2 1 1 1}}
+}
+
+do_faultsim_test 1.2 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT ntile(105) 
+    OVER ( RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) 
+    FROM t1
+  }
+} -test {
+  faultsim_test_result {0 {1 2 3}}
+}
+
+do_faultsim_test 2 -start 1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT round(percent_rank() OVER win, 2),
+           round(cume_dist() OVER win, 2)
+    FROM t1
+    WINDOW win AS (ORDER BY a)
+  }
+} -test {
+  faultsim_test_result {0 {0.0 0.33 0.5 0.67 1.0 1.0}}
+}
+
+do_faultsim_test 3 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT min(d) OVER win, max(d) OVER win
+    FROM t1
+    WINDOW win AS (ORDER BY a RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING)
+  }
+} -test {
+  faultsim_test_result {0 {4 12 8 12 12 12}}
+}
+
+do_faultsim_test 4 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    CREATE VIEW aaa AS
+    SELECT min(d) OVER w, max(d) OVER w
+    FROM t1
+    WINDOW w AS (ORDER BY a RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING);
+    SELECT * FROM aaa;
+  }
+} -test {
+  faultsim_test_result {0 {4 12 8 12 12 12}}
+}
+
+do_faultsim_test 5 -start 1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT last_value(a) OVER win1,
+           last_value(a) OVER win2
+    FROM t1
+    WINDOW win1 AS (ORDER BY a ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING),
+           win2 AS (ORDER BY a)
+  }
+} -test {
+  faultsim_test_result {0 {5 1 9 5 9 9}}
+}
+
+do_faultsim_test 6 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT percent_rank() OVER (), cume_dist() OVER () FROM t1
+  }
+} -test {
+  faultsim_test_result {0 {0.0 1.0 0.0 1.0 0.0 1.0}}
+}
+
+do_faultsim_test 7 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT percent_rank() OVER (), cume_dist() OVER () FROM t1
+  }
+} -test {
+  faultsim_test_result {0 {0.0 1.0 0.0 1.0 0.0 1.0}}
+}
+
+do_faultsim_test 8 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql {
+    SELECT a, sum(b) OVER win1 FROM t1
+      WINDOW win1 AS (PARTITION BY a ),
+             win2 AS (PARTITION BY b )
+    ORDER BY a;
+  }
+} -test {
+  faultsim_test_result {0 {1 2 5 6 9 10}}
+}
+
+#-------------------------------------------------------------------------
+# The following test causes a cursor in REQURESEEK state to be passed
+# to sqlite3BtreeDelete(). An error is simulated within the seek operation
+# to restore the cursors position.
+#
+reset_db
+set big [string repeat x 900]
+do_execsql_test 9.0 {
+  PRAGMA page_size = 512;
+  PRAGMA cache_size = 2;
+  CREATE TABLE t(x INTEGER PRIMARY KEY, y TEXT);
+  WITH s(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<1900
+  )
+  INSERT INTO t(y) SELECT $big FROM s;
+}
+db close
+
+testvfs tvfs -default 1
+tvfs script vfs_callback
+tvfs filter xRead
+
+sqlite3 db test.db
+proc vfs_callback {method file args} {
+  if {$file=="" && [info exists ::tmp_read_fail]} {
+    incr ::tmp_read_fail -1
+    if {$::tmp_read_fail<=0} {
+      return "SQLITE_IOERR"
+    }
+  }
+  return "SQLITE_OK"
+}
+
+set FAULTSIM(tmpread) [list                \
+  -injectstart   tmpread_injectstart       \
+  -injectstop    tmpread_injectstop        \
+  -injecterrlist {{1 {disk I/O error}}}    \
+]
+proc tmpread_injectstart {iFail} {
+  set ::tmp_read_fail $iFail
+}
+proc tmpread_injectstop {} {
+  set ret [expr $::tmp_read_fail<=0]
+  unset -nocomplain ::tmp_read_fail 
+  return $ret
+}
+
+set L [db eval {SELECT 0.0 FROM t}]
+do_faultsim_test 9 -end 25 -faults tmpread -body {
+  execsql {
+    SELECT sum(y) OVER win FROM t
+    WINDOW win AS (
+      ORDER BY x ROWS BETWEEN UNBOUNDED PRECEDING AND 1800 FOLLOWING
+    )
+  }
+} -test {
+  faultsim_test_result [list 0 $::L]
+}
+
+catch {db close}
+tvfs delete
+
+reset_db
+do_execsql_test 10.0 {
+  CREATE TABLE t1(a, b, c, d);
+  CREATE TABLE t2(a, b, c, d);
+}
+
+do_faultsim_test 10 -faults oom* -prep {
+} -body {
+  execsql {
+    SELECT row_number() OVER win
+    FROM t1
+    WINDOW win AS (
+      ORDER BY (
+        SELECT percent_rank() OVER win2 FROM t2
+        WINDOW win2 AS (ORDER BY a)
+      )
+    )
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+reset_db
+do_execsql_test 11.0 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(c0 INTEGER UNIQUE);
+  INSERT INTO t0 VALUES(0);
+} {}
+
+do_faultsim_test 11 -faults oom* -prep {
+} -body {
+  execsql {
+    SELECT * FROM t0 WHERE 
+      (0, t0.c0) IN (SELECT DENSE_RANK() OVER(), LAG(0) OVER() FROM t0);
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+do_faultsim_test 11 -faults oom* -prep {
+} -body {
+  execsql {
+    VALUES(false),(current_date collate binary) 
+    intersect 
+    values(count() not like group_concat(cast(cast(0e00 as text) as integer) <= NULL || 0.4e-0 || 0x8 & true ) over () collate rtrim);
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+finish_test

@@ -1,0 +1,423 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on custom tokenizers that support synonyms.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5synonym
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc tcl_create {args} { return "tcl_tokenize" }
+
+foreach_detail_mode $testprefix {
+
+#-------------------------------------------------------------------------
+# Warm body test for the code in fts5_tcl.c.
+#
+fts5_tclnum_register db
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x, tokenize = "tclnum document", detail=%DETAIL%);
+  INSERT INTO ft VALUES('abc def ghi');
+  INSERT INTO ft VALUES('jkl mno pqr');
+  SELECT rowid, x FROM ft WHERE ft MATCH 'def';
+  SELECT x, rowid FROM ft WHERE ft MATCH 'pqr';
+} {1 {abc def ghi} {jkl mno pqr} 2}
+
+#-------------------------------------------------------------------------
+# Test a tokenizer that supports synonyms by adding extra entries to the
+# FTS index.
+#
+reset_db
+fts5_tclnum_register db
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(
+      x, tokenize = "tclnum document", detail=%DETAIL%
+  );
+  INSERT INTO ft VALUES('one two three');
+  INSERT INTO ft VALUES('four five six');
+  INSERT INTO ft VALUES('eight nine ten');
+} {}
+
+foreach {tn expr res} {
+  1 "3" 1
+  2 "eight OR 8 OR 5" {2 3}
+  3 "10" {}
+  4 "1*" {1}
+  5 "1 + 2" {1}
+} {
+  if {![fts5_expr_ok $expr ft]} continue
+  do_execsql_test 2.1.$tn {
+    SELECT rowid FROM ft WHERE ft MATCH $expr
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Test some broken tokenizers:
+#
+#   3.1.*: A tokenizer that declares the very first token to be colocated.
+#
+#   3.2.*: A tokenizer that reports two identical tokens at the same position.
+#          This is allowed.
+#
+reset_db
+sqlite3_fts5_create_tokenizer db tcl tcl_create
+proc tcl_tokenize {tflags text} {
+  set bColo 1
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    if {$bColo} {
+      sqlite3_fts5_token -colo $w $iStart $iEnd
+      set bColo 0
+    } {
+      sqlite3_fts5_token $w $iStart $iEnd
+    }
+  }
+}
+do_execsql_test 3.1.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x, tokenize = tcl);
+  INSERT INTO ft VALUES('one two three');
+  CREATE VIRTUAL TABLE vv USING fts5vocab(ft, row);
+  SELECT * FROM vv;
+} {
+  one 1 1   three 1 1   two 1 1
+}
+
+do_execsql_test 3.1.1 {
+  INSERT INTO ft(ft) VALUES('integrity-check');
+} {}
+
+proc tcl_tokenize {tflags text} {
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    sqlite3_fts5_token $w $iStart $iEnd
+  }
+}
+
+do_execsql_test 3.1.2 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one two three'
+} {1}
+
+reset_db
+sqlite3_fts5_create_tokenizer db tcl tcl_create
+proc tcl_tokenize {tflags text} {
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    sqlite3_fts5_token $w $iStart $iEnd
+    sqlite3_fts5_token -colo $w $iStart $iEnd
+  }
+}
+do_execsql_test 3.2.0 {
+  CREATE VIRTUAL TABLE ft USING fts5(x, tokenize = tcl);
+  INSERT INTO ft VALUES('one one two three');
+  CREATE VIRTUAL TABLE vv USING fts5vocab(ft, row);
+  SELECT * FROM vv;
+} {
+  one 1 4   three 1 2   two 1 2
+}
+do_execsql_test 3.2.1 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one';
+} {1}
+do_execsql_test 3.2.2 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one two three';
+} {1}
+do_execsql_test 3.2.3 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one + one + two + three';
+} {1}
+do_execsql_test 3.2.4 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one two two three';
+} {1}
+do_execsql_test 3.2.5 {
+  SELECT rowid FROM ft WHERE ft MATCH 'one + two + two + three';
+} {}
+
+#-------------------------------------------------------------------------
+# Check that expressions with synonyms can be parsed and executed.
+#
+reset_db
+fts5_tclnum_register db
+
+foreach {tn expr res} {
+  1  {abc}                           {"abc"}
+  2  {one}                           {"one"|"i"|"1"}
+  3  {3}                             {"3"|"iii"|"three"}
+  4  {3*}                            {"3" *}
+} {
+  do_execsql_test 4.1.$tn {
+    SELECT fts5_expr($expr, 'tokenize=tclnum')
+  } [list $res]
+}
+
+do_execsql_test 4.2.1 {
+  CREATE VIRTUAL TABLE xx USING fts5(x, tokenize=tclnum, detail=%DETAIL%);
+  INSERT INTO xx VALUES('one two');
+  INSERT INTO xx VALUES('three four');
+}
+
+do_execsql_test 4.2.2 {
+  SELECT rowid FROM xx WHERE xx MATCH '2'
+} {1}
+
+do_execsql_test 4.2.3 {
+  SELECT rowid FROM xx WHERE xx MATCH '3'
+} {2}
+
+do_test 5.0 {
+  execsql { 
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, tokenize=tclnum, detail=%DETAIL%)
+  }
+  foreach {rowid a b} {
+    1 {four v 4 i three} {1 3 five five 4 one}
+    2 {5 1 3 4 i} {2 2 v two 4}
+    3 {5 i 5 2 four 4 1} {iii ii five two 1}
+    4 {ii four 4 one 5 three five} {one 5 1 iii 4 3}
+    5 {three i v i four 4 1} {ii five five five iii}
+    6 {4 2 ii two 2 iii} {three 1 four 4 iv 1 iv}
+    7 {ii ii two three 2 5} {iii i ii iii iii one one}
+    8 {2 ii i two 3 three 2} {two iv v iii 3 five}
+    9 {i 2 iv 3 five four v} {iii 4 three i three ii 1}
+  } {
+    execsql { INSERT INTO t1(rowid, a, b) VALUES($rowid, $a, $b) }
+  }
+} {}
+
+
+foreach {tn q res} {
+  1 {one} {
+    1 {four v 4 [i] three} {[1] 3 five five 4 [one]}
+    2 {5 [1] 3 4 [i]} {2 2 v two 4}
+    3 {5 [i] 5 2 four 4 [1]} {iii ii five two [1]}
+    4 {ii four 4 [one] 5 three five} {[one] 5 [1] iii 4 3}
+    5 {three [i] v [i] four 4 [1]} {ii five five five iii}
+    6 {4 2 ii two 2 iii} {three [1] four 4 iv [1] iv}
+    7 {ii ii two three 2 5} {iii [i] ii iii iii [one] [one]}
+    8 {2 ii [i] two 3 three 2} {two iv v iii 3 five}
+    9 {[i] 2 iv 3 five four v} {iii 4 three [i] three ii [1]}
+  }
+  2 {five four} {
+    1 {[four] [v] [4] i three} {1 3 [five] [five] [4] one}
+    2 {[5] 1 3 [4] i} {2 2 [v] two [4]}
+    3 {[5] i [5] 2 [four] [4] 1} {iii ii [five] two 1}
+    4 {ii [four] [4] one [5] three [five]} {one [5] 1 iii [4] 3}
+    5 {three i [v] i [four] [4] 1} {ii [five] [five] [five] iii}
+    8 {2 ii i two 3 three 2} {two [iv] [v] iii 3 [five]}
+    9 {i 2 [iv] 3 [five] [four] [v]} {iii [4] three i three ii 1}
+  }
+  3 {one OR two OR iii OR 4 OR v} {
+    1 {[four] [v] [4] [i] [three]} {[1] [3] [five] [five] [4] [one]}
+    2 {[5] [1] [3] [4] [i]} {[2] [2] [v] [two] [4]}
+    3 {[5] [i] [5] [2] [four] [4] [1]} {[iii] [ii] [five] [two] [1]}
+    4 {[ii] [four] [4] [one] [5] [three] [five]} {[one] [5] [1] [iii] [4] [3]}
+    5 {[three] [i] [v] [i] [four] [4] [1]} {[ii] [five] [five] [five] [iii]}
+    6 {[4] [2] [ii] [two] [2] [iii]} {[three] [1] [four] [4] [iv] [1] [iv]}
+    7 {[ii] [ii] [two] [three] [2] [5]} {[iii] [i] [ii] [iii] [iii] [one] [one]}
+    8 {[2] [ii] [i] [two] [3] [three] [2]} {[two] [iv] [v] [iii] [3] [five]}
+    9 {[i] [2] [iv] [3] [five] [four] [v]} {[iii] [4] [three] [i] [three] [ii] [1]}
+  }
+
+  4 {5 + 1} {
+    2 {[5 1] 3 4 i} {2 2 v two 4} 
+    3 {[5 i] 5 2 four 4 1} {iii ii five two 1} 
+    4 {ii four 4 one 5 three five} {one [5 1] iii 4 3} 
+    5 {three i [v i] four 4 1} {ii five five five iii}
+  }
+
+  5 {one + two + three} {
+    7 {ii ii two three 2 5} {iii [i ii iii] iii one one}
+    8 {2 ii [i two 3] three 2} {two iv v iii 3 five}
+  }
+
+  6 {"v v"} {
+    1 {four v 4 i three} {1 3 [five five] 4 one}
+    5 {three i v i four 4 1} {ii [five five five] iii}
+  }
+} {
+  if {![fts5_expr_ok $q t1]} continue
+  do_execsql_test 5.1.$tn {
+    SELECT rowid, highlight(t1, 0, '[', ']'), highlight(t1, 1, '[', ']')
+    FROM t1 WHERE t1 MATCH $q
+  } $res
+}
+
+# Test that the xQueryPhrase() API works with synonyms.
+#
+proc mit {blob} {
+  set scan(littleEndian) i*
+  set scan(bigEndian) I*
+  binary scan $blob $scan($::tcl_platform(byteOrder)) r
+  return $r
+}
+db func mit mit
+sqlite3_fts5_register_matchinfo db
+
+foreach {tn q res} {
+  1 {one} {
+      1 {1 11 7 2 12 6}     2 {2 11 7 0 12 6} 
+      3 {2 11 7 1 12 6}     4 {1 11 7 2 12 6} 
+      5 {3 11 7 0 12 6}     6 {0 11 7 2 12 6} 
+      7 {0 11 7 3 12 6}     8 {1 11 7 0 12 6} 
+      9 {1 11 7 2 12 6}
+  }
+} {
+  do_execsql_test 5.2.$tn {
+    SELECT rowid, mit(matchinfo(t1, 'x')) FROM t1 WHERE t1 MATCH $q
+  } $res
+}
+
+#-------------------------------------------------------------------------
+# Test terms with more than 4 synonyms.
+#
+reset_db
+sqlite3_fts5_create_tokenizer db tcl tcl_create
+proc tcl_tokenize {tflags text} {
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    sqlite3_fts5_token $w $iStart $iEnd
+    if {$tflags=="query" && [string length $w]==1} {
+      for {set i 2} {$i<=10} {incr i} {
+        sqlite3_fts5_token -colo [string repeat $w $i] $iStart $iEnd
+      }
+    }
+  }
+}
+
+do_execsql_test 6.0.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, tokenize=tcl, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('yy xx qq');
+  INSERT INTO t1 VALUES('yy xx xx');
+}
+if {[fts5_expr_ok "NEAR(y q)" t1]} {
+  do_execsql_test 6.0.2 {
+    SELECT * FROM t1 WHERE t1 MATCH 'NEAR(y q)';
+  } {{yy xx qq}}
+}
+
+do_test 6.0.3 {
+  execsql { 
+    CREATE VIRTUAL TABLE t2 USING fts5(a, b, tokenize=tcl, detail=%DETAIL%)
+  }
+  foreach {rowid a b} {
+    1 {yyyy vvvvv qq oo yyyyyy vvvv eee} {ffff uu r qq aaaa}
+    2 {ww oooooo bbbbb ssssss mm} {ffffff yy iiii rr s ccc qqqqq}
+    3 {zzzz llll gggggg cccc uu} {hhhhhh aaaa ppppp rr ee jjjj}
+    4 {r f i rrrrrr ww hhh} {aa yyy t x aaaaa ii}
+    5 {fffff mm vvvv ooo ffffff kkkk tttt} {cccccc bb e zzz d n}
+    6 {iii dddd hh qqqq ddd ooo} {ttt d c b aaaaaa qqqq}
+    7 {jjjj rrrr v zzzzz u tt t} {ppppp pp dddd mm hhh uuu}
+    8 {gggg rrrrrr kkkk vvvv gggg jjjjjj b} {dddddd jj r w cccc wwwwww ss}
+    9 {kkkkk qqq oooo e tttttt mmm} {e ss qqqqqq hhhh llllll gg}
+  } {
+    execsql { INSERT INTO t2(rowid, a, b) VALUES($rowid, $a, $b) }
+  }
+} {}
+
+foreach {tn q res} {
+  1 {a} {
+    1 {yyyy vvvvv qq oo yyyyyy vvvv eee} {ffff uu r qq [aaaa]}
+    3 {zzzz llll gggggg cccc uu} {hhhhhh [aaaa] ppppp rr ee jjjj}
+    4 {r f i rrrrrr ww hhh} {[aa] yyy t x [aaaaa] ii}
+    6 {iii dddd hh qqqq ddd ooo} {ttt d c b [aaaaaa] qqqq}
+  }
+
+  2 {a AND q} {
+    1 {yyyy vvvvv [qq] oo yyyyyy vvvv eee} {ffff uu r [qq] [aaaa]}
+    6 {iii dddd hh [qqqq] ddd ooo} {ttt d c b [aaaaaa] [qqqq]}
+  }
+
+  3 {o OR (q AND a)} {
+    1 {yyyy vvvvv [qq] [oo] yyyyyy vvvv eee} {ffff uu r [qq] [aaaa]}
+    2 {ww [oooooo] bbbbb ssssss mm} {ffffff yy iiii rr s ccc qqqqq}
+    5 {fffff mm vvvv [ooo] ffffff kkkk tttt} {cccccc bb e zzz d n}
+    6 {iii dddd hh [qqqq] ddd [ooo]} {ttt d c b [aaaaaa] [qqqq]}
+    9 {kkkkk qqq [oooo] e tttttt mmm} {e ss qqqqqq hhhh llllll gg}
+  }
+
+  4 {NEAR(q y, 20)} {
+    1 {[yyyy] vvvvv [qq] oo [yyyyyy] vvvv eee} {ffff uu r qq aaaa}
+    2 {ww oooooo bbbbb ssssss mm} {ffffff [yy] iiii rr s ccc [qqqqq]}
+  }
+} {
+  if {![fts5_expr_ok $q t2]} continue
+
+  do_execsql_test 6.1.$tn.asc {
+    SELECT rowid, highlight(t2, 0, '[', ']'), highlight(t2, 1, '[', ']')
+    FROM t2 WHERE t2 MATCH $q
+  } $res
+
+  set res2 [list]
+  foreach {rowid a b} $res {
+    set res2 [concat [list $rowid $a $b] $res2]
+  }
+
+  do_execsql_test 6.1.$tn.desc {
+    SELECT rowid, highlight(t2, 0, '[', ']'), highlight(t2, 1, '[', ']')
+    FROM t2 WHERE t2 MATCH $q ORDER BY rowid DESC
+  } $res2
+}
+
+do_execsql_test 6.2.1 {
+  INSERT INTO t2(rowid, a, b) VALUES(13,
+      'x xx xxx xxxx xxxxx xxxxxx xxxxxxx', 'y yy yyy yyyy yyyyy yyyyyy yyyyyyy'
+  );
+  SELECT rowid, highlight(t2, 0, '<', '>'), highlight(t2, 1, '(', ')')
+  FROM t2 WHERE t2 MATCH 'x OR y'
+} {
+  1 {<yyyy> vvvvv qq oo <yyyyyy> vvvv eee} {ffff uu r qq aaaa}
+  2 {ww oooooo bbbbb ssssss mm} {ffffff (yy) iiii rr s ccc qqqqq}
+  4 {r f i rrrrrr ww hhh} {aa (yyy) t (x) aaaaa ii}
+  13 {<x> <xx> <xxx> <xxxx> <xxxxx> <xxxxxx> <xxxxxxx>}
+     {(y) (yy) (yyy) (yyyy) (yyyyy) (yyyyyy) (yyyyyyy)}
+}
+
+#-------------------------------------------------------------------------
+# Test that the xColumnSize() API is not confused by colocated tokens.
+#
+reset_db
+sqlite3_fts5_create_tokenizer db tcl tcl_create
+fts5_aux_test_functions db
+proc tcl_tokenize {tflags text} {
+  foreach {w iStart iEnd} [fts5_tokenize_split $text] {
+    sqlite3_fts5_token $w $iStart $iEnd
+    if {[string length $w]==1} {
+      for {set i 2} {$i<=10} {incr i} {
+        sqlite3_fts5_token -colo [string repeat $w $i] $iStart $iEnd
+      }
+    }
+  }
+}
+
+do_execsql_test 7.0.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, columnsize=1, tokenize=tcl, detail=%DETAIL%);
+  INSERT INTO t1 VALUES('0 2 3', '4 5 6 7');
+  INSERT INTO t1 VALUES('8 9', '0 0 0 0 0 0 0 0 0 0');
+  SELECT fts5_test_columnsize(t1) FROM t1 WHERE t1 MATCH '000 AND 00 AND 0';
+} {{3 4} {2 10}}
+
+do_execsql_test 7.0.2 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+do_execsql_test 7.1.1 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, b, columnsize=0, tokenize=tcl, detail=%DETAIL%);
+  INSERT INTO t2 VALUES('0 2 3', '4 5 6 7');
+  INSERT INTO t2 VALUES('8 9', '0 0 0 0 0 0 0 0 0 0');
+  SELECT fts5_test_columnsize(t2) FROM t2 WHERE t2 MATCH '000 AND 00 AND 0';
+} {{3 4} {2 10}}
+
+do_execsql_test 7.1.2 {
+  INSERT INTO t2(t2) VALUES('integrity-check');
+}
+
+} ;# foreach_detail_mode
+
+finish_test

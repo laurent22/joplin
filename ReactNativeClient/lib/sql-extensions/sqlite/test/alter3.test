@@ -1,0 +1,398 @@
+# 2005 February 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing that SQLite can handle a subtle 
+# file format change that may be used in the future to implement
+# "ALTER TABLE ... ADD COLUMN".
+#
+# $Id: alter3.test,v 1.11 2008/03/19 00:21:31 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+
+source $testdir/tester.tcl
+
+# If SQLITE_OMIT_ALTERTABLE is defined, omit this file.
+ifcapable !altertable {
+  finish_test
+  return
+}
+
+# Determine if there is a codec available on this test.
+#
+if {[catch {sqlite3 -has-codec} r] || $r} {
+  set has_codec 1
+} else {
+  set has_codec 0
+}
+
+
+# Test Organisation:
+# ------------------
+#
+# alter3-1.*: Test that ALTER TABLE correctly modifies the CREATE TABLE sql.
+# alter3-2.*: Test error messages.
+# alter3-3.*: Test adding columns with default value NULL.
+# alter3-4.*: Test adding columns with default values other than NULL.
+# alter3-5.*: Test adding columns to tables in ATTACHed databases.
+# alter3-6.*: Test that temp triggers are not accidentally dropped.
+# alter3-7.*: Test that VACUUM resets the file-format.
+#
+
+# This procedure returns the value of the file-format in file 'test.db'.
+# 
+proc get_file_format {{fname test.db}} {
+  return [hexio_get_int [hexio_read $fname 44 4]]
+}
+
+do_test alter3-1.1 {
+  sqlite3_db_config db LEGACY_FILE_FORMAT 1
+  execsql {
+    CREATE TABLE abc(a, b, c);
+    SELECT sql FROM sqlite_master;
+  }
+} {{CREATE TABLE abc(a, b, c)}}
+do_test alter3-1.2 {
+  execsql {ALTER TABLE abc ADD d INTEGER;}
+  execsql {
+    SELECT sql FROM sqlite_master;
+  }
+} {{CREATE TABLE abc(a, b, c, d INTEGER)}}
+do_test alter3-1.3 {
+  execsql {ALTER TABLE abc ADD e}
+  execsql {
+    SELECT sql FROM sqlite_master;
+  }
+} {{CREATE TABLE abc(a, b, c, d INTEGER, e)}}
+do_test alter3-1.4 {
+  execsql {
+    CREATE TABLE main.t1(a, b);
+    ALTER TABLE t1 ADD c;
+    SELECT sql FROM sqlite_master WHERE tbl_name = 't1';
+  }
+} {{CREATE TABLE t1(a, b, c)}}
+do_test alter3-1.5 {
+  execsql {
+    ALTER TABLE t1 ADD d CHECK (a>d);
+    SELECT sql FROM sqlite_master WHERE tbl_name = 't1';
+  }
+} {{CREATE TABLE t1(a, b, c, d CHECK (a>d))}}
+ifcapable foreignkey {
+  do_test alter3-1.6 {
+    execsql {
+      CREATE TABLE t2(a, b, UNIQUE(a, b));
+      ALTER TABLE t2 ADD c REFERENCES t1(c)  ;
+      SELECT sql FROM sqlite_master WHERE tbl_name = 't2' AND type = 'table';
+    }
+  } {{CREATE TABLE t2(a, b, c REFERENCES t1(c), UNIQUE(a, b))}}
+}
+do_test alter3-1.7 {
+  execsql {
+    CREATE TABLE t3(a, b, UNIQUE(a, b));
+    ALTER TABLE t3 ADD COLUMN c VARCHAR(10, 20);
+    SELECT sql FROM sqlite_master WHERE tbl_name = 't3' AND type = 'table';
+  }
+} {{CREATE TABLE t3(a, b, c VARCHAR(10, 20), UNIQUE(a, b))}}
+do_test alter3-1.99 {
+  catchsql {
+    # May not exist if foriegn-keys are omitted at compile time.
+    DROP TABLE t2; 
+  }
+  execsql {
+    DROP TABLE abc; 
+    DROP TABLE t1; 
+    DROP TABLE t3; 
+  }
+} {}
+
+do_test alter3-2.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1,2);
+  }
+  catchsql {
+    ALTER TABLE t1 ADD c PRIMARY KEY;
+  }
+} {1 {Cannot add a PRIMARY KEY column}}
+do_test alter3-2.2 {
+  catchsql {
+    ALTER TABLE t1 ADD c UNIQUE
+  }
+} {1 {Cannot add a UNIQUE column}}
+do_test alter3-2.3 {
+  catchsql {
+    ALTER TABLE t1 ADD b VARCHAR(10)
+  }
+} {1 {duplicate column name: b}}
+do_test alter3-2.3 {
+  catchsql {
+    ALTER TABLE t1 ADD c NOT NULL;
+  }
+} {1 {Cannot add a NOT NULL column with default value NULL}}
+do_test alter3-2.4 {
+  catchsql {
+    ALTER TABLE t1 ADD c NOT NULL DEFAULT 10;
+  }
+} {0 {}}
+ifcapable view {
+  do_test alter3-2.5 {
+    execsql {
+      CREATE VIEW v1 AS SELECT * FROM t1;
+    }
+    catchsql {
+      alter table v1 add column d;
+    }
+  } {1 {Cannot add a column to a view}}
+}
+do_test alter3-2.6 {
+  catchsql {
+    alter table t1 add column d DEFAULT CURRENT_TIME;
+  }
+} {1 {Cannot add a column with non-constant default}}
+do_test alter3-2.99 {
+  execsql {
+    DROP TABLE t1;
+  }
+} {}
+
+do_test alter3-3.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 100);
+    INSERT INTO t1 VALUES(2, 300);
+    SELECT * FROM t1;
+  }
+} {1 100 2 300}
+do_test alter3-3.1 {
+  execsql {
+    PRAGMA schema_version = 10;
+  }
+} {}
+do_test alter3-3.2 {
+  execsql {
+    ALTER TABLE t1 ADD c;
+    SELECT * FROM t1;
+  }
+} {1 100 {} 2 300 {}}
+if {!$has_codec} {
+  do_test alter3-3.3 {
+    get_file_format
+  } {3}
+}
+ifcapable schema_version {
+  do_test alter3-3.4 {
+    execsql {
+      PRAGMA schema_version;
+    }
+  } {11}
+}
+
+do_test alter3-4.1 {
+  db close
+  forcedelete test.db
+  set ::DB [sqlite3 db test.db]
+  sqlite3_db_config db LEGACY_FILE_FORMAT 1
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 100);
+    INSERT INTO t1 VALUES(2, 300);
+    SELECT * FROM t1;
+  }
+} {1 100 2 300}
+do_test alter3-4.1 {
+  execsql {
+    PRAGMA schema_version = 20;
+  }
+} {}
+do_test alter3-4.2 {
+  execsql {
+    ALTER TABLE t1 ADD c DEFAULT 'hello world';
+    SELECT * FROM t1;
+  }
+} {1 100 {hello world} 2 300 {hello world}}
+if {!$has_codec} {
+  do_test alter3-4.3 {
+    get_file_format
+  } {3}
+}
+ifcapable schema_version {
+  do_test alter3-4.4 {
+    execsql {
+      PRAGMA schema_version;
+    }
+  } {21}
+}
+do_test alter3-4.99 {
+  execsql {
+    DROP TABLE t1;
+  }
+} {}
+
+ifcapable attach {
+  do_test alter3-5.1 {
+    forcedelete test2.db
+    forcedelete test2.db-journal
+    execsql {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 'one');
+      INSERT INTO t1 VALUES(2, 'two');
+      ATTACH 'test2.db' AS aux;
+      CREATE TABLE aux.t1 AS SELECT * FROM t1;
+      PRAGMA aux.schema_version = 30;
+      SELECT sql FROM aux.sqlite_master;
+    } 
+  } {{CREATE TABLE t1(a,b)}}
+  do_test alter3-5.2 {
+    execsql {
+      ALTER TABLE aux.t1 ADD COLUMN c VARCHAR(128);
+      SELECT sql FROM aux.sqlite_master;
+    }
+  } {{CREATE TABLE t1(a,b, c VARCHAR(128))}}
+  do_test alter3-5.3 {
+    execsql {
+      SELECT * FROM aux.t1;
+    }
+  } {1 one {} 2 two {}}
+  ifcapable schema_version {
+    do_test alter3-5.4 {
+      execsql {
+        PRAGMA aux.schema_version;
+      }
+    } {31}
+  }
+  if {!$has_codec} {
+    do_test alter3-5.5 {
+      list [get_file_format test2.db] [get_file_format]
+    } {3 3}
+  }
+  do_test alter3-5.6 {
+    execsql {
+      ALTER TABLE aux.t1 ADD COLUMN d DEFAULT 1000;
+      SELECT sql FROM aux.sqlite_master;
+    }
+  } {{CREATE TABLE t1(a,b, c VARCHAR(128), d DEFAULT 1000)}}
+  do_test alter3-5.7 {
+    execsql {
+      SELECT * FROM aux.t1;
+    }
+  } {1 one {} 1000 2 two {} 1000}
+  ifcapable schema_version {
+    do_test alter3-5.8 {
+      execsql {
+        PRAGMA aux.schema_version;
+      }
+    } {32}
+  }
+  do_test alter3-5.9 {
+    execsql {
+      SELECT * FROM t1;
+    }
+  } {1 one 2 two}
+  do_test alter3-5.99 {
+    execsql {
+      DROP TABLE aux.t1;
+      DROP TABLE t1;
+    }
+  } {}
+}
+
+#----------------------------------------------------------------
+# Test that the table schema is correctly reloaded when a column
+# is added to a table.
+#
+ifcapable trigger&&tempdb {
+  do_test alter3-6.1 {
+    execsql {
+      CREATE TABLE t1(a, b);
+      CREATE TABLE log(trig, a, b);
+
+      CREATE TRIGGER t1_a AFTER INSERT ON t1 BEGIN
+        INSERT INTO log VALUES('a', new.a, new.b);
+      END;
+      CREATE TEMP TRIGGER t1_b AFTER INSERT ON t1 BEGIN
+        INSERT INTO log VALUES('b', new.a, new.b);
+      END;
+  
+      INSERT INTO t1 VALUES(1, 2);
+      SELECT * FROM log;
+    }
+  } {b 1 2 a 1 2}
+  do_test alter3-6.2 {
+    execsql {
+      ALTER TABLE t1 ADD COLUMN c DEFAULT 'c';
+      INSERT INTO t1(a, b) VALUES(3, 4);
+      SELECT * FROM log;
+    }
+  } {b 1 2 a 1 2 b 3 4 a 3 4}
+}
+
+if {!$has_codec} {
+  ifcapable vacuum {
+    do_test alter3-7.1 {
+      execsql {
+        VACUUM;
+      }
+      get_file_format
+    } {1}
+    do_test alter3-7.2 {
+      execsql {
+        CREATE TABLE abc(a, b, c);
+        ALTER TABLE abc ADD d DEFAULT NULL;
+      }
+      get_file_format
+    } {3}
+    do_test alter3-7.3 {
+      execsql {
+        ALTER TABLE abc ADD e DEFAULT 10;
+      }
+      get_file_format
+    } {3}
+    do_test alter3-7.4 {
+      execsql {
+        ALTER TABLE abc ADD f DEFAULT NULL;
+      }
+      get_file_format
+    } {3}
+    do_test alter3-7.5 {
+      execsql {
+        VACUUM;
+      }
+      get_file_format
+    } {1}
+  }
+}
+
+# Ticket #1183 - Make sure adding columns to large tables does not cause
+# memory corruption (as was the case before this bug was fixed).
+do_test alter3-8.1 {
+  execsql {
+    CREATE TABLE t4(c1);
+  }
+} {}
+set ::sql ""
+do_test alter3-8.2 {
+  set cols c1
+  for {set i 2} {$i < 100} {incr i} {
+    execsql "
+      ALTER TABLE t4 ADD c$i
+    "
+    lappend cols c$i
+  }
+  set ::sql "CREATE TABLE t4([join $cols {, }])"
+  list 
+} {}
+do_test alter3-8.2 {
+  execsql {
+    SELECT sql FROM sqlite_master WHERE name = 't4';
+  }
+} [list $::sql]
+
+finish_test

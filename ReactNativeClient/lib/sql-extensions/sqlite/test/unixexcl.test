@@ -1,0 +1,129 @@
+# 2011 March 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the "unix-excl" VFS module (part of 
+# os_unix.c).
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+
+if {$::tcl_platform(platform)!="unix" || [info commands test_syscall]==""} {
+  finish_test
+  return
+} 
+set testprefix unixexcl
+
+
+
+# Test that when using VFS "unix-excl", the first time the database is read
+# a process-wide exclusive lock is taken on it. This means other connections
+# within the process may still access the db normally, but connections from
+# outside the process cannot.
+#
+do_multiclient_test tn {
+  do_test unixexcl-1.$tn.1 {
+    sql1 {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES('hello', 'world');
+    }
+  } {}
+  do_test unixexcl-1.$tn.2 { sql2 { SELECT * FROM t1 } } {hello world}
+  do_test unixexcl-1.$tn.3 {
+    code1 {
+      db close
+      sqlite3 db test.db -vfs unix-excl
+      db eval { SELECT * FROM t1 }
+    }
+  } {hello world}
+  if {$tn==1} {
+    do_test unixexcl-1.$tn.4.multiproc { 
+      csql2 { SELECT * FROM t1 } 
+    } {1 {database is locked}}
+  } else {
+    do_test unixexcl-1.$tn.4.singleproc { 
+      csql2 { SELECT * FROM t1 } 
+    } {0 {hello world}}
+  }
+}
+
+# Test that when using VFS "unix-excl", if a file is opened in read-only mode
+# the behaviour is the same as if VFS "unix" were used.
+#
+do_multiclient_test tn {
+  do_test unixexcl-2.$tn.1 {
+    sql1 {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES('hello', 'world');
+    }
+  } {}
+  do_test unixexcl-2.$tn.2 { sql2 { SELECT * FROM t1 } } {hello world}
+  do_test unixexcl-2.$tn.3 {
+    code1 {
+      db close
+      sqlite3 db test.db -readonly yes -vfs unix-excl
+      db eval { SELECT * FROM t1 }
+    }
+  } {hello world}
+  do_test unixexcl-2.$tn.4 { 
+    csql2 { SELECT * FROM t1 } 
+  } {0 {hello world}}
+}
+
+do_multiclient_test tn {
+  do_test unixexcl-3.$tn.1 {
+    code1 { db close; sqlite3 db file:test.db?psow=0 -vfs unix-excl -uri 1 }
+    code2 { db2 close; sqlite3 db2 file:test.db?psow=0 -vfs unix-excl -uri 1 }
+    sql1 {
+      PRAGMA auto_vacuum = 0;
+      PRAGMA journal_mode = WAL;
+      PRAGMA synchronous = FULL;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    }
+  } {wal}
+
+  if {$tn==1} {
+    do_test unixexcl-3.$tn.1.multiproc {
+      csql2 { SELECT * FROM t1; }
+    } {1 {database is locked}}
+  } else {
+    do_test unixexcl-3.$tn.1.singleproc {
+      sql2 { SELECT * FROM t1; }
+    } {1 2}
+
+    do_test unixexcl-3.$tn.2 {
+      sql2 { 
+        BEGIN;
+          SELECT * FROM t1;
+      }
+    } {1 2}
+    do_test unixexcl-3.$tn.3 {
+      sql1 { PRAGMA wal_checkpoint; INSERT INTO t1 VALUES(3, 4); }
+    } {0 5 5}
+    do_test unixexcl-3.$tn.4 {
+      sql2 { SELECT * FROM t1; }
+    } {1 2}
+    do_test unixexcl-3.$tn.5 {
+      sql1 { SELECT * FROM t1; }
+    } {1 2 3 4}
+    do_test unixexcl-3.$tn.6 {
+      sql2 { COMMIT; SELECT * FROM t1; }
+    } {1 2 3 4}
+    do_test unixexcl-3.$tn.7 {
+      sql1 { PRAGMA wal_checkpoint; }
+    } {0 7 7}
+  }
+}
+
+finish_test

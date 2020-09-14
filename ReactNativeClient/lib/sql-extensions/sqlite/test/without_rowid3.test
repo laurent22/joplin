@@ -1,0 +1,2111 @@
+# 2013-11-02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for foreign keys on WITHOUT ROWID
+# tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable {!foreignkey||!trigger} {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Test structure:
+#
+# without_rowid3-1.*: Simple tests to check that immediate and deferred foreign key 
+#            constraints work when not inside a transaction.
+#            
+# without_rowid3-2.*: Tests to verify that deferred foreign keys work inside
+#            explicit transactions (i.e that processing really is deferred).
+#
+# without_rowid3-3.*: Tests that a statement transaction is rolled back if an
+#            immediate foreign key constraint is violated.
+#
+# without_rowid3-4.*: Test that FK actions may recurse even when recursive triggers
+#            are disabled.
+#
+# without_rowid3-5.*: Check that if foreign-keys are enabled, it is not possible
+#            to write to an FK column using the incremental blob API.
+#
+# without_rowid3-6.*: Test that FK processing is automatically disabled when 
+#            running VACUUM.
+#
+# without_rowid3-7.*: Test using an IPK as the key in the child (referencing) table.
+#
+# without_rowid3-8.*: Test that enabling/disabling foreign key support while a 
+#            transaction is active is not possible.
+#
+# without_rowid3-9.*: Test SET DEFAULT actions.
+#
+# without_rowid3-10.*: Test errors.
+#
+# without_rowid3-11.*: Test CASCADE actions.
+#
+# without_rowid3-12.*: Test RESTRICT actions.
+#
+# without_rowid3-13.*: Test that FK processing is performed when a row is REPLACED by
+#             an UPDATE or INSERT statement.
+#
+# without_rowid3-14.*: Test the ALTER TABLE and DROP TABLE commands.
+#
+# without_rowid3-15.*: Test that if there are no (known) outstanding foreign key 
+#             constraint violations in the database, inserting into a parent
+#             table or deleting from a child table does not cause SQLite
+#             to check if this has repaired an outstanding violation.
+#
+# without_rowid3-16.*: Test that rows that refer to themselves may be inserted, 
+#             updated and deleted.
+#
+# without_rowid3-17.*: Test that the "count_changes" pragma does not interfere with
+#             FK constraint processing.
+# 
+# without_rowid3-18.*: Test that the authorization callback is invoked when processing
+#             FK constraints.
+#
+# without_rowid3-20.*: Test that ON CONFLICT clauses specified as part of statements
+#             do not affect the operation of FK constraints.
+#
+# without_rowid3-genfkey.*: Tests that were used with the shell tool .genfkey
+#            command. Recycled to test the built-in implementation.
+#
+# without_rowid3-dd08e5.*:  Tests to verify that ticket dd08e5a988d00decc4a543daa8d
+#                  has been fixed.
+#
+
+
+execsql { PRAGMA foreign_keys = on }
+
+set FkeySimpleSchema {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+  CREATE TABLE t2(c REFERENCES t1(a) /D/ , d);
+
+  CREATE TABLE t3(a PRIMARY KEY, b) WITHOUT rowid;
+  CREATE TABLE t4(c REFERENCES t3 /D/, d);
+
+  CREATE TABLE t7(a, b INT PRIMARY KEY) WITHOUT rowid;
+  CREATE TABLE t8(c REFERENCES t7 /D/, d);
+
+  CREATE TABLE t9(a REFERENCES nosuchtable, b);
+  CREATE TABLE t10(a REFERENCES t9(c) /D/, b);
+}
+
+
+set FkeySimpleTests {
+  1.1  "INSERT INTO t2 VALUES(1, 3)"      {1 {FOREIGN KEY constraint failed}}
+  1.2  "INSERT INTO t1 VALUES(1, 2)"      {0 {}}
+  1.3  "INSERT INTO t2 VALUES(1, 3)"      {0 {}}
+  1.4  "INSERT INTO t2 VALUES(2, 4)"      {1 {FOREIGN KEY constraint failed}}
+  1.5  "INSERT INTO t2 VALUES(NULL, 4)"   {0 {}}
+  1.6  "UPDATE t2 SET c=2 WHERE d=4"      {1 {FOREIGN KEY constraint failed}}
+  1.7  "UPDATE t2 SET c=1 WHERE d=4"      {0 {}}
+  1.9  "UPDATE t2 SET c=1 WHERE d=4"      {0 {}}
+  1.10 "UPDATE t2 SET c=NULL WHERE d=4"   {0 {}}
+  1.11 "DELETE FROM t1 WHERE a=1"         {1 {FOREIGN KEY constraint failed}}
+  1.12 "UPDATE t1 SET a = 2"              {1 {FOREIGN KEY constraint failed}}
+  1.13 "UPDATE t1 SET a = 1"              {0 {}}
+
+  2.1  "INSERT INTO t4 VALUES(1, 3)"      {1 {FOREIGN KEY constraint failed}}
+  2.2  "INSERT INTO t3 VALUES(1, 2)"      {0 {}}
+  2.3  "INSERT INTO t4 VALUES(1, 3)"      {0 {}}
+
+  4.1  "INSERT INTO t8 VALUES(1, 3)"      {1 {FOREIGN KEY constraint failed}}
+  4.2  "INSERT INTO t7 VALUES(2, 1)"      {0 {}}
+  4.3  "INSERT INTO t8 VALUES(1, 3)"      {0 {}}
+  4.4  "INSERT INTO t8 VALUES(2, 4)"      {1 {FOREIGN KEY constraint failed}}
+  4.5  "INSERT INTO t8 VALUES(NULL, 4)"   {0 {}}
+  4.6  "UPDATE t8 SET c=2 WHERE d=4"      {1 {FOREIGN KEY constraint failed}}
+  4.7  "UPDATE t8 SET c=1 WHERE d=4"      {0 {}}
+  4.9  "UPDATE t8 SET c=1 WHERE d=4"      {0 {}}
+  4.10 "UPDATE t8 SET c=NULL WHERE d=4"   {0 {}}
+  4.11 "DELETE FROM t7 WHERE b=1"         {1 {FOREIGN KEY constraint failed}}
+  4.12 "UPDATE t7 SET b = 2"              {1 {FOREIGN KEY constraint failed}}
+  4.13 "UPDATE t7 SET b = 1"              {0 {}}
+  4.14 "INSERT INTO t8 VALUES('a', 'b')"  {1 {FOREIGN KEY constraint failed}}
+  4.15 "UPDATE t7 SET b = 5"              {1 {FOREIGN KEY constraint failed}}
+  4.17 "UPDATE t7 SET a = 10"             {0 {}}
+
+  5.1  "INSERT INTO t9 VALUES(1, 3)"      {1 {no such table: main.nosuchtable}}
+  5.2  "INSERT INTO t10 VALUES(1, 3)"  
+                            {1 {foreign key mismatch - "t10" referencing "t9"}}
+}
+
+do_test without_rowid3-1.1.0 {
+  execsql [string map {/D/ {}} $FkeySimpleSchema]
+} {}
+foreach {tn zSql res} $FkeySimpleTests {
+  do_test without_rowid3-1.1.$tn.1 { catchsql $zSql } $res
+  do_test without_rowid3-1.1.$tn.2 { execsql {PRAGMA foreign_key_check(t1)} } {}
+  do_test without_rowid3-1.1.$tn.3 { execsql {PRAGMA foreign_key_check(t2)} } {}
+  do_test without_rowid3-1.1.$tn.4 { execsql {PRAGMA foreign_key_check(t3)} } {}
+  do_test without_rowid3-1.1.$tn.5 { execsql {PRAGMA foreign_key_check(t4)} } {}
+  do_test without_rowid3-1.1.$tn.6 { execsql {PRAGMA foreign_key_check(t7)} } {}
+  do_test without_rowid3-1.1.$tn.7 { execsql {PRAGMA foreign_key_check(t8)} } {}
+}
+drop_all_tables
+
+do_test without_rowid3-1.2.0 {
+  execsql [string map {/D/ {DEFERRABLE INITIALLY DEFERRED}} $FkeySimpleSchema]
+} {}
+foreach {tn zSql res} $FkeySimpleTests {
+  do_test without_rowid3-1.2.$tn { catchsql $zSql } $res
+  do_test without_rowid3-1.2.$tn.2 { execsql {PRAGMA foreign_key_check(t1)} } {}
+  do_test without_rowid3-1.2.$tn.3 { execsql {PRAGMA foreign_key_check(t2)} } {}
+  do_test without_rowid3-1.2.$tn.4 { execsql {PRAGMA foreign_key_check(t3)} } {}
+  do_test without_rowid3-1.2.$tn.5 { execsql {PRAGMA foreign_key_check(t4)} } {}
+  do_test without_rowid3-1.2.$tn.6 { execsql {PRAGMA foreign_key_check(t7)} } {}
+  do_test without_rowid3-1.2.$tn.7 { execsql {PRAGMA foreign_key_check(t8)} } {}
+}
+drop_all_tables
+
+do_test without_rowid3-1.3.0 {
+  execsql [string map {/D/ {}} $FkeySimpleSchema]
+  execsql { PRAGMA count_changes = 1 }
+} {}
+foreach {tn zSql res} $FkeySimpleTests {
+  if {$res == "0 {}"} { set res {0 1} }
+  do_test without_rowid3-1.3.$tn { catchsql $zSql } $res
+  do_test without_rowid3-1.3.$tn.2 { execsql {PRAGMA foreign_key_check(t1)} } {}
+  do_test without_rowid3-1.3.$tn.3 { execsql {PRAGMA foreign_key_check(t2)} } {}
+  do_test without_rowid3-1.3.$tn.4 { execsql {PRAGMA foreign_key_check(t3)} } {}
+  do_test without_rowid3-1.3.$tn.5 { execsql {PRAGMA foreign_key_check(t4)} } {}
+  do_test without_rowid3-1.3.$tn.6 { execsql {PRAGMA foreign_key_check(t7)} } {}
+  do_test without_rowid3-1.3.$tn.7 { execsql {PRAGMA foreign_key_check(t8)} } {}
+}
+execsql { PRAGMA count_changes = 0 }
+drop_all_tables
+
+do_test without_rowid3-1.4.0 {
+  execsql [string map {/D/ {}} $FkeySimpleSchema]
+  execsql { PRAGMA count_changes = 1 }
+} {}
+foreach {tn zSql res} $FkeySimpleTests {
+  if {$res == "0 {}"} { set res {0 1} }
+  execsql BEGIN
+  do_test without_rowid3-1.4.$tn { catchsql $zSql } $res
+  execsql COMMIT
+}
+execsql { PRAGMA count_changes = 0 }
+drop_all_tables
+
+# Special test: When the parent key is an IPK, make sure the affinity of
+# the IPK is not applied to the child key value before it is inserted
+# into the child table.
+do_test without_rowid3-1.5.1 {
+  execsql {
+    CREATE TABLE i(i INT PRIMARY KEY) WITHOUT rowid;
+    CREATE TABLE j(j REFERENCES i);
+    INSERT INTO i VALUES(35);
+    INSERT INTO j VALUES('35.0');
+    SELECT j, typeof(j) FROM j;
+  }
+} {35.0 text}
+do_test without_rowid3-1.5.2 {
+  catchsql { DELETE FROM i }
+} {1 {FOREIGN KEY constraint failed}}
+
+# Same test using a regular primary key with integer affinity.
+drop_all_tables
+do_test without_rowid3-1.6.1 {
+  execsql {
+    CREATE TABLE i(i INT UNIQUE);
+    CREATE TABLE j(j REFERENCES i(i));
+    INSERT INTO i VALUES('35.0');
+    INSERT INTO j VALUES('35.0');
+    SELECT j, typeof(j) FROM j;
+    SELECT i, typeof(i) FROM i;
+  }
+} {35.0 text 35 integer}
+do_test without_rowid3-1.6.2 {
+  catchsql { DELETE FROM i }
+} {1 {FOREIGN KEY constraint failed}}
+
+# Use a collation sequence on the parent key.
+drop_all_tables
+do_test without_rowid3-1.7.1 {
+  execsql {
+    CREATE TABLE i(i TEXT COLLATE nocase PRIMARY KEY) WITHOUT rowid;
+    CREATE TABLE j(j TEXT COLLATE binary REFERENCES i(i));
+    INSERT INTO i VALUES('SQLite');
+    INSERT INTO j VALUES('sqlite');
+  }
+  catchsql { DELETE FROM i }
+} {1 {FOREIGN KEY constraint failed}}
+
+# Use the parent key collation even if it is default and the child key
+# has an explicit value.
+drop_all_tables
+do_test without_rowid3-1.7.2 {
+  execsql {
+    CREATE TABLE i(i TEXT PRIMARY KEY) WITHOUT rowid;  -- Colseq is "BINARY"
+    CREATE TABLE j(j TEXT COLLATE nocase REFERENCES i(i));
+    INSERT INTO i VALUES('SQLite');
+  }
+  catchsql { INSERT INTO j VALUES('sqlite') }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-1.7.3 {
+  execsql {
+    INSERT INTO i VALUES('sqlite');
+    INSERT INTO j VALUES('sqlite');
+    DELETE FROM i WHERE i = 'SQLite';
+  }
+  catchsql { DELETE FROM i WHERE i = 'sqlite' }
+} {1 {FOREIGN KEY constraint failed}}
+
+#-------------------------------------------------------------------------
+# This section (test cases without_rowid3-2.*) contains tests to check that the
+# deferred foreign key constraint logic works.
+#
+proc without_rowid3-2-test {tn nocommit sql {res {}}} {
+  if {$res eq "FKV"} {
+    set expected {1 {FOREIGN KEY constraint failed}}
+  } else {
+    set expected [list 0 $res]
+  }
+  do_test without_rowid3-2.$tn [list catchsql $sql] $expected
+  if {$nocommit} {
+    do_test without_rowid3-2.${tn}c {
+      catchsql COMMIT
+    } {1 {FOREIGN KEY constraint failed}}
+  }
+}
+
+without_rowid3-2-test 1 0 {
+  CREATE TABLE node(
+    nodeid PRIMARY KEY,
+    parent REFERENCES node DEFERRABLE INITIALLY DEFERRED
+  ) WITHOUT rowid;
+  CREATE TABLE leaf(
+    cellid PRIMARY KEY,
+    parent REFERENCES node DEFERRABLE INITIALLY DEFERRED
+  ) WITHOUT rowid;
+}
+
+without_rowid3-2-test 1  0 "INSERT INTO node VALUES(1, 0)"       FKV
+without_rowid3-2-test 2  0 "BEGIN"
+without_rowid3-2-test 3  1   "INSERT INTO node VALUES(1, 0)"
+without_rowid3-2-test 4  0   "UPDATE node SET parent = NULL"
+without_rowid3-2-test 5  0 "COMMIT"
+without_rowid3-2-test 6  0 "SELECT * FROM node" {1 {}}
+
+without_rowid3-2-test 7  0 "BEGIN"
+without_rowid3-2-test 8  1   "INSERT INTO leaf VALUES('a', 2)"
+without_rowid3-2-test 9  1   "INSERT INTO node VALUES(2, 0)"
+without_rowid3-2-test 10 0   "UPDATE node SET parent = 1 WHERE nodeid = 2"
+without_rowid3-2-test 11 0 "COMMIT"
+without_rowid3-2-test 12 0 "SELECT * FROM node" {1 {} 2 1}
+without_rowid3-2-test 13 0 "SELECT * FROM leaf" {a 2}
+
+without_rowid3-2-test 14 0 "BEGIN"
+without_rowid3-2-test 15 1   "DELETE FROM node WHERE nodeid = 2"
+without_rowid3-2-test 16 0   "INSERT INTO node VALUES(2, NULL)"
+without_rowid3-2-test 17 0 "COMMIT"
+without_rowid3-2-test 18 0 "SELECT * FROM node" {1 {} 2 {}}
+without_rowid3-2-test 19 0 "SELECT * FROM leaf" {a 2}
+
+without_rowid3-2-test 20 0 "BEGIN"
+without_rowid3-2-test 21 0   "INSERT INTO leaf VALUES('b', 1)"
+without_rowid3-2-test 22 0   "SAVEPOINT save"
+without_rowid3-2-test 23 0     "DELETE FROM node WHERE nodeid = 1"
+without_rowid3-2-test 24 0   "ROLLBACK TO save"
+without_rowid3-2-test 25 0 "COMMIT"
+without_rowid3-2-test 26 0 "SELECT * FROM node" {1 {} 2 {}}
+without_rowid3-2-test 27 0 "SELECT * FROM leaf" {a 2 b 1}
+
+without_rowid3-2-test 28 0 "BEGIN"
+without_rowid3-2-test 29 0   "INSERT INTO leaf VALUES('c', 1)"
+without_rowid3-2-test 30 0   "SAVEPOINT save"
+without_rowid3-2-test 31 0     "DELETE FROM node WHERE nodeid = 1"
+without_rowid3-2-test 32 1   "RELEASE save"
+without_rowid3-2-test 33 1   "DELETE FROM leaf WHERE cellid = 'b'"
+without_rowid3-2-test 34 0   "DELETE FROM leaf WHERE cellid = 'c'"
+without_rowid3-2-test 35 0 "COMMIT"
+without_rowid3-2-test 36 0 "SELECT * FROM node" {2 {}} 
+without_rowid3-2-test 37 0 "SELECT * FROM leaf" {a 2}
+
+without_rowid3-2-test 38 0 "SAVEPOINT outer"
+without_rowid3-2-test 39 1   "INSERT INTO leaf VALUES('d', 3)"
+without_rowid3-2-test 40 1 "RELEASE outer"    FKV
+without_rowid3-2-test 41 1   "INSERT INTO leaf VALUES('e', 3)"
+without_rowid3-2-test 42 0   "INSERT INTO node VALUES(3, 2)"
+without_rowid3-2-test 43 0 "RELEASE outer"
+
+without_rowid3-2-test 44 0 "SAVEPOINT outer"
+without_rowid3-2-test 45 1   "DELETE FROM node WHERE nodeid=3"
+without_rowid3-2-test 47 0   "INSERT INTO node VALUES(3, 2)"
+without_rowid3-2-test 48 0 "ROLLBACK TO outer"
+without_rowid3-2-test 49 0 "RELEASE outer"
+
+without_rowid3-2-test 50 0 "SAVEPOINT outer"
+without_rowid3-2-test 51 1   "INSERT INTO leaf VALUES('f', 4)"
+without_rowid3-2-test 52 1   "SAVEPOINT inner"
+without_rowid3-2-test 53 1     "INSERT INTO leaf VALUES('g', 4)"
+without_rowid3-2-test 54 1  "RELEASE outer"   FKV
+without_rowid3-2-test 55 1   "ROLLBACK TO inner"
+without_rowid3-2-test 56 0  "COMMIT"          FKV
+without_rowid3-2-test 57 0   "INSERT INTO node VALUES(4, NULL)"
+without_rowid3-2-test 58 0 "RELEASE outer"
+without_rowid3-2-test 59 0 "SELECT * FROM node" {2 {} 3 2 4 {}}
+without_rowid3-2-test 60 0 "SELECT * FROM leaf" {a 2 d 3 e 3 f 4}
+
+# The following set of tests check that if a statement that affects 
+# multiple rows violates some foreign key constraints, then strikes a 
+# constraint that causes the statement-transaction to be rolled back, 
+# the deferred constraint counter is correctly reset to the value it 
+# had before the statement-transaction was opened.
+#
+without_rowid3-2-test 61 0 "BEGIN"
+without_rowid3-2-test 62 0   "DELETE FROM leaf"
+without_rowid3-2-test 63 0   "DELETE FROM node"
+without_rowid3-2-test 64 1   "INSERT INTO leaf VALUES('a', 1)"
+without_rowid3-2-test 65 1   "INSERT INTO leaf VALUES('b', 2)"
+without_rowid3-2-test 66 1   "INSERT INTO leaf VALUES('c', 1)"
+do_test without_rowid3-2-test-67 {
+  catchsql          "INSERT INTO node SELECT parent, 3 FROM leaf"
+} {1 {UNIQUE constraint failed: node.nodeid}}
+without_rowid3-2-test 68 0 "COMMIT"           FKV
+without_rowid3-2-test 69 1   "INSERT INTO node VALUES(1, NULL)"
+without_rowid3-2-test 70 0   "INSERT INTO node VALUES(2, NULL)"
+without_rowid3-2-test 71 0 "COMMIT"
+
+without_rowid3-2-test 72 0 "BEGIN"
+without_rowid3-2-test 73 1   "DELETE FROM node"
+without_rowid3-2-test 74 0   "INSERT INTO node(nodeid) SELECT DISTINCT parent FROM leaf"
+without_rowid3-2-test 75 0 "COMMIT"
+
+#-------------------------------------------------------------------------
+# Test cases without_rowid3-3.* test that a program that executes foreign key
+# actions (CASCADE, SET DEFAULT, SET NULL etc.) or tests FK constraints
+# opens a statement transaction if required.
+#
+# without_rowid3-3.1.*: Test UPDATE statements.
+# without_rowid3-3.2.*: Test DELETE statements.
+#
+drop_all_tables
+do_test without_rowid3-3.1.1 {
+  execsql {
+    CREATE TABLE ab(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE cd(
+      c PRIMARY KEY REFERENCES ab ON UPDATE CASCADE ON DELETE CASCADE, 
+      d
+    ) WITHOUT rowid;
+    CREATE TABLE ef(
+      e REFERENCES cd ON UPDATE CASCADE, 
+      f, CHECK (e!=5)
+    );
+  }
+} {}
+do_test without_rowid3-3.1.2 {
+  execsql {
+    INSERT INTO ab VALUES(1, 'b');
+    INSERT INTO cd VALUES(1, 'd');
+    INSERT INTO ef VALUES(1, 'e');
+  }
+} {}
+do_test without_rowid3-3.1.3 {
+  catchsql { UPDATE ab SET a = 5 }
+} {1 {CHECK constraint failed: ef}}
+do_test without_rowid3-3.1.4 {
+  execsql { SELECT * FROM ab }
+} {1 b}
+do_test without_rowid3-3.1.4 {
+  execsql BEGIN;
+  catchsql { UPDATE ab SET a = 5 }
+} {1 {CHECK constraint failed: ef}}
+do_test without_rowid3-3.1.5 {
+  execsql COMMIT;
+  execsql { SELECT * FROM ab; SELECT * FROM cd; SELECT * FROM ef }
+} {1 b 1 d 1 e}
+
+do_test without_rowid3-3.2.1 {
+  execsql BEGIN;
+  catchsql { DELETE FROM ab }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-3.2.2 {
+  execsql COMMIT
+  execsql { SELECT * FROM ab; SELECT * FROM cd; SELECT * FROM ef }
+} {1 b 1 d 1 e}
+
+#-------------------------------------------------------------------------
+# Test cases without_rowid3-4.* test that recursive foreign key actions 
+# (i.e. CASCADE) are allowed even if recursive triggers are disabled.
+#
+drop_all_tables
+do_test without_rowid3-4.1 {
+  execsql {
+    CREATE TABLE t1(
+      node PRIMARY KEY, 
+      parent REFERENCES t1 ON DELETE CASCADE
+    ) WITHOUT rowid;
+    CREATE TABLE t2(node PRIMARY KEY, parent) WITHOUT rowid;
+    CREATE TRIGGER t2t AFTER DELETE ON t2 BEGIN
+      DELETE FROM t2 WHERE parent = old.node;
+    END;
+    INSERT INTO t1 VALUES(1, NULL);
+    INSERT INTO t1 VALUES(2, 1);
+    INSERT INTO t1 VALUES(3, 1);
+    INSERT INTO t1 VALUES(4, 2);
+    INSERT INTO t1 VALUES(5, 2);
+    INSERT INTO t1 VALUES(6, 3);
+    INSERT INTO t1 VALUES(7, 3);
+    INSERT INTO t2 SELECT * FROM t1;
+  }
+} {}
+do_test without_rowid3-4.2 {
+  execsql { PRAGMA recursive_triggers = off }
+  execsql { 
+    BEGIN;
+      DELETE FROM t1 WHERE node = 1;
+      SELECT node FROM t1;
+  }
+} {}
+do_test without_rowid3-4.3 {
+  execsql { 
+      DELETE FROM t2 WHERE node = 1;
+      SELECT node FROM t2;
+    ROLLBACK;
+  }
+} {4 5 6 7}
+do_test without_rowid3-4.4 {
+  execsql { PRAGMA recursive_triggers = on }
+  execsql { 
+    BEGIN;
+      DELETE FROM t1 WHERE node = 1;
+      SELECT node FROM t1;
+  }
+} {}
+do_test without_rowid3-4.3 {
+  execsql { 
+      DELETE FROM t2 WHERE node = 1;
+      SELECT node FROM t2;
+    ROLLBACK;
+  }
+} {}
+
+#-------------------------------------------------------------------------
+# Test cases without_rowid3-5.* verify that the incremental blob API may not
+# write to a foreign key column while foreign-keys are enabled.
+#
+drop_all_tables
+ifcapable incrblob {
+  do_test without_rowid3-5.1 {
+    execsql {
+      CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+      CREATE TABLE t2(a PRIMARY KEY, b REFERENCES t1(a)) WITHOUT rowid;
+      INSERT INTO t1 VALUES('hello', 'world');
+      INSERT INTO t2 VALUES('key', 'hello');
+    }
+  } {}
+  do_test without_rowid3-5.2 {
+    set rc [catch { set fd [db incrblob t2 b 1] } msg]
+    list $rc $msg
+  } {1 {cannot open table without rowid: t2}}
+  do_test without_rowid3-5.5 {
+    execsql { PRAGMA foreign_keys = on }
+  } {}
+}
+
+drop_all_tables
+ifcapable vacuum {
+  do_test without_rowid3-6.1 {
+    execsql {
+      CREATE TABLE t1(a REFERENCES t2(c), b);
+      CREATE TABLE t2(c UNIQUE, b);
+      INSERT INTO t2 VALUES(1, 2);
+      INSERT INTO t1 VALUES(1, 2);
+      VACUUM;
+    }
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# Test that it is possible to use an INT PRIMARY KEY as the child key
+# of a foreign constraint.
+# 
+drop_all_tables
+do_test without_rowid3-7.1 {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(c INT PRIMARY KEY REFERENCES t1, b) WITHOUT rowid;
+  }
+} {}
+do_test without_rowid3-7.2 {
+  catchsql { INSERT INTO t2 VALUES(1, 'A'); }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-7.3 {
+  execsql { 
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(2, 3);
+    INSERT INTO t2 VALUES(1, 'A');
+  }
+} {}
+do_test without_rowid3-7.4 {
+  execsql { UPDATE t2 SET c = 2 }
+} {}
+do_test without_rowid3-7.5 {
+  catchsql { UPDATE t2 SET c = 3 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-7.6 {
+  catchsql { DELETE FROM t1 WHERE a = 2 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-7.7 {
+  execsql { DELETE FROM t1 WHERE a = 1 }
+} {}
+do_test without_rowid3-7.8 {
+  catchsql { UPDATE t1 SET a = 3 }
+} {1 {FOREIGN KEY constraint failed}}
+
+#-------------------------------------------------------------------------
+# Test that it is not possible to enable/disable FK support while a
+# transaction is open.
+# 
+drop_all_tables
+proc without_rowid3-8-test {tn zSql value} {
+  do_test without_rowid3-2.8.$tn.1 [list execsql $zSql] {}
+  do_test without_rowid3-2.8.$tn.2 { execsql "PRAGMA foreign_keys" } $value
+}
+without_rowid3-8-test  1 { PRAGMA foreign_keys = 0     } 0
+without_rowid3-8-test  2 { PRAGMA foreign_keys = 1     } 1
+without_rowid3-8-test  3 { BEGIN                       } 1
+without_rowid3-8-test  4 { PRAGMA foreign_keys = 0     } 1
+without_rowid3-8-test  5 { COMMIT                      } 1
+without_rowid3-8-test  6 { PRAGMA foreign_keys = 0     } 0
+without_rowid3-8-test  7 { BEGIN                       } 0
+without_rowid3-8-test  8 { PRAGMA foreign_keys = 1     } 0
+without_rowid3-8-test  9 { COMMIT                      } 0
+without_rowid3-8-test 10 { PRAGMA foreign_keys = 1     } 1
+without_rowid3-8-test 11 { PRAGMA foreign_keys = off   } 0
+without_rowid3-8-test 12 { PRAGMA foreign_keys = on    } 1
+without_rowid3-8-test 13 { PRAGMA foreign_keys = no    } 0
+without_rowid3-8-test 14 { PRAGMA foreign_keys = yes   } 1
+without_rowid3-8-test 15 { PRAGMA foreign_keys = false } 0
+without_rowid3-8-test 16 { PRAGMA foreign_keys = true  } 1
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-9.*, test SET DEFAULT actions.
+#
+drop_all_tables
+do_test without_rowid3-9.1.1 {
+  execsql {
+    CREATE TABLE t1(a INT PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(
+      c INT PRIMARY KEY,
+      d INTEGER DEFAULT 1 REFERENCES t1 ON DELETE SET DEFAULT
+    ) WITHOUT rowid;
+    DELETE FROM t1;
+  }
+} {}
+do_test without_rowid3-9.1.2 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+    INSERT INTO t2 VALUES(1, 2);
+    SELECT * FROM t2;
+    DELETE FROM t1 WHERE a = 2;
+    SELECT * FROM t2;
+  }
+} {1 2 1 1}
+do_test without_rowid3-9.1.3 {
+  execsql {
+    INSERT INTO t1 VALUES(2, 'two');
+    UPDATE t2 SET d = 2;
+    DELETE FROM t1 WHERE a = 1;
+    SELECT * FROM t2;
+  }
+} {1 2}
+do_test without_rowid3-9.1.4 {
+  execsql { SELECT * FROM t1 }
+} {2 two}
+do_test without_rowid3-9.1.5 {
+  catchsql { DELETE FROM t1 }
+} {1 {FOREIGN KEY constraint failed}}
+
+do_test without_rowid3-9.2.1 {
+  execsql {
+    CREATE TABLE pp(a, b, c, PRIMARY KEY(b, c)) WITHOUT rowid;
+    CREATE TABLE cc(d DEFAULT 3, e DEFAULT 1, f DEFAULT 2,
+        FOREIGN KEY(f, d) REFERENCES pp 
+        ON UPDATE SET DEFAULT 
+        ON DELETE SET NULL
+    );
+    INSERT INTO pp VALUES(1, 2, 3);
+    INSERT INTO pp VALUES(4, 5, 6);
+    INSERT INTO pp VALUES(7, 8, 9);
+  }
+} {}
+do_test without_rowid3-9.2.2 {
+  execsql {
+    INSERT INTO cc VALUES(6, 'A', 5);
+    INSERT INTO cc VALUES(6, 'B', 5);
+    INSERT INTO cc VALUES(9, 'A', 8);
+    INSERT INTO cc VALUES(9, 'B', 8);
+    UPDATE pp SET b = 1 WHERE a = 7;
+    SELECT * FROM cc;
+  }
+} {6 A 5 6 B 5 3 A 2 3 B 2}
+do_test without_rowid3-9.2.3 {
+  execsql {
+    DELETE FROM pp WHERE a = 4;
+    SELECT * FROM cc;
+  }
+} {{} A {} {} B {} 3 A 2 3 B 2}
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-10.*, test "foreign key mismatch" and 
+# other errors.
+#
+set tn 0
+foreach zSql [list {
+  CREATE TABLE p(a PRIMARY KEY, b) WITHOUT rowid;
+  CREATE TABLE c(x REFERENCES p(c));
+} {
+  CREATE TABLE c(x REFERENCES v(y));
+  CREATE VIEW v AS SELECT x AS y FROM c;
+} {
+  CREATE TABLE p(a, b, PRIMARY KEY(a, b)) WITHOUT rowid;
+  CREATE TABLE c(x REFERENCES p);
+} {
+  CREATE TABLE p(a COLLATE binary, b);
+  CREATE UNIQUE INDEX i ON p(a COLLATE nocase);
+  CREATE TABLE c(x REFERENCES p(a));
+}] {
+  drop_all_tables
+  do_test without_rowid3-10.1.[incr tn] {
+    execsql $zSql
+    catchsql { INSERT INTO c DEFAULT VALUES }
+  } {/1 {foreign key mismatch - "c" referencing "."}/}
+}
+
+# "rowid" cannot be used as part of a child or parent key definition 
+# unless it happens to be the name of an explicitly declared column.
+#
+do_test without_rowid3-10.2.1 {
+  drop_all_tables
+  catchsql {
+    CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(c, d, FOREIGN KEY(rowid) REFERENCES t1(a));
+  }
+} {1 {unknown column "rowid" in foreign key definition}}
+do_test without_rowid3-10.2.2 {
+  drop_all_tables
+  catchsql {
+    CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(rowid, d, FOREIGN KEY(rowid) REFERENCES t1(a));
+  }
+} {0 {}}
+do_test without_rowid3-10.2.1 {
+  drop_all_tables
+  catchsql {
+    CREATE TABLE t1(a, b);
+    CREATE TABLE t2(c, d, FOREIGN KEY(c) REFERENCES t1(rowid));
+    INSERT INTO t1(rowid, a, b) VALUES(1, 1, 1);
+    INSERT INTO t2 VALUES(1, 1);
+  }
+} {1 {foreign key mismatch - "t2" referencing "t1"}}
+do_test without_rowid3-10.2.2 {
+  drop_all_tables
+  catchsql {
+    CREATE TABLE t1(rowid PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(c, d, FOREIGN KEY(c) REFERENCES t1(rowid));
+    INSERT INTO t1(rowid, b) VALUES(1, 1);
+    INSERT INTO t2 VALUES(1, 1);
+  }
+} {0 {}}
+
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-11.*, test CASCADE actions.
+#
+drop_all_tables
+do_test without_rowid3-11.1.1 {
+  execsql {
+    CREATE TABLE t1(a INT PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE t2(c, d, FOREIGN KEY(c) REFERENCES t1(a) ON UPDATE CASCADE);
+
+    INSERT INTO t1 VALUES(10, 100);
+    INSERT INTO t2 VALUES(10, 100);
+    UPDATE t1 SET a = 15;
+    SELECT * FROM t2;
+  }
+} {15 100}
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-12.*, test RESTRICT actions.
+#
+drop_all_tables
+do_test without_rowid3-12.1.1 {
+  execsql {
+    CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT rowid;
+    CREATE TABLE t2(
+      x REFERENCES t1 ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED 
+    );
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(3, 'three');
+  }
+} {}
+do_test without_rowid3-12.1.2 { 
+  execsql "BEGIN"
+  execsql "INSERT INTO t2 VALUES('two')"
+} {}
+do_test without_rowid3-12.1.3 { 
+  execsql "UPDATE t1 SET b = 'four' WHERE b = 'one'"
+} {}
+do_test without_rowid3-12.1.4 { 
+  catchsql "UPDATE t1 SET b = 'five' WHERE b = 'two'"
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-12.1.5 { 
+  execsql "DELETE FROM t1 WHERE b = 'two'"
+} {}
+do_test without_rowid3-12.1.6 { 
+  catchsql "COMMIT"
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-12.1.7 { 
+  execsql {
+    INSERT INTO t1 VALUES(2, 'two');
+    COMMIT;
+  }
+} {}
+
+drop_all_tables
+do_test without_rowid3-12.2.1 {
+  execsql {
+    CREATE TABLE t1(x COLLATE NOCASE PRIMARY KEY) WITHOUT rowid;
+    CREATE TRIGGER tt1 AFTER DELETE ON t1 
+      WHEN EXISTS ( SELECT 1 FROM t2 WHERE old.x = y )
+    BEGIN
+      INSERT INTO t1 VALUES(old.x);
+    END;
+    CREATE TABLE t2(y REFERENCES t1);
+    INSERT INTO t1 VALUES('A');
+    INSERT INTO t1 VALUES('B');
+    INSERT INTO t2 VALUES('a');
+    INSERT INTO t2 VALUES('b');
+
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {A B a b}
+do_test without_rowid3-12.2.2 {
+  execsql { DELETE FROM t1 }
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {A B a b}
+do_test without_rowid3-12.2.3 {
+  execsql {
+    DROP TABLE t2;
+    CREATE TABLE t2(y REFERENCES t1 ON DELETE RESTRICT);
+    INSERT INTO t2 VALUES('a');
+    INSERT INTO t2 VALUES('b');
+  }
+  catchsql { DELETE FROM t1 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-12.2.4 {
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {A B a b}
+
+drop_all_tables
+do_test without_rowid3-12.3.1 {
+  execsql {
+    CREATE TABLE up(
+      c00, c01, c02, c03, c04, c05, c06, c07, c08, c09,
+      c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
+      c20, c21, c22, c23, c24, c25, c26, c27, c28, c29,
+      c30, c31, c32, c33, c34, c35, c36, c37, c38, c39,
+      PRIMARY KEY(c34, c35)
+    ) WITHOUT rowid;
+    CREATE TABLE down(
+      c00, c01, c02, c03, c04, c05, c06, c07, c08, c09,
+      c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
+      c20, c21, c22, c23, c24, c25, c26, c27, c28, c29,
+      c30, c31, c32, c33, c34, c35, c36, c37, c38, c39,
+      FOREIGN KEY(c39, c38) REFERENCES up ON UPDATE CASCADE
+    );
+  }
+} {}
+do_test without_rowid3-12.3.2 {
+  execsql {
+    INSERT INTO up(c34, c35) VALUES('yes', 'no');
+    INSERT INTO down(c39, c38) VALUES('yes', 'no');
+    UPDATE up SET c34 = 'possibly';
+    SELECT c38, c39 FROM down;
+    DELETE FROM down;
+  }
+} {no possibly}
+do_test without_rowid3-12.3.3 {
+  catchsql { INSERT INTO down(c39, c38) VALUES('yes', 'no') }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-12.3.4 {
+  execsql { 
+    INSERT INTO up(c34, c35) VALUES('yes', 'no');
+    INSERT INTO down(c39, c38) VALUES('yes', 'no');
+  }
+  catchsql { DELETE FROM up WHERE c34 = 'yes' }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-12.3.5 {
+  execsql { 
+    DELETE FROM up WHERE c34 = 'possibly';
+    SELECT c34, c35 FROM up;
+    SELECT c39, c38 FROM down;
+  }
+} {yes no yes no}
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-13.*, test that FK processing is performed
+# when rows are REPLACEd.
+#
+drop_all_tables
+do_test without_rowid3-13.1.1 {
+  execsql {
+    CREATE TABLE pp(a UNIQUE, b, c, PRIMARY KEY(b, c)) WITHOUT rowid;
+    CREATE TABLE cc(d, e, f UNIQUE, FOREIGN KEY(d, e) REFERENCES pp);
+    INSERT INTO pp VALUES(1, 2, 3);
+    INSERT INTO cc VALUES(2, 3, 1);
+  }
+} {}
+foreach {tn stmt} {
+  1   "REPLACE INTO pp VALUES(1, 4, 5)"
+} {
+  do_test without_rowid3-13.1.$tn.1 {
+    catchsql $stmt
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-13.1.$tn.2 {
+    execsql {
+      SELECT * FROM pp;
+      SELECT * FROM cc;
+    }
+  } {1 2 3 2 3 1}
+  do_test without_rowid3-13.1.$tn.3 {
+    execsql BEGIN;
+    catchsql $stmt
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-13.1.$tn.4 {
+    execsql {
+      COMMIT;
+      SELECT * FROM pp;
+      SELECT * FROM cc;
+    }
+  } {1 2 3 2 3 1}
+}
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-14.*, test that the "DROP TABLE" and "ALTER
+# TABLE" commands work as expected wrt foreign key constraints.
+#
+# without_rowid3-14.1*: ALTER TABLE ADD COLUMN
+# without_rowid3-14.2*: ALTER TABLE RENAME TABLE
+# without_rowid3-14.3*: DROP TABLE
+#
+drop_all_tables
+ifcapable altertable {
+  do_test without_rowid3-14.1.1 {
+    # Adding a column with a REFERENCES clause is not supported.
+    execsql { 
+      CREATE TABLE t1(a PRIMARY KEY) WITHOUT rowid;
+      CREATE TABLE t2(a, b);
+      INSERT INTO t2(a,b) VALUES(1,2);
+    }
+    catchsql { ALTER TABLE t2 ADD COLUMN c REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1.2 {
+    catchsql { ALTER TABLE t2 ADD COLUMN d DEFAULT NULL REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1.3 {
+    catchsql { ALTER TABLE t2 ADD COLUMN e REFERENCES t1 DEFAULT NULL}
+  } {0 {}}
+  do_test without_rowid3-14.1.4 {
+    catchsql { ALTER TABLE t2 ADD COLUMN f REFERENCES t1 DEFAULT 'text'}
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1.5 {
+    catchsql { ALTER TABLE t2 ADD COLUMN g DEFAULT CURRENT_TIME REFERENCES t1 }
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1.6 {
+    execsql { 
+      PRAGMA foreign_keys = off;
+      ALTER TABLE t2 ADD COLUMN h DEFAULT 'text' REFERENCES t1;
+      PRAGMA foreign_keys = on;
+      SELECT sql FROM sqlite_schema WHERE name='t2';
+    }
+  } {{CREATE TABLE t2(a, b, c REFERENCES t1, d DEFAULT NULL REFERENCES t1, e REFERENCES t1 DEFAULT NULL, h DEFAULT 'text' REFERENCES t1)}}
+  
+  
+  # Test the sqlite_rename_parent() function directly.
+  #
+  proc test_rename_parent {zCreate zOld zNew} {
+    db eval {SELECT sqlite_rename_table(
+        'main', 'table', 't1', $zCreate, $zOld, $zNew, 0
+    )}
+  }
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  do_test without_rowid3-14.2.1.1 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  do_test without_rowid3-14.2.1.2 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t4 t3
+  } {{CREATE TABLE t1(a REFERENCES t2)}}
+  do_test without_rowid3-14.2.1.3 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES "t2")} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  
+  # Test ALTER TABLE RENAME TABLE a bit.
+  #
+  do_test without_rowid3-14.2.2.1 {
+    drop_all_tables
+    execsql {
+      CREATE TABLE t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid;
+      CREATE TABLE t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid;
+      CREATE TABLE t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1);
+    }
+    execsql { SELECT sql FROM sqlite_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid}       \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid}    \
+    {CREATE TABLE t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1)}  \
+  ]
+  do_test without_rowid3-14.2.2.2 {
+    execsql { ALTER TABLE t1 RENAME TO t4 }
+    execsql { SELECT sql FROM sqlite_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE "t4"(a PRIMARY KEY, b REFERENCES "t4") WITHOUT rowid}      \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES "t4", c REFERENCES t2)
+            WITHOUT rowid}     \
+    {CREATE TABLE t3(a REFERENCES "t4", b REFERENCES t2, c REFERENCES "t4")} \
+  ]
+  do_test without_rowid3-14.2.2.3 {
+    catchsql { INSERT INTO t3 VALUES(1, 2, 3) }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2.2.4 {
+    execsql { INSERT INTO t4 VALUES(1, NULL) }
+  } {}
+  do_test without_rowid3-14.2.2.5 {
+    catchsql { UPDATE t4 SET b = 5 }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2.2.6 {
+    catchsql { UPDATE t4 SET b = 1 }
+  } {0 {}}
+  do_test without_rowid3-14.2.2.7 {
+    execsql { INSERT INTO t3 VALUES(1, NULL, 1) }
+  } {}
+
+  # Repeat for TEMP tables
+  #
+  drop_all_tables
+  do_test without_rowid3-14.1tmp.1 {
+    # Adding a column with a REFERENCES clause is not supported.
+    execsql { 
+      CREATE TEMP TABLE t1(a PRIMARY KEY) WITHOUT rowid;
+      CREATE TEMP TABLE t2(a, b);
+      INSERT INTO temp.t2(a,b) VALUES(1,2);
+    }
+    catchsql { ALTER TABLE t2 ADD COLUMN c REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1tmp.2 {
+    catchsql { ALTER TABLE t2 ADD COLUMN d DEFAULT NULL REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1tmp.3 {
+    catchsql { ALTER TABLE t2 ADD COLUMN e REFERENCES t1 DEFAULT NULL}
+  } {0 {}}
+  do_test without_rowid3-14.1tmp.4 {
+    catchsql { ALTER TABLE t2 ADD COLUMN f REFERENCES t1 DEFAULT 'text'}
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1tmp.5 {
+    catchsql { ALTER TABLE t2 ADD COLUMN g DEFAULT CURRENT_TIME REFERENCES t1 }
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1tmp.6 {
+    execsql { 
+      PRAGMA foreign_keys = off;
+      ALTER TABLE t2 ADD COLUMN h DEFAULT 'text' REFERENCES t1;
+      PRAGMA foreign_keys = on;
+      SELECT sql FROM temp.sqlite_schema WHERE name='t2';
+    }
+  } {{CREATE TABLE t2(a, b, c REFERENCES t1, d DEFAULT NULL REFERENCES t1, e REFERENCES t1 DEFAULT NULL, h DEFAULT 'text' REFERENCES t1)}}
+
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  do_test without_rowid3-14.2tmp.1.1 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  do_test without_rowid3-14.2tmp.1.2 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t4 t3
+  } {{CREATE TABLE t1(a REFERENCES t2)}}
+  do_test without_rowid3-14.2tmp.1.3 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES "t2")} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  
+  # Test ALTER TABLE RENAME TABLE a bit.
+  #
+  do_test without_rowid3-14.2tmp.2.1 {
+    drop_all_tables
+    execsql {
+      CREATE TEMP TABLE t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid;
+      CREATE TEMP TABLE t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid;
+      CREATE TEMP TABLE t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1);
+    }
+    execsql { SELECT sql FROM sqlite_temp_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid}       \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid}    \
+    {CREATE TABLE t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1)}  \
+  ]
+  do_test without_rowid3-14.2tmp.2.2 {
+    execsql { ALTER TABLE t1 RENAME TO t4 }
+    execsql { SELECT sql FROM temp.sqlite_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE "t4"(a PRIMARY KEY, b REFERENCES "t4") WITHOUT rowid}      \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES "t4", c REFERENCES t2)
+            WITHOUT rowid}     \
+    {CREATE TABLE t3(a REFERENCES "t4", b REFERENCES t2, c REFERENCES "t4")} \
+  ]
+  do_test without_rowid3-14.2tmp.2.3 {
+    catchsql { INSERT INTO t3 VALUES(1, 2, 3) }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2tmp.2.4 {
+    execsql { INSERT INTO t4 VALUES(1, NULL) }
+  } {}
+  do_test without_rowid3-14.2tmp.2.5 {
+    catchsql { UPDATE t4 SET b = 5 }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2tmp.2.6 {
+    catchsql { UPDATE t4 SET b = 1 }
+  } {0 {}}
+  do_test without_rowid3-14.2tmp.2.7 {
+    execsql { INSERT INTO t3 VALUES(1, NULL, 1) }
+  } {}
+
+  # Repeat for ATTACH-ed tables
+  #
+  drop_all_tables
+  do_test without_rowid3-14.1aux.1 {
+    # Adding a column with a REFERENCES clause is not supported.
+    execsql { 
+      ATTACH ':memory:' AS aux;
+      CREATE TABLE aux.t1(a PRIMARY KEY) WITHOUT rowid;
+      CREATE TABLE aux.t2(a, b);
+      INSERT INTO aux.t2(a,b) VALUES(1,2);
+    }
+    catchsql { ALTER TABLE t2 ADD COLUMN c REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1aux.2 {
+    catchsql { ALTER TABLE t2 ADD COLUMN d DEFAULT NULL REFERENCES t1 }
+  } {0 {}}
+  do_test without_rowid3-14.1aux.3 {
+    catchsql { ALTER TABLE t2 ADD COLUMN e REFERENCES t1 DEFAULT NULL}
+  } {0 {}}
+  do_test without_rowid3-14.1aux.4 {
+    catchsql { ALTER TABLE t2 ADD COLUMN f REFERENCES t1 DEFAULT 'text'}
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1aux.5 {
+    catchsql { ALTER TABLE t2 ADD COLUMN g DEFAULT CURRENT_TIME REFERENCES t1 }
+  } {1 {Cannot add a REFERENCES column with non-NULL default value}}
+  do_test without_rowid3-14.1aux.6 {
+    execsql { 
+      PRAGMA foreign_keys = off;
+      ALTER TABLE t2 ADD COLUMN h DEFAULT 'text' REFERENCES t1;
+      PRAGMA foreign_keys = on;
+      SELECT sql FROM aux.sqlite_schema WHERE name='t2';
+    }
+  } {{CREATE TABLE t2(a, b, c REFERENCES t1, d DEFAULT NULL REFERENCES t1, e REFERENCES t1 DEFAULT NULL, h DEFAULT 'text' REFERENCES t1)}}
+
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  do_test without_rowid3-14.2aux.1.1 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  do_test without_rowid3-14.2aux.1.2 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES t2)} t4 t3
+  } {{CREATE TABLE t1(a REFERENCES t2)}}
+  do_test without_rowid3-14.2aux.1.3 {
+    test_rename_parent {CREATE TABLE t1(a REFERENCES "t2")} t2 t3
+  } {{CREATE TABLE t1(a REFERENCES "t3")}}
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  
+  # Test ALTER TABLE RENAME TABLE a bit.
+  #
+  do_test without_rowid3-14.2aux.2.1 {
+    drop_all_tables
+    execsql {
+      CREATE TABLE aux.t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid;
+      CREATE TABLE aux.t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid;
+      CREATE TABLE aux.t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1);
+    }
+    execsql { SELECT sql FROM aux.sqlite_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE t1(a PRIMARY KEY, b REFERENCES t1) WITHOUT rowid}       \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES t1, c REFERENCES t2)
+            WITHOUT rowid}    \
+    {CREATE TABLE t3(a REFERENCES t1, b REFERENCES t2, c REFERENCES t1)}  \
+  ]
+  do_test without_rowid3-14.2aux.2.2 {
+    execsql { ALTER TABLE t1 RENAME TO t4 }
+    execsql { SELECT sql FROM aux.sqlite_schema WHERE type = 'table'}
+  } [list \
+    {CREATE TABLE "t4"(a PRIMARY KEY, b REFERENCES "t4") WITHOUT rowid}      \
+    {CREATE TABLE t2(a PRIMARY KEY, b REFERENCES "t4", c REFERENCES t2)
+            WITHOUT rowid}     \
+    {CREATE TABLE t3(a REFERENCES "t4", b REFERENCES t2, c REFERENCES "t4")} \
+  ]
+  do_test without_rowid3-14.2aux.2.3 {
+    catchsql { INSERT INTO t3 VALUES(1, 2, 3) }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2aux.2.4 {
+    execsql { INSERT INTO t4 VALUES(1, NULL) }
+  } {}
+  do_test without_rowid3-14.2aux.2.5 {
+    catchsql { UPDATE t4 SET b = 5 }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-14.2aux.2.6 {
+    catchsql { UPDATE t4 SET b = 1 }
+  } {0 {}}
+  do_test without_rowid3-14.2aux.2.7 {
+    execsql { INSERT INTO t3 VALUES(1, NULL, 1) }
+  } {}
+}
+
+do_test without_rowid3-2.14.3.1 {
+  drop_all_tables
+  execsql {
+    CREATE TABLE t1(a, b REFERENCES nosuchtable);
+    DROP TABLE t1;
+  }
+} {}
+do_test without_rowid3-2.14.3.2 {
+  execsql {
+    CREATE TABLE t1(a PRIMARY KEY, b) WITHOUT rowid;
+    INSERT INTO t1 VALUES('a', 1);
+    CREATE TABLE t2(x REFERENCES t1);
+    INSERT INTO t2 VALUES('a');
+  }
+} {}
+do_test without_rowid3-2.14.3.3 {
+  catchsql { DROP TABLE t1 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-2.14.3.4 {
+  execsql {
+    DELETE FROM t2;
+    DROP TABLE t1;
+  }
+} {}
+do_test without_rowid3-2.14.3.4 {
+  catchsql { INSERT INTO t2 VALUES('x') }
+} {1 {no such table: main.t1}}
+do_test without_rowid3-2.14.3.5 {
+  execsql {
+    CREATE TABLE t1(x PRIMARY KEY) WITHOUT rowid;
+    INSERT INTO t1 VALUES('x');
+  }
+  execsql { INSERT INTO t2 VALUES('x') }
+} {}
+do_test without_rowid3-2.14.3.6 {
+  catchsql { DROP TABLE t1 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-2.14.3.7 {
+  execsql {
+    DROP TABLE t2;
+    DROP TABLE t1;
+  }
+} {}
+do_test without_rowid3-2.14.3.8 {
+  execsql {
+    CREATE TABLE pp(x, y, PRIMARY KEY(x, y)) WITHOUT ROWID;
+    CREATE TABLE cc(a, b, FOREIGN KEY(a, b) REFERENCES pp(x, z));
+  }
+  catchsql { INSERT INTO cc VALUES(1, 2) }
+} {1 {foreign key mismatch - "cc" referencing "pp"}}
+do_test without_rowid3-2.14.3.9 {
+  execsql { DROP TABLE cc }
+} {}
+do_test without_rowid3-2.14.3.10 {
+  execsql {
+    CREATE TABLE cc(a, b, 
+      FOREIGN KEY(a, b) REFERENCES pp DEFERRABLE INITIALLY DEFERRED
+    );
+  }
+  execsql {
+    INSERT INTO pp VALUES('a', 'b');
+    INSERT INTO cc VALUES('a', 'b');
+    BEGIN;
+      DROP TABLE pp;
+      CREATE TABLE pp(a, b, c, PRIMARY KEY(b, c)) WITHOUT rowid;
+      INSERT INTO pp VALUES(1, 'a', 'b');
+    COMMIT;
+  }
+} {}
+do_test without_rowid3-2.14.3.11 {
+  execsql { 
+    BEGIN;
+      DROP TABLE cc;
+      DROP TABLE pp;
+    COMMIT;
+  }
+} {}
+do_test without_rowid3-2.14.3.12 {
+  execsql {
+    CREATE TABLE b1(a, b);
+    CREATE TABLE b2(a, b REFERENCES b1);
+    DROP TABLE b1;
+  }
+} {}
+do_test without_rowid3-2.14.3.13 {
+  execsql {
+    CREATE TABLE b3(a, b REFERENCES b2 DEFERRABLE INITIALLY DEFERRED);
+    DROP TABLE b2;
+  }
+} {}
+
+# Test that nothing goes wrong when dropping a table that refers to a view.
+# Or dropping a view that an existing FK (incorrectly) refers to. Or either
+# of the above scenarios with a virtual table.
+drop_all_tables
+do_test without_rowid3-2.14.4.1 {
+  execsql {
+    CREATE TABLE t1(x REFERENCES v); 
+    CREATE VIEW v AS SELECT * FROM t1;
+  }
+} {}
+do_test without_rowid3-2.14.4.2 {
+  execsql {
+    DROP VIEW v;
+  }
+} {}
+ifcapable vtab {
+  register_echo_module db
+  do_test without_rowid3-2.14.4.3 {
+    execsql { CREATE VIRTUAL TABLE v USING echo(t1) }
+  } {}
+  do_test without_rowid3-2.14.4.2 {
+    execsql {
+      DROP TABLE v;
+    }
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# The following tests, without_rowid3-15.*, test that unnecessary FK related scans 
+# and lookups are avoided when the constraint counters are zero.
+#
+drop_all_tables
+proc execsqlS {zSql} {
+  set ::sqlite_search_count 0
+  set ::sqlite_found_count 0
+  set res [uplevel [list execsql $zSql]]
+  concat [expr $::sqlite_found_count + $::sqlite_search_count] $res
+}
+do_test without_rowid3-15.1.1 {
+  execsql {
+    CREATE TABLE pp(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE cc(x, y REFERENCES pp DEFERRABLE INITIALLY DEFERRED);
+    INSERT INTO pp VALUES(1, 'one');
+    INSERT INTO pp VALUES(2, 'two');
+    INSERT INTO cc VALUES('neung', 1);
+    INSERT INTO cc VALUES('song', 2);
+  }
+} {}
+do_test without_rowid3-15.1.2 {
+  execsqlS { INSERT INTO pp VALUES(3, 'three') }
+} {0}
+do_test without_rowid3-15.1.3 {
+  execsql {
+    BEGIN;
+      INSERT INTO cc VALUES('see', 4);    -- Violates deferred constraint
+  }
+  execsqlS { INSERT INTO pp VALUES(5, 'five') }
+} {2}
+do_test without_rowid3-15.1.4 {
+  execsql { DELETE FROM cc WHERE x = 'see' }
+  execsqlS { INSERT INTO pp VALUES(6, 'six') }
+} {0}
+do_test without_rowid3-15.1.5 {
+  execsql COMMIT
+} {}
+do_test without_rowid3-15.1.6 {
+  execsql BEGIN
+  execsqlS {
+    DELETE FROM cc WHERE x = 'neung';
+    ROLLBACK;
+  }
+} {1}
+do_test without_rowid3-15.1.7 {
+  execsql { 
+    BEGIN;
+    DELETE FROM pp WHERE a = 2;
+  }
+  execsqlS {
+    DELETE FROM cc WHERE x = 'neung';
+    ROLLBACK;
+  }
+} {2}
+
+#-------------------------------------------------------------------------
+# This next block of tests, without_rowid3-16.*, test that rows that refer to
+# themselves may be inserted and deleted.
+#
+foreach {tn zSchema} {
+  1 { CREATE TABLE self(a INTEGER PRIMARY KEY, b REFERENCES self(a))
+             WITHOUT rowid }
+  2 { CREATE TABLE self(a PRIMARY KEY, b REFERENCES self(a)) WITHOUT rowid }
+  3 { CREATE TABLE self(a UNIQUE, b INT PRIMARY KEY REFERENCES self(a))
+             WITHOUT rowid }
+} {
+  drop_all_tables
+  do_test without_rowid3-16.1.$tn.1 {
+    execsql $zSchema
+    execsql { INSERT INTO self VALUES(13, 13) }
+  } {}
+  do_test without_rowid3-16.1.$tn.2 {
+    execsql { UPDATE self SET a = 14, b = 14 }
+  } {}
+
+  do_test without_rowid3-16.1.$tn.3 {
+    catchsql { UPDATE self SET b = 15 }
+  } {1 {FOREIGN KEY constraint failed}}
+
+  do_test without_rowid3-16.1.$tn.4 {
+    catchsql { UPDATE self SET a = 15 }
+  } {1 {FOREIGN KEY constraint failed}}
+
+  do_test without_rowid3-16.1.$tn.5 {
+    catchsql { UPDATE self SET a = 15, b = 16 }
+  } {1 {FOREIGN KEY constraint failed}}
+
+  do_test without_rowid3-16.1.$tn.6 {
+    catchsql { UPDATE self SET a = 17, b = 17 }
+  } {0 {}}
+
+  do_test without_rowid3-16.1.$tn.7 {
+    execsql { DELETE FROM self }
+  } {}
+  do_test without_rowid3-16.1.$tn.8 {
+    catchsql { INSERT INTO self VALUES(20, 21) }
+  } {1 {FOREIGN KEY constraint failed}}
+}
+
+# Additional tests cases using multi-column self-referential
+# FOREIGN KEY constraints.
+#
+drop_all_tables
+do_execsql_test without_rowid3-16.4.1.1 {
+  PRAGMA foreign_keys=ON;
+  CREATE TABLE t1(a,b,c,d,e,f,
+     UNIQUE (a,b),
+     PRIMARY KEY (e,c),
+     FOREIGN KEY (d,f) REFERENCES t1(e,c)
+  ) WITHOUT rowid;
+  INSERT INTO t1 VALUES(1,2,3,5,5,3);
+  INSERT INTO t1 VALUES(2,3,4,6,6,4);
+  INSERT INTO t1 VALUES('x','y',1.5,'fizzle','fizzle',1.5);
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 3 5 5 3 | 2 3 4 6 6 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_execsql_test without_rowid3-16.4.1.2 {
+  UPDATE t1 SET c=99, f=99 WHERE a=1;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 99 5 5 99 | 2 3 4 6 6 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_execsql_test without_rowid3-16.4.1.3 {
+  UPDATE t1 SET e=876, d=876 WHERE a=2;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 99 5 5 99 | 2 3 4 876 876 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_test without_rowid3-16.4.1.4 {
+  catchsql {
+    UPDATE t1 SET c=11, e=22 WHERE a=1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+do_test without_rowid3-16.4.1.5 {
+  catchsql {
+    UPDATE t1 SET d=11, f=22 WHERE a=1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+do_execsql_test without_rowid3-16.4.1.6 {
+  DELETE FROM t1 WHERE a=1;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {2 3 4 876 876 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_execsql_test without_rowid3-16.4.2.1 {
+  DROP TABLE t1;
+  CREATE TABLE t1(a,b,c,d,e,f,
+     PRIMARY KEY (a,b),
+     UNIQUE (e,c),
+     FOREIGN KEY (d,f) REFERENCES t1(e,c)
+  ) WITHOUT rowid;
+  INSERT INTO t1 VALUES(1,2,3,5,5,3);
+  INSERT INTO t1 VALUES(2,3,4,6,6,4);
+  INSERT INTO t1 VALUES('x','y',1.5,'fizzle','fizzle',1.5);
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 3 5 5 3 | 2 3 4 6 6 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_execsql_test without_rowid3-16.4.2.2 {
+  UPDATE t1 SET c=99, f=99 WHERE a=1;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 99 5 5 99 | 2 3 4 6 6 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_execsql_test without_rowid3-16.4.2.3 {
+  UPDATE t1 SET e=876, d=876 WHERE a=2;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {1 2 99 5 5 99 | 2 3 4 876 876 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+do_test without_rowid3-16.4.2.4 {
+  catchsql {
+    UPDATE t1 SET c=11, e=22 WHERE a=1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+do_test without_rowid3-16.4.2.5 {
+  catchsql {
+    UPDATE t1 SET d=11, f=22 WHERE a=1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+do_execsql_test without_rowid3-16.4.2.6 {
+  DELETE FROM t1 WHERE a=1;
+  SELECT *, '|' FROM t1 ORDER BY a, b;
+} {2 3 4 876 876 4 | x y 1.5 fizzle fizzle 1.5 |}
+
+
+#-------------------------------------------------------------------------
+# This next block of tests, without_rowid3-17.*, tests that if "PRAGMA count_changes"
+# is turned on statements that violate immediate FK constraints return
+# SQLITE_CONSTRAINT immediately, not after returning a number of rows.
+# Whereas statements that violate deferred FK constraints return the number
+# of rows before failing.
+#
+# Also test that rows modified by FK actions are not counted in either the
+# returned row count or the values returned by sqlite3_changes(). Like
+# trigger related changes, they are included in sqlite3_total_changes() though.
+#
+drop_all_tables
+do_test without_rowid3-17.1.1 {
+  execsql { PRAGMA count_changes = 1 }
+  execsql { 
+    CREATE TABLE one(a, b, c, UNIQUE(b, c));
+    CREATE TABLE two(d, e, f, FOREIGN KEY(e, f) REFERENCES one(b, c));
+    INSERT INTO one VALUES(1, 2, 3);
+  }
+} {1}
+do_test without_rowid3-17.1.2 {
+  set STMT [sqlite3_prepare_v2 db "INSERT INTO two VALUES(4, 5, 6)" -1 dummy]
+  sqlite3_step $STMT
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-17.1.2b SQLITE_CONSTRAINT_FOREIGNKEY
+ifcapable autoreset {
+  do_test without_rowid3-17.1.3 {
+    sqlite3_step $STMT
+  } {SQLITE_CONSTRAINT}
+  verify_ex_errcode without_rowid3-17.1.3b SQLITE_CONSTRAINT_FOREIGNKEY
+} else {
+  do_test without_rowid3-17.1.3 {
+    sqlite3_step $STMT
+  } {SQLITE_MISUSE}
+}
+do_test without_rowid3-17.1.4 {
+  sqlite3_finalize $STMT
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-17.1.4b SQLITE_CONSTRAINT_FOREIGNKEY
+do_test without_rowid3-17.1.5 {
+  execsql {
+    INSERT INTO one VALUES(2, 3, 4);
+    INSERT INTO one VALUES(3, 4, 5);
+    INSERT INTO two VALUES(1, 2, 3);
+    INSERT INTO two VALUES(2, 3, 4);
+    INSERT INTO two VALUES(3, 4, 5);
+  }
+} {1 1 1 1 1}
+do_test without_rowid3-17.1.6 {
+  catchsql {
+    BEGIN;
+      INSERT INTO one VALUES(0, 0, 0);
+      UPDATE two SET e=e+1, f=f+1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-17.1.7 {
+  execsql { SELECT * FROM one }
+} {1 2 3 2 3 4 3 4 5 0 0 0}
+do_test without_rowid3-17.1.8 {
+  execsql { SELECT * FROM two }
+} {1 2 3 2 3 4 3 4 5}
+do_test without_rowid3-17.1.9 {
+  execsql COMMIT
+} {}
+do_test without_rowid3-17.1.10 {
+  execsql {
+    CREATE TABLE three(
+      g, h, i, 
+      FOREIGN KEY(h, i) REFERENCES one(b, c) DEFERRABLE INITIALLY DEFERRED
+    );
+  }
+} {}
+do_test without_rowid3-17.1.11 {
+  set STMT [sqlite3_prepare_v2 db "INSERT INTO three VALUES(7, 8, 9)" -1 dummy]
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test without_rowid3-17.1.12 {
+  sqlite3_column_text $STMT 0
+} {1}
+do_test without_rowid3-17.1.13 {
+  sqlite3_step $STMT
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-17.1.13b SQLITE_CONSTRAINT_FOREIGNKEY
+do_test without_rowid3-17.1.14 {
+  sqlite3_finalize $STMT
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-17.1.14b SQLITE_CONSTRAINT_FOREIGNKEY
+
+drop_all_tables
+do_test without_rowid3-17.2.1 {
+  execsql {
+    CREATE TABLE high("a'b!" PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE low(
+      c, 
+      "d&6" REFERENCES high ON UPDATE CASCADE ON DELETE CASCADE
+    );
+  }
+} {}
+do_test without_rowid3-17.2.2 {
+  execsql {
+    INSERT INTO high VALUES('a', 'b');
+    INSERT INTO low VALUES('b', 'a');
+  }
+  db changes
+} {1}
+set nTotal [db total_changes]
+do_test without_rowid3-17.2.3 {
+  execsql { UPDATE high SET "a'b!" = 'c' }
+} {1}
+do_test without_rowid3-17.2.4 {
+  db changes
+} {1}
+do_test without_rowid3-17.2.5 {
+  expr [db total_changes] - $nTotal
+} {2}
+do_test without_rowid3-17.2.6 {
+  execsql { SELECT * FROM high ; SELECT * FROM low }
+} {c b b c}
+do_test without_rowid3-17.2.7 {
+  execsql { DELETE FROM high }
+} {1}
+do_test without_rowid3-17.2.8 {
+  db changes
+} {1}
+do_test without_rowid3-17.2.9 {
+  expr [db total_changes] - $nTotal
+} {4}
+do_test without_rowid3-17.2.10 {
+  execsql { SELECT * FROM high ; SELECT * FROM low }
+} {}
+execsql { PRAGMA count_changes = 0 }
+
+#-------------------------------------------------------------------------
+# Test that the authorization callback works.
+#
+
+ifcapable auth {
+  do_test without_rowid3-18.1 {
+    execsql {
+      CREATE TABLE long(a, b PRIMARY KEY, c) WITHOUT rowid;
+      CREATE TABLE short(d, e, f REFERENCES long);
+      CREATE TABLE mid(g, h, i REFERENCES long DEFERRABLE INITIALLY DEFERRED);
+    }
+  } {}
+
+  proc auth {args} {eval lappend ::authargs [lrange $args 0 4]; return SQLITE_OK}
+  db auth auth
+
+  # An insert on the parent table must read the child key of any deferred
+  # foreign key constraints. But not the child key of immediate constraints.
+  set authargs {}
+  do_test without_rowid3-18.2 {
+    execsql { INSERT INTO long VALUES(1, 2, 3) }
+    set authargs
+  } {SQLITE_INSERT long {} main {} SQLITE_READ mid i main {}}
+
+  # An insert on the child table of an immediate constraint must read the
+  # parent key columns (to see if it is a violation or not).
+  set authargs {}
+  do_test without_rowid3-18.3 {
+    execsql { INSERT INTO short VALUES(1, 3, 2) }
+    set authargs
+  } {SQLITE_INSERT short {} main {} SQLITE_READ long b main {}}
+  
+  # As must an insert on the child table of a deferred constraint.
+  set authargs {}
+  do_test without_rowid3-18.4 {
+    execsql { INSERT INTO mid VALUES(1, 3, 2) }
+    set authargs
+  } {SQLITE_INSERT mid {} main {} SQLITE_READ long b main {}}
+
+  do_test without_rowid3-18.5 {
+    execsql {
+      CREATE TABLE nought(a, b PRIMARY KEY, c) WITHOUT rowid;
+      CREATE TABLE cross(d, e, f,
+        FOREIGN KEY(e) REFERENCES nought(b) ON UPDATE CASCADE
+      );
+    }
+    execsql { INSERT INTO nought VALUES(2, 1, 2) }
+    execsql { INSERT INTO cross VALUES(0, 1, 0) }
+    set authargs [list]
+    execsql { UPDATE nought SET b = 5 }
+    set authargs
+  } {SQLITE_UPDATE nought b main {} SQLITE_READ cross e main {} SQLITE_READ cross e main {} SQLITE_READ nought b main {} SQLITE_READ nought b main {} SQLITE_READ nought b main {} SQLITE_UPDATE cross e main {} SQLITE_READ nought b main {} SQLITE_READ cross e main {} SQLITE_READ nought b main {} SQLITE_READ nought b main {}}
+
+  do_test without_rowid3-18.6 {
+    execsql {SELECT * FROM cross}
+  } {0 5 0}
+
+  do_test without_rowid3-18.7 {
+    execsql {
+      CREATE TABLE one(a INT PRIMARY KEY, b) WITHOUT rowid;
+      CREATE TABLE two(b, c REFERENCES one);
+      INSERT INTO one VALUES(101, 102);
+    }
+    set authargs [list]
+    execsql { INSERT INTO two VALUES(100, 101); }
+    set authargs
+  } {SQLITE_INSERT two {} main {} SQLITE_READ one a main {}}
+
+  # Return SQLITE_IGNORE to requests to read from the parent table. This
+  # causes inserts of non-NULL keys into the child table to fail.
+  #
+  rename auth {}
+  proc auth {args} {
+    if {[lindex $args 1] == "long"} {return SQLITE_IGNORE}
+    return SQLITE_OK
+  }
+  do_test without_rowid3-18.8 {
+    catchsql { INSERT INTO short VALUES(1, 3, 2) }
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-18.9 {
+    execsql { INSERT INTO short VALUES(1, 3, NULL) }
+  } {}
+  do_test without_rowid3-18.10 {
+    execsql { SELECT * FROM short }
+  } {1 3 2 1 3 {}}
+  do_test without_rowid3-18.11 {
+    catchsql { UPDATE short SET f = 2 WHERE f IS NULL }
+  } {1 {FOREIGN KEY constraint failed}}
+
+  db auth {}
+  unset authargs
+}
+
+
+do_test without_rowid3-19.1 {
+  execsql {
+    CREATE TABLE main(id INT PRIMARY KEY) WITHOUT rowid;
+    CREATE TABLE sub(id INT REFERENCES main(id));
+    INSERT INTO main VALUES(1);
+    INSERT INTO main VALUES(2);
+    INSERT INTO sub VALUES(2);
+  }
+} {}
+do_test without_rowid3-19.2 {
+  set S [sqlite3_prepare_v2 db "DELETE FROM main WHERE id = ?" -1 dummy]
+  sqlite3_bind_int $S 1 2
+  sqlite3_step $S
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-19.2b SQLITE_CONSTRAINT_FOREIGNKEY
+do_test without_rowid3-19.3 {
+  sqlite3_reset $S
+} {SQLITE_CONSTRAINT}
+verify_ex_errcode without_rowid3-19.3b SQLITE_CONSTRAINT_FOREIGNKEY
+do_test without_rowid3-19.4 {
+  sqlite3_bind_int $S 1 1
+  sqlite3_step $S
+} {SQLITE_DONE}
+do_test without_rowid3-19.4 {
+  sqlite3_finalize $S
+} {SQLITE_OK}
+
+drop_all_tables
+do_test without_rowid3-20.1 {
+  execsql {
+    CREATE TABLE pp(a PRIMARY KEY, b) WITHOUT rowid;
+    CREATE TABLE cc(c PRIMARY KEY, d REFERENCES pp) WITHOUT rowid;
+  }
+} {}
+
+foreach {tn insert} {
+  1 "INSERT"
+  2 "INSERT OR IGNORE"
+  3 "INSERT OR ABORT"
+  4 "INSERT OR ROLLBACK"
+  5 "INSERT OR REPLACE"
+  6 "INSERT OR FAIL"
+} {
+  do_test without_rowid3-20.2.$tn.1 {
+    catchsql "$insert INTO cc VALUES(1, 2)"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.2.$tn.2 {
+    execsql { SELECT * FROM cc }
+  } {}
+  do_test without_rowid3-20.2.$tn.3 {
+    execsql {
+      BEGIN;
+        INSERT INTO pp VALUES(2, 'two');
+        INSERT INTO cc VALUES(1, 2);
+    }
+    catchsql "$insert INTO cc VALUES(3, 4)"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.2.$tn.4 {
+    execsql { COMMIT ; SELECT * FROM cc }
+  } {1 2}
+  do_test without_rowid3-20.2.$tn.5 {
+    execsql { DELETE FROM cc ; DELETE FROM pp }
+  } {}
+}
+
+foreach {tn update} {
+  1 "UPDATE"
+  2 "UPDATE OR IGNORE"
+  3 "UPDATE OR ABORT"
+  4 "UPDATE OR ROLLBACK"
+  5 "UPDATE OR REPLACE"
+  6 "UPDATE OR FAIL"
+} {
+  do_test without_rowid3-20.3.$tn.1 {
+    execsql {
+      INSERT INTO pp VALUES(2, 'two');
+      INSERT INTO cc VALUES(1, 2);
+    }
+  } {}
+  do_test without_rowid3-20.3.$tn.2 {
+    catchsql "$update pp SET a = 1"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.3.$tn.3 {
+    execsql { SELECT * FROM pp }
+  } {2 two}
+  do_test without_rowid3-20.3.$tn.4 {
+    catchsql "$update cc SET d = 1"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.3.$tn.5 {
+    execsql { SELECT * FROM cc }
+  } {1 2}
+  do_test without_rowid3-20.3.$tn.6 {
+    execsql {
+      BEGIN;
+        INSERT INTO pp VALUES(3, 'three');
+    }
+    catchsql "$update pp SET a = 1 WHERE a = 2"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.3.$tn.7 {
+    execsql { COMMIT ; SELECT * FROM pp }
+  } {2 two 3 three}
+  do_test without_rowid3-20.3.$tn.8 {
+    execsql {
+      BEGIN;
+        INSERT INTO cc VALUES(2, 2);
+    }
+    catchsql "$update cc SET d = 1 WHERE c = 1"
+  } {1 {FOREIGN KEY constraint failed}}
+  do_test without_rowid3-20.3.$tn.9 {
+    execsql { COMMIT ; SELECT * FROM cc }
+  } {1 2 2 2}
+  do_test without_rowid3-20.3.$tn.10 {
+    execsql { DELETE FROM cc ; DELETE FROM pp }
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# The following block of tests, those prefixed with "without_rowid3-genfkey.",
+# are the same tests that were used to test the ".genfkey" command provided 
+# by the shell tool. So these tests show that the built-in foreign key 
+# implementation is more or less compatible with the triggers generated 
+# by genfkey.
+#
+drop_all_tables
+do_test without_rowid3-genfkey.1.1 {
+  execsql {
+    CREATE TABLE t1(a INT PRIMARY KEY, b, c, UNIQUE(b, c)) WITHOUT rowid;
+    CREATE TABLE t2(e REFERENCES t1, f);
+    CREATE TABLE t3(g, h, i, FOREIGN KEY (h, i) REFERENCES t1(b, c));
+  }
+} {}
+do_test without_rowid3-genfkey.1.2 {
+  catchsql { INSERT INTO t2 VALUES(1, 2) }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.3 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t2 VALUES(1, 2);
+  }
+} {}
+do_test without_rowid3-genfkey.1.4 {
+  execsql { INSERT INTO t2 VALUES(NULL, 3) }
+} {}
+do_test without_rowid3-genfkey.1.5 {
+  catchsql { UPDATE t2 SET e = 5 WHERE e IS NULL }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.6 {
+  execsql { UPDATE t2 SET e = 1 WHERE e IS NULL }
+} {}
+do_test without_rowid3-genfkey.1.7 {
+  execsql { UPDATE t2 SET e = NULL WHERE f = 3 }
+} {}
+do_test without_rowid3-genfkey.1.8 {
+  catchsql { UPDATE t1 SET a = 10 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.9 {
+  catchsql { UPDATE t1 SET a = NULL }
+} {1 {NOT NULL constraint failed: t1.a}}
+do_test without_rowid3-genfkey.1.10 {
+  catchsql { DELETE FROM t1 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.11 {
+  execsql { UPDATE t2 SET e = NULL }
+} {}
+do_test without_rowid3-genfkey.1.12 {
+  execsql { 
+    UPDATE t1 SET a = 10;
+    DELETE FROM t1;
+    DELETE FROM t2;
+  }
+} {}
+do_test without_rowid3-genfkey.1.13 {
+  execsql {
+    INSERT INTO t3 VALUES(1, NULL, NULL);
+    INSERT INTO t3 VALUES(1, 2, NULL);
+    INSERT INTO t3 VALUES(1, NULL, 3);
+  }
+} {}
+do_test without_rowid3-genfkey.1.14 {
+  catchsql { INSERT INTO t3 VALUES(3, 1, 4) }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.15 {
+  execsql { 
+    INSERT INTO t1 VALUES(1, 1, 4);
+    INSERT INTO t3 VALUES(3, 1, 4);
+  }
+} {}
+do_test without_rowid3-genfkey.1.16 {
+  catchsql { DELETE FROM t1 }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.17 {
+  catchsql { UPDATE t1 SET b = 10}
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-genfkey.1.18 {
+  execsql { UPDATE t1 SET a = 10}
+} {}
+do_test without_rowid3-genfkey.1.19 {
+  catchsql { UPDATE t3 SET h = 'hello' WHERE i = 3}
+} {1 {FOREIGN KEY constraint failed}}
+
+drop_all_tables
+do_test without_rowid3-genfkey.2.1 {
+  execsql {
+    CREATE TABLE t1(a INT PRIMARY KEY, b, c, UNIQUE(b, c)) WITHOUT rowid;
+    CREATE TABLE t2(e REFERENCES t1 ON UPDATE CASCADE ON DELETE CASCADE, f);
+    CREATE TABLE t3(g, h, i, 
+        FOREIGN KEY (h, i) 
+        REFERENCES t1(b, c) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+  }
+} {}
+do_test without_rowid3-genfkey.2.2 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t2 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(4, 'four');
+  }
+} {}
+do_test without_rowid3-genfkey.2.3 {
+  execsql {
+    UPDATE t1 SET a = 2 WHERE a = 1;
+    SELECT * FROM t2;
+  }
+} {2 one 4 four}
+do_test without_rowid3-genfkey.2.4 {
+  execsql {
+    DELETE FROM t1 WHERE a = 4;
+    SELECT * FROM t2;
+  }
+} {2 one}
+
+do_test without_rowid3-genfkey.2.5 {
+  execsql {
+    INSERT INTO t3 VALUES('hello', 2, 3);
+    UPDATE t1 SET c = 2;
+    SELECT * FROM t3;
+  }
+} {hello 2 2}
+do_test without_rowid3-genfkey.2.6 {
+  execsql {
+    DELETE FROM t1;
+    SELECT * FROM t3;
+  }
+} {}
+
+drop_all_tables
+do_test without_rowid3-genfkey.3.1 {
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, UNIQUE(c, b)) WITHOUT rowid;
+    CREATE TABLE t2(e REFERENCES t1 ON UPDATE SET NULL ON DELETE SET NULL, f);
+    CREATE TABLE t3(g, h, i, 
+        FOREIGN KEY (h, i) 
+        REFERENCES t1(b, c) ON UPDATE SET NULL ON DELETE SET NULL
+    );
+  }
+} {}
+do_test without_rowid3-genfkey.3.2 {
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t2 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(4, 'four');
+  }
+} {}
+do_test without_rowid3-genfkey.3.3 {
+  execsql {
+    UPDATE t1 SET a = 2 WHERE a = 1;
+    SELECT * FROM t2;
+  }
+} {{} one 4 four}
+do_test without_rowid3-genfkey.3.4 {
+  execsql {
+    DELETE FROM t1 WHERE a = 4;
+    SELECT * FROM t2;
+  }
+} {{} one {} four}
+do_test without_rowid3-genfkey.3.5 {
+  execsql {
+    INSERT INTO t3 VALUES('hello', 2, 3);
+    UPDATE t1 SET c = 2;
+    SELECT * FROM t3;
+  }
+} {hello {} {}}
+do_test without_rowid3-genfkey.3.6 {
+  execsql {
+    UPDATE t3 SET h = 2, i = 2;
+    DELETE FROM t1;
+    SELECT * FROM t3;
+  }
+} {hello {} {}}
+
+#-------------------------------------------------------------------------
+# Verify that ticket dd08e5a988d00decc4a543daa8dbbfab9c577ad8 has been
+# fixed.
+#
+do_test without_rowid3-dd08e5.1.1 {
+  execsql {
+    PRAGMA foreign_keys=ON;
+    CREATE TABLE tdd08(a INTEGER PRIMARY KEY, b) WITHOUT rowid;
+    CREATE UNIQUE INDEX idd08 ON tdd08(a,b);
+    INSERT INTO tdd08 VALUES(200,300);
+
+    CREATE TABLE tdd08_b(w,x,y, FOREIGN KEY(x,y) REFERENCES tdd08(a,b));
+    INSERT INTO tdd08_b VALUES(100,200,300);
+  }
+} {}
+do_test without_rowid3-dd08e5.1.2 {
+  catchsql {
+    DELETE FROM tdd08;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-dd08e5.1.3 {
+  execsql {
+    SELECT * FROM tdd08;
+  }
+} {200 300}
+do_test without_rowid3-dd08e5.1.4 {
+  catchsql {
+    INSERT INTO tdd08_b VALUES(400,500,300);
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-dd08e5.1.5 {
+  catchsql {
+    UPDATE tdd08_b SET x=x+1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-dd08e5.1.6 {
+  catchsql {
+    UPDATE tdd08 SET a=a+1;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+#-------------------------------------------------------------------------
+# Verify that ticket ce7c133ea6cc9ccdc1a60d80441f80b6180f5eba
+# fixed.
+#
+do_test without_rowid3-ce7c13.1.1 {
+  execsql {
+    CREATE TABLE tce71(a INTEGER PRIMARY KEY, b) WITHOUT rowid;
+    CREATE UNIQUE INDEX ice71 ON tce71(a,b);
+    INSERT INTO tce71 VALUES(100,200);
+    CREATE TABLE tce72(w, x, y, FOREIGN KEY(x,y) REFERENCES tce71(a,b));
+    INSERT INTO tce72 VALUES(300,100,200);
+    UPDATE tce71 set b = 200 where a = 100;
+    SELECT * FROM tce71, tce72;
+  }
+} {100 200 300 100 200}
+do_test without_rowid3-ce7c13.1.2 {
+  catchsql {
+    UPDATE tce71 set b = 201 where a = 100;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-ce7c13.1.3 {
+  catchsql {
+    UPDATE tce71 set a = 101 where a = 100;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-ce7c13.1.4 {
+  execsql {
+    CREATE TABLE tce73(a INTEGER PRIMARY KEY, b, UNIQUE(a,b)) WITHOUT rowid;
+    INSERT INTO tce73 VALUES(100,200);
+    CREATE TABLE tce74(w, x, y, FOREIGN KEY(x,y) REFERENCES tce73(a,b));
+    INSERT INTO tce74 VALUES(300,100,200);
+    UPDATE tce73 set b = 200 where a = 100;
+    SELECT * FROM tce73, tce74;
+  }
+} {100 200 300 100 200}
+do_test without_rowid3-ce7c13.1.5 {
+  catchsql {
+    UPDATE tce73 set b = 201 where a = 100;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+do_test without_rowid3-ce7c13.1.6 {
+  catchsql {
+    UPDATE tce73 set a = 101 where a = 100;
+  }
+} {1 {FOREIGN KEY constraint failed}}
+
+# Confirm that changes() works on WITHOUT ROWID tables that use the
+# xfer optimization.
+#
+db close
+sqlite3 db :memory:
+do_execsql_test without_rowid3-30.1 {
+  CREATE TABLE t1(a,b,PRIMARY KEY(a,b)) WITHOUT ROWID;
+  CREATE TABLE t2(a,b,PRIMARY KEY(a,b)) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1,2),(3,4),(5,6);
+  SELECT changes();
+} {3}
+do_execsql_test without_rowid3-30.2 {
+  INSERT INTO t2 SELECT * FROM t1;
+  SELECT changes();
+} {3}
+
+finish_test

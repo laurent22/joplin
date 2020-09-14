@@ -1,0 +1,182 @@
+# 2013-11-13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests of the "skip-scan" query strategy. In 
+# particular it tests that stat4 data can be used by a range query
+# that uses the skip-scan approach.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix skipscan5
+
+ifcapable !stat4 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(a INT, b INT, c INT);
+  CREATE INDEX i1 ON t1(a, b);
+} {}
+
+expr srand(4)
+do_test 1.2 {
+  for {set i 0} {$i < 100} {incr i} {
+    set a [expr int(rand()*4.0) + 1]
+    set b [expr int(rand()*20.0) + 1]
+    execsql { INSERT INTO t1 VALUES($a, $b, NULL) }
+  }
+  execsql ANALYZE
+} {}
+
+foreach {tn q res} {
+  1  "b = 5"                   {/*ANY(a) AND b=?*/}
+  2  "b > 12 AND b < 16"       {/*ANY(a) AND b>? AND b<?*/}
+  3  "b > 2 AND b < 16"        {/*SCAN TABLE t1*/}
+  4  "b > 18 AND b < 25"       {/*ANY(a) AND b>? AND b<?*/}
+  5  "b > 15"                  {/*ANY(a) AND b>?*/}
+  6  "b > 5"                   {/*SCAN TABLE t1*/}
+  7  "b < 15"                  {/*SCAN TABLE t1*/}
+  8  "b < 5"                   {/*ANY(a) AND b<?*/}
+  9  "5 > b"                   {/*ANY(a) AND b<?*/}
+  10 "b = '5'"                 {/*ANY(a) AND b=?*/}
+  11 "b > '12' AND b < '16'"   {/*ANY(a) AND b>? AND b<?*/}
+  12 "b > '2' AND b < '16'"    {/*SCAN TABLE t1*/}
+  13 "b > '18' AND b < '25'"   {/*ANY(a) AND b>? AND b<?*/}
+  14 "b > '15'"                {/*ANY(a) AND b>?*/}
+  15 "b > '5'"                 {/*SCAN TABLE t1*/}
+  16 "b < '15'"                {/*SCAN TABLE t1*/}
+  17 "b < '5'"                 {/*ANY(a) AND b<?*/}
+  18 "'5' > b"                 {/*ANY(a) AND b<?*/}
+} {
+  set sql "EXPLAIN QUERY PLAN SELECT * FROM t1 WHERE $q"
+  do_execsql_test 1.3.$tn $sql $res
+}
+
+
+#-------------------------------------------------------------------------
+# Test that range-query/skip-scan estimation works with text values.
+# And on UTF-16 databases when there is no UTF-16 collation sequence
+# available.
+#
+
+proc test_collate {enc lhs rhs} {
+  string compare $lhs $rhs
+}
+
+foreach {tn dbenc coll} {
+  1 UTF-8   { add_test_collate db 0 0 1 }
+  2 UTF-16  { add_test_collate db 1 0 0 }
+  3 UTF-8   { add_test_collate db 0 1 0 }
+} {
+  reset_db
+  eval $coll
+
+  do_execsql_test 2.$tn.1 " PRAGMA encoding = '$dbenc' "
+  do_execsql_test 2.$tn.2 {
+    CREATE TABLE t2(a TEXT, b TEXT, c TEXT COLLATE test_collate, d TEXT);
+    CREATE INDEX i2 ON t2(a, b, c);
+  }
+
+  set vocab(d) { :) }
+  set vocab(c) { a b c d e f g h i j k l m n o p q r s t }
+  set vocab(b) { one two three }
+  set vocab(a) { sql }
+
+  do_test 2.$tn.3 {
+    for {set i 0} {$i < 100} {incr i} {
+      foreach var {a b c d} { 
+        set $var [lindex $vocab($var) [expr $i % [llength $vocab($var)]]]
+      }
+      execsql { INSERT INTO t2 VALUES($a, $b, $c, $d) }
+    }
+    execsql ANALYZE
+  } {}
+
+  foreach {tn2 q res} {
+    1 { c BETWEEN 'd' AND 'e' }       {/*ANY(a) AND ANY(b) AND c>? AND c<?*/}
+    2 { c BETWEEN 'b' AND 'r' }       {/*SCAN TABLE t2*/}
+    3 { c > 'q' }                     {/*ANY(a) AND ANY(b) AND c>?*/}
+    4 { c > 'e' }                     {/*SCAN TABLE t2*/}
+    5 { c < 'q' }                     {/*SCAN TABLE t2*/}
+    6 { c < 'c' }                     {/*ANY(a) AND ANY(b) AND c<?*/}
+  } {
+    set sql "EXPLAIN QUERY PLAN SELECT * FROM t2 WHERE $q" 
+    do_execsql_test 2.$tn.$tn2 $sql $res
+  }
+
+}
+
+#-------------------------------------------------------------------------
+# Test that range-query/skip-scan estimation works on columns that contain
+# a variety of types.
+#
+
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE t3(a, b, c);
+  CREATE INDEX i3 ON t3(a, b);
+}
+
+set values {
+    NULL NULL NULL
+    NULL -9567 -9240
+    -8725 -8659 -8248.340244520614
+    -8208 -7939 -7746.985758536954
+    -7057 -6550 -5916
+    -5363 -4935.781822975623 -4935.063633571875
+    -3518.4554911770183 -2537 -2026
+    -1511.2603881914456 -1510.4195994839156 -1435
+    -1127.4210136045804 -1045 99
+    1353 1457 1563.2908193223611
+    2245 2286 2552
+    2745.18831295203 2866.279926554429 3075.0468527316334
+    3447 3867 4237.892420141907
+    4335 5052.9775000424015 5232.178240656935
+    5541.784919585003 5749.725576373621 5758
+    6005 6431 7263.477992854769
+    7441 7541 8667.279760663994
+    8857 9199.638673662972 'dl'
+    'dro' 'h' 'igprfq'
+    'jnbd' 'k' 'kordee'
+    'lhwcv' 'mzlb' 'nbjked'
+    'nufpo' 'nxqkdq' 'shelln'
+    'tvzn' 'wpnt' 'wylf'
+    'ydkgu' 'zdb' X''
+    X'0a' X'203f6429f1f33f' X'23858e324545e0362b'
+    X'3f9f8a' X'516f7ddd4b' X'68f1df0930ac6b'
+    X'9ea60d' X'a06f' X'aefd342a39ce36df'
+    X'afaa020fe2' X'be201c' X'c47d97b209601e45'
+}
+
+do_test 3.2 {
+  set c 0
+  foreach v $values {
+    execsql "INSERT INTO t3 VALUES($c % 2, $v, $c)"
+    incr c
+  }
+  execsql ANALYZE
+} {}
+
+foreach {tn q res} {
+  1 "b BETWEEN -10000 AND -8000"       {/*ANY(a) AND b>? AND b<?*/}
+  2 "b BETWEEN -10000 AND 'qqq'"       {/*SCAN TABLE t3*/}
+  3 "b < X'5555'"                      {/*SCAN TABLE t3*/}
+  4 "b > X'5555'"                      {/*ANY(a) AND b>?*/}
+  5 "b > 'zzz'"                        {/*ANY(a) AND b>?*/}
+  6 "b < 'zzz'"                        {/*SCAN TABLE t3*/}
+} {
+  set sql "EXPLAIN QUERY PLAN SELECT * FROM t3 WHERE $q" 
+  do_execsql_test 3.3.$tn $sql $res
+}
+
+finish_test

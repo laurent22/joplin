@@ -1,0 +1,118 @@
+# 2015 September 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault7
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+if 1 {
+
+#-------------------------------------------------------------------------
+# Test fault-injection on a query that uses xColumnSize() on columnsize=0
+# table.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=0);
+  INSERT INTO t1 VALUES('a b c d e f g');
+  INSERT INTO t1 VALUES('a b c d');
+  INSERT INTO t1 VALUES('a b c d e f g h i j');
+}
+
+
+fts5_aux_test_functions db
+do_faultsim_test 1 -faults oom* -body {
+  execsql { SELECT fts5_test_columnsize(t1) FROM t1 WHERE t1 MATCH 'b' }
+} -test {
+  faultsim_test_result {0 {7 4 10}} {1 SQLITE_NOMEM}
+}
+
+}
+
+#-------------------------------------------------------------------------
+# Test fault-injection when a segment is promoted.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a);
+  INSERT INTO t2(t2, rank) VALUES('automerge', 0);
+  INSERT INTO t2(t2, rank) VALUES('crisismerge', 4);
+  INSERT INTO t2(t2, rank) VALUES('pgsz', 40);
+
+  INSERT INTO t2 VALUES('a b c');
+  INSERT INTO t2 VALUES('d e f');
+  INSERT INTO t2 VALUES('f e d');
+  INSERT INTO t2 VALUES('c b a');
+
+  INSERT INTO t2 VALUES('a b c');
+  INSERT INTO t2 VALUES('d e f');
+  INSERT INTO t2 VALUES('f e d');
+  INSERT INTO t2 VALUES('c b a');
+} {}
+
+faultsim_save_and_close
+do_faultsim_test 1 -faults oom-t* -prep {
+  faultsim_restore_and_reopen
+  db eval {
+    BEGIN;
+    INSERT INTO t2 VALUES('c d c g g f');
+    INSERT INTO t2 VALUES('c d g b f d');
+    INSERT INTO t2 VALUES('c c f d e d');
+    INSERT INTO t2 VALUES('e a f c e f');
+    INSERT INTO t2 VALUES('c g f b b d');
+    INSERT INTO t2 VALUES('d a g a b b');
+    INSERT INTO t2 VALUES('e f a b c e');
+    INSERT INTO t2 VALUES('e c a g c d');
+    INSERT INTO t2 VALUES('g b d d e b');
+    INSERT INTO t2 VALUES('e a d a e d');
+  }
+} -body {
+  db eval COMMIT
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+#-------------------------------------------------------------------------
+# Test fault-injection when a segment is promoted.
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE xy USING fts5(x);
+  INSERT INTO xy(rowid, x) VALUES(1, '1 2 3');
+  INSERT INTO xy(rowid, x) VALUES(2, '2 3 4');
+  INSERT INTO xy(rowid, x) VALUES(3, '3 4 5');
+}
+faultsim_save_and_close
+
+do_faultsim_test 2.1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  db eval { UPDATE OR REPLACE xy SET rowid=3 WHERE rowid = 2 }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+# Test fault-injection when an empty expression is parsed.
+#
+do_faultsim_test 2.2 -faults oom-* -body {
+  db eval { SELECT * FROM xy('""') }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+finish_test

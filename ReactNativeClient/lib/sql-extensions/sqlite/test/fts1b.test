@@ -1,0 +1,147 @@
+# 2006 September 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS1 module.
+#
+# $Id: fts1b.test,v 1.4 2006/09/18 02:12:48 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS1 is defined, omit this file.
+ifcapable !fts1 {
+  finish_test
+  return
+}
+
+# Fill the full-text index "t1" with phrases in english, spanish,
+# and german.  For the i-th row, fill in the names for the bits
+# that are set in the value of i.  The least significant bit is
+# 1.  For example,  the value 5 is 101 in binary which will be
+# converted to "one three" in english.
+#
+proc fill_multilanguage_fulltext_t1 {} {
+  set english {one two three four five}
+  set spanish {un dos tres cuatro cinco}
+  set german {eine zwei drei vier funf}
+  
+  for {set i 1} {$i<=31} {incr i} {
+    set cmd "INSERT INTO t1 VALUES"
+    set vset {}
+    foreach lang {english spanish german} {
+      set words {}
+      for {set j 0; set k 1} {$j<5} {incr j; incr k $k} {
+        if {$k&$i} {lappend words [lindex [set $lang] $j]}
+      }
+      lappend vset "'$words'"
+    }
+    set sql "INSERT INTO t1(english,spanish,german) VALUES([join $vset ,])"
+    # puts $sql
+    db eval $sql
+  }
+}
+
+# Construct a full-text search table containing five keywords:
+# one, two, three, four, and five, in various combinations.  The
+# rowid for each will be a bitmask for the elements it contains.
+#
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts1(english,spanish,german);
+}
+fill_multilanguage_fulltext_t1
+
+do_test fts1b-1.1 {
+  execsql {SELECT rowid FROM t1 WHERE english MATCH 'one'}
+} {1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31}
+do_test fts1b-1.2 {
+  execsql {SELECT rowid FROM t1 WHERE spanish MATCH 'one'}
+} {}
+do_test fts1b-1.3 {
+  execsql {SELECT rowid FROM t1 WHERE german MATCH 'one'}
+} {}
+do_test fts1b-1.4 {
+  execsql {SELECT rowid FROM t1 WHERE t1 MATCH 'one'}
+} {1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31}
+do_test fts1b-1.5 {
+  execsql {SELECT rowid FROM t1 WHERE t1 MATCH 'one dos drei'}
+} {7 15 23 31}
+do_test fts1b-1.6 {
+  execsql {SELECT english, spanish, german FROM t1 WHERE rowid=1}
+} {one un eine}
+do_test fts1b-1.7 {
+  execsql {SELECT rowid FROM t1 WHERE t1 MATCH '"one un"'}
+} {}
+
+do_test fts1b-2.1 {
+  execsql {
+    CREATE VIRTUAL TABLE t2 USING fts1(from,to);
+    INSERT INTO t2([from],[to]) VALUES ('one two three', 'four five six');
+    SELECT [from], [to] FROM t2
+  }
+} {{one two three} {four five six}}
+
+
+# Compute an SQL string that contains the words one, two, three,... to
+# describe bits set in the value $i.  Only the lower 5 bits are examined.
+#
+proc wordset {i} {
+  set x {}
+  for {set j 0; set k 1} {$j<5} {incr j; incr k $k} {
+    if {$k&$i} {lappend x [lindex {one two three four five} $j]}
+  }
+  return '$x'
+}
+
+# Create a new FTS table with three columns:
+#
+#    norm:      words for the bits of rowid
+#    plusone:   words for the bits of rowid+1
+#    invert:    words for the bits of ~rowid
+#
+db eval {
+   CREATE VIRTUAL TABLE t4 USING fts1([norm],'plusone',"invert");
+}
+for {set i 1} {$i<=15} {incr i} {
+  set vset [list [wordset $i] [wordset [expr {$i+1}]] [wordset [expr {~$i}]]]
+  db eval "INSERT INTO t4(norm,plusone,invert) VALUES([join $vset ,]);"
+}
+
+do_test fts1b-4.1 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'norm:one'}
+} {1 3 5 7 9 11 13 15}
+do_test fts1b-4.2 {
+  execsql {SELECT rowid FROM t4 WHERE norm MATCH 'one'}
+} {1 3 5 7 9 11 13 15}
+do_test fts1b-4.3 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'one'}
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+do_test fts1b-4.4 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'plusone:one'}
+} {2 4 6 8 10 12 14}
+do_test fts1b-4.5 {
+  execsql {SELECT rowid FROM t4 WHERE plusone MATCH 'one'}
+} {2 4 6 8 10 12 14}
+do_test fts1b-4.6 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'norm:one plusone:two'}
+} {1 5 9 13}
+do_test fts1b-4.7 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'norm:one two'}
+} {1 3 5 7 9 11 13 15}
+do_test fts1b-4.8 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'plusone:two norm:one'}
+} {1 5 9 13}
+do_test fts1b-4.9 {
+  execsql {SELECT rowid FROM t4 WHERE t4 MATCH 'two norm:one'}
+} {1 3 5 7 9 11 13 15}
+
+
+finish_test

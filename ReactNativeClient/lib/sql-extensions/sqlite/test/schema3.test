@@ -1,0 +1,97 @@
+# 2010 Jun 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+source $testdir/lock_common.tcl
+
+# This block tests that if one client modifies the database schema, a
+# second client updates its internal cache of the database schema before
+# executing any queries. Specifically, it does not return a "no such column"
+# or "no such table" error if the table or column in question does exist
+# but was added after the second client loaded its cache of the database
+# schema.
+#
+# Types of schema modifications:
+#
+#   1. Adding a database table.
+#   2. Adding a database view.
+#   3. Adding a database index.
+#   4. Adding a database trigger.
+#   5. Adding a column to an existing table (ALTER TABLE).
+#
+do_multiclient_test tn {
+
+  # Have connections [db1] and [db2] load the current database schema.
+  #
+  sql1 { SELECT * FROM sqlite_master }
+  sql2 { SELECT * FROM sqlite_master }
+
+  foreach {tn2 c1 c2} {
+    1  { CREATE TABLE t1(a, b) }       { SELECT * FROM t1            }
+    2  { CREATE TABLE t2(a, b) }       { UPDATE t2 SET a = b         }
+    3  { CREATE TABLE t3(a, b) }       { DELETE FROM t3              }
+    4  { CREATE TABLE t4(a, b) }       { INSERT INTO t4 VALUES(1, 2) }
+    5  { CREATE TABLE t5(a, b) }       { DROP TABLE t5 }
+    6  { CREATE TABLE t6(a, b) }       { CREATE INDEX i1 ON t6(a) }
+
+    7  { ALTER TABLE t1 ADD COLUMN c } { SELECT a, b, c FROM t1 }
+    8  { ALTER TABLE t2 ADD COLUMN c } { UPDATE t2 SET a = c }
+    9  { ALTER TABLE t2 ADD COLUMN d } { UPDATE t2 SET d = c }
+    10 { ALTER TABLE t3 ADD COLUMN c } { DELETE FROM t3 WHERE c>10 }
+    11 { ALTER TABLE t4 ADD COLUMN c } { INSERT INTO t4(a,b,c) VALUES(1,2,3) }
+    12 { ALTER TABLE t6 ADD COLUMN c } { CREATE INDEX i2 ON t6(c) }
+    13 { ALTER TABLE t6 ADD COLUMN d } { 
+         CREATE TRIGGER tr1 AFTER UPDATE OF d ON t6 BEGIN
+           SELECT 1, 2, 3;
+         END;
+    }
+
+    14 { CREATE INDEX i3 ON t1(a) }    { DROP INDEX i3 }
+    15 { CREATE INDEX i4 ON t2(a) }    {
+         SELECT * FROM t2 INDEXED BY i4 ORDER BY a
+    }
+
+    16 { CREATE TRIGGER tr2 AFTER INSERT ON t3 BEGIN SELECT 1 ; END } {
+         DROP TRIGGER tr2
+    }
+
+    17  { CREATE VIEW v1 AS SELECT * FROM t1 } { SELECT a,b,c   FROM v1 }
+    18  { ALTER TABLE t1 ADD COLUMN d        } { SELECT a,b,c,d FROM v1 }
+
+    19  { CREATE TABLE t7(a, b) } {
+          DROP TABLE IF EXISTS t7; CREATE TABLE t7(c, d);
+    }
+    20  { CREATE INDEX i5 ON t7(c, d) } {
+          DROP INDEX IF EXISTS i5; CREATE INDEX i5 ON t7(c)
+    }
+    21  { CREATE TRIGGER tr3 BEFORE DELETE ON t7 BEGIN SELECT 1, 2, 3 ; END } {
+          DROP TRIGGER IF EXISTS tr3;
+          CREATE TRIGGER tr3 AFTER INSERT ON t7 BEGIN SELECT 1, 2, 3 ; END 
+    }
+
+    22  { CREATE TABLE t8(a, b) }       {
+         CREATE TRIGGER tr4 AFTER UPDATE OF a ON t8 BEGIN
+           SELECT 1, 2, 3;
+         END;
+    }
+  } {
+    do_test schema3-1.$tn.$tn2 {
+      sql1 $c1
+      sql2 $c2
+    } {}
+  }
+}
+
+finish_test

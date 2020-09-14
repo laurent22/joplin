@@ -1,0 +1,60 @@
+# 2016-07-27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test cases for ORDER BY and LIMIT on an index scan.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Performance regression reported at
+# http://www.mail-archive.com/sqlite-users@mailinglists.sqlite.org/msg98615.html
+#
+# Caused by the ORDER BY LIMIT optionation for check-in
+# https://sqlite.org/src/info/bf46179d44843769
+#
+# Fixed on approximately 2016-07-27 by changes that compute a better score
+# for index scans by taking into account WHERE clause constraints that can
+# be handled by the index and do not require a table lookup.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a,b,c,d);
+  WITH RECURSIVE c(x) AS (VALUES(0) UNION ALL SELECT x+1 FROM c WHERE x<100)
+  INSERT INTO t1(a,b,c,d)
+     SELECT x/10, x%10, x%19, x FROM c;
+  CREATE INDEX t1abc ON t1(a,b,c);
+  SELECT * FROM t1 WHERE c=4 ORDER BY a, b LIMIT 2;
+} {0 4 4 4 2 3 4 23}
+
+# Prior to the fix, the following EQP would show a table scan and a sort
+# rather than an index scan.
+#
+do_execsql_test 1.0eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t1 WHERE c=4 ORDER BY a, b LIMIT 2;
+} {/SCAN TABLE t1 USING INDEX t1abc/}
+
+# If we change the index so that it no longer covers the WHERE clause,
+# then we should (correctly) revert to using a table scan.
+#
+do_execsql_test 1.1 {
+  DROP INDEX t1abc;
+  CREATE INDEX t1abd ON t1(a,b,d);
+  SELECT * FROM t1 WHERE c=4 ORDER BY a, b LIMIT 2;
+} {0 4 4 4 2 3 4 23}
+do_execsql_test 1.1eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t1 WHERE c=4 ORDER BY a, b LIMIT 2;
+} {~/USING INDEX/}
+
+
+finish_test

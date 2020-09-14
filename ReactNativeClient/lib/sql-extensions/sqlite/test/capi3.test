@@ -1,0 +1,1276 @@
+# 2003 January 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script testing the callback-free C/C++ API.
+#
+# $Id: capi3.test,v 1.70 2009/01/09 02:49:32 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix capi3
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# Return the UTF-16 representation of the supplied UTF-8 string $str.
+# If $nt is true, append two 0x00 bytes as a nul terminator.
+proc utf16 {str {nt 1}} {
+  set r [encoding convertto unicode $str]
+  if {$nt} {
+    append r "\x00\x00"
+  }
+  return $r
+}
+
+# Return the UTF-8 representation of the supplied UTF-16 string $str. 
+proc utf8 {str} {
+  # If $str ends in two 0x00 0x00 bytes, knock these off before
+  # converting to UTF-8 using TCL.
+  binary scan $str \c* vals
+  if {[lindex $vals end]==0 && [lindex $vals end-1]==0} {
+    set str [binary format \c* [lrange $vals 0 end-2]]
+  }
+
+  set r [encoding convertfrom unicode $str]
+  return $r
+}
+
+# These tests complement those in capi2.test. They are organized
+# as follows:
+#
+# capi3-1.*: Test sqlite3_prepare 
+# capi3-2.*: Test sqlite3_prepare16
+# capi3-3.*: Test sqlite3_open
+# capi3-4.*: Test sqlite3_open16
+# capi3-5.*: Test the various sqlite3_result_* APIs
+# capi3-6.*: Test that sqlite3_close fails if there are outstanding VMs.
+#
+
+set DB [sqlite3_connection_pointer db]
+
+do_test capi3-1.0 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-1.1 {
+  set STMT [sqlite3_prepare $DB {SELECT name FROM sqlite_master} -1 TAIL]
+  sqlite3_finalize $STMT
+  set TAIL
+} {}
+do_test capi3-1.2.1 {
+  sqlite3_errcode $DB
+} {SQLITE_OK}
+do_test capi3-1.2.2 {
+  sqlite3_extended_errcode $DB
+} {SQLITE_OK}
+do_test capi3-1.3 {
+  sqlite3_errmsg $DB
+} {not an error}
+do_test capi3-1.4 {
+  set sql {SELECT name FROM sqlite_master;SELECT 10}
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_finalize $STMT
+  set TAIL
+} {SELECT 10}
+do_test capi3-1.5 {
+  set sql {SELECT name FROM sqlite_master;SELECT 10}
+  set STMT [sqlite3_prepare $DB $sql [string length $sql] TAIL]
+  sqlite3_finalize $STMT
+  set TAIL
+} {SELECT 10}
+do_test capi3-1.6 {
+  set sql {SELECT name FROM sqlite_master;SELECT 10}
+  set STMT [sqlite3_prepare $DB $sql [expr [string length $sql]+1] TAIL]
+  sqlite3_finalize $STMT
+  set TAIL
+} {SELECT 10}
+
+do_test capi3-1.7 {
+  set sql {SELECT namex FROM sqlite_master}
+  catch {
+    set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  }
+} {1}
+do_test capi3-1.8.1 {
+  sqlite3_errcode $DB
+} {SQLITE_ERROR}
+do_test capi3-1.8.2 {
+  sqlite3_extended_errcode $DB
+} {SQLITE_ERROR}
+do_test capi3-1.9 {
+  sqlite3_errmsg $DB
+} {no such column: namex}
+
+ifcapable {utf16} {
+  do_test capi3-2.1 {
+    set sql16 [utf16 {SELECT name FROM sqlite_master}]
+    set STMT [sqlite3_prepare16 $DB $sql16 -1 ::TAIL]
+    sqlite3_finalize $STMT
+    utf8 $::TAIL
+  } {}
+  do_test capi3-2.2 {
+    set sql [utf16 {SELECT name FROM sqlite_master;SELECT 10}]
+    set STMT [sqlite3_prepare16 $DB $sql -1 TAIL]
+    sqlite3_finalize $STMT
+    utf8 $TAIL
+  } {SELECT 10}
+  do_test capi3-2.3 {
+    set sql [utf16 {SELECT namex FROM sqlite_master}]
+    catch {
+      set STMT [sqlite3_prepare16 $DB $sql -1]
+    }
+  } {1}
+  do_test capi3-2.4.1 {
+    sqlite3_errcode $DB
+  } {SQLITE_ERROR}
+  do_test capi3-2.4.2 {
+    sqlite3_extended_errcode $DB
+  } {SQLITE_ERROR}
+  do_test capi3-2.5 {
+    sqlite3_errmsg $DB
+  } {no such column: namex}
+
+  ifcapable schema_pragmas {
+    do_test capi3-2.6 {
+      execsql {CREATE TABLE tablename(x)}
+      set sql16 [utf16 {PRAGMA table_info("TableName"); --excess text}]
+      set STMT [sqlite3_prepare16 $DB $sql16 -1]
+      sqlite3_step $STMT
+    } SQLITE_ROW
+    do_test capi3-2.7 {
+      sqlite3_step $STMT
+    } SQLITE_DONE
+    do_test capi3-2.8 {
+      sqlite3_finalize $STMT
+    } SQLITE_OK
+  }
+
+} ;# endif utf16
+
+# rename sqlite3_open sqlite3_open_old
+# proc sqlite3_open {fname options} {sqlite3_open_new $fname $options}
+
+do_test capi3-3.1 {
+  set db2 [sqlite3_open test.db {}]
+  sqlite3_errcode $db2
+} {SQLITE_OK}
+# FIX ME: Should test the db handle works.
+do_test capi3-3.2 {
+  sqlite3_close $db2
+} {SQLITE_OK}
+do_test capi3-3.3 {
+  catch {
+    set db2 [sqlite3_open /bogus/path/test.db {}]
+  }
+  set ::capi3_errno [sqlite3_system_errno $db2]
+  list [sqlite3_extended_errcode $db2] [expr {$::capi3_errno!=0}]
+} {SQLITE_CANTOPEN 1}
+do_test capi3-3.4 {
+  sqlite3_errmsg $db2
+} {unable to open database file}
+do_test capi3-3.5 {
+  list [sqlite3_system_errno $db2] [sqlite3_close $db2]
+} [list $::capi3_errno SQLITE_OK]
+if {[clang_sanitize_address]==0} {
+  do_test capi3-3.6.1-misuse {
+    sqlite3_close $db2
+  } {SQLITE_MISUSE}
+  do_test capi3-3.6.2-misuse {
+    sqlite3_errmsg $db2
+  } {bad parameter or other API misuse}
+  ifcapable {utf16} {
+    do_test capi3-3.6.3-misuse {
+      utf8 [sqlite3_errmsg16 $db2]
+    } {bad parameter or other API misuse}
+  }
+}
+
+do_test capi3-3.7 {
+  set db2 [sqlite3_open]
+  sqlite3_errcode $db2
+} {SQLITE_OK}
+do_test capi3-3.8 {
+  sqlite3_close $db2
+} {SQLITE_OK}
+
+# rename sqlite3_open ""
+# rename sqlite3_open_old sqlite3_open
+
+ifcapable {utf16} {
+do_test capi3-4.1 {
+  set db2 [sqlite3_open16 [utf16 test.db] {}]
+  sqlite3_errcode $db2
+} {SQLITE_OK}
+# FIX ME: Should test the db handle works.
+do_test capi3-4.2 {
+  sqlite3_close $db2
+} {SQLITE_OK}
+do_test capi3-4.3 {
+  catch {
+    set db2 [sqlite3_open16 [utf16 /bogus/path/test.db] {}]
+  }
+  sqlite3_errcode $db2
+} {SQLITE_CANTOPEN}
+do_test capi3-4.4 {
+  utf8 [sqlite3_errmsg16 $db2]
+} {unable to open database file}
+do_test capi3-4.5 {
+  sqlite3_close $db2
+} {SQLITE_OK}
+} ;# utf16
+
+# This proc is used to test the following API calls:
+#
+# sqlite3_column_count
+# sqlite3_column_name
+# sqlite3_column_name16
+# sqlite3_column_decltype
+# sqlite3_column_decltype16
+#
+# $STMT is a compiled SQL statement. $test is a prefix
+# to use for test names within this proc. $names is a list
+# of the column names that should be returned by $STMT.
+# $decltypes is a list of column declaration types for $STMT.
+#
+# Example:
+#
+# set STMT [sqlite3_prepare "SELECT 1, 2, 2;" -1 DUMMY]
+# check_header test1.1 {1 2 3} {"" "" ""}
+#
+proc check_header {STMT test names decltypes} {
+
+  # Use the return value of sqlite3_column_count() to build
+  # a list of column indexes. i.e. If sqlite3_column_count
+  # is 3, build the list {0 1 2}.
+  set ::idxlist [list]
+  set ::numcols [sqlite3_column_count $STMT]
+  for {set i 0} {$i < $::numcols} {incr i} {lappend ::idxlist $i}
+
+  # Column names in UTF-8
+  do_test $test.1 {
+    set cnamelist [list]
+    foreach i $idxlist {lappend cnamelist [sqlite3_column_name $STMT $i]} 
+    set cnamelist
+  } $names
+
+  # Column names in UTF-16
+  ifcapable {utf16} {
+    do_test $test.2 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [utf8 [sqlite3_column_name16 $STMT $i]]
+      }
+      set cnamelist
+    } $names
+  }
+
+  # Column names in UTF-8
+  do_test $test.3 {
+    set cnamelist [list]
+    foreach i $idxlist {lappend cnamelist [sqlite3_column_name $STMT $i]} 
+    set cnamelist
+  } $names
+
+  # Column names in UTF-16
+  ifcapable {utf16} {
+    do_test $test.4 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [utf8 [sqlite3_column_name16 $STMT $i]]
+      }
+      set cnamelist
+    } $names
+  }
+
+  # Column names in UTF-8
+  do_test $test.5 {
+    set cnamelist [list]
+    foreach i $idxlist {lappend cnamelist [sqlite3_column_decltype $STMT $i]} 
+    set cnamelist
+  } $decltypes
+
+  # Column declaration types in UTF-16
+  ifcapable {utf16} {
+    do_test $test.6 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [utf8 [sqlite3_column_decltype16 $STMT $i]]
+      }
+      set cnamelist
+    } $decltypes
+  }
+
+
+  # Test some out of range conditions:
+  ifcapable {utf16} {
+    do_test $test.7 {
+      list \
+        [sqlite3_column_name $STMT -1] \
+        [sqlite3_column_name16 $STMT -1] \
+        [sqlite3_column_decltype $STMT -1] \
+        [sqlite3_column_decltype16 $STMT -1] \
+        [sqlite3_column_name $STMT $numcols] \
+        [sqlite3_column_name16 $STMT $numcols] \
+        [sqlite3_column_decltype $STMT $numcols] \
+        [sqlite3_column_decltype16 $STMT $numcols]
+    } {{} {} {} {} {} {} {} {}}
+  }
+} 
+
+# This proc is used to test the following API calls:
+#
+# sqlite3_column_origin_name
+# sqlite3_column_origin_name16
+# sqlite3_column_table_name
+# sqlite3_column_table_name16
+# sqlite3_column_database_name
+# sqlite3_column_database_name16
+#
+# $STMT is a compiled SQL statement. $test is a prefix
+# to use for test names within this proc. $names is a list
+# of the column names that should be returned by $STMT.
+# $decltypes is a list of column declaration types for $STMT.
+#
+# Example:
+#
+# set STMT [sqlite3_prepare "SELECT 1, 2, 2;" -1 DUMMY]
+# check_header test1.1 {1 2 3} {"" "" ""}
+#
+proc check_origin_header {STMT test dbs tables cols} {
+  # If sqlite3_column_origin_name() and friends are not compiled into
+  # this build, this proc is a no-op.
+  ifcapable columnmetadata {
+    # Use the return value of sqlite3_column_count() to build
+    # a list of column indexes. i.e. If sqlite3_column_count
+    # is 3, build the list {0 1 2}.
+    set ::idxlist [list]
+    set ::numcols [sqlite3_column_count $STMT]
+    for {set i 0} {$i < $::numcols} {incr i} {lappend ::idxlist $i}
+  
+    # Database names in UTF-8
+    do_test $test.8 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [sqlite3_column_database_name $STMT $i]
+      } 
+      set cnamelist
+    } $dbs
+  
+    # Database names in UTF-16
+    ifcapable {utf16} {
+      do_test $test.9 {
+        set cnamelist [list]
+        foreach i $idxlist {
+          lappend cnamelist [utf8 [sqlite3_column_database_name16 $STMT $i]]
+        }
+        set cnamelist
+      } $dbs
+    }
+  
+    # Table names in UTF-8
+    do_test $test.10 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [sqlite3_column_table_name $STMT $i]
+      } 
+      set cnamelist
+    } $tables
+  
+    # Table names in UTF-16
+    ifcapable {utf16} {
+      do_test $test.11 {
+        set cnamelist [list]
+        foreach i $idxlist {
+          lappend cnamelist [utf8 [sqlite3_column_table_name16 $STMT $i]]
+        }
+        set cnamelist
+      } $tables
+    }
+  
+    # Origin names in UTF-8
+    do_test $test.12 {
+      set cnamelist [list]
+      foreach i $idxlist {
+        lappend cnamelist [sqlite3_column_origin_name $STMT $i]
+      } 
+      set cnamelist
+    } $cols
+  
+    # Origin declaration types in UTF-16
+    ifcapable {utf16} {
+      do_test $test.13 {
+        set cnamelist [list]
+        foreach i $idxlist {
+          lappend cnamelist [utf8 [sqlite3_column_origin_name16 $STMT $i]]
+        }
+        set cnamelist
+      } $cols
+    }
+  }
+}
+
+# This proc is used to test the following APIs:
+#
+# sqlite3_data_count
+# sqlite3_column_type
+# sqlite3_column_int
+# sqlite3_column_text
+# sqlite3_column_text16
+# sqlite3_column_double
+#
+# $STMT is a compiled SQL statement for which the previous call 
+# to sqlite3_step returned SQLITE_ROW. $test is a prefix to use 
+# for test names within this proc. $types is a list of the 
+# manifest types for the current row. $ints, $doubles and $strings
+# are lists of the integer, real and string representations of
+# the values in the current row.
+#
+# Example:
+#
+# set STMT [sqlite3_prepare "SELECT 'hello', 1.1, NULL" -1 DUMMY]
+# sqlite3_step $STMT
+# check_data test1.2 {TEXT REAL NULL} {0 1 0} {0 1.1 0} {hello 1.1 {}}
+#
+proc check_data {STMT test types ints doubles strings} {
+
+  # Use the return value of sqlite3_column_count() to build
+  # a list of column indexes. i.e. If sqlite3_column_count
+  # is 3, build the list {0 1 2}.
+  set ::idxlist [list]
+  set numcols [sqlite3_data_count $STMT]
+  for {set i 0} {$i < $numcols} {incr i} {lappend ::idxlist $i}
+
+# types
+do_test $test.1 {
+  set types [list]
+  foreach i $idxlist {
+    set x [sqlite3_column_type $STMT $i]
+    # EVIDENCE-OF: R-12793-43283 Every value in SQLite has one of five
+    # fundamental datatypes: 64-bit signed integer 64-bit IEEE floating
+    # point number string BLOB NULL
+    if {[lsearch {INTEGER FLOAT TEXT BLOB NULL} $x]<0} {
+      set types ERROR
+      break
+    } else {
+      lappend types $x
+    }
+  }
+  set types
+} $types
+ 
+
+# Integers
+do_test $test.2 {
+  set ints [list]
+  foreach i $idxlist {lappend ints [sqlite3_column_int64 $STMT $i]}
+  set ints
+} $ints
+
+# bytes
+set lens [list]
+foreach i $::idxlist {
+  lappend lens [string length [lindex $strings $i]]
+}
+do_test $test.3 {
+  set bytes [list]
+  set lens [list]
+  foreach i $idxlist {
+    lappend bytes [sqlite3_column_bytes $STMT $i]
+  }
+  set bytes
+} $lens
+
+# bytes16
+ifcapable {utf16} {
+  set lens [list]
+  foreach i $::idxlist {
+    lappend lens [expr 2 * [string length [lindex $strings $i]]]
+  }
+  do_test $test.4 {
+    set bytes [list]
+    set lens [list]
+    foreach i $idxlist {
+      lappend bytes [sqlite3_column_bytes16 $STMT $i]
+    }
+    set bytes
+  } $lens
+}
+
+# Blob
+do_test $test.5 {
+  set utf8 [list]
+  foreach i $idxlist {lappend utf8 [sqlite3_column_blob $STMT $i]}
+  set utf8
+} $strings
+
+# UTF-8
+do_test $test.6 {
+  set utf8 [list]
+  foreach i $idxlist {lappend utf8 [sqlite3_column_text $STMT $i]}
+  set utf8
+} $strings
+
+# Floats
+do_test $test.7 {
+  set utf8 [list]
+  foreach i $idxlist {lappend utf8 [sqlite3_column_double $STMT $i]}
+  set utf8
+} $doubles
+
+# UTF-16
+ifcapable {utf16} {
+  do_test $test.8 {
+    set utf8 [list]
+    foreach i $idxlist {lappend utf8 [utf8 [sqlite3_column_text16 $STMT $i]]}
+    set utf8
+  } $strings
+}
+
+# Integers
+do_test $test.9 {
+  set ints [list]
+  foreach i $idxlist {lappend ints [sqlite3_column_int $STMT $i]}
+  set ints
+} $ints
+
+# Floats
+do_test $test.10 {
+  set utf8 [list]
+  foreach i $idxlist {lappend utf8 [sqlite3_column_double $STMT $i]}
+  set utf8
+} $doubles
+
+# UTF-8
+do_test $test.11 {
+  set utf8 [list]
+  foreach i $idxlist {lappend utf8 [sqlite3_column_text $STMT $i]}
+  set utf8
+} $strings
+
+# Types
+do_test $test.12 {
+  set types [list]
+  foreach i $idxlist {lappend types [sqlite3_column_type $STMT $i]}
+  set types
+} $types
+
+# Test that an out of range request returns the equivalent of NULL
+do_test $test.13 {
+  sqlite3_column_int $STMT -1
+} {0}
+do_test $test.13 {
+  sqlite3_column_text $STMT -1
+} {}
+
+}
+
+ifcapable !floatingpoint {
+  finish_test
+  return
+}
+
+do_test capi3-5.0 {
+  execsql {
+    CREATE TABLE t1(a VARINT, b BLOB, c VARCHAR(16));
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES('one', 'two', NULL);
+    INSERT INTO t1 VALUES(1.2, 1.3, 1.4);
+  }
+  set sql "SELECT * FROM t1"
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_column_count $STMT
+} 3
+
+check_header $STMT capi3-5.1 {a b c} {VARINT BLOB VARCHAR(16)}
+check_origin_header $STMT capi3-5.1 {main main main} {t1 t1 t1} {a b c}
+do_test capi3-5.2 {
+  sqlite3_step $STMT
+} SQLITE_ROW
+
+check_header $STMT capi3-5.3 {a b c} {VARINT BLOB VARCHAR(16)}
+check_origin_header $STMT capi3-5.3 {main main main} {t1 t1 t1} {a b c}
+check_data $STMT capi3-5.4 {INTEGER INTEGER TEXT} {1 2 3} {1.0 2.0 3.0} {1 2 3}
+
+do_test capi3-5.5 {
+  sqlite3_step $STMT
+} SQLITE_ROW
+
+check_header $STMT capi3-5.6 {a b c} {VARINT BLOB VARCHAR(16)}
+check_origin_header $STMT capi3-5.6 {main main main} {t1 t1 t1} {a b c}
+check_data $STMT capi3-5.7 {TEXT TEXT NULL} {0 0 0} {0.0 0.0 0.0} {one two {}}
+
+do_test capi3-5.8 {
+  sqlite3_step $STMT
+} SQLITE_ROW
+
+check_header $STMT capi3-5.9 {a b c} {VARINT BLOB VARCHAR(16)}
+check_origin_header $STMT capi3-5.9 {main main main} {t1 t1 t1} {a b c}
+check_data $STMT capi3-5.10 {FLOAT FLOAT TEXT} {1 1 1} {1.2 1.3 1.4} {1.2 1.3 1.4}
+
+do_test capi3-5.11 {
+  sqlite3_step $STMT
+} SQLITE_DONE
+
+do_test capi3-5.12 {
+  sqlite3_finalize $STMT
+} SQLITE_OK
+
+do_test capi3-5.20 {
+  set sql "SELECT a, sum(b), max(c) FROM t1 GROUP BY a"
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_column_count $STMT
+} 3
+
+check_header $STMT capi3-5.21 {a sum(b) max(c)} {VARINT {} {}}
+check_origin_header $STMT capi3-5.22 {main {} {}} {t1 {} {}} {a {} {}}
+do_test capi3-5.23 {
+  sqlite3_finalize $STMT
+} SQLITE_OK
+
+do_test capi3-5.30 {
+  set sql "SELECT a AS x, sum(b) AS y, max(c) AS z FROM t1 AS m GROUP BY x"
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_column_count $STMT
+} 3
+
+check_header $STMT capi3-5.31 {x y z} {VARINT {} {}}
+check_origin_header $STMT capi3-5.32 {main {} {}} {t1 {} {}} {a {} {}}
+do_test capi3-5.33 {
+  sqlite3_finalize $STMT
+} SQLITE_OK
+
+# 2018-01-09:  If a column is the last token if a string, the column name
+# was not being set correctly, due to changes in check-in
+# https://sqlite.org/src/info/0fdf97efe5df7455
+#
+# This problem was detected by the community during beta-testing.
+#
+do_test capi3-5.34 {
+  set STMT [sqlite3_prepare $DB {SELECT :a, :b} -1 TAIL]
+  sqlite3_column_count $STMT
+} 2
+check_header $STMT capi-5.35 {:a :b} {{} {}}
+sqlite3_finalize $STMT
+
+set ::ENC [execsql {pragma encoding}]
+db close
+
+do_test capi3-6.0 {
+  sqlite3 db test.db
+  set DB [sqlite3_connection_pointer db]
+  if {[sqlite3 -has-codec]==0} { sqlite3_key $DB xyzzy }
+  set sql {SELECT a FROM t1 order by rowid}
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  expr 0
+} {0}
+do_test capi3-6.1 {
+  db cache flush
+  sqlite3_close $DB
+} {SQLITE_BUSY}
+
+# 6.2 and 6.3 used to return SQLITE_ERROR and SQLITE_SCHEMA, respectively.
+# But since attempting to close a connection no longer resets the internal
+# schema and expires all statements, this is no longer the case.
+do_test capi3-6.2 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+#check_data $STMT capi3-6.3 {INTEGER} {1} {1.0} {1}
+do_test capi3-6.3 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+
+if {[clang_sanitize_address]==0} {
+  do_test capi3-6.4-misuse {
+    db cache flush
+    sqlite3_close $DB
+  } {SQLITE_OK}
+}
+db close
+
+# This procedure sets the value of the file-format in file 'test.db'
+# to $newval. Also, the schema cookie is incremented.
+# 
+proc set_file_format {newval} {
+  hexio_write test.db 44 [hexio_render_int32 $newval]
+  set schemacookie [hexio_get_int [hexio_read test.db 40 4]]
+  incr schemacookie
+  hexio_write test.db 40 [hexio_render_int32 $schemacookie]
+  return {}
+}
+
+# This procedure returns the value of the file-format in file 'test.db'.
+# 
+proc get_file_format {{fname test.db}} {
+  return [hexio_get_int [hexio_read $fname 44 4]]
+}
+
+if {![sqlite3 -has-codec]} {
+  # Test what happens when the library encounters a newer file format.
+  do_test capi3-7.1 {
+    set_file_format 5
+  } {}
+  do_test capi3-7.2 {
+    catch { sqlite3 db test.db }
+    catchsql {
+      SELECT * FROM sqlite_master;
+    }
+  } {1 {unsupported file format}}
+  db close
+}
+
+if {![sqlite3 -has-codec]} {
+  # Now test that the library correctly handles bogus entries in the
+  # sqlite_master table (schema corruption).
+  do_test capi3-8.1 {
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    execsql {
+      CREATE TABLE t1(a);
+    }
+    db close
+  } {}
+  do_test capi3-8.2 {
+    sqlite3 db test.db
+    sqlite3_db_config db DEFENSIVE 0
+    execsql {
+      PRAGMA writable_schema=ON;
+      INSERT INTO sqlite_master VALUES(NULL,NULL,NULL,NULL,NULL);
+    }
+    db close
+  } {}
+  do_test capi3-8.3 {
+    catch { sqlite3 db test.db }
+    catchsql {
+      SELECT * FROM sqlite_master;
+    }
+  } {1 {malformed database schema (?)}}
+  do_test capi3-8.4 {
+    # Build a 5-field row record. The first field is a string 'table', and
+    # subsequent fields are all NULL.
+    db close
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    sqlite3_db_config db DEFENSIVE 0
+    execsql {
+      CREATE TABLE t1(a);
+      PRAGMA writable_schema=ON;
+      INSERT INTO sqlite_master VALUES('table',NULL,NULL,NULL,NULL);
+    }
+    db close
+  } {};
+  do_test capi3-8.5 {
+    catch { sqlite3 db test.db }
+    catchsql {
+      SELECT * FROM sqlite_master;
+    }
+  } {1 {malformed database schema (?)}}
+  db close
+}
+forcedelete test.db
+forcedelete test.db-journal
+
+
+# Test the english language string equivalents for sqlite error codes
+set code2english [list \
+SQLITE_OK         {not an error} \
+SQLITE_ERROR      {SQL logic error} \
+SQLITE_PERM       {access permission denied} \
+SQLITE_ABORT      {query aborted} \
+SQLITE_BUSY       {database is locked} \
+SQLITE_LOCKED     {database table is locked} \
+SQLITE_NOMEM      {out of memory} \
+SQLITE_READONLY   {attempt to write a readonly database} \
+SQLITE_INTERRUPT  {interrupted} \
+SQLITE_IOERR      {disk I/O error} \
+SQLITE_CORRUPT    {database disk image is malformed} \
+SQLITE_FULL       {database or disk is full} \
+SQLITE_CANTOPEN   {unable to open database file} \
+SQLITE_SCHEMA     {database schema has changed} \
+SQLITE_CONSTRAINT {constraint failed} \
+SQLITE_MISMATCH   {datatype mismatch} \
+SQLITE_MISUSE     {bad parameter or other API misuse} \
+SQLITE_AUTH       {authorization denied} \
+SQLITE_RANGE      {column index out of range} \
+SQLITE_NOTADB     {file is not a database} \
+unknownerror      {unknown error} \
+]
+
+set test_number 1
+foreach {code english} $code2english {
+  do_test capi3-9.$test_number "sqlite3_test_errstr $code" $english
+  incr test_number
+}
+
+# Test the error message when a "real" out of memory occurs.
+if { [permutation] != "nofaultsim" } {
+  do_test capi3-10-1 {
+    sqlite3 db test.db
+    set DB [sqlite3_connection_pointer db]
+    sqlite3_memdebug_fail 1
+    catchsql {
+      select * from sqlite_master;
+    }
+  } {1 {out of memory}}
+  do_test capi3-10-2 {
+    sqlite3_errmsg $::DB
+  } {out of memory}
+  ifcapable {utf16} {
+    do_test capi3-10-3 {
+      utf8 [sqlite3_errmsg16 $::DB]
+    } {out of memory}
+  }
+  db close
+  sqlite3_memdebug_fail -1
+  do_test capi3-10-4 {
+    sqlite3 db test.db
+    set DB [sqlite3_connection_pointer db]
+    sqlite3_memdebug_fail 1
+    catchsql {
+      select * from sqlite_master where rowid>5;
+    }
+  } {1 {out of memory}}
+  do_test capi3-10-5 {
+    sqlite3_errmsg $::DB
+  } {out of memory}
+  ifcapable {utf16} {
+    do_test capi3-10-6 {
+      utf8 [sqlite3_errmsg16 $::DB]
+    } {out of memory}
+  }
+  db close
+  sqlite3_memdebug_fail -1
+}
+
+# The following tests - capi3-11.* - test that a COMMIT or ROLLBACK
+# statement issued while there are still outstanding VMs that are part of
+# the transaction fails.
+sqlite3 db test.db
+set DB [sqlite3_connection_pointer db]
+sqlite_register_test_function $DB func
+do_test capi3-11.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 'int');
+    INSERT INTO t1 VALUES(2, 'notatype');
+  }
+} {}
+do_test capi3-11.1.1 {
+  sqlite3_get_autocommit $DB
+} 0
+do_test capi3-11.2 {
+  set STMT [sqlite3_prepare $DB "SELECT func(b, a) FROM t1" -1 TAIL]
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+
+# As of 3.6.5 a COMMIT is OK during while a query is still running -
+# as long as it is a read-only query and not an incremental BLOB write.
+#
+do_test capi3-11.3.1 {
+  catchsql {
+    COMMIT;
+  }
+} {0 {}}
+do_test capi3-11.3.2 {
+  sqlite3_extended_errcode $DB
+} {SQLITE_OK}
+do_test capi3-11.3.3 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-11.3.4 {
+  db eval {PRAGMA lock_status}
+} {main shared temp closed}
+
+do_test capi3-11.4 {
+  sqlite3_step $STMT
+} {SQLITE_ERROR}
+do_test capi3-11.5 {
+  sqlite3_finalize $STMT
+} {SQLITE_ERROR}
+do_test capi3-11.6 {
+  catchsql {
+    SELECT * FROM t1;
+  }
+} {0 {1 int 2 notatype}}
+do_test capi3-11.7 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-11.8 {
+  execsql {
+    CREATE TABLE t2(a);
+    INSERT INTO t2 VALUES(1);
+    INSERT INTO t2 VALUES(2);
+    BEGIN;
+    INSERT INTO t2 VALUES(3);
+  }
+} {}
+do_test capi3-11.8.1 {
+  sqlite3_get_autocommit $DB
+} 0
+do_test capi3-11.9 {
+  set STMT [sqlite3_prepare $DB "SELECT a FROM t2" -1 TAIL]
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-11.9.1 {
+  sqlite3_get_autocommit $DB
+} 0
+do_test capi3-11.9.2 {
+  catchsql {
+    ROLLBACK;
+  }
+} {0 {}}
+do_test capi3-11.9.3 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-11.10 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-11.11 {
+  sqlite3_step $STMT
+} {SQLITE_DONE}
+ifcapable !autoreset {
+  do_test capi3-11.12armor {
+    sqlite3_step $STMT
+    sqlite3_step $STMT
+  } {SQLITE_MISUSE}
+} else {
+  do_test capi3-11.12 {
+    sqlite3_step $STMT
+    sqlite3_step $STMT
+  } {SQLITE_ROW}
+}
+do_test capi3-11.13 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+do_test capi3-11.14 {
+  execsql {
+    SELECT a FROM t2;
+  }
+} {1 2}
+do_test capi3-11.14.1 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-11.15 {
+  catchsql {
+    ROLLBACK;
+  }
+} {1 {cannot rollback - no transaction is active}}
+do_test capi3-11.15.1 {
+  sqlite3_get_autocommit $DB
+} 1
+do_test capi3-11.16 {
+  execsql {
+    SELECT a FROM t2;
+  }
+} {1 2}
+
+# Sanity check on the definition of 'outstanding VM'. This means any VM
+# that has had sqlite3_step() called more recently than sqlite3_finalize() or
+# sqlite3_reset(). So a VM that has just been prepared or reset does not
+# count as an active VM.
+do_test capi3-11.17 {
+  execsql {
+    BEGIN;
+  }
+} {}
+do_test capi3-11.18 {
+  set STMT [sqlite3_prepare $DB "SELECT a FROM t1" -1 TAIL]
+  catchsql {
+    COMMIT;
+  }
+} {0 {}}
+do_test capi3-11.19 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-11.20 {
+  catchsql {
+    BEGIN;
+    COMMIT;
+  }
+} {0 {}}
+do_test capi3-11.20 {
+  sqlite3_reset $STMT
+  catchsql {
+    COMMIT;
+  }
+} {1 {cannot commit - no transaction is active}}
+do_test capi3-11.21 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+
+# The following tests - capi3-12.* - check that its Ok to start a
+# transaction while other VMs are active, and that its Ok to execute
+# atomic updates in the same situation 
+#
+do_test capi3-12.1 {
+  set STMT [sqlite3_prepare $DB "SELECT a FROM t2" -1 TAIL]
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-12.2 {
+  catchsql {
+    INSERT INTO t1 VALUES(3, NULL);
+  }
+} {0 {}}
+do_test capi3-12.3 {
+  catchsql {
+    INSERT INTO t2 VALUES(4);
+  }
+} {0 {}}
+do_test capi3-12.4 {
+  catchsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(4, NULL);
+  }
+} {0 {}}
+do_test capi3-12.5 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-12.5.1 {
+  sqlite3_step $STMT
+} {SQLITE_ROW}
+do_test capi3-12.6 {
+  sqlite3_step $STMT
+} {SQLITE_DONE}
+do_test capi3-12.7 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+do_test capi3-12.8 {
+  execsql {
+    COMMIT;
+    SELECT a FROM t1;
+  }
+} {1 2 3 4}
+
+# Test cases capi3-13.* test the sqlite3_clear_bindings() and 
+# sqlite3_sleep APIs.
+#
+if {[llength [info commands sqlite3_clear_bindings]]>0} {
+  do_test capi3-13.1 {
+    execsql {
+      DELETE FROM t1;
+    }
+    set STMT [sqlite3_prepare $DB "INSERT INTO t1 VALUES(?, ?)" -1 TAIL]
+    sqlite3_step $STMT
+  } {SQLITE_DONE}
+  do_test capi3-13.2 {
+    sqlite3_reset $STMT
+    sqlite3_bind_text $STMT 1 hello 5
+    sqlite3_bind_text $STMT 2 world 5
+    sqlite3_step $STMT
+  } {SQLITE_DONE}
+  do_test capi3-13.3 {
+    sqlite3_reset $STMT
+    sqlite3_clear_bindings $STMT
+    sqlite3_step $STMT
+  } {SQLITE_DONE}
+  do_test capi3-13-4 {
+    sqlite3_finalize $STMT
+    execsql {
+      SELECT * FROM t1;
+    }
+  } {{} {} hello world {} {}}
+}
+if {[llength [info commands sqlite3_sleep]]>0} {
+  do_test capi3-13-5 {
+    set ms [sqlite3_sleep 80]
+    expr {$ms==80 || $ms==1000}
+  } {1}
+}
+
+# Ticket #1219:  Make sure binding APIs can handle a NULL pointer.
+# 
+if {[clang_sanitize_address]==0} {
+  do_test capi3-14.1-misuse {
+    set rc [catch {sqlite3_bind_text 0 1 hello 5} msg]
+      lappend rc $msg
+  } {1 SQLITE_MISUSE}
+}
+
+# Ticket #1650:  Honor the nBytes parameter to sqlite3_prepare.
+#
+do_test capi3-15.1 {
+  set sql {SELECT * FROM t2}
+  set nbytes [string length $sql]
+  append sql { WHERE a==1}
+  set STMT [sqlite3_prepare $DB $sql $nbytes TAIL]
+  sqlite3_step $STMT
+  sqlite3_column_int $STMT 0
+} {1}
+do_test capi3-15.2 {
+  sqlite3_step $STMT
+  sqlite3_column_int $STMT 0
+} {2}
+do_test capi3-15.3 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+do_test capi3-15.4 {
+  #        123456789 1234567
+  set sql {SELECT 1234567890}
+  set STMT [sqlite3_prepare $DB $sql 8 TAIL]
+  sqlite3_step $STMT
+  set v1 [sqlite3_column_int $STMT 0]
+  sqlite3_finalize $STMT
+  set v1
+} {1}
+do_test capi3-15.5 {
+  #        123456789 1234567
+  set sql {SELECT 1234567890}
+  set STMT [sqlite3_prepare $DB $sql 9 TAIL]
+  sqlite3_step $STMT
+  set v1 [sqlite3_column_int $STMT 0]
+  sqlite3_finalize $STMT
+  set v1
+} {12}
+do_test capi3-15.6 {
+  #        123456789 1234567
+  set sql {SELECT 1234567890}
+  set STMT [sqlite3_prepare $DB $sql 12 TAIL]
+  sqlite3_step $STMT
+  set v1 [sqlite3_column_int $STMT 0]
+  sqlite3_finalize $STMT
+  set v1
+} {12345}
+do_test capi3-15.7 {
+  #        123456789 1234567
+  set sql {SELECT 12.34567890}
+  set STMT [sqlite3_prepare $DB $sql 12 TAIL]
+  sqlite3_step $STMT
+  set v1 [sqlite3_column_double $STMT 0]
+  sqlite3_finalize $STMT
+  set v1
+} {12.34}
+do_test capi3-15.8 {
+  #        123456789 1234567
+  set sql {SELECT 12.34567890}
+  set STMT [sqlite3_prepare $DB $sql 14 TAIL]
+  sqlite3_step $STMT
+  set v1 [sqlite3_column_double $STMT 0]
+  sqlite3_finalize $STMT
+  set v1
+} {12.3456}
+
+# Make sure code is always generated even if an IF EXISTS or 
+# IF NOT EXISTS clause is present that the table does not or
+# does exists.  That way we will always have a prepared statement
+# to expire when the schema changes.
+#
+do_test capi3-16.1 {
+  set sql {DROP TABLE IF EXISTS t3}
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_finalize $STMT
+  expr {$STMT!=""}
+} {1}
+do_test capi3-16.2 {
+  set sql {CREATE TABLE IF NOT EXISTS t1(x,y)}
+  set STMT [sqlite3_prepare $DB $sql -1 TAIL]
+  sqlite3_finalize $STMT
+  expr {$STMT!=""}
+} {1}
+
+# But still we do not generate code if there is no SQL
+#
+do_test capi3-16.3 {
+  set STMT [sqlite3_prepare $DB {} -1 TAIL]
+  sqlite3_finalize $STMT
+  expr {$STMT==""}
+} {1}
+do_test capi3-16.4 {
+  set STMT [sqlite3_prepare $DB {;} -1 TAIL]
+  sqlite3_finalize $STMT
+  expr {$STMT==""}
+} {1}
+
+# Ticket #2426:  Misuse of sqlite3_column_* by calling it after
+# a sqlite3_reset should be harmless.
+#
+do_test capi3-17.1 {
+  set STMT [sqlite3_prepare $DB {SELECT * FROM t2} -1 TAIL]
+  sqlite3_step $STMT
+  sqlite3_column_int $STMT 0
+} {1}
+do_test capi3-17.2 {
+  sqlite3_reset $STMT
+  sqlite3_column_int $STMT 0
+} {0}
+do_test capi3-17.3 {
+  sqlite3_finalize $STMT
+} {SQLITE_OK}
+
+# Verify that sqlite3_step() fails with an SQLITE_SCHEMA error
+# when the statement is prepared with sqlite3_prepare() (not
+# sqlite3_prepare_v2()) and the schema has changed.
+#
+do_test capi3-18.1 {
+  set STMT [sqlite3_prepare db {SELECT * FROM t2} -1 TAIL]
+  sqlite3 db2 test.db
+  db2 eval {CREATE TABLE t3(x)}
+  db2 close
+  sqlite3_step $STMT
+} {SQLITE_ERROR}
+do_test capi3-18.2 {
+  sqlite3_reset $STMT
+  sqlite3_errcode db
+} {SQLITE_SCHEMA}
+do_test capi3-18.3 {
+  sqlite3_errmsg db
+} {database schema has changed}
+# The error persist on retry when sqlite3_prepare() has been used.
+do_test capi3-18.4 {
+  sqlite3_step $STMT
+} {SQLITE_ERROR}
+do_test capi3-18.5 {
+  sqlite3_reset $STMT
+  sqlite3_errcode db
+} {SQLITE_SCHEMA}
+do_test capi3-18.6 {
+  sqlite3_errmsg db
+} {database schema has changed}
+sqlite3_finalize $STMT
+
+# Ticket #3134.  Prepare a statement with an nBytes parameter of 0.
+# Make sure this works correctly and does not reference memory out of
+# range.
+#
+do_test capi3-19.1 {
+  sqlite3_prepare_tkt3134 db
+} {}
+
+# Test that calling sqlite3_column_blob() on a TEXT value does not change
+# the return type of subsequent calls to sqlite3_column_type().
+#
+do_execsql_test 20.1 {
+  CREATE TABLE t4(x);
+  INSERT INTO t4 VALUES('abcdefghij');
+}
+do_test 20.2 {
+  set stmt [sqlite3_prepare db "SELECT * FROM t4" -1 dummy]
+  sqlite3_step $stmt
+} {SQLITE_ROW}
+do_test 20.3 { sqlite3_column_type $stmt 0 } {TEXT}
+do_test 20.4 { sqlite3_column_blob $stmt 0 } {abcdefghij}
+do_test 20.5 { sqlite3_column_type $stmt 0 } {TEXT}
+do_test 20.6 { sqlite3_finalize $stmt } SQLITE_OK
+
+
+# Tests of the interface when no VFS is registered.
+#
+if {![info exists tester_do_binarylog]} {
+  db close
+  vfs_unregister_all
+  do_test capi3-20.1 {
+    sqlite3_sleep 100
+  } {0}
+  vfs_reregister_all
+}
+
+finish_test

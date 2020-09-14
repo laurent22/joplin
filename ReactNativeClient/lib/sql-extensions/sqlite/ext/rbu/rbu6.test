@@ -1,0 +1,102 @@
+# 2014 October 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. Specifically, it tests the
+# outcome of some other client writing to the database while an RBU update
+# is being applied.
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbu6
+
+proc setup_test {} {
+  reset_db
+  execsql {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b UNIQUE);
+    CREATE TABLE t2(a INTEGER PRIMARY KEY, b UNIQUE);
+    CREATE TABLE t3(a INTEGER PRIMARY KEY, b UNIQUE);
+  }
+  db close
+
+  forcedelete rbu.db
+  sqlite3 rbu rbu.db
+  rbu eval {
+    CREATE TABLE data_t1(a, b, rbu_control);
+    CREATE TABLE data_t2(a, b, rbu_control);
+    CREATE TABLE data_t3(a, b, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 't1', 0);
+    INSERT INTO data_t2 VALUES(2, 't2', 0);
+    INSERT INTO data_t3 VALUES(3, 't3', 0);
+  }
+  rbu close
+}
+
+# Test the outcome of some other client writing the db while the *-oal 
+# file is being generated. Once this has happened, the update cannot be
+# progressed.
+#
+for {set nStep 1} {$nStep < 8} {incr nStep} {
+  do_test 1.$nStep.1 {
+    setup_test
+    sqlite3rbu rbu test.db rbu.db
+    for {set i 0} {$i<$nStep} {incr i} {rbu step}
+
+    rbu close
+    sqlite3 db test.db
+    execsql { INSERT INTO t1 VALUES(5, 'hello') }
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_BUSY}
+  do_test 1.$nStep.2 {
+    rbu step
+  } {SQLITE_BUSY}
+  do_test 1.$nStep.3 {
+    list [file exists test.db-oal] [file exists test.db-wal]
+  } {1 0}
+  do_test 1.$nStep.4 {
+    list [catch { rbu close } msg] $msg
+  } {1 {SQLITE_BUSY - database modified during rbu update}}
+}
+
+# Test the outcome of some other client writing the db after the *-oal
+# file has been copied to the *-wal path. Once this has happened, any
+# other client writing to the db causes RBU to consider its job finished.
+#
+for {set nStep 8} {$nStep < 20} {incr nStep} {
+  do_test 1.$nStep.1 {
+    setup_test
+    sqlite3rbu rbu test.db rbu.db
+    for {set i 0} {$i<$nStep} {incr i} {rbu step}
+    rbu close
+    sqlite3 db test.db
+    execsql { INSERT INTO t1 VALUES(5, 'hello') }
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_DONE}
+  do_test 1.$nStep.2 {
+    rbu step
+  } {SQLITE_DONE}
+  do_test 1.$nStep.3 {
+    file exists test.db-oal
+  } {0}
+  do_test 1.$nStep.4 {
+    list [catch { rbu close } msg] $msg
+  } {0 SQLITE_DONE}
+
+  do_execsql_test 1.$nStep.5 {
+    SELECT * FROM t1;
+  } {1 t1 5 hello}
+}
+
+
+finish_test

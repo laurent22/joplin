@@ -1,0 +1,254 @@
+# 2011 April 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS3 module.
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts3conf
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+
+proc fts3_integrity {tn db tbl} {
+
+  if {[sqlite3_get_autocommit $db]==0} {
+    error "fts3_integrity does not work with an open transaction"
+  }
+
+  set sql [db one {SELECT sql FROM sqlite_master WHERE name = $tbl}]
+  regexp -nocase {[^(]* using (.*)} $sql -> tail
+  set cols [list]
+  $db eval "PRAGMA table_info($tbl)" {
+    lappend cols $name
+  }
+  set cols [join [concat docid $cols] ,]
+
+  $db eval [subst {
+    CREATE VIRTUAL TABLE fts3check USING fts4term($tbl);
+    CREATE VIRTUAL TABLE temp.fts3check2 USING $tail;
+    INSERT INTO temp.fts3check2($cols) SELECT docid, * FROM $tbl;
+    CREATE VIRTUAL TABLE temp.fts3check3 USING fts4term(fts3check2);
+  }]
+
+  set m1 [$db one {SELECT md5sum(term, docid, col, pos) FROM fts3check}]
+  set m2 [$db one {SELECT md5sum(term, docid, col, pos) FROM fts3check3}]
+
+  $db eval {
+    DROP TABLE fts3check;
+    DROP TABLE temp.fts3check2;
+    DROP TABLE temp.fts3check3;
+  }
+  
+  uplevel [list do_test $tn [list set {} $m1] $m2]
+}
+
+do_execsql_test 1.0.1 {
+  CREATE VIRTUAL TABLE t1 USING fts3(x);
+  INSERT INTO t1(rowid, x) VALUES(1, 'a b c d');
+  INSERT INTO t1(rowid, x) VALUES(2, 'e f g h');
+
+  CREATE TABLE source(a, b);
+  INSERT INTO source VALUES(4, 'z');
+  INSERT INTO source VALUES(2, 'y');
+}
+db_save_and_close
+
+set T1 "INTO t1(rowid, x) VALUES(1, 'x')"
+set T2 "INTO t1(rowid, x) SELECT * FROM source"
+
+set T3 "t1 SET docid = 2 WHERE docid = 1"
+set T4 "t1 SET docid = CASE WHEN docid = 1 THEN 4 ELSE 3 END WHERE docid <=2"
+
+foreach {tn sql uses constraint data} [subst {
+  1    "INSERT OR ROLLBACK $T1"   0 1 {{a b c d} {e f g h}}
+  2    "INSERT OR ABORT    $T1"   0 1 {{a b c d} {e f g h} {i j k l}}
+  3    "INSERT OR FAIL     $T1"   0 1 {{a b c d} {e f g h} {i j k l}}
+  4    "INSERT OR IGNORE   $T1"   0 0 {{a b c d} {e f g h} {i j k l}}
+  5    "INSERT OR REPLACE  $T1"   0 0 {x {e f g h} {i j k l}}
+
+  6    "INSERT OR ROLLBACK $T2"   1 1 {{a b c d} {e f g h}}
+  7    "INSERT OR ABORT    $T2"   1 1 {{a b c d} {e f g h} {i j k l}}
+  8    "INSERT OR FAIL     $T2"   1 1 {{a b c d} {e f g h} {i j k l} z}
+  9    "INSERT OR IGNORE   $T2"   1 0 {{a b c d} {e f g h} {i j k l} z}
+  10   "INSERT OR REPLACE  $T2"   1 0 {{a b c d} y {i j k l} z}
+
+  11   "UPDATE OR ROLLBACK $T3"   0 1 {{a b c d} {e f g h}}
+  12   "UPDATE OR ABORT    $T3"   0 1 {{a b c d} {e f g h} {i j k l}}
+  13   "UPDATE OR FAIL     $T3"   0 1 {{a b c d} {e f g h} {i j k l}}
+  14   "UPDATE OR IGNORE   $T3"   0 0 {{a b c d} {e f g h} {i j k l}}
+  15   "UPDATE OR REPLACE  $T3"   0 0 {{a b c d} {i j k l}}
+
+  16   "UPDATE OR ROLLBACK $T4"   1 1 {{a b c d} {e f g h}}
+  17   "UPDATE OR ABORT    $T4"   1 1 {{a b c d} {e f g h} {i j k l}}
+  18   "UPDATE OR FAIL     $T4"   1 1 {{e f g h} {i j k l} {a b c d}}
+  19   "UPDATE OR IGNORE   $T4"   1 0 {{e f g h} {i j k l} {a b c d}}
+  20   "UPDATE OR REPLACE  $T4"   1 0 {{e f g h} {a b c d}}
+}] {
+  db_restore_and_reopen
+  execsql { 
+    BEGIN;
+      INSERT INTO t1(rowid, x) VALUES(3, 'i j k l');
+  }
+  set R(0) {0 {}}
+  set R(1) {1 {constraint failed}}
+  do_catchsql_test 1.$tn.1 $sql $R($constraint)
+  do_catchsql_test 1.$tn.2 { SELECT * FROM t1 } [list 0 $data]
+  catchsql COMMIT
+
+  fts3_integrity 1.$tn.3 db t1
+
+  do_test 1.$tn.4 [list sql_uses_stmt db $sql] $uses
+}
+
+do_execsql_test 2.1.1 {
+  DELETE FROM t1;
+  BEGIN;
+    INSERT INTO t1 VALUES('a b c');
+    SAVEPOINT a;
+      INSERT INTO t1 VALUES('x y z');
+    ROLLBACK TO a;
+  COMMIT;
+}
+fts3_integrity 2.1.2 db t1
+
+do_catchsql_test 2.2.1 {
+  DELETE FROM t1;
+  BEGIN;
+    INSERT INTO t1(docid, x) VALUES(0, 'a b c');
+    INSERT INTO t1(docid, x) VALUES(1, 'a b c');
+    REPLACE INTO t1(docid, x) VALUES('zero', 'd e f');
+} {1 {datatype mismatch}}
+do_execsql_test 2.2.2 { COMMIT }
+do_execsql_test 2.2.3 { SELECT * FROM t1 } {{a b c} {a b c}}
+fts3_integrity 2.2.4 db t1
+
+if {$tcl_platform(byteOrder)=="littleEndian"} {
+  do_execsql_test 3.1 {
+    CREATE VIRTUAL TABLE t3 USING fts4;
+    REPLACE INTO t3(docid, content) VALUES (1, 'one two');
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'one'
+  } {X'0100000002000000'}
+  
+  do_execsql_test 3.2 {
+    REPLACE INTO t3(docid, content) VALUES (2, 'one two three four');
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'four'
+  } {X'0200000003000000'}
+  
+  do_execsql_test 3.3 {
+    REPLACE INTO t3(docid, content) VALUES (1, 'one two three four five six');
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'six'
+  } {X'0200000005000000'}
+  
+  do_execsql_test 3.4 {
+    UPDATE OR REPLACE t3 SET docid = 2 WHERE docid=1;
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'six'
+  } {X'0100000006000000'}
+  
+  do_execsql_test 3.5 {
+    UPDATE OR REPLACE t3 SET docid = 3 WHERE docid=2;
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'six'
+  } {X'0100000006000000'}
+  
+  do_execsql_test 3.6 {
+    REPLACE INTO t3(docid, content) VALUES (3, 'one two');
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'one'
+  } {X'0100000002000000'}
+  
+  do_execsql_test 3.7 {
+    REPLACE INTO t3(docid, content) VALUES(NULL,'one two three four');
+    REPLACE INTO t3(docid, content) VALUES(NULL,'one two three four five six');
+    SELECT docid FROM t3;
+  } {3 4 5}
+  
+  do_execsql_test 3.8 {
+    UPDATE OR REPLACE t3 SET docid = 5, content='three four' WHERE docid = 4;
+    SELECT quote(matchinfo(t3, 'na')) FROM t3 WHERE t3 MATCH 'one'
+  } {X'0200000002000000'}
+}
+
+#-------------------------------------------------------------------------
+# Test that the xSavepoint is invoked correctly if the first write 
+# operation within a transaction is to a virtual table. 
+# 
+do_catchsql_test 4.1.1 {
+  CREATE VIRTUAL TABLE t0 USING fts4;
+  BEGIN;
+    INSERT INTO t0(rowid, content) SELECT
+      1, 'abc' UNION ALL SELECT
+      2, 'def' UNION ALL SELECT
+      1, 'ghi';
+} {1 {constraint failed}}
+do_execsql_test 4.1.2 {
+  COMMIT;
+}
+do_execsql_test 4.1.3 {
+  SELECT * FROM t0 WHERE t0 MATCH 'abc';
+  INSERT INTO t0(t0) VALUES('integrity-check');
+} {}
+
+do_execsql_test 4.2.1 {
+  CREATE VIRTUAL TABLE t01 USING fts4;
+  BEGIN;
+    SAVEPOINT abc;
+      INSERT INTO t01 VALUES('a b c');
+    ROLLBACK TO abc;
+  COMMIT;
+}
+do_execsql_test 4.2.2 {
+  SELECT * FROM t01 WHERE t01 MATCH 'b';
+  INSERT INTO t01(t01) VALUES('integrity-check');
+} {}
+
+do_execsql_test 4.3.1 {
+  CREATE VIRTUAL TABLE t02 USING fts4;
+  INSERT INTO t01 VALUES('1 1 1');
+  INSERT INTO t02 VALUES('2 2 2');
+  BEGIN;
+    SAVEPOINT abc;
+      INSERT INTO t01 VALUES('a b c');
+      INSERT INTO t02 VALUES('a b c');
+    ROLLBACK TO abc;
+  COMMIT;
+}
+do_execsql_test 4.3.2 {
+  SELECT * FROM t01 WHERE t01 MATCH 'b';
+  INSERT INTO t01(t01) VALUES('integrity-check');
+} {}
+
+do_execsql_test 4.4.1 {
+  CREATE TABLE A(ID INTEGER PRIMARY KEY, AnotherID INTEGER, Notes TEXT);
+  CREATE VIRTUAL TABLE AFTS USING FTS4 (Notes);
+  CREATE TRIGGER A_DeleteTrigger AFTER DELETE ON A FOR EACH ROW BEGIN 
+    DELETE FROM AFTS WHERE rowid=OLD.ID; 
+  END;
+  CREATE TABLE B(ID INTEGER PRIMARY KEY,Notes TEXT);
+  CREATE VIRTUAL TABLE BFTS USING FTS3 (Notes);
+  CREATE TRIGGER B_DeleteTrigger AFTER DELETE ON B FOR EACH ROW BEGIN 
+    DELETE FROM BFTS WHERE rowid=OLD.ID; 
+  END;
+}
+		
+do_execsql_test 4.4.2 {
+  BEGIN TRANSACTION;
+    DELETE FROM A WHERE AnotherID=1;
+    DELETE FROM B WHERE ID=1;
+  COMMIT;
+}
+		
+
+
+finish_test

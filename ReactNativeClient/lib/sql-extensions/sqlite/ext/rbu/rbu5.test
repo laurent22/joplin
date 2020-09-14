@@ -1,0 +1,302 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test some properties of the pager_rbu_mode and rbu_mode pragmas.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbu5
+
+
+# Return a list of the primary key columns for table $tbl in the database
+# opened by database handle $db.
+#
+proc pkcols {db tbl} {
+  set ret [list]
+  $db eval "PRAGMA table_info = '$tbl'" {
+    if {$pk} { lappend ret $name }
+  }
+  return $ret
+}
+
+# Return a list of all columns for table $tbl in the database opened by 
+# database handle $db.
+#
+proc allcols {db tbl} {
+  set ret [list]
+  $db eval "PRAGMA table_info = '$tbl'" {
+    lappend ret $name
+  }
+  return $ret
+}
+
+# Return a checksum on all tables and data in the main database attached
+# to database handle $db. It is possible to add indexes without changing
+# the checksum.
+#
+proc datacksum {db} {
+
+  $db eval { SELECT name FROM sqlite_master WHERE type='table' } {
+    append txt $name
+    set cols [list]
+    set order [list]
+    set cnt 0
+    $db eval "PRAGMA table_info = $name" x {
+      lappend cols "quote($x(name))"
+      lappend order [incr cnt]
+    }
+    set cols [join $cols ,]
+    set order [join $order ,]
+    append txt [$db eval "SELECT $cols FROM $name ORDER BY $order"]
+  }
+  return "[string length $txt]-[md5 $txt]"
+}
+
+proc ucontrol {args} {
+  set ret ""
+  foreach a $args {
+    if {$a} {
+      append ret .
+    } else {
+      append ret x
+    }
+  }
+  return $ret
+}
+
+# Argument $target is the name of an SQLite database file. $sql is an SQL
+# script containing INSERT, UPDATE and DELETE statements to execute against
+# it. This command creates an RBU update database in file $rbu that has
+# the same effect as the script. The target database is not modified by
+# this command.
+#
+proc generate_rbu_db {target rbu sql} {
+
+  forcedelete $rbu
+  forcecopy $target copy.db
+
+  # Evaluate the SQL script to modify the contents of copy.db.
+  #
+  sqlite3 dbRbu copy.db
+  dbRbu eval $sql
+
+  dbRbu function ucontrol ucontrol
+  
+  # Evaluate the SQL script to modify the contents of copy.db.
+  set ret [datacksum dbRbu]
+
+  dbRbu eval { ATTACH $rbu AS rbu }
+  dbRbu eval { ATTACH $target AS orig }
+
+  dbRbu eval { SELECT name AS tbl FROM sqlite_master WHERE type = 'table' } {
+    set pk [pkcols dbRbu $tbl]
+    set cols [allcols dbRbu $tbl]
+
+    # A WHERE clause to test that the PK columns match.
+    #
+    set where [list]
+    foreach c $pk { lappend where "main.$tbl.$c IS orig.$tbl.$c" }
+    set where [join $where " AND "]
+    
+    # A WHERE clause to test that all columns match.
+    #
+    set where2 [list]
+    foreach c $cols { lappend where2 "main.$tbl.$c IS orig.$tbl.$c" }
+    set ucontrol "ucontrol([join $where2 ,])"
+    set where2 [join $where2 " AND "]
+
+    # Create a data_xxx table in the RBU update database.
+    dbRbu eval "
+      CREATE TABLE rbu.data_$tbl AS SELECT *, '' AS rbu_control 
+      FROM main.$tbl LIMIT 0
+    "
+
+    # Find all new rows INSERTed by the script.
+    dbRbu eval "
+      INSERT INTO rbu.data_$tbl 
+          SELECT *, 0 AS rbu_control FROM main.$tbl
+          WHERE NOT EXISTS (
+            SELECT 1 FROM orig.$tbl WHERE $where
+          )
+    "
+    
+    # Find all old rows DELETEd by the script.
+    dbRbu eval "
+      INSERT INTO rbu.data_$tbl 
+          SELECT *, 1 AS rbu_control FROM orig.$tbl
+          WHERE NOT EXISTS (
+            SELECT 1 FROM main.$tbl WHERE $where
+          )
+    "
+    
+    # Find all rows UPDATEd by the script.
+    set origcols [list]
+    foreach c $cols { lappend origcols "main.$tbl.$c" }
+    set origcols [join $origcols ,]
+    dbRbu eval "
+      INSERT INTO rbu.data_$tbl
+          SELECT $origcols, $ucontrol AS rbu_control 
+          FROM orig.$tbl, main.$tbl
+          WHERE $where AND NOT ($where2)
+    "
+
+  }
+
+  dbRbu close
+  forcedelete copy.db
+
+  return $ret
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE TABLE t2(x, y, z, PRIMARY KEY(y, z)) WITHOUT ROWID;
+
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(2, 4, 6);
+  INSERT INTO t1 VALUES(3, 6, 9);
+
+  INSERT INTO t2 VALUES(1, 2, 3);
+  INSERT INTO t2 VALUES(2, 4, 6);
+  INSERT INTO t2 VALUES(3, 6, 9);
+}
+db close
+
+set cksum [generate_rbu_db test.db rbu.db {
+  INSERT INTO t1 VALUES(4, 8, 12);
+  DELETE FROM t1 WHERE a = 2;
+  UPDATE t1 SET c = 15 WHERE a=3;
+
+  INSERT INTO t2 VALUES(4, 8, 12);
+  DELETE FROM t2 WHERE x = 2;
+  UPDATE t2 SET x = 15 WHERE z=9;
+}]
+
+foreach {tn idx} {
+  1 {
+  }
+  2 {
+    CREATE INDEX i1 ON t1(a, b, c);
+    CREATE INDEX i2 ON t2(x, y, z);
+  }
+} {
+  foreach cmd {run step} {
+    forcecopy test.db test.db2
+    forcecopy rbu.db rbu.db2
+
+    sqlite3 db test.db2
+    db eval $idx
+
+    do_test 1.$tn.$cmd.1 {
+      ${cmd}_rbu test.db2 rbu.db2
+      datacksum db
+    } $cksum
+
+    do_test 1.$tn.$cmd.2 {
+      db eval { PRAGMA integrity_check } 
+    } {ok}
+
+    db close
+  }
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, d, e);
+  INSERT INTO t1 VALUES(-750250,'fyetckfaagjkzqjx',-185831,X'FEAD',444258.29);
+  INSERT INTO t1 VALUES(649081,NULL,X'7DF25BF78778',-342324.63,'akvspktocwozo');
+  INSERT INTO t1 VALUES(-133045,-44822.31,X'',287935,NULL);
+  INSERT INTO t1 VALUES(202132,NULL,X'5399','cujsjtspryqeyovcdpz','m');
+  INSERT INTO t1 VALUES(302910,NULL,'dvdhivtfkaedzhdcnn',-717113.41,688487);
+  INSERT INTO t1 VALUES(-582327,X'7A267A',X'7E6B3CFE5CB9','zacuzilrok',-196478);
+  INSERT INTO t1 VALUES(-190462,X'D1A087E7D68D9578','lsmleti',NULL,-928094);
+  INSERT INTO t1 VALUES(-467665,176344.57,-536684.23,828876.22,X'903E');
+  INSERT INTO t1 VALUES(-629138,632630.29,X'28D6',-774501,X'819BBBFC65');
+  INSERT INTO t1 VALUES(-828110,-54379.24,-881121.44,X'',X'8D5A894F0D');
+
+  CREATE TABLE t2(a PRIMARY KEY, b, c, d, e) WITHOUT ROWID;
+  INSERT INTO t2 VALUES(-65174,X'AC1DBFFE27310F',-194471.08,347988,X'84041BA6F9BDDE86A8');
+  INSERT INTO t2 VALUES('bzbpi',-952693.69,811628.25,NULL,-817434);
+  INSERT INTO t2 VALUES(-643830,NULL,'n',NULL,'dio');
+  INSERT INTO t2 VALUES('rovoenxxj',NULL,'owupbtdcoxxnvg',-119676,X'55431DFA');
+  INSERT INTO t2 VALUES(899770,'jlygdl',X'DBCA4D1A',NULL,-631773);
+  INSERT INTO t2 VALUES(334698.80,NULL,-697585.58,-89277,-817352);
+  INSERT INTO t2 VALUES(X'1A9EB7547A4AAF38','aiprdhkpzdz','anw','szvjbwdvzucybpwwqjt',X'53');
+  INSERT INTO t2 VALUES(713220,NULL,'hfcqhqzjuqplvkum',X'20B076075649DE','fthgpvqdyy');
+  INSERT INTO t2 VALUES(763908,NULL,'xgslzcpvwfknbr',X'75',X'668146');
+  INSERT INTO t2 VALUES(X'E1BA2B6BA27278','wjbpd',NULL,139341,-290086.15);
+}
+db close
+
+set cksum [generate_rbu_db test.db rbu.db {
+INSERT INTO t2 VALUES(222916.23,'idh',X'472C517405',X'E3',X'7C4F31824669');
+INSERT INTO t2 VALUES('xcndjwafcoxwxizoktd',-319567.21,NULL,-720906.43,-577170);
+INSERT INTO t2 VALUES(376369.99,-536058,'yoaiurfqupdscwc',X'29EC8A2542EC3953E9',-740485.22);
+INSERT INTO t2 VALUES(X'0EFB4DC50693',-175590.83,X'1779E253CAB5B1789E',X'BC6903',NULL);
+INSERT INTO t2 VALUES(-288299,'hfrp',NULL,528477,730676.77);
+DELETE FROM t2 WHERE a < -60000;
+
+UPDATE t2 SET b = 'pgnnaaoflnw' WHERE a = 'bzbpi';
+UPDATE t2 SET c = -675583 WHERE a = 'rovoenxxj';
+UPDATE t2 SET d = X'09CDF2B2C241' WHERE a = 713220;
+
+INSERT INTO t1 VALUES(224938,'bmruycvfznhhnfmgqys','fr',854381,789143);
+INSERT INTO t1 VALUES(-863931,-1386.26,X'2A058540C2FB5C',NULL,X'F9D5990A');
+INSERT INTO t1 VALUES(673696,X'97301F0AC5735F44B5',X'440C',227999.92,-709599.79);
+INSERT INTO t1 VALUES(-243640,NULL,-71718.11,X'1EEFEB38',X'8CC7C55D95E142FBA5');
+INSERT INTO t1 VALUES(275893,X'',375606.30,X'0AF9EC334711FB',-468194);
+DELETE FROM t1 WHERE a > 200000;
+
+UPDATE t1 SET b = 'pgnnaaoflnw' WHERE a = -190462;
+UPDATE t1 SET c = -675583 WHERE a = -467665;
+UPDATE t1 SET d = X'09CDF2B2C241' WHERE a = -133045;
+
+}]
+
+foreach {tn idx} {
+  1 {
+  }
+  2 {
+    CREATE UNIQUE INDEX i1 ON t1(b, c, d);
+    CREATE UNIQUE INDEX i2 ON t1(d, e, a);
+    CREATE UNIQUE INDEX i3 ON t1(e, d, c, b);
+
+    CREATE UNIQUE INDEX i4 ON t2(b, c, d);
+    CREATE UNIQUE INDEX i5 ON t2(d, e, a);
+    CREATE UNIQUE INDEX i6 ON t2(e, d, c, b);
+  }
+} {
+  foreach cmd {run step} {
+    forcecopy test.db test.db2
+    forcecopy rbu.db rbu.db2
+
+    sqlite3 db test.db2
+    db eval $idx
+
+    do_test 2.$tn.$cmd.1 {
+      ${cmd}_rbu test.db2 rbu.db2
+      datacksum db
+    } $cksum
+
+    do_test 2.$tn.$cmd.2 {
+      db eval { PRAGMA integrity_check } 
+    } {ok}
+
+    db close
+  }
+}
+
+
+finish_test

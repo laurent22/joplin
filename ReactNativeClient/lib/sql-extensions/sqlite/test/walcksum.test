@@ -1,0 +1,338 @@
+# 2010 May 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+
+ifcapable !wal {finish_test ; return }
+
+# Read and return the contents of file $filename. Treat the content as
+# binary data.
+#
+proc readfile {filename} {
+  set fd [open $filename]
+  fconfigure $fd -encoding binary
+  fconfigure $fd -translation binary
+  set data [read $fd]
+  close $fd
+  return $data
+}
+
+#
+# File $filename must be a WAL file on disk. Check that the checksum of frame
+# $iFrame in the file is correct when interpreting data as $endian-endian
+# integers ($endian must be either "big" or "little"). If the checksum looks
+# correct, return 1. Otherwise 0.
+#
+proc log_checksum_verify {filename iFrame endian} {
+  set data [readfile $filename]
+
+  foreach {offset c1 c2} [log_checksum_calc $data $iFrame $endian] {}
+
+  binary scan [string range $data $offset [expr $offset+7]] II expect1 expect2
+  set expect1 [expr $expect1&0xFFFFFFFF]
+  set expect2 [expr $expect2&0xFFFFFFFF]
+
+  expr {$c1==$expect1 && $c2==$expect2}
+}
+
+# File $filename must be a WAL file on disk. Compute the checksum for frame
+# $iFrame in the file by interpreting data as $endian-endian integers 
+# ($endian must be either "big" or "little"). Then write the computed 
+# checksum into the file.
+#
+proc log_checksum_write {filename iFrame endian} {
+  set data [readfile $filename]
+
+  foreach {offset c1 c2} [log_checksum_calc $data $iFrame $endian] {}
+
+  set bin [binary format II $c1 $c2]
+  set fd [open $filename r+]
+  fconfigure $fd -encoding binary
+  fconfigure $fd -translation binary
+  seek $fd $offset
+  puts -nonewline $fd $bin
+  close $fd
+}
+
+# Calculate and return the checksum for a particular frame in a WAL.
+#
+# Arguments are:
+#
+#   $data         Blob containing the entire contents of a WAL.
+#
+#   $iFrame       Frame number within the $data WAL. Frames are numbered 
+#                 starting at 1.
+#
+#   $endian       One of "big" or "little".
+#
+# Returns a list of three elements, as follows:
+#
+#   * The byte offset of the checksum belonging to frame $iFrame in the WAL.
+#   * The first integer in the calculated version of the checksum.
+#   * The second integer in the calculated version of the checksum.
+#
+proc log_checksum_calc {data iFrame endian} {
+  
+  binary scan [string range $data 8 11] I pgsz
+  if {$iFrame > 1} {
+    set n [wal_file_size [expr $iFrame-2] $pgsz]
+    binary scan [string range $data [expr $n+16] [expr $n+23]] II c1 c2
+  } else {
+    set c1 0
+    set c2 0
+    wal_cksum $endian c1 c2 [string range $data 0 23]
+  }
+
+  set n [wal_file_size [expr $iFrame-1] $pgsz]
+  wal_cksum $endian c1 c2 [string range $data $n [expr $n+7]]
+  wal_cksum $endian c1 c2 [string range $data [expr $n+24] [expr $n+24+$pgsz-1]]
+
+  list [expr $n+16] $c1 $c2
+}
+
+#
+# File $filename must be a WAL file on disk. Set the 'magic' field of the
+# WAL header to indicate that checksums are $endian-endian ($endian must be
+# either "big" or "little").
+#
+# Also update the wal header checksum (since the wal header contents may
+# have changed).
+#
+proc log_checksum_writemagic {filename endian} {
+  set val [expr {0x377f0682 | ($endian == "big" ? 1 : 0)}]
+  set bin [binary format I $val]
+  set fd [open $filename r+]
+  fconfigure $fd -encoding binary
+  fconfigure $fd -translation binary
+  puts -nonewline $fd $bin
+
+  seek $fd 0
+  set blob [read $fd 24]
+  set c1 0
+  set c2 0
+  wal_cksum $endian c1 c2 $blob 
+  seek $fd 24
+  puts -nonewline $fd [binary format II $c1 $c2]
+
+  close $fd
+}
+
+#-------------------------------------------------------------------------
+# Test cases walcksum-1.* attempt to verify the following:
+#
+#   * That both native and non-native order checksum log files can 
+#      be recovered.
+#
+#   * That when appending to native or non-native checksum log files 
+#     SQLite continues to use the right kind of checksums.
+#
+#   * Test point 2 when the appending process is not one that recovered
+#     the log file.
+#
+#   * Test that both native and non-native checksum log files can be
+#     checkpointed. And that after doing so the next write to the log
+#     file occurs using native byte-order checksums. 
+#
+set native "big"
+if {$::tcl_platform(byteOrder) == "littleEndian"} { set native "little" }
+foreach endian {big little} {
+
+  # Create a database. Leave some data in the log file.
+  #
+  do_test walcksum-1.$endian.1 {
+    catch { db close }
+    forcedelete test.db test.db-wal test.db-journal
+    sqlite3 db test.db
+    execsql {
+      PRAGMA page_size = 1024;
+      PRAGMA auto_vacuum = 0;
+      PRAGMA synchronous = NORMAL;
+
+      CREATE TABLE t1(a PRIMARY KEY, b);
+      INSERT INTO t1 VALUES(1,  'one');
+      INSERT INTO t1 VALUES(2,  'two');
+      INSERT INTO t1 VALUES(3,  'three');
+      INSERT INTO t1 VALUES(5,  'five');
+
+      PRAGMA journal_mode = WAL;
+      INSERT INTO t1 VALUES(8,  'eight');
+      INSERT INTO t1 VALUES(13, 'thirteen');
+      INSERT INTO t1 VALUES(21, 'twentyone');
+    }
+
+    forcecopy test.db test2.db
+    forcecopy test.db-wal test2.db-wal
+    db close
+
+    list [file size test2.db] [file size test2.db-wal]
+  } [list [expr 1024*3] [wal_file_size 6 1024]]
+
+  # Verify that the checksums are valid for all frames and that they
+  # are calculated by interpreting data in native byte-order.
+  #
+  for {set f 1} {$f <= 6} {incr f} {
+    do_test walcksum-1.$endian.2.$f {
+      log_checksum_verify test2.db-wal $f $native
+    } 1
+  }
+
+  # Replace all checksums in the current WAL file with $endian versions.
+  # Then check that it is still possible to recover and read the database.
+  #
+  log_checksum_writemagic test2.db-wal $endian
+  for {set f 1} {$f <= 6} {incr f} {
+    do_test walcksum-1.$endian.3.$f {
+      log_checksum_write test2.db-wal $f $endian
+      log_checksum_verify test2.db-wal $f $endian
+    } {1}
+  }
+  do_test walcksum-1.$endian.4.1 {
+    forcecopy test2.db test.db
+    forcecopy test2.db-wal test.db-wal
+    sqlite3 db test.db
+    execsql { SELECT a FROM t1 }
+  } {1 2 3 5 8 13 21}
+
+  # Following recovery, any frames written to the log should use the same 
+  # endianness as the existing frames. Check that this is the case.
+  #
+  do_test walcksum-1.$endian.5.0 {
+    execsql { 
+      PRAGMA synchronous = NORMAL;
+      INSERT INTO t1 VALUES(34, 'thirtyfour');
+    }
+    list [file size test.db] [file size test.db-wal]
+  } [list [expr 1024*3] [wal_file_size 8 1024]]
+  for {set f 1} {$f <= 8} {incr f} {
+    do_test walcksum-1.$endian.5.$f {
+      log_checksum_verify test.db-wal $f $endian
+    } {1}
+  }
+
+  # Now connect a second connection to the database. Check that this one
+  # (not the one that did recovery) also appends frames to the log using
+  # the same endianness for checksums as the existing frames.
+  #
+  do_test walcksum-1.$endian.6 {
+    sqlite3 db2 test.db
+    execsql { 
+      PRAGMA integrity_check;
+      SELECT a FROM t1;
+    } db2
+  } {ok 1 2 3 5 8 13 21 34}
+  do_test walcksum-1.$endian.7.0 {
+    execsql { 
+      PRAGMA synchronous = NORMAL;
+      INSERT INTO t1 VALUES(55, 'fiftyfive');
+    } db2
+    list [file size test.db] [file size test.db-wal]
+  } [list [expr 1024*3] [wal_file_size 10 1024]]
+  for {set f 1} {$f <= 10} {incr f} {
+    do_test walcksum-1.$endian.7.$f {
+      log_checksum_verify test.db-wal $f $endian
+    } {1}
+  }
+
+  # Now that both the recoverer and non-recoverer have added frames to the
+  # log file, check that it can still be recovered.
+  #
+  forcecopy test.db test2.db
+  forcecopy test.db-wal test2.db-wal
+  do_test walcksum-1.$endian.7.11 {
+    sqlite3 db3 test2.db
+    execsql { 
+      PRAGMA integrity_check;
+      SELECT a FROM t1;
+    } db3
+  } {ok 1 2 3 5 8 13 21 34 55}
+  db3 close
+
+  # Run a checkpoint on the database file. Then, check that any frames written
+  # to the start of the log use native byte-order checksums.
+  #
+  do_test walcksum-1.$endian.8.1 {
+    execsql {
+      PRAGMA wal_checkpoint;
+      INSERT INTO t1 VALUES(89, 'eightynine');
+    }
+    log_checksum_verify test.db-wal 1 $native
+  } {1}
+  do_test walcksum-1.$endian.8.2 {
+    log_checksum_verify test.db-wal 2 $native
+  } {1}
+  do_test walcksum-1.$endian.8.3 {
+    log_checksum_verify test.db-wal 3 $native
+  } {0}
+
+  do_test walcksum-1.$endian.9 {
+    execsql { 
+      PRAGMA integrity_check;
+      SELECT a FROM t1;
+    } db2
+  } {ok 1 2 3 5 8 13 21 34 55 89}
+
+  catch { db close }
+  catch { db2 close }
+}
+
+#-------------------------------------------------------------------------
+# Test case walcksum-2.* tests that if a statement transaction is rolled
+# back after frames are written to the WAL, and then (after writing some
+# more) the outer transaction is committed, the WAL file is still correctly
+# formatted (and can be recovered by a second process if required).
+#
+do_test walcksum-2.1 {
+  forcedelete test.db test.db-wal test.db-journal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA synchronous = NORMAL;
+    PRAGMA page_size = 1024;
+    PRAGMA journal_mode = WAL;
+    PRAGMA cache_size = 10;
+    CREATE TABLE t1(x PRIMARY KEY);
+    PRAGMA wal_checkpoint;
+    INSERT INTO t1 VALUES(randomblob(800));
+    BEGIN;
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*   2 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*   4 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*   8 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*  16 */
+      SAVEPOINT one;
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*  32 */
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*  64 */
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   /* 128 */
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   /* 256 */
+      ROLLBACK TO one;
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*  32 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /*  64 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /* 128 */
+      INSERT INTO t1 SELECT randomblob(800) FROM t1;   /* 256 */
+    COMMIT;
+  }
+
+  forcecopy test.db test2.db
+  forcecopy test.db-wal test2.db-wal
+
+  sqlite3 db2 test2.db
+  execsql {
+    PRAGMA integrity_check;
+    SELECT count(*) FROM t1;
+  } db2
+} {ok 256}
+catch { db close }
+catch { db2 close }
+
+  
+finish_test

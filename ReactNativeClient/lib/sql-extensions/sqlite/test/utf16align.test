@@ -1,0 +1,95 @@
+# 2006 February 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# This file contains code to verify that the SQLITE_UTF16_ALIGNED
+# flag passed into the sqlite3_create_collation() function insures
+# that all strings passed to that function are aligned on an even
+# byte boundary.
+#
+# $Id: utf16align.test,v 1.2 2008/11/07 03:29:34 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Skip this entire test if we do not support UTF16
+#
+ifcapable !utf16 {
+  finish_test
+  return
+}
+
+# Create a database with a UTF16 encoding.  Put in lots of string
+# data of varying lengths.
+#
+do_test utf16align-1.0 {
+  set unaligned_string_counter 0
+  add_alignment_test_collations [sqlite3_connection_pointer db]
+  execsql {
+    PRAGMA encoding=UTF16;
+    CREATE TABLE t1(
+      id INTEGER PRIMARY KEY,
+      spacer TEXT,
+      a TEXT COLLATE utf16_aligned,
+      b TEXT COLLATE utf16_unaligned
+    );
+    INSERT INTO t1(a) VALUES("abc");
+    INSERT INTO t1(a) VALUES("defghi");
+    INSERT INTO t1(a) VALUES("jklmnopqrstuv");
+    INSERT INTO t1(a) VALUES("wxyz0123456789-");
+    UPDATE t1 SET b=a||'-'||a;
+    INSERT INTO t1(a,b) SELECT a||b, b||a FROM t1;
+    INSERT INTO t1(a,b) SELECT a||b, b||a FROM t1;
+    INSERT INTO t1(a,b) SELECT a||b, b||a FROM t1;
+    INSERT INTO t1(a,b) VALUES('one','two');
+    INSERT INTO t1(a,b) SELECT a, b FROM t1;
+    UPDATE t1 SET spacer = CASE WHEN rowid&1 THEN 'x' ELSE 'xx' END;
+    SELECT count(*) FROM t1;
+  }
+} 66
+do_test utf16align-1.1 {
+  set unaligned_string_counter
+} 0
+
+# Creating an index that uses the unaligned collation.  We should see
+# some unaligned strings passed to the collating function.
+#
+do_test utf16align-1.2 {
+  execsql {
+    CREATE INDEX t1i1 ON t1(spacer, b);
+  }
+  # puts $unaligned_string_counter
+  expr {$unaligned_string_counter>0}
+} 1
+
+# Create another index that uses the aligned collation.  This time
+# there should be no unaligned accesses
+#
+do_test utf16align-1.3 {
+  set unaligned_string_counter 0
+  execsql {
+    CREATE INDEX t1i2 ON t1(spacer, a);
+  }
+  expr {$unaligned_string_counter>0}
+} 0
+integrity_check utf16align-1.4
+
+# ticket #3482
+#
+db close
+sqlite3 db :memory:
+do_test utf16align-2.1 {
+  db eval {
+    PRAGMA encoding=UTF16be;
+    SELECT hex(ltrim(x'6efcda'));
+  }
+} {6EFC}
+
+finish_test

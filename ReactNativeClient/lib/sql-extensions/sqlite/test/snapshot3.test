@@ -1,0 +1,99 @@
+# 2016 September 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. The focus
+# of this file is the sqlite3_snapshot_xxx() APIs.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !snapshot {finish_test; return}
+set testprefix snapshot3
+
+# This test does not work with the inmemory_journal permutation. The reason
+# is that each connection opened as part of this permutation executes
+# "PRAGMA journal_mode=memory", which fails if the database is in wal mode
+# and there are one or more existing connections.
+if {[permutation]=="inmemory_journal"} {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# This block of tests verifies that it is not possible to wrap the wal
+# file - using a writer or a "PRAGMA wal_checkpoint = TRUNCATE" - while
+# there is an open snapshot transaction (transaction opened using
+# sqlite3_snapshot_open()).
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(y);
+  PRAGMA journal_mode = wal;
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(4);
+} {wal}
+
+do_test 1.1 {
+  sqlite3 db2 test.db
+  sqlite3 db3 test.db
+
+  execsql {SELECT * FROM sqlite_master} db2
+  execsql {SELECT * FROM sqlite_master} db3
+
+  db2 trans { set snap [sqlite3_snapshot_get_blob db2 main] }
+  db2 eval { SELECT * FROM t1 }
+} {1 2 3 4}
+
+do_test 1.2 {
+  execsql BEGIN db2
+  sqlite3_snapshot_open_blob db2 main $snap
+  db2 eval { SELECT * FROM t1 }
+} {1 2 3 4}
+
+do_test 1.2 {
+  execsql END db2
+  execsql { PRAGMA wal_checkpoint }
+
+  execsql BEGIN db2
+  sqlite3_snapshot_open_blob db2 main $snap
+  db2 eval { SELECT * FROM t1 }
+} {1 2 3 4}
+
+set sz [file size test.db-wal]
+do_test 1.3 {
+  execsql { PRAGMA wal_checkpoint = truncate }
+  file size test.db-wal
+} $sz
+
+do_test 1.4 {
+  execsql BEGIN db3
+  list [catch { sqlite3_snapshot_open_blob db3 main $snap } msg] $msg
+} {0 {}}
+
+do_test 1.5 {
+  db3 eval { SELECT * FROM t1; END }
+} {1 2 3 4}
+
+do_test 1.6 {
+  db2 eval { SELECT * FROM t1; END }
+} {1 2 3 4}
+
+do_test 1.7 {
+  execsql { PRAGMA wal_checkpoint = truncate }
+  file size test.db-wal
+} 0
+
+do_test 1.8 {
+  execsql BEGIN db3
+  list [catch { sqlite3_snapshot_open_blob db3 main $snap } msg] $msg
+} {1 SQLITE_ERROR_SNAPSHOT}
+
+finish_test

@@ -1,0 +1,216 @@
+# 2008 May 12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file tests that if sqlite3_release_memory() is called to reclaim
+# memory from a pager that is in the error-state, SQLite does not 
+# incorrectly write dirty pages out to the database (not safe to do
+# once the pager is in error state).
+#
+# $Id: ioerr5.test,v 1.5 2008/08/28 18:35:34 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !memorymanage||!shared_cache {
+  finish_test
+  return
+}
+
+db close
+
+set ::enable_shared_cache [sqlite3_enable_shared_cache 1]
+set ::soft_limit [sqlite3_soft_heap_limit 1048576]
+
+# This procedure prepares, steps and finalizes an SQL statement via the
+# UTF-16 APIs. The text representation of an SQLite error code is returned
+# ("SQLITE_OK", "SQLITE_IOERR" etc.). The actual results returned by the
+# SQL statement, if it is a SELECT, are not available.
+#
+# This can be useful for testing because it forces SQLite to make an extra 
+# call to sqlite3_malloc() when translating from the supplied UTF-16 to
+# the UTF-8 encoding used internally.
+#
+proc dosql16 {zSql {db db}} {
+  set sql [encoding convertto unicode $zSql]
+  append sql "\00\00"
+  set stmt [sqlite3_prepare16 $db $sql -1 {}]
+  sqlite3_step $stmt
+  set rc [sqlite3_finalize $stmt]
+}
+
+proc compilesql16 {zSql {db db}} {
+  set sql [encoding convertto unicode $zSql]
+  append sql "\00\00"
+  set stmt [sqlite3_prepare16 $db $sql -1 {}]
+  set rc [sqlite3_finalize $stmt]
+}
+
+# Open two database connections (handle db and db2) to database "test.db".
+#
+proc opendatabases {} {
+  catch {db close}
+  catch {db2 close}
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  db2 cache size 0
+  db cache size 0
+  execsql {
+    pragma page_size=512;
+    pragma auto_vacuum=2;
+    pragma cache_size=16;
+  }
+}
+
+# Open two database connections and create a single table in the db.
+#
+do_test ioerr5-1.0 {
+  opendatabases
+  execsql { CREATE TABLE A(Id INTEGER, Name TEXT) }
+} {}
+
+foreach locking_mode {normal exclusive} {
+  set nPage 2
+  for {set iFail 1} {$iFail<200} {incr iFail} {
+    sqlite3_soft_heap_limit 1048576
+    opendatabases
+    execsql { pragma locking_mode=exclusive }
+    set nRow [db one {SELECT count(*) FROM a}]
+  
+    # Dirty (at least) one of the pages in the cache.
+    do_test ioerr5-1.$locking_mode-$iFail.1 {
+      execsql {
+        BEGIN EXCLUSIVE;
+        INSERT INTO a VALUES(1, 'ABCDEFGHIJKLMNOP');
+      }
+    } {}
+
+    # Open a read-only cursor on table "a". If the COMMIT below is
+    # interrupted by a persistent IO error, the pager will transition to 
+    # PAGER_ERROR state. If there are no other read-only cursors open,
+    # from there the pager immediately discards all cached data and 
+    # switches to PAGER_OPEN state. This read-only cursor stops that
+    # from happening, leaving the pager stuck in PAGER_ERROR state.
+    #
+    set channel [db incrblob -readonly a Name [db last_insert_rowid]]
+  
+    # Now try to commit the transaction. Cause an IO error to occur
+    # within this operation, which moves the pager into the error state.
+    #
+    set ::sqlite_io_error_persist 1
+    set ::sqlite_io_error_pending $iFail
+    do_test ioerr5-1.$locking_mode-$iFail.2 {
+      set rc [catchsql {COMMIT}]
+      list
+    } {}
+    set ::sqlite_io_error_hit 0
+    set ::sqlite_io_error_persist 0
+    set ::sqlite_io_error_pending 0
+  
+    # Read the contents of the database file into a Tcl variable.
+    #
+    set fd [open test.db]
+    fconfigure $fd -translation binary -encoding binary
+    set zDatabase [read $fd]
+    close $fd
+
+    # Set a very low soft-limit and then try to compile an SQL statement 
+    # from UTF-16 text. To do this, SQLite will need to reclaim memory
+    # from the pager that is in error state. Including that associated
+    # with the dirty page.
+    #
+    do_test ioerr5-1.$locking_mode-$iFail.3 {
+      sqlite3_soft_heap_limit 1024
+      compilesql16 "SELECT 10"
+    } {SQLITE_OK}
+
+    close $channel
+
+    # Ensure that nothing was written to the database while reclaiming
+    # memory from the pager in error state.
+    #
+    do_test ioerr5-1.$locking_mode-$iFail.4 {
+      set fd [open test.db]
+      fconfigure $fd -translation binary -encoding binary
+      set zDatabase2 [read $fd]
+      close $fd
+      expr {$zDatabase eq $zDatabase2}
+    } {1}
+
+    if {$rc eq [list 0 {}]} {
+      do_test ioerr5.1-$locking_mode-$iFail.3 {
+        execsql { SELECT count(*) FROM a }
+      } [expr $nRow+1]
+      break
+    }
+  }
+}
+
+# Make sure this test script doesn't leave any files open.
+#
+do_test ioerr5-1.X {
+  catch { db close }
+  catch { db2 close }
+  set sqlite_open_file_count
+} 0
+
+do_test ioerr5-2.0 {
+  sqlite3 db test.db
+  execsql { CREATE INDEX i1 ON a(id, name); }
+} {}
+
+foreach locking_mode {exclusive normal} {
+  for {set iFail 1} {$iFail<200} {incr iFail} {
+    sqlite3_soft_heap_limit 1048576
+    opendatabases
+    execsql { pragma locking_mode=exclusive }
+    set nRow [db one {SELECT count(*) FROM a}]
+  
+    do_test ioerr5-2.$locking_mode-$iFail.1 {
+      execsql {
+        BEGIN EXCLUSIVE;
+        INSERT INTO a VALUES(1, 'ABCDEFGHIJKLMNOP');
+      }
+    } {}
+
+    set ::sqlite_io_error_persist 1
+    set ::sqlite_io_error_pending $iFail
+
+    sqlite3_release_memory 10000
+
+    set error_hit $::sqlite_io_error_hit
+    set ::sqlite_io_error_hit 0
+    set ::sqlite_io_error_persist 0
+    set ::sqlite_io_error_pending 0
+    if {$error_hit} {
+      do_test ioerr5-2.$locking_mode-$iFail.3a {
+        catchsql COMMIT
+      } {1 {disk I/O error}}
+    } else {
+      do_test ioerr5-2.$locking_mode-$iFail.3b {
+        execsql COMMIT
+      } {}
+      break
+    }
+  }
+}
+
+# Make sure this test script doesn't leave any files open.
+#
+do_test ioerr5-2.X {
+  catch { db close }
+  catch { db2 close }
+  set sqlite_open_file_count
+} 0
+
+sqlite3_enable_shared_cache $::enable_shared_cache
+sqlite3_soft_heap_limit $::soft_limit
+
+finish_test

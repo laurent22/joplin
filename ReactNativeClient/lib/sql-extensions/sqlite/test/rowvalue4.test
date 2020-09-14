@@ -1,0 +1,305 @@
+# 2016 July 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is syntax errors involving row-value constructors
+# and sub-selects that return multiple arguments.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue4
+
+#-------------------------------------------------------------------------
+# Test some error conditions:
+# 
+#   * row values used where they are not supported,
+#   * row values or sub-selects that contain/return the wrong number
+#     of elements.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c);
+  CREATE INDEX t1bac ON t1(b, a, c);
+}
+
+foreach {tn e} {
+  1 "(1, 2, 3)"
+  2 "1 + (1, 2)"
+  3 "(1,2,3) == (1, 2)"
+} {
+  do_catchsql_test 1.$tn "SELECT $e" {1 {row value misused}}
+}
+
+foreach {tn s error} {
+  1 "SELECT * FROM t1 WHERE a = (1, 2)"       {row value misused}
+  2 "SELECT * FROM t1 WHERE b = (1, 2)"       {row value misused}
+  3 "SELECT * FROM t1 WHERE NOT (b = (1, 2))" {row value misused}
+  4 "SELECT * FROM t1 LIMIT (1, 2)"           {row value misused}
+  5 "SELECT (a, b) IN (SELECT * FROM t1) FROM t1" 
+                             {sub-select returns 3 columns - expected 2}
+
+  6 "SELECT * FROM t1 WHERE (a, b) IN (SELECT * FROM t1)" 
+                             {sub-select returns 3 columns - expected 2}
+  7 "SELECT * FROM t1 WHERE (c, c) <= 1" {row value misused}
+  8 "SELECT * FROM t1 WHERE (b, b) <= 1" {row value misused}
+} {
+  do_catchsql_test 2.$tn "$s" [list 1 $error]
+}
+
+#-------------------------------------------------------------------------
+do_execsql_test 2.0 {
+  CREATE TABLE t2(a, b, c, d);
+  INSERT INTO t2 VALUES(1, 1, 1,   1);
+  INSERT INTO t2 VALUES(1, 1, 2,   2);
+  INSERT INTO t2 VALUES(1, 1, 3,   3);
+  INSERT INTO t2 VALUES(1, 2, 1,   4);
+  INSERT INTO t2 VALUES(1, 2, 2,   5);
+  INSERT INTO t2 VALUES(1, 2, 3,   6);
+  INSERT INTO t2 VALUES(1, 3, 1,   7);
+  INSERT INTO t2 VALUES(1, 3, 2,   8);
+  INSERT INTO t2 VALUES(1, 3, 3,   9);
+
+  INSERT INTO t2 VALUES(2, 1, 1,   10);
+  INSERT INTO t2 VALUES(2, 1, 2,   11);
+  INSERT INTO t2 VALUES(2, 1, 3,   12);
+  INSERT INTO t2 VALUES(2, 2, 1,   13);
+  INSERT INTO t2 VALUES(2, 2, 2,   14);
+  INSERT INTO t2 VALUES(2, 2, 3,   15);
+  INSERT INTO t2 VALUES(2, 3, 1,   16);
+  INSERT INTO t2 VALUES(2, 3, 2,   17);
+  INSERT INTO t2 VALUES(2, 3, 3,   18);
+
+  INSERT INTO t2 VALUES(3, 1, 1,   19);
+  INSERT INTO t2 VALUES(3, 1, 2,   20);
+  INSERT INTO t2 VALUES(3, 1, 3,   21);
+  INSERT INTO t2 VALUES(3, 2, 1,   22);
+  INSERT INTO t2 VALUES(3, 2, 2,   23);
+  INSERT INTO t2 VALUES(3, 2, 3,   24);
+  INSERT INTO t2 VALUES(3, 3, 1,   25);
+  INSERT INTO t2 VALUES(3, 3, 2,   26);
+  INSERT INTO t2 VALUES(3, 3, 3,   27);
+}
+
+foreach {nm idx} {
+  idx1 {}
+  idx2 { CREATE INDEX t2abc ON t2(a, b, c); }
+  idx3 { CREATE INDEX t2abc ON t2(a, b DESC, c); }
+  idx4 { CREATE INDEX t2abc ON t2(a DESC, b DESC, c DESC); }
+  idx5 { CREATE INDEX t2abc ON t2(a ASC, b ASC, c ASC); }
+  idx6 { CREATE INDEX t2abc ON t2(a DESC, b, c); }
+  idx7 { CREATE INDEX t2abc ON t2(a DESC, b DESC) }
+  idx8 { CREATE INDEX t2abc ON t2(c, b, a); }
+  idx9 { CREATE INDEX t2d ON t2(d); }
+  idx10 { CREATE INDEX t2abc ON t2(a DESC, b, c DESC); }
+} {
+  drop_all_indexes
+  execsql $idx
+
+  foreach {tn where res} {
+    1 "(a, b, c) < (2, 2, 2)"  {1 2 3 4 5 6 7 8 9 10 11 12 13}
+    2 "(a, b, c) <= (2, 2, 2)" {1 2 3 4 5 6 7 8 9 10 11 12 13 14}
+    3 "(a, b, c) > (2, 2, 2)"  {15 16 17 18 19 20 21 22 23 24 25 26 27}
+    4 "(a, b, c) >= (2, 2, 2)" {14 15 16 17 18 19 20 21 22 23 24 25 26 27}
+    5 "(a, b, c) >= (2, 2, NULL)" {16 17 18 19 20 21 22 23 24 25 26 27}
+    6 "(a, b, c) <= (2, 2, NULL)" {1 2 3 4 5 6 7 8 9 10 11 12}
+    7 "(a, b, c) >= (2, NULL, NULL)" {19 20 21 22 23 24 25 26 27}
+    8 "(a, b, c) <= (2, NULL, NULL)" {1 2 3 4 5 6 7 8 9}
+
+    9 "(a, b, c) < (SELECT a, b, c FROM t2 WHERE d=14)"  
+      {1 2 3 4 5 6 7 8 9 10 11 12 13}
+
+    10 "(a, b, c) = (SELECT a, b, c FROM t2 WHERE d=14)" 14
+
+    11 "a = 2 AND (b, c) > (2, 2)" {15 16 17 18}
+    12 "a = 2 AND (b, c) < (3, 3) AND (b, c) > (1, 1)" {11 12 13 14 15 16 17}
+  } {
+    set result [db eval "SELECT d FROM t2 WHERE $where"]
+    do_test 2.1.$nm.$tn { lsort -integer $result } $res
+  }
+
+  foreach {tn e res} {
+    1 "(2, 1) IN (SELECT a, b FROM t2)" 1
+    2 "(2, 1) IN (SELECT a, b FROM t2 ORDER BY d)" 1
+    3 "(2, 1) IN (SELECT a, b FROM t2 ORDER BY d LIMIT 9)" 0
+    4 "(2, 1) IN (SELECT a, b FROM t2 ORDER BY d LIMIT 10)" 1
+
+    5 "(3, 3) = (SELECT a, b FROM t2 ORDER BY d DESC LIMIT 1)" 1
+    6 "(3, 3) = (SELECT a, b FROM t2 ORDER BY d ASC LIMIT 1)" 0
+    7 "(1, NULL) = (SELECT a, b FROM t2 ORDER BY d ASC LIMIT 1)" {{}}
+
+    8 "(3, 1) = (SELECT b, c FROM t2 ORDER BY d DESC LIMIT 1 OFFSET 2)" 1
+    9 "(3, 1) = (SELECT b, c FROM t2 ORDER BY d ASC LIMIT 1 OFFSET 2)" 0
+    10 "(1, NULL) = (SELECT b, c FROM t2 ORDER BY d ASC LIMIT 1 OFFSET 2)" {{}}
+
+    11 "(3, 3) = (SELECT max(a), max(b) FROM t2)" 1
+    12 "(3, 1) = (SELECT max(a), min(b) FROM t2)" 1
+    13 "(NULL, NULL) = (SELECT max(a), min(b) FROM t2)" {{}}
+
+    14 "(2, 1) IN (SELECT a, b FROM t2 ORDER BY d LIMIT 5 OFFSET 11)" 1
+    15 "(2, 1) IN (SELECT a, b FROM t2 ORDER BY d LIMIT 5 OFFSET 12)" 0
+  } {
+    do_execsql_test 2.2.$nm.$tn "SELECT $e" $res
+  }
+}
+
+ifcapable stat4 {
+  do_execsql_test 3.0 {
+    CREATE TABLE c1(a, b, c, d);
+    INSERT INTO c1(a, b) VALUES(1, 'a');
+    INSERT INTO c1(a, b) VALUES(1, 'b');
+    INSERT INTO c1(a, b) VALUES(1, 'c');
+    INSERT INTO c1(a, b) VALUES(1, 'd');
+    INSERT INTO c1(a, b) VALUES(1, 'e');
+    INSERT INTO c1(a, b) VALUES(1, 'f');
+    INSERT INTO c1(a, b) VALUES(1, 'g');
+    INSERT INTO c1(a, b) VALUES(1, 'h');
+    INSERT INTO c1(a, b) VALUES(1, 'i');
+    INSERT INTO c1(a, b) VALUES(1, 'j');
+    INSERT INTO c1(a, b) VALUES(1, 'k');
+    INSERT INTO c1(a, b) VALUES(1, 'l');
+    INSERT INTO c1(a, b) VALUES(1, 'm');
+    INSERT INTO c1(a, b) VALUES(1, 'n');
+    INSERT INTO c1(a, b) VALUES(1, 'o');
+    INSERT INTO c1(a, b) VALUES(1, 'p');
+    INSERT INTO c1(a, b) VALUES(2, 'a');
+    INSERT INTO c1(a, b) VALUES(2, 'b');
+    INSERT INTO c1(a, b) VALUES(2, 'c');
+    INSERT INTO c1(a, b) VALUES(2, 'd');
+    INSERT INTO c1(a, b) VALUES(2, 'e');
+    INSERT INTO c1(a, b) VALUES(2, 'f');
+    INSERT INTO c1(a, b) VALUES(2, 'g');
+    INSERT INTO c1(a, b) VALUES(2, 'h');
+
+    INSERT INTO c1(c, d) SELECT a, b FROM c1;
+
+    CREATE INDEX c1ab ON c1(a, b);
+    CREATE INDEX c1cd ON c1(c, d);
+    ANALYZE;
+  }
+
+  do_eqp_test 3.1.1 { SELECT * FROM c1 WHERE a=1 AND c=2 } \
+     {SEARCH TABLE c1 USING INDEX c1cd (c=?)}
+
+  do_eqp_test 3.1.2 { SELECT * FROM c1 WHERE a=1 AND b>'d' AND c=2 } \
+     {SEARCH TABLE c1 USING INDEX c1cd (c=?)}
+
+  do_eqp_test 3.1.3 { SELECT * FROM c1 WHERE a=1 AND b>'l' AND c=2 } \
+     {SEARCH TABLE c1 USING INDEX c1ab (a=? AND b>?)}
+
+  do_eqp_test 3.2.1 { SELECT * FROM c1 WHERE a=1 AND c>1 } \
+     {SEARCH TABLE c1 USING INDEX c1cd (c>?)}
+
+  do_eqp_test 3.2.2 { SELECT * FROM c1 WHERE a=1 AND c>0 } \
+     {SEARCH TABLE c1 USING INDEX c1ab (a=?)}
+
+  do_eqp_test 3.2.3 { SELECT * FROM c1 WHERE a=1 AND c>=1 } \
+     {SEARCH TABLE c1 USING INDEX c1ab (a=?)}
+
+  do_eqp_test 3.2.4 { SELECT * FROM c1 WHERE a=1 AND (c, d)>(1, 'c') } \
+     {SEARCH TABLE c1 USING INDEX c1ab (a=?)}
+
+  do_eqp_test 3.2.5 { SELECT * FROM c1 WHERE a=1 AND (c, d)>(1, 'o') } \
+     {SEARCH TABLE c1 USING INDEX c1cd ((c,d)>(?,?))}
+
+  do_eqp_test 3.2.6 { SELECT * FROM c1 WHERE a=1 AND (c, +b)>(1, 'c') } \
+     {SEARCH TABLE c1 USING INDEX c1ab (a=?)}
+
+}
+
+#------------------------------------------------------------------------
+
+do_execsql_test 5.0 {
+  CREATE TABLE d1(x, y);
+  CREATE TABLE d2(a, b, c);
+  CREATE INDEX d2ab ON d2(a, b);
+  CREATE INDEX d2c ON d2(c);
+
+  WITH i(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM i WHERE i<1000
+  )
+  INSERT INTO d2 SELECT i/100, i%100, i/100 FROM i;
+  ANALYZE;
+}
+
+do_eqp_test 5.1 {
+  SELECT * FROM d2 WHERE 
+    (a, b) IN (SELECT x, y FROM d1) AND
+    (c) IN (SELECT y FROM d1)
+} {
+  QUERY PLAN
+  |--SEARCH TABLE d2 USING INDEX d2ab (a=? AND b=?)
+  |--LIST SUBQUERY xxxxxx
+  |  `--SCAN TABLE d1
+  `--LIST SUBQUERY xxxxxx
+     `--SCAN TABLE d1
+}
+
+do_execsql_test 6.0 {
+  CREATE TABLE e1(a, b, c, d, e);
+  CREATE INDEX e1ab ON e1(a, b);
+  CREATE INDEX e1cde ON e1(c, d, e);
+}
+
+do_eqp_test 6.1 {
+  SELECT * FROM e1 WHERE (a, b) > (?, ?)
+} {SEARCH TABLE e1 USING INDEX e1ab ((a,b)>(?,?))}
+
+do_eqp_test 6.2 {
+  SELECT * FROM e1 WHERE (a, b) < (?, ?)
+} {SEARCH TABLE e1 USING INDEX e1ab ((a,b)<(?,?))}
+
+do_eqp_test 6.3 {
+  SELECT * FROM e1 WHERE c = ? AND (d, e) > (?, ?)
+} {SEARCH TABLE e1 USING INDEX e1cde (c=? AND (d,e)>(?,?))}
+
+do_eqp_test 6.4 {
+  SELECT * FROM e1 WHERE c = ? AND (d, e) < (?, ?)
+} {SEARCH TABLE e1 USING INDEX e1cde (c=? AND (d,e)<(?,?))}
+
+do_eqp_test 6.5 {
+  SELECT * FROM e1 WHERE (d, e) BETWEEN (?, ?) AND (?, ?) AND c = ?
+} {SEARCH TABLE e1 USING INDEX e1cde (c=? AND (d,e)>(?,?) AND (d,e)<(?,?))}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 7.1 {
+  CREATE TABLE f1(a, b, c);
+  CREATE INDEX f1ab ON f1(a, b);
+}
+
+do_catchsql_test 7.2 {
+  SELECT (a COLLATE nocase, b) IN (SELECT a, b FROM f1) FROM f1;
+} {0 {}}
+
+do_catchsql_test 7.3 {
+  SELECT (a COLLATE nose, b) IN (SELECT a, b FROM f1) FROM f1;
+} {1 {no such collation sequence: nose}}
+
+do_catchsql_test 7.4 {
+  SELECT * FROM f1 WHERE (?, ? COLLATE nose) > (a, b);
+} {1 {no such collation sequence: nose}}
+
+#-------------------------------------------------------------------------
+drop_all_tables
+do_execsql_test 8.1 {
+  CREATE TABLE c1(x, y);
+  CREATE TABLE c2(a, b, c);
+  CREATE INDEX c2ab ON c2(a, b);
+  CREATE INDEX c2c ON c2(c);
+
+  CREATE TABLE c3(d);
+}
+do_catchsql_test 8.2 {
+  SELECT * FROM c2 CROSS JOIN c3 WHERE 
+    ( (a, b) == (SELECT x, y FROM c1) AND c3.d = c ) OR
+    ( c == (SELECT x, y FROM c1) AND c3.d = c )
+} {1 {row value misused}}
+
+finish_test

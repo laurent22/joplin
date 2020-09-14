@@ -1,0 +1,1574 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the use of indices in WHERE clases.
+#
+# $Id: where.test,v 1.50 2008/11/03 09:06:06 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Build some test data
+#
+do_test where-1.0 {
+  execsql {
+    CREATE TABLE t1(w int, x int, y int);
+    CREATE TABLE t2(p int, q int, r int, s int);
+  }
+  for {set i 1} {$i<=100} {incr i} {
+    set w $i
+    set x [expr {int(log($i)/log(2))}]
+    set y [expr {$i*$i + 2*$i + 1}]
+    execsql "INSERT INTO t1 VALUES($w,$x,$y)"
+  }
+
+  ifcapable subquery {
+    execsql {
+      INSERT INTO t2 SELECT 101-w, x, (SELECT max(y) FROM t1)+1-y, y FROM t1;
+    }
+  } else {
+    set maxy [execsql {select max(y) from t1}]
+    execsql "
+      INSERT INTO t2 SELECT 101-w, x, $maxy+1-y, y FROM t1;
+    "
+  }
+
+  execsql {
+    CREATE INDEX i1w ON t1("w");  -- Verify quoted identifier names
+    CREATE INDEX i1xy ON t1(`x`,'y' ASC); -- Old MySQL compatibility
+    CREATE INDEX i2p ON t2(p);
+    CREATE INDEX i2r ON t2(r);
+    CREATE INDEX i2qs ON t2(q, s);
+  }
+} {}
+
+# Do an SQL statement.  Append the search count to the end of the result.
+#
+proc count sql {
+  set ::sqlite_search_count 0
+  return [concat [execsql $sql] $::sqlite_search_count]
+}
+
+# Verify that queries use an index.  We are using the special variable
+# "sqlite_search_count" which tallys the number of executions of MoveTo
+# and Next operators in the VDBE.  By verifing that the search count is
+# small we can be assured that indices are being used properly.
+#
+do_test where-1.1.1 {
+  count {SELECT x, y, w FROM t1 WHERE w=10}
+} {3 121 10 3}
+do_test where-1.1.1b {
+  count {SELECT x, y, w FROM t1 WHERE w IS 10}
+} {3 121 10 3}
+do_eqp_test where-1.1.2 {
+  SELECT x, y, w FROM t1 WHERE w=10
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_eqp_test where-1.1.2b {
+  SELECT x, y, w FROM t1 WHERE w IS 10
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_test where-1.1.3 {
+  db status step
+} {0}
+do_test where-1.1.4 {
+  db eval {SELECT x, y, w FROM t1 WHERE +w=10}
+} {3 121 10}
+do_test where-1.1.5 {
+  db status step
+} {99}
+do_eqp_test where-1.1.6 {
+  SELECT x, y, w FROM t1 WHERE +w=10
+} {*SCAN TABLE t1*}
+do_test where-1.1.7 {
+  count {SELECT x, y, w AS abc FROM t1 WHERE abc=10}
+} {3 121 10 3}
+do_eqp_test where-1.1.8 {
+  SELECT x, y, w AS abc FROM t1 WHERE abc=10
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_test where-1.1.9 {
+  db status step
+} {0}
+do_test where-1.2.1 {
+  count {SELECT x, y, w FROM t1 WHERE w=11}
+} {3 144 11 3}
+do_test where-1.2.2 {
+  count {SELECT x, y, w AS abc FROM t1 WHERE abc=11}
+} {3 144 11 3}
+do_test where-1.3.1 {
+  count {SELECT x, y, w AS abc FROM t1 WHERE 11=w}
+} {3 144 11 3}
+do_test where-1.3.2 {
+  count {SELECT x, y, w AS abc FROM t1 WHERE 11=abc}
+} {3 144 11 3}
+do_test where-1.3.3 {
+  count {SELECT x, y, w AS abc FROM t1 WHERE 11 IS abc}
+} {3 144 11 3}
+do_test where-1.4.1 {
+  count {SELECT w, x, y FROM t1 WHERE 11=w AND x>2}
+} {11 3 144 3}
+do_test where-1.4.1b {
+  count {SELECT w, x, y FROM t1 WHERE 11 IS w AND x>2}
+} {11 3 144 3}
+do_eqp_test where-1.4.2 {
+  SELECT w, x, y FROM t1 WHERE 11=w AND x>2
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_eqp_test where-1.4.2b {
+  SELECT w, x, y FROM t1 WHERE 11 IS w AND x>2
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_test where-1.4.3 {
+  count {SELECT w AS a, x AS b, y FROM t1 WHERE 11=a AND b>2}
+} {11 3 144 3}
+do_eqp_test where-1.4.4 {
+  SELECT w AS a, x AS b, y FROM t1 WHERE 11=a AND b>2
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_test where-1.5 {
+  count {SELECT x, y FROM t1 WHERE y<200 AND w=11 AND x>2}
+} {3 144 3}
+do_eqp_test where-1.5.2 {
+  SELECT x, y FROM t1 WHERE y<200 AND w=11 AND x>2
+} {*SEARCH TABLE t1 USING INDEX i1w (w=?)*}
+do_test where-1.6 {
+  count {SELECT x, y FROM t1 WHERE y<200 AND x>2 AND w=11}
+} {3 144 3}
+do_test where-1.7 {
+  count {SELECT x, y FROM t1 WHERE w=11 AND y<200 AND x>2}
+} {3 144 3}
+do_test where-1.8 {
+  count {SELECT x, y FROM t1 WHERE w>10 AND y=144 AND x=3}
+} {3 144 3}
+do_eqp_test where-1.8.2 {
+  SELECT x, y FROM t1 WHERE w>10 AND y=144 AND x=3
+} {*SEARCH TABLE t1 USING INDEX i1xy (x=? AND y=?)*}
+do_eqp_test where-1.8.3 {
+  SELECT x, y FROM t1 WHERE y=144 AND x=3
+} {*SEARCH TABLE t1 USING COVERING INDEX i1xy (x=? AND y=?)*}
+do_test where-1.9 {
+  count {SELECT x, y FROM t1 WHERE y=144 AND w>10 AND x=3}
+} {3 144 3}
+do_test where-1.10 {
+  count {SELECT x, y FROM t1 WHERE x=3 AND w>=10 AND y=121}
+} {3 121 3}
+do_test where-1.11 {
+  count {SELECT x, y FROM t1 WHERE x=3 AND y=100 AND w<10}
+} {3 100 3}
+do_test where-1.11b {
+  count {SELECT x, y FROM t1 WHERE x IS 3 AND y IS 100 AND w<10}
+} {3 100 3}
+
+# New for SQLite version 2.1: Verify that that inequality constraints
+# are used correctly.
+#
+do_test where-1.12 {
+  count {SELECT w FROM t1 WHERE x=3 AND y<100}
+} {8 3}
+do_test where-1.12b {
+  count {SELECT w FROM t1 WHERE x IS 3 AND y<100}
+} {8 3}
+do_test where-1.13 {
+  count {SELECT w FROM t1 WHERE x=3 AND 100>y}
+} {8 3}
+do_test where-1.14 {
+  count {SELECT w FROM t1 WHERE 3=x AND y<100}
+} {8 3}
+do_test where-1.14b {
+  count {SELECT w FROM t1 WHERE 3 IS x AND y<100}
+} {8 3}
+do_test where-1.15 {
+  count {SELECT w FROM t1 WHERE 3=x AND 100>y}
+} {8 3}
+do_test where-1.16 {
+  count {SELECT w FROM t1 WHERE x=3 AND y<=100}
+} {8 9 5}
+do_test where-1.17 {
+  count {SELECT w FROM t1 WHERE x=3 AND 100>=y}
+} {8 9 5}
+do_test where-1.18 {
+  count {SELECT w FROM t1 WHERE x=3 AND y>225}
+} {15 3}
+do_test where-1.18b {
+  count {SELECT w FROM t1 WHERE x IS 3 AND y>225}
+} {15 3}
+do_test where-1.19 {
+  count {SELECT w FROM t1 WHERE x=3 AND 225<y}
+} {15 3}
+do_test where-1.20 {
+  count {SELECT w FROM t1 WHERE x=3 AND y>=225}
+} {14 15 5}
+do_test where-1.21 {
+  count {SELECT w FROM t1 WHERE x=3 AND 225<=y}
+} {14 15 5}
+do_test where-1.22 {
+  count {SELECT w FROM t1 WHERE x=3 AND y>121 AND y<196}
+} {11 12 5}
+do_test where-1.22b {
+  count {SELECT w FROM t1 WHERE x IS 3 AND y>121 AND y<196}
+} {11 12 5}
+do_test where-1.23 {
+  count {SELECT w FROM t1 WHERE x=3 AND y>=121 AND y<=196}
+} {10 11 12 13 9}
+do_test where-1.24 {
+  count {SELECT w FROM t1 WHERE x=3 AND 121<y AND 196>y}
+} {11 12 5}
+do_test where-1.25 {
+  count {SELECT w FROM t1 WHERE x=3 AND 121<=y AND 196>=y}
+} {10 11 12 13 9}
+
+# Need to work on optimizing the BETWEEN operator.  
+#
+# do_test where-1.26 {
+#   count {SELECT w FROM t1 WHERE x=3 AND y BETWEEN 121 AND 196}
+# } {10 11 12 13 9}
+
+do_test where-1.27 {
+  count {SELECT w FROM t1 WHERE x=3 AND y+1==122}
+} {10 10}
+
+do_test where-1.28 {
+  count {SELECT w FROM t1 WHERE x+1=4 AND y+1==122}
+} {10 99}
+do_test where-1.29 {
+  count {SELECT w FROM t1 WHERE y==121}
+} {10 99}
+
+
+do_test where-1.30 {
+  count {SELECT w FROM t1 WHERE w>97}
+} {98 99 100 3}
+do_test where-1.31 {
+  count {SELECT w FROM t1 WHERE w>=97}
+} {97 98 99 100 4}
+do_test where-1.33 {
+  count {SELECT w FROM t1 WHERE w==97}
+} {97 2}
+do_test where-1.33.1  {
+  count {SELECT w FROM t1 WHERE w<=97 AND w==97}
+} {97 2}
+do_test where-1.33.2  {
+  count {SELECT w FROM t1 WHERE w<98 AND w==97}
+} {97 2}
+do_test where-1.33.3  {
+  count {SELECT w FROM t1 WHERE w>=97 AND w==97}
+} {97 2}
+do_test where-1.33.4  {
+  count {SELECT w FROM t1 WHERE w>96 AND w==97}
+} {97 2}
+do_test where-1.33.5  {
+  count {SELECT w FROM t1 WHERE w==97 AND w==97}
+} {97 2}
+do_test where-1.34 {
+  count {SELECT w FROM t1 WHERE w+1==98}
+} {97 99}
+do_test where-1.35 {
+  count {SELECT w FROM t1 WHERE w<3}
+} {1 2 3}
+do_test where-1.36 {
+  count {SELECT w FROM t1 WHERE w<=3}
+} {1 2 3 4}
+do_test where-1.37 {
+  count {SELECT w FROM t1 WHERE w+1<=4 ORDER BY w}
+} {1 2 3 99}
+
+do_test where-1.38 {
+  count {SELECT (w) FROM t1 WHERE (w)>(97)}
+} {98 99 100 3}
+do_test where-1.39 {
+  count {SELECT (w) FROM t1 WHERE (w)>=(97)}
+} {97 98 99 100 4}
+do_test where-1.40 {
+  count {SELECT (w) FROM t1 WHERE (w)==(97)}
+} {97 2}
+do_test where-1.41 {
+  count {SELECT (w) FROM t1 WHERE ((w)+(1))==(98)}
+} {97 99}
+
+
+# Do the same kind of thing except use a join as the data source.
+#
+do_test where-2.1 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE x=q AND y=s AND r=8977
+  }
+} {34 67 6}
+do_test where-2.2 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE x=q AND s=y AND r=8977
+  }
+} {34 67 6}
+do_test where-2.3 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE x=q AND s=y AND r=8977 AND w>10
+  }
+} {34 67 6}
+do_test where-2.4 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE p<80 AND x=q AND s=y AND r=8977 AND w>10
+  }
+} {34 67 6}
+do_test where-2.5 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE p<80 AND x=q AND 8977=r AND s=y AND w>10
+  }
+} {34 67 6}
+do_test where-2.6 {
+  count {
+    SELECT w, p FROM t2, t1
+    WHERE x=q AND p=77 AND s=y AND w>5
+  }
+} {24 77 6}
+do_test where-2.7 {
+  count {
+    SELECT w, p FROM t1, t2
+    WHERE x=q AND p>77 AND s=y AND w=5
+  }
+} {5 96 6}
+
+# Lets do a 3-way join.
+#
+do_test where-3.1 {
+  count {
+    SELECT A.w, B.p, C.w FROM t1 as A, t2 as B, t1 as C
+    WHERE C.w=101-B.p AND B.r=10202-A.y AND A.w=11
+  }
+} {11 90 11 8}
+do_test where-3.2 {
+  count {
+    SELECT A.w, B.p, C.w FROM t1 as A, t2 as B, t1 as C
+    WHERE C.w=101-B.p AND B.r=10202-A.y AND A.w=12
+  }
+} {12 89 12 8}
+do_test where-3.3 {
+  count {
+    SELECT A.w, B.p, C.w FROM t1 as A, t2 as B, t1 as C
+    WHERE A.w=15 AND B.p=C.w AND B.r=10202-A.y
+  }
+} {15 86 86 8}
+
+# Test to see that the special case of a constant WHERE clause is
+# handled.
+#
+do_test where-4.1 {
+  count {
+    SELECT * FROM t1 WHERE 0
+  }
+} {0}
+do_test where-4.2 {
+  count {
+    SELECT * FROM t1 WHERE 1 LIMIT 1
+  }
+} {1 0 4 0}
+do_test where-4.3 {
+  execsql {
+    SELECT 99 WHERE 0
+  }
+} {}
+do_test where-4.4 {
+  execsql {
+    SELECT 99 WHERE 1
+  }
+} {99}
+do_test where-4.5 {
+  execsql {
+    SELECT 99 WHERE 0.1
+  }
+} {99}
+do_test where-4.6 {
+  execsql {
+    SELECT 99 WHERE 0.0
+  }
+} {}
+do_test where-4.7 {
+  execsql {
+    SELECT count(*) FROM t1 WHERE t1.w
+  }
+} {100}
+
+# Verify that IN operators in a WHERE clause are handled correctly.
+# Omit these tests if the build is not capable of sub-queries.
+#
+ifcapable subquery {
+  do_test where-5.1 {
+    count {
+      SELECT * FROM t1 WHERE rowid IN (1,2,3,1234) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 4}
+  do_test where-5.2 {
+    count {
+      SELECT * FROM t1 WHERE rowid+0 IN (1,2,3,1234) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 102}
+  do_test where-5.3a {
+    count {
+      SELECT * FROM t1 WHERE w IN (-1,1,2,3) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 12}
+  do_test where-5.3b {
+    count {
+      SELECT * FROM t1 WHERE w IN (3,-1,1,2) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 12}
+  do_test where-5.3c {
+    count {
+      SELECT * FROM t1 WHERE w IN (3,2,-1,1,2) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 12}
+  do_test where-5.3d {
+    count {
+      SELECT * FROM t1 WHERE w IN (-1,1,2,3) order by 1 DESC;
+    }
+  } {3 1 16 2 1 9 1 0 4 11}
+  do_test where-5.4 {
+    count {
+      SELECT * FROM t1 WHERE w+0 IN (-1,1,2,3) order by 1;
+    }
+  } {1 0 4 2 1 9 3 1 16 102}
+  do_test where-5.5 {
+    count {
+      SELECT * FROM t1 WHERE rowid IN 
+         (select rowid from t1 where rowid IN (-1,2,4))
+      ORDER BY 1;
+    }
+  } {2 1 9 4 2 25 3}
+  do_test where-5.6 {
+    count {
+      SELECT * FROM t1 WHERE rowid+0 IN 
+         (select rowid from t1 where rowid IN (-1,2,4))
+      ORDER BY 1;
+    }
+  } {2 1 9 4 2 25 103}
+  do_test where-5.7 {
+    count {
+      SELECT * FROM t1 WHERE w IN 
+         (select rowid from t1 where rowid IN (-1,2,4))
+      ORDER BY 1;
+    }
+  } {2 1 9 4 2 25 9}
+  do_test where-5.8 {
+    count {
+      SELECT * FROM t1 WHERE w+0 IN 
+         (select rowid from t1 where rowid IN (-1,2,4))
+      ORDER BY 1;
+    }
+  } {2 1 9 4 2 25 103}
+  do_test where-5.9 {
+    count {
+      SELECT * FROM t1 WHERE x IN (1,7) ORDER BY 1;
+    }
+  } {2 1 9 3 1 16 6}
+  do_test where-5.10 {
+    count {
+      SELECT * FROM t1 WHERE x+0 IN (1,7) ORDER BY 1;
+    }
+  } {2 1 9 3 1 16 199}
+  do_test where-5.11 {
+    count {
+      SELECT * FROM t1 WHERE y IN (6400,8100) ORDER BY 1;
+    }
+  } {79 6 6400 89 6 8100 199}
+  do_test where-5.12 {
+    count {
+      SELECT * FROM t1 WHERE x=6 AND y IN (6400,8100) ORDER BY 1;
+    }
+  } {79 6 6400 89 6 8100 7}
+  do_test where-5.13 {
+    count {
+      SELECT * FROM t1 WHERE x IN (1,7) AND y NOT IN (6400,8100) ORDER BY 1;
+    }
+  } {2 1 9 3 1 16 6}
+  do_test where-5.14 {
+    count {
+      SELECT * FROM t1 WHERE x IN (1,7) AND y IN (9,10) ORDER BY 1;
+    }
+  } {2 1 9 4}
+  do_test where-5.15 {
+    count {
+      SELECT * FROM t1 WHERE x IN (1,7) AND y IN (9,16) ORDER BY 1;
+    }
+  } {2 1 9 3 1 16 8}
+  do_test where-5.100 {
+    db eval {
+      SELECT w, x, y FROM t1 WHERE x IN (1,5) AND y IN (9,8,3025,1000,3969)
+       ORDER BY x, y
+    }
+  } {2 1 9 54 5 3025 62 5 3969}
+  do_test where-5.101 {
+    db eval {
+      SELECT w, x, y FROM t1 WHERE x IN (1,5) AND y IN (9,8,3025,1000,3969)
+       ORDER BY x DESC, y DESC
+    }
+  } {62 5 3969 54 5 3025 2 1 9}
+  do_test where-5.102 {
+    db eval {
+      SELECT w, x, y FROM t1 WHERE x IN (1,5) AND y IN (9,8,3025,1000,3969)
+       ORDER BY x DESC, y
+    }
+  } {54 5 3025 62 5 3969 2 1 9}
+  do_test where-5.103 {
+    db eval {
+      SELECT w, x, y FROM t1 WHERE x IN (1,5) AND y IN (9,8,3025,1000,3969)
+       ORDER BY x, y DESC
+    }
+  } {2 1 9 62 5 3969 54 5 3025}
+}
+
+# This procedure executes the SQL.  Then it checks to see if the OP_Sort
+# opcode was executed.  If an OP_Sort did occur, then "sort" is appended
+# to the result.  If no OP_Sort happened, then "nosort" is appended.
+#
+# This procedure is used to check to make sure sorting is or is not
+# occurring as expected.
+#
+proc cksort {sql} {
+  set data [execsql $sql]
+  if {[db status sort]} {set x sort} {set x nosort}
+  lappend data $x
+  return $data
+}
+# Check out the logic that attempts to implement the ORDER BY clause
+# using an index rather than by sorting.
+#
+do_test where-6.1 {
+  execsql {
+    CREATE TABLE t3(a,b,c);
+    CREATE INDEX t3a ON t3(a);
+    CREATE INDEX t3bc ON t3(b,c);
+    CREATE INDEX t3acb ON t3(a,c,b);
+    INSERT INTO t3 SELECT w, 101-w, y FROM t1;
+    SELECT count(*), sum(a), sum(b), sum(c) FROM t3;
+  }
+} {100 5050 5050 348550}
+do_test where-6.2 {
+  cksort {
+    SELECT * FROM t3 ORDER BY a LIMIT 3
+  }
+} {1 100 4 2 99 9 3 98 16 nosort}
+do_test where-6.3 {
+  cksort {
+    SELECT * FROM t3 ORDER BY a+1 LIMIT 3
+  }
+} {1 100 4 2 99 9 3 98 16 sort}
+do_test where-6.4 {
+  cksort {
+    SELECT * FROM t3 WHERE a<10 ORDER BY a LIMIT 3
+  }
+} {1 100 4 2 99 9 3 98 16 nosort}
+do_test where-6.5 {
+  cksort {
+    SELECT * FROM t3 WHERE a>0 AND a<10 ORDER BY a LIMIT 3
+  }
+} {1 100 4 2 99 9 3 98 16 nosort}
+do_test where-6.6 {
+  cksort {
+    SELECT * FROM t3 WHERE a>0 ORDER BY a LIMIT 3
+  }
+} {1 100 4 2 99 9 3 98 16 nosort}
+do_test where-6.7.1 {
+  cksort {
+    SELECT * FROM t3 WHERE b>0 ORDER BY a LIMIT 10
+  }
+} {/1 100 4 2 99 9 3 98 16 .* nosort/}
+do_test where-6.7.2 {
+  cksort {
+    SELECT * FROM t3 WHERE b>0 ORDER BY a LIMIT 1
+  }
+} {1 100 4 nosort}
+ifcapable subquery {
+  do_test where-6.8a {
+    cksort {
+      SELECT * FROM t3 WHERE a IN (3,5,7,1,9,4,2) ORDER BY a LIMIT 3
+    }
+  } {1 100 4 2 99 9 3 98 16 nosort}
+  do_test where-6.8b {
+    cksort {
+      SELECT * FROM t3 WHERE a IN (3,5,7,1,9,4,2) ORDER BY a DESC LIMIT 3
+    }
+  } {9 92 100 7 94 64 5 96 36 nosort}
+}
+do_test where-6.9.1 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.1.1 {
+  cksort {
+    SELECT * FROM t3 WHERE a>=1 AND a=1 AND c>0 ORDER BY a LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.1.2 {
+  cksort {
+    SELECT * FROM t3 WHERE a<2 AND a=1 AND c>0 ORDER BY a LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.2 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a,c LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.3 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY c LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.4 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a DESC LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.5 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a DESC, c DESC LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.6 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY c DESC LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.7 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY c,a LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.8 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a DESC, c ASC LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.9.9 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a ASC, c DESC LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.10 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.11 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a,c LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.12 {
+  cksort {
+    SELECT * FROM t3 WHERE a=1 AND c>0 ORDER BY a,c,b LIMIT 3
+  }
+} {1 100 4 nosort}
+do_test where-6.13 {
+  cksort {
+    SELECT * FROM t3 WHERE a>0 ORDER BY a DESC LIMIT 3
+  }
+} {100 1 10201 99 2 10000 98 3 9801 nosort}
+do_test where-6.13.1 {
+  cksort {
+    SELECT * FROM t3 WHERE a>0 ORDER BY -a LIMIT 3
+  }
+} {100 1 10201 99 2 10000 98 3 9801 sort}
+do_test where-6.14 {
+  cksort {
+    SELECT * FROM t3 ORDER BY b LIMIT 3
+  }
+} {100 1 10201 99 2 10000 98 3 9801 nosort}
+do_test where-6.15 {
+  cksort {
+    SELECT t3.a, t1.x FROM t3, t1 WHERE t3.a=t1.w ORDER BY t3.a LIMIT 3
+  }
+} {1 0 2 1 3 1 nosort}
+do_test where-6.16 {
+  cksort {
+    SELECT t3.a, t1.x FROM t3, t1 WHERE t3.a=t1.w ORDER BY t1.x, t3.a LIMIT 3
+  }
+} {1 0 2 1 3 1 sort}
+do_test where-6.19 {
+  cksort {
+    SELECT y FROM t1 ORDER BY w LIMIT 3;
+  }
+} {4 9 16 nosort}
+do_test where-6.20 {
+  cksort {
+    SELECT y FROM t1 ORDER BY rowid LIMIT 3;
+  }
+} {4 9 16 nosort}
+do_test where-6.21 {
+  cksort {
+    SELECT y FROM t1 ORDER BY rowid, y LIMIT 3;
+  }
+} {4 9 16 nosort}
+do_test where-6.22 {
+  cksort {
+    SELECT y FROM t1 ORDER BY rowid, y DESC LIMIT 3;
+  }
+} {4 9 16 nosort}
+do_test where-6.23 {
+  cksort {
+    SELECT y FROM t1 WHERE y>4 ORDER BY rowid, w, x LIMIT 3;
+  }
+} {9 16 25 nosort}
+do_test where-6.24 {
+  cksort {
+    SELECT y FROM t1 WHERE y>=9 ORDER BY rowid, x DESC, w LIMIT 3;
+  }
+} {9 16 25 nosort}
+do_test where-6.25 {
+  cksort {
+    SELECT y FROM t1 WHERE y>4 AND y<25 ORDER BY rowid;
+  }
+} {9 16 nosort}
+do_test where-6.26 {
+  cksort {
+    SELECT y FROM t1 WHERE y>=4 AND y<=25 ORDER BY oid;
+  }
+} {4 9 16 25 nosort}
+do_test where-6.27 {
+  cksort {
+    SELECT y FROM t1 WHERE y<=25 ORDER BY _rowid_, w+y;
+  }
+} {4 9 16 25 nosort}
+
+
+# Tests for reverse-order sorting.
+#
+do_test where-7.1 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 ORDER BY y;
+  }
+} {8 9 10 11 12 13 14 15 nosort}
+do_test where-7.2 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 ORDER BY y DESC;
+  }
+} {15 14 13 12 11 10 9 8 nosort}
+do_test where-7.3 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>100 ORDER BY y LIMIT 3;
+  }
+} {10 11 12 nosort}
+do_test where-7.4 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>100 ORDER BY y DESC LIMIT 3;
+  }
+} {15 14 13 nosort}
+do_test where-7.5 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>121 ORDER BY y DESC;
+  }
+} {15 14 13 12 11 nosort}
+do_test where-7.6 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=121 ORDER BY y DESC;
+  }
+} {15 14 13 12 11 10 nosort}
+do_test where-7.7 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=121 AND y<196 ORDER BY y DESC;
+  }
+} {12 11 10 nosort}
+do_test where-7.8 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=121 AND y<=196 ORDER BY y DESC;
+  }
+} {13 12 11 10 nosort}
+do_test where-7.9 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>121 AND y<=196 ORDER BY y DESC;
+  }
+} {13 12 11 nosort}
+do_test where-7.10 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>100 AND y<196 ORDER BY y DESC;
+  }
+} {12 11 10 nosort}
+do_test where-7.11 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=121 AND y<196 ORDER BY y;
+  }
+} {10 11 12 nosort}
+do_test where-7.12 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=121 AND y<=196 ORDER BY y;
+  }
+} {10 11 12 13 nosort}
+do_test where-7.13 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>121 AND y<=196 ORDER BY y;
+  }
+} {11 12 13 nosort}
+do_test where-7.14 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>100 AND y<196 ORDER BY y;
+  }
+} {10 11 12 nosort}
+do_test where-7.15 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y<81 ORDER BY y;
+  }
+} {nosort}
+do_test where-7.16 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y<=81 ORDER BY y;
+  }
+} {8 nosort}
+do_test where-7.17 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>256 ORDER BY y;
+  }
+} {nosort}
+do_test where-7.18 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=256 ORDER BY y;
+  }
+} {15 nosort}
+do_test where-7.19 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y<81 ORDER BY y DESC;
+  }
+} {nosort}
+do_test where-7.20 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y<=81 ORDER BY y DESC;
+  }
+} {8 nosort}
+do_test where-7.21 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>256 ORDER BY y DESC;
+  }
+} {nosort}
+do_test where-7.22 {
+  cksort {
+    SELECT w FROM t1 WHERE x=3 AND y>=256 ORDER BY y DESC;
+  }
+} {15 nosort}
+do_test where-7.23 {
+  cksort {
+    SELECT w FROM t1 WHERE x=0 AND y<4 ORDER BY y;
+  }
+} {nosort}
+do_test where-7.24 {
+  cksort {
+    SELECT w FROM t1 WHERE x=0 AND y<=4 ORDER BY y;
+  }
+} {1 nosort}
+do_test where-7.25 {
+  cksort {
+    SELECT w FROM t1 WHERE x=6 AND y>10201 ORDER BY y;
+  }
+} {nosort}
+do_test where-7.26 {
+  cksort {
+    SELECT w FROM t1 WHERE x=6 AND y>=10201 ORDER BY y;
+  }
+} {100 nosort}
+do_test where-7.27 {
+  cksort {
+    SELECT w FROM t1 WHERE x=0 AND y<4 ORDER BY y DESC;
+  }
+} {nosort}
+do_test where-7.28 {
+  cksort {
+    SELECT w FROM t1 WHERE x=0 AND y<=4 ORDER BY y DESC;
+  }
+} {1 nosort}
+do_test where-7.29 {
+  cksort {
+    SELECT w FROM t1 WHERE x=6 AND y>10201 ORDER BY y DESC;
+  }
+} {nosort}
+do_test where-7.30 {
+  cksort {
+    SELECT w FROM t1 WHERE x=6 AND y>=10201 ORDER BY y DESC;
+  }
+} {100 nosort}
+do_test where-7.31 {
+  cksort {
+    SELECT y FROM t1 ORDER BY rowid DESC LIMIT 3
+  }
+} {10201 10000 9801 nosort}
+do_test where-7.32 {
+  cksort {
+    SELECT y FROM t1 WHERE y<25 ORDER BY rowid DESC
+  }
+} {16 9 4 nosort}
+do_test where-7.33 {
+  cksort {
+    SELECT y FROM t1 WHERE y<=25 ORDER BY rowid DESC
+  }
+} {25 16 9 4 nosort}
+do_test where-7.34 {
+  cksort {
+    SELECT y FROM t1 WHERE y<25 AND y>4 ORDER BY rowid DESC, y DESC
+  }
+} {16 9 nosort}
+do_test where-7.35 {
+  cksort {
+    SELECT y FROM t1 WHERE y<25 AND y>=4 ORDER BY rowid DESC
+  }
+} {16 9 4 nosort}
+
+do_test where-8.1 {
+  execsql {
+    CREATE TABLE t4 AS SELECT * FROM t1;
+    CREATE INDEX i4xy ON t4(x,y);
+  }
+  cksort {
+    SELECT w FROM t4 WHERE x=4 and y<1000 ORDER BY y DESC limit 3;
+  }
+} {30 29 28 nosort}
+do_test where-8.2 {
+  execsql {
+    DELETE FROM t4;
+  }
+  cksort {
+    SELECT w FROM t4 WHERE x=4 and y<1000 ORDER BY y DESC limit 3;
+  }
+} {nosort}
+
+# Make sure searches with an index work with an empty table.
+#
+do_test where-9.1 {
+  execsql {
+    CREATE TABLE t5(x PRIMARY KEY);
+    SELECT * FROM t5 WHERE x<10;
+  }
+} {}
+do_test where-9.2 {
+  execsql {
+    SELECT * FROM t5 WHERE x<10 ORDER BY x DESC;
+  }
+} {}
+do_test where-9.3 {
+  execsql {
+    SELECT * FROM t5 WHERE x=10;
+  }
+} {}
+
+do_test where-10.1 {
+  execsql {
+    SELECT 1 WHERE abs(random())<0
+  }
+} {}
+do_test where-10.2 {
+  proc tclvar_func {vname} {return [set ::$vname]}
+  db function tclvar tclvar_func
+  set ::v1 0
+  execsql {
+    SELECT count(*) FROM t1 WHERE tclvar('v1');
+  }
+} {0}
+do_test where-10.3 {
+  set ::v1 1
+  execsql {
+    SELECT count(*) FROM t1 WHERE tclvar('v1');
+  }
+} {100}
+do_test where-10.4 {
+  set ::v1 1
+  proc tclvar_func {vname} {
+    upvar #0 $vname v
+    set v [expr {!$v}]
+    return $v
+  }
+  execsql {
+    SELECT count(*) FROM t1 WHERE tclvar('v1');
+  }
+} {50}
+
+# Ticket #1376.  The query below was causing a segfault.
+# The problem was the age-old error of calling realloc() on an
+# array while there are still pointers to individual elements of
+# that array.
+#
+do_test where-11.1 {
+  execsql {
+   CREATE TABLE t99(Dte INT, X INT);
+   DELETE FROM t99 WHERE (Dte = 2451337) OR (Dte = 2451339) OR
+     (Dte BETWEEN 2451345 AND 2451347) OR (Dte = 2451351) OR 
+     (Dte BETWEEN 2451355 AND 2451356) OR (Dte = 2451358) OR
+     (Dte = 2451362) OR (Dte = 2451365) OR (Dte = 2451367) OR
+     (Dte BETWEEN 2451372 AND 2451376) OR (Dte BETWEEN 2451382 AND 2451384) OR
+     (Dte = 2451387) OR (Dte BETWEEN 2451389 AND 2451391) OR 
+     (Dte BETWEEN 2451393 AND 2451395) OR (Dte = 2451400) OR 
+     (Dte = 2451402) OR (Dte = 2451404) OR (Dte BETWEEN 2451416 AND 2451418) OR 
+     (Dte = 2451422) OR (Dte = 2451426) OR (Dte BETWEEN 2451445 AND 2451446) OR
+     (Dte = 2451456) OR (Dte = 2451458) OR (Dte BETWEEN 2451465 AND 2451467) OR
+     (Dte BETWEEN 2451469 AND 2451471) OR (Dte = 2451474) OR
+     (Dte BETWEEN 2451477 AND 2451501) OR (Dte BETWEEN 2451503 AND 2451509) OR
+     (Dte BETWEEN 2451511 AND 2451514) OR (Dte BETWEEN 2451518 AND 2451521) OR
+     (Dte BETWEEN 2451523 AND 2451531) OR (Dte BETWEEN 2451533 AND 2451537) OR
+     (Dte BETWEEN 2451539 AND 2451544) OR (Dte BETWEEN 2451546 AND 2451551) OR
+     (Dte BETWEEN 2451553 AND 2451555) OR (Dte = 2451557) OR
+     (Dte BETWEEN 2451559 AND 2451561) OR (Dte = 2451563) OR
+     (Dte BETWEEN 2451565 AND 2451566) OR (Dte BETWEEN 2451569 AND 2451571) OR 
+     (Dte = 2451573) OR (Dte = 2451575) OR (Dte = 2451577) OR (Dte = 2451581) OR
+     (Dte BETWEEN 2451583 AND 2451586) OR (Dte BETWEEN 2451588 AND 2451592) OR 
+     (Dte BETWEEN 2451596 AND 2451598) OR (Dte = 2451600) OR
+     (Dte BETWEEN 2451602 AND 2451603) OR (Dte = 2451606) OR (Dte = 2451611);
+  }
+} {}
+
+# Ticket #2116:  Make sure sorting by index works well with nn INTEGER PRIMARY
+# KEY.
+#
+do_test where-12.1 {
+  execsql {
+    CREATE TABLE t6(a INTEGER PRIMARY KEY, b TEXT);
+    INSERT INTO t6 VALUES(1,'one');
+    INSERT INTO t6 VALUES(4,'four');
+    CREATE INDEX t6i1 ON t6(b);
+  }
+  cksort {
+    SELECT * FROM t6 ORDER BY b;
+  }
+} {4 four 1 one nosort}
+do_test where-12.2 {
+  cksort {
+    SELECT * FROM t6 ORDER BY b, a;
+  }
+} {4 four 1 one nosort}
+do_test where-12.3 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a;
+  }
+} {1 one 4 four nosort}
+do_test where-12.4 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a, b;
+  }
+} {1 one 4 four nosort}
+do_test where-12.5 {
+  cksort {
+    SELECT * FROM t6 ORDER BY b DESC;
+  }
+} {1 one 4 four nosort}
+do_test where-12.6 {
+  cksort {
+    SELECT * FROM t6 ORDER BY b DESC, a DESC;
+  }
+} {1 one 4 four nosort}
+do_test where-12.7 {
+  cksort {
+    SELECT * FROM t6 ORDER BY b DESC, a ASC;
+  }
+} {1 one 4 four sort}
+do_test where-12.8 {
+  cksort {
+    SELECT * FROM t6 ORDER BY b ASC, a DESC;
+  }
+} {4 four 1 one sort}
+do_test where-12.9 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a DESC;
+  }
+} {4 four 1 one nosort}
+do_test where-12.10 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a DESC, b DESC;
+  }
+} {4 four 1 one nosort}
+do_test where-12.11 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a DESC, b ASC;
+  }
+} {4 four 1 one nosort}
+do_test where-12.12 {
+  cksort {
+    SELECT * FROM t6 ORDER BY a ASC, b DESC;
+  }
+} {1 one 4 four nosort}
+do_test where-13.1 {
+  execsql {
+    CREATE TABLE t7(a INTEGER PRIMARY KEY, b TEXT);
+    INSERT INTO t7 VALUES(1,'one');
+    INSERT INTO t7 VALUES(4,'four');
+    CREATE INDEX t7i1 ON t7(b);
+  }
+  cksort {
+    SELECT * FROM t7 ORDER BY b;
+  }
+} {4 four 1 one nosort}
+do_test where-13.2 {
+  cksort {
+    SELECT * FROM t7 ORDER BY b, a;
+  }
+} {4 four 1 one nosort}
+do_test where-13.3 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a;
+  }
+} {1 one 4 four nosort}
+do_test where-13.4 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a, b;
+  }
+} {1 one 4 four nosort}
+do_test where-13.5 {
+  cksort {
+    SELECT * FROM t7 ORDER BY b DESC;
+  }
+} {1 one 4 four nosort}
+do_test where-13.6 {
+  cksort {
+    SELECT * FROM t7 ORDER BY b DESC, a DESC;
+  }
+} {1 one 4 four nosort}
+do_test where-13.7 {
+  cksort {
+    SELECT * FROM t7 ORDER BY b DESC, a ASC;
+  }
+} {1 one 4 four sort}
+do_test where-13.8 {
+  cksort {
+    SELECT * FROM t7 ORDER BY b ASC, a DESC;
+  }
+} {4 four 1 one sort}
+do_test where-13.9 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a DESC;
+  }
+} {4 four 1 one nosort}
+do_test where-13.10 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a DESC, b DESC;
+  }
+} {4 four 1 one nosort}
+do_test where-13.11 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a DESC, b ASC;
+  }
+} {4 four 1 one nosort}
+do_test where-13.12 {
+  cksort {
+    SELECT * FROM t7 ORDER BY a ASC, b DESC;
+  }
+} {1 one 4 four nosort}
+
+# Ticket #2211.
+#
+# When optimizing out ORDER BY clauses, make sure that trailing terms
+# of the ORDER BY clause do not reference other tables in a join.
+#
+if {[permutation] != "no_optimization"} {
+do_test where-14.1 {
+  execsql {
+    CREATE TABLE t8(a INTEGER PRIMARY KEY, b TEXT UNIQUE, c CHAR(100));
+    INSERT INTO t8(a,b) VALUES(1,'one');
+    INSERT INTO t8(a,b) VALUES(4,'four');
+  }
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.a, y.b
+  } 
+} {1/4 1/1 4/4 4/1 nosort}
+do_test where-14.2 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.a, y.b DESC
+  } 
+} {1/1 1/4 4/1 4/4 nosort}
+do_test where-14.3 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.a, x.b
+  } 
+} {1/4 1/1 4/4 4/1 nosort}
+do_test where-14.4 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.a, x.b DESC
+  } 
+} {1/4 1/1 4/4 4/1 nosort}
+do_test where-14.5 {
+  # This test case changed from "nosort" to "sort". See ticket 2a5629202f.
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a||x.b
+  } 
+} {/4/[14] 4/[14] 1/[14] 1/[14] sort/}
+do_test where-14.6 {
+  # This test case changed from "nosort" to "sort". See ticket 2a5629202f.
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a||x.b DESC
+  } 
+} {/4/[14] 4/[14] 1/[14] 1/[14] sort/}
+do_test where-14.7 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, y.a||y.b
+  } 
+} {4/1 4/4 1/1 1/4 sort}
+do_test where-14.7.1 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a, y.a||y.b
+  } 
+} {4/1 4/4 1/1 1/4 sort}
+do_test where-14.7.2 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a, x.a||x.b
+  } 
+} {4/4 4/1 1/4 1/1 nosort}
+do_test where-14.8 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, y.a||y.b DESC
+  } 
+} {4/4 4/1 1/4 1/1 sort}
+do_test where-14.9 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a||y.b
+  } 
+} {4/4 4/1 1/4 1/1 sort}
+do_test where-14.10 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, x.a||y.b DESC
+  } 
+} {4/1 4/4 1/1 1/4 sort}
+do_test where-14.11 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, y.a||x.b
+  } 
+} {4/1 4/4 1/1 1/4 sort}
+do_test where-14.12 {
+  cksort {
+    SELECT x.a || '/' || y.a FROM t8 x, t8 y ORDER BY x.b, y.a||x.b DESC
+  } 
+} {4/4 4/1 1/4 1/1 sort}
+} ;# {permutation != "no_optimization"}
+
+# Ticket #2445.
+#
+# There was a crash that could occur when a where clause contains an
+# alias for an expression in the result set, and that expression retrieves
+# a column of the second or subsequent table in a join.
+#
+do_test where-15.1 {
+  execsql {
+    CREATE TEMP TABLE t1 (a, b, c, d, e);
+    CREATE TEMP TABLE t2 (f);
+    SELECT t1.e AS alias FROM t2, t1 WHERE alias = 1 ;
+  }
+} {}
+
+# Ticket #3408.
+# 
+# The branch of code in where.c that generated rowid lookups was
+# incorrectly deallocating a constant register, meaning that if the 
+# vdbe code ran more than once, the second time around the constant
+# value may have been clobbered by some other value.
+# 
+do_test where-16.1 {
+  execsql {
+    CREATE TABLE a1(id INTEGER PRIMARY KEY, v);
+    CREATE TABLE a2(id INTEGER PRIMARY KEY, v);
+    INSERT INTO a1 VALUES(1, 'one');
+    INSERT INTO a1 VALUES(2, 'two');
+    INSERT INTO a2 VALUES(1, 'one');
+    INSERT INTO a2 VALUES(2, 'two');
+  }
+} {}
+do_test where-16.2 {
+  execsql {
+    SELECT * FROM a2 CROSS JOIN a1 WHERE a1.id=1 AND a1.v='one';
+  }
+} {1 one 1 one 2 two 1 one}
+
+# The actual problem reported in #3408.
+do_test where-16.3 {
+  execsql {
+    CREATE TEMP TABLE foo(idx INTEGER);
+    INSERT INTO foo VALUES(1);
+    INSERT INTO foo VALUES(1);
+    INSERT INTO foo VALUES(1);
+    INSERT INTO foo VALUES(2);
+    INSERT INTO foo VALUES(2);
+    CREATE TEMP TABLE bar(stuff INTEGER);
+    INSERT INTO bar VALUES(100);
+    INSERT INTO bar VALUES(200);
+    INSERT INTO bar VALUES(300);
+  }
+} {}
+do_test where-16.4 {
+  execsql {
+    SELECT bar.RowID id FROM foo, bar WHERE foo.idx = bar.RowID AND id = 2;
+  }
+} {2 2}
+
+integrity_check {where-99.0}
+
+#---------------------------------------------------------------------
+# These tests test that a bug surrounding the use of ForceInt has been
+# fixed in where.c.
+#
+do_test where-17.1 {
+  execsql {
+    CREATE TABLE tbooking (
+      id INTEGER PRIMARY KEY,
+      eventtype INTEGER NOT NULL
+    );
+    INSERT INTO tbooking VALUES(42, 3);
+    INSERT INTO tbooking VALUES(43, 4);
+  }
+} {}
+do_test where-17.2 {
+  execsql {
+    SELECT a.id
+    FROM tbooking AS a
+    WHERE a.eventtype=3;
+  }
+} {42}
+do_test where-17.3 {
+  execsql {
+    SELECT a.id, (SELECT b.id FROM tbooking AS b WHERE b.id>a.id)
+    FROM tbooking AS a
+    WHERE a.eventtype=3;
+  }
+} {42 43}
+do_test where-17.4 {
+  execsql {
+    SELECT a.id, (SELECT b.id FROM tbooking AS b WHERE b.id>a.id)
+    FROM (SELECT 1.5 AS id) AS a
+  }
+} {1.5 42}
+do_test where-17.5 {
+  execsql {
+    CREATE TABLE tother(a, b);
+    INSERT INTO tother VALUES(1, 3.7);
+    SELECT id, a FROM tbooking, tother WHERE id>a;
+  }
+} {42 1 43 1}
+
+# Ticket [be84e357c035d068135f20bcfe82761bbf95006b]  2013-09-03
+# Segfault during query involving LEFT JOIN column in the ORDER BY clause.
+#
+do_execsql_test where-18.1 {
+  CREATE TABLE t181(a);
+  CREATE TABLE t182(b,c);
+  INSERT INTO t181 VALUES(1);
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY c IS NULL;
+} {1}
+do_execsql_test where-18.2 {
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY +c;
+} {1}
+do_execsql_test where-18.3 {
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY c;
+} {1}
+do_execsql_test where-18.4 {
+  INSERT INTO t181 VALUES(1),(1),(1),(1);
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY +c;
+} {1}
+do_execsql_test where-18.5 {
+  INSERT INTO t181 VALUES(2);
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY c IS NULL, +a;
+} {1 2}
+do_execsql_test where-18.6 {
+  INSERT INTO t181 VALUES(2);
+  SELECT DISTINCT a FROM t181 LEFT JOIN t182 ON a=b ORDER BY +a, +c IS NULL;
+} {1 2}
+
+# Make sure the OR optimization works on a JOIN
+#
+do_execsql_test where-19.0 {
+  CREATE TABLE t191(a INT UNIQUE NOT NULL, b INT UNIQUE NOT NULL,c,d);
+  CREATE INDEX t191a ON t1(a);
+  CREATE INDEX t191b ON t1(b);
+  CREATE TABLE t192(x INTEGER PRIMARY KEY,y INT, z INT);
+
+  EXPLAIN QUERY PLAN
+  SELECT t191.rowid FROM t192, t191 WHERE (a=y OR b=y) AND x=?1;
+} {/.* sqlite_autoindex_t191_1 .* sqlite_autoindex_t191_2 .*/}
+
+# 2018-04-24 ticket [https://www.sqlite.org/src/info/4ba5abf65c5b0f9a]
+# Index on expressions leads to an incorrect answer for a LEFT JOIN
+#
+do_execsql_test where-20.0 {
+  CREATE TABLE t201(x);
+  CREATE TABLE t202(y, z);
+  INSERT INTO t201 VALUES('key');
+  INSERT INTO t202 VALUES('key', -1);
+  CREATE INDEX t202i ON t202(y, ifnull(z, 0));
+  SELECT count(*) FROM t201 LEFT JOIN t202 ON (x=y) WHERE ifnull(z, 0) >=0;
+} {0}
+
+do_execsql_test where-21.0 {
+  CREATE TABLE t12(a, b, c);
+  CREATE TABLE t13(x);
+  CREATE INDEX t12ab ON t12(b, a);
+  CREATE INDEX t12ac ON t12(c, a);
+
+  INSERT INTO t12 VALUES(4, 0, 1);
+  INSERT INTO t12 VALUES(4, 1, 0);
+  INSERT INTO t12 VALUES(5, 0, 1);
+  INSERT INTO t12 VALUES(5, 1, 0);
+
+  INSERT INTO t13 VALUES(1), (2), (3), (4);
+}
+do_execsql_test where-21.1 {
+  SELECT * FROM t12 WHERE 
+  a = (SELECT * FROM (SELECT count(*) FROM t13 LIMIT 5) ORDER BY 1 LIMIT 10) 
+  AND (b=1 OR c=1);
+} {
+  4 1 0
+  4 0 1
+}
+
+# 2018-11-05: ticket [https://www.sqlite.org/src/tktview/65eb38f6e46de8c75e188a]
+# Incorrect result in LEFT JOIN when STAT4 is enabled.
+#
+sqlite3 db :memory:
+do_execsql_test where-22.1 {
+  CREATE TABLE t1(a INT);
+  CREATE INDEX t1a ON t1(a);
+  INSERT INTO t1(a) VALUES(NULL),(NULL),(42),(NULL),(NULL);
+  CREATE TABLE t2(dummy INT);
+  SELECT count(*) FROM t1 LEFT JOIN t2 ON a IS NOT NULL;
+} {5}
+
+# 20190-02-22:  A bug introduced by checkin
+# https://www.sqlite.org/src/info/fa792714ae62fa98.
+#
+do_execsql_test where-23.0 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY);
+  INSERT INTO t1(a) VALUES(1),(2),(3);
+  CREATE TABLE t2(x INTEGER PRIMARY KEY, y INT);
+  INSERT INTO t2(y) VALUES(2),(3);
+  SELECT * FROM t1, t2 WHERE a=y AND y=3;
+} {3 2 3}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test where-24.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, 'one');
+  INSERT INTO t1 VALUES(2, 'two');
+  INSERT INTO t1 VALUES(3, 'three');
+  INSERT INTO t1 VALUES(4, 'four');
+}
+
+foreach {tn sql res} {
+  1 "SELECT b FROM t1"                   {one two three four}
+  2 "SELECT b FROM t1 WHERE a<4"         {one two three}
+  3 "SELECT b FROM t1 WHERE a>1"         {two three four}
+  4 "SELECT b FROM t1 WHERE a>1 AND a<4" {two three}
+
+  5 "SELECT b FROM t1 WHERE a>? AND a<4" {}
+  6 "SELECT b FROM t1 WHERE a>1 AND a<?" {}
+  7 "SELECT b FROM t1 WHERE a>? AND a<?" {}
+
+  7 "SELECT b FROM t1 WHERE a>=? AND a<=4" {}
+  8 "SELECT b FROM t1 WHERE a>=1 AND a<=?" {}
+  9 "SELECT b FROM t1 WHERE a>=? AND a<=?" {}
+} {
+  set rev [list]
+  foreach r $res { set rev [concat $r $rev] }
+
+  do_execsql_test where-24.$tn.1 "$sql"                     $res
+  do_execsql_test where-24.$tn.2 "$sql ORDER BY rowid"      $res
+  do_execsql_test where-24.$tn.3 "$sql ORDER BY rowid DESC" $rev
+
+  do_execsql_test where-24-$tn.4 "
+    BEGIN;
+      DELETE FROM t1;
+      $sql;
+      $sql ORDER BY rowid;
+      $sql ORDER BY rowid DESC;
+    ROLLBACK;
+  "
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test where-25.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE UNIQUE INDEX i1 ON t1(c);
+  INSERT INTO t1 VALUES(1, 'one', 'i');
+  INSERT INTO t1 VALUES(2, 'two', 'ii');
+
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b, c);
+  CREATE UNIQUE INDEX i2 ON t2(c);
+  INSERT INTO t2 VALUES(1, 'one', 'i');
+  INSERT INTO t2 VALUES(2, 'two', 'ii');
+  INSERT INTO t2 VALUES(3, 'three', 'iii');
+
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_schema SET rootpage = (
+    SELECT rootpage FROM sqlite_schema WHERE name = 'i2'
+  ) WHERE name = 'i1';
+}
+db close
+sqlite3 db test.db
+do_catchsql_test where-25.1 {
+  DELETE FROM t1 WHERE c='iii'
+} {1 {database disk image is malformed}}
+do_catchsql_test where-25.2 {
+  INSERT INTO t1 VALUES(4, 'four', 'iii') 
+    ON CONFLICT(c) DO UPDATE SET b=NULL
+} {1 {database disk image is malformed}}
+
+reset_db
+do_execsql_test where-25.3 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+  CREATE UNIQUE INDEX i1 ON t1(c);
+  INSERT INTO t1 VALUES(1, 'one', 'i');
+  INSERT INTO t1 VALUES(2, 'two', 'ii');
+
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b, c);
+  CREATE UNIQUE INDEX i2 ON t2(c);
+  INSERT INTO t2 VALUES(1, 'one', 'i');
+  INSERT INTO t2 VALUES(2, 'two', 'ii');
+  INSERT INTO t2 VALUES(3, 'three', 'iii');
+
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_schema SET rootpage = (
+    SELECT rootpage FROM sqlite_schema WHERE name = 'i2'
+  ) WHERE name = 'i1';
+}
+db close
+sqlite3 db test.db
+do_catchsql_test where-25.4 {
+  SELECT * FROM t1 WHERE c='iii'
+} {0 {}}
+do_catchsql_test where-25.5 {
+  INSERT INTO t1 VALUES(4, 'four', 'iii') 
+    ON CONFLICT(c) DO UPDATE SET b=NULL
+} {1 {corrupt database}}
+
+# 2019-08-21 Ticket https://www.sqlite.org/src/info/d9f584e936c7a8d0
+#
+db close
+sqlite3 db :memory:
+do_execsql_test where-26.1 {
+  CREATE TABLE t0(c0 INTEGER PRIMARY KEY, c1 TEXT);
+  INSERT INTO t0(c0, c1) VALUES (1, 'a');
+  CREATE TABLE t1(c0 INT PRIMARY KEY, c1 TEXT);
+  INSERT INTO t1(c0, c1) VALUES (1, 'a');
+  SELECT * FROM t0 WHERE '-1' BETWEEN 0 AND t0.c0;
+} {1 a}
+do_execsql_test where-26.2 {
+  SELECT * FROM t1 WHERE '-1' BETWEEN 0 AND t1.c0;
+} {1 a}
+do_execsql_test where-26.3 {
+  SELECT * FROM t0 WHERE '-1'>=0 AND '-1'<=t0.c0;
+} {1 a}
+do_execsql_test where-26.4 {
+  SELECT * FROM t1 WHERE '-1'>=0 AND '-1'<=t1.c0;
+} {1 a}
+do_execsql_test where-26.5 {
+  SELECT '-1' BETWEEN 0 AND t0.c0 FROM t0;
+} {1}
+do_execsql_test where-26.6 {
+  SELECT '-1' BETWEEN 0 AND t1.c0 FROM t1;
+} {1}
+do_execsql_test where-26.7 {
+  SELECT '-1'>=0 AND '-1'<=t0.c0 FROM t0;
+} {1}
+do_execsql_test where-26.8 {
+  SELECT '-1'>=0 AND '-1'<=t1.c0 FROM t1;
+} {1}
+
+finish_test

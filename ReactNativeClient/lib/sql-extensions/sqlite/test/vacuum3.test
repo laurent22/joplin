@@ -1,0 +1,340 @@
+# 2007 March 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is changing the database page size using a 
+# VACUUM statement.
+#
+# $Id: vacuum3.test,v 1.9 2008/08/26 21:07:27 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If the VACUUM statement is disabled in the current build, skip all
+# the tests in this file.
+#
+ifcapable !vacuum {
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------
+# Test cases vacuum3-1.* convert a simple 2-page database between a 
+# few different page sizes.
+#
+do_test vacuum3-1.1 {
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+  }
+} {}
+do_test vacuum3-1.2 {
+  execsql { PRAGMA page_size }
+} {1024}
+do_test vacuum3-1.3 {
+  file size test.db
+} {2048}
+
+set I 4
+foreach {request actual database} [list \
+  2048 2048 4096                        \
+  1024 1024 2048                        \
+  1170 1024 2048                        \
+  256  1024 2048                        \
+  512  512  1024                        \
+  4096 4096 8192                        \
+  1024 1024 2048                        \
+] {
+  do_test vacuum3-1.$I.1 {
+    execsql " 
+      PRAGMA page_size = $request;
+      VACUUM;
+    "
+    execsql { PRAGMA page_size }
+  } $actual
+  do_test vacuum3-1.$I.2 {
+    file size test.db
+  } $database
+  do_test vacuum3-1.$I.3 {
+    execsql { SELECT * FROM t1 }
+  } {1 2 3}
+  integrity_check vacuum3-1.$I.4
+
+  incr I
+}
+
+#-------------------------------------------------------------------
+# Test cases vacuum3-2.* convert a simple 3-page database between a 
+# few different page sizes.
+#
+do_test vacuum3-2.1 {
+  execsql {
+    PRAGMA page_size = 1024;
+    VACUUM;
+    ALTER TABLE t1 ADD COLUMN d;
+    UPDATE t1 SET d = randomblob(1000);
+  }
+  file size test.db
+} {3072}
+do_test vacuum3-2.2 {
+  execsql { PRAGMA page_size }
+} {1024}
+do_test vacuum3-2.3 {
+  set blob [db one {select d from t1}]
+  string length $blob
+} {1000}
+
+set I 4
+foreach {request actual database} [list \
+  2048 2048 4096                        \
+  1024 1024 3072                        \
+  1170 1024 3072                        \
+  256  1024 3072                        \
+  512  512  2048                        \
+  4096 4096 8192                        \
+  1024 1024 3072                        \
+] {
+  do_test vacuum3-2.$I.1 {
+    execsql " 
+      PRAGMA page_size = $request;
+      VACUUM;
+    "
+    execsql { PRAGMA page_size }
+  } $actual
+  do_test vacuum3-2.$I.2 {
+    file size test.db
+  } $database
+  do_test vacuum3-2.$I.3 {
+    execsql { SELECT * FROM t1 }
+  } [list 1 2 3 $blob]
+  integrity_check vacuum3-1.$I.4
+
+  incr I
+}
+
+#-------------------------------------------------------------------
+# Test cases vacuum3-3.* converts a database large enough to include
+# the locking page (in a test environment) between few different 
+# page sizes.
+#
+proc signature {} {
+  return [db eval {SELECT count(*), md5sum(a), md5sum(b), md5sum(c) FROM abc}]
+}
+do_test vacuum3-3.1 {
+  execsql "
+    PRAGMA page_size = 1024;
+    BEGIN;
+    CREATE TABLE abc(a PRIMARY KEY, b, c);
+    INSERT INTO abc VALUES(randomblob(100), randomblob(200), randomblob(1000));
+    INSERT INTO abc 
+        SELECT randomblob(1000), randomblob(200), randomblob(100)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(100), randomblob(200), randomblob(1000)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(100), randomblob(200), randomblob(1000)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(100), randomblob(200), randomblob(1000)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(100), randomblob(200), randomblob(1000)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(25), randomblob(45), randomblob(9456)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(100), randomblob(200), randomblob(1000)
+        FROM abc;
+    INSERT INTO abc 
+        SELECT randomblob(25), randomblob(45), randomblob(9456)
+        FROM abc;
+    COMMIT;
+  "
+} {}
+do_test vacuum3-3.2 {
+  execsql { PRAGMA page_size }
+} {1024}
+
+set ::sig [signature]
+
+set I 3
+foreach {request actual} [list \
+  2048 2048                    \
+  1024 1024                    \
+  1170 1024                    \
+  256  1024                    \
+  512  512                     \
+  4096 4096                    \
+  1024 1024                    \
+] {
+  do_test vacuum3-3.$I.1 {
+    execsql " 
+      PRAGMA page_size = $request;
+      VACUUM;
+    "
+    execsql { PRAGMA page_size }
+  } $actual
+  do_test vacuum3-3.$I.2 {
+    signature
+  } $::sig
+  integrity_check vacuum3-3.$I.3
+
+  incr I
+}
+
+do_test vacuum3-4.1 {
+  db close
+  delete_file test.db
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size=1024;
+    CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(1, 2, 3);
+    INSERT INTO abc VALUES(4, 5, 6);
+  }
+  execsql { SELECT * FROM abc }
+} {1 2 3 4 5 6}
+do_test vacuum3-4.2 {
+  sqlite3 db2 test.db
+  execsql { SELECT * FROM abc } db2
+} {1 2 3 4 5 6}
+do_test vacuum3-4.3 {
+  execsql { 
+    PRAGMA page_size = 2048;
+    VACUUM;
+  }
+  execsql { SELECT * FROM abc }
+} {1 2 3 4 5 6}
+do_test vacuum3-4.4 {
+  execsql { SELECT * FROM abc } db2
+} {1 2 3 4 5 6}
+do_test vacuum3-4.5 {
+  execsql {
+    PRAGMA page_size=16384;
+    VACUUM;
+  } db2
+  execsql { SELECT * FROM abc } db2
+} {1 2 3 4 5 6}
+do_test vacuum3-4.6 {
+  execsql {
+    PRAGMA page_size=1024;
+    VACUUM;
+  }
+  execsql { SELECT * FROM abc } db2
+} {1 2 3 4 5 6}
+
+# Unable to change the page-size of an in-memory using vacuum.
+db2 close
+sqlite3 db2 :memory:
+do_test vacuum3-5.1 {
+  db2 eval {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(1234);
+    PRAGMA page_size=4096;
+    VACUUM;
+    SELECT * FROM t1;
+  }
+} {1234}
+do_test vacuum3-5.2 {
+  db2 eval {
+    PRAGMA page_size
+  }
+} {1024}
+
+set create_database_sql {
+  BEGIN; 
+  CREATE TABLE t1(a, b, c); 
+  INSERT INTO t1 VALUES(1, randstr(50,50), randstr(50,50)); 
+  INSERT INTO t1 SELECT a+2, b||'-'||rowid, c||'-'||rowid FROM t1; 
+  INSERT INTO t1 SELECT a+4, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 SELECT a+8, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 SELECT a+16, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 SELECT a+32, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 SELECT a+64, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 SELECT a+128, b||'-'||rowid, c||'-'||rowid FROM t1;
+  INSERT INTO t1 VALUES(1, randstr(600,600), randstr(600,600));
+  CREATE TABLE t2 AS SELECT * FROM t1;
+  CREATE TABLE t3 AS SELECT * FROM t1;
+  COMMIT;
+  DROP TABLE t2;
+}
+
+do_ioerr_test vacuum3-ioerr-1 -cksum true -sqlprep "
+  PRAGMA page_size = 1024;
+  $create_database_sql
+" -sqlbody {
+  PRAGMA page_size = 4096;
+  VACUUM;
+} 
+do_ioerr_test vacuum3-ioerr-2 -cksum true -sqlprep " 
+  PRAGMA page_size = 2048;
+  $create_database_sql
+" -sqlbody {
+  PRAGMA page_size = 512;
+  VACUUM;
+} 
+
+ifcapable autovacuum {
+  do_ioerr_test vacuum3-ioerr-3 -cksum true -sqlprep "
+    PRAGMA auto_vacuum = 0;
+    $create_database_sql
+  " -sqlbody {
+    PRAGMA auto_vacuum = 1;
+    VACUUM;
+  } 
+  do_ioerr_test vacuum3-ioerr-4 -cksum true -sqlprep "
+    PRAGMA auto_vacuum = 1;
+    $create_database_sql
+  " -sqlbody {
+    PRAGMA auto_vacuum = 0;
+    VACUUM;
+  } 
+}
+
+source $testdir/malloc_common.tcl
+if {$MEMDEBUG} {
+  do_malloc_test vacuum3-malloc-1 -sqlprep { 
+    PRAGMA page_size = 2048;
+    BEGIN; 
+    CREATE TABLE t1(a, b, c); 
+    INSERT INTO t1 VALUES(1, randstr(50,50), randstr(50,50)); 
+    INSERT INTO t1 SELECT a+2, b||'-'||rowid, c||'-'||rowid FROM t1; 
+    INSERT INTO t1 SELECT a+4, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+8, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+16, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+32, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+64, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 SELECT a+128, b||'-'||rowid, c||'-'||rowid FROM t1;
+    INSERT INTO t1 VALUES(1, randstr(600,600), randstr(600,600));
+    CREATE TABLE t2 AS SELECT * FROM t1;
+    CREATE TABLE t3 AS SELECT * FROM t1;
+    COMMIT;
+    DROP TABLE t2;
+  } -sqlbody {
+    PRAGMA page_size = 512;
+    VACUUM;
+  } 
+  do_malloc_test vacuum3-malloc-2 -sqlprep { 
+    PRAGMA encoding=UTF16;
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    CREATE TABLE t2(x,y,z);
+    INSERT INTO t2 SELECT * FROM t1;
+  } -sqlbody {
+    VACUUM;
+  } 
+}
+
+finish_test

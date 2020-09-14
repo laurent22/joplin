@@ -1,0 +1,68 @@
+# 2009 January 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test the outcome of a writer crashing within a call to the VFS
+# xWrite function.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix writecrash
+
+do_not_use_codec
+
+
+if {$tcl_platform(platform)=="windows"} {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB UNIQUE);
+  WITH s(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<100
+  )
+  INSERT INTO t1 SELECT NULL, randomblob(900) FROM s;
+} {}
+
+set bGo 1
+for {set tn 1} {$bGo} {incr tn} {
+
+db close
+sqlite3 db test.db
+
+  do_test 1.$tn.1 {
+    set res [crash_on_write $tn {
+      UPDATE t1 SET b = randomblob(899) WHERE (a%3)==0
+    }]
+    set bGo 0
+    if {[string match {1 {child killed:*}} $res]} {
+      set res {0 {}}
+      set bGo 1
+    }
+    set res
+  } {0 {}}
+
+#db close
+#sqlite3 db test.db
+
+  do_execsql_test 1.$tn.2 { PRAGMA integrity_check } {ok}
+
+db close
+sqlite3 db test.db
+
+  do_execsql_test 1.$tn.3 { PRAGMA integrity_check } {ok}
+}
+
+
+
+finish_test

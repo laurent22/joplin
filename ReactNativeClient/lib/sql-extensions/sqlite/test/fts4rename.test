@@ -1,0 +1,43 @@
+# 2019 April 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/fts3_common.tcl
+set ::testprefix fts4rename
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE temp.t1 USING fts3(a);
+  BEGIN;
+  CREATE TABLE t2(x);
+} {}
+
+do_catchsql_test 1.1 {
+  ALTER TABLE t1_content RENAME c0a TO docid;
+} {1 {duplicate column name: docid}}
+
+do_catchsql_test 1.2 {
+  UPDATE t1 SET Col0 = 1 ;
+} {1 {no such column: Col0}}
+
+do_catchsql_test 1.3 {
+  ROLLBACK;
+  DROP TABLE t1;
+} {0 {}}
+
+finish_test

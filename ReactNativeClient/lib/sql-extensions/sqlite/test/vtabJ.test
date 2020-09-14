@@ -1,0 +1,126 @@
+# 2017-08-10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements tests of writing to WITHOUT ROWID virtual tables
+# using the tclvar eponymous virtual table.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix vtabJ
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_tclvar_module db
+
+unset -nocomplain vtabJ
+do_test 100 {
+  set vtabJ(1) this
+  set vtabJ(two) is
+  set vtabJ(3) {a test}
+  db eval {
+    SELECT fullname, value FROM tclvar WHERE name='vtabJ' ORDER BY fullname;
+  }
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(two) is}
+
+do_execsql_test 110 {
+  INSERT INTO tclvar(fullname, value)
+    VALUES('vtabJ(4)',4),('vtabJ(five)',555);
+  SELECT fullname, value FROM tclvar WHERE name='vtabJ' ORDER BY fullname;
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(4) 4 vtabJ(five) 555 vtabJ(two) is}
+do_test 111 {
+  set res {}
+  foreach vname [lsort [array names vtabJ]] {
+    lappend res vtabJ($vname) $vtabJ($vname)
+  }
+  set res
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(4) 4 vtabJ(five) 555 vtabJ(two) is}
+
+do_test 120 {
+  db eval {
+    INSERT INTO tclvar(fullname, value) VALUES('vtabJ(4)',444);
+  }
+  set vtabJ(4)
+} {444}
+
+do_test 130 {
+  db eval {
+    INSERT INTO tclvar(fullname, value) VALUES('vtabJ(4)',NULL);
+  }
+  info exists vtabJ(4)
+} {0}
+
+do_test 140 {
+  db eval {
+    UPDATE tclvar SET value=55 WHERE fullname='vtabJ(five)';
+  }
+  set vtabJ(five)
+} {55}
+
+do_test 150 {
+  db eval {
+    UPDATE tclvar SET fullname='vtabJ(5)' WHERE fullname='vtabJ(five)';
+  }
+  set vtabJ(5)
+} {55}
+do_test 151 {
+  info exists vtabJ(five)
+} {0}
+do_test 152 {
+  set res {}
+  foreach vname [lsort [array names vtabJ]] {
+    lappend res vtabJ($vname) $vtabJ($vname)
+  }
+  set res
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(5) 55 vtabJ(two) is}
+
+do_execsql_test 160 {
+  SELECT fullname FROM tclvar WHERE arrayname='two'
+} {vtabJ(two)}
+do_execsql_test 161 {
+  DELETE FROM tclvar WHERE arrayname='two';
+  SELECT fullname, value FROM tclvar WHERE name='vtabJ' ORDER BY fullname;
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(5) 55}
+do_test 162 {
+  set res {}
+  foreach vname [lsort [array names vtabJ]] {
+    lappend res vtabJ($vname) $vtabJ($vname)
+  }
+  set res
+} {vtabJ(1) this vtabJ(3) {a test} vtabJ(5) 55}
+
+# Try to trick the module into updating the same variable twice for a
+# single UPDATE statement.
+#
+do_execsql_test 171 {
+  INSERT INTO tclvar(fullname, value) VALUES('xx', 'a');
+  SELECT name, value FROM tclvar where name = 'xx';
+} {xx a}
+do_execsql_test 172 {
+  UPDATE tclvar SET value = value || 't' 
+  WHERE name = 'xx' OR name = 'x'||'x';
+  SELECT name, value FROM tclvar where name = 'xx';
+} {xx at}
+do_execsql_test 173 {
+  UPDATE tclvar SET value = value || 't' 
+  WHERE name = 'xx' OR name BETWEEN 'xx' AND 'xx';
+  SELECT name, value FROM tclvar where name = 'xx';
+} {xx att}
+
+do_execsql_test 181 {
+  DELETE FROM tclvar WHERE name BETWEEN 'xx' AND 'xx' OR name='xx';
+  SELECT name, value FROM tclvar where name = 'xx';
+} {}
+
+
+finish_test

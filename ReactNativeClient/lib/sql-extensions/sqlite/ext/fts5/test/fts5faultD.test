@@ -1,0 +1,87 @@
+# 2016 February 2
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5faultA
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+  if {"%DETAIL%"=="none"} continue
+
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE o1 USING fts5(a, b, c, detail=%DETAIL%);
+    INSERT INTO o1(o1, rank) VALUES('pgsz', 32);
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<60 )
+    INSERT INTO o1 SELECT 'A', 'B', 'C' FROM s;
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<60 )
+    INSERT INTO o1 SELECT 'C', 'A', 'B' FROM s;
+
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<60 )
+    INSERT INTO o1 SELECT 'B', 'C', 'A' FROM s;
+  }
+  
+  do_faultsim_test 1 -faults int* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT count(*) FROM o1('a') }
+  } -test {
+    faultsim_test_result {0 180} {1 {vtable constructor failed: o1}}
+  }
+
+  do_faultsim_test 2 -faults int* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT * FROM o1('a:a AND {b c}:b') ORDER BY rank }
+    expr 1
+  } -test {
+    faultsim_test_result {0 1} {1 {vtable constructor failed: o1}}
+  }
+
+  do_faultsim_test 3 -faults int* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT * FROM o1('{b c}:b NOT a:a') ORDER BY rank }
+    expr 1
+  } -test {
+    faultsim_test_result {0 1} {1 {vtable constructor failed: o1}}
+  }
+
+  do_faultsim_test 4 -faults int* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT * FROM o1('b:b OR a:a') }
+    expr 1
+  } -test {
+    faultsim_test_result {0 1} {1 {vtable constructor failed: o1}}
+  }
+
+  do_faultsim_test 5 -faults int* -prep {
+    sqlite3 db test.db
+  } -body {
+    execsql { SELECT count(*) FROM o1('c:b') }
+    expr 1
+  } -test {
+    faultsim_test_result {0 1} {1 {vtable constructor failed: o1}}
+  }
+}
+
+finish_test

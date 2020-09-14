@@ -1,0 +1,84 @@
+# 2018 January 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessionH
+
+forcedelete test.db2
+sqlite3 db2 test.db2
+
+do_test 1.0 {
+  do_common_sql {
+    CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b));
+  }
+  do_then_apply_sql {
+    WITH s(i) AS (
+      VALUES(1) UNION ALL SELECT i+1 FROM s WHERe i<10000
+    )
+    INSERT INTO t1 SELECT 'abcde', randomblob(16), i FROM s;
+  }
+  compare_db db db2
+} {}
+
+#------------------------------------------------------------------------
+db2 close
+reset_db
+
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO main.t1 VALUES(1, 2, 3), (4, 5, 6), (7, 8, 9);
+}
+
+do_test 2.1 {
+  sqlite3session S db main
+  S attach *
+  db eval {
+    BEGIN;
+      INSERT INTO t1 VALUES(10, 11, 12);
+      DELETE FROM t1 WHERE a=1;
+      UPDATE t1 SET b='five', c='six' WHERE a=4;
+  }
+
+  set C [S changeset]
+  db eval ROLLBACK
+  S delete
+  set {} {}
+} {}
+
+do_execsql_test 2.2 {
+  CREATE TEMP TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO temp.t1 VALUES(1, 2, 3), (4, 5, 6), (7, 8, 9);
+}
+
+set ::conflict [list]
+proc xConflict {args} { lappend ::conflict $args ; return "" }
+do_test 2.3 {
+  sqlite3changeset_apply db $C xConflict
+  set ::conflict
+} {}
+do_execsql_test 2.4 {
+  SELECT * FROM main.t1;
+  SELECT '****';
+  SELECT * FROM temp.t1;
+} {
+  4 five six 7 8 9 10 11 12
+  ****
+  1 2 3 4 5 6 7 8 9
+}
+
+
+finish_test

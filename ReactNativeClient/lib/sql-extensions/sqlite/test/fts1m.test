@@ -1,0 +1,50 @@
+# 2007 July 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The focus
+# of this script is testing the FTS1 module, specifically snippet
+# generation.  Extracted from fts2o.test.
+#
+# $Id: fts1m.test,v 1.1 2007/07/25 00:25:20 shess Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS1 is not defined, omit this file.
+ifcapable !fts1 {
+  finish_test
+  return
+}
+
+#---------------------------------------------------------------------
+# These tests, fts1m-1.*, test that ticket #2429 is fixed.
+#
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts1(a, b, c);
+  INSERT INTO t1(a, b, c) VALUES('one three four', 'one four', 'one four two');
+}
+do_test fts1m-1.1 {
+  execsql {
+    SELECT rowid, snippet(t1) FROM t1 WHERE c MATCH 'four';
+  }
+} {1 {one <b>four</b> two}}
+do_test fts1m-1.2 {
+  execsql {
+    SELECT rowid, snippet(t1) FROM t1 WHERE b MATCH 'four';
+  }
+} {1 {one <b>four</b>}}
+do_test fts1m-1.3 {
+  execsql {
+    SELECT rowid, snippet(t1) FROM t1 WHERE a MATCH 'four';
+  }
+} {1 {one three <b>four</b>}}
+
+finish_test

@@ -1,0 +1,164 @@
+# 2007 June 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is 'hidden' virtual table columns.
+#
+# $Id: vtabA.test,v 1.2 2008/07/12 14:52:21 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+proc get_decltype {table col} {
+  set STMT [sqlite3_prepare $::DB "SELECT $col FROM $table" -1 TAIL]
+  set decltype [sqlite3_column_decltype $STMT 0]
+  sqlite3_finalize $STMT
+  set decltype
+}
+
+proc get_collist {table} {
+  set ret [list]
+  db eval "PRAGMA table_info($table)" { lappend ret $name }
+  set ret
+}
+
+# Register the echo module
+register_echo_module [sqlite3_connection_pointer db]
+
+# Create a virtual table with a 'hidden' column (column b).
+#
+do_test vtabA-1.1 {
+  execsql { CREATE TABLE t1(a, b HIDDEN VARCHAR, c INTEGER) }
+} {}
+do_test vtabA-1.2 {
+  execsql { CREATE VIRTUAL TABLE t1e USING echo(t1) }
+} {}
+
+# Test that the hidden column is not listed by [PRAGMA table_info].
+#
+do_test vtabA-1.3 {
+  execsql { PRAGMA table_info(t1e) }
+} [list              \
+  0 a {}      0 {} 0 \
+  1 c INTEGER 0 {} 0 \
+]
+
+# Test that the hidden column is not require in the default column
+# list for an INSERT statement.
+#
+do_test vtabA-1.4 {
+  catchsql {
+    INSERT INTO t1e VALUES('value a', 'value c');
+  }
+} {0 {}}
+do_test vtabA-1.5 {
+  execsql {
+    SELECT a, b, c FROM t1e;
+  }
+} {{value a} {} {value c}}
+
+do_test vtabA-1.6 {
+  execsql {
+    SELECT * FROM t1e;
+  }
+} {{value a} {value c}}
+do_execsql_test vtabA-1.7 {
+  DELETE FROM t1e;
+  INSERT INTO t1e SELECT 'abc','def';
+} {}
+do_execsql_test vtabA-1.8 {
+  INSERT INTO t1e VALUES('ghi','jkl'),('mno','pqr'),('stu','vwx');
+} {}
+do_execsql_test vtabA-1.9 {
+  SELECT a,b,c, '|' FROM t1e ORDER BY 1;
+} {abc {} def | ghi {} jkl | mno {} pqr | stu {} vwx |}
+
+
+# Test that the expansion of a '*' expression in the result set of
+# a SELECT does not include the hidden column.
+#
+do_test vtabA-1.20 {
+  execsql {
+    INSERT INTO t1e SELECT * FROM t1e;
+  }
+} {}
+do_test vtabA-1.21 {
+  execsql {
+    SELECT * FROM t1e ORDER BY 1;
+  }
+} {abc def abc def ghi jkl ghi jkl mno pqr mno pqr stu vwx stu vwx}
+
+# Test that the declaration type of the hidden column does not include
+# the token "HIDDEN".
+#
+do_test vtabA-1.22 {
+  get_decltype t1e b
+} {VARCHAR}
+do_test vtabA-1.23 {
+  get_collist t1e
+} {a c}
+
+#----------------------------------------------------------------------
+# These tests vtabA-2.* concentrate on testing that the HIDDEN token
+# is detected and handled correctly in various declarations.
+#
+proc analyse_parse {columns decltype_list} {
+  db eval { DROP TABLE IF EXISTS t1e; }
+  db eval { DROP TABLE IF EXISTS t1; }
+  db eval " CREATE TABLE t1 $columns "
+  db eval { CREATE VIRTUAL TABLE t1e USING echo(t1) }
+  set ret [list [get_collist t1e]]
+  foreach c $decltype_list {
+    lappend ret [get_decltype t1e $c]
+  }
+  set ret
+}
+
+do_test vtabA-2.1 {
+  analyse_parse {(a text, b integer hidden, c hidden)} {a b c}
+} {a text integer {}}
+
+do_test vtabA-2.2 {
+  analyse_parse {(a hidden   , b integerhidden, c hidden1)} {a b c}
+} {{b c} {} integerhidden hidden1}
+
+do_test vtabA-2.3 {
+  analyse_parse {(a HiDden, b HIDDEN, c hidden)} {a b c}
+} {{} {} {} {}}
+
+do_test vtabA-2.4 {
+  analyse_parse {(a whatelse can i hidden test, b HIDDEN hidden)} {a b}
+} {{} {whatelse can i test} hidden}
+
+
+# Ticket [d2f02d37f52bfe23e421f2c60fbb8586ac76ff01]:
+# assertion failure on an UPDATE involving two virtual tables.
+#
+do_test vtabA-3.1 {
+  db eval {
+    DROP TABLE IF EXISTS t1;
+    DROP TABLE IF EXISTS t2;
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,2);
+    CREATE TABLE t2(x,y);
+    INSERT INTO t2 VALUES(3,4);
+    CREATE VIRTUAL TABLE vt1 USING echo(t1);
+    CREATE VIRTUAL TABLE vt2 USING echo(t2);
+    UPDATE vt2 SET x=(SELECT a FROM vt1 WHERE b=2) WHERE y=4;
+    SELECT * FROM t2;
+  }
+} {1 4}
+
+finish_test

@@ -1,0 +1,68 @@
+# 2015 October 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5conflict
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, a, b);
+  CREATE VIRTUAL TABLE ft USING fts5(a, b, content=t1, content_rowid=x);
+}
+
+do_execsql_test 1.1 {
+  REPLACE INTO ft(rowid, a, b) VALUES(1, 'a b c', 'a b c');
+  REPLACE INTO t1              VALUES(1, 'a b c', 'a b c');
+}
+
+do_execsql_test 1.2 {
+  INSERT INTO ft(ft) VALUES('integrity-check');
+}
+
+do_execsql_test 2.0 {
+  CREATE TABLE tbl(a INTEGER PRIMARY KEY, b, c);
+  CREATE VIRTUAL TABLE fts_idx USING fts5(b, c, content=tbl, content_rowid=a);
+  CREATE TRIGGER tbl_ai AFTER INSERT ON tbl BEGIN
+    INSERT INTO fts_idx(rowid, b, c) VALUES (new.a, new.b, new.c);
+  END;
+  CREATE TRIGGER tbl_ad AFTER DELETE ON tbl BEGIN
+    INSERT INTO fts_idx(fts_idx, rowid, b, c) 
+      VALUES('delete', old.a, old.b, old.c);
+  END;
+  CREATE TRIGGER tbl_au AFTER UPDATE ON tbl BEGIN
+    INSERT INTO fts_idx(fts_idx, rowid, b, c) 
+      VALUES('delete', old.a, old.b, old.c);
+    INSERT INTO fts_idx(rowid, b, c) VALUES (new.a, new.b, new.c);
+  END;
+}
+
+do_execsql_test 2.1 {
+  PRAGMA recursive_triggers = 1;
+  INSERT INTO tbl VALUES(1,   'x y z', '1 2 3');
+  INSERT INTO tbl VALUES(10,  'x y z', '1 2 3');
+  INSERT INTO tbl VALUES(100, 'x 1 z', '1 y 3');
+
+  UPDATE tbl SET b = '1 2 x' WHERE rowid=10;
+  REPLACE INTO tbl VALUES(1, '4 5 6', '3 2 1');
+  DELETE FROM tbl WHERE a=100;
+
+  INSERT INTO fts_idx(fts_idx) VALUES('integrity-check');
+}
+
+finish_test

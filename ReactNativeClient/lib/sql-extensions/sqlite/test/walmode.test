@@ -1,0 +1,393 @@
+# 2010 April 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+
+# If the library was compiled without WAL support, check that the 
+# "PRAGMA journal_mode=WAL" treats "WAL" as an unrecognized mode.
+#
+ifcapable !wal {
+
+  do_test walmode-0.1 {
+    execsql { PRAGMA journal_mode = wal }
+  } {delete}
+  do_test walmode-0.2 {
+    execsql { PRAGMA main.journal_mode = wal }
+  } {delete}
+  do_test walmode-0.3 {
+    execsql { PRAGMA main.journal_mode }
+  } {delete}
+
+  finish_test
+  return
+}
+
+do_test walmode-1.1 {
+  set sqlite_sync_count 0
+  execsql { PRAGMA page_size = 1024 }
+  execsql { PRAGMA journal_mode = wal }
+} {wal}
+do_test walmode-1.2 {
+  file size test.db
+} {1024}
+
+if {[atomic_batch_write test.db]==0} {
+  set expected_sync_count 3
+  if {$::tcl_platform(platform)!="windows"} {
+    ifcapable dirsync {
+      incr expected_sync_count
+    }
+  }
+  do_test walmode-1.3 {
+    set sqlite_sync_count
+  } $expected_sync_count
+}
+
+do_test walmode-1.4 {
+  file exists test.db-wal
+} {0}
+do_test walmode-1.5 {
+  execsql { CREATE TABLE t1(a, b) }
+  file size test.db
+} {1024}
+do_test walmode-1.6 {
+  file exists test.db-wal
+} {1}
+do_test walmode-1.7 {
+  db close
+  file exists test.db-wal
+} {0}
+
+# There is now a database file with the read and write versions set to 2
+# in the file system. This file should default to WAL mode.
+#
+do_test walmode-2.1 {
+  sqlite3 db test.db
+  file exists test.db-wal
+} {0}
+do_test walmode-2.2 {
+  execsql { SELECT * FROM sqlite_master }
+  file exists test.db-wal
+} {1}
+do_test walmode-2.3 {
+  db close
+  file exists test.db-wal
+} {0}
+
+# If the first statement executed is "PRAGMA journal_mode = wal", and
+# the file is already configured for WAL (read and write versions set
+# to 2), then there should be no need to write the database. The 
+# statement should cause the client to connect to the log file.
+#
+set sqlite_sync_count 0
+do_test walmode-3.1 {
+  sqlite3 db test.db
+  execsql { PRAGMA journal_mode = wal }
+} {wal}
+do_test walmode-3.2 {
+  list $sqlite_sync_count [file exists test.db-wal] [file size test.db-wal]
+} {0 1 0}
+
+# Test that changing back to journal_mode=persist works.
+#
+do_test walmode-4.1 {
+  execsql { INSERT INTO t1 VALUES(1, 2) }
+  execsql { PRAGMA journal_mode = persist }
+} {persist}
+if {[atomic_batch_write test.db]==0} {
+  do_test walmode-4.2 {
+    list [file exists test.db-journal] [file exists test.db-wal]
+  } {1 0}
+}
+do_test walmode-4.3 {
+  execsql { SELECT * FROM t1 }
+} {1 2}
+do_test walmode-4.4 {
+  db close
+  sqlite3 db test.db
+  execsql { SELECT * FROM t1 }
+} {1 2}
+if {[atomic_batch_write test.db]==0} {
+  do_test walmode-4.5 {
+    list [file exists test.db-journal] [file exists test.db-wal]
+  } {1 0}
+}
+
+# Test that nothing goes wrong if a connection is prevented from changing
+# from WAL to rollback mode because a second connection has the database
+# open. Or from rollback to WAL.
+#
+do_test walmode-4.6 {
+  sqlite3 db2 test.db
+  execsql { PRAGMA main.journal_mode } db2
+} {delete}
+do_test walmode-4.7 {
+  execsql { PRAGMA main.journal_mode = wal } db
+} {wal}
+do_test walmode-4.8 {
+  execsql { SELECT * FROM t1 } db2
+} {1 2}
+do_test walmode-4.9 {
+  catchsql { PRAGMA journal_mode = delete } db
+} {1 {database is locked}}
+do_test walmode-4.10 {
+  execsql { PRAGMA main.journal_mode } db
+} {wal}
+
+do_test walmode-4.11 {
+  db2 close
+  execsql { PRAGMA journal_mode = delete } db
+} {delete}
+do_test walmode-4.12 {
+  execsql { PRAGMA main.journal_mode } db
+} {delete}
+do_test walmode-4.13 {
+  list [file exists test.db-journal] [file exists test.db-wal]
+} {0 0}
+do_test walmode-4.14 {
+  sqlite3 db2 test.db
+  execsql {
+    BEGIN;
+      SELECT * FROM t1;
+  } db2
+} {1 2}
+
+do_test walmode-4.16 { execsql { PRAGMA main.journal_mode } db  } {delete}
+do_test walmode-4.17 { execsql { PRAGMA main.journal_mode } db2 } {delete}
+
+do_test walmode-4.17 {
+  catchsql { PRAGMA main.journal_mode = wal } db
+} {1 {database is locked}}
+do_test walmode-4.18 {
+  execsql { PRAGMA main.journal_mode } db
+} {delete}
+catch { db close }
+catch { db2 close }
+
+# Test that it is not possible to change a temporary or in-memory database
+# to WAL mode. WAL mode is for persistent file-backed databases only.
+#
+#   walmode-5.1.*: Try to set journal_mode=WAL on [sqlite3 db :memory:] database.
+#   walmode-5.2.*: Try to set journal_mode=WAL on [sqlite3 db ""] database.
+#   walmode-5.3.*: Try to set temp.journal_mode=WAL.
+#
+do_test walmode-5.1.1 {
+  sqlite3 db :memory:
+  execsql { PRAGMA main.journal_mode }
+} {memory}
+do_test walmode-5.1.2 {
+  execsql { PRAGMA main.journal_mode = wal }
+} {memory}
+do_test walmode-5.1.3 {
+  execsql {
+    BEGIN;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    COMMIT;
+    SELECT * FROM t1;
+    PRAGMA main.journal_mode;
+  }
+} {1 2 memory}
+do_test walmode-5.1.4 {
+  execsql { PRAGMA main.journal_mode = wal }
+} {memory}
+do_test walmode-5.1.5 {
+  execsql { 
+    INSERT INTO t1 VALUES(3, 4);
+    SELECT * FROM t1;
+    PRAGMA main.journal_mode;
+  }
+} {1 2 3 4 memory}
+
+if {$TEMP_STORE>=2} {
+  set tempJrnlMode memory
+} else {
+  set tempJrnlMode delete
+}
+do_test walmode-5.2.1 {
+  sqlite3 db ""
+  execsql { PRAGMA main.journal_mode }
+} $tempJrnlMode
+do_test walmode-5.2.2 {
+  execsql { PRAGMA main.journal_mode = wal }
+} $tempJrnlMode
+do_test walmode-5.2.3 {
+  execsql {
+    BEGIN;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    COMMIT;
+    SELECT * FROM t1;
+    PRAGMA main.journal_mode;
+  }
+} [list 1 2 $tempJrnlMode]
+do_test walmode-5.2.4 {
+  execsql { PRAGMA main.journal_mode = wal }
+} $tempJrnlMode
+do_test walmode-5.2.5 {
+  execsql { 
+    INSERT INTO t1 VALUES(3, 4);
+    SELECT * FROM t1;
+    PRAGMA main.journal_mode;
+  }
+} [list 1 2 3 4 $tempJrnlMode]
+
+do_test walmode-5.3.1 {
+  sqlite3 db test.db
+  execsql { PRAGMA temp.journal_mode }
+} $tempJrnlMode
+do_test walmode-5.3.2 {
+  execsql { PRAGMA temp.journal_mode = wal }
+} $tempJrnlMode
+do_test walmode-5.3.3 {
+  execsql {
+    BEGIN;
+      CREATE TEMP TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    COMMIT;
+    SELECT * FROM t1;
+    PRAGMA temp.journal_mode;
+  }
+} [list 1 2 $tempJrnlMode]
+do_test walmode-5.3.4 {
+  execsql { PRAGMA temp.journal_mode = wal }
+} $tempJrnlMode
+do_test walmode-5.3.5 {
+  execsql { 
+    INSERT INTO t1 VALUES(3, 4);
+    SELECT * FROM t1;
+    PRAGMA temp.journal_mode;
+  }
+} [list 1 2 3 4 $tempJrnlMode]
+
+
+#-------------------------------------------------------------------------
+# Test changing to WAL mode from journal_mode=off or journal_mode=memory
+#
+foreach {tn mode} {
+  1 off
+  2 memory
+  3 persist
+  4 delete
+  5 truncate
+} {
+  do_test walmode-6.$tn {
+    faultsim_delete_and_reopen
+    execsql "
+      PRAGMA journal_mode = $mode;
+      PRAGMA journal_mode = wal;
+    "
+  } [list $mode wal]
+}
+db close
+
+#-------------------------------------------------------------------------
+# Test the effect of a "PRAGMA journal_mode" command being the first 
+# thing executed by a new connection. This means that the schema is not
+# loaded when sqlite3_prepare_v2() is called to compile the statement.
+#
+do_test walmode-7.0 {
+  forcedelete test.db
+  sqlite3 db test.db
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+  }
+} {wal}
+foreach {tn sql result} {
+  1  "PRAGMA journal_mode"                wal
+  2  "PRAGMA main.journal_mode"           wal
+  3  "PRAGMA journal_mode = delete"       delete
+  4  "PRAGMA journal_mode"                delete
+  5  "PRAGMA main.journal_mode"           delete
+  6  "PRAGMA journal_mode = wal"          wal
+  7  "PRAGMA journal_mode"                wal
+  8  "PRAGMA main.journal_mode"           wal
+
+  9  "PRAGMA journal_mode"                wal
+ 10  "PRAGMA main.journal_mode"           wal
+ 11  "PRAGMA main.journal_mode = delete"  delete
+ 12  "PRAGMA journal_mode"                delete
+ 13  "PRAGMA main.journal_mode"           delete
+ 14  "PRAGMA main.journal_mode = wal"     wal
+ 15  "PRAGMA journal_mode"                wal
+ 16  "PRAGMA main.journal_mode"           wal
+} {
+  do_test walmode-7.$tn { 
+    db close
+    sqlite3 db test.db
+    execsql $sql
+  } $result
+}
+db close
+
+#-------------------------------------------------------------------------
+# Test the effect of a "PRAGMA journal_mode" command on an attached 
+# database.
+#
+faultsim_delete_and_reopen
+do_execsql_test walmode-8.1 {
+  CREATE TABLE t1(a, b);
+  PRAGMA journal_mode = WAL;
+  ATTACH 'test.db2' AS two;
+  CREATE TABLE two.t2(a, b);
+} {wal}
+do_execsql_test walmode-8.2 { PRAGMA main.journal_mode }         {wal}
+do_execsql_test walmode-8.3 { PRAGMA two.journal_mode  }         {delete}
+do_execsql_test walmode-8.4 { PRAGMA two.journal_mode = DELETE } {delete}
+
+db close
+sqlite3 db test.db
+do_execsql_test walmode-8.5  { ATTACH 'test.db2' AS two }          {}
+do_execsql_test walmode-8.6  { PRAGMA main.journal_mode }          {wal}
+do_execsql_test walmode-8.7  { PRAGMA two.journal_mode  }          {delete}
+do_execsql_test walmode-8.8  { INSERT INTO two.t2 DEFAULT VALUES } {}
+do_execsql_test walmode-8.9  { PRAGMA two.journal_mode  }          {delete}
+do_execsql_test walmode-8.10 { INSERT INTO t1 DEFAULT VALUES } {}
+do_execsql_test walmode-8.11 { PRAGMA main.journal_mode  }         {wal}
+do_execsql_test walmode-8.12 { PRAGMA journal_mode  }              {wal}
+
+# Change to WAL mode on test2.db and make sure (in the tests that follow)
+# that this mode change persists. 
+do_test walmode-8.x1 {
+  execsql {
+     PRAGMA two.journal_mode=WAL;
+     PRAGMA two.journal_mode;
+  }
+} {wal wal}
+
+db close
+sqlite3 db test.db
+do_execsql_test walmode-8.13 { PRAGMA journal_mode = WAL }         {wal}
+do_execsql_test walmode-8.14 { ATTACH 'test.db2' AS two  }         {}
+do_execsql_test walmode-8.15 { PRAGMA main.journal_mode  }         {wal}
+do_execsql_test walmode-8.16 { PRAGMA two.journal_mode   }         {wal}
+do_execsql_test walmode-8.17 { INSERT INTO two.t2 DEFAULT VALUES } {}
+do_execsql_test walmode-8.18 { PRAGMA two.journal_mode   }         {wal}
+ 
+sqlite3 db2 test.db2
+do_test walmode-8.19 { execsql { PRAGMA main.journal_mode } db2 }  {wal}
+db2 close
+
+do_execsql_test walmode-8.20 { PRAGMA journal_mode = DELETE } {delete}
+do_execsql_test walmode-8.21 { PRAGMA main.journal_mode }     {delete}
+do_execsql_test walmode-8.22 { PRAGMA two.journal_mode }      {delete}
+do_execsql_test walmode-8.21 { PRAGMA journal_mode = WAL }    {wal}
+do_execsql_test walmode-8.21 { PRAGMA main.journal_mode }     {wal}
+do_execsql_test walmode-8.22 { PRAGMA two.journal_mode }      {wal}
+
+finish_test

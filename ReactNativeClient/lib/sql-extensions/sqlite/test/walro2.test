@@ -1,0 +1,406 @@
+# 2011 May 09
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for using WAL databases in read-only mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+set ::testprefix walro2
+
+# And only if the build is WAL-capable.
+#
+ifcapable !wal {
+  finish_test
+  return
+}
+
+proc copy_to_test2 {bZeroShm} {
+  forcecopy test.db test.db2
+  forcecopy test.db-wal test.db2-wal
+  if {$bZeroShm} {
+    forcedelete test.db2-shm
+    set fd [open test.db2-shm w]
+    seek $fd [expr [file size test.db-shm]-1]
+    puts -nonewline $fd "\0"
+    close $fd
+  } else {
+    forcecopy test.db-shm test.db2-shm
+  }
+}
+
+# Most systems allocate the *-shm file in 32KB trunks. But on UNIX systems
+# for which the getpagesize() call returns greater than 32K, the *-shm
+# file is allocated in page-sized units (since you cannot mmap part of
+# a page). The following code sets variable $MINSHMSZ to the smallest
+# possible *-shm file (i.e. the greater of 32KB and the system page-size).
+#
+do_execsql_test 0.0 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE t1(x);
+} {wal}
+set MINSHMSZ [file size test.db-shm]
+
+foreach bZeroShm {0 1} {
+set TN [expr $bZeroShm+1]
+do_multiclient_test tn {
+  
+  # Close all connections and delete the database.
+  #
+  code1 { db close  }
+  code2 { db2 close }
+  code3 { db3 close }
+  forcedelete test.db
+  
+  # Do not run tests with the connections in the same process.
+  #
+  if {$tn==2} continue
+
+  foreach c {code1 code2 code3} {
+    $c {
+      sqlite3_shutdown
+      sqlite3_config_uri 1
+    }
+  }
+
+  do_test $TN.1.1 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { 
+      CREATE TABLE t1(x, y);
+      PRAGMA journal_mode = WAL;
+      INSERT INTO t1 VALUES('a', 'b');
+      INSERT INTO t1 VALUES('c', 'd');
+    }
+    file exists test.db-shm
+  } {1}
+
+  do_test $TN.1.2.1 {
+    copy_to_test2 $bZeroShm
+    code1 {
+      sqlite3 db file:test.db2?readonly_shm=1
+    }
+
+    sql1 { SELECT * FROM t1 }
+  } {a b c d}
+  do_test $TN.1.2.2 {
+    sql1 { SELECT * FROM t1 }
+  } {a b c d}
+
+  do_test $TN.1.3.1 {
+    code3 { sqlite3 db3 test.db2 }
+    sql3 { SELECT * FROM t1 }
+  } {a b c d}
+
+  do_test $TN.1.3.2 {
+    sql1 { SELECT * FROM t1 }
+  } {a b c d}
+
+  code1 { db close  }
+  code2 { db2 close }
+  code3 { db3 close }
+
+  do_test $TN.2.1 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { 
+      INSERT INTO t1 VALUES('e', 'f');
+      INSERT INTO t1 VALUES('g', 'h');
+    }
+    file exists test.db-shm
+  } {1}
+
+  do_test $TN.2.2 {
+    copy_to_test2 $bZeroShm
+    code1 {
+      sqlite3 db file:test.db2?readonly_shm=1
+    }
+    sql1 { 
+      BEGIN;
+      SELECT * FROM t1;
+    }
+  } {a b c d e f g h}
+
+  do_test $TN.2.3.1 {
+    code3 { sqlite3 db3 test.db2 }
+    sql3 { SELECT * FROM t1 }
+  } {a b c d e f g h}
+  do_test $TN.2.3.2 {
+    sql3 { INSERT INTO t1 VALUES('i', 'j') }
+    code3 { db3 close }
+    sql1 { COMMIT } 
+  } {}
+  do_test $TN.2.3.3 {
+    sql1 { SELECT * FROM t1 }
+  } {a b c d e f g h i j}
+
+
+  #-----------------------------------------------------------------------
+  # 3.1.*: That a readonly_shm connection can read a database file if both
+  #        the *-wal and *-shm files are zero bytes in size.
+  #
+  # 3.2.*: That it flushes the cache if, between transactions on a db with a
+  #        zero byte *-wal file, some other connection modifies the db, then
+  #        does "PRAGMA wal_checkpoint=truncate" to truncate the wal file
+  #        back to zero bytes in size.
+  #
+  # 3.3.*: That, if between transactions some other process wraps the wal
+  #        file, the readonly_shm client reruns recovery.
+  #
+  catch { code1 { db close } }
+  catch { code2 { db2 close } }
+  catch { code3 { db3 close } }
+  do_test $TN.3.1.0 {
+    list [file exists test.db-wal] [file exists test.db-shm]
+  } {0 0}
+  do_test $TN.3.1.1 {
+    close [open test.db-wal w]
+    close [open test.db-shm w]
+    code1 {
+      sqlite3 db file:test.db?readonly_shm=1
+    }
+    sql1 { SELECT * FROM t1 }
+  } {a b c d e f g h}
+
+  do_test $TN.3.2.0 {
+    list [file size test.db-wal] [file size test.db-shm]
+  } {0 0}
+  do_test $TN.3.2.1 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { INSERT INTO t1 VALUES(1, 2) ; PRAGMA wal_checkpoint=truncate }
+    code2 { db2 close }
+    sql1 { SELECT * FROM t1 }
+  } {a b c d e f g h 1 2}
+  do_test $TN.3.2.2 {
+    list [file size test.db-wal] [file size test.db-shm]
+  } [list 0 $MINSHMSZ]
+
+  do_test $TN.3.3.0 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { 
+      INSERT INTO t1 VALUES(3, 4);
+      INSERT INTO t1 VALUES(5, 6);
+      INSERT INTO t1 VALUES(7, 8);
+      INSERT INTO t1 VALUES(9, 10);
+    }
+    code2 { db2 close }
+    code1 { db close }
+    list [file size test.db-wal] [file size test.db-shm]
+  } [list [wal_file_size 4 1024] $MINSHMSZ]
+  do_test $TN.3.3.1 {
+    code1 { sqlite3 db file:test.db?readonly_shm=1 }
+    sql1 { SELECT * FROM t1 }
+  } {a b c d e f g h 1 2 3 4 5 6 7 8 9 10}
+  do_test $TN.3.3.2 {
+    code2 { sqlite3 db2 test.db }
+    sql2 { 
+      PRAGMA wal_checkpoint; 
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES('i', 'ii');
+    }
+    code2 { db2 close }
+    list [file size test.db-wal] [file size test.db-shm]
+  } [list [wal_file_size 4 1024] $MINSHMSZ]
+  do_test $TN.3.3.3 {
+    sql1 { SELECT * FROM t1 }
+  } {i ii}
+
+  #-----------------------------------------------------------------------
+  #
+  #
+  catch { code1 { db close } }
+  catch { code2 { db2 close } }
+  catch { code3 { db3 close } }
+
+  do_test $TN.4.0 {
+    code1 { forcedelete test.db }
+    code1 { sqlite3 db test.db }
+    sql1 {
+      PRAGMA journal_mode = wal;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES('hello');
+      INSERT INTO t1 VALUES('world');
+    }
+
+    copy_to_test2 $bZeroShm
+
+    code1 { db close }
+  } {}
+
+  do_test $TN.4.1.1 {
+    code2 { sqlite3 db2 file:test.db2?readonly_shm=1 }
+    sql2 { SELECT * FROM t1 }
+  } {hello world}
+
+  do_test $TN.4.1.2 {
+    code3 { sqlite3 db3 test.db2 }
+    sql3 {
+      INSERT INTO t1 VALUES('!');
+      PRAGMA wal_checkpoint = truncate;
+    }
+    code3 { db3 close }
+  } {}
+  do_test $TN.4.1.3 {
+    sql2 { SELECT * FROM t1 }
+  } {hello world !}
+
+  catch { code1 { db close } }
+  catch { code2 { db2 close } }
+  catch { code3 { db3 close } }
+
+  do_test $TN.4.2.1 {
+    code1 { sqlite3 db test.db }
+    sql1 {
+      INSERT INTO t1 VALUES('!');
+      INSERT INTO t1 VALUES('!');
+
+      PRAGMA cache_size = 10;
+      CREATE TABLE t2(x);
+
+      BEGIN;
+        WITH s(i) AS (
+          SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<500
+          )
+        INSERT INTO t2 SELECT randomblob(500) FROM s;
+        SELECT count(*) FROM t2;
+    } 
+  } {500}
+  set sz [file size test.db-wal]
+  do_test $TN.4.2.2.(sz=$sz) {
+    expr {$sz>400000}
+  } {1}
+  do_test $TN.4.2.4 {
+    file_control_persist_wal db 1; db close
+
+    copy_to_test2 $bZeroShm
+    code2 { sqlite3 db2 file:test.db2?readonly_shm=1 }
+    sql2 {
+      SELECT * FROM t1;
+      SELECT count(*) FROM t2;
+    }
+  } {hello world ! ! 0}
+
+  #-----------------------------------------------------------------------
+  #
+  #
+  catch { code1 { db close } }
+  catch { code2 { db2 close } }
+  catch { code3 { db3 close } }
+
+  do_test $TN.5.0 {
+    code1 { forcedelete test.db }
+    code1 { sqlite3 db test.db }
+    sql1 {
+      PRAGMA journal_mode = wal;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES('hello');
+      INSERT INTO t1 VALUES('world');
+      INSERT INTO t1 VALUES('!');
+      INSERT INTO t1 VALUES('world');
+      INSERT INTO t1 VALUES('hello');
+    }
+
+    copy_to_test2 $bZeroShm
+    
+    code1 { db close }
+  } {}
+
+  do_test $TN.5.1 {
+    code2 { sqlite3 db2 file:test.db2?readonly_shm=1 }
+    sql2 {
+      SELECT * FROM t1;
+    }
+  } {hello world ! world hello}
+
+  do_test $TN.5.2 {
+    code1 {
+      proc handle_read {op args} {
+        if {$op=="xRead" && [file tail [lindex $args 0]]=="test.db2-wal"} {
+          set ::res2 [sql2 { SELECT * FROM t1 }]
+        }
+        puts "$msg xRead $args"
+        return "SQLITE_OK"
+      }
+      testvfs tvfs -fullshm 1
+
+      sqlite3 db file:test.db2?vfs=tvfs
+      db eval { SELECT * FROM sqlite_master }
+
+      tvfs filter xRead
+      tvfs script handle_read
+    }
+    sql1 {
+      PRAGMA wal_checkpoint = truncate;
+    }
+    code1 { set ::res2 }
+  } {hello world ! world hello}
+
+  do_test $TN.5.3 {
+    code1 { db close }
+    code1 { tvfs delete }
+  } {}
+
+  #-----------------------------------------------------------------------
+  #
+  #
+  catch { code1 { db close } }
+  catch { code2 { db2 close } }
+  catch { code3 { db3 close } }
+
+  do_test $TN.6.1 {
+    code1 { forcedelete test.db }
+    code1 { sqlite3 db test.db }
+    sql1 {
+      PRAGMA journal_mode = wal;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES('hello');
+      INSERT INTO t1 VALUES('world');
+      INSERT INTO t1 VALUES('!');
+      INSERT INTO t1 VALUES('world');
+      INSERT INTO t1 VALUES('hello');
+    }
+
+    copy_to_test2 $bZeroShm
+    
+    code1 { db close }
+  } {}
+
+  do_test $TN.6.2 {
+    code1 {
+      set ::nRem 5
+      proc handle_read {op args} {
+        if {$op=="xRead" && [file tail [lindex $args 0]]=="test.db2-wal"} {
+          incr ::nRem -1
+          if {$::nRem==0} {
+            code2 { sqlite3 db2 test.db2 }
+            sql2  { PRAGMA wal_checkpoint = truncate }
+          }
+        }
+        return "SQLITE_OK"
+      }
+      testvfs tvfs -fullshm 1
+
+      tvfs filter xRead
+      tvfs script handle_read
+
+      sqlite3 db file:test.db2?readonly_shm=1&vfs=tvfs
+      db eval { SELECT * FROM t1 }
+    }
+  } {hello world ! world hello}
+
+  do_test $TN.6.3 {
+    code1 { db close }
+    code1 { tvfs delete }
+  } {}
+}
+} ;# foreach bZeroShm
+
+finish_test

@@ -1,0 +1,106 @@
+# 2013 July 04
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file tests that filter callbacks work as required.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessionA
+
+
+forcedelete test.db2
+sqlite3 db2 test.db2
+foreach {tn db} {1 db 2 db2} {
+  do_test 1.$tn.1 {
+    execsql {
+      CREATE TABLE t1(a PRIMARY KEY, b);
+      CREATE TABLE t2(a PRIMARY KEY, b);
+      CREATE TABLE t3(a PRIMARY KEY, b);
+    } $db
+  } {}
+}
+
+proc tbl_filter {zTbl} {
+  return $::table_filter($zTbl)
+}
+
+do_test 2.1 {
+  set ::table_filter(t1) 1
+  set ::table_filter(t2) 0
+  set ::table_filter(t3) 1
+
+  sqlite3session S db main
+  S table_filter tbl_filter 
+
+  execsql {
+    INSERT INTO t1 VALUES('a', 'b');
+    INSERT INTO t2 VALUES('c', 'd');
+    INSERT INTO t3 VALUES('e', 'f');
+  }
+
+  set changeset [S changeset]
+  S delete
+  sqlite3changeset_apply db2 $changeset xConflict
+
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+    SELECT * FROM t3;
+  } db2
+} {a b e f}
+
+#-------------------------------------------------------------------------
+# Test that filter callbacks passed to sqlite3changeset_apply() are 
+# invoked correctly.
+#
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+}
+
+do_test 3.2 {
+  execsql BEGIN
+  set ::cs [changeset_from_sql { 
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t2 VALUES('x', 'y');
+  }]
+  execsql ROLLBACK
+  set {} {}
+} {}
+
+proc filter {x y} { 
+  return [string equal $x $y] 
+}
+
+do_test 3.3 {
+  sqlite3changeset_apply db $::cs {} [list filter t1]
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {1 2}
+
+do_test 3.4 {
+  execsql { DELETE FROM t1 }
+  sqlite3changeset_apply db $::cs {} [list filter t2]
+  execsql {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }
+} {x y}
+
+finish_test

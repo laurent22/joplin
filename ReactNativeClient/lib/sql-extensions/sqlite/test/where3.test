@@ -1,0 +1,494 @@
+# 2006 January 31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the join reordering optimization
+# in cases that include a LEFT JOIN.
+#
+# $Id: where3.test,v 1.4 2008/04/17 19:14:02 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# The following is from ticket #1652.
+#
+# A comma join then a left outer join:  A,B left join C.
+# Arrange indices so that the B table is chosen to go first.
+# Also put an index on C, but make sure that A is chosen before C.
+#
+do_test where3-1.1 {
+  execsql {
+    CREATE TABLE t1(a, b);
+    CREATE TABLE t2(p, q);
+    CREATE TABLE t3(x, y);
+    
+    INSERT INTO t1 VALUES(111,'one');
+    INSERT INTO t1 VALUES(222,'two');
+    INSERT INTO t1 VALUES(333,'three');
+    
+    INSERT INTO t2 VALUES(1,111);
+    INSERT INTO t2 VALUES(2,222);
+    INSERT INTO t2 VALUES(4,444);
+    CREATE INDEX t2i1 ON t2(p);
+    
+    INSERT INTO t3 VALUES(999,'nine');
+    CREATE INDEX t3i1 ON t3(x);
+    
+    SELECT * FROM t1, t2 LEFT JOIN t3 ON q=x WHERE p=2 AND a=q;
+  }
+} {222 two 2 222 {} {}}
+
+ifcapable explain&&!cursorhints {
+  do_test where3-1.1.1 {
+     explain_no_trace {SELECT * FROM t1, t2 LEFT JOIN t3 ON q=x
+                        WHERE p=2 AND a=q}
+  } [explain_no_trace {SELECT * FROM t1, t2 LEFT JOIN t3 ON x=q
+                        WHERE p=2 AND a=q}]
+}
+
+# Ticket #1830
+#
+# This is similar to the above but with the LEFT JOIN on the
+# other side.
+#
+do_test where3-1.2 {
+  execsql {
+    CREATE TABLE parent1(parent1key, child1key, Child2key, child3key);
+    CREATE TABLE child1 ( child1key NVARCHAR, value NVARCHAR );
+    CREATE UNIQUE INDEX PKIDXChild1 ON child1 ( child1key );
+    CREATE TABLE child2 ( child2key NVARCHAR, value NVARCHAR );
+
+    INSERT INTO parent1(parent1key,child1key,child2key)
+       VALUES ( 1, 'C1.1', 'C2.1' );
+    INSERT INTO child1 ( child1key, value ) VALUES ( 'C1.1', 'Value for C1.1' );
+    INSERT INTO child2 ( child2key, value ) VALUES ( 'C2.1', 'Value for C2.1' );
+
+    INSERT INTO parent1 ( parent1key, child1key, child2key )
+       VALUES ( 2, 'C1.2', 'C2.2' );
+    INSERT INTO child2 ( child2key, value ) VALUES ( 'C2.2', 'Value for C2.2' );
+
+    INSERT INTO parent1 ( parent1key, child1key, child2key )
+       VALUES ( 3, 'C1.3', 'C2.3' );
+    INSERT INTO child1 ( child1key, value ) VALUES ( 'C1.3', 'Value for C1.3' );
+    INSERT INTO child2 ( child2key, value ) VALUES ( 'C2.3', 'Value for C2.3' );
+
+    SELECT parent1.parent1key, child1.value, child2.value
+    FROM parent1
+    LEFT OUTER JOIN child1 ON child1.child1key = parent1.child1key
+    INNER JOIN child2 ON child2.child2key = parent1.child2key;
+  }
+} {1 {Value for C1.1} {Value for C2.1} 2 {} {Value for C2.2} 3 {Value for C1.3} {Value for C2.3}}
+
+ifcapable explain&&!cursorhints {
+  do_test where3-1.2.1 {
+     explain_no_trace {
+       SELECT parent1.parent1key, child1.value, child2.value
+       FROM parent1
+       LEFT OUTER JOIN child1 ON child1.child1key = parent1.child1key
+       INNER JOIN child2 ON child2.child2key = parent1.child2key;
+     }
+  } [explain_no_trace {
+       SELECT parent1.parent1key, child1.value, child2.value
+       FROM parent1
+       LEFT OUTER JOIN child1 ON parent1.child1key = child1.child1key 
+       INNER JOIN child2 ON child2.child2key = parent1.child2key;
+     }]
+}
+
+# This procedure executes the SQL.  Then it appends 
+# the names of the table and index used
+#
+proc queryplan {sql} {
+  set ::sqlite_sort_count 0
+  set data [execsql $sql]
+  set eqp [execsql "EXPLAIN QUERY PLAN $sql"]
+  # puts eqp=$eqp
+  foreach {a b c x} $eqp {
+    if {[regexp { TABLE (\w+ AS )?(\w+) USING.* INDEX (\w+)\y} \
+        $x all as tab idx]} {
+      lappend data $tab $idx
+    } elseif {[regexp { TABLE (\w+ AS )?(\w+)\y} $x all as tab]} {
+      lappend data $tab *
+    }
+  }
+  return $data   
+}
+
+
+# If you have a from clause of the form:   A B C left join D
+# then make sure the query optimizer is able to reorder the 
+# A B C part anyway it wants. 
+#
+# Following the fix to ticket #1652, there was a time when
+# the C table would not reorder.  So the following reorderings
+# were possible:
+#
+#            A B C left join D
+#            B A C left join D
+#
+# But these reorders were not allowed
+#
+#            C A B left join D
+#            A C B left join D
+#            C B A left join D
+#            B C A left join D
+#
+# The following tests are here to verify that the latter four
+# reorderings are allowed again.
+#
+do_test where3-2.1 {
+  execsql {
+    CREATE TABLE tA(apk integer primary key, ax);
+    CREATE TABLE tB(bpk integer primary key, bx);
+    CREATE TABLE tC(cpk integer primary key, cx);
+    CREATE TABLE tD(dpk integer primary key, dx);
+  }
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=bx AND bpk=ax
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.1.1 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON cx=dpk
+     WHERE cpk=bx AND bpk=ax
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.1.2 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON cx=dpk
+     WHERE bx=cpk AND bpk=ax
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.1.3 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON cx=dpk
+     WHERE bx=cpk AND ax=bpk
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.1.4 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE bx=cpk AND ax=bpk
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.1.5 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=bx AND ax=bpk
+  }
+} {tA * tB * tC * tD *}
+do_test where3-2.2 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=bx AND apk=bx
+  }
+} {tB * tA * tC * tD *}
+do_test where3-2.3 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=bx AND apk=bx
+  }
+} {tB * tA * tC * tD *}
+do_test where3-2.4 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE apk=cx AND bpk=ax
+  }
+} {tC * tA * tB * tD *}
+do_test where3-2.5 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=ax AND bpk=cx
+  }
+} {tA * tC * tB * tD *}
+do_test where3-2.6 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE bpk=cx AND apk=bx
+  }
+} {tC * tB * tA * tD *}
+do_test where3-2.7 {
+  queryplan {
+    SELECT * FROM tA, tB, tC LEFT JOIN tD ON dpk=cx
+     WHERE cpk=bx AND apk=cx
+  }
+} {tB * tC * tA * tD *}
+
+# Ticket [13f033c865f878953]
+# If the outer loop must be a full table scan, do not let ANALYZE trick
+# the planner into use a table for the outer loop that might be indexable
+# if held until an inner loop.
+# 
+do_execsql_test where3-3.0 {
+  CREATE TABLE t301(a INTEGER PRIMARY KEY,b,c);
+  CREATE INDEX t301c ON t301(c);
+  INSERT INTO t301 VALUES(1,2,3);
+  INSERT INTO t301 VALUES(2,2,3);
+  CREATE TABLE t302(x, y);
+  INSERT INTO t302 VALUES(4,5);
+  ANALYZE;
+}
+do_eqp_test where3-3.0a {
+  SELECT * FROM t302, t301 WHERE t302.x=5 AND t301.a=t302.y;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t302
+  `--SEARCH TABLE t301 USING INTEGER PRIMARY KEY (rowid=?)
+}
+do_eqp_test where3-3.1 {
+  SELECT * FROM t301, t302 WHERE t302.x=5 AND t301.a=t302.y;
+} {
+  QUERY PLAN
+  |--SCAN TABLE t302
+  `--SEARCH TABLE t301 USING INTEGER PRIMARY KEY (rowid=?)
+}
+do_execsql_test where3-3.2 {
+  SELECT * FROM t301 WHERE c=3 AND a IS NULL;
+} {}
+do_execsql_test where3-3.3 {
+  SELECT * FROM t301 WHERE c=3 AND a IS NOT NULL;
+} {1 2 3 2 2 3}
+
+if 0 {  # Query planner no longer does this
+# Verify that when there are multiple tables in a join which must be
+# full table scans that the query planner attempts put the table with
+# the fewest number of output rows as the outer loop.
+#
+do_execsql_test where3-4.0 {
+  CREATE TABLE t400(a INTEGER PRIMARY KEY, b, c);
+  CREATE TABLE t401(p INTEGER PRIMARY KEY, q, r);
+  CREATE TABLE t402(x INTEGER PRIMARY KEY, y, z);
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t400, t401, t402 WHERE t402.z GLOB 'abc*';
+} {
+  0 0 2 {SCAN TABLE t402} 
+  0 1 0 {SCAN TABLE t400} 
+  0 2 1 {SCAN TABLE t401}
+}
+do_execsql_test where3-4.1 {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t400, t401, t402 WHERE t401.r GLOB 'abc*';
+} {
+  0 0 1 {SCAN TABLE t401} 
+  0 1 0 {SCAN TABLE t400} 
+  0 2 2 {SCAN TABLE t402}
+}
+do_execsql_test where3-4.2 {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t400, t401, t402 WHERE t400.c GLOB 'abc*';
+} {
+  0 0 0 {SCAN TABLE t400} 
+  0 1 1 {SCAN TABLE t401} 
+  0 2 2 {SCAN TABLE t402}
+}
+} ;# endif
+
+# Verify that a performance regression encountered by firefox
+# has been fixed.
+#
+do_execsql_test where3-5.0 {
+  CREATE TABLE aaa (id INTEGER PRIMARY KEY, type INTEGER,
+                    fk INTEGER DEFAULT NULL, parent INTEGER,
+                    position INTEGER, title LONGVARCHAR,
+                    keyword_id INTEGER, folder_type TEXT,
+                    dateAdded INTEGER, lastModified INTEGER);
+  CREATE INDEX aaa_111 ON aaa (fk, type);
+  CREATE INDEX aaa_222 ON aaa (parent, position);
+  CREATE INDEX aaa_333 ON aaa (fk, lastModified);
+  CREATE TABLE bbb (id INTEGER PRIMARY KEY, type INTEGER,
+                    fk INTEGER DEFAULT NULL, parent INTEGER,
+                    position INTEGER, title LONGVARCHAR,
+                    keyword_id INTEGER, folder_type TEXT,
+                    dateAdded INTEGER, lastModified INTEGER);
+  CREATE INDEX bbb_111 ON bbb (fk, type);
+  CREATE INDEX bbb_222 ON bbb (parent, position);
+  CREATE INDEX bbb_333 ON bbb (fk, lastModified);
+}
+do_eqp_test where3-5.0a {
+   SELECT bbb.title AS tag_title 
+     FROM aaa JOIN bbb ON bbb.id = aaa.parent  
+    WHERE aaa.fk = 'constant'
+      AND LENGTH(bbb.title) > 0
+      AND bbb.parent = 4
+    ORDER BY bbb.title COLLATE NOCASE ASC;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE aaa USING INDEX aaa_333 (fk=?)
+  |--SEARCH TABLE bbb USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test where3-5.1 {
+   SELECT bbb.title AS tag_title 
+     FROM aaa JOIN aaa AS bbb ON bbb.id = aaa.parent  
+    WHERE aaa.fk = 'constant'
+      AND LENGTH(bbb.title) > 0
+      AND bbb.parent = 4
+    ORDER BY bbb.title COLLATE NOCASE ASC;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE aaa USING INDEX aaa_333 (fk=?)
+  |--SEARCH TABLE aaa AS bbb USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test where3-5.2 {
+   SELECT bbb.title AS tag_title 
+     FROM bbb JOIN aaa ON bbb.id = aaa.parent  
+    WHERE aaa.fk = 'constant'
+      AND LENGTH(bbb.title) > 0
+      AND bbb.parent = 4
+    ORDER BY bbb.title COLLATE NOCASE ASC;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE aaa USING INDEX aaa_333 (fk=?)
+  |--SEARCH TABLE bbb USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+do_eqp_test where3-5.3 {
+   SELECT bbb.title AS tag_title 
+     FROM aaa AS bbb JOIN aaa ON bbb.id = aaa.parent  
+    WHERE aaa.fk = 'constant'
+      AND LENGTH(bbb.title) > 0
+      AND bbb.parent = 4
+    ORDER BY bbb.title COLLATE NOCASE ASC;
+} {
+  QUERY PLAN
+  |--SEARCH TABLE aaa USING INDEX aaa_333 (fk=?)
+  |--SEARCH TABLE aaa AS bbb USING INTEGER PRIMARY KEY (rowid=?)
+  `--USE TEMP B-TREE FOR ORDER BY
+}
+
+# Name resolution with NATURAL JOIN and USING
+#
+do_test where3-6.setup {
+  db eval {
+    CREATE TABLE t6w(a, w);
+    INSERT INTO t6w VALUES(1, 'w-one');
+    INSERT INTO t6w VALUES(2, 'w-two');
+    INSERT INTO t6w VALUES(9, 'w-nine');
+    CREATE TABLE t6x(a, x);
+    INSERT INTO t6x VALUES(1, 'x-one');
+    INSERT INTO t6x VALUES(3, 'x-three');
+    INSERT INTO t6x VALUES(9, 'x-nine');
+    CREATE TABLE t6y(a, y);
+    INSERT INTO t6y VALUES(1, 'y-one');
+    INSERT INTO t6y VALUES(4, 'y-four');
+    INSERT INTO t6y VALUES(9, 'y-nine');
+    CREATE TABLE t6z(a, z);
+    INSERT INTO t6z VALUES(1, 'z-one');
+    INSERT INTO t6z VALUES(5, 'z-five');
+    INSERT INTO t6z VALUES(9, 'z-nine');
+  }
+} {}
+set cnt 0
+foreach predicate {
+   {}
+   {ORDER BY a}
+   {ORDER BY t6w.a}
+   {WHERE a>0}
+   {WHERE t6y.a>0}
+   {WHERE a>0 ORDER BY a}
+} {
+  incr cnt
+  do_test where3-6.$cnt.1 {
+    set sql "SELECT * FROM t6w NATURAL JOIN t6x NATURAL JOIN t6y"
+    append sql " NATURAL JOIN t6z "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.2 {
+    set sql "SELECT * FROM t6w JOIN t6x USING(a) JOIN t6y USING(a)"
+    append sql " JOIN t6z USING(a) "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.3 {
+    set sql "SELECT * FROM t6w NATURAL JOIN t6x JOIN t6y USING(a)"
+    append sql " JOIN t6z USING(a) "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.4 {
+    set sql "SELECT * FROM t6w JOIN t6x USING(a) NATURAL JOIN t6y"
+    append sql " JOIN t6z USING(a) "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.5 {
+    set sql "SELECT * FROM t6w JOIN t6x USING(a) JOIN t6y USING(a)"
+    append sql " NATURAL JOIN t6z "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.6 {
+    set sql "SELECT * FROM t6w JOIN t6x USING(a) NATURAL JOIN t6y"
+    append sql " NATURAL JOIN t6z "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.7 {
+    set sql "SELECT * FROM t6w NATURAL JOIN t6x JOIN t6y USING(a)"
+    append sql " NATURAL JOIN t6z "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+  do_test where3-6.$cnt.8 {
+    set sql "SELECT * FROM t6w NATURAL JOIN t6x NATURAL JOIN t6y"
+    append sql " JOIN t6z USING(a) "
+    append sql $::predicate
+    db eval $sql
+  } {1 w-one x-one y-one z-one 9 w-nine x-nine y-nine z-nine}
+}
+
+do_execsql_test where3-7-setup {
+  CREATE TABLE t71(x1 INTEGER PRIMARY KEY, y1);
+  CREATE TABLE t72(x2 INTEGER PRIMARY KEY, y2);
+  CREATE TABLE t73(x3, y3);
+  CREATE TABLE t74(x4, y4);
+  INSERT INTO t71 VALUES(123,234);
+  INSERT INTO t72 VALUES(234,345);
+  INSERT INTO t73 VALUES(123,234);
+  INSERT INTO t74 VALUES(234,345);
+  INSERT INTO t74 VALUES(234,678);
+} {}
+foreach disabled_opt {none omit-noop-join all} {
+  optimization_control db all 1
+  optimization_control db $disabled_opt 0
+  do_execsql_test where3-7.$disabled_opt.1 {
+    SELECT x1 FROM t71 LEFT JOIN t72 ON x2=y1;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.2 {
+    SELECT x1 FROM t71 LEFT JOIN t72 ON x2=y1 WHERE y2 IS NULL;
+  } {}
+  do_execsql_test where3-7.$disabled_opt.3 {
+    SELECT x1 FROM t71 LEFT JOIN t72 ON x2=y1 WHERE y2 IS NOT NULL;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.4 {
+    SELECT x1 FROM t71 LEFT JOIN t72 ON x2=y1 AND y2 IS NULL;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.5 {
+    SELECT x1 FROM t71 LEFT JOIN t72 ON x2=y1 AND y2 IS NOT NULL;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.6 {
+    SELECT x3 FROM t73 LEFT JOIN t72 ON x2=y3;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.7 {
+    SELECT DISTINCT x3 FROM t73 LEFT JOIN t72 ON x2=y3;
+  } {123}
+  do_execsql_test where3-7.$disabled_opt.8 {
+    SELECT x3 FROM t73 LEFT JOIN t74 ON x4=y3;
+  } {123 123}
+  do_execsql_test where3-7.$disabled_opt.9 {
+    SELECT DISTINCT x3 FROM t73 LEFT JOIN t74 ON x4=y3;
+  } {123}
+}
+
+
+finish_test

@@ -1,0 +1,294 @@
+# 2015 June 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for the sessions module.
+# Specifically, it tests that tables appear in the correct order
+# within changesets and patchsets.
+#
+
+
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessionF
+
+#
+# Test plan:
+#
+#    1.*: Test that sqlite3session_changeset() and sqlite3session_patchset()
+#         output tables in the right order.
+#
+#    2.*: Test that sqlite3session_invert() does not modify the order of
+#         tables within a changeset.
+#
+#    3.*: Test that sqlite3session_concat outputs tables in the right order.
+#
+
+# Create a db schema to use.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t3(e PRIMARY KEY, f);
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  CREATE TABLE t2(c PRIMARY KEY, d);
+}
+
+#-----------------------------------------------------------------------
+# 1.* - changeset() and patchset().
+#
+
+foreach {tn setup result} {
+  1 {
+    S attach *
+  } {
+    {INSERT t2 0 X. {} {i 2 t two}} 
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t3 0 X. {} {i 3 t three}}
+  }
+
+  2 {
+    S attach t1
+    S attach *
+  } {
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t2 0 X. {} {i 2 t two}} 
+    {INSERT t3 0 X. {} {i 3 t three}}
+  }
+
+  3 {
+    S attach t3
+    S attach t2
+    S attach t1
+  } {
+    {INSERT t3 0 X. {} {i 3 t three}}
+    {INSERT t2 0 X. {} {i 2 t two}} 
+    {INSERT t1 0 X. {} {i 1 t one}} 
+  }
+} {
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+    DELETE FROM t3;
+  }
+  sqlite3session S db main
+  eval $setup
+
+  do_execsql_test 1.$tn.1 {
+    INSERT INTO t2 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t3 VALUES(3, 'three');
+  }
+
+  do_changeset_test 1.1.$tn.2 S $result
+  do_patchset_test  1.1.$tn.3 S $result
+
+  S delete
+}
+
+foreach {tn setup result} {
+  1 {
+    S attach *
+  } {
+    {INSERT t2 0 X. {} {i 4 t four}} 
+    {INSERT t2 0 X. {} {i 5 t five}}
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t3 0 X. {} {i 6 t six}}
+  }
+
+  2 {
+    S attach t1
+    S attach *
+  } {
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t2 0 X. {} {i 4 t four}} 
+    {INSERT t2 0 X. {} {i 5 t five}}
+    {INSERT t3 0 X. {} {i 6 t six}}
+  }
+
+  3 {
+    S attach t3
+    S attach t2
+    S attach t1
+  } {
+    {INSERT t3 0 X. {} {i 6 t six}}
+    {INSERT t2 0 X. {} {i 4 t four}} 
+    {INSERT t2 0 X. {} {i 5 t five}}
+    {INSERT t1 0 X. {} {i 1 t one}} 
+  }
+} {
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+    DELETE FROM t3;
+  }
+  sqlite3session S db main
+  eval $setup
+
+  do_execsql_test 1.$tn.1 {
+    INSERT INTO t2 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(1, 'one');
+    DELETE FROM t2;
+    INSERT INTO t2 VALUES(4, 'four');
+    INSERT INTO t2 VALUES(5, 'five');
+    INSERT INTO t3 VALUES(6, 'six');
+  }
+
+  do_changeset_test 1.2.$tn.2 S $result
+  do_patchset_test 1.2.$tn.2 S $result
+
+  S delete
+}
+
+#-------------------------------------------------------------------------
+# 2.* - invert()
+#
+
+foreach {tn setup result} {
+  1 {
+    S attach *
+  } {
+    {DELETE t2 0 X. {i 4 t four} {}} 
+    {DELETE t2 0 X. {i 5 t five} {}} 
+    {DELETE t1 0 X. {i 1 t one} {}}
+    {DELETE t3 0 X. {i 6 t six} {}} 
+  }
+
+  2 {
+    S attach t1
+    S attach *
+  } {
+    {DELETE t1 0 X. {i 1 t one} {}}
+    {DELETE t2 0 X. {i 4 t four} {}} 
+    {DELETE t2 0 X. {i 5 t five} {}} 
+    {DELETE t3 0 X. {i 6 t six} {}} 
+  }
+
+  3 {
+    S attach t3
+    S attach t2
+    S attach t1
+  } {
+    {DELETE t3 0 X. {i 6 t six} {}} 
+    {DELETE t2 0 X. {i 4 t four} {}} 
+    {DELETE t2 0 X. {i 5 t five} {}} 
+    {DELETE t1 0 X. {i 1 t one} {}}
+  }
+} {
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+    DELETE FROM t3;
+  }
+  sqlite3session S db main
+  eval $setup
+
+  do_execsql_test 1.$tn.1 {
+    INSERT INTO t2 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(1, 'one');
+    DELETE FROM t2;
+    INSERT INTO t2 VALUES(4, 'four');
+    INSERT INTO t2 VALUES(5, 'five');
+    INSERT INTO t3 VALUES(6, 'six');
+  }
+
+  do_changeset_invert_test 2.$tn.2 S $result
+
+  S delete
+}
+
+#-------------------------------------------------------------------------
+# 3.* - concat()
+#
+foreach {tn setup1 sql1 setup2 sql2 result} {
+  1 {
+    S attach *
+  } {
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(2, 'two');
+  } {
+    S attach t2
+    S attach t1
+  } {
+    INSERT INTO t1 VALUES(3, 'three');
+    INSERT INTO t2 VALUES(4, 'four');
+  } {
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t1 0 X. {} {i 3 t three}} 
+    {INSERT t2 0 X. {} {i 2 t two}}
+    {INSERT t2 0 X. {} {i 4 t four}}
+  }
+
+  1 {
+    S attach t2
+    S attach t1
+  } {
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t2 VALUES(2, 'two');
+  } {
+    S attach *
+  } {
+    INSERT INTO t1 VALUES(3, 'three');
+    INSERT INTO t2 VALUES(4, 'four');
+  } {
+    {INSERT t2 0 X. {} {i 2 t two}}
+    {INSERT t2 0 X. {} {i 4 t four}}
+    {INSERT t1 0 X. {} {i 1 t one}} 
+    {INSERT t1 0 X. {} {i 3 t three}} 
+  }
+
+  1 {
+    S attach *
+  } {
+    INSERT INTO t2 VALUES(2, 'two');
+  } {
+    S attach *
+  } {
+    INSERT INTO t1 VALUES(3, 'three');
+    INSERT INTO t2 VALUES(4, 'four');
+    INSERT INTO t3 VALUES(5, 'five');
+  } {
+    {INSERT t2 0 X. {} {i 2 t two}}
+    {INSERT t2 0 X. {} {i 4 t four}}
+    {INSERT t1 0 X. {} {i 3 t three}} 
+    {INSERT t3 0 X. {} {i 5 t five}} 
+  }
+
+} {
+  execsql {
+    DELETE FROM t1;
+    DELETE FROM t2;
+    DELETE FROM t3;
+  }
+  sqlite3session S db main
+  eval $setup1
+  execsql $sql1
+  set c1 [S changeset]
+  S delete
+
+  sqlite3session S db main
+  eval $setup2
+  execsql $sql2
+  set c2 [S changeset]
+  S delete
+
+  set res [list]
+  sqlite3session_foreach x [sqlite3changeset_concat $c1 $c2] {
+    lappend res $x
+  }
+
+  do_test 3.$tn { set res } [list {*}$result]
+}
+
+
+finish_test

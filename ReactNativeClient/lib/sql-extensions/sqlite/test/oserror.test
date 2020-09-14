@@ -1,0 +1,142 @@
+# 2011 February 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing that error messages are logged via the
+# sqlite3_log() mechanism when certain errors are encountered in the
+# default unix or windows VFS modules.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+if {$::tcl_platform(platform)!="unix"} { finish_test ; return }
+set ::testprefix oserror
+
+db close
+sqlite3_shutdown
+test_sqlite3_log xLog
+proc xLog {error_code msg} {
+  if {[string match os_* $msg]} {
+    lappend ::log $msg 
+  }
+}
+
+proc do_re_test {tn script expression} {
+  uplevel do_test $tn [list [subst -nocommands {
+    set res [eval { $script }]
+    if {[regexp {$expression} [set res]]} {
+      set {} {$expression}
+    } else {
+      set res
+    }
+  }]] [list $expression]
+  
+}
+
+#--------------------------------------------------------------------------
+# Tests oserror-1.* test failures in the open() system call.
+#
+
+# Test a failure in open() due to too many files. 
+#
+# The xOpen() method of the unix VFS calls getcwd() as well as open().
+# Although this does not appear to be documented in the man page, on OSX
+# a call to getcwd() may fail if there are no free file descriptors. So
+# an error may be reported for either open() or getcwd() here.
+#
+if {![clang_sanitize_address]} {
+  unset -nocomplain rc
+  unset -nocomplain nOpen
+  set nOpen 20000
+  do_test 1.1.1 {
+    set ::log [list]
+    set ::rc [catch {
+      for {set i 0} {$i < $::nOpen} {incr i} { sqlite3 dbh_$i test.db -readonly 1 }
+    } msg]
+    if {$::rc==0} {
+      # Some system (ex: Debian) are able to create 20000+ file descriptiors
+      # such systems will not fail here
+      set x ok
+    } elseif {$::rc==1 && $msg=="unable to open database file"} {
+      set x ok
+    } else {
+      set x [list $::rc $msg]
+    }
+  } {ok}
+  do_test 1.1.2 {
+    catch { for {set i 0} {$i < $::nOpen} {incr i} { dbh_$i close } }
+  } $::rc
+  if {$rc} {
+    do_re_test 1.1.3 { 
+      lindex $::log 0 
+    } {^os_unix.c:\d+: \(\d+\) (open|getcwd)\(.*test.db\) - }
+  }
+}
+
+
+# Test a failure in open() due to the path being a directory.
+#
+do_test 1.2.1 {
+  file mkdir dir.db
+  set ::log [list]
+  list [catch { sqlite3 dbh dir.db } msg] $msg
+} {1 {unable to open database file}}
+
+do_re_test 1.2.2 { lindex $::log 0 } {^os_unix.c:\d+: \(\d+\) open\(.*dir.db\) - }
+
+# Test a failure in open() due to the path not existing.
+#
+do_test 1.3.1 {
+  set ::log [list]
+  list [catch { sqlite3 dbh /x/y/z/test.db } msg] $msg
+} {1 {unable to open database file}}
+
+do_re_test 1.3.2 { lindex $::log 0 } {^os_unix.c:\d+: \(\d+\) open\(.*test.db\) - }
+
+# Test a failure in open() due to the path not existing.
+#
+do_test 1.4.1 {
+  set ::log [list]
+  list [catch { sqlite3 dbh /root/test.db } msg] $msg
+} {1 {unable to open database file}}
+
+do_re_test 1.4.2 { 
+  lindex $::log 0
+} {^os_unix.c:\d*: \(\d+\) (open|readlink|lstat)\(.*test.db\) - }
+
+#--------------------------------------------------------------------------
+# Tests oserror-1.* test failures in the unlink() system call.
+#
+ifcapable wal {
+  do_test 2.1.1 {
+    set ::log [list]
+    file mkdir test.db-wal
+    forcedelete test.db
+    list [catch {
+      sqlite3 dbh test.db
+      execsql { SELECT * FROM sqlite_master } dbh
+    } msg] $msg
+  } {1 {disk I/O error}}
+  
+  do_re_test 2.1.2 { 
+    lindex $::log 0 
+  } {^os_unix.c:\d+: \(\d+\) unlink\(.*test.db-wal\) - }
+  do_test 2.1.3 { 
+    catch { dbh close }
+    forcedelete test.db-wal
+  } {}
+}
+  
+
+test_syscall reset
+sqlite3_shutdown
+test_sqlite3_log 
+sqlite3_initialize
+finish_test

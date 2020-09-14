@@ -1,0 +1,669 @@
+# 2011 March 07
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session1
+
+# Run all tests in this file twice. Once with "WITHOUT ROWID", and once
+# with regular rowid tables.
+#
+foreach {tn trailing} {
+  1 ""
+  2 " WITHOUT ROWID "
+} {
+eval [string map [list %WR% $trailing] {
+
+db close
+forcedelete test.db test.db2
+reset_db
+
+do_execsql_test $tn.1.0 {
+  CREATE TABLE t1(x PRIMARY KEY, y) %WR%;
+  INSERT INTO t1 VALUES('abc', 'def');
+}
+
+#-------------------------------------------------------------------------
+# Test creating, attaching tables to and deleting session objects.
+#
+do_test $tn.1.1 { sqlite3session S db main } {S}
+do_test $tn.1.2 { S delete } {}
+do_test $tn.1.3 { sqlite3session S db main } {S}
+do_test $tn.1.4 { S attach t1 } {}
+do_test $tn.1.5 { S delete } {}
+do_test $tn.1.6 { sqlite3session S db main } {S}
+do_test $tn.1.7 { S attach t1 ; S attach t2 ; S attach t3 } {}
+do_test $tn.1.8 { S attach t1 ; S attach t2 ; S attach t3 } {}
+do_test $tn.1.9 { S delete } {}
+do_test $tn.1.10 {
+  sqlite3session S db main
+  S attach t1
+  execsql { INSERT INTO t1 VALUES('ghi', 'jkl') }
+} {}
+do_test $tn.1.11 { S delete } {}
+if {$tn==1} {
+  do_test $tn.1.12 {
+    sqlite3session S db main
+    S attach t1
+    execsql { INSERT INTO t1 VALUES('mno', 'pqr') }
+    execsql { UPDATE t1 SET x = 111 WHERE rowid = 1 }
+    execsql { DELETE FROM t1 WHERE rowid = 2 }
+  } {}
+  do_test $tn.1.13 {
+    S changeset
+    S delete
+  } {}
+}
+
+#-------------------------------------------------------------------------
+# Simple changeset tests. Also test the sqlite3changeset_invert() 
+# function.
+#
+do_test $tn.2.1.1 {
+  execsql { DELETE FROM t1 }
+  sqlite3session S db main
+  S attach t1
+  execsql { INSERT INTO t1 VALUES(1, 'Sukhothai') }
+  execsql { INSERT INTO t1 VALUES(2, 'Ayutthaya') }
+  execsql { INSERT INTO t1 VALUES(3, 'Thonburi') }
+} {}
+do_changeset_test $tn.2.1.2 S {
+  {INSERT t1 0 X. {} {i 1 t Sukhothai}}
+  {INSERT t1 0 X. {} {i 2 t Ayutthaya}}
+  {INSERT t1 0 X. {} {i 3 t Thonburi}}
+}
+do_changeset_invert_test $tn.2.1.3 S {
+  {DELETE t1 0 X. {i 1 t Sukhothai} {}}
+  {DELETE t1 0 X. {i 2 t Ayutthaya} {}}
+  {DELETE t1 0 X. {i 3 t Thonburi} {}}
+}
+do_test $tn.2.1.4 { S delete } {}
+
+do_test $tn.2.2.1 {
+  sqlite3session S db main
+  S attach t1
+  execsql { DELETE FROM t1 WHERE 1 }
+} {}
+do_changeset_test $tn.2.2.2 S {
+  {DELETE t1 0 X. {i 1 t Sukhothai} {}}
+  {DELETE t1 0 X. {i 2 t Ayutthaya} {}}
+  {DELETE t1 0 X. {i 3 t Thonburi} {}}
+}
+do_changeset_invert_test $tn.2.2.3 S {
+  {INSERT t1 0 X. {} {i 1 t Sukhothai}}
+  {INSERT t1 0 X. {} {i 2 t Ayutthaya}}
+  {INSERT t1 0 X. {} {i 3 t Thonburi}}
+}
+do_test $tn.2.2.4 { S delete } {}
+
+do_test $tn.2.3.1 {
+  execsql { DELETE FROM t1 }
+  sqlite3session S db main
+  execsql { INSERT INTO t1 VALUES(1, 'Sukhothai') }
+  execsql { INSERT INTO t1 VALUES(2, 'Ayutthaya') }
+  execsql { INSERT INTO t1 VALUES(3, 'Thonburi') }
+  S attach t1
+  execsql { 
+    UPDATE t1 SET x = 10 WHERE x = 1;
+    UPDATE t1 SET y = 'Surin' WHERE x = 2;
+    UPDATE t1 SET x = 20, y = 'Thapae' WHERE x = 3;
+  }
+} {}
+
+do_changeset_test $tn.2.3.2 S {
+  {INSERT t1 0 X. {} {i 10 t Sukhothai}} 
+  {DELETE t1 0 X. {i 1 t Sukhothai} {}} 
+  {UPDATE t1 0 X. {i 2 t Ayutthaya} {{} {} t Surin}} 
+  {DELETE t1 0 X. {i 3 t Thonburi} {}} 
+  {INSERT t1 0 X. {} {i 20 t Thapae}} 
+}
+
+do_changeset_invert_test $tn.2.3.3 S {
+  {DELETE t1 0 X. {i 10 t Sukhothai} {}} 
+  {INSERT t1 0 X. {} {i 1 t Sukhothai}} 
+  {UPDATE t1 0 X. {i 2 t Surin} {{} {} t Ayutthaya}} 
+  {INSERT t1 0 X. {} {i 3 t Thonburi}} 
+  {DELETE t1 0 X. {i 20 t Thapae} {}}
+}
+do_test $tn.2.3.4 { S delete } {}
+
+do_test $tn.2.4.1 {
+  sqlite3session S db main
+  S attach t1
+  execsql { INSERT INTO t1 VALUES(100, 'Bangkok') }
+  execsql { DELETE FROM t1 WHERE x = 100 }
+} {}
+do_changeset_test $tn.2.4.2 S {}
+do_changeset_invert_test $tn.2.4.3 S {}
+do_test $tn.2.4.4 { S delete } {}
+
+#-------------------------------------------------------------------------
+# Test the application of simple changesets. These tests also test that
+# the conflict callback is invoked correctly. For these tests, the 
+# conflict callback always returns OMIT.
+#
+db close
+forcedelete test.db test.db2
+sqlite3 db test.db
+sqlite3 db2 test.db2
+
+proc xConflict {args} { 
+  lappend ::xConflict $args
+  return "" 
+}
+
+proc bgerror {args} { set ::background_error $args }
+
+proc do_conflict_test {tn args} {
+  set O(-tables)    [list]
+  set O(-sql)       [list]
+  set O(-conflicts) [list]
+
+  array set V $args
+  foreach key [array names V] {
+    if {![info exists O($key)]} {error "no such option: $key"}
+  }
+  array set O $args
+
+  sqlite3session S db main
+  foreach t $O(-tables) { S attach $t }
+  execsql $O(-sql)
+  set ::xConflict [list]
+  sqlite3changeset_apply db2 [S changeset] xConflict
+
+  set conflicts [list]
+  foreach c $O(-conflicts) {
+    lappend conflicts $c
+  }
+
+  after 1 {set go 1}
+  vwait go
+
+  uplevel do_test $tn [list { set ::xConflict }] [list $conflicts]
+  S delete
+}
+
+proc do_db2_test {testname sql {result {}}} {
+  uplevel do_test $testname [list "execsql {$sql} db2"] [list [list {*}$result]]
+}
+
+# Test INSERT changesets.
+#
+do_test $tn.3.1.0 {
+  execsql { CREATE TABLE t1(a PRIMARY KEY, b NOT NULL) %WR% } db2
+  execsql { 
+    CREATE TABLE t1(a PRIMARY KEY, b) %WR%;
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+  } db 
+} {}
+do_db2_test $tn.3.1.1 "INSERT INTO t1 VALUES(6, 'VI')"
+do_conflict_test $tn.3.1.2 -tables t1 -sql {
+  INSERT INTO t1 VALUES(3, 'three');
+  INSERT INTO t1 VALUES(4, 'four');
+  INSERT INTO t1 VALUES(5, 'five');
+  INSERT INTO t1 VALUES(6, 'six');
+  INSERT INTO t1 VALUES(7, 'seven');
+  INSERT INTO t1 VALUES(8, NULL);
+} -conflicts {
+  {INSERT t1 CONFLICT {i 6 t six} {i 6 t VI}}
+  {INSERT t1 CONSTRAINT {i 8 n {}}}
+}
+
+do_db2_test $tn.3.1.3 "SELECT * FROM t1 ORDER BY a" {
+  3 three 4 four 5 five 6 VI 7 seven
+}
+do_execsql_test $tn.3.1.4 "SELECT * FROM t1" {
+  1 one 2 two 3 three 4 four 5 five 6 six 7 seven 8 {}
+}
+
+# Test DELETE changesets.
+#
+do_execsql_test $tn.3.2.1 {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE t2(a PRIMARY KEY, b)%WR%;
+  CREATE TABLE t3(c, d REFERENCES t2);
+  INSERT INTO t2 VALUES(1, 'one');
+  INSERT INTO t2 VALUES(2, 'two');
+  INSERT INTO t2 VALUES(3, 'three');
+  INSERT INTO t2 VALUES(4, 'four');
+}
+do_db2_test $tn.3.2.2 {
+  PRAGMA foreign_keys = on;
+  CREATE TABLE t2(a PRIMARY KEY, b)%WR%;
+  CREATE TABLE t3(c, d REFERENCES t2);
+  INSERT INTO t2 VALUES(1, 'one');
+  INSERT INTO t2 VALUES(2, 'two');
+  INSERT INTO t2 VALUES(4, 'five');
+  INSERT INTO t3 VALUES('i', 1);
+}
+do_conflict_test $tn.3.2.3 -tables t2 -sql {
+  DELETE FROM t2 WHERE a = 1;
+  DELETE FROM t2 WHERE a = 2;
+  DELETE FROM t2 WHERE a = 3;
+  DELETE FROM t2 WHERE a = 4;
+} -conflicts {
+  {DELETE t2 NOTFOUND {i 3 t three}}
+  {DELETE t2 DATA {i 4 t four} {i 4 t five}}
+  {FOREIGN_KEY 1}
+}
+do_execsql_test $tn.3.2.4 "SELECT * FROM t2" {}
+do_db2_test $tn.3.2.5 "SELECT * FROM t2" {4 five}
+
+# Test UPDATE changesets.
+#
+do_execsql_test $tn.3.3.1 {
+  CREATE TABLE t4(a, b, c, PRIMARY KEY(b, c))%WR%;
+  INSERT INTO t4 VALUES(1, 2, 3);
+  INSERT INTO t4 VALUES(4, 5, 6);
+  INSERT INTO t4 VALUES(7, 8, 9);
+  INSERT INTO t4 VALUES(10, 11, 12);
+}
+do_db2_test $tn.3.3.2 {
+  CREATE TABLE t4(a NOT NULL, b, c, PRIMARY KEY(b, c))%WR%;
+  INSERT INTO t4 VALUES(0, 2, 3);
+  INSERT INTO t4 VALUES(4, 5, 7);
+  INSERT INTO t4 VALUES(7, 8, 9);
+  INSERT INTO t4 VALUES(10, 11, 12);
+}
+do_conflict_test $tn.3.3.3 -tables t4 -sql {
+  UPDATE t4 SET a = -1 WHERE b = 2;
+  UPDATE t4 SET a = -1 WHERE b = 5;
+  UPDATE t4 SET a = NULL WHERE c = 9;
+  UPDATE t4 SET a = 'x' WHERE b = 11;
+} -conflicts {
+  {UPDATE t4 DATA {i 1 i 2 i 3} {i -1 {} {} {} {}} {i 0 i 2 i 3}}
+  {UPDATE t4 NOTFOUND {i 4 i 5 i 6} {i -1 {} {} {} {}}}
+  {UPDATE t4 CONSTRAINT {i 7 i 8 i 9} {n {} {} {} {} {}}}
+}
+do_db2_test $tn.3.3.4 { SELECT * FROM t4 } {0 2 3 4 5 7 7 8 9 x 11 12}
+do_execsql_test $tn.3.3.5 { SELECT * FROM t4 } {-1 2 3 -1 5 6 {} 8 9 x 11 12}
+
+#-------------------------------------------------------------------------
+# This next block of tests verifies that values returned by the conflict
+# handler are intepreted correctly.
+#
+
+proc test_reset {} {
+  db close
+  db2 close
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  sqlite3 db2 test.db2
+}
+
+proc xConflict {args} {
+  lappend ::xConflict $args
+  return $::conflict_return
+}
+
+foreach {tn2 conflict_return after} {
+  1 OMIT      {1 2 value1   4 5 7       10 x x}
+  2 REPLACE   {1 2 value1   4 5 value2  10 8 9}
+} {
+  test_reset
+
+  do_test $tn.4.$tn2.1 {
+    foreach db {db db2} {
+      execsql { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(a))%WR%;
+        INSERT INTO t1 VALUES(1, 2, 3);
+        INSERT INTO t1 VALUES(4, 5, 6);
+        INSERT INTO t1 VALUES(7, 8, 9);
+      } $db
+    }
+    execsql { 
+      REPLACE INTO t1 VALUES(4, 5, 7);
+      REPLACE INTO t1 VALUES(10, 'x', 'x');
+    } db2
+  } {}
+
+  do_conflict_test $tn.4.$tn2.2 -tables t1 -sql {
+    UPDATE t1 SET c = 'value1' WHERE a = 1;       -- no conflict
+    UPDATE t1 SET c = 'value2' WHERE a = 4;       -- DATA conflict
+    UPDATE t1 SET a = 10 WHERE a = 7;             -- CONFLICT conflict
+  } -conflicts {
+    {INSERT t1 CONFLICT {i 10 i 8 i 9} {i 10 t x t x}}
+    {UPDATE t1 DATA {i 4 {} {} i 6} {{} {} {} {} t value2} {i 4 i 5 i 7}}
+  }
+
+  do_db2_test $tn.4.$tn2.3 "SELECT * FROM t1 ORDER BY a" $after
+}
+
+foreach {tn2 conflict_return} {
+  1 OMIT
+  2 REPLACE
+} {
+  test_reset
+
+  do_test $tn.5.$tn2.1 {
+    # Create an identical schema in both databases.
+    set schema {
+      CREATE TABLE "'foolish name'"(x, y, z, PRIMARY KEY(x, y))%WR%;
+    }
+    execsql $schema db
+    execsql $schema db2
+
+    # Add some rows to [db2]. These rows will cause conflicts later
+    # on when the changeset from [db] is applied to it.
+    execsql { 
+      INSERT INTO "'foolish name'" VALUES('one', 'one', 'ii');
+      INSERT INTO "'foolish name'" VALUES('one', 'two', 'i');
+      INSERT INTO "'foolish name'" VALUES('two', 'two', 'ii');
+    } db2
+
+  } {}
+
+  do_conflict_test $tn.5.$tn2.2 -tables {{'foolish name'}} -sql {
+    INSERT INTO "'foolish name'" VALUES('one', 'two', 2);
+  } -conflicts {
+    {INSERT {'foolish name'} CONFLICT {t one t two i 2} {t one t two t i}}
+  }
+
+  set res(REPLACE) {one one ii one two 2 two two ii}
+  set res(OMIT)    {one one ii one two i two two ii}
+  do_db2_test $tn.5.$tn2.3 {
+    SELECT * FROM "'foolish name'" ORDER BY x, y
+  } $res($conflict_return)
+
+
+  do_test $tn.5.$tn2.1 {
+    set schema {
+      CREATE TABLE d1("z""z" PRIMARY KEY, y)%WR%;
+      INSERT INTO d1 VALUES(1, 'one');
+      INSERT INTO d1 VALUES(2, 'two');
+    }
+    execsql $schema db
+    execsql $schema db2
+
+    execsql { 
+      UPDATE d1 SET y = 'TWO' WHERE "z""z" = 2;
+    } db2
+
+  } {}
+
+  do_conflict_test $tn.5.$tn2.2 -tables d1 -sql {
+    DELETE FROM d1 WHERE "z""z" = 2;
+  } -conflicts {
+    {DELETE d1 DATA {i 2 t two} {i 2 t TWO}}
+  }
+
+  set res(REPLACE) {1 one}
+  set res(OMIT)    {1 one 2 TWO}
+  do_db2_test $tn.5.$tn2.3 "SELECT * FROM d1" $res($conflict_return)
+}
+
+#-------------------------------------------------------------------------
+# Test that two tables can be monitored by a single session object.
+#
+test_reset
+set schema {
+  CREATE TABLE t1(a COLLATE nocase PRIMARY KEY, b)%WR%;
+  CREATE TABLE t2(a, b PRIMARY KEY)%WR%;
+}
+do_test $tn.6.0 {
+  execsql $schema db
+  execsql $schema db2
+  execsql {
+    INSERT INTO t1 VALUES('a', 'b');
+    INSERT INTO t2 VALUES('a', 'b');
+  } db2
+} {}
+
+set conflict_return ""
+do_conflict_test $tn.6.1 -tables {t1 t2} -sql {
+  INSERT INTO t1 VALUES('1', '2');
+  INSERT INTO t1 VALUES('A', 'B');
+  INSERT INTO t2 VALUES('A', 'B');
+} -conflicts {
+  {INSERT t1 CONFLICT {t A t B} {t a t b}}
+}
+
+do_db2_test $tn.6.2 "SELECT * FROM t1 ORDER BY a" {1 2 a b}
+do_db2_test $tn.6.3 "SELECT * FROM t2 ORDER BY a" {A B a b}
+
+#-------------------------------------------------------------------------
+# Test that session objects are not confused by changes to table in
+# other databases.
+#
+catch { db2 close }
+drop_all_tables
+forcedelete test.db2
+do_iterator_test $tn.7.1 * {
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE main.t1(x PRIMARY KEY, y)%WR%;
+  CREATE TABLE aux.t1(x PRIMARY KEY, y)%WR%;
+
+  INSERT INTO main.t1 VALUES('one', 1);
+  INSERT INTO main.t1 VALUES('two', 2);
+  INSERT INTO aux.t1 VALUES('three', 3);
+  INSERT INTO aux.t1 VALUES('four', 4);
+} {
+  {INSERT t1 0 X. {} {t two i 2}} 
+  {INSERT t1 0 X. {} {t one i 1}}
+}
+
+#-------------------------------------------------------------------------
+# Test the sqlite3session_isempty() function.
+#
+do_test $tn.8.1 {
+  execsql {
+    CREATE TABLE t5(x PRIMARY KEY, y)%WR%;
+    CREATE TABLE t6(x PRIMARY KEY, y)%WR%;
+    INSERT INTO t5 VALUES('a', 'b');
+    INSERT INTO t6 VALUES('a', 'b');
+  }
+  sqlite3session S db main
+  S attach *
+
+  S isempty
+} {1}
+do_test $tn.8.2 {
+  execsql { DELETE FROM t5 }
+  S isempty
+} {0}
+do_test $tn.8.3 {
+  S delete
+  sqlite3session S db main
+  S attach t5
+  execsql { DELETE FROM t5 }
+  S isempty
+} {1}
+do_test $tn.8.4 { S delete } {}
+
+do_test $tn.8.5 {
+  sqlite3session S db main
+  S attach t5
+  S attach t6
+  execsql { INSERT INTO t5 VALUES(1, 2) }
+  S isempty
+} {0}
+
+do_test $tn.8.6 {
+  S delete
+  sqlite3session S db main
+  S attach t5
+  S attach t6
+  execsql { INSERT INTO t6 VALUES(1, 2) }
+  S isempty
+} {0}
+do_test $tn.8.7 { S delete } {}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test $tn.9.1 {
+  CREATE TABLE t7(a, b, c, d, e PRIMARY KEY, f, g)%WR%;
+  INSERT INTO t7 VALUES(1, 1, 1, 1, 1, 1, 1);
+}
+do_test $tn.9.2 { 
+  sqlite3session S db main 
+  S attach *
+  execsql { UPDATE t7 SET b=2, d=2 }
+} {}
+do_changeset_test $tn.9.2 S {{UPDATE t7 0 ....X.. {{} {} i 1 {} {} i 1 i 1 {} {} {} {}} {{} {} i 2 {} {} i 2 {} {} {} {} {} {}}}}
+S delete
+catch { db2 close }
+ 
+#-------------------------------------------------------------------------
+# Test a really long table name.
+#
+reset_db
+set tblname [string repeat tblname123 100]
+do_test $tn.10.1.1 {
+  execsql "
+    CREATE TABLE $tblname (a PRIMARY KEY, b)%WR%;
+    INSERT INTO $tblname VALUES('xyz', 'def');
+  "
+  sqlite3session S db main
+  S attach $tblname
+  execsql " 
+    INSERT INTO $tblname VALUES('uvw', 'abc');
+    DELETE FROM $tblname WHERE a = 'xyz';
+  "
+} {}
+do_changeset_test $tn.10.1.2 S "
+  {INSERT $tblname 0 X. {} {t uvw t abc}}
+  {DELETE $tblname 0 X. {t xyz t def} {}}
+"
+do_test $tn.10.1.4 { S delete } {}
+
+#---------------------------------------------------------------
+reset_db
+do_execsql_test $tn.11.1 {
+  CREATE TABLE t1(a, b);
+}
+do_test $tn.11.2 {
+  sqlite3session S db main
+  S attach t1
+  execsql {
+    INSERT INTO t1 VALUES(1, 2);
+  }
+  S changeset
+} {}
+
+S delete
+
+
+#-------------------------------------------------------------------------
+# Test a really long table name.
+#
+reset_db
+set tblname [string repeat tblname123 100]
+do_test $tn.10.1.1 {
+  execsql "
+    CREATE TABLE $tblname (a PRIMARY KEY, b)%WR%;
+    INSERT INTO $tblname VALUES('xyz', 'def');
+  "
+  sqlite3session S db main
+  S attach $tblname
+  execsql " 
+    INSERT INTO $tblname VALUES('uvw', 'abc');
+    DELETE FROM $tblname WHERE a = 'xyz';
+  "
+} {}
+do_changeset_test $tn.10.1.2 S "
+  {INSERT $tblname 0 X. {} {t uvw t abc}}
+  {DELETE $tblname 0 X. {t xyz t def} {}}
+"
+do_test $tn.10.1.4 { S delete } {}
+
+#-------------------------------------------------------------------------
+# Test the effect of updating a column from 0.0 to 0.0.
+#
+reset_db
+do_execsql_test $tn.11.1 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b REAL)%WR%;
+  INSERT INTO t1 VALUES(1, 0.0);
+}
+do_iterator_test $tn.11.2 * {
+  UPDATE t1 SET b = 0.0;
+} {
+}
+
+reset_db
+do_execsql_test $tn.12.1 {
+  CREATE TABLE t1(r INTEGER PRIMARY KEY, a, b)%WR%;
+  CREATE INDEX i1 ON t1(a);
+  INSERT INTO t1 VALUES(1, 1, 1);
+  INSERT INTO t1 VALUES(2, 1, 2);
+  INSERT INTO t1 VALUES(3, 1, 3);
+}
+
+do_iterator_test $tn.12.2 * {
+  UPDATE t1 SET b='one' WHERE a=1;
+} {
+  {UPDATE t1 0 X.. {i 1 {} {} i 1} {{} {} {} {} t one}}
+  {UPDATE t1 0 X.. {i 2 {} {} i 2} {{} {} {} {} t one}}
+  {UPDATE t1 0 X.. {i 3 {} {} i 3} {{} {} {} {} t one}}
+}
+
+#-------------------------------------------------------------------------
+# Test that no savepoint is used if -nosavepoint is specified.
+#
+do_execsql_test $tn.13.1 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b)%WR%;
+}
+do_test $tn.13.2 {
+  execsql BEGIN
+  set C [changeset_from_sql {
+    INSERT INTO x1 VALUES(1, 'one');
+    INSERT INTO x1 VALUES(2, 'two');
+    INSERT INTO x1 VALUES(3, 'three');
+  }]
+  execsql ROLLBACK
+  execsql {
+    INSERT INTO x1 VALUES(1, 'i');
+    INSERT INTO x1 VALUES(2, 'ii');
+    INSERT INTO x1 VALUES(3, 'iii');
+  }
+} {}
+
+proc xConflict {args} {
+  set ret [lindex $::CONFLICT_HANDLERS 0]
+  set ::CONFLICT_HANDLERS [lrange $::CONFLICT_HANDLERS 1 end]
+  set ret
+}
+do_test $tn.13.3 {
+  set CONFLICT_HANDLERS [list REPLACE REPLACE ABORT]
+  execsql BEGIN
+  catch { sqlite3changeset_apply_v2 db $C xConflict } msg
+  execsql {
+    SELECT * FROM x1
+  }
+} {1 i 2 ii 3 iii}
+do_test $tn.13.3 {
+  set CONFLICT_HANDLERS [list REPLACE REPLACE ABORT]
+  execsql ROLLBACK
+  execsql BEGIN
+  catch { sqlite3changeset_apply_v2 -nosavepoint db $C xConflict } msg
+  execsql { SELECT * FROM x1 }
+} {1 one 2 two 3 iii}
+execsql ROLLBACK
+
+do_test $tn.14.1 { sqlite3session_config strm_size -1 } 64
+do_test $tn.14.2 { sqlite3session_config strm_size 65536 } 65536
+do_test $tn.14.3 { sqlite3session_config strm_size 64 } 64
+do_test $tn.14.4 { 
+  list [catch {sqlite3session_config invalid 123} msg] $msg
+} {1 SQLITE_MISUSE}
+
+}]
+}
+
+
+finish_test

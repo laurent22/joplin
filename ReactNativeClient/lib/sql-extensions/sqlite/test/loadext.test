@@ -1,0 +1,299 @@
+# 2006 July 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is extension loading.
+#
+# $Id: loadext.test,v 1.17 2009/03/20 09:09:37 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !load_ext {
+  finish_test
+  return
+}
+
+# The name of the test extension varies by operating system.
+#
+if {$::tcl_platform(platform) eq "windows"} {
+  set testextension ./testloadext.dll
+} else {
+  set testextension ./libtestloadext.so
+}
+set gcc_shared "-shared -fPIC"
+if {$::tcl_platform(os) eq "Darwin"} {
+  set gcc_shared -dynamiclib
+}
+
+# The error messages tested by this file are operating system dependent
+# (because they are returned by sqlite3OsDlError()). For now, they only
+# work with UNIX (and probably only certain kinds of UNIX).
+#
+# When a shared-object cannot be opened because it does not exist, the
+# format of the message returned is:
+#
+#      [format $dlerror_nosuchfile <shared-object-name>]
+#
+# When a shared-object cannot be opened because it consists of the 4
+# characters "blah" only, we expect the error message to be:
+#
+#      [format $dlerror_notadll <shared-object-name>]
+#
+# When a symbol cannot be found within an open shared-object, the error
+# message should be:
+#
+#      [format $dlerror_nosymbol <shared-object-name> <symbol-name>]
+#
+# The exact error messages are not important. The important bit is
+# that SQLite is correctly copying the message from xDlError().
+#
+set dlerror_nosuchfile \
+    {%s: cannot open shared object file: No such file or directory}
+set dlerror_notadll    {%s: file too short}
+set dlerror_nosymbol   {%s: undefined symbol: %s}
+
+if {$::tcl_platform(os) eq "Darwin"} {
+  set dlerror_nosuchfile {dlopen.%s, 10.: .*image.*found.*}
+  set dlerror_notadll    {dlopen.%1$s, 10.: .*image.*found.*}
+  set dlerror_nosymbol   {dlsym.XXX, %2$s.: symbol not found}
+}
+
+if {$::tcl_platform(platform) eq "windows"} {
+  set dlerror_nosuchfile {The specified module could not be found.*}
+  set dlerror_notadll    {%%1 is not a valid Win32 application.*}
+  set dlerror_nosymbol   {The specified procedure could not be found.*}
+}
+
+# Make sure the test extension actually exists.  If it does not
+# exist, try to create it.  If unable to create it, then skip this
+# test file.
+#
+if {![file exists $testextension]} {
+  set srcdir [file dir $testdir]/src
+  set testextsrc $srcdir/test_loadext.c
+
+  set cmdline [concat exec gcc $gcc_shared]
+  lappend cmdline -Wall -I$srcdir -I. -I.. -g $testextsrc -o $testextension
+  
+  if {[catch $cmdline msg]} {
+    puts "Skipping loadext tests: Test extension not built..."
+    puts $msg
+    finish_test
+    return
+  }
+}
+
+# Test that loading the extension produces the expected results - adding
+# the half() function to the specified database handle.
+#
+do_test loadext-1.1 {
+  catchsql {
+    SELECT half(1.0);
+  }
+} {1 {no such function: half}}
+do_test loadext-1.2 {
+  db enable_load_extension 1
+  sqlite3_load_extension db $testextension testloadext_init
+  catchsql {
+    SELECT half(1.0);
+  }
+} {0 0.5}
+
+# Test that a second database connection (db2) can load the extension also.
+#
+do_test loadext-1.3 {
+  sqlite3 db2 test.db
+  sqlite3_db_config db2 SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION 1
+  catchsql {
+    SELECT half(1.0);
+  } db2
+} {1 {no such function: half}}
+do_test loadext-1.4 {
+  sqlite3_load_extension db2 $testextension testloadext_init
+  catchsql {
+    SELECT half(1.0);
+  } db2
+} {0 0.5}
+
+# Close the first database connection. Then check that the second database
+# can still use the half() function without a problem.
+#
+do_test loadext-1.5 {
+  db close
+  catchsql {
+    SELECT half(1.0);
+  } db2
+} {0 0.5}
+
+db2 close
+sqlite3 db test.db
+sqlite3_enable_load_extension db 1
+
+# Try to load an extension for which the file does not exist.
+#
+do_test loadext-2.1 {
+  forcedelete ${testextension}xx
+  set rc [catch {
+    sqlite3_load_extension db "${testextension}xx"
+  } msg]
+  list $rc $msg
+} /[list 1 [format $dlerror_nosuchfile ${testextension}xx.*]]/
+
+# Try to load an extension for which the file is not a shared object
+#
+do_test loadext-2.2 {
+  set fd [open "./notasharedlib.so" w]
+  puts $fd blah
+  close $fd
+  set fd [open "./notasharedlib.dll" w]
+  puts $fd blah
+  close $fd
+  set rc [catch {
+    sqlite3_load_extension db "./notasharedlib"
+  } msg]
+  list $rc $msg
+} /[list 1 [format $dlerror_notadll ./notasharedlib.*]]/
+
+# Try to load an extension for which the file is present but the
+# entry point is not.
+#
+do_test loadext-2.3 {
+  set rc [catch {
+    sqlite3_load_extension db $testextension icecream
+  } msg]
+  if {$::tcl_platform(os) eq "Darwin"} {
+    regsub {0x[1234567890abcdefABCDEF]*} $msg XXX msg
+  }
+  list $rc $msg
+} /[list 1 [format $dlerror_nosymbol $testextension icecream]]/
+
+# Try to load an extension for which the entry point fails (returns non-zero) 
+#
+do_test loadext-2.4 {
+  set rc [catch {
+    sqlite3_load_extension db $testextension testbrokenext_init
+  } msg]
+  list $rc $msg
+} {1 {error during initialization: broken!}}
+
+############################################################################
+# Tests for the load_extension() SQL function
+#
+
+db close
+sqlite3 db test.db
+sqlite3_enable_load_extension db 1
+do_test loadext-3.1 {
+  catchsql {
+    SELECT half(5);
+  }
+} {1 {no such function: half}}
+do_test loadext-3.2 {
+  set res [catchsql {
+    SELECT load_extension($::testextension)
+  }]
+  if {$::tcl_platform(os) eq "Darwin"} {
+    regsub {0x[1234567890abcdefABCDEF]*} $res XXX res
+  }
+  set res
+} /[list 1 [format $dlerror_nosymbol $testextension sqlite3_.*_init]]/
+do_test loadext-3.3 {
+  catchsql {
+    SELECT load_extension($::testextension,'testloadext_init')
+  }
+} {0 {{}}}
+do_test loadext-3.4 {
+  catchsql {
+    SELECT half(5);
+  }
+} {0 2.5}
+do_test loadext-3.5 {
+  db eval {
+    SELECT sqlite3_status('MEMORY_USED') AS mused
+  } break
+  puts -nonewline " (memory_used=$mused) "
+  expr {$mused>0}
+} {1}
+do_test loadext-3.6 {
+  catchsql {
+    SELECT sqlite3_status('MEMORY_USED_X') AS mused
+  }
+} {1 {unknown status property: MEMORY_USED_X}}
+do_test loadext-3.7 {
+  catchsql {
+    SELECT sqlite3_status(4.53) AS mused
+  }
+} {1 {unknown status type}}
+do_test loadext-3.8 {
+  catchsql {
+    SELECT sqlite3_status(23) AS mused
+  }
+} {1 {sqlite3_status(23,...) returns 21}}
+
+# Ticket #1863
+# Make sure the extension loading mechanism will not work unless it
+# is explicitly enabled.
+#
+db close
+sqlite3 db test.db
+do_test loadext-4.1 {
+  catchsql {
+    SELECT load_extension($::testextension,'testloadext_init')
+  }
+} {1 {not authorized}}
+do_test loadext-4.2 {
+  sqlite3_enable_load_extension db 1
+  catchsql {
+    SELECT load_extension($::testextension,'testloadext_init')
+  }
+} {0 {{}}}
+
+# disable all extension loading
+do_test loadext-4.3 {
+  sqlite3_enable_load_extension db 0
+  catchsql {
+    SELECT load_extension($::testextension,'testloadext_init')
+  }
+} {1 {not authorized}}
+
+# enable C-api extension loading only.  Show that the SQL function
+# still does not work.
+do_test loadext-4.4 {
+  sqlite3_db_config db SQLITE_DBCONFIG_ENABLE_LOAD_EXTENSION 1
+  catchsql {
+    SELECT load_extension($::testextension,'testloadext_init')
+  }
+} {1 {not authorized}}
+
+source $testdir/malloc_common.tcl
+
+
+# Malloc failure in sqlite3_auto_extension and sqlite3_load_extension
+#
+do_malloc_test loadext-5 -tclprep {
+  sqlite3_reset_auto_extension
+} -tclbody {
+  if {[autoinstall_test_functions]==7} {error "out of memory"}
+}
+
+# On Windows, this malloc test must be skipped because the winDlOpen
+# function itself can fail due to "out of memory" conditions.
+#
+if {$::tcl_platform(platform) ne "windows"} {
+  do_malloc_test loadext-6 -tclbody {
+    db enable_load_extension 1
+    sqlite3_load_extension db $::testextension testloadext_init
+  }
+}
+
+autoinstall_test_functions
+
+finish_test

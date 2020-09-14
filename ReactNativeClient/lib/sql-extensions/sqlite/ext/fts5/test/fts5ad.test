@@ -1,0 +1,243 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+# More specifically, the focus is on testing prefix queries, both with and
+# without prefix indexes.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ad
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE yy USING fts5(x, y, detail=%DETAIL%);
+  INSERT INTO yy VALUES('Changes the result to be', 'the list of all matching');
+  INSERT INTO yy VALUES('indices (or all  matching', 'values if -inline is');
+  INSERT INTO yy VALUES('specified as  well.) If', 'indices are returned, the');
+} {}
+
+foreach {tn match res} {
+  1 {c*} {1}
+  2 {i*} {3 2}
+  3 {t*} {3 1}
+  4 {r*} {3 1}
+} {
+  do_execsql_test 1.$tn {
+    SELECT rowid FROM yy WHERE yy MATCH $match ORDER BY rowid DESC
+  } $res
+}
+
+foreach {tn match res} {
+  5 {c*} {1}
+  6 {i*} {2 3}
+  7 {t*} {1 3}
+  8 {r*} {1 3}
+} {
+  do_execsql_test 1.$tn {
+    SELECT rowid FROM yy WHERE yy MATCH $match
+  } $res
+}
+
+foreach {T create} {
+  2 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  }
+  
+  3 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix="1,2,3,4", detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  }
+
+  4 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+    BEGIN;
+  }
+  
+  5 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, prefix="1,2,3,4", detail=%DETAIL%);
+    INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+    BEGIN;
+  }
+
+} {
+
+  do_test $T.1 { 
+    execsql { DROP TABLE IF EXISTS t1 }
+    execsql $create
+  } {}
+  
+  do_test $T.1 {
+    foreach {rowid a b} {
+      0   {fghij uvwxyz klmn pq uvwx}         {klmn f fgh uv fghij klmno}
+      1   {uv f abcd abcd fghi}               {pq klm uv uv fgh uv a}
+      2   {klmn klm pqrs fghij uv}            {f k uvw ab abcd pqr uv}
+      3   {ab pqrst a fghi ab pqr fg}         {k klmno a fg abcd}
+      4   {abcd pqrst uvwx a fgh}             {f klmno fghij kl pqrst}
+      5   {uvwxyz k abcde u a}                {uv k k kl klmn}
+      6   {uvwxyz k klmn pqrst uv}            {fghi pqrs abcde u k}
+      7   {uvwxy klmn u p pqrst fgh}          {p f fghi abcd uvw kl uv}
+      8   {f klmno pqrst uvwxy pqrst}         {uv abcde klm pq pqr}
+      9   {f abcde a uvwxyz pqrst}            {fghij abc k uvwx pqr fghij uvwxy}
+      10  {ab uv f fg pqrst uvwxy}            {fgh p uv k abc klm uvw}
+      11  {pq klmno a uvw abcde uvwxyz}       {fghij pq uvwxyz pqr fghi}
+      12  {fgh u pq fgh uvw}                  {uvw pqr f uvwxy uvwx}
+      13  {uvwx klmn f fgh abcd pqr}          {uvw k fg uv klm abcd}
+      14  {ab uvwx pqrst pqr uvwxyz pqrs}     {uvwxyz abcde ab ab uvw abcde}
+      15  {abc abcde uvwxyz abc kl k pqr}     {klm k k klmno u fgh}
+      16  {fghi abcd fghij uv uvwxyz ab uv}   {klmn pqr a uvw fghi}
+      17  {abc pqrst fghi uvwx uvw klmn fghi} {ab fg pqr pqrs p}
+      18  {pqr kl a fghij fgh fg kl}          {pqr uvwxyz uvw abcd uvwxyz}
+      19  {fghi fghi pqr kl fghi f}           {klmn u u klmno klmno}
+      20  {abc pqrst klmno kl pq uvwxy}       {abc k fghi pqrs klm}
+      21  {a pqr uvwxyz uv fghi a fgh}        {abc pqrs pqrst pq klm}
+      22  {klm abc uvwxyz klm pqrst}          {fghij k pq pqr u klm fghij}
+      23  {p klm uv p a a}                    {uvwxy klmn uvw abcde pq}
+      24  {uv fgh fg pq uvwxy u uvwxy}        {pqrs a uvw p uvwx uvwxyz fg}
+      25  {fghij fghi klmn abcd pq kl}        {fghi abcde pqrs abcd fgh uvwxy}
+      26  {pq fgh a abc klmno klmn}           {fgh p k p fg fghij}
+      27  {fg pq kl uvwx fghij pqrst klmn}    {abcd uvw abcd fghij f fghij}
+      28  {uvw fghi p fghij pq fgh uvwx}      {k fghij abcd uvwx pqr fghi}
+      29  {klm pq abcd pq f uvwxy}            {pqrst p fghij pqr p}
+      30  {ab uvwx fg uvwx klmn klm}          {klmn klmno fghij klmn klm}
+      31  {pq k pqr abcd a pqrs}              {abcd abcd uvw a abcd klmno ab}
+      32  {pqrst u abc pq klm}                {abc kl uvwxyz fghij u fghi p}
+      33  {f uvwxy u k f uvw uvwx}            {pqrs uvw fghi fg pqrst klm}
+      34  {pqrs pq fghij uvwxyz pqr}          {ab abc abc uvw f pq f}
+      35  {uvwxy ab uvwxy klmno kl pqrs}      {abcde uvw pqrs uvwx k k}
+      36  {uvwxyz k ab abcde abc uvw}         {uvw abcde uvw klmn uv klmn}
+      37  {k kl uv abcde uvwx fg u}           {u abc uvwxy k fg abcd}
+      38  {fghi pqrst fghi pqr pqrst uvwx}    {u uv uvwx fghi abcde}
+      39  {k pqrst k uvw fg pqrst fghij}      {uvwxy ab kl klmn uvwxyz abcde}
+      40  {fg uvwxy pqrs klmn uvwxyz klm p}   {k uv ab fghij fgh k pqrs}
+      41  {uvwx abc f pq uvwxy k}             {ab uvwxyz abc f fghij}
+      42  {uvwxy klmno uvwxyz uvwxyz pqrst}   {uv kl kl klmno k f abcde}
+      43  {abcde ab pqrs fg f fgh}            {abc fghij fghi k k}
+      44  {uvw abcd a ab pqrst klmn fg}       {pqrst u uvwx pqrst fghij f pqrst}
+      45  {uvwxy p kl uvwxyz ab pqrst fghi}   {abc f pqr fg a k}
+      46  {u p f a fgh}                       {a kl pq uv f}
+      47  {pqrs abc fghij fg abcde ab a}      {p ab uv pqrs kl fghi abcd}
+      48  {abcde uvwxy pqrst uv abc pqr uvwx} {uvwxy klm uvwxy uvwx k}
+      49  {fgh klm abcde klmno u}             {a f fghij f uvwxyz abc u}
+      50  {uv uvw uvwxyz uvwxyz uv ab}        {uvwx pq fg u k uvwxy}
+      51  {uvwxy pq p kl fghi}                {pqrs fghi pqrs abcde uvwxyz ab}
+      52  {pqr p uvwxy kl pqrs klmno fghij}   {ab abcde abc pqrst pqrs uv}
+      53  {fgh pqrst p a klmno}               {ab ab pqrst pqr kl pqrst}
+      54  {abcd klm ab uvw a fg u}            {f pqr f abcd uv}
+      55  {u fg uvwxyz k uvw}                 {abc pqrs f fghij fg pqrs uvwxy}
+      56  {klm fg p fghi fg a}                {uv a fghi uvwxyz a fghi}
+      57  {uvwxy k abcde fgh f fghi}          {f kl klmn f fghi klm}
+      58  {klm k fgh uvw fgh fghi}            {klmno uvwx u pqrst u}
+      59  {fghi pqr pqrst p uvw fghij}        {uv pqrst pqrs pq fghij klm}
+      60  {uvwx klm uvwxy uv klmn}            {p a a abc klmn ab k}
+      61  {uvwxy uvwx klm uvwx klm}           {pqrs ab ab uvwxyz fg}
+      62  {kl uv uv uvw fg kl k}              {abcde uvw fgh uvwxy klm}
+      63  {a abc fgh u klm abcd}              {fgh pqr uv klmn fghij}
+      64  {klmn k klmn klmno pqrs pqr}        {fg kl abcde klmno uvwxy kl pq}
+      65  {uvwxyz klm fghi abc abcde kl}      {uvwxy uvw uvwxyz uvwxyz pq pqrst}
+      66  {pq klm abc pqrst fgh f}            {u abcde pqrst abcde fg}
+      67  {u pqrst kl u uvw klmno}            {u pqr pqrs fgh u p}
+      68  {abc fghi uvwxy fgh k pq}           {uv p uvwx uvwxyz ab}
+      69  {klmno f uvwxyz uvwxy klmn fg ab}   {fgh kl a pqr abcd pqr}
+      70  {fghi pqrst pqrst uv a}             {uvwxy k p uvw uvwx a}
+      71  {a fghij f p uvw}                   {klm fg abcd abcde klmno pqrs}
+      72  {uv uvwx uvwx uvw klm}              {uv fghi klmno uvwxy uvw}
+      73  {kl uvwxy ab f pq klm u}            {uvwxy klmn klm abcd pq fg k}
+      74  {uvw pqrst abcd uvwxyz ab}          {fgh fgh klmn abc pq}
+      75  {uvwxyz klm pq abcd klmno pqr uvwxyz} {kl f a fg pqr klmn}
+      76  {uvw uvwxy pqr k pqrst kl}          {uvwxy abc uvw uvw u}
+      77  {fgh klm u uvwxyz f uvwxy abcde}    {uv abcde klmno u u ab}
+      78  {klmno abc pq pqr fgh}              {p uv abcd fgh abc u k}
+      79  {fg pqr uvw pq uvwx}                {uv uvw fghij pqrs fg p}
+      80  {abcd pqrs uvwx uvwxy uvwx}         {u uvw pqrst pqr abcde pqrs kl}
+      81  {uvwxyz klm pq uvwxy fghij}         {p pq klm fghij u a a}
+      82  {uvwx k uvwxyz klmno pqrst kl}      {abcde p f pqrst abcd uvwxyz p}
+      83  {abcd abcde klm pqrst uvwxyz}       {uvw pqrst u p uvwxyz a pqrs}
+      84  {k klm abc uv uvwxy klm klmn}       {k abc pqr a abc p kl}
+      85  {klmn abcd pqrs p pq klm a}         {klmn kl ab uvw pq}
+      86  {klmn a pqrs abc uvw pqrst}         {a pqr kl klm a k f}
+      87  {pqrs ab uvwx uvwxy a pqr f}        {fg klm uvwx pqr pqr}
+      88  {klmno ab k kl u uvwxyz}            {uv kl uvw fghi uv uvw}
+      89  {pq fghi pqrst klmn uvwxy abc pqrs} {fg f f fg abc abcde klm}
+      90  {kl a k fghi uvwx fghi u}           {ab uvw pqr fg a p abc}
+      91  {uvwx pqrs klmno ab fgh uvwx}       {pqr uvwx abc kl f klmno kl}
+      92  {fghij pq pqrs fghij f pqrst}       {u abcde fg pq pqr fgh k}
+      93  {fgh u pqrs abcde klmno abc}        {abc fg pqrst pqr abcde}
+      94  {uvwx p abc f pqr p}                {k pqrs kl klm abc fghi klm}
+      95  {kl p klmno uvwxyz klmn}            {fghi ab a fghi pqrs kl}
+      96  {pqr fgh pq uvwx a}                 {uvw klm klmno fg uvwxy uvwx}
+      97  {fg abc uvwxyz fghi pqrst pq}       {abc k a ab abcde f}
+      98  {uvwxy fghi uvwxy u abcde abcde uvw} {klmn uvwx pqrs uvw uvwxy abcde}
+      99  {pq fg fghi uvwx uvwx fghij uvwxy}  {klmn klmn f abc fg a}
+    } {
+      execsql {
+        INSERT INTO t1(rowid, a, b) VALUES($rowid, $a, $b);
+      }
+    }
+  } {}
+  
+  proc prefix_query {prefixlist} {
+    set ret [list]
+    db eval {SELECT rowid, a, b FROM t1 ORDER BY rowid DESC} {
+      set bMatch 1
+      foreach pref $prefixlist {
+        if { [lsearch -glob $a $pref]<0 && [lsearch -glob $b $pref]<0 } {
+          set bMatch 0
+          break
+        }
+      }
+      if {$bMatch} { lappend ret $rowid }
+    }
+    return $ret
+  }
+
+  do_execsql_test $T.integrity {
+    INSERT INTO t1(t1) VALUES('integrity-check');
+  }
+  
+  foreach {bAsc sql} {
+    1 {SELECT rowid FROM t1 WHERE t1 MATCH $prefix}
+    0 {SELECT rowid FROM t1 WHERE t1 MATCH $prefix ORDER BY rowid DESC}
+  } {
+    foreach {tn prefix} {
+      1  {a*} 2 {ab*} 3 {abc*} 4 {abcd*} 5 {abcde*} 
+      6  {f*} 7 {fg*} 8 {fgh*} 9 {fghi*} 10 {fghij*}
+      11 {k*} 12 {kl*} 13 {klm*} 14 {klmn*} 15 {klmno*}
+      16 {p*} 17 {pq*} 18 {pqr*} 19 {pqrs*} 20 {pqrst*}
+      21 {u*} 22 {uv*} 23 {uvw*} 24 {uvwx*} 25 {uvwxy*} 26 {uvwxyz*}
+      27 {x*}
+      28 {a f*} 29 {a* f*} 30 {a* fghij*}
+    } {
+      set res [prefix_query $prefix]
+      if {$bAsc} {
+        set res [lsort -integer -increasing $res]
+      }
+      set n [llength $res]
+      do_execsql_test $T.$bAsc.$tn.$n $sql $res
+    }
+  }
+
+  catchsql COMMIT
+}
+
+}
+
+finish_test

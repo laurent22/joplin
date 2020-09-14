@@ -1,0 +1,292 @@
+#
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing DISTINCT, UNION, INTERSECT and EXCEPT
+# SELECT statements that use user-defined collation sequences. Also
+# GROUP BY clauses that use user-defined collation sequences.
+#
+# $Id: collate5.test,v 1.7 2008/09/16 11:58:20 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+#
+# Tests are organised as follows:
+# collate5-1.* - DISTINCT
+# collate5-2.* - Compound SELECT
+# collate5-3.* - ORDER BY on compound SELECT
+# collate5-4.* - GROUP BY
+
+# Create the collation sequence 'TEXT', purely for asthetic reasons. The
+# test cases in this script could just as easily use BINARY.
+db collate TEXT [list string compare]
+
+# Mimic the SQLite 2 collation type NUMERIC.
+db collate numeric numeric_collate
+proc numeric_collate {lhs rhs} {
+  if {$lhs == $rhs} {return 0} 
+  return [expr ($lhs>$rhs)?1:-1]
+}
+
+#
+# These tests - collate5-1.* - focus on the DISTINCT keyword.
+#
+do_test collate5-1.0 {
+  execsql {
+    CREATE TABLE collate5t1(a COLLATE nocase, b COLLATE text);
+
+    INSERT INTO collate5t1 VALUES('a', 'apple');
+    INSERT INTO collate5t1 VALUES('A', 'Apple');
+    INSERT INTO collate5t1 VALUES('b', 'banana');
+    INSERT INTO collate5t1 VALUES('B', 'banana');
+    INSERT INTO collate5t1 VALUES('n', NULL);
+    INSERT INTO collate5t1 VALUES('N', NULL);
+  } 
+} {}
+do_test collate5-1.1 {
+  execsql {
+    SELECT DISTINCT a FROM collate5t1;
+  }
+} {a b n}
+do_test collate5-1.2 {
+  execsql {
+    SELECT DISTINCT b FROM collate5t1;
+  }
+} {apple Apple banana {}}
+do_test collate5-1.3 {
+  execsql {
+    SELECT DISTINCT a, b FROM collate5t1;
+  }
+} {a apple A Apple b banana n {}}
+
+# Ticket #3376
+#
+do_test collate5-1.11 {
+  execsql {
+    CREATE TABLE tkt3376(a COLLATE nocase PRIMARY KEY);
+    INSERT INTO tkt3376 VALUES('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz');
+    INSERT INTO tkt3376 VALUES('ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789');
+    SELECT DISTINCT a FROM tkt3376;
+  }
+} {abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789ABXYZ012234567890123456789}
+do_test collate5-1.12 {
+  sqlite3 db2 :memory:
+  db2 eval {
+    PRAGMA encoding=UTF16le;
+    CREATE TABLE tkt3376(a COLLATE nocase PRIMARY KEY);
+    INSERT INTO tkt3376 VALUES('abc');
+    INSERT INTO tkt3376 VALUES('ABX');
+    SELECT DISTINCT a FROM tkt3376;
+  }
+} {abc ABX}
+catch {db2 close}
+
+# The remainder of this file tests compound SELECT statements.
+# Omit it if the library is compiled such that they are omitted.
+#
+ifcapable !compound {
+  finish_test
+  return
+}
+
+#
+# Tests named collate5-2.* focus on UNION, EXCEPT and INTERSECT
+# queries that use user-defined collation sequences.
+#
+# collate5-2.1.* - UNION
+# collate5-2.2.* - INTERSECT
+# collate5-2.3.* - EXCEPT
+#
+do_test collate5-2.0 {
+  execsql {
+    CREATE TABLE collate5t2(a COLLATE text, b COLLATE nocase);
+
+    INSERT INTO collate5t2 VALUES('a', 'apple');
+    INSERT INTO collate5t2 VALUES('A', 'apple');
+    INSERT INTO collate5t2 VALUES('b', 'banana');
+    INSERT INTO collate5t2 VALUES('B', 'Banana');
+  } 
+} {}
+
+do_test collate5-2.1.1 {
+  execsql {
+    SELECT a FROM collate5t1 UNION select a FROM collate5t2;
+  }
+} {A B N}
+do_test collate5-2.1.2 {
+  execsql {
+    SELECT a FROM collate5t2 UNION select a FROM collate5t1;
+  }
+} {A B N a b n}
+do_test collate5-2.1.3 {
+  execsql {
+    SELECT a, b FROM collate5t1 UNION select a, b FROM collate5t2;
+  }
+} {A Apple A apple B Banana b banana N {}}
+do_test collate5-2.1.4 {
+  execsql {
+    SELECT a, b FROM collate5t2 UNION select a, b FROM collate5t1;
+  }
+} {A Apple B banana N {} a apple b banana n {}}
+
+do_test collate5-2.2.1 {
+  execsql {
+    SELECT a FROM collate5t1 EXCEPT select a FROM collate5t2;
+  }
+} {N}
+do_test collate5-2.2.2 {
+  execsql {
+    SELECT a FROM collate5t2 EXCEPT select a FROM collate5t1 WHERE a != 'a';
+  }
+} {A a}
+do_test collate5-2.2.3 {
+  execsql {
+    SELECT a, b FROM collate5t1 EXCEPT select a, b FROM collate5t2;
+  }
+} {A Apple N {}}
+do_test collate5-2.2.4 {
+  execsql {
+    SELECT a, b FROM collate5t2 EXCEPT select a, b FROM collate5t1 
+      where a != 'a';
+  }
+} {A apple a apple}
+
+do_test collate5-2.3.1 {
+  execsql {
+    SELECT a FROM collate5t1 INTERSECT select a FROM collate5t2;
+  }
+} {A B}
+do_test collate5-2.3.2 {
+  execsql {
+    SELECT a FROM collate5t2 INTERSECT select a FROM collate5t1 WHERE a != 'a';
+  }
+} {B b}
+do_test collate5-2.3.3 {
+  execsql {
+    SELECT a, b FROM collate5t1 INTERSECT select a, b FROM collate5t2;
+  }
+} {a apple B banana}
+do_test collate5-2.3.4 {
+  execsql {
+    SELECT a, b FROM collate5t2 INTERSECT select a, b FROM collate5t1;
+  }
+} {A apple B Banana a apple b banana}
+
+#
+# This test ensures performs a UNION operation with a bunch of different
+# length records. The goal is to test that the logic that compares records
+# for the compound SELECT operators works with record lengths that lie
+# either side of the troublesome 256 and 65536 byte marks.
+#
+set ::lens [list \
+  0 1 2 3 4 5 6 7 8 9 \
+  240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 \
+  257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 \
+  65520 65521 65522 65523 65524 65525 65526 65527 65528 65529 65530 \
+  65531 65532 65533 65534 65535 65536 65537 65538 65539 65540 65541 \
+  65542 65543 65544 65545 65546 65547 65548 65549 65550 65551 ]
+do_test collate5-2.4.0 {
+  execsql {
+    BEGIN;
+    CREATE TABLE collate5t3(a, b);
+  }
+  foreach ii $::lens { 
+    execsql "INSERT INTO collate5t3 VALUES($ii, '[string repeat a $ii]');"
+  }
+  expr [llength [execsql {
+    COMMIT;
+    SELECT * FROM collate5t3 UNION SELECT * FROM collate5t3;
+  }]] / 2
+} [llength $::lens]
+do_test collate5-2.4.1 {
+  execsql {DROP TABLE collate5t3;}
+} {}
+unset ::lens
+
+#
+# These tests - collate5-3.* - focus on compound SELECT queries that 
+# feature ORDER BY clauses.
+#
+do_test collate5-3.0 {
+  execsql {
+    SELECT a FROM collate5t1 UNION ALL SELECT a FROM collate5t2 ORDER BY 1;
+  }
+} {/[aA] [aA] [aA] [aA] [bB] [bB] [bB] [bB] [nN] [nN]/}
+do_test collate5-3.1 {
+  execsql {
+    SELECT a FROM collate5t2 UNION ALL SELECT a FROM collate5t1 ORDER BY 1;
+  }
+} {A A B B N a a b b n}
+do_test collate5-3.2 {
+  execsql {
+    SELECT a FROM collate5t1 UNION ALL SELECT a FROM collate5t2 
+      ORDER BY 1 COLLATE TEXT;
+  }
+} {A A B B N a a b b n}
+
+do_test collate5-3.3 {
+  execsql {
+    CREATE TABLE collate5t_cn(a COLLATE NUMERIC);
+    CREATE TABLE collate5t_ct(a COLLATE TEXT);
+    INSERT INTO collate5t_cn VALUES('1');
+    INSERT INTO collate5t_cn VALUES('11');
+    INSERT INTO collate5t_cn VALUES('101');
+    INSERT INTO collate5t_ct SELECT * FROM collate5t_cn;
+  }
+} {}
+do_test collate5-3.4 {
+  execsql {
+    SELECT a FROM collate5t_cn INTERSECT SELECT a FROM collate5t_ct ORDER BY 1;
+  }
+} {1 11 101}
+do_test collate5-3.5 {
+  execsql {
+    SELECT a FROM collate5t_ct INTERSECT SELECT a FROM collate5t_cn ORDER BY 1;
+  }
+} {1 101 11}
+
+do_test collate5-3.20 {
+  execsql {
+    DROP TABLE collate5t_cn;
+    DROP TABLE collate5t_ct;
+    DROP TABLE collate5t1;
+    DROP TABLE collate5t2;
+  }
+} {}
+
+do_test collate5-4.0 {
+  execsql {
+    CREATE TABLE collate5t1(a COLLATE NOCASE, b COLLATE NUMERIC); 
+    INSERT INTO collate5t1 VALUES('a', '1');
+    INSERT INTO collate5t1 VALUES('A', '1.0');
+    INSERT INTO collate5t1 VALUES('b', '2');
+    INSERT INTO collate5t1 VALUES('B', '3');
+  }
+} {}
+do_test collate5-4.1 {
+  string tolower [execsql {
+    SELECT a, count(*) FROM collate5t1 GROUP BY a;
+  }]
+} {a 2 b 2}
+do_test collate5-4.2 {
+  execsql {
+    SELECT a, b, count(*) FROM collate5t1 GROUP BY a, b ORDER BY a, b;
+  }
+} {/[aA] 1(.0)? 2 [bB] 2 1 [bB] 3 1/}
+do_test collate5-4.3 {
+  execsql {
+    DROP TABLE collate5t1;
+  }
+} {}
+
+finish_test

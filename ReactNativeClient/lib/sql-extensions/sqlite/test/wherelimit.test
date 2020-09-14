@@ -1,0 +1,330 @@
+# 2008 October 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the LIMIT ... OFFSET ... clause
+#  of UPDATE and DELETE statements.
+#
+# $Id: wherelimit.test,v 1.2 2008/10/10 18:25:46 shane Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+proc create_test_data {size} {
+  # Build some test data
+  #
+  execsql {
+    DROP TABLE IF EXISTS t1;
+    CREATE TABLE t1(x int, y int);
+    BEGIN;
+  }
+  for {set i 1} {$i<=$size} {incr i} {
+    for {set j 1} {$j<=$size} {incr j} {
+      execsql "INSERT INTO t1 VALUES([expr {$i}],[expr {$j}])"
+    }
+  }
+  execsql {
+    COMMIT;
+  }
+  return {}
+}
+
+ifcapable {update_delete_limit} {
+
+  execsql { CREATE TABLE t1(x, y) }
+
+  # check syntax error support
+  do_test wherelimit-0.1 {
+    catchsql {DELETE FROM t1 ORDER BY x}
+  } {1 {ORDER BY without LIMIT on DELETE}}
+  do_test wherelimit-0.2 {
+    catchsql {DELETE FROM t1 WHERE x=1 ORDER BY x}
+  } {1 {ORDER BY without LIMIT on DELETE}}
+  do_test wherelimit-0.3 {
+    catchsql {UPDATE t1 SET y=1 WHERE x=1 ORDER BY x}
+  } {1 {ORDER BY without LIMIT on UPDATE}}
+
+  # no AS on table sources
+  #
+  # UPDATE: As of version 3.24, AS clauses are allowed as part of
+  # UPDATE or DELETE statements.
+  do_test wherelimit-0.4 {
+    catchsql {DELETE FROM t1 AS a WHERE a.x=1}
+  } {0 {}}
+  do_test wherelimit-0.5.1 {
+    catchsql {UPDATE t1 AS a SET y=1 WHERE x=1}
+  } {0 {}}
+  do_test wherelimit-0.5.2 {
+    catchsql {UPDATE t1 AS a SET y=1 WHERE t1.x=1}
+  } {1 {no such column: t1.x}}
+
+  # OFFSET w/o LIMIT
+  do_test wherelimit-0.6 {
+    catchsql {DELETE FROM t1 WHERE x=1 OFFSET 2}
+  } {1 {near "OFFSET": syntax error}}
+  do_test wherelimit-0.7 {
+    catchsql {UPDATE t1 SET y=1 WHERE x=1 OFFSET 2}
+  } {1 {near "OFFSET": syntax error}}
+
+  execsql { DROP TABLE t1 }
+
+  # check deletes w/o where clauses but with limit/offsets
+  create_test_data 5
+  do_test wherelimit-1.0 {
+    execsql {SELECT count(*) FROM t1}
+  } {25}
+  do_test wherelimit-1.1 {
+    execsql {DELETE FROM t1}
+    execsql {SELECT count(*) FROM t1}
+  } {0}
+  create_test_data 5
+  do_test wherelimit-1.2 {
+    execsql {DELETE FROM t1 LIMIT 5}
+    execsql {SELECT count(*) FROM t1}
+  } {20}
+  do_test wherelimit-1.3 {
+    # limit 5
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 5}
+    execsql {SELECT count(*) FROM t1}
+  } {15}
+  do_test wherelimit-1.4 {
+    # limit 5, offset 2
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 5 OFFSET 2}
+    execsql {SELECT count(*) FROM t1}
+  } {10}
+  do_test wherelimit-1.5 {
+    # limit 5, offset -2
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 5 OFFSET -2}
+    execsql {SELECT count(*) FROM t1}
+  } {5}
+  do_test wherelimit-1.6 {
+    # limit -5 (no limit), offset 2
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 2, -5}
+    execsql {SELECT count(*) FROM t1}
+  } {2}
+  do_test wherelimit-1.7 {
+    # limit 5, offset -2 (no offset)
+    execsql {DELETE FROM t1 ORDER BY x LIMIT -2, 5}
+    execsql {SELECT count(*) FROM t1}
+  } {0}
+  create_test_data 5
+  do_test wherelimit-1.8 {
+    # limit -5 (no limit), offset -2 (no offset)
+    execsql {DELETE FROM t1 ORDER BY x LIMIT -2, -5}
+    execsql {SELECT count(*) FROM t1}
+  } {0}
+  create_test_data 3
+  do_test wherelimit-1.9 {
+    # limit 5, offset 2
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 2, 5}
+    execsql {SELECT count(*) FROM t1}
+  } {4}
+  do_test wherelimit-1.10 {
+    # limit 5, offset 5
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 5 OFFSET 5}
+    execsql {SELECT count(*) FROM t1}
+  } {4}
+  do_test wherelimit-1.11 {
+    # limit 50, offset 30
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 50 OFFSET 30}
+    execsql {SELECT count(*) FROM t1}
+  } {4}
+  do_test wherelimit-1.12 {
+    # limit 50, offset 30
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 30, 50}
+    execsql {SELECT count(*) FROM t1}
+  } {4}
+  do_test wherelimit-1.13 {
+    execsql {DELETE FROM t1 ORDER BY x LIMIT 50 OFFSET 50}
+    execsql {SELECT count(*) FROM t1}
+  } {4}
+
+
+  create_test_data 6
+  do_test wherelimit-2.0 {
+    execsql {SELECT count(*) FROM t1}
+  } {36}
+  do_test wherelimit-2.1 {
+    execsql {DELETE FROM t1 WHERE x=1}
+    execsql {SELECT count(*) FROM t1}
+  } {30}
+  create_test_data 6
+  do_test wherelimit-2.2 {
+    execsql {DELETE FROM t1 WHERE x=1 LIMIT 5}
+    execsql {SELECT count(*) FROM t1}
+  } {31}
+  do_test wherelimit-2.3 {
+    # limit 5
+    execsql {DELETE FROM t1 WHERE x=1 ORDER BY x LIMIT 5}
+    execsql {SELECT count(*) FROM t1}
+  } {30}
+  do_test wherelimit-2.4 {
+    # limit 5, offset 2
+    execsql {DELETE FROM t1 WHERE x=2 ORDER BY x LIMIT 5 OFFSET 2}
+    execsql {SELECT count(*) FROM t1}
+  } {26}
+  do_test wherelimit-2.5 {
+    # limit 5, offset -2
+    execsql {DELETE FROM t1 WHERE x=2 ORDER BY x LIMIT 5 OFFSET -2}
+    execsql {SELECT count(*) FROM t1}
+  } {24}
+  do_test wherelimit-2.6 {
+    # limit -5 (no limit), offset 2
+    execsql {DELETE FROM t1 WHERE x=3 ORDER BY x LIMIT 2, -5}
+    execsql {SELECT count(*) FROM t1}
+  } {20}
+  do_test wherelimit-2.7 {
+    # limit 5, offset -2 (no offset)
+    execsql {DELETE FROM t1 WHERE x=3 ORDER BY x LIMIT -2, 5}
+    execsql {SELECT count(*) FROM t1}
+  } {18}
+  do_test wherelimit-2.8 {
+    # limit -5 (no limit), offset -2 (no offset)
+    execsql {DELETE FROM t1 WHERE x=4 ORDER BY x LIMIT -2, -5}
+    execsql {SELECT count(*) FROM t1}
+  } {12}
+  create_test_data 6
+  do_test wherelimit-2.9 {
+    # limit 5, offset 2
+    execsql {DELETE FROM t1 WHERE x=5 ORDER BY x LIMIT 2, 5}
+    execsql {SELECT count(*) FROM t1}
+  } {32}
+  do_test wherelimit-2.10 {
+    # limit 5, offset 5
+    execsql {DELETE FROM t1 WHERE x=6 ORDER BY x LIMIT 5 OFFSET 5}
+    execsql {SELECT count(*) FROM t1}
+  } {31}
+  do_test wherelimit-2.11 {
+    # limit 50, offset 30
+    execsql {DELETE FROM t1 WHERE x=1 ORDER BY x LIMIT 50 OFFSET 30}
+    execsql {SELECT count(*) FROM t1}
+  } {31}
+  do_test wherelimit-2.12 {
+    # limit 50, offset 30
+    execsql {DELETE FROM t1 WHERE x=2 ORDER BY x LIMIT 30, 50}
+    execsql {SELECT count(*) FROM t1}
+  } {31}
+  do_test wherelimit-2.13 {
+    execsql {DELETE FROM t1 WHERE x=3 ORDER BY x LIMIT 50 OFFSET 50}
+    execsql {SELECT count(*) FROM t1}
+  } {31}
+
+
+  create_test_data 6
+  do_test wherelimit-3.0 {
+    execsql {SELECT count(*) FROM t1}
+  } {36}
+  do_test wherelimit-3.1 {
+    execsql {UPDATE t1 SET y=1 WHERE x=1}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {11}
+  create_test_data 6
+  do_test wherelimit-3.2 {
+    execsql {UPDATE t1 SET y=1 WHERE x=1 LIMIT 5}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {10}
+  do_test wherelimit-3.3 {
+    # limit 5
+    execsql {UPDATE t1 SET y=2 WHERE x=2 ORDER BY x LIMIT 5}
+    execsql {SELECT count(*) FROM t1 WHERE y=2}
+  } {9}
+  create_test_data 6
+  do_test wherelimit-3.4 {
+    # limit 5, offset 2
+    execsql {UPDATE t1 SET y=2 WHERE x=2 ORDER BY x LIMIT 5 OFFSET 2}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {6}
+  do_test wherelimit-3.5 {
+    # limit 5, offset -2
+    execsql {UPDATE t1 SET y=2 WHERE x=2 ORDER BY x LIMIT 5 OFFSET -2}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {5}
+  do_test wherelimit-3.6 {
+    # limit -5 (no limit), offset 2
+    execsql {UPDATE t1 SET y=3 WHERE x=3 ORDER BY x LIMIT 2, -5}
+    execsql {SELECT count(*) FROM t1 WHERE y=3}
+  } {8}
+  do_test wherelimit-3.7 {
+    # limit 5, offset -2 (no offset)
+    execsql {UPDATE t1 SET y=3 WHERE x=3 ORDER BY x LIMIT -2, 5}
+    execsql {SELECT count(*) FROM t1 WHERE y=3}
+  } {10}
+
+  do_test wherelimit-3.8 {
+    # limit -5 (no limit), offset -2 (no offset)
+    execsql {UPDATE t1 SET y=4 WHERE x=4 ORDER BY x LIMIT -2, -5}
+    execsql {SELECT count(*) FROM t1 WHERE y=4}
+  } {9}
+  create_test_data 6
+  do_test wherelimit-3.9 {
+    # limit 5, offset 2
+    execsql {UPDATE t1 SET y=4 WHERE x=5 ORDER BY x LIMIT 2, 5}
+    execsql {SELECT count(*) FROM t1 WHERE y=4}
+  } {9}
+  do_test wherelimit-3.10 {
+    # limit 5, offset 5
+    execsql {UPDATE t1 SET y=4 WHERE x=6 ORDER BY x LIMIT 5 OFFSET 5}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {6}
+  do_test wherelimit-3.11 {
+    # limit 50, offset 30
+    execsql {UPDATE t1 SET y=1 WHERE x=1 ORDER BY x LIMIT 50 OFFSET 30}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {6}
+  do_test wherelimit-3.12 {
+    # limit 50, offset 30
+    execsql {UPDATE t1 SET y=1 WHERE x=2 ORDER BY x LIMIT 30, 50}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {6}
+  do_test wherelimit-3.13 {
+    execsql {UPDATE t1 SET y=1 WHERE x=3 ORDER BY x LIMIT 50 OFFSET 50}
+    execsql {SELECT count(*) FROM t1 WHERE y=1}
+  } {6}
+
+  # Cannot use a LIMIT for UPDATE or DELETE against a WITHOUT ROWID table
+  # or a VIEW.  (We should fix this someday).
+  #
+  db close
+  sqlite3 db :memory:
+  do_execsql_test wherelimit-4.1 {
+    CREATE TABLE t1(a int);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    CREATE TABLE t2(a int);
+    INSERT INTO t2 SELECT a+100 FROM t1;
+    CREATE VIEW tv(r,a) AS
+       SELECT rowid, a FROM t2 UNION ALL SELECT rowid, a FROM t1;
+    CREATE TRIGGER tv_del INSTEAD OF DELETE ON tv
+    BEGIN
+      DELETE FROM t1 WHERE rowid=old.r;
+      DELETE FROM t2 WHERE rowid=old.r;
+    END;
+  } {}
+  do_catchsql_test wherelimit-4.2 {
+    DELETE FROM tv WHERE 1 LIMIT 2;
+  } {0 {}}
+  do_catchsql_test wherelimit-4.3 {
+    DELETE FROM tv WHERE 1 ORDER BY a LIMIT 2;
+  } {0 {}}
+  do_execsql_test wherelimit-4.10 {
+    CREATE TABLE t3(a,b,c,d TEXT, PRIMARY KEY(a,b)) WITHOUT ROWID;
+    INSERT INTO t3(a,b,c,d) VALUES(1,2,3,4),(5,6,7,8),(9,10,11,12);
+  } {}
+  do_catchsql_test wherelimit-4.11 {
+    DELETE FROM t3 WHERE a=5 LIMIT 2;
+  } {0 {}}
+  do_execsql_test wherelimit-4.12 {
+    SELECT a,b,c,d FROM t3 ORDER BY 1;
+  } {1 2 3 4 9 10 11 12}
+
+}
+
+finish_test

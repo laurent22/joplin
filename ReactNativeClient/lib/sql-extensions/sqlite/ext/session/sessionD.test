@@ -1,0 +1,257 @@
+# 2014 August 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file focuses on the sqlite3session_diff() function.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionD
+
+proc scksum {db dbname} {
+
+  if {$dbname=="temp"} {
+    set master sqlite_temp_master
+  } else {
+    set master $dbname.sqlite_master
+  }
+
+  set alltab [$db eval "SELECT name FROM $master WHERE type='table'"]
+  set txt [$db eval "SELECT * FROM $master ORDER BY type,name,sql"]
+  foreach tab $alltab {
+    set cols [list]
+    db eval "PRAGMA $dbname.table_info = $tab" x { 
+      lappend cols "quote($x(name))" 
+    }
+    set cols [join $cols ,]
+    append txt [db eval "SELECT $cols FROM $tab ORDER BY $cols"]
+  }
+  return [md5 $txt]
+}
+
+proc do_diff_test {tn setup} {
+  reset_db
+  forcedelete test.db2
+  execsql { ATTACH 'test.db2' AS aux }
+  execsql $setup
+
+  sqlite3session S db main
+  foreach tbl [db eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    S attach $tbl
+    S diff aux $tbl
+  }
+
+  set C [S changeset]
+  S delete
+
+  sqlite3 db2 test.db2
+  sqlite3changeset_apply db2 $C ""
+  uplevel do_test $tn.1 [list {execsql { PRAGMA integrity_check } db2}] ok
+  db2 close
+
+  set cksum [scksum db main]
+  uplevel do_test $tn.2 [list {scksum db aux}] [list $cksum]
+}
+
+# Ensure that the diff produced by comparing the current contents of [db]
+# with itself is empty.
+proc do_empty_diff_test {tn} {
+  forcedelete test.db2
+  forcecopy test.db test.db2
+
+  execsql { ATTACH 'test.db2' AS aux }
+  sqlite3session S db main
+  foreach tbl [db eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    S attach $tbl
+    S diff aux $tbl
+  }
+
+  set ::C [S changeset]
+  S delete
+
+  uplevel [list do_test $tn {string length $::C} 0]
+}
+
+
+forcedelete test.db2
+do_execsql_test 1.0 {
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t2 VALUES(1, 'one');
+  INSERT INTO t2 VALUES(2, 'two');
+
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t2(a PRIMARY KEY, b);
+}
+
+do_test 1.1 {
+  sqlite3session S db main
+  S attach t2
+  S diff aux t2
+  set C [S changeset]
+  S delete
+} {}
+
+do_test 1.2 {
+  sqlite3 db2 test.db2
+  sqlite3changeset_apply db2 $C ""
+  db2 close
+  db eval { SELECT * FROM aux.t2 }
+} {1 one 2 two}
+
+do_diff_test 2.1 {
+  CREATE TABLE aux.t1(x, y, PRIMARY KEY(y));
+  CREATE TABLE t1(x, y, PRIMARY KEY(y));
+
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(NULL, 'xyz');
+  INSERT INTO t1 VALUES(4.5, 5.5);
+}
+
+do_diff_test 2.2 {
+  CREATE TABLE aux.t1(x, y, PRIMARY KEY(y));
+  CREATE TABLE t1(x, y, PRIMARY KEY(y));
+
+  INSERT INTO aux.t1 VALUES(1, 2);
+  INSERT INTO aux.t1 VALUES(NULL, 'xyz');
+  INSERT INTO aux.t1 VALUES(4.5, 5.5);
+}
+
+do_diff_test 2.3 {
+  CREATE TABLE aux.t1(a PRIMARY KEY, b TEXT);
+  CREATE TABLE t1(a PRIMARY KEY, b TEXT);
+
+  INSERT INTO aux.t1 VALUES(1, 'one');
+  INSERT INTO aux.t1 VALUES(2, 'two');
+  INSERT INTO aux.t1 VALUES(3, 'three');
+
+  INSERT INTO t1 VALUES(1, 'I');
+  INSERT INTO t1 VALUES(2, 'two');
+  INSERT INTO t1 VALUES(3, 'III');
+}
+
+do_diff_test 2.4 {
+  CREATE TABLE aux.t1(a, b, c, d, PRIMARY KEY(c, b, a));
+  CREATE TABLE t1(a, b, c, d, PRIMARY KEY(c, b, a));
+
+  INSERT INTO t1 VALUES('hvkzyipambwdqlvwv','',-458331.50,X'DA51ED5E84');
+  INSERT INTO t1 VALUES(X'C5C6B5DD','jjxrath',40917,830244);
+  INSERT INTO t1 VALUES(-204877.54,X'1704C253D5F3AFA8',155120.88,NULL);
+  INSERT INTO t1 
+  VALUES('ckmqmzoeuvxisxqy',X'EB5A5D3A1DD22FD1','tidhjcbvbppdt',-642987.37);
+  INSERT INTO t1 VALUES(-851726,-161992,-469943,-159541);
+  INSERT INTO t1 VALUES(X'4A6A667F858938',185083,X'7A',NULL);
+
+  INSERT INTO aux.t1 VALUES(415075.74,'auawczkb',X'',X'57B4FAAF2595');
+  INSERT INTO aux.t1 VALUES(727637,711560,-181340,'hphuo');
+  INSERT INTO aux.t1 
+  VALUES(-921322.81,662959,'lvlgwdgxaurr','ajjrzrbhqflsutnymgc');
+  INSERT INTO aux.t1 VALUES(-146061,-377892,X'4E','gepvpvvuhszpxabbb');
+  INSERT INTO aux.t1 VALUES(-851726,-161992,-469943,-159541);
+  INSERT INTO aux.t1 VALUES(X'4A6A667F858938',185083,X'7A',NULL);
+  INSERT INTO aux.t1 VALUES(-204877.54,X'1704C253D5F3AFA8',155120.88, 4);
+  INSERT INTO aux.t1 
+  VALUES('ckmqmzoeuvxisxqy',X'EB5A5D3A1DD22FD1','tidgtsplhjcbvbppdt',-642987.3);
+}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a));
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+
+  CREATE TABLE t2(a, b, c, PRIMARY KEY(a, b));
+  INSERT INTO t2 VALUES(1, 2, 3);
+  INSERT INTO t2 VALUES(4, 5, 6);
+  INSERT INTO t2 VALUES(7, 8, 9);
+
+  CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b, c));
+  INSERT INTO t3 VALUES(1, 2, 3);
+  INSERT INTO t3 VALUES(4, 5, 6);
+  INSERT INTO t3 VALUES(7, 8, 9);
+}
+do_empty_diff_test 3.1
+
+
+#-------------------------------------------------------------------------
+# Test some error cases:
+# 
+#   1) schema mismatches between the two dbs, and 
+#   2) tables with no primary keys. This is not actually an error, but
+#      should not add any changes to the session object.
+#
+reset_db
+forcedelete test.db2
+do_execsql_test 4.0 {
+  ATTACH 'test.db2' AS ixua;
+  CREATE TABLE ixua.t1(a, b, c);
+  CREATE TABLE main.t1(a, b, c);
+  INSERT INTO main.t1 VALUES(1, 2, 3);
+
+  CREATE TABLE ixua.t2(a PRIMARY KEY, b, c);
+  CREATE TABLE main.t2(a PRIMARY KEY, b, x);
+}
+
+do_test 4.1.1 {
+  sqlite3session S db main
+  S attach t1
+  list [catch { S diff ixua t1 } msg] $msg
+} {0 {}}
+do_test 4.1.2 {
+  string length [S changeset]
+} {0}
+S delete
+
+do_test 4.2.2 {
+  sqlite3session S db main
+  S attach t2
+  list [catch { S diff ixua t2 } msg] $msg
+} {1 {SQLITE_SCHEMA - table schemas do not match}}
+S delete
+
+do_test 4.3.1 {
+  sqlite3session S db main
+  S attach t4
+  execsql { CREATE TABLE t4(i PRIMARY KEY, b) }
+  list [catch { S diff ixua t4 } msg] $msg
+} {1 {SQLITE_SCHEMA - table schemas do not match}}
+S delete
+do_catchsql_test 4.3.2 {
+  SELECT * FROM ixua.t4;
+} {1 {no such table: ixua.t4}}
+
+do_test 4.4.1 {
+  sqlite3session S db main
+  S attach sqlite_stat1
+  execsql { ANALYZE }
+  execsql { DROP TABLE ixua.sqlite_stat1 }
+  list [catch { S diff ixua sqlite_stat1 } msg] $msg
+} {1 {SQLITE_SCHEMA - table schemas do not match}}
+S delete
+do_catchsql_test 4.4.2 {
+  SELECT * FROM ixua.sqlite_stat1;
+} {1 {no such table: ixua.sqlite_stat1}}
+
+do_test 4.5.1 {
+  sqlite3session S db main
+  S attach t8
+  list [catch { S diff ixua t8 } msg] $msg
+} {0 {}}
+S delete
+do_catchsql_test 4.5.2 {
+  SELECT * FROM ixua.i8;
+} {1 {no such table: ixua.i8}}
+
+finish_test

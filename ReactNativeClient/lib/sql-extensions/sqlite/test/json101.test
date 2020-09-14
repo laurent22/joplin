@@ -1,0 +1,850 @@
+# 2015-08-12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements tests for JSON SQL functions extension to the
+# SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !json1 {
+  finish_test
+  return
+}
+
+do_execsql_test json101-1.1.00 {
+  SELECT json_array(1,2.5,null,'hello');
+} {[1,2.5,null,"hello"]}
+do_execsql_test json101-1.1.01 {
+  SELECT json_array(1,'{"abc":2.5,"def":null,"ghi":hello}',99);
+  -- the second term goes in as a string:
+} {[1,"{\\"abc\\":2.5,\\"def\\":null,\\"ghi\\":hello}",99]}
+do_execsql_test json101-1.1.02 {
+  SELECT json_array(1,json('{"abc":2.5,"def":null,"ghi":"hello"}'),99);
+  -- the second term goes in as JSON
+} {[1,{"abc":2.5,"def":null,"ghi":"hello"},99]}
+do_execsql_test json101-1.1.03 {
+  SELECT json_array(1,json_object('abc',2.5,'def',null,'ghi','hello'),99);
+  -- the second term goes in as JSON
+} {[1,{"abc":2.5,"def":null,"ghi":"hello"},99]}
+do_execsql_test json101-1.2 {
+  SELECT hex(json_array('String "\ Test'));
+} {5B22537472696E67205C225C5C2054657374225D}
+do_catchsql_test json101-1.3 {
+  SELECT json_array(1,printf('%.1000c','x'),x'abcd',3);
+} {1 {JSON cannot hold BLOB values}}
+do_execsql_test json101-1.4 {
+  SELECT json_array(-9223372036854775808,9223372036854775807,0,1,-1,
+                    0.0, 1.0, -1.0, -1e99, +2e100,
+                    'one','two','three',
+                    4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                    19, NULL, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+                    'abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    'abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    'abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    99);
+} {[-9223372036854775808,9223372036854775807,0,1,-1,0.0,1.0,-1.0,-1.0e+99,2.0e+100,"one","two","three",4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,null,21,22,23,24,25,26,27,28,29,30,31,"abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ",99]}
+
+do_execsql_test json101-2.1 {
+  SELECT json_object('a',1,'b',2.5,'c',null,'d','String Test');
+} {{{"a":1,"b":2.5,"c":null,"d":"String Test"}}}
+do_catchsql_test json101-2.2 {
+  SELECT json_object('a',printf('%.1000c','x'),2,2.5);
+} {1 {json_object() labels must be TEXT}}
+do_catchsql_test json101-2.3 {
+  SELECT json_object('a',1,'b');
+} {1 {json_object() requires an even number of arguments}}
+do_catchsql_test json101-2.4 {
+  SELECT json_object('a',printf('%.1000c','x'),'b',x'abcd');
+} {1 {JSON cannot hold BLOB values}}
+
+do_execsql_test json101-3.1 {
+  SELECT json_replace('{"a":1,"b":2}','$.a','[3,4,5]');
+} {{{"a":"[3,4,5]","b":2}}}
+do_execsql_test json101-3.2 {
+  SELECT json_replace('{"a":1,"b":2}','$.a',json('[3,4,5]'));
+} {{{"a":[3,4,5],"b":2}}}
+do_execsql_test json101-3.3 {
+  SELECT json_type(json_set('{"a":1,"b":2}','$.b','{"x":3,"y":4}'),'$.b');
+} {text}
+do_execsql_test json101-3.4 {
+  SELECT json_type(json_set('{"a":1,"b":2}','$.b',json('{"x":3,"y":4}')),'$.b');
+} {object}
+ifcapable vtab {
+do_execsql_test json101-3.5 {
+  SELECT fullkey, atom, '|' FROM json_tree(json_set('{}','$.x',123,'$.x',456));
+} {{$} {} | {$.x} 456 |}
+}
+
+# Per rfc7159, any JSON value is allowed at the top level, and whitespace
+# is permitting before and/or after that value.
+#
+do_execsql_test json101-4.1 {
+  CREATE TABLE j1(x);
+  INSERT INTO j1(x)
+   VALUES('true'),('false'),('null'),('123'),('-234'),('34.5e+6'),
+         ('""'),('"\""'),('"\\"'),('"abcdefghijlmnopqrstuvwxyz"'),
+         ('[]'),('{}'),('[true,false,null,123,-234,34.5e+6,{},[]]'),
+         ('{"a":true,"b":{"c":false}}');
+  SELECT * FROM j1 WHERE NOT json_valid(x);
+} {}
+do_execsql_test json101-4.2 {
+  SELECT * FROM j1 WHERE NOT json_valid(char(0x20,0x09,0x0a,0x0d)||x);
+} {}
+do_execsql_test json101-4.3 {
+  SELECT * FROM j1 WHERE NOT json_valid(x||char(0x20,0x09,0x0a,0x0d));
+} {}
+
+# But an empty string, or a string of pure whitespace is not valid JSON.
+#
+do_execsql_test json101-4.4 {
+  SELECT json_valid(''), json_valid(char(0x20,0x09,0x0a,0x0d));
+} {0 0}
+
+# json_remove() and similar functions with no edit operations return their
+# input unchanged.
+#
+do_execsql_test json101-4.5 {
+  SELECT x FROM j1 WHERE json_remove(x)<>x;
+} {}
+do_execsql_test json101-4.6 {
+  SELECT x FROM j1 WHERE json_replace(x)<>x;
+} {}
+do_execsql_test json101-4.7 {
+  SELECT x FROM j1 WHERE json_set(x)<>x;
+} {}
+do_execsql_test json101-4.8 {
+  SELECT x FROM j1 WHERE json_insert(x)<>x;
+} {}
+
+# json_extract(JSON,'$') will return objects and arrays without change.
+#
+do_execsql_test json-4.10 {
+  SELECT count(*) FROM j1 WHERE json_type(x) IN ('object','array');
+  SELECT x FROM j1
+   WHERE json_extract(x,'$')<>x
+     AND json_type(x) IN ('object','array');
+} {4}
+
+do_execsql_test json-5.1 {
+  CREATE TABLE j2(id INTEGER PRIMARY KEY, json, src);
+  INSERT INTO j2(id,json,src)
+  VALUES(1,'{
+    "firstName": "John",
+    "lastName": "Smith",
+    "isAlive": true,
+    "age": 25,
+    "address": {
+      "streetAddress": "21 2nd Street",
+      "city": "New York",
+      "state": "NY",
+      "postalCode": "10021-3100"
+    },
+    "phoneNumbers": [
+      {
+        "type": "home",
+        "number": "212 555-1234"
+      },
+      {
+        "type": "office",
+        "number": "646 555-4567"
+      }
+    ],
+    "children": [],
+    "spouse": null
+  }','https://en.wikipedia.org/wiki/JSON');
+  INSERT INTO j2(id,json,src)
+  VALUES(2, '{
+	"id": "0001",
+	"type": "donut",
+	"name": "Cake",
+	"ppu": 0.55,
+	"batters":
+		{
+			"batter":
+				[
+					{ "id": "1001", "type": "Regular" },
+					{ "id": "1002", "type": "Chocolate" },
+					{ "id": "1003", "type": "Blueberry" },
+					{ "id": "1004", "type": "Devil''s Food" }
+				]
+		},
+	"topping":
+		[
+			{ "id": "5001", "type": "None" },
+			{ "id": "5002", "type": "Glazed" },
+			{ "id": "5005", "type": "Sugar" },
+			{ "id": "5007", "type": "Powdered Sugar" },
+			{ "id": "5006", "type": "Chocolate with Sprinkles" },
+			{ "id": "5003", "type": "Chocolate" },
+			{ "id": "5004", "type": "Maple" }
+		]
+   }','https://adobe.github.io/Spry/samples/data_region/JSONDataSetSample.html');
+   INSERT INTO j2(id,json,src)
+   VALUES(3,'[
+	{
+		"id": "0001",
+		"type": "donut",
+		"name": "Cake",
+		"ppu": 0.55,
+		"batters":
+			{
+				"batter":
+					[
+						{ "id": "1001", "type": "Regular" },
+						{ "id": "1002", "type": "Chocolate" },
+						{ "id": "1003", "type": "Blueberry" },
+						{ "id": "1004", "type": "Devil''s Food" }
+					]
+			},
+		"topping":
+			[
+				{ "id": "5001", "type": "None" },
+				{ "id": "5002", "type": "Glazed" },
+				{ "id": "5005", "type": "Sugar" },
+				{ "id": "5007", "type": "Powdered Sugar" },
+				{ "id": "5006", "type": "Chocolate with Sprinkles" },
+				{ "id": "5003", "type": "Chocolate" },
+				{ "id": "5004", "type": "Maple" }
+			]
+	},
+	{
+		"id": "0002",
+		"type": "donut",
+		"name": "Raised",
+		"ppu": 0.55,
+		"batters":
+			{
+				"batter":
+					[
+						{ "id": "1001", "type": "Regular" }
+					]
+			},
+		"topping":
+			[
+				{ "id": "5001", "type": "None" },
+				{ "id": "5002", "type": "Glazed" },
+				{ "id": "5005", "type": "Sugar" },
+				{ "id": "5003", "type": "Chocolate" },
+				{ "id": "5004", "type": "Maple" }
+			]
+	},
+	{
+		"id": "0003",
+		"type": "donut",
+		"name": "Old Fashioned",
+		"ppu": 0.55,
+		"batters":
+			{
+				"batter":
+					[
+						{ "id": "1001", "type": "Regular" },
+						{ "id": "1002", "type": "Chocolate" }
+					]
+			},
+		"topping":
+			[
+				{ "id": "5001", "type": "None" },
+				{ "id": "5002", "type": "Glazed" },
+				{ "id": "5003", "type": "Chocolate" },
+				{ "id": "5004", "type": "Maple" }
+			]
+	}
+   ]','https://adobe.github.io/Spry/samples/data_region/JSONDataSetSample.html');
+   SELECT count(*) FROM j2;
+} {3}
+
+do_execsql_test json-5.2 {
+  SELECT id, json_valid(json), json_type(json), '|' FROM j2 ORDER BY id;
+} {1 1 object | 2 1 object | 3 1 array |}
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+# fullkey is always the same as path+key (with appropriate formatting)
+#
+do_execsql_test json-5.3 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_tree(j2.json) AS jx
+   WHERE fullkey!=(path || CASE WHEN typeof(key)=='integer' THEN '['||key||']'
+                                ELSE '.'||key END);
+} {}
+do_execsql_test json-5.4 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_each(j2.json) AS jx
+   WHERE fullkey!=(path || CASE WHEN typeof(key)=='integer' THEN '['||key||']'
+                                ELSE '.'||key END);
+} {}
+
+
+# Verify that the json_each.json and json_tree.json output is always the
+# same as input.
+#
+do_execsql_test json-5.5 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_each(j2.json) AS jx
+   WHERE jx.json<>j2.json;
+} {}
+do_execsql_test json-5.6 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_tree(j2.json) AS jx
+   WHERE jx.json<>j2.json;
+} {}
+do_execsql_test json-5.7 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_each(j2.json) AS jx
+   WHERE jx.value<>jx.atom AND type NOT IN ('array','object');
+} {}
+do_execsql_test json-5.8 {
+  SELECT j2.rowid, jx.rowid, fullkey, path, key
+    FROM j2, json_tree(j2.json) AS jx
+   WHERE jx.value<>jx.atom AND type NOT IN ('array','object');
+} {}
+
+do_execsql_test json-6.1 {
+  SELECT json_valid('{"a":55,"b":72,}');
+} {0}
+do_execsql_test json-6.2 {
+  SELECT json_valid('{"a":55,"b":72}');
+} {1}
+do_execsql_test json-6.3 {
+  SELECT json_valid('["a",55,"b",72,]');
+} {0}
+do_execsql_test json-6.4 {
+  SELECT json_valid('["a",55,"b",72]');
+} {1}
+
+# White-space tests.  Note that form-feed is not white-space in JSON.
+# ticket [57eec374ae1d0a1d4a23077a95f4e173fe269113]
+# 
+foreach {tn isvalid ws} {
+  7.1  1  char(0x20)
+  7.2  1  char(0x09)
+  7.3  1  char(0x0A)
+  7.4  1  char(0x0D)
+  7.5  0  char(0x0C)
+  7.6  1  char(0x20,0x09,0x0a,0x0d,0x20)
+  7.7  0  char(0x20,0x09,0x0a,0x0c,0x0d,0x20)
+} {
+  do_execsql_test json-$tn.1 \
+    "SELECT json_valid(printf('%s{%s\"x\"%s:%s9%s}%s',
+         $::ws,$::ws,$::ws,$::ws,$::ws,$::ws));" \
+  $isvalid
+}
+
+# Ticket https://www.sqlite.org/src/info/ad2559db380abf8e
+# Control characters must be escaped in JSON strings.
+#
+do_execsql_test json-8.1 {
+  DROP TABLE IF EXISTS t8;
+  CREATE TABLE t8(a,b);
+  INSERT INTO t8(a) VALUES('abc' || char(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35) || 'xyz');
+  UPDATE t8 SET b=json_array(a);
+  SELECT b FROM t8;
+} {{["abc\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f !\"#xyz"]}}
+do_execsql_test json-8.2 {
+  SELECT a=json_extract(b,'$[0]') FROM t8;
+} {1}
+
+# 2017-04-12.  Regression reported on the mailing list by Rolf Ade
+#
+do_execsql_test json-8.3 {
+  SELECT json_valid(char(0x22,0xe4,0x22));
+} {1}
+do_execsql_test json-8.4 {
+  SELECT unicode(json_extract(char(0x22,228,0x22),'$'));
+} {228}
+
+# The json_quote() function transforms an SQL value into a JSON value.
+# String values are quoted and interior quotes are escaped.  NULL values
+# are rendered as the unquoted string "null".
+#
+do_execsql_test json-9.1 {
+  SELECT json_quote('abc"xyz');
+} {{"abc\"xyz"}}
+do_execsql_test json-9.2 {
+  SELECT json_quote(3.14159);
+} {3.14159}
+do_execsql_test json-9.3 {
+  SELECT json_quote(12345);
+} {12345}
+do_execsql_test json-9.4 {
+  SELECT json_quote(null);
+} {"null"}
+do_catchsql_test json-9.5 {
+  SELECT json_quote(x'30313233');
+} {1 {JSON cannot hold BLOB values}}
+do_catchsql_test json-9.6 {
+  SELECT json_quote(123,456)
+} {1 {wrong number of arguments to function json_quote()}}
+do_catchsql_test json-9.7 {
+  SELECT json_quote()
+} {1 {wrong number of arguments to function json_quote()}}
+
+# Make sure only valid backslash-escapes are accepted.
+#
+do_execsql_test json-10.1 {
+  SELECT json_valid('" \  "');
+} {0}
+do_execsql_test json-10.2 {
+  SELECT json_valid('" \! "');
+} {0}
+do_execsql_test json-10.3 {
+  SELECT json_valid('" \" "');
+} {1}
+do_execsql_test json-10.4 {
+  SELECT json_valid('" \# "');
+} {0}
+do_execsql_test json-10.5 {
+  SELECT json_valid('" \$ "');
+} {0}
+do_execsql_test json-10.6 {
+  SELECT json_valid('" \% "');
+} {0}
+do_execsql_test json-10.7 {
+  SELECT json_valid('" \& "');
+} {0}
+do_execsql_test json-10.8 {
+  SELECT json_valid('" \'' "');
+} {0}
+do_execsql_test json-10.9 {
+  SELECT json_valid('" \( "');
+} {0}
+do_execsql_test json-10.10 {
+  SELECT json_valid('" \) "');
+} {0}
+do_execsql_test json-10.11 {
+  SELECT json_valid('" \* "');
+} {0}
+do_execsql_test json-10.12 {
+  SELECT json_valid('" \+ "');
+} {0}
+do_execsql_test json-10.13 {
+  SELECT json_valid('" \, "');
+} {0}
+do_execsql_test json-10.14 {
+  SELECT json_valid('" \- "');
+} {0}
+do_execsql_test json-10.15 {
+  SELECT json_valid('" \. "');
+} {0}
+do_execsql_test json-10.16 {
+  SELECT json_valid('" \/ "');
+} {1}
+do_execsql_test json-10.17 {
+  SELECT json_valid('" \0 "');
+} {0}
+do_execsql_test json-10.18 {
+  SELECT json_valid('" \1 "');
+} {0}
+do_execsql_test json-10.19 {
+  SELECT json_valid('" \2 "');
+} {0}
+do_execsql_test json-10.20 {
+  SELECT json_valid('" \3 "');
+} {0}
+do_execsql_test json-10.21 {
+  SELECT json_valid('" \4 "');
+} {0}
+do_execsql_test json-10.22 {
+  SELECT json_valid('" \5 "');
+} {0}
+do_execsql_test json-10.23 {
+  SELECT json_valid('" \6 "');
+} {0}
+do_execsql_test json-10.24 {
+  SELECT json_valid('" \7 "');
+} {0}
+do_execsql_test json-10.25 {
+  SELECT json_valid('" \8 "');
+} {0}
+do_execsql_test json-10.26 {
+  SELECT json_valid('" \9 "');
+} {0}
+do_execsql_test json-10.27 {
+  SELECT json_valid('" \: "');
+} {0}
+do_execsql_test json-10.28 {
+  SELECT json_valid('" \; "');
+} {0}
+do_execsql_test json-10.29 {
+  SELECT json_valid('" \< "');
+} {0}
+do_execsql_test json-10.30 {
+  SELECT json_valid('" \= "');
+} {0}
+do_execsql_test json-10.31 {
+  SELECT json_valid('" \> "');
+} {0}
+do_execsql_test json-10.32 {
+  SELECT json_valid('" \? "');
+} {0}
+do_execsql_test json-10.33 {
+  SELECT json_valid('" \@ "');
+} {0}
+do_execsql_test json-10.34 {
+  SELECT json_valid('" \A "');
+} {0}
+do_execsql_test json-10.35 {
+  SELECT json_valid('" \B "');
+} {0}
+do_execsql_test json-10.36 {
+  SELECT json_valid('" \C "');
+} {0}
+do_execsql_test json-10.37 {
+  SELECT json_valid('" \D "');
+} {0}
+do_execsql_test json-10.38 {
+  SELECT json_valid('" \E "');
+} {0}
+do_execsql_test json-10.39 {
+  SELECT json_valid('" \F "');
+} {0}
+do_execsql_test json-10.40 {
+  SELECT json_valid('" \G "');
+} {0}
+do_execsql_test json-10.41 {
+  SELECT json_valid('" \H "');
+} {0}
+do_execsql_test json-10.42 {
+  SELECT json_valid('" \I "');
+} {0}
+do_execsql_test json-10.43 {
+  SELECT json_valid('" \J "');
+} {0}
+do_execsql_test json-10.44 {
+  SELECT json_valid('" \K "');
+} {0}
+do_execsql_test json-10.45 {
+  SELECT json_valid('" \L "');
+} {0}
+do_execsql_test json-10.46 {
+  SELECT json_valid('" \M "');
+} {0}
+do_execsql_test json-10.47 {
+  SELECT json_valid('" \N "');
+} {0}
+do_execsql_test json-10.48 {
+  SELECT json_valid('" \O "');
+} {0}
+do_execsql_test json-10.49 {
+  SELECT json_valid('" \P "');
+} {0}
+do_execsql_test json-10.50 {
+  SELECT json_valid('" \Q "');
+} {0}
+do_execsql_test json-10.51 {
+  SELECT json_valid('" \R "');
+} {0}
+do_execsql_test json-10.52 {
+  SELECT json_valid('" \S "');
+} {0}
+do_execsql_test json-10.53 {
+  SELECT json_valid('" \T "');
+} {0}
+do_execsql_test json-10.54 {
+  SELECT json_valid('" \U "');
+} {0}
+do_execsql_test json-10.55 {
+  SELECT json_valid('" \V "');
+} {0}
+do_execsql_test json-10.56 {
+  SELECT json_valid('" \W "');
+} {0}
+do_execsql_test json-10.57 {
+  SELECT json_valid('" \X "');
+} {0}
+do_execsql_test json-10.58 {
+  SELECT json_valid('" \Y "');
+} {0}
+do_execsql_test json-10.59 {
+  SELECT json_valid('" \Z "');
+} {0}
+do_execsql_test json-10.60 {
+  SELECT json_valid('" \[ "');
+} {0}
+do_execsql_test json-10.61 {
+  SELECT json_valid('" \\ "');
+} {1}
+do_execsql_test json-10.62 {
+  SELECT json_valid('" \] "');
+} {0}
+do_execsql_test json-10.63 {
+  SELECT json_valid('" \^ "');
+} {0}
+do_execsql_test json-10.64 {
+  SELECT json_valid('" \_ "');
+} {0}
+do_execsql_test json-10.65 {
+  SELECT json_valid('" \` "');
+} {0}
+do_execsql_test json-10.66 {
+  SELECT json_valid('" \a "');
+} {0}
+do_execsql_test json-10.67 {
+  SELECT json_valid('" \b "');
+} {1}
+do_execsql_test json-10.68 {
+  SELECT json_valid('" \c "');
+} {0}
+do_execsql_test json-10.69 {
+  SELECT json_valid('" \d "');
+} {0}
+do_execsql_test json-10.70 {
+  SELECT json_valid('" \e "');
+} {0}
+do_execsql_test json-10.71 {
+  SELECT json_valid('" \f "');
+} {1}
+do_execsql_test json-10.72 {
+  SELECT json_valid('" \g "');
+} {0}
+do_execsql_test json-10.73 {
+  SELECT json_valid('" \h "');
+} {0}
+do_execsql_test json-10.74 {
+  SELECT json_valid('" \i "');
+} {0}
+do_execsql_test json-10.75 {
+  SELECT json_valid('" \j "');
+} {0}
+do_execsql_test json-10.76 {
+  SELECT json_valid('" \k "');
+} {0}
+do_execsql_test json-10.77 {
+  SELECT json_valid('" \l "');
+} {0}
+do_execsql_test json-10.78 {
+  SELECT json_valid('" \m "');
+} {0}
+do_execsql_test json-10.79 {
+  SELECT json_valid('" \n "');
+} {1}
+do_execsql_test json-10.80 {
+  SELECT json_valid('" \o "');
+} {0}
+do_execsql_test json-10.81 {
+  SELECT json_valid('" \p "');
+} {0}
+do_execsql_test json-10.82 {
+  SELECT json_valid('" \q "');
+} {0}
+do_execsql_test json-10.83 {
+  SELECT json_valid('" \r "');
+} {1}
+do_execsql_test json-10.84 {
+  SELECT json_valid('" \s "');
+} {0}
+do_execsql_test json-10.85 {
+  SELECT json_valid('" \t "');
+} {1}
+do_execsql_test json-10.86.0 {
+  SELECT json_valid('" \u "');
+} {0}
+do_execsql_test json-10.86.1 {
+  SELECT json_valid('" \ua "');
+} {0}
+do_execsql_test json-10.86.2 {
+  SELECT json_valid('" \uab "');
+} {0}
+do_execsql_test json-10.86.3 {
+  SELECT json_valid('" \uabc "');
+} {0}
+do_execsql_test json-10.86.4 {
+  SELECT json_valid('" \uabcd "');
+} {1}
+do_execsql_test json-10.86.5 {
+  SELECT json_valid('" \uFEDC "');
+} {1}
+do_execsql_test json-10.86.6 {
+  SELECT json_valid('" \u1234 "');
+} {1}
+do_execsql_test json-10.87 {
+  SELECT json_valid('" \v "');
+} {0}
+do_execsql_test json-10.88 {
+  SELECT json_valid('" \w "');
+} {0}
+do_execsql_test json-10.89 {
+  SELECT json_valid('" \x "');
+} {0}
+do_execsql_test json-10.90 {
+  SELECT json_valid('" \y "');
+} {0}
+do_execsql_test json-10.91 {
+  SELECT json_valid('" \z "');
+} {0}
+do_execsql_test json-10.92 {
+  SELECT json_valid('" \{ "');
+} {0}
+do_execsql_test json-10.93 {
+  SELECT json_valid('" \| "');
+} {0}
+do_execsql_test json-10.94 {
+  SELECT json_valid('" \} "');
+} {0}
+do_execsql_test json-10.95 {
+  SELECT json_valid('" \~ "');
+} {0}
+
+#--------------------------------------------------------------------------
+# 2017-04-11.  https://www.sqlite.org/src/info/981329adeef51011
+# Stack overflow on deeply nested JSON.
+#
+# The following tests confirm that deeply nested JSON is considered invalid.
+#
+do_execsql_test json-11.0 {
+  /* Shallow enough to be parsed */
+  SELECT json_valid(printf('%.2000c0%.2000c','[',']'));
+} {1}
+do_execsql_test json-11.1 {
+  /* Too deep by one */
+  SELECT json_valid(printf('%.2001c0%.2001c','[',']'));
+} {0}
+do_execsql_test json-11.2 {
+  /* Shallow enough to be parsed { */
+  SELECT json_valid(replace(printf('%.2000c0%.2000c','[','}'),'[','{"a":'));
+  /* } */
+} {1}
+do_execsql_test json-11.3 {
+  /* Too deep by one { */
+  SELECT json_valid(replace(printf('%.2001c0%.2001c','[','}'),'[','{"a":'));
+  /* } */
+} {0}
+
+# 2017-10-27.  Demonstrate the ability to access an element from
+# a json structure even though the element name constains a "."
+# character, by quoting the element name in the path.
+#
+do_execsql_test json-12.100 {
+  CREATE TABLE t12(x);
+  INSERT INTO t12(x) VALUES(
+    '{"settings":
+        {"layer2":
+           {"hapax.legomenon":
+              {"forceDisplay":true,
+               "transliterate":true,
+               "add.footnote":true,
+               "summary.report":true},
+            "dis.legomenon":
+              {"forceDisplay":true,
+               "transliterate":false,
+               "add.footnote":false,
+               "summary.report":true},
+            "tris.legomenon":
+              {"forceDisplay":true,
+               "transliterate":false,
+               "add.footnote":false,
+               "summary.report":false}
+           }
+        }
+     }');
+} {}
+do_execsql_test json-12.110 {
+  SELECT json_remove(x, '$.settings.layer2."dis.legomenon".forceDisplay')
+    FROM t12;
+} {{{"settings":{"layer2":{"hapax.legomenon":{"forceDisplay":true,"transliterate":true,"add.footnote":true,"summary.report":true},"dis.legomenon":{"transliterate":false,"add.footnote":false,"summary.report":true},"tris.legomenon":{"forceDisplay":true,"transliterate":false,"add.footnote":false,"summary.report":false}}}}}}
+do_execsql_test json-12.120 {
+  SELECT json_extract(x, '$.settings.layer2."tris.legomenon"."summary.report"')
+    FROM t12;
+} {0}
+
+# 2018-01-26
+# ticket https://www.sqlite.org/src/tktview/80177f0c226ff54f6ddd41
+# Make sure the query planner knows about the arguments to table-valued functions.
+#
+do_execsql_test json-13.100 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(id, json);
+  INSERT INTO t1(id,json) VALUES(1,'{"items":[3,5]}');
+  CREATE TABLE t2(id, json);
+  INSERT INTO t2(id,json) VALUES(2,'{"value":2}');
+  INSERT INTO t2(id,json) VALUES(3,'{"value":3}');
+  INSERT INTO t2(id,json) VALUES(4,'{"value":4}');
+  INSERT INTO t2(id,json) VALUES(5,'{"value":5}');
+  INSERT INTO t2(id,json) VALUES(6,'{"value":6}');
+  SELECT * FROM t1 CROSS JOIN t2
+   WHERE EXISTS(SELECT 1 FROM json_each(t1.json,'$.items') AS Z
+                 WHERE Z.value==t2.id);
+} {1 {{"items":[3,5]}} 3 {{"value":3}} 1 {{"items":[3,5]}} 5 {{"value":5}}}
+do_execsql_test json-13.110 {
+  SELECT * FROM t2 CROSS JOIN t1
+   WHERE EXISTS(SELECT 1 FROM json_each(t1.json,'$.items') AS Z
+                 WHERE Z.value==t2.id);
+} {3 {{"value":3}} 1 {{"items":[3,5]}} 5 {{"value":5}} 1 {{"items":[3,5]}}}
+
+# 2018-05-16
+# Incorrect fullkey output from json_each()
+# when the input JSON is not an array or object.
+#
+do_execsql_test json-14.100 {
+  SELECT fullkey FROM json_each('123');
+} {$}
+do_execsql_test json-14.110 {
+  SELECT fullkey FROM json_each('123.56');
+} {$}
+do_execsql_test json-14.120 {
+  SELECT fullkey FROM json_each('"hello"');
+} {$}
+do_execsql_test json-14.130 {
+  SELECT fullkey FROM json_each('null');
+} {$}
+do_execsql_test json-14.140 {
+  SELECT fullkey FROM json_tree('123');
+} {$}
+do_execsql_test json-14.150 {
+  SELECT fullkey FROM json_tree('123.56');
+} {$}
+do_execsql_test json-14.160 {
+  SELECT fullkey FROM json_tree('"hello"');
+} {$}
+do_execsql_test json-14.170 {
+  SELECT fullkey FROM json_tree('null');
+} {$}
+
+# 2018-12-03
+# Make sure the table-valued functions contained within parentheses
+# work correctly.
+#
+# Bug reported via private email. See TH3 for more information.
+#
+do_execsql_test json-15.100 {
+  SELECT * FROM JSON_EACH('{"a":1, "b":2}');
+} {a 1 integer 1 2 {} {$.a} {$} b 2 integer 2 4 {} {$.b} {$}}
+do_execsql_test json-15.110 {
+  SELECT xyz.* FROM JSON_EACH('{"a":1, "b":2}') AS xyz;
+} {a 1 integer 1 2 {} {$.a} {$} b 2 integer 2 4 {} {$.b} {$}}
+do_execsql_test json-15.120 {
+  SELECT * FROM (JSON_EACH('{"a":1, "b":2}'));
+} {a 1 integer 1 2 {} {$.a} {$} b 2 integer 2 4 {} {$.b} {$}}
+do_execsql_test json-15.130 {
+  SELECT xyz.* FROM (JSON_EACH('{"a":1, "b":2}')) AS xyz;
+} {a 1 integer 1 2 {} {$.a} {$} b 2 integer 2 4 {} {$.b} {$}}
+
+# 2019-11-10
+# Mailing list bug report on the handling of surrogate pairs
+# in JSON.
+#
+do_execsql_test json-16.10 {
+  SELECT length(json_extract('"abc\uD834\uDD1Exyz"','$'));
+} {7}
+do_execsql_test json-16.20 {
+  SELECT length(json_extract('"\uD834\uDD1E"','$'));
+} {1}
+do_execsql_test json-16.30 {
+  SELECT unicode(json_extract('"\uD834\uDD1E"','$'));
+} {119070}
+
+
+finish_test

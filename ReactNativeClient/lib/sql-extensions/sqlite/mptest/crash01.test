@@ -1,0 +1,106 @@
+/* Test cases involving incomplete transactions that must be rolled back.
+*/
+--task 1
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  --sleep 1
+  INSERT INTO t1 VALUES(1, randomblob(2000));
+  INSERT INTO t1 VALUES(2, randomblob(1000));
+  --sleep 1
+  INSERT INTO t1 SELECT a+2, randomblob(1500) FROM t1;
+  INSERT INTO t1 SELECT a+4, randomblob(1500) FROM t1;
+  INSERT INTO t1 SELECT a+8, randomblob(1500) FROM t1;
+  --sleep 1
+  INSERT INTO t1 SELECT a+16, randomblob(1500) FROM t1;
+  --sleep 1
+  INSERT INTO t1 SELECT a+32, randomblob(1500) FROM t1;
+  SELECT count(*) FROM t1;
+  --match 64
+  SELECT avg(length(b)) FROM t1;
+  --match 1500.0
+  --sleep 2
+  UPDATE t1 SET b='x'||a||'y';
+  SELECT sum(length(b)) FROM t1;
+  --match 247
+  SELECT a FROM t1 WHERE b='x17y';
+  --match 17
+  CREATE INDEX t1b ON t1(b);
+  SELECT a FROM t1 WHERE b='x17y';
+  --match 17
+  SELECT a FROM t1 WHERE b GLOB 'x2?y' ORDER BY b DESC LIMIT 5;
+  --match 29 28 27 26 25
+--end
+--wait 1
+--task 2
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t2 SELECT a, b FROM t1;
+  UPDATE t1 SET b='x'||a||'y';
+  SELECT sum(length(b)) FROM t2;
+  --match 247
+  SELECT a FROM t2 WHERE b='x17y';
+  --match 17
+  CREATE INDEX t2b ON t2(b);
+  SELECT a FROM t2 WHERE b='x17y';
+  --match 17
+  SELECT a FROM t2 WHERE b GLOB 'x2?y' ORDER BY b DESC LIMIT 5;
+  --match 29 28 27 26 25
+--end
+--task 3
+  DROP TABLE IF EXISTS t3;
+  CREATE TABLE t3(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t3 SELECT a, b FROM t1;
+  UPDATE t1 SET b='x'||a||'y';
+  SELECT sum(length(b)) FROM t3;
+  --match 247
+  SELECT a FROM t3 WHERE b='x17y';
+  --match 17
+  CREATE INDEX t3b ON t3(b);
+  SELECT a FROM t3 WHERE b='x17y';
+  --match 17
+  SELECT a FROM t3 WHERE b GLOB 'x2?y' ORDER BY b DESC LIMIT 5;
+  --match 29 28 27 26 25
+--end
+--task 4
+  DROP TABLE IF EXISTS t4;
+  CREATE TABLE t4(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t4 SELECT a, b FROM t1;
+  UPDATE t1 SET b='x'||a||'y';
+  SELECT sum(length(b)) FROM t4;
+  --match 247
+  SELECT a FROM t4 WHERE b='x17y';
+  --match 17
+  CREATE INDEX t4b ON t4(b);
+  SELECT a FROM t4 WHERE b='x17y';
+  --match 17
+  SELECT a FROM t4 WHERE b GLOB 'x2?y' ORDER BY b DESC LIMIT 5;
+  --match 29 28 27 26 25
+--end
+--task 5
+  DROP TABLE IF EXISTS t5;
+  CREATE TABLE t5(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t5 SELECT a, b FROM t1;
+  UPDATE t1 SET b='x'||a||'y';
+  SELECT sum(length(b)) FROM t5;
+  --match 247
+  SELECT a FROM t5 WHERE b='x17y';
+  --match 17
+  CREATE INDEX t5b ON t5(b);
+  SELECT a FROM t5 WHERE b='x17y';
+  --match 17
+  SELECT a FROM t5 WHERE b GLOB 'x2?y' ORDER BY b DESC LIMIT 5;
+  --match 29 28 27 26 25
+--end
+
+--wait all
+/* After the database file has been set up, run the crash2 subscript
+** multiple times. */
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest
+--source crash02.subtest

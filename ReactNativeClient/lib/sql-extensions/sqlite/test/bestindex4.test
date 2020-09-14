@@ -1,0 +1,175 @@
+# 2016 November 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test the virtual table interface. In particular the xBestIndex
+# method.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex4
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Virtual table callback for a virtual table named $tbl.
+#
+# The table created is:
+#
+#      "CREATE TABLE t1 (id, host, class)"
+#
+# The virtual table supports == operators on a subset of its columns. The
+# exact subset depends on the value of bitmask paramater $param.
+#
+#   0x01 - == on "id" supported
+#   0x02 - == on "host" supported
+#   0x04 - == on "class" supported
+#
+# $param also supports the following bits:
+#
+#   0x08 - ignore the "usable" flag (malfunction)
+#
+#
+#  
+proc vtab_cmd {param method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(id TEXT, host TEXT, class TEXT)"
+    }
+
+    xBestIndex {
+      foreach {clist orderby mask} $args {}
+
+      set ret [list]
+
+      set use use
+
+
+      for {set i 0} {$i < [llength $clist]} {incr i} {
+        array unset C
+        array set C [lindex $clist $i]
+        if { ($C(usable) || ($param & 0x08)) 
+          && $C(op)=="eq" && ($param & 1<<$C(column))
+        } {
+          lappend ret $use $i
+          break
+        }
+      }
+
+      set score 1000000
+      if {$ret!=""} {
+        set score [expr $score / [llength $ret]]
+      }
+      lappend ret cost $score rows $score
+
+      return $ret
+    }
+
+    xFilter {
+    }
+  }
+  return ""
+}
+
+register_tcl_module db
+
+for {set param1 0} {$param1<16} {incr param1} {
+  for {set param2 0} {$param2<16} {incr param2} {
+    reset_db
+    register_tcl_module db
+    do_execsql_test 1.$param1.$param2.1 "
+      CREATE VIRTUAL TABLE t1 USING tcl('vtab_cmd $param1');
+      CREATE VIRTUAL TABLE t2 USING tcl('vtab_cmd $param2');
+    "
+
+    foreach {tn sql} {
+      2 "select t1.id as ID from t1, t2 where t1.id=t2.host and t2.class='xx'"
+      3 {
+        select t1.id as ID from t1, t2 where t2.class ='xx' and t2.id = t1.host
+      }
+      4 {
+        select t1.id as ID from t1, t2 where t1.host = t2.id and t2. class ='xx'
+      }
+    } {
+
+      if {($param1 & 0x08)==0 && ($param2 & 0x08)==0} {
+
+        do_execsql_test 1.$param1.$param2.$tn.a $sql {}
+
+      } else {
+        do_test 1.$param1.$param2.$tn.b {
+          catchsql $sql
+            set {} {}
+        } {}
+      }
+    }
+
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that a parameter passed to a table-valued function cannot be
+# used to drive an index. i.e. that in the following:
+#
+#   SELECT * FROM tbl, vtab(tbl.x);
+#
+# The implicit constraint "tbl.x = vtab.hidden" is not optimized using
+# an index on tbl.x.
+#
+reset_db
+register_tcl_module db
+proc vtab_command {method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE t1(a, b, c, d HIDDEN)"
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      if {[llength $clist]!=1} { error "unexpected constraint list" }
+      catch { array unset C }
+      array set C [lindex $clist 0]
+      if {$C(usable)} {
+        return [list omit 0 idxnum 555 rows 10 cost 100]
+      }
+      return [list cost 100000000]
+    }
+
+  }
+
+  return {}
+}
+
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE x1 USING tcl(vtab_command);
+  CREATE TABLE t1 (x INT PRIMARY KEY);
+} {}
+
+do_eqp_test 2.1 {
+  SELECT * FROM t1, x1 WHERE x1.d=t1.x;
+} {
+  QUERY PLAN
+  |--SCAN TABLE x1 VIRTUAL TABLE INDEX 0:
+  `--SEARCH TABLE t1 USING COVERING INDEX sqlite_autoindex_t1_1 (x=?)
+}
+
+do_eqp_test 2.2 {
+  SELECT * FROM t1, x1(t1.x)
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SCAN TABLE x1 VIRTUAL TABLE INDEX 555:
+}
+
+
+finish_test

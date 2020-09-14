@@ -1,0 +1,163 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on custom tokenizers that support synonyms.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5synonym2
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach tok {query document} {
+foreach_detail_mode $testprefix {
+
+fts5_tclnum_register db
+fts5_aux_test_functions db
+
+proc fts5_test_bothlist {cmd} {
+
+  for {set i 0} {$i < [$cmd xPhraseCount]} {incr i} {
+    set bFirst 1
+    $cmd xPhraseColumnForeach $i c { 
+      lappend CL $i.$c 
+      if {$bFirst} { $cmd xPhraseForeach $i c o { lappend PL $i.$c.$o } }
+      set bFirst 0
+    }
+  }
+
+  list [sort_poslist $PL] $CL
+}
+sqlite3_fts5_create_function db fts5_test_bothlist fts5_test_bothlist
+
+proc fts5_rowid {cmd} { expr [$cmd xColumnText -1] }
+sqlite3_fts5_create_function db fts5_rowid fts5_rowid
+
+do_execsql_test 1.$tok.0.1 "
+  CREATE VIRTUAL TABLE ss USING fts5(a, b, 
+       tokenize='tclnum $tok', detail=%DETAIL%);
+  INSERT INTO ss(ss, rank) VALUES('rank', 'fts5_rowid()');
+"
+
+do_execsql_test 1.$tok.0.2 {
+  INSERT INTO ss VALUES('5 5 five seven 3 seven i', '2 1 5 0 two 1 i');
+  INSERT INTO ss VALUES('six ix iii 7 i vii iii', 'one seven nine 4 9 1 vi');
+  INSERT INTO ss VALUES('6 viii i five six zero seven', '5 v iii iv iv 3');
+  INSERT INTO ss VALUES('9 ii six 8 1 6', 'six 4 iv iv 7');
+  INSERT INTO ss VALUES('1 5 4 eight ii iv iii', 'nine 2 eight ix v vii');
+  INSERT INTO ss VALUES('one 7 seven six 2 two', '1 2 four 7 4 3 4');
+  INSERT INTO ss VALUES('eight iv 4 nine vii six 1', '5 6 v one zero 4');
+  INSERT INTO ss VALUES('v 9 8 iii 4', '9 4 seven two vi vii');
+  INSERT INTO ss VALUES('3 ix two 9 0 nine i', 'five ii nine two viii i five');
+  INSERT INTO ss VALUES('six iii 9 two eight 2', 'nine i nine vii nine');
+  INSERT INTO ss VALUES('6 three zero seven vii five', '8 vii ix 0 7 seven');
+  INSERT INTO ss VALUES('8 vii 8 7 3 4', 'eight iii four viii nine iv three');
+  INSERT INTO ss VALUES('4 v 7 two 0 one 8', 'vii 1 two five i zero 9');
+  INSERT INTO ss VALUES('3 ii vii vi eight', '8 4 ix one three eight');
+  INSERT INTO ss VALUES('iv eight seven 6 9 seven', 'one vi two five seven');
+  INSERT INTO ss VALUES('i i 5 i v vii eight', '2 seven i 2 2 four');
+  INSERT INTO ss VALUES('0 i iii nine 3 ix five', '0 eight iv 0 six 2');
+  INSERT INTO ss VALUES('iv vii three 3 9 one 8', '2 ii 6 eight ii six six');
+  INSERT INTO ss VALUES('eight one two nine six', '8 9 3 viii vi');
+  INSERT INTO ss VALUES('one 0 four ii eight one 3', 'iii eight vi vi vi');
+  INSERT INTO ss VALUES('4 0 eight 0 0', '1 four one vii seven ii');
+  INSERT INTO ss VALUES('1 zero nine 2 2', 'viii iv two vi nine v iii');
+  INSERT INTO ss VALUES('5 five viii four four vi', '8 five 7 vii 6 4');
+  INSERT INTO ss VALUES('7 ix four 8 vii', 'nine three nine ii ix vii');
+  INSERT INTO ss VALUES('nine iv v i 0 v', 'two iv vii six i ix 4');
+  INSERT INTO ss VALUES('one v v one viii 3 8', '2 1 3 five iii');
+  INSERT INTO ss VALUES('six ii 5 nine 4 viii seven', 'eight i ix ix 7 four');
+  INSERT INTO ss VALUES('9 ii two seven three 7 0', 'six viii seven 7 five');
+  INSERT INTO ss VALUES('five two 4 viii nine', '9 7 nine zero 1 two one');
+  INSERT INTO ss VALUES('viii 8 iii i ii 8 3', '4 2 7 v 8 8');
+  INSERT INTO ss VALUES('four vii 4 iii zero 0 vii', '3 viii iii zero 9 i');
+  INSERT INTO ss VALUES('0 seven v five i five v', 'one 4 2 ix 9');
+  INSERT INTO ss VALUES('two 5 two two ix 4 1', '3 nine ii v nine 3 five');
+  INSERT INTO ss VALUES('five 5 7 4 6 vii', 'three 2 ix 2 8 6');
+  INSERT INTO ss VALUES('six iii vi iv seven eight', '8 six 7 0 4');
+  INSERT INTO ss VALUES('vi vi iv 3 0 one one', '9 6 eight ix iv');
+  INSERT INTO ss VALUES('7 2 2 iii 0', '0 0 seven 1 nine');
+  INSERT INTO ss VALUES('8 6 iv six ii', 'iv 6 3 4 ii five');
+  INSERT INTO ss VALUES('0 two two seven ii', 'vii ix four 4 zero vi vi');
+  INSERT INTO ss VALUES('2 one eight 8 9 7', 'vi 3 0 3 vii');
+  INSERT INTO ss VALUES('iii ii ix iv three', 'vi i 6 1 two');
+  INSERT INTO ss VALUES('eight four nine 8 seven', 'one three i nine iii one');
+  INSERT INTO ss VALUES('iii seven five ix 8', 'ii 7 seven 0 four ii');
+  INSERT INTO ss VALUES('four 0 1 5 two', 'iii 9 5 ii ii 2 4');
+  INSERT INTO ss VALUES('iii nine four vi 8 five six', 'i i ii seven vi vii');
+  INSERT INTO ss VALUES('eight vii eight six 3', 'i vii 1 six 9 vii');
+  INSERT INTO ss VALUES('9 0 viii viii five', 'i 1 viii ix 3 4');
+  INSERT INTO ss VALUES('three nine 5 nine viii four zero', 'ii i 1 5 2 viii');
+  INSERT INTO ss VALUES('5 vii three 9 four', 'three five one 7 2 eight one');
+}
+
+foreach {tn expr} {
+  2.1 "one OR two OR three OR four"
+
+  1.1 "one"   1.2 "two"   1.3 "three"   1.4 "four"
+  1.5 "v"     1.6 "vi"    1.7 "vii"     1.8 "viii"
+  1.9 "9"    1.10 "0"    1.11 "1"      1.12 "2"
+
+  2.1 "one OR two OR three OR four"
+  2.2 "(one AND two) OR (three AND four)"
+  2.3 "(one AND two) OR (three AND four) NOT five"
+  2.4 "(one AND two) NOT 6"
+
+  3.1 "b:one AND a:two"
+  3.2 "b:one OR a:two"
+  3.3 "a:one OR b:1 OR {a b} : i"
+
+  4.1 "NEAR(one two, 2)"
+  4.2 "NEAR(one two three, 2)"
+  4.3 "NEAR(eight nine, 1) OR NEAR(six seven, 1)"
+} {
+  if {[fts5_expr_ok $expr ss]==0} {
+    do_test 1.$tok.$tn.OMITTED { list } [list]
+    continue
+  }
+
+  set res [fts5_query_data $expr ss ASC ::tclnum_syn]
+  do_execsql_test 1.$tok.$tn.[llength $res].asc.1 {
+    SELECT rowid, fts5_test_poslist2(ss), fts5_test_collist(ss) FROM ss($expr)
+  } $res
+
+  do_execsql_test 1.$tok.$tn.[llength $res].asc.2 {
+    SELECT rowid, fts5_test_poslist(ss), fts5_test_collist(ss) FROM ss($expr)
+  } $res
+
+  do_execsql_test 1.$tok.$tn.[llength $res].asc.2 {
+    SELECT rowid, fts5_test_poslist2(ss), fts5_test_collist(ss) FROM ss($expr)
+    ORDER BY rank ASC
+  } $res
+
+  set res2 [list]
+  foreach {a b c} $res { lappend res2 $a $c $b }
+  do_execsql_test 1.$tok.$tn.[llength $res].asc.3 {
+    SELECT rowid, fts5_test_collist(ss), fts5_test_poslist2(ss) FROM ss($expr)
+  } $res2
+
+  set res3 [list]
+  foreach {a b c} $res { lappend res3 $a [list $b $c] }
+  do_execsql_test 1.$tok.$tn.[llength $res].asc.3 {
+    SELECT rowid, fts5_test_bothlist(ss) FROM ss($expr)
+  } $res3
+
+
+}
+
+}
+}
+
+finish_test

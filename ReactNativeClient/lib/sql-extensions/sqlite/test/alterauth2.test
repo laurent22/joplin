@@ -1,0 +1,98 @@
+# 2018 October 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+set testdir [file dirname $argv0]
+
+source $testdir/tester.tcl
+
+# If SQLITE_OMIT_ALTERTABLE is defined, omit this file.
+ifcapable !altertable {
+  finish_test
+  return
+}
+set testprefix alterauth2
+
+set ::auth [list]
+proc xAuth {type args} {
+  lappend ::auth [concat $type [lrange $args 0 3]]
+  if {$type=="SQLITE_READ" && [lindex $args 0] == "t2"} breakpoint
+  return SQLITE_OK
+}
+db auth xAuth
+
+proc do_auth_test {tn sql authcode} {
+  set script "
+    set ::auth \[list\]
+    execsql {$sql}
+    lsort -unique \[set ::auth\]
+  "
+
+  set normal [list {*}$authcode]
+  uplevel [list do_test $tn $script $normal]
+}
+
+do_execsql_test 1.0 { 
+  CREATE TABLE t1(a, b, c); 
+  CREATE VIEW v1 AS SELECT * FROM t1;
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    DELETE FROM t1 WHERE a<new.a;
+  END;
+
+  CREATE TEMP TRIGGER tr2 AFTER UPDATE OF a, b ON t1 BEGIN
+    UPDATE t1 SET a=a+1 WHERE new.b<b;
+  END;
+}
+
+do_auth_test 1.1 {
+  ALTER TABLE t1 RENAME TO t2;
+} {
+    {SQLITE_ALTER_TABLE main t1 {} {}} 
+    {SQLITE_FUNCTION {} like {} {}} 
+  {SQLITE_FUNCTION {} sqlite_rename_table {} {}} 
+  {SQLITE_FUNCTION {} sqlite_rename_test {} {}} 
+    {SQLITE_FUNCTION {} substr {} {}} 
+    {SQLITE_READ sqlite_master name main {}} 
+    {SQLITE_READ sqlite_master sql main {}} 
+    {SQLITE_READ sqlite_master tbl_name main {}} 
+    {SQLITE_READ sqlite_master type main {}} 
+  {SQLITE_READ sqlite_temp_master name temp {}} 
+  {SQLITE_READ sqlite_temp_master sql temp {}} 
+  {SQLITE_READ sqlite_temp_master tbl_name temp {}} 
+  {SQLITE_READ sqlite_temp_master type temp {}} 
+  {SQLITE_SELECT {} {} {} {}} 
+    {SQLITE_UPDATE sqlite_master name main {}} 
+    {SQLITE_UPDATE sqlite_master sql main {}} 
+    {SQLITE_UPDATE sqlite_master tbl_name main {}} 
+  {SQLITE_UPDATE sqlite_temp_master sql temp {}} 
+  {SQLITE_UPDATE sqlite_temp_master tbl_name temp {}}
+}
+
+do_auth_test 1.2 {
+  ALTER TABLE t2 RENAME a TO aaa;
+} {
+  {SQLITE_ALTER_TABLE main t2 {} {}} 
+  {SQLITE_FUNCTION {} like {} {}} 
+  {SQLITE_FUNCTION {} sqlite_rename_column {} {}} 
+  {SQLITE_FUNCTION {} sqlite_rename_test {} {}} 
+  {SQLITE_READ sqlite_master name main {}} 
+  {SQLITE_READ sqlite_master sql main {}} 
+  {SQLITE_READ sqlite_master tbl_name main {}} 
+  {SQLITE_READ sqlite_master type main {}} 
+  {SQLITE_READ sqlite_temp_master name temp {}} 
+  {SQLITE_READ sqlite_temp_master sql temp {}} 
+  {SQLITE_READ sqlite_temp_master type temp {}} 
+  {SQLITE_SELECT {} {} {} {}} 
+  {SQLITE_UPDATE sqlite_master sql main {}} 
+  {SQLITE_UPDATE sqlite_temp_master sql temp {}}
+}
+
+finish_test

@@ -1,0 +1,196 @@
+# 2010 October 27
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test that the FTS3 extension does not crash when it encounters a
+# corrupt data structure on disk.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+
+set ::testprefix fts3corrupt
+
+
+# Test that a doclist with a length field that indicates that the doclist
+# extends past the end of the node on which it resides is correctly identified
+# as database corruption.
+#
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts3;
+  INSERT INTO t1 VALUES('hello');
+} {}
+do_test fts3corrupt-1.1 {
+  set blob [db one {SELECT root from t1_segdir}]
+  set blob [binary format a7ca* $blob 24 [string range $blob 8 end]]
+  execsql { UPDATE t1_segdir SET root = $blob }
+} {}
+do_test fts3corrupt-1.2 {
+  foreach w {a b c d e f g h i j k l m n o} {
+    execsql { INSERT INTO t1 VALUES($w) }
+  }
+} {}
+do_catchsql_test 1.3 {
+  INSERT INTO t1 VALUES('world');
+} {1 {database disk image is malformed}}
+do_test 1.3.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+do_execsql_test 1.4 { 
+  DROP TABLE t1;
+} 
+
+# This block of tests checks that corruption is correctly detected if the
+# length field of a term on a leaf node indicates that the term extends past
+# the end of the node on which it resides. There are two cases:
+#
+#   1. The first term on the node.
+#   2. The second or subsequent term on the node (prefix compressed term).
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts3;
+  BEGIN;
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t1 VALUES('hello');
+  COMMIT;
+} {}
+do_test fts3corrupt-2.1 {
+  set blob [db one {SELECT root from t1_segdir}]
+  set blob [binary format a*a* "\x00\x7F" [string range $blob 2 end]]
+  execsql { UPDATE t1_segdir SET root = $blob }
+} {}
+do_catchsql_test 2.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'hello'
+} {1 {database disk image is malformed}}
+do_test 2.2.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+
+do_execsql_test 3.0 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING fts3;
+  BEGIN;
+    INSERT INTO t1 VALUES('hello');
+    INSERT INTO t1 VALUES('world');
+  COMMIT;
+} {}
+do_test fts3corrupt-3.1 {
+  set blob [db one {SELECT quote(root) from t1_segdir}]
+  set blob [binary format a11a*a* $blob "\x7F" [string range $blob 12 end]]
+  execsql { UPDATE t1_segdir SET root = $blob }
+} {}
+do_catchsql_test 3.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'world'
+} {1 {database disk image is malformed}}
+do_test 3.2.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+
+
+do_execsql_test 4.0 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING fts3;
+  INSERT INTO t1(t1) VALUES('nodesize=24');
+}
+do_test fts3corrupt-4.1 {
+  execsql BEGIN
+  foreach s {
+     "amxtvoo adqwroyhz auq aithtir avniqnuynvf axp ahibayfynig agbicpm"
+     "ajdtebs anteaxr aieynenwmd awpl alo akxcrwow aoxftge aoqvgul"
+     "amcfvdr auz apu aebelm ahuxyz aqc asyafdb agulvhvqu"
+     "apepwfyz azkhdvkw aenyelxzbk aslnitbyet aycdsdcpgr aqzzdbc agfi axnypydou"
+     "aaqrzzcm apcxdxo atumltzj aevvivo aodknoft aqoyytoz alobx apldt"
+  } {
+    execsql { INSERT INTO t1 VALUES($s) }
+  }
+  execsql COMMIT
+} {}
+
+do_catchsql_test 4.2 {
+  UPDATE t1_segdir SET root = X'FFFFFFFFFFFFFFFF';
+  SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+} {1 {database disk image is malformed}}
+do_test 4.2.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+
+set    blob [binary format cca*cca*cca*cca*cca*cca*cca*cca*cca*cca*a* \
+  22 120 [string repeat a 120]  \
+  22 120 [string repeat b 120]  \
+  22 120 [string repeat c 120]  \
+  22 120 [string repeat d 120]  \
+  22 120 [string repeat e 120]  \
+  22 120 [string repeat f 120]  \
+  22 120 [string repeat g 120]  \
+  22 120 [string repeat h 120]  \
+  22 120 [string repeat i 120]  \
+  22 120 [string repeat j 120]  \
+  "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+]
+
+do_catchsql_test 4.3 {
+  UPDATE t1_segdir SET root = $blob;
+  SELECT rowid FROM t1 WHERE t1 MATCH 'world';
+} {1 {database disk image is malformed}}
+do_test 4.3.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+
+# Test a special kind of corruption, where the %_stat table contains
+# an invalid entry. At one point this could lead to a division-by-zero
+# error in fts4.
+#
+do_execsql_test 5.0 {
+  DROP TABLE t1;
+  CREATE VIRTUAL TABLE t1 USING fts4;
+}
+do_test 5.1 {
+  db func nn nn
+  execsql BEGIN
+  execsql { INSERT INTO t1 VALUES('one') }
+  execsql { INSERT INTO t1 VALUES('two') }
+  execsql { INSERT INTO t1 VALUES('three') }
+  execsql { INSERT INTO t1 VALUES('four') }
+  execsql COMMIT
+} {}
+do_catchsql_test 5.2 {
+  UPDATE t1_stat SET value = X'0000';
+  SELECT matchinfo(t1, 'nxa') FROM t1 WHERE t1 MATCH 't*';
+} {1 {database disk image is malformed}}
+do_test 5.2.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+do_catchsql_test 5.3 {
+  UPDATE t1_stat SET value = NULL;
+  SELECT matchinfo(t1, 'nxa') FROM t1 WHERE t1 MATCH 't*';
+} {1 {database disk image is malformed}}
+do_test 5.3.1 { sqlite3_extended_errcode db } SQLITE_CORRUPT_VTAB
+
+# 2019-11-18 https://bugs.chromium.org/p/chromium/issues/detail?id=1025467
+# bug1
+db close
+sqlite3 db :memory:
+do_catchsql_test 6.10 {
+  CREATE VIRTUAL TABLE f using fts3(a,b);
+  CREATE TABLE f_stat(id INTEGER PRIMARY KEY, value BLOB);
+  INSERT INTO f_segdir VALUES (2000, 0,0,0, '16', '');
+  INSERT INTO f_segdir VALUES (1999, 0,0,0, '0 18',
+                               x'000131030102000103323334050101010200');
+  INSERT INTO f_segments (blockid) values (16);
+  INSERT INTO f_segments values (0, x'');
+  INSERT INTO f_stat VALUES (1,x'cf0f01');
+  INSERT INTO f(f) VALUES ("merge=1");
+} {1 {database disk image is malformed}}
+
+# 2020-03-02 https://bugs.chromium.org/p/chromium/issues/detail?id=1057441
+# The ticket complains of use of an uninitialized value. That part is harmless.
+# The only reason to fix this is the failure to detect a subtly corrupt
+# inverted index.
+#
+reset_db
+do_catchsql_test 7.10 {
+  CREATE VIRTUAL TABLE f USING fts3(a,b);
+  INSERT INTO f_segdir VALUES (0,0,1,0,'0 0',x'01010101020101');
+  SELECT  matchinfo( f , 'pcx')  FROM f WHERE b MATCH x'c533';
+} {1 {database disk image is malformed}}
+
+finish_test

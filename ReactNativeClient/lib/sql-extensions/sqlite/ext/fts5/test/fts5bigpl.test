@@ -1,0 +1,63 @@
+# 2015 April 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test is focused on really large position lists. Those that require
+# 4 or 5 byte position-list size varints. Because of the amount of memory
+# required, these tests only run on 64-bit platforms.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5bigpl
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+if { $tcl_platform(wordSize)<8 } {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 { CREATE VIRTUAL TABLE t1 USING fts5(x) }
+
+do_test 1.1 {
+  foreach t {a b c d e f g h i j} {
+    set doc [string repeat "$t " 1200000]
+    execsql { INSERT INTO t1 VALUES($doc) }
+  }
+  execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+} {}
+
+do_test 1.2 {
+  execsql { DELETE FROM t1 }
+  foreach t {"a b" "b a" "c d" "d c"} {
+    set doc [string repeat "$t " 600000]
+    execsql { INSERT INTO t1 VALUES($doc) }
+  }
+  execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+} {}
+
+
+# 5-byte varint. This test takes 30 seconds or so on a 2014 workstation.
+# The generated database is roughly 635MiB.
+#
+do_test 2.1...slow {
+  execsql { DELETE FROM t1 }
+  foreach t {a} {
+    set doc [string repeat "$t " 150000000]
+    execsql { INSERT INTO t1 VALUES($doc) }
+  }
+  execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+} {}
+
+finish_test

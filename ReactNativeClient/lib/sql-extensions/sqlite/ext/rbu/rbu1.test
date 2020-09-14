@@ -1,0 +1,672 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbu1
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+# Create a simple RBU database. That expects to write to a table:
+#
+#   CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+#
+proc create_rbu1 {filename} {
+  forcedelete $filename
+  sqlite3 rbu1 $filename  
+  rbu1 eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 2, 3, 0);
+    INSERT INTO data_t1 VALUES(2, 'two', 'three', 0);
+    INSERT INTO data_t1 VALUES(3, NULL, 8.2, 0);
+  }
+  rbu1 close
+  return $filename
+}
+
+# Create a simple RBU database. That expects to write to a table:
+#
+#   CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+#
+# This RBU includes both insert and delete operations.
+#
+proc create_rbu4 {filename} {
+  forcedelete $filename
+  sqlite3 rbu1 $filename  
+  rbu1 eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, 2, 3, 0);
+    INSERT INTO data_t1 VALUES(2, NULL, 5, 1);
+    INSERT INTO data_t1 VALUES(3, 8, 9, 0);
+    INSERT INTO data_t1 VALUES(4, NULL, 11, 1);
+  }
+  rbu1 close
+  return $filename
+}
+#
+# Create a simple RBU database. That expects to write to a table:
+#
+#   CREATE TABLE t1(c, b, '(a)' INTEGER PRIMARY KEY);
+#
+# This RBU includes both insert and delete operations.
+#
+proc create_rbu4b {filename} {
+  forcedelete $filename
+  sqlite3 rbu1 $filename  
+  rbu1 eval {
+    CREATE TABLE data_t1(c, b, '(a)', rbu_control);
+    INSERT INTO data_t1 VALUES(3, 2, 1, 0);
+    INSERT INTO data_t1 VALUES(5, NULL, 2, 1);
+    INSERT INTO data_t1 VALUES(9, 8, 3, 0);
+    INSERT INTO data_t1 VALUES(11, NULL, 4, 1);
+  }
+  rbu1 close
+  return $filename
+}
+
+# Create a simple RBU database. That expects to write to a table:
+#
+#   CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, d);
+#
+# This RBU includes update statements.
+#
+proc create_rbu5 {filename} {
+  forcedelete $filename
+  sqlite3 rbu5 $filename  
+  rbu5 eval {
+    CREATE TABLE data_t1(a, b, c, d, rbu_control);
+    INSERT INTO data_t1 VALUES(1, NULL, NULL, 5, '...x');  -- SET d = 5
+    INSERT INTO data_t1 VALUES(2, NULL, 10, 5, '..xx');    -- SET c=10, d = 5
+    INSERT INTO data_t1 VALUES(3, 11, NULL, NULL, '.x..'); -- SET b=11
+  }
+  rbu5 close
+  return $filename
+}
+
+
+# Same as [step_rbu], except using a URI to open the target db.
+#
+proc step_rbu_uri {target rbu} {
+  while 1 {
+    sqlite3rbu rbu file:$target?xyz=&abc=123 $rbu
+    set rc [rbu step]
+    rbu close
+    if {$rc != "SQLITE_OK"} break
+  }
+  set rc
+}
+
+# Same as [step_rbu], except using an external state database - "state.db"
+#
+proc step_rbu_state {target rbu} {
+  while 1 {
+    sqlite3rbu rbu $target $rbu state.db
+    set rc [rbu step]
+    rbu close
+    if {$rc != "SQLITE_OK"} break
+  }
+  set rc
+}
+
+proc dbfilecksum {file} {
+  sqlite3 ck $file
+  set cksum [dbcksum ck main]
+  ck close
+  set cksum
+}
+
+foreach {tn3 create_vfs destroy_vfs} {
+  1 {} {}
+  2 {
+    sqlite3rbu_create_vfs -default myrbu ""
+  } {
+    sqlite3rbu_destroy_vfs myrbu
+  }
+} {
+
+  eval $create_vfs
+
+  foreach {tn2 cmd} {
+      1 run_rbu 
+      2 step_rbu 3 step_rbu_uri 4 step_rbu_state
+      5 step_rbu_legacy
+  } {
+    foreach {tn schema} {
+      1 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+      }
+      2 { 
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b);
+      }
+      3 { 
+        CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+      }
+      4 { 
+        CREATE TABLE t1(a PRIMARY KEY, b, c) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+      }
+      5 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(a, c)) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+      }
+      6 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(c)) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b, a);
+      }
+      7 { 
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b, c);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(a, b, c, a, b, c);
+      }
+
+      8 { 
+        CREATE TABLE t1(a PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b, c);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(a, b, c, a, b, c);
+      }
+
+      9 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(a, c));
+        CREATE INDEX i1 ON t1(b);
+      }
+
+      10 { 
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b DESC);
+      }
+
+      11 { 
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b DESC, a ASC, c DESC);
+      }
+
+      12 { 
+        CREATE TABLE t1(a INT PRIMARY KEY DESC, b, c) WITHOUT ROWID; 
+      }
+
+      13 { 
+        CREATE TABLE t1(a INT, b, c, PRIMARY KEY(a DESC)) WITHOUT ROWID; 
+      }
+
+      14 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(a DESC, c)) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+      }
+
+      15 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(a, c DESC)) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+      }
+
+      16 { 
+        CREATE TABLE t1(a, b, c, PRIMARY KEY(c DESC, a)) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b DESC, c, a);
+      }
+    } {
+      reset_db
+      execsql $schema
+      create_rbu1 rbu.db
+      set check [dbfilecksum rbu.db]
+      forcedelete state.db
+
+      do_test $tn3.1.$tn2.$tn.1 {
+        $cmd test.db rbu.db
+      } {SQLITE_DONE}
+
+      do_execsql_test $tn3.1.$tn2.$tn.2 { SELECT * FROM t1 ORDER BY a ASC } {
+        1 2 3 
+        2 two three 
+        3 {} 8.2
+      }
+      do_execsql_test $tn3.1.$tn2.$tn.3 { SELECT * FROM t1 ORDER BY b ASC } {
+        3 {} 8.2
+        1 2 3 
+        2 two three 
+      }
+      do_execsql_test $tn3.1.$tn2.$tn.4 { SELECT * FROM t1 ORDER BY c ASC } {
+        1 2 3 
+        3 {} 8.2
+        2 two three 
+      }
+   
+      do_execsql_test $tn3.1.$tn2.$tn.5 { PRAGMA integrity_check } ok
+
+      if {$cmd=="step_rbu_state"} {
+        do_test $tn3.1.$tn2.$tn.6 { file exists state.db } 1
+        do_test $tn3.1.$tn2.$tn.7 { expr {$check == [dbfilecksum rbu.db]} } 1
+      } else {
+        do_test $tn3.1.$tn2.$tn.8 { file exists state.db } 0
+        do_test $tn3.1.$tn2.$tn.9 { expr {$check == [dbfilecksum rbu.db]} } 0
+      }
+    }
+  }
+
+  #-------------------------------------------------------------------------
+  # Check that an RBU cannot be applied to a table that has no PK.
+  #
+  # UPDATE: At one point RBU required that all tables featured either
+  # explicit IPK columns or were declared WITHOUT ROWID. This has been
+  # relaxed so that external PRIMARY KEYs on tables with automatic rowids
+  # are now allowed.
+  #
+  # UPDATE 2: Tables without any PRIMARY KEY declaration are now allowed.
+  # However the input table must feature an "rbu_rowid" column.
+  #
+  reset_db
+  create_rbu1 rbu.db
+  do_execsql_test $tn3.2.1 { CREATE TABLE t1(a, b, c) }
+  do_test $tn3.2.2 {
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_ERROR}
+  do_test $tn3.2.3 {
+    list [catch { rbu close } msg] $msg
+  } {1 {SQLITE_ERROR - table data_t1 requires rbu_rowid column}}
+  reset_db
+  do_execsql_test $tn3.2.4 { CREATE TABLE t1(a PRIMARY KEY, b, c) }
+  do_test $tn3.2.5 {
+    sqlite3rbu rbu test.db rbu.db
+    rbu step
+  } {SQLITE_OK}
+  do_test $tn3.2.6 {
+    list [catch { rbu close } msg] $msg
+  } {0 SQLITE_OK}
+
+  #-------------------------------------------------------------------------
+  # Check that if a UNIQUE constraint is violated the current and all 
+  # subsequent [rbu step] calls return SQLITE_CONSTRAINT. And that the RBU 
+  # transaction is rolled back by the [rbu close] that deletes the rbu 
+  # handle.
+  #
+  foreach {tn errcode errmsg schema} {
+    1 SQLITE_CONSTRAINT "UNIQUE constraint failed: t1.a" {
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+      INSERT INTO t1 VALUES(3, 2, 1);
+    } 
+
+    2 SQLITE_CONSTRAINT "UNIQUE constraint failed: t1.c" {
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c UNIQUE);
+      INSERT INTO t1 VALUES(4, 2, 'three');
+    } 
+
+    3 SQLITE_CONSTRAINT "UNIQUE constraint failed: t1.a" {
+      CREATE TABLE t1(a PRIMARY KEY, b, c);
+      INSERT INTO t1 VALUES(3, 2, 1);
+    } 
+
+    4 SQLITE_CONSTRAINT "UNIQUE constraint failed: t1.c" {
+      CREATE TABLE t1(a PRIMARY KEY, b, c UNIQUE);
+      INSERT INTO t1 VALUES(4, 2, 'three');
+    } 
+
+  } {
+    reset_db
+    execsql $schema
+    set cksum [dbcksum db main]
+
+    do_test $tn3.3.$tn.1 {
+      create_rbu1 rbu.db
+      sqlite3rbu rbu test.db rbu.db
+      while {[set res [rbu step]]=="SQLITE_OK"} {}
+      set res
+    } $errcode
+
+    do_test $tn3.3.$tn.2 { rbu step } $errcode
+
+    do_test $tn3.3.$tn.3 { 
+      list [catch { rbu close } msg] $msg
+    } [list 1 "$errcode - $errmsg"]
+
+    do_test $tn3.3.$tn.4 { dbcksum db main } $cksum
+  }
+
+  #-------------------------------------------------------------------------
+  #
+  foreach {tn2 cmd} {1 run_rbu 2 step_rbu 3 step_rbu_state } {
+    foreach {tn schema} {
+      1 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+      }
+      2 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b);
+      }
+      3 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(c, b, c);
+      }
+      4 {
+        CREATE TABLE t1(a INT PRIMARY KEY, b, c) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(c, b, c);
+      }
+      5 {
+        CREATE TABLE t1(a INT PRIMARY KEY, b, c);
+        CREATE INDEX i1 ON t1(b);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(c, b, c);
+      }
+
+      6 {
+        CREATE TABLE t1(a INT PRIMARY KEY DESC, b, c);
+        CREATE INDEX i1 ON t1(b DESC);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(c DESC, b, c);
+      }
+      7 {
+        CREATE TABLE t1(a INT PRIMARY KEY DESC, b, c) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(b);
+        CREATE INDEX i2 ON t1(c, b);
+        CREATE INDEX i3 ON t1(c, b, c);
+      }
+    } {
+      reset_db
+      execsql $schema
+      execsql {
+        INSERT INTO t1 VALUES(2, 'hello', 'world');
+        INSERT INTO t1 VALUES(4, 'hello', 'planet');
+        INSERT INTO t1 VALUES(6, 'hello', 'xyz');
+      }
+
+      create_rbu4 rbu.db
+      set check [dbfilecksum rbu.db]
+      forcedelete state.db
+    
+      do_test $tn3.4.$tn2.$tn.1 {
+        $cmd test.db rbu.db
+      } {SQLITE_DONE}
+      
+      do_execsql_test $tn3.4.$tn2.$tn.2 {
+        SELECT * FROM t1 ORDER BY a ASC;
+      } {
+        1 2 3 
+        3 8 9
+        6 hello xyz
+      }
+    
+      do_execsql_test $tn3.4.$tn2.$tn.3 { PRAGMA integrity_check } ok
+
+      if {$cmd=="step_rbu_state"} {
+        do_test $tn3.4.$tn2.$tn.4 { file exists state.db } 1
+        do_test $tn3.4.$tn2.$tn.5 { expr {$check == [dbfilecksum rbu.db]} } 1
+      } else {
+        do_test $tn3.4.$tn2.$tn.6 { file exists state.db } 0
+        do_test $tn3.4.$tn2.$tn.7 { expr {$check == [dbfilecksum rbu.db]} } 0
+      }
+    }
+  }
+
+  foreach {tn2 cmd} {1 run_rbu 2 step_rbu 3 step_rbu_state} {
+    foreach {tn schema} {
+      1 {
+        CREATE TABLE t1(c, b, '(a)' INTEGER PRIMARY KEY);
+        CREATE INDEX i1 ON t1(c, b);
+      }
+      2 {
+        CREATE TABLE t1(c, b, '(a)' PRIMARY KEY);
+      }
+      3 {
+        CREATE TABLE t1(c, b, '(a)' PRIMARY KEY) WITHOUT ROWID;
+      }
+    } {
+      reset_db
+      execsql $schema
+      execsql {
+        INSERT INTO t1('(a)', b, c) VALUES(2, 'hello', 'world');
+        INSERT INTO t1('(a)', b, c) VALUES(4, 'hello', 'planet');
+        INSERT INTO t1('(a)', b, c) VALUES(6, 'hello', 'xyz');
+      }
+
+      create_rbu4b rbu.db
+      set check [dbfilecksum rbu.db]
+      forcedelete state.db
+    
+      do_test $tn3.5.$tn2.$tn.1 {
+        $cmd test.db rbu.db
+      } {SQLITE_DONE}
+      
+      do_execsql_test $tn3.5.$tn2.$tn.2 {
+        SELECT * FROM t1 ORDER BY "(a)" ASC;
+      } {
+        3 2 1
+        9 8 3
+        xyz hello 6
+      }
+    
+      do_execsql_test $tn3.4.$tn2.$tn.3 { PRAGMA integrity_check } ok
+
+      if {$cmd=="step_rbu_state"} {
+        do_test $tn3.5.$tn2.$tn.4 { file exists state.db } 1
+        do_test $tn3.5.$tn2.$tn.5 { expr {$check == [dbfilecksum rbu.db]} } 1
+      } else {
+        do_test $tn3.5.$tn2.$tn.6 { file exists state.db } 0
+        do_test $tn3.5.$tn2.$tn.7 { expr {$check == [dbfilecksum rbu.db]} } 0
+      }
+    }
+  }
+
+  #-------------------------------------------------------------------------
+  #
+  foreach {tn2 cmd} {1 run_rbu 2 step_rbu 3 step_rbu_state} {
+    foreach {tn schema} {
+      1 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, d);
+      }
+      2 {
+        CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c, d);
+        CREATE INDEX i1 ON t1(d);
+        CREATE INDEX i2 ON t1(d, c);
+        CREATE INDEX i3 ON t1(d, c, b);
+        CREATE INDEX i4 ON t1(b);
+        CREATE INDEX i5 ON t1(c);
+        CREATE INDEX i6 ON t1(c, b);
+      }
+      3 {
+        CREATE TABLE t1(a PRIMARY KEY, b, c, d) WITHOUT ROWID;
+        CREATE INDEX i1 ON t1(d);
+        CREATE INDEX i2 ON t1(d, c);
+        CREATE INDEX i3 ON t1(d, c, b);
+        CREATE INDEX i4 ON t1(b);
+        CREATE INDEX i5 ON t1(c);
+        CREATE INDEX i6 ON t1(c, b);
+      }
+      4 {
+        CREATE TABLE t1(a PRIMARY KEY, b, c, d);
+        CREATE INDEX i1 ON t1(d);
+        CREATE INDEX i2 ON t1(d, c);
+        CREATE INDEX i3 ON t1(d, c, b);
+        CREATE INDEX i4 ON t1(b);
+        CREATE INDEX i5 ON t1(c);
+        CREATE INDEX i6 ON t1(c, b);
+      }
+    } {
+      reset_db
+      execsql $schema
+      execsql {
+        INSERT INTO t1 VALUES(1, 2, 3, 4);
+        INSERT INTO t1 VALUES(2, 5, 6, 7);
+        INSERT INTO t1 VALUES(3, 8, 9, 10);
+      }
+    
+      create_rbu5 rbu.db
+      set check [dbfilecksum rbu.db]
+      forcedelete state.db
+
+      do_test $tn3.5.$tn2.$tn.1 {
+        $cmd test.db rbu.db
+      } {SQLITE_DONE}
+      
+      do_execsql_test $tn3.5.$tn2.$tn.2 {
+        SELECT * FROM t1 ORDER BY a ASC;
+      } {
+        1 2 3 5
+        2 5 10 5
+        3 11 9 10
+      }
+    
+      do_execsql_test $tn3.6.$tn2.$tn.3 { PRAGMA integrity_check } ok
+
+      if {$cmd=="step_rbu_state"} {
+        do_test $tn3.6.$tn2.$tn.4 { file exists state.db } 1
+        do_test $tn3.6.$tn2.$tn.5 { expr {$check == [dbfilecksum rbu.db]} } 1
+      } else {
+        do_test $tn3.6.$tn2.$tn.6 { file exists state.db } 0
+        do_test $tn3.6.$tn2.$tn.7 { expr {$check == [dbfilecksum rbu.db]} } 0
+      }
+    }
+  }
+
+  #-------------------------------------------------------------------------
+  # Test some error cases:
+  # 
+  #   * A virtual table with no rbu_rowid column.
+  #   * A no-PK table with no rbu_rowid column.
+  #   * A PK table with an rbu_rowid column.
+  #
+  #   6: An update string of the wrong length
+  #
+  ifcapable fts3 {
+    foreach {tn schema error} {
+       1 {
+         CREATE TABLE t1(a, b);
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+       } {SQLITE_ERROR - table data_t1 requires rbu_rowid column}
+    
+       2 {
+         CREATE VIRTUAL TABLE t1 USING fts4(a, b);
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+       } {SQLITE_ERROR - table data_t1 requires rbu_rowid column}
+    
+       3 {
+         CREATE TABLE t1(a PRIMARY KEY, b);
+         CREATE TABLE rbu.data_t1(a, b, rbu_rowid, rbu_control);
+       } {SQLITE_ERROR - table data_t1 may not have rbu_rowid column}
+    
+       4 {
+         CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+         CREATE TABLE rbu.data_t1(a, b, rbu_rowid, rbu_control);
+       } {SQLITE_ERROR - table data_t1 may not have rbu_rowid column}
+    
+       5 {
+         CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT ROWID;
+         CREATE TABLE rbu.data_t1(a, b, rbu_rowid, rbu_control);
+       } {SQLITE_ERROR - table data_t1 may not have rbu_rowid column}
+
+       6 {
+         CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT ROWID;
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+         INSERT INTO rbu.data_t1 VALUES(1, 2, 'x.x');
+       } {SQLITE_ERROR - invalid rbu_control value}
+
+       7 {
+         CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT ROWID;
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+         INSERT INTO rbu.data_t1 VALUES(1, 2, NULL);
+       } {SQLITE_ERROR - invalid rbu_control value}
+
+       8 {
+         CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT ROWID;
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+         INSERT INTO rbu.data_t1 VALUES(1, 2, 4);
+       } {SQLITE_ERROR - invalid rbu_control value}
+
+       9 {
+         CREATE TABLE t1(a, b PRIMARY KEY) WITHOUT ROWID;
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+         INSERT INTO rbu.data_t1 VALUES(1, 2, 3);
+       } {SQLITE_ERROR - invalid rbu_control value}
+
+       10 {
+         CREATE TABLE t2(a, b);
+         CREATE TABLE rbu.data_t1(a, b, rbu_control);
+         INSERT INTO rbu.data_t1 VALUES(1, 2, 2);
+       } {SQLITE_ERROR - no such table: t1}
+
+       11 {
+         CREATE TABLE rbu.data_t2(a, b, rbu_control);
+         INSERT INTO rbu.data_t2 VALUES(1, 2, 2);
+       } {SQLITE_ERROR - no such table: t2}
+
+    } {
+      reset_db
+      forcedelete rbu.db
+      execsql { ATTACH 'rbu.db' AS rbu }
+      execsql $schema
+
+      do_test $tn3.7.$tn {
+        list [catch { run_rbu test.db rbu.db } msg] $msg
+      } [list 1 $error]
+    }
+  }
+
+  # Test that an RBU database containing no input tables is handled
+  # correctly.
+  reset_db
+  forcedelete rbu.db
+  do_test $tn3.8.1 {
+    list [catch { run_rbu test.db rbu.db } msg] $msg
+  } {0 SQLITE_DONE}
+
+  # Test that an RBU database containing only empty data_xxx tables is
+  # also handled correctly.
+  reset_db
+  forcedelete rbu.db
+  do_execsql_test $tn3.8.2.1 {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, 2);
+    ATTACH 'rbu.db' AS rbu;
+    CREATE TABLE data_t1(a, b, rbu_control);
+    DETACH rbu;
+  }
+  do_test $tn3.8.2.1 {
+    list [catch { run_rbu test.db rbu.db } msg] $msg
+  } {0 SQLITE_DONE}
+
+  # Test that RBU can update indexes containing NULL values.
+  #
+  reset_db
+  forcedelete rbu.db
+  do_execsql_test $tn3.9.1 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE INDEX i1 ON t1(b, c);
+    INSERT INTO t1 VALUES(1, 1, NULL);
+    INSERT INTO t1 VALUES(2, NULL, 2);
+    INSERT INTO t1 VALUES(3, NULL, NULL);
+
+    ATTACH 'rbu.db' AS rbu;
+    CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(1, NULL, NULL, 1);
+    INSERT INTO data_t1 VALUES(3, NULL, NULL, 1);
+  } {}
+
+  do_test $tn3.9.2 {
+    list [catch { run_rbu test.db rbu.db } msg] $msg
+  } {0 SQLITE_DONE}
+
+  do_execsql_test $tn3.9.3 {
+    SELECT * FROM t1
+  } {2 {} 2}
+  do_execsql_test $tn3.9.4 { PRAGMA integrity_check } {ok}
+
+  catch { db close }
+  eval $destroy_vfs
+}
+
+
+finish_test

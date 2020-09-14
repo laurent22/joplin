@@ -1,0 +1,50 @@
+# 2018 April 14.
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix sorterref
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  ALTER TABLE t1 ADD COLUMN d DEFAULT 'string';
+  INSERT INTO t1 VALUES(7, 8, 9, 'text');
+}
+
+do_execsql_test 1.1 {
+  SELECT * FROM t1 ORDER BY b;
+} {
+  1 2 3 string 4 5 6 string 7 8 9 text
+}
+
+do_execsql_test 2.0 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(c, d, PRIMARY KEY(c)) WITHOUT ROWID;
+
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(2, 3);
+  INSERT INTO t1 VALUES(3, 4);
+
+  INSERT INTO t2 VALUES(1, 'one');
+  INSERT INTO t2 VALUES(3, 'three');
+}
+
+do_execsql_test 2.1 {
+  SELECT * FROM t1 LEFT JOIN t2 ON (a=c) ORDER BY b;
+} {1 2 1 one 2 3 {} {} 3 4 3 three}
+
+
+
+finish_test

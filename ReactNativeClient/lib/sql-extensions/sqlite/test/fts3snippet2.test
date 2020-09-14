@@ -1,0 +1,60 @@
+# 2020-05-14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# The tests in this file test the FTS3 auxillary functions offsets(), 
+# snippet() and matchinfo() work. At time of writing, running this file 
+# provides full coverage of fts3_snippet.c.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts3snippet
+
+# If SQLITE_ENABLE_FTS3 is not defined, omit this file.
+ifcapable !fts3 { finish_test ; return }
+source $testdir/fts3_common.tcl
+
+set sqlite_fts3_enable_parentheses 1
+#-------------------------------------------------------------------------
+# Request a snippet from a query with more than 64 phrases.
+#
+reset_db
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE f USING fts3(b);
+  INSERT INTO f VALUES ( x'746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218');
+}
+
+do_execsql_test 1.1 {
+  SELECT  length(snippet(f))>0  FROM f WHERE b MATCH x'1065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a010f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c2a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e082a011065616e656d655a616c702a2f65732e0f42014001380230018218021001081e0a3d746e6e6d64612e0f42';
+} {1}
+
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t0 USING fts3(col0 INTEGER PRIMARY KEY,col1 VARCHAR(8),col2 BINARY,col3 BINARY);
+  INSERT INTO t0 VALUES (1, '1234','aaaa','bbbb');
+  SELECT snippet(t0)  FROM t0 WHERE t0 MATCH x'0a4d4d4d4d320a4f52d70a310a310a4e4541520a0a31f6ce0a4f520a0a310a310a310a4f520a75fc2a242424' ;
+} {<b>1</b>}
+
+reset_db
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE t0 USING fts3(
+      col0 INTEGER PRIMARY KEY,col1 VARCHAR(8),col2 BINARY,col3 BINARY
+  );
+  INSERT INTO t0 VALUES ('one', '1234','aaaa','bbbb');
+}
+do_execsql_test 2.2 {
+  SELECT snippet(t0)  FROM t0 WHERE t0 MATCH 
+  '(def AND (one NEAR abc)) OR one'
+} {<b>one</b>}
+
+set sqlite_fts3_enable_parentheses 0
+finish_test
+

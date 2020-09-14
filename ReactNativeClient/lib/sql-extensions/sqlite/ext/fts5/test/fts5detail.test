@@ -1,0 +1,243 @@
+# 2015 December 18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5detail
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+fts5_aux_test_functions db
+
+#--------------------------------------------------------------------------
+# Simple tests.
+#
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, c, detail=col);
+  INSERT INTO t1 VALUES('h d g', 'j b b g b', 'i e i d h g g'); -- 1
+  INSERT INTO t1 VALUES('h j d', 'j h d a h', 'f d d g g f b'); -- 2
+  INSERT INTO t1 VALUES('j c i', 'f f h e f', 'c j i j c h f'); -- 3
+  INSERT INTO t1 VALUES('e g g', 'g e d h i', 'e d b e g d c'); -- 4
+  INSERT INTO t1 VALUES('b c c', 'd i h a f', 'd i j f a b c'); -- 5
+  INSERT INTO t1 VALUES('e d e', 'b c j g d', 'a i f d h b d'); -- 6
+  INSERT INTO t1 VALUES('g h e', 'b c d i d', 'e f c i f i c'); -- 7
+  INSERT INTO t1 VALUES('c f j', 'j j i e a', 'h a c f d h e'); -- 8
+  INSERT INTO t1 VALUES('a h i', 'c i a f a', 'c f d h g d g'); -- 9
+  INSERT INTO t1 VALUES('j g g', 'e f e f f', 'h j b i c g e'); -- 10
+}
+
+do_execsql_test 1.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+foreach {tn match res} {
+  1 "a:a" {9}
+  2 "b:g" {1 4 6}
+  3 "c:h" {1 3 6 8 9 10}
+} {
+  do_execsql_test 1.2.$tn.1 {
+    SELECT rowid FROM t1($match);
+  } $res
+
+  do_execsql_test 1.2.$tn.2 {
+    SELECT rowid FROM t1($match || '*');
+  } $res
+}
+
+do_catchsql_test 1.3.1 {
+  SELECT rowid FROM t1('h + d');
+} {1 {fts5: phrase queries are not supported (detail!=full)}}
+
+do_catchsql_test 1.3.2 {
+  SELECT rowid FROM t1('NEAR(h d)');
+} {1 {fts5: NEAR queries are not supported (detail!=full)}}
+
+
+#-------------------------------------------------------------------------
+# integrity-check with both detail= and prefix= options.
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(a, detail=col, prefix="1");
+  INSERT INTO t2(a) VALUES('aa ab');
+}
+
+#db eval {SELECT rowid, fts5_decode(rowid, block) aS r FROM t2_data} {puts $r}
+
+do_execsql_test 2.1 {
+  INSERT INTO t2(t2) VALUES('integrity-check');
+}
+
+do_execsql_test 2.2 {
+  SELECT fts5_test_poslist(t2) FROM t2('aa');
+} {0.0.0}
+
+do_execsql_test 2.3 {
+  SELECT fts5_test_collist(t2) FROM t2('aa');
+} {0.0}
+
+set ::pc 0
+#puts [nearset {{ax bx cx}} -pc ::pc -near 10 -- b*]
+#exit
+
+#-------------------------------------------------------------------------
+# Check that the xInstCount, xInst, xPhraseFirst and xPhraseNext APIs
+# work with detail=col tables.
+#
+set data {
+  1  {abb aca aca} {aba bab aab aac caa} {abc cbc ccb bcc bab ccb aca}
+  2  {bca aca acb} {ccb bcc bca aab bcc} {bab aaa aac cbb bba aca abc}
+  3  {cca abc cab} {aab aba bcc cac baa} {bab cbb acb aba aab ccc cca}
+  4  {ccb bcb aba} {aba bbb bcc cac bbb} {cbb aaa bca bcc aab cac aca}
+  5  {bca bbc cac} {aba cbb cac cca aca} {cab acb cbc ccb cac bbb bcb}
+  6  {acc bba cba} {bab bbc bbb bcb aca} {bca ccc cbb aca bac ccc ccb}
+  7  {aba bab aaa} {abb bca aac bcb bcc} {bcb bbc aba aaa cba abc acc}
+  8  {cab aba aaa} {ccb aca caa bbc bcc} {aaa abc ccb bbb cac cca abb}
+  9  {bcb bab bac} {bcb cba cac bbb abc} {aba aca cbb acb abb ccc ccb}
+  10 {aba aab ccc} {abc ccc bcc cab bbb} {aab bcc cbb ccc aaa bac baa}
+  11 {bab acb cba} {aac cab cab bca cbc} {aab cbc aac baa ccb acc cac}
+  12 {ccc cbb cbc} {aaa aab bcc aac bbc} {cbc cbc bac bac ccc bbc acc}
+  13 {cab bbc abc} {bbb bab bba aca bab} {baa bbb aab bbb ccb bbb ccc}
+  14 {bbc cab caa} {acb aac abb cba acc} {cba bba bba acb abc abb baa}
+  15 {aba cca bcc} {aaa acb abc aab ccb} {cca bcb acc aaa caa cca cbc}
+  16 {bcb bba aba} {cbc acb cab caa ccb} {aac aaa bbc cab cca cba abc}
+  17 {caa cbb acc} {ccb bcb bca aaa bcc} {bbb aca bcb bca cbc cbc cca}
+  18 {cbb bbc aac} {ccc bbc aaa aab baa} {cab cab cac cca bbc abc bbc}
+  19 {ccc acc aaa} {aab cbb bca cca caa} {bcb aca aca cab acc bac bcc}
+  20 {aab ccc bcb} {bbc cbb bbc aaa bcc} {cbc aab ccc aaa bcb bac cbc}
+  21 {aba cab ccc} {bbc cbc cba acc bbb} {acc aab aac acb aca bca acb}
+  22 {bcb bca baa} {cca bbc aca ccb cbb} {aab abc bbc aaa cab bcc bcc}
+  23 {cac cbb caa} {bbc aba bbb bcc ccb} {bbc bbb cab bbc cac abb acc}
+  24 {ccb acb caa} {cab bba cac bbc aac} {aac bca abc cab bca cab bcb}
+  25 {bbb aca bca} {bcb acc ccc cac aca} {ccc acb acc cac cac bba bbc}
+  26 {bab acc caa} {caa cab cac bac aca} {aba cac caa acc bac ccc aaa}
+  27 {bca bca aaa} {ccb aca bca aaa baa} {bab acc aaa cca cba cca bac}
+  28 {ccb cac cac} {bca abb bba bbc baa} {aca ccb aac cab ccc cab caa}
+  29 {abc bca cab} {cac cbc cbb ccc bcc} {bcc aaa aaa acc aac cac aac}
+  30 {aca acc acb} {aab aac cbb caa acb} {acb bbc bbc acc cbb bbc aac}
+  31 {aba aca baa} {aca bcc cab bab acb} {bcc acb baa bcb bbc acc aba}
+  32 {abb cbc caa} {cba abb bbb cbb aca} {bac aca caa cac caa ccb bbc}
+  33 {bcc bcb bcb} {cca cab cbc abb bab} {caa bbc aac bbb cab cba aaa}
+  34 {caa cab acc} {ccc ccc bcc acb bcc} {bac bba aca bcb bba bcb cac}
+  35 {bac bcb cba} {bcc acb bbc cba bab} {abb cbb abc abc bac acc cbb}
+  36 {cab bab ccb} {bca bba bab cca acc} {acc aab bcc bac acb cbb caa}
+  37 {aca cbc cab} {bba aac aca aac aaa} {baa cbb cba aba cab bca bcb}
+  38 {acb aab baa} {baa bab bca bbc bbb} {abc baa acc aba cab baa cac}
+  39 {bcb aac cba} {bcb baa caa cac bbc} {cbc ccc bab ccb bbb caa aba}
+  40 {cba ccb abc} {cbb caa cba aac bab} {cbb bbb bca bbb bac cac bca}
+}
+
+set data {
+  1  {abb aca aca} {aba bab aab aac caa} {abc cbc ccb bcc bab ccb aca}
+}
+
+proc matchdata {expr {bAsc 1}} {
+
+  set tclexpr [db one {
+    SELECT fts5_expr_tcl($expr, 'nearset $cols -pc ::pc', 'x', 'y', 'z')
+  }]
+  set res [list]
+
+  #puts "$expr -> $tclexpr"
+  foreach {id x y z} $::data {
+    set cols [list $x $y $z]
+    set ::pc 0
+    #set hits [lsort -command instcompare [eval $tclexpr]]
+    set hits [eval $tclexpr]
+    if {[llength $hits]>0} {
+      lappend res [list $id $hits]
+    }
+  }
+
+  if {$bAsc} {
+    set res [lsort -integer -increasing -index 0 $res]
+  } else {
+    set res [lsort -integer -decreasing -index 0 $res]
+  }
+
+  return [concat {*}$res]
+}
+
+foreach {tn tbl} {
+  1 { CREATE VIRTUAL TABLE t3 USING fts5(x, y, z, detail=col) }
+  2 { CREATE VIRTUAL TABLE t3 USING fts5(x, y, z, detail=none) }
+} {
+  reset_db
+  fts5_aux_test_functions db
+  execsql $tbl
+  foreach {id x y z} $data {
+    execsql { INSERT INTO t3(rowid, x, y, z) VALUES($id, $x, $y, $z) }
+  }
+  foreach {tn2 expr} {
+    1 aaa    2 ccc    3 bab    4 aac
+    5 aa*    6 cc*    7 ba*    8 aa*
+    9 a*     10 b*   11 c*
+  } {
+
+    set res [matchdata $expr]
+
+    do_execsql_test 3.$tn.$tn2.1 {
+      SELECT rowid, fts5_test_poslist(t3) FROM t3($expr)
+    } $res
+
+    do_execsql_test 3.$tn.$tn2.2 {
+      SELECT rowid, fts5_test_poslist2(t3) FROM t3($expr)
+    } $res
+  }
+}
+
+#-------------------------------------------------------------------------
+# Simple tests for detail=none tables.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t4 USING fts5(a, b, c, detail=none);
+  INSERT INTO t4 VALUES('a b c', 'b c d', 'e f g');
+  INSERT INTO t4 VALUES('1 2 3', '4 5 6', '7 8 9');
+}
+
+do_catchsql_test 4.1 {
+  SELECT * FROM t4('a:a')
+} {1 {fts5: column queries are not supported (detail=none)}}
+
+#-------------------------------------------------------------------------
+# Test that for the same content detail=none uses less space than 
+# detail=col, and that detail=col uses less space than detail=full
+#
+reset_db
+do_test 5.1 {
+  foreach {tbl detail} {t1 none t2 col t3 full} {
+    execsql "CREATE VIRTUAL TABLE $tbl USING fts5(x, y, z, detail=$detail)"
+    foreach {rowid x y z} $::data {
+      execsql "INSERT INTO $tbl (rowid, x, y, z) VALUES(\$rowid, \$x, \$y, \$z)"
+    }
+  }
+} {}
+
+do_execsql_test 5.2 {
+  SELECT 
+    (SELECT sum(length(block)) from t1_data) <
+    (SELECT sum(length(block)) from t2_data)
+} {1}
+
+do_execsql_test 5.3 {
+  SELECT 
+    (SELECT sum(length(block)) from t2_data) <
+    (SELECT sum(length(block)) from t3_data)
+} {1}
+
+
+
+finish_test

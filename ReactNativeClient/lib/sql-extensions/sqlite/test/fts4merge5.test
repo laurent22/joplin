@@ -1,0 +1,58 @@
+# 2019 October 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS4 module.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix fts4merge5
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts3 {
+  finish_test
+  return
+}
+
+source $testdir/genesis.tcl
+
+do_execsql_test 1.1 { 
+  CREATE TABLE t1(docid, words);
+}
+fts_kjv_genesis
+
+do_execsql_test 1.2 {
+  CREATE VIRTUAL TABLE x1 USING fts3; 
+  INSERT INTO x1(x1) VALUES('nodesize=64');
+  INSERT INTO x1(x1) VALUES('maxpending=64');
+}
+
+do_execsql_test 1.3 {
+  INSERT INTO x1(docid, content) SELECT * FROM t1;
+}
+
+for {set tn 1} {1} {incr tn} {
+  set tc1 [db total_changes]
+  do_execsql_test 1.4.$tn.1 {
+    INSERT INTO x1(x1) VALUES('merge=1,2');
+  }
+  set tc2 [db total_changes]
+
+  if {($tc2 - $tc1)<2} break
+
+  do_execsql_test 1.4.$tn.1 {
+    INSERT INTO x1(x1) VALUES('integrity-check');
+  }
+}
+
+
+
+finish_test

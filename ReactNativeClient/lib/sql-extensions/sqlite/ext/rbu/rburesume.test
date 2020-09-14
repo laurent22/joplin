@@ -1,0 +1,253 @@
+# 2017 January 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for resumption of RBU operations in the
+# case where the previous RBU process crashed.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rburesume
+
+forcedelete test.db-shm test.db-oal
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1b ON t1(b);
+  CREATE INDEX t1c ON t1(c);
+  WITH s(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<50
+  )
+  INSERT INTO t1 SELECT randomblob(50), randomblob(75), randomblob(100) FROM s;
+}
+db_save_and_close
+
+do_test 1.1 {
+  list [file exists test.db] \
+       [file exists test.db-wal] \
+       [file exists test.db-shm] \
+       [file exists test.db-oal]
+} {1 0 0 0}
+
+# Each iteration of the following loop:
+#
+#   1. Restores the db to the state it was in following test case 1.0
+#   2. Opens an RBU vacuum and steps it $n times.
+#   3. Closes the RBU vacuum handled opened in (2).
+#   4. Opens a second RBU vacuum handle, resumes and completes the vacuum op. 
+#
+# The loop runs until $n is large enough that step (2) vacuums the entire
+# database.
+#
+for {set n 1} {$n < 5000} {incr n} {
+  db_restore
+  forcedelete state.db
+  sqlite3rbu_vacuum rbu test.db state.db
+  for {set i 0} {$i<$n} {incr i} {
+    set rc [rbu step]
+    if {$rc == "SQLITE_DONE"} break
+  }
+  rbu close
+  if {$rc == "SQLITE_DONE"} break
+
+  do_test 1.2.$n.1 {
+    sqlite3rbu_vacuum rbu test.db state.db
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } {SQLITE_DONE}
+
+  do_test 1.2.$n.2 {
+    sqlite3 db2 test.db
+    db2 eval { 
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    }
+  } {50 ok}
+  db2 close
+}
+
+# Each iteration of this loop:
+#
+#   1. Restores the db to the state it was in following test case 1.0
+#   2. Opens an RBU vacuum and steps it $n times.
+#   3. Takes a copy of all database files and the state db.
+#   4. Opens a second RBU vacuum handle on the copy, resumes and completes the
+#      vacuum op. 
+#
+# The loop runs until $n is large enough that step (2) vacuums the entire
+# database.
+#
+for {set n 1} {$n < 5000} {incr n} {
+  db_restore
+  forcedelete state.db state.db-shm state.db-oal state.db-wal
+  sqlite3rbu_vacuum rbu test.db state.db
+  for {set i 0} {$i<$n} {incr i} {
+    set rc [rbu step]
+    if {$rc == "SQLITE_DONE"} break
+  }
+  if {$rc == "SQLITE_DONE"} {
+    rbu close
+    break
+  }
+
+  foreach f {test.db test.db-oal test.db-wal test.db-shm test.db-vacuum} {
+    set f2 [string map [list test.db test.db2] $f]
+    if {[file exists $f]} {
+      forcecopy $f $f2
+    } else {
+      forcedelete $f2
+    }
+  }
+  forcecopy state.db state.db2
+  rbu close
+
+  do_test 1.3.$n.1 {
+    sqlite3rbu_vacuum rbu test.db2 state.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } {SQLITE_DONE}
+
+  do_test 1.3.$n.2 {
+    sqlite3 db2 test.db2
+    db2 eval { 
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    }
+  } {50 ok}
+  db2 close
+}
+
+# Each iteration of this loop:
+#
+#   1. Restores the db to the state it was in following test case 1.0
+#   2. Opens an RBU vacuum and steps it 10 times. Then closes it.
+#   2. Opens an RBU vacuum and steps it $n times.
+#   3. Takes a copy of all database files and the state db.
+#   4. Opens a second RBU vacuum handle on the copy, resumes and completes the
+#      vacuum op. 
+#
+# The loop runs until $n is large enough that step (3) vacuums the entire
+# database.
+#
+for {set n 1} {$n < 5000} {incr n} {
+  db_restore
+  forcedelete state.db state.db-shm state.db-oal state.db-wal
+
+  sqlite3rbu_vacuum rbu test.db state.db
+  for {set i 0} {$i<10} {incr i} {
+    rbu step
+  }
+  rbu close
+
+  sqlite3rbu_vacuum rbu test.db state.db
+  for {set i 0} {$i<$n} {incr i} {
+    set rc [rbu step]
+    if {$rc == "SQLITE_DONE"} break
+  }
+  if {$rc == "SQLITE_DONE"} {
+    rbu close
+    break
+  }
+
+  foreach f {test.db test.db-oal test.db-wal test.db-shm test.db-vacuum} {
+    set f2 [string map [list test.db test.db2] $f]
+    if {[file exists $f]} {
+      forcecopy $f $f2
+    } else {
+      forcedelete $f2
+    }
+  }
+  forcecopy state.db state.db2
+  rbu close
+
+  do_test 1.4.$n.1 {
+    sqlite3rbu_vacuum rbu test.db2 state.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } {SQLITE_DONE}
+
+  do_test 1.4.$n.2 {
+    sqlite3 db2 test.db2
+    db2 eval { 
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    }
+  } {50 ok}
+  db2 close
+}
+
+forcedelete rbu.db
+do_test 2.0 {
+  sqlite3 db2 rbu.db
+  db2 eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    WITH s(i) AS (
+        VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<10
+    )
+    INSERT INTO data_t1 
+      SELECT randomblob(50), randomblob(75), randomblob(100), 0 FROM s;
+  }
+  db2 close
+} {}
+
+# Each iteration of this loop:
+#
+#   1. Restores the db to the state it was in following test case 1.0
+#   2. Opens an RBU handle to apply the RBU update created in test case 2.0.
+#   3. Steps the RBU handle $n times.
+#   4. Takes a copy of all database files and the state db.
+#   5. Opens a second RBU handle on the copy, resumes and completes the
+#      RBU op. Checks it worked as expected.
+#
+# The loop runs until $n is large enough that step (3) applies the entire
+# update.
+#
+for {set n 1} {$n < 5000} {incr n} {
+  db_restore
+  forcedelete state.db state.db-shm state.db-oal state.db-wal
+  sqlite3rbu rbu test.db rbu.db state.db
+
+  for {set i 0} {$i<$n} {incr i} {
+    set rc [rbu step]
+    if {$rc == "SQLITE_DONE"} break
+  }
+  if {$rc == "SQLITE_DONE"} {
+    rbu close
+    break
+  }
+
+  foreach f {test.db test.db-oal test.db-wal test.db-shm test.db-vacuum} {
+    set f2 [string map [list test.db test.db2] $f]
+    if {[file exists $f]} {
+      forcecopy $f $f2
+    } else {
+      forcedelete $f2
+    }
+  }
+  forcecopy state.db state.db2
+  rbu close
+
+  do_test 2.$n.1 {
+    sqlite3rbu rbu test.db2 rbu.db state.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+  } {SQLITE_DONE}
+
+  do_test 2.$n.2 {
+    sqlite3 db2 test.db2
+    db2 eval { 
+      SELECT count(*) FROM t1;
+      PRAGMA integrity_check;
+    }
+  } {60 ok}
+  db2 close
+}
+
+finish_test

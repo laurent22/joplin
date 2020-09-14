@@ -1,0 +1,68 @@
+# 2016-08-18
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# The focus of this file is vector assignments in the SET clause of
+# an UPDATE statement.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue7
+
+do_execsql_test 1.1 {
+  CREATE TABLE t1(a,b,c,d);
+  CREATE INDEX t1x ON t1(a,b);
+  INSERT INTO t1(a,b,c,d) VALUES(1,2,0,0),(3,4,0,0),(5,6,0,0);
+  CREATE TABLE t2(w,x,y,z);
+  CREATE INDEX t2x ON t2(w,x);
+  INSERT INTO t2(w,x,y,z) VALUES(1,2,11,22),(8,9,88,99),(3,5,33,55),(5,6,55,66);
+
+  SELECT *,'|' FROM t1 ORDER BY a;
+} {1 2 0 0 | 3 4 0 0 | 5 6 0 0 |}
+
+do_execsql_test 1.2 {
+  UPDATE t1 SET (c,d) = (SELECT y,z FROM t2 WHERE (w,x)=(a,b));
+  SELECT *,'|' FROM t1 ORDER BY a;
+} {1 2 11 22 | 3 4 {} {} | 5 6 55 66 |}
+
+do_execsql_test 1.3 {
+  UPDATE t1 SET (c,d) = (SELECT y,z FROM t2 WHERE w=a);
+  SELECT *,'|' FROM t1 ORDER BY a;
+} {1 2 11 22 | 3 4 33 55 | 5 6 55 66 |}
+
+do_execsql_test 1.4 {
+  UPDATE t1 SET (c) = 99 WHERE a=3;
+  SELECT *,'|' FROM t1 ORDER BY a;
+} {1 2 11 22 | 3 4 99 55 | 5 6 55 66 |}
+
+do_execsql_test 1.5 {
+  UPDATE t1 SET b = 8, (c,d) = (SELECT 123,456) WHERE a=3;
+  SELECT *,'|' FROM t1 ORDER BY a;
+} {1 2 11 22 | 3 8 123 456 | 5 6 55 66 |}
+
+do_catchsql_test 2.1 {
+  UPDATE t1 SET (c,d) = (SELECT x,y,z FROM t2 WHERE w=a);
+} {1 {2 columns assigned 3 values}}
+
+do_catchsql_test 2.2 {
+  UPDATE t1 SET (b,c,d) = (SELECT x,y FROM t2 WHERE w=a);
+} {1 {3 columns assigned 2 values}}
+
+# 2019-08-26
+# ticket https://www.sqlite.org/src/info/78acc9d40f0786e8
+#
+do_catchsql_test 3.0 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a,b);
+  INSERT INTO t1 VALUES(1,2);
+  UPDATE t1 SET (a,a,a,b)=(SELECT 99,100);
+} {1 {4 columns assigned 2 values}}
+
+finish_test

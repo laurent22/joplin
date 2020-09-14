@@ -1,0 +1,31 @@
+# 2015-09-10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements tests for sqlite3_value_subtype() and
+# sqlite3_result_subtype() interfaces.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_execsql_test subtype1-100 {
+  SELECT test_getsubtype('hello');
+} {0}
+do_execsql_test subtype1-110 {
+  SELECT test_getsubtype(test_setsubtype('hello',123));
+} {123}
+do_execsql_test subtype1-120 {
+  SELECT typeof(test_setsubtype('hello',123));
+} {text}
+do_execsql_test subtype1-130 {
+  SELECT test_setsubtype('hello',123);
+} {hello}
+
+finish_test

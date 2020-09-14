@@ -1,0 +1,46 @@
+# 2015 April 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This test is focused on edge cases in the doclist format.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5doclist
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+#-------------------------------------------------------------------------
+# Create a table with 1000 columns. Then add some large documents to it.
+# All text is in the right most column of the table.
+#
+do_test 1.0 {
+  set cols [list]
+  for {set i 0} {$i < 900} {incr i} { lappend cols "x$i" }
+  execsql "CREATE VIRTUAL TABLE ccc USING fts5([join $cols ,])"
+} {}
+
+db func rnddoc fts5_rnddoc 
+do_execsql_test 1.1 {
+  WITH ii(i) AS (SELECT 1 UNION SELECT i+1 FROM ii WHERE i<100)
+  INSERT INTO ccc(x899) SELECT rnddoc(500) FROM ii;
+}
+
+do_execsql_test 1.2 {
+  INSERT INTO ccc(ccc) VALUES('integrity-check');
+}
+
+
+finish_test

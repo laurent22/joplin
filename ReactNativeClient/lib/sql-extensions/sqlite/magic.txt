@@ -1,0 +1,32 @@
+# This file contains suggested magic(5) text for the unix file(1)
+# utility for recognizing SQLite3 databases.
+#
+# When SQLite is used as an application file format, it is desirable to
+# have file(1) recognize the database file as being with the specific
+# application.  You can set the application_id for a database file
+# using:
+#
+#     PRAGMA application_id = INTEGER;
+#
+# INTEGER can be any signed 32-bit integer.  That integer is written as
+# a 4-byte big-endian integer into offset 68 of the database header. 
+#
+# The Monotone application used "PRAGMA user_version=1598903374;" to set
+# its identifier long before "PRAGMA application_id" became available.
+# The user_version is very similar to application_id except that it is
+# stored at offset 68 instead of offset 60.  The application_id pragma
+# is preferred.  The rule using offset 60 for Monotone is for historical
+# compatibility only.
+#
+0    string  =SQLite\ format\ 3
+>68  belong  =0x0f055112  Fossil checkout - 
+>68  belong  =0x0f055113  Fossil global configuration - 
+>68  belong  =0x0f055111  Fossil repository -
+>68  belong  =0x42654462  Bentley Systems BeSQLite Database -
+>68  belong  =0x42654c6e  Bentley Systems Localization File -
+>60  belong  =0x5f4d544e  Monotone source repository -
+>68  belong  =0x47504b47  OGC GeoPackage file -
+>68  belong  =0x47503130  OGC GeoPackage version 1.0 file -
+>68  belong  =0x45737269  Esri Spatially-Enabled Database -
+>68  belong  =0x4d504258  MBTiles tileset -
+>0   string  =SQLite      SQLite3 database

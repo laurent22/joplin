@@ -1,0 +1,347 @@
+# 2008 March 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is measuring executing speed.  
+#
+# This is a copy of speed1.test modified to user prepared statements.
+#
+# $Id: speed1p.test,v 1.7 2009/04/09 01:23:49 drh Exp $
+#
+
+sqlite3_shutdown
+#sqlite3_config_scratch 29000 1
+set old_lookaside [sqlite3_config_lookaside 2048 300]
+#sqlite3_config_pagecache 1024 11000
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+speed_trial_init speed1
+
+sqlite3_memdebug_vfs_oom_test 0
+
+# Set a uniform random seed
+expr srand(0)
+
+# The number_name procedure below converts its argment (an integer)
+# into a string which is the English-language name for that number.
+#
+# Example:
+#
+#     puts [number_name 123]   ->  "one hundred twenty three"
+#
+set ones {zero one two three four five six seven eight nine
+          ten eleven twelve thirteen fourteen fifteen sixteen seventeen
+          eighteen nineteen}
+set tens {{} ten twenty thirty forty fifty sixty seventy eighty ninety}
+proc number_name {n} {
+  if {$n>=1000} {
+    set txt "[number_name [expr {$n/1000}]] thousand"
+    set n [expr {$n%1000}]
+  } else {
+    set txt {}
+  }
+  if {$n>=100} {
+    append txt " [lindex $::ones [expr {$n/100}]] hundred"
+    set n [expr {$n%100}]
+  }
+  if {$n>=20} {
+    append txt " [lindex $::tens [expr {$n/10}]]"
+    set n [expr {$n%10}]
+  }
+  if {$n>0} {
+    append txt " [lindex $::ones $n]"
+  }
+  set txt [string trim $txt]
+  if {$txt==""} {set txt zero}
+  return $txt
+}
+
+# Create a database schema.
+#
+do_test speed1p-1.0 {
+  execsql {
+    PRAGMA page_size=1024;
+    PRAGMA cache_size=500;
+    PRAGMA locking_mode=EXCLUSIVE;
+    CREATE TABLE t1(a INTEGER, b INTEGER, c TEXT);
+    CREATE TABLE t2(a INTEGER, b INTEGER, c TEXT);
+    CREATE INDEX i2a ON t2(a);
+    CREATE INDEX i2b ON t2(b);
+  }
+  execsql {
+    SELECT name FROM sqlite_master ORDER BY 1;
+  }
+} {i2a i2b t1 t2}
+
+# 50000 INSERTs on an unindexed table
+#
+set list {}
+for {set i 1} {$i<=50000} {incr i} {
+  set r [expr {int(rand()*500000)}]
+  set x [number_name $r]
+  lappend list $i $r $x
+}
+set script {
+  foreach {i r x} $::list {
+    db eval {INSERT INTO t1 VALUES($i,$r,$x)}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-insert1 50000 row $script
+db eval COMMIT
+
+# 50000 INSERTs on an indexed table
+#
+set list {}
+for {set i 1} {$i<=50000} {incr i} {
+  set r [expr {int(rand()*500000)}]
+  set x [number_name $r]
+  lappend list $i $r $x
+}
+set script {
+  foreach {i r x} $::list {
+    db eval {INSERT INTO t2 VALUES($i,$r,$x)}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-insert2 50000 row $script
+db eval COMMIT
+
+
+
+# 50 SELECTs on an integer comparison.  There is no index so
+# a full table scan is required.
+#
+set list {}
+for {set i 0} {$i<50} {incr i} {
+  set lwr [expr {$i*100}]
+  set upr [expr {($i+10)*100}]
+  lappend list $lwr $upr
+}
+set script {
+  foreach {lwr upr} $::list {
+    db eval  {SELECT count(*), avg(b) FROM t1 WHERE b>=$lwr AND b<$upr}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select1 [expr {50*50000}] row $script
+db eval COMMIT
+
+# 50 SELECTs on an LIKE comparison.  There is no index so a full
+# table scan is required.
+#
+set list {}
+for {set i 0} {$i<50} {incr i} {
+  lappend list "%[number_name $i]%"
+}
+set script {
+  foreach pattern $::list {
+    db eval {SELECT count(*), avg(b) FROM t1 WHERE c LIKE $pattern}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select2 [expr {50*50000}] row $script
+db eval COMMIT
+
+# Create indices
+#
+db eval BEGIN
+speed_trial speed1p-createidx 150000 row {
+  CREATE INDEX i1a ON t1(a);
+  CREATE INDEX i1b ON t1(b);
+  CREATE INDEX i1c ON t1(c);
+}
+db eval COMMIT
+
+# 5000 SELECTs on an integer comparison where the integer is
+# indexed.
+#
+set list {}
+for {set i 0} {$i<5000} {incr i} {
+  set lwr [expr {$i*100}]
+  set upr [expr {($i+10)*100}]
+  lappend list $lwr $upr
+}
+set script {
+  foreach {lwr upr} $::list {
+    db eval {SELECT count(*), avg(b) FROM t1 WHERE b>=$lwr AND b<$upr}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select3 5000 stmt $script
+db eval COMMIT
+
+# 100000 random SELECTs against rowid.
+#
+set list {}
+for {set i 1} {$i<=100000} {incr i} {
+  set id [expr {int(rand()*50000)+1}]
+  lappend list $id
+}
+set script {
+  foreach id $::list {
+    db eval {SELECT c FROM t1 WHERE rowid=$id}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select4 100000 row $script
+db eval COMMIT
+
+# 100000 random SELECTs against a unique indexed column.
+#
+set list {}
+for {set i 1} {$i<=100000} {incr i} {
+  set id [expr {int(rand()*50000)+1}]
+  lappend list $id
+}
+set script {
+  foreach id $::list {
+    db eval {SELECT c FROM t1 WHERE a=$id}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select5 100000 row $script
+db eval COMMIT
+
+# 50000 random SELECTs against an indexed column text column
+#
+set list [db eval {SELECT c FROM t1 ORDER BY random() LIMIT 50000}]
+set script {
+  foreach c $::list {
+    db eval {SELECT c FROM t1 WHERE c=$c}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-select6 50000 row $script
+db eval COMMIT
+
+
+# Vacuum
+speed_trial speed1p-vacuum 100000 row VACUUM
+
+# 5000 updates of ranges where the field being compared is indexed.
+#
+set list {}
+for {set i 0} {$i<5000} {incr i} {
+  set lwr [expr {$i*2}]
+  set upr [expr {($i+1)*2}]
+  lappend list $lwr $upr
+}
+set script {
+  foreach {lwr upr} $::list {
+    db eval {UPDATE t1 SET b=b*2 WHERE a>=$lwr AND a<$upr}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-update1 5000 stmt $script
+db eval COMMIT
+
+# 50000 single-row updates.  An index is used to find the row quickly.
+#
+set list {}
+for {set i 0} {$i<50000} {incr i} {
+  set r [expr {int(rand()*500000)}]
+  lappend list $i $r
+}
+set script {
+  foreach {i r} $::list {
+    db eval {UPDATE t1 SET b=$r WHERE a=$i}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-update2 50000 row $script
+db eval COMMIT
+
+# 1 big text update that touches every row in the table.
+#
+speed_trial speed1p-update3 50000 row {
+  UPDATE t1 SET c=a;
+}
+
+# Many individual text updates.  Each row in the table is
+# touched through an index.
+#
+set list {}
+for {set i 1} {$i<=50000} {incr i} {
+  set r [expr {int(rand()*500000)}]
+  lappend list $i [number_name $r]
+}
+set script {
+  foreach {i x} $::list {
+    db eval {UPDATE t1 SET c=$x WHERE a=$i}
+  }
+}
+db eval BEGIN
+speed_trial_tcl speed1p-update4 50000 row $script
+db eval COMMIT
+
+# Delete all content in a table.
+#
+speed_trial speed1p-delete1 50000 row {DELETE FROM t1}
+
+# Copy one table into another
+#
+speed_trial speed1p-copy1 50000 row {INSERT INTO t1 SELECT * FROM t2}
+
+# Delete all content in a table, one row at a time.
+#
+speed_trial speed1p-delete2 50000 row {DELETE FROM t1 WHERE 1}
+
+# Refill the table yet again
+#
+speed_trial speed1p-copy2 50000 row {INSERT INTO t1 SELECT * FROM t2}
+
+# Drop the table and recreate it without its indices.
+#
+db eval BEGIN
+speed_trial speed1p-drop1 50000 row {
+   DROP TABLE t1;
+   CREATE TABLE t1(a INTEGER, b INTEGER, c TEXT);
+}
+db eval COMMIT
+
+# Refill the table yet again.  This copy should be faster because
+# there are no indices to deal with.
+#
+speed_trial speed1p-copy3 50000 row {INSERT INTO t1 SELECT * FROM t2}
+
+# Select 20000 rows from the table at random.
+#
+speed_trial speed1p-random1 50000 row {
+  SELECT rowid FROM t1 ORDER BY random() LIMIT 20000
+}
+
+# Delete 20000 random rows from the table.
+#
+speed_trial speed1p-random-del1 20000 row {
+  DELETE FROM t1 WHERE rowid IN
+    (SELECT rowid FROM t1 ORDER BY random() LIMIT 20000)
+}
+do_test speed1p-1.1 {
+  db one {SELECT count(*) FROM t1}
+} 30000
+    
+# Delete 20000 more rows at random from the table.
+#
+speed_trial speed1p-random-del2 20000 row {
+  DELETE FROM t1 WHERE rowid IN
+    (SELECT rowid FROM t1 ORDER BY random() LIMIT 20000)
+}
+do_test speed1p-1.2 {
+  db one {SELECT count(*) FROM t1}
+} 10000
+speed_trial_summary speed1
+
+db close
+sqlite3_shutdown
+eval sqlite3_config_lookaside $old_lookaside
+sqlite3_initialize
+autoinstall_test_functions
+finish_test

@@ -1,0 +1,160 @@
+# 2006 Aug 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the sqlite3_set_authorizer() API
+# and related functionality.
+#
+# $Id: auth2.test,v 1.3 2008/07/02 13:13:53 danielk1977 Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# disable this test if the SQLITE_OMIT_AUTHORIZATION macro is
+# defined during compilation.
+if {[catch {db auth {}} msg]} {
+  finish_test
+  return
+}
+
+do_test auth2-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(1,2,3);
+  }
+  set ::flist {}
+  proc auth {code arg1 arg2 arg3 arg4 args} {
+    if {$code=="SQLITE_FUNCTION"} {
+      lappend ::flist $arg2
+      if {$arg2=="max"} {
+        return SQLITE_DENY
+      } elseif {$arg2=="min"} {
+        return SQLITE_IGNORE
+      } else {
+        return SQLITE_OK
+      }
+    }
+    return SQLITE_OK
+  }
+  db authorizer ::auth
+  catchsql {SELECT max(a,b,c) FROM t1}
+} {1 {not authorized to use function: max}}
+do_test auth2-1.2 {
+  set ::flist
+} max
+do_test auth2-1.3 {
+  set ::flist {}
+  catchsql {SELECT min(a,b,c) FROM t1}
+} {0 {{}}}
+do_test auth2-1.4 {
+  set ::flist
+} min
+do_test auth2-1.5 {
+  set ::flist {}
+  catchsql {SELECT coalesce(min(a,b,c),999) FROM t1}
+} {0 999}
+do_test auth2-1.6 {
+  set ::flist
+} {coalesce min}
+do_test auth2-1.7 {
+  set ::flist {}
+  catchsql {SELECT coalesce(a,b,c) FROM t1}
+} {0 1}
+do_test auth2-1.8 {
+  set ::flist
+} coalesce
+
+# Make sure the authorizer is not called when parsing the schema
+# and when computing the result set of a view.
+#
+db close
+sqlite3 db test.db
+sqlite3 db2 test.db
+proc auth {args} {
+  global authargs
+  append authargs [lrange $args 0 4]\n
+  return SQLITE_OK
+}
+db auth auth
+do_test auth2-2.1 {
+  set ::authargs {}
+  db eval {
+    CREATE TABLE t2(x,y,z);
+  }
+  set ::authargs
+} {SQLITE_INSERT sqlite_master {} main {}
+SQLITE_CREATE_TABLE t2 {} main {}
+SQLITE_UPDATE sqlite_master type main {}
+SQLITE_UPDATE sqlite_master name main {}
+SQLITE_UPDATE sqlite_master tbl_name main {}
+SQLITE_UPDATE sqlite_master rootpage main {}
+SQLITE_UPDATE sqlite_master sql main {}
+SQLITE_READ sqlite_master ROWID main {}
+}
+do_test auth2-2.2 {
+  set ::authargs {}
+  db eval {
+    CREATE VIEW v2 AS SELECT x+y AS a, y+z AS b from t2;
+  }
+  set ::authargs
+} {SQLITE_INSERT sqlite_master {} main {}
+SQLITE_CREATE_VIEW v2 {} main {}
+SQLITE_UPDATE sqlite_master type main {}
+SQLITE_UPDATE sqlite_master name main {}
+SQLITE_UPDATE sqlite_master tbl_name main {}
+SQLITE_UPDATE sqlite_master rootpage main {}
+SQLITE_UPDATE sqlite_master sql main {}
+SQLITE_READ sqlite_master ROWID main {}
+}
+do_test auth2-2.3 {
+  set ::authargs {}
+  db eval {
+    SELECT a, b FROM v2;
+  }
+  set ::authargs
+} {SQLITE_SELECT {} {} {} {}
+SQLITE_READ t2 x main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 z main v2
+SQLITE_READ v2 a main {}
+SQLITE_READ v2 b main {}
+SQLITE_SELECT {} {} {} v2
+}
+do_test auth2-2.4 {
+  db2 eval {
+    CREATE TABLE t3(p,q,r);
+  }
+  set ::authargs {}
+  db eval {
+    SELECT b, a FROM v2;
+  }
+  set ::authargs
+} {SQLITE_SELECT {} {} {} {}
+SQLITE_READ t2 x main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 z main v2
+SQLITE_READ v2 b main {}
+SQLITE_READ v2 a main {}
+SQLITE_SELECT {} {} {} v2
+SQLITE_SELECT {} {} {} {}
+SQLITE_READ t2 x main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 y main v2
+SQLITE_READ t2 z main v2
+SQLITE_READ v2 b main {}
+SQLITE_READ v2 a main {}
+SQLITE_SELECT {} {} {} v2
+}
+db2 close
+
+finish_test

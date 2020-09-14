@@ -1,0 +1,159 @@
+# 2007 May 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the built-in SUBSTR() functions.
+#
+# $Id: substr.test,v 1.7 2009/02/03 13:10:54 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !tclvar {
+  finish_test
+  return
+}
+
+# Create a table to work with.
+#
+execsql { 
+  CREATE TABLE t1(t text, b blob)
+}
+proc substr-test {id string i1 i2 result} {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1(t) VALUES($string)
+  }
+  do_test substr-$id.1 [subst {
+    execsql {
+      SELECT substr(t, $i1, $i2) FROM t1
+    }
+  }] [list $result]
+  set qstr '[string map {' ''} $string]'
+  do_test substr-$id.2 [subst {
+    execsql {
+      SELECT substr($qstr, $i1, $i2)
+    }
+  }] [list $result]
+}
+proc subblob-test {id hex i1 i2 hexresult} {
+  db eval "
+    DELETE FROM t1;
+    INSERT INTO t1(b) VALUES(x'$hex')
+  "
+  do_test substr-$id.1 [subst {
+    execsql {
+      SELECT hex(substr(b, $i1, $i2)) FROM t1
+    }
+  }] [list $hexresult]
+  do_test substr-$id.2 [subst {
+    execsql {
+      SELECT hex(substr(x'$hex', $i1, $i2))
+    }
+  }] [list $hexresult]
+}
+
+# Basic SUBSTR functionality
+#
+substr-test 1.1 abcdefg 1 1 a
+substr-test 1.2 abcdefg 2 1 b
+substr-test 1.3 abcdefg 1 2 ab
+substr-test 1.4 abcdefg 1 100 abcdefg
+substr-test 1.5 abcdefg 0 2 a
+substr-test 1.6 abcdefg -1 1 g
+substr-test 1.7 abcdefg -1 10 g
+substr-test 1.8 abcdefg -5 3 cde
+substr-test 1.9 abcdefg -7 3 abc
+substr-test 1.10 abcdefg -100 98 abcde
+substr-test 1.11 abcdefg 5 -1 d
+substr-test 1.12 abcdefg 5 -4 abcd
+substr-test 1.13 abcdefg 5 -5 abcd
+substr-test 1.14 abcdefg -5 -1 b
+substr-test 1.15 abcdefg -5 -2 ab
+substr-test 1.16 abcdefg -5 -3 ab
+substr-test 1.17 abcdefg 100 200 {}
+substr-test 1.18 abcdefg 200 100 {}
+
+# Make sure NULL is returned if any parameter is NULL
+#
+do_test substr-1.90 {
+  db eval {SELECT ifnull(substr(NULL,1,1),'nil')}
+} nil
+do_test substr-1.91 {
+  db eval {SELECT ifnull(substr(NULL,1),'nil')}
+} nil
+do_test substr-1.92 {
+  db eval {SELECT ifnull(substr('abcdefg',NULL,1),'nil')}
+} nil
+do_test substr-1.93 {
+  db eval {SELECT ifnull(substr('abcdefg',NULL),'nil')}
+} nil
+do_test substr-1.94 {
+  db eval {SELECT ifnull(substr('abcdefg',1,NULL),'nil')}
+} nil
+
+# Make sure everything works with long unicode characters
+#
+substr-test 2.1 \u1234\u2345\u3456 1 1 \u1234
+substr-test 2.2 \u1234\u2345\u3456 2 1 \u2345
+substr-test 2.3 \u1234\u2345\u3456 1 2 \u1234\u2345
+substr-test 2.4 \u1234\u2345\u3456 -1 1 \u3456
+substr-test 2.5 a\u1234b\u2345c\u3456c -5 3 b\u2345c
+substr-test 2.6 a\u1234b\u2345c\u3456c -2 -3 b\u2345c
+
+# Basic functionality for BLOBs
+#
+subblob-test 3.1 61626364656667 1 1 61
+subblob-test 3.2 61626364656667 2 1 62
+subblob-test 3.3 61626364656667 1 2 6162
+subblob-test 3.4 61626364656667 1 100 61626364656667
+subblob-test 3.5 61626364656667 0 2 61
+subblob-test 3.6 61626364656667 -1 1 67
+subblob-test 3.7 61626364656667 -1 10 67
+subblob-test 3.8 61626364656667 -5 3 636465
+subblob-test 3.9 61626364656667 -7 3 616263
+subblob-test 3.10 61626364656667 -100 98 6162636465
+subblob-test 3.11 61626364656667 100 200 {}
+subblob-test 3.12 61626364656667 200 100 {}
+
+# If these blobs were strings, then they would contain multi-byte
+# characters.  But since they are blobs, the substr indices refer
+# to bytes.
+#
+subblob-test 4.1 61E188B462E28D8563E3919663 1 1 61
+subblob-test 4.2 61E188B462E28D8563E3919663 2 1 E1
+subblob-test 4.3 61E188B462E28D8563E3919663 1 2 61E1
+subblob-test 4.4 61E188B462E28D8563E3919663 -2 1 96
+subblob-test 4.5 61E188B462E28D8563E3919663 -5 4 63E39196
+subblob-test 4.6 61E188B462E28D8563E3919663 -100 98 61E188B462E28D8563E391 
+
+# Two-argument SUBSTR
+#
+proc substr-2-test {id string idx result} {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1(t) VALUES($string)
+  }
+  do_test substr-$id.1 [subst {
+    execsql {
+      SELECT substr(t, $idx) FROM t1
+    }
+  }] [list $result]
+  set qstr '[string map {' ''} $string]'
+  do_test substr-$id.2 [subst {
+    execsql {
+      SELECT substr($qstr, $idx)
+    }
+  }] [list $result]
+}
+substr-2-test 5.1 abcdefghijklmnop 5 efghijklmnop
+substr-2-test 5.2 abcdef -5 bcdef
+
+finish_test

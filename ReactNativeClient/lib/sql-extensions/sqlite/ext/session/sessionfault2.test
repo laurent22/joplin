@@ -1,0 +1,284 @@
+# 2016 March 31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the session module.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessionfault2
+
+if 1 {
+
+do_execsql_test 1.0.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b UNIQUE);
+  INSERT INTO t1 VALUES(1, 1);
+  INSERT INTO t1 VALUES(2, 2);
+  INSERT INTO t1 VALUES(3, 3);
+
+  CREATE TABLE t2(a PRIMARY KEY, b UNIQUE);
+  INSERT INTO t2 VALUES(1, 1);
+  INSERT INTO t2 VALUES(2, 2);
+  INSERT INTO t2 VALUES(3, 3);
+}
+faultsim_save_and_close
+
+faultsim_restore_and_reopen
+do_test 1.0.1 {
+  set ::C [changeset_from_sql {
+    UPDATE t1 SET b=4 WHERE a=3;
+    UPDATE t1 SET b=3 WHERE a=2;
+    UPDATE t1 SET b=2 WHERE a=1;
+    UPDATE t2 SET b=0 WHERE a=1;
+    UPDATE t2 SET b=1 WHERE a=2;
+    UPDATE t2 SET b=2 WHERE a=3;
+  }]
+  set {} {}
+} {}
+
+proc xConflict args { return "OMIT" }
+
+do_faultsim_test 1 -faults oom-p* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3changeset_apply db $::C xConflict
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  faultsim_integrity_check
+
+  catch { db eval ROLLBACK }
+  set res [db eval {
+    SELECT * FROM t1;
+    SELECT * FROM t2;
+  }]
+
+  if {$testrc==0} {
+    if {$res != "1 2 2 3 3 4 1 0 2 1 3 2"} { error "data error" }
+  } else {
+    if {
+         $res != "1 2 2 3 3 4 1 0 2 1 3 2"
+      && $res != "1 1 2 2 3 3 1 1 2 2 3 3"
+    } { error "data error!! $res" }
+  }
+}
+
+#-------------------------------------------------------------------------
+# OOM when applying a changeset for which one of the tables has a name
+# 99 bytes in size. This happens to cause an extra malloc in within the
+# sessions_strm permutation.
+#
+reset_db
+set nm [string repeat t 99]
+do_execsql_test 2.0.0 [string map "%TBL% $nm" {
+  CREATE TABLE %TBL%(a PRIMARY KEY, b UNIQUE);
+}]
+faultsim_save_and_close
+
+faultsim_restore_and_reopen
+do_test 1.0.1 {
+  set ::C [changeset_from_sql [string map "%TBL% $nm" {
+    INSERT INTO %TBL% VALUES(1, 2);
+    INSERT INTO %TBL% VALUES(3, 4);
+  }]]
+  set {} {}
+} {}
+
+proc xConflict args { return "OMIT" }
+do_faultsim_test 2 -faults oom-p* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3changeset_apply db $::C xConflict
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  faultsim_integrity_check
+}
+
+#-------------------------------------------------------------------------
+# OOM when collecting and apply a changeset that uses sqlite_stat1.
+#
+reset_db
+forcedelete test.db2
+sqlite3 db2 test.db2
+do_common_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b UNIQUE, c);
+  CREATE INDEX i1 ON t1(c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+  CREATE TABLE t2(a, b, c);
+  INSERT INTO t2 VALUES(1, 2, 3);
+  INSERT INTO t2 VALUES(4, 5, 6);
+  INSERT INTO t2 VALUES(7, 8, 9);
+  ANALYZE;
+}
+faultsim_save_and_close
+db2 close
+
+do_faultsim_test 1.1 -faults oom-* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+} -body {
+  do_then_apply_sql {
+    INSERT INTO sqlite_stat1 VALUES('x', 'y', 45);
+    UPDATE sqlite_stat1 SET stat = 123 WHERE tbl='t1' AND idx='i1';
+    UPDATE sqlite_stat1 SET stat = 456 WHERE tbl='t2';
+  }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+  faultsim_integrity_check
+  if {$testrc==0} { compare_db db db2 }
+}
+
+#-------------------------------------------------------------------------
+# OOM when collecting and using a rebase changeset.
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t3(a, b, c, PRIMARY KEY(b, c));
+  CREATE TABLE t4(x PRIMARY KEY, y, z);
+
+  INSERT INTO t3 VALUES(1, 2, 3);
+  INSERT INTO t3 VALUES(4, 2, 5);
+  INSERT INTO t3 VALUES(7, 2, 9);
+
+  INSERT INTO t4 VALUES('a', 'b', 'c');
+  INSERT INTO t4 VALUES('d', 'e', 'f');
+  INSERT INTO t4 VALUES('g', 'h', 'i');
+}
+faultsim_save_and_close
+db2 close
+
+proc xConflict {ret args} { return $ret }
+
+do_test 2.1 {
+  faultsim_restore_and_reopen
+  set C1 [changeset_from_sql {
+    INSERT INTO t3 VALUES(10, 11, 12);
+    UPDATE t4 SET y='j' WHERE x='g';
+    DELETE FROM t4 WHERE x='a';
+  }]
+
+  faultsim_restore_and_reopen
+  set C2 [changeset_from_sql {
+    INSERT INTO t3 VALUES(1000, 11, 12);
+    DELETE FROM t4 WHERE x='g';
+  }]
+
+  faultsim_restore_and_reopen
+  sqlite3changeset_apply db $C1 [list xConflict OMIT]
+  faultsim_save_and_close
+} {}
+
+do_faultsim_test 2.2 -faults oom* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+} -body {
+  set rebase [sqlite3changeset_apply_v2 db $::C2 [list xConflict OMIT]]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+do_faultsim_test 2.3 -faults oom* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db2
+} -body {
+  set rebase [sqlite3changeset_apply_v2 db $::C2 [list xConflict REPLACE]]
+  set {} {}
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+do_faultsim_test 2.4 -faults oom* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  set ::rebase [sqlite3changeset_apply_v2 db $::C2 [list xConflict REPLACE]]
+} -body {
+  sqlite3rebaser_create R
+  R configure $::rebase
+  R rebase $::C1
+  set {} {}
+} -test {
+  catch { R delete } 
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+do_faultsim_test 2.5 -faults oom* -prep {
+  catch {db2 close}
+  catch {db close}
+  faultsim_restore_and_reopen
+  set ::rebase [sqlite3changeset_apply_v2 db $::C2 [list xConflict OMIT]]
+} -body {
+  sqlite3rebaser_create R
+  R configure $::rebase
+  R rebase $::C1
+  set {} {}
+} -test {
+  catch { R delete } 
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+
+}
+
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(x PRIMARY KEY, y, z);
+  INSERT INTO t1 VALUES(3, 1, 4);
+  INSERT INTO t1 VALUES(1, 5, 9);
+}
+faultsim_save_and_close
+
+proc xConflict {ret args} { return $ret }
+
+do_test 3.1 {
+  faultsim_restore_and_reopen
+
+  execsql { BEGIN; UPDATE t1 SET z=11; }
+  set C1 [changeset_from_sql {
+    UPDATE t1 SET z=10 WHERE x=1;
+  }]
+  execsql { ROLLBACK }
+
+  execsql { BEGIN; UPDATE t1 SET z=11; }
+  set C2 [changeset_from_sql {
+    UPDATE t1 SET z=55 WHERE x=1;
+  }]
+  execsql { ROLLBACK }
+
+  set ::rebase1 [sqlite3changeset_apply_v2 db $::C1 [list xConflict OMIT]]
+  set ::rebase2 [sqlite3changeset_apply_v2 db $::C2 [list xConflict OMIT]]
+  set {} {}
+  execsql { SELECT * FROM t1 }
+} {3 1 4 1 5 9}
+
+
+do_faultsim_test 3.2 -faults oom* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  sqlite3rebaser_create R
+  R configure $::rebase1
+  R configure $::rebase2
+  set {} {}
+} -test {
+  catch { R delete } 
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM}
+}
+
+
+finish_test

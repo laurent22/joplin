@@ -1,0 +1,271 @@
+# 2010 October 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+sqlite3 db test.db
+sqlite3_db_config_lookaside db 0 0 0
+
+do_execsql_test incrblob3-1.1 {
+  CREATE TABLE blobs(k INTEGER PRIMARY KEY, v BLOB);
+  INSERT INTO blobs VALUES(1, zeroblob(100));
+  INSERT INTO blobs VALUES(2, zeroblob(100));
+} {}
+
+# Test the sqlite3_blob_reopen()/read()/write() functions.
+#
+do_test incrblob3-1.2 {
+  set ::blob [db incrblob blobs v 1]
+  puts $::blob "hello world"
+} {}
+
+do_test incrblob3-1.3 {
+  sqlite3_blob_reopen $::blob 2
+  puts $::blob "world hello"
+} {}
+
+do_test incrblob3-1.4 {
+  sqlite3_blob_reopen $::blob 1
+  gets $::blob
+} {hello world}
+
+do_test incrblob3-1.5 {
+  sqlite3_blob_reopen $::blob 2
+  gets $::blob
+} {world hello}
+
+do_test incrblob3-1.6 { close $::blob } {}
+
+# Test some error conditions.
+#
+#   incrblob3-2.1: Attempting to reopen a row that does not exist.
+#   incrblob3-2.2: Attempting to reopen a row that does not contain a blob
+#                  or text value.
+#
+do_test incrblob3-2.1.1 {
+  set ::blob [db incrblob blobs v 1]
+  list [catch {sqlite3_blob_reopen $::blob 3} msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-2.1.2 {
+  list [sqlite3_errcode db] [sqlite3_errmsg db]
+} {SQLITE_ERROR {no such rowid: 3}}
+do_test incrblob3-2.1.3 {
+  list [catch {sqlite3_blob_reopen $::blob 1} msg] $msg
+} {1 SQLITE_ABORT}
+do_test incrblob3-2.1.4 { close $::blob } {}
+
+do_execsql_test incrblob3-2.2.1 {
+  INSERT INTO blobs VALUES(3, 42);
+  INSERT INTO blobs VALUES(4, 54.4);
+  INSERT INTO blobs VALUES(5, NULL);
+}
+foreach {tn rowid type} {
+  1 3 integer
+  2 4 real
+  3 5 null
+} {
+  do_test incrblob3-2.2.$tn.1 {
+    set ::blob [db incrblob blobs v 1]
+    list [catch {sqlite3_blob_reopen $::blob $rowid} msg] $msg
+  } {1 SQLITE_ERROR}
+  do_test incrblob3-2.2.$tn.2 {
+    list [sqlite3_errcode db] [sqlite3_errmsg db]
+  } "SQLITE_ERROR {cannot open value of type $type}"
+
+  do_test incrblob3-2.2.$tn.3 {
+    list [catch {sqlite3_blob_reopen $::blob 1} msg] $msg
+  } {1 SQLITE_ABORT}
+  do_test incrblob3-2.2.$tn.4 {
+    list [catch {sqlite3_blob_read $::blob 0 10} msg] $msg
+  } {1 SQLITE_ABORT}
+  do_test incrblob3-2.2.$tn.5 {
+    list [catch {sqlite3_blob_write $::blob 0 "abcd"} msg] $msg
+  } {1 SQLITE_ABORT}
+  do_test incrblob3-2.2.$tn.6 {
+    sqlite3_blob_bytes $::blob
+  } {0}
+
+  do_test incrblob3-2.2.$tn.7 { close $::blob } {}
+}
+
+# Test that passing NULL to sqlite3_blob_XXX() APIs returns SQLITE_MISUSE.
+#
+#   incrblob3-3.1: sqlite3_blob_reopen()
+#   incrblob3-3.2: sqlite3_blob_read()
+#   incrblob3-3.3: sqlite3_blob_write()
+#   incrblob3-3.4: sqlite3_blob_bytes()
+#
+do_test incrblob3-3.1 {
+  list [catch {sqlite3_blob_reopen {} 3} msg] $msg
+} {1 SQLITE_MISUSE}
+
+do_test incrblob3-3.2 {
+  list [catch {sqlite3_blob_read {} 0 10} msg] $msg
+} {1 SQLITE_MISUSE}
+
+do_test incrblob3-3.3 {
+  list [catch {sqlite3_blob_write {} 0 "abcd"} msg] $msg
+} {1 SQLITE_MISUSE}
+
+do_test incrblob3-3.4 { sqlite3_blob_bytes {} } {0}
+
+do_test incrblob3-3.5 { sqlite3_blob_close {} } {}
+
+# Test out-of-range reading and writing
+#
+do_test incrblob3-4.1 {
+  set ::blob [db incrblob blobs v 1]
+  sqlite3_blob_bytes $::blob
+} {100}
+do_test incrblob3-4.2 {
+  list [catch { sqlite3_blob_read $::blob -1 10 } msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-4.3 {
+  list [catch { sqlite3_blob_read $::blob 0 -10 } msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-4.4 {
+  list [catch { sqlite3_blob_read $::blob 95 10 } msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-4.5 {
+  list [catch { sqlite3_blob_write $::blob -1 "abcdefghij" 10 } msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-4.6 {
+  list [catch { sqlite3_blob_write $::blob 0 "abcdefghij" -10 } msg] $msg
+} {1 SQLITE_ERROR}
+do_test incrblob3-4.7 {
+  list [catch { sqlite3_blob_write $::blob 95 "abcdefghij" } msg] $msg
+} {1 SQLITE_ERROR}
+
+do_test incrblob3-4.8 { close $::blob } {}
+
+# Test that modifying the row a blob handle points to aborts the blob.
+#
+do_test incrblob3-5.1 {
+  set ::blob [db incrblob blobs v 1]
+  sqlite3_blob_bytes $::blob
+} {100}
+do_test incrblob3-5.2 {
+  execsql { UPDATE blobs SET v = '123456789012345678901234567890' WHERE k = 1 }
+  list [catch { sqlite3_blob_read $::blob 0 10 } msg] $msg
+} {1 SQLITE_ABORT}
+
+# Test various errors that can occur in sqlite3_blob_open():
+#
+#   1. Trying to open a virtual table column.
+#   2. Trying to open a view column.
+#   3. Trying to open a column that does not exist.
+#   4. Trying to open a read/write handle on an indexed column.
+#   5. Trying to open a read/write handle on the child key of an FK constraint.
+#
+ifcapable fts3 {
+  do_test incrblob3-6.1 {
+    execsql {
+      CREATE VIRTUAL TABLE ft USING fts3;
+      INSERT INTO ft VALUES('rules to open a column to which');
+    }
+
+    list [catch { db incrblob ft content 1 } msg] $msg
+  } {1 {cannot open virtual table: ft}}
+}
+ifcapable view {
+  do_test incrblob3-6.2 {
+    execsql { CREATE VIEW v1 AS SELECT * FROM blobs }
+    list [catch { db incrblob v1 content 1 } msg] $msg
+  } {1 {cannot open view: v1}}
+}
+
+do_test incrblob3-6.3 {
+  list [catch { db incrblob blobs content 1 } msg] $msg
+} {1 {no such column: "content"}}
+
+do_test incrblob3-6.4.1 {
+  execsql { 
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(b);
+    INSERT INTO t1 VALUES(zeroblob(100), zeroblob(100));
+  }
+  list [catch { db incrblob t1 b 1 } msg] $msg
+} {1 {cannot open indexed column for writing}}
+do_test incrblob3-6.4.2 {
+  set ::blob [db incrblob t1 a 1]
+  close $::blob
+} {}
+do_test incrblob3-6.4.3 {
+  set ::blob [db incrblob -readonly t1 b 1]
+  close $::blob
+} {}
+
+do_test incrblob3-6.5.1 {
+  execsql { 
+    CREATE TABLE p1(a PRIMARY KEY);
+    CREATE TABLE c1(a, b REFERENCES p1);
+    PRAGMA foreign_keys = 1;
+    INSERT INTO p1 VALUES(zeroblob(100));
+    INSERT INTO c1 VALUES(zeroblob(100), zeroblob(100));
+  }
+  list [catch { db incrblob c1 b 1 } msg] $msg
+} {1 {cannot open foreign key column for writing}}
+
+do_test incrblob3-6.5.2 {
+  set ::blob [db incrblob c1 a 1]
+  close $::blob
+} {}
+do_test incrblob3-6.5.3 {
+  set ::blob [db incrblob -readonly c1 b 1]
+  close $::blob
+} {}
+do_test incrblob3-6.5.4 {
+  execsql { PRAGMA foreign_keys = 0 }
+  set ::blob [db incrblob c1 b 1]
+  close $::blob
+} {}
+
+
+# Test that sqlite3_blob_open() handles transient and persistent schema 
+# errors correctly.
+#
+do_test incrblob3-7.1 {
+  sqlite3 db2 test.db
+  sqlite3_db_config_lookaside db2 0 0 0
+  execsql { CREATE TABLE t2(x) } db2
+  set ::blob [db incrblob blobs v 1]
+  close $::blob
+} {}
+db2 close
+
+testvfs tvfs -default 1
+tvfs filter xAccess
+tvfs script access_method
+
+proc access_method {args} {
+  set schemacookie [hexio_get_int [hexio_read test.db 40 4]]
+  incr schemacookie
+  hexio_write test.db 40 [hexio_render_int32 $schemacookie]
+
+  set dbversion [hexio_get_int [hexio_read test.db 24 4]]
+  incr dbversion
+  hexio_write test.db 24 [hexio_render_int32 $dbversion]
+
+  return ""
+}
+
+do_test incrblob3-7.2 {
+  sqlite3 db test.db 
+  sqlite3_db_config_lookaside db 0 0 0
+  list [catch {db incrblob blobs v 1} msg] $msg
+} {1 {database schema has changed}}
+db close
+tvfs delete
+
+finish_test

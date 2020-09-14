@@ -1,0 +1,50 @@
+# 2008 Sep 08
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing that ticket #3363 is fixed.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+do_test tkt3363.1.1 {
+  execsql { CREATE VIRTUAL TABLE t1 USING rtree(ii, x1, x2, y1, y2) }
+} {}
+
+do_test tkt3363.1.2 {
+  for {set ii 1} {$ii < 50} {incr ii} {
+    set x 1000000
+    set y [expr 4000000 + $ii*10]
+    execsql { INSERT INTO t1 VALUES($ii, $x, $x, $y, $y) }
+  }
+} {}
+
+do_test tkt3363.1.3 {
+  execsql { 
+    SELECT count(*) FROM t1 WHERE +y2>4000425.0;
+  }
+} {7}
+
+do_test tkt3363.1.4 {
+  execsql { 
+    SELECT count(*) FROM t1 WHERE y2>4000425.0;
+  }
+} {7}
+
+finish_test

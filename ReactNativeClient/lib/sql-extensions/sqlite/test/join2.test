@@ -1,0 +1,328 @@
+# 2002 May 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for joins, including outer joins.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix join2
+
+do_test join2-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,11);
+    INSERT INTO t1 VALUES(2,22);
+    INSERT INTO t1 VALUES(3,33);
+    SELECT * FROM t1;
+  }  
+} {1 11 2 22 3 33}
+do_test join2-1.2 {
+  execsql {
+    CREATE TABLE t2(b,c);
+    INSERT INTO t2 VALUES(11,111);
+    INSERT INTO t2 VALUES(33,333);
+    INSERT INTO t2 VALUES(44,444);
+    SELECT * FROM t2;
+  }  
+} {11 111 33 333 44 444};
+do_test join2-1.3 {
+  execsql {
+    CREATE TABLE t3(c,d);
+    INSERT INTO t3 VALUES(111,1111);
+    INSERT INTO t3 VALUES(444,4444);
+    INSERT INTO t3 VALUES(555,5555);
+    SELECT * FROM t3;
+  }  
+} {111 1111 444 4444 555 5555}
+
+do_test join2-1.4 {
+  execsql {
+    SELECT * FROM
+      t1 NATURAL JOIN t2 NATURAL JOIN t3
+  }
+} {1 11 111 1111}
+do_test join2-1.5 {
+  execsql {
+    SELECT * FROM
+      t1 NATURAL JOIN t2 NATURAL LEFT OUTER JOIN t3
+  }
+} {1 11 111 1111 3 33 333 {}}
+do_test join2-1.6 {
+  execsql {
+    SELECT * FROM
+      t1 NATURAL LEFT OUTER JOIN t2 NATURAL JOIN t3
+  }
+} {1 11 111 1111}
+ifcapable subquery {
+  do_test join2-1.7 {
+    execsql {
+      SELECT * FROM
+        t1 NATURAL LEFT OUTER JOIN (t2 NATURAL JOIN t3)
+    }
+  } {1 11 111 1111 2 22 {} {} 3 33 {} {}}
+}
+
+#-------------------------------------------------------------------------
+# Check that ticket [25e335f802ddc] has been resolved. It should be an
+# error for the ON clause of a LEFT JOIN to refer to a table to its right.
+#
+do_execsql_test 2.0 {
+  CREATE TABLE aa(a);
+  CREATE TABLE bb(b);
+  CREATE TABLE cc(c);
+  INSERT INTO aa VALUES('one');
+  INSERT INTO bb VALUES('one');
+  INSERT INTO cc VALUES('one');
+}
+
+do_catchsql_test 2.1 {
+  SELECT * FROM aa LEFT JOIN cc ON (a=b) JOIN bb ON (b=coalesce(c,1));
+} {1 {ON clause references tables to its right}}
+do_catchsql_test 2.2 {
+  SELECT * FROM aa JOIN cc ON (a=b) JOIN bb ON (b=c);
+} {0 {one one one}}
+
+#-------------------------------------------------------------------------
+# Test that a problem causing where.c to overlook opportunities to
+# omit unnecessary tables from a LEFT JOIN when UNIQUE, NOT NULL column 
+# that makes this possible happens to be the leftmost in its table.
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE TABLE t1(k1 INTEGER PRIMARY KEY, k2, k3);
+  CREATE TABLE t2(k2 INTEGER PRIMARY KEY, v2);
+
+  -- Prior to this problem being fixed, table t3_2 would be omitted from
+  -- the join queries below, but if t3_1 were used in its place it would
+  -- not.
+  CREATE TABLE t3_1(k3 PRIMARY KEY, v3) WITHOUT ROWID;
+  CREATE TABLE t3_2(v3, k3 PRIMARY KEY) WITHOUT ROWID;
+}
+
+do_eqp_test 3.1 {
+  SELECT v2 FROM t1 LEFT JOIN t2 USING (k2) LEFT JOIN t3_1 USING (k3);
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SEARCH TABLE t2 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+do_eqp_test 3.2 {
+  SELECT v2 FROM t1 LEFT JOIN t2 USING (k2) LEFT JOIN t3_2 USING (k3);
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1
+  `--SEARCH TABLE t2 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+#-------------------------------------------------------------------------
+# Test that tables other than the rightmost can be omitted from a
+# LEFT JOIN query.
+#
+do_execsql_test 4.0 {
+  CREATE TABLE c1(k INTEGER PRIMARY KEY, v1);
+  CREATE TABLE c2(k INTEGER PRIMARY KEY, v2);
+  CREATE TABLE c3(k INTEGER PRIMARY KEY, v3);
+
+  INSERT INTO c1 VALUES(1, 2);
+  INSERT INTO c2 VALUES(2, 3);
+  INSERT INTO c3 VALUES(3, 'v3');
+
+  INSERT INTO c1 VALUES(111, 1112);
+  INSERT INTO c2 VALUES(112, 1113);
+  INSERT INTO c3 VALUES(113, 'v1113');
+}
+do_execsql_test 4.1.1 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v2);
+} {2 v3 1112 {}}
+do_execsql_test 4.1.2 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 1112 {}}
+
+do_execsql_test 4.1.3 {
+  SELECT DISTINCT v1, v3 FROM c1 LEFT JOIN c2 LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 1112 {}}
+
+do_execsql_test 4.1.4 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 2 v3 1112 {} 1112 {}}
+
+do_eqp_test 4.1.5 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v2);
+} {
+  QUERY PLAN
+  |--SCAN TABLE c1
+  |--SEARCH TABLE c2 USING INTEGER PRIMARY KEY (rowid=?)
+  `--SEARCH TABLE c3 USING INTEGER PRIMARY KEY (rowid=?)
+}
+do_eqp_test 4.1.6 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v1+1);
+} {
+  QUERY PLAN
+  |--SCAN TABLE c1
+  `--SEARCH TABLE c3 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+do_execsql_test 4.2.0 {
+  DROP TABLE c1;
+  DROP TABLE c2;
+  DROP TABLE c3;
+  CREATE TABLE c1(k UNIQUE, v1);
+  CREATE TABLE c2(k UNIQUE, v2);
+  CREATE TABLE c3(k UNIQUE, v3);
+
+  INSERT INTO c1 VALUES(1, 2);
+  INSERT INTO c2 VALUES(2, 3);
+  INSERT INTO c3 VALUES(3, 'v3');
+
+  INSERT INTO c1 VALUES(111, 1112);
+  INSERT INTO c2 VALUES(112, 1113);
+  INSERT INTO c3 VALUES(113, 'v1113');
+}
+do_execsql_test 4.2.1 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v2);
+} {2 v3 1112 {}}
+do_execsql_test 4.2.2 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 1112 {}}
+
+do_execsql_test 4.2.3 {
+  SELECT DISTINCT v1, v3 FROM c1 LEFT JOIN c2 LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 1112 {}}
+
+do_execsql_test 4.2.4 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 LEFT JOIN c3 ON (c3.k=v1+1);
+} {2 v3 2 v3 1112 {} 1112 {}}
+
+do_eqp_test 4.2.5 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v2);
+} {
+  QUERY PLAN
+  |--SCAN TABLE c1
+  |--SEARCH TABLE c2 USING INDEX sqlite_autoindex_c2_1 (k=?)
+  `--SEARCH TABLE c3 USING INDEX sqlite_autoindex_c3_1 (k=?)
+}
+do_eqp_test 4.2.6 {
+  SELECT v1, v3 FROM c1 LEFT JOIN c2 ON (c2.k=v1) LEFT JOIN c3 ON (c3.k=v1+1);
+} {
+  QUERY PLAN
+  |--SCAN TABLE c1
+  `--SEARCH TABLE c3 USING INDEX sqlite_autoindex_c3_1 (k=?)
+}
+
+# 2017-11-23 (Thanksgiving day)
+# OSSFuzz found an assertion fault in the new LEFT JOIN eliminator code.
+#
+do_execsql_test 4.3.0 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(x PRIMARY KEY) WITHOUT ROWID;
+  CREATE TABLE t2(x);
+  SELECT a.x
+    FROM t1 AS a
+    LEFT JOIN t1 AS b ON (a.x=b.x)
+    LEFT JOIN t2 AS c ON (a.x=c.x);
+} {}
+do_execsql_test 4.3.1 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<10)
+    INSERT INTO t1(x) SELECT x FROM c;
+  INSERT INTO t2(x) SELECT x+9 FROM t1;
+  SELECT a.x, c.x
+    FROM t1 AS a
+    LEFT JOIN t1 AS b ON (a.x=b.x)
+    LEFT JOIN t2 AS c ON (a.x=c.x);
+} {1 {} 2 {} 3 {} 4 {} 5 {} 6 {} 7 {} 8 {} 9 {} 10 10}
+
+do_execsql_test 5.0 {
+  CREATE TABLE s1 (a INTEGER PRIMARY KEY);
+  CREATE TABLE s2 (a INTEGER PRIMARY KEY);
+  CREATE TABLE s3 (a INTEGER);
+  CREATE UNIQUE INDEX ndx on s3(a);
+}
+do_eqp_test 5.1 {
+  SELECT s1.a FROM s1 left join s2 using (a);
+} {SCAN TABLE s1}
+
+do_eqp_test 5.2 {
+  SELECT s1.a FROM s1 left join s3 using (a);
+} {SCAN TABLE s1}
+
+do_execsql_test 6.0 {
+  CREATE TABLE u1(a INTEGER PRIMARY KEY, b, c);
+  CREATE TABLE u2(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX u1ab ON u1(b, c);
+}
+do_eqp_test 6.1 {
+  SELECT u2.* FROM u2 LEFT JOIN u1 ON( u1.a=u2.a AND u1.b=u2.b AND u1.c=u2.c );
+} {SCAN TABLE u2}
+
+db close
+sqlite3 db :memory:
+do_execsql_test 7.0 {
+  CREATE TABLE t1(a,b);  INSERT INTO t1 VALUES(1,2),(3,4),(5,6);
+  CREATE TABLE t2(c,d);  INSERT INTO t2 VALUES(2,4),(3,6);
+  CREATE TABLE t3(x);    INSERT INTO t3 VALUES(9);
+  CREATE VIEW test AS
+    SELECT *, 'x'
+      FROM t1 LEFT JOIN (SELECT * FROM t2, t3) ON (c=b AND x=9)
+      WHERE c IS NULL;
+  SELECT * FROM test;
+} {3 4 {} {} {} x 5 6 {} {} {} x}
+
+#-------------------------------------------------------------------------
+# Ticket [dfd66334].
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE TABLE t0(c0);
+  CREATE TABLE t1(c0);
+}
+
+do_execsql_test 8.1 {
+  SELECT * FROM t0 LEFT JOIN t1 
+  WHERE (t1.c0 BETWEEN 0 AND 0) > ('' AND t0.c0);
+}
+
+#-------------------------------------------------------------------------
+# Ticket [45f4bf4eb].
+#
+reset_db
+do_execsql_test 9.0 {
+  CREATE TABLE t0(c0 INT);
+  CREATE VIEW v0(c0) AS SELECT CAST(t0.c0 AS INTEGER) FROM t0;
+  INSERT INTO t0(c0) VALUES (0);
+}
+
+do_execsql_test 9.1 {
+  SELECT typeof(c0), c0 FROM v0 WHERE c0>='0'
+} {integer 0}
+
+do_execsql_test 9.2 {
+  SELECT * FROM t0, v0 WHERE v0.c0 >= '0';
+} {0 0}
+
+do_execsql_test 9.3 {
+  SELECT * FROM t0 LEFT JOIN v0 WHERE v0.c0 >= '0';
+} {0 0}
+
+do_execsql_test 9.4 {
+  SELECT * FROM t0 LEFT JOIN v0 ON v0.c0 >= '0';
+} {0 0}
+
+do_execsql_test 9.5 {
+  SELECT * FROM t0 LEFT JOIN v0 ON v0.c0 >= '0' WHERE TRUE 
+  UNION SELECT 0,0 WHERE 0; 
+} {0 0}
+
+
+finish_test

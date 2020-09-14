@@ -1,0 +1,11 @@
+This directory contains components use to build an autoconf-ready package
+of the SQLite amalgamation:  sqlite-autoconf-30XXXXXX.tar.gz
+
+To build the autoconf amalgamation, run from the top-level:
+
+   ./configure
+   make amalgamation-tarball
+
+The amalgamation-tarball target (also available in "main.mk") runs the
+script tool/mkautoconfamal.sh which does the work.  Refer to that script
+for details.

@@ -1,0 +1,83 @@
+# 2008 Jul 14
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the r-tree extension when it is
+# configured to store values as 32 bit integers.
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] rtree_util.tcl]
+source $testdir/tester.tcl
+
+ifcapable !rtree {
+  finish_test
+  return
+}
+
+do_test rtree5-1.0 {
+  execsql { CREATE VIRTUAL TABLE t1 USING rtree_i32(id, x1, x2, y1, y2) }
+} {}
+do_test rtree5-1.1 {
+  execsql { INSERT INTO t1 VALUES(1, 5, 10, 4, 11.2) }
+} {}
+do_test rtree5-1.2 { 
+  execsql { SELECT * FROM t1 }
+} {1 5 10 4 11}
+do_test rtree5-1.3 { 
+  execsql { SELECT typeof(x1) FROM t1 }
+} {integer}
+
+do_test rtree5-1.4 { 
+  execsql { SELECT x1==5 FROM t1 }
+} {1}
+do_test rtree5-1.5 { 
+  execsql { SELECT x1==5.2 FROM t1 }
+} {0}
+do_test rtree5-1.6 { 
+  execsql { SELECT x1==5.0 FROM t1 }
+} {1}
+
+do_test rtree5-1.7 { 
+  execsql { SELECT count(*) FROM t1 WHERE x1==5 }
+} {1}
+ifcapable !rtree_int_only {
+  do_test rtree5-1.8 { 
+    execsql { SELECT count(*) FROM t1 WHERE x1==5.2 }
+  } {0}
+}
+do_test rtree5-1.9 { 
+  execsql { SELECT count(*) FROM t1 WHERE x1==5.0 }
+} {1}
+
+do_test rtree5-1.10 { 
+  execsql { SELECT (1<<31)-5, (1<<31)-1, -1*(1<<31), -1*(1<<31)+5 }
+} {2147483643 2147483647 -2147483648 -2147483643}
+do_test rtree5-1.11 { 
+  execsql { 
+    INSERT INTO t1 VALUES(2, (1<<31)-5, (1<<31)-1, -1*(1<<31), -1*(1<<31)+5) 
+  }
+} {}
+do_test rtree5-1.12 { 
+  execsql { SELECT * FROM t1 WHERE id=2 }
+} {2 2147483643 2147483647 -2147483648 -2147483643}
+do_test rtree5-1.13 { 
+  execsql { 
+    SELECT * FROM t1 WHERE 
+        x1=2147483643 AND x2=2147483647 AND 
+        y1=-2147483648 AND y2=-2147483643
+  }
+} {2 2147483643 2147483647 -2147483648 -2147483643}
+do_rtree_integrity_test rtree5-1.14 t1
+
+expand_all_sql db
+finish_test

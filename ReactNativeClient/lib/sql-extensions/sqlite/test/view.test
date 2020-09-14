@@ -1,0 +1,790 @@
+# 2002 February 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing VIEW statements.
+#
+# $Id: view.test,v 1.39 2008/12/14 14:45:21 danielk1977 Exp $
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Omit this entire file if the library is not configured with views enabled.
+ifcapable !view {
+  finish_test
+  return
+}
+
+do_test view-1.0 {
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(1,2,3);
+    INSERT INTO t1 VALUES(4,5,6);
+    INSERT INTO t1 VALUES(7,8,9);
+    SELECT * FROM t1;
+  }
+} {1 2 3 4 5 6 7 8 9}
+
+do_test view-1.1 {
+  execsql {
+    BEGIN;
+    CREATE VIEW IF NOT EXISTS v1 AS SELECT a,b FROM t1;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 2 4 5 7 8}
+do_test view-1.1.100 {
+  db config enable_view off
+  catchsql {
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 {access to view "v1" prohibited}}
+do_test view-1.1.110 {
+  db config enable_view on
+  catchsql {
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {0 {1 2 4 5 7 8}}
+do_test view-1.2 {
+  catchsql {
+    ROLLBACK;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 {no such table: v1}}
+do_test view-1.3 {
+  execsql {
+    CREATE VIEW v1 AS SELECT a,b FROM t1;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 2 4 5 7 8}
+do_test view-1.3.1 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 2 4 5 7 8}
+do_test view-1.4 {
+  catchsql {
+    DROP VIEW IF EXISTS v1;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 {no such table: v1}}
+do_test view-1.5 {
+  execsql {
+    CREATE VIEW v1 AS SELECT a,b FROM t1;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 2 4 5 7 8}
+do_test view-1.6 {
+  catchsql {
+    DROP TABLE t1;
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {1 {no such table: main.t1}}
+do_test view-1.7 {
+  execsql {
+    CREATE TABLE t1(x,a,b,c);
+    INSERT INTO t1 VALUES(1,2,3,4);
+    INSERT INTO t1 VALUES(4,5,6,7);
+    INSERT INTO t1 VALUES(7,8,9,10);
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {2 3 5 6 8 9}
+do_test view-1.8 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM v1 ORDER BY a;
+  }
+} {2 3 5 6 8 9}
+
+do_execsql_test view-1.10 {
+  CREATE TABLE t9(x INTEGER);
+  CREATE VIEW v9a AS SELECT x FROM t9;
+  CREATE VIEW v9b AS SELECT * FROM t9;
+  CREATE VIEW v9c(x) AS SELECT x FROM t9;
+  CREATE VIEW v9d(x) AS SELECT * FROM t9;
+} {}
+do_execsql_test view-1.11 {
+  PRAGMA table_info(v9a);
+} {0 x INTEGER 0 {} 0}
+do_execsql_test view-1.12 {
+  PRAGMA table_info(v9b);
+} {0 x INTEGER 0 {} 0}
+do_execsql_test view-1.13 {
+  PRAGMA table_info(v9c);
+} {0 x INTEGER 0 {} 0}
+do_execsql_test view-1.14 {
+  PRAGMA table_info(v9d);
+} {0 x INTEGER 0 {} 0}
+
+do_test view-2.1 {
+  execsql {
+    CREATE VIEW v2 AS SELECT * FROM t1 WHERE a>5
+  };  # No semicolon
+  execsql2 {
+    SELECT * FROM v2;
+  }
+} {x 7 a 8 b 9 c 10}
+do_test view-2.2 {
+  catchsql {
+    INSERT INTO v2 VALUES(1,2,3,4);
+  }
+} {1 {cannot modify v2 because it is a view}}
+do_test view-2.3 {
+  catchsql {
+    UPDATE v2 SET a=10 WHERE a=5;
+  }
+} {1 {cannot modify v2 because it is a view}}
+do_test view-2.4 {
+  catchsql {
+    DELETE FROM v2;
+  }
+} {1 {cannot modify v2 because it is a view}}
+do_test view-2.5 {
+  execsql {
+    INSERT INTO t1 VALUES(11,12,13,14);
+    SELECT * FROM v2 ORDER BY x;
+  }
+} {7 8 9 10 11 12 13 14}
+do_test view-2.6 {
+  execsql {
+    SELECT x FROM v2 WHERE a>10
+  }
+} {11}
+
+# Test that column name of views are generated correctly.
+#
+do_test view-3.1 {
+  execsql2 {
+    SELECT * FROM v1 LIMIT 1
+  }
+} {a 2 b 3}
+do_test view-3.2 {
+  execsql2 {
+    SELECT * FROM v2 LIMIT 1
+  }
+} {x 7 a 8 b 9 c 10}
+do_test view-3.3.1 {
+  execsql2 {
+    DROP VIEW v1;
+    CREATE VIEW v1 AS SELECT a AS 'xyz', b+c AS 'pqr', c-b FROM t1;
+    SELECT * FROM v1 LIMIT 1
+  }
+} {xyz 2 pqr 7 c-b 1}
+do_test view-3.3.2 {
+  execsql2 {
+    CREATE VIEW v1b AS SELECT t1.a, b+c, t1.c FROM t1;
+    SELECT * FROM v1b LIMIT 1
+  }
+} {a 2 b+c 7 c 4}
+do_test view-3.3.3 {
+  execsql2 {
+    CREATE VIEW v1c(x,y,z) AS SELECT a, b+c, c-b FROM t1;
+    SELECT * FROM v1c LIMIT 1;
+  }
+} {x 2 y 7 z 1}
+do_catchsql_test view-3.3.4 {
+  CREATE VIEW v1err(x,y DESC,z) AS SELECT a, b+c, c-b FROM t1;
+} {1 {syntax error after column name "y"}}
+do_catchsql_test view-3.3.5 {
+  DROP VIEW IF EXISTS v1err;
+  CREATE VIEW v1err(x,y) AS SELECT a, b+c, c-b FROM t1;
+  SELECT * FROM v1err;
+} {1 {expected 2 columns for 'v1err' but got 3}}
+do_catchsql_test view-3.3.6 {
+  DROP VIEW IF EXISTS v1err;
+  CREATE VIEW v1err(w,x,y,z) AS SELECT a, b+c, c-b FROM t1;
+  SELECT * FROM v1err;
+} {1 {expected 4 columns for 'v1err' but got 3}}
+
+ifcapable compound {
+do_test  view-3.4 {
+  execsql2 {
+    CREATE VIEW v3 AS SELECT a FROM t1 UNION SELECT b FROM t1 ORDER BY b;
+    SELECT * FROM v3 LIMIT 4;
+  }
+} {a 2 a 3 a 5 a 6}
+do_test view-3.5 {
+  execsql2 {
+    CREATE VIEW v4 AS 
+      SELECT a, b FROM t1 
+      UNION
+      SELECT b AS 'x', a AS 'y' FROM t1
+      ORDER BY x, y;
+    SELECT b FROM v4 ORDER BY b LIMIT 4;
+  }
+} {b 2 b 3 b 5 b 6}
+} ;# ifcapable compound
+
+
+do_test view-4.1 {
+  catchsql {
+    DROP VIEW t1;
+  }
+} {1 {use DROP TABLE to delete table t1}}
+do_test view-4.2 {
+  execsql {
+    SELECT 1 FROM t1 LIMIT 1;
+  }
+} 1
+do_test view-4.3 {
+  catchsql {
+    DROP TABLE v1;
+  }
+} {1 {use DROP VIEW to delete view v1}}
+do_test view-4.4 {
+  execsql {
+     SELECT 1 FROM v1 LIMIT 1;
+  }
+} {1}
+do_test view-4.5 {
+  catchsql {
+    CREATE INDEX i1v1 ON v1(xyz);
+  }
+} {1 {views may not be indexed}}
+
+do_test view-5.1 {
+  execsql {
+    CREATE TABLE t2(y,a);
+    INSERT INTO t2 VALUES(22,2);
+    INSERT INTO t2 VALUES(33,3);
+    INSERT INTO t2 VALUES(44,4);
+    INSERT INTO t2 VALUES(55,5);
+    SELECT * FROM t2;
+  }
+} {22 2 33 3 44 4 55 5}
+do_test view-5.2 {
+  execsql {
+    CREATE VIEW v5 AS
+      SELECT t1.x AS v, t2.y AS w FROM t1 JOIN t2 USING(a);
+    SELECT * FROM v5;
+  }
+} {1 22 4 55}
+
+# Verify that the view v5 gets flattened.  see sqliteFlattenSubquery().
+# This will only work if EXPLAIN is enabled.
+# Ticket #272
+#
+ifcapable {explain} {
+do_test view-5.3 {
+  lsearch [execsql {
+    EXPLAIN SELECT * FROM v5;
+  }] OpenEphemeral
+} {-1}
+do_test view-5.4 {
+  execsql {
+    SELECT * FROM v5 AS a, t2 AS b WHERE a.w=b.y;
+  }
+} {1 22 22 2 4 55 55 5}
+do_test view-5.5 {
+  lsearch [execsql {
+    EXPLAIN SELECT * FROM v5 AS a, t2 AS b WHERE a.w=b.y;
+  }] OpenEphemeral
+} {-1}
+do_test view-5.6 {
+  execsql {
+    SELECT * FROM t2 AS b, v5 AS a WHERE a.w=b.y;
+  }
+} {22 2 1 22 55 5 4 55}
+do_test view-5.7 {
+  lsearch [execsql {
+    EXPLAIN SELECT * FROM t2 AS b, v5 AS a WHERE a.w=b.y;
+  }] OpenEphemeral
+} {-1}
+do_test view-5.8 {
+  execsql {
+    SELECT * FROM t1 AS a, v5 AS b, t2 AS c WHERE a.x=b.v AND b.w=c.y;
+  }
+} {1 2 3 4 1 22 22 2 4 5 6 7 4 55 55 5}
+do_test view-5.9 {
+  lsearch [execsql {
+    EXPLAIN SELECT * FROM t1 AS a, v5 AS b, t2 AS c WHERE a.x=b.v AND b.w=c.y;
+  }] OpenEphemeral
+} {-1}
+} ;# endif explain
+
+do_test view-6.1 {
+  execsql {
+    SELECT min(x), min(a), min(b), min(c), min(a+b+c) FROM v2;
+  }
+} {7 8 9 10 27}
+do_test view-6.2 {
+  execsql {
+    SELECT max(x), max(a), max(b), max(c), max(a+b+c) FROM v2;
+  }
+} {11 12 13 14 39}
+
+do_test view-7.1 {
+  execsql {
+    CREATE TABLE test1(id integer primary key, a);
+    CREATE TABLE test2(id integer, b);
+    INSERT INTO test1 VALUES(1,2);
+    INSERT INTO test2 VALUES(1,3);
+    CREATE VIEW test AS
+      SELECT test1.id, a, b
+      FROM test1 JOIN test2 ON test2.id=test1.id;
+    SELECT * FROM test;
+  }
+} {1 2 3}
+do_test view-7.2 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM test;
+  }
+} {1 2 3}
+do_test view-7.3 {
+  execsql {
+    DROP VIEW test;
+    CREATE VIEW test AS
+      SELECT test1.id, a, b
+      FROM test1 JOIN test2 USING(id);
+    SELECT * FROM test;
+  }
+} {1 2 3}
+do_test view-7.4 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM test;
+  }
+} {1 2 3}
+do_test view-7.5 {
+  execsql {
+    DROP VIEW test;
+    CREATE VIEW test AS
+      SELECT test1.id, a, b
+      FROM test1 NATURAL JOIN test2;
+    SELECT * FROM test;
+  }
+} {1 2 3}
+do_test view-7.6 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM test;
+  }
+} {1 2 3}
+
+do_test view-8.1 {
+  execsql {
+    CREATE VIEW v6 AS SELECT pqr, xyz FROM v1;
+    SELECT * FROM v6 ORDER BY xyz;
+  }
+} {7 2 13 5 19 8 27 12}
+do_test view-8.2 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    SELECT * FROM v6 ORDER BY xyz;
+  }
+} {7 2 13 5 19 8 27 12}
+do_test view-8.3 {
+  execsql {
+    CREATE VIEW v7(a) AS SELECT pqr+xyz FROM v6;
+    SELECT * FROM v7 ORDER BY a;
+  }
+} {9 18 27 39}
+
+ifcapable subquery {
+  do_test view-8.4 {
+    execsql {
+      CREATE VIEW v8 AS SELECT max(cnt) AS mx FROM
+        (SELECT a%2 AS eo, count(*) AS cnt FROM t1 GROUP BY eo);
+      SELECT * FROM v8;
+    }
+  } 3
+  do_test view-8.5 {
+    execsql {
+      SELECT mx+10, mx*2 FROM v8;
+    }
+  } {13 6}
+  do_test view-8.6 {
+    execsql {
+      SELECT mx+10, pqr FROM v6, v8 WHERE xyz=2;
+    }
+  } {13 7}
+  do_test view-8.7 {
+    execsql {
+      SELECT mx+10, pqr FROM v6, v8 WHERE xyz>2;
+    }
+  } {13 13 13 19 13 27}
+} ;# ifcapable subquery
+
+# Tests for a bug found by Michiel de Wit involving ORDER BY in a VIEW.
+#
+do_test view-9.1 {
+  execsql {
+    INSERT INTO t2 SELECT * FROM t2 WHERE a<5;
+    INSERT INTO t2 SELECT * FROM t2 WHERE a<4;
+    INSERT INTO t2 SELECT * FROM t2 WHERE a<3;
+    SELECT DISTINCT count(*) FROM t2 GROUP BY a ORDER BY 1;
+  }
+} {1 2 4 8}
+do_test view-9.2 {
+  execsql {
+    SELECT DISTINCT count(*) FROM t2 GROUP BY a ORDER BY 1 LIMIT 3;
+  }
+} {1 2 4}
+do_test view-9.3 {
+  execsql {
+    CREATE VIEW v9 AS 
+       SELECT DISTINCT count(*) FROM t2 GROUP BY a ORDER BY 1 LIMIT 3;
+    SELECT * FROM v9;
+  }
+} {1 2 4}
+do_test view-9.4 {
+  execsql {
+    SELECT * FROM v9 ORDER BY 1 DESC;
+  }
+} {4 2 1}
+do_test view-9.5 {
+  execsql {
+    CREATE VIEW v10 AS 
+       SELECT DISTINCT a, count(*) FROM t2 GROUP BY a ORDER BY 2 LIMIT 3;
+    SELECT * FROM v10;
+  }
+} {5 1 4 2 3 4}
+do_test view-9.6 {
+  execsql {
+    SELECT * FROM v10 ORDER BY 1;
+  }
+} {3 4 4 2 5 1}
+
+# Tables with columns having peculiar quoted names used in views
+# Ticket #756.
+#
+do_test view-10.1 {
+  execsql {
+    CREATE TABLE t3("9" integer, [4] text);
+    INSERT INTO t3 VALUES(1,2);
+    CREATE VIEW v_t3_a AS SELECT a.[9] FROM t3 AS a;
+    CREATE VIEW v_t3_b AS SELECT "4" FROM t3;
+    SELECT * FROM v_t3_a;
+  }
+} {1}
+do_test view-10.2 {
+  execsql {
+    SELECT * FROM v_t3_b;
+  }
+} {2}
+
+do_test view-11.1 {
+  execsql {
+    CREATE TABLE t4(a COLLATE NOCASE);
+    INSERT INTO t4 VALUES('This');
+    INSERT INTO t4 VALUES('this');
+    INSERT INTO t4 VALUES('THIS');
+    SELECT * FROM t4 WHERE a = 'THIS';
+  }
+} {This this THIS}
+ifcapable subquery {
+  do_test view-11.2 {
+    execsql {
+      SELECT * FROM (SELECT * FROM t4) WHERE a = 'THIS';
+    }
+  } {This this THIS}
+}
+do_test view-11.3 {
+  execsql {
+    CREATE VIEW v11 AS SELECT * FROM t4;
+    SELECT * FROM v11 WHERE a = 'THIS';
+  }
+} {This this THIS}
+
+# Ticket #1270:  Do not allow parameters in view definitions.
+#
+do_test view-12.1 {
+  catchsql {
+    CREATE VIEW v12 AS SELECT a FROM t1 WHERE b=?
+  }
+} {1 {parameters are not allowed in views}}
+do_test view-12.2 {
+  catchsql {
+    CREATE VIEW v12(x) AS SELECT a FROM t1 WHERE b=?
+  }
+} {1 {parameters are not allowed in views}}
+
+ifcapable attach {
+  do_test view-13.1 {
+    forcedelete test2.db
+    catchsql {
+      ATTACH 'test2.db' AS two;
+      CREATE TABLE two.t2(x,y);
+      CREATE VIEW v13 AS SELECT y FROM two.t2;
+    }
+  } {1 {view v13 cannot reference objects in database two}}
+}
+
+# Ticket #1658
+#
+do_test view-14.1 {
+  catchsql {
+    CREATE TEMP VIEW t1 AS SELECT a,b FROM t1;
+    SELECT * FROM temp.t1;
+  }
+} {1 {view t1 is circularly defined}}
+do_test view-14.2 {
+  catchsql {
+    DROP VIEW IF EXISTS temp.t1;
+    CREATE TEMP VIEW t1(a,b) AS SELECT a,b FROM t1;
+    SELECT * FROM temp.t1;
+  }
+} {1 {view t1 is circularly defined}}
+
+# Tickets #1688, #1709
+#
+do_test view-15.1 {
+  execsql2 {
+    CREATE VIEW v15 AS SELECT a AS x, b AS y FROM t1;
+    SELECT * FROM v15 LIMIT 1;
+  }
+} {x 2 y 3}
+do_test view-15.2 {
+  execsql2 {
+    SELECT x, y FROM v15 LIMIT 1
+  }
+} {x 2 y 3}
+
+do_test view-16.1 {
+  catchsql {
+    CREATE VIEW IF NOT EXISTS v1 AS SELECT * FROM t1;
+  }
+} {0 {}}
+do_test view-16.2 {
+  execsql {
+    SELECT sql FROM sqlite_master WHERE name='v1'
+  }
+} {{CREATE VIEW v1 AS SELECT a AS 'xyz', b+c AS 'pqr', c-b FROM t1}}
+do_test view-16.3 {
+  catchsql {
+    DROP VIEW IF EXISTS nosuchview
+  }
+} {0 {}}
+
+# correct error message when attempting to drop a view that does not
+# exist.
+#
+do_test view-17.1 {
+  catchsql {
+    DROP VIEW nosuchview
+  }
+} {1 {no such view: nosuchview}}
+do_test view-17.2 {
+  catchsql {
+    DROP VIEW main.nosuchview
+  }
+} {1 {no such view: main.nosuchview}}
+
+do_test view-18.1 {
+  execsql {
+    DROP VIEW t1;
+    DROP TABLE t1;
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+
+    CREATE VIEW vv1 AS SELECT * FROM t1;
+    CREATE VIEW vv2 AS SELECT * FROM vv1;
+    CREATE VIEW vv3 AS SELECT * FROM vv2;
+    CREATE VIEW vv4 AS SELECT * FROM vv3;
+    CREATE VIEW vv5 AS SELECT * FROM vv4;
+
+    SELECT * FROM vv5;
+  }
+} {1 2 3 4 5 6}
+
+# Ticket #3308
+# Make sure "rowid" columns in a view are named correctly.
+#
+do_test view-19.1 {
+  execsql {
+    CREATE VIEW v3308a AS SELECT rowid, * FROM t1;
+  }
+  execsql2 {
+    SELECT * FROM v3308a
+  }
+} {rowid 1 a 1 b 2 c 3 rowid 2 a 4 b 5 c 6}
+do_test view-19.2 {
+  execsql {
+    CREATE VIEW v3308b AS SELECT t1.rowid, t1.a, t1.b+t1.c FROM t1;
+  }
+  execsql2 {
+    SELECT * FROM v3308b
+  }
+} {rowid 1 a 1 t1.b+t1.c 5 rowid 2 a 4 t1.b+t1.c 11}
+do_test view-19.3 {
+  execsql {
+    CREATE VIEW v3308c AS SELECT t1.oid, A, t1.b+t1.c AS x FROM t1;
+  }
+  execsql2 {
+    SELECT * FROM v3308c
+  }
+} {rowid 1 a 1 x 5 rowid 2 a 4 x 11}
+
+# Ticket #3539 had this crashing (see commit [5940]).
+do_test view-20.1 {
+  execsql {
+    DROP TABLE IF EXISTS t1;
+    DROP VIEW IF EXISTS v1;
+    CREATE TABLE t1(c1);
+    CREATE VIEW v1 AS SELECT c1 FROM (SELECT t1.c1 FROM t1);
+  }
+} {}
+
+# Ticket [d58ccbb3f1b]: Prevent Table.nRef overflow.
+db close
+sqlite3 db :memory:
+do_test view-21.1 {
+  catchsql {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(5);
+    CREATE VIEW v1 AS SELECT x*2 FROM t1;
+    CREATE VIEW v2 AS SELECT * FROM v1 UNION SELECT * FROM v1;
+    CREATE VIEW v4 AS SELECT * FROM v2 UNION SELECT * FROM v2;
+    CREATE VIEW v8 AS SELECT * FROM v4 UNION SELECT * FROM v4;
+    CREATE VIEW v16 AS SELECT * FROM v8 UNION SELECT * FROM v8;
+    CREATE VIEW v32 AS SELECT * FROM v16 UNION SELECT * FROM v16;
+    CREATE VIEW v64 AS SELECT * FROM v32 UNION SELECT * FROM v32;
+    CREATE VIEW v128 AS SELECT * FROM v64 UNION SELECT * FROM v64;
+    CREATE VIEW v256 AS SELECT * FROM v128 UNION SELECT * FROM v128;
+    CREATE VIEW v512 AS SELECT * FROM v256 UNION SELECT * FROM v256;
+    CREATE VIEW v1024 AS SELECT * FROM v512 UNION SELECT * FROM v512;
+    CREATE VIEW v2048 AS SELECT * FROM v1024 UNION SELECT * FROM v1024;
+    CREATE VIEW v4096 AS SELECT * FROM v2048 UNION SELECT * FROM v2048;
+    CREATE VIEW v8192 AS SELECT * FROM v4096 UNION SELECT * FROM v4096;
+    CREATE VIEW v16384 AS SELECT * FROM v8192 UNION SELECT * FROM v8192;
+    CREATE VIEW v32768 AS SELECT * FROM v16384 UNION SELECT * FROM v16384;
+    SELECT * FROM v32768 UNION SELECT * FROM v32768;
+  }
+} {1 {too many references to "v1": max 65535}}
+ifcapable progress {
+  do_test view-21.2 {
+    db progress 1000 {expr 1}
+    catchsql {
+      SELECT * FROM v32768;
+    }
+  } {1 interrupted}
+}
+
+db close
+sqlite3 db :memory:
+do_execsql_test view-22.1 {
+  CREATE VIEW x1 AS SELECT 123 AS '', 234 AS '', 345 AS '';
+  SELECT * FROM x1;
+} {123 234 345}
+do_test view-22.2 {
+  unset -nocomplain x
+  db eval {SELECT * FROM x1} x break
+  lsort [array names x]
+} {{} * :1 :2}
+
+do_test view-25.1 {
+  db eval {
+    CREATE TABLE t25 (x);
+    INSERT INTO t25 (x) VALUES (1);
+    ANALYZE;
+  }
+  proc authLogDelete {code arg1 arg2 arg3 arg4 args} {
+    if {$code=="SQLITE_DELETE" && [string match sqlite_stat* $arg1]} {
+      # lappend ::log [list $code $arg1 $arg2 $arg3 $arg4 $args]
+      lappend ::log [list $code $arg1 $arg2 $arg3 $arg4]
+    }
+    return SQLITE_OK
+  }
+  set log ""
+  db authorizer ::authLogDelete
+  db eval {DROP VIEW x1;}
+  set log
+} {}
+
+set res [list {SQLITE_DELETE sqlite_stat1 {} main {}}]
+ifcapable stat4 { lappend res {SQLITE_DELETE sqlite_stat4 {} main {}} }
+do_test view-25.2 {
+  set log ""
+  db eval {DROP TABLE t25;}
+  set log
+} $res
+
+#-------------------------------------------------------------------------
+do_execsql_test view-26.0 {
+  CREATE TABLE t16(a, b, c UNIQUE);
+  INSERT INTO t16 VALUES(1, 1, 1);
+  INSERT INTO t16 VALUES(2, 2, 2);
+  INSERT INTO t16 VALUES(3, 3, 3);
+  CREATE VIEW v16 AS SELECT max(a) AS mx, min(b) AS mn FROM t16 GROUP BY c;
+
+  SELECT * FROM v16 AS one, v16 AS two WHERE one.mx=1;
+} {
+  1 1 1 1 
+  1 1 2 2 
+  1 1 3 3
+}
+do_execsql_test view-26.1 {
+  WITH v17(x,y) AS (SELECT max(a), min(b) FROM t16 GROUP BY c)
+  SELECT * FROM v17 AS one, v17 AS two WHERE one.x=1;
+} {
+  1 1 1 1 
+  1 1 2 2 
+  1 1 3 3
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test view-27.0 {
+  CREATE TABLE t0(c0 TEXT, c1);
+  INSERT INTO t0(c0, c1) VALUES (-1, 0);
+  CREATE VIEW v0(c0, c1) AS SELECT t0.c0, AVG(t0.c1) FROM t0;
+}
+
+do_execsql_test view-27.1 {
+  SELECT c0, typeof(c0), c1, typeof(c1) FROM v0;
+} {
+  -1   text
+   0.0 real
+}
+
+do_execsql_test view-27.2 { SELECT c0<c1 FROM v0 } 1
+do_execsql_test view-27.3 { SELECT c1<c0 FROM v0 } 0
+do_execsql_test view-27.4 {
+  SELECT 1 FROM v0 WHERE c1<c0
+} {}
+do_execsql_test view-27.5 {
+  SELECT 1 FROM v0 WHERE c0<c1
+} {1}
+
+do_execsql_test view-27.6 { 
+  SELECT c0<c1 FROM (SELECT t0.c0 AS c0, AVG(t0.c1) AS c1 FROM t0) 
+} 1
+do_execsql_test view-27.7 { 
+  SELECT c1<c0 FROM (SELECT t0.c0 AS c0, AVG(t0.c1) AS c1 FROM t0) 
+} 0
+do_execsql_test view-27.8 {
+  SELECT 1 FROM (SELECT t0.c0 AS c0, AVG(t0.c1) AS c1 FROM t0) WHERE c1<c0
+} {}
+do_execsql_test view-27.9 {
+  SELECT 1 FROM (SELECT t0.c0 AS c0, AVG(t0.c1) AS c1 FROM t0) WHERE c0<c1
+} {1}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test view-28.0 {
+  CREATE TABLE t0(c0 TEXT);
+  CREATE VIEW v0(c0) AS SELECT t0.c0 FROM t0;
+  INSERT INTO t0(c0) VALUES ('0');
+}
+do_execsql_test view-28.1 {
+  SELECT 0 IN (c0) FROM t0;
+} {0}
+do_execsql_test view-28.2 {
+  SELECT 0 IN (c0) FROM (SELECT c0 FROM t0);
+} {0}
+
+finish_test

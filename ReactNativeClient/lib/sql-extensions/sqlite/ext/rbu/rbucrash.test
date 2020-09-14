@@ -1,0 +1,147 @@
+# 2014 October 22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbucrash
+
+db close
+forcedelete test.db-oal rbu.db
+sqlite3_shutdown
+sqlite3_config_uri 1
+reset_db
+
+# Set up a target database and an rbu update database. The target
+# db is the usual "test.db", the rbu db is "test.db2".
+#
+forcedelete test.db2
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(a), UNIQUE(b));
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+
+  ATTACH 'test.db2' AS rbu;
+  CREATE TABLE rbu.data_t1(a, b, c, rbu_control);
+  INSERT INTO data_t1 VALUES(10, 11, 12, 0);
+  INSERT INTO data_t1 VALUES(13, 14, 15, 0);
+  INSERT INTO data_t1 VALUES(4, NULL, NULL, 1);
+  INSERT INTO data_t1 VALUES(1, NULL, 100, '..x');
+}
+db_save_and_close
+
+
+# Determine the number of steps in applying the rbu update to the test
+# target database created above. Set $::rbu_num_steps accordingly
+#
+# Check that the same number of steps are required to apply the rbu
+# update using many calls to sqlite3rbu_step() on a single rbu handle
+# as required to apply it using a series of rbu handles, on each of 
+# which sqlite3rbu_step() is called once.
+#
+do_test 1.1 {
+  db_restore
+  sqlite3rbu rbu test.db test.db2
+  set nStep 0
+  while {[rbu step]=="SQLITE_OK"} { incr nStep }
+  rbu close
+} {SQLITE_DONE}
+set rbu_num_steps $nStep
+do_test 1.2 {
+  db_restore
+  set nStep 0
+  while {1} {
+    sqlite3rbu rbu test.db test.db2
+    rbu step
+    if {[rbu close]=="SQLITE_DONE"} break
+    incr nStep
+  }
+  set nStep
+} $rbu_num_steps
+
+
+# Run one or more tests using the target (test.db) and rbu (test.db2)
+# databases created above. As follows:
+#
+#   1. This process starts the rbu update and calls sqlite3rbu_step()
+#      $nPre times. Then closes the rbu update handle.
+#
+#   2. A second process resumes the rbu update and attempts to call 
+#      sqlite3rbu_step() $nStep times before closing the handle. A
+#      crash is simulated during each xSync() of file test.db2.
+#
+#   3. This process attempts to resume the rbu update from whatever
+#      state it was left in by step (2). Test that it is successful
+#      in doing so and that the final target database is as expected.
+#
+# In total (nSync+1) tests are run, where nSync is the number of times
+# xSync() is called on test.db2.
+#
+proc do_rbu_crash_test {tn nPre nStep} {
+
+  set script [subst -nocommands {
+    sqlite3rbu rbu test.db file:test.db2?vfs=crash
+    set i 0
+    while {[set i] < $nStep} {
+      if {[rbu step]!="SQLITE_OK"} break
+      incr i
+    }
+    rbu close
+  }]
+
+  set bDone 0
+  for {set iDelay 1} {$bDone==0} {incr iDelay} {
+    forcedelete test.db2 test.db2-journal test.db test.db-oal test.db-wal
+    db_restore
+
+    if {$nPre>0} {
+      sqlite3rbu rbu test.db file:test.db2
+      set i 0
+      for {set i 0} {$i < $nPre} {incr i} { 
+        if {[rbu step]!="SQLITE_OK"} break
+      }
+      rbu close
+    }
+
+    set res [
+      crashsql -file test.db2 -delay $iDelay -tclbody $script -opendb {} {}
+    ]
+
+    set bDone 1
+    if {$res == "1 {child process exited abnormally}"} {
+      set bDone 0
+    } elseif {$res != "0 {}"} {
+      error "unexected catchsql result: $res"
+    }
+
+    sqlite3rbu rbu test.db test.db2
+    while {[rbu step]=="SQLITE_OK"} {}
+    rbu close
+
+    sqlite3 db test.db
+    do_execsql_test $tn.delay=$iDelay {
+      SELECT * FROM t1;
+      PRAGMA integrity_check;
+    } {1 2 100  7 8 9  10 11 12  13 14 15  ok}
+    db close
+  }
+}
+
+for {set nPre 0} {$nPre < $rbu_num_steps} {incr nPre} {
+  for {set is 1} {$is <= ($rbu_num_steps - $nPre)} {incr is} {
+    do_rbu_crash_test 2.pre=$nPre.step=$is $nPre $is
+  }
+}
+
+finish_test

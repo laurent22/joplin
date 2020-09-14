@@ -1,0 +1,109 @@
+# 2018-09-09
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex6
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_tcl_module db
+
+proc vtab_command {src method args} {
+  switch -- $method {
+    xConnect {
+      return [db one {SELECT sql FROM sqlite_master where name = $src}]
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      set wlist 1
+
+      set iCons 0
+      set ret [list]
+      foreach cons $clist {
+        catch { array unset C }
+        array set C $cons
+
+        if {$C(usable)} {
+          set col [db one {
+            SELECT name FROM pragma_table_info($src) WHERE cid=$C(column)
+          }]
+          switch $C(op) {
+            isnull {
+              lappend wlist "$col IS NULL"
+              lappend ret omit $iCons
+            }
+            eq {
+              lappend wlist "$col = %$iCons%"
+              lappend ret omit $iCons
+            }
+          }
+        }
+        incr iCons
+      }
+      #puts "xBestIndex: $ret"
+      lappend ret idxStr [join $wlist " AND "]
+      return $ret
+    }
+
+    xFilter {
+      foreach {idxnum idxstr aa} $args {}
+      set map [list]
+      for {set iCons 0} {$iCons < [llength $aa]} {incr iCons} {
+        lappend map %$iCons% [lindex $aa $iCons]
+      }
+      set ret [list sql \
+          "SELECT rowid, * FROM $src WHERE [string map $map $idxstr]"
+      ]
+      # puts "xFilter: $ret"
+      return $ret
+    }
+
+  }
+
+  return {}
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(id int, value text);
+  CREATE TABLE t2(ctx int, id int, value text); 
+
+  INSERT INTO t1 VALUES(1,'try');
+  INSERT INTO t2 VALUES(1,1,'good');
+  INSERT INTO t2 VALUES(2,2,'evil');
+
+  CREATE VIRTUAL TABLE vt1 USING tcl(vtab_command t1);
+  CREATE VIRTUAL TABLE vt2 USING tcl(vtab_command t2);
+}
+
+do_execsql_test 1.1 {
+  select * from t2 left join t1 on t1.id=t2.ctx where t1.value is null;
+} {2 2 evil {} {}}
+
+do_execsql_test 1.2 {
+  select * from vt2 left join vt1 on vt1.id=vt2.ctx where vt1.value is null; 
+} {2 2 evil {} {}}
+
+unset -nocomplain xxx
+do_execsql_test 1.3 {
+  select * from vt2 left join vt1 on vt1.id=vt2.ctx where vt1.value is $xxx; 
+} {2 2 evil {} {}}
+
+do_execsql_test 1.4 {
+  select * from t2 left join vt1 on vt1.id=t2.ctx where vt1.value = 3
+} {}
+
+finish_test

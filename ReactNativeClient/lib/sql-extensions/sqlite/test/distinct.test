@@ -1,0 +1,297 @@
+# 2011 July 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is the DISTINCT modifier.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !compound {
+  finish_test
+  return
+}
+
+set testprefix distinct
+
+
+proc is_distinct_noop {sql} {
+  set sql1 $sql
+  set sql2 [string map {DISTINCT ""} $sql]
+
+  set program1 [list]
+  set program2 [list]
+  db eval "EXPLAIN $sql1" {
+    if {$opcode != "Noop"} { lappend program1 $opcode }
+  }
+  db eval "EXPLAIN $sql2" {
+    if {$opcode != "Noop"} { lappend program2 $opcode }
+  }
+
+  return [expr {$program1==$program2}]
+}
+
+proc do_distinct_noop_test {tn sql} {
+  uplevel [list do_test $tn [list is_distinct_noop $sql] 1]
+}
+proc do_distinct_not_noop_test {tn sql} {
+  uplevel [list do_test $tn [list is_distinct_noop $sql] 0]
+}
+
+proc do_temptables_test {tn sql temptables} {
+  uplevel [list do_test $tn [subst -novar {
+    set ret ""
+    db eval "EXPLAIN [set sql]" {
+      if {$opcode == "OpenEphemeral" || $opcode == "SorterOpen"} { 
+        if {$p5!=8 && $p5!=0} { error "p5 = $p5" }
+        if {$p5==8} {
+          lappend ret hash
+        } else {
+          lappend ret btree
+        }
+      }
+    }
+    set ret
+  }] $temptables]
+}
+
+
+#-------------------------------------------------------------------------
+# The following tests - distinct-1.* - check that the planner correctly 
+# detects cases where a UNIQUE index means that a DISTINCT clause is 
+# redundant. Currently the planner only detects such cases when there
+# is a single table in the FROM clause.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, c, d);
+  CREATE UNIQUE INDEX i1 ON t1(b, c);
+  CREATE UNIQUE INDEX i2 ON t1(d COLLATE nocase);
+
+  CREATE TABLE t2(x INTEGER PRIMARY KEY, y);
+
+  CREATE TABLE t3(c1 PRIMARY KEY NOT NULL, c2 NOT NULL);
+  CREATE INDEX i3 ON t3(c2);
+
+  CREATE TABLE t4(a, b NOT NULL, c NOT NULL, d NOT NULL);
+  CREATE UNIQUE INDEX t4i1 ON t4(b, c);
+  CREATE UNIQUE INDEX t4i2 ON t4(d COLLATE nocase);
+}
+foreach {tn noop sql} {
+
+  1.1 0   "SELECT DISTINCT b, c FROM t1"
+  1.2 1   "SELECT DISTINCT b, c FROM t4"
+  2.1 0   "SELECT DISTINCT c FROM t1 WHERE b = ?"
+  2.2 1   "SELECT DISTINCT c FROM t4 WHERE b = ?"
+  3   1   "SELECT DISTINCT rowid FROM t1"
+  4   1   "SELECT DISTINCT rowid, a FROM t1"
+  5   1   "SELECT DISTINCT x FROM t2"
+  6   1   "SELECT DISTINCT * FROM t2"
+  7   1   "SELECT DISTINCT * FROM (SELECT * FROM t2)"
+
+  8.1 0   "SELECT DISTINCT * FROM t1"
+  8.2 1   "SELECT DISTINCT * FROM t4"
+
+  8   0   "SELECT DISTINCT a, b FROM t1"
+
+  9   0   "SELECT DISTINCT c FROM t1 WHERE b IN (1,2)"
+  10  0   "SELECT DISTINCT c FROM t1"
+  11  0   "SELECT DISTINCT b FROM t1"
+
+  12.1 0   "SELECT DISTINCT a, d FROM t1"
+  12.2 0   "SELECT DISTINCT a, d FROM t4"
+  13.1 0   "SELECT DISTINCT a, b, c COLLATE nocase FROM t1"
+  13.2 0   "SELECT DISTINCT a, b, c COLLATE nocase FROM t4"
+  14.1 0   "SELECT DISTINCT a, d COLLATE nocase FROM t1"
+  14.2 1   "SELECT DISTINCT a, d COLLATE nocase FROM t4"
+
+  15   0   "SELECT DISTINCT a, d COLLATE binary FROM t1"
+  16.1 0   "SELECT DISTINCT a, b, c COLLATE binary FROM t1"
+  16.2 1   "SELECT DISTINCT a, b, c COLLATE binary FROM t4"
+
+  16  0   "SELECT DISTINCT t1.rowid FROM t1, t2"
+  17  0   { /* Technically, it would be possible to detect that DISTINCT
+            ** is a no-op in cases like the following. But SQLite does not
+            ** do so. */
+            SELECT DISTINCT t1.rowid FROM t1, t2 WHERE t1.rowid=t2.rowid }
+
+  18  1   "SELECT DISTINCT c1, c2 FROM t3"
+  19  1   "SELECT DISTINCT c1 FROM t3"
+  20  1   "SELECT DISTINCT * FROM t3"
+  21  0   "SELECT DISTINCT c2 FROM t3"
+
+  22  0   "SELECT DISTINCT * FROM (SELECT 1, 2, 3 UNION SELECT 4, 5, 6)"
+  23  1   "SELECT DISTINCT rowid FROM (SELECT 1, 2, 3 UNION SELECT 4, 5, 6)"
+
+  24  0   "SELECT DISTINCT rowid/2 FROM t1"
+  25  1   "SELECT DISTINCT rowid/2, rowid FROM t1"
+  26.1  0   "SELECT DISTINCT rowid/2, b FROM t1 WHERE c = ?"
+  26.2  1   "SELECT DISTINCT rowid/2, b FROM t4 WHERE c = ?"
+} {
+  if {$noop} {
+    do_distinct_noop_test 1.$tn $sql
+  } else {
+    do_distinct_not_noop_test 1.$tn $sql
+  }
+}
+
+#-------------------------------------------------------------------------
+# The following tests - distinct-2.* - test cases where an index is
+# used to deliver results in order of the DISTINCT expressions. 
+#
+drop_all_tables
+do_execsql_test 2.0 {
+  CREATE TABLE t1(a, b, c);
+
+  CREATE INDEX i1 ON t1(a, b);
+  CREATE INDEX i2 ON t1(b COLLATE nocase, c COLLATE nocase);
+
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  INSERT INTO t1 VALUES('A', 'B', 'C');
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  INSERT INTO t1 VALUES('A', 'B', 'C');
+}
+
+foreach {tn sql temptables res} {
+  1   "a, b FROM t1"                                       {}      {A B a b}
+  2   "b, a FROM t1"                                       {}      {B A b a}
+  3   "a, b, c FROM t1"                                    {hash}  {A B C a b c}
+  4   "a, b, c FROM t1 ORDER BY a, b, c"                   {btree} {A B C a b c}
+  5   "b FROM t1 WHERE a = 'a'"                            {}      {b}
+  6   "b FROM t1 ORDER BY +b COLLATE binary"          {btree hash} {B b}
+  7   "a FROM t1"                                          {}      {A a}
+  8   "b COLLATE nocase FROM t1"                           {}      {b}
+  9   "b COLLATE nocase FROM t1 ORDER BY b COLLATE nocase" {}      {b}
+} {
+  do_execsql_test    2.$tn.1 "SELECT DISTINCT $sql" $res
+  do_temptables_test 2.$tn.2 "SELECT DISTINCT $sql" $temptables
+}
+
+do_execsql_test 2.A {
+  SELECT (SELECT DISTINCT o.a FROM t1 AS i) FROM t1 AS o ORDER BY rowid;
+} {a A a A}
+
+do_test 3.0 {
+  db eval {
+    CREATE TABLE t3(a INTEGER, b INTEGER, c, UNIQUE(a,b));
+    INSERT INTO t3 VALUES
+        (null, null, 1),
+        (null, null, 2),
+        (null, 3, 4),
+        (null, 3, 5),
+        (6, null, 7),
+        (6, null, 8);
+    SELECT DISTINCT a, b FROM t3 ORDER BY +a, +b;
+  }
+} {{} {} {} 3 6 {}}
+do_test 3.1 {
+  regexp {OpenEphemeral} [db eval {
+    EXPLAIN SELECT DISTINCT a, b FROM t3 ORDER BY +a, +b;
+  }]
+} {0}
+
+#-------------------------------------------------------------------------
+# Ticket  [fccbde530a6583bf2748400919f1603d5425995c] (2014-01-08)
+# The logic that computes DISTINCT sometimes thinks that a zeroblob()
+# and a blob of all zeros are different when they should be the same. 
+#
+do_execsql_test 4.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a INTEGER);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(1);
+  CREATE TABLE t2(x);
+  INSERT INTO t2
+    SELECT DISTINCT
+      CASE a WHEN 1 THEN x'0000000000'
+             WHEN 2 THEN zeroblob(5)
+             ELSE 'xyzzy' END
+      FROM t1;
+  SELECT quote(x) FROM t2 ORDER BY 1;
+} {'xyzzy' X'0000000000'}
+
+#----------------------------------------------------------------------------
+# Ticket [c5ea805691bfc4204b1cb9e9aa0103bd48bc7d34] (2014-12-04)
+# Make sure that DISTINCT works together with ORDER BY and descending
+# indexes.
+#
+do_execsql_test 5.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(x);
+  INSERT INTO t1(x) VALUES(3),(1),(5),(2),(6),(4),(5),(1),(3);
+  CREATE INDEX t1x ON t1(x DESC);
+  SELECT DISTINCT x FROM t1 ORDER BY x ASC;
+} {1 2 3 4 5 6}
+do_execsql_test 5.2 {
+  SELECT DISTINCT x FROM t1 ORDER BY x DESC;
+} {6 5 4 3 2 1}
+do_execsql_test 5.3 {
+  SELECT DISTINCT x FROM t1 ORDER BY x;
+} {1 2 3 4 5 6}
+do_execsql_test 5.4 {
+  DROP INDEX t1x;
+  CREATE INDEX t1x ON t1(x ASC);
+  SELECT DISTINCT x FROM t1 ORDER BY x ASC;
+} {1 2 3 4 5 6}
+do_execsql_test 5.5 {
+  SELECT DISTINCT x FROM t1 ORDER BY x DESC;
+} {6 5 4 3 2 1}
+do_execsql_test 5.6 {
+  SELECT DISTINCT x FROM t1 ORDER BY x;
+} {1 2 3 4 5 6}
+
+#-------------------------------------------------------------------------
+# 2015-11-23.  Problem discovered by Kostya Serebryany using libFuzzer
+#
+db close
+sqlite3 db :memory:
+do_execsql_test 6.1 {
+  CREATE TABLE jjj(x);
+  SELECT (SELECT 'mmm' UNION SELECT DISTINCT max(name) ORDER BY 1) 
+    FROM sqlite_master;
+} {jjj}
+do_execsql_test 6.2 {
+  CREATE TABLE nnn(x);
+  SELECT (SELECT 'mmm' UNION SELECT DISTINCT max(name) ORDER BY 1) 
+    FROM sqlite_master;
+} {mmm}
+
+#-------------------------------------------------------------------------
+# Ticket [9c944882]
+#
+reset_db
+do_execsql_test 7.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY);
+  CREATE TABLE t3(a INTEGER PRIMARY KEY);
+
+  CREATE TABLE t4(x);
+  CREATE TABLE t5(y);
+  
+  INSERT INTO t5 VALUES(1), (2), (2);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t3 VALUES(2);
+  INSERT INTO t4 VALUES(2);
+}
+
+do_execsql_test 7.1 {
+  WITH t2(b) AS (
+    SELECT DISTINCT y FROM t5 ORDER BY y
+  )
+  SELECT * FROM 
+    t4 CROSS JOIN t3 CROSS JOIN t1 
+  WHERE (t1.a=t3.a) AND (SELECT count(*) FROM t2 AS y WHERE t4.x!='abc')=t1.a
+} {2 2 2}
+
+finish_test

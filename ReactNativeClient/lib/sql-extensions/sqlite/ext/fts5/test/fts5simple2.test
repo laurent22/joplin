@@ -1,0 +1,372 @@
+# 2015 September 05
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5simple2
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  INSERT INTO t1 VALUES('a b c');
+}
+do_execsql_test 1.1 {
+  SELECT rowid FROM t1('c a b')
+} {1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  BEGIN;
+    INSERT INTO t1 VALUES('b c d');
+    INSERT INTO t1 VALUES('b c d');
+  COMMIT;
+}
+do_execsql_test 2.1 {
+  SELECT rowid FROM t1('b c d')
+} {1 2}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  BEGIN;
+    INSERT INTO t1 VALUES('b c d');
+    INSERT INTO t1 VALUES('b c d');
+}
+do_execsql_test 3.1 {
+  SELECT rowid FROM t1('b c d'); COMMIT;
+} {1 2}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  BEGIN;
+    INSERT INTO t1 VALUES('a1 b1 c1');
+    INSERT INTO t1 VALUES('a2 b2 c2');
+    INSERT INTO t1 VALUES('a3 b3 c3');
+  COMMIT;
+}
+do_execsql_test 4.1 {
+  SELECT rowid FROM t1('b*');
+} {1 2 3}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  BEGIN;
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  INSERT INTO t1 VALUES('a2 b2 c2');
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  COMMIT;
+}
+do_execsql_test 5.1 { SELECT rowid FROM t1('b*') } {1 2 3}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=full);
+  BEGIN;
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  COMMIT;
+}
+
+do_execsql_test 6.1 { SELECT rowid FROM t1('a1') ORDER BY rowid DESC } {3 2 1}
+do_execsql_test 6.2 { SELECT rowid FROM t1('b1') ORDER BY rowid DESC } {3 2 1}
+do_execsql_test 6.3 { SELECT rowid FROM t1('c1') ORDER BY rowid DESC } {3 2 1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  BEGIN;
+  INSERT INTO t1 VALUES('a1 b1');
+  INSERT INTO t1 VALUES('a1 b2');
+  COMMIT;
+}
+do_execsql_test 7.1 { SELECT rowid FROM t1('b*') ORDER BY rowid DESC } {2 1}
+do_execsql_test 7.2 { SELECT rowid FROM t1('a1') ORDER BY rowid DESC } {2 1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  INSERT INTO t1 VALUES('a2 b2 c2');
+  INSERT INTO t1 VALUES('a1 b1 c1');
+}
+do_execsql_test 8.0.1 { SELECT rowid FROM t1('b*') } {1 2 3}
+do_execsql_test 8.0.2 { SELECT rowid FROM t1('a1') } {1 3}
+do_execsql_test 8.0.3 { SELECT rowid FROM t1('c2') } {2}
+
+do_execsql_test 8.0.4 { SELECT rowid FROM t1('b*') ORDER BY rowid DESC } {3 2 1}
+do_execsql_test 8.0.5 { SELECT rowid FROM t1('a1') ORDER BY rowid DESC } {3 1}
+do_execsql_test 8.0.8 { SELECT rowid FROM t1('c2') ORDER BY rowid DESC } {2}
+
+do_execsql_test 8.1.0 { INSERT INTO t1(t1) VALUES('optimize') }
+
+do_execsql_test 8.1.1 { SELECT rowid FROM t1('b*') } {1 2 3}
+do_execsql_test 8.1.2 { SELECT rowid FROM t1('a1') } {1 3}
+do_execsql_test 8.1.3 { SELECT rowid FROM t1('c2') } {2}
+
+do_execsql_test 8.2.1 { SELECT rowid FROM t1('b*') ORDER BY rowid DESC} {3 2 1}
+do_execsql_test 8.2.2 { SELECT rowid FROM t1('a1') ORDER BY rowid DESC} {3 1}
+do_execsql_test 8.2.3 { SELECT rowid FROM t1('c2') ORDER BY rowid DESC} {2}
+
+#--------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 9.0.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  INSERT INTO t1 VALUES('a1 b1 c1');
+  INSERT INTO t1 VALUES('a2 b2 c2');
+  INSERT INTO t1 VALUES('a1 b1 c1');
+}
+do_execsql_test 9.0.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {}
+
+reset_db
+do_execsql_test 9.1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, detail=none);
+  INSERT INTO t1 VALUES('a1 b1 c1', 'x y z');
+  INSERT INTO t1 VALUES('a2 b2 c2', '1 2 3');
+  INSERT INTO t1 VALUES('a1 b1 c1', 'x 2 z');
+}
+do_execsql_test 9.2.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {}
+
+#--------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  INSERT INTO t1 VALUES('b1');
+  INSERT INTO t1 VALUES('b1');
+  DELETE FROM t1 WHERE rowid=1;
+}
+
+do_execsql_test 10.1 {
+  SELECT rowid FROM t1('b1');
+} {2}
+
+do_execsql_test 10.2 {
+  SELECT rowid FROM t1('b1') ORDER BY rowid DESC;
+} {2}
+
+do_execsql_test 10.3 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+} {}
+
+#--------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 11.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, y, detail=none);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  WITH d(x,y) AS (
+    SELECT NULL, 'xyz' UNION ALL SELECT NULL, 'xyz' FROM d
+  )
+  INSERT INTO t1 SELECT * FROM d LIMIT 23;
+}
+
+#db eval { SELECT rowid AS r, quote(block) AS b FROM t1_data } { puts "$r: $b" }
+do_execsql_test 11.2 {
+  SELECT rowid FROM t1;
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
+
+do_execsql_test 11.3 {
+  SELECT rowid FROM t1('xyz');
+} {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
+
+do_execsql_test 11.4 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 12.0 {
+  CREATE VIRTUAL TABLE yy USING fts5(x, detail=none);
+  INSERT INTO yy VALUES('in if');
+  INSERT INTO yy VALUES('if');
+} {}
+
+do_execsql_test 12.1 {
+  SELECT rowid FROM yy('i*');
+} {1 2}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 13.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, prefix=1, detail=none);
+} {}
+foreach {rowid a} {
+  0   {f}
+  1   {u}
+  2   {k}
+  3   {a}
+  4   {a}
+  5   {u}
+  6   {u}
+  7   {u}
+  8   {f}
+  9   {f}
+  10  {a}
+  11  {p}
+  12  {f}
+  13  {u}
+  14  {a}
+  15  {a}
+} {
+  do_execsql_test 13.1.$rowid {
+    INSERT INTO t1(rowid, a) VALUES($rowid, $a);
+  }
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+fts5_aux_test_functions db
+do_execsql_test 14.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, detail=none);
+  INSERT INTO t1 VALUES('a b c d');
+} {}
+
+do_execsql_test 14.1 {
+  SELECT fts5_test_poslist(t1) FROM t1('b') ORDER BY rank;
+} {0.0.1}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 15.1 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=none);
+  BEGIN;
+    INSERT INTO t1(rowid, x) VALUES(1, 'sqlite');
+    INSERT INTO t1(rowid, x) VALUES(2, 'sqlite'); 
+  COMMIT;
+} {}
+
+do_test 15.1 {
+  execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+} {}
+
+do_test 15.2 {
+  execsql { DELETE FROM t1 }
+} {}
+
+do_execsql_test 15.3.1 {
+  SELECT rowid FROM t1('sqlite');
+} {}
+
+do_execsql_test 15.3.2 {
+  SELECT rowid FROM t1('sqlite') ORDER BY rowid DESC;
+} {}
+
+do_test 15.4 {
+  execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+} {}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 16.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, detail=none);
+  BEGIN;
+    INSERT INTO t2(rowid, x) VALUES(1, 'a b c');
+    INSERT INTO t2(rowid, x) VALUES(456, 'a b c');
+    INSERT INTO t2(rowid, x) VALUES(1000, 'a b c');
+  COMMIT;
+  UPDATE t2 SET x=x;
+}
+
+do_execsql_test 16.1 {
+  INSERT INTO t2(t2) VALUES('integrity-check');
+} {}
+
+do_execsql_test 16.2 {
+  SELECT rowid FROM t2('b') ORDER BY rowid DESC
+} {1000 456 1}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 16.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, detail=none);
+  BEGIN;
+    INSERT INTO t2(rowid, x) VALUES(1, 'a b c');
+    INSERT INTO t2(rowid, x) VALUES(456, 'a b c');
+    INSERT INTO t2(rowid, x) VALUES(1000, 'a b c');
+  COMMIT;
+  UPDATE t2 SET x=x;
+  DELETE FROM t2;
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 17.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, y);
+  BEGIN;
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+  COMMIT;
+}
+do_execsql_test 17.1 { SELECT * FROM t2('y:a*') WHERE rowid BETWEEN 10 AND 20 }
+do_execsql_test 17.2 {
+  BEGIN;
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+    SELECT * FROM t2('y:a*') WHERE rowid BETWEEN 10 AND 20 ;
+}
+do_execsql_test 17.3 {
+  COMMIT
+}
+
+reset_db
+do_execsql_test 17.4 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, y);
+  BEGIN;
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+    INSERT INTO t2 VALUES('a aa aaa', 'b bb bbb');
+    SELECT * FROM t2('y:a*') WHERE rowid>66;
+}
+do_execsql_test 17.5 { SELECT * FROM t2('x:b* OR y:a*') }
+do_execsql_test 17.5 { COMMIT ; SELECT * FROM t2('x:b* OR y:a*') }
+do_execsql_test 17.6 { 
+  SELECT * FROM t2('x:b* OR y:a*') WHERE rowid>55
+}
+
+#db eval {SELECT rowid, fts5_decode_none(rowid, block) aS r FROM t2_data} {puts $r}
+  
+finish_test

@@ -1,0 +1,65 @@
+# 2014 November 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix backup5
+
+forcedelete test2.db
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a, b);
+  INSERT INTO t2 VALUES(1, 1);
+  INSERT INTO t2 VALUES(2, 2);
+  INSERT INTO t2 VALUES(3, 3);
+}
+
+do_test 1.1 {
+  forcecopy test.db test.db2
+  db eval {
+    DROP TABLE t2;
+    INSERT INTO t1 VALUES(zeroblob(1000), zeroblob(1000));
+    INSERT INTO t1 VALUES(randomblob(1000), randomblob(1000));
+  }
+} {}
+
+do_test 1.2 {
+  sqlite3 db2 test.db2
+  set stmt [sqlite3_prepare_v2 db2 "SELECT * FROM t2" -1 dummy]
+  sqlite3_step $stmt
+} {SQLITE_ROW}
+
+do_test 1.3 {
+  list [catch { sqlite3_backup B db2 main db main } msg] $msg
+} {1 {sqlite3_backup_init() failed}}
+
+do_test 1.4 {
+  sqlite3_errmsg db2
+} {destination database is in use}
+
+do_test 1.5 {
+  sqlite3_reset $stmt
+  sqlite3_backup B db2 main db main
+  B step 200
+  B finish
+} {SQLITE_OK}
+
+do_test 1.6 {
+  list [sqlite3_step $stmt] [sqlite3_finalize $stmt]
+} {SQLITE_ERROR SQLITE_ERROR}
+
+do_test 1.7 {
+  sqlite3_errmsg db2
+} {no such table: t2}
+
+finish_test

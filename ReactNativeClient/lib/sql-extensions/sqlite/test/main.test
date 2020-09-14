@@ -1,0 +1,538 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is exercising the code in main.c.
+#
+# $Id: main.test,v 1.32 2009/04/28 04:51:29 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Only do the next group of tests if the sqlite3_complete API is available
+#
+ifcapable {complete} {
+
+# Tests of the sqlite_complete() function.
+#
+do_test main-1.1 {
+  db complete {This is a test}
+} {0}
+do_test main-1.2.0 {
+  db complete {
+  }
+} {0}
+do_test main-1.2.1 {
+  db complete {}
+} {0}
+do_test main-1.3.0 {
+  db complete {
+     -- a comment ;
+  }
+} {0}
+do_test main-1.3.1 {
+  db complete {
+     /* a comment ; */
+  }
+} {0}
+do_test main-1.4.0 {
+  db complete {
+     -- a comment ;
+     ;
+  }
+} {1}
+do_test main-1.4.1 {
+  db complete {
+     /* a comment ; */
+     ;
+  }
+} {1}
+do_test main-1.4.2 {
+  db complete {
+     /* a comment ; */ ;
+  }
+} {1}
+do_test main-1.5 {
+  db complete {DROP TABLE 'xyz;}
+} {0}
+do_test main-1.6 {
+  db complete {DROP TABLE 'xyz';}
+} {1}
+do_test main-1.7 {
+  db complete {DROP TABLE "xyz;}
+} {0}
+do_test main-1.8 {
+  db complete {DROP TABLE "xyz';}
+} {0}
+do_test main-1.9 {
+  db complete {DROP TABLE "xyz";}
+} {1}
+do_test main-1.10 {
+  db complete {DROP TABLE xyz; hi}
+} {0}
+do_test main-1.11 {
+  db complete {DROP TABLE xyz; }
+} {1}
+do_test main-1.12 {
+  db complete {DROP TABLE xyz; -- hi }
+} {1}
+do_test main-1.13 {
+  db complete {DROP TABLE xyz; -- hi
+  }
+} {1}
+do_test main-1.14 {
+  db complete {SELECT a-b FROM t1; }
+} {1}
+do_test main-1.15 {
+  db complete {SELECT a/e FROM t1 }
+} {0}
+do_test main-1.16 {
+  db complete {
+    CREATE TABLE abc(x,y);
+  }
+} {1}
+ifcapable {trigger} {
+  do_test main-1.17 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE abc BEGIN UPDATE pqr;
+    }
+  } {0}
+  do_test main-1.17.2 {
+    db complete {
+      EXPLAIN CREATE TRIGGER xyz AFTER DELETE abc BEGIN UPDATE pqr;
+    }
+  } {0}
+  do_test main-1.17.3 {
+    db complete {
+      EXPLAIN QUERY PLAN CREATE TRIGGER xyz AFTER DELETE abc BEGIN UPDATE pqr;
+    }
+  } {0}
+  do_test main-1.18 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE abc BEGIN UPDATE pqr; END;
+    }
+  } {1}
+  do_test main-1.19 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE abc BEGIN
+         UPDATE pqr;
+         unknown command;
+    }
+  } {0}
+  do_test main-1.20 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE backend BEGIN
+         UPDATE pqr;
+    }
+  } {0}
+  do_test main-1.21 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE end BEGIN
+         SELECT a, b FROM end;
+    }
+  } {0}
+  do_test main-1.22 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE end BEGIN
+         SELECT a, b FROM end;
+      END;
+    }
+  } {1}
+  do_test main-1.23 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE end BEGIN
+         SELECT a, b FROM end;
+      END;
+      SELECT a, b FROM end;
+    }
+  } {1}
+  do_test main-1.24 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE [;end;] BEGIN
+         UPDATE pqr;
+    }
+  } {0}
+  do_test main-1.25 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE backend BEGIN
+         UPDATE cantor SET a=[;end;];;;
+    }
+  } {0}
+  do_test main-1.26 {
+    db complete {
+      CREATE -- a comment
+      TRIGGER exy AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+    }
+  } {0}
+  do_test main-1.27.1 {
+    db complete {
+      CREATE -- a comment
+      TRIGGERX tangentxx AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+    }
+  } {1}
+  do_test main-1.27.2 {
+    db complete {
+      CREATE/**/TRIGGER tiger00 AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+    }
+  } {0}
+  ifcapable {explain} {
+    do_test main-1.27.3 {
+      db complete {
+        /* */ EXPLAIN -- A comment
+        CREATE/**/TRIGGER ezxyz12 AFTER DELETE backend BEGIN
+           UPDATE pqr SET a=5;
+      }
+    } {0}
+  }
+  do_test main-1.27.4 {
+    db complete {
+      BOGUS token
+      CREATE  TRIGGER xyz AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+    }
+  } {1}
+  ifcapable {explain} {
+    do_test main-1.27.5 {
+      db complete {
+        EXPLAIN 
+        CREATE TEMP TRIGGER xyz AFTER DELETE backend BEGIN
+           UPDATE pqr SET a=5;
+      }
+    } {0}
+  }
+  do_test main-1.28 {
+    db complete {
+      CREATE TEMPORARY TRIGGER xyz AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+    }
+  } {0}
+  do_test main-1.29 {
+    db complete {
+      CREATE TRIGGER xyz AFTER DELETE backend BEGIN
+         UPDATE pqr SET a=5;
+         EXPLAIN select * from xyz;
+    }
+  } {0}
+
+} ;# end ifcapable {complete}
+
+}
+do_test main-1.30 {
+  db complete {
+     CREATE TABLE /* In comment ; */
+  }
+} {0}
+do_test main-1.31 {
+  db complete {
+     CREATE TABLE /* In comment ; */ hi;
+  }
+} {1}
+do_test main-1.31 {
+  db complete {
+     CREATE TABLE /* In comment ; */;
+  }
+} {1}
+do_test main-1.32 {
+  db complete {
+     stuff;
+     /*
+       CREATE TABLE
+       multiple lines
+       of text
+     */
+  }
+} {1}
+do_test main-1.33 {
+  db complete {
+     /*
+       CREATE TABLE
+       multiple lines
+       of text;
+  }
+} {0}
+do_test main-1.34 {
+  db complete {
+     /*
+       CREATE TABLE
+       multiple lines "*/
+       of text;
+  }
+} {1}
+do_test main-1.35 {
+  db complete {hi /**/ there;}
+} {1}
+do_test main-1.36 {
+  db complete {hi there/***/;}
+} {1}
+do_test main-1.37 {
+  db complete {hi there/**}
+} {0}
+do_test main-1.38 {
+  db complete {hi [there}
+} {0}
+
+ifcapable {trigger} {
+  # Characters less than \040 can never be part of an identifier.
+  # Characters greater than \u177 are always identifier characters.
+  do_test main-1.100 {
+    db complete "create \037\036\035\034trigger\001\002;"
+  } {1}
+  do_test main-1.101 {
+    db complete "create trigger\200;"
+  } {1}
+  do_test main-1.102 {
+    db complete "create \200trigger;"
+  } {1}
+}
+
+
+# Try to open a database with a corrupt database file.
+#
+if {[permutation] == ""} {
+  do_test main-2.0 {
+    catch {db close}
+    forcedelete test.db
+    set fd [open test.db w]
+    puts $fd hi!
+    close $fd
+    set v [catch {sqlite3 db test.db} msg]
+    if {$v} {lappend v $msg} {lappend v {}}
+  } {0 {}}
+}
+
+# Here are some tests for tokenize.c.  
+#
+do_test main-3.1 {
+  catch {db close}
+  foreach f [glob -nocomplain testdb/*] {forcedelete $f}
+  forcedelete testdb
+  sqlite3 db testdb
+  set v [catch {execsql {SELECT * from T1 where x!!5}} msg]
+  lappend v $msg
+} {1 {unrecognized token: "!"}}
+do_test main-3.2 {
+  catch {db close}
+  foreach f [glob -nocomplain testdb/*] {forcedelete $f}
+  forcedelete testdb
+  sqlite3 db testdb
+  set v [catch {execsql {SELECT * from T1 where ^x}} msg]
+  lappend v $msg
+} {1 {unrecognized token: "^"}}
+do_test main-3.2.2 {
+  catchsql {select 'abc}
+} {1 {unrecognized token: "'abc"}}
+do_test main-3.2.3 {
+  catchsql {select "abc}
+} {1 {unrecognized token: ""abc"}}
+do_test main-3.2.4 {
+  catchsql {select [abc}
+} {1 {unrecognized token: "[abc"}}
+do_test main-3.2.5 {
+  catchsql {select x'4869}
+} {1 {unrecognized token: "x'4869"}}
+do_test main-3.2.6 {
+  catchsql {select x'4869'}
+} {0 Hi}
+do_test main-3.2.7 {
+  catchsql {select x'48695'}
+} {1 {unrecognized token: "x'48695'"}}
+do_test main-3.2.8 {
+  catchsql {select x'486x'}
+} {1 {unrecognized token: "x'486x'"}}
+do_test main-3.2.9 {
+  catchsql {select $abc(}
+} {1 {unrecognized token: "$abc("}}
+do_test main-3.2.10 {
+  catchsql {select $abc(x}
+} {1 {unrecognized token: "$abc(x"}}
+set xyz 123
+do_test main-3.2.11 {
+  catchsql {select $::xyz}
+} {0 123}
+namespace eval ::testnamespace {
+  variable xyz 321
+}
+do_test main-3.2.12 {
+  catchsql {select $testnamespace::xyz}
+} {0 321}
+do_test main-3.2.13 {
+  catchsql {select $(abc)}
+} {1 {unrecognized token: "$"}}
+do_test main-3.2.14 {
+  set hi\u1234x 987
+  db eval "select \$hi\u1234x"
+} {987}
+do_test main-3.2.15 {
+  catchsql "select 456\u1234"
+} [list 1 "unrecognized token: \"456\u1234\""]
+do_test main-3.2.16 {
+  catchsql {select cast(3.14e+4 AS integer)}
+} {0 31400}
+do_test main-3.2.17 {
+  catchsql {select cast(3.14e+04 AS integer)}
+} {0 31400}
+do_test main-3.2.18 {
+  catchsql {select cast(3.14e+004 AS integer)}
+} {0 31400}
+do_test main-3.2.19 {
+  catchsql {select cast(3.14e4 AS integer)}
+} {0 31400}
+do_test main-3.2.20 {
+  catchsql {select cast(3.14e04 AS integer)}
+} {0 31400}
+do_test main-3.2.21 {
+  catchsql {select cast(3.14e004 AS integer)}
+} {0 31400}
+do_test main-3.2.16 {
+  catchsql {select cast(3.14E+4 AS integer)}
+} {0 31400}
+do_test main-3.2.17 {
+  catchsql {select cast(3.14E+04 AS integer)}
+} {0 31400}
+do_test main-3.2.18 {
+  catchsql {select cast(3.14E+004 AS integer)}
+} {0 31400}
+do_test main-3.2.19 {
+  catchsql {select cast(3.14E4 AS integer)}
+} {0 31400}
+do_test main-3.2.20 {
+  catchsql {select cast(3.14E04 AS integer)}
+} {0 31400}
+do_test main-3.2.21 {
+  catchsql {select cast(3.14E004 AS integer)}
+} {0 31400}
+do_test main-3.2.22 {
+  catchsql {select cast(3.14e-4 * 1e8 AS integer)}
+} {0 31400}
+do_test main-3.2.23 {
+  catchsql {select cast(3.14E-04 * 1E08 AS integer)}
+} {0 31400}
+do_test main-3.2.24 {
+  catchsql {select cast(3.14e-004 * 01.0E+8 AS integer)}
+} {0 31400}
+do_test main-3.2.25 {
+  catchsql {select 123/*abc}
+} {0 123}
+do_test main-3.2.26 {
+  catchsql {select 123/***abc}
+} {0 123}
+do_test main-3.2.27 {
+  catchsql {select 123/*/*2}
+} {0 123}
+do_test main-3.2.28 {
+  catchsql {select 123/**/*2}
+} {0 246}
+do_test main-3.2.29 {
+  catchsql {select 123/}
+} {1 {incomplete input}}
+do_test main-3.2.30 {
+  catchsql {select 123--5}
+} {0 123}
+
+
+do_test main-3.3 {
+  catch {db close}
+  foreach f [glob -nocomplain testdb/*] {forcedelete $f}
+  forcedelete testdb
+  sqlite3 db testdb
+  execsql {
+    create table T1(X REAL);  /* C-style comments allowed */
+    insert into T1 values(0.5);
+    insert into T1 values(0.5e2);
+    insert into T1 values(0.5e-002);
+    insert into T1 values(5e-002);
+    insert into T1 values(-5.0e-2);
+    insert into T1 values(-5.1e-2);
+    insert into T1 values(0.5e2);
+    insert into T1 values(0.5E+02);
+    insert into T1 values(5E+02);
+    insert into T1 values(5.0E+03);
+    select x*10 from T1 order by x*5;
+  }
+} {-0.51 -0.5 0.05 0.5 5.0 500.0 500.0 500.0 5000.0 50000.0}
+do_test main-3.4 {
+  set v [catch {execsql {create bogus}} msg]
+  lappend v $msg
+} {1 {near "bogus": syntax error}}
+do_test main-3.5 {
+  set v [catch {execsql {create}} msg]
+  lappend v $msg
+} {1 {incomplete input}}
+do_test main-3.6 {
+  catchsql {SELECT 'abc' + #9}
+} {1 {near "#9": syntax error}}
+
+# The following test-case tests the linked list code used to manage
+# sqlite3_vfs structures.
+if {$::tcl_platform(platform)=="unix" 
+     && [info command sqlite3async_initialize]!=""} {
+  ifcapable threadsafe {
+    do_test main-4.1 {
+      sqlite3_crash_enable 1
+      sqlite3_crash_enable 0
+    
+      sqlite3async_initialize "" 1
+      sqlite3async_shutdown
+    
+      sqlite3_crash_enable 1
+      sqlite3async_initialize "" 1
+      sqlite3_crash_enable 0
+      sqlite3async_shutdown
+    
+      sqlite3_crash_enable 1
+      sqlite3async_initialize "" 1
+      sqlite3async_shutdown
+      sqlite3_crash_enable 0
+    
+      sqlite3async_initialize "" 1
+      sqlite3_crash_enable 1
+      sqlite3_crash_enable 0
+      sqlite3async_shutdown
+    
+      sqlite3async_initialize "" 1
+      sqlite3_crash_enable 1
+      sqlite3async_shutdown
+      sqlite3_crash_enable 0
+    } {}
+    do_test main-4.2 {
+      set rc [catch {sqlite3 db test.db -vfs crash} msg]
+      list $rc $msg
+    } {1 {no such vfs: crash}}
+    do_test main-4.3 {
+      set rc [catch {sqlite3 db test.db -vfs async} msg]
+      list $rc $msg
+    } {1 {no such vfs: async}}
+  }
+}
+
+# Print the version number so that it can be picked up by releasetest.tcl.
+#
+puts [db one {SELECT 'VERSION: ' ||
+                  sqlite_version() || ' ' ||
+                  sqlite_source_id();}]
+
+# Do deliberate failures if the TEST_FAILURE environment variable is set.
+# This is done to verify that failure notifications are detected by the
+# releasetest.tcl script, or possibly by other scripts involved in automatic
+# testing.
+#
+if {[info exists ::env(TEST_FAILURE)]} {
+  set res 123
+  if {$::env(TEST_FAILURE)==0} {set res 234}
+  do_test main-99.1 {
+     bad_behavior $::env(TEST_FAILURE)
+     set x 123
+  } $res
+}
+    
+finish_test

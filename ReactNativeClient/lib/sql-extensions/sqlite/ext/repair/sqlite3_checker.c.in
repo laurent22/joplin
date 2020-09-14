@@ -1,0 +1,86 @@
+/*
+** Read an SQLite database file and analyze its space utilization.  Generate
+** text on standard output.
+*/
+#define TCLSH_INIT_PROC sqlite3_checker_init_proc
+#define SQLITE_ENABLE_DBPAGE_VTAB 1
+#define SQLITE_ENABLE_JSON1 1
+#undef SQLITE_THREADSAFE
+#define SQLITE_THREADSAFE 0
+#undef SQLITE_ENABLE_COLUMN_METADATA
+#define SQLITE_OMIT_DECLTYPE 1
+#define SQLITE_OMIT_DEPRECATED 1
+#define SQLITE_OMIT_PROGRESS_CALLBACK 1
+#define SQLITE_OMIT_SHARED_CACHE 1
+#define SQLITE_DEFAULT_MEMSTATUS 0
+#define SQLITE_MAX_EXPR_DEPTH 0
+INCLUDE sqlite3.c
+INCLUDE $ROOT/src/tclsqlite.c
+INCLUDE $ROOT/ext/misc/btreeinfo.c
+INCLUDE $ROOT/ext/repair/checkindex.c
+INCLUDE $ROOT/ext/repair/checkfreelist.c
+
+/*
+** Decode a pointer to an sqlite3 object.
+*/
+int getDbPointer(Tcl_Interp *interp, const char *zA, sqlite3 **ppDb){
+  struct SqliteDb *p;
+  Tcl_CmdInfo cmdInfo;
+  if( Tcl_GetCommandInfo(interp, zA, &cmdInfo) ){
+    p = (struct SqliteDb*)cmdInfo.objClientData;
+    *ppDb = p->db;
+    return TCL_OK;
+  }else{
+    *ppDb = 0;
+    return TCL_ERROR;
+  }
+  return TCL_OK;
+}
+
+/*
+**   sqlite3_imposter db main rootpage {CREATE TABLE...}  ;# setup an imposter
+**   sqlite3_imposter db main                             ;# rm all imposters
+*/
+static int sqlite3_imposter(
+  void *clientData,
+  Tcl_Interp *interp,
+  int objc,
+  Tcl_Obj *CONST objv[]
+){
+  sqlite3 *db;
+  const char *zSchema;
+  int iRoot;
+  const char *zSql;
+
+  if( objc!=3 && objc!=5 ){
+    Tcl_WrongNumArgs(interp, 1, objv, "DB SCHEMA [ROOTPAGE SQL]");
+    return TCL_ERROR;
+  }
+  if( getDbPointer(interp, Tcl_GetString(objv[1]), &db) ) return TCL_ERROR;
+  zSchema = Tcl_GetString(objv[2]);
+  if( objc==3 ){
+    sqlite3_test_control(SQLITE_TESTCTRL_IMPOSTER, db, zSchema, 0, 1);
+  }else{
+    if( Tcl_GetIntFromObj(interp, objv[3], &iRoot) ) return TCL_ERROR;
+    zSql = Tcl_GetString(objv[4]);
+    sqlite3_test_control(SQLITE_TESTCTRL_IMPOSTER, db, zSchema, 1, iRoot);
+    sqlite3_exec(db, zSql, 0, 0, 0);
+    sqlite3_test_control(SQLITE_TESTCTRL_IMPOSTER, db, zSchema, 0, 0);
+  }
+  return TCL_OK;
+}
+
+#include <stdio.h>
+
+const char *sqlite3_checker_init_proc(Tcl_Interp *interp){
+  Tcl_CreateObjCommand(interp, "sqlite3_imposter", 
+                       (Tcl_ObjCmdProc*)sqlite3_imposter, 0, 0);
+  sqlite3_auto_extension((void(*)(void))sqlite3_btreeinfo_init);
+  sqlite3_auto_extension((void(*)(void))sqlite3_checkindex_init);
+  sqlite3_auto_extension((void(*)(void))sqlite3_checkfreelist_init);
+  return
+BEGIN_STRING
+INCLUDE $ROOT/ext/repair/sqlite3_checker.tcl
+END_STRING
+;
+}

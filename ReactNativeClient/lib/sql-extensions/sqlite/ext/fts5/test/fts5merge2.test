@@ -1,0 +1,57 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that focus on incremental merges of segments.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5merge2
+return_if_no_fts5
+
+proc dump_structure {} {
+  db eval {SELECT fts5_decode(id, block) AS t FROM t1_data WHERE id=10} {
+    foreach lvl [lrange $t 1 end] {
+      set seg [string repeat . [expr [llength $lvl]-2]]
+      puts "[lrange $lvl 0 1] $seg"
+    }
+  }
+}
+
+foreach_detail_mode $testprefix {
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x, detail=%DETAIL%);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 32);
+  INSERT INTO t1(t1, rank) VALUES('crisismerge', 2);
+  INSERT INTO t1 VALUES('1 2 3 4');
+}
+
+expr srand(0)
+db func rnddoc fts5_rnddoc
+do_test 1.1 {
+  for {set i 0} {$i < 100} {incr i} {
+    execsql {
+      BEGIN;
+        DELETE FROM t1 WHERE rowid = 1;
+        INSERT INTO t1(rowid, x) VALUES(1, '1 2 3 4');
+        INSERT INTO t1 VALUES(rnddoc(10));
+      COMMIT;
+    }
+  }
+} {}
+
+do_execsql_test 1.2 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+}
+
+finish_test

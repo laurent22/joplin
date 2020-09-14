@@ -1,0 +1,299 @@
+# 2010 September 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests to verify that the "testable statements" in 
+# the lang_reindex.html document are correct.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+proc do_reindex_tests {args} {
+  uplevel do_select_tests $args
+}
+
+do_execsql_test e_reindex-0.0 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+  CREATE INDEX i2 ON t1(b, a);
+} {}
+
+#  -- syntax diagram reindex-stmt
+#
+do_reindex_tests e_reindex-0.1 {
+  1   "REINDEX"           {}
+  2   "REINDEX nocase"    {}
+  3   "REINDEX binary"    {}
+  4   "REINDEX t1"        {}
+  5   "REINDEX main.t1"   {}
+  6   "REINDEX i1"        {}
+  7   "REINDEX main.i1"   {}
+}
+
+# EVIDENCE-OF: R-52173-44778 The REINDEX command is used to delete and
+# recreate indices from scratch.
+#
+#    Test this by corrupting some database indexes, running REINDEX, and
+#    observing that the corruption is gone.
+#
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test e_reindex-1.1 {
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+
+  CREATE TABLE saved(a,b,c,d,e);
+  INSERT INTO saved SELECT * FROM sqlite_master WHERE type = 'index';
+  PRAGMA writable_schema = 1;
+  DELETE FROM sqlite_master WHERE type = 'index';
+} {}
+
+db close
+sqlite3 db test.db
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test e_reindex-1.2 {
+  DELETE FROM t1 WHERE a = 3;
+  INSERT INTO t1 VALUES(7, 8);
+  INSERT INTO t1 VALUES(9, 10);
+  PRAGMA writable_schema = 1;
+  INSERT INTO sqlite_master SELECT * FROM saved;
+  DROP TABLE saved;
+} {}
+
+db close
+sqlite3 db test.db
+do_execsql_test e_reindex-1.3 {
+  PRAGMA integrity_check;
+} [list \
+  {row 3 missing from index i2} \
+  {row 3 missing from index i1} \
+  {row 4 missing from index i2} \
+  {row 4 missing from index i1} \
+  {wrong # of entries in index i2} \
+  {wrong # of entries in index i1}
+]
+
+do_execsql_test e_reindex-1.4 {
+  REINDEX;
+  PRAGMA integrity_check;
+} {ok}
+
+#-------------------------------------------------------------------------
+# The remaining tests in this file focus on testing that the REINDEX 
+# command reindexes the correct subset of the indexes in the database.
+# They all use the following dataset.
+#
+db close
+forcedelete test.db2
+forcedelete test.db
+sqlite3 db test.db
+
+proc sort_by_length {lhs rhs} {
+  set res [expr {[string length $lhs] - [string length $rhs]}]
+  if {$res!=0} {return $res}
+  return [string compare $lhs $rhs]
+}
+array set V {one 1 two 2 three 3 four 4 five 5 six 6 seven 7 eight 8}
+proc sort_by_value {lhs rhs} {
+  global V
+  set res [expr {$V($lhs) - $V($rhs)}]
+  if {$res!=0} {return $res}
+  return [string compare $lhs $rhs]
+}
+
+db collate collA sort_by_length
+db collate collB sort_by_value
+
+set BY(length) {one six two five four eight seven three}
+set BY(value)  {one two three four five six seven eight}
+
+do_execsql_test e_reindex-2.0 {
+  ATTACH 'test.db2' AS aux;
+
+  CREATE TABLE t1(x);
+  CREATE INDEX i1_a ON t1(x COLLATE collA);
+  CREATE INDEX i1_b ON t1(x COLLATE collB);
+  INSERT INTO t1 VALUES('one');
+  INSERT INTO t1 VALUES('two');
+  INSERT INTO t1 VALUES('three');
+  INSERT INTO t1 VALUES('four');
+  INSERT INTO t1 VALUES('five');
+  INSERT INTO t1 VALUES('six');
+  INSERT INTO t1 VALUES('seven');
+  INSERT INTO t1 VALUES('eight');
+
+  CREATE TABLE t2(x);
+  CREATE INDEX i2_a ON t2(x COLLATE collA);
+  CREATE INDEX i2_b ON t2(x COLLATE collB);
+  INSERT INTO t2 SELECT x FROM t1;
+
+  CREATE TABLE aux.t1(x);
+  CREATE INDEX aux.i1_a ON t1(x COLLATE collA);
+  CREATE INDEX aux.i1_b ON t1(x COLLATE collB);
+  INSERT INTO aux.t1 SELECT x FROM main.t1;
+
+} {}
+
+proc test_index {tn tbl collation expected} {
+  set sql "SELECT x FROM $tbl ORDER BY x COLLATE $collation"
+  uplevel do_execsql_test e_reindex-2.$tn [list $sql] [list $::BY($expected)]
+}
+
+proc set_collations {a b} {
+  db collate collA "sort_by_$a"
+  db collate collB "sort_by_$b"
+}
+
+test_index 1.1   t1     collA   length
+test_index 1.2   t1     collB   value
+test_index 1.3   t2     collA   length
+test_index 1.4   t2     collB   value
+test_index 1.5   aux.t1 collA   length
+test_index 1.6   aux.t1 collB   value
+
+
+# EVIDENCE-OF: R-47362-07898 If the REINDEX keyword is not followed by a
+# collation-sequence or database object identifier, then all indices in
+# all attached databases are rebuilt.
+#
+set_collations value length
+do_execsql_test e_reindex-2.2.1 "REINDEX" {}
+test_index 2.2   t1     collA   value
+test_index 2.3   t1     collB   length
+test_index 2.4   t2     collA   value
+test_index 2.5   t2     collB   length
+test_index 2.6   aux.t1 collA   value
+test_index 2.7   aux.t1 collB   length
+
+# EVIDENCE-OF: R-45878-07697 If the REINDEX keyword is followed by a
+# collation-sequence name, then all indices in all attached databases
+# that use the named collation sequences are recreated.
+#
+set_collations length value
+do_execsql_test e_reindex-2.3.1 "REINDEX collA" {}
+test_index 3.2   t1     collA   length
+test_index 3.3   t1     collB   length
+test_index 3.4   t2     collA   length
+test_index 3.5   t2     collB   length
+test_index 3.6   aux.t1 collA   length
+test_index 3.7   aux.t1 collB   length
+do_execsql_test e_reindex-2.3.8 "REINDEX collB" {}
+test_index 3.9   t1     collA   length
+test_index 3.10  t1     collB   value
+test_index 3.11  t2     collA   length
+test_index 3.12  t2     collB   value
+test_index 3.13  aux.t1 collA   length
+test_index 3.14  aux.t1 collB   value
+
+# EVIDENCE-OF: R-49616-30196 Or, if the argument attached to the REINDEX
+# identifies a specific database table, then all indices attached to the
+# database table are rebuilt.
+#
+set_collations value length
+do_execsql_test e_reindex-2.4.1 "REINDEX t1" {}
+test_index 4.2   t1     collA   value
+test_index 4.3   t1     collB   length
+test_index 4.4   t2     collA   length
+test_index 4.5   t2     collB   value
+test_index 4.6   aux.t1 collA   length
+test_index 4.7   aux.t1 collB   value
+do_execsql_test e_reindex-2.4.8 "REINDEX aux.t1" {}
+test_index 4.9   t1     collA   value
+test_index 4.10  t1     collB   length
+test_index 4.11  t2     collA   length
+test_index 4.12  t2     collB   value
+test_index 4.13  aux.t1 collA   value
+test_index 4.14  aux.t1 collB   length
+do_execsql_test e_reindex-2.4.15 "REINDEX t2" {}
+test_index 4.16  t1     collA   value
+test_index 4.17  t1     collB   length
+test_index 4.18  t2     collA   value
+test_index 4.19  t2     collB   length
+test_index 4.20  aux.t1 collA   value
+test_index 4.21  aux.t1 collB   length
+
+# EVIDENCE-OF: R-58823-28748 If it identifies a specific database index,
+# then just that index is recreated.
+#
+set_collations length value
+do_execsql_test e_reindex-2.5.1 "REINDEX i1_a" {}
+test_index 5.2   t1     collA   length
+test_index 5.3   t1     collB   length
+test_index 5.4   t2     collA   value
+test_index 5.5   t2     collB   length
+test_index 5.6   aux.t1 collA   value
+test_index 5.7   aux.t1 collB   length
+do_execsql_test e_reindex-2.5.8 "REINDEX i2_b" {}
+test_index 5.9   t1     collA   length
+test_index 5.10  t1     collB   length
+test_index 5.11  t2     collA   value
+test_index 5.12  t2     collB   value
+test_index 5.13  aux.t1 collA   value
+test_index 5.14  aux.t1 collB   length
+do_execsql_test e_reindex-2.5.15 "REINDEX aux.i1_b" {}
+test_index 5.16  t1     collA   length
+test_index 5.17  t1     collB   length
+test_index 5.18  t2     collA   value
+test_index 5.19  t2     collB   value
+test_index 5.20  aux.t1 collA   value
+test_index 5.21  aux.t1 collB   value
+do_execsql_test e_reindex-2.5.22 "REINDEX i1_b" {}
+test_index 5.23  t1     collA   length
+test_index 5.24  t1     collB   value
+test_index 5.25  t2     collA   value
+test_index 5.26  t2     collB   value
+test_index 5.27  aux.t1 collA   value
+test_index 5.28  aux.t1 collB   value
+do_execsql_test e_reindex-2.5.29 "REINDEX i2_a" {}
+test_index 5.30  t1     collA   length
+test_index 5.31  t1     collB   value
+test_index 5.32  t2     collA   length
+test_index 5.33  t2     collB   value
+test_index 5.34  aux.t1 collA   value
+test_index 5.35  aux.t1 collB   value
+do_execsql_test e_reindex-2.5.36 "REINDEX aux.i1_a" {}
+test_index 5.37  t1     collA   length
+test_index 5.38  t1     collB   value
+test_index 5.39  t2     collA   length
+test_index 5.40  t2     collB   value
+test_index 5.41  aux.t1 collA   length
+test_index 5.42  aux.t1 collB   value
+
+# EVIDENCE-OF: R-35892-30289 For a command of the form "REINDEX name", a
+# match against collation-name takes precedence over a match against
+# index-name or table-name.
+#
+set_collations value length
+do_execsql_test e_reindex-2.6.0 {
+  CREATE TABLE collA(x);
+  CREATE INDEX icolla_a ON collA(x COLLATE collA);
+  CREATE INDEX icolla_b ON collA(x COLLATE collB);
+
+  INSERT INTO collA SELECT x FROM t1;
+} {}
+
+test_index 6.1   collA  collA   value
+test_index 6.2   collA  collB   length
+
+set_collations length value
+do_execsql_test e_reindex-2.6.3 "REINDEX collA" {}
+test_index 6.4   collA  collA   length
+test_index 6.5   collA  collB   length
+do_execsql_test e_reindex-2.6.3 "REINDEX main.collA" {}
+test_index 6.4   collA  collA   length
+test_index 6.5   collA  collB   value
+
+set_collations value length
+do_execsql_test e_reindex-2.6.6 "REINDEX main.collA" {}
+test_index 6.7   collA  collA   value
+test_index 6.8   collA  collB   length
+
+finish_test

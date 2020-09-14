@@ -1,0 +1,67 @@
+# 2014 Dec 20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5rebuild
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE f1 USING fts5(a, b);
+  INSERT INTO f1(a, b) VALUES('one',   'o n e');
+  INSERT INTO f1(a, b) VALUES('two',   't w o');
+  INSERT INTO f1(a, b) VALUES('three', 't h r e e');
+}
+
+do_execsql_test 1.2 {
+  INSERT INTO f1(f1) VALUES('integrity-check');
+} {}
+
+do_execsql_test 1.3 {
+  INSERT INTO f1(f1) VALUES('rebuild');
+} {}
+
+do_execsql_test 1.4 {
+  INSERT INTO f1(f1) VALUES('integrity-check');
+} {}
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 1.5 {
+  DELETE FROM f1_data;
+} {}
+
+do_catchsql_test 1.6 {
+  INSERT INTO f1(f1) VALUES('integrity-check');
+} {1 {database disk image is malformed}}
+
+do_execsql_test 1.7 {
+  INSERT INTO f1(f1) VALUES('rebuild');
+  INSERT INTO f1(f1) VALUES('integrity-check');
+} {}
+
+
+#-------------------------------------------------------------------------
+# Check that 'rebuild' may not be used with a contentless table.
+#
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE nc USING fts5(doc, content=);
+}
+
+do_catchsql_test 2.2 {
+  INSERT INTO nc(nc) VALUES('rebuild');
+} {1 {'rebuild' may not be used with a contentless fts5 table}}
+finish_test

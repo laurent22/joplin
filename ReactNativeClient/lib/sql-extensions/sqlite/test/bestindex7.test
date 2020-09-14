@@ -1,0 +1,79 @@
+# 2020-01-29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex7
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_tcl_module db
+
+proc vtab_command {src method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE xxx(a)"
+    }
+
+    xBestIndex {
+      set clist [lindex $args 0]
+      set iCons 0
+      set ret [list]
+      foreach cons $clist {
+        catch { array unset C }
+        array set C $cons
+        if {$C(usable)} {
+          lappend ret use $iCons
+        }
+        incr iCons
+      }
+      return $ret
+    }
+
+    xFilter {
+      return [list sql "SELECT rowid, x FROM $src"]
+    }
+
+  }
+
+  return {}
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(0), (2);
+  CREATE VIRTUAL TABLE vt1 USING tcl(vtab_command t1);
+}
+
+do_execsql_test 1.1 { select * from vt1 } {0 2}
+do_execsql_test 1.2 { select * from vt1 WHERE a=0 } {0}
+do_execsql_test 1.3 { select * from vt1 WHERE a=1 } {}
+do_execsql_test 1.4 { select * from vt1 WHERE a=1 OR a=0} {0}
+
+do_execsql_test 1.5 {
+  UPDATE t1 SET x=NULL WHERE x=2;
+}
+
+do_execsql_test 1.6 { select * from vt1 } {0 {}}
+do_execsql_test 1.7 { select * from vt1 WHERE a=0 } {0}
+do_execsql_test 1.8 { select * from vt1 WHERE a=1 } {}
+do_execsql_test 1.9 { select * from vt1 WHERE a=1 OR a=0} {0}
+do_execsql_test 1.10 { select * from vt1 WHERE a IN (2) } {}
+do_execsql_test 1.10 { select * from vt1 WHERE a IN (0,1,2,3) } {0}
+do_execsql_test 1.11 { select * from vt1 WHERE a IN (0, NULL) } {0}
+do_execsql_test 1.12 { select * from vt1 WHERE a IN (NULL) } {}
+
+finish_test
+

@@ -1,0 +1,203 @@
+# 2010 August 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. The
+# focus of this file is testing that destructor functions associated
+# with functions created using sqlite3_create_function_v2() is 
+# correctly invoked.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+
+ifcapable utf16 {
+  do_test func3-1.1 {
+    set destroyed 0
+    proc destroy {} { set ::destroyed 1 }
+    sqlite3_create_function_v2 db f2 -1 any -func f2 -destroy destroy
+    set destroyed
+  } 0
+  do_test func3-1.2 {
+    sqlite3_create_function_v2 db f2 -1 utf8 -func f2
+    set destroyed
+  } 0
+  do_test func3-1.3 {
+    sqlite3_create_function_v2 db f2 -1 utf16le -func f2
+    set destroyed
+  } 0
+  do_test func3-1.4 {
+    sqlite3_create_function_v2 db f2 -1 utf16be -func f2
+    set destroyed
+  } 1
+}
+
+do_test func3-2.1 {
+  set destroyed 0
+  proc destroy {} { set ::destroyed 1 }
+  sqlite3_create_function_v2 db f3 -1 utf8 -func f3 -destroy destroy
+  set destroyed
+} 0
+do_test func3-2.2 {
+  sqlite3_create_function_v2 db f3 -1 utf8 -func f3
+  set destroyed
+} 1
+
+do_test func3-3.1 {
+  set destroyed 0
+  proc destroy {} { set ::destroyed 1 }
+  sqlite3_create_function_v2 db f3 -1 any -func f3 -destroy destroy
+  set destroyed
+} 0
+do_test func3-3.2 {
+  db close
+  set destroyed
+} 1
+
+sqlite3 db test.db
+do_test func3-4.1 {
+  set destroyed 0
+  set rc [catch { 
+    sqlite3_create_function_v2 db f3 -1 any -func f3 -step f3 -destroy destroy
+  } msg]
+  list $rc $msg
+} {1 SQLITE_MISUSE}
+do_test func3-4.2 { set destroyed } 1
+
+# EVIDENCE-OF: R-41921-05214 The likelihood(X,Y) function returns
+# argument X unchanged.
+#
+do_execsql_test func3-5.1 {
+  SELECT likelihood(9223372036854775807, 0.5);
+} {9223372036854775807}
+do_execsql_test func3-5.2 {
+  SELECT likelihood(-9223372036854775808, 0.5);
+} {-9223372036854775808}
+do_execsql_test func3-5.3 {
+  SELECT likelihood(14.125, 0.5);
+} {14.125}
+do_execsql_test func3-5.4 {
+  SELECT likelihood(NULL, 0.5);
+} {{}}
+do_execsql_test func3-5.5 {
+  SELECT likelihood('test-string', 0.5);
+} {test-string}
+do_execsql_test func3-5.6 {
+  SELECT quote(likelihood(x'010203000405', 0.5));
+} {X'010203000405'}
+
+# EVIDENCE-OF: R-44133-61651 The value Y in likelihood(X,Y) must be a
+# floating point constant between 0.0 and 1.0, inclusive.
+#
+do_execsql_test func3-5.7 {
+  SELECT likelihood(123, 1.0), likelihood(456, 0.0);
+} {123 456}
+do_test func3-5.8 {
+  catchsql {
+    SELECT likelihood(123, 1.000001);
+  }
+} {1 {second argument to likelihood() must be a constant between 0.0 and 1.0}}
+do_test func3-5.9 {
+  catchsql {
+    SELECT likelihood(123, -0.000001);
+  }
+} {1 {second argument to likelihood() must be a constant between 0.0 and 1.0}}
+do_test func3-5.10 {
+  catchsql {
+    SELECT likelihood(123, 0.5+0.3);
+  }
+} {1 {second argument to likelihood() must be a constant between 0.0 and 1.0}}
+
+# EVIDENCE-OF: R-28535-44631 The likelihood(X) function is a no-op that
+# the code generator optimizes away so that it consumes no CPU cycles
+# during run-time (that is, during calls to sqlite3_step()).
+#
+do_test func3-5.20 {
+  db eval {EXPLAIN SELECT likelihood(min(1.0+'2.0',4*11), 0.5)}
+} [db eval {EXPLAIN SELECT min(1.0+'2.0',4*11)}]
+
+
+# EVIDENCE-OF: R-11152-23456 The unlikely(X) function returns the
+# argument X unchanged.
+#
+do_execsql_test func3-5.30 {
+  SELECT unlikely(9223372036854775807);
+} {9223372036854775807}
+do_execsql_test func3-5.31 {
+  SELECT unlikely(-9223372036854775808);
+} {-9223372036854775808}
+do_execsql_test func3-5.32 {
+  SELECT unlikely(14.125);
+} {14.125}
+do_execsql_test func3-5.33 {
+  SELECT unlikely(NULL);
+} {{}}
+do_execsql_test func3-5.34 {
+  SELECT unlikely('test-string');
+} {test-string}
+do_execsql_test func3-5.35 {
+  SELECT quote(unlikely(x'010203000405'));
+} {X'010203000405'}
+
+# EVIDENCE-OF: R-22887-63324 The unlikely(X) function is a no-op that
+# the code generator optimizes away so that it consumes no CPU cycles at
+# run-time (that is, during calls to sqlite3_step()).
+#
+do_test func3-5.39 {
+  db eval {EXPLAIN SELECT unlikely(min(1.0+'2.0',4*11))}
+} [db eval {EXPLAIN SELECT min(1.0+'2.0',4*11)}]
+
+# Unlikely() does not preserve the affinity of X.
+# ticket https://www.sqlite.org/src/tktview/0c620df60b
+#
+do_execsql_test func3-5.40 {
+  SELECT likely(CAST(1 AS INT))=='1';
+} 0
+do_execsql_test func3-5.41 {
+  SELECT unlikely(CAST(1 AS INT))=='1';
+} 0
+do_execsql_test func3-5.41 {
+  SELECT likelihood(CAST(1 AS INT),0.5)=='1';
+} 0
+
+
+# EVIDENCE-OF: R-23735-03107 The likely(X) function returns the argument
+# X unchanged.
+#
+do_execsql_test func3-5.50 {
+  SELECT likely(9223372036854775807);
+} {9223372036854775807}
+do_execsql_test func3-5.51 {
+  SELECT likely(-9223372036854775808);
+} {-9223372036854775808}
+do_execsql_test func3-5.52 {
+  SELECT likely(14.125);
+} {14.125}
+do_execsql_test func3-5.53 {
+  SELECT likely(NULL);
+} {{}}
+do_execsql_test func3-5.54 {
+  SELECT likely('test-string');
+} {test-string}
+do_execsql_test func3-5.55 {
+  SELECT quote(likely(x'010203000405'));
+} {X'010203000405'}
+
+# EVIDENCE-OF: R-43464-09689 The likely(X) function is a no-op that the
+# code generator optimizes away so that it consumes no CPU cycles at
+# run-time (that is, during calls to sqlite3_step()).
+#
+do_test func3-5.59 {
+  db eval {EXPLAIN SELECT likely(min(1.0+'2.0',4*11))}
+} [db eval {EXPLAIN SELECT min(1.0+'2.0',4*11)}]
+
+
+
+
+finish_test

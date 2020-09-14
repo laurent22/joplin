@@ -1,0 +1,598 @@
+# 2001 September 15.
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the sorter (code in vdbesort.c).
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix sort
+db close
+sqlite3_shutdown
+sqlite3_config_pmasz 10
+sqlite3_initialize
+sqlite3 db test.db
+
+# Create a bunch of data to sort against
+#
+do_test sort-1.0 {
+  execsql {
+    CREATE TABLE t1(
+       n int,
+       v varchar(10),
+       log int,
+       roman varchar(10),
+       flt real
+    );
+    INSERT INTO t1 VALUES(1,'one',0,'I',3.141592653);
+    INSERT INTO t1 VALUES(2,'two',1,'II',2.15);
+    INSERT INTO t1 VALUES(3,'three',1,'III',4221.0);
+    INSERT INTO t1 VALUES(4,'four',2,'IV',-0.0013442);
+    INSERT INTO t1 VALUES(5,'five',2,'V',-11);
+    INSERT INTO t1 VALUES(6,'six',2,'VI',0.123);
+    INSERT INTO t1 VALUES(7,'seven',2,'VII',123.0);
+    INSERT INTO t1 VALUES(8,'eight',3,'VIII',-1.6);
+  }
+  execsql {SELECT count(*) FROM t1}
+} {8}
+
+do_test sort-1.1 {
+  execsql {SELECT n FROM t1 ORDER BY n}
+} {1 2 3 4 5 6 7 8}
+do_test sort-1.1.1 {
+  execsql {SELECT n FROM t1 ORDER BY n ASC}
+} {1 2 3 4 5 6 7 8}
+do_test sort-1.1.1 {
+  execsql {SELECT ALL n FROM t1 ORDER BY n ASC}
+} {1 2 3 4 5 6 7 8}
+do_test sort-1.2 {
+  execsql {SELECT n FROM t1 ORDER BY n DESC}
+} {8 7 6 5 4 3 2 1}
+do_test sort-1.3a {
+  execsql {SELECT v FROM t1 ORDER BY v}
+} {eight five four one seven six three two}
+do_test sort-1.3b {
+  execsql {SELECT n FROM t1 ORDER BY v}
+} {8 5 4 1 7 6 3 2}
+do_test sort-1.4 {
+  execsql {SELECT n FROM t1 ORDER BY v DESC}
+} {2 3 6 7 1 4 5 8}
+do_test sort-1.5 {
+  execsql {SELECT flt FROM t1 ORDER BY flt}
+} {-11.0 -1.6 -0.0013442 0.123 2.15 3.141592653 123.0 4221.0}
+do_test sort-1.6 {
+  execsql {SELECT flt FROM t1 ORDER BY flt DESC}
+} {4221.0 123.0 3.141592653 2.15 0.123 -0.0013442 -1.6 -11.0}
+do_test sort-1.7 {
+  execsql {SELECT roman FROM t1 ORDER BY roman}
+} {I II III IV V VI VII VIII}
+do_test sort-1.8 {
+  execsql {SELECT n FROM t1 ORDER BY log, flt}
+} {1 2 3 5 4 6 7 8}
+do_test sort-1.8.1 {
+  execsql {SELECT n FROM t1 ORDER BY log asc, flt}
+} {1 2 3 5 4 6 7 8}
+do_test sort-1.8.2 {
+  execsql {SELECT n FROM t1 ORDER BY log, flt ASC}
+} {1 2 3 5 4 6 7 8}
+do_test sort-1.8.3 {
+  execsql {SELECT n FROM t1 ORDER BY log ASC, flt asc}
+} {1 2 3 5 4 6 7 8}
+do_test sort-1.9 {
+  execsql {SELECT n FROM t1 ORDER BY log, flt DESC}
+} {1 3 2 7 6 4 5 8}
+do_test sort-1.9.1 {
+  execsql {SELECT n FROM t1 ORDER BY log ASC, flt DESC}
+} {1 3 2 7 6 4 5 8}
+do_test sort-1.10 {
+  execsql {SELECT n FROM t1 ORDER BY log DESC, flt}
+} {8 5 4 6 7 2 3 1}
+do_test sort-1.11 {
+  execsql {SELECT n FROM t1 ORDER BY log DESC, flt DESC}
+} {8 7 6 4 5 3 2 1}
+
+# These tests are designed to reach some hard-to-reach places
+# inside the string comparison routines.
+#
+# (Later) The sorting behavior changed in 2.7.0.  But we will
+# keep these tests.  You can never have too many test cases!
+#
+do_test sort-2.1.1 {
+  execsql {
+    UPDATE t1 SET v='x' || -flt;
+    UPDATE t1 SET v='x-2b' where v=='x-0.123';
+    SELECT v FROM t1 ORDER BY v;
+  }
+} {x-123.0 x-2.15 x-2b x-3.141592653 x-4221.0 x0.0013442 x1.6 x11.0}
+do_test sort-2.1.2 {
+  execsql {
+    SELECT v FROM t1 ORDER BY substr(v,2,999);
+  }
+} {x-123.0 x-2.15 x-2b x-3.141592653 x-4221.0 x0.0013442 x1.6 x11.0}
+do_test sort-2.1.3 {
+  execsql {
+    SELECT v FROM t1 ORDER BY substr(v,2,999)+0.0;
+  }
+} {x-4221.0 x-123.0 x-3.141592653 x-2.15 x-2b x0.0013442 x1.6 x11.0}
+do_test sort-2.1.4 {
+  execsql {
+    SELECT v FROM t1 ORDER BY substr(v,2,999) DESC;
+  }
+} {x11.0 x1.6 x0.0013442 x-4221.0 x-3.141592653 x-2b x-2.15 x-123.0}
+do_test sort-2.1.5 {
+  execsql {
+    SELECT v FROM t1 ORDER BY substr(v,2,999)+0.0 DESC;
+  }
+} {x11.0 x1.6 x0.0013442 x-2b x-2.15 x-3.141592653 x-123.0 x-4221.0}
+
+# This is a bug fix for 2.2.4.
+# Strings are normally mapped to upper-case for a caseless comparison.
+# But this can cause problems for characters in between 'Z' and 'a'.
+#
+do_test sort-3.1 {
+  execsql {
+    CREATE TABLE t2(a,b);
+    INSERT INTO t2 VALUES('AGLIENTU',1);
+    INSERT INTO t2 VALUES('AGLIE`',2);
+    INSERT INTO t2 VALUES('AGNA',3);
+    SELECT a, b FROM t2 ORDER BY a;
+  }
+} {AGLIENTU 1 AGLIE` 2 AGNA 3}
+do_test sort-3.2 {
+  execsql {
+    SELECT a, b FROM t2 ORDER BY a DESC;
+  }
+} {AGNA 3 AGLIE` 2 AGLIENTU 1}
+do_test sort-3.3 {
+  execsql {
+    DELETE FROM t2;
+    INSERT INTO t2 VALUES('aglientu',1);
+    INSERT INTO t2 VALUES('aglie`',2);
+    INSERT INTO t2 VALUES('agna',3);
+    SELECT a, b FROM t2 ORDER BY a;
+  }
+} {aglie` 2 aglientu 1 agna 3}
+do_test sort-3.4 {
+  execsql {
+    SELECT a, b FROM t2 ORDER BY a DESC;
+  }
+} {agna 3 aglientu 1 aglie` 2}
+
+# Version 2.7.0 testing.
+#
+do_test sort-4.1 {
+  execsql {
+    INSERT INTO t1 VALUES(9,'x2.7',3,'IX',4.0e5);
+    INSERT INTO t1 VALUES(10,'x5.0e10',3,'X',-4.0e5);
+    INSERT INTO t1 VALUES(11,'x-4.0e9',3,'XI',4.1e4);
+    INSERT INTO t1 VALUES(12,'x01234567890123456789',3,'XII',-4.2e3);
+    SELECT n FROM t1 ORDER BY n;
+  }
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+do_test sort-4.2 {
+  execsql {
+    SELECT n||'' FROM t1 ORDER BY 1;
+  }
+} {1 10 11 12 2 3 4 5 6 7 8 9}
+do_test sort-4.3 {
+  execsql {
+    SELECT n+0 FROM t1 ORDER BY 1;
+  }
+} {1 2 3 4 5 6 7 8 9 10 11 12}
+do_test sort-4.4 {
+  execsql {
+    SELECT n||'' FROM t1 ORDER BY 1 DESC;
+  }
+} {9 8 7 6 5 4 3 2 12 11 10 1}
+do_test sort-4.5 {
+  execsql {
+    SELECT n+0 FROM t1 ORDER BY 1 DESC;
+  }
+} {12 11 10 9 8 7 6 5 4 3 2 1}
+do_test sort-4.6 {
+  execsql {
+    SELECT v FROM t1 ORDER BY 1;
+  }
+} {x-123.0 x-2.15 x-2b x-3.141592653 x-4.0e9 x-4221.0 x0.0013442 x01234567890123456789 x1.6 x11.0 x2.7 x5.0e10}
+do_test sort-4.7 {
+  execsql {
+    SELECT v FROM t1 ORDER BY 1 DESC;
+  }
+} {x5.0e10 x2.7 x11.0 x1.6 x01234567890123456789 x0.0013442 x-4221.0 x-4.0e9 x-3.141592653 x-2b x-2.15 x-123.0}
+do_test sort-4.8 {
+  execsql {
+    SELECT substr(v,2,99) FROM t1 ORDER BY 1;
+  }
+} {-123.0 -2.15 -2b -3.141592653 -4.0e9 -4221.0 0.0013442 01234567890123456789 1.6 11.0 2.7 5.0e10}
+#do_test sort-4.9 {
+#  execsql {
+#    SELECT substr(v,2,99)+0.0 FROM t1 ORDER BY 1;
+#  }
+#} {-4000000000 -4221 -123 -3.141592653 -2.15 -2 0.0013442 1.6 2.7 11 50000000000 1.23456789012346e+18}
+
+do_test sort-5.1 {
+  execsql {
+    create table t3(a,b);
+    insert into t3 values(5,NULL);
+    insert into t3 values(6,NULL);
+    insert into t3 values(3,NULL);
+    insert into t3 values(4,'cd');
+    insert into t3 values(1,'ab');
+    insert into t3 values(2,NULL);
+    select a from t3 order by b, a;
+  }
+} {2 3 5 6 1 4}
+do_test sort-5.2 {
+  execsql {
+    select a from t3 order by b, a desc;
+  }
+} {6 5 3 2 1 4}
+do_test sort-5.3 {
+  execsql {
+    select a from t3 order by b desc, a;
+  }
+} {4 1 2 3 5 6}
+do_test sort-5.4 {
+  execsql {
+    select a from t3 order by b desc, a desc;
+  }
+} {4 1 6 5 3 2}
+
+do_test sort-6.1 {
+  execsql {
+    create index i3 on t3(b,a);
+    select a from t3 order by b, a;
+  }
+} {2 3 5 6 1 4}
+do_test sort-6.2 {
+  execsql {
+    select a from t3 order by b, a desc;
+  }
+} {6 5 3 2 1 4}
+do_test sort-6.3 {
+  execsql {
+    select a from t3 order by b desc, a;
+  }
+} {4 1 2 3 5 6}
+do_test sort-6.4 {
+  execsql {
+    select a from t3 order by b desc, a desc;
+  }
+} {4 1 6 5 3 2}
+
+do_test sort-7.1 {
+  execsql {
+    CREATE TABLE t4(
+      a INTEGER,
+      b VARCHAR(30)
+    );
+    INSERT INTO t4 VALUES(1,1);
+    INSERT INTO t4 VALUES(2,2);
+    INSERT INTO t4 VALUES(11,11);
+    INSERT INTO t4 VALUES(12,12);
+    SELECT a FROM t4 ORDER BY 1;
+  }
+} {1 2 11 12}
+do_test sort-7.2 {
+  execsql {
+    SELECT b FROM t4 ORDER BY 1
+  }
+} {1 11 12 2}
+
+# Omit tests sort-7.3 to sort-7.8 if view support was disabled at
+# compilatation time.
+ifcapable view {
+do_test sort-7.3 {
+  execsql {
+    CREATE VIEW v4 AS SELECT * FROM t4;
+    SELECT a FROM v4 ORDER BY 1;
+  }
+} {1 2 11 12}
+do_test sort-7.4 {
+  execsql {
+    SELECT b FROM v4 ORDER BY 1;
+  }
+} {1 11 12 2}
+
+ifcapable compound {
+do_test sort-7.5 {
+  execsql {
+    SELECT a FROM t4 UNION SELECT a FROM v4 ORDER BY 1;
+  }
+} {1 2 11 12}
+do_test sort-7.6 {
+  execsql {
+    SELECT b FROM t4 UNION SELECT a FROM v4 ORDER BY 1;
+  }
+} {1 2 11 12 1 11 12 2}  ;# text from t4.b and numeric from v4.a
+do_test sort-7.7 {
+  execsql {
+    SELECT a FROM t4 UNION SELECT b FROM v4 ORDER BY 1;
+  }
+} {1 2 11 12 1 11 12 2} ;# numeric from t4.a and text from v4.b
+do_test sort-7.8 {
+  execsql {
+    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1;
+  }
+} {1 11 12 2}
+} ;# ifcapable compound
+} ;# ifcapable view
+
+#### Version 3 works differently here:
+#do_test sort-7.9 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE numeric;
+#  }
+#} {1 2 11 12}
+#do_test sort-7.10 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE integer;
+#  }
+#} {1 2 11 12}
+#do_test sort-7.11 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE text;
+#  }
+#} {1 11 12 2}
+#do_test sort-7.12 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE blob;
+#  }
+#} {1 11 12 2}
+#do_test sort-7.13 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE clob;
+#  }
+#} {1 11 12 2}
+#do_test sort-7.14 {
+#  execsql {
+#    SELECT b FROM t4 UNION SELECT b FROM v4 ORDER BY 1 COLLATE varchar;
+#  }
+#} {1 11 12 2}
+
+# Ticket #297
+#
+do_test sort-8.1 {
+  execsql {
+    CREATE TABLE t5(a real, b text);
+    INSERT INTO t5 VALUES(100,'A1');
+    INSERT INTO t5 VALUES(100.0,'A2');
+    SELECT * FROM t5 ORDER BY a, b;
+  }
+} {100.0 A1 100.0 A2}
+
+
+ifcapable {bloblit} {
+# BLOBs should sort after TEXT
+#
+do_test sort-9.1 {
+  execsql {
+    CREATE TABLE t6(x, y);
+    INSERT INTO t6 VALUES(1,1);
+    INSERT INTO t6 VALUES(2,'1');
+    INSERT INTO t6 VALUES(3,x'31');
+    INSERT INTO t6 VALUES(4,NULL);
+    SELECT x FROM t6 ORDER BY y;
+  }
+} {4 1 2 3}
+do_test sort-9.2 {
+  execsql {
+    SELECT x FROM t6 ORDER BY y DESC;
+  }
+} {3 2 1 4}
+do_test sort-9.3 {
+  execsql {
+    SELECT x FROM t6 WHERE y<1
+  }
+} {}
+do_test sort-9.4 {
+  execsql {
+    SELECT x FROM t6 WHERE y<'1'
+  }
+} {1}
+do_test sort-9.5 {
+  execsql {
+    SELECT x FROM t6 WHERE y<x'31'
+  }
+} {1 2}
+do_test sort-9.6 {
+  execsql {
+    SELECT x FROM t6 WHERE y>1
+  }
+} {2 3}
+do_test sort-9.7 {
+  execsql {
+    SELECT x FROM t6 WHERE y>'1'
+  }
+} {3}
+} ;# endif bloblit
+
+# Ticket #1092 - ORDER BY on rowid fields.
+do_test sort-10.1 {
+  execsql {
+    CREATE TABLE t7(c INTEGER PRIMARY KEY);
+    INSERT INTO t7 VALUES(1);
+    INSERT INTO t7 VALUES(2);
+    INSERT INTO t7 VALUES(3);
+    INSERT INTO t7 VALUES(4);
+  }
+} {}
+do_test sort-10.2 {
+  execsql {
+    SELECT c FROM t7 WHERE c<=3 ORDER BY c DESC;
+  }
+} {3 2 1}
+do_test sort-10.3 {
+  execsql {
+    SELECT c FROM t7 WHERE c<3 ORDER BY c DESC;
+  }
+} {2 1}
+
+# ticket #1358.  Just because one table in a join gives a unique
+# result does not mean they all do.  We cannot disable sorting unless
+# all tables in the join give unique results.
+#
+do_test sort-11.1 {
+  execsql {
+    create table t8(a unique, b, c);
+    insert into t8 values(1,2,3);
+    insert into t8 values(2,3,4);
+    create table t9(x,y);
+    insert into t9 values(2,4);
+    insert into t9 values(2,3);
+    select y from t8, t9 where a=1 order by a, y;
+  }
+} {3 4}
+
+# Trouble reported on the mailing list.  Check for overly aggressive
+# (which is to say, incorrect) optimization of order-by with a rowid
+# in a join.
+#
+do_test sort-12.1 {
+  execsql {
+    create table a (id integer primary key);
+    create table b (id integer primary key, aId integer, text);
+    insert into a values (1);
+    insert into b values (2, 1, 'xxx');
+    insert into b values (1, 1, 'zzz');
+    insert into b values (3, 1, 'yyy');
+    select a.id, b.id, b.text from a join b on (a.id = b.aId)
+      order by a.id, b.text;
+  }
+} {1 2 xxx 1 3 yyy 1 1 zzz}
+
+#-------------------------------------------------------------------------
+# Check that the sorter in vdbesort.c sorts in a stable fashion.
+#
+do_execsql_test sort-13.0 {
+  CREATE TABLE t10(a, b);
+}
+do_test sort-13.1 {
+  db transaction {
+    for {set i 0} {$i < 100000} {incr i} {
+      execsql { INSERT INTO t10 VALUES( $i/10, $i%10 ) }
+    }
+  }
+} {}
+do_execsql_test sort-13.2 {
+  SELECT a, b FROM t10 ORDER BY a;
+} [db eval {SELECT a, b FROM t10 ORDER BY a, b}]
+do_execsql_test sort-13.3 {
+  PRAGMA cache_size = 5;
+  SELECT a, b FROM t10 ORDER BY a;
+} [db eval {SELECT a, b FROM t10 ORDER BY a, b}]
+
+#-------------------------------------------------------------------------
+#
+foreach {tn mmap_limit nWorker tmpstore coremutex fakeheap softheaplimit} {
+          1          0       3     file      true    false             0
+          2          0       3     file      true     true             0
+          3          0       0     file      true    false             0
+          4    1000000       3     file      true    false             0
+          5          0       0   memory     false     true             0
+          6          0       0     file     false     true       1000000     
+          7          0       0     file     false     true         10000
+} {
+  db close
+  sqlite3_shutdown
+  if {$coremutex} {
+    sqlite3_config multithread
+  } else {
+    sqlite3_config singlethread
+  }
+  sqlite3_initialize
+  sorter_test_fakeheap $fakeheap
+  sqlite3_soft_heap_limit $softheaplimit
+
+  reset_db
+  sqlite3_test_control SQLITE_TESTCTRL_SORTER_MMAP db $mmap_limit
+  execsql "PRAGMA temp_store = $tmpstore; PRAGMA threads = $nWorker"
+  
+  
+  set ten [string repeat X 10300]
+  set one [string repeat y   200]
+
+  if {$softheaplimit} {
+    execsql { PRAGMA cache_size = 20 };
+  } else {
+    execsql { PRAGMA cache_size = 5 };
+  }
+
+  do_execsql_test 15.$tn.1 {
+    WITH rr AS (
+      SELECT 4, $ten UNION ALL
+      SELECT 2, $one UNION ALL
+      SELECT 1, $ten UNION ALL
+      SELECT 3, $one
+    )
+    SELECT * FROM rr ORDER BY 1;
+  } [list 1 $ten 2 $one 3 $one 4 $ten]
+
+  do_execsql_test 15.$tn.2 {
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(4);
+    INSERT INTO t1 VALUES(5);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(6);
+    INSERT INTO t1 VALUES(1);
+    CREATE INDEX i1 ON t1(a);
+    SELECT * FROM t1 ORDER BY a;
+  } {1 2 3 4 5 6}
+
+  do_execsql_test 15.$tn.3 {
+    WITH rr AS (
+      SELECT 4, $ten UNION ALL
+      SELECT 2, $one
+    )
+    SELECT * FROM rr ORDER BY 1;
+  } [list 2 $one 4 $ten]
+
+  sorter_test_fakeheap 0
+}
+
+db close
+sqlite3_shutdown
+set t(0) singlethread
+set t(1) multithread
+set t(2) serialized
+sqlite3_config $t($sqlite_options(threadsafe))
+sqlite3_initialize
+sqlite3_soft_heap_limit 0
+
+reset_db
+do_catchsql_test 16.1 {
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(1, NULL, 3);
+  INSERT INTO t1 VALUES(NULL, 2, 3);
+  INSERT INTO t1 VALUES(1, 2, NULL);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  CREATE UNIQUE INDEX i1 ON t1(b, a, c);
+} {0 {}}
+reset_db
+do_catchsql_test 16.2 {
+  CREATE TABLE t1(a, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(1, NULL, 3);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(1, 2, NULL);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  CREATE UNIQUE INDEX i1 ON t1(b, a, c);
+} {1 {UNIQUE constraint failed: t1.b, t1.a, t1.c}}
+
+reset_db
+do_execsql_test 17.1 {
+  SELECT * FROM sqlite_master ORDER BY sql;
+} {}
+
+finish_test

@@ -1,0 +1,105 @@
+# 2017-10-11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the sqlite_dbpage virtual table.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix dbpage
+
+ifcapable !vtab||!compound {
+  finish_test
+  return
+}
+
+sqlite3_db_config db DEFENSIVE 0
+do_test 100 {
+  execsql {
+    PRAGMA auto_vacuum=0;
+    PRAGMA page_size=4096;
+    PRAGMA journal_mode=WAL;
+  }
+  execsql { 
+    CREATE TABLE t1(a,b);
+    WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<100)
+      INSERT INTO t1(a,b) SELECT x, printf('%d-x%.*c',x,x,'x') FROM c;
+    PRAGMA integrity_check;
+  }
+} {ok}
+do_execsql_test 110 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage('main') ORDER BY pgno;
+} {1 X'53514C6974' 2 X'0500000001' 3 X'0D0000004E' 4 X'0D00000016'}
+do_execsql_test 120 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage WHERE pgno=2;
+} {2 X'0500000001'}
+do_execsql_test 130 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage WHERE pgno=4;
+} {4 X'0D00000016'}
+do_execsql_test 140 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage WHERE pgno=5;
+} {}
+do_execsql_test 150 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage WHERE pgno=0;
+} {}
+do_execsql_test 160 {
+  ATTACH ':memory:' AS aux1;
+  PRAGMA aux1.page_size=4096;
+  CREATE TABLE aux1.t2(a,b,c);
+  INSERT INTO t2 VALUES(11,12,13);
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage('aux1');
+} {1 X'53514C6974' 2 X'0D00000001'}
+do_execsql_test 170 {
+  CREATE TABLE aux1.x3(x,y,z);
+  INSERT INTO x3(x,y,z) VALUES(1,'main',1),(2,'aux1',1);
+  SELECT pgno, schema, substr(data,1,6)
+    FROM sqlite_dbpage, x3
+   WHERE sqlite_dbpage.schema=x3.y AND sqlite_dbpage.pgno=x3.z
+   ORDER BY x3.x;
+} {1 main SQLite 1 aux1 SQLite}
+
+do_execsql_test 200 {
+  CREATE TEMP TABLE saved_content(x);
+  INSERT INTO saved_content(x) SELECT data FROM sqlite_dbpage WHERE pgno=4;
+  UPDATE sqlite_dbpage SET data=zeroblob(4096) WHERE pgno=4;
+} {}
+do_catchsql_test 210 {
+  PRAGMA integrity_check;
+} {1 {database disk image is malformed}}
+do_execsql_test 220 {
+  SELECT pgno, quote(substr(data,1,5)) FROM sqlite_dbpage('main') ORDER BY pgno;
+} {1 X'53514C6974' 2 X'0500000001' 3 X'0D0000004E' 4 X'0000000000'}
+do_execsql_test 230 {
+  UPDATE sqlite_dbpage SET data=(SELECT x FROM saved_content) WHERE pgno=4;
+} {}
+do_catchsql_test 230 {
+  PRAGMA integrity_check;
+} {0 ok}
+do_execsql_test 240 {
+  DELETE FROM saved_content;
+  INSERT INTO saved_content(x) 
+     SELECT data FROM sqlite_dbpage WHERE schema='aux1' AND pgno=2;
+} {}
+do_execsql_test 241 {
+  UPDATE sqlite_dbpage SET data=zeroblob(4096) WHERE pgno=2 AND schema='aux1';
+} {}
+do_catchsql_test 250 {
+  PRAGMA aux1.integrity_check;
+} {1 {database disk image is malformed}}
+do_execsql_test 260 {
+  UPDATE sqlite_dbpage SET data=(SELECT x FROM saved_content)
+   WHERE pgno=2 AND schema='aux1';
+} {}
+do_catchsql_test 270 {
+  PRAGMA aux1.integrity_check;
+} {0 ok}
+
+finish_test

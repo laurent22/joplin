@@ -1,0 +1,251 @@
+# 2015 December 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. The focus
+# of this file is the sqlite3_snapshot_xxx() APIs.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+ifcapable !snapshot {finish_test; return}
+set testprefix snapshot_fault
+
+#-------------------------------------------------------------------------
+# Check that an sqlite3_snapshot_open() client cannot be tricked into
+# reading a corrupt snapshot even if a second client fails while 
+# checkpointing the db.
+#
+do_faultsim_test 1.0 -prep {
+  faultsim_delete_and_reopen
+  sqlite3 db2 test.db
+  db2 eval { 
+    CREATE TABLE t1(a, b UNIQUE, c UNIQUE);
+    INSERT INTO t1 VALUES(1, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(2, randomblob(500), randomblob(500));
+    PRAGMA journal_mode = wal;
+    INSERT INTO t1 VALUES(3, randomblob(500), randomblob(500));
+    BEGIN;
+      SELECT a FROM t1;
+  }
+  set ::snapshot [sqlite3_snapshot_get db2 main] 
+  db2 eval COMMIT
+  db2 eval {
+    UPDATE t1 SET b=randomblob(501), c=randomblob(501) WHERE a=1;
+    INSERT INTO t1 VALUES(4, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(5, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(6, randomblob(500), randomblob(500));
+  }
+} -body {
+  db eval { PRAGMA wal_checkpoint }
+} -test {
+  db2 eval BEGIN
+  if {[catch { sqlite3_snapshot_open db2 main $::snapshot } msg]} {
+    if {$msg != "SQLITE_ERROR_SNAPSHOT" && $msg != "SQLITE_BUSY"} {
+      error "error is $msg" 
+    }
+  } else {
+    set res [db2 eval { 
+      SELECT a FROM t1;
+      PRAGMA integrity_check;
+    }]
+    if {$res != "1 2 3 ok"} { error "res is $res" }
+  }
+
+  sqlite3_snapshot_free $::snapshot
+}
+
+#-------------------------------------------------------------------------
+# This test is similar to the previous one. Except, after the 
+# "PRAGMA wal_checkpoint" command fails the db is closed and reopened
+# so as to require wal file recovery. It should not be possible to open
+# a snapshot that is part of the body of a recovered wal file.
+#
+do_faultsim_test 2.0 -prep {
+  faultsim_delete_and_reopen
+  db eval { 
+    CREATE TABLE t1(a, b UNIQUE, c UNIQUE);
+    INSERT INTO t1 VALUES(1, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(2, randomblob(500), randomblob(500));
+    PRAGMA journal_mode = wal;
+    INSERT INTO t1 VALUES(3, randomblob(500), randomblob(500));
+    BEGIN;
+      SELECT a FROM t1;
+  }
+  set ::snapshot [sqlite3_snapshot_get db main] 
+  db eval COMMIT
+
+  db eval {
+    UPDATE t1 SET b=randomblob(501), c=randomblob(501) WHERE a=1;
+    INSERT INTO t1 VALUES(4, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(5, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(6, randomblob(500), randomblob(500));
+  }
+} -body {
+  db eval { PRAGMA wal_checkpoint }
+} -test {
+
+  db_save
+  db close
+  db_restore_and_reopen
+  db eval { SELECT * FROM t1 }
+  
+  db eval BEGIN
+  if {[catch { sqlite3_snapshot_open db main $::snapshot } msg]} {
+    if {$msg != "SQLITE_ERROR_SNAPSHOT" && $msg != "SQLITE_BUSY"} {
+      error "error is $msg" 
+    }
+  } else {
+    # This branch should actually never be taken. But it was useful in
+    # determining whether or not this test was actually working (by 
+    # running a modified version of SQLite that allowed snapshots to be
+    # opened following a recovery).
+    error "TEST HAS FAILED"
+
+    set res [db eval { 
+      SELECT a FROM t1;
+      PRAGMA integrity_check;
+    }]
+    if {$res != "1 2 3 ok"} { error "res is $res" }
+  }
+
+  sqlite3_snapshot_free $::snapshot
+}
+
+#-------------------------------------------------------------------------
+# Test the handling of faults that occur within sqlite3_snapshot_open().
+#
+do_faultsim_test 3.0 -prep {
+  faultsim_delete_and_reopen
+  db eval { 
+    CREATE TABLE t1(a, b UNIQUE, c UNIQUE);
+    INSERT INTO t1 VALUES(1, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(2, randomblob(500), randomblob(500));
+    PRAGMA journal_mode = wal;
+    INSERT INTO t1 VALUES(3, randomblob(500), randomblob(500));
+    BEGIN;
+      SELECT a FROM t1;
+  }
+  set ::snapshot [sqlite3_snapshot_get db main] 
+  db eval COMMIT
+  db eval {
+    UPDATE t1 SET b=randomblob(501), c=randomblob(501) WHERE a=1;
+    INSERT INTO t1 VALUES(4, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(5, randomblob(500), randomblob(500));
+    INSERT INTO t1 VALUES(6, randomblob(500), randomblob(500));
+    BEGIN;
+  }
+} -body {
+  if { [catch { sqlite3_snapshot_open db main $::snapshot } msg] } {
+    error $msg
+  }
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_IOERR} {1 SQLITE_NOMEM} \
+                              {1 SQLITE_IOERR_NOMEM} {1 SQLITE_IOERR_READ}
+  if {$testrc==0} {
+    set res [db eval { 
+      SELECT a FROM t1;
+      PRAGMA integrity_check;
+    }]
+    if {$res != "1 2 3 ok"} { error "res is $res" }
+  }
+
+  sqlite3_snapshot_free $::snapshot
+}
+
+#-------------------------------------------------------------------------
+# Test the handling of faults that occur within sqlite3_snapshot_recover().
+#
+reset_db
+do_execsql_test 4.0 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE t1(zzz);
+  INSERT INTO t1 VALUES('abc');
+  INSERT INTO t1 VALUES('def');
+} {wal}
+faultsim_save_and_close
+
+do_test 4.0.1 {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM sqlite_master } 
+  sqlite3_snapshot_recover db main
+} {}
+db close
+
+do_faultsim_test 4.0 -faults oom* -prep {
+  faultsim_restore_and_reopen
+  db eval { SELECT * FROM sqlite_master } 
+} -body {
+  sqlite3_snapshot_recover db main
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_NOMEM} {1 SQLITE_IOERR_NOMEM}
+}
+
+# The following test cases contrive to call sqlite3_snapshot_recover()
+# before all pages of the *-shm file have been mapped. This tests an
+# extra branch of error handling logic in snapshot_recover().
+#
+reset_db
+do_execsql_test 4.1.0 {
+  PRAGMA page_size = 512;
+  PRAGMA journal_mode = wal;
+  PRAGMA wal_autocheckpoint = 0;
+  CREATE TABLE t1(zzz);
+  INSERT INTO t1 VALUES(randomblob( 500 * 9500 ));
+  PRAGMA user_version = 211;
+} {wal 0}
+
+do_test 4.1.1 {
+  list [file size test.db-shm] [file size test.db]
+} {98304 512}
+
+faultsim_save_and_close
+do_faultsim_test 4.1 -faults shm* -prep {
+  catch { db2 close } 
+  catch { db close } 
+  faultsim_restore_and_reopen
+  sqlite3 db2 test.db
+  db2 eval { SELECT * FROM sqlite_master } 
+  db eval BEGIN
+  sqlite3_snapshot_get_blob db main
+  db eval COMMIT
+} -body {
+  sqlite3_snapshot_recover db main
+} -test {
+  faultsim_test_result {0 {}} {1 SQLITE_IOERR}
+}
+
+#-------------------------------------------------------------------------
+# Test the handling of faults that occur within sqlite3_snapshot_get().
+#
+reset_db
+do_execsql_test 5.0 {
+  PRAGMA page_size = 512;
+  PRAGMA journal_mode = wal;
+  PRAGMA wal_autocheckpoint = 0;
+  CREATE TABLE t1(zzz);
+  INSERT INTO t1 VALUES(randomblob( 5000 ));
+  PRAGMA user_version = 211;
+} {wal 0}
+faultsim_save_and_close
+
+do_faultsim_test 5 -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT count(*) FROM sqlite_master }
+  execsql BEGIN
+} -body {
+  sqlite3_snapshot_get_blob db main
+  set {} {}
+} -test {
+  execsql END
+  faultsim_test_result {0 {}} {1 SQLITE_IOERR} {1 SQLITE_NOMEM}
+}
+
+
+finish_test

@@ -1,0 +1,201 @@
+# 2015-11-07
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the WITH clause.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix with3
+
+ifcapable {!cte} {
+  finish_test
+  return
+}
+
+# Test problems found by Kostya Serebryany using 
+# LibFuzzer.  (http://llvm.org/docs/LibFuzzer.html)
+#
+do_catchsql_test 1.0 {
+  WITH i(x) AS (
+    WITH j AS (SELECT 10)
+    SELECT 5 FROM t0 UNION SELECT 8 FROM m
+  )
+  SELECT * FROM i;
+} {1 {no such table: t0}}
+
+# 2019-11-09 dbfuzzcheck find
+do_catchsql_test 1.1 {
+  CREATE VIEW v1(x,y) AS
+    WITH t1(a,b) AS (VALUES(1,2))
+    SELECT * FROM nosuchtable JOIN t1;
+  SELECT * FROM v1;
+} {1 {no such table: main.nosuchtable}}
+
+# Additional test cases that came out of the work to
+# fix for Kostya's problem.
+#
+do_execsql_test 2.0 {
+ WITH
+  x1 AS (SELECT 10),
+  x2 AS (SELECT 11),
+  x3 AS (
+    SELECT * FROM x1 UNION ALL SELECT * FROM x2
+  ),
+  x4 AS (
+    WITH
+    x1 AS (SELECT 12),
+    x2 AS (SELECT 13)
+    SELECT * FROM x3
+  )
+  SELECT * FROM x4;
+
+} {10 11}
+
+do_execsql_test 2.1 {
+  CREATE TABLE t1(x);
+  WITH
+    x1(a) AS (values(100))
+  INSERT INTO t1(x)
+    SELECT * FROM (WITH x2(y) AS (SELECT * FROM x1) SELECT y+a FROM x1, x2);
+  SELECT * FROM t1;
+} {200}
+
+#-------------------------------------------------------------------------
+# Test that the planner notices LIMIT clauses on recursive WITH queries.
+#
+
+ifcapable analyze {
+  do_execsql_test 3.1.1 {
+    CREATE TABLE y1(a, b);
+    CREATE INDEX y1a ON y1(a);
+
+    WITH cnt(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM cnt LIMIT 1000)
+      INSERT INTO y1 SELECT i%10, i FROM cnt;
+    ANALYZE;
+
+  }
+
+  do_eqp_test 3.1.2 {
+    WITH cnt(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM cnt LIMIT 1)
+    SELECT * FROM cnt, y1 WHERE i=a
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    |--MATERIALIZE xxxxxx
+    |  |--SETUP
+    |  |  `--SCAN CONSTANT ROW
+    |  `--RECURSIVE STEP
+    |     `--SCAN TABLE cnt
+    |--SCAN SUBQUERY xxxxxx
+    `--SEARCH TABLE y1 USING INDEX y1a (a=?)
+  }]
+
+  do_eqp_test 3.1.3 {
+    WITH cnt(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM cnt LIMIT 1000000)
+    SELECT * FROM cnt, y1 WHERE i=a
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    |--MATERIALIZE xxxxxx
+    |  |--SETUP
+    |  |  `--SCAN CONSTANT ROW
+    |  `--RECURSIVE STEP
+    |     `--SCAN TABLE cnt
+    |--SCAN TABLE y1
+    `--SEARCH SUBQUERY xxxxxx USING AUTOMATIC COVERING INDEX (i=?)
+  }]
+}
+
+do_execsql_test 3.2.1 {
+  CREATE TABLE w1(pk INTEGER PRIMARY KEY, x INTEGER);
+  CREATE TABLE w2(pk INTEGER PRIMARY KEY);
+}
+
+do_eqp_test 3.2.2 {
+  WITH RECURSIVE c(w,id) AS (SELECT 0, (SELECT pk FROM w2 LIMIT 1)
+     UNION ALL SELECT c.w + 1, x FROM w1, c LIMIT 1)
+     SELECT * FROM c, w2, w1
+     WHERE c.id=w2.pk AND c.id=w1.pk;
+} {
+  QUERY PLAN
+  |--MATERIALIZE xxxxxx
+  |  |--SETUP
+  |  |  |--SCAN CONSTANT ROW
+  |  |  `--SCALAR SUBQUERY xxxxxx
+  |  |     `--SCAN TABLE w2
+  |  `--RECURSIVE STEP
+  |     |--SCAN TABLE w1
+  |     `--SCAN TABLE c
+  |--SCAN SUBQUERY xxxxxx
+  |--SEARCH TABLE w2 USING INTEGER PRIMARY KEY (rowid=?)
+  `--SEARCH TABLE w1 USING INTEGER PRIMARY KEY (rowid=?)
+}
+
+do_execsql_test 4.0 {
+  WITH t5(t5col1) AS (
+    SELECT (
+      WITH t3(t3col1) AS (
+        WITH t2 AS (
+          WITH t1 AS (SELECT 1 AS c1 GROUP BY 1) 
+          SELECT a.c1 FROM t1 AS a, t1 AS b
+          WHERE anoncol1 = 1
+        )
+        SELECT (SELECT 1 FROM t2) FROM t2
+      ) 
+      SELECT t3col1 FROM t3 WHERE t3col1
+    ) FROM (SELECT 1 AS anoncol1)
+  )
+  SELECT t5col1, t5col1 FROM t5
+} {1 1}
+do_execsql_test 4.1 {
+  SELECT EXISTS (
+    WITH RECURSIVE Table0 AS (
+      WITH RECURSIVE Table0(Col0) AS (SELECT ALL 1  ) 
+      SELECT ALL (
+        WITH RECURSIVE Table0 AS (
+          WITH RECURSIVE Table0 AS (
+            WITH RECURSIVE Table0 AS (SELECT DISTINCT 1  GROUP BY 1  ) 
+            SELECT DISTINCT * FROM Table0 NATURAL INNER JOIN Table0
+            WHERE Col0 = 1  
+          )
+          SELECT ALL (SELECT DISTINCT * FROM Table0) FROM Table0 WHERE Col0 = 1
+        ) 
+        SELECT ALL * FROM Table0  NATURAL INNER JOIN  Table0      
+      ) FROM Table0 ) 
+      SELECT DISTINCT * FROM Table0  NATURAL INNER JOIN  Table0      
+    ); 
+} {1}
+
+# 2020-01-18 chrome ticket 1043236
+# Correct handling of the sequence:
+#    OP_OpenEphem
+#    OP_OpenDup
+#    Op_OpenEphem
+#    OP_OpenDup
+#
+do_execsql_test 4.2 {
+  SELECT (
+    WITH t1(a) AS (VALUES(1))
+    SELECT (
+      WITH t2(b) AS (
+        WITH t3(c) AS (
+          WITH t4(d) AS (VALUES('elvis'))
+          SELECT t4a.d FROM t4 AS t4a JOIN t4 AS t4b LEFT JOIN t4 AS t4c
+        )
+        SELECT c FROM t3 WHERE a = 1
+      )
+      SELECT t2a.b FROM t2 AS t2a JOIN t2 AS t2x
+    )
+    FROM t1 GROUP BY 1
+  )
+  GROUP BY 1;
+} {elvis}
+
+finish_test

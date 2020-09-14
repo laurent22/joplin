@@ -1,0 +1,258 @@
+# 2018-04-28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# Test cases for SQLITE_DBCONFIG_RESET_DATABASE
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix resetdb
+
+do_not_use_codec
+
+ifcapable !vtab||!compound {
+  finish_test
+  return
+}
+
+# In the "inmemory_journal" permutation, each new connection executes 
+# "PRAGMA journal_mode = memory". This fails with SQLITE_BUSY if attempted
+# on a wal mode database with existing connections. For this and a few
+# other reasons, this test is not run as part of "inmemory_journal".
+#
+# Permutation "journaltest" does not support wal mode.
+#
+if {[permutation]=="inmemory_journal"
+ || [permutation]=="journaltest"
+} {
+  finish_test
+  return
+}
+
+# Create a sample database
+do_execsql_test 100 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size=4096;
+  CREATE TABLE t1(a,b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<20)
+    INSERT INTO t1(a,b) SELECT x, randomblob(300) FROM c;
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1b ON t1(b);
+  SELECT sum(a), sum(length(b)) FROM t1;
+  PRAGMA integrity_check;
+  PRAGMA journal_mode;
+  PRAGMA page_count;
+} {210 6000 ok delete 8}
+
+# Verify that the same content is seen from a separate database connection
+sqlite3 db2 test.db
+do_test 110 {
+  execsql {
+    SELECT sum(a), sum(length(b)) FROM t1;
+    PRAGMA integrity_check;
+    PRAGMA journal_mode;
+    PRAGMA page_count;
+  } db2
+} {210 6000 ok delete 8}
+
+do_test 200 {
+  # Thoroughly corrupt the database file by overwriting the first
+  # page with randomness.
+  sqlite3_db_config db DEFENSIVE 0
+  catchsql {
+    UPDATE sqlite_dbpage SET data=randomblob(4096) WHERE pgno=1;
+    PRAGMA quick_check;
+  }
+} {1 {file is not a database}}
+do_test 201 {
+  catchsql {
+    PRAGMA quick_check;
+  } db2
+} {1 {file is not a database}}
+
+do_test 210 {
+  # Reset the database file using SQLITE_DBCONFIG_RESET_DATABASE
+  sqlite3_db_config db RESET_DB 1
+  db eval VACUUM
+  sqlite3_db_config db RESET_DB 0
+
+  # If using sqlite3_prepare() instead of _v2() or _v3(), the block 
+  # below raises an SQLITE_SCHEMA error. The following fixes this.
+  if {[permutation]=="prepare"} { catchsql "SELECT * FROM sqlite_master" db2 }
+
+  # Verify that the reset took, even on the separate database connection
+  catchsql {
+     PRAGMA page_count;
+     PRAGMA page_size;
+     PRAGMA quick_check;
+     PRAGMA journal_mode;
+  } db2
+} {0 {1 4096 ok delete}}
+
+# Delete the old connections and database and start over again
+# with a different page size and in WAL mode.
+#
+db close
+db2 close
+forcedelete test.db
+sqlite3 db test.db
+do_execsql_test 300 {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size=8192;
+  PRAGMA journal_mode=WAL;
+  CREATE TABLE t1(a,b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<20)
+    INSERT INTO t1(a,b) SELECT x, randomblob(1300) FROM c;
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1b ON t1(b);
+  SELECT sum(a), sum(length(b)) FROM t1;
+  PRAGMA integrity_check;
+  PRAGMA journal_mode;
+  PRAGMA page_size;
+  PRAGMA page_count;
+} {wal 210 26000 ok wal 8192 12}
+sqlite3 db2 test.db
+do_test 310 {
+  execsql {
+    SELECT sum(a), sum(length(b)) FROM t1;
+    PRAGMA integrity_check;
+    PRAGMA journal_mode;
+    PRAGMA page_size;
+    PRAGMA page_count;
+  } db2
+} {210 26000 ok wal 8192 12}
+
+# Corrupt the database again
+sqlite3_db_config db DEFENSIVE 0
+do_catchsql_test 320 {
+  UPDATE sqlite_dbpage SET data=randomblob(8192) WHERE pgno=1;
+  PRAGMA quick_check
+} {1 {file is not a database}}
+
+do_test 330 {
+  catchsql {
+    PRAGMA quick_check
+  } db2
+} {1 {file is not a database}}
+
+db2 cache flush         ;# Required by permutation "prepare".
+
+# Reset the database yet again.  Verify that the page size and
+# journal mode are preserved.
+#
+do_test 400 {
+  sqlite3_db_config db RESET_DB 1
+  db eval VACUUM
+  sqlite3_db_config db RESET_DB 0
+  catchsql {
+     PRAGMA page_count;
+     PRAGMA page_size;
+     PRAGMA journal_mode;
+     PRAGMA quick_check;
+  } db2
+} {0 {1 8192 wal ok}}
+db2 close
+
+# Reset the database yet again. This time immediately after it is closed
+# and reopened. So that the VACUUM is the first statement run.
+#
+db close
+sqlite3 db test.db
+do_test 500 {
+  sqlite3_finalize [
+    sqlite3_prepare db "SELECT 1 FROM sqlite_master LIMIT 1" -1 tail
+  ]
+  sqlite3_db_config db RESET_DB 1
+  db eval VACUUM
+  sqlite3_db_config db RESET_DB 0
+  sqlite3 db2 test.db
+  catchsql {
+     PRAGMA page_count;
+     PRAGMA page_size;
+     PRAGMA journal_mode;
+     PRAGMA quick_check;
+  } db2
+} {0 {1 8192 wal ok}}
+db2 close
+
+#-------------------------------------------------------------------------
+reset_db
+sqlite3 db2 test.db
+do_execsql_test 600 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE t1(a);
+  INSERT INTO t1 VALUES(1), (2), (3), (4);
+} {wal}
+
+do_execsql_test -db db2 610 {
+  SELECT * FROM t1
+} {1 2 3 4}
+
+do_test 620 {
+  set res [list]
+  db2 eval {SELECT a FROM t1} {
+    lappend res $a
+    if {$a==3} {
+      sqlite3_db_config db RESET_DB 1
+      db eval VACUUM
+      sqlite3_db_config db RESET_DB 0
+    }
+  }
+
+  set res
+} {1 2 3 4}
+
+do_execsql_test -db db2 630 {
+  SELECT * FROM sqlite_master
+} {}
+
+#-------------------------------------------------------------------------
+db2 close
+reset_db
+
+do_execsql_test 700 {
+  PRAGMA page_size=512;
+  PRAGMA auto_vacuum = 0;
+  CREATE TABLE t1(a,b,c);
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1bc ON t1(b,c);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<10)
+    INSERT INTO t1(a,b,c) SELECT x, randomblob(100),randomblob(100) FROM c;
+  PRAGMA page_count;
+  PRAGMA integrity_check;
+} {19 ok}
+
+if {[nonzero_reserved_bytes]} {
+  finish_test
+  return
+}
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 710 {
+  UPDATE sqlite_dbpage SET data=
+    X'53514C69746520666F726D61742033000200030100402020000000000000001300000000000000000000000300000004000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000D00000003017C0001D801AC017C00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002E03061715110145696E6465787431626374310443524541544520494E4445582074316263204F4E20743128622C63292A0206171311013F696E64657874316174310343524541544520494E44455820743161204F4E20743128612926010617111101397461626C657431743102435245415445205441424C4520743128612C622C6329' WHERE pgno=1;
+}
+
+do_execsql_test 720 {
+  PRAGMA integrity_check;
+} {ok}
+
+do_test 730 {
+  sqlite3_db_config db RESET_DB 1
+  db eval VACUUM
+  sqlite3_db_config db RESET_DB 0
+} {0}
+
+do_execsql_test 740 {
+  PRAGMA page_count;
+  PRAGMA integrity_check;
+} {1 ok}
+
+finish_test

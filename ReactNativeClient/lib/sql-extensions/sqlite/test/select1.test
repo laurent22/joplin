@@ -1,0 +1,1204 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the SELECT statement.
+#
+# $Id: select1.test,v 1.70 2009/05/28 01:00:56 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Try to select on a non-existant table.
+#
+do_test select1-1.1 {
+  set v [catch {execsql {SELECT * FROM test1}} msg]
+  lappend v $msg
+} {1 {no such table: test1}}
+
+
+execsql {CREATE TABLE test1(f1 int, f2 int)}
+
+do_test select1-1.2 {
+  set v [catch {execsql {SELECT * FROM test1, test2}} msg]
+  lappend v $msg
+} {1 {no such table: test2}}
+do_test select1-1.3 {
+  set v [catch {execsql {SELECT * FROM test2, test1}} msg]
+  lappend v $msg
+} {1 {no such table: test2}}
+
+execsql {INSERT INTO test1(f1,f2) VALUES(11,22)}
+
+
+# Make sure the columns are extracted correctly.
+#
+do_test select1-1.4 {
+  execsql {SELECT f1 FROM test1}
+} {11}
+do_test select1-1.5 {
+  execsql {SELECT f2 FROM test1}
+} {22}
+do_test select1-1.6 {
+  execsql {SELECT f2, f1 FROM test1}
+} {22 11}
+do_test select1-1.7 {
+  execsql {SELECT f1, f2 FROM test1}
+} {11 22}
+do_test select1-1.8 {
+  execsql {SELECT * FROM test1}
+} {11 22}
+do_test select1-1.8.1 {
+  execsql {SELECT *, * FROM test1}
+} {11 22 11 22}
+do_test select1-1.8.2 {
+  execsql {SELECT *, min(f1,f2), max(f1,f2) FROM test1}
+} {11 22 11 22}
+do_test select1-1.8.3 {
+  execsql {SELECT 'one', *, 'two', * FROM test1}
+} {one 11 22 two 11 22}
+
+execsql {CREATE TABLE test2(r1 real, r2 real)}
+execsql {INSERT INTO test2(r1,r2) VALUES(1.1,2.2)}
+
+do_test select1-1.9 {
+  execsql {SELECT * FROM test1, test2}
+} {11 22 1.1 2.2}
+do_test select1-1.9.1 {
+  execsql {SELECT *, 'hi' FROM test1, test2}
+} {11 22 1.1 2.2 hi}
+do_test select1-1.9.2 {
+  execsql {SELECT 'one', *, 'two', * FROM test1, test2}
+} {one 11 22 1.1 2.2 two 11 22 1.1 2.2}
+do_test select1-1.10 {
+  execsql {SELECT test1.f1, test2.r1 FROM test1, test2}
+} {11 1.1}
+do_test select1-1.11 {
+  execsql {SELECT test1.f1, test2.r1 FROM test2, test1}
+} {11 1.1}
+do_test select1-1.11.1 {
+  execsql {SELECT * FROM test2, test1}
+} {1.1 2.2 11 22}
+do_test select1-1.11.2 {
+  execsql {SELECT * FROM test1 AS a, test1 AS b}
+} {11 22 11 22}
+do_test select1-1.12 {
+  execsql {SELECT max(test1.f1,test2.r1), min(test1.f2,test2.r2)
+           FROM test2, test1}
+} {11 2.2}
+do_test select1-1.13 {
+  execsql {SELECT min(test1.f1,test2.r1), max(test1.f2,test2.r2)
+           FROM test1, test2}
+} {1.1 22}
+
+set long {This is a string that is too big to fit inside a NBFS buffer}
+do_test select1-2.0 {
+  execsql "
+    DROP TABLE test2;
+    DELETE FROM test1;
+    INSERT INTO test1 VALUES(11,22);
+    INSERT INTO test1 VALUES(33,44);
+    CREATE TABLE t3(a,b);
+    INSERT INTO t3 VALUES('abc',NULL);
+    INSERT INTO t3 VALUES(NULL,'xyz');
+    INSERT INTO t3 SELECT * FROM test1;
+    CREATE TABLE t4(a,b);
+    INSERT INTO t4 VALUES(NULL,'$long');
+    SELECT * FROM t3;
+  "
+} {abc {} {} xyz 11 22 33 44}
+
+# Error messges from sqliteExprCheck
+#
+do_test select1-2.1 {
+  set v [catch {execsql {SELECT count(f1,f2) FROM test1}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function count()}}
+do_test select1-2.2 {
+  set v [catch {execsql {SELECT count(f1) FROM test1}} msg]
+  lappend v $msg
+} {0 2}
+do_test select1-2.3 {
+  set v [catch {execsql {SELECT Count() FROM test1}} msg]
+  lappend v $msg
+} {0 2}
+do_test select1-2.4 {
+  set v [catch {execsql {SELECT COUNT(*) FROM test1}} msg]
+  lappend v $msg
+} {0 2}
+do_test select1-2.5 {
+  set v [catch {execsql {SELECT COUNT(*)+1 FROM test1}} msg]
+  lappend v $msg
+} {0 3}
+do_test select1-2.5.1 {
+  execsql {SELECT count(*),count(a),count(b) FROM t3}
+} {4 3 3}
+do_test select1-2.5.2 {
+  execsql {SELECT count(*),count(a),count(b) FROM t4}
+} {1 0 1}
+do_test select1-2.5.3 {
+  execsql {SELECT count(*),count(a),count(b) FROM t4 WHERE b=5}
+} {0 0 0}
+do_test select1-2.6 {
+  set v [catch {execsql {SELECT min(*) FROM test1}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function min()}}
+do_test select1-2.7 {
+  set v [catch {execsql {SELECT Min(f1) FROM test1}} msg]
+  lappend v $msg
+} {0 11}
+do_test select1-2.8 {
+  set v [catch {execsql {SELECT MIN(f1,f2) FROM test1}} msg]
+  lappend v [lsort $msg]
+} {0 {11 33}}
+do_test select1-2.8.1 {
+  execsql {SELECT coalesce(min(a),'xyzzy') FROM t3}
+} {11}
+do_test select1-2.8.2 {
+  execsql {SELECT min(coalesce(a,'xyzzy')) FROM t3}
+} {11}
+do_test select1-2.8.3 {
+  execsql {SELECT min(b), min(b) FROM t4}
+} [list $long $long]
+do_test select1-2.9 {
+  set v [catch {execsql {SELECT MAX(*) FROM test1}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function MAX()}}
+do_test select1-2.10 {
+  set v [catch {execsql {SELECT Max(f1) FROM test1}} msg]
+  lappend v $msg
+} {0 33}
+do_test select1-2.11 {
+  set v [catch {execsql {SELECT max(f1,f2) FROM test1}} msg]
+  lappend v [lsort $msg]
+} {0 {22 44}}
+do_test select1-2.12 {
+  set v [catch {execsql {SELECT MAX(f1,f2)+1 FROM test1}} msg]
+  lappend v [lsort $msg]
+} {0 {23 45}}
+do_test select1-2.13 {
+  set v [catch {execsql {SELECT MAX(f1)+1 FROM test1}} msg]
+  lappend v $msg
+} {0 34}
+do_test select1-2.13.1 {
+  execsql {SELECT coalesce(max(a),'xyzzy') FROM t3}
+} {abc}
+do_test select1-2.13.2 {
+  execsql {SELECT max(coalesce(a,'xyzzy')) FROM t3}
+} {xyzzy}
+do_test select1-2.14 {
+  set v [catch {execsql {SELECT SUM(*) FROM test1}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function SUM()}}
+do_test select1-2.15 {
+  set v [catch {execsql {SELECT Sum(f1) FROM test1}} msg]
+  lappend v $msg
+} {0 44}
+do_test select1-2.16 {
+  set v [catch {execsql {SELECT sum(f1,f2) FROM test1}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function sum()}}
+do_test select1-2.17 {
+  set v [catch {execsql {SELECT SUM(f1)+1 FROM test1}} msg]
+  lappend v $msg
+} {0 45}
+do_test select1-2.17.1 {
+  execsql {SELECT sum(a) FROM t3}
+} {44.0}
+do_test select1-2.18 {
+  set v [catch {execsql {SELECT XYZZY(f1) FROM test1}} msg]
+  lappend v $msg
+} {1 {no such function: XYZZY}}
+do_test select1-2.19 {
+  set v [catch {execsql {SELECT SUM(min(f1,f2)) FROM test1}} msg]
+  lappend v $msg
+} {0 44}
+do_test select1-2.20 {
+  set v [catch {execsql {SELECT SUM(min(f1)) FROM test1}} msg]
+  lappend v $msg
+} {1 {misuse of aggregate function min()}}
+
+# Ticket #2526
+#
+do_test select1-2.21 {
+  catchsql {
+     SELECT min(f1) AS m FROM test1 GROUP BY f1 HAVING max(m+5)<10
+  }
+} {1 {misuse of aliased aggregate m}}
+do_test select1-2.22 {
+  catchsql {
+     SELECT coalesce(min(f1)+5,11) AS m FROM test1
+      GROUP BY f1
+     HAVING max(m+5)<10
+  }
+} {1 {misuse of aliased aggregate m}}
+do_test select1-2.23 {
+  execsql {
+    CREATE TABLE tkt2526(a,b,c PRIMARY KEY);
+    INSERT INTO tkt2526 VALUES('x','y',NULL);
+    INSERT INTO tkt2526 VALUES('x','z',NULL);
+  }
+  catchsql {
+    SELECT count(a) AS cn FROM tkt2526 GROUP BY a HAVING cn<max(cn)
+  }
+} {1 {misuse of aliased aggregate cn}}
+
+# WHERE clause expressions
+#
+do_test select1-3.1 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1<11}} msg]
+  lappend v $msg
+} {0 {}}
+do_test select1-3.2 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1<=11}} msg]
+  lappend v $msg
+} {0 11}
+do_test select1-3.3 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1=11}} msg]
+  lappend v $msg
+} {0 11}
+do_test select1-3.4 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1>=11}} msg]
+  lappend v [lsort $msg]
+} {0 {11 33}}
+do_test select1-3.5 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1>11}} msg]
+  lappend v [lsort $msg]
+} {0 33}
+do_test select1-3.6 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE f1!=11}} msg]
+  lappend v [lsort $msg]
+} {0 33}
+do_test select1-3.7 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE min(f1,f2)!=11}} msg]
+  lappend v [lsort $msg]
+} {0 33}
+do_test select1-3.8 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE max(f1,f2)!=11}} msg]
+  lappend v [lsort $msg]
+} {0 {11 33}}
+do_test select1-3.9 {
+  set v [catch {execsql {SELECT f1 FROM test1 WHERE count(f1,f2)!=11}} msg]
+  lappend v $msg
+} {1 {wrong number of arguments to function count()}}
+
+# ORDER BY expressions
+#
+do_test select1-4.1 {
+  set v [catch {execsql {SELECT f1 FROM test1 ORDER BY f1}} msg]
+  lappend v $msg
+} {0 {11 33}}
+do_test select1-4.2 {
+  set v [catch {execsql {SELECT f1 FROM test1 ORDER BY -f1}} msg]
+  lappend v $msg
+} {0 {33 11}}
+do_test select1-4.3 {
+  set v [catch {execsql {SELECT f1 FROM test1 ORDER BY min(f1,f2)}} msg]
+  lappend v $msg
+} {0 {11 33}}
+do_test select1-4.4 {
+  set v [catch {execsql {SELECT f1 FROM test1 ORDER BY min(f1)}} msg]
+  lappend v $msg
+} {1 {misuse of aggregate: min()}}
+do_catchsql_test select1-4.5 {
+  INSERT INTO test1(f1) SELECT f1 FROM test1 ORDER BY min(f1);
+} {1 {misuse of aggregate: min()}}
+
+# The restriction not allowing constants in the ORDER BY clause
+# has been removed.  See ticket #1768
+#do_test select1-4.5 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY 8.4;
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+#do_test select1-4.6 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY '8.4';
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+#do_test select1-4.7.1 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY 'xyz';
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+#do_test select1-4.7.2 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY -8.4;
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+#do_test select1-4.7.3 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY +8.4;
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+#do_test select1-4.7.4 {
+#  catchsql {
+#    SELECT f1 FROM test1 ORDER BY 4294967296; -- constant larger than 32 bits
+#  }
+#} {1 {ORDER BY terms must not be non-integer constants}}
+
+do_test select1-4.5 {
+  execsql {
+    SELECT f1 FROM test1 ORDER BY 8.4
+  }
+} {11 33}
+do_test select1-4.6 {
+  execsql {
+    SELECT f1 FROM test1 ORDER BY '8.4'
+  }
+} {11 33}
+
+do_test select1-4.8 {
+  execsql {
+    CREATE TABLE t5(a,b);
+    INSERT INTO t5 VALUES(1,10);
+    INSERT INTO t5 VALUES(2,9);
+    SELECT * FROM t5 ORDER BY 1;
+  }
+} {1 10 2 9}
+do_test select1-4.9.1 {
+  execsql {
+    SELECT * FROM t5 ORDER BY 2;
+  }
+} {2 9 1 10}
+do_test select1-4.9.2 {
+  execsql {
+    SELECT * FROM t5 ORDER BY +2;
+  }
+} {2 9 1 10}
+do_test select1-4.10.1 {
+  catchsql {
+    SELECT * FROM t5 ORDER BY 3;
+  }
+} {1 {1st ORDER BY term out of range - should be between 1 and 2}}
+do_test select1-4.10.2 {
+  catchsql {
+    SELECT * FROM t5 ORDER BY -1;
+  }
+} {1 {1st ORDER BY term out of range - should be between 1 and 2}}
+do_test select1-4.11 {
+  execsql {
+    INSERT INTO t5 VALUES(3,10);
+    SELECT * FROM t5 ORDER BY 2, 1 DESC;
+  }
+} {2 9 3 10 1 10}
+do_test select1-4.12 {
+  execsql {
+    SELECT * FROM t5 ORDER BY 1 DESC, b;
+  }
+} {3 10 2 9 1 10}
+do_test select1-4.13 {
+  execsql {
+    SELECT * FROM t5 ORDER BY b DESC, 1;
+  }
+} {1 10 3 10 2 9}
+
+
+# ORDER BY ignored on an aggregate query
+#
+do_test select1-5.1 {
+  set v [catch {execsql {SELECT max(f1) FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 33}
+
+execsql {CREATE TABLE test2(t1 text, t2 text)}
+execsql {INSERT INTO test2 VALUES('abc','xyz')}
+
+# Check for column naming
+#
+do_test select1-6.1 {
+  set v [catch {execsql2 {SELECT f1 FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {f1 11 f1 33}}
+do_test select1-6.1.1 {
+  db eval {PRAGMA full_column_names=on}
+  set v [catch {execsql2 {SELECT f1 FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {test1.f1 11 test1.f1 33}}
+do_test select1-6.1.2 {
+  set v [catch {execsql2 {SELECT f1 as 'f1' FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {f1 11 f1 33}}
+do_test select1-6.1.3 {
+  set v [catch {execsql2 {SELECT * FROM test1 WHERE f1==11}} msg]
+  lappend v $msg
+} {0 {f1 11 f2 22}}
+do_test select1-6.1.4 {
+  set v [catch {execsql2 {SELECT DISTINCT * FROM test1 WHERE f1==11}} msg]
+  db eval {PRAGMA full_column_names=off}
+  lappend v $msg
+} {0 {f1 11 f2 22}}
+do_test select1-6.1.5 {
+  set v [catch {execsql2 {SELECT * FROM test1 WHERE f1==11}} msg]
+  lappend v $msg
+} {0 {f1 11 f2 22}}
+do_test select1-6.1.6 {
+  set v [catch {execsql2 {SELECT DISTINCT * FROM test1 WHERE f1==11}} msg]
+  lappend v $msg
+} {0 {f1 11 f2 22}}
+do_test select1-6.2 {
+  set v [catch {execsql2 {SELECT f1 as xyzzy FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {xyzzy 11 xyzzy 33}}
+do_test select1-6.3 {
+  set v [catch {execsql2 {SELECT f1 as "xyzzy" FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {xyzzy 11 xyzzy 33}}
+do_test select1-6.3.1 {
+  set v [catch {execsql2 {SELECT f1 as 'xyzzy ' FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {{xyzzy } 11 {xyzzy } 33}}
+do_test select1-6.4 {
+  set v [catch {execsql2 {SELECT f1+F2 as xyzzy FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {xyzzy 33 xyzzy 77}}
+do_test select1-6.4a {
+  set v [catch {execsql2 {SELECT f1+F2 FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {f1+F2 33 f1+F2 77}}
+do_test select1-6.5 {
+  set v [catch {execsql2 {SELECT test1.f1+F2 FROM test1 ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {test1.f1+F2 33 test1.f1+F2 77}}
+do_test select1-6.5.1 {
+  execsql2 {PRAGMA full_column_names=on}
+  set v [catch {execsql2 {SELECT test1.f1+F2 FROM test1 ORDER BY f2}} msg]
+  execsql2 {PRAGMA full_column_names=off}
+  lappend v $msg
+} {0 {test1.f1+F2 33 test1.f1+F2 77}}
+do_test select1-6.6 {
+  set v [catch {execsql2 {SELECT test1.f1+F2, t1 FROM test1, test2 
+         ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {test1.f1+F2 33 t1 abc test1.f1+F2 77 t1 abc}}
+do_test select1-6.7 {
+  set v [catch {execsql2 {SELECT A.f1, t1 FROM test1 as A, test2 
+         ORDER BY f2}} msg]
+  lappend v $msg
+} {0 {f1 11 t1 abc f1 33 t1 abc}}
+do_test select1-6.8 {
+  set v [catch {execsql2 {SELECT A.f1, f1 FROM test1 as A, test1 as B 
+         ORDER BY f2}} msg]
+  lappend v $msg
+} {1 {ambiguous column name: f1}}
+do_test select1-6.8b {
+  set v [catch {execsql2 {SELECT A.f1, B.f1 FROM test1 as A, test1 as B 
+         ORDER BY f2}} msg]
+  lappend v $msg
+} {1 {ambiguous column name: f2}}
+do_test select1-6.8c {
+  set v [catch {execsql2 {SELECT A.f1, f1 FROM test1 as A, test1 as A 
+         ORDER BY f2}} msg]
+  lappend v $msg
+} {1 {ambiguous column name: A.f1}}
+do_test select1-6.9.1 {
+  set v [catch {execsql {SELECT A.f1, B.f1 FROM test1 as A, test1 as B 
+         ORDER BY A.f1, B.f1}} msg]
+  lappend v $msg
+} {0 {11 11 11 33 33 11 33 33}}
+do_test select1-6.9.2 {
+  set v [catch {execsql2 {SELECT A.f1, B.f1 FROM test1 as A, test1 as B 
+         ORDER BY A.f1, B.f1}} msg]
+  lappend v $msg
+} {0 {f1 11 f1 11 f1 33 f1 33 f1 11 f1 11 f1 33 f1 33}}
+
+do_test select1-6.9.3 {
+  db eval {
+     PRAGMA short_column_names=OFF;
+     PRAGMA full_column_names=OFF;
+  }
+  execsql2 {
+     SELECT test1 . f1, test1 . f2 FROM test1 LIMIT 1
+  }
+} {{test1 . f1} 11 {test1 . f2} 22}
+do_test select1-6.9.4 {
+  db eval {
+     PRAGMA short_column_names=OFF;
+     PRAGMA full_column_names=ON;
+  }
+  execsql2 {
+     SELECT test1 . f1, test1 . f2 FROM test1 LIMIT 1
+  }
+} {test1.f1 11 test1.f2 22}
+do_test select1-6.9.5 {
+  db eval {
+     PRAGMA short_column_names=OFF;
+     PRAGMA full_column_names=ON;
+  }
+  execsql2 {
+     SELECT 123.45;
+  }
+} {123.45 123.45}
+do_test select1-6.9.6 {
+  execsql2 {
+     SELECT * FROM test1 a, test1 b LIMIT 1
+  }
+} {a.f1 11 a.f2 22 b.f1 11 b.f2 22}
+do_test select1-6.9.7 {
+  set x [execsql2 {
+     SELECT * FROM test1 a, (select 5, 6) LIMIT 1
+  }]
+  regsub -all {subquery_[0-9a-fA-F_]+} $x {subquery} x
+  set x
+} {a.f1 11 a.f2 22 subquery.5 5 subquery.6 6}
+do_test select1-6.9.8 {
+  set x [execsql2 {
+     SELECT * FROM test1 a, (select 5 AS x, 6 AS y) AS b LIMIT 1
+  }]
+  regsub -all {subquery_[0-9a-fA-F]+_} $x {subquery} x
+  set x
+} {a.f1 11 a.f2 22 b.x 5 b.y 6}
+do_test select1-6.9.9 {
+  execsql2 {
+     SELECT a.f1, b.f2 FROM test1 a, test1 b LIMIT 1
+  }
+} {test1.f1 11 test1.f2 22}
+do_test select1-6.9.10 {
+  execsql2 {
+     SELECT f1, t1 FROM test1, test2 LIMIT 1
+  }
+} {test1.f1 11 test2.t1 abc}
+do_test select1-6.9.11 {
+  db eval {
+     PRAGMA short_column_names=ON;
+     PRAGMA full_column_names=ON;
+  }
+  execsql2 {
+     SELECT a.f1, b.f2 FROM test1 a, test1 b LIMIT 1
+  }
+} {test1.f1 11 test1.f2 22}
+do_test select1-6.9.12 {
+  execsql2 {
+     SELECT f1, t1 FROM test1, test2 LIMIT 1
+  }
+} {test1.f1 11 test2.t1 abc}
+do_test select1-6.9.13 {
+  db eval {
+     PRAGMA short_column_names=ON;
+     PRAGMA full_column_names=OFF;
+  }
+  execsql2 {
+     SELECT a.f1, b.f1 FROM test1 a, test1 b LIMIT 1
+  }
+} {f1 11 f1 11}
+do_test select1-6.9.14 {
+  execsql2 {
+     SELECT f1, t1 FROM test1, test2 LIMIT 1
+  }
+} {f1 11 t1 abc}
+do_test select1-6.9.15 {
+  db eval {
+     PRAGMA short_column_names=OFF;
+     PRAGMA full_column_names=ON;
+  }
+  execsql2 {
+     SELECT a.f1, b.f1 FROM test1 a, test1 b LIMIT 1
+  }
+} {test1.f1 11 test1.f1 11}
+do_test select1-6.9.16 {
+  execsql2 {
+     SELECT f1, t1 FROM test1, test2 LIMIT 1
+  }
+} {test1.f1 11 test2.t1 abc}
+
+
+db eval {
+  PRAGMA short_column_names=ON;
+  PRAGMA full_column_names=OFF;
+}
+
+ifcapable compound {
+do_test select1-6.10 {
+  set v [catch {execsql2 {
+    SELECT f1 FROM test1 UNION SELECT f2 FROM test1
+    ORDER BY f2;
+  }} msg]
+  lappend v $msg
+} {0 {f1 11 f1 22 f1 33 f1 44}}
+do_test select1-6.11 {
+  set v [catch {execsql2 {
+    SELECT f1 FROM test1 UNION SELECT f2+100 FROM test1
+    ORDER BY f2+101;
+  }} msg]
+  lappend v $msg
+} {1 {1st ORDER BY term does not match any column in the result set}}
+
+# Ticket #2296
+ifcapable subquery&&compound {
+do_test select1-6.20 {
+   execsql {
+     CREATE TABLE t6(a TEXT, b TEXT);
+     INSERT INTO t6 VALUES('a','0');
+     INSERT INTO t6 VALUES('b','1');
+     INSERT INTO t6 VALUES('c','2');
+     INSERT INTO t6 VALUES('d','3');
+     SELECT a FROM t6 WHERE b IN 
+        (SELECT b FROM t6 WHERE a<='b' UNION SELECT '3' AS x
+                 ORDER BY 1 LIMIT 1)
+   }
+} {a}
+do_test select1-6.21 {
+   execsql {
+     SELECT a FROM t6 WHERE b IN 
+        (SELECT b FROM t6 WHERE a<='b' UNION SELECT '3' AS x
+                 ORDER BY 1 DESC LIMIT 1)
+   }
+} {d}
+do_test select1-6.22 {
+   execsql {
+     SELECT a FROM t6 WHERE b IN 
+        (SELECT b FROM t6 WHERE a<='b' UNION SELECT '3' AS x
+                 ORDER BY b LIMIT 2)
+     ORDER BY a;
+   }
+} {a b}
+do_test select1-6.23 {
+   execsql {
+     SELECT a FROM t6 WHERE b IN 
+        (SELECT b FROM t6 WHERE a<='b' UNION SELECT '3' AS x
+                 ORDER BY x DESC LIMIT 2)
+     ORDER BY a;
+   }
+} {b d}
+}
+
+} ;#ifcapable compound
+
+do_test select1-7.1 {
+  set v [catch {execsql {
+     SELECT f1 FROM test1 WHERE f2=;
+  }} msg]
+  lappend v $msg
+} {1 {near ";": syntax error}}
+ifcapable compound {
+do_test select1-7.2 {
+  set v [catch {execsql {
+     SELECT f1 FROM test1 UNION SELECT WHERE;
+  }} msg]
+  lappend v $msg
+} {1 {near "WHERE": syntax error}}
+} ;# ifcapable compound
+do_test select1-7.3 {
+  set v [catch {execsql {SELECT f1 FROM test1 as 'hi', test2 as}} msg]
+  lappend v $msg
+} {1 {incomplete input}}
+do_test select1-7.4 {
+  set v [catch {execsql {
+     SELECT f1 FROM test1 ORDER BY;
+  }} msg]
+  lappend v $msg
+} {1 {near ";": syntax error}}
+do_test select1-7.5 {
+  set v [catch {execsql {
+     SELECT f1 FROM test1 ORDER BY f1 desc, f2 where;
+  }} msg]
+  lappend v $msg
+} {1 {near "where": syntax error}}
+do_test select1-7.6 {
+  set v [catch {execsql {
+     SELECT count(f1,f2 FROM test1;
+  }} msg]
+  lappend v $msg
+} {1 {near "FROM": syntax error}}
+do_test select1-7.7 {
+  set v [catch {execsql {
+     SELECT count(f1,f2+) FROM test1;
+  }} msg]
+  lappend v $msg
+} {1 {near ")": syntax error}}
+do_test select1-7.8 {
+  set v [catch {execsql {
+     SELECT f1 FROM test1 ORDER BY f2, f1+;
+  }} msg]
+  lappend v $msg
+} {1 {near ";": syntax error}}
+do_test select1-7.9 {
+  catchsql {
+     SELECT f1 FROM test1 LIMIT 5+3 OFFSET 11 ORDER BY f2;
+  }
+} {1 {near "ORDER": syntax error}}
+
+do_test select1-8.1 {
+  execsql {SELECT f1 FROM test1 WHERE 4.3+2.4 OR 1 ORDER BY f1}
+} {11 33}
+do_test select1-8.2 {
+  execsql {
+    SELECT f1 FROM test1 WHERE ('x' || f1) BETWEEN 'x10' AND 'x20'
+    ORDER BY f1
+  }
+} {11}
+do_test select1-8.3 {
+  execsql {
+    SELECT f1 FROM test1 WHERE 5-3==2
+    ORDER BY f1
+  }
+} {11 33}
+
+# TODO: This test is failing because f1 is now being loaded off the
+# disk as a vdbe integer, not a string. Hence the value of f1/(f1-11)
+# changes because of rounding. Disable the test for now.
+if 0 {
+do_test select1-8.4 {
+  execsql {
+    SELECT coalesce(f1/(f1-11),'x'),
+           coalesce(min(f1/(f1-11),5),'y'),
+           coalesce(max(f1/(f1-33),6),'z')
+    FROM test1 ORDER BY f1
+  }
+} {x y 6 1.5 1.5 z}
+}
+do_test select1-8.5 {
+  execsql {
+    SELECT min(1,2,3), -max(1,2,3)
+    FROM test1 ORDER BY f1
+  }
+} {1 -3 1 -3}
+
+
+# Check the behavior when the result set is empty
+#
+# SQLite v3 always sets r(*).
+#
+# do_test select1-9.1 {
+#   catch {unset r}
+#   set r(*) {}
+#   db eval {SELECT * FROM test1 WHERE f1<0} r {}
+#   set r(*)
+# } {}
+do_test select1-9.2 {
+  execsql {PRAGMA empty_result_callbacks=on}
+  catch {unset r}
+  set r(*) {}
+  db eval {SELECT * FROM test1 WHERE f1<0} r {}
+  set r(*)
+} {f1 f2}
+ifcapable subquery {
+  do_test select1-9.3 {
+    set r(*) {}
+    db eval {SELECT * FROM test1 WHERE f1<(select count(*) from test2)} r {}
+    set r(*)
+  } {f1 f2}
+}
+do_test select1-9.4 {
+  set r(*) {}
+  db eval {SELECT * FROM test1 ORDER BY f1} r {}
+  set r(*)
+} {f1 f2}
+do_test select1-9.5 {
+  set r(*) {}
+  db eval {SELECT * FROM test1 WHERE f1<0 ORDER BY f1} r {}
+  set r(*)
+} {f1 f2}
+unset r
+
+# Check for ORDER BY clauses that refer to an AS name in the column list
+#
+do_test select1-10.1 {
+  execsql {
+    SELECT f1 AS x FROM test1 ORDER BY x
+  }
+} {11 33}
+do_test select1-10.2 {
+  execsql {
+    SELECT f1 AS x FROM test1 ORDER BY -x
+  }
+} {33 11}
+do_test select1-10.3 {
+  execsql {
+    SELECT f1-23 AS x FROM test1 ORDER BY abs(x)
+  }
+} {10 -12}
+do_test select1-10.4 {
+  execsql {
+    SELECT f1-23 AS x FROM test1 ORDER BY -abs(x)
+  }
+} {-12 10}
+do_test select1-10.5 {
+  execsql {
+    SELECT f1-22 AS x, f2-22 as y FROM test1
+  }
+} {-11 0 11 22}
+do_test select1-10.6 {
+  execsql {
+    SELECT f1-22 AS x, f2-22 as y FROM test1 WHERE x>0 AND y<50
+  }
+} {11 22}
+do_test select1-10.7 {
+  execsql {
+    SELECT f1 COLLATE nocase AS x FROM test1 ORDER BY x
+  }
+} {11 33}
+
+# Check the ability to specify "TABLE.*" in the result set of a SELECT
+#
+do_test select1-11.1 {
+  execsql {
+    DELETE FROM t3;
+    DELETE FROM t4;
+    INSERT INTO t3 VALUES(1,2);
+    INSERT INTO t4 VALUES(3,4);
+    SELECT * FROM t3, t4;
+  }
+} {1 2 3 4}
+do_test select1-11.2.1 {
+  execsql {
+    SELECT * FROM t3, t4;
+  }
+} {1 2 3 4}
+do_test select1-11.2.2 {
+  execsql2 {
+    SELECT * FROM t3, t4;
+  }
+} {a 3 b 4 a 3 b 4}
+do_test select1-11.4.1 {
+  execsql {
+    SELECT t3.*, t4.b FROM t3, t4;
+  }
+} {1 2 4}
+do_test select1-11.4.2 {
+  execsql {
+    SELECT "t3".*, t4.b FROM t3, t4;
+  }
+} {1 2 4}
+do_test select1-11.5.1 {
+  execsql2 {
+    SELECT t3.*, t4.b FROM t3, t4;
+  }
+} {a 1 b 4 b 4}
+do_test select1-11.6 {
+  execsql2 {
+    SELECT x.*, y.b FROM t3 AS x, t4 AS y;
+  }
+} {a 1 b 4 b 4}
+do_test select1-11.7 {
+  execsql {
+    SELECT t3.b, t4.* FROM t3, t4;
+  }
+} {2 3 4}
+do_test select1-11.8 {
+  execsql2 {
+    SELECT t3.b, t4.* FROM t3, t4;
+  }
+} {b 4 a 3 b 4}
+do_test select1-11.9 {
+  execsql2 {
+    SELECT x.b, y.* FROM t3 AS x, t4 AS y;
+  }
+} {b 4 a 3 b 4}
+do_test select1-11.10 {
+  catchsql {
+    SELECT t5.* FROM t3, t4;
+  }
+} {1 {no such table: t5}}
+do_test select1-11.11 {
+  catchsql {
+    SELECT t3.* FROM t3 AS x, t4;
+  }
+} {1 {no such table: t3}}
+ifcapable subquery {
+  do_test select1-11.12 {
+    execsql2 {
+      SELECT t3.* FROM t3, (SELECT max(a), max(b) FROM t4)
+    }
+  } {a 1 b 2}
+  do_test select1-11.13 {
+    execsql2 {
+      SELECT t3.* FROM (SELECT max(a), max(b) FROM t4), t3
+    }
+  } {a 1 b 2}
+  do_test select1-11.14 {
+    execsql2 {
+      SELECT * FROM t3, (SELECT max(a), max(b) FROM t4) AS 'tx'
+    }
+  } {a 1 b 2 max(a) 3 max(b) 4}
+  do_test select1-11.15 {
+    execsql2 {
+      SELECT y.*, t3.* FROM t3, (SELECT max(a), max(b) FROM t4) AS y
+    }
+  } {max(a) 3 max(b) 4 a 1 b 2}
+}
+do_test select1-11.16 {
+  execsql2 {
+    SELECT y.* FROM t3 as y, t4 as z
+  }
+} {a 1 b 2}
+
+# Tests of SELECT statements without a FROM clause.
+#
+do_test select1-12.1 {
+  execsql2 {
+    SELECT 1+2+3
+  }
+} {1+2+3 6}
+do_test select1-12.2 {
+  execsql2 {
+    SELECT 1,'hello',2
+  }
+} {1 1 'hello' hello 2 2}
+do_test select1-12.3 {
+  execsql2 {
+    SELECT 1 AS 'a','hello' AS 'b',2 AS 'c'
+  }
+} {a 1 b hello c 2}
+do_test select1-12.4 {
+  execsql {
+    DELETE FROM t3;
+    INSERT INTO t3 VALUES(1,2);
+  }
+} {}
+
+ifcapable compound {
+do_test select1-12.5 {
+  execsql {
+    SELECT * FROM t3 UNION SELECT 3 AS 'a', 4 ORDER BY a;
+  }
+} {1 2 3 4}
+
+do_test select1-12.6 {
+  execsql {
+    SELECT 3, 4 UNION SELECT * FROM t3;
+  }
+} {1 2 3 4}
+} ;# ifcapable compound
+
+ifcapable subquery {
+  do_test select1-12.7 {
+    execsql {
+      SELECT * FROM t3 WHERE a=(SELECT 1);
+    }
+  } {1 2}
+  do_test select1-12.8 {
+    execsql {
+      SELECT * FROM t3 WHERE a=(SELECT 2);
+    }
+  } {}
+}
+
+ifcapable {compound && subquery} {
+  do_test select1-12.9 {
+    execsql2 {
+      SELECT x FROM (
+        SELECT a AS x, b AS y FROM t3 UNION SELECT a,b FROM t4 ORDER BY a,b
+      ) ORDER BY x;
+    }
+  } {x 1 x 3}
+  do_test select1-12.10 {
+    execsql2 {
+      SELECT z.x FROM (
+        SELECT a AS x,b AS y FROM t3 UNION SELECT a, b FROM t4 ORDER BY a,b
+      ) AS 'z' ORDER BY x;
+    }
+  } {x 1 x 3}
+} ;# ifcapable compound
+
+
+# Check for a VDBE stack growth problem that existed at one point.
+#
+ifcapable subquery {
+  do_test select1-13.1 {
+    execsql {
+      BEGIN;
+      create TABLE abc(a, b, c, PRIMARY KEY(a, b));
+      INSERT INTO abc VALUES(1, 1, 1);
+    }
+    for {set i 0} {$i<10} {incr i} {
+      execsql {
+        INSERT INTO abc SELECT a+(select max(a) FROM abc), 
+            b+(select max(a) FROM abc), c+(select max(a) FROM abc) FROM abc;
+      }
+    }
+    execsql {COMMIT}
+  
+    # This used to seg-fault when the problem existed.
+    execsql {
+      SELECT count(
+        (SELECT a FROM abc WHERE a = NULL AND b >= upper.c) 
+      ) FROM abc AS upper;
+    }
+  } {0}
+}
+
+foreach tab [db eval {SELECT name FROM sqlite_master WHERE type = 'table'}] {
+  db eval "DROP TABLE $tab"
+}
+db close
+sqlite3 db test.db
+
+do_test select1-14.1 {
+  execsql { 
+    SELECT * FROM sqlite_master WHERE rowid>10; 
+    SELECT * FROM sqlite_master WHERE rowid=10;
+    SELECT * FROM sqlite_master WHERE rowid<10;
+    SELECT * FROM sqlite_master WHERE rowid<=10;
+    SELECT * FROM sqlite_master WHERE rowid>=10;
+    SELECT * FROM sqlite_master;
+  }
+} {}
+do_test select1-14.2 {
+  execsql { 
+    SELECT 10 IN (SELECT rowid FROM sqlite_master);
+  }
+} {0}
+
+if {[db one {PRAGMA locking_mode}]=="normal"} {
+  # Check that ticket #3771 has been fixed.  This test does not
+  # work with locking_mode=EXCLUSIVE so disable in that case.
+  #
+  do_test select1-15.1 {
+    execsql {
+      CREATE TABLE t1(a);
+      CREATE INDEX i1 ON t1(a);
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+    }
+  } {}
+  do_test select1-15.2 {
+    sqlite3 db2 test.db
+    execsql { DROP INDEX i1 } db2
+    db2 close
+  } {}
+  do_test select1-15.3 {
+    execsql { SELECT 2 IN (SELECT a FROM t1) }
+  } {1}
+}
+
+# Crash bug reported on the mailing list on 2012-02-23
+#
+do_test select1-16.1 {
+  catchsql {SELECT 1 FROM (SELECT *)}
+} {1 {no tables specified}}
+
+# 2015-04-17:  assertion fix.
+do_catchsql_test select1-16.2 {
+  SELECT 1 FROM sqlite_master LIMIT 1,#1;
+} {1 {near "#1": syntax error}}
+
+# 2019-01-16 Chromium bug 922312
+# Sorting with a LIMIT clause using SRT_EphemTab and SRT_Table
+#
+do_execsql_test select1-17.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(x);   INSERT INTO t1 VALUES(1);
+  CREATE TABLE t2(y,z); INSERT INTO t2 VALUES(2,3);
+  CREATE INDEX t2y ON t2(y);
+  SELECT * FROM t1,(SELECT * FROM t2 WHERE y=2 ORDER BY y,z);
+} {1 2 3}
+do_execsql_test select1-17.2 {
+  SELECT * FROM t1,(SELECT * FROM t2 WHERE y=2 ORDER BY y,z LIMIT 4);
+} {1 2 3}
+do_execsql_test select1-17.3 {
+  SELECT * FROM t1,(SELECT * FROM t2 WHERE y=2
+         UNION ALL SELECT * FROM t2 WHERE y=3 ORDER BY y,z LIMIT 4);
+} {1 2 3}
+
+# 2019-07-24 Ticket https://sqlite.org/src/tktview/c52b09c7f38903b1311
+#
+do_execsql_test select1-18.1 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(c);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+  INSERT INTO t1(c) VALUES(123);
+  INSERT INTO t2(x) VALUES(123);
+  SELECT x FROM t2, t1 WHERE x BETWEEN c AND null OR x AND
+  x IN ((SELECT x FROM (SELECT x FROM t2, t1 
+  WHERE x BETWEEN (SELECT x FROM (SELECT x COLLATE rtrim 
+  FROM t2, t1 WHERE x BETWEEN c AND null
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND null
+  OR x AND x IN (c)) AND null
+  OR NOT EXISTS(SELECT -4.81 FROM t1, t2 WHERE x BETWEEN c AND null
+  OR x AND x IN ((SELECT x FROM (SELECT x FROM t2, t1
+  WHERE x BETWEEN (SELECT x FROM (SELECT x BETWEEN c AND null
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND null
+  OR x AND x IN (c)) AND null
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND null
+  OR x AND x IN (c)))) AND x IN (c)
+  ), t1 WHERE x BETWEEN c AND null
+  OR x AND x IN (c)));
+} {}
+do_execsql_test select1-18.2 {
+  DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(c);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+  INSERT INTO t1(c) VALUES(123);
+  INSERT INTO t2(x) VALUES(123);
+  SELECT x FROM t2, t1 WHERE x BETWEEN c AND (c+1) OR x AND
+  x IN ((SELECT x FROM (SELECT x FROM t2, t1 
+  WHERE x BETWEEN (SELECT x FROM (SELECT x COLLATE rtrim 
+  FROM t2, t1 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN (c)) AND (c+1)
+  OR NOT EXISTS(SELECT -4.81 FROM t1, t2 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN ((SELECT x FROM (SELECT x FROM t2, t1
+  WHERE x BETWEEN (SELECT x FROM (SELECT x BETWEEN c AND (c+1)
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN (c)) AND (c+1)
+  OR x AND x IN (c)), t1 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN (c)))) AND x IN (c)
+  ), t1 WHERE x BETWEEN c AND (c+1)
+  OR x AND x IN (c)));
+} {123}
+do_execsql_test select1-18.3 {
+  SELECT 1 FROM t1 WHERE (
+    SELECT 2 FROM t2 WHERE (
+      SELECT 3 FROM (
+        SELECT x FROM t2 WHERE x=c OR x=(SELECT x FROM (VALUES(0)))
+      ) WHERE x>c OR x=c
+    )
+  );
+} {1}
+do_execsql_test select1-18.4 {
+  SELECT 1 FROM t1, t2 WHERE (
+    SELECT 3 FROM (
+      SELECT x FROM t2 WHERE x=c OR x=(SELECT x FROM (VALUES(0)))
+    ) WHERE x>c OR x=c
+  );
+} {1}
+
+# 2019-12-17 gramfuzz find
+#
+do_execsql_test select-19.10 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(x);
+} {}
+do_catchsql_test select-19.20 {
+  INSERT INTO t1
+    SELECT 1,2,3,4,5,6,7
+    UNION ALL SELECT 1,2,3,4,5,6,7
+    ORDER BY 1;
+} {1 {table t1 has 1 columns but 7 values were supplied}}
+do_catchsql_test select-19.21 {
+  INSERT INTO t1
+    SELECT 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+    UNION ALL SELECT 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+    ORDER BY 1;
+} {1 {table t1 has 1 columns but 15 values were supplied}}
+
+# 2020-01-01 Found by Yongheng's fuzzer
+#
+reset_db
+do_execsql_test select-20.10 {
+  CREATE TABLE t1 (
+    a INTEGER PRIMARY KEY,
+    b AS('Y') UNIQUE
+  );
+  INSERT INTO t1(a) VALUES (10);
+  SELECT * FROM t1 JOIN t1 USING(a,b)
+   WHERE ((SELECT t1.a FROM t1 AS x GROUP BY b) AND b=0)
+      OR a = 10;
+} {10 Y}
+do_execsql_test select-20.20 {
+  SELECT ifnull(a, max((SELECT 123))), count(a) FROM t1 ;
+} {10 1}
+
+finish_test

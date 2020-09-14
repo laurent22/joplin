@@ -1,0 +1,107 @@
+# 2010 March 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests to verify that ticket [cbd054fa6b] has been
+# fixed.  
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !stat4 {
+  finish_test
+  return
+}
+
+proc s {blob} {
+  set ret ""
+  binary scan $blob c* bytes
+  foreach b $bytes {
+    set t [binary format c $b]
+    if {[string is print $t]} {
+      append ret $t
+    } else {
+      append ret .
+    }
+  }
+  return $ret
+}
+db function s s
+
+do_test tkt-cbd05-1.1 {
+  db eval {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b TEXT UNIQUE NOT NULL);
+    CREATE INDEX t1_x ON t1(b);
+    INSERT INTO t1 VALUES (NULL, '');
+    INSERT INTO t1 VALUES (NULL, 'A');
+    INSERT INTO t1 VALUES (NULL, 'B');
+    INSERT INTO t1 VALUES (NULL, 'C');
+    INSERT INTO t1 VALUES (NULL, 'D');
+    INSERT INTO t1 VALUES (NULL, 'E');
+    INSERT INTO t1 VALUES (NULL, 'F');
+    INSERT INTO t1 VALUES (NULL, 'G');
+    INSERT INTO t1 VALUES (NULL, 'H');
+    INSERT INTO t1 VALUES (NULL, 'I');
+    SELECT count(*) FROM t1;
+  }
+} {10}
+do_test tkt-cbd05-1.2 {
+  db eval { ANALYZE; }
+  db eval {
+    PRAGMA writable_schema = 1;
+    CREATE VIEW vvv AS 
+    SELECT tbl,idx,neq,nlt,ndlt,test_extract(sample,0) AS sample
+    FROM sqlite_stat4;
+    PRAGMA writable_schema = 0;
+  }
+} {}
+do_test tkt-cbd05-1.3 {
+  execsql { 
+    SELECT tbl,idx,group_concat(s(sample),' ') 
+    FROM vvv 
+    WHERE idx = 't1_x' 
+    GROUP BY tbl,idx
+  }
+} {t1 t1_x { A B C D E F G H I}}
+
+do_test tkt-cbd05-2.1 {
+  db eval {
+    DROP TABLE t1;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB UNIQUE NOT NULL);
+    CREATE INDEX t1_x ON t1(b);
+    INSERT INTO t1 VALUES(NULL, X'');
+    INSERT INTO t1 VALUES(NULL, X'41');
+    INSERT INTO t1 VALUES(NULL, X'42');
+    INSERT INTO t1 VALUES(NULL, X'43');
+    INSERT INTO t1 VALUES(NULL, X'44');
+    INSERT INTO t1 VALUES(NULL, X'45');
+    INSERT INTO t1 VALUES(NULL, X'46');
+    INSERT INTO t1 VALUES(NULL, X'47');
+    INSERT INTO t1 VALUES(NULL, X'48');
+    INSERT INTO t1 VALUES(NULL, X'49');
+    SELECT count(*) FROM t1;
+  }
+} {10}
+do_test tkt-cbd05-2.2 {
+  db eval {
+    ANALYZE;
+  }
+} {}
+do_test tkt-cbd05-2.3 {
+  execsql { 
+    SELECT tbl,idx,group_concat(s(sample),' ') 
+    FROM vvv 
+    WHERE idx = 't1_x' 
+    GROUP BY tbl,idx
+  }
+} {t1 t1_x { A B C D E F G H I}}
+
+finish_test

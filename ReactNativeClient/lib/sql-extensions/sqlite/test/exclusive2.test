@@ -1,0 +1,324 @@
+# 2007 March 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# $Id: exclusive2.test,v 1.10 2008/11/27 02:22:11 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+ifcapable {!pager_pragmas} {
+  finish_test
+  return
+}
+
+# Tests in this file verify that locking_mode=exclusive causes SQLite to
+# use cached pages even if the database is changed on disk. This doesn't
+# work with mmap.
+if {[permutation]=="mmap"} {
+  finish_test
+  return
+}
+
+# This module does not work right if the cache spills at unexpected
+# moments.  So disable the soft-heap-limit.
+#
+sqlite3_soft_heap_limit 0
+
+proc pagerChangeCounter {filename new {fd ""}} {
+  if {$fd==""} {
+    set fd [open $filename RDWR]
+    fconfigure $fd -translation binary -encoding binary
+    set needClose 1
+  } else {
+    set needClose 0
+  }
+  if {$new ne ""} {
+    seek $fd 24
+    set a [expr {($new&0xFF000000)>>24}]
+    set b [expr {($new&0x00FF0000)>>16}]
+    set c [expr {($new&0x0000FF00)>>8}]
+    set d [expr {($new&0x000000FF)}]
+    puts -nonewline $fd [binary format cccc $a $b $c $d]
+    flush $fd
+  }
+
+  seek $fd 24
+  foreach {a b c d} [list 0 0 0 0] {}
+  binary scan [read $fd 4] cccc a b c d
+  set  ret [expr ($a&0x000000FF)<<24]
+  incr ret [expr ($b&0x000000FF)<<16]
+  incr ret [expr ($c&0x000000FF)<<8]
+  incr ret [expr ($d&0x000000FF)<<0]
+
+  if {$needClose} {close $fd}
+  return $ret
+}
+
+proc readPagerChangeCounter {filename} {
+  set fd [open $filename RDONLY]
+  fconfigure $fd -translation binary -encoding binary
+
+  seek $fd 24
+  foreach {a b c d} [list 0 0 0 0] {}
+  binary scan [read $fd 4] cccc a b c d
+  set  ret [expr ($a&0x000000FF)<<24]
+  incr ret [expr ($b&0x000000FF)<<16]
+  incr ret [expr ($c&0x000000FF)<<8]
+  incr ret [expr ($d&0x000000FF)<<0]
+
+  close $fd
+  return $ret
+}
+
+
+proc t1sig {{db db}} {
+  execsql {SELECT count(*), md5sum(a) FROM t1} $db
+}
+do_test exclusive2-1.0 {
+  readPagerChangeCounter test.db
+} {0}
+
+#-----------------------------------------------------------------------
+# The following tests - exclusive2-1.X - check that:
+#
+# 1-3:   Build a database with connection 1, calculate a signature.
+# 4-7:   Modify the database using a second connection in a way that
+#        does not modify the freelist, then reset the pager change-counter
+#        to the value it had before the modifications.
+# 8:     Check that using the first connection, the database signature
+#        is still the same. This is because it uses the in-memory cache.
+#        It can't tell the db has changed because we reset the change-counter.
+# 9:     Increment the change-counter.
+# 10:    Ensure that the first connection now sees the updated database. It
+#        sees the change-counter has been incremented and discards the 
+#        invalid in-memory cache.
+#
+# This will only work if the database cache is large enough to hold 
+# the entire database. In the case of 1024 byte pages, this means
+# the cache size must be at least 17. Otherwise, some pages will be
+# loaded from the database file in step 8.
+#
+# For similar reasons, this test does not work with the memsubsys1 permutation.
+# Permutation memsubsys1 configures the pcache subsystem to use a static
+# allocation of 24 pages (shared between all pagers). This is not enough for
+# this test.
+#
+do_test exclusive2-1.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1(a, b) VALUES(randstr(10, 400), 0);
+    INSERT INTO t1(a, b) VALUES(randstr(10, 400), 0);
+    INSERT INTO t1(a, b) SELECT randstr(10, 400), 0 FROM t1;
+    INSERT INTO t1(a, b) SELECT randstr(10, 400), 0 FROM t1;
+    INSERT INTO t1(a, b) SELECT randstr(10, 400), 0 FROM t1;
+    INSERT INTO t1(a, b) SELECT randstr(10, 400), 0 FROM t1;
+    INSERT INTO t1(a, b) SELECT randstr(10, 400), 0 FROM t1;
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }
+} {64}
+do_test exclusive2-1.2.1 {
+  # Make sure the pager cache is large enough to store the 
+  # entire database.
+  set nPage [expr [file size test.db]/1024]
+  if {$::SQLITE_DEFAULT_CACHE_SIZE < $nPage} {
+    execsql "PRAGMA cache_size = $nPage"
+  }
+  expr {[execsql {PRAGMA cache_size}] >= $nPage}
+} {1}
+do_test exclusive2-1.2 {
+  set ::sig [t1sig]
+  readPagerChangeCounter test.db
+} {1}
+do_test exclusive2-1.3 {
+  t1sig
+} $::sig
+do_test exclusive2-1.4 {
+  sqlite3 db2 test.db
+  t1sig db2
+} $::sig
+do_test exclusive2-1.5 {
+  execsql {
+    UPDATE t1 SET b=a, a=0;
+  } db2
+  expr {[t1sig db2] eq $::sig}
+} 0
+do_test exclusive2-1.6 {
+  readPagerChangeCounter test.db
+} {2}
+do_test exclusive2-1.7 {
+  pagerChangeCounter test.db 1
+} {1}
+if {[permutation] != "memsubsys1"} {
+  do_test exclusive2-1.9 {
+    t1sig
+    expr {[t1sig] eq $::sig}
+  } {1}
+}
+do_test exclusive2-1.10 {
+  pagerChangeCounter test.db 2
+} {2}
+do_test exclusive2-1.11 {
+  expr {[t1sig] eq $::sig}
+} {0}
+db2 close
+
+#--------------------------------------------------------------------
+# These tests - exclusive2-2.X - are similar to exclusive2-1.X, 
+# except that they are run with locking_mode=EXCLUSIVE.
+#
+# 1-3:   Build a database with exclusive-access connection 1, 
+#        calculate a signature.
+# 4:     Corrupt the database by writing 10000 bytes of garbage
+#        starting at the beginning of page 2. Check that connection 1
+#        still works. It should be accessing the in-memory cache.
+# 5-6:   Modify the dataase change-counter. Connection 1 still works
+#        entirely from in-memory cache, because it doesn't check the
+#        change-counter.
+# 7-8    Set the locking-mode back to normal. After the db is unlocked,
+#        SQLite detects the modified change-counter and discards the
+#        in-memory cache. Then it finds the corruption caused in step 4....
+#
+# As above, this test is only applicable if the pager cache is
+# large enough to hold the entire database. With 1024 byte pages,
+# this means 19 pages.  We also need to disable the soft-heap-limit
+# to prevent memory-induced cache spills.
+#
+do_test exclusive2-2.1 {
+  execsql {PRAGMA cache_size=1000;}
+  execsql {PRAGMA locking_mode = exclusive;}
+  execsql {
+    BEGIN;
+    DELETE FROM t1;
+    INSERT INTO t1(a) VALUES(randstr(10, 400));
+    INSERT INTO t1(a) VALUES(randstr(10, 400));
+    INSERT INTO t1(a) SELECT randstr(10, 400) FROM t1;
+    INSERT INTO t1(a) SELECT randstr(10, 400) FROM t1;
+    INSERT INTO t1(a) SELECT randstr(10, 400) FROM t1;
+    INSERT INTO t1(a) SELECT randstr(10, 400) FROM t1;
+    INSERT INTO t1(a) SELECT randstr(10, 400) FROM t1;
+    COMMIT;
+    SELECT count(*) FROM t1;
+  }
+} {64}
+do_test exclusive2-2.2.1 {
+  # Make sure the pager cache is large enough to store the 
+  # entire database.
+  set nPage [expr [file size test.db]/1024]
+  if {$::SQLITE_DEFAULT_CACHE_SIZE < $nPage} {
+    execsql "PRAGMA cache_size = $nPage"
+  }
+  expr {[execsql {PRAGMA cache_size}] >= $nPage}
+} {1}
+do_test exclusive2-2.2 {
+  set ::sig [t1sig]
+  readPagerChangeCounter test.db
+} {3}
+do_test exclusive2-2.3 {
+  t1sig
+} $::sig
+
+do_test exclusive2-2.4 {
+  set ::fd [open test.db RDWR]
+  fconfigure $::fd -translation binary
+  seek $::fd 1024
+  puts -nonewline $::fd [string repeat [binary format c 0] 10000]
+  flush $::fd
+  t1sig
+} $::sig
+
+do_test exclusive2-2.5 {
+  pagerChangeCounter test.db 5 $::fd
+} {5}
+do_test exclusive2-2.6 {
+  t1sig
+} $::sig
+do_test exclusive2-2.7 {
+  execsql {PRAGMA locking_mode = normal}
+  t1sig
+} $::sig
+
+do_test exclusive2-2.8 {
+  set rc [catch {t1sig} msg]
+  list $rc $msg
+} {1 {database disk image is malformed}}
+
+#--------------------------------------------------------------------
+# These tests - exclusive2-3.X - verify that the pager change-counter
+# is only incremented by the first change when in exclusive access
+# mode. In normal mode, the change-counter is incremented once
+# per write-transaction.
+#
+
+db close
+catch {close $::fd}
+forcedelete test.db
+forcedelete test.db-journal
+
+do_test exclusive2-3.0 {
+  sqlite3 db test.db
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(a UNIQUE);
+    INSERT INTO t1 VALUES(randstr(200, 200));
+    INSERT INTO t1 VALUES(randstr(200, 200));
+    COMMIT;
+  }
+  readPagerChangeCounter test.db
+} {1}
+do_test exclusive2-3.1 {
+  execsql {
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {2}
+do_test exclusive2-3.2 {
+  execsql {
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {3}
+do_test exclusive2-3.3 {
+  execsql {
+    PRAGMA locking_mode = exclusive;
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {4}
+do_test exclusive2-3.4 {
+  execsql {
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {4}
+do_test exclusive2-3.5 {
+  execsql {
+    PRAGMA locking_mode = normal;
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {4}
+do_test exclusive2-3.6 {
+  execsql {
+    INSERT INTO t1 VALUES(randstr(200, 200));
+  }
+  readPagerChangeCounter test.db
+} {5}
+sqlite3_soft_heap_limit $cmdlinearg(soft-heap-limit)
+
+finish_test

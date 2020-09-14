@@ -1,0 +1,573 @@
+# 2006 September 4
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# $Id: misc7.test,v 1.29 2009/07/16 18:21:18 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix misc7
+
+if {[clang_sanitize_address]==0} {
+  do_test misc7-1-misuse {
+    c_misuse_test
+  } {}
+}
+
+do_test misc7-2 {
+  c_realloc_test
+} {}
+
+do_test misc7-3 {
+  c_collation_test
+} {}
+
+# Try to open a directory:
+#
+do_test misc7-4 {
+  delete_file mydir
+  file mkdir mydir
+  set rc [catch {
+    sqlite3 db2 ./mydir
+  } msg]
+  list $rc $msg
+} {1 {unable to open database file}}
+
+# Try to open a file with a directory where its journal file should be.
+#
+if {[atomic_batch_write test.db]==0} {
+  do_test misc7-5 {
+    delete_file mydir
+    file mkdir mydir-journal
+    sqlite3 db2 ./mydir
+    catchsql {
+      CREATE TABLE abc(a, b, c);
+    } db2
+  } {1 {unable to open database file}}
+  db2 close
+}
+
+#--------------------------------------------------------------------
+# The following tests, misc7-6.* test the libraries behaviour when
+# it cannot open a file. To force this condition, we use up all the
+# file-descriptors before running sqlite. This probably only works
+# on unix.
+#
+
+proc use_up_files {} {
+  set ret [list]
+  catch {
+    while 1 { lappend ret [open test.db] }
+  }
+  return $ret
+}
+
+proc do_fileopen_test {prefix sql} {
+  set fd_list [use_up_files]
+  set ::go 1
+  set ::n 1
+  set ::sql $sql
+  while {$::go} {
+    catch {db close}
+    do_test ${prefix}.${::n} {
+      set rc [catch {
+        sqlite db test.db
+        db eval $::sql
+      } msg]
+      if {$rc == 0} {set ::go 0}
+  
+      expr {$rc == 0 || ($rc == 1 && [string first unable $msg]==0)}
+    } 1
+  
+    close [lindex $fd_list 0]
+    set fd_list [lrange $fd_list 1 end]
+    incr ::n
+  }
+  foreach fd $fd_list {
+    close $fd
+  }
+  db close
+}
+
+execsql { CREATE TABLE abc(a PRIMARY KEY, b, c); }
+db close
+
+if {$tcl_platform(platform)!="windows"} {
+  do_fileopen_test misc7-6.1 {
+    BEGIN;
+    INSERT INTO abc VALUES(1, 2, 3);
+    INSERT INTO abc VALUES(2, 3, 4);
+    INSERT INTO abc SELECT a+2, b, c FROM abc;
+    COMMIT;
+  }
+  
+  do_fileopen_test misc7-6.2 {
+    PRAGMA temp.cache_size = 1000;
+  }
+}
+
+#
+# End of tests for out-of-file-descriptors condition.
+#--------------------------------------------------------------------
+
+sqlite3 db test.db
+execsql {
+  DELETE FROM abc;
+  INSERT INTO abc VALUES(1, 2, 3);
+  INSERT INTO abc VALUES(2, 3, 4);
+  INSERT INTO abc SELECT a+2, b, c FROM abc;
+}
+  
+
+#--------------------------------------------------------------------
+# Test that the sqlite3_busy_timeout call seems to delay approximately
+# the right amount of time.
+#
+do_test misc7-7.0 {
+  sqlite3 db2 test.db
+  sqlite3_busy_timeout [sqlite3_connection_pointer db] 2000
+  execsql {
+    BEGIN EXCLUSIVE;
+  } db2
+
+  # Now db2 has an exclusive lock on the database file, and db has
+  # a busy-timeout of 2000 milliseconds. So check that trying to
+  # access the database using connection db delays for at least 1500 ms.
+  #
+  set tm [time {
+    set result [catchsql {
+        SELECT * FROM sqlite_master;
+      } db]
+  }]
+  set delay [lindex $tm 0]  ;# In microseconds
+  lappend result [expr {$delay>1500000 && $delay<4000000}]
+} {1 {database is locked} 1}
+db2 close
+
+#--------------------------------------------------------------------
+# Test that nothing goes horribly wrong when attaching a database
+# after the omit_readlock pragma has been exercised.
+#
+# Note:  The PRAGMA omit_readlock was an early hack to disable the
+# fcntl() calls for read-only databases so that read-only databases could
+# be read on broken NFS systems.  That pragma has now been removed.
+# (Use the unix-none VFS as a replacement, if needed.)  But these tests
+# do not really depend on omit_readlock, so we left them in place.
+#
+do_test misc7-7.1 {
+  forcedelete test2.db
+  forcedelete test2.db-journal
+  execsql {
+    PRAGMA omit_readlock = 1;
+    ATTACH 'test2.db' AS aux;
+    CREATE TABLE aux.hello(world);
+    SELECT name FROM aux.sqlite_master;
+  }
+} {hello}
+do_test misc7-7.2 {
+  execsql {
+    DETACH aux;
+  }
+} {}
+do_test misc7-7.3 {
+  db close
+  sqlite3 db test.db -readonly 1
+  execsql {
+    PRAGMA omit_readlock = 1;
+    ATTACH 'test2.db' AS aux;
+    SELECT name FROM aux.sqlite_master;
+    SELECT name FROM aux.sqlite_master;
+  }
+} {hello hello}
+do_test misc7-7.3 {
+  db close
+  sqlite3 db test.db
+  set ::DB [sqlite3_connection_pointer db]
+  list
+} {}
+
+# Test the UTF-16 version of the "out of memory" message (used when
+# malloc fails during sqlite3_open() ).
+#
+ifcapable utf16 {
+  do_test misc7-8 {
+    encoding convertfrom unicode [sqlite3_errmsg16 0x00000000]
+  } {out of memory}
+}
+
+do_test misc7-9 {
+  execsql {
+    SELECT * 
+    FROM (SELECT name+1 AS one FROM sqlite_master LIMIT 1 OFFSET 1) 
+    WHERE one LIKE 'hello%';
+  }
+} {}
+
+#--------------------------------------------------------------------
+# Improve coverage for vtab code.
+#
+ifcapable vtab {
+  # Run some debug code to improve reported coverage
+  #
+
+  # set sqlite_where_trace 1
+  do_test misc7-10 {
+    register_echo_module [sqlite3_connection_pointer db]
+    execsql {
+      CREATE VIRTUAL TABLE t1 USING echo(abc);
+      SELECT a FROM t1 WHERE a = 1 ORDER BY b;
+    }
+  } {1}
+  set sqlite_where_trace 0
+  do_catchsql_test misc7-10.1 {
+    INSERT INTO t1(a,b,c) VALUES(12345,2,3) ON CONFLICT(a) DO NOTHING;
+  } {1 {UPSERT not implemented for virtual table "t1"}}
+
+  # Specify an ORDER BY clause that cannot be indexed.
+  do_test misc7-11 {
+    execsql {
+      SELECT t1.a, t2.a FROM t1, t1 AS t2 ORDER BY 2 LIMIT 1;
+    }
+  } {1 1}
+
+  # The whole point of this is to test an error code other than
+  # SQLITE_NOMEM from the vtab xBestIndex callback.
+  #
+  do_ioerr_test misc7-12 -tclprep {
+    sqlite3 db2 test.db
+    register_echo_module [sqlite3_connection_pointer db2]
+    db2 eval {
+      CREATE TABLE abc(a PRIMARY KEY, b, c);
+      INSERT INTO abc VALUES(1, 2, 3);
+      CREATE VIRTUAL TABLE t1 USING echo(abc);
+    }
+    db2 close
+  } -tclbody {
+    register_echo_module [sqlite3_connection_pointer db]
+    execsql {SELECT * FROM t1 WHERE a = 1;}
+  } 
+
+  # The case where the virtual table module returns a very large number
+  # as the cost of a scan (greater than SQLITE_BIG_DOUBLE in the code).
+  #
+  do_test misc7-13 {
+    sqlite3 db test.db
+    register_echo_module [sqlite3_connection_pointer db]
+    set ::echo_module_cost 2.0e+99
+    execsql {SELECT * FROM t1 WHERE a = 1;}
+  } {1 2 3}
+  unset ::echo_module_cost
+}
+
+db close
+forcedelete test.db
+forcedelete test.db-journal
+sqlite3 db test.db
+
+ifcapable explain {
+  do_execsql_test misc7-14.0 {
+    CREATE TABLE abc(a PRIMARY KEY, b, c);
+  }
+  do_eqp_test misc7-14.1 {
+    SELECT * FROM abc AS t2 WHERE rowid = 1;
+  } {
+  QUERY PLAN
+  `--SEARCH TABLE abc AS t2 USING INTEGER PRIMARY KEY (rowid=?)
+}
+  do_eqp_test misc7-14.2 {
+    SELECT * FROM abc AS t2 WHERE a = 1;
+} {
+  QUERY PLAN
+  `--SEARCH TABLE abc AS t2 USING INDEX sqlite_autoindex_abc_1 (a=?)
+}
+  do_eqp_test misc7-14.3 {
+    SELECT * FROM abc AS t2 ORDER BY a;
+  } {
+  QUERY PLAN
+  `--SCAN TABLE abc AS t2 USING INDEX sqlite_autoindex_abc_1
+}
+}
+
+db close
+forcedelete test.db
+forcedelete test.db-journal
+sqlite3 db test.db
+
+#--------------------------------------------------------------------
+# This is all to force the pager_remove_from_stmt_list() function
+# (inside pager.c) to remove a pager from the middle of the
+# statement-list.
+#
+do_test misc7-15.1 {
+  execsql {
+    PRAGMA cache_size = 10;
+    BEGIN;
+    CREATE TABLE abc(a PRIMARY KEY, b, c);
+    INSERT INTO abc 
+    VALUES(randstr(100,100), randstr(100,100), randstr(100,100));
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+    COMMIT;
+  }
+  expr {[file size test.db]>10240}
+} {1}
+do_test misc7-15.2 {
+  execsql {
+    DELETE FROM abc WHERE rowid > 12;
+    INSERT INTO abc SELECT 
+            randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+  }
+} {}
+
+db close
+forcedelete test.db
+forcedelete test.db-journal
+sqlite3 db test.db
+
+do_ioerr_test misc7-16 -sqlprep {
+   PRAGMA cache_size = 10;
+   PRAGMA default_cache_size = 10;
+   CREATE TABLE t3(a, b, UNIQUE(a, b));
+   INSERT INTO t3 VALUES( randstr(100, 100), randstr(100, 100) );
+   INSERT INTO t3 SELECT randstr(100, 100), randstr(100, 100) FROM t3;
+   INSERT INTO t3 SELECT randstr(100, 100), randstr(100, 100) FROM t3;
+   INSERT INTO t3 SELECT randstr(100, 100), randstr(100, 100) FROM t3;
+   INSERT INTO t3 SELECT randstr(100, 100), randstr(100, 100) FROM t3;
+   INSERT INTO t3 SELECT randstr(100, 100), randstr(100, 100) FROM t3;
+   UPDATE t3 
+   SET b = 'hello world'
+   WHERE rowid >= (SELECT max(rowid)-1 FROM t3);
+} -tclbody {
+  set rc [catch {db eval {
+    BEGIN;
+      PRAGMA cache_size = 10;
+      INSERT INTO t3 VALUES( randstr(100, 100), randstr(100, 100) );
+      UPDATE t3 SET a = b;
+    COMMIT;
+  }} msg]
+
+  if {!$rc || ($rc && [string first "UNIQUE" $msg]==0)} {
+    set msg
+  } else {
+    error $msg
+  }
+}
+
+sqlite3 db test.db
+
+do_test misc7-16.X {
+  execsql {
+    SELECT count(*) FROM t3;
+  }
+} {32}
+
+#----------------------------------------------------------------------
+# Test the situation where a hot-journal is discovered but write-access
+# to it is denied. This should return SQLITE_BUSY.
+#
+# These tests do not work on windows due to restrictions in the
+# windows file system.
+#
+if {$tcl_platform(platform)!="windows"} {
+
+  # Some network filesystems (ex: AFP) do not support setting read-only
+  # permissions.  Only run these tests if full unix permission setting
+  # capabilities are supported.
+  #
+  file attributes test.db -permissions rw-r--r--
+  if {[file attributes test.db -permissions]==0644} {
+
+    do_test misc7-17.1 {
+      execsql {
+        BEGIN;
+        DELETE FROM t3 WHERE (oid%3)==0;
+      }
+      forcecopy test.db bak.db
+      forcecopy test.db-journal bak.db-journal
+      execsql {
+        COMMIT;
+      }
+    
+      db close
+      forcecopy bak.db test.db
+      forcecopy bak.db-journal test.db-journal
+      sqlite3 db test.db
+    
+      catch {file attributes test.db-journal -permissions r--------}
+      catch {file attributes test.db-journal -readonly 1}
+      catchsql {
+        SELECT count(*) FROM t3;
+      }
+    } {1 {unable to open database file}}
+    do_test misc7-17.2 {
+      # Note that the -readonly flag must be cleared before the -permissions
+      # are set. Otherwise, when using tcl 8.5 on mac, the fact that the 
+      # -readonly flag is set causes the attempt to set the permissions
+      # to fail.
+      catch {file attributes test.db-journal -readonly 0}
+      catch {file attributes test.db-journal -permissions rw-------}
+      catchsql {
+        SELECT count(*) FROM t3;
+      }
+    } {0 32}
+    
+    # sqlite3_test_control_pending_page [expr ($::sqlite_pending_byte / 1024) + 1]
+    set ::pending_byte_page [expr ($::sqlite_pending_byte / 1024) + 1]
+    sqlite3_test_control_pending_byte $::sqlite_pending_byte 
+    do_test misc7-17.3 {
+      sqlite3_db_config db DEFENSIVE 0
+      db eval {
+        pragma writable_schema = true;
+        UPDATE sqlite_master 
+          SET rootpage = $pending_byte_page
+          WHERE type = 'table' AND name = 't3';
+      }
+      execsql {
+        SELECT rootpage FROM sqlite_master WHERE type = 'table' AND name = 't3';
+      }
+    } $::pending_byte_page
+    
+    do_test misc7-17.4 {
+      db close
+      sqlite3 db test.db
+      catchsql {
+        SELECT count(*) FROM t3;
+      } 
+    } {1 {malformed database schema (t3) - invalid rootpage}}
+  }
+}
+
+# Ticket #2470
+#
+reset_db
+do_test misc7-18.1 {
+  execsql {
+    CREATE TABLE table_1 (col_10);
+    CREATE TABLE table_2 (
+      col_1, col_2, col_3, col_4, col_5,
+      col_6, col_7, col_8, col_9, col_10
+    );
+    SELECT a.col_10
+    FROM
+      (SELECT table_1.col_10 AS col_10 FROM table_1) a,
+      (SELECT table_1.col_10, table_2.col_9 AS qcol_9
+         FROM table_1, table_2
+        GROUP BY table_1.col_10, qcol_9);
+  }
+} {}
+
+# Testing boundary conditions on sqlite3_status()
+#
+do_test misc7-19.1 {
+  sqlite3_status -1 0
+} {21 0 0}
+do_test misc7-19.2 {
+  sqlite3_status 1000 0
+} {21 0 0}
+
+
+# sqlite3_global_recover() is a no-op.  But we might as well test it
+# if only to get the test coverage.
+#
+do_test misc7-20.1 {
+  sqlite3_global_recover
+} {SQLITE_OK}
+
+# Try to open a really long file name.
+#
+do_test misc7-21.1 {
+  set zFile [file join [get_pwd] "[string repeat abcde 104].db"]
+  set rc [catch {sqlite3 db2 $zFile} msg]
+  list $rc $msg
+} {1 {unable to open database file}}
+
+# Try to do hot-journal rollback with a read-only connection. The 
+# error code should be SQLITE_READONLY_ROLLBACK.
+#
+do_test misc7-22.1 {
+  db close
+  forcedelete test.db copy.db-journal
+  sqlite3 db test.db
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+  }
+  db close
+  sqlite3 db test.db -readonly 1
+  catchsql {
+    INSERT INTO t1 VALUES(5, 6);
+  }
+} {1 {attempt to write a readonly database}}
+do_test misc7-22.2 { execsql { SELECT * FROM t1 } } {1 2 3 4}
+do_test misc7-22.3 { 
+  set fd [open test.db-journal w]
+  puts $fd [string repeat abc 1000]
+  close $fd
+  catchsql { SELECT * FROM t1 }
+} {1 {attempt to write a readonly database}}
+do_test misc7-22.4 { 
+  sqlite3_extended_errcode db
+} SQLITE_READONLY_ROLLBACK
+catch { db close }
+forcedelete test.db
+
+if {$::tcl_platform(platform)=="unix"
+ && [atomic_batch_write test.db]==0
+} {
+  reset_db
+  do_execsql_test 23.0 {
+    CREATE TABLE t1(x, y);
+    INSERT INTO t1 VALUES(1, 2);
+  }
+  
+  do_test 23.1 {
+    db close
+    forcedelete tst
+    file mkdir tst
+    forcecopy test.db tst/test.db
+    file attributes tst -permissions r-xr-xr-x
+  } {}
+  
+  sqlite3 db tst/test.db
+  do_execsql_test 23.2 {
+    SELECT * FROM t1;
+  } {1 2}
+  
+  do_catchsql_test 23.3 {
+    INSERT INTO t1 VALUES(3, 4);
+  } {1 {attempt to write a readonly database}}
+  
+  do_test 23.4 {
+    sqlite3_extended_errcode db
+  } {SQLITE_READONLY_DIRECTORY}
+  
+  do_test 23.5 {
+    db close
+    forcedelete tst
+  } {}
+}
+
+finish_test

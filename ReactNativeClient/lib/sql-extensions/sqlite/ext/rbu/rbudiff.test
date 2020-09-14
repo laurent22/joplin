@@ -1,0 +1,302 @@
+# 2015-07-31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests for the [sqldiff --rbu] command.
+#
+#
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set testprefix rbudiff
+
+set PROG [test_find_sqldiff]
+db close
+
+proc get_rbudiff_sql {db1 db2} {
+  exec $::PROG --rbu $db1 $db2
+}
+
+proc get_vtab_rbudiff_sql {db1 db2} {
+  exec $::PROG --vtab --rbu $db1 $db2
+}
+
+proc step_rbu {target rbu} {
+  while 1 {
+    sqlite3rbu rbu $target $rbu
+    set rc [rbu step]
+    rbu close
+    if {$rc != "SQLITE_OK"} break
+  }
+  set rc
+}
+
+proc apply_rbudiff {sql target} {
+  test_rbucount $sql
+  forcedelete rbu.db
+  sqlite3 rbudb rbu.db
+  rbudb eval $sql
+  rbudb close
+  step_rbu $target rbu.db
+}
+
+proc sqlesc {id} {
+  set ret "'[string map {' ''} $id]'"
+  set ret
+}
+
+# The only argument is the output of an [sqldiff -rbu] run. This command
+# tests that the contents of the rbu_count table is correct. An exception
+# is thrown if it is not.
+#
+proc test_rbucount {sql} {
+  sqlite3 tmpdb ""
+  tmpdb eval $sql
+  tmpdb eval {
+    SELECT name FROM sqlite_master WHERE name LIKE 'data%' AND type='table'
+  } {
+    set a [tmpdb eval "SELECT count(*) FROM [sqlesc $name]"]
+    set b [tmpdb eval {SELECT cnt FROM rbu_count WHERE tbl = $name}]
+    if {$a != $b} { 
+      tmpdb close
+      error "rbu_count error - tbl = $name" 
+    }
+  }
+  tmpdb close
+  return ""
+}
+
+proc rbudiff_cksum {db1} {
+  set txt ""
+
+  sqlite3 dbtmp $db1
+  foreach tbl [dbtmp eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    set cols [list]
+    dbtmp eval "PRAGMA table_info = [sqlesc $tbl]" { 
+      lappend cols "quote( $name )" 
+    }
+    append txt [dbtmp eval \
+      "SELECT [join $cols {||'.'||}] FROM [sqlesc $tbl] ORDER BY 1"
+    ]
+  }
+  dbtmp close
+
+  md5 $txt
+}
+
+foreach {tn init mod} {
+  1 {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+  
+    CREATE TABLE t2(a, b, c, PRIMARY KEY(b, c));
+    INSERT INTO t2 VALUES(1, 2, 3);
+    INSERT INTO t2 VALUES(4, 5, 6);
+  } {
+    INSERT INTO t1 VALUES(7, 8, 9);
+    DELETE FROM t1 WHERE a=4;
+    UPDATE t1 SET c = 11 WHERE a = 1;
+  
+    INSERT INTO t2 VALUES(7, 8, 9);
+    DELETE FROM t2 WHERE a=4;
+    UPDATE t2 SET c = 11 WHERE a = 1;
+  }
+
+  2 {
+    CREATE TABLE t1(a, b, c, PRIMARY KEY(a, b, c));
+    INSERT INTO t1 VALUES('u', 'v', 'w');
+    INSERT INTO t1 VALUES('x', 'y', 'z');
+  } {
+    DELETE FROM t1 WHERE a='u';
+    INSERT INTO t1 VALUES('a', 'b', 'c');
+  }
+
+  3 {
+    CREATE TABLE t1(i INTEGER PRIMARY KEY, x);
+    INSERT INTO t1 VALUES(1,
+      X'0000000000000000111111111111111122222222222222223333333333333333'
+    );
+    CREATE TABLE t2(y INTEGER PRIMARY KEY, x);
+    INSERT INTO t2 VALUES(1,
+        X'0000000000000000111111111111111122222222222222223333333333333333'
+    );
+  } {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES(1,
+      X'0000000000000000111111111111111122222555555552223333333333333333'
+    );
+    DELETE FROM t2;
+    INSERT INTO t2 VALUES(1,
+        X'0000000000000000111111111111111122222222222222223333333FFF333333'
+    );
+  }
+
+  4 {
+    CREATE TABLE x1(a, b, c, PRIMARY KEY(a, b, c));
+    INSERT INTO x1 VALUES('u', 'v', NULL);
+    INSERT INTO x1 VALUES('x', 'y', 'z');
+    INSERT INTO x1 VALUES('a', NULL, 'b');
+  } {
+    INSERT INTO x1 VALUES('a', 'b', 'c');
+  }
+
+  5 {
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, NULL);
+    INSERT INTO t1 VALUES(2, X'');
+  } {
+    UPDATE t1 SET b = X'' WHERE a=1;
+    UPDATE t1 SET b = NULL WHERE a=2;
+  }
+
+} {
+  catch { db close }
+
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  db eval "$init"
+  sqlite3 db test.db2
+  db eval "$init ; $mod"
+  db close
+
+  do_test 1.$tn.2 {
+    set sql [get_rbudiff_sql test.db test.db2]
+    apply_rbudiff $sql test.db
+  } {SQLITE_DONE}
+  do_test 1.$tn.3 { rbudiff_cksum test.db } [rbudiff_cksum test.db2]
+
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  db eval "$init ; $mod"
+  sqlite3 db test.db2
+  db eval "$init"
+  db close
+
+  do_test 1.$tn.4 {
+    set sql [get_rbudiff_sql test.db test.db2]
+    apply_rbudiff $sql test.db
+  } {SQLITE_DONE}
+  do_test 1.$tn.5 { rbudiff_cksum test.db } [rbudiff_cksum test.db2]
+}
+
+#-------------------------------------------------------------------------
+# Test that if the --vtab switch is present, [sqldiff] handles virtual
+# table types fts[345] and rtree correctly.
+#
+ifcapable fts3&&fts5&&rtree {
+
+foreach {tn init mod} {
+  1 {
+    CREATE VIRTUAL TABLE t1 USING fts5(c);
+    INSERT INTO t1 VALUES('a b c');
+    INSERT INTO t1 VALUES('a b c');
+  } {
+    DELETE FROM t1 WHERE rowid = 1;
+    INSERT INTO t1 VALUES('a b c');
+  }
+
+  2 {
+    CREATE VIRTUAL TABLE "x y" USING 'rtree'(id, x1, x2);
+    INSERT INTO "x y" VALUES(1, 2, 3);
+    INSERT INTO "x y" VALUES(2, 4, 6);
+  } {
+    DELETE FROM "x y" WHERE rowid = 1;
+    INSERT INTO "x y" VALUES(3, 6, 9);
+  }
+
+  3 {
+    CREATE VIRTUAL TABLE 'x''y' USING fts3;
+    INSERT INTO 'x''y' VALUES('one two three');
+    INSERT INTO 'x''y' VALUES('four five six');
+  } {
+    DELETE FROM 'x''y' WHERE rowid = 1;
+    INSERT INTO 'x''y' VALUES('one two three');
+  }
+} {
+
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  db eval "$init"
+  sqlite3 db test.db2
+  db eval "$init ; $mod"
+  db close
+
+  do_test 2.$tn.1 {
+    set sql [get_vtab_rbudiff_sql test.db test.db2]
+    apply_rbudiff $sql test.db
+  } {SQLITE_DONE}
+  do_test 2.$tn.2 { rbudiff_cksum test.db } [rbudiff_cksum test.db2]
+}
+
+}
+
+ifcapable fts5 {
+  foreach {tn init mod} {
+    1 {
+      CREATE VIRTUAL TABLE t1 USING fts5(c);
+      INSERT INTO t1 VALUES('a b c');
+      INSERT INTO t1 VALUES('a b c');
+    } {
+      DELETE FROM t1 WHERE rowid = 1;
+      INSERT INTO t1 VALUES('a b c');
+    }
+
+    2 {
+      CREATE VIRTUAL TABLE t1 USING FTs5(c);
+      INSERT INTO t1 VALUES('a b c');
+      INSERT INTO t1 VALUES('a b c');
+    } {
+      DELETE FROM t1 WHERE rowid = 1;
+      INSERT INTO t1 VALUES('a b c');
+    }
+
+    3 {
+      creAte    virTUal
+tablE t1 USING FTs5(c);
+      INSERT INTO t1 VALUES('a b c');
+      INSERT INTO t1 VALUES('a b c');
+    } {
+      DELETE FROM t1 WHERE rowid = 1;
+      INSERT INTO t1 VALUES('a b c');
+    }
+
+  } {
+    forcedelete test.db test.db2
+    sqlite3 db test.db
+    db eval "$init"
+    sqlite3 db test.db2
+    db eval "$init ; $mod"
+    db eval { INSERT INTO t1(t1) VALUES('optimize') }
+    db close
+
+    do_test 3.$tn.1 {
+      set sql [get_vtab_rbudiff_sql test.db test.db2]
+      apply_rbudiff $sql test.db
+    } {SQLITE_DONE}
+
+    sqlite3 db test.db
+    sqlite3 db2 test.db2
+    do_test 3.$tn.2 { 
+      db2 eval { SELECT * FROM t1 ORDER BY rowid }
+    } [db eval { SELECT * FROM t1 ORDER BY rowid }]
+
+    do_test 3.$tn.3 { 
+      db2 eval { INSERT INTO t1(t1) VALUES('integrity-check') }
+    } {}
+
+    db close
+    db2 close
+  }
+}
+
+
+finish_test

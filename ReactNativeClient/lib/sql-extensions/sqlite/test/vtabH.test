@@ -1,0 +1,261 @@
+# 2015 Nov 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. Specifically,
+# it tests that the GLOB, LIKE and REGEXP operators are correctly exposed
+# to virtual table implementations.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix vtabH
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_echo_module db
+
+do_execsql_test 1.0 {
+  CREATE TABLE t6(a, b TEXT);
+  CREATE INDEX i6 ON t6(b, a);
+  CREATE VIRTUAL TABLE e6 USING echo(t6);
+}
+
+ifcapable !icu {
+  foreach {tn sql expect} {
+    1 "SELECT * FROM e6 WHERE b LIKE '8abc'" {
+      xBestIndex 
+         {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?}
+      xFilter
+         {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?}
+         8ABC 8abd 8abc
+    }
+  
+    2 "SELECT * FROM e6 WHERE b GLOB '8abc'" {
+       xBestIndex
+         {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b glob ?}
+       xFilter
+         {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b glob ?}
+         8abc 8abd 8abc
+    }
+    3 "SELECT * FROM e6 WHERE b LIKE '8e/'" {
+      xBestIndex {SELECT rowid, a, b FROM 't6' WHERE b like ?}
+      xFilter {SELECT rowid, a, b FROM 't6' WHERE b like ?} 8e/
+    }
+    4 "SELECT * FROM e6 WHERE b GLOB '8e/'" {
+      xBestIndex {SELECT rowid, a, b FROM 't6' WHERE b glob ?}
+      xFilter {SELECT rowid, a, b FROM 't6' WHERE b glob ?} 8e/
+    }
+  } {
+    do_test 1.$tn {
+      set echo_module {}
+      execsql $sql
+      set ::echo_module
+    } [list {*}$expect]
+  }
+}
+
+
+#--------------------------------------------------------------------------
+
+register_tclvar_module db
+set ::xyz 10
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE vars USING tclvar;
+  SELECT name, arrayname, value FROM vars WHERE name = 'xyz';
+} {xyz {} 10}
+
+set x1 aback
+set x2 abaft
+set x3 abandon
+set x4 abandonint
+set x5 babble
+set x6 baboon
+set x7 backbone
+set x8 backarrow
+set x9 castle
+
+db func glob -argcount 2 gfunc
+proc gfunc {a b} {
+  incr ::gfunc
+  return 1
+}
+
+db func like -argcount 2 lfunc
+proc lfunc {a b} {
+  incr ::gfunc 100
+  return 1
+}
+
+db func regexp -argcount 2 rfunc
+proc rfunc {a b} {
+  incr ::gfunc 10000
+  return 1
+}
+
+foreach ::tclvar_set_omit {0 1} {
+  foreach {tn expr res cnt} {
+    1 {value GLOB 'aban*'} {x3 abandon x4 abandonint} 2
+    2 {value LIKE '%ac%'}  {x1 aback x7 backbone x8 backarrow} 300
+    3 {value REGEXP '^......$'}  {x5 babble x6 baboon x9 castle} 30000
+  } {
+    db cache flush
+    set ::gfunc 0
+    if {$::tclvar_set_omit} {set cnt 0}
+
+    do_test 2.$tclvar_set_omit.$tn.1 {
+      execsql "SELECT name, value FROM vars WHERE name MATCH 'x*' AND $expr"
+    } $res
+
+    do_test 2.$tclvar_set_omit.$tn.2 {
+      set ::gfunc
+    } $cnt
+  }
+}
+
+#-------------------------------------------------------------------------
+#
+if {$tcl_platform(platform)=="windows"} {
+  set drive [string range [pwd] 0 1]
+  set ::env(fstreeDrive) $drive
+}
+if {$tcl_platform(platform)!="windows" || \
+    [regexp -nocase -- {^[A-Z]:} $drive]} {
+  reset_db
+  register_fs_module db
+  do_execsql_test 3.0 {
+    SELECT name FROM fsdir WHERE dir = '.' AND name = 'test.db';
+    SELECT name FROM fsdir WHERE dir = '.' AND name = '.'
+  } {test.db .}
+
+  proc sort_files { names {nocase false} } {
+    if {$nocase && $::tcl_platform(platform) eq "windows"} {
+      return [lsort -nocase $names]
+    } else {
+      return [lsort $names]
+    }
+  }
+
+  proc list_root_files {} {
+    if {$::tcl_platform(platform) eq "windows"} {
+      set res [list]; set dir $::env(fstreeDrive)/; set names [list]
+      eval lappend names [glob -nocomplain -directory $dir -- *]
+      foreach name $names {
+        if {[string index [file tail $name] 0] eq "."} continue
+        if {[file attributes $name -hidden]} continue
+        if {[file attributes $name -system]} continue
+        lappend res $name
+      }
+      return [sort_files $res true]
+    } else {
+      return [sort_files [string map {/ {}} [glob -nocomplain -- /*]]]
+    }
+  }
+
+  proc list_files { pattern } {
+    if {$::tcl_platform(platform) eq "windows"} {
+      set res [list]; set names [list]
+      eval lappend names [glob -nocomplain -- $pattern]
+      foreach name $names {
+        if {[string index [file tail $name] 0] eq "."} continue
+        if {[file attributes $name -hidden]} continue
+        if {[file attributes $name -system]} continue
+        lappend res $name
+      }
+      return [sort_files $res]
+    } else {
+      return [sort_files [glob -nocomplain -- $pattern]]
+    }
+  }
+
+  # Read the first 5 entries from the root directory.  Except, ignore
+  # files that contain the "$" character in their names as these are
+  # special files on some Windows platforms.
+  #
+  set res [list]
+  set root_files [list_root_files]
+  foreach p $root_files {
+    if {$::tcl_platform(platform) eq "windows"} {
+      if {![regexp {\$} $p]} {lappend res $p}
+    } else {
+      lappend res "/$p"
+    }
+  }
+  set num_root_files [llength $root_files]
+  do_test 3.1 {
+    sort_files [execsql {
+      SELECT path FROM fstree WHERE path NOT GLOB '*\$*' LIMIT $num_root_files;
+    }] true
+  } [sort_files $res true]
+
+  # Read all entries in the current directory.
+  #
+  proc contents {pattern} {
+    set res [list]
+    foreach f [list_files $pattern] {
+      lappend res $f
+      if {[file isdir $f]} {
+        set res [concat $res [contents "$f/*"]]
+      }
+    }
+    set res
+  }
+  set pwd "[pwd]/*"
+  set res [contents $pwd]
+  do_execsql_test 3.2 {
+    SELECT path FROM fstree WHERE path GLOB $pwd ORDER BY 1
+  } [sort_files $res]
+
+  # Add some sub-directories and files to the current directory.
+  #
+  do_test 3.3 {
+    catch { file delete -force subdir }
+    foreach {path sz} {
+      subdir/x1.txt     143
+      subdir/x2.txt     153
+    } {
+      set dir [file dirname $path]
+      catch { file mkdir $dir }
+      set fd [open $path w]
+      puts -nonewline $fd [string repeat 1 $sz]
+      close $fd
+    }
+  } {}
+
+  set pwd [pwd]
+  if {![string match {*[_%]*} $pwd]} {
+    do_execsql_test 3.5 {
+      SELECT path, size FROM fstree 
+       WHERE path GLOB $pwd || '/subdir/*' ORDER BY 1
+    } [list \
+      "$pwd/subdir/x1.txt" 143 \
+      "$pwd/subdir/x2.txt" 153 \
+    ]
+    do_execsql_test 3.6 {
+      SELECT path, size FROM fstree
+       WHERE path LIKE $pwd || '/subdir/%' ORDER BY 1
+    } [list \
+      "$pwd/subdir/x1.txt" 143 \
+      "$pwd/subdir/x2.txt" 153 \
+    ]
+    do_execsql_test 3.7 {
+      SELECT sum(size) FROM fstree WHERE path LIKE $pwd || '/subdir/%'
+    } 296
+    do_execsql_test 3.8 {
+      SELECT size FROM fstree WHERE path = $pwd || '/subdir/x1.txt'
+    } 143
+  }
+
+}
+
+
+finish_test

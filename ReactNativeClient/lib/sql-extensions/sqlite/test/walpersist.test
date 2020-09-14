@@ -1,0 +1,126 @@
+# 2011 July 26
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for using WAL with persistent WAL file mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+set ::testprefix walpersist
+
+ifcapable !wal {
+  finish_test
+  return
+}
+
+do_test walpersist-1.0 {
+  db eval {
+    PRAGMA journal_mode=WAL;
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(randomblob(5000));
+  }
+  file exists test.db-wal
+} {1}
+do_test walpersist-1.1 {
+  file exists test.db-shm
+} {1}
+do_test walpersist-1.2 {
+  db close
+  list [file exists test.db] [file exists test.db-wal] [file exists test.db-shm]
+} {1 0 0}
+do_test walpersist-1.3 {
+  sqlite3 db test.db
+  db eval {SELECT length(a) FROM t1}
+} {5000}
+do_test walpersist-1.4 {
+  list [file exists test.db] [file exists test.db-wal] [file exists test.db-shm]
+} {1 1 1}
+do_test walpersist-1.5 {
+  file_control_persist_wal db -1
+} {0 0}
+do_test walpersist-1.6 {
+  file_control_persist_wal db 1
+} {0 1}
+do_test walpersist-1.7 {
+  file_control_persist_wal db -1
+} {0 1}
+do_test walpersist-1.8 {
+  file_control_persist_wal db 0
+} {0 0}
+do_test walpersist-1.9 {
+  file_control_persist_wal db -1
+} {0 0}
+do_test walpersist-1.10 {
+  file_control_persist_wal db 1
+} {0 1}
+do_test walpersist-1.11 {
+  db close
+  list [file exists test.db] [file exists test.db-wal] [file exists test.db-shm]
+} {1 1 1}
+
+# Make sure the journal_size_limit works to limit the size of the
+# persisted wal file.  In persistent-wal mode, any non-negative
+# journal_size_limit causes the WAL file to be truncated to zero bytes
+# when closing.
+#
+forcedelete test.db test.db-shm test.db-wal
+do_test walpersist-2.1 {
+  sqlite3 db test.db
+  db eval {
+    PRAGMA journal_mode=WAL;
+    PRAGMA wal_autocheckpoint=OFF;
+    PRAGMA journal_size_limit=12000;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(randomblob(50000));
+    UPDATE t1 SET x=randomblob(50000);
+  }
+  expr {[file size test.db-wal]>100000}
+} {1}
+do_test walpersist-2.2 {
+  file_control_persist_wal db 1
+  db close
+  concat [file exists test.db-wal] [file size test.db-wal]
+} {1 0}
+do_test walpersist-2.3 {
+  sqlite3 db test.db
+  execsql { PRAGMA integrity_check }
+} {ok}
+
+do_test 3.1 {
+  catch {db close}
+  forcedelete test.db test.db-shm test.db-wal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    PRAGMA journal_mode = WAL;
+    PRAGMA wal_autocheckpoint=128;
+    PRAGMA journal_size_limit=16384;
+    CREATE TABLE t1(a, b, PRIMARY KEY(a, b));
+  }
+} {wal 128 16384}
+do_test 3.2 {
+  for {set i 0} {$i<200} {incr i} {
+    execsql { INSERT INTO t1 VALUES(randomblob(500), randomblob(500)) }
+  }
+  file_control_persist_wal db 1
+  db close
+} {}
+do_test walpersist-3.3 { 
+  file size test.db-wal 
+} {0}
+do_test walpersist-3.4 { 
+  sqlite3 db test.db
+  execsql { PRAGMA integrity_check }
+} {ok}
+ 
+
+finish_test

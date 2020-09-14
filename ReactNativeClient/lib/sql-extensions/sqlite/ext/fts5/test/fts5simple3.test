@@ -1,0 +1,118 @@
+# 2015 September 05
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5simple3
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+fts5_aux_test_functions db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a, b, c, detail=col);
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  INSERT INTO t1 VALUES('x', 'x', 'x');
+}
+
+do_execsql_test 1.1 {
+  SELECT rowid, fts5_test_collist(t1) FROM t1('a:a');
+} {1 0.0}
+
+do_execsql_test 1.2 {
+  SELECT rowid, fts5_test_collist(t1) FROM t1('b:x');
+} {2 0.1}
+
+do_execsql_test 1.3 {
+  SELECT rowid, fts5_test_collist(t1) FROM t1('b:a');
+} {}
+
+#-------------------------------------------------------------------------
+# Create detail=col and detail=full tables with 998 columns.
+#
+foreach_detail_mode $testprefix {
+  if {[detail_is_none]} continue
+
+  do_test 2.1 {
+    execsql { DROP TABLE IF EXISTS t2 }
+    set cols [list]
+    set vals [list]
+    for {set i 1} {$i <= 998} {incr i} {
+      lappend cols "c$i"
+      lappend vals "'val$i'"
+    }
+    execsql "CREATE VIRTUAL TABLE t2 USING fts5(detail=%DETAIL%,[join $cols ,])"
+  } {}
+  
+  do_test 2.2 {
+    execsql "INSERT INTO t2 VALUES([join $vals ,])"
+  } {}
+  
+  foreach {tn q res} {
+    1 { c1:val1 }     1
+    2 { c300:val300 } 1
+    3 { c300:val1 } {}
+    4 { c1:val300 } {}
+  } {
+    do_execsql_test 2.3.$tn {
+      SELECT rowid FROM t2($q)
+    } $res
+  }
+}
+
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE x3 USING fts5(one);
+  INSERT INTO x3 VALUES('a b c');
+  INSERT INTO x3 VALUES('c b a');
+  INSERT INTO x3 VALUES('o t t');
+  SELECT * FROM x3('x OR y OR z');
+}
+
+#-------------------------------------------------------------------------
+# Test that a crash occuring when the second or subsequent tokens in a
+# phrase matched zero rows has been fixed.
+#
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1 VALUES('ab');
+  INSERT INTO t1 VALUES('cd');
+  INSERT INTO t1 VALUES('ab cd');
+  INSERT INTO t1 VALUES('ab cdXXX');
+  INSERT INTO t1 VALUES('abXXX cd');
+}
+do_execsql_test 4.1 {
+  SELECT * FROM t1('"ab cd" OR "ab cd" *');
+} {{ab cd} {ab cdXXX}}
+do_execsql_test 4.2 {
+  SELECT * FROM t1('"xy zz" OR "ab cd" *');
+} {{ab cd} {ab cdXXX}}
+do_execsql_test 4.3 {
+  SELECT * FROM t1('"xy zz" OR "xy zz" *');
+}
+do_execsql_test 4.4 {
+  SELECT * FROM t1('"ab cd" OR "xy zz" *');
+} {{ab cd}}
+do_execsql_test 4.5 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x);
+  INSERT INTO t2 VALUES('ab');
+  INSERT INTO t2 VALUES('cd');
+  INSERT INTO t2 VALUES('ef');
+} 
+do_execsql_test 4.6 {
+  SELECT * FROM t2('ab + xyz');
+}
+
+
+finish_test

@@ -1,0 +1,169 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5ah
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $testprefix {
+
+#-------------------------------------------------------------------------
+# This file contains tests for very large doclists.
+#
+
+set Y [list]
+set W [list]
+do_test 1.0 {
+  execsql { CREATE VIRTUAL TABLE t1 USING fts5(a, detail=%DETAIL%) }
+  execsql { INSERT INTO t1(t1, rank) VALUES('pgsz', 128) }
+  set v {w w w w w w w w w w w w w w w w w w w w}
+  execsql { INSERT INTO t1(rowid, a) VALUES(0, $v) }
+  for {set i 1} {$i <= 10000} {incr i} {
+    set v {x x x x x x x x x x x x x x x x x x x x}
+    if {($i % 2139)==0} {lset v 3 Y ; lappend Y $i}
+    if {($i % 1577)==0} {lset v 5 W ; lappend W $i}
+    execsql { INSERT INTO t1 VALUES($v) }
+  }
+  set v {w w w w w w w w w w w w w w w w w w w w}
+  execsql { INSERT INTO t1 VALUES($v) }
+} {}
+
+do_execsql_test 1.1.1 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'x AND w'
+} [lsort -integer -incr $W]
+
+do_execsql_test 1.1.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'x* AND w*'
+} [lsort -integer -incr $W]
+
+do_execsql_test 1.2 {
+  SELECT rowid FROM t1 WHERE t1 MATCH 'y AND x'
+} [lsort -integer -incr $Y]
+
+do_execsql_test 1.3 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+proc reads {} {
+  db one {SELECT t1 FROM t1 WHERE t1 MATCH '*reads'}
+}
+
+proc execsql_reads {sql} {
+  set nRead [reads]
+  execsql $sql
+  expr [reads] - $nRead
+}
+
+do_test 1.4 {
+  set nRead [reads]
+  execsql { SELECT rowid FROM t1 WHERE t1 MATCH 'x' }
+  set nReadX [expr [reads] - $nRead]
+  #puts -nonewline "(nReadX=$nReadX)"
+  if {[detail_is_full]} { set expect 1000 }
+  if {[detail_is_col]}  { set expect 250 }
+  if {[detail_is_none]} { set expect 80 }
+
+  expr $nReadX>$expect
+} {1}
+
+do_test 1.5 {
+  set fwd [execsql_reads {SELECT rowid FROM t1 WHERE t1 MATCH 'x' }]
+  set bwd [execsql_reads {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'x' ORDER BY 1 ASC 
+  }]
+  expr {$bwd < $fwd + 12}
+} {1}
+
+foreach {tn q res} "
+  1 { SELECT rowid FROM t1 WHERE t1 MATCH 'w + x'   }  [list $W]
+  2 { SELECT rowid FROM t1 WHERE t1 MATCH 'x + w'   }  [list $W]
+  3 { SELECT rowid FROM t1 WHERE t1 MATCH 'x AND w' }  [list $W]
+  4 { SELECT rowid FROM t1 WHERE t1 MATCH 'y AND x' }  [list $Y]
+" {
+  if {[detail_is_full]==0 && ($tn==1 || $tn==2)} continue
+
+  if {[detail_is_full]} { set ratio 8 }
+  if {[detail_is_col]}  { set ratio 4 }
+  if {[detail_is_none]} { set ratio 2 }
+
+  do_test 1.6.$tn.1 {
+    set n [execsql_reads $q]
+    #puts -nonewline "(n=$n nReadX=$nReadX)"
+    expr {$n < ($nReadX / $ratio)}
+  } {1}
+
+  do_test 1.6.$tn.2 {
+    set n [execsql_reads "$q ORDER BY rowid DESC"]
+    #puts -nonewline "(n=$n nReadX=$nReadX)"
+    expr {$n < ($nReadX / $ratio)}
+  } {1}
+
+  do_execsql_test 1.6.$tn.3 $q [lsort -int -incr $res]
+  do_execsql_test 1.6.$tn.4 "$q ORDER BY rowid DESC" [lsort -int -decr $res]
+}
+
+#-------------------------------------------------------------------------
+# Now test that adding range constraints on the rowid field reduces the
+# number of pages loaded from disk.
+#
+foreach {tn fraction tail cnt} {
+  1  0.6 {rowid > 5000} 5000
+  2  0.2 {rowid > 9000} 1000
+  3  0.2 {rowid < 1000}  999
+  4  0.2 {rowid BETWEEN 4000 AND 5000}  1001
+  5  0.6 {rowid >= 5000} 5001
+  6  0.2 {rowid >= 9000} 1001
+  7  0.2 {rowid <= 1000} 1000
+  8  0.6 {rowid > '5000'} 5000
+  9  0.2 {rowid > '9000'} 1000
+  10 0.1 {rowid = 444} 1
+} {
+  set q "SELECT rowid FROM t1 WHERE t1 MATCH 'x' AND $tail"
+  set n [execsql_reads $q]
+  set ret [llength [execsql $q]]
+
+  # Because the position lists for 'x' are quite long in this db, the 
+  # advantage is a bit smaller in detail=none mode. Update $fraction to 
+  # reflect this.
+  if {[detail_is_none] && $fraction<0.5} { set fraction [expr $fraction*2] }
+
+  do_test "1.7.$tn.asc.(n=$n ret=$ret)" {
+    expr {$n < ($fraction*$nReadX) && $ret==$cnt}
+  } {1}
+
+  set q "SELECT rowid FROM t1 WHERE t1 MATCH 'x' AND $tail ORDER BY rowid DESC"
+  set n [execsql_reads $q]
+  set ret [llength [execsql $q]]
+  do_test "1.7.$tn.desc.(n=$n ret=$ret)" {
+    expr {$n < 2*$fraction*$nReadX && $ret==$cnt}
+  } {1}
+}
+
+do_execsql_test 1.8.1 {
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'x' AND +rowid < 'text';
+} {10000}
+do_execsql_test 1.8.2 {
+  SELECT count(*) FROM t1 WHERE t1 MATCH 'x' AND rowid < 'text';
+} {10000}
+
+} ;# foreach_detail_mode
+
+#db eval {SELECT rowid, fts5_decode(rowid, block) aS r FROM t1_data} {puts $r}
+
+finish_test

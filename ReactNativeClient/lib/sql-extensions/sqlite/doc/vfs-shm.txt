@@ -1,0 +1,130 @@
+The 5 states of an historical rollback lock as implemented by the
+xLock, xUnlock, and xCheckReservedLock methods of the sqlite3_io_methods
+objec are:
+
+   UNLOCKED
+   SHARED
+   RESERVED
+   PENDING
+   EXCLUSIVE
+
+The wal-index file has a similar locking hierarchy implemented using
+the xShmLock method of the sqlite3_vfs object, but with 7
+states.  Each connection to a wal-index file must be in one of
+the following 7 states:
+
+   UNLOCKED
+   READ
+   READ_FULL
+   WRITE
+   PENDING
+   CHECKPOINT
+   RECOVER
+
+These roughly correspond to the 5 states of a rollback lock except
+that SHARED is split out into 2 states: READ and READ_FULL and
+there is an extra RECOVER state used for wal-index reconstruction.
+
+The meanings of the various wal-index locking states is as follows:
+
+   UNLOCKED    - The wal-index is not in use.
+
+   READ        - Some prefix of the wal-index is being read. Additional
+                 wal-index information can be appended at any time.  The
+                 newly appended content will be ignored by the holder of
+                 the READ lock.
+
+   READ_FULL   - The entire wal-index is being read.  No new information
+                 can be added to the wal-index.  The holder of a READ_FULL
+                 lock promises never to read pages from the database file
+                 that are available anywhere in the wal-index.
+
+   WRITE       - It is OK to append to the wal-index file and to adjust
+                 the header to indicate the new "last valid frame".
+
+   PENDING     - Waiting on all READ locks to clear so that a
+                 CHECKPOINT lock can be acquired.
+
+   CHECKPOINT  - It is OK to write any WAL data into the database file
+                 and zero the last valid frame field of the wal-index
+                 header.  The wal-index file itself may not be changed
+                 other than to zero the last valid frame field in the
+                 header.
+
+   RECOVER     - Held during wal-index recovery.  Used to prevent a
+                 race if multiple clients try to recover a wal-index at
+                 the same time.
+   
+
+A particular lock manager implementation may coalesce one or more of 
+the wal-index locking states, though with a reduction in concurrency.
+For example, an implemention might implement only exclusive locking,
+in which case all states would be equivalent to CHECKPOINT, meaning that 
+only one reader or one writer or one checkpointer could be active at a 
+time.  Or, an implementation might combine READ and READ_FULL into 
+a single state equivalent to READ, meaning that a writer could
+coexist with a reader, but no reader or writers could coexist with a
+checkpointer.
+
+The lock manager must obey the following rules:
+
+(1)  A READ cannot coexist with CHECKPOINT.
+(2)  A READ_FULL cannot coexist with WRITE.
+(3)  None of WRITE, PENDING, CHECKPOINT, or RECOVER can coexist.
+
+The SQLite core will obey the next set of rules.  These rules are
+assertions on the behavior of the SQLite core which might be verified
+during testing using an instrumented lock manager.
+
+(5)  No part of the wal-index will be read without holding either some
+     kind of SHM lock or an EXCLUSIVE lock on the original database.
+     The original database is the file named in the 2nd parameter to
+     the xShmOpen method.
+
+(6)  A holder of a READ_FULL will never read any page of the database
+     file that is contained anywhere in the wal-index.
+
+(7)  No part of the wal-index other than the header will be written nor
+     will the size of the wal-index grow without holding a WRITE or
+     an EXCLUSIVE on the original database file.
+
+(8)  The wal-index header will not be written without holding one of
+     WRITE, CHECKPOINT, or RECOVER on the wal-index or an EXCLUSIVE on
+     the original database files.
+
+(9)  A CHECKPOINT or RECOVER must be held on the wal-index, or an
+     EXCLUSIVE on the original database file, in order to reset the 
+     last valid frame counter in the header of the wal-index back to zero.
+
+(10) A WRITE can only increase the last valid frame pointer in the header.
+
+The SQLite core will only ever send requests for UNLOCK, READ, WRITE,
+CHECKPOINT, or RECOVER to the lock manager.   The SQLite core will never
+request a READ_FULL or PENDING lock though the lock manager may deliver
+those locking states in response to READ and CHECKPOINT requests,
+respectively, if and only if the requested READ or CHECKPOINT cannot
+be delivered.
+
+The following are the allowed lock transitions:
+
+       Original-State     Request         New-State
+       --------------     ----------      ----------
+(11a)  UNLOCK             READ            READ
+(11b)  UNLOCK             READ            READ_FULL
+(11c)  UNLOCK             CHECKPOINT      PENDING
+(11d)  UNLOCK             CHECKPOINT      CHECKPOINT
+(11e)  READ               UNLOCK          UNLOCK
+(11f)  READ               WRITE           WRITE
+(11g)  READ               RECOVER         RECOVER
+(11h)  READ_FULL          UNLOCK          UNLOCK
+(11i)  READ_FULL          WRITE           WRITE
+(11j)  READ_FULL          RECOVER         RECOVER
+(11k)  WRITE              READ            READ
+(11l)  PENDING            UNLOCK          UNLOCK
+(11m)  PENDING            CHECKPOINT      CHECKPOINT
+(11n)  CHECKPOINT         UNLOCK          UNLOCK
+(11o)  RECOVER            READ            READ
+
+These 15 transitions are all that needs to be supported.  The lock
+manager implementation can assert that fact.  The other 27 possible
+transitions among the 7 locking states will never occur.

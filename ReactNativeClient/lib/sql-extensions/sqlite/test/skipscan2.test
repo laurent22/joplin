@@ -1,0 +1,206 @@
+# 2013-11-27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements tests of the "skip-scan" query strategy.
+#
+# The test cases in this file are derived from the description of
+# the skip-scan query strategy in the "optoverview.html" document.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_execsql_test skipscan2-1.1 {
+  CREATE TABLE people(
+    name TEXT PRIMARY KEY,
+    role TEXT NOT NULL,
+    height INT NOT NULL, -- in cm
+    CHECK( role IN ('student','teacher') )
+  );
+  CREATE INDEX people_idx1 ON people(role, height);
+} {}
+do_execsql_test skipscan2-1.2 {
+  INSERT INTO people VALUES('Alice','student',156);
+  INSERT INTO people VALUES('Bob','student',161);
+  INSERT INTO people VALUES('Cindy','student',155);
+  INSERT INTO people VALUES('David','student',181);
+  INSERT INTO people VALUES('Emily','teacher',158);
+  INSERT INTO people VALUES('Fred','student',163);
+  INSERT INTO people VALUES('Ginny','student',169);
+  INSERT INTO people VALUES('Harold','student',172);
+  INSERT INTO people VALUES('Imma','student',179);
+  INSERT INTO people VALUES('Jack','student',181);
+  INSERT INTO people VALUES('Karen','student',163);
+  INSERT INTO people VALUES('Logan','student',177);
+  INSERT INTO people VALUES('Megan','teacher',159);
+  INSERT INTO people VALUES('Nathan','student',163);
+  INSERT INTO people VALUES('Olivia','student',161);
+  INSERT INTO people VALUES('Patrick','teacher',180);
+  INSERT INTO people VALUES('Quiana','student',182);
+  INSERT INTO people VALUES('Robert','student',159);
+  INSERT INTO people VALUES('Sally','student',166);
+  INSERT INTO people VALUES('Tom','student',171);
+  INSERT INTO people VALUES('Ursula','student',170);
+  INSERT INTO people VALUES('Vance','student',179);
+  INSERT INTO people VALUES('Willma','student',175);
+  INSERT INTO people VALUES('Xavier','teacher',185);
+  INSERT INTO people VALUES('Yvonne','student',149);
+  INSERT INTO people VALUES('Zach','student',170);
+}
+
+# Without ANALYZE, a skip-scan is not used
+#
+do_execsql_test skipscan2-1.3 {
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-1.3eqp {
+  EXPLAIN QUERY PLAN
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {~/*INDEX people_idx1 */}
+
+# Now do an ANALYZE.  A skip-scan can be used after ANALYZE.
+#
+do_execsql_test skipscan2-1.4 {
+  ANALYZE;
+  -- We do not have enough people above to actually force the use
+  -- of a skip-scan.  So make a manual adjustment to the stat1 table
+  -- to make it seem like there are many more.
+  UPDATE sqlite_stat1 SET stat='10000 5000 20' WHERE idx='people_idx1';
+  UPDATE sqlite_stat1 SET stat='10000 1' WHERE idx='sqlite_autoindex_people_1';
+  ANALYZE sqlite_master;
+}
+db cache flush
+do_execsql_test skipscan2-1.5 {
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-1.5eqp {
+  EXPLAIN QUERY PLAN
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {/*INDEX people_idx1 */}
+
+# Same answer with other formulations of the same query
+#
+do_execsql_test skipscan2-1.6 {
+  SELECT name FROM people
+   WHERE role IN (SELECT DISTINCT role FROM people)
+     AND height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-1.7 {
+  SELECT name FROM people WHERE role='teacher' AND height>=180
+  UNION ALL
+  SELECT name FROM people WHERE role='student' AND height>=180
+  ORDER BY 1;
+} {David Jack Patrick Quiana Xavier}
+
+# Add 8 more people, bringing the total to 34.  Then the number of
+# duplicates in the left-column of the index will be 17 and 
+# skip-scan should not be used after an (unfudged) ANALYZE.
+#
+do_execsql_test skipscan2-1.8 {
+  INSERT INTO people VALUES('Angie','student',166);
+  INSERT INTO people VALUES('Brad','student',176);
+  INSERT INTO people VALUES('Claire','student',168);
+  INSERT INTO people VALUES('Donald','student',162);
+  INSERT INTO people VALUES('Elaine','student',177);
+  INSERT INTO people VALUES('Frazier','student',159);
+  INSERT INTO people VALUES('Grace','student',179);
+  INSERT INTO people VALUES('Horace','student',166);
+  ANALYZE;
+  SELECT stat FROM sqlite_stat1 WHERE idx='people_idx1';
+} {{34 17 2}}
+db cache flush
+do_execsql_test skipscan2-1.9 {
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-1.9eqp {
+  EXPLAIN QUERY PLAN
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {~/*INDEX people_idx1 */}
+
+# Add 2 more people, bringing the total to 36.  Then the number of
+# duplicates in the left-column of the index will be 18 and 
+# skip-scan will be used after an (unfudged) ANALYZE.
+#
+do_execsql_test skipscan2-1.10 {
+  INSERT INTO people VALUES('Ingrad','student',155);
+  INSERT INTO people VALUES('Jacob','student',179);
+  ANALYZE;
+  SELECT stat FROM sqlite_stat1 WHERE idx='people_idx1';
+} {{36 18 2}}
+db cache flush
+do_execsql_test skipscan2-1.11 {
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-1.11eqp {
+  EXPLAIN QUERY PLAN
+  SELECT name FROM people WHERE height>=180 ORDER BY +name;
+} {/*INDEX people_idx1 */}
+
+
+# Repeat using a WITHOUT ROWID table.
+#
+do_execsql_test skipscan2-2.1 {
+  CREATE TABLE peoplew(
+    name TEXT PRIMARY KEY,
+    role TEXT NOT NULL,
+    height INT NOT NULL, -- in cm
+    CHECK( role IN ('student','teacher') )
+  ) WITHOUT ROWID;
+  CREATE INDEX peoplew_idx1 ON peoplew(role, height);
+  INSERT INTO peoplew(name,role,height)
+     SELECT name, role, height FROM  people;
+  ALTER TABLE people RENAME TO old_people;
+  SELECT name FROM peoplew WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-2.2 {
+  SELECT name FROM peoplew
+   WHERE role IN (SELECT DISTINCT role FROM peoplew)
+     AND height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-2.2 {
+  SELECT name FROM peoplew WHERE role='teacher' AND height>=180
+  UNION ALL
+  SELECT name FROM peoplew WHERE role='student' AND height>=180
+  ORDER BY 1;
+} {David Jack Patrick Quiana Xavier}
+
+# Now do an ANALYZE.  A skip-scan can be used after ANALYZE.
+#
+do_execsql_test skipscan2-2.4 {
+  ANALYZE;
+}
+db cache flush
+do_execsql_test skipscan2-2.5 {
+  SELECT name FROM peoplew WHERE height>=180 ORDER BY +name;
+} {David Jack Patrick Quiana Xavier}
+do_execsql_test skipscan2-2.5eqp {
+  EXPLAIN QUERY PLAN
+  SELECT name FROM peoplew WHERE height>=180 ORDER BY +name;
+} {/*INDEX peoplew_idx1 */}
+
+# A skip-scan on a PK index of a WITHOUT ROWID table.
+#
+do_execsql_test skipscan2-3.1 {
+  CREATE TABLE t3(a, b, c, PRIMARY KEY(a, b)) WITHOUT ROWID;
+}
+do_test skipscan2-3.2 {
+  for {set i 0} {$i < 1000} {incr i} {
+    execsql { INSERT INTO t3 VALUES($i%2, $i, 'xyz') }
+  }
+  execsql { ANALYZE }
+} {}
+do_eqp_test skipscan2-3.3eqp {
+  SELECT * FROM t3 WHERE b=42;
+} {SEARCH TABLE t3 USING PRIMARY KEY (ANY(a) AND b=?)}
+
+
+
+finish_test

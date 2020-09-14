@@ -1,0 +1,251 @@
+# 2020-01-08
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# Test cases for managing execution of code snippets found in untrusted
+# schemas.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix trustschema1
+
+# edgy functions used in generated columns
+#
+proc f1 {x} {return $x}
+do_test 1.100 {
+  db function f1 -innocuous -deterministic f1
+  db function f2 -deterministic f1
+  db function f3 -directonly -deterministic f1
+  db eval {
+    CREATE TABLE t1(a, b AS (f1(a+1)), c AS (f2(a+2)));
+    INSERT INTO t1 VALUES(100),(200);
+  }
+} {}
+do_catchsql_test 1.110 {
+  SELECT a, b, c FROM t1;
+} {0 {100 101 102 200 201 202}}
+do_execsql_test 1.120 {
+  PRAGMA trusted_schema=OFF;
+} {}
+do_catchsql_test 1.130 {
+  SELECT a, b FROM t1;
+} {0 {100 101 200 201}}
+do_catchsql_test 1.140 {
+  SELECT a, b, c FROM t1;
+} {1 {unsafe use of f2()}}
+do_catchsql_test 1.150 {
+  PRAGMA trusted_schema=ON;
+  DROP TABLE t1;
+  CREATE TABLE t1(a, b AS (f3(a+1)));
+} {1 {unsafe use of f3()}}
+do_execsql_test 1.160 {
+  PRAGMA trusted_schema=OFF;
+  CREATE TEMP TABLE temp1(a,b AS (f3(a+1)));
+  INSERT INTO temp1(a) VALUES(100),(900);
+  SELECT * FROM temp1;
+} {100 101 900 901}
+
+# edgy functions used in CHECK constraints
+#
+do_catchsql_test 1.200 {
+  PRAGMA trusted_schema=ON;
+  CREATE TABLE t2(a,b,c,CHECK(f3(c)==c));
+} {1 {unsafe use of f3()}}
+do_catchsql_test 1.210 {
+  PRAGMA trusted_schema=Off;
+  CREATE TABLE t2(a,b,c,CHECK(f2(c)==c));
+} {1 {unsafe use of f2()}}
+do_catchsql_test 1.211 {
+  PRAGMA trusted_schema=On;
+  CREATE TABLE t2(a,b,c,CHECK(f2(c)==c));
+} {0 {}}
+do_catchsql_test 1.220 {
+  INSERT INTO t2 VALUES(1,2,3);
+  SELECT * FROM t2;
+} {0 {1 2 3}}
+do_catchsql_test 1.230 {
+  PRAGMA trusted_schema=off;
+  INSERT INTO t2 VALUES(4,5,6);
+} {1 {unsafe use of f2()}}
+do_execsql_test 1.231 {
+  SELECT * FROM t2;
+} {1 2 3}
+# Ok to put as many edgy functions as you want in a
+# TEMP table.
+do_execsql_test 1.240 {
+  PRAGMA trusted_schema=OFF;
+  CREATE TEMP TABLE temp2(a, b, CHECK(f3(b)==b));
+  INSERT INTO temp2(a,b) VALUES(1,2),('x','y');
+  SELECT * FROM temp2;
+} {1 2 x y}
+
+# edgy functions used in DEFAULT constraints
+#
+do_catchsql_test 1.300 {
+  CREATE TABLE t3(a,b DEFAULT(f2(25)));
+} {0 {}}
+do_catchsql_test 1.310 {
+  PRAGMA trusted_schema=Off;
+  INSERT INTO t3(a) VALUES(1);
+} {1 {unsafe use of f2()}}
+do_catchsql_test 1.311 {
+  INSERT INTO t3(a,b) VALUES(1,2);
+} {0 {}}
+do_execsql_test 1.320 {
+  CREATE TEMP TABLE temp3(a, b DEFAULT(f3(31)));
+  INSERT INTO temp3(a) VALUES(22);
+  SELECT * FROM temp3;
+} {22 31}
+
+# edgy functions used in partial indexes.
+#
+do_execsql_test 1.400 {
+  CREATE TABLE t4(a,b,c);
+  INSERT INTO t4 VALUES(1,2,3),('a','b','c'),(4,'d',0);
+  SELECT * FROM t4;
+  CREATE TEMP TABLE temp4(a,b,c);
+  INSERT INTO temp4 SELECT * FROM t4;
+} {1 2 3 a b c 4 d 0}
+do_catchsql_test 1.410 {
+  CREATE INDEX t4a ON t4(a) WHERE f3(c);
+} {1 {unsafe use of f3()}}
+do_catchsql_test 1.420 {
+  PRAGMA trusted_schema=OFF;
+  CREATE INDEX t4a ON t4(a) WHERE f2(c);
+} {1 {unsafe use of f2()}}
+do_execsql_test 1.421 {
+  CREATE INDEX t4a ON t4(a) WHERE f1(c);
+  SELECT a FROM t4 WHERE f1(c) ORDER BY a;
+} {1}
+do_execsql_test 1.430 {
+  PRAGMA trusted_schema=ON;
+  CREATE INDEX t4b ON t4(b) WHERE f2(c);
+  SELECT b FROM t4 WHERE f2(c) ORDER BY b;
+} {2}
+do_execsql_test 1.440 {
+  PRAGMA trusted_schema=OFF;
+  CREATE INDEX temp4a ON temp4(a) WHERE f3(c);
+  SELECT a FROM temp4 WHERE f2(c) ORDER BY a;
+} {1}
+
+# edgy functions used in index expressions
+#
+do_execsql_test 1.500 {
+  CREATE TABLE t5(a,b,c);
+  INSERT INTO t5 VALUES(1,2,3),(4,5,6),(7,0,-3);
+  SELECT * FROM t5;
+  CREATE TEMP TABLE temp5(a,b,c);
+  INSERT INTO temp5 SELECT * FROM t5;
+} {1 2 3 4 5 6 7 0 -3}
+do_catchsql_test 1.510 {
+  CREATE INDEX t5x1 ON t5(a+f3(b));
+} {1 {unsafe use of f3()}}
+do_catchsql_test 1.520 {
+  PRAGMA trusted_schema=OFF;
+  CREATE INDEX t5x1 ON t5(a+f2(b));
+} {1 {unsafe use of f2()}}
+do_execsql_test 1.521 {
+  CREATE INDEX t5x1 ON t5(a+f1(b));
+  SELECT * FROM t5 INDEXED BY t5x1 WHERE a+f1(b)=3;
+} {1 2 3}
+do_execsql_test 1.530 {
+  PRAGMA trusted_schema=ON;
+  CREATE INDEX t5x2 ON t5(b+f2(c));
+  SELECT * FROM t5 INDEXED BY t5x2 WHERE b+f2(c)=11;
+} {4 5 6}
+do_execsql_test 1.540 {
+  PRAGMA trusted_schema=OFF;
+  CREATE INDEX temp5x1 ON temp5(a+f3(b));
+  SELECT * FROM temp5 INDEXED BY temp5x1 WHERE a+f3(b)=7;
+} {7 0 -3}
+
+# edgy functions in VIEWs
+#
+reset_db
+db function f1 -innocuous -deterministic f1
+db function f2 -deterministic f1
+db function f3 -directonly -deterministic f1
+do_execsql_test 2.100 {
+  CREATE TABLE t1(a,b,c);
+  INSERT INTO t1 VALUES(1,2,3),(100,50,75),(-11,22,-33);
+  CREATE VIEW v1a AS SELECT f3(a+b) FROM t1;
+  SELECT f3(a+b) FROM t1;
+} {3 150 11}
+do_catchsql_test 2.110 {
+  PRAGMA trusted_schema=ON;
+  SELECT * FROM v1a;
+} {1 {unsafe use of f3()}}
+do_catchsql_test 2.111 {
+  PRAGMA trusted_schema=OFF;
+  SELECT * FROM v1a;
+} {1 {unsafe use of f3()}}
+do_execsql_test 2.120 {
+  DROP VIEW v1a;
+  CREATE TEMP VIEW v1a AS SELECT f3(a+b) FROM t1;
+  SELECT * FROM v1a;
+} {3 150 11}
+do_execsql_test 2.130 {
+  CREATE VIEW v1b AS SELECT f2(b+c) FROM t1;
+  SELECT f2(b+c) FROM t1;
+} {5 125 -11}
+do_catchsql_test 2.140 {
+  PRAGMA trusted_schema=ON;
+  SELECT * FROM v1b;
+} {0 {5 125 -11}}
+do_catchsql_test 2.141 {
+  PRAGMA trusted_schema=OFF;
+  SELECT * FROM v1b;
+} {1 {unsafe use of f2()}}
+do_execsql_test 2.150 {
+  DROP VIEW v1b;
+  CREATE TEMP VIEW v1b AS SELECT f2(b+c) FROM t1;
+  SELECT * FROM v1b;
+} {5 125 -11}
+
+# edgy functions inside of triggers
+#
+do_execsql_test 3.100 {
+  DELETE FROM t1;
+  CREATE TABLE t2(x);
+  CREATE TRIGGER r1 AFTER INSERT ON t1 BEGIN
+    INSERT INTO t2(x) SELECT f3(new.a);
+  END;
+} {}
+do_catchsql_test 3.110 {
+  INSERT INTO t1 VALUES(7,6,5);
+} {1 {unsafe use of f3()}}
+do_execsql_test 3.111 {
+  SELECT * FROM t1;
+  SELECT * FROM t2;
+} {}
+
+do_execsql_test 3.120 {
+  DROP TRIGGER r1;
+  CREATE TRIGGER r1 AFTER INSERT ON t1 BEGIN
+    INSERT INTO t2(x) SELECT f2(new.a)+100;
+  END;
+  PRAGMA trusted_schema=ON;
+  INSERT INTO t1 VALUES(7,6,5);
+  SELECT * FROM t1, t2;
+} {7 6 5 107}
+do_catchsql_test 3.130 {
+  DELETE FROM t1;
+  DELETE FROM t2;
+  PRAGMA trusted_schema=OFF;
+  INSERT INTO t1 VALUES(7,6,5);
+} {1 {unsafe use of f2()}}
+do_execsql_test 3.131 {
+  SELECT * FROM t1;
+  SELECT * FROM t2;
+} {}
+
+
+finish_test

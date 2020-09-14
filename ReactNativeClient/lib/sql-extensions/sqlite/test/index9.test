@@ -1,0 +1,95 @@
+# 2017 Jun 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that partial indexes work with bound variables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix index9
+
+proc sqluses {sql} {
+  array unset ::T
+  uplevel [list db eval "EXPLAIN $sql" a {
+    if {$a(opcode)=="OpenRead"} { set ::T($a(p2)) 1 }
+  }]
+
+  set in [join [array names ::T] ,]
+  db eval "SELECT name FROM sqlite_master WHERE rootpage IN ($in) ORDER BY 1"
+}
+
+proc do_sqluses_test {tn sql objects} {
+  uplevel [list do_test $tn [list sqluses $sql] $objects]
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(x, y);
+  CREATE INDEX t1x ON t1(x) WHERE y=45;
+}
+set y [expr 45]
+do_sqluses_test 1.1 { SELECT * FROM t1 WHERE x=? AND y=$y } {t1 t1x}
+set y [expr 45.1]
+do_sqluses_test 1.2 { SELECT * FROM t1 WHERE x=? AND y=$y } {t1}
+set y [expr 44]
+do_sqluses_test 1.3 { SELECT * FROM t1 WHERE x=? AND y=$y } {t1}
+unset -nocomplain y
+do_sqluses_test 1.4 { SELECT * FROM t1 WHERE x=? AND y=$y } {t1}
+set y [string range "45" 0 end]
+do_sqluses_test 1.5 { SELECT * FROM t1 WHERE x=? AND y=$y } {t1}
+
+do_execsql_test 2.0 {
+  CREATE INDEX t1x2 ON t1(x) WHERE y=-20111000111
+}
+do_sqluses_test 2.1 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr -20111000111]
+do_sqluses_test 2.2 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1 t1x2}
+set y [expr -20111000110]
+do_sqluses_test 2.3 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr -20111000112]
+do_sqluses_test 2.4 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+
+do_execsql_test 3.0 {
+  CREATE INDEX t1x3 ON t1(x) WHERE y=9223372036854775807
+}
+set y [expr 9223372036854775807]
+do_sqluses_test 3.1 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1 t1x3}
+set y [expr 9223372036854775808]
+do_sqluses_test 3.2 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr 9223372036854775806]
+do_sqluses_test 3.3 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+db cache flush
+sqlite3_db_config db QPSG 1
+set y [expr 9223372036854775807]
+do_sqluses_test 3.4 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr 9223372036854775808]
+do_sqluses_test 3.5 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+sqlite3_db_config db QPSG 0
+db cache flush
+
+
+do_execsql_test 4.0 {
+  CREATE INDEX t1x4 ON t1(x) WHERE y=-9223372036854775808
+}
+set y [expr -9223372036854775808]
+do_sqluses_test 4.1 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1 t1x4}
+set y [expr -9223372036854775807]
+do_sqluses_test 4.2 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr -9223372036854775809]
+do_sqluses_test 4.3 { SELECT * FROM t1 WHERE y=$y ORDER BY x } {t1}
+set y [expr -9223372036854775808]
+do_sqluses_test 4.4 { SELECT * FROM t1 WHERE $y=y ORDER BY x } {t1 t1x4}
+db cache flush
+sqlite3_db_config db QPSG 1
+do_sqluses_test 4.5 { SELECT * FROM t1 WHERE $y=y ORDER BY x } {t1}
+sqlite3_db_config db QPSG 0
+db cache flush
+
+finish_test

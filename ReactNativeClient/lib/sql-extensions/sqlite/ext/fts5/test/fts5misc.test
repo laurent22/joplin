@@ -1,0 +1,327 @@
+# 2019 September 02
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5misc
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a);
+}
+
+do_catchsql_test 1.1.1 { 
+  SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*'); 
+} {1 {unknown special query: }}
+do_catchsql_test 1.1.2 {
+  SELECT a FROM t1
+    WHERE rank = (SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*'));
+} {1 {unknown special query: }}
+
+do_catchsql_test 1.2.1 { 
+  SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*id'); 
+} {0 {{}}}
+
+do_catchsql_test 1.2.2 {
+  SELECT a FROM t1
+    WHERE rank = (SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*id'));
+} {0 {}}
+
+do_catchsql_test 1.3.1 { 
+  SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*reads'); 
+} {1 {no such cursor: 1}}
+
+do_catchsql_test 1.3.2 {
+  SELECT a FROM t1
+    WHERE rank = (SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*reads'));
+} {1 {no such cursor: 1}}
+
+db close
+sqlite3 db test.db
+
+do_catchsql_test 1.3.3 {
+  SELECT a FROM t1
+    WHERE rank = (SELECT highlight(t1, 4, '<b>', '</b>') FROM t1('*reads'));
+} {1 {no such cursor: 1}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.0 {
+  CREATE TABLE t0(c0);
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+}
+do_execsql_test 2.1.1 {
+  BEGIN TRANSACTION;
+  INSERT INTO vt0(c0) VALUES ('xyz');
+}
+do_execsql_test 2.1.2 {
+  ALTER TABLE t0 ADD COLUMN c5;
+}
+do_execsql_test 2.1.3 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+do_execsql_test 2.1.4 {
+  INSERT INTO vt0(c0) VALUES ('abc');
+  COMMIT
+}
+do_execsql_test 2.1.5 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+reset_db
+do_execsql_test 2.2.1 {
+  CREATE TABLE t0(c0);
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+  BEGIN TRANSACTION;
+  INSERT INTO vt0(c0) VALUES ('xyz');
+}
+
+breakpoint
+do_execsql_test 2.2.2 {
+  ALTER TABLE t0 RENAME TO t1;
+}
+do_execsql_test 2.2.3 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+do_execsql_test 2.2.4 {
+  INSERT INTO vt0(c0) VALUES ('abc');
+  COMMIT;
+}
+do_execsql_test 2.2.5 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(a);
+  PRAGMA reverse_unordered_selects = true;
+  INSERT INTO vt0 VALUES('365062398'), (0), (0);
+  INSERT INTO vt0(vt0, rank) VALUES('pgsz', '38');
+}
+do_execsql_test 3.1 {
+  UPDATE vt0 SET a = 399905135; -- unexpected: database disk image is malformed
+}
+do_execsql_test 3.2 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 4.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+  INSERT INTO vt0(c0) VALUES ('xyz');
+}
+
+do_execsql_test 4.1 {
+  BEGIN;
+    INSERT INTO vt0(c0) VALUES ('abc');
+    INSERT INTO vt0(vt0) VALUES('rebuild');
+  COMMIT;
+}
+
+do_execsql_test 4.2 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+do_execsql_test 4.3 {
+  BEGIN;
+    INSERT INTO vt0(vt0) VALUES('rebuild');
+    INSERT INTO vt0(vt0) VALUES('rebuild');
+  COMMIT;
+}
+
+do_execsql_test 4.4 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+# Ticket [81a7f7b9].
+#
+reset_db
+do_execsql_test 5.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0, c1);
+  INSERT INTO vt0(vt0, rank) VALUES('pgsz', '65536');
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<1236
+  )
+  INSERT INTO vt0(c0) SELECT '0' FROM s;
+} {}
+
+do_execsql_test 5.1 {
+  UPDATE vt0 SET c1 = 'T,D&p^y/7#3*v<b<4j7|f';
+}
+
+do_execsql_test 5.2 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+do_catchsql_test 5.3 {
+  INSERT INTO vt0(vt0, rank) VALUES('pgsz', '65537');
+} {1 {SQL logic error}}
+
+#-------------------------------------------------------------------------
+# Ticket [d392017c].
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0);
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<10000
+  )
+  INSERT INTO vt0(c0) SELECT '0' FROM s;
+  INSERT INTO vt0(vt0, rank) VALUES('crisismerge', 2000);
+  INSERT INTO vt0(vt0, rank) VALUES('automerge', 0);
+} {}
+
+do_execsql_test 6.1 {
+  INSERT INTO vt0(vt0) VALUES('rebuild');
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 7.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  INSERT INTO t1(rowid, x) VALUES(1, 'hello world');
+  INSERT INTO t1(rowid, x) VALUES(2, 'well said');
+  INSERT INTO t1(rowid, x) VALUES(3, 'hello said');
+  INSERT INTO t1(rowid, x) VALUES(4, 'well world');
+
+  CREATE TABLE t2 (a, b);
+  INSERT INTO t2 VALUES(1, 'hello');
+  INSERT INTO t2 VALUES(2, 'world');
+  INSERT INTO t2 VALUES(3, 'said');
+  INSERT INTO t2 VALUES(4, 'hello');
+}
+
+do_execsql_test 7.1 {
+  SELECT rowid FROM t1 WHERE (rowid, x) IN (SELECT a, b FROM t2); 
+}
+
+do_execsql_test 7.2 {
+  SELECT rowid FROM t1 WHERE rowid=2 AND t1 = 'hello';
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 8.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0, tokenize = "ascii", prefix = 1);
+  INSERT INTO vt0(c0) VALUES (x'd1');
+}
+
+do_execsql_test 8.1 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 9.0 {
+  CREATE VIRTUAL TABLE t1 using FTS5(mailcontent);
+  insert into t1(rowid, mailcontent) values
+      (-4764623217061966105, 'we are going to upgrade'),
+      (8324454597464624651, 'we are going to upgrade');
+}
+
+do_execsql_test 9.1 {
+  INSERT INTO t1(t1) VALUES('integrity-check');
+}
+
+do_execsql_test 9.2 {
+  SELECT rowid FROM t1('upgrade');
+} {
+  -4764623217061966105 8324454597464624651
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 10.0 {
+  CREATE VIRTUAL TABLE vt1 USING fts5(c1, c2, prefix = 1, tokenize = "ascii");
+  INSERT INTO vt1 VALUES (x'e4', '䔬');
+}
+
+do_execsql_test 10.1 {
+  SELECT quote(CAST(c1 AS blob)), quote(CAST(c2 AS blob)) FROM vt1
+} {X'E4' X'E494AC'}
+
+do_execsql_test 10.2 {
+  INSERT INTO vt1(vt1) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 11.0 {
+  CREATE VIRTUAL TABLE vt0 USING fts5(
+      c0, prefix = 71, tokenize = "porter ascii", prefix = 9
+  );
+} {}
+do_execsql_test 11.1 {
+  BEGIN;
+  INSERT INTO vt0(c0) VALUES (x'e8');
+}
+do_execsql_test 11.2 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+# Ticket [752fdbf6] 
+#
+reset_db
+do_execsql_test 11.0 {
+  PRAGMA encoding = 'UTF-16';
+  CREATE VIRTUAL TABLE vt0 USING fts5(c0, c1);
+  INSERT INTO vt0(vt0, rank) VALUES('pgsz', '37');
+  INSERT INTO vt0(c0, c1) VALUES (0.66077, 1957391816);
+}
+do_execsql_test 11.1 {
+  INSERT INTO vt0(vt0) VALUES('integrity-check');
+}
+
+#-------------------------------------------------------------------------
+# Ticket [7c0e06b16] 
+#
+do_execsql_test 12.0 {
+  CREATE TABLE t1(a, b, rank);
+  INSERT INTO t1 VALUES('a', 'hello', '');
+  INSERT INTO t1 VALUES('b', 'world', '');
+
+  CREATE VIRTUAL TABLE ft USING fts5(a);
+  INSERT INTO ft VALUES('b');
+  INSERT INTO ft VALUES('y');
+
+  CREATE TABLE t2(x, y, ft);
+  INSERT INTO t2 VALUES(1, 2, 'x');
+  INSERT INTO t2 VALUES(3, 4, 'b');
+}
+
+do_execsql_test 12.1 {
+  SELECT * FROM t1 NATURAL JOIN ft WHERE ft MATCH('b')
+} {b world {}}
+do_execsql_test 12.2 {
+  SELECT * FROM ft NATURAL JOIN t1 WHERE ft MATCH('b')
+} {b world {}}
+do_execsql_test 12.3 {
+  SELECT * FROM t2 JOIN ft USING (ft)
+} {3 4 b b}
+
+finish_test
+

@@ -1,0 +1,370 @@
+# 2018 May 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library. Specifically,
+# it tests the sqlite3_create_window_function() API.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix window6
+
+ifcapable !windowfunc {
+  finish_test
+  return
+}
+
+set setup {
+  CREATE TABLE %t1(%x, %y %typename);
+  INSERT INTO %t1 VALUES(1, 'a');
+  INSERT INTO %t1 VALUES(2, 'b');
+  INSERT INTO %t1 VALUES(3, 'c');
+  INSERT INTO %t1 VALUES(4, 'd');
+  INSERT INTO %t1 VALUES(5, 'e');
+}
+
+foreach {tn vars} {
+  1 {}
+  2 { set A(%t1) over }
+  3 { set A(%x)  over }
+  4 { 
+    set A(%alias)   over 
+    set A(%x)       following 
+    set A(%y)       over 
+  }
+  5 { 
+    set A(%t1)      over
+    set A(%x)       following 
+    set A(%y)       preceding 
+    set A(%w)       current 
+    set A(%alias)   filter
+    set A(%typename)  window
+  }
+
+  6 { 
+    set A(%x)       window 
+  }
+} {
+  set A(%t1)    t1
+  set A(%x)     x
+  set A(%y)     y
+  set A(%w)     w
+  set A(%alias) alias
+  set A(%typename) integer
+  eval $vars
+
+  set MAP [array get A]
+  set setup_sql [string map $MAP $setup]
+  reset_db
+  execsql $setup_sql
+
+  do_execsql_test 1.$tn.1 [string map $MAP {
+    SELECT group_concat(%x, '.') OVER (ORDER BY %y) FROM %t1
+  }] {1 1.2 1.2.3 1.2.3.4 1.2.3.4.5}
+
+  do_execsql_test 1.$tn.2 [string map $MAP {
+    SELECT sum(%x) OVER %w FROM %t1 WINDOW %w AS (ORDER BY %y)
+  }] {1 3 6 10 15}
+
+  do_execsql_test 1.$tn.3 [string map $MAP {
+    SELECT sum(%alias.%x) OVER %w FROM %t1 %alias WINDOW %w AS (ORDER BY %y)
+  }] {1 3 6 10 15}
+
+  do_execsql_test 1.$tn.4 [string map $MAP {
+    SELECT sum(%x) %alias FROM %t1
+  }] {15}
+}
+
+
+proc winproc {args} { return "window: $args" }
+db func window winproc
+do_execsql_test 2.0 {
+  SELECT window('hello world');
+} {{window: {hello world}}}
+
+proc wincmp {a b} { string compare $b $a }
+db collate window wincmp
+do_execsql_test 3.0 {
+  CREATE TABLE window(x COLLATE window);
+  INSERT INTO window VALUES('bob'), ('alice'), ('cate');
+  SELECT * FROM window ORDER BY x COLLATE window;
+} {cate bob alice}
+do_execsql_test 3.1 {
+  DROP TABLE window;
+  CREATE TABLE x1(x);
+  INSERT INTO x1 VALUES('bob'), ('alice'), ('cate');
+  CREATE INDEX window ON x1(x COLLATE window);
+  SELECT * FROM x1 ORDER BY x COLLATE window;
+} {cate bob alice}
+
+
+do_execsql_test 4.0 { CREATE TABLE t4(x, y); }
+
+# do_execsql_test 4.1 { PRAGMA parser_trace = 1 }
+do_execsql_test 4.1 { 
+  SELECT * FROM t4 window, t4;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 5.0 {
+  CREATE TABLE over(x, over);
+  CREATE TABLE window(x, window);
+  INSERT INTO over VALUES(1, 2), (3, 4), (5, 6);
+  INSERT INTO window VALUES(1, 2), (3, 4), (5, 6);
+  SELECT sum(x) over FROM over
+} {9}
+
+do_execsql_test 5.1 {
+  SELECT sum(x) over over FROM over WINDOW over AS ()
+} {9 9 9}
+
+do_execsql_test 5.2 {
+  SELECT sum(over) over over over FROM over over WINDOW over AS (ORDER BY over)
+} {2 6 12}
+
+do_execsql_test 5.3 {
+  SELECT sum(over) over over over FROM over over WINDOW over AS (ORDER BY over);
+} {2 6 12}
+
+do_execsql_test 5.4 {
+  SELECT sum(window) OVER window window FROM window window window window AS (ORDER BY window);
+} {2 6 12}
+
+do_execsql_test 5.5 {
+  SELECT count(*) OVER win FROM over
+  WINDOW win AS (ORDER BY x ROWS BETWEEN +2 FOLLOWING AND +3 FOLLOWING)
+} {1 0 0}
+
+#-------------------------------------------------------------------------
+#
+
+ifcapable !icu {
+  do_execsql_test 6.0 {
+    SELECT LIKE('!', '', '!') x WHERE x;
+  } {}
+  do_execsql_test 6.1 {
+    SELECT LIKE("!","","!")""WHeRE"";
+  } {}
+  do_catchsql_test 6.2 {
+    SELECT LIKE("!","","!")""window"";
+  } {1 {near "window": syntax error}}
+}
+
+reset_db 
+do_execsql_test 7.0 {
+  CREATE TABLE t1(x TEXT);
+  CREATE INDEX i1 ON t1(x COLLATE nocase);
+  INSERT INTO t1 VALUES('');
+}
+
+ifcapable !icu {
+  do_execsql_test 7.1 {
+    SELECT count(*) FROM t1 WHERE x LIKE '!' ESCAPE '!';
+  } {0}
+}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 8.0 {
+  CREATE TABLE IF NOT EXISTS "sample" (
+      "id" INTEGER NOT NULL PRIMARY KEY, 
+      "counter" INTEGER NOT NULL, 
+      "value" REAL NOT NULL
+  );
+
+  INSERT INTO "sample" (counter, value) 
+  VALUES (1, 10.), (1, 20.), (2, 1.), (2, 3.), (3, 100.);
+}
+
+do_execsql_test 8.1 {
+  SELECT "counter", "value", RANK() OVER w AS "rank" 
+  FROM "sample"
+  WINDOW w AS (PARTITION BY "counter" ORDER BY "value" DESC) 
+  ORDER BY "counter", RANK() OVER w
+} {
+  1 20.0 1   1 10.0 2   2 3.0 1   2 1.0 2  3 100.0 1
+}
+
+do_execsql_test 8.2 {
+  SELECT "counter", "value", SUM("value") OVER 
+  (ORDER BY "id" ROWS 2 PRECEDING) 
+    FROM "sample" 
+  ORDER BY "id"
+} {
+  1 10.0 10.0   1 20.0 30.0   2 1.0 31.0   2 3.0 24.0   3 100.0 104.0
+}
+
+do_execsql_test 8.3 {
+  SELECT SUM("value") OVER 
+  (ORDER BY "id" ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) 
+    FROM "sample" 
+  ORDER BY "id"
+} {
+  10.0   30.0   31.0   24.0   104.0
+}
+
+do_execsql_test 9.0 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT x, group_concat(x) OVER (ORDER BY x ROWS 2 PRECEDING)
+  FROM c;
+} {
+  1 1  2 1,2  3 1,2,3  4 2,3,4  5 3,4,5
+}
+#do_catchsql_test 9.1 {
+#  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+#  SELECT x, group_concat(x) OVER (ORDER BY x RANGE 2 PRECEDING)
+#  FROM c;
+#} {1 {RANGE must use only UNBOUNDED or CURRENT ROW}}
+#
+#do_catchsql_test 9.2 {
+#  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+#  SELECT x, group_concat(x) OVER (ORDER BY x RANGE BETWEEN UNBOUNDED PRECEDING AND 2 FOLLOWING)
+#  FROM c;
+#} {1 {RANGE must use only UNBOUNDED or CURRENT ROW}}
+
+do_catchsql_test 9.3 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count(DISTINCT x) OVER (ORDER BY x) FROM c;
+} {1 {DISTINCT is not supported for window functions}}
+
+do_catchsql_test 9.4 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count() OVER (ORDER BY x RANGE UNBOUNDED FOLLOWING) FROM c;
+} {1 {near "FOLLOWING": syntax error}}
+
+do_catchsql_test 9.5 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count() OVER (ORDER BY x RANGE BETWEEN UNBOUNDED FOLLOWING AND UNBOUNDED FOLLOWING) FROM c;
+} {1 {near "FOLLOWING": syntax error}}
+
+do_catchsql_test 9.6 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count() OVER (ORDER BY x RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED PRECEDING) FROM c;
+} {1 {near "PRECEDING": syntax error}}
+
+foreach {tn frame} {
+  1 "BETWEEN CURRENT ROW AND 4 PRECEDING"
+  2 "4 FOLLOWING"
+  3 "BETWEEN 4 FOLLOWING AND CURRENT ROW"
+  4 "BETWEEN 4 FOLLOWING AND 2 PRECEDING"
+} {
+  do_catchsql_test 9.7.$tn "
+    WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+    SELECT count() OVER (
+        ORDER BY x ROWS $frame 
+    ) FROM c;
+  " {1 {unsupported frame specification}}
+}
+
+do_catchsql_test 9.8.1 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count() OVER (
+      ORDER BY x ROWS BETWEEN a PRECEDING AND 2 FOLLOWING
+  ) FROM c;
+} {1 {frame starting offset must be a non-negative integer}}
+do_catchsql_test 9.8.2 {
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+  SELECT count() OVER (
+      ORDER BY x ROWS BETWEEN 2 PRECEDING AND a FOLLOWING
+  ) FROM c;
+} {1 {frame ending offset must be a non-negative integer}}
+
+do_execsql_test 10.0 {
+  WITH t1(a,b) AS (VALUES(1,2))
+  SELECT count() FILTER (where b<>5) OVER w1
+    FROM t1
+    WINDOW w1 AS (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING);
+} {1}
+
+foreach {tn stmt} {
+  1 "SELECT nth_value(b, 0) OVER (ORDER BY a) FROM t1"
+  2 "SELECT nth_value(b, -1) OVER (ORDER BY a) FROM t1"
+  3 "SELECT nth_value(b, '4ab') OVER (ORDER BY a) FROM t1"
+  4 "SELECT nth_value(b, NULL) OVER (ORDER BY a) FROM t1"
+  5 "SELECT nth_value(b, 8.5) OVER (ORDER BY a) FROM t1"
+} {
+  do_catchsql_test 10.1.$tn "
+    WITH t1(a,b) AS ( VALUES(1, 2), (2, 3), (3, 4) )
+    $stmt
+  " {1 {second argument to nth_value must be a positive integer}}
+}
+
+foreach {tn stmt res} {
+  1 "SELECT nth_value(b, 1) OVER (ORDER BY a) FROM t1"         {2 2 2}
+  2 "SELECT nth_value(b, 2) OVER (ORDER BY a) FROM t1"         {{} 3 3}
+  3 "SELECT nth_value(b, '2') OVER (ORDER BY a) FROM t1"       {{} 3 3}
+  4 "SELECT nth_value(b, 2.0) OVER (ORDER BY a) FROM t1"       {{} 3 3}
+  5 "SELECT nth_value(b, '2.0') OVER (ORDER BY a) FROM t1"     {{} 3 3}
+  6 "SELECT nth_value(b, 10000000) OVER (ORDER BY a) FROM t1"  {{} {} {}}
+} {
+  do_execsql_test 10.2.$tn "
+    WITH t1(a,b) AS ( VALUES(1, 2), (2, 3), (3, 4) )
+    $stmt
+  " $res
+}
+
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 11.0 {
+  CREATE TABLE t1(a INT);
+  INSERT INTO t1 VALUES(10),(15),(20),(20),(25),(30),(30),(50);
+  CREATE TABLE t3(x INT, y VARCHAR);
+  INSERT INTO t3(x,y) VALUES(10,'ten'),('15','fifteen'),(30,'thirty');
+}
+
+do_execsql_test 11.1 {
+  SELECT a, (SELECT y FROM t3 WHERE x=a) FROM t1 ORDER BY a;
+} {
+  10 ten 15 fifteen 20 {} 20 {} 25 {} 30 thirty 30 thirty 50 {}
+}
+
+do_execsql_test 11.2 {
+  SELECT a, (SELECT y FROM t3 WHERE x=a), sum(a) OVER (ORDER BY a)
+    FROM t1 ORDER BY a;
+} {
+  10 ten 10   15 fifteen 25   20 {} 65        20 {} 65   
+  25 {} 90    30 thirty 150   30 thirty 150   50 {} 200
+}
+
+do_execsql_test 11.3.1 {
+  SELECT a, sum(a) OVER win FROM t1
+  WINDOW win AS (ORDER BY a ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+} {
+  10 10 15 25 20 45 20 65 25 90 30 120 30 150 50 200
+}
+do_execsql_test 11.3.2 {
+  SELECT a, sum(a) OVER win FROM t1
+  WINDOW win AS (ORDER BY a ROWS BETWEEN UNBOUNDED PRECEDING AND 0 FOLLOWING)
+} {
+  10 10 15 25 20 45 20 65 25 90 30 120 30 150 50 200
+}
+do_execsql_test 11.3.3 {
+  SELECT a, sum(a) OVER win FROM t1
+  WINDOW win AS (ORDER BY a ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING)
+} {
+  10 10 15 25 20 45 20 65 25 90 30 120 30 150 50 200
+}
+
+do_execsql_test 11.4.1 {
+  SELECT y, group_concat(y, '.') OVER win FROM t3
+  WINDOW win AS (
+    ORDER BY y RANGE BETWEEN UNBOUNDED PRECEDING AND 10 PRECEDING
+  );
+} {
+  fifteen fifteen 
+  ten     fifteen.ten 
+  thirty  fifteen.ten.thirty
+}
+
+finish_test

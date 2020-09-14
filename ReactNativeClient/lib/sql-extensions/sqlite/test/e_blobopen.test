@@ -1,0 +1,548 @@
+# 2014 October 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix e_blobopen
+
+forcedelete test.db2
+
+do_execsql_test 1.0 {
+  ATTACH 'test.db2' AS aux;
+
+  CREATE TABLE main.t1(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+  CREATE TEMP TABLE t1(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+  CREATE TABLE aux.t1(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+
+  CREATE TABLE main.x1(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+  CREATE TEMP TABLE x2(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+  CREATE TABLE aux.x3(a INTEGER PRIMARY KEY, b TEXT, c BLOB);
+
+  INSERT INTO main.t1 VALUES(1, 'main one', X'0101');
+  INSERT INTO main.t1 VALUES(2, 'main two', X'0102');
+  INSERT INTO main.t1 VALUES(3, 'main three', X'0103');
+  INSERT INTO main.t1 VALUES(4, 'main four', X'0104');
+  INSERT INTO main.t1 VALUES(5, 'main five', X'0105');
+
+  INSERT INTO main.x1 VALUES(1, 'x main one', X'000101');
+  INSERT INTO main.x1 VALUES(2, 'x main two', X'000102');
+  INSERT INTO main.x1 VALUES(3, 'x main three', X'000103');
+  INSERT INTO main.x1 VALUES(4, 'x main four', X'000104');
+  INSERT INTO main.x1 VALUES(5, 'x main five', X'000105');
+
+  INSERT INTO temp.t1 VALUES(1, 'temp one', X'0201');
+  INSERT INTO temp.t1 VALUES(2, 'temp two', X'0202');
+  INSERT INTO temp.t1 VALUES(3, 'temp three', X'0203');
+  INSERT INTO temp.t1 VALUES(4, 'temp four', X'0204');
+  INSERT INTO temp.t1 VALUES(5, 'temp five', X'0205');
+
+  INSERT INTO temp.x2 VALUES(1, 'x temp one', X'000201');
+  INSERT INTO temp.x2 VALUES(2, 'x temp two', X'000202');
+  INSERT INTO temp.x2 VALUES(3, 'x temp three', X'000203');
+  INSERT INTO temp.x2 VALUES(4, 'x temp four', X'000204');
+  INSERT INTO temp.x2 VALUES(5, 'x temp five', X'000205');
+
+  INSERT INTO aux.t1 VALUES(1, 'aux one', X'0301');
+  INSERT INTO aux.t1 VALUES(2, 'aux two', X'0302');
+  INSERT INTO aux.t1 VALUES(3, 'aux three', X'0303');
+  INSERT INTO aux.t1 VALUES(4, 'aux four', X'0304');
+  INSERT INTO aux.t1 VALUES(5, 'aux five', X'0305');
+
+  INSERT INTO aux.x3 VALUES(1, 'x aux one', X'000301');
+  INSERT INTO aux.x3 VALUES(2, 'x aux two', X'000302');
+  INSERT INTO aux.x3 VALUES(3, 'x aux three', X'000303');
+  INSERT INTO aux.x3 VALUES(4, 'x aux four', X'000304');
+  INSERT INTO aux.x3 VALUES(5, 'x aux five', X'000305');
+}
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-37639-55938 This interfaces opens a handle to the BLOB
+# located in row iRow, column zColumn, table zTable in database zDb; in
+# other words, the same BLOB that would be selected by: SELECT zColumn
+# FROM zDb.zTable WHERE rowid = iRow;
+#
+proc read_blob {zDb zTab zCol iRow} {
+  sqlite3_blob_open db $zDb $zTab $zCol $iRow 0 B
+  set nByte [sqlite3_blob_bytes $B]
+  set data [sqlite3_blob_read $B 0 $nByte]
+  sqlite3_blob_close $B
+  return $data
+}
+
+do_test 1.1.1 { read_blob main t1 b 1 } "main one"
+do_test 1.1.2 { read_blob main t1 c 1 } "\01\01"
+do_test 1.1.3 { read_blob temp t1 b 1 } "temp one"
+do_test 1.1.4 { read_blob temp t1 c 1 } "\02\01"
+do_test 1.1.6 { read_blob aux  t1 b 1 } "aux one"
+do_test 1.1.7 { read_blob aux  t1 c 1 } "\03\01"
+
+do_test 1.2.1 { read_blob main t1 b 4 } "main four"
+do_test 1.2.2 { read_blob main t1 c 4 } "\01\04"
+do_test 1.2.3 { read_blob temp t1 b 4 } "temp four"
+do_test 1.2.4 { read_blob temp t1 c 4 } "\02\04"
+do_test 1.2.6 { read_blob aux  t1 b 4 } "aux four"
+do_test 1.2.7 { read_blob aux  t1 c 4 } "\03\04"
+
+do_test 1.3.1 { read_blob main x1 b 2 } "x main two"
+do_test 1.3.2 { read_blob main x1 c 2 } "\00\01\02"
+do_test 1.3.3 { read_blob temp x2 b 2 } "x temp two"
+do_test 1.3.4 { read_blob temp x2 c 2 } "\00\02\02"
+do_test 1.3.6 { read_blob aux  x3 b 2 } "x aux two"
+do_test 1.3.7 { read_blob aux  x3 c 2 } "\00\03\02"
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-27234-05761 Parameter zDb is not the filename that
+# contains the database, but rather the symbolic name of the database.
+# For attached databases, this is the name that appears after the AS
+# keyword in the ATTACH statement. For the main database file, the
+# database name is "main". For TEMP tables, the database name is "temp".
+#
+#   The test cases immediately above demonstrate that the database name
+#   for the main db, for TEMP tables and for those in attached databases
+#   is correct. The following tests check that filenames cannot be
+#   used as well.
+#
+do_test 2.1 {
+  list [catch { sqlite3_blob_open db "test.db" t1 b 1 0 B } msg] $msg
+} {1 SQLITE_ERROR}
+do_test 2.2 {
+  list [catch { sqlite3_blob_open db "test.db2" t1 b 1 0 B } msg] $msg
+} {1 SQLITE_ERROR}
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-50854-53979 If the flags parameter is non-zero, then
+# the BLOB is opened for read and write access.
+#
+# EVIDENCE-OF: R-03922-41160 If the flags parameter is zero, the BLOB is
+# opened for read-only access.
+#
+foreach {tn iRow flags} {
+  1 1   0
+  2 2   1
+  3 3  -1
+  4 4   2147483647
+  5 5  -2147483648
+} {
+  do_test 3.$tn.1 {
+    sqlite3_blob_open db main x1 c $iRow $flags B
+    set n [sqlite3_blob_bytes $B]
+    sqlite3_blob_read $B 0 $n
+  } [binary format ccc 0 1 $iRow]
+
+  if {$flags==0} {
+    # Blob was opened for read-only access - writing returns an error.
+    do_test 3.$tn.2 {
+      list [catch { sqlite3_blob_write $B 0 xxx 3 } msg] $msg
+    } {1 SQLITE_READONLY}
+
+    do_execsql_test 3.$tn.3 {
+      SELECT c FROM x1 WHERE a=$iRow;
+    } [binary format ccc 0 1 $iRow]
+  } else {
+    # Blob was opened for read/write access - writing succeeds
+    do_test 3.$tn.4 {
+      list [catch { sqlite3_blob_write $B 0 xxx 3 } msg] $msg
+    } {0 {}}
+
+    do_execsql_test 3.$tn.5 {
+      SELECT c FROM x1 WHERE a=$iRow;
+    } {xxx}
+  }
+
+  sqlite3_blob_close $B
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+do_execsql_test 4.0 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES('abcd', 152);
+  INSERT INTO t1 VALUES(NULL, X'00010203');
+  INSERT INTO t1 VALUES('', 154.2);
+
+  CREATE TABLE t2(x PRIMARY KEY, y) WITHOUT ROWID;
+  INSERT INTO t2 VALUES(1, 'blob');
+
+  CREATE TABLE t3(a PRIMARY KEY, b, c, d, e, f, UNIQUE(e, f));
+  INSERT INTO t3 VALUES('aaaa', 'bbbb', 'cccc', 'dddd', 'eeee', 'ffff');
+  CREATE INDEX t3b ON t3(b);
+
+  CREATE TABLE p1(x PRIMARY KEY);
+  INSERT INTO p1 VALUES('abc');
+
+  CREATE TABLE c1(a INTEGER PRIMARY KEY, b REFERENCES p1);
+  INSERT INTO c1 VALUES(45, 'abc');
+}
+
+proc test_blob_open {tn zDb zTab zCol iRow flags    errcode errmsg} {
+  global B
+  set B "0x1234"
+
+  if {$errcode=="SQLITE_OK"} {
+    set expected "0 {}"
+  } else {
+    set expected "1 $errcode"
+  }
+
+  set ::res [list [
+    catch { sqlite3_blob_open db $zDb $zTab $zCol $iRow $flags B } msg
+  ] $msg]
+  do_test 4.$tn.1 { set ::res } $expected
+
+  # EVIDENCE-OF: R-08940-21305 Unless it returns SQLITE_MISUSE, this
+  # function sets the database connection error code and message
+  # accessible via sqlite3_errcode() and sqlite3_errmsg() and related
+  # functions.
+  #
+  #   This proc (test_blob_open) is used below to test various error and
+  #   non-error conditions. But never SQLITE_MISUSE conditions. So these
+  #   test cases are considered as partly verifying the requirement above.
+  #   See below for a test of the SQLITE_MISUSE case.
+  #
+  do_test 4.$tn.2 {
+    sqlite3_errcode db
+  } $errcode
+  do_test 4.$tn.3 {
+    sqlite3_errmsg db
+  } $errmsg
+
+  # EVIDENCE-OF: R-31086-35521 On success, SQLITE_OK is returned and the
+  # new BLOB handle is stored in *ppBlob. Otherwise an error code is
+  # returned and, unless the error code is SQLITE_MISUSE, *ppBlob is set
+  # to NULL.
+  #
+  do_test 4.$tn.4 {
+    expr {$B == "0"}
+  } [expr {$errcode != "SQLITE_OK"}]
+
+  # EVIDENCE-OF: R-63421-15521 This means that, provided the API is not
+  # misused, it is always safe to call sqlite3_blob_close() on *ppBlob
+  # after this function it returns.
+  do_test 4.$tn.5 {
+    sqlite3_blob_close $B
+  } {}
+}
+
+# EVIDENCE-OF: R-31204-44780 Database zDb does not exist
+test_blob_open 1 nosuchdb t1 x 1 0 SQLITE_ERROR "no such table: nosuchdb.t1"
+
+# EVIDENCE-OF: R-28676-08005 Table zTable does not exist within database zDb
+test_blob_open 2 main tt1 x 1 0    SQLITE_ERROR "no such table: main.tt1"
+
+# EVIDENCE-OF: R-40134-30296 Table zTable is a WITHOUT ROWID table
+test_blob_open 3 main t2 y 1 0     SQLITE_ERROR \
+    "cannot open table without rowid: t2"
+
+# EVIDENCE-OF: R-56376-21261 Column zColumn does not exist
+test_blob_open 4 main t1 z 2 0     SQLITE_ERROR "no such column: \"z\""
+
+# EVIDENCE-OF: R-28258-23166 Row iRow is not present in the table
+test_blob_open 5 main t1 y 6 0     SQLITE_ERROR "no such rowid: 6"
+
+# EVIDENCE-OF: R-11683-62380 The specified column of row iRow contains a
+# value that is not a TEXT or BLOB value
+test_blob_open 6 main t1 x 2 0 SQLITE_ERROR "cannot open value of type null"
+test_blob_open 7 main t1 y 1 0 SQLITE_ERROR "cannot open value of type integer"
+test_blob_open 8 main t1 y 3 0 SQLITE_ERROR "cannot open value of type real"
+
+# EVIDENCE-OF: R-34146-30782 Column zColumn is part of an index, PRIMARY
+# KEY or UNIQUE constraint and the blob is being opened for read/write
+# access
+#
+# Test cases 8.1.* show that such columns can be opened for read-access. 
+# Tests 8.2.* show that read-write access is different. Columns "c" and "c"
+# are not part of an index, PK or UNIQUE constraint, so they work in both
+# cases.
+#
+test_blob_open 8.1.1 main t3 a 1 0 SQLITE_OK "not an error"
+test_blob_open 8.1.2 main t3 b 1 0 SQLITE_OK "not an error"
+test_blob_open 8.1.3 main t3 c 1 0 SQLITE_OK "not an error"
+test_blob_open 8.1.4 main t3 d 1 0 SQLITE_OK "not an error"
+test_blob_open 8.1.5 main t3 e 1 0 SQLITE_OK "not an error"
+test_blob_open 8.1.6 main t3 f 1 0 SQLITE_OK "not an error"
+
+set cannot "cannot open indexed column for writing"
+test_blob_open 8.2.1 main t3 a 1 8 SQLITE_ERROR $cannot
+test_blob_open 8.2.2 main t3 b 1 8 SQLITE_ERROR $cannot
+test_blob_open 8.2.3 main t3 c 1 8 SQLITE_OK "not an error"
+test_blob_open 8.2.4 main t3 d 1 8 SQLITE_OK "not an error"
+test_blob_open 8.2.5 main t3 e 1 8 SQLITE_ERROR $cannot
+test_blob_open 8.2.6 main t3 f 1 8 SQLITE_ERROR $cannot
+
+# EVIDENCE-OF: R-50117-55204 Foreign key constraints are enabled, column
+# zColumn is part of a child key definition and the blob is being opened
+# for read/write access
+#
+#   9.1: FK disabled, read-only access.
+#   9.2: FK disabled, read-only access.
+#   9.3: FK enabled, read/write access.
+#   9.4: FK enabled, read/write access.
+#
+test_blob_open 9.1 main c1 b 45 0 SQLITE_OK "not an error"
+test_blob_open 9.2 main c1 b 45 1 SQLITE_OK "not an error"
+execsql { PRAGMA foreign_keys = ON }
+test_blob_open 9.3 main c1 b 45 0 SQLITE_OK "not an error"
+test_blob_open 9.4 main c1 b 45 1 SQLITE_ERROR \
+        "cannot open foreign key column for writing"
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-08940-21305 Unless it returns SQLITE_MISUSE, this
+# function sets the database connection error code and message
+# accessible via sqlite3_errcode() and sqlite3_errmsg() and related
+# functions.
+#
+#   This requirement is partially verified by the many uses of test
+#   command [test_blob_open] above. All that is left is to verify the
+#   SQLITE_MISUSE case.
+#
+#   SQLITE_MISUSE is only returned if SQLITE_ENABLE_API_ARMOR is defined
+#   during compilation.
+#
+ifcapable api_armor {
+  sqlite3_blob_open db main t1 x 1 0 B
+
+  do_test 10.1.1 {
+    list [catch {sqlite3_blob_open $B main t1 x 1 0 B2} msg] $msg
+  } {1 SQLITE_MISUSE}
+  do_test 10.1.2 {
+    list [sqlite3_errcode db] [sqlite3_errmsg db]
+  } {SQLITE_OK {not an error}}
+  sqlite3_blob_close $B
+
+  do_test 10.2.1 {
+    list [catch {sqlite3_blob_open db main {} x 1 0 B} msg] $msg
+  } {1 SQLITE_MISUSE}
+  do_test 10.2.2 {
+    list [sqlite3_errcode db] [sqlite3_errmsg db]
+  } {SQLITE_OK {not an error}}
+}
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-50542-62589 If the row that a BLOB handle points to is
+# modified by an UPDATE, DELETE, or by ON CONFLICT side-effects then the
+# BLOB handle is marked as "expired". This is true if any column of the
+# row is changed, even a column other than the one the BLOB handle is
+# open on.
+#
+# EVIDENCE-OF: R-48367-20048 Calls to sqlite3_blob_read() and
+# sqlite3_blob_write() for an expired BLOB handle fail with a return
+# code of SQLITE_ABORT.
+#
+#   11.2: read-only handle, DELETE.
+#   11.3: read-only handle, UPDATE.
+#   11.4: read-only handle, REPLACE.
+#   11.5: read/write handle, DELETE.
+#   11.6: read/write handle, UPDATE.
+#   11.7: read/write handle, REPLACE.
+#
+do_execsql_test 11.1 {
+  CREATE TABLE b1(a INTEGER PRIMARY KEY, b, c UNIQUE);
+  INSERT INTO b1 VALUES(1, '1234567890', 1);
+  INSERT INTO b1 VALUES(2, '1234567890', 2);
+  INSERT INTO b1 VALUES(3, '1234567890', 3);
+  INSERT INTO b1 VALUES(4, '1234567890', 4);
+  INSERT INTO b1 VALUES(5, '1234567890', 5);
+  INSERT INTO b1 VALUES(6, '1234567890', 6);
+
+  CREATE TABLE b2(a INTEGER PRIMARY KEY, b, c UNIQUE);
+  INSERT INTO b2 VALUES(1, '1234567890', 1);
+  INSERT INTO b2 VALUES(2, '1234567890', 2);
+  INSERT INTO b2 VALUES(3, '1234567890', 3);
+  INSERT INTO b2 VALUES(4, '1234567890', 4);
+  INSERT INTO b2 VALUES(5, '1234567890', 5);
+  INSERT INTO b2 VALUES(6, '1234567890', 6);
+}
+
+do_test 11.2.1 {
+  sqlite3_blob_open db main b1 b 2 0 B
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.2.2 {
+  # Deleting a different row does not invalidate the blob handle.
+  execsql { DELETE FROM b1 WHERE a = 1 }
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.2.3 {
+  execsql { DELETE FROM b1 WHERE a = 2 }
+  list [catch { sqlite3_blob_read $B 0 10 } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.2.4 {
+  sqlite3_blob_close $B
+} {}
+
+do_test 11.3.1 {
+  sqlite3_blob_open db main b1 b 3 0 B
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.3.2 {
+  # Updating a different row
+  execsql { UPDATE b1 SET c = 42 WHERE a=4 }
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.3.3 {
+  execsql { UPDATE b1 SET c = 43 WHERE a=3 }
+  list [catch { sqlite3_blob_read $B 0 10 } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.3.4 {
+  sqlite3_blob_close $B
+} {}
+
+do_test 11.4.1 {
+  sqlite3_blob_open db main b1 b 6 0 B
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.4.2 {
+  # Replace a different row
+  execsql { INSERT OR REPLACE INTO b1 VALUES(10, 'abcdefghij', 5) }
+  sqlite3_blob_read $B 0 10
+} {1234567890}
+do_test 11.4.3 {
+  execsql { INSERT OR REPLACE INTO b1 VALUES(11, 'abcdefghij', 6) }
+  list [catch { sqlite3_blob_read $B 0 10 } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.4.4 {
+  sqlite3_blob_close $B
+} {}
+
+do_test 11.4.1 {
+  sqlite3_blob_open db main b2 b 2 1 B
+  sqlite3_blob_write $B 0 "abcdefghij"
+} {}
+do_test 11.4.2 {
+  # Deleting a different row does not invalidate the blob handle.
+  execsql { DELETE FROM b2 WHERE a = 1 }
+  sqlite3_blob_write $B 0 "ABCDEFGHIJ"
+} {}
+do_test 11.4.3 {
+  execsql { DELETE FROM b2 WHERE a = 2 }
+  list [catch { sqlite3_blob_write $B 0 "0987654321" } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.4.4 {
+  sqlite3_blob_close $B
+} {}
+
+do_test 11.5.1 {
+  sqlite3_blob_open db main b2 b 3 1 B
+  sqlite3_blob_write $B 0 "abcdefghij"
+} {}
+do_test 11.5.2 {
+  # Updating a different row
+  execsql { UPDATE b2 SET c = 42 WHERE a=4 }
+  sqlite3_blob_write $B 0 "ABCDEFGHIJ"
+} {}
+do_test 11.5.3 {
+  execsql { UPDATE b2 SET c = 43 WHERE a=3 }
+  list [catch { sqlite3_blob_write $B 0 "0987654321" } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.5.4 {
+  sqlite3_blob_close $B
+} {}
+
+do_test 11.6.1 {
+  sqlite3_blob_open db main b2 b 6 1 B
+  sqlite3_blob_write $B 0 "abcdefghij"
+} {}
+do_test 11.6.2 {
+  # Replace a different row
+  execsql { INSERT OR REPLACE INTO b2 VALUES(10, 'abcdefghij', 5) }
+  sqlite3_blob_write $B 0 "ABCDEFGHIJ"
+} {}
+do_test 11.6.3 {
+  execsql { INSERT OR REPLACE INTO b2 VALUES(11, 'abcdefghij', 6) }
+  list [catch { sqlite3_blob_write $B 0 "0987654321" } msg] $msg
+} {1 SQLITE_ABORT}
+do_test 11.6.4 {
+  sqlite3_blob_close $B
+} {}
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-45408-40694 Changes written into a BLOB prior to the
+# BLOB expiring are not rolled back by the expiration of the BLOB. Such
+# changes will eventually commit if the transaction continues to
+# completion.
+#
+do_execsql_test 12.1 {
+  CREATE TABLE b3(x INTEGER PRIMARY KEY, y TEXT, z INTEGER);
+  INSERT INTO b3 VALUES(22, '..........', NULL);
+}
+do_test 12.2 {
+  sqlite3_blob_open db main b3 y 22 1 B
+  sqlite3_blob_write $B 0 "xxxxx" 5
+} {}
+do_execsql_test 12.3 {
+  UPDATE b3 SET z = 'not null';
+}
+do_test 12.4 {
+  list [catch {sqlite3_blob_write $B 5 "xxxxx" 5} msg] $msg
+} {1 SQLITE_ABORT}
+do_execsql_test 12.5 {
+  SELECT * FROM b3;
+} {22 xxxxx..... {not null}}
+do_test 12.5 {
+  sqlite3_blob_close $B
+} {}
+do_execsql_test 12.6 {
+  SELECT * FROM b3;
+} {22 xxxxx..... {not null}}
+
+#-------------------------------------------------------------------------
+# EVIDENCE-OF: R-58813-55036 The sqlite3_bind_zeroblob() and
+# sqlite3_result_zeroblob() interfaces and the built-in zeroblob SQL
+# function may be used to create a zero-filled blob to read or write
+# using the incremental-blob interface.
+#
+do_execsql_test 13.1 {
+  CREATE TABLE c2(i INTEGER PRIMARY KEY, j);
+  INSERT INTO c2 VALUES(10, zeroblob(24));
+}
+
+do_test 13.2 {
+  set stmt [sqlite3_prepare_v2 db "INSERT INTO c2 VALUES(11, ?)" -1]
+  sqlite3_bind_zeroblob $stmt 1 45
+  sqlite3_step $stmt
+  sqlite3_finalize $stmt
+} {SQLITE_OK}
+
+# The blobs can be read:
+#
+do_test 13.3.1 {
+  sqlite3_blob_open db main c2 j 10 1 B
+  sqlite3_blob_open db main c2 j 11 1 B2
+  list [sqlite3_blob_bytes $B] [sqlite3_blob_bytes $B2]
+} {24 45}
+do_test 13.3.2 {
+  sqlite3_blob_read $B 0 24
+} [string repeat [binary format c 0] 24]
+do_test 13.3.3 {
+  sqlite3_blob_read $B2 0 45
+} [string repeat [binary format c 0] 45]
+
+# And also written:
+#
+do_test 13.4.1 {
+  sqlite3_blob_write $B 0 [string repeat [binary format c 1] 24]
+} {}
+do_test 13.4.2 {
+  sqlite3_blob_write $B2 0 [string repeat [binary format c 1] 45]
+} {}
+do_test 13.5 {
+  sqlite3_blob_close $B
+  sqlite3_blob_close $B2
+  execsql { SELECT j FROM c2 }
+} [list \
+    [string repeat [binary format c 1] 24] \
+    [string repeat [binary format c 1] 45] \
+]
+
+
+finish_test

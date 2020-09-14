@@ -1,0 +1,94 @@
+# 2018 April 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbusplit
+
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+
+autoinstall_test_functions
+
+proc build_db {db} {
+  $db eval {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE TABLE t2(a PRIMARY KEY, b, c);
+
+    CREATE INDEX t1c ON t1(c);
+  }
+}
+
+proc build_rbu {filename} {
+  forcedelete $filename
+  sqlite3 dbRbu $filename
+  dbRbu eval {
+    CREATE TABLE data0_t1(a, b, c, rbu_control);
+    CREATE TABLE data1_t1(a, b, c, rbu_control);
+    CREATE TABLE data2_t1(a, b, c, rbu_control);
+    CREATE TABLE data3_t1(a, b, c, rbu_control);
+
+    CREATE TABLE data_t2(a, b, c, rbu_control);
+
+    INSERT INTO data0_t1 VALUES(1, 1, 1, 0);
+    INSERT INTO data0_t1 VALUES(2, 2, 2, 0);
+    INSERT INTO data0_t1 VALUES(3, 3, 3, 0);
+    INSERT INTO data0_t1 VALUES(4, 4, 4, 0);
+    INSERT INTO data1_t1 VALUES(5, 5, 5, 0);
+    INSERT INTO data1_t1 VALUES(6, 6, 6, 0);
+    INSERT INTO data1_t1 VALUES(7, 7, 7, 0);
+    INSERT INTO data1_t1 VALUES(8, 8, 8, 0);
+    INSERT INTO data3_t1 VALUES(9, 9, 9, 0);
+
+    INSERT INTO data_t2 VALUES(1, 1, 1, 0);
+    INSERT INTO data_t2 VALUES(2, 2, 2, 0);
+    INSERT INTO data_t2 VALUES(3, 3, 3, 0);
+    INSERT INTO data_t2 VALUES(4, 4, 4, 0);
+    INSERT INTO data_t2 VALUES(5, 5, 5, 0);
+    INSERT INTO data_t2 VALUES(6, 6, 6, 0);
+    INSERT INTO data_t2 VALUES(7, 7, 7, 0);
+    INSERT INTO data_t2 VALUES(8, 8, 8, 0);
+    INSERT INTO data_t2 VALUES(9, 9, 9, 0);
+  }
+  
+  dbRbu close
+}
+
+foreach {tn cmd} {
+  1 run_rbu
+  2 step_rbu
+} {
+  reset_db
+  build_db db
+  build_rbu testrbu.db
+
+  do_test 1.$tn.1 {
+    $cmd test.db testrbu.db
+  } {SQLITE_DONE}
+  do_execsql_test 1.$tn.1 {
+    SELECT * FROM t1;
+  } {
+    1 1 1 2 2 2 3 3 3 4 4 4
+    5 5 5 6 6 6 7 7 7 8 8 8
+    9 9 9
+  }
+  do_execsql_test 1.$tn.2 {
+    SELECT * FROM t2;
+  } {
+    1 1 1 2 2 2 3 3 3 4 4 4
+    5 5 5 6 6 6 7 7 7 8 8 8
+    9 9 9
+  }
+}
+
+finish_test

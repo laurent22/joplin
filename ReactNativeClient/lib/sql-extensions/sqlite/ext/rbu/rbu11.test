@@ -1,0 +1,197 @@
+# 2015 February 16
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbu11
+
+
+#--------------------------------------------------------------------
+# Test that the xAccess() method of an rbu vfs handles queries other
+# than SQLITE_ACCESS_EXISTS correctly. The test code below causes
+# SQLite to call xAccess(SQLITE_ACCESS_READWRITE) on the directory
+# path argument passed to "PRAGMA temp_store_directory".
+#
+do_test 1.1 {
+  sqlite3rbu_create_vfs -default rbu ""
+  reset_db
+  catchsql { PRAGMA temp_store_directory = '/no/such/directory' }
+} {1 {not a writable directory}}
+
+do_test 1.2 {
+  catchsql " PRAGMA temp_store_directory = '[pwd]' "
+} {0 {}}
+
+do_test 1.3 {
+  catchsql " PRAGMA temp_store_directory = '' "
+} {0 {}}
+
+do_test 1.4 {
+  db close
+  sqlite3rbu_destroy_vfs rbu
+} {}
+
+#--------------------------------------------------------------------
+# Try to trick rbu into operating on a database opened in wal mode.
+#
+reset_db
+do_execsql_test 2.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  PRAGMA journal_mode = 'wal';
+  CREATE TABLE t2(d PRIMARY KEY, e, f);
+} {wal}
+
+do_test 2.2 {
+  db_save 
+  db close
+
+  forcedelete rbu.db
+  sqlite3 dbo rbu.db
+  dbo eval {
+    CREATE TABLE data_t1(a, b, c, rbu_control);
+    INSERT INTO data_t1 VALUES(4, 5, 6, 0);
+    INSERT INTO data_t1 VALUES(7, 8, 9, 0);
+  }
+  dbo close
+
+  db_restore 
+  hexio_write test.db 18 0101
+  file exists test.db-wal
+} {1}
+
+do_test 2.3 {
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_ERROR}
+
+do_test 2.4 {
+  list [catch {rbu close} msg] $msg
+} {1 {SQLITE_ERROR - cannot update wal mode database}}
+
+#--------------------------------------------------------------------
+# Test a constraint violation message with an unusual table name. 
+# Specifically, one for which the first character is a codepoint
+# smaller than 30 (character '0').
+#
+reset_db
+do_execsql_test 3.1 {
+  CREATE TABLE "(t1)"(a PRIMARY KEY, b, c);
+  INSERT INTO "(t1)" VALUES(1, 2, 3);
+  INSERT INTO "(t1)" VALUES(4, 5, 6);
+}
+db close
+
+do_test 3.2 {
+  forcedelete rbu.db
+  sqlite3 dbo rbu.db
+  dbo eval {
+    CREATE TABLE "data_(t1)"(a, b, c, rbu_control);
+    INSERT INTO "data_(t1)" VALUES(4, 8, 9, 0);
+  }
+  dbo close
+
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+  rbu step
+} {SQLITE_CONSTRAINT}
+
+do_test 3.3 {
+  list [catch {rbu close} msg] $msg
+} {1 {SQLITE_CONSTRAINT - UNIQUE constraint failed: (t1).a}}
+
+#--------------------------------------------------------------------
+# Check that once an RBU update has been applied, attempting to apply
+# it a second time is a no-op (as the state stored in the RBU database is
+# "all steps completed").
+#
+reset_db
+do_execsql_test 4.1 {
+  CREATE TABLE "(t1)"(a, b, c, PRIMARY KEY(c, b, a));
+  INSERT INTO "(t1)" VALUES(1, 2, 3);
+  INSERT INTO "(t1)" VALUES(4, 5, 6);
+}
+db close
+
+do_test 4.2 {
+  forcedelete rbu.db
+  sqlite3 dbo rbu.db
+  dbo eval {
+    CREATE TABLE "data_(t1)"(a, b, c, rbu_control);
+    INSERT INTO "data_(t1)" VALUES(7, 8, 9, 0);
+    INSERT INTO "data_(t1)" VALUES(1, 2, 3, 1);
+  }
+  dbo close
+
+  sqlite3rbu rbu test.db rbu.db
+  while {[rbu step]=="SQLITE_OK"} { }
+  rbu close
+} {SQLITE_DONE}
+
+do_test 4.3 {
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_DONE}
+
+do_test 4.4 {
+  rbu close
+} {SQLITE_DONE}
+
+do_test 4.5.1 {
+  sqlite3 dbo rbu.db
+  dbo eval { INSERT INTO rbu_state VALUES(100, 100) }
+  dbo close
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_CORRUPT}
+do_test 4.5.2 {
+  list [catch {rbu close} msg] $msg
+} {1 SQLITE_CORRUPT}
+do_test 4.5.3 {
+  sqlite3 dbo rbu.db
+  dbo eval { DELETE FROM rbu_state WHERE k = 100 }
+  dbo close 
+} {}
+
+# Also, check that an invalid state value in the rbu_state table is
+# detected and reported as corruption.
+do_test 4.6.1 {
+  sqlite3 dbo rbu.db
+  dbo eval { UPDATE rbu_state SET v = v*-1 WHERE k = 1 }
+  dbo close
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_CORRUPT}
+do_test 4.6.2 {
+  list [catch {rbu close} msg] $msg
+} {1 SQLITE_CORRUPT}
+do_test 4.6.3 {
+  sqlite3 dbo rbu.db
+  dbo eval { UPDATE rbu_state SET v = v*-1 WHERE k = 1 }
+  dbo close 
+} {}
+
+do_test 4.7.1 {
+  sqlite3 dbo rbu.db
+  dbo eval { UPDATE rbu_state SET v = 1 WHERE k = 1 }
+  dbo eval { UPDATE rbu_state SET v = 'nosuchtable' WHERE k = 2 }
+  dbo close
+  sqlite3rbu rbu test.db rbu.db
+  rbu step
+} {SQLITE_ERROR}
+do_test 4.7.2 {
+  list [catch {rbu close} msg] $msg
+} {1 {SQLITE_ERROR - rbu_state mismatch error}}
+
+finish_test

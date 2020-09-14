@@ -1,0 +1,137 @@
+
+OVERVIEW
+
+  The SQLite library is capable of parsing SQL foreign key constraints 
+  supplied as part of CREATE TABLE statements, but it does not actually 
+  implement them. However, most of the features of foreign keys may be
+  implemented using SQL triggers, which SQLite does support. This text
+  file describes a feature of the SQLite shell tool (sqlite3) that
+  extracts foreign key definitions from an existing SQLite database and
+  creates the set of CREATE TRIGGER statements required to implement
+  the foreign key constraints.
+
+CAPABILITIES
+
+  An SQL foreign key is a constraint that requires that each row in
+  the "child" table corresponds to a row in the "parent" table. For
+  example, the following schema:
+
+    CREATE TABLE parent(a, b, c, PRIMARY KEY(a, b));
+    CREATE TABLE child(d, e, f, FOREIGN KEY(d, e) REFERENCES parent(a, b));
+
+  implies that for each row in table "child", there must be a row in
+  "parent" for which the expression (child.d==parent.a AND child.e==parent.b) 
+  is true. The columns in the parent table are required to be either the
+  primary key columns or subject to a UNIQUE constraint. There is no such
+  requirement for the columns of the child table.
+
+  At this time, all foreign keys are implemented as if they were 
+  "MATCH NONE", even if the declaration specified "MATCH PARTIAL" or 
+  "MATCH FULL". "MATCH NONE" means that if any of the key columns in
+  the child table are NULL, then there is no requirement for a corresponding
+  row in the parent table. So, taking this into account, the expression that
+  must be true for every row of the child table in the above example is
+  actually:
+
+      (child.d IS NULL) OR 
+      (child.e IS NULL) OR 
+      (child.d==parent.a AND child.e==parent.b)
+
+  Attempting to insert or update a row in the child table so that the 
+  affected row violates this constraint results in an exception being 
+  thrown.
+
+  The effect of attempting to delete or update a row in the parent table 
+  so that the constraint becomes untrue for one or more rows in the child
+  table depends on the "ON DELETE" or "ON UPDATE" actions specified as
+  part of the foreign key definition, respectively. Three different actions
+  are supported: "RESTRICT" (the default), "CASCADE" and "SET NULL". SQLite
+  will also parse the "SET DEFAULT" action, but this is not implemented
+  and "RESTRICT" is used instead.
+
+    RESTRICT: Attempting to update or delete a row in the parent table so
+              that the constraint becomes untrue for one or more rows in
+              the child table is not allowed. An exception is thrown.
+
+    CASCADE:  Instead of throwing an exception, all corresponding child table
+              rows are either deleted (if the parent row is being deleted)
+              or updated to match the new parent key values (if the parent 
+              row is being updated).
+
+    SET NULL: Instead of throwing an exception, the foreign key fields of
+              all corresponding child table rows are set to NULL.
+
+LIMITATIONS
+
+  Apart from those limitiations described above:
+
+    * Implicit mapping to composite primary keys is not supported. If
+      a parent table has a composite primary key, then any child table
+      that refers to it must explicitly map each column. For example, given
+      the following definition of table "parent":
+
+        CREATE TABLE parent(a, b, c, PRIMARY KEY(a, b));
+
+      only the first of the following two definitions of table "child"
+      is supported:
+
+        CREATE TABLE child(d, e, f, FOREIGN KEY(d, e) REFERENCES parent(a, b));
+        CREATE TABLE child(d, e, f, FOREIGN KEY(d, e) REFERENCES parent);
+
+      An implicit reference to a composite primary key is detected as an
+      error when the program is run (see below).
+
+    * SQLite does not support recursive triggers, and therefore this program
+      does not support recursive CASCADE or SET NULL foreign key 
+      relationships. If the parent and the child tables of a CASCADE or
+      SET NULL foreign key are the same table, the generated triggers will
+      malfunction. This is also true if the recursive foreign key constraint
+      is indirect (for example if table A references table B which references
+      table A with a CASCADE or SET NULL foreign key constraint).
+
+      Recursive CASCADE or SET NULL foreign key relationships are *not*
+      detected as errors when the program is run. Buyer beware.
+
+USAGE
+
+  The functionality is accessed through an sqlite3 shell tool "dot-command":
+
+    .genfkey ?--no-drop? ?--ignore-errors? ?--exec?
+
+  When this command is run, it first checks the schema of the open SQLite
+  database for foreign key related errors or inconsistencies. For example,
+  a foreign key that refers to a parent table that does not exist, or
+  a foreign key that refers to columns in a parent table that are not
+  guaranteed to be unique. If such errors are found and the --ignore-errors
+  option was not present, a message for each one is printed to stderr and
+  no further processing takes place.
+
+  If errors are found and the --ignore-errors option is passed, then
+  no error messages are printed. No "CREATE TRIGGER" statements are generated
+  for foriegn-key definitions that contained errors, they are silently
+  ignored by subsequent processing.
+
+  All triggers generated by this command have names that match the pattern
+  "genfkey*". Unless the --no-drop option is specified, then the program
+  also generates a "DROP TRIGGER" statement for each trigger that exists
+  in the database with a name that matches this pattern. This allows the
+  program to be used to upgrade a database schema for which foreign key
+  triggers have already been installed (i.e. after new tables are created
+  or existing tables dropped).
+
+  Finally, a series of SQL trigger definitions (CREATE TRIGGER statements) 
+  that implement the foreign key constraints found in the database schema are
+  generated.
+
+  If the --exec option was passed, then all generated SQL is immediately
+  executed on the database. Otherwise, the generated SQL strings are output
+  in the same way as the results of SELECT queries are. Normally, this means
+  they will be printed to stdout, but this can be configured using other
+  dot-commands (i.e. ".output").
+
+  The simplest way to activate the foriegn key definitions in a database
+  is simply to open it using the shell tool and enter the command 
+  ".genfkey --exec":
+
+    sqlite> .genfkey --exec
+

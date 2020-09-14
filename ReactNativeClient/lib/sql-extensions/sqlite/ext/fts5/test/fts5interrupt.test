@@ -1,0 +1,67 @@
+# 2019 Jan 4
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5interrupt
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(a);
+  INSERT INTO t1(t1, rank) VALUES('pgsz', 40);
+}
+db_save_and_close
+
+proc progress_handler {args} {
+  incr ::progress_handler_delay -1
+  if {$::progress_handler_delay<=0} { return 1 } 
+  return 0
+}
+
+foreach {tn sql} {
+  1 { INSERT INTO t1(rowid, a) VALUES(0, 'z z z z') }
+  2 { COMMIT }
+} {
+  set bDone 0
+  for {set i 1} {$bDone==0} {incr i} {
+    do_test 1.$tn.$i {
+      db_restore_and_reopen
+      execsql {
+        BEGIN;
+          INSERT INTO t1(rowid, a) VALUES(1, 'a b c d');
+          INSERT INTO t1(rowid, a) VALUES(2, 'd e f g');
+          INSERT INTO t1(rowid, a) VALUES(3, 'h i j k');
+          INSERT INTO t1(rowid, a) VALUES(4, 'l m n o');
+      }
+  
+      set ::progress_handler_delay $i
+      db progress 1 progress_handler
+      set res [catchsql $sql]
+      db close
+      if {$res=="0 {}"} {
+        set bDone 1
+      } else {
+        if {$res!="1 interrupted"} { error "got: $res" }
+      }
+      set {} {}
+    } {}
+  }
+}
+
+finish_test
+

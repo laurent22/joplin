@@ -1,0 +1,196 @@
+# 2007 April 26
+#
+# The author disclaims copyright to this source code.
+#
+#*************************************************************************
+# This file implements tests for prefix-searching in the fts2
+# component of the SQLite library.
+#
+# $Id: fts2n.test,v 1.2 2007/12/13 21:54:11 drh Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# If SQLITE_ENABLE_FTS2 is defined, omit this file.
+ifcapable !fts2 {
+  finish_test
+  return
+}
+
+# A large string to prime the pump with.
+set text {
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas
+  iaculis mollis ipsum. Praesent rhoncus placerat justo. Duis non quam
+  sed turpis posuere placerat. Curabitur et lorem in lorem porttitor
+  aliquet. Pellentesque bibendum tincidunt diam. Vestibulum blandit
+  ante nec elit. In sapien diam, facilisis eget, dictum sed, viverra
+  at, felis. Vestibulum magna. Sed magna dolor, vestibulum rhoncus,
+  ornare vel, vulputate sit amet, felis. Integer malesuada, tellus at
+  luctus gravida, diam nunc porta nibh, nec imperdiet massa metus eu
+  lectus. Aliquam nisi. Nunc fringilla nulla at lectus. Suspendisse
+  potenti. Cum sociis natoque penatibus et magnis dis parturient
+  montes, nascetur ridiculus mus. Pellentesque odio nulla, feugiat eu,
+  suscipit nec, consequat quis, risus.
+}
+
+db eval {
+  CREATE VIRTUAL TABLE t1 USING fts2(c);
+
+  INSERT INTO t1(rowid, c) VALUES(1, $text);
+  INSERT INTO t1(rowid, c) VALUES(2, 'Another lovely row');
+}
+
+# Exact match
+do_test fts2n-1.1 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lorem'"
+} {1}
+
+# And a prefix
+do_test fts2n-1.2 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lore*'"
+} {1}
+
+# Prefix includes exact match
+do_test fts2n-1.3 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lorem*'"
+} {1}
+
+# Make certain everything isn't considered a prefix!
+do_test fts2n-1.4 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lore'"
+} {}
+
+# Prefix across multiple rows.
+do_test fts2n-1.5 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lo*'"
+} {1 2}
+
+# Likewise, with multiple hits in one document.
+do_test fts2n-1.6 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'l*'"
+} {1 2}
+
+# Prefix which should only hit one document.
+do_test fts2n-1.7 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lov*'"
+} {2}
+
+# * not at end is dropped.
+do_test fts2n-1.8 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH 'lo *'"
+} {}
+
+# Stand-alone * is dropped.
+do_test fts2n-1.9 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH '*'"
+} {}
+
+# Phrase-query prefix.
+do_test fts2n-1.10 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH '\"lovely r*\"'"
+} {2}
+do_test fts2n-1.11 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH '\"lovely r\"'"
+} {}
+
+# Phrase query with multiple prefix matches.
+do_test fts2n-1.12 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH '\"a* l*\"'"
+} {1 2}
+
+# Phrase query with multiple prefix matches.
+do_test fts2n-1.13 {
+  execsql "SELECT rowid FROM t1 WHERE t1 MATCH '\"a* l* row\"'"
+} {2}
+
+
+
+
+# Test across updates (and, by implication, deletes).
+
+# Version of text without "lorem".
+regsub -all {[Ll]orem} $text '' ntext
+
+db eval {
+  CREATE VIRTUAL TABLE t2 USING fts2(c);
+
+  INSERT INTO t2(rowid, c) VALUES(1, $text);
+  INSERT INTO t2(rowid, c) VALUES(2, 'Another lovely row');
+  UPDATE t2 SET c = $ntext WHERE rowid = 1;
+}
+
+# Can't see lorem as an exact match.
+do_test fts2n-2.1 {
+  execsql "SELECT rowid FROM t2 WHERE t2 MATCH 'lorem'"
+} {}
+
+# Can't see a prefix of lorem, either.
+do_test fts2n-2.2 {
+  execsql "SELECT rowid FROM t2 WHERE t2 MATCH 'lore*'"
+} {}
+
+# Can see lovely in the other document.
+do_test fts2n-2.3 {
+  execsql "SELECT rowid FROM t2 WHERE t2 MATCH 'lo*'"
+} {2}
+
+# Can still see other hits.
+do_test fts2n-2.4 {
+  execsql "SELECT rowid FROM t2 WHERE t2 MATCH 'l*'"
+} {1 2}
+
+# Prefix which should only hit one document.
+do_test fts2n-2.5 {
+  execsql "SELECT rowid FROM t2 WHERE t2 MATCH 'lov*'"
+} {2}
+
+
+
+# Test with a segment which will have multiple levels in the tree.
+
+# Build a big document with lots of unique terms.
+set bigtext $text
+foreach c {a b c d e} {
+  regsub -all {[A-Za-z]+} $bigtext "&$c" t
+  append bigtext $t
+}
+
+# Populate a table with many copies of the big document, so that we
+# can test the number of hits found.  Populate $ret with the expected
+# hit counts for each row.  offsets() returns 4 elements for every
+# hit.  We'll have 6 hits for row 1, 1 for row 2, and 6*(2^5)==192 for
+# $bigtext.
+set ret {6 1}
+db eval {
+  BEGIN;
+  CREATE VIRTUAL TABLE t3 USING fts2(c);
+
+  INSERT INTO t3(rowid, c) VALUES(1, $text);
+  INSERT INTO t3(rowid, c) VALUES(2, 'Another lovely row');
+}
+for {set i 0} {$i<100} {incr i} {
+  db eval {INSERT INTO t3(rowid, c) VALUES(3+$i, $bigtext)}
+  lappend ret 192
+}
+db eval {COMMIT;}
+
+# Test that we get the expected number of hits.
+do_test fts2n-3.1 {
+  set t {}
+  db eval {SELECT offsets(t3) as o FROM t3 WHERE t3 MATCH 'l*'} {
+    set l [llength $o]
+    lappend t [expr {$l/4}]
+  }
+  set t
+} $ret
+
+# TODO(shess) It would be useful to test a couple edge cases, but I
+# don't know if we have the precision to manage it from here at this
+# time.  Prefix hits can cross leaves, which the code above _should_
+# hit by virtue of size.  There are two variations on this.  If the
+# tree is 2 levels high, the code will find the leaf-node extent
+# directly, but if its higher, the code will have to follow two
+# separate interior branches down the tree.  Both should be tested.
+
+finish_test

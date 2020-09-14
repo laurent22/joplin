@@ -1,0 +1,589 @@
+# 2019-10-31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# Test cases for generated columns.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# ticket 830277d9db6c3ba1 on 2019-10-31
+do_execsql_test gencol1-100 {
+  CREATE TABLE t0(c0 AS(TYPEOF(c1)), c1);
+  INSERT INTO t0(c1) VALUES(0);
+  CREATE TABLE t1(x AS (typeof(y)), y);
+  INSERT INTO t1 SELECT * FROM t0;
+  SELECT * FROM t1;
+} {integer 0}
+
+foreach {tn schema} { 
+1 {
+   CREATE TABLE t1(
+     a INT,
+     b TEXT,
+     c ANY,
+     w INT GENERATED ALWAYS AS (a*10),
+     x TEXT AS (typeof(c)),
+     y TEXT AS (substr(b,a,a+2))
+   );
+  }
+2 {
+   CREATE TABLE t1(
+     w INT GENERATED ALWAYS AS (a*10),
+     x TEXT AS (typeof(c)),
+     y TEXT AS (substr(b,a,a+2)),
+     a INT,
+     b TEXT,
+     c ANY
+   );
+  }
+3 {
+   CREATE TABLE t1(
+     w INT GENERATED ALWAYS AS (a*10),
+     a INT,
+     x TEXT AS (typeof(c)) STORED,
+     b TEXT,
+     y TEXT AS (substr(b,a,a+2)),
+     c ANY
+   );
+  }
+4 {
+   CREATE TABLE t1(
+     a INTEGER PRIMARY KEY,
+     w INT GENERATED ALWAYS AS (a*10),
+     b TEXT,
+     x TEXT AS (typeof(c)),
+     y TEXT AS (substr(b,a,a+2)) STORED,
+     c ANY
+   );
+  }
+5 {
+   CREATE TABLE t1(
+     w INT GENERATED ALWAYS AS (a*10),
+     a INT,
+     x TEXT AS (typeof(c)),
+     b TEXT,
+     y TEXT AS (substr(b,a,a+2)) STORED,
+     c ANY,
+     PRIMARY KEY(a,b)
+   ) WITHOUT ROWID;
+  }
+6 {
+   CREATE TABLE t1(
+     w INT GENERATED ALWAYS AS (m*5),
+     m INT AS (a*2) STORED,
+     a INT,
+     x TEXT AS (typeof(c)),
+     b TEXT,
+     y TEXT AS (substr(b,m/2,m/2+2)) STORED,
+     c ANY,
+     PRIMARY KEY(a,b)
+   );
+  }
+7 {
+   CREATE TABLE t1(
+     w INT GENERATED ALWAYS AS (m*5),
+     m INT AS (a*2) NOT NULL,
+     a INT,
+     x TEXT AS (typeof(c)) CHECK (x<>'blank'),
+     b TEXT,
+     y TEXT AS (substr(b,m/2,m/2+2)) STORED,
+     c ANY,
+     PRIMARY KEY(b,a)
+   ) WITHOUT ROWID;
+  }
+} {
+  catch {db close}
+  sqlite3 db :memory:
+  db eval $schema
+  do_execsql_test gencol1-2.$tn.100 {
+    INSERT INTO t1(a,b,c) VALUES(1,'abcdef',5.5),(3,'cantaloupe',NULL);
+    SELECT w, x, y, '|' FROM t1 ORDER BY a;
+  } {10 real abc | 30 null ntalo |}
+  do_execsql_test gencol1-2.$tn.101 {
+    SELECT w, x, y, '|' FROM t1 ORDER BY w;
+  } {10 real abc | 30 null ntalo |}
+  do_execsql_test gencol1-2.$tn.102 {
+    SELECT a FROM t1 WHERE w=30;
+  } {3}
+  do_execsql_test gencol1-2.$tn.103 {
+    SELECT a FROM t1 WHERE x='real';
+  } {1}
+  do_execsql_test gencol1-2.$tn.104 {
+    SELECT a FROM t1 WHERE y LIKE '%tal%' OR x='real' ORDER BY b;
+  } {1 3}
+  do_execsql_test gencol1-2.$tn.110 {
+    CREATE INDEX t1w ON t1(w);
+    SELECT a FROM t1 WHERE w=10;
+  } {1}
+  do_execsql_test gencol1-2.$tn.120 {
+    CREATE INDEX t1x ON t1(x) WHERE w BETWEEN 20 AND 40;
+    SELECT a FROM t1 WHERE x='null' AND w BETWEEN 20 AND 40;
+  } {3}
+  do_execsql_test gencol1-2.$tn.121 {
+    SELECT a FROM t1 WHERE x='real';
+  } {1}
+  do_execsql_test gencol1-2.$tn.130 {
+    VACUUM;
+    PRAGMA integrity_check;
+  } {ok}
+  do_execsql_test gencol1-2.$tn.140 {
+    UPDATE t1 SET a=a+100 WHERE w<20;
+    SELECT a, w, '|' FROM t1 ORDER BY w;
+  } {3 30 | 101 1010 |}
+  do_execsql_test gencol1-2.$tn.150 {
+    INSERT INTO t1 VALUES(4,'jambalaya','Chef John'),(15,87719874135,0);
+    SELECT w, x, y, '|' FROM t1 ORDER BY w;
+  } {30 null ntalo | 40 text balaya | 150 integer {} | 1010 real {} |}
+}
+
+# 2019-10-31 ticket b9befa4b83a660cc
+db close
+sqlite3 db :memory:
+do_execsql_test gencol1-3.100 {
+  PRAGMA foreign_keys = true;
+  CREATE TABLE t0(c0 PRIMARY KEY, c1, c2 AS (c0+c1-c3) REFERENCES t0, c3);
+  INSERT INTO t0 VALUES (0, 0, 0), (11, 5, 5);
+  UPDATE t0 SET c1 = c0, c3 = c0;
+  SELECT *, '|' FROM t0 ORDER BY +c0;
+} {0 0 0 0 | 11 11 11 11 |}
+do_catchsql_test gencol1-3.110 {
+  UPDATE t0 SET c1 = c0, c3 = c0+1;
+} {1 {FOREIGN KEY constraint failed}}
+
+# 2019-11-01 ticket c28a01da72f8957c
+db close
+sqlite3 db :memory:
+do_execsql_test gencol1-4.100 {
+  CREATE TABLE t0 (
+    c0,
+    c1 a UNIQUE AS (1),
+    c2,
+    c3 REFERENCES t0(c1)
+  );
+  PRAGMA foreign_keys = true;
+  INSERT INTO t0(c0,c2,c3) VALUES(0,0,1);
+} {}
+do_catchsql_test gencol1-4.110 {
+  REPLACE INTO t0(c0,c2,c3) VALUES(0,0,0),(0,0,0);
+} {1 {FOREIGN KEY constraint failed}}
+
+# 2019-11-01 Problem found while adding new foreign key test cases in TH3.
+db close
+sqlite3 db :memory:
+do_execsql_test gencol1-5.100 {
+  PRAGMA foreign_keys=ON;
+  CREATE TABLE t1(
+    gcb AS (b*1),
+    a INTEGER PRIMARY KEY,
+    gcc AS (c+0),
+    b UNIQUE,
+    gca AS (1*a+0),
+    c UNIQUE
+  ) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1,2,3);
+  INSERT INTO t1 VALUES(4,5,6);
+  INSERT INTO t1 VALUES(7,8,9);
+  CREATE TABLE t1a(
+    gcx AS (x+0) REFERENCES t1(a) ON DELETE CASCADE,
+    id,
+    x,
+    gcid AS (1*id)
+  );
+  INSERT INTO t1a VALUES(1, 1);
+  INSERT INTO t1a VALUES(2, 4);
+  INSERT INTO t1a VALUES(3, 7);
+  DELETE FROM t1 WHERE b=5;
+  SELECT id,x,'|' FROM t1a ORDER BY id;
+} {1 1 | 3 7 |}  
+
+do_catchsql_test gencol1-6.10 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(c0 NOT NULL AS(c1), c1);
+  REPLACE INTO t0(c1) VALUES(NULL);
+} {1 {NOT NULL constraint failed: t0.c0}}
+
+# 2019-11-06 ticket https://www.sqlite.org/src/info/2399f5986134f79c
+# 2019-12-27 ticket https://www.sqlite.org/src/info/5fbc159eeb092130
+# 2019-12-27 ticket https://www.sqlite.org/src/info/37823501c68a09f9
+#
+# All of the above tickets deal with NOT NULL ON CONFLICT REPLACE
+# constraints on tables that have generated columns.
+#
+reset_db
+do_execsql_test gencol1-7.10 {
+  CREATE TABLE t0 (c0 GENERATED ALWAYS AS (1), c1 UNIQUE, c2 UNIQUE);
+  INSERT INTO t0(c1) VALUES (1);
+  SELECT quote(0 = t0.c2 OR t0.c1 BETWEEN t0.c2 AND 1) FROM t0;
+} {NULL}
+do_execsql_test gencol1-7.11 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0 NOT NULL DEFAULT 'xyz', c1 AS(c0) NOT NULL);
+  REPLACE INTO t0(c0) VALUES(NULL);
+  SELECT * FROM t0;
+} {xyz xyz}
+do_execsql_test gencol1-7.12 {
+  DROP TABLE t0;
+  CREATE TABLE t0(c0 NOT NULL DEFAULT 'xyz', c1 AS(c0) STORED NOT NULL);
+  REPLACE INTO t0(c0) VALUES(NULL);
+  SELECT * FROM t0;
+} {xyz xyz}
+do_execsql_test gencol1-7.20 {
+  CREATE TABLE t1(
+   a NOT NULL DEFAULT 'aaa',
+   b AS(c) NOT NULL,
+   c NOT NULL DEFAULT 'ccc');
+  REPLACE INTO t1(a,c) VALUES(NULL,NULL);
+  SELECT * FROM t1;
+} {aaa ccc ccc}
+do_execsql_test gencol1-7.21 {
+  DROP TABLE t1;
+  CREATE TABLE t1(
+   a NOT NULL DEFAULT 'aaa',
+   b AS(c) STORED NOT NULL,
+   c NOT NULL DEFAULT 'ccc');
+  REPLACE INTO t1(a,c) VALUES(NULL,NULL);
+  SELECT * FROM t1;
+} {aaa ccc ccc}
+do_execsql_test gencol1-7.30 {
+  CREATE TABLE t2(
+   a NOT NULL DEFAULT 'aaa',
+   b AS(a) NOT NULL,
+   c NOT NULL DEFAULT 'ccc');
+  REPLACE INTO t2(a,c) VALUES(NULL,NULL);
+  SELECT * FROM t2;
+} {aaa aaa ccc}
+do_execsql_test gencol1-7.31 {
+  DROP TABLE t2;
+  CREATE TABLE t2(
+   a NOT NULL DEFAULT 'aaa',
+   b AS(a) STORED NOT NULL,
+   c NOT NULL DEFAULT 'ccc');
+  REPLACE INTO t2(a,c) VALUES(NULL,NULL);
+  SELECT * FROM t2;
+} {aaa aaa ccc}
+do_execsql_test gencol1-7.40 {
+  CREATE TABLE t3(a NOT NULL DEFAULT 123, b AS(a) UNIQUE);
+  REPLACE INTO t3 VALUES(NULL);
+  SELECT * FROM t3;
+} {123 123}
+do_execsql_test gencol1-7.41 {
+  SELECT * FROM t3 WHERE b=123;
+} {123 123}
+do_execsql_test gencol1-7.50 {
+  CREATE TABLE t4(a NOT NULL DEFAULT 123, b AS(a*10+4) STORED UNIQUE);
+  REPLACE INTO t4 VALUES(NULL);
+  SELECT * FROM t4;
+} {123 1234}
+do_execsql_test gencol1-7.51 {
+  SELECT * FROM t4 WHERE b=1234;
+} {123 1234}
+
+# 2019-11-06 ticket 4fc08501f4e56692
+do_execsql_test gencol1-8.10 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(
+    c0 AS (('a', 9) < ('b', c1)),
+    c1 AS (1),
+    c2 CHECK (1 = c1)
+  );
+  INSERT INTO t0 VALUES (0),(99);
+  SELECT * FROM t0;
+} {1 1 0 1 1 99}
+do_catchsql_test gencol1-8.20 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0(
+    c0,
+    c1 AS(c0 + c2),
+    c2 AS(c1) CHECK(c2)
+  );
+  UPDATE t0 SET c0 = NULL;
+} {1 {generated column loop on "c2"}}
+
+# 2019-11-21 Problems in the new generated column logic
+# reported by Yongheng Chen and Rui Zhong
+reset_db
+do_execsql_test gencol1-9.10 {
+  PRAGMA foreign_keys=OFF;
+  CREATE TABLE t1(aa , bb AS (17) UNIQUE);
+  INSERT INTO t1 VALUES(17);
+  CREATE TABLE t2(cc);
+  INSERT INTO t2 VALUES(41);
+  SELECT * FROM t2 JOIN t1 WHERE t1.bb=t1.aa AND t1.bb=17;
+} {41 17 17}
+do_execsql_test gencol1-9.20 {
+  CREATE TABLE t3(aa INT PRIMARY KEY, bb UNIQUE AS(aa));
+  INSERT INTO t3 VALUES(1);
+  SELECT 100, * FROM t3;
+  DELETE FROM t3 WHERE (SELECT bb FROM t3);
+  SELECT 200, * FROM t3;
+} {100 1 1}
+
+# 2019-12-04 Generated column in a CREATE TABLE IF NOT EXISTS that
+# does already exist.
+#
+sqlite3 db :memory:
+do_execsql_test gencol1-10.10 {
+  CREATE TABLE t1(aa,bb);
+  CREATE TABLE IF NOT EXISTS t1(aa, bb AS (aa+1));
+  PRAGMA integrity_check;
+} {ok}
+
+# 2019-12-06 Found by mrigger
+#
+sqlite3 db :memory:
+do_execsql_test gencol1-11.10 {
+  PRAGMA foreign_keys = true;
+  CREATE TABLE t0(
+    c0,
+    c1 INTEGER PRIMARY KEY,
+    c2 BLOB UNIQUE DEFAULT x'00',
+    c3 BLOB GENERATED ALWAYS AS (1), 
+    FOREIGN KEY(c1) REFERENCES t0(c2)
+  );
+}
+do_catchsql_test gencol1-11.20 {
+  INSERT OR REPLACE INTO t0(c0, c1) VALUES (2, 1), (1, 0)
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test gencol1-11.30 {
+  DROP TABLE t0;
+  CREATE TABLE t0(
+    c0,
+    c1 INTEGER PRIMARY KEY,
+    c3 BLOB GENERATED ALWAYS AS (1), 
+    c2 BLOB UNIQUE DEFAULT x'00',
+    FOREIGN KEY(c1) REFERENCES t0(c2)
+  );
+}
+do_catchsql_test gencol1-11.40 {
+  INSERT OR REPLACE INTO t0(c0, c1) VALUES (2, 1), (1, 0)
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test gencol1-11.50 {
+  DROP TABLE t0;
+  CREATE TABLE t0(
+    c0,
+    c3 BLOB GENERATED ALWAYS AS (1), 
+    c1 INTEGER PRIMARY KEY,
+    c2 BLOB UNIQUE DEFAULT x'00',
+    FOREIGN KEY(c1) REFERENCES t0(c2)
+  );
+}
+do_catchsql_test gencol1-11.60 {
+  INSERT OR REPLACE INTO t0(c0, c1) VALUES (2, 1), (1, 0)
+} {1 {FOREIGN KEY constraint failed}}
+do_execsql_test gencol1-11.70 {
+  DROP TABLE t0;
+  CREATE TABLE t0(
+    c3 BLOB GENERATED ALWAYS AS (1), 
+    c0,
+    c1 INTEGER PRIMARY KEY,
+    c2 BLOB UNIQUE DEFAULT x'00',
+    FOREIGN KEY(c1) REFERENCES t0(c2)
+  );
+}
+do_catchsql_test gencol1-11.80 {
+  INSERT OR REPLACE INTO t0(c0, c1) VALUES (2, 1), (1, 0)
+} {1 {FOREIGN KEY constraint failed}}
+
+# 2019-12-09 ticket bd8c280671ba44a7
+# With generated columns, the sqlite3ExprGetColumnOfTable() routine might
+# generate a code sequence that does not end with OP_Column.  So check to
+# make sure that the last instruction generated is an OP_column prior to
+# applying the OPFLAG_TYPEOFARG optimization to NOT NULL checks in the
+# PRAGMA integrity_check code.
+#
+sqlite3 db :memory:
+do_execsql_test gencol1-12.10 {
+  CREATE TABLE t0 (c0, c1 NOT NULL AS (c0==0));
+  INSERT INTO t0(c0) VALUES (0);
+  PRAGMA integrity_check;
+} {ok}
+
+# 2019-12-09 bug report from Yongheng Chen
+# Ensure that the SrcList_item.colUsed field is set correctly when a
+# generated column appears in the USING clause of a join.
+#
+do_execsql_test gencol1-13.10 {
+  CREATE TABLE t1(x, y AS(x+1));
+  INSERT INTO t1 VALUES(10);
+  SELECT y FROM t1 JOIN t1 USING (y,y);
+} {11}
+do_execsql_test gencol1-13.11 {
+  SELECT 123 FROM t1 JOIN t1 USING (x);
+} {123}
+do_execsql_test gencol1-13.11 {
+  SELECT 456 FROM t1 JOIN t1 USING (x,x);
+} {456}
+do_execsql_test gencol1-13.20 {
+  CREATE INDEX t1y ON t1(y);
+  SELECT y FROM t1 JOIN t1 USING (y,y);
+} {11}
+do_execsql_test gencol1-13.21 {
+  CREATE INDEX t1x ON t1(x);
+  SELECT 123 FROM t1 JOIN t1 USING (x);
+} {123}
+do_execsql_test gencol1-13.22 {
+  SELECT 456 FROM t1 JOIN t1 USING (x,x);
+} {456}
+
+# 2019-12-14 ticket b439bfcfb7deedc6
+#
+sqlite3 db :memory:
+do_execsql_test gencol1-14.10 {
+  CREATE TABLE t0(c0 AS(1 >= 1), c1 UNIQUE AS(TYPEOF(c0)), c2);
+  INSERT INTO t0 VALUES(0);
+  REINDEX;
+  SELECT * FROM t0;
+} {1 integer 0}
+do_catchsql_test gencol1-14.10 {
+  INSERT INTO t0 VALUES(2);
+} {1 {UNIQUE constraint failed: t0.c1}}
+
+# 2019-12-14 gramfuzz1 find
+# The schema is malformed in that it has a subquery on a generated
+# column expression.  This will be loaded if writable_schema=ON.  SQLite
+# must not use such an expression during code generation as the code generator
+# will add bits of content to the expression tree that might be allocated
+# from lookaside.  But the schema is not tied to a particular database
+# connection, so the use of lookaside memory is prohibited.  The fix
+# is to change the generated column expression to NULL before adding it
+# to the schema.
+#
+reset_db
+do_test gencol1-15.10 {
+  sqlite3 db {}
+  db deserialize [decode_hexdb {
+| size 8192 pagesize 4096 filename c27.db
+| page 1 offset 0
+|      0: 53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00   SQLite format 3.
+|     16: 10 00 01 01 00 40 20 20 00 00 00 01 00 00 00 02   .....@  ........
+|     32: 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 04   ................
+|     48: 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00   ................
+|     80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01   ................
+|     96: 00 2e 3f d8 0d 00 00 00 01 0f ba 00 0f ba 00 00   ..?.............
+|   4016: 00 00 00 00 00 00 00 00 00 00 44 01 06 17 11 11   ..........D.....
+|   4032: 01 75 74 61 62 6c 65 74 31 74 31 02 43 52 45 41   .utablet1t1.CREA
+|   4048: 54 45 20 54 41 42 4c 45 20 74 31 28 61 20 49 4e   TE TABLE t1(a IN
+|   4064: 54 2c 20 62 20 41 53 28 28 56 41 4c 55 45 53 28   T, b AS((VALUES(
+|   4080: 31 29 29 20 49 53 20 75 6e 6b 6e 6f 77 6e 29 29   1)) IS unknown))
+| page 2 offset 4096
+|      0: 0d 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00   ................
+| end c27.db
+}]} {}
+do_execsql_test gencol1-15.20 {
+  PRAGMA writable_schema=ON;
+  REPLACE INTO t1 VALUES(9);
+  SELECT a, quote(b) FROM t1
+} {9 NULL}
+
+# 2019-12-16 ticket 3b84b42943644d6f
+# When a table is the right table of a LEFT JOIN and the ON clause is
+# false, make sure any generated columns evaluate to NULL.
+reset_db
+do_execsql_test gencol1-16.10 {
+  CREATE TABLE t0(c0);
+  CREATE TABLE t1(c1, c2 AS(1));
+  INSERT INTO t0 VALUES(0);
+  SELECT c0, c1, c2 FROM t0 LEFT JOIN t1;
+} {0 {} {}}
+do_execsql_test gencol1-16.20 {
+  DROP TABLE t1;
+  CREATE TABLE t1(c1, c2 AS (c1 ISNULL));
+  SELECT c0, c1, c2 FROM t0 LEFT JOIN t1;
+} {0 {} {}}
+do_execsql_test gencol1-16.30 {
+  INSERT INTO t1(c1) VALUES(1),(NULL);
+  SELECT * FROM t1;
+} {1 0 {} 1}
+do_execsql_test gencol1-16.40 {
+  SELECT c0, c1, c2 FROM t0 LEFT JOIN t1 ON c0=c1;
+} {0 {} {}}
+
+# 2019-12-20 ticket e0a8120553f4b082
+# Generated columns with REAL affinity need to have an OP_RealAffinity
+# opcode applied, even when the column value is extracted from an index.
+#
+reset_db
+do_execsql_test gencol1-17.10 {
+  CREATE TABLE t0(c0 REAL AS(1) UNIQUE, c1 INT);
+  INSERT INTO t0 VALUES('');
+  SELECT quote(c0), quote(c1) from t0;
+} {1.0 ''}
+do_execsql_test gencol1-17.20 {
+  SELECT *, (1 BETWEEN CAST(t0.c0 AS TEXT) AND t0.c0) FROM t0;
+} {1.0 {} 0}
+do_execsql_test gencol1-17.30 {
+  SELECT * FROM t0 WHERE (1 BETWEEN CAST(t0.c0 AS TEXT) AND t0.c0);
+} {}
+do_execsql_test gencol1-17.40 {
+  CREATE TABLE t1(a TEXT AS(b) COLLATE nocase, b TEXT, c INT, d DEFAULT 1);
+  INSERT INTO t1(b,c) VALUES('abc',11),('DEF',22),('ghi',33);
+  SELECT a FROM t1 WHERE b='DEF' AND a='def';
+} {DEF}
+do_execsql_test gencol1-17.50 {
+  CREATE INDEX t1bca ON t1(b,c,a);
+  SELECT a FROM t1 WHERE b='DEF' AND a='def';
+} {DEF}
+
+# 2019-12-26 ticket ec8abb025e78f40c
+# An index on a virtual column with a constant value (why would anybody
+# ever do such a thing?) can cause problems for a one-pass DELETE.
+#
+reset_db
+do_execsql_test gencol1-18.10 {
+  CREATE TABLE t0(c0 UNIQUE AS(0), c1, c2);
+  INSERT INTO t0(c1) VALUES(0);
+  SELECT * FROM t0;
+} {0 0 {}}
+do_execsql_test gencol1-18.20 {
+  UPDATE t0 SET c1=0, c2=0 WHERE c0>=0;
+  SELECT * FROM t0;
+} {0 0 0}
+
+# 2019-12-27 ticket de4b04149b9fdeae
+#
+reset_db
+do_catchsql_test gencol1-19.10 {
+  CREATE TABLE t0(
+    c0 INT AS(2) UNIQUE,
+    c1 TEXT UNIQUE,
+    FOREIGN KEY(c0) REFERENCES t0(c1)
+  );
+  INSERT INTO t0(c1) VALUES(0.16334143182538696), (0);
+} {1 {UNIQUE constraint failed: t0.c0}}
+
+# 2020-06-29 forum bug report.
+# https://sqlite.org/forum/forumpost/73b9a8ccfb
+#
+do_execsql_test gencol1-20.1 {
+  CREATE TEMPORARY TABLE tab (
+    prim DATE PRIMARY KEY,
+    a INTEGER,
+    comp INTEGER AS (a),
+    b INTEGER,
+    x INTEGER
+  );
+  -- Add some data
+  INSERT INTO tab (prim, a, b) VALUES ('2001-01-01', 0, 0);
+  -- Check that each column is 0 like I expect
+  SELECT * FROM tab;
+} {2001-01-01 0 0 0 {}}
+do_execsql_test gencol1-20.2 {
+  -- Do an UPSERT on the b column
+  INSERT INTO tab (prim, b)
+  VALUES ('2001-01-01',5)
+      ON CONFLICT(prim) DO UPDATE SET  b=excluded.b;
+  -- Now b is NULL rather than 5
+  SELECT * FROM tab;
+} {2001-01-01 0 0 5 {}}
+
+
+finish_test

@@ -1,0 +1,645 @@
+# 2001 November 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the LIMIT ... OFFSET ... clause
+#  of SELECT statements.
+#
+# $Id: limit.test,v 1.32 2008/08/02 03:50:39 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Build some test data
+#
+execsql {
+  CREATE TABLE t1(x int, y int);
+  BEGIN;
+}
+for {set i 1} {$i<=32} {incr i} {
+  for {set j 0} {(1<<$j)<$i} {incr j} {}
+  execsql "INSERT INTO t1 VALUES([expr {32-$i}],[expr {10-$j}])"
+}
+execsql {
+  COMMIT;
+}
+
+do_test limit-1.0 {
+  execsql {SELECT count(*) FROM t1}
+} {32}
+do_test limit-1.1 {
+  execsql {SELECT count(*) FROM t1 LIMIT  5}
+} {32}
+do_test limit-1.2.1 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 5}
+} {0 1 2 3 4}
+do_test limit-1.2.2 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 5 OFFSET 2}
+} {2 3 4 5 6}
+do_test limit-1.2.3 {
+  execsql {SELECT x FROM t1 ORDER BY x+1 LIMIT 5 OFFSET -2}
+} {0 1 2 3 4}
+do_test limit-1.2.4 {
+  execsql {SELECT x FROM t1 ORDER BY x+1 LIMIT 2, -5}
+} {2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
+do_test limit-1.2.5 {
+  execsql {SELECT x FROM t1 ORDER BY x+1 LIMIT -2, 5}
+} {0 1 2 3 4}
+do_test limit-1.2.6 {
+  execsql {SELECT x FROM t1 ORDER BY x+1 LIMIT -2, -5}
+} {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
+do_test limit-1.2.7 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 2, 5}
+} {2 3 4 5 6}
+do_test limit-1.3 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 5 OFFSET 5}
+} {5 6 7 8 9}
+do_test limit-1.4.1 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 50 OFFSET 30}
+} {30 31}
+do_test limit-1.4.2 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 30, 50}
+} {30 31}
+do_test limit-1.5 {
+  execsql {SELECT x FROM t1 ORDER BY x LIMIT 50 OFFSET 50}
+} {}
+do_test limit-1.6 {
+  execsql {SELECT * FROM t1 AS a, t1 AS b ORDER BY a.x, b.x LIMIT 5}
+} {0 5 0 5 0 5 1 5 0 5 2 5 0 5 3 5 0 5 4 5}
+do_test limit-1.7 {
+  execsql {SELECT * FROM t1 AS a, t1 AS b ORDER BY a.x, b.x LIMIT 5 OFFSET 32}
+} {1 5 0 5 1 5 1 5 1 5 2 5 1 5 3 5 1 5 4 5}
+
+ifcapable {view && subquery} {
+  do_test limit-2.1 {
+    execsql {
+      CREATE VIEW v1 AS SELECT * FROM t1 LIMIT 2;
+      SELECT count(*) FROM (SELECT * FROM v1);
+    }
+  } 2
+} ;# ifcapable view
+do_test limit-2.2 {
+  execsql {
+    CREATE TABLE t2 AS SELECT * FROM t1 LIMIT 2;
+    SELECT count(*) FROM t2;
+  }
+} 2
+ifcapable subquery {
+  do_test limit-2.3 {
+    execsql {
+      SELECT count(*) FROM t1 WHERE rowid IN (SELECT rowid FROM t1 LIMIT 2);
+    }
+  } 2
+}
+
+ifcapable subquery {
+  do_test limit-3.1 {
+    execsql {
+      SELECT z FROM (SELECT y*10+x AS z FROM t1 ORDER BY x LIMIT 10)
+      ORDER BY z LIMIT 5;
+    }
+  } {50 51 52 53 54}
+}
+
+do_test limit-4.1 {
+  ifcapable subquery { 
+    execsql {
+      BEGIN;
+      CREATE TABLE t3(x);
+      INSERT INTO t3 SELECT x FROM t1 ORDER BY x LIMIT 10 OFFSET 1;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      INSERT INTO t3 SELECT x+(SELECT max(x) FROM t3) FROM t3;
+      END;
+      SELECT count(*) FROM t3;
+    }
+  } else {
+    execsql {
+      BEGIN;
+      CREATE TABLE t3(x);
+      INSERT INTO t3 SELECT x FROM t1 ORDER BY x LIMIT 10 OFFSET 1;
+    }
+    for {set i 0} {$i<10} {incr i} {
+      set max_x_t3 [execsql {SELECT max(x) FROM t3}]
+      execsql "INSERT INTO t3 SELECT x+$max_x_t3 FROM t3;"
+    }
+    execsql {
+      END;
+      SELECT count(*) FROM t3;
+    }
+  }
+} {10240}
+do_test limit-4.2 {
+  execsql {
+    SELECT x FROM t3 LIMIT 2 OFFSET 10000
+  }
+} {10001 10002}
+do_test limit-4.3 {
+  execsql {
+    CREATE TABLE t4 AS SELECT x,
+       'abcdefghijklmnopqrstuvwyxz ABCDEFGHIJKLMNOPQRSTUVWYXZ' || x ||
+       'abcdefghijklmnopqrstuvwyxz ABCDEFGHIJKLMNOPQRSTUVWYXZ' || x ||
+       'abcdefghijklmnopqrstuvwyxz ABCDEFGHIJKLMNOPQRSTUVWYXZ' || x ||
+       'abcdefghijklmnopqrstuvwyxz ABCDEFGHIJKLMNOPQRSTUVWYXZ' || x ||
+       'abcdefghijklmnopqrstuvwyxz ABCDEFGHIJKLMNOPQRSTUVWYXZ' || x AS y
+    FROM t3 LIMIT 1000;
+    SELECT x FROM t4 ORDER BY y DESC LIMIT 1 OFFSET 999;
+  }
+} {1000}
+
+do_test limit-5.1 {
+  execsql {
+    CREATE TABLE t5(x,y);
+    INSERT INTO t5 SELECT x-y, x+y FROM t1 WHERE x BETWEEN 10 AND 15
+        ORDER BY x LIMIT 2;
+    SELECT * FROM t5 ORDER BY x;
+  }
+} {5 15 6 16}
+do_test limit-5.2 {
+  execsql {
+    DELETE FROM t5;
+    INSERT INTO t5 SELECT x-y, x+y FROM t1 WHERE x BETWEEN 10 AND 15
+        ORDER BY x DESC LIMIT 2;
+    SELECT * FROM t5 ORDER BY x;
+  }
+} {9 19 10 20}
+do_test limit-5.3 {
+  execsql {
+    DELETE FROM t5;
+    INSERT INTO t5 SELECT x-y, x+y FROM t1 WHERE x ORDER BY x DESC LIMIT 31;
+    SELECT * FROM t5 ORDER BY x LIMIT 2;
+  }
+} {-4 6 -3 7}
+do_test limit-5.4 {
+  execsql {
+    SELECT * FROM t5 ORDER BY x DESC, y DESC LIMIT 2;
+  }
+} {21 41 21 39}
+do_test limit-5.5 {
+  execsql {
+    DELETE FROM t5;
+    INSERT INTO t5 SELECT a.x*100+b.x, a.y*100+b.y FROM t1 AS a, t1 AS b
+                   ORDER BY 1, 2 LIMIT 1000;
+    SELECT count(*), sum(x), sum(y), min(x), max(x), min(y), max(y) FROM t5;
+  }
+} {1000 1528204 593161 0 3107 505 1005}
+
+# There is some contraversy about whether LIMIT 0 should be the same as
+# no limit at all or if LIMIT 0 should result in zero output rows.
+#
+do_test limit-6.1 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t6(a);
+    INSERT INTO t6 VALUES(1);
+    INSERT INTO t6 VALUES(2);
+    INSERT INTO t6 SELECT a+2 FROM t6;
+    COMMIT;
+    SELECT * FROM t6;
+  }
+} {1 2 3 4}
+do_test limit-6.2 {
+  execsql {
+    SELECT * FROM t6 LIMIT -1 OFFSET -1;
+  }
+} {1 2 3 4}
+do_test limit-6.3 {
+  execsql {
+    SELECT * FROM t6 LIMIT 2 OFFSET -123;
+  }
+} {1 2}
+do_test limit-6.4 {
+  execsql {
+    SELECT * FROM t6 LIMIT -432 OFFSET 2;
+  }
+} {3 4}
+do_test limit-6.5 {
+  execsql {
+    SELECT * FROM t6 LIMIT -1
+  }
+} {1 2 3 4}
+do_test limit-6.6 {
+  execsql {
+    SELECT * FROM t6 LIMIT -1 OFFSET 1
+  }
+} {2 3 4}
+do_test limit-6.7 {
+  execsql {
+    SELECT * FROM t6 LIMIT 0
+  }
+} {}
+do_test limit-6.8 {
+  execsql {
+    SELECT * FROM t6 LIMIT 0 OFFSET 1
+  }
+} {}
+
+# Make sure LIMIT works well with compound SELECT statements.
+# Ticket #393
+#
+# EVIDENCE-OF: R-13512-64012 In a compound SELECT, only the last or
+# right-most simple SELECT may contain a LIMIT clause.
+#
+# EVIDENCE-OF: R-03782-50113 In a compound SELECT, the LIMIT clause
+# applies to the entire compound, not just the final SELECT.
+#
+ifcapable compound {
+do_test limit-7.1.1 {
+  catchsql {
+    SELECT x FROM t2 LIMIT 5 UNION ALL SELECT a FROM t6;
+  }
+} {1 {LIMIT clause should come after UNION ALL not before}}
+do_test limit-7.1.2 {
+  catchsql {
+    SELECT x FROM t2 LIMIT 5 UNION SELECT a FROM t6;
+  }
+} {1 {LIMIT clause should come after UNION not before}}
+do_test limit-7.1.3 {
+  catchsql {
+    SELECT x FROM t2 LIMIT 5 EXCEPT SELECT a FROM t6 LIMIT 3;
+  }
+} {1 {LIMIT clause should come after EXCEPT not before}}
+do_test limit-7.1.4 {
+  catchsql {
+    SELECT x FROM t2 LIMIT 0,5 INTERSECT SELECT a FROM t6;
+  }
+} {1 {LIMIT clause should come after INTERSECT not before}}
+do_test limit-7.2 {
+  execsql {
+    SELECT x FROM t2 UNION ALL SELECT a FROM t6 LIMIT 5;
+  }
+} {31 30 1 2 3}
+do_test limit-7.3 {
+  execsql {
+    SELECT x FROM t2 UNION ALL SELECT a FROM t6 LIMIT 3 OFFSET 1;
+  }
+} {30 1 2}
+do_test limit-7.4 {
+  execsql {
+    SELECT x FROM t2 UNION ALL SELECT a FROM t6 ORDER BY 1 LIMIT 3 OFFSET 1;
+  }
+} {2 3 4}
+do_test limit-7.5 {
+  execsql {
+    SELECT x FROM t2 UNION SELECT x+2 FROM t2 LIMIT 2 OFFSET 1;
+  }
+} {31 32}
+do_test limit-7.6 {
+  execsql {
+    SELECT x FROM t2 UNION SELECT x+2 FROM t2 ORDER BY 1 DESC LIMIT 2 OFFSET 1;
+  }
+} {32 31}
+do_test limit-7.7 {
+  execsql {
+    SELECT a+9 FROM t6 EXCEPT SELECT y FROM t2 LIMIT 2;
+  }
+} {11 12}
+do_test limit-7.8 {
+  execsql {
+    SELECT a+9 FROM t6 EXCEPT SELECT y FROM t2 ORDER BY 1 DESC LIMIT 2;
+  }
+} {13 12}
+do_test limit-7.9 {
+  execsql {
+    SELECT a+26 FROM t6 INTERSECT SELECT x FROM t2 LIMIT 1;
+  }
+} {30}
+do_test limit-7.10 {
+  execsql {
+    SELECT a+27 FROM t6 INTERSECT SELECT x FROM t2 LIMIT 1;
+  }
+} {30}
+do_test limit-7.11 {
+  execsql {
+    SELECT a+27 FROM t6 INTERSECT SELECT x FROM t2 LIMIT 1 OFFSET 1;
+  }
+} {31}
+do_test limit-7.12 {
+  execsql {
+    SELECT a+27 FROM t6 INTERSECT SELECT x FROM t2 
+       ORDER BY 1 DESC LIMIT 1 OFFSET 1;
+  }
+} {30}
+} ;# ifcapable compound
+
+# Tests for limit in conjunction with distinct.  The distinct should
+# occur before both the limit and the offset.  Ticket #749.
+#
+do_test limit-8.1 {
+  execsql {
+    SELECT DISTINCT cast(round(x/100) as integer) FROM t3 LIMIT 5;
+  }
+} {0 1 2 3 4}
+do_test limit-8.2 {
+  execsql {
+    SELECT DISTINCT cast(round(x/100) as integer) FROM t3 LIMIT 5 OFFSET 5;
+  }
+} {5 6 7 8 9}
+do_test limit-8.3 {
+  execsql {
+    SELECT DISTINCT cast(round(x/100) as integer) FROM t3 LIMIT 5 OFFSET 25;
+  }
+} {25 26 27 28 29}
+
+# Make sure limits on multiple subqueries work correctly.
+# Ticket #1035
+#
+ifcapable subquery {
+  do_test limit-9.1 {
+    execsql {
+      SELECT * FROM (SELECT * FROM t6 LIMIT 3);
+    }
+  } {1 2 3}
+}
+do_test limit-9.2.1 {
+  execsql {
+    CREATE TABLE t7 AS SELECT * FROM t6;
+  }
+} {}
+ifcapable subquery {
+  do_test limit-9.2.2 {
+    execsql {
+      SELECT * FROM (SELECT * FROM t7 LIMIT 3);
+    }
+  } {1 2 3}
+}
+ifcapable compound {
+  ifcapable subquery {
+    do_test limit-9.3 {
+      execsql {
+        SELECT * FROM (SELECT * FROM t6 LIMIT 3)
+        UNION
+        SELECT * FROM (SELECT * FROM t7 LIMIT 3)
+        ORDER BY 1
+      }
+    } {1 2 3}
+    do_test limit-9.4 {
+      execsql {
+        SELECT * FROM (SELECT * FROM t6 LIMIT 3)
+        UNION
+        SELECT * FROM (SELECT * FROM t7 LIMIT 3)
+        ORDER BY 1
+        LIMIT 2
+      }
+    } {1 2}
+  }
+  do_test limit-9.5 {
+    catchsql {
+      SELECT * FROM t6 LIMIT 3
+      UNION
+      SELECT * FROM t7 LIMIT 3
+    }
+  } {1 {LIMIT clause should come after UNION not before}}
+}
+
+# Test LIMIT and OFFSET using SQL variables.
+do_test limit-10.1 {
+  set limit 10
+  db eval {
+    SELECT x FROM t1 LIMIT :limit;
+  }
+} {31 30 29 28 27 26 25 24 23 22}
+do_test limit-10.2 {
+  set limit 5
+  set offset 5
+  db eval {
+    SELECT x FROM t1 LIMIT :limit OFFSET :offset;
+  }
+} {26 25 24 23 22}
+do_test limit-10.3 {
+  set limit -1
+  db eval {
+    SELECT x FROM t1 WHERE x<10 LIMIT :limit;
+  }
+} {9 8 7 6 5 4 3 2 1 0}
+do_test limit-10.4 {
+  set limit 1.5
+  set rc [catch {
+  db eval {
+    SELECT x FROM t1 WHERE x<10 LIMIT :limit;
+  } } msg]
+  list $rc $msg
+} {1 {datatype mismatch}}
+do_test limit-10.5 {
+  set limit "hello world"
+  set rc [catch {
+  db eval {
+    SELECT x FROM t1 WHERE x<10 LIMIT :limit;
+  } } msg]
+  list $rc $msg
+} {1 {datatype mismatch}}
+
+ifcapable subquery {
+do_test limit-11.1 {
+  db eval {
+     SELECT x FROM (SELECT x FROM t1 ORDER BY x LIMIT 0) ORDER BY x
+  }
+} {}
+} ;# ifcapable subquery
+
+# Test error processing.
+#
+do_test limit-12.1 {
+  catchsql {
+     SELECT * FROM t1 LIMIT replace(1)
+  }
+} {1 {wrong number of arguments to function replace()}}
+do_test limit-12.2 {
+  catchsql {
+     SELECT * FROM t1 LIMIT 5 OFFSET replace(1)
+  }
+} {1 {wrong number of arguments to function replace()}}
+do_test limit-12.3 {
+  catchsql {
+     SELECT * FROM t1 LIMIT x
+  }
+} {1 {no such column: x}}
+do_test limit-12.4 {
+  catchsql {
+     SELECT * FROM t1 LIMIT 1 OFFSET x
+  }
+} {1 {no such column: x}}
+
+# Ticket [db4d96798da8b]
+# LIMIT does not work with nested views containing UNION ALL 
+#
+do_test limit-13.1 {
+  db eval {
+    CREATE TABLE t13(x);
+    INSERT INTO t13 VALUES(1),(2);
+    CREATE VIEW v13a AS SELECT x AS y FROM t13;
+    CREATE VIEW v13b AS SELECT y AS z FROM v13a UNION ALL SELECT y+10 FROM v13a;
+    CREATE VIEW v13c AS SELECT z FROM v13b UNION ALL SELECT z+20 FROM v13b;
+  }
+} {}
+do_test limit-13.2 {
+  db eval {SELECT z FROM v13c LIMIT 1}
+} {1}
+do_test limit-13.3 {
+  db eval {SELECT z FROM v13c LIMIT 2}
+} {1 2}
+do_test limit-13.4 {
+  db eval {SELECT z FROM v13c LIMIT 3}
+} {1 2 11}
+do_test limit-13.5 {
+  db eval {SELECT z FROM v13c LIMIT 4}
+} {1 2 11 12}
+do_test limit-13.6 {
+  db eval {SELECT z FROM v13c LIMIT 5}
+} {1 2 11 12 21}
+do_test limit-13.7 {
+  db eval {SELECT z FROM v13c LIMIT 6}
+} {1 2 11 12 21 22}
+do_test limit-13.8 {
+  db eval {SELECT z FROM v13c LIMIT 7}
+} {1 2 11 12 21 22 31}
+do_test limit-13.9 {
+  db eval {SELECT z FROM v13c LIMIT 8}
+} {1 2 11 12 21 22 31 32}
+do_test limit-13.10 {
+  db eval {SELECT z FROM v13c LIMIT 9}
+} {1 2 11 12 21 22 31 32}
+do_test limit-13.11 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 1}
+} {2}
+do_test limit-13.12 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 1}
+} {2 11}
+do_test limit-13.13 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 1}
+} {2 11 12}
+do_test limit-13.14 {
+  db eval {SELECT z FROM v13c LIMIT 4 OFFSET 1}
+} {2 11 12 21}
+do_test limit-13.15 {
+  db eval {SELECT z FROM v13c LIMIT 5 OFFSET 1}
+} {2 11 12 21 22}
+do_test limit-13.16 {
+  db eval {SELECT z FROM v13c LIMIT 6 OFFSET 1}
+} {2 11 12 21 22 31}
+do_test limit-13.17 {
+  db eval {SELECT z FROM v13c LIMIT 7 OFFSET 1}
+} {2 11 12 21 22 31 32}
+do_test limit-13.18 {
+  db eval {SELECT z FROM v13c LIMIT 8 OFFSET 1}
+} {2 11 12 21 22 31 32}
+do_test limit-13.21 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 2}
+} {11}
+do_test limit-13.22 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 2}
+} {11 12}
+do_test limit-13.23 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 2}
+} {11 12 21}
+do_test limit-13.24 {
+  db eval {SELECT z FROM v13c LIMIT 4 OFFSET 2}
+} {11 12 21 22}
+do_test limit-13.25 {
+  db eval {SELECT z FROM v13c LIMIT 5 OFFSET 2}
+} {11 12 21 22 31}
+do_test limit-13.26 {
+  db eval {SELECT z FROM v13c LIMIT 6 OFFSET 2}
+} {11 12 21 22 31 32}
+do_test limit-13.27 {
+  db eval {SELECT z FROM v13c LIMIT 7 OFFSET 2}
+} {11 12 21 22 31 32}
+do_test limit-13.31 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 3}
+} {12}
+do_test limit-13.32 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 3}
+} {12 21}
+do_test limit-13.33 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 3}
+} {12 21 22}
+do_test limit-13.34 {
+  db eval {SELECT z FROM v13c LIMIT 4 OFFSET 3}
+} {12 21 22 31}
+do_test limit-13.35 {
+  db eval {SELECT z FROM v13c LIMIT 5 OFFSET 3}
+} {12 21 22 31 32}
+do_test limit-13.36 {
+  db eval {SELECT z FROM v13c LIMIT 6 OFFSET 3}
+} {12 21 22 31 32}
+do_test limit-13.41 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 4}
+} {21}
+do_test limit-13.42 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 4}
+} {21 22}
+do_test limit-13.43 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 4}
+} {21 22 31}
+do_test limit-13.44 {
+  db eval {SELECT z FROM v13c LIMIT 4 OFFSET 4}
+} {21 22 31 32}
+do_test limit-13.45 {
+  db eval {SELECT z FROM v13c LIMIT 5 OFFSET 4}
+} {21 22 31 32}
+do_test limit-13.51 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 5}
+} {22}
+do_test limit-13.52 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 5}
+} {22 31}
+do_test limit-13.53 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 5}
+} {22 31 32}
+do_test limit-13.54 {
+  db eval {SELECT z FROM v13c LIMIT 4 OFFSET 5}
+} {22 31 32}
+do_test limit-13.61 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 6}
+} {31}
+do_test limit-13.62 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 6}
+} {31 32}
+do_test limit-13.63 {
+  db eval {SELECT z FROM v13c LIMIT 3 OFFSET 6}
+} {31 32}
+do_test limit-13.71 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 7}
+} {32}
+do_test limit-13.72 {
+  db eval {SELECT z FROM v13c LIMIT 2 OFFSET 7}
+} {32}
+do_test limit-13.81 {
+  db eval {SELECT z FROM v13c LIMIT 1 OFFSET 8}
+} {}
+
+do_execsql_test limit-14.1 {
+  SELECT 123 LIMIT 1 OFFSET 0
+} {123}
+do_execsql_test limit-14.2 {
+  SELECT 123 LIMIT 1 OFFSET 1
+} {}
+do_execsql_test limit-14.3 {
+  SELECT 123 LIMIT 0 OFFSET 0
+} {}
+do_execsql_test limit-14.4 {
+  SELECT 123 LIMIT 0 OFFSET 1
+} {}
+do_execsql_test limit-14.6 {
+  SELECT 123 LIMIT -1 OFFSET 0
+} {123}
+do_execsql_test limit-14.7 {
+  SELECT 123 LIMIT -1 OFFSET 1
+} {}
+
+
+finish_test

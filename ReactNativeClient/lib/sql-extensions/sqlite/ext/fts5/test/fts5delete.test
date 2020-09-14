@@ -1,0 +1,53 @@
+# 2017 May 12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5delete
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+fts5_aux_test_functions db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(x);
+  WITH s(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<5000
+  )
+  INSERT INTO t1(rowid, x) SELECT i, (i/2)*2 FROM s;
+}
+
+do_test 1.1 {
+  execsql BEGIN
+  for {set i 1} {$i<=5000} {incr i} {
+    if {$i % 2} {
+      execsql { INSERT INTO t1 VALUES($i) }
+    } else {
+      execsql { DELETE FROM t1 WHERE rowid = $i }
+    }
+  }
+  execsql COMMIT
+} {}
+
+do_test 1.2 {
+  execsql { INSERT INTO t1(t1, rank) VALUES('usermerge', 2); }
+  for {set i 0} {$i < 5} {incr i} {
+    execsql { INSERT INTO t1(t1, rank) VALUES('merge', 1) }
+    execsql { INSERT INTO t1(t1) VALUES('integrity-check') }
+  }
+} {}
+
+finish_test

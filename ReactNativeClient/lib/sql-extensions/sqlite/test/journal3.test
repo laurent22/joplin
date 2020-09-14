@@ -1,0 +1,69 @@
+# 2010 July 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+
+#-------------------------------------------------------------------------
+# If a connection is required to create a journal file, it creates it with 
+# the same file-system permissions as the database file itself. Test this.
+#
+if {$::tcl_platform(platform) == "unix"
+ && [atomic_batch_write test.db]==0
+} {
+
+  # Changed on 2012-02-13:  umask is deliberately ignored for -wal, -journal,
+  # and -shm files.
+  #set umask [exec /bin/sh -c umask]
+  faultsim_delete_and_reopen
+  do_test journal3-1.1 { execsql { CREATE TABLE tx(y, z) } } {}
+
+  foreach {tn permissions} {
+   1 00644
+   2 00666
+   3 00600
+   4 00755
+  } {
+    db close
+    #set effective [format %.5o [expr $permissions & ~$umask]]
+    set res "/[regsub {^00} $permissions {0.}]/"
+    if {$tcl_version>=8.7} {
+       regsub {^00} $permissions {0o} permissions
+    }
+    set effective $permissions
+    do_test journal3-1.2.$tn.1 {
+      catch { forcedelete test.db-journal }
+      file attributes test.db -permissions $permissions
+      file attributes test.db -permissions
+    } $res
+    do_test journal3-1.2.$tn.2 { file exists test.db-journal } {0}
+    do_test journal3-1.2.$tn.3 {
+      sqlite3 db test.db
+      execsql { 
+        BEGIN;
+          INSERT INTO tx DEFAULT VALUES;
+      }
+      file exists test.db-journal
+    } {1}
+    do_test journal3-1.2.$tn.4 {
+      file attr test.db-journal -perm
+    } $res
+    do_execsql_test journal3-1.2.$tn.5 { ROLLBACK } {}
+  }
+
+
+}
+
+finish_test

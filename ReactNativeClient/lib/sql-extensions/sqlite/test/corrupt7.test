@@ -1,0 +1,112 @@
+# 2008 June 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure SQLite does not crash or
+# segfault if it sees a corrupt database file.  It specifically focuses
+# on corrupt cell offsets in a btree page.
+#
+# $Id: corrupt7.test,v 1.8 2009/08/10 10:18:08 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# This module uses hard-coded offsets which do not work if the reserved_bytes
+# value is nonzero.
+if {[nonzero_reserved_bytes]} {finish_test; return;}
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+# We must have the page_size pragma for these tests to work.
+#
+ifcapable !pager_pragmas {
+  finish_test
+  return
+}
+
+# Create a simple, small database.
+#
+do_test corrupt7-1.1 {
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    PRAGMA page_size=1024;
+    CREATE TABLE t1(x);
+    INSERT INTO t1(x) VALUES(1);
+    INSERT INTO t1(x) VALUES(2);
+    INSERT INTO t1(x) SELECT x+2 FROM t1;
+    INSERT INTO t1(x) SELECT x+4 FROM t1;
+    INSERT INTO t1(x) SELECT x+8 FROM t1;
+  }
+  file size test.db
+} [expr {1024*2}]
+
+# Verify that the file format is as we expect.  The page size
+# should be 1024 bytes.
+#
+do_test corrupt7-1.2 {
+  hexio_get_int [hexio_read test.db 16 2]
+} 1024   ;# The page size is 1024
+do_test corrupt7-1.3 {
+  hexio_get_int [hexio_read test.db 20 1]
+} 0      ;# Unused bytes per page is 0
+
+integrity_check corrupt7-1.4
+
+# Deliberately corrupt some of the cell offsets in the btree page
+# on page 2 of the database.
+do_test corrupt7-2.1 {
+  db close
+  hexio_write test.db 1062 FF
+  sqlite3 db test.db
+  db eval {PRAGMA integrity_check(1)}
+} {{*** in database main ***
+On tree page 2 cell 15: Offset 65457 out of range 945..1020}}
+do_test corrupt7-2.2 {
+  db close
+  hexio_write test.db 1062 04
+  sqlite3 db test.db
+  db eval {PRAGMA integrity_check(1)}
+} {{*** in database main ***
+On tree page 2 cell 15: Offset 1201 out of range 945..1020}}
+  
+# The code path that was causing the buffer overrun that this test
+# case was checking for was removed.
+#
+#do_test corrupt7-3.1 {
+#  execsql {
+#    DROP TABLE t1;
+#    CREATE TABLE t1(a, b);
+#    INSERT INTO t1 VALUES(1, 'one');
+#    INSERT INTO t1 VALUES(100, 'one hundred');
+#    INSERT INTO t1 VALUES(100000, 'one hundred thousand');
+#    CREATE INDEX i1 ON t1(b);
+#  }
+#  db close
+#
+#  # Locate the 3rd cell in the index.
+#  set cell_offset [hexio_get_int [hexio_read test.db [expr 1024*2 + 12] 2]]
+#  incr cell_offset [expr 1024*2]
+#  incr cell_offset 1
+#
+#  # This write corrupts the "header-size" field of the database record
+#  # stored in the index cell. At one point this was causing sqlite to 
+#  # reference invalid memory.
+#  hexio_write test.db $cell_offset FFFF7F
+#  
+#  sqlite3 db test.db
+#  catchsql {
+#    SELECT b FROM t1 WHERE b > 'o' AND b < 'p';
+#  }
+#} {1 {database disk image is malformed}}
+
+finish_test

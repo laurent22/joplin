@@ -1,0 +1,1560 @@
+# 2006 June 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is creating and dropping virtual tables.
+#
+# $Id: vtab1.test,v 1.57 2008/08/01 17:51:47 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix vtab1
+
+ifcapable !vtab||!schema_pragmas {
+  finish_test
+  return
+}
+
+#----------------------------------------------------------------------
+# Organization of tests in this file:
+#
+# vtab1-1.*: Error conditions and other issues surrounding creation/connection
+#            of a virtual module.
+# vtab1-2.*: Test sqlite3_declare_vtab() and the xConnect/xDisconnect methods.
+# vtab1-3.*: Table scans and WHERE clauses.
+# vtab1-4.*: Table scans and ORDER BY clauses.
+# vtab1-5.*: Test queries that include joins. This brings the
+#            sqlite3_index_info.estimatedCost variable into play.
+# vtab1-6.*: Test UPDATE/INSERT/DELETE on vtables.
+# vtab1-7.*: Test sqlite3_last_insert_rowid().
+#
+# This file uses the "echo" module (see src/test8.c). Refer to comments
+# in that file for the special behaviour of the Tcl $echo_module variable.
+#
+# TODO: 
+#   * How to test the sqlite3_index_constraint_usage.omit field?
+#   * vtab1-5.*
+#
+# vtab1-14.*: Test 'IN' constraints - i.e. "SELECT * FROM t1 WHERE id IN(...)"
+#
+# vtab1-18.*: Check that the LIKE optimization is not applied when the lhs
+#             is a virtual table column.
+#
+
+
+#----------------------------------------------------------------------
+# Test cases vtab1.1.*
+#
+
+# We cannot create a virtual table if the module has not been registered.
+#
+do_test vtab1-1.1.1 {
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING echo;
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.1.2 {
+  catchsql {
+    CREATE VIRTUAL TABLE IF NOT EXISTS t1 USING echo;
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.2 {
+  execsql {
+    SELECT name FROM sqlite_master ORDER BY 1
+  }
+} {}
+
+# Register the module
+register_echo_module [sqlite3_connection_pointer db]
+
+# Once a module has been registered, virtual tables using that module
+# may be created. However if a module xCreate() fails to call
+# sqlite3_declare_vtab() an error will be raised and the table not created.
+#
+# The "echo" module does not invoke sqlite3_declare_vtab() if it is
+# passed zero arguments.
+#
+do_test vtab1-1.3.1 {
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING echo;
+  }
+} {1 {vtable constructor did not declare schema: t1}}
+do_test vtab1-1.3.2 {
+  catchsql {
+    CREATE VIRTUAL TABLE IF NOT EXISTS t1 USING echo;
+  }
+} {1 {vtable constructor did not declare schema: t1}}
+do_test vtab1-1.4 {
+  execsql {
+    SELECT name FROM sqlite_master ORDER BY 1
+  }
+} {}
+
+# The "echo" module xCreate method returns an error and does not create
+# the virtual table if it is passed an argument that does not correspond
+# to an existing real table in the same database.
+#
+do_test vtab1-1.5.1 {
+  catchsql {
+    CREATE VIRTUAL TABLE t1 USING echo(no_such_table);
+  }
+} {1 {vtable constructor failed: t1}}
+do_test vtab1-1.5.2 {
+  catchsql {
+    CREATE VIRTUAL TABLE IF NOT EXISTS t1 USING echo(no_such_table);
+  }
+} {1 {vtable constructor failed: t1}}
+do_test vtab1-1.6 {
+  execsql {
+    SELECT name FROM sqlite_master ORDER BY 1
+  }
+} {}
+
+# Ticket #2156.  Using the sqlite3_prepare_v2() API, make sure that
+# a CREATE VIRTUAL TABLE statement can be used multiple times.
+#
+do_test vtab1-1.2152.1 {
+  set DB [sqlite3_connection_pointer db]
+  set sql {CREATE VIRTUAL TABLE t2152a USING echo(t2152b)}
+  set STMT [sqlite3_prepare_v2 $DB $sql -1 TAIL]
+  sqlite3_step $STMT
+} SQLITE_ERROR
+do_test vtab-1.2152.2 {
+  sqlite3_reset $STMT
+  sqlite3_step $STMT
+} SQLITE_ERROR
+do_test vtab-1.2152.3 {
+  sqlite3_reset $STMT
+  db eval {CREATE TABLE t2152b(x,y)}
+  sqlite3_step $STMT
+} SQLITE_DONE
+do_test vtab-1.2152.4 {
+  sqlite3_finalize $STMT
+  db eval {DROP TABLE t2152a; DROP TABLE t2152b}
+} {}
+
+# Test to make sure nothing goes wrong and no memory is leaked if we 
+# select an illegal table-name (i.e a reserved name or the name of a
+# table that already exists).
+#
+do_test vtab1-1.7.1 {
+  catchsql {
+    CREATE VIRTUAL TABLE sqlite_master USING echo;
+  }
+} {1 {object name reserved for internal use: sqlite_master}}
+do_test vtab1-1.7.2 {
+  catchsql {
+    CREATE VIRTUAL TABLE IF NOT EXISTS sqlite_master USING echo;
+  }
+} {1 {object name reserved for internal use: sqlite_master}}
+do_test vtab1-1.8.1 {
+  catchsql {
+    CREATE TABLE treal(a, b, c);
+    CREATE VIRTUAL TABLE treal USING echo(treal);
+  }
+} {1 {table treal already exists}}
+do_test vtab1-1.8.2 {
+  catchsql {
+    CREATE VIRTUAL TABLE IF NOT EXISTS treal USING echo(treal);
+  }
+} {0 {}}
+do_test vtab1-1.9 {
+  execsql {
+    DROP TABLE treal;
+    SELECT name FROM sqlite_master ORDER BY 1
+  }
+} {}
+
+do_test vtab1-1.10 {
+  execsql {
+    CREATE TABLE treal(a, b, c);
+    CREATE VIRTUAL TABLE techo USING echo(treal);
+  }
+  db close
+  sqlite3 db test.db
+  catchsql {
+    SELECT * FROM techo;
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.11 {
+  catchsql {
+    INSERT INTO techo VALUES(1, 2, 3);
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.12 {
+  catchsql {
+    UPDATE techo SET a = 10;
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.13 {
+  catchsql {
+    DELETE FROM techo;
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.14 {
+  catchsql {
+    PRAGMA table_info(techo)
+  }
+} {1 {no such module: echo}}
+do_test vtab1-1.15 {
+  catchsql {
+    DROP TABLE techo;
+  }
+} {1 {no such module: echo}}
+
+register_echo_module [sqlite3_connection_pointer db]
+register_echo_module [sqlite3_connection_pointer db]
+
+# Test an error message returned from a v-table constructor.
+#
+do_test vtab1-1.16 {
+  execsql {
+    DROP TABLE techo;
+    CREATE TABLE logmsg(log);
+  }
+  catchsql {
+    CREATE VIRTUAL TABLE techo USING echo(treal, logmsg);
+  }
+} {1 {table 'logmsg' already exists}}
+
+do_test vtab1-1.17 {
+  execsql {
+    DROP TABLE treal;
+    DROP TABLE logmsg;
+    SELECT sql FROM sqlite_master;
+  }
+} {}
+
+#----------------------------------------------------------------------
+# Test cases vtab1.2.*
+#
+# At this point, the database is completely empty. The echo module
+# has already been registered.
+
+# If a single argument is passed to the echo module during table
+# creation, it is assumed to be the name of a table in the same
+# database. The echo module attempts to set the schema of the
+# new virtual table to be the same as the existing database table.
+#
+do_test vtab1-2.1 {
+  execsql {
+    CREATE TABLE template(a, b, c);
+  }
+  execsql { PRAGMA table_info(template); }
+} [list         \
+  0 a {} 0 {} 0 \
+  1 b {} 0 {} 0 \
+  2 c {} 0 {} 0 \
+]
+do_test vtab1-2.2 {
+  execsql {
+    CREATE VIRTUAL TABLE t1 USING echo(template);
+  }
+  execsql { PRAGMA table_info(t1); }
+} [list         \
+  0 a {} 0 {} 0 \
+  1 b {} 0 {} 0 \
+  2 c {} 0 {} 0 \
+]
+
+# Test that the database can be unloaded. This should invoke the xDisconnect()
+# callback for the successfully create virtual table (t1).
+#
+do_test vtab1-2.3 {
+  set echo_module [list]
+  db close
+  set echo_module
+} [list xDisconnect]
+
+# Re-open the database. This should not cause any virtual methods to 
+# be called. The invocation of xConnect() is delayed until the virtual
+# table schema is first required by the compiler.
+#
+do_test vtab1-2.4 {
+  set echo_module [list]
+  sqlite3 db test.db
+  db cache size 0
+  set echo_module
+} {}
+
+# Try to query the virtual table schema. This should fail, as the
+# echo module has not been registered with this database connection.
+#
+do_test vtab1.2.6 {
+  catchsql { PRAGMA table_info(t1); }
+} {1 {no such module: echo}}
+
+# Register the module
+register_echo_module [sqlite3_connection_pointer db]
+
+# Try to query the virtual table schema again. This time it should
+# invoke the xConnect method and succeed.
+#
+do_test vtab1.2.7 {
+  execsql { PRAGMA table_info(t1); }
+} [list         \
+  0 a {} 0 {} 0 \
+  1 b {} 0 {} 0 \
+  2 c {} 0 {} 0 \
+]
+do_test vtab1.2.8 {
+  set echo_module
+} {xConnect echo main t1 template}
+
+# Drop table t1. This should cause the xDestroy (but not xDisconnect) method 
+# to be invoked.
+do_test vtab1-2.5 {
+  set echo_module ""
+  execsql {
+    DROP TABLE t1;
+  }
+  set echo_module
+} {xDestroy}
+
+do_test vtab1-2.6 {
+  execsql { 
+    PRAGMA table_info(t1); 
+  }
+} {}
+do_test vtab1-2.7 {
+  execsql {
+    SELECT sql FROM sqlite_master;
+  }
+} [list {CREATE TABLE template(a, b, c)}]
+# Clean up other test artifacts:
+do_test vtab1-2.8 {
+  execsql { 
+    DROP TABLE template;
+    SELECT sql FROM sqlite_master;
+  }
+} [list]
+
+#----------------------------------------------------------------------
+# Test case vtab1-3 test table scans and the echo module's 
+# xBestIndex/xFilter handling of WHERE conditions.
+
+do_test vtab1-3.1 {
+  set echo_module ""
+  execsql {
+    CREATE TABLE treal(a INTEGER, b INTEGER, c); 
+    CREATE INDEX treal_idx ON treal(b);
+    CREATE VIRTUAL TABLE t1 USING echo(treal);
+  }
+  set echo_module
+} [list xCreate echo main t1 treal   \
+        xSync   echo(treal)  \
+        xCommit echo(treal)  \
+]
+
+# Test that a SELECT on t1 doesn't crash. No rows are returned
+# because the underlying real table is currently empty.
+#
+do_test vtab1-3.2 {
+  execsql {
+    SELECT a, b, c FROM t1;
+  }
+} {}
+
+# Put some data into the table treal. Then try a few simple SELECT 
+# statements on t1.
+#
+do_test vtab1-3.3 {
+  execsql {
+    INSERT INTO treal VALUES(1, 2, 3);
+    INSERT INTO treal VALUES(4, 5, 6);
+    SELECT * FROM t1;
+  }
+} {1 2 3 4 5 6}
+do_test vtab1-3.4 {
+  execsql {
+    SELECT a FROM t1;
+  }
+} {1 4}
+do_test vtab1-3.5 {
+  execsql {
+    SELECT rowid FROM t1;
+  }
+} {1 2}
+do_test vtab1-3.6 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1;
+  }
+} {1 2 3 4 5 6}
+do_test vtab1-3.7 {
+  execsql {
+    SELECT rowid, * FROM t1;
+  }
+} {1 1 2 3 2 4 5 6}
+do_test vtab1-3.8.1 {
+  execsql {
+    SELECT a AS d, b AS e, c AS f FROM t1;
+  }
+} {1 2 3 4 5 6}
+
+# Execute some SELECT statements with WHERE clauses on the t1 table.
+# Then check the echo_module variable (written to by the module methods
+# in test8.c) to make sure the xBestIndex() and xFilter() methods were
+# called correctly.
+#
+do_test vtab1-3.8.2 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1;
+  }
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'treal'} \
+        xFilter    {SELECT rowid, a, b, c FROM 'treal'} ]
+do_test vtab1-3.9 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1 WHERE b = 5;
+  }
+} {4 5 6}
+do_test vtab1-3.10 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'treal' WHERE b = ?}   \
+        xFilter    {SELECT rowid, a, b, c FROM 'treal' WHERE b = ?} 5 ]
+do_test vtab1-3.10 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1 WHERE b >= 5 AND b <= 10;
+  }
+} {4 5 6}
+do_test vtab1-3.11 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'treal' WHERE b >= ? AND b <= ?}\
+        xFilter    {SELECT rowid, a, b, c FROM 'treal' WHERE b >= ? AND b <= ?}\
+        5 10 ]
+do_test vtab1-3.12 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1 WHERE b BETWEEN 2 AND 10;
+  }
+} {1 2 3 4 5 6}
+do_test vtab1-3.13 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'treal' WHERE b >= ? AND b <= ?}\
+        xFilter    {SELECT rowid, a, b, c FROM 'treal' WHERE b >= ? AND b <= ?}\
+        2 10 ]
+
+# Add a function for the MATCH operator. Everything always matches!
+#proc test_match {lhs rhs} {
+#  lappend ::echo_module MATCH $lhs $rhs
+#  return 1
+#}
+#db function match test_match
+
+set echo_module ""
+do_test vtab1-3.12 {
+  set echo_module ""
+  catchsql {
+    SELECT * FROM t1 WHERE a MATCH 'string';
+  }
+} {1 {unable to use function MATCH in the requested context}}
+do_test vtab1-3.13 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'treal'} \
+        xFilter    {SELECT rowid, a, b, c FROM 'treal'}]
+ifcapable subquery {
+# The echo module uses a subquery internally to implement the MATCH operator.
+do_test vtab1-3.14 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM t1 WHERE b MATCH 'string';
+  }
+} {}
+do_test vtab1-3.15 {
+  set echo_module
+} [list xBestIndex \
+        {SELECT rowid, a, b, c FROM 'treal' WHERE b LIKE (SELECT '%'||?||'%')} \
+        xFilter \
+        {SELECT rowid, a, b, c FROM 'treal' WHERE b LIKE (SELECT '%'||?||'%')} \
+        string ]
+}; #ifcapable subquery
+
+#----------------------------------------------------------------------
+# Test case vtab1-3 test table scans and the echo module's 
+# xBestIndex/xFilter handling of ORDER BY clauses.
+
+# This procedure executes the SQL.  Then it checks to see if the OP_Sort
+# opcode was executed.  If an OP_Sort did occur, then "sort" is appended
+# to the result.  If no OP_Sort happened, then "nosort" is appended.
+#
+# This procedure is used to check to make sure sorting is or is not
+# occurring as expected.
+#
+proc cksort {sql} {
+  set ::sqlite_sort_count 0
+  set data [execsql $sql]
+  if {$::sqlite_sort_count} {set x sort} {set x nosort}
+  lappend data $x
+  return $data
+}
+
+do_test vtab1-4.1 {
+  set echo_module ""
+  cksort {
+    SELECT b FROM t1 ORDER BY b;
+  }
+} {2 5 nosort}
+do_test vtab1-4.2 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, NULL, b, NULL FROM 'treal' ORDER BY b ASC} \
+        xFilter    {SELECT rowid, NULL, b, NULL FROM 'treal' ORDER BY b ASC} ]
+do_test vtab1-4.3 {
+  set echo_module ""
+  cksort {
+    SELECT b FROM t1 ORDER BY b DESC;
+  }
+} {5 2 nosort}
+do_test vtab1-4.4 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, NULL, b, NULL FROM 'treal' ORDER BY b DESC} \
+        xFilter    {SELECT rowid, NULL, b, NULL FROM 'treal' ORDER BY b DESC} ]
+do_test vtab1-4.3 {
+  set echo_module ""
+  cksort {
+    SELECT b FROM t1 ORDER BY b||'';
+  }
+} {2 5 sort}
+do_test vtab1-4.4 {
+  set echo_module
+} [list xBestIndex {SELECT rowid, NULL, b, NULL FROM 'treal'} \
+        xFilter    {SELECT rowid, NULL, b, NULL FROM 'treal'} ]
+
+execsql {
+  DROP TABLE t1;
+  DROP TABLE treal;
+}
+
+#----------------------------------------------------------------------
+# Test cases vtab1-5 test SELECT queries that include joins on virtual 
+# tables.
+
+proc filter {log} {
+  set out [list]
+  for {set ii 0} {$ii < [llength $log]} {incr ii} {
+    if {[lindex $log $ii] eq "xFilter"} {
+      lappend out xFilter
+      lappend out [lindex $log [expr $ii+1]]
+    }
+  }
+  return $out
+}
+
+do_test vtab1-5-1 {
+  execsql { 
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(d, e, f);
+    INSERT INTO t1 VALUES(1, 'red', 'green');
+    INSERT INTO t1 VALUES(2, 'blue', 'black');
+    INSERT INTO t2 VALUES(1, 'spades', 'clubs');
+    INSERT INTO t2 VALUES(2, 'hearts', 'diamonds');
+    CREATE VIRTUAL TABLE et1 USING echo(t1);
+    CREATE VIRTUAL TABLE et2 USING echo(t2);
+  }
+} {}
+
+do_test vtab1-5-2 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM et1, et2;
+  }
+} [list \
+  1 red green 1 spades clubs     \
+  1 red green 2 hearts diamonds  \
+  2 blue black 1 spades clubs    \
+  2 blue black 2 hearts diamonds \
+]
+do_test vtab1-5-3 {
+  filter $echo_module
+} [list \
+  xFilter {SELECT rowid, a, b, c FROM 't1'} \
+  xFilter {SELECT rowid, d, e, f FROM 't2'} \
+  xFilter {SELECT rowid, d, e, f FROM 't2'} \
+]
+do_test vtab1-5-4 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM et1, et2 WHERE et2.d = 2;
+  }
+} [list \
+  1 red green 2 hearts diamonds  \
+  2 blue black 2 hearts diamonds \
+]
+do_test vtab1-5-5 {
+  filter $echo_module
+} [list \
+  xFilter {SELECT rowid, a, b, c FROM 't1'} \
+  xFilter {SELECT rowid, d, e, f FROM 't2'} \
+  xFilter {SELECT rowid, d, e, f FROM 't2'} \
+]
+do_test vtab1-5-6 {
+  execsql {
+    CREATE INDEX i1 ON t2(d);
+  }
+
+  db close
+  sqlite3 db test.db
+  register_echo_module [sqlite3_connection_pointer db]
+
+  set ::echo_module ""
+  execsql {
+    SELECT * FROM et1, et2 WHERE et2.d = 2;
+  }
+} [list \
+  1 red green 2 hearts diamonds  \
+  2 blue black 2 hearts diamonds \
+]
+do_test vtab1-5-7 {
+  filter $::echo_module
+} [list \
+  xFilter {SELECT rowid, a, b, c FROM 't1'}             \
+  xFilter {SELECT rowid, d, e, f FROM 't2' WHERE d = ?} \
+  xFilter {SELECT rowid, d, e, f FROM 't2' WHERE d = ?} \
+]
+
+execsql {
+  DROP TABLE t1;
+  DROP TABLE t2;
+  DROP TABLE et1;
+  DROP TABLE et2;
+}
+
+#----------------------------------------------------------------------
+# Test cases vtab1-6 test INSERT, UPDATE and DELETE operations 
+# on virtual tables.
+do_test vtab1-6-1 {
+  execsql { SELECT sql FROM sqlite_master }
+} {}
+do_test vtab1-6-2 {
+  execsql {
+    CREATE TABLE treal(a PRIMARY KEY, b, c);
+    CREATE VIRTUAL TABLE techo USING echo(treal);
+    SELECT name FROM sqlite_master WHERE type = 'table';
+  }
+} {treal techo}
+do_test vtab1-6-3.1.1 {
+  execsql {
+    PRAGMA count_changes=ON;
+    INSERT INTO techo VALUES(1, 2, 3);
+  }
+} {1}
+do_test vtab1-6-3.1.2 {
+  db changes
+} {1}
+do_test vtab1-6-3.2 {
+  execsql {
+    SELECT * FROM techo;
+  }
+} {1 2 3}
+do_test vtab1-6-4.1 {
+  execsql {
+    UPDATE techo SET a = 5;
+  }
+  db changes
+} {1}
+do_test vtab1-6-4.2 {
+  execsql {
+    SELECT * FROM techo;
+  }
+} {5 2 3}
+do_test vtab1-6-4.3 {
+  execsql {
+    UPDATE techo SET a=6 WHERE a<0;
+  }
+  db changes
+} {0}
+do_test vtab1-6-4.4 {
+  execsql {
+    SELECT * FROM techo;
+  }
+} {5 2 3}
+
+do_test vtab1-6-5.1 {
+ execsql {
+   UPDATE techo set a = a||b||c;
+ }
+ db changes
+} {1}
+do_test vtab1-6-5.2 {
+ execsql {
+   SELECT * FROM techo;
+ }
+} {523 2 3}
+
+do_test vtab1-6-6.1 {
+  execsql {
+    UPDATE techo set rowid = 10;
+  }
+  db changes
+} {1}
+do_test vtab1-6-6.2 {
+  execsql {
+    SELECT rowid FROM techo;
+  }
+} {10}
+
+do_test vtab1-6-7.1.1 {
+  execsql {
+    INSERT INTO techo VALUES(11,12,13);
+  }
+} {1}
+do_test vtab1-6-7.1.2 {
+  db changes
+} {1}
+do_test vtab1-6-7.2 {
+  execsql {
+    SELECT * FROM techo ORDER BY a;
+  }
+} {11 12 13 523 2 3}
+do_test vtab1-6-7.3 {
+  execsql {
+    UPDATE techo SET b=b+1000
+  }
+  db changes
+} {2}
+do_test vtab1-6-7.4 {
+  execsql {
+    SELECT * FROM techo ORDER BY a;
+  }
+} {11 1012 13 523 1002 3}
+
+
+do_test vtab1-6-8.1 {
+  execsql {
+    DELETE FROM techo WHERE a=5;
+  }
+  db changes
+} {0}
+do_test vtab1-6-8.2 {
+  execsql {
+    SELECT * FROM techo ORDER BY a;
+  }
+} {11 1012 13 523 1002 3}
+do_test vtab1-6-8.3 {
+  execsql {
+    DELETE FROM techo;
+  }
+  db changes
+} {2}
+do_test vtab1-6-8.4 {
+  execsql {
+    SELECT * FROM techo ORDER BY a;
+  }
+} {}
+execsql {PRAGMA count_changes=OFF}
+
+forcedelete test2.db
+forcedelete test2.db-journal
+sqlite3 db2 test2.db
+execsql {
+  CREATE TABLE techo(a PRIMARY KEY, b, c);
+} db2
+proc check_echo_table {tn} {
+  set ::data1 [execsql {SELECT rowid, * FROM techo}]
+  set ::data2 [execsql {SELECT rowid, * FROM techo} db2]
+  do_test $tn {
+    string equal $::data1 $::data2
+  } 1
+}
+set tn 0
+foreach stmt [list \
+  {INSERT INTO techo VALUES('abc', 'def', 'ghi')}                        \
+  {INSERT INTO techo SELECT a||'.'||rowid, b, c FROM techo}              \
+  {INSERT INTO techo SELECT a||'x'||rowid, b, c FROM techo}              \
+  {INSERT INTO techo SELECT a||'y'||rowid, b, c FROM techo}              \
+  {DELETE FROM techo WHERE (oid % 3) = 0}                                \
+  {UPDATE techo set rowid = 100 WHERE rowid = 1}                         \
+  {INSERT INTO techo(a, b) VALUES('hello', 'world')}                     \
+  {DELETE FROM techo}                                                    \
+] {
+  execsql $stmt
+  execsql $stmt db2
+  check_echo_table vtab1-6.8.[incr tn]
+}
+
+db2 close
+
+
+
+#----------------------------------------------------------------------
+# Test cases vtab1-7 tests that the value returned by 
+# sqlite3_last_insert_rowid() is set correctly when rows are inserted
+# into virtual tables.
+do_test vtab1.7-1 {
+  execsql {
+    CREATE TABLE real_abc(a PRIMARY KEY, b, c);
+    CREATE VIRTUAL TABLE echo_abc USING echo(real_abc);
+  }
+} {}
+do_test vtab1.7-2 {
+  execsql {
+    INSERT INTO echo_abc VALUES(1, 2, 3);
+    SELECT last_insert_rowid();
+  }
+} {1}
+do_test vtab1.7-3 {
+  execsql {
+    INSERT INTO echo_abc(rowid) VALUES(31427);
+    SELECT last_insert_rowid();
+  }
+} {31427}
+do_test vtab1.7-4 {
+  execsql {
+    INSERT INTO echo_abc SELECT a||'.v2', b, c FROM echo_abc;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-5 {
+  execsql {
+    SELECT rowid, a, b, c FROM echo_abc
+  }
+} [list 1     1    2  3  \
+        31427 {}   {} {} \
+        31428 1.v2 2  3  \
+        31429 {}  {} {}  \
+]
+
+# Now test that DELETE and UPDATE operations do not modify the value.
+do_test vtab1.7-6 {
+  execsql {
+    UPDATE echo_abc SET c = 5 WHERE b = 2;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-7 {
+  execsql {
+    UPDATE echo_abc SET rowid = 5 WHERE rowid = 1;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-8 {
+  execsql {
+    DELETE FROM echo_abc WHERE b = 2;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-9 {
+  execsql {
+    SELECT rowid, a, b, c FROM echo_abc
+  }
+} [list 31427 {} {} {} \
+        31429 {} {} {} \
+]
+do_test vtab1.7-10 {
+  execsql {
+    DELETE FROM echo_abc WHERE b = 2;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-11 {
+  execsql {
+    SELECT rowid, a, b, c FROM real_abc
+  }
+} [list 31427 {} {} {} \
+        31429 {} {} {} \
+]
+do_test vtab1.7-12 {
+  execsql {
+    DELETE FROM echo_abc;
+    SELECT last_insert_rowid();
+  }
+} {31429}
+do_test vtab1.7-13 {
+  execsql {
+    SELECT rowid, a, b, c FROM real_abc
+  }
+} {}
+
+# PRAGMA index_info and index_xinfo are no-ops on a virtual table
+do_test vtab1.7-14 {
+  execsql {
+    PRAGMA index_info('echo_abc');
+    PRAGMA index_xinfo('echo_abc');
+  }
+} {}
+
+ifcapable attach {
+  do_test vtab1.8-1 {
+    set echo_module ""
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      CREATE VIRTUAL TABLE aux.e2 USING echo(real_abc);
+    }
+    set echo_module
+  } [list xCreate echo aux e2 real_abc   \
+          xSync   echo(real_abc)         \
+          xCommit echo(real_abc)         \
+  ]
+}
+do_test vtab1.8-2 {
+  catchsql {
+    DROP TABLE aux.e2;
+  }
+  execsql {
+    DROP TABLE treal;
+    DROP TABLE techo;
+    DROP TABLE echo_abc;
+    DROP TABLE real_abc;
+  }
+} {}
+
+do_test vtab1.9-1 {
+  set echo_module ""
+  execsql {
+    CREATE TABLE r(a, b, c);
+    CREATE VIRTUAL TABLE e USING echo(r, e_log);
+    SELECT name FROM sqlite_master;
+  }
+} {r e e_log}
+do_test vtab1.9-2 {
+  execsql {
+    DROP TABLE e;
+    SELECT name FROM sqlite_master;
+  }
+} {r}
+
+do_test vtab1.9-3 {
+  set echo_module ""
+  execsql {
+    CREATE VIRTUAL TABLE e USING echo(r, e_log, virtual 1 2 3 varchar(32));
+  }
+  set echo_module
+} [list                                                        \
+  xCreate echo main e r e_log {virtual 1 2 3 varchar(32)}      \
+  xSync echo(r)                                                \
+  xCommit echo(r)                                              \
+]
+
+do_test vtab1.10-1 {
+  execsql {
+    CREATE TABLE del(d);
+    CREATE VIRTUAL TABLE e2 USING echo(del);
+  }
+  db close
+  sqlite3 db test.db
+  register_echo_module [sqlite3_connection_pointer db]
+  execsql {
+    DROP TABLE del;
+  }
+  catchsql {
+    SELECT * FROM e2;
+  }
+} {1 {vtable constructor failed: e2}}
+do_test vtab1.10-2 {
+  set rc [catch {
+    set ptr [sqlite3_connection_pointer db]
+    sqlite3_declare_vtab $ptr {CREATE TABLE abc(a, b, c)}
+  } msg]
+  list $rc $msg
+} {1 {bad parameter or other API misuse}}
+do_test vtab1.10-3 {
+  set ::echo_module_begin_fail r
+  catchsql {
+    INSERT INTO e VALUES(1, 2, 3);
+  }
+} {1 {SQL logic error}}
+do_test vtab1.10-4 {
+  catch {execsql {
+    EXPLAIN SELECT * FROM e WHERE rowid = 2;
+    EXPLAIN QUERY PLAN SELECT * FROM e WHERE rowid = 2 ORDER BY rowid;
+  }}
+} {0}
+
+do_test vtab1.10-5 {
+  set echo_module ""
+  execsql {
+    SELECT * FROM e WHERE rowid||'' MATCH 'pattern';
+  }
+  set echo_module
+} [list \
+  xBestIndex {SELECT rowid, a, b, c FROM 'r'} \
+  xFilter {SELECT rowid, a, b, c FROM 'r'}    \
+]
+proc match_func {args} {return ""}
+do_test vtab1.10-6 {
+  set echo_module ""
+  db function match match_func
+  execsql {
+    SELECT * FROM e WHERE match('pattern', rowid, 'pattern2');
+  }
+  set echo_module
+} [list \
+  xBestIndex {SELECT rowid, a, b, c FROM 'r'} \
+  xFilter {SELECT rowid, a, b, c FROM 'r'}    \
+]
+
+
+# Testing the xFindFunction interface
+#
+catch {rename ::echo_glob_overload {}}
+do_test vtab1.11-1 {
+  execsql {
+    INSERT INTO r(a,b,c) VALUES(1,'?',99);
+    INSERT INTO r(a,b,c) VALUES(2,3,99);
+    SELECT a GLOB b FROM e
+  }
+} {1 0}
+proc ::echo_glob_overload {a b} {
+ return [list $b $a]
+}
+do_test vtab1.11-2 {
+  execsql {
+    SELECT a like 'b' FROM e
+  }
+} {0 0}
+do_test vtab1.11-3 {
+  execsql {
+    SELECT a glob '2' FROM e
+  }
+} {{1 2} {2 2}}
+do_test vtab1.11-4 {
+  execsql {
+    SELECT  glob('2',a) FROM e
+  }
+} {0 1}
+do_test vtab1.11-5 {
+  execsql {
+    SELECT  glob(a,'2') FROM e
+  }
+} {{2 1} {2 2}}
+ 
+#----------------------------------------------------------------------
+# Test the outcome if a constraint is encountered half-way through
+# a multi-row INSERT that is inside a transaction
+#
+do_test vtab1.12-1 {
+  execsql {
+    CREATE TABLE b(a, b, c);
+    CREATE TABLE c(a UNIQUE, b, c);
+    INSERT INTO b VALUES(1, 'A', 'B');
+    INSERT INTO b VALUES(2, 'C', 'D');
+    INSERT INTO b VALUES(3, 'E', 'F');
+    INSERT INTO c VALUES(3, 'G', 'H');
+    CREATE VIRTUAL TABLE echo_c USING echo(c);
+  }
+} {}
+
+# First test outside of a transaction.
+do_test vtab1.12-2 {
+  catchsql { INSERT INTO echo_c SELECT * FROM b; }
+} {1 {echo-vtab-error: UNIQUE constraint failed: c.a}}
+do_test vtab1.12-2.1 {
+  sqlite3_errmsg db
+} {echo-vtab-error: UNIQUE constraint failed: c.a}
+do_test vtab1.12-3 {
+  execsql { SELECT * FROM c }
+} {3 G H}
+
+# Now the real test - wrapped in a transaction.
+do_test vtab1.12-4 {
+  execsql  {BEGIN}
+  catchsql { INSERT INTO echo_c SELECT * FROM b; }
+} {1 {echo-vtab-error: UNIQUE constraint failed: c.a}}
+do_test vtab1.12-5 {
+  execsql { SELECT * FROM c }
+} {3 G H}
+do_test vtab1.12-6 {
+  execsql { COMMIT }
+  execsql { SELECT * FROM c }
+} {3 G H}
+
+# At one point (ticket #2759), a WHERE clause of the form "<column> IS NULL"
+# on a virtual table was causing an assert() to fail in the compiler.
+#
+# "IS NULL" clauses should not be passed through to the virtual table
+# implementation. They are handled by SQLite after the vtab returns its
+# data.
+#
+do_test vtab1.13-1 {
+  execsql { 
+    SELECT * FROM echo_c WHERE a IS NULL 
+  }
+} {}
+do_test vtab1.13-2 {
+  execsql { 
+    INSERT INTO c VALUES(NULL, 15, 16);
+    SELECT * FROM echo_c WHERE a IS NULL 
+  }
+} {{} 15 16}
+do_test vtab1.13-3 {
+  execsql { 
+    INSERT INTO c VALUES(15, NULL, 16);
+    SELECT * FROM echo_c WHERE b IS NULL 
+  }
+} {15 {} 16}
+do_test vtab1.13-4 {
+  unset -nocomplain null
+  execsql { 
+    SELECT * FROM echo_c WHERE b IS $null
+  }
+} {15 {} 16}
+do_test vtab1.13-5 {
+  execsql { 
+    SELECT * FROM echo_c WHERE b IS NULL AND a = 15;
+  }
+} {15 {} 16}
+do_test vtab1.13-6 {
+  execsql { 
+    SELECT * FROM echo_c WHERE NULL IS b AND a IS 15;
+  }
+} {15 {} 16}
+
+
+do_test vtab1-14.001 {
+  execsql {SELECT rowid, * FROM echo_c WHERE +rowid IN (1,2,3)}
+} {1 3 G H 2 {} 15 16 3 15 {} 16}
+do_test vtab1-14.002 {
+  execsql {SELECT rowid, * FROM echo_c WHERE rowid IN (1,2,3)}
+} {1 3 G H 2 {} 15 16 3 15 {} 16}
+do_test vtab1-14.003 {
+  execsql {SELECT rowid, * FROM echo_c WHERE +rowid IN (0,1,5,2,'a',3,NULL)}
+} {1 3 G H 2 {} 15 16 3 15 {} 16}
+do_test vtab1-14.004 {
+  execsql {SELECT rowid, * FROM echo_c WHERE rowid IN (0,1,5,'a',2,3,NULL)}
+} {1 3 G H 2 {} 15 16 3 15 {} 16}
+do_test vtab1-14.005 {
+  execsql {SELECT rowid, * FROM echo_c WHERE rowid NOT IN (0,1,5,'a',2,3)}
+} {}
+do_test vtab1-14.006 {
+  execsql {SELECT rowid, * FROM echo_c WHERE rowid NOT IN (0,5,'a',2,3)}
+} {1 3 G H}
+do_test vtab1-14.007 {
+  execsql {SELECT rowid, * FROM echo_c WHERE +rowid NOT IN (0,5,'a',2,3,NULL)}
+} {}
+do_test vtab1-14.008 {
+  execsql {SELECT rowid, * FROM echo_c WHERE rowid NOT IN (0,5,'a',2,3,NULL)}
+} {}
+do_test vtab1-14.011 {
+  execsql {SELECT * FROM echo_c WHERE +a IN (1,3,8,'x',NULL,15,24)}
+} {3 G H 15 {} 16}
+do_test vtab1-14.012 {
+  execsql {SELECT * FROM echo_c WHERE a IN (1,3,8,'x',NULL,15,24)}
+} {3 G H 15 {} 16}
+do_test vtab1-14.013 {
+  execsql {SELECT * FROM echo_c WHERE a NOT IN (1,8,'x',15,24)}
+} {3 G H}
+do_test vtab1-14.014 {
+  execsql {SELECT * FROM echo_c WHERE a NOT IN (1,8,'x',NULL,15,24)}
+} {}
+do_test vtab1-14.015 {
+  execsql {SELECT * FROM echo_c WHERE +a NOT IN (1,8,'x',NULL,15,24)}
+} {}
+
+
+
+#do_test vtab1-14.1 {
+#  execsql { DELETE FROM c }
+#  set echo_module ""
+#  execsql { SELECT * FROM echo_c WHERE rowid IN (1, 2, 3) }
+#  set echo_module
+#} {/.*xBestIndex {SELECT rowid, . FROM 'c' WHERE rowid = .} xFilter {SELECT rowid, . FROM 'c'} 1/}
+
+do_test vtab1-14.2 {
+  set echo_module ""
+  execsql { SELECT * FROM echo_c WHERE rowid = 1 }
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'c' WHERE rowid = ?} \
+        xFilter {SELECT rowid, a, b, c FROM 'c' WHERE rowid = ?} 1]
+
+do_test vtab1-14.3 {
+  set echo_module ""
+  execsql { SELECT * FROM echo_c WHERE a = 1 }
+  set echo_module
+} [list xBestIndex {SELECT rowid, a, b, c FROM 'c' WHERE a = ?} \
+        xFilter {SELECT rowid, a, b, c FROM 'c' WHERE a = ?} 1]
+
+#do_test vtab1-14.4 {
+#  set echo_module ""
+#  execsql { SELECT * FROM echo_c WHERE a IN (1, 2) }
+#  set echo_module
+#} {/xBestIndex {SELECT rowid, . FROM 'c' WHERE a = .} xFilter {SELECT rowid, . FROM 'c' WHERE a = .} 1/}
+
+do_test vtab1-15.1 {
+  execsql {
+    CREATE TABLE t1(a, b, c);
+    CREATE VIRTUAL TABLE echo_t1 USING echo(t1);
+  }
+} {}
+do_test vtab1-15.2 {
+  execsql {
+    INSERT INTO echo_t1(rowid) VALUES(45);
+    SELECT rowid, * FROM echo_t1;
+  }
+} {45 {} {} {}}
+do_test vtab1-15.3 {
+  execsql {
+    INSERT INTO echo_t1(rowid) VALUES(NULL);
+    SELECT rowid, * FROM echo_t1;
+  }
+} {45 {} {} {} 46 {} {} {}}
+do_test vtab1-15.4 {
+  catchsql {
+    INSERT INTO echo_t1(rowid) VALUES('new rowid');
+  }
+} {1 {datatype mismatch}}
+
+# The following tests - vtab1-16.* - are designed to test that setting 
+# sqlite3_vtab.zErrMsg variable can be used by the vtab interface to 
+# return an error message to the user.
+# 
+do_test vtab1-16.1 {
+  execsql {
+    CREATE TABLE t2(a PRIMARY KEY, b, c);
+    INSERT INTO t2 VALUES(1, 2, 3);
+    INSERT INTO t2 VALUES(4, 5, 6);
+    CREATE VIRTUAL TABLE echo_t2 USING echo(t2);
+  }
+} {}
+
+set tn 2
+foreach method [list \
+    xBestIndex       \
+    xOpen            \
+    xFilter          \
+    xNext            \
+    xColumn          \
+    xRowid           \
+] {
+  do_test vtab1-16.$tn {
+    set echo_module_fail($method,t2) "the $method method has failed"
+    catchsql { SELECT rowid, * FROM echo_t2 WHERE a >= 1 }
+  } "1 {echo-vtab-error: the $method method has failed}"
+  unset echo_module_fail($method,t2)
+  incr tn
+}
+
+foreach method [list \
+  xUpdate            \
+  xBegin             \
+  xSync              \
+] {
+  do_test vtab1-16.$tn {
+    set echo_module_fail($method,t2) "the $method method has failed"
+    catchsql { INSERT INTO echo_t2 VALUES(7, 8, 9) }
+  } "1 {echo-vtab-error: the $method method has failed}"
+  unset echo_module_fail($method,t2)
+  incr tn
+}
+
+ifcapable altertable {
+  do_test vtab1-16.$tn {
+    set echo_module_fail(xRename,t2) "the xRename method has failed"
+    catchsql { ALTER TABLE echo_t2 RENAME TO another_name }
+  } "1 {echo-vtab-error: the xRename method has failed}"
+  unset echo_module_fail(xRename,t2)
+  incr tn
+}
+
+# The following test case exposes an instance in sqlite3_declare_vtab()
+# an error message was set using a call similar to sqlite3_mprintf(zErr),
+# where zErr is an arbitrary string. This is no good if the string contains
+# characters that can be mistaken for printf() formatting directives.
+#
+do_test vtab1-17.1 {
+  sqlite3_db_config db DEFENSIVE 0
+  execsql { 
+    PRAGMA writable_schema = 1;
+    INSERT INTO sqlite_master VALUES(
+      'table', 't3', 't3', 0, 'INSERT INTO "%s%s" VALUES(1)'
+    );
+  }
+  catchsql { CREATE VIRTUAL TABLE t4 USING echo(t3); }
+} {1 {vtable constructor failed: t4}}
+
+# This test verifies that ticket 48f29963 is fixed.
+#
+do_test vtab1-17.1 {
+  execsql { 
+    CREATE TABLE t5(a, b);
+    CREATE VIRTUAL TABLE e5 USING echo_v2(t5);
+    BEGIN;
+      INSERT INTO e5 VALUES(1, 2);
+      DROP TABLE e5;
+      SAVEPOINT one;
+      ROLLBACK TO one;
+    COMMIT;
+  }
+} {}
+
+do_test vtab1-17.2 {
+  execsql { DELETE FROM sqlite_master WHERE sql LIKE 'insert%' }
+} {}
+
+#-------------------------------------------------------------------------
+# The following tests - vtab1-18.* - test that the optimization of LIKE
+# constraints in where.c plays well with virtual tables.
+#
+#   18.1.*: Case-insensitive LIKE.
+#   18.2.*: Case-sensitive LIKE.
+#
+unset -nocomplain echo_module_begin_fail
+
+do_execsql_test 18.1.0 {
+  CREATE TABLE t6(a, b TEXT);
+  CREATE INDEX i6 ON t6(b, a);
+  INSERT INTO t6 VALUES(1, 'Peter');
+  INSERT INTO t6 VALUES(2, 'Andrew');
+  INSERT INTO t6 VALUES(3, '8James');
+  INSERT INTO t6 VALUES(4, '8John');
+  INSERT INTO t6 VALUES(5, 'Phillip');
+  INSERT INTO t6 VALUES(6, 'Bartholomew');
+  CREATE VIRTUAL TABLE e6 USING echo(t6);
+}
+
+ifcapable !icu {
+  foreach {tn sql res filter} {
+    1.1 "SELECT a FROM e6 WHERE b>'8James'" {4 2 6 1 5}
+      {xFilter {SELECT rowid, a, b FROM 't6' WHERE b > ?} 8James}
+  
+    1.2 "SELECT a FROM e6 WHERE b>='8' AND b<'9'" {3 4}
+      {xFilter {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ?} 8 9}
+  
+    1.3 "SELECT a FROM e6 WHERE b LIKE '8J%'" {3 4}
+      {xFilter {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?} 8J 8k 8J%}
+  
+    1.4 "SELECT a FROM e6 WHERE b LIKE '8j%'" {3 4}
+      {xFilter {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?} 8J 8k 8j%}
+  
+    1.5 "SELECT a FROM e6 WHERE b LIKE '8%'" {3 4}
+      {xFilter {SELECT rowid, a, b FROM 't6' WHERE b like ?} 8%}
+  } {
+    set echo_module {}
+    do_execsql_test 18.$tn.1 $sql $res
+    do_test         18.$tn.2 { lrange $::echo_module 2 end } $filter
+  }
+}
+
+do_execsql_test 18.2.0 {  PRAGMA case_sensitive_like = ON }
+foreach {tn sql res filter} {
+  2.1 "SELECT a FROM e6 WHERE b LIKE '8%'" {3 4}
+    {xFilter {SELECT rowid, a, b FROM 't6' WHERE b like ?} 8%}
+
+  2.2 "SELECT a FROM e6 WHERE b LIKE '8j%'" {}
+    {xFilter {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?} 8j 8k 8j%}
+
+  2.3 "SELECT a FROM e6 WHERE b LIKE '8J%'" {3 4}
+    {xFilter {SELECT rowid, a, b FROM 't6' WHERE b >= ? AND b < ? AND b like ?} 8J 8K 8J%}
+} {
+  set echo_module {}
+  do_execsql_test 18.$tn.1 $sql $res
+  do_test         18.$tn.2 { lrange $::echo_module 2 end } $filter
+}
+do_execsql_test 18.2.x {  PRAGMA case_sensitive_like = OFF }
+
+#-------------------------------------------------------------------------
+# Test that it is ok to override and existing module.
+#
+do_test 19.1 {
+  sqlite3 db2 test.db
+  register_echo_module [sqlite3_connection_pointer db2]
+} SQLITE_OK
+do_test 19.2 {
+  register_echo_module [sqlite3_connection_pointer db2]
+} SQLITE_OK
+do_test 19.3 {
+  db2 close
+} {}
+
+#-------------------------------------------------------------------------
+# Test that the bug fixed by [b0c1ba655d69] really is fixed.
+#
+do_execsql_test 20.1 {
+  CREATE TABLE t7 (a, b);
+  CREATE TABLE t8 (c, d);
+  CREATE INDEX i2 ON t7(a);
+  CREATE INDEX i3 ON t7(b);
+  CREATE INDEX i4 ON t8(c);
+  CREATE INDEX i5 ON t8(d);
+
+  CREATE VIRTUAL TABLE t7v USING echo(t7);
+  CREATE VIRTUAL TABLE t8v USING echo(t8);
+}
+
+do_test 20.2 {
+  for {set i 0} {$i < 1000} {incr i} {
+    db eval {INSERT INTO t7 VALUES($i, $i)}
+    db eval {INSERT INTO t8 VALUES($i, $i)}
+  }
+} {}
+
+do_execsql_test 20.3 {
+  SELECT a, b FROM (
+      SELECT a, b FROM t7 WHERE a=11 OR b=12
+      UNION ALL
+      SELECT c, d FROM t8 WHERE c=5 OR d=6
+  )
+  ORDER BY 1, 2;
+} {5 5 6 6 11 11 12 12}
+
+do_execsql_test 20.4 {
+  SELECT a, b FROM (
+      SELECT a, b FROM t7v WHERE a=11 OR b=12
+      UNION ALL
+      SELECT c, d FROM t8v WHERE c=5 OR d=6
+  )
+  ORDER BY 1, 2;
+} {5 5 6 6 11 11 12 12}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 21.1 {
+  CREATE TABLE t9(a,b,c);
+  CREATE VIRTUAL TABLE t9v USING echo(t9);
+
+  INSERT INTO t9 VALUES(1,2,3);
+  INSERT INTO t9 VALUES(3,2,1);
+  INSERT INTO t9 VALUES(2,2,2);
+}
+
+do_execsql_test 21.2 {
+  SELECT * FROM t9v WHERE a<b;
+} {1 2 3}
+
+do_execsql_test 21.3 {
+  SELECT * FROM t9v WHERE a=b;
+} {2 2 2}
+
+#-------------------------------------------------------------------------
+# At one point executing a CREATE VIRTUAL TABLE statement that specified 
+# a database name but no virtual table arguments was causing an internal
+# buffer overread. Valgrind would report errors while running the following 
+# tests. Specifically:
+#
+#   CREATE VIRTUAL TABLE t1 USING fts4;          -- Ok - no db name.
+#   CREATE VIRTUAL TABLE main.t1 USING fts4(x);  -- Ok - has vtab arguments.
+#   CREATE VIRTUAL TABLE main.t1 USING fts4;     -- Had the problem. 
+#
+ifcapable fts3 {
+  forcedelete test.db2
+  set nm [string repeat abcdefghij 100]
+  do_execsql_test 22.1 {
+    ATTACH 'test.db2' AS $nm
+  }
+  
+  execsql "SELECT * FROM sqlite_master"
+  do_execsql_test 22.2 "CREATE VIRTUAL TABLE ${nm}.t1 USING fts4"
+  
+  do_test 22.3.1 {
+    set sql "CREATE VIRTUAL TABLE ${nm}.t2 USING fts4"
+    set stmt [sqlite3_prepare_v2 db $sql -1 dummy]
+    sqlite3_step $stmt
+  } {SQLITE_DONE}
+  
+  do_test 22.3.2 {
+    sqlite3_finalize $stmt
+  } {SQLITE_OK}
+  
+  do_test 22.4.1 {
+    set sql "CREATE VIRTUAL TABLE ${nm}.t3 USING fts4"
+    set n [string length $sql]
+    set stmt [sqlite3_prepare db "${sql}xyz" $n dummy]
+    sqlite3_step $stmt
+  } {SQLITE_DONE}
+  
+  do_test 22.4.2 {
+    sqlite3_finalize $stmt
+  } {SQLITE_OK}
+}
+
+
+#-------------------------------------------------------------------------
+# The following tests verify that a DROP TABLE command on a virtual
+# table does not cause other operations to crash.
+#
+#   23.1: Dropping a vtab while a SELECT is running on it.
+#
+#   23.2: Dropping a vtab while a SELECT that will, but has not yet,
+#         open a cursor on the vtab, is running. In this case the
+#         DROP TABLE succeeds and the SELECT hits an error.
+#   
+#   23.3: Dropping a vtab from within a user-defined-function callback
+#         in the middle of an "INSERT INTO vtab SELECT ..." statement.
+#
+reset_db
+load_static_extension db wholenumber
+load_static_extension db eval
+register_echo_module db
+
+do_test 23.1 {
+  execsql { CREATE VIRTUAL TABLE t1 USING wholenumber }
+  set res ""
+  db eval { SELECT value FROM t1 WHERE value<10 } {
+    if {$value == 5} {
+      set res [catchsql { DROP TABLE t1 }]
+    }
+  }
+  set res
+} {1 {database table is locked}}
+
+do_test 23.2 {
+  execsql { 
+    CREATE TABLE t2(value);
+    INSERT INTO t2 VALUES(1), (2), (3);
+  }
+
+  set res2 [list [catch {
+    db eval {
+      SELECT value FROM t2 UNION ALL 
+      SELECT value FROM t1 WHERE value<10
+    } {
+      if {$value == 2} { set res1 [catchsql { DROP TABLE t1 }] }
+    }
+  } msg] $msg]
+  list $res1 $res2
+} {{0 {}} {1 {database table is locked}}}
+
+do_test 23.3.1 {
+  execsql { CREATE VIRTUAL TABLE t1e USING echo(t2) }
+  execsql { INSERT INTO t1e SELECT 4 }
+  catchsql { INSERT INTO t1e SELECT eval('DROP TABLE t1e') }
+} {1 {database table is locked}}
+do_execsql_test 23.3.2 { SELECT * FROM t1e } {1 2 3 4}
+
+#-------------------------------------------------------------------------
+# At one point SQL like this:
+#
+#   SAVEPOINT xyz;       -- Opens SQL transaction
+#     INSERT INTO vtab   -- Write to virtual table
+#     ROLLBACK TO xyz;
+#   RELEASE xyz;
+#
+# was not invoking the xRollbackTo() callback for the ROLLBACK TO 
+# operation. Which meant that virtual tables like FTS3 would incorrectly 
+# commit the results of the INSERT as part of the "RELEASE xyz" command.
+#
+# The following tests check that this has been fixed.
+#
+ifcapable fts3 {
+  do_execsql_test 24.0 {
+    CREATE VIRTUAL TABLE t4 USING fts3();
+    SAVEPOINT a;
+    INSERT INTO t4 VALUES('a b c');
+    ROLLBACK TO a;
+    RELEASE a;
+    SELECT * FROM t4;
+  } {}
+
+  do_execsql_test 24.1 { SELECT * FROM t4 WHERE t4 MATCH 'b' } {}
+  do_execsql_test 24.2 { INSERT INTO t4(t4) VALUES('integrity-check') } {}
+
+  do_execsql_test 24.3 {
+    SAVEPOINT a;
+    CREATE VIRTUAL TABLE t5 USING fts3();
+    SAVEPOINT b;
+    ROLLBACK TO a;
+    SAVEPOINT c;
+    RELEASE a;
+  }
+}
+
+finish_test

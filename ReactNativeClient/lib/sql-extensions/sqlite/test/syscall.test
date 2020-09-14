@@ -1,0 +1,278 @@
+# 2011 March 29
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+
+if {[llength [info commands test_syscall]]==0} {
+  finish_test
+  return
+} 
+
+if {[test_syscall defaultvfs] != "unix"} {
+  finish_test
+  return
+}
+set testprefix syscall
+
+#-------------------------------------------------------------------------
+# Tests for the xSetSystemCall method.
+#
+do_test 1.1.1 {
+  list [catch { test_syscall reset open } msg] $msg
+} {0 {}}
+do_test 1.1.2 {
+  list [catch { test_syscall reset nosuchcall } msg] $msg
+} {1 SQLITE_NOTFOUND}
+do_test 1.1.3 {
+  list [catch { test_syscall reset open } msg] $msg
+} {0 {}}
+do_test 1.1.4 {
+  list [catch { test_syscall reset ""} msg] $msg
+} {1 SQLITE_NOTFOUND}
+
+do_test 1.2 { test_syscall reset } {}
+
+do_test 1.3.1 { test_syscall install {open getcwd access} } {}
+do_test 1.3.2 { test_syscall reset } {}
+
+#-------------------------------------------------------------------------
+# Tests for the xGetSystemCall method.
+#
+do_test 2.1.1 { test_syscall exists open } 1
+do_test 2.1.2 { test_syscall exists nosuchcall } 0
+
+#-------------------------------------------------------------------------
+# Tests for the xNextSystemCall method.
+#
+foreach s {
+    open close access getcwd stat fstat ftruncate
+    fcntl read pread write pwrite fchmod fallocate
+    pread64 pwrite64 unlink openDirectory mkdir rmdir 
+    statvfs fchown geteuid umask mmap munmap mremap
+    getpagesize readlink lstat ioctl
+} {
+  if {[test_syscall exists $s]} {lappend syscall_list $s}
+}
+do_test 3.1 { lsort [test_syscall list] } [lsort $syscall_list]
+
+#-------------------------------------------------------------------------
+# This test verifies that if a call to open() fails and errno is set to
+# EINTR, the call is retried. If it succeeds, execution continues as if
+# nothing happened. 
+#
+test_syscall reset
+forcedelete test.db2
+do_execsql_test 4.1 {
+  CREATE TABLE t1(x, y);
+  INSERT INTO t1 VALUES(1, 2);
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t2(x, y);
+  INSERT INTO t2 VALUES(3, 4);
+}
+
+db_save_and_close
+test_syscall install open
+foreach jrnl [list wal delete] {
+  for {set i 1} {$i < 20} {incr i} {
+    db_restore_and_reopen
+    test_syscall fault $i 0
+    test_syscall errno open EINTR
+  
+    do_test 4.2.$jrnl.$i {
+      sqlite3 db test.db
+      execsql { ATTACH 'test.db2' AS aux }
+      execsql "PRAGMA main.journal_mode = $jrnl"
+      execsql "PRAGMA aux.journal_mode = $jrnl"
+      execsql {
+        BEGIN;
+          INSERT INTO t1 VALUES(5, 6);
+          INSERT INTO t2 VALUES(7, 8);
+        COMMIT;
+      }
+
+      db close
+      sqlite3 db test.db
+      execsql { ATTACH 'test.db2' AS aux }
+      execsql {
+        SELECT * FROM t1;
+        SELECT * FROM t2;
+      }
+    } {1 2 5 6 3 4 7 8}
+  }
+}
+
+#-------------------------------------------------------------------------
+# This test verifies that closing database handles does not drop locks
+# held by other database handles in the same process on the same file.
+#
+# The os_unix.c module has to take precautions to prevent this as the
+# close() system call drops locks held by other file-descriptors on the
+# same file. From the Linux man page:
+#
+#   close() closes a file descriptor, so that it no longer refers to any file
+#   and may be reused. Any record locks (see fcntl(2)) held on the file it 
+#   was associated with, and owned by the process, are removed (regardless 
+#   of the file descriptor that was used to obtain the lock).
+#
+catch { db close }
+forcedelete test.db test.db2
+
+do_multiclient_test tn {
+  code1 {
+    sqlite3 dbX1 test.db
+    sqlite3 dbX2 test.db
+  }
+
+  do_test syscall-5.$tn.1 {
+    sql1 {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+      BEGIN;
+        INSERT INTO t1 VALUES(3, 4);
+    }
+  } {}
+
+  do_test syscall-5.$tn.2 { sql2 { SELECT * FROM t1 } } {1 2}
+  do_test syscall-5.$tn.3 { 
+    csql2 { INSERT INTO t1 VALUES(5, 6) }
+  } {1 {database is locked}}
+
+  do_test syscall-5.$tn.4 { 
+    code1 {
+      dbX1 close
+      dbX2 close
+    }
+  } {}
+
+  do_test syscall-5.$tn.5 { 
+    csql2 { INSERT INTO t1 VALUES(5, 6) }
+  } {1 {database is locked}}
+
+  do_test syscall-5.$tn.6 { sql1 { COMMIT } } {}
+
+  do_test syscall-5.$tn.7 { 
+    csql2 { INSERT INTO t1 VALUES(5, 6) }
+  } {0 {}}
+}
+
+catch {db close}
+do_test 6.1 {
+  sqlite3 db1 test.db1
+  sqlite3 db2 test.db2
+  sqlite3 db3 test.db3
+  sqlite3 dbM ""
+
+  db2 close
+  db3 close
+  dbM close
+  db1 close
+} {}
+
+do_test 6.2 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA temp_store = file;
+
+    PRAGMA main.cache_size = 10;
+    PRAGMA temp.cache_size = 10;
+    CREATE TABLE temp.tt(a, b);
+    INSERT INTO tt VALUES(randomblob(500), randomblob(600));
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+    INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+  }
+
+  db close
+} {}
+
+#-------------------------------------------------------------------------
+# Test that a database file a single byte in size is treated as an empty
+# file. Whereas a file 2 bytes or larger might be considered corrupt.
+#
+catch { db close }
+forcedelete test.db test.db2
+
+proc create_db_file {nByte} {
+  set fd [open test.db w]
+  fconfigure $fd -translation binary -encoding binary
+  puts -nonewline $fd [string range "xSQLite" 1 $nByte]
+  close $fd
+}
+
+foreach {nByte res} {
+  1      {0 {}}
+  2      {1 {file is not a database}}
+  3      {1 {file is not a database}}
+} {
+  do_test 7.$nByte {
+    create_db_file $nByte
+    list [catch {
+      sqlite3 db test.db
+      execsql { CREATE TABLE t1(a, b) }
+    } msg] $msg
+  } $res
+  catch { db close }
+}
+
+#-------------------------------------------------------------------------
+# 
+catch { db close }
+forcedelete test.db test.db2
+
+do_test 8.1 {
+  sqlite3 db test.db
+  file_control_chunksize_test db main 4096
+  file size test.db
+} {0}
+foreach {tn hint size} {
+  1  1000    4096 
+  2  1000    4096 
+  3  3000    4096 
+  4  4096    4096 
+  5  4197    8192 
+} {
+  do_test 8.2.$tn {
+    file_control_sizehint_test db main $hint
+    file size test.db
+  } $size
+}
+
+do_test 8.3 {
+  db close
+  forcedelete test.db test.db2
+  sqlite3 db test.db
+  file_control_chunksize_test db main 16
+  file size test.db
+} {0}
+foreach {tn hint size} {
+  1  5       16 
+  2  13      16 
+  3  45      48 
+  4  48      48 
+  5  49      64 
+} {
+  do_test 8.4.$tn {
+    file_control_sizehint_test db main $hint
+    file size test.db
+  } $size
+}
+
+test_syscall reset
+finish_test

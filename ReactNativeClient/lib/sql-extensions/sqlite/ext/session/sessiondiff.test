@@ -1,0 +1,114 @@
+# 2015-07-31
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests for the [sqldiff --changeset] command.
+#
+#
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+set testprefix sessiondiff
+
+set PROG [test_find_sqldiff]
+db close
+
+proc sqlesc {id} {
+  set ret "'[string map {' ''} $id]'"
+  set ret
+}
+
+proc database_cksum {db1} {
+  set txt ""
+
+  sqlite3 dbtmp $db1
+  foreach tbl [dbtmp eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    set cols [list]
+    dbtmp eval "PRAGMA table_info = [sqlesc $tbl]" { 
+      lappend cols "quote( $name )" 
+    }
+    append txt [dbtmp eval \
+      "SELECT [join $cols {||'.'||}] FROM [sqlesc $tbl] ORDER BY 1"
+    ]
+  }
+  dbtmp close
+
+  md5 $txt
+}
+
+proc readfile {filename} {
+  set fd [open $filename]
+  fconfigure $fd -translation binary -encoding binary
+  set data [read $fd]
+  close $fd
+  set data
+}
+
+proc get_changeset {db1 db2} {
+  exec $::PROG --changeset changeset.bin $db1 $db2
+  set bin [readfile changeset.bin]
+  return $bin
+}
+
+proc xConflict {args} { 
+  return "" 
+}
+
+proc do_changeset_test {tn sql1 sql2} {
+  forcedelete test.db123 test.db124 
+
+  sqlite3 db test.db123
+  db eval $sql1
+  db close
+
+  sqlite3 db test.db124
+  db eval $sql2
+
+  set cs [get_changeset test.db124 test.db123]
+  sqlite3changeset_apply db $cs xConflict
+  db close
+
+  set database_cksum1 [database_cksum test.db123]
+  set database_cksum2 [database_cksum test.db124]
+
+  uplevel [list \
+      do_test $tn [list string compare $database_cksum1 $database_cksum2] 0
+  ]
+}
+
+do_changeset_test 1.0 {
+  CREATE TABLE t1(x PRIMARY KEY);
+} {
+  CREATE TABLE t1(x PRIMARY KEY);
+}
+
+do_changeset_test 1.1 {
+  CREATE TABLE t1(x PRIMARY KEY);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+  INSERT INTO t2 VALUES(1, 2);
+} {
+  CREATE TABLE t1(x PRIMARY KEY);
+  CREATE TABLE t2(x PRIMARY KEY, y);
+  INSERT INTO t2 VALUES(3, 4);
+}
+
+do_changeset_test 1.2 {
+  CREATE TABLE t2(a, b, c, PRIMARY KEY(b, c));
+  INSERT INTO t2 VALUES(1, 2, 3);
+  INSERT INTO t2 VALUES(4, 5, 6);
+} {
+  CREATE TABLE t2(a, b, c, PRIMARY KEY(b, c));
+  INSERT INTO t2 VALUES(1, 2, 11);
+  INSERT INTO t2 VALUES(7, 8, 9);
+}
+
+finish_test

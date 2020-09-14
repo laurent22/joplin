@@ -1,0 +1,246 @@
+# 2017-07-15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is the "swarmvtab" extension
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix swarmvtab
+do_not_use_codec
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+load_static_extension db unionvtab
+
+set nFile $sqlite_open_file_count
+
+do_execsql_test 1.0 {
+  CREATE TABLE t0(a INTEGER PRIMARY KEY, b TEXT);
+  WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<400) 
+  INSERT INTO t0 SELECT i, hex(randomblob(50)) FROM s;
+
+  CREATE TABLE dir(f, t, imin, imax);
+}
+
+do_test 1.1 {
+  for {set i 0} {$i < 40} {incr i} {
+    set iMin [expr $i*10 + 1]
+    set iMax [expr $iMin+9]
+
+    forcedelete "test.db$i"
+    execsql [subst {
+      ATTACH 'test.db$i' AS aux;
+      CREATE TABLE aux.t$i (a INTEGER PRIMARY KEY, b TEXT);
+      INSERT INTO aux.t$i SELECT * FROM t0 WHERE a BETWEEN $iMin AND $iMax;
+      DETACH aux;
+      INSERT INTO dir VALUES('test.db$i', 't$i', $iMin, $iMax);
+    }]
+  }
+
+  execsql {
+    CREATE VIRTUAL TABLE temp.s1 USING swarmvtab('SELECT * FROM dir');
+  }
+} {}
+
+do_execsql_test 1.2 { 
+  DROP TABLE s1; 
+} {}
+
+do_execsql_test 1.3 {
+  CREATE VIRTUAL TABLE temp.s1 USING swarmvtab('SELECT * FROM dir');
+  SELECT count(*) FROM s1 WHERE rowid<50;
+} {49}
+
+proc do_compare_test {tn where} {
+  set sql [subst {
+    SELECT (SELECT group_concat(a || ',' || b, ',') FROM t0 WHERE $where) 
+           IS 
+           (SELECT group_concat(a || ',' || b, ',') FROM s1 WHERE $where)
+  }]
+
+  uplevel [list do_execsql_test $tn $sql 1]
+}
+
+do_compare_test 1.4.1 "rowid = 700"
+do_compare_test 1.4.2 "rowid = -1"
+do_compare_test 1.4.3 "rowid = 0"
+do_compare_test 1.4.4 "rowid = 55"
+do_compare_test 1.4.5 "rowid BETWEEN 20 AND 100"
+do_compare_test 1.4.6 "rowid > 350"
+do_compare_test 1.4.7 "rowid >= 350"
+do_compare_test 1.4.8 "rowid >= 200"
+do_compare_test 1.4.9 "1"
+
+# Multiple simultaneous cursors.
+#
+do_execsql_test 1.5.1.(5-seconds-or-so) {
+  SELECT count(*) FROM s1 a, s1 b WHERE b.rowid<=200;
+} {80000}
+do_execsql_test 1.5.2 {
+  SELECT count(*) FROM s1 a, s1 b, s1 c 
+  WHERE a.rowid=b.rowid AND b.rowid=c.rowid;
+} {400}
+
+# Empty source tables.
+#
+do_test 1.6.0 {
+  for {set i 0} {$i < 20} {incr i} {
+    sqlite3 db2 test.db$i
+    db2 eval " DELETE FROM t$i "
+    db2 close
+  }
+  db eval { DELETE FROM t0 WHERE rowid<=200 }
+} {}
+
+do_compare_test 1.6.1 "rowid = 700"
+do_compare_test 1.6.2 "rowid = -1"
+do_compare_test 1.6.3 "rowid = 0"
+do_compare_test 1.6.4 "rowid = 55"
+do_compare_test 1.6.5 "rowid BETWEEN 20 AND 100"
+do_compare_test 1.6.6 "rowid > 350"
+do_compare_test 1.6.7 "rowid >= 350"
+do_compare_test 1.6.8 "rowid >= 200"
+do_compare_test 1.6.9 "1"
+do_compare_test 1.6.10 "rowid >= 5"
+
+do_test 1.x {
+  set sqlite_open_file_count
+} [expr $nFile+9]
+
+do_test 1.y { db close } {}
+
+# Delete all the database files created above.
+#
+for {set i 0} {$i < 40} {incr i} { forcedelete "test.db$i" }
+
+#-------------------------------------------------------------------------
+# Test some error conditions:
+#
+#   2.1: Database file does not exist.
+#   2.2: Table does not exist.
+#   2.3: Table schema does not match.
+#   2.4: Syntax error in SELECT statement.
+#
+reset_db
+load_static_extension db unionvtab
+do_test 2.0.1 {
+  db eval {
+    CREATE TABLE t0(a INTEGER PRIMARY KEY, b TEXT);
+    WITH s(i) AS ( SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<400) 
+      INSERT INTO t0 SELECT i, hex(randomblob(50)) FROM s;
+    CREATE TABLE dir(f, t, imin, imax);
+  }
+
+  for {set i 0} {$i < 40} {incr i} {
+    set iMin [expr $i*10 + 1]
+    set iMax [expr $iMin+9]
+
+    forcedelete "test.db$i"
+    db eval [subst {
+      ATTACH 'test.db$i' AS aux;
+      CREATE TABLE aux.t$i (a INTEGER PRIMARY KEY, b TEXT);
+      INSERT INTO aux.t$i SELECT * FROM t0 WHERE a BETWEEN $iMin AND $iMax;
+      DETACH aux;
+      INSERT INTO dir VALUES('test.db$i', 't$i', $iMin, $iMax);
+    }]
+  }
+  execsql {
+    CREATE VIRTUAL TABLE temp.s1 USING swarmvtab('SELECT * FROM dir');
+  }
+} {}
+
+do_test 2.0.2 {
+  forcedelete test.db5
+
+  sqlite3 db2 test.db15
+  db2 eval { DROP TABLE t15 }
+  db2 close
+
+  sqlite3 db2 test.db25
+  db2 eval { 
+    DROP TABLE t25;
+    CREATE TABLE t25(x, y, z PRIMARY KEY);
+  }
+  db2 close
+} {}
+
+do_catchsql_test 2.1 {
+  SELECT * FROM s1 WHERE rowid BETWEEN 1 AND 100;
+} {1 {unable to open database file}}
+do_catchsql_test 2.2 {
+  SELECT * FROM s1 WHERE rowid BETWEEN 101 AND 200;
+} {1 {no such rowid table: t15}}
+do_catchsql_test 2.3 {
+  SELECT * FROM s1 WHERE rowid BETWEEN 201 AND 300;
+} {1 {source table schema mismatch}}
+
+do_catchsql_test 2.4 {
+  CREATE VIRTUAL TABLE temp.x1 USING swarmvtab('SELECT * FROMdir');
+} {1 {sql error: near "FROMdir": syntax error}}
+do_catchsql_test 2.5 {
+  CREATE VIRTUAL TABLE temp.x1 USING swarmvtab('SELECT * FROMdir', 'fetchdb');
+} {1 {sql error: near "FROMdir": syntax error}}
+
+for {set i 0} {$i < 40} {incr i} {
+  forcedelete "test.db$i"
+}
+
+#-------------------------------------------------------------------------
+# Test the outcome of the fetch function throwing an exception.
+#
+proc fetch_db {file} {
+  error "fetch_db error!"
+}
+
+db func fetch_db fetch_db
+
+do_catchsql_test 3.1 {
+  CREATE VIRTUAL TABLE temp.xyz USING swarmvtab(
+    'VALUES
+        ("test.db1", "t1", 1, 10),
+        ("test.db2", "t1", 11, 20)
+    ', 'fetch_db_no_such_function'
+  );
+} {1 {sql error: no such function: fetch_db_no_such_function}}
+
+do_catchsql_test 3.2 {
+  CREATE VIRTUAL TABLE temp.xyz USING swarmvtab(
+    'VALUES
+        ("test.db1", "t1", 1, 10),
+        ("test.db2", "t1", 11, 20)
+    ', 'fetch_db'
+  );
+} {1 {fetch_db error!}}
+
+do_execsql_test 3.3.1 {
+  ATTACH 'test.db1' AS aux;
+  CREATE TABLE aux.t1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO aux.t1 VALUES(1, NULL);
+  INSERT INTO aux.t1 VALUES(2, NULL);
+  INSERT INTO aux.t1 VALUES(9, NULL);
+  DETACH aux;
+  CREATE VIRTUAL TABLE temp.xyz USING swarmvtab(
+    'VALUES
+        ("test.db1", "t1", 1, 10),
+        ("test.db2", "t1", 11, 20)
+    ', 'fetch_db'
+  );
+} {}
+
+do_catchsql_test 3.3.2 { SELECT * FROM xyz } {1 {fetch_db error!}}
+
+
+
+finish_test

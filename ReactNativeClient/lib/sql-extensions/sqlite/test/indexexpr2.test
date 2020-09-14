@@ -1,0 +1,375 @@
+# 2017 April 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix indexexpr2
+
+do_execsql_test 1 {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 'one');
+  INSERT INTO t1 VALUES(2, 'two');
+  INSERT INTO t1 VALUES(3, 'three');
+
+  CREATE INDEX i1 ON t1(b || 'x');
+}
+
+do_execsql_test 1.1 {
+  SELECT 'TWOX' == (b || 'x') FROM t1 WHERE (b || 'x')>'onex'
+} {0 0}
+
+do_execsql_test 1.2 {
+  SELECT 'TWOX' == (b || 'x') COLLATE nocase  FROM t1 WHERE (b || 'x')>'onex'
+} {0 1}
+
+do_execsql_test 2.0 {
+  CREATE INDEX i2 ON t1(a+1);
+}
+
+do_execsql_test 2.1 {
+  SELECT a+1, quote(a+1) FROM t1 ORDER BY 1;
+} {2 2 3 3 4 4}
+
+#-------------------------------------------------------------------------
+# At one point SQLite was incorrectly using indexes on expressions to
+# optimize ORDER BY and GROUP BY clauses even when the collation
+# sequences of the query and index did not match (ticket [e20dd54ab0e4]).
+# The following tests - 3.* - attempt to verify that this has been fixed.
+#
+
+reset_db
+do_execsql_test 3.1.0 {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a, b);
+} {}
+
+do_eqp_test 3.1.1 {
+  SELECT b FROM t1 WHERE b IS NOT NULL AND a IS NULL 
+  GROUP BY b COLLATE nocase
+  ORDER BY b COLLATE nocase;
+} {/USE TEMP B-TREE FOR GROUP BY/}
+
+do_execsql_test 3.2.0 {
+  CREATE TABLE t2(x);
+
+  INSERT INTO t2 VALUES('.ABC');
+  INSERT INTO t2 VALUES('.abcd');
+  INSERT INTO t2 VALUES('.defg');
+  INSERT INTO t2 VALUES('.DEF');
+} {}
+
+do_execsql_test 3.2.1 {
+  SELECT x FROM t2 ORDER BY substr(x, 2) COLLATE nocase;
+} {
+  .ABC .abcd .DEF .defg
+}
+
+do_execsql_test 3.2.2 {
+  CREATE INDEX i2 ON t2( substr(x, 2) );
+  SELECT x FROM t2 ORDER BY substr(x, 2) COLLATE nocase;
+} {
+  .ABC .abcd .DEF .defg
+}
+
+do_execsql_test 3.3.0 {
+  CREATE TABLE t3(x);
+}
+
+ifcapable json1 {
+  do_eqp_test 3.3.1 {
+    SELECT json_extract(x, '$.b') FROM t2 
+    WHERE json_extract(x, '$.b') IS NOT NULL AND json_extract(x, '$.a') IS NULL 
+    GROUP BY json_extract(x, '$.b') COLLATE nocase
+    ORDER BY json_extract(x, '$.b') COLLATE nocase;
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    |--SCAN TABLE t2
+    `--USE TEMP B-TREE FOR GROUP BY
+  }]
+  
+  do_execsql_test 3.3.2 {
+    CREATE INDEX i3 ON t3(json_extract(x, '$.a'), json_extract(x, '$.b'));
+  } {}
+  
+  do_eqp_test 3.3.3 {
+    SELECT json_extract(x, '$.b') FROM t3 
+    WHERE json_extract(x, '$.b') IS NOT NULL AND json_extract(x, '$.a') IS NULL 
+    GROUP BY json_extract(x, '$.b') COLLATE nocase
+    ORDER BY json_extract(x, '$.b') COLLATE nocase;
+  } [string map {"\n  " \n} {
+    QUERY PLAN
+    |--SEARCH TABLE t3 USING INDEX i3 (<expr>=?)
+    `--USE TEMP B-TREE FOR GROUP BY
+  }]
+}
+
+do_execsql_test 3.4.0 {
+  CREATE TABLE t4(a, b);
+  INSERT INTO t4 VALUES('.ABC', 1);
+  INSERT INTO t4 VALUES('.abc', 2);
+  INSERT INTO t4 VALUES('.ABC', 3);
+  INSERT INTO t4 VALUES('.abc', 4);
+}
+
+do_execsql_test 3.4.1 {
+  SELECT * FROM t4 
+  WHERE substr(a, 2) = 'abc' COLLATE NOCASE
+  ORDER BY substr(a, 2), b;
+} {
+  .ABC 1   .ABC 3   .abc 2   .abc 4
+}
+
+do_execsql_test 3.4.2 {
+  CREATE INDEX i4 ON t4( substr(a, 2) COLLATE NOCASE, b );
+  SELECT * FROM t4 
+  WHERE substr(a, 2) = 'abc' COLLATE NOCASE
+  ORDER BY substr(a, 2), b;
+} {
+  .ABC 1   .ABC 3   .abc 2   .abc 4
+}
+
+do_execsql_test 3.4.3 {
+  DROP INDEX i4;
+  UPDATE t4 SET a = printf('%s%d',a,b);
+  SELECT * FROM t4 ORDER BY Substr(a,-2) COLLATE nocase;
+} {.ABC1 1 .abc2 2 .ABC3 3 .abc4 4}
+do_execsql_test 3.4.4 {
+  SELECT * FROM t4 ORDER BY Substr(a,-2) COLLATE binary;
+} {.ABC1 1 .ABC3 3 .abc2 2 .abc4 4}
+
+do_execsql_test 3.4.5 {
+  CREATE INDEX i4 ON t4( Substr(a,-2) COLLATE nocase );
+  SELECT * FROM t4 ORDER BY Substr(a,-2) COLLATE nocase;
+} {.ABC1 1 .abc2 2 .ABC3 3 .abc4 4}
+do_execsql_test 3.4.5eqp {
+  EXPLAIN QUERY PLAN
+  SELECT * FROM t4 ORDER BY Substr(a,-2) COLLATE nocase;
+} {/SCAN TABLE t4 USING INDEX i4/}
+do_execsql_test 3.4.6 {
+  SELECT * FROM t4 ORDER BY Substr(a,-2) COLLATE binary;
+} {.ABC1 1 .ABC3 3 .abc2 2 .abc4 4}
+
+# 2014-09-15:  Verify that UPDATEs of columns not referenced by a
+# index on expression do not modify the index.
+#
+unset -nocomplain cnt
+set cnt 0
+proc refcnt {x} {
+  global cnt
+  incr cnt
+  return $x
+}
+db close
+sqlite3 db :memory:
+db function refcnt -deterministic refcnt
+do_test 4.100 {
+  db eval {
+    CREATE TABLE t1(a,b,c,d,e,f);
+    CREATE INDEX t1abc ON t1(refcnt(a+b+c));
+  }
+  set ::cnt
+} {0}
+do_test 4.110 {
+  db eval {INSERT INTO t1 VALUES(1,2,3,4,5,6);}
+  set ::cnt
+  # The refcnt() function is invoked once to compute the index value 
+} {1}
+do_test 4.120 {
+  set ::cnt 0
+  db eval {UPDATE t1 SET b=b+1;}
+  set ::cnt
+  # The refcnt() function is invoked twice, once to remove the old index
+  # entry and a second time to insert the new one.
+} {2}
+do_test 4.130 {
+  set ::cnt 0
+  db eval {UPDATE t1 SET d=d+1;}
+  set ::cnt
+  # Refcnt() should not be invoked because that index does not change.
+} {0}
+
+# Additional test cases to show that UPDATE does not modify indexes that
+# do not involve unchanged columns.
+#
+ifcapable vtab {
+  load_static_extension db explain
+  do_execsql_test 4.200 {
+    CREATE TABLE t2(a,b,c,d,e,f);
+    INSERT INTO t2 VALUES(2,3,4,5,6,7);
+    CREATE INDEX t2abc ON t2(a+b+c);
+    CREATE INDEX t2cd ON t2(c*d);
+    CREATE INDEX t2def ON t2(d,e+25*f);
+    SELECT sqlite_master.name 
+      FROM sqlite_master, explain('UPDATE t2 SET b=b+1')
+     WHERE explain.opcode LIKE 'Open%'
+       AND sqlite_master.rootpage=explain.p2
+     ORDER BY 1;
+  } {t2 t2abc}
+  do_execsql_test 4.210 {
+    SELECT sqlite_master.name 
+      FROM sqlite_master, explain('UPDATE t2 SET c=c+1')
+     WHERE explain.opcode LIKE 'Open%'
+       AND sqlite_master.rootpage=explain.p2
+     ORDER BY 1;
+  } {t2 t2abc t2cd}
+  do_execsql_test 4.220 {
+    SELECT sqlite_master.name 
+      FROM sqlite_master, explain('UPDATE t2 SET c=c+1, f=NULL')
+     WHERE explain.opcode LIKE 'Open%'
+       AND sqlite_master.rootpage=explain.p2
+     ORDER BY 1;
+  } {t2 t2abc t2cd t2def}
+}
+
+#-------------------------------------------------------------------------
+# Test that ticket [d96eba87] has been fixed.
+#
+do_execsql_test 5.0 {
+  CREATE TABLE t5(a INTEGER, b INTEGER);
+  INSERT INTO t5 VALUES(2, 4), (3, 9);
+}
+do_execsql_test 5.1 {
+  SELECT * FROM t5 WHERE abs(a)=2 or abs(b)=9;
+} {2 4 3 9}
+do_execsql_test 5.2 {
+  CREATE INDEX t5a ON t5( abs(a) );
+  CREATE INDEX t5b ON t5( abs(b) );
+}
+do_execsql_test 5.4 {
+  SELECT * FROM t5 WHERE abs(a)=2 or abs(b)=9;
+} {2 4 3 9}
+
+#-------------------------------------------------------------------------
+do_execsql_test 6.0 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b);
+  INSERT INTO x1 VALUES
+      (1, 123), (2, '123'), (3, '123abc'), (4, 123.0), (5, 1234);
+}
+
+do_execsql_test 6.1.1 {
+  SELECT a, b FROM x1 WHERE CAST(b AS INTEGER) = 123;
+} {1 123   2 123   3 123abc  4 123.0}
+do_execsql_test 6.1.2 {
+  CREATE INDEX x1i ON x1( CAST(b AS INTEGER) );
+  SELECT a, b FROM x1 WHERE CAST(b AS INTEGER) = 123;
+} {1 123   2 123   3 123abc  4 123.0}
+do_eqp_test 6.1.3 {
+  SELECT a, b FROM x1 WHERE CAST(b AS INTEGER) = 123;
+} {SEARCH TABLE x1 USING INDEX x1i (<expr>=?)}
+
+do_execsql_test 6.2.1 {
+  SELECT a, b FROM x1 WHERE CAST(b AS TEXT) = 123;
+} {1 123   2 123}
+do_execsql_test 6.2.2 {
+  CREATE INDEX x1i2 ON x1( CAST(b AS TEXT) );
+  SELECT a, b FROM x1 WHERE CAST(b AS TEXT) = 123;
+} {1 123   2 123}
+do_eqp_test 6.2.3 {
+  SELECT a, b FROM x1 WHERE CAST(b AS TEXT) = 123;
+} {SEARCH TABLE x1 USING INDEX x1i2 (<expr>=?)}
+
+do_execsql_test 7.0 {
+  CREATE TABLE IF NOT EXISTS t0(c0);
+  INSERT INTO t0(c0) VALUES (-9223372036854775808);
+  BEGIN;
+}
+do_catchsql_test 7.1 {
+  CREATE INDEX i0 ON t0(ABS(c0));
+} {1 {integer overflow}}
+do_execsql_test 7.2 {
+  COMMIT;
+  SELECT sql FROM sqlite_master WHERE tbl_name = 't0';
+  CREATE INDEX i0 ON t0(c0);
+} {{CREATE TABLE t0(c0)}}
+do_execsql_test 7.3 {
+  REINDEX;
+} {}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 8.0 {
+  CREATE TABLE t0(c0);
+  CREATE INDEX i0 ON t0(c0) WHERE c0 NOT NULL;
+  INSERT INTO t0(c0) VALUES (NULL);
+}
+
+do_execsql_test 8.1.1 {
+  SELECT * FROM t0 WHERE ~('' BETWEEN t0.c0 AND TRUE);
+} {{}}
+do_execsql_test 8.1.2 {
+  SELECT ~('' BETWEEN t0.c0 AND TRUE) FROM t0;
+} {-1}
+
+foreach {tn expr} {
+  1 " 0  ==  (34 BETWEEN c0 AND 33)"
+  2 " 1  !=  (34 BETWEEN c0 AND 33)"
+  3 "-1   <  (34 BETWEEN c0 AND 33)"
+  4 "-1  <=  (34 BETWEEN c0 AND 33)"
+  5 " 1   >  (34 BETWEEN c0 AND 33)"
+  6 " 1  >=  (34 BETWEEN c0 AND 33)"
+  7 " 1   -  (34 BETWEEN c0 AND 33)"
+  8 "-1   +  (34 BETWEEN c0 AND 33)"
+  9 " 1   |  (34 BETWEEN c0 AND 33)"
+ 10 " 1  <<  (34 BETWEEN c0 AND 33)"
+ 11 " 1  >>  (34 BETWEEN c0 AND 33)"
+ 12 " 1  ||  (34 BETWEEN c0 AND 33)"
+} {
+  do_execsql_test 8.3.$tn.1 "SELECT * FROM t0 WHERE $expr ORDER BY c0" { {} }
+  do_execsql_test 8.3.$tn.2 "SELECT ($expr) IS TRUE FROM t0"           { 1 }
+}
+
+do_execsql_test 8.4 {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2), (3, 4);
+  CREATE TABLE t2(x, y);
+}
+
+foreach {tn expr} {
+  1 " 0  ==  (a=0 AND y=1)"
+  2 " 1  !=  (a=0 AND y=1)"
+  3 "-1  <   (a=0 AND y=1)"
+  4 "-1  <=  (a=0 AND y=1)"
+  5 " 1   >  (a=0 AND y=1)"
+  6 " 1  >=  (a=0 AND y=1)"
+  7 " 1   -  (a=0 AND y=1)"
+  8 "-1   +  (a=0 AND y=1)"
+  9 " 1   |  (a=0 AND y=1)"
+  10 "1  <<  (a=0 AND y=1)"
+  11 "1  >>  (a=0 AND y=1)"
+  12 "1  ||  (a=0 AND y=1)"
+
+  13 " 0  ==  (10 BETWEEN y AND b)"
+  14 " 1  !=  (10 BETWEEN y AND b)"
+  15 "-1  <   (10 BETWEEN y AND b)"
+  16 "-1  <=  (10 BETWEEN y AND b)"
+  17 " 1   >  (10 BETWEEN y AND b)"
+  18 " 1  >=  (10 BETWEEN y AND b)"
+  19 " 1   -  (10 BETWEEN y AND b)"
+  20 "-1   +  (10 BETWEEN y AND b)"
+  21 " 1   |  (10 BETWEEN y AND b)"
+  22 " 1  <<  (10 BETWEEN y AND b)"
+  23 " 1  >>  (10 BETWEEN y AND b)"
+  24 " 1  ||  (10 BETWEEN y AND b)"
+
+  25 " 1  ||  (10 BETWEEN y AND b)"
+} {
+  do_execsql_test 8.5.$tn.1 "
+    SELECT * FROM t1 LEFT JOIN t2 WHERE $expr
+  " {1 2 {} {} 3 4 {} {}}
+
+  do_execsql_test 8.5.$tn.2 "
+    SELECT ($expr) IS TRUE FROM t1 LEFT JOIN t2
+  " {1 1}
+}
+
+finish_test

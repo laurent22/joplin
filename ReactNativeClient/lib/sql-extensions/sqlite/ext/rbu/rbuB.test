@@ -1,0 +1,61 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set ::testprefix rbuB
+
+db close
+sqlite3_shutdown
+test_sqlite3_log xLog
+reset_db
+
+proc xLog {args} { }
+
+set db_sql {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+}
+set rbu_sql {
+  CREATE TABLE data_t1(a, b, c, rbu_control);
+  INSERT INTO data_t1 VALUES(1, 2, 3, 0);
+  INSERT INTO data_t1 VALUES(4, 5, 6, 0);
+  INSERT INTO data_t1 VALUES(7, 8, 9, 0);
+}
+
+do_test 1.1 {
+  forcedelete rbu.db
+  sqlite3 rbu rbu.db
+  rbu eval $rbu_sql
+  rbu close
+
+  db eval $db_sql
+} {}
+
+set ::errlog [list]
+proc xLog {err msg} { lappend ::errlog $err }
+do_test 1.2 {
+  run_rbu test.db rbu.db
+} {SQLITE_DONE}
+
+do_test 1.3 {
+  set ::errlog
+} {SQLITE_NOTICE_RECOVER_WAL SQLITE_INTERNAL}
+
+do_execsql_test 1.4 {
+  SELECT * FROM t1
+} {1 2 3 4 5 6 7 8 9}
+
+db close
+sqlite3_shutdown
+test_sqlite3_log 
+sqlite3_initialize
+finish_test

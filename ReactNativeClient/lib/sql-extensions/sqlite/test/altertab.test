@@ -1,0 +1,680 @@
+# 2018 August 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix altertab
+
+# If SQLITE_OMIT_ALTERTABLE is defined, omit this file.
+ifcapable !altertable {
+  finish_test
+  return
+}
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a, b, CHECK(t1.a != t1.b));
+
+  CREATE TABLE t2(a, b);
+  CREATE INDEX t2expr ON t2(a) WHERE t2.b>0;
+}
+
+do_execsql_test 1.1 {
+  SELECT sql FROM sqlite_master
+} {
+  {CREATE TABLE t1(a, b, CHECK(t1.a != t1.b))}
+  {CREATE TABLE t2(a, b)}
+  {CREATE INDEX t2expr ON t2(a) WHERE t2.b>0}
+}
+
+do_execsql_test 1.2 {
+  ALTER TABLE t1 RENAME TO t1new;
+}
+
+do_execsql_test 1.3 {
+  CREATE TABLE t3(c, d);
+  ALTER TABLE t3 RENAME TO t3new;
+  DROP TABLE t3new;
+}
+
+do_execsql_test 1.4 {
+  SELECT sql FROM sqlite_master
+} {
+  {CREATE TABLE "t1new"(a, b, CHECK("t1new".a != "t1new".b))}
+  {CREATE TABLE t2(a, b)}
+  {CREATE INDEX t2expr ON t2(a) WHERE t2.b>0}
+}
+
+
+do_execsql_test 1.3 {
+  ALTER TABLE t2 RENAME TO t2new;
+}
+do_execsql_test 1.4 {
+  SELECT sql FROM sqlite_master
+} {
+  {CREATE TABLE "t1new"(a, b, CHECK("t1new".a != "t1new".b))}
+  {CREATE TABLE "t2new"(a, b)}
+  {CREATE INDEX t2expr ON "t2new"(a) WHERE "t2new".b>0}
+}
+
+
+#-------------------------------------------------------------------------
+reset_db
+ifcapable vtab {
+  register_echo_module db
+
+  do_execsql_test 2.0 {
+    CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(1, 2, 3);
+    CREATE VIRTUAL TABLE eee USING echo('abc');
+    SELECT * FROM eee;
+  } {1 2 3}
+
+  do_execsql_test 2.1 {
+    ALTER TABLE eee RENAME TO fff;
+    SELECT * FROM fff;
+  } {1 2 3}
+
+  db close
+  sqlite3 db test.db
+
+  do_catchsql_test 2.2 {
+    ALTER TABLE fff RENAME TO ggg;
+  } {1 {no such module: echo}}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+
+do_execsql_test 3.0 {
+  CREATE TABLE txx(a, b, c);
+  INSERT INTO txx VALUES(1, 2, 3);
+  CREATE VIEW vvv AS SELECT main.txx.a, txx.b, c FROM txx;
+  CREATE VIEW uuu AS SELECT main.one.a, one.b, c FROM txx AS one;
+  CREATE VIEW temp.ttt AS SELECT main.txx.a, txx.b, one.b, main.one.a FROM txx AS one, txx;
+}
+
+do_execsql_test 3.1.1 {
+  SELECT * FROM vvv;
+} {1 2 3}
+do_execsql_test 3.1.2 {
+  ALTER TABLE txx RENAME TO "t xx";
+  SELECT * FROM vvv;
+} {1 2 3}
+do_execsql_test 3.1.3 {
+  SELECT sql FROM sqlite_master WHERE name='vvv';
+} {{CREATE VIEW vvv AS SELECT main."t xx".a, "t xx".b, c FROM "t xx"}}
+
+
+do_execsql_test 3.2.1 {
+  SELECT * FROM uuu;
+} {1 2 3}
+do_execsql_test 3.2.2 {
+  SELECT sql FROM sqlite_master WHERE name='uuu';;
+} {{CREATE VIEW uuu AS SELECT main.one.a, one.b, c FROM "t xx" AS one}}
+
+do_execsql_test 3.3.1 {
+  SELECT * FROM ttt;
+} {1 2 2 1}
+do_execsql_test 3.3.2 {
+  SELECT sql FROM sqlite_temp_master WHERE name='ttt';
+} {{CREATE VIEW ttt AS SELECT main."t xx".a, "t xx".b, one.b, main.one.a FROM "t xx" AS one, "t xx"}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 4.0 {
+  CREATE table t1(x, y);
+  CREATE table t2(a, b);
+
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    SELECT t1.x, * FROM t1, t2;
+    INSERT INTO t2 VALUES(new.x, new.y);
+  END;
+}
+
+do_execsql_test 4.1 {
+  INSERT INTO t1 VALUES(1, 1);
+  ALTER TABLE t1 RENAME TO t11;
+  INSERT INTO t11 VALUES(2, 2);
+  ALTER TABLE t2 RENAME TO t22;
+  INSERT INTO t11 VALUES(3, 3);
+}
+
+proc squish {a} {
+  string trim [regsub -all {[[:space:]][[:space:]]*} $a { }]
+}
+db func squish squish
+do_test 4.2 {
+  execsql { SELECT squish(sql) FROM sqlite_master WHERE name = 'tr1' }
+} [list [squish {
+  CREATE TRIGGER tr1 AFTER INSERT ON "t11" BEGIN
+    SELECT "t11".x, * FROM "t11", "t22";
+    INSERT INTO "t22" VALUES(new.x, new.y);
+  END
+}]]
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 5.0 {
+  CREATE TABLE t9(a, b, c);
+  CREATE TABLE t10(a, b, c);
+  CREATE TEMP TABLE t9(a, b, c);
+
+  CREATE TRIGGER temp.t9t AFTER INSERT ON temp.t9 BEGIN
+    INSERT INTO t10 VALUES(new.a, new.b, new.c);
+  END;
+
+  INSERT INTO temp.t9 VALUES(1, 2, 3);
+  SELECT * FROM t10;
+} {1 2 3}
+
+do_execsql_test 5.1 {
+  ALTER TABLE temp.t9 RENAME TO 't1234567890'
+}
+
+do_execsql_test 5.2 {
+  CREATE TABLE t1(a, b);
+  CREATE TABLE t2(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t2 VALUES(3, 4);
+  CREATE VIEW v AS SELECT one.a, one.b, t2.a, t2.b FROM t1 AS one, t2;
+  SELECT * FROM v;
+} {1 2 3 4}
+
+do_catchsql_test 5.3 {
+  ALTER TABLE t2 RENAME TO one;
+} {1 {error in view v after rename: ambiguous column name: one.a}}
+
+do_execsql_test 5.4 {
+  SELECT  *  FROM v
+} {1 2 3 4}
+
+do_execsql_test 5.5 {
+  DROP VIEW v;
+  CREATE VIEW temp.vv AS SELECT one.a, one.b, t2.a, t2.b FROM t1 AS one, t2;
+  SELECT * FROM vv;
+} {1 2 3 4}
+
+do_catchsql_test 5.6 {
+  ALTER TABLE t2 RENAME TO one;
+} {1 {error in view vv after rename: ambiguous column name: one.a}}
+
+#-------------------------------------------------------------------------
+
+ifcapable vtab {
+  register_tcl_module db
+  proc tcl_command {method args} {
+    switch -- $method {
+      xConnect {
+        return "CREATE TABLE t1(a, b, c)"
+      }
+    }
+    return {}
+  }
+  
+  do_execsql_test 6.0 {
+    CREATE VIRTUAL TABLE x1 USING tcl(tcl_command);
+  }
+  
+  do_execsql_test 6.1 {
+    ALTER TABLE x1 RENAME TO x2;
+    SELECT sql FROM sqlite_master WHERE name = 'x2'
+  } {{CREATE VIRTUAL TABLE "x2" USING tcl(tcl_command)}}
+  
+  do_execsql_test 7.1 {
+    CREATE TABLE ddd(db, sql, zOld, zNew, bTemp);
+    INSERT INTO ddd VALUES(
+        'main', 'CREATE TABLE x1(i INTEGER, t TEXT)', 'ddd', NULL, 0
+    ), (
+        'main', 'CREATE TABLE x1(i INTEGER, t TEXT)', NULL, 'eee', 0
+    ), (
+        'main', NULL, 'ddd', 'eee', 0
+    );
+  } {}
+  
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+  do_execsql_test 7.2 {
+    SELECT 
+    sqlite_rename_table(db, 0, 0, sql, zOld, zNew, bTemp)
+    FROM ddd;
+  } {{} {} {}}
+  sqlite3_test_control SQLITE_TESTCTRL_INTERNAL_FUNCTIONS db
+}
+
+#-------------------------------------------------------------------------
+#
+reset_db
+forcedelete test.db2
+do_execsql_test 8.1 {
+  ATTACH 'test.db2' AS aux;
+  PRAGMA foreign_keys = on;
+  CREATE TABLE aux.p1(a INTEGER PRIMARY KEY, b);
+  CREATE TABLE aux.c1(x INTEGER PRIMARY KEY, y REFERENCES p1(a));
+  INSERT INTO aux.p1 VALUES(1, 1);
+  INSERT INTO aux.p1 VALUES(2, 2);
+  INSERT INTO aux.c1 VALUES(NULL, 2);
+  CREATE TABLE aux.c2(x INTEGER PRIMARY KEY, y REFERENCES c1(a));
+}
+
+do_execsql_test 8.2 {
+  ALTER TABLE aux.p1 RENAME TO ppp;
+}
+
+do_execsql_test 8.2 {
+  INSERT INTO aux.c1 VALUES(NULL, 1);
+  SELECT sql FROM aux.sqlite_master WHERE name = 'c1';
+} {{CREATE TABLE c1(x INTEGER PRIMARY KEY, y REFERENCES "ppp"(a))}}
+
+reset_db
+do_execsql_test 9.0 {
+  CREATE TABLE t1(a, b, c);
+  CREATE VIEW v1 AS SELECT * FROM t2;
+}
+do_catchsql_test 9.1 {
+  ALTER TABLE t1 RENAME TO t3;
+} {1 {error in view v1: no such table: main.t2}}
+do_execsql_test 9.2 {
+  DROP VIEW v1;
+  CREATE TRIGGER tr AFTER INSERT ON t1 BEGIN
+    INSERT INTO t2 VALUES(new.a);
+  END;
+}
+do_catchsql_test 9.3 {
+  ALTER TABLE t1 RENAME TO t3;
+} {1 {error in trigger tr: no such table: main.t2}}
+
+forcedelete test.db2
+do_execsql_test 9.4 {
+  DROP TRIGGER tr;
+
+  ATTACH 'test.db2' AS aux;
+  CREATE TRIGGER tr AFTER INSERT ON t1 WHEN new.a IS NULL BEGIN SELECT 1, 2, 3; END;
+
+  CREATE TABLE aux.t1(x);
+  CREATE TEMP TRIGGER tr AFTER INSERT ON aux.t1 BEGIN SELECT 1, 2, 3; END;
+}
+do_execsql_test 9.5 {
+  ALTER TABLE main.t1 RENAME TO t3;
+}
+do_execsql_test 9.6 {
+  SELECT sql FROM sqlite_temp_master;
+  SELECT sql FROM sqlite_master WHERE type='trigger';
+} {
+  {CREATE TRIGGER tr AFTER INSERT ON aux.t1 BEGIN SELECT 1, 2, 3; END}
+  {CREATE TRIGGER tr AFTER INSERT ON "t3" WHEN new.a IS NULL BEGIN SELECT 1, 2, 3; END}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+ifcapable fts5 {
+  do_execsql_test 10.0 {
+    CREATE VIRTUAL TABLE fff USING fts5(x, y, z);
+  }
+
+  do_execsql_test 10.1 {
+    BEGIN;
+      INSERT INTO fff VALUES('a', 'b', 'c');
+      ALTER TABLE fff RENAME TO ggg;
+    COMMIT;
+  }
+
+  do_execsql_test 10.2 {
+    SELECT * FROM ggg;
+  } {a b c}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+forcedelete test.db2
+db func trigger trigger
+set ::trigger [list]
+proc trigger {args} {
+  lappend ::trigger $args
+}
+do_execsql_test 11.0 {
+  ATTACH 'test.db2' AS aux;
+  CREATE TABLE aux.t1(a, b, c);
+  CREATE TABLE main.t1(a, b, c);
+  CREATE TEMP TRIGGER tr AFTER INSERT ON aux.t1 BEGIN
+    SELECT trigger(new.a, new.b, new.c);
+  END;
+}
+
+do_execsql_test 11.1 {
+  INSERT INTO main.t1 VALUES(1, 2, 3);
+  INSERT INTO aux.t1 VALUES(4, 5, 6);
+}
+do_test 11.2 { set ::trigger } {{4 5 6}}
+
+do_execsql_test 11.3 {
+  SELECT name, tbl_name FROM sqlite_temp_master;
+} {tr t1}
+
+do_execsql_test 11.4 {
+  ALTER TABLE main.t1 RENAME TO t2;
+  SELECT name, tbl_name FROM sqlite_temp_master;
+} {tr t1}
+
+do_execsql_test 11.5 {
+  ALTER TABLE aux.t1 RENAME TO t2;
+  SELECT name, tbl_name FROM sqlite_temp_master;
+} {tr t2}
+
+do_execsql_test 11.6 {
+  INSERT INTO aux.t2 VALUES(7, 8, 9);
+}
+do_test 11.7 { set ::trigger } {{4 5 6} {7 8 9}}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 12.0 {
+  CREATE TABLE t1(a);
+  CREATE TABLE t2(w);
+  CREATE TRIGGER temp.r1 AFTER INSERT ON main.t2 BEGIN
+    INSERT INTO t1(a) VALUES(new.w);
+  END;
+  CREATE TEMP TABLE t2(x);
+}
+
+do_execsql_test 12.1 {
+  ALTER TABLE main.t2 RENAME TO t3;
+}
+
+do_execsql_test 12.2 {
+  INSERT INTO t3 VALUES('WWW');
+  SELECT * FROM t1;
+} {WWW}
+
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 13.0 {
+  CREATE TABLE t1(x, y);
+  CREATE TABLE t2(a, b);
+  CREATE TABLE log(c);
+  CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+    INSERT INTO log SELECT y FROM t1, t2;
+  END;
+}
+
+do_execsql_test 13.1 {
+  INSERT INTO t1 VALUES(1, 2);
+}
+
+do_catchsql_test 13.2 {
+  ALTER TABLE t2 RENAME b TO y;
+} {1 {error in trigger tr1 after rename: ambiguous column name: y}}
+
+#-------------------------------------------------------------------------
+reset_db
+
+ifcapable rtree {
+  do_execsql_test 14.0 {
+    CREATE VIRTUAL TABLE rt USING rtree(id, minx, maxx, miny, maxy);
+
+    CREATE TABLE "mytable" ( "fid" INTEGER PRIMARY KEY, "geom" BLOB);
+
+    CREATE TRIGGER tr1 AFTER UPDATE OF "geom" ON "mytable" 
+          WHEN OLD."fid" = NEW."fid" AND NEW."geom" IS NULL BEGIN 
+      DELETE FROM rt WHERE id = OLD."fid"; 
+    END;
+
+    INSERT INTO mytable VALUES(1, X'abcd');
+  }
+
+  do_execsql_test 14.1 {
+    UPDATE mytable SET geom = X'1234'
+  }
+
+  do_execsql_test 14.2 {
+    ALTER TABLE mytable RENAME TO mytable_renamed;
+  }
+
+  do_execsql_test 14.3 {
+    CREATE TRIGGER tr2 AFTER INSERT ON mytable_renamed BEGIN
+      DELETE FROM rt WHERE id=(SELECT min(id) FROM rt);
+    END;
+  }
+
+  do_execsql_test 14.4 {
+    ALTER TABLE mytable_renamed RENAME TO mytable2;
+  }
+}
+
+reset_db
+do_execsql_test 14.5 {
+  CREATE TABLE t1(a, b, c);
+  CREATE VIEW v1 AS SELECT * FROM t1;
+  CREATE TRIGGER xyz AFTER INSERT ON t1 BEGIN
+    SELECT a, b FROM v1;
+  END;
+}
+do_execsql_test 14.6 {
+  ALTER TABLE t1 RENAME TO tt1;
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 15.0 {
+  CREATE TABLE t1(a integer NOT NULL PRIMARY KEY);
+  CREATE VIEW v1 AS SELECT a FROM t1;
+  CREATE TRIGGER tr1 INSTEAD OF INSERT ON v1 BEGIN 
+    UPDATE t1 SET a = NEW.a;
+  END;
+  CREATE TRIGGER tr2 INSTEAD OF INSERT ON v1 BEGIN 
+    SELECT new.a;
+  END;
+  CREATE TABLE t2 (b);
+}
+
+do_execsql_test 15.1 {
+  INSERT INTO v1 VALUES(1);
+  ALTER TABLE t2 RENAME TO t3;
+}
+
+do_execsql_test 15.2 {
+  CREATE TABLE x(f1 integer NOT NULL);
+  CREATE VIEW y AS SELECT f1 AS f1 FROM x;
+  CREATE TRIGGER t INSTEAD OF UPDATE OF f1 ON y BEGIN 
+    UPDATE x SET f1 = NEW.f1; 
+  END;
+  CREATE TABLE z (f1 integer NOT NULL PRIMARY KEY);
+  ALTER TABLE z RENAME TO z2;
+}
+
+do_execsql_test 15.3 {
+  INSERT INTO x VALUES(1), (2), (3);
+  ALTER TABLE x RENAME f1 TO f2;
+  SELECT * FROM x;
+} {1 2 3}
+
+do_execsql_test 15.4 {
+  UPDATE y SET f1 = 'x' WHERE f1 = 1;
+  SELECT * FROM x;
+} {x x x}
+
+do_execsql_test 15.5 {
+  SELECT sql FROM sqlite_master WHERE name = 'y';
+} {{CREATE VIEW y AS SELECT f2 AS f1 FROM x}}
+
+#-------------------------------------------------------------------------
+# Test that it is not possible to rename a shadow table in DEFENSIVE mode.
+#
+ifcapable fts3 {
+  proc vtab_command {method args} {
+    switch -- $method {
+      xConnect {
+        if {[info exists ::vtab_connect_sql]} {
+          execsql $::vtab_connect_sql
+        }
+        return "CREATE TABLE t1(a, b, c)"
+      }
+
+      xBestIndex {
+        set clist [lindex $args 0]
+        if {[llength $clist]!=1} { error "unexpected constraint list" }
+        catch { array unset C }
+        array set C [lindex $clist 0]
+        if {$C(usable)} {
+          return "omit 0 cost 0 rows 1 idxnum 555 idxstr eq!"
+        } else {
+          return "cost 1000000 rows 0 idxnum 0 idxstr scan..."
+        }
+      }
+    }
+
+    return {}
+  }
+
+  register_tcl_module db
+
+  sqlite3_db_config db DEFENSIVE 1
+
+  do_execsql_test 16.0 {
+    CREATE VIRTUAL TABLE y1 USING fts3;
+  }
+
+  do_catchsql_test 16.10 {
+    INSERT INTO y1_segments VALUES(1, X'1234567890');
+  } {1 {table y1_segments may not be modified}}
+
+  do_catchsql_test 16.20 {
+    DROP TABLE y1_segments;
+  } {1 {table y1_segments may not be dropped}}
+
+  do_catchsql_test 16.20 {
+    ALTER TABLE y1_segments RENAME TO abc;
+  } {1 {table y1_segments may not be altered}}
+  sqlite3_db_config db DEFENSIVE 0
+  do_catchsql_test 16.22 {
+    ALTER TABLE y1_segments RENAME TO abc;
+  } {0 {}}
+  sqlite3_db_config db DEFENSIVE 1
+  do_catchsql_test 16.23 {
+    CREATE TABLE y1_segments AS SELECT * FROM abc;
+  } {1 {object name reserved for internal use: y1_segments}}
+  do_catchsql_test 16.24 {
+    CREATE VIEW y1_segments AS SELECT * FROM abc;
+  } {1 {object name reserved for internal use: y1_segments}}
+  sqlite3_db_config db DEFENSIVE 0
+  do_catchsql_test 16.25 {
+    ALTER TABLE abc RENAME TO y1_segments;
+  } {0 {}}
+  sqlite3_db_config db DEFENSIVE 1
+
+  do_execsql_test 16.30 {
+    ALTER TABLE y1 RENAME TO z1;
+  }
+
+  do_execsql_test 16.40 {
+    SELECT * FROM z1_segments;
+  }
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 17.0 {
+  CREATE TABLE sqlite1234 (id integer);
+  ALTER TABLE sqlite1234 RENAME TO User;
+  SELECT name, sql FROM sqlite_master WHERE sql IS NOT NULL;
+} {
+  User {CREATE TABLE "User" (id integer)}
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 18.1.0 {
+  CREATE TABLE t0 (c0 INTEGER, PRIMARY KEY(c0)) WITHOUT ROWID;
+}
+do_execsql_test 18.1.1 {
+  ALTER TABLE t0 RENAME COLUMN c0 TO c1;
+}
+do_execsql_test 18.1.2 {
+  SELECT sql FROM sqlite_master;
+} {{CREATE TABLE t0 (c1 INTEGER, PRIMARY KEY(c1)) WITHOUT ROWID}}
+
+reset_db
+do_execsql_test 18.2.0 {
+  CREATE TABLE t0 (c0 INTEGER, PRIMARY KEY(c0));
+}
+do_execsql_test 18.2.1 {
+  ALTER TABLE t0 RENAME COLUMN c0 TO c1;
+}
+do_execsql_test 18.2.2 {
+  SELECT sql FROM sqlite_master;
+} {{CREATE TABLE t0 (c1 INTEGER, PRIMARY KEY(c1))}}
+
+# 2020-02-23 ticket f50af3e8a565776b
+reset_db
+do_execsql_test 19.100 {
+  CREATE TABLE t1(x);
+  CREATE VIEW t2 AS SELECT 1 FROM t1, (t1 AS a0, t1);
+  ALTER TABLE t1 RENAME TO t3;
+  SELECT sql FROM sqlite_master;
+} {{CREATE TABLE "t3"(x)} {CREATE VIEW t2 AS SELECT 1 FROM "t3", ("t3" AS a0, "t3")}}
+do_execsql_test 19.110 {
+  INSERT INTO t3(x) VALUES(123);
+  SELECT * FROM t2;
+} {1}
+do_execsql_test 19.120 {
+  INSERT INTO t3(x) VALUES('xyz');
+  SELECT * FROM t2;
+} {1 1 1 1 1 1 1 1}
+
+# Ticket 4722bdab08cb14
+reset_db
+do_execsql_test 20.0 {
+  CREATE TABLE a(a);
+  CREATE VIEW b AS SELECT(SELECT *FROM c JOIN a USING(d, a, a, a) JOIN a) IN();
+}
+do_execsql_test 20.1 {
+  ALTER TABLE a RENAME a TO e;
+} {}
+
+reset_db
+do_execsql_test 21.0 {
+  CREATE TABLE a(b);
+  CREATE VIEW c AS 
+      SELECT NULL INTERSECT 
+      SELECT NULL ORDER BY
+      likelihood(NULL, (d, (SELECT c)));
+} {}
+do_catchsql_test 21.1 {
+  SELECT likelihood(NULL, (d, (SELECT c)));
+} {1 {second argument to likelihood() must be a constant between 0.0 and 1.0}}
+do_catchsql_test 21.2 {
+  SELECT * FROM c;
+} {1 {1st ORDER BY term does not match any column in the result set}}
+
+do_catchsql_test 21.3 {
+  ALTER TABLE a RENAME TO e;
+} {1 {error in view c: 1st ORDER BY term does not match any column in the result set}}
+
+# After forum thread https://sqlite.org/forum/forumpost/ddbe1c7efa
+# Ensure that PRAGMA schema_version=N causes a full schema reload.
+#
+reset_db
+do_execsql_test 22.0 {
+  CREATE TABLE t1(a INT, b TEXT NOT NULL);
+  INSERT INTO t1 VALUES(1,2),('a','b');
+  BEGIN;
+  PRAGMA writable_schema=ON;
+  UPDATE sqlite_schema SET sql='CREATE TABLE t1(a INT, b TEXT)' WHERE name LIKE 't1';
+  PRAGMA schema_version=1234;
+  COMMIT;
+  PRAGMA integrity_check;
+} {ok}
+do_execsql_test 22.1 {
+  ALTER TABLE t1 ADD COLUMN c INT DEFAULT 78;
+  SELECT * FROM t1;
+} {1 2 78 a b 78}
+
+finish_test

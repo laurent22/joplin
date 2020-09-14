@@ -1,0 +1,87 @@
+# 2008 July 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file experiments with recursion using the "test_eval()" SQL function
+# in order to make sure that SQLite is reentrant.
+#
+# $Id: eval.test,v 1.2 2008/10/13 10:37:50 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Create a table to work with.
+#
+do_test eval-1.1 {
+  execsql {
+    CREATE TABLE t1(x INTEGER PRIMARY KEY); 
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 SELECT x+2 FROM t1;
+    INSERT INTO t1 SELECT x+4 FROM t1;
+    INSERT INTO t1 SELECT x+8 FROM t1;
+    INSERT INTO t1 SELECT x+16 FROM t1;
+    INSERT INTO t1 SELECT x+32 FROM t1;
+    INSERT INTO t1 SELECT x+64 FROM t1;
+    INSERT INTO t1 SELECT x+128 FROM t1;
+    INSERT INTO t1 SELECT x+256 FROM t1;
+    SELECT count(*), max(x) FROM t1;
+  }
+} {512 512}
+do_test eval-1.2 {
+  execsql {
+    SELECT x, test_eval('SELECT max(x) FROM t1 WHERE x<' || x) FROM t1 LIMIT 5
+  }
+} {1 {} 2 1 3 2 4 3 5 4}
+
+# Delete a row out from under a read cursor in the middle of
+# collecting the arguments for a single row in a result set.
+# Verify that subsequent rows come out as NULL.
+#
+do_test eval-2.1 {
+  execsql {
+    CREATE TABLE t2(x,y);
+    INSERT INTO t2 SELECT x, x+1 FROM t1 WHERE x<5;
+    SELECT x, test_eval('DELETE FROM t2 WHERE x='||x), y FROM t2;
+  }
+} {1 {} {} 2 {} {} 3 {} {} 4 {} {}}
+do_test eval-2.2 {
+  execsql {
+    SELECT * FROM t2
+  }
+} {}
+do_test eval-2.3 {
+  execsql {
+    INSERT INTO t2 SELECT x, x+1 FROM t1 WHERE x<5;
+    SELECT x, test_eval('DELETE FROM t2 WHERE x='||x), y FROM t2
+     ORDER BY rowid DESC;
+  }
+} {4 {} {} 3 {} {} 2 {} {} 1 {} {}}
+do_test eval-2.4 {
+  execsql {
+    SELECT * FROM t2
+  }
+} {}
+
+# Modify a row while it is being read.
+#
+do_test eval-3.1 {
+  execsql {
+    INSERT INTO t2 SELECT x, x+1 FROM t1 WHERE x<5;
+    SELECT x, test_eval('UPDATE t2 SET y=y+100 WHERE x='||x), y FROM t2;
+  }
+} {1 {} 102 2 {} 103 3 {} 104 4 {} 105}
+
+do_test eval-4.1 {
+  execsql { SELECT test_eval('SELECT "abcdefghij"') }
+} {abcdefghij}
+
+finish_test

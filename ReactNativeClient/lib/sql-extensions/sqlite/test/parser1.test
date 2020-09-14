@@ -1,0 +1,103 @@
+# 2014-08-24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+# The focus of this script is testing details of the SQL language parser.
+# 
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_catchsql_test parser1-1.1 {
+  CREATE TABLE t1(
+    a TEXT PRIMARY KEY,
+    b TEXT,
+    FOREIGN KEY(b COLLATE nocase DESC) REFERENCES t1(a COLLATE binary ASC)
+  );
+} {1 {syntax error after column name "b"}}
+
+
+# Verify that a legacy schema in the sqlite_master file is allowed to have
+# COLLATE, ASC, and DESC keywords on the id list of a FK constraint, and that
+# those keywords are silently ignored.
+#
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test parser1-1.2 {
+  CREATE TABLE t1(
+    a TEXT PRIMARY KEY,
+    b TEXT,
+    FOREIGN KEY(b) REFERENCES t1(a)
+  );
+  INSERT INTO t1 VALUES('abc',NULL),('xyz','abc');
+  PRAGMA writable_schema=on;
+  UPDATE sqlite_master SET sql='CREATE TABLE t1(
+    a TEXT PRIMARY KEY,
+    b TEXT,
+    FOREIGN KEY(b COLLATE nocase) REFERENCES t1(a)
+  )' WHERE name='t1';
+  SELECT name FROM sqlite_master WHERE sql LIKE '%collate%';
+} {t1}
+sqlite3 db2 test.db
+do_test parser1-1.3 {
+  sqlite3 db2 test.db
+  db2 eval {SELECT * FROM t1 ORDER BY 1}
+} {abc {} xyz abc}
+db2 close
+
+do_execsql_test parser1-1.4 {
+  UPDATE sqlite_master SET sql='CREATE TABLE t1(
+    a TEXT PRIMARY KEY,
+    b TEXT,
+    FOREIGN KEY(b ASC) REFERENCES t1(a)
+  )' WHERE name='t1';
+  SELECT name FROM sqlite_master WHERE sql LIKE '%ASC%';
+} {t1}
+sqlite3 db2 test.db
+do_test parser1-1.5 {
+  sqlite3 db2 test.db
+  db2 eval {SELECT * FROM t1 ORDER BY 1}
+} {abc {} xyz abc}
+db2 close
+
+do_catchsql_test parser1-2.1 {
+  WITH RECURSIVE
+    c(x COLLATE binary) AS (VALUES(1) UNION SELECT x+1 FROM c WHERE x<5)
+  SELECT x FROM c;
+} {1 {syntax error after column name "x"}}
+do_catchsql_test parser1-2.2 {
+  WITH RECURSIVE
+    c(x ASC) AS (VALUES(1) UNION SELECT x+1 FROM c WHERE x<5)
+  SELECT x FROM c;
+} {1 {syntax error after column name "x"}}
+
+# Verify that the comma between multiple table constraints is
+# optional.
+#
+# The missing comma is technically a syntax error.  But we have to support
+# it because there might be legacy databases that omit the commas in their
+# sqlite_master tables.
+#
+do_execsql_test parser1-3.1 {
+  CREATE TABLE t300(id INTEGER PRIMARY KEY);
+  CREATE TABLE t301(
+    id INTEGER PRIMARY KEY,
+    c1 INTEGER NOT NULL,
+    c2 INTEGER NOT NULL,
+    c3 BOOLEAN NOT NULL DEFAULT 0,
+    FOREIGN KEY(c1) REFERENCES t300(id) ON DELETE CASCADE ON UPDATE RESTRICT
+        /* no comma */
+    FOREIGN KEY(c2) REFERENCES t300(id) ON DELETE CASCADE ON UPDATE RESTRICT
+        /* no comma */
+    UNIQUE(c1, c2)
+  );
+  PRAGMA foreign_key_list(t301);
+} {0 0 t300 c2 id RESTRICT CASCADE NONE 1 0 t300 c1 id RESTRICT CASCADE NONE}
+
+finish_test

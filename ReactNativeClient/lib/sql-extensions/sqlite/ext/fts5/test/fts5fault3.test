@@ -1,0 +1,112 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file is focused on OOM errors.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+source $testdir/malloc_common.tcl
+set testprefix fts5fault3
+
+# If SQLITE_ENABLE_FTS3 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# An OOM while resuming a partially completed segment merge.
+#
+db func rnddoc fts5_rnddoc 
+do_test 1.0 {
+  expr srand(0)
+  execsql {
+    CREATE VIRTUAL TABLE xx USING fts5(x);
+    INSERT INTO xx(xx, rank) VALUES('pgsz', 32);
+    INSERT INTO xx(xx, rank) VALUES('automerge', 16);
+  }
+  for {set i 0} {$i < 10} {incr i} {
+    execsql {
+      BEGIN;
+        INSERT INTO xx(x) VALUES(rnddoc(20));
+        INSERT INTO xx(x) VALUES(rnddoc(20));
+        INSERT INTO xx(x) VALUES(rnddoc(20));
+      COMMIT
+    }
+  }
+
+  execsql {
+    INSERT INTO xx(xx, rank) VALUES('automerge', 2);
+    INSERT INTO xx(xx, rank) VALUES('merge', 50);
+  }
+} {}
+faultsim_save_and_close
+
+do_faultsim_test 1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO xx(xx, rank) VALUES('merge', 1) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+#-------------------------------------------------------------------------
+# An OOM while flushing an unusually large term to disk.
+#
+reset_db
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE xx USING fts5(x);
+  INSERT INTO xx(xx, rank) VALUES('pgsz', 32);
+}
+faultsim_save_and_close
+
+set    doc "a long term abcdefghijklmnopqrstuvwxyz "
+append doc "and then abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz "
+append doc [string repeat "abcdefghijklmnopqrstuvwxyz" 10]
+
+do_faultsim_test 2 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO xx(x) VALUES ($::doc) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+#-------------------------------------------------------------------------
+# An OOM while flushing an unusually large term to disk.
+#
+reset_db
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE xx USING fts5(x);
+}
+faultsim_save_and_close
+
+set doc [fts5_rnddoc 1000]
+do_faultsim_test 3.1 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO xx(x) VALUES ($::doc) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+set doc [string repeat "abc " 100]
+do_faultsim_test 3.2 -faults oom-* -prep {
+  faultsim_restore_and_reopen
+} -body {
+  execsql { INSERT INTO xx(x) VALUES ($::doc) }
+} -test {
+  faultsim_test_result [list 0 {}]
+}
+
+
+
+finish_test

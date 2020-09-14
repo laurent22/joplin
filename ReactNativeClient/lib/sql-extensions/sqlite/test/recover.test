@@ -1,0 +1,134 @@
+# 2019 April 23
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test the shell tool ".ar" command.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix recover
+
+ifcapable !vtab {
+  finish_test; return
+}
+set CLI [test_find_cli]
+
+proc compare_result {db1 db2 sql} {
+  set r1 [$db1 eval $sql]
+  set r2 [$db2 eval $sql]
+  if {$r1 != $r2} {
+  puts "r1: $r1"
+  puts "r2: $r2"
+    error "mismatch for $sql"
+  }
+  return ""
+}
+
+proc compare_dbs {db1 db2} {
+  compare_result $db1 $db2 "SELECT sql FROM sqlite_master ORDER BY 1"
+  foreach tbl [$db1 eval {SELECT name FROM sqlite_master WHERE type='table'}] {
+    compare_result $db1 $db2 "SELECT * FROM $tbl"
+  }
+}
+
+proc do_recover_test {tn {tsql {}} {res {}}} {
+  set fd [open "|$::CLI test.db .recover"]
+  fconfigure $fd -encoding binary
+  fconfigure $fd -translation binary
+  set sql [read $fd]
+  close $fd
+
+  forcedelete test.db2
+  sqlite3 db2 test.db2
+  execsql $sql db2
+  if {$tsql==""} {
+    uplevel [list do_test $tn [list compare_dbs db db2] {}]
+  } else {
+    uplevel [list do_execsql_test -db db2 $tn $tsql $res]
+  }
+  db2 close
+}
+
+set doc {
+  hello
+  world
+}
+do_execsql_test 1.1.1 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  INSERT INTO t1 VALUES(1, 4, X'1234567800');
+  INSERT INTO t1 VALUES(2, 'test', 8.1);
+  INSERT INTO t1 VALUES(3, $doc, 8.4);
+}
+do_recover_test 1.1.2
+
+do_execsql_test 1.2.1 "
+  DELETE FROM t1;
+  INSERT INTO t1 VALUES(13, 'hello\r\nworld', 13);
+"
+do_recover_test 1.2.2
+
+do_execsql_test 1.3.1 "
+  CREATE TABLE t2(i INTEGER PRIMARY KEY AUTOINCREMENT, b, c);
+  INSERT INTO t2 VALUES(NULL, 1, 2);
+  INSERT INTO t2 VALUES(NULL, 3, 4);
+  INSERT INTO t2 VALUES(NULL, 5, 6);
+  CREATE TABLE t3(i INTEGER PRIMARY KEY AUTOINCREMENT, b, c);
+  INSERT INTO t3 VALUES(NULL, 1, 2);
+  INSERT INTO t3 VALUES(NULL, 3, 4);
+  INSERT INTO t3 VALUES(NULL, 5, 6);
+  DELETE FROM t2;
+"
+do_recover_test 1.3.2
+
+#-------------------------------------------------------------------------
+reset_db
+do_execsql_test 2.1.0 {
+  PRAGMA auto_vacuum = 0;
+  CREATE TABLE t1(a, b, c, PRIMARY KEY(b, c)) WITHOUT ROWID;
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+  INSERT INTO t1 VALUES(7, 8, 9);
+}
+
+do_recover_test 2.1.1
+
+do_execsql_test 2.2.0 {
+  PRAGMA writable_schema = 1;
+  DELETE FROM sqlite_master WHERE name='t1';
+}
+do_recover_test 2.2.1 {
+  SELECT name FROM sqlite_master
+} {lost_and_found}
+
+do_execsql_test 2.3.0 {
+  CREATE TABLE lost_and_found(a, b, c);
+}
+do_recover_test 2.3.1 {
+  SELECT name FROM sqlite_master
+} {lost_and_found lost_and_found_0}
+
+do_execsql_test 2.4.0 {
+  CREATE TABLE lost_and_found_0(a, b, c);
+}
+do_recover_test 2.4.1 {
+  SELECT name FROM sqlite_master;
+  SELECT * FROM lost_and_found_1;
+} {lost_and_found lost_and_found_0 lost_and_found_1
+  2 2 3 {} 2 3 1
+  2 2 3 {} 5 6 4
+  2 2 3 {} 8 9 7
+}
+
+#-------------------------------------------------------------------------
+reset_db
+do_recover_test 3.0
+
+finish_test

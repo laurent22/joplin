@@ -1,0 +1,1353 @@
+# 2010 May 5
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/malloc_common.tcl
+source $testdir/wal_common.tcl
+
+set testprefix wal2
+
+ifcapable !wal {finish_test ; return }
+
+set sqlite_sync_count 0
+proc cond_incr_sync_count {adj} {
+  global sqlite_sync_count
+  if {$::tcl_platform(platform) == "windows"} {
+    incr sqlite_sync_count $adj
+  } {
+    ifcapable !dirsync {
+      incr sqlite_sync_count $adj
+    }
+  }
+}
+
+proc set_tvfs_hdr {file args} {
+
+  # Set $nHdr to the number of bytes in the wal-index header:
+  set nHdr 48
+  set nInt [expr {$nHdr/4}]
+
+  if {[llength $args]>2} {
+    error {wrong # args: should be "set_tvfs_hdr fileName ?val1? ?val2?"}
+  }
+
+  set blob [tvfs shm $file]
+  if {$::tcl_platform(byteOrder)=="bigEndian"} {set fmt I} {set fmt i}
+
+  if {[llength $args]} {
+    set ia [lindex $args 0]
+    set ib $ia
+    if {[llength $args]==2} {
+      set ib [lindex $args 1]
+    }
+    binary scan $blob a[expr $nHdr*2]a* dummy tail
+    set blob [binary format ${fmt}${nInt}${fmt}${nInt}a* $ia $ib $tail]
+    tvfs shm $file $blob
+  }
+
+  binary scan $blob ${fmt}${nInt} ints
+  return $ints
+}
+
+proc incr_tvfs_hdr {file idx incrval} {
+  set ints [set_tvfs_hdr $file]
+  set v [lindex $ints $idx]
+  incr v $incrval
+  lset ints $idx $v
+  set_tvfs_hdr $file $ints
+}
+
+
+#-------------------------------------------------------------------------
+# Test case wal2-1.*:
+#
+# Set up a small database containing a single table. The database is not
+# checkpointed during the test - all content resides in the log file.
+#
+# Two connections are established to the database file - a writer ([db])
+# and a reader ([db2]). For each of the 8 integer fields in the wal-index
+# header (6 fields and 2 checksum values), do the following:
+#
+#   1. Modify the database using the writer.
+#
+#   2. Attempt to read the database using the reader. Before the reader
+#      has a chance to snapshot the wal-index header, increment one
+#      of the integer fields (so that the reader ends up with a corrupted
+#      header).
+#
+#   3. Check that the reader recovers the wal-index and reads the correct
+#      database content.
+#
+do_test wal2-1.0 {
+  proc tvfs_cb {method filename args} { 
+    set ::filename $filename
+    return SQLITE_OK 
+  }
+
+  testvfs tvfs
+  tvfs script tvfs_cb
+  tvfs filter xShmOpen
+
+  sqlite3 db  test.db -vfs tvfs
+  sqlite3 db2 test.db -vfs tvfs
+
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a);
+  } db2
+  execsql {
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(4);
+    SELECT count(a), sum(a) FROM t1;
+  }
+} {4 10}
+do_test wal2-1.1 {
+  execsql { SELECT count(a), sum(a) FROM t1 } db2
+} {4 10}
+
+set RECOVER [list                                      \
+  {0 1 lock exclusive}   {1 2 lock exclusive}          \
+  {4 1 lock exclusive}   {4 1 unlock exclusive}        \
+  {5 1 lock exclusive}   {5 1 unlock exclusive}        \
+  {6 1 lock exclusive}   {6 1 unlock exclusive}        \
+  {7 1 lock exclusive}   {7 1 unlock exclusive}        \
+  {1 2 unlock exclusive} {0 1 unlock exclusive}        \
+]
+set READ [list                                         \
+  {4 1 lock shared}    {4 1 unlock shared}             \
+]
+set INITSLOT [list                                     \
+  {4 1 lock exclusive} {4 1 unlock exclusive}          \
+]
+
+foreach {tn iInsert res wal_index_hdr_mod wal_locks} "
+         2    5   {5 15}    0             {$RECOVER $READ}
+         3    6   {6 21}    1             {$RECOVER $READ}
+         4    7   {7 28}    2             {$RECOVER $READ}
+         5    8   {8 36}    3             {$RECOVER $READ}
+         6    9   {9 45}    4             {$RECOVER $READ}
+         7   10   {10 55}   5             {$RECOVER $READ}
+         8   11   {11 66}   6             {$RECOVER $READ}
+         9   12   {12 78}   7             {$RECOVER $READ}
+        10   13   {13 91}   8             {$RECOVER $READ}
+        11   14   {14 105}  9             {$RECOVER $READ}
+        12   15   {15 120}  -1            {$INITSLOT $READ}
+" {
+
+  do_test wal2-1.$tn.1 {
+    execsql { INSERT INTO t1 VALUES($iInsert) }
+    set ::locks [list]
+    proc tvfs_cb {method args} {
+      lappend ::locks [lindex $args 2]
+      return SQLITE_OK
+    }
+    tvfs filter xShmLock
+    if {$::wal_index_hdr_mod >= 0} {
+      incr_tvfs_hdr $::filename $::wal_index_hdr_mod 1
+    }
+    execsql { SELECT count(a), sum(a) FROM t1 } db2
+  } $res
+
+  do_test wal2-1.$tn.2 {
+    set ::locks
+  } $wal_locks
+}
+db close
+db2 close
+tvfs delete
+forcedelete test.db test.db-wal test.db-journal
+
+#-------------------------------------------------------------------------
+# This test case is very similar to the previous one, except, after
+# the reader reads the corrupt wal-index header, but before it has
+# a chance to re-read it under the cover of the RECOVER lock, the
+# wal-index header is replaced with a valid, but out-of-date, header.
+#
+# Because the header checksum looks Ok, the reader does not run recovery,
+# it simply drops back to a READ lock and proceeds. But because the
+# header is out-of-date, the reader reads the out-of-date snapshot.
+#
+# After this, the header is corrupted again and the reader is allowed
+# to run recovery. This time, it sees an up-to-date snapshot of the
+# database file.
+#
+set WRITER [list 0 1 lock exclusive]
+set LOCKS  [list \
+  {0 1 lock exclusive} {0 1 unlock exclusive} \
+  {4 1 lock exclusive} {4 1 unlock exclusive} \
+  {4 1 lock shared}    {4 1 unlock shared}    \
+]
+do_test wal2-2.0 {
+
+  testvfs tvfs
+  tvfs script tvfs_cb
+  tvfs filter xShmOpen
+  proc tvfs_cb {method args} {
+    set ::filename [lindex $args 0]
+    return SQLITE_OK
+  }
+
+  sqlite3 db  test.db -vfs tvfs
+  sqlite3 db2 test.db -vfs tvfs
+
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a);
+  } db2
+  execsql {
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(4);
+    SELECT count(a), sum(a) FROM t1;
+  }
+} {4 10}
+do_test wal2-2.1 {
+  execsql { SELECT count(a), sum(a) FROM t1 } db2
+} {4 10}
+
+foreach {tn iInsert res0 res1 wal_index_hdr_mod} {
+         2    5   {4 10}   {5 15}    0
+         3    6   {5 15}   {6 21}    1
+         4    7   {6 21}   {7 28}    2
+         5    8   {7 28}   {8 36}    3
+         6    9   {8 36}   {9 45}    4
+         7   10   {9 45}   {10 55}   5
+         8   11   {10 55}  {11 66}   6
+         9   12   {11 66}  {12 78}   7
+} {
+  tvfs filter xShmLock
+
+  do_test wal2-2.$tn.1 {
+    set oldhdr [set_tvfs_hdr $::filename]
+    execsql { INSERT INTO t1 VALUES($iInsert) }
+    execsql { SELECT count(a), sum(a) FROM t1 }
+  } $res1
+
+  do_test wal2-2.$tn.2 {
+    set ::locks [list]
+    proc tvfs_cb {method args} {
+      set lock [lindex $args 2]
+      lappend ::locks $lock
+      if {$lock == $::WRITER} {
+        set_tvfs_hdr $::filename $::oldhdr
+      }
+      return SQLITE_OK
+    }
+
+    if {$::wal_index_hdr_mod >= 0} {
+      incr_tvfs_hdr $::filename $::wal_index_hdr_mod 1
+    }
+    execsql { SELECT count(a), sum(a) FROM t1 } db2
+  } $res0
+
+  do_test wal2-2.$tn.3 {
+    set ::locks
+  } $LOCKS
+
+  do_test wal2-2.$tn.4 {
+    set ::locks [list]
+    proc tvfs_cb {method args} {
+      set lock [lindex $args 2]
+      lappend ::locks $lock
+      return SQLITE_OK
+    }
+
+    if {$::wal_index_hdr_mod >= 0} {
+      incr_tvfs_hdr $::filename $::wal_index_hdr_mod 1
+    }
+    execsql { SELECT count(a), sum(a) FROM t1 } db2
+  } $res1
+}
+db close
+db2 close
+tvfs delete
+forcedelete test.db test.db-wal test.db-journal
+
+
+if 0 {
+#-------------------------------------------------------------------------
+# This test case - wal2-3.* - tests the response of the library to an
+# SQLITE_BUSY when attempting to obtain a READ or RECOVER lock.
+#
+#   wal2-3.0 - 2: SQLITE_BUSY when obtaining a READ lock
+#   wal2-3.3 - 6: SQLITE_BUSY when obtaining a RECOVER lock
+#
+do_test wal2-3.0 {
+  proc tvfs_cb {method args} {
+    if {$method == "xShmLock"} {
+      if {[info exists ::locked]} { return SQLITE_BUSY }
+    }
+    return SQLITE_OK
+  }
+
+  proc busyhandler x {
+    if {$x>3} { unset -nocomplain ::locked }
+    return 0
+  }
+
+  testvfs tvfs
+  tvfs script tvfs_cb
+  sqlite3 db test.db -vfs tvfs
+  db busy busyhandler
+
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(4);
+  } 
+
+  set ::locked 1
+  info exists ::locked
+} {1}
+do_test wal2-3.1 {
+  execsql { SELECT count(a), sum(a) FROM t1 }
+} {4 10}
+do_test wal2-3.2 {
+  info exists ::locked
+} {0}
+
+do_test wal2-3.3 {
+  proc tvfs_cb {method args} {
+    if {$method == "xShmLock"} {
+      if {[info exists ::sabotage]} {
+        unset -nocomplain ::sabotage
+        incr_tvfs_hdr [lindex $args 0] 1 1
+      }
+      if {[info exists ::locked] && [lindex $args 2] == "RECOVER"} {
+        return SQLITE_BUSY
+      }
+    }
+    return SQLITE_OK
+  }
+  set ::sabotage 1
+  set ::locked 1
+  list [info exists ::sabotage] [info exists ::locked]
+} {1 1}
+do_test wal2-3.4 {
+  execsql { SELECT count(a), sum(a) FROM t1 }
+} {4 10}
+do_test wal2-3.5 {
+  list [info exists ::sabotage] [info exists ::locked]
+} {0 0}
+db close
+tvfs delete
+forcedelete test.db test.db-wal test.db-journal
+
+}
+
+#-------------------------------------------------------------------------
+# Test that a database connection using a VFS that does not support the
+# xShmXXX interfaces cannot open a WAL database.
+#
+do_test wal2-4.1 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum = 0;
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE data(x);
+    INSERT INTO data VALUES('need xShmOpen to see this');
+    PRAGMA wal_checkpoint;
+  }
+  # Three pages in the WAL file at this point: One copy of page 1 and two
+  # of the root page for table "data".
+} {wal 0 3 3}
+do_test wal2-4.2 {
+  db close
+  testvfs tvfs -noshm 1
+  sqlite3 db test.db -vfs tvfs
+  catchsql { SELECT * FROM data }
+} {1 {unable to open database file}}
+do_test wal2-4.3 {
+  db close
+  testvfs tvfs
+  sqlite3 db test.db -vfs tvfs
+  catchsql { SELECT * FROM data }
+} {0 {{need xShmOpen to see this}}}
+db close
+tvfs delete
+
+#-------------------------------------------------------------------------
+# Test that if a database connection is forced to run recovery before it
+# can perform a checkpoint, it does not transition into RECOVER state.
+#
+# UPDATE: This has now changed. When running a checkpoint, if recovery is
+# required the client grabs all exclusive locks (just as it would for a
+# recovery performed as a pre-cursor to a normal database transaction).
+#
+set expected_locks [list]
+lappend expected_locks {1 1 lock exclusive}   ;# Lock checkpoint
+lappend expected_locks {0 1 lock exclusive}   ;# Lock writer
+lappend expected_locks {2 1 lock exclusive}   ;# Lock recovery
+# lappend expected_locks {4 4 lock exclusive}   ;# Lock all aReadMark[]
+lappend expected_locks {4 1 lock exclusive}   ;# Lock aReadMark[1]
+lappend expected_locks {4 1 unlock exclusive} ;# Unlock aReadMark[1]
+lappend expected_locks {5 1 lock exclusive}  
+lappend expected_locks {5 1 unlock exclusive}
+lappend expected_locks {6 1 lock exclusive} 
+lappend expected_locks {6 1 unlock exclusive}
+lappend expected_locks {7 1 lock exclusive} 
+lappend expected_locks {7 1 unlock exclusive}
+lappend expected_locks {2 1 unlock exclusive} ;# Unlock recovery 
+# lappend expected_locks {4 4 unlock exclusive} ;# Unlock all aReadMark[] 
+lappend expected_locks {0 1 unlock exclusive} ;# Unlock writer
+lappend expected_locks {3 1 lock exclusive}   ;# Lock aReadMark[0]
+lappend expected_locks {3 1 unlock exclusive} ;# Unlock aReadMark[0]
+lappend expected_locks {1 1 unlock exclusive} ;# Unlock checkpoint
+do_test wal2-5.1 {
+  proc tvfs_cb {method args} {
+    set ::shm_file [lindex $args 0]
+    if {$method == "xShmLock"} { lappend ::locks [lindex $args 2] }
+    return $::tvfs_cb_return
+  }
+  set tvfs_cb_return SQLITE_OK
+
+  testvfs tvfs
+  tvfs script tvfs_cb
+
+  sqlite3 db test.db -vfs tvfs
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE x(y);
+    INSERT INTO x VALUES(1);
+  }
+
+  incr_tvfs_hdr $::shm_file 1 1
+  set ::locks [list]
+  execsql { PRAGMA wal_checkpoint }
+  set ::locks
+} $expected_locks
+db close
+tvfs delete
+
+#-------------------------------------------------------------------------
+# This block, test cases wal2-6.*, tests the operation of WAL with
+# "PRAGMA locking_mode=EXCLUSIVE" set.
+#
+#   wal2-6.1.*: Changing to WAL mode before setting locking_mode=exclusive.
+#
+#   wal2-6.2.*: Changing to WAL mode after setting locking_mode=exclusive.
+#
+#   wal2-6.3.*: Changing back to rollback mode from WAL mode after setting 
+#               locking_mode=exclusive.
+#
+#   wal2-6.4.*: Check that xShmLock calls are omitted in exclusive locking
+#               mode.
+#
+#   wal2-6.5.*: 
+#
+#   wal2-6.6.*: Check that if the xShmLock() to reaquire a WAL read-lock when
+#               exiting exclusive mode fails (i.e. SQLITE_IOERR), then the
+#               connection silently remains in exclusive mode.
+#
+do_test wal2-6.1.1 {
+  forcedelete test.db test.db-wal test.db-journal
+  sqlite3 db test.db
+  execsql {
+    Pragma Journal_Mode = Wal;
+  }
+} {wal}
+do_test wal2-6.1.2 {
+  execsql { PRAGMA lock_status }
+} {main unlocked temp closed}
+do_test wal2-6.1.3 {
+  execsql {
+    SELECT * FROM sqlite_master;
+    Pragma Locking_Mode = Exclusive;
+  }
+  execsql {
+    BEGIN;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    COMMIT;
+    PRAGMA lock_status;
+  }
+} {main exclusive temp closed}
+do_test wal2-6.1.4 {
+  execsql { 
+    PRAGMA locking_mode = normal; 
+    PRAGMA lock_status;
+  }
+} {normal main exclusive temp closed}
+do_test wal2-6.1.5 {
+  execsql { 
+    SELECT * FROM t1;
+    PRAGMA lock_status;
+  }
+} {1 2 main shared temp closed}
+do_test wal2-6.1.6 {
+  execsql {
+    INSERT INTO t1 VALUES(3, 4);
+    PRAGMA lock_status;
+  }
+} {main shared temp closed}
+db close
+
+do_test wal2-6.2.1 {
+  forcedelete test.db test.db-wal test.db-journal
+  sqlite3 db test.db
+  execsql {
+    Pragma Locking_Mode = Exclusive;
+    Pragma Journal_Mode = Wal;
+    Pragma Lock_Status;
+  }
+} {exclusive wal main exclusive temp closed}
+do_test wal2-6.2.2 {
+  execsql {
+    BEGIN;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    COMMIT;
+    Pragma loCK_STATus;
+  }
+} {main exclusive temp closed}
+do_test wal2-6.2.3 {
+  db close
+  sqlite3 db test.db
+  execsql { SELECT * FROM sqlite_master }
+  execsql { PRAGMA LOCKING_MODE = EXCLUSIVE }
+} {exclusive}
+do_test wal2-6.2.4 {
+  execsql {
+    SELECT * FROM t1;
+    pragma lock_status;
+  }
+} {1 2 main shared temp closed}
+do_test wal2-6.2.5 {
+  execsql {
+    INSERT INTO t1 VALUES(3, 4);
+    pragma lock_status;
+  }
+} {main exclusive temp closed}
+do_test wal2-6.2.6 {
+  execsql {
+    PRAGMA locking_mode = NORMAL;
+    pragma lock_status;
+  }
+} {normal main exclusive temp closed}
+do_test wal2-6.2.7 {
+  execsql {
+    BEGIN IMMEDIATE; COMMIT;
+    pragma lock_status;
+  }
+} {main shared temp closed}
+do_test wal2-6.2.8 {
+  execsql {
+    PRAGMA locking_mode = EXCLUSIVE;
+    BEGIN IMMEDIATE; COMMIT;
+    PRAGMA locking_mode = NORMAL;
+  }
+  execsql {
+    SELECT * FROM t1;
+    pragma lock_status;
+  }
+} {1 2 3 4 main shared temp closed}
+do_test wal2-6.2.9 {
+  execsql {
+    INSERT INTO t1 VALUES(5, 6);
+    SELECT * FROM t1;
+    pragma lock_status;
+  }
+} {1 2 3 4 5 6 main shared temp closed}
+db close
+
+do_test wal2-6.3.1 {
+  forcedelete test.db test.db-wal test.db-journal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA journal_mode = WAL;
+    PRAGMA locking_mode = exclusive;
+    BEGIN;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES('Chico');
+      INSERT INTO t1 VALUES('Harpo');
+    COMMIT;
+  }
+  list [file exists test.db-wal] [file exists test.db-journal]
+} {1 0}
+do_test wal2-6.3.2 {
+  execsql { PRAGMA journal_mode = DELETE }
+  file exists test.db-wal
+} {0}
+do_test wal2-6.3.3 {
+  execsql { PRAGMA lock_status }
+} {main exclusive temp closed}
+do_test wal2-6.3.4 {
+  execsql { 
+    BEGIN;
+      INSERT INTO t1 VALUES('Groucho');
+  }
+} {}
+if {[atomic_batch_write test.db]==0} {
+  do_test wal2-6.3.4.1 {
+    list [file exists test.db-wal] [file exists test.db-journal]
+  } {0 1}
+}
+do_test wal2-6.3.5 {
+  execsql { PRAGMA lock_status }
+} {main exclusive temp closed}
+do_test wal2-6.3.6 {
+  execsql { COMMIT }
+} {}
+if {[atomic_batch_write test.db]==0} {
+  do_test wal2-6.3.6.1 {
+    list [file exists test.db-wal] [file exists test.db-journal]
+  } {0 1}
+}
+do_test wal2-6.3.7 {
+  execsql { PRAGMA lock_status }
+} {main exclusive temp closed}
+db close
+
+
+# This test - wal2-6.4.* - uses a single database connection and the
+# [testvfs] instrumentation to test that xShmLock() is being called
+# as expected when a WAL database is used with locking_mode=exclusive.
+#
+do_test wal2-6.4.1 {
+  forcedelete test.db test.db-wal test.db-journal
+  proc tvfs_cb {method args} {
+    set ::shm_file [lindex $args 0]
+    if {$method == "xShmLock"} { lappend ::locks [lindex $args 2] }
+    return "SQLITE_OK"
+  }
+  testvfs tvfs
+  tvfs script tvfs_cb
+  sqlite3 db test.db -vfs tvfs
+  set {} {}
+} {}
+
+set RECOVERY {
+  {0 1 lock exclusive}   {1 2 lock exclusive}
+  {4 1 lock exclusive}   {4 1 unlock exclusive}
+  {5 1 lock exclusive}   {5 1 unlock exclusive}
+  {6 1 lock exclusive}   {6 1 unlock exclusive}
+  {7 1 lock exclusive}   {7 1 unlock exclusive}
+  {1 2 unlock exclusive} {0 1 unlock exclusive}
+}
+set READMARK0_READ {
+  {3 1 lock shared} {3 1 unlock shared}
+}
+set READMARK0_WRITE {
+  {3 1 lock shared} 
+  {0 1 lock exclusive} {3 1 unlock shared} 
+  {4 1 lock exclusive} {4 1 unlock exclusive} {4 1 lock shared} 
+  {0 1 unlock exclusive} {4 1 unlock shared}
+}
+set READMARK1_SET {
+  {4 1 lock exclusive} {4 1 unlock exclusive}
+}
+set READMARK1_READ {
+  {4 1 lock shared} {4 1 unlock shared}
+}
+set READMARK1_WRITE {
+  {4 1 lock shared} 
+    {0 1 lock exclusive} {0 1 unlock exclusive} 
+  {4 1 unlock shared}
+}
+
+foreach {tn sql res expected_locks} {
+  2 {
+    PRAGMA auto_vacuum = 0;
+    PRAGMA journal_mode = WAL;
+    BEGIN;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES('Leonard');
+      INSERT INTO t1 VALUES('Arthur');
+    COMMIT;
+  } {wal} {
+    $RECOVERY 
+    $READMARK0_WRITE
+  }
+
+  3 {
+    # This test should do the READMARK1_SET locking to populate the 
+    # aReadMark[1] slot with the current mxFrame value. Followed by
+    # READMARK1_READ to read the database.
+    #
+    SELECT * FROM t1
+  } {Leonard Arthur} {
+    $READMARK1_SET
+    $READMARK1_READ
+  }
+
+  4 {
+    # aReadMark[1] is already set to mxFrame. So just READMARK1_READ
+    # this time, not READMARK1_SET.
+    #
+    SELECT * FROM t1 ORDER BY x
+  } {Arthur Leonard} { 
+    $READMARK1_READ 
+  }
+
+  5 {
+    PRAGMA locking_mode = exclusive
+  } {exclusive} { } 
+
+  6 {
+    INSERT INTO t1 VALUES('Julius Henry');
+    SELECT * FROM t1;
+  } {Leonard Arthur {Julius Henry}} {
+    $READMARK1_READ
+  }
+
+  7 {
+    INSERT INTO t1 VALUES('Karl');
+    SELECT * FROM t1;
+  } {Leonard Arthur {Julius Henry} Karl} { }
+
+  8 {
+    PRAGMA locking_mode = normal
+  } {normal} { }
+
+  9 {
+    SELECT * FROM t1 ORDER BY x
+  } {Arthur {Julius Henry} Karl Leonard} $READMARK1_READ
+
+  10 { DELETE FROM t1 } {} $READMARK1_WRITE
+
+  11 {
+    SELECT * FROM t1
+  } {} {
+    $READMARK1_SET
+    $READMARK1_READ
+  }
+} {
+
+  set L [list]
+  foreach el [subst $expected_locks] { lappend L $el }
+
+  set S ""
+  foreach sq [split $sql "\n"] { 
+    set sq [string trim $sq]
+    if {[string match {#*} $sq]==0} {append S "$sq\n"}
+  }
+
+  set ::locks [list]
+  do_test wal2-6.4.$tn.1 { execsql $S } $res
+  do_test wal2-6.4.$tn.2 { set ::locks  } $L
+}
+
+db close
+tvfs delete
+
+do_test wal2-6.5.1 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum = 0;
+    PRAGMA journal_mode = wal;
+    PRAGMA locking_mode = exclusive;
+    CREATE TABLE t2(a, b);
+    PRAGMA wal_checkpoint;
+    INSERT INTO t2 VALUES('I', 'II');
+    PRAGMA journal_mode;
+  }
+} {wal exclusive 0 2 2 wal}
+do_test wal2-6.5.2 {
+  execsql {
+    PRAGMA locking_mode = normal;
+    INSERT INTO t2 VALUES('III', 'IV');
+    PRAGMA locking_mode = exclusive;
+    SELECT * FROM t2;
+  }
+} {normal exclusive I II III IV}
+do_test wal2-6.5.3 {
+  execsql { PRAGMA wal_checkpoint }
+} {0 2 2}
+db close
+
+proc lock_control {method filename handle spec} {
+  foreach {start n op type} $spec break
+  if {$op == "lock"} { return SQLITE_IOERR }
+  return SQLITE_OK
+}
+do_test wal2-6.6.1 {
+  testvfs T
+  T script lock_control
+  T filter {}
+  sqlite3 db test.db -vfs T
+  execsql { SELECT * FROM sqlite_master }
+  execsql { PRAGMA locking_mode = exclusive }
+  execsql { INSERT INTO t2 VALUES('V', 'VI') }
+} {}
+do_test wal2-6.6.2 {
+  execsql { PRAGMA locking_mode = normal }
+  T filter xShmLock
+  execsql { INSERT INTO t2 VALUES('VII', 'VIII') }
+} {}
+do_test wal2-6.6.3 {
+  # At this point the connection should still be in exclusive-mode, even
+  # though it tried to exit exclusive-mode when committing the INSERT
+  # statement above. To exit exclusive mode, SQLite has to take a read-lock 
+  # on the WAL file using xShmLock(). Since that call failed, it remains
+  # in exclusive mode.
+  #
+  sqlite3 db2 test.db -vfs T
+  catchsql { SELECT * FROM t2 } db2
+} {1 {database is locked}}
+do_test wal2-6.6.2 {
+  db2 close
+  T filter {}
+  execsql { INSERT INTO t2 VALUES('IX', 'X') }
+} {}
+do_test wal2-6.6.4 {
+  # This time, we have successfully exited exclusive mode. So the second
+  # connection can read the database.
+  sqlite3 db2 test.db -vfs T
+  catchsql { SELECT * FROM t2 } db2
+} {0 {I II III IV V VI VII VIII IX X}}
+
+db close
+db2 close
+T delete
+
+#-------------------------------------------------------------------------
+# Test a theory about the checksum algorithm. Theory was false and this
+# test did not provoke a bug.
+#
+forcedelete test.db test.db-wal test.db-journal
+do_test wal2-7.1.1 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 4096;
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+  }
+  file size test.db
+} {4096}
+do_test wal2-7.1.2 {
+  forcecopy test.db test2.db
+  forcecopy test.db-wal test2.db-wal
+  # The first 32 bytes of the WAL file contain the WAL header. Offset 48
+  # is the first byte of the checksum for the first frame in the WAL. 
+  # The following three lines replaces the contents of that byte with 
+  # a different value.
+  set newval FF
+  if {$newval == [hexio_read test2.db-wal 48 1]} { set newval 00 }
+  hexio_write test2.db-wal 48 $newval
+} {1}
+do_test wal2-7.1.3 {
+  sqlite3 db2 test2.db
+  execsql { PRAGMA wal_checkpoint } db2
+  execsql { SELECT * FROM sqlite_master } db2
+} {}
+db close
+db2 close
+forcedelete test.db test.db-wal test.db-journal
+do_test wal2-8.1.2 {
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    PRAGMA page_size = 1024;
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(zeroblob(8188*1020));
+    CREATE TABLE t2(y);
+    PRAGMA wal_checkpoint;
+  }
+  execsql {
+    SELECT rootpage>=8192 FROM sqlite_master WHERE tbl_name = 't2';
+  }
+} {1}
+do_test wal2-8.1.3 {
+  execsql {
+    PRAGMA cache_size = 10;
+    CREATE TABLE t3(z);
+    BEGIN;
+      INSERT INTO t3 VALUES(randomblob(900));
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t2 VALUES('hello');
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+      INSERT INTO t3 SELECT randomblob(900) FROM t3;
+    ROLLBACK;
+  }
+  execsql {
+    INSERT INTO t2 VALUES('goodbye');
+    INSERT INTO t3 SELECT randomblob(900) FROM t3;
+    INSERT INTO t3 SELECT randomblob(900) FROM t3;
+  }
+} {}
+do_test wal2-8.1.4 {
+  sqlite3 db2 test.db
+  execsql { SELECT * FROM t2 }
+} {goodbye}
+db2 close
+db close
+
+#-------------------------------------------------------------------------
+# Test that even if the checksums for both are valid, if the two copies
+# of the wal-index header in the wal-index do not match, the client
+# runs (or at least tries to run) database recovery.
+# 
+#
+proc get_name {method args} { set ::filename [lindex $args 0] ; tvfs filter {} }
+testvfs tvfs
+tvfs script get_name
+tvfs filter xShmOpen
+
+forcedelete test.db test.db-wal test.db-journal
+do_test wal2-9.1 {
+  sqlite3 db test.db -vfs tvfs
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE x(y);
+    INSERT INTO x VALUES('Barton');
+    INSERT INTO x VALUES('Deakin');
+  }
+
+  # Set $wih(1) to the contents of the wal-index header after
+  # the frames associated with the first two rows in table 'x' have
+  # been inserted. Then insert one more row and set $wih(2)
+  # to the new value of the wal-index header.
+  #
+  # If the $wih(1) is written into the wal-index before running
+  # a read operation, the client will see only the first two rows. If
+  # $wih(2) is written into the wal-index, the client will see
+  # three rows. If an invalid header is written into the wal-index, then
+  # the client will run recovery and see three rows.
+  #
+  set wih(1) [set_tvfs_hdr $::filename]
+  execsql { INSERT INTO x VALUES('Watson') }
+  set wih(2) [set_tvfs_hdr $::filename]
+
+  sqlite3 db2 test.db -vfs tvfs
+  execsql { SELECT * FROM x } db2
+} {Barton Deakin Watson}
+
+foreach {tn hdr1 hdr2 res} [list                                            \
+  3  $wih(1)                $wih(1)                {Barton Deakin}          \
+  4  $wih(1)                $wih(2)                {Barton Deakin Watson}   \
+  5  $wih(2)                $wih(1)                {Barton Deakin Watson}   \
+  6  $wih(2)                $wih(2)                {Barton Deakin Watson}   \
+  7  $wih(1)                $wih(1)                {Barton Deakin}          \
+  8  {0 0 0 0 0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0 0 0 0 0} {Barton Deakin Watson}
+] {
+  do_test wal2-9.$tn {
+    set_tvfs_hdr $::filename $hdr1 $hdr2
+    execsql { SELECT * FROM x } db2
+  } $res
+}
+
+db2 close
+db close
+
+#-------------------------------------------------------------------------
+# This block of tests - wal2-10.* - focus on the libraries response to
+# new versions of the wal or wal-index formats. 
+#
+#   wal2-10.1.*: Test that the library refuses to "recover" a new WAL 
+#                format.
+#
+#   wal2-10.2.*: Test that the library refuses to read or write a database
+#                if the wal-index version is newer than it understands.
+#
+# At time of writing, the only versions of the wal and wal-index formats
+# that exist are versions 3007000 (corresponding to SQLite version 3.7.0,
+# the first version of SQLite to feature wal mode).
+#
+do_test wal2-10.1.1 {
+  faultsim_delete_and_reopen
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+    PRAGMA wal_checkpoint;
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+  }
+  faultsim_save_and_close
+} {}
+do_test wal2-10.1.2 {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test wal2-10.1.3 {
+  faultsim_restore_and_reopen
+  set hdr [wal_set_walhdr test.db-wal]
+  lindex $hdr 1
+} {3007000}
+do_test wal2-10.1.4 {
+  lset hdr 1 3007001
+  wal_set_walhdr test.db-wal $hdr
+  catchsql { SELECT * FROM t1 }
+} {1 {unable to open database file}}
+
+testvfs tvfs -default 1
+do_test wal2-10.2.1 {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test wal2-10.2.2 { 
+  set hdr [set_tvfs_hdr $::filename] 
+  lindex $hdr 0 
+} {3007000}
+do_test wal2-10.2.3 { 
+  lset hdr 0 3007001
+  wal_fix_walindex_cksum hdr 
+  set_tvfs_hdr $::filename $hdr
+  catchsql { SELECT * FROM t1 }
+} {1 {unable to open database file}}
+db close
+tvfs delete
+
+#-------------------------------------------------------------------------
+# This block of tests - wal2-11.* - tests that it is not possible to put
+# the library into an infinite loop by presenting it with a corrupt
+# hash table (one that appears to contain a single chain of infinite 
+# length).
+#
+#   wal2-11.1.*: While reading the hash-table.
+#
+#   wal2-11.2.*: While writing the hash-table.
+#
+testvfs tvfs -default 1
+do_test wal2-11.0 {
+  faultsim_delete_and_reopen
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b, c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    INSERT INTO t1 VALUES(7, 8, 9);
+    SELECT * FROM t1;
+  }
+} {wal 1 2 3 4 5 6 7 8 9}
+
+do_test wal2-11.1.1 {
+  sqlite3 db2 test.db
+  execsql { SELECT name FROM sqlite_master } db2
+} {t1}
+
+if {$::tcl_version>=8.5} {
+  # Set all zeroed slots in the first hash table to invalid values.
+  #
+  set blob [string range [tvfs shm $::filename] 0 16383]
+  set I [string range [tvfs shm $::filename] 16384 end]
+  binary scan $I t* L
+  set I [list]
+  foreach p $L {
+    lappend I [expr $p ? $p : 400]
+  }
+  append blob [binary format t* $I]
+  tvfs shm $::filename $blob
+  do_test wal2-11.2 {
+    catchsql { INSERT INTO t1 VALUES(10, 11, 12) }
+  } {1 {database disk image is malformed}}
+  
+  # Fill up the hash table on the first page of shared memory with 0x55 bytes.
+  #
+  set blob [string range [tvfs shm $::filename] 0 16383]
+  append blob [string repeat [binary format c 55] 16384]
+  tvfs shm $::filename $blob
+  do_test wal2-11.3 {
+    catchsql { SELECT * FROM t1 } db2
+  } {1 {database disk image is malformed}}
+}
+
+db close
+db2 close
+tvfs delete
+
+#-------------------------------------------------------------------------
+# If a connection is required to create a WAL or SHM file, it creates 
+# the new files with the same file-system permissions as the database 
+# file itself. Test this.
+#
+if {$::tcl_platform(platform) == "unix"} {
+  faultsim_delete_and_reopen
+  # Changed on 2012-02-13: umask is deliberately ignored for -wal files.
+  #set umask [exec /bin/sh -c umask]
+  set umask 0
+  
+
+  do_test wal2-12.1 {
+    sqlite3 db test.db
+    execsql { 
+      CREATE TABLE tx(y, z);
+      PRAGMA journal_mode = WAL;
+    }
+    db close
+    list [file exists test.db-wal] [file exists test.db-shm]
+  } {0 0}
+  
+  foreach {tn permissions} {
+   1 00644
+   2 00666
+   3 00600
+   4 00755
+  } {
+    set effective [format %.5o [expr $permissions & ~$umask]]
+    do_test wal2-12.2.$tn.1 {
+      file attributes test.db -permissions $permissions
+      string map {o 0} [file attributes test.db -permissions]
+    } $permissions
+    do_test wal2-12.2.$tn.2 {
+      list [file exists test.db-wal] [file exists test.db-shm]
+    } {0 0}
+    do_test wal2-12.2.$tn.3 {
+      sqlite3 db test.db
+      execsql { INSERT INTO tx DEFAULT VALUES }
+      list [file exists test.db-wal] [file exists test.db-shm]
+    } {1 1}
+    do_test wal2-12.2.$tn.4 {
+      set x [list [file attr test.db-wal -perm] [file attr test.db-shm -perm]]
+      string map {o 0} $x
+    } [list $effective $effective]
+    do_test wal2-12.2.$tn.5 {
+      db close
+      list [file exists test.db-wal] [file exists test.db-shm]
+    } {0 0}
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test the libraries response to discovering that one or more of the
+# database, wal or shm files cannot be opened, or can only be opened
+# read-only.
+#
+if {$::tcl_platform(platform) == "unix"} {
+  proc perm {} {
+    set L [list]
+    foreach f {test.db test.db-wal test.db-shm} {
+      if {[file exists $f]} {
+        lappend L [file attr $f -perm]
+      } else {
+        lappend L {}
+      }
+    }
+    set L
+  }
+
+  faultsim_delete_and_reopen
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+    PRAGMA wal_checkpoint;
+    INSERT INTO t1 VALUES('3.14', '2.72');
+  }
+  do_test wal2-13.1.1 {
+    list [file exists test.db-shm] [file exists test.db-wal]
+  } {1 1}
+  faultsim_save_and_close
+
+  foreach {tn db_perm wal_perm shm_perm can_open can_read can_write} {
+    2   00644   00644   00644   1   1   1
+    3   00644   00400   00644   1   1   0
+    4   00644   00644   00400   1   1   0
+    5   00400   00644   00644   1   1   0
+
+    7   00644   00000   00644   1   0   0
+    8   00644   00644   00000   1   0   0
+    9   00000   00644   00644   0   0   0
+  } {
+    faultsim_restore
+    do_test wal2-13.$tn.1 {
+      file attr test.db     -perm $db_perm
+      file attr test.db-wal -perm $wal_perm
+      file attr test.db-shm -perm $shm_perm
+
+      set     L [file attr test.db -perm]
+      lappend L [file attr test.db-wal -perm]
+      lappend L [file attr test.db-shm -perm]
+      string map {o 0} $L
+    } [list $db_perm $wal_perm $shm_perm]
+
+    # If $can_open is true, then it should be possible to open a database
+    # handle. Otherwise, if $can_open is 0, attempting to open the db
+    # handle throws an "unable to open database file" exception.
+    #
+    set r(1) {0 ok}
+    set r(0) {1 {unable to open database file}}
+    do_test wal2-13.$tn.2 {
+      list [catch {sqlite3 db test.db ; set {} ok} msg] $msg
+    } $r($can_open)
+
+    if {$can_open} {
+
+      # If $can_read is true, then the client should be able to read from
+      # the database file. If $can_read is false, attempting to read should
+      # throw the "unable to open database file" exception. 
+      #
+      set a(0) {1 {unable to open database file}}
+      set a(1) {0 {3.14 2.72}}
+      do_test wal2-13.$tn.3 {
+        catchsql { SELECT * FROM t1 }
+      } $a($can_read)
+  
+      # Now try to write to the db file. If the client can read but not
+      # write, then it should throw the familiar "unable to open db file"
+      # exception. If it can read but not write, the exception should
+      # be "attempt to write a read only database".
+      #
+      # If the client can read and write, the operation should succeed.
+      #
+      set b(0,0) {1 {unable to open database file}}
+      set b(1,0) {1 {attempt to write a readonly database}}
+      set b(1,1) {0 {}}
+      do_test wal2-13.$tn.4 {
+        catchsql { INSERT INTO t1 DEFAULT VALUES }
+      } $b($can_read,$can_write)
+    }
+    catch { db close }
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that "PRAGMA checkpoint_fullsync" appears to be working.
+#
+foreach {tn sql reslist} {
+  1 { }                                 {10 0 4 0 6 0}
+  2 { PRAGMA checkpoint_fullfsync = 1 } {10 6 4 3 6 3}
+  3 { PRAGMA checkpoint_fullfsync = 0 } {10 0 4 0 6 0}
+} {
+  ifcapable default_ckptfullfsync {
+    if {[string trim $sql]==""} continue
+  }
+  faultsim_delete_and_reopen
+
+  execsql {PRAGMA auto_vacuum = 0; PRAGMA synchronous = FULL;}
+  execsql $sql
+  do_execsql_test wal2-14.$tn.0 { PRAGMA page_size = 4096 }   {}
+  do_execsql_test wal2-14.$tn.1 { PRAGMA journal_mode = WAL } {wal}
+
+  set sqlite_sync_count 0
+  set sqlite_fullsync_count 0
+
+  do_execsql_test wal2-14.$tn.2 {
+    PRAGMA wal_autocheckpoint = 10;
+    CREATE TABLE t1(a, b);                -- 2 wal syncs
+    INSERT INTO t1 VALUES(1, 2);          -- 2 wal sync
+    PRAGMA wal_checkpoint;                -- 1 wal sync, 1 db sync
+    BEGIN;
+      INSERT INTO t1 VALUES(3, 4);
+      INSERT INTO t1 VALUES(5, 6);
+    COMMIT;                               -- 2 wal sync
+    PRAGMA wal_checkpoint;                -- 1 wal sync, 1 db sync
+  } {10 0 3 3 0 1 1}
+
+  do_test wal2-14.$tn.3 {
+    cond_incr_sync_count 1
+    list $sqlite_sync_count $sqlite_fullsync_count
+  } [lrange $reslist 0 1]
+
+  set sqlite_sync_count 0
+  set sqlite_fullsync_count 0
+
+  do_test wal2-14.$tn.4 {
+    execsql { INSERT INTO t1 VALUES(7, zeroblob(12*4096)) }
+    list $sqlite_sync_count $sqlite_fullsync_count
+  } [lrange $reslist 2 3]
+
+  set sqlite_sync_count 0
+  set sqlite_fullsync_count 0
+
+  do_test wal2-14.$tn.5 {
+    execsql { PRAGMA wal_autocheckpoint = 1000 }
+    execsql { INSERT INTO t1 VALUES(9, 10) }
+    execsql { INSERT INTO t1 VALUES(11, 12) }
+    execsql { INSERT INTO t1 VALUES(13, 14) }
+    db close
+    list $sqlite_sync_count $sqlite_fullsync_count
+  } [lrange $reslist 4 5]
+}
+
+catch { db close }
+
+# PRAGMA checkpoint_fullsync
+# PRAGMA fullfsync
+# PRAGMA synchronous
+#
+foreach {tn settings restart_sync commit_sync ckpt_sync} {
+  1  {0 0 off}     {0 0}  {0 0}  {0 0}
+  2  {0 0 normal}  {1 0}  {0 0}  {2 0}
+  3  {0 0 full}    {2 0}  {1 0}  {2 0}
+
+  4  {0 1 off}     {0 0}  {0 0}  {0 0}
+  5  {0 1 normal}  {0 1}  {0 0}  {0 2}
+  6  {0 1 full}    {0 2}  {0 1}  {0 2}
+
+  7  {1 0 off}     {0 0}  {0 0}  {0 0}
+  8  {1 0 normal}  {0 1}  {0 0}  {0 2}
+  9  {1 0 full}    {1 1}  {1 0}  {0 2}
+
+  10 {1 1 off}     {0 0}  {0 0}  {0 0}
+  11 {1 1 normal}  {0 1}  {0 0}  {0 2}
+  12 {1 1 full}    {0 2}  {0 1}  {0 2}
+} {
+  forcedelete test.db
+
+  testvfs tvfs -default 1
+  tvfs filter xSync
+  tvfs script xSyncCb
+  proc xSyncCb {method file fileid flags} {
+    incr ::sync($flags)
+  }
+
+  sqlite3 db test.db
+  do_execsql_test 15.$tn.1 "
+    PRAGMA page_size = 4096;
+    CREATE TABLE t1(x);
+    PRAGMA wal_autocheckpoint = OFF;
+    PRAGMA journal_mode = WAL;
+    PRAGMA checkpoint_fullfsync = [lindex $settings 0];
+    PRAGMA fullfsync = [lindex $settings 1];
+    PRAGMA synchronous = [lindex $settings 2];
+  " {0 wal}
+
+  do_test 15.$tn.2 {
+    set sync(normal) 0
+    set sync(full) 0
+    execsql { INSERT INTO t1 VALUES('abc') }
+    list $::sync(normal) $::sync(full)
+  } $restart_sync
+
+  do_test 15.$tn.3 {
+    set sync(normal) 0
+    set sync(full) 0
+    execsql { INSERT INTO t1 VALUES('abc') }
+    list $::sync(normal) $::sync(full)
+  } $commit_sync
+
+  do_test 15.$tn.4 {
+    set sync(normal) 0
+    set sync(full) 0
+    execsql { INSERT INTO t1 VALUES('def') }
+    list $::sync(normal) $::sync(full)
+  } $commit_sync
+
+  do_test 15.$tn.5 {
+    set sync(normal) 0
+    set sync(full) 0
+    execsql { PRAGMA wal_checkpoint }
+    list $::sync(normal) $::sync(full)
+  } $ckpt_sync
+  
+  db close
+  tvfs delete
+}
+
+
+
+finish_test

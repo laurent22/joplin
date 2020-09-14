@@ -1,0 +1,86 @@
+# 2016 August 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the FTS5 module.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5colset
+
+# If SQLITE_ENABLE_FTS5 is not defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+foreach_detail_mode $::testprefix {
+  if {[detail_is_none]} continue
+
+  do_execsql_test 1.0 {
+    CREATE VIRTUAL TABLE t1 USING fts5(a, b, c, d, detail=%DETAIL%);
+    INSERT INTO t1 VALUES('a', 'b', 'c', 'd');  -- 1
+    INSERT INTO t1 VALUES('d', 'a', 'b', 'c');  -- 2
+    INSERT INTO t1 VALUES('c', 'd', 'a', 'b');  -- 3
+    INSERT INTO t1 VALUES('b', 'c', 'd', 'a');  -- 4
+  }
+
+  foreach {tn q res} {
+    1 "a"          {1 2 3 4}
+    2 "{a}   : a"  {1}
+    3 "-{a}   : a" {2 3 4}
+    4 "- {a c} : a" {2 4}
+    5 " - {d d c} : a" {1 2}
+    6 "- {d c b a} : a" {}
+    7 "-{\"a\"} : b" {1 2 3}
+    8 "- c : a" {1 2 4}
+    9 "-c : a"  {1 2 4}
+    10 "-\"c\" : a"  {1 2 4}
+  } {
+    do_execsql_test 1.$tn {
+      SELECT rowid FROM t1($q)
+    } $res
+  }
+
+  foreach {tn q res} {
+    0 {{a} : (a AND ":")}     {}
+    1 "{a b c} : (a AND d)"   {2 3}
+    2 "{a b c} : (a AND b:d)" {3}
+    3 "{a b c} : (a AND d:d)" {}
+    4 "{b} : ( {b a} : ( {c b a} : ( {d b c a} : ( d OR c ) ) ) )" {3 4}
+    5 "{a} : ( {b a} : ( {c b a} : ( {d b c a} : ( d OR c ) ) ) )" {2 3}
+    6 "{a} : ( {b a} : ( {c b} : ( {d b c a} : ( d OR c ) ) ) )" {}
+    7 "{a b c} : (b:a AND c:b)" {2}
+  } {
+    do_execsql_test 2.$tn {
+      SELECT rowid FROM t1($q)
+    } $res
+  }
+
+  foreach {tn w res} {
+    0 "a MATCH 'a'" {1}
+    1 "b MATCH 'a'" {2}
+    2 "b MATCH '{a b c} : a'" {2}
+    3 "b MATCH 'a OR b'"      {1 2}
+    4 "b MATCH 'a OR a:b'"    {2}
+    5 "b MATCH 'a OR b:b'"    {1 2}
+  } {
+    do_execsql_test 3.$tn "
+      SELECT rowid FROM t1 WHERE $w
+    " $res
+  }
+
+  do_catchsql_test 4.1 {
+    SELECT * FROM t1 WHERE rowid MATCH 'a'
+  } {1 {unable to use function MATCH in the requested context}}
+}
+
+
+finish_test

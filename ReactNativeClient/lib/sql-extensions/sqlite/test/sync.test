@@ -1,0 +1,105 @@
+# 2005 August 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to verify that fsync is disabled when
+# pragma synchronous=off even for multi-database commits.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+#
+# These tests are only applicable when pager pragma are
+# enabled. Also, since every test uses an ATTACHed database, they
+# are only run when ATTACH is enabled.
+#
+ifcapable !pager_pragmas||!attach {
+  finish_test
+  return
+}
+if {[atomic_batch_write test.db]} {
+  finish_test
+  return
+}
+
+set sqlite_sync_count 0
+proc cond_incr_sync_count {adj} {
+  global sqlite_sync_count
+  if {$::tcl_platform(platform) == "windows"} {
+    incr sqlite_sync_count $adj
+  } else {
+    ifcapable !dirsync {
+      incr sqlite_sync_count $adj
+    }
+  }
+}
+
+do_test sync-1.1 {
+  set sqlite_sync_count 0
+  forcedelete test2.db
+  forcedelete test2.db-journal
+  execsql {
+    PRAGMA fullfsync=OFF;
+    CREATE TABLE t1(a,b);
+    ATTACH DATABASE 'test2.db' AS db2;
+    CREATE TABLE db2.t2(x,y);
+  }
+  cond_incr_sync_count 2
+  set sqlite_sync_count
+} 8
+ifcapable pager_pragmas {
+  do_test sync-1.2 {
+    set sqlite_sync_count 0
+    execsql {
+      PRAGMA main.synchronous=on;
+      PRAGMA db2.synchronous=on;
+      BEGIN;
+      INSERT INTO t1 VALUES(1,2);
+      INSERT INTO t2 VALUES(3,4);
+      COMMIT;
+    }
+    cond_incr_sync_count 4
+    set sqlite_sync_count
+  } 9
+}
+do_test sync-1.3 {
+  set sqlite_sync_count 0
+  execsql {
+    PRAGMA main.synchronous=full;
+    PRAGMA db2.synchronous=full;
+    BEGIN;
+    INSERT INTO t1 VALUES(3,4);
+    INSERT INTO t2 VALUES(5,6);
+    COMMIT;
+  }
+  cond_incr_sync_count 4
+  set sqlite_sync_count
+} 11
+ifcapable pager_pragmas {
+if {[permutation]!="journaltest"} {
+  do_test sync-1.4 {
+    set sqlite_sync_count 0
+    execsql {
+      PRAGMA main.synchronous=off;
+      PRAGMA db2.synchronous=off;
+      BEGIN;
+      INSERT INTO t1 VALUES(5,6);
+      INSERT INTO t2 VALUES(7,8);
+      COMMIT;
+    }
+    set sqlite_sync_count
+  } 0
+}
+}
+
+
+finish_test

@@ -1,0 +1,243 @@
+# 2016 June 1
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. More specifically, it
+# contains tests to ensure that the sqlite3rbu_vacuum() API works as
+# expected.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+
+foreach {step} {0 1} {
+foreach {ttt state} {
+  s state.db t test.db-vacuum n {}
+} {
+  set ::testprefix rbuvacuum2-$step$ttt
+  
+  #-------------------------------------------------------------------------
+  # Test that a database that contains fts3 tables can be vacuumed.
+  #
+  ifcapable fts3 {
+    reset_db
+    do_execsql_test 1.1 {
+      CREATE VIRTUAL TABLE t1 USING fts3(z, y);
+      INSERT INTO t1 VALUES('fix this issue', 'at some point');
+    }
+  
+    do_rbu_vacuum_test 1.2 $step $state
+  
+    do_execsql_test 1.3 {
+      SELECT * FROM t1;
+    } {{fix this issue} {at some point}}
+  
+    do_execsql_test 1.4 {
+      SELECT rowid FROM t1 WHERE t1 MATCH 'fix';
+    } {1}
+
+    do_execsql_test 1.5 {
+      INSERT INTO t1 VALUES('a b c', 'd e f');
+      INSERT INTO t1 VALUES('l h i', 'd e f');
+      DELETE FROM t1 WHERE docid = 2;
+      INSERT INTO t1 VALUES('a b c', 'x y z');
+    }
+
+    do_rbu_vacuum_test 1.6 $step $state
+    do_execsql_test 1.7 {
+      INSERT INTO t1(t1) VALUES('integrity-check');
+      SELECT * FROM t1;
+    } {
+      {fix this issue} {at some point}
+      {l h i} {d e f}
+      {a b c} {x y z}
+    }
+  }
+  
+  #-------------------------------------------------------------------------
+  # Test that a database that contains fts5 tables can be vacuumed.
+  #
+  ifcapable fts5 {
+    reset_db
+    do_execsql_test 2.1 {
+      CREATE VIRTUAL TABLE t1 USING fts5(z, y);
+      INSERT INTO t1 VALUES('fix this issue', 'at some point');
+    }
+  
+    do_rbu_vacuum_test 2.2 $step $state
+  
+    do_execsql_test 2.3 {
+      SELECT * FROM t1;
+    } {{fix this issue} {at some point}}
+  
+    do_execsql_test 2.4 {
+      SELECT rowid FROM t1 ('fix');
+    } {1}
+
+    do_execsql_test 2.5 {
+      INSERT INTO t1 VALUES('a b c', 'd e f');
+      INSERT INTO t1 VALUES('l h i', 'd e f');
+      DELETE FROM t1 WHERE rowid = 2;
+      INSERT INTO t1 VALUES('a b c', 'x y z');
+    }
+
+    do_rbu_vacuum_test 2.6 $step $state
+    do_execsql_test 2.7 {
+      INSERT INTO t1(t1) VALUES('integrity-check');
+      SELECT * FROM t1;
+    } {
+      {fix this issue} {at some point}
+      {l h i} {d e f}
+      {a b c} {x y z}
+    }
+  }
+
+  #-------------------------------------------------------------------------
+  # Test that a database that contains an rtree table can be vacuumed.
+  #
+  ifcapable rtree {
+    reset_db
+    do_execsql_test 3.1 {
+      CREATE VIRTUAL TABLE rt USING rtree(id, x1, x2);
+      INSERT INTO rt VALUES(1, 45, 55);
+      INSERT INTO rt VALUES(2, 50, 60);
+      INSERT INTO rt VALUES(3, 55, 65);
+    }
+  
+    do_rbu_vacuum_test 3.2 $step $state
+  
+    do_execsql_test 3.3 {
+      SELECT * FROM rt;
+    } {1 45.0 55.0 2 50.0 60.0 3 55.0 65.0}
+  
+    do_execsql_test 3.4.1 {
+      SELECT rowid FROM rt WHERE x2>51 AND x1 < 51
+    } {1 2}
+    do_execsql_test 3.4.2 {
+      SELECT rowid FROM rt WHERE x2>59 AND x1 < 59
+    } {2 3}
+
+    do_rbu_vacuum_test 3.5 $step $state
+
+    do_execsql_test 3.6.1 {
+      SELECT rowid FROM rt WHERE x2>51 AND x1 < 51
+    } {1 2}
+    do_execsql_test 3.6.2 {
+      SELECT rowid FROM rt WHERE x2>59 AND x1 < 59
+    } {2 3}
+  }
+
+  ifcapable trigger {
+    reset_db
+    do_execsql_test 4.1 {
+      CREATE TABLE t1(a, b, c);
+      INSERT INTO t1 VALUES(1, 2, 3);
+      CREATE VIEW v1 AS SELECT * FROM t1;
+      CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END;
+    }
+
+    do_execsql_test 4.2 {
+      SELECT * FROM sqlite_master;
+    } {
+    table t1 t1 2 {CREATE TABLE t1(a, b, c)}
+    view v1 v1 0 {CREATE VIEW v1 AS SELECT * FROM t1}
+    trigger tr1 t1 0 {CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END}
+    }
+
+    do_rbu_vacuum_test 4.3 $step $state
+    do_execsql_test 4.4 {
+      SELECT * FROM sqlite_master;
+    } {
+    table t1 t1 2 {CREATE TABLE t1(a, b, c)}
+    view v1 v1 0 {CREATE VIEW v1 AS SELECT * FROM t1}
+    trigger tr1 t1 0 {CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END}
+    }
+  }
+}
+}
+  
+#-------------------------------------------------------------------------
+# Test that passing a NULL value as the second argument to 
+# sqlite3rbu_vacuum() causes it to:
+#
+#   * Use <database>-vacuum as the state db, and
+#   * Set the state db permissions to the same as those on the db file.
+#
+db close
+if {$::tcl_platform(platform)=="unix"} {
+  forcedelete test.db
+
+  sqlite3 db test.db
+  do_execsql_test 5.0 {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+    INSERT INTO t1 VALUES(5, 6);
+    INSERT INTO t1 VALUES(7, 8);
+  }
+  db close
+
+  foreach {tn perm} {
+    1 00755
+    2 00666
+    3 00644
+    4 00444
+  } {
+    forcedelete test.db-vacuum
+
+    do_test 5.$tn.1 {
+      file attributes test.db -permissions $perm
+      sqlite3rbu_vacuum rbu test.db
+      rbu step
+    } {SQLITE_OK}
+
+    do_test 5.$tn.2 { file exists test.db-vacuum } 1
+    do_test 5.$tn.3 { file attributes test.db-vacuum -permissions} $perm
+    rbu close
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test the outcome of some other connection running a checkpoint while
+# the incremental checkpoint is suspended.
+#
+reset_db
+do_execsql_test 6.0 {
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX i1b ON t1(b);
+  CREATE INDEX i1c ON t1(c);
+  INSERT INTO t1 VALUES(1, 2, 3);
+  INSERT INTO t1 VALUES(4, 5, 6);
+}
+forcedelete test.db2
+
+do_test 6.1 {
+  sqlite3rbu_vacuum rbu test.db test.db2
+  while {[rbu state]!="checkpoint"} { rbu step }
+  rbu close
+} {SQLITE_OK}
+
+do_execsql_test 6.2 {
+  SELECT 1 FROM sqlite_master LIMIT 1;
+  PRAGMA wal_checkpoint;
+} {1 0 4 4}
+
+do_test 6.3 {
+  sqlite3rbu_vacuum rbu test.db test.db2
+  while {[rbu step]!="SQLITE_DONE"} { rbu step }
+  rbu close
+  execsql { PRAGMA integrity_check }
+} {ok}
+
+do_test 6.4 {
+  sqlite3rbu_vacuum rbu test.db test.db-vactmp
+  list [catch { rbu close } msg] $msg
+} {1 SQLITE_MISUSE}
+
+finish_test

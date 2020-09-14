@@ -1,0 +1,611 @@
+# 2004 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests to make sure SQLite does not crash or
+# segfault if it sees a corrupt database file.
+#
+# $Id: corrupt2.test,v 1.20 2009/04/06 17:50:03 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix corrupt2
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# These tests deal with corrupt database files
+#
+database_may_be_corrupt
+
+set presql ""
+catch { set presql "$::G(perm:presql);" }
+unset -nocomplain ::G(perm:presql)
+
+# The following tests - corrupt2-1.* - create some databases corrupted in
+# specific ways and ensure that SQLite detects them as corrupt.
+#
+do_test corrupt2-1.1 {
+  execsql {
+    PRAGMA auto_vacuum=0;
+    PRAGMA page_size=1024;
+    CREATE TABLE abc(a, b, c);
+  }
+} {}
+
+do_test corrupt2-1.2 {
+
+  # Corrupt the 16 byte magic string at the start of the file
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  forcecopy test.db corrupt.db
+  set f [open corrupt.db RDWR]
+  seek $f 8 start
+  puts $f blah
+  close $f
+
+  sqlite3 db2 corrupt.db
+  catchsql "
+    $::presql
+    SELECT * FROM sqlite_master;
+  " db2
+} {1 {file is not a database}}
+
+do_test corrupt2-1.3 {
+  db2 close
+
+  # Corrupt the page-size (bytes 16 and 17 of page 1).
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  forcecopy test.db corrupt.db
+  set f [open corrupt.db RDWR]
+  fconfigure $f -encoding binary
+  seek $f 16 start
+  puts -nonewline $f "\x00\xFF"
+  close $f
+
+  sqlite3 db2 corrupt.db
+  catchsql "
+    $::presql
+    SELECT * FROM sqlite_master;
+  " db2
+} {1 {file is not a database}}
+
+do_test corrupt2-1.4 {
+  db2 close
+
+  # Corrupt the free-block list on page 1.
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  forcecopy test.db corrupt.db
+  set f [open corrupt.db RDWR]
+  fconfigure $f -encoding binary
+  seek $f 101 start
+  puts -nonewline $f "\xFF\xFF"
+  close $f
+
+  sqlite3 db2 corrupt.db
+  # Note: This test is no longer meaningful due to the deferred computation
+  # of MemPage.nFree 
+  catchsql {PRAGMA quick_check} db2
+} {0 {{*** in database main ***
+Page 1: free space corruption}}}
+
+do_test corrupt2-1.5 {
+  db2 close
+
+  # Corrupt the free-block list on page 1.
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  forcecopy test.db corrupt.db
+  set f [open corrupt.db RDWR]
+  fconfigure $f -encoding binary
+  seek $f 101 start
+  puts -nonewline $f "\x00\xC8"
+  seek $f 200 start
+  puts -nonewline $f "\x00\x00"
+  puts -nonewline $f "\x10\x00"
+  close $f
+
+  sqlite3 db2 corrupt.db
+  catchsql {PRAGMA quick_check} db2
+} {0 {{*** in database main ***
+Page 1: free space corruption}}}
+db2 close
+
+# Corrupt a database by having 2 indices of the same name:
+do_test corrupt2-2.1 {
+
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  forcecopy test.db corrupt.db
+
+  sqlite3 db2 corrupt.db 
+  sqlite3_db_config db2 DEFENSIVE 0
+  execsql "
+    $::presql
+    CREATE INDEX a1 ON abc(a);
+    CREATE INDEX a2 ON abc(b);
+    PRAGMA writable_schema = 1;
+    UPDATE sqlite_master 
+      SET name = 'a3', sql = 'CREATE INDEX a3' || substr(sql, 16, 10000)
+      WHERE type = 'index';
+    PRAGMA writable_schema = 0;
+  " db2
+
+  db2 close
+  sqlite3 db2 corrupt.db 
+  catchsql "
+    $::presql
+    SELECT * FROM sqlite_master;
+  " db2
+} {1 {malformed database schema (a3) - index a3 already exists}}
+
+db2 close
+
+do_test corrupt2-3.1 {
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  sqlite3 db2 corrupt.db 
+
+  execsql "
+    $::presql
+    PRAGMA auto_vacuum = 1;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(a, b, c);
+    INSERT INTO t2 VALUES(randomblob(100), randomblob(100), randomblob(100));
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+  " db2
+
+  db2 close
+
+  # On the root page of table t2 (page 4), set one of the child page-numbers
+  # to 0. This corruption will be detected when SQLite attempts to update
+  # the pointer-map after moving the content of page 4 to page 3 as part
+  # of the DROP TABLE operation below.
+  #
+  set fd [open corrupt.db r+]
+  fconfigure $fd -encoding binary -translation binary
+  seek $fd [expr 1024*3 + 12]
+  set zCelloffset [read $fd 2]
+  binary scan $zCelloffset S iCelloffset
+  seek $fd [expr 1024*3 + $iCelloffset]
+  puts -nonewline $fd "\00\00\00\00" 
+  close $fd
+
+  sqlite3 db2 corrupt.db 
+  catchsql "
+    $::presql
+    DROP TABLE t1;
+  " db2
+} {1 {database disk image is malformed}}
+
+do_test corrupt2-4.1 {
+  catchsql {
+    SELECT * FROM t2;
+  } db2
+} {1 {database disk image is malformed}}
+
+db2 close
+
+unset -nocomplain result
+do_test corrupt2-5.1 {
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+  sqlite3 db2 corrupt.db 
+
+  execsql "
+    $::presql
+    PRAGMA auto_vacuum = 0;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(a, b, c);
+    INSERT INTO t2 VALUES(randomblob(100), randomblob(100), randomblob(100));
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t2 SELECT * FROM t2;
+    INSERT INTO t1 SELECT * FROM t2;
+  " db2
+
+  db2 close
+
+  # This block links a page from table t2 into the t1 table structure.
+  #
+  set fd [open corrupt.db r+]
+  fconfigure $fd -encoding binary -translation binary
+  seek $fd [expr 1024 + 12]
+  set zCelloffset [read $fd 2]
+  binary scan $zCelloffset S iCelloffset
+  seek $fd [expr 1024 + $iCelloffset]
+  set zChildPage [read $fd 4]
+  seek $fd [expr 2*1024 + 12]
+  set zCelloffset [read $fd 2]
+  binary scan $zCelloffset S iCelloffset
+  seek $fd [expr 2*1024 + $iCelloffset]
+  puts -nonewline $fd $zChildPage
+  close $fd
+
+  sqlite3 db2 corrupt.db 
+  db2 eval $::presql
+  db2 eval {SELECT rowid FROM t1} {
+    set result [db2 eval {pragma integrity_check}]
+    break
+  }
+  set result
+} {{*** in database main ***
+On tree page 2 cell 0: 2nd reference to page 10
+Page 4 is never used}}
+
+db2 close
+
+proc corruption_test {args} {
+  set A(-corrupt) {}
+  set A(-sqlprep) {}
+  set A(-tclprep) {}
+  array set A $args
+
+  catch {db close}
+  forcedelete corrupt.db
+  forcedelete corrupt.db-journal
+
+  sqlite3 db corrupt.db 
+  sqlite3_db_config db DEFENSIVE 0
+  db eval $::presql
+  eval $A(-tclprep)
+  db eval $A(-sqlprep)
+  db close
+
+  eval $A(-corrupt)
+
+  sqlite3 db corrupt.db
+  eval $A(-test)
+}
+
+ifcapable autovacuum {
+  # The tests within this block - corrupt2-6.* - aim to test corruption
+  # detection within an incremental-vacuum. When an incremental-vacuum
+  # step is executed, the last non-free page of the database file is 
+  # moved into a free space in the body of the file. After doing so,
+  # the page reference in the parent page must be updated to refer
+  # to the new location. These tests test the outcome of corrupting
+  # that page reference before performing the incremental vacuum.
+  #
+
+  # The last page in the database page is the second page 
+  # in an overflow chain.
+  #
+  corruption_test -sqlprep {
+    PRAGMA auto_vacuum = incremental;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, randomblob(2500));
+    INSERT INTO t1 VALUES(2, randomblob(2500));
+    DELETE FROM t1 WHERE a = 1;
+  } -corrupt {
+    hexio_write corrupt.db [expr 1024*5] 00000008
+  } -test {
+    do_test corrupt2-6.1 {
+      catchsql " $::presql pragma incremental_vacuum = 1 "
+    } {1 {database disk image is malformed}}
+  }
+
+  # The last page in the database page is a non-root b-tree page.
+  #
+  corruption_test -sqlprep {
+    PRAGMA auto_vacuum = incremental;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, randomblob(2500));
+    INSERT INTO t1 VALUES(2, randomblob(50));
+    INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+    INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+    INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+    INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+    DELETE FROM t1 WHERE a = 1;
+  } -corrupt {
+    hexio_write corrupt.db [expr 1024*2 + 8] 00000009
+  } -test {
+    do_test corrupt2-6.2 {
+      catchsql " $::presql pragma incremental_vacuum = 1 "
+    } {1 {database disk image is malformed}}
+  }
+
+  # Set up a pointer-map entry so that the last page of the database
+  # file appears to be a b-tree root page. This should be detected
+  # as corruption.
+  #
+  corruption_test -sqlprep {
+    PRAGMA auto_vacuum = incremental;
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, randomblob(2500));
+    INSERT INTO t1 VALUES(2, randomblob(2500));
+    INSERT INTO t1 VALUES(3, randomblob(2500));
+    DELETE FROM t1 WHERE a = 1;
+  } -corrupt {
+    set nPage [expr [file size corrupt.db] / 1024]
+    hexio_write corrupt.db [expr 1024 + ($nPage-3)*5] 010000000
+  } -test {
+    do_test corrupt2-6.3 {
+      catchsql " $::presql pragma incremental_vacuum = 1 "
+    } {1 {database disk image is malformed}}
+  }
+
+  if {![nonzero_reserved_bytes]} {
+    corruption_test -sqlprep {
+      PRAGMA auto_vacuum = 1;
+      PRAGMA page_size = 1024;
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+      INSERT INTO t1 VALUES(1, randomblob(2500));
+      DELETE FROM t1 WHERE a = 1;
+    } -corrupt {
+      set nAppend [expr 1024*207 - [file size corrupt.db]]
+      set fd [open corrupt.db r+]
+      seek $fd 0 end
+      puts -nonewline $fd [string repeat x $nAppend]
+      close $fd
+      hexio_write corrupt.db 28 00000000
+    } -test {
+      do_test corrupt2-6.4 {
+        catchsql " 
+          $::presql 
+          BEGIN EXCLUSIVE;
+          COMMIT;
+        "
+      } {1 {database disk image is malformed}}
+    }
+  }
+}
+
+
+set sqlprep {
+  PRAGMA auto_vacuum = 0;
+  PRAGMA page_size = 1024;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  CREATE INDEX i1 ON t1(b);
+  INSERT INTO t1 VALUES(1, randomblob(50));
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+  INSERT INTO t1 SELECT NULL, randomblob(50) FROM t1;
+}
+
+corruption_test -sqlprep $sqlprep -corrupt {
+  # Set the page-flags of one of the leaf pages of the index B-Tree to
+  # 0x0D (interpreted by SQLite as "leaf page of a table B-Tree").
+  #
+  set fd [open corrupt.db r+]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd [expr 1024*2 + 8] 
+  set zRightChild [read $fd 4]
+  binary scan $zRightChild I iRightChild
+  seek $fd [expr 1024*($iRightChild-1)]
+  puts -nonewline $fd "\x0D"
+  close $fd
+} -test {
+  do_test corrupt2-7.1 {
+    catchsql " $::presql SELECT b FROM t1 ORDER BY b ASC "
+  } {1 {database disk image is malformed}}
+}
+
+corruption_test -sqlprep $sqlprep -corrupt {
+  # Mess up the page-header of one of the leaf pages of the index B-Tree.
+  # The corruption is detected as part of an OP_Prev opcode.
+  #
+  set fd [open corrupt.db r+]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd [expr 1024*2 + 12] 
+  set zCellOffset [read $fd 2]
+  binary scan $zCellOffset S iCellOffset
+  seek $fd [expr 1024*2 + $iCellOffset]
+  set zChild [read $fd 4]
+  binary scan $zChild I iChild
+  seek $fd [expr 1024*($iChild-1)+3]
+  puts -nonewline $fd "\xFFFF"
+  close $fd
+} -test {
+  do_test corrupt2-7.1 {
+    catchsql " $::presql SELECT b FROM t1 ORDER BY b DESC "
+  } {1 {database disk image is malformed}}
+}
+
+corruption_test -sqlprep $sqlprep -corrupt {
+  # Set the page-flags of one of the leaf pages of the table B-Tree to
+  # 0x0A (interpreted by SQLite as "leaf page of an index B-Tree").
+  #
+  set fd [open corrupt.db r+]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd [expr 1024*1 + 8] 
+  set zRightChild [read $fd 4]
+  binary scan $zRightChild I iRightChild
+  seek $fd [expr 1024*($iRightChild-1)]
+  puts -nonewline $fd "\x0A"
+  close $fd
+} -test {
+  do_test corrupt2-8.1 {
+    catchsql " $::presql SELECT * FROM t1 WHERE rowid=1000 "
+  } {1 {database disk image is malformed}}
+}
+
+corruption_test -sqlprep {
+  CREATE TABLE t1(a, b, c); CREATE TABLE t8(a, b, c); CREATE TABLE tE(a, b, c);
+  CREATE TABLE t2(a, b, c); CREATE TABLE t9(a, b, c); CREATE TABLE tF(a, b, c);
+  CREATE TABLE t3(a, b, c); CREATE TABLE tA(a, b, c); CREATE TABLE tG(a, b, c);
+  CREATE TABLE t4(a, b, c); CREATE TABLE tB(a, b, c); CREATE TABLE tH(a, b, c);
+  CREATE TABLE t5(a, b, c); CREATE TABLE tC(a, b, c); CREATE TABLE tI(a, b, c);
+  CREATE TABLE t6(a, b, c); CREATE TABLE tD(a, b, c); CREATE TABLE tJ(a, b, c);
+  CREATE TABLE x1(a, b, c); CREATE TABLE x8(a, b, c); CREATE TABLE xE(a, b, c);
+  CREATE TABLE x2(a, b, c); CREATE TABLE x9(a, b, c); CREATE TABLE xF(a, b, c);
+  CREATE TABLE x3(a, b, c); CREATE TABLE xA(a, b, c); CREATE TABLE xG(a, b, c);
+  CREATE TABLE x4(a, b, c); CREATE TABLE xB(a, b, c); CREATE TABLE xH(a, b, c);
+  CREATE TABLE x5(a, b, c); CREATE TABLE xC(a, b, c); CREATE TABLE xI(a, b, c);
+  CREATE TABLE x6(a, b, c); CREATE TABLE xD(a, b, c); CREATE TABLE xJ(a, b, c);
+} -corrupt {
+  set fd [open corrupt.db r+]
+  fconfigure $fd -translation binary -encoding binary
+  seek $fd 108
+  set zRightChild [read $fd 4]
+  binary scan $zRightChild I iRightChild
+  seek $fd [expr 1024*($iRightChild-1)+3]
+  puts -nonewline $fd "\x00\x00"
+  close $fd
+} -test {
+  do_test corrupt2-9.1 {
+    catchsql " $::presql SELECT sql FROM sqlite_master "
+  } {1 {database disk image is malformed}}
+}
+
+corruption_test -sqlprep {
+  CREATE TABLE t1(a, b, c);
+  CREATE TABLE t2(a, b, c);
+  PRAGMA writable_schema = 1;
+  UPDATE sqlite_master SET rootpage = NULL WHERE name = 't2';
+} -test {
+  do_test corrupt2-10.1 {
+    catchsql " $::presql SELECT * FROM t2 "
+  } {1 {malformed database schema (t2)}}
+  do_test corrupt2-10.2 {
+    sqlite3_errcode db
+  } {SQLITE_CORRUPT}
+}
+
+corruption_test -sqlprep {
+  PRAGMA auto_vacuum = incremental;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, randstr(100,100));
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t2 SELECT * FROM t1;
+  DELETE FROM t1;
+} -corrupt {
+  set offset [expr [file size corrupt.db] - 1024]
+  hexio_write corrupt.db $offset FF 
+  hexio_write corrupt.db 24   12345678
+} -test {
+  do_test corrupt2-11.1 {
+    catchsql " $::presql PRAGMA incremental_vacuum "
+  } {1 {database disk image is malformed}}
+}
+corruption_test -sqlprep {
+  PRAGMA auto_vacuum = incremental;
+  CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+  CREATE TABLE t2(a INTEGER PRIMARY KEY, b);
+  INSERT INTO t1 VALUES(1, randstr(100,100));
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t1 SELECT NULL, randstr(100,100) FROM t1;
+  INSERT INTO t2 SELECT * FROM t1;
+  DELETE FROM t1;
+} -corrupt {
+  set pgno [expr [file size corrupt.db] / 1024]
+  hexio_write corrupt.db [expr 1024+5*($pgno-3)] 03 
+  hexio_write corrupt.db 24   12345678
+} -test {
+  do_test corrupt2-12.1 {
+    catchsql " $::presql PRAGMA incremental_vacuum "
+  } {1 {database disk image is malformed}}
+}
+
+ifcapable autovacuum {
+  # It is not possible for the last page in a database file to be the
+  # pending-byte page (AKA the locking page). This test verifies that if
+  # an attempt is made to commit a transaction to such an auto-vacuum 
+  # database SQLITE_CORRUPT is returned.
+  #
+  corruption_test -tclprep {
+    db eval { 
+      PRAGMA auto_vacuum = full;
+      PRAGMA page_size = 1024;
+      CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+      INSERT INTO t1 VALUES(NULL, randstr(50,50));
+    }
+    for {set ii 0} {$ii < 10} {incr ii} {
+      db eval " $::presql INSERT INTO t1 SELECT NULL, randstr(50,50) FROM t1 "
+    }
+  } -corrupt {
+    do_test corrupt2-13.1 {
+      file size corrupt.db
+    } $::sqlite_pending_byte
+    hexio_write corrupt.db [expr $::sqlite_pending_byte+1023] 00
+    hexio_write corrupt.db 28 00000000
+  } -test {
+    do_test corrupt2-13.2 {
+      file size corrupt.db
+    } [expr $::sqlite_pending_byte + 1024]
+    do_test corrupt2-13.3 {
+      catchsql { DELETE FROM t1 WHERE rowid < 30; }
+    } {1 {database disk image is malformed}}
+  }
+}
+
+#-------------------------------------------------------------------------
+# Test that PRAGMA integrity_check detects cases where the freelist-count
+# header field is smaller than the actual number of pages on the freelist.
+#
+
+reset_db
+do_execsql_test 14.0 {
+  PRAGMA auto_vacuum = 0;
+  CREATE TABLE t1(x);
+  INSERT INTO t1 VALUES(randomblob(3500));
+  DELETE FROM t1;
+}
+
+do_execsql_test 14.1 {
+  PRAGMA integrity_check;
+  PRAGMA freelist_count;
+} {ok 3}
+
+# There are now 3 free pages. Modify the header-field so that it 
+# (incorrectly) says that just 2 are free.
+do_test 14.2 {
+  db close
+  hexio_write test.db 36 [hexio_render_int32 2]
+  sqlite3 db test.db
+  execsql { PRAGMA freelist_count }
+} {2}
+
+do_execsql_test 14.3 {
+  PRAGMA integrity_check;
+} {{*** in database main ***
+Main freelist: size is 3 but should be 2}}
+
+# Use 2 of the free pages on the free-list.
+#
+do_execsql_test 14.4 {
+  INSERT INTO t1 VALUES(randomblob(2500));
+  PRAGMA freelist_count;
+} {0}
+
+do_execsql_test 14.5 {
+  PRAGMA integrity_check;
+} {{*** in database main ***
+Main freelist: size is 1 but should be 0}}
+
+
+finish_test
+
+finish_test

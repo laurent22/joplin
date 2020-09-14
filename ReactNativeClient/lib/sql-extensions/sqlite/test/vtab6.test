@@ -1,0 +1,578 @@
+# 2002 May 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for joins, including outer joins involving
+# virtual tables. The test cases in this file are copied from the file
+# join.test, and some of the comments still reflect that.
+#
+# $Id: vtab6.test,v 1.5 2009/07/01 16:12:08 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+register_echo_module [sqlite3_connection_pointer db]
+
+execsql {
+  CREATE TABLE real_t1(a,b,c);
+  CREATE TABLE real_t2(b,c,d);
+  CREATE TABLE real_t3(c,d,e);
+  CREATE TABLE real_t4(d,e,f);
+  CREATE TABLE real_t5(a INTEGER PRIMARY KEY);
+  CREATE TABLE real_t6(a INTEGER);
+  CREATE TABLE real_t7 (x, y);
+  CREATE TABLE real_t8 (a integer primary key, b);
+  CREATE TABLE real_t9(a INTEGER PRIMARY KEY, b);
+  CREATE TABLE real_t10(x INTEGER PRIMARY KEY, y);
+  CREATE TABLE real_t11(p INTEGER PRIMARY KEY, q);
+  CREATE TABLE real_t12(a,b);
+  CREATE TABLE real_t13(b,c);
+  CREATE TABLE real_t21(a,b,c);
+  CREATE TABLE real_t22(p,q);
+}
+foreach t [list t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t21 t22] {
+  execsql "CREATE VIRTUAL TABLE $t USING echo(real_$t)"
+}
+
+do_test vtab6-1.1 {
+  execsql {
+    INSERT INTO t1 VALUES(1,2,3);
+    INSERT INTO t1 VALUES(2,3,4);
+    INSERT INTO t1 VALUES(3,4,5);
+    SELECT * FROM t1;
+  }  
+} {1 2 3 2 3 4 3 4 5}
+do_test vtab6-1.2 {
+  execsql {
+    INSERT INTO t2 VALUES(1,2,3);
+    INSERT INTO t2 VALUES(2,3,4);
+    INSERT INTO t2 VALUES(3,4,5);
+    SELECT * FROM t2;
+  }  
+} {1 2 3 2 3 4 3 4 5}
+
+do_test vtab6-1.3 {
+  execsql2 {
+    SELECT * FROM t1 NATURAL JOIN t2;
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+do_test vtab6-1.3.1 {
+  execsql2 {
+    SELECT * FROM t2 NATURAL JOIN t1;
+  }
+} {b 2 c 3 d 4 a 1 b 3 c 4 d 5 a 2}
+do_test vtab6-1.3.2 {
+  execsql2 {
+    SELECT * FROM t2 AS x NATURAL JOIN t1;
+  }
+} {b 2 c 3 d 4 a 1 b 3 c 4 d 5 a 2}
+do_test vtab6-1.3.3 {
+  execsql2 {
+    SELECT * FROM t2 NATURAL JOIN t1 AS y;
+  }
+} {b 2 c 3 d 4 a 1 b 3 c 4 d 5 a 2}
+do_test vtab6-1.3.4 {
+  execsql {
+    SELECT b FROM t1 NATURAL JOIN t2;
+  }
+} {2 3}
+do_test vtab6-1.4.1 {
+  execsql2 {
+    SELECT * FROM t1 INNER JOIN t2 USING(b,c);
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+do_test vtab6-1.4.2 {
+  execsql2 {
+    SELECT * FROM t1 AS x INNER JOIN t2 USING(b,c);
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+do_test vtab6-1.4.3 {
+  execsql2 {
+    SELECT * FROM t1 INNER JOIN t2 AS y USING(b,c);
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+do_test vtab6-1.4.4 {
+  execsql2 {
+    SELECT * FROM t1 AS x INNER JOIN t2 AS y USING(b,c);
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+do_test vtab6-1.4.5 {
+  execsql {
+    SELECT b FROM t1 JOIN t2 USING(b);
+  }
+} {2 3}
+do_test vtab6-1.5 {
+  execsql2 {
+    SELECT * FROM t1 INNER JOIN t2 USING(b);
+  }
+} {a 1 b 2 c 3 c 3 d 4 a 2 b 3 c 4 c 4 d 5}
+do_test vtab6-1.6 {
+  execsql2 {
+    SELECT * FROM t1 INNER JOIN t2 USING(c);
+  }
+} {a 1 b 2 c 3 b 2 d 4 a 2 b 3 c 4 b 3 d 5}
+do_test vtab6-1.7 {
+  execsql2 {
+    SELECT * FROM t1 INNER JOIN t2 USING(c,b);
+  }
+} {a 1 b 2 c 3 d 4 a 2 b 3 c 4 d 5}
+
+do_test vtab6-1.8 {
+  execsql {
+    SELECT * FROM t1 NATURAL CROSS JOIN t2;
+  }
+} {1 2 3 4 2 3 4 5}
+do_test vtab6-1.9 {
+  execsql {
+    SELECT * FROM t1 CROSS JOIN t2 USING(b,c);
+  }
+} {1 2 3 4 2 3 4 5}
+do_test vtab6-1.10 {
+  execsql {
+    SELECT * FROM t1 NATURAL INNER JOIN t2;
+  }
+} {1 2 3 4 2 3 4 5}
+do_test vtab6-1.11 {
+  execsql {
+    SELECT * FROM t1 INNER JOIN t2 USING(b,c);
+  }
+} {1 2 3 4 2 3 4 5}
+do_test vtab6-1.12 {
+  execsql {
+    SELECT * FROM t1 natural inner join t2;
+  }
+} {1 2 3 4 2 3 4 5}
+
+ifcapable subquery {
+  do_test vtab6-1.13 {
+    execsql2 {
+      SELECT * FROM t1 NATURAL JOIN 
+        (SELECT b as 'c', c as 'd', d as 'e' FROM t2) as t3
+    }
+  } {a 1 b 2 c 3 d 4 e 5}
+  do_test vtab6-1.14 {
+    execsql2 {
+      SELECT * FROM (SELECT b as 'c', c as 'd', d as 'e' FROM t2) as 'tx'
+          NATURAL JOIN t1
+    }
+  } {c 3 d 4 e 5 a 1 b 2}
+}
+
+do_test vtab6-1.15 {
+  execsql {
+    INSERT INTO t3 VALUES(2,3,4);
+    INSERT INTO t3 VALUES(3,4,5);
+    INSERT INTO t3 VALUES(4,5,6);
+    SELECT * FROM t3;
+  }  
+} {2 3 4 3 4 5 4 5 6}
+do_test vtab6-1.16 {
+  execsql {
+    SELECT * FROM t1 natural join t2 natural join t3;
+  }
+} {1 2 3 4 5 2 3 4 5 6}
+do_test vtab6-1.17 {
+  execsql2 {
+    SELECT * FROM t1 natural join t2 natural join t3;
+  }
+} {a 1 b 2 c 3 d 4 e 5 a 2 b 3 c 4 d 5 e 6}
+do_test vtab6-1.18 {
+  execsql {
+    INSERT INTO t4 VALUES(2,3,4);
+    INSERT INTO t4 VALUES(3,4,5);
+    INSERT INTO t4 VALUES(4,5,6);
+    SELECT * FROM t4;
+  }  
+} {2 3 4 3 4 5 4 5 6}
+do_test vtab6-1.19.1 {
+  execsql {
+    SELECT * FROM t1 natural join t2 natural join t4;
+  }
+} {1 2 3 4 5 6}
+do_test vtab6-1.19.2 {
+  execsql2 {
+    SELECT * FROM t1 natural join t2 natural join t4;
+  }
+} {a 1 b 2 c 3 d 4 e 5 f 6}
+do_test vtab6-1.20 {
+  execsql {
+    SELECT * FROM t1 natural join t2 natural join t3 WHERE t1.a=1
+  }
+} {1 2 3 4 5}
+
+do_test vtab6-2.1 {
+  execsql {
+    SELECT * FROM t1 NATURAL LEFT JOIN t2;
+  }
+} {1 2 3 4 2 3 4 5 3 4 5 {}}
+do_test vtab6-2.2 {
+  execsql {
+    SELECT * FROM t2 NATURAL LEFT OUTER JOIN t1;
+  }
+} {1 2 3 {} 2 3 4 1 3 4 5 2}
+do_test vtab6-2.3 {
+  catchsql {
+    SELECT * FROM t1 NATURAL RIGHT OUTER JOIN t2;
+  }
+} {1 {RIGHT and FULL OUTER JOINs are not currently supported}}
+do_test vtab6-2.4 {
+  execsql {
+    SELECT * FROM t1 LEFT JOIN t2 ON t1.a=t2.d
+  }
+} {1 2 3 {} {} {} 2 3 4 {} {} {} 3 4 5 1 2 3}
+do_test vtab6-2.4.1 {
+  execsql {
+    SELECT * FROM t1 LEFT JOIN t2 ON t1.a IS t2.d
+  }
+} {1 2 3 {} {} {} 2 3 4 {} {} {} 3 4 5 1 2 3}
+do_test vtab6-2.5 {
+  execsql {
+    SELECT * FROM t1 LEFT JOIN t2 ON t1.a=t2.d WHERE t1.a>1
+  }
+} {2 3 4 {} {} {} 3 4 5 1 2 3}
+do_test vtab6-2.6 {
+  execsql {
+    SELECT * FROM t1 LEFT JOIN t2 ON t1.a=t2.d WHERE t2.b IS NULL OR t2.b>1
+  }
+} {1 2 3 {} {} {} 2 3 4 {} {} {}}
+
+do_test vtab6-3.1 {
+  catchsql {
+    SELECT * FROM t1 NATURAL JOIN t2 ON t1.a=t2.b;
+  }
+} {1 {a NATURAL join may not have an ON or USING clause}}
+do_test vtab6-3.2 {
+  catchsql {
+    SELECT * FROM t1 NATURAL JOIN t2 USING(b);
+  }
+} {1 {a NATURAL join may not have an ON or USING clause}}
+do_test vtab6-3.3 {
+  catchsql {
+    SELECT * FROM t1 JOIN t2 ON t1.a=t2.b USING(b);
+  }
+} {1 {cannot have both ON and USING clauses in the same join}}
+do_test vtab6-3.4 {
+  catchsql {
+    SELECT * FROM t1 JOIN t2 USING(a);
+  }
+} {1 {cannot join using column a - column not present in both tables}}
+do_test vtab6-3.5 {
+  catchsql { SELECT * FROM t1 USING(a) }
+} {1 {a JOIN clause is required before USING}}
+do_test vtab6-3.6 {
+  catchsql {
+    SELECT * FROM t1 JOIN t2 ON t3.a=t2.b;
+  }
+} {1 {no such column: t3.a}}
+do_test vtab6-3.7 {
+  catchsql {
+    SELECT * FROM t1 INNER OUTER JOIN t2;
+  }
+} {1 {unknown or unsupported join type: INNER OUTER}}
+do_test vtab6-3.7 {
+  catchsql {
+    SELECT * FROM t1 LEFT BOGUS JOIN t2;
+  }
+} {1 {unknown or unsupported join type: LEFT BOGUS}}
+
+do_test vtab6-4.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO t6 VALUES(NULL);
+    INSERT INTO t6 VALUES(NULL);
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    INSERT INTO t6 SELECT * FROM t6;
+    COMMIT;
+  }
+  execsql {
+    SELECT * FROM t6 NATURAL JOIN t5;
+  }
+} {}
+do_test vtab6-4.2 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a<t5.a;
+  }
+} {}
+do_test vtab6-4.3 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a>t5.a;
+  }
+} {}
+do_test vtab6-4.4 {
+  execsql {
+    UPDATE t6 SET a='xyz';
+    SELECT * FROM t6 NATURAL JOIN t5;
+  }
+} {}
+do_test vtab6-4.6 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a<t5.a;
+  }
+} {}
+do_test vtab6-4.7 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a>t5.a;
+  }
+} {}
+do_test vtab6-4.8 {
+  execsql {
+    UPDATE t6 SET a=1;
+    SELECT * FROM t6 NATURAL JOIN t5;
+  }
+} {}
+do_test vtab6-4.9 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a<t5.a;
+  }
+} {}
+do_test vtab6-4.10 {
+  execsql {
+    SELECT * FROM t6, t5 WHERE t6.a>t5.a;
+  }
+} {}
+
+# A test for ticket #247.
+#
+do_test vtab6-7.1 {
+  execsql {
+    INSERT INTO t7 VALUES ("pa1", 1);
+    INSERT INTO t7 VALUES ("pa2", NULL);
+    INSERT INTO t7 VALUES ("pa3", NULL);
+    INSERT INTO t7 VALUES ("pa4", 2);
+    INSERT INTO t7 VALUES ("pa30", 131);
+    INSERT INTO t7 VALUES ("pa31", 130);
+    INSERT INTO t7 VALUES ("pa28", NULL);
+
+    INSERT INTO t8 VALUES (1, "pa1");
+    INSERT INTO t8 VALUES (2, "pa4");
+    INSERT INTO t8 VALUES (3, NULL);
+    INSERT INTO t8 VALUES (4, NULL);
+    INSERT INTO t8 VALUES (130, "pa31");
+    INSERT INTO t8 VALUES (131, "pa30");
+
+    SELECT coalesce(t8.a,999) from t7 LEFT JOIN t8 on y=a;
+  }
+} {1 999 999 2 131 130 999}
+
+# Make sure a left join where the right table is really a view that
+# is itself a join works right.  Ticket #306.
+#
+ifcapable view {
+do_test vtab6-8.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO t9 VALUES(1,11);
+    INSERT INTO t9 VALUES(2,22);
+    INSERT INTO t10 VALUES(1,2);
+    INSERT INTO t10 VALUES(3,3);    
+    INSERT INTO t11 VALUES(2,111);
+    INSERT INTO t11 VALUES(3,333);    
+    CREATE VIEW v10_11 AS SELECT x, q FROM t10, t11 WHERE t10.y=t11.p;
+    COMMIT;
+    SELECT * FROM t9 LEFT JOIN v10_11 ON( a=x );
+  }
+} {1 11 1 111 2 22 {} {}}
+ifcapable subquery {
+  do_test vtab6-8.2 {
+    execsql {
+      SELECT * FROM t9 LEFT JOIN (SELECT x, q FROM t10, t11 WHERE t10.y=t11.p)
+           ON( a=x);
+    }
+  } {1 11 1 111 2 22 {} {}}
+}
+do_test vtab6-8.3 {
+  execsql {
+    SELECT * FROM v10_11 LEFT JOIN t9 ON( a=x );
+  }
+} {1 111 1 11 3 333 {} {}}
+} ;# ifcapable view
+
+# Ticket #350 describes a scenario where LEFT OUTER JOIN does not
+# function correctly if the right table in the join is really
+# subquery.
+#
+# To test the problem, we generate the same LEFT OUTER JOIN in two
+# separate selects but with on using a subquery and the other calling
+# the table directly.  Then connect the two SELECTs using an EXCEPT.
+# Both queries should generate the same results so the answer should
+# be an empty set.
+#
+ifcapable compound {
+do_test vtab6-9.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO t12 VALUES(1,11);
+    INSERT INTO t12 VALUES(2,22);
+    INSERT INTO t13 VALUES(22,222);
+    COMMIT;
+  }
+} {}
+
+ifcapable subquery {
+  do_test vtab6-9.1.1 {
+    execsql {
+      SELECT * FROM t12 NATURAL LEFT JOIN t13
+      EXCEPT
+      SELECT * FROM t12 NATURAL LEFT JOIN (SELECT * FROM t13 WHERE b>0);
+    }
+  } {}
+}
+ifcapable view {
+  do_test vtab6-9.2 {
+    execsql {
+      CREATE VIEW v13 AS SELECT * FROM t13 WHERE b>0;
+      SELECT * FROM t12 NATURAL LEFT JOIN t13
+        EXCEPT
+        SELECT * FROM t12 NATURAL LEFT JOIN v13;
+    }
+  } {}
+} ;# ifcapable view
+} ;# ifcapable compound
+
+ifcapable subquery {
+do_test vtab6-10.1 {
+  execsql {
+    CREATE INDEX i22 ON real_t22(q);
+    SELECT a FROM t21 LEFT JOIN t22 ON b=p WHERE q=
+       (SELECT max(m.q) FROM t22 m JOIN t21 n ON n.b=m.p WHERE n.c=1);
+  }  
+} {}
+} ;# ifcapable subquery
+
+do_test vtab6-11.1.0 {
+  execsql {
+    CREATE TABLE ab_r(a, b);
+    CREATE TABLE bc_r(b, c);
+
+    CREATE VIRTUAL TABLE ab USING echo(ab_r); 
+    CREATE VIRTUAL TABLE bc USING echo(bc_r); 
+
+    INSERT INTO ab VALUES(1, 2);
+    INSERT INTO bc VALUES(2, 3);
+  }
+} {}
+
+do_test vtab6-11.1.1 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+do_test vtab6-11.1.2 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+set ::echo_module_cost 1.0
+
+do_test vtab6-11.1.3 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+do_test vtab6-11.1.4 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+
+do_test vtab6-11.2.0 {
+  execsql {
+    CREATE INDEX ab_i ON ab_r(b);
+    CREATE INDEX bc_i ON bc_r(b);
+  }
+} {}
+
+unset ::echo_module_cost
+
+do_test vtab6-11.2.1 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+do_test vtab6-11.2.2 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+set ::echo_module_cost 1.0
+
+do_test vtab6-11.2.3 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+do_test vtab6-11.2.4 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+unset ::echo_module_cost
+db close
+sqlite3 db test.db
+register_echo_module [sqlite3_connection_pointer db]
+
+do_test vtab6-11.3.1 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+
+do_test vtab6-11.3.2 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+set ::echo_module_cost 1.0
+
+do_test vtab6-11.3.3 {
+  execsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 2 3}
+do_test vtab6-11.3.4 {
+  execsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 2 3}
+
+unset ::echo_module_cost
+
+set ::echo_module_ignore_usable 1
+db cache flush
+
+do_test vtab6-11.4.1 {
+  catchsql {
+    SELECT a, b, c FROM ab NATURAL JOIN bc;
+  }
+} {1 {ab.xBestIndex malfunction}}
+do_test vtab6-11.4.2 {
+  catchsql {
+    SELECT a, b, c FROM bc NATURAL JOIN ab;
+  }
+} {1 {bc.xBestIndex malfunction}}
+
+unset ::echo_module_ignore_usable
+
+finish_test

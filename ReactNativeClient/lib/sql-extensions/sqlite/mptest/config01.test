@@ -1,0 +1,46 @@
+/*
+** Configure five tasks in different ways, then run tests.
+*/
+--if vfsname() GLOB 'unix'
+PRAGMA page_size=8192;
+--task 1
+  PRAGMA journal_mode=PERSIST;
+  PRAGMA mmap_size=0;
+--end
+--task 2
+  PRAGMA journal_mode=TRUNCATE;
+  PRAGMA mmap_size=28672;
+--end
+--task 3
+  PRAGMA journal_mode=MEMORY;
+--end
+--task 4
+  PRAGMA journal_mode=OFF;
+--end
+--task 4
+  PRAGMA mmap_size(268435456);
+--end
+--source multiwrite01.test
+--wait all
+PRAGMA page_size=16384;
+VACUUM;
+CREATE TABLE pgsz(taskid, sz INTEGER);
+--task 1
+  INSERT INTO pgsz VALUES(1, eval('PRAGMA page_size'));
+--end
+--task 2
+  INSERT INTO pgsz VALUES(2, eval('PRAGMA page_size'));
+--end
+--task 3
+  INSERT INTO pgsz VALUES(3, eval('PRAGMA page_size'));
+--end
+--task 4
+  INSERT INTO pgsz VALUES(4, eval('PRAGMA page_size'));
+--end
+--task 5
+  INSERT INTO pgsz VALUES(5, eval('PRAGMA page_size'));
+--end
+--source multiwrite01.test
+--wait all
+SELECT sz FROM pgsz;
+--match 16384 16384 16384 16384 16384

@@ -1,0 +1,205 @@
+# 2014 August 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+}
+source $testdir/tester.tcl
+set ::testprefix rbu3
+
+
+# Run the RBU in file $rbu on target database $target until completion.
+#
+proc run_rbu {target rbu} {
+  sqlite3rbu rbu $target $rbu
+  while { [rbu step]=="SQLITE_OK" } {}
+  rbu close
+}
+
+forcedelete test.db-oal rbu.db
+db close
+sqlite3_shutdown
+sqlite3_config_uri 1
+reset_db
+
+#--------------------------------------------------------------------
+# Test that for an RBU to be applied, no corruption results if the
+# affinities on the source and target table do not match.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b TEXT, c REAL);
+  CREATE INDEX i1 ON x1(b, c);
+} {}
+
+do_test 1.1 {
+  sqlite3 db2 rbu.db
+  db2 eval {
+    CREATE TABLE data_x1(a, b, c, rbu_control);
+    INSERT INTO data_x1 VALUES(1, '123', '123', 0);
+    INSERT INTO data_x1 VALUES(2, 123, 123, 0);
+  }
+  db2 close
+  run_rbu test.db rbu.db
+} {SQLITE_DONE}
+
+do_execsql_test 1.2 {
+  PRAGMA integrity_check;
+} {ok}
+
+#--------------------------------------------------------------------
+# Test that NULL values may not be inserted into INTEGER PRIMARY KEY
+# columns.
+#
+forcedelete rbu.db
+reset_db
+
+do_execsql_test 2.0 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b TEXT, c REAL);
+  CREATE INDEX i1 ON x1(b, c);
+} {}
+
+foreach {tn rbudb} {
+  1 {
+    CREATE TABLE data_x1(a, b, c, rbu_control);
+    INSERT INTO data_x1 VALUES(NULL, 'a', 'b', 0);
+  }
+
+  2 {
+    CREATE TABLE data_x1(c, b, a, rbu_control);
+    INSERT INTO data_x1 VALUES('b', 'a', NULL, 0);
+  }
+} {
+  do_test 2.$tn.1 {
+    forcedelete rbu.db
+    sqlite3 db2 rbu.db
+    db2 eval $rbudb
+    db2 close
+    list [catch { run_rbu test.db rbu.db } msg] $msg
+  } {1 {SQLITE_MISMATCH - datatype mismatch}}
+
+  do_execsql_test 2.1.2 {
+    PRAGMA integrity_check;
+  } {ok}
+}
+
+#--------------------------------------------------------------------
+# Test that missing columns are detected.
+#
+forcedelete rbu.db
+reset_db
+
+do_execsql_test 2.0 {
+  CREATE TABLE x1(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX i1 ON x1(b, c);
+} {}
+
+do_test 2.1 {
+  sqlite3 db2 rbu.db
+  db2 eval {
+    CREATE TABLE data_x1(a, b, rbu_control);
+    INSERT INTO data_x1 VALUES(1, 'a', 0);
+  }
+  db2 close
+  list [catch { run_rbu test.db rbu.db } msg] $msg
+} {1 {SQLITE_ERROR - column missing from data_x1: c}}
+
+do_execsql_test 2.2 {
+  PRAGMA integrity_check;
+} {ok}
+
+# Also extra columns.
+#
+do_execsql_test 2.3 {
+  CREATE TABLE x2(a INTEGER PRIMARY KEY, b, c);
+  CREATE INDEX i2 ON x2(b, c);
+} {}
+
+do_test 2.4 {
+  forcedelete rbu.db
+  sqlite3 db2 rbu.db
+  db2 eval {
+    CREATE TABLE data_x2(a, b, c, d, rbu_control);
+    INSERT INTO data_x2 VALUES(1, 'a', 2, 3, 0);
+  }
+  db2 close
+  list [catch { run_rbu test.db rbu.db } msg] $msg
+} {1 SQLITE_ERROR}
+
+do_execsql_test 2.5 {
+  PRAGMA integrity_check;
+} {ok}
+
+
+#-------------------------------------------------------------------------
+# Test that sqlite3rbu_create_vfs() returns an error if the requested 
+# parent VFS is unknown.
+#
+# And that nothing disasterous happens if a VFS name passed to
+# sqlite3rbu_destroy_vfs() is unknown or not an RBU vfs.
+#
+do_test 3.1 {
+  list [catch {sqlite3rbu_create_vfs xyz nosuchparent} msg] $msg
+} {1 SQLITE_NOTFOUND}
+
+do_test 3.2 {
+  sqlite3rbu_destroy_vfs nosuchvfs
+  sqlite3rbu_destroy_vfs unix
+  sqlite3rbu_destroy_vfs win32
+} {}
+
+#-------------------------------------------------------------------------
+# Test that it is an error to specify an explicit VFS that does not 
+# include rbu VFS functionality.
+#
+do_test 4.1 {
+  testvfs tvfs
+  sqlite3rbu rbu file:test.db?vfs=tvfs rbu.db 
+  list [catch { rbu step } msg] $msg
+} {0 SQLITE_ERROR}
+do_test 4.2 {
+  list [catch { rbu close } msg] $msg
+} {1 {SQLITE_ERROR - rbu vfs not found}}
+tvfs delete
+
+#-------------------------------------------------------------------------
+# Test a large rbu update to ensure that wal_autocheckpoint does not get
+# in the way.
+#
+forcedelete rbu.db
+reset_db
+do_execsql_test 5.1 {
+  CREATE TABLE x1(a, b, c, PRIMARY KEY(a)) WITHOUT ROWID;
+  CREATE INDEX i1 ON x1(a);
+
+  ATTACH 'rbu.db' AS rbu;
+  CREATE TABLE rbu.data_x1(a, b, c, rbu_control);
+  WITH s(a, b, c) AS (
+    SELECT randomblob(300), randomblob(300), 1
+    UNION ALL
+    SELECT randomblob(300), randomblob(300), c+1 FROM s WHERE c<2000
+  )
+  INSERT INTO data_x1 SELECT a, b, c, 0 FROM s;
+}
+
+do_test 5.2 {
+  sqlite3rbu rbu test.db rbu.db
+  while {[rbu step]=="SQLITE_OK" && [file exists test.db-wal]==0} {}
+  rbu close
+} {SQLITE_OK}
+
+do_test 5.3 {
+  expr {[file size test.db-wal] > (1024 * 1200)}
+} 1
+
+do_test 6.1 { sqlite3rbu_internal_test } {}
+
+finish_test

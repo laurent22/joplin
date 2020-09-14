@@ -1,0 +1,375 @@
+# 2008 April 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Ticket #3060
+#
+# Make sure IEEE floating point NaN values are handled properly.
+# SQLite should always convert NaN into NULL.
+#
+# Also verify that the decimal to IEEE754 binary conversion routines
+# correctly generate 0.0, +Inf, and -Inf as appropriate for numbers
+# out of range.
+#
+# $Id: nan.test,v 1.5 2008/09/18 11:30:13 danielk1977 Exp $
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+do_test nan-1.1.1 {
+  db eval {
+    PRAGMA auto_vacuum=OFF;
+    PRAGMA page_size=1024;
+    CREATE TABLE t1(x FLOAT);
+  }
+  set ::STMT [sqlite3_prepare db "INSERT INTO t1 VALUES(?)" -1 TAIL]
+  sqlite3_bind_double $::STMT 1 NaN
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT x, typeof(x) FROM t1}
+} {{} null}
+if {$tcl_platform(platform) != "symbian"} {
+  do_realnum_test nan-1.1.2 {
+    sqlite3_bind_double $::STMT 1 +Inf
+    sqlite3_step $::STMT
+    sqlite3_reset $::STMT
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null inf real}
+  do_realnum_test nan-1.1.3 {
+    sqlite3_bind_double $::STMT 1 -Inf
+    sqlite3_step $::STMT
+    sqlite3_reset $::STMT
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null inf real -inf real}
+  do_realnum_test nan-1.1.4 {
+    sqlite3_bind_double $::STMT 1 -NaN
+    sqlite3_step $::STMT
+    sqlite3_reset $::STMT
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null inf real -inf real {} null}
+  do_realnum_test nan-1.1.5 {
+    sqlite3_bind_double $::STMT 1 NaN0
+    sqlite3_step $::STMT
+    sqlite3_reset $::STMT
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null inf real -inf real {} null {} null}
+  do_realnum_test nan-1.1.6 {
+    sqlite3_bind_double $::STMT 1 -NaN0
+    sqlite3_step $::STMT
+    sqlite3_reset $::STMT
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null inf real -inf real {} null {} null {} null}
+  do_test nan-1.1.7 {
+    db eval {
+      UPDATE t1 SET x=x-x;
+      SELECT x, typeof(x) FROM t1;
+    }
+  } {{} null {} null {} null {} null {} null {} null}
+}
+
+# The following block of tests, nan-1.2.*, are the same as the nan-1.1.*
+# tests above, except that the SELECT queries used to validate data 
+# convert floating point values to text internally before returning them
+# to Tcl. This allows the tests to be run on platforms where Tcl has
+# problems converting "inf" and "-inf" from floating point to text format.
+# It also tests the internal float->text conversion routines a bit.
+#
+do_test nan-1.2.1 {
+  db eval {
+    DELETE FROM T1;
+  }
+  sqlite3_bind_double $::STMT 1 NaN
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null}
+do_test nan-1.2.2 {
+  sqlite3_bind_double $::STMT 1 +Inf
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null Inf real}
+do_test nan-1.2.3 {
+  sqlite3_bind_double $::STMT 1 -Inf
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null Inf real -Inf real}
+do_test nan-1.2.4 {
+  sqlite3_bind_double $::STMT 1 -NaN
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null Inf real -Inf real {} null}
+do_test nan-1.2.5 {
+  sqlite3_bind_double $::STMT 1 NaN0
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null Inf real -Inf real {} null {} null}
+do_test nan-1.2.6 {
+  sqlite3_bind_double $::STMT 1 -NaN0
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {{} null Inf real -Inf real {} null {} null {} null}
+do_test nan-1.2.7 {
+  db eval {
+    UPDATE t1 SET x=x-x;
+    SELECT CAST(x AS text), typeof(x) FROM t1;
+  }
+} {{} null {} null {} null {} null {} null {} null}
+
+do_test nan-2.1 {
+  db eval {
+    DELETE FROM T1;
+  }
+  sqlite3_bind_double $::STMT 1 NaN
+  sqlite3_step $::STMT
+  sqlite3_reset $::STMT
+  db eval {SELECT x, typeof(x) FROM t1}
+} {{} null}
+sqlite3_finalize $::STMT
+
+# SQLite always converts NaN into NULL so it is not possible to write
+# a NaN value into the database file using SQLite.  The following series
+# of tests writes a normal floating point value (0.5) into the database,
+# then writes directly into the database file to change the 0.5 into NaN.
+# Then it reads the value of the database to verify it is converted into
+# NULL.
+#
+if {![nonzero_reserved_bytes]} {
+  do_test nan-3.1 {
+    db eval {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(0.5);
+      PRAGMA auto_vacuum=OFF;
+      PRAGMA page_size=1024;
+      VACUUM;
+    }
+    hexio_read test.db 2040 8
+  } {3FE0000000000000}
+  do_test nan-3.2 {
+    db eval {
+      SELECT x, typeof(x) FROM t1
+    }
+  } {0.5 real}
+  do_test nan-3.3 {
+    db close
+    hexio_write test.db 2040 FFF8000000000000
+    sqlite3 db test.db
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null}
+  do_test nan-3.4 {
+    db close
+    hexio_write test.db 2040 7FF8000000000000
+    sqlite3 db test.db
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null}
+  do_test nan-3.5 {
+    db close
+    hexio_write test.db 2040 FFFFFFFFFFFFFFFF
+    sqlite3 db test.db
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null}
+  do_test nan-3.6 {
+    db close
+    hexio_write test.db 2040 7FFFFFFFFFFFFFFF
+    sqlite3 db test.db
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {{} null}
+}
+
+# Verify that the sqlite3AtoF routine is able to handle extreme
+# numbers.
+#
+do_test nan-4.1 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES([string repeat 9 307].0)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {1e+307 real}
+do_test nan-4.2 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES([string repeat 9 308].0)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {1e+308 real}
+do_test nan-4.3 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES(-[string repeat 9 307].0)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {-1e+307 real}
+do_test nan-4.4 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES(-[string repeat 9 308].0)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {-1e+308 real}
+do_test nan-4.5 {
+  db eval {DELETE FROM t1}
+  set big -[string repeat 0 10000][string repeat 9 308].[string repeat 0 10000]
+  db eval "INSERT INTO t1 VALUES($big)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {-1e+308 real}
+do_test nan-4.6 {
+  db eval {DELETE FROM t1}
+  set big [string repeat 0 10000][string repeat 9 308].[string repeat 0 10000]
+  db eval "INSERT INTO t1 VALUES($big)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {1e+308 real}
+
+if {$tcl_platform(platform) != "symbian"} {
+  # Do not run these tests on Symbian, as the Tcl port doesn't like to
+  # convert from floating point value "-inf" to a string.
+  #
+  do_realnum_test nan-4.7 {
+    db eval {DELETE FROM t1}
+    db eval "INSERT INTO t1 VALUES([string repeat 9 309].0)"
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {inf real}
+  do_realnum_test nan-4.8 {
+    db eval {DELETE FROM t1}
+    db eval "INSERT INTO t1 VALUES(-[string repeat 9 309].0)"
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {-inf real}
+}
+do_test nan-4.9 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES([string repeat 9 309].0)"
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {Inf real}
+do_test nan-4.10 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES(-[string repeat 9 309].0)"
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {-Inf real}
+
+do_test nan-4.11 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES(1234.5[string repeat 0 10000]12345)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {1234.5 real}
+do_test nan-4.12 {
+  db eval {DELETE FROM t1}
+  db eval "INSERT INTO t1 VALUES(-1234.5[string repeat 0 10000]12345)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {-1234.5 real}
+do_test nan-4.13 {
+  db eval {DELETE FROM t1}
+  set small [string repeat 0 10000].[string repeat 0 324][string repeat 9 10000]
+  db eval "INSERT INTO t1 VALUES($small)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {0.0 real}
+do_test nan-4.14 {
+  db eval {DELETE FROM t1}
+  set small \
+      -[string repeat 0 10000].[string repeat 0 324][string repeat 9 10000]
+  db eval "INSERT INTO t1 VALUES($small)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {0.0 real}
+
+# These tests test some really, really small floating point numbers.
+#
+if {$tcl_platform(platform) != "symbian"} {
+  # These two are not run on symbian because tcl has trouble converting
+  # the very small numbers back to text form (probably due to a difference
+  # in the sprintf() implementation).
+  #
+  do_test nan-4.15 {
+    db eval {DELETE FROM t1}
+    set small \
+        [string repeat 0 10000].[string repeat 0 323][string repeat 9 10000]
+    db eval "INSERT INTO t1 VALUES($small)"
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {9.88131291682493e-324 real}
+  do_test nan-4.16 {
+    db eval {DELETE FROM t1}
+    set small \
+        -[string repeat 0 10000].[string repeat 0 323][string repeat 9 10000]
+    db eval "INSERT INTO t1 VALUES($small)"
+    db eval {SELECT x, typeof(x) FROM t1}
+  } {-9.88131291682493e-324 real}
+}
+do_test nan-4.17 {
+  db eval {DELETE FROM t1}
+  set small [string repeat 0 10000].[string repeat 0 323][string repeat 9 10000]
+  db eval "INSERT INTO t1 VALUES($small)"
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {9.88131291682493e-324 real}
+do_test nan-4.18 {
+  db eval {DELETE FROM t1}
+  set small \
+      -[string repeat 0 10000].[string repeat 0 323][string repeat 9 10000]
+  db eval "INSERT INTO t1 VALUES($small)"
+  db eval {SELECT CAST(x AS text), typeof(x) FROM t1}
+} {-9.88131291682493e-324 real}
+
+do_realnum_test nan-4.20 {
+  db eval {DELETE FROM t1}
+  set big [string repeat 9 10000].0e-9000
+  db eval "INSERT INTO t1 VALUES($big)"
+  db eval {SELECT x, typeof(x) FROM t1}
+} {inf real}
+
+do_realnum_test nan-4.30 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e+9999');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {inf real}
+do_realnum_test nan-4.31 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e+10000');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {inf real}
+
+do_realnum_test nan-4.32 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e-9999');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {0.0 real}
+do_realnum_test nan-4.33 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e-10000');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {0.0 real}
+do_realnum_test nan-4.34 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e2147483650');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {inf real}
+do_realnum_test nan-4.35 {
+  db eval {
+    DELETE FROM t1;
+    INSERT INTO t1 VALUES('2.5e-2147483650');
+    SELECT x, typeof(x) FROM t1;
+  }
+} {0.0 real}
+
+do_realnum_test nan-4.40 {
+  db eval {
+    SELECT cast('-1e999' AS real);
+  }
+} {-inf}
+
+finish_test

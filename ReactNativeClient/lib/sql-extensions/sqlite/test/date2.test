@@ -1,0 +1,169 @@
+# 2017-07-20
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing date and time functions used in
+# check constraints and index expressions.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Skip this whole file if date and time functions are omitted
+# at compile-time
+#
+ifcapable {!datetime} {
+  finish_test
+  return
+}
+
+do_execsql_test date2-100 {
+  CREATE TABLE t1(x, y, CHECK( date(x) BETWEEN '2017-07-01' AND '2017-07-31' ));
+  INSERT INTO t1(x,y) VALUES('2017-07-20','one');
+} {}
+do_catchsql_test date2-110 {
+  INSERT INTO t1(x,y) VALUES('now','two');
+} {1 {non-deterministic use of date() in a CHECK constraint}}
+do_execsql_test date2-120 {
+  SELECT * FROM t1;
+} {2017-07-20 one}
+do_catchsql_test date2-130 {
+  INSERT INTO t1(x,y) VALUES('2017-08-01','two');
+} {1 {CHECK constraint failed: t1}}
+
+do_execsql_test date2-200 {
+  CREATE TABLE t2(x,y);
+  INSERT INTO t2(x,y) VALUES(1, '2017-07-20'), (2, 'xyzzy');
+  CREATE INDEX t2y ON t2(date(y));
+}
+do_catchsql_test date2-210 {
+  INSERT INTO t2(x,y) VALUES(3, 'now');
+} {1 {non-deterministic use of date() in an index}}
+do_execsql_test date2-220 {
+  SELECT x, y FROM t2 ORDER BY x;
+} {1 2017-07-20 2 xyzzy}
+
+do_execsql_test date2-300 {
+  CREATE TABLE t3(a INTEGER PRIMARY KEY,b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<1000)
+    INSERT INTO t3(a,b) SELECT x, julianday('2017-07-01')+x FROM c;
+  UPDATE t3 SET b='now' WHERE a=500;
+}
+do_catchsql_test date2-310 {
+  CREATE INDEX t3b1 ON t3(datetime(b));
+} {1 {non-deterministic use of datetime() in an index}}
+do_catchsql_test date2-320 {
+  CREATE INDEX t3b1 ON t3(datetime(b)) WHERE typeof(b)='real';
+} {0 {}}
+do_execsql_test date2-330 {
+  EXPLAIN QUERY PLAN
+  SELECT a FROM t3
+   WHERE typeof(b)='real'
+     AND datetime(b) BETWEEN '2017-07-04' AND '2017-07-08';
+} {/USING INDEX t3b/}
+do_execsql_test date2-331 {
+  SELECT a FROM t3
+   WHERE typeof(b)='real'
+     AND datetime(b) BETWEEN '2017-07-04' AND '2017-07-08'
+  ORDER BY a;
+} {3 4 5 6}
+
+do_execsql_test date2-400 {
+  CREATE TABLE t4(a INTEGER PRIMARY KEY,b);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<1000)
+    INSERT INTO t4(a,b) SELECT x, julianday('2017-07-01')+x FROM c;
+  UPDATE t4 SET b='now' WHERE a=500;
+}
+do_catchsql_test date2-410 {
+  CREATE INDEX t4b1 ON t4(b)
+    WHERE date(b) BETWEEN '2017-06-01' AND '2017-08-31';
+} {1 {non-deterministic use of date() in an index}}
+do_execsql_test date2-420 {
+  DELETE FROM t4 WHERE a=500;
+  CREATE INDEX t4b1 ON t4(b)
+    WHERE date(b) BETWEEN '2017-06-01' AND '2017-08-31';
+}
+do_catchsql_test date2-430 {
+  INSERT INTO t4(a,b) VALUES(9999,'now');
+} {1 {non-deterministic use of date() in an index}}
+
+do_execsql_test date2-500 {
+  CREATE TABLE mods(x);
+  INSERT INTO mods(x) VALUES
+    ('+10 days'),
+    ('-10 days'),
+    ('+10 hours'),
+    ('-10 hours'),
+    ('+10 minutes'),
+    ('-10 minutes'),
+    ('+10 seconds'),
+    ('-10 seconds'),
+    ('+10 months'),
+    ('-10 months'),
+    ('+10 years'),
+    ('-10 years'),
+    ('start of month'),
+    ('start of year'),
+    ('start of day'),
+    ('weekday 1'),
+    ('unixepoch');
+  CREATE TABLE t5(y,m);
+  WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<5)
+    INSERT INTO t5(y,m) SELECT julianday('2017-07-01')+c.x, mods.x FROM c, mods;
+  CREATE INDEX t5x1 on t5(y) WHERE datetime(y,m) IS NOT NULL;
+}
+do_catchsql_test date2-510 {
+  INSERT INTO t5(y,m) VALUES('2017-07-20','localtime');
+} {1 {non-deterministic use of datetime() in an index}}
+do_catchsql_test date2-520 {
+  INSERT INTO t5(y,m) VALUES('2017-07-20','utc');
+} {1 {non-deterministic use of datetime() in an index}}
+
+# 2019-10-30 Ticket 830277d9db6c3ba1
+#
+do_catchsql_test date2-600 {
+  CREATE TABLE t600(a REAL CHECK( a<julianday('now') ));
+  INSERT INTO t600(a) VALUES(1.0);
+} {1 {non-deterministic use of julianday() in a CHECK constraint}}
+do_catchsql_test date2-601 {
+  CREATE TABLE t601(a REAL, b TEXT, CHECK( a<julianday(b) ));
+  INSERT INTO t601(a,b) VALUES(1.0, '1970-01-01');
+} {0 {}}
+do_catchsql_test date2-602 {
+  INSERT INTO t601(a,b) VALUES(1e100, '1970-01-01');
+} {1 {CHECK constraint failed: t601}}
+do_catchsql_test date2-603 {
+  INSERT INTO t601(a,b) VALUES(10, 'now');
+} {1 {non-deterministic use of julianday() in a CHECK constraint}}
+do_catchsql_test date2-604 {
+  INSERT INTO t600(a) VALUES(julianday('now')+10);
+} {1 {non-deterministic use of julianday() in a CHECK constraint}}
+
+
+do_catchsql_test date2-610 {
+  CREATE TABLE t610(a,b);
+  CREATE INDEX t610x1 ON t610(julianday('now')+b);
+  INSERT INTO t610(a,b) VALUES(123,456);
+} {1 {non-deterministic use of julianday() in an index}}
+do_catchsql_test date2-611 {
+  CREATE TABLE t611(a,b);
+  CREATE INDEX t611x1 ON t611(julianday(a)+b);
+  INSERT INTO t611(a,b) VALUES('1970-01-01',10.0);
+} {0 {}}
+do_catchsql_test date2-612 {
+  INSERT INTO t611(a,b) VALUES('now',10.0);
+} {1 {non-deterministic use of julianday() in an index}}
+
+do_catchsql_test date3-620 {
+  CREATE TABLE t620(a, b AS (a+julianday('now')));
+  INSERT INTO t620 VALUES(10);
+} {1 {non-deterministic use of julianday() in a generated column}}
+
+finish_test

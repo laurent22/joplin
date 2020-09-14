@@ -1,0 +1,310 @@
+# 2018 January 12
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix sessionstat1
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  CREATE INDEX t1b ON t1(b);
+  CREATE INDEX t1c ON t1(c);
+
+  WITH s(i) AS (
+    SELECT 0 UNION ALL SELECT i+1 FROM s WHERE (i+1)<32
+  )
+  INSERT INTO t1 SELECT i, i%8, i%2 FROM s;
+}
+
+do_iterator_test 1.1 {} {
+  ANALYZE
+} {
+  {INSERT sqlite_stat1 0 XX. {} {t t1 t sqlite_autoindex_t1_1 t {32 1}}}
+  {INSERT sqlite_stat1 0 XX. {} {t t1 t t1b t {32 4}}} 
+  {INSERT sqlite_stat1 0 XX. {} {t t1 t t1c t {32 16}}}
+}
+
+do_execsql_test 1.2 {
+  WITH s(i) AS (
+    SELECT 32 UNION ALL SELECT i+1 FROM s WHERE (i+1)<64
+  )
+  INSERT INTO t1 SELECT i, i%8, i%2 FROM s;
+}
+
+do_iterator_test 1.3 {} {
+  ANALYZE
+} {
+  {UPDATE sqlite_stat1 0 XX. {t t1 t sqlite_autoindex_t1_1 t {32 1}} {{} {} {} {} t {64 1}}} 
+  {UPDATE sqlite_stat1 0 XX. {t t1 t t1b t {32 4}} {{} {} {} {} t {64 8}}} 
+  {UPDATE sqlite_stat1 0 XX. {t t1 t t1c t {32 16}} {{} {} {} {} t {64 32}}}
+}
+
+do_iterator_test 1.5 {} {
+  DROP INDEX t1b;
+} {
+  {DELETE sqlite_stat1 0 XX. {t t1 t t1b t {64 8}} {}}
+}
+
+do_iterator_test 1.6 {} {
+  DROP TABLE t1;
+} {
+  {DELETE sqlite_stat1 0 XX. {t t1 t sqlite_autoindex_t1_1 t {64 1}} {}}
+  {DELETE sqlite_stat1 0 XX. {t t1 t t1c t {64 32}} {}}
+}
+
+#-------------------------------------------------------------------------
+#
+catch { db2 close }
+forcedelete test.db2
+sqlite3 db2 test.db2
+
+do_test 2.0 {
+  do_common_sql {
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+    CREATE INDEX t1b ON t1(b);
+    CREATE INDEX t1c ON t1(c);
+    ANALYZE;
+  }
+} {}
+
+do_test 2.1 {
+  do_then_apply_sql {
+    WITH s(i) AS (
+        SELECT 0 UNION ALL SELECT i+1 FROM s WHERE (i+1)<32
+    )
+    INSERT INTO t1 SELECT i, i%8, i%2 FROM s;
+    ANALYZE;
+  }
+} {}
+
+do_execsql_test -db db2 2.2 {
+  SELECT * FROM sqlite_stat1
+} {
+  t1 sqlite_autoindex_t1_1 {32 1} 
+  t1 t1b {32 4} 
+  t1 t1c {32 16}
+}
+
+do_test 2.3 {
+  do_then_apply_sql { DROP INDEX t1c }
+} {}
+
+do_execsql_test -db db2 2.4 {
+  SELECT * FROM sqlite_stat1
+} {
+  t1 sqlite_autoindex_t1_1 {32 1} 
+  t1 t1b {32 4} 
+}
+
+do_test 2.3 {
+  do_then_apply_sql { DROP TABLE t1 }
+} {}
+
+do_execsql_test -db db2 2.4 {
+  SELECT * FROM sqlite_stat1
+} {
+}
+
+do_execsql_test -db db2 2.5 { SELECT count(*) FROM t1 } 32
+
+#-------------------------------------------------------------------------
+db2 close
+forcedelete test.db2
+reset_db
+sqlite3 db2 test.db2
+
+do_test 3.0 {
+  do_common_sql {
+    CREATE TABLE t1(a, b, c);
+    ANALYZE;
+    DELETE FROM sqlite_stat1;
+  }
+  execsql {
+    INSERT INTO t1 VALUES(1, 1, 1);
+    INSERT INTO t1 VALUES(2, 2, 2);
+    INSERT INTO t1 VALUES(3, 3, 3);
+    INSERT INTO t1 VALUES(4, 4, 4);
+  }
+} {} 
+
+do_iterator_test 3.1 {} {
+  ANALYZE
+} {
+  {INSERT sqlite_stat1 0 XX. {} {t t1 b {} t 4}}
+}
+db null null
+db2 null null
+do_execsql_test 3.2 {
+  SELECT * FROM sqlite_stat1;
+} {t1 null 4}
+do_test 3.3 {
+  execsql { DELETE FROM sqlite_stat1 }
+  do_then_apply_sql { ANALYZE }
+  execsql { SELECT * FROM sqlite_stat1 } db2
+} {t1 null 4}
+do_test 3.4 {
+  execsql { INSERT INTO t1 VALUES(5,5,5) }
+  do_then_apply_sql { ANALYZE }
+  execsql { SELECT * FROM sqlite_stat1 } db2
+} {t1 null 5}
+do_test 3.5 {
+  do_then_apply_sql { DROP TABLE t1 }
+  execsql { SELECT * FROM sqlite_stat1 } db2
+} {}
+
+do_test 3.6.1 {
+  execsql { 
+    CREATE TABLE t1(a, b, c);
+    CREATE TABLE t2(x, y, z);
+    INSERT INTO t1 VALUES(1,1,1), (2,2,2), (3,3,3), (4,4,4), (5,5,5);
+    INSERT INTO t2 SELECT * FROM t1;
+    DELETE FROM sqlite_stat1;
+  }
+  sqlite3session S db main
+  S attach sqlite_stat1
+  execsql { ANALYZE }
+} {}
+do_changeset_test 3.6.2 S {
+  {INSERT sqlite_stat1 0 XX. {} {t t2 b {} t 5}}
+  {INSERT sqlite_stat1 0 XX. {} {t t1 b {} t 5}}
+}
+do_changeset_invert_test 3.6.3 S {
+  {DELETE sqlite_stat1 0 XX. {t t2 b {} t 5} {}}
+  {DELETE sqlite_stat1 0 XX. {t t1 b {} t 5} {}}
+}
+do_test 3.6.4 { S delete } {}
+
+proc sql_changeset_concat {args} {
+  foreach sql $args {
+    sqlite3session S db main
+    S attach sqlite_stat1
+    execsql $sql
+    set change [S changeset]
+    S delete
+
+    if {[info vars ret]!=""} {
+      set ret [sqlite3changeset_concat $ret $change]
+    } else {
+      set ret $change
+    }
+  }
+
+  changeset_to_list $ret
+}
+
+proc do_scc_test {tn args} {
+  uplevel [list \
+    do_test $tn [concat sql_changeset_concat [lrange $args 0 end-1]] \
+    [list {*}[ lindex $args end ]]
+  ]
+}
+
+do_execsql_test 3.7.0 {
+  DELETE FROM sqlite_stat1;
+}
+do_scc_test 3.7.1 {
+  ANALYZE;
+} {
+  INSERT INTO t2 VALUES(6,6,6);
+  ANALYZE;
+} {
+  {INSERT sqlite_stat1 0 XX. {} {t t1 b {} t 5}}
+  {INSERT sqlite_stat1 0 XX. {} {t t2 b {} t 6}}
+}
+
+#-------------------------------------------------------------------------
+catch { db2 close }
+reset_db
+forcedelete test.db2
+sqlite3 db2 test.db2
+
+do_test 4.1.0 {
+  do_common_sql {
+    CREATE TABLE t1(a, b);
+    CREATE INDEX i1 ON t1(a);
+    CREATE INDEX i2 ON t1(b);
+    INSERT INTO t1 VALUES(1,1), (2,2);
+    ANALYZE;
+  }
+  execsql { DELETE FROM sqlite_stat1 }
+} {}
+
+do_test 4.1.1 {
+  execsql { INSERT INTO t1 VALUES(3,3); }
+  set C [changeset_from_sql {ANALYZE}]
+  set ::c [list]
+  proc xConflict {args} {
+    lappend ::c $args
+    return "OMIT"
+  }
+  sqlite3changeset_apply db2 $C xConflict
+  set ::c
+} [list {*}{
+  {INSERT sqlite_stat1 CONFLICT {t t1 t i1 t {3 1}} {t t1 t i1 t {2 1}}}
+  {INSERT sqlite_stat1 CONFLICT {t t1 t i2 t {3 1}} {t t1 t i2 t {2 1}}}
+}]
+
+do_execsql_test -db db2 4.1.2 {
+  SELECT * FROM sqlite_stat1 ORDER BY 1,2;
+} {t1 i1 {2 1} t1 i2 {2 1}}
+
+do_test 4.1.3 {
+  proc xConflict {args} {
+    return "REPLACE"
+  }
+  sqlite3changeset_apply db2 $C xConflict
+  execsql { SELECT * FROM sqlite_stat1 ORDER BY 1,2 } db2
+} {t1 i1 {3 1} t1 i2 {3 1}}
+
+do_test 4.2.0 {
+  do_common_sql { 
+    DROP TABLE t1;
+    CREATE TABLE t3(x,y);
+    INSERT INTO t3 VALUES('a','a');
+    INSERT INTO t3 VALUES('b','b');
+    ANALYZE;
+  }
+  execsql { DELETE FROM sqlite_stat1 }
+} {}
+do_test 4.2.1 {
+  execsql { INSERT INTO t3 VALUES('c','c'); }
+  set C [changeset_from_sql {ANALYZE}]
+  set ::c [list]
+  proc xConflict {args} {
+    lappend ::c $args
+    return "OMIT"
+  }
+  sqlite3changeset_apply db2 $C xConflict
+  set ::c
+} [list {*}{
+  {INSERT sqlite_stat1 CONFLICT {t t3 b {} t 3} {t t3 b {} t 2}}
+}]
+
+db2 null null
+do_execsql_test -db db2 4.2.2 {
+  SELECT * FROM sqlite_stat1 ORDER BY 1,2;
+} {t3 null 2}
+
+do_test 4.2.3 {
+  proc xConflict {args} {
+    return "REPLACE"
+  }
+  sqlite3changeset_apply db2 $C xConflict
+  execsql { SELECT * FROM sqlite_stat1 ORDER BY 1,2 } db2
+} {t3 null 3}
+
+finish_test

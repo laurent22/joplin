@@ -1,0 +1,456 @@
+# 2013-10-30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing WITHOUT ROWID tables.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix without_rowid1
+
+proc do_execsql_test_if_vtab {tn sql {res {}}} {
+  ifcapable vtab { uplevel [list do_execsql_test $tn $sql $res] }
+}
+
+# Create and query a WITHOUT ROWID table.
+#
+do_execsql_test without_rowid1-1.0 {
+  CREATE TABLE t1(a,b,c,d, PRIMARY KEY(c,a)) WITHOUT ROWID;
+  CREATE INDEX t1bd ON t1(b, d);
+  INSERT INTO t1 VALUES('journal','sherman','ammonia','helena');
+  INSERT INTO t1 VALUES('dynamic','juliet','flipper','command');
+  INSERT INTO t1 VALUES('journal','sherman','gamma','patriot');
+  INSERT INTO t1 VALUES('arctic','sleep','ammonia','helena');
+  SELECT *, '|' FROM t1 ORDER BY c, a;
+} {arctic sleep ammonia helena | journal sherman ammonia helena | dynamic juliet flipper command | journal sherman gamma patriot |}
+
+integrity_check without_rowid1-1.0ic
+
+do_execsql_test_if_vtab without_rowid1-1.0ixi {
+  SELECT name, key FROM pragma_index_xinfo('t1');
+} {c 1 a 1 b 0 d 0}
+
+do_execsql_test without_rowid1-1.1 {
+  SELECT *, '|' FROM t1 ORDER BY +c, a;
+} {arctic sleep ammonia helena | journal sherman ammonia helena | dynamic juliet flipper command | journal sherman gamma patriot |}
+
+do_execsql_test without_rowid1-1.2 {
+  SELECT *, '|' FROM t1 ORDER BY c DESC, a DESC;
+} {journal sherman gamma patriot | dynamic juliet flipper command | journal sherman ammonia helena | arctic sleep ammonia helena |}
+
+do_execsql_test without_rowid1-1.11 {
+  SELECT *, '|' FROM t1 ORDER BY b, d;
+} {dynamic juliet flipper command | journal sherman ammonia helena | journal sherman gamma patriot | arctic sleep ammonia helena |}
+
+do_execsql_test without_rowid1-1.12 {
+  SELECT *, '|' FROM t1 ORDER BY +b, d;
+} {dynamic juliet flipper command | journal sherman ammonia helena | journal sherman gamma patriot | arctic sleep ammonia helena |}
+
+# Trying to insert a duplicate PRIMARY KEY fails.
+#
+do_test without_rowid1-1.21 {
+  catchsql {
+    INSERT INTO t1 VALUES('dynamic','phone','flipper','harvard');
+  }
+} {1 {UNIQUE constraint failed: t1.c, t1.a}}
+
+# REPLACE INTO works, however.
+#
+do_execsql_test without_rowid1-1.22 {
+  REPLACE INTO t1 VALUES('dynamic','phone','flipper','harvard');
+  SELECT *, '|' FROM t1 ORDER BY c, a;
+} {arctic sleep ammonia helena | journal sherman ammonia helena | dynamic phone flipper harvard | journal sherman gamma patriot |}
+
+do_execsql_test without_rowid1-1.23 {
+  SELECT *, '|' FROM t1 ORDER BY b, d;
+} {dynamic phone flipper harvard | journal sherman ammonia helena | journal sherman gamma patriot | arctic sleep ammonia helena |}
+
+# UPDATE statements.
+#
+do_execsql_test without_rowid1-1.31 {
+  UPDATE t1 SET d=3.1415926 WHERE a='journal';
+  SELECT *, '|' FROM t1 ORDER BY c, a;
+} {arctic sleep ammonia helena | journal sherman ammonia 3.1415926 | dynamic phone flipper harvard | journal sherman gamma 3.1415926 |}
+do_execsql_test without_rowid1-1.32 {
+  SELECT *, '|' FROM t1 ORDER BY b, d;
+} {dynamic phone flipper harvard | journal sherman ammonia 3.1415926 | journal sherman gamma 3.1415926 | arctic sleep ammonia helena |}
+
+do_execsql_test without_rowid1-1.35 {
+  UPDATE t1 SET a=1250 WHERE b='phone';
+  SELECT *, '|' FROM t1 ORDER BY c, a;
+} {arctic sleep ammonia helena | journal sherman ammonia 3.1415926 | 1250 phone flipper harvard | journal sherman gamma 3.1415926 |}
+integrity_check without_rowid1-1.36
+
+do_execsql_test without_rowid1-1.37 {
+  SELECT *, '|' FROM t1 ORDER BY b, d;
+} {1250 phone flipper harvard | journal sherman ammonia 3.1415926 | journal sherman gamma 3.1415926 | arctic sleep ammonia helena |}
+
+do_execsql_test without_rowid1-1.40 {
+  VACUUM;
+  SELECT *, '|' FROM t1 ORDER BY b, d;
+} {1250 phone flipper harvard | journal sherman ammonia 3.1415926 | journal sherman gamma 3.1415926 | arctic sleep ammonia helena |}
+integrity_check without_rowid1-1.41
+
+# Verify that ANALYZE works
+#
+do_execsql_test without_rowid1-1.50 {
+  ANALYZE;
+  SELECT * FROM sqlite_stat1 ORDER BY idx;
+} {t1 t1 {4 2 1} t1 t1bd {4 2 2}}
+ifcapable stat4 {
+  do_execsql_test without_rowid1-1.52 {
+    SELECT DISTINCT tbl, idx FROM sqlite_stat4 ORDER BY idx;
+  } {t1 t1 t1 t1bd}
+}
+
+#----------
+
+do_execsql_test 2.1.1 {
+  CREATE TABLE t4 (a COLLATE nocase PRIMARY KEY, b) WITHOUT ROWID;
+  INSERT INTO t4 VALUES('abc', 'def');
+  SELECT * FROM t4;
+} {abc def}
+do_execsql_test 2.1.2 {
+  UPDATE t4 SET a = 'ABC';
+  SELECT * FROM t4;
+} {ABC def}
+do_execsql_test_if_vtab 2.1.3 {
+  SELECT name, coll, key FROM pragma_index_xinfo('t4');
+} {a nocase 1 b BINARY 0}
+
+do_execsql_test 2.2.1 {
+  DROP TABLE t4;
+  CREATE TABLE t4 (b, a COLLATE nocase PRIMARY KEY) WITHOUT ROWID;
+  INSERT INTO t4(a, b) VALUES('abc', 'def');
+  SELECT * FROM t4;
+} {def abc}
+
+do_execsql_test 2.2.2 {
+  UPDATE t4 SET a = 'ABC', b = 'xyz';
+  SELECT * FROM t4;
+} {xyz ABC}
+
+do_execsql_test_if_vtab 2.2.3 {
+  SELECT name, coll, key FROM pragma_index_xinfo('t4');
+} {a nocase 1 b BINARY 0}
+
+
+do_execsql_test 2.3.1 {
+  CREATE TABLE t5 (a, b, PRIMARY KEY(b, a)) WITHOUT ROWID;
+  INSERT INTO t5(a, b) VALUES('abc', 'def');
+  UPDATE t5 SET a='abc', b='def';
+} {}
+
+do_execsql_test_if_vtab 2.3.2 {
+  SELECT name, coll, key FROM pragma_index_xinfo('t5');
+} {b BINARY 1 a BINARY 1}
+
+
+do_execsql_test 2.4.1 {
+  CREATE TABLE t6 (
+    a COLLATE nocase, b, c UNIQUE, PRIMARY KEY(b, a)
+  ) WITHOUT ROWID;
+
+  INSERT INTO t6(a, b, c) VALUES('abc', 'def', 'ghi');
+  UPDATE t6 SET a='ABC', c='ghi';
+} {}
+
+do_execsql_test 2.4.2 {
+  SELECT * FROM t6 ORDER BY b, a;
+  SELECT * FROM t6 ORDER BY c;
+} {ABC def ghi ABC def ghi}
+
+do_execsql_test_if_vtab 2.4.3 {
+  SELECT name, coll, key FROM pragma_index_xinfo('t6');
+} {b BINARY 1 a nocase 1 c BINARY 0}
+
+
+#-------------------------------------------------------------------------
+# Unless the destination table is completely empty, the xfer optimization 
+# is disabled for WITHOUT ROWID tables. The following tests check for
+# some problems that might occur if this were not the case.
+#
+reset_db
+do_execsql_test 3.1.1 {
+  CREATE TABLE t1(a, b, PRIMARY KEY(a)) WITHOUT ROWID;
+  CREATE UNIQUE INDEX i1 ON t1(b);
+
+  CREATE TABLE t2(a, b, PRIMARY KEY(a)) WITHOUT ROWID;
+  CREATE UNIQUE INDEX i2 ON t2(b);
+
+  INSERT INTO t1 VALUES('one', 'two');
+  INSERT INTO t2 VALUES('three', 'two');
+}
+
+do_execsql_test 3.1.2 {
+  INSERT OR REPLACE INTO t1 SELECT * FROM t2;
+  SELECT * FROM t1;
+} {three two}
+
+do_execsql_test 3.1.3 {
+  DELETE FROM t1;
+  INSERT INTO t1 SELECT * FROM t2;
+  SELECT * FROM t1;
+} {three two}
+
+do_catchsql_test 3.1.4 {
+  INSERT INTO t2 VALUES('four', 'four');
+  INSERT INTO t2 VALUES('six', 'two');
+  INSERT INTO t1 SELECT * FROM t2;
+} {1 {UNIQUE constraint failed: t2.b}}
+
+do_execsql_test 3.1.5 {
+  CREATE TABLE t3(a PRIMARY KEY);
+  CREATE TABLE t4(a PRIMARY KEY);
+
+  INSERT INTO t4 VALUES('i');
+  INSERT INTO t4 VALUES('ii');
+  INSERT INTO t4 VALUES('iii');
+
+  INSERT INTO t3 SELECT * FROM t4;
+  SELECT * FROM t3;
+} {i ii iii}
+
+############################################################################
+# Ticket [c34d0557f740c450709d6e33df72d4f3f651a3cc]
+# Name resolution issue with WITHOUT ROWID
+#
+do_execsql_test 4.1 {
+  CREATE TABLE t41(a PRIMARY KEY) WITHOUT ROWID;
+  INSERT INTO t41 VALUES('abc');
+  CREATE TABLE t42(x);
+  INSERT INTO t42 VALUES('xyz');
+  SELECT t42.rowid FROM t41, t42;
+} {1}
+do_execsql_test 4.2 {
+  SELECT t42.rowid FROM t42, t41;
+} {1}
+
+
+#--------------------------------------------------------------------------
+# The following tests verify that the trailing PK fields added to each
+# entry in an index on a WITHOUT ROWID table are used correctly.
+#
+do_execsql_test 5.0 {
+  CREATE TABLE t45(a PRIMARY KEY, b, c) WITHOUT ROWID;
+  CREATE INDEX i45 ON t45(b);
+
+  INSERT INTO t45 VALUES(2, 'one', 'x');
+  INSERT INTO t45 VALUES(4, 'one', 'x');
+  INSERT INTO t45 VALUES(6, 'one', 'x');
+  INSERT INTO t45 VALUES(8, 'one', 'x');
+  INSERT INTO t45 VALUES(10, 'one', 'x');
+
+  INSERT INTO t45 VALUES(1, 'two', 'x');
+  INSERT INTO t45 VALUES(3, 'two', 'x');
+  INSERT INTO t45 VALUES(5, 'two', 'x');
+  INSERT INTO t45 VALUES(7, 'two', 'x');
+  INSERT INTO t45 VALUES(9, 'two', 'x');
+}
+
+do_eqp_test 5.1 {
+  SELECT * FROM t45 WHERE b=? AND a>?
+} {USING INDEX i45 (b=? AND a>?)}
+
+do_execsql_test 5.2 {
+  SELECT * FROM t45 WHERE b='two' AND a>4
+} {5 two x 7 two x 9 two x}
+
+do_execsql_test 5.3 {
+  SELECT * FROM t45 WHERE b='one' AND a<8
+} { 2 one x 4 one x 6 one x }
+
+do_execsql_test 5.4 {
+  CREATE TABLE t46(a, b, c, d, PRIMARY KEY(a, b)) WITHOUT ROWID;
+  WITH r(x) AS (
+    SELECT 1 UNION ALL SELECT x+1 FROM r WHERE x<100
+  )
+  INSERT INTO t46 SELECT x / 20, x % 20, x % 10, x FROM r;
+}
+
+set queries {
+  1    2    "c = 5 AND a = 1"          {i46 (c=? AND a=?)}
+  2    6    "c = 4 AND a < 3"          {i46 (c=? AND a<?)}
+  3    4    "c = 2 AND a >= 3"         {i46 (c=? AND a>?)}
+  4    1    "c = 2 AND a = 1 AND b<10" {i46 (c=? AND a=? AND b<?)}
+  5    1    "c = 0 AND a = 0 AND b>5"  {i46 (c=? AND a=? AND b>?)}
+}
+
+foreach {tn cnt where eqp} $queries {
+  do_execsql_test 5.5.$tn.1 "SELECT count(*) FROM t46 WHERE $where" $cnt
+}
+
+do_execsql_test 5.6 {
+  CREATE INDEX i46 ON t46(c);
+}
+
+foreach {tn cnt where eqp} $queries {
+  do_execsql_test 5.7.$tn.1 "SELECT count(*) FROM t46 WHERE $where" $cnt
+  do_eqp_test 5.7.$tn.2  "SELECT count(*) FROM t46 WHERE $where" $eqp
+}
+
+#-------------------------------------------------------------------------
+# Check that redundant UNIQUE constraints do not cause a problem.
+#
+do_execsql_test 6.0 {
+  CREATE TABLE t47(a, b UNIQUE PRIMARY KEY) WITHOUT ROWID;
+  CREATE INDEX i47 ON t47(a);
+  INSERT INTO t47 VALUES(1, 2);
+  INSERT INTO t47 VALUES(2, 4);
+  INSERT INTO t47 VALUES(3, 6);
+  INSERT INTO t47 VALUES(4, 8);
+
+  VACUUM;
+  PRAGMA integrity_check;
+  SELECT name FROM sqlite_master WHERE tbl_name = 't47';
+} {ok t47 i47}
+
+do_execsql_test 6.1 {
+  CREATE TABLE t48(
+    a UNIQUE UNIQUE, 
+    b UNIQUE, 
+    PRIMARY KEY(a), 
+    UNIQUE(a)
+  ) WITHOUT ROWID;
+  INSERT INTO t48 VALUES('a', 'b'), ('c', 'd'), ('e', 'f');
+  VACUUM;
+  PRAGMA integrity_check;
+  SELECT name FROM sqlite_master WHERE tbl_name = 't48';
+} {
+  ok  t48   sqlite_autoindex_t48_2
+}
+
+# 2015-05-28: CHECK constraints can refer to the rowid in a
+# rowid table, but not in a WITHOUT ROWID table.
+#
+do_execsql_test 7.1 {
+  CREATE TABLE t70a(
+     a INT CHECK( rowid!=33 ),
+     b TEXT PRIMARY KEY
+  );
+  INSERT INTO t70a(a,b) VALUES(99,'hello');
+} {}
+do_catchsql_test 7.2 {
+  INSERT INTO t70a(rowid,a,b) VALUES(33,99,'xyzzy');
+} {1 {CHECK constraint failed: t70a}}
+do_catchsql_test 7.3 {
+  CREATE TABLE t70b(
+     a INT CHECK( rowid!=33 ),
+     b TEXT PRIMARY KEY
+  ) WITHOUT ROWID;
+} {1 {no such column: rowid}}
+
+# 2017-07-30: OSSFuzz discovered that an extra entry was being
+# added in the sqlite_master table for an "INTEGER PRIMARY KEY UNIQUE"
+# WITHOUT ROWID table.  Make sure this has now been fixed.
+#
+db close
+sqlite3 db :memory:
+do_execsql_test 8.1 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY UNIQUE, b) WITHOUT ROWID;
+  CREATE INDEX t1x ON t1(x);
+  INSERT INTO t1(x,b) VALUES('funny','buffalo');
+  SELECT type, name, '|' FROM sqlite_master;
+} {table t1 | index t1x |}
+
+# 2018-04-05: OSSFuzz found that the following was accessing an 
+# unintialized memory cell. Which was not actually causing a 
+# malfunction, but does cause an assert() to fail.
+#
+do_execsql_test 9.0 {
+  CREATE TABLE t2(b, c, PRIMARY KEY(b,c)) WITHOUT ROWID;
+  CREATE UNIQUE INDEX t2b ON t2(b);
+  UPDATE t2 SET b=1 WHERE b='';
+}
+
+do_execsql_test 10.1 {
+  DELETE FROM t2 WHERE b=1
+}
+
+#-------------------------------------------------------------------------
+# UNIQUE constraint violation in an UPDATE with a multi-column PK.
+#
+reset_db
+do_execsql_test 10.0 {
+  CREATE TABLE t1(a, b, c UNIQUE, PRIMARY KEY(a, b)) WITHOUT ROWID;
+  INSERT INTO t1 VALUES('a', 'a', 1);
+  INSERT INTO t1 VALUES('a', 'b', 2);
+  INSERT INTO t1 VALUES('b', 'a', 3);
+  INSERT INTO t1 VALUES('b', 'b', 4);
+}
+
+do_catchsql_test 10.1 {
+  UPDATE t1 SET c=1 WHERE (a, b) = ('a', 'a');
+} {0 {}}
+do_catchsql_test 10.2 {
+  UPDATE t1 SET c=1 WHERE (a, b) = ('a', 'b');
+} {1 {UNIQUE constraint failed: t1.c}}
+do_catchsql_test 10.3 {
+  UPDATE t1 SET c=1 WHERE (a, b) = ('b', 'a');
+} {1 {UNIQUE constraint failed: t1.c}}
+do_catchsql_test 10.4 {
+  UPDATE t1 SET c=1 WHERE (a, b) = ('b', 'b');
+} {1 {UNIQUE constraint failed: t1.c}}
+do_catchsql_test 10.5 {
+  UPDATE t1 SET c=1 WHERE (a, b) = ('c', 'c');
+} {0 {}}
+
+do_execsql_test 10.6 {
+  CREATE TRIGGER t1_tr BEFORE UPDATE ON t1 BEGIN
+    DELETE FROM t1 WHERE a = new.a;
+  END;
+  UPDATE t1 SET c = c+1 WHERE a = 'a';
+  SELECT * FROM t1;
+} {b a 3  b b 4}
+
+# 2019-04-29 ticket https://www.sqlite.org/src/info/3182d3879020ef3
+do_execsql_test 11.1 {
+  CREATE TABLE t11(a TEXT PRIMARY KEY, b INT) WITHOUT ROWID;
+  CREATE INDEX t11a ON t11(a COLLATE NOCASE);
+  INSERT INTO t11(a,b) VALUES ('A',1),('a',2);
+  PRAGMA integrity_check;
+  SELECT a FROM t11 ORDER BY a COLLATE binary;
+} {ok A a}
+
+# 2019-05-13 ticket https://www.sqlite.org/src/info/bba7b69f9849b5b
+do_execsql_test 12.1 {
+  DROP TABLE IF EXISTS t0;
+  CREATE TABLE t0 (c0 INTEGER PRIMARY KEY DESC, c1 UNIQUE DEFAULT NULL) WITHOUT ROWID;
+  INSERT INTO t0(c0) VALUES (1), (2), (3), (4), (5);
+  REINDEX;
+  PRAGMA integrity_check;
+} {ok}
+
+# 2019-11-07 ticket https://www.sqlite.org/src/info/302027baf1374498
+# The xferCompatibleIndex() function confuses a PRIMARY KEY index
+# with a UNIQUE index.
+#
+do_execsql_test 13.10 {
+  DROP TABLE IF EXISTS t0;
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t0(
+    c0,
+    c1 UNIQUE,
+    PRIMARY KEY(c1, c1)
+  ) WITHOUT ROWID;
+  INSERT INTO t0(c0,c1) VALUES('abc','xyz');
+  CREATE TABLE t1(
+    c0,
+    c1 UNIQUE,
+    PRIMARY KEY(c1, c1)
+  ) WITHOUT ROWID;
+  INSERT INTO t1 SELECT * FROM t0;
+  PRAGMA integrity_check;
+  SELECT * FROM t0, t1;
+} {ok abc xyz abc xyz}
+  
+finish_test

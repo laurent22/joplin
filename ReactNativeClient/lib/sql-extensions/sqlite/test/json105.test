@@ -1,0 +1,118 @@
+# 2019-11-22
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements tests for "[#]" extension to json-path
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix json104
+
+ifcapable !json1 {
+  finish_test
+  return
+}
+
+# This is the example from pages 2 and 3 of RFC-7396
+db eval {
+  CREATE TABLE t1(j);
+  INSERT INTO t1(j) VALUES('{"a":1,"b":[1,[2,3],4],"c":99}');
+}
+proc json_extract_test {testnum path result} {
+  do_execsql_test json105-1.$testnum "SELECT quote(json_extract(j,$path)) FROM t1" $result
+}
+json_extract_test 10 {'$.b[#]'}   NULL
+json_extract_test 20 {'$.b[#-1]'} 4
+json_extract_test 30 {'$.b[#-2]'} {'[2,3]'}
+json_extract_test 31 {'$.b[#-02]'} {'[2,3]'}
+json_extract_test 40 {'$.b[#-3]'} 1
+json_extract_test 50 {'$.b[#-4]'} NULL
+json_extract_test 60 {'$.b[#-2][#-1]'} 3
+json_extract_test 70 {'$.b[0]','$.b[#-1]'} {'[1,4]'}
+
+json_extract_test 100 {'$.a[#-1]'} NULL
+json_extract_test 110 {'$.b[#-000001]'} 4
+
+proc json_remove_test {testnum path result} {
+  do_execsql_test json105-2.$testnum "SELECT quote(json_remove(j,$path)) FROM t1" $result
+}
+json_remove_test 10 {'$.b[#]'}    {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_remove_test 20 {'$.b[#-0]'}  {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_remove_test 30 {'$.b[#-1]'}  {'{"a":1,"b":[1,[2,3]],"c":99}'}
+json_remove_test 40 {'$.b[#-2]'}  {'{"a":1,"b":[1,4],"c":99}'}
+json_remove_test 50 {'$.b[#-3]'}  {'{"a":1,"b":[[2,3],4],"c":99}'}
+json_remove_test 60 {'$.b[#-4]'}  {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_remove_test 70 {'$.b[#-2][#-1]'}  {'{"a":1,"b":[1,[2],4],"c":99}'}
+
+json_remove_test 100 {'$.b[0]','$.b[#-1]'} {'{"a":1,"b":[[2,3]],"c":99}'}
+json_remove_test 110 {'$.b[#-1]','$.b[0]'} {'{"a":1,"b":[[2,3]],"c":99}'}
+json_remove_test 120 {'$.b[#-1]','$.b[#-2]'} {'{"a":1,"b":[[2,3]],"c":99}'}
+json_remove_test 130 {'$.b[#-1]','$.b[#-1]'} {'{"a":1,"b":[1],"c":99}'}
+json_remove_test 140 {'$.b[#-2]','$.b[#-1]'} {'{"a":1,"b":[1],"c":99}'}
+
+proc json_insert_test {testnum x result} {
+  do_execsql_test json105-3.$testnum "SELECT quote(json_insert(j,$x)) FROM t1" $result
+}
+json_insert_test 10 {'$.b[#]','AAA'} {'{"a":1,"b":[1,[2,3],4,"AAA"],"c":99}'}
+json_insert_test 20 {'$.b[1][#]','AAA'} {'{"a":1,"b":[1,[2,3,"AAA"],4],"c":99}'}
+json_insert_test 30 {'$.b[1][#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3,"AAA"],4,"BBB"],"c":99}'}
+json_insert_test 40 {'$.b[#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],4,"AAA","BBB"],"c":99}'}
+
+proc json_set_test {testnum x result} {
+  do_execsql_test json105-4.$testnum "SELECT quote(json_set(j,$x)) FROM t1" $result
+}
+json_set_test 10 {'$.b[#]','AAA'} {'{"a":1,"b":[1,[2,3],4,"AAA"],"c":99}'}
+json_set_test 20 {'$.b[1][#]','AAA'} {'{"a":1,"b":[1,[2,3,"AAA"],4],"c":99}'}
+json_set_test 30 {'$.b[1][#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3,"AAA"],4,"BBB"],"c":99}'}
+json_set_test 40 {'$.b[#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],4,"AAA","BBB"],"c":99}'}
+json_set_test 50 {'$.b[#-1]','AAA'} {'{"a":1,"b":[1,[2,3],"AAA"],"c":99}'}
+json_set_test 60 {'$.b[1][#-1]','AAA'} {'{"a":1,"b":[1,[2,"AAA"],4],"c":99}'}
+json_set_test 70 {'$.b[1][#-1]','AAA','$.b[#-1]','BBB'} \
+     {'{"a":1,"b":[1,[2,"AAA"],"BBB"],"c":99}'}
+json_set_test 80 {'$.b[#-1]','AAA','$.b[#-1]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],"BBB"],"c":99}'}
+
+proc json_replace_test {testnum x result} {
+  do_execsql_test json105-5.$testnum "SELECT quote(json_replace(j,$x)) FROM t1" $result
+}
+json_replace_test 10 {'$.b[#]','AAA'} {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_replace_test 20 {'$.b[1][#]','AAA'} {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_replace_test 30 {'$.b[1][#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_replace_test 40 {'$.b[#]','AAA','$.b[#]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],4],"c":99}'}
+json_replace_test 50 {'$.b[#-1]','AAA'} {'{"a":1,"b":[1,[2,3],"AAA"],"c":99}'}
+json_replace_test 60 {'$.b[1][#-1]','AAA'} {'{"a":1,"b":[1,[2,"AAA"],4],"c":99}'}
+json_replace_test 70 {'$.b[1][#-1]','AAA','$.b[#-1]','BBB'} \
+     {'{"a":1,"b":[1,[2,"AAA"],"BBB"],"c":99}'}
+json_replace_test 80 {'$.b[#-1]','AAA','$.b[#-1]','BBB'} \
+     {'{"a":1,"b":[1,[2,3],"BBB"],"c":99}'}
+
+do_catchsql_test json105-6.10 {
+  SELECT json_extract(j, '$.b[#-]') FROM t1;
+} {1 {JSON path error near '[#-]'}}
+do_catchsql_test json105-6.20 {
+  SELECT json_extract(j, '$.b[#9]') FROM t1;
+} {1 {JSON path error near '[#9]'}}
+do_catchsql_test json105-6.30 {
+  SELECT json_extract(j, '$.b[#+2]') FROM t1;
+} {1 {JSON path error near '[#+2]'}}
+do_catchsql_test json105-6.40 {
+  SELECT json_extract(j, '$.b[#-1') FROM t1;
+} {1 {JSON path error near '[#-1'}}
+do_catchsql_test json105-6.50 {
+  SELECT json_extract(j, '$.b[#-1x]') FROM t1;
+} {1 {JSON path error near '[#-1x]'}}
+
+finish_test

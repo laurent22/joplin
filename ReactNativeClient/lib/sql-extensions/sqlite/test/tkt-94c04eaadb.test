@@ -1,0 +1,72 @@
+# 2009 October 19
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+if {[info commands sqlite3async_initialize] eq ""} {
+  # The async logic is not built into this system
+  finish_test
+  return
+}
+
+# Create a database.
+do_test tkt-94c94-1.1 {
+  execsql { CREATE TABLE t1(a, b) }
+} {}
+
+# Grow the file to larger than 4096MB (2^32 bytes)
+db close
+if {[catch {fake_big_file 4096 [get_pwd]/test.db} msg]} {
+  puts "**** Unable to create a file larger than 4096 MB. *****"
+  finish_test
+  return
+}
+
+# Switch to async mode.
+sqlite3async_initialize "" 1
+sqlite3 db test.db
+sqlite3 db2 test.db
+
+# Read from and write to the db just past the 4096MB mark.
+#
+do_test tkt-94c94-2.1 {
+  execsql { CREATE TABLE t2(x, y) } db
+} {}
+do_test tkt-94c94-2.2 {
+  execsql { INSERT INTO t2 VALUES(1, 2) } db2
+} {}
+do_test tkt-94c94-2.3 {
+  execsql { SELECT * FROM t2 } db
+} {1 2}
+do_test tkt-94c94-2.4 {
+  sqlite3async_control halt idle
+  sqlite3async_start
+  sqlite3async_wait
+} {}
+do_test tkt-94c94-2.5 {
+  execsql { SELECT * FROM t2 } db
+} {1 2}
+do_test tkt-94c94-2.6 {
+  sqlite3async_start
+  sqlite3async_wait
+} {}
+
+db close
+db2 close
+sqlite3async_start
+sqlite3async_wait
+sqlite3async_control halt never
+sqlite3async_shutdown
+
+finish_test

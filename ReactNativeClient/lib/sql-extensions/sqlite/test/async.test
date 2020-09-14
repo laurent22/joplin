@@ -1,0 +1,90 @@
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file runs all tests.
+#
+# $Id: async.test,v 1.21 2009/06/05 17:09:12 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+if {[info commands sqlite3async_initialize] eq ""} {
+  # The async logic is not built into this system
+  finish_test
+  return
+}
+
+rename finish_test async_really_finish_test
+proc finish_test {} {
+  catch {db close}
+  catch {db2 close}
+  catch {db3 close}
+}
+if {[info exists G(isquick)]} { set ASYNC_SAVE_ISQUICK $G(isquick) }
+set G(isquick) 1
+
+set ASYNC_INCLUDE {
+  insert.test
+  insert2.test
+  insert3.test
+  lock.test
+  lock2.test
+  lock3.test
+  select1.test
+  select2.test
+  select3.test
+  select4.test
+  trans.test
+}
+
+# Enable asynchronous IO.
+sqlite3async_initialize "" 1
+
+# This proc flushes the contents of the async-IO queue through to the 
+# underlying VFS. A couple of the test scripts identified in $ASYNC_INCLUDE
+# above contain lines like "catch flush_async_queue" in places where 
+# this is required for the tests to work in async mode.
+#
+proc flush_async_queue {} {
+  sqlite3async_control halt idle
+  sqlite3async_start
+  sqlite3async_wait
+  sqlite3async_control halt never
+}
+
+rename do_test async_really_do_test
+proc do_test {name args} {
+  uplevel async_really_do_test async_io-$name $args
+  flush_async_queue
+}
+
+foreach testfile [lsort -dictionary [glob $testdir/*.test]] {
+  set tail [file tail $testfile]
+  if {[lsearch -exact $ASYNC_INCLUDE $tail]<0} continue
+  source $testfile
+
+  # Make sure everything is flushed through. This is because [source]ing 
+  # the next test file will delete the database file on disk (using
+  # [delete_file]). If the asynchronous backend still has the file
+  # open, it will become confused.
+  #
+  flush_async_queue
+}
+
+# Flush the write-queue and disable asynchronous IO. This should ensure
+# all allocated memory is cleaned up.
+set sqlite3async_trace 1
+flush_async_queue
+sqlite3async_shutdown
+set sqlite3async_trace 0
+
+rename do_test {}
+rename async_really_do_test do_test
+rename finish_test {}
+rename async_really_finish_test finish_test
+
+if {[info exists ASYNC_SAVE_ISQUICK]} { set G(isquick) $ASYNC_SAVE_ISQUICK }
+finish_test

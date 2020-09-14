@@ -1,0 +1,100 @@
+# 2014 June 17
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5eb
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+proc do_syntax_error_test {tn expr err} {
+  set ::se_expr $expr
+  do_catchsql_test $tn {SELECT fts5_expr($se_expr)} [list 1 $err]
+}
+
+proc do_syntax_test {tn expr res} {
+  set ::se_expr $expr
+  do_execsql_test $tn {SELECT fts5_expr($se_expr)} [list $res]
+}
+
+foreach {tn expr res} {
+  1  {abc}                            {"abc"}
+  2  {abc ""}                         {"abc"}
+  3  {""}                             {}
+  4  {abc OR ""}                      {"abc" OR ""}
+  5  {abc NOT ""}                     {"abc" NOT ""}
+  6  {abc AND ""}                     {"abc" AND ""}
+  7  {"" OR abc}                      {"" OR "abc"}
+  8  {"" NOT abc}                     {"" NOT "abc"}
+  9  {"" AND abc}                     {"" AND "abc"}
+  10 {abc + "" + def}                 {"abc" + "def"}
+  11 {abc "" def}                     {"abc" AND "def"}
+  12 {r+e OR w}                       {"r" + "e" OR "w"}
+
+  13 {a AND b NOT c}                  {"a" AND ("b" NOT "c")}
+  14 {a OR b NOT c}                   {"a" OR ("b" NOT "c")}
+  15 {a NOT b AND c}                  {("a" NOT "b") AND "c"}
+  16 {a NOT b OR c}                   {("a" NOT "b") OR "c"}
+
+  17 {a AND b OR c}                   {("a" AND "b") OR "c"}
+  18 {a OR b AND c}                   {"a" OR ("b" AND "c")}
+
+} {
+  do_execsql_test 1.$tn {SELECT fts5_expr($expr)} [list $res]
+}
+
+do_catchsql_test 2.1 {
+  SELECT fts5_expr()
+} {1 {wrong number of arguments to function fts5_expr}}
+
+do_catchsql_test 2.2 {
+  SELECT fts5_expr_tcl()
+} {1 {wrong number of arguments to function fts5_expr_tcl}}
+
+do_catchsql_test 2.3 {
+  SELECT fts5_expr('')
+} {1 {fts5: syntax error near ""}}
+
+do_catchsql_test 2.4 {
+  SELECT fts5_expr(NULL)
+} {1 {fts5: syntax error near ""}}
+
+do_catchsql_test 2.5 {
+  SELECT fts5_expr(NULL, NULL)
+} {1 {parse error in ""}}
+
+for {set i 0} {$i < 255} {incr i} {
+  do_test 2.6.$i {
+    lindex [catchsql {sELECT fts5_expr(NULL, char($i));}] 0
+  } 1
+}
+
+do_execsql_test 3.0 {
+  CREATE VIRTUAL TABLE e1 USING fts5(text, tokenize = 'porter unicode61');
+  INSERT INTO e1 VALUES ("just a few words with a / inside");
+}
+do_execsql_test 3.1 {
+  SELECT rowid, bm25(e1) FROM e1 WHERE e1 MATCH '"just"' ORDER BY rank;
+} {1 -1e-06}
+do_execsql_test 3.2 {
+  SELECT rowid FROM e1 WHERE e1 MATCH '"/" OR "just"'
+} 1
+do_execsql_test 3.3 {
+  SELECT rowid, bm25(e1) FROM e1 WHERE e1 MATCH '"/" OR "just"' ORDER BY rank;
+} {1 -1e-06}
+
+
+
+finish_test

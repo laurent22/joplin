@@ -1,0 +1,180 @@
+# 2018 December 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+set testprefix shmlock
+
+ifcapable !wal {finish_test ; return }
+
+sqlite3 db2 test.db
+sqlite3 db3 test.db
+
+do_execsql_test 1.0 {
+  PRAGMA journal_mode = wal;
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+} {wal}
+do_test 1.1 { execsql { SELECT * FROM t1 } db2 } {1 2}
+do_test 1.2 { execsql { SELECT * FROM t1 } db3 } {1 2}
+
+foreach {tn dbhandle cmd res} {
+  1    db  {shared    lock   7 1}    OK
+  2    db2 {exclusive lock   7 1}    BUSY
+  3    db  {shared    unlock 7 1}    OK
+  4    db2 {exclusive lock   7 1}    OK
+  5    db  {shared    lock   7 1}    BUSY
+  6    db  {exclusive lock   7 1}    BUSY
+  7    db2 {exclusive unlock 7 1}    OK
+
+  8    db  {exclusive lock   0 8}    OK
+  9    db  {exclusive unlock 0 8}    OK
+  10   db2 {exclusive lock   0 8}    OK
+  11   db2 {exclusive unlock 0 8}    OK
+
+  12   db  {shared    lock   0 1}    OK
+  13   db2 {shared    lock   0 1}    OK
+  14   db3 {shared    lock   0 1}    OK
+  15   db3 {shared    unlock 0 1}    OK
+  16   db3 {exclusive lock   0 1}    BUSY
+  17   db2 {shared    unlock 0 1}    OK
+  18   db3 {exclusive lock   0 1}    BUSY
+  19   db  {shared    unlock 0 1}    OK
+  20   db3 {exclusive lock   0 1}    OK
+  21   db3 {exclusive unlock 0 1}    OK
+
+  22   db  {shared    lock   3 1}    OK
+  23   db2 {exclusive lock   2 2}    BUSY
+  24   db  {shared    lock   2 1}    OK
+  25   db2 {exclusive lock   0 5}    BUSY
+  26   db2 {exclusive lock   0 4}    BUSY
+  27   db2 {exclusive lock   0 3}    BUSY
+  28   db  {shared    unlock 3 1}    OK
+  29   db2 {exclusive lock   2 2}    BUSY
+  28   db  {shared    unlock 2 1}    OK
+  29   db2 {exclusive lock   2 2}    OK
+  29   db2 {exclusive unlock 2 2}    OK
+} {
+  do_test 1.3.$tn [list vfs_shmlock $dbhandle main {*}$cmd] "SQLITE_$res"
+}
+
+db  close
+db2 close
+db3 close
+
+if {[permutation]=="unix-excl"} {
+  do_test 2.0 {
+    for {set i 0} {$i < 256} {incr i} { 
+      sqlite3 db$i test.db 
+      execsql { SELECT * FROM t1 } db$i
+    }
+    for {set i 0} {$i < 255} {incr i} { 
+      set rc [vfs_shmlock db$i main shared lock 4 1]
+      if {$rc != "SQLITE_OK"} { error $rc }
+    }
+
+    vfs_shmlock db255 main shared lock 4 1
+  } {SQLITE_BUSY}
+
+  do_test 2.1 { vfs_shmlock db255 main exclusive lock   4 1 } SQLITE_BUSY
+  do_test 2.2 { vfs_shmlock db0   main shared    unlock 4 1 } SQLITE_OK
+  do_test 2.3 { vfs_shmlock db255 main shared    lock   4 1 } SQLITE_OK
+  do_test 2.4 { vfs_shmlock db255 main shared    unlock 4 1 } SQLITE_OK
+  do_test 2.5 { vfs_shmlock db255 main exclusive lock   4 1 } SQLITE_BUSY
+
+  do_test 2.6 {
+    for {set i 1} {$i < 255} {incr i} { 
+      set rc [vfs_shmlock db255 main exclusive lock 4 1]
+      if {$rc != "SQLITE_BUSY"} { error $rc }
+      set rc [vfs_shmlock db$i main shared unlock 4 1]
+      if {$rc != "SQLITE_OK"} { error $rc }
+    }
+
+    vfs_shmlock db255 main exclusive lock 4 1
+  } {SQLITE_OK}
+
+  vfs_shmlock db255 main exclusive unlock 4 1
+
+  for {set i 0} {$i < 256} {incr i} {
+    db$i close
+  }
+}
+
+sqlite3 db0 test.db
+sqlite3 db1 test.db
+do_test 3.1 { execsql { SELECT * FROM t1 } db0 } {1 2}
+do_test 3.2 { execsql { SELECT * FROM t1 } db1 } {1 2}
+if {$tcl_platform(platform)=="windows"} {
+  set isWindows 1
+} else {
+  set isWindows 0
+}
+
+set L(0) {n n n n n n n n}
+set L(1) {n n n n n n n n}
+proc random_lock_test {idx} {
+  global L
+  set iSlot [expr int(rand()*8)]
+  if {[expr int(rand()*2)]} {
+    # Unlock operation
+    if {[lindex $L($idx) $iSlot]!="n"} {
+      vfs_shmlock db$idx main [lindex $L($idx) $iSlot] unlock $iSlot 1
+      lset L($idx) $iSlot n
+    }
+  } else {
+    # Lock operation
+    if {[lindex $L($idx) $iSlot]=="n"} {
+      set locktype [lindex {e s} [expr int(rand()*2)]]
+      set n 1
+      if {$locktype=="e"} {
+        for {set l $iSlot} {$l<8 && [lindex $L($idx) $l]=="n"} {incr l} {}
+        set n [expr int(rand()*($l-$iSlot))+1]
+        # The LockFile() and UnlockFile() apis on windows require that
+        # every unlock correspond exactly to a prior lock.  Hence, we cannot
+        # lock arbitrary ranges in this test on windows.
+        if {$::isWindows} {set n 1}
+        # puts "iSlot=$iSlot l=$l L=$L($idx)"
+        # puts "$iSlot $n"
+      }
+      set res [vfs_shmlock db$idx main $locktype lock $iSlot $n]
+
+      set bBusy 0
+      for {set i $iSlot} {$i<($iSlot+$n)} {incr i} {
+        set other [lindex $L([expr ($idx+1)%2]) $i]
+        if {($other!="n" && $locktype=="e")||($other=="e" && $locktype=="s")} {
+          if {$res != "SQLITE_BUSY"} { error "BUSY not detected" }
+          set bBusy 1
+          break
+        } 
+      }
+
+      if {$bBusy==0} {
+        if {$res != "SQLITE_OK"} { error "BUSY false-positive" }
+        for {set i $iSlot} {$i<($iSlot+$n)} {incr i} {
+          lset L($idx) $i $locktype
+        }
+      }
+    }
+  }
+}
+
+set nStep 100000
+for {set i 0} {$i < $nStep} {incr i} {
+  random_lock_test 0
+  random_lock_test 1
+}
+
+db0 close
+db1 close
+
+finish_test

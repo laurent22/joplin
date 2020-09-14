@@ -1,0 +1,139 @@
+# 2013 August 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this script is testing the file name handling provided
+# by the "win32-longpath" VFS.
+#
+
+if {$tcl_platform(platform)!="windows"} return
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix win32longpath
+
+do_test 1.0 {
+  file_control_vfsname db
+} win32
+
+db close
+set rawPath [get_pwd]
+set path [file nativename $rawPath]
+sqlite3 db [file join $path test.db] -vfs win32-longpath
+
+do_test 1.1 {
+  file_control_vfsname db
+} win32-longpath
+
+do_test 1.2 {
+  db eval {
+    BEGIN EXCLUSIVE;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 VALUES(2);
+    INSERT INTO t1 VALUES(3);
+    INSERT INTO t1 VALUES(4);
+    SELECT x FROM t1 ORDER BY x;
+    COMMIT;
+  }
+} {1 2 3 4}
+
+set longPath(1) \\\\?\\$path\\[pid]
+set uriPath(1a) %5C%5C%3F%5C$path\\[pid]
+set uriPath(1b) %5C%5C%3F%5C$rawPath/[pid]
+
+make_win32_dir $longPath(1)
+
+set longPath(2) $longPath(1)\\[string repeat X 255]
+set uriPath(2a) $uriPath(1a)\\[string repeat X 255]
+set uriPath(2b) $uriPath(1b)/[string repeat X 255]
+
+make_win32_dir $longPath(2)
+
+set longPath(3) $longPath(2)\\[string repeat Y 255]
+set uriPath(3a) $uriPath(2a)\\[string repeat Y 255]
+set uriPath(3b) $uriPath(2b)/[string repeat Y 255]
+
+make_win32_dir $longPath(3)
+
+set fileName $longPath(3)\\test.db
+
+set uri(1a) file:$uriPath(3a)\\test.db
+set uri(1b) file:$uriPath(3b)/test.db
+set uri(1c) file:///$uriPath(3a)\\test.db
+set uri(1d) file:///$uriPath(3b)/test.db
+set uri(1e) file://localhost/$uriPath(3a)\\test.db
+set uri(1f) file://localhost/$uriPath(3b)/test.db
+
+do_test 1.3 {
+  list [catch {sqlite3 db2 [string range $fileName 4 end]} msg] $msg
+} {1 {unable to open database file}}
+
+sqlite3 db3 $fileName -vfs win32-longpath
+
+do_test 1.4 {
+  db3 eval {
+    BEGIN EXCLUSIVE;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(5);
+    INSERT INTO t1 VALUES(6);
+    INSERT INTO t1 VALUES(7);
+    INSERT INTO t1 VALUES(8);
+    SELECT x FROM t1 ORDER BY x;
+    COMMIT;
+  }
+} {5 6 7 8}
+
+db3 close
+# puts "  Database exists \{[exists_win32_path $fileName]\}"
+
+sqlite3 db3 $fileName -vfs win32-longpath
+
+do_test 1.5 {
+  db3 eval {
+    PRAGMA journal_mode = WAL;
+  }
+} {wal}
+
+do_test 1.6 {
+  db3 eval {
+    BEGIN EXCLUSIVE;
+    INSERT INTO t1 VALUES(9);
+    INSERT INTO t1 VALUES(10);
+    INSERT INTO t1 VALUES(11);
+    INSERT INTO t1 VALUES(12);
+    SELECT x FROM t1 ORDER BY x;
+    COMMIT;
+  }
+} {5 6 7 8 9 10 11 12}
+
+db3 close
+# puts "  Database exists \{[exists_win32_path $fileName]\}"
+
+foreach tn {1a 1b 1c 1d 1e 1f} {
+  sqlite3 db3 $uri($tn) -vfs win32-longpath -uri 1 -translatefilename 0
+
+  do_test 1.7.$tn {
+    db3 eval {
+      SELECT x FROM t1 ORDER BY x;
+    }
+  } {5 6 7 8 9 10 11 12}
+
+  db3 close
+}
+
+do_delete_win32_file $fileName
+# puts "  Files remaining \{[find_win32_file $longPath(3)\\*]\}"
+
+do_remove_win32_dir $longPath(3)
+do_remove_win32_dir $longPath(2)
+do_remove_win32_dir $longPath(1)
+
+finish_test

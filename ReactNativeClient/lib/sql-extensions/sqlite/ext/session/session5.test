@@ -1,0 +1,408 @@
+# 2011 April 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for the session module. 
+# Specifically, for the sqlite3changeset_concat() command.
+# 
+
+if {![info exists testdir]} {
+  set testdir [file join [file dirname [info script]] .. .. test]
+} 
+source [file join [file dirname [info script]] session_common.tcl]
+source $testdir/tester.tcl
+ifcapable !session {finish_test; return}
+
+set testprefix session5
+
+# Organization of tests:
+#
+#   session5-1.*: Simple tests to check the concat() function produces 
+#                 correct results.
+#
+#   session5-2.*: More complicated tests.
+#   
+#   session5-3.*: Schema mismatch errors.
+#
+#   session5-4.*: Test the concat cases that indicate that the database
+#                 was modified in between recording of the two changesets
+#                 being concatenated (i.e. two changesets that INSERT rows
+#                 with the same PK values).
+#
+
+proc do_concat_test {tn args} {
+
+  set subtest 0
+  foreach sql $args {
+    incr subtest
+    sqlite3session S db main ; S attach *
+    execsql $sql
+
+    set c [S changeset]
+    if {[info commands s_prev] != ""} {
+      set c_concat [sqlite3changeset_concat $c_prev $c]
+      set c_two [s_prev changeset]
+      s_prev delete
+
+      set h_concat [changeset_to_list $c_concat]
+      set h_two [changeset_to_list $c_two]
+
+      do_test $tn.$subtest [list set {} $h_concat] $h_two
+    }
+    set c_prev $c
+    rename S s_prev
+  }
+
+  catch { s_prev delete }
+}
+
+#-------------------------------------------------------------------------
+# Test cases session5-1.* - simple tests.
+#
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+}
+
+do_concat_test 1.1.1 {
+  INSERT INTO t1 VALUES(1, 'one');
+} {
+  INSERT INTO t1 VALUES(2, 'two');
+}
+
+do_concat_test 1.1.2 {
+  UPDATE t1 SET b = 'five' WHERE a = 1;
+} {
+  UPDATE t1 SET b = 'six' WHERE a = 2;
+}
+
+do_concat_test 1.1.3 {
+  DELETE FROM t1 WHERE a = 1;
+} {
+  DELETE FROM t1 WHERE a = 2;
+}
+
+
+# 1.2.1:    INSERT + DELETE                     -> (none)
+# 1.2.2:    INSERT + UPDATE                     -> INSERT
+#
+# 1.2.3:    DELETE + INSERT (matching data)     -> (none)
+# 1.2.4:    DELETE + INSERT (non-matching data) -> UPDATE
+#
+# 1.2.5:    UPDATE + UPDATE (matching data)     -> (none)
+# 1.2.6:    UPDATE + UPDATE (non-matching data) -> UPDATE
+# 1.2.7:    UPDATE + DELETE                     -> DELETE
+#
+do_concat_test 1.2.1 {
+  INSERT INTO t1 VALUES('x', 'y');
+} {
+  DELETE FROM t1 WHERE a = 'x';
+}
+do_concat_test 1.2.2 {
+  INSERT INTO t1 VALUES(5.0, 'five');
+} {
+  UPDATE t1 SET b = 'six' WHERE a = 5.0;
+}
+
+do_execsql_test 1.2.3.1 "INSERT INTO t1 VALUES('I', 'one')"
+do_concat_test 1.2.3.2 {
+  DELETE FROM t1 WHERE a = 'I';
+} {
+  INSERT INTO t1 VALUES('I', 'one');
+}
+do_concat_test 1.2.4 {
+  DELETE FROM t1 WHERE a = 'I';
+} {
+  INSERT INTO t1 VALUES('I', 'two');
+}
+do_concat_test 1.2.5 {
+  UPDATE t1 SET b = 'five' WHERE a = 'I';
+} {
+  UPDATE t1 SET b = 'two' WHERE a = 'I';
+}
+do_concat_test 1.2.6 {
+  UPDATE t1 SET b = 'six' WHERE a = 'I';
+} {
+  UPDATE t1 SET b = 'seven' WHERE a = 'I';
+}
+do_concat_test 1.2.7 {
+  UPDATE t1 SET b = 'eight' WHERE a = 'I';
+} {
+  DELETE FROM t1 WHERE a = 'I';
+}
+
+
+#-------------------------------------------------------------------------
+# Test cases session5-2.* - more complex tests.
+#
+db function indirect indirect 
+proc indirect {{x -1}} {
+  S indirect $x
+  s_prev indirect $x
+}
+do_concat_test 2.1 {
+  CREATE TABLE abc(a, b, c PRIMARY KEY);
+  INSERT INTO abc VALUES(NULL, NULL, 1);
+  INSERT INTO abc VALUES('abcdefghijkl', NULL, 2);
+} {
+  DELETE FROM abc WHERE c = 1;
+  UPDATE abc SET c = 1 WHERE c = 2;
+} {
+  INSERT INTO abc VALUES('abcdefghijkl', NULL, 2);
+  INSERT INTO abc VALUES(1.0, 2.0, 3);
+} {
+  UPDATE abc SET a = a-1;
+} {
+  CREATE TABLE def(d, e, f, PRIMARY KEY(e, f));
+  INSERT INTO def VALUES('x', randomblob(11000), 67);
+  INSERT INTO def SELECT d, e, f+1 FROM def;
+  INSERT INTO def SELECT d, e, f+2 FROM def;
+  INSERT INTO def SELECT d, e, f+4 FROM def;
+} {
+  DELETE FROM def WHERE rowid>4;
+} { 
+  INSERT INTO def SELECT d, e, f+4 FROM def; 
+} {
+  INSERT INTO abc VALUES(22, 44, -1);
+} { 
+  UPDATE abc SET c=-2 WHERE c=-1;
+  UPDATE abc SET c=-3 WHERE c=-2;
+} {
+  UPDATE abc SET c=-4 WHERE c=-3;
+} {
+  UPDATE abc SET a=a+1 WHERE c=-3;
+  UPDATE abc SET a=a+1 WHERE c=-3;
+} {
+  UPDATE abc SET a=a+1 WHERE c=-3;
+  UPDATE abc SET a=a+1 WHERE c=-3;
+} {
+  INSERT INTO abc VALUES('one', 'two', 'three');
+} {
+  SELECT indirect(1);
+  UPDATE abc SET a='one point five' WHERE c = 'three';
+} {
+  SELECT indirect(0);
+  UPDATE abc SET a='one point six' WHERE c = 'three';
+} {
+  CREATE TABLE x1(a, b, PRIMARY KEY(a));
+  SELECT indirect(1);
+  INSERT INTO x1 VALUES(1, 2);
+} {
+  SELECT indirect(1);
+  UPDATE x1 SET b = 3 WHERE a = 1;
+}
+
+catch {db close}
+forcedelete test.db
+sqlite3 db test.db
+do_concat_test 2.2 {
+  CREATE TABLE t1(a, b, PRIMARY KEY(b));
+  CREATE TABLE t2(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('string', 1);
+  INSERT INTO t1 VALUES(4, 2);
+  INSERT INTO t1 VALUES(X'FFAAFFAAFFAA', 3);
+} {
+  INSERT INTO t2 VALUES('one', 'two');
+  INSERT INTO t2 VALUES(1, NULL);
+  UPDATE t1 SET a = 5 WHERE a = 2;
+} {
+  DELETE FROM t2 WHERE a = 1;
+  UPDATE t1 SET a = 4 WHERE a = 2;
+  INSERT INTO t2 VALUES('x', 'y');
+}
+
+do_test 2.3.0 {
+  catch {db close}
+  forcedelete test.db
+  sqlite3 db test.db
+ 
+  set sql1 ""
+  set sql2 ""
+  for {set i 1} {$i < 120} {incr i} {
+    append sql1 "INSERT INTO x1 VALUES($i*4, $i);"
+  }
+  for {set i 1} {$i < 120} {incr i} {
+    append sql2 "DELETE FROM x1 WHERE a = $i*4;"
+  }
+  set {} {}
+} {}
+do_concat_test 2.3 {
+  CREATE TABLE x1(a PRIMARY KEY, b)
+} $sql1 $sql2 $sql1 $sql2
+
+do_concat_test 2.4 {
+  CREATE TABLE x2(a PRIMARY KEY, b);
+  CREATE TABLE x3(a PRIMARY KEY, b);
+
+  INSERT INTO x2 VALUES('a', 'b');
+  INSERT INTO x2 VALUES('x', 'y');
+  INSERT INTO x3 VALUES('a', 'b');
+} {
+  INSERT INTO x2 VALUES('c', 'd');
+  INSERT INTO x3 VALUES('e', 'f');
+  INSERT INTO x3 VALUES('x', 'y');
+}
+
+do_concat_test 2.5 {
+  UPDATE x3 SET b = 'Y' WHERE a = 'x'
+} {
+  DELETE FROM x3 WHERE a = 'x'
+} {
+  DELETE FROM x2 WHERE a = 'a'
+} {
+  INSERT INTO x2 VALUES('a', 'B');
+}
+
+for {set k 1} {$k <=10} {incr k} {
+  do_test 2.6.$k.1 {
+    drop_all_tables
+    set sql1 ""
+    set sql2 ""
+    for {set i 1} {$i < 120} {incr i} {
+      append sql1 "INSERT INTO x1 VALUES(randomblob(20+(random()%10)), $i);"
+    }
+    for {set i 1} {$i < 120} {incr i} {
+      append sql2 "DELETE FROM x1 WHERE rowid = $i;"
+    }
+    set {} {}
+  } {}
+  do_concat_test 2.6.$k {
+    CREATE TABLE x1(a PRIMARY KEY, b)
+  } $sql1 $sql2 $sql1 $sql2
+}
+
+for {set k 1} {$k <=10} {incr k} {
+  do_test 2.7.$k.1 {
+    drop_all_tables
+    set sql1 ""
+    set sql2 ""
+    for {set i 1} {$i < 120} {incr i} {
+      append sql1 {
+        INSERT INTO x1 VALUES(
+         CASE WHEN random()%2 THEN random() ELSE randomblob(20+random()%10) END,
+         CASE WHEN random()%2 THEN random() ELSE randomblob(20+random()%10) END
+        );
+      }
+    }
+    for {set i 1} {$i < 120} {incr i} {
+      append sql2 "DELETE FROM x1 WHERE rowid = $i;"
+    }
+    set {} {}
+  } {}
+  do_concat_test 2.7.$k {
+    CREATE TABLE x1(a PRIMARY KEY, b)
+  } $sql1 $sql2 $sql1 $sql2
+}
+
+
+#-------------------------------------------------------------------------
+# Test that schema incompatibilities are detected correctly.
+#
+#   session5-3.1: Incompatible number of columns.
+#   session5-3.2: Incompatible PK definition.
+#
+
+do_test 3.1 {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+
+  execsql { CREATE TABLE t1(a PRIMARY KEY, b) }
+  set c1 [changeset_from_sql { INSERT INTO t1 VALUES(1, 2) }]
+  execsql { 
+    DROP TABLE t1;
+    CREATE TABLE t1(a PRIMARY KEY, b, c);
+  }
+  set c2 [changeset_from_sql { INSERT INTO t1 VALUES(2, 3, 4) }]
+
+  list [catch { sqlite3changeset_concat $c1 $c2 } msg] $msg
+} {1 SQLITE_SCHEMA}
+
+do_test 3.2 {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+
+  execsql { CREATE TABLE t1(a PRIMARY KEY, b) }
+  set c1 [changeset_from_sql { INSERT INTO t1 VALUES(1, 2) }]
+  execsql { 
+    DROP TABLE t1;
+    CREATE TABLE t1(a, b PRIMARY KEY);
+  }
+  set c2 [changeset_from_sql { INSERT INTO t1 VALUES(2, 3) }]
+
+  list [catch { sqlite3changeset_concat $c1 $c2 } msg] $msg
+} {1 SQLITE_SCHEMA}
+
+#-------------------------------------------------------------------------
+# Test that concat() handles these properly:
+#
+#   session5-4.1: INSERT + INSERT
+#   session5-4.2: UPDATE + INSERT
+#   session5-4.3: DELETE + UPDATE
+#   session5-4.4: DELETE + DELETE
+#
+
+proc do_concat_test2 {tn sql1 sqlX sql2 expected} {
+  sqlite3session S db main ; S attach *
+  execsql $sql1
+  set ::c1 [S changeset]
+  S delete
+
+  execsql $sqlX
+
+  sqlite3session S db main ; S attach *
+  execsql $sql2
+  set ::c2 [S changeset]
+  S delete
+
+  uplevel do_test $tn [list {
+    changeset_to_list [sqlite3changeset_concat $::c1 $::c2]
+  }] [list [normalize_list $expected]]
+}
+
+drop_all_tables db
+do_concat_test2 4.1 {
+  CREATE TABLE t1(a PRIMARY KEY, b);
+  INSERT INTO t1 VALUES('key', 'value');
+} {
+  DELETE FROM t1 WHERE a = 'key';
+} {
+  INSERT INTO t1 VALUES('key', 'xxx');
+} {
+  {INSERT t1 0 X. {} {t key t value}}
+}
+do_concat_test2 4.2 {
+  UPDATE t1 SET b = 'yyy';
+} {
+  DELETE FROM t1 WHERE a = 'key';
+} {
+  INSERT INTO t1 VALUES('key', 'value');
+} {
+  {UPDATE t1 0 X. {t key t xxx} {{} {} t yyy}}
+}
+do_concat_test2 4.3 {
+  DELETE FROM t1 WHERE a = 'key';
+} {
+  INSERT INTO t1 VALUES('key', 'www');
+} {
+  UPDATE t1 SET b = 'valueX' WHERE a = 'key';
+} {
+  {DELETE t1 0 X. {t key t value} {}}
+}
+do_concat_test2 4.4 {
+  DELETE FROM t1 WHERE a = 'key';
+} {
+  INSERT INTO t1 VALUES('key', 'ttt');
+} {
+  DELETE FROM t1 WHERE a = 'key';
+} {
+  {DELETE t1 0 X. {t key t valueX} {}}
+}
+
+finish_test

@@ -1,0 +1,95 @@
+# 2017 November 25
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5first
+
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE x1 USING fts5(a, b);
+}
+
+foreach {tn expr ok} {
+  1 {^abc}           1
+  2 {^abc + def}     1
+  3 {^ "abc def"}    1
+  4 {^"abc def"}     1
+  5 {abc ^def}       1
+  6 {abc + ^def}     0
+  7 {abc ^+ def}     0
+  8 {"^abc"}         1
+  9 {NEAR(^abc def)} 0
+} {
+  set res(0) {/1 {fts5: syntax error near .*}/}
+  set res(1) {0 {}}
+
+  do_catchsql_test 1.$tn { SELECT * FROM x1($expr) } $res($ok)
+}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 2.0 {
+  INSERT INTO x1 VALUES('a b c', 'b c a');
+}
+
+foreach {tn expr match} {
+  1 {^a} 1
+  2 {^b} 1
+  3 {^c} 0
+  4 {^a + b} 1
+  5 {^b + c} 1
+  6 {^c + a} 0
+  7 {^"c a"} 0
+  8 {a:^a} 1
+  9 {a:^b} 0
+  10 {a:^"a b"} 1
+} {
+  do_execsql_test 2.$tn { SELECT EXISTS (SELECT rowid FROM x1($expr)) } $match
+}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 3.0 {
+  DELETE FROM x1;
+  INSERT INTO x1 VALUES('b a', 'c a');
+  INSERT INTO x1 VALUES('a a', 'c c');
+  INSERT INTO x1 VALUES('a b', 'a a');
+}
+fts5_aux_test_functions db
+
+foreach {tn expr expect} {
+  1 {^a} {{2 1}}
+  2 {^c AND ^b} {{0 2} {1 0}}
+} {
+  do_execsql_test 3.$tn {
+    SELECT fts5_test_queryphrase(x1) FROM x1($expr) LIMIT 1
+  } [list $expect]
+}
+
+#-------------------------------------------------------------------------
+# 
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE x2 USING fts5(a, b, c, detail=column);
+}
+
+do_catchsql_test 3.2 {
+  SELECT * FROM x2('a + b');
+} {1 {fts5: phrase queries are not supported (detail!=full)}}
+
+do_catchsql_test 3.3 {
+  SELECT * FROM x2('^a');
+} {1 {fts5: phrase queries are not supported (detail!=full)}}
+finish_test

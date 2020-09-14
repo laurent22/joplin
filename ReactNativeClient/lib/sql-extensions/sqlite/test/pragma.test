@@ -1,0 +1,2002 @@
+# 2002 March 6
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for the PRAGMA command.
+#
+# $Id: pragma.test,v 1.73 2009/01/12 14:01:45 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix pragma
+
+# Do not use a codec for tests in this file, as the database file is
+# manipulated directly using tcl scripts (using the [hexio_write] command).
+#
+do_not_use_codec
+
+# Test organization:
+#
+# pragma-1.*: Test cache_size, default_cache_size and synchronous on main db.
+# pragma-2.*: Test synchronous on attached db.
+# pragma-3.*: Test detection of table/index inconsistency by integrity_check.
+# pragma-4.*: Test cache_size and default_cache_size on attached db.
+# pragma-5.*: Test that pragma synchronous may not be used inside of a
+#             transaction.
+# pragma-6.*: Test schema-query pragmas.
+# pragma-7.*: Miscellaneous tests.
+# pragma-8.*: Test user_version and schema_version pragmas.
+# pragma-9.*: Test temp_store and temp_store_directory.
+# pragma-10.*: Test the count_changes pragma in the presence of triggers.
+# pragma-11.*: Test the collation_list pragma.
+# pragma-14.*: Test the page_count pragma.
+# pragma-15.*: Test that the value set using the cache_size pragma is not
+#              reset when the schema is reloaded.
+# pragma-16.*: Test proxy locking
+# pragma-20.*: Test data_store_directory.
+# pragma-22.*: Test that "PRAGMA [db].integrity_check" respects the "db"
+#              directive - if it is present.
+#
+
+ifcapable !pragma {
+  finish_test
+  return
+}
+
+# Capture the output of a pragma in a TEMP table.
+#
+proc capture_pragma {db tabname sql} {
+  $db eval "DROP TABLE IF EXISTS temp.$tabname"
+  set once 1
+  $db eval $sql x {
+    if {$once} {
+      set once 0
+      set ins "INSERT INTO $tabname VALUES"
+      set crtab "CREATE TEMP TABLE $tabname "
+      set sep "("
+      foreach col $x(*) {
+        append ins ${sep}\$x($col)
+        append crtab ${sep}\"$col\"
+        set sep ,
+      }
+      append ins )
+      append crtab )
+      $db eval $crtab
+    }
+    $db eval $ins
+  }
+}
+
+# Delete the preexisting database to avoid the special setup
+# that the "all.test" script does.
+#
+db close
+delete_file test.db test.db-journal
+delete_file test3.db test3.db-journal
+sqlite3 db test.db; set DB [sqlite3_connection_pointer db]
+
+# EVIDENCE-OF: R-13861-56665 PRAGMA schema.cache_size; PRAGMA
+# schema.cache_size = pages; PRAGMA schema.cache_size = -kibibytes;
+# Query or change the suggested maximum number of database disk pages
+# that SQLite will hold in memory at once per open database file.
+#
+ifcapable pager_pragmas {
+set DFLT_CACHE_SZ [db one {PRAGMA default_cache_size}]
+set TEMP_CACHE_SZ [db one {PRAGMA temp.default_cache_size}]
+do_test pragma-1.1 {
+  execsql {
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ 2]
+do_test pragma-1.2 {
+  # EVIDENCE-OF: R-42059-47211 If the argument N is positive then the
+  # suggested cache size is set to N.
+  execsql {
+    PRAGMA synchronous=OFF;
+    PRAGMA cache_size=1234;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list 1234 $DFLT_CACHE_SZ 0]
+do_test pragma-1.3 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ 2]
+do_test pragma-1.4 {
+  execsql {
+    PRAGMA synchronous=OFF;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ 0]
+do_test pragma-1.5 {
+  execsql {
+    PRAGMA cache_size=-4321;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list -4321 $DFLT_CACHE_SZ 0]
+do_test pragma-1.6 {
+  execsql {
+    PRAGMA synchronous=ON;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list -4321 $DFLT_CACHE_SZ 1]
+do_test pragma-1.7 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ 2]
+do_test pragma-1.8 {
+  execsql {
+    PRAGMA default_cache_size=-123;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 2}
+do_test pragma-1.9.1 {
+  db close
+  sqlite3 db test.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 2}
+ifcapable vacuum {
+  do_test pragma-1.9.2 {
+    execsql {
+      VACUUM;
+      PRAGMA cache_size;
+      PRAGMA default_cache_size;
+      PRAGMA synchronous;
+    }
+  } {123 123 2}
+}
+do_test pragma-1.10 {
+  execsql {
+    PRAGMA synchronous=NORMAL;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 1}
+do_test pragma-1.11.1 {
+  execsql {
+    PRAGMA synchronous=EXTRA;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 3}
+do_test pragma-1.11.2 {
+  execsql {
+    PRAGMA synchronous=FULL;
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 2}
+do_test pragma-1.12 {
+  db close
+  sqlite3 db test.db; set ::DB [sqlite3_connection_pointer db]
+  execsql {
+    PRAGMA cache_size;
+    PRAGMA default_cache_size;
+    PRAGMA synchronous;
+  }
+} {123 123 2}
+
+# Make sure the pragma handler understands numeric values in addition
+# to keywords like "off" and "full".
+#
+do_test pragma-1.13 {
+  execsql {
+    PRAGMA synchronous=0;
+    PRAGMA synchronous;
+  }
+} {0}
+do_test pragma-1.14 {
+  execsql {
+    PRAGMA synchronous=2;
+    PRAGMA synchronous;
+  }
+} {2}
+do_test pragma-1.14.1 {
+  execsql {
+    PRAGMA synchronous=4;
+    PRAGMA synchronous;
+  }
+} {4}
+do_test pragma-1.14.2 {
+  execsql {
+    PRAGMA synchronous=3;
+    PRAGMA synchronous;
+  }
+} {3}
+do_test pragma-1.14.3 {
+  execsql {
+    PRAGMA synchronous=8;
+    PRAGMA synchronous;
+  }
+} {0}
+do_test pragma-1.14.4 {
+  execsql {
+    PRAGMA synchronous=10;
+    PRAGMA synchronous;
+  }
+} {2}
+
+do_execsql_test 1.15.1 {
+  PRAGMA default_cache_size = 0;
+}
+do_execsql_test 1.15.2 {
+  PRAGMA default_cache_size;
+} $DFLT_CACHE_SZ
+do_execsql_test 1.15.3 {
+  PRAGMA default_cache_size = -500;
+}
+do_execsql_test 1.15.4 {
+  PRAGMA default_cache_size;
+} 500
+do_execsql_test 1.15.3 {
+  PRAGMA default_cache_size = 500;
+}
+do_execsql_test 1.15.4 {
+  PRAGMA default_cache_size;
+} 500
+db close
+hexio_write test.db 48 FFFFFF00
+sqlite3 db test.db
+do_execsql_test 1.15.4 {
+  PRAGMA default_cache_size;
+} 256
+} ;# ifcapable pager_pragmas
+
+# Test turning "flag" pragmas on and off.
+#
+ifcapable debug {
+  # Pragma "vdbe_listing" is only available if compiled with SQLITE_DEBUG
+  #
+  do_test pragma-1.15 {
+    execsql {
+      PRAGMA vdbe_listing=YES;
+      PRAGMA vdbe_listing;
+    }
+  } {1}
+  do_test pragma-1.16 {
+    execsql {
+      PRAGMA vdbe_listing=NO;
+      PRAGMA vdbe_listing;
+    }
+  } {0}
+}
+
+do_test pragma-1.17 {
+  execsql {
+    PRAGMA parser_trace=ON;
+    PRAGMA parser_trace=OFF;
+  }
+} {}
+do_test pragma-1.18 {
+  execsql {
+    PRAGMA bogus = -1234;  -- Parsing of negative values
+  }
+} {}
+
+# Test modifying the safety_level of an attached database.
+ifcapable pager_pragmas&&attach {
+  do_test pragma-2.1 {
+    forcedelete test2.db
+    forcedelete test2.db-journal
+    execsql {
+      ATTACH 'test2.db' AS aux;
+    } 
+  } {}
+  do_test pragma-2.2 {
+    execsql {
+      pragma aux.synchronous;
+    } 
+  } {2}
+  do_test pragma-2.3 {
+    execsql {
+      pragma aux.synchronous = OFF;
+      pragma aux.synchronous;
+      pragma synchronous;
+    } 
+  } {0 2}
+  do_test pragma-2.4 {
+    execsql {
+      pragma aux.synchronous = ON;
+      pragma synchronous;
+      pragma aux.synchronous;
+    } 
+  } {2 1}
+} ;# ifcapable pager_pragmas
+
+# Construct a corrupted index and make sure the integrity_check
+# pragma finds it.
+#
+# These tests won't work if the database is encrypted
+#
+do_test pragma-3.1 {
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA auto_vacuum=OFF;
+    BEGIN;
+    CREATE TABLE t2(a,b,c);
+    CREATE INDEX i2 ON t2(a);
+    INSERT INTO t2 VALUES(11,2,3);
+    INSERT INTO t2 VALUES(22,3,4);
+    COMMIT;
+    SELECT rowid, * from t2;
+  }
+} {1 11 2 3 2 22 3 4}
+ifcapable attach {
+  if {![sqlite3 -has-codec] && $sqlite_options(integrityck)} {
+    do_test pragma-3.2 {
+      db eval {SELECT rootpage FROM sqlite_master WHERE name='i2'} break
+      set pgsz [db eval {PRAGMA page_size}]
+      # overwrite the header on the rootpage of the index in order to
+      # make the index appear to be empty.
+      #
+      set offset [expr {$pgsz*($rootpage-1)}]
+      hexio_write test.db $offset 0a00000000040000000000
+      db close
+      sqlite3 db test.db
+      execsql {PRAGMA integrity_check}
+    } {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+    do_test pragma-3.3 {
+      execsql {PRAGMA integrity_check=1}
+    } {{row 1 missing from index i2}}
+    do_test pragma-3.4 {
+      execsql {
+        ATTACH DATABASE 'test.db' AS t2;
+        PRAGMA integrity_check
+      }
+    } {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+    do_test pragma-3.5 {
+      execsql {
+        PRAGMA integrity_check=4
+      }
+    } {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {row 1 missing from index i2}}
+    do_catchsql_test pragma-3.6 {
+      PRAGMA integrity_check=xyz
+    } {1 {no such table: xyz}}
+    do_catchsql_test pragma-3.6b {
+      PRAGMA integrity_check=t2
+    } {0 {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}}
+    do_catchsql_test pragma-3.6c {
+      PRAGMA integrity_check=sqlite_schema
+    } {0 ok}
+    do_test pragma-3.7 {
+      execsql {
+        PRAGMA integrity_check=0
+      }
+    } {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+  
+    # Add additional corruption by appending unused pages to the end of
+    # the database file testerr.db
+    #
+    do_test pragma-3.8 {
+      execsql {DETACH t2}
+      forcedelete testerr.db testerr.db-journal
+      set out [open testerr.db w]
+      fconfigure $out -translation binary
+      set in [open test.db r]
+      fconfigure $in -translation binary
+      puts -nonewline $out [read $in]
+      seek $in 0
+      puts -nonewline $out [read $in]
+      close $in
+      close $out
+      hexio_write testerr.db 28 00000000
+      execsql {REINDEX t2}
+      execsql {PRAGMA integrity_check}
+    } {ok}
+    do_test pragma-3.8.1 {
+      execsql {PRAGMA quick_check}
+    } {ok}
+    do_test pragma-3.8.2 {
+      execsql {PRAGMA QUICK_CHECK}
+    } {ok}
+    do_test pragma-3.9a {
+      execsql {
+        ATTACH 'testerr.db' AS t2;
+        PRAGMA integrity_check
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+    do_execsql_test pragma-3.9b {
+      PRAGMA t2.integrity_check=t2;
+    } {{row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+    do_execsql_test pragma-3.9c {
+      PRAGMA t2.integrity_check=sqlite_schema;
+    } {ok}
+    do_test pragma-3.10 {
+      execsql {
+        PRAGMA integrity_check=1
+      }
+    } {{*** in database t2 ***
+Page 4 is never used}}
+    do_test pragma-3.11 {
+      execsql {
+        PRAGMA integrity_check=5
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2}}
+    do_test pragma-3.12 {
+      execsql {
+        PRAGMA integrity_check=4
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2}}
+    do_test pragma-3.13 {
+      execsql {
+        PRAGMA integrity_check=3
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used}}
+    do_test pragma-3.14 {
+      execsql {
+        PRAGMA integrity_check(2)
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used}}
+    do_test pragma-3.15 {
+      execsql {
+        ATTACH 'testerr.db' AS t3;
+        PRAGMA integrity_check
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {*** in database t3 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2}}
+    do_test pragma-3.16 {
+      execsql {
+        PRAGMA integrity_check(10)
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {*** in database t3 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2}}
+    do_test pragma-3.17 {
+      execsql {
+        PRAGMA integrity_check=8
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2} {row 2 missing from index i2} {wrong # of entries in index i2} {*** in database t3 ***
+Page 4 is never used
+Page 5 is never used}}
+    do_test pragma-3.18 {
+      execsql {
+        PRAGMA integrity_check=4
+      }
+    } {{*** in database t2 ***
+Page 4 is never used
+Page 5 is never used
+Page 6 is never used} {row 1 missing from index i2}}
+  }
+  do_test pragma-3.19 {
+    catch {db close}
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    db eval {PRAGMA integrity_check}
+  } {ok}
+}
+
+# Verify that PRAGMA integrity_check catches UNIQUE and NOT NULL
+# constraint violations.
+#
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test pragma-3.20 {
+  CREATE TABLE t1(a,b);
+  CREATE INDEX t1a ON t1(a);
+  INSERT INTO t1 VALUES(1,1),(2,2),(3,3),(2,4),(NULL,5),(NULL,6);
+  PRAGMA writable_schema=ON;
+  UPDATE sqlite_master SET sql='CREATE UNIQUE INDEX t1a ON t1(a)'
+   WHERE name='t1a';
+  UPDATE sqlite_master SET sql='CREATE TABLE t1(a NOT NULL,b)'
+   WHERE name='t1';
+  PRAGMA writable_schema=OFF;
+  ALTER TABLE t1 RENAME TO t1x;
+  PRAGMA integrity_check;
+} {{non-unique entry in index t1a} {NULL value in t1x.a} {non-unique entry in index t1a} {NULL value in t1x.a}}
+do_execsql_test pragma-3.21 {
+  PRAGMA integrity_check(3);
+} {{non-unique entry in index t1a} {NULL value in t1x.a} {non-unique entry in index t1a}}
+do_execsql_test pragma-3.22 {
+  PRAGMA integrity_check(2);
+} {{non-unique entry in index t1a} {NULL value in t1x.a}}
+do_execsql_test pragma-3.23 {
+  PRAGMA integrity_check(1);
+} {{non-unique entry in index t1a}}
+
+# PRAGMA integrity check (or more specifically the sqlite3BtreeCount()
+# interface) used to leave index cursors in an inconsistent state
+# which could result in an assertion fault in sqlite3BtreeKey()
+# called from saveCursorPosition() if content is removed from the
+# index while the integrity_check is still running.  This test verifies
+# that problem has been fixed.
+#
+do_test pragma-3.30 {
+  db close
+  delete_file test.db
+  sqlite3 db test.db
+  db eval {
+    CREATE TABLE t1(a,b,c);
+    WITH RECURSIVE
+      c(i) AS (VALUES(1) UNION ALL SELECT i+1 FROM c WHERE i<100)
+    INSERT INTO t1(a,b,c) SELECT i, printf('xyz%08x',i), 2000-i FROM c;
+    CREATE INDEX t1a ON t1(a);
+    CREATE INDEX t1bc ON t1(b,c);
+  }
+  db eval {PRAGMA integrity_check} {
+     db eval {DELETE FROM t1}
+  }
+} {}
+
+# Test modifying the cache_size of an attached database.
+ifcapable pager_pragmas&&attach {
+do_test pragma-4.1 {
+  execsql {
+    ATTACH 'test2.db' AS aux;
+    pragma aux.cache_size;
+    pragma aux.default_cache_size;
+  } 
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ]
+do_test pragma-4.2 {
+  execsql {
+    pragma aux.cache_size = 50;
+    pragma aux.cache_size;
+    pragma aux.default_cache_size;
+  } 
+} [list 50 $DFLT_CACHE_SZ]
+do_test pragma-4.3 {
+  execsql {
+    pragma aux.default_cache_size = 456;
+    pragma aux.cache_size;
+    pragma aux.default_cache_size;
+  } 
+} {456 456}
+do_test pragma-4.4 {
+  execsql {
+    pragma cache_size;
+    pragma default_cache_size;
+  } 
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ]
+do_test pragma-4.5 {
+  execsql {
+    DETACH aux;
+    ATTACH 'test3.db' AS aux;
+    pragma aux.cache_size;
+    pragma aux.default_cache_size;
+  } 
+} [list $DFLT_CACHE_SZ $DFLT_CACHE_SZ]
+do_test pragma-4.6 {
+  execsql {
+    DETACH aux;
+    ATTACH 'test2.db' AS aux;
+    pragma aux.cache_size;
+    pragma aux.default_cache_size;
+  } 
+} {456 456}
+} ;# ifcapable pager_pragmas
+
+# Test that modifying the sync-level in the middle of a transaction is
+# disallowed.
+ifcapable pager_pragmas {
+do_test pragma-5.0 {
+  execsql {
+    pragma synchronous;
+  } 
+} {2}
+do_test pragma-5.1 {
+  catchsql {
+    BEGIN;
+    pragma synchronous = OFF;
+  } 
+} {1 {Safety level may not be changed inside a transaction}}
+do_test pragma-5.2 {
+  execsql {
+    pragma synchronous;
+  } 
+} {2}
+catchsql {COMMIT;}
+} ;# ifcapable pager_pragmas
+
+# Test schema-query pragmas
+#
+ifcapable schema_pragmas {
+ifcapable tempdb&&attach {
+  do_test pragma-6.1 {
+    set res {}
+    execsql {SELECT * FROM sqlite_temp_master}
+    foreach {idx name file} [execsql {pragma database_list}] {
+      lappend res $idx $name
+    }
+    set res
+  } {0 main 1 temp 2 aux}
+}
+do_test pragma-6.2 {
+  execsql {
+    CREATE TABLE t2(a TYPE_X, b [TYPE_Y], c "TYPE_Z");
+    pragma table_info(t2)
+  }
+} {0 a TYPE_X 0 {} 0 1 b TYPE_Y 0 {} 0 2 c TYPE_Z 0 {} 0}
+do_test pragma-6.2.1 {
+  execsql {
+    pragma table_info;
+  }
+} {}
+db nullvalue <<NULL>>
+do_test pragma-6.2.2 {
+  execsql {
+    CREATE TABLE t5(
+      a TEXT DEFAULT CURRENT_TIMESTAMP, 
+      b DEFAULT (5+3),
+      c TEXT,
+      d INTEGER DEFAULT NULL,
+      e TEXT DEFAULT '',
+      UNIQUE(b,c,d),
+      PRIMARY KEY(e,b,c)
+    );
+    PRAGMA table_info(t5);
+  }
+} {0 a TEXT 0 CURRENT_TIMESTAMP 0 1 b {} 0 5+3 2 2 c TEXT 0 <<NULL>> 3 3 d INTEGER 0 NULL 0 4 e TEXT 0 '' 1}
+db nullvalue {}
+do_test pragma-6.2.3 {
+  execsql {
+    CREATE TABLE t2_3(a,b INTEGER PRIMARY KEY,c);
+    pragma table_info(t2_3)
+  }
+} {0 a {} 0 {} 0 1 b INTEGER 0 {} 1 2 c {} 0 {} 0}
+ifcapable {foreignkey} {
+  do_test pragma-6.3.1 {
+    execsql {
+      CREATE TABLE t3(a int references t2(b), b UNIQUE);
+      pragma foreign_key_list(t3);
+    }
+  } {0 0 t2 a b {NO ACTION} {NO ACTION} NONE}
+  do_test pragma-6.3.2 {
+    execsql {
+      pragma foreign_key_list;
+    }
+  } {}
+  do_test pragma-6.3.3 {
+    execsql {
+      pragma foreign_key_list(t3_bogus);
+    }
+  } {}
+  do_test pragma-6.3.4 {
+    execsql {
+      pragma foreign_key_list(t5);
+    }
+  } {}
+  do_test pragma-6.4 {
+    capture_pragma db out {
+      pragma index_list(t3);
+    }
+    db eval {SELECT seq, "name", "unique" FROM out ORDER BY seq}
+  } {0 sqlite_autoindex_t3_1 1}
+}
+ifcapable {!foreignkey} {
+  execsql {CREATE TABLE t3(a,b UNIQUE)}
+}
+do_test pragma-6.5.1 {
+  execsql {
+    CREATE INDEX t3i1 ON t3(a,b);
+  }
+  capture_pragma db out {
+    pragma index_info(t3i1);
+  }
+  db eval {SELECT seqno, cid, name FROM out ORDER BY seqno}
+} {0 0 a 1 1 b}
+
+# EVIDENCE-OF: R-23114-21695 The auxiliary index-columns are not shown
+# by the index_info pragma, but they are listed by the index_xinfo
+# pragma.
+#
+do_test pragma-6.5.1b {
+  capture_pragma db out {PRAGMA index_xinfo(t3i1)}
+  db eval {SELECT seqno, cid, name FROM out ORDER BY seqno}
+} {0 0 a 1 1 b 2 -1 {}}
+
+
+# EVIDENCE-OF: R-29448-60346 PRAGMA schema.index_info(index-name); This
+# pragma returns one row for each key column in the named index.
+#
+# (The first column of output from PRAGMA index_info is...)
+# EVIDENCE-OF: R-34186-52914 The rank of the column within the index. (0
+# means left-most.)
+#
+# (The second column of output from PRAGMA index_info is...)
+# EVIDENCE-OF: R-65019-08383 The rank of the column within the table
+# being indexed.
+#
+# (The third column of output from PRAGMA index_info is...)
+# EVIDENCE-OF: R-09773-34266 The name of the column being indexed.
+#
+do_execsql_test pragma-6.5.1c {
+  CREATE INDEX t3i2 ON t3(b,a);
+  PRAGMA index_info='t3i2';
+  DROP INDEX t3i2;
+} {0 1 b 1 0 a}
+
+do_test pragma-6.5.2 {
+  execsql {
+    pragma index_info(t3i1_bogus);
+  }
+} {}
+
+ifcapable tempdb {
+  # Test for ticket #3320. When a temp table of the same name exists, make
+  # sure the schema of the main table can still be queried using 
+  # "pragma table_info":
+  do_test pragma-6.6.1 {
+    execsql {
+      CREATE TABLE trial(col_main);
+      CREATE TEMP TABLE trial(col_temp);
+    }
+  } {}
+  do_test pragma-6.6.2 {
+    execsql {
+      PRAGMA table_info(trial);
+    }
+  } {0 col_temp {} 0 {} 0}
+  do_test pragma-6.6.3 {
+    execsql {
+      PRAGMA temp.table_info(trial);
+    }
+  } {0 col_temp {} 0 {} 0}
+  do_test pragma-6.6.4 {
+    execsql {
+      PRAGMA main.table_info(trial);
+    }
+  } {0 col_main {} 0 {} 0}
+}
+
+do_test pragma-6.7 {
+  execsql {
+    CREATE TABLE test_table(
+      one INT NOT NULL DEFAULT -1, 
+      two text,
+      three VARCHAR(45, 65) DEFAULT 'abcde',
+      four REAL DEFAULT X'abcdef',
+      five DEFAULT CURRENT_TIME
+    );
+  }
+  capture_pragma db out {PRAGMA table_info(test_table)}
+  db eval {SELECT cid, "name", type, "notnull", dflt_value, pk FROM out
+            ORDER BY cid}
+} [concat \
+  {0 one INT 1 -1 0} \
+  {1 two text 0 {} 0} \
+  {2 three {VARCHAR(45, 65)} 0 'abcde' 0} \
+  {3 four REAL 0 X'abcdef' 0} \
+  {4 five {} 0 CURRENT_TIME 0} \
+]
+do_test pragma-6.8 {
+  execsql {
+    CREATE TABLE t68(a,b,c,PRIMARY KEY(a,b,a,c));
+    PRAGMA table_info(t68);
+  }
+} [concat \
+  {0 a {} 0 {} 1} \
+  {1 b {} 0 {} 2} \
+  {2 c {} 0 {} 4} \
+]
+} ;# ifcapable schema_pragmas
+# Miscellaneous tests
+#
+ifcapable schema_pragmas {
+# EVIDENCE-OF: R-64103-17776 PRAGMA schema.index_list(table-name); This
+# pragma returns one row for each index associated with the given table.
+#
+do_test pragma-7.1.1 {
+  # Make sure a pragma knows to read the schema if it needs to
+  db close
+  sqlite3 db test.db
+  capture_pragma db out "PRAGMA index_list(t3)"
+  db eval {SELECT name, "origin" FROM out ORDER BY name DESC}
+} {t3i1 c sqlite_autoindex_t3_1 u}
+do_test pragma-7.1.2 {
+  execsql {
+    pragma index_list(t3_bogus);
+  }
+} {}
+} ;# ifcapable schema_pragmas
+ifcapable {utf16} {
+  if {[permutation] == ""} {
+    do_test pragma-7.2 {
+      db close
+      sqlite3 db test.db
+      catchsql {
+        pragma encoding=bogus;
+      }
+    } {1 {unsupported encoding: bogus}}
+  }
+}
+ifcapable tempdb {
+  do_test pragma-7.3 {
+    db close
+    sqlite3 db test.db
+    execsql {
+      pragma lock_status;
+    }
+  } {main unlocked temp closed}
+} else {
+  do_test pragma-7.3 {
+    db close
+    sqlite3 db test.db
+    execsql {
+      pragma lock_status;
+    }
+  } {main unlocked}
+}
+
+
+#----------------------------------------------------------------------
+# Test cases pragma-8.* test the "PRAGMA schema_version" and "PRAGMA
+# user_version" statements.
+#
+# pragma-8.1: PRAGMA schema_version
+# pragma-8.2: PRAGMA user_version
+#
+
+ifcapable schema_version {
+
+# First check that we can set the schema version and then retrieve the
+# same value.
+do_test pragma-8.1.1 {
+  execsql {
+    PRAGMA schema_version = 105;
+  }
+} {}
+do_test pragma-8.1.2 {
+  execsql2 {
+    PRAGMA schema_version;
+  }
+} {schema_version 105}
+do_test pragma-8.1.3 {
+  execsql {
+    PRAGMA schema_version = 106;
+  }
+} {}
+do_test pragma-8.1.4 {
+  execsql {
+    PRAGMA schema_version;
+  }
+} 106
+
+# Check that creating a table modifies the schema-version (this is really
+# to verify that the value being read is in fact the schema version).
+do_test pragma-8.1.5 {
+  execsql {
+    CREATE TABLE t4(a, b, c);
+    INSERT INTO t4 VALUES(1, 2, 3);
+    SELECT * FROM t4;
+  }
+} {1 2 3}
+do_test pragma-8.1.6 {
+  execsql {
+    PRAGMA schema_version;
+  }
+} 107
+
+# Now open a second connection to the database. Ensure that changing the
+# schema-version using the first connection forces the second connection
+# to reload the schema. This has to be done using the C-API test functions,
+# because the TCL API accounts for SCHEMA_ERROR and retries the query.
+do_test pragma-8.1.7 {
+  sqlite3 db2 test.db; set ::DB2 [sqlite3_connection_pointer db2]
+  execsql {
+    SELECT * FROM t4;
+  } db2
+} {1 2 3}
+do_test pragma-8.1.8 {
+  execsql {
+    PRAGMA schema_version = 108;
+  }
+} {}
+do_test pragma-8.1.9 {
+  set ::STMT [sqlite3_prepare $::DB2 "SELECT * FROM t4" -1 DUMMY]
+  sqlite3_step $::STMT
+} SQLITE_ERROR
+do_test pragma-8.1.10 {
+  sqlite3_finalize $::STMT
+} SQLITE_SCHEMA
+
+# Make sure the schema-version can be manipulated in an attached database.
+forcedelete test2.db
+forcedelete test2.db-journal
+ifcapable attach {
+  do_test pragma-8.1.11 {
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      CREATE TABLE aux.t1(a, b, c);
+      PRAGMA aux.schema_version = 205;
+    }
+  } {}
+  do_test pragma-8.1.12 {
+    execsql {
+      PRAGMA aux.schema_version;
+    }
+  } 205
+}
+do_test pragma-8.1.13 {
+  execsql {
+    PRAGMA schema_version;
+  }
+} 108
+
+# And check that modifying the schema-version in an attached database
+# forces the second connection to reload the schema.
+ifcapable attach {
+  do_test pragma-8.1.14 {
+    sqlite3 db2 test.db; set ::DB2 [sqlite3_connection_pointer db2]
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      SELECT * FROM aux.t1;
+    } db2
+  } {}
+  do_test pragma-8.1.15 {
+    execsql {
+      PRAGMA aux.schema_version = 206;
+    }
+  } {}
+  do_test pragma-8.1.16 {
+    set ::STMT [sqlite3_prepare $::DB2 "SELECT * FROM aux.t1" -1 DUMMY]
+    sqlite3_step $::STMT
+  } SQLITE_ERROR
+  do_test pragma-8.1.17 {
+    sqlite3_finalize $::STMT
+  } SQLITE_SCHEMA
+  do_test pragma-8.1.18 {
+    db2 close
+  } {}
+}
+
+# Now test that the user-version can be read and written (and that we aren't
+# accidentally manipulating the schema-version instead).
+do_test pragma-8.2.1 {
+  execsql2 {
+    PRAGMA user_version;
+  }
+} {user_version 0}
+do_test pragma-8.2.2 {
+  execsql {
+    PRAGMA user_version = 2;
+  }
+} {}
+do_test pragma-8.2.3.1 {
+  execsql2 {
+    PRAGMA user_version;
+  }
+} {user_version 2}
+do_test pragma-8.2.3.2 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA user_version;
+  }
+} {2}
+do_test pragma-8.2.4.1 {
+  execsql {
+    PRAGMA schema_version;
+  }
+} {108}
+ifcapable vacuum {
+  do_test pragma-8.2.4.2 {
+    execsql {
+      VACUUM;
+      PRAGMA user_version;
+    }
+  } {2}
+  do_test pragma-8.2.4.3 {
+    execsql {
+      PRAGMA schema_version;
+    }
+  } {109}
+}
+
+ifcapable attach {
+  db eval {ATTACH 'test2.db' AS aux}
+  
+  # Check that the user-version in the auxilary database can be manipulated (
+  # and that we aren't accidentally manipulating the same in the main db).
+  do_test pragma-8.2.5 {
+    execsql {
+      PRAGMA aux.user_version;
+    }
+  } {0}
+  do_test pragma-8.2.6 {
+    execsql {
+      PRAGMA aux.user_version = 3;
+    }
+  } {}
+  do_test pragma-8.2.7 {
+    execsql {
+      PRAGMA aux.user_version;
+    }
+  } {3}
+  do_test pragma-8.2.8 {
+    execsql {
+      PRAGMA main.user_version;
+    }
+  } {2}
+  
+  # Now check that a ROLLBACK resets the user-version if it has been modified
+  # within a transaction.
+  do_test pragma-8.2.9 {
+    execsql {
+      BEGIN;
+      PRAGMA aux.user_version = 10;
+      PRAGMA user_version = 11;
+    }
+  } {}
+  do_test pragma-8.2.10 {
+    execsql {
+      PRAGMA aux.user_version;
+    }
+  } {10}
+  do_test pragma-8.2.11 {
+    execsql {
+      PRAGMA main.user_version;
+    }
+  } {11}
+  do_test pragma-8.2.12 {
+    execsql {
+      ROLLBACK;
+      PRAGMA aux.user_version;
+    }
+  } {3}
+  do_test pragma-8.2.13 {
+    execsql {
+      PRAGMA main.user_version;
+    }
+  } {2}
+}
+
+# Try a negative value for the user-version
+do_test pragma-8.2.14 {
+  execsql {
+    PRAGMA user_version = -450;
+  }
+} {}
+do_test pragma-8.2.15 {
+  execsql {
+    PRAGMA user_version;
+  }
+} {-450}
+} ; # ifcapable schema_version
+
+# Check to see if TEMP_STORE is memory or disk.  Return strings
+# "memory" or "disk" as appropriate.
+#
+proc check_temp_store {} {
+  db eval {
+    PRAGMA temp.cache_size = 1;
+    CREATE TEMP TABLE IF NOT EXISTS a(b);
+    DELETE FROM a;
+    INSERT INTO a VALUES(randomblob(1000));
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+    INSERT INTO a SELECT * FROM a;
+  }
+  db eval {PRAGMA database_list} {
+    if {$name=="temp"} {
+      set bt [btree_from_db db 1]
+      if {[btree_ismemdb $bt]} {
+        return "memory"
+      }
+      return "disk"
+    }
+  }
+  return "unknown"
+}
+
+# Application_ID
+#
+do_test pragma-8.3.1 {
+  execsql {
+    PRAGMA application_id;
+  }
+} {0}
+do_test pragma-8.3.2 {
+  execsql {PRAGMA Application_ID(12345); PRAGMA application_id;}
+} {12345}
+
+# Test temp_store and temp_store_directory pragmas
+#
+ifcapable pager_pragmas {
+do_test pragma-9.1 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA temp_store;
+  }
+} {0}
+if {$TEMP_STORE<=1} {
+  do_test pragma-9.1.1 {
+    check_temp_store
+  } {disk}
+} else {
+  do_test pragma-9.1.1 {
+    check_temp_store
+  } {memory}
+}
+
+do_test pragma-9.2 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA temp_store=file;
+    PRAGMA temp_store;
+  }
+} {1}
+if {$TEMP_STORE==3} {
+  # When TEMP_STORE is 3, always use memory regardless of pragma settings.
+  do_test pragma-9.2.1 {
+    check_temp_store
+  } {memory}
+} else {
+  do_test pragma-9.2.1 {
+    check_temp_store
+  } {disk}
+}
+
+do_test pragma-9.3 {
+  db close
+  sqlite3 db test.db
+  execsql {
+    PRAGMA temp_store=memory;
+    PRAGMA temp_store;
+  }
+} {2}
+if {$TEMP_STORE==0} {
+  # When TEMP_STORE is 0, always use the disk regardless of pragma settings.
+  do_test pragma-9.3.1 {
+    check_temp_store
+  } {disk}
+} else {
+  do_test pragma-9.3.1 {
+    check_temp_store
+  } {memory}
+}
+
+do_test pragma-9.4 {
+  execsql {
+    PRAGMA temp_store_directory;
+  }
+} {}
+ifcapable wsd {
+  do_test pragma-9.5 {
+    set pwd [string map {' ''} [file nativename [get_pwd]]]
+    execsql "
+      PRAGMA temp_store_directory='$pwd';
+    "
+  } {}
+  do_test pragma-9.6 {
+    execsql { 
+      PRAGMA temp_store_directory;
+    }
+  } [list [file nativename [get_pwd]]]
+  do_test pragma-9.7 {
+    catchsql { 
+      PRAGMA temp_store_directory='/NON/EXISTENT/PATH/FOOBAR';
+    }
+  } {1 {not a writable directory}}
+  do_test pragma-9.8 {
+    execsql { 
+      PRAGMA temp_store_directory='';
+    }
+  } {}
+  if {![info exists TEMP_STORE] || $TEMP_STORE<=1} {
+    ifcapable tempdb {
+      do_test pragma-9.9 {
+        execsql { 
+          PRAGMA temp_store_directory;
+          PRAGMA temp_store=FILE;
+          CREATE TEMP TABLE temp_store_directory_test(a integer);
+          INSERT INTO temp_store_directory_test values (2);
+          SELECT * FROM temp_store_directory_test;
+        }
+      } {2}
+      do_test pragma-9.10 {
+        catchsql "
+          PRAGMA temp_store_directory='$pwd';
+          SELECT * FROM temp_store_directory_test;
+        "
+      } {1 {no such table: temp_store_directory_test}}
+    }
+  }
+}
+do_test pragma-9.11 {
+  execsql {
+    PRAGMA temp_store = 0;
+    PRAGMA temp_store;
+  }
+} {0}
+do_test pragma-9.12 {
+  execsql {
+    PRAGMA temp_store = 1;
+    PRAGMA temp_store;
+  }
+} {1}
+do_test pragma-9.13 {
+  execsql {
+    PRAGMA temp_store = 2;
+    PRAGMA temp_store;
+  }
+} {2}
+do_test pragma-9.14 {
+  execsql {
+    PRAGMA temp_store = 3;
+    PRAGMA temp_store;
+  }
+} {0}
+do_test pragma-9.15 {
+  catchsql {
+    BEGIN EXCLUSIVE;
+    CREATE TEMP TABLE temp_table(t);
+    INSERT INTO temp_table VALUES('valuable data');
+    PRAGMA temp_store = 1;
+  }
+} {1 {temporary storage cannot be changed from within a transaction}}
+do_test pragma-9.16 {
+  execsql {
+    SELECT * FROM temp_table;
+    COMMIT;
+  }
+} {{valuable data}}
+
+do_test pragma-9.17 {
+  execsql {
+    INSERT INTO temp_table VALUES('valuable data II');
+    SELECT * FROM temp_table;
+  }
+} {{valuable data} {valuable data II}}
+
+do_test pragma-9.18 {
+  set rc [catch {
+    db eval {SELECT t FROM temp_table} {
+      execsql {pragma temp_store = 1}
+    }
+  } msg]
+  list $rc $msg
+} {1 {temporary storage cannot be changed from within a transaction}}
+
+} ;# ifcapable pager_pragmas
+
+ifcapable trigger {
+
+do_test pragma-10.0 {
+  catchsql {
+    DROP TABLE main.t1;
+  }
+  execsql {
+    PRAGMA count_changes = 1;
+
+    CREATE TABLE t1(a PRIMARY KEY);
+    CREATE TABLE t1_mirror(a);
+    CREATE TABLE t1_mirror2(a);
+    CREATE TRIGGER t1_bi BEFORE INSERT ON t1 BEGIN 
+      INSERT INTO t1_mirror VALUES(new.a);
+    END;
+    CREATE TRIGGER t1_ai AFTER INSERT ON t1 BEGIN 
+      INSERT INTO t1_mirror2 VALUES(new.a);
+    END;
+    CREATE TRIGGER t1_bu BEFORE UPDATE ON t1 BEGIN 
+      UPDATE t1_mirror SET a = new.a WHERE a = old.a;
+    END;
+    CREATE TRIGGER t1_au AFTER UPDATE ON t1 BEGIN 
+      UPDATE t1_mirror2 SET a = new.a WHERE a = old.a;
+    END;
+    CREATE TRIGGER t1_bd BEFORE DELETE ON t1 BEGIN 
+      DELETE FROM t1_mirror WHERE a = old.a;
+    END;
+    CREATE TRIGGER t1_ad AFTER DELETE ON t1 BEGIN 
+      DELETE FROM t1_mirror2 WHERE a = old.a;
+    END;
+  }
+} {}
+
+do_test pragma-10.1 {
+  execsql {
+    INSERT INTO t1 VALUES(randstr(10,10));
+  }
+} {1}
+do_test pragma-10.2 {
+  execsql {
+    UPDATE t1 SET a = randstr(10,10);
+  }
+} {1}
+do_test pragma-10.3 {
+  execsql {
+    DELETE FROM t1;
+  }
+} {1}
+
+} ;# ifcapable trigger
+
+ifcapable schema_pragmas {
+  do_test pragma-11.1 {
+    execsql2 {
+      pragma collation_list;
+    }
+  } {seq 0 name RTRIM seq 1 name NOCASE seq 2 name BINARY}
+  do_test pragma-11.2 {
+    db collate New_Collation blah...
+    execsql {
+      pragma collation_list;
+    }
+  } {0 New_Collation 1 RTRIM 2 NOCASE 3 BINARY}
+}
+
+ifcapable schema_pragmas&&tempdb {
+  do_test pragma-12.1 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA temp.table_info('abc');
+    } db2
+  } {}
+  db2 close
+
+  do_test pragma-12.2 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA temp.default_cache_size = 200;
+      PRAGMA temp.default_cache_size;
+    } db2
+  } {200}
+  db2 close
+
+  do_test pragma-12.3 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA temp.cache_size = 400;
+      PRAGMA temp.cache_size;
+    } db2
+  } {400}
+  db2 close
+}
+
+ifcapable bloblit {
+
+do_test pragma-13.1 {
+  execsql {
+    DROP TABLE IF EXISTS t4;
+    PRAGMA vdbe_trace=on;
+    PRAGMA vdbe_listing=on;
+    PRAGMA sql_trace=on;
+    CREATE TABLE t4(a INTEGER PRIMARY KEY,b);
+    INSERT INTO t4(b) VALUES(x'0123456789abcdef0123456789abcdef0123456789');
+    INSERT INTO t4(b) VALUES(randstr(30,30));
+    INSERT INTO t4(b) VALUES(1.23456);
+    INSERT INTO t4(b) VALUES(NULL);
+    INSERT INTO t4(b) VALUES(0);
+    INSERT INTO t4(b) SELECT b||b||b||b FROM t4;
+    SELECT * FROM t4;
+  }
+  execsql {
+    PRAGMA vdbe_trace=off;
+    PRAGMA vdbe_listing=off;
+    PRAGMA sql_trace=off;
+  }
+} {}
+
+} ;# ifcapable bloblit 
+
+ifcapable pager_pragmas {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+ 
+  # EVIDENCE-OF: R-15672-33611 PRAGMA schema.page_count; Return the total
+  # number of pages in the database file.
+  #
+  do_test pragma-14.1 {
+    execsql { pragma auto_vacuum = 0 }
+    execsql { pragma page_count; pragma main.page_count }
+  } {0 0}
+
+  do_test pragma-14.2 {
+    execsql { 
+      CREATE TABLE abc(a, b, c);
+      PRAGMA page_count;
+      PRAGMA main.page_count;
+      PRAGMA temp.page_count;
+    }
+  } {2 2 0}
+  do_test pragma-14.2uc {
+    execsql {pragma PAGE_COUNT}
+  } {2}
+
+  do_test pragma-14.3 {
+    execsql { 
+      BEGIN;
+      CREATE TABLE def(a, b, c);
+      PRAGMA page_count;
+    }
+  } {3}
+  do_test pragma-14.3uc {
+    execsql {pragma PAGE_COUNT}
+  } {3}
+
+  do_test pragma-14.4 {
+    set page_size [db one {pragma page_size}]
+    expr [file size test.db] / $page_size
+  } {2}
+
+  do_test pragma-14.5 {
+    execsql {
+      ROLLBACK;
+      PRAGMA page_count;
+    }
+  } {2}
+
+  do_test pragma-14.6 {
+    forcedelete test2.db
+    sqlite3 db2 test2.db
+    execsql {
+      PRAGMA auto_vacuum = 0;
+      CREATE TABLE t1(a, b, c);
+      CREATE TABLE t2(a, b, c);
+      CREATE TABLE t3(a, b, c);
+      CREATE TABLE t4(a, b, c);
+    } db2
+    db2 close
+    execsql {
+      ATTACH 'test2.db' AS aux;
+      PRAGMA aux.page_count;
+    } 
+  } {5}
+  do_test pragma-14.6uc {
+    execsql {pragma AUX.PAGE_COUNT}
+  } {5}
+}
+
+# Test that the value set using the cache_size pragma is not reset when the
+# schema is reloaded.
+#
+ifcapable pager_pragmas {
+  db close
+  sqlite3 db test.db
+  do_test pragma-15.1 {
+    execsql {
+      PRAGMA cache_size=59;
+      PRAGMA cache_size;
+    }
+  } {59}
+  do_test pragma-15.2 {
+    sqlite3 db2 test.db
+    execsql {
+      CREATE TABLE newtable(a, b, c);
+    } db2
+    db2 close
+  } {}
+  do_test pragma-15.3 {
+    # Evaluating this statement will cause the schema to be reloaded (because
+    # the schema was changed by another connection in pragma-15.2). At one
+    # point there was a bug that reset the cache_size to its default value
+    # when this happened. 
+    execsql { SELECT * FROM sqlite_master }
+    execsql { PRAGMA cache_size }
+  } {59}
+}
+
+# Reset the sqlite3_temp_directory variable for the next run of tests:
+sqlite3 dbX :memory:
+dbX eval {PRAGMA temp_store_directory = ""}
+dbX close
+
+ifcapable lock_proxy_pragmas&&prefer_proxy_locking {
+  set sqlite_hostid_num 1
+
+  set using_proxy 0
+  foreach {name value} [array get env SQLITE_FORCE_PROXY_LOCKING] {
+    set using_proxy $value
+  }
+
+  # Test the lock_proxy_file pragmas.
+  #
+  db close
+  set env(SQLITE_FORCE_PROXY_LOCKING) "0"
+
+  sqlite3 db test.db
+  do_test pragma-16.1 {
+    execsql {
+      PRAGMA lock_proxy_file="mylittleproxy";
+      select * from sqlite_master;
+    }
+    execsql {
+      PRAGMA lock_proxy_file;
+    } 
+  } {mylittleproxy}
+
+  do_test pragma-16.2 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA lock_proxy_file="mylittleproxy";
+    } db2
+  } {}
+
+  db2 close
+  do_test pragma-16.2.1 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA lock_proxy_file=":auto:";
+      select * from sqlite_master;
+    } db2
+    execsql {
+      PRAGMA lock_proxy_file;
+    } db2
+  } {mylittleproxy}
+
+  db2 close
+  do_test pragma-16.3 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA lock_proxy_file="myotherproxy";
+    } db2
+    catchsql {
+      select * from sqlite_master;
+    } db2
+  } {1 {database is locked}}
+
+  do_test pragma-16.4 {
+    db2 close
+    db close
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA lock_proxy_file="myoriginalproxy";
+      PRAGMA lock_proxy_file="myotherproxy";
+      PRAGMA lock_proxy_file;
+    } db2
+  } {myotherproxy}
+
+  db2 close
+  set env(SQLITE_FORCE_PROXY_LOCKING) "1"
+  do_test pragma-16.5 {
+    sqlite3 db2 test.db
+    execsql {
+      PRAGMA lock_proxy_file=":auto:";
+      PRAGMA lock_proxy_file;
+    } db2
+  } {myotherproxy}
+  
+  do_test pragma-16.6 {
+    db2 close
+    sqlite3 db2 test2.db
+    set lockpath [execsql {
+      PRAGMA lock_proxy_file=":auto:";
+      PRAGMA lock_proxy_file;
+    } db2]
+    string match "*test2.db:auto:" $lockpath
+  } {1}
+  
+  set sqlite_hostid_num 2
+  do_test pragma-16.7 {
+    list [catch {
+      sqlite3 db test2.db
+      execsql { 
+        PRAGMA lock_proxy_file=":auto:";
+        select * from sqlite_master;
+      }
+    } msg] $msg
+  } {1 {database is locked}}
+  db close
+  
+  do_test pragma-16.8 {
+    list [catch {
+      sqlite3 db test2.db
+      execsql { select * from sqlite_master } 
+    } msg] $msg
+  } {1 {database is locked}}
+
+  db2 close
+  do_test pragma-16.8.1 {
+    execsql {
+      PRAGMA lock_proxy_file="yetanotherproxy";
+      PRAGMA lock_proxy_file;
+    } 
+  } {yetanotherproxy}
+  do_test pragma-16.8.2 {
+    execsql {
+      create table mine(x);
+    } 
+  } {}
+
+  db close
+  do_test pragma-16.9 {
+    sqlite3 db proxytest.db
+    set lockpath2 [execsql {
+      PRAGMA lock_proxy_file=":auto:";
+      PRAGMA lock_proxy_file;
+    } db]
+    string match "*proxytest.db:auto:" $lockpath2
+  } {1}
+
+  set env(SQLITE_FORCE_PROXY_LOCKING) $using_proxy
+  set sqlite_hostid_num 0
+}
+
+# Parsing of auto_vacuum settings.
+#
+foreach {autovac_setting val} {
+  0 0
+  1 1
+  2 2
+  3 0
+  -1 0
+  none 0
+  NONE 0
+  NoNe 0
+  full 1
+  FULL 1
+  incremental 2
+  INCREMENTAL 2
+  -1234 0
+  1234 0
+} {
+  do_test pragma-17.1.$autovac_setting {
+    catch {db close}
+    sqlite3 db :memory:
+    execsql "
+      PRAGMA auto_vacuum=$::autovac_setting;
+      PRAGMA auto_vacuum;
+    "
+  } $val
+}
+
+# Parsing of temp_store settings.
+#
+foreach {temp_setting val} {
+  0 0
+  1 1
+  2 2
+  3 0
+  -1 0
+  file 1
+  FILE 1
+  fIlE 1
+  memory 2
+  MEMORY 2
+  MeMoRy 2
+} {
+  do_test pragma-18.1.$temp_setting {
+    catch {db close}
+    sqlite3 db :memory:
+    execsql "
+      PRAGMA temp_store=$::temp_setting;
+      PRAGMA temp_store=$::temp_setting;
+      PRAGMA temp_store;
+    "
+  } $val
+}
+
+# The SQLITE_FCNTL_PRAGMA logic, with error handling.
+#
+db close
+testvfs tvfs
+sqlite3 db test.db -vfs tvfs
+do_test pragma-19.1 {
+  catchsql {PRAGMA error}
+} {1 {SQL logic error}}
+do_test pragma-19.2 {
+  catchsql {PRAGMA error='This is the error message'}
+} {1 {This is the error message}}
+do_test pragma-19.3 {
+  catchsql {PRAGMA error='7 This is the error message'}
+} {1 {This is the error message}}
+do_test pragma-19.4 {
+  catchsql {PRAGMA error=7}
+} {1 {out of memory}}
+do_test pragma-19.5 {
+  file tail [lindex [execsql {PRAGMA filename}] 0]
+} {test.db}
+
+if {$tcl_platform(platform)=="windows"} {
+# Test data_store_directory pragma
+#
+db close
+sqlite3 db test.db
+file mkdir data_dir
+do_test pragma-20.1 {
+  catchsql {PRAGMA data_store_directory}
+} {0 {}}
+do_test pragma-20.2 {
+  set pwd [string map {' ''} [file nativename [get_pwd]]]
+  catchsql "PRAGMA data_store_directory='$pwd';"
+} {0 {}}
+do_test pragma-20.3 {
+  catchsql {PRAGMA data_store_directory}
+} [list 0 [list [file nativename [get_pwd]]]]
+do_test pragma-20.4 {
+  set pwd [string map {' ''} [file nativename \
+    [file join [get_pwd] data_dir]]]
+  catchsql "PRAGMA data_store_directory='$pwd';"
+} {0 {}}
+do_test pragma-20.5 {
+  sqlite3 db2 test2.db
+  catchsql "PRAGMA database_list;" db2
+} [list 0 [list 0 main [file nativename \
+    [file join [get_pwd] data_dir test2.db]]]]
+catch {db2 close}
+do_test pragma-20.6 {
+  sqlite3 db2 [file join [get_pwd] test2.db]
+  catchsql "PRAGMA database_list;" db2
+} [list 0 [list 0 main [file nativename \
+    [file join [get_pwd] test2.db]]]]
+catch {db2 close}
+do_test pragma-20.7 {
+  catchsql "PRAGMA data_store_directory='';"
+} {0 {}}
+do_test pragma-20.8 {
+  catchsql {PRAGMA data_store_directory}
+} {0 {}}
+
+forcedelete data_dir
+} ;# endif windows
+
+database_may_be_corrupt
+if {![nonzero_reserved_bytes]} {
+
+  do_test 21.1 {
+    # Create a corrupt database in testerr.db. And a non-corrupt at test.db.
+    #
+    db close
+    forcedelete test.db
+    sqlite3 db test.db
+    execsql { 
+      PRAGMA page_size = 1024;
+      PRAGMA auto_vacuum = 0;
+      CREATE TABLE t1(a PRIMARY KEY, b);
+      INSERT INTO t1 VALUES(1, 1);
+    }
+    for {set i 0} {$i < 10} {incr i} {
+      execsql { INSERT INTO t1 SELECT a + (1 << $i), b + (1 << $i) FROM t1 }
+    }
+    db close
+    forcecopy test.db testerr.db
+    hexio_write testerr.db 15000 [string repeat 55 100]
+  } {100}
+  
+  set mainerr {*** in database main ***
+Multiple uses for byte 672 of page 15}
+  set auxerr {*** in database aux ***
+Multiple uses for byte 672 of page 15}
+  
+  set mainerr {/{\*\*\* in database main \*\*\*
+Multiple uses for byte 672 of page 15}.*/}
+  set auxerr {/{\*\*\* in database aux \*\*\*
+Multiple uses for byte 672 of page 15}.*/}
+  
+  do_test 22.2 {
+    catch { db close }
+    sqlite3 db testerr.db
+    execsql { PRAGMA integrity_check }
+  } $mainerr
+  
+  do_test 22.3.1 {
+    catch { db close }
+    sqlite3 db test.db
+    execsql { 
+      ATTACH 'testerr.db' AS 'aux';
+      PRAGMA integrity_check;
+    }
+  } $auxerr
+  do_test 22.3.2 {
+    execsql { PRAGMA main.integrity_check; }
+  } {ok}
+  do_test 22.3.3 {
+    execsql { PRAGMA aux.integrity_check; }
+  } $auxerr
+  
+  do_test 22.4.1 {
+    catch { db close }
+    sqlite3 db testerr.db
+    execsql { 
+      ATTACH 'test.db' AS 'aux';
+      PRAGMA integrity_check;
+    }
+  } $mainerr
+  do_test 22.4.2 {
+    execsql { PRAGMA main.integrity_check; }
+  } $mainerr
+  do_test 22.4.3 {
+    execsql { PRAGMA aux.integrity_check; }
+  } {ok}
+}
+  
+db close
+forcedelete test.db test.db-wal test.db-journal
+sqlite3 db test.db
+sqlite3 db2 test.db
+do_test 23.1 {
+  db eval {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY,b,c,d);
+    CREATE INDEX i1 ON t1(b,c);
+    CREATE INDEX i2 ON t1(c,d);
+    CREATE INDEX i2x ON t1(d COLLATE nocase, c DESC);
+    CREATE INDEX i3 ON t1(d,b+c,c);
+    CREATE TABLE t2(x INTEGER REFERENCES t1);
+  }
+  db2 eval {SELECT name FROM sqlite_master}
+} {t1 i1 i2 i2x i3 t2}
+do_test 23.2a {
+  db eval {
+    DROP INDEX i2;
+    CREATE INDEX i2 ON t1(c,d,b);
+  }
+  capture_pragma db2 out {PRAGMA index_info(i2)}
+  db2 eval {SELECT cid, name, '|' FROM out ORDER BY seqno}
+} {2 c | 3 d | 1 b |}
+
+# EVIDENCE-OF: R-56143-29319 PRAGMA schema.index_xinfo(index-name); This
+# pragma returns information about every column in an index.
+#
+# EVIDENCE-OF: R-45970-35618 Unlike this index_info pragma, this pragma
+# returns information about every column in the index, not just the key
+# columns.
+#
+do_test 23.2b {
+  capture_pragma db2 out {PRAGMA index_xinfo(i2)}
+  db2 eval {SELECT cid, name, "desc", coll, "key", '|' FROM out ORDER BY seqno}
+} {2 c 0 BINARY 1 | 3 d 0 BINARY 1 | 1 b 0 BINARY 1 | -1 {} 0 BINARY 0 |}
+
+# (The first column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-00197-14279 The rank of the column within the index. (0
+# means left-most. Key columns come before auxiliary columns.)
+#
+# (The second column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-06603-49335 The rank of the column within the table
+# being indexed, or -1 if the index-column is the rowid of the table
+# being indexed and -2 if the index is on an expression.
+#
+# (The third column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-40641-22898 The name of the column being indexed, or
+# NULL if the index-column is the rowid of the table being indexed or an
+# expression.
+#
+# (The fourth column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-11847-09179 1 if the index-column is sorted in reverse
+# (DESC) order by the index and 0 otherwise.
+#
+# (The fifth column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-15313-19540 The name for the collating sequence used to
+# compare values in the index-column.
+#
+# (The sixth column of output from PRAGMA index_xinfo is...)
+# EVIDENCE-OF: R-14310-64553 1 if the index-column is a key column and 0
+# if the index-column is an auxiliary column.
+#
+do_test 23.2c {
+  db2 eval {PRAGMA index_xinfo(i2)}
+} {0 2 c 0 BINARY 1 1 3 d 0 BINARY 1 2 1 b 0 BINARY 1 3 -1 {} 0 BINARY 0}
+do_test 23.2d {
+  db2 eval {PRAGMA index_xinfo(i2x)}
+} {0 3 d 0 nocase 1 1 2 c 1 BINARY 1 2 -1 {} 0 BINARY 0}
+do_test 23.2e {
+  db2 eval {PRAGMA index_xinfo(i3)}
+} {0 3 d 0 BINARY 1 1 -2 {} 0 BINARY 1 2 2 c 0 BINARY 1 3 -1 {} 0 BINARY 0}
+
+# EVIDENCE-OF: R-64103-17776 PRAGMA schema.index_list(table-name); This
+# pragma returns one row for each index associated with the given table.
+#
+# (The first column of output from PRAGMA index_list is...)
+# EVIDENCE-OF: R-02753-24748 A sequence number assigned to each index
+# for internal tracking purposes.
+#
+# (The second column of output from PRAGMA index_list is...)
+# EVIDENCE-OF: R-35496-03635 The name of the index.
+#
+# (The third column of output from PRAGMA index_list is...)
+# EVIDENCE-OF: R-57301-64506 "1" if the index is UNIQUE and "0" if not.
+#
+# (The fourth column of output from PRAGMA index_list is...)
+# EVIDENCE-OF: R-36609-39554 "c" if the index was created by a CREATE
+# INDEX statement, "u" if the index was created by a UNIQUE constraint,
+# or "pk" if the index was created by a PRIMARY KEY constraint.
+#
+do_test 23.3 {
+  db eval {
+    DROP INDEX IF EXISTS i3;
+    CREATE INDEX i3 ON t1(d,b,c);
+  }
+  capture_pragma db2 out {PRAGMA index_list(t1)}
+  db2 eval {SELECT seq, name, "unique", origin, '|' FROM out ORDER BY seq}
+} {0 i3 0 c | 1 i2 0 c | 2 i2x 0 c | 3 i1 0 c |}
+do_test 23.4 {
+  db eval {
+    ALTER TABLE t1 ADD COLUMN e;
+  }
+  db2 eval {
+    PRAGMA table_info(t1);
+  }
+} {/4 e {} 0 {} 0/}
+do_test 23.5 {
+  db eval {
+    DROP TABLE t2;
+    CREATE TABLE t2(x, y INTEGER REFERENCES t1);
+  }
+  db2 eval {
+    PRAGMA foreign_key_list(t2);
+  }
+} {0 0 t1 y {} {NO ACTION} {NO ACTION} NONE}
+db2 close
+
+ifcapable !has_codec {
+  reset_db
+  do_execsql_test 24.0 {
+    PRAGMA page_size = 1024;
+    CREATE TABLE t1(a, b, c);
+    CREATE INDEX i1 ON t1(b);
+    INSERT INTO t1 VALUES('a', 'b', 'c');
+    PRAGMA integrity_check;
+  } {ok}
+  
+  set r [db one {SELECT rootpage FROM sqlite_master WHERE name = 't1'}]
+  db close
+  hexio_write test.db [expr $r*1024 - 16] 000000000000000701040f0f1f616263
+  
+  sqlite3 db test.db
+  do_catchsql_test 24.1 {
+    SELECT * FROM t1;
+  } {1 {database disk image is malformed}}
+  do_catchsql_test 24.2 {
+    PRAGMA integrity_check;
+  } {0 {{database disk image is malformed}}}
+}  
+database_never_corrupt
+finish_test

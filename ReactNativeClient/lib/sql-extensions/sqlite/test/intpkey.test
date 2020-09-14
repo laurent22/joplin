@@ -1,0 +1,645 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for the special processing associated
+# with INTEGER PRIMARY KEY columns.
+#
+# $Id: intpkey.test,v 1.24 2007/11/29 17:43:28 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Create a table with a primary key and a datatype other than
+# integer
+#
+do_test intpkey-1.0 {
+  execsql {
+    CREATE TABLE t1(a TEXT PRIMARY KEY, b, c);
+  }
+} {}
+
+# There should be an index associated with the primary key
+#
+do_test intpkey-1.1 {
+  execsql {
+    SELECT name FROM sqlite_master
+    WHERE type='index' AND tbl_name='t1';
+  }
+} {sqlite_autoindex_t1_1}
+
+# Now create a table with an integer primary key and verify that
+# there is no associated index.
+#
+do_test intpkey-1.2 {
+  execsql {
+    DROP TABLE t1;
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+    SELECT name FROM sqlite_master
+      WHERE type='index' AND tbl_name='t1';
+  }
+} {}
+
+# Insert some records into the new table.  Specify the primary key
+# and verify that the key is used as the record number.
+#
+do_test intpkey-1.3 {
+  execsql {
+    INSERT INTO t1 VALUES(5,'hello','world');
+  }
+  db last_insert_rowid
+} {5}
+do_test intpkey-1.4 {
+  execsql {
+    SELECT * FROM t1;
+  }
+} {5 hello world}
+do_test intpkey-1.5 {
+  execsql {
+    SELECT rowid, * FROM t1;
+  }
+} {5 5 hello world}
+
+# Attempting to insert a duplicate primary key should give a constraint
+# failure.
+#
+do_test intpkey-1.6 {
+  set r [catch {execsql {
+     INSERT INTO t1 VALUES(5,'second','entry');
+  }} msg]
+  lappend r $msg
+} {1 {UNIQUE constraint failed: t1.a}}
+do_test intpkey-1.7 {
+  execsql {
+    SELECT rowid, * FROM t1;
+  }
+} {5 5 hello world}
+do_test intpkey-1.8 {
+  set r [catch {execsql {
+     INSERT INTO t1 VALUES(6,'second','entry');
+  }} msg]
+  lappend r $msg
+} {0 {}}
+do_test intpkey-1.8.1 {
+  db last_insert_rowid
+} {6}
+do_test intpkey-1.9 {
+  execsql {
+    SELECT rowid, * FROM t1;
+  }
+} {5 5 hello world 6 6 second entry}
+
+# A ROWID is automatically generated for new records that do not specify
+# the integer primary key.
+#
+do_test intpkey-1.10 {
+  execsql {
+    INSERT INTO t1(b,c) VALUES('one','two');
+    SELECT b FROM t1 ORDER BY b;
+  }
+} {hello one second}
+
+# Try to change the ROWID for the new entry.
+#
+do_test intpkey-1.11 {
+  execsql {
+    UPDATE t1 SET a=4 WHERE b='one';
+    SELECT * FROM t1;
+  }
+} {4 one two 5 hello world 6 second entry}
+
+# Make sure SELECT statements are able to use the primary key column
+# as an index.
+#
+do_test intpkey-1.12.1 {
+  execsql {
+    SELECT * FROM t1 WHERE a==4;
+  }
+} {4 one two}
+do_test intpkey-1.12.2 {
+  execsql {
+    EXPLAIN QUERY PLAN
+    SELECT * FROM t1 WHERE a==4;
+  }
+} {/SEARCH TABLE t1 /}
+
+# Try to insert a non-integer value into the primary key field.  This
+# should result in a data type mismatch.
+#
+do_test intpkey-1.13.1 {
+  set r [catch {execsql {
+    INSERT INTO t1 VALUES('x','y','z');
+  }} msg]
+  lappend r $msg
+} {1 {datatype mismatch}}
+do_test intpkey-1.13.2 {
+  set r [catch {execsql {
+    INSERT INTO t1 VALUES('','y','z');
+  }} msg]
+  lappend r $msg
+} {1 {datatype mismatch}}
+do_test intpkey-1.14 {
+  set r [catch {execsql {
+    INSERT INTO t1 VALUES(3.4,'y','z');
+  }} msg]
+  lappend r $msg
+} {1 {datatype mismatch}}
+do_test intpkey-1.15 {
+  set r [catch {execsql {
+    INSERT INTO t1 VALUES(-3,'y','z');
+  }} msg]
+  lappend r $msg
+} {0 {}}
+do_test intpkey-1.16 {
+  execsql {SELECT * FROM t1}
+} {-3 y z 4 one two 5 hello world 6 second entry}
+
+#### INDICES
+# Check to make sure indices work correctly with integer primary keys
+#
+do_test intpkey-2.1 {
+  execsql {
+    CREATE INDEX i1 ON t1(b);
+    SELECT * FROM t1 WHERE b=='y'
+  }
+} {-3 y z}
+do_test intpkey-2.1.1 {
+  execsql {
+    SELECT * FROM t1 WHERE b=='y' AND rowid<0
+  }
+} {-3 y z}
+do_test intpkey-2.1.2 {
+  execsql {
+    SELECT * FROM t1 WHERE b=='y' AND rowid<0 AND rowid>=-20
+  }
+} {-3 y z}
+do_test intpkey-2.1.3 {
+  execsql {
+    SELECT * FROM t1 WHERE b>='y'
+  }
+} {-3 y z}
+do_test intpkey-2.1.4 {
+  execsql {
+    SELECT * FROM t1 WHERE b>='y' AND rowid<10
+  }
+} {-3 y z}
+
+do_test intpkey-2.2 {
+  execsql {
+    UPDATE t1 SET a=8 WHERE b=='y';
+    SELECT * FROM t1 WHERE b=='y';
+  }
+} {8 y z}
+do_test intpkey-2.3 {
+  execsql {
+    SELECT rowid, * FROM t1;
+  }
+} {4 4 one two 5 5 hello world 6 6 second entry 8 8 y z}
+do_test intpkey-2.4 {
+  execsql {
+    SELECT rowid, * FROM t1 WHERE b<'second'
+  }
+} {5 5 hello world 4 4 one two}
+do_test intpkey-2.4.1 {
+  execsql {
+    SELECT rowid, * FROM t1 WHERE 'second'>b
+  }
+} {5 5 hello world 4 4 one two}
+do_test intpkey-2.4.2 {
+  execsql {
+    SELECT rowid, * FROM t1 WHERE 8>rowid AND 'second'>b
+  }
+} {4 4 one two 5 5 hello world}
+do_test intpkey-2.4.3 {
+  execsql {
+    SELECT rowid, * FROM t1 WHERE 8>rowid AND 'second'>b AND 0<rowid
+  }
+} {4 4 one two 5 5 hello world}
+do_test intpkey-2.5 {
+  execsql {
+    SELECT rowid, * FROM t1 WHERE b>'a'
+  }
+} {5 5 hello world 4 4 one two 6 6 second entry 8 8 y z}
+do_test intpkey-2.6 {
+  execsql {
+    DELETE FROM t1 WHERE rowid=4;
+    SELECT * FROM t1 WHERE b>'a';
+  }
+} {5 hello world 6 second entry 8 y z}
+do_test intpkey-2.7 {
+  execsql {
+    UPDATE t1 SET a=-4 WHERE rowid=8;
+    SELECT * FROM t1 WHERE b>'a';
+  }
+} {5 hello world 6 second entry -4 y z}
+do_test intpkey-2.7 {
+  execsql {
+    SELECT * FROM t1
+  }
+} {-4 y z 5 hello world 6 second entry}
+
+# Do an SQL statement.  Append the search count to the end of the result.
+#
+proc count sql {
+  set ::sqlite_search_count 0
+  return [concat [execsql $sql] $::sqlite_search_count]
+}
+
+# Create indices that include the integer primary key as one of their
+# columns.
+#
+do_test intpkey-3.1 {
+  execsql {
+    CREATE INDEX i2 ON t1(a);
+  }
+} {}
+do_test intpkey-3.2 {
+  count {
+    SELECT * FROM t1 WHERE a=5;
+  }
+} {5 hello world 0}
+do_test intpkey-3.3 {
+  count {
+    SELECT * FROM t1 WHERE a>4 AND a<6;
+  }
+} {5 hello world 2}
+do_test intpkey-3.4 {
+  count {
+    SELECT * FROM t1 WHERE b>='hello' AND b<'hello2';
+  }
+} {5 hello world 3}
+do_test intpkey-3.5 {
+  execsql {
+    CREATE INDEX i3 ON t1(c,a);
+  }
+} {}
+do_test intpkey-3.6 {
+  count {
+    SELECT * FROM t1 WHERE c=='world';
+  }
+} {5 hello world 3}
+do_test intpkey-3.7 {
+  execsql {INSERT INTO t1 VALUES(11,'hello','world')}
+  count {
+    SELECT * FROM t1 WHERE c=='world';
+  }
+} {5 hello world 11 hello world 5}
+do_test intpkey-3.8 {
+  count {
+    SELECT * FROM t1 WHERE c=='world' AND a>7;
+  }
+} {11 hello world 3}
+do_test intpkey-3.9 {
+  count {
+    SELECT * FROM t1 WHERE 7<a;
+  }
+} {11 hello world 1}
+
+# Test inequality constraints on integer primary keys and rowids
+#
+do_test intpkey-4.1 {
+  count {
+    SELECT * FROM t1 WHERE 11=rowid
+  }
+} {11 hello world 0}
+do_test intpkey-4.2 {
+  count {
+    SELECT * FROM t1 WHERE 11=rowid AND b=='hello'
+  }
+} {11 hello world 0}
+do_test intpkey-4.3 {
+  count {
+    SELECT * FROM t1 WHERE 11=rowid AND b=='hello' AND c IS NOT NULL;
+  }
+} {11 hello world 0}
+do_test intpkey-4.4 {
+  count {
+    SELECT * FROM t1 WHERE rowid==11
+  }
+} {11 hello world 0}
+do_test intpkey-4.5 {
+  count {
+    SELECT * FROM t1 WHERE oid==11 AND b=='hello'
+  }
+} {11 hello world 0}
+do_test intpkey-4.6 {
+  count {
+    SELECT * FROM t1 WHERE a==11 AND b=='hello' AND c IS NOT NULL;
+  }
+} {11 hello world 0}
+
+do_test intpkey-4.7 {
+  count {
+    SELECT * FROM t1 WHERE 8<rowid;
+  }
+} {11 hello world 1}
+do_test intpkey-4.8 {
+  count {
+    SELECT * FROM t1 WHERE 8<rowid AND 11>=oid;
+  }
+} {11 hello world 1}
+do_test intpkey-4.9 {
+  count {
+    SELECT * FROM t1 WHERE 11<=_rowid_ AND 12>=a;
+  }
+} {11 hello world 1}
+do_test intpkey-4.10 {
+  count {
+    SELECT * FROM t1 WHERE 0>=_rowid_;
+  }
+} {-4 y z 1}
+do_test intpkey-4.11 {
+  count {
+    SELECT * FROM t1 WHERE a<0;
+  }
+} {-4 y z 1}
+do_test intpkey-4.12 {
+  count {
+    SELECT * FROM t1 WHERE a<0 AND a>10;
+  }
+} {1}
+
+# Make sure it is OK to insert a rowid of 0
+#
+do_test intpkey-5.1 {
+  execsql {
+    INSERT INTO t1 VALUES(0,'zero','entry');
+  }
+  count {
+    SELECT * FROM t1 WHERE a=0;
+  }
+} {0 zero entry 0}
+do_test intpkey-5.2 {
+  execsql {
+    SELECT rowid, a FROM t1 ORDER BY rowid
+  }
+} {-4 -4 0 0 5 5 6 6 11 11}
+
+# Test the ability of the COPY command to put data into a
+# table that contains an integer primary key.
+#
+# COPY command has been removed.  But we retain these tests so
+# that the tables will contain the right data for tests that follow.
+#
+do_test intpkey-6.1 {
+  execsql {
+    BEGIN;
+    INSERT INTO t1 VALUES(20,'b-20','c-20');
+    INSERT INTO t1 VALUES(21,'b-21','c-21');
+    INSERT INTO t1 VALUES(22,'b-22','c-22');
+    COMMIT;
+    SELECT * FROM t1 WHERE a>=20;
+  }
+} {20 b-20 c-20 21 b-21 c-21 22 b-22 c-22}
+do_test intpkey-6.2 {
+  execsql {
+    SELECT * FROM t1 WHERE b=='hello'
+  }
+} {5 hello world 11 hello world}
+do_test intpkey-6.3 {
+  execsql {
+    DELETE FROM t1 WHERE b='b-21';
+    SELECT * FROM t1 WHERE b=='b-21';
+  }
+} {}
+do_test intpkey-6.4 {
+  execsql {
+    SELECT * FROM t1 WHERE a>=20
+  }
+} {20 b-20 c-20 22 b-22 c-22}
+
+# Do an insert of values with the columns specified out of order.
+#
+do_test intpkey-7.1 {
+  execsql {
+    INSERT INTO t1(c,b,a) VALUES('row','new',30);
+    SELECT * FROM t1 WHERE rowid>=30;
+  }
+} {30 new row}
+do_test intpkey-7.2 {
+  execsql {
+    SELECT * FROM t1 WHERE rowid>20;
+  }
+} {22 b-22 c-22 30 new row}
+
+# Do an insert from a select statement.
+#
+do_test intpkey-8.1 {
+  execsql {
+    CREATE TABLE t2(x INTEGER PRIMARY KEY, y, z);
+    INSERT INTO t2 SELECT * FROM t1;
+    SELECT rowid FROM t2;
+  }
+} {-4 0 5 6 11 20 22 30}
+do_test intpkey-8.2 {
+  execsql {
+    SELECT x FROM t2;
+  }
+} {-4 0 5 6 11 20 22 30}
+
+do_test intpkey-9.1 {
+  execsql {
+    UPDATE t1 SET c='www' WHERE c='world';
+    SELECT rowid, a, c FROM t1 WHERE c=='www';
+  }
+} {5 5 www 11 11 www}
+
+
+# Check insert of NULL for primary key
+#
+do_test intpkey-10.1 {
+  execsql {
+    DROP TABLE t2;
+    CREATE TABLE t2(x INTEGER PRIMARY KEY, y, z);
+    INSERT INTO t2 VALUES(NULL, 1, 2);
+    SELECT * from t2;
+  }
+} {1 1 2}
+do_test intpkey-10.2 {
+  execsql {
+    INSERT INTO t2 VALUES(NULL, 2, 3);
+    SELECT * from t2 WHERE x=2;
+  }
+} {2 2 3}
+do_test intpkey-10.3 {
+  execsql {
+    INSERT INTO t2 SELECT NULL, z, y FROM t2;
+    SELECT * FROM t2;
+  }
+} {1 1 2 2 2 3 3 2 1 4 3 2}
+
+# This tests checks to see if a floating point number can be used
+# to reference an integer primary key.
+#
+do_test intpkey-11.1 {
+  execsql {
+    SELECT b FROM t1 WHERE a=2.0+3.0;
+  }
+} {hello}
+do_test intpkey-11.1 {
+  execsql {
+    SELECT b FROM t1 WHERE a=2.0+3.5;
+  }
+} {}
+
+integrity_check intpkey-12.1
+
+# Try to use a string that looks like a floating point number as
+# an integer primary key.  This should actually work when the floating
+# point value can be rounded to an integer without loss of data.
+#
+do_test intpkey-13.1 {
+  execsql {
+    SELECT * FROM t1 WHERE a=1;
+  }
+} {}
+do_test intpkey-13.2 {
+  execsql {
+    INSERT INTO t1 VALUES('1.0',2,3);
+    SELECT * FROM t1 WHERE a=1;
+  }
+} {1 2 3}
+do_test intpkey-13.3 {
+  catchsql {
+    INSERT INTO t1 VALUES('1.5',3,4);
+  }
+} {1 {datatype mismatch}}
+ifcapable {bloblit} {
+  do_test intpkey-13.4 {
+    catchsql {
+      INSERT INTO t1 VALUES(x'123456',3,4);
+    }
+  } {1 {datatype mismatch}}
+}
+do_test intpkey-13.5 {
+  catchsql {
+    INSERT INTO t1 VALUES('+1234567890',3,4);
+  }
+} {0 {}}
+
+# Compare an INTEGER PRIMARY KEY against a TEXT expression. The INTEGER
+# affinity should be applied to the text value before the comparison
+# takes place.
+#
+do_test intpkey-14.1 {
+  execsql {
+    CREATE TABLE t3(a INTEGER PRIMARY KEY, b INTEGER, c TEXT);
+    INSERT INTO t3 VALUES(1, 1, 'one');
+    INSERT INTO t3 VALUES(2, 2, '2');
+    INSERT INTO t3 VALUES(3, 3, 3);
+  }
+} {}
+do_test intpkey-14.2 {
+  execsql {
+    SELECT * FROM t3 WHERE a>2;
+  }
+} {3 3 3}
+do_test intpkey-14.3 {
+  execsql {
+    SELECT * FROM t3 WHERE a>'2';
+  }
+} {3 3 3}
+do_test intpkey-14.4 {
+  execsql {
+    SELECT * FROM t3 WHERE a<'2';
+  }
+} {1 1 one}
+do_test intpkey-14.5 {
+  execsql {
+    SELECT * FROM t3 WHERE a<c;
+  }
+} {1 1 one}
+do_test intpkey-14.6 {
+  execsql {
+    SELECT * FROM t3 WHERE a=c;
+  }
+} {2 2 2 3 3 3}
+
+# Check for proper handling of primary keys greater than 2^31.
+# Ticket #1188
+#
+do_test intpkey-15.1 {
+  execsql {
+    INSERT INTO t1 VALUES(2147483647, 'big-1', 123);
+    SELECT * FROM t1 WHERE a>2147483648;
+  }
+} {}
+do_test intpkey-15.2 {
+  execsql {
+    INSERT INTO t1 VALUES(NULL, 'big-2', 234);
+    SELECT b FROM t1 WHERE a>=2147483648;
+  }
+} {big-2}
+do_test intpkey-15.3 {
+  execsql {
+    SELECT b FROM t1 WHERE a>2147483648;
+  }
+} {}
+do_test intpkey-15.4 {
+  execsql {
+    SELECT b FROM t1 WHERE a>=2147483647;
+  }
+} {big-1 big-2}
+do_test intpkey-15.5 {
+  execsql {
+    SELECT b FROM t1 WHERE a<2147483648;
+  }
+} {y zero 2 hello second hello b-20 b-22 new 3 big-1}
+do_test intpkey-15.6 {
+  execsql {
+    SELECT b FROM t1 WHERE a<12345678901;
+  }
+} {y zero 2 hello second hello b-20 b-22 new 3 big-1 big-2}
+do_test intpkey-15.7 {
+  execsql {
+    SELECT b FROM t1 WHERE a>12345678901;
+  }
+} {}
+
+# 2016-04-18 ticket https://www.sqlite.org/src/tktview/7d7525cb01b68712495d3a
+# Be sure to escape quoted typenames.
+#
+do_execsql_test intpkey-16.0 {
+  CREATE TABLE t16a(id "INTEGER" PRIMARY KEY AUTOINCREMENT, b [TEXT], c `INT`);
+} {}
+do_execsql_test intpkey-16.1 {
+  PRAGMA table_info=t16a;
+} {0 id INTEGER 0 {} 1 1 b TEXT 0 {} 0 2 c INT 0 {} 0}
+
+# 2016-05-06 ticket https://www.sqlite.org/src/tktview/16c9801ceba4923939085
+# When the schema contains an index on the IPK and no other index
+# and a WHERE clause on a delete uses an OR where both sides referencing
+# the IPK, then it is possible that the OP_Delete will fail because there
+# deferred seek of the OP_Seek is not resolved prior to reaching the OP_Delete.
+#
+do_execsql_test intpkey-17.0 {
+  CREATE TABLE t17(x INTEGER PRIMARY KEY, y TEXT);
+  INSERT INTO t17(x,y) VALUES(123,'elephant'),(248,'giraffe');
+  CREATE INDEX t17x ON t17(x);
+  DELETE FROM t17 WHERE x=99 OR x<130;
+  SELECT * FROM t17;
+} {248 giraffe}
+do_execsql_test intpkey-17.1 {
+  DROP INDEX t17x;
+  DELETE FROM t17;
+  INSERT INTO t17(x,y) VALUES(123,'elephant'),(248,'giraffe');
+  CREATE UNIQUE INDEX t17x ON t17(abs(x));
+  DELETE FROM t17 WHERE abs(x) IS NULL OR abs(x)<130;
+  SELECT * FROM t17;
+} {248 giraffe}
+do_execsql_test intpkey-17.2 {
+  DELETE FROM t17;
+  INSERT INTO t17(x,y) VALUES(123,'elephant'),(248,'giraffe');
+  UPDATE t17 SET y='ostrich' WHERE abs(x)=248;
+  SELECT * FROM t17 ORDER BY +x;
+} {123 elephant 248 ostrich}
+
+finish_test

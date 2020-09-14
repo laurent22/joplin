@@ -1,0 +1,344 @@
+# 2015 May 30
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#*************************************************************************
+#
+# This file contains automatically generated tests for various types
+# of MATCH expressions.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5auto
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+set data {
+    -4026076
+    {n x w k b p x b n t t d s}     {f j j s p j o}               
+    {w v i y r}                     {i p y s}                     
+    {a o q v e n q r}               {q v g u c y a z y}           
+    3995120
+    {c}                             {e e w d t}                   
+    {x c p f w r s m l r b f d}     {g g u e}                     
+    {s n u t d v p d}               {b k v p m f}                 
+    -2913881
+    {k m}                           {a}                           
+    {w r j z n s l}                 {m j i w d t w e l}           
+    {z n c}                         {v f b m}                     
+    174082
+    {j}                             {q l w u k e q v r i}         
+    {j l}                           {u v w r s p e l}             
+    {p i k j k q c t g u s}         {g u y s m h q k g t e s o r} 
+    3207399
+    {e t}                           {}                            
+    {p}                             {y v r b e k h d e v}         
+    {t m w z b g q t s d d h}       {o n v u i t o y k j}         
+    182399
+    {}                              {m o s o x d y f a x j z}     
+    {x n z r c d}                   {n r x i r}                   
+    {s v s}                         {a u}                         
+    768994
+    {e u t q v z q k j p u f j p}   {y c b}                       
+    {p s d}                         {k n w p m p p}               
+    {u o x s d}                     {f s g r d b d r m m m z y}   
+    3931037
+    {c j p x e}                     {c n k t h z o i}             
+    {}                              {r r p j k x w q}             
+    {o r d z d}                     {x}                           
+    3105748
+    {p x r u}                       {x i s w o t o g x m z i w}   
+    {q x m z}                       {h c j w b l y w x c o}       
+    {m b k v}                       {t v q i s a d x}             
+    -2501642
+    {o u d n w o m o o s n t r h}   {k p e u y p e z d j r y g}   
+    {v b b h d d q y j q j}         {a m w d t}                   
+    {y e f n}                       {a k x i x}                   
+    -1745680
+    {z u w j f d b f}               {j w i c g u d w e}           
+    {m f p v m a s p v c o s}       {s c r z o t w l b e a q}     
+    {m k q}                         {k b a v o}                   
+    -932328
+    {r v i u m q d r}               {f z u v h c m r f g}         
+    {r x r}                         {k p i d h h w h z u a x}     
+    {k m j p}                       {h l j a e u c i q x x f x g} 
+    -3923818
+    {t t p b n u i h e c k}         {m z}                         
+    {v u d c}                       {v y y j s g}                 
+    {o a f k k q p h g x e n z x}   {h d w c o l}                 
+    -2145922
+    {z z l f a l g e d c d h}       {j b j p k o o u b q}         
+    {d i g q t f d r h k}           {n w g j c x r p t y f l c t} 
+    {d o c u k f o}                 {r y s x z s p p h g t p y c} 
+    4552917
+    {j w j y h l k u}               {n a}                         
+    {y h w c n k}                   {b}                           
+    {w}                             {z l r t s i m v c y}         
+    2292008
+    {q v q j w y y x u t}           {r q z n h a b o}             
+    {d q y}                         {y v o e j}                   
+    {}                              {a b h c d l p d x}           
+    1407892
+    {n j j u q d o a u c f}         {r d b w o q n g}             
+    {d e v w s}                     {v d v o u o x s l s j z y}   
+    {j y w h i f g i h m}           {v n z b n y}                 
+    -4412544
+    {g h h r s}                     {h e r e}                     
+    {n q s}                         {o p z r m l l t}             
+    {p}                             {f s u o b j}                 
+    1209110
+    {o a a z t t u h j}             {z z i r k r}                 
+    {i c x q w g v o x z i z p}     {q o g k i n z x e d v w v}   
+    {p f v b g f e d n p u c y k}   {q z z a i p a a s r e z}     
+    3448977
+    {i v}                           {l u x t b o k}               
+    {f h u v p}                     {k a o y j}                   
+    {d m k c j}                     {v c e r u e f i t}           
+    -4703774
+    {d h v w u z r e h x o l t}     {p s f y w y r q d a m w}     
+    {c h g c g j j f t b i c q}     {s e}                         
+    {c t q j g f}                   {v n r w y r a g e j d}       
+    2414151
+    {s o o s d s k q b f q v p e}   {j r o b t o p d l o o x}     
+    {d d k t v e}                   {}                            
+    {t v o d w}                     {w e q w h y c y y i j b a m} 
+    -3342407
+    {m c h n e p d o c r w n t}     {j d k s p q l}               
+    {t g s r w x j l r z r}         {h}                           
+    {r q v x i r a n h s}           {m y p b v w r a u o g q r}   
+    -993951
+    {l n p u o j d x t u u c o j}   {k r n a r e k v i t o e}     
+    {q f t t a a c z v f}           {o n m p v f o e n}           
+    {h z h i p s b j z h}           {i t w m k c u g n i}         
+    1575251
+    {}                              {z s i j d o x j a r t}       
+    {h g j u j n v e n z}           {p z j n n f}                 
+    {s q q f d w r l y i z d o m}   {b a n d h t b y g h d}       
+    4263668
+    {q g t h f s}                   {s g x p f q z i s o f l i}   
+    {q k}                           {w v h a x n a r b}           
+    {m j a h o b i x k r w z q u}   {m t r g j o e q t m p u l}   
+    2487819
+    {m w g x r n e u t s r}         {b x a t u u j c r n}         
+    {j}                             {w f j r e e y l p}           
+    {o u h b}                       {o c a c a b v}               
+    167966
+    {o d b s d o a u m o x y}       {c}                           
+    {r w d o b v}                   {z e b}                       
+    {i n z a f g z o}               {m u b a g}                   
+    1948599
+    {n r g q d j s}                 {n k}                         
+    {l b p d v t k h y y}           {u m k e c}                   
+    {t b n y o t b}                 {j w c i r x x}               
+    2941631
+    {l d p l b g f}                 {e k e}                       
+    {p j}                           {m c s w t b k n l d x}       
+    {f o v y v l}                   {c w p s w j w c u t y}       
+    3561104
+    {d r j j r j i g p}             {u}                           
+    {g r j q}                       {z l p d s n f c h t d c v z} 
+    {w r c f s x z y}               {g f o k g g}                 
+    -2223281
+    {y e t j j z f p o m m z}       {h k o g o}                   
+    {m x a t}                       {l q x l}                     
+    {r w k d l s y b}               {q g k b}                     
+    -4502874
+    {k k b x k l f}                 {r}                           
+    {}                              {q m z b k h k u n e z}       
+    {z q g y m y u}                 {}                            
+    1757599
+    {d p z j y u r}                 {z p l q w j t j}             
+    {n i r x r y j}                 {}                            
+    {h}                             {w t d q c x z z x e e}       
+    -4809589
+    {}                              {z p x u h i i n g}           
+    {w q s u d b f x n}             {l y k b b r x t i}           
+    {n d v j q o t o d p z e}       {u r y u v u c}               
+    1068408
+    {y e}                           {e g s k e w t p v o b k}     
+    {z c m s}                       {r u r u h n h b p q g b}     
+    {j k b l}                       {m c d t s r s q a d b o f}   
+    -1972554
+    {m s w}                         {d k v s a r k p a r i v}     
+    {g j z k p}                     {y k c v r e u o q f i b a}   
+    {i p i}                         {c z w c y b n z i v}         
+    -2052385
+    {}                              {x e u f f g n c i x n e i e} 
+    {}                              {p s w d x p g}               
+    {}                              {s j a h n}                   
+    2805981
+    {m x g c w o e}                 {k g u y r y i u e g g}       
+    {f k j v t x p h x k u}         {w i}                         
+    {b l f z f v t n}               {i u d o d p h s m u}         
+    2507621
+    {}                              {u b n l x f n j t}           
+    {u r x l h}                     {h r l m r}                   
+    {d y e n b s q v t k n q q}     {x l t v w h a s k}           
+    -3138375
+    {e o f j y x u w v e w z}       {r d q g k n n v r c z n e w} 
+    {l y i q z k j p u f q s k}     {c i l l i m a a g a z r x f} 
+    {a v k h m q z b y n z}         {q g w c y r r o a}           
+    -457971
+    {j x a w e c s h f l f}         {q}                           
+    {j f v j u m d q r v v}         {x n v a w}                   
+    {i e h d h f u w t t z}         {v s u l s v o v i k n e}     
+    2265221
+    {z t c y w n y r t}             {n b a x s}                   
+    {q w a v}                       {a b s d x i g w t e z h}     
+    {t l}                           {j k r w f f y j o k u}       
+    -3941280
+    {r x t o z}                     {f j n z k}                   
+    {t x e b t d b k w i s}         {j t y h i h}                 
+    {y q g n g s u v c z j z n g}   {n n g t l p h}               
+    2084745
+    {z d z d}                       {j}                           
+    {o e k t b k a z l w}           {o p i h k c x}               
+    {c r b t i j f}                 {z e n m}                     
+    1265843
+    {}                              {j s g j j x u y}             
+    {u q t f}                       {g o g}                       
+    {w o j e d}                     {w q n a c t q x j}           
+    -2941116
+    {i n c u o}                     {f b}                         
+    {o m s q d o z a q}             {f s v o b b}                 
+    {o a z c h r}                   {j e w h b f z}               
+    -1265441
+    {p g z q v a o a x a}           {s t h}                       
+    {w i p o c}                     {s n d g f z w q o d v v l j} 
+    {y f b i a s v}                 {u m o z k k s t s d p b l p} 
+    -1989158
+    {r i c n}                       {r e w w i n z}               
+    {q u s y b w u g y g f o}       {y}                           
+    {d}                             {j x i b x u y d c p v a h}   
+    2391989
+    {b n w x w f q h p i}           {e u b b i n a i o c d g}     
+    {v a z o i e n l x l r}         {r u f o r k w m d w}         
+    {k s}                           {r f e j q p w}               
+}
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE tt USING fts5(a, b, c, d, e, f);
+} {}
+
+fts5_aux_test_functions db
+
+proc do_auto_test {tn tbl expr} {
+  foreach order {asc desc} {
+    set res [fts5_poslist_data $expr $tbl $order]
+    set testname "$tn.[string range $order 0 0].rows=[expr [llength $res]/2]"
+
+    set ::autotest_expr $expr
+    do_execsql_test $testname [subst -novar {
+      SELECT rowid, fts5_test_poslist([set tbl]) FROM [set tbl] 
+      WHERE [set tbl] MATCH $::autotest_expr ORDER BY rowid [set order]
+    }] $res
+  }
+}
+
+#-------------------------------------------------------------------------
+#
+
+for {set fold 0} {$fold < 3} {incr fold} {
+  switch $fold {
+    0 { set map {} }
+    1 { set map {
+      a a  b a  c b  d b  e c  f c  g d  h d  
+      i e  j e  k f  l f  m g  g g  o h  p h
+      q i  r i  s j  t j  u k  v k  w l  x l
+      y m  z m
+    }}
+
+    2 { set map {
+      a a  b a  c a  d a  e a  f a  g a  h a  
+      i b  j b  k b  l b  m b  g b  o b  p b
+      q c  r c  s c  t c  u c  v c  w c  x c
+    }}
+  }
+
+  execsql {
+    BEGIN;
+    DELETE FROM tt;
+  }
+  foreach {rowid a b c d e f} [string map $map $data] {
+  if {$rowid==-4703774} {
+    execsql {
+      INSERT INTO tt(rowid, a, b, c, d, e, f) 
+      VALUES($rowid, $a, $b, $c, $d, $e, $f)
+    }
+    }
+  }
+  execsql COMMIT
+
+
+  foreach {tn expr} {
+    A.1 { {a} : x }
+    A.2 { {a b} : x }
+    A.3 { {a b f} : x }
+    A.4 { {f a b} : x }
+    A.5 { {f a b} : x y }
+    A.6 { {f a b} : x + y }
+    A.7 { {c a b} : x + c }
+    A.8 { {c d} : "l m" }
+    A.9 { {c e} : "l m" }
+    A.10 { {a b c a b c a b c f f e} : "l m" }
+
+    B.1 { a NOT b }
+    B.2 { a NOT a:b }
+    B.3 { a OR (b AND c) }
+    B.4 { a OR (b AND {a b c}:c) }
+    B.5 { a OR "b c" }
+    B.6 { a OR b OR c }
+
+    C.1 { a OR (b AND "b c") }
+    C.2 { a OR (b AND "z c") }
+  } {
+    do_auto_test 3.$fold.$tn tt $expr
+  }
+}
+
+proc replace_elems {list args} {
+  set ret $list
+  foreach {idx elem} $args {
+    set ret [lreplace $ret $idx $idx $elem]
+  }
+  set ret
+}
+
+#-------------------------------------------------------------------------
+#
+set bigdoc [string trim [string repeat "a " 1000]]
+do_test 4.0 {
+  set a [replace_elems $bigdoc  50 x  950 x]
+  set b [replace_elems $bigdoc  20 y   21 x  887 x 888 y]
+  set c [replace_elems $bigdoc   1 z  444 z  789 z]
+  execsql {
+    CREATE VIRTUAL TABLE yy USING fts5(c1, c2, c3);
+    INSERT INTO yy(rowid, c1, c2, c3) VALUES(-56789, $a, $b, $c);
+    INSERT INTO yy(rowid, c1, c2, c3) VALUES(250, $a, $b, $c);
+  }
+} {}
+
+foreach {tn expr} {
+  1 x    
+  2 y    
+  3 z
+
+  4 {c1 : x} 5 {c2 : x} 6 {c3 : x}
+  7 {c1 : y} 8 {c2 : y} 9 {c3 : y}
+  10 {c1 : z} 11 {c2 : z} 12 {c3 : z}
+} {
+  do_auto_test 4.$tn yy $expr
+}
+
+
+
+finish_test

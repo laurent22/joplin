@@ -1,0 +1,63 @@
+# 2019 Jan 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file contains tests for the RBU module. More specifically, it
+# contains tests to ensure that the sqlite3rbu_vacuum() API works as
+# expected.
+#
+
+source [file join [file dirname [info script]] rbu_common.tcl]
+set testprefix rbuvacuum3
+
+do_execsql_test 1.0 {
+  CREATE TABLE t1(a PRIMARY KEY, b, c);
+  CREATE INDEX i1b ON t1(b);
+  CREATE INDEX i1c ON t1(c);
+  
+  WITH s(i) AS (
+    VALUES(1) UNION ALL SELECT i+1 FROM s WHERE i<100
+  )
+  INSERT INTO t1 SELECT i, randomblob(100), randomblob(100) FROM s;
+}
+
+forcedelete state.db
+do_test 1.1 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  while {1} {
+    set rc [rbu step]
+    if {$rc!="SQLITE_OK"} break
+    rbu savestate
+  }
+  rbu close
+} {SQLITE_DONE}
+
+do_test 1.2 {
+  sqlite3rbu_vacuum rbu test.db state.db
+  while {1} {
+    set rc [rbu step]
+    if {$rc!="SQLITE_OK"} break
+    rbu savestate
+  }
+  rbu close
+} {SQLITE_DONE}
+
+do_test 1.3 {
+  while {1} {
+    sqlite3rbu_vacuum rbu test.db state.db
+    set rc [rbu step]
+    if {$rc!="SQLITE_OK"} break
+    rbu savestate
+    rbu close
+  }
+  rbu close
+} {SQLITE_DONE}
+
+finish_test

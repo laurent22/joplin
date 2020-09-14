@@ -1,0 +1,651 @@
+# 2010 April 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the operation of the library in
+# "PRAGMA journal_mode=WAL" mode.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/lock_common.tcl
+source $testdir/wal_common.tcl
+source $testdir/malloc_common.tcl
+ifcapable !wal {finish_test ; return }
+
+set a_string_counter 1
+proc a_string {n} {
+  global a_string_counter
+  incr a_string_counter
+  string range [string repeat "${a_string_counter}." $n] 1 $n
+}
+db func a_string a_string
+
+#-------------------------------------------------------------------------
+# When a rollback or savepoint rollback occurs, the client may remove
+# elements from one of the hash tables in the wal-index. This block
+# of test cases tests that nothing appears to go wrong when this is
+# done.
+#
+do_test wal3-1.0 {
+  execsql {
+    PRAGMA cache_size = 2000;
+    PRAGMA page_size = 1024;
+    PRAGMA auto_vacuum = off;
+    PRAGMA synchronous = normal;
+    PRAGMA journal_mode = WAL;
+    PRAGMA wal_autocheckpoint = 0;
+    BEGIN;
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES( a_string(800) );                  /*    1 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*    2 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*    4 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*    8 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*   16 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*   32 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*   64 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*  128*/
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*  256 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /*  512 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /* 1024 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1;             /* 2048 */
+      INSERT INTO t1 SELECT a_string(800) FROM t1 LIMIT 1970;  /* 4018 */
+    COMMIT;
+    PRAGMA cache_size = 10;
+  }
+  set x [wal_frame_count test.db-wal 1024]
+  if {[permutation]=="memsubsys1"} {
+    if {$x==4251 || $x==4290} {set x 4056}
+  }
+  set x
+} 4056
+
+for {set i 1} {$i < 50} {incr i} {
+
+  do_test wal3-1.$i.1 {
+    set str [a_string 800]
+    execsql { UPDATE t1 SET x = $str WHERE rowid = $i }
+    lappend L [wal_frame_count test.db-wal 1024]
+    execsql {
+      BEGIN;
+        INSERT INTO t1 SELECT a_string(800) FROM t1 LIMIT 100;
+      ROLLBACK;
+      PRAGMA integrity_check;
+    }
+  } {ok}
+
+  # Check that everything looks OK from the point of view of an 
+  # external connection.
+  #
+  sqlite3 db2 test.db
+  do_test wal3-1.$i.2 {
+    execsql { SELECT count(*) FROM t1 } db2
+  } 4018
+  do_test wal3-1.$i.3 {
+    execsql { SELECT x FROM t1 WHERE rowid = $i }
+  } $str
+  do_test wal3-1.$i.4 {
+    execsql { PRAGMA integrity_check } db2
+  } {ok}
+  db2 close
+  
+  # Check that the file-system in its current state can be recovered.
+  # 
+  forcecopy test.db test2.db
+  forcecopy test.db-wal test2.db-wal
+  forcedelete test2.db-journal
+  sqlite3 db2 test2.db
+  do_test wal3-1.$i.5 {
+    execsql { SELECT count(*) FROM t1 } db2
+  } 4018
+  do_test wal3-1.$i.6 {
+    execsql { SELECT x FROM t1 WHERE rowid = $i }
+  } $str
+  do_test wal3-1.$i.7 {
+    execsql { PRAGMA integrity_check } db2
+  } {ok}
+  db2 close
+}
+
+proc byte_is_zero {file offset} {
+  if {[file size test.db] <= $offset} { return 1 }
+  expr { [hexio_read $file $offset 1] == "00" }
+}
+
+do_multiclient_test i {
+
+  set testname(1) multiproc
+  set testname(2) singleproc
+  set tn $testname($i)
+
+  do_test wal3-2.$tn.1 {
+    sql1 { 
+      PRAGMA page_size = 1024;
+      PRAGMA journal_mode = WAL;
+    }
+    sql1 {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 'one');
+      BEGIN;
+        SELECT * FROM t1;
+    }
+  } {1 one}
+  do_test wal3-2.$tn.2 {
+    sql2 {
+      CREATE TABLE t2(a, b);
+      INSERT INTO t2 VALUES(2, 'two');
+      BEGIN;
+        SELECT * FROM t2;
+    }
+  } {2 two}
+  do_test wal3-2.$tn.3 {
+    sql3 {
+      CREATE TABLE t3(a, b);
+      INSERT INTO t3 VALUES(3, 'three');
+      BEGIN;
+        SELECT * FROM t3;
+    }
+  } {3 three}
+
+  # Try to checkpoint the database using [db]. It should be possible to
+  # checkpoint everything except the table added by [db3] (checkpointing
+  # these frames would clobber the snapshot currently being used by [db2]).
+  #
+  # After [db2] has committed, a checkpoint can copy the entire log to the
+  # database file. Checkpointing after [db3] has committed is therefore a
+  # no-op, as the entire log has already been backfilled.
+  #
+  do_test wal3-2.$tn.4 {
+    sql1 {
+      COMMIT;
+      PRAGMA wal_checkpoint;
+    }
+    byte_is_zero test.db [expr $AUTOVACUUM ? 4*1024 : 3*1024]
+  } {1}
+  do_test wal3-2.$tn.5 {
+    sql2 {
+      COMMIT;
+      PRAGMA wal_checkpoint;
+    }
+    list [byte_is_zero test.db [expr $AUTOVACUUM ? 4*1024 : 3*1024]]   \
+         [byte_is_zero test.db [expr $AUTOVACUUM ? 5*1024 : 4*1024]]
+  } {0 1}
+  do_test wal3-2.$tn.6 {
+    sql3 {
+      COMMIT;
+      PRAGMA wal_checkpoint;
+    }
+    list [byte_is_zero test.db [expr $AUTOVACUUM ? 4*1024 : 3*1024]]   \
+         [byte_is_zero test.db [expr $AUTOVACUUM ? 5*1024 : 4*1024]]
+  } {0 1}
+}
+catch {db close}
+
+#-------------------------------------------------------------------------
+# Test that that for the simple test:
+#
+#   CREATE TABLE x(y);
+#   INSERT INTO x VALUES('z');
+#   PRAGMA wal_checkpoint;
+#
+# in WAL mode the xSync method is invoked as expected for each of
+# synchronous=off, synchronous=normal and synchronous=full.
+#
+foreach {tn syncmode synccount} {
+  1 off     
+    {}
+  2 normal  
+    {test.db-wal normal test.db normal}
+  3 full    
+    {test.db-wal normal test.db-wal normal test.db-wal normal test.db normal}
+} {
+
+  proc sync_counter {args} { 
+    foreach {method filename id flags} $args break
+    lappend ::syncs [file tail $filename] $flags
+  }
+  do_test wal3-3.$tn {
+    forcedelete test.db test.db-wal test.db-journal
+  
+    testvfs T
+    T filter {} 
+    T script sync_counter
+    sqlite3 db test.db -vfs T
+  
+    execsql "PRAGMA synchronous = $syncmode"
+    execsql "PRAGMA checkpoint_fullfsync = 0"
+    execsql { PRAGMA journal_mode = WAL }
+    execsql { CREATE TABLE filler(a,b,c); }
+
+    set ::syncs [list]
+    T filter xSync
+    execsql {
+      CREATE TABLE x(y);
+      INSERT INTO x VALUES('z');
+      PRAGMA wal_checkpoint;
+    }
+    T filter {}
+    set ::syncs
+  } $synccount
+
+  db close
+  T delete
+}
+
+
+#-------------------------------------------------------------------------
+# Only one client may run recovery at a time. Test this mechanism.
+#
+# When client-2 tries to open a read transaction while client-1 is 
+# running recovery, it fails to obtain a lock on an aReadMark[] slot
+# (because they are all locked by recovery). It then tries to obtain
+# a shared lock on the RECOVER lock to see if there really is a
+# recovery running or not.
+#
+# This block of tests checks the effect of an SQLITE_BUSY or SQLITE_IOERR
+# being returned when client-2 attempts a shared lock on the RECOVER byte.
+#
+# An SQLITE_BUSY should be converted to an SQLITE_BUSY_RECOVERY. An
+# SQLITE_IOERR should be returned to the caller.
+#
+do_test wal3-5.1 {
+  faultsim_delete_and_reopen
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 2);
+    INSERT INTO t1 VALUES(3, 4);
+  }
+  faultsim_save_and_close
+} {}
+
+testvfs T -default 1
+T script method_callback
+
+proc method_callback {method args} {
+  if {$method == "xShmBarrier"} {
+    incr ::barrier_count
+    if {$::barrier_count == 2} {
+      # This code is executed within the xShmBarrier() callback invoked
+      # by the client running recovery as part of writing the recovered
+      # wal-index header. If a second client attempts to access the 
+      # database now, it reads a corrupt (partially written) wal-index
+      # header. But it cannot even get that far, as the first client
+      # is still holding all the locks (recovery takes an exclusive lock
+      # on *all* db locks, preventing access by any other client).
+      #
+      # If global variable ::wal3_do_lockfailure is non-zero, then set
+      # things up so that an IO error occurs within an xShmLock() callback
+      # made by the second client (aka [db2]).
+      #
+      sqlite3 db2 test.db
+      if { $::wal3_do_lockfailure } { T filter xShmLock }
+      set ::testrc [ catch { db2 eval "SELECT * FROM t1" } ::testmsg ]
+      T filter {}
+      db2 close
+    }
+  }
+
+  if {$method == "xShmLock"} {
+    foreach {file handle spec} $args break
+    if { $spec == "2 1 lock shared" } {
+      return SQLITE_IOERR
+    }
+  }
+
+  return SQLITE_OK
+}
+
+# Test a normal SQLITE_BUSY return.
+#
+T filter xShmBarrier
+set testrc ""
+set testmsg ""
+set barrier_count 0
+set wal3_do_lockfailure 0
+do_test wal3-5.2 {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test wal3-5.3 {
+  list $::testrc $::testmsg
+} {1 {database is locked}}
+db close
+
+# Test an SQLITE_IOERR return.
+#
+T filter xShmBarrier
+set barrier_count 0
+set wal3_do_lockfailure 1
+set testrc ""
+set testmsg ""
+do_test wal3-5.4 {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4}
+do_test wal3-5.5 {
+  list $::testrc $::testmsg
+} {1 {disk I/O error}}
+
+db close
+T delete
+
+#-------------------------------------------------------------------------
+# When opening a read-transaction on a database, if the entire log has
+# already been copied to the database file, the reader grabs a special
+# kind of read lock (on aReadMark[0]). This set of test cases tests the 
+# outcome of the following:
+#
+#   + The reader discovering that between the time when it determined 
+#     that the log had been completely backfilled and the lock is obtained
+#     that a writer has written to the log. In this case the reader should
+#     acquire a different read-lock (not aReadMark[0]) and read the new
+#     snapshot.
+#
+#   + The attempt to obtain the lock on aReadMark[0] fails with SQLITE_BUSY.
+#     This can happen if a checkpoint is ongoing. In this case also simply
+#     obtain a different read-lock.
+#
+catch {db close}
+testvfs T -default 1
+do_test wal3-6.1.1 {
+  forcedelete test.db test.db-journal test.db wal
+  sqlite3 db test.db
+  execsql { PRAGMA auto_vacuum = off }
+  execsql { PRAGMA journal_mode = WAL }
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES('o', 't');
+    INSERT INTO t1 VALUES('t', 'f');
+  }
+} {}
+do_test wal3-6.1.2 {
+  sqlite3 db2 test.db
+  sqlite3 db3 test.db
+  execsql { BEGIN ; SELECT * FROM t1 } db3
+} {o t t f}
+do_test wal3-6.1.3 {
+  execsql { PRAGMA wal_checkpoint } db2
+} {0 4 4}
+
+# At this point the log file has been fully checkpointed. However, 
+# connection [db3] holds a lock that prevents the log from being wrapped.
+# Test case 3.6.1.4 has [db] attempt a read-lock on aReadMark[0]. But
+# as it is obtaining the lock, [db2] appends to the log file.
+#
+T filter xShmLock
+T script lock_callback
+proc lock_callback {method file handle spec} {
+  if {$spec == "3 1 lock shared"} {
+    # This is the callback for [db] to obtain the read lock on aReadMark[0].
+    # Disable future callbacks using [T filter {}] and write to the log
+    # file using [db2]. [db3] is preventing [db2] from wrapping the log
+    # here, so this is an append.
+    T filter {}
+    db2 eval { INSERT INTO t1 VALUES('f', 's') }
+  }
+  return SQLITE_OK
+}
+do_test wal3-6.1.4 {
+  execsql {
+    BEGIN;
+    SELECT * FROM t1;
+  }
+} {o t t f f s}
+
+# [db] should be left holding a read-lock on some slot other than 
+# aReadMark[0]. Test this by demonstrating that the read-lock is preventing
+# the log from being wrapped.
+#
+do_test wal3-6.1.5 {
+  db3 eval COMMIT
+  db2 eval { PRAGMA wal_checkpoint }
+  set sz1 [file size test.db-wal]
+  db2 eval { INSERT INTO t1 VALUES('s', 'e') }
+  set sz2 [file size test.db-wal]
+  expr {$sz2>$sz1}
+} {1}
+
+# Test that if [db2] had not interfered when [db] was trying to grab
+# aReadMark[0], it would have been possible to wrap the log in 3.6.1.5.
+#
+do_test wal3-6.1.6 {
+  execsql { COMMIT }
+  execsql { PRAGMA wal_checkpoint } db2
+  execsql {
+    BEGIN;
+    SELECT * FROM t1;
+  }
+} {o t t f f s s e}
+do_test wal3-6.1.7 {
+  db2 eval { PRAGMA wal_checkpoint }
+  set sz1 [file size test.db-wal]
+  db2 eval { INSERT INTO t1 VALUES('n', 't') }
+  set sz2 [file size test.db-wal]
+  expr {$sz2==$sz1}
+} {1}
+
+db3 close
+db2 close
+db close
+
+do_test wal3-6.2.1 {
+  forcedelete test.db test.db-journal test.db wal
+  sqlite3 db test.db
+  sqlite3 db2 test.db
+  execsql { PRAGMA auto_vacuum = off }
+  execsql { PRAGMA journal_mode = WAL }
+  execsql {
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES('h', 'h');
+    INSERT INTO t1 VALUES('l', 'b');
+  }
+} {}
+
+T filter xShmLock
+T script lock_callback
+proc lock_callback {method file handle spec} {
+  if {$spec == "3 1 unlock exclusive"} {
+    T filter {}
+    set ::R [db2 eval {
+      BEGIN;
+      SELECT * FROM t1;
+    }]
+  }
+}
+do_test wal3-6.2.2 {
+  execsql { PRAGMA wal_checkpoint }
+} {0 4 4}
+do_test wal3-6.2.3 {
+  set ::R
+} {h h l b}
+do_test wal3-6.2.4 {
+  set sz1 [file size test.db-wal]
+  execsql { INSERT INTO t1 VALUES('b', 'c'); }
+  set sz2 [file size test.db-wal]
+  expr {$sz2 > $sz1}
+} {1}
+do_test wal3-6.2.5 {
+  db2 eval { COMMIT }
+  execsql { PRAGMA wal_checkpoint }
+  set sz1 [file size test.db-wal]
+  execsql { INSERT INTO t1 VALUES('n', 'o'); }
+  set sz2 [file size test.db-wal]
+  expr {$sz2 == $sz1}
+} {1}
+ 
+db2 close
+db close
+T delete
+
+#-------------------------------------------------------------------------
+# When opening a read-transaction on a database, if the entire log has
+# not yet been copied to the database file, the reader grabs a read
+# lock on aReadMark[x], where x>0. The following test cases experiment
+# with the outcome of the following:
+#
+#   + The reader discovering that between the time when it read the
+#     wal-index header and the lock was obtained that a writer has 
+#     written to the log. In this case the reader should re-read the 
+#     wal-index header and lock a snapshot corresponding to the new 
+#     header.
+#
+#   + The value in the aReadMark[x] slot has been modified since it was
+#     read.
+#
+catch {db close}
+testvfs T -default 1
+do_test wal3-7.1.1 {
+  forcedelete test.db test.db-journal test.db wal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE blue(red PRIMARY KEY, green);
+  }
+} {wal}
+
+T script method_callback
+T filter xOpen
+proc method_callback {method args} {
+  if {$method == "xOpen"} { return "reader" }
+}
+do_test wal3-7.1.2 {
+  sqlite3 db2 test.db
+  execsql { SELECT * FROM blue } db2
+} {}
+
+T filter xShmLock
+set ::locks [list]
+proc method_callback {method file handle spec} {
+  if {$handle != "reader" } { return }
+  if {$method == "xShmLock"} {
+    catch { execsql { INSERT INTO blue VALUES(1, 2) } }
+    catch { execsql { INSERT INTO blue VALUES(3, 4) } }
+  }
+  lappend ::locks $spec
+}
+do_test wal3-7.1.3 {
+  execsql { SELECT * FROM blue } db2
+} {1 2 3 4}
+do_test wal3-7.1.4 {
+  set ::locks
+} {{4 1 lock shared} {4 1 unlock shared} {5 1 lock shared} {5 1 unlock shared}}
+
+set ::locks [list]
+proc method_callback {method file handle spec} {
+  if {$handle != "reader" } { return }
+  if {$method == "xShmLock"} {
+    catch { execsql { INSERT INTO blue VALUES(5, 6) } }
+  }
+  lappend ::locks $spec
+}
+do_test wal3-7.2.1 {
+  execsql { SELECT * FROM blue } db2
+} {1 2 3 4 5 6}
+do_test wal3-7.2.2 {
+  set ::locks
+} {{5 1 lock shared} {5 1 unlock shared} {4 1 lock shared} {4 1 unlock shared}}
+
+db close
+db2 close
+T delete
+
+
+#-------------------------------------------------------------------------
+# When a connection opens a read-lock on the database, it searches for
+# an aReadMark[] slot that is already set to the mxFrame value for the
+# new transaction. If it cannot find one, it attempts to obtain an 
+# exclusive lock on an aReadMark[] slot for the purposes of modifying
+# the value, then drops back to a shared-lock for the duration of the
+# transaction.
+#
+# This test case verifies that if an exclusive lock cannot be obtained
+# on any aReadMark[] slot (because there are already several readers),
+# the client takes a shared-lock on a slot without modifying the value
+# and continues.
+#
+set nConn 50
+if { [string match *BSD $tcl_platform(os)] } { set nConn 25 }
+do_test wal3-9.0 {
+  forcedelete test.db test.db-journal test.db wal
+  sqlite3 db test.db
+  execsql {
+    PRAGMA page_size = 1024;
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE whoami(x);
+    INSERT INTO whoami VALUES('nobody');
+  }
+} {wal}
+for {set i 0} {$i < $nConn} {incr i} {
+  set c db$i
+  do_test wal3-9.1.$i {
+    sqlite3 $c test.db
+    execsql { UPDATE whoami SET x = $c }
+    execsql {
+      BEGIN;
+      SELECT * FROM whoami
+    } $c
+  } $c
+}
+for {set i 0} {$i < $nConn} {incr i} {
+  set c db$i
+  do_test wal3-9.2.$i {
+    execsql { SELECT * FROM whoami } $c
+  } $c
+}
+
+set sz [expr 1024 * (2+$AUTOVACUUM)]
+do_test wal3-9.3 {
+  for {set i 0} {$i < ($nConn-1)} {incr i} { db$i close }
+  execsql { PRAGMA wal_checkpoint } 
+  byte_is_zero test.db [expr $sz-1024]
+} {1}
+do_test wal3-9.4 {
+  db[expr $nConn-1] close
+  execsql { PRAGMA wal_checkpoint } 
+  set sz2 [file size test.db]
+  byte_is_zero test.db [expr $sz-1024]
+} {0}
+
+do_multiclient_test tn {
+  do_test wal3-10.$tn.1 {
+    sql1 {
+      PRAGMA page_size = 1024;
+      CREATE TABLE t1(x);
+      PRAGMA journal_mode = WAL;
+      PRAGMA wal_autocheckpoint = 100000;
+      BEGIN;
+        INSERT INTO t1 VALUES(randomblob(800));
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 2
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 4
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 8
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 16
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 32
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 64
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 128
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 256
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 512
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 1024
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 2048
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 4096
+        INSERT INTO t1 SELECT randomblob(800) FROM t1;   -- 8192
+      COMMIT;
+      CREATE INDEX i1 ON t1(x);
+    }
+
+    expr {[file size test.db-wal] > [expr 1032*9000]}
+  } 1
+
+  do_test wal3-10.$tn.2 {
+    sql2 {PRAGMA integrity_check}
+  } {ok}
+}
+
+finish_test

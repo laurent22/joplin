@@ -1,0 +1,142 @@
+# 2016 March 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix bestindex2
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Virtual table callback for table named $tbl, with the columns specified
+# by list argument $cols. e.g. if the function is invoked as:
+#
+#   vtab_cmd t1 {a b c} ...
+#
+# The table created is:
+#
+#      "CREATE TABLE t1 (a, b, c)"
+#
+# The tables xBestIndex method behaves as if all possible combinations of
+# "=" constraints (but no others) may be optimized. The cost of a full table
+# scan is:
+#
+#      "WHERE 1"                "cost 1000000 rows 1000000"
+#
+# If one or more "=" constraints are in use, the cost and estimated number
+# of rows returned are both is (11 - nCons)*1000, where nCons is the number
+# of constraints used. e.g.
+#
+#   "WHERE a=? AND b=?"    ->   "cost  900 rows  900"
+#   "WHERE c=? AND b<?"    ->   "cost 1000 rows 1000"
+#  
+proc vtab_cmd {tbl cols method args} {
+  switch -- $method {
+    xConnect {
+      return "CREATE TABLE $tbl ([join $cols ,])"
+    }
+    xBestIndex {
+      foreach {clist orderby mask} $args {}
+
+      set cons [list]
+      set used [list]
+
+      for {set i 0} {$i < [llength $clist]} {incr i} {
+        array unset C
+        array set C [lindex $clist $i]
+        if {$C(op)=="eq" && $C(usable) && [lsearch $cons $C(column)]<0} {
+          lappend used use $i
+          lappend cons $C(column)
+        }
+      }
+
+      set nCons [llength $cons]
+      if {$nCons==0} {
+        return "cost 1000000 rows 1000000"
+      } else {
+        set cost [expr (11-$nCons) * 1000]
+        set ret [concat $used "cost $cost rows $cost"]
+
+        set txt [list]
+        foreach c $cons { lappend txt "[lindex $cols $c]=?" }
+        lappend ret idxstr "indexed([join $txt { AND }])"
+
+        return $ret
+      }
+    }
+  }
+  return ""
+}
+
+register_tcl_module db
+
+do_execsql_test 1.0 {
+  CREATE VIRTUAL TABLE t1 USING tcl("vtab_cmd t1 {a b}");
+  CREATE VIRTUAL TABLE t2 USING tcl("vtab_cmd t2 {c d}");
+  CREATE VIRTUAL TABLE t3 USING tcl("vtab_cmd t3 {e f}");
+}
+
+do_eqp_test 1.1 {
+  SELECT * FROM t1 WHERE a='abc'
+} {SCAN TABLE t1 VIRTUAL TABLE INDEX 0:indexed(a=?)}
+
+do_eqp_test 1.2 {
+  SELECT * FROM t1 WHERE a='abc' AND b='def'
+} {SCAN TABLE t1 VIRTUAL TABLE INDEX 0:indexed(a=? AND b=?)}
+
+do_eqp_test 1.3 {
+  SELECT * FROM t1 WHERE a='abc' AND a='def'
+} {SCAN TABLE t1 VIRTUAL TABLE INDEX 0:indexed(a=?)}
+
+do_eqp_test 1.4 {
+  SELECT * FROM t1,t2 WHERE c=a
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:
+  `--SCAN TABLE t2 VIRTUAL TABLE INDEX 0:indexed(c=?)
+}
+
+do_eqp_test 1.5 {
+  SELECT * FROM t1, t2 CROSS JOIN t3 WHERE t2.c = +t1.b AND t3.e=t2.d
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:
+  |--SCAN TABLE t2 VIRTUAL TABLE INDEX 0:indexed(c=?)
+  `--SCAN TABLE t3 VIRTUAL TABLE INDEX 0:indexed(e=?)
+}
+
+do_eqp_test 1.6 {
+  SELECT * FROM t1, t2, t3 WHERE t2.c = +t1.b AND t3.e = t2.d
+} {
+  QUERY PLAN
+  |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:
+  |--SCAN TABLE t2 VIRTUAL TABLE INDEX 0:indexed(c=?)
+  `--SCAN TABLE t3 VIRTUAL TABLE INDEX 0:indexed(e=?)
+}
+
+do_execsql_test 1.7.1 {
+  CREATE TABLE x1(a, b);
+}
+do_eqp_test 1.7.2 {
+  SELECT * FROM x1 CROSS JOIN t1, t2, t3 
+    WHERE t1.a = t2.c AND t1.b = t3.e
+} {
+  QUERY PLAN
+  |--SCAN TABLE x1
+  |--SCAN TABLE t1 VIRTUAL TABLE INDEX 0:
+  |--SCAN TABLE t2 VIRTUAL TABLE INDEX 0:indexed(c=?)
+  `--SCAN TABLE t3 VIRTUAL TABLE INDEX 0:indexed(e=?)
+}
+
+finish_test

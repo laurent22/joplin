@@ -1,0 +1,441 @@
+# 2003 June 21
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file implements tests for miscellanous features that were
+# left out of other test files.
+#
+# $Id: misc2.test,v 1.28 2007/09/12 17:01:45 danielk1977 Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# The tests in this file were written before SQLite supported recursive
+# trigger invocation, and some tests depend on that to pass. So disable
+# recursive triggers for this file.
+catchsql { pragma recursive_triggers = off } 
+
+ifcapable {trigger} {
+# Test for ticket #360
+#
+do_test misc2-1.1 {
+  catchsql {
+    CREATE TABLE FOO(bar integer);
+    CREATE TRIGGER foo_insert BEFORE INSERT ON foo BEGIN
+      SELECT CASE WHEN (NOT new.bar BETWEEN 0 AND 20)
+             THEN raise(rollback, 'aiieee') END;
+    END;
+    INSERT INTO foo(bar) VALUES (1);
+  }
+} {0 {}}
+do_test misc2-1.2 {
+  catchsql {
+    INSERT INTO foo(bar) VALUES (111);
+  }
+} {1 aiieee}
+} ;# endif trigger
+
+# Make sure ROWID works on a view and a subquery.  Ticket #364
+#
+do_test misc2-2.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(1,2,3);
+    CREATE TABLE t2(a,b,c);
+    INSERT INTO t2 VALUES(7,8,9);
+  }
+} {}
+ifcapable subquery {
+  do_test misc2-2.2 {
+    execsql {
+      SELECT rowid, * FROM (SELECT * FROM t1, t2);
+    }
+  } {{} 1 2 3 7 8 9}
+}
+ifcapable view {
+  do_test misc2-2.3 {
+    execsql {
+      CREATE VIEW v1 AS SELECT * FROM t1, t2;
+      SELECT rowid, * FROM v1;
+    }
+  } {{} 1 2 3 7 8 9}
+} ;# ifcapable view
+
+# Ticket #2002 and #1952.
+ifcapable subquery {
+  do_test misc2-2.4 {
+    execsql2 {
+      SELECT * FROM (SELECT a, b AS 'a', c AS 'a', 4 AS 'a' FROM t1)
+    }
+  } {a 1 a:1 2 a:2 3 a:3 4}
+}
+
+# Check name binding precedence.  Ticket #387
+#
+do_test misc2-3.1 {
+  catchsql {
+    SELECT t1.b+t2.b AS a, t1.a, t2.a FROM t1, t2 WHERE a==10
+  }
+} {1 {ambiguous column name: a}}
+
+# Make sure 32-bit integer overflow is handled properly in queries.
+# ticket #408
+#
+do_test misc2-4.1 {
+  execsql {
+    INSERT INTO t1 VALUES(4000000000,'a','b');
+    SELECT a FROM t1 WHERE a>1;
+  }
+} {4000000000}
+do_test misc2-4.2 {
+  execsql {
+    INSERT INTO t1 VALUES(2147483648,'b2','c2');
+    INSERT INTO t1 VALUES(2147483647,'b3','c3');
+    SELECT a FROM t1 WHERE a>2147483647;
+  }
+} {4000000000 2147483648}
+do_test misc2-4.3 {
+  execsql {
+    SELECT a FROM t1 WHERE a<2147483648;
+  }
+} {1 2147483647}
+do_test misc2-4.4 {
+  execsql {
+    SELECT a FROM t1 WHERE a<=2147483648;
+  }
+} {1 2147483648 2147483647}
+do_test misc2-4.5 {
+  execsql {
+    SELECT a FROM t1 WHERE a<10000000000;
+  }
+} {1 4000000000 2147483648 2147483647}
+do_test misc2-4.6 {
+  execsql {
+    SELECT a FROM t1 WHERE a<1000000000000 ORDER BY 1;
+  }
+} {1 2147483647 2147483648 4000000000}
+
+# There were some issues with expanding a SrcList object using a call
+# to sqliteSrcListAppend() if the SrcList had previously been duplicated
+# using a call to sqliteSrcListDup().  Ticket #416.  The following test
+# makes sure the problem has been fixed.
+#
+ifcapable view {
+do_test misc2-5.1 {
+  execsql {
+    CREATE TABLE x(a,b);
+    CREATE VIEW y AS 
+      SELECT x1.b AS p, x2.b AS q FROM x AS x1, x AS x2 WHERE x1.a=x2.a;
+    CREATE VIEW z AS
+      SELECT y1.p, y2.p FROM y AS y1, y AS y2 WHERE y1.q=y2.q;
+    SELECT * from z;
+  }
+} {}
+}
+
+# Make sure we can open a database with an empty filename.  What this
+# does is store the database in a temporary file that is deleted when
+# the database is closed.  Ticket #432.
+#
+do_test misc2-6.1 {
+  db close
+  sqlite3 db {}
+  execsql {
+    CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,2);
+    SELECT * FROM t1;
+  }
+} {1 2}
+
+# Make sure we get an error message (not a segfault) on an attempt to
+# update a table from within the callback of a select on that same
+# table.
+#
+# 2006-08-16:  This has changed.  It is now permitted to update
+# the table being SELECTed from within the callback of the query.
+#
+ifcapable tclvar {
+  do_test misc2-7.1 {
+    db close
+    forcedelete test.db
+    sqlite3 db test.db
+    execsql {
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      SELECT * FROM t1;
+    }
+  } {1 2 3}
+  do_test misc2-7.2 {
+    set rc [catch {
+      db eval {SELECT rowid FROM t1} {} {
+        db eval "DELETE FROM t1 WHERE rowid=$rowid"
+      }
+    } msg]
+    lappend rc $msg
+  } {0 {}}
+  do_test misc2-7.3 {
+    execsql {SELECT * FROM t1}
+  } {}
+  do_test misc2-7.4 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1 WHERE rowid=$rowid}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {2 4}
+  do_test misc2-7.5 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1 WHERE rowid=$rowid+1}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {1 3}
+  do_test misc2-7.6 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {}
+  do_test misc2-7.7 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x & 1} {
+        db eval {UPDATE t1 SET x=x+100 WHERE rowid=$rowid}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {101 2 103 4}
+  do_test misc2-7.8 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x<10} {
+        db eval {INSERT INTO t1 VALUES($x+1)}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {1 2 3 4 5 6 7 8 9 10}
+  
+  # Repeat the tests 7.1 through 7.8 about but this time do the SELECTs
+  # in reverse order so that we exercise the sqlite3BtreePrev() routine
+  # instead of sqlite3BtreeNext()
+  #
+  do_test misc2-7.11 {
+    db close
+    forcedelete test.db
+    sqlite3 db test.db
+    execsql {
+      CREATE TABLE t1(x);
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      SELECT * FROM t1;
+    }
+  } {1 2 3}
+  do_test misc2-7.12 {
+    set rc [catch {
+      db eval {SELECT rowid FROM t1 ORDER BY rowid DESC} {} {
+        db eval "DELETE FROM t1 WHERE rowid=$rowid"
+      }
+    } msg]
+    lappend rc $msg
+  } {0 {}}
+  do_test misc2-7.13 {
+    execsql {SELECT * FROM t1}
+  } {}
+  do_test misc2-7.14 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1 ORDER BY rowid DESC} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1 WHERE rowid=$rowid}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {2 4}
+  do_test misc2-7.15 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1 WHERE rowid=$rowid+1}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {1 3}
+  do_test misc2-7.16 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1 ORDER BY rowid DESC} {
+      if {$x & 1} {
+        db eval {DELETE FROM t1}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {}
+  do_test misc2-7.17 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1 VALUES(1);
+      INSERT INTO t1 VALUES(2);
+      INSERT INTO t1 VALUES(3);
+      INSERT INTO t1 VALUES(4);
+    }
+    db eval {SELECT rowid, x FROM t1 ORDER BY rowid DESC} {
+      if {$x & 1} {
+        db eval {UPDATE t1 SET x=x+100 WHERE rowid=$rowid}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {101 2 103 4}
+  do_test misc2-7.18 {
+    execsql {
+      DELETE FROM t1;
+      INSERT INTO t1(rowid,x) VALUES(10,10);
+    }
+    db eval {SELECT rowid, x FROM t1 ORDER BY rowid DESC} {
+      if {$x>1} {
+        db eval {INSERT INTO t1(rowid,x) VALUES($x-1,$x-1)}
+      }
+    }
+    execsql {SELECT * FROM t1}
+  } {1 2 3 4 5 6 7 8 9 10}
+}
+
+db close
+forcedelete test.db
+sqlite3 db test.db
+catchsql { pragma recursive_triggers = off } 
+
+# Ticket #453.  If the SQL ended with "-", the tokenizer was calling that
+# an incomplete token, which caused problem.  The solution was to just call
+# it a minus sign.
+#
+do_test misc2-8.1 {
+  catchsql {-}
+} {1 {near "-": syntax error}}
+
+# Ticket #513.  Make sure the VDBE stack does not grow on a 3-way join.
+#
+ifcapable tempdb {
+  do_test misc2-9.1 {
+    execsql {
+      BEGIN;
+      CREATE TABLE counts(n INTEGER PRIMARY KEY);
+      INSERT INTO counts VALUES(0);
+      INSERT INTO counts VALUES(1);
+      INSERT INTO counts SELECT n+2 FROM counts;
+      INSERT INTO counts SELECT n+4 FROM counts;
+      INSERT INTO counts SELECT n+8 FROM counts;
+      COMMIT;
+  
+      CREATE TEMP TABLE x AS
+      SELECT dim1.n, dim2.n, dim3.n
+      FROM counts AS dim1, counts AS dim2, counts AS dim3
+      WHERE dim1.n<10 AND dim2.n<10 AND dim3.n<10;
+  
+      SELECT count(*) FROM x;
+    }
+  } {1000}
+  do_test misc2-9.2 {
+    execsql {
+      DROP TABLE x;
+      CREATE TEMP TABLE x AS
+      SELECT dim1.n, dim2.n, dim3.n
+      FROM counts AS dim1, counts AS dim2, counts AS dim3
+      WHERE dim1.n>=6 AND dim2.n>=6 AND dim3.n>=6;
+  
+      SELECT count(*) FROM x;
+    }
+  } {1000}
+  do_test misc2-9.3 {
+    execsql {
+      DROP TABLE x;
+      CREATE TEMP TABLE x AS
+      SELECT dim1.n, dim2.n, dim3.n, dim4.n
+      FROM counts AS dim1, counts AS dim2, counts AS dim3, counts AS dim4
+      WHERE dim1.n<5 AND dim2.n<5 AND dim3.n<5 AND dim4.n<5;
+  
+      SELECT count(*) FROM x;
+    }
+  } [expr 5*5*5*5]
+}
+
+# Ticket #1229.  Sometimes when a "NEW.X" appears in a SELECT without
+# a FROM clause deep within a trigger, the code generator is unable to
+# trace the NEW.X back to an original table and thus figure out its
+# declared datatype.
+#
+# The SQL code below was causing a segfault.
+#
+ifcapable subquery&&trigger {
+  do_test misc2-10.1 {
+    execsql {
+      CREATE TABLE t1229(x);
+      CREATE TRIGGER r1229 BEFORE INSERT ON t1229 BEGIN
+        INSERT INTO t1229 SELECT y FROM (SELECT new.x y);
+      END;
+      INSERT INTO t1229 VALUES(1);
+    }
+  } {}
+}
+
+finish_test

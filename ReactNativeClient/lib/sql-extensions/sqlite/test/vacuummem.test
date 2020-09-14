@@ -1,0 +1,73 @@
+# 2005 February 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing that the VACUUM statement correctly
+# frees any memory used for a temporary cache.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix vacuummem
+
+if {[permutation]=="memsubsys1"} {
+  finish_test
+  return
+}
+
+# If ENABLE_MEMORY_MANAGEMENT is defined, when VACUUM is run the temp db
+# is able to borrow space from the main db (and it does, because the
+# temp db is configure with a very small cache). When the VACUUM is
+# finished and the temp db closed, all the page-cache memory currently 
+# assigned to the temp db is freed. If ENABLE_MEMORY_MANAGEMENT is defined
+# this causes the total memory usage to drop much more than expected,
+# causing tests in this file to fail.
+#
+ifcapable memorymanage {
+  finish_test
+  return
+}
+
+
+proc memory_used {} { 
+  set stat [sqlite3_status SQLITE_STATUS_MEMORY_USED 1]  
+  lindex $stat 1
+}
+
+do_execsql_test 1.0 {
+  PRAGMA cache_size = -2000;
+  CREATE TABLE t1(a, b, c);
+
+  WITH r(i) AS (
+    SELECT 1 UNION ALL SELECT i+1 FROM r WHERE i<100000
+  )
+  INSERT INTO t1 SELECT randomblob(100),randomblob(100),randomblob(100) FROM r;
+
+  CREATE INDEX t1a ON t1(a);
+  CREATE INDEX t1b ON t1(b);
+  CREATE INDEX t1c ON t1(c);
+}
+set ans "#/[memory_used]/"
+
+do_test 1.1 { memory_used } $ans
+
+do_execsql_test 1.2 VACUUM
+
+do_test 1.3 { memory_used } $ans
+
+do_execsql_test 1.4 {
+  SELECT count(*) FROM t1 WHERE +a IS NOT NULL
+} {100000}
+
+do_test 1.5 { memory_used } $ans
+
+
+
+finish_test

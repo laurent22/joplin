@@ -1,0 +1,531 @@
+# 2010 October 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+source $testdir/malloc_common.tcl
+
+ifcapable !fts3||!fts4_deferred {
+  finish_test
+  return
+}
+
+set sqlite_fts3_enable_parentheses 1
+
+set fts3_simple_deferred_tokens_only 1
+
+set ::testprefix fts3defer
+
+#--------------------------------------------------------------------------
+# Test cases fts3defer-1.* are the "warm body" cases. The database contains
+# one row with 15000 instances of the token "a". This makes the doclist for
+# "a" so large that FTS3 will avoid loading it in most cases.
+#
+# To show this, test cases fts3defer-1.2.* execute a bunch of FTS3 queries
+# involving token "a". Then, fts3defer-1.3.* replaces the doclist for token
+# "a" with all zeroes and fts3defer-1.4.* repeats the tests from 1.2. If
+# the tests still work, we can conclude that the doclist for "a" was not
+# used.
+# 
+
+set aaa [string repeat "a " 15000]
+
+do_execsql_test 1.1 {
+  CREATE VIRTUAL TABLE t1 USING fts4;
+  BEGIN;
+    INSERT INTO t1 VALUES('this is a dog');
+    INSERT INTO t1 VALUES('an instance of a phrase');
+    INSERT INTO t1 VALUES('an instance of a longer phrase');
+    INSERT INTO t1 VALUES($aaa);
+  COMMIT;
+} {}
+
+set tests {
+  1  {SELECT rowid FROM t1 WHERE t1 MATCH '"a dog"'}                 {1}
+  2  {SELECT rowid FROM t1 WHERE t1 MATCH '"is a dog"'}              {1}
+  3  {SELECT rowid FROM t1 WHERE t1 MATCH '"a longer phrase"'}       {3}
+  4  {SELECT snippet(t1) FROM t1 WHERE t1 MATCH '"a longer phrase"'}  
+     {"an instance of <b>a</b> <b>longer</b> <b>phrase</b>"}
+  5  {SELECT rowid FROM t1 WHERE t1 MATCH 'a dog'}                   {1}
+}
+
+do_select_tests 1.2 $tests
+
+sqlite3_db_config db DEFENSIVE 0
+do_execsql_test 1.3 {
+  SELECT count(*) FROM t1_segments WHERE length(block)>10000;
+  UPDATE t1_segments 
+    SET block = zeroblob(length(block)) 
+    WHERE length(block)>10000;
+} {1}
+
+do_select_tests 1.4 $tests
+
+# Drop the table. It is corrupt now anyhow, so not useful for subsequent tests.
+#
+do_execsql_test 1.5 { DROP TABLE t1 }
+
+#--------------------------------------------------------------------------
+# These tests - fts3defer-2.* - are more rigorous. They test that for a
+# variety of queries, FTS3 and FTS4 return the same results. And that 
+# zeroing the very large doclists that FTS4 does not load does not change
+# the results.
+#
+# They use the following pseudo-randomly generated document data. The
+# tokens "zm" and "jk" are especially common in this dataset. Additionally,
+# two documents are added to the pseudo-random data before it is loaded
+# into FTS4 containing 100,000 instances of the "zm" and "jk" tokens. This
+# makes the doclists for those tokens so large that FTS4 avoids loading them
+# into memory if possible.
+#
+set data [list]
+lappend data [string repeat "zm " 100000]
+lappend data [string repeat "jk " 100000]
+lappend data {*}{
+  "zm zm agmckuiu uhzq nsab jk rrkx duszemmzl hyq jk"
+  "jk uhzq zm zm rgpzmlnmd zm zk jk jk zm"
+  "duszemmzl zm jk xldlpy zm jk sbptoa xh jk xldlpy"
+  "zm xh zm xqf azavwm jk jk trqd rgpzmlnmd jk"
+  "zm vwq urvysbnykk ubwrfqnbjf zk lsz jk doiwavhwwo jk jk"
+  "jk xduvfhk orpfawpx zkhdvkw jk mjpavjuhw zm jk duszemmzl zm"
+  "jk igju jk jk zm hmjf xh zm gwdfhwurx zk"
+  "vgsld jk jk zm hrlipdm jn zm zsmhnf vgsld duszemmzl"
+  "gtuiexzsu aayxpmve zm zm zm drir scpgna xh azavwm uhzq"
+  "farlehdhq hkfoudzftq igju duszemmzl xnxhf ewle zm hrlipdm urvysbnykk kn"
+  "xnxhf jk jk agmckuiu duszemmzl jk zm zm jk vgsld"
+  "zm zm zm jk jk urvysbnykk ogttbykvt zm zm jk"
+  "iasrqgqv zm azavwm zidhxhbtv jk jk mjpavjuhw zm zm ajmvcydy"
+  "rgpzmlnmd tmt mjpavjuhw xh igju jk azavwm fibokdry vgsld ofm"
+  "zm jk vgsld jk xh jk csjqxhgj drir jk pmrb"
+  "xh jk jk zm rrkx duszemmzl mjpavjuhw xldlpy igju zm"
+  "jk hkfoudzftq zf rrkx wdmy jupk jk zm urvysbnykk npywgdvgz"
+  "zm jk zm zm zhbrzadb uenvbm aayxpmve urvysbnykk duszemmzl jk"
+  "uenvbm jk zm fxw xh bdilwmjw mjpavjuhw uv jk zm"
+  "nk jk bnhc pahlds jk igju dzadnqzprr jk jk jk"
+  "uhzq uv zm duszemmzl tlqix jk jk xh jk zm"
+  "jk zm agmckuiu urvysbnykk jk jk zm zm jk jk"
+  "azavwm mjpavjuhw lsgshn trqd xldlpy ogyavjvv agmckuiu ryvwwhlbc jk jk"
+  "tmt jk zk zm azavwm ofm acpgim bvgimjik iasrqgqv wuvajhwqz"
+  "igju ogyavjvv xrbdak rrkx fibokdry zf ujfhmrllq jk zm hxgwvib"
+  "zm pahlds jk uenvbm aayxpmve iaf hmjf xph vnlyvtkgx zm"
+  "jk xnxhf igju jk xh jk nvfasfh zm js jk"
+  "zm zm rwaj igju xr rrkx xnxhf nvfasfh skxbsqzvmt xatbxeqq"
+  "vgsld zm ujfhmrllq uhzq ogyavjvv nsab azavwm zm vgsld jmfiqhwnjg"
+  "ymjoym duszemmzl urvysbnykk azavwm jk jmfiqhwnjg bu qcdziqomqk vnlyvtkgx"
+  "zm nbilqcnz dzadnqzprr xh bkfgzsxn urvysbnykk xrujfzxqf zm zf agmckuiu"
+  "jk urvysbnykk nvfasfh zf xh zm zm qcdziqomqk qvxtclg wdmy"
+  "fibokdry jk urvysbnykk jk xr osff zm cvnnsl zm vgsld"
+  "jk mjpavjuhw hkfoudzftq jk zm xh xqf urvysbnykk jk iasrqgqv"
+  "jk csjqxhgj duszemmzl iasrqgqv aayxpmve zm brsuoqww jk qpmhtvl wluvgsw"
+  "jk mj azavwm jk zm jn dzadnqzprr zm jk uhzq"
+  "zk xqf jupk fxw nbilqcnz zm jk jcpiwj tznlvbfcv nvfasfh"
+  "jk jcpiwj zm xnxhf zm mjpavjuhw mj drir pa pvjrjlas"
+  "duszemmzl dzadnqzprr jk swc duszemmzl tmt jk jk pahlds jk"
+  "zk zm jk zm zm eczkjblu zm hi pmrb jk"
+  "azavwm zm iz agmckuiu jk sntk jk duszemmzl duszemmzl zm"
+  "jk zm jk eczkjblu urvysbnykk sk gnl jk ttvgf hmjf"
+  "jk bnhc jjrxpjkb mjpavjuhw fibokdry igju jk zm zm xh"
+  "wxe ogttbykvt uhzq xr iaf zf urvysbnykk aayxpmve oacaxgjoo mjpavjuhw"
+  "gazrt jk ephknonq myjp uenvbm wuvajhwqz jk zm xnxhf nvfasfh"
+  "zm aayxpmve csjqxhgj xnxhf xr jk aayxpmve xnxhf zm zm"
+  "sokcyf zm ogyavjvv jk zm fibokdry zm jk igju igju"
+  "vgsld bvgimjik xuprtlyle jk akmikrqyt jk aayxpmve hkfoudzftq ddjj ithtir"
+  "zm uhzq ovkyevlgv zk uenvbm csjqxhgj jk vgsld pgybs jk"
+  "zm agmckuiu zexh fibokdry jk uhzq bu tugflixoex xnxhf sk"
+  "zm zf uenvbm jk azavwm zm zm agmckuiu zm jk"
+  "rrkx jk zf jt zm oacaxgjoo fibokdry wdmy igju csjqxhgj"
+  "hi igju zm jk zidhxhbtv dzadnqzprr jk jk trqd duszemmzl"
+  "zm zm mjpavjuhw xrbdak qrvbjruc jk qzzqdxq guwq cvnnsl zm"
+  "ithtir jk jk qcdziqomqk zm farlehdhq zm zm xrbdak jk"
+  "ixfipk csjqxhgj azavwm sokcyf ttvgf vgsld jk sk xh zk"
+  "nvfasfh azavwm zm zm zm fxw nvfasfh zk gnl trqd"
+  "zm fibokdry csjqxhgj ofm dzadnqzprr jk akmikrqyt orpfawpx duszemmzl vwq"
+  "csjqxhgj jk jk vgsld urvysbnykk jk nxum jk jk nxum"
+  "zm hkfoudzftq jk ryvwwhlbc mjpavjuhw ephknonq jk zm ogyavjvv zm"
+  "lwa hi xnxhf qdyerbws zk njtc jk uhzq zm jk"
+  "trqd zm dzadnqzprr zm urvysbnykk jk lsz jk mjpavjuhw cmnnkna"
+  "duszemmzl zk jk jk fibokdry jseuhjnzo zm aayxpmve zk jk"
+  "fibokdry jk sviq qvxtclg wdmy jk doiwavhwwo zexh jk zm"
+  "jupk zm xh jk mjpavjuhw zm jk nsab npywgdvgz duszemmzl"
+  "zm igju zm zm nvfasfh eh hkfoudzftq fibokdry fxw xkblf"
+  "jk zm jk jk zm xh zk abthnzcv zf csjqxhgj"
+  "zm zm jk nkaotm urvysbnykk sbptoa bq jk ktxdty ubwrfqnbjf"
+  "nvfasfh aayxpmve xdcuz zm tugflixoex jcpiwj zm mjpavjuhw fibokdry doiwavhwwo"
+  "iaf jk mjpavjuhw zm duszemmzl jk jk uhzq pahlds fibokdry"
+  "ddjj zk azavwm jk swc zm gjtexkv jk xh jk"
+  "igju jk csjqxhgj zm jk dzadnqzprr duszemmzl ulvcbv jk jk"
+  "jk fibokdry zm csjqxhgj jn zm zm zm zf uhzq"
+  "duszemmzl jk xkblf zk hrlipdm aayxpmve uenvbm uhzq jk zf"
+  "dzadnqzprr jk zm zdu nvfasfh zm jk urvysbnykk hmjf jk"
+  "jk aayxpmve aserrdxm acpgim fibokdry jk drir wxe brsuoqww rrkx"
+  "uhzq csjqxhgj nvfasfh jk rrkx qbamok trqd uenvbm sntk zm"
+  "ps azavwm zkhdvkw jk zm jk jk zm csjqxhgj xedlrcfo"
+  "jk jk ogyavjvv jk zm farlehdhq duszemmzl jk agitgxamxe jk"
+  "qzzqdxq rwaj jk jk zm xqf jk uenvbm jk zk"
+  "zm hxgwvib akmikrqyt zf agmckuiu uenvbm bq npywgdvgz azavwm jk"
+  "zf jmfiqhwnjg js igju zm aayxpmve zm mbxnljomiv csjqxhgj nvfasfh"
+  "zm jk jk gazrt jk jk lkc jk nvfasfh jk"
+  "xldlpy orpfawpx zkhdvkw jk zm igju zm urvysbnykk dzadnqzprr mbxnljomiv"
+  "urvysbnykk jk zk igju zm uenvbm jk zm ithtir jk"
+  "zm zk zm zf ofm zm xdcuz dzadnqzprr zm vgsld"
+  "sbptoa jk tugflixoex jk zm zm vgsld zm xh zm"
+  "uhzq jk zk evvivo vgsld vniqnuynvf agmckuiu jk zm zm"
+  "zm nvfasfh zm zm zm abthnzcv uenvbm jk zk dzadnqzprr"
+  "zm azavwm igju qzzqdxq jk xnxhf abthnzcv jk nvfasfh zm"
+  "qbamok fxw vgsld igju cmnnkna xnxhf vniqnuynvf zk xh zm"
+  "nvfasfh zk zm mjpavjuhw dzadnqzprr jk jk duszemmzl xldlpy nvfasfh"
+  "xnxhf sviq nsab npywgdvgz osff vgsld farlehdhq fibokdry wjbkhzsa hhac"
+  "zm azavwm scpgna jk jk bq jk duszemmzl fibokdry ovkyevlgv"
+  "csjqxhgj zm jk jk duszemmzl zk xh zm jk zf"
+  "urvysbnykk dzadnqzprr csjqxhgj mjpavjuhw ubwrfqnbjf nkaotm jk jk zm drir"
+  "nvfasfh xh igju zm wluvgsw jk zm srwwnezqk ewle ovnq"
+  "jk nvfasfh eh ktxdty urvysbnykk vgsld zm jk eh uenvbm"
+  "orpfawpx pahlds jk uhzq hi zm zm zf jk dzadnqzprr"
+  "srwwnezqk csjqxhgj rbwzuf nvfasfh jcpiwj xldlpy nvfasfh jk vgsld wjybxmieki"
+}
+
+proc add_empty_records {n} {
+  execsql BEGIN
+  for {set i 0} {$i < $n} {incr i} {
+    execsql { INSERT INTO t1 VALUES('') }
+  }
+  execsql COMMIT
+}
+
+
+#set e [list]
+#foreach d $data {set e [concat $e $d]}
+#puts [lsort -unique $e]
+#exit
+
+set zero_long_doclists {
+  UPDATE t1_segments SET block=zeroblob(length(block)) WHERE length(block)>10000
+}
+
+foreach {tn setup} {
+  1 {
+    set dmt_modes 0
+    execsql { CREATE VIRTUAL TABLE t1 USING FTS3 }
+    foreach doc $data { execsql { INSERT INTO t1 VALUES($doc) } }
+  }
+  2 {
+    set dmt_modes 0
+    execsql { CREATE VIRTUAL TABLE t1 USING FTS4 }
+    foreach doc $data { execsql { INSERT INTO t1 VALUES($doc) } }
+  }
+  3 {
+    set dmt_modes {0 1 2}
+    execsql { CREATE VIRTUAL TABLE t1 USING FTS4 }
+    foreach doc $data { execsql { INSERT INTO t1 VALUES($doc) } }
+    add_empty_records 1000
+    sqlite3_db_config db DEFENSIVE 0
+    execsql $zero_long_doclists
+  }
+  4 {
+    set dmt_modes 0
+    execsql { CREATE VIRTUAL TABLE t1 USING FTS4 }
+    foreach doc $data { execsql { INSERT INTO t1 VALUES($doc) } }
+    add_empty_records 1000
+    execsql "INSERT INTO t1(t1) VALUES('optimize')"
+    sqlite3_db_config db DEFENSIVE 0
+    execsql $zero_long_doclists
+  }
+  5 {
+    set dmt_modes 0
+    execsql { CREATE VIRTUAL TABLE t1 USING FTS4(matchinfo=fts3) }
+    foreach doc $data { execsql { INSERT INTO t1 VALUES($doc) } }
+    add_empty_records 1000
+    sqlite3_db_config db DEFENSIVE 0
+    execsql $zero_long_doclists
+  }
+} {
+
+  execsql { DROP TABLE IF EXISTS t1 }
+  eval $setup
+  set ::testprefix fts3defer-2.$tn
+  set DO_MALLOC_TEST 0
+
+  do_execsql_test 0 { 
+    SELECT count(*) FROM t1_segments WHERE length(block)>10000 
+  } {2}
+
+  do_select_test 1.1 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'jk xnxhf'
+  } {13 29 40 47 48 52 63 92}
+  do_select_test 1.2 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'jk eh'
+  } {100}
+  do_select_test 1.3 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'jk ubwrfqnbjf'
+  } {7 70 98}
+  do_select_test 1.4 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'duszemmzl jk'
+  } {3 5 8 10 13 18 20 23 32 37 41 43 55 60 65 67 72 74 76 81 94 96 97}
+  do_select_test 1.5 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'ubwrfqnbjf jk'
+  } {7 70 98}
+  do_select_test 1.6 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'jk ubwrfqnbjf jk jk jk jk'
+  } {7 70 98}
+  do_select_test 1.7 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'zm xnxhf'
+  } {12 13 29 30 40 47 48 52 63 92 93}
+  do_select_test 1.8 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'zm eh'
+  } {68 100}
+  do_select_test 1.9 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'zm ubwrfqnbjf'
+  } {7 70 98}
+  do_select_test 1.10 {
+    SELECT rowid FROM t1 WHERE t1 MATCH 'z* vgsld'
+  } {10 13 17 31 35 51 58 88 89 90 93 100}
+
+  if { $fts3_simple_deferred_tokens_only==0 } {
+    do_select_test 1.11 {
+      SELECT rowid FROM t1 
+      WHERE t1 MATCH '(
+        zdu OR zexh OR zf OR zhbrzadb OR zidhxhbtv OR 
+        zk OR zkhdvkw OR zm OR zsmhnf
+      ) vgsld'
+    } {10 13 17 31 35 51 58 88 89 90 93 100}
+  }
+
+  do_select_test 2.1 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm agmckuiu"'
+  } {3 24 52 53}
+  do_select_test 2.2 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm zf"'
+  } {33 53 75 88 101}
+  do_select_test 2.3 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm aayxpmve"'
+  } {48 65 84}
+  do_select_test 2.4 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"aayxpmve zm"'
+  } {11 37 84}
+  do_select_test 2.5 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"jk azavwm"'
+  } {16 53}
+  do_select_test 2.6 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"xh jk jk"'
+  } {18}
+  do_select_test 2.7 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm jk vgsld"'
+  } {13 17}
+  do_select_test 2.8 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm jk vgsld lkjlkjlkj"'
+  } {}
+
+  do_select_test 3.1 {
+    SELECT snippet(t1, '[', ']') FROM t1 WHERE t1 MATCH '"zm agmckuiu"'
+  } {
+    {zm [zm] [agmckuiu] uhzq nsab jk rrkx duszemmzl hyq jk} 
+    {jk [zm] [agmckuiu] urvysbnykk jk jk zm zm jk jk} 
+    {[zm] [agmckuiu] zexh fibokdry jk uhzq bu tugflixoex xnxhf sk} 
+    {zm zf uenvbm jk azavwm zm [zm] [agmckuiu] zm jk}
+  }
+
+  do_select_test 3.2 {
+    SELECT snippet(t1, '[', ']') FROM t1 WHERE t1 MATCH 'xnxhf jk'
+  } {
+    {[xnxhf] [jk] [jk] agmckuiu duszemmzl [jk] zm zm [jk] vgsld} 
+    {[jk] [xnxhf] igju [jk] xh [jk] nvfasfh zm js [jk]} 
+    {[jk] jcpiwj zm [xnxhf] zm mjpavjuhw mj drir pa pvjrjlas} 
+    {gazrt [jk] ephknonq myjp uenvbm wuvajhwqz [jk] zm [xnxhf] nvfasfh} 
+    {zm aayxpmve csjqxhgj [xnxhf] xr [jk] aayxpmve [xnxhf] zm zm} 
+    {zm agmckuiu zexh fibokdry [jk] uhzq bu tugflixoex [xnxhf] sk} 
+    {lwa hi [xnxhf] qdyerbws zk njtc [jk] uhzq zm [jk]} 
+    {zm azavwm igju qzzqdxq [jk] [xnxhf] abthnzcv [jk] nvfasfh zm}
+  }
+
+  do_select_test 4.1 {
+    SELECT offsets(t1) FROM t1 WHERE t1 MATCH '"jk uenvbm"'
+  } {
+    {0 0 10 2 0 1 13 6} {0 0 26 2 0 1 29 6}
+  }
+
+  do_select_test 4.2 {
+    SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'duszemmzl jk fibokdry'
+  } {
+    {0 2 3 8 0 1 36 2 0 0 58 9} 
+    {0 0 0 9 0 1 13 2 0 1 16 2 0 2 19 8 0 1 53 2} 
+    {0 1 4 2 0 0 20 9 0 1 30 2 0 1 33 2 0 2 48 8} 
+    {0 1 17 2 0 1 20 2 0 1 26 2 0 0 29 9 0 2 39 8}
+  }
+
+  do_select_test 4.3 {
+    SELECT offsets(t1) FROM t1 
+    WHERE t1 MATCH 'vgsld (hrlipdm OR (aapmve NEAR duszemmzl))'
+  } {{0 0 0 5 0 1 15 7 0 0 36 5}}
+
+  # The following block of tests runs normally with FTS3 or FTS4 without the
+  # long doclists zeroed. And with OOM-injection for FTS4 with long doclists
+  # zeroed. Change this by messing with the [set dmt_modes] commands above.
+  #
+  foreach DO_MALLOC_TEST $dmt_modes {
+    
+    # Phrase search.
+    #
+    do_select_test 5.$DO_MALLOC_TEST.1 {
+      SELECT rowid FROM t1 WHERE t1 MATCH '"jk mjpavjuhw"'
+    } {8 15 36 64 67 72}
+
+    # Multiple tokens search.
+    do_select_test 5.$DO_MALLOC_TEST.2 {
+      SELECT rowid FROM t1 WHERE t1 MATCH 'duszemmzl zm'
+    } {3 5 8 10 12 13 18 20 23 37 43 55 60 65 67 72 74 81 94 96 97}
+
+    # snippet() function with phrase.
+    do_select_test 5.$DO_MALLOC_TEST.3 {
+      SELECT snippet(t1, '[', ']') FROM t1 WHERE t1 MATCH '"zm aayxpmve"'
+    } {
+      {[zm] [aayxpmve] csjqxhgj xnxhf xr jk aayxpmve xnxhf zm zm} 
+      {duszemmzl zk jk jk fibokdry jseuhjnzo [zm] [aayxpmve] zk jk} 
+      {zf jmfiqhwnjg js igju [zm] [aayxpmve] zm mbxnljomiv csjqxhgj nvfasfh}
+    }
+    
+    # snippet() function with multiple tokens.
+    do_select_test 5.$DO_MALLOC_TEST.4 {
+      SELECT snippet(t1, '[', ']') FROM t1 WHERE t1 MATCH 'zm zhbrzadb'
+    } {
+      {[zm] jk [zm] [zm] [zhbrzadb] uenvbm aayxpmve urvysbnykk duszemmzl jk}
+    }
+    
+    # snippet() function with phrase.
+    do_select_test 5.$DO_MALLOC_TEST.5 {
+      SELECT offsets(t1) FROM t1 WHERE t1 MATCH '"zm aayxpmve"'
+    } {
+      {0 0 0 2 0 1 3 8} {0 0 38 2 0 1 41 8} {0 0 22 2 0 1 25 8}
+    }
+    
+    # snippet() function with multiple tokens.
+    do_select_test 5.$DO_MALLOC_TEST.6 {
+      SELECT offsets(t1) FROM t1 WHERE t1 MATCH 'zm zhbrzadb'
+    } {
+      {0 0 0 2 0 0 6 2 0 0 9 2 0 1 12 8}
+    }
+
+    set DO_MALLOC_TEST 0
+  }
+
+  do_select_test 6.1 {
+    SELECT rowid FROM t1 
+    WHERE t1 MATCH 'vgsld (hrlipdm OR (aayxpmve duszemmzl))'
+  } {10}
+  do_select_test 6.2.1 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"jk xduvfhk"'
+  } {8}
+  do_select_test 6.2.2 {
+    SELECT rowid FROM t1 WHERE t1 MATCH '"zm azavwm"'
+  } {15 26 92 96}
+  if {$fts3_simple_deferred_tokens_only==0} {
+    do_select_test 6.2.3 {
+      SELECT rowid FROM t1 WHERE t1 MATCH '"jk xduvfhk" OR "zm azavwm"'
+    } {8 15 26 92 96}
+  }
+
+  if {$tn>1} {
+    # These tests will not work with $tn==1, as in this case table t1 is
+    # created using FTS3. The ^ syntax is only available with FTS4 tables.
+    #
+    do_select_test 7.1 {
+      SELECT rowid FROM t1 WHERE t1 MATCH '^zm mjpavjuhw'
+    } {56 62}
+    do_select_test 7.2 {
+      SELECT rowid FROM t1 WHERE t1 MATCH '^azavwm zm'
+    } {43}
+  }
+}
+
+set testprefix fts3defer
+
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE x1 USING fts4(a, b);
+  INSERT INTO x1 VALUES('a b c', 'd e f');
+  INSERT INTO x1 SELECT * FROM x1;
+  INSERT INTO x1 SELECT * FROM x1;
+  INSERT INTO x1 SELECT * FROM x1;
+  INSERT INTO x1 SELECT * FROM x1;
+}
+do_execsql_test 3.2 "
+  INSERT INTO x1 VALUES(
+    '[string repeat {d } 3000]', '[string repeat {f } 30000]'
+  );
+  INSERT INTO x1(x1) VALUES('optimize');
+"
+
+do_execsql_test 3.3 {
+  SELECT count(*) FROM x1 WHERE x1 MATCH '"d e f"'
+} {16}
+
+# At one point the following was causing a floating-point exception.
+#
+do_execsql_test 4.1 {
+  CREATE VIRTUAL TABLE x2 USING FTS4(x);
+  BEGIN;
+  INSERT INTO x2 VALUES('m m m m m m m m m m m m m m m m m m m m m m m m m m');
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 SELECT * FROM x2;
+  INSERT INTO x2 VALUES('a b c d e f g h i j k l m n o p q r s t u v w x y m');
+  COMMIT;
+}
+do_execsql_test 4.2 {
+  SELECT * FROM x2 WHERE x2 MATCH 'a b c d e f g h i j k l m n o p q r s';
+} {{a b c d e f g h i j k l m n o p q r s t u v w x y m}}
+
+set tokenizers {1 simple}
+ifcapable icu { lappend tokenizers 2 {icu en_US} }
+foreach {tn tokenizer} $tokenizers {
+  do_execsql_test 5.$tn.1 "
+    CREATE VIRTUAL TABLE x3 USING FTS4(a, b, TOKENIZE $tokenizer)
+  "
+  do_execsql_test 5.$tn.2 {
+    BEGIN;
+    INSERT INTO x3 VALUES('b b b b b b b b b b b', 'b b b b b b b b b b b b b');
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 SELECT * FROM x3;
+    INSERT INTO x3 VALUES('a b c', NULL);
+    INSERT INTO x3 VALUES('a x c', NULL);
+    COMMIT;
+
+    SELECT * FROM x3 WHERE x3 MATCH 'a b';
+  } {{a b c} {}}
+
+  do_execsql_test 5.$tn.3 { DROP TABLE x3 }
+}
+
+finish_test

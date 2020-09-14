@@ -1,0 +1,101 @@
+# 2015 Jun 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The tests in this file focus on renaming FTS5 tables using the
+# "ALTER TABLE ... RENAME TO ..." command
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5alter
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Test renaming regular, contentless and columnsize=0 FTS5 tables.
+#
+do_execsql_test 1.1.0 {
+  CREATE VIRTUAL TABLE "a x" USING fts5(a, x);
+  INSERT INTO "a x" VALUES('a a a', 'x x x');
+  ALTER TABLE "a x" RENAME TO "x y";
+}
+do_execsql_test 1.1.1 {
+  SELECT * FROM "x y";
+  SELECT rowid FROM "x y" WHERE "x y" MATCH 'a'
+} {{a a a} {x x x} 1}
+
+do_execsql_test 1.2.0 {
+  CREATE VIRTUAL TABLE "one/two" USING fts5(one, columnsize=0);
+  INSERT INTO "one/two"(rowid, one) VALUES(456, 'd d d');
+  ALTER TABLE "one/two" RENAME TO "three/four";
+}
+do_execsql_test 1.2.1 {
+  SELECT * FROM "three/four";
+  SELECT rowid FROM "three/four" WHERE "three/four" MATCH 'd'
+} {{d d d} 456}
+
+do_execsql_test 1.3.0 {
+  CREATE VIRTUAL TABLE t1 USING fts5(val, content='');
+  INSERT INTO t1(rowid, val) VALUES(-1, 'drop table');
+  INSERT INTO t1(rowid, val) VALUES(-2, 'drop view');
+  ALTER TABLE t1 RENAME TO t2;
+}
+do_execsql_test 1.3.1 {
+  SELECT rowid, * FROM t2;
+  SELECT rowid FROM t2 WHERE t2 MATCH 'table'
+} {-2 {} -1 {} -1}
+
+#-------------------------------------------------------------------------
+# Test renaming an FTS5 table within a transaction.
+#
+do_execsql_test 2.1 {
+  CREATE VIRTUAL TABLE zz USING fts5(a);
+  INSERT INTO zz(rowid, a) VALUES(-56, 'a b c');
+  BEGIN;
+    INSERT INTO zz(rowid, a) VALUES(-22, 'a b c');
+    ALTER TABLE zz RENAME TO yy;
+    SELECT rowid FROM yy WHERE yy MATCH 'a + b + c';
+  COMMIT;
+} {-56 -22}
+
+do_execsql_test 2.2 {
+  BEGIN;
+    ALTER TABLE yy RENAME TO ww;
+    INSERT INTO ww(rowid, a) VALUES(-11, 'a b c');
+    SELECT rowid FROM ww WHERE ww MATCH 'a + b + c';
+} {-56 -22 -11}
+
+do_execsql_test 2.3 {
+  ROLLBACK;
+  SELECT rowid FROM yy WHERE yy MATCH 'a + b + c';
+} {-56 -22}
+
+#-------------------------------------------------------------------------
+
+do_execsql_test 3.1 {
+  CREATE VIRTUAL TABLE abc USING fts5(a);
+  INSERT INTO abc(rowid, a) VALUES(1, 'a');
+  BEGIN;
+    INSERT INTO abc(rowid, a) VALUES(2, 'a');
+}
+do_execsql_test 3.2 {
+    SELECT rowid FROM abc WHERE abc MATCH 'a';
+} {1 2}
+
+do_execsql_test 3.3 {
+  COMMIT;
+  SELECT rowid FROM abc WHERE abc MATCH 'a';
+} {1 2}
+
+finish_test

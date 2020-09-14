@@ -1,0 +1,403 @@
+# 2005 Jan 24
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.
+#
+# This file tests the various conditions under which an SQLITE_SCHEMA
+# error should be returned.
+#
+# $Id: schema.test,v 1.9 2009/02/04 17:40:58 drh Exp $
+
+#---------------------------------------------------------------------
+# When any of the following types of SQL statements or actions are 
+# executed, all pre-compiled statements are invalidated. An attempt
+# to execute an invalidated statement always returns SQLITE_SCHEMA.
+#
+# CREATE/DROP TABLE...................................schema-1.*
+# CREATE/DROP VIEW....................................schema-2.*
+# CREATE/DROP TRIGGER.................................schema-3.*
+# CREATE/DROP INDEX...................................schema-4.*
+# DETACH..............................................schema-5.*
+# Deleting a user-function............................schema-6.*
+# Deleting a collation sequence.......................schema-7.*
+# Setting or changing the authorization function......schema-8.*
+# Rollback of a DDL statement.........................schema-12.*
+#
+# Test cases schema-9.* and schema-10.* test some specific bugs
+# that came up during development.
+#
+# Test cases schema-11.* test that it is impossible to delete or
+# change a collation sequence or user-function while SQL statements
+# are executing. Adding new collations or functions is allowed.
+#
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+do_test schema-1.1 {
+  set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+  execsql {
+    CREATE TABLE abc(a, b, c);
+  }
+  sqlite3_step $::STMT
+} {SQLITE_ERROR}
+do_test schema-1.2 {
+  sqlite3_finalize $::STMT
+} {SQLITE_SCHEMA}
+do_test schema-1.3 {
+  set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+  execsql {
+    DROP TABLE abc;
+  }
+  sqlite3_step $::STMT
+} {SQLITE_ERROR}
+do_test schema-1.4 {
+  sqlite3_finalize $::STMT
+} {SQLITE_SCHEMA}
+
+ifcapable view {
+  do_test schema-2.1 {
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    execsql {
+      CREATE VIEW v1 AS SELECT * FROM sqlite_master;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-2.2 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+  do_test schema-2.3 {
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    execsql {
+      DROP VIEW v1;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-2.4 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+}
+
+ifcapable trigger {
+  do_test schema-3.1 {
+    execsql {
+      CREATE TABLE abc(a, b, c);
+    }
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    execsql {
+      CREATE TRIGGER abc_trig AFTER INSERT ON abc BEGIN
+        SELECT 1, 2, 3;
+      END;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-3.2 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+  do_test schema-3.3 {
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    execsql {
+      DROP TRIGGER abc_trig;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-3.4 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+}
+
+do_test schema-4.1 {
+  catchsql {
+    CREATE TABLE abc(a, b, c);
+  }
+  set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+  execsql {
+    CREATE INDEX abc_index ON abc(a);
+  }
+  sqlite3_step $::STMT
+} {SQLITE_ERROR}
+do_test schema-4.2 {
+  sqlite3_finalize $::STMT
+} {SQLITE_SCHEMA}
+do_test schema-4.3 {
+  set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+  execsql {
+    DROP INDEX abc_index;
+  }
+  sqlite3_step $::STMT
+} {SQLITE_ERROR}
+do_test schema-4.4 {
+  sqlite3_finalize $::STMT
+} {SQLITE_SCHEMA}
+
+#---------------------------------------------------------------------
+# Tests 5.1 to 5.4 check that prepared statements are invalidated when
+# a database is DETACHed (but not when one is ATTACHed).
+#
+ifcapable attach {
+  do_test schema-5.1 {
+    set sql {SELECT * FROM abc;}
+    set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+    execsql {
+      ATTACH 'test2.db' AS aux;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_DONE}
+  do_test schema-5.2 {
+    sqlite3_reset $::STMT
+  } {SQLITE_OK}
+  do_test schema-5.3 {
+    execsql {
+      DETACH aux;
+    }
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-5.4 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+}
+
+#---------------------------------------------------------------------
+# Tests 6.* check that prepared statements are invalidated when
+# a user-function is deleted (but not when one is added).
+do_test schema-6.1 {
+  set sql {SELECT * FROM abc;}
+  set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+  db function hello_function {}
+  sqlite3_step $::STMT
+} {SQLITE_DONE}
+do_test schema-6.2 {
+  sqlite3_reset $::STMT
+} {SQLITE_OK}
+do_test schema-6.3 {
+  sqlite_delete_function $::DB hello_function
+  sqlite3_step $::STMT
+} {SQLITE_ERROR}
+do_test schema-6.4 {
+  sqlite3_finalize $::STMT
+} {SQLITE_SCHEMA}
+
+#---------------------------------------------------------------------
+# Tests 7.* check that prepared statements are invalidated when
+# a collation sequence is deleted (but not when one is added).
+#
+ifcapable utf16 {
+  do_test schema-7.1 {
+    set sql {SELECT * FROM abc;}
+    set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+    add_test_collate $::DB 1 1 1
+    sqlite3_step $::STMT
+  } {SQLITE_DONE}
+  do_test schema-7.2 {
+    sqlite3_reset $::STMT
+  } {SQLITE_OK}
+  do_test schema-7.3 {
+    add_test_collate $::DB 0 0 0 
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-7.4 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+}
+
+#---------------------------------------------------------------------
+# Tests 8.1 and 8.2 check that prepared statements are invalidated when
+# the authorization function is set to a non-null function.  Tests 8.11
+# and 8.12 verify that no invalidations occur when the authorizer is
+# cleared.
+#
+ifcapable auth {
+  proc noop_auth {args} {return SQLITE_OK}
+  do_test schema-8.1 {
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    db auth noop_auth
+    sqlite3_step $::STMT
+  } {SQLITE_ERROR}
+  do_test schema-8.2 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_SCHEMA}
+  do_test schema-8.11 {
+    set ::STMT [sqlite3_prepare $::DB {SELECT * FROM sqlite_master} -1 TAIL]
+    db auth {}
+    sqlite3_step $::STMT
+  } {SQLITE_ROW}
+  do_test schema-8.12 {
+    sqlite3_finalize $::STMT
+  } {SQLITE_OK}
+
+}
+
+#---------------------------------------------------------------------
+# schema-9.1: Test that if a table is dropped by one database connection, 
+#             other database connections are aware of the schema change.
+# schema-9.2: Test that if a view is dropped by one database connection,
+#             other database connections are aware of the schema change.
+#
+do_test schema-9.1 {
+  sqlite3 db2 test.db
+  execsql {
+    DROP TABLE abc;
+  } db2
+  db2 close
+  catchsql {
+    SELECT * FROM abc;
+  }
+} {1 {no such table: abc}}
+execsql {
+  CREATE TABLE abc(a, b, c);
+}
+ifcapable view {
+  do_test schema-9.2 {
+    execsql {
+      CREATE VIEW abcview AS SELECT * FROM abc;
+    }
+    sqlite3 db2 test.db
+    execsql {
+      DROP VIEW abcview;
+    } db2
+    db2 close
+    catchsql {
+      SELECT * FROM abcview;
+    }
+  } {1 {no such table: abcview}}
+}
+
+#---------------------------------------------------------------------
+# Test that if a CREATE TABLE statement fails because there are other
+# btree cursors open on the same database file it does not corrupt
+# the sqlite_master table.
+#
+# 2007-05-02: These tests have been overcome by events.  Open btree
+# cursors no longer block CREATE TABLE.  But there is no reason not
+# to keep the tests in the test suite.
+#
+do_test schema-10.1 {
+  execsql {
+    INSERT INTO abc VALUES(1, 2, 3);
+  }
+  set sql {SELECT * FROM abc}
+  set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+  sqlite3_step $::STMT
+} {SQLITE_ROW}
+do_test schema-10.2 {
+  catchsql {
+    CREATE TABLE t2(a, b, c);
+  }
+} {0 {}}
+do_test schema-10.3 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+do_test schema-10.4 {
+  sqlite3 db2 test.db
+  execsql {
+    SELECT * FROM abc
+  } db2
+} {1 2 3}
+do_test schema-10.5 {
+  db2 close
+} {}
+
+#---------------------------------------------------------------------
+# Attempting to delete or replace a user-function or collation sequence 
+# while there are active statements returns an SQLITE_BUSY error.
+#
+# schema-11.1 - 11.4: User function.
+# schema-11.5 - 11.8: Collation sequence.
+#
+do_test schema-11.1 {
+  db function tstfunc {}
+  set sql {SELECT * FROM abc}
+  set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+  sqlite3_step $::STMT
+} {SQLITE_ROW}
+do_test schema-11.2 {
+  sqlite_delete_function $::DB tstfunc
+} {SQLITE_BUSY}
+do_test schema-11.3 {
+  set rc [catch {
+    db function tstfunc {}
+  } msg]
+  list $rc $msg
+} {1 {unable to delete/modify user-function due to active statements}}
+do_test schema-11.4 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+do_test schema-11.5 {
+  db collate tstcollate {}
+  set sql {SELECT * FROM abc}
+  set ::STMT [sqlite3_prepare $::DB $sql -1 TAIL]
+  sqlite3_step $::STMT
+} {SQLITE_ROW}
+do_test schema-11.6 {
+  sqlite_delete_collation $::DB tstcollate
+} {SQLITE_BUSY}
+do_test schema-11.7 {
+  set rc [catch {
+    db collate tstcollate {}
+  } msg]
+  list $rc $msg
+} {1 {unable to delete/modify collation sequence due to active statements}}
+do_test schema-11.8 {
+  sqlite3_finalize $::STMT
+} {SQLITE_OK}
+
+# The following demonstrates why statements need to be expired whenever
+# there is a rollback (explicit or otherwise).
+#
+do_test schema-12.1 {
+  # Begin a transaction and create a table. This increments 
+  # the schema cookie. Then compile an SQL statement, using
+  # the current (incremented) value of the cookie.
+  execsql {
+    BEGIN;
+    CREATE TABLE t3(a, b, c);
+  }
+  set ::STMT [sqlite3_prepare $::DB "CREATE TABLE t4(a,b,c)" -1 TAIL]
+
+  # Rollback the transaction, resetting the schema cookie to the value
+  # it had at the start of this test case. Then create a table, 
+  # incrementing the schema cookie.
+  execsql {
+    ROLLBACK;
+    CREATE TABLE t4(a, b, c);
+  }
+
+  # The schema cookie now has the same value as it did when SQL statement
+  # $::STMT was prepared. So unless it has been expired, it would be
+  # possible to run the "CREATE TABLE t4" statement and create a
+  # duplicate table.
+  list [sqlite3_step $::STMT] [sqlite3_finalize $::STMT]
+} {SQLITE_ERROR SQLITE_SCHEMA}
+
+ifcapable {auth} {
+
+do_test schema-13.1 {
+  set S [sqlite3_prepare_v2 db "SELECT * FROM sqlite_master" -1 dummy]
+  db function hello hello
+  db function hello {}
+  db auth auth
+  proc auth {args} {
+    if {[lindex $args 0] == "SQLITE_READ"} {return SQLITE_DENY}
+    return SQLITE_OK
+  }
+  sqlite3_step $S
+} {SQLITE_AUTH}
+
+do_test schema-13.2 {
+  sqlite3_step $S
+} {SQLITE_AUTH}
+
+do_test schema-13.3 {
+  sqlite3_finalize $S
+} {SQLITE_AUTH}
+
+}
+
+finish_test

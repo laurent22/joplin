@@ -1,0 +1,954 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# This file attempts to check the behavior of the SQLite library in 
+# an out-of-memory situation. When compiled with -DSQLITE_DEBUG=1, 
+# the SQLite library accepts a special command (sqlite3_memdebug_fail N C)
+# which causes the N-th malloc to fail.  This special feature is used
+# to see what happens in the library if a malloc were to really fail
+# due to an out-of-memory situation.
+#
+# $Id: malloc.test,v 1.81 2009/06/24 13:13:45 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix malloc
+
+
+# Only run these tests if memory debugging is turned on.
+#
+source $testdir/malloc_common.tcl
+if {!$MEMDEBUG} {
+   puts "Skipping malloc tests: not compiled with -DSQLITE_MEMDEBUG..."
+   finish_test
+   return
+}
+
+# Do a couple of memory dumps just to exercise the memory dump logic
+# that that we can say that we have.
+#
+puts stderr "This is a test.  Ignore the error that follows:"
+sqlite3_memdebug_dump $testdir
+puts "Memory dump to file memdump.txt..."
+sqlite3_memdebug_dump memdump.txt
+
+ifcapable bloblit&&subquery {
+  do_malloc_test 1 -tclprep {
+    db close
+  } -tclbody {
+    if {[catch {sqlite3 db test.db}]} {
+      error "out of memory"
+    }
+    sqlite3_extended_result_codes db 1
+  } -sqlbody {
+    DROP TABLE IF EXISTS t1;
+    CREATE TABLE t1(
+       a int, b float, c double, d text, e varchar(20),
+       primary key(a,b,c)
+    );
+    CREATE INDEX i1 ON t1(a,b);
+    INSERT INTO t1 VALUES(1,2.3,4.5,'hi',x'746865726500');
+    INSERT INTO t1 VALUES(6,7.0,0.8,'hello','out yonder');
+    SELECT * FROM t1;
+    SELECT avg(b) FROM t1 GROUP BY a HAVING b>20.0;
+    DELETE FROM t1 WHERE a IN (SELECT min(a) FROM t1);
+    SELECT count(*), group_concat(e) FROM t1;
+    SELECT b FROM t1 ORDER BY 1 COLLATE nocase;
+  } 
+}
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-1.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+ifcapable subquery {
+  do_malloc_test 2 -sqlbody {
+    CREATE TABLE t1(a int, b int default 'abc', c int default 1);
+    CREATE INDEX i1 ON t1(a,b);
+    INSERT INTO t1 VALUES(1,1,'99 abcdefghijklmnopqrstuvwxyz');
+    INSERT INTO t1 VALUES(2,4,'98 abcdefghijklmnopqrstuvwxyz');
+    INSERT INTO t1 VALUES(3,9,'97 abcdefghijklmnopqrstuvwxyz');
+    INSERT INTO t1 VALUES(4,16,'96 abcdefghijklmnopqrstuvwxyz');
+    INSERT INTO t1 VALUES(5,25,'95 abcdefghijklmnopqrstuvwxyz');
+    INSERT INTO t1 VALUES(6,36,'94 abcdefghijklmnopqrstuvwxyz');
+    SELECT 'stuff', count(*) as 'other stuff', max(a+10) FROM t1;
+    UPDATE t1 SET b=b||b||b||b;
+    UPDATE t1 SET b=a WHERE a in (10,12,22);
+    INSERT INTO t1(c,b,a) VALUES(20,10,5);
+    INSERT INTO t1 SELECT * FROM t1
+        WHERE a IN (SELECT a FROM t1 WHERE a<10);
+    DELETE FROM t1 WHERE a>=10;
+    DROP INDEX i1;
+    DELETE FROM t1;
+  } 
+}
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-2.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+do_malloc_test 3 -sqlbody {
+  BEGIN TRANSACTION;
+  CREATE TABLE t1(a int, b int, c int);
+  CREATE INDEX i1 ON t1(a,b);
+  INSERT INTO t1 VALUES(1,1,99);
+  INSERT INTO t1 VALUES(2,4,98);
+  INSERT INTO t1 VALUES(3,9,97);
+  INSERT INTO t1 VALUES(4,16,96);
+  INSERT INTO t1 VALUES(5,25,95);
+  INSERT INTO t1 VALUES(6,36,94);
+  INSERT INTO t1(c,b,a) VALUES(20,10,5);
+  DELETE FROM t1 WHERE a>=10;
+  DROP INDEX i1;
+  DELETE FROM t1;
+  ROLLBACK;
+} 
+
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-3.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+ifcapable subquery {
+  do_malloc_test 4 -sqlbody {
+    BEGIN TRANSACTION;
+    CREATE TABLE t1(a int, b int, c int);
+    CREATE INDEX i1 ON t1(a,b);
+    INSERT INTO t1 VALUES(1,1,99);
+    INSERT INTO t1 VALUES(2,4,98);
+    INSERT INTO t1 VALUES(3,9,97);
+    INSERT INTO t1 VALUES(4,16,96);
+    INSERT INTO t1 VALUES(5,25,95);
+    INSERT INTO t1 VALUES(6,36,94);
+    UPDATE t1 SET b=a WHERE a in (10,12,22);
+    INSERT INTO t1 SELECT * FROM t1
+       WHERE a IN (SELECT a FROM t1 WHERE a<10);
+    DROP INDEX i1;
+    DELETE FROM t1;
+    COMMIT;
+  } 
+}
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-4.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+ifcapable trigger {
+  do_malloc_test 5 -sqlbody {
+    BEGIN TRANSACTION;
+    CREATE TABLE t1(a,b);
+    CREATE TABLE t2(x,y);
+    CREATE TRIGGER r1 AFTER INSERT ON t1 WHEN new.a = 2 BEGIN
+      INSERT INTO t2(x,y) VALUES(new.rowid,1);
+      INSERT INTO t2(x,y) SELECT * FROM t2;
+      INSERT INTO t2 SELECT * FROM t2;
+      UPDATE t2 SET y=y+1 WHERE x=new.rowid;
+      SELECT 123;
+      DELETE FROM t2 WHERE x=new.rowid;
+    END;
+    INSERT INTO t1(a,b) VALUES(2,3);
+    COMMIT;
+  } 
+}
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-5.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+ifcapable vacuum {
+  do_malloc_test 6 -sqlprep {
+    BEGIN TRANSACTION;
+    CREATE TABLE t1(a);
+    INSERT INTO t1 VALUES(1);
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    INSERT INTO t1 SELECT a*2 FROM t1;
+    DELETE FROM t1 where rowid%5 = 0;
+    COMMIT;
+  } -sqlbody {
+    VACUUM;
+  } 
+}
+
+autoinstall_test_functions
+do_malloc_test 7 -sqlprep {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+  INSERT INTO t1 VALUES(5, 6);
+  INSERT INTO t1 VALUES(7, randstr(1200,1200));
+} -sqlbody {
+  SELECT min(a) FROM t1 WHERE a<6 GROUP BY b;
+  SELECT a FROM t1 WHERE a<6 ORDER BY a;
+  SELECT b FROM t1 WHERE a>6;
+}
+
+# This block is designed to test that some malloc failures that may
+# occur in vdbeapi.c. Specifically, if a malloc failure that occurs
+# when converting UTF-16 text to integers and real numbers is handled
+# correctly. 
+#
+# This is done by retrieving a string from the database engine and
+# manipulating it using the sqlite3_column_*** APIs. This doesn't 
+# actually return an error to the user when a malloc() fails.. That 
+# could be viewed as a bug.
+#
+# These tests only run if UTF-16 support is compiled in.
+#
+ifcapable utf16 {
+  set ::STMT {}
+  do_malloc_test 8 -tclprep {
+    set sql "SELECT '[string repeat abc 20]', '[string repeat def 20]', ?"
+    set ::STMT [sqlite3_prepare db $sql -1 X]
+    sqlite3_step $::STMT
+    if { $::tcl_platform(byteOrder)=="littleEndian" } {
+      set ::bomstr "\xFF\xFE"
+    } else {
+      set ::bomstr "\xFE\xFF"
+    }
+    append ::bomstr [encoding convertto unicode "123456789_123456789_123456789"]
+  } -tclbody {
+    sqlite3_column_text16 $::STMT 0
+    sqlite3_column_int $::STMT 0
+    sqlite3_column_text16 $::STMT 1
+    sqlite3_column_double $::STMT 1
+    set rc [sqlite3_reset $::STMT]
+    if {$rc eq "SQLITE_NOMEM"} {error "out of memory"}
+    sqlite3_bind_text16 $::STMT 1 $::bomstr 60
+    #catch {sqlite3_finalize $::STMT}
+    #if {[lindex [sqlite_malloc_stat] 2]<=0} {
+    #  error "out of memory"
+    #}
+  } -cleanup {
+    if {$::STMT!=""} {
+      sqlite3_finalize $::STMT
+      set ::STMT {}
+    }
+  }
+}
+
+# This block tests that malloc() failures that occur whilst commiting
+# a multi-file transaction are handled correctly.
+#
+do_malloc_test 9 -sqlprep {
+  ATTACH 'test2.db' as test2;
+  CREATE TABLE abc1(a, b, c);
+  CREATE TABLE test2.abc2(a, b, c);
+} -sqlbody {
+  BEGIN;
+  INSERT INTO abc1 VALUES(1, 2, 3);
+  INSERT INTO abc2 VALUES(1, 2, 3);
+  COMMIT;
+}
+
+# This block tests malloc() failures that occur while opening a 
+# connection to a database.
+do_malloc_test 10 -tclprep {
+  catch {db2 close}
+  db close
+  forcedelete test.db test.db-journal
+  sqlite3 db test.db
+  sqlite3_extended_result_codes db 1
+  db eval {CREATE TABLE abc(a, b, c)}
+} -tclbody {
+  db close
+  sqlite3 db2 test.db
+  sqlite3_extended_result_codes db2 1
+  db2 eval {SELECT * FROM sqlite_master}
+  db2 close
+}
+
+# This block tests malloc() failures that occur within calls to
+# sqlite3_create_function().
+do_malloc_test 11 -tclbody {
+  set rc [sqlite3_create_function db]
+  if {[string match $rc SQLITE_OK]} {
+    set rc [sqlite3_create_aggregate db]
+  }
+  if {[string match $rc SQLITE_NOMEM]} {
+    error "out of memory"
+  }
+}
+
+do_malloc_test 12 -tclbody {
+  set sql16 [encoding convertto unicode "SELECT * FROM sqlite_master"]
+  append sql16 "\00\00"
+  set ::STMT [sqlite3_prepare16 db $sql16 -1 DUMMY]
+  sqlite3_finalize $::STMT
+}
+
+# Test malloc errors when replaying two hot journals from a 2-file 
+# transaction.
+ifcapable crashtest&&attach {
+  do_malloc_test 13 -tclprep {
+    set rc [crashsql -delay 1 -file test2.db {
+      ATTACH 'test2.db' as aux;
+      PRAGMA cache_size = 10;
+      BEGIN;
+      CREATE TABLE aux.t2(a, b, c);
+      CREATE TABLE t1(a, b, c);
+      COMMIT;
+    }]
+    if {$rc!="1 {child process exited abnormally}"} {
+      error "Wrong error message: $rc"
+    }
+  } -tclbody {
+    db eval {ATTACH 'test2.db' as aux;}
+    set rc [catch {db eval {
+      SELECT * FROM t1; 
+      SELECT * FROM t2;
+    }} err]
+    if {$rc && $err!="no such table: t1"} {
+      error $err
+    }
+  }
+}
+
+if {$tcl_platform(platform)!="windows" && [atomic_batch_write test.db]==0} {
+  do_malloc_test 14 -tclprep {
+    catch {db close}
+    sqlite3 db2 test2.db
+    sqlite3_extended_result_codes db2 1
+    db2 eval {
+      PRAGMA journal_mode = DELETE;    /* For inmemory_journal permutation */
+      PRAGMA synchronous = 0;
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+      BEGIN;
+      INSERT INTO t1 VALUES(3, 4);
+    }
+    forcecopy test2.db test.db
+    forcecopy test2.db-journal test.db-journal
+    db2 close
+  } -tclbody {
+    sqlite3 db test.db
+    sqlite3_extended_result_codes db 1
+
+    # If an out-of-memory occurs within a call to a VFS layer function during
+    # hot-journal rollback, sqlite will report SQLITE_CORRUPT. See commit
+    # [5668] for details.
+    set rc [catch {db eval { SELECT * FROM t1 }} msg]
+    if {$msg eq "database disk image is malformed"} { set msg "out of memory" }
+    if {$rc} { error $msg }
+    set msg
+  }
+}
+
+proc string_compare {a b} {
+  return [string compare $a $b]
+}
+
+# Test for malloc() failures in sqlite3_create_collation() and 
+# sqlite3_create_collation16().
+#
+ifcapable utf16 {
+  do_malloc_test 15 -start 4 -tclbody {
+    db collate string_compare string_compare
+    if {[catch {add_test_collate db 1 1 1} msg]} {
+      if {$msg=="SQLITE_NOMEM"} {set msg "out of memory"}
+      error $msg
+    }
+  
+    db complete {SELECT "hello """||'world"' [microsoft], * FROM anicetable;}
+    db complete {-- Useful comment}
+  
+    execsql {
+      CREATE TABLE t1(a, b COLLATE string_compare);
+      INSERT INTO t1 VALUES(10, 'string');
+      INSERT INTO t1 VALUES(10, 'string2');
+    }
+  }
+}
+
+# Also test sqlite3_complete(). There are (currently) no malloc()
+# calls in this function, but test anyway against future changes.
+#
+do_malloc_test 16 -tclbody {
+  db complete {SELECT "hello """||'world"' [microsoft], * FROM anicetable;}
+  db complete {-- Useful comment}
+  db eval {
+    SELECT * FROM sqlite_master;
+  }
+}
+
+# Test handling of malloc() failures in sqlite3_open16().
+#
+ifcapable utf16 {
+  do_malloc_test 17 -tclbody {
+    set DB2 0
+    set STMT 0
+  
+    # open database using sqlite3_open16()
+    set filename [encoding convertto unicode test.db]
+    append filename "\x00\x00"
+    set DB2 [sqlite3_open16 $filename -unused]
+    if {0==$DB2} {
+      error "out of memory"
+    }
+    sqlite3_extended_result_codes $DB2 1
+  
+    # Prepare statement
+    set rc [catch {sqlite3_prepare $DB2 {SELECT * FROM sqlite_master} -1 X} msg]
+    if {[sqlite3_errcode $DB2] eq "SQLITE_IOERR+12"} {
+      error "out of memory"
+    }
+    if {[regexp ".*automatic extension loading.*" [sqlite3_errmsg $DB2]]} {
+      error "out of memory"
+    }
+    if {$rc} {
+      error [string range $msg 4 end]
+    }
+    set STMT $msg
+  
+    # Finalize statement
+    set rc [sqlite3_finalize $STMT]
+    if {$rc!="SQLITE_OK"} {
+      error [sqlite3_errmsg $DB2]
+    }
+    set STMT 0
+  
+    # Close database
+    set rc [sqlite3_close $DB2]
+    if {$rc!="SQLITE_OK"} {
+      error [sqlite3_errmsg $DB2]
+    }
+    set DB2 0
+  } -cleanup {
+    if {$STMT!="0"} {
+      sqlite3_finalize $STMT
+    }
+    if {$DB2!="0"} {
+      set rc [sqlite3_close $DB2]
+    }
+  }
+}
+
+# Test handling of malloc() failures in sqlite3_errmsg16().
+#
+ifcapable utf16 {
+  do_malloc_test 18 -tclprep {
+    catch {
+      db eval "SELECT [string repeat longcolumnname 10] FROM sqlite_master"
+    }
+  } -tclbody {
+    set utf16 [sqlite3_errmsg16 [sqlite3_connection_pointer db]]
+    binary scan $utf16 c* bytes
+    if {[llength $bytes]==0} {
+      error "out of memory"
+    }
+  }
+}
+
+# This test is aimed at coverage testing. Specificly, it is supposed to
+# cause a malloc() only used when converting between the two utf-16 
+# encodings to fail (i.e. little-endian->big-endian). It only actually 
+# hits this malloc() on little-endian hosts.
+#
+set static_string "\x00h\x00e\x00l\x00l\x00o"
+for {set l 0} {$l<10} {incr l} {
+  append static_string $static_string
+}
+append static_string "\x00\x00"
+do_malloc_test 19 -tclprep {
+  execsql {
+    PRAGMA encoding = "UTF16be";
+    CREATE TABLE abc(a, b, c);
+  }
+} -tclbody {
+  unset -nocomplain ::STMT
+  set r [catch {
+    set ::STMT [sqlite3_prepare db {SELECT ?} -1 DUMMY]
+    sqlite3_bind_text16 -static $::STMT 1 $static_string 112
+  } msg]
+  if {$r} {error [string range $msg 4 end]}
+  set msg
+} -cleanup {
+  if {[info exists ::STMT]} {
+    sqlite3_finalize $::STMT
+  }
+}
+unset static_string
+
+# Make sure SQLITE_NOMEM is reported out on an ATTACH failure even
+# when the malloc failure occurs within the nested parse.
+#
+ifcapable attach {
+  do_malloc_test 20 -tclprep {
+    db close
+    forcedelete test2.db test2.db-journal
+    sqlite3 db test2.db
+    sqlite3_extended_result_codes db 1
+    db eval {CREATE TABLE t1(x);}
+    db close
+  } -tclbody {
+    if {[catch {sqlite3 db test.db}]} {
+      error "out of memory"
+    }
+    sqlite3_extended_result_codes db 1
+  } -sqlbody {
+    ATTACH DATABASE 'test2.db' AS t2;
+    SELECT * FROM t1;
+    DETACH DATABASE t2;
+  } 
+}
+
+# Test malloc failure whilst installing a foreign key.
+#
+ifcapable foreignkey {
+  do_malloc_test 21 -sqlbody {
+    CREATE TABLE abc(a, b, c, FOREIGN KEY(a) REFERENCES abc(b))
+  } 
+}
+
+# Test malloc failure in an sqlite3_prepare_v2() call.
+#
+do_malloc_test 22 -tclbody {
+  set ::STMT ""
+  set r [catch {
+    set ::STMT [
+      sqlite3_prepare_v2 db "SELECT * FROM sqlite_master" -1 DUMMY
+    ]
+  } msg]
+  if {$r} {error [string range $msg 4 end]}
+} -cleanup {
+  if {$::STMT ne ""} {
+    sqlite3_finalize $::STMT
+    set ::STMT ""
+  }
+}
+
+ifcapable {pager_pragmas} {
+  # This tests a special case - that an error that occurs while the pager
+  # is trying to recover from error-state in exclusive-access mode works.
+  #
+  do_malloc_test 23 -tclprep {
+    db eval {
+      PRAGMA cache_size = 10;
+      PRAGMA locking_mode = exclusive;
+      BEGIN;
+      CREATE TABLE abc(a, b, c);
+      CREATE INDEX abc_i ON abc(a, b, c);
+      INSERT INTO abc 
+        VALUES(randstr(100,100), randstr(100,100), randstr(100,100));
+      INSERT INTO abc 
+        SELECT randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+      INSERT INTO abc 
+        SELECT randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+      INSERT INTO abc 
+        SELECT randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+      INSERT INTO abc 
+        SELECT randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+      INSERT INTO abc 
+        SELECT randstr(100,100), randstr(100,100), randstr(100,100) FROM abc;
+      COMMIT;
+    }
+  
+    # This puts the pager into error state.
+    #
+    db eval BEGIN
+    db eval {UPDATE abc SET a = 0 WHERE oid%2}
+    set ::sqlite_io_error_pending 10
+    catch {db eval {ROLLBACK}} msg
+
+  } -tclbody {
+    # If an out-of-memory occurs within a call to a VFS layer function during
+    # hot-journal rollback, sqlite will report SQLITE_CORRUPT. See commit
+    # [5668] for details.
+    set rc [catch {db eval { SELECT * FROM abc LIMIT 10 }} msg]
+    if {$msg eq "database disk image is malformed"} { set msg "out of memory" }
+    if {$rc} { error $msg }
+    set msg
+  } -cleanup {
+    set e [db eval {PRAGMA integrity_check}]
+    if {$e ne "ok"} {error $e}
+  }
+}
+
+ifcapable compound {
+  do_malloc_test 24 -sqlprep {
+    CREATE TABLE t1(a, b, c)
+  } -sqlbody {
+    SELECT 1 FROM t1 UNION SELECT 2 FROM t1 ORDER BY 1
+  }
+}
+
+ifcapable view&&trigger {
+  do_malloc_test 25 -sqlprep {
+    CREATE TABLE t1(a, b, c);
+    CREATE VIEW v1 AS SELECT * FROM t1;
+    CREATE TRIGGER v1t1 INSTEAD OF DELETE ON v1 BEGIN SELECT 1; END;
+    CREATE TRIGGER v1t2 INSTEAD OF INSERT ON v1 BEGIN SELECT 1; END;
+    CREATE TRIGGER v1t3 INSTEAD OF UPDATE ON v1 BEGIN SELECT 1; END;
+  } -sqlbody {
+    DELETE FROM v1 WHERE a = 1;
+    INSERT INTO v1 VALUES(1, 2, 3);
+    UPDATE v1 SET a = 1 WHERE b = 2;
+  }
+}
+
+do_malloc_test 25 -sqlprep {
+  CREATE TABLE abc(a, b, c);
+  CREATE INDEX i1 ON abc(a, b);
+  INSERT INTO abc VALUES(1, 2, 3);
+  INSERT INTO abc VALUES(4, 5, 6);
+} -tclbody {
+  # For each UPDATE executed, the cursor used for the SELECT statement
+  # must be "saved". Because the cursor is open on an index, this requires
+  # a malloc() to allocate space to save the index key. This test case is
+  # aimed at testing the response of the library to a failure in that
+  # particular malloc() call.
+  db eval {SELECT a FROM abc ORDER BY a} {
+    db eval {UPDATE abc SET b = b - 1 WHERE a = $a}
+  }
+}
+
+# This test is designed to test a specific juncture in the sqlite code.
+# The database set up by -sqlprep script contains a single table B-Tree
+# of height 2. In the -tclbody script, the existing database connection
+# is closed and a new one opened and used to insert a new row into the
+# table B-Tree. By using a new connection, the outcome of a malloc() 
+# failure while seeking to the right-hand side of the B-Tree to insert 
+# a new record can be tested.
+#
+do_malloc_test 26 -sqlprep {
+  BEGIN;
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, randomblob(210));
+  INSERT INTO t1 VALUES(1, randomblob(210));
+  INSERT INTO t1 VALUES(1, randomblob(210));
+  INSERT INTO t1 VALUES(1, randomblob(210));
+  INSERT INTO t1 VALUES(1, randomblob(210));
+  COMMIT;
+} -tclbody {
+  db close
+  sqlite3 db test.db
+  db eval { INSERT INTO t1 VALUES(1, randomblob(210)) }
+}
+
+# Test that no memory is leaked following a malloc() failure in
+# sqlite3_initialize().
+#
+do_malloc_test 27 -tclprep {
+  db close
+  sqlite3_shutdown
+} -tclbody {
+  set rc [sqlite3_initialize]
+  if {$rc == "SQLITE_NOMEM"} {
+    error "out of memory"
+  }
+}
+autoinstall_test_functions
+
+# Test that malloc failures that occur while processing INDEXED BY
+# clauses are handled correctly.
+do_malloc_test 28 -sqlprep {
+  CREATE TABLE t1(a, b);
+  CREATE INDEX i1 ON t1(a);
+  CREATE VIEW v1 AS SELECT * FROM t1 INDEXED BY i1 WHERE a = 10;
+} -sqlbody {
+  SELECT * FROM t1 INDEXED BY i1 ORDER BY a;
+  SELECT * FROM v1;
+}
+
+do_malloc_test 29 -sqlprep {
+  CREATE TABLE t1(a TEXT, b TEXT);
+} -sqlbody {
+  INSERT INTO t1 VALUES(1, -234);
+  INSERT INTO t1 SELECT * FROM t1 UNION ALL SELECT * FROM t1;
+}
+
+do_malloc_test 30 -tclprep {
+  db eval {
+    CREATE TABLE t1(x PRIMARY KEY);
+    INSERT INTO t1 VALUES(randstr(500,500));
+    INSERT INTO t1 VALUES(randstr(500,500));
+    INSERT INTO t1 VALUES(randstr(500,500));
+  }
+  db close
+  sqlite3 db test.db
+
+  # The DELETE command in the following block moves the overflow pages that
+  # are part of the primary key index to the free-list. But it does not
+  # actually load the content of the pages. This leads to the peculiar
+  # situation where cache entries exist, but are not populated with data.
+  # They are populated next time they are requested by the b-tree layer.
+  #
+  db eval {
+    BEGIN;
+      DELETE FROM t1;
+    ROLLBACK;
+  }
+} -sqlbody {
+  -- This statement requires the 'no-content' pages loaded by the DELETE
+  -- statement above. When requesting the pages, the content is loaded
+  -- from the database file. The point of this test case is to test handling
+  -- of malloc errors (including SQLITE_IOERR_NOMEM errors) when loading
+  -- the content.
+  SELECT * FROM t1 ORDER BY x;
+}
+
+# After committing a transaction in persistent-journal mode, if a journal
+# size limit is configured SQLite may attempt to truncate the journal file.
+# This test verifies the libraries response to a malloc() failure during
+# this operation.
+#
+do_malloc_test 31 -sqlprep {
+  PRAGMA journal_mode = persist;
+  PRAGMA journal_size_limit = 1024;
+  CREATE TABLE t1(a PRIMARY KEY, b);
+} -sqlbody {
+  INSERT INTO t1 VALUES(1, 2);
+}
+
+# When written, this test provoked an obscure change-counter bug.
+# 
+# If, when running in exclusive mode, a malloc() failure occurs
+# after the database file change-counter has been written but
+# before the transaction has been committed, then the transaction
+# is automatically rolled back. However, internally the 
+# Pager.changeCounterDone flag was being left set. This means
+# that if the same connection attempts another transaction following
+# the malloc failure and rollback, the change counter will not
+# be updated. This could corrupt another processes cache.
+#
+do_malloc_test 32 -tclprep {
+  # Build a small database containing an indexed table.
+  #
+  db eval {
+    PRAGMA locking_mode = normal;
+    BEGIN;
+    CREATE TABLE t1(a PRIMARY KEY, b);
+    INSERT INTO t1 VALUES(1, 'one');
+    INSERT INTO t1 VALUES(2, 'two');
+    INSERT INTO t1 VALUES(3, 'three');
+    COMMIT;
+    PRAGMA locking_mode = exclusive;
+  }
+
+  # Open a second database connection. Load the table (but not index)
+  # into the second connections pager cache.
+  #
+  sqlite3 db2 test.db
+  db2 eval { 
+    PRAGMA locking_mode = normal;
+    SELECT b FROM t1;
+  }
+
+} -tclbody {
+  # Running in exclusive mode, perform a database transaction that 
+  # modifies both the database table and index. For iterations where
+  # the malloc failure occurs after updating the change counter but
+  # before committing the transaction, this should result in the
+  # transaction being rolled back but the changeCounterDone flag
+  # left set.
+  #
+  db eval { UPDATE t1 SET a = a + 3 }
+} -cleanup {
+
+  # Perform another transaction using the first connection. Unlock
+  # the database after doing so. If this is one of the right iterations,
+  # then this should result in the database contents being updated but
+  # the change-counter left as it is.
+  #
+  db eval { 
+    PRAGMA locking_mode = normal;
+    UPDATE t1 SET a = a + 3;
+  }
+
+  # Now do an integrity check with the second connection. The second
+  # connection still has the database table in its cache. If this is
+  # one of the magic iterations and the change counter was not modified,
+  # then it won't realize that the cached data is out of date. Since
+  # the cached data won't match the up to date index data read from
+  # the database file, the integrity check should fail.
+  #
+  set zRepeat "transient"
+  if {$::iRepeat} {set zRepeat "persistent"}
+  do_test malloc-32.$zRepeat.${::n}.integrity {
+    execsql {PRAGMA integrity_check} db2
+  } {ok}
+  db2 close
+}
+
+# The following two OOM tests verify that OOM handling works in the
+# code used to optimize "SELECT count(*) FROM <tbl>".
+#
+do_malloc_test 33 -tclprep {
+  db eval { PRAGMA cache_size = 10 }
+  db transaction {
+    db eval { CREATE TABLE abc(a, b) }
+    for {set i 0} {$i<500} {incr i} {
+      db eval {INSERT INTO abc VALUES(randstr(100,100), randstr(1000,1000))}
+    }
+  }
+} -sqlbody {
+  SELECT count(*) FROM abc;
+}
+do_malloc_test 34 -tclprep {
+  db eval { PRAGMA cache_size = 10 }
+  db transaction {
+    db eval { CREATE TABLE abc(a PRIMARY KEY, b) }
+    for {set i 0} {$i<500} {incr i} {
+      db eval {INSERT INTO abc VALUES(randstr(100,100), randstr(1000,1000))}
+    }
+  }
+} -sqlbody {
+  SELECT count(*) FROM abc;
+}
+
+proc f {args} { error "Quite a long error!" }
+do_malloc_test 35 -tclprep {
+  db func f f
+  set ::STMT [sqlite3_prepare db "SELECT f()" -1 DUMMY]
+  sqlite3_step $::STMT
+} -tclbody {
+  sqlite3_finalize $::STMT
+} -cleanup {
+  # At one point an assert( !db->mallocFailed ) could fail in the following
+  # call to sqlite3_errmsg(). Because sqlite3_finalize() had failed to clear
+  # the flag before returning.
+  sqlite3_errmsg16 db
+}
+
+do_malloc_test 36 -sqlprep {
+  CREATE TABLE t1(a, b);
+  INSERT INTO t1 VALUES(1, 2);
+  INSERT INTO t1 VALUES(3, 4);
+} -sqlbody {
+  SELECT test_agg_errmsg16(), group_concat(a) FROM t1
+}
+
+# At one point, if an OOM occurred immediately after obtaining a shared lock
+# on the database file, the file remained locked. This test case ensures
+# that bug has been fixed.i
+if {[db eval {PRAGMA locking_mode}]!="exclusive"} {
+  do_malloc_test 37 -tclprep {
+    sqlite3 db2 test.db
+    execsql {
+      CREATE TABLE t1(a, b);
+      INSERT INTO t1 VALUES(1, 2);
+    } db2
+  } -sqlbody {
+    SELECT * FROM t1;
+  } -cleanup {
+    # Try to write to the database using connection [db2]. If connection [db]
+    # has correctly released the shared lock, this write attempt should 
+    # succeed. If [db] has not released the lock, this should hit an 
+    # SQLITE_BUSY error.
+    do_test malloc-36.$zRepeat.${::n}.unlocked {
+      execsql {INSERT INTO t1 VALUES(3, 4)} db2
+    } {}
+    db2 close
+  }
+  catch { db2 close }
+}
+
+
+# Test that if an OOM error occurs, aux-data is still correctly destroyed.
+# This test case was causing either a memory-leak or an assert() failure
+# at one point, depending on the configuration.
+#
+do_malloc_test 39 -tclprep {
+  sqlite3 db test.db
+} -sqlbody {
+  SELECT test_auxdata('abc', 'def');
+} -cleanup {
+  db close
+}
+
+reset_db
+add_test_utf16bin_collate db
+do_execsql_test 40.1 {
+  CREATE TABLE t1(a);
+  INSERT INTO t1 VALUES('fghij');
+  INSERT INTO t1 VALUES('pqrst');
+  INSERT INTO t1 VALUES('abcde');
+  INSERT INTO t1 VALUES('uvwxy');
+  INSERT INTO t1 VALUES('klmno');
+}
+do_execsql_test 40.2 {
+  SELECT * FROM t1 ORDER BY 1 COLLATE utf16bin;
+} {abcde fghij klmno pqrst uvwxy}
+do_faultsim_test 40.3 -faults oom-trans* -body {
+  execsql {
+    SELECT * FROM t1 ORDER BY 1 COLLATE utf16bin;
+  }
+} -test {
+  faultsim_test_result {0 {abcde fghij klmno pqrst uvwxy}} 
+  faultsim_integrity_check
+}
+
+reset_db
+add_test_utf16bin_collate db
+set big [string repeat x 200]
+do_execsql_test 41.1 {
+  DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(a COLLATE utf16bin);
+  INSERT INTO t1 VALUES('fghij' || $::big);
+  INSERT INTO t1 VALUES('pqrst' || $::big);
+  INSERT INTO t1 VALUES('abcde' || $::big);
+  INSERT INTO t1 VALUES('uvwxy' || $::big);
+  INSERT INTO t1 VALUES('klmno' || $::big);
+  CREATE INDEX i1 ON t1(a);
+}
+do_faultsim_test 41.2 -faults oom* -body {
+  execsql { SELECT * FROM t1 WHERE a = ('abcde' || $::big)}
+} -test {
+  faultsim_test_result [list 0 "abcde$::big"]
+  faultsim_integrity_check
+}
+
+reset_db
+do_execsql_test 42.0 {
+  CREATE TABLE t1(x INTEGER PRIMARY KEY, y, z);
+  CREATE TABLE t2(a, b);
+  CREATE VIEW a002 AS SELECT *, sum(b) AS m FROM t2 GROUP BY a;
+}
+faultsim_save_and_close
+do_faultsim_test 42 -faults oom-tran* -prep {
+  faultsim_restore_and_reopen
+  execsql { SELECT * FROM sqlite_master }
+} -body {
+  execsql {
+    SELECT t1.z, a002.m
+    FROM t1 JOIN a002 ON t1.y=a002.m
+    WHERE t1.x IN (1,2,3);
+  }
+} -test {
+  faultsim_test_result {0 {}}
+}
+
+
+# Ensure that no file descriptors were leaked.
+do_test malloc-99.X {
+  catch {db close}
+  set sqlite_open_file_count
+} {0}
+
+puts open-file-count=$sqlite_open_file_count
+finish_test

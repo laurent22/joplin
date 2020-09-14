@@ -1,0 +1,779 @@
+# 2005 July 28
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the use of indices in WHERE clauses
+# based on recent changes to the optimizer.
+#
+# $Id: where2.test,v 1.15 2009/02/02 01:50:40 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Build some test data
+#
+do_test where2-1.0 {
+  execsql {
+    BEGIN;
+    CREATE TABLE t1(w int, x int, y int, z int);
+  }
+  for {set i 1} {$i<=100} {incr i} {
+    set w $i
+    set x [expr {int(log($i)/log(2))}]
+    set y [expr {$i*$i + 2*$i + 1}]
+    set z [expr {$x+$y}]
+    ifcapable tclvar {
+      execsql {INSERT INTO t1 VALUES($::w,$::x,$::y,$::z)}
+    } else {
+      execsql {INSERT INTO t1 VALUES(:w,:x,:y,:z)}
+    }
+  }
+  execsql {
+    CREATE UNIQUE INDEX i1w ON t1(w);
+    CREATE INDEX i1xy ON t1(x,y);
+    CREATE INDEX i1zyx ON t1(z,y,x);
+    COMMIT;
+  }
+} {}
+
+# Do an SQL statement.  Append the search count to the end of the result.
+#
+proc count sql {
+  set ::sqlite_search_count 0
+  return [concat [execsql $sql] $::sqlite_search_count]
+}
+
+# This procedure executes the SQL.  Then it checks to see if the OP_Sort
+# opcode was executed.  If an OP_Sort did occur, then "sort" is appended
+# to the result.  If no OP_Sort happened, then "nosort" is appended.
+#
+# This procedure is used to check to make sure sorting is or is not
+# occurring as expected.
+#
+proc cksort {sql} {
+  set data [execsql $sql]
+  if {[db status sort]} {set x sort} {set x nosort}
+  lappend data $x
+  return $data
+}
+
+# This procedure executes the SQL.  Then it appends to the result the
+# "sort" or "nosort" keyword (as in the cksort procedure above) then
+# it appends the name of the table and index used.
+#
+proc queryplan {sql} {
+  set ::sqlite_sort_count 0
+  set data [execsql $sql]
+  if {$::sqlite_sort_count} {set x sort} {set x nosort}
+  lappend data $x
+  set eqp [execsql "EXPLAIN QUERY PLAN $sql"]
+  # puts eqp=$eqp
+  foreach {a b c x} $eqp {
+    if {[regexp { TABLE (\w+ AS )?(\w+) USING.* INDEX (\w+)\y} \
+        $x all as tab idx]} {
+      lappend data $tab $idx
+    } elseif {[regexp { TABLE (\w+ AS )?(\w+)\y} $x all as tab]} {
+      lappend data $tab *
+    }
+  }
+  return $data   
+}
+
+
+# Prefer a UNIQUE index over another index.
+#
+do_test where2-1.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=85 AND x=6 AND y=7396
+  }
+} {85 6 7396 7402 nosort t1 i1w}
+
+# Always prefer a rowid== constraint over any other index.
+#
+do_test where2-1.3 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=85 AND x=6 AND y=7396 AND rowid=85
+  }
+} {85 6 7396 7402 nosort t1 *}
+
+# When constrained by a UNIQUE index, the ORDER BY clause is always ignored.
+#
+do_test where2-2.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=85 ORDER BY random();
+  }
+} {85 6 7396 7402 nosort t1 i1w}
+do_test where2-2.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE x=6 AND y=7396 ORDER BY random();
+  }
+} {85 6 7396 7402 sort t1 i1xy}
+do_test where2-2.3 {
+  queryplan {
+    SELECT * FROM t1 WHERE rowid=85 AND x=6 AND y=7396 ORDER BY random();
+  }
+} {85 6 7396 7402 nosort t1 *}
+
+# Ticket [65bdeb9739605cc22966f49208452996ff29a640] 2014-02-26
+# Make sure "ORDER BY random" does not gets optimized out.
+#
+do_test where2-2.4 {
+  db eval {
+    CREATE TABLE x1(a INTEGER PRIMARY KEY, b DEFAULT 1);
+    WITH RECURSIVE
+       cnt(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM cnt WHERE x<50)
+    INSERT INTO x1 SELECT x, 1 FROM cnt;
+    CREATE TABLE x2(x INTEGER PRIMARY KEY);
+    INSERT INTO x2 VALUES(1);
+  }
+  set sql {SELECT * FROM x1, x2 WHERE x=1 ORDER BY random()}
+  set out1 [db eval $sql]
+  set out2 [db eval $sql]
+  set out3 [db eval $sql]
+  expr {$out1!=$out2 && $out2!=$out3}
+} {1}
+do_execsql_test where2-2.5 {
+  -- random() is not optimized out
+  EXPLAIN SELECT * FROM x1, x2 WHERE x=1 ORDER BY random();
+} {/ random/}
+do_execsql_test where2-2.5b {
+  -- random() is not optimized out
+  EXPLAIN SELECT * FROM x1, x2 WHERE x=1 ORDER BY random();
+} {/ SorterOpen /}
+do_execsql_test where2-2.6 {
+  -- other constant functions are optimized out
+  EXPLAIN SELECT * FROM x1, x2 WHERE x=1 ORDER BY abs(5);
+} {~/ abs/}
+do_execsql_test where2-2.6b {
+  -- other constant functions are optimized out
+  EXPLAIN SELECT * FROM x1, x2 WHERE x=1 ORDER BY abs(5);
+} {~/ SorterOpen /}
+
+
+
+# Efficient handling of forward and reverse table scans.
+#
+do_test where2-3.1 {
+  queryplan {
+    SELECT * FROM t1 ORDER BY rowid LIMIT 2
+  }
+} {1 0 4 4 2 1 9 10 nosort t1 *}
+do_test where2-3.2 {
+  queryplan {
+    SELECT * FROM t1 ORDER BY rowid DESC LIMIT 2
+  }
+} {100 6 10201 10207 99 6 10000 10006 nosort t1 *}
+
+# The IN operator can be used by indices at multiple layers
+#
+ifcapable subquery {
+  do_test where2-4.1 {
+    queryplan {
+      SELECT * FROM t1 WHERE z IN (10207,10006) AND y IN (10000,10201)
+                       AND x>0 AND x<10
+      ORDER BY w
+    }
+  } {99 6 10000 10006 100 6 10201 10207 sort t1 i1zyx}
+  do_test where2-4.2 {
+    queryplan {
+      SELECT * FROM t1 WHERE z IN (10207,10006) AND y=10000
+                       AND x>0 AND x<10
+      ORDER BY w
+    }
+  } {99 6 10000 10006 sort t1 i1zyx}
+  do_test where2-4.3 {
+    queryplan {
+      SELECT * FROM t1 WHERE z=10006 AND y IN (10000,10201)
+                       AND x>0 AND x<10
+      ORDER BY w
+    }
+  } {99 6 10000 10006 sort t1 i1zyx}
+  ifcapable compound {
+    do_test where2-4.4 {
+      queryplan {
+        SELECT * FROM t1 WHERE z IN (SELECT 10207 UNION SELECT 10006)
+                         AND y IN (10000,10201)
+                         AND x>0 AND x<10
+        ORDER BY w
+      }
+    } {99 6 10000 10006 100 6 10201 10207 sort t1 i1zyx}
+    do_test where2-4.5 {
+      queryplan {
+        SELECT * FROM t1 WHERE z IN (SELECT 10207 UNION SELECT 10006)
+                         AND y IN (SELECT 10000 UNION SELECT 10201)
+                         AND x>0 AND x<10
+        ORDER BY w
+      }
+    } {99 6 10000 10006 100 6 10201 10207 sort t1 i1zyx}
+  }
+  do_test where2-4.6a {
+    queryplan {
+      SELECT * FROM t1
+       WHERE x IN (1,2,3,4,5,6,7,8)
+         AND y IN (10000,10001,10002,10003,10004,10005)
+       ORDER BY x
+    }
+  } {99 6 10000 10006 nosort t1 i1xy}
+  do_test where2-4.6b {
+    queryplan {
+      SELECT * FROM t1
+       WHERE x IN (1,2,3,4,5,6,7,8)
+         AND y IN (10000,10001,10002,10003,10004,10005)
+       ORDER BY x DESC
+    }
+  } {99 6 10000 10006 nosort t1 i1xy}
+  do_test where2-4.6c {
+    queryplan {
+      SELECT * FROM t1
+       WHERE x IN (1,2,3,4,5,6,7,8)
+         AND y IN (10000,10001,10002,10003,10004,10005)
+       ORDER BY x, y
+    }
+  } {99 6 10000 10006 nosort t1 i1xy}
+  do_test where2-4.6d {
+    queryplan {
+      SELECT * FROM t1
+       WHERE x IN (1,2,3,4,5,6,7,8)
+         AND y IN (10000,10001,10002,10003,10004,10005)
+       ORDER BY x, y DESC
+    }
+  } {99 6 10000 10006 sort t1 i1xy}
+
+  # Duplicate entires on the RHS of an IN operator do not cause duplicate
+  # output rows.
+  #
+  do_test where2-4.6x {
+    queryplan {
+      SELECT * FROM t1 WHERE z IN (10207,10006,10006,10207)
+      ORDER BY w
+    }
+  } {99 6 10000 10006 100 6 10201 10207 sort t1 i1zyx}
+  do_test where2-4.6y {
+    queryplan {
+      SELECT * FROM t1 WHERE z IN (10207,10006,10006,10207)
+      ORDER BY w DESC
+    }
+  } {100 6 10201 10207 99 6 10000 10006 sort t1 i1zyx}
+  ifcapable compound {
+    do_test where2-4.7 {
+      queryplan {
+        SELECT * FROM t1 WHERE z IN (
+           SELECT 10207 UNION ALL SELECT 10006
+           UNION ALL SELECT 10006 UNION ALL SELECT 10207)
+        ORDER BY w
+      }
+    } {99 6 10000 10006 100 6 10201 10207 sort t1 i1zyx}
+  }
+
+} ;# ifcapable subquery
+
+# The use of an IN operator disables the index as a sorter.
+#
+do_test where2-5.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=99 ORDER BY w
+  }
+} {99 6 10000 10006 nosort t1 i1w}
+
+ifcapable subquery {
+  do_test where2-5.2a {
+    queryplan {
+      SELECT * FROM t1 WHERE w IN (99) ORDER BY w
+    }
+  } {99 6 10000 10006 nosort t1 i1w}
+  do_test where2-5.2b {
+    queryplan {
+      SELECT * FROM t1 WHERE w IN (99) ORDER BY w DESC
+    }
+  } {99 6 10000 10006 nosort t1 i1w}
+}
+
+# Verify that OR clauses get translated into IN operators.
+#
+set ::idx {}
+ifcapable subquery {set ::idx i1w}
+do_test where2-6.1.1 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=99 OR w=100 ORDER BY +w
+  }
+} [list 99 6 10000 10006 100 6 10201 10207 sort t1 $::idx]
+do_test where2-6.1.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE 99=w OR 100=w ORDER BY +w
+  }
+} [list 99 6 10000 10006 100 6 10201 10207 sort t1 $::idx]
+do_test where2-6.2 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=99 OR w=100 OR 6=w ORDER BY +w
+  }
+} [list 6 2 49 51 99 6 10000 10006 100 6 10201 10207 sort t1 $::idx]
+
+do_test where2-6.3 {
+  queryplan {
+    SELECT * FROM t1 WHERE w=99 OR w=100 OR 6=+w ORDER BY +w
+  }
+} {6 2 49 51 99 6 10000 10006 100 6 10201 10207 sort t1 *}
+do_test where2-6.4 {
+  queryplan {
+    SELECT *, '|' FROM t1 WHERE w=99 OR +w=100 OR 6=w ORDER BY +w
+  }
+} {6 2 49 51 | 99 6 10000 10006 | 100 6 10201 10207 | sort t1 *}
+do_test where2-6.5 {
+  queryplan {
+    SELECT *, '|' FROM t1 WHERE w=99 OR y=10201 OR 6=w ORDER BY +w
+  }
+} {6 2 49 51 | 99 6 10000 10006 | 100 6 10201 10207 | sort t1 *}
+
+set ::idx {}
+ifcapable subquery {set ::idx i1zyx}
+do_test where2-6.5 {
+  queryplan {
+    SELECT b.* FROM t1 a, t1 b
+     WHERE a.w=1 AND (a.y=b.z OR b.z=10)
+     ORDER BY +b.w
+  }
+} [list 1 0 4 4 2 1 9 10 sort a i1w b $::idx]
+do_test where2-6.6 {
+  queryplan {
+    SELECT b.* FROM t1 a, t1 b
+     WHERE a.w=1 AND (b.z=10 OR a.y=b.z OR b.z=10)
+     ORDER BY +b.w
+  }
+} [list 1 0 4 4 2 1 9 10 sort a i1w b $::idx]
+
+if {[permutation] != "no_optimization"} {
+
+# Ticket #2249.  Make sure the OR optimization is not attempted if
+# comparisons between columns of different affinities are needed.
+#
+do_test where2-6.7 {
+  execsql {
+    CREATE TABLE t2249a(a TEXT UNIQUE, x CHAR(100));
+    CREATE TABLE t2249b(b INTEGER);
+    INSERT INTO t2249a(a) VALUES('0123');
+    INSERT INTO t2249b VALUES(123);
+  }
+  queryplan {
+    -- Because a is type TEXT and b is type INTEGER, both a and b
+    -- will attempt to convert to NUMERIC before the comparison.
+    -- They will thus compare equal.
+    --
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a=b;
+  }
+} {123 0123 nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.9 {
+  queryplan {
+    -- The + operator removes affinity from the rhs.  No conversions
+    -- occur and the comparison is false.  The result is an empty set.
+    --
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a=+b;
+  }
+} {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.9.2 {
+  # The same thing but with the expression flipped around.
+  queryplan {
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE +b=a
+  }
+} {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.10 {
+  queryplan {
+    -- Use + on both sides of the comparison to disable indices
+    -- completely.  Make sure we get the same result.
+    --
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE +a=+b;
+  }
+} {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.11 {
+  # This will not attempt the OR optimization because of the a=b
+  # comparison.
+  queryplan {
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a=b OR a='hello';
+  }
+} {123 0123 nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.11.2 {
+  # Permutations of the expression terms.
+  queryplan {
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE b=a OR a='hello';
+  }
+} {123 0123 nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.11.3 {
+  # Permutations of the expression terms.
+  queryplan {
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE 'hello'=a OR b=a;
+  }
+} {123 0123 nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+do_test where2-6.11.4 {
+  # Permutations of the expression terms.
+  queryplan {
+    SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a='hello' OR b=a;
+  }
+} {123 0123 nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+ifcapable explain&&subquery {
+  # These tests are not run if subquery support is not included in the
+  # build. This is because these tests test the "a = 1 OR a = 2" to
+  # "a IN (1, 2)" optimisation transformation, which is not enabled if
+  # subqueries and the IN operator is not available.
+  #
+  do_test where2-6.12 {
+    # In this case, the +b disables the affinity conflict and allows
+    # the OR optimization to be used again.  The result is now an empty
+    # set, the same as in where2-6.9.
+    queryplan {
+      SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a=+b OR a='hello';
+    }
+  } {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+  do_test where2-6.12.2 {
+    # In this case, the +b disables the affinity conflict and allows
+    # the OR optimization to be used again.  The result is now an empty
+    # set, the same as in where2-6.9.
+    queryplan {
+      SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a='hello' OR +b=a;
+    }
+  } {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+  do_test where2-6.12.3 {
+    # In this case, the +b disables the affinity conflict and allows
+    # the OR optimization to be used again.  The result is now an empty
+    # set, the same as in where2-6.9.
+    queryplan {
+      SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE +b=a OR a='hello';
+    }
+  } {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+  do_test where2-6.13 {
+    # The addition of +a on the second term disabled the OR optimization.
+    # But we should still get the same empty-set result as in where2-6.9.
+    queryplan {
+      SELECT b,a FROM t2249b CROSS JOIN t2249a WHERE a=+b OR +a='hello';
+    }
+  } {nosort t2249b * t2249a sqlite_autoindex_t2249a_1}
+}
+
+# Variations on the order of terms in a WHERE clause in order
+# to make sure the OR optimizer can recognize them all.
+do_test where2-6.20 {
+  queryplan {
+    SELECT x.a, y.a FROM t2249a x CROSS JOIN t2249a y WHERE x.a=y.a
+  }
+} {0123 0123 nosort x sqlite_autoindex_t2249a_1 y sqlite_autoindex_t2249a_1}
+ifcapable explain&&subquery {
+  # These tests are not run if subquery support is not included in the
+  # build. This is because these tests test the "a = 1 OR a = 2" to
+  # "a IN (1, 2)" optimisation transformation, which is not enabled if
+  # subqueries and the IN operator is not available.
+  #
+  do_test where2-6.21 {
+    queryplan {
+      SELECT x.a,y.a FROM t2249a x CROSS JOIN t2249a y
+       WHERE x.a=y.a OR y.a='hello'
+    }
+  } {0123 0123 nosort x sqlite_autoindex_t2249a_1 y sqlite_autoindex_t2249a_1}
+  do_test where2-6.22 {
+    queryplan {
+      SELECT x.a,y.a FROM t2249a x CROSS JOIN t2249a y
+       WHERE y.a=x.a OR y.a='hello'
+    }
+  } {0123 0123 nosort x sqlite_autoindex_t2249a_1 y sqlite_autoindex_t2249a_1}
+  do_test where2-6.23 {
+    queryplan {
+      SELECT x.a,y.a FROM t2249a x CROSS JOIN t2249a y
+       WHERE y.a='hello' OR x.a=y.a
+    }
+  } {0123 0123 nosort x sqlite_autoindex_t2249a_1 y sqlite_autoindex_t2249a_1}
+}
+
+# Unique queries (queries that are guaranteed to return only a single
+# row of result) do not call the sorter.  But all tables must give
+# a unique result.  If any one table in the join does not give a unique
+# result then sorting is necessary.
+#
+do_test where2-7.1 {
+  cksort {
+    create table t8(a unique, b, c);
+    insert into t8 values(1,2,3);
+    insert into t8 values(2,3,4);
+    create table t9(x,y);
+    insert into t9 values(2,4);
+    insert into t9 values(2,3);
+    select y from t8, t9 where a=1 order by a, y;
+  }
+} {3 4 sort}
+do_test where2-7.2 {
+  cksort {
+    select * from t8 where a=1 order by b, c
+  }
+} {1 2 3 nosort}
+do_test where2-7.3 {
+  cksort {
+    select * from t8, t9 where a=1 and y=3 order by b, x
+  }
+} {1 2 3 2 3 sort}
+do_test where2-7.4 {
+  cksort {
+    create unique index i9y on t9(y);
+    select * from t8, t9 where a=1 and y=3 order by b, x
+  }
+} {1 2 3 2 3 nosort}
+
+} ;# if {[permutation] != "no_optimization"}
+
+# Ticket #1807.  Using IN constrains on multiple columns of
+# a multi-column index.
+#
+ifcapable subquery {
+  do_test where2-8.1 {
+    execsql {
+      SELECT * FROM t1 WHERE x IN (20,21) AND y IN (1,2)
+    }
+  } {}
+  do_test where2-8.2 {
+    execsql {
+      SELECT * FROM t1 WHERE x IN (1,2) AND y IN (-5,-6)
+    }
+  } {}
+  execsql {CREATE TABLE tx AS SELECT * FROM t1}
+  do_test where2-8.3 {
+    execsql {
+      SELECT w FROM t1
+       WHERE x IN (SELECT x FROM tx WHERE rowid<0)
+         AND +y IN (SELECT y FROM tx WHERE rowid=1)
+    }
+  } {}
+  do_test where2-8.4 {
+    execsql {
+      SELECT w FROM t1
+       WHERE x IN (SELECT x FROM tx WHERE rowid=1)
+         AND y IN (SELECT y FROM tx WHERE rowid<0)
+    }
+  } {}
+  #set sqlite_where_trace 1
+  do_test where2-8.5 {
+    execsql {
+      CREATE INDEX tx_xyz ON tx(x, y, z, w);
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 12 AND 14)
+    }
+  } {12 13 14}
+  do_test where2-8.6 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 12 AND 14)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {12 13 14}
+  do_test where2-8.7 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 12 AND 14)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {10 11 12 13 14 15}
+  do_test where2-8.8 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {10 11 12 13 14 15 16 17 18 19 20}
+  do_test where2-8.9 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 2 AND 4)
+    }
+  } {}
+  do_test where2-8.10 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 2 AND 4)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.11 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 2 AND 4)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.12 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN -4 AND -2)
+    }
+  } {}
+  do_test where2-8.13 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN -4 AND -2)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.14 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN -4 AND -2)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.15 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 200 AND 300)
+    }
+  } {}
+  do_test where2-8.16 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 200 AND 300)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.17 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE w BETWEEN 200 AND 300)
+         AND y IN (SELECT y FROM t1 WHERE w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.18 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE +w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE +w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE +w BETWEEN 200 AND 300)
+    }
+  } {}
+  do_test where2-8.19 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE +w BETWEEN 10 AND 20)
+         AND y IN (SELECT y FROM t1 WHERE +w BETWEEN 200 AND 300)
+         AND z IN (SELECT z FROM t1 WHERE +w BETWEEN 10 AND 20)
+    }
+  } {}
+  do_test where2-8.20 {
+    execsql {
+      SELECT w FROM tx
+       WHERE x IN (SELECT x FROM t1 WHERE +w BETWEEN 200 AND 300)
+         AND y IN (SELECT y FROM t1 WHERE +w BETWEEN 10 AND 20)
+         AND z IN (SELECT z FROM t1 WHERE +w BETWEEN 10 AND 20)
+    }
+  } {}
+}  
+
+# Make sure WHERE clauses of the form A=1 AND (B=2 OR B=3) are optimized
+# when we have an index on A and B.
+#
+ifcapable or_opt&&tclvar {
+  do_test where2-9.1 {
+    execsql {
+      BEGIN;
+      CREATE TABLE t10(a,b,c);
+      INSERT INTO t10 VALUES(1,1,1);
+      INSERT INTO t10 VALUES(1,2,2);
+      INSERT INTO t10 VALUES(1,3,3);
+    }
+    for {set i 4} {$i<=1000} {incr i} {
+      execsql {INSERT INTO t10 VALUES(1,$i,$i)}
+    }
+    execsql {
+      CREATE INDEX i10 ON t10(a,b);
+      COMMIT;
+      SELECT count(*) FROM t10;
+    }
+  } 1000
+  ifcapable subquery {
+    do_test where2-9.2 {
+      count {
+        SELECT * FROM t10 WHERE a=1 AND (b=2 OR b=3)
+      }
+    } {1 2 2 1 3 3 7}
+  }
+}
+
+# Indices with redundant columns
+#
+do_test where2-11.1 {
+  execsql {
+    CREATE TABLE t11(a,b,c,d);
+    CREATE INDEX i11aba ON t11(a,b,a,c); -- column A occurs twice.
+    INSERT INTO t11 VALUES(1,2,3,4);
+    INSERT INTO t11 VALUES(5,6,7,8);
+    INSERT INTO t11 VALUES(1,2,9,10);
+    INSERT INTO t11 VALUES(5,11,12,13);
+    SELECT c FROM t11 WHERE a=1 AND b=2 ORDER BY c;
+  }
+} {3 9}
+do_test where2-11.2 {
+  execsql {
+    CREATE INDEX i11cccccccc ON t11(c,c,c,c,c,c,c,c); -- repeated column
+    SELECT d FROM t11 WHERE c=9;
+  }
+} {10}
+do_test where2-11.3 {
+  execsql {
+    SELECT d FROM t11 WHERE c IN (1,2,3,4,5);
+  }
+} {4}
+do_test where2-11.4 {
+  execsql {
+    SELECT d FROM t11 WHERE c=7 OR (a=1 AND b=2) ORDER BY d;
+  }
+} {4 8 10}
+
+# Verify that the OR clause is used in an outer loop even when
+# the OR clause scores slightly better on an inner loop.
+if {[permutation] != "no_optimization"} {
+do_execsql_test where2-12.1 {
+  CREATE TABLE t12(x INTEGER PRIMARY KEY, y INT, z CHAR(100));
+  CREATE INDEX t12y ON t12(y);
+  EXPLAIN QUERY PLAN
+    SELECT a.x, b.x
+      FROM t12 AS a JOIN t12 AS b ON a.y=b.x
+     WHERE (b.x=$abc OR b.y=$abc);
+} {/.*SEARCH TABLE t12 AS b .*SEARCH TABLE t12 AS b .*/}
+}
+
+# Verify that all necessary OP_OpenRead opcodes occur in the OR optimization.
+#
+do_execsql_test where2-13.1 {
+  CREATE TABLE t13(a,b);
+  CREATE INDEX t13a ON t13(a);
+  INSERT INTO t13 VALUES(4,5);
+  SELECT * FROM t13 WHERE (1=2 AND a=3) OR a=4;
+} {4 5}
+
+# https://www.sqlite.org/src/info/5e3c886796e5512e  (2016-03-09)
+# Correlated subquery on the RHS of an IN operator 
+#
+do_execsql_test where2-14.1 {
+  CREATE TABLE t14a(x INTEGER PRIMARY KEY);
+  INSERT INTO t14a(x) VALUES(1),(2),(3),(4);
+  CREATE TABLE t14b(y INTEGER PRIMARY KEY);
+  INSERT INTO t14b(y) VALUES(1);
+  SELECT x FROM t14a WHERE x NOT IN (SELECT x FROM t14b);
+} {}
+
+finish_test

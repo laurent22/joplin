@@ -1,0 +1,1222 @@
+# 2009 Nov 11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# The focus of this file is testing the CLI shell tool.
+#
+#
+
+# Test plan:
+#
+#   shell1-1.*: Basic command line option handling.
+#   shell1-2.*: Basic "dot" command token parsing.
+#   shell1-3.*: Basic test that "dot" command can be called.
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set CLI [test_find_cli]
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+#----------------------------------------------------------------------------
+# Test cases shell1-1.*: Basic command line option handling.
+#
+
+# invalid option
+do_test shell1-1.1.1 {
+  set res [catchcmd "-bad test.db" ""]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {Error: unknown option: -bad} $res]
+} {1 1}
+do_test shell1-1.1.1b {
+  set res [catchcmd "test.db -bad" ""]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {Error: unknown option: -bad} $res]
+} {1 1}
+# error on extra options
+do_test shell1-1.1.2 {
+  catchcmd "test.db \"select+3\" \"select+4\"" ""
+} {0 {3
+4}}
+# error on extra options
+do_test shell1-1.1.3 {
+  catchcmd "test.db FOO test.db BAD" ".quit"
+} {1 {Error: near "FOO": syntax error}}
+
+# -help
+do_test shell1-1.2.1 {
+  set res [catchcmd "-help test.db" ""]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {Usage} $res] \
+       [regexp {\-init} $res] \
+       [regexp {\-version} $res]
+} {1 1 1 1}
+
+# -init filename       read/process named file
+do_test shell1-1.3.1 {
+  catchcmd "-init FOO test.db" ""
+} {0 {}}
+do_test shell1-1.3.2 {
+  catchcmd "-init FOO test.db .quit BAD" ""
+} {0 {}}
+do_test shell1-1.3.3 {
+  catchcmd "-init FOO test.db BAD .quit" ""
+} {1 {Error: near "BAD": syntax error}}
+
+# -echo                print commands before execution
+do_test shell1-1.4.1 {
+  catchcmd "-echo test.db" ""
+} {0 {}}
+
+# -[no]header          turn headers on or off
+do_test shell1-1.5.1 {
+  catchcmd "-header test.db" ""
+} {0 {}}
+do_test shell1-1.5.2 {
+  catchcmd "-noheader test.db" ""
+} {0 {}}
+
+# -bail                stop after hitting an error
+do_test shell1-1.6.1 {
+  catchcmd "-bail test.db" ""
+} {0 {}}
+
+# -interactive         force interactive I/O
+do_test shell1-1.7.1 {
+  set res [catchcmd "-interactive test.db" ".quit"]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {SQLite version} $res] \
+       [regexp {Enter ".help" for usage hints} $res]
+} {0 1 1}
+
+# -batch               force batch I/O
+do_test shell1-1.8.1 {
+  catchcmd "-batch test.db" ""
+} {0 {}}
+
+# -column              set output mode to 'column'
+do_test shell1-1.9.1 {
+  catchcmd "-column test.db" ""
+} {0 {}}
+
+# -csv                 set output mode to 'csv'
+do_test shell1-1.10.1 {
+  catchcmd "-csv test.db" ""
+} {0 {}}
+
+# -html                set output mode to HTML
+do_test shell1-1.11.1 {
+  catchcmd "-html test.db" ""
+} {0 {}}
+
+# -line                set output mode to 'line'
+do_test shell1-1.12.1 {
+  catchcmd "-line test.db" ""
+} {0 {}}
+
+# -list                set output mode to 'list'
+do_test shell1-1.13.1 {
+  catchcmd "-list test.db" ""
+} {0 {}}
+
+# -separator 'x'       set output field separator (|)
+do_test shell1-1.14.1 {
+  catchcmd "-separator 'x' test.db" ""
+} {0 {}}
+do_test shell1-1.14.2 {
+  catchcmd "-separator x test.db" ""
+} {0 {}}
+do_test shell1-1.14.3 {
+  set res [catchcmd "-separator" ""]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {Error: missing argument to -separator} $res]
+} {1 1}
+
+# -stats               print memory stats before each finalize
+do_test shell1-1.14b.1 {
+  catchcmd "-stats test.db" ""
+} {0 {}}
+
+# -nullvalue 'text'    set text string for NULL values
+do_test shell1-1.15.1 {
+  catchcmd "-nullvalue 'x' test.db" ""
+} {0 {}}
+do_test shell1-1.15.2 {
+  catchcmd "-nullvalue x test.db" ""
+} {0 {}}
+do_test shell1-1.15.3 {
+  set res [catchcmd "-nullvalue" ""]
+  set rc [lindex $res 0]
+  list $rc \
+       [regexp {Error: missing argument to -nullvalue} $res]
+} {1 1}
+
+# -version             show SQLite version
+do_test shell1-1.16.1 {
+  set x [catchcmd "-version test.db" ""]
+} {/3.[0-9.]+ 20\d\d-[01]\d-\d\d \d\d:\d\d:\d\d [0-9a-f]+/}
+
+#----------------------------------------------------------------------------
+# Test cases shell1-2.*: Basic "dot" command token parsing.
+#
+
+# check first token handling
+do_test shell1-2.1.1 {
+  catchcmd "test.db" ".foo"
+} {1 {Error: unknown command or invalid arguments:  "foo". Enter ".help" for help}}
+do_test shell1-2.1.2 {
+  catchcmd "test.db" ".\"foo OFF\""
+} {1 {Error: unknown command or invalid arguments:  "foo OFF". Enter ".help" for help}}
+do_test shell1-2.1.3 {
+  catchcmd "test.db" ".\'foo OFF\'"
+} {1 {Error: unknown command or invalid arguments:  "foo OFF". Enter ".help" for help}}
+
+# unbalanced quotes
+do_test shell1-2.2.1 {
+  catchcmd "test.db" ".\"foo OFF"
+} {1 {Error: unknown command or invalid arguments:  "foo OFF". Enter ".help" for help}}
+do_test shell1-2.2.2 {
+  catchcmd "test.db" ".\'foo OFF"
+} {1 {Error: unknown command or invalid arguments:  "foo OFF". Enter ".help" for help}}
+do_test shell1-2.2.3 {
+  catchcmd "test.db" ".explain \"OFF"
+} {0 {}}
+do_test shell1-2.2.4 {
+  catchcmd "test.db" ".explain \'OFF"
+} {0 {}}
+do_test shell1-2.2.5 {
+  catchcmd "test.db" ".mode \"insert FOO"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+do_test shell1-2.2.6 {
+  catchcmd "test.db" ".mode \'insert FOO"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+
+# check multiple tokens, and quoted tokens
+do_test shell1-2.3.1 {
+  catchcmd "test.db" ".explain 1"
+} {0 {}}
+do_test shell1-2.3.2 {
+  catchcmd "test.db" ".explain on"
+} {0 {}}
+do_test shell1-2.3.3 {
+  catchcmd "test.db" ".explain \"1 2 3\""
+} {1 {ERROR: Not a boolean value: "1 2 3". Assuming "no".}}
+do_test shell1-2.3.4 {
+  catchcmd "test.db" ".explain \"OFF\""
+} {0 {}}
+do_test shell1-2.3.5 {
+  catchcmd "test.db" ".\'explain\' \'OFF\'"
+} {0 {}}
+do_test shell1-2.3.6 {
+  catchcmd "test.db" ".explain \'OFF\'"
+} {0 {}}
+do_test shell1-2.3.7 {
+  catchcmd "test.db" ".\'explain\' \'OFF\'"
+} {0 {}}
+
+# check quoted args are unquoted
+do_test shell1-2.4.1 {
+  catchcmd "test.db" ".mode FOO"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+do_test shell1-2.4.2 {
+  catchcmd "test.db" ".mode csv"
+} {0 {}}
+do_test shell1-2.4.2 {
+  catchcmd "test.db" ".mode \"csv\""
+} {0 {}}
+
+
+#----------------------------------------------------------------------------
+# Test cases shell1-3.*: Basic test that "dot" command can be called.
+#
+
+# .backup ?DB? FILE      Backup DB (default "main") to FILE
+do_test shell1-3.1.1 {
+  catchcmd "test.db" ".backup"
+} {1 {missing FILENAME argument on .backup}}
+do_test shell1-3.1.2 {
+  catchcmd "test.db" ".backup FOO"
+} {0 {}}
+do_test shell1-3.1.3 {
+  catchcmd "test.db" ".backup FOO BAR"
+} {1 {Error: unknown database FOO}}
+do_test shell1-3.1.4 {
+  # too many arguments
+  catchcmd "test.db" ".backup FOO BAR BAD"
+} {1 {Usage: .backup ?DB? ?OPTIONS? FILENAME}}
+
+# .bail ON|OFF           Stop after hitting an error.  Default OFF
+do_test shell1-3.2.1 {
+  catchcmd "test.db" ".bail"
+} {1 {Usage: .bail on|off}}
+do_test shell1-3.2.2 {
+  catchcmd "test.db" ".bail ON"
+} {0 {}}
+do_test shell1-3.2.3 {
+  catchcmd "test.db" ".bail OFF"
+} {0 {}}
+do_test shell1-3.2.4 {
+  # too many arguments
+  catchcmd "test.db" ".bail OFF BAD"
+} {1 {Usage: .bail on|off}}
+
+ifcapable vtab {
+# .databases             List names and files of attached databases
+do_test shell1-3.3.1 {
+  catchcmd "-csv test.db" ".databases"
+} "/0.+main.+[string map {/ ".{1,2}"} [string range [get_pwd] 0 10]].*/"
+do_test shell1-3.3.2 {
+  # extra arguments ignored
+  catchcmd "test.db" ".databases BAD"
+} "/0.+main.+[string map {/ ".{1,2}"} [string range [get_pwd] 0 10]].*/"
+}
+
+# .dump ?TABLE? ...      Dump the database in an SQL text format
+#                          If TABLE specified, only dump tables matching
+#                          LIKE pattern TABLE.
+do_test shell1-3.4.1 {
+  set res [catchcmd "test.db" ".dump"]
+  list [regexp {BEGIN TRANSACTION;} $res] \
+       [regexp {COMMIT;} $res]
+} {1 1}
+do_test shell1-3.4.2 {
+  set res [catchcmd "test.db" ".dump FOO"]
+  list [regexp {BEGIN TRANSACTION;} $res] \
+       [regexp {COMMIT;} $res]
+} {1 1}
+# The .dump command now accepts multiple arguments
+#do_test shell1-3.4.3 {
+#  # too many arguments
+#  catchcmd "test.db" ".dump FOO BAD"
+#} {1 {Usage: .dump ?--preserve-rowids? ?--newlines? ?LIKE-PATTERN?}}
+
+# .echo ON|OFF           Turn command echo on or off
+do_test shell1-3.5.1 {
+  catchcmd "test.db" ".echo"
+} {1 {Usage: .echo on|off}}
+do_test shell1-3.5.2 {
+  catchcmd "test.db" ".echo ON"
+} {0 {}}
+do_test shell1-3.5.3 {
+  catchcmd "test.db" ".echo OFF"
+} {0 {}}
+do_test shell1-3.5.4 {
+  # too many arguments
+  catchcmd "test.db" ".echo OFF BAD"
+} {1 {Usage: .echo on|off}}
+
+# .exit                  Exit this program
+do_test shell1-3.6.1 {
+  catchcmd "test.db" ".exit"
+} {0 {}}
+
+# .explain ON|OFF        Turn output mode suitable for EXPLAIN on or off.
+do_test shell1-3.7.1 {
+  catchcmd "test.db" ".explain"
+  # explain is the exception to the booleans.  without an option, it turns it on.
+} {0 {}}
+do_test shell1-3.7.2 {
+  catchcmd "test.db" ".explain ON"
+} {0 {}}
+do_test shell1-3.7.3 {
+  catchcmd "test.db" ".explain OFF"
+} {0 {}}
+do_test shell1-3.7.4 {
+  # extra arguments ignored
+  catchcmd "test.db" ".explain OFF BAD"
+} {0 {}}
+
+
+# .header(s) ON|OFF      Turn display of headers on or off
+do_test shell1-3.9.1 {
+  catchcmd "test.db" ".header"
+} {1 {Usage: .headers on|off}}
+do_test shell1-3.9.2 {
+  catchcmd "test.db" ".header ON"
+} {0 {}}
+do_test shell1-3.9.3 {
+  catchcmd "test.db" ".header OFF"
+} {0 {}}
+do_test shell1-3.9.4 {
+  # too many arguments
+  catchcmd "test.db" ".header OFF BAD"
+} {1 {Usage: .headers on|off}}
+
+do_test shell1-3.9.5 {
+  catchcmd "test.db" ".headers"
+} {1 {Usage: .headers on|off}}
+do_test shell1-3.9.6 {
+  catchcmd "test.db" ".headers ON"
+} {0 {}}
+do_test shell1-3.9.7 {
+  catchcmd "test.db" ".headers OFF"
+} {0 {}}
+do_test shell1-3.9.8 {
+  # too many arguments
+  catchcmd "test.db" ".headers OFF BAD"
+} {1 {Usage: .headers on|off}}
+
+# .help                  Show this message
+do_test shell1-3.10.1 {
+  set res [catchcmd "test.db" ".help"]
+  # look for a few of the possible help commands
+  list [regexp {.help} $res] \
+       [regexp {.quit} $res] \
+       [regexp {.show} $res]
+} {1 1 1}
+do_test shell1-3.10.2 {
+  # we allow .help to take extra args (it is help after all)
+  set res [catchcmd "test.db" ".help *"]
+  # look for a few of the possible help commands
+  list [regexp {.help} $res] \
+       [regexp {.quit} $res] \
+       [regexp {.show} $res]
+} {1 1 1}
+
+# .import FILE TABLE     Import data from FILE into TABLE
+do_test shell1-3.11.1 {
+  catchcmd "test.db" ".import"
+} {/1 .ERROR: missing FILE argument.*/}
+do_test shell1-3.11.2 {
+  catchcmd "test.db" ".import FOO"
+} {/1 .ERROR: missing TABLE argument.*/}
+do_test shell1-3.11.3 {
+  # too many arguments
+  catchcmd "test.db" ".import FOO BAR BAD"
+} {/1 .ERROR: extra argument: "BAD".*./}
+
+# .indexes ?TABLE?       Show names of all indexes
+#                          If TABLE specified, only show indexes for tables
+#                          matching LIKE pattern TABLE.
+do_test shell1-3.12.1 {
+  catchcmd "test.db" ".indexes"
+} {0 {}}
+do_test shell1-3.12.2 {
+  catchcmd "test.db" ".indexes FOO"
+} {0 {}}
+do_test shell1-3.12.2-legacy {
+  catchcmd "test.db" ".indices FOO"
+} {0 {}}
+do_test shell1-3.12.3 {
+  # too many arguments
+  catchcmd "test.db" ".indexes FOO BAD"
+} {1 {Usage: .indexes ?LIKE-PATTERN?}}
+
+# .mode MODE ?TABLE?     Set output mode where MODE is one of:
+#                          ascii    Columns/rows delimited by 0x1F and 0x1E
+#                          csv      Comma-separated values
+#                          column   Left-aligned columns.  (See .width)
+#                          html     HTML <table> code
+#                          insert   SQL insert statements for TABLE
+#                          line     One value per line
+#                          list     Values delimited by .separator strings
+#                          tabs     Tab-separated values
+#                          tcl      TCL list elements
+do_test shell1-3.13.1 {
+  catchcmd "test.db" ".mode"
+} {0 {current output mode: list}}
+do_test shell1-3.13.2 {
+  catchcmd "test.db" ".mode FOO"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+do_test shell1-3.13.3 {
+  catchcmd "test.db" ".mode csv"
+} {0 {}}
+do_test shell1-3.13.4 {
+  catchcmd "test.db" ".mode column"
+} {0 {}}
+do_test shell1-3.13.5 {
+  catchcmd "test.db" ".mode html"
+} {0 {}}
+do_test shell1-3.13.6 {
+  catchcmd "test.db" ".mode insert"
+} {0 {}}
+do_test shell1-3.13.7 {
+  catchcmd "test.db" ".mode line"
+} {0 {}}
+do_test shell1-3.13.8 {
+  catchcmd "test.db" ".mode list"
+} {0 {}}
+do_test shell1-3.13.9 {
+  catchcmd "test.db" ".mode tabs"
+} {0 {}}
+do_test shell1-3.13.10 {
+  catchcmd "test.db" ".mode tcl"
+} {0 {}}
+do_test shell1-3.13.11 {
+  # extra arguments ignored
+  catchcmd "test.db" ".mode tcl BAD"
+} {0 {}}
+
+# don't allow partial mode type matches
+do_test shell1-3.13.12 {
+  catchcmd "test.db" ".mode l"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+do_test shell1-3.13.13 {
+  catchcmd "test.db" ".mode li"
+} {1 {Error: mode should be one of: ascii box column csv html insert json line list markdown quote table tabs tcl}}
+do_test shell1-3.13.14 {
+  catchcmd "test.db" ".mode lin"
+} {0 {}}
+
+# .nullvalue STRING      Print STRING in place of NULL values
+do_test shell1-3.14.1 {
+  catchcmd "test.db" ".nullvalue"
+} {1 {Usage: .nullvalue STRING}}
+do_test shell1-3.14.2 {
+  catchcmd "test.db" ".nullvalue FOO"
+} {0 {}}
+do_test shell1-3.14.3 {
+  # too many arguments
+  catchcmd "test.db" ".nullvalue FOO BAD"
+} {1 {Usage: .nullvalue STRING}}
+
+# .output FILENAME       Send output to FILENAME
+do_test shell1-3.15.1 {
+  catchcmd "test.db" ".output"
+} {0 {}}
+do_test shell1-3.15.2 {
+  catchcmd "test.db" ".output FOO"
+} {0 {}}
+do_test shell1-3.15.3 {
+  # too many arguments
+  catchcmd "test.db" ".output FOO BAD"
+} {1 {ERROR: extra parameter: "BAD".  Usage:
+.output ?FILE?           Send output to FILE or stdout if FILE is omitted
+   If FILE begins with '|' then open it as a pipe.
+   Options:
+     --bom                 Prefix output with a UTF8 byte-order mark
+     -e                    Send output to the system text editor
+     -x                    Send output as CSV to a spreadsheet
+child process exited abnormally}}
+
+# .output stdout         Send output to the screen
+do_test shell1-3.16.1 {
+  catchcmd "test.db" ".output stdout"
+} {0 {}}
+do_test shell1-3.16.2 {
+  # too many arguments
+  catchcmd "test.db" ".output stdout BAD"
+} {1 {ERROR: extra parameter: "BAD".  Usage:
+.output ?FILE?           Send output to FILE or stdout if FILE is omitted
+   If FILE begins with '|' then open it as a pipe.
+   Options:
+     --bom                 Prefix output with a UTF8 byte-order mark
+     -e                    Send output to the system text editor
+     -x                    Send output as CSV to a spreadsheet
+child process exited abnormally}}
+
+# .prompt MAIN CONTINUE  Replace the standard prompts
+do_test shell1-3.17.1 {
+  catchcmd "test.db" ".prompt"
+} {0 {}}
+do_test shell1-3.17.2 {
+  catchcmd "test.db" ".prompt FOO"
+} {0 {}}
+do_test shell1-3.17.3 {
+  catchcmd "test.db" ".prompt FOO BAR"
+} {0 {}}
+do_test shell1-3.17.4 {
+  # too many arguments
+  catchcmd "test.db" ".prompt FOO BAR BAD"
+} {0 {}}
+
+# .quit                  Exit this program
+do_test shell1-3.18.1 {
+  catchcmd "test.db" ".quit"
+} {0 {}}
+do_test shell1-3.18.2 {
+  # too many arguments
+  catchcmd "test.db" ".quit BAD"
+} {0 {}}
+
+# .read FILENAME         Execute SQL in FILENAME
+do_test shell1-3.19.1 {
+  catchcmd "test.db" ".read"
+} {1 {Usage: .read FILE}}
+do_test shell1-3.19.2 {
+  forcedelete FOO
+  catchcmd "test.db" ".read FOO"
+} {1 {Error: cannot open "FOO"}}
+do_test shell1-3.19.3 {
+  # too many arguments
+  catchcmd "test.db" ".read FOO BAD"
+} {1 {Usage: .read FILE}}
+
+# .restore ?DB? FILE     Restore content of DB (default "main") from FILE
+do_test shell1-3.20.1 {
+  catchcmd "test.db" ".restore"
+} {1 {Usage: .restore ?DB? FILE}}
+do_test shell1-3.20.2 {
+  catchcmd "test.db" ".restore FOO"
+} {0 {}}
+do_test shell1-3.20.3 {
+  catchcmd "test.db" ".restore FOO BAR"
+} {1 {Error: unknown database FOO}}
+do_test shell1-3.20.4 {
+  # too many arguments
+  catchcmd "test.db" ".restore FOO BAR BAD"
+} {1 {Usage: .restore ?DB? FILE}}
+
+ifcapable vtab {
+# .schema ?TABLE?        Show the CREATE statements
+#                          If TABLE specified, only show tables matching
+#                          LIKE pattern TABLE.
+do_test shell1-3.21.1 {
+  catchcmd "test.db" ".schema"
+} {0 {}}
+do_test shell1-3.21.2 {
+  catchcmd "test.db" ".schema FOO"
+} {0 {}}
+do_test shell1-3.21.3 {
+  # too many arguments
+  catchcmd "test.db" ".schema FOO BAD"
+} {1 {Usage: .schema ?--indent? ?LIKE-PATTERN?}}
+
+do_test shell1-3.21.4 {
+  catchcmd "test.db" {
+     CREATE TABLE t1(x);
+     CREATE VIEW v2 AS SELECT x+1 AS y FROM t1;
+     CREATE VIEW v1 AS SELECT y+1 FROM v2;
+  }
+  catchcmd "test.db" ".schema"
+} {0 {CREATE TABLE t1(x);
+CREATE VIEW v2 AS SELECT x+1 AS y FROM t1
+/* v2(y) */;
+CREATE VIEW v1 AS SELECT y+1 FROM v2
+/* v1("y+1") */;}}
+db eval {DROP VIEW v1; DROP VIEW v2; DROP TABLE t1;}
+}
+
+# .separator STRING  Change column separator used by output and .import
+do_test shell1-3.22.1 {
+  catchcmd "test.db" ".separator"
+} {1 {Usage: .separator COL ?ROW?}}
+do_test shell1-3.22.2 {
+  catchcmd "test.db" ".separator FOO"
+} {0 {}}
+do_test shell1-3.22.3 {
+  catchcmd "test.db" ".separator ABC XYZ"
+} {0 {}}
+do_test shell1-3.22.4 {
+  # too many arguments
+  catchcmd "test.db" ".separator FOO BAD BAD2"
+} {1 {Usage: .separator COL ?ROW?}}
+
+# .show                  Show the current values for various settings
+do_test shell1-3.23.1 {
+  set res [catchcmd "test.db" ".show"]
+  list [regexp {echo:} $res] \
+       [regexp {explain:} $res] \
+       [regexp {headers:} $res] \
+       [regexp {mode:} $res] \
+       [regexp {nullvalue:} $res] \
+       [regexp {output:} $res] \
+       [regexp {colseparator:} $res] \
+       [regexp {rowseparator:} $res] \
+       [regexp {stats:} $res] \
+       [regexp {width:} $res]
+} {1 1 1 1 1 1 1 1 1 1}
+do_test shell1-3.23.2 {
+  # too many arguments
+  catchcmd "test.db" ".show BAD"
+} {1 {Usage: .show}}
+
+# .stats ON|OFF          Turn stats on or off
+#do_test shell1-3.23b.1 {
+#  catchcmd "test.db" ".stats"
+#} {1 {Usage: .stats on|off}}
+do_test shell1-3.23b.2 {
+  catchcmd "test.db" ".stats ON"
+} {0 {}}
+do_test shell1-3.23b.3 {
+  catchcmd "test.db" ".stats OFF"
+} {0 {}}
+do_test shell1-3.23b.4 {
+  # too many arguments
+  catchcmd "test.db" ".stats OFF BAD"
+} {1 {Usage: .stats ?on|off?}}
+
+# Ticket 7be932dfa60a8a6b3b26bcf7623ec46e0a403ddb 2018-06-07
+# Adverse interaction between .stats and .eqp
+#
+do_test shell1-3.23b.5 {
+  catchcmd "test.db" [string map {"\n    " "\n"} {
+    CREATE TEMP TABLE t1(x);
+    INSERT INTO t1 VALUES(1),(2);
+    .stats on
+    .eqp full
+    SELECT * FROM t1;
+  }]
+} {/1\n2\n/}
+
+# .tables ?TABLE?        List names of tables
+#                          If TABLE specified, only list tables matching
+#                          LIKE pattern TABLE.
+do_test shell1-3.24.1 {
+  catchcmd "test.db" ".tables"
+} {0 {}}
+do_test shell1-3.24.2 {
+  catchcmd "test.db" ".tables FOO"
+} {0 {}}
+do_test shell1-3.24.3 {
+  # too many arguments
+  catchcmd "test.db" ".tables FOO BAD"
+} {0 {}}
+
+# .timeout MS            Try opening locked tables for MS milliseconds
+do_test shell1-3.25.1 {
+  catchcmd "test.db" ".timeout"
+} {0 {}}
+do_test shell1-3.25.2 {
+  catchcmd "test.db" ".timeout zzz"
+  # this should be treated the same as a '0' timeout
+} {0 {}}
+do_test shell1-3.25.3 {
+  catchcmd "test.db" ".timeout 1"
+} {0 {}}
+do_test shell1-3.25.4 {
+  # too many arguments
+  catchcmd "test.db" ".timeout 1 BAD"
+} {0 {}}
+
+# .width NUM NUM ...     Set column widths for "column" mode
+do_test shell1-3.26.1 {
+  catchcmd "test.db" ".width"
+} {0 {}}
+do_test shell1-3.26.2 {
+  catchcmd "test.db" ".width xxx"
+  # this should be treated the same as a '0' width for col 1
+} {0 {}}
+do_test shell1-3.26.3 {
+  catchcmd "test.db" ".width xxx yyy"
+  # this should be treated the same as a '0' width for col 1 and 2
+} {0 {}}
+do_test shell1-3.26.4 {
+  catchcmd "test.db" ".width 1 1"
+  # this should be treated the same as a '1' width for col 1 and 2
+} {0 {}}
+do_test shell1-3.26.5 {
+  catchcmd "test.db" ".mode column\n.header off\n.width 10 -10\nSELECT 'abcdefg', 123456;"
+  # this should be treated the same as a '1' width for col 1 and 2
+} {0 {abcdefg         123456}}
+do_test shell1-3.26.6 {
+  catchcmd "test.db" ".mode column\n.header off\n.width -10 10\nSELECT 'abcdefg', 123456;"
+  # this should be treated the same as a '1' width for col 1 and 2
+} {0 {   abcdefg  123456    }}
+
+
+# .timer ON|OFF          Turn the CPU timer measurement on or off
+do_test shell1-3.27.1 {
+  catchcmd "test.db" ".timer"
+} {1 {Usage: .timer on|off}}
+do_test shell1-3.27.2 {
+  catchcmd "test.db" ".timer ON"
+} {0 {}}
+do_test shell1-3.27.3 {
+  catchcmd "test.db" ".timer OFF"
+} {0 {}}
+do_test shell1-3.27.4 {
+  # too many arguments
+  catchcmd "test.db" ".timer OFF BAD"
+} {1 {Usage: .timer on|off}}
+
+do_test shell1-3-28.1 {
+  catchcmd test.db \
+     ".log stdout\nSELECT coalesce(sqlite_log(123,'hello'),'456');"
+} "0 {(123) hello\n456}"
+
+do_test shell1-3-29.1 {
+  catchcmd "test.db" ".print this is a test"
+} {0 {this is a test}}
+
+# dot-command argument quoting
+do_test shell1-3-30.1 {
+  catchcmd {test.db} {.print "this\"is'a\055test" 'this\"is\\a\055test'}
+} {0 {this"is'a-test this\"is\\a\055test}}
+do_test shell1-3-31.1 {
+  catchcmd {test.db} {.print "this\nis\ta\\test" 'this\nis\ta\\test'}
+} [list 0 "this\nis\ta\\test this\\nis\\ta\\\\test"]
+
+
+# Test the output of the ".dump" command
+#
+do_test shell1-4.1 {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+  db eval {
+    PRAGMA encoding=UTF16;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(null), (''), (1), (2.25), ('hello'), (x'807f');
+    CREATE TABLE t3(x,y);
+    INSERT INTO t3 VALUES(1,null), (2,''), (3,1),
+                         (4,2.25), (5,'hello'), (6,x'807f');
+  }
+  catchcmd test.db {.dump}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE t1(x);
+INSERT INTO t1 VALUES(NULL);
+INSERT INTO t1 VALUES('');
+INSERT INTO t1 VALUES(1);
+INSERT INTO t1 VALUES(2.25);
+INSERT INTO t1 VALUES('hello');
+INSERT INTO t1 VALUES(X'807f');
+CREATE TABLE t3(x,y);
+INSERT INTO t3 VALUES(1,NULL);
+INSERT INTO t3 VALUES(2,'');
+INSERT INTO t3 VALUES(3,1);
+INSERT INTO t3 VALUES(4,2.25);
+INSERT INTO t3 VALUES(5,'hello');
+INSERT INTO t3 VALUES(6,X'807f');
+COMMIT;}}
+
+
+ifcapable vtab {
+
+# The --preserve-rowids option to .dump
+#
+do_test shell1-4.1.1 {
+  catchcmd test.db {.dump --preserve-rowids}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE t1(x);
+INSERT INTO t1(rowid,x) VALUES(1,NULL);
+INSERT INTO t1(rowid,x) VALUES(2,'');
+INSERT INTO t1(rowid,x) VALUES(3,1);
+INSERT INTO t1(rowid,x) VALUES(4,2.25);
+INSERT INTO t1(rowid,x) VALUES(5,'hello');
+INSERT INTO t1(rowid,x) VALUES(6,X'807f');
+CREATE TABLE t3(x,y);
+INSERT INTO t3(rowid,x,y) VALUES(1,1,NULL);
+INSERT INTO t3(rowid,x,y) VALUES(2,2,'');
+INSERT INTO t3(rowid,x,y) VALUES(3,3,1);
+INSERT INTO t3(rowid,x,y) VALUES(4,4,2.25);
+INSERT INTO t3(rowid,x,y) VALUES(5,5,'hello');
+INSERT INTO t3(rowid,x,y) VALUES(6,6,X'807f');
+COMMIT;}}
+
+# If the table contains an INTEGER PRIMARY KEY, do not record a separate
+# rowid column in the output.
+#
+do_test shell1-4.1.2 {
+  db close
+  forcedelete test2.db
+  sqlite3 db test2.db
+  db eval {
+    CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+    INSERT INTO t1 VALUES(1,null), (2,''), (3,1),
+                         (4,2.25), (5,'hello'), (6,x'807f');
+  }
+  catchcmd test2.db {.dump --preserve-rowids}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+INSERT INTO t1 VALUES(1,NULL);
+INSERT INTO t1 VALUES(2,'');
+INSERT INTO t1 VALUES(3,1);
+INSERT INTO t1 VALUES(4,2.25);
+INSERT INTO t1 VALUES(5,'hello');
+INSERT INTO t1 VALUES(6,X'807f');
+COMMIT;}}
+
+# Verify that the table named [table] is correctly quoted and that
+# an INTEGER PRIMARY KEY DESC is not an alias for the rowid.
+#
+do_test shell1-4.1.3 {
+  db close
+  forcedelete test2.db
+  sqlite3 db test2.db
+  db eval {
+    CREATE TABLE [table](x INTEGER PRIMARY KEY DESC, y);
+    INSERT INTO [table] VALUES(1,null), (12,''), (23,1),
+                         (34,2.25), (45,'hello'), (56,x'807f');
+  }
+  catchcmd test2.db {.dump --preserve-rowids}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE [table](x INTEGER PRIMARY KEY DESC, y);
+INSERT INTO "table"(rowid,x,y) VALUES(1,1,NULL);
+INSERT INTO "table"(rowid,x,y) VALUES(2,12,'');
+INSERT INTO "table"(rowid,x,y) VALUES(3,23,1);
+INSERT INTO "table"(rowid,x,y) VALUES(4,34,2.25);
+INSERT INTO "table"(rowid,x,y) VALUES(5,45,'hello');
+INSERT INTO "table"(rowid,x,y) VALUES(6,56,X'807f');
+COMMIT;}}
+
+# Do not record rowids for a WITHOUT ROWID table.  Also check correct quoting
+# of table names that contain odd characters.
+#
+do_test shell1-4.1.4 {
+  db close
+  forcedelete test2.db
+  sqlite3 db test2.db
+  db eval {
+    CREATE TABLE [ta<>ble](x INTEGER PRIMARY KEY, y) WITHOUT ROWID;
+    INSERT INTO [ta<>ble] VALUES(1,null), (12,''), (23,1),
+                         (34,2.25), (45,'hello'), (56,x'807f');
+  }
+  catchcmd test2.db {.dump --preserve-rowids}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE [ta<>ble](x INTEGER PRIMARY KEY, y) WITHOUT ROWID;
+INSERT INTO "ta<>ble" VALUES(1,NULL);
+INSERT INTO "ta<>ble" VALUES(12,'');
+INSERT INTO "ta<>ble" VALUES(23,1);
+INSERT INTO "ta<>ble" VALUES(34,2.25);
+INSERT INTO "ta<>ble" VALUES(45,'hello');
+INSERT INTO "ta<>ble" VALUES(56,X'807f');
+COMMIT;}}
+
+# Do not record rowids if the rowid is inaccessible
+#
+do_test shell1-4.1.5 {
+  db close
+  forcedelete test2.db
+  sqlite3 db test2.db
+  db eval {
+    CREATE TABLE t1(_ROWID_,rowid,oid);
+    INSERT INTO t1 VALUES(1,null,'alpha'), (12,'',99), (23,1,x'b0b1b2');
+  }
+  catchcmd test2.db {.dump --preserve-rowids}
+} {0 {PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE t1(_ROWID_,rowid,oid);
+INSERT INTO t1 VALUES(1,NULL,'alpha');
+INSERT INTO t1 VALUES(12,'',99);
+INSERT INTO t1 VALUES(23,1,X'b0b1b2');
+COMMIT;}}
+
+} else {
+
+do_test shell1-4.1.6 {
+  db close
+  forcedelete test2.db
+  sqlite3 db test2.db
+  db eval {
+    CREATE TABLE t1(x INTEGER PRIMARY KEY, y);
+    INSERT INTO t1 VALUES(1,null), (2,''), (3,1),
+                         (4,2.25), (5,'hello'), (6,x'807f');
+  }
+  catchcmd test2.db {.dump --preserve-rowids}
+} {1 {The --preserve-rowids option is not compatible with SQLITE_OMIT_VIRTUALTABLE}}
+
+}
+
+
+# Test the output of ".mode insert"
+#
+do_test shell1-4.2.1 {
+  catchcmd test.db ".mode insert t1\nselect * from t1;"
+} {0 {INSERT INTO t1 VALUES(NULL);
+INSERT INTO t1 VALUES('');
+INSERT INTO t1 VALUES(1);
+INSERT INTO t1 VALUES(2.25);
+INSERT INTO t1 VALUES('hello');
+INSERT INTO t1 VALUES(X'807f');}}
+
+# Test the output of ".mode insert" with headers
+#
+do_test shell1-4.2.2 {
+  catchcmd test.db ".mode insert t1\n.headers on\nselect * from t1;"
+} {0 {INSERT INTO t1(x) VALUES(NULL);
+INSERT INTO t1(x) VALUES('');
+INSERT INTO t1(x) VALUES(1);
+INSERT INTO t1(x) VALUES(2.25);
+INSERT INTO t1(x) VALUES('hello');
+INSERT INTO t1(x) VALUES(X'807f');}}
+
+# Test the output of ".mode insert"
+#
+do_test shell1-4.2.3 {
+  catchcmd test.db ".mode insert t3\nselect * from t3;"
+} {0 {INSERT INTO t3 VALUES(1,NULL);
+INSERT INTO t3 VALUES(2,'');
+INSERT INTO t3 VALUES(3,1);
+INSERT INTO t3 VALUES(4,2.25);
+INSERT INTO t3 VALUES(5,'hello');
+INSERT INTO t3 VALUES(6,X'807f');}}
+
+# Test the output of ".mode insert" with headers
+#
+do_test shell1-4.2.4 {
+  catchcmd test.db ".mode insert t3\n.headers on\nselect * from t3;"
+} {0 {INSERT INTO t3(x,y) VALUES(1,NULL);
+INSERT INTO t3(x,y) VALUES(2,'');
+INSERT INTO t3(x,y) VALUES(3,1);
+INSERT INTO t3(x,y) VALUES(4,2.25);
+INSERT INTO t3(x,y) VALUES(5,'hello');
+INSERT INTO t3(x,y) VALUES(6,X'807f');}}
+
+# Test the output of ".mode tcl"
+#
+do_test shell1-4.3 {
+  db close
+  forcedelete test.db
+  sqlite3 db test.db
+  db eval {
+    PRAGMA encoding=UTF8;
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(null), (''), (1), (2.25), ('hello'), (x'807f');
+  }
+  catchcmd test.db ".mode tcl\nselect * from t1;"
+} {0 {""
+""
+"1"
+"2.25"
+"hello"
+"\200\177"}}
+
+# Test the output of ".mode tcl" with multiple columns
+#
+do_test shell1-4.4 {
+  db eval {
+    CREATE TABLE t2(x,y);
+    INSERT INTO t2 VALUES(null, ''), (1, 2.25), ('hello', x'807f');
+  }
+  catchcmd test.db ".mode tcl\nselect * from t2;"
+} {0 {"" ""
+"1" "2.25"
+"hello" "\200\177"}}
+
+# Test the output of ".mode tcl" with ".nullvalue"
+#
+do_test shell1-4.5 {
+  catchcmd test.db ".mode tcl\n.nullvalue NULL\nselect * from t2;"
+} {0 {"NULL" ""
+"1" "2.25"
+"hello" "\200\177"}}
+
+# Test the output of ".mode tcl" with Tcl reserved characters
+#
+do_test shell1-4.6 {
+  db eval {
+    CREATE TABLE tcl1(x);
+    INSERT INTO tcl1 VALUES('"'), ('['), (']'), ('\{'), ('\}'), (';'), ('$');
+  }
+  foreach {x y} [catchcmd test.db ".mode tcl\nselect * from tcl1;"] break
+  list $x $y [llength $y]
+} {0 {"\""
+"["
+"]"
+"\\{"
+"\\}"
+";"
+"$"} 7}
+
+# Test using arbitrary byte data with the shell via standard input/output.
+#
+do_test shell1-5.0 {
+  #
+  # NOTE: Skip NUL byte because it appears to be incompatible with command
+  #       shell argument parsing.
+  #
+  for {set i 1} {$i < 256} {incr i} {
+    #
+    # NOTE: Due to how the Tcl [exec] command works (i.e. where it treats
+    #       command channels opened for it as textual ones), the carriage
+    #       return character (and on Windows, the end-of-file character)
+    #       cannot be used here.
+    #
+    if {$i==0x0D || ($tcl_platform(platform)=="windows" && $i==0x1A)} {
+      continue
+    }
+    # Tcl 8.7 maps 0x80 through 0x9f into valid UTF8.  So skip those tests.
+    if {$i>=0x80 && $i<=0x9f} continue
+    if {$i>=0xE0 && $tcl_platform(os)=="OpenBSD"}  continue
+    if {$i>=0xE0 && $i<=0xEF && $tcl_platform(os)=="Linux"}  continue
+    set hex [format %02X $i]
+    set char [subst \\x$hex]; set oldChar $char
+    set escapes [list]
+    if {$tcl_platform(platform)=="windows"} {
+      #
+      # NOTE: On Windows, we need to escape all the whitespace characters,
+      #       the alarm (\a) character, and those with special meaning to
+      #       the SQLite shell itself.
+      #
+      set escapes [list \
+          \a \\a \b \\b \t \\t \n \\n \v \\v \f \\f \r \\r \
+          " " "\" \"" \" \\\" ' \"'\" \\ \\\\]
+    } else {
+      #
+      # NOTE: On Unix, we need to escape most of the whitespace characters
+      #       and those with special meaning to the SQLite shell itself.
+      #       The alarm (\a), backspace (\b), and carriage-return (\r)
+      #       characters do not appear to require escaping on Unix.  For
+      #       the alarm and backspace characters, this is probably due to
+      #       differences in the command shell.  For the carriage-return,
+      #       it is probably due to differences in how Tcl handles command
+      #       channel end-of-line translations.
+      #
+      set escapes [list \
+          \t \\t \n \\n \v \\v \f \\f \
+          " " "\" \"" \" \\\" ' \"'\" \\ \\\\]
+    }
+    set char [string map $escapes $char]
+    set x [catchcmdex test.db ".print $char\n"]
+    set code [lindex $x 0]
+    set res [lindex $x 1]
+    if {$code ne "0"} {
+      error "failed with error: $res"
+    }
+    if {$res ne "$oldChar\n"} {
+      if {[llength $res] > 0} {
+        set got [format %02X [scan $res %c]]
+      } else {
+        set got <empty>
+      }
+      error "failed with byte $hex mismatch, got $got"
+    }
+  }
+} {}
+
+# These test cases do not work on MinGW
+if 0 {
+
+# The string used here is the word "test" in Chinese.
+# In UTF-8, it is encoded as: \xE6\xB5\x8B\xE8\xAF\x95
+set test \u6D4B\u8BD5
+
+do_test shell1-6.0 {
+  set fileName $test; append fileName .db
+  catch {forcedelete $fileName}
+  set x [catchcmdex $fileName "CREATE TABLE t1(x);\n.schema\n"]
+  set code [lindex $x 0]
+  set res [string trim [lindex $x 1]]
+  if {$code ne "0"} {
+    error "failed with error: $res"
+  }
+  if {$res ne "CREATE TABLE t1(x);"} {
+    error "failed with mismatch: $res"
+  }
+  if {![file exists $fileName]} {
+    error "file \"$fileName\" (Unicode) does not exist"
+  }
+  forcedelete $fileName
+} {}
+
+do_test shell1-6.1 {
+  catch {forcedelete test3.db}
+  set x [catchcmdex test3.db \
+      "CREATE TABLE [encoding convertto utf-8 $test](x);\n.schema\n"]
+  set code [lindex $x 0]
+  set res [string trim [lindex $x 1]]
+  if {$code ne "0"} {
+    error "failed with error: $res"
+  }
+  if {$res ne "CREATE TABLE ${test}(x);"} {
+    error "failed with mismatch: $res"
+  }
+  forcedelete test3.db
+} {}
+}
+
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+# The shell tool ".schema" command uses virtual table "pragma_database_list"
+#
+ifcapable vtab {
+
+do_test shell1-7.1.1 {
+  db eval {
+    CREATE TABLE Z (x TEXT PRIMARY KEY);
+    CREATE TABLE _ (x TEXT PRIMARY KEY);
+    CREATE TABLE YY (x TEXT PRIMARY KEY);
+    CREATE TABLE __ (x TEXT PRIMARY KEY);
+    CREATE TABLE WWW (x TEXT PRIMARY KEY);
+    CREATE TABLE ___ (x TEXT PRIMARY KEY);
+  }
+} {}
+do_test shell1-7.1.2 {
+  catchcmd "test.db" ".schema _"
+} {0 {CREATE TABLE Z (x TEXT PRIMARY KEY);
+CREATE TABLE _ (x TEXT PRIMARY KEY);}}
+do_test shell1-7.1.3 {
+  catchcmd "test.db" ".schema \\\\_"
+} {0 {CREATE TABLE _ (x TEXT PRIMARY KEY);}}
+do_test shell1-7.1.4 {
+  catchcmd "test.db" ".schema __"
+} {0 {CREATE TABLE YY (x TEXT PRIMARY KEY);
+CREATE TABLE __ (x TEXT PRIMARY KEY);}}
+do_test shell1-7.1.5 {
+  catchcmd "test.db" ".schema \\\\_\\\\_"
+} {0 {CREATE TABLE __ (x TEXT PRIMARY KEY);}}
+do_test shell1-7.1.6 {
+  catchcmd "test.db" ".schema ___"
+} {0 {CREATE TABLE WWW (x TEXT PRIMARY KEY);
+CREATE TABLE ___ (x TEXT PRIMARY KEY);}}
+do_test shell1-7.1.7 {
+  catchcmd "test.db" ".schema \\\\_\\\\_\\\\_"
+} {0 {CREATE TABLE ___ (x TEXT PRIMARY KEY);}}
+
+}
+
+# Test case for the ieee754 and decimal extensions in the shell.
+# See the "floatingpoint.html" file in the documentation for more
+# information.
+#
+do_test shell1-8.1 {
+  catchcmd ":memory:" {
+    -- The pow2 table will hold all the necessary powers of two.
+    CREATE TABLE pow2(x INTEGER PRIMARY KEY, v TEXT);
+    WITH RECURSIVE c(x,v) AS (
+      VALUES(0,'1')
+      UNION ALL
+      SELECT x+1, decimal_mul(v,'2') FROM c WHERE x+1<=971
+    ) INSERT INTO pow2(x,v) SELECT x, v FROM c;
+    WITH RECURSIVE c(x,v) AS (
+      VALUES(-1,'0.5')
+      UNION ALL
+      SELECT x-1, decimal_mul(v,'0.5') FROM c WHERE x-1>=-1075
+    ) INSERT INTO pow2(x,v) SELECT x, v FROM c;
+    
+    -- This query finds the decimal representation of each value in the "c" table.
+    WITH c(n) AS (VALUES(47.49))
+                     ----XXXXX----------- Replace with whatever you want
+    SELECT decimal_mul(ieee754_mantissa(c.n),pow2.v)
+      FROM pow2, c WHERE pow2.x=ieee754_exponent(c.n);
+  }
+} {0 47.49000000000000198951966012828052043914794921875}
+do_test shell1-8.2 {
+  catchcmd :memory: {
+.mode box
+SELECT ieee754(47.49) AS x;
+  }
+} {0 {┌───────────────────────────────┐
+│               x               │
+├───────────────────────────────┤
+│ ieee754(6683623321994527,-47) │
+└───────────────────────────────┘}}
+do_test shell1-8.3 {
+  catchcmd ":memory: --box" {
+    select ieee754(6683623321994527,-47) as x;
+  }
+} {0 {┌───────┐
+│   x   │
+├───────┤
+│ 47.49 │
+└───────┘}}
+do_test shell1-8.4 {
+  catchcmd ":memory: --table" {SELECT ieee754_mantissa(47.49) AS M, ieee754_exponent(47.49) AS E;}
+} {0 {+------------------+-----+
+|        M         |  E  |
++------------------+-----+
+| 6683623321994527 | -47 |
++------------------+-----+}}
+
+finish_test

@@ -1,0 +1,139 @@
+# 2005 july 8
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file test the busy handler
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set testprefix busy
+
+do_test busy-1.1 {
+  sqlite3 db2 test.db
+  execsql {
+    CREATE TABLE t1(x);
+    INSERT INTO t1 VALUES(1);
+    SELECT * FROM t1
+  }
+} 1
+proc busy x {
+  lappend ::busyargs $x
+  if {$x>2} {return 1}
+  return 0
+}
+set busyargs {}
+do_test busy-1.2 {
+  db busy busy
+  db2 eval {BEGIN EXCLUSIVE}
+  catchsql {BEGIN IMMEDIATE}
+} {1 {database is locked}}
+do_test busy-1.3 {
+  set busyargs
+} {0 1 2 3}
+do_test busy-1.4 {
+  set busyargs {}
+  catchsql {BEGIN IMMEDIATE}
+  set busyargs
+} {0 1 2 3}
+
+do_test busy-2.1 {
+  db2 eval {COMMIT}
+  db eval {BEGIN; INSERT INTO t1 VALUES(5)}
+  db2 eval {BEGIN; SELECT * FROM t1}
+  set busyargs {}
+  catchsql COMMIT
+} {1 {database is locked}}
+do_test busy-2.2 {
+  set busyargs
+} {0 1 2 3}
+
+db2 close
+
+#-------------------------------------------------------------------------
+# Test that the busy-handler is invoked correctly for "PRAGMA optimize"
+# and ANALYZE commnds.
+ifcapable pragma&&analyze&&!stat4 {
+
+reset_db
+
+do_execsql_test 3.1 {
+  CREATE TABLE t1(x);
+  CREATE TABLE t2(y);
+  CREATE TABLE t3(z);
+
+  CREATE INDEX i1 ON t1(x);
+  CREATE INDEX i2 ON t2(y);
+
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t2 VALUES(1);
+  ANALYZE;
+
+  SELECT * FROM t1 WHERE x=1;
+  SELECT * FROM t2 WHERE y=1;
+} {1 1}
+
+do_test 3.2 {
+  sqlite3 db2 test.db
+  execsql { BEGIN EXCLUSIVE } db2
+  catchsql { PRAGMA optimize }
+} {1 {database is locked}}
+
+proc busy_handler {n} {
+  if {$n>1000} { execsql { COMMIT } db2 }
+  return 0
+}
+db busy busy_handler
+
+do_test 3.3 {
+  catchsql { PRAGMA optimize }
+} {0 {}}
+
+do_test 3.4 {
+  execsql {
+    BEGIN;
+    SELECT count(*) FROM sqlite_master;
+  } db2
+} {6}
+
+proc busy_handler {n} { return 1 }
+do_test 3.5 {
+  catchsql { PRAGMA optimize }
+} {0 {}}
+
+do_test 3.6 {
+  execsql { COMMIT } db2
+  execsql {
+    WITH s(i) AS (
+      SELECT 1 UNION ALL SELECT i+1 FROM s WHERE i<1000
+    )
+    INSERT INTO t1 SELECT i FROM s;
+  }
+  execsql {
+    BEGIN;
+    SELECT count(*) FROM sqlite_master;
+  } db2
+} {6}
+
+do_test 3.7 {
+  catchsql { PRAGMA optimize }
+} {1 {database is locked}}
+
+proc busy_handler {n} {
+  if {$n>1000} { execsql { COMMIT } db2 }
+  return 0
+}
+do_test 3.8 {
+  catchsql { PRAGMA optimize }
+} {0 {}}
+
+}
+
+finish_test

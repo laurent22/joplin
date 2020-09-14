@@ -1,0 +1,110 @@
+
+# 2007 Aug 13
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# 
+# This file tests aspects of recovery from a malloc() failure
+# in a CREATE INDEX statement.
+#
+# $Id: crash5.test,v 1.3 2008/07/12 14:52:20 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# Only run these tests if memory debugging is turned on.
+#
+ifcapable !crashtest||!memorymanage {
+   puts "Skipping crash5 tests: not compiled with -DSQLITE_MEMDEBUG..."
+   finish_test
+   return
+}
+
+db close
+
+for {set ii 0} {$ii < 10} {incr ii} {
+  for {set jj 50} {$jj < 100} {incr jj} {
+
+    # Set up the database so that it is an auto-vacuum database 
+    # containing a single table (root page 3) with a single row. 
+    # The row has an overflow page (page 4).
+    forcedelete test.db test.db-journal
+    sqlite3 db test.db
+    set c [string repeat 3 1500]
+    db eval {
+      pragma auto_vacuum = 1;
+      CREATE TABLE t1(a, b, c);
+      INSERT INTO t1 VALUES('1111111111', '2222222222', $c);
+    }
+    db close
+
+    do_test crash5-$ii.$jj.1 {
+      crashsql -delay 1 -file test.db-journal -seed $ii -tclbody [join [list \
+        [list set iFail $jj] {
+        sqlite3_crashparams 0 [file join [get_pwd] test.db-journal]
+      
+        # Begin a transaction and evaluate a "CREATE INDEX" statement
+        # with the iFail'th malloc() set to fail. This operation will
+        # have to move the current contents of page 4 (the overflow
+        # page) to make room for the new root page. The bug is that
+        # if malloc() fails at a particular point in sqlite3PagerMovepage(),
+        # sqlite mistakenly thinks that the page being moved (page 4) has 
+        # been safely synced into the journal. If the page is written
+        # to later in the transaction, it may be written out to the database
+        # before the relevant part of the journal has been synced.
+        #
+        db eval BEGIN
+        sqlite3_memdebug_fail $iFail -repeat 0
+        catch {db eval { CREATE UNIQUE INDEX i1 ON t1(a); }} msg
+        # puts "$n $msg ac=[sqlite3_get_autocommit db]"
+      
+        # If the transaction is still active (it may not be if the malloc()
+        # failure occurred in the OS layer), write to the database. Make sure
+        # page 4 is among those written.
+        #
+        if {![sqlite3_get_autocommit db]} {
+          db eval {
+            DELETE FROM t1;  -- This will put page 4 on the free list.
+            INSERT INTO t1 VALUES('111111111', '2222222222', '33333333');
+            INSERT INTO t1 SELECT * FROM t1;                     -- 2
+            INSERT INTO t1 SELECT * FROM t1;                     -- 4
+            INSERT INTO t1 SELECT * FROM t1;                     -- 8
+            INSERT INTO t1 SELECT * FROM t1;                     -- 16
+            INSERT INTO t1 SELECT * FROM t1;                     -- 32
+            INSERT INTO t1 SELECT * FROM t1 WHERE rowid%2;       -- 48
+          }
+        }
+        
+        # If the right malloc() failed during the 'CREATE INDEX' above and
+        # the transaction was not rolled back, then the sqlite cache now 
+        # has a dirty page 4 that it incorrectly believes is already safely
+        # in the synced part of the journal file. When 
+        # sqlite3_release_memory() is called sqlite tries to free memory
+        # by writing page 4 out to the db file. If it crashes later on,
+        # before syncing the journal... Corruption!
+        #
+        sqlite3_crashparams 1 [file join [get_pwd] test.db-journal]
+        sqlite3_release_memory 8092
+      }]] {}
+      expr 1
+    } {1}
+  
+    sqlite3 db test.db
+    do_test crash5-$ii.$jj.2 {
+      db eval {pragma integrity_check}
+    } {ok}
+    do_test crash5-$ii.$jj.3 {
+      db eval {SELECT * FROM t1}
+    } [list 1111111111 2222222222 $::c]
+    db close
+  }
+}
+
+
+finish_test

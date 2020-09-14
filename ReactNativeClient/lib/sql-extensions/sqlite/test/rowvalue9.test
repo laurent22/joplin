@@ -1,0 +1,301 @@
+# 2016 September 3
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing SQL statements that use row value
+# constructors.
+#
+
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+set ::testprefix rowvalue9
+
+# Tests:
+#
+#  1.*: Test that affinities are handled correctly by various row-value
+#       operations without indexes.
+#
+#  2.*: Test an affinity bug that came up during testing.
+#
+#  3.*: Test a row-value version of the bug tested by 2.*.
+#
+#  4.*: Test that affinities are handled correctly by various row-value
+#       operations with assorted indexes.
+#
+
+do_execsql_test 1.0.1 {
+  CREATE TABLE a1(c, b INTEGER, a TEXT, PRIMARY KEY(a, b));
+ 
+  INSERT INTO a1 (rowid, c, b, a) VALUES(3,  '0x03', 1, 1);
+  INSERT INTO a1 (rowid, c, b, a) VALUES(14, '0x0E', 2, 2);
+  INSERT INTO a1 (rowid, c, b, a) VALUES(15, '0x0F', 3, 3);
+  INSERT INTO a1 (rowid, c, b, a) VALUES(92, '0x5C', 4, 4);
+
+  CREATE TABLE a2(x BLOB, y BLOB);
+  INSERT INTO a2(x, y) VALUES(1, 1);
+  INSERT INTO a2(x, y) VALUES(2, '2');
+  INSERT INTO a2(x, y) VALUES('3', 3);
+  INSERT INTO a2(x, y) VALUES('4', '4');
+}
+
+do_execsql_test 1.0.2 { 
+  SELECT x, typeof(x), y, typeof(y) FROM a2 ORDER BY rowid
+} {
+  1 integer 1 integer 
+  2 integer 2 text 
+  3 text    3 integer 
+  4 text    4 text
+}
+
+do_execsql_test 1.1.1 {
+  SELECT (SELECT rowid FROM a1 WHERE a=x AND b=y) FROM a2
+} {{} {} 15 92}
+do_execsql_test 1.1.2 {
+  SELECT (SELECT rowid FROM a1 WHERE (a, b) = (x, y)) FROM a2
+} {{} {} 15 92}
+
+do_execsql_test 1.2.3 {
+  SELECT a1.rowid FROM a1, a2 WHERE a=x AND b=y;
+} {15 92}
+do_execsql_test 1.2.4 {
+  SELECT a1.rowid FROM a1, a2 WHERE (a, b) = (x, y)
+} {15 92}
+
+
+do_execsql_test 1.3.1 {
+  SELECT a1.rowid FROM a1, a2 WHERE coalesce(NULL,x)=a AND coalesce(NULL,y)=b
+} {3 14 15 92}
+do_execsql_test 1.3.2 {
+  SELECT a1.rowid FROM a1, a2 
+  WHERE (coalesce(NULL,x), coalesce(NULL,y)) = (a, b)
+} {3 14 15 92}
+
+do_execsql_test 1.4.1 {
+  SELECT a1.rowid FROM a1, a2 WHERE +x=a AND +y=b
+} {3 14 15 92}
+do_execsql_test 1.4.2 {
+  SELECT a1.rowid FROM a1, a2 WHERE (+x, +y) = (a, b)
+} {3 14 15 92}
+
+do_execsql_test 1.5.1 {
+  SELECT (SELECT rowid FROM a1 WHERE a=+x AND b=+y) FROM a2
+} {3 14 15 92}
+do_execsql_test 1.5.2 {
+  SELECT (SELECT rowid FROM a1 WHERE (a, b) = (+x, +y)) FROM a2
+} {3 14 15 92}
+do_execsql_test 1.5.3 {
+  SELECT (SELECT rowid FROM a1 WHERE (+x, +y) = (a, b)) FROM a2
+} {3 14 15 92}
+
+do_execsql_test 1.6.1 {
+  SELECT a1.rowid FROM a1 WHERE (a, b) IN (SELECT x, y FROM a2)
+} {15 92}
+do_execsql_test 1.6.2 {
+  SELECT a1.rowid FROM a1, a2 WHERE EXISTS (
+    SELECT 1 FROM a1 WHERE a=x AND b=y
+  )
+} {3 14 15 92 3 14 15 92}
+
+# Test that [199df416] is fixed.
+#
+do_execsql_test 2.1 {
+  CREATE TABLE b1(a TEXT);
+  CREATE TABLE b2(x BLOB);
+  INSERT INTO b1 VALUES(1);
+  INSERT INTO b2 VALUES(1);
+}
+do_execsql_test 2.2 { SELECT * FROM b1, b2 WHERE a=x; } {}
+do_execsql_test 2.3 { SELECT * FROM b1 WHERE a IN (SELECT x FROM b2) } {}
+do_execsql_test 2.4 { CREATE UNIQUE INDEX b1a ON b1(a); }
+do_execsql_test 2.5 { SELECT * FROM b1 WHERE a IN (SELECT x FROM b2) } {}
+
+# Test that a multi-column version of the query that revealed problem 
+# [199df416] also works.
+#
+do_execsql_test 3.1 {
+  CREATE TABLE c1(a INTEGER, b TEXT);
+  INSERT INTO c1 VALUES(1, 1);
+  CREATE TABLE c2(x BLOB, y BLOB);
+  INSERT INTO c2 VALUES(1, 1);
+}
+do_execsql_test 3.2 {
+  SELECT * FROM c1 WHERE (a, b) IN (SELECT x, y FROM c2)
+} {}
+do_execsql_test 3.3 {
+  CREATE UNIQUE INDEX c1ab ON c1(a, b);
+  SELECT * FROM c1 WHERE (a, b) IN (SELECT x, y FROM c2)
+} {}
+do_execsql_test 3.4 {
+  SELECT * FROM c1 WHERE (a, +b) IN (SELECT x, y FROM c2)
+} {}
+
+do_execsql_test 3.5 {
+  SELECT c1.rowid FROM c1 WHERE b = (SELECT y FROM c2);
+} {}
+do_execsql_test 3.6 {
+  SELECT c1.rowid FROM c1 WHERE (a, b) = (SELECT x, y FROM c2);
+} {}
+
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 4.0 {
+  CREATE TABLE d1(a TEXT, b INTEGER, c NUMERIC);
+  CREATE TABLE d2(x BLOB, y BLOB);
+
+  INSERT INTO d1 VALUES(1, 1, 1);
+  INSERT INTO d1 VALUES(2, 2, 2);
+  INSERT INTO d1 VALUES(3, 3, 3);
+  INSERT INTO d1 VALUES(4, 4, 4);
+
+  INSERT INTO d2 VALUES (1, 1);
+  INSERT INTO d2 VALUES (2, '2');
+  INSERT INTO d2 VALUES ('3', 3);
+  INSERT INTO d2 VALUES ('4', '4');
+}
+
+foreach {tn idx} {
+  1 {}
+  2 { CREATE INDEX idx ON d1(a) }
+  3 { CREATE INDEX idx ON d1(a, c) }
+  4 { CREATE INDEX idx ON d1(c) }
+  5 { CREATE INDEX idx ON d1(c, a) }
+
+  6 { 
+    CREATE INDEX idx ON d1(c, a) ;
+    CREATE INDEX idx1 ON d2(x, y);
+  }
+
+  7 { 
+    CREATE INDEX idx ON d1(c, a) ;
+    CREATE UNIQUE INDEX idx2 ON d2(x, y) ;
+  }
+
+  8 { 
+    CREATE INDEX idx ON d1(c) ;
+    CREATE UNIQUE INDEX idx2 ON d2(x);
+  }
+
+} {
+  execsql { DROP INDEX IF EXISTS idx } 
+  execsql { DROP INDEX IF EXISTS idx2 } 
+  execsql { DROP INDEX IF EXISTS idx3 } 
+  execsql $idx
+
+  do_execsql_test 4.$tn.1 {
+    SELECT rowid FROM d1 WHERE (a, c) IN (SELECT x, y FROM d2);
+  } {3 4}
+
+  do_execsql_test 4.$tn.2 {
+    SELECT rowid FROM d1 WHERE (c, a) IN (SELECT x, y FROM d2);
+  } {2 4}
+
+  do_execsql_test 4.$tn.3 {
+    SELECT rowid FROM d1 WHERE (+c, a) IN (SELECT x, y FROM d2);
+  } {2}
+
+  do_execsql_test 4.$tn.4 {
+    SELECT rowid FROM d1 WHERE (c, a) = (
+      SELECT x, y FROM d2 WHERE d2.rowid=d1.rowid
+    );
+  } {2 4}
+
+  do_execsql_test 4.$tn.5 {
+    SELECT d1.rowid FROM d1, d2 WHERE a = y;
+  } {2 4}
+
+  do_execsql_test 4.$tn.6 {
+    SELECT d1.rowid FROM d1 WHERE a = (
+      SELECT y FROM d2 where d2.rowid=d1.rowid
+    );
+  } {2 4}
+}
+
+do_execsql_test 5.0 {
+  CREATE TABLE e1(a TEXT, c NUMERIC);
+  CREATE TABLE e2(x BLOB, y BLOB);
+
+  INSERT INTO e1 VALUES(2, 2);
+
+  INSERT INTO e2 VALUES ('2', 2);
+  INSERT INTO e2 VALUES ('2', '2');
+  INSERT INTO e2 VALUES ('2', '2.0');
+
+  CREATE INDEX e1c ON e1(c);
+}
+
+do_execsql_test 5.1 {
+  SELECT rowid FROM e1 WHERE (a, c) IN (SELECT x, y FROM e2);
+} {1}
+do_execsql_test 5.2 {
+  SELECT rowid FROM e2 WHERE rowid IN (SELECT +c FROM e1);
+} {2}
+do_execsql_test 5.3 {
+  SELECT rowid FROM e2 WHERE rowid IN (SELECT 0+c FROM e1);
+} {2}
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 6.0 {
+  CREATE TABLE f1(a, b);
+  CREATE TABLE f2(c, d);
+  CREATE TABLE f3(e, f);
+}
+
+do_execsql_test 6.1 {
+  SELECT * FROM f3 WHERE (e, f) IN (
+    SELECT a, b FROM f1 UNION ALL SELECT c, d FROM f2
+  );
+}
+do_execsql_test 6.2 {
+  CREATE INDEX f3e ON f3(e);
+  SELECT * FROM f3 WHERE (e, f) IN (
+    SELECT a, b FROM f1 UNION ALL SELECT c, d FROM f2
+  );
+}
+
+
+#-------------------------------------------------------------------------
+#
+do_execsql_test 7.0 {
+  CREATE TABLE g1(a, b); 
+  INSERT INTO g1 VALUES
+      (1, 1), (1, 2), (1, 3), (1, 'i'), (1, 'j'),
+      (1, 6), (1, 7), (1, 8), (1, 9), (1, 10),
+      (1, 4), (1, 5);
+
+  CREATE TABLE g2(x, y);
+  CREATE INDEX g2x ON g2(x);
+
+  INSERT INTO g2 VALUES(1, 4);
+  INSERT INTO g2 VALUES(1, 5);
+}
+
+do_execsql_test 7.1 {
+  SELECT * FROM g2 WHERE (x, y) IN (
+    SELECT a, b FROM g1 ORDER BY +a, +b LIMIT 10
+  );
+} { 1 4 1 5 }
+
+do_execsql_test 7.2 {
+  SELECT * FROM g2 WHERE (x, y) IN (
+    SELECT a, b FROM g1 ORDER BY a, b LIMIT 10
+  );
+} { 1 4 1 5 }
+
+do_execsql_test 7.3 {
+  SELECT * FROM g2 WHERE (x, y) IN (
+    SELECT a, b FROM g1 ORDER BY 1, 2 LIMIT 10
+  );
+} { 1 4 1 5 }
+
+
+finish_test

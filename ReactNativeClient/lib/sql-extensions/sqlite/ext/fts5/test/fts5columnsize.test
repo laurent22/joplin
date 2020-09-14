@@ -1,0 +1,150 @@
+# 2015 Jun 10
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Tests focusing on fts5 tables with the columnsize=0 option.
+#
+
+source [file join [file dirname [info script]] fts5_common.tcl]
+set testprefix fts5columnsize
+
+# If SQLITE_ENABLE_FTS5 is defined, omit this file.
+ifcapable !fts5 {
+  finish_test
+  return
+}
+
+#-------------------------------------------------------------------------
+# Check that the option can be parsed and that the %_docsize table is
+# only created if it is set to true.
+#
+foreach {tn outcome stmt} {
+  1 0 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=0) }
+  2 1 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=1) }
+  3 0 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize='0') }
+  4 1 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize='1') }
+  5 2 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize='') }
+  6 2 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=2) }
+  7 1 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=0, columnsize=1) }
+  8 1 { CREATE VIRTUAL TABLE t1 USING fts5(x) }
+  9 2 { CREATE VIRTUAL TABLE t1 USING fts5(x, columnsize=11) }
+} {
+  execsql { 
+    DROP TABLE IF EXISTS t1;
+  }
+  if {$outcome==2} {
+    do_catchsql_test 1.$tn.1 $stmt {1 {malformed columnsize=... directive}}
+  } else {
+    do_execsql_test 1.$tn.2 $stmt
+    do_execsql_test 1.$tn.3 {
+      SELECT count(*) FROM sqlite_master WHERE name = 't1_docsize'
+    } $outcome
+  }
+}
+
+#-------------------------------------------------------------------------
+# Run tests on a table with no %_content or %_docsize backing store.
+#
+do_execsql_test 2.0 {
+  CREATE VIRTUAL TABLE t2 USING fts5(x, columnsize=0, content='');
+}
+do_catchsql_test 2.1 {
+  INSERT INTO t2 VALUES('a b c d e f');
+} {1 {datatype mismatch}}
+do_execsql_test 2.2 {
+  INSERT INTO t2(rowid, x) VALUES(1, 'c d e f');
+  INSERT INTO t2(rowid, x) VALUES(2, 'c d e f g h');
+  INSERT INTO t2(rowid, x) VALUES(3, 'a b c d e f g h');
+} {}
+do_execsql_test 2.3 {
+  SELECT rowid FROM t2 WHERE t2 MATCH 'b'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'e'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'h'; 
+} {3 :: 1 2 3 :: 2 3}
+do_execsql_test 2.4 {
+  INSERT INTO t2(t2, rowid, x) VALUES('delete', 2, 'c d e f g h');
+  SELECT rowid FROM t2 WHERE t2 MATCH 'b'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'e'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'h'; 
+} {3 :: 1 3 :: 3}
+do_execsql_test 2.5 {
+  INSERT INTO t2(t2) VALUES('delete-all');
+  SELECT rowid FROM t2 WHERE t2 MATCH 'b'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'e'; SELECT '::';
+  SELECT rowid FROM t2 WHERE t2 MATCH 'h'; 
+} {:: ::}
+do_execsql_test 2.6 {
+  INSERT INTO t2(rowid, x) VALUES(1, 'o t t f');
+  INSERT INTO t2(rowid, x) VALUES(2, 'f s s e');
+  INSERT INTO t2(rowid, x) VALUES(3, 'n t e t');
+}
+
+do_catchsql_test 2.7.1 {
+  SELECT rowid FROM t2
+} {1 {t2: table does not support scanning}}
+do_catchsql_test 2.7.2 {
+  SELECT rowid FROM t2 WHERE rowid=2
+} {1 {t2: table does not support scanning}}
+do_catchsql_test 2.7.3 {
+  SELECT rowid FROM t2 WHERE rowid BETWEEN 1 AND 3
+} {1 {t2: table does not support scanning}}
+
+do_execsql_test 2.X {
+  DROP TABLE t2
+}
+
+#-------------------------------------------------------------------------
+# Test the xColumnSize() API
+#
+fts5_aux_test_functions db
+
+do_execsql_test 3.1.0 {
+  CREATE VIRTUAL TABLE t3 USING fts5(x, y UNINDEXED, z, columnsize=0);
+  INSERT INTO t3 VALUES('a a', 'b b b', 'c');
+  INSERT INTO t3 VALUES('x a x', 'b b b y', '');
+}
+do_execsql_test 3.1.1 {
+  SELECT rowid, fts5_test_columnsize(t3) FROM t3 WHERE t3 MATCH 'a'
+} {
+  1 {2 0 1} 2 {3 0 0}
+}
+do_execsql_test 3.1.2 {
+  INSERT INTO t3 VALUES(NULL, NULL, 'a a a a');
+  DELETE FROM t3 WHERE rowid = 1;
+  SELECT rowid, fts5_test_columnsize(t3) FROM t3 WHERE t3 MATCH 'a'
+} {
+  2 {3 0 0} 3 {0 0 4}
+}
+
+do_execsql_test 3.2.0 {
+  CREATE VIRTUAL TABLE t4 USING fts5(x, y UNINDEXED, z, columnsize=0, content='');
+  INSERT INTO t4(rowid, x, y, z) VALUES(1, 'a a', 'b b b', 'c');
+  INSERT INTO t4(rowid, x, y, z) VALUES(2, 'x a x', 'b b b y', '');
+}
+do_execsql_test 3.2.1 {
+  SELECT rowid, fts5_test_columnsize(t4) FROM t4 WHERE t4 MATCH 'a'
+} {
+  1 {-1 0 -1} 2 {-1 0 -1}
+}
+
+#-------------------------------------------------------------------------
+# Test the integrity-check
+#
+do_execsql_test 4.1.1 {
+  CREATE VIRTUAL TABLE t5 USING fts5(x, columnsize=0);
+  INSERT INTO t5 VALUES('1 2 3 4');
+  INSERT INTO t5 VALUES('2 4 6 8');
+}
+
+do_execsql_test 4.1.2 {
+  INSERT INTO t5(t5) VALUES('integrity-check');
+}
+
+finish_test

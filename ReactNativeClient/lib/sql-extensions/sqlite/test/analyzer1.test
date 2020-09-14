@@ -1,0 +1,55 @@
+# 2015-05-11
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Quick tests for the sqlite3_analyzer tool
+#
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+ifcapable !vtab {
+  finish_test
+  return
+}
+
+if {$tcl_platform(platform)=="windows"} {
+  set PROG "sqlite3_analyzer.exe"
+} else {
+  set PROG "./sqlite3_analyzer"
+}
+if {![file exe $PROG]} {
+  set PROG [file normalize [file join $::cmdlinearg(TESTFIXTURE_HOME) $PROG]]
+  if {![file exe $PROG]} {
+    puts "analyzer1 cannot run because $PROG is not available"
+    finish_test
+    return
+  }
+}
+db close
+forcedelete test.db test.db-journal test.db-wal
+sqlite3 db test.db
+
+do_test analyzer1-1.0 {
+  db eval {
+    CREATE TABLE t1(a INTEGER PRIMARY KEY, b);
+    CREATE TABLE t2(a INT PRIMARY KEY, b) WITHOUT ROWID;
+    WITH RECURSIVE c(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM c WHERE x<250)
+    INSERT INTO t1(a,b) SELECT x, randomblob(200) FROM c;
+    INSERT INTO t2(a,b) SELECT a, b FROM t1;
+  }
+  set line "exec $PROG test.db"
+  unset -nocomplain ::MSG
+  catch {eval $line} ::MSG
+} {0}
+do_test analyzer1-1.1 {
+  regexp {^/\*\* Disk-Space Utilization.*COMMIT;\W*$} $::MSG
+} {1}
+
+finish_test

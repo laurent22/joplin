@@ -1,0 +1,132 @@
+# 2008 October 27
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+#
+# Test that the truncate optimization is disabled if the SQLITE_DELETE
+# authorization callback returns SQLITE_IGNORE.
+#
+# Test that authorizer is disabled during schema parsing.
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# disable this test if the SQLITE_OMIT_AUTHORIZATION macro is
+# defined during compilation.
+if {[catch {db auth {}} msg]} {
+  finish_test
+  return
+}
+
+# Disable the statement cache for these tests.
+# 
+db cache size 0
+
+db authorizer ::auth
+proc auth {code arg1 arg2 arg3 arg4 args} {
+  if {$code=="SQLITE_DELETE"} {
+    return $::authcode
+  }
+  return SQLITE_OK
+}
+
+#--------------------------------------------------------------------------
+# The following tests - auth3-1.* - test that return values of SQLITE_DENY,
+# SQLITE_IGNORE, SQLITE_OK and <invalid> are correctly handled when returned
+# by an SQLITE_DELETE authorization callback triggered by a 
+# "DELETE FROM <table-name>" statement.
+#
+do_test auth3-1.1 {
+  execsql {
+    CREATE TABLE t1(a,b,c);
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+  }
+} {}
+do_test auth3.1.2 {
+  set ::authcode SQLITE_DENY
+  catchsql { DELETE FROM t1 }
+} {1 {not authorized}}
+# EVIDENCE-OF: R-64962-58611 If the authorizer callback returns any
+# value other than SQLITE_IGNORE, SQLITE_OK, or SQLITE_DENY then the
+# sqlite3_prepare_v2() or equivalent call that triggered the authorizer
+# will fail with an error message.
+do_test auth3.1.3 {
+  set ::authcode SQLITE_INVALID
+  catchsql { DELETE FROM t1 }
+} {1 {authorizer malfunction}}
+do_test auth3.1.4 {
+  execsql { SELECT * FROM t1 }
+} {1 2 3 4 5 6}
+do_test auth3-1.5 {
+  set ::authcode SQLITE_IGNORE
+  execsql { 
+    DELETE FROM t1;
+    SELECT * FROM t1;
+  }
+} {}
+do_test auth3-1.6 {
+  set ::authcode SQLITE_OK
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+    DELETE FROM t1;
+    SELECT * FROM t1;
+  }
+} {}
+
+#--------------------------------------------------------------------------
+# These tests - auth3-2.* - test that returning SQLITE_IGNORE really does
+# disable the truncate optimization.
+#
+do_test auth3-2.1 {
+  set ::authcode SQLITE_OK
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+  }
+  set sqlite_search_count 0
+  execsql {
+    DELETE FROM t1;
+  }
+  set sqlite_search_count
+} {0}
+
+do_test auth3-2.2 {
+  set ::authcode SQLITE_IGNORE
+  execsql {
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES(4, 5, 6);
+  }
+  set sqlite_search_count 0
+  execsql {
+    DELETE FROM t1;
+  }
+  set sqlite_search_count
+} {1}
+
+# 2016-07-28.  A problem report from a private client complaining about
+# an authorizer failure during an ALTER TABLE.  The solution (I think) is
+# to disable the authorizer during schema parsing.
+#
+proc auth {code args} {
+  if {$code=="SQLITE_READ" && [regexp {DoNotRead} $args]} {
+    return SQLITE_DENY
+  }
+  return SQLITE_OK
+}
+do_execsql_test auth3-3.0 {
+  CREATE TEMPORARY TABLE TempTable (
+      key TEXT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT REPLACE,
+      value TEXT NOT NULL ON CONFLICT FAIL);
+  ALTER TABLE TempTable RENAME TO DoNotRead;
+  SELECT name FROM temp.sqlite_master;
+} {DoNotRead sqlite_autoindex_DoNotRead_1}
+
+finish_test
