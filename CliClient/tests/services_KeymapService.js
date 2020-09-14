@@ -173,7 +173,7 @@ describe('services_KeymapService', () => {
 			keymapService.initialize('darwin');
 			const customKeymapItems_Darwin = [
 				{ command: 'newNote', accelerator: 'Option+Shift+Cmd+N' },
-				{ command: 'synchronize', accelerator: 'F11' },
+				{ command: 'synchronize', accelerator: 'Ctrl+F11' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
 				{ command: 'showLocalSearch', accelerator: 'Ctrl+Option+S' },
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
@@ -194,7 +194,7 @@ describe('services_KeymapService', () => {
 			keymapService.initialize('win32');
 			const customKeymapItems_Win32 = [
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
-				{ command: 'synchronize', accelerator: 'F11' },
+				{ command: 'synchronize', accelerator: 'Ctrl+F11' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
 				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
