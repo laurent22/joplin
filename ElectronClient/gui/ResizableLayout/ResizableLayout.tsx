@@ -120,7 +120,7 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes):JSX.Element {
+	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean):JSX.Element {
 
 		function onResizeStart() {
 			setResizedItem({
@@ -150,13 +150,14 @@ function ResizableLayout(props:Props) {
 				item: item,
 				eventEmitter: eventEmitter.current,
 				size: sizes[item.key],
+				visible: isVisible,
 			});
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [comp]);
 		} else {
 			const childrenComponents = [];
 			for (const child of item.children) {
-				childrenComponents.push(renderLayoutItem(child, sizes));
+				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && child.visible !== false));
 			}
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents);
@@ -166,7 +167,7 @@ function ResizableLayout(props:Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);
 
-	return renderLayoutItem(props.layout, sizes);
+	return renderLayoutItem(props.layout, sizes, props.layout.visible !== false);
 }
 
 export default ResizableLayout;

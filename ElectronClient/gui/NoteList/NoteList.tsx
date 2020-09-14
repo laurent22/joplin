@@ -42,7 +42,7 @@ class NoteListComponent extends React.Component {
 		this.itemListRef = React.createRef();
 		this.itemAnchorRefs_ = {};
 
-		this.itemRenderer = this.itemRenderer.bind(this);
+		this.renderItem = this.renderItem.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.noteItem_titleClick = this.noteItem_titleClick.bind(this);
 		this.noteItem_noteDragOver = this.noteItem_noteDragOver.bind(this);
@@ -234,7 +234,7 @@ class NoteListComponent extends React.Component {
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
 	}
 
-	itemRenderer(item:any, index:number) {
+	renderItem(item:any, index:number) {
 		const highlightedWords = () => {
 			if (this.props.notesParentType === 'Search') {
 				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
@@ -292,6 +292,10 @@ class NoteListComponent extends React.Component {
 					break;
 				}
 			}
+		}
+
+		if (prevProps.visible !== this.props.visible) {
+			this.updateSizeState();
 		}
 	}
 
@@ -468,7 +472,7 @@ class NoteListComponent extends React.Component {
 				className={'note-list'}
 				items={this.props.notes}
 				style={style}
-				itemRenderer={this.itemRenderer}
+				itemRenderer={this.renderItem}
 				onKeyDown={this.onKeyDown}
 			/>
 		);

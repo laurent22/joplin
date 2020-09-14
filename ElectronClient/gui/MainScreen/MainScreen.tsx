@@ -540,7 +540,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		if (key === 'sideBar') {
 			return <SideBar key={key} />;
 		} else if (key === 'noteList') {
-			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} size={event.size}/>;
+			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} size={event.size} visible={event.visible}/>;
 		} else if (key === 'editor') {
 			const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;

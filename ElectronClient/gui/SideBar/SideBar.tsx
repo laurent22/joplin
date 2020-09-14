@@ -393,10 +393,9 @@ class SideBarComponent extends React.Component<Props, State> {
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+			<div key={key} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 				<StyledHeader
 					ref={ref}
-					key={key}
 					{...extraProps}
 					onContextMenu={contextMenuHandler}
 					onClick={(event:any) => {
