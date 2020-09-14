@@ -276,7 +276,9 @@ class InteropService {
 
 		const exportedNoteIds = [];
 		let resourceIds = [];
-		const folderIds = await Folder.allIds();
+
+		// Recursively get all the folders that have valid parents
+		const folderIds = await Folder.childrenIds('', true);
 
 		let fullSourceFolderIds = sourceFolderIds.slice();
 		for (let i = 0; i < sourceFolderIds.length; i++) {
@@ -327,7 +329,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModuleFromPath_('exporter', options);// this.newModuleByFormat_('exporter', exportFormat);
+		const exporter = this.newModuleFromPath_('exporter', options);
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];

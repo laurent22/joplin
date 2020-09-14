@@ -95,8 +95,12 @@ document.addEventListener('auxclick', event => event.preventDefault());
 // which would open a new browser window.
 document.addEventListener('click', (event) => event.preventDefault());
 
-app().start(bridge().processArgv()).then(() => {
-	require('./gui/Root.min.js');
+app().start(bridge().processArgv()).then((result) => {
+	if (!result || !result.action) {
+		require('./gui/Root.min.js');
+	} else if (result.action === 'upgradeSyncTarget') {
+		require('./gui/Root_UpgradeSyncTarget');
+	}
 }).catch((error) => {
 	const env = bridge().env();
 

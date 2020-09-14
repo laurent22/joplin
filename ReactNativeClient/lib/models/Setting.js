@@ -86,6 +86,12 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'sync.upgradeState': {
+				value: Setting.SYNC_UPGRADE_STATE_IDLE,
+				type: Setting.TYPE_INT,
+				public: false,
+			},
+
 			'sync.2.path': {
 				value: '',
 				type: Setting.TYPE_STRING,
@@ -246,7 +252,12 @@ class Setting extends BaseModel {
 
 			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
+			// The active folder ID is guaranteed to be valid as long as there's at least one
+			// existing folder, so it is a good default in contexts where there's no currently
+			// selected folder. It corresponds in general to the currently selected folder or
+			// to the last folder that was selected.
 			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
+
 			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
 			locale: {
 				value: defaultLocale(),
@@ -386,14 +397,6 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
-			'editor.betaCodeMirror': {
-				value: false,
-				type: Setting.TYPE_BOOL,
-				public: true,
-				section: 'note',
-				appTypes: ['desktop'],
-				label: () => _('Use CodeMirror as the code editor (WARNING: BETA).'),
-			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {
 				value: 'title',
@@ -419,7 +422,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: Setting.TYPE_BOOL,
 				section: 'note',
-				public: true,
+				public: mobilePlatform === 'ios',
 				appTypes: ['mobile'],
 				label: () => 'Opt-in to the editor beta',
 				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
@@ -500,6 +503,7 @@ class Setting extends BaseModel {
 
 			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
+			'db.fuzzySearchEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
@@ -1252,6 +1256,7 @@ class Setting extends BaseModel {
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
 		if (name === 'server') return _('Web Clipper');
+		if (name === 'keymap') return _('Keyboard Shortcuts');
 		return name;
 	}
 
@@ -1271,6 +1276,7 @@ class Setting extends BaseModel {
 		if (name === 'revisionService') return 'fas fa-history';
 		if (name === 'encryption') return 'fas fa-key';
 		if (name === 'server') return 'far fa-hand-scissors';
+		if (name === 'keymap') return 'fa fa-keyboard';
 		return name;
 	}
 
@@ -1323,6 +1329,10 @@ Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
 Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
 Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
+Setting.SYNC_UPGRADE_STATE_IDLE = 0; // Doesn't need to be upgraded
+Setting.SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
+Setting.SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
+
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',
 	RENDERED_MARKDOWN: 'userstyle.css',
@@ -1344,7 +1354,7 @@ Setting.constants_ = {
 	tempDir: '',
 	pluginDir: '',
 	flagOpenDevTools: false,
-	syncVersion: 1,
+	syncVersion: 2,
 };
 
 Setting.autoSaveEnabled = true;

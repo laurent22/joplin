@@ -148,6 +148,14 @@ class NoteSearchBarComponent extends React.Component {
 			</div>
 		) : null;
 
+		const allowScrolling = this.props.visiblePanes.indexOf('editor') >= 0;
+
+		const viewerWarning = (
+			<div style={textStyle}>
+				{'Jumping between matches is not available in the viewer, please toggle the editor'}
+			</div>
+		);
+
 		return (
 			<div style={this.props.style}>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -161,9 +169,10 @@ class NoteSearchBarComponent extends React.Component {
 						type="text"
 						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor, color: theme.color }}
 					/>
-					{nextButton}
-					{previousButton}
-					{matchesFoundString}
+					{allowScrolling ? nextButton : null}
+					{allowScrolling ? previousButton : null}
+					{allowScrolling ? matchesFoundString : null}
+					{!allowScrolling ? viewerWarning : null}
 				</div>
 			</div>
 		);

@@ -25,7 +25,7 @@ class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(cmdService.commandToMenuItem('setTags'))
+				new MenuItem(cmdService.commandToMenuItem('setTags', { noteIds }))
 			);
 
 			menu.append(
@@ -48,11 +48,11 @@ class NoteListUtils {
 
 			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
 				menu.append(
-					new MenuItem(cmdService.commandToMenuItem('startExternalEditing', null, { noteId: noteIds[0] }))
+					new MenuItem(cmdService.commandToMenuItem('startExternalEditing', { noteId: noteIds[0] }))
 				);
 			} else {
 				menu.append(
-					new MenuItem(cmdService.commandToMenuItem('stopExternalEditing', null, { noteId: noteIds[0] }))
+					new MenuItem(cmdService.commandToMenuItem('stopExternalEditing', { noteId: noteIds[0] }))
 				);
 			}
 
@@ -122,7 +122,7 @@ class NoteListUtils {
 
 			menu.append(
 				new MenuItem(
-					cmdService.commandToMenuItem('showShareNoteDialog', null, { noteIds: noteIds.slice() })
+					cmdService.commandToMenuItem('showShareNoteDialog', { noteIds: noteIds.slice() })
 				)
 			);
 
@@ -147,7 +147,7 @@ class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
-					cmdService.commandToMenuItem('exportPdf', null, { noteIds: noteIds })
+					cmdService.commandToMenuItem('exportPdf', { noteIds: noteIds })
 				)
 			);
 

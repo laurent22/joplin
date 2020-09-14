@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.233",
+  "version": "1.1.1",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -51,6 +51,10 @@
         {
           "from": "build-win/Joplin.VisualElementsManifest.xml",
           "to": "."
+        },
+        {
+          "from": "lib/sql-extensions/spellfix.dll",
+          "to": "usr/lib/spellfix.dll"
         }
       ],
       "extraResources": [
@@ -65,19 +69,32 @@
       "artifactName": "${productName}Portable.${ext}"
     },
     "mac": {
-      "icon": "../../Assets/macOs.icns"
+      "icon": "../../Assets/macOs.icns",
+      "extraFiles": [
+        {
+          "from": "lib/sql-extensions/spellfix.dylib",
+          "to": "usr/lib/spellfix.dylib"
+        }
+      ]
     },
     "linux": {
-      "icon": "../Assets/LinuxIcons/256x256.png",
+      "icon": "../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
       },
-      "target": "AppImage"
+      "target": "AppImage",
+      "extraFiles": [
+        {
+          "from": "lib/sql-extensions/spellfix.so",
+          "to": "usr/lib/spellfix.so"
+        }
+      ]
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "@types/jasmine": "^3.5.11",
     "ajv": "^6.5.0",
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
@@ -104,7 +121,7 @@
     "base64-stream": "^1.0.0",
     "chokidar": "^3.0.0",
     "clean-html": "^1.5.0",
-    "codemirror": "^5.54.0",
+    "codemirror": "^5.56.0",
     "color": "^3.1.2",
     "compare-versions": "^3.2.1",
     "countable": "^3.0.1",
@@ -130,7 +147,7 @@
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",
-    "katex": "^0.11.1",
+    "katex": "^0.12.0",
     "keytar": "^5.4.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.19",
@@ -161,7 +178,6 @@
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
     "react": "^16.9.0",
-    "react-ace": "^6.1.4",
     "react-datetime": "^2.14.0",
     "react-dom": "^16.9.0",
     "react-redux": "^5.0.7",

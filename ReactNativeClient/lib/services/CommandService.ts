@@ -1,3 +1,4 @@
+import KeymapService from './KeymapService';
 const BaseService = require('lib/services/BaseService');
 const eventManager = require('lib/eventManager');
 
@@ -12,8 +13,19 @@ export interface CommandRuntime {
 
 export interface CommandDeclaration {
 	name: string
+
 	// Used for the menu item label, and toolbar button tooltip
 	label?():string,
+
+	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
+	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
+	// but not so much within the keymap config screen, where the parent item is not displayed. Because
+	// of this we have this "parentLabel()" property to clarify the meaning of the certain items.
+	// For example, the focusElementNoteList will have these two properties:
+	//     label() => _('Note list'),
+	//     parentLabel() => _('Focus'),
+	// Which will be displayed as "Focus: Note list" in the keymap config screen.
+	parentLabel?():string,
 	iconName?: string,
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
@@ -75,8 +87,11 @@ export default class CommandService extends BaseService {
 	private commandPreviousStates_:CommandStates = {};
 	private mapStateToPropsIID_:any = null;
 
-	initialize(store:any) {
+	private keymapService:KeymapService = null;
+
+	initialize(store:any, keymapService:KeymapService) {
 		utils.store = store;
+		this.keymapService = keymapService;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -153,6 +168,7 @@ export default class CommandService extends BaseService {
 		options = {
 			mustExist: true,
 			runtimeMustBeRegistered: false,
+			...options,
 		};
 
 		const command = this.commands_[name];
@@ -244,6 +260,20 @@ export default class CommandService extends BaseService {
 		return command.runtime.title(command.runtime.props);
 	}
 
+	label(commandName:string, fullLabel:boolean = false):string {
+		const command = this.commandByName(commandName);
+		if (!command) throw new Error(`Command: ${commandName} is not declared`);
+		const output = [];
+		if (fullLabel && command.declaration.parentLabel && command.declaration.parentLabel()) output.push(command.declaration.parentLabel());
+		output.push(command.declaration.label());
+		return output.join(': ');
+	}
+
+	exists(commandName:string):boolean {
+		const command = this.commandByName(commandName, { mustExist: false });
+		return !!command;
+	}
+
 	private extractExecuteArgs(command:Command, executeArgs:any) {
 		if (executeArgs) return executeArgs;
 		if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);
@@ -255,7 +285,7 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
 
 		return {
-			tooltip: command.declaration.label(),
+			tooltip: this.label(commandName),
 			iconName: command.declaration.iconName,
 			enabled: this.isEnabled(commandName),
 			onClick: () => {
@@ -265,19 +295,21 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	commandToMenuItem(commandName:string, accelerator:string = null, executeArgs:any = null) {
+	commandToMenuItem(commandName:string, executeArgs:any = null) {
 		const command = this.commandByName(commandName);
 
 		const item:any = {
 			id: command.declaration.name,
-			label: command.declaration.label(),
+			label: this.label(commandName),
 			click: () => {
 				this.execute(commandName, this.extractExecuteArgs(command, executeArgs));
 			},
 		};
 
-		if (accelerator) item.accelerator = accelerator;
 		if (command.declaration.role) item.role = command.declaration.role;
+		if (this.keymapService.acceleratorExists(commandName)) {
+			item.accelerator = this.keymapService.getAccelerator(commandName);
+		}
 
 		return item;
 	}

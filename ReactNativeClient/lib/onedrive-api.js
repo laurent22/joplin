@@ -13,6 +13,7 @@ class OneDriveApi {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
+		this.accountProperties_ = null;
 		this.isPublic_ = isPublic;
 		this.listeners_ = {
 			authRefreshed: [],
@@ -73,14 +74,15 @@ class OneDriveApi {
 	}
 
 	async appDirectory() {
-		const r = await this.execJson('GET', '/drive/special/approot');
+		const driveId = this.accountProperties_.driveId;
+		const r = await this.execJson('GET', `/me/drives/${driveId}/special/approot`);
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
 	authCodeUrl(redirectUri) {
 		const query = {
 			client_id: this.clientId_,
-			scope: 'files.readwrite offline_access',
+			scope: 'files.readwrite offline_access sites.readwrite.all',
 			response_type: 'code',
 			redirect_uri: redirectUri,
 		};
@@ -225,7 +227,10 @@ class OneDriveApi {
 		// In general, `path` contains a path relative to the base URL, but in some
 		// cases the full URL is provided (for example, when it's a URL that was
 		// retrieved from the API).
-		if (url.indexOf('https://') !== 0) url = `https://graph.microsoft.com/v1.0${path}`;
+		if (url.indexOf('https://') !== 0) {
+			const slash = path.indexOf('/') === 0 ? '' : '/';
+			url = `https://graph.microsoft.com/v1.0${slash}${path}`;
+		}
 
 		if (query) {
 			url += url.indexOf('?') < 0 ? '?' : '&';
@@ -315,6 +320,22 @@ class OneDriveApi {
 		}
 
 		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
+	}
+
+	setAccountProperties(accountProperties) {
+		this.accountProperties_ = accountProperties;
+	}
+
+	async execAccountPropertiesRequest() {
+
+		try {
+			const response = await this.exec('GET','https://graph.microsoft.com/v1.0/me/drive');
+			const data = await response.json();
+			const accountProperties = { accountType: data.driveType, driveId: data.id };
+			return accountProperties;
+		} catch (error) {
+			throw new Error(`Could not retrieve account details (drive ID, Account type. Error code: ${error.code}, Error message: ${error.message}`);
+		}
 	}
 
 	async execJson(method, path, query, data) {

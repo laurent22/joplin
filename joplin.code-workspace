@@ -3,11 +3,7 @@
 		{
 			"name": ".",
 			"path": "."
-		},
-		{
-			"name": "D:/Web/www/nextcloud/apps/joplin",
-			"path": "D:/Web/www/nextcloud/apps/joplin"
-		},
+		}
 	],
 	"settings": {
 		"files.exclude": {
@@ -371,6 +367,14 @@
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspaces.js": true,
 			"CliClient/tests/support/amazon-s3-auth.json": true,
 			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js": true,
+			"CliClient/tests/synchronizer_LockHandler.js": true,
+			"CliClient/tests/synchronizer_MigrationHandler.js": true,
+			"ElectronClient/gui/Root_UpgradeSyncTarget.js": true,
+			"ReactNativeClient/lib/services/synchronizer/LockHandler.js": true,
+			"ReactNativeClient/lib/services/synchronizer/MigrationHandler.js": true,
+			"ReactNativeClient/lib/services/synchronizer/migrations/2.js": true,
+			"ReactNativeClient/lib/services/synchronizer/utils/types.js": true,
+			"ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js": true,
 			"ReactNativeClient/lib/services/ResourceEditWatcher/index.js": true,
 			"ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js": true
 		},

@@ -113,7 +113,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			},
 			supportsCommand: (/* name:string*/) => {
 				// TODO: not implemented, currently only used for "search" command
-				// which is not directly supported by Ace Editor.
+				// which is not directly supported by this Editor.
 				return false;
 			},
 			execCommand: async (cmd: EditorCommand) => {
@@ -276,6 +276,80 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
+	const loadScript = async (script:any) => {
+		return new Promise((resolve) => {
+			let element:any = document.createElement('script');
+			if (script.src.indexOf('.css') >= 0) {
+				element = document.createElement('link');
+				element.rel = 'stylesheet';
+				element.href = script.src;
+			} else {
+				element.src = script.src;
+
+				if (script.attrs) {
+					for (const attr in script.attrs) {
+						element[attr] = script.attrs[attr];
+					}
+				}
+			}
+
+			element.id = script.id;
+
+			element.onload = () => {
+				resolve();
+			};
+
+			document.getElementsByTagName('head')[0].appendChild(element);
+		});
+	};
+
+	useEffect(() => {
+		let cancelled = false;
+
+		async function loadScripts() {
+			const scriptsToLoad:{src: string, id:string, loaded: boolean}[] = [
+				{
+					src: 'node_modules/codemirror/addon/dialog/dialog.css',
+					id: 'codemirrorDialogStyle',
+					loaded: false,
+				},
+			];
+
+			// The default codemirror theme is defined in codemirror.css
+			// and doesn't have an extra css file
+			if (styles.editor.codeMirrorTheme !== 'default') {
+				// Solarized light and solarized dark are loaded by the single
+				// solarized.css file
+				let theme = styles.editor.codeMirrorTheme;
+				if (theme.indexOf('solarized') >= 0) theme = 'solarized';
+
+				scriptsToLoad.push({
+					src: `node_modules/codemirror/theme/${theme}.css`,
+					id: `codemirrorTheme${theme}`,
+					loaded: false,
+				});
+			}
+
+			for (const s of scriptsToLoad) {
+				if (document.getElementById(s.id)) {
+					s.loaded = true;
+					continue;
+				}
+
+				await loadScript(s);
+				if (cancelled) return;
+
+				s.loaded = true;
+			}
+		}
+
+		loadScripts();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [styles.editor.codeMirrorTheme]);
+
 	useEffect(() => {
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -290,6 +364,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				background-color: inherit !important;
 				position: absolute !important;
 				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+			}
+
+			.CodeMirror-lines {
+				/* This is used to enable the scroll-past end behaviour. The same height should */
+				/* be applied to the viewer. */
+				padding-bottom: 400px !important;
 			}
 			
 			.cm-header-1 {
@@ -327,6 +407,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				-moz-box-sizing: border-box;
 				box-sizing: border-box;
 				opacity: .5;
+			}
+
+			/* We need to use important to override theme specific values */
+			.cm-error {
+				color: inherit !important;
+				background-color: inherit !important;
+				border-bottom: 1px dotted #dc322f;
 			}
 		`));
 
@@ -392,37 +479,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
-			// Force both viewers to be visible during search
-			// This view should only change when the search terms change, this means the user
-			// is always presented with the currently highlighted text, but can revert
-			// to the viewer if they only want to scroll through matches
-			if (!props.visiblePanes.includes('editor') && props.searchMarkers !== previousSearchMarkers) {
-				props.dispatch({
-					type: 'NOTE_VISIBLE_PANES_SET',
-					panes: ['editor', 'viewer'],
-				});
-			}
-			// SEARCHHACK
-			// TODO: remove this options hack when aceeditor is removed
-			// Currently the webviewRef will send out an ipcMessage to set the results count
-			// Also setting it here will start an infinite loop of repeating the search
-			// Unfortunately we can't remove the function in the webview setMarkers
-			// until the aceeditor is remove.
-			// The below search is more accurate than the webview based one as it searches
-			// the text and not rendered html (rendered html fails if there is a match
-			// in a katex block)
-			// Once AceEditor is removed the options definition below can be removed and
-			// props.searchMarkers.options can be directly passed to as the 3rd argument below
-			// (replacing options)
-			let options = { notFromAce: true };
-			if (props.searchMarkers.options) {
-				options = Object.assign({}, props.searchMarkers.options, options);
-			}
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, options);
-			//  SEARCHHACK
-			if (editorRef.current) {
+			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
+			if (editorRef.current) {
 				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
+
 				props.setLocalSearchResultCount(matches);
 			}
 		}
@@ -450,6 +511,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
+
+	useEffect(() => {
+		if (!editorRef.current) return;
+
+		// Anytime the user toggles the visible panes AND the editor is visible as a result
+		// we should focus the editor
+		// The intuition is that a panel toggle (with editor in view) is the equivalent of
+		// an editor interaction so users should expect the editor to be focused
+		if (props.visiblePanes.indexOf('editor') >= 0) {
+			editorRef.current.focus();
+		}
+	}, [props.visiblePanes]);
 
 	useEffect(() => {
 		if (!editorRef.current) return;

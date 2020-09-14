@@ -63,13 +63,6 @@ a {
 	transition: 0.3s;
 	opacity: 1;
 }
-/* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
-   as red boxes, but since those are actually valid characters and common in imported
-   Evernote data, we hide them here. */
-.ace-chrome .ace_invisible_space {
-	background-color: transparent !important;
-	opacity: 0;
-}
 
 .note-list .list-item-container:hover {
 	background-color: rgba(0,160,255,0.1) !important;

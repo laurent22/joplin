@@ -28,7 +28,6 @@ const aritimStyle = {
 	codeBorderColor: '#141a21', // Single line code border, and tables
 	codeColor: '#005b47', // Single line code text
 
-	aceEditorTheme: 'chaos',
 	codeMirrorTheme: 'monokai',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 

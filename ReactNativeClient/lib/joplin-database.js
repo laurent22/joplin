@@ -3,6 +3,7 @@ const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim.js');
+const EventEmitter = require('events');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -125,6 +126,12 @@ class JoplinDatabase extends Database {
 		this.tableFields_ = null;
 		this.version_ = null;
 		this.tableFieldNames_ = {};
+		this.extensionToLoad = './build/lib/sql-extensions/spellfix';
+		this.eventEmitter_ = new EventEmitter();
+	}
+
+	eventEmitter() {
+		return this.eventEmitter_;
 	}
 
 	initialized() {
@@ -277,6 +284,8 @@ class JoplinDatabase extends Database {
 					if (tableName == 'table_fields') continue;
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
+					if (tableName == 'notes_spellfix') continue;
+					if (tableName == 'search_aux') continue;
 					chain.push(() => {
 						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
@@ -326,7 +335,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -349,6 +358,8 @@ class JoplinDatabase extends Database {
 			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
+
+			this.eventEmitter_.emit('startMigration', { version: targetVersion });
 
 			if (targetVersion == 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));
@@ -757,13 +768,103 @@ class JoplinDatabase extends Database {
 						GROUP BY tags.id`);
 			}
 
+			if (targetVersion == 33) {
+				queries.push('DROP TRIGGER notes_fts_before_update');
+				queries.push('DROP TRIGGER notes_fts_before_delete');
+				queries.push('DROP TRIGGER notes_after_update');
+				queries.push('DROP TRIGGER notes_after_insert');
+
+				queries.push('DROP INDEX notes_normalized_id');
+				queries.push('DROP TABLE notes_normalized');
+				queries.push('DROP TABLE notes_fts');
+
+
+				const notesNormalized = `
+					CREATE TABLE notes_normalized (
+						id TEXT NOT NULL,
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT "",
+						user_created_time INT NOT NULL DEFAULT 0,
+						user_updated_time INT NOT NULL DEFAULT 0,
+						is_todo INT NOT NULL DEFAULT 0,
+						todo_completed INT NOT NULL DEFAULT 0,
+						parent_id TEXT NOT NULL DEFAULT "",
+						latitude NUMERIC NOT NULL DEFAULT 0,
+						longitude NUMERIC NOT NULL DEFAULT 0,
+						altitude NUMERIC NOT NULL DEFAULT 0,
+						source_url TEXT NOT NULL DEFAULT ""
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(notesNormalized)[0]);
+
+				queries.push('CREATE INDEX notes_normalized_id ON notes_normalized (id)');
+
+				queries.push('CREATE INDEX notes_normalized_user_created_time ON notes_normalized (user_created_time)');
+				queries.push('CREATE INDEX notes_normalized_user_updated_time ON notes_normalized (user_updated_time)');
+				queries.push('CREATE INDEX notes_normalized_is_todo ON notes_normalized (is_todo)');
+				queries.push('CREATE INDEX notes_normalized_todo_completed ON notes_normalized (todo_completed)');
+				queries.push('CREATE INDEX notes_normalized_parent_id ON notes_normalized (parent_id)');
+				queries.push('CREATE INDEX notes_normalized_latitude ON notes_normalized (latitude)');
+				queries.push('CREATE INDEX notes_normalized_longitude ON notes_normalized (longitude)');
+				queries.push('CREATE INDEX notes_normalized_altitude ON notes_normalized (altitude)');
+				queries.push('CREATE INDEX notes_normalized_source_url ON notes_normalized (source_url)');
+
+				const tableFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
+
+
+				const newVirtualTableSql = `
+					CREATE VIRTUAL TABLE notes_fts USING fts4(
+						content="notes_normalized",
+						notindexed="id",
+						notindexed="user_created_time",
+						notindexed="user_updated_time",
+						notindexed="is_todo",
+						notindexed="todo_completed",
+						notindexed="parent_id",
+						notindexed="latitude",
+						notindexed="longitude",
+						notindexed="altitude",
+						notindexed="source_url",
+						${tableFields}
+					);`
+				;
+
+				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
+
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_update BEFORE UPDATE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_fts_before_delete BEFORE DELETE ON notes_normalized BEGIN
+						DELETE FROM notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(this.addMigrationFile(33));
+			}
+
+			if (targetVersion == 34) {
+				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
+				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
-				if (targetVersion === 15 || targetVersion === 18) {
-					this.logger().warn('Could not upgrade to database v15 or v18 - FTS feature will not be used', error);
+				if (targetVersion === 15 || targetVersion === 18 || targetVersion === 33) {
+					this.logger().warn('Could not upgrade to database v15 or v18 or v33 - FTS feature will not be used', error);
+				} else if (targetVersion === 34) {
+					this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
 				} else {
 					throw error;
 				}
@@ -790,12 +891,29 @@ class JoplinDatabase extends Database {
 		return true;
 	}
 
+	async fuzzySearchEnabled() {
+		try {
+			await this.selectOne('SELECT count(*) FROM notes_spellfix');
+		} catch (error) {
+			this.logger().warn('Fuzzy search check failed', error);
+			return false;
+		}
+		this.logger().info('Fuzzy search check succeeded');
+		return true;
+	}
+
 	version() {
 		return this.version_;
 	}
 
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
+
+		try {
+			await this.loadExtension(this.extensionToLoad);
+		} catch (error) {
+			console.info(error);
+		}
 
 		let versionRow = null;
 		try {

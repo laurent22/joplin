@@ -2,8 +2,8 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
-const SearchEngine = require('lib/services/SearchEngine');
 const CommandService = require('lib/services/CommandService').default;
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
 const Folder = require('lib/models/Folder');
@@ -14,6 +14,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const KeymapService = require('lib/services/KeymapService.js').default;
 
 class GotoAnything {
 
@@ -176,8 +177,8 @@ class Dialog extends React.PureComponent {
 		return output.join(' ');
 	}
 
-	keywords(searchQuery) {
-		const parsedQuery = SearchEngine.instance().parseQuery(searchQuery);
+	async keywords(searchQuery) {
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, false);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
@@ -226,7 +227,7 @@ class Dialog extends React.PureComponent {
 					}
 				} else {
 					const limit = 20;
-					const searchKeywords = this.keywords(searchQuery);
+					const searchKeywords = await this.keywords(searchQuery);
 					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
@@ -282,7 +283,7 @@ class Dialog extends React.PureComponent {
 			this.setState({
 				listType: listType,
 				results: results,
-				keywords: this.keywords(searchQuery),
+				keywords: await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
 			});
@@ -454,6 +455,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		theme: state.settings.theme,
 		showCompletedTodos: state.settings.showCompletedTodos,
+		highlightedWords: state.highlightedWords,
 	};
 };
 
@@ -467,7 +469,7 @@ GotoAnything.manifest = {
 			name: 'main',
 			parent: 'tools',
 			label: _('Goto Anything...'),
-			accelerator: 'CommandOrControl+G',
+			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
 		},
 	],

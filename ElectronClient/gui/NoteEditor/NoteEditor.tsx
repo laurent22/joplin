@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import AceEditor  from './NoteBody/AceEditor/AceEditor';
 import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
@@ -367,7 +366,7 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
+	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
 	const editorProps:NoteBodyEditorProps = {
 		ref: editorRef,
@@ -400,8 +399,6 @@ function NoteEditor(props: NoteEditorProps) {
 
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
-	} else if (props.bodyEditor === 'AceEditor') {
-		editor = <AceEditor {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
 		editor = <CodeMirror {...editorProps}/>;
 	} else {
@@ -468,6 +465,7 @@ function NoteEditor(props: NoteEditorProps) {
 				onNext={localSearch_next}
 				onPrevious={localSearch_previous}
 				onClose={localSearch_close}
+				visiblePanes={props.noteVisiblePanes}
 			/>
 		);
 	}
@@ -533,6 +531,7 @@ const mapStateToProps = (state: any) => {
 		customCss: state.customCss,
 		noteVisiblePanes: state.noteVisiblePanes,
 		watchedResources: state.watchedResources,
+		highlightedWords: state.highlightedWords,
 	};
 };
 

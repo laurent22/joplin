@@ -10,6 +10,7 @@ const shared = require('lib/components/shared/config-shared.js');
 const ConfigMenuBar = require('./ConfigMenuBar.min.js');
 const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('./ClipperConfigScreen.min');
+const { KeymapConfigScreen } = require('./KeymapConfig/KeymapConfigScreen');
 
 class ConfigScreenComponent extends React.Component {
 	constructor() {
@@ -68,6 +69,7 @@ class ConfigScreenComponent extends React.Component {
 	screenFromName(screenName) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
 		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
+		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.theme}/>;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}

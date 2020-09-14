@@ -5,7 +5,7 @@
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "watch": "node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
+    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
     "buildPluginDoc": "typedoc --theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib/services/plugin_service/Sandbox",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
@@ -21,12 +21,13 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
-    "eslint": "^6.1.0",
+    "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.4.0",
@@ -34,11 +35,13 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
+    "jasmine": "^3.5.0",
     "lint-staged": "^9.2.1",
     "typedoc": "^0.17.8",
     "typescript": "^3.9.6"
   },
   "dependencies": {
+    "@types/react-native": "^0.63.1",
     "follow-redirects": "^1.11.0",
     "immer": "^7.0.5",
     "joplin-turndown": "^4.0.29",

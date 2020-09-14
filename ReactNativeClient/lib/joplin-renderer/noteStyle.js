@@ -19,7 +19,7 @@ module.exports = function(theme) {
 		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 
 		body {
-			font-size: ${theme.noteViewerFontSize};
+			font-size: ${formatCssSize(theme.noteViewerFontSize)};
 			color: ${theme.color};
 			word-wrap: break-word;
 			line-height: ${theme.lineHeight};

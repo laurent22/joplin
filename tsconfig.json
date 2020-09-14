@@ -17,6 +17,10 @@
 		"jsx": "react",
 		"skipLibCheck": true,
 		"allowUmdGlobalAccess": true,
+		"baseUrl": ".",
+		"paths": {
+			"lib/*": ["./ReactNativeClient/lib/*"],
+		},
 	},
     "include": [
         "ReactNativeClient/**/*",
