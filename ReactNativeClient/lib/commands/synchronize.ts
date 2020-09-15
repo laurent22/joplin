@@ -4,7 +4,7 @@ const { reg } = require('lib/registry.js');
 
 export const declaration:CommandDeclaration = {
 	name: 'synchronize',
-	label: () => _('Synchronize'),
+	label: () => _('Synchronise'),
 	iconName: 'fa-sync-alt',
 };
 
