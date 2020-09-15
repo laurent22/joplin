@@ -154,7 +154,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -249,7 +249,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	renderHeader(key, title) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle}>
 				<Text style={theme.headerStyle}>{title}</Text>
@@ -327,7 +327,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	settingToComponent(key, value) {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 		const output = null;
 
@@ -429,7 +429,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	render() {
 		const settings = this.state.settings;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
@@ -545,7 +545,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />
 				<ScrollView>{settingComps}</ScrollView>
 			</View>
@@ -556,7 +556,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 const ConfigScreen = connect(state => {
 	return {
 		settings: state.settings,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(ConfigScreenComponent);
 

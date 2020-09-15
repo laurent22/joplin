@@ -532,7 +532,7 @@ const ScreenHeader = connect(state => {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
 		folders: state.folders,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,

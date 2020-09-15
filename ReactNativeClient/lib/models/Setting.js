@@ -1267,14 +1267,14 @@ class Setting extends BaseModel {
 	}
 
 	static sectionNameToIcon(name) {
-		if (name === 'general') return 'fas fa-sliders-h';
-		if (name === 'sync') return 'fas fa-sync-alt';
-		if (name === 'appearance') return 'fas fa-pencil-alt';
-		if (name === 'note') return 'far fa-file-alt';
-		if (name === 'plugins') return 'fas fa-puzzle-piece';
-		if (name === 'application') return 'fas fa-cog';
-		if (name === 'revisionService') return 'fas fa-history';
-		if (name === 'encryption') return 'fas fa-key';
+		if (name === 'general') return 'icon-general';
+		if (name === 'sync') return 'icon-sync';
+		if (name === 'appearance') return 'icon-appearance';
+		if (name === 'note') return 'icon-note';
+		if (name === 'plugins') return 'icon-plugins';
+		if (name === 'application') return 'icon-application';
+		if (name === 'revisionService') return 'icon-note-history';
+		if (name === 'encryption') return 'icon-encryption';
 		if (name === 'server') return 'far fa-hand-scissors';
 		if (name === 'keymap') return 'fa fa-keyboard';
 		return name;

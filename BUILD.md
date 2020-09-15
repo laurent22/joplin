@@ -11,6 +11,7 @@ Note that all the applications share the same library, which, for historical rea
 - macOS, Linux: Install rsync - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
+- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev`
 
 ## Building
 
@@ -24,6 +25,8 @@ Then you can test the various applications:
 
 	cd ElectronClient
 	npm start
+
+You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 

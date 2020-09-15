@@ -39,6 +39,15 @@ export interface Command {
 	runtime?: CommandRuntime,
 }
 
+export interface ToolbarButtonInfo {
+	name: string,
+	tooltip: string,
+	iconName: string,
+	enabled: boolean,
+	onClick():void,
+	title: string,
+}
+
 interface Commands {
 	[key:string]: Command;
 }
@@ -260,6 +269,12 @@ export default class CommandService extends BaseService {
 		return command.runtime.title(command.runtime.props);
 	}
 
+	iconName(commandName:string):string {
+		const command = this.commandByName(commandName);
+		if (!command) throw new Error(`No such command: ${commandName}`);
+		return command.declaration.iconName;
+	}
+
 	label(commandName:string, fullLabel:boolean = false):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
@@ -281,10 +296,11 @@ export default class CommandService extends BaseService {
 		return {};
 	}
 
-	commandToToolbarButton(commandName:string, executeArgs:any = null) {
+	commandToToolbarButton(commandName:string, executeArgs:any = null):ToolbarButtonInfo {
 		const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
 
 		return {
+			name: commandName,
 			tooltip: this.label(commandName),
 			iconName: command.declaration.iconName,
 			enabled: this.isEnabled(commandName),

@@ -257,7 +257,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		const cacheKey = [themeId, this.state.titleTextInputHeight, this.state.HACK_webviewLoadingState].join('_');
@@ -957,12 +957,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
-			return <CameraView theme={this.props.theme} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		}
 
 		let bodyComponent = null;
@@ -992,7 +992,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
-						theme={this.props.theme}
+						themeId={this.props.themeId}
 						noteHash={this.props.noteHash}
 						onCheckboxChange={newBody => {
 							onCheckboxChange(newBody);
@@ -1049,7 +1049,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						note: note,
 						noteResources: this.state.noteResources,
 						highlightedKeywords: keywords,
-						theme: this.props.theme,
+						themeId: this.props.themeId,
 						noteHash: this.props.noteHash,
 						onCheckboxChange: newBody => {
 							onCheckboxChange(newBody);
@@ -1153,7 +1153,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
 					folderPickerOptions={this.folderPickerOptions()}
 					menuOptions={this.menuOptions()}
@@ -1193,7 +1193,7 @@ const NoteScreen = connect(state => {
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		searchQuery: state.searchQuery,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
