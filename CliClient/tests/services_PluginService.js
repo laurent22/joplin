@@ -65,7 +65,7 @@ describe('services_PluginService', function() {
 
 	it('should load multiple plugins from a directory', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadPlugins(`${testPluginDir}/multi_plugins`);
+		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`);
 
 		const plugin1 = service.pluginById('simple1');
 		const plugin2 = service.pluginById('simple2');

@@ -50,4 +50,12 @@ export default class Sandbox {
 		}, interval);
 	}
 
+	alert(message:string) {
+		return alert(message);
+	}
+
+	confirm(message:string) {
+		return confirm(message);
+	}
+
 }

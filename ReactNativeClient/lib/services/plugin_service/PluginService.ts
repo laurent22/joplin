@@ -48,6 +48,8 @@ export default class PluginService extends BaseService {
 			distPath = `${path}/dist`;
 		}
 
+		this.logger().info(`PluginService: Loading plugin from ${path}`);
+
 		const manifestPath = `${distPath}/manifest.json`;
 		const indexPath = `${distPath}/index.js`;
 		const manifestContent = await fsDriver.readFile(manifestPath);
@@ -68,7 +70,7 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	async loadPlugins(pluginDir:string) {
+	async loadAndRunPlugins(pluginDir:string) {
 		const fsDriver = shim.fsDriver();
 		const pluginPaths = await fsDriver.readDirStats(pluginDir);
 
@@ -81,12 +83,13 @@ export default class PluginService extends BaseService {
 			}
 
 			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
-			this.plugins_[plugin.id] = plugin;
 			await this.runPlugin(plugin);
 		}
 	}
 
 	async runPlugin(plugin:Plugin) {
+		this.plugins_[plugin.id] = plugin;
+
 		// Context contains the data that is sent from the plugin to the app
 		// Currently it only contains the object that's registered when
 		// the plugin calls `joplin.plugins.register()`

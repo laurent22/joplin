@@ -222,26 +222,50 @@ class MainScreenComponent extends React.Component<any, any> {
 	}
 
 	updateRootLayoutSize() {
-		this.setState({ layout: produce(this.state.layout, (draftState:any) => {
+		this.setState({ layout: produce(this.state.layout, (draft:any) => {
 			const s = this.rootLayoutSize();
-			draftState.width = s.width;
-			draftState.height = s.height;
+			draft.width = s.width;
+			draft.height = s.height;
 		}) });
 	}
 
 	componentDidUpdate(prevProps:any) {
 		if (this.props.noteListVisibility !== prevProps.noteListVisibility || this.props.sidebarVisibility !== prevProps.sidebarVisibility) {
-			this.setState({ layout: produce(this.state.layout, (draftState:any) => {
-				const noteListColumn = findItemByKey(draftState, 'noteListColumn');
+			this.setState({ layout: produce(this.state.layout, (draft:any) => {
+				const noteListColumn = findItemByKey(draft, 'noteListColumn');
 				noteListColumn.visible = this.props.noteListVisibility;
 
-				const sidebarColumn = findItemByKey(draftState, 'sidebarColumn');
+				const sidebarColumn = findItemByKey(draft, 'sidebarColumn');
 				sidebarColumn.visible = this.props.sidebarVisibility;
 			}) });
 		}
 
 		if (prevProps.style.width !== this.props.style.width || prevProps.style.height !== this.props.style.height) {
 			this.updateRootLayoutSize();
+		}
+
+		if (prevProps.plugins !== this.props.plugins) {
+			this.setState({ layout: produce(this.state.layout, (draft:any) => {
+				for (const pluginId in this.props.plugins) {
+					const plugin = this.props.plugins[pluginId];
+					for (const viewId in plugin.views) {
+						const control = plugin.views[viewId];
+						const key = `pluginView_${viewId}`;
+
+						const found = draft.children[1].children.find((c:any) => c.key === key);
+
+						if (!found) {
+							draft.children[1].children.push({
+								key: key,
+								context: {
+									plugin: plugin,
+									control: control,
+								},
+							});
+						}
+					}
+				}
+			}) });
 		}
 	}
 
@@ -589,6 +613,17 @@ class MainScreenComponent extends React.Component<any, any> {
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
 			return <NoteListControls key={key} />;
+		} else if (key.indexOf('pluginView_') === 0) {
+			const { control, plugin } = event.item.context;
+			return <UserWebview
+				key={control.id}
+				viewId={control.id}
+				html={control.html}
+				scripts={control.scripts}
+				pluginId={plugin.id}
+				onMessage={this.userWebview_message}
+				style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}
+			/>;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);
@@ -608,41 +643,6 @@ class MainScreenComponent extends React.Component<any, any> {
 		const noteListVisibility = this.props.noteListVisibility;
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth, this.pluginControlCount());
 
-		// const headerItems = [];
-
-		// headerItems.push(CommandService.instance().commandToToolbarButton('toggleSidebar', { iconRotation: sidebarVisibility ? 0 : 90 }));
-		// headerItems.push(CommandService.instance().commandToToolbarButton('toggleNoteList', { iconRotation: noteListVisibility ? 0 : 90 }));
-		// headerItems.push(CommandService.instance().commandToToolbarButton('newNote'));
-		// headerItems.push(CommandService.instance().commandToToolbarButton('newTodo'));
-		// headerItems.push(CommandService.instance().commandToToolbarButton('newNotebook'));
-
-		// headerItems.push({
-		// 	title: _('Code View'),
-		// 	iconName: 'fa-file-code ',
-		// 	enabled: !!notes.length,
-		// 	type: 'checkbox',
-		// 	checked: this.props.settingEditorCodeView,
-		// 	onClick: () => {
-		// 		// A bit of a hack, but for now don't allow changing code view
-		// 		// while a note is being saved as it will cause a problem with
-		// 		// TinyMCE because it won't have time to send its content before
-		// 		// being switch to the Code Editor.
-		// 		if (this.props.hasNotesBeingSaved) return;
-		// 		Setting.toggle('editor.codeView');
-		// 	},
-		// });
-
-		// headerItems.push(CommandService.instance().commandToToolbarButton('toggleVisiblePanes'));
-
-		// headerItems.push({
-		// 	title: _('Search...'),
-		// 	iconName: 'fa-search',
-		// 	onQuery: (query, fuzzy = false) => {
-		// 		CommandService.instance().execute('search', { query, fuzzy });
-		// 	},
-		// 	type: 'search',
-		// });
-
 		if (!this.promptOnClose_) {
 			this.promptOnClose_ = (answer:any, buttonType:any) => {
 				return this.state.promptOptions.onClose(answer, buttonType);
@@ -659,19 +659,6 @@ class MainScreenComponent extends React.Component<any, any> {
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
-
-		//const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
-
-		//const userWebviews = this.renderUserWebviews();
-
-		// <SideBar style={styles.sideBar} />
-		// <VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
-		// <div style={{ display: 'inline-flex', flexDirection: 'column', verticalAlign: 'top', height: '100%' }}>
-		// 	{userWebviews}
-		// </div>
-		// <NoteList style={styles.noteList} />
-		// <VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
-		// <NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
 
 		return (
 			<div style={style}>

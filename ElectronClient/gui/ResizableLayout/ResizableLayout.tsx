@@ -26,6 +26,7 @@ export interface LayoutItem {
 	direction?: LayoutItemDirection,
 	resizable?: boolean,
 	visible?: boolean,
+	context?: any,
 }
 
 interface onResizeEvent {
