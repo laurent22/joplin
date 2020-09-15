@@ -686,8 +686,8 @@ class BaseApplication {
 		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
-		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
-			// this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+		if (Setting.value('appType') === 'desktop') {
+			this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		}
 

@@ -96,7 +96,13 @@ export default class PluginService extends BaseService {
 
 		const sandbox = new Sandbox(plugin, this.store_, context);
 		vm.createContext(sandbox);
-		vm.runInContext(plugin.scriptText, sandbox);
+
+		try {
+			vm.runInContext(plugin.scriptText, sandbox);
+		} catch (error) {
+			this.logger().error(`In plugin ${plugin.id}:`, error);
+			return;
+		}
 
 		if (!context.runtime) {
 			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
@@ -114,7 +120,7 @@ export default class PluginService extends BaseService {
 				// be handled correctly by loggers, etc.
 				const newError:Error = new Error(error.message);
 				newError.stack = error.stack;
-				this.logger().error(plugin.id, `In plugin ${plugin.id}:`, newError);
+				this.logger().error(`In plugin ${plugin.id}:`, newError);
 			}
 
 			this.logger().info(`Finished running plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
