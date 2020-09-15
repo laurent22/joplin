@@ -5,13 +5,15 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "webpack"
+    "dist": "webpack",
+    "postinstall": "npm run dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.14",
+    "copy-webpack-plugin": "^6.1.0",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",

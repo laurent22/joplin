@@ -41,19 +41,17 @@ joplin.plugins.register({
 
 		async function updateTocView() {
 			const note = await joplin.workspace.selectedNote();
+
 			if (note) {
 				const headers = noteHeaders(note.body);
 
 				const html = [];
 				for (const header of headers) {
-					const message = {
-						name: 'scrollToHash',
-						hash: headerSlug(header.text),
-					};
-					const onClickJs = `webviewApi.postMessage(${JSON.stringify(message)}); return false;`
+					const slug = headerSlug(header.text);
+
 					html.push(`
 						<p style="padding-left:${(header.level - 1) * 15}px">
-							<a href="#" onclick="${joplin.utils.escapeHtml(onClickJs)}">
+							<a class="toc-header" href="#" data-slug="${joplin.utils.escapeHtml(slug)}">
 								${joplin.utils.escapeHtml(header.text)}
 							</a>
 						</p>
