@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -104,9 +106,9 @@ msgid "Do not ask for confirmation."
 msgstr "Ne pas demander de confirmation."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Format de la source : %s"
+msgstr "Format de la sortie : %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -317,7 +319,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Mettre à jour la cible de synchronisation."
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -376,7 +378,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Cible de la synchronisation : %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Impossible d'initialiser la synchronisation."
 
@@ -813,6 +814,8 @@ msgstr "Annuler"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"L'application va maintenance fermer. Veuillez la relancer pour terminer "
+"l'opération."
 
 #: ElectronClient/plugins/GotoAnything.min.js:446
 msgid ""
@@ -1021,7 +1024,6 @@ msgid "strong text"
 msgstr "texte en gras"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
-#, fuzzy
 msgid "emphasised text"
 msgstr "texte en italique"
 
@@ -1176,13 +1178,14 @@ msgstr "Création de %s..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:344
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Les changements sur les éléments suivants sont monitorés :"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:347
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"Les pièces jointes ne seront plus monitorées lorsque vous changerez de note."
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1308,12 +1311,11 @@ msgstr "Importer"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
-msgstr ""
+msgstr "Commande"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Mode de clavier"
+msgstr "Raccourci"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
 #: ElectronClient/app.js:690
@@ -1336,9 +1338,8 @@ msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "A propos de Joplin"
+msgstr "Cacher Joplin"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 #: ElectronClient/app.js:703
@@ -1346,9 +1347,8 @@ msgid "Close Window"
 msgstr "Fermer la fenêtre"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Preferences"
-msgstr "Préférences…"
+msgstr "Préférences"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
 #: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:572
@@ -1357,13 +1357,15 @@ msgstr "Options"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Taper le raccourci"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Tapez le raccourci et appuyez sur ENTREE. Ou, appuyez sur la touche de "
+"retour arrière pour supprimer le raccourci."
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
@@ -1377,11 +1379,13 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"La cible de synchronisation doit être mise à jour. L'opération peut prendre "
+"plusieurs minutes et l'application devra être re-démarrée. Pour continuer, "
+"veuillez cliquer sur le lien."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Clefs maîtres qui peuvent être mise à niveau"
+msgstr "Redémarrer et mettre à jour"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
@@ -1406,12 +1410,10 @@ msgid "Set the password"
 msgstr "Définir le mot de passe"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:349
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "L'une des clefs maîtres requiert un mot de passe."
+msgstr "L'une des clefs maîtres utilise une méthode de chiffrement obsolète."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:361
-#, fuzzy
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -1420,7 +1422,6 @@ msgstr ""
 "l'appliquer à vos données."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:366
-#, fuzzy
 msgid "More info"
 msgstr "Plus d'information"
 
@@ -1761,9 +1762,8 @@ msgid "Icon"
 msgstr "Icône"
 
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "Propriétés de la note"
+msgstr "Propriétés du carnet"
 
 #: ElectronClient/gui/NoteText.min.js:781
 #, javascript-format
@@ -1936,7 +1936,7 @@ msgstr "Statistiques"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Temps de lecture : %s min"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -2151,9 +2151,8 @@ msgid "Templates"
 msgstr "Modèles"
 
 #: ElectronClient/app.js:668
-#, fuzzy
 msgid "Export all"
-msgstr "Exporter"
+msgstr "Tout exporter"
 
 #: ElectronClient/app.js:683
 #, javascript-format
@@ -2253,7 +2252,7 @@ msgstr "Paramètre inconnu : %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2397,15 +2396,15 @@ msgstr "WebDAV : Mot de passe"
 
 #: ReactNativeClient/lib/models/Setting.js:195
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3: bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:206
 msgid "AWS key"
-msgstr ""
+msgstr "AWS : Clef"
 
 #: ReactNativeClient/lib/models/Setting.js:216
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS : Secret"
 
 #: ReactNativeClient/lib/models/Setting.js:230
 msgid "Attachment download behaviour"
@@ -2626,7 +2625,6 @@ msgid "Editor font family"
 msgstr "Police de l'éditeur"
 
 #: ReactNativeClient/lib/models/Setting.js:553
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -2867,9 +2865,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1259
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Mode de clavier"
+msgstr "Raccourcis clavier"
 
 #: ReactNativeClient/lib/models/Setting.js:1264
 msgid ""
@@ -3025,6 +3022,8 @@ msgstr "Certains objets ne peuvent être synchronisés."
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"La cible de synchronisation doit être mise à jour. Veuillez appuyer sur "
+"cette bannière pour commencer."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3151,7 +3150,7 @@ msgstr "Rafraîchir"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Mise à jour de la cible de synchro"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3553,7 +3552,6 @@ msgid "Forward"
 msgstr "Vers l'avant"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "Synchroniser"
 
@@ -3793,9 +3791,11 @@ msgid "Directory"
 msgstr "Dossier"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Impossible de charger module \"%s\" pour le format \"%s\""
+msgstr ""
+"Impossible de charger module \"%s\" pour le format d'entrée \"%s\" et de "
+"sortie \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format

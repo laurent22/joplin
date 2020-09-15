@@ -136,7 +136,7 @@ export default class KeymapService extends BaseService {
 				this.overrideKeymap(JSON.parse(customKeymapFile));
 			} catch (err) {
 				const message = err.message || '';
-				throw new Error(`${_('Error loading the keymap from file: %s', customKeymapPath)}\n${message}`);
+				throw new Error(_('Error: %s', message));
 			}
 		}
 	}
@@ -153,7 +153,7 @@ export default class KeymapService extends BaseService {
 			eventManager.emit('keymapChange');
 		} catch (err) {
 			const message = err.message || '';
-			throw new Error(`${_('Error saving the keymap to file: %s', customKeymapPath)}\n${message}`);
+			throw new Error(_('Error: %s', message));
 		}
 	}
 
@@ -227,18 +227,18 @@ export default class KeymapService extends BaseService {
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new Error(_('Keymap item %s is missing the required "command" property.', JSON.stringify(item)));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'command'));
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(_('Keymap item %s is invalid because %s is not a valid command.', JSON.stringify(item), item.command));
+			throw new Error(_('Invalid %s: %s.', 'command', item.command));
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error(_('Keymap item %s is missing the required "accelerator" property.', JSON.stringify(item)));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'accelerator'));
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
 			} catch {
-				throw new Error(_('Keymap item %s is invalid because %s is not a valid accelerator.', JSON.stringify(item), item.accelerator));
+				throw new Error(_('Invalid %s: %s.', 'accelerator', item.command));
 			}
 		}
 	}

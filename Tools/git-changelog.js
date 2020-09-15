@@ -197,8 +197,6 @@ function formatCommitMessage(msg, author, options) {
 
 	const commitMessage = parseCommitMessage(output, subModule);
 
-	console.info(commitMessage);
-
 	const messagePieces = [];
 	messagePieces.push(`${capitalizeFirstLetter(commitMessage.type)}`);
 	if (commitMessage.subModule) messagePieces.push(`${capitalizeFirstLetter(commitMessage.subModule)}`);
