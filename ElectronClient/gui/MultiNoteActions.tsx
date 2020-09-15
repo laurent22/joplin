@@ -5,22 +5,21 @@ const { bridge } = require('electron').remote.require('./bridge');
 const NoteListUtils = require('./utils/NoteListUtils');
 
 interface MultiNoteActionsProps {
-	theme: number,
+	themeId: number,
 	selectedNoteIds: string[],
 	notes: any[],
 	dispatch: Function,
 	watchedNoteFiles: string[],
-	style: any,
 }
 
 function styles_(props:MultiNoteActionsProps) {
-	return buildStyle('MultiNoteActions', props.theme, (theme:any) => {
+	return buildStyle('MultiNoteActions', props.themeId, (theme:any) => {
 		return {
 			root: {
-				...props.style,
 				display: 'inline-flex',
 				justifyContent: 'center',
 				paddingTop: theme.marginTop,
+				width: '100%',
 			},
 			itemList: {
 				display: 'flex',

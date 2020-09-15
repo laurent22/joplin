@@ -5,19 +5,29 @@ const { connect, Provider } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 
-const { MainScreen } = require('.//MainScreen/MainScreen.min.js');
+const MainScreen = require('./MainScreen/MainScreen').default;
+const ConfigScreen = require('./ConfigScreen/ConfigScreen').default;
+const StatusScreen = require('./StatusScreen/StatusScreen').default;
+const OneDriveLoginScreen = require('./OneDriveLoginScreen').default;
+const DropboxLoginScreen = require('./DropboxLoginScreen').default;
 const ErrorBoundary = require('./ErrorBoundary').default;
-const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
-const { DropboxLoginScreen } = require('./DropboxLoginScreen.min.js');
-const { StatusScreen } = require('./StatusScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
-const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { app } = require('../app');
+const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
+const { themeStyle } = require('lib/theme');
 
 const { bridge } = require('electron').remote.require('./bridge');
+
+const GlobalStyle = createGlobalStyle`
+	div, span, a {
+		color: ${(props) => props.theme.color};
+		font-size: ${(props) => props.theme.fontSize}px;
+		font-family: ${(props) => props.theme.fontFamily};
+	}
+`;
 
 async function initialize() {
 	this.wcsTimeoutId_ = null;
@@ -84,6 +94,8 @@ class RootComponent extends React.Component {
 			height: this.props.size.height / this.props.zoomFactor,
 		};
 
+		const theme = themeStyle(this.props.themeId);
+
 		const screens = {
 			Main: { screen: MainScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
@@ -94,7 +106,14 @@ class RootComponent extends React.Component {
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 
-		return <Navigator style={navigatorStyle} screens={screens} />;
+		return (
+			<StyleSheetManager disableVendorPrefixes>
+				<ThemeProvider theme={theme}>
+					<GlobalStyle/>
+					<Navigator style={navigatorStyle} screens={screens} />
+				</ThemeProvider>
+			</StyleSheetManager>
+		);
 	}
 }
 
@@ -103,6 +122,7 @@ const mapStateToProps = state => {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
+		themeId: state.settings.theme,
 	};
 };
 

@@ -22,9 +22,9 @@ class NoteItemComponent extends Component {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -62,8 +62,8 @@ class NoteItemComponent extends Component {
 		styles.selectionWrapperSelected = Object.assign({}, styles.selectionWrapper);
 		styles.selectionWrapperSelected.backgroundColor = theme.selectedColor;
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	async todoCheckbox_change(checked) {
@@ -107,7 +107,7 @@ class NoteItemComponent extends Component {
 		const note = this.props.note ? this.props.note : {};
 		const isTodo = !!Number(note.is_todo);
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		// IOS: display: none crashes the app
 		const checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
@@ -145,7 +145,7 @@ class NoteItemComponent extends Component {
 
 const NoteItem = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 	};

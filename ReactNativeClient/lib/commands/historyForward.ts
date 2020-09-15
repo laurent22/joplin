@@ -4,7 +4,7 @@ const { _ } = require('lib/locale');
 export const declaration:CommandDeclaration = {
 	name: 'historyForward',
 	label: () => _('Forward'),
-	iconName: 'fa-arrow-right',
+	iconName: 'icon-forward',
 };
 
 interface Props {

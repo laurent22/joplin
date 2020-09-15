@@ -15,9 +15,9 @@ class SideMenuContentNoteComponent extends Component {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -45,12 +45,12 @@ class SideMenuContentNoteComponent extends Component {
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
 		styles.sideButtonDisabled = Object.assign({}, styles.sideButton, { opacity: 0.6 });
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	renderDivider(key) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
 	}
 
@@ -72,7 +72,7 @@ class SideMenuContentNoteComponent extends Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
 
@@ -109,7 +109,7 @@ class SideMenuContentNoteComponent extends Component {
 
 const SideMenuContentNote = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(SideMenuContentNoteComponent);
 

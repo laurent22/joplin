@@ -3,16 +3,18 @@ import { NoteEditorProps } from '../utils/types';
 const { buildStyle } = require('lib/theme');
 
 export default function styles(props: NoteEditorProps) {
-	return buildStyle(['NoteEditor', props.style.width, props.style.height], props.theme, (theme: any) => {
+	return buildStyle(['NoteEditor'], props.themeId, (theme: any) => {
 		return {
 			root: {
-				...props.style,
+				// ...props.style,
 				boxSizing: 'border-box',
-				paddingLeft: 10,
-				paddingTop: 5,
+				paddingLeft: theme.mainPadding,
+				paddingTop: 0,
 				borderLeftWidth: 1,
 				borderLeftColor: theme.dividerColor,
 				borderLeftStyle: 'solid',
+				width: '100%',
+				height: '100%',
 			},
 			titleInput: {
 				flex: 1,
@@ -20,16 +22,15 @@ export default function styles(props: NoteEditorProps) {
 				paddingTop: 5,
 				minHeight: 35,
 				boxSizing: 'border-box',
+				fontWeight: 'bold',
 				paddingBottom: 5,
-				paddingLeft: 8,
+				paddingLeft: 0,
 				paddingRight: 8,
 				marginLeft: 5,
-				// marginRight: theme.paddingLeft,
 				color: theme.textStyle.color,
-				fontSize: theme.textStyle.fontSize * 1.25,
+				fontSize: Math.round(theme.textStyle.fontSize * 1.5),
 				backgroundColor: theme.backgroundColor,
-				border: '1px solid',
-				borderColor: theme.dividerColor,
+				border: 'none',
 			},
 			warningBanner: {
 				background: theme.warningBackgroundColor,

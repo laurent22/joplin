@@ -3,15 +3,18 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
+import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
-import CommandService from '../../../../lib/services/CommandService';
+import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
+import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
+import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
-const { themeStyle, buildStyle } = require('lib/theme');
+const { themeStyle } = require('lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -112,31 +115,6 @@ const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 };
 
-function styles_(props:NoteBodyEditorProps) {
-	return buildStyle('TinyMCE', props.theme, (/* theme:any */) => {
-		return {
-			disabledOverlay: {
-				zIndex: 10,
-				position: 'absolute',
-				backgroundColor: 'white',
-				opacity: 0.7,
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				padding: 20,
-				paddingTop: 50,
-				textAlign: 'center',
-				width: '100%',
-			},
-			rootStyle: {
-				position: 'relative',
-				...props.style,
-			},
-		};
-	});
-}
-
 let loadedCssFiles_:string[] = [];
 let loadedJsFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
@@ -170,7 +148,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	editorRef.current = editor;
 
 	const styles = styles_(props);
-	const theme = themeStyle(props.theme);
+	// const theme = themeStyle(props.themeId);
 
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
@@ -368,10 +346,17 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	useEffect(() => {
 		if (!editorReady) return () => {};
 
+		const theme = themeStyle(props.themeId);
+
 		const element = document.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
+			.joplin-tinymce .tox-editor-header {
+				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
+			}
+			
 			.tox .tox-toolbar,
 			.tox .tox-toolbar__overflow,
 			.tox .tox-toolbar__primary,
@@ -388,8 +373,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-editor-header {
-				border-top: 1px solid ${theme.dividerColor};
-				border-bottom: 1px solid ${theme.dividerColor};
+				border: none;
 			}
 
 			.tox .tox-tbtn,
@@ -401,8 +385,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox input,
 			.tox .tox-label,
 			.tox .tox-toolbar-label {
-				color: ${theme.iconColor} !important;
-				fill: ${theme.iconColor} !important;
+				color: ${theme.color3} !important;
+				fill: ${theme.color3} !important;
 			}
 
 			.tox .tox-statusbar a,
@@ -424,32 +408,59 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-tbtn:hover {
-				background-color: ${theme.backgroundHover};
-				color: ${theme.colorHover};
-				fill: ${theme.colorHover};
+				color: ${theme.colorHover3} !important;
+				fill: ${theme.colorHover3} !important;
+				background-color: ${theme.backgroundColorHover3}
+			}
+
+			.tox .tox-tbtn {
+				width: ${theme.toolbarHeight}px;
+				height: ${theme.toolbarHeight}px;
+				min-width: ${theme.toolbarHeight}px;
+				min-height: ${theme.toolbarHeight}px;
+				margin: 0;
+			}
+
+
+			.tox .tox-tbtn[aria-haspopup=true] {
+				width: ${theme.toolbarHeight + 15}px;
+				min-width: ${theme.toolbarHeight + 15}px;
+			}
+
+			.tox .tox-tbtn > span,
+			.tox .tox-tbtn:active > span,
+			.tox .tox-tbtn:hover > span {
+				transform: scale(0.8);
 			}
 
 			.tox .tox-toolbar__primary,
 			.tox .tox-toolbar__overflow {
 				background: none;
+				background-color: ${theme.backgroundColor3} !important;
 			}
 
 			.tox-tinymce,
 			.tox .tox-toolbar__group,
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
 			.tox .tox-dialog__footer {
-				border-color: ${theme.dividerColor} !important;
+				border: none !important;
 			}
 
 			.tox-tinymce {
 				border-top: none !important;
+			}
+
+			.joplin-tinymce .tox-toolbar__group {
+				background-color: ${theme.backgroundColor3};
+				padding-top: ${theme.toolbarPadding}px;
+				padding-bottom: ${theme.toolbarPadding}px;
 			}
 		`));
 
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [editorReady, props.theme]);
+	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -499,6 +510,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				menubar: false,
 				relative_urls: false,
 				branding: false,
+				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
@@ -705,6 +717,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		//                                  incorrectly stay.
 		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
 		// code would check this and either append the CSS or replace.
+
+		const theme = themeStyle(props.themeId);
 
 		let docHead_:any = null;
 
@@ -1039,11 +1053,63 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		};
 	}, []);
 
+	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
+		return <ToolbarButton
+			key={key}
+			themeId={props.themeId}
+			toolbarButtonInfo={info}
+		/>;
+	}
+
+	const leftButtonCommandNames = ['historyBackward', 'historyForward', 'startExternalEditing'];
+
+	function renderLeftExtraToolbarButtons() {
+		const buttons = [];
+		for (const buttonName in props.noteToolbarButtonInfos) {
+			if (!leftButtonCommandNames.includes(buttonName)) continue;
+			const info = props.noteToolbarButtonInfos[buttonName];
+			buttons.push(renderExtraToolbarButton(buttonName, info));
+		}
+
+		return (
+			<div style={styles.leftExtraToolbarContainer}>
+				{buttons}
+			</div>
+		);
+	}
+
+	function renderRightExtraToolbarButtons() {
+		const buttons = [];
+		for (const buttonName in props.noteToolbarButtonInfos) {
+			if (leftButtonCommandNames.includes(buttonName)) continue;
+			const info = props.noteToolbarButtonInfos[buttonName];
+
+			if (buttonName === 'toggleEditors') {
+				buttons.push(<ToggleEditorsButton
+					key={buttonName}
+					value={ToggleEditorsButtonValue.RichText}
+					themeId={props.themeId}
+					toolbarButtonInfo={info}
+				/>);
+			} else {
+				buttons.push(renderExtraToolbarButton(buttonName, info));
+			}
+		}
+
+		return (
+			<div style={styles.rightExtraToolbarContainer}>
+				{buttons}
+			</div>
+		);
+	}
+
 	// Currently we don't handle resource "auto" and "manual" mode with TinyMCE
 	// as it is quite complex and probably rarely used.
 	function renderDisabledOverlay() {
 		const status = resourcesStatus(props.resourceInfos);
 		if (status === 'ready' && !draggingStarted) return null;
+
+		const theme = themeStyle(props.themeId);
 
 		const message = draggingStarted ? _('Drop notes or files here') : _('Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.', _('Code View'));
 		const statusComp = draggingStarted ? null : <p style={theme.textStyleMinor}>{`Status: ${status}`}</p>;
@@ -1056,8 +1122,10 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	}
 
 	return (
-		<div style={styles.rootStyle}>
+		<div style={styles.rootStyle} className="joplin-tinymce">
 			{renderDisabledOverlay()}
+			{renderLeftExtraToolbarButtons()}
+			{renderRightExtraToolbarButtons()}
 			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
 		</div>
 	);

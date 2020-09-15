@@ -5,7 +5,7 @@ const { themeStyle } = require('lib/theme');
 
 class NoteStatusBarComponent extends React.Component {
 	style() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = {
 			root: Object.assign({}, theme.textStyle, {
@@ -28,7 +28,7 @@ const mapStateToProps = state => {
 		// notes: state.notes,
 		// folders: state.folders,
 		// selectedNoteIds: state.selectedNoteIds,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

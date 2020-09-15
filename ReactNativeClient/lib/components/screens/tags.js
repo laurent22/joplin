@@ -28,7 +28,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	styles() {
 		if (this.styles_) return this.styles_;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		this.styles_ = StyleSheet.create({
 			listItem: {
@@ -89,7 +89,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rootStyle = {
 			flex: 1,
@@ -107,7 +107,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 
 const TagsScreen = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(TagsScreenComponent);
 

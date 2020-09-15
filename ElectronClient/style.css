@@ -38,18 +38,18 @@ a {
 ::-webkit-scrollbar-track {
 	border: none;
 }
- 
+
 ::-webkit-scrollbar-thumb {
-	background: rgba(100, 100, 100, 0.3); 
+	background: rgba(100, 100, 100, 0.3);
 	border-radius: 5px;
 }
 
 ::-webkit-scrollbar-track:hover {
-	background: rgba(0, 0, 0, 0.1); 
+	background: rgba(0, 0, 0, 0.1);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: rgba(100, 100, 100, 0.7); 
+	background: rgba(100, 100, 100, 0.7);
 }
 
 .fade_out {
@@ -64,20 +64,13 @@ a {
 	opacity: 1;
 }
 
+/*
 .note-list .list-item-container:hover {
 	background-color: rgba(0,160,255,0.1) !important;
 }
+*/
 
-/*.side-bar .list-item:hover,
-.side-bar .synchronize-button:hover {
-	background-color: #01427B;
-}
-
-.side-bar .list-item:active,
-.side-bar .synchronize-button:active {
-	background-color: #0465BB;
-}*/
-
+/*
 .editor-toolbar .button:not(.disabled):hover,
 .header .button:not(.disabled):hover {
 	background-color: rgba(0,160,255,0.1);
@@ -91,6 +84,7 @@ a {
 	border: 1px solid rgba(0,160,255,0.7);
 	box-sizing: 'border-box';
 }
+*/
 
 .editor-toolbar .button,
 .header .button {
@@ -162,4 +156,13 @@ a {
 @keyframes rotate {
 	from {transform: rotate(0deg);}
 	to {transform: rotate(360deg);}
+}
+
+/* .joplin-tinymce .tox-editor-header {
+	padding-left: 88px;
+	padding-right: 150px;
+} */
+
+*:focus {
+    outline: none;
 }

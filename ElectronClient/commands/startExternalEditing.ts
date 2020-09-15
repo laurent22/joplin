@@ -11,7 +11,7 @@ interface Props {
 export const declaration:CommandDeclaration = {
 	name: 'startExternalEditing',
 	label: () => _('Edit in external editor'),
-	iconName: 'fa-share-square',
+	iconName: 'icon-share',
 };
 
 export const runtime = ():CommandRuntime => {

@@ -81,7 +81,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	styles() {
 		if (!this.styles_) this.styles_ = {};
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const cacheKey = themeId;
 
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
@@ -207,7 +207,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const parent = this.parentItem();
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rootStyle = {
 			flex: 1,
@@ -263,7 +263,7 @@ const NotesScreen = connect(state => {
 		notesSource: state.notesSource,
 		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 		showCompletedTodos: state.settings.showCompletedTodos,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};
