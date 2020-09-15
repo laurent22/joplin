@@ -70,19 +70,25 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	async loadAndRunPlugins(pluginDir:string) {
-		const fsDriver = shim.fsDriver();
-		const pluginPaths = await fsDriver.readDirStats(pluginDir);
+	async loadAndRunPlugins(pluginDirOrPaths:string | string[]) {
+		let pluginPaths = [];
 
-		for (const stat of pluginPaths) {
-			if (!stat.isDirectory()) continue;
+		if (Array.isArray(pluginDirOrPaths)) {
+			pluginPaths = pluginDirOrPaths;
+		} else {
+			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
+				.filter((stat:any) => stat.isDirectory())
+				.map((stat:any) => `${pluginDirOrPaths}/${stat.path}`);
+		}
 
-			if (stat.path.indexOf('_') === 0) {
-				this.logger().info(`PluginService: Plugin name starts with "_" and has not been loaded: ${stat.path}`);
+		for (const pluginPath of pluginPaths) {
+			console.info('LOAD', pluginPath);
+			if (pluginPath.indexOf('_') === 0) {
+				this.logger().info(`PluginService: Plugin name starts with "_" and has not been loaded: ${pluginPath}`);
 				continue;
 			}
 
-			const plugin = await this.loadPlugin(`${pluginDir}/${stat.path}`);
+			const plugin = await this.loadPlugin(pluginPath);
 			await this.runPlugin(plugin);
 		}
 	}

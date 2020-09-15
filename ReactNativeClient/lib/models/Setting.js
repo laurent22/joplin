@@ -459,27 +459,37 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'plugins.devPluginPaths': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'plugins',
+				public: true,
+				appTypes: ['desktop'],
+				label: () => 'Development plugins',
+				description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
+			},
+
 			// Deprecated - use markdown.plugin.*
 			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
 			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
-			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
-			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
-			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
-			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
+			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
+			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
+			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
 
-			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
-			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
-			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
-			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
-			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
-			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
-			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
-			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
-			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
-			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
+			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
+			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
+			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
+			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
+			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
+			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
+			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
+			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
+			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
+			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -1251,6 +1261,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
+		if (name === 'markdownPlugins') return _('Markdown');
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
@@ -1261,7 +1272,7 @@ class Setting extends BaseModel {
 	}
 
 	static sectionDescription(name) {
-		if (name === 'plugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
 		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		return '';
 	}
@@ -1272,6 +1283,7 @@ class Setting extends BaseModel {
 		if (name === 'appearance') return 'icon-appearance';
 		if (name === 'note') return 'icon-note';
 		if (name === 'plugins') return 'icon-plugins';
+		if (name === 'markdownPlugins') return 'fab fa-markdown';
 		if (name === 'application') return 'icon-application';
 		if (name === 'revisionService') return 'icon-note-history';
 		if (name === 'encryption') return 'icon-encryption';

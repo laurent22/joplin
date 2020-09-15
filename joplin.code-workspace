@@ -75,7 +75,7 @@
 			"Server/db*.sqlite/": true,
 			"CliClient/locales-build": true,
 			"Server/dist/": true,
-			"docs/":true,
+			"docs/": true,
 			"./ReactNativeClient/lib/joplin-renderer/**/node_modules/": true,
 			"./ReactNativeClient/lib/joplin-renderer/**/.vscode/": true,
 			"./ReactNativeClient/lib/joplin-renderer/**/copyLib.bat": true,
@@ -383,7 +383,6 @@
 			"CliClient/build/LinkSelector.js": true,
 			"ElectronClient/gui/MainScreen/commands/toggleEditors.js": true,
 			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js": true,
-			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js": true,
 			"ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js": true,
 			"ElectronClient/gui/NoteEditor/utils/useNoteToolbarButtons.js": true,
 			"ElectronClient/gui/ResizableLayout/ResizableLayout.js": true,
@@ -407,7 +406,6 @@
 			"ElectronClient/gui/style/StyledTextInput.js": true,
 			"ElectronClient/gui/NoteListControls/commands/focusSearch.js": true,
 			"ElectronClient/gui/SearchBar/styles/index.js": true,
-			"CliClient/locales-build": true,
 			"ElectronClient/**/node_modules/": true,
 			"ElectronClient/**/packageInfo.js": true,
 			"ElectronClient/**/dist/": true,
@@ -548,7 +546,12 @@
 			"ReactNativeClient/lib/themes/oledDark.js": true,
 			"ReactNativeClient/lib/themes/solarizedDark.js": true,
 			"ReactNativeClient/lib/themes/solarizedLight.js": true,
-			"ReactNativeClient/lib/themes/type.js": true
+			"ReactNativeClient/lib/themes/type.js": true,
+			"CliClient/tests/support/plugins/toc/global.d.js": true,
+			"CliClient/tests/support/plugins/toc/src/index.js": true,
+			"ElectronClient/commands/copyDevCommand.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace.js": true,
+			"CliClient/tests/support/plugins/toc/**/dist/": true
 		},
 		"spellright.language": [
 			"en"

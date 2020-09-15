@@ -1263,7 +1263,21 @@ class Application extends BaseApplication {
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
 		PluginService.instance().initialize(this.store());
-		if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadPlugins(Setting.value('pluginDir'));
+
+		try {
+			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		}
+
+		try {
+			if (Setting.value('plugins.devPluginPaths')) {
+				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p) => p.trim());
+				await PluginService.instance().loadAndRunPlugins(paths);
+			}
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
 	}
 
 }
