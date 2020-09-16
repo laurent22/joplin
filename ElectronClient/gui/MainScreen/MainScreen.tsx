@@ -609,7 +609,6 @@ class MainScreenComponent extends React.Component<any, any> {
 				scripts={control.scripts}
 				pluginId={plugin.id}
 				onMessage={this.userWebview_message}
-				style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}
 			/>;
 		}
 

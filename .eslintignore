@@ -154,6 +154,8 @@ ElectronClient/gui/NoteListControls/NoteListControls.js
 ElectronClient/gui/NoteListItem.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/OneDriveLoginScreen.js
+ElectronClient/gui/plugin_service/hooks/useThemeCss.js
+ElectronClient/gui/plugin_service/hooks/useViewIsReady.js
 ElectronClient/gui/plugin_service/UserWebview.js
 ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js
 ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js
