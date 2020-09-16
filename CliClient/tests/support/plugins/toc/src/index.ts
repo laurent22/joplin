@@ -14,7 +14,7 @@ function noteHeaders(noteBody:string) {
 	return headers;
 }
 
-const slugs = {};
+let slugs = {};
 
 function headerSlug(headerText) {
 	const s = uslug(headerText);
@@ -42,6 +42,7 @@ joplin.plugins.register({
 
 		async function updateTocView() {
 			const note = await joplin.workspace.selectedNote();
+			slugs = {};
 
 			if (note) {
 				const headers = noteHeaders(note.body);
