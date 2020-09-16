@@ -33,4 +33,8 @@ export default class ViewController {
 		throw new Error('Must be overriden');
 	}
 
+	public emitMessage(event:any) {
+		console.info('Calling ViewController.emitMessage - but not implemented', event);
+	}
+
 }

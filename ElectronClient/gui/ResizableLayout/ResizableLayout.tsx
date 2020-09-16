@@ -24,7 +24,8 @@ export interface LayoutItem {
 	minHeight?: number,
 	children?: LayoutItem[]
 	direction?: LayoutItemDirection,
-	resizable?: boolean,
+	resizableRight?: boolean,
+	resizableBottom?: boolean,
 	visible?: boolean,
 	context?: any,
 }
@@ -88,8 +89,17 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 	const size:Size = itemSize(item, sizes);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
-	if (item.resizable) {
-		const enable = { top: false, right: true, bottom: false, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false };
+	if (item.resizableRight || item.resizableBottom) {
+		const enable = {
+			top: false,
+			right: !!item.resizableRight,
+			bottom: !! item.resizableBottom,
+			left: false,
+			topRight: false,
+			bottomRight: false,
+			bottomLeft: false,
+			topLeft: false,
+		};
 
 		return (
 			<Resizable

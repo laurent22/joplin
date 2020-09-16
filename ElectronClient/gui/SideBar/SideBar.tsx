@@ -641,6 +641,4 @@ const mapStateToProps = (state:any) => {
 	};
 };
 
-const SideBar = connect(mapStateToProps)(SideBarComponent);
-
-module.exports = { SideBar };
+export default connect(mapStateToProps)(SideBarComponent);

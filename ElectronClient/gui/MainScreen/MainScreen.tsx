@@ -1,15 +1,17 @@
 import * as React from 'react';
 import ResizableLayout, { findItemByKey, LayoutItem, LayoutItemDirection } from '../ResizableLayout/ResizableLayout';
-import NoteList from '../NoteList/NoteList.js';
-import NoteEditor from '../NoteEditor/NoteEditor.js';
-import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog.js';
-import ShareNoteDialog from '../ShareNoteDialog.js';
-import NoteListControls from '../NoteListControls/NoteListControls.js';
+import NoteList from '../NoteList/NoteList';
+import NoteEditor from '../NoteEditor/NoteEditor';
+import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
+import ShareNoteDialog from '../ShareNoteDialog';
+import NoteListControls from '../NoteListControls/NoteListControls';
 import CommandService from 'lib/services/CommandService';
+import PluginService from 'lib/services/plugin_service/PluginService';
+import SideBar from '../SideBar/SideBar';
+import UserWebview from '../plugin_service/UserWebview';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
-const { SideBar } = require('../SideBar/SideBar.js');
 const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
@@ -21,10 +23,8 @@ const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
-const UserWebview = require('../plugin_service/UserWebview.js').default;
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
-const PluginService = require('lib/services/plugin_service/PluginService.js').default;
 
 const PLUGIN_SIDEBAR_WIDTH = 200;
 
@@ -63,60 +63,6 @@ class MainScreenComponent extends React.Component<any, any> {
 	constructor(props:any) {
 		super(props);
 
-		const rootLayoutSize = this.rootLayoutSize();
-		const theme = themeStyle(props.themeId);
-		const sideBarMinWidth = 200;
-
-		const layout:LayoutItem = {
-			key: 'root',
-			direction: LayoutItemDirection.Row,
-			resizable: false,
-			width: rootLayoutSize.width,
-			height: rootLayoutSize.height,
-			children: [
-				{
-					key: 'sidebarColumn',
-					direction: LayoutItemDirection.Column,
-					resizable: true,
-					width: Setting.value('style.sidebar.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.sidebar.width'),
-					visible: Setting.value('sidebarVisibility'),
-					minWidth: sideBarMinWidth,
-					children: [
-						{
-							key: 'sideBar',
-						},
-					],
-				},
-				{
-					key: 'noteListColumn',
-					direction: LayoutItemDirection.Column,
-					resizable: true,
-					width: Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
-					visible: Setting.value('noteListVisibility'),
-					minWidth: sideBarMinWidth,
-					children: [
-						{
-							height: theme.topRowHeight,
-							key: 'noteListControls',
-						},
-						{
-							key: 'noteList',
-						},
-					],
-				},
-				{
-					key: 'editorColumn',
-					direction: LayoutItemDirection.Column,
-					resizable: false,
-					children: [
-						{
-							key: 'editor',
-						},
-					],
-				},
-			],
-		};
-
 		this.state = {
 			promptOptions: null,
 			modalLayer: {
@@ -126,7 +72,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
-			layout: layout,
+			layout: this.buildLayout([]),
 		};
 
 		this.registerCommands();
@@ -146,6 +92,87 @@ class MainScreenComponent extends React.Component<any, any> {
 		this.rowHeight = this.rowHeight.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
+	}
+
+	buildLayout(plugins:any):LayoutItem {
+		const rootLayoutSize = this.rootLayoutSize();
+		const theme = themeStyle(this.props.themeId);
+		const sideBarMinWidth = 200;
+
+		const pluginColumnChildren = [];
+
+		for (const pluginId in plugins) {
+			const plugin = plugins[pluginId];
+			for (const viewId in plugin.views) {
+				const control = plugin.views[viewId];
+				const key = `pluginView_${viewId}`;
+
+				pluginColumnChildren.push({
+					key: key,
+					context: {
+						plugin: plugin,
+						control: control,
+					},
+				});
+			}
+		}
+
+		return {
+			key: 'root',
+			direction: LayoutItemDirection.Row,
+			width: rootLayoutSize.width,
+			height: rootLayoutSize.height,
+			children: [
+				{
+					key: 'sidebarColumn',
+					direction: LayoutItemDirection.Column,
+					resizableRight: true,
+					width: Setting.value('style.sidebar.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.sidebar.width'),
+					visible: Setting.value('sidebarVisibility'),
+					minWidth: sideBarMinWidth,
+					children: [
+						{
+							key: 'sideBar',
+						},
+					],
+				},
+				{
+					key: 'noteListColumn',
+					direction: LayoutItemDirection.Column,
+					resizableRight: true,
+					width: Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
+					visible: Setting.value('noteListVisibility'),
+					minWidth: sideBarMinWidth,
+					children: [
+						{
+							height: theme.topRowHeight,
+							key: 'noteListControls',
+						},
+						{
+							key: 'noteList',
+						},
+					],
+				},
+				{
+					key: 'pluginColumn',
+					direction: LayoutItemDirection.Column,
+					resizableRight: true,
+					width: 200,// Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
+					visible: !!pluginColumnChildren.length,
+					minWidth: sideBarMinWidth,
+					children: pluginColumnChildren,
+				},
+				{
+					key: 'editorColumn',
+					direction: LayoutItemDirection.Column,
+					children: [
+						{
+							key: 'editor',
+						},
+					],
+				},
+			],
+		};
 	}
 
 	window_resize() {
@@ -245,27 +272,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		}
 
 		if (prevProps.plugins !== this.props.plugins) {
-			this.setState({ layout: produce(this.state.layout, (draft:any) => {
-				for (const pluginId in this.props.plugins) {
-					const plugin = this.props.plugins[pluginId];
-					for (const viewId in plugin.views) {
-						const control = plugin.views[viewId];
-						const key = `pluginView_${viewId}`;
-
-						const found = draft.children[1].children.find((c:any) => c.key === key);
-
-						if (!found) {
-							draft.children[1].children.push({
-								key: key,
-								context: {
-									plugin: plugin,
-									control: control,
-								},
-							});
-						}
-					}
-				}
-			}) });
+			this.setState({ layout: this.buildLayout(this.props.plugins) });
 		}
 	}
 
