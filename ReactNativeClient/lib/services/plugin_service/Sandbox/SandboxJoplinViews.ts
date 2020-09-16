@@ -1,5 +1,6 @@
 import WebviewController from '../WebviewController';
 import Plugin from '../Plugin';
+
 export default class SandboxJoplinViews {
 
 	private store: any;
@@ -15,4 +16,5 @@ export default class SandboxJoplinViews {
 		this.plugin.addViewController(controller);
 		return controller;
 	}
+
 }

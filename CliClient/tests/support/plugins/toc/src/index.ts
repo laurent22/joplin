@@ -30,6 +30,7 @@ joplin.plugins.register({
 		const tocView = joplin.views.createWebviewPanel();
 		tocView.html = 'Loading...';
 		tocView.addScript('./webview.js');
+		tocView.addScript('./webview.css');
 
 		tocView.onMessage((message) => {
 			if (message.name === 'scrollToHash') {
@@ -45,20 +46,24 @@ joplin.plugins.register({
 			if (note) {
 				const headers = noteHeaders(note.body);
 
-				const html = [];
+				const itemHtml = [];
 				for (const header of headers) {
 					const slug = headerSlug(header.text);
 
-					html.push(`
-						<p style="padding-left:${(header.level - 1) * 15}px">
-							<a class="toc-header" href="#" data-slug="${joplin.utils.escapeHtml(slug)}">
+					itemHtml.push(`
+						<p class="toc-item" style="padding-left:${(header.level - 1) * 15}px">
+							<a class="toc-item-link" href="#" data-slug="${joplin.utils.escapeHtml(slug)}">
 								${joplin.utils.escapeHtml(header.text)}
 							</a>
 						</p>
 					`);
 				}
 
-				tocView.html = html.join('\n');
+				tocView.html = `
+					<div class="container">
+						${itemHtml.join('\n')}
+					</div>
+				`;
 			} else {
 				tocView.html = 'Please select a note to view the table of content';
 			}

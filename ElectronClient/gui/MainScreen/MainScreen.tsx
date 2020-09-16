@@ -578,27 +578,6 @@ class MainScreenComponent extends React.Component<any, any> {
 		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.viewId).emitMessage(event);
 	}
 
-	renderUserWebviews() {
-		const output = [];
-		for (const pluginId in this.props.plugins) {
-			const plugin = this.props.plugins[pluginId];
-			for (const viewId in plugin.views) {
-				const control = plugin.views[viewId];
-				const v = <UserWebview
-					key={control.id}
-					viewId={control.id}
-					html={control.html}
-					scripts={control.scripts}
-					pluginId={pluginId}
-					onMessage={this.userWebview_message}
-					style={{ width: PLUGIN_SIDEBAR_WIDTH, height: '100%' }}
-				/>;
-				output.push(v);
-			}
-		}
-		return output;
-	}
-
 	resizableLayout_resize(event:any) {
 		this.setState({ layout: event.layout });
 
@@ -625,6 +604,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			return <UserWebview
 				key={control.id}
 				viewId={control.id}
+				themeId={this.props.themeId}
 				html={control.html}
 				scripts={control.scripts}
 				pluginId={plugin.id}

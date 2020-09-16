@@ -34,9 +34,42 @@ const webviewApi = {
 
 		const addedScripts = {};
 
+		function addScript(scriptPath, id = null) {
+			const ext = fileExtension(scriptPath).toLowerCase();
+
+			if (ext === 'js') {
+				const script = document.createElement('script');
+				script.src = scriptPath;
+				if (id) script.id = id;
+				headElement.appendChild(script);
+			} else if (ext === 'css') {
+				const link = document.createElement('link');
+				link.rel = 'stylesheet';
+				link.href = scriptPath;
+				if (id) link.id = id;
+				headElement.appendChild(link);
+			} else {
+				throw new Error(`Unsupported script: ${scriptPath}`);
+			}
+		}
+
 		const ipc = {
 			setHtml: (args) => {
 				contentElement.innerHTML = args.html;
+			},
+
+			setScript: (args) => {
+				const { script, key } = args;
+
+				const scriptPath = `file://${script}`;
+				const elementId = `joplin-script-${key}`;
+
+				if (addedScripts[elementId]) {
+					document.getElementById(elementId).remove();
+					delete addedScripts[elementId];
+				}
+
+				addScript(scriptPath, elementId);
 			},
 
 			setScripts: (args) => {
@@ -50,20 +83,7 @@ const webviewApi = {
 					if (addedScripts[scriptPath]) continue;
 					addedScripts[scriptPath] = true;
 
-					const ext = fileExtension(scriptPath).toLowerCase();
-
-					if (ext === 'js') {
-						const script = document.createElement('script');
-						script.src = scriptPath;
-						headElement.appendChild(script);
-					} else if (ext === 'css') {
-						const link = document.createElement('link');
-						link.rel = 'stylesheet';
-						link.href = scriptPath;
-						headElement.appendChild(link);
-					} else {
-						throw new Error(`Unsupported script: ${scriptPath}`);
-					}
+					addScript(scriptPath);
 				}
 			},
 		};

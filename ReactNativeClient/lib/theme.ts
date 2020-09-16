@@ -427,4 +427,4 @@ function buildStyle(cacheKey:any, themeId:string, callback:Function) {
 	return cachedStyles_.styles[cacheKey].style;
 }
 
-module.exports = { themeStyle, buildStyle, themeById };
+export { themeStyle, buildStyle, themeById };
