@@ -32,7 +32,7 @@ joplin.plugins.register({
 		tocView.addScript('./webview.js');
 		tocView.addScript('./webview.css');
 
-		tocView.onMessage((message) => {
+		tocView.onMessage((message:any) => {
 			if (message.name === 'scrollToHash') {
 				joplin.commands.execute('scrollToHash', {
 					hash: message.hash,
