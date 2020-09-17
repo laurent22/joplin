@@ -304,4 +304,4 @@ And that's it! If you run this code you should now have a fully functional TOC. 
 
 https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/
 
-Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API]() for further information.
+Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API]() for further information or head to the [development forum]() for support.
