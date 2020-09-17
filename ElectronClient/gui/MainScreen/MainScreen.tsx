@@ -117,8 +117,13 @@ class MainScreenComponent extends React.Component<any, any> {
 		for (const pluginId in plugins) {
 			const plugin = plugins[pluginId];
 			for (const viewId in plugin.views) {
+				// For now it's assumed all views go in the "pluginColumn" so they are
+				// resizable vertically. But horizontally they stretch 100%
 				const control = plugin.views[viewId];
-				const size = sizes[viewId] ? sizes[viewId] : null;
+				const size = {
+					...(sizes[viewId] ? sizes[viewId] : null),
+					width: '100%',
+				};
 
 				pluginColumnChildren.push({
 					key: viewId,
