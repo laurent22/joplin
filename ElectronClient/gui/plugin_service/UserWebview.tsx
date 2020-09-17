@@ -2,25 +2,29 @@ import * as React from 'react';
 import { useRef, useEffect } from 'react';
 import useViewIsReady from './hooks/useViewIsReady';
 import useThemeCss from './hooks/useThemeCss';
+const styled = require('styled-components').default;
 
-interface UserWebviewProps {
+interface Props {
 	html:string,
 	scripts:string[],
 	onMessage:Function,
 	pluginId:string,
 	viewId:string,
 	themeId:string,
+	borderBottom: boolean,
+	theme?:any,
 }
 
-const frameStyle:any = {
-	padding: 0,
-	margin: 0,
-	border: 'none',
-	width: '100%',
-	height: '100%',
-};
+const StyledFrame = styled.iframe`
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+	border-bottom: ${(props:Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
+`;
 
-export default function UserWebview(props:UserWebviewProps) {
+export default function UserWebview(props:Props) {
 	const viewRef = useRef(null);
 	const isReady = useViewIsReady(viewRef);
 	const cssFilePath = useThemeCss({ pluginId: props.pluginId, themeId: props.themeId });
@@ -68,5 +72,10 @@ export default function UserWebview(props:UserWebviewProps) {
 		};
 	}, [props.onMessage, props.pluginId, props.viewId]);
 
-	return <iframe id={props.viewId} ref={viewRef} style={frameStyle} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
+	return <StyledFrame
+		id={props.viewId}
+		ref={viewRef}
+		src="gui/plugin_service/UserWebviewIndex.html"
+		borderBottom={props.borderBottom}
+	></StyledFrame>;
 }
