@@ -83,8 +83,6 @@ class MainScreenComponent extends React.Component<any, any> {
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
-		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
-		this.noteList_onDrag = this.noteList_onDrag.bind(this);
 		this.userWebview_message = this.userWebview_message.bind(this);
 		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
@@ -208,14 +206,6 @@ class MainScreenComponent extends React.Component<any, any> {
 				}, 50);
 			}
 		});
-	}
-
-	sidebar_onDrag(event:any) {
-		Setting.setValue('style.sidebar.width', this.props.sidebarWidth + event.deltaX);
-	}
-
-	noteList_onDrag(event:any) {
-		Setting.setValue('style.noteList.width', Setting.value('style.noteList.width') + event.deltaX);
 	}
 
 	notePropertiesDialog_close() {
