@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ResizableLayout, { findItemByKey, LayoutItem, LayoutItemDirection } from '../ResizableLayout/ResizableLayout';
+import ResizableLayout, { findItemByKey, LayoutItem, LayoutItemDirection, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
 import NoteList from '../NoteList/NoteList';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
@@ -25,8 +25,6 @@ const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
-
-const PLUGIN_SIDEBAR_WIDTH = 200;
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -97,20 +95,39 @@ class MainScreenComponent extends React.Component<any, any> {
 		const theme = themeStyle(this.props.themeId);
 		const sideBarMinWidth = 200;
 
-		const pluginColumnChildren = [];
+		const sizes = {
+			sideBarColumn: {
+				width: 150,
+			},
+			noteListColumn: {
+				width: 150,
+			},
+			pluginColumn: {
+				width: 150,
+			},
+			...Setting.value('ui.layout'),
+		};
+
+		for (const k in sizes) {
+			if (sizes[k].width < sideBarMinWidth) sizes[k].width = sideBarMinWidth;
+		}
+
+		const pluginColumnChildren:LayoutItem[] = [];
 
 		for (const pluginId in plugins) {
 			const plugin = plugins[pluginId];
 			for (const viewId in plugin.views) {
 				const control = plugin.views[viewId];
-				const key = `pluginView_${viewId}`;
+				const size = sizes[viewId] ? sizes[viewId] : null;
 
 				pluginColumnChildren.push({
-					key: key,
+					key: viewId,
+					resizableBottom: true,
 					context: {
 						plugin: plugin,
 						control: control,
 					},
+					...size,
 				});
 			}
 		}
@@ -122,10 +139,10 @@ class MainScreenComponent extends React.Component<any, any> {
 			height: rootLayoutSize.height,
 			children: [
 				{
-					key: 'sidebarColumn',
+					key: 'sideBarColumn',
 					direction: LayoutItemDirection.Column,
 					resizableRight: true,
-					width: Setting.value('style.sidebar.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.sidebar.width'),
+					width: sizes.sideBarColumn.width,
 					visible: Setting.value('sidebarVisibility'),
 					minWidth: sideBarMinWidth,
 					children: [
@@ -138,7 +155,7 @@ class MainScreenComponent extends React.Component<any, any> {
 					key: 'noteListColumn',
 					direction: LayoutItemDirection.Column,
 					resizableRight: true,
-					width: Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
+					width: sizes.noteListColumn.width,
 					visible: Setting.value('noteListVisibility'),
 					minWidth: sideBarMinWidth,
 					children: [
@@ -155,7 +172,7 @@ class MainScreenComponent extends React.Component<any, any> {
 					key: 'pluginColumn',
 					direction: LayoutItemDirection.Column,
 					resizableRight: true,
-					width: 200,// Setting.value('style.noteList.width') < sideBarMinWidth ? sideBarMinWidth : Setting.value('style.noteList.width'),
+					width: sizes.pluginColumn.width,
 					visible: !!pluginColumnChildren.length,
 					minWidth: sideBarMinWidth,
 					children: pluginColumnChildren,
@@ -252,8 +269,8 @@ class MainScreenComponent extends React.Component<any, any> {
 				const noteListColumn = findItemByKey(draft, 'noteListColumn');
 				noteListColumn.visible = this.props.noteListVisibility;
 
-				const sidebarColumn = findItemByKey(draft, 'sidebarColumn');
-				sidebarColumn.visible = this.props.sidebarVisibility;
+				const sideBarColumn = findItemByKey(draft, 'sideBarColumn');
+				sideBarColumn.visible = this.props.sidebarVisibility;
 			}) });
 		}
 
@@ -352,8 +369,8 @@ class MainScreenComponent extends React.Component<any, any> {
 		return 50;
 	}
 
-	styles(themeId:number, width:number, height:number, messageBoxVisible:boolean, isSidebarVisible:any, isNoteListVisible:any, sidebarWidth:number, noteListWidth:number, pluginSidebarCount:number) {
-		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth, pluginSidebarCount].join('_');
+	styles(themeId:number, width:number, height:number, messageBoxVisible:boolean, isSidebarVisible:any, isNoteListVisible:any) {
+		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -379,51 +396,8 @@ class MainScreenComponent extends React.Component<any, any> {
 
 		this.styles_.rowHeight = rowHeight;
 
-		this.styles_.verticalResizerSidebar = {
-			width: 5,
-			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
-			// making the whole window scroll vertically. So we remove 10 extra pixels here.
-			height: rowHeight - 10,
-			display: 'inline-block',
-		};
-
 		this.styles_.resizableLayout = {
 			height: rowHeight,
-		};
-
-		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
-
-		this.styles_.sideBar = {
-			width: sidebarWidth - this.styles_.verticalResizerSidebar.width,
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		if (isSidebarVisible === false) {
-			this.styles_.sideBar.width = 0;
-			this.styles_.sideBar.display = 'none';
-			this.styles_.verticalResizerSidebar.display = 'none';
-		}
-
-		this.styles_.noteList = {
-			width: noteListWidth - this.styles_.verticalResizerNotelist.width,
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
-		};
-
-		if (isNoteListVisible === false) {
-			this.styles_.noteList.width = 0;
-			this.styles_.noteList.display = 'none';
-			this.styles_.verticalResizerNotelist.display = 'none';
-		}
-
-		this.styles_.noteText = {
-			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10) - PLUGIN_SIDEBAR_WIDTH * pluginSidebarCount,
-			height: rowHeight,
-			display: 'inline-block',
-			verticalAlign: 'top',
 		};
 
 		this.styles_.prompt = {
@@ -551,30 +525,13 @@ class MainScreenComponent extends React.Component<any, any> {
 		}
 	}
 
-	pluginControlCount() {
-		let output = 0;
-		for (const pluginId in this.props.plugins) {
-			const plugin = this.props.plugins[pluginId];
-			if (!plugin.views) {
-				console.error('Plugin without views key:', pluginId, this.props.plugins);
-				continue;
-			}
-			output += Object.keys(plugin.views).length;
-		}
-		return output;
-	}
-
 	userWebview_message(event:any) {
 		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.viewId).emitMessage(event);
 	}
 
 	resizableLayout_resize(event:any) {
 		this.setState({ layout: event.layout });
-
-		const col1 = findItemByKey(event.layout, 'sidebarColumn');
-		const col2 = findItemByKey(event.layout, 'noteListColumn');
-		Setting.setValue('style.sidebar.width', col1.width);
-		Setting.setValue('style.noteList.width', col2.width);
+		Setting.setValue('ui.layout', allDynamicSizes(event.layout));
 	}
 
 	resizableLayout_renderItem(key:string, event:any) {
@@ -589,7 +546,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
 			return <NoteListControls key={key} />;
-		} else if (key.indexOf('pluginView_') === 0) {
+		} else if (key.indexOf('plugin-view') === 0) {
 			const { control, plugin } = event.item.context;
 			return <UserWebview
 				key={control.id}
@@ -617,7 +574,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		const promptOptions = this.state.promptOptions;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
-		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth, this.pluginControlCount());
+		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility);
 
 		if (!this.promptOnClose_) {
 			this.promptOnClose_ = (answer:any, buttonType:any) => {
@@ -675,8 +632,6 @@ const mapStateToProps = (state:any) => {
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		selectedFolderId: state.selectedFolderId,
-		sidebarWidth: state.settings['style.sidebar.width'],
-		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,

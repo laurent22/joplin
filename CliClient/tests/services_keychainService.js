@@ -50,7 +50,7 @@ describeIfCompatible('services_KeychainService', function() {
 	}));
 
 	it('should save and load secure settings', asyncTest(async () => {
-		Setting.setObjectKey('encryption.passwordCache', 'testing', '123456');
+		Setting.setObjectValue('encryption.passwordCache', 'testing', '123456');
 		await Setting.saveAll();
 		await Setting.load();
 		const passwords = Setting.value('encryption.passwordCache');

@@ -289,35 +289,4 @@ describe('services_EncryptionService', function() {
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0,5));
 	}));
-
-	// it('should upgrade master key encryption mode', asyncTest(async () => {
-	// 	let masterKey = await service.generateMasterKey('123456', {
-	// 		encryptionMethod: EncryptionService.METHOD_SJCL_2,
-	// 	});
-	// 	masterKey = await MasterKey.save(masterKey);
-	// 	Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
-	// 	Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
-
-	// 	await sleep(0.01);
-
-	// 	await service.loadMasterKeysFromSettings();
-
-	// 	masterKeyNew = await MasterKey.load(masterKey.id);
-
-	// 	// Check that the master key has been upgraded
-
-	// 	expect(masterKeyNew.created_time).toBe(masterKey.created_time);
-	// 	expect(masterKeyNew.updated_time === masterKey.updated_time).toBe(false);
-	// 	expect(masterKeyNew.content === masterKey.content).toBe(false);
-	// 	expect(masterKeyNew.encryption_method === masterKey.encryption_method).toBe(false);
-	// 	expect(masterKeyNew.checksum === masterKey.checksum).toBe(false);
-	// 	expect(masterKeyNew.encryption_method).toBe(service.defaultMasterKeyEncryptionMethod_);
-
-	// 	// Check that encryption still works
-
-	// 	const cipherText = await service.encryptString('some secret');
-	// 	const plainText = await service.decryptString(cipherText);
-	// 	expect(plainText).toBe('some secret');
-	// }));
-
 });

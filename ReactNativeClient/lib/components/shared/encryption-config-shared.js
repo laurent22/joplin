@@ -113,9 +113,9 @@ shared.decryptedStatText = function(comp) {
 shared.onSavePasswordClick = function(comp, mk) {
 	const password = comp.props.passwords[mk.id];
 	if (!password) {
-		Setting.deleteObjectKey('encryption.passwordCache', mk.id);
+		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
 	} else {
-		Setting.setObjectKey('encryption.passwordCache', mk.id, password);
+		Setting.setObjectValue('encryption.passwordCache', mk.id, password);
 	}
 
 	comp.checkPasswords();

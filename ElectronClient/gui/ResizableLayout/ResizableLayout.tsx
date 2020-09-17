@@ -42,6 +42,31 @@ interface Props {
 	height?: number,
 }
 
+export function allDynamicSizes(layout:LayoutItem):any {
+	const output:any = {};
+
+	function recurseProcess(item:LayoutItem) {
+		if (item.resizableBottom || item.resizableRight) {
+			if ('width' in item || 'height' in item) {
+				const size:any = {};
+				if ('width' in item) size.width = item.width;
+				if ('height' in item) size.height = item.height;
+				output[item.key] = size;
+			}
+		}
+
+		if (item.children) {
+			for (const child of item.children) {
+				recurseProcess(child);
+			}
+		}
+	}
+
+	recurseProcess(layout);
+
+	return output;
+}
+
 export function findItemByKey(layout:LayoutItem, key:string):LayoutItem {
 	function recurseFind(item:LayoutItem):LayoutItem {
 		if (item.key === key) return item;
@@ -80,7 +105,7 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:JSX.Element[]):JSX.Element {
+function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:JSX.Element[], isLastChild:boolean):JSX.Element {
 	const style:any = {
 		display: item.visible !== false ? 'flex' : 'none',
 		flexDirection: item.direction,
@@ -92,8 +117,8 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 	if (item.resizableRight || item.resizableBottom) {
 		const enable = {
 			top: false,
-			right: !!item.resizableRight,
-			bottom: !! item.resizableBottom,
+			right: !!item.resizableRight && !isLastChild,
+			bottom: !!item.resizableBottom && !isLastChild,
 			left: false,
 			topRight: false,
 			bottomRight: false,
@@ -131,7 +156,7 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean):JSX.Element {
+	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):JSX.Element {
 
 		function onResizeStart() {
 			setResizedItem({
@@ -164,21 +189,22 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [comp]);
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [comp], isLastChild);
 		} else {
 			const childrenComponents = [];
-			for (const child of item.children) {
-				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && child.visible !== false));
+			for (let i = 0; i < item.children.length; i++) {
+				const child = item.children[i];
+				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && child.visible !== false, i === item.children.length - 1));
 			}
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents);
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
 		}
 	}
 
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);
 
-	return renderLayoutItem(props.layout, sizes, props.layout.visible !== false);
+	return renderLayoutItem(props.layout, sizes, props.layout.visible !== false, true);
 }
 
 export default ResizableLayout;

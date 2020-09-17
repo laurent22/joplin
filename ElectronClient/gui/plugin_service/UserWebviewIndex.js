@@ -100,5 +100,9 @@ const webviewApi = {
 				ipc[callName](args);
 			}
 		}));
+
+		// Send a message to the containing component to notify
+		// it that the view content is fully ready.
+		window.postMessage({ target: 'UserWebview', message: 'ready' }, '*');
 	});
 })();

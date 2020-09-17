@@ -38,7 +38,7 @@ class Command extends BaseCommand {
 				this.stdout(_('Operation cancelled'));
 				return false;
 			}
-			Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
+			Setting.setObjectValue('encryption.passwordCache', masterKeyId, password);
 			await EncryptionService.instance().loadMasterKeysFromSettings();
 			return true;
 		};

@@ -563,6 +563,9 @@ class Setting extends BaseModel {
 							_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
 						'is incorrect or empty, it will default to a generic monospace font.'),
 					},
+
+			'ui.layout': { value: {}, type: Setting.TYPE_OBJECT, public: false, appTypes: ['desktop'] },
+
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 
@@ -976,14 +979,20 @@ class Setting extends BaseModel {
 		return this.setValue(key, !this.value(key));
 	}
 
-	static setObjectKey(settingKey, objectKey, value) {
+	static objectValue(settingKey, objectKey, defaultValue = null) {
+		const o = this.value(settingKey);
+		if (!o || !(objectKey in o)) return defaultValue;
+		return o[objectKey];
+	}
+
+	static setObjectValue(settingKey, objectKey, value) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
 		this.setValue(settingKey, o);
 	}
 
-	static deleteObjectKey(settingKey, objectKey) {
+	static deleteObjectValue(settingKey, objectKey) {
 		const o = this.value(settingKey);
 		if (typeof o !== 'object') return;
 		delete o[objectKey];
