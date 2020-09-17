@@ -68,5 +68,5 @@ export default function UserWebview(props:UserWebviewProps) {
 		};
 	}, [props.onMessage, props.pluginId, props.viewId]);
 
-	return <iframe ref={viewRef} style={frameStyle} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
+	return <iframe id={props.viewId} ref={viewRef} style={frameStyle} src="gui/plugin_service/UserWebviewIndex.html"></iframe>;
 }

@@ -1,10 +1,11 @@
 export default class ViewController {
 
-	private id_:string = `view_${Math.random()}`;
+	private id_:string;
 	private pluginId_:string;
 	private store_:any;
 
-	constructor(pluginId:string, store:any) {
+	constructor(id:string, pluginId:string, store:any) {
+		this.id_ = id;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}

@@ -7,8 +7,8 @@ export default class WebviewController extends ViewController {
 	private baseDir_:string;
 	private messageListener_:Function = null;
 
-	constructor(pluginId:string, store:any, baseDir:string) {
-		super(pluginId, store);
+	constructor(id:string, pluginId:string, store:any, baseDir:string) {
+		super(id, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
 		this.store.dispatch({

@@ -3,6 +3,7 @@ import Plugin from '../Plugin';
 
 export default class SandboxJoplinViews {
 
+	private viewIdNum:number = 0;
 	private store: any;
 	private plugin: Plugin;
 
@@ -12,7 +13,8 @@ export default class SandboxJoplinViews {
 	}
 
 	createWebviewPanel() {
-		const controller = new WebviewController(this.plugin.id, this.store, this.plugin.baseDir);
+		const idNum = this.viewIdNum++;
+		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
 		this.plugin.addViewController(controller);
 		return controller;
 	}
