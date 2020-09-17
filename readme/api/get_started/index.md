@@ -31,7 +31,7 @@ Doing so should compile all the files into the `dist/` directory. This is from h
 
 ## Testing the plugin
 
-In order to test the plugin, you might want to run Joplin in development mode. Doing so means that Joplin will run using a different profile, which means you can experiment with the plugin without risking to accidentally change or delete your data. To do so, open Joplin as normal, then go to **Help => Copy dev mode command to clipboard**. This will copy a command to the clipboard. Now close Joplin, and start it again in dev mode using the command you've copied.
+In order to test the plugin, you might want to run Joplin in [Development Mode](). Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.
 
 Finally, in order to test the plugin, open the Setting screen, then navigate the the **Plugins** section, and add the plugin path in the **Development plugins** text field. For example, if your plugin project path is `/home/user/src/joplin-plugin`, add this in the text field.
 
