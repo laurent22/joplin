@@ -15,12 +15,14 @@
                             </ul>
                         {{/each}}
                     {{else}}
-                        <h3>{{title}}</h3>
-                        <ul class="tsd-index-list">
-                            {{#each children}}
-                                <li class="{{cssClasses}}"><a href="{{relativeURL url}}" class="tsd-kind-icon">{{#if name}}{{{wbr name}}}{{else}}<em>{{{wbr kindString}}}</em>{{/if}}</a></li>
-                            {{/each}}
-                        </ul>
+                        {{#if (jpIsAllowedGroup title)}}
+                            <h3>{{title}}</h3>
+                            <ul class="tsd-index-list">
+                                {{#each children}}
+                                    <li class="{{cssClasses}}"><a href="{{relativeURL url}}" class="tsd-kind-icon">{{#if name}}{{{wbr name}}}{{else}}<em>{{{wbr kindString}}}</em>{{/if}}</a></li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
                     {{/if}}
                 </section>
             {{/each}}

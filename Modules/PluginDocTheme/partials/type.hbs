@@ -96,10 +96,10 @@ if an inner type may result in invalid output without them. For example:
 {{#*inline 'reference'}}
     {{#if reflection}}
         <a href="{{relativeURL reflection.url}}" class="tsd-signature-type">
-            {{reflection.name}}
+            {{jpFormatClassName reflection.name}}
         </a>
     {{else}}
-        <span class="tsd-signature-type">{{name}}</span>
+        <span class="tsd-signature-type">{{jpFormatClassName name}}</span>
     {{/if}}
     {{#if typeArguments}}
         <span class="tsd-signature-symbol">&lt;</span>
