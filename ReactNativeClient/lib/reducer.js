@@ -743,16 +743,20 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
+				let newProvisionalNoteIds = newState.provisionalNoteIds;
+
 				if (action.provisional) {
-					newState.provisionalNoteIds.push(modNote.id);
+					newProvisionalNoteIds = newProvisionalNoteIds.slice();
+					newProvisionalNoteIds.push(modNote.id);
 				} else {
-					const idx = newState.provisionalNoteIds.indexOf(modNote.id);
+					const idx = newProvisionalNoteIds.indexOf(modNote.id);
 					if (idx >= 0) {
-						const t = newState.provisionalNoteIds.slice();
-						t.splice(idx, 1);
-						newState.provisionalNoteIds = t;
+						newProvisionalNoteIds = newProvisionalNoteIds.slice();
+						newProvisionalNoteIds.splice(idx, 1);
 					}
 				}
+
+				newState.provisionalNoteIds = newProvisionalNoteIds;
 			}
 			break;
 
