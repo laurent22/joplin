@@ -1271,7 +1271,7 @@ class Setting extends BaseModel {
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
 		if (name === 'markdownPlugins') return _('Markdown');
-		if (name === 'plugins') return _('Plugins');
+		if (name === 'plugins') return `${_('Plugins')} (Beta)`;
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
