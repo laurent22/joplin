@@ -9,7 +9,7 @@ class InteropService_Exporter_Base {
 
 	async init(destDir, options = {}) {}
 	async prepareForProcessingItemType(type, itemsToExport) {}
-	async processItem(ItemClass, item) {}
+	async processItem(itemType, item) {}
 	async processResource(resource, filePath) {}
 	async close() {}
 

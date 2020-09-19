@@ -66,7 +66,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		return newBody;
 	}
 
-	async processItem(ItemClass, item) {
+	async processItem(itemType, item) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		let dirPath = '';

@@ -1,4 +1,5 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
+const BaseItem = require('lib/models/BaseItem.js');
 const { basename } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 
@@ -11,7 +12,8 @@ class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	async processItem(ItemClass, item) {
+	async processItem(itemType, item) {
+		const ItemClass = BaseItem.getClassByItemType(itemType);
 		const serialized = await ItemClass.serialize(item);
 		const filePath = `${this.destDir_}/${ItemClass.systemPath(item)}`;
 		await shim.fsDriver().writeFile(filePath, serialized, 'utf-8');

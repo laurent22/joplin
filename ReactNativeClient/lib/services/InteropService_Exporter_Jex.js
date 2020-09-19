@@ -14,8 +14,8 @@ class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 		await this.rawExporter_.init(this.tempDir_);
 	}
 
-	async processItem(ItemClass, item) {
-		return this.rawExporter_.processItem(ItemClass, item);
+	async processItem(itemType, item) {
+		return this.rawExporter_.processItem(itemType, item);
 	}
 
 	async processResource(resource, filePath) {

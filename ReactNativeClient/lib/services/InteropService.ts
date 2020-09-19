@@ -263,6 +263,7 @@ class InteropService {
 
 		if (!modulePath) {
 			const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+			if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 			modulePath = this.modulePath(moduleMetadata);
 		}
 		const ModuleClass = require(modulePath);
@@ -441,7 +442,7 @@ class InteropService {
 						await exporter.processResource(item, resourcePath);
 					}
 
-					await exporter.processItem(ItemClass, item);
+					await exporter.processItem(itemType, item);
 				} catch (error) {
 					console.error(error);
 					result.warnings.push(error.message);

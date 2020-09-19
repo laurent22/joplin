@@ -101,7 +101,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		}
 	}
 
-	async processItem(ItemClass, item) {
+	async processItem(itemType, item) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		if (item.type_ === BaseModel.TYPE_FOLDER) {
