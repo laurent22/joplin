@@ -121,6 +121,9 @@ class Dialog extends React.PureComponent {
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
 
+		// Load initial list with most recently updated items
+		this.scheduleListUpdate();
+
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: 'gotoAnything',
@@ -202,104 +205,99 @@ class Dialog extends React.PureComponent {
 
 	async updateList() {
 		let resultsInBody = false;
+		let results = [];
+		let listType = null;
+		let searchQuery = '';
 
-		if (!this.state.query) {
-			this.setState({ results: [], keywords: [] });
-		} else {
-			let results = [];
-			let listType = null;
-			let searchQuery = '';
+		if (this.state.query.indexOf('#') === 0) { // TAGS
+			listType = BaseModel.TYPE_TAG;
+			searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
+			results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+		} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
+			listType = BaseModel.TYPE_FOLDER;
+			searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
+			results = await Folder.search({ titlePattern: searchQuery });
 
-			if (this.state.query.indexOf('#') === 0) { // TAGS
-				listType = BaseModel.TYPE_TAG;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
-			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
-				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Folder.search({ titlePattern: searchQuery });
+			for (let i = 0; i < results.length; i++) {
+				const row = results[i];
+				const path = Folder.folderPathString(this.props.folders, row.parent_id);
+				results[i] = Object.assign({}, row, { path: path ? path : '/' });
+			}
+		} else { // Note TITLE or BODY
+			listType = BaseModel.TYPE_NOTE;
+			searchQuery = this.makeSearchQuery(this.state.query);
+			results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
+
+			resultsInBody = !!results.find(row => row.fields.includes('body'));
+
+			if (!resultsInBody || this.state.query.length <= 1) {
+				for (let i = 0; i < results.length; i++) {
+					const row = results[i];
+					const path = Folder.folderPathString(this.props.folders, row.parent_id);
+					results[i] = Object.assign({}, row, { path: path });
+				}
+			} else {
+				const limit = 20;
+				const searchKeywords = await this.keywords(searchQuery);
+				const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+				const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 				for (let i = 0; i < results.length; i++) {
 					const row = results[i];
 					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = Object.assign({}, row, { path: path ? path : '/' });
-				}
-			} else { // Note TITLE or BODY
-				listType = BaseModel.TYPE_NOTE;
-				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
-				resultsInBody = !!results.find(row => row.fields.includes('body'));
+					if (row.fields.includes('body')) {
+						let fragments = '...';
 
-				if (!resultsInBody || this.state.query.length <= 1) {
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-						results[i] = Object.assign({}, row, { path: path });
-					}
-				} else {
-					const limit = 20;
-					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
-					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+						if (i < limit) { // Display note fragments of search keyword matches
+							const indices = [];
+							const note = notesById[row.id];
+							const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
 
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
+							// Iterate over all matches in the body for each search keyword
+							for (let { valueRegex } of searchKeywords) {
+								valueRegex = removeDiacritics(valueRegex);
 
-						if (row.fields.includes('body')) {
-							let fragments = '...';
-
-							if (i < limit) { // Display note fragments of search keyword matches
-								const indices = [];
-								const note = notesById[row.id];
-								const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
-
-								// Iterate over all matches in the body for each search keyword
-								for (let { valueRegex } of searchKeywords) {
-									valueRegex = removeDiacritics(valueRegex);
-
-									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
-										// Populate 'indices' with [begin index, end index] of each note fragment
-										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
-										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
-										if (indices.length > 20) break;
-									}
+								for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+									// Populate 'indices' with [begin index, end index] of each note fragment
+									// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
+									indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+									if (indices.length > 20) break;
 								}
-
-								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
-								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
-								// will result in 'Joplin is a free, open source note taking application'
-								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
-								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
-								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
-
 							}
 
-							results[i] = Object.assign({}, row, { path, fragments });
-						} else {
-							results[i] = Object.assign({}, row, { path: path, fragments: '' });
-						}
-					}
+							// Merge multiple overlapping fragments into a single fragment to prevent repeated content
+							// e.g. 'Joplin is a free, open source' and 'open source note taking application'
+							// will result in 'Joplin is a free, open source note taking application'
+							const mergedIndices = mergeOverlappingIntervals(indices, 3);
+							fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+							// Add trailing ellipsis if the final fragment doesn't end where the note is ending
+							if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
-					if (!this.props.showCompletedTodos) {
-						results = results.filter((row) => !row.is_todo || !row.todo_completed);
+						}
+
+						results[i] = Object.assign({}, row, { path, fragments });
+					} else {
+						results[i] = Object.assign({}, row, { path: path, fragments: '' });
 					}
 				}
+
+				if (!this.props.showCompletedTodos) {
+					results = results.filter((row) => !row.is_todo || !row.todo_completed);
+				}
 			}
-
-			// make list scroll to top in every search
-			this.itemListRef.current.makeItemIndexVisible(0);
-
-			this.setState({
-				listType: listType,
-				results: results,
-				keywords: await this.keywords(searchQuery),
-				selectedItemId: results.length === 0 ? null : results[0].id,
-				resultsInBody: resultsInBody,
-			});
 		}
+
+		// make list scroll to top in every search
+		this.itemListRef.current.makeItemIndexVisible(0);
+
+		this.setState({
+			listType: listType,
+			results: results,
+			keywords: await this.keywords(searchQuery),
+			selectedItemId: results.length === 0 ? null : results[0].id,
+			resultsInBody: resultsInBody,
+		});
 	}
 
 	async gotoItem(item) {
