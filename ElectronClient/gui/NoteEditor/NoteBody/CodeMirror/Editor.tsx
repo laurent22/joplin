@@ -152,6 +152,10 @@ function Editor(props: EditorProps, ref: any) {
 			'Insert': 'toggleOverwrite',
 			'Esc': 'singleSelection',
 		};
+		// Add some of the Joplin smart list handling to emacs mode
+		CodeMirror.keyMap.emacs['Tab'] = 'smartListIndent';
+		CodeMirror.keyMap.emacs['Enter'] = 'insertListElement';
+		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
 
 		if (shim.isMac()) {
 			CodeMirror.keyMap.default = {

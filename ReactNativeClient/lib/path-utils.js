@@ -40,7 +40,12 @@ function isHidden(path) {
 }
 
 function safeFileExtension(e, maxLength = null) {
-	if (maxLength === null) maxLength = 8;
+	// In theory the file extension can have any length but in practice Joplin
+	// expects a fixed length, so we limit it to 20 which should cover most cases.
+	// Note that it means that a file extension longer than 20 will break
+	// external editing (since the extension would be truncated).
+	// https://discourse.joplinapp.org/t/troubles-with-webarchive-files-on-ios/10447
+	if (maxLength === null) maxLength = 20;
 	if (!e || !e.replace) return '';
 	return e.replace(/[^a-zA-Z0-9]/g, '').substr(0, maxLength);
 }
