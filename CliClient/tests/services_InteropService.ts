@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
-
 import InteropService from 'lib/services/interop/InteropService';
+import { Module, ModuleType } from 'lib/services/interop/types';
+
+require('app-module-path').addPath(__dirname);
 
 const { asyncTest, fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
@@ -352,8 +353,8 @@ describe('services_InteropService', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note11 = await Note.save({ title: 'title note11', parent_id: folder1.id });
 		note11 = await Note.load(note11.id);
-		let note12 = await Note.save({ title: 'title note12', parent_id: folder1.id });
-		note12 = await Note.load(note12.id);
+		const note12 = await Note.save({ title: 'title note12', parent_id: folder1.id });
+		await Note.load(note12.id);
 
 		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		folder2 = await Folder.load(folder2.id);
@@ -445,10 +446,20 @@ describe('services_InteropService', function() {
 		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
 		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
 
-		// const service = new InteropService();
-		// service.registerModule({
-		// 	type:
-		// });
+		const module:Module = {
+			type: ModuleType.Importer,
+			description: 'Test Import Module',
+			format: 'testing',
+			fileExtensions: ['test'],
+			instanceFactory: () => {
+				return {
+
+				};
+			},
+		};
+
+		const service = new InteropService();
+		service.registerModule(module);
 
 		// await service.export({
 		// 	path: exportDir(),

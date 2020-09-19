@@ -551,7 +551,15 @@
 			"CliClient/tests/support/plugins/toc/src/index.js": true,
 			"ElectronClient/commands/copyDevCommand.js": true,
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace.js": true,
-			"CliClient/tests/support/plugins/toc/**/dist/": true
+			"CliClient/tests/support/plugins/toc/**/dist/": true,
+			"CliClient/tests/services_InteropService.js": true,
+			"ElectronClient/gui/plugin_service/hooks/useThemeCss.js": true,
+			"ElectronClient/gui/plugin_service/hooks/useViewIsReady.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Base.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService.js": true,
+			"ReactNativeClient/lib/services/interop/types.js": true,
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js": true
 		},
 		"spellright.language": [
 			"en"

@@ -1,4 +1,4 @@
-const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base');
+const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
 const { basename, dirname, friendlySafeFilename } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
@@ -70,8 +70,8 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		return newBody;
 	}
 
-	async prepareForProcessingItemType(type, itemsToExport) {
-		if (type === BaseModel.TYPE_NOTE) {
+	async prepareForProcessingItemType(itemType, itemsToExport) {
+		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
 			const context = {
 				notePaths: {},
@@ -79,7 +79,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			for (let i = 0; i < itemsToExport.length; i++) {
 				const itemType = itemsToExport[i].type;
 
-				if (itemType !== type) continue;
+				if (itemType !== itemType) continue;
 
 				const itemOrId = itemsToExport[i].itemOrId;
 				const note = typeof itemOrId === 'object' ? itemOrId : await Note.load(itemOrId);

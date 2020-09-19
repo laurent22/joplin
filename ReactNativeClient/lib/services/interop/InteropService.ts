@@ -1,4 +1,4 @@
-import {ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule} from './types';
+import { ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule } from './types';
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
@@ -14,10 +14,11 @@ const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 
-	private modules_:Module[];
+	private modules_:Module[] = [];
+	private defaultModulesInitialized_:boolean = false;
 
 	modules() {
-		if (this.modules_) return this.modules_;
+		if (this.defaultModulesInitialized_) return this.modules_;
 
 		const importModules:Module[] = [
 			{
@@ -101,6 +102,8 @@ class InteropService {
 
 		this.modules_ = importModules.concat(exportModules);
 
+		this.defaultModulesInitialized_ = true;
+
 		return this.modules_;
 	}
 
@@ -108,7 +111,7 @@ class InteropService {
 		module = {
 			...defaultImportExportModule(module.type),
 			...module,
-		}
+		};
 
 		this.modules_.push(module);
 	}

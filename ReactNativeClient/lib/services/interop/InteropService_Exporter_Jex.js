@@ -1,4 +1,4 @@
-const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base');
+const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
 const InteropService_Exporter_Raw = require('lib/services/interop/InteropService_Exporter_Raw');
 const fs = require('fs-extra');
 const { shim } = require('lib/shim');
