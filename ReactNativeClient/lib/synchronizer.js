@@ -841,14 +841,12 @@ class Synchronizer {
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
 				}
-			} else if (error.code === 'unknownItemType') {
-				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
-				this.logger().error(error);
 			} else {
 				this.logger().error(error);
 
-				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) {
+				if (error.code === 'unknownItemType') {
+					this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
+				} else {
 					this.progressReport_.errors.push(error);
 					this.logLastRequests();
 				}
