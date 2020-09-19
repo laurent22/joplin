@@ -1,5 +1,16 @@
 const { _ } = require('lib/locale');
 
+export interface CustomImportContext {
+	sourcePath: string,
+	options: ImportOptions,
+	warnings: string[],
+}
+
+export interface CustomExportContext {
+	destPath: string,
+	options: ExportOptions,
+}
+
 export enum ModuleType {
 	Importer = 'importer',
 	Exporter = 'exporter',

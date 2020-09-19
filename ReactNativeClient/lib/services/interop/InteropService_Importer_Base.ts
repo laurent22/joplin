@@ -1,4 +1,6 @@
-/* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
+/* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: 0 */
+
+import { ImportExportResult } from './types';
 
 const Setting = require('lib/models/Setting');
 
@@ -20,7 +22,8 @@ export default class InteropService_Importer_Base {
 		this.options_ = options;
 	}
 
-	async exec() {}
+	// @ts-ignore
+	async exec(result:ImportExportResult) {}
 
 	async temporaryDirectory_(createIt:boolean) {
 		const md5 = require('md5');

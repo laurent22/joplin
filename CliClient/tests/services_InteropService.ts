@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import InteropService from 'lib/services/interop/InteropService';
-import { Module, ModuleType } from 'lib/services/interop/types';
+import { CustomExportContext, CustomImportContext, Module, ModuleType } from 'lib/services/interop/types';
 
 require('app-module-path').addPath(__dirname);
 
@@ -441,10 +441,14 @@ describe('services_InteropService', function() {
 		expect(result.warnings.length).toBe(0);
 	}));
 
-	it('should allow registering new modules', asyncTest(async () => {
-		const folder1 = await Folder.save({ title: 'testexportfolder' });
-		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
-		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+	it('should allow registering new import modules', asyncTest(async () => {
+		const testImportFilePath = `${exportDir()}/testImport${Math.random()}.test`;
+		await shim.fsDriver().writeFile(testImportFilePath, 'test', 'utf8');
+
+		const result = {
+			hasBeenExecuted: false,
+			sourcePath: '',
+		};
 
 		const module:Module = {
 			type: ModuleType.Importer,
@@ -453,22 +457,87 @@ describe('services_InteropService', function() {
 			fileExtensions: ['test'],
 			instanceFactory: () => {
 				return {
-
+					exec: (context:CustomImportContext) => {
+						result.hasBeenExecuted = true;
+						result.sourcePath = context.sourcePath;
+					},
 				};
 			},
 		};
 
 		const service = new InteropService();
 		service.registerModule(module);
+		await service.import({
+			format: 'testing',
+			path: testImportFilePath,
+		});
 
-		// await service.export({
-		// 	path: exportDir(),
-		// 	format: 'md',
-		// 	sourceFolderIds: [folder1.id],
-		// });
-
-		// expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
-		// expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
+		expect(result.hasBeenExecuted).toBe(true);
+		expect(result.sourcePath).toBe(testImportFilePath);
 	}));
+
+	it('should allow registering new export modules', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Note.save({ title: 'note2', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+
+		const filePath = `${exportDir()}/example.test`;
+
+		const result:any = {
+			destPath: '',
+			itemTypes: [],
+			items: [],
+			resources: [],
+			filePaths: [],
+			closeCalled: false,
+		};
+
+		const module:Module = {
+			type: ModuleType.Exporter,
+			description: 'Test Export Module',
+			format: 'testing',
+			fileExtensions: ['test'],
+			instanceFactory: () => {
+				return {
+					init: async (context:CustomExportContext) => {
+						result.destPath = context.destPath;
+					},
+
+					processItem: async (_context:CustomExportContext, itemType:number, item:any) => {
+						result.itemTypes.push(itemType);
+						result.items.push(item);
+					},
+
+					processResource: async (_context:CustomExportContext, resource:any, filePath:string) => {
+						result.resources.push(resource);
+						result.filePaths.push(filePath);
+					},
+
+					close: () => {
+						result.closeCalled = true;
+					},
+				};
+			},
+		};
+
+		const service = new InteropService();
+		service.registerModule(module);
+		await service.export({
+			format: 'testing',
+			path: filePath,
+		});
+
+		expect(result.destPath).toBe(filePath);
+		expect(result.itemTypes.sort().join('_')).toBe('1_1_2_4');
+		expect(result.items.length).toBe(4);
+		expect(result.items.map((o:any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
+		expect(result.resources.length).toBe(1);
+		expect(result.resources[0].title).toBe('photo.jpg');
+		expect(result.filePaths.length).toBe(1);
+		expect(!!result.filePaths[0]).toBe(true);
+		expect(result.closeCalled).toBe(true);
+	}));
+
 
 });

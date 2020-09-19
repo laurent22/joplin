@@ -1,4 +1,6 @@
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule } from './types';
+import InteropService_Importer_Custom from './InteropService_Importer_Custom';
+import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
@@ -14,97 +16,95 @@ const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 
-	private modules_:Module[] = [];
-	private defaultModulesInitialized_:boolean = false;
+	private defaultModules_:Module[];
+	private userModules_:Module[] = [];
 
 	modules() {
-		if (this.defaultModulesInitialized_) return this.modules_;
+		if (!this.defaultModules_) {
+			const importModules:Module[] = [
+				{
+					...defaultImportExportModule(ModuleType.Importer),
+					format: 'jex',
+					fileExtensions: ['jex'],
+					sources: [FileSystemItem.File],
+					description: _('Joplin Export File'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
+					format: 'md',
+					fileExtensions: ['md', 'markdown', 'txt'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('Markdown'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
+					format: 'raw',
+					sources: [FileSystemItem.Directory],
+					description: _('Joplin Export Directory'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as Markdown)'),
+					importerClass: 'InteropService_Importer_EnexToMd',
+					isDefault: true,
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as HTML)'),
+					// TODO: Consider doing this the same way as the multiple `md` importers are handled
+					importerClass: 'InteropService_Importer_EnexToHtml',
+					outputFormat: ImportModuleOutputFormat.Html,
+				},
+			];
 
-		const importModules:Module[] = [
-			{
-				...defaultImportExportModule(ModuleType.Importer),
-				format: 'jex',
-				fileExtensions: ['jex'],
-				sources: [FileSystemItem.File],
-				description: _('Joplin Export File'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Importer),
-				format: 'md',
-				fileExtensions: ['md', 'markdown', 'txt'],
-				sources: [FileSystemItem.File, FileSystemItem.Directory],
-				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
-				description: _('Markdown'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Importer),
-				format: 'raw',
-				sources: [FileSystemItem.Directory],
-				description: _('Joplin Export Directory'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Importer),
-				format: 'enex',
-				fileExtensions: ['enex'],
-				sources: [FileSystemItem.File],
-				description: _('Evernote Export File (as Markdown)'),
-				importerClass: 'InteropService_Importer_EnexToMd',
-				isDefault: true,
-			},
-			{
-				...defaultImportExportModule(ModuleType.Importer),
-				format: 'enex',
-				fileExtensions: ['enex'],
-				sources: [FileSystemItem.File],
-				description: _('Evernote Export File (as HTML)'),
-				// TODO: Consider doing this the same way as the multiple `md` importers are handled
-				importerClass: 'InteropService_Importer_EnexToHtml',
-				outputFormat: ImportModuleOutputFormat.Html,
-			},
-		];
+			const exportModules:Module[] = [
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'jex',
+					fileExtensions: ['jex'],
+					target: FileSystemItem.File,
+					canDoMultiExport: true,
+					description: _('Joplin Export File'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'raw',
+					target: FileSystemItem.Directory,
+					description: _('Joplin Export Directory'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'md',
+					target: FileSystemItem.Directory,
+					description: _('Markdown'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'html',
+					fileExtensions: ['html', 'htm'],
+					target: FileSystemItem.File,
+					canDoMultiExport: false,
+					description: _('HTML File'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'html',
+					target: FileSystemItem.Directory,
+					description: _('HTML Directory'),
+				},
+			];
 
-		const exportModules:Module[] = [
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'jex',
-				fileExtensions: ['jex'],
-				target: FileSystemItem.File,
-				canDoMultiExport: true,
-				description: _('Joplin Export File'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'raw',
-				target: FileSystemItem.Directory,
-				description: _('Joplin Export Directory'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'md',
-				target: FileSystemItem.Directory,
-				description: _('Markdown'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'html',
-				fileExtensions: ['html', 'htm'],
-				target: FileSystemItem.File,
-				canDoMultiExport: false,
-				description: _('HTML File'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'html',
-				target: FileSystemItem.Directory,
-				description: _('HTML Directory'),
-			},
-		];
+			this.defaultModules_ = importModules.concat(exportModules);
+		}
 
-		this.modules_ = importModules.concat(exportModules);
-
-		this.defaultModulesInitialized_ = true;
-
-		return this.modules_;
+		return this.defaultModules_.concat(this.userModules_);
 	}
 
 	registerModule(module:Module) {
@@ -113,7 +113,7 @@ class InteropService {
 			...module,
 		};
 
-		this.modules_.push(module);
+		this.userModules_.push(module);
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")
@@ -153,6 +153,14 @@ class InteropService {
 		return `lib/services/interop/${className}`;
 	}
 
+	private newModuleFromCustomFactory(module:Module) {
+		if (module.type === ModuleType.Importer) {
+			return new InteropService_Importer_Custom(module.instanceFactory());
+		} else {
+			return new InteropService_Exporter_Custom(module.instanceFactory());
+		}
+	}
+
 	/**
 	 * NOTE TO FUTURE SELF: It might make sense to simply move all the existing
 	 * formatters to the `newModuleFromPath_` approach, so that there's only one way
@@ -167,7 +175,7 @@ class InteropService {
 		let output = null;
 
 		if (moduleMetadata.instanceFactory) {
-			output = moduleMetadata.instanceFactory();
+			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
 			const ModuleClass = require(this.modulePath(moduleMetadata));
 			output = new ModuleClass();
@@ -200,7 +208,7 @@ class InteropService {
 		let output = null;
 
 		if (moduleMetadata.instanceFactory) {
-			output = moduleMetadata.instanceFactory();
+			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
 			const ModuleClass = require(modulePath);
 			output = new ModuleClass();

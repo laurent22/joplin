@@ -194,7 +194,9 @@ ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js
+ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js
 ReactNativeClient/lib/services/interop/InteropService_Importer_Base.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_Custom.js
 ReactNativeClient/lib/services/interop/InteropService.js
 ReactNativeClient/lib/services/interop/types.js
 ReactNativeClient/lib/services/keychain/KeychainService.js
