@@ -26,6 +26,9 @@ enum ImportModuleOutputFormat {
 	Html = 'html',
 }
 
+// For historical reasons the import and export modules share the same
+// interface, except that some properties are used only for import
+// and others only for export.
 interface Module {
 	// ---------------------------------------
 	// Shared properties
@@ -82,7 +85,7 @@ function moduleFullLabel(moduleSource:FileSystemItem = null):string {
 		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 	}
 	return label.join(' ');
-};
+}
 
 function defaultImportExportModule(type:ModuleType):Module {
 	return {
@@ -99,7 +102,7 @@ function defaultImportExportModule(type:ModuleType):Module {
 
 		target: FileSystemItem.File,
 		canDoMultiExport: true,
-	}
+	};
 }
 
 class InteropService {
@@ -169,12 +172,6 @@ class InteropService {
 			},
 			{
 				...defaultImportExportModule(ModuleType.Exporter),
-				format: 'json',
-				target: FileSystemItem.Directory,
-				description: _('Json Export Directory'),
-			},
-			{
-				...defaultImportExportModule(ModuleType.Exporter),
 				format: 'md',
 				target: FileSystemItem.Directory,
 				description: _('Markdown'),
@@ -194,42 +191,6 @@ class InteropService {
 				description: _('HTML Directory'),
 			},
 		];
-
-		// importModules = importModules.map(a => {
-		// 	const className = a.importerClass || `InteropService_Importer_${toTitleCase(a.format)}`;
-		// 	const output = Object.assign({}, {
-		// 		type: 'importer',
-		// 		path: `lib/services/${className}`,
-		// 		outputFormat: 'md',
-		// 	}, a);
-		// 	if (!('isNoteArchive' in output)) output.isNoteArchive = true;
-		// 	return output;
-		// });
-
-		// exportModules = exportModules.map(a => {
-		// 	const className = `InteropService_Exporter_${toTitleCase(a.format)}`;
-		// 	return Object.assign(
-		// 		{},
-		// 		{
-		// 			type: 'exporter',
-		// 			path: `lib/services/${className}`,
-		// 		},
-		// 		a
-		// 	);
-		// });
-
-		// this.modules_ = importModules.concat(exportModules);
-
-		// this.modules_ = this.modules_.map(a => {
-		// 	a.fullLabel = function(moduleSource = null) {
-		// 		const label = [`${this.format.toUpperCase()} - ${this.description}`];
-		// 		if (moduleSource && this.sources.length > 1) {
-		// 			label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
-		// 		}
-		// 		return label.join(' ');
-		// 	};
-		// 	return a;
-		// });
 
 		this.modules_ = importModules.concat(exportModules);
 
@@ -270,7 +231,7 @@ class InteropService {
 		} else {
 			className = `InteropService_Exporter_${toTitleCase(module.format)}`;
 		}
-		return 'lib/services/' + className;
+		return `lib/services/${className}`;
 	}
 
 	/**
@@ -369,7 +330,7 @@ class InteropService {
 		options = {
 			format: 'jex',
 			...options,
-		}
+		};
 
 		const exportPath = options.path ? options.path : null;
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
