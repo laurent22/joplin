@@ -13,16 +13,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"<note>와 일치하는 노트를 [notebook]에 복제합니다. 노트북이 특정되지 않았다면 "
-"노트는 현재의 노트북에 복제됩니다."
+"<note>와 일치하는 노트를 [노트북]에 복제합니다. 노트북이 특정되지 않았다면 노"
+"트는 현재의 노트북에 복제됩니다."
 
 #: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
 #: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
@@ -41,7 +43,7 @@ msgstr ""
 #: ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "다음을 찾을 수 없습니다: “%s”."
+msgstr "\"%s\"를 찾을 수 없습니다."
 
 #: CliClient/app/command-ls.js:18
 msgid ""
@@ -103,9 +105,9 @@ msgid "Do not ask for confirmation."
 msgstr "더 이상 확인을 묻지 않습니다."
 
 #: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "원본 포맷: %s"
+msgstr "출력 포맷: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -218,14 +220,14 @@ msgstr ""
 "러주세요."
 
 #: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "복호화된 항목: %s / %s"
+msgstr "복호화된 항목: %d"
 
 #: CliClient/app/command-e2ee.js:54
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
+msgstr "건너뛴 항목: %d (복호화를 다시 시도하려면 --retry-failed-items를 사용)"
 
 #: CliClient/app/command-e2ee.js:68
 msgid "Completed decryption."
@@ -362,7 +364,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "동기화 대상: %s (%s)"
 
 #: CliClient/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "동기화를 시작할 수 없습니다."
 
@@ -441,7 +442,7 @@ msgstr "삭제할 노트나 노트북을 먼저 선택해주세요."
 
 #: CliClient/app/app-gui.js:748
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Ctrl+D 키를 누르거나 혹은 “exit\"를 입력해서 종료해주세요"
+msgstr "Ctrl+D 키를 누르거나 혹은 \"exit\"를 입력해서 종료해주세요"
 
 #: CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -544,9 +545,8 @@ msgstr ""
 "번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
 
 #: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "더 이상 확인을 묻지 않습니다."
+msgstr "자세한 내용을 확인하기 위해 status를 입력할 수도 있습니다."
 
 #: CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -590,11 +590,11 @@ msgstr "잘못된 답: %s"
 
 #: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
 msgid "Y"
-msgstr "Y"
+msgstr "예"
 
 #: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
 msgid "n"
-msgstr "n"
+msgstr "아니오"
 
 #: CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -696,11 +696,11 @@ msgstr "특정된 노트북이 없습니다."
 
 #: CliClient/app/app.js:136
 msgid "N"
-msgstr "N"
+msgstr "아니오"
 
 #: CliClient/app/app.js:136
 msgid "y"
-msgstr "y"
+msgstr "예"
 
 #: CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -724,6 +724,7 @@ msgstr "노트와 노트북에 관한 요약 정보를 표시합니다."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다."
 
 #: CliClient/app/command-tag.js:14
 msgid ""
@@ -732,10 +733,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 "
-"사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 "
-"있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
+"[노트]로부터 [태그]를 지우거나 지정할 때, 아니면 [태그]와 관련된 노트의 목록"
+"을 확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" "
+"를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 "
+"수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 
 #: CliClient/app/command-tag.js:90
 #, javascript-format
@@ -796,13 +797,12 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/plugins/GotoAnything.min.js:446
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"노트 제목을 적으시거나 혹은 건너 뛰세요. 혹은 # 를 적고 태그 이름을 붙이거"
-"나, @뒤에 노트북 이름을 적으세요."
+"노트 제목을 적거나 혹은 건너뛰세요. 혹은 #으로 시작하는 태그 이름이나, @로 시"
+"작하는 노트북 이름을 적으세요."
 
 #: ElectronClient/plugins/GotoAnything.min.js:486
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
@@ -815,9 +815,9 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다려주세요..."
 
 #: ElectronClient/InteropServiceHelper.js:164
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not export notes: %s"
-msgstr "내보낼 노트를 찾을수 없습니다: %s"
+msgstr "노트를 내보낼 수 없습니다: %s"
 
 #: ElectronClient/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -863,7 +863,7 @@ msgstr "전체 릴리즈된 노트들"
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "노트 “%s”가 노트북 “%s”에 성공적으로 복구되었습니다."
+msgstr "노트 “%s”가 노트북 “%s\"에 성공적으로 복구되었습니다."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -887,8 +887,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"“%s”를 클릭하여 노트를 복구하세요. 노트는 “%s” 이름을 가진 노트북에 복사될 것"
-"입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
+"\"%s\"를 클릭하여 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사"
+"될 것입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/NoteText.min.js:1671
@@ -913,7 +913,7 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"“%s” 노트북을 삭제할까요?\n"
+"\"%s\" 노트북을 삭제할까요?\n"
 "\n"
 "이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
 
@@ -1001,7 +1001,6 @@ msgid "strong text"
 msgstr "굵게"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
-#, fuzzy
 msgid "emphasised text"
 msgstr "강조"
 
@@ -1054,9 +1053,8 @@ msgstr ""
 "요."
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "체크박스"
+msgstr "선택상자 목록"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:471
 #: ElectronClient/gui/ConfigScreen.min.js:644
@@ -1073,11 +1071,11 @@ msgstr "파일 첨부"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:536
 msgid "Code Block"
-msgstr ""
+msgstr "코드 블록"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:545
 msgid "Inline Code"
-msgstr ""
+msgstr "인라인 코드"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:560
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
@@ -1087,13 +1085,12 @@ msgstr "날짜와 시간 입력"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "노트나 파일을 여기에 끌어놓습니다"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:419
-#, fuzzy
 msgid "Code View"
-msgstr "코드"
+msgstr "코드 보기"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
 #, javascript-format
@@ -1101,6 +1098,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"모든 첨부 파일들이 다운로드 및 복호화될 때까지 기다려주세요. %s를 통해 이 노"
+"트를 편집하도록 전환할 수 있습니다."
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:72
 #: ElectronClient/gui/NoteText.min.js:833
@@ -1125,7 +1124,7 @@ msgstr "다른 이름으로 저장..."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "폴더에 있는 파일 표시"
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
 #: ElectronClient/gui/NoteText.min.js:797
@@ -1140,7 +1139,7 @@ msgstr "링크 주소 복사"
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:272
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "to-do"
-msgstr "할일"
+msgstr "할 일"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:272
 #: ElectronClient/gui/NoteText.min.js:2121
@@ -1287,12 +1286,11 @@ msgstr "가져오기"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
-msgstr ""
+msgstr "명령"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "키보드 모드"
+msgstr "키보드 바로가기"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
 #: ElectronClient/app.js:690
@@ -1315,9 +1313,8 @@ msgid "Website and documentation"
 msgstr "웹사이트 및 각종 문서"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Joplin에 대해서"
+msgstr "Joplin 숨기기"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 #: ElectronClient/app.js:703
@@ -1325,9 +1322,8 @@ msgid "Close Window"
 msgstr "창 닫기"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Preferences"
-msgstr "설정..."
+msgstr "설정"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
 #: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:572
@@ -1336,13 +1332,15 @@ msgstr "옵션"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid "Press the shortcut"
-msgstr ""
+msgstr "바로가기를 입력하세요"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"바로가기를 입력한 후 엔터 키를 누르세요. 바로가기를 지우려면 백스페이스 키를 "
+"누릅니다."
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
@@ -1358,9 +1356,8 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "마스터키 업그레이드가 필요합니다."
+msgstr "재시작 및 업그레이드"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
@@ -1385,24 +1382,22 @@ msgid "Set the password"
 msgstr "암호 설정"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:349
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "하나 혹은 그 이상의 마스터 키 비밀번호를 입력해주세요."
+msgstr "마스터 키 중 하나가 오래된 암호화 방식을 사용합니다."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:361
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "기본 암호과 구문이 변경 되었습니다. 데이타를 재암호화 해야합니다."
+msgstr "기본 암호과 구문이 변경 되었습니다. 데이터를 재암호화 해야합니다."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:366
-#, fuzzy
 msgid "More info"
 msgstr "더 많은 정보"
 
 #: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
 msgid "Statistics..."
-msgstr ""
+msgstr "통계..."
 
 #: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:17
@@ -1459,15 +1454,13 @@ msgid "New note"
 msgstr "새 노트"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
-#, fuzzy
 msgid "Move to notebook"
-msgstr "노트북으로 옮기기..."
+msgstr "노트북으로 옮기기"
 
 #: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
 #: ElectronClient/gui/MainScreen.min.js:272
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "노트북으로 옮기기..."
+msgstr "노트북으로 옮기기:"
 
 #: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
 msgid "Toggle editor layout"
@@ -1613,9 +1606,8 @@ msgid "Dropbox Login"
 msgstr "Dropbox 로그인"
 
 #: ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "첨부"
+msgstr "노트 첨부"
 
 #: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:511
 msgid "Synchronisation Status"
@@ -1647,11 +1639,10 @@ msgstr "제출"
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
 msgid "Custom order"
-msgstr ""
+msgstr "사용자 정의"
 
 #: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
-#, fuzzy
 msgid "View"
 msgstr "보기"
 
@@ -1668,23 +1659,24 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"노트들을 수동으로 정렬하려면 \"%s\"가 변경되어야만 합니다.(\"%s\" > \"%s\" 메"
+"뉴)"
 
 #: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#, fuzzy
 msgid "Do it now"
-msgstr "설치하기:"
+msgstr "지금하기"
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "노트가 없습니다. '새 노트'를 선택해서 노트를 새로 만드세요."
+msgstr "노트가 없습니다. \"새 노트\"를 선택해서 노트를 새로 만드세요."
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "노트북이 없습니다. '새 노트북'을 선택해서 노트북을 새로 만드세요."
+msgstr "노트북이 없습니다. \"새 노트북\"을 선택해서 노트북을 새로 만드세요."
 
 #: ElectronClient/gui/utils/NoteListUtils.js:37
 #: ReactNativeClient/lib/components/screen-header.js:362
@@ -1716,7 +1708,7 @@ msgstr "마크다운 링크 복사"
 #: ElectronClient/gui/utils/NoteListUtils.js:178
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "“%s” 노트를 삭제할까요?"
+msgstr "\"%s\" 노트를 삭제할까요?"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:180
 #, javascript-format
@@ -1732,7 +1724,6 @@ msgid "Icon"
 msgstr "Icon"
 
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
 msgstr "노트북 속성"
 
@@ -1759,13 +1750,12 @@ msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
 
 #: ElectronClient/gui/NoteText.min.js:1852
-#, fuzzy
 msgid "Content Properties"
 msgstr "노트 속성"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr "마스터키 업그레이드가 필요합니다."
+msgstr "마스터키 업그레이드가 필요합니다"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1773,30 +1763,31 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"다음 마스터 키들이 오래된 암호화 알고리즘을 사용하고 있기 때문에 업그레이드"
+"를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대"
+"로 사용될 수 있습니다."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
 msgstr "업그레이드"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "재 암호화 데이타"
+msgstr "데이터를 다시 암호화"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
-msgstr ""
-"기본 암호화 구문이 변경 되었습니다 데이타에 적용 하는 것 을 권장 합니다."
+msgstr "기본 암호화 방법이 변경 되었습니다. 데이터에 적용하는 것을 권장합니다."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"일부 노트가 이전 암호로 암호화 되어있을때,아래 도구를 이용해서 데이타를 재 암"
-"호화 할 수 있습니다."
+"아래 도구를 사용하여 데이터를 다시 암호화할 수 있습니다. 일부 노트가 오래된 "
+"암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 해당합니다."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1815,15 +1806,17 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"전체 데이터가 암호되고, 동기화가 되므로, 충분한시간을 가지고 실행하는게 좋습"
-"니다.\n"
-"시작하기위해 아래 방법으로 할 수 있습니다.\n"
+"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니"
+"다.\n"
+"시작하기 위해 아래 방법으로 할 수 있습니다.\n"
 "\n"
-"1. 모든디바이스를 동기화.\n"
+"1. 모든 디바이스를 동기화.\n"
 "2. Click \"%s\".\n"
-"3. 충돌을  방지하기위해, 암호화가 진행되는동안 다른장치에서 메모를 변경하지 "
-"마십시요.4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동"
-"기화 하세요.\n"
+"3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하"
+"지 말아주세요.\n"
+"4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세"
+"요.\n"
+"\n"
 "중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:432
@@ -1842,9 +1835,8 @@ msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
 #: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:112
-#, fuzzy
 msgid "Retry All"
-msgstr "재시도"
+msgstr "전부 재시도"
 
 #: ElectronClient/gui/StatusScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/status.js:118
@@ -1865,19 +1857,19 @@ msgstr "지우기"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
-msgstr ""
+msgstr "단어"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
-msgstr ""
+msgstr "문자"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "공백을 제외한 문자"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
-msgstr ""
+msgstr "줄"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:98
 #: ReactNativeClient/lib/models/Setting.js:366
@@ -1894,14 +1886,13 @@ msgid "Viewer"
 msgstr "뷰어"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
 msgid "Statistics"
-msgstr "상태"
+msgstr "통계"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "읽기 시간: %s 분"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1980,7 +1971,6 @@ msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
 
 #: ElectronClient/gui/ResourceScreen.js:31
-#, fuzzy
 msgid "Title"
 msgstr "제목"
 
@@ -1989,9 +1979,8 @@ msgid "Size"
 msgstr "크기"
 
 #: ElectronClient/gui/ResourceScreen.js:39
-#, fuzzy
 msgid "Action"
-msgstr "위치"
+msgstr "동작"
 
 #: ElectronClient/gui/ResourceScreen.js:42
 #: ReactNativeClient/lib/path-utils.js:68
@@ -2001,9 +1990,9 @@ msgid "Untitled"
 msgstr "제목 없음"
 
 #: ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "“%s” 노트를 삭제할까요?"
+msgstr "첨부된 \"%s\"를 삭제할까요?"
 
 #: ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -2013,18 +2002,17 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/ResourceScreen.js:140
-#, fuzzy
 msgid "Please wait..."
-msgstr "확인 중입니다... 잠시만 기다리세요."
+msgstr "잠시만 기다려주세요..."
 
 #: ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
-msgstr "리소스가 없습니다."
+msgstr "없는 리소스입니다!"
 
 #: ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "경고 : 성능상의 문제로 모든 리소스를 표시하지 않습니다.(제한 : %s)"
+msgstr "경고: 성능상의 문제로 모든 리소스를 표시하지 않습니다 (제한: %s)."
 
 #: ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -2074,7 +2062,7 @@ msgstr "템플릿에서 노트 생성"
 
 #: ElectronClient/app.js:539
 msgid "Create to-do from template"
-msgstr "템플릿에서 할일 생성"
+msgstr "템플릿에서 할 일 생성"
 
 #: ElectronClient/app.js:552
 msgid "Open template directory"
@@ -2085,13 +2073,12 @@ msgid "Refresh templates"
 msgstr "템플릿 새로고침"
 
 #: ElectronClient/app.js:585
-#, fuzzy
 msgid "Note attachments..."
-msgstr "첨부"
+msgstr "노트 첨부..."
 
 #: ElectronClient/app.js:621 ElectronClient/app.js:697
 msgid "&File"
-msgstr "파일"
+msgstr "파일(&F)"
 
 #: ElectronClient/app.js:627 ElectronClient/app.js:896
 msgid "About Joplin"
@@ -2110,9 +2097,8 @@ msgid "Templates"
 msgstr "템플릿"
 
 #: ElectronClient/app.js:668
-#, fuzzy
 msgid "Export all"
-msgstr "내보내기"
+msgstr "모두 내보내기"
 
 #: ElectronClient/app.js:683
 #, javascript-format
@@ -2121,11 +2107,11 @@ msgstr "%s 숨기기"
 
 #: ElectronClient/app.js:748
 msgid "&Edit"
-msgstr "편집"
+msgstr "편집(&E)"
 
 #: ElectronClient/app.js:768
 msgid "&View"
-msgstr "보기"
+msgstr "보기(&V)"
 
 #: ElectronClient/app.js:774
 msgid "Layout button sequence"
@@ -2144,17 +2130,16 @@ msgid "Zoom Out"
 msgstr "축소"
 
 #: ElectronClient/app.js:852
-#, fuzzy
 msgid "&Note"
-msgstr "노트"
+msgstr "노트(&N)"
 
 #: ElectronClient/app.js:861
 msgid "&Tools"
-msgstr "도구"
+msgstr "도구(&T)"
 
 #: ElectronClient/app.js:865
 msgid "&Help"
-msgstr "도움말"
+msgstr "도움말(&H)"
 
 #: ElectronClient/app.js:872
 msgid "Joplin Forum"
@@ -2212,7 +2197,7 @@ msgstr "알 수 없는 레벨 ID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2252,10 +2237,9 @@ msgstr "노트북을 이 위치로 옮길 수 없습니다"
 #: ReactNativeClient/lib/models/Folder.js:440
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "노트북 제목을 \"%s\" 으로 정할 수 없습니다. 이미 예약중입니다."
+msgstr "노트북 제목을 \"%s\" 으로 정할 수 없습니다. 이미 예약 중입니다."
 
 #: ReactNativeClient/lib/models/Setting.js:39
-#, fuzzy
 msgid "yes"
 msgstr "예"
 
@@ -2263,12 +2247,11 @@ msgstr "예"
 #: ReactNativeClient/lib/models/Setting.js:40
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(위지윅: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:40
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "아니오"
 
 #: ReactNativeClient/lib/models/Setting.js:43
 #, javascript-format
@@ -2278,7 +2261,7 @@ msgid ""
 "more details: %s"
 msgstr ""
 "주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
-"세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
+"세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 
 #: ReactNativeClient/lib/models/Setting.js:51
 msgid "Light"
@@ -2306,7 +2289,7 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:57
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Dark"
 
 #: ReactNativeClient/lib/models/Setting.js:58
 msgid "OLED Dark"
@@ -2354,15 +2337,15 @@ msgstr "WebDAV 암호"
 
 #: ReactNativeClient/lib/models/Setting.js:195
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 버킷"
 
 #: ReactNativeClient/lib/models/Setting.js:206
 msgid "AWS key"
-msgstr ""
+msgstr "AWS 키"
 
 #: ReactNativeClient/lib/models/Setting.js:216
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS 보안 암호"
 
 #: ReactNativeClient/lib/models/Setting.js:230
 msgid "Attachment download behaviour"
@@ -2374,9 +2357,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"“수동” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, “자동” 모드에서는 노트"
-"를 열 때만 다운로드됩니다. “항상” 모드에서는 노트를 열지 않아도 첨부 파일이 "
-"다운로드됩니다."
+"\\“수동\\” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \\“자동\\” 모드에"
+"서는 노트를 열 때만 다운로드됩니다. \\“항상\\” 모드에서는 노트를 열지 않아도 "
+"첨부 파일이 다운로드됩니다."
 
 #: ReactNativeClient/lib/models/Setting.js:234
 msgid "Always"
@@ -2412,15 +2395,15 @@ msgstr "테마"
 
 #: ReactNativeClient/lib/models/Setting.js:326
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "시스템 테마에 적합한 테마로 자동으로 변경"
 
 #: ReactNativeClient/lib/models/Setting.js:338
 msgid "Preferred light theme"
-msgstr ""
+msgstr "선호하는 밝은 테마"
 
 #: ReactNativeClient/lib/models/Setting.js:352
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "선호하는 어두운 테마"
 
 #: ReactNativeClient/lib/models/Setting.js:357
 msgid "Show note counts"
@@ -2454,7 +2437,7 @@ msgstr "완료된 '할 일'을 표시"
 
 #: ReactNativeClient/lib/models/Setting.js:398
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "괄호, 중괄호, 인용 부호 등의 자동 완성"
+msgstr "괄호, 중괄호, 인용 부호 등의 자동 완성."
 
 #: ReactNativeClient/lib/models/Setting.js:400
 #: ReactNativeClient/lib/models/Setting.js:418
@@ -2493,7 +2476,7 @@ msgstr "소프트 브레이크 활성화"
 
 #: ReactNativeClient/lib/models/Setting.js:468
 msgid "Enable typographer support"
-msgstr "typographer 지원 활성화"
+msgstr "조판부호 지원 활성화"
 
 #: ReactNativeClient/lib/models/Setting.js:469
 msgid "Enable math expressions"
@@ -2581,15 +2564,13 @@ msgid "Editor font family"
 msgstr "편집기 글꼴 모음"
 
 #: ReactNativeClient/lib/models/Setting.js:553
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"반드시 monospace 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
-"올바르지 않을 경우, 기본적으로 제공되는 monospace 글꼴을 기본값으로 사용합니"
-"다."
+"반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
+"올바르지 않을 경우, 일반 c고정폭 글꼴을 기본값으로 사용합니다."
 
 #: ReactNativeClient/lib/models/Setting.js:592
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2688,7 +2669,7 @@ msgstr "키보드 모드"
 
 #: ReactNativeClient/lib/models/Setting.js:653
 msgid "Default"
-msgstr "기본값:  %s"
+msgstr "기본값"
 
 #: ReactNativeClient/lib/models/Setting.js:654
 msgid "Emacs"
@@ -2720,15 +2701,15 @@ msgstr "TLS 인증서 오류 무시"
 
 #: ReactNativeClient/lib/models/Setting.js:692
 msgid "Fail-safe"
-msgstr ""
+msgstr "안전 작동"
 
 #: ReactNativeClient/lib/models/Setting.js:693
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"안전 장치: 동기화 목표가 비어 있을시 로컬 데이타를 지우시지 마세요 (종종 잘못"
-"된 설정이나 버그로 인해 발생됩니다)"
+"안전 장치: 동기화 목표가 비어 있을 경우, 로컬 데이터를 지우시지 마세요 (종종 "
+"잘못된 설정이나 버그로 인해 발생됩니다)"
 
 #: ReactNativeClient/lib/models/Setting.js:697
 msgid ""
@@ -2740,7 +2721,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:705
 msgid "Enable note history"
-msgstr "노트 역사 허용"
+msgstr "노트 기록 활성화"
 
 #: ReactNativeClient/lib/models/Setting.js:715
 msgid "days"
@@ -2753,11 +2734,11 @@ msgstr "%d 일"
 
 #: ReactNativeClient/lib/models/Setting.js:717
 msgid "Keep note history for"
-msgstr "노트 역사를 다음 날짜로 보관합니다"
+msgstr "다음과 같이 노트 기록을 유지"
 
 #: ReactNativeClient/lib/models/Setting.js:744
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "노트북 목록 증가 인수"
 
 #: ReactNativeClient/lib/models/Setting.js:746
 #: ReactNativeClient/lib/models/Setting.js:759
@@ -2771,16 +2752,16 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:757
 msgid "Note list growth factor"
-msgstr ""
+msgstr "노트 목록 증가 인수"
 
 #: ReactNativeClient/lib/models/Setting.js:770
 msgid "Note area growth factor"
-msgstr ""
+msgstr "노트 영역 증가 인수"
 
 #: ReactNativeClient/lib/models/Setting.js:922
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: \"%s\"."
+msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: %s."
 
 #: ReactNativeClient/lib/models/Setting.js:1250
 msgid "General"
@@ -2815,9 +2796,8 @@ msgid "Web Clipper"
 msgstr "웹 수집기"
 
 #: ReactNativeClient/lib/models/Setting.js:1259
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "키보드 모드"
+msgstr "키보드 바로가기"
 
 #: ReactNativeClient/lib/models/Setting.js:1264
 msgid ""
@@ -2848,17 +2828,20 @@ msgid "Downloaded"
 msgstr "다운로드됨"
 
 #: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "첨부"
+msgstr "첨부 충돌: \"%s\""
 
 #: ReactNativeClient/lib/models/Resource.js:372
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "첨부 파일을 다운로드하던 중에 오류가 발생했습니다:"
+msgstr ""
+"아래의 첨부에서 [충돌](%s)이 발생했습니다.\n"
+"\n"
+"%s"
 
 #: ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
@@ -2871,7 +2854,7 @@ msgstr "만든 날짜"
 
 #: ReactNativeClient/lib/models/Note.js:28
 msgid "custom order"
-msgstr ""
+msgstr "사용자 정의"
 
 #: ReactNativeClient/lib/models/Note.js:92
 msgid "This note does not have geolocation information."
@@ -3048,12 +3031,12 @@ msgstr ""
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr "마스터 키가 성공적으로 업그레이드되었습니다."
+msgstr "마스터 키가 성공적으로 업그레이드되었습니다!"
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "내보낼 노트를 찾을수 없습니다: %s"
+msgstr "마스터 키를 업그레이드할 수 없습니다: %s"
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3219,11 +3202,11 @@ msgstr "디버그 보고서 내보내기"
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid "Fixing search index..."
-msgstr "검색 인덱스 수정..."
+msgstr "검색 색인을 수정하는 중..."
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid "Fix search index"
-msgstr "검색 인덱스 수정"
+msgstr "검색 색인 수정"
 
 #: ReactNativeClient/lib/components/screens/config.js:443
 msgid ""
@@ -3302,7 +3285,7 @@ msgstr "변경 사항 버리기"
 #: ReactNativeClient/lib/components/screens/note.js:160
 #, javascript-format
 msgid "No item with ID %s"
-msgstr "ID %s에 해당하는 항목이 없습니다"
+msgstr "식별자 %s에 해당하는 항목이 없습니다"
 
 #: ReactNativeClient/lib/components/screens/note.js:179
 msgid "This attachment is not downloaded or not decrypted yet."
@@ -3316,7 +3299,7 @@ msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원�
 #: ReactNativeClient/lib/components/screens/note.js:187
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
+msgstr "링크를 위한 프로토콜 \\“%s\\”는 지원하지 않습니다"
 
 #: ReactNativeClient/lib/components/screens/note.js:617
 #, javascript-format
@@ -3477,10 +3460,9 @@ msgstr "파일 시스템"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
-msgstr ""
+msgstr "앞으로 가기"
 
 #: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
 msgid "Synchronize"
 msgstr "동기화"
 
@@ -3590,7 +3572,7 @@ msgstr "%s (%s) 는 업로드 할 수 없습니다: %s"
 #: ReactNativeClient/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "“%s”를 다운로드 할 수 없습니다: %s"
+msgstr "\"%s\"를 다운로드 할 수 없습니다: %s"
 
 #: ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
@@ -3720,9 +3702,9 @@ msgid "Directory"
 msgstr "폴더"
 
 #: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" 모듈을 \"%s\" 형식에 불러올 수 없습니다"
+msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 출력을 위한)을 불러올 수 없습니다"
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
@@ -3774,18 +3756,15 @@ msgstr ""
 #~ msgid "Front"
 #~ msgstr "글꼴"
 
-#, fuzzy
 #~ msgid "Content properties"
 #~ msgstr "노트 속성"
 
-#, fuzzy
 #~ msgid "Split"
 #~ msgstr "뷰 나누기"
 
 #~ msgid "Information"
 #~ msgstr "정보"
 
-#, fuzzy
 #~ msgid "Resources"
 #~ msgstr "리소스: %d."
 
@@ -3821,7 +3800,6 @@ msgstr ""
 #~ "는 노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용될 "
 #~ "수 있습니다."
 
-#, fuzzy
 #~ msgid "marked text"
 #~ msgstr "강조"
 
@@ -3841,7 +3819,6 @@ msgstr ""
 #~ msgid "Confirm password"
 #~ msgstr "마스터 키를 넣어주세요"
 
-#, fuzzy
 #~ msgid "Missing required argument: note"
 #~ msgstr "필요한 인자가 없습니다: %s"
 
@@ -3872,7 +3849,6 @@ msgstr ""
 #~ "알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 "
 #~ "해주세요"
 
-#, fuzzy
 #~ msgid "Permission to write to external storage"
 #~ msgstr "카메라 사용 허가"
 
