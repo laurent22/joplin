@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -312,7 +314,7 @@ msgstr "指定のターゲットと同期します。(標準： sync.targetの�
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "同期先を最新バージョンにアップグレード。"
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -796,6 +798,8 @@ msgstr "キャンセル"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"まもなくアプリケーションは終了します。もう一度起動して処理を完了させてくださ"
+"い。"
 
 #: ElectronClient/plugins/GotoAnything.min.js:446
 msgid ""
@@ -1157,13 +1161,13 @@ msgstr "新しい %s を作成中..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:344
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "下記の添付ファイルが変更されたかどうかを監視中です。"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:347
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "添付ファイルの監視は他のノートに移動すると終了します。"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1274,7 +1278,7 @@ msgstr "ノートのプロパティ"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
 msgid "An unexpected error occured while importing the keymap!"
-msgstr ""
+msgstr "キーマップのインポート中に予期しないエラーが発生しました!"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:437
@@ -1289,12 +1293,11 @@ msgstr "インポート"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
-msgstr ""
+msgstr "コマンド"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "キーバインド"
+msgstr "ショートカットキー"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
 #: ElectronClient/app.js:690
@@ -1317,9 +1320,8 @@ msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Joplinについて"
+msgstr "Joplinを隠す"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 #: ElectronClient/app.js:703
@@ -1327,7 +1329,6 @@ msgid "Close Window"
 msgstr "ウィンドウを閉じる"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Preferences"
 msgstr "環境設定"
 
@@ -1338,13 +1339,15 @@ msgstr "オプション"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid "Press the shortcut"
-msgstr ""
+msgstr "ショートカットキーを押してください"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"ショートカットキーに続けてENTERを押すことで設定します。ショートカットを削除す"
+"るにはBACKSPACEを押してください。"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
@@ -1358,11 +1361,13 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"同期するには同期先をアップグレードする必要があります。アップグレードには数分"
+"かかるかもしれません。またアプリケーションの再起動が必要です。アップグレード"
+"するにはリンクをクリックしてください。"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "アップグレードが必要なマスターキー"
+msgstr "再起動してアップグレード"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
@@ -2114,9 +2119,8 @@ msgid "Templates"
 msgstr "テンプレート"
 
 #: ElectronClient/app.js:668
-#, fuzzy
 msgid "Export all"
-msgstr "エクスポート"
+msgstr "すべてをエクスポート"
 
 #: ElectronClient/app.js:683
 #, javascript-format
@@ -2215,7 +2219,7 @@ msgstr "不明なレベルID: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2360,15 +2364,15 @@ msgstr "WevDAV パスワード"
 
 #: ReactNativeClient/lib/models/Setting.js:195
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 バケット"
 
 #: ReactNativeClient/lib/models/Setting.js:206
 msgid "AWS key"
-msgstr ""
+msgstr "AWS アクセスキーID"
 
 #: ReactNativeClient/lib/models/Setting.js:216
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS シークレットアクセスキー"
 
 #: ReactNativeClient/lib/models/Setting.js:230
 msgid "Attachment download behaviour"
@@ -2823,9 +2827,8 @@ msgid "Web Clipper"
 msgstr "Webクリッパー"
 
 #: ReactNativeClient/lib/models/Setting.js:1259
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "キーバインド"
+msgstr "キーボードショートカット"
 
 #: ReactNativeClient/lib/models/Setting.js:1264
 msgid ""
@@ -2980,6 +2983,8 @@ msgstr "いくつかの項目は同期されませんでした。詳細はクリ
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"同期先をアップグレードする必要があります。アップグレードするにはバナーをク"
+"リックしてください。"
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3024,8 +3029,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"エラーです。URL、ユーザー名、パスワードなどを修正し、同期するターゲットにアク"
-"セスできるかを確認してください。次が報告されたエラーです:"
+"エラーです。URL、ユーザー名、パスワードなどを修正し、同期先にアクセスできるか"
+"を確認してください。次が報告されたエラーです:"
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -3102,7 +3107,7 @@ msgstr "更新"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "同期先のアップグレード"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3151,10 +3156,10 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
-"ゲットに暗号化した状態で送ることを意味します。パスワードはなくさないようにし"
-"てください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法にな"
-"るためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
+"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
+"号化した状態で送ることを意味します。パスワードはなくさないようにしてくださ"
+"い。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためで"
+"す！ 暗号化を有効にするには、下にパスワードを入力してください。"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:177
 msgid "Enable"
@@ -3546,32 +3551,35 @@ msgstr "ノートをどのノートブックにインポートするのか指定
 #: ReactNativeClient/lib/services/KeymapService.js:124
 #, javascript-format
 msgid "Error loading the keymap from file: %s"
-msgstr ""
+msgstr "キーマップ読み込みエラー（ファイル: %s）"
 
 #: ReactNativeClient/lib/services/KeymapService.js:141
 #, javascript-format
 msgid "Error saving the keymap to file: %s"
-msgstr ""
+msgstr "キーマップ書き出しエラー（ファイル: %s）"
 
 #: ReactNativeClient/lib/services/KeymapService.js:204
 #, javascript-format
 msgid "Keymap item %s is missing the required \"command\" property."
 msgstr ""
+"キーマップアイテム %s は必須の \"command\" プロパティを持っていません。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:207
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid command."
-msgstr ""
+msgstr "キーマップアイテム %s は %s が有効なコマンドでないため無効です。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:210
 #, javascript-format
 msgid "Keymap item %s is missing the required \"accelerator\" property."
 msgstr ""
+"キーマップアイテム %s は必須の \"accelerator\" プロパティを持っていません。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:217
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid accelerator."
 msgstr ""
+"キーマップアイテム %s は %s が有効なショートカットキーでないため無効です。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:235
 #, javascript-format
@@ -3579,11 +3587,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"ショートカットキー \"%s\" は \"%s\" コマンドと \"%s\" コマンドで使われていま"
+"す。これにより予想外の動作が起こる可能性があります。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:260
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "ショートカットキー \"%s\" は無効です。"
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
