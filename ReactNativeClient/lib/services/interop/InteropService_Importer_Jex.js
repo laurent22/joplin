@@ -1,5 +1,5 @@
-const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
-const InteropService_Importer_Raw = require('lib/services/InteropService_Importer_Raw');
+const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base');
+const InteropService_Importer_Raw = require('lib/services/interop/InteropService_Importer_Raw');
 const { filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 

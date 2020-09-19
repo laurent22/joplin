@@ -1,4 +1,4 @@
-const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
+const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base');
 const BaseItem = require('lib/models/BaseItem.js');
 const { basename } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');

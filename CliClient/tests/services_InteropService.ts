@@ -2,17 +2,15 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, expectNotThrow, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const InteropService = require('lib/services/InteropService').default;
+import InteropService from 'lib/services/interop/InteropService';
+
+const { asyncTest, fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const NoteTag = require('lib/models/NoteTag.js');
 const Resource = require('lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
-const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -23,7 +21,7 @@ function exportDir() {
 	return `${__dirname}/export`;
 }
 
-function fieldsEqual(model1, model2, fieldNames) {
+function fieldsEqual(model1:any, model2:any, fieldNames:string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
 		expect(model1[f]).toBe(model2[f], `For key ${f}`);
@@ -90,15 +88,15 @@ describe('services_InteropService', function() {
 		await service.import({ path: filePath });
 
 		const allFolders = await Folder.all();
-		expect(allFolders.map(f => f.title).sort().join(' - ')).toBe('folder - folder (1)');
+		expect(allFolders.map((f:any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
 	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
 		const service = new InteropService();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
-		const sub1 = await Folder.save({ title: 'Sub', parent_id: folder1.id });
-		const sub2 = await Folder.save({ title: 'Sub', parent_id: folder2.id });
+		await Folder.save({ title: 'Sub', parent_id: folder1.id });
+		await Folder.save({ title: 'Sub', parent_id: folder2.id });
 		const filePath = `${exportDir()}/test.jex`;
 		await service.export({ path: filePath });
 
@@ -362,8 +360,8 @@ describe('services_InteropService', function() {
 		let note21 = await Note.save({ title: 'title note21', parent_id: folder2.id });
 		note21 = await Note.load(note21.id);
 
-		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
-		folder3 = await Folder.load(folder2.id);
+		await Folder.save({ title: 'folder3', parent_id: folder1.id });
+		await Folder.load(folder2.id);
 
 		const outDir = exportDir();
 
@@ -382,13 +380,13 @@ describe('services_InteropService', function() {
 		const service = new InteropService();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'ジョプリン' });
-		const note1 = await Note.save({ title: '生活', parent_id: folder1.id });
-		const note2 = await Note.save({ title: '生活', parent_id: folder1.id });
-		const note2b = await Note.save({ title: '生活', parent_id: folder1.id });
-		const note3 = await Note.save({ title: '', parent_id: folder1.id });
-		const note4 = await Note.save({ title: '', parent_id: folder1.id });
-		const note5 = await Note.save({ title: 'salut, ça roule ?', parent_id: folder1.id });
-		const note6 = await Note.save({ title: 'ジョプリン', parent_id: folder2.id });
+		await Note.save({ title: '生活', parent_id: folder1.id });
+		await Note.save({ title: '生活', parent_id: folder1.id });
+		await Note.save({ title: '生活', parent_id: folder1.id });
+		await Note.save({ title: '', parent_id: folder1.id });
+		await Note.save({ title: '', parent_id: folder1.id });
+		await Note.save({ title: 'salut, ça roule ?', parent_id: folder1.id });
+		await Note.save({ title: 'ジョプリン', parent_id: folder2.id });
 
 		const outDir = exportDir();
 
@@ -440,6 +438,26 @@ describe('services_InteropService', function() {
 		});
 
 		expect(result.warnings.length).toBe(0);
+	}));
+
+	it('should allow registering new modules', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'testexportfolder' });
+		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
+		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+
+		// const service = new InteropService();
+		// service.registerModule({
+		// 	type:
+		// });
+
+		// await service.export({
+		// 	path: exportDir(),
+		// 	format: 'md',
+		// 	sourceFolderIds: [folder1.id],
+		// });
+
+		// expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
+		// expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
 	}));
 
 });

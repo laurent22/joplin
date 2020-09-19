@@ -1,4 +1,4 @@
-const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
+const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base');
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');

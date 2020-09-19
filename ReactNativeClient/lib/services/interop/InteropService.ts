@@ -1,3 +1,4 @@
+import {ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule} from './types';
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
@@ -10,100 +11,6 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { toTitleCase } = require('lib/string-utils');
-
-enum ModuleType {
-	Importer = 'importer',
-	Exporter = 'exporter',
-}
-
-enum FileSystemItem {
-	File = 'file',
-	Directory = 'directory',
-}
-
-enum ImportModuleOutputFormat {
-	Markdown = 'md',
-	Html = 'html',
-}
-
-// For historical reasons the import and export modules share the same
-// interface, except that some properties are used only for import
-// and others only for export.
-interface Module {
-	// ---------------------------------------
-	// Shared properties
-	// ---------------------------------------
-
-	type: ModuleType,
-	format: string,
-	fileExtensions: string[],
-	description: string,
-
-	// ---------------------------------------
-	// Import-only properties
-	// ---------------------------------------
-
-	sources: FileSystemItem[],
-	isNoteArchive: boolean,
-	importerClass: string,
-	outputFormat: ImportModuleOutputFormat,
-	isDefault: boolean,
-	fullLabel: Function,
-
-	// ---------------------------------------
-	// Export-only properties
-	// ---------------------------------------
-
-	target: FileSystemItem,
-	// Tells whether the format can package multiple notes into one file. Default: true.
-	canDoMultiExport: boolean,
-}
-
-interface ImportOptions {
-	path?: string,
-	format?: string
-	modulePath?: string,
-	destinationFolderId?: string,
-	destinationFolder?: any,
-	outputFormat?: ImportModuleOutputFormat,
-}
-
-interface ExportOptions {
-	format?: string,
-	path?:string,
-	sourceFolderIds?: string[],
-	sourceNoteIds?: string[],
-}
-
-interface ImportExportResult {
-	warnings: string[],
-}
-
-function moduleFullLabel(moduleSource:FileSystemItem = null):string {
-	const label = [`${this.format.toUpperCase()} - ${this.description}`];
-	if (moduleSource && this.sources.length > 1) {
-		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
-	}
-	return label.join(' ');
-}
-
-function defaultImportExportModule(type:ModuleType):Module {
-	return {
-		type: type,
-		format: '',
-		fileExtensions: [],
-		sources: [],
-		description: '',
-		isNoteArchive: true,
-		importerClass: '',
-		outputFormat: ImportModuleOutputFormat.Markdown,
-		isDefault: false,
-		fullLabel: moduleFullLabel,
-
-		target: FileSystemItem.File,
-		canDoMultiExport: true,
-	};
-}
 
 class InteropService {
 
@@ -197,6 +104,15 @@ class InteropService {
 		return this.modules_;
 	}
 
+	registerModule(module:Module) {
+		module = {
+			...defaultImportExportModule(module.type),
+			...module,
+		}
+
+		this.modules_.push(module);
+	}
+
 	// Find the module that matches the given type ("importer" or "exporter")
 	// and the given format. Some formats can have multiple assocated importers
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
@@ -231,7 +147,7 @@ class InteropService {
 		} else {
 			className = `InteropService_Exporter_${toTitleCase(module.format)}`;
 		}
-		return `lib/services/${className}`;
+		return `lib/services/interop/${className}`;
 	}
 
 	/**
@@ -244,9 +160,18 @@ class InteropService {
 	newModuleByFormat_(type:ModuleType, format:string, outputFormat:ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
 		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
-		const ModuleClass = require(this.modulePath(moduleMetadata));
-		const output = new ModuleClass();
+
+		let output = null;
+
+		if (moduleMetadata.instanceFactory) {
+			output = moduleMetadata.instanceFactory();
+		} else {
+			const ModuleClass = require(this.modulePath(moduleMetadata));
+			output = new ModuleClass();
+		}
+
 		output.setMetadata(moduleMetadata);
+
 		return output;
 	}
 
@@ -266,10 +191,20 @@ class InteropService {
 			if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 			modulePath = this.modulePath(moduleMetadata);
 		}
-		const ModuleClass = require(modulePath);
-		const output = new ModuleClass();
+
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
-		output.setMetadata({ options, ...moduleMetadata }); // TODO: Check that this metadata is equivalent to module above
+
+		let output = null;
+
+		if (moduleMetadata.instanceFactory) {
+			output = moduleMetadata.instanceFactory();
+		} else {
+			const ModuleClass = require(modulePath);
+			output = new ModuleClass();
+		}
+
+		output.setMetadata({ options, ...moduleMetadata });
+
 		return output;
 	}
 
