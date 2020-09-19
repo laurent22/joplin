@@ -4,7 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, expectNotThrow, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const InteropService = require('lib/services/InteropService.js');
+const InteropService = require('lib/services/InteropService').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');

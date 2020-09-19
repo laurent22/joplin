@@ -192,6 +192,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/services/CommandService.js
+ReactNativeClient/lib/services/InteropService.js
 ReactNativeClient/lib/services/keychain/KeychainService.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.dummy.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
@@ -206,6 +207,7 @@ ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplin.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinApi.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinCommands.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinFilters.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js

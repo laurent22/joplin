@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from 'lib/services/CommandService';
+import InteropService from 'lib/services/InteropService';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
@@ -220,8 +221,6 @@ class SideBarComponent extends React.Component<Props, State> {
 			menu.append(new MenuItem(CommandService.instance().commandToMenuItem('renameFolder', { folderId: itemId })));
 
 			menu.append(new MenuItem({ type: 'separator' }));
-
-			const InteropService = require('lib/services/InteropService.js');
 
 			const exportMenu = new Menu();
 			const ioService = new InteropService();

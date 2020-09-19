@@ -82,7 +82,6 @@ export default class PluginService extends BaseService {
 		}
 
 		for (const pluginPath of pluginPaths) {
-			console.info('LOAD', pluginPath);
 			if (pluginPath.indexOf('_') === 0) {
 				this.logger().info(`PluginService: Plugin name starts with "_" and has not been loaded: ${pluginPath}`);
 				continue;

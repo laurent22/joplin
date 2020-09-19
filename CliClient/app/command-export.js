@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const InteropService = require('lib/services/InteropService.js');
+const InteropService = require('lib/services/InteropService').default;
 const BaseModel = require('lib/BaseModel.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
