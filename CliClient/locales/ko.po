@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Ji-Hyeon Gim <potatogim@potatogim.net>\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -122,7 +122,7 @@ msgstr "생성됨: %d."
 #: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
-msgstr "업데이트됨: %d."
+msgstr "갱신됨: %d."
 
 #: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
@@ -312,7 +312,7 @@ msgstr "지정된 대상으로 동기화 합니다 (기본값은 sync.target con
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "동기화 대상을 최신 버전으로 업그레이드합니다."
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -724,7 +724,7 @@ msgstr "노트와 노트북에 관한 요약 정보를 표시합니다."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다."
+"항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다"
 
 #: CliClient/app/command-tag.js:14
 msgid ""
@@ -794,7 +794,7 @@ msgstr "취소"
 #: ElectronClient/bridge.js:198
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr ""
+msgstr "애플리케이션이 곧 종료됩니다. 프로세스를 완료하려면 다시 실해주세요."
 
 #: ElectronClient/plugins/GotoAnything.min.js:446
 msgid ""
@@ -1154,13 +1154,13 @@ msgstr "%s 새로 만들기..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:344
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "다음 첨부 파일들이 변경되었는지 감시하고 있습니다:"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:347
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "다른 노트로 전환하면 첨부 파일이 더 이상 감시되지 않습니다."
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1189,7 +1189,7 @@ msgstr "코드"
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
 #: ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
-msgstr "숫자가 매겨진 목록"
+msgstr "번호 매기 목록"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
 #: ElectronClient/gui/NoteText.min.js:1746
@@ -1199,7 +1199,7 @@ msgstr "글머리 기호 목록"
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
 #: ElectronClient/gui/NoteText.min.js:1754
 msgid "Checkbox"
-msgstr "체크박스"
+msgstr "확인 상자"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
 #: ElectronClient/gui/NoteText.min.js:1762
@@ -1228,7 +1228,7 @@ msgstr "노트 본문"
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: ElectronClient/gui/ResourceScreen.js:38
 msgid "ID"
-msgstr "ID"
+msgstr "식별자"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:27
 msgid "Created"
@@ -1236,7 +1236,7 @@ msgstr "생성됨"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:28
 msgid "Updated"
-msgstr "업데이트됨"
+msgstr "갱신됨"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:29
 msgid "Completed"
@@ -1271,7 +1271,7 @@ msgstr "노트 속성"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
 msgid "An unexpected error occured while importing the keymap!"
-msgstr ""
+msgstr "키맵을 가져오는 중에 예기치 못한 오류가 발생했습니다!"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:437
@@ -1310,7 +1310,7 @@ msgstr "실제 크기"
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
 #: ElectronClient/app.js:868
 msgid "Website and documentation"
-msgstr "웹사이트 및 각종 문서"
+msgstr "웹사이트 및 참고 문서"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
 msgid "Hide Joplin"
@@ -1354,6 +1354,9 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"Joplin이 동기화를 하기에 앞서 동기화 대상의 업그레이드가 필요합니다. 작업이 "
+"완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하"
+"려면 링크를 눌러주세요."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
 msgid "Restart and upgrade"
@@ -2000,6 +2003,8 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 "
+"삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
 
 #: ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -2210,6 +2215,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽"
+"셀로 줄이시겠습니까?"
 
 #: ReactNativeClient/lib/shim-init-node.js:157
 #, javascript-format
@@ -2224,7 +2231,7 @@ msgstr "제목"
 #: ReactNativeClient/lib/models/Folder.js:28
 #: ReactNativeClient/lib/models/Note.js:26
 msgid "updated date"
-msgstr "업데이트된 날짜"
+msgstr "수정 날짜"
 
 #: ReactNativeClient/lib/models/Folder.js:88
 msgid "Conflicts"
@@ -2578,16 +2585,16 @@ msgstr "Joplin 앱에 전역적으로 적용되는 사용자 정의 스타일시
 
 #: ReactNativeClient/lib/models/Setting.js:598
 msgid "Automatically update the application"
-msgstr "자동으로 업데이트 하기"
+msgstr "자동으로 업데이트하기"
 
 #: ReactNativeClient/lib/models/Setting.js:599
 msgid "Get pre-releases when checking for updates"
-msgstr "업데이트 시 프리-릴리즈 받기"
+msgstr "사전-출시 버전일 경우에도 업데이트"
 
 #: ReactNativeClient/lib/models/Setting.js:599
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "자세한 내용은 프리-릴리즈 페이지를 참조해주세요: %s"
+msgstr "자세한 내용은 사전-출시 페이지를 참조해주세요: %s"
 
 #: ReactNativeClient/lib/models/Setting.js:607
 msgid "Synchronisation interval"
@@ -2653,7 +2660,7 @@ msgstr "Legal"
 
 #: ReactNativeClient/lib/models/Setting.js:636
 msgid "Page orientation for PDF export"
-msgstr "PDF를 내보낼때의 페이지 방향"
+msgstr "PDF를 내보낼 때의 페이지 방향"
 
 #: ReactNativeClient/lib/models/Setting.js:638
 msgid "Portrait"
@@ -2701,14 +2708,14 @@ msgstr "TLS 인증서 오류 무시"
 
 #: ReactNativeClient/lib/models/Setting.js:692
 msgid "Fail-safe"
-msgstr "안전 작동"
+msgstr "안전 장치"
 
 #: ReactNativeClient/lib/models/Setting.js:693
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"안전 장치: 동기화 목표가 비어 있을 경우, 로컬 데이터를 지우시지 마세요 (종종 "
+"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 "
 "잘못된 설정이나 버그로 인해 발생됩니다)"
 
 #: ReactNativeClient/lib/models/Setting.js:697
@@ -2716,12 +2723,12 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
-"API 서버에 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니"
+"API 서버가 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니"
 "다."
 
 #: ReactNativeClient/lib/models/Setting.js:705
 msgid "Enable note history"
-msgstr "노트 기록 활성화"
+msgstr "노트 변경 이력 활성화"
 
 #: ReactNativeClient/lib/models/Setting.js:715
 msgid "days"
@@ -2734,7 +2741,7 @@ msgstr "%d 일"
 
 #: ReactNativeClient/lib/models/Setting.js:717
 msgid "Keep note history for"
-msgstr "다음과 같이 노트 기록을 유지"
+msgstr "다음과 같이 노트 변경 이력을 유지"
 
 #: ReactNativeClient/lib/models/Setting.js:744
 msgid "Notebook list growth factor"
@@ -2749,6 +2756,10 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"이 인수는 각 항목들이 컨테이너 상에서 가용 공간에 적합하게 증가 혹은 감소되"
+"는 방식을 설정합니다. 따라서 인수가 2인 항목은 인수가 1인 항목보다 약 2배 더 "
+"많은 공간을 차지하게 될 것입니다. 변경은 애플리케이션을 재시작한 후에 적용됩"
+"니다."
 
 #: ReactNativeClient/lib/models/Setting.js:757
 msgid "Note list growth factor"
@@ -2809,6 +2820,12 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"이 플러그인들은 마크다운 렌더러에 부가적인 기능들을 추가합니다. 일부 기능들"
+"은 표준 마크다운에서 지원하지 않기 때문에 Jpolin에서만 동작할 수도 있음을 참"
+"고하세요. 추가로, 일부 기능들은 위지윅 편집기에 *호환되지 않습니다*. 편집기에"
+"서 이 플러그인을 사용하는 노트를 열게 된다면, 플러그인의 편집 내용이 유실될 "
+"수도 있습니다. 아래에 어떤 플러그인들이 위지윅 편집기와의 호환되는지 표시됩니"
+"다."
 
 #: ReactNativeClient/lib/models/Setting.js:1265
 #, javascript-format
@@ -2880,7 +2897,7 @@ msgstr "암호화된 항목은 변경될 수 없습니다"
 
 #: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (실험 전용)"
+msgstr "OneDrive Dev (실험용)"
 
 #: ReactNativeClient/lib/BaseApplication.js:142
 #: ReactNativeClient/lib/BaseApplication.js:155
@@ -2933,7 +2950,7 @@ msgstr "노트북으로 옮기기..."
 #: ReactNativeClient/lib/components/screen-header.js:433
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "%d 노트를 \"%s\" 노트북으로 옮길까요?"
+msgstr "%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
 
 #: ReactNativeClient/lib/components/screen-header.js:451
 msgid "Press to set the decryption password."
@@ -2941,11 +2958,11 @@ msgstr "복호화 암호를 설정하려면 누르세요."
 
 #: ReactNativeClient/lib/components/screen-header.js:452
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "일부 항목들은 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
+msgstr "일부 항목들을 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
 
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr ""
+msgstr "동기화 대상의 업그레이드가 필요합니다. 처리를 위해 이 배너를 누르세요."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -2991,7 +3008,7 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목"
-"표하는 동기화 장소가 접근가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
+"표하는 동기화 장소가 접근 가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
 "다:"
 
 #: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
@@ -3068,7 +3085,7 @@ msgstr "새로고침"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "동기화 대상 업그레이드"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3117,10 +3134,10 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"암호화를 사용하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 된 상"
-"태로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할수 있는 유일한 수"
-"단으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하실려면 아래에 "
-"비밀번호를 넣어주세요."
+"암호화를 사용하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화된 상태"
+"로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할 수 있는 유일한 수단"
+"으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하려면 아래에 비밀"
+"번호를 넣어주세요."
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:177
 msgid "Enable"
@@ -3181,8 +3198,7 @@ msgstr "경고"
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
-msgstr ""
-"파일 시스템 동기화를 사용하실려면 외부 저장소 쓰기 권한을 필요로 합니다."
+msgstr "파일 시스템 동기화는 외부 저장소 쓰기 권한을 필요로 합니다."
 
 #: ReactNativeClient/lib/components/screens/config.js:436
 msgid "Tools"
@@ -3213,7 +3229,7 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"검색에 오류가 있는 경우, 이를 이용하여 검색 인덱스를 다시 만들수 있습니다. 이"
+"검색에 오류가 있는 경우, 이를 이용하여 검색 색인을 다시 만들 수 있습니다. 이"
 "는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
 
 #: ReactNativeClient/lib/components/screens/config.js:446
@@ -3299,7 +3315,7 @@ msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원�
 #: ReactNativeClient/lib/components/screens/note.js:187
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "링크를 위한 프로토콜 \\“%s\\”는 지원하지 않습니다"
+msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 
 #: ReactNativeClient/lib/components/screens/note.js:617
 #, javascript-format
@@ -3494,7 +3510,7 @@ msgstr "프로파일 버전: %s"
 #: ReactNativeClient/lib/versionInfo.js:23
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "키체인 지원: %s"
 
 #: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
@@ -3511,32 +3527,32 @@ msgstr "노트를 가져와서 저장할 노트북을 지정해주세요."
 #: ReactNativeClient/lib/services/KeymapService.js:124
 #, javascript-format
 msgid "Error loading the keymap from file: %s"
-msgstr ""
+msgstr "파일로부터 키맵을 불러오는 중에 오류가 발생했습니다: %s"
 
 #: ReactNativeClient/lib/services/KeymapService.js:141
 #, javascript-format
 msgid "Error saving the keymap to file: %s"
-msgstr ""
+msgstr "파일에 키맵을 저장하는 중에 오류가 발생했습니다: %s"
 
 #: ReactNativeClient/lib/services/KeymapService.js:204
 #, javascript-format
 msgid "Keymap item %s is missing the required \"command\" property."
-msgstr ""
+msgstr "키맵 항목 %s에 필수 속성인 \"명령\"이 없습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:207
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid command."
-msgstr ""
+msgstr "키맵 항목 %s에 유효하지 않은 명령인 %s가 지정되었습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:210
 #, javascript-format
 msgid "Keymap item %s is missing the required \"accelerator\" property."
-msgstr ""
+msgstr "키맵 항목 %s에 필수 속성인 \"단축키\"가 없습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:217
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid accelerator."
-msgstr ""
+msgstr "키맵 항목 %s에 유효하지 않은 단축키인 %s가 지정되었습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:235
 #, javascript-format
@@ -3544,11 +3560,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"단축키 \"%s\"는 \"%s\"와 \"%s\" 명령으로 사용 중입니다. 이러한 설정은 예기치 "
+"못한 동작을 할 수도 있습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:260
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "단축키 \"%s\"는 유효하지 않습니다."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
