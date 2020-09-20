@@ -559,7 +559,9 @@
 			"ReactNativeClient/lib/services/interop/InteropService_Importer_Base.js": true,
 			"ReactNativeClient/lib/services/interop/InteropService.js": true,
 			"ReactNativeClient/lib/services/interop/types.js": true,
-			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js": true
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Custom.js": true
 		},
 		"spellright.language": [
 			"en"

@@ -7,6 +7,7 @@ import SandboxJoplinFilters from './SandboxJoplinFilters';
 import SandboxJoplinCommands from './SandboxJoplinCommands';
 import SandboxJoplinViews from './SandboxJoplinViews';
 import SandboxJoplinUtils from './SandboxJoplinUtils';
+import SandboxJoplinInterop from './SandboxJoplinInterop';
 
 export default class SandboxJoplin {
 
@@ -17,6 +18,7 @@ export default class SandboxJoplin {
 	private commands_: SandboxJoplinCommands = null;
 	private views_: SandboxJoplinViews = null;
 	private utils_: SandboxJoplinUtils = null;
+	private interop_: SandboxJoplinInterop = null;
 
 	constructor(plugin: Plugin, store: any, context: SandboxContext) {
 		this.api_ = new SandboxJoplinApi();
@@ -26,6 +28,7 @@ export default class SandboxJoplin {
 		this.commands_ = new SandboxJoplinCommands();
 		this.views_ = new SandboxJoplinViews(plugin, store);
 		this.utils_ = new SandboxJoplinUtils();
+		this.interop_ = new SandboxJoplinInterop();
 	}
 
 	get api(): SandboxJoplinApi {
@@ -54,5 +57,9 @@ export default class SandboxJoplin {
 
 	get utils(): SandboxJoplinUtils {
 		return this.utils_;
+	}
+
+	get interop(): SandboxJoplinInterop {
+		return this.interop_;
 	}
 }
