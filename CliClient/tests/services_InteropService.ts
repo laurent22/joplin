@@ -42,7 +42,7 @@ describe('services_InteropService', function() {
 	});
 
 	it('should export and import folders', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		let folder1 = await Folder.save({ title: 'folder1' });
 		folder1 = await Folder.load(folder1.id);
 		const filePath = `${exportDir()}/test.jex`;
@@ -77,7 +77,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should import folders and de-duplicate titles when needed', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder' });
 		const folder2 = await Folder.save({ title: 'folder' });
 		const filePath = `${exportDir()}/test.jex`;
@@ -93,7 +93,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		await Folder.save({ title: 'Sub', parent_id: folder1.id });
@@ -116,7 +116,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import folders and notes', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
@@ -155,7 +155,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import notes to specific folder', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
@@ -174,7 +174,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import tags', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -214,7 +214,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import resources', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -250,7 +250,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import single notes', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -270,7 +270,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import single folders', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -291,7 +291,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import folder and its sub-folders', asyncTest(async () => {
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
@@ -325,7 +325,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import links to notes', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -349,7 +349,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export selected notes in md format', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note11 = await Note.save({ title: 'title note11', parent_id: folder1.id });
 		note11 = await Note.load(note11.id);
@@ -378,7 +378,7 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export MD with unicode filenames', asyncTest(async () => {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'ジョプリン' });
 		await Note.save({ title: '生活', parent_id: folder1.id });
@@ -407,7 +407,7 @@ describe('services_InteropService', function() {
 		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
 		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 
 		await service.export({
 			path: exportDir(),
@@ -431,7 +431,7 @@ describe('services_InteropService', function() {
 
 		await Folder.save({ title: 'orphan', parent_id: '0c5bbd8a1b5a48189484a412a7e534cc' });
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 
 		const result = await service.export({
 			path: exportDir(),
@@ -465,7 +465,7 @@ describe('services_InteropService', function() {
 			},
 		};
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 		service.registerModule(module);
 		await service.import({
 			format: 'testing',
@@ -521,7 +521,7 @@ describe('services_InteropService', function() {
 			},
 		};
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 		service.registerModule(module);
 		await service.export({
 			format: 'testing',

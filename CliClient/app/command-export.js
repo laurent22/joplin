@@ -14,7 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const formats = service
 			.modules()
 			.filter(m => m.type === 'exporter' && m.format !== 'html')
@@ -41,7 +41,7 @@ class Command extends BaseCommand {
 			exportOptions.sourceFolderIds = folders.map(n => n.id);
 		}
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const result = await service.export(exportOptions);
 
 		result.warnings.map(w => this.stdout(w));

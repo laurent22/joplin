@@ -13,11 +13,31 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { toTitleCase } = require('lib/string-utils');
+const EventEmitter = require('events');
 
 class InteropService {
 
 	private defaultModules_:Module[];
 	private userModules_:Module[] = [];
+	private eventEmitter_:any = null;
+	private static instance_:InteropService;
+
+	public static instance():InteropService {
+		if (!this.instance_) this.instance_ = new InteropService();
+		return this.instance_;
+	}
+
+	constructor() {
+		this.eventEmitter_ = new EventEmitter();
+	}
+
+	on(eventName:string, callback:Function) {
+		return this.eventEmitter_.on(eventName, callback);
+	}
+
+	off(eventName:string, callback:Function) {
+		return this.eventEmitter_.removeListener(eventName, callback);
+	}
 
 	modules() {
 		if (!this.defaultModules_) {
@@ -107,13 +127,15 @@ class InteropService {
 		return this.defaultModules_.concat(this.userModules_);
 	}
 
-	registerModule(module:Module) {
+	public registerModule(module:Module) {
 		module = {
 			...defaultImportExportModule(module.type),
 			...module,
 		};
 
 		this.userModules_.push(module);
+
+		this.eventEmitter_.emit('modulesChanged');
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")

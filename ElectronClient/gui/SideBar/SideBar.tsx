@@ -223,7 +223,7 @@ class SideBarComponent extends React.Component<Props, State> {
 			menu.append(new MenuItem({ type: 'separator' }));
 
 			const exportMenu = new Menu();
-			const ioService = new InteropService();
+			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];

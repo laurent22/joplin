@@ -23,7 +23,7 @@ class InteropServiceHelper {
 			customCss: '',
 		}, exportOptions);
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 
 		const result = await service.export(exportOptions);
 		console.info('Export HTML result: ', result);
@@ -154,7 +154,7 @@ class InteropServiceHelper {
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 
-		const service = new InteropService();
+		const service = InteropService.instance();
 
 		try {
 			const result = await service.export(exportOptions);

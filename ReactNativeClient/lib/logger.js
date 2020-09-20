@@ -122,7 +122,11 @@ class Logger {
 				if (level == Logger.LEVEL_WARN) fn = 'warn';
 				if (level == Logger.LEVEL_INFO) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				const items = [moment().format('HH:mm:ss')].concat(object);
+				let items = [moment().format('HH:mm:ss')];
+				if (target.prefix) {
+					items.push(target.prefix);
+				}
+				items = items.concat(...object);
 				consoleObj[fn](...items);
 			} else if (target.type == 'file') {
 				const serializedObject = this.objectsToString(...object);

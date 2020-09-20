@@ -87,8 +87,12 @@ export default class PluginService extends BaseService {
 				continue;
 			}
 
-			const plugin = await this.loadPlugin(pluginPath);
-			await this.runPlugin(plugin);
+			try {
+				const plugin = await this.loadPlugin(pluginPath);
+				await this.runPlugin(plugin);
+			} catch (error) {
+				this.logger().error(`PluginService: Could not load plugin: ${pluginPath}`, error);
+			}
 		}
 	}
 

@@ -128,7 +128,7 @@ class NoteListUtils {
 
 			const exportMenu = new Menu();
 
-			const ioService = new InteropService();
+			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];

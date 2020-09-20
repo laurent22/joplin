@@ -1,28 +1,40 @@
+const fs = require('fs-extra');
+const path = require('path');
+
+function destDir(context:any) {
+	return context.destPath;
+}
+
+function resourceDir(context:any) {
+	return context.destPath + '/resources';
+}
+
 joplin.plugins.register({
 	onStart: async function() {
 		joplin.interop.registerModule({
 			type: 'exporter',
-			description: 'Test JSON Module',
+			description: 'JSON Export Directory',
 			format: 'json',
-			fileExtensions: ['json'],
+			target: 'directory',
 			instanceFactory: () => {
 				return {
 					init: async (context:any) => {
-						console.info('INIT', context);
-						//result.destPath = context.destPath;
+						await fs.mkdirp(destDir(context));
+						await fs.mkdirp(resourceDir(context));
 					},
 
 					processItem: async (context:any, itemType:number, item:any) => {
-						console.info('processItem', itemType, item);
+						const filePath = destDir(context) + '/' + item.id + '.json';
+						const serialized = JSON.stringify(item);
+						await fs.writeFile(filePath, serialized, 'utf8');
 					},
 
 					processResource: async (context:any, resource:any, filePath:string) => {
-						console.info('processResource', resource, filePath);
+						const destPath = resourceDir(context) + '/' + path.basename(filePath);
+						await fs.copy(filePath, destPath);
 					},
 
-					close: () => {
-						console.info('CLOSE');
-					},
+					close: () => {},
 				};
 			},
 		});

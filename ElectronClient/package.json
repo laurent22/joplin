@@ -119,6 +119,7 @@
     "aws-sdk": "^2.594.0",
     "base-64": "^0.1.0",
     "base64-stream": "^1.0.0",
+    "builtin-modules": "^3.1.0",
     "chokidar": "^3.0.0",
     "clean-html": "^1.5.0",
     "codemirror": "^5.56.0",

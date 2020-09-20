@@ -115,6 +115,8 @@ class Application extends BaseApplication {
 		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
 
 		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
+
+		this.interopService_modulesChanged = this.interopService_modulesChanged.bind(this);
 	}
 
 	commandService_commandsEnabledStateChange() {
@@ -363,6 +365,10 @@ class Application extends BaseApplication {
 		return result;
 	}
 
+	interopService_modulesChanged() {
+		this.refreshMenu();
+	}
+
 	handleThemeAutoDetect() {
 		if (!Setting.value('themeAutoDetect')) return;
 
@@ -433,7 +439,7 @@ class Application extends BaseApplication {
 		const exportItems = [];
 		const toolsItemsFirst = [];
 		const templateItems = [];
-		const ioService = new InteropService();
+		const ioService = InteropService.instance();
 		const ioModules = ioService.modules();
 		for (let i = 0; i < ioModules.length; i++) {
 			const module = ioModules[i];
@@ -485,7 +491,7 @@ class Application extends BaseApplication {
 										: null,
 							};
 
-							const service = new InteropService();
+							const service = InteropService.instance();
 							try {
 								const result = await service.import(importOptions);
 								console.info('Import result: ', result);
@@ -1262,6 +1268,14 @@ class Application extends BaseApplication {
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
+		InteropService.instance().on('modulesChanged', this.interopService_modulesChanged);
+
+		const pluginLogger = new Logger();
+		pluginLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-plugins.txt` });
+		pluginLogger.addTarget('console', { prefix: 'Plugin Service:' });
+		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
+
+		PluginService.instance().setLogger(pluginLogger);
 		PluginService.instance().initialize(this.store());
 
 		try {
