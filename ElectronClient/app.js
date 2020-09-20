@@ -312,7 +312,7 @@ class Application extends BaseApplication {
 			// The bridge runs within the main process, with its own instance of locale.js
 			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
-			await this.refreshMenu();
+			this.scheduleRefreshMenu();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
@@ -366,7 +366,7 @@ class Application extends BaseApplication {
 	}
 
 	interopService_modulesChanged() {
-		this.refreshMenu();
+		this.scheduleRefreshMenu();
 	}
 
 	handleThemeAutoDetect() {
@@ -377,6 +377,15 @@ class Application extends BaseApplication {
 		} else {
 			Setting.setValue('theme', Setting.value('preferredLightTheme'));
 		}
+	}
+
+	scheduleRefreshMenu() {
+		if (this.scheduleRefreshMenuIID_) clearTimeout(this.scheduleRefreshMenuIID_);
+
+		this.scheduleRefreshMenuIID_ = setTimeout(() => {
+			this.scheduleRefreshMenuIID_ = null;
+			this.refreshMenu();
+		}, 500);
 	}
 
 	async refreshMenu() {

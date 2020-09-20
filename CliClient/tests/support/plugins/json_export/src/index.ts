@@ -11,6 +11,7 @@ function resourceDir(context:any) {
 
 joplin.plugins.register({
 	onStart: async function() {
+
 		joplin.interop.registerModule({
 			type: 'exporter',
 			description: 'JSON Export Directory',
@@ -35,6 +36,20 @@ joplin.plugins.register({
 					},
 
 					close: () => {},
+				};
+			},
+		});
+
+		joplin.interop.registerModule({
+			type: 'importer',
+			description: 'JSON Export Directory',
+			format: 'json',
+			sources: ['directory'],
+			instanceFactory: () => {
+				return {
+					exec: async (context:any) => {
+						console.info('Not implemented. Importing from:', context);
+					},
 				};
 			},
 		});
