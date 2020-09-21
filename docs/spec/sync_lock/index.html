@@ -327,7 +327,7 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 <li>
 <p>Development</p>
 <ul>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
@@ -360,6 +360,8 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 <p>When a client acquires a lock, it must refresh it every X seconds. A lock timeout after Y seconds (where X &lt; Y). A lock with a timestamp greater than Y is considered expired and can be ignored by other clients. A client that tries to refresh a lock that has expired should fail.</p>
 <p>For example, if a client is currently syncing, it must stop doing so if it couldn't refresh the lock with Y seconds.</p>
 <p>For example, if a client is upgrading a target, it must stop doing so if it couldn't refresh the lock within Y seconds.</p>
+<p>If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients, seeing no active lock, might have performed in the meantime operations that invalidates the current operation. For example, another client might have upgraded the sync target, so any active sync with an expired lock should be cancelled. Or if the current client was upgrading the sync target, another client might have synced since then, making any cached data invalid.</p>
+<p>In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex without much benefits.</p>
 <h1>Acquiring a SYNC lock<a name="acquiring-a-sync-lock" href="#acquiring-a-sync-lock" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>The client check if there is a valid EXCLUSIVE lock on the target</li>
