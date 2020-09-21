@@ -249,12 +249,23 @@ function capitalizeFirstLetter(string) {
 
 function decreaseTagVersion(tag) {
 	const s = tag.split('.');
-	const lastToken = s.pop();
-	const s2 = lastToken.split('-');
-	let num = Number(s2[0]);
-	num--;
-	if (num < 0) throw new Error(`Cannot decrease tag version: ${tag}`);
-	s.push(`${num}`);
+
+	let updated = false;
+
+	for (let tokenIndex = s.length - 1; tokenIndex >= 0; tokenIndex--) {
+		const token = s[tokenIndex];
+		const s2 = token.split('-');
+		let num = Number(s2[0]);
+		num--;
+		if (num >= 0) {
+			updated = true;
+			s[tokenIndex] = num;
+			break;
+		}
+	}
+
+	if (!updated) throw new Error(`Cannot decrease tag version: ${tag}`);
+
 	return s.join('.');
 }
 
