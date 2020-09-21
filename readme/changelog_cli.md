@@ -1,5 +1,12 @@
 # Joplin terminal app changelog
 
+## [cli-v1.1.8](https://github.com/laurent22/joplin/releases/tag/cli-v1.1.8) - 2020-09-21T12:02:29Z
+
+- Improved: Do not prevent export when one item is still encrypted
+- Improved: Fix keytar library being loaded up in FreeBSD. (#3712) (#3711 by Jose Esteve)
+- Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. (#3689)
+- Fixed: Increased file extension limit to 20 to prevent issue when using external editors (#3696)
+
 ## [cli-v1.0.168](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.168) - 2020-09-14T08:47:08Z
 
 - Improved: Implemented reliable way to sync device and server clocks

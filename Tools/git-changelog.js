@@ -34,6 +34,11 @@ async function gitLog(sinceTag) {
 	return output;
 }
 
+async function gitTags() {
+	const lines = await execCommand('git tag --sort=committerdate');
+	return lines.split('\n').map(l => l.trim());
+}
+
 function platformFromTag(tagName) {
 	if (tagName.indexOf('v') === 0) return 'desktop';
 	if (tagName.indexOf('android') >= 0) return 'android';
@@ -42,6 +47,15 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('cli') === 0) return 'cli';
 	throw new Error(`Could not determine platform from tag: ${tagName}`);
 }
+
+// function tagPrefixFromPlatform(platform) {
+// 	if (platform === 'desktop') return '';
+// 	if (platform === 'android') return 'android-';
+// 	if (platform === 'ios') return 'ios-';
+// 	if (platform === 'clipper') return 'clipper-';
+// 	if (platform === 'cli') return 'cli-';
+// 	throw new Error(`Could not determine tag prefix from platform: ${platform}`);
+// }
 
 function filterLogs(logs, platform) {
 	const output = [];
@@ -247,25 +261,42 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function decreaseTagVersion(tag) {
-	const s = tag.split('.');
-	const lastToken = s.pop();
-	const s2 = lastToken.split('-');
-	let num = Number(s2[0]);
-	num--;
-	if (num < 0) throw new Error(`Cannot decrease tag version: ${tag}`);
-	s.push(`${num}`);
-	return s.join('.');
-}
+// function decreaseTagVersion(tag) {
+// 	const s = tag.split('.');
+
+// 	let updated = false;
+
+// 	for (let tokenIndex = s.length - 1; tokenIndex >= 0; tokenIndex--) {
+// 		const token = s[tokenIndex];
+// 		const s2 = token.split('-');
+// 		let num = Number(s2[0]);
+// 		num--;
+// 		if (num >= 0) {
+// 			updated = true;
+// 			s[tokenIndex] = num;
+// 			break;
+// 		}
+// 	}
+
+// 	if (!updated) throw new Error(`Cannot decrease tag version: ${tag}`);
+
+// 	return s.join('.');
+// }
 
 // This function finds the first relevant tag starting from the given tag.
 // The first "relevant tag" is the one that exists, and from which there are changes.
-async function findFirstRelevantTag(baseTag) {
-	let tag = decreaseTagVersion(baseTag);
-	while (true) {
+async function findFirstRelevantTag(baseTag, platform, allTags) {
+	let baseTagIndex = allTags.indexOf(baseTag);
+	if (baseTagIndex < 0) baseTagIndex = allTags.length;
+
+	for (let i = baseTagIndex - 1; i >= 0; i--) {
+		const tag = allTags[i];
+		if (platformFromTag(tag) !== platform) continue;
+
 		try {
 			const logs = await gitLog(tag);
-			if (logs.length) return tag;
+			const filteredLogs = filterLogs(logs, platform);
+			if (filteredLogs.length) return tag;
 		} catch (error) {
 			if (error.message.indexOf('unknown revision') >= 0) {
 				// We skip the error - it means this particular tag has never been created
@@ -273,21 +304,22 @@ async function findFirstRelevantTag(baseTag) {
 				throw error;
 			}
 		}
-
-		tag = decreaseTagVersion(tag);
 	}
+
+	throw new Error(`Could not find previous tag for: ${baseTag}`);
 }
 
 async function main() {
 	const argv = require('yargs').argv;
 	if (!argv._.length) throw new Error('Tag name must be specified. Provide the tag of the new version and git-changelog will walk backward to find the changes to the previous relevant tag.');
 
+	const allTags = await gitTags();
 	const fromTagName = argv._[0];
 	let toTagName = argv._.length >= 2 ? argv._[1] : '';
 
 	const platform = platformFromTag(fromTagName);
 
-	if (!toTagName) toTagName = await findFirstRelevantTag(fromTagName);
+	if (!toTagName) toTagName = await findFirstRelevantTag(fromTagName, platform, allTags);
 
 	const logsSinceTags = await gitLog(toTagName);
 
