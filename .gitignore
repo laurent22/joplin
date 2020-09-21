@@ -50,8 +50,8 @@ joplin-webclipper-source.zip
 Tools/commit_hook.txt
 .vscode/*
 *.map
-ReactNativeClient/lib/sql-extensions/
-!ReactNativeClient/lib/sql-extensions/spellfix.dll
+ReactNativeClient/lib/sql-extensions/spellfix.so
+ReactNativeClient/lib/sql-extensions/spellfix.dylib
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js

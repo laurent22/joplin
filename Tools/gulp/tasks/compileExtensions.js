@@ -45,6 +45,11 @@ async function main() {
 	} catch (e) {
 		console.warn(e);
 	}
+
+	await fs.remove(`${dest}/sqlite.tar.gz`);
+	await fs.remove(`${dest}/amalgamation.tar.gz`);
+	await fs.remove(`${dest}/sqlite`);
+	await fs.remove(`${dest}/sqlite-autoconf-3330000`);
 }
 
 module.exports = main;
