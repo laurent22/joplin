@@ -377,7 +377,7 @@ class Application extends BaseApplication {
 		await this.updateMenu(screen);
 	}
 
-	async updateMenu(screen) {
+	async updateMenu(screen, updateStates = true) {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const cmdService = CommandService.instance();
@@ -740,7 +740,6 @@ class Application extends BaseApplication {
 		const separator = () => {
 			return {
 				type: 'separator',
-				screens: ['Main'],
 			};
 		};
 
@@ -988,6 +987,8 @@ class Application extends BaseApplication {
 		Menu.setApplicationMenu(menu);
 
 		this.lastMenuScreen_ = screen;
+
+		if (updateStates) await this.updateMenuItemStates();
 	}
 
 	async updateMenuItemStates(state = null) {
@@ -1130,7 +1131,7 @@ class Application extends BaseApplication {
 			CommandService.instance().registerDeclaration(declaration);
 		}
 
-		this.updateMenu('Main');
+		this.updateMenu('Main', false);
 
 		// Since the settings need to be loaded before the store is created, it will never
 		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
