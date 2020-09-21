@@ -1,7 +1,5 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
-const Note = require('lib/models/Note');
 const BaseModel = require('lib/BaseModel');
-// const { _ } = require('lib/locale');
 const { uuid } = require('lib/uuid.js');
 
 export const declaration:CommandDeclaration = {
@@ -31,14 +29,18 @@ export const runtime = (comp:any):CommandRuntime => {
 					id: comp.searchId_,
 				});
 			} else {
-				const note = await Note.load(comp.props.selectedNoteId);
-				if (note) {
-					comp.props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: note.parent_id,
-						noteId: note.id,
-					});
-				}
+				// Note: Normally there's no need to do anything when the search query
+				// is cleared as the reducer should handle all state changes.
+				// https://github.com/laurent22/joplin/issues/3748
+
+				// const note = await Note.load(comp.props.selectedNoteId);
+				// if (note) {
+				// 	comp.props.dispatch({
+				// 		type: 'FOLDER_AND_NOTE_SELECT',
+				// 		folderId: note.parent_id,
+				// 		noteId: note.id,
+				// 	});
+				// }
 			}
 		},
 	};

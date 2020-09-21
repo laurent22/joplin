@@ -313,7 +313,9 @@ function updateSelectedNotesFromExistingNotes(state) {
 function defaultNotesParentType(state, exclusion) {
 	let newNotesParentType = null;
 
-	if (exclusion !== 'Folder' && state.selectedFolderId) {
+	if (exclusion !== 'SmartFilter' && state.selectedSmartFilterId) {
+		newNotesParentType = 'SmartFilter';
+	} else if (exclusion !== 'Folder' && state.selectedFolderId) {
 		newNotesParentType = 'Folder';
 	} else if (exclusion !== 'Tag' && state.selectedTagId) {
 		newNotesParentType = 'Tag';
@@ -543,7 +545,7 @@ function handleHistory(state, action) {
 }
 
 const reducer = (state = defaultState, action) => {
-	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type);
+	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type, action);
 
 	let newState = state;
 
