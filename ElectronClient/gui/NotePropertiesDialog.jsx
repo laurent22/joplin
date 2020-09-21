@@ -224,8 +224,8 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	createNoteField(key, value) {
-		const styles = this.styles(this.props.theme);
-		const theme = themeStyle(this.props.theme);
+		const styles = this.styles(this.props.themeId);
+		const theme = themeStyle(this.props.themeId);
 		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{this.formatLabel(key)}</label>;
 		let controlComp = null;
 		let editComp = null;
@@ -356,7 +356,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const formNote = this.state.formNote;
 
 		const noteComps = [];
@@ -374,7 +374,7 @@ class NotePropertiesDialog extends React.Component {
 				<div style={theme.dialogBox}>
 					<div style={theme.dialogTitle}>{_('Note properties')}</div>
 					<div>{noteComps}</div>
-					<DialogButtonRow theme={this.props.theme} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+					<DialogButtonRow themeId={this.props.themeId} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
 				</div>
 			</div>
 		);

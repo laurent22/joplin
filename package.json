@@ -4,7 +4,7 @@
   "description": "Joplin root package for linting",
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter-ci": "./node_modules/.bin/eslint --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
@@ -23,6 +23,7 @@
     "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-native": "0.63.1",
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
@@ -39,7 +40,6 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
-    "@types/react-native": "^0.63.1",
     "follow-redirects": "^1.11.0",
     "immer": "^7.0.5",
     "joplin-turndown": "^4.0.29",

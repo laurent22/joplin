@@ -22,7 +22,7 @@ class NoteListComponent extends Component {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -114,7 +114,7 @@ const NoteList = connect(state => {
 		items: state.notes,
 		folders: state.folders,
 		notesSource: state.notesSource,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 	};
 })(NoteListComponent);

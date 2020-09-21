@@ -4,7 +4,7 @@ const { themeStyle } = require('lib/theme');
 class IconButton extends React.Component {
 	render() {
 		const style = this.props.style;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const iconStyle = {
 			color: theme.color,
 			fontSize: theme.fontSize * 1.4,

@@ -35,9 +35,9 @@ class SideMenuContentComponent extends Component {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -85,8 +85,8 @@ class SideMenuContentComponent extends Component {
 		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	componentDidUpdate(prevProps) {
@@ -220,7 +220,7 @@ class SideMenuContentComponent extends Component {
 	}
 
 	renderFolderItem(folder, selected, hasChildren, depth) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const folderButtonStyle = {
 			flex: 1,
@@ -298,12 +298,12 @@ class SideMenuContentComponent extends Component {
 	}
 
 	makeDivider(key) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
 	}
 
 	renderBottomPanel() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
 
@@ -351,7 +351,7 @@ class SideMenuContentComponent extends Component {
 	render() {
 		let items = [];
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
@@ -398,7 +398,7 @@ const SideMenuContent = connect(state => {
 		selectedTagId: state.selectedTagId,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,

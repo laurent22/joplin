@@ -1,7 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Folder = require('lib/models/Folder.js');
-const { Header } = require('./Header/Header.min.js');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { filename, basename } = require('lib/path-utils.js');
@@ -94,8 +93,7 @@ class ImportScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
-		const style = this.props.style;
+		const theme = themeStyle(this.props.themeId);
 		const messages = this.uniqueMessages();
 
 		const messagesStyle = {
@@ -105,10 +103,6 @@ class ImportScreenComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 		};
 
-		const headerStyle = {
-			width: style.width,
-		};
-
 		const messageComps = [];
 		for (let i = 0; i < messages.length; i++) {
 			messageComps.push(<div key={messages[i].key}>{messages[i].text}</div>);
@@ -116,7 +110,6 @@ class ImportScreenComponent extends React.Component {
 
 		return (
 			<div style={{}}>
-				<Header style={headerStyle} />
 				<div style={messagesStyle}>{messageComps}</div>
 			</div>
 		);
@@ -125,7 +118,7 @@ class ImportScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

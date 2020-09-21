@@ -25,9 +25,9 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -38,8 +38,8 @@ class FolderScreenComponent extends BaseScreenComponent {
 			},
 		};
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	UNSAFE_componentWillMount() {
@@ -102,10 +102,10 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const saveButtonDisabled = !this.isModified();
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
 				<TextInput placeholder={_('Enter notebook title')} placeholderTextColor={theme.colorFaded} underlineColorAndroid={theme.dividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
 				<dialogs.DialogBox
@@ -121,7 +121,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 const FolderScreen = connect(state => {
 	return {
 		folderId: state.selectedFolderId,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(FolderScreenComponent);
 

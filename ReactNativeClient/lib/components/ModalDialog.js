@@ -10,7 +10,7 @@ class ModalDialog extends React.Component {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];

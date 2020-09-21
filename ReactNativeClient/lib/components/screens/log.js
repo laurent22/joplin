@@ -26,9 +26,9 @@ class LogScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -56,8 +56,8 @@ class LogScreenComponent extends BaseScreenComponent {
 		styles.rowTextWarn = Object.assign({}, styles.rowText);
 		styles.rowTextWarn.color = theme.colorWarn;
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	UNSAFE_componentWillMount() {
@@ -96,7 +96,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Log')} />
 				<FlatList
 					data={this.state.logEntries}
@@ -128,7 +128,7 @@ class LogScreenComponent extends BaseScreenComponent {
 
 const LogScreen = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(LogScreenComponent);
 

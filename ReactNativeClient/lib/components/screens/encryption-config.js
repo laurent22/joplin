@@ -57,7 +57,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -97,7 +97,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	renderMasterKey(num, mk) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const onSaveClick = () => {
 			return shared.onSavePasswordClick(this, mk);
@@ -129,7 +129,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	passwordPromptComponent() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const onEnableClick = async () => {
 			try {
@@ -194,7 +194,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const masterKeys = this.props.masterKeys;
 		const decryptedItemsInfo = this.props.encryptionEnabled ? <Text style={this.styles().normalText}>{shared.decryptedStatText(this)}</Text> : null;
 
@@ -260,7 +260,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		) : null;
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Encryption Config')} />
 				<ScrollView style={this.styles().container}>
 					{
@@ -297,7 +297,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 const EncryptionConfigScreen = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
 		encryptionEnabled: state.settings['encryption.enabled'],

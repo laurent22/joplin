@@ -69,7 +69,7 @@ export interface EditorProps {
 	value: string,
 	mode: string,
 	style: any,
-	theme: any,
+	codeMirrorTheme: any,
 	readOnly: boolean,
 	autoMatchBraces: boolean,
 	keyMap: string,
@@ -220,7 +220,7 @@ function Editor(props: EditorProps, ref: any) {
 		const cmOptions = {
 			value: props.value,
 			screenReaderLabel: props.value,
-			theme: props.theme,
+			theme: props.codeMirrorTheme,
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
@@ -269,9 +269,9 @@ function Editor(props: EditorProps, ref: any) {
 
 	useEffect(() => {
 		if (editor) {
-			editor.setOption('theme', props.theme);
+			editor.setOption('theme', props.codeMirrorTheme);
 		}
-	}, [props.theme]);
+	}, [props.codeMirrorTheme]);
 
 	useEffect(() => {
 		if (editor) {
