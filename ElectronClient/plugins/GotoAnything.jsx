@@ -120,11 +120,21 @@ class Dialog extends React.PureComponent {
 
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
+
+		this.props.dispatch({
+			type: 'VISIBLE_DIALOGS_ADD',
+			name: 'gotoAnything',
+		});
 	}
 
 	componentWillUnmount() {
 		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
+
+		this.props.dispatch({
+			type: 'VISIBLE_DIALOGS_REMOVE',
+			name: 'gotoAnything',
+		});
 	}
 
 	onKeyDown(event) {

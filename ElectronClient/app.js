@@ -99,6 +99,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
 	devToolsVisible: false,
+	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 });
 
 class Application extends BaseApplication {
@@ -278,6 +279,16 @@ class Application extends BaseApplication {
 			case 'NOTE_DEVTOOLS_SET':
 				newState = Object.assign({}, state);
 				newState.devToolsVisible = action.value;
+				break;
+
+			case 'VISIBLE_DIALOGS_ADD':
+				newState = Object.assign({}, state);
+				newState.visibleDialogs[state.name] = true;
+				break;
+
+			case 'VISIBLE_DIALOGS_REMOVE':
+				newState = Object.assign({}, state);
+				delete newState.visibleDialogs[state.name];
 				break;
 
 			}

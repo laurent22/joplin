@@ -44,7 +44,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 			}
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main') return false;
+			if (props.routeName !== 'Main' || props.isDialogVisible) return false;
 			if (props.markdownEditorViewerOnly) return false;
 			if (!props.noteId) return false;
 			const note = BaseModel.byId(props.notes, props.noteId);
@@ -60,6 +60,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 				notes: state.notes,
 				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 				routeName: state.route.routeName,
+				isDialogVisible: !!Object.keys(state.visibleDialogs).length,
 			};
 		},
 	};

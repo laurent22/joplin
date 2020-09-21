@@ -224,7 +224,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		}) });
 	}
 
-	componentDidUpdate(prevProps:any) {
+	componentDidUpdate(prevProps:any, prevState:any) {
 		if (this.props.noteListVisibility !== prevProps.noteListVisibility || this.props.sidebarVisibility !== prevProps.sidebarVisibility) {
 			this.setState({ layout: produce(this.state.layout, (draftState:any) => {
 				const noteListColumn = findItemByKey(draftState, 'noteListColumn');
@@ -237,6 +237,27 @@ class MainScreenComponent extends React.Component<any, any> {
 
 		if (prevProps.style.width !== this.props.style.width || prevProps.style.height !== this.props.style.height) {
 			this.updateRootLayoutSize();
+		}
+
+		if (this.state.notePropertiesDialogOptions !== prevState.notePropertiesDialogOptions) {
+			this.props.dispatch({
+				type: this.state.notePropertiesDialogOptions && this.state.notePropertiesDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'noteProperties',
+			});
+		}
+
+		if (this.state.noteContentPropertiesDialogOptions !== prevState.noteContentPropertiesDialogOptions) {
+			this.props.dispatch({
+				type: this.state.noteContentPropertiesDialogOptions && this.state.noteContentPropertiesDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'noteContentProperties',
+			});
+		}
+
+		if (this.state.shareNoteDialogOptions !== prevState.shareNoteDialogOptions) {
+			this.props.dispatch({
+				type: this.state.shareNoteDialogOptions && this.state.shareNoteDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'shareNote',
+			});
 		}
 	}
 
