@@ -526,7 +526,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			const label = [md.label()];
 			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
 
-			const inputStyle = Object.assign({}, textInputBaseStyle);
+			const inputStyle:any = Object.assign({}, textInputBaseStyle);
 
 			return (
 				<div key={key} style={rowStyle}>
