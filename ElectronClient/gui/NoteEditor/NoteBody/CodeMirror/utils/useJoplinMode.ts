@@ -21,7 +21,8 @@ export default function useJoplinMode(CodeMirror: any) {
 
 		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?!\S))/;
 		const inlineKatexCloseRE = /(?<![\\\s$])\$(?!\S)/;
-		const blockKatexRE = /(?<!\\)\$\$/;
+		const blockKatexOpenRE = /(?<!\S)\$\$/;
+		const blockKatexCloseRE = /(?<![\\\s])\$\$/;
 
 		// Find token will search for a valid katex start or end token
 		// If found then it will return the index, otherwise -1
@@ -55,19 +56,19 @@ export default function useJoplinMode(CodeMirror: any) {
 				let nextTokenPos = stream.string.length;
 				let closing = false;
 
-				const blockPos = findToken(stream, blockKatexRE);
-
 				if (state.openCharacter) {
 					currentMode = stex;
 					currentState = state.inner;
 					tokenLabel = 'katex-marker-close';
 					closing = true;
 
+					const blockPos = findToken(stream, blockKatexCloseRE);
 					const inlinePos = findToken(stream, inlineKatexCloseRE);
 
 					if (state.openCharacter === '$$' && blockPos !== -1) nextTokenPos = blockPos;
 					if (state.openCharacter === '$' && inlinePos !== -1) nextTokenPos = inlinePos;
-				} else {
+				} else if (!currentState.code) {
+					const blockPos = findToken(stream, blockKatexOpenRE);
 					const inlinePos = findToken(stream, inlineKatexOpenRE);
 
 					if (blockPos !== -1) nextTokenPos = blockPos;
