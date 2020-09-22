@@ -35,7 +35,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	renderMasterKey(mk) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const passwordStyle = {
 			color: theme.color,
@@ -80,7 +80,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		const needUpgradeMasterKeys = EncryptionService.instance().masterKeysThatNeedUpgrading(this.props.masterKeys);
 		if (!needUpgradeMasterKeys.length) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rows = [];
 		const comp = this;
@@ -114,7 +114,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	renderReencryptData() {
 		if (!shim.isElectron()) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const buttonLabel = _('Re-encrypt data');
 
 		const intro = this.props.shouldReencrypt ? _('The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.') : _('You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.');
@@ -139,13 +139,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const masterKeys = this.props.masterKeys;
-		const containerPadding = 10;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
-			padding: containerPadding,
+			padding: theme.configScreenPadding,
 			overflow: 'auto',
+			backgroundColor: theme.backgroundColor3,
 		});
 
 		const mkComps = [];
@@ -289,7 +289,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
 		encryptionEnabled: state.settings['encryption.enabled'],

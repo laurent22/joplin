@@ -327,7 +327,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>
 <p>Development</p>
 <ul>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
@@ -351,6 +351,17 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </ul>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.1.8">cli-v1.1.8</a> - 2020-09-21T12:02:29Z<a name="cli-v1-1-8-https-github-com-laurent22-joplin-releases-tag-cli-v1-1-8-2020-09-21t12-02-29z" href="#cli-v1-1-8-https-github-com-laurent22-joplin-releases-tag-cli-v1-1-8-2020-09-21t12-02-29z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Do not prevent export when one item is still encrypted</li>
+<li>Improved: Fix keytar library being loaded up in FreeBSD. (#3712) (#3711 by Jose Esteve)</li>
+<li>Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. (#3689)</li>
+<li>Fixed: Increased file extension limit to 20 to prevent issue when using external editors (#3696)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.168">cli-v1.0.168</a> - 2020-09-14T08:47:08Z<a name="cli-v1-0-168-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-168-2020-09-14t08-47-08z" href="#cli-v1-0-168-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-168-2020-09-14t08-47-08z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Implemented reliable way to sync device and server clocks</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167">cli-v1.0.167</a> - 2020-09-04T17:15:49Z<a name="cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" href="#cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add mechanism to lock and upgrade sync targets (#3524)</li>

@@ -4,6 +4,7 @@ const { _ } = require('lib/locale');
 export const declaration:CommandDeclaration = {
 	name: 'focusElementNoteTitle',
 	label: () => _('Note title'),
+	parentLabel: () => _('Focus'),
 };
 
 export const runtime = (comp:any):CommandRuntime => {

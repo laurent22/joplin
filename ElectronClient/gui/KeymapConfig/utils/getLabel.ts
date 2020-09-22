@@ -1,4 +1,4 @@
-import CommandService from '../../../lib/services/CommandService';
+import CommandService from 'lib/services/CommandService';
 
 const { _ } = require('lib/locale');
 const { shim } = require('lib/shim');
@@ -6,7 +6,7 @@ const { shim } = require('lib/shim');
 const commandService = CommandService.instance();
 
 const getLabel = (commandName: string) => {
-	if (commandService.exists(commandName)) return commandService.label(commandName);
+	if (commandService.exists(commandName)) return commandService.label(commandName, true);
 
 	// Some commands are not registered in CommandService at the moment
 	// Following hard-coded labels are used as a workaround

@@ -169,7 +169,7 @@ class NoteTextViewerComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

@@ -5,7 +5,7 @@ const { _ } = require('lib/locale');
 export const declaration:CommandDeclaration = {
 	name: 'setTags',
 	label: () => _('Tags'),
-	iconName: 'fa-tags',
+	iconName: 'icon-tags',
 };
 
 export const runtime = (comp:any):CommandRuntime => {

@@ -23,7 +23,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return {
 			screen: {
 				flex: 1,
@@ -129,7 +129,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 
 const OneDriveLoginScreen = connect((state) => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(OneDriveLoginScreenComponent);
 

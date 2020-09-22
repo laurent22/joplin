@@ -62,7 +62,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				const keymapFile = await shim.fsDriver().readFile(actualFilePath, 'utf-8');
 				overrideKeymapItems(JSON.parse(keymapFile));
 			} catch (err) {
-				bridge().showErrorMessageBox(`${_('An unexpected error occured while importing the keymap!')}\n${err.message}`);
+				bridge().showErrorMessageBox(_('Error: %s', err.message));
 			}
 		}
 	};

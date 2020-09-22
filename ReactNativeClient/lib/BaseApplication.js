@@ -292,20 +292,18 @@ class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, { fuzzy: search.fuzzy });
-				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern, search.fuzzy);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
 				notes = await Note.previews(parentId, options);
 			}
 		}
 
-		if (highlightedWords.length) {
-			this.store().dispatch({
-				type: 'SET_HIGHLIGHTED',
-				words: highlightedWords,
-			});
-		}
+		this.store().dispatch({
+			type: 'SET_HIGHLIGHTED',
+			words: highlightedWords,
+		});
 
 		this.store().dispatch({
 			type: 'NOTE_UPDATE_ALL',
@@ -469,7 +467,7 @@ class BaseApplication {
 			refreshNotesUseSelectedNoteId = true;
 		}
 
-		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD' || action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;

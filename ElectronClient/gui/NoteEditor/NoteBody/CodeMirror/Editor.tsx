@@ -28,7 +28,6 @@ const { shim } = require('lib/shim.js');
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
-// +XML (HTML) +CSS and Markdown added
 const topLanguages = [
 	'python',
 	'clike',
@@ -51,8 +50,16 @@ const topLanguages = [
 	'haskell',
 	'pascal',
 	'css',
-	'xml',
+	
+	// Additional languages, not in the PYPL list
+	'xml', // For HTML too
 	'markdown',
+	'yaml',
+	'shell',
+	'dockerfile',
+	'diff',
+	'erlang',
+	'sql',
 ];
 // Load Top Modes
 for (let i = 0; i < topLanguages.length; i++) {
@@ -67,9 +74,10 @@ for (let i = 0; i < topLanguages.length; i++) {
 
 export interface EditorProps {
 	value: string,
+	searchMarkers: any,
 	mode: string,
 	style: any,
-	theme: any,
+	codeMirrorTheme: any,
 	readOnly: boolean,
 	autoMatchBraces: boolean,
 	keyMap: string,
@@ -152,6 +160,10 @@ function Editor(props: EditorProps, ref: any) {
 			'Insert': 'toggleOverwrite',
 			'Esc': 'singleSelection',
 		};
+		// Add some of the Joplin smart list handling to emacs mode
+		CodeMirror.keyMap.emacs['Tab'] = 'smartListIndent';
+		CodeMirror.keyMap.emacs['Enter'] = 'insertListElement';
+		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
 
 		if (shim.isMac()) {
 			CodeMirror.keyMap.default = {
@@ -216,7 +228,7 @@ function Editor(props: EditorProps, ref: any) {
 		const cmOptions = {
 			value: props.value,
 			screenReaderLabel: props.value,
-			theme: props.theme,
+			theme: props.codeMirrorTheme,
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
@@ -237,6 +249,11 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
+
+		// It's possible for searchMarkers to be available before the editor
+		// In these cases we set the markers asap so the user can see them as
+		// soon as the editor is ready
+		if (props.searchMarkers) { cm.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options); }
 
 		return () => {
 			// Clean up codemirror
@@ -265,9 +282,9 @@ function Editor(props: EditorProps, ref: any) {
 
 	useEffect(() => {
 		if (editor) {
-			editor.setOption('theme', props.theme);
+			editor.setOption('theme', props.codeMirrorTheme);
 		}
-	}, [props.theme]);
+	}, [props.codeMirrorTheme]);
 
 	useEffect(() => {
 		if (editor) {

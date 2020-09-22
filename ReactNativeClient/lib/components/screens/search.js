@@ -30,9 +30,9 @@ class SearchScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
 		const styles = {
@@ -58,8 +58,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 		styles.clearIcon.paddingRight = theme.marginRight;
 		styles.clearIcon.backgroundColor = theme.backgroundColor;
 
-		this.styles_[this.props.theme] = StyleSheet.create(styles);
-		return this.styles_[this.props.theme];
+		this.styles_[this.props.themeId] = StyleSheet.create(styles);
+		return this.styles_[this.props.themeId];
 	}
 
 	componentDidMount() {
@@ -144,7 +144,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 	render() {
 		if (!this.isMounted_) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rootStyle = {
 			flex: 1,
@@ -203,7 +203,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 const SearchScreen = connect(state => {
 	return {
 		query: state.searchQuery,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		settings: state.settings,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 	};

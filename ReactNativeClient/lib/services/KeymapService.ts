@@ -38,6 +38,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Shift+Cmd+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Shift+Cmd+B', command: 'focusElementNoteBody' },
 		{ accelerator: 'Option+Cmd+S', command: 'toggleSidebar' },
+		{ accelerator: 'Option+Cmd+L', command: 'toggleNoteList' },
 		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
 		{ accelerator: 'Cmd+E', command: 'startExternalEditing' },
@@ -68,6 +69,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
 		{ accelerator: 'F10', command: 'toggleSidebar' },
+		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
 		{ accelerator: 'Ctrl+E', command: 'startExternalEditing' },
@@ -134,7 +136,7 @@ export default class KeymapService extends BaseService {
 				this.overrideKeymap(JSON.parse(customKeymapFile));
 			} catch (err) {
 				const message = err.message || '';
-				throw new Error(`${_('Error loading the keymap from file: %s', customKeymapPath)}\n${message}`);
+				throw new Error(_('Error: %s', message));
 			}
 		}
 	}
@@ -151,7 +153,7 @@ export default class KeymapService extends BaseService {
 			eventManager.emit('keymapChange');
 		} catch (err) {
 			const message = err.message || '';
-			throw new Error(`${_('Error saving the keymap to file: %s', customKeymapPath)}\n${message}`);
+			throw new Error(_('Error: %s', message));
 		}
 	}
 
@@ -225,18 +227,18 @@ export default class KeymapService extends BaseService {
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new Error(_('Keymap item %s is missing the required "command" property.', JSON.stringify(item)));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'command'));
 		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(_('Keymap item %s is invalid because %s is not a valid command.', JSON.stringify(item), item.command));
+			throw new Error(_('Invalid %s: %s.', 'command', item.command));
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error(_('Keymap item %s is missing the required "accelerator" property.', JSON.stringify(item)));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'accelerator'));
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
 			} catch {
-				throw new Error(_('Keymap item %s is invalid because %s is not a valid accelerator.', JSON.stringify(item), item.accelerator));
+				throw new Error(_('Invalid %s: %s.', 'accelerator', item.command));
 			}
 		}
 	}

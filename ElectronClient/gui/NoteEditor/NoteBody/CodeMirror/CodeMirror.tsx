@@ -37,7 +37,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const [webviewReady, setWebviewReady] = useState(false);
 
-	const previousRenderedBody = usePrevious(renderedBody);
+	const previousContent = usePrevious(props.content);
 	const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
@@ -48,7 +48,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	props_onChangeRef.current = props.onChange;
 	const contentKeyHasChangedRef = useRef(false);
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
-	const theme = themeStyle(props.theme);
 
 	const rootSize = useRootSize({ rootRef });
 
@@ -351,6 +350,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [styles.editor.codeMirrorTheme]);
 
 	useEffect(() => {
+		const theme = themeStyle(props.themeId);
+
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
 		document.head.appendChild(element);
@@ -420,7 +421,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [props.theme]);
+	}, [props.themeId]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -478,7 +479,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
+		if (!props.searchMarkers) return;
+
+		// If there is a currently active search, it's important to re-search the text as the user
+		// types. However this is slow for performance so we ONLY want it to happen when there is
+		// a search
+		const textChanged = props.searchMarkers.keywords.length > 0 && props.content !== previousContent;
+
+		if (props.searchMarkers !== previousSearchMarkers || textChanged) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
@@ -487,7 +495,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				props.setLocalSearchResultCount(matches);
 			}
 		}
-	}, [props.searchMarkers, props.setLocalSearchResultCount, renderedBody]);
+	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
@@ -547,9 +555,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			<div style={cellEditorStyle}>
 				<Editor
 					value={props.content}
+					searchMarkers={props.searchMarkers}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
-					theme={styles.editor.codeMirrorTheme}
+					codeMirrorTheme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
@@ -580,7 +589,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		<div style={styles.root} ref={rootRef}>
 			<div style={styles.rowToolbar}>
 				<Toolbar
-					theme={props.theme}
+					themeId={props.themeId}
 					dispatch={props.dispatch}
 					disabled={editorReadOnly}
 				/>

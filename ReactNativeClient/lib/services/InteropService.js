@@ -360,7 +360,10 @@ class InteropService {
 					continue;
 				}
 
-				if (item.encryption_applied || item.encryption_blob_encrypted) throw new Error(_('This item is currently encrypted: %s "%s". Please wait for all items to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id));
+				if (item.encryption_applied || item.encryption_blob_encrypted) {
+					result.warnings.push(sprintf('This item is currently encrypted: %s "%s" (%s) and was not exported. You may wait for it to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id, item.id));
+					continue;
+				}
 
 				try {
 					if (itemType == BaseModel.TYPE_RESOURCE) {

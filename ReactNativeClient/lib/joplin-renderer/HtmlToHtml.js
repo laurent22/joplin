@@ -1,6 +1,8 @@
 const htmlUtils = require('./htmlUtils');
 const utils = require('./utils');
 const noteStyle = require('./noteStyle');
+const Setting = require('lib/models/Setting');
+const { themeStyle } = require('lib/theme');
 const memoryCache = require('memory-cache');
 const md5 = require('md5');
 
@@ -44,7 +46,10 @@ class HtmlToHtml {
 		return []; // TODO
 	}
 
-	async render(markup, theme, options) {
+	// Note: the "theme" variable is ignored and instead the light theme is
+	// always used for HTML notes.
+	// See: https://github.com/laurent22/joplin/issues/3698
+	async render(markup, _theme, options) {
 		options = Object.assign({}, {
 			splitted: false,
 		}, options);
@@ -84,7 +89,8 @@ class HtmlToHtml {
 			};
 		}
 
-		let cssStrings = noteStyle(theme);
+		const lightTheme = themeStyle(Setting.THEME_LIGHT);
+		let cssStrings = noteStyle(lightTheme);
 
 		if (options.splitted) {
 			const splitted = this.splitHtml(html);
