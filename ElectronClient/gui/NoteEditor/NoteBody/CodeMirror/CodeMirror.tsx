@@ -37,7 +37,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const [webviewReady, setWebviewReady] = useState(false);
 
-	const previousRenderedBody = usePrevious(renderedBody);
+	const previousContent = usePrevious(props.content);
 	const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
@@ -479,7 +479,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (props.searchMarkers !== previousSearchMarkers || renderedBody !== previousRenderedBody) {
+		if (!props.searchMarkers) return;
+
+		// If there is a currently active search, it's important to re-search the text as the user
+		// types. However this is slow for performance so we ONLY want it to happen when there is
+		// a search
+		const textChanged = props.searchMarkers.keywords.length > 0 && props.content !== previousContent;
+
+		if (props.searchMarkers !== previousSearchMarkers || textChanged) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
@@ -488,7 +495,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				props.setLocalSearchResultCount(matches);
 			}
 		}
-	}, [props.searchMarkers, props.setLocalSearchResultCount, renderedBody]);
+	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
@@ -548,6 +555,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			<div style={cellEditorStyle}>
 				<Editor
 					value={props.content}
+					searchMarkers={props.searchMarkers}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}

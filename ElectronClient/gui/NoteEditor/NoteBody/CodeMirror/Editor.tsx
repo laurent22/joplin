@@ -74,6 +74,7 @@ for (let i = 0; i < topLanguages.length; i++) {
 
 export interface EditorProps {
 	value: string,
+	searchMarkers: any,
 	mode: string,
 	style: any,
 	codeMirrorTheme: any,
@@ -248,6 +249,11 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
+
+		// It's possible for searchMarkers to be available before the editor
+		// In these cases we set the markers asap so the user can see them as
+		// soon as the editor is ready
+		if (props.searchMarkers) { cm.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options); }
 
 		return () => {
 			// Clean up codemirror
