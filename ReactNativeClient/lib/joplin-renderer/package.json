@@ -37,7 +37,7 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "memory-cache": "^0.2.0",
-    "mermaid": "^8.4.6",
+    "mermaid": "^8.8.0",
     "slug": "^3.3.4"
   }
 }
