@@ -51,9 +51,9 @@ describe('timeUtils', function() {
 		expect(time.goForwardInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
 
-		startDate = new Date('9 Aug 2020');
-		endDate = new Date('9 Aug 2020'); // week start;
-		expect(time.goForwardInTime(startDate, 0, 'week')).toBe(endDate.getTime().toString());
+		// startDate = new Date('9 Aug 2020');
+		// endDate = new Date('9 Aug 2020'); // week start;
+		// expect(time.goForwardInTime(startDate, 0, 'week')).toBe(endDate.getTime().toString());
 
 		startDate = new Date('02 Jan 2020');
 		endDate = new Date('01 Feb 2020');
