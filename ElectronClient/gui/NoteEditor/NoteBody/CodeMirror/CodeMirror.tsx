@@ -434,7 +434,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: #878787 !important;
 			}
 
-			.cm-s-solarized.cm-s-light span.cm-comment {
+			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
 		`));
