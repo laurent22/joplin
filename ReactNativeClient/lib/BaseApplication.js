@@ -300,12 +300,10 @@ class BaseApplication {
 			}
 		}
 
-		if (highlightedWords.length) {
-			this.store().dispatch({
-				type: 'SET_HIGHLIGHTED',
-				words: highlightedWords,
-			});
-		}
+		this.store().dispatch({
+			type: 'SET_HIGHLIGHTED',
+			words: highlightedWords,
+		});
 
 		this.store().dispatch({
 			type: 'NOTE_UPDATE_ALL',

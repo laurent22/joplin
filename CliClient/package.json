@@ -109,7 +109,7 @@
     "terminal-kit": "^1.30.0",
     "tkwidgets": "^0.5.26",
     "url-parse": "^1.4.7",
-    "uslug": "^1.0.4",
+    "slug": "^3.3.4",
     "uuid": "^3.0.1",
     "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
