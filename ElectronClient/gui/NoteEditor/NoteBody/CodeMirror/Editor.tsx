@@ -28,7 +28,6 @@ const { shim } = require('lib/shim.js');
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
-// +XML (HTML) +CSS and Markdown added
 const topLanguages = [
 	'python',
 	'clike',
@@ -51,8 +50,16 @@ const topLanguages = [
 	'haskell',
 	'pascal',
 	'css',
-	'xml',
+	
+	// Additional languages, not in the PYPL list
+	'xml', // For HTML too
 	'markdown',
+	'yaml',
+	'shell',
+	'dockerfile',
+	'diff',
+	'erlang',
+	'sql',
 ];
 // Load Top Modes
 for (let i = 0; i < topLanguages.length; i++) {
