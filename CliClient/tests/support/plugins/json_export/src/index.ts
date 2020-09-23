@@ -24,13 +24,13 @@ joplin.plugins.register({
 						await fs.mkdirp(resourceDir(context));
 					},
 
-					processItem: async (context:any, itemType:number, item:any) => {
+					processItem: async (context:any, _itemType:number, item:any) => {
 						const filePath = destDir(context) + '/' + item.id + '.json';
 						const serialized = JSON.stringify(item);
 						await fs.writeFile(filePath, serialized, 'utf8');
 					},
 
-					processResource: async (context:any, resource:any, filePath:string) => {
+					processResource: async (context:any, _resource:any, filePath:string) => {
 						const destPath = resourceDir(context) + '/' + path.basename(filePath);
 						await fs.copy(filePath, destPath);
 					},

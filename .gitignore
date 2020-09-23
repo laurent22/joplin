@@ -216,6 +216,7 @@ ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace.js
+ReactNativeClient/lib/services/plugin_service/ToolbarButtonController.js
 ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
 ReactNativeClient/lib/services/plugin_service/ViewController.js

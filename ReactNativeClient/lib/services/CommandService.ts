@@ -26,7 +26,10 @@ export interface CommandDeclaration {
 	//     parentLabel() => _('Focus'),
 	// Which will be displayed as "Focus: Note list" in the keymap config screen.
 	parentLabel?():string,
+
+	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string,
+
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot

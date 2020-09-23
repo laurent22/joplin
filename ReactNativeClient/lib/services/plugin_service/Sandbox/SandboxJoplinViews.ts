@@ -1,5 +1,6 @@
 import WebviewController from '../WebviewController';
 import Plugin from '../Plugin';
+import ToolbarButtonController, { ToolbarButtonLocation } from '../ToolbarButtonController';
 
 export default class SandboxJoplinViews {
 
@@ -15,6 +16,13 @@ export default class SandboxJoplinViews {
 	createWebviewPanel() {
 		const idNum = this.viewIdNum++;
 		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
+		this.plugin.addViewController(controller);
+		return controller;
+	}
+
+	createToolbarButton(commandName:string, location:ToolbarButtonLocation) {
+		const idNum = this.viewIdNum++;
+		const controller = new ToolbarButtonController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);
 		return controller;
 	}

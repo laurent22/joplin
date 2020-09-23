@@ -6,6 +6,32 @@ export const defaultState = {
 	plugins: {},
 };
 
+interface ViewInfo {
+	view: any,
+	plugin: any,
+}
+
+export const utils = {
+	viewInfosByType: function(plugins:any, type:string):ViewInfo[] {
+		const output:ViewInfo[] = [];
+
+		for (const pluginId in plugins) {
+			const plugin = plugins[pluginId];
+			for (const viewId in plugin.views) {
+				const view = plugin.views[viewId];
+				if (view.type !== type) continue;
+
+				output.push({
+					plugin: plugin,
+					view: view,
+				});
+			}
+		}
+
+		return output;
+	},
+};
+
 const reducer = produce((draft: Draft<any>, action:any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 

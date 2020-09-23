@@ -426,6 +426,7 @@ function NoteEditor(props: NoteEditorProps) {
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
 		noteToolbarButtonInfos: useNoteToolbarButtons(),
+		plugins: props.plugins,
 	};
 
 	let editor = null;
@@ -590,6 +591,7 @@ const mapStateToProps = (state: any) => {
 		noteVisiblePanes: state.noteVisiblePanes,
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 	};
 };
 

@@ -29,6 +29,7 @@ export interface NoteEditorProps {
 	noteVisiblePanes: string[],
 	watchedResources: any,
 	highlightedWords: any[],
+	plugins: any[],
 }
 
 export interface NoteBodyEditorProps {
@@ -57,6 +58,7 @@ export interface NoteBodyEditorProps {
 	locale: string,
 	onDrop: Function,
 	noteToolbarButtonInfos: ToolbarButtonInfos,
+	plugins: any[],
 }
 
 export interface FormNote {

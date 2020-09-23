@@ -14,9 +14,9 @@ function noteHeaders(noteBody:string) {
 	return headers;
 }
 
-let slugs = {};
+let slugs:any = {};
 
-function headerSlug(headerText) {
+function headerSlug(headerText:string) {
 	const s = uslug(headerText);
 	let num = slugs[s] ? slugs[s] : 1;
 	const output = [s];

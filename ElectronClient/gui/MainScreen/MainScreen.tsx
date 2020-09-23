@@ -7,6 +7,7 @@ import ShareNoteDialog from '../ShareNoteDialog';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import CommandService from 'lib/services/CommandService';
 import PluginService from 'lib/services/plugin_service/PluginService';
+import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 import SideBar from '../SideBar/SideBar';
 import UserWebview from '../plugin_service/UserWebview';
 
@@ -114,27 +115,27 @@ class MainScreenComponent extends React.Component<any, any> {
 
 		const pluginColumnChildren:LayoutItem[] = [];
 
-		for (const pluginId in plugins) {
-			const plugin = plugins[pluginId];
-			for (const viewId in plugin.views) {
-				// For now it's assumed all views go in the "pluginColumn" so they are
-				// resizable vertically. But horizontally they stretch 100%
-				const control = plugin.views[viewId];
-				const size = {
-					...(sizes[viewId] ? sizes[viewId] : null),
-					width: '100%',
-				};
+		const infos = pluginUtils.viewInfosByType(plugins, 'webview');
 
-				pluginColumnChildren.push({
-					key: viewId,
-					resizableBottom: true,
-					context: {
-						plugin: plugin,
-						control: control,
-					},
-					...size,
-				});
-			}
+		for (const info of infos) {
+			// For now it's assumed all views go in the "pluginColumn" so they are
+			// resizable vertically. But horizontally they stretch 100%
+			const viewId = info.view.id;
+
+			const size = {
+				...(sizes[viewId] ? sizes[viewId] : null),
+				width: '100%',
+			};
+
+			pluginColumnChildren.push({
+				key: viewId,
+				resizableBottom: true,
+				context: {
+					plugin: info.plugin,
+					control: info.view,
+				},
+				...size,
+			});
 		}
 
 		return {

@@ -1,11 +1,13 @@
 import * as React from 'react';
 import CommandService from 'lib/services/CommandService';
 import ToolbarBase from '../../../ToolbarBase';
+import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 const { buildStyle } = require('lib/theme');
 
 interface ToolbarProps {
 	themeId: number,
 	dispatch: Function,
+	plugins: any[],
 }
 
 function styles_(props:ToolbarProps) {
@@ -46,6 +48,14 @@ export default function Toolbar(props:ToolbarProps) {
 
 		cmdService.commandToToolbarButton('toggleEditors'),
 	];
+
+	const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
+
+	for (const info of infos) {
+		const view = info.view;
+		if (view.location !== 'editorToolbar') continue;
+		toolbarItems.push(cmdService.commandToToolbarButton(view.commandName));
+	}
 
 	return <ToolbarBase style={styles.root} items={toolbarItems} />;
 }

@@ -611,6 +611,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					themeId={props.themeId}
 					dispatch={props.dispatch}
+					plugins={props.plugins}
 				/>
 				{props.noteToolbar}
 			</div>

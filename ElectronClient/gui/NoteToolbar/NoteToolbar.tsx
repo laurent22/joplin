@@ -2,11 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import CommandService from '../../lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
+import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 const { connect } = require('react-redux');
 const { buildStyle } = require('lib/theme');
-// const Folder = require('lib/models/Folder');
-// const { _ } = require('lib/locale');
-// const { substrWithEllipsis } = require('lib/string-utils');
 
 interface ButtonClickEvent {
 	name: string,
@@ -23,6 +21,7 @@ interface NoteToolbarProps {
 	note: any,
 	dispatch: Function,
 	onButtonClick(event:ButtonClickEvent):void,
+	plugins: any,
 }
 
 function styles_(props:NoteToolbarProps) {
@@ -50,6 +49,14 @@ function NoteToolbar(props:NoteToolbarProps) {
 		output.push(cmdService.commandToToolbarButton('toggleVisiblePanes'));
 		output.push(cmdService.commandToToolbarButton('showNoteProperties'));
 
+		const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
+
+		for (const info of infos) {
+			const view = info.view;
+			if (view.location !== 'noteToolbar') continue;
+			output.push(cmdService.commandToToolbarButton(view.commandName));
+		}
+
 		setToolbarItems(output);
 	}
 
@@ -71,6 +78,7 @@ const mapStateToProps = (state:any) => {
 		backwardHistoryNotes: state.backwardHistoryNotes,
 		forwardHistoryNotes: state.forwardHistoryNotes,
 		notesParentType: state.notesParentType,
+		plugins: state.pluginService.plugins,
 	};
 };
 
