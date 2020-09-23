@@ -152,6 +152,8 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 		textAlign: 'center',
 	};
 
+	const readTimeLabel = _('Read time: %s min', formatReadTime(strippedReadTime));
+
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={theme.dialogBox}>
@@ -164,8 +166,8 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 						{tableBodyComps}
 					</tbody>
 				</table>
-				<div style={labelCompStyle}>
-					{_('Read time: %s min', formatReadTime(strippedReadTime))}
+				<div style={{ ...labelCompStyle, marginTop: 10 }}>
+					{readTimeLabel}
 				</div>
 				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>

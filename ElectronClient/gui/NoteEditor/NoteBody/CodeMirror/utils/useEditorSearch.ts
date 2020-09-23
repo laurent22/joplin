@@ -119,7 +119,8 @@ export default function useEditorSearch(CodeMirror: any) {
 		// We only want to highlight all matches when there is only 1 search term
 		if (keywords.length !== 1 || keywords[0].value == '') {
 			clearOverlay(this);
-			setPreviousKeywordValue('');
+			const prev = keywords.length > 1 ? keywords[0].value : '';
+			setPreviousKeywordValue(prev);
 			return 0;
 		}
 

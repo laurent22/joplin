@@ -327,7 +327,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 <li>
 <p>Development</p>
 <ul>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
@@ -351,6 +351,64 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </ul>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.4">v1.1.4</a> - 2020-09-21T11:20:09Z<a name="v1-1-4-https-github-com-laurent22-joplin-releases-tag-v1-1-4-2020-09-21t11-20-09z" href="#v1-1-4-https-github-com-laurent22-joplin-releases-tag-v1-1-4-2020-09-21t11-20-09z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add keyboard shortcut editor (<a href="https://github.com/laurent22/joplin/issues/3525">#3525</a> by Anjula Karunarathne)</li>
+<li>New: Add log statement to try to fix issue <a href="https://github.com/laurent22/joplin/issues/3536">#3536</a></li>
+<li>Improved: Change codemirror default home and end to be visual line based (<a href="https://github.com/laurent22/joplin/issues/3672">#3672</a> by Caleb John)</li>
+<li>Improved: Clarifies labels of certain actions, and added shortcut for note list toggle</li>
+<li>Improved: Do not prevent export when one item is still encrypted</li>
+<li>Improved: Fuzzy search (<a href="https://github.com/laurent22/joplin/issues/3632">#3632</a> by Naveen M V)</li>
+<li>Improved: Make codemirror the default code editor (<a href="https://github.com/laurent22/joplin/issues/3703">#3703</a>) (<a href="https://github.com/laurent22/joplin/issues/3560">#3560</a> by Caleb John)</li>
+<li>Improved: Rename menu item from &quot;Export&quot; to &quot;Export all&quot; to clarify what it does</li>
+<li>Improved: Sync immediately on startup</li>
+<li>Security: Disallow EMBED tags to prevent XSS vulnerability (CVE-2020-15930, vulnerability found by Ademar Nowasky Junior)</li>
+<li>Security: Upgrade packages to fix vulnerabilities</li>
+<li>Fixed: Creating a note after backward redirection places it in a wrong notebook (<a href="https://github.com/laurent22/joplin/issues/3759">#3759</a> by Naveen M V)</li>
+<li>Fixed: Fix applying tags to multiple notes (<a href="https://github.com/laurent22/joplin/issues/3710">#3710</a>)</li>
+<li>Fixed: Fix bug with quotes when searching (<a href="https://github.com/laurent22/joplin/issues/3735">#3735</a> by Naveen M V)</li>
+<li>Fixed: Fix wildcard search (<a href="https://github.com/laurent22/joplin/issues/3713">#3713</a> by Naveen M V)</li>
+<li>Fixed: Fixed clock sync logic when creating new sync target</li>
+<li>Fixed: Fixed copying link in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/3697">#3697</a>)</li>
+<li>Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. (<a href="https://github.com/laurent22/joplin/issues/3689">#3689</a>)</li>
+<li>Fixed: Fixed viewer font size, in particular for inline code (<a href="https://github.com/laurent22/joplin/issues/3553">#3553</a>)</li>
+<li>Fixed: Increased file extension limit to 20 to prevent issue when using external editors (<a href="https://github.com/laurent22/joplin/issues/3696">#3696</a>)</li>
+<li>Fixed: Use joplin list handling in emacs mode (<a href="https://github.com/laurent22/joplin/issues/3758">#3758</a>) (<a href="https://github.com/laurent22/joplin/issues/3749">#3749</a> by Caleb John)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.3">v1.1.3</a> - 2020-09-17T10:30:37Z<a name="v1-1-3-https-github-com-laurent22-joplin-releases-tag-v1-1-3-2020-09-17t10-30-37z" href="#v1-1-3-https-github-com-laurent22-joplin-releases-tag-v1-1-3-2020-09-17t10-30-37z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Do not prevent export when one item is still encrypted</li>
+<li>Fixed: Creating a note after backward redirection places it in a wrong notebook (<a href="https://github.com/laurent22/joplin/issues/3759">#3759</a> by Naveen M V)</li>
+<li>Fixed: Increased file extension limit to 20 to prevent issue when using external editors (<a href="https://github.com/laurent22/joplin/issues/3696">#3696</a>)</li>
+<li>Fixed: Use joplin list handling in emacs mode (<a href="https://github.com/laurent22/joplin/issues/3758">#3758</a>) (<a href="https://github.com/laurent22/joplin/issues/3749">#3749</a> by Caleb John)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.2">v1.1.2</a> - 2020-09-15T12:58:38Z<a name="v1-1-2-https-github-com-laurent22-joplin-releases-tag-v1-1-2-2020-09-15t12-58-38z" href="#v1-1-2-https-github-com-laurent22-joplin-releases-tag-v1-1-2-2020-09-15t12-58-38z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Clarifies labels of certain actions, and added shortcut for note list toggle</li>
+<li>Security: Upgrade packages to fix vulnerabilities</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.1">v1.1.1</a> - 2020-09-11T23:32:47Z<a name="v1-1-1-https-github-com-laurent22-joplin-releases-tag-v1-1-1-2020-09-11t23-32-47z" href="#v1-1-1-https-github-com-laurent22-joplin-releases-tag-v1-1-1-2020-09-11t23-32-47z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add keyboard shortcut editor (<a href="https://github.com/laurent22/joplin/issues/3525">#3525</a> by Anjula Karunarathne)</li>
+<li>Improved: Change CodeMirror default home and end to be visual line based (<a href="https://github.com/laurent22/joplin/issues/3672">#3672</a> by Caleb John)</li>
+<li>Improved: Added support for fuzzy search (<a href="https://github.com/laurent22/joplin/issues/3632">#3632</a> by Naveen M V)</li>
+<li>Improved: Make CodeMirror the default code editor (<a href="https://github.com/laurent22/joplin/issues/3703">#3703</a>) (<a href="https://github.com/laurent22/joplin/issues/3560">#3560</a> by Caleb John)</li>
+<li>Improved: Rename menu item from &quot;Export&quot; to &quot;Export all&quot; to clarify what it does</li>
+<li>Improved: Sync immediately on startup</li>
+<li>Security: Disallow EMBED tags to prevent XSS vulnerability (CVE-2020-15930, vulnerability found by Ademar Nowasky Junior)</li>
+<li>Fixed: Fix applying tags to multiple notes (<a href="https://github.com/laurent22/joplin/issues/3710">#3710</a>)</li>
+<li>Fixed: Fix bug with quotes when searching (<a href="https://github.com/laurent22/joplin/issues/3735">#3735</a> by Naveen M V)</li>
+<li>Fixed: Fix wildcard search (<a href="https://github.com/laurent22/joplin/issues/3713">#3713</a> by Naveen M V)</li>
+<li>Fixed: Fixed copying link in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/3697">#3697</a>)</li>
+<li>Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. (<a href="https://github.com/laurent22/joplin/issues/3689">#3689</a>)</li>
+<li>Fixed: Fixed viewer font size, in particular for inline code (<a href="https://github.com/laurent22/joplin/issues/3553">#3553</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.245">v1.0.245</a> - 2020-09-09T12:56:10Z<a name="v1-0-245-https-github-com-laurent22-joplin-releases-tag-v1-0-245-2020-09-09t12-56-10z" href="#v1-0-245-https-github-com-laurent22-joplin-releases-tag-v1-0-245-2020-09-09t12-56-10z" class="heading-anchor">🔗</a></h2>
+<p>This release is to fix the sync lock issues on devices that have an incorrect clock. Specifically, it should fix this error: &quot;Cannot acquire sync lock: either the lock could be written but not read back. Or it was expired before it was read again&quot;.</p>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.242">v1.0.242</a> - 2020-09-04T22:00:34Z<a name="v1-0-242-https-github-com-laurent22-joplin-releases-tag-v1-0-242-2020-09-04t22-00-34z" href="#v1-0-242-https-github-com-laurent22-joplin-releases-tag-v1-0-242-2020-09-04t22-00-34z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixes sync target upgrade issue when custom TLS settings are used</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.241">v1.0.241</a> - 2020-09-04T18:06:00Z<a name="v1-0-241-https-github-com-laurent22-joplin-releases-tag-v1-0-241-2020-09-04t18-06-00z" href="#v1-0-241-https-github-com-laurent22-joplin-releases-tag-v1-0-241-2020-09-04t18-06-00z" class="heading-anchor">🔗</a></h2>
 <p>This release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. So please make sure you upgrade your other clients too (mobile, cli, etc.).</p>
 <p>This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is. This is a one off operation.</p>

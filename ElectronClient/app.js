@@ -101,6 +101,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
 	devToolsVisible: false,
+	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 });
 
 class Application extends BaseApplication {
@@ -284,6 +285,16 @@ class Application extends BaseApplication {
 				newState.devToolsVisible = action.value;
 				break;
 
+			case 'VISIBLE_DIALOGS_ADD':
+				newState = Object.assign({}, state);
+				newState.visibleDialogs[state.name] = true;
+				break;
+
+			case 'VISIBLE_DIALOGS_REMOVE':
+				newState = Object.assign({}, state);
+				delete newState.visibleDialogs[state.name];
+				break;
+
 			}
 		} catch (error) {
 			error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -394,7 +405,7 @@ class Application extends BaseApplication {
 		await this.updateMenu(screen);
 	}
 
-	async updateMenu(screen) {
+	async updateMenu(screen, updateStates = true) {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const cmdService = CommandService.instance();
@@ -757,7 +768,6 @@ class Application extends BaseApplication {
 		const separator = () => {
 			return {
 				type: 'separator',
-				screens: ['Main'],
 			};
 		};
 
@@ -1009,6 +1019,8 @@ class Application extends BaseApplication {
 		Menu.setApplicationMenu(menu);
 
 		this.lastMenuScreen_ = screen;
+
+		if (updateStates) await this.updateMenuItemStates();
 	}
 
 	async updateMenuItemStates(state = null) {
@@ -1151,7 +1163,7 @@ class Application extends BaseApplication {
 			CommandService.instance().registerDeclaration(declaration);
 		}
 
-		this.updateMenu('Main');
+		this.updateMenu('Main', false);
 
 		// Since the settings need to be loaded before the store is created, it will never
 		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be

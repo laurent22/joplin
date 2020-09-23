@@ -301,12 +301,10 @@ class BaseApplication {
 			}
 		}
 
-		if (highlightedWords.length) {
-			this.store().dispatch({
-				type: 'SET_HIGHLIGHTED',
-				words: highlightedWords,
-			});
-		}
+		this.store().dispatch({
+			type: 'SET_HIGHLIGHTED',
+			words: highlightedWords,
+		});
 
 		this.store().dispatch({
 			type: 'NOTE_UPDATE_ALL',
@@ -746,6 +744,14 @@ class BaseApplication {
 		if (Setting.value('db.fuzzySearchEnabled') === -1) {
 			const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
 			Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
+		}
+
+		// Always disable on CLI because building and packaging the extension is not working
+		// and is too error-prone - requires gcc on the machine, or we should package the .so
+		// and dylib files, but it's not sure it would work everywhere if not built from
+		// source on the target machine.
+		if (Setting.value('appType') !== 'desktop') {
+			Setting.setValue('db.fuzzySearchEnabled', 0);
 		}
 
 		if (Setting.value('encryption.shouldReencrypt') < 0) {

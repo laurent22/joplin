@@ -24,7 +24,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const GlobalStyle = createGlobalStyle`
 	div, span, a {
 		color: ${(props) => props.theme.color};
-		font-size: ${(props) => props.theme.fontSize}px;
+		/*font-size: ${(props) => props.theme.fontSize}px;*/
 		font-family: ${(props) => props.theme.fontFamily};
 	}
 `;

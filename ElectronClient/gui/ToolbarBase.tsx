@@ -5,11 +5,18 @@ const ToolbarButton = require('./ToolbarButton/ToolbarButton.js').default;
 const ToolbarSpace = require('./ToolbarSpace.min.js');
 const ToggleEditorsButton = require('./ToggleEditorsButton/ToggleEditorsButton.js').default;
 
-class ToolbarComponent extends React.Component {
+interface Props {
+	themeId: number,
+	style: any,
+	items: any[],
+}
+
+class ToolbarBaseComponent extends React.Component<Props, any> {
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style = Object.assign({
+		const style:any = Object.assign({
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
@@ -18,15 +25,15 @@ class ToolbarComponent extends React.Component {
 			paddingRight: theme.mainPadding,
 		}, this.props.style);
 
-		const groupStyle = {
+		const groupStyle:any = {
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
 		};
 
-		const leftItemComps = [];
-		const centerItemComps = [];
-		const rightItemComps = [];
+		const leftItemComps:any[] = [];
+		const centerItemComps:any[] = [];
+		const rightItemComps:any[] = [];
 
 		if (this.props.items) {
 			for (let i = 0; i < this.props.items.length; i++) {
@@ -44,8 +51,6 @@ class ToolbarComponent extends React.Component {
 					},
 					o
 				);
-
-				if (this.props.disabled) props.disabled = true;
 
 				if (o.name === 'toggleEditors') {
 					rightItemComps.push(<ToggleEditorsButton
@@ -79,10 +84,8 @@ class ToolbarComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return { themeId: state.settings.theme };
 };
 
-const Toolbar = connect(mapStateToProps)(ToolbarComponent);
-
-module.exports = Toolbar;
+export default connect(mapStateToProps)(ToolbarBaseComponent);

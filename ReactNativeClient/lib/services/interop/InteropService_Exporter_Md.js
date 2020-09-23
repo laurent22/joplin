@@ -4,6 +4,7 @@ const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { shim } = require('lib/shim');
+const markdownUtils = require('lib/markdownUtils');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async init(destDir) {
@@ -53,7 +54,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 
 		const createRelativePath = function(notePath) {
-			return encodeURI(`${relativePathToRoot}${notePath}`.trim());
+			return markdownUtils.escapeLinkUrl(`${relativePathToRoot}${notePath}`.trim());
 		};
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
