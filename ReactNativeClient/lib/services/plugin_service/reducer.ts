@@ -1,15 +1,37 @@
 import produce, { Draft } from 'immer';
 
-export const stateRootKey = 'pluginService';
-
-export const defaultState = {
-	plugins: {},
-};
-
 interface ViewInfo {
 	view: any,
 	plugin: any,
 }
+
+interface PluginViewState {
+	id: string,
+	type: string,
+}
+
+interface PluginViewStates {
+	[key:string]: PluginViewState,
+}
+
+interface PluginState {
+	id:string,
+	views:PluginViewStates,
+}
+
+interface PluginStates {
+	[key:string]: PluginState;
+}
+
+interface State {
+	plugins: PluginStates,
+}
+
+export const stateRootKey = 'pluginService';
+
+export const defaultState:State = {
+	plugins: {},
+};
 
 export const utils = {
 	viewInfosByType: function(plugins:any, type:string):ViewInfo[] {
