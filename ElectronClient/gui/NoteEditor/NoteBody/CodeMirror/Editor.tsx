@@ -17,13 +17,13 @@ import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
 import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
+import useKeymap from './utils/useKeymap';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
-const { shim } = require('lib/shim.js');
 
 const { reg } = require('lib/registry.js');
 
@@ -50,7 +50,7 @@ const topLanguages = [
 	'haskell',
 	'pascal',
 	'css',
-	
+
 	// Additional languages, not in the PYPL list
 	'xml', // For HTML too
 	'markdown',
@@ -99,6 +99,7 @@ function Editor(props: EditorProps, ref: any) {
 	useLineSorting(CodeMirror);
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
+	useKeymap(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -138,87 +139,6 @@ function Editor(props: EditorProps, ref: any) {
 		if (event.dataTransfer.effectAllowed === 'all') {
 			const coords = cm.coordsChar({ left: event.x, top: event.y });
 			cm.setCursor(coords);
-		}
-	}, []);
-
-	useEffect(() => {
-		CodeMirror.keyMap.basic = {
-			'Left': 'goCharLeft',
-			'Right': 'goCharRight',
-			'Up': 'goLineUp',
-			'Down': 'goLineDown',
-			'End': 'goLineRight',
-			'Home': 'goLineLeftSmart',
-			'PageUp': 'goPageUp',
-			'PageDown': 'goPageDown',
-			'Delete': 'delCharAfter',
-			'Backspace': 'delCharBefore',
-			'Shift-Backspace': 'delCharBefore',
-			'Tab': 'smartListIndent',
-			'Shift-Tab': 'smartListUnindent',
-			'Enter': 'insertListElement',
-			'Insert': 'toggleOverwrite',
-			'Esc': 'singleSelection',
-		};
-		// Add some of the Joplin smart list handling to emacs mode
-		CodeMirror.keyMap.emacs['Tab'] = 'smartListIndent';
-		CodeMirror.keyMap.emacs['Enter'] = 'insertListElement';
-		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
-
-		if (shim.isMac()) {
-			CodeMirror.keyMap.default = {
-				// MacOS
-				'Cmd-A': 'selectAll',
-				'Cmd-D': 'deleteLine',
-				'Cmd-Z': 'undo',
-				'Shift-Cmd-Z': 'redo',
-				'Cmd-Y': 'redo',
-				'Cmd-Home': 'goDocStart',
-				'Cmd-Up': 'goDocStart',
-				'Cmd-End': 'goDocEnd',
-				'Cmd-Down': 'goDocEnd',
-				'Cmd-Left': 'goLineLeft',
-				'Cmd-Right': 'goLineRight',
-				'Alt-Left': 'goGroupLeft',
-				'Alt-Right': 'goGroupRight',
-				'Alt-Backspace': 'delGroupBefore',
-				'Alt-Delete': 'delGroupAfter',
-				'Cmd-[': 'indentLess',
-				'Cmd-]': 'indentMore',
-				'Cmd-/': 'toggleComment',
-				'Cmd-Opt-S': 'sortSelectedLines',
-				'Opt-Up': 'swapLineUp',
-				'Opt-Down': 'swapLineDown',
-
-				'fallthrough': 'basic',
-			};
-		} else {
-			CodeMirror.keyMap.default = {
-				// Windows/linux
-				'Ctrl-A': 'selectAll',
-				'Ctrl-D': 'deleteLine',
-				'Ctrl-Z': 'undo',
-				'Shift-Ctrl-Z': 'redo',
-				'Ctrl-Y': 'redo',
-				'Ctrl-Home': 'goDocStart',
-				'Ctrl-End': 'goDocEnd',
-				'Ctrl-Up': 'goLineUp',
-				'Ctrl-Down': 'goLineDown',
-				'Ctrl-Left': 'goGroupLeft',
-				'Ctrl-Right': 'goGroupRight',
-				'Alt-Left': 'goLineStart',
-				'Alt-Right': 'goLineEnd',
-				'Ctrl-Backspace': 'delGroupBefore',
-				'Ctrl-Delete': 'delGroupAfter',
-				'Ctrl-[': 'indentLess',
-				'Ctrl-]': 'indentMore',
-				'Ctrl-/': 'toggleComment',
-				'Ctrl-Alt-S': 'sortSelectedLines',
-				'Alt-Up': 'swapLineUp',
-				'Alt-Down': 'swapLineDown',
-
-				'fallthrough': 'basic',
-			};
 		}
 	}, []);
 
