@@ -286,6 +286,7 @@ module.exports = function(theme) {
 			opacity: 0.7;
 		}
 
+		.jop-tinymce ul.joplin-checklist .checked,
 		.md-checkbox .checkbox-label-checked {
 			opacity: 0.5;
 		}
