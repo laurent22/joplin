@@ -7,6 +7,7 @@
     "linter-ci": "./node_modules/.bin/eslint --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
+    "setupNewRelease": "node ./Tools/setupNewRelease",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {

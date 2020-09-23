@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import CommandService from '../../lib/services/CommandService';
+import ToolbarBase from '../ToolbarBase';
 const { connect } = require('react-redux');
 const { buildStyle } = require('lib/theme');
-const Toolbar = require('../Toolbar.min.js');
 // const Folder = require('lib/models/Folder');
 // const { _ } = require('lib/locale');
 // const { substrWithEllipsis } = require('lib/string-utils');
@@ -40,20 +40,11 @@ function styles_(props:NoteToolbarProps) {
 function NoteToolbar(props:NoteToolbarProps) {
 	const styles = styles_(props);
 	const [toolbarItems, setToolbarItems] = useState([]);
-	// const selectedNoteFolder = Folder.byId(props.folders, props.note.parent_id);
-	// const folderId = selectedNoteFolder ? selectedNoteFolder.id : '';
-	// const folderTitle = selectedNoteFolder && selectedNoteFolder.title ? selectedNoteFolder.title : '';
 
 	const cmdService = CommandService.instance();
 
 	function updateToolbarItems() {
 		const output = [];
-
-		// if (props.watchedNoteFiles.indexOf(props.note.id) >= 0) {
-		// 	output.push(cmdService.commandToToolbarButton('stopExternalEditing'));
-		// } else {
-		// 	output.push(cmdService.commandToToolbarButton('startExternalEditing'));
-		// }
 
 		output.push(cmdService.commandToToolbarButton('editAlarm'));
 		output.push(cmdService.commandToToolbarButton('toggleVisiblePanes'));
@@ -70,7 +61,7 @@ function NoteToolbar(props:NoteToolbarProps) {
 		};
 	}, []);
 
-	return <Toolbar style={styles.root} items={toolbarItems} />;
+	return <ToolbarBase style={styles.root} items={toolbarItems} />;
 }
 
 const mapStateToProps = (state:any) => {

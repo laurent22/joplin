@@ -58,7 +58,7 @@ function safeFilename(e, maxLength = null, allowSpaces = false) {
 	return output.substr(0, maxLength);
 }
 
-let friendlySafeFilename_blackListChars = '/<>:\'"\\|?*';
+let friendlySafeFilename_blackListChars = '/<>:\'"\\|?*#';
 for (let i = 0; i < 32; i++) {
 	friendlySafeFilename_blackListChars += String.fromCharCode(i);
 }

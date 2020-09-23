@@ -1,13 +1,11 @@
 import * as React from 'react';
-import CommandService from '../../../../lib/services/CommandService';
-
-const ToolbarBase = require('../../../Toolbar.min.js');
+import CommandService from 'lib/services/CommandService';
+import ToolbarBase from '../../../ToolbarBase';
 const { buildStyle } = require('lib/theme');
 
 interface ToolbarProps {
 	themeId: number,
 	dispatch: Function,
-	disabled: boolean,
 }
 
 function styles_(props:ToolbarProps) {
@@ -49,5 +47,5 @@ export default function Toolbar(props:ToolbarProps) {
 		cmdService.commandToToolbarButton('toggleEditors'),
 	];
 
-	return <ToolbarBase disabled={props.disabled} style={styles.root} items={toolbarItems} />;
+	return <ToolbarBase style={styles.root} items={toolbarItems} />;
 }
