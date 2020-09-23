@@ -68,6 +68,8 @@ CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/json_export/global.d.js
 CliClient/tests/support/plugins/json_export/src/index.js
+CliClient/tests/support/plugins/register_command/global.d.js
+CliClient/tests/support/plugins/register_command/src/index.js
 CliClient/tests/support/plugins/toc/global.d.js
 CliClient/tests/support/plugins/toc/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
