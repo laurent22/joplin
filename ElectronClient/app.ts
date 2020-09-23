@@ -1,11 +1,12 @@
-require('app-module-path').addPath(__dirname);
-
 import InteropService from 'lib/services/interop/InteropService';
 import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
 import CommandService from 'lib/services/CommandService';
 import KeymapService from 'lib/services/KeymapService';
 import PluginService from 'lib/services/plugin_service/PluginService';
 import resourceEditWatcherReducer from 'lib/services/ResourceEditWatcher/reducer';
+import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+
+require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
@@ -964,6 +965,18 @@ class Application extends BaseApplication {
 		for (const item of pluginMenuItems) {
 			const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
 			itemParent.submenu.push(item);
+		}
+
+		const pluginViewInfos = pluginUtils.viewInfosByType(this.store().getState().pluginService.plugins, 'menuItem');
+
+		for (const info of pluginViewInfos) {
+			const itemParent = rootMenus[info.view.location];
+
+			if (!itemParent) {
+				reg.logger().error('Menu item location does not exist: ', info.view.location, info);
+			} else {
+				itemParent.submenu.push(cmdService.commandToMenuItem(info.view.commandName));
+			}
 		}
 
 		const template = [

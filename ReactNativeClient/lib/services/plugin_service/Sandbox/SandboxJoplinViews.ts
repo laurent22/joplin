@@ -2,6 +2,11 @@ import WebviewController from '../WebviewController';
 import Plugin from '../Plugin';
 import ToolbarButtonController, { ToolbarButtonLocation } from '../ToolbarButtonController';
 import MenuItemController, { MenuItemLocation } from '../MenuItemController';
+import KeymapService from 'lib/services/KeymapService';
+
+interface CreateMenuItemOptions {
+	accelerator: string,
+}
 
 export default class SandboxJoplinViews {
 
@@ -28,10 +33,15 @@ export default class SandboxJoplinViews {
 		return controller;
 	}
 
-	createMenuItem(commandName:string, location:MenuItemLocation) {
+	createMenuItem(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
 		const idNum = this.viewIdNum++;
 		const controller = new MenuItemController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);
+
+		if (options && options.accelerator) {
+			KeymapService.instance().registerCommandAccelerator(commandName, options.accelerator);
+		}
+
 		return controller;
 	}
 
