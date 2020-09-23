@@ -1,5 +1,12 @@
 require('app-module-path').addPath(__dirname);
 
+import InteropService from 'lib/services/interop/InteropService';
+import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
+import CommandService from 'lib/services/CommandService';
+import KeymapService from 'lib/services/KeymapService';
+import PluginService from 'lib/services/plugin_service/PluginService';
+import resourceEditWatcherReducer from 'lib/services/ResourceEditWatcher/reducer';
+
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const Setting = require('lib/models/Setting.js');
@@ -16,25 +23,19 @@ const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
-const InteropService = require('lib/services/interop/InteropService').default;
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const ResourceEditWatcher = require('lib/services/ResourceEditWatcher/index').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
-const CommandService = require('lib/services/CommandService').default;
-const KeymapService = require('lib/services/KeymapService').default;
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
-const PluginService = require('lib/services/plugin_service/PluginService.js').default;
-const resourceEditWatcherReducer = require('lib/services/ResourceEditWatcher/reducer').default;
 const versionInfo = require('lib/versionInfo').default;
 
 const commands = [
@@ -106,9 +107,10 @@ const appDefaultState = Object.assign({}, defaultState, {
 
 class Application extends BaseApplication {
 
+	private lastMenuScreen_:string = null;
+
 	constructor() {
 		super();
-		this.lastMenuScreen_ = null;
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 
@@ -133,7 +135,7 @@ class Application extends BaseApplication {
 		return `${Setting.value('profileDir')}/log-autoupdater.txt`;
 	}
 
-	reducer(state = appDefaultState, action) {
+	reducer(state:any = appDefaultState, action:any) {
 		let newState = state;
 
 		try {
@@ -179,7 +181,7 @@ class Application extends BaseApplication {
 			case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 				{
-					const getNextLayout = (currentLayout) => {
+					const getNextLayout = (currentLayout:any) => {
 						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 						let paneOptions;
@@ -309,7 +311,7 @@ class Application extends BaseApplication {
 		return newState;
 	}
 
-	toggleDevTools(visible) {
+	toggleDevTools(visible:boolean) {
 		if (visible) {
 			bridge().openDevTools();
 		} else {
@@ -317,7 +319,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store, next, action) {
+	async generalMiddleware(store:any, next:any, action:any) {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
@@ -405,13 +407,13 @@ class Application extends BaseApplication {
 		await this.updateMenu(screen);
 	}
 
-	async updateMenu(screen, updateStates = true) {
+	async updateMenu(screen:string, updateStates:boolean = true) {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const cmdService = CommandService.instance();
 		const keymapService = KeymapService.instance();
 
-		const sortNoteFolderItems = (type) => {
+		const sortNoteFolderItems = (type:string) => {
 			const sortItems = [];
 			const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 			for (const field in sortOptions) {
@@ -454,7 +456,7 @@ class Application extends BaseApplication {
 			cmdService.commandToMenuItem('focusElementNoteBody'),
 		];
 
-		let toolsItems = [];
+		let toolsItems:any[] = [];
 		const importItems = [];
 		const exportItems = [];
 		const toolsItemsFirst = [];
@@ -598,7 +600,7 @@ class Application extends BaseApplication {
 		});
 
 		// we need this workaround, because on macOS the menu is different
-		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
+		const toolsItemsWindowsLinux:any[] = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
 			accelerator: !shim.isMac() && keymapService.getAccelerator('config'),
@@ -608,7 +610,7 @@ class Application extends BaseApplication {
 					routeName: 'Config',
 				});
 			},
-		}]);
+		} as any]);
 
 		// the following menu items will be available for all OS under Tools
 		const toolsItemsAll = [{
@@ -626,7 +628,7 @@ class Application extends BaseApplication {
 		}
 		toolsItems = toolsItems.concat(toolsItemsAll);
 
-		function _checkForUpdates(ctx) {
+		function _checkForUpdates(ctx:any) {
 			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 		}
 
@@ -771,7 +773,7 @@ class Application extends BaseApplication {
 			};
 		};
 
-		const rootMenus = {
+		const rootMenus:any = {
 			edit: {
 				id: 'edit',
 				label: _('&Edit'),
@@ -943,7 +945,7 @@ class Application extends BaseApplication {
 		// It seems the "visible" property of separators is ignored by Electron, making
 		// it display separators that we want hidden. So this function iterates through
 		// them and remove them completely.
-		const cleanUpSeparators = items => {
+		const cleanUpSeparators = (items:any[]) => {
 			const output = [];
 			for (const item of items) {
 				if ('visible' in item && item.type === 'separator' && !item.visible) continue;
@@ -975,7 +977,7 @@ class Application extends BaseApplication {
 
 		if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
 
-		function isEmptyMenu(template) {
+		function isEmptyMenu(template:any[]) {
 			for (let i = 0; i < template.length; i++) {
 				const t = template[i];
 				if (t.type !== 'separator') return false;
@@ -983,7 +985,7 @@ class Application extends BaseApplication {
 			return true;
 		}
 
-		function removeUnwantedItems(template, screen) {
+		function removeUnwantedItems(template:any[], screen:string) {
 			const platform = shim.platformName();
 
 			let output = [];
@@ -1023,7 +1025,7 @@ class Application extends BaseApplication {
 		if (updateStates) await this.updateMenuItemStates();
 	}
 
-	async updateMenuItemStates(state = null) {
+	async updateMenuItemStates(state:any = null) {
 		if (!this.lastMenuScreen_) return;
 		if (!this.store() && !state) return;
 
@@ -1083,7 +1085,7 @@ class Application extends BaseApplication {
 		document.head.appendChild(styleTag);
 	}
 
-	async loadCustomCss(filePath) {
+	async loadCustomCss(filePath:string) {
 		let cssString = '';
 		if (await fs.pathExists(filePath)) {
 			try {
@@ -1100,7 +1102,7 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
-	async start(argv) {
+	async start(argv:string[]) {
 		const electronIsDev = require('electron-is-dev');
 
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
@@ -1136,7 +1138,7 @@ class Application extends BaseApplication {
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
-		reg.setShowErrorMessageBoxHandler((message) => { bridge().showErrorMessageBox(message); });
+		reg.setShowErrorMessageBoxHandler((message:string) => { bridge().showErrorMessageBox(message); });
 
 		if (Setting.value('flagOpenDevTools')) {
 			bridge().openDevTools();
@@ -1271,14 +1273,14 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action) => { this.store().dispatch(action); });
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action:any) => { this.store().dispatch(action); });
 
 		RevisionService.instance().runInBackground();
 
 		this.updateMenuItemStates();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		window.joplin = () => {
+		(window as any).joplin = () => {
 			return {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
@@ -1307,21 +1309,23 @@ class Application extends BaseApplication {
 
 		try {
 			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p) => p.trim());
+				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
 				await PluginService.instance().loadAndRunPlugins(paths);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
+
+		return null;
 	}
 
 }
 
-let application_ = null;
+let application_:Application = null;
 
 function app() {
 	if (!application_) application_ = new Application();
 	return application_;
 }
 
-module.exports = { app };
+export default app;

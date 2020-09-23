@@ -13,7 +13,7 @@ __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	onCommitFiberUnmount: function() {},
 };
 
-const { app } = require('./app.js');
+const app = require('./app').default;
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -97,7 +97,7 @@ document.addEventListener('click', (event) => event.preventDefault());
 
 app().start(bridge().processArgv()).then((result) => {
 	if (!result || !result.action) {
-		require('./gui/Root.min.js');
+		require('./gui/Root');
 	} else if (result.action === 'upgradeSyncTarget') {
 		require('./gui/Root_UpgradeSyncTarget');
 	}

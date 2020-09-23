@@ -39,6 +39,7 @@ export interface Module {
 	fileExtensions: string[],
 	description: string,
 	instanceFactory?: Function,
+	path?: string,
 
 	// ---------------------------------------
 	// Import-only properties

@@ -76,6 +76,7 @@ CliClient/tests/support/plugins/withExternalModules/global.d.js
 CliClient/tests/support/plugins/withExternalModules/src/index.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
+ElectronClient/app.js
 ElectronClient/commands/copyDevCommand.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
@@ -167,6 +168,7 @@ ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js
 ElectronClient/gui/ResizableLayout/ResizableLayout.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/Root_UpgradeSyncTarget.js
+ElectronClient/gui/Root.js
 ElectronClient/gui/SearchBar/hooks/useSearch.js
 ElectronClient/gui/SearchBar/SearchBar.js
 ElectronClient/gui/SearchBar/styles/index.js

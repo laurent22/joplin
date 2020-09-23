@@ -1,46 +1,53 @@
-const React = require('react');
+import * as React from 'react';
+import app from '../app';
+import MainScreen from './MainScreen/MainScreen';
+import ConfigScreen from './ConfigScreen/ConfigScreen';
+import StatusScreen from './StatusScreen/StatusScreen';
+import OneDriveLoginScreen from './OneDriveLoginScreen';
+import DropboxLoginScreen from './DropboxLoginScreen';
+import ErrorBoundary from './ErrorBoundary';
+import { themeStyle } from 'lib/theme';
+import { Size } from './ResizableLayout/ResizableLayout';
+
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
-
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
-
-const MainScreen = require('./MainScreen/MainScreen').default;
-const ConfigScreen = require('./ConfigScreen/ConfigScreen').default;
-const StatusScreen = require('./StatusScreen/StatusScreen').default;
-const OneDriveLoginScreen = require('./OneDriveLoginScreen').default;
-const DropboxLoginScreen = require('./DropboxLoginScreen').default;
-const ErrorBoundary = require('./ErrorBoundary').default;
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
-const { app } = require('../app');
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
-const { themeStyle } = require('lib/theme');
-
 const { bridge } = require('electron').remote.require('./bridge');
+
+interface Props {
+	themeId: number,
+	appState: string,
+	dispatch: Function,
+	size: Size,
+	zoomFactor: number,
+}
 
 const GlobalStyle = createGlobalStyle`
 	div, span, a {
-		color: ${(props) => props.theme.color};
-		/*font-size: ${(props) => props.theme.fontSize}px;*/
-		font-family: ${(props) => props.theme.fontFamily};
+		color: ${(props:any) => props.theme.color};
+		/*font-size: ${(props:any) => props.theme.fontSize}px;*/
+		font-family: ${(props:any) => props.theme.fontFamily};
 	}
 `;
 
+let wcsTimeoutId_:any = null;
+
 async function initialize() {
-	this.wcsTimeoutId_ = null;
-
 	bridge().window().on('resize', function() {
-		if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
+		if (wcsTimeoutId_) clearTimeout(wcsTimeoutId_);
 
-		this.wcsTimeoutId_ = setTimeout(() => {
+		wcsTimeoutId_ = setTimeout(() => {
 			store.dispatch({
 				type: 'WINDOW_CONTENT_SIZE_SET',
 				size: bridge().windowContentSize(),
 			});
-			this.wcsTimeoutId_ = null;
+			wcsTimeoutId_ = null;
 		}, 10);
 	});
 
@@ -69,7 +76,7 @@ async function initialize() {
 	});
 }
 
-class RootComponent extends React.Component {
+class RootComponent extends React.Component<Props, any> {
 	async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
@@ -77,7 +84,7 @@ class RootComponent extends React.Component {
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch);
+			await initialize();
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -117,7 +124,7 @@ class RootComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
