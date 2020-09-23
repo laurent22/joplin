@@ -164,6 +164,7 @@ ElectronClient/gui/style/StyledInput.js
 ElectronClient/gui/style/StyledTextInput.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js
 ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
+ElectronClient/gui/ToolbarBase.js
 ElectronClient/gui/ToolbarButton/styles/index.js
 ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ReactNativeClient/lib/AsyncActionQueue.js

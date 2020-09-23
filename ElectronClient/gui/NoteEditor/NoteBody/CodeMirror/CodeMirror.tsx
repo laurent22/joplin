@@ -372,37 +372,37 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* be applied to the viewer. */
 				padding-bottom: 400px !important;
 			}
-			
+
 			.cm-header-1 {
 				font-size: 1.5em;
 			}
-			
+
 			.cm-header-2 {
 				font-size: 1.3em;
 			}
-			
+
 			.cm-header-3 {
 				font-size: 1.1em;
 			}
-			
+
 			.cm-header-4, .cm-header-5, .cm-header-6 {
 				font-size: 1em;
 			}
-			
+
 			.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
 				line-height: 1.5em;
 			}
-			
+
 			.cm-search-marker {
 				background: ${theme.searchMarkerBackgroundColor};
 				color: ${theme.searchMarkerColor} !important;
 			}
-			
+
 			.cm-search-marker-selected {
 				background: ${theme.selectedColor2};
 				color: ${theme.color2} !important;
 			}
-			
+
 			.cm-search-marker-scrollbar {
 				background: ${theme.searchMarkerBackgroundColor};
 				-moz-box-sizing: border-box;
@@ -568,8 +568,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		editorRef.current.refresh();
 	}, [rootSize, styles.editor, props.visiblePanes]);
 
-	const editorReadOnly = props.visiblePanes.indexOf('editor') < 0;
-
 	function renderEditor() {
 
 		return (
@@ -612,7 +610,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				<Toolbar
 					themeId={props.themeId}
 					dispatch={props.dispatch}
-					disabled={editorReadOnly}
 				/>
 				{props.noteToolbar}
 			</div>
