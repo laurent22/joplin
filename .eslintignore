@@ -210,6 +210,7 @@ ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriver.node.js
 ReactNativeClient/lib/services/keychain/KeychainServiceDriverBase.js
 ReactNativeClient/lib/services/KeymapService.js
+ReactNativeClient/lib/services/plugin_service/MenuItemController.js
 ReactNativeClient/lib/services/plugin_service/Plugin.js
 ReactNativeClient/lib/services/plugin_service/PluginService.js
 ReactNativeClient/lib/services/plugin_service/reducer.js

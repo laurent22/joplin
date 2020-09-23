@@ -24,6 +24,6 @@ joplin.plugins.register({
 
 		joplin.views.createToolbarButton('testCommand1', 'noteToolbar');
 		joplin.views.createToolbarButton('testCommand2', 'editorToolbar');
-		// joplin.views.createMenuItem('myTestCommand', 'main');
+		// joplin.views.createMenuItem('myTestCommand', 'tools');
 	},
 });
