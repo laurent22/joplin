@@ -1,5 +1,11 @@
 # Joplin terminal app changelog
 
+## [cli-v1.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.1) - 2020-09-23T11:15:12Z
+
+- Fixed: Fixed crash due to missing spellfix extension
+- Fixed: Fixed link generation when exporting to PDF or HTML (#3780)
+- Fixed: Improved handling of special characters when exporting to Markdown (#3760)
+
 ## [cli-v1.1.8](https://github.com/laurent22/joplin/releases/tag/cli-v1.1.8) - 2020-09-21T12:02:29Z
 
 - Improved: Do not prevent export when one item is still encrypted
