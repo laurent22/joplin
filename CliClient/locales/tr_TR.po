@@ -14,7 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -319,7 +321,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Senkronizasyon hedefini en son sürüme yükseltin"
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -813,6 +815,8 @@ msgstr "İptal et"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Uygulama şimdi kapanacak. İşlemi tamamlamak için lütfen uygulamayı "
+"kapandıktan sonar yeniden çalıştırın."
 
 #: ElectronClient/plugins/GotoAnything.min.js:446
 msgid ""
@@ -1173,13 +1177,13 @@ msgstr "Yeni %s oluşturuluyor..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:344
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Şu ek dosyaları değişiklikler için izlenmekte:"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:347
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "Eğer başka bir not'a geçerseniz ek dosyalar artık izlenmeyecek."
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1290,7 +1294,7 @@ msgstr "Not özellikleri"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
 msgid "An unexpected error occured while importing the keymap!"
-msgstr ""
+msgstr "Tuş dizimini içe aktarırken bir hata oluştu!"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:437
@@ -1305,12 +1309,11 @@ msgstr "İçe aktar"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
-msgstr ""
+msgstr "Komut"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Klavye modu"
+msgstr "Klavye Kısayolu"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
 #: ElectronClient/app.js:690
@@ -1333,9 +1336,8 @@ msgid "Website and documentation"
 msgstr "Web sitesi ve dökümanlar"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Joplin hakkında"
+msgstr "Joplin'i Gizle"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 #: ElectronClient/app.js:703
@@ -1343,9 +1345,8 @@ msgid "Close Window"
 msgstr "Pencereyi Kapat"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Preferences"
-msgstr "Tercihler..."
+msgstr "Tercihler"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
 #: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:572
@@ -1354,13 +1355,15 @@ msgstr "Seçenekler"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Kısayolu girin"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Kısayolu girin ve ardından ENTER tuşuna basın. Veya BACKSPACE tuşuna basarak "
+"kısayolu temizleyin."
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:95
@@ -1374,11 +1377,14 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"Senkronizasyon hedefi'nin Joplin senkronizasyona yeniden başlamadan once "
+"güncellenmesi gerekir. Bu işlem notlarınızıın yoğunluğuna göre birkaç dakika "
+"sürebilir, ve de bu işlem ardından uygulama yeniden başlatılacaktır. Bu "
+"işlemi başlatmak için lütfen linke tıklayın."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Ana anahtarların güncellenmesi lazım"
+msgstr "Yeniden başlat ve güncelle"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
@@ -2138,9 +2144,8 @@ msgid "Templates"
 msgstr "Şablonlar"
 
 #: ElectronClient/app.js:668
-#, fuzzy
 msgid "Export all"
-msgstr "Dışa aktar"
+msgstr "Tümünü dışa aktar"
 
 #: ElectronClient/app.js:683
 #, javascript-format
@@ -2241,7 +2246,7 @@ msgstr "Bilinmeyen ID seviyesi: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2384,15 +2389,15 @@ msgstr "WebDAV şifresi"
 
 #: ReactNativeClient/lib/models/Setting.js:195
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 deposu"
 
 #: ReactNativeClient/lib/models/Setting.js:206
 msgid "AWS key"
-msgstr ""
+msgstr "AWS anahtarı"
 
 #: ReactNativeClient/lib/models/Setting.js:216
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS gizli anahtarı"
 
 #: ReactNativeClient/lib/models/Setting.js:230
 msgid "Attachment download behaviour"
@@ -2850,9 +2855,8 @@ msgid "Web Clipper"
 msgstr "Web Alıntılayıcısı"
 
 #: ReactNativeClient/lib/models/Setting.js:1259
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Klavye modu"
+msgstr "Klavye Kısayolları"
 
 #: ReactNativeClient/lib/models/Setting.js:1264
 msgid ""
@@ -3008,6 +3012,8 @@ msgstr "Bazı öğeler senkronize edilemiyor. Detayları için tıklayın."
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"Senkronizasyon hedefinin güncellenmesi gerekmekte. Bu banner'a tıklayarak "
+"devam edebilirsiniz."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3129,7 +3135,7 @@ msgstr "Yenile"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Senkronizasyon Hedefi Güncellemesi"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3578,32 +3584,37 @@ msgstr "Lütfen notların alınacağı not defterini belirtin."
 #: ReactNativeClient/lib/services/KeymapService.js:124
 #, javascript-format
 msgid "Error loading the keymap from file: %s"
-msgstr ""
+msgstr "%s dosyasından tuş haritası yüklenemedi"
 
 #: ReactNativeClient/lib/services/KeymapService.js:141
 #, javascript-format
 msgid "Error saving the keymap to file: %s"
-msgstr ""
+msgstr "%s dosyasına tuş haritası kaydedilemedi"
 
 #: ReactNativeClient/lib/services/KeymapService.js:204
 #, javascript-format
 msgid "Keymap item %s is missing the required \"command\" property."
 msgstr ""
+"%s tuş haritası, işlemler için gerekli olan \"command\" özelliğini "
+"barındırmıyor."
 
 #: ReactNativeClient/lib/services/KeymapService.js:207
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid command."
-msgstr ""
+msgstr "%s tuş haritası geçersizdir, çünkü %s geçerli bir komut değildir."
 
 #: ReactNativeClient/lib/services/KeymapService.js:210
 #, javascript-format
 msgid "Keymap item %s is missing the required \"accelerator\" property."
 msgstr ""
+"%s tuş haritası, işlemler için gerekli olan \"accelerator\" özelliğini "
+"barındırmıyor."
 
 #: ReactNativeClient/lib/services/KeymapService.js:217
 #, javascript-format
 msgid "Keymap item %s is invalid because %s is not a valid accelerator."
 msgstr ""
+"%s tuş haritası geçersizdir, çünkü %s geçerli bir accelerator değildir."
 
 #: ReactNativeClient/lib/services/KeymapService.js:235
 #, javascript-format
@@ -3611,11 +3622,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Kısayol \"%s\", \"%s\" ve \"%s\" komutları için kullanılıyor. Bu beklenmeyen "
+"sonuçlara sebep verebilir."
 
 #: ReactNativeClient/lib/services/KeymapService.js:260
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Kısayol \"%s\" geçersiz."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -3949,7 +3962,7 @@ msgstr ""
 #~ "Şu anda not defteriniz yok. (+) butonuna tıklayarak bir tane oluşturun."
 
 #~ msgid "Welcome"
-#~ msgstr "Hoşgeldiniz"
+#~ msgstr "Hoş Geldiniz"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Her etiketi virgülle ayırın."
