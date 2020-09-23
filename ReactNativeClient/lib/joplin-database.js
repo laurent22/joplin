@@ -910,9 +910,12 @@ class JoplinDatabase extends Database {
 		this.logger().info('Checking for database schema update...');
 
 		try {
+			// Note that the only extension that can be loaded as of now is spellfix.
+			// If it fails here, it will fail on the fuzzySearchEnabled() check above
+			// too, thus disabling spellfix for the app.
 			await this.loadExtension(this.extensionToLoad);
 		} catch (error) {
-			console.info(error);
+			this.logger().error(error);
 		}
 
 		let versionRow = null;
@@ -923,7 +926,7 @@ class JoplinDatabase extends Database {
 			if (error.message && error.message.indexOf('no such table: version') >= 0) {
 				// Ignore
 			} else {
-				console.info(error);
+				this.logger().info(error);
 			}
 		}
 
