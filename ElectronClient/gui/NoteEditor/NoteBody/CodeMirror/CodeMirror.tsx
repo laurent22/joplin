@@ -416,6 +416,27 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				background-color: inherit !important;
 				border-bottom: 1px dotted #dc322f;
 			}
+
+			/* The default dark theme colors don't have enough contrast with the background */
+			.cm-s-nord span.cm-comment {
+				color: #9aa4b6 !important;
+			}
+
+			.cm-s-dracula span.cm-comment {
+				color: #a1abc9 !important;
+			}
+
+			.cm-s-monokai span.cm-comment {
+				color: #908b74 !important;
+			}
+
+			.cm-s-material-darker span.cm-comment {
+				color: #878787 !important;
+			}
+
+			.cm-s-solarized.cm-s-dark span.cm-comment {
+				color: #8ba1a7 !important;
+			}
 		`));
 
 		return () => {
