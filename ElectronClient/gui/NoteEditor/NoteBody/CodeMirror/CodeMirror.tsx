@@ -359,6 +359,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			/* These must be important to prevent the codemirror defaults from taking over*/
 			.CodeMirror {
 				font-family: monospace;
+				font-size: ${theme.editorFontSize}px;
 				height: 100% !important;
 				width: 100% !important;
 				color: inherit !important;
