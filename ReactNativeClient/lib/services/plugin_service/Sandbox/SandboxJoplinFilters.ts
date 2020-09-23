@@ -1,4 +1,4 @@
-const eventManager = require('lib/eventManager');
+import eventManager from 'lib/eventManager';
 
 export default class SandboxJoplinFilters {
 	on(name: string, callback: Function) {

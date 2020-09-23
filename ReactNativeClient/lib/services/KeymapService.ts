@@ -1,7 +1,7 @@
 import { KeyboardEvent } from 'react';
+import eventManager from 'lib/eventManager';
 
 const BaseService = require('lib/services/BaseService');
-const eventManager = require('lib/eventManager');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 

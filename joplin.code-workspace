@@ -561,7 +561,22 @@
 			"ReactNativeClient/lib/services/interop/types.js": true,
 			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js": true,
 			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js": true,
-			"ReactNativeClient/lib/services/interop/InteropService_Importer_Custom.js": true
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Custom.js": true,
+			"CliClient/tests/support/plugins/json_export/dist/*": true,
+			"CliClient/tests/support/plugins/json_export/**/node_modules/": true,
+			"CliClient/tests/support/plugins/register_command/dist/*": true,
+			"CliClient/tests/support/plugins/register_command/**/node_modules/": true,
+			"ReactNativeClient/lib/sql-extensions/spellfix.so": true,
+			"ReactNativeClient/lib/sql-extensions/spellfix.dylib": true,
+			"CliClient/tests/support/plugins/json_export/global.d.js": true,
+			"CliClient/tests/support/plugins/json_export/src/index.js": true,
+			"CliClient/tests/support/plugins/register_command/global.d.js": true,
+			"CliClient/tests/support/plugins/register_command/src/index.js": true,
+			"ElectronClient/app.js": true,
+			"ElectronClient/gui/Root.js": true,
+			"ElectronClient/gui/ToolbarBase.js": true,
+			"ReactNativeClient/lib/services/plugin_service/MenuItemController.js": true,
+			"ReactNativeClient/lib/services/plugin_service/ToolbarButtonController.js": true
 		},
 		"spellright.language": [
 			"en"

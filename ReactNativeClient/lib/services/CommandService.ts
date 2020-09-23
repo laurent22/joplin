@@ -1,6 +1,6 @@
 import KeymapService from './KeymapService';
+import eventManager from 'lib/eventManager';
 const BaseService = require('lib/services/BaseService');
-const eventManager = require('lib/eventManager');
 
 export interface CommandRuntime {
 	execute(props:any):void

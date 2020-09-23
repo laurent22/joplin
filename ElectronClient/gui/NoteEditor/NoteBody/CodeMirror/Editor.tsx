@@ -23,8 +23,10 @@ import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
-const { shim } = require('lib/shim.js');
 
+import eventManager from 'lib/eventManager';
+
+const { shim } = require('lib/shim.js');
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
@@ -71,8 +73,6 @@ for (let i = 0; i < topLanguages.length; i++) {
 		reg.logger().error('Cannot find CodeMirror mode: ', mode);
 	}
 }
-
-const eventManager = require('lib/eventManager');
 
 export interface EditorProps {
 	value: string,

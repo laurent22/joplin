@@ -190,6 +190,7 @@ ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
+ReactNativeClient/lib/eventManager.js
 ReactNativeClient/lib/hooks/useEffectDebugger.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js

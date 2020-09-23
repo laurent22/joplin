@@ -1,3 +1,4 @@
+import eventManager from 'lib/eventManager';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
@@ -6,7 +7,6 @@ const { themeStyle } = require('lib/theme');
 const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
-const eventManager = require('lib/eventManager');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const NoteListUtils = require('../utils/NoteListUtils');

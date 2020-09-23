@@ -1,5 +1,6 @@
-const eventManager = require('lib/eventManager');
+import eventManager from 'lib/eventManager';
 const Note = require('lib/models/Note');
+
 export default class SandboxJoplinWorkspace {
 	// TODO: unregister events when plugin is closed or disabled
 
