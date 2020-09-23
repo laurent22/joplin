@@ -1,4 +1,4 @@
-const uslug = require('uslug');
+const nodeSlug = require('slug');
 
 function noteHeaders(noteBody:string) {
 	const headers = [];
@@ -17,7 +17,7 @@ function noteHeaders(noteBody:string) {
 let slugs:any = {};
 
 function headerSlug(headerText:string) {
-	const s = uslug(headerText);
+	const s = nodeSlug(headerText);
 	let num = slugs[s] ? slugs[s] : 1;
 	const output = [s];
 	if (num > 1) output.push(num);

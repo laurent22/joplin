@@ -124,7 +124,7 @@ Later you will also need a way to generate the slug for each header. A slug is a
 let slugs = {};
 
 function headerSlug(headerText) {
-	const s = uslug(headerText);
+	const s = nodeSlug(headerText);
 	let num = slugs[s] ? slugs[s] : 1;
 	const output = [s];
 	if (num > 1) output.push(num);

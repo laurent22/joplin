@@ -20,6 +20,6 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "uslug": "^1.0.4"
+    "slug": "^3.3.4"
   }
 }
