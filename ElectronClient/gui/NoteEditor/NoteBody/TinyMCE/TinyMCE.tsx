@@ -8,6 +8,9 @@ import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/
 import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
+import useSandboxRegistration from '../../utils/useSandboxRegistration';
+import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
@@ -82,6 +85,12 @@ function dialogTextArea_keyDown(event:any) {
 	}
 }
 
+let markupToHtml_ = new MarkupToHtml();
+function stripMarkup(markupLanguage:number, markup:string, options:any = null) {
+	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
+	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
+}
+
 // Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
 // taboverride will take care of actually inserting the tab character, while the keydown
 // event listener will override the default behaviour, which is to focus the next field.
@@ -151,6 +160,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	// const theme = themeStyle(props.themeId);
 
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
+
+	useSandboxRegistration(ref);
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
@@ -252,6 +263,22 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				}
 
 				if (commandProcessed) return true;
+
+				const additionalCommands:any = {
+					selectedText: () => {
+						return stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_HTML, editor.selection.getContent());
+					},
+					selectedHtml: () => {
+						return editor.selection.getContent();
+					},
+					replaceSelection: (value:any) => {
+						editor.selection.setContent(value);
+					},
+				};
+
+				if (additionalCommands[cmd.name]) {
+					return additionalCommands[cmd.name](cmd.value);
+				}
 
 				if (!joplinCommandToTinyMceCommands[cmd.name]) {
 					reg.logger().warn('TinyMCE: unsupported Joplin command: ', cmd);
@@ -496,6 +523,18 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
+			const pluginCommandNames:string[] = [];
+
+			const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
+
+			for (const info of infos) {
+				const view = info.view;
+				if (view.location !== 'editorToolbar') continue;
+				pluginCommandNames.push(view.commandName);
+			}
+
+			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -514,7 +553,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
-				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
+				toolbar: `bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime${toolbarPluginButtons}`,
 				localization_function: _,
 				contextmenu: contextMenuItemNames.join(' '),
 				setup: (editor:any) => {
@@ -621,6 +660,16 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 							CommandService.instance().execute('insertDateTime');
 						},
 					});
+
+					for (const pluginCommandName of pluginCommandNames) {
+						editor.ui.registry.addButton(pluginCommandName, {
+							tooltip: CommandService.instance().label(pluginCommandName),
+							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
+							onAction: function() {
+								CommandService.instance().execute(pluginCommandName);
+							},
+						});
+					}
 
 					for (const itemName in contextMenuItems) {
 						const item = contextMenuItems[itemName];

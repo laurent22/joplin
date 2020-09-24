@@ -20,9 +20,9 @@ export default class Sandbox {
 	private consoleWrapper_:any = null;
 	private :string[] = null;
 
-	constructor(plugin: Plugin, store: any, context: SandboxContext) {
+	constructor(implementation:any, plugin: Plugin, store: any, context: SandboxContext) {
 		this.context = context;
-		this.joplin_ = new SandboxJoplin(plugin, store, this.context);
+		this.joplin_ = new SandboxJoplin(implementation.joplin, plugin, store, this.context);
 		this.consoleWrapper_ = this.createConsoleWrapper(plugin.id);
 	}
 

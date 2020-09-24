@@ -10,6 +10,7 @@ import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
 import Editor from './Editor';
+import useSandboxRegistration from '../../utils/useSandboxRegistration';
 
 //  @ts-ignore
 const { bridge } = require('electron').remote.require('./bridge');
@@ -50,6 +51,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	contentKeyHasChangedRef.current = previousContentKey !== props.contentKey;
 
 	const rootSize = useRootSize({ rootRef });
+
+	useSandboxRegistration(ref);
 
 	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
@@ -138,8 +141,25 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					commandProcessed = false;
 				}
 
+				let commandOutput = null;
+
 				if (!commandProcessed) {
+					const selectedText = () => {
+						if (!editorRef.current) return '';
+						const selections = editorRef.current.getSelections();
+						return selections.length ? selections[0] : '';
+					};
+
 					const commands: any = {
+						selectedText: () => {
+							return selectedText();
+						},
+						selectedHtml: () => {
+							return selectedText();
+						},
+						replaceSelection: (value:any) => {
+							return editorRef.current.replaceSelection(value);
+						},
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
@@ -184,14 +204,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					};
 
 					if (commands[cmd.name]) {
-						commands[cmd.name](cmd.value);
+						commandOutput = commands[cmd.name](cmd.value);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
-						return false;
 					}
 				}
 
-				return true;
+				return commandOutput;
 			},
 		};
 	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);

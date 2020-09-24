@@ -63,6 +63,8 @@ CliClient/tests/support/plugins/json_export/global.d.js
 CliClient/tests/support/plugins/json_export/src/index.js
 CliClient/tests/support/plugins/register_command/global.d.js
 CliClient/tests/support/plugins/register_command/src/index.js
+CliClient/tests/support/plugins/selected_text/global.d.js
+CliClient/tests/support/plugins/selected_text/src/index.js
 CliClient/tests/support/plugins/toc/global.d.js
 CliClient/tests/support/plugins/toc/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
@@ -144,6 +146,7 @@ ElectronClient/gui/NoteEditor/utils/useMarkupToHtml.js
 ElectronClient/gui/NoteEditor/utils/useMessageHandler.js
 ElectronClient/gui/NoteEditor/utils/useNoteSearchBar.js
 ElectronClient/gui/NoteEditor/utils/useNoteToolbarButtons.js
+ElectronClient/gui/NoteEditor/utils/useSandboxRegistration.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js
 ElectronClient/gui/NoteList/commands/focusElementNoteList.js
@@ -177,6 +180,7 @@ ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
 ElectronClient/gui/ToolbarBase.js
 ElectronClient/gui/ToolbarButton/styles/index.js
 ElectronClient/gui/ToolbarButton/ToolbarButton.js
+ElectronClient/plugin_service/SandboxImplementation.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js

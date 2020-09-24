@@ -5,6 +5,7 @@ import KeymapService from 'lib/services/KeymapService';
 import PluginService from 'lib/services/plugin_service/PluginService';
 import resourceEditWatcherReducer from 'lib/services/ResourceEditWatcher/reducer';
 import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+import SandboxImplementation from './plugin_service/SandboxImplementation';
 
 require('app-module-path').addPath(__dirname);
 
@@ -1313,7 +1314,7 @@ class Application extends BaseApplication {
 		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
 
 		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(this.store());
+		PluginService.instance().initialize(SandboxImplementation.instance(), this.store());
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));

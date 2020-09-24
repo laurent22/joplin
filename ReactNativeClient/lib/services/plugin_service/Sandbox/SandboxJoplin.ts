@@ -20,10 +20,10 @@ export default class SandboxJoplin {
 	private utils_: SandboxJoplinUtils = null;
 	private interop_: SandboxJoplinInterop = null;
 
-	constructor(plugin: Plugin, store: any, context: SandboxContext) {
+	constructor(implementation:any, plugin: Plugin, store: any, context: SandboxContext) {
 		this.api_ = new SandboxJoplinApi();
 		this.plugins_ = new SandboxJoplinPlugins(context);
-		this.workspace_ = new SandboxJoplinWorkspace(store);
+		this.workspace_ = new SandboxJoplinWorkspace(implementation.workspace, store);
 		this.filters_ = new SandboxJoplinFilters();
 		this.commands_ = new SandboxJoplinCommands();
 		this.views_ = new SandboxJoplinViews(plugin, store);

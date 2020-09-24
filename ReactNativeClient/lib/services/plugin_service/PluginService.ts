@@ -24,10 +24,12 @@ export default class PluginService extends BaseService {
 	}
 
 	private store_:any = null;
+	private sandboxImplementation_:any = null;
 	private plugins_:Plugins = {};
 
-	initialize(store:any) {
+	initialize(sandboxImplementation:any, store:any) {
 		this.store_ = store;
+		this.sandboxImplementation_ = sandboxImplementation;
 	}
 
 	public get plugins():Plugins {
@@ -106,7 +108,7 @@ export default class PluginService extends BaseService {
 			runtime: null,
 		};
 
-		const sandbox = new Sandbox(plugin, this.store_, context);
+		const sandbox = new Sandbox(this.sandboxImplementation_, plugin, this.store_, context);
 		vm.createContext(sandbox);
 
 		try {
