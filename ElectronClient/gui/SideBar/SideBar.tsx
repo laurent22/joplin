@@ -45,6 +45,50 @@ const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
+function ExpandIcon(props:any) {
+	const theme = themeStyle(props.themeId);
+	const style:any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
+	if (!props.isVisible) style.visibility = 'hidden';
+	return <i className={props.isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
+}
+
+function ExpandLink(props:any) {
+	return props.hasChildren ? (
+		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onFolderToggleClick_}>
+			<ExpandIcon themeId={props.themeId} isVisible={true} isExpanded={props.isExpanded}/>
+		</StyledExpandLink>
+	) : (
+		<StyledExpandLink><ExpandIcon themeId={props.themeId} isVisible={false} isExpanded={false}/></StyledExpandLink>
+	);
+}
+
+function FolderItem(props:any) {
+	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
+
+	return (
+		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
+			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
+			<StyledListItemAnchor
+				ref={anchorRef}
+				className="list-item"
+				isConflictFolder={folderId === Folder.conflictFolderId()}
+				href="#"
+				selected={selected}
+				data-id={folderId}
+				data-type={BaseModel.TYPE_FOLDER}
+				onContextMenu={itemContextMenu}
+				data-folder-id={folderId}
+				onClick={() => {
+					folderItem_click(folderId);
+				}}
+				onDoubleClick={onFolderToggleClick_}
+			>
+				{folderTitle} { noteCount && <StyledNoteCount>{noteCount}</StyledNoteCount>}
+			</StyledListItemAnchor>
+		</StyledListItem>
+	);
+}
+
 class SideBarComponent extends React.Component<Props, State> {
 
 	private folderItemsOrder_:any[] = [];
@@ -68,7 +112,17 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
 		this.header_contextMenu = this.header_contextMenu.bind(this);
 		this.onAddFolderButtonClick = this.onAddFolderButtonClick.bind(this);
+		this.folderItem_click = this.folderItem_click.bind(this);
 	}
+
+	// componentDidUpdate(prevProps:any, _prevState:any) {
+	// 	const props = this.props as any;
+	// 	for (const k in this.props) {
+	// 		if (prevProps[k] !== props[k]) {
+	// 			console.info('Props', k, props[k]);
+	// 		}
+	// 	}
+	// }
 
 	onFolderDragStart_(event:any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -257,10 +311,10 @@ class SideBarComponent extends React.Component<Props, State> {
 		menu.popup(bridge().window());
 	}
 
-	folderItem_click(folder:any) {
+	folderItem_click(folderId:string) {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
-			id: folder ? folder.id : null,
+			id: folderId ? folderId : null,
 		});
 	}
 
@@ -321,41 +375,26 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 
 	renderFolderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
-		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
-		const expandIcon = this.renderExpandIcon(isExpanded, hasChildren);
-		const expandLink = hasChildren ? (
-			<StyledExpandLink href="#" data-folder-id={folder.id} onClick={this.onFolderToggleClick_}>
-				{expandIcon}
-			</StyledExpandLink>
-		) : (
-			<StyledExpandLink>{expandIcon}</StyledExpandLink>
-		);
-
 		const anchorRef = this.anchorItemRef('folder', folder.id);
-		const noteCount = folder.note_count ? this.renderNoteCount(folder.note_count) : '';
 
-		return (
-			<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} data-folder-id={folder.id}>
-				{expandLink}
-				<StyledListItemAnchor
-					ref={anchorRef}
-					className="list-item"
-					isConflictFolder={folder.id === Folder.conflictFolderId()}
-					href="#"
-					selected={selected}
-					data-id={folder.id}
-					data-type={BaseModel.TYPE_FOLDER}
-					onContextMenu={(event:any) => this.itemContextMenu(event)}
-					data-folder-id={folder.id}
-					onClick={() => {
-						this.folderItem_click(folder);
-					}}
-					onDoubleClick={this.onFolderToggleClick_}
-				>
-					{Folder.displayTitle(folder)} {noteCount}
-				</StyledListItemAnchor>
-			</StyledListItem>
-		);
+		return <FolderItem
+			key={folder.id}
+			folderId={folder.id}
+			folderTitle={Folder.displayTitle(folder)}
+			themeId={this.props.themeId}
+			depth={depth}
+			selected={selected}
+			isExpanded={this.props.collapsedFolderIds.indexOf(folder.id) < 0}
+			hasChildren={hasChildren}
+			anchorRef={anchorRef}
+			noteCount={folder.note_count}
+			onFolderDragStart_={this.onFolderDragStart_}
+			onFolderDragOver_={this.onFolderDragOver_}
+			onFolderDrop_={this.onFolderDrop_}
+			itemContextMenu={this.itemContextMenu}
+			folderItem_click={this.folderItem_click}
+			onFolderToggleClick_={this.onFolderToggleClick_}
+		/>;
 	}
 
 	renderTag(tag:any, selected:boolean) {

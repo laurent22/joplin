@@ -9,6 +9,8 @@ class Database {
 		this.logger_ = new Logger();
 		this.logExcludedQueryTypes_ = [];
 		this.batchTransactionMutex_ = new Mutex();
+		this.profilingEnabled_ = false;
+		this.queryId_ = 1;
 	}
 
 	setLogExcludedQueryTypes(v) {
@@ -71,10 +73,30 @@ class Database {
 
 		let waitTime = 50;
 		let totalWaitTime = 0;
+		const callStartTime = Date.now();
+		let profilingTimeoutId = null;
 		while (true) {
 			try {
 				this.logQuery(sql, params);
+
+				const queryId = this.queryId_++;
+				if (this.profilingEnabled_) {
+					console.info(`SQL START ${queryId}`, sql, params);
+
+					profilingTimeoutId = setInterval(() => {
+						console.warn(`SQL ${queryId} has been running for ${Date.now() - callStartTime}: ${sql}`);
+					}, 3000);
+				}
+
 				const result = await this.driver()[callName](sql, params);
+
+				if (this.profilingEnabled_) {
+					clearInterval(profilingTimeoutId);
+					profilingTimeoutId = null;
+					const elapsed = Date.now() - callStartTime;
+					if (elapsed > 10) console.info(`SQL END ${queryId}`, elapsed, sql, params);
+				}
+
 				return result; // No exception was thrown
 			} catch (error) {
 				if (error && (error.code == 'SQLITE_IOERR' || error.code == 'SQLITE_BUSY')) {
@@ -89,6 +111,8 @@ class Database {
 				} else {
 					throw this.sqliteErrorToJsError(error, sql, params);
 				}
+			} finally {
+				if (profilingTimeoutId) clearInterval(profilingTimeoutId);
 			}
 		}
 	}
