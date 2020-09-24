@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>joplin.commands | Joplin Plugin Documentation</title>
+	<title>ToolbarButtonLocation | Joplin Plugin Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="sandbox.html" class="title">Joplin Plugin Documentation</a>
+					<a href="../classes/sandbox.html" class="title">Joplin Plugin Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,107 +54,45 @@
         </li>
 -->
 				<li>
-					<a href="sandboxjoplincommands.html">joplin.commands</a>
+					<a href="toolbarbuttonlocation.html">ToolbarButtonLocation</a>
 				</li>
 			</ul>
-			<h1><!-- Class  -->joplin.commands</h1>
+			<h1><!-- Enumeration  -->ToolbarButtonLocation</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<!--
-    <section class="tsd-panel tsd-hierarchy">
-        <h3>Hierarchy</h3>
-        <ul class="tsd-hierarchy">
-        <li>
-                <span class="target">SandboxJoplinCommands</span>
-
-        </li>
-</ul>
-
-    </section>
-    -->
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sandboxjoplincommands.html#execute" class="tsd-kind-icon">execute</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sandboxjoplincommands.html#register" class="tsd-kind-icon">register</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="toolbarbuttonlocation.html#editortoolbar" class="tsd-kind-icon">Editor<wbr>Toolbar</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="toolbarbuttonlocation.html#notetoolbar" class="tsd-kind-icon">Note<wbr>Toolbar</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="execute" class="tsd-anchor"></a>
-					<h3>execute</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p><span class="platform-desktop">desktop</span> Executes the given command.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>args: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-
-
--->
-						</li>
-					</ul>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="editortoolbar" class="tsd-anchor"></a>
+					<h3>Editor<wbr>Toolbar</h3>
+					<div class="tsd-signature tsd-kind-icon">Editor<wbr>Toolbar<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;editorToolbar&quot;</span></div>
+					<aside class="tsd-sources">
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="register" class="tsd-anchor"></a>
-					<h3>register</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">register<span class="tsd-signature-symbol">(</span>declaration<span class="tsd-signature-symbol">: </span><a href="../interfaces/commanddeclaration.html" class="tsd-signature-type">CommandDeclaration</a>, runtime<span class="tsd-signature-symbol">: </span><a href="../interfaces/commandruntime.html" class="tsd-signature-type">CommandRuntime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p><span class="platform-desktop">desktop</span> Registers the given command.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>declaration: <a href="../interfaces/commanddeclaration.html" class="tsd-signature-type">CommandDeclaration</a></h5>
-								</li>
-								<li>
-									<h5>runtime: <a href="../interfaces/commandruntime.html" class="tsd-signature-type">CommandRuntime</a></h5>
-								</li>
-							</ul>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-
-
--->
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="notetoolbar" class="tsd-anchor"></a>
+					<h3>Note<wbr>Toolbar</h3>
+					<div class="tsd-signature tsd-kind-icon">Note<wbr>Toolbar<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;noteToolbar&quot;</span></div>
+					<aside class="tsd-sources">
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -172,14 +110,14 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="sandboxjoplincommands.html" class="tsd-kind-icon">joplin.commands</a>
+					<li class="current tsd-kind-enum">
+						<a href="toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="sandboxjoplincommands.html#execute" class="tsd-kind-icon">execute</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="toolbarbuttonlocation.html#editortoolbar" class="tsd-kind-icon">Editor<wbr>Toolbar</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="sandboxjoplincommands.html#register" class="tsd-kind-icon">register</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="toolbarbuttonlocation.html#notetoolbar" class="tsd-kind-icon">Note<wbr>Toolbar</a>
 							</li>
 						</ul>
 					</li>

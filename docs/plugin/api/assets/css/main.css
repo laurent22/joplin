@@ -2684,4 +2684,16 @@ img {
   display: none;
 }
 
+span.platform-desktop::after {
+  content: "-only";
+}
+
+span.platform-desktop {
+  border-radius: 4px;
+  border: 1px solid #a5afc3;
+  background-color: #d8e5ff;
+  font-size: 0.8em;
+  padding: 2px 4px;
+}
+
 /* /JOPLINCHANGES */
