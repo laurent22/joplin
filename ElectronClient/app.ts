@@ -37,6 +37,7 @@ const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
+// const populateDatabase = require('lib/services/debug/populateDatabase').default;
 const versionInfo = require('lib/versionInfo').default;
 
 const commands = [
@@ -1145,7 +1146,7 @@ class Application extends BaseApplication {
 		try {
 			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
 		} catch (err) {
-			bridge().showErrorMessageBox(err.message);
+			reg.logger().error(err.message);
 		}
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
@@ -1330,6 +1331,8 @@ class Application extends BaseApplication {
 		}
 
 		return null;
+
+		// await populateDatabase(reg.db());
 	}
 
 }

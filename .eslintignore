@@ -194,6 +194,7 @@ ReactNativeClient/lib/eventManager.js
 ReactNativeClient/lib/hooks/useEffectDebugger.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
+ReactNativeClient/lib/hooks/usePropsDebugger.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
@@ -201,6 +202,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/services/CommandService.js
+ReactNativeClient/lib/services/debug/populateDatabase.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js
 ReactNativeClient/lib/services/interop/InteropService_Importer_Base.js
