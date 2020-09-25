@@ -1,55 +1,51 @@
+function allEqual(input:string, char:string) {
+	return input.split('').every(c => c === char);
+}
+
 joplin.plugins.register({
 	onStart: async function() {
 		joplin.commands.register({
-			name: 'testCommand1',
-			label: () => 'My Test Command 1',
+			name: 'prettyMarkdownTable',
+			label: () => 'Reformat the selected Markdown table',
 			iconName: 'fas fa-music',
 		}, {
-			execute: () => {
-				alert('Testing plugin command 1');
+			execute: async () => {
+				const selectedText = await joplin.workspace.execEditorCommand({ name: 'selectedText' });
+				const lines = selectedText.split('\n');
+
+				const cellWidths = [];
+
+				for (let line of lines) {
+					const cells = line.split('|');
+					for (let i = 0; i < cells.length; i++) {
+						const c = cells[i].trim();
+
+						if (i >= cellWidths.length) cellWidths.push(0);
+
+						if (c.length > cellWidths[i]) {
+							cellWidths[i] = c.length;
+						}
+					}
+				}
+
+				const newLines = [];
+
+				for (let line of lines) {
+					const cells = line.split('|');
+					const newCells = [];
+					for (let i = 0; i < cells.length; i++) {
+						const c = cells[i].trim();
+						const newContent = c.padEnd(cellWidths[i], allEqual(c, '-') ? '-' : ' ');
+						newCells.push(newContent);
+					}
+
+					newLines.push(newCells.join(' | '));
+				}
+
+				await joplin.workspace.execEditorCommand({ name: 'replaceSelection', value: newLines.join('\n') });
 			},
 		});
-
-		joplin.commands.register({
-			name: 'testCommand2',
-			label: () => 'My Test Command 2',
-			iconName: 'fas fa-drum',
-		}, {
-			execute: () => {
-				alert('Testing plugin command 2');
-			},
-		});
-
-
-		joplin.commands.register(
-			{
-				name: 'selectedTextInAlert',
-				label: () => 'Displays the currently selected text in an alert box',
-				iconName: 'fas fa-music',
-			},
-			{
-				execute: async () => {
-					const selectedText = await joplin.workspace.execEditorCommand({ name: 'selectedText' });
-					const selectedHtml = await joplin.workspace.execEditorCommand({ name: 'selectedHtml' });
-					alert('Selected text: ' + selectedText + '\n\nSelected HTML: ' + selectedHtml);
-				},
-			}
-		);
-
-		joplin.commands.register(
-			{
-				name: 'replaceSelection',
-				label: () => 'Replace the selection by a string',
-				iconName: 'fas fa-drum',
-			},
-			{
-				execute: async () => {
-					await joplin.workspace.execEditorCommand({ name: 'replaceSelection', value: 'mystring' });
-				},
-			}
-		);
 		
-		joplin.views.createToolbarButton('selectedTextInAlert', 'editorToolbar');
-		joplin.views.createToolbarButton('replaceSelection', 'editorToolbar');
+		joplin.views.createToolbarButton('prettyMarkdownTable', 'editorToolbar');
 	},
 });
