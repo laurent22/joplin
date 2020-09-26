@@ -224,6 +224,25 @@ shim.showMessageBox = (message, options = null) => {
 	throw new Error('Not implemented');
 };
 
+// setTimeout/setInterval are in the shim so that in Electron renderer process
+// we can force the use of the Node timers from the "timers" package. This is to go around
+// a bug that happened while testing plugins (on WSL2 / X-Server, so same as Linux):
+//
+// - The plugin would change some text in the editor
+// - The editor would schedule a save using setTimeout (via AsyncActionQueue)
+// - The timer would never get fired (although setTimeout was definitely called)
+//
+// It's not clear whether it is due to the code path originating in the plugin script or
+// some other bugs. But in any case, the issue was fixed using require('timers').setTimeout
+// instead of the default window.setTimeout. Might be related to this Electron bug:
+// https://github.com/electron/electron/issues/25311
+// (although changing allowRendererProcessReuse solved nothing)
+//
+// These unreliable timers might also be the reason for hard to replicate bugs in file watching
+// or the synchronisation freeze bug on Linux.
+//
+// Having the timers wrapped in that way would also make it easier to debug timing issue and
+// find out what timers have been fired or not.
 shim.setTimeout = (fn, interval) => {
 	throw new Error('Not implemented');
 };

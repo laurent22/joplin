@@ -197,6 +197,23 @@ function shimInit() {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name];
 	};
+
+	shim.setTimeout = (fn, interval) => {
+		return setTimeout(fn, interval);
+	};
+
+	shim.setInterval = (fn, interval) => {
+		return setInterval(fn, interval);
+	};
+
+	shim.clearTimeout = (id) => {
+		return clearTimeout(id);
+	};
+
+	shim.clearInterval = (id) => {
+		return clearInterval(id);
+	};
+
 }
 
 module.exports = { shimInit };
