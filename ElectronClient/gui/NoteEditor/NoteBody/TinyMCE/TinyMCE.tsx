@@ -16,6 +16,7 @@ const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
+const shim = require('lib/shim');
 const Resource = require('lib/models/Resource');
 const { themeStyle } = require('lib/theme');
 const { clipboard } = require('electron');
@@ -164,8 +165,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	useSandboxRegistration(ref);
 
 	const dispatchDidUpdate = (editor:any) => {
-		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
-		dispatchDidUpdateIID_ = setTimeout(() => {
+		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
+		dispatchDidUpdateIID_ = shim.setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
 			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
@@ -971,7 +972,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			if (onChangeHandlerTimeoutRef.current) clearTimeout(onChangeHandlerTimeoutRef.current);
+			if (onChangeHandlerTimeoutRef.current) shim.clearTimeout(onChangeHandlerTimeoutRef.current);
 
 			nextOnChangeEventInfo.current = {
 				changeId: changeId,
@@ -980,7 +981,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				contentOriginalCss: props.contentOriginalCss,
 			};
 
-			onChangeHandlerTimeoutRef.current = setTimeout(async () => {
+			onChangeHandlerTimeoutRef.current = shim.setTimeout(async () => {
 				onChangeHandlerTimeoutRef.current = null;
 				execOnChangeEvent();
 			}, 1000);

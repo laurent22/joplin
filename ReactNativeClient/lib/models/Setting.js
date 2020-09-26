@@ -7,7 +7,7 @@ const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 
 class Setting extends BaseModel {
 	static tableName() {
@@ -1159,7 +1159,7 @@ class Setting extends BaseModel {
 		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().info('Saving settings...');
-		clearTimeout(this.saveTimeoutId_);
+		shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
 		const queries = [];
@@ -1203,9 +1203,9 @@ class Setting extends BaseModel {
 	static scheduleSave() {
 		if (!Setting.autoSaveEnabled) return;
 
-		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
+		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 
-		this.saveTimeoutId_ = setTimeout(async () => {
+		this.saveTimeoutId_ = shim.setTimeout(async () => {
 			try {
 				await this.saveAll();
 			} catch (error) {
@@ -1215,7 +1215,7 @@ class Setting extends BaseModel {
 	}
 
 	static cancelScheduleSave() {
-		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
+		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 	}
 

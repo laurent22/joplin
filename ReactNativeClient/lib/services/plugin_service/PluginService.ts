@@ -3,7 +3,7 @@ import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import Sandbox from './Sandbox/Sandbox';
 import { SandboxContext } from './utils/types';
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { filename } = require('lib/path-utils');
 const BaseService = require('lib/services/BaseService');
 

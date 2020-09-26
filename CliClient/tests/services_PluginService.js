@@ -14,6 +14,10 @@ const testPluginDir = `${__dirname}/../tests/support/plugins`;
 function newPluginService() {
 	const service = new PluginService();
 	service.initialize({
+		joplin: {
+			workspace: {},
+		},
+	}, {
 		dispatch: () => {},
 		getState: () => {},
 	});

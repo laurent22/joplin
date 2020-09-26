@@ -26,7 +26,7 @@ const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
@@ -167,7 +167,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 							type: 'NAV_BACK',
 						});
 
-						setTimeout(() => {
+						shim.setTimeout(() => {
 							this.props.dispatch({
 								type: 'NAV_GO',
 								routeName: 'Note',
@@ -892,16 +892,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	scheduleFocusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
-		this.focusUpdateIID_ = setTimeout(() => {
+		this.focusUpdateIID_ = shim.setTimeout(() => {
 			this.focusUpdateIID_ = null;
 			this.focusUpdate();
 		}, 100);
 	}
 
 	focusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
 		if (!this.state.note) return;
@@ -1003,9 +1003,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						}}
 						onMarkForDownload={this.onMarkForDownload}
 						onLoadEnd={() => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);
@@ -1060,9 +1060,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						},
 						onMarkForDownload: this.onMarkForDownload,
 						onLoadEnd: () => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);

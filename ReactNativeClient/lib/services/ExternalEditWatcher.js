@@ -1,7 +1,7 @@
 const { Logger } = require('lib/logger.js');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');
@@ -249,16 +249,16 @@ class ExternalEditWatcher {
 			try {
 				const subProcess = spawn(path, args, options);
 
-				const iid = setInterval(() => {
+				const iid = shim.setInterval(() => {
 					if (subProcess && subProcess.pid) {
 						/* was_debug */ this.logger().info(`Started editor with PID ${subProcess.pid}`);
-						clearInterval(iid);
+						shim.clearInterval(iid);
 						resolve();
 					}
 				}, 100);
 
 				subProcess.on('error', error => {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					reject(wrapError(error));
 				});
 			} catch (error) {

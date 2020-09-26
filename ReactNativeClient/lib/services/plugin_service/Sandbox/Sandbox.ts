@@ -2,6 +2,7 @@ import { SandboxContext } from '../utils/types';
 import Plugin from '../Plugin';
 import SandboxJoplin from './SandboxJoplin';
 const builtinModules = require('builtin-modules');
+const shim = require('lib/shim');
 
 let requireWhiteList_:string[] = null;
 
@@ -63,13 +64,13 @@ export default class Sandbox {
 	}
 
 	setTimeout(fn: Function, interval: number) {
-		return setTimeout(() => {
+		return shim.setTimeout(() => {
 			fn();
 		}, interval);
 	}
 
 	setInterval(fn: Function, interval: number) {
-		return setInterval(() => {
+		return shim.setInterval(() => {
 			fn();
 		}, interval);
 	}

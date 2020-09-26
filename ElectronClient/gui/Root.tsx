@@ -13,6 +13,7 @@ const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
+const shim = require('lib/shim');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
@@ -40,9 +41,9 @@ let wcsTimeoutId_:any = null;
 
 async function initialize() {
 	bridge().window().on('resize', function() {
-		if (wcsTimeoutId_) clearTimeout(wcsTimeoutId_);
+		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
 
-		wcsTimeoutId_ = setTimeout(() => {
+		wcsTimeoutId_ = shim.setTimeout(() => {
 			store.dispatch({
 				type: 'WINDOW_CONTENT_SIZE_SET',
 				size: bridge().windowContentSize(),

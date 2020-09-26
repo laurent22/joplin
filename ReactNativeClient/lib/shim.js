@@ -224,4 +224,20 @@ shim.showMessageBox = (message, options = null) => {
 	throw new Error('Not implemented');
 };
 
-module.exports = { shim };
+shim.setTimeout = (fn, interval) => {
+	throw new Error('Not implemented');
+};
+
+shim.setInterval = (fn, interval) => {
+	throw new Error('Not implemented');
+};
+
+shim.clearTimeout = (id) => {
+	throw new Error('Not implemented');
+};
+
+shim.clearInterval = (id) => {
+	throw new Error('Not implemented');
+};
+
+module.exports = shim;

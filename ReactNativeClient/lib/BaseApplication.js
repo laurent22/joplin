@@ -14,7 +14,7 @@ const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
@@ -64,7 +64,7 @@ class BaseApplication {
 
 	async destroy() {
 		if (this.scheduleAutoAddResourcesIID_) {
-			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			shim.clearTimeout(this.scheduleAutoAddResourcesIID_);
 			this.scheduleAutoAddResourcesIID_ = null;
 		}
 		await ResourceFetcher.instance().destroy();

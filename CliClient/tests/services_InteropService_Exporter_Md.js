@@ -9,7 +9,7 @@ const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
 const Note = require('lib/models/Note.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 
 const exportDir = `${__dirname}/export`;
 

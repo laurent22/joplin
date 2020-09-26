@@ -5,7 +5,7 @@ const Setting = require('lib/models/Setting');
 const Revision = require('lib/models/Revision');
 const BaseModel = require('lib/BaseModel');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const BaseService = require('lib/services/BaseService');
 const { _ } = require('lib/locale.js');
 const { sprintf } = require('sprintf-js');
@@ -270,7 +270,7 @@ class RevisionService extends BaseService {
 
 		this.logger().info(`RevisionService::runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 
-		this.maintenanceTimer1_ = setTimeout(() => {
+		this.maintenanceTimer1_ = shim.setTimeout(() => {
 			this.maintenance();
 		}, 1000 * 4);
 
@@ -281,7 +281,7 @@ class RevisionService extends BaseService {
 
 	async cancelTimers() {
 		if (this.maintenanceTimer1_) {
-			clearTimeout(this.maintenanceTimer1);
+			shim.clearTimeout(this.maintenanceTimer1);
 			this.maintenanceTimer1_ = null;
 		}
 		if (this.maintenanceTimer2_) {
@@ -290,9 +290,9 @@ class RevisionService extends BaseService {
 		}
 
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!this.maintenanceCalls_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

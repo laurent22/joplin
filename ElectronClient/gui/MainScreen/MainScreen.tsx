@@ -18,7 +18,7 @@ const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { themeStyle } = require('lib/theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -210,7 +210,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		// If a note is being saved, we wait till it is saved and then call
 		// "appCloseReply" again.
 		ipcRenderer.on('appClose', () => {
-			if (this.waitForNotesSavedIID_) clearInterval(this.waitForNotesSavedIID_);
+			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
 
 			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
@@ -218,9 +218,9 @@ class MainScreenComponent extends React.Component<any, any> {
 			});
 
 			if (this.props.hasNotesBeingSaved) {
-				this.waitForNotesSavedIID_ = setInterval(() => {
+				this.waitForNotesSavedIID_ = shim.setInterval(() => {
 					if (!this.props.hasNotesBeingSaved) {
-						clearInterval(this.waitForNotesSavedIID_);
+						shim.clearInterval(this.waitForNotesSavedIID_);
 						this.waitForNotesSavedIID_ = null;
 						ipcRenderer.send('asynchronous-message', 'appCloseReply', {
 							canClose: true,

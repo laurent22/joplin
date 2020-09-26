@@ -1,5 +1,5 @@
 const { dialog } = require('electron');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const fetch = require('node-fetch');

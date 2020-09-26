@@ -26,7 +26,7 @@ import 'codemirror/mode/meta';
 
 import eventManager from 'lib/eventManager';
 
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html

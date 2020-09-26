@@ -13,6 +13,7 @@ const NoteListUtils = require('../utils/NoteListUtils');
 const NoteListItem = require('../NoteListItem').default;
 const CommandService = require('lib/services/CommandService.js').default;
 const styled = require('styled-components').default;
+const shim = require('lib/shim');
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -404,11 +405,11 @@ class NoteListComponent extends React.Component {
 		// - We need to use an interval because when leaving the arrow pressed, the rendering
 		//   of items might lag behind and so the ref is not yet available at this point.
 		if (!this.itemAnchorRef(noteId)) {
-			if (this.focusItemIID_) clearInterval(this.focusItemIID_);
-			this.focusItemIID_ = setInterval(() => {
+			if (this.focusItemIID_) shim.clearInterval(this.focusItemIID_);
+			this.focusItemIID_ = shim.setInterval(() => {
 				if (this.itemAnchorRef(noteId)) {
 					this.itemAnchorRef(noteId).focus();
-					clearInterval(this.focusItemIID_);
+					shim.clearInterval(this.focusItemIID_);
 					this.focusItemIID_ = null;
 				}
 			}, 10);
@@ -435,7 +436,7 @@ class NoteListComponent extends React.Component {
 
 	componentWillUnmount() {
 		if (this.focusItemIID_) {
-			clearInterval(this.focusItemIID_);
+			shim.clearInterval(this.focusItemIID_);
 			this.focusItemIID_ = null;
 		}
 

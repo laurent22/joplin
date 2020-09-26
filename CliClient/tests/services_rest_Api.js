@@ -9,7 +9,7 @@ const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

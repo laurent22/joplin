@@ -1,4 +1,4 @@
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { GeolocationReact } = require('lib/geolocation-react.js');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFetchBlob = require('rn-fetch-blob').default;

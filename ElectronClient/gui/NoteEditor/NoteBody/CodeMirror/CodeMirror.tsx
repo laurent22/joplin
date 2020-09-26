@@ -27,6 +27,7 @@ const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 const { themeStyle } = require('lib/theme');
+const shim = require('lib/shim');
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };
@@ -490,7 +491,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 		const interval = contentKeyHasChangedRef.current ? 0 : 500;
 
-		const timeoutId = setTimeout(async () => {
+		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
 
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
@@ -505,7 +506,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 		return () => {
 			cancelled = true;
-			clearTimeout(timeoutId);
+			shim.clearTimeout(timeoutId);
 		};
 	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 

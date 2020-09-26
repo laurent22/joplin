@@ -1,5 +1,5 @@
 const { BrowserWindow, Tray, screen } = require('electron');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const url = require('url');
 const path = require('path');
 const { dirname } = require('lib/path-utils');

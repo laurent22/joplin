@@ -27,7 +27,7 @@ const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const { shimInit } = require('lib/shim-init-node.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { uuid } = require('lib/uuid.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('lib/SyncTargetMemory.js');
@@ -147,6 +147,7 @@ BaseItem.loadClass('Revision', Revision);
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', tempDir);
+Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;
 
@@ -162,7 +163,7 @@ function isNetworkSyncTarget() {
 
 function sleep(n) {
 	return new Promise((resolve, reject) => {
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			resolve();
 		}, Math.round(n * 1000));
 	});
@@ -170,7 +171,7 @@ function sleep(n) {
 
 function msleep(ms) {
 	return new Promise((resolve, reject) => {
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			resolve();
 		}, ms);
 	});
@@ -677,7 +678,7 @@ class TestApp extends BaseApplication {
 
 	async wait() {
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!this.middlewareCalls_.length) {
 					clearInterval(iid);
 					resolve();

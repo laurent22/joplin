@@ -4,7 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { setupDatabase, synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');

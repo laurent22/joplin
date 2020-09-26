@@ -8,7 +8,7 @@ const { friendlySafeFilename } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
 const md5 = require('md5');
 const url = require('url');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 
 class InteropServiceHelper {
 
@@ -60,7 +60,7 @@ class InteropServiceHelper {
 					// all fonts are loaded, which will break for example Katex rendering.
 					// So we need to add an additional timer to make sure fonts are loaded
 					// as it doesn't seem there's any easy way to figure that out.
-					setTimeout(async () => {
+					shim.setTimeout(async () => {
 						if (target === 'pdf') {
 							try {
 								const data = await win.webContents.printToPDF(options);

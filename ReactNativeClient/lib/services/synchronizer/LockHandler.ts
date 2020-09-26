@@ -3,6 +3,7 @@ import { Dirnames } from './utils/types';
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
 const { fileExtension, filename } = require('lib/path-utils.js');
+const shim = require('lib/shim');
 
 export enum LockType {
 	None = '',
@@ -277,7 +278,7 @@ export default class LockHandler {
 			inProgress: false,
 		};
 
-		this.refreshTimers_[handle].id = setInterval(async () => {
+		this.refreshTimers_[handle].id = shim.setInterval(async () => {
 			if (this.refreshTimers_[handle].inProgress) return;
 
 			const defer = () => {
@@ -310,7 +311,7 @@ export default class LockHandler {
 
 			if (error) {
 				if (this.refreshTimers_[handle]) {
-					clearInterval(this.refreshTimers_[handle].id);
+					shim.clearInterval(this.refreshTimers_[handle].id);
 					delete this.refreshTimers_[handle];
 				}
 				errorHandler(error);
@@ -331,7 +332,7 @@ export default class LockHandler {
 			return;
 		}
 
-		clearInterval(this.refreshTimers_[handle].id);
+		shim.clearInterval(this.refreshTimers_[handle].id);
 		delete this.refreshTimers_[handle];
 	}
 

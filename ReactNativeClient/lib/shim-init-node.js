@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { GeolocationNode } = require('lib/geolocation-node.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
@@ -12,6 +12,7 @@ const { _ } = require('lib/locale.js');
 const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
+const timers = require('timers');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -452,6 +453,22 @@ function shimInit() {
 
 	shim.pathRelativeToCwd = (path) => {
 		return toRelative(process.cwd(), path);
+	};
+
+	shim.setTimeout = (fn, interval) => {
+		return timers.setTimeout(fn, interval);
+	};
+
+	shim.setInterval = (fn, interval) => {
+		return timers.setInterval(fn, interval);
+	};
+
+	shim.clearTimeout = (id) => {
+		return timers.clearTimeout(id);
+	};
+
+	shim.clearInterval = (id) => {
+		return timers.clearInterval(id);
 	};
 
 }

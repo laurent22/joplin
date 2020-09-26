@@ -4,6 +4,7 @@ const Note = require('lib/models/Note.js');
 const checkPermissions = require('lib/checkPermissions.js').default;
 const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
+const shim = require('lib/shim');
 
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
@@ -31,7 +32,7 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 		parent_id: folderId,
 	}, { provisional: true });
 
-	setTimeout(() => {
+	shim.setTimeout(() => {
 		dispatch({
 			type: 'NAV_GO',
 			routeName: 'Note',

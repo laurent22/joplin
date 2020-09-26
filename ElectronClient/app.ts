@@ -12,7 +12,7 @@ require('app-module-path').addPath(__dirname);
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const Setting = require('lib/models/Setting.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
 const { _, setLocale } = require('lib/locale.js');
@@ -396,9 +396,9 @@ class Application extends BaseApplication {
 	}
 
 	scheduleRefreshMenu() {
-		if (this.scheduleRefreshMenuIID_) clearTimeout(this.scheduleRefreshMenuIID_);
+		if (this.scheduleRefreshMenuIID_) shim.clearTimeout(this.scheduleRefreshMenuIID_);
 
-		this.scheduleRefreshMenuIID_ = setTimeout(() => {
+		this.scheduleRefreshMenuIID_ = shim.setTimeout(() => {
 			this.scheduleRefreshMenuIID_ = null;
 			this.refreshMenu();
 		}, 500);
@@ -1242,14 +1242,14 @@ class Application extends BaseApplication {
 			};
 
 			// Initial check on startup
-			setTimeout(() => { runAutoUpdateCheck(); }, 5000);
+			shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
 			// Then every x hours
-			setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 		}
 
 		this.updateTray();
 
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 

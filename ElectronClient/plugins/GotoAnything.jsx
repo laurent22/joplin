@@ -15,6 +15,7 @@ const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const KeymapService = require('lib/services/KeymapService.js').default;
+const shim = require('lib/shim');
 
 class GotoAnything {
 
@@ -128,7 +129,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
@@ -168,9 +169,9 @@ class Dialog extends React.PureComponent {
 	}
 
 	scheduleListUpdate() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 
-		this.listUpdateIID_ = setTimeout(async () => {
+		this.listUpdateIID_ = shim.setTimeout(async () => {
 			await this.updateList();
 			this.listUpdateIID_ = null;
 		}, 100);

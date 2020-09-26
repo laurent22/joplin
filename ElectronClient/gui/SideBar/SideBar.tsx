@@ -12,6 +12,7 @@ const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
+const shim = require('lib/shim');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -193,7 +194,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 	clearForceUpdateDuringSync() {
 		if (this.forceUpdateDuringSyncIID_) {
-			clearInterval(this.forceUpdateDuringSyncIID_);
+			shim.clearInterval(this.forceUpdateDuringSyncIID_);
 			this.forceUpdateDuringSyncIID_ = null;
 		}
 	}

@@ -11,7 +11,7 @@ const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 // const { filename, fileExtension } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 const TaskQueue = require('lib/TaskQueue');
@@ -186,9 +186,9 @@ class Synchronizer {
 		this.cancelling_ = true;
 
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (this.state() == 'idle') {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

@@ -13,6 +13,7 @@ const Alarm = require('lib/models/Alarm');
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('lib/shim-init-react.js');
+const shim = require('lib/shim');
 const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
 const { Logger } = require('lib/logger.js');
@@ -626,7 +627,7 @@ class AppComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		setTimeout(async () => {
+		shim.setTimeout(async () => {
 			// We run initialization code with a small delay to give time
 			// to the view to render "please wait" messages.
 

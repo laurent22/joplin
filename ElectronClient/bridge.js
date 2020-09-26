@@ -1,5 +1,5 @@
 const { _, setLocale } = require('lib/locale.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
 

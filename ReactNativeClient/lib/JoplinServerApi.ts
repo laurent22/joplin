@@ -1,5 +1,5 @@
 const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const JoplinError = require('lib/JoplinError');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');

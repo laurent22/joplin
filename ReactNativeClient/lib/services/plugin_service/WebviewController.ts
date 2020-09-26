@@ -1,5 +1,5 @@
 import ViewController from './ViewController';
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { toSystemSlashes } = require('lib/path-utils');
 
 export default class WebviewController extends ViewController {

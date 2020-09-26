@@ -9,6 +9,7 @@ const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
 const filterParser = require('./filterParser').default;
 const queryBuilder = require('./queryBuilder').default;
+const shim = require('lib/shim');
 
 class SearchEngine {
 
@@ -95,7 +96,7 @@ class SearchEngine {
 	scheduleSyncTables() {
 		if (this.scheduleSyncTablesIID_) return;
 
-		this.scheduleSyncTablesIID_ = setTimeout(async () => {
+		this.scheduleSyncTablesIID_ = shim.setTimeout(async () => {
 			try {
 				await this.syncTables();
 			} catch (error) {
@@ -663,15 +664,15 @@ class SearchEngine {
 
 	async destroy() {
 		if (this.scheduleSyncTablesIID_) {
-			clearTimeout(this.scheduleSyncTablesIID_);
+			shim.clearTimeout(this.scheduleSyncTablesIID_);
 			this.scheduleSyncTablesIID_ = null;
 		}
 		SearchEngine.instance_ = null;
 
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!this.syncCalls_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					this.instance_ = null;
 					resolve();
 				}

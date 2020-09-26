@@ -1,6 +1,7 @@
 import KeymapService from './KeymapService';
 import eventManager from 'lib/eventManager';
 const BaseService = require('lib/services/BaseService');
+const shim = require('lib/shim');
 
 export interface CommandRuntime {
 	execute(props:any):void
@@ -130,9 +131,9 @@ export default class CommandService extends BaseService {
 	}
 
 	scheduleMapStateToProps(state:any) {
-		if (this.mapStateToPropsIID_) clearTimeout(this.mapStateToPropsIID_);
+		if (this.mapStateToPropsIID_) shim.clearTimeout(this.mapStateToPropsIID_);
 
-		this.mapStateToPropsIID_ = setTimeout(() => {
+		this.mapStateToPropsIID_ = shim.setTimeout(() => {
 			this.mapStateToProps(state);
 		}, 50);
 	}
@@ -259,7 +260,7 @@ export default class CommandService extends BaseService {
 	}
 
 	scheduleExecute(commandName:string, args:any = null) {
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
 	}

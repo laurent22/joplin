@@ -4,6 +4,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const { reg } = require('lib/registry.js');
+const shim = require('lib/shim');
 
 const shared = {};
 
@@ -65,13 +66,13 @@ shared.componentDidMount = async function(comp) {
 	shared.refreshStats(comp);
 
 	if (shared.refreshStatsIID_) {
-		clearInterval(shared.refreshStatsIID_);
+		shim.clearInterval(shared.refreshStatsIID_);
 		shared.refreshStatsIID_ = null;
 	}
 
-	shared.refreshStatsIID_ = setInterval(() => {
+	shared.refreshStatsIID_ = shim.setInterval(() => {
 		if (!comp.isMounted_) {
-			clearInterval(shared.refreshStatsIID_);
+			shim.clearInterval(shared.refreshStatsIID_);
 			shared.refreshStatsIID_ = null;
 			return;
 		}
@@ -87,7 +88,7 @@ shared.componentDidUpdate = async function(comp, prevProps = null) {
 
 shared.componentWillUnmount = function() {
 	if (shared.refreshStatsIID_) {
-		clearInterval(shared.refreshStatsIID_);
+		shim.clearInterval(shared.refreshStatsIID_);
 		shared.refreshStatsIID_ = null;
 	}
 };

@@ -1,6 +1,6 @@
 const Resource = require('lib/models/Resource');
 const Setting = require('lib/models/Setting');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const { reg } = require('lib/registry.js');
 const { fileExtension } = require('lib/path-utils.js');
 

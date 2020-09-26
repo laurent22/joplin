@@ -16,7 +16,7 @@ const ResourceService = require('lib/services/ResourceService.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 
 process.on('unhandledRejection', (reason, p) => {

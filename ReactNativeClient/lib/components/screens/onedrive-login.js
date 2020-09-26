@@ -10,6 +10,7 @@ const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const parseUri = require('lib/parseUri');
 const { themeStyle } = require('lib/components/global-style.js');
+const shim = require('lib/shim');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -91,7 +92,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		});
 		this.forceUpdate();
 
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			this.setState({
 				webviewUrl: this.startUrl(),
 			});

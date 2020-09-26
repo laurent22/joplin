@@ -1,5 +1,6 @@
 const notifier = require('node-notifier');
 const { bridge } = require('electron').remote.require('./bridge');
+const shim = require('lib/shim');
 
 class AlarmServiceDriverNode {
 	constructor(options) {
@@ -28,7 +29,7 @@ class AlarmServiceDriverNode {
 
 	async clearNotification(id) {
 		if (!this.notificationIsSet(id)) return;
-		clearTimeout(this.notifications_[id].timeoutId);
+		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];
 	}
 
@@ -43,7 +44,7 @@ class AlarmServiceDriverNode {
 
 		this.logger().info(`AlarmServiceDriverNode::scheduleNotification: Notification ${notification.id} with interval: ${interval}ms`);
 
-		if (this.notifications_[notification.id]) clearTimeout(this.notifications_[notification.id].timeoutId);
+		if (this.notifications_[notification.id]) shim.clearTimeout(this.notifications_[notification.id].timeoutId);
 
 		let timeoutId = null;
 
@@ -56,7 +57,7 @@ class AlarmServiceDriverNode {
 		if (interval >= maxInterval)  {
 			this.logger().info(`AlarmServiceDriverNode::scheduleNotification: Notification interval is greater than ${maxInterval}ms - will reschedule in ${maxInterval}ms`);
 
-			timeoutId = setTimeout(() => {
+			timeoutId = shim.setTimeout(() => {
 				if (!this.notifications_[notification.id]) {
 					this.logger().info(`AlarmServiceDriverNode::scheduleNotification: Notification ${notification.id} has been deleted - not rescheduling it`);
 					return;
@@ -64,7 +65,7 @@ class AlarmServiceDriverNode {
 				this.scheduleNotification(this.notifications_[notification.id]);
 			}, maxInterval);
 		} else {
-			timeoutId = setTimeout(() => {
+			timeoutId = shim.setTimeout(() => {
 				const o = {
 					appID: this.appName_,
 					title: notification.title,

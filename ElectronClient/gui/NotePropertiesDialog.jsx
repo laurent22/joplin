@@ -7,6 +7,7 @@ const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
 const { bridge } = require('electron').remote.require('./bridge');
+const shim = require('lib/shim');
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {
@@ -176,7 +177,7 @@ class NotePropertiesDialog extends React.Component {
 			editedValue: initialValue,
 		});
 
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			if (this.refs.editField.openCalendar) {
 				this.refs.editField.openCalendar();
 			} else {

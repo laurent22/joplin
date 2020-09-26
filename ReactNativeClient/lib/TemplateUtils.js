@@ -1,4 +1,4 @@
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim');
 const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');
 

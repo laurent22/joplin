@@ -87,7 +87,7 @@ function getIds(items, indexes = null) {
 
 let insideBeforeEach = false;
 
-describe('Reducer', function() {
+describe('reducer', function() {
 
 	beforeEach(async (done) => {
 		insideBeforeEach = true;

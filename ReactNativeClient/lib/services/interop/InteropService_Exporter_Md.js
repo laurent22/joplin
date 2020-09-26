@@ -3,7 +3,7 @@ const { basename, dirname, friendlySafeFilename } = require('lib/path-utils.js')
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim');
 const markdownUtils = require('lib/markdownUtils');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
