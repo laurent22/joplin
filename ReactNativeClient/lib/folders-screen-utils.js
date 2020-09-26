@@ -1,5 +1,5 @@
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
 
 class FoldersScreenUtils {

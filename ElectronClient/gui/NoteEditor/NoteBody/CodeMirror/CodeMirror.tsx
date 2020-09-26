@@ -17,7 +17,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 //  @ts-ignore
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const NoteTextViewer = require('../../../NoteTextViewer.min');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;

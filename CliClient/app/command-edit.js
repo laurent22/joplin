@@ -5,7 +5,7 @@ const { uuid } = require('lib/uuid.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const BaseModel = require('lib/BaseModel.js');
 
 class Command extends BaseCommand {

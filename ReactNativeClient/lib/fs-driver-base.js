@@ -1,6 +1,6 @@
 const { filename, fileExtension } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const md5 = require('md5');
 
 class FsDriverBase {

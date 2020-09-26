@@ -1,7 +1,7 @@
 const EncryptionService = require('lib/services/EncryptionService');
 const { _ } = require('lib/locale.js');
 const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey.js');
 const { reg } = require('lib/registry.js');
 const shim = require('lib/shim');

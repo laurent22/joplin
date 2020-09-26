@@ -12,7 +12,7 @@ import { Size } from './ResizableLayout/ResizableLayout';
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
 const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');

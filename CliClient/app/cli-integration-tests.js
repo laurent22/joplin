@@ -8,7 +8,7 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { sprintf } = require('sprintf-js');
 const exec = require('child_process').exec;
 

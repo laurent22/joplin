@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { View, Text, Button, FlatList } = require('react-native');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { ReportService } = require('lib/services/report.js');

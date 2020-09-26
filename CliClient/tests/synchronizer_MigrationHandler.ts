@@ -11,7 +11,7 @@ require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
 const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow

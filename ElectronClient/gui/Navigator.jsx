@@ -1,6 +1,6 @@
 const React = require('react');
 const Component = React.Component;
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');
 

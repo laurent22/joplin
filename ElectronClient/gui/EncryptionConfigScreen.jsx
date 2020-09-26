@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const EncryptionService = require('lib/services/EncryptionService');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');

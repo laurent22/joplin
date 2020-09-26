@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { reg } = require('lib/registry');
 
 export interface SyncTargetUpgradeResult {

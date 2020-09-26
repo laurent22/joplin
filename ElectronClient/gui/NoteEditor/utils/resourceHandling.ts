@@ -1,4 +1,4 @@
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');

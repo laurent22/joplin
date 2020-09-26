@@ -5,7 +5,7 @@ require('app-module-path').addPath(__dirname);
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const ItemChange = require('lib/models/ItemChange.js');

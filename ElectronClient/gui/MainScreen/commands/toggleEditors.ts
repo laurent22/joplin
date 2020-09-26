@@ -1,7 +1,7 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
 const { _ } = require('lib/locale');
 const { stateUtils } = require('lib/reducer.js');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleEditors',

@@ -3,7 +3,7 @@
 
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { Synchronizer } = require('lib/synchronizer.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
 const JoplinServerApi = require('lib/JoplinServerApi.js').default;

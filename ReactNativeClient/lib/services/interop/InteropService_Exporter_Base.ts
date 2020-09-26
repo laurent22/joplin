@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
 
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 
 export default class InteropService_Exporter_Base {
 	private context_:any = {};

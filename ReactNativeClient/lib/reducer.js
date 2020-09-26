@@ -2,7 +2,7 @@
 
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 

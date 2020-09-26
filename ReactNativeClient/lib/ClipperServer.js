@@ -1,5 +1,5 @@
 const urlParser = require('url');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { Logger } = require('lib/logger.js');
 const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');

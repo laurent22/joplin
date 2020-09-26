@@ -2,7 +2,7 @@
 
 import { ImportExportResult } from './types';
 
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 
 export default class InteropService_Importer_Base {
 	private metadata_:any = null;

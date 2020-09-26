@@ -9,7 +9,54 @@ const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const shim = require('lib/shim');
 
+interface KeysOptions {
+	secureOnly?: boolean,
+}
+
+// This is the definition of a setting item
+interface MetadataItem {
+	value: any,
+	type: number,
+	public: boolean,
+	
+	subType?: string,
+	key?: string,
+	isEnum?: boolean,
+	section?: string,
+	label?():string,
+	description?(appType:string):string,
+	options?():any,
+	appTypes?:string[],
+	show?(settings:any):boolean,
+	filter?(value:any):any,
+	secure?: boolean,
+	advanced?: boolean,
+	minimum?: number,
+	maximum?: number,
+	step?: number,
+	onClick?():void,
+	unitLabel?(value:any):string,
+}
+
+interface Metadata {
+	[key:string]: MetadataItem,
+}
+
+// This is where the actual setting values are stored.
+// They are saved to database at regular intervals.
+interface CacheItem {
+	key: string,
+	value: any,
+}
+
 class Setting extends BaseModel {
+
+	private static metadata_:Metadata = null;
+	private static keychainService_:any = null;
+	private static keys_:string[] = null;
+	private static cache_:CacheItem[] = [];
+	private static saveTimeoutId_:any = null;
+
 	static tableName() {
 		return 'settings';
 	}
@@ -23,11 +70,11 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
-	static setKeychainService(s) {
+	static setKeychainService(s:any) {
 		this.keychainService_ = s;
 	}
 
-	static metadata() {
+	static metadata():Metadata {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
@@ -47,7 +94,7 @@ class Setting extends BaseModel {
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		const themeOptions = () => {
-			const output = {};
+			const output:any = {};
 			output[Setting.THEME_LIGHT] = _('Light');
 			output[Setting.THEME_DARK] = _('Dark');
 			output[Setting.THEME_DRACULA] = _('Dracula');
@@ -78,7 +125,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'sync',
 				label: () => _('Synchronisation target'),
-				description: appType => {
+				description: (appType:string) => {
 					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
@@ -96,14 +143,14 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					try {
 						return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem');
 					} catch (error) {
 						return false;
 					}
 				},
-				filter: value => {
+				filter: (value:any) => {
 					return value ? rtrimSlashes(value) : '';
 				},
 				public: true,
@@ -115,7 +162,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -126,7 +173,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -136,7 +183,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
@@ -148,7 +195,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -159,7 +206,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -169,7 +216,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
@@ -181,7 +228,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					try {
 						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
 					} catch (error) {
@@ -199,7 +246,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
@@ -209,7 +256,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
@@ -276,7 +323,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Date format'),
 				options: () => {
-					const options = {};
+					const options:any = {};
 					const now = new Date('2017-01-30T12:00:00').getTime();
 					options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
 					options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
@@ -295,7 +342,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Time format'),
 				options: () => {
-					const options = {};
+					const options:any = {};
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 					options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
@@ -382,7 +429,7 @@ class Setting extends BaseModel {
 				options: () => {
 					const Note = require('lib/models/Note');
 					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
-					const options = {};
+					const options:any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
 					}
@@ -408,7 +455,7 @@ class Setting extends BaseModel {
 				options: () => {
 					const Folder = require('lib/models/Folder');
 					const folderSortFields = ['title', 'last_note_user_updated_time'];
-					const options = {};
+					const options:any = {};
 					for (let i = 0; i < folderSortFields.length; i++) {
 						options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));
 					}
@@ -575,6 +622,7 @@ class Setting extends BaseModel {
 			// generated from this list of settings, there wasn't a really elegant way
 			// to do that directly in the React markup.
 			'style.customCss.renderedMarkdown': {
+				value: null,
 				onClick: () => {
 					const dir = Setting.value('profileDir');
 					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
@@ -591,6 +639,7 @@ class Setting extends BaseModel {
 				advanced: true,
 			},
 			'style.customCss.joplinApp': {
+				value: null,
 				onClick: () => {
 					const dir = Setting.value('profileDir');
 					const filename = Setting.custom_css_files.JOPLIN_APP;
@@ -662,7 +711,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				label: () => _('Keyboard Mode'),
 				options: () => {
-					const output = {};
+					const output:any = {};
 					output[''] = _('Default');
 					output['emacs'] = _('Emacs');
 					output['vim'] = _('Vim');
@@ -675,7 +724,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				advanced: true,
-				show: settings => {
+				show: (settings:any) => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
@@ -688,7 +737,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_BOOL,
 				advanced: true,
 				section: 'sync',
-				show: settings => {
+				show: (settings:any) => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
@@ -792,7 +841,7 @@ class Setting extends BaseModel {
 		return this.metadata_;
 	}
 
-	static settingMetadata(key) {
+	static settingMetadata(key:string):MetadataItem {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
 		const output = Object.assign({}, metadata[key]);
@@ -800,21 +849,21 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static keyExists(key) {
+	static keyExists(key:string) {
 		return key in this.metadata();
 	}
 
-	static keyDescription(key, appType = null) {
+	static keyDescription(key:string, appType:string = null) {
 		const md = this.settingMetadata(key);
 		if (!md.description) return null;
 		return md.description(appType);
 	}
 
-	static isSecureKey(key) {
+	static isSecureKey(key:string) {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	static keys(publicOnly = false, appType = null, options = null) {
+	static keys(publicOnly:boolean = false, appType:string = null, options:KeysOptions = null) {
 		options = Object.assign({}, {
 			secureOnly: false,
 		}, options);
@@ -843,22 +892,22 @@ class Setting extends BaseModel {
 		}
 	}
 
-	static isPublic(key) {
+	static isPublic(key:string) {
 		return this.keys(true).indexOf(key) >= 0;
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
-	static loadOne(key) {
+	static loadOne(key:string) {
 		return this.modelSelectOne('SELECT * FROM settings WHERE key = ?', [key]);
 	}
 
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
-		return this.modelSelectAll('SELECT * FROM settings').then(async (rows) => {
+		return this.modelSelectAll('SELECT * FROM settings').then(async (rows:any[]) => {
 			this.cache_ = [];
 
-			const pushItemsToCache = (items) => {
+			const pushItemsToCache = (items:any[]) => {
 				for (let i = 0; i < items.length; i++) {
 					const c = items[i];
 
@@ -876,7 +925,7 @@ class Setting extends BaseModel {
 			// saving to database shouldn't). When the keychain works, the secure keys
 			// are deleted from the database and transfered to the keychain in saveAll().
 
-			const rowKeys = rows.map(r => r.key);
+			const rowKeys = rows.map((r:any) => r.key);
 			const secureKeys = this.keys(false, null, { secureOnly: true });
 			const secureItems = [];
 			for (const key of secureKeys) {
@@ -900,7 +949,7 @@ class Setting extends BaseModel {
 
 	static toPlainObject() {
 		const keys = this.keys();
-		const keyToValues = {};
+		const keyToValues:any = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
@@ -914,12 +963,12 @@ class Setting extends BaseModel {
 		});
 	}
 
-	static setConstant(key, value) {
+	static setConstant(key:string, value:any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
 		this.constants_[key] = value;
 	}
 
-	static setValue(key, value) {
+	static setValue(key:string, value:any) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
@@ -971,28 +1020,28 @@ class Setting extends BaseModel {
 		this.scheduleSave();
 	}
 
-	static incValue(key, inc) {
+	static incValue(key:string, inc:any) {
 		return this.setValue(key, this.value(key) + inc);
 	}
 
-	static toggle(key) {
+	static toggle(key:string) {
 		return this.setValue(key, !this.value(key));
 	}
 
-	static objectValue(settingKey, objectKey, defaultValue = null) {
+	static objectValue(settingKey:string, objectKey:string, defaultValue:any = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
-	static setObjectValue(settingKey, objectKey, value) {
+	static setObjectValue(settingKey:string, objectKey:string, value:any) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
 		this.setValue(settingKey, o);
 	}
 
-	static deleteObjectValue(settingKey, objectKey) {
+	static deleteObjectValue(settingKey:string, objectKey:string) {
 		const o = this.value(settingKey);
 		if (typeof o !== 'object') return;
 		delete o[objectKey];
@@ -1006,7 +1055,7 @@ class Setting extends BaseModel {
 		}
 	}
 
-	static valueToString(key, value) {
+	static valueToString(key:string, value:any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
 		if (md.type == Setting.TYPE_INT) return value.toFixed(0);
@@ -1018,12 +1067,12 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	static filterValue(key, value) {
+	static filterValue(key:string, value:any) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
-	static formatValue(key, value) {
+	static formatValue(key:string, value:any) {
 		const md = this.settingMetadata(key);
 
 		if (md.type == Setting.TYPE_INT) return !value ? 0 : Math.floor(Number(value));
@@ -1060,12 +1109,12 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	static value(key) {
+	static value(key:string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// and object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
-		function copyIfNeeded(value) {
+		function copyIfNeeded(value:any) {
 			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
 			if (typeof value === 'object') return Object.assign({}, value);
@@ -1091,12 +1140,12 @@ class Setting extends BaseModel {
 		return copyIfNeeded(md.value);
 	}
 
-	static isEnum(key) {
+	static isEnum(key:string) {
 		const md = this.settingMetadata(key);
 		return md.isEnum === true;
 	}
 
-	static enumOptionValues(key) {
+	static enumOptionValues(key:string) {
 		const options = this.enumOptions(key);
 		const output = [];
 		for (const n in options) {
@@ -1106,7 +1155,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static enumOptionLabel(key, value) {
+	static enumOptionLabel(key:string, value:any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
 			if (n == value) return options[n];
@@ -1114,14 +1163,14 @@ class Setting extends BaseModel {
 		return '';
 	}
 
-	static enumOptions(key) {
+	static enumOptions(key:string) {
 		const metadata = this.metadata();
 		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
 		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
 
-	static enumOptionsDoc(key, templateString = null) {
+	static enumOptionsDoc(key:string, templateString:string = null) {
 		if (templateString === null) templateString = '%s: %s';
 		const options = this.enumOptions(key);
 		const output = [];
@@ -1132,7 +1181,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
-	static isAllowedEnumOption(key, value) {
+	static isAllowedEnumOption(key:string, value:any) {
 		const options = this.enumOptions(key);
 		return !!options[value];
 	}
@@ -1141,10 +1190,10 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	static subValues(baseKey, settings, options = null) {
+	static subValues(baseKey:string, settings:any, options:any = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
-		const output = {};
+		const output:any = {};
 		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
@@ -1219,12 +1268,12 @@ class Setting extends BaseModel {
 		this.saveTimeoutId_ = null;
 	}
 
-	static publicSettings(appType) {
+	static publicSettings(appType:string) {
 		if (!appType) throw new Error('appType is required');
 
 		const metadata = this.metadata();
 
-		const output = {};
+		const output:any = {};
 		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
 			const s = Object.assign({}, metadata[key]);
@@ -1236,18 +1285,19 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static typeToString(typeId) {
+	static typeToString(typeId:number) {
 		if (typeId === Setting.TYPE_INT) return 'int';
 		if (typeId === Setting.TYPE_STRING) return 'string';
 		if (typeId === Setting.TYPE_BOOL) return 'bool';
 		if (typeId === Setting.TYPE_ARRAY) return 'array';
 		if (typeId === Setting.TYPE_OBJECT) return 'object';
+		throw new Error('Invalid type ID: ' + typeId);
 	}
 
-	static groupMetadatasBySections(metadatas) {
+	static groupMetadatasBySections(metadatas:MetadataItem[]) {
 		const sections = [];
-		const generalSection = { name: 'general', metadatas: [] };
-		const nameToSections = {};
+		const generalSection:any = { name: 'general', metadatas: [] };
+		const nameToSections:any = {};
 		nameToSections['general'] = generalSection;
 		sections.push(generalSection);
 		for (let i = 0; i < metadatas.length; i++) {
@@ -1265,7 +1315,7 @@ class Setting extends BaseModel {
 		return sections;
 	}
 
-	static sectionNameToLabel(name) {
+	static sectionNameToLabel(name:string) {
 		if (name === 'general') return _('General');
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
@@ -1280,13 +1330,13 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	static sectionDescription(name) {
+	static sectionDescription(name:string) {
 		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
 		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		return '';
 	}
 
-	static sectionNameToIcon(name) {
+	static sectionNameToIcon(name:string) {
 		if (name === 'general') return 'icon-general';
 		if (name === 'sync') return 'icon-sync';
 		if (name === 'appearance') return 'icon-appearance';
@@ -1301,7 +1351,7 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	static appTypeToLabel(name) {
+	static appTypeToLabel(name:string) {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
@@ -1380,4 +1430,4 @@ Setting.constants_ = {
 
 Setting.autoSaveEnabled = true;
 
-module.exports = Setting;
+export default Setting;

@@ -1,6 +1,6 @@
 const { Logger } = require('lib/logger.js');
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');

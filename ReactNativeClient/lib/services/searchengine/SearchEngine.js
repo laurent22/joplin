@@ -1,6 +1,6 @@
 const { Logger } = require('lib/logger.js');
 const ItemChange = require('lib/models/ItemChange.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');

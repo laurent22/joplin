@@ -1,6 +1,6 @@
 import AsyncActionQueue from '../../AsyncActionQueue';
 const { Logger } = require('lib/logger.js');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource');
 const shim = require('lib/shim');
 const EventEmitter = require('events');

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
 
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');

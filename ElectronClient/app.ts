@@ -11,7 +11,7 @@ require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');

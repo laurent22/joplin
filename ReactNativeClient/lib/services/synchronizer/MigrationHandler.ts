@@ -13,7 +13,7 @@ const migrations = [
 	require('./migrations/2.js').default,
 ];
 
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { sprintf } = require('sprintf-js');
 const JoplinError = require('lib/JoplinError');
 

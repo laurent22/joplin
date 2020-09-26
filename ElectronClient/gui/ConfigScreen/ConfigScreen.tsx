@@ -3,7 +3,7 @@ import SideBar from './SideBar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { themeStyle } = require('lib/theme');
 const pathUtils = require('lib/path-utils.js');
 const { _ } = require('lib/locale.js');

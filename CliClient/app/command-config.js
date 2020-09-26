@@ -2,7 +2,7 @@ const { BaseCommand } = require('./base-command.js');
 const { _, setLocale } = require('lib/locale.js');
 const { app } = require('./app.js');
 const fs = require('fs-extra');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 
 class Command extends BaseCommand {
 	usage() {

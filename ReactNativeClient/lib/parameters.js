@@ -1,4 +1,4 @@
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 
 const parameters_ = {};
 

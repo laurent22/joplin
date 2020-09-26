@@ -1,5 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
 const TemplateUtils = require('lib/TemplateUtils');

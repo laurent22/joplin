@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { themeStyle } from 'lib/theme';
 const shim = require('lib/shim');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { camelCaseToDash, formatCssSize } = require('lib/string-utils');
 
 interface HookDependencies {
