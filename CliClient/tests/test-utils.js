@@ -196,6 +196,7 @@ async function switchClient(id, options = null) {
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 
+	await Setting.reset();
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 

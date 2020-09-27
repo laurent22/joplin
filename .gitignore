@@ -56,6 +56,7 @@ ReactNativeClient/lib/sql-extensions/spellfix.dylib
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
 CliClient/build/LinkSelector.js
+CliClient/tests/models_Setting.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
@@ -65,6 +66,8 @@ CliClient/tests/support/plugins/register_command/global.d.js
 CliClient/tests/support/plugins/register_command/src/index.js
 CliClient/tests/support/plugins/selected_text/global.d.js
 CliClient/tests/support/plugins/selected_text/src/index.js
+CliClient/tests/support/plugins/settings/global.d.js
+CliClient/tests/support/plugins/settings/src/index.js
 CliClient/tests/support/plugins/toc/global.d.js
 CliClient/tests/support/plugins/toc/src/index.js
 CliClient/tests/support/plugins/withExternalModules/global.d.js
@@ -224,6 +227,7 @@ ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinCommands.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinFilters.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinInterop.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinPlugins.js
+ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinSettings.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace.js

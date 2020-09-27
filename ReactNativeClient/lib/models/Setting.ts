@@ -14,11 +14,11 @@ interface KeysOptions {
 }
 
 // This is the definition of a setting item
-interface MetadataItem {
+export interface MetadataItem {
 	value: any,
 	type: number,
 	public: boolean,
-	
+
 	subType?: string,
 	key?: string,
 	isEnum?: boolean,
@@ -56,6 +56,7 @@ class Setting extends BaseModel {
 	private static keys_:string[] = null;
 	private static cache_:CacheItem[] = [];
 	private static saveTimeoutId_:any = null;
+	private static customMetadata_:Metadata = {};
 
 	static tableName() {
 		return 'settings';
@@ -63,6 +64,16 @@ class Setting extends BaseModel {
 
 	static modelType() {
 		return BaseModel.TYPE_SETTING;
+	}
+
+	static async reset() {
+		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
+
+		this.saveTimeoutId_ = null;
+		this.metadata_ = null;
+		this.keys_ = null;
+		this.cache_ = [];
+		this.customMetadata_ = {};
 	}
 
 	static keychainService() {
@@ -838,7 +849,40 @@ class Setting extends BaseModel {
 			},
 		};
 
+		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
+
 		return this.metadata_;
+	}
+
+	private static validateKey(key:string) {
+		if (!key) throw new Error('Cannot register empty key');
+		if (key.length > 128) throw new Error(`Key length cannot be longer than 128 characters: ${key}`);
+		if (!key.match(/^[a-zA-Z0-9_\-.]+$/)) throw new Error(`Key must only contain characters /a-zA-Z0-9_-./ : ${key}`);
+	}
+
+	static async registerSetting(key:string, metadataItem:MetadataItem) {
+		this.validateKey(key);
+
+		this.customMetadata_[key] = metadataItem;
+
+		// Clear cache
+		this.metadata_ = null;
+		this.keys_ = null;
+
+		// Reload the value from the database, if it was already present
+		const valueRow = await this.loadOne(key);
+		if (valueRow) {
+			this.cache_.push({
+				key: key,
+				value: valueRow.value,
+			});
+		}
+
+		this.dispatch({
+			type: 'SETTING_UPDATE_ONE',
+			key: key,
+			value: this.value(key),
+		});
 	}
 
 	static settingMetadata(key:string):MetadataItem {
@@ -1211,8 +1255,11 @@ class Setting extends BaseModel {
 		shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
+		const keys = this.keys();
+
 		const queries = [];
-		queries.push('DELETE FROM settings');
+		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
+
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
@@ -1291,7 +1338,7 @@ class Setting extends BaseModel {
 		if (typeId === Setting.TYPE_BOOL) return 'bool';
 		if (typeId === Setting.TYPE_ARRAY) return 'array';
 		if (typeId === Setting.TYPE_OBJECT) return 'object';
-		throw new Error('Invalid type ID: ' + typeId);
+		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
 	static groupMetadatasBySections(metadatas:MetadataItem[]) {
