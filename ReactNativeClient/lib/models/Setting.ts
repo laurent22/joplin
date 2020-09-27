@@ -9,14 +9,23 @@ const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const shim = require('lib/shim');
 
+export enum SettingItemType {
+	Int = 1,
+	String = 2,
+	Bool = 3,
+	Array = 4,
+	Object = 5,
+	Button = 6,
+}
+
 interface KeysOptions {
 	secureOnly?: boolean,
 }
 
 // This is the definition of a setting item
-export interface MetadataItem {
+export interface SettingItem {
 	value: any,
-	type: number,
+	type: SettingItemType,
 	public: boolean,
 
 	subType?: string,
@@ -38,8 +47,8 @@ export interface MetadataItem {
 	unitLabel?(value:any):string,
 }
 
-interface Metadata {
-	[key:string]: MetadataItem,
+interface SettingItems {
+	[key:string]: SettingItem,
 }
 
 // This is where the actual setting values are stored.
@@ -51,12 +60,12 @@ interface CacheItem {
 
 class Setting extends BaseModel {
 
-	private static metadata_:Metadata = null;
+	private static metadata_:SettingItems = null;
 	private static keychainService_:any = null;
 	private static keys_:string[] = null;
 	private static cache_:CacheItem[] = [];
 	private static saveTimeoutId_:any = null;
-	private static customMetadata_:Metadata = {};
+	private static customMetadata_:SettingItems = {};
 
 	static tableName() {
 		return 'settings';
@@ -85,7 +94,7 @@ class Setting extends BaseModel {
 		this.keychainService_ = s;
 	}
 
-	static metadata():Metadata {
+	static metadata():SettingItems {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
@@ -120,18 +129,18 @@ class Setting extends BaseModel {
 		this.metadata_ = {
 			'clientId': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				public: false,
 			},
 			'editor.codeView': {
 				value: true,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				public: false,
 				appTypes: ['desktop'],
 			},
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				isEnum: true,
 				public: true,
 				section: 'sync',
@@ -146,13 +155,13 @@ class Setting extends BaseModel {
 
 			'sync.upgradeState': {
 				value: Setting.SYNC_UPGRADE_STATE_IDLE,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: false,
 			},
 
 			'sync.2.path': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					try {
@@ -171,7 +180,7 @@ class Setting extends BaseModel {
 
 			'sync.5.path': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
@@ -182,7 +191,7 @@ class Setting extends BaseModel {
 			},
 			'sync.5.username': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
@@ -192,7 +201,7 @@ class Setting extends BaseModel {
 			},
 			'sync.5.password': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
@@ -204,7 +213,7 @@ class Setting extends BaseModel {
 
 			'sync.6.path': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
@@ -215,7 +224,7 @@ class Setting extends BaseModel {
 			},
 			'sync.6.username': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
@@ -225,7 +234,7 @@ class Setting extends BaseModel {
 			},
 			'sync.6.password': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
@@ -237,7 +246,7 @@ class Setting extends BaseModel {
 
 			'sync.8.path': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					try {
@@ -255,7 +264,7 @@ class Setting extends BaseModel {
 			},
 			'sync.8.username': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
@@ -265,7 +274,7 @@ class Setting extends BaseModel {
 			},
 			'sync.8.password': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings:any) => {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
@@ -275,11 +284,11 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
-			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
 				value: 'always',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				public: true,
 				advanced: true,
@@ -296,30 +305,30 @@ class Setting extends BaseModel {
 				},
 			},
 
-			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.8.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.4.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.5.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.6.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.7.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 
-			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
+			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
 			// The active folder ID is guaranteed to be valid as long as there's at least one
 			// existing folder, so it is a good default in contexts where there's no currently
 			// selected folder. It corresponds in general to the currently selected folder or
 			// to the last folder that was selected.
-			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
+			activeFolderId: { value: '', type: SettingItemType.String, public: false },
 
-			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
+			firstStart: { value: true, type: SettingItemType.Bool, public: false },
 			locale: {
 				value: defaultLocale(),
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				isEnum: true,
 				public: true,
 				label: () => _('Language'),
@@ -329,7 +338,7 @@ class Setting extends BaseModel {
 			},
 			dateFormat: {
 				value: Setting.DATE_FORMAT_1,
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				isEnum: true,
 				public: true,
 				label: () => _('Date format'),
@@ -348,7 +357,7 @@ class Setting extends BaseModel {
 			},
 			timeFormat: {
 				value: Setting.TIME_FORMAT_1,
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				isEnum: true,
 				public: true,
 				label: () => _('Time format'),
@@ -363,7 +372,7 @@ class Setting extends BaseModel {
 
 			theme: {
 				value: Setting.THEME_LIGHT,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: true,
 				appTypes: ['mobile', 'desktop'],
 				show: (settings) => {
@@ -377,7 +386,7 @@ class Setting extends BaseModel {
 
 			themeAutoDetect: {
 				value: false,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				section: 'appearance',
 				appTypes: ['desktop'],
 				public: true,
@@ -386,7 +395,7 @@ class Setting extends BaseModel {
 
 			preferredLightTheme: {
 				value: Setting.THEME_LIGHT,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: true,
 				show: (settings) => {
 					return settings['themeAutoDetect'];
@@ -400,7 +409,7 @@ class Setting extends BaseModel {
 
 			preferredDarkTheme: {
 				value: Setting.THEME_DARK,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: true,
 				show: (settings) => {
 					return settings['themeAutoDetect'];
@@ -412,11 +421,11 @@ class Setting extends BaseModel {
 				options: () => themeOptions(),
 			},
 
-			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: SettingItemType.Bool, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: false,
 				appTypes: ['desktop'],
 				isEnum: true,
@@ -427,11 +436,11 @@ class Setting extends BaseModel {
 					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
 				}),
 			},
-			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
-			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
+			uncompletedTodosOnTop: { value: true, type: SettingItemType.Bool, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
+			showCompletedTodos: { value: true, type: SettingItemType.Bool, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
 				value: 'user_updated_time',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'note',
 				isEnum: true,
 				public: true,
@@ -449,16 +458,16 @@ class Setting extends BaseModel {
 			},
 			'editor.autoMatchingBraces': {
 				value: true,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				public: true,
 				section: 'note',
 				appTypes: ['desktop'],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
-			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {
 				value: 'title',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				isEnum: true,
 				public: true,
 				appTypes: ['cli'],
@@ -473,12 +482,12 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
-			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
-			trackLocation: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
+			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 
 			'editor.beta': {
 				value: false,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				section: 'note',
 				public: mobilePlatform === 'ios',
 				appTypes: ['mobile'],
@@ -488,7 +497,7 @@ class Setting extends BaseModel {
 
 			newTodoFocus: {
 				value: 'title',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'note',
 				isEnum: true,
 				public: true,
@@ -503,7 +512,7 @@ class Setting extends BaseModel {
 			},
 			newNoteFocus: {
 				value: 'body',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'note',
 				isEnum: true,
 				public: true,
@@ -519,7 +528,7 @@ class Setting extends BaseModel {
 
 			'plugins.devPluginPaths': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'plugins',
 				public: true,
 				appTypes: ['desktop'],
@@ -528,26 +537,26 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
-			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.softbreaks': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.typographer': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
-			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
-			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
-			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
-			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
+			'markdown.plugin.softbreaks': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.typographer': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.katex': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
+			'markdown.plugin.fountain': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
+			'markdown.plugin.mermaid': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
 
-			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
-			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
-			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
-			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
-			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
-			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
-			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
-			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
-			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
-			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
+			'markdown.plugin.mark': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
+			'markdown.plugin.footnote': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
+			'markdown.plugin.toc': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
+			'markdown.plugin.sub': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
+			'markdown.plugin.sup': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
+			'markdown.plugin.deflist': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
+			'markdown.plugin.abbr': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
+			'markdown.plugin.emoji': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
+			'markdown.plugin.insert': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
+			'markdown.plugin.multitable': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -555,7 +564,7 @@ class Setting extends BaseModel {
 			// by default we disable it on Linux.
 			showTrayIcon: {
 				value: platform !== 'linux',
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				section: 'application',
 				public: true,
 				appTypes: ['desktop'],
@@ -565,31 +574,31 @@ class Setting extends BaseModel {
 				},
 			},
 
-			startMinimized: { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
+			startMinimized: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
-			collapsedFolderIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
+			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
 
-			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
-			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
-			'db.fuzzySearchEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
-			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
-			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
-			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
+			'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
+			'db.ftsEnabled': { value: -1, type: SettingItemType.Int, public: false },
+			'db.fuzzySearchEnabled': { value: -1, type: SettingItemType.Int, public: false },
+			'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },
+			'encryption.activeMasterKeyId': { value: '', type: SettingItemType.String, public: false },
+			'encryption.passwordCache': { value: {}, type: SettingItemType.Object, public: false, secure: true },
 			'encryption.shouldReencrypt': {
 				value: -1, // will be set on app startup
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: false,
 			},
 
 			// Deprecated in favour of windowContentZoomFactor
-			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
+			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 
-			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
+			'style.editor.fontSize': { value: 13, type: SettingItemType.Int, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
 					({
 						value: Setting.FONT_DEFAULT,
-						type: Setting.TYPE_STRING,
+						type: SettingItemType.String,
 						isEnum: true,
 						public: true,
 						label: () => _('Editor font'),
@@ -612,7 +621,7 @@ class Setting extends BaseModel {
 						},
 					}) : {
 						value: '',
-						type: Setting.TYPE_STRING,
+						type: SettingItemType.String,
 						public: true,
 						appTypes: ['desktop'],
 						section: 'appearance',
@@ -622,10 +631,10 @@ class Setting extends BaseModel {
 						'is incorrect or empty, it will default to a generic monospace font.'),
 					},
 
-			'ui.layout': { value: {}, type: Setting.TYPE_OBJECT, public: false, appTypes: ['desktop'] },
+			'ui.layout': { value: {}, type: SettingItemType.Object, public: false, appTypes: ['desktop'] },
 
-			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
-			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
+			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: SettingItemType.Int, public: false, appTypes: ['desktop'] },
+			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: SettingItemType.Int, public: false, appTypes: ['desktop'] },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -642,7 +651,7 @@ class Setting extends BaseModel {
 
 					shim.openOrCreateFile(filepath, defaultContents);
 				},
-				type: Setting.TYPE_BUTTON,
+				type: SettingItemType.Button,
 				public: true,
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for rendered Markdown'),
@@ -659,7 +668,7 @@ class Setting extends BaseModel {
 
 					shim.openOrCreateFile(filepath, defaultContents);
 				},
-				type: Setting.TYPE_BUTTON,
+				type: SettingItemType.Button,
 				public: true,
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for Joplin-wide app styles'),
@@ -668,12 +677,12 @@ class Setting extends BaseModel {
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
-			autoUpdateEnabled: { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
-			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
-			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
+			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
+			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, public: false },
 			'sync.interval': {
 				value: 300,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				section: 'sync',
 				isEnum: true,
 				public: true,
@@ -690,13 +699,13 @@ class Setting extends BaseModel {
 					};
 				},
 			},
-			noteVisiblePanes: { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
-			sidebarVisibility: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
-			noteListVisibility: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
-			tagHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
-			folderHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
-			editor: { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+			noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, public: false, appTypes: ['desktop'] },
+			sidebarVisibility: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
+			noteListVisibility: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
+			tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
+			folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
+			editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+			'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
@@ -706,7 +715,7 @@ class Setting extends BaseModel {
 					'Legal': _('Legal'),
 				};
 			} },
-			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+			'export.pdfPageOrientation': { value: 'portrait', type: SettingItemType.String, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
@@ -715,7 +724,7 @@ class Setting extends BaseModel {
 
 			'editor.keyboardMode': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				public: true,
 				appTypes: ['desktop'],
 				isEnum: true,
@@ -732,7 +741,7 @@ class Setting extends BaseModel {
 
 			'net.customCertificates': {
 				value: '',
-				type: Setting.TYPE_STRING,
+				type: SettingItemType.String,
 				section: 'sync',
 				advanced: true,
 				show: (settings:any) => {
@@ -745,7 +754,7 @@ class Setting extends BaseModel {
 			},
 			'net.ignoreTlsErrors': {
 				value: false,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				advanced: true,
 				section: 'sync',
 				show: (settings:any) => {
@@ -758,7 +767,7 @@ class Setting extends BaseModel {
 
 			'sync.wipeOutFailSafe': {
 				value: true,
-				type: Setting.TYPE_BOOL,
+				type: SettingItemType.Bool,
 				advanced: true,
 				public: true,
 				section: 'sync',
@@ -766,20 +775,20 @@ class Setting extends BaseModel {
 				description: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)'),
 			},
 
-			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
-			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
+			'api.token': { value: null, type: SettingItemType.String, public: false },
+			'api.port': { value: null, type: SettingItemType.Int, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
 
-			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
-			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
-			'revisionService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'resourceService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
+			'searchEngine.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
+			'revisionService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 
-			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
+			'searchEngine.initialIndexingDone': { value: false, type: SettingItemType.Bool, public: false },
 
-			'revisionService.enabled': { section: 'revisionService', value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Enable note history') },
+			'revisionService.enabled': { section: 'revisionService', value: true, type: SettingItemType.Bool, public: true, label: () => _('Enable note history') },
 			'revisionService.ttlDays': {
 				section: 'revisionService',
 				value: 90,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: true,
 				minimum: 1,
 				maximum: 365 * 2,
@@ -789,18 +798,18 @@ class Setting extends BaseModel {
 				},
 				label: () => _('Keep note history for'),
 			},
-			'revisionService.intervalBetweenRevisions': { section: 'revisionService', value: 1000 * 60 * 10, type: Setting.TYPE_INT, public: false },
-			'revisionService.oldNoteInterval': { section: 'revisionService', value: 1000 * 60 * 60 * 24 * 7, type: Setting.TYPE_INT, public: false },
+			'revisionService.intervalBetweenRevisions': { section: 'revisionService', value: 1000 * 60 * 10, type: SettingItemType.Int, public: false },
+			'revisionService.oldNoteInterval': { section: 'revisionService', value: 1000 * 60 * 60 * 24 * 7, type: SettingItemType.Int, public: false },
 
-			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
-			'welcome.enabled': { value: true, type: Setting.TYPE_BOOL, public: false },
+			'welcome.wasBuilt': { value: false, type: SettingItemType.Bool, public: false },
+			'welcome.enabled': { value: true, type: SettingItemType.Bool, public: false },
 
-			'camera.type': { value: 0, type: Setting.TYPE_INT, public: false, appTypes: ['mobile'] },
-			'camera.ratio': { value: '4:3', type: Setting.TYPE_STRING, public: false, appTypes: ['mobile'] },
+			'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: ['mobile'] },
+			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: ['mobile'] },
 
 			windowContentZoomFactor: {
 				value: 100,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				public: false,
 				appTypes: ['desktop'],
 				minimum: 30,
@@ -810,7 +819,7 @@ class Setting extends BaseModel {
 
 			'layout.folderList.factor': {
 				value: 1,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
 				appTypes: ['cli'],
@@ -823,7 +832,7 @@ class Setting extends BaseModel {
 			},
 			'layout.noteList.factor': {
 				value: 1,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
 				appTypes: ['cli'],
@@ -836,7 +845,7 @@ class Setting extends BaseModel {
 			},
 			'layout.note.factor': {
 				value: 2,
-				type: Setting.TYPE_INT,
+				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
 				appTypes: ['cli'],
@@ -860,7 +869,7 @@ class Setting extends BaseModel {
 		if (!key.match(/^[a-zA-Z0-9_\-.]+$/)) throw new Error(`Key must only contain characters /a-zA-Z0-9_-./ : ${key}`);
 	}
 
-	static async registerSetting(key:string, metadataItem:MetadataItem) {
+	static async registerSetting(key:string, metadataItem:SettingItem) {
 		this.validateKey(key);
 
 		this.customMetadata_[key] = metadataItem;
@@ -885,7 +894,7 @@ class Setting extends BaseModel {
 		});
 	}
 
-	static settingMetadata(key:string):MetadataItem {
+	static settingMetadata(key:string):SettingItem {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
 		const output = Object.assign({}, metadata[key]);
@@ -1102,11 +1111,11 @@ class Setting extends BaseModel {
 	static valueToString(key:string, value:any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
-		if (md.type == Setting.TYPE_INT) return value.toFixed(0);
-		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
-		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
-		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		if (md.type == Setting.TYPE_STRING) return value ? `${value}` : '';
+		if (md.type == SettingItemType.Int) return value.toFixed(0);
+		if (md.type == SettingItemType.Bool) return value ? '1' : '0';
+		if (md.type == SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
+		if (md.type == SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
+		if (md.type == SettingItemType.String) return value ? `${value}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
@@ -1119,9 +1128,9 @@ class Setting extends BaseModel {
 	static formatValue(key:string, value:any) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == Setting.TYPE_INT) return !value ? 0 : Math.floor(Number(value));
+		if (md.type == SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
 
-		if (md.type == Setting.TYPE_BOOL) {
+		if (md.type == SettingItemType.Bool) {
 			if (typeof value === 'string') {
 				value = value.toLowerCase();
 				if (value === 'true') return true;
@@ -1131,21 +1140,21 @@ class Setting extends BaseModel {
 			return !!value;
 		}
 
-		if (md.type === Setting.TYPE_ARRAY) {
+		if (md.type === SettingItemType.Array) {
 			if (!value) return [];
 			if (Array.isArray(value)) return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return [];
 		}
 
-		if (md.type === Setting.TYPE_OBJECT) {
+		if (md.type === SettingItemType.Object) {
 			if (!value) return {};
 			if (typeof value === 'object') return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return {};
 		}
 
-		if (md.type === Setting.TYPE_STRING) {
+		if (md.type === SettingItemType.String) {
 			if (!value) return '';
 			return `${value}`;
 		}
@@ -1333,15 +1342,15 @@ class Setting extends BaseModel {
 	}
 
 	static typeToString(typeId:number) {
-		if (typeId === Setting.TYPE_INT) return 'int';
-		if (typeId === Setting.TYPE_STRING) return 'string';
-		if (typeId === Setting.TYPE_BOOL) return 'bool';
-		if (typeId === Setting.TYPE_ARRAY) return 'array';
-		if (typeId === Setting.TYPE_OBJECT) return 'object';
+		if (typeId === SettingItemType.Int) return 'int';
+		if (typeId === SettingItemType.String) return 'string';
+		if (typeId === SettingItemType.Bool) return 'bool';
+		if (typeId === SettingItemType.Array) return 'array';
+		if (typeId === SettingItemType.Object) return 'object';
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
-	static groupMetadatasBySections(metadatas:MetadataItem[]) {
+	static groupMetadatasBySections(metadatas:SettingItem[]) {
 		const sections = [];
 		const generalSection:any = { name: 'general', metadatas: [] };
 		const nameToSections:any = {};
@@ -1405,12 +1414,13 @@ class Setting extends BaseModel {
 	}
 }
 
-Setting.TYPE_INT = 1;
-Setting.TYPE_STRING = 2;
-Setting.TYPE_BOOL = 3;
-Setting.TYPE_ARRAY = 4;
-Setting.TYPE_OBJECT = 5;
-Setting.TYPE_BUTTON = 6;
+// For backward compatibility
+Setting.TYPE_INT = SettingItemType.Int;
+Setting.TYPE_STRING = SettingItemType.String;
+Setting.TYPE_BOOL = SettingItemType.Bool;
+Setting.TYPE_ARRAY = SettingItemType.Array;
+Setting.TYPE_OBJECT = SettingItemType.Object;
+Setting.TYPE_BUTTON = SettingItemType.Button;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
