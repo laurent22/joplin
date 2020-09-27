@@ -102,5 +102,11 @@ describe('models_Setting', function() {
 		await expectNotThrow(async () => await Setting.registerSetting('so-ARE-dashes_123', md));
 	}));
 
+	it('should register new sections', asyncTest(async () => {
+		await Setting.registerSection('mySection', {
+			label: 'My section',
+		});
 
+		expect(Setting.sectionNameToLabel('mySection')).toBe('My section');
+	}));
 });

@@ -1,8 +1,11 @@
-import Setting, { SettingItem } from 'lib/models/Setting';
+import Setting, { SettingItem, SettingSection } from 'lib/models/Setting';
 
 export default class SandboxJoplinSettings {
-	register(key:string, metadata:SettingItem) {
-		// TODO: validate key name
+	async registerSetting(key:string, metadata:SettingItem) {
 		return Setting.registerSetting(key, metadata);
+	}
+
+	async registerSection(name:string, section:SettingSection) {
+		return Setting.registerSection(name, section);
 	}
 }

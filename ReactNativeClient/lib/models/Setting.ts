@@ -58,6 +58,17 @@ interface CacheItem {
 	value: any,
 }
 
+export interface SettingSection {
+	label: string,
+	iconName?: string,
+	description?: string,
+	name?: string,
+}
+
+interface SettingSections {
+	[key:string]: SettingSection,
+}
+
 class Setting extends BaseModel {
 
 	private static metadata_:SettingItems = null;
@@ -66,6 +77,7 @@ class Setting extends BaseModel {
 	private static cache_:CacheItem[] = [];
 	private static saveTimeoutId_:any = null;
 	private static customMetadata_:SettingItems = {};
+	private static customSections_:SettingSections = {};
 
 	static tableName() {
 		return 'settings';
@@ -894,6 +906,10 @@ class Setting extends BaseModel {
 		});
 	}
 
+	static async registerSection(name:string, section:SettingSection) {
+		this.customSections_[name] = { ...section, name: name };
+	}
+
 	static settingMetadata(key:string):SettingItem {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
@@ -1368,6 +1384,14 @@ class Setting extends BaseModel {
 				nameToSections[md.section].metadatas.push(md);
 			}
 		}
+
+		for (const name in this.customSections_) {
+			nameToSections[name] = {
+				name: name,
+				metadatas: [],
+			};
+		}
+
 		return sections;
 	}
 
@@ -1383,12 +1407,18 @@ class Setting extends BaseModel {
 		if (name === 'encryption') return _('Encryption');
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
+
+		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
+
 		return name;
 	}
 
 	static sectionDescription(name:string) {
 		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
 		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+
+		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
+
 		return '';
 	}
 
@@ -1404,6 +1434,9 @@ class Setting extends BaseModel {
 		if (name === 'encryption') return 'icon-encryption';
 		if (name === 'server') return 'far fa-hand-scissors';
 		if (name === 'keymap') return 'fa fa-keyboard';
+
+		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
+
 		return name;
 	}
 
