@@ -125,19 +125,21 @@ export default class PluginService extends BaseService {
 		if (context.runtime.onStart) {
 			const startTime = Date.now();
 
-			try {
-				this.logger().info(`Starting plugin: ${plugin.id}`);
-				await context.runtime.onStart({});
-			} catch (error) {
+			this.logger().info(`Starting plugin: ${plugin.id}`);
+
+			// We don't use `await` when calling onStart because the plugin might be awaiting
+			// in that call too (for example, when opening a dialog on startup) so we don't
+			// want to get stuck here.
+			context.runtime.onStart({}).catch((error) => {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
 				// be handled correctly by loggers, etc.
 				const newError:Error = new Error(error.message);
 				newError.stack = error.stack;
 				this.logger().error(`In plugin ${plugin.id}:`, newError);
-			}
-
-			this.logger().info(`Finished running plugin: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
+			}).then(() => {
+				this.logger().info(`Finished running onStart handler: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
+			});
 		}
 	}
 

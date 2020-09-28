@@ -31,7 +31,7 @@ interface Props {
 
 const GlobalStyle = createGlobalStyle`
 	div, span, a {
-		color: ${(props:any) => props.theme.color};
+		/*color: ${(props:any) => props.theme.color};*/
 		/*font-size: ${(props:any) => props.theme.fontSize}px;*/
 		font-family: ${(props:any) => props.theme.fontFamily};
 	}

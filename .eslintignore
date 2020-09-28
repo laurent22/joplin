@@ -67,6 +67,8 @@ CliClient/tests/models_Setting.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
+CliClient/tests/support/plugins/dialog/global.d.js
+CliClient/tests/support/plugins/dialog/src/index.js
 CliClient/tests/support/plugins/json_export/global.d.js
 CliClient/tests/support/plugins/json_export/src/index.js
 CliClient/tests/support/plugins/register_command/global.d.js
@@ -169,6 +171,8 @@ ElectronClient/gui/OneDriveLoginScreen.js
 ElectronClient/gui/plugin_service/hooks/useThemeCss.js
 ElectronClient/gui/plugin_service/hooks/useViewIsReady.js
 ElectronClient/gui/plugin_service/UserWebview.js
+ElectronClient/gui/plugin_service/UserWebviewDialog.js
+ElectronClient/gui/plugin_service/UserWebviewDialogButtonBar.js
 ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js
 ElectronClient/gui/ResizableLayout/hooks/useWindowResizeEvent.js
 ElectronClient/gui/ResizableLayout/ResizableLayout.js

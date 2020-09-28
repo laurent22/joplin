@@ -10,6 +10,8 @@ import PluginService from 'lib/services/plugin_service/PluginService';
 import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 import SideBar from '../SideBar/SideBar';
 import UserWebview from '../plugin_service/UserWebview';
+import UserWebviewDialog from '../plugin_service/UserWebviewDialog';
+import { ContainerType } from 'lib/services/plugin_service/WebviewController';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -26,6 +28,18 @@ const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
+const styled = require('styled-components').default;
+
+const StyledUserWebviewDialogContainer = styled.div`
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	box-sizing: border-box;
+`;
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -71,7 +85,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
-			layout: this.buildLayout([]),
+			layout: this.buildLayout(props.plugins),
 		};
 
 		this.registerCommands();
@@ -118,6 +132,8 @@ class MainScreenComponent extends React.Component<any, any> {
 		const infos = pluginUtils.viewInfosByType(plugins, 'webview');
 
 		for (const info of infos) {
+			if (info.view.containerType !== ContainerType.Panel) continue;
+
 			// For now it's assumed all views go in the "pluginColumn" so they are
 			// resizable vertically. But horizontally they stretch 100%
 			const viewId = info.view.id;
@@ -584,10 +600,35 @@ class MainScreenComponent extends React.Component<any, any> {
 				pluginId={plugin.id}
 				onMessage={this.userWebview_message}
 				borderBottom={true}
+				fitToContent={false}
 			/>;
 		}
 
 		throw new Error(`Invalid layout component: ${key}`);
+	}
+
+	renderPluginDialogs() {
+		const output = [];
+		const infos = pluginUtils.viewInfosByType(this.props.plugins, 'webview');
+
+		for (const info of infos) {
+			const { plugin, view } = info;
+			if (view.containerType !== ContainerType.Dialog) continue;
+			if (!view.opened) continue;
+
+			output.push(<UserWebviewDialog
+				key={view.id}
+				viewId={view.id}
+				themeId={this.props.themeId}
+				html={view.html}
+				scripts={view.scripts}
+				pluginId={plugin.id}
+				onMessage={this.userWebview_message}
+				buttons={view.buttons}
+			/>);
+		}
+
+		return output;
 	}
 
 	render() {
@@ -624,6 +665,10 @@ class MainScreenComponent extends React.Component<any, any> {
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
+
+				<StyledUserWebviewDialogContainer>
+					{this.renderPluginDialogs()}
+				</StyledUserWebviewDialogContainer>
 
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}

@@ -20,7 +20,7 @@ export interface Plugin {
 }
 
 export interface SandboxContextRuntime {
-	onStart(event:any):void;
+	onStart(event:any):Promise<void>;
 	onMessage(event:any):void;
 }
 

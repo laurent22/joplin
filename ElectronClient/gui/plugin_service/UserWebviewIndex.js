@@ -28,6 +28,7 @@ const webviewApi = {
 		document.getElementsByTagName('body')[0].appendChild(rootElement);
 
 		const contentElement = document.createElement('div');
+		contentElement.setAttribute('id', 'joplin-plugin-content');
 		rootElement.appendChild(contentElement);
 
 		const headElement = document.getElementsByTagName('head')[0];
