@@ -460,6 +460,15 @@ class SearchEngine {
 			const fuzzyTitle = await this.fuzzifier(titleTerms.filter(x => !x.wildcard).map(x => trimQuotes(x.value)));
 			const fuzzyBody = await this.fuzzifier(bodyTerms.filter(x => !x.wildcard).map(x => trimQuotes(x.value)));
 
+			// Floor the fuzzy scores to 0, 1 and 2.
+			const floorFuzzyScore = (matches) => {
+				for (let i = 0; i < matches.length; i++) matches[i].score = i;
+			};
+
+			fuzzyText.forEach(floorFuzzyScore);
+			fuzzyTitle.forEach(floorFuzzyScore);
+			fuzzyBody.forEach(floorFuzzyScore);
+
 			const phraseTextSearch = textTerms.filter(x => x.quoted);
 			const wildCardSearch = textTerms.concat(titleTerms).concat(bodyTerms).filter(x => x.wildcard);
 
