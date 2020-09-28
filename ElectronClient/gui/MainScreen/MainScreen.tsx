@@ -628,7 +628,13 @@ class MainScreenComponent extends React.Component<any, any> {
 			/>);
 		}
 
-		return output;
+		if (!output.length) return null;
+
+		return (
+			<StyledUserWebviewDialogContainer>
+				{output}
+			</StyledUserWebviewDialogContainer>
+		);
 	}
 
 	render() {
@@ -665,11 +671,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
-
-				<StyledUserWebviewDialogContainer>
-					{this.renderPluginDialogs()}
-				</StyledUserWebviewDialogContainer>
-
+				{this.renderPluginDialogs()}
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}

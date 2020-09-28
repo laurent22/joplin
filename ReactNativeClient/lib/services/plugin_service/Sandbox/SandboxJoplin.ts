@@ -31,7 +31,7 @@ export default class SandboxJoplin {
 		this.views_ = new SandboxJoplinViews(plugin, store);
 		this.utils_ = new SandboxJoplinUtils();
 		this.interop_ = new SandboxJoplinInterop();
-		this.settings_ = new SandboxJoplinSettings();
+		this.settings_ = new SandboxJoplinSettings(plugin);
 	}
 
 	get api(): SandboxJoplinApi {

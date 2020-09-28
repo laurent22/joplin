@@ -6,9 +6,15 @@ import { SandboxContext } from './utils/types';
 const shim = require('lib/shim');
 const { filename } = require('lib/path-utils');
 const BaseService = require('lib/services/BaseService');
+const nodeSlug = require('slug');
 
 interface Plugins {
 	[key:string]: Plugin
+}
+
+function makePluginId(source:string):string {
+	// https://www.npmjs.com/package/slug#options
+	return nodeSlug(source, nodeSlug.defaults.modes['rfc3986']).substr(0,32);
 }
 
 export default class PluginService extends BaseService {
@@ -57,7 +63,12 @@ export default class PluginService extends BaseService {
 		const manifestContent = await fsDriver.readFile(manifestPath);
 		const manifest = manifestFromObject(JSON.parse(manifestContent));
 		const scriptText = await fsDriver.readFile(indexPath);
-		const pluginId = filename(path);
+		const pluginId = makePluginId(filename(path));
+
+		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
+		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
+		// such folders but to keep things sane we disallow it.
+		if (this.plugins_[pluginId]) throw new Error(`There is already a plugin with this ID: ${pluginId}`);
 
 		const plugin = new Plugin(pluginId, distPath, manifest, scriptText, this.logger());
 
