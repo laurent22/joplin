@@ -11,6 +11,7 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
 const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 
 Icon.loadFont();
 
@@ -72,18 +73,6 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.isMounted_ = false;
 	}
 
-	// UNSAFE_componentWillReceiveProps(newProps) {
-	// 	console.info('UNSAFE_componentWillReceiveProps', newProps);
-
-	// 	let newState = {};
-	// 	if ('query' in newProps && !this.state.query) newState.query = newProps.query;
-
-	// 	if (Object.getOwnPropertyNames(newState).length) {
-	// 		this.setState(newState);
-	// 		this.refreshSearch(newState.query);
-	// 	}
-	// }
-
 	searchTextInput_submit() {
 		const query = this.state.query.trim();
 		if (!query) return;
@@ -133,6 +122,14 @@ class SearchScreenComponent extends BaseScreenComponent {
 		}
 
 		if (!this.isMounted_) return;
+
+		const parsedQuery = await SearchEngine.instance().parseQuery(query);
+		const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+
+		this.props.dispatch({
+			type: 'SET_HIGHLIGHTED',
+			words: highlightedWords,
+		});
 
 		this.setState({ notes: notes });
 	}
