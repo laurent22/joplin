@@ -6,9 +6,12 @@ import CommandService from 'lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 const styled = require('styled-components').default;
 
+interface Props {
+	showNewNoteButtons: boolean,
+}
+
 const StyledRoot = styled.div`
 	width: 100%;
-	/*height: 100%;*/
 	display: flex;
 	flex-direction: row;
 	padding: ${(props:any) => props.theme.mainPadding}px;
@@ -19,7 +22,12 @@ const StyledButton = styled(Button)`
 	margin-left: 8px;
 `;
 
-export default function NoteListControls() {
+const ButtonContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+`;
+
+export default function NoteListControls(props:Props) {
 	const searchBarRef = useRef(null);
 
 	useEffect(function() {
@@ -38,21 +46,31 @@ export default function NoteListControls() {
 		CommandService.instance().execute('newNote');
 	}
 
+	function renderNewNoteButtons() {
+		if (!props.showNewNoteButtons) return null;
+
+		return (
+			<ButtonContainer>
+				<StyledButton
+					tooltip={CommandService.instance().title('newTodo')}
+					iconName="far fa-check-square"
+					level={ButtonLevel.Primary}
+					onClick={onNewTodoButtonClick}
+				/>
+				<StyledButton
+					tooltip={CommandService.instance().title('newNote')}
+					iconName="icon-note"
+					level={ButtonLevel.Primary}
+					onClick={onNewNoteButtonClick}
+				/>
+			</ButtonContainer>
+		);
+	}
+
 	return (
 		<StyledRoot>
 			<SearchBar inputRef={searchBarRef}/>
-			<StyledButton
-				tooltip={CommandService.instance().title('newTodo')}
-				iconName="far fa-check-square"
-				level={ButtonLevel.Primary}
-				onClick={onNewTodoButtonClick}
-			/>
-			<StyledButton
-				tooltip={CommandService.instance().title('newNote')}
-				iconName="icon-note"
-				level={ButtonLevel.Primary}
-				onClick={onNewNoteButtonClick}
-			/>
+			{renderNewNoteButtons()}
 		</StyledRoot>
 	);
 }
