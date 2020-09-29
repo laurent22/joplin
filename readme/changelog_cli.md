@@ -1,5 +1,11 @@
 # Joplin terminal app changelog
 
+## [cli-v1.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.2) - 2020-09-29T11:33:53Z
+
+- Fixed: Fixed crash due to missing spellfix extension
+- Fixed: Fixed link generation when exporting to PDF or HTML (#3780)
+- Fixed: Improved handling of special characters when exporting to Markdown (#3760)
+
 ## [cli-v1.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.1) - 2020-09-23T11:15:12Z
 
 - Fixed: Fixed crash due to missing spellfix extension
