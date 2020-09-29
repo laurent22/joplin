@@ -7,7 +7,7 @@ const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
 const markdownUtils = require('lib/markdownUtils');
-const {shim} = require('lib/shim');
+const shim = require('lib/shim');
 const fs = require('fs-extra');
 
 const snapshotBaseDir = `${__dirname}/../../tests/support/syncTargetSnapshots`;
