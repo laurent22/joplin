@@ -101,6 +101,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	lastEditorScrollPercents: {},
 	devToolsVisible: false,
 	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
+	focusedField: null,
 });
 
 class Application extends BaseApplication {
@@ -290,6 +291,21 @@ class Application extends BaseApplication {
 			case 'VISIBLE_DIALOGS_REMOVE':
 				newState = Object.assign({}, state);
 				delete newState.visibleDialogs[state.name];
+				break;
+
+			case 'FOCUS_SET':
+
+				newState = Object.assign({}, state);
+				newState.focusedField = action.field;
+				break;
+
+			case 'FOCUS_CLEAR':
+
+				// A field can only clear its own state
+				if (action.field === state.focusedField) {
+					newState = Object.assign({}, state);
+					newState.focusedField = null;
+				}
 				break;
 
 			}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from 'lib/services/CommandService';
 
@@ -54,7 +54,7 @@ function ExpandIcon(props:any) {
 
 function ExpandLink(props:any) {
 	return props.hasChildren ? (
-		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onFolderToggleClick_}>
+		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onClick}>
 			<ExpandIcon themeId={props.themeId} isVisible={true} isExpanded={props.isExpanded}/>
 		</StyledExpandLink>
 	) : (
@@ -64,6 +64,8 @@ function ExpandLink(props:any) {
 
 function FolderItem(props:any) {
 	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
+
+	const noteCountComp = noteCount ? <StyledNoteCount>{noteCount}</StyledNoteCount> : null;
 
 	return (
 		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
@@ -83,7 +85,7 @@ function FolderItem(props:any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{folderTitle} { noteCount && <StyledNoteCount>{noteCount}</StyledNoteCount>}
+				{folderTitle} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
 	);
@@ -345,7 +347,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 
 	renderNoteCount(count:number) {
-		return <StyledNoteCount>{count}</StyledNoteCount>;
+		return count ? <StyledNoteCount>{count}</StyledNoteCount> : null;
 	}
 
 	renderExpandIcon(isExpanded:boolean, isVisible:boolean = true) {
@@ -359,16 +361,15 @@ class SideBarComponent extends React.Component<Props, State> {
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
+				<StyledAllNotesIcon className="icon-notes"/>
 				<StyledListItemAnchor
 					className="list-item"
 					isSpecialItem={true}
 					href="#"
 					selected={selected}
-					onClick={() => {
-						this.onAllNotesClick_();
-					}}
+					onClick={this.onAllNotesClick_}
 				>
-					({_('All notes')})
+					{_('All notes')}
 				</StyledListItemAnchor>
 			</StyledListItem>
 		);
