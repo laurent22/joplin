@@ -588,7 +588,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
 			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 		} else if (key === 'noteListControls') {
-			return <NoteListControls key={key} />;
+			return <NoteListControls key={key} showNewNoteButtons={this.props.focusedField !== 'globalSearch'} />;
 		} else if (key.indexOf('plugin-view') === 0) {
 			const { control, plugin } = event.item.context;
 			return <UserWebview
@@ -714,6 +714,7 @@ const mapStateToProps = (state:any) => {
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
+		focusedField: state.focusedField,
 	};
 };
 
