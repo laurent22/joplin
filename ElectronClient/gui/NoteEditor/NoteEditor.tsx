@@ -338,12 +338,8 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderNoteToolbar() {
-		// const theme = themeStyle(props.themeId);
-
 		const toolbarStyle = {
 			marginBottom: 0,
-			// paddingTop: theme.mainPadding,
-			// paddingBottom: theme.mainPadding,
 		};
 
 		return <NoteToolbar
@@ -363,16 +359,12 @@ function NoteEditor(props: NoteEditorProps) {
 
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
-		let control = null;
-		if (!props.selectedNoteTags.length) {
-			const noteIds = [formNote.id];
-			control = <span onClick={() => { CommandService.instance().execute('setTags', { noteIds }); }} style={theme.clickableTextStyle}>Click to add tags...</span>;
-		} else {
-			control = <TagList items={props.selectedNoteTags} />;
-		}
+		const noteIds = [formNote.id];
+		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', { noteIds }); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (
-			<div style={{ paddingLeft: 8 }}>{control}</div>
+			<div style={{ paddingLeft: 8, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{tagList}{instructions}</div>
 		);
 	}
 
