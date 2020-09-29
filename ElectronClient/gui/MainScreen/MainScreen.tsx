@@ -12,10 +12,10 @@ import SideBar from '../SideBar/SideBar';
 import UserWebview from '../plugin_service/UserWebview';
 import UserWebviewDialog from '../plugin_service/UserWebviewDialog';
 import { ContainerType } from 'lib/services/plugin_service/WebviewController';
+import { stateUtils } from 'lib/reducer';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
-const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');

@@ -1,20 +1,88 @@
-'use strict';
-
+import produce, { Draft } from 'immer';
+import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState } from 'lib/services/plugin_service/reducer';
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting').default;
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
-const additionalReducers = [];
+const additionalReducers:any[] = [];
 
 additionalReducers.push({
-	stateRootKey: require('lib/services/plugin_service/reducer.js').stateRootKey,
-	defaultState: require('lib/services/plugin_service/reducer.js').defaultState,
-	reducer: require('lib/services/plugin_service/reducer.js').default,
+	stateRootKey: pluginServiceStateRootKey,
+	defaultState: pluginServiceDefaultState,
+	reducer: pluginServiceReducer,
 });
 
-const defaultState = {
+interface StateLastSelectedNotesIds {
+	Folder: any,
+	Tag: any,
+	Search: any,
+}
+
+interface StateClipperServer {
+	startState: string,
+	port: number,
+}
+
+interface StateDecryptionWorker {
+	state: string,
+	itemIndex: number,
+	itemCount: number,
+	decryptedItemCounts: any
+	decryptedItemCount: number,
+	skippedItemCount: number,
+}
+
+interface StateResourceFetcher {
+	toFetchCount: number,
+}
+
+interface State {
+	notes: any[],
+	notesSource: string,
+	notesParentType: string,
+	folders: any[],
+	tags: any[],
+	masterKeys: any[],
+	notLoadedMasterKeys: any[],
+	searches: any[],
+	highlightedWords: string[],
+	selectedNoteIds: string[],
+	selectedNoteHash: string,
+	selectedFolderId: string,
+	selectedTagId: string,
+	selectedSearchId: string,
+	selectedItemType: string,
+	selectedSmartFilterId: string,
+	lastSelectedNotesIds: StateLastSelectedNotesIds,
+	showSideMenu: boolean,
+	screens: any
+	historyCanGoBack: boolean,
+	syncStarted: boolean,
+	syncReport: any
+	searchQuery: string,
+	settings: any
+	sharedData: any,
+	appState: string,
+	hasDisabledSyncItems: boolean,
+	hasDisabledEncryptionItems: boolean,
+	customCss: string,
+	templates: any[],
+	collapsedFolderIds: string[],
+	clipperServer: StateClipperServer,
+	decryptionWorker: StateDecryptionWorker,
+	selectedNoteTags: any[],
+	resourceFetcher: StateResourceFetcher,
+	backwardHistoryNotes: any[],
+	forwardHistoryNotes: any[],
+	pluginsLegacy: any
+	provisionalNoteIds: string[],
+	editorNoteStatuses: any
+	isInsertingNotes: boolean,
+	hasEncryptedItems: boolean,
+}
+
+export const defaultState:State = {
 	notes: [],
 	notesSource: '',
 	notesParentType: null,
@@ -29,6 +97,7 @@ const defaultState = {
 	selectedFolderId: null,
 	selectedTagId: null,
 	selectedSearchId: null,
+	selectedSmartFilterId: null,
 	selectedItemType: 'note',
 	lastSelectedNotesIds: {
 		Folder: {},
@@ -75,21 +144,22 @@ const defaultState = {
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
+	hasEncryptedItems: false,
 };
 
 for (const additionalReducer of additionalReducers) {
-	defaultState[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+	(defaultState as any)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
 }
 
-const MAX_HISTORY = 200;
+export const MAX_HISTORY = 200;
 
-const stateUtils = {};
+export const stateUtils:any = {};
 
-const derivedStateCache_ = {};
+const derivedStateCache_:any = {};
 
 // Allows, for a given state, to return the same derived
 // objects, to prevent unecessary updates on calling components.
-const cacheEnabledOutput = (key, output) => {
+const cacheEnabledOutput = (key:string, output:any) => {
 	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
 
@@ -97,11 +167,11 @@ const cacheEnabledOutput = (key, output) => {
 	return derivedStateCache_[key];
 };
 
-stateUtils.hasOneSelectedNote = function(state) {
+stateUtils.hasOneSelectedNote = function(state:State):boolean {
 	return state.selectedNoteIds.length === 1;
 };
 
-stateUtils.notesOrder = function(stateSettings) {
+stateUtils.notesOrder = function(stateSettings:any) {
 	if (stateSettings['notes.sortOrder.field'] === 'order') {
 		return cacheEnabledOutput('notesOrder', [
 			{
@@ -123,7 +193,7 @@ stateUtils.notesOrder = function(stateSettings) {
 	}
 };
 
-stateUtils.foldersOrder = function(stateSettings) {
+stateUtils.foldersOrder = function(stateSettings:any) {
 	return cacheEnabledOutput('foldersOrder', [
 		{
 			by: stateSettings['folders.sortOrder.field'],
@@ -132,14 +202,14 @@ stateUtils.foldersOrder = function(stateSettings) {
 	]);
 };
 
-stateUtils.hasNotesBeingSaved = function(state) {
+stateUtils.hasNotesBeingSaved = function(state:State):boolean {
 	for (const id in state.editorNoteStatuses) {
 		if (state.editorNoteStatuses[id] === 'saving') return true;
 	}
 	return false;
 };
 
-stateUtils.parentItem = function(state) {
+stateUtils.parentItem = function(state:State) {
 	const t = state.notesParentType;
 	let id = null;
 	if (t === 'Folder') id = state.selectedFolderId;
@@ -149,14 +219,14 @@ stateUtils.parentItem = function(state) {
 	return { type: t, id: id };
 };
 
-stateUtils.lastSelectedNoteIds = function(state) {
+stateUtils.lastSelectedNoteIds = function(state:State):string[] {
 	const parent = stateUtils.parentItem(state);
 	if (!parent) return [];
-	const output = state.lastSelectedNotesIds[parent.type][parent.id];
+	const output = (state.lastSelectedNotesIds as any)[parent.type][parent.id];
 	return output ? output : [];
 };
 
-stateUtils.getCurrentNote = function(state) {
+stateUtils.getCurrentNote = function(state:State) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
 	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
@@ -177,44 +247,42 @@ stateUtils.getCurrentNote = function(state) {
 	return null;
 };
 
-function arrayHasEncryptedItems(array) {
+function arrayHasEncryptedItems(array:any[]) {
 	for (let i = 0; i < array.length; i++) {
 		if (array[i].encryption_applied) return true;
 	}
 	return false;
 }
 
-function stateHasEncryptedItems(state) {
+function stateHasEncryptedItems(state:State) {
 	if (arrayHasEncryptedItems(state.notes)) return true;
 	if (arrayHasEncryptedItems(state.folders)) return true;
 	if (arrayHasEncryptedItems(state.tags)) return true;
 	return false;
 }
 
-function folderSetCollapsed(state, action) {
-	const collapsedFolderIds = state.collapsedFolderIds.slice();
+function folderSetCollapsed(draft:Draft<State>, action:any) {
+	const collapsedFolderIds = draft.collapsedFolderIds.slice();
 	const idx = collapsedFolderIds.indexOf(action.id);
 
 	if (action.collapsed) {
-		if (idx >= 0) return state;
+		if (idx >= 0) return;
 		collapsedFolderIds.push(action.id);
 	} else {
-		if (idx < 0) return state;
+		if (idx < 0) return;
 		collapsedFolderIds.splice(idx, 1);
 	}
 
-	const newState = Object.assign({}, state);
-	newState.collapsedFolderIds = collapsedFolderIds;
-	return newState;
+	draft.collapsedFolderIds = collapsedFolderIds;
 }
 
-function removeAdjacentDuplicates(items) {
-	return items.filter((item, idx) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
+function removeAdjacentDuplicates(items:any[]) {
+	return items.filter((item:any, idx:number) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
 }
 
 // When deleting a note, tag or folder
-function handleItemDelete(state, action) {
-	const map = {
+function handleItemDelete(draft:Draft<State>, action:any) {
+	const map:any = {
 		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
 		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
 		TAG_DELETE: ['tags', 'selectedTagId', true],
@@ -225,12 +293,12 @@ function handleItemDelete(state, action) {
 	const selectedItemKey = map[action.type][1];
 	const isSingular = map[action.type][2];
 
-	const selectedItemKeys = isSingular ? [state[selectedItemKey]] : state[selectedItemKey];
+	const selectedItemKeys = isSingular ? [(draft as any)[selectedItemKey]] : (draft as any)[selectedItemKey];
 	const isSelected = selectedItemKeys.includes(action.id);
 
-	const items = state[listKey];
+	const items = (draft as any)[listKey];
 	const newItems = [];
-	let newSelectedIndexes = [];
+	let newSelectedIndexes:number[] = [];
 
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
@@ -268,23 +336,20 @@ function handleItemDelete(state, action) {
 		}
 	}
 
-	const newState = Object.assign({}, state);
-	newState[listKey] = newItems;
+	(draft as any)[listKey] = newItems;
 
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
-	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
+	(draft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	if ((newIds.length == 0) && newState.notesParentType !== 'Folder') {
-		newState.notesParentType = 'Folder';
+	if ((newIds.length == 0) && draft.notesParentType !== 'Folder') {
+		draft.notesParentType = 'Folder';
 	}
-
-	return newState;
 }
 
-function updateOneItem(state, action, keyName = '') {
+function updateOneItem(draft:Draft<State>, action:any, keyName:string = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
@@ -292,7 +357,7 @@ function updateOneItem(state, action, keyName = '') {
 		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
 	}
 
-	const newItems = state[itemsKey].slice();
+	const newItems = (draft as any)[itemsKey].slice();
 	const item = action.item;
 
 	let found = false;
@@ -307,75 +372,62 @@ function updateOneItem(state, action, keyName = '') {
 
 	if (!found) newItems.push(item);
 
-	const newState = Object.assign({}, state);
-
-	newState[itemsKey] = newItems;
-
-	return newState;
+	(draft as any)[itemsKey] = newItems;
 }
 
-function updateSelectedNotesFromExistingNotes(state) {
+function updateSelectedNotesFromExistingNotes(draft:Draft<State>) {
 	const newSelectedNoteIds = [];
-	for (const selectedNoteId of state.selectedNoteIds) {
-		for (const n of state.notes) {
+	for (const selectedNoteId of draft.selectedNoteIds) {
+		for (const n of draft.notes) {
 			if (n.id === selectedNoteId) {
 				newSelectedNoteIds.push(n.id);
 			}
 		}
 	}
 
-	return Object.assign({}, state, {
-		selectedNoteIds: newSelectedNoteIds,
-	});
+	draft.selectedNoteIds = newSelectedNoteIds;
 }
 
-function defaultNotesParentType(state, exclusion) {
+function defaultNotesParentType(draft:Draft<State>, exclusion:string) {
 	let newNotesParentType = null;
 
-	if (exclusion !== 'SmartFilter' && state.selectedSmartFilterId) {
+	if (exclusion !== 'SmartFilter' && draft.selectedSmartFilterId) {
 		newNotesParentType = 'SmartFilter';
-	} else if (exclusion !== 'Folder' && state.selectedFolderId) {
+	} else if (exclusion !== 'Folder' && draft.selectedFolderId) {
 		newNotesParentType = 'Folder';
-	} else if (exclusion !== 'Tag' && state.selectedTagId) {
+	} else if (exclusion !== 'Tag' && draft.selectedTagId) {
 		newNotesParentType = 'Tag';
-	} else if (exclusion !== 'Search' && state.selectedSearchId) {
+	} else if (exclusion !== 'Search' && draft.selectedSearchId) {
 		newNotesParentType = 'Search';
 	}
 
 	return newNotesParentType;
 }
 
-function changeSelectedFolder(state, action, options = null) {
+function changeSelectedFolder(draft:Draft<State>, action:any, options:any = null) {
 	if (!options) options = {};
-	const newState = Object.assign({}, state);
-	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
-	if (!newState.selectedFolderId) {
-		newState.notesParentType = defaultNotesParentType(state, 'Folder');
+	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
+	if (!draft.selectedFolderId) {
+		draft.notesParentType = defaultNotesParentType(draft, 'Folder');
 	} else {
-		newState.notesParentType = 'Folder';
+		draft.notesParentType = 'Folder';
 	}
 
-	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
-
-	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
-
-	return newState;
+	if (options.clearSelectedNoteIds) draft.selectedNoteIds = [];
 }
 
-function recordLastSelectedNoteIds(state, noteIds) {
-	const newOnes = Object.assign({}, state.lastSelectedNotesIds);
-	const parent = stateUtils.parentItem(state);
-	if (!parent) return state;
+function recordLastSelectedNoteIds(draft:Draft<State>, noteIds:string[]) {
+	const newOnes:any = Object.assign({}, draft.lastSelectedNotesIds);
+	const parent = stateUtils.parentItem(draft);
+	if (!parent) return;
 
 	newOnes[parent.type] = Object.assign({}, newOnes[parent.type]);
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
-	return Object.assign({}, state, {
-		lastSelectedNotesIds: newOnes,
-	});
+	draft.lastSelectedNotesIds = newOnes;
 }
 
-function changeSelectedNotes(state, action, options = null) {
+function changeSelectedNotes(draft:Draft<State>, action:any, options:any = null) {
 	if (!options) options = {};
 
 	let noteIds = [];
@@ -383,44 +435,40 @@ function changeSelectedNotes(state, action, options = null) {
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
 
-	let newState = Object.assign({}, state);
-
 	if (action.type === 'NOTE_SELECT') {
-		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
-		newState.selectedNoteIds = noteIds;
-		newState.selectedNoteHash = action.hash ? action.hash : '';
+		if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(noteIds)) return;
+		draft.selectedNoteIds = noteIds;
+		draft.selectedNoteHash = action.hash ? action.hash : '';
 	} else if (action.type === 'NOTE_SELECT_ADD') {
-		if (!noteIds.length) return state;
-		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
+		if (!noteIds.length) return;
+		draft.selectedNoteIds = ArrayUtils.unique(draft.selectedNoteIds.concat(noteIds));
 	} else if (action.type === 'NOTE_SELECT_REMOVE') {
-		if (!noteIds.length) return state; // Nothing to unselect
-		if (state.selectedNoteIds.length <= 1) return state; // Cannot unselect the last note
+		if (!noteIds.length) return; // Nothing to unselect
+		if (draft.selectedNoteIds.length <= 1) return; // Cannot unselect the last note
 
 		const newSelectedNoteIds = [];
-		for (let i = 0; i < newState.selectedNoteIds.length; i++) {
-			const id = newState.selectedNoteIds[i];
+		for (let i = 0; i < draft.selectedNoteIds.length; i++) {
+			const id = draft.selectedNoteIds[i];
 			if (noteIds.indexOf(id) >= 0) continue;
 			newSelectedNoteIds.push(id);
 		}
-		newState.selectedNoteIds = newSelectedNoteIds;
+		draft.selectedNoteIds = newSelectedNoteIds;
 	} else if (action.type === 'NOTE_SELECT_TOGGLE') {
-		if (!noteIds.length) return state;
+		if (!noteIds.length) return;
 
-		if (newState.selectedNoteIds.indexOf(noteIds[0]) >= 0) {
-			newState = changeSelectedNotes(state, { type: 'NOTE_SELECT_REMOVE', id: noteIds[0] });
+		if (draft.selectedNoteIds.indexOf(noteIds[0]) >= 0) {
+			changeSelectedNotes(draft, { type: 'NOTE_SELECT_REMOVE', id: noteIds[0] });
 		} else {
-			newState = changeSelectedNotes(state, { type: 'NOTE_SELECT_ADD', id: noteIds[0] });
+			changeSelectedNotes(draft, { type: 'NOTE_SELECT_ADD', id: noteIds[0] });
 		}
 	} else {
 		throw new Error('Unreachable');
 	}
 
-	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
-
-	return newState;
+	recordLastSelectedNoteIds(draft, draft.selectedNoteIds);
 }
 
-function removeItemFromArray(array, property, value) {
+function removeItemFromArray(array:any[], property:any, value:any) {
 	for (let i = 0; i !== array.length; ++i) {
 		const currentItem = array[i];
 		if (currentItem[property] === value) {
@@ -432,8 +480,8 @@ function removeItemFromArray(array, property, value) {
 	return array;
 }
 
-const getContextFromHistory = (ctx) => {
-	const result = {};
+const getContextFromHistory = (ctx:any) => {
+	const result:any = {};
 	result.notesParentType = ctx.notesParentType;
 	if (result.notesParentType === 'Folder') {
 		result.selectedFolderId = ctx.selectedFolderId;
@@ -448,11 +496,10 @@ const getContextFromHistory = (ctx) => {
 	return result;
 };
 
-function handleHistory(state, action) {
-	let newState = Object.assign({}, state);
-	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-	const currentNote = stateUtils.getCurrentNote(state);
+function handleHistory(draft:Draft<State>, action:any) {
+	let backwardHistoryNotes = draft.backwardHistoryNotes.slice();
+	let forwardHistoryNotes = draft.forwardHistoryNotes.slice();
+	const currentNote = stateUtils.getCurrentNote(draft);
 	switch (action.type) {
 	case 'HISTORY_BACKWARD': {
 		const note = backwardHistoryNotes[backwardHistoryNotes.length - 1];
@@ -460,11 +507,11 @@ function handleHistory(state, action) {
 			forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
 
 		const ctx = backwardHistoryNotes[backwardHistoryNotes.length - 1];
-		newState = Object.assign(newState, getContextFromHistory(ctx));
+		Object.assign(draft, getContextFromHistory(ctx));
 
 		backwardHistoryNotes.pop();
 		break;
@@ -476,11 +523,11 @@ function handleHistory(state, action) {
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
 
 		const ctx = forwardHistoryNotes[forwardHistoryNotes.length - 1];
-		newState = Object.assign(newState, getContextFromHistory(ctx));
+		Object.assign(draft, getContextFromHistory(ctx));
 
 
 		forwardHistoryNotes.pop();
@@ -546,7 +593,7 @@ function handleHistory(state, action) {
 		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
 
 		// Fix the case where after deletion the currently selected note is also the latest in history
-		const selectedNoteIds = newState.selectedNoteIds;
+		const selectedNoteIds = draft.selectedNoteIds;
 		if (selectedNoteIds.length && backwardHistoryNotes.length && backwardHistoryNotes[backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
 			backwardHistoryNotes = backwardHistoryNotes.slice(0, backwardHistoryNotes.length - 1);
 		}
@@ -555,24 +602,23 @@ function handleHistory(state, action) {
 		}
 		break;
 	}
-	default:
-		// console.log('Unknown action in history reducer.' ,action.type);
-		return state;
 	}
 
-	newState.backwardHistoryNotes = backwardHistoryNotes;
-	newState.forwardHistoryNotes = forwardHistoryNotes;
-	return newState;
+	draft.backwardHistoryNotes = backwardHistoryNotes;
+	draft.forwardHistoryNotes = forwardHistoryNotes;
 }
 
-const reducer = (state = defaultState, action) => {
+
+const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
+
+//const reducer = (state:State = defaultState, action:any) => {
 	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type, action);
 
-	let newState = state;
+	// let newState = state;
 
 	// NOTE_DELETE requires post processing
 	if (action.type !== 'NOTE_DELETE') {
-		newState = handleHistory(newState, action);
+		handleHistory(draft, action);
 	}
 
 	try {
@@ -582,105 +628,99 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_SELECT_ADD':
 		case 'NOTE_SELECT_REMOVE':
 		case 'NOTE_SELECT_TOGGLE':
-			newState = changeSelectedNotes(newState, action);
+			changeSelectedNotes(draft, action);
 			break;
 		case 'NOTE_SELECT_EXTEND':
 			{
-				newState = Object.assign({}, state);
-
-				if (!newState.selectedNoteIds.length) {
-					newState.selectedNoteIds = [action.id];
+				if (!draft.selectedNoteIds.length) {
+					draft.selectedNoteIds = [action.id];
 				} else {
-					const selectRangeId1 = state.selectedNoteIds[state.selectedNoteIds.length - 1];
+					const selectRangeId1 = draft.selectedNoteIds[draft.selectedNoteIds.length - 1];
 					const selectRangeId2 = action.id;
-					if (selectRangeId1 === selectRangeId2) return state;
+					if (selectRangeId1 === selectRangeId2) {
+						// Nothing
+					} else {
+						const newSelectedNoteIds = draft.selectedNoteIds.slice();
+						let selectionStarted = false;
+						for (let i = 0; i < draft.notes.length; i++) {
+							const id = draft.notes[i].id;
 
-					const newSelectedNoteIds = state.selectedNoteIds.slice();
-					let selectionStarted = false;
-					for (let i = 0; i < state.notes.length; i++) {
-						const id = state.notes[i].id;
+							if (!selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+								selectionStarted = true;
+								if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+								continue;
+							} else if (selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+								if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+								break;
+							}
 
-						if (!selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
-							selectionStarted = true;
-							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
-							continue;
-						} else if (selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
-							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
-							break;
+							if (selectionStarted && newSelectedNoteIds.indexOf(id) < 0) {
+								newSelectedNoteIds.push(id);
+							}
 						}
-
-						if (selectionStarted && newSelectedNoteIds.indexOf(id) < 0) {
-							newSelectedNoteIds.push(id);
-						}
+						draft.selectedNoteIds = newSelectedNoteIds;
 					}
-					newState.selectedNoteIds = newSelectedNoteIds;
 				}
 			}
 			break;
 
 		case 'NOTE_SELECT_ALL':
-			newState = Object.assign({}, state);
-			newState.selectedNoteIds = newState.notes.map(n => n.id);
+			draft.selectedNoteIds = draft.notes.map((n:any) => n.id);
 			break;
 
 		case 'NOTE_SELECT_ALL_TOGGLE': {
-			newState = Object.assign({}, state);
-			const allSelected = state.notes.every(n => state.selectedNoteIds.includes(n.id));
+			const allSelected = draft.notes.every((n:any) => draft.selectedNoteIds.includes(n.id));
 			if (allSelected) {
-				newState.selectedNoteIds = [];
+				draft.selectedNoteIds = [];
 			} else {
-				newState.selectedNoteIds = newState.notes.map(n => n.id);
+				draft.selectedNoteIds = draft.notes.map(n => n.id);
 			}
 			break;
 		}
 
 		case 'SMART_FILTER_SELECT':
-			newState = Object.assign({}, state);
-			newState.notesParentType = 'SmartFilter';
-			newState.selectedSmartFilterId = action.id;
+			draft.notesParentType = 'SmartFilter';
+			draft.selectedSmartFilterId = action.id;
 			break;
 
 		case 'FOLDER_SELECT':
-			newState = changeSelectedFolder(newState, action, { clearSelectedNoteIds: true });
+			changeSelectedFolder(draft, action, { clearSelectedNoteIds: true });
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(newState, action);
+				changeSelectedFolder(draft, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction);
+				changeSelectedNotes(draft, noteSelectAction);
 			}
 			break;
 
 		case 'SETTING_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.settings = action.settings;
+			draft.settings = action.settings;
 			break;
 
 		case 'SETTING_UPDATE_ONE':
 			{
-				newState = Object.assign({}, state);
-				const newSettings = Object.assign({}, state.settings);
+				const newSettings = Object.assign({}, draft.settings);
 				newSettings[action.key] = action.value;
-				newState.settings = newSettings;
+				draft.settings = newSettings;
 			}
 			break;
 
 		case 'NOTE_PROVISIONAL_FLAG_CLEAR':
 			{
-				const newIds = ArrayUtils.removeElement(state.provisionalNoteIds, action.id);
-				if (newIds !== state.provisionalNoteIds) {
-					newState = Object.assign({}, state, { provisionalNoteIds: newIds });
+				const newIds = ArrayUtils.removeElement(draft.provisionalNoteIds, action.id);
+				if (newIds !== draft.provisionalNoteIds) {
+					draft.provisionalNoteIds = newIds;
 				}
 			}
 			break;
 
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.notes = action.notes;
-			newState.notesSource = action.notesSource;
-			newState = updateSelectedNotesFromExistingNotes(newState);
+			draft.notes = action.notes;
+			draft.notesSource = action.notesSource;
+			updateSelectedNotesFromExistingNotes(draft);
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -688,10 +728,10 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote = action.note;
-				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
-				const isViewingConflictFolder = state.notesParentType === 'Folder' && state.selectedFolderId === Folder.conflictFolderId();
+				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note, folderId) {
+				const noteIsInFolder = function(note:any, folderId:string) {
 					if (note.is_conflict && isViewingConflictFolder) return true;
 					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
 					return false;
@@ -699,7 +739,7 @@ const reducer = (state = defaultState, action) => {
 
 				let movedNotePreviousIndex = 0;
 				let noteFolderHasChanged = false;
-				let newNotes = state.notes.slice();
+				let newNotes = draft.notes.slice();
 				let found = false;
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
@@ -728,24 +768,23 @@ const reducer = (state = defaultState, action) => {
 				// Note was not found - if the current folder is the same as the note folder,
 				// add it to it.
 				if (!found) {
-					if (isViewingAllNotes || noteIsInFolder(modNote, state.selectedFolderId)) {
+					if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
 						newNotes.push(modNote);
 					}
 				}
 
-				// newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
-				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
-				newState = Object.assign({}, state);
-				newState.notes = newNotes;
+				// newNotes = Note.sortNotes(newNotes, draft.notesOrder, draft.settings.uncompletedTodosOnTop);
+				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
+				draft.notes = newNotes;
 
 				if (noteFolderHasChanged) {
 					let newIndex = movedNotePreviousIndex;
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 					if (!newNotes.length) newIndex = -1;
-					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
+					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-				let newProvisionalNoteIds = newState.provisionalNoteIds;
+				let newProvisionalNoteIds = draft.provisionalNoteIds;
 
 				if (action.provisional) {
 					newProvisionalNoteIds = newProvisionalNoteIds.slice();
@@ -755,142 +794,131 @@ const reducer = (state = defaultState, action) => {
 					if (idx >= 0) {
 						newProvisionalNoteIds = newProvisionalNoteIds.slice();
 						newProvisionalNoteIds.splice(idx, 1);
+
 					}
 				}
 
-				newState.provisionalNoteIds = newProvisionalNoteIds;
+				draft.provisionalNoteIds = newProvisionalNoteIds;
 			}
 			break;
 
 		case 'NOTE_DELETE':
 
 			{
-				newState = handleItemDelete(state, action);
+				handleItemDelete(draft, action);
 
-				const idx = newState.provisionalNoteIds.indexOf(action.id);
+				const idx = draft.provisionalNoteIds.indexOf(action.id);
 				if (idx >= 0) {
-					const t = newState.provisionalNoteIds.slice();
+					const t = draft.provisionalNoteIds.slice();
 					t.splice(idx, 1);
-					newState.provisionalNoteIds = t;
+					draft.provisionalNoteIds = t;
 				}
 			}
 			break;
 
 		case 'NOTE_IS_INSERTING_NOTES':
 
-			if (state.isInsertingNotes !== action.value) {
-				newState = Object.assign({}, state);
-				newState.isInsertingNotes = action.value;
+			if (draft.isInsertingNotes !== action.value) {
+				draft.isInsertingNotes = action.value;
 			}
 			break;
 
 		case 'TAG_DELETE':
-			newState = handleItemDelete(state, action);
-			newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags, 'id', action.id);
+			handleItemDelete(draft, action);
+			draft.selectedNoteTags = removeItemFromArray(draft.selectedNoteTags, 'id', action.id);
 			break;
 
 		case 'FOLDER_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.folders = action.items;
+			draft.folders = action.items;
 			break;
 
 		case 'FOLDER_SET_COLLAPSED':
-			newState = folderSetCollapsed(state, action);
+			folderSetCollapsed(draft, action);
 			break;
 
 		case 'FOLDER_TOGGLE':
-			if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
-				newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
+			if (draft.collapsedFolderIds.indexOf(action.id) >= 0) {
+				folderSetCollapsed(draft, Object.assign({ collapsed: false }, action));
 			} else {
-				newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
+				folderSetCollapsed(draft, Object.assign({ collapsed: true }, action));
 			}
 			break;
 
 		case 'FOLDER_SET_COLLAPSED_ALL':
-			newState = Object.assign({}, state);
-			newState.collapsedFolderIds = action.ids.slice();
+			draft.collapsedFolderIds = action.ids.slice();
 			break;
 
 		case 'TAG_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.tags = action.items;
+			draft.tags = action.items;
 			break;
 
 		case 'TAG_SELECT':
 
-			if (state.selectedTagId !== action.id) {
-				newState = Object.assign({}, state);
-				newState.selectedTagId = action.id;
+			if (draft.selectedTagId !== action.id) {
+				draft.selectedTagId = action.id;
 				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Tag');
+					draft.notesParentType = defaultNotesParentType(draft, 'Tag');
 				} else {
-					newState.notesParentType = 'Tag';
+					draft.notesParentType = 'Tag';
 				}
-				newState.selectedNoteIds = [];
+				draft.selectedNoteIds = [];
 			}
 			break;
 
 		case 'TAG_UPDATE_ONE':
 			{
 				// We only want to update the selected note tags if the tag belongs to the currently open note
-				const selectedNoteHasTag = !!state.selectedNoteTags.find(tag => tag.id === action.item.id);
-				newState = updateOneItem(state, action);
-				if (selectedNoteHasTag) newState = updateOneItem(newState, action, 'selectedNoteTags');
+				const selectedNoteHasTag = !!draft.selectedNoteTags.find(tag => tag.id === action.item.id);
+				updateOneItem(draft, action);
+				if (selectedNoteHasTag) updateOneItem(draft, action, 'selectedNoteTags');
 			}
 			break;
 
 		case 'NOTE_TAG_REMOVE':
 			{
-				newState = updateOneItem(state, action, 'tags');
+				updateOneItem(draft, action, 'tags');
 				const tagRemoved = action.item;
-				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags, 'id', tagRemoved.id);
+				draft.selectedNoteTags = removeItemFromArray(draft.selectedNoteTags, 'id', tagRemoved.id);
 			}
 			break;
 
 		case 'EDITOR_NOTE_STATUS_SET':
 
 			{
-				const newStatuses = Object.assign({}, state.editorNoteStatuses);
-				newStatuses[action.id] = action.status;
-				newState = Object.assign({}, state, { editorNoteStatuses: newStatuses });
+				draft.editorNoteStatuses[action.id] = action.status;
 			}
 			break;
 
 		case 'EDITOR_NOTE_STATUS_REMOVE':
 
 			{
-				const newStatuses = Object.assign({}, state.editorNoteStatuses);
-				delete newStatuses[action.id];
-				newState = Object.assign({}, state, { editorNoteStatuses: newStatuses });
+				delete draft.editorNoteStatuses[action.id];
 			}
 			break;
 
 		case 'FOLDER_UPDATE_ONE':
 		case 'MASTERKEY_UPDATE_ONE':
-			newState = updateOneItem(state, action);
+			updateOneItem(draft, action);
 			break;
 
 		case 'FOLDER_DELETE':
-			newState = handleItemDelete(newState, action);
+			handleItemDelete(draft, action);
 			break;
 
 		case 'MASTERKEY_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.masterKeys = action.items;
+			draft.masterKeys = action.items;
 			break;
 
 		case 'MASTERKEY_SET_NOT_LOADED':
-			newState = Object.assign({}, state);
-			newState.notLoadedMasterKeys = action.ids;
+			draft.notLoadedMasterKeys = action.ids;
 			break;
 
 		case 'MASTERKEY_ADD_NOT_LOADED':
 			{
-				if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {
-					newState = Object.assign({}, state);
-					const keys = newState.notLoadedMasterKeys.slice();
+				if (draft.notLoadedMasterKeys.indexOf(action.id) < 0) {
+					const keys = draft.notLoadedMasterKeys.slice();
 					keys.push(action.id);
-					newState.notLoadedMasterKeys = keys;
+					draft.notLoadedMasterKeys = keys;
 				}
 			}
 			break;
@@ -900,49 +928,43 @@ const reducer = (state = defaultState, action) => {
 				const ids = action.id ? [action.id] : action.ids;
 				for (let i = 0; i < ids.length; i++) {
 					const id = ids[i];
-					const index = state.notLoadedMasterKeys.indexOf(id);
+					const index = draft.notLoadedMasterKeys.indexOf(id);
 					if (index >= 0) {
-						newState = Object.assign({}, state);
-						const keys = newState.notLoadedMasterKeys.slice();
+						const keys = draft.notLoadedMasterKeys.slice();
 						keys.splice(index, 1);
-						newState.notLoadedMasterKeys = keys;
+						draft.notLoadedMasterKeys = keys;
 					}
 				}
 			}
 			break;
 
 		case 'SYNC_STARTED':
-			newState = Object.assign({}, state);
-			newState.syncStarted = true;
+			draft.syncStarted = true;
 			break;
 
 		case 'SYNC_COMPLETED':
-			newState = Object.assign({}, state);
-			newState.syncStarted = false;
+			draft.syncStarted = false;
 			break;
 
 		case 'SYNC_REPORT_UPDATE':
-			newState = Object.assign({}, state);
-			newState.syncReport = action.report;
+			draft.syncReport = action.report;
 			break;
 
 		case 'SEARCH_QUERY':
-			newState = Object.assign({}, state);
-			newState.searchQuery = action.query.trim();
+			draft.searchQuery = action.query.trim();
 			break;
 
 		case 'SEARCH_ADD':
 			{
-				newState = Object.assign({}, state);
-				const searches = newState.searches.slice();
+				const searches = draft.searches.slice();
 				searches.push(action.search);
-				newState.searches = searches;
+				draft.searches = searches;
 			}
 			break;
 
 		case 'SEARCH_UPDATE':
 			{
-				const searches = newState.searches.slice();
+				const searches = draft.searches.slice();
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
 					if (searches[i].id === action.search.id) {
@@ -955,103 +977,92 @@ const reducer = (state = defaultState, action) => {
 				if (!found) searches.push(action.search);
 
 				if (!action.search.query_pattern) {
-					newState.notesParentType = defaultNotesParentType(state, 'Search');
+					draft.notesParentType = defaultNotesParentType(draft, 'Search');
 				} else {
-					newState.notesParentType = 'Search';
+					draft.notesParentType = 'Search';
 				}
 
-				newState.searches = searches;
+				draft.searches = searches;
 			}
 			break;
 
 		case 'SEARCH_DELETE':
-			newState = handleItemDelete(state, action);
+			handleItemDelete(draft, action);
 			break;
 
 		case 'SEARCH_SELECT':
-			newState = Object.assign({}, state);
-			newState.selectedSearchId = action.id;
+			draft.selectedSearchId = action.id;
 			if (!action.id) {
-				newState.notesParentType = defaultNotesParentType(state, 'Search');
+				draft.notesParentType = defaultNotesParentType(draft, 'Search');
 			} else {
-				newState.notesParentType = 'Search';
+				draft.notesParentType = 'Search';
 			}
-			newState.selectedNoteIds = [];
+			draft.selectedNoteIds = [];
 			break;
 		case 'SET_HIGHLIGHTED':
-			newState = Object.assign({}, state, { highlightedWords: action.words });
+			draft.highlightedWords = action.words;
 			break;
 
 		case 'APP_STATE_SET':
-			newState = Object.assign({}, state);
-			newState.appState = action.state;
+			draft.appState = action.state;
 			break;
 
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
-			newState = Object.assign({}, state);
-			newState.hasDisabledSyncItems = true;
+			draft.hasDisabledSyncItems = true;
 			break;
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
-			newState = Object.assign({}, state);
-			newState.hasDisabledEncryptionItems = action.value;
+			draft.hasDisabledEncryptionItems = action.value;
 			break;
 
 		case 'CLIPPER_SERVER_SET':
 			{
-				newState = Object.assign({}, state);
-				const clipperServer = Object.assign({}, newState.clipperServer);
+				const clipperServer = Object.assign({}, draft.clipperServer);
 				if ('startState' in action) clipperServer.startState = action.startState;
 				if ('port' in action) clipperServer.port = action.port;
-				newState.clipperServer = clipperServer;
+				draft.clipperServer = clipperServer;
 			}
 			break;
 
 		case 'DECRYPTION_WORKER_SET':
 			{
-				newState = Object.assign({}, state);
-				const decryptionWorker = Object.assign({}, newState.decryptionWorker);
+				const decryptionWorker = Object.assign({}, draft.decryptionWorker);
 				for (const n in action) {
 					if (!action.hasOwnProperty(n) || n === 'type') continue;
-					decryptionWorker[n] = action[n];
+					(decryptionWorker as any)[n] = action[n];
 				}
-				newState.decryptionWorker = decryptionWorker;
+				draft.decryptionWorker = decryptionWorker;
 			}
 			break;
 
 		case 'RESOURCE_FETCHER_SET':
 			{
-				newState = Object.assign({}, state);
 				const rf = Object.assign({}, action);
 				delete rf.type;
-				newState.resourceFetcher = rf;
+				draft.resourceFetcher = rf;
 			}
 			break;
 
 		case 'LOAD_CUSTOM_CSS':
-			newState = Object.assign({}, state);
-			newState.customCss = action.css;
+			draft.customCss = action.css;
 			break;
 
 		case 'TEMPLATE_UPDATE_ALL':
-			newState = Object.assign({}, state);
-			newState.templates = action.templates;
+			draft.templates = action.templates;
 			break;
 
 		case 'SET_NOTE_TAGS':
-			newState = Object.assign({}, state);
-			newState.selectedNoteTags = action.items;
+			draft.selectedNoteTags = action.items;
 			break;
 
 		case 'PLUGINLEGACY_DIALOG_SET':
 			{
 				if (!action.pluginName) throw new Error('action.pluginName not specified');
-				newState = Object.assign({}, state);
-				const newPluginsLegacy = Object.assign({}, newState.pluginsLegacy);
-				const newPlugin = newState.pluginsLegacy[action.pluginName] ? Object.assign({}, newState.pluginsLegacy[action.pluginName]) : {};
+				const newPluginsLegacy = Object.assign({}, draft.pluginsLegacy);
+				const newPlugin = draft.pluginsLegacy[action.pluginName] ? Object.assign({}, draft.pluginsLegacy[action.pluginName]) : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
 				newPluginsLegacy[action.pluginName] = newPlugin;
-				newState.pluginsLegacy = newPluginsLegacy;
+				draft.pluginsLegacy = newPluginsLegacy;
 			}
 			break;
 		}
@@ -1061,23 +1072,22 @@ const reducer = (state = defaultState, action) => {
 	}
 
 	if (action.type.indexOf('NOTE_UPDATE') === 0 || action.type.indexOf('FOLDER_UPDATE') === 0 || action.type.indexOf('TAG_UPDATE') === 0) {
-		newState = Object.assign({}, newState);
-		newState.hasEncryptedItems = stateHasEncryptedItems(newState);
+		draft.hasEncryptedItems = stateHasEncryptedItems(draft);
 	}
 
 	if (action.type === 'NOTE_DELETE') {
-		newState = handleHistory(newState, action);
+		handleHistory(draft, action);
 	}
-
+	
 	for (const additionalReducer of additionalReducers) {
-		newState = additionalReducer.reducer(newState, action);
+		additionalReducer.reducer(draft, action);
 	}
+	
+	// if (Setting.value('env') === 'dev') {
+	// 	return Object.freeze(newState);
+	// } else {
+	// 	return newState;
+	// }
+});
 
-	if (Setting.value('env') === 'dev') {
-		return Object.freeze(newState);
-	} else {
-		return newState;
-	}
-};
-
-module.exports = { reducer, defaultState, stateUtils, MAX_HISTORY };
+export default reducer

@@ -208,6 +208,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js
+ReactNativeClient/lib/reducer.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/debug/populateDatabase.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js
