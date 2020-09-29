@@ -31,6 +31,12 @@ export const StyledHeaderIcon = styled.i`
 	margin-right: 8px;
 `;
 
+export const StyledAllNotesIcon = styled(StyledHeaderIcon)`
+	font-size: ${(props:any) => props.theme.toolbarIconSize * 0.8}px;
+	color: ${(props:any) => props.theme.colorFaded2};
+	margin-right: 8px;
+`;
+
 export const StyledHeaderLabel = styled.span`
 	flex: 1;
 	color: ${(props:any) => props.theme.color2};
@@ -43,9 +49,10 @@ export const StyledListItem = styled.div`
 	height: 25px;
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	padding-left: ${(props:any) => props.theme.mainPadding + ('depth' in props ? props.depth : 0) * 16}px;
 	background: ${(props:any) => props.selected ? props.theme.selectedColor2 : 'none'};
-	text-transform: ${(props:any) => props.isSpecialItem ? 'uppercase' : 'none'};
+	/*text-transform: ${(props:any) => props.isSpecialItem ? 'uppercase' : 'none'};*/
 	transition: 0.1s;
 
 	&:hover {
