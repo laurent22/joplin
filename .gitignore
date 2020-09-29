@@ -64,6 +64,8 @@ CliClient/tests/support/plugins/dialog/global.d.js
 CliClient/tests/support/plugins/dialog/src/index.js
 CliClient/tests/support/plugins/json_export/global.d.js
 CliClient/tests/support/plugins/json_export/src/index.js
+CliClient/tests/support/plugins/markdown_plugin/global.d.js
+CliClient/tests/support/plugins/markdown_plugin/src/index.js
 CliClient/tests/support/plugins/register_command/global.d.js
 CliClient/tests/support/plugins/register_command/src/index.js
 CliClient/tests/support/plugins/selected_text/global.d.js
