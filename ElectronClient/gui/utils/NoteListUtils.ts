@@ -1,3 +1,6 @@
+import { MenuItemLocation } from 'lib/services/plugin_service/MenuItemController';
+import { utils as pluginUtils, PluginStates } from 'lib/services/plugin_service/reducer';
+
 const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -10,8 +13,15 @@ const Note = require('lib/models/Note');
 const CommandService = require('lib/services/CommandService').default;
 const { substrWithEllipsis } = require('lib/string-utils');
 
-class NoteListUtils {
-	static makeContextMenu(noteIds, props) {
+interface ContextMenuProps {
+	notes: any[],
+	dispatch: Function,
+	watchedNoteFiles: string[],
+	plugins: PluginStates,
+}
+
+export default class NoteListUtils {
+	static makeContextMenu(noteIds:string[], props:ContextMenuProps) {
 		const cmdService = CommandService.instance();
 
 		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
@@ -76,7 +86,7 @@ class NoteListUtils {
 					})
 				);
 			} else {
-				const switchNoteType = async (noteIds, type) => {
+				const switchNoteType = async (noteIds:string[], type:string) => {
 					for (let i = 0; i < noteIds.length; i++) {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);
@@ -165,10 +175,21 @@ class NoteListUtils {
 			})
 		);
 
+		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
+
+		for (const info of pluginViewInfos) {
+			const location:MenuItemLocation = info.view.location;
+			if (location !== MenuItemLocation.Context) continue;
+
+			menu.append(
+				new MenuItem(cmdService.commandToMenuItem(info.view.commandName))
+			);
+		}
+
 		return menu;
 	}
 
-	static async confirmDeleteNotes(noteIds) {
+	static async confirmDeleteNotes(noteIds:string[]) {
 		if (!noteIds.length) return;
 
 		let msg = '';
@@ -190,5 +211,3 @@ class NoteListUtils {
 	}
 
 }
-
-module.exports = NoteListUtils;

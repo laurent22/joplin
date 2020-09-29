@@ -31,6 +31,10 @@ export default class SandboxJoplinWorkspace {
 		return Note.load(noteIds[0]);
 	}
 
+	async selectedNoteIds() {
+		return this.store.getState().selectedNoteIds.slice();
+	}
+
 	async execEditorCommand(command:EditorCommand) {
 		return this.implementation_.execEditorCommand(command);
 	}

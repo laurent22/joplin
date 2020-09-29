@@ -1,4 +1,4 @@
-import produce, { Draft } from 'immer';
+import { Draft } from 'immer';
 
 interface ViewInfo {
 	view: any,
@@ -19,11 +19,11 @@ interface PluginState {
 	views:PluginViewStates,
 }
 
-interface PluginStates {
+export interface PluginStates {
 	[key:string]: PluginState;
 }
 
-interface State {
+export interface State {
 	plugins: PluginStates,
 }
 
@@ -34,7 +34,7 @@ export const defaultState:State = {
 };
 
 export const utils = {
-	viewInfosByType: function(plugins:any, type:string):ViewInfo[] {
+	viewInfosByType: function(plugins:PluginStates, type:string):ViewInfo[] {
 		const output:ViewInfo[] = [];
 
 		for (const pluginId in plugins) {
@@ -54,7 +54,7 @@ export const utils = {
 	},
 };
 
-const reducer = produce((draft: Draft<any>, action:any) => {
+const reducer = (draft: Draft<any>, action:any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
 	// All actions should be scoped to a plugin, except when adding a new plugin
@@ -89,6 +89,6 @@ const reducer = produce((draft: Draft<any>, action:any) => {
 		error.message = `In plugin reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 		throw error;
 	}
-});
+};
 
 export default reducer;

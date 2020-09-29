@@ -1,13 +1,13 @@
 import * as React from 'react';
 import CommandService from 'lib/services/CommandService';
 import ToolbarBase from '../../../ToolbarBase';
-import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+import { PluginStates, utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 const { buildStyle } = require('lib/theme');
 
 interface ToolbarProps {
 	themeId: number,
 	dispatch: Function,
-	plugins: any[],
+	plugins: PluginStates,
 }
 
 function styles_(props:ToolbarProps) {

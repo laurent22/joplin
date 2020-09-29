@@ -1,5 +1,5 @@
 import produce, { Draft } from 'immer';
-import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState } from 'lib/services/plugin_service/reducer';
+import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from 'lib/services/plugin_service/reducer';
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
@@ -37,7 +37,7 @@ interface StateResourceFetcher {
 	toFetchCount: number,
 }
 
-interface State {
+export interface State {
 	notes: any[],
 	notesSource: string,
 	notesParentType: string,
@@ -80,6 +80,9 @@ interface State {
 	editorNoteStatuses: any
 	isInsertingNotes: boolean,
 	hasEncryptedItems: boolean,
+
+	// Extra reducer keys go here:
+	pluginService: PluginServiceState,
 }
 
 export const defaultState:State = {
@@ -145,6 +148,8 @@ export const defaultState:State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+
+	pluginService: pluginServiceDefaultState,
 };
 
 for (const additionalReducer of additionalReducers) {
@@ -611,7 +616,7 @@ function handleHistory(draft:Draft<State>, action:any) {
 
 const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 
-//const reducer = (state:State = defaultState, action:any) => {
+	// const reducer = (state:State = defaultState, action:any) => {
 	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type, action);
 
 	// let newState = state;
@@ -1078,11 +1083,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 	if (action.type === 'NOTE_DELETE') {
 		handleHistory(draft, action);
 	}
-	
+
 	for (const additionalReducer of additionalReducers) {
 		additionalReducer.reducer(draft, action);
 	}
-	
+
 	// if (Setting.value('env') === 'dev') {
 	// 	return Object.freeze(newState);
 	// } else {
@@ -1090,4 +1095,4 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 	// }
 });
 
-export default reducer
+export default reducer;

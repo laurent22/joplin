@@ -7,6 +7,7 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
+	Context = 'context',
 }
 
 export default class MenuItemController extends ViewController {

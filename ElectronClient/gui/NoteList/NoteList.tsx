@@ -1,4 +1,6 @@
+import { AppState } from '../../app';
 import eventManager from 'lib/eventManager';
+import NoteListUtils from '../utils/NoteListUtils';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
@@ -9,7 +11,6 @@ const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting').default;
-const NoteListUtils = require('../utils/NoteListUtils');
 const NoteListItem = require('../NoteListItem').default;
 const CommandService = require('lib/services/CommandService.js').default;
 const styled = require('styled-components').default;
@@ -119,6 +120,7 @@ class NoteListComponent extends React.Component {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
 			watchedNoteFiles: this.props.watchedNoteFiles,
+			plugins: this.props.plugins,
 		});
 
 		menu.popup(bridge().window());
@@ -491,7 +493,7 @@ class NoteListComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state:AppState) => {
 	return {
 		notes: state.notes,
 		folders: state.folders,
@@ -506,6 +508,7 @@ const mapStateToProps = (state:any) => {
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 	};
 };
 

@@ -3,9 +3,11 @@ import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
 import CommandService from 'lib/services/CommandService';
 import KeymapService from 'lib/services/KeymapService';
 import PluginService from 'lib/services/plugin_service/PluginService';
-import resourceEditWatcherReducer from 'lib/services/ResourceEditWatcher/reducer';
+import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from 'lib/services/ResourceEditWatcher/reducer';
 import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
 import SandboxImplementation from './plugin_service/SandboxImplementation';
+import { MenuItemLocation } from 'lib/services/plugin_service/MenuItemController';
+import { defaultState, State } from 'lib/reducer';
 
 require('app-module-path').addPath(__dirname);
 
@@ -20,7 +22,6 @@ const { Logger } = require('lib/logger.js');
 const fs = require('fs-extra');
 const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');
-const { defaultState } = require('lib/reducer');
 const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
@@ -90,14 +91,37 @@ const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
 ];
 
-const appDefaultState = Object.assign({}, defaultState, {
+interface AppStateRoute {
+	type: string,
+	routeName: string,
+	props: any,
+}
+
+export interface AppState extends State {
+	route: AppStateRoute,
+	navHistory: any[],
+	noteVisiblePanes: string[],
+	sidebarVisibility: boolean,
+	noteListVisibility: boolean,
+	windowContentSize: any,
+	watchedNoteFiles: string[],
+	lastEditorScrollPercents: any,
+	devToolsVisible: boolean,
+	visibleDialogs: any, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
+	focusedField: string,
+
+	// Extra reducer keys go here
+	watchedResources: any,
+}
+
+const appDefaultState:AppState = {
+	...defaultState,
 	route: {
 		type: 'NAV_GO',
 		routeName: 'Main',
 		props: {},
 	},
 	navHistory: [],
-	fileToImport: null,
 	noteVisiblePanes: ['editor', 'viewer'],
 	sidebarVisibility: true,
 	noteListVisibility: true,
@@ -107,7 +131,8 @@ const appDefaultState = Object.assign({}, defaultState, {
 	devToolsVisible: false,
 	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: null,
-});
+	...resourceEditWatcherDefaultState,
+};
 
 class Application extends BaseApplication {
 
@@ -139,7 +164,7 @@ class Application extends BaseApplication {
 		return `${Setting.value('profileDir')}/log-autoupdater.txt`;
 	}
 
-	reducer(state:any = appDefaultState, action:any) {
+	reducer(state:AppState = appDefaultState, action:any) {
 		let newState = state;
 
 		try {
@@ -293,12 +318,12 @@ class Application extends BaseApplication {
 
 			case 'VISIBLE_DIALOGS_ADD':
 				newState = Object.assign({}, state);
-				newState.visibleDialogs[state.name] = true;
+				newState.visibleDialogs[action.name] = true;
 				break;
 
 			case 'VISIBLE_DIALOGS_REMOVE':
 				newState = Object.assign({}, state);
-				delete newState.visibleDialogs[state.name];
+				delete newState.visibleDialogs[action.name];
 				break;
 
 			case 'FOCUS_SET':
@@ -988,10 +1013,13 @@ class Application extends BaseApplication {
 		const pluginViewInfos = pluginUtils.viewInfosByType(this.store().getState().pluginService.plugins, 'menuItem');
 
 		for (const info of pluginViewInfos) {
-			const itemParent = rootMenus[info.view.location];
+			const location:MenuItemLocation = info.view.location;
+			if (location === MenuItemLocation.Context) continue;
+
+			const itemParent = rootMenus[location];
 
 			if (!itemParent) {
-				reg.logger().error('Menu item location does not exist: ', info.view.location, info);
+				reg.logger().error('Menu item location does not exist: ', location, info);
 			} else {
 				itemParent.submenu.push(cmdService.commandToMenuItem(info.view.commandName));
 			}

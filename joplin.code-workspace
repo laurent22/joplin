@@ -598,7 +598,19 @@
 			"ReactNativeClient/lib/hooks/usePropsDebugger.js": true,
 			"ReactNativeClient/lib/models/Setting.js": true,
 			"ReactNativeClient/lib/services/debug/populateDatabase.js": true,
-			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinSettings.js": true
+			"ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinSettings.js": true,
+			"CliClient/tests/support/plugins/multi_selection/dist/*": true,
+			"CliClient/tests/support/plugins/multi_selection/**/node_modules/": true,
+			"CliClient/tests/support/plugins/markdown_plugin/dist/*": true,
+			"CliClient/tests/support/plugins/markdown_plugin/**/node_modules/": true,
+			"CliClient/tests/support/plugins/markdown_plugin/global.d.js": true,
+			"CliClient/tests/support/plugins/markdown_plugin/src/index.js": true,
+			"CliClient/tests/support/plugins/multi_selection/global.d.js": true,
+			"CliClient/tests/support/plugins/multi_selection/src/index.js": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useKeymap.js": true,
+			"ElectronClient/gui/NoteTextViewer.js": true,
+			"ElectronClient/gui/utils/NoteListUtils.js": true,
+			"ReactNativeClient/lib/reducer.js": true
 		},
 		"spellright.language": [
 			"en"

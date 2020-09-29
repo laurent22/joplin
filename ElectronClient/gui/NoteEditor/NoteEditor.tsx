@@ -23,6 +23,7 @@ import CommandService from 'lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from 'lib/eventManager';
+import { AppState } from '../../app';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -466,6 +467,7 @@ function NoteEditor(props: NoteEditorProps) {
 			notes={props.notes}
 			dispatch={props.dispatch}
 			watchedNoteFiles={props.watchedNoteFiles}
+			plugins={props.plugins}
 		/>;
 	}
 
@@ -560,7 +562,7 @@ export {
 	NoteEditor as NoteEditorComponent,
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
 
 	return {
