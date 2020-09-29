@@ -54,7 +54,7 @@ function ExpandIcon(props:any) {
 
 function ExpandLink(props:any) {
 	return props.hasChildren ? (
-		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onFolderToggleClick_}>
+		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onClick}>
 			<ExpandIcon themeId={props.themeId} isVisible={true} isExpanded={props.isExpanded}/>
 		</StyledExpandLink>
 	) : (
