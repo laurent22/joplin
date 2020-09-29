@@ -219,10 +219,10 @@ class NoteBodyViewer extends Component {
 		]);
 
 		if (action === 'share') {
-			const file_name = resource.file_name ?
+			const filename = resource.file_name ?
 				`${resource.file_name}.${resource.file_extension}` :
 				resource.title;
-			const targetPath = `${Setting.value('resourceDir')}/${file_name}`;
+			const targetPath = `${Setting.value('resourceDir')}/${filename}`;
 
 			await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
 
