@@ -59,7 +59,7 @@ describe('services_PluginService', function() {
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
 		const service = newPluginService();
 		const plugin = await service.loadPlugin(`${testPluginDir}/withExternalModules`);
-		expect(plugin.id).toBe('withExternalModules');
+		expect(plugin.id).toBe('withexternalmodules');
 		await service.runPlugin(plugin);
 
 		const allFolders = await Folder.all();
