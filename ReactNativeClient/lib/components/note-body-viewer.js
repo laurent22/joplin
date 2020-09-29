@@ -210,15 +210,19 @@ class NoteBodyViewer extends Component {
 		return this.forceUpdate_;
 	}
 
-	async onResourceLongPress(resourceId) {
+	async onResourceLongPress(msg) {
+		const resourceId = msg.split(':')[1];
 		const resource = await Resource.load(resourceId);
 		const name = resource.title ? resource.title : resource.file_name;
 
 		const action = await dialogs.pop(this, name, [
+			{ text: _('Open'), id: 'open' },
 			{ text: _('Share'), id: 'share' },
 		]);
 
-		if (action === 'share') {
+		if (action === 'open') {
+			this.props.onJoplinLinkClick(msg);
+		} else if (action === 'share') {
 			const filename = resource.file_name ?
 				`${resource.file_name}.${resource.file_extension}` :
 				resource.title;
@@ -291,9 +295,7 @@ class NoteBodyViewer extends Component {
 										const resourceId = msg[1];
 										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
 									} else if (msg.startsWith('longclick:')) {
-										msg = msg.split(':');
-										const resourceId = msg[1];
-										this.onResourceLongPress(resourceId);
+										this.onResourceLongPress(msg);
 									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
 									}
