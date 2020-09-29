@@ -146,6 +146,7 @@ ElectronClient/gui/NoteList/NoteList.js
 ElectronClient/gui/NoteListControls/commands/focusSearch.js
 ElectronClient/gui/NoteListControls/NoteListControls.js
 ElectronClient/gui/NoteListItem.js
+ElectronClient/gui/NoteTextViewer.js
 ElectronClient/gui/NoteToolbar/NoteToolbar.js
 ElectronClient/gui/OneDriveLoginScreen.js
 ElectronClient/gui/ResizableLayout/hooks/useLayoutItemSizes.js

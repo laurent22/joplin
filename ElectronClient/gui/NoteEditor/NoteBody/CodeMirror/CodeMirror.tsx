@@ -9,6 +9,7 @@ import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize 
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
+import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
 
 //  @ts-ignore
@@ -17,7 +18,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
 const Setting = require('lib/models/Setting.js');
-const NoteTextViewer = require('../../../NoteTextViewer.min');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;

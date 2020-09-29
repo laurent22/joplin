@@ -1,15 +1,24 @@
-const React = require('react');
+import * as React from 'react';
 const { connect } = require('react-redux');
+const { reg } = require('lib/registry.js');
 
-class NoteTextViewerComponent extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	onDomReady: Function,
+	onIpcMessage: Function,
+	viewerStyle: any,
+}
 
-		this.initialized_ = false;
-		this.domReady_ = false;
+class NoteTextViewerComponent extends React.Component<Props, any> {
+
+	private initialized_:boolean = false;
+	private domReady_:boolean = false;
+	private webviewRef_:any;
+	private webviewListeners_:any = null;
+
+	constructor(props:any) {
+		super(props);
 
 		this.webviewRef_ = React.createRef();
-		this.webviewListeners_ = null;
 
 		this.webview_domReady = this.webview_domReady.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
@@ -17,20 +26,20 @@ class NoteTextViewerComponent extends React.Component {
 		this.webview_message = this.webview_message.bind(this);
 	}
 
-	webview_domReady(event) {
+	webview_domReady(event:any) {
 		this.domReady_ = true;
 		if (this.props.onDomReady) this.props.onDomReady(event);
 	}
 
-	webview_ipcMessage(event) {
+	webview_ipcMessage(event:any) {
 		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
 	}
 
 	webview_load() {
-		this.webview_domReady();
+		this.webview_domReady({});
 	}
 
-	webview_message(event) {
+	webview_message(event:any) {
 		if (!event.data || event.data.target !== 'main') return;
 
 		const callName = event.data.name;
@@ -78,7 +87,14 @@ class NoteTextViewerComponent extends React.Component {
 			wv.removeEventListener(n, fn);
 		}
 
-		this.webviewRef_.current.contentWindow.removeEventListener('message', this.webview_message);
+		try {
+			// It seems this can throw a cross-origin error in a way that is hard to replicate so just wrap
+			// it in try/catch since it's not critical.
+			// https://github.com/laurent22/joplin/issues/3835
+			this.webviewRef_.current.contentWindow.removeEventListener('message', this.webview_message);
+		} catch (error) {
+			reg.logger().warn('Error destroying note viewer', error);
+		}
 
 		this.initialized_ = false;
 		this.domReady_ = false;
@@ -107,7 +123,7 @@ class NoteTextViewerComponent extends React.Component {
 	// Wrap WebView functions
 	// ----------------------------------------------------------------
 
-	send(channel, arg0 = null, arg1 = null) {
+	send(channel:string, arg0:any = null, arg1:any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 
 		if (channel === 'setHtml') {
@@ -127,47 +143,18 @@ class NoteTextViewerComponent extends React.Component {
 		}
 	}
 
-	printToPDF() { // options, callback) {
-		// In Electron 4x, printToPDF is broken so need to use this hack:
-		// https://github.com/electron/electron/issues/16171#issuecomment-451090245
-
-		// return this.webviewRef_.current.printToPDF(options, callback);
-		// return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
-	}
-
-	print() {
-		// In Electron 4x, print is broken so need to use this hack:
-		// https://github.com/electron/electron/issues/16219#issuecomment-451454948
-		// Note that this is not a perfect workaround since it means the options are ignored
-		// In particular it means that background images and colours won't be printed (printBackground property will be ignored)
-
-		// return this.webviewRef_.current.getWebContents().print({});
-		return this.webviewRef_.current.getWebContents().executeJavaScript('window.print()');
-	}
-
-	openDevTools() {
-		// return this.webviewRef_.current.openDevTools();
-	}
-
-	closeDevTools() {
-		// return this.webviewRef_.current.closeDevTools();
-	}
-
-	isDevToolsOpened() {
-		// return this.webviewRef_.current.isDevToolsOpened();
-	}
-
 	// ----------------------------------------------------------------
 	// Wrap WebView functions (END)
 	// ----------------------------------------------------------------
 
 	render() {
+		console.info('RRRRRRRRRRRRRRRRRRRRRRR');
 		const viewerStyle = Object.assign({}, { border: 'none' }, this.props.viewerStyle);
 		return <iframe className="noteTextViewer" ref={this.webviewRef_} style={viewerStyle} src="gui/note-viewer/index.html"></iframe>;
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		themeId: state.settings.theme,
 	};
@@ -180,4 +167,4 @@ const NoteTextViewer = connect(
 	{ withRef: true }
 )(NoteTextViewerComponent);
 
-module.exports = NoteTextViewer;
+export default NoteTextViewer;
