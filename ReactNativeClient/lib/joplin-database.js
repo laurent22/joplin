@@ -864,7 +864,7 @@ class JoplinDatabase extends Database {
 				if (targetVersion === 15 || targetVersion === 18 || targetVersion === 33) {
 					this.logger().warn('Could not upgrade to database v15 or v18 or v33 - FTS feature will not be used', error);
 				} else if (targetVersion === 34) {
-					this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
+					// this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
 				} else {
 					throw error;
 				}
