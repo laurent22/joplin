@@ -1,6 +1,6 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
 const { _ } = require('lib/locale');
-const { stateUtils } = require('lib/reducer.js');
+const { stateUtils } = require('lib/reducer');
 const Setting = require('lib/models/Setting');
 
 export const declaration:CommandDeclaration = {

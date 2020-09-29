@@ -1,5 +1,6 @@
 const { createStore, applyMiddleware } = require('redux');
-const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
+const reducer = require('lib/reducer').default;
+const { defaultState, stateUtils } = require('lib/reducer');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');

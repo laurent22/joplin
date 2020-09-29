@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { AppState, View, StyleSheet } = require('react-native');
-const { stateUtils } = require('lib/reducer.js');
+const { stateUtils } = require('lib/reducer');
 const { connect } = require('react-redux');
 const { NoteList } = require('lib/components/note-list.js');
 const Folder = require('lib/models/Folder.js');

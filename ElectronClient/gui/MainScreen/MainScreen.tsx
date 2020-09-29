@@ -10,7 +10,7 @@ import CommandService from 'lib/services/CommandService';
 const produce = require('immer').default;
 const { connect } = require('react-redux');
 const { SideBar } = require('../SideBar/SideBar.js');
-const { stateUtils } = require('lib/reducer.js');
+const { stateUtils } = require('lib/reducer');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
