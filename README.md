@@ -288,6 +288,8 @@ The whole UI can be customized by placing a custom editor style file in the prof
 
 Important: userstyle.css and userchrome.css are provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.
 
+Check out the [Joplin Customization wiki page](https://discourse.joplinapp.org/t/joplin-customization/11195) on the forum for common userstyle and userchrome tweaks!
+
 # Note templates
 
 In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
