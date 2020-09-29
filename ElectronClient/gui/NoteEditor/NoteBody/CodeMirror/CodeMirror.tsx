@@ -9,16 +9,16 @@ import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize 
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
+import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
 import useSandboxRegistration from '../../utils/useSandboxRegistration';
+import Setting from 'lib/models/Setting';
 
 //  @ts-ignore
 const { bridge } = require('electron').remote.require('./bridge');
 //  @ts-ignore
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');
-const Setting = require('lib/models/Setting').default;
-const NoteTextViewer = require('../../../NoteTextViewer.min');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -40,6 +40,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const previousContent = usePrevious(props.content);
+	const previousRenderedBody = usePrevious(renderedBody);
 	const previousSearchMarkers = usePrevious(props.searchMarkers);
 	const previousContentKey = usePrevious(props.contentKey);
 
@@ -526,7 +527,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// If there is a currently active search, it's important to re-search the text as the user
 		// types. However this is slow for performance so we ONLY want it to happen when there is
 		// a search
-		const textChanged = props.searchMarkers.keywords.length > 0 && props.content !== previousContent;
+
+		// Note that since the CodeMirror component also needs to handle the viewer pane, we need
+		// to check if the rendered body has changed too (it will be changed with a delay after
+		// props.content has been updated).
+		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
 
 		if (props.searchMarkers !== previousSearchMarkers || textChanged) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
@@ -537,7 +542,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				props.setLocalSearchResultCount(matches);
 			}
 		}
-	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent]);
+	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };

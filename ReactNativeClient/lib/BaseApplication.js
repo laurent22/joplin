@@ -500,7 +500,11 @@ class BaseApplication {
 			refreshNotesUseSelectedNoteId = true;
 		}
 
-		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
+		// Should refresh the notes when:
+		// - A tag is selected, to show the notes for that tag
+		// - When a tag is updated so that when searching by tags, the search results are updated
+		// https://github.com/laurent22/joplin/issues/3754
+		if (['TAG_SELECT', 'TAG_DELETE', 'TAG_UPDATE_ONE', 'NOTE_TAG_REMOVE'].includes(action.type)) {
 			refreshNotes = true;
 		}
 
@@ -741,18 +745,23 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
-		if (Setting.value('db.fuzzySearchEnabled') === -1) {
-			const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
-			Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
-		}
+		// if (Setting.value('db.fuzzySearchEnabled') === -1) {
+		// 	const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
+		// 	Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
+		// }
 
-		// Always disable on CLI because building and packaging the extension is not working
-		// and is too error-prone - requires gcc on the machine, or we should package the .so
-		// and dylib files, but it's not sure it would work everywhere if not built from
-		// source on the target machine.
-		if (Setting.value('appType') !== 'desktop') {
-			Setting.setValue('db.fuzzySearchEnabled', 0);
-		}
+		// // Always disable on CLI because building and packaging the extension is not working
+		// // and is too error-prone - requires gcc on the machine, or we should package the .so
+		// // and dylib files, but it's not sure it would work everywhere if not built from
+		// // source on the target machine.
+		// if (Setting.value('appType') !== 'desktop') {
+		// 	Setting.setValue('db.fuzzySearchEnabled', 0);
+		// }
+
+		// For now always disable fuzzy search due to performance issues:
+		// https://discourse.joplinapp.org/t/1-1-4-keyboard-locks-up-while-typing/11231/11
+		// https://discourse.joplinapp.org/t/serious-lagging-when-there-are-tens-of-thousands-of-notes/11215/23
+		Setting.setValue('db.fuzzySearchEnabled', 0);
 
 		if (Setting.value('encryption.shouldReencrypt') < 0) {
 			// We suggest re-encryption if the user has at least one notebook

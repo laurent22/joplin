@@ -1189,7 +1189,7 @@ msgstr "코드"
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
 #: ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
-msgstr "번호 매기 목록"
+msgstr "번호 매기기 목록"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
 #: ElectronClient/gui/NoteText.min.js:1746
