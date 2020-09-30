@@ -28,4 +28,4 @@ The plugin runner also initialises the sandbox proxy and injects it into the plu
 
 ### Plugin API
 
-The plugin API is a light wrapper over Joplin's internal functions and services.
+The plugin API is a light wrapper over Joplin's internal functions and services. All the platforms share some of the plugin API but there can also be some differences. For example, the desktop app exposes the text editor component commands, and so this part of the plugin API is available only on desktop. The difference between platforms is implemented using the PlatformImplementation class, which is injected in the plugin service on startup.
