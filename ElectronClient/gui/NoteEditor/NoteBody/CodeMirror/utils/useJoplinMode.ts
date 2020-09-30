@@ -10,7 +10,7 @@ export default function useJoplinMode(CodeMirror: any) {
 			name: 'markdown',
 			taskLists: true,
 			strikethrough: true,
-			emoji: true,
+			emoji: false,
 			tokenTypeOverrides: {
 				linkText: 'link-text',
 			},
@@ -33,7 +33,7 @@ export default function useJoplinMode(CodeMirror: any) {
 		}
 
 		return {
-			startState: function(): {outer: any, openCharacter: string, inner: any} {
+			startState: function(): { outer: any, openCharacter: string, inner: any } {
 				return {
 					outer: CodeMirror.startState(markdownMode),
 					openCharacter: '',
