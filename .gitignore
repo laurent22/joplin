@@ -58,6 +58,7 @@ CliClient/app/LinkSelector.js
 CliClient/build/LinkSelector.js
 CliClient/tests/models_Setting.js
 CliClient/tests/services_InteropService.js
+CliClient/tests/services/plugins/sandboxProxy.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/dialog/global.d.js
@@ -243,6 +244,7 @@ ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinSettings.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinUtils.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinViews.js
 ReactNativeClient/lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace.js
+ReactNativeClient/lib/services/plugin_service/sandboxProxy.js
 ReactNativeClient/lib/services/plugin_service/ToolbarButtonController.js
 ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugin_service/utils/types.js
