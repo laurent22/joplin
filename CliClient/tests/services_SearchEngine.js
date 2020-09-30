@@ -158,7 +158,7 @@ describe('services_SearchEngine', function() {
 		expect(rows[1].id).toBe(n2.id);
 	}));
 
-	it('should correctly weigh notes using BM25', asyncTest(async () => {
+	it('should correctly weigh notes using BM25 and user_updated_time', asyncTest(async () => {
 
 		const noteData = [
 			{
