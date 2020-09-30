@@ -333,6 +333,10 @@ class SearchEngine {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
+			if (!row.user_updated_time) {
+				return 0;
+			}
+
 			const alpha = 200;
 			const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
 			return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));

@@ -24,6 +24,21 @@ const frequency = (word, string) => {
 	return (string.match(re) || []).length;
 };
 
+const msSinceEpoch = Math.round(new Date().getTime());
+const msPerDay = 86400000;
+const weightForDaysSinceLastUpdate = (row) => {
+	// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
+	// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
+	// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
+	if (!row.user_updated_time) {
+		return 0;
+	}
+
+	const alpha = 200;
+	const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
+	return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
+};
+
 const calculateScore = (searchString, notes) => {
 	const K1 = 1.2;
 	const B = 0.75;
@@ -33,16 +48,17 @@ const calculateScore = (searchString, notes) => {
 	const numTokens = notes.map(note => note.title.split(' ').length);
 	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
 
-	let titleBM25 = new Array(notes.length).fill(-1);
+	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
 	if (avgTokens != 0) {
 		for (let i = 0; i < notes.length; i++) {
-			titleBM25[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
+			titleBM25WeightedByLastUpdate[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
+			titleBM25WeightedByLastUpdate[i] += weightForDaysSinceLastUpdate(notes[i]);
 		}
 	}
 
 	const scores = [];
 	for (let i = 0; i < notes.length; i++) {
-		if (freqTitle[i]) scores.push(titleBM25[i]);
+		if (freqTitle[i]) scores.push(titleBM25WeightedByLastUpdate[i]);
 	}
 
 	scores.sort().reverse();
@@ -147,18 +163,23 @@ describe('services_SearchEngine', function() {
 		const noteData = [
 			{
 				title: 'abc test2 test2',
+				user_updated_time: 1601425064756,
 			},
 			{
 				title: 'foo foo',
+				user_updated_time: 1601425064758,
 			},
 			{
 				title: 'dead beef',
+				user_updated_time: 1601425064760,
 			},
 			{
 				title: 'test2 bar',
+				user_updated_time: 1601425064761,
 			},
 			{
 				title: 'blah blah abc',
+				user_updated_time: 1601425064763,
 			},
 		];
 
