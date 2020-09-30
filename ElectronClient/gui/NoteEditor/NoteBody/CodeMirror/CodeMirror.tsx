@@ -11,7 +11,7 @@ import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
 import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
-import useSandboxRegistration from '../../utils/useSandboxRegistration';
+import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from 'lib/models/Setting';
 
 //  @ts-ignore
@@ -54,7 +54,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	const rootSize = useRootSize({ rootRef });
 
-	useSandboxRegistration(ref);
+	usePluginServiceRegistration(ref);
 
 	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
 

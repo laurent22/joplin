@@ -8,7 +8,7 @@ import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/
 import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
-import useSandboxRegistration from '../../utils/useSandboxRegistration';
+import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
@@ -162,7 +162,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
-	useSandboxRegistration(ref);
+	usePluginServiceRegistration(ref);
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
