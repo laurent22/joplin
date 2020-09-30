@@ -1,6 +1,6 @@
 import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 
-export default class SandboxJoplinCommands {
+export default class JoplinCommands {
 
 	/**
 	 * <span class="platform-desktop">desktop</span> Executes the given command.

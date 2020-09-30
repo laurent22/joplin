@@ -1,4 +1,4 @@
-import Sandbox from '../Sandbox/Sandbox';
+import Global from '../api/Global';
 
 type EventHandler = (callbackId:string, args:any[]) => void;
 
@@ -25,7 +25,7 @@ function createEventHandlers(arg:any, eventHandler:EventHandler) {
 	return arg;
 }
 
-export default async function executeSandboxCall(pluginId:string, sandbox:Sandbox, path:string, args:any[], eventHandler:EventHandler) {
+export default async function executeSandboxCall(pluginId:string, sandbox:Global, path:string, args:any[], eventHandler:EventHandler) {
 	const pathFragments = path.split('.');
 
 	let parent:any = null;

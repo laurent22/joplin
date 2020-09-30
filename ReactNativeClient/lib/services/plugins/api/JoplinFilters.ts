@@ -1,6 +1,6 @@
 import eventManager from 'lib/eventManager';
 
-export default class SandboxJoplinFilters {
+export default class JoplinFilters {
 	on(name: string, callback: Function) {
 		eventManager.filterOn(name, callback);
 	}

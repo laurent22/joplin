@@ -1,6 +1,6 @@
 import Plugin from 'lib/services/plugins/Plugin';
 import manifestFromObject from 'lib/services/plugins/utils/manifestFromObject';
-import Sandbox from 'lib/services/plugins/Sandbox/Sandbox';
+import Global from 'lib/services/plugins/api/Global';
 import { SandboxContext } from 'lib/services/plugins/utils/types';
 // import sandboxProxy from 'lib/services/plugins/sandboxProxy';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
@@ -165,7 +165,7 @@ export default class PluginService extends BaseService {
 			runtime: null,
 		};
 
-		const sandbox = new Sandbox(this.sandboxImplementation_, plugin, this.store_, context);
+		const sandbox = new Global(this.sandboxImplementation_, plugin, this.store_, context);
 		// this.sandboxes_[plugin.id] = sandbox;
 
 		await this.runner_.run(plugin, sandbox);

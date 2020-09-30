@@ -1,7 +1,7 @@
 import Setting, { SettingItem, SettingSection } from 'lib/models/Setting';
 import Plugin from '../Plugin';
 
-export default class SandboxJoplinSettings {
+export default class JoplinSettings {
 	private plugin_:Plugin = null;
 
 	constructor(plugin: Plugin) {

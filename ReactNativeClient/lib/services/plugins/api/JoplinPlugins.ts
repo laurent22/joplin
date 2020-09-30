@@ -1,5 +1,5 @@
 import { SandboxContext } from '../utils/types';
-export default class SandboxJoplinPlugins {
+export default class JoplinPlugins {
 
 	private context: SandboxContext;
 

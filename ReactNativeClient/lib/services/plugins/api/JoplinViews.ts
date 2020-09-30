@@ -8,7 +8,7 @@ interface CreateMenuItemOptions {
 	accelerator: string,
 }
 
-export default class SandboxJoplinViews {
+export default class JoplinViews {
 
 	private viewIdNum:number = 0;
 	private store: any;

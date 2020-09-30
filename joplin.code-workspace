@@ -624,7 +624,18 @@
 			"ReactNativeClient/lib/services/BaseService.js": true,
 			"ReactNativeClient/lib/services/plugins/BasePluginRunner.js": true,
 			"ReactNativeClient/lib/services/plugins/sandboxProxy.js": true,
-			"ReactNativeClient/lib/services/plugins/utils/executeSandboxCall.js": true
+			"ReactNativeClient/lib/services/plugins/utils/executeSandboxCall.js": true,
+			"ReactNativeClient/lib/services/plugins/api/Global.js": true,
+			"ReactNativeClient/lib/services/plugins/api/Joplin.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinCommands.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinData.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinFilters.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinInterop.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinPlugins.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinSettings.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinUtils.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViews.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js": true
 		},
 		"spellright.language": [
 			"en"

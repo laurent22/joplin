@@ -1,6 +1,6 @@
 import { SandboxContext } from '../utils/types';
 import Plugin from '../Plugin';
-import SandboxJoplin from './SandboxJoplin';
+import Joplin from './Joplin';
 const builtinModules = require('builtin-modules');
 const shim = require('lib/shim');
 
@@ -14,16 +14,16 @@ function requireWhiteList():string[] {
 	return requireWhiteList_;
 }
 
-export default class Sandbox {
+export default class Global {
 
 	private context: SandboxContext;
-	private joplin_: SandboxJoplin;
+	private joplin_: Joplin;
 	private consoleWrapper_:any = null;
-	private :string[] = null;
+	// private :string[] = null;
 
 	constructor(implementation:any, plugin: Plugin, store: any, context: SandboxContext) {
 		this.context = context;
-		this.joplin_ = new SandboxJoplin(implementation.joplin, plugin, store, this.context);
+		this.joplin_ = new Joplin(implementation.joplin, plugin, store, this.context);
 		this.consoleWrapper_ = this.createConsoleWrapper(plugin.id);
 	}
 
@@ -43,7 +43,7 @@ export default class Sandbox {
 		return wrapper;
 	}
 
-	get joplin(): SandboxJoplin {
+	get joplin(): Joplin {
 		return this.joplin_;
 	}
 

@@ -5,7 +5,7 @@ const Api = require('lib/services/rest/Api');
  * This is the main way to retrieve data, such as notes, notebooks, tags, etc.
  * or to update them or delete them.
  */
-export default class SandboxJoplinApi {
+export default class JoplinData {
 
 	private api_: any = new Api();
 

@@ -3,7 +3,7 @@ import Plugin from 'lib/services/plugins/Plugin';
 import sandboxProxy from 'lib/services/plugins/sandboxProxy';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import executeSandboxCall from 'lib/services/plugins/utils/executeSandboxCall';
-import Sandbox from 'lib/services/plugins/Sandbox/Sandbox';
+import Global from 'lib/services/plugins/api/Global';
 
 function createConsoleWrapper(pluginId:string) {
 	const wrapper:any = {};
@@ -41,7 +41,7 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
-	private newSandboxProxy(pluginId:string, sandbox:Sandbox) {
+	private newSandboxProxy(pluginId:string, sandbox:Global) {
 
 		// Note: for desktop, the implementation should be like so:
 		// In the target, we post an IPC message with the path, args, etc. as well as a callbackId to the host
@@ -59,7 +59,7 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 	}
 
-	async run(plugin:Plugin, sandbox:Sandbox) {
+	async run(plugin:Plugin, sandbox:Global) {
 		const vmSandbox = vm.createContext(this.newSandboxProxy(plugin.id, sandbox));
 
 		try {

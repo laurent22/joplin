@@ -6,7 +6,7 @@ export interface EditorCommand {
 	value: any;
 }
 
-export default class SandboxJoplinWorkspace {
+export default class JoplinWorkspace {
 	// TODO: unregister events when plugin is closed or disabled
 
 	private store: any;

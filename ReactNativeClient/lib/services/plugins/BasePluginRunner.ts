@@ -1,6 +1,6 @@
 import Plugin from './Plugin';
 import BaseService from '../BaseService';
-import Sandbox from './Sandbox/Sandbox';
+import Global from './api/Global';
 
 interface EventHandlers {
 	[key:string]: Function;
@@ -35,7 +35,7 @@ export default abstract class BasePluginRunner extends BaseService {
 		return arg;
 	}
 
-	async run(plugin:Plugin, sandbox:Sandbox) {
+	async run(plugin:Plugin, sandbox:Global) {
 		throw new Error(`Not implemented: ${plugin} / ${sandbox}`);
 	}
 
