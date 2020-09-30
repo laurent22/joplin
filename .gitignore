@@ -194,7 +194,7 @@ ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ElectronClient/gui/utils/NoteListUtils.js
 ElectronClient/services/plugins/hooks/useThemeCss.js
 ElectronClient/services/plugins/hooks/useViewIsReady.js
-ElectronClient/services/plugins/SandboxImplementation.js
+ElectronClient/services/plugins/PlatformImplementation.js
 ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js

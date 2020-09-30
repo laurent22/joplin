@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import SandboxImplementation from '../../../services/plugins/SandboxImplementation';
+import PlatformImplementation from '../../../services/plugins/PlatformImplementation';
 
 export default function useSandboxRegistration(ref:any) {
 	useEffect(() => {
-		SandboxImplementation.instance().registerComponent('textEditor', ref);
+		PlatformImplementation.instance().registerComponent('textEditor', ref);
 
 		return () => {
-			SandboxImplementation.instance().unregisterComponent('textEditor');
+			PlatformImplementation.instance().unregisterComponent('textEditor');
 		};
 	}, []);
 }

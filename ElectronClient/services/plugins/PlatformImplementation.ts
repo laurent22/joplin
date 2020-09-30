@@ -1,25 +1,25 @@
 import { EditorCommand } from 'lib/services/plugins/api/JoplinWorkspace';
 
-interface SandboxWorkspace {
+interface JoplinWorkspace {
 	execEditorCommand(command:EditorCommand):Promise<string>
 }
 
-interface SandboxJoplin {
-	workspace: SandboxWorkspace;
+interface Joplin {
+	workspace: JoplinWorkspace;
 }
 
 interface Components {
 	[key:string]: any,
 }
 
-export default class SandboxImplementation {
+export default class PlatformImplementation {
 
-	private static instance_:SandboxImplementation;
-	private joplin_:SandboxJoplin;
+	private static instance_:PlatformImplementation;
+	private joplin_:Joplin;
 	private components_:Components;
 
-	public static instance():SandboxImplementation {
-		if (!this.instance_) this.instance_ = new SandboxImplementation();
+	public static instance():PlatformImplementation {
+		if (!this.instance_) this.instance_ = new PlatformImplementation();
 		return this.instance_;
 	}
 
@@ -47,7 +47,7 @@ export default class SandboxImplementation {
 		delete this.components_[name];
 	}
 
-	public get joplin():SandboxJoplin {
+	public get joplin():Joplin {
 		return this.joplin_;
 	}
 

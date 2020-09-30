@@ -635,7 +635,8 @@
 			"ReactNativeClient/lib/services/plugins/api/JoplinSettings.js": true,
 			"ReactNativeClient/lib/services/plugins/api/JoplinUtils.js": true,
 			"ReactNativeClient/lib/services/plugins/api/JoplinViews.js": true,
-			"ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js": true
+			"ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js": true,
+			"ElectronClient/services/plugins/PlatformImplementation.js": true
 		},
 		"spellright.language": [
 			"en"

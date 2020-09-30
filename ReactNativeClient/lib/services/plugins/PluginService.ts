@@ -35,15 +35,15 @@ export default class PluginService extends BaseService {
 	}
 
 	private store_:any = null;
-	private sandboxImplementation_:any = null;
+	private platformImplementation_:any = null;
 	private plugins_:Plugins = {};
 	// private sandboxes_:Sandboxes = {};
 	private runner_:BasePluginRunner = null;
 
-	initialize(sandboxImplementation:any, runner:BasePluginRunner, store:any) {
+	initialize(platformImplementation:any, runner:BasePluginRunner, store:any) {
 		this.store_ = store;
 		this.runner_ = runner;
-		this.sandboxImplementation_ = sandboxImplementation;
+		this.platformImplementation_ = platformImplementation;
 	}
 
 	public get plugins():Plugins {
@@ -165,7 +165,7 @@ export default class PluginService extends BaseService {
 			runtime: null,
 		};
 
-		const sandbox = new Global(this.sandboxImplementation_, plugin, this.store_, context);
+		const sandbox = new Global(this.platformImplementation_, plugin, this.store_, context);
 		// this.sandboxes_[plugin.id] = sandbox;
 
 		await this.runner_.run(plugin, sandbox);
