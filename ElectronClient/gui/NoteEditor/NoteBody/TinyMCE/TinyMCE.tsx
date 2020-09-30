@@ -9,7 +9,7 @@ import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import useSandboxRegistration from '../../utils/useSandboxRegistration';
-import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');

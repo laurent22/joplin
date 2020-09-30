@@ -83,10 +83,10 @@
 				"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/Editor.js",
 				"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js",
 				"ElectronClient/gui/NoteListItem.js",
-				"ReactNativeClient/lib/services/plugin_service/PluginService.js",
-				"ReactNativeClient/lib/services/plugin_service/Plugin.js",
-				"ReactNativeClient/lib/services/plugin_service/utils/manifestFromObject.js",
-				"ReactNativeClient/lib/services/plugin_service/utils/types.js"
+				"ReactNativeClient/lib/services/plugins/PluginService.js",
+				"ReactNativeClient/lib/services/plugins/Plugin.js",
+				"ReactNativeClient/lib/services/plugins/utils/manifestFromObject.js",
+				"ReactNativeClient/lib/services/plugins/utils/types.js"
 			],
 			"folder_exclude_patterns":
 			[

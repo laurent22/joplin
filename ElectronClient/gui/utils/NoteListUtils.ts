@@ -1,5 +1,5 @@
-import { MenuItemLocation } from 'lib/services/plugin_service/MenuItemController';
-import { utils as pluginUtils, PluginStates } from 'lib/services/plugin_service/reducer';
+import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
+import { utils as pluginUtils, PluginStates } from 'lib/services/plugins/reducer';
 
 const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');

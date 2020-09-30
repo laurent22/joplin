@@ -2,11 +2,11 @@ import InteropService from 'lib/services/interop/InteropService';
 import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
 import CommandService from 'lib/services/CommandService';
 import KeymapService from 'lib/services/KeymapService';
-import PluginService from 'lib/services/plugin_service/PluginService';
+import PluginService from 'lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from 'lib/services/ResourceEditWatcher/reducer';
-import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
-import SandboxImplementation from './plugin_service/SandboxImplementation';
-import { MenuItemLocation } from 'lib/services/plugin_service/MenuItemController';
+import { utils as pluginUtils } from 'lib/services/plugins/reducer';
+// import SandboxImplementation from './plugins/SandboxImplementation';
+import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { defaultState, State } from 'lib/reducer';
 
 require('app-module-path').addPath(__dirname);
@@ -1358,26 +1358,69 @@ class Application extends BaseApplication {
 		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
 
 		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(SandboxImplementation.instance(), this.store());
+		// PluginService.instance().initialize(SandboxImplementation.instance(), this.store());
 
-		try {
-			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
-		} catch (error) {
-			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
-		}
+		// try {
+		// 	if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+		// } catch (error) {
+		// 	this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		// }
 
-		try {
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
-				await PluginService.instance().loadAndRunPlugins(paths);
-			}
-		} catch (error) {
-			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
-		}
+		// try {
+		// 	if (Setting.value('plugins.devPluginPaths')) {
+		// 		const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
+		// 		await PluginService.instance().loadAndRunPlugins(paths);
+		// 	}
+		// } catch (error) {
+		// 	this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		// }
 
-		return null;
+
+		// const url = require('url');
+
+		// const tempWin = bridge().newBrowserWindow({
+		// 	show: true,
+		// 	webPreferences: {
+		// 		nodeIntegration: true,
+		// 	},
+		// });
+
+		// tempWin.loadURL(url.format({
+		// 	pathname: require('path').join(__dirname, 'plugins/plugin_index.html'),
+		// 	protocol: 'file:',
+		// 	slashes: true,
+		// }) + '?pluginId=' + '123456');
+
+		// tempWin.webContents.openDevTools();
+
+		// const ipcRenderer = require('electron').ipcRenderer;
+		// ipcRenderer.on('pluginMessage', (event:any, data:any) => {
+		// 	console.info('GOT MESSAGE ON MAIN WINDOW', event, data);
+		// });
+
+
+
+
+
+
+
+
+
+		// setTimeout(() => {
+		// 	tempWin.webContents.openDevTools();
+
+		// 	tempWin.webContents.on('ipc-message', (event) => {
+		// 		console.info('GOT MESSAGE FROM PLUGIN', event);
+		// 	});
+		// }, 2000);
+
+		// return null;
 
 		// await populateDatabase(reg.db());
+
+
+
+		return null;
 	}
 
 }

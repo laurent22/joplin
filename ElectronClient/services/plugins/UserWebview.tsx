@@ -139,7 +139,7 @@ export default function UserWebview(props:Props) {
 		height={contentSize.height}
 		fitToContent={props.fitToContent}
 		ref={viewRef}
-		src="gui/plugin_service/UserWebviewIndex.html"
+		src="services/plugins/UserWebviewIndex.html"
 		borderBottom={props.borderBottom}
 	></StyledFrame>;
 }

@@ -6,12 +6,12 @@ import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import CommandService from 'lib/services/CommandService';
-import PluginService from 'lib/services/plugin_service/PluginService';
-import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+import PluginService from 'lib/services/plugins/PluginService';
+import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 import SideBar from '../SideBar/SideBar';
-import UserWebview from '../plugin_service/UserWebview';
-import UserWebviewDialog from '../plugin_service/UserWebviewDialog';
-import { ContainerType } from 'lib/services/plugin_service/WebviewController';
+import UserWebview from '../../services/plugins/UserWebview';
+import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
+import { ContainerType } from 'lib/services/plugins/WebviewController';
 import { stateUtils } from 'lib/reducer';
 
 const produce = require('immer').default;

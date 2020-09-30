@@ -1,4 +1,4 @@
-import { EditorCommand } from 'lib/services/plugin_service/Sandbox/SandboxJoplinWorkspace';
+import { EditorCommand } from 'lib/services/plugins/Sandbox/SandboxJoplinWorkspace';
 
 interface SandboxWorkspace {
 	execEditorCommand(command:EditorCommand):Promise<string>

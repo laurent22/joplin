@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import CommandService from '../../lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
-import { utils as pluginUtils } from 'lib/services/plugin_service/reducer';
+import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 const { connect } = require('react-redux');
 const { buildStyle } = require('lib/theme');
 

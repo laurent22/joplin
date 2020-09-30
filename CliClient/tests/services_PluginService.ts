@@ -1,7 +1,7 @@
-require('app-module-path').addPath(__dirname);
-
 import PluginRunner from '../app/services/plugins/PluginRunner';
-import PluginService from 'lib/services/plugin_service/PluginService';
+import PluginService from 'lib/services/plugins/PluginService';
+
+require('app-module-path').addPath(__dirname);
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');

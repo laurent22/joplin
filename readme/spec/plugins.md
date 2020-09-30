@@ -1,16 +1,16 @@
 # Plugin system architecture
 
-The plugin system assumes a multi-process architecture, which is safer and easier to manage. For example if a plugin freezes or crashes, it doesn't bring down the app with it. It also makes it easier to find the source of problem when there is one - eg. we know that process X has crashed so the problem is with the plugin running inside. The alternative, to run everything within the same process, would make it very hard to make such diagnostic. Once a plugin call is frozen in an infinite loop or crashes the app, we can't know anything.
+The plugin system assumes a multi-process architecture, which is safer and easier to manage. For example if a plugin freezes or crashes, it doesn't bring down the app with it. It also makes it easier to find the source of problem when there is one - eg. we know that process X has crashed so the problem is with the plugin running inside. The alternative, to run everything within the same process, would make it very hard to make such a diagnostic. Once a plugin call is frozen in an infinite loop or crashes the app, we can't know anything.
 
 ## Main architecture elements
 
 ### Plugin script
 
-Written by the user and loaded by Joplin, it's a simple JavaScript file that makes call to the plugin API. It is loaded in a separate process.
+Written by the user and loaded by Joplin, it's a simple JavaScript file that makes calls to the plugin API. It is loaded in a separate process.
 
 ### Sandbox proxy
 
-It is loaded in the same process as the plugin script. Whenever the plugin script calls a plugin API function (eg. joplin.commands.execute) it goes through this proxy. The proxy then converts the call to a plain string and use IPC to send the call to the plugin host. The plugin host executes the function on the plugin API then send back the result by IPC call again.
+It is loaded in the same process as the plugin script. Whenever the plugin script calls a plugin API function (eg. joplin.commands.execute) it goes through this proxy. The proxy then converts the call to a plain string and use IPC to send the call to the plugin host. The plugin host executes the function on the plugin API then sends back the result by IPC call again.
 
 ### Plugin host
 

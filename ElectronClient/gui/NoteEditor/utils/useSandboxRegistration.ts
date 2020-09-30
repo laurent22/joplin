@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import SandboxImplementation from '../../../plugin_service/SandboxImplementation';
+import SandboxImplementation from '../../../services/plugins/SandboxImplementation';
 
 export default function useSandboxRegistration(ref:any) {
 	useEffect(() => {

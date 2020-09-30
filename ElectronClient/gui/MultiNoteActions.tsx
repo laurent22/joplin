@@ -1,4 +1,4 @@
-import { PluginStates } from 'lib/services/plugin_service/reducer';
+import { PluginStates } from 'lib/services/plugins/reducer';
 import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 

@@ -1,4 +1,4 @@
-import sandboxProxy, { Target } from 'lib/services/plugin_service/sandboxProxy';
+import sandboxProxy, { Target } from 'lib/services/plugins/sandboxProxy';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 

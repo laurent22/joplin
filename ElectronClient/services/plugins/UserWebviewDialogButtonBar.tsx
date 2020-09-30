@@ -1,6 +1,6 @@
-import { ButtonSpec } from 'lib/services/plugin_service/WebviewController';
+import { ButtonSpec } from 'lib/services/plugins/WebviewController';
 import * as React from 'react';
-import Button from '../Button/Button';
+import Button from '../../gui/Button/Button';
 const styled = require('styled-components').default;
 const { _ } = require('lib/locale');
 const { space } = require('styled-system');

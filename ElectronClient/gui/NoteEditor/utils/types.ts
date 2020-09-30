@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import AsyncActionQueue from '../../../lib/AsyncActionQueue';
 import { ToolbarButtonInfo } from 'lib/services/CommandService';
-import { PluginStates } from 'lib/services/plugin_service/reducer';
+import { PluginStates } from 'lib/services/plugins/reducer';
 
 export interface ToolbarButtonInfos {
 	[key:string]: ToolbarButtonInfo;

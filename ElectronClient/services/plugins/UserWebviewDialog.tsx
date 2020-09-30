@@ -1,5 +1,5 @@
-import PluginService from 'lib/services/plugin_service/PluginService';
-import WebviewController, { ButtonSpec } from 'lib/services/plugin_service/WebviewController';
+import PluginService from 'lib/services/plugins/PluginService';
+import WebviewController, { ButtonSpec } from 'lib/services/plugins/WebviewController';
 import * as React from 'react';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';

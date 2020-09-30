@@ -1,9 +1,9 @@
-import Plugin from 'lib/services/plugin_service/Plugin';
-import manifestFromObject from 'lib/services/plugin_service/utils/manifestFromObject';
-import Sandbox from 'lib/services/plugin_service/Sandbox/Sandbox';
-import { SandboxContext } from 'lib/services/plugin_service/utils/types';
-// import sandboxProxy from 'lib/services/plugin_service/sandboxProxy';
-import BasePluginRunner from 'lib/services/plugin_service/BasePluginRunner';
+import Plugin from 'lib/services/plugins/Plugin';
+import manifestFromObject from 'lib/services/plugins/utils/manifestFromObject';
+import Sandbox from 'lib/services/plugins/Sandbox/Sandbox';
+import { SandboxContext } from 'lib/services/plugins/utils/types';
+// import sandboxProxy from 'lib/services/plugins/sandboxProxy';
+import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import BaseService  from '../BaseService';
 const shim = require('lib/shim');
 const { filename } = require('lib/path-utils');

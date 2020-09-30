@@ -6,6 +6,12 @@ const { dirname } = require('lib/path-utils');
 const fs = require('fs-extra');
 const { ipcMain } = require('electron');
 
+// const { ipcMain } = require('electron')
+// ipcMain.on('pluginMessage', (event, arg) => {
+//   console.info('PPPPPPPPPPPPPPPPPPPPPP', arg);
+// })
+
+
 class ElectronAppWrapper {
 
 	constructor(electronApp, env, profilePath, isDebugMode) {
@@ -171,6 +177,13 @@ class ElectronAppWrapper {
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
 				this.electronApp_.quit();
+			}
+		});
+
+		ipcMain.on('pluginMessage', (event, data) => {
+			// Forward message
+			if (data.target === 'mainWindow') {
+				this.win_.webContents.send('pluginMessage', data);
 			}
 		});
 

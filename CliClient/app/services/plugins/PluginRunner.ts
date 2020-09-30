@@ -1,9 +1,9 @@
 import * as vm from 'vm';
-import Plugin from 'lib/services/plugin_service/Plugin';
-import sandboxProxy from 'lib/services/plugin_service/sandboxProxy';
-import BasePluginRunner from 'lib/services/plugin_service/BasePluginRunner';
-import executeSandboxCall from 'lib/services/plugin_service/utils/executeSandboxCall';
-import Sandbox from 'lib/services/plugin_service/Sandbox/Sandbox';
+import Plugin from 'lib/services/plugins/Plugin';
+import sandboxProxy from 'lib/services/plugins/sandboxProxy';
+import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
+import executeSandboxCall from 'lib/services/plugins/utils/executeSandboxCall';
+import Sandbox from 'lib/services/plugins/Sandbox/Sandbox';
 
 function createConsoleWrapper(pluginId:string) {
 	const wrapper:any = {};
