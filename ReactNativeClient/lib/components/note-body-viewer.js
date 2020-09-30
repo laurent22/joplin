@@ -2,7 +2,7 @@ import Async from 'react-async';
 
 const React = require('react');
 const Component = React.Component;
-const { Platform, View, Text } = require('react-native');
+const { Platform, View, Text, ToastAndroid } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
@@ -211,33 +211,38 @@ class NoteBodyViewer extends Component {
 	}
 
 	async onResourceLongPress(msg) {
-		const resourceId = msg.split(':')[1];
-		const resource = await Resource.load(resourceId);
-		const name = resource.title ? resource.title : resource.file_name;
+		try {
+			const resourceId = msg.split(':')[1];
+			const resource = await Resource.load(resourceId);
+			const name = resource.title ? resource.title : resource.file_name;
 
-		const action = await dialogs.pop(this, name, [
-			{ text: _('Open'), id: 'open' },
-			{ text: _('Share'), id: 'share' },
-		]);
+			const action = await dialogs.pop(this, name, [
+				{ text: _('Open'), id: 'open' },
+				{ text: _('Share'), id: 'share' },
+			]);
 
-		if (action === 'open') {
-			this.props.onJoplinLinkClick(msg);
-		} else if (action === 'share') {
-			const filename = resource.file_name ?
-				`${resource.file_name}.${resource.file_extension}` :
-				resource.title;
-			const targetPath = `${Setting.value('resourceDir')}/${filename}`;
+			if (action === 'open') {
+				this.props.onJoplinLinkClick(msg);
+			} else if (action === 'share') {
+				const filename = resource.file_name ?
+					`${resource.file_name}.${resource.file_extension}` :
+					resource.title;
+				const targetPath = `${Setting.value('resourceDir')}/${filename}`;
 
-			await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
+				await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
 
-			await Share.open({
-				type: resource.mime,
-				filename: resource.title,
-				url: `file://${targetPath}`,
-				failOnCancel: false,
-			});
+				await Share.open({
+					type: resource.mime,
+					filename: resource.title,
+					url: `file://${targetPath}`,
+					failOnCancel: false,
+				});
 
-			await shim.fsDriver().remove(targetPath);
+				await shim.fsDriver().remove(targetPath);
+			}
+		} catch (e) {
+			reg.logger().error('Could not handle link long press', e);
+			ToastAndroid.show('An error occurred, check log for details', ToastAndroid.SHORT);
 		}
 	}
 
