@@ -5,7 +5,6 @@ import BasePluginRunner from 'lib/services/plugin_service/BasePluginRunner';
 import executeSandboxCall from 'lib/services/plugin_service/utils/executeSandboxCall';
 import Sandbox from 'lib/services/plugin_service/Sandbox/Sandbox';
 
-
 function createConsoleWrapper(pluginId:string) {
 	const wrapper:any = {};
 
@@ -20,6 +19,13 @@ function createConsoleWrapper(pluginId:string) {
 
 	return wrapper;
 }
+
+// The CLI plugin runner is more complex than it needs to be because it more or less emulates
+// how it would work in a multi-process architecture, as in the desktop app (and probably how
+// it would work in the mobile app too). This is mainly to allow doing integration testing.
+//
+// For example, all plugin calls go through a proxy, however they could made directly since
+// the plugin script is running within the same process as the main app.
 
 export default class PluginRunner extends BasePluginRunner {
 
@@ -36,6 +42,13 @@ export default class PluginRunner extends BasePluginRunner {
 	}
 
 	private newSandboxProxy(pluginId:string, sandbox:Sandbox) {
+
+		// Note: for desktop, the implementation should be like so:
+		// In the target, we post an IPC message with the path, args, etc. as well as a callbackId to the host
+		// The target saves this callbackId and associate it with a Promise that it returns.
+		// When the host responds back (via IPC), we get the promise back using the callbackId, then call resolve
+		// with what was sent from the host.
+
 		const target = async (path:string, args:any[]) => {
 			return executeSandboxCall(pluginId, sandbox, `joplin.${path}`, this.mapEventHandlersToIds(args), this.eventHandler);
 		};
