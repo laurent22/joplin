@@ -10,7 +10,7 @@ module.exports = {
 				'**/node_modules/**',
 				'**/.git/**',
 				'**/ElectronClient/lib/**',
-				'**/CliClient/build/lib/**',
+				'**/CliClient/build/**',
 				'**/CliClient/tests-build/lib/**',
 				'**/ElectronClient/dist/**',
 				'**/Modules/TinyMCE/JoplinLists/**',

@@ -12,7 +12,7 @@ handler.get = function(target:Target, prop:string) {
 handler.apply = (target:Target, _thisArg:any, argumentsList:any[]) => {
 	const path = handler.namespace_.join('.');
 	handler.namespace_ = [];
-	target(path, argumentsList);
+	return target(path, argumentsList);
 };
 
 export default function sandboxProxy(target:Target):any {

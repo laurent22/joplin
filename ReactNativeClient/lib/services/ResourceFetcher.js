@@ -1,6 +1,6 @@
 const Resource = require('lib/models/Resource');
 const Setting = require('lib/models/Setting').default;
-const BaseService = require('lib/services/BaseService');
+const BaseService = require('lib/services/BaseService').default;
 const ResourceService = require('lib/services/ResourceService');
 const { Dirnames } = require('lib/services/synchronizer/utils/types');
 const { Logger } = require('lib/logger.js');

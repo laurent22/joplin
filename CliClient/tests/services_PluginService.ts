@@ -1,9 +1,10 @@
 require('app-module-path').addPath(__dirname);
 
+import PluginRunner from '../app/services/plugins/PluginRunner';
+import PluginService from 'lib/services/plugin_service/PluginService';
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
-const PluginService = require('lib/services/plugin_service/PluginService.js').default;
-const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
+const Folder = require('lib/models/Folder');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -12,15 +13,20 @@ process.on('unhandledRejection', (reason, p) => {
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 
 function newPluginService() {
+	const runner = new PluginRunner();
 	const service = new PluginService();
-	service.initialize({
-		joplin: {
-			workspace: {},
+	service.initialize(
+		{
+			joplin: {
+				workspace: {},
+			},
 		},
-	}, {
-		dispatch: () => {},
-		getState: () => {},
-	});
+		runner,
+		{
+			dispatch: () => {},
+			getState: () => {},
+		}
+	);
 	return service;
 }
 
@@ -47,15 +53,6 @@ describe('services_PluginService', function() {
 		expect(allNotes[0].parent_id).toBe(allFolders[0].id);
 	}));
 
-	// it('should load and run a plugin from a directory', asyncTest(async () => {
-	// 	const service = newPluginService();
-	// 	const plugin = await service.loadPlugin(`${testPluginDir}/testImport`);
-	// 	await service.runPlugin(plugin);
-	// 	const allFolders = await Folder.all();
-	// 	expect(allFolders.length).toBe(1);
-	// 	expect(allFolders[0].title).toBe('testImport');
-	// }));
-
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
 		const service = newPluginService();
 		const plugin = await service.loadPlugin(`${testPluginDir}/withExternalModules`);
@@ -78,7 +75,19 @@ describe('services_PluginService', function() {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
-		expect(allFolders.map(f => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
+
+	// it('should translate calls from plugin process to sandbox', asyncTest(async () => {
+	// 	const service = newPluginService();
+	// 	const plugin = await service.loadPlugin(`${testPluginDir}/simple`);
+	// 	await service.runPlugin(plugin);
+
+	// 	const folder = await Folder.save({ title: 'folder' });
+
+	// 	const folderFromApi = await service.executeSandboxCall(plugin.id, 'joplin.api.get', ['folders/' + folder.id]);
+	// 	expect(folder.id).toBe(folderFromApi.id);
+	// 	expect(folder.title).toBe(folderFromApi.title);
+	// }));
 
 });

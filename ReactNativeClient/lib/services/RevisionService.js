@@ -6,7 +6,7 @@ const Revision = require('lib/models/Revision');
 const BaseModel = require('lib/BaseModel');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const shim = require('lib/shim');
-const BaseService = require('lib/services/BaseService');
+const BaseService = require('lib/services/BaseService').default;
 const { _ } = require('lib/locale.js');
 const { sprintf } = require('sprintf-js');
 

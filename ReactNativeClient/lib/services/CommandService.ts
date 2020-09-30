@@ -1,6 +1,6 @@
 import KeymapService from './KeymapService';
 import eventManager from 'lib/eventManager';
-const BaseService = require('lib/services/BaseService');
+const BaseService = require('lib/services/BaseService').default;
 const shim = require('lib/shim');
 
 export interface CommandRuntime {

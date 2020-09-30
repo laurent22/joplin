@@ -1,16 +1,21 @@
-import * as vm from 'vm';
-import Plugin from './Plugin';
-import manifestFromObject from './utils/manifestFromObject';
-import Sandbox from './Sandbox/Sandbox';
-import { SandboxContext } from './utils/types';
+import Plugin from 'lib/services/plugin_service/Plugin';
+import manifestFromObject from 'lib/services/plugin_service/utils/manifestFromObject';
+import Sandbox from 'lib/services/plugin_service/Sandbox/Sandbox';
+import { SandboxContext } from 'lib/services/plugin_service/utils/types';
+// import sandboxProxy from 'lib/services/plugin_service/sandboxProxy';
+import BasePluginRunner from 'lib/services/plugin_service/BasePluginRunner';
+import BaseService  from '../BaseService';
 const shim = require('lib/shim');
 const { filename } = require('lib/path-utils');
-const BaseService = require('lib/services/BaseService');
 const nodeSlug = require('slug');
 
 interface Plugins {
 	[key:string]: Plugin
 }
+
+// interface Sandboxes {
+// 	[key:string]: Sandbox;
+// }
 
 function makePluginId(source:string):string {
 	// https://www.npmjs.com/package/slug#options
@@ -32,9 +37,12 @@ export default class PluginService extends BaseService {
 	private store_:any = null;
 	private sandboxImplementation_:any = null;
 	private plugins_:Plugins = {};
+	// private sandboxes_:Sandboxes = {};
+	private runner_:BasePluginRunner = null;
 
-	initialize(sandboxImplementation:any, store:any) {
+	initialize(sandboxImplementation:any, runner:BasePluginRunner, store:any) {
 		this.store_ = store;
+		this.runner_ = runner;
 		this.sandboxImplementation_ = sandboxImplementation;
 	}
 
@@ -109,6 +117,44 @@ export default class PluginService extends BaseService {
 		}
 	}
 
+	// cliSandbox(pluginId:string) {
+	// 	let callbackId_ = 1;
+	// 	const callbacks_:any = {};
+
+	// 	function mapFunctionsToCallbacks(arg:any) {
+	// 		if (Array.isArray(arg)) {
+	// 			for (let i = 0; i < arg.length; i++) {
+	// 				arg[i] = mapFunctionsToCallbacks(arg[i]);
+	// 			}
+	// 			return arg;
+	// 		} else if (typeof arg === 'function') {
+	// 			const id = '__event#' + callbackId_;
+	// 			callbackId_++;
+	// 			callbacks_[id] = arg;
+	// 			return id;
+	// 		} else if (arg === null) {
+	// 			return null;
+	// 		} else if (arg === undefined) {
+	// 			return undefined;
+	// 		} else if (typeof arg === 'object') {
+	// 			for (const n in arg) {
+	// 				arg[n] = mapFunctionsToCallbacks(arg[n]);
+	// 			}
+	// 		}
+
+	// 		return arg;
+	// 	}
+
+	// 	const target = (path:string, args:any[]) => {
+	// 		console.info('GOT PATH', path, mapFunctionsToCallbacks(args));
+	// 		this.executeSandboxCall(pluginId, 'joplin.' + path, mapFunctionsToCallbacks(args));
+	// 	};
+
+	// 	return {
+	// 		joplin: sandboxProxy(target),
+	// 	}
+	// }
+
 	async runPlugin(plugin:Plugin) {
 		this.plugins_[plugin.id] = plugin;
 
@@ -120,14 +166,21 @@ export default class PluginService extends BaseService {
 		};
 
 		const sandbox = new Sandbox(this.sandboxImplementation_, plugin, this.store_, context);
-		vm.createContext(sandbox);
+		// this.sandboxes_[plugin.id] = sandbox;
 
-		try {
-			vm.runInContext(plugin.scriptText, sandbox);
-		} catch (error) {
-			this.logger().error(`In plugin ${plugin.id}:`, error);
-			return;
-		}
+		await this.runner_.run(plugin, sandbox);
+
+		// const vmSandbox = vm.createContext(this.cliSandbox(plugin.id));
+
+		// try {
+		// 	vm.runInContext(plugin.scriptText, vmSandbox);
+		// } catch (error) {
+		// 	this.logger().error(`In plugin ${plugin.id}:`, error);
+		// 	return;
+		// }
+
+
+
 
 		if (!context.runtime) {
 			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
@@ -152,6 +205,46 @@ export default class PluginService extends BaseService {
 				this.logger().info(`Finished running onStart handler: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
 			});
 		}
+
+
+
+
+
+
+
+
+		// vm.createContext(sandbox);
+
+		// try {
+		// 	vm.runInContext(plugin.scriptText, sandbox);
+		// } catch (error) {
+		// 	this.logger().error(`In plugin ${plugin.id}:`, error);
+		// 	return;
+		// }
+
+		// if (!context.runtime) {
+		// 	throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
+		// }
+
+		// if (context.runtime.onStart) {
+		// 	const startTime = Date.now();
+
+		// 	this.logger().info(`Starting plugin: ${plugin.id}`);
+
+		// 	// We don't use `await` when calling onStart because the plugin might be awaiting
+		// 	// in that call too (for example, when opening a dialog on startup) so we don't
+		// 	// want to get stuck here.
+		// 	context.runtime.onStart({}).catch((error) => {
+		// 		// For some reason, error thrown from the executed script do not have the type "Error"
+		// 		// but are instead plain object. So recreate the Error object here so that it can
+		// 		// be handled correctly by loggers, etc.
+		// 		const newError:Error = new Error(error.message);
+		// 		newError.stack = error.stack;
+		// 		this.logger().error(`In plugin ${plugin.id}:`, newError);
+		// 	}).then(() => {
+		// 		this.logger().info(`Finished running onStart handler: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
+		// 	});
+		// }
 	}
 
 }
