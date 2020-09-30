@@ -115,16 +115,8 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.header_contextMenu = this.header_contextMenu.bind(this);
 		this.onAddFolderButtonClick = this.onAddFolderButtonClick.bind(this);
 		this.folderItem_click = this.folderItem_click.bind(this);
+		this.itemContextMenu = this.itemContextMenu.bind(this);
 	}
-
-	// componentDidUpdate(prevProps:any, _prevState:any) {
-	// 	const props = this.props as any;
-	// 	for (const k in this.props) {
-	// 		if (prevProps[k] !== props[k]) {
-	// 			console.info('Props', k, props[k]);
-	// 		}
-	// 	}
-	// }
 
 	onFolderDragStart_(event:any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -412,7 +404,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					selected={selected}
 					data-id={tag.id}
 					data-type={BaseModel.TYPE_TAG}
-					onContextMenu={(event:any) => this.itemContextMenu(event)}
+					onContextMenu={this.itemContextMenu}
 					onClick={() => {
 						this.tagItem_click(tag);
 					}}
