@@ -4,7 +4,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, mockDate, restoreDate } = require('test-utils.js');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Note = require('lib/models/Note');
 const ItemChange = require('lib/models/ItemChange');
@@ -24,21 +24,6 @@ const frequency = (word, string) => {
 	return (string.match(re) || []).length;
 };
 
-const msSinceEpoch = Math.round(new Date().getTime());
-const msPerDay = 86400000;
-const weightForDaysSinceLastUpdate = (row) => {
-	// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
-	// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
-	// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
-	if (!row.user_updated_time) {
-		return 0;
-	}
-
-	const alpha = 200;
-	const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
-	return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
-};
-
 const calculateScore = (searchString, notes) => {
 	const K1 = 1.2;
 	const B = 0.75;
@@ -47,6 +32,21 @@ const calculateScore = (searchString, notes) => {
 	const notesWithWord = freqTitle.filter(count => count !== 0).length;
 	const numTokens = notes.map(note => note.title.split(' ').length);
 	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
+
+	const msSinceEpoch = Math.round(new Date().getTime());
+	const msPerDay = 86400000;
+	const weightForDaysSinceLastUpdate = (row) => {
+		// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
+		// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
+		// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
+		if (!row.user_updated_time) {
+			return 0;
+		}
+
+		const alpha = 200;
+		const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
+		return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
+	};
 
 	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
 	if (avgTokens != 0) {
@@ -159,37 +159,53 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should correctly weigh notes using BM25 and user_updated_time', asyncTest(async () => {
-
+		await mockDate(2020, 9, 30, 50);
 		const noteData = [
 			{
 				title: 'abc test2 test2',
+				updated_time: 1601425064756,
 				user_updated_time: 1601425064756,
+				created_time: 1601425064756,
+				user_created_time: 1601425064756,
 			},
 			{
 				title: 'foo foo',
+				updated_time: 1601425064758,
 				user_updated_time: 1601425064758,
+				created_time: 1601425064758,
+				user_created_time: 1601425064758,
 			},
 			{
 				title: 'dead beef',
+				updated_time: 1601425064760,
 				user_updated_time: 1601425064760,
+				created_time: 1601425064760,
+				user_created_time: 1601425064760,
 			},
 			{
 				title: 'test2 bar',
+				updated_time: 1601425064761,
 				user_updated_time: 1601425064761,
+				created_time: 1601425064761,
+				user_created_time: 1601425064761,
 			},
 			{
 				title: 'blah blah abc',
+				updated_time: 1601425064763,
 				user_updated_time: 1601425064763,
+				created_time: 1601425064763,
+				user_created_time: 1601425064763,
 			},
 		];
 
-		const n0 = await Note.save(noteData[0]);
-		const n1 = await Note.save(noteData[1]);
-		const n2 = await Note.save(noteData[2]);
-		const n3 = await Note.save(noteData[3]);
-		const n4 = await Note.save(noteData[4]);
-
+		const n0 = await Note.save(noteData[0], { autoTimestamp: false });
+		const n1 = await Note.save(noteData[1], { autoTimestamp: false });
+		const n2 = await Note.save(noteData[2], { autoTimestamp: false });
+		const n3 = await Note.save(noteData[3], { autoTimestamp: false });
+		const n4 = await Note.save(noteData[4], { autoTimestamp: false });
+		restoreDate();
 		await engine.syncTables();
+		await mockDate(2020, 9, 30, 50);
 
 		let searchString = 'abc';
 		let scores = calculateScore(searchString, noteData);
@@ -219,6 +235,7 @@ describe('services_SearchEngine', function() {
 		// console.log(scores);
 
 		expect(rows[0].weight).toEqual(scores[0]);
+		await restoreDate();
 	}));
 
 	it('should tell where the results are found', asyncTest(async () => {
