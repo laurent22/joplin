@@ -8,7 +8,7 @@ const { time } = require('lib/time-utils.js');
 const shim = require('lib/shim');
 const dialogs = require('./dialogs');
 const shared = require('lib/components/shared/encryption-config-shared.js');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 class EncryptionConfigScreenComponent extends React.Component {
 	constructor() {

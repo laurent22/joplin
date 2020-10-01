@@ -8,7 +8,7 @@ function createEventHandlers(arg:any, eventHandler:EventHandler) {
 			arg[i] = createEventHandlers(arg[i], eventHandler);
 		}
 		return arg;
-	} else if (typeof arg === 'string' && arg.indexOf('__event#') === 0) {
+	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const callbackId = arg;
 		return async (...args:any[]) => {
 			const result = await eventHandler(callbackId, args);
@@ -36,6 +36,7 @@ export default async function executeSandboxCall(pluginId:string, sandbox:Global
 	for (const pathFragment of pathFragments) {
 		parent = fn;
 		fn = fn[pathFragment];
+		if (!fn) throw new Error(`Invalid method call: ${path}`);
 	}
 
 	const convertedArgs = createEventHandlers(args, eventHandler);

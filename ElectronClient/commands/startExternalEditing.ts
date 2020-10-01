@@ -2,7 +2,7 @@ import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandServi
 const { _ } = require('lib/locale');
 const Note = require('lib/models/Note');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 interface Props {
 	noteId: string

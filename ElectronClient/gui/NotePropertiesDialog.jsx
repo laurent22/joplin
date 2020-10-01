@@ -6,7 +6,7 @@ const DialogButtonRow = require('./DialogButtonRow.min');
 const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const shim = require('lib/shim');
 
 class NotePropertiesDialog extends React.Component {

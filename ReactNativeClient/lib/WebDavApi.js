@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const shim = require('lib/shim');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');

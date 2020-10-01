@@ -3,7 +3,7 @@ import { utils as pluginUtils, PluginStates } from 'lib/services/plugins/reducer
 
 const BaseModel = require('lib/BaseModel');
 const { _ } = require('lib/locale.js');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const eventManager = require('lib/eventManager').default;

@@ -1,8 +1,6 @@
 import Plugin from 'lib/services/plugins/Plugin';
 import manifestFromObject from 'lib/services/plugins/utils/manifestFromObject';
 import Global from 'lib/services/plugins/api/Global';
-import { SandboxContext } from 'lib/services/plugins/utils/types';
-// import sandboxProxy from 'lib/services/plugins/sandboxProxy';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import BaseService  from '../BaseService';
 const shim = require('lib/shim');
@@ -12,10 +10,6 @@ const nodeSlug = require('slug');
 interface Plugins {
 	[key:string]: Plugin
 }
-
-// interface Sandboxes {
-// 	[key:string]: Sandbox;
-// }
 
 function makePluginId(source:string):string {
 	// https://www.npmjs.com/package/slug#options
@@ -37,7 +31,6 @@ export default class PluginService extends BaseService {
 	private store_:any = null;
 	private platformImplementation_:any = null;
 	private plugins_:Plugins = {};
-	// private sandboxes_:Sandboxes = {};
 	private runner_:BasePluginRunner = null;
 
 	initialize(platformImplementation:any, runner:BasePluginRunner, store:any) {
@@ -117,134 +110,10 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	// cliSandbox(pluginId:string) {
-	// 	let callbackId_ = 1;
-	// 	const callbacks_:any = {};
-
-	// 	function mapFunctionsToCallbacks(arg:any) {
-	// 		if (Array.isArray(arg)) {
-	// 			for (let i = 0; i < arg.length; i++) {
-	// 				arg[i] = mapFunctionsToCallbacks(arg[i]);
-	// 			}
-	// 			return arg;
-	// 		} else if (typeof arg === 'function') {
-	// 			const id = '__event#' + callbackId_;
-	// 			callbackId_++;
-	// 			callbacks_[id] = arg;
-	// 			return id;
-	// 		} else if (arg === null) {
-	// 			return null;
-	// 		} else if (arg === undefined) {
-	// 			return undefined;
-	// 		} else if (typeof arg === 'object') {
-	// 			for (const n in arg) {
-	// 				arg[n] = mapFunctionsToCallbacks(arg[n]);
-	// 			}
-	// 		}
-
-	// 		return arg;
-	// 	}
-
-	// 	const target = (path:string, args:any[]) => {
-	// 		console.info('GOT PATH', path, mapFunctionsToCallbacks(args));
-	// 		this.executeSandboxCall(pluginId, 'joplin.' + path, mapFunctionsToCallbacks(args));
-	// 	};
-
-	// 	return {
-	// 		joplin: sandboxProxy(target),
-	// 	}
-	// }
-
 	async runPlugin(plugin:Plugin) {
 		this.plugins_[plugin.id] = plugin;
-
-		// Context contains the data that is sent from the plugin to the app
-		// Currently it only contains the object that's registered when
-		// the plugin calls `joplin.plugins.register()`
-		const context:SandboxContext = {
-			runtime: null,
-		};
-
-		const sandbox = new Global(this.platformImplementation_, plugin, this.store_, context);
-		// this.sandboxes_[plugin.id] = sandbox;
-
-		await this.runner_.run(plugin, sandbox);
-
-		// const vmSandbox = vm.createContext(this.cliSandbox(plugin.id));
-
-		// try {
-		// 	vm.runInContext(plugin.scriptText, vmSandbox);
-		// } catch (error) {
-		// 	this.logger().error(`In plugin ${plugin.id}:`, error);
-		// 	return;
-		// }
-
-
-
-
-		if (!context.runtime) {
-			throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
-		}
-
-		if (context.runtime.onStart) {
-			const startTime = Date.now();
-
-			this.logger().info(`Starting plugin: ${plugin.id}`);
-
-			// We don't use `await` when calling onStart because the plugin might be awaiting
-			// in that call too (for example, when opening a dialog on startup) so we don't
-			// want to get stuck here.
-			context.runtime.onStart({}).catch((error) => {
-				// For some reason, error thrown from the executed script do not have the type "Error"
-				// but are instead plain object. So recreate the Error object here so that it can
-				// be handled correctly by loggers, etc.
-				const newError:Error = new Error(error.message);
-				newError.stack = error.stack;
-				this.logger().error(`In plugin ${plugin.id}:`, newError);
-			}).then(() => {
-				this.logger().info(`Finished running onStart handler: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
-			});
-		}
-
-
-
-
-
-
-
-
-		// vm.createContext(sandbox);
-
-		// try {
-		// 	vm.runInContext(plugin.scriptText, sandbox);
-		// } catch (error) {
-		// 	this.logger().error(`In plugin ${plugin.id}:`, error);
-		// 	return;
-		// }
-
-		// if (!context.runtime) {
-		// 	throw new Error(`Plugin ${plugin.id}: The plugin was not registered! Call joplin.plugins.register({.....}) from within the plugin.`);
-		// }
-
-		// if (context.runtime.onStart) {
-		// 	const startTime = Date.now();
-
-		// 	this.logger().info(`Starting plugin: ${plugin.id}`);
-
-		// 	// We don't use `await` when calling onStart because the plugin might be awaiting
-		// 	// in that call too (for example, when opening a dialog on startup) so we don't
-		// 	// want to get stuck here.
-		// 	context.runtime.onStart({}).catch((error) => {
-		// 		// For some reason, error thrown from the executed script do not have the type "Error"
-		// 		// but are instead plain object. So recreate the Error object here so that it can
-		// 		// be handled correctly by loggers, etc.
-		// 		const newError:Error = new Error(error.message);
-		// 		newError.stack = error.stack;
-		// 		this.logger().error(`In plugin ${plugin.id}:`, newError);
-		// 	}).then(() => {
-		// 		this.logger().info(`Finished running onStart handler: ${plugin.id} (Took ${Date.now() - startTime}ms)`);
-		// 	});
-		// }
+		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
+		return this.runner_.run(plugin, pluginApi);
 	}
 
 }

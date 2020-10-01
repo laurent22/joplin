@@ -1,5 +1,5 @@
 const { isHidden } = require('lib/path-utils.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const shim = require('lib/shim');
 const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');

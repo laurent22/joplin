@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');

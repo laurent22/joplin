@@ -23,11 +23,11 @@ const NoteTag = require('lib/models/NoteTag.js');
 const MasterKey = require('lib/models/MasterKey');
 const Setting = require('lib/models/Setting').default;
 const Revision = require('lib/models/Revision.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
 const EncryptionService = require('lib/services/EncryptionService');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 
 if (bridge().env() === 'dev') {

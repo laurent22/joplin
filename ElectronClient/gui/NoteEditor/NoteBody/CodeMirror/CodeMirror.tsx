@@ -15,7 +15,7 @@ import usePluginServiceRegistration from '../../utils/usePluginServiceRegistrati
 import Setting from 'lib/models/Setting';
 
 //  @ts-ignore
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 //  @ts-ignore
 const Note = require('lib/models/Note.js');
 const { clipboard } = require('electron');

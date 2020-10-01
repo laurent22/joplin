@@ -1,4 +1,3 @@
-import { SandboxContext } from '../utils/types';
 import Plugin from '../Plugin';
 import JoplinData from './JoplinData';
 import JoplinPlugins from './JoplinPlugins';
@@ -9,10 +8,11 @@ import JoplinViews from './JoplinViews';
 import JoplinUtils from './JoplinUtils';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
+import Logger from 'lib/Logger';
 
 export default class Joplin {
 
-	private api_: JoplinData = null;
+	private data_: JoplinData = null;
 	private plugins_: JoplinPlugins = null;
 	private workspace_: JoplinWorkspace = null;
 	private filters_: JoplinFilters = null;
@@ -22,9 +22,9 @@ export default class Joplin {
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
 
-	constructor(implementation:any, plugin: Plugin, store: any, context: SandboxContext) {
-		this.api_ = new JoplinData();
-		this.plugins_ = new JoplinPlugins(context);
+	constructor(logger:Logger, implementation:any, plugin: Plugin, store: any) {
+		this.data_ = new JoplinData();
+		this.plugins_ = new JoplinPlugins(logger, plugin);
 		this.workspace_ = new JoplinWorkspace(implementation.workspace, store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
@@ -34,8 +34,8 @@ export default class Joplin {
 		this.settings_ = new JoplinSettings(plugin);
 	}
 
-	get api(): JoplinData {
-		return this.api_;
+	get data(): JoplinData {
+		return this.data_;
 	}
 
 	get plugins(): JoplinPlugins {

@@ -85,7 +85,7 @@ describe('services_PluginService', function() {
 
 	// 	const folder = await Folder.save({ title: 'folder' });
 
-	// 	const folderFromApi = await service.executeSandboxCall(plugin.id, 'joplin.api.get', ['folders/' + folder.id]);
+	// 	const folderFromApi = await service.executeSandboxCall(plugin.id, 'joplin.data.get', ['folders/' + folder.id]);
 	// 	expect(folder.id).toBe(folderFromApi.id);
 	// 	expect(folder.title).toBe(folderFromApi.title);
 	// }));

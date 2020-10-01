@@ -1,6 +1,6 @@
 import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher/index';
 
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const Resource = require('lib/models/Resource.js');

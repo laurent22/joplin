@@ -4,6 +4,7 @@ import sandboxProxy from 'lib/services/plugins/sandboxProxy';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import executeSandboxCall from 'lib/services/plugins/utils/executeSandboxCall';
 import Global from 'lib/services/plugins/api/Global';
+import mapEventHandlersToIds, { EventHandlers } from 'lib/services/plugins/utils/mapEventHandlersToIds';
 
 function createConsoleWrapper(pluginId:string) {
 	const wrapper:any = {};
@@ -29,6 +30,8 @@ function createConsoleWrapper(pluginId:string) {
 
 export default class PluginRunner extends BasePluginRunner {
 
+	private eventHandlers_:EventHandlers = {};
+
 	constructor() {
 		super();
 
@@ -37,20 +40,12 @@ export default class PluginRunner extends BasePluginRunner {
 
 	private async eventHandler(eventHandlerId:string, args:any[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
-		delete this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
 
 	private newSandboxProxy(pluginId:string, sandbox:Global) {
-
-		// Note: for desktop, the implementation should be like so:
-		// In the target, we post an IPC message with the path, args, etc. as well as a callbackId to the host
-		// The target saves this callbackId and associate it with a Promise that it returns.
-		// When the host responds back (via IPC), we get the promise back using the callbackId, then call resolve
-		// with what was sent from the host.
-
 		const target = async (path:string, args:any[]) => {
-			return executeSandboxCall(pluginId, sandbox, `joplin.${path}`, this.mapEventHandlersToIds(args), this.eventHandler);
+			return executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
 		};
 
 		return {

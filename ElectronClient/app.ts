@@ -8,6 +8,8 @@ import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 // import SandboxImplementation from './plugins/SandboxImplementation';
 import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { defaultState, State } from 'lib/reducer';
+import PluginRunner from './services/plugins/PluginRunner';
+import PlatformImplementation from './services/plugins/PlatformImplementation';
 
 require('app-module-path').addPath(__dirname);
 
@@ -18,7 +20,7 @@ const shim = require('lib/shim');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
 const { _, setLocale } = require('lib/locale.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const fs = require('fs-extra');
 const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');
@@ -31,7 +33,7 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
@@ -1357,23 +1359,24 @@ class Application extends BaseApplication {
 		pluginLogger.addTarget('console', { prefix: 'Plugin Service:' });
 		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
 
+		const pluginRunner = new PluginRunner();
 		PluginService.instance().setLogger(pluginLogger);
-		// PluginService.instance().initialize(SandboxImplementation.instance(), this.store());
+		PluginService.instance().initialize(PlatformImplementation.instance(), pluginRunner, this.store());
 
-		// try {
-		// 	if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
-		// } catch (error) {
-		// 	this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
-		// }
+		try {
+			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		}
 
-		// try {
-		// 	if (Setting.value('plugins.devPluginPaths')) {
-		// 		const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
-		// 		await PluginService.instance().loadAndRunPlugins(paths);
-		// 	}
-		// } catch (error) {
-		// 	this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
-		// }
+		try {
+			if (Setting.value('plugins.devPluginPaths')) {
+				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
+				await PluginService.instance().loadAndRunPlugins(paths);
+			}
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
 
 
 		// const url = require('url');
@@ -1395,7 +1398,7 @@ class Application extends BaseApplication {
 
 		// const ipcRenderer = require('electron').ipcRenderer;
 		// ipcRenderer.on('pluginMessage', (event:any, data:any) => {
-		// 	console.info('GOT MESSAGE ON MAIN WINDOW', event, data);
+		// 	console.info('RENDERER PROCESS got message', data);
 		// });
 
 

@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const ClipperServer = require('lib/ClipperServer');

@@ -8,7 +8,7 @@ import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const shim = require('lib/shim');
 const { _ } = require('lib/locale');
 

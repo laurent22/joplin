@@ -91,10 +91,12 @@ CliClient/tests/support/plugins/withExternalModules/src/index.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/app.js
+ElectronClient/bridge.js
 ElectronClient/commands/copyDevCommand.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
+ElectronClient/ElectronAppWrapper.js
 ElectronClient/global.d.js
 ElectronClient/gui/Button/Button.js
 ElectronClient/gui/ConfigScreen/ButtonBar.js
@@ -199,9 +201,11 @@ ElectronClient/gui/ToolbarBase.js
 ElectronClient/gui/ToolbarButton/styles/index.js
 ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ElectronClient/gui/utils/NoteListUtils.js
+ElectronClient/services/bridge.js
 ElectronClient/services/plugins/hooks/useThemeCss.js
 ElectronClient/services/plugins/hooks/useViewIsReady.js
 ElectronClient/services/plugins/PlatformImplementation.js
+ElectronClient/services/plugins/PluginRunner.js
 ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
@@ -221,6 +225,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/lib/Logger.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/reducer.js
@@ -259,6 +264,7 @@ ReactNativeClient/lib/services/plugins/sandboxProxy.js
 ReactNativeClient/lib/services/plugins/ToolbarButtonController.js
 ReactNativeClient/lib/services/plugins/utils/executeSandboxCall.js
 ReactNativeClient/lib/services/plugins/utils/manifestFromObject.js
+ReactNativeClient/lib/services/plugins/utils/mapEventHandlersToIds.js
 ReactNativeClient/lib/services/plugins/utils/types.js
 ReactNativeClient/lib/services/plugins/ViewController.js
 ReactNativeClient/lib/services/plugins/WebviewController.js

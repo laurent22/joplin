@@ -1,7 +1,7 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
 const { _ } = require('lib/locale');
 const Folder = require('lib/models/Folder');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'newFolder',

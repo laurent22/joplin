@@ -637,7 +637,13 @@
 			"ReactNativeClient/lib/services/plugins/api/JoplinViews.js": true,
 			"ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js": true,
 			"ElectronClient/services/plugins/PlatformImplementation.js": true,
-			"ElectronClient/gui/NoteEditor/utils/usePluginServiceRegistration.js": true
+			"ElectronClient/gui/NoteEditor/utils/usePluginServiceRegistration.js": true,
+			"ElectronClient/bridge.js": true,
+			"ElectronClient/ElectronAppWrapper.js": true,
+			"ElectronClient/services/bridge.js": true,
+			"ElectronClient/services/plugins/PluginRunner.js": true,
+			"ReactNativeClient/lib/Logger.js": true,
+			"ReactNativeClient/lib/services/plugins/utils/mapEventHandlersToIds.js": true
 		},
 		"spellright.language": [
 			"en"

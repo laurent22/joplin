@@ -5,7 +5,7 @@ import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from 'lib/services/sync
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
 const Setting = require('lib/models/Setting').default;
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 function useAppCloseHandler(upgradeResult:SyncTargetUpgradeResult) {
 	useEffect(function() {

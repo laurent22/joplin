@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim');
@@ -7,7 +7,7 @@ const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { time } = require('lib/time-utils.js');
 const { ErrorNotFound } = require('./rest/errors');
 

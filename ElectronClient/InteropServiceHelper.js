@@ -1,5 +1,5 @@
 const { _ } = require('lib/locale');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const InteropService = require('lib/services/interop/InteropService').default;
 const CommandService = require('lib/services/CommandService').default;
 const Setting = require('lib/models/Setting').default;

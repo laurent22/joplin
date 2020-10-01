@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs-extra');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { dirname } = require('lib/path-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');

@@ -3,7 +3,7 @@ const BaseModel = require('lib/BaseModel');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const EventEmitter = require('events');
 const shim = require('lib/shim');
 

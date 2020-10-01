@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');

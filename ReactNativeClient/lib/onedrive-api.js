@@ -1,7 +1,7 @@
 const shim = require('lib/shim');
 const { stringify } = require('query-string');
 const { time } = require('lib/time-utils.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { _ } = require('lib/locale.js');
 
 class OneDriveApi {

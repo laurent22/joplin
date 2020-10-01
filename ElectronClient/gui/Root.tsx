@@ -19,7 +19,7 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 interface Props {
 	themeId: number,

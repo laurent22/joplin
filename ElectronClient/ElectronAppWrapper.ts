@@ -1,3 +1,6 @@
+import Logger from "lib/Logger";
+import { PluginMessage } from './services/plugins/PluginRunner'
+
 const { BrowserWindow, Tray, screen } = require('electron');
 const shim = require('lib/shim');
 const url = require('url');
@@ -6,31 +9,40 @@ const { dirname } = require('lib/path-utils');
 const fs = require('fs-extra');
 const { ipcMain } = require('electron');
 
-// const { ipcMain } = require('electron')
-// ipcMain.on('pluginMessage', (event, arg) => {
-//   console.info('PPPPPPPPPPPPPPPPPPPPPP', arg);
-// })
+interface RendererProcessQuitReply {
+	canClose: boolean,
+}
 
+interface PluginWindows {
+	[key: string]: any,
+}
 
-class ElectronAppWrapper {
+export default class ElectronAppWrapper {
 
-	constructor(electronApp, env, profilePath, isDebugMode) {
+	private logger_:Logger = null;
+	private electronApp_:any;
+	private env_:string;
+	private isDebugMode_:boolean;
+	private profilePath_:string;
+	private win_:any = null;
+	private willQuitApp_:boolean = false;
+	private tray_:any = null;
+	private buildDir_:string = null;
+	private rendererProcessQuitReply_:RendererProcessQuitReply = null;
+	private pluginWindows_:PluginWindows = {};
+
+	constructor(electronApp:any, env:string, profilePath:string, isDebugMode:boolean) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
-		this.win_ = null;
-		this.willQuitApp_ = false;
-		this.tray_ = null;
-		this.buildDir_ = null;
-		this.rendererProcessQuitReply_ = null;
 	}
 
 	electronApp() {
 		return this.electronApp_;
 	}
 
-	setLogger(v) {
+	setLogger(v:Logger) {
 		this.logger_ = v;
 	}
 
@@ -53,7 +65,7 @@ class ElectronAppWrapper {
 		const windowStateKeeper = require('electron-window-state');
 
 
-		const stateOptions = {
+		const stateOptions:any = {
 			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
 			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
 			file: `window-state-${this.env_}.json`,
@@ -64,7 +76,7 @@ class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
-		const windowOptions = {
+		const windowOptions:any = {
 			x: windowState.x,
 			y: windowState.y,
 			width: windowState.width,
@@ -86,7 +98,7 @@ class ElectronAppWrapper {
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
 		require('electron-context-menu')({
-			shouldShowMenu: (event, params) => {
+			shouldShowMenu: (_event:any, params:any) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
@@ -123,7 +135,7 @@ class ElectronAppWrapper {
 			}, 3000);
 		}
 
-		this.win_.on('close', (event) => {
+		this.win_.on('close', (event:any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
 			// user clicks on the icon in the task bar).
@@ -171,7 +183,7 @@ class ElectronAppWrapper {
 			}
 		});
 
-		ipcMain.on('asynchronous-message', (event, message, args) => {
+		ipcMain.on('asynchronous-message', (_event:any, message:string, args:any) => {
 			if (message === 'appCloseReply') {
 				// We got the response from the renderer process:
 				// save the response and try quit again.
@@ -180,10 +192,21 @@ class ElectronAppWrapper {
 			}
 		});
 
-		ipcMain.on('pluginMessage', (event, data) => {
-			// Forward message
-			if (data.target === 'mainWindow') {
-				this.win_.webContents.send('pluginMessage', data);
+		// This handler receives IPC messages from a plugin or from the main window,
+		// and forwards it to the main window or the plugin window.
+		ipcMain.on('pluginMessage', (_event:any, message:PluginMessage) => {
+			if (message.target === 'mainWindow') {
+				this.win_.webContents.send('pluginMessage', message);
+			}
+
+			if (message.target === 'plugin') {
+				const win = this.pluginWindows_[message.pluginId];
+				if (!win) {
+					this.logger().error('Trying to send IPC message to non-existing plugin window: ' + message.pluginId);
+					return;
+				}
+
+				win.webContents.send('pluginMessage', message);
 			}
 		});
 
@@ -198,6 +221,10 @@ class ElectronAppWrapper {
 		if (!windowOptions.show) {
 			this.win_.hide();
 		}
+	}
+
+	registerPluginWindow(pluginId:string, window:any) {
+		this.pluginWindows_[pluginId] = window;
 	}
 
 	async waitForElectronAppReady() {
@@ -258,7 +285,7 @@ class ElectronAppWrapper {
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
-	createTray(contextMenu) {
+	createTray(contextMenu:any) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
 			this.tray_.setToolTip(this.electronApp_.name);
@@ -325,5 +352,3 @@ class ElectronAppWrapper {
 	}
 
 }
-
-module.exports = { ElectronAppWrapper };

@@ -11,7 +11,7 @@ joplin.plugins.register({
 				let parentId = null;
 
 				for (const noteId of noteIds) {
-					const note = await joplin.api.get('notes/' + noteId, { fields: ['title', 'body', 'parent_id']});
+					const note = await joplin.data.get('notes/' + noteId, { fields: ['title', 'body', 'parent_id']});
 					newNoteBody.push([
 						'# ' + note.title,
 						'',
@@ -27,7 +27,7 @@ joplin.plugins.register({
 					parent_id: parentId,
 				};
 
-				await joplin.api.post('notes', null, newNote);
+				await joplin.data.post('notes', null, newNote);
 			},
 		});
 

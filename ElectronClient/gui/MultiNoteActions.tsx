@@ -3,7 +3,7 @@ import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 
 const { buildStyle } = require('lib/theme');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 interface MultiNoteActionsProps {
 	themeId: number,

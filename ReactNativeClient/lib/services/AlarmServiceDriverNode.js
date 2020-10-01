@@ -1,5 +1,5 @@
 const notifier = require('node-notifier');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const shim = require('lib/shim');
 
 class AlarmServiceDriverNode {

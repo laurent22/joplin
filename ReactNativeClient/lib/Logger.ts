@@ -1,22 +1,52 @@
 const moment = require('moment');
-const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
+enum TargetType {
+	Database = 'database',
+	File = 'file',
+	Console = 'console',
+}
+
+enum LogLevel {
+	None = 0,
+	Error = 10,
+	Warn = 20,
+	Info = 30,
+	Debug = 40,	
+}
+
+interface Target {
+	type: TargetType,
+	level?: LogLevel,
+	database?: any,
+	console?: any,
+	prefix?: string,
+	path?: string,
+	source?: string,
+}
+
 class Logger {
-	constructor() {
-		this.targets_ = [];
-		this.level_ = Logger.LEVEL_INFO;
-		this.fileAppendQueue_ = [];
-		this.lastDbCleanup_ = time.unixMs();
-	}
+
+	// For backward compatibility
+	public static LEVEL_NONE = LogLevel.None;
+	public static LEVEL_ERROR = LogLevel.Error;
+	public static LEVEL_WARN = LogLevel.Warn;
+	public static LEVEL_INFO = LogLevel.Info;
+	public static LEVEL_DEBUG = LogLevel.Debug;
+
+	public static fsDriver_:any = null;
+
+	private targets_:Target[] = [];
+	private level_:LogLevel = LogLevel.Info;
+	private lastDbCleanup_:number = time.unixMs();
 
 	static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
 		return Logger.fsDriver_;
 	}
 
-	setLevel(level) {
+	setLevel(level:LogLevel) {
 		this.level_ = level;
 	}
 
@@ -28,25 +58,22 @@ class Logger {
 		return this.targets_;
 	}
 
-	clearTargets() {
-		this.targets_.clear();
-	}
-
-	addTarget(type, options = null) {
+	addTarget(type:TargetType, options:any = null) {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
-			target[n] = options[n];
+			(target as any)[n] = options[n];
 		}
 
 		this.targets_.push(target);
 	}
 
-	objectToString(object) {
+	objectToString(object:any) {
 		let output = '';
 
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
+				object = object as any;
 				output = object.toString();
 				if (object.code) output += `\nCode: ${object.code}`;
 				if (object.headers) output += `\nHeader: ${JSON.stringify(object.headers)}`;
@@ -62,7 +89,7 @@ class Logger {
 		return output;
 	}
 
-	objectsToString(...object) {
+	objectsToString(...object:any[]) {
 		const output = [];
 		for (let i = 0; i < object.length; i++) {
 			output.push(`"${this.objectToString(object[i])}"`);
@@ -84,9 +111,9 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	async lastEntries(limit = 100, options = null) {
+	async lastEntries(limit:number = 100, options:any = null) {
 		if (options === null) options = {};
-		if (!options.levels) options.levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
 
 		for (let i = 0; i < this.targets_.length; i++) {
@@ -100,12 +127,12 @@ class Logger {
 		return [];
 	}
 
-	targetLevel(target) {
+	targetLevel(target:Target) {
 		if ('level' in target) return target.level;
 		return this.level();
 	}
 
-	log(level, ...object) {
+	log(level:LogLevel, ...object:any[]) {
 		if (!this.targets_.length) return;
 
 		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -118,9 +145,9 @@ class Logger {
 
 			if (target.type == 'console') {
 				let fn = 'log';
-				if (level == Logger.LEVEL_ERROR) fn = 'error';
-				if (level == Logger.LEVEL_WARN) fn = 'warn';
-				if (level == Logger.LEVEL_INFO) fn = 'info';
+				if (level == LogLevel.Error) fn = 'error';
+				if (level == LogLevel.Warn) fn = 'warn';
+				if (level == LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
 				let items = [moment().format('HH:mm:ss')];
 				if (target.prefix) {
@@ -160,55 +187,41 @@ class Logger {
 		}
 	}
 
-	error(...object) {
-		return this.log(Logger.LEVEL_ERROR, ...object);
+	error(...object:any[]) {
+		return this.log(LogLevel.Error, ...object);
 	}
-	warn(...object) {
-		return this.log(Logger.LEVEL_WARN, ...object);
+	warn(...object:any[]) {
+		return this.log(LogLevel.Warn, ...object);
 	}
-	info(...object) {
-		return this.log(Logger.LEVEL_INFO, ...object);
+	info(...object:any[]) {
+		return this.log(LogLevel.Info, ...object);
 	}
-	debug(...object) {
-		return this.log(Logger.LEVEL_DEBUG, ...object);
-	}
-
-	static levelStringToId(s) {
-		if (s == 'none') return Logger.LEVEL_NONE;
-		if (s == 'error') return Logger.LEVEL_ERROR;
-		if (s == 'warn') return Logger.LEVEL_WARN;
-		if (s == 'info') return Logger.LEVEL_INFO;
-		if (s == 'debug') return Logger.LEVEL_DEBUG;
-		throw new Error(_('Unknown log level: %s', s));
+	debug(...object:any[]) {
+		return this.log(LogLevel.Debug, ...object);
 	}
 
-	static levelIdToString(id) {
-		if (id == Logger.LEVEL_NONE) return 'none';
-		if (id == Logger.LEVEL_ERROR) return 'error';
-		if (id == Logger.LEVEL_WARN) return 'warn';
-		if (id == Logger.LEVEL_INFO) return 'info';
-		if (id == Logger.LEVEL_DEBUG) return 'debug';
-		throw new Error(_('Unknown level ID: %s', id));
+	static levelStringToId(s:string) {
+		if (s == 'none') return LogLevel.None;
+		if (s == 'error') return LogLevel.Error;
+		if (s == 'warn') return LogLevel.Warn;
+		if (s == 'info') return LogLevel.Info;
+		if (s == 'debug') return LogLevel.Debug;
+		throw new Error('Unknown log level: ' + s);
+	}
+
+	static levelIdToString(id:LogLevel) {
+		if (id == LogLevel.None) return 'none';
+		if (id == LogLevel.Error) return 'error';
+		if (id == LogLevel.Warn) return 'warn';
+		if (id == LogLevel.Info) return 'info';
+		if (id == LogLevel.Debug) return 'debug';
+		throw new Error('Unknown level ID: ' + id);
 	}
 
 	static levelIds() {
-		return [Logger.LEVEL_NONE, Logger.LEVEL_ERROR, Logger.LEVEL_WARN, Logger.LEVEL_INFO, Logger.LEVEL_DEBUG];
+		return [LogLevel.None, LogLevel.Error, LogLevel.Warn, LogLevel.Info, LogLevel.Debug];
 	}
 
-	static levelEnum() {
-		const output = {};
-		const ids = this.levelIds();
-		for (let i = 0; i < ids.length; i++) {
-			output[ids[i]] = this.levelIdToString(ids[i]);
-		}
-		return output;
-	}
 }
 
-Logger.LEVEL_NONE = 0;
-Logger.LEVEL_ERROR = 10;
-Logger.LEVEL_WARN = 20;
-Logger.LEVEL_INFO = 30;
-Logger.LEVEL_DEBUG = 40;
-
-module.exports = { Logger };
+export default Logger;
