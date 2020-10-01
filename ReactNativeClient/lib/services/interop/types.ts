@@ -38,27 +38,43 @@ export interface Module {
 	format: string,
 	fileExtensions: string[],
 	description: string,
-	instanceFactory?: Function,
 	path?: string,
+
+	// Only applies to single file exporters or importers
+	// It tells whether the format can package multiple notes into one file.
+	// For example JEX or ENEX can, but HTML cannot.
+	// Default: true.
+	isNoteArchive?: boolean,
+
+	// A custom module is one that was not hard-coded, that was created at runtime
+	// by a plugin for example. If `isCustom` is `true` if it is expected that all
+	// the event handlers below are defined (it's enforced by the plugin API).
+	isCustom?: boolean,
 
 	// ---------------------------------------
 	// Import-only properties
 	// ---------------------------------------
 
 	sources?: FileSystemItem[],
-	isNoteArchive?: boolean,
 	importerClass?: string,
 	outputFormat?: ImportModuleOutputFormat,
 	isDefault?: boolean,
 	fullLabel?: Function,
+
+	// Used only if `isCustom` is true
+	onExec?(context:any): Promise<void>;
 
 	// ---------------------------------------
 	// Export-only properties
 	// ---------------------------------------
 
 	target?: FileSystemItem,
-	// Tells whether the format can package multiple notes into one file. Default: true.
-	canDoMultiExport?: boolean,
+
+	// Used only if `isCustom` is true
+	onInit?(context:any): Promise<void>;
+	onProcessItem?(context:any, itemType:number, item:any):Promise<void>;
+	onProcessResource?(context:any, resource:any, filePath:string):Promise<void>;
+	onClose?(context:any):Promise<void>;
 }
 
 export interface ImportOptions {
@@ -101,8 +117,7 @@ export function defaultImportExportModule(type:ModuleType):Module {
 		outputFormat: ImportModuleOutputFormat.Markdown,
 		isDefault: false,
 		fullLabel: moduleFullLabel,
-
+		isCustom: false,
 		target: FileSystemItem.File,
-		canDoMultiExport: true,
 	};
 }

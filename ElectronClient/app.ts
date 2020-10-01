@@ -512,7 +512,7 @@ class Application extends BaseApplication {
 		for (let i = 0; i < ioModules.length; i++) {
 			const module = ioModules[i];
 			if (module.type === 'exporter') {
-				if (module.canDoMultiExport !== false) {
+				if (module.isNoteArchive !== false) {
 					exportItems.push({
 						label: module.fullLabel(),
 						screens: ['Main'],

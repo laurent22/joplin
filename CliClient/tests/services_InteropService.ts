@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import InteropService from 'lib/services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, Module, ModuleType } from 'lib/services/interop/types';
 
@@ -455,13 +453,11 @@ describe('services_InteropService', function() {
 			description: 'Test Import Module',
 			format: 'testing',
 			fileExtensions: ['test'],
-			instanceFactory: () => {
-				return {
-					exec: (context:CustomImportContext) => {
-						result.hasBeenExecuted = true;
-						result.sourcePath = context.sourcePath;
-					},
-				};
+			isCustom: true,
+
+			onExec: async (context:CustomImportContext) => {
+				result.hasBeenExecuted = true;
+				result.sourcePath = context.sourcePath;
 			},
 		};
 
@@ -498,26 +494,24 @@ describe('services_InteropService', function() {
 			description: 'Test Export Module',
 			format: 'testing',
 			fileExtensions: ['test'],
-			instanceFactory: () => {
-				return {
-					init: async (context:CustomExportContext) => {
-						result.destPath = context.destPath;
-					},
+			isCustom: true,
 
-					processItem: async (_context:CustomExportContext, itemType:number, item:any) => {
-						result.itemTypes.push(itemType);
-						result.items.push(item);
-					},
+			onInit: async (context:CustomExportContext) => {
+				result.destPath = context.destPath;
+			},
 
-					processResource: async (_context:CustomExportContext, resource:any, filePath:string) => {
-						result.resources.push(resource);
-						result.filePaths.push(filePath);
-					},
+			onProcessItem: async (_context:CustomExportContext, itemType:number, item:any) => {
+				result.itemTypes.push(itemType);
+				result.items.push(item);
+			},
 
-					close: () => {
-						result.closeCalled = true;
-					},
-				};
+			onProcessResource: async (_context:CustomExportContext, resource:any, filePath:string) => {
+				result.resources.push(resource);
+				result.filePaths.push(filePath);
+			},
+
+			onClose: async (_context:CustomExportContext) => {
+				result.closeCalled = true;
 			},
 		};
 

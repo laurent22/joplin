@@ -36,7 +36,7 @@ export default async function executeSandboxCall(pluginId:string, sandbox:Global
 	for (const pathFragment of pathFragments) {
 		parent = fn;
 		fn = fn[pathFragment];
-		if (!fn) throw new Error(`Invalid method call: ${path}`);
+		if (!fn) throw new Error(`Property or method "${pathFragment}" does not exist in "${path}"`);
 	}
 
 	const convertedArgs = createEventHandlers(args, eventHandler);

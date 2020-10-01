@@ -90,7 +90,6 @@ class InteropService {
 					format: 'jex',
 					fileExtensions: ['jex'],
 					target: FileSystemItem.File,
-					canDoMultiExport: true,
 					description: _('Joplin Export File'),
 				},
 				{
@@ -110,7 +109,7 @@ class InteropService {
 					format: 'html',
 					fileExtensions: ['html', 'htm'],
 					target: FileSystemItem.File,
-					canDoMultiExport: false,
+					isNoteArchive: false,
 					description: _('HTML File'),
 				},
 				{
@@ -177,9 +176,9 @@ class InteropService {
 
 	private newModuleFromCustomFactory(module:Module) {
 		if (module.type === ModuleType.Importer) {
-			return new InteropService_Importer_Custom(module.instanceFactory());
+			return new InteropService_Importer_Custom(module);
 		} else {
-			return new InteropService_Exporter_Custom(module.instanceFactory());
+			return new InteropService_Exporter_Custom(module);
 		}
 	}
 
@@ -196,7 +195,7 @@ class InteropService {
 
 		let output = null;
 
-		if (moduleMetadata.instanceFactory) {
+		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
 			const ModuleClass = require(this.modulePath(moduleMetadata));
@@ -229,7 +228,7 @@ class InteropService {
 
 		let output = null;
 
-		if (moduleMetadata.instanceFactory) {
+		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
 			const ModuleClass = require(modulePath);

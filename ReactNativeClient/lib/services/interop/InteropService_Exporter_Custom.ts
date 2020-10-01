@@ -1,14 +1,14 @@
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import { CustomExportContext, ExportOptions } from './types';
+import { CustomExportContext, ExportOptions, Module } from './types';
 
 export default class InteropService_Exporter_Custom extends InteropService_Exporter_Base {
 
 	private customContext_:CustomExportContext;
-	private handler_:any = null;
+	private module_:Module = null;
 
-	constructor(handler:any) {
+	constructor(module:Module) {
 		super();
-		this.handler_ = handler;
+		this.module_ = module;
 	}
 
 	async init(destPath:string, options:ExportOptions) {
@@ -17,18 +17,18 @@ export default class InteropService_Exporter_Custom extends InteropService_Expor
 			options: options,
 		};
 
-		if (this.handler_.init) return this.handler_.init(this.customContext_);
+		return this.module_.onInit(this.customContext_);
 	}
 
 	async processItem(itemType:number, item:any) {
-		if (this.handler_.processItem) return this.handler_.processItem(this.customContext_, itemType, item);
+		return this.module_.onProcessItem(this.customContext_, itemType, item);
 	}
 
 	async processResource(resource:any, filePath:string) {
-		if (this.handler_.processResource) return this.handler_.processResource(this.customContext_, resource, filePath);
+		return this.module_.onProcessResource(this.customContext_, resource, filePath);
 	}
 
 	async close() {
-		if (this.handler_.close) return this.handler_.close(this.customContext_);
+		return this.module_.onClose(this.customContext_);
 	}
 }

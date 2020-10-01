@@ -143,7 +143,7 @@ export default class NoteListUtils {
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
-				if (noteIds.length > 1 && module.canDoMultiExport === false) continue;
+				if (noteIds.length > 1 && module.isNoteArchive === false) continue;
 
 				exportMenu.append(
 					new MenuItem({
