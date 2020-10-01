@@ -19,14 +19,14 @@ export default class JoplinViews {
 		this.plugin = plugin;
 	}
 
-	createWebviewPanel() {
+	async createWebviewPanel() {
 		const idNum = this.viewIdNum++;
 		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
 		this.plugin.addViewController(controller);
 		return controller;
 	}
 
-	createWebviewDialog() {
+	async createWebviewDialog() {
 		const idNum = this.viewIdNum++;
 		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
 		controller.containerType = ContainerType.Dialog;
@@ -34,14 +34,14 @@ export default class JoplinViews {
 		return controller;
 	}
 
-	createToolbarButton(commandName:string, location:ToolbarButtonLocation) {
+	async createToolbarButton(commandName:string, location:ToolbarButtonLocation) {
 		const idNum = this.viewIdNum++;
 		const controller = new ToolbarButtonController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);
 		return controller;
 	}
 
-	createMenuItem(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
+	async createMenuItem(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
 		const idNum = this.viewIdNum++;
 		const controller = new MenuItemController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);

@@ -211,6 +211,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--dev-plugins') {
+				Setting.setConstant('startupDevPlugins', nextArg.split(',').map(p => p.trim()));
+				argv.splice(0, 2);
+				continue;
+			}
+
 			if (arg.indexOf('--remote-debugging-port=') === 0) {
 				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
 				argv.splice(0, 1);
@@ -235,6 +241,7 @@ class BaseApplication {
 		if (setDefaults) {
 			if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
 			if (!matched.env) matched.env = 'prod';
+			if (!matched.devPlugins) matched.devPlugins = [];
 		}
 
 		return {

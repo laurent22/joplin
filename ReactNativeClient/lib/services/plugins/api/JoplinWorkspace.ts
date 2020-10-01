@@ -17,11 +17,11 @@ export default class JoplinWorkspace {
 		this.implementation_ = implementation;
 	}
 
-	onNoteSelectionChange(callback: Function) {
+	async onNoteSelectionChange(callback: Function) {
 		eventManager.appStateOn('selectedNoteIds', callback);
 	}
 
-	onNoteContentChange(callback: Function) {
+	async onNoteContentChange(callback: Function) {
 		eventManager.on('noteContentChange', callback);
 	}
 

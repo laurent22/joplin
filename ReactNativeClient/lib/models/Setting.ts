@@ -1516,6 +1516,7 @@ Setting.constants_ = {
 	pluginDir: '',
 	flagOpenDevTools: false,
 	syncVersion: 2,
+	startupDevPlugins: [],
 };
 
 Setting.autoSaveEnabled = true;

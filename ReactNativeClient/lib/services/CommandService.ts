@@ -3,6 +3,8 @@ import eventManager from 'lib/eventManager';
 const BaseService = require('lib/services/BaseService').default;
 const shim = require('lib/shim');
 
+type LabelFunction = () => string;
+
 export interface CommandRuntime {
 	execute(props:any):void
 	isEnabled?(props:any):boolean
@@ -16,7 +18,7 @@ export interface CommandDeclaration {
 	name: string
 
 	// Used for the menu item label, and toolbar button tooltip
-	label?():string,
+	label?: LabelFunction | string,
 
 	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
 	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
@@ -26,7 +28,7 @@ export interface CommandDeclaration {
 	//     label() => _('Note list'),
 	//     parentLabel() => _('Focus'),
 	// Which will be displayed as "Focus: Note list" in the keymap config screen.
-	parentLabel?():string,
+	parentLabel?:LabelFunction | string,
 
 	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string,
@@ -201,16 +203,9 @@ export default class CommandService extends BaseService {
 	}
 
 	registerDeclaration(declaration:CommandDeclaration) {
-		// if (this.commands_[declaration.name]) throw new Error(`There is already a command with name ${declaration.name}`);
-
 		declaration = { ...declaration };
-		if (!declaration.label) declaration.label = () => '';
+		if (!declaration.label) declaration.label = '';
 		if (!declaration.iconName) declaration.iconName = '';
-
-		// In TypeScript it's not an issue, but in JavaScript it's easy to accidentally set the label
-		// to a string instead of a function, and it will cause strange errors that are hard to debug.
-		// So here check early that we have the right type.
-		if (typeof declaration.label !== 'function') throw new Error(`declaration.label must be a function: ${declaration.name}`);
 
 		this.commands_[declaration.name] = {
 			declaration: declaration,
@@ -289,8 +284,15 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];
-		if (fullLabel && command.declaration.parentLabel && command.declaration.parentLabel()) output.push(command.declaration.parentLabel());
-		output.push(command.declaration.label());
+
+		const parentLabel = (d:CommandDeclaration):string => {
+			if (!d.parentLabel) return '';
+			if (typeof d.parentLabel === 'function') return d.parentLabel();
+			return d.parentLabel as string;
+		};
+
+		if (fullLabel && parentLabel(command.declaration)) output.push(parentLabel(command.declaration));
+		output.push(typeof command.declaration.label === 'function' ? command.declaration.label() : command.declaration.label);
 		return output.join(': ');
 	}
 

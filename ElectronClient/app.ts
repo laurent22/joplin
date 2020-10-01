@@ -1374,54 +1374,16 @@ class Application extends BaseApplication {
 				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
 				await PluginService.instance().loadAndRunPlugins(paths);
 			}
+
+			// Also load dev plugins that have passed via command line arguments
+			if (Setting.value('startupDevPlugins')) {
+				await PluginService.instance().loadAndRunPlugins(Setting.value('startupDevPlugins'));
+			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
 
-
-		// const url = require('url');
-
-		// const tempWin = bridge().newBrowserWindow({
-		// 	show: true,
-		// 	webPreferences: {
-		// 		nodeIntegration: true,
-		// 	},
-		// });
-
-		// tempWin.loadURL(url.format({
-		// 	pathname: require('path').join(__dirname, 'plugins/plugin_index.html'),
-		// 	protocol: 'file:',
-		// 	slashes: true,
-		// }) + '?pluginId=' + '123456');
-
-		// tempWin.webContents.openDevTools();
-
-		// const ipcRenderer = require('electron').ipcRenderer;
-		// ipcRenderer.on('pluginMessage', (event:any, data:any) => {
-		// 	console.info('RENDERER PROCESS got message', data);
-		// });
-
-
-
-
-
-
-
-
-
-		// setTimeout(() => {
-		// 	tempWin.webContents.openDevTools();
-
-		// 	tempWin.webContents.on('ipc-message', (event) => {
-		// 		console.info('GOT MESSAGE FROM PLUGIN', event);
-		// 	});
-		// }, 2000);
-
-		// return null;
-
 		// await populateDatabase(reg.db());
-
-
 
 		return null;
 	}

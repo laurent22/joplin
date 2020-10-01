@@ -25,11 +25,11 @@ export default class JoplinSettings {
 		return Setting.registerSection(this.namespacedKey(name), section);
 	}
 
-	value(key:string):any {
+	async value(key:string):Promise<any> {
 		return Setting.value(this.namespacedKey(key));
 	}
 
-	setValue(key:string, value:any) {
+	async setValue(key:string, value:any) {
 		return Setting.setValue(this.namespacedKey(key), value);
 	}
 }

@@ -3,7 +3,7 @@ import { Module } from 'lib/services/interop/types';
 
 export default class JoplinInterop {
 
-	registerModule(module:Module) {
+	async registerModule(module:Module) {
 		return InteropService.instance().registerModule(module);
 	}
 

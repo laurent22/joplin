@@ -11,7 +11,7 @@ export default class JoplinPlugins {
 		this.plugin = plugin;
 	}
 
-	register(script: any) {
+	async register(script: any) {
 		if (script.onStart) {
 			const startTime = Date.now();
 
