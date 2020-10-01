@@ -2,7 +2,7 @@ import Plugin from '../Plugin';
 import Joplin from './Joplin';
 import Logger from 'lib/Logger';
 const builtinModules = require('builtin-modules');
-const shim = require('lib/shim');
+// const shim = require('lib/shim');
 
 let requireWhiteList_:string[] = null;
 
@@ -17,36 +17,36 @@ function requireWhiteList():string[] {
 export default class Global {
 
 	private joplin_: Joplin;
-	private consoleWrapper_:any = null;
+	// private consoleWrapper_:any = null;
 
 	constructor(logger:Logger, implementation:any, plugin: Plugin, store: any) {
 		this.joplin_ = new Joplin(logger, implementation.joplin, plugin, store);
-		this.consoleWrapper_ = this.createConsoleWrapper(plugin.id);
+		// this.consoleWrapper_ = this.createConsoleWrapper(plugin.id);
 	}
 
 	// Wraps console calls to allow prefixing them with "Plugin PLUGIN_ID:"
-	private createConsoleWrapper(pluginId:string) {
-		const wrapper:any = {};
+	// private createConsoleWrapper(pluginId:string) {
+	// 	const wrapper:any = {};
 
-		for (const n in console) {
-			if (!console.hasOwnProperty(n)) continue;
-			wrapper[n] = (...args:any[]) => {
-				const newArgs = args.slice();
-				newArgs.splice(0, 0, `Plugin "${pluginId}":`);
-				return (console as any)[n](...newArgs);
-			};
-		}
+	// 	for (const n in console) {
+	// 		if (!console.hasOwnProperty(n)) continue;
+	// 		wrapper[n] = (...args:any[]) => {
+	// 			const newArgs = args.slice();
+	// 			newArgs.splice(0, 0, `Plugin "${pluginId}":`);
+	// 			return (console as any)[n](...newArgs);
+	// 		};
+	// 	}
 
-		return wrapper;
-	}
+	// 	return wrapper;
+	// }
 
 	get joplin(): Joplin {
 		return this.joplin_;
 	}
 
-	get console(): any {
-		return this.consoleWrapper_;
-	}
+	// get console(): any {
+	// 	return this.consoleWrapper_;
+	// }
 
 	require(filePath:string):any {
 		if (!requireWhiteList().includes(filePath)) throw new Error(`Path not allowed: ${filePath}`);
@@ -60,24 +60,24 @@ export default class Global {
 		return process;
 	}
 
-	setTimeout(fn: Function, interval: number) {
-		return shim.setTimeout(() => {
-			fn();
-		}, interval);
-	}
+	// setTimeout(fn: Function, interval: number) {
+	// 	return shim.setTimeout(() => {
+	// 		fn();
+	// 	}, interval);
+	// }
 
-	setInterval(fn: Function, interval: number) {
-		return shim.setInterval(() => {
-			fn();
-		}, interval);
-	}
+	// setInterval(fn: Function, interval: number) {
+	// 	return shim.setInterval(() => {
+	// 		fn();
+	// 	}, interval);
+	// }
 
-	alert(message:string) {
-		return alert(message);
-	}
+	// alert(message:string) {
+	// 	return alert(message);
+	// }
 
-	confirm(message:string) {
-		return confirm(message);
-	}
+	// confirm(message:string) {
+	// 	return confirm(message);
+	// }
 
 }

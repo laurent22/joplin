@@ -85,7 +85,7 @@ export default class PluginRunner extends BasePluginRunner {
 			pathname: require('path').join(__dirname, 'plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,
-		})}?pluginId=${plugin.id}&pluginScript=file://${scriptPath}`); // TODO: escape!!
+		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}`);
 
 		pluginWindow.webContents.openDevTools();
 
