@@ -1,6 +1,7 @@
 import { PluginManifest } from './utils/types';
 import ViewController from './ViewController';
 import shim from 'lib/shim';
+import { ViewHandle } from './utils/createViewHandle';
 
 interface ViewControllers {
 	[key:string]: ViewController
@@ -13,7 +14,6 @@ export default class Plugin {
 	private manifest_:PluginManifest;
 	private scriptText_:string;
 	private enabled_:boolean = true;
-	// private context_:SandboxContext = null;
 	// @ts-ignore Should be useful later on
 	private logger_:any = null;
 	private viewControllers_:ViewControllers = {};
@@ -46,22 +46,14 @@ export default class Plugin {
 		return this.baseDir_;
 	}
 
-	// public get context():SandboxContext {
-	// 	return this.context_;
-	// }
-
-	// public set context(v:SandboxContext) {
-	// 	this.context_ = v;
-	// }
-
 	public addViewController(v:ViewController) {
-		if (this.viewControllers_[v.id]) throw new Error(`View already added: ${v.id}`);
-		this.viewControllers_[v.id] = v;
+		if (this.viewControllers_[v.handle]) throw new Error(`View already added: ${v.handle}`);
+		this.viewControllers_[v.handle] = v;
 	}
 
-	public viewControllerById(id:string):ViewController {
-		if (!this.viewControllers_[id]) throw new Error(`View not found: ${id}`);
-		return this.viewControllers_[id];
+	public viewController(handle:ViewHandle):ViewController {
+		if (!this.viewControllers_[handle]) throw new Error(`View not found: ${handle}`);
+		return this.viewControllers_[handle];
 	}
 
 }

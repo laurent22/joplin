@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting').default;
 const Folder = require('lib/models/Folder');
 const Tag = require('lib/models/Tag');
 const shim = require('lib/shim').default;
-const { uuid } = require('lib/uuid');
+const uuid = require('lib/uuid').default;
 const { fileExtension, basename } = require('lib/path-utils');
 const { pregQuote } = require('lib/string-utils');
 

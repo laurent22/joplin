@@ -23,7 +23,7 @@ const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils')
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
-const { uuid } = require('lib/uuid');
+const uuid = require('lib/uuid').default;
 const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
 class Api {

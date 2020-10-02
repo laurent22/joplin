@@ -36,7 +36,7 @@ export default class WebviewController extends ViewController {
 			type: 'PLUGIN_VIEW_ADD',
 			pluginId: pluginId,
 			view: {
-				id: this.id,
+				id: this.handle,
 				type: this.type,
 				containerType: ContainerType.Panel,
 				html: '',
@@ -55,7 +55,7 @@ export default class WebviewController extends ViewController {
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_SET',
 			pluginId: this.pluginId,
-			id: this.id,
+			id: this.handle,
 			name: name,
 			value: value,
 		});
@@ -85,7 +85,7 @@ export default class WebviewController extends ViewController {
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_PUSH',
 			pluginId: this.pluginId,
-			id: this.id,
+			id: this.handle,
 			name: 'scripts',
 			value: fullPath,
 		});

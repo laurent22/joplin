@@ -4,7 +4,7 @@ import AsyncActionQueue from '../../AsyncActionQueue';
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');

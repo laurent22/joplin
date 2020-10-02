@@ -10,20 +10,3 @@ export interface PluginManifest {
 	homepage_url?: string,
 	permissions?: PluginPermission[],
 }
-
-export interface Plugin {
-	id: string,
-	manifest: PluginManifest,
-	scriptText: string,
-	baseDir: string,
-	controls: any, // TODO: don't use any
-}
-
-export interface SandboxContextRuntime {
-	onStart(event:any):Promise<void>;
-	onMessage(event:any):void;
-}
-
-export interface SandboxContext {
-	runtime:SandboxContextRuntime;
-}

@@ -152,7 +152,7 @@ function shimInit() {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
-		const { uuid } = require('lib/uuid.js');
+		const uuid = require('lib/uuid').default;
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));

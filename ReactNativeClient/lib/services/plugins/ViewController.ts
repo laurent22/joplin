@@ -1,17 +1,19 @@
+import { ViewHandle } from './utils/createViewHandle';
+
 export default class ViewController {
 
-	private id_:string;
+	private handle_:ViewHandle;
 	private pluginId_:string;
 	private store_:any;
 
-	constructor(id:string, pluginId:string, store:any) {
-		this.id_ = id;
+	constructor(handle:ViewHandle, pluginId:string, store:any) {
+		this.handle_ = handle;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}
 
 	protected get storeView():any {
-		return this.store_.pluginService.plugins[this.pluginId_].views[this.id];
+		return this.store_.pluginService.plugins[this.pluginId_].views[this.handle];
 	}
 
 	protected get store():any {
@@ -23,11 +25,11 @@ export default class ViewController {
 	}
 
 	public get key():string {
-		return this.id_;
+		return this.handle_;
 	}
 
-	public get id():string {
-		return this.id_;
+	public get handle():ViewHandle {
+		return this.handle_;
 	}
 
 	public get type():string {

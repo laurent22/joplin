@@ -1,4 +1,4 @@
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const moment = require('moment');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');

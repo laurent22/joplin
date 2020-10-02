@@ -49,7 +49,7 @@ function defaultButtons():ButtonSpec[] {
 
 export default function UserWebviewDialog(props:Props) {
 	function viewController():WebviewController {
-		return PluginService.instance().pluginById(props.pluginId).viewControllerById(props.viewId) as WebviewController;
+		return PluginService.instance().pluginById(props.pluginId).viewController(props.viewId) as WebviewController;
 	}
 
 	const buttons:ButtonSpec[] = (props.buttons ? props.buttons : defaultButtons()).map((b:ButtonSpec) => {

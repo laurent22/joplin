@@ -19,7 +19,7 @@ export default class MenuItemController extends ViewController {
 			type: 'PLUGIN_VIEW_ADD',
 			pluginId: pluginId,
 			view: {
-				id: this.id,
+				id: this.handle,
 				type: this.type,
 				commandName: commandName,
 				location: location,

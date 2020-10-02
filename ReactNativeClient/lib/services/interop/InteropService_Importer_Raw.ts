@@ -1,4 +1,4 @@
-import { ImportExportResult } from "./types";
+import { ImportExportResult } from './types';
 
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const BaseItem = require('lib/models/BaseItem.js');
@@ -11,7 +11,7 @@ const Tag = require('lib/models/Tag.js');
 const { sprintf } = require('sprintf-js');
 const shim = require('lib/shim').default;
 const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {

@@ -2,7 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { time } = require('lib/time-utils.js');
 const { asyncTest, sleep, fileApi, fileContentEqual, checkThrowAsync } = require('test-utils.js');
 const shim = require('lib/shim').default;

@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const { BaseCommand } = require('./base-command.js');
 const { splitCommandString } = require('lib/string-utils.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');

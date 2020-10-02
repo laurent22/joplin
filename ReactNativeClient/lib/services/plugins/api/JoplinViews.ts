@@ -3,6 +3,7 @@ import Plugin from '../Plugin';
 import ToolbarButtonController, { ToolbarButtonLocation } from '../ToolbarButtonController';
 import MenuItemController, { MenuItemLocation } from '../MenuItemController';
 import KeymapService from 'lib/services/KeymapService';
+import JoplinViewsDialogs from './JoplinViewsDialogs';
 
 interface CreateMenuItemOptions {
 	accelerator: string,
@@ -14,9 +15,16 @@ export default class JoplinViews {
 	private store: any;
 	private plugin: Plugin;
 
+	private dialogs_:JoplinViewsDialogs = null;
+
 	constructor(plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
+	}
+
+	public get dialogs():JoplinViewsDialogs {
+		if (!this.dialogs_) this.dialogs_ = new JoplinViewsDialogs(this.plugin, this.store);
+		return this.dialogs_;
 	}
 
 	async createWebviewPanel() {

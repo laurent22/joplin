@@ -1,13 +1,15 @@
 joplin.plugins.register({
 	onStart: async function() {
-		const dialog = joplin.views.createWebviewDialog();
-		dialog.html = '<p>Testing dialog with default buttons</p><p>Second line</p><p>Third line</p>';
-		const result = await dialog.open();
+		// const dialogs = joplin.views.dialogs;
+
+		const handle = await joplin.views.dialogs.create();
+		await joplin.views.dialogs.setHtml(handle, '<p>Testing dialog with default buttons</p><p>Second line</p><p>Third line</p>');
+		const result = await joplin.views.dialogs.open(handle);
 		alert('This button was clicked: ' + result);
 
-		const dialog2 = joplin.views.createWebviewDialog();
-		dialog2.html = '<p>Testing dialog with custom buttons</p><p>Second line</p><p>Third line</p>';
-		dialog.buttons = [
+		const handle2 = await joplin.views.dialogs.create();
+		await joplin.views.dialogs.setHtml(handle2, '<p>Testing dialog with custom buttons</p><p>Second line</p><p>Third line</p>');
+		await joplin.views.dialogs.setButtons(handle2, [
 			{
 				id: 'ok',
 			},
@@ -18,9 +20,9 @@ joplin.plugins.register({
 				id: 'moreInfo',
 				title: 'More info',
 			},
-		];
+		]);
 
-		const result2 = await dialog.open();
+		const result2 = await joplin.views.dialogs.open(handle2);
 		alert('This button was clicked: ' + result2);
 
 	},

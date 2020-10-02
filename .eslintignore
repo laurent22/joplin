@@ -263,6 +263,7 @@ ReactNativeClient/lib/services/plugins/api/JoplinPlugins.js
 ReactNativeClient/lib/services/plugins/api/JoplinSettings.js
 ReactNativeClient/lib/services/plugins/api/JoplinUtils.js
 ReactNativeClient/lib/services/plugins/api/JoplinViews.js
+ReactNativeClient/lib/services/plugins/api/JoplinViewsDialogs.js
 ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js
 ReactNativeClient/lib/services/plugins/BasePluginRunner.js
 ReactNativeClient/lib/services/plugins/MenuItemController.js
@@ -271,6 +272,7 @@ ReactNativeClient/lib/services/plugins/PluginService.js
 ReactNativeClient/lib/services/plugins/reducer.js
 ReactNativeClient/lib/services/plugins/sandboxProxy.js
 ReactNativeClient/lib/services/plugins/ToolbarButtonController.js
+ReactNativeClient/lib/services/plugins/utils/createViewHandle.js
 ReactNativeClient/lib/services/plugins/utils/executeSandboxCall.js
 ReactNativeClient/lib/services/plugins/utils/manifestFromObject.js
 ReactNativeClient/lib/services/plugins/utils/mapEventHandlersToIds.js
@@ -304,6 +306,7 @@ ReactNativeClient/lib/themes/oledDark.js
 ReactNativeClient/lib/themes/solarizedDark.js
 ReactNativeClient/lib/themes/solarizedLight.js
 ReactNativeClient/lib/themes/type.js
+ReactNativeClient/lib/uuid.js
 ReactNativeClient/lib/versionInfo.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js

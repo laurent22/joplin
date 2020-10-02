@@ -66,7 +66,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriverMobile = require('lib/services/keychain/KeychainServiceDriver.mobile').default;

@@ -569,7 +569,7 @@ class MainScreenComponent extends React.Component<any, any> {
 	}
 
 	userWebview_message(event:any) {
-		PluginService.instance().pluginById(event.pluginId).viewControllerById(event.viewId).emitMessage(event);
+		PluginService.instance().pluginById(event.pluginId).viewController(event.viewId).emitMessage(event);
 	}
 
 	resizableLayout_resize(event:any) {
