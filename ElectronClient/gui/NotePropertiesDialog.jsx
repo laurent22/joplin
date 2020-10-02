@@ -7,7 +7,7 @@ const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {

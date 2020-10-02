@@ -3,7 +3,7 @@ import manifestFromObject from 'lib/services/plugins/utils/manifestFromObject';
 import Global from 'lib/services/plugins/api/Global';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import BaseService  from '../BaseService';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 const { filename } = require('lib/path-utils');
 const nodeSlug = require('slug');
 

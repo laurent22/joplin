@@ -27,7 +27,7 @@ const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 const { themeStyle } = require('lib/theme');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };

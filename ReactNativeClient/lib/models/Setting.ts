@@ -1,3 +1,4 @@
+import shim from 'lib/shim';
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
@@ -7,7 +8,6 @@ const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
-const shim = require('lib/shim');
 
 export enum SettingItemType {
 	Int = 1,

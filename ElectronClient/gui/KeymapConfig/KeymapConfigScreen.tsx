@@ -9,7 +9,7 @@ import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const { _ } = require('lib/locale');
 
 const keymapService = KeymapService.instance();

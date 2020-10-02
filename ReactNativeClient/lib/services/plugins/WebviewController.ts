@@ -1,5 +1,5 @@
 import ViewController from './ViewController';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 const { toSystemSlashes } = require('lib/path-utils');
 
 export interface ButtonSpec {

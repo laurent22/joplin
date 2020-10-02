@@ -13,7 +13,7 @@ const Levenshtein = require('levenshtein');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 // const Promise = require('promise');
 const fs = require('fs-extra');

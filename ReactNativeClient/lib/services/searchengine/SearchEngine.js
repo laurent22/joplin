@@ -9,7 +9,7 @@ const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
 const filterParser = require('./filterParser').default;
 const queryBuilder = require('./queryBuilder').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class SearchEngine {
 

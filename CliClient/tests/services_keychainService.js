@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const Setting = require('lib/models/Setting').default;
 const KeychainService = require('lib/services/keychain/KeychainService').default;
 

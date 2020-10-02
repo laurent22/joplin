@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 
 export function cursorPositionToTextOffset(cursorPos: any, body: string) {
 	if (!body) return 0;

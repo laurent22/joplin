@@ -1,4 +1,4 @@
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const { stringify } = require('query-string');
 const { time } = require('lib/time-utils.js');
 const Logger = require('lib/Logger').default;

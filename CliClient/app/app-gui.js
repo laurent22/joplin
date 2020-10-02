@@ -11,7 +11,7 @@ const { defaultState } = require('lib/reducer');
 const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 

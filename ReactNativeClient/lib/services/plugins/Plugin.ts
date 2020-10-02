@@ -1,6 +1,6 @@
 import { PluginManifest } from './utils/types';
 import ViewController from './ViewController';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 
 interface ViewControllers {
 	[key:string]: ViewController

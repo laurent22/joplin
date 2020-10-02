@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { themeStyle } from 'lib/theme';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 const Setting = require('lib/models/Setting').default;
 const { camelCaseToDash, formatCssSize } = require('lib/string-utils');
 

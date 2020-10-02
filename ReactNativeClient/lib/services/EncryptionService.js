@@ -1,6 +1,6 @@
 const { padLeft } = require('lib/string-utils.js');
 const Logger = require('lib/Logger').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');

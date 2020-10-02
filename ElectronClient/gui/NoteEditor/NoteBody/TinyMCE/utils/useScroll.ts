@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 
 interface HookDependencies {
 	editor:any,

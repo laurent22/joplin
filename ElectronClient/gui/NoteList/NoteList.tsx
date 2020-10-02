@@ -14,7 +14,7 @@ const Setting = require('lib/models/Setting').default;
 const NoteListItem = require('../NoteListItem').default;
 const CommandService = require('lib/services/CommandService.js').default;
 const styled = require('styled-components').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 const commands = [
 	require('./commands/focusElementNoteList'),

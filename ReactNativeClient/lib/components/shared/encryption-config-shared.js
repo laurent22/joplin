@@ -4,7 +4,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey.js');
 const { reg } = require('lib/registry.js');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 const shared = {};
 

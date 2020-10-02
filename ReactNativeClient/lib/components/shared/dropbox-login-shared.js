@@ -1,4 +1,4 @@
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');

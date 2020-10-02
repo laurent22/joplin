@@ -1,6 +1,7 @@
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule } from './types';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
+import shim from 'lib/shim';
 const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
@@ -9,7 +10,6 @@ const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
-const shim = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 const { toTitleCase } = require('lib/string-utils');

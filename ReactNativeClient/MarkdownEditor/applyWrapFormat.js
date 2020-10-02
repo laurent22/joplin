@@ -1,5 +1,5 @@
 import { replaceBetween } from './utils';
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 export default ({ getState, item, setState }) => {
 	const { text, selection } = getState();

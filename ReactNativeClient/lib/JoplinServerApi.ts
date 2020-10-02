@@ -1,5 +1,5 @@
+import shim from 'lib/shim';
 const Logger = require('lib/Logger').default;
-const shim = require('lib/shim');
 const JoplinError = require('lib/JoplinError');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');

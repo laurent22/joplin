@@ -1,6 +1,6 @@
 const { _ } = require('lib/locale.js');
 const { netUtils } = require('lib/net-utils.js');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 const http = require('http');
 const urlParser = require('url');

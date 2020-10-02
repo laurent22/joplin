@@ -5,7 +5,7 @@ import Global from 'lib/services/plugins/api/Global';
 import bridge from '../bridge';
 import Setting from 'lib/models/Setting';
 import { EventHandlers } from 'lib/services/plugins/utils/mapEventHandlersToIds';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 const ipcRenderer = require('electron').ipcRenderer;
 
 enum PluginMessageTarget {

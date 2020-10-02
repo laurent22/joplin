@@ -2,7 +2,7 @@ import { isStringWebLink, replaceBetween } from './utils';
 
 export const writeUrlTextHere = 'https://example.com';
 export const writeTextHereString = 'Write some text here';
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 export default ({ getState, item, setState }) => {

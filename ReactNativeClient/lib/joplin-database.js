@@ -2,7 +2,7 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const EventEmitter = require('events');
 
 const structureSql = `

@@ -10,13 +10,13 @@ import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { defaultState, State } from 'lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
+import shim from 'lib/shim';
 
 require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
 const { _, setLocale } = require('lib/locale.js');

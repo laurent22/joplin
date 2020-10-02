@@ -14,7 +14,7 @@ const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
 const RevisionService = require('lib/services/RevisionService');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class Application extends BaseApplication {
 	constructor() {

@@ -1,5 +1,5 @@
 const Logger = require('lib/Logger').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');

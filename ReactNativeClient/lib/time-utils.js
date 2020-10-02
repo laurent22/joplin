@@ -1,5 +1,5 @@
 const moment = require('moment');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class Time {
 	constructor() {

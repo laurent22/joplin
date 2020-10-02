@@ -7,7 +7,7 @@ const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { sprintf } = require('sprintf-js');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
 

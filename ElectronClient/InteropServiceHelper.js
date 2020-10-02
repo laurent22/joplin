@@ -8,7 +8,7 @@ const { friendlySafeFilename } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
 const md5 = require('md5');
 const url = require('url');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class InteropServiceHelper {
 

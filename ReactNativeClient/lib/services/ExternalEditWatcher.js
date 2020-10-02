@@ -1,7 +1,7 @@
 const Logger = require('lib/Logger').default;
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');

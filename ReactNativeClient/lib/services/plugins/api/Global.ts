@@ -2,7 +2,7 @@ import Plugin from '../Plugin';
 import Joplin from './Joplin';
 import Logger from 'lib/Logger';
 const builtinModules = require('builtin-modules');
-// const shim = require('lib/shim');
+// import shim from 'lib/shim';
 
 let requireWhiteList_:string[] = null;
 

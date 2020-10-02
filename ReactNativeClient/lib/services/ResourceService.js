@@ -6,7 +6,7 @@ const BaseModel = require('lib/BaseModel');
 const BaseService = require('lib/services/BaseService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { sprintf } = require('sprintf-js');
 

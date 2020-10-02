@@ -15,7 +15,7 @@ const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const KeymapService = require('lib/services/KeymapService.js').default;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class GotoAnything {
 

@@ -1,4 +1,4 @@
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 
 export interface QueueItemAction {
 	(): void,

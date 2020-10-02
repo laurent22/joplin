@@ -5,7 +5,7 @@ const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
 const Logger = require('lib/Logger').default;
 const EventEmitter = require('events');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class DecryptionWorker {
 	constructor() {

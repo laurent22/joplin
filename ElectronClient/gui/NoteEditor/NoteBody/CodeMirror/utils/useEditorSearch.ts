@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-const shim = require('lib/shim');
+import shim from 'lib/shim';
 
 export default function useEditorSearch(CodeMirror: any) {
 

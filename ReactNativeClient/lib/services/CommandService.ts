@@ -1,15 +1,20 @@
 import KeymapService from './KeymapService';
 import eventManager from 'lib/eventManager';
-import { State } from 'lib/reducer';
-const BaseService = require('lib/services/BaseService').default;
-const shim = require('lib/shim');
+import BaseService from 'lib/services/BaseService';
+import shim from 'lib/shim';
 
 type LabelFunction = () => string;
 
 export interface CommandRuntime {
 	execute(props:any):void
 	isEnabled?(props:any):boolean
-	mapStateToProps?(state:State):any
+
+	// "state" type is "AppState" but in order not to introduce a
+	// dependency to the desktop app (so that the service can
+	// potentially be used by the mobile app too), we keep it as "any".
+	// Individual commands can define it as state:AppState when relevant.
+	mapStateToProps?(state:any):any
+
 	// Used for the (optional) toolbar button title
 	title?(props:any):string,
 	props?:any
@@ -133,7 +138,7 @@ export default class CommandService extends BaseService {
 		return false;
 	}
 
-	scheduleMapStateToProps(state:State) {
+	scheduleMapStateToProps(state:any) {
 		if (this.mapStateToPropsIID_) shim.clearTimeout(this.mapStateToPropsIID_);
 
 		this.mapStateToPropsIID_ = shim.setTimeout(() => {
@@ -141,7 +146,7 @@ export default class CommandService extends BaseService {
 		}, 50);
 	}
 
-	private mapStateToProps(state:State) {
+	private mapStateToProps(state:any) {
 		const newState = state;
 
 		const changedCommands:any = {};

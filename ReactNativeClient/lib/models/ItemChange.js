@@ -1,6 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const Mutex = require('async-mutex').Mutex;
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class ItemChange extends BaseModel {
 	static tableName() {

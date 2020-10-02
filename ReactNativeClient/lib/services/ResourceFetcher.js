@@ -5,7 +5,7 @@ const ResourceService = require('lib/services/ResourceService');
 const { Dirnames } = require('lib/services/synchronizer/utils/types');
 const Logger = require('lib/Logger').default;
 const EventEmitter = require('events');
-const shim = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class ResourceFetcher extends BaseService {
 	constructor(fileApi = null) {

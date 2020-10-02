@@ -1,4 +1,3 @@
-import { State } from 'lib/reducer';
 import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 
 interface Command {
@@ -7,7 +6,7 @@ interface Command {
 	iconName?: string,
 	execute(props:any):void
 	isEnabled?(props:any):boolean
-	mapStateToProps?(state:State):any
+	mapStateToProps?(state:any):any
 }
 
 export default class JoplinCommands {

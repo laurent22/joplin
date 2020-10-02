@@ -1,5 +1,6 @@
 import InteropService from 'lib/services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, Module, ModuleType } from 'lib/services/interop/types';
+import shim from 'lib/shim';
 
 require('app-module-path').addPath(__dirname);
 
@@ -10,7 +11,6 @@ const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
-const shim = require('lib/shim');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
