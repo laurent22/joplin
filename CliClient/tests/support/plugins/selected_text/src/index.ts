@@ -6,9 +6,8 @@ joplin.plugins.register({
 	onStart: async function() {
 		joplin.commands.register({
 			name: 'prettyMarkdownTable',
-			label: () => 'Reformat the selected Markdown table',
+			label: 'Reformat the selected Markdown table',
 			iconName: 'fas fa-music',
-		}, {
 			execute: async () => {
 				const selectedText = await joplin.workspace.execEditorCommand({ name: 'selectedText' });
 				const lines = selectedText.split('\n');
