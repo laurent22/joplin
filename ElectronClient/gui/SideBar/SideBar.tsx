@@ -6,7 +6,7 @@ import InteropService from 'lib/services/interop/InteropService';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const Synchronizer = require('lib/Synchronizer').default;
 const BaseModel = require('lib/BaseModel.js');
 const Setting = require('lib/models/Setting').default;
 const Folder = require('lib/models/Folder.js');

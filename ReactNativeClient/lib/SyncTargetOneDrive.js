@@ -4,7 +4,7 @@ const { OneDriveApi } = require('lib/onedrive-api.js');
 const Setting = require('lib/models/Setting').default;
 const { parameters } = require('lib/parameters.js');
 const { FileApi } = require('lib/file-api.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const Synchronizer = require('lib/Synchronizer').default;
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
 class SyncTargetOneDrive extends BaseSyncTarget {

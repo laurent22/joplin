@@ -1,4 +1,4 @@
-import { ImportExportResult } from "./types";
+import { ImportExportResult } from './types';
 
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const Folder = require('lib/models/Folder.js');

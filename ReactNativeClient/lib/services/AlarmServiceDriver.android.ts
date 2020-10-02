@@ -1,4 +1,4 @@
-import { Notification } from "lib/models/Alarm";
+import { Notification } from 'lib/models/Alarm';
 
 const PushNotification = require('react-native-push-notification');
 

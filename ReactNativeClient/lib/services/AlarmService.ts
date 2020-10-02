@@ -1,4 +1,4 @@
-import Logger from "lib/Logger";
+import Logger from 'lib/Logger';
 import Alarm from 'lib/models/Alarm';
 
 const Note = require('lib/models/Note.js');

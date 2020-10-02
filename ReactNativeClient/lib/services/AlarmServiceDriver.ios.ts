@@ -2,7 +2,7 @@ import { Notification } from 'lib/models/Alarm';
 const PushNotificationIOS  = require('@react-native-community/push-notification-ios').default;
 
 export default class AlarmServiceDriver {
-	
+
 	private hasPermission_:boolean = null;
 	private inAppNotificationHandler_:any = null;
 

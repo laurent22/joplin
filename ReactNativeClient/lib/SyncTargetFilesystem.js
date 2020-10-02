@@ -3,7 +3,7 @@ const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting').default;
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const Synchronizer = require('lib/Synchronizer').default;
 
 class SyncTargetFilesystem extends BaseSyncTarget {
 	static id() {

@@ -306,6 +306,7 @@ ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/lib/shim.js
+ReactNativeClient/lib/Synchronizer.js
 ReactNativeClient/lib/theme.js
 ReactNativeClient/lib/themes/aritimDark.js
 ReactNativeClient/lib/themes/dark.js

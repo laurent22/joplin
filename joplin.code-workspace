@@ -668,7 +668,8 @@
 			"ReactNativeClient/lib/services/AlarmService.js": true,
 			"ReactNativeClient/lib/services/AlarmServiceDriver.android.js": true,
 			"ReactNativeClient/lib/services/AlarmServiceDriver.ios.js": true,
-			"ReactNativeClient/lib/services/AlarmServiceDriverNode.js": true
+			"ReactNativeClient/lib/services/AlarmServiceDriverNode.js": true,
+			"ReactNativeClient/lib/Synchronizer.js": true
 		},
 		"spellright.language": [
 			"en"

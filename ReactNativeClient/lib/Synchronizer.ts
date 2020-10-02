@@ -1,39 +1,60 @@
+import Logger from './Logger';
+import LockHandler, { LockType } from 'lib/services/synchronizer/LockHandler';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
+import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
+
 const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ItemChange = require('lib/models/ItemChange.js');
-const Setting = require('lib/models/Setting').default;
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
-const Logger = require('lib/Logger').default;
 const { _ } = require('lib/locale.js');
-const shim = require('lib/shim').default;
-// const { filename, fileExtension } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 const TaskQueue = require('lib/TaskQueue');
-const LockHandler = require('lib/services/synchronizer/LockHandler').default;
-const MigrationHandler = require('lib/services/synchronizer/MigrationHandler').default;
 const { Dirnames } = require('lib/services/synchronizer/utils/types');
 
-class Synchronizer {
-	constructor(db, api, appType) {
-		this.state_ = 'idle';
+interface RemoteItem {
+	id: string,
+	path?: string,
+	type_?: number,
+}
+
+export default class Synchronizer {
+
+	private db_:any;
+	private api_:any;
+	private appType_:string;
+	private logger_:Logger = new Logger();
+	private state_:string = 'idle';
+	private cancelling_:boolean = false;
+	private maxResourceSize_:number = null;
+	private downloadQueue_:any = null;
+	private clientId_:string;
+	private lockHandler_:LockHandler;
+	private migrationHandler_:MigrationHandler;
+	private encryptionService_:any = null;
+	private syncTargetIsLocked_:boolean = false;
+
+	// Debug flags are used to test certain hard-to-test conditions
+	// such as cancelling in the middle of a loop.
+	public testingHooks_:string[] = [];
+
+	private onProgress_:Function;
+	private progressReport_:any = {};
+
+	public dispatch:Function;
+
+	constructor(db:any, api:any, appType:string) {
 		this.db_ = db;
 		this.api_ = api;
-		this.logger_ = new Logger();
 		this.appType_ = appType;
-		this.cancelling_ = false;
-		this.maxResourceSize_ = null;
-		this.downloadQueue_ = null;
 		this.clientId_ = Setting.value('clientId');
-
-		// Debug flags are used to test certain hard-to-test conditions
-		// such as cancelling in the middle of a loop.
-		this.testingHooks_ = [];
 
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};
@@ -57,7 +78,7 @@ class Synchronizer {
 		return this.clientId_;
 	}
 
-	setLogger(l) {
+	setLogger(l:Logger) {
 		this.logger_ = l;
 	}
 
@@ -82,7 +103,7 @@ class Synchronizer {
 		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
 	}
 
-	setEncryptionService(v) {
+	setEncryptionService(v:any) {
 		this.encryptionService_ = v;
 	}
 
@@ -99,7 +120,7 @@ class Synchronizer {
 		}
 	}
 
-	static reportToLines(report) {
+	static reportToLines(report:any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
@@ -116,7 +137,7 @@ class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action, local = null, remote = null, message = null, actionCount = 1) {
+	logSyncOperation(action:any, local:any = null, remote:RemoteItem = null, message:string = null, actionCount:number = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -148,7 +169,7 @@ class Synchronizer {
 		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: Object.assign({}, this.progressReport_) });
 	}
 
-	async logSyncSummary(report) {
+	async logSyncSummary(report:any) {
 		this.logger().info('Operations completed: ');
 		for (const n in report) {
 			if (!report.hasOwnProperty(n)) continue;
@@ -210,27 +231,27 @@ class Synchronizer {
 		}
 	}
 
-	static stateToLabel(state) {
+	static stateToLabel(state:string) {
 		if (state === 'idle') return _('Idle');
 		if (state === 'in_progress') return _('In progress');
 		return state;
 	}
 
-	isFullSync(steps) {
+	isFullSync(steps:string[]) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
 
 	async lockErrorStatus_() {
-		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock('exclusive');
+		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock(LockType.Exclusive);
 		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
 
-		const hasActiveSyncLock = await this.lockHandler().hasActiveLock('sync', this.appType_, this.clientId_);
+		const hasActiveSyncLock = await this.lockHandler().hasActiveLock(LockType.Sync, this.appType_, this.clientId_);
 		if (!hasActiveSyncLock) return 'syncLockGone';
 
 		return '';
 	}
 
-	async apiCall(fnName, ...args) {
+	async apiCall(fnName:string, ...args:any[]) {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
 		try {
@@ -254,11 +275,11 @@ class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	async start(options = null) {
+	async start(options:any = null) {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			const error = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			const error:any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
 		}
@@ -291,12 +312,12 @@ class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... [${synchronizationId}]`);
 
-		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
+		const handleCannotSyncItem = async (ItemClass:any, syncTargetId:any, item:any, cannotSyncReason:string, itemLocation:any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
-		const resourceRemotePath = resourceId => {
+		const resourceRemotePath = (resourceId:string) => {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
@@ -322,9 +343,9 @@ class Synchronizer {
 				throw error;
 			}
 
-			syncLock = await this.lockHandler().acquireLock('sync', this.appType_, this.clientId_);
+			syncLock = await this.lockHandler().acquireLock(LockType.Sync, this.appType_, this.clientId_);
 
-			this.lockHandler().startAutoLockRefresh(syncLock, (error) => {
+			this.lockHandler().startAutoLockRefresh(syncLock, (error:any) => {
 				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
 				this.syncTargetIsLocked_ = true;
 				this.cancel();
@@ -338,9 +359,9 @@ class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('update_remote') >= 0) {
-				const donePaths = [];
+				const donePaths:string[] = [];
 
-				const completeItemProcessing = path => {
+				const completeItemProcessing = (path:string) => {
 					donePaths.push(path);
 				};
 
@@ -366,13 +387,13 @@ class Synchronizer {
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
-						const remote = await this.apiCall('stat', path);
+						const remote:RemoteItem = await this.apiCall('stat', path);
 						let action = null;
 
 						let reason = '';
 						let remoteContent = null;
 
-						const getConflictType = (conflictedItem) => {
+						const getConflictType = (conflictedItem:any) => {
 							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return 'noteConflict';
 							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return 'resourceConflict';
 							return 'itemConflict';
@@ -625,7 +646,7 @@ class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					const listResult = await this.apiCall('delta', '', {
+					const listResult:any = await this.apiCall('delta', '', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -733,7 +754,7 @@ class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
-							const options = {
+							const options:any = {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								changeSource: ItemChange.SOURCE_SYNC,
@@ -856,7 +877,7 @@ class Synchronizer {
 
 		if (syncLock) {
 			this.lockHandler().stopAutoLockRefresh(syncLock);
-			await this.lockHandler().releaseLock('sync', this.appType_, this.clientId_);
+			await this.lockHandler().releaseLock(LockType.Sync, this.appType_, this.clientId_);
 		}
 
 		this.syncTargetIsLocked_ = false;
@@ -884,5 +905,3 @@ class Synchronizer {
 		return outputContext;
 	}
 }
-
-module.exports = { Synchronizer };
