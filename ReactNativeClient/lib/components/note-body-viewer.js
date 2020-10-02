@@ -222,7 +222,7 @@ class NoteBodyViewer extends Component {
 			]);
 
 			if (action === 'open') {
-				this.props.onJoplinLinkClick(msg);
+				this.props.onJoplinLinkClick(`joplin://${resourceId}`);
 			} else if (action === 'share') {
 				const filename = resource.file_name ?
 					`${resource.file_name}.${resource.file_extension}` :
