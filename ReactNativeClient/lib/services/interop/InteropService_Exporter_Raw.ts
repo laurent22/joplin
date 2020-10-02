@@ -3,8 +3,8 @@ const BaseItem = require('lib/models/BaseItem.js');
 const { basename } = require('lib/path-utils.js');
 const shim = require('lib/shim').default;
 
-class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
-	async init(destDir) {
+export default class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
+	async init(destDir:string) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? `${destDir}/resources` : null;
 
@@ -12,19 +12,17 @@ class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	async processItem(itemType, item) {
+	async processItem(itemType:number, item:any) {
 		const ItemClass = BaseItem.getClassByItemType(itemType);
 		const serialized = await ItemClass.serialize(item);
 		const filePath = `${this.destDir_}/${ItemClass.systemPath(item)}`;
 		await shim.fsDriver().writeFile(filePath, serialized, 'utf-8');
 	}
 
-	async processResource(resource, filePath) {
+	async processResource(_resource:any, filePath:string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);
 	}
 
 	async close() {}
 }
-
-module.exports = InteropService_Exporter_Raw;

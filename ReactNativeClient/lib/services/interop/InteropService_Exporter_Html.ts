@@ -11,9 +11,9 @@ const { escapeHtml } = require('lib/string-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const { assetsToHeaders } = require('lib/joplin-renderer');
 
-class InteropService_Exporter_Html extends InteropService_Exporter_Base {
+export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
-	async init(path, options = {}) {
+	async init(path:string, options:any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
 		if (this.metadata().target === 'file') {
@@ -33,7 +33,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 
-	async makeDirPath_(item, pathPart = null) {
+	async makeDirPath_(item:any, pathPart:string = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -49,7 +49,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		}
 	}
 
-	async processNoteResources_(item) {
+	async processNoteResources_(item:any) {
 		const target = this.metadata().target;
 		const linkedResourceIds = await Note.linkedResourceIds(item.body);
 		const relativePath = target === 'directory' ? rtrimSlashes(await this.makeDirPath_(item, '..')) : '';
@@ -66,7 +66,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		return newBody;
 	}
 
-	async processItem(itemType, item) {
+	async processItem(_itemType:number, item:any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		let dirPath = '';
@@ -127,7 +127,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		}
 	}
 
-	async processResource(resource, filePath) {
+	async processResource(resource:any, filePath:string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);
 		this.resources_.push(resource);
@@ -135,5 +135,3 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
 	async close() {}
 }
-
-module.exports = InteropService_Exporter_Html;

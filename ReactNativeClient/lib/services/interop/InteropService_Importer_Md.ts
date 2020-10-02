@@ -1,3 +1,5 @@
+import { ImportExportResult } from "./types";
+
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -8,8 +10,8 @@ const { extractImageUrls } = require('lib/markdownUtils');
 const { unique } = require('lib/ArrayUtils');
 const { pregQuote } = require('lib/string-utils-common');
 
-class InteropService_Importer_Md extends InteropService_Importer_Base {
-	async exec(result) {
+export default class InteropService_Importer_Md extends InteropService_Importer_Base {
+	async exec(result:ImportExportResult) {
 		let parentFolderId = null;
 
 		const sourcePath = rtrimSlashes(this.sourcePath_);
@@ -38,7 +40,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		return result;
 	}
 
-	async importDirectory(dirPath, parentFolderId) {
+	async importDirectory(dirPath:string, parentFolderId:string) {
 		console.info(`Import: ${dirPath}`);
 
 		const supportedFileExtension = this.metadata().fileExtensions;
@@ -60,10 +62,10 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
 	 */
-	async importLocalImages(filePath, md) {
+	async importLocalImages(filePath:string, md:string) {
 		let updated = md;
 		const imageLinks = unique(extractImageUrls(md));
-		await Promise.all(imageLinks.map(async (encodedLink) => {
+		await Promise.all(imageLinks.map(async (encodedLink:string) => {
 			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
@@ -80,7 +82,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		return updated;
 	}
 
-	async importFile(filePath, parentFolderId) {
+	async importFile(filePath:string, parentFolderId:string) {
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);
@@ -104,5 +106,3 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		return Note.save(note, { autoTimestamp: false });
 	}
 }
-
-module.exports = InteropService_Importer_Md;

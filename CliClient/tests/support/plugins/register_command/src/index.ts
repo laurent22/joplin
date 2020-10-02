@@ -4,7 +4,6 @@ joplin.plugins.register({
 			name: 'testCommand1',
 			label: 'My Test Command 1',
 			iconName: 'fas fa-music',
-		}, {
 			execute: () => {
 				alert('Testing plugin command 1');
 			},
@@ -14,7 +13,6 @@ joplin.plugins.register({
 			name: 'testCommand2',
 			label: 'My Test Command 2',
 			iconName: 'fas fa-drum',
-		}, {
 			execute: () => {
 				alert('Testing plugin command 2');
 			},

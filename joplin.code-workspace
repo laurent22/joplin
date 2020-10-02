@@ -643,7 +643,17 @@
 			"ElectronClient/services/bridge.js": true,
 			"ElectronClient/services/plugins/PluginRunner.js": true,
 			"ReactNativeClient/lib/Logger.js": true,
-			"ReactNativeClient/lib/services/plugins/utils/mapEventHandlersToIds.js": true
+			"ReactNativeClient/lib/services/plugins/utils/mapEventHandlersToIds.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Html.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Md.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Exporter_Raw.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_EnexToHtml.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_EnexToMd.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Jex.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js": true,
+			"ReactNativeClient/lib/services/interop/InteropService_Importer_Raw.js": true,
+			"ReactNativeClient/lib/shim.js": true
 		},
 		"spellright.language": [
 			"en"

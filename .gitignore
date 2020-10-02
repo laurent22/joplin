@@ -227,8 +227,17 @@ ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/debug/populateDatabase.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js
+ReactNativeClient/lib/services/interop/InteropService_Exporter_Html.js
+ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js
+ReactNativeClient/lib/services/interop/InteropService_Exporter_Md.js
+ReactNativeClient/lib/services/interop/InteropService_Exporter_Raw.js
 ReactNativeClient/lib/services/interop/InteropService_Importer_Base.js
 ReactNativeClient/lib/services/interop/InteropService_Importer_Custom.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_EnexToHtml.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_EnexToMd.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_Jex.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js
+ReactNativeClient/lib/services/interop/InteropService_Importer_Raw.js
 ReactNativeClient/lib/services/interop/InteropService.js
 ReactNativeClient/lib/services/interop/types.js
 ReactNativeClient/lib/services/keychain/KeychainService.js

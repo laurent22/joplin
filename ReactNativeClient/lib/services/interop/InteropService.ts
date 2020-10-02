@@ -15,7 +15,7 @@ const { fileExtension } = require('lib/path-utils');
 const { toTitleCase } = require('lib/string-utils');
 const EventEmitter = require('events');
 
-class InteropService {
+export default class InteropService {
 
 	private defaultModules_:Module[];
 	private userModules_:Module[] = [];
@@ -198,7 +198,7 @@ class InteropService {
 		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
-			const ModuleClass = require(this.modulePath(moduleMetadata));
+			const ModuleClass = require(this.modulePath(moduleMetadata)).default;
 			output = new ModuleClass();
 		}
 
@@ -231,7 +231,7 @@ class InteropService {
 		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
-			const ModuleClass = require(modulePath);
+			const ModuleClass = require(modulePath).default;
 			output = new ModuleClass();
 		}
 
@@ -425,5 +425,3 @@ class InteropService {
 		return result;
 	}
 }
-
-export default InteropService;

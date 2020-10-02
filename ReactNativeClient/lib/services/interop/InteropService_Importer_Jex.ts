@@ -1,10 +1,12 @@
+import { ImportExportResult } from "./types";
+
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
-const InteropService_Importer_Raw = require('lib/services/interop/InteropService_Importer_Raw');
+const InteropService_Importer_Raw = require('lib/services/interop/InteropService_Importer_Raw').default;
 const { filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 
-class InteropService_Importer_Jex extends InteropService_Importer_Base {
-	async exec(result) {
+export default class InteropService_Importer_Jex extends InteropService_Importer_Base {
+	async exec(result:ImportExportResult) {
 		const tempDir = await this.temporaryDirectory_(true);
 
 		try {
@@ -32,5 +34,3 @@ class InteropService_Importer_Jex extends InteropService_Importer_Base {
 		return result;
 	}
 }
-
-module.exports = InteropService_Importer_Jex;
