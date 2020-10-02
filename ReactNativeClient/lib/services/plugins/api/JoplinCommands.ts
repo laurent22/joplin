@@ -25,14 +25,17 @@ export default class JoplinCommands {
 		const declaration:CommandDeclaration = {
 			name: command.name,
 			label: command.label,
-			iconName: command.iconName,
 		};
+
+		if ('iconName' in command) declaration.iconName = command.iconName;
 
 		const runtime:CommandRuntime = {
 			execute: command.execute,
-			isEnabled: command.isEnabled,
-			mapStateToProps: command.mapStateToProps,
+			props: {},
 		};
+
+		if ('isEnabled' in command) runtime.isEnabled = command.isEnabled;
+		if ('mapStateToProps' in command) runtime.mapStateToProps = command.mapStateToProps;
 
 		CommandService.instance().registerDeclaration(declaration);
 		CommandService.instance().registerRuntime(declaration.name, runtime);
