@@ -1,5 +1,6 @@
 import KeymapService from './KeymapService';
 import eventManager from 'lib/eventManager';
+import { State } from 'lib/reducer';
 const BaseService = require('lib/services/BaseService').default;
 const shim = require('lib/shim');
 
@@ -8,7 +9,7 @@ type LabelFunction = () => string;
 export interface CommandRuntime {
 	execute(props:any):void
 	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
+	mapStateToProps?(state:State):any
 	// Used for the (optional) toolbar button title
 	title?(props:any):string,
 	props?:any
@@ -132,7 +133,7 @@ export default class CommandService extends BaseService {
 		return false;
 	}
 
-	scheduleMapStateToProps(state:any) {
+	scheduleMapStateToProps(state:State) {
 		if (this.mapStateToPropsIID_) shim.clearTimeout(this.mapStateToPropsIID_);
 
 		this.mapStateToPropsIID_ = shim.setTimeout(() => {
@@ -140,7 +141,7 @@ export default class CommandService extends BaseService {
 		}, 50);
 	}
 
-	private mapStateToProps(state:any) {
+	private mapStateToProps(state:State) {
 		const newState = state;
 
 		const changedCommands:any = {};

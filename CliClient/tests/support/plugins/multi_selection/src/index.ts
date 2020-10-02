@@ -2,9 +2,8 @@ joplin.plugins.register({
 	onStart: async function() {
 		joplin.commands.register({
 			name: 'concatSelectedNotes',
-			label: () => 'Concatenate selected notes into one',
+			label: 'Concatenate selected notes into one',
 			iconName: 'fas fa-music',
-		}, {
 			execute: async () => {
 				const noteIds = await joplin.workspace.selectedNoteIds();
 				const newNoteBody = [];
