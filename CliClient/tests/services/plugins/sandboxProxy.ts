@@ -33,4 +33,26 @@ describe('services_plugins_sandboxProxy', function() {
 		expect(results[1].args.join('_')).toBe('');
 	}));
 
+	it('should allow importing a namespace', asyncTest(async () => {
+		interface Result {
+			path: string,
+			args: any[],
+		}
+
+		const results:Result[] = [];
+
+		const target:Target = (path:string, args:any[]) => {
+			results.push({ path, args });
+		};
+
+		const proxy = sandboxProxy(target);
+
+		const ns = proxy.testing.blabla;
+		ns.test();
+		ns.test2();
+
+		expect(results[0].path).toBe('testing.blabla.test');
+		expect(results[1].path).toBe('testing.blabla.test2');
+	}));
+
 });

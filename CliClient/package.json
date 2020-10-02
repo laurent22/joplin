@@ -84,6 +84,7 @@
     "mime": "^2.0.3",
     "moment": "^2.24.0",
     "multiparty": "^4.2.1",
+    "nanoid": "^3.1.12",
     "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
     "node-persist": "^2.1.0",
