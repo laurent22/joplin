@@ -1,6 +1,6 @@
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
-const Setting = require('../../../../../lib/models/Setting.js');
+const Setting = require('lib/models/Setting.js');
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks
