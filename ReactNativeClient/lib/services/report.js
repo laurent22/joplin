@@ -1,6 +1,6 @@
 const { time } = require('lib/time-utils');
 const BaseItem = require('lib/models/BaseItem.js');
-const Alarm = require('lib/models/Alarm');
+const Alarm = require('lib/models/Alarm').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');

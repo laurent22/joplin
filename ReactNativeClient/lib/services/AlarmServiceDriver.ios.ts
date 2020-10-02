@@ -1,11 +1,13 @@
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { Notification } from 'lib/models/Alarm';
+const PushNotificationIOS  = require('@react-native-community/push-notification-ios').default;
 
-class AlarmServiceDriver {
+export default class AlarmServiceDriver {
+	
+	private hasPermission_:boolean = null;
+	private inAppNotificationHandler_:any = null;
+
 	constructor() {
-		this.hasPermission_ = null;
-		this.inAppNotificationHandler_ = null;
-
-		PushNotificationIOS.addEventListener('localNotification', instance => {
+		PushNotificationIOS.addEventListener('localNotification', (instance:any) => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
@@ -26,17 +28,17 @@ class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	setInAppNotificationHandler(v) {
+	setInAppNotificationHandler(v:any) {
 		this.inAppNotificationHandler_ = v;
 	}
 
-	async hasPermissions(perm = null) {
+	async hasPermissions(perm:any = null) {
 		if (perm !== null) return perm.alert && perm.badge && perm.sound;
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
 		return new Promise((resolve) => {
-			PushNotificationIOS.checkPermissions(async perm => {
+			PushNotificationIOS.checkPermissions(async (perm:any) => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
 				resolve(ok);
@@ -45,27 +47,28 @@ class AlarmServiceDriver {
 	}
 
 	async requestPermissions() {
-		const newPerm = await PushNotificationIOS.requestPermissions({
+		const options:any = {
 			alert: 1,
 			badge: 1,
 			sound: 1,
-		});
+		};
+		const newPerm = await PushNotificationIOS.requestPermissions(options);
 		this.hasPermission_ = null;
 		return this.hasPermissions(newPerm);
 	}
 
-	async clearNotification(id) {
+	async clearNotification(id:any) {
 		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
-	async scheduleNotification(notification) {
+	async scheduleNotification(notification:Notification) {
 		if (!(await this.hasPermissions())) {
 			const ok = await this.requestPermissions();
 			if (!ok) return;
 		}
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
-		const iosNotification = {
+		const iosNotification:any = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,
 			fireDate: notification.date.toISOString(),
@@ -77,5 +80,3 @@ class AlarmServiceDriver {
 		PushNotificationIOS.scheduleLocalNotification(iosNotification);
 	}
 }
-
-module.exports = AlarmServiceDriver;

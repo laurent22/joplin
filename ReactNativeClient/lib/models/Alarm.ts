@@ -1,7 +1,15 @@
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 
-class Alarm extends BaseModel {
+export interface Notification {
+	id: string,
+	noteId: string,
+	date: Date,
+	title: string,
+	body?: string,
+}
+
+export default class Alarm extends BaseModel {
 	static tableName() {
 		return 'alarms';
 	}
@@ -10,7 +18,7 @@ class Alarm extends BaseModel {
 		return BaseModel.TYPE_ALARM;
 	}
 
-	static byNoteId(noteId) {
+	static byNoteId(noteId:string) {
 		return this.modelSelectOne('SELECT * FROM alarms WHERE note_id = ?', [noteId]);
 	}
 
@@ -21,12 +29,12 @@ class Alarm extends BaseModel {
 	static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
 		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL');
-		return alarms.map(a => {
+		return alarms.map((a:any) => {
 			return a.id;
 		});
 	}
 
-	static async makeNotification(alarm, note = null) {
+	static async makeNotification(alarm:any, note:any = null):Promise<Notification> {
 		if (!note) {
 			note = await Note.load(alarm.note_id);
 		} else if (!note.todo_due) {
@@ -35,8 +43,9 @@ class Alarm extends BaseModel {
 			this.logger().warn('Reloaded note:', note);
 		}
 
-		const output = {
+		const output:Notification = {
 			id: alarm.id,
+			noteId: alarm.note_id,
 			date: new Date(note.todo_due),
 			title: note.title.substr(0, 128),
 		};
@@ -50,5 +59,3 @@ class Alarm extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
 	}
 }
-
-module.exports = Alarm;

@@ -5,33 +5,33 @@ import KeymapService from 'lib/services/KeymapService';
 import PluginService from 'lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from 'lib/services/ResourceEditWatcher/reducer';
 import { utils as pluginUtils } from 'lib/services/plugins/reducer';
-// import SandboxImplementation from './plugins/SandboxImplementation';
 import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { defaultState, State } from 'lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from 'lib/shim';
+import AlarmService from 'lib/services/AlarmService';
+import AlarmServiceDriverNode from 'lib/services/AlarmServiceDriverNode';
+import Logger, { TargetType } from 'lib/Logger';
+import Setting from 'lib/models/Setting';
+import actionApi from 'lib/services/rest/actionApi.desktop';
+import versionInfo from 'lib/versionInfo';
 
 require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
 const { _, setLocale } = require('lib/locale.js');
-const Logger = require('lib/Logger').default;
 const fs = require('fs-extra');
 const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');
 const packageInfo = require('./packageInfo.js');
-const AlarmService = require('lib/services/AlarmService.js');
-const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
-const actionApi = require('lib/services/rest/actionApi.desktop').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;
 const { shell, webFrame, clipboard } = require('electron');
@@ -42,7 +42,6 @@ const MigrationService = require('lib/services/MigrationService');
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
 // const populateDatabase = require('lib/services/debug/populateDatabase').default;
-const versionInfo = require('lib/versionInfo').default;
 
 const commands = [
 	require('./gui/NoteListControls/commands/focusSearch'),
@@ -1320,8 +1319,8 @@ class Application extends BaseApplication {
 		}
 
 		const clipperLogger = new Logger();
-		clipperLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-clipper.txt` });
-		clipperLogger.addTarget('console');
+		clipperLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-clipper.txt` });
+		clipperLogger.addTarget(TargetType.Console);
 
 		ClipperServer.instance().initialize(actionApi);
 		ClipperServer.instance().setLogger(clipperLogger);
@@ -1355,8 +1354,8 @@ class Application extends BaseApplication {
 		InteropService.instance().on('modulesChanged', this.interopService_modulesChanged);
 
 		const pluginLogger = new Logger();
-		pluginLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-plugins.txt` });
-		pluginLogger.addTarget('console', { prefix: 'Plugin Service:' });
+		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });
+		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
 		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
 
 		const pluginRunner = new PluginRunner();

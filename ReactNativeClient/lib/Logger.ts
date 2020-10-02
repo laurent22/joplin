@@ -2,7 +2,7 @@ const moment = require('moment');
 const { time } = require('lib/time-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
-enum TargetType {
+export enum TargetType {
 	Database = 'database',
 	File = 'file',
 	Console = 'console',

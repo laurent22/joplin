@@ -1,8 +1,15 @@
-const Note = require('lib/models/Note.js');
-const Alarm = require('lib/models/Alarm.js');
+import Logger from "lib/Logger";
+import Alarm from 'lib/models/Alarm';
 
-class AlarmService {
-	static setDriver(v) {
+const Note = require('lib/models/Note.js');
+
+export default class AlarmService {
+
+	private static driver_:any;
+	private static logger_:Logger;
+	// private static inAppNotificationHandler_:any;
+
+	static setDriver(v:any) {
 		this.driver_ = v;
 
 		if (this.driver_.setService) this.driver_.setService(this);
@@ -13,7 +20,7 @@ class AlarmService {
 		return this.driver_;
 	}
 
-	static setLogger(v) {
+	static setLogger(v:Logger) {
 		this.logger_ = v;
 	}
 
@@ -21,8 +28,8 @@ class AlarmService {
 		return this.logger_;
 	}
 
-	static setInAppNotificationHandler(v) {
-		this.inAppNotificationHandler_ = v;
+	static setInAppNotificationHandler(v:any) {
+		// this.inAppNotificationHandler_ = v;
 		if (this.driver_.setInAppNotificationHandler) this.driver_.setInAppNotificationHandler(v);
 	}
 
@@ -43,7 +50,7 @@ class AlarmService {
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
-	static async updateNoteNotification(noteOrId, isDeleted = false) {
+	static async updateNoteNotification(noteOrId:any, isDeleted:boolean = false) {
 		try {
 			let note = null;
 			let noteId = null;
@@ -118,5 +125,3 @@ class AlarmService {
 		}
 	}
 }
-
-module.exports = AlarmService;

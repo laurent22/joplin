@@ -1,17 +1,27 @@
+import eventManager from 'lib/eventManager';
+import { Notification } from 'lib/models/Alarm';
+import shim from 'lib/shim';
+
 const notifier = require('node-notifier');
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('lib/shim').default;
 
-class AlarmServiceDriverNode {
-	constructor(options) {
+interface Options {
+	appName: string,
+}
+
+export default class AlarmServiceDriverNode {
+
+	private appName_:string;
+	private notifications_:any = {};
+	private service_:any = null;
+
+	constructor(options:Options) {
 		// Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
 		// https://github.com/mikaelbr/node-notifier/issues/144#issuecomment-319324058
 		this.appName_ = options.appName;
-		this.notifications_ = {};
-		this.service_ = null;
 	}
 
-	setService(s) {
+	setService(s:any) {
 		this.service_ = s;
 	}
 
@@ -23,17 +33,17 @@ class AlarmServiceDriverNode {
 		return false;
 	}
 
-	notificationIsSet(id) {
+	notificationIsSet(id:string) {
 		return id in this.notifications_;
 	}
 
-	async clearNotification(id) {
+	async clearNotification(id:string) {
 		if (!this.notificationIsSet(id)) return;
 		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];
 	}
 
-	async scheduleNotification(notification) {
+	async scheduleNotification(notification:Notification) {
 		const now = Date.now();
 		const interval = notification.date.getTime() - now;
 		if (interval < 0) return;
@@ -66,7 +76,7 @@ class AlarmServiceDriverNode {
 			}, maxInterval);
 		} else {
 			timeoutId = shim.setTimeout(() => {
-				const o = {
+				const o:any = {
 					appID: this.appName_,
 					title: notification.title,
 					icon: `${bridge().electronApp().buildDir()}/icons/512x512.png`,
@@ -80,11 +90,13 @@ class AlarmServiceDriverNode {
 
 				this.logger().info('AlarmServiceDriverNode::scheduleNotification: Triggering notification:', o);
 
-				notifier.notify(o, (error, response) => {
+				notifier.notify(o, (error:any, response:any) => {
 					this.logger().info('AlarmServiceDriverNode::scheduleNotification: node-notifier response:', error, response);
 				});
 
 				this.clearNotification(notification.id);
+
+				eventManager.emit('noteAlarmTrigger', { noteId: notification.noteId });
 			}, interval);
 		}
 
@@ -92,5 +104,3 @@ class AlarmServiceDriverNode {
 		this.notifications_[notification.id].timeoutId = timeoutId;
 	}
 }
-
-module.exports = AlarmServiceDriverNode;

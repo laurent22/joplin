@@ -68,6 +68,8 @@ CliClient/tests/models_Setting.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services/plugins/sandboxProxy.js
+CliClient/tests/support/plugins/alarm/global.d.js
+CliClient/tests/support/plugins/alarm/src/index.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/dialog/global.d.js
@@ -226,9 +228,14 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/Logger.js
+ReactNativeClient/lib/models/Alarm.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/reducer.js
+ReactNativeClient/lib/services/AlarmService.js
+ReactNativeClient/lib/services/AlarmServiceDriver.android.js
+ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
+ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/debug/populateDatabase.js

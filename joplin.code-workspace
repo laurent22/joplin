@@ -659,7 +659,16 @@
 			"ReactNativeClient/lib/services/plugins/api/JoplinViewsPanels.js": true,
 			"ReactNativeClient/lib/services/plugins/api/JoplinViewsToolbarButtons.js": true,
 			"ReactNativeClient/lib/services/plugins/utils/createViewHandle.js": true,
-			"ReactNativeClient/lib/uuid.js": true
+			"ReactNativeClient/lib/uuid.js": true,
+			"CliClient/tests/support/plugins/alarm/dist/*": true,
+			"CliClient/tests/support/plugins/alarm/**/node_modules/": true,
+			"CliClient/tests/support/plugins/alarm/global.d.js": true,
+			"CliClient/tests/support/plugins/alarm/src/index.js": true,
+			"ReactNativeClient/lib/models/Alarm.js": true,
+			"ReactNativeClient/lib/services/AlarmService.js": true,
+			"ReactNativeClient/lib/services/AlarmServiceDriver.android.js": true,
+			"ReactNativeClient/lib/services/AlarmServiceDriver.ios.js": true,
+			"ReactNativeClient/lib/services/AlarmServiceDriverNode.js": true
 		},
 		"spellright.language": [
 			"en"
