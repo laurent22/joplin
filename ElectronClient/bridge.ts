@@ -1,4 +1,4 @@
-import ElectronAppWrapper from "./ElectronAppWrapper";
+import ElectronAppWrapper from './ElectronAppWrapper';
 
 const { _, setLocale } = require('lib/locale.js');
 const shim = require('lib/shim');

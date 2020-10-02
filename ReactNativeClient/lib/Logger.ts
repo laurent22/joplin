@@ -13,7 +13,7 @@ enum LogLevel {
 	Error = 10,
 	Warn = 20,
 	Info = 30,
-	Debug = 40,	
+	Debug = 40,
 }
 
 interface Target {
@@ -206,7 +206,7 @@ class Logger {
 		if (s == 'warn') return LogLevel.Warn;
 		if (s == 'info') return LogLevel.Info;
 		if (s == 'debug') return LogLevel.Debug;
-		throw new Error('Unknown log level: ' + s);
+		throw new Error(`Unknown log level: ${s}`);
 	}
 
 	static levelIdToString(id:LogLevel) {
@@ -215,7 +215,7 @@ class Logger {
 		if (id == LogLevel.Warn) return 'warn';
 		if (id == LogLevel.Info) return 'info';
 		if (id == LogLevel.Debug) return 'debug';
-		throw new Error('Unknown level ID: ' + id);
+		throw new Error(`Unknown level ID: ${id}`);
 	}
 
 	static levelIds() {

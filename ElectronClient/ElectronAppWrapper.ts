@@ -1,5 +1,5 @@
-import Logger from "lib/Logger";
-import { PluginMessage } from './services/plugins/PluginRunner'
+import Logger from 'lib/Logger';
+import { PluginMessage } from './services/plugins/PluginRunner';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const shim = require('lib/shim');
@@ -202,7 +202,7 @@ export default class ElectronAppWrapper {
 			if (message.target === 'plugin') {
 				const win = this.pluginWindows_[message.pluginId];
 				if (!win) {
-					this.logger().error('Trying to send IPC message to non-existing plugin window: ' + message.pluginId);
+					this.logger().error(`Trying to send IPC message to non-existing plugin window: ${message.pluginId}`);
 					return;
 				}
 
