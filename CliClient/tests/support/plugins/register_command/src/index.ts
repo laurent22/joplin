@@ -19,13 +19,13 @@ joplin.plugins.register({
 		});
 
 		// Add the first command to the note toolbar
-		await joplin.views.createToolbarButton('testCommand1', 'noteToolbar');
+		await joplin.views.toolbarButtons.create('testCommand1', 'noteToolbar');
 
 		// Add the second command to the editor toolbar
-		await joplin.views.createToolbarButton('testCommand2', 'editorToolbar');
+		await joplin.views.toolbarButtons.create('testCommand2', 'editorToolbar');
 
 		// Also add the commands to the menu
-		await joplin.views.createMenuItem('testCommand1', 'tools', { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
-		await joplin.views.createMenuItem('testCommand2', 'tools');
+		await joplin.views.menuItems.create('testCommand1', 'tools', { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
+		await joplin.views.menuItems.create('testCommand2', 'tools');
 	},
 });

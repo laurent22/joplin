@@ -75,7 +75,7 @@ describe('models_Setting', function() {
 
 		await Setting.load();
 
-		Setting.registerSetting('myCustom', {
+		await Setting.registerSetting('myCustom', {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
@@ -84,6 +84,29 @@ describe('models_Setting', function() {
 		await Setting.saveAll();
 
 		expect(Setting.value('myCustom')).toBe('123');
+	}));
+
+	it('should return values with correct type for custom settings', asyncTest(async () => {
+		await Setting.registerSetting('myCustom', {
+			public: true,
+			value: 123,
+			type: Setting.TYPE_INT,
+		});
+
+		Setting.setValue('myCustom', 456);
+
+		await Setting.saveAll();
+		await Setting.reset();
+		await Setting.load();
+
+		await Setting.registerSetting('myCustom', {
+			public: true,
+			value: 123,
+			type: Setting.TYPE_INT,
+		});
+
+		expect(typeof Setting.value('myCustom')).toBe('number');
+		expect(Setting.value('myCustom')).toBe(456);
 	}));
 
 	it('should validate registered keys', asyncTest(async () => {

@@ -895,7 +895,7 @@ class Setting extends BaseModel {
 		if (valueRow) {
 			this.cache_.push({
 				key: key,
-				value: valueRow.value,
+				value: this.formatValue(key, valueRow.value),
 			});
 		}
 

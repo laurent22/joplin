@@ -30,6 +30,6 @@ joplin.plugins.register({
 			},
 		});
 
-		joplin.views.createMenuItem('concatSelectedNotes', 'context');
+		joplin.views.menuItems.create('concatSelectedNotes', 'context');
 	},
 });

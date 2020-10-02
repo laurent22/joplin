@@ -45,6 +45,6 @@ joplin.plugins.register({
 			},
 		});
 		
-		joplin.views.createToolbarButton('prettyMarkdownTable', 'editorToolbar');
+		joplin.views.toolbarButtons.create('prettyMarkdownTable', 'editorToolbar');
 	},
 });

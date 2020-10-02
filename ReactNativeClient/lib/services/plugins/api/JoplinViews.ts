@@ -1,22 +1,18 @@
 import Plugin from '../Plugin';
-import ToolbarButtonController, { ToolbarButtonLocation } from '../ToolbarButtonController';
-import MenuItemController, { MenuItemLocation } from '../MenuItemController';
-import KeymapService from 'lib/services/KeymapService';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
+import JoplinViewsMenuItems from './JoplinViewsMenuItems';
+import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
-
-interface CreateMenuItemOptions {
-	accelerator: string,
-}
 
 export default class JoplinViews {
 
-	private viewIdNum:number = 0;
 	private store: any;
 	private plugin: Plugin;
 
 	private dialogs_:JoplinViewsDialogs = null;
 	private panels_:JoplinViewsPanels = null;
+	private menuItems_:JoplinViewsMenuItems = null;
+	private toolbarButtons_:JoplinViewsToolbarButtons = null;
 
 	constructor(plugin: Plugin, store: any) {
 		this.store = store;
@@ -33,23 +29,14 @@ export default class JoplinViews {
 		return this.panels_;
 	}
 
-	async createToolbarButton(commandName:string, location:ToolbarButtonLocation) {
-		const idNum = this.viewIdNum++;
-		const controller = new ToolbarButtonController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
-		this.plugin.addViewController(controller);
-		return controller;
+	public get menuItems():JoplinViewsMenuItems {
+		if (!this.menuItems_) this.menuItems_ = new JoplinViewsMenuItems(this.plugin, this.store);
+		return this.menuItems_;
 	}
 
-	async createMenuItem(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
-		const idNum = this.viewIdNum++;
-		const controller = new MenuItemController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, commandName, location);
-		this.plugin.addViewController(controller);
-
-		if (options && options.accelerator) {
-			KeymapService.instance().registerCommandAccelerator(commandName, options.accelerator);
-		}
-
-		return controller;
+	public get toolbarButtons():JoplinViewsToolbarButtons {
+		if (!this.toolbarButtons_) this.toolbarButtons_ = new JoplinViewsToolbarButtons(this.plugin, this.store);
+		return this.toolbarButtons_;
 	}
 
 }

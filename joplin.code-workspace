@@ -653,7 +653,13 @@
 			"ReactNativeClient/lib/services/interop/InteropService_Importer_Jex.js": true,
 			"ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js": true,
 			"ReactNativeClient/lib/services/interop/InteropService_Importer_Raw.js": true,
-			"ReactNativeClient/lib/shim.js": true
+			"ReactNativeClient/lib/shim.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsDialogs.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsMenuItems.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsPanels.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsToolbarButtons.js": true,
+			"ReactNativeClient/lib/services/plugins/utils/createViewHandle.js": true,
+			"ReactNativeClient/lib/uuid.js": true
 		},
 		"spellright.language": [
 			"en"

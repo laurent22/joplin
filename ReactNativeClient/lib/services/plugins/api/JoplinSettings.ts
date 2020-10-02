@@ -62,6 +62,7 @@ export default class JoplinSettings {
 	}
 
 	async value(key:string):Promise<any> {
+		console.info('VALUE', key, Setting.value(this.namespacedKey(key)));
 		return Setting.value(this.namespacedKey(key));
 	}
 
