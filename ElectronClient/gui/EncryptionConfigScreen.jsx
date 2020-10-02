@@ -11,9 +11,10 @@ const shared = require('lib/components/shared/encryption-config-shared.js');
 const bridge = require('electron').remote.require('./bridge').default;
 
 class EncryptionConfigScreenComponent extends React.Component {
-	constructor() {
-		super();
-		shared.constructor(this);
+	constructor(props) {
+		super(props);
+
+		shared.constructor(this, props);
 	}
 
 	componentWillUnmount() {
@@ -52,7 +53,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			return shared.onPasswordChange(this, mk, event.target.value);
 		};
 
-		const password = this.props.passwords[mk.id] ? this.props.passwords[mk.id] : '';
+		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 

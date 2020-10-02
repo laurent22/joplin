@@ -8,13 +8,14 @@ const shim = require('lib/shim').default;
 
 const shared = {};
 
-shared.constructor = function(comp) {
+shared.constructor = function(comp, props) {
 	comp.state = {
 		passwordChecks: {},
 		stats: {
 			encrypted: null,
 			total: null,
 		},
+		passwords: Object.assign({}, props.passwords),
 	};
 	comp.isMounted_ = false;
 
@@ -50,7 +51,7 @@ shared.upgradeMasterKey = async function(comp, masterKey) {
 	}
 
 	try {
-		const password = comp.props.passwords[masterKey.id];
+		const password = comp.state.passwords[masterKey.id];
 		const newMasterKey = await EncryptionService.instance().upgradeMasterKey(masterKey, password);
 		await MasterKey.save(newMasterKey);
 		reg.waitForSyncFinishedThenSync();
@@ -81,6 +82,10 @@ shared.componentDidMount = async function(comp) {
 };
 
 shared.componentDidUpdate = async function(comp, prevProps = null) {
+	if (prevProps && comp.props.passwords !== prevProps.passwords) {
+		comp.setState({ passwords: Object.assign({}, comp.props.passwords) });
+	}
+
 	if (!prevProps || comp.props.masterKeys !== prevProps.masterKeys || comp.props.passwords !== prevProps.passwords) {
 		comp.checkPasswords();
 	}
@@ -97,7 +102,7 @@ shared.checkPasswords = async function(comp) {
 	const passwordChecks = Object.assign({}, comp.state.passwordChecks);
 	for (let i = 0; i < comp.props.masterKeys.length; i++) {
 		const mk = comp.props.masterKeys[i];
-		const password = comp.props.passwords[mk.id];
+		const password = comp.state.passwords[mk.id];
 		const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 		passwordChecks[mk.id] = ok;
 	}
@@ -112,7 +117,7 @@ shared.decryptedStatText = function(comp) {
 };
 
 shared.onSavePasswordClick = function(comp, mk) {
-	const password = comp.props.passwords[mk.id];
+	const password = comp.state.passwords[mk.id];
 	if (!password) {
 		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
 	} else {
@@ -123,7 +128,7 @@ shared.onSavePasswordClick = function(comp, mk) {
 };
 
 shared.onPasswordChange = function(comp, mk, password) {
-	const passwords = comp.props.passwords;
+	const passwords = Object.assign({}, comp.state.passwords);
 	passwords[mk.id] = password;
 	comp.setState({ passwords: passwords });
 };

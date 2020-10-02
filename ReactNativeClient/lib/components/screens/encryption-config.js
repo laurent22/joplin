@@ -17,8 +17,8 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		return { header: null };
 	}
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
 		this.state = {
 			passwordPromptShow: false,
@@ -26,7 +26,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			passwordPromptConfirmAnswer: '',
 		};
 
-		shared.constructor(this);
+		shared.constructor(this, props);
 
 		this.styles_ = {};
 	}
@@ -107,7 +107,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			return shared.onPasswordChange(this, mk, text);
 		};
 
-		const password = this.props.passwords[mk.id] ? this.props.passwords[mk.id] : '';
+		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 
 		const inputStyle = { flex: 1, marginRight: 10, color: theme.color };
