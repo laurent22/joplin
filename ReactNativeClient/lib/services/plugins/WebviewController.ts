@@ -77,7 +77,7 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('containerType', containerType);
 	}
 
-	public addScript(path:string) {
+	public async addScript(path:string) {
 		const fullPath = toSystemSlashes(shim.fsDriver().resolve(`${this.baseDir_}/${path}`), 'linux');
 
 		if (fullPath.indexOf(this.baseDir_) !== 0) throw new Error(`Script appears to be outside of plugin base directory: ${fullPath} (Base dir: ${this.baseDir_})`);

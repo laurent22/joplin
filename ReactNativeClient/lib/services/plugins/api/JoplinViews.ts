@@ -1,9 +1,9 @@
-import WebviewController, { ContainerType } from '../WebviewController';
 import Plugin from '../Plugin';
 import ToolbarButtonController, { ToolbarButtonLocation } from '../ToolbarButtonController';
 import MenuItemController, { MenuItemLocation } from '../MenuItemController';
 import KeymapService from 'lib/services/KeymapService';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
+import JoplinViewsPanels from './JoplinViewsPanels';
 
 interface CreateMenuItemOptions {
 	accelerator: string,
@@ -16,6 +16,7 @@ export default class JoplinViews {
 	private plugin: Plugin;
 
 	private dialogs_:JoplinViewsDialogs = null;
+	private panels_:JoplinViewsPanels = null;
 
 	constructor(plugin: Plugin, store: any) {
 		this.store = store;
@@ -27,19 +28,9 @@ export default class JoplinViews {
 		return this.dialogs_;
 	}
 
-	async createWebviewPanel() {
-		const idNum = this.viewIdNum++;
-		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
-		this.plugin.addViewController(controller);
-		return controller;
-	}
-
-	async createWebviewDialog() {
-		const idNum = this.viewIdNum++;
-		const controller = new WebviewController(`plugin-view-${this.plugin.id}-${idNum}`, this.plugin.id, this.store, this.plugin.baseDir);
-		controller.containerType = ContainerType.Dialog;
-		this.plugin.addViewController(controller);
-		return controller;
+	public get panels():JoplinViewsPanels {
+		if (!this.panels_) this.panels_ = new JoplinViewsPanels(this.plugin, this.store);
+		return this.panels_;
 	}
 
 	async createToolbarButton(commandName:string, location:ToolbarButtonLocation) {

@@ -1,5 +1,15 @@
 const nodeSlug = require('slug');
 
+// From https://stackoverflow.com/a/6234804/561309
+function escapeHtml(unsafe:string) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 function noteHeaders(noteBody:string) {
 	const headers = [];
 	const lines = noteBody.split('\n');
@@ -27,12 +37,15 @@ function headerSlug(headerText:string) {
 
 joplin.plugins.register({
 	onStart: async function() {
-		const tocView = joplin.views.createWebviewPanel();
-		tocView.html = 'Loading...';
-		tocView.addScript('./webview.js');
-		tocView.addScript('./webview.css');
+		const panels = joplin.views.panels;
 
-		tocView.onMessage((message:any) => {
+		const view = await panels.create();
+
+		await panels.setHtml(view, 'Loading...');
+		await panels.addScript(view, './webview.js');
+		await panels.addScript(view, './webview.css');
+
+		panels.onMessage(view, (message:any) => {
 			if (message.name === 'scrollToHash') {
 				joplin.commands.execute('scrollToHash', {
 					hash: message.hash,
@@ -53,20 +66,20 @@ joplin.plugins.register({
 
 					itemHtml.push(`
 						<p class="toc-item" style="padding-left:${(header.level - 1) * 15}px">
-							<a class="toc-item-link" href="#" data-slug="${joplin.utils.escapeHtml(slug)}">
-								${joplin.utils.escapeHtml(header.text)}
+							<a class="toc-item-link" href="#" data-slug="${escapeHtml(slug)}">
+								${escapeHtml(header.text)}
 							</a>
 						</p>
 					`);
 				}
 
-				tocView.html = `
+				await panels.setHtml(view, `
 					<div class="container">
 						${itemHtml.join('\n')}
 					</div>
-				`;
+				`);
 			} else {
-				tocView.html = 'Please select a note to view the table of content';
+				await panels.setHtml(view, 'Please select a note to view the table of content');
 			}
 		}
 
