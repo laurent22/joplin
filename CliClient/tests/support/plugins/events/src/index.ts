@@ -4,5 +4,9 @@ joplin.plugins.register({
 			const note = await joplin.data.get('notes/' + event.noteId);
 			console.info('Alarm was triggered for note: ', note);
 		});
+
+		joplin.workspace.onSyncComplete(async () => {
+			console.info('Sync has completed');
+		});
 	},
 });

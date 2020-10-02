@@ -3,6 +3,7 @@ import LockHandler, { LockType } from 'lib/services/synchronizer/LockHandler';
 import Setting from 'lib/models/Setting';
 import shim from 'lib/shim';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
+import eventManager from 'lib/eventManager';
 
 const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
@@ -129,7 +130,6 @@ export default class Synchronizer {
 		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
-		// if (!report.completedTime && report.state) lines.push(_('State: %s.', Synchronizer.stateToLabel(report.state)));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.formatMsToLocal(report.completedTime)));
 		if (report.errors && report.errors.length) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
@@ -166,7 +166,13 @@ export default class Synchronizer {
 		this.progressReport_.state = this.state();
 		this.onProgress_(this.progressReport_);
 
-		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: Object.assign({}, this.progressReport_) });
+		// Make sure we only send a **copy** of the report since it
+		// is mutated within this class. Should probably use a lib
+		// for this but for now this simple fix will do.
+		const reportCopy:any = {};
+		for (const n in this.progressReport_) reportCopy[n] = this.progressReport_[n];
+		if (reportCopy.errors) reportCopy.errors = this.progressReport_.errors.slice();
+		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: reportCopy });
 	}
 
 	async logSyncSummary(report:any) {
@@ -897,6 +903,7 @@ export default class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
+		eventManager.emit('syncComplete');
 
 		this.state_ = 'idle';
 

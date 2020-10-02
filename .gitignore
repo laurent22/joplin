@@ -61,12 +61,12 @@ CliClient/tests/models_Setting.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services/plugins/sandboxProxy.js
-CliClient/tests/support/plugins/alarm/global.d.js
-CliClient/tests/support/plugins/alarm/src/index.js
 CliClient/tests/support/plugins/codemirror_test/global.d.js
 CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/dialog/global.d.js
 CliClient/tests/support/plugins/dialog/src/index.js
+CliClient/tests/support/plugins/events/global.d.js
+CliClient/tests/support/plugins/events/src/index.js
 CliClient/tests/support/plugins/json_export/global.d.js
 CliClient/tests/support/plugins/json_export/src/index.js
 CliClient/tests/support/plugins/markdown_plugin/global.d.js

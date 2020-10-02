@@ -29,6 +29,10 @@ export default class JoplinWorkspace {
 		eventManager.on('noteAlarmTrigger', callback);
 	}
 
+	async onSyncComplete(callback:Function) {
+		eventManager.on('syncComplete', callback);
+	}
+
 	async selectedNote() {
 		const noteIds = this.store.getState().selectedNoteIds;
 		if (noteIds.length !== 1) { return null; }
