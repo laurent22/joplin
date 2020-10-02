@@ -319,11 +319,13 @@ class Application extends BaseApplication {
 
 			case 'VISIBLE_DIALOGS_ADD':
 				newState = Object.assign({}, state);
+				newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
 				newState.visibleDialogs[action.name] = true;
 				break;
 
 			case 'VISIBLE_DIALOGS_REMOVE':
 				newState = Object.assign({}, state);
+				newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
 				delete newState.visibleDialogs[action.name];
 				break;
 
