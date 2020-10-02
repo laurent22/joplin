@@ -296,7 +296,10 @@ class MainScreenComponent extends React.Component<any, any> {
 			}) });
 		}
 
-		if (prevProps.style.width !== this.props.style.width || prevProps.style.height !== this.props.style.height) {
+		if (prevProps.style.width !== this.props.style.width ||
+			prevProps.style.height !== this.props.style.height ||
+			this.messageBoxVisible(prevProps) !== this.messageBoxVisible(this.props)
+		) {
 			this.updateRootLayoutSize();
 		}
 
@@ -552,8 +555,9 @@ class MainScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	messageBoxVisible() {
-		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget;
+	messageBoxVisible(props:any = null) {
+		if (!props) props = this.props;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget;
 	}
 
 	registerCommands() {
