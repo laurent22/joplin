@@ -1,5 +1,25 @@
-import Setting, { SettingItem, SettingSection } from 'lib/models/Setting';
+import Setting, { SettingItem as InternalSettingItem, SettingItemType, SettingSection } from 'lib/models/Setting';
 import Plugin from '../Plugin';
+
+// Redefine a simplified interface to mask internal details
+// and to remove function calls as they would have to be async.
+interface SettingItem {
+	value: any,
+	type: SettingItemType,
+	public: boolean,
+	label:string,
+
+	description?:string,
+	isEnum?: boolean,
+	section?: string,
+	options?:any,
+	appTypes?:string[],
+	secure?: boolean,
+	advanced?: boolean,
+	minimum?: number,
+	maximum?: number,
+	step?: number,
+}
 
 export default class JoplinSettings {
 	private plugin_:Plugin = null;
@@ -14,11 +34,27 @@ export default class JoplinSettings {
 		return `plugin-${this.plugin_.id}.${key}`;
 	}
 
-	async registerSetting(key:string, metadata:SettingItem) {
-		const md = { ...metadata };
-		if (md.section) md.section = this.namespacedKey(md.section);
+	async registerSetting(key:string, settingItem:SettingItem) {
+		const internalSettingItem:InternalSettingItem = {
+			key: key,
+			value: settingItem.value,
+			type: settingItem.type,
+			public: settingItem.public,
+			label: () => settingItem.label,
+			description: (_appType:string) => settingItem.description,
+		};
 
-		return Setting.registerSetting(this.namespacedKey(key), md);
+		if ('isEnum' in settingItem) internalSettingItem.isEnum = settingItem.isEnum;
+		if ('section' in settingItem) internalSettingItem.section = this.namespacedKey(settingItem.section);
+		if ('options' in settingItem) internalSettingItem.options = settingItem.options;
+		if ('appTypes' in settingItem) internalSettingItem.appTypes = settingItem.appTypes;
+		if ('secure' in settingItem) internalSettingItem.secure = settingItem.secure;
+		if ('advanced' in settingItem) internalSettingItem.advanced = settingItem.advanced;
+		if ('minimum' in settingItem) internalSettingItem.minimum = settingItem.minimum;
+		if ('maximum' in settingItem) internalSettingItem.maximum = settingItem.maximum;
+		if ('step' in settingItem) internalSettingItem.step = settingItem.step;
+
+		return Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
 	}
 
 	async registerSection(name:string, section:SettingSection) {
