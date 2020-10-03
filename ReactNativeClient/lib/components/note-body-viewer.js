@@ -13,7 +13,7 @@ const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
+const BackButtonDialogBox = require('lib/components/BackButtonDialogBox').default;
 const Resource = require('lib/models/Resource.js');
 const Share = require('react-native-share').default;
 
@@ -293,7 +293,7 @@ class NoteBodyViewer extends Component {
 						);
 					}}
 				</Async>
-				<DialogBox
+				<BackButtonDialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
 					}}
