@@ -350,7 +350,7 @@ export default class CommandService extends BaseService {
 			tooltip: this.label(commandName),
 			iconName: command.declaration.iconName,
 			enabled: this.isEnabled(commandName),
-			onClick: () => {
+			onClick: async () => {
 				this.execute(commandName, this.extractExecuteArgs(command, executeArgs));
 			},
 			title: this.title(commandName),
@@ -389,17 +389,7 @@ export default class CommandService extends BaseService {
 
 				command.runtime.props = newProps;
 
-				const info:ToolbarButtonInfo = {
-					name: commandName,
-					tooltip: this.label(commandName),
-					iconName: command.declaration.iconName,
-					enabled: this.isEnabled(commandName),
-					onClick: async () => {
-						return this.execute(commandName, this.extractExecuteArgs(command));
-					},
-					title: this.title(commandName),
-				};
-
+				const info:ToolbarButtonInfo = this.commandToToolbarButton(commandName);
 				output.push(info);
 
 				this.toolbarButtonCache_[commandName] = {
