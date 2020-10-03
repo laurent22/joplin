@@ -2,16 +2,18 @@ import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
 import { PluginStates, utils as pluginUtils } from 'lib/services/plugins/reducer';
 import { useMemo } from 'react';
 
-export default function(toolbarButtonInfos:ToolbarButtonInfo[], plugins:PluginStates) {
+export default function(toolbarType:string, toolbarButtonInfos:ToolbarButtonInfo[], plugins:PluginStates = null) {
 	return useMemo(() => {
 		const output = toolbarButtonInfos.slice();
 
-		const infos = pluginUtils.viewInfosByType(plugins, 'toolbarButton');
+		if (plugins) {
+			const infos = pluginUtils.viewInfosByType(plugins, 'toolbarButton');
 
-		for (const info of infos) {
-			const view = info.view;
-			if (view.location !== 'editorToolbar') continue;
-			output.push(CommandService.instance().commandToToolbarButton(view.commandName));
+			for (const info of infos) {
+				const view = info.view;
+				if (view.location !== toolbarType) continue;
+				output.push(CommandService.instance().commandToToolbarButton(view.commandName));
+			}
 		}
 
 		return output;

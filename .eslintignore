@@ -171,7 +171,6 @@ ElectronClient/gui/NoteEditor/utils/useFormNote.js
 ElectronClient/gui/NoteEditor/utils/useMarkupToHtml.js
 ElectronClient/gui/NoteEditor/utils/useMessageHandler.js
 ElectronClient/gui/NoteEditor/utils/useNoteSearchBar.js
-ElectronClient/gui/NoteEditor/utils/useNoteToolbarButtons.js
 ElectronClient/gui/NoteEditor/utils/usePluginServiceRegistration.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js

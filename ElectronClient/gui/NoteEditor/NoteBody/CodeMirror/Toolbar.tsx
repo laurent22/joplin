@@ -26,7 +26,7 @@ function styles_(props:ToolbarProps) {
 
 function Toolbar(props:ToolbarProps) {
 	const styles = styles_(props);
-	const toolbarItems = useToolbarItems(props.toolbarButtonInfos, props.plugins);
+	const toolbarItems = useToolbarItems('editorToolbar', props.toolbarButtonInfos, props.plugins);
 	return <ToolbarBase style={styles.root} items={toolbarItems} />;
 }
 

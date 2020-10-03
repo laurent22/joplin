@@ -13,7 +13,6 @@ import useMessageHandler from './utils/useMessageHandler';
 import useWindowCommandHandler from './utils/useWindowCommandHandler';
 import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
-import useNoteToolbarButtons from './utils/useNoteToolbarButtons';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
@@ -24,6 +23,7 @@ import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from 'lib/eventManager';
 import { AppState } from '../../app';
+import useToolbarItems from './NoteBody/CodeMirror/utils/useToolbarItems';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -43,6 +43,10 @@ const TagList = require('../TagList.min.js');
 const commands = [
 	require('./commands/showRevisions'),
 ];
+
+const toolbarStyle = {
+	marginBottom: 0,
+};
 
 function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
@@ -341,13 +345,9 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderNoteToolbar() {
-		const toolbarStyle = {
-			marginBottom: 0,
-		};
-
 		return <NoteToolbar
 			themeId={props.themeId}
-			note={formNote}
+			// note={formNote}
 			style={toolbarStyle}
 		/>;
 	}
@@ -410,7 +410,7 @@ function NoteEditor(props: NoteEditorProps) {
 		disabled: false,
 		themeId: props.themeId,
 		dispatch: props.dispatch,
-		noteToolbar: null,// renderNoteToolbar(),
+		noteToolbar: null,
 		onScroll: onScroll,
 		setLocalSearchResultCount: setLocalSearchResultCount,
 		searchMarkers: searchMarkers,
@@ -418,7 +418,7 @@ function NoteEditor(props: NoteEditorProps) {
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
-		noteToolbarButtonInfos: useNoteToolbarButtons(),
+		noteToolbarButtonInfos: useToolbarItems('editorToolbar', props.toolbarButtonInfos),
 		plugins: props.plugins,
 	};
 
@@ -586,6 +586,12 @@ const mapStateToProps = (state: AppState) => {
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
+		toolbarButtonInfos: CommandService.instance().commandsToToolbarButtons(state, [
+			'historyBackward',
+			'historyForward',
+			'toggleEditors',
+			'startExternalEditing',
+		]),
 	};
 };
 

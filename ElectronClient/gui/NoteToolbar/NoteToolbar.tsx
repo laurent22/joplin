@@ -1,27 +1,17 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 import CommandService from '../../lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
-import { utils as pluginUtils } from 'lib/services/plugins/reducer';
+import { PluginStates } from 'lib/services/plugins/reducer';
+import useToolbarItems from '../NoteEditor/NoteBody/CodeMirror/utils/useToolbarItems';
+import { ToolbarButtonInfo } from 'lib/services/CommandService';
 const { connect } = require('react-redux');
 const { buildStyle } = require('lib/theme');
-
-interface ButtonClickEvent {
-	name: string,
-}
 
 interface NoteToolbarProps {
 	themeId: number,
 	style: any,
-	folders: any[],
-	watchedNoteFiles: string[],
-	backwardHistoryNotes: any[],
-	forwardHistoryNotes: any[],
-	notesParentType: string,
-	note: any,
-	dispatch: Function,
-	onButtonClick(event:ButtonClickEvent):void,
-	plugins: any,
+	plugins: PluginStates,
+	toolbarButtonInfos: ToolbarButtonInfo[],
 }
 
 function styles_(props:NoteToolbarProps) {
@@ -38,48 +28,18 @@ function styles_(props:NoteToolbarProps) {
 
 function NoteToolbar(props:NoteToolbarProps) {
 	const styles = styles_(props);
-	const [toolbarItems, setToolbarItems] = useState([]);
-
-	const cmdService = CommandService.instance();
-
-	function updateToolbarItems() {
-		const output = [];
-
-		output.push(cmdService.commandToToolbarButton('editAlarm'));
-		output.push(cmdService.commandToToolbarButton('toggleVisiblePanes'));
-		output.push(cmdService.commandToToolbarButton('showNoteProperties'));
-
-		const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
-
-		for (const info of infos) {
-			const view = info.view;
-			if (view.location !== 'noteToolbar') continue;
-			output.push(cmdService.commandToToolbarButton(view.commandName));
-		}
-
-		setToolbarItems(output);
-	}
-
-	useEffect(() => {
-		updateToolbarItems();
-		cmdService.on('commandsEnabledStateChange', updateToolbarItems);
-		return () => {
-			cmdService.off('commandsEnabledStateChange', updateToolbarItems);
-		};
-	}, []);
-
+	const toolbarItems = useToolbarItems('noteToolbar', props.toolbarButtonInfos, props.plugins);
 	return <ToolbarBase style={styles.root} items={toolbarItems} />;
 }
 
 const mapStateToProps = (state:any) => {
 	return {
-		folders: state.folders,
-		watchedNoteFiles: state.watchedNoteFiles,
-		backwardHistoryNotes: state.backwardHistoryNotes,
-		forwardHistoryNotes: state.forwardHistoryNotes,
-		notesParentType: state.notesParentType,
 		plugins: state.pluginService.plugins,
-
+		toolbarButtonInfos: CommandService.instance().commandsToToolbarButtons(state, [
+			'editAlarm',
+			'toggleVisiblePanes',
+			'showNoteProperties',
+		]),
 	};
 };
 

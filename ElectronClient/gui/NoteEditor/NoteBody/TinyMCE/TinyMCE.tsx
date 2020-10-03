@@ -1115,10 +1115,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	function renderLeftExtraToolbarButtons() {
 		const buttons = [];
-		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (!leftButtonCommandNames.includes(buttonName)) continue;
-			const info = props.noteToolbarButtonInfos[buttonName];
-			buttons.push(renderExtraToolbarButton(buttonName, info));
+		for (const info of props.noteToolbarButtonInfos) {
+			if (!leftButtonCommandNames.includes(info.name)) continue;
+			buttons.push(renderExtraToolbarButton(info.name, info));
 		}
 
 		return (
@@ -1130,19 +1129,18 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	function renderRightExtraToolbarButtons() {
 		const buttons = [];
-		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (leftButtonCommandNames.includes(buttonName)) continue;
-			const info = props.noteToolbarButtonInfos[buttonName];
+		for (const info of props.noteToolbarButtonInfos) {
+			if (leftButtonCommandNames.includes(info.name)) continue;
 
-			if (buttonName === 'toggleEditors') {
+			if (info.name === 'toggleEditors') {
 				buttons.push(<ToggleEditorsButton
-					key={buttonName}
+					key={info.name}
 					value={ToggleEditorsButtonValue.RichText}
 					themeId={props.themeId}
 					toolbarButtonInfo={info}
 				/>);
 			} else {
-				buttons.push(renderExtraToolbarButton(buttonName, info));
+				buttons.push(renderExtraToolbarButton(info.name, info));
 			}
 		}
 

@@ -31,6 +31,7 @@ export interface NoteEditorProps {
 	watchedResources: any,
 	highlightedWords: any[],
 	plugins: PluginStates,
+	toolbarButtonInfos: ToolbarButtonInfo[],
 }
 
 export interface NoteBodyEditorProps {
@@ -58,7 +59,7 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos,
 	locale: string,
 	onDrop: Function,
-	noteToolbarButtonInfos: ToolbarButtonInfos,
+	noteToolbarButtonInfos: ToolbarButtonInfo[],
 	plugins: PluginStates,
 }
 
