@@ -230,7 +230,9 @@ ReactNativeClient/lib/services/AlarmServiceDriver.android.js
 ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
+ReactNativeClient/lib/services/BooleanExpression.js
 ReactNativeClient/lib/services/CommandService.js
+ReactNativeClient/lib/services/contextkey/contextkey.js
 ReactNativeClient/lib/services/debug/populateDatabase.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Base.js
 ReactNativeClient/lib/services/interop/InteropService_Exporter_Custom.js
