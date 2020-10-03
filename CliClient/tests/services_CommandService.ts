@@ -150,4 +150,55 @@ describe('services_CommandService', function() {
 		expect(toolbarInfos[1].enabled).toBe(true);
 	}));
 
+	it('should return the same toolbarButtons array if nothing has changed', asyncTest(async () => {
+		const service = newService();
+
+		registerCommand(service, createCommand('test1', {
+			execute: () => {},
+			mapStateToProps: (state:any) => {
+				return {
+					selectedNoteId: state.selectedNoteId,
+				};
+			},
+			isEnabled: (props:any) => {
+				return props.selectedNoteId === 'ok';
+			},
+		}));
+
+		registerCommand(service, createCommand('test2', {
+			execute: () => {},
+			mapStateToProps: (state:any) => {
+				return {
+					selectedFolderId: state.selectedFolderId,
+				};
+			},
+			isEnabled: (props:any) => {
+				return props.selectedFolderId === 'ok';
+			},
+		}));
+
+		const toolbarInfos1 = service.commandsToToolbarButtons({
+			selectedNoteId: 'ok',
+			selectedFolderId: 'notok',
+		}, ['test1', 'test2']);
+
+		const toolbarInfos2 = service.commandsToToolbarButtons({
+			selectedNoteId: 'ok',
+			selectedFolderId: 'notok',
+		}, ['test1', 'test2']);
+
+		expect(toolbarInfos1 === toolbarInfos2).toBe(true);
+		expect(toolbarInfos1[0] === toolbarInfos2[0]).toBe(true);
+		expect(toolbarInfos1[1] === toolbarInfos2[1]).toBe(true);
+
+		const toolbarInfos3 = service.commandsToToolbarButtons({
+			selectedNoteId: 'ok',
+			selectedFolderId: 'ok',
+		}, ['test1', 'test2']);
+
+		expect(toolbarInfos2 === toolbarInfos3).toBe(false);
+		expect(toolbarInfos2[0] === toolbarInfos3[0]).toBe(true);
+		expect(toolbarInfos2[1] === toolbarInfos3[1]).toBe(false);
+	}));
+
 });

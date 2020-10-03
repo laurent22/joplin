@@ -676,7 +676,8 @@
 			"CliClient/tests/support/plugins/events/global.d.js": true,
 			"CliClient/tests/support/plugins/events/src/index.js": true,
 			"ReactNativeClient/lib/services/BooleanExpression.js": true,
-			"ReactNativeClient/lib/services/contextkey/contextkey.js": true
+			"ReactNativeClient/lib/services/contextkey/contextkey.js": true,
+			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useToolbarItems.js": true
 		},
 		"spellright.language": [
 			"en"

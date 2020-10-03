@@ -9,22 +9,22 @@ export const declaration:CommandDeclaration = {
 };
 
 interface Props {
-	backwardHistoryNotes: any[],
+	hasBackwardNotes: boolean,
 }
 
 export const runtime = ():CommandRuntime => {
 	return {
 		execute: async (props:Props) => {
-			if (!props.backwardHistoryNotes.length) return;
+			if (!props.hasBackwardNotes) return;
 			utils.store.dispatch({
 				type: 'HISTORY_BACKWARD',
 			});
 		},
 		isEnabled: (props:Props) => {
-			return props.backwardHistoryNotes.length > 0;
+			return props.hasBackwardNotes;
 		},
 		mapStateToProps: (state:any) => {
-			return { backwardHistoryNotes: state.backwardHistoryNotes };
+			return { hasBackwardNotes: state.backwardHistoryNotes.length > 0 };
 		},
 	};
 };

@@ -79,6 +79,7 @@ const mapStateToProps = (state:any) => {
 		forwardHistoryNotes: state.forwardHistoryNotes,
 		notesParentType: state.notesParentType,
 		plugins: state.pluginService.plugins,
+
 	};
 };
 

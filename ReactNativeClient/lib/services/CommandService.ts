@@ -13,6 +13,14 @@ export interface CommandRuntime {
 	// dependency to the desktop app (so that the service can
 	// potentially be used by the mobile app too), we keep it as "any".
 	// Individual commands can define it as state:AppState when relevant.
+	//
+	// In general this method should reduce the provided state to only
+	// what's absolutely necessary. For example, if the property of a
+	// note is needed, return only that particular property and not the
+	// whole note object. This will ensure that components that depends
+	// on this command are not uncessarily re-rendered. A note object for
+	// example might change frequently but its markdown_language property
+	// will almost never change.
 	mapStateToProps?(state:any):any
 
 	// Used for the (optional) toolbar button title
@@ -99,6 +107,19 @@ interface CommandStates {
 	[key:string]: CommandState
 }
 
+interface ToolbarButtonCacheItem {
+	info: ToolbarButtonInfo,
+	props: any,
+}
+
+interface ToolbarButtonCache {
+	[key:string]: ToolbarButtonCacheItem;
+}
+
+interface ToolbarButtonsCache {
+	[key:string]: ToolbarButtonInfo[],
+}
+
 export default class CommandService extends BaseService {
 
 	private static instance_:CommandService;
@@ -114,6 +135,9 @@ export default class CommandService extends BaseService {
 	private mapStateToPropsIID_:any = null;
 
 	private keymapService:KeymapService = null;
+
+	private toolbarButtonCache_:ToolbarButtonCache = {};
+	private toolbarButtonsCache_:ToolbarButtonsCache = {};
 
 	initialize(store:any, keymapService:KeymapService) {
 		utils.store = store;
@@ -131,8 +155,12 @@ export default class CommandService extends BaseService {
 	private propsHaveChanged(previous:any, next:any) {
 		if (!previous && next) return true;
 
+		if (Object.keys(previous).length !== Object.keys(next).length) return true;
+
 		for (const n in previous) {
-			if (previous[n] !== next[n]) return true;
+			if (previous[n] !== next[n]) {
+				return true;
+			}
 		}
 
 		return false;
@@ -329,32 +357,65 @@ export default class CommandService extends BaseService {
 		};
 	}
 
+	// This method ensures that if the provided commandNames and state hasn't changed
+	// the output also won't change. Invididual toolbarButtonInfo also won't changed
+	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
 	commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
 		const output:ToolbarButtonInfo[] = [];
 
+		let allSame = true;
+
 		for (const commandName of commandNames) {
+			if (commandName === '-') {
+				output.push({ type: 'separator' } as any);
+				continue;
+			}
+
 			const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
 
+			let newProps:any = {};
+
 			if (command.runtime) {
-				if (!command.runtime.mapStateToProps) {
-					command.runtime.props = {};
-				} else {
-					const newProps = command.runtime.mapStateToProps(state);
-					command.runtime.props = newProps;
+				if (command.runtime.mapStateToProps) {
+					newProps = command.runtime.mapStateToProps(state);
 				}
 			}
 
-			output.push({
-				name: commandName,
-				tooltip: this.label(commandName),
-				iconName: command.declaration.iconName,
-				enabled: this.isEnabled(commandName),
-				onClick: async () => {
-					return this.execute(commandName, this.extractExecuteArgs(command));
-				},
-				title: this.title(commandName),
-			});
+			const previousEntry = this.toolbarButtonCache_[commandName];
+			if (previousEntry && !this.propsHaveChanged(previousEntry.props, newProps)) {
+				output.push(previousEntry.info);
+			} else {
+				allSame = false;
+
+				command.runtime.props = newProps;
+
+				const info:ToolbarButtonInfo = {
+					name: commandName,
+					tooltip: this.label(commandName),
+					iconName: command.declaration.iconName,
+					enabled: this.isEnabled(commandName),
+					onClick: async () => {
+						return this.execute(commandName, this.extractExecuteArgs(command));
+					},
+					title: this.title(commandName),
+				};
+
+				output.push(info);
+
+				this.toolbarButtonCache_[commandName] = {
+					info: info,
+					props: newProps,
+				};
+			}
 		}
+
+		const arrayCacheKey = commandNames.join('_');
+
+		if (allSame && this.toolbarButtonsCache_[arrayCacheKey]) {
+			return this.toolbarButtonsCache_[arrayCacheKey];
+		}
+
+		this.toolbarButtonsCache_[arrayCacheKey] = output;
 
 		return output;
 	}

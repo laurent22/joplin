@@ -26,7 +26,7 @@ interface HookDependencies {
 function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
 	return {
 		execute: async (props:any) => {
-			console.info('Running editor command:', declaration.name, props);
+			// console.info('Running editor command:', declaration.name, props);
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 			} else {
@@ -51,21 +51,22 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 		isEnabled: (props:any) => {
 			if (props.routeName !== 'Main' || props.isDialogVisible) return false;
 			if (props.markdownEditorViewerOnly) return false;
-			if (!props.noteId) return false;
-			const note = BaseModel.byId(props.notes, props.noteId);
-			if (!note) return false;
-			return note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			if (!props.hasSelectedNote) return false;
+			return props.isMarkdownNote;
 		},
 		mapStateToProps: (state:any) => {
+			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+			const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
+			const isMarkdownNote = note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false;
+
 			return {
 				// True when the Markdown editor is active, and only the viewer pane is visible
 				// In this case, all editor-related shortcuts are disabled.
 				markdownEditorViewerOnly: state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer',
-				noteVisiblePanes: state.noteVisiblePanes,
-				notes: state.notes,
-				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+				hasSelectedNote: !!note,
 				routeName: state.route.routeName,
 				isDialogVisible: !!Object.keys(state.visibleDialogs).length,
+				isMarkdownNote: isMarkdownNote,
 			};
 		},
 	};

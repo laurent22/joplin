@@ -20,12 +20,12 @@ export const runtime = ():CommandRuntime => {
 			Setting.toggle('editor.codeView');
 		},
 		isEnabled: (props:any):boolean => {
-			return !props.hasNotesBeingSaved && props.selectedNoteIds.length === 1;
+			return !props.hasNotesBeingSaved && props.hasOneSelectedNote;
 		},
 		mapStateToProps: (state:any):any => {
 			return {
 				hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
-				selectedNoteIds: state.selectedNoteIds,
+				hasOneSelectedNote: state.selectedNoteIds.length === 1,
 			};
 		},
 	};
