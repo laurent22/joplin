@@ -25,7 +25,7 @@ interface HookDependencies {
 
 function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
 	return {
-		execute: (props:any) => {
+		execute: async (props:any) => {
 			console.info('Running editor command:', declaration.name, props);
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);

@@ -65,6 +65,7 @@ CliClient/build/
 CliClient/app/LinkSelector.js
 CliClient/app/services/plugins/PluginRunner.js
 CliClient/tests/models_Setting.js
+CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services/plugins/sandboxProxy.js

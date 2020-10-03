@@ -4,7 +4,7 @@ interface Command {
 	name: string
 	label: string
 	iconName?: string,
-	execute(props:any):void
+	execute(props:any):Promise<any>
 	isEnabled?(props:any):boolean
 	mapStateToProps?(state:any):any
 }

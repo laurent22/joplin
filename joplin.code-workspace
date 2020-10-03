@@ -669,7 +669,14 @@
 			"ReactNativeClient/lib/services/AlarmServiceDriver.android.js": true,
 			"ReactNativeClient/lib/services/AlarmServiceDriver.ios.js": true,
 			"ReactNativeClient/lib/services/AlarmServiceDriverNode.js": true,
-			"ReactNativeClient/lib/Synchronizer.js": true
+			"ReactNativeClient/lib/Synchronizer.js": true,
+			"CliClient/tests/support/plugins/events/dist/*": true,
+			"CliClient/tests/support/plugins/events/**/node_modules/": true,
+			"CliClient/tests/services_CommandService.js": true,
+			"CliClient/tests/support/plugins/events/global.d.js": true,
+			"CliClient/tests/support/plugins/events/src/index.js": true,
+			"ReactNativeClient/lib/services/BooleanExpression.js": true,
+			"ReactNativeClient/lib/services/contextkey/contextkey.js": true
 		},
 		"spellright.language": [
 			"en"

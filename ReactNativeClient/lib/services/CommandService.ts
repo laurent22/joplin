@@ -6,7 +6,7 @@ import shim from 'lib/shim';
 type LabelFunction = () => string;
 
 export interface CommandRuntime {
-	execute(props:any):void
+	execute(props:any):Promise<any>
 	isEnabled?(props:any):boolean
 
 	// "state" type is "AppState" but in order not to introduce a
@@ -253,11 +253,11 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[commandName];
 	}
 
-	execute(commandName:string, args:any = null) {
-		console.info('CommandService::execute:', commandName, args);
-
+	async execute(commandName:string, args:any = null):Promise<any> {
 		const command = this.commandByName(commandName);
-		command.runtime.execute(args ? args : {});
+		if (args === null && command.runtime.props) args = command.runtime.props;
+		this.logger().info('CommandService::execute:', commandName, args);
+		return command.runtime.execute(args ? args : {});
 	}
 
 	scheduleExecute(commandName:string, args:any = null) {
@@ -307,7 +307,7 @@ export default class CommandService extends BaseService {
 		return !!command;
 	}
 
-	private extractExecuteArgs(command:Command, executeArgs:any) {
+	private extractExecuteArgs(command:Command, executeArgs:any = null) {
 		if (executeArgs) return executeArgs;
 		if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);
 		if (command.runtime.props) return command.runtime.props;
@@ -329,6 +329,36 @@ export default class CommandService extends BaseService {
 		};
 	}
 
+	commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
+		const output:ToolbarButtonInfo[] = [];
+
+		for (const commandName of commandNames) {
+			const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
+
+			if (command.runtime) {
+				if (!command.runtime.mapStateToProps) {
+					command.runtime.props = {};
+				} else {
+					const newProps = command.runtime.mapStateToProps(state);
+					command.runtime.props = newProps;
+				}
+			}
+
+			output.push({
+				name: commandName,
+				tooltip: this.label(commandName),
+				iconName: command.declaration.iconName,
+				enabled: this.isEnabled(commandName),
+				onClick: async () => {
+					return this.execute(commandName, this.extractExecuteArgs(command));
+				},
+				title: this.title(commandName),
+			});
+		}
+
+		return output;
+	}
+
 	commandToMenuItem(commandName:string, executeArgs:any = null) {
 		const command = this.commandByName(commandName);
 
@@ -341,7 +371,7 @@ export default class CommandService extends BaseService {
 		};
 
 		if (command.declaration.role) item.role = command.declaration.role;
-		if (this.keymapService.acceleratorExists(commandName)) {
+		if (this.keymapService && this.keymapService.acceleratorExists(commandName)) {
 			item.accelerator = this.keymapService.getAccelerator(commandName);
 		}
 
