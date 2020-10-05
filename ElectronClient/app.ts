@@ -1,11 +1,8 @@
-import InteropService from 'lib/services/interop/InteropService';
 import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
 import CommandService from 'lib/services/CommandService';
 import KeymapService from 'lib/services/KeymapService';
 import PluginService from 'lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from 'lib/services/ResourceEditWatcher/reducer';
-import { utils as pluginUtils } from 'lib/services/plugins/reducer';
-import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { defaultState, State } from 'lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
@@ -15,7 +12,6 @@ import AlarmServiceDriverNode from 'lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from 'lib/Logger';
 import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
-import versionInfo from 'lib/versionInfo';
 import BaseApplication from 'lib/BaseApplication';
 
 require('app-module-path').addPath(__dirname);
@@ -29,12 +25,11 @@ const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');
 const packageInfo = require('./packageInfo.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
-const InteropServiceHelper = require('./InteropServiceHelper.js');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;
-const { shell, webFrame, clipboard } = require('electron');
+const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
@@ -137,26 +132,10 @@ const appDefaultState:AppState = {
 
 class Application extends BaseApplication {
 
-	private lastMenuScreen_:string = null;
-	private previousMenuEnabledState:any = null;
-	private scheduleRefreshMenuIID_:any = null;
-
 	constructor() {
 		super();
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
-
-		this.commandService_commandsEnabledStateChange = this.commandService_commandsEnabledStateChange.bind(this);
-		CommandService.instance().on('commandsEnabledStateChange', this.commandService_commandsEnabledStateChange);
-
-		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
-
-		this.interopService_modulesChanged = this.interopService_modulesChanged.bind(this);
-	}
-
-	commandService_commandsEnabledStateChange() {
-		// TODO: only update if command is used in menu?
-		this.updateMenuItemStates();
 	}
 
 	hasGui() {
@@ -374,7 +353,6 @@ class Application extends BaseApplication {
 			// The bridge runs within the main process, with its own instance of locale.js
 			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
-			this.scheduleRefreshMenu();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
@@ -395,10 +373,6 @@ class Application extends BaseApplication {
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
-
-		if (action.type === 'NAV_GO' || action.type === 'NAV_BACK') {
-			app().updateMenu(newState.route.routeName);
-		}
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
@@ -427,10 +401,6 @@ class Application extends BaseApplication {
 		return result;
 	}
 
-	interopService_modulesChanged() {
-		this.scheduleRefreshMenu();
-	}
-
 	handleThemeAutoDetect() {
 		if (!Setting.value('themeAutoDetect')) return;
 
@@ -439,678 +409,6 @@ class Application extends BaseApplication {
 		} else {
 			Setting.setValue('theme', Setting.value('preferredLightTheme'));
 		}
-	}
-
-	scheduleRefreshMenu() {
-		if (this.scheduleRefreshMenuIID_) shim.clearTimeout(this.scheduleRefreshMenuIID_);
-
-		this.scheduleRefreshMenuIID_ = shim.setTimeout(() => {
-			this.scheduleRefreshMenuIID_ = null;
-			this.refreshMenu();
-		}, 500);
-	}
-
-	async refreshMenu() {
-		const screen = this.lastMenuScreen_;
-		this.lastMenuScreen_ = null;
-		await this.updateMenu(screen);
-	}
-
-	async updateMenu(screen:string, updateStates:boolean = true) {
-		if (this.lastMenuScreen_ === screen) return;
-
-		const cmdService = CommandService.instance();
-		const keymapService = KeymapService.instance();
-
-		const sortNoteFolderItems = (type:string) => {
-			const sortItems = [];
-			const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
-			for (const field in sortOptions) {
-				if (!sortOptions.hasOwnProperty(field)) continue;
-				sortItems.push({
-					label: sortOptions[field],
-					screens: ['Main'],
-					type: 'checkbox',
-					checked: Setting.value(`${type}.sortOrder.field`) === field,
-					click: () => {
-						Setting.setValue(`${type}.sortOrder.field`, field);
-						this.refreshMenu();
-					},
-				});
-			}
-
-			sortItems.push({ type: 'separator' });
-
-			sortItems.push({
-				id: `sort:${type}:reverse`,
-				label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
-				type: 'checkbox',
-				checked: Setting.value(`${type}.sortOrder.reverse`),
-				screens: ['Main'],
-				click: () => {
-					Setting.setValue(`${type}.sortOrder.reverse`, !Setting.value(`${type}.sortOrder.reverse`));
-				},
-			});
-
-			return sortItems;
-		};
-
-		const sortNoteItems = sortNoteFolderItems('notes');
-		const sortFolderItems = sortNoteFolderItems('folders');
-
-		const focusItems = [
-			cmdService.commandToMenuItem('focusElementSideBar'),
-			cmdService.commandToMenuItem('focusElementNoteList'),
-			cmdService.commandToMenuItem('focusElementNoteTitle'),
-			cmdService.commandToMenuItem('focusElementNoteBody'),
-		];
-
-		let toolsItems:any[] = [];
-		const importItems = [];
-		const exportItems = [];
-		const toolsItemsFirst = [];
-		const templateItems = [];
-		const ioService = InteropService.instance();
-		const ioModules = ioService.modules();
-		for (let i = 0; i < ioModules.length; i++) {
-			const module = ioModules[i];
-			if (module.type === 'exporter') {
-				if (module.isNoteArchive !== false) {
-					exportItems.push({
-						label: module.fullLabel(),
-						screens: ['Main'],
-						click: async () => {
-							await InteropServiceHelper.export(this.dispatch.bind(this), module);
-						},
-					});
-				}
-			} else {
-				for (let j = 0; j < module.sources.length; j++) {
-					const moduleSource = module.sources[j];
-					importItems.push({
-						label: module.fullLabel(moduleSource),
-						screens: ['Main'],
-						click: async () => {
-							let path = null;
-
-							const selectedFolderId = this.store().getState().selectedFolderId;
-
-							if (moduleSource === 'file') {
-								path = bridge().showOpenDialog({
-									filters: [{ name: module.description, extensions: module.fileExtensions }],
-								});
-							} else {
-								path = bridge().showOpenDialog({
-									properties: ['openDirectory', 'createDirectory'],
-								});
-							}
-
-							if (!path || (Array.isArray(path) && !path.length)) return;
-
-							if (Array.isArray(path)) path = path[0];
-
-							cmdService.execute('showModalMessage', { message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format) });
-
-							const importOptions = {
-								path,
-								format: module.format,
-								modulePath: module.path,
-								onError: console.warn,
-								destinationFolderId:
-									!module.isNoteArchive && moduleSource === 'file'
-										? selectedFolderId
-										: null,
-							};
-
-							const service = InteropService.instance();
-							try {
-								const result = await service.import(importOptions);
-								console.info('Import result: ', result);
-							} catch (error) {
-								bridge().showErrorMessageBox(error.message);
-							}
-
-							cmdService.execute('hideModalMessage');
-						},
-					});
-				}
-			}
-		}
-
-		exportItems.push(
-			cmdService.commandToMenuItem('exportPdf')
-		);
-
-		// We need a dummy entry, otherwise the ternary operator to show a
-		// menu item only on a specific OS does not work.
-		const noItem = {
-			type: 'separator',
-			visible: false,
-		};
-
-		const syncStatusItem = {
-			label: _('Synchronisation Status'),
-			click: () => {
-				this.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Status',
-				});
-			},
-		};
-
-		const newNoteItem = cmdService.commandToMenuItem('newNote');
-		const newTodoItem = cmdService.commandToMenuItem('newTodo');
-		const newFolderItem = cmdService.commandToMenuItem('newFolder');
-		const printItem = cmdService.commandToMenuItem('print');
-
-		toolsItemsFirst.push(syncStatusItem, {
-			type: 'separator',
-			screens: ['Main'],
-		});
-
-		const templateDirExists = await shim.fsDriver().exists(Setting.value('templateDir'));
-
-		templateItems.push({
-			label: _('Create note from template'),
-			visible: templateDirExists,
-			click: () => {
-				cmdService.execute('selectTemplate', { noteType: 'note' });
-			},
-		}, {
-			label: _('Create to-do from template'),
-			visible: templateDirExists,
-			click: () => {
-				cmdService.execute('selectTemplate', { noteType: 'todo' });
-			},
-		}, {
-			label: _('Insert template'),
-			visible: templateDirExists,
-			accelerator: keymapService.getAccelerator('insertTemplate'),
-			click: () => {
-				cmdService.execute('selectTemplate');
-			},
-		}, {
-			label: _('Open template directory'),
-			click: () => {
-				const templateDir = Setting.value('templateDir');
-				if (!templateDirExists) shim.fsDriver().mkdir(templateDir);
-				shell.openItem(templateDir);
-			},
-		}, {
-			label: _('Refresh templates'),
-			click: async () => {
-				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-				this.store().dispatch({
-					type: 'TEMPLATE_UPDATE_ALL',
-					templates: templates,
-				});
-			},
-		});
-
-		// we need this workaround, because on macOS the menu is different
-		const toolsItemsWindowsLinux:any[] = toolsItemsFirst.concat([{
-			label: _('Options'),
-			visible: !shim.isMac(),
-			accelerator: !shim.isMac() && keymapService.getAccelerator('config'),
-			click: () => {
-				this.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Config',
-				});
-			},
-		} as any]);
-
-		// the following menu items will be available for all OS under Tools
-		const toolsItemsAll = [{
-			label: _('Note attachments...'),
-			click: () => {
-				this.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Resources',
-				});
-			},
-		}];
-
-		if (!shim.isMac()) {
-			toolsItems = toolsItems.concat(toolsItemsWindowsLinux);
-		}
-		toolsItems = toolsItems.concat(toolsItemsAll);
-
-		function _checkForUpdates(ctx:any) {
-			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-		}
-
-		function _showAbout() {
-			const v = versionInfo(packageInfo);
-
-			const copyToClipboard = bridge().showMessageBox(v.message, {
-				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
-				buttons: [_('Copy'), _('OK')],
-				cancelId: 1,
-				defaultId: 1,
-			});
-
-			if (copyToClipboard === 0) {
-				clipboard.writeText(v.message);
-			}
-		}
-
-		const rootMenuFile = {
-			// Using a dummy entry for macOS here, because first menu
-			// becomes 'Joplin' and we need a nenu called 'File' later.
-			label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
-			// `&` before one of the char in the label name mean, that
-			// <Alt + F> will open this menu. It's needed becase electron
-			// opens the first menu on Alt press if no hotkey assigned.
-			// Issue: https://github.com/laurent22/joplin/issues/934
-			submenu: [{
-				label: _('About Joplin'),
-				visible: shim.isMac() ? true : false,
-				click: () => _showAbout(),
-			}, {
-				type: 'separator',
-				visible: shim.isMac() ? true : false,
-			}, {
-				label: _('Preferences...'),
-				visible: shim.isMac() ? true : false,
-				accelerator: shim.isMac() && keymapService.getAccelerator('config'),
-				click: () => {
-					this.dispatch({
-						type: 'NAV_GO',
-						routeName: 'Config',
-					});
-				},
-			}, {
-				label: _('Check for updates...'),
-				visible: shim.isMac() ? true : false,
-				click: () => _checkForUpdates(this),
-			}, {
-				type: 'separator',
-				visible: shim.isMac() ? true : false,
-			},
-			shim.isMac() ? noItem : newNoteItem,
-			shim.isMac() ? noItem : newTodoItem,
-			shim.isMac() ? noItem : newFolderItem, {
-				type: 'separator',
-				visible: shim.isMac() ? false : true,
-			}, {
-				label: _('Templates'),
-				visible: shim.isMac() ? false : true,
-				submenu: templateItems,
-			}, {
-				type: 'separator',
-				visible: shim.isMac() ? false : true,
-			}, {
-				label: _('Import'),
-				visible: shim.isMac() ? false : true,
-				submenu: importItems,
-			}, {
-				label: _('Export all'),
-				visible: shim.isMac() ? false : true,
-				submenu: exportItems,
-			}, {
-				type: 'separator',
-			},
-
-			cmdService.commandToMenuItem('synchronize'),
-
-			shim.isMac() ? syncStatusItem : noItem, {
-				type: 'separator',
-			}, shim.isMac() ? noItem : printItem, {
-				type: 'separator',
-				platforms: ['darwin'],
-			}, {
-				label: _('Hide %s', 'Joplin'),
-				platforms: ['darwin'],
-				accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
-				click: () => { bridge().electronApp().hide(); },
-			}, {
-				type: 'separator',
-			}, {
-				label: _('Quit'),
-				accelerator: keymapService.getAccelerator('quit'),
-				click: () => { bridge().electronApp().quit(); },
-			}],
-		};
-
-		const rootMenuFileMacOs = {
-			label: _('&File'),
-			visible: shim.isMac() ? true : false,
-			submenu: [
-				newNoteItem,
-				newTodoItem,
-				newFolderItem, {
-					label: _('Close Window'),
-					platforms: ['darwin'],
-					accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
-					selector: 'performClose:',
-				}, {
-					type: 'separator',
-				}, {
-					label: _('Templates'),
-					submenu: templateItems,
-				}, {
-					type: 'separator',
-				}, {
-					label: _('Import'),
-					submenu: importItems,
-				}, {
-					label: _('Export'),
-					submenu: exportItems,
-				}, {
-					type: 'separator',
-				},
-				printItem,
-			],
-		};
-
-		const layoutButtonSequenceOptions = Object.entries(Setting.enumOptions('layoutButtonSequence')).map(([layoutKey, layout]) => ({
-			label: layout,
-			screens: ['Main'],
-			type: 'checkbox',
-			checked: Setting.value('layoutButtonSequence') == layoutKey,
-			click: () => {
-				Setting.setValue('layoutButtonSequence', layoutKey);
-				this.refreshMenu();
-			},
-		}));
-
-		const separator = () => {
-			return {
-				type: 'separator',
-			};
-		};
-
-		const rootMenus:any = {
-			edit: {
-				id: 'edit',
-				label: _('&Edit'),
-				submenu: [
-					cmdService.commandToMenuItem('textCopy'),
-					cmdService.commandToMenuItem('textCut'),
-					cmdService.commandToMenuItem('textPaste'),
-					cmdService.commandToMenuItem('textSelectAll'),
-					separator(),
-					cmdService.commandToMenuItem('textBold'),
-					cmdService.commandToMenuItem('textItalic'),
-					cmdService.commandToMenuItem('textLink'),
-					cmdService.commandToMenuItem('textCode'),
-					separator(),
-					cmdService.commandToMenuItem('insertDateTime'),
-					cmdService.commandToMenuItem('attachFile'),
-					separator(),
-					cmdService.commandToMenuItem('focusSearch'),
-					cmdService.commandToMenuItem('showLocalSearch'),
-				],
-			},
-			view: {
-				label: _('&View'),
-				submenu: [
-					CommandService.instance().commandToMenuItem('toggleSidebar'),
-					CommandService.instance().commandToMenuItem('toggleNoteList'),
-					CommandService.instance().commandToMenuItem('toggleVisiblePanes'),
-					{
-						label: _('Layout button sequence'),
-						screens: ['Main'],
-						submenu: layoutButtonSequenceOptions,
-					},
-					separator(),
-					{
-						label: Setting.settingMetadata('notes.sortOrder.field').label(),
-						screens: ['Main'],
-						submenu: sortNoteItems,
-					}, {
-						label: Setting.settingMetadata('folders.sortOrder.field').label(),
-						screens: ['Main'],
-						submenu: sortFolderItems,
-					}, {
-						label: Setting.settingMetadata('showNoteCounts').label(),
-						type: 'checkbox',
-						checked: Setting.value('showNoteCounts'),
-						screens: ['Main'],
-						click: () => {
-							Setting.setValue('showNoteCounts', !Setting.value('showNoteCounts'));
-						},
-					}, {
-						label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
-						type: 'checkbox',
-						checked: Setting.value('uncompletedTodosOnTop'),
-						screens: ['Main'],
-						click: () => {
-							Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
-						},
-					}, {
-						label: Setting.settingMetadata('showCompletedTodos').label(),
-						type: 'checkbox',
-						checked: Setting.value('showCompletedTodos'),
-						screens: ['Main'],
-						click: () => {
-							Setting.setValue('showCompletedTodos', !Setting.value('showCompletedTodos'));
-						},
-					},
-					separator(),
-					{
-						label: _('Focus'),
-						screens: ['Main'],
-						submenu: focusItems,
-					},
-					separator(),
-					{
-						label: _('Actual Size'),
-						click: () => {
-							Setting.setValue('windowContentZoomFactor', 100);
-						},
-						accelerator: 'CommandOrControl+0',
-					}, {
-					// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
-					// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
-					// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
-					// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
-					// Additionally it allows the use of the plus key on the numpad.
-						label: _('Zoom In'),
-						click: () => {
-							Setting.incValue('windowContentZoomFactor', 10);
-						},
-						accelerator: 'CommandOrControl+Plus',
-					}, {
-						label: _('Zoom In'),
-						visible: false,
-						click: () => {
-							Setting.incValue('windowContentZoomFactor', 10);
-						},
-						accelerator: 'CommandOrControl+=',
-					}, {
-						label: _('Zoom Out'),
-						click: () => {
-							Setting.incValue('windowContentZoomFactor', -10);
-						},
-						accelerator: 'CommandOrControl+-',
-					}],
-			},
-			note: {
-				label: _('&Note'),
-				submenu: [
-					CommandService.instance().commandToMenuItem('startExternalEditing'),
-					CommandService.instance().commandToMenuItem('setTags'),
-					separator(),
-					CommandService.instance().commandToMenuItem('showNoteContentProperties'),
-				],
-			},
-			tools: {
-				label: _('&Tools'),
-				submenu: toolsItems,
-			},
-			help: {
-				label: _('&Help'),
-				role: 'help', // Makes it add the "Search" field on macOS
-				submenu: [{
-					label: _('Website and documentation'),
-					accelerator: keymapService.getAccelerator('help'),
-					click() { bridge().openExternal('https://joplinapp.org'); },
-				}, {
-					label: _('Joplin Forum'),
-					click() { bridge().openExternal('https://discourse.joplinapp.org'); },
-				}, {
-					label: _('Make a donation'),
-					click() { bridge().openExternal('https://joplinapp.org/donate/'); },
-				}, {
-					label: _('Check for updates...'),
-					visible: shim.isMac() ? false : true,
-					click: () => _checkForUpdates(this),
-				},
-				separator(),
-				{
-					id: 'help:toggleDevTools',
-					label: _('Toggle development tools'),
-					click: () => {
-						this.dispatch({
-							type: 'NOTE_DEVTOOLS_TOGGLE',
-						});
-					},
-				},
-
-				cmdService.commandToMenuItem('copyDevCommand'),
-
-				{
-					type: 'separator',
-					visible: shim.isMac() ? false : true,
-					screens: ['Main'],
-				}, {
-					label: _('About Joplin'),
-					visible: shim.isMac() ? false : true,
-					click: () => _showAbout(),
-				}],
-			},
-		};
-
-		if (shim.isMac()) {
-			rootMenus.macOsApp = rootMenuFile;
-			rootMenus.file = rootMenuFileMacOs;
-		} else {
-			rootMenus.file = rootMenuFile;
-		}
-
-		// It seems the "visible" property of separators is ignored by Electron, making
-		// it display separators that we want hidden. So this function iterates through
-		// them and remove them completely.
-		const cleanUpSeparators = (items:any[]) => {
-			const output = [];
-			for (const item of items) {
-				if ('visible' in item && item.type === 'separator' && !item.visible) continue;
-				output.push(item);
-			}
-			return output;
-		};
-
-		for (const key in rootMenus) {
-			if (!rootMenus.hasOwnProperty(key)) continue;
-			if (!rootMenus[key].submenu) continue;
-			rootMenus[key].submenu = cleanUpSeparators(rootMenus[key].submenu);
-		}
-
-		const pluginMenuItems = PluginManager.instance().menuItems();
-		for (const item of pluginMenuItems) {
-			const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
-			itemParent.submenu.push(item);
-		}
-
-		const pluginViewInfos = pluginUtils.viewInfosByType(this.store().getState().pluginService.plugins, 'menuItem');
-
-		for (const info of pluginViewInfos) {
-			const location:MenuItemLocation = info.view.location;
-			if (location === MenuItemLocation.Context) continue;
-
-			const itemParent = rootMenus[location];
-
-			if (!itemParent) {
-				reg.logger().error('Menu item location does not exist: ', location, info);
-			} else {
-				itemParent.submenu.push(cmdService.commandToMenuItem(info.view.commandName));
-			}
-		}
-
-		const template = [
-			rootMenus.file,
-			rootMenus.edit,
-			rootMenus.view,
-			rootMenus.note,
-			rootMenus.tools,
-			rootMenus.help,
-		];
-
-		if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
-
-		function isEmptyMenu(template:any[]) {
-			for (let i = 0; i < template.length; i++) {
-				const t = template[i];
-				if (t.type !== 'separator') return false;
-			}
-			return true;
-		}
-
-		function removeUnwantedItems(template:any[], screen:string) {
-			const platform = shim.platformName();
-
-			let output = [];
-			for (let i = 0; i < template.length; i++) {
-				const t = Object.assign({}, template[i]);
-				if (t.screens && t.screens.indexOf(screen) < 0) continue;
-				if (t.platforms && t.platforms.indexOf(platform) < 0) continue;
-				if (t.submenu) t.submenu = removeUnwantedItems(t.submenu, screen);
-				if (('submenu' in t) && isEmptyMenu(t.submenu)) continue;
-				output.push(t);
-			}
-
-			// Remove empty separator for now empty sections
-			const temp = [];
-			let previous = null;
-			for (let i = 0; i < output.length; i++) {
-				const t = Object.assign({}, output[i]);
-				if (t.type === 'separator') {
-					if (!previous) continue;
-					if (previous.type === 'separator') continue;
-				}
-				temp.push(t);
-				previous = t;
-			}
-			output = temp;
-
-			return output;
-		}
-
-		const screenTemplate = removeUnwantedItems(template, screen);
-
-		const menu = Menu.buildFromTemplate(screenTemplate);
-		Menu.setApplicationMenu(menu);
-
-		this.lastMenuScreen_ = screen;
-
-		if (updateStates) await this.updateMenuItemStates();
-	}
-
-	async updateMenuItemStates(state:any = null) {
-		if (!this.lastMenuScreen_) return;
-		if (!this.store() && !state) return;
-
-		if (!state) state = this.store().getState();
-
-		const menuEnabledState = CommandService.instance().commandsEnabledState(this.previousMenuEnabledState);
-		this.previousMenuEnabledState = menuEnabledState;
-
-		const menu = Menu.getApplicationMenu();
-
-		for (const itemId in menuEnabledState) {
-			const menuItem = menu.getMenuItemById(itemId);
-			if (!menuItem) continue;
-			menuItem.enabled = menuEnabledState[itemId];
-		}
-
-		const sortNoteReverseItem = menu.getMenuItemById('sort:notes:reverse');
-		if (sortNoteReverseItem) sortNoteReverseItem.enabled = state.settings['notes.sortOrder.field'] !== 'order';
-
-		// const devToolsMenuItem = menu.getMenuItemById('help:toggleDevTools');
-		// devToolsMenuItem.checked = state.devToolsVisible;
 	}
 
 	bridge_nativeThemeUpdated() {
@@ -1168,6 +466,8 @@ class Application extends BaseApplication {
 
 	async start(argv:string[]):Promise<any> {
 		const electronIsDev = require('electron-is-dev');
+
+		await fs.mkdirp(Setting.value('templateDir'), 0o755);
 
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
@@ -1228,8 +528,6 @@ class Application extends BaseApplication {
 		for (const declaration of editorCommandDeclarations) {
 			CommandService.instance().registerDeclaration(declaration);
 		}
-
-		this.updateMenu('Main', false);
 
 		// Since the settings need to be loaded before the store is created, it will never
 		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
@@ -1341,8 +639,6 @@ class Application extends BaseApplication {
 
 		RevisionService.instance().runInBackground();
 
-		this.updateMenuItemStates();
-
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		(window as any).joplin = () => {
 			return {
@@ -1354,8 +650,6 @@ class Application extends BaseApplication {
 		};
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
-
-		InteropService.instance().on('modulesChanged', this.interopService_modulesChanged);
 
 		const pluginLogger = new Logger();
 		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });

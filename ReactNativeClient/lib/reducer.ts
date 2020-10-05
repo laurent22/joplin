@@ -4,6 +4,8 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { createSelectorCreator, defaultMemoize } = require('reselect');
+const { createCachedSelector } = require('re-reselect');
 
 const additionalReducers:any[] = [];
 
@@ -171,6 +173,29 @@ const cacheEnabledOutput = (key:string, output:any) => {
 	derivedStateCache_[key] = output;
 	return derivedStateCache_[key];
 };
+
+const createShallowArrayEqualSelector = createSelectorCreator(
+	defaultMemoize,
+	(prev:any[], next:any[]) => {
+		if (prev.length !== next.length) return false;
+		for (let i = 0; i < prev.length; i++) {
+			if (prev[i] !== next[i]) return false;
+		}
+		return true;
+	}
+);
+
+// Given an input array, this selector ensures that the same array is returned
+// if its content hasn't changed.
+stateUtils.selectArrayShallow = createCachedSelector(
+	(state:any) => state.array,
+	(array:any[]) => array
+)({
+	keySelector: (_state:any, cacheKey:any) => {
+		return cacheKey;
+	},
+	selectorCreator: createShallowArrayEqualSelector,
+});
 
 stateUtils.hasOneSelectedNote = function(state:State):boolean {
 	return state.selectedNoteIds.length === 1;

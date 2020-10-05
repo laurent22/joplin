@@ -8,6 +8,7 @@ import DropboxLoginScreen from './DropboxLoginScreen';
 import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from 'lib/theme';
 import { Size } from './ResizableLayout/ResizableLayout';
+import MenuBar from './MenuBar';
 
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
@@ -117,6 +118,7 @@ class RootComponent extends React.Component<Props, any> {
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
+					<MenuBar/>
 					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} />
 				</ThemeProvider>

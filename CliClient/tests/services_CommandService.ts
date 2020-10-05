@@ -1,3 +1,4 @@
+import MenuUtils from 'lib/services/commands/MenuUtils';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 
@@ -214,6 +215,86 @@ describe('services_CommandService', function() {
 				selectedFolderId: 'notok',
 			}, ['test1', '-', 'test2']));
 		}
+	}));
+
+	it('should create menu items from commands', asyncTest(async () => {
+		const service = newService();
+		const utils = new MenuUtils(service);
+
+		registerCommand(service, createCommand('test1', {
+			execute: () => {},
+		}));
+
+		registerCommand(service, createCommand('test2', {
+			execute: () => {},
+		}));
+
+		const clickedCommands:string[] = [];
+
+		const onClick = (commandName:string) => {
+			clickedCommands.push(commandName);
+		};
+
+		const menuItems = utils.commandsToMenuItems(['test1', 'test2'], onClick);
+
+		menuItems.test1.click();
+		menuItems.test2.click();
+
+		expect(clickedCommands.join('_')).toBe('test1_test2');
+
+		// Also check that the same commands always return strictly the same menu
+		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick));
+	}));
+
+	it('should give menu item props from state', asyncTest(async () => {
+		const service = newService();
+		const utils = new MenuUtils(service);
+
+		registerCommand(service, createCommand('test1', {
+			mapStateToProps: (state:any) => {
+				return {
+					isOk: state.test1 === 'ok',
+				};
+			},
+			execute: () => {},
+		}));
+
+		registerCommand(service, createCommand('test2', {
+			mapStateToProps: (state:any) => {
+				return {
+					isOk: state.test2 === 'ok',
+				};
+			},
+			execute: () => {},
+		}));
+
+		{
+			const menuItemProps = utils.commandsToMenuItemProps({
+				test1: 'ok',
+				test2: 'notok',
+			}, ['test1', 'test2']);
+
+			expect(menuItemProps.test1.isOk).toBe(true);
+			expect(menuItemProps.test2.isOk).toBe(false);
+		}
+
+		{
+			const menuItemProps = utils.commandsToMenuItemProps({
+				test1: 'ok',
+				test2: 'ok',
+			}, ['test1', 'test2']);
+
+			expect(menuItemProps.test1.isOk).toBe(true);
+			expect(menuItemProps.test2.isOk).toBe(true);
+		}
+
+		expect(utils.commandsToMenuItemProps({
+			test1: 'ok',
+			test2: 'ok',
+		}, ['test1', 'test2'])).toBe(utils.commandsToMenuItemProps({
+			test1: 'ok',
+			test2: 'ok',
+		}, ['test1', 'test2']));
 	}));
 
 });

@@ -13,8 +13,14 @@ export const runtime = (comp:any):CommandRuntime => {
 			if (!comp.titleInputRef.current) return;
 			comp.titleInputRef.current.focus();
 		},
-		isEnabled: ():boolean => {
-			return !!comp.titleInputRef.current;
+		isEnabled: (props:any):boolean => {
+			return props.hasOneNoteSelected;
 		},
+		mapStateToProps: (state:any):any => {
+			return {
+				hasOneNoteSelected: state.selectedNoteIds.length === 1,
+			};
+		},
+
 	};
 };

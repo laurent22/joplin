@@ -39,12 +39,6 @@ export const runtime = (comp:any):CommandRuntime => {
 				},
 			});
 		},
-		mapStateToProps: (state:any):any => {
-			return {
-				selectedNoteIds: state.selectedNoteIds,
-				notes: state.notes,
-			};
-		},
 		title: () => {
 			return _('New notebook');
 		},

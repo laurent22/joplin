@@ -274,7 +274,7 @@ export default class CommandService extends BaseService {
 		return command.runtime.execute(props ? props : {});
 	}
 
-	scheduleExecute(commandName:string, args:any = null) {
+	scheduleExecute(commandName:string, args:any) {
 		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
@@ -289,7 +289,8 @@ export default class CommandService extends BaseService {
 
 	commandMapStateToProps(commandName:string, state:any):any {
 		const command = this.commandByName(commandName);
-		if (!command.runtime || !command.runtime.mapStateToProps) return {};
+		if (!command.runtime) return null;
+		if (!command.runtime.mapStateToProps) return {};
 		return command.runtime.mapStateToProps(state);
 	}
 

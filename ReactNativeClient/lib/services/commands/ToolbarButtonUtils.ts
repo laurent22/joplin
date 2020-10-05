@@ -1,30 +1,6 @@
 import CommandService from '../CommandService';
 import propsHaveChanged from './propsHaveChanged';
-const { createSelectorCreator, defaultMemoize } = require('reselect');
-const { createCachedSelector } = require('re-reselect');
-
-const createShallowArrayEqualSelector = createSelectorCreator(
-	defaultMemoize,
-	(prev:any[], next:any[]) => {
-		if (prev.length !== next.length) return false;
-		for (let i = 0; i < prev.length; i++) {
-			if (prev[i] !== next[i]) return false;
-		}
-		return true;
-	}
-);
-
-// This selector ensures that for the given command names, the same toolbar
-// button array is returned if the underlying toolbar buttons have not changed.
-const selectToolbarButtonInfosByCommands = createCachedSelector(
-	(state:any) => state.toolbarInfos,
-	(toolbarInfos:ToolbarButtonInfo[]) => toolbarInfos
-)({
-	keySelector: (_state:any, commandNames:string[]) => {
-		return commandNames.join('_');
-	},
-	selectorCreator: createShallowArrayEqualSelector,
-});
+import { stateUtils } from 'lib/reducer';
 
 const separatorItem = { type: 'separator' };
 
@@ -101,7 +77,7 @@ export default class ToolbarButtonUtils {
 			output.push(this.commandToToolbarButton(commandName, props));
 		}
 
-		return selectToolbarButtonInfosByCommands({ toolbarInfos: output }, commandNames);
+		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));
 	}
 
 }

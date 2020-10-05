@@ -128,6 +128,7 @@ ElectronClient/gui/MainScreen/commands/toggleNoteList.js
 ElectronClient/gui/MainScreen/commands/toggleSidebar.js
 ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js
 ElectronClient/gui/MainScreen/MainScreen.js
+ElectronClient/gui/MenuBar.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js
@@ -232,6 +233,7 @@ ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
 ReactNativeClient/lib/services/BooleanExpression.js
+ReactNativeClient/lib/services/commands/MenuUtils.js
 ReactNativeClient/lib/services/commands/propsHaveChanged.js
 ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js
 ReactNativeClient/lib/services/CommandService.js

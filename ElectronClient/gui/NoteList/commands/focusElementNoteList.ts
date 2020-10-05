@@ -1,4 +1,4 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
 const { _ } = require('lib/locale');
 
 export const declaration:CommandDeclaration = {
@@ -9,18 +9,18 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ selectedNoteIds }:any) => {
-			if (selectedNoteIds.length) {
-				const ref = comp.itemAnchorRef(selectedNoteIds[0]);
+		execute: async ({ noteId }:any) => {
+			if (noteId) {
+				const ref = comp.itemAnchorRef(noteId);
 				if (ref) ref.focus();
 			}
 		},
 		isEnabled: (props:any):boolean => {
-			return !!props.selectedNoteIds.length;
+			return !!props.noteId;
 		},
 		mapStateToProps: (state:any):any => {
 			return {
-				selectedNoteIds: state.selectedNoteIds,
+				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 			};
 		},
 	};
