@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseApplication } = require('lib/BaseApplication.js');
+const BaseApplication = require('lib/BaseApplication').default;
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');

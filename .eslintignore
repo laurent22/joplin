@@ -212,6 +212,7 @@ ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
 ReactNativeClient/lib/AsyncActionQueue.js
+ReactNativeClient/lib/BaseApplication.js
 ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js

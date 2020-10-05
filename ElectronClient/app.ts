@@ -16,10 +16,10 @@ import Logger, { TargetType } from 'lib/Logger';
 import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
 import versionInfo from 'lib/versionInfo';
+import BaseApplication from 'lib/BaseApplication';
 
 require('app-module-path').addPath(__dirname);
 
-const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
@@ -138,6 +138,8 @@ const appDefaultState:AppState = {
 class Application extends BaseApplication {
 
 	private lastMenuScreen_:string = null;
+	private previousMenuEnabledState:any = null;
+	private scheduleRefreshMenuIID_:any = null;
 
 	constructor() {
 		super();
@@ -1164,7 +1166,7 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
-	async start(argv:string[]) {
+	async start(argv:string[]):Promise<any> {
 		const electronIsDev = require('electron-is-dev');
 
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
