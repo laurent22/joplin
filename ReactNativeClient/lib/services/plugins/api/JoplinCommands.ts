@@ -31,7 +31,6 @@ export default class JoplinCommands {
 
 		const runtime:CommandRuntime = {
 			execute: command.execute,
-			props: {},
 		};
 
 		if ('isEnabled' in command) runtime.isEnabled = command.isEnabled;

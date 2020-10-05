@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
 
-interface ViewInfo {
+export interface ViewInfo {
 	view: any,
 	plugin: any,
 }
@@ -51,6 +51,14 @@ export const utils = {
 		}
 
 		return output;
+	},
+
+	commandNamesFromViews: function(plugins:PluginStates, toolbarType:string):string[] {
+		const infos = utils.viewInfosByType(plugins, 'toolbarButton');
+
+		return infos
+			.filter((info:ViewInfo) => info.view.location === toolbarType)
+			.map((info:ViewInfo) => info.view.commandName);
 	},
 };
 

@@ -180,6 +180,7 @@
     "pretty-bytes": "^5.3.0",
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
+    "re-reselect": "^4.0.0",
     "re-resizable": "^6.5.4",
     "react": "^16.9.0",
     "react-datetime": "^2.14.0",

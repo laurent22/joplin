@@ -23,7 +23,7 @@ import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from 'lib/eventManager';
 import { AppState } from '../../app';
-import useToolbarItems from './NoteBody/CodeMirror/utils/useToolbarItems';
+import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -47,6 +47,8 @@ const commands = [
 const toolbarStyle = {
 	marginBottom: 0,
 };
+
+const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
 function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
@@ -353,10 +355,9 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderTagButton() {
-		const info = CommandService.instance().commandToToolbarButton('setTags');
 		return <ToolbarButton
 			themeId={props.themeId}
-			toolbarButtonInfo={info}
+			toolbarButtonInfo={props.setTagsToolbarButtonInfo}
 		/>;
 	}
 
@@ -418,7 +419,7 @@ function NoteEditor(props: NoteEditorProps) {
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
-		noteToolbarButtonInfos: useToolbarItems('editorToolbar', props.toolbarButtonInfos),
+		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 	};
 
@@ -586,12 +587,15 @@ const mapStateToProps = (state: AppState) => {
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
-		toolbarButtonInfos: CommandService.instance().commandsToToolbarButtons(state, [
+		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons(state, [
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
 			'startExternalEditing',
 		]),
+		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons(state, [
+			'setTags',
+		])[0],
 	};
 };
 

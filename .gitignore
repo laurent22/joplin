@@ -148,7 +148,6 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useKeymap.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useLineSorting.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
-ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useToolbarItems.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
@@ -232,6 +231,8 @@ ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
 ReactNativeClient/lib/services/BooleanExpression.js
+ReactNativeClient/lib/services/commands/propsHaveChanged.js
+ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/contextkey/contextkey.js
 ReactNativeClient/lib/services/debug/populateDatabase.js

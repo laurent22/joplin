@@ -5,7 +5,8 @@ import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../.
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
-import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
+import CommandService from 'lib/services/CommandService';
+import { ToolbarButtonInfo } from 'lib/services/commands/ToolbarButtonUtils';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
