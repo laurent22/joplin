@@ -24,6 +24,7 @@ const StyledRoot = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: ${(props:any) => props.theme.backgroundColor3};
+	border-right: 1px solid ${(props:any) => props.theme.dividerColor},
 `;
 
 class NoteListComponent extends React.Component {

@@ -6,6 +6,8 @@ import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './hooks/useLayout
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
+export const dragBarThickness = 5;
+
 export enum LayoutItemDirection {
 	Row = 'row',
 	Column = 'column',
@@ -36,10 +38,10 @@ interface onResizeEvent {
 
 interface Props {
 	layout: LayoutItem,
-	renderItem(key:string, event:any):JSX.Element;
 	onResize(event:onResizeEvent):void;
 	width?: number,
 	height?: number,
+	renderItem: Function,
 }
 
 export function allDynamicSizes(layout:LayoutItem):any {
@@ -125,6 +127,9 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 			bottomLeft: false,
 			topLeft: false,
 		};
+
+		if (item.resizableRight) style.paddingRight = dragBarThickness;
+		if (item.resizableBottom) style.paddingBottom = dragBarThickness;
 
 		return (
 			<Resizable

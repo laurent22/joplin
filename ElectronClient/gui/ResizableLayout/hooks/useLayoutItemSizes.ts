@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { LayoutItem, Size } from '../ResizableLayout';
+import { LayoutItem, Size, dragBarThickness } from '../ResizableLayout';
 
 export interface LayoutItemSizes {
 	[key:string]: Size,
@@ -32,6 +32,10 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 			w = 0;
 			h = 0;
 		}
+
+		if (item.resizableRight) w -= dragBarThickness;
+		if (item.resizableBottom) h -= dragBarThickness;
+
 		sizes[child.key] = { width: w, height: h };
 		if (w !== null) remainingSize.width -= w;
 		if (h !== null) remainingSize.height -= h;
