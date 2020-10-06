@@ -15,11 +15,14 @@ function camelCaseToDots(s) {
 
 module.exports = {
 	jpFormatClassName: function(className) {
-		if (className.indexOf('Sandbox') !== 0) return className;
+		if (className.indexOf('Joplin') !== 0) return className;
 
-		const p = className.substr(7);
-		if (p === '') return 'Global';
-		return camelCaseToDots(p);
+		const p = className.substr(6);
+		if (p === '') return 'joplin';
+
+		return `joplin.${camelCaseToDots(p)
+			.replace(/menu\.items/, 'menuItems')
+			.replace(/toolbar\.buttons/, 'toolbarButtons')}`;
 	},
 
 	jpIsAllowedGroup: function(name) {

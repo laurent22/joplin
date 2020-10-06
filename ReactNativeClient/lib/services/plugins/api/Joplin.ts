@@ -46,6 +46,12 @@ export default class Joplin {
 		return this.workspace_;
 	}
 
+	/**
+	 * @ignore
+	 *
+	 * Not sure if it's the best way to hook into the app
+	 * so for now disable filters.
+	 */
 	get filters(): JoplinFilters {
 		return this.filters_;
 	}
