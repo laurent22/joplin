@@ -91,6 +91,8 @@ export interface ExportOptions {
 	path?:string,
 	sourceFolderIds?: string[],
 	sourceNoteIds?: string[],
+	modulePath?:string,
+	target?:FileSystemItem,
 }
 
 export interface ImportExportResult {

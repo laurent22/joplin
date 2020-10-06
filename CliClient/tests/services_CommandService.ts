@@ -43,51 +43,6 @@ describe('services_CommandService', function() {
 		done();
 	});
 
-	// it('should register and execute commands', asyncTest(async () => {
-	// 	const service = newService();
-
-	// 	let wasExecuted = false;
-
-	// 	registerCommand(service, createCommand('test1', {
-	// 		execute: () => {
-	// 			wasExecuted = true;
-	// 		},
-	// 	}));
-
-	// 	await service.execute('test1');
-
-	// 	expect(wasExecuted).toBe(true);
-	// }));
-
-	// it('should pass props to commands', asyncTest(async () => {
-	// 	const service = newService();
-	// 	const toolbarButtonUtils = new ToolbarButtonUtils(service);
-
-	// 	let receivedProps:any = {};
-
-	// 	registerCommand(service, createCommand('test1', {
-	// 		execute: (props:any) => {
-	// 			receivedProps = props;
-	// 		},
-	// 		mapStateToProps: (state:any) => {
-	// 			return {
-	// 				selectedNoteId: state.selectedNoteId,
-	// 				selectedFolderId: state.selectedFolderId,
-	// 			};
-	// 		},
-	// 	}));
-
-	// 	toolbarButtonUtils.commandsToToolbarButtons({
-	// 		selectedNoteId: '123',
-	// 		selectedFolderId: 'abc',
-	// 	}, ['test1']);
-
-	// 	await service.execute('test1');
-
-	// 	expect(receivedProps.selectedNoteId).toBe('123');
-	// 	expect(receivedProps.selectedFolderId).toBe('abc');
-	// }));
-
 	it('should create toolbar button infos from commands', asyncTest(async () => {
 		const service = newService();
 		const toolbarButtonUtils = new ToolbarButtonUtils(service);
@@ -295,6 +250,29 @@ describe('services_CommandService', function() {
 			test1: 'ok',
 			test2: 'ok',
 		}, ['test1', 'test2']));
+	}));
+
+	it('should create stateful menu items', asyncTest(async () => {
+		const service = newService();
+		const utils = new MenuUtils(service);
+
+		let propValue = null;
+
+		registerCommand(service, createCommand('test1', {
+			mapStateToProps: (state:any) => {
+				return {
+					isOk: state.test1 === 'ok',
+				};
+			},
+			execute: (props:any) => {
+				propValue = props.isOk;
+			},
+		}));
+
+		const menuItem = utils.commandToStatefulMenuItem('test1', { isOk: 'hello' });
+		menuItem.click();
+
+		expect(propValue).toBe('hello');
 	}));
 
 });

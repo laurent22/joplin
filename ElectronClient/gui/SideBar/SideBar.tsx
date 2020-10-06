@@ -6,6 +6,7 @@ import InteropService from 'lib/services/interop/InteropService';
 import Synchronizer from 'lib/Synchronizer';
 import Setting from 'lib/models/Setting';
 import MenuUtils from 'lib/services/commands/MenuUtils';
+import InteropServiceHelper from '../../InteropServiceHelper';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
@@ -18,7 +19,6 @@ const { themeStyle } = require('lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 

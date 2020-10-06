@@ -13,12 +13,12 @@ import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from 'lib/services/plugins/WebviewController';
 import { stateUtils } from 'lib/reducer';
+import InteropServiceHelper from '../../InteropServiceHelper';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
-const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim').default;
 const { themeStyle } = require('lib/theme.js');
