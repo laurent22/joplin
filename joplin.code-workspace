@@ -680,7 +680,10 @@
 			"ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useToolbarItems.js": true,
 			"ReactNativeClient/lib/services/commands/propsHaveChanged.js": true,
 			"ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js": true,
-			"ReactNativeClient/lib/BaseApplication.js": true
+			"ReactNativeClient/lib/BaseApplication.js": true,
+			"ElectronClient/gui/MenuBar.js": true,
+			"ElectronClient/InteropServiceHelper.js": true,
+			"ReactNativeClient/lib/services/commands/MenuUtils.js": true
 		},
 		"spellright.language": [
 			"en"
