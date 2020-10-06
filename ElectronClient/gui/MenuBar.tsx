@@ -87,16 +87,10 @@ function menuItemSetEnabled(id:string, enabled:boolean) {
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-// TODO: check that menu is updated when module changes
-// TODO: check if updated when keymap changes
-
-// 		InteropService.instance().on('modulesChanged', this.interopService_modulesChanged);
-// 		KeymapService.instance().on('keymapChange', this.refreshMenu.bind(this));
-
-
 function useMenu(props:Props) {
 	const [menu, setMenu] = useState(null);
 	const [keymapLastChangeTime, setKeymapLastChangeTime] = useState(Date.now());
+	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName:string) => {
 		CommandService.instance().execute(commandName, props.menuItemProps[commandName]);
@@ -731,7 +725,7 @@ function useMenu(props:Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItemInfos, keymapLastChangeTime]);
+	}, [props.routeName, props.pluginMenuItemInfos, keymapLastChangeTime, modulesLastChangeTime]);
 
 	useEffect(() => {
 		for (const commandName in props.menuItemProps) {
@@ -781,6 +775,18 @@ function useMenu(props:Props) {
 
 		return () => {
 			KeymapService.instance().off('keymapChange', onKeymapChange);
+		};
+	}, []);
+
+	useEffect(() => {
+		function onModulesChanged() {
+			setModulesLastChangeTime(Date.now());
+		}
+
+		InteropService.instance().on('modulesChanged', onModulesChanged);
+
+		return () => {
+			InteropService.instance().off('modulesChanged', onModulesChanged);
 		};
 	}, []);
 
