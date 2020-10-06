@@ -1,0 +1,41 @@
+import Logger from 'lib/Logger';
+export default class BaseApplication {
+    private logger_;
+    private dbLogger_;
+    private eventEmitter_;
+    private scheduleAutoAddResourcesIID_;
+    private database_;
+    protected showStackTraces_: boolean;
+    protected showPromptString_: boolean;
+    private currentFolder_;
+    protected store_: any;
+    constructor();
+    destroy(): Promise<void>;
+    logger(): Logger;
+    store(): any;
+    currentFolder(): any;
+    refreshCurrentFolder(): Promise<void>;
+    switchCurrentFolder(folder: any): void;
+    handleStartFlags_(argv: string[], setDefaults?: boolean): Promise<{
+        matched: any;
+        argv: string[];
+    }>;
+    on(eventName: string, callback: Function): any;
+    exit(code?: number): Promise<void>;
+    refreshNotes(state: any, useSelectedNoteId?: boolean, noteHash?: string): Promise<void>;
+    resourceFetcher_downloadComplete(event: any): void;
+    decryptionWorker_resourceMetadataButNotBlobDecrypted(): Promise<void>;
+    reducerActionToString(action: any): string;
+    hasGui(): boolean;
+    uiType(): "cli" | "gui";
+    generalMiddlewareFn(): (store: any) => (next: any) => (action: any) => Promise<any>;
+    applySettingsSideEffects(action?: any): Promise<void>;
+    generalMiddleware(store: any, next: any, action: any): Promise<any>;
+    dispatch(action: any): any;
+    reducer(state: any, action: any): any;
+    initRedux(): void;
+    deinitRedux(): void;
+    readFlagsFromFile(flagPath: string): Promise<any>;
+    determineProfileDir(initArgs: any): any;
+    start(argv: string[]): Promise<any>;
+}

@@ -21,6 +21,8 @@
 		"paths": {
 			"lib/*": ["./ReactNativeClient/lib/*"],
 		},
+		"declaration": true,
+		"declarationDir": "./declarations"
 	},
     "include": [
         "ReactNativeClient/**/*",

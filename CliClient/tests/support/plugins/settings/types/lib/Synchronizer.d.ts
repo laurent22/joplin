@@ -1,0 +1,52 @@
+import Logger from './Logger';
+import LockHandler from 'lib/services/synchronizer/LockHandler';
+import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
+interface RemoteItem {
+    id: string;
+    path?: string;
+    type_?: number;
+}
+export default class Synchronizer {
+    private db_;
+    private api_;
+    private appType_;
+    private logger_;
+    private state_;
+    private cancelling_;
+    private maxResourceSize_;
+    private downloadQueue_;
+    private clientId_;
+    private lockHandler_;
+    private migrationHandler_;
+    private encryptionService_;
+    private syncTargetIsLocked_;
+    testingHooks_: string[];
+    private onProgress_;
+    private progressReport_;
+    dispatch: Function;
+    constructor(db: any, api: any, appType: string);
+    state(): string;
+    db(): any;
+    api(): any;
+    clientId(): string;
+    setLogger(l: Logger): void;
+    logger(): Logger;
+    lockHandler(): LockHandler;
+    migrationHandler(): MigrationHandler;
+    maxResourceSize(): number;
+    setEncryptionService(v: any): void;
+    encryptionService(): any;
+    waitForSyncToFinish(): Promise<void>;
+    static reportToLines(report: any): any[];
+    logSyncOperation(action: any, local?: any, remote?: RemoteItem, message?: string, actionCount?: number): void;
+    logSyncSummary(report: any): Promise<void>;
+    cancel(): Promise<unknown>;
+    cancelling(): boolean;
+    logLastRequests(): void;
+    static stateToLabel(state: string): any;
+    isFullSync(steps: string[]): boolean;
+    lockErrorStatus_(): Promise<"" | "hasExclusiveLock" | "syncLockGone">;
+    apiCall(fnName: string, ...args: any[]): Promise<any>;
+    start(options?: any): Promise<any>;
+}
+export {};

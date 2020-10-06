@@ -1,0 +1,32 @@
+import Plugin from '../Plugin';
+import JoplinData from './JoplinData';
+import JoplinPlugins from './JoplinPlugins';
+import JoplinWorkspace from './JoplinWorkspace';
+import JoplinFilters from './JoplinFilters';
+import JoplinCommands from './JoplinCommands';
+import JoplinViews from './JoplinViews';
+import JoplinUtils from './JoplinUtils';
+import JoplinInterop from './JoplinInterop';
+import JoplinSettings from './JoplinSettings';
+import Logger from 'lib/Logger';
+export default class Joplin {
+    private data_;
+    private plugins_;
+    private workspace_;
+    private filters_;
+    private commands_;
+    private views_;
+    private utils_;
+    private interop_;
+    private settings_;
+    constructor(logger: Logger, implementation: any, plugin: Plugin, store: any);
+    get data(): JoplinData;
+    get plugins(): JoplinPlugins;
+    get workspace(): JoplinWorkspace;
+    get filters(): JoplinFilters;
+    get commands(): JoplinCommands;
+    get views(): JoplinViews;
+    get utils(): JoplinUtils;
+    get interop(): JoplinInterop;
+    get settings(): JoplinSettings;
+}

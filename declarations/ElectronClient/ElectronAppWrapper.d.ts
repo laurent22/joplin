@@ -1,0 +1,33 @@
+import Logger from 'lib/Logger';
+export default class ElectronAppWrapper {
+    private logger_;
+    private electronApp_;
+    private env_;
+    private isDebugMode_;
+    private profilePath_;
+    private win_;
+    private willQuitApp_;
+    private tray_;
+    private buildDir_;
+    private rendererProcessQuitReply_;
+    private pluginWindows_;
+    constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean);
+    electronApp(): any;
+    setLogger(v: Logger): void;
+    logger(): Logger;
+    window(): any;
+    env(): string;
+    createWindow(): void;
+    registerPluginWindow(pluginId: string, window: any): void;
+    waitForElectronAppReady(): Promise<unknown>;
+    quit(): Promise<void>;
+    exit(errorCode?: number): void;
+    trayShown(): boolean;
+    hide(): void;
+    buildDir(): string;
+    trayIconFilename_(): string;
+    createTray(contextMenu: any): void;
+    destroyTray(): void;
+    ensureSingleInstance(): boolean;
+    start(): Promise<void>;
+}

@@ -1,0 +1,13 @@
+export declare const StyledRoot: any;
+export declare const StyledHeader: any;
+export declare const StyledHeaderIcon: any;
+export declare const StyledAllNotesIcon: any;
+export declare const StyledHeaderLabel: any;
+export declare const StyledListItem: any;
+export declare const StyledListItemAnchor: any;
+export declare const StyledExpandLink: any;
+export declare const StyledNoteCount: any;
+export declare const StyledSynchronizeButton: any;
+export declare const StyledAddButton: any;
+export declare const StyledSyncReport: any;
+export declare const StyledSyncReportText: any;
