@@ -334,8 +334,6 @@ class Application extends BaseApplication {
 		newState = resourceEditWatcherReducer(newState, action);
 		newState = super.reducer(newState, action);
 
-		CommandService.instance().scheduleMapStateToProps(newState);
-
 		return newState;
 	}
 
@@ -514,7 +512,7 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		CommandService.instance().initialize(this.store(), keymapService);
+		CommandService.instance().initialize(this.store());
 
 		for (const command of commands) {
 			CommandService.instance().registerDeclaration(command.declaration);

@@ -11,7 +11,7 @@ interface TestCommand {
 
 function newService():CommandService {
 	const service = new CommandService();
-	service.initialize({}, null);
+	service.initialize({});
 	return service;
 }
 

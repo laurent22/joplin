@@ -94,13 +94,20 @@ export default class KeymapService extends BaseService {
 	private platform: string;
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
+	private lastSaveTime_:number;
 
 	constructor() {
 		super();
 
+		this.lastSaveTime_ = Date.now();
+
 		// By default, initialize for the current platform
 		// Manual initialization allows testing for other platforms
 		this.initialize();
+	}
+
+	get lastSaveTime():number {
+		return this.lastSaveTime_;
 	}
 
 	initialize(platform: string = shim.platformName()) {
@@ -143,6 +150,8 @@ export default class KeymapService extends BaseService {
 			// Only the customized keymap items should be saved to the disk
 			const customKeymapItems = this.getCustomKeymapItems();
 			await shim.fsDriver().writeFile(customKeymapPath, JSON.stringify(customKeymapItems, null, 2), 'utf-8');
+
+			this.lastSaveTime_ = Date.now();
 
 			// Refresh the menu items so that the changes are reflected
 			eventManager.emit('keymapChange');

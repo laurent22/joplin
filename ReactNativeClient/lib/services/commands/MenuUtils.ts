@@ -1,4 +1,5 @@
 import CommandService from '../CommandService';
+import KeymapService from '../KeymapService';
 import propsHaveChanged from './propsHaveChanged';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
@@ -8,6 +9,7 @@ interface MenuItem {
 	label: string,
 	click: Function,
 	role?: any,
+	accelerator?: string,
 }
 
 interface MenuItems {
@@ -63,10 +65,14 @@ export default class MenuUtils {
 		return this.service_;
 	}
 
+	private get keymapService():KeymapService {
+		return KeymapService.instance();
+	}
+
 	private commandToMenuItem(commandName:string, onClick:Function):MenuItem {
 		const command = this.service.commandByName(commandName);
 
-		const item:any = {
+		const item:MenuItem = {
 			id: command.declaration.name,
 			label: this.service.label(commandName),
 			click: () => onClick(command.declaration.name),
@@ -74,16 +80,22 @@ export default class MenuUtils {
 
 		if (command.declaration.role) item.role = command.declaration.role;
 
-		// TODO
-		// if (this.keymapService && this.keymapService.acceleratorExists(commandName)) {
-		// 	item.accelerator = this.keymapService.getAccelerator(commandName);
-		// }
+		if (this.keymapService && this.keymapService.acceleratorExists(commandName)) {
+			item.accelerator = this.keymapService.getAccelerator(commandName);
+		}
 
 		return item;
 	}
 
+	public commandToStatefulMenuItem(commandName:string, props:any = null):MenuItem {
+		const output = this.commandsToMenuItems([commandName], () => {
+			return this.service.execute(commandName, props ? props : {});
+		});
+		return output[commandName];
+	}
+
 	public commandsToMenuItems(commandNames:string[], onClick:Function):MenuItems {
-		const key:string = commandNames.join('_');
+		const key:string = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];
 
 		const output:MenuItems = {};
@@ -103,8 +115,6 @@ export default class MenuUtils {
 		for (const commandName of commandNames) {
 			const newProps = this.service.commandMapStateToProps(commandName, state);
 			if (newProps === null || propsHaveChanged(this.menuItemPropsCache_[commandName], newProps)) {
-				console.info('Has changed', commandName);
-
 				output[commandName] = newProps;
 				this.menuItemPropsCache_[commandName] = newProps;
 			} else {

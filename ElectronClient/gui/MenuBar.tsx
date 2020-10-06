@@ -96,6 +96,7 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 function useMenu(props:Props) {
 	const [menu, setMenu] = useState(null);
+	const [keymapLastChangeTime, setKeymapLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName:string) => {
 		CommandService.instance().execute(commandName, props.menuItemProps[commandName]);
@@ -146,8 +147,6 @@ function useMenu(props:Props) {
 	onImportModuleClickRef.current = onImportModuleClick;
 
 	useEffect(() => {
-		console.info('BUILD MENU');
-
 		const keymapService = KeymapService.instance();
 
 		const pluginCommandNames = props.pluginMenuItemInfos.map((viewInfo:ViewInfo) => viewInfo.view.commandName);
@@ -732,7 +731,7 @@ function useMenu(props:Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItemInfos]);
+	}, [props.routeName, props.pluginMenuItemInfos, keymapLastChangeTime]);
 
 	useEffect(() => {
 		for (const commandName in props.menuItemProps) {
@@ -772,6 +771,18 @@ function useMenu(props:Props) {
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
 	]);
+
+	useEffect(() => {
+		function onKeymapChange() {
+			setKeymapLastChangeTime(Date.now());
+		}
+
+		KeymapService.instance().on('keymapChange', onKeymapChange);
+
+		return () => {
+			KeymapService.instance().off('keymapChange', onKeymapChange);
+		};
+	}, []);
 
 	return menu;
 }

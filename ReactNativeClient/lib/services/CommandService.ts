@@ -1,4 +1,3 @@
-import KeymapService from './KeymapService';
 import eventManager from 'lib/eventManager';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
@@ -64,15 +63,6 @@ export interface Command {
 	runtime?: CommandRuntime,
 }
 
-// export interface ToolbarButtonInfo {
-// 	name: string,
-// 	tooltip: string,
-// 	iconName: string,
-// 	enabled: boolean,
-// 	onClick():void,
-// 	title: string,
-// }
-
 interface Commands {
 	[key:string]: Command;
 }
@@ -119,13 +109,9 @@ export default class CommandService extends BaseService {
 
 	private commands_:Commands = {};
 	private commandPreviousStates_:CommandStates = {};
-	private mapStateToPropsIID_:any = null;
 
-	private keymapService:KeymapService = null;
-
-	initialize(store:any, keymapService:KeymapService) {
+	initialize(store:any) {
 		utils.store = store;
-		this.keymapService = keymapService;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -134,74 +120,6 @@ export default class CommandService extends BaseService {
 
 	public off(eventName:string, callback:Function) {
 		eventManager.off(eventName, callback);
-	}
-
-	// private propsHaveChanged(previous:any, next:any) {
-	// 	if (!previous && next) return true;
-
-	// 	if (Object.keys(previous).length !== Object.keys(next).length) return true;
-
-	// 	for (const n in previous) {
-	// 		if (previous[n] !== next[n]) {
-	// 			return true;
-	// 		}
-	// 	}
-
-	// 	return false;
-	// }
-
-	scheduleMapStateToProps(state:any) {
-		if (this.mapStateToPropsIID_) shim.clearTimeout(this.mapStateToPropsIID_);
-
-		this.mapStateToPropsIID_ = shim.setTimeout(() => {
-			this.mapStateToProps(state);
-		}, 50);
-	}
-
-	private mapStateToProps(state:any) {
-		return state;
-
-		// const newState = state;
-
-		// const changedCommands:any = {};
-
-		// for (const name in this.commands_) {
-		// 	const command = this.commands_[name];
-
-		// 	if (!command.runtime) continue;
-
-		// 	if (!command.runtime.mapStateToProps) {
-		// 		command.runtime.props = {};
-		// 		continue;
-		// 	}
-
-		// 	const newProps = command.runtime.mapStateToProps(state);
-
-		// 	const haveChanged = this.propsHaveChanged(command.runtime.props, newProps);
-
-		// 	if (haveChanged) {
-		// 		const previousState = this.commandPreviousStates_[name];
-
-		// 		command.runtime.props = newProps;
-
-		// 		const newState:CommandState = {
-		// 			enabled: this.isEnabled(name),
-		// 			title: this.title(name),
-		// 		};
-
-		// 		if (!previousState || previousState.title !== newState.title || previousState.enabled !== newState.enabled) {
-		// 			changedCommands[name] = newState;
-		// 		}
-
-		// 		this.commandPreviousStates_[name] = newState;
-		// 	}
-		// }
-
-		// if (Object.keys(changedCommands).length) {
-		// 	eventManager.emit('commandsEnabledStateChange', { commands: changedCommands });
-		// }
-
-		// return newState;
 	}
 
 	public commandByName(name:string, options:CommandByNameOptions = null):Command {
@@ -326,46 +244,6 @@ export default class CommandService extends BaseService {
 	exists(commandName:string):boolean {
 		const command = this.commandByName(commandName, { mustExist: false });
 		return !!command;
-	}
-
-	// private extractExecuteArgs(command:Command, executeArgs:any = null) {
-	// 	if (executeArgs) return executeArgs;
-	// 	if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);
-	// 	if (command.runtime.props) return command.runtime.props;
-	// 	return {};
-	// }
-
-	commandToMenuItem(commandName:string, props:any = null) {
-		const command = this.commandByName(commandName);
-
-		const item:any = {
-			id: command.declaration.name,
-			label: this.label(commandName),
-			click: () => {
-				this.execute(commandName, props);// this.extractExecuteArgs(command, executeArgs));
-			},
-		};
-
-		if (command.declaration.role) item.role = command.declaration.role;
-		if (this.keymapService && this.keymapService.acceleratorExists(commandName)) {
-			item.accelerator = this.keymapService.getAccelerator(commandName);
-		}
-
-		return item;
-	}
-
-	commandsEnabledState(_previousState:any = null):any {
-		return {};
-		// const output:any = {};
-
-		// for (const name in this.commands_) {
-		// 	const enabled = this.isEnabled(name);
-		// 	if (!previousState || previousState[name] !== enabled) {
-		// 		output[name] = enabled;
-		// 	}
-		// }
-
-		// return output;
 	}
 
 }

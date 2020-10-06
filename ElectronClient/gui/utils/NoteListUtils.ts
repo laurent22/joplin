@@ -1,16 +1,17 @@
 import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { utils as pluginUtils, PluginStates } from 'lib/services/plugins/reducer';
+import CommandService from 'lib/services/CommandService';
+import eventManager from 'lib/eventManager';
+import InteropService from 'lib/services/interop/InteropService';
+import MenuUtils from 'lib/services/commands/MenuUtils';
 
 const BaseModel = require('lib/BaseModel');
+const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { _ } = require('lib/locale.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const eventManager = require('lib/eventManager').default;
-const InteropService = require('lib/services/interop/InteropService').default;
-const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Note = require('lib/models/Note');
-const CommandService = require('lib/services/CommandService').default;
 const { substrWithEllipsis } = require('lib/string-utils');
 
 interface ContextMenuProps {
@@ -24,6 +25,8 @@ export default class NoteListUtils {
 	static makeContextMenu(noteIds:string[], props:ContextMenuProps) {
 		const cmdService = CommandService.instance();
 
+		const menuUtils = new MenuUtils(cmdService);
+
 		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
 
 		let hasEncrypted = false;
@@ -35,11 +38,11 @@ export default class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(cmdService.commandToMenuItem('setTags', { noteIds }))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', { noteIds }))
 			);
 
 			menu.append(
-				new MenuItem(cmdService.commandToMenuItem('moveToFolder'))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder'))
 			);
 
 			menu.append(
@@ -58,11 +61,11 @@ export default class NoteListUtils {
 
 			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
 				menu.append(
-					new MenuItem(cmdService.commandToMenuItem('startExternalEditing', { noteId: noteIds[0] }))
+					new MenuItem(menuUtils.commandToStatefulMenuItem('startExternalEditing', { noteId: noteIds[0] }))
 				);
 			} else {
 				menu.append(
-					new MenuItem(cmdService.commandToMenuItem('stopExternalEditing', { noteId: noteIds[0] }))
+					new MenuItem(menuUtils.commandToStatefulMenuItem('stopExternalEditing', { noteId: noteIds[0] }))
 				);
 			}
 
@@ -132,7 +135,7 @@ export default class NoteListUtils {
 
 			menu.append(
 				new MenuItem(
-					cmdService.commandToMenuItem('showShareNoteDialog', { noteIds: noteIds.slice() })
+					menuUtils.commandToStatefulMenuItem('showShareNoteDialog', { noteIds: noteIds.slice() })
 				)
 			);
 
@@ -157,7 +160,7 @@ export default class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
-					cmdService.commandToMenuItem('exportPdf', { noteIds: noteIds })
+					menuUtils.commandToStatefulMenuItem('exportPdf', { noteIds: noteIds })
 				)
 			);
 
@@ -182,7 +185,7 @@ export default class NoteListUtils {
 			if (location !== MenuItemLocation.Context) continue;
 
 			menu.append(
-				new MenuItem(cmdService.commandToMenuItem(info.view.commandName))
+				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName))
 			);
 		}
 
