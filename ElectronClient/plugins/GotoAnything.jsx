@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 const CommandService = require('lib/services/CommandService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');

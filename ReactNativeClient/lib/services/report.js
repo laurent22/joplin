@@ -7,7 +7,7 @@ const BaseModel = require('lib/BaseModel.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const Resource = require('lib/models/Resource');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { toTitleCase } = require('lib/string-utils.js');
 
 class ReportService {

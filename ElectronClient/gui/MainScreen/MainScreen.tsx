@@ -14,6 +14,7 @@ import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from 'lib/services/plugins/WebviewController';
 import { stateUtils } from 'lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
+import { _ } from 'lib/locale';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -22,7 +23,6 @@ const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim').default;
 const { themeStyle } = require('lib/theme.js');
-const { _ } = require('lib/locale.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');

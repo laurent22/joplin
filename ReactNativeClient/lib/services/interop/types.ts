@@ -1,4 +1,4 @@
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export interface CustomImportContext {
 	sourcePath: string,

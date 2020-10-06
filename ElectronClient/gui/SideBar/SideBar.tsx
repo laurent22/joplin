@@ -7,6 +7,7 @@ import Synchronizer from 'lib/Synchronizer';
 import Setting from 'lib/models/Setting';
 import MenuUtils from 'lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
@@ -14,7 +15,6 @@ const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;

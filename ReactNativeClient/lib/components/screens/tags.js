@@ -5,7 +5,7 @@ const { connect } = require('react-redux');
 const Tag = require('lib/models/Tag.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class TagsScreenComponent extends BaseScreenComponent {

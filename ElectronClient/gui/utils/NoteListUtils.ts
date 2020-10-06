@@ -5,9 +5,9 @@ import eventManager from 'lib/eventManager';
 import InteropService from 'lib/services/interop/InteropService';
 import MenuUtils from 'lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
+import { _ } from 'lib/locale';
 
 const BaseModel = require('lib/BaseModel');
-const { _ } = require('lib/locale.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;

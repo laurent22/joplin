@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseItem = require('lib/models/BaseItem');

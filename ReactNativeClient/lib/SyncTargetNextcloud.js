@@ -2,7 +2,7 @@
 // thus all the calls to SyncTargetWebDAV to avoid duplicate code.
 
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const Setting = require('lib/models/Setting').default;
 const Synchronizer = require('lib/Synchronizer').default;
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');

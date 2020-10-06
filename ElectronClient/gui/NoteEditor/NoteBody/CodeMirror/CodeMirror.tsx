@@ -13,6 +13,7 @@ import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from 'lib/models/Setting';
+import { _ } from 'lib/locale';
 
 //  @ts-ignore
 const bridge = require('electron').remote.require('./bridge').default;
@@ -23,7 +24,6 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const markdownUtils = require('lib/markdownUtils');
-const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 const { themeStyle } = require('lib/theme');

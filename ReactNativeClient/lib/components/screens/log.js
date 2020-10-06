@@ -8,7 +8,7 @@ const { time } = require('lib/time-utils');
 const { themeStyle } = require('lib/components/global-style.js');
 const Logger = require('lib/Logger').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class LogScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

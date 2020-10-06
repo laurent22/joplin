@@ -4,7 +4,7 @@ const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, Sc
 const EncryptionService = require('lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');

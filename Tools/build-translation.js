@@ -19,7 +19,7 @@ const rnDir = `${rootDir}/ReactNativeClient`;
 const electronDir = `${rootDir}/ElectronClient`;
 
 const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
-const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
+const { countryDisplayName, countryCodeOnly } = require('lib/locale');
 
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);

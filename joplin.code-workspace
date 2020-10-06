@@ -683,7 +683,8 @@
 			"ReactNativeClient/lib/BaseApplication.js": true,
 			"ElectronClient/gui/MenuBar.js": true,
 			"ElectronClient/InteropServiceHelper.js": true,
-			"ReactNativeClient/lib/services/commands/MenuUtils.js": true
+			"ReactNativeClient/lib/services/commands/MenuUtils.js": true,
+			"ReactNativeClient/lib/locale.js": true
 		},
 		"spellright.language": [
 			"en"

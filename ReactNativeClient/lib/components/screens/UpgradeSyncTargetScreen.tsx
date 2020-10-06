@@ -1,11 +1,11 @@
 import * as React from 'react';
 import useSyncTargetUpgrade from 'lib/services/synchronizer/gui/useSyncTargetUpgrade';
+import { _ } from 'lib/locale';
 const { View, Text, ScrollView } = require('react-native');
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
 
 function UpgradeSyncTargetScreen(props:any) {
 	const upgradeResult = useSyncTargetUpgrade();

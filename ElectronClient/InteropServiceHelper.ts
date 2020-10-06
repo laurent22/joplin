@@ -3,7 +3,7 @@ import CommandService from 'lib/services/CommandService';
 import shim from 'lib/shim';
 import { ExportOptions, FileSystemItem, Module } from 'lib/services/interop/types';
 
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const bridge = require('electron').remote.require('./bridge').default;
 const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');

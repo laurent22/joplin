@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
 import shim from 'lib/shim';
 import InteropServiceHelper from '../../../InteropServiceHelper';
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
-const { _ } = require('lib/locale');
 const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration:CommandDeclaration = {

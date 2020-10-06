@@ -1,5 +1,5 @@
 import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;

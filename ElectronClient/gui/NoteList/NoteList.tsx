@@ -1,13 +1,13 @@
 import { AppState } from '../../app';
 import eventManager from 'lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
+import { _ } from 'lib/locale';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/theme');
 const BaseModel = require('lib/BaseModel');
-const { _ } = require('lib/locale.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting').default;

@@ -1,5 +1,5 @@
 import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const app = require('electron').remote.app;
 const { clipboard } = require('electron');
 

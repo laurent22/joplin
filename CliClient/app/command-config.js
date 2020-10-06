@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { _, setLocale } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale');
 const { app } = require('./app.js');
 const fs = require('fs-extra');
 const Setting = require('lib/models/Setting').default;

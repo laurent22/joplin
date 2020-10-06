@@ -9,10 +9,10 @@ import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from 'lib/theme';
 import { Size } from './ResizableLayout/ResizableLayout';
 import MenuBar from './MenuBar';
+import { _ } from 'lib/locale';
 
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
-const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim').default;
 const { ImportScreen } = require('./ImportScreen.min.js');

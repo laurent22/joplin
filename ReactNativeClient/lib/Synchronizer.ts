@@ -4,6 +4,7 @@ import Setting from 'lib/models/Setting';
 import shim from 'lib/shim';
 import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
 import eventManager from 'lib/eventManager';
+import { _ } from 'lib/locale';
 
 const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
@@ -15,7 +16,6 @@ const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
-const { _ } = require('lib/locale.js');
 const JoplinError = require('lib/JoplinError');
 const TaskQueue = require('lib/TaskQueue');
 const { Dirnames } = require('lib/services/synchronizer/utils/types');

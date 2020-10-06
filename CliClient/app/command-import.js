@@ -3,7 +3,7 @@ const InteropService = require('lib/services/interop/InteropService').default;
 const BaseModel = require('lib/BaseModel.js');
 const { cliUtils } = require('./cli-utils.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class Command extends BaseCommand {
 	usage() {

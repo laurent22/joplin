@@ -1,5 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'historyBackward',

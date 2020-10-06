@@ -1,5 +1,5 @@
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const DropboxApi = require('lib/DropboxApi');
 const Setting = require('lib/models/Setting').default;
 const { parameters } = require('lib/parameters.js');

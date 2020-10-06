@@ -24,6 +24,7 @@ import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from 'lib/eventManager';
 import { AppState } from '../../app';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
+import { _ } from 'lib/locale';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -33,7 +34,6 @@ const { time } = require('lib/time-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const usePrevious = require('lib/hooks/usePrevious').default;
 const Setting = require('lib/models/Setting').default;
-const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');

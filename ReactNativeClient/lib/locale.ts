@@ -1,6 +1,10 @@
 const { sprintf } = require('sprintf-js');
 
-const codeToLanguageE_ = {};
+interface StringToStringMap {
+	[key:string]: string,
+}
+
+const codeToLanguageE_:StringToStringMap = {};
 codeToLanguageE_['aa'] = 'Afar';
 codeToLanguageE_['ab'] = 'Abkhazian';
 codeToLanguageE_['af'] = 'Afrikaans';
@@ -144,7 +148,7 @@ codeToLanguageE_['za'] = 'Zhuang';
 codeToLanguageE_['zh'] = 'Chinese';
 codeToLanguageE_['zu'] = 'Zulu';
 
-const codeToLanguage_ = {};
+const codeToLanguage_:StringToStringMap = {};
 codeToLanguage_['an'] = 'Aragonés';
 codeToLanguage_['da'] = 'Dansk';
 codeToLanguage_['de'] = 'Deutsch';
@@ -172,17 +176,17 @@ codeToLanguage_['et'] = 'Eesti Keel';
 codeToLanguage_['vi'] = 'Tiếng Việt';
 codeToLanguage_['hu'] = 'Magyar';
 
-const codeToCountry_ = {};
+const codeToCountry_:StringToStringMap = {};
 codeToCountry_['BR'] = 'Brasil';
 codeToCountry_['CR'] = 'Costa Rica';
 codeToCountry_['CN'] = '中国';
 codeToCountry_['GB'] = 'UK';
 codeToCountry_['US'] = 'US';
 
-let supportedLocales_ = null;
-let localeStats_ = null;
+let supportedLocales_:any = null;
+let localeStats_:any = null;
 
-const loadedLocales_ = {};
+const loadedLocales_:any = {};
 
 const defaultLocale_ = 'en_GB';
 
@@ -197,7 +201,7 @@ function localeStats() {
 	return localeStats_;
 }
 
-function supportedLocales() {
+function supportedLocales():string[] {
 	if (!supportedLocales_) supportedLocales_ = require('../locales/index.js').locales;
 
 	const output = [];
@@ -208,11 +212,15 @@ function supportedLocales() {
 	return output;
 }
 
-function supportedLocalesToLanguages(options = null) {
+interface SupportedLocalesToLanguagesOptions {
+	includeStats?: boolean,
+}
+
+function supportedLocalesToLanguages(options:SupportedLocalesToLanguagesOptions = null) {
 	if (!options) options = {};
 	const stats = localeStats();
 	const locales = supportedLocales();
-	const output = {};
+	const output:StringToStringMap = {};
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 		output[locale] = countryDisplayName(locale);
@@ -225,7 +233,7 @@ function supportedLocalesToLanguages(options = null) {
 	return output;
 }
 
-function closestSupportedLocale(canonicalName, defaultToEnglish = true, locales = null) {
+function closestSupportedLocale(canonicalName:string, defaultToEnglish:boolean = true, locales:string[] = null) {
 	locales = locales === null ? supportedLocales() : locales;
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
@@ -240,31 +248,31 @@ function closestSupportedLocale(canonicalName, defaultToEnglish = true, locales 
 	return defaultToEnglish ? 'en_GB' : null;
 }
 
-function countryName(countryCode) {
+function countryName(countryCode:string) {
 	return codeToCountry_[countryCode] ? codeToCountry_[countryCode] : '';
 }
 
-function languageNameInEnglish(languageCode) {
+function languageNameInEnglish(languageCode:string) {
 	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
 }
 
-function languageName(languageCode, defaultToEnglish = true) {
+function languageName(languageCode:string, defaultToEnglish:boolean = true) {
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
 	if (defaultToEnglish) return languageNameInEnglish(languageCode);
 	return '';
 }
 
-function languageCodeOnly(canonicalName) {
+function languageCodeOnly(canonicalName:string) {
 	if (canonicalName.length < 2) return canonicalName;
 	return canonicalName.substr(0, 2);
 }
 
-function countryCodeOnly(canonicalName) {
+function countryCodeOnly(canonicalName:string) {
 	if (canonicalName.length <= 2) return '';
 	return canonicalName.substr(3);
 }
 
-function countryDisplayName(canonicalName) {
+function countryDisplayName(canonicalName:string) {
 	const languageCode = languageCodeOnly(canonicalName);
 	const countryCode = countryCodeOnly(canonicalName);
 
@@ -287,7 +295,7 @@ function countryDisplayName(canonicalName) {
 	return output;
 }
 
-function localeStrings(canonicalName) {
+function localeStrings(canonicalName:string) {
 	const locale = closestSupportedLocale(canonicalName);
 
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
@@ -297,7 +305,7 @@ function localeStrings(canonicalName) {
 	return loadedLocales_[locale];
 }
 
-function setLocale(canonicalName) {
+function setLocale(canonicalName:string) {
 	if (currentLocale_ == canonicalName) return;
 	currentLocale_ = closestSupportedLocale(canonicalName);
 }
@@ -306,7 +314,7 @@ function languageCode() {
 	return languageCodeOnly(currentLocale_);
 }
 
-function _(s, ...args) {
+function _(s:string, ...args:any[]) {
 	const strings = localeStrings(currentLocale_);
 	let result = strings[s];
 	if (result === '' || result === undefined) result = s;
@@ -317,9 +325,9 @@ function _(s, ...args) {
 	}
 }
 
-function _n(singular, plural, n, ...args) {
+function _n(singular:string, plural:string, n:number, ...args:any[]) {
 	if (n > 1) return _(plural, ...args);
 	return _(singular, ...args);
 }
 
-module.exports = { _, _n, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

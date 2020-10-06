@@ -1,4 +1,4 @@
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { netUtils } = require('lib/net-utils.js');
 const shim = require('lib/shim').default;
 

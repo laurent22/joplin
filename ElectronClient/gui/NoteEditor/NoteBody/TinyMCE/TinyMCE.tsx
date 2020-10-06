@@ -11,11 +11,11 @@ import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../..
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import { utils as pluginUtils } from 'lib/services/plugins/reducer';
+import { _, closestSupportedLocale } from 'lib/locale';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
-const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const shim = require('lib/shim').default;
 const Resource = require('lib/models/Resource');

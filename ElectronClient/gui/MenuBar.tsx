@@ -12,9 +12,9 @@ import Setting from 'lib/models/Setting';
 import versionInfo from 'lib/versionInfo';
 import { Module } from 'lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 const packageInfo = require('../packageInfo.js');
 const bridge = require('electron').remote.require('./bridge').default;

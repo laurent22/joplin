@@ -13,13 +13,13 @@ import Logger, { TargetType } from 'lib/Logger';
 import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
 import BaseApplication from 'lib/BaseApplication';
+import { _, setLocale } from 'lib/locale';
 
 require('app-module-path').addPath(__dirname);
 
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const MasterKey = require('lib/models/MasterKey');
 const Folder = require('lib/models/Folder');
-const { _, setLocale } = require('lib/locale.js');
 const fs = require('fs-extra');
 const Tag = require('lib/models/Tag.js');
 const { reg } = require('lib/registry.js');

@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 const CommandDone = require('./command-done.js');
 

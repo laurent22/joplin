@@ -1,5 +1,5 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const Folder = require('lib/models/Folder');
 const bridge = require('electron').remote.require('./bridge').default;
 

@@ -1,5 +1,5 @@
+import { _ } from 'lib/locale';
 const Setting = require('lib/models/Setting').default;
-const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 
 export default function versionInfo(packageInfo:any) {

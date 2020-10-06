@@ -10,7 +10,7 @@ const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class Resource extends BaseItem {
 	static tableName() {

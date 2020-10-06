@@ -1,8 +1,8 @@
+import { _ } from 'lib/locale';
 const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
 const InteropService_Exporter_Raw = require('lib/services/interop/InteropService_Exporter_Raw').default;
 const fs = require('fs-extra');
 const shim = require('lib/shim').default;
-const { _ } = require('lib/locale');
 
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 	async init(destPath:string) {

@@ -4,6 +4,7 @@ import shim from 'lib/shim';
 import BaseService from 'lib/services/BaseService';
 import reducer from 'lib/reducer';
 import KeychainServiceDriver from 'lib/services/keychain/KeychainServiceDriver.node';
+import { _, setLocale } from 'lib/locale';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('lib/reducer');
@@ -19,7 +20,6 @@ const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
@@ -51,7 +51,7 @@ const { setAutoFreeze } = require('immer');
 // ntpClient.dgram = require('dgram');
 
 export default class BaseApplication {
-	
+
 	private logger_:Logger;
 	private dbLogger_:Logger;
 	private eventEmitter_:any;

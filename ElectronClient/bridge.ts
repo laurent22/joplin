@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from 'lib/shim';
 
-const { _, setLocale } = require('lib/locale.js');
+import { _, setLocale } from 'lib/locale';
 const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
 

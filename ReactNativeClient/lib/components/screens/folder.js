@@ -8,7 +8,7 @@ const { ScreenHeader } = require('lib/components/screen-header.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { dialogs } = require('lib/dialogs.js');
 const { themeStyle } = require('lib/components/global-style.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class FolderScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

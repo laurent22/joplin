@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const Setting = require('lib/models/Setting').default;
 const Logger = require('lib/Logger').default;
 const shim = require('lib/shim').default;

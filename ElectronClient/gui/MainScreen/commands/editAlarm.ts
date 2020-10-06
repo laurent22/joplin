@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
 import eventManager from 'lib/eventManager';
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
 const BaseModel = require('lib/BaseModel');
-const { _ } = require('lib/locale');
 const { time } = require('lib/time-utils');
 
 export const declaration:CommandDeclaration = {

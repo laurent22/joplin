@@ -1,6 +1,6 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
 const Setting = require('lib/models/Setting').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');

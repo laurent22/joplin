@@ -1,8 +1,8 @@
 import { ButtonSpec } from 'lib/services/plugins/WebviewController';
 import * as React from 'react';
 import Button from '../../gui/Button/Button';
+import { _ } from 'lib/locale';
 const styled = require('styled-components').default;
-const { _ } = require('lib/locale');
 const { space } = require('styled-system');
 
 interface Props {
