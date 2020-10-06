@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CommandService | Joplin Plugin Documentation</title>
-	<meta name="description" content="Documentation for Joplin Plugin Documentation">
+	<title>CommandService | Joplin Plugin API Documentation</title>
+	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="sandbox.html" class="title">Joplin Plugin Documentation</a>
+					<a href="joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -69,7 +69,7 @@
         <h3>Hierarchy</h3>
         <ul class="tsd-hierarchy">
         <li>
-                <span class="tsd-signature-type">any</span>
+                <a href="baseservice.html" class="tsd-signature-type">BaseService</a>
 
                     <ul class="tsd-hierarchy">
         <li>
@@ -86,12 +86,17 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="commandservice.html#logger_" class="tsd-kind-icon">logger_</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#commandtomenuitem" class="tsd-kind-icon">command<wbr>ToMenu<wbr>Item</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#commandtotoolbarbutton" class="tsd-kind-icon">command<wbr>ToToolbar<wbr>Button</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#commandsenabledstate" class="tsd-kind-icon">commands<wbr>Enabled<wbr>State</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#commandbyname" class="tsd-kind-icon">command<wbr>ByName</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#commandmapstatetoprops" class="tsd-kind-icon">command<wbr>Map<wbr>State<wbr>ToProps</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#componentregistercommands" class="tsd-kind-icon">component<wbr>Register<wbr>Commands</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#componentunregistercommands" class="tsd-kind-icon">component<wbr>Unregister<wbr>Commands</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#execute" class="tsd-kind-icon">execute</a></li>
@@ -100,12 +105,13 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#initialize" class="tsd-kind-icon">initialize</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#isenabled" class="tsd-kind-icon">is<wbr>Enabled</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#label" class="tsd-kind-icon">label</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="commandservice.html#logger" class="tsd-kind-icon">logger</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#off" class="tsd-kind-icon">off</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#on" class="tsd-kind-icon">on</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#registerdeclaration" class="tsd-kind-icon">register<wbr>Declaration</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#registerruntime" class="tsd-kind-icon">register<wbr>Runtime</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#scheduleexecute" class="tsd-kind-icon">schedule<wbr>Execute</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#schedulemapstatetoprops" class="tsd-kind-icon">schedule<wbr>Map<wbr>State<wbr>ToProps</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="commandservice.html#setlogger" class="tsd-kind-icon">set<wbr>Logger</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#title" class="tsd-kind-icon">title</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="commandservice.html#unregisterruntime" class="tsd-kind-icon">unregister<wbr>Runtime</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="commandservice.html#instance" class="tsd-kind-icon">instance</a></li>
@@ -114,13 +120,51 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+					<a name="logger_" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> logger_</h3>
+					<div class="tsd-signature tsd-kind-icon">logger_<span class="tsd-signature-symbol">:</span> <a href="logger.html" class="tsd-signature-type">Logger</a><span class="tsd-signature-symbol"> = null</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseservice.html">BaseService</a>.<a href="baseservice.html#logger_">logger_</a></p>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="commandtomenuitem" class="tsd-anchor"></a>
-					<h3>command<wbr>ToMenu<wbr>Item</h3>
+					<a name="commandbyname" class="tsd-anchor"></a>
+					<h3>command<wbr>ByName</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">command<wbr>ToMenu<wbr>Item<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, executeArgs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">command<wbr>ByName<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/commandbynameoptions.html" class="tsd-signature-type">CommandByNameOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/command.html" class="tsd-signature-type">Command</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/commandbynameoptions.html" class="tsd-signature-type">CommandByNameOptions</a><span class="tsd-signature-symbol"> = null</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <a href="../interfaces/command.html" class="tsd-signature-type">Command</a></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="commandmapstatetoprops" class="tsd-anchor"></a>
+					<h3>command<wbr>Map<wbr>State<wbr>ToProps</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">command<wbr>Map<wbr>State<wbr>ToProps<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -132,58 +176,7 @@
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> executeArgs: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
-								</li>
-							</ul>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
-
-
--->
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="commandtotoolbarbutton" class="tsd-anchor"></a>
-					<h3>command<wbr>ToToolbar<wbr>Button</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">command<wbr>ToToolbar<wbr>Button<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, executeArgs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/toolbarbuttoninfo.html" class="tsd-signature-type">ToolbarButtonInfo</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> executeArgs: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
-								</li>
-							</ul>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <a href="../interfaces/toolbarbuttoninfo.html" class="tsd-signature-type">ToolbarButtonInfo</a></h4>
-
-
--->
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="commandsenabledstate" class="tsd-anchor"></a>
-					<h3>commands<wbr>Enabled<wbr>State</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">commands<wbr>Enabled<wbr>State<span class="tsd-signature-symbol">(</span>previousState<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> previousState: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
+									<h5>state: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -249,7 +242,7 @@
 					<a name="execute" class="tsd-anchor"></a>
 					<h3>execute</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -261,11 +254,11 @@
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> props: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -300,7 +293,7 @@
 					<a name="iconname" class="tsd-anchor"></a>
 					<h3>icon<wbr>Name</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">icon<wbr>Name<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">icon<wbr>Name<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, variant<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -310,6 +303,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> variant: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = null</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -324,7 +320,7 @@
 					<a name="initialize" class="tsd-anchor"></a>
 					<h3>initialize</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">initialize<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, keymapService<span class="tsd-signature-symbol">: </span><a href="keymapservice.html" class="tsd-signature-type">KeymapService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">initialize<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -334,9 +330,6 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>store: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>keymapService: <a href="keymapservice.html" class="tsd-signature-type">KeymapService</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -351,7 +344,7 @@
 					<a name="isenabled" class="tsd-anchor"></a>
 					<h3>is<wbr>Enabled</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Enabled<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Enabled<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -361,6 +354,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -392,6 +388,25 @@
 							</ul>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="logger" class="tsd-anchor"></a>
+					<h3>logger</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="logger.html" class="tsd-signature-type">Logger</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baseservice.html">BaseService</a>.<a href="baseservice.html#logger">logger</a></p>
+							</aside>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <a href="logger.html" class="tsd-signature-type">Logger</a></h4>
 
 
 -->
@@ -507,7 +522,7 @@
 					<a name="scheduleexecute" class="tsd-anchor"></a>
 					<h3>schedule<wbr>Execute</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">schedule<wbr>Execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">schedule<wbr>Execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -519,7 +534,7 @@
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
+									<h5>args: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -530,20 +545,21 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="schedulemapstatetoprops" class="tsd-anchor"></a>
-					<h3>schedule<wbr>Map<wbr>State<wbr>ToProps</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">schedule<wbr>Map<wbr>State<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="setlogger" class="tsd-anchor"></a>
+					<h3>set<wbr>Logger</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Logger<span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><a href="logger.html" class="tsd-signature-type">Logger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="baseservice.html">BaseService</a>.<a href="baseservice.html#setlogger">setLogger</a></p>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>state: <span class="tsd-signature-type">any</span></h5>
+									<h5>v: <a href="logger.html" class="tsd-signature-type">Logger</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -558,7 +574,7 @@
 					<a name="title" class="tsd-anchor"></a>
 					<h3>title</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -568,6 +584,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -639,14 +658,14 @@
 					<li class="current tsd-kind-class">
 						<a href="commandservice.html" class="tsd-kind-icon">CommandService</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="commandservice.html#commandtomenuitem" class="tsd-kind-icon">command<wbr>ToMenu<wbr>Item</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="commandservice.html#logger_" class="tsd-kind-icon">logger_</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="commandservice.html#commandtotoolbarbutton" class="tsd-kind-icon">command<wbr>ToToolbar<wbr>Button</a>
+								<a href="commandservice.html#commandbyname" class="tsd-kind-icon">command<wbr>ByName</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="commandservice.html#commandsenabledstate" class="tsd-kind-icon">commands<wbr>Enabled<wbr>State</a>
+								<a href="commandservice.html#commandmapstatetoprops" class="tsd-kind-icon">command<wbr>Map<wbr>State<wbr>ToProps</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="commandservice.html#componentregistercommands" class="tsd-kind-icon">component<wbr>Register<wbr>Commands</a>
@@ -672,6 +691,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="commandservice.html#label" class="tsd-kind-icon">label</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="commandservice.html#logger" class="tsd-kind-icon">logger</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="commandservice.html#off" class="tsd-kind-icon">off</a>
 							</li>
@@ -687,8 +709,8 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="commandservice.html#scheduleexecute" class="tsd-kind-icon">schedule<wbr>Execute</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="commandservice.html#schedulemapstatetoprops" class="tsd-kind-icon">schedule<wbr>Map<wbr>State<wbr>ToProps</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="commandservice.html#setlogger" class="tsd-kind-icon">set<wbr>Logger</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="commandservice.html#title" class="tsd-kind-icon">title</a>

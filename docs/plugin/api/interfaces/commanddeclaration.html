@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CommandDeclaration | Joplin Plugin Documentation</title>
-	<meta name="description" content="Documentation for Joplin Plugin Documentation">
+	<title>CommandDeclaration | Joplin Plugin API Documentation</title>
+	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../classes/sandbox.html" class="title">Joplin Plugin Documentation</a>
+					<a href="../classes/joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -84,15 +84,11 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#iconname" class="tsd-kind-icon">icon<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#label" class="tsd-kind-icon">label</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#parentlabel" class="tsd-kind-icon">parent<wbr>Label</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#role" class="tsd-kind-icon">role</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="commanddeclaration.html#label" class="tsd-kind-icon">label</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="commanddeclaration.html#parentlabel" class="tsd-kind-icon">parent<wbr>Label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddeclaration.html#tinymceiconname" class="tsd-kind-icon">tinymce<wbr>Icon<wbr>Name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,9 +104,23 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="label" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> label</h3>
+					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <a href="../globals.html#labelfunction" class="tsd-signature-type">LabelFunction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="parentlabel" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent<wbr>Label</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<wbr>Label<span class="tsd-signature-symbol">:</span> <a href="../globals.html#labelfunction" class="tsd-signature-type">LabelFunction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
 				</section>
@@ -121,44 +131,12 @@
 					<aside class="tsd-sources">
 					</aside>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="label" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> label</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-
-
--->
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="parentlabel" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent<wbr>Label</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">parent<wbr>Label<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-
-
--->
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="tinymceiconname" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tinymce<wbr>Icon<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">tinymce<wbr>Icon<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -183,16 +161,19 @@
 								<a href="commanddeclaration.html#iconname" class="tsd-kind-icon">icon<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="commanddeclaration.html#label" class="tsd-kind-icon">label</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="commanddeclaration.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="commanddeclaration.html#parentlabel" class="tsd-kind-icon">parent<wbr>Label</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="commanddeclaration.html#role" class="tsd-kind-icon">role</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="commanddeclaration.html#label" class="tsd-kind-icon">label</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="commanddeclaration.html#parentlabel" class="tsd-kind-icon">parent<wbr>Label</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="commanddeclaration.html#tinymceiconname" class="tsd-kind-icon">tinymce<wbr>Icon<wbr>Name</a>
 							</li>
 						</ul>
 					</li>

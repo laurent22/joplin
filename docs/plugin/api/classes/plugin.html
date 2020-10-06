@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Plugin | Joplin Plugin Documentation</title>
-	<meta name="description" content="Documentation for Joplin Plugin Documentation">
+	<title>Plugin | Joplin Plugin API Documentation</title>
+	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="sandbox.html" class="title">Joplin Plugin Documentation</a>
+					<a href="joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -83,26 +83,20 @@
 						<section class="tsd-index-section ">
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="plugin.html#basedir" class="tsd-kind-icon">base<wbr>Dir</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="plugin.html#controls" class="tsd-kind-icon">controls</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="plugin.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="plugin.html#manifest" class="tsd-kind-icon">manifest</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="plugin.html#scripttext" class="tsd-kind-icon">script<wbr>Text</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="plugin.html#basedir" class="tsd-kind-icon">base<wbr>Dir</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="plugin.html#enabled" class="tsd-kind-icon">enabled</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="plugin.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="plugin.html#manifest" class="tsd-kind-icon">manifest</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="plugin.html#scripttext" class="tsd-kind-icon">script<wbr>Text</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="plugin.html#addviewcontroller" class="tsd-kind-icon">add<wbr>View<wbr>Controller</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="plugin.html#viewcontrollerbyid" class="tsd-kind-icon">view<wbr>Controller<wbr>ById</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="plugin.html#viewcontroller" class="tsd-kind-icon">view<wbr>Controller</a></li>
 							</ul>
 						</section>
 					</div>
@@ -111,11 +105,11 @@
 			<section class="tsd-panel-group tsd-member-group ">
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="basedir" class="tsd-anchor"></a>
 					<h3>base<wbr>Dir</h3>
-					<ul class="tsd-signatures tsd-kind-property tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> baseDir<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -130,17 +124,28 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="controls" class="tsd-anchor"></a>
-					<h3>controls</h3>
-					<div class="tsd-signature tsd-kind-icon">controls<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-					</aside>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="enabled" class="tsd-anchor"></a>
+					<h3>enabled</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> enabled<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+
+
+-->
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="id" class="tsd-anchor"></a>
 					<h3>id</h3>
-					<ul class="tsd-signatures tsd-kind-property tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> id<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -155,10 +160,10 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="manifest" class="tsd-anchor"></a>
 					<h3>manifest</h3>
-					<ul class="tsd-signatures tsd-kind-property tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> manifest<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/pluginmanifest.html" class="tsd-signature-type">PluginManifest</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -173,10 +178,10 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="scripttext" class="tsd-anchor"></a>
 					<h3>script<wbr>Text</h3>
-					<ul class="tsd-signatures tsd-kind-property tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> scriptText<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -185,27 +190,6 @@
 							</aside>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-
-
--->
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="enabled" class="tsd-anchor"></a>
-					<h3>enabled</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> enabled<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 
 
 -->
@@ -240,10 +224,10 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="viewcontrollerbyid" class="tsd-anchor"></a>
-					<h3>view<wbr>Controller<wbr>ById</h3>
+					<a name="viewcontroller" class="tsd-anchor"></a>
+					<h3>view<wbr>Controller</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">view<wbr>Controller<wbr>ById<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="viewcontroller.html" class="tsd-signature-type">ViewController</a></li>
+						<li class="tsd-signature tsd-kind-icon">view<wbr>Controller<span class="tsd-signature-symbol">(</span>handle<span class="tsd-signature-symbol">: </span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="viewcontroller.html" class="tsd-signature-type">ViewController</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -252,7 +236,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>id: <span class="tsd-signature-type">string</span></h5>
+									<h5>handle: <a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -285,29 +269,26 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="plugin.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="plugin.html#basedir" class="tsd-kind-icon">base<wbr>Dir</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="plugin.html#controls" class="tsd-kind-icon">controls</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="plugin.html#id" class="tsd-kind-icon">id</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="plugin.html#manifest" class="tsd-kind-icon">manifest</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="plugin.html#scripttext" class="tsd-kind-icon">script<wbr>Text</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="plugin.html#enabled" class="tsd-kind-icon">enabled</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="plugin.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="plugin.html#manifest" class="tsd-kind-icon">manifest</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="plugin.html#scripttext" class="tsd-kind-icon">script<wbr>Text</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="plugin.html#addviewcontroller" class="tsd-kind-icon">add<wbr>View<wbr>Controller</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="plugin.html#viewcontrollerbyid" class="tsd-kind-icon">view<wbr>Controller<wbr>ById</a>
+								<a href="plugin.html#viewcontroller" class="tsd-kind-icon">view<wbr>Controller</a>
 							</li>
 						</ul>
 					</li>

@@ -9,7 +9,7 @@
     "build": "gulp build",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "copyLib": "gulp copyLib",
-    "buildPluginDoc": "typedoc --name 'Joplin Plugin Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib",
+    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib",
     "setupNewRelease": "node ./Tools/setupNewRelease",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },

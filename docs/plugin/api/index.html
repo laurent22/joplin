@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Joplin Plugin Documentation</title>
-	<meta name="description" content="Documentation for Joplin Plugin Documentation">
+	<title>Joplin Plugin API Documentation</title>
+	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="classes/sandbox.html" class="title">Joplin Plugin Documentation</a>
+					<a href="classes/joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
         </li>
 -->
 			</ul>
-			<h1><!--   -->Joplin Plugin Documentation</h1>
+			<h1><!--   -->joplin. .plugin .a.p.i .documentation</h1>
 		</div>
 	</div>
 </header>
@@ -81,6 +81,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="enums/containertype.html" class="tsd-kind-icon">ContainerType</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/contextkeyexprtype.html" class="tsd-kind-icon">ContextKeyExprType</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/dirnames.html" class="tsd-kind-icon">Dirnames</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -94,6 +100,9 @@
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/locktype.html" class="tsd-kind-icon">LockType</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/loglevel.html" class="tsd-kind-icon">LogLevel</a>
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
@@ -114,10 +123,28 @@
 						<a href="enums/requirement.html" class="tsd-kind-icon">Requirement</a>
 					</li>
 					<li class=" tsd-kind-enum">
+						<a href="enums/settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/targettype.html" class="tsd-kind-icon">TargetType</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/themeappearance.html" class="tsd-kind-icon">ThemeAppearance</a>
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/alarm.html" class="tsd-kind-icon">Alarm</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/alarmservice.html" class="tsd-kind-icon">AlarmService</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/alarmservicedriver.html" class="tsd-kind-icon">AlarmServiceDriver</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/alarmservicedrivernode.html" class="tsd-kind-icon">AlarmServiceDriverNode</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/apierror.html" class="tsd-kind-icon">ApiError</a>
@@ -126,7 +153,58 @@
 						<a href="classes/asyncactionqueue.html" class="tsd-kind-icon">AsyncActionQueue</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/baseapplication.html" class="tsd-kind-icon">BaseApplication</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/basepluginrunner.html" class="tsd-kind-icon">BasePluginRunner</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/baseservice.html" class="tsd-kind-icon">BaseService</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/booleanexpression.html" class="tsd-kind-icon">BooleanExpression</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/commandservice.html" class="tsd-kind-icon">CommandService</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyandexpr.html" class="tsd-kind-icon">ContextKeyAndExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeydefinedexpr.html" class="tsd-kind-icon">ContextKeyDefinedExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyequalsexpr.html" class="tsd-kind-icon">ContextKeyEqualsExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyexpr.html" class="tsd-kind-icon">ContextKeyExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyfalseexpr.html" class="tsd-kind-icon">ContextKeyFalseExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyinexpr.html" class="tsd-kind-icon">ContextKeyInExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeynotequalsexpr.html" class="tsd-kind-icon">ContextKeyNotEqualsExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeynotexpr.html" class="tsd-kind-icon">ContextKeyNotExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeynotinexpr.html" class="tsd-kind-icon">ContextKeyNotInExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeynotregexexpr.html" class="tsd-kind-icon">ContextKeyNotRegexExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyorexpr.html" class="tsd-kind-icon">ContextKeyOrExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeyregexexpr.html" class="tsd-kind-icon">ContextKeyRegexExpr</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contextkeytrueexpr.html" class="tsd-kind-icon">ContextKeyTrueExpr</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/errorbadrequest.html" class="tsd-kind-icon">ErrorBadRequest</a>
@@ -144,6 +222,9 @@
 						<a href="classes/eventmanager.html" class="tsd-kind-icon">EventManager</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/global.html" class="tsd-kind-icon">Global</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/interopservice.html" class="tsd-kind-icon">InteropService</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -153,13 +234,82 @@
 						<a href="classes/interopservice_exporter_custom.html" class="tsd-kind-icon">InteropService_Exporter_Custom</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_exporter_html.html" class="tsd-kind-icon">InteropService_Exporter_Html</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_exporter_jex.html" class="tsd-kind-icon">InteropService_Exporter_Jex</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_exporter_md.html" class="tsd-kind-icon">InteropService_Exporter_Md</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_exporter_raw.html" class="tsd-kind-icon">InteropService_Exporter_Raw</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/interopservice_importer_base.html" class="tsd-kind-icon">InteropService_Importer_Base</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/interopservice_importer_custom.html" class="tsd-kind-icon">InteropService_Importer_Custom</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/joplinserverapi.html" class="tsd-kind-icon">JoplinServerApi</a>
+						<a href="classes/interopservice_importer_enextohtml.html" class="tsd-kind-icon">InteropService_Importer_EnexToHtml</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_importer_enextomd.html" class="tsd-kind-icon">InteropService_Importer_EnexToMd</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_importer_jex.html" class="tsd-kind-icon">InteropService_Importer_Jex</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_importer_md.html" class="tsd-kind-icon">InteropService_Importer_Md</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/interopservice_importer_raw.html" class="tsd-kind-icon">InteropService_Importer_Raw</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplin.html" class="tsd-kind-icon">joplin</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinserverapi.html" class="tsd-kind-icon">joplin.server.api</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinutils.html" class="tsd-kind-icon">joplin.utils</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinviews.html" class="tsd-kind-icon">joplin.views</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/keychainservice.html" class="tsd-kind-icon">KeychainService</a>
@@ -177,7 +327,13 @@
 						<a href="classes/lockhandler.html" class="tsd-kind-icon">LockHandler</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/logger.html" class="tsd-kind-icon">Logger</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/menuitemcontroller.html" class="tsd-kind-icon">MenuItemController</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/menuutils.html" class="tsd-kind-icon">MenuUtils</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/migrationhandler.html" class="tsd-kind-icon">MigrationHandler</a>
@@ -188,41 +344,23 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/pluginservice.html" class="tsd-kind-icon">PluginService</a>
 					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/rawcontextkey.html" class="tsd-kind-icon">RawContextKey</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/resourceeditwatcher.html" class="tsd-kind-icon">ResourceEditWatcher</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/sandbox.html" class="tsd-kind-icon">Global</a>
+						<a href="classes/setting.html" class="tsd-kind-icon">Setting</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplin.html" class="tsd-kind-icon">joplin</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinapi.html" class="tsd-kind-icon">joplin.api</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplincommands.html" class="tsd-kind-icon">joplin.commands</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplininterop.html" class="tsd-kind-icon">joplin.interop</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinutils.html" class="tsd-kind-icon">joplin.utils</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinviews.html" class="tsd-kind-icon">joplin.views</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/sandboxjoplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
+						<a href="classes/synchronizer.html" class="tsd-kind-icon">Synchronizer</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/toolbarbuttoncontroller.html" class="tsd-kind-icon">ToolbarButtonController</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/toolbarbuttonutils.html" class="tsd-kind-icon">ToolbarButtonUtils</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/undoqueue.html" class="tsd-kind-icon">UndoQueue</a>
@@ -235,6 +373,15 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/webviewcontroller.html" class="tsd-kind-icon">WebviewController</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/cacheitem.html" class="tsd-kind-icon">CacheItem</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/closeresponse.html" class="tsd-kind-icon">CloseResponse</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/command.html" class="tsd-kind-icon">Command</a>
@@ -267,16 +414,52 @@
 						<a href="interfaces/customimportcontext.html" class="tsd-kind-icon">CustomImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/eventhandlers.html" class="tsd-kind-icon">EventHandlers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontext.html" class="tsd-kind-icon">IContext</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/icontextkey.html" class="tsd-kind-icon">IContextKey</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontextkeychangeevent.html" class="tsd-kind-icon">IContextKeyChangeEvent</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontextkeyexprmapper.html" class="tsd-kind-icon">IContextKeyExprMapper</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontextkeyexpression.html" class="tsd-kind-icon">IContextKeyExpression</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontextkeyservice.html" class="tsd-kind-icon">IContextKeyService</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icontextkeyservicetarget.html" class="tsd-kind-icon">IContextKeyServiceTarget</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/ireadableset.html" class="tsd-kind-icon">IReadableSet</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/importexportresult.html" class="tsd-kind-icon">ImportExportResult</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/importoptions.html" class="tsd-kind-icon">ImportOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/joplinserverapioptions.html" class="tsd-kind-icon">JoplinServerApiOptions</a>
+						<a href="interfaces/joplinserverapioptions.html" class="tsd-kind-icon">joplin.server.api.options</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/keymap.html" class="tsd-kind-icon">Keymap</a>
@@ -285,13 +468,37 @@
 						<a href="interfaces/keymapitem.html" class="tsd-kind-icon">KeymapItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/keysoptions.html" class="tsd-kind-icon">KeysOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/lock.html" class="tsd-kind-icon">Lock</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/lockhandleroptions.html" class="tsd-kind-icon">LockHandlerOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menuitemcache.html" class="tsd-kind-icon">MenuItemCache</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menuitemprops.html" class="tsd-kind-icon">MenuItemProps</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menuitempropscache.html" class="tsd-kind-icon">MenuItemPropsCache</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menuitems.html" class="tsd-kind-icon">MenuItems</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/module.html" class="tsd-kind-icon">Module</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/notification.html" class="tsd-kind-icon">Notification</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/options.html" class="tsd-kind-icon">Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/pluginmanifest.html" class="tsd-kind-icon">PluginManifest</a>
@@ -330,10 +537,19 @@
 						<a href="interfaces/refreshtimers.html" class="tsd-kind-icon">RefreshTimers</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/sandboxcontext.html" class="tsd-kind-icon">context</a>
+						<a href="interfaces/remoteitem.html" class="tsd-kind-icon">RemoteItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/sandboxcontextruntime.html" class="tsd-kind-icon">context.runtime</a>
+						<a href="interfaces/settingitem.html" class="tsd-kind-icon">SettingItem</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/settingitems.html" class="tsd-kind-icon">SettingItems</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/settingsections.html" class="tsd-kind-icon">SettingSections</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/shareddata.html" class="tsd-kind-icon">SharedData</a>
@@ -342,16 +558,43 @@
 						<a href="interfaces/state.html" class="tsd-kind-icon">State</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/stateclipperserver.html" class="tsd-kind-icon">StateClipperServer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/statedecryptionworker.html" class="tsd-kind-icon">StateDecryptionWorker</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/statelastselectednotesids.html" class="tsd-kind-icon">StateLastSelectedNotesIds</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/stateresourcefetcher.html" class="tsd-kind-icon">StateResourceFetcher</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/stringtostringmap.html" class="tsd-kind-icon">StringToStringMap</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/supportedlocalestolanguagesoptions.html" class="tsd-kind-icon">SupportedLocalesToLanguagesOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/synctargetinfo.html" class="tsd-kind-icon">SyncTargetInfo</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/synctargetupgraderesult.html" class="tsd-kind-icon">SyncTargetUpgradeResult</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/target.html" class="tsd-kind-icon">Target</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/term.html" class="tsd-kind-icon">Term</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/theme.html" class="tsd-kind-icon">Theme</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/toolbarbuttoncache.html" class="tsd-kind-icon">ToolbarButtonCache</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/toolbarbuttoncacheitem.html" class="tsd-kind-icon">ToolbarButtonCacheItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/toolbarbuttoninfo.html" class="tsd-kind-icon">ToolbarButtonInfo</a>
@@ -372,10 +615,28 @@
 						<a href="interfaces/watcheditems.html" class="tsd-kind-icon">WatchedItems</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#contextkeyexpression" class="tsd-kind-icon">ContextKeyExpression</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#eventhandler" class="tsd-kind-icon">EventHandler</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#labelfunction" class="tsd-kind-icon">LabelFunction</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#rationale" class="tsd-kind-icon">rationale</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#upgradesynctargetscreen" class="tsd-kind-icon">UpgradeSyncTargetScreen</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_" class="tsd-kind-icon">_</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_n" class="tsd-kind-icon">_n</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#addcontextassets" class="tsd-kind-icon">addContextAssets</a>
@@ -387,19 +648,52 @@
 						<a href="globals.html#addmissingproperties" class="tsd-kind-icon">addMissingProperties</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#arrayhasencrypteditems" class="tsd-kind-icon">arrayHasEncryptedItems</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#biconditionalfilter" class="tsd-kind-icon">biConditionalFilter</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#buildstyle" class="tsd-kind-icon">buildStyle</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#cacheenabledoutput" class="tsd-kind-icon">cacheEnabledOutput</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#changeselectedfolder" class="tsd-kind-icon">changeSelectedFolder</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#changeselectednotes" class="tsd-kind-icon">changeSelectedNotes</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#closestsupportedlocale" class="tsd-kind-icon">closestSupportedLocale</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#cmp" class="tsd-kind-icon">cmp</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#completedfilter" class="tsd-kind-icon">completedFilter</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#countrycodeonly" class="tsd-kind-icon">countryCodeOnly</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#countrydisplayname" class="tsd-kind-icon">countryDisplayName</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#countryname" class="tsd-kind-icon">countryName</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#createeventhandlers" class="tsd-kind-icon">createEventHandlers</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#createprefixtokens" class="tsd-kind-icon">createPrefixTokens</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#createsuffixtokens" class="tsd-kind-icon">createSuffixTokens</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#createviewhandle" class="tsd-kind-icon">createViewHandle</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#datefilter" class="tsd-kind-icon">dateFilter</a>
@@ -411,16 +705,31 @@
 						<a href="globals.html#defaultimportexportmodule" class="tsd-kind-icon">defaultImportExportModule</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#defaultlocale" class="tsd-kind-icon">defaultLocale</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#defaultnotesparenttype" class="tsd-kind-icon">defaultNotesParentType</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#executesandboxcall" class="tsd-kind-icon">executeSandboxCall</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#filterbytablename" class="tsd-kind-icon">filterByTableName</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#filterparser" class="tsd-kind-icon">filterParser</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#foldersetcollapsed" class="tsd-kind-icon">folderSetCollapsed</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#genericfilter" class="tsd-kind-icon">genericFilter</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getconnective" class="tsd-kind-icon">getConnective</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getcontextfromhistory" class="tsd-kind-icon">getContextFromHistory</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getdefaultrelation" class="tsd-kind-icon">getDefaultRelation</a>
@@ -432,19 +741,49 @@
 						<a href="globals.html#getterms" class="tsd-kind-icon">getTerms</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#handlehistory" class="tsd-kind-icon">handleHistory</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#handleitemdelete" class="tsd-kind-icon">handleItemDelete</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#installrule" class="tsd-kind-icon">installRule</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#loadkeychainserviceandsettings" class="tsd-kind-icon">loadKeychainServiceAndSettings</a>
+						<a href="globals.html#isfalsyorwhitespace" class="tsd-kind-icon">isFalsyOrWhitespace</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#languagecode" class="tsd-kind-icon">languageCode</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#languagecodeonly" class="tsd-kind-icon">languageCodeOnly</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#languagename" class="tsd-kind-icon">languageName</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#languagenameinenglish" class="tsd-kind-icon">languageNameInEnglish</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#localestats" class="tsd-kind-icon">localeStats</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#localestrings" class="tsd-kind-icon">localeStrings</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#locationfilter" class="tsd-kind-icon">locationFilter</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#makepluginid" class="tsd-kind-icon">makePluginId</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#maketerm" class="tsd-kind-icon">makeTerm</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#manifestfromobject" class="tsd-kind-icon">manifestFromObject</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#mapeventhandlerstoids" class="tsd-kind-icon">mapEventHandlersToIds</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#modulefulllabel" class="tsd-kind-icon">moduleFullLabel</a>
@@ -462,6 +801,9 @@
 						<a href="globals.html#populatedatabase" class="tsd-kind-icon">populateDatabase</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#propshavechanged" class="tsd-kind-icon">propsHaveChanged</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#querybuilder" class="tsd-kind-icon">queryBuilder</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -474,6 +816,18 @@
 						<a href="globals.html#randomindex" class="tsd-kind-icon">randomIndex</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#recordlastselectednoteids" class="tsd-kind-icon">recordLastSelectedNoteIds</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#reducer" class="tsd-kind-icon">reducer</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#removeadjacentduplicates" class="tsd-kind-icon">removeAdjacentDuplicates</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#removeitemfromarray" class="tsd-kind-icon">removeItemFromArray</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#requirewhitelist" class="tsd-kind-icon">requireWhiteList</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -481,6 +835,12 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#runtime" class="tsd-kind-icon">runtime</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#sandboxproxy" class="tsd-kind-icon">sandboxProxy</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#setlocale" class="tsd-kind-icon">setLocale</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#setlogger" class="tsd-kind-icon">setLogger</a>
@@ -492,7 +852,16 @@
 						<a href="globals.html#sourceurlfilter" class="tsd-kind-icon">sourceUrlFilter</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#statehasencrypteditems" class="tsd-kind-icon">stateHasEncryptedItems</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#style" class="tsd-kind-icon">style</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#supportedlocales" class="tsd-kind-icon">supportedLocales</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#supportedlocalestolanguages" class="tsd-kind-icon">supportedLocalesToLanguages</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#tagfilter" class="tsd-kind-icon">tagFilter</a>
@@ -508,6 +877,12 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#typefilter" class="tsd-kind-icon">typeFilter</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#updateoneitem" class="tsd-kind-icon">updateOneItem</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#updateselectednotesfromexistingnotes" class="tsd-kind-icon">updateSelectedNotesFromExistingNotes</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#useeffectdebugger" class="tsd-kind-icon">useEffectDebugger</a>
@@ -546,7 +921,13 @@
 						<a href="globals.html#modifiersregexp" class="tsd-kind-icon">modifiersRegExp</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#separatoritem" class="tsd-kind-icon">separatorItem</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#server" class="tsd-kind-icon">server</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#shim" class="tsd-kind-icon">shim</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#theme" class="tsd-kind-icon">theme</a>
