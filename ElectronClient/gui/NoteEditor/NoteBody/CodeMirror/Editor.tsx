@@ -25,7 +25,7 @@ import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
 
-import eventManager from 'lib/eventManager';
+// import eventManager from 'lib/eventManager';
 
 const { reg } = require('lib/registry.js');
 
@@ -147,7 +147,8 @@ function Editor(props: EditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
+		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
+		const userOptions = {};
 
 		const cmOptions = Object.assign({}, {
 			value: props.value,

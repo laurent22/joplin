@@ -19,7 +19,7 @@ const rules = {
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 
-const eventManager = require('lib/eventManager').default;
+// const eventManager = require('lib/eventManager').default;
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const nodeSlug = require('slug');
@@ -304,10 +304,10 @@ class MdToHtml {
 			}
 		}
 
-		const extraPlugins = eventManager.filterEmit('mdToHtmlPlugins', {});
-		for (const key in extraPlugins) {
-			markdownIt.use(extraPlugins[key].module, extraPlugins[key].options);
-		}
+		// const extraPlugins = eventManager.filterEmit('mdToHtmlPlugins', {});
+		// for (const key in extraPlugins) {
+		// 	markdownIt.use(extraPlugins[key].module, extraPlugins[key].options);
+		// }
 
 		setupLinkify(markdownIt);
 
