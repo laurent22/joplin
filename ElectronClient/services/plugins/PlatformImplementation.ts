@@ -1,4 +1,4 @@
-import { EditorCommand } from 'lib/services/plugins/api/JoplinWorkspace';
+import { EditorCommand } from 'lib/services/plugins/api/types';
 
 interface JoplinWorkspace {
 	execEditorCommand(command:EditorCommand):Promise<string>

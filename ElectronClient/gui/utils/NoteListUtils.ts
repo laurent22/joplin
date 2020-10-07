@@ -5,7 +5,7 @@ import InteropService from 'lib/services/interop/InteropService';
 import MenuUtils from 'lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from 'lib/locale';
-import { MenuItemLocation } from 'lib/services/plugins/api/JoplinViewsMenuItems';
+import { MenuItemLocation } from 'lib/services/plugins/api/types';
 
 const BaseModel = require('lib/BaseModel');
 const bridge = require('electron').remote.require('./bridge').default;

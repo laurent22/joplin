@@ -1,3 +1,6 @@
+import joplin from 'api';
+import { ToolbarButtonLocation } from 'api/types';
+
 function allEqual(input:string, char:string) {
 	return input.split('').every(c => c === char);
 }
@@ -45,6 +48,6 @@ joplin.plugins.register({
 			},
 		});
 		
-		joplin.views.toolbarButtons.create('prettyMarkdownTable', 'editorToolbar');
+		joplin.views.toolbarButtons.create('prettyMarkdownTable', ToolbarButtonLocation.EditorToolbar);
 	},
 });

@@ -1,4 +1,4 @@
-import { MenuItemLocation } from './api/JoplinViewsMenuItems';
+import { MenuItemLocation } from './api/types';
 import ViewController from './ViewController';
 
 export default class MenuItemController extends ViewController {

@@ -1,3 +1,6 @@
+import joplin from 'api';
+import { FileSystemItem } from 'api/types';
+
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -15,7 +18,7 @@ joplin.plugins.register({
 		await joplin.interop.registerExportModule({
 			description: 'JSON Export Directory',
 			format: 'json',
-			target: 'directory',
+			target: FileSystemItem.Directory,
 			isNoteArchive: false,
 			
 			onInit: async (context:any) => {
@@ -34,13 +37,13 @@ joplin.plugins.register({
 				await fs.copy(filePath, destPath);
 			},
 
-			onClose: () => {},
+			onClose: async (_context:any) => {},
 		});
 
 		await joplin.interop.registerImportModule({
 			description: 'JSON Export Directory',
 			format: 'json',
-			sources: ['directory'],
+			sources: [FileSystemItem.Directory],
 			isNoteArchive: false,
 	
 			onExec: async (context:any) => {

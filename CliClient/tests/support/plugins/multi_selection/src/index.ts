@@ -1,3 +1,6 @@
+import joplin from 'api';
+import { MenuItemLocation } from 'api/types';
+
 joplin.plugins.register({
 	onStart: async function() {
 		joplin.commands.register({
@@ -30,6 +33,6 @@ joplin.plugins.register({
 			},
 		});
 
-		joplin.views.menuItems.create('concatSelectedNotes', 'context');
+		joplin.views.menuItems.create('concatSelectedNotes', MenuItemLocation.Context);
 	},
 });

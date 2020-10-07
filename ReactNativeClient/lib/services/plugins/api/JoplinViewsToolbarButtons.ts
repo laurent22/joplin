@@ -1,11 +1,7 @@
+import { ToolbarButtonLocation } from './types';
 import Plugin from '../Plugin';
 import ToolbarButtonController from '../ToolbarButtonController';
 import createViewHandle from '../utils/createViewHandle';
-
-export enum ToolbarButtonLocation {
-	NoteToolbar = 'noteToolbar',
-	EditorToolbar = 'editorToolbar',
-}
 
 export default class JoplinViewsToolbarButtons {
 

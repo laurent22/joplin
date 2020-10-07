@@ -1,3 +1,6 @@
+import joplin from 'api';
+import { ToolbarButtonLocation } from 'api/types';
+
 joplin.plugins.register({
 	onStart: async function() {
 		await joplin.settings.registerSection('myCustomSection', {
@@ -34,7 +37,7 @@ joplin.plugins.register({
 			},
 		});
 
-		await joplin.views.toolbarButtons.create('incValue', 'noteToolbar');
-		await joplin.views.toolbarButtons.create('checkValue', 'noteToolbar');
+		await joplin.views.toolbarButtons.create('incValue', ToolbarButtonLocation.NoteToolbar);
+		await joplin.views.toolbarButtons.create('checkValue', ToolbarButtonLocation.NoteToolbar);
 	},
 });

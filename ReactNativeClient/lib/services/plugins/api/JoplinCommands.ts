@@ -1,13 +1,5 @@
 import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
-
-interface Command {
-	name: string
-	label: string
-	iconName?: string,
-	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
-}
+import { Command } from './types';
 
 /**
  * This class allows executing or registering new Joplin commands. Commands can be executed or associated with

@@ -1,8 +1,0 @@
-{
-	"manifest_version": 1,
-	"name": "Markdown Plugin Demo",
-	"description": "Demonstrate how to install a new Markdown plugin",
-	"version": "1.0.0",
-	"author": "Laurent Cozic",
-	"homepage_url": "https://joplinapp.org"
-}

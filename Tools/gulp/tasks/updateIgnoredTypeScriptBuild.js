@@ -16,6 +16,8 @@ module.exports = {
 				'**/Modules/TinyMCE/JoplinLists/**',
 				'**/Modules/TinyMCE/IconPack/**',
 				'**/CliClient/tests-build/support/**',
+				'**/CliClient/tests/support/plugins/**',
+				'**/plugin_types/**',
 			],
 		}).map(f => f.substr(rootDir.length + 1));
 

@@ -1,4 +1,4 @@
-import { ToolbarButtonLocation } from './api/JoplinViewsToolbarButtons';
+import { ToolbarButtonLocation } from './api/types';
 import ViewController from './ViewController';
 
 export default class ToolbarButtonController extends ViewController {

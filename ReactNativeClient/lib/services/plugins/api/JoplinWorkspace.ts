@@ -1,14 +1,10 @@
 import eventManager from 'lib/eventManager';
+import { EditorCommand } from './types';
 
 /**
  * @ignore
  */
 const Note = require('lib/models/Note');
-
-export interface EditorCommand {
-	name: string;
-	value?: any;
-}
 
 export default class JoplinWorkspace {
 	// TODO: unregister events when plugin is closed or disabled

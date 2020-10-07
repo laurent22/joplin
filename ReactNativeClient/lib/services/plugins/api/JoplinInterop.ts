@@ -1,29 +1,6 @@
 import InteropService from 'lib/services/interop/InteropService';
-import { FileSystemItem, ImportModuleOutputFormat, Module, ModuleType } from 'lib/services/interop/types';
-
-interface ExportModule {
-	format: string,
-	description: string,
-	target: FileSystemItem,
-	isNoteArchive: boolean,
-	fileExtensions?: string[],
-
-	onInit(context:any): Promise<void>;
-	onProcessItem(context:any, itemType:number, item:any):Promise<void>;
-	onProcessResource(context:any, resource:any, filePath:string):Promise<void>;
-	onClose(context:any):Promise<void>;
-}
-
-interface ImportModule {
-	format: string,
-	description: string,
-	isNoteArchive: boolean,
-	sources: FileSystemItem[],
-	fileExtensions?: string[],
-	outputFormat?: ImportModuleOutputFormat,
-
-	onExec(context:any): Promise<void>;
-}
+import { Module, ModuleType } from 'lib/services/interop/types';
+import { ExportModule, ImportModule } from './types';
 
 export default class JoplinInterop {
 

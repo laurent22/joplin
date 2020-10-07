@@ -2,7 +2,9 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+	mode: 'production',
 	entry: './src/index.ts',
+	target: 'node',
 	module: {
 		rules: [
 			{
@@ -13,7 +15,14 @@ module.exports = {
 		],
 	},
 	resolve: {
+		alias: {
+			api: path.resolve(__dirname, 'api')
+		},
 		extensions: [ '.tsx', '.ts', '.js' ],
+	},
+	output: {
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'dist'),
 	},
 	plugins: [
 		new CopyPlugin({
@@ -32,8 +41,4 @@ module.exports = {
 			],
 		}),
 	],
-	output: {
-		filename: 'index.js',
-		path: path.resolve(__dirname, 'dist'),
-	},
 };

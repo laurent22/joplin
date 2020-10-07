@@ -1,9 +1,6 @@
 import Plugin from '../Plugin';
 import Logger from 'lib/Logger';
-
-interface Script {
-	onStart?(event:any):Promise<void>,
-}
+import { Script } from './types';
 
 /**
  * This class provides access to plugin-related features.

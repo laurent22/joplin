@@ -4,8 +4,6 @@ import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 
-export type ViewHandle = string;
-
 export default class JoplinViews {
 
 	private store: any;

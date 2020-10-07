@@ -1,3 +1,4 @@
+import joplin from 'api';
 const leftPad = require('left-pad');
 
 joplin.plugins.register({

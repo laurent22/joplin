@@ -1,7 +1,7 @@
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController from '../WebviewController';
-import { ViewHandle } from './JoplinViews';
+import { ViewHandle } from './types';
 
 export default class JoplinViewsPanels {
 

@@ -53,6 +53,7 @@ Tools/commit_hook.txt
 ReactNativeClient/lib/sql-extensions/spellfix.so
 ReactNativeClient/lib/sql-extensions/spellfix.dylib
 CliClient/build/
+plugin_types/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
@@ -62,26 +63,6 @@ CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services/plugins/sandboxProxy.js
-CliClient/tests/support/plugins/dialog/global.d.js
-CliClient/tests/support/plugins/dialog/src/index.js
-CliClient/tests/support/plugins/events/global.d.js
-CliClient/tests/support/plugins/events/src/index.js
-CliClient/tests/support/plugins/json_export/global.d.js
-CliClient/tests/support/plugins/json_export/src/index.js
-CliClient/tests/support/plugins/markdown_plugin/global.d.js
-CliClient/tests/support/plugins/markdown_plugin/src/index.js
-CliClient/tests/support/plugins/multi_selection/global.d.js
-CliClient/tests/support/plugins/multi_selection/src/index.js
-CliClient/tests/support/plugins/register_command/global.d.js
-CliClient/tests/support/plugins/register_command/src/index.js
-CliClient/tests/support/plugins/selected_text/global.d.js
-CliClient/tests/support/plugins/selected_text/src/index.js
-CliClient/tests/support/plugins/settings/global.d.js
-CliClient/tests/support/plugins/settings/src/index.js
-CliClient/tests/support/plugins/toc/global.d.js
-CliClient/tests/support/plugins/toc/src/index.js
-CliClient/tests/support/plugins/withExternalModules/global.d.js
-CliClient/tests/support/plugins/withExternalModules/src/index.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
 ElectronClient/app.js
@@ -274,6 +255,7 @@ ReactNativeClient/lib/services/plugins/api/JoplinViewsMenuItems.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsPanels.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js
+ReactNativeClient/lib/services/plugins/api/types.js
 ReactNativeClient/lib/services/plugins/BasePluginRunner.js
 ReactNativeClient/lib/services/plugins/MenuItemController.js
 ReactNativeClient/lib/services/plugins/Plugin.js

@@ -1,3 +1,5 @@
+import joplin from 'api';
+
 const nodeSlug = require('slug');
 
 // From https://stackoverflow.com/a/6234804/561309

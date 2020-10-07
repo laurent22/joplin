@@ -12,7 +12,7 @@ import versionInfo from 'lib/versionInfo';
 import { Module } from 'lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
-import { MenuItemLocation } from 'lib/services/plugins/api/JoplinViewsMenuItems';
+import { MenuItemLocation } from 'lib/services/plugins/api/types';
 
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
