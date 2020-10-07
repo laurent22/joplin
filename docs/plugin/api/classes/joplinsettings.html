@@ -64,6 +64,16 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This API allows registering new settings and setting sections, as well as getting and setting settings. Once a setting has been registered it will appear in the config screen and be editable by the user.</p>
+					</div>
+					<p>Settings are essentially key/value pairs.</p>
+					<p>Note: Currently this API does <strong>not</strong> provide access to Joplin&#39;s built-in settings. This is by design as plugins that modify user settings could give unexpected results</p>
+					<p><a href="https://github.com/laurent22/joplin/CliClient/tests/support/plugins/settings">View the demo plugin</a></p>
+				</div>
+			</section>
 			<!--
     <section class="tsd-panel tsd-hierarchy">
         <h3>Hierarchy</h3>
@@ -108,6 +118,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -135,6 +150,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers a new setting. Note that registering a setting item is dynamic and will be gone next time Joplin starts.
+										What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
+										The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
+									reason the plugin fails to start at some point.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -162,6 +185,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets a setting value (only applies to setting you registered from your plugin)</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -189,6 +217,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a setting value (only applies to setting you registered from your plugin)</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -218,6 +251,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -234,9 +273,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
@@ -299,7 +335,16 @@
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
@@ -312,6 +357,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

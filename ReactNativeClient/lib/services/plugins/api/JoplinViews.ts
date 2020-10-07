@@ -4,6 +4,12 @@ import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 
+/**
+ * This namespace provides access to view-related services.
+ *
+ * All view services provide a `create()` method which you would use to create the view object, whether it's a dialog, a toolbar button or a menu item.
+ * In some cases, the `create()` method will return a [[ViewHandle]], which you would use to act on the view, for example to set certain properties or call some methods.
+ */
 export default class JoplinViews {
 
 	private store: any;

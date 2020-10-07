@@ -64,6 +64,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Allows creating and managing menu items.</p>
+					</div>
+					<p><a href="https://github.com/laurent22/joplin/CliClient/tests/support/plugins/register_command">View the demo plugin</a></p>
+				</div>
+			</section>
 			<!--
     <section class="tsd-panel tsd-hierarchy">
         <h3>Hierarchy</h3>
@@ -99,12 +107,17 @@
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, location<span class="tsd-signature-symbol">?: </span><a href="../enums/menuitemlocation.html" class="tsd-signature-type">MenuItemLocation</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/createmenuitemoptions.html" class="tsd-signature-type">CreateMenuItemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MenuItemController</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, location<span class="tsd-signature-symbol">?: </span><a href="../enums/menuitemlocation.html" class="tsd-signature-type">MenuItemLocation</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/createmenuitemoptions.html" class="tsd-signature-type">CreateMenuItemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new menu item and associate it with the given command. You can specify under which menu the item should appear using the <code>location</code> parameter.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -118,7 +131,7 @@
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MenuItemController</span><span class="tsd-signature-symbol">&gt;</span></h4>
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -140,6 +153,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -156,9 +175,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
@@ -212,7 +228,16 @@
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
@@ -225,6 +250,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

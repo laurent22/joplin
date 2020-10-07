@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CreateMenuItemOptions | Joplin Plugin API Documentation</title>
+	<title>ExportContext | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
         </li>
 -->
 				<li>
-					<a href="createmenuitemoptions.html">CreateMenuItemOptions</a>
+					<a href="exportcontext.html">ExportContext</a>
 				</li>
 			</ul>
-			<h1><!-- Interface  -->CreateMenuItemOptions</h1>
+			<h1><!-- Interface  -->ExportContext</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
         <h3>Hierarchy</h3>
         <ul class="tsd-hierarchy">
         <li>
-                <span class="target">CreateMenuItemOptions</span>
+                <span class="target">ExportContext</span>
 
         </li>
 </ul>
@@ -83,7 +83,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="createmenuitemoptions.html#accelerator" class="tsd-kind-icon">accelerator</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#destpath" class="tsd-kind-icon">dest<wbr>Path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#options" class="tsd-kind-icon">options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#userdata" class="tsd-kind-icon">user<wbr>Data</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,11 +94,30 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="accelerator" class="tsd-anchor"></a>
-					<h3>accelerator</h3>
-					<div class="tsd-signature tsd-kind-icon">accelerator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="destpath" class="tsd-anchor"></a>
+					<h3>dest<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">dest<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="options" class="tsd-anchor"></a>
+					<h3>options</h3>
+					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="exportoptions.html" class="tsd-signature-type">ExportOptions</a></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="userdata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> user<wbr>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">user<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -169,24 +190,30 @@
 					<li class=" tsd-kind-interface">
 						<a href="command.html" class="tsd-kind-icon">Command</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="createmenuitemoptions.html#accelerator" class="tsd-kind-icon">accelerator</a>
+								<a href="exportcontext.html#destpath" class="tsd-kind-icon">dest<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportcontext.html#options" class="tsd-kind-icon">options</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportcontext.html#userdata" class="tsd-kind-icon">user<wbr>Data</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface">
-						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
-					</li>
 					<li class=" tsd-kind-interface">
 						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
 					</li>

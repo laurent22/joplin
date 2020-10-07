@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CreateMenuItemOptions | Joplin Plugin API Documentation</title>
+	<title>ExportOptions | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
         </li>
 -->
 				<li>
-					<a href="createmenuitemoptions.html">CreateMenuItemOptions</a>
+					<a href="exportoptions.html">ExportOptions</a>
 				</li>
 			</ul>
-			<h1><!-- Interface  -->CreateMenuItemOptions</h1>
+			<h1><!-- Interface  -->ExportOptions</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
         <h3>Hierarchy</h3>
         <ul class="tsd-hierarchy">
         <li>
-                <span class="target">CreateMenuItemOptions</span>
+                <span class="target">ExportOptions</span>
 
         </li>
 </ul>
@@ -83,7 +83,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="createmenuitemoptions.html#accelerator" class="tsd-kind-icon">accelerator</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#format" class="tsd-kind-icon">format</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#modulepath" class="tsd-kind-icon">module<wbr>Path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#sourcefolderids" class="tsd-kind-icon">source<wbr>Folder<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#sourcenoteids" class="tsd-kind-icon">source<wbr>Note<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportoptions.html#target" class="tsd-kind-icon">target</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,9 +97,44 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="accelerator" class="tsd-anchor"></a>
-					<h3>accelerator</h3>
-					<div class="tsd-signature tsd-kind-icon">accelerator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="format" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> format</h3>
+					<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="modulepath" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> module<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">module<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="path" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> path</h3>
+					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="sourcefolderids" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> source<wbr>Folder<wbr>Ids</h3>
+					<div class="tsd-signature tsd-kind-icon">source<wbr>Folder<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="sourcenoteids" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> source<wbr>Note<wbr>Ids</h3>
+					<div class="tsd-signature tsd-kind-icon">source<wbr>Note<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="target" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> target</h3>
+					<div class="tsd-signature tsd-kind-icon">target<span class="tsd-signature-symbol">:</span> <a href="../enums/filesystemitem.html" class="tsd-signature-type">FileSystemItem</a></div>
 					<aside class="tsd-sources">
 					</aside>
 				</section>
@@ -169,18 +209,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="command.html" class="tsd-kind-icon">Command</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
+					<li class=" tsd-kind-interface">
 						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="createmenuitemoptions.html#accelerator" class="tsd-kind-icon">accelerator</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
@@ -190,9 +221,33 @@
 					<li class=" tsd-kind-interface">
 						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#format" class="tsd-kind-icon">format</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#modulepath" class="tsd-kind-icon">module<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#path" class="tsd-kind-icon">path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#sourcefolderids" class="tsd-kind-icon">source<wbr>Folder<wbr>Ids</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#sourcenoteids" class="tsd-kind-icon">source<wbr>Note<wbr>Ids</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="exportoptions.html#target" class="tsd-kind-icon">target</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>

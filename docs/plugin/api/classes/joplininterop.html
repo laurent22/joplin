@@ -64,6 +64,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Provides a way to create modules to import external data into Joplin or to export notes into any arbitrary format.</p>
+					</div>
+					<p><a href="https://github.com/laurent22/joplin/CliClient/tests/support/plugins/json_export">View the demo plugin</a></p>
+					<p>To implement an import or export module, you would simply define an object with various event handlers that are called
+					by the application during the import/export process.</p>
+					<p>See the documentation of the <a href="../interfaces/exportmodule.html">ExportModule</a> and <a href="../interfaces/importmodule.html">ImportModule</a> for more information.</p>
+					<p>You may also want to refer to the Joplin API documentation to see the list of properties for each item (note, notebook, etc.) - <a href="https://joplinapp.org/api/">https://joplinapp.org/api/</a></p>
+				</div>
+			</section>
 			<!--
     <section class="tsd-panel tsd-hierarchy">
         <h3>Hierarchy</h3>
@@ -155,6 +167,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -171,9 +189,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -227,7 +242,16 @@
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
@@ -240,6 +264,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

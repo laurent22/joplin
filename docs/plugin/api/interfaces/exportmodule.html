@@ -64,6 +64,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Used to implement a module to export data from Joplin. <a href="https://github.com/laurent22/joplin/CliClient/tests/support/plugins/json_export">View the demo plugin</a> for an example.</p>
+					</div>
+					<p>In general, all the event handlers you&#39;ll need to implement take a <code>context</code> object as a first argument. This object will contain the export or import path as well as various optional properties, such as which notes or notebooks need to be exported.</p>
+					<p>To get a better sense of what it will contain it can be useful to print it using <code>console.info(context)</code>.</p>
+				</div>
+			</section>
 			<!--
     <section class="tsd-panel tsd-hierarchy">
         <h3>Hierarchy</h3>
@@ -110,6 +119,11 @@
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The description that will appear in the UI, for example in the menu item.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="fileextensions" class="tsd-anchor"></a>
@@ -117,6 +131,11 @@
 					<div class="tsd-signature tsd-kind-icon">file<wbr>Extensions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The extensions of the files exported by your module. For example, it is <code>[&quot;htm&quot;, &quot;html&quot;]</code> for the HTML module, and just <code>[&quot;jex&quot;]</code> for the JEX module.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="format" class="tsd-anchor"></a>
@@ -124,6 +143,11 @@
 					<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The format to be exported, eg &quot;enex&quot;, &quot;jex&quot;, &quot;json&quot;, etc.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="isnotearchive" class="tsd-anchor"></a>
@@ -131,13 +155,25 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Note<wbr>Archive<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Only applies to single file exporters or importers
+								It tells whether the format can package multiple notes into one file.
+							For example JEX or ENEX can, but HTML cannot.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="target" class="tsd-anchor"></a>
 					<h3>target</h3>
-					<div class="tsd-signature tsd-kind-icon">target<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FileSystemItem</span></div>
+					<div class="tsd-signature tsd-kind-icon">target<span class="tsd-signature-symbol">:</span> <a href="../enums/filesystemitem.html" class="tsd-signature-type">FileSystemItem</a></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether the module will export a single file or multiple files in a directory. It affects the open dialog that will be presented to the user when using your exporter.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -146,16 +182,21 @@
 					<a name="onclose" class="tsd-anchor"></a>
 					<h3>on<wbr>Close</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Close<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Close<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="exportcontext.html" class="tsd-signature-type">ExportContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the export process is done.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>context: <a href="exportcontext.html" class="tsd-signature-type">ExportContext</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -170,16 +211,21 @@
 					<a name="oninit" class="tsd-anchor"></a>
 					<h3>on<wbr>Init</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Init<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Init<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="exportcontext.html" class="tsd-signature-type">ExportContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the export process starts.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>context: <a href="exportcontext.html" class="tsd-signature-type">ExportContext</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -194,16 +240,21 @@
 					<a name="onprocessitem" class="tsd-anchor"></a>
 					<h3>on<wbr>Process<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Process<wbr>Item<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, itemType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Process<wbr>Item<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="exportcontext.html" class="tsd-signature-type">ExportContext</a>, itemType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when an item needs to be processed. An &quot;item&quot; can be any Joplin object, such as a note, a folder, a notebook, etc.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>context: <a href="exportcontext.html" class="tsd-signature-type">ExportContext</a></h5>
 								</li>
 								<li>
 									<h5>itemType: <span class="tsd-signature-type">number</span></h5>
@@ -224,16 +275,21 @@
 					<a name="onprocessresource" class="tsd-anchor"></a>
 					<h3>on<wbr>Process<wbr>Resource</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Process<wbr>Resource<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, resource<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, filePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Process<wbr>Resource<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="exportcontext.html" class="tsd-signature-type">ExportContext</a>, resource<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, filePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when a resource file needs to be exported.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>context: <a href="exportcontext.html" class="tsd-signature-type">ExportContext</a></h5>
 								</li>
 								<li>
 									<h5>resource: <span class="tsd-signature-type">any</span></h5>
@@ -265,6 +321,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -281,9 +343,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
@@ -324,6 +383,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
@@ -361,6 +423,12 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface">
+						<a href="exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="importmodule.html" class="tsd-kind-icon">ImportModule</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -371,6 +439,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

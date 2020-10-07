@@ -64,6 +64,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The workspace service provides access to all the parts of Joplin that are being worked on - i.e. the currently selected notes or notebooks as well
+						as various related events, such as when a new note is selected, or when the note content changes.</p>
+					</div>
+					<p><a href="https://github.com/laurent22/joplin/CliClient/tests/support/plugins">View the demo plugin</a></p>
+				</div>
+			</section>
 			<!--
     <section class="tsd-panel tsd-hierarchy">
         <h3>Hierarchy</h3>
@@ -111,6 +120,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executes the given editor command.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -135,6 +149,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when an alarm associated with a to-do is triggered.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -159,6 +178,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the content of a note changes.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -183,6 +207,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when a new note or notes are selected.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -207,6 +236,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the synchronisation process has finished.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -231,6 +265,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the currently selected note</p>
+								</div>
+							</div>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
@@ -243,14 +282,19 @@
 					<a name="selectednoteids" class="tsd-anchor"></a>
 					<h3>selected<wbr>Note<wbr>Ids</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">selected<wbr>Note<wbr>Ids<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">selected<wbr>Note<wbr>Ids<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the IDs of the selected notes (can be zero, one, or many). Use the data API to retrieve information about these notes.</p>
+								</div>
+							</div>
 							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -272,6 +316,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -288,9 +338,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
@@ -362,7 +409,16 @@
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
@@ -375,6 +431,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

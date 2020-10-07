@@ -4,6 +4,11 @@ import MenuItemController from '../MenuItemController';
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 
+/**
+ * Allows creating and managing menu items.
+ *
+ * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/register_command)
+ */
 export default class JoplinViewsMenuItems {
 
 	private store: any;
@@ -14,6 +19,9 @@ export default class JoplinViewsMenuItems {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Creates a new menu item and associate it with the given command. You can specify under which menu the item should appear using the `location` parameter.
+	 */
 	async create(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
 		const handle = createViewHandle(this.plugin);
 		const controller = new MenuItemController(handle, this.plugin.id, this.store, commandName, location);
@@ -22,8 +30,6 @@ export default class JoplinViewsMenuItems {
 		if (options && options.accelerator) {
 			KeymapService.instance().registerCommandAccelerator(commandName, options.accelerator);
 		}
-
-		return controller;
 	}
 
 }

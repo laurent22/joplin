@@ -1,9 +1,10 @@
+import { ExportContext } from '../plugins/api/types';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import { CustomExportContext, ExportOptions, Module } from './types';
+import { ExportOptions, Module } from './types';
 
 export default class InteropService_Exporter_Custom extends InteropService_Exporter_Base {
 
-	private customContext_:CustomExportContext;
+	private customContext_:ExportContext;
 	private module_:Module = null;
 
 	constructor(module:Module) {

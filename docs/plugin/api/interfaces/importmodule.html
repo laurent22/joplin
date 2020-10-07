@@ -108,6 +108,11 @@
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The description that will appear in the UI, for example in the menu item.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="fileextensions" class="tsd-anchor"></a>
@@ -115,6 +120,11 @@
 					<div class="tsd-signature tsd-kind-icon">file<wbr>Extensions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Tells the file extensions of the exported files.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="format" class="tsd-anchor"></a>
@@ -122,6 +132,11 @@
 					<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The format to be exported, eg &quot;enex&quot;, &quot;jex&quot;, &quot;json&quot;, etc.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="isnotearchive" class="tsd-anchor"></a>
@@ -129,20 +144,37 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Note<wbr>Archive<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Only applies to single file exporters or importers
+								It tells whether the format can package multiple notes into one file.
+							For example JEX or ENEX can, but HTML cannot.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="outputformat" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> output<wbr>Format</h3>
-					<div class="tsd-signature tsd-kind-icon">output<wbr>Format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ImportModuleOutputFormat</span></div>
+					<div class="tsd-signature tsd-kind-icon">output<wbr>Format<span class="tsd-signature-symbol">:</span> <a href="../enums/importmoduleoutputformat.html" class="tsd-signature-type">ImportModuleOutputFormat</a></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Tells the type of notes that will be generated, either HTML or Markdown (default).</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="sources" class="tsd-anchor"></a>
 					<h3>sources</h3>
-					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FileSystemItem</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <a href="../enums/filesystemitem.html" class="tsd-signature-type">FileSystemItem</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The type of sources that are supported by the module. Tells whether the module can import files or directories or both.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -151,16 +183,21 @@
 					<a name="onexec" class="tsd-anchor"></a>
 					<h3>on<wbr>Exec</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Exec<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Exec<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="importcontext.html" class="tsd-signature-type">ImportContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the import process starts. There is only one event handler within which you should import the complete data.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>context: <a href="importcontext.html" class="tsd-signature-type">ImportContext</a></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -186,6 +223,12 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -202,9 +245,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
@@ -246,7 +286,16 @@
 						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -286,6 +335,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="settingsection.html" class="tsd-kind-icon">SettingSection</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

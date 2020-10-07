@@ -1,5 +1,6 @@
+import { ButtonSpec } from 'lib/services/plugins/api/types';
 import PluginService from 'lib/services/plugins/PluginService';
-import WebviewController, { ButtonSpec } from 'lib/services/plugins/WebviewController';
+import WebviewController from 'lib/services/plugins/WebviewController';
 import * as React from 'react';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';

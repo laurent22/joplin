@@ -1,12 +1,7 @@
 import ViewController from './ViewController';
 import shim from 'lib/shim';
+import { ButtonId, ButtonSpec } from './api/types';
 const { toSystemSlashes } = require('lib/path-utils');
-
-export interface ButtonSpec {
-	id: string,
-	title?: string,
-	onClick?():void,
-}
 
 export enum ContainerType {
 	Panel = 'panel',
@@ -104,7 +99,7 @@ export default class WebviewController extends ViewController {
 	// Specific to dialogs
 	// ---------------------------------------------
 
-	public async  open() {
+	public async open():Promise<ButtonId> {
 		this.setStoreProp('opened', true);
 
 		return new Promise((resolve:Function, reject:Function) => {
@@ -116,7 +111,7 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('opened', false);
 	}
 
-	public closeWithResponse(result:any) {
+	public closeWithResponse(result:ButtonId) {
 		this.close();
 		this.closeResponse_.resolve(result);
 	}
