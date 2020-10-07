@@ -78,6 +78,7 @@ export const StyledListItemAnchor = styled.a`
 	flex: 1;
 	align-items: center;
 	user-select: none;
+	height: 100%;
 `;
 
 export const StyledExpandLink = styled.a`

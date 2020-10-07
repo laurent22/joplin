@@ -396,7 +396,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					selected={selected}
 					data-id={tag.id}
 					data-type={BaseModel.TYPE_TAG}
-					onContextMenu={(event:any) => this.itemContextMenu(event)}
+					onContextMenu={this.itemContextMenu}
 					onClick={() => {
 						this.tagItem_click(tag);
 					}}
