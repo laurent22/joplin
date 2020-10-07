@@ -1,4 +1,8 @@
 import eventManager from 'lib/eventManager';
+
+/**
+ * @ignore
+ */
 const Note = require('lib/models/Note');
 
 export interface EditorCommand {

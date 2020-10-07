@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>joplin.views.toolbarButtons | Joplin Plugin API Documentation</title>
+	<title>Script | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="joplin.html" class="title">Joplin Plugin API Documentation</a>
+					<a href="../classes/joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,10 +54,10 @@
         </li>
 -->
 				<li>
-					<a href="joplinviewstoolbarbuttons.html">joplin.views.toolbarButtons</a>
+					<a href="script.html">Script</a>
 				</li>
 			</ul>
-			<h1><!-- Class  -->joplin.views.toolbarButtons</h1>
+			<h1><!-- Interface  -->Script</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
         <h3>Hierarchy</h3>
         <ul class="tsd-hierarchy">
         <li>
-                <span class="target">JoplinViewsToolbarButtons</span>
+                <span class="target">Script</span>
 
         </li>
 </ul>
@@ -81,25 +81,21 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewstoolbarbuttons.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="script.html#onstart" class="tsd-kind-icon">on<wbr>Start</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>create</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, location<span class="tsd-signature-symbol">: </span><a href="../enums/toolbarbuttonlocation.html" class="tsd-signature-type">ToolbarButtonLocation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ToolbarButtonController</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="onstart" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Start</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Start<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -108,14 +104,11 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>location: <a href="../enums/toolbarbuttonlocation.html" class="tsd-signature-type">ToolbarButtonLocation</a></h5>
+									<h5>event: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ToolbarButtonController</span><span class="tsd-signature-symbol">&gt;</span></h4>
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -146,82 +139,79 @@
 						<a href="../enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplin.html" class="tsd-kind-icon">joplin</a>
+						<a href="../classes/joplin.html" class="tsd-kind-icon">joplin</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
+						<a href="../classes/joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
+						<a href="../classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
+						<a href="../classes/joplinfilters.html" class="tsd-kind-icon">joplin.filters</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
+						<a href="../classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
+						<a href="../classes/joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
+						<a href="../classes/joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinviews.html" class="tsd-kind-icon">joplin.views</a>
+						<a href="../classes/joplinviews.html" class="tsd-kind-icon">joplin.views</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
+						<a href="../classes/joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
+						<a href="../classes/joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
+						<a href="../classes/joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="command.html" class="tsd-kind-icon">Command</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="importmodule.html" class="tsd-kind-icon">ImportModule</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
+					<li class="current tsd-kind-interface">
+						<a href="script.html" class="tsd-kind-icon">Script</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="joplinviewstoolbarbuttons.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="joplinviewstoolbarbuttons.html#create" class="tsd-kind-icon">create</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="script.html#onstart" class="tsd-kind-icon">on<wbr>Start</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
+					<li class=" tsd-kind-interface">
+						<a href="settingitem.html" class="tsd-kind-icon">SettingItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/command.html" class="tsd-kind-icon">Command</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/script.html" class="tsd-kind-icon">Script</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingitem.html" class="tsd-kind-icon">SettingItem</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+						<a href="settingsection.html" class="tsd-kind-icon">SettingSection</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>

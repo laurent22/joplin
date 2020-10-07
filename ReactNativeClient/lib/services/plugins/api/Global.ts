@@ -1,22 +1,19 @@
 import Plugin from '../Plugin';
 import Joplin from './Joplin';
 import Logger from 'lib/Logger';
+
+/**
+ * @ignore
+ */
 const builtinModules = require('builtin-modules');
-// import shim from 'lib/shim';
 
-let requireWhiteList_:string[] = null;
-
-function requireWhiteList():string[] {
-	if (!requireWhiteList_) {
-		requireWhiteList_ = builtinModules.slice();
-		requireWhiteList_.push('fs-extra');
-	}
-	return requireWhiteList_;
-}
-
+/**
+ * @ignore
+ */
 export default class Global {
 
 	private joplin_: Joplin;
+	private requireWhiteList_:string[] = null;
 	// private consoleWrapper_:any = null;
 
 	constructor(logger:Logger, implementation:any, plugin: Plugin, store: any) {
@@ -44,12 +41,20 @@ export default class Global {
 		return this.joplin_;
 	}
 
+	private requireWhiteList():string[] {
+		if (!this.requireWhiteList_) {
+			this.requireWhiteList_ = builtinModules.slice();
+			this.requireWhiteList_.push('fs-extra');
+		}
+		return this.requireWhiteList_;
+	}
+
 	// get console(): any {
 	// 	return this.consoleWrapper_;
 	// }
 
 	require(filePath:string):any {
-		if (!requireWhiteList().includes(filePath)) throw new Error(`Path not allowed: ${filePath}`);
+		if (!this.requireWhiteList().includes(filePath)) throw new Error(`Path not allowed: ${filePath}`);
 		return require(filePath);
 	}
 

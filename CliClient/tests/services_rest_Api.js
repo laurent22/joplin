@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('test-utils.js');
-const Api = require('lib/services/rest/Api');
+const Api = require('lib/services/rest/Api').default;
 const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');

@@ -291,6 +291,7 @@ ReactNativeClient/lib/services/plugins/WebviewController.js
 ReactNativeClient/lib/services/ResourceEditWatcher/index.js
 ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
+ReactNativeClient/lib/services/rest/Api.js
 ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/searchengine/filterParser.js
 ReactNativeClient/lib/services/searchengine/queryBuilder.js

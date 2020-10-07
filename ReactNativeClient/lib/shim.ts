@@ -147,6 +147,10 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	createResourceFromPath: async (_filePath:string, _defaultProps:any = null, _options:any = null) => {
+		throw new Error('Not implemented');
+	},
+
 	FormData: typeof FormData !== 'undefined' ? FormData : null,
 
 	fsDriver: ():any => {
@@ -183,7 +187,11 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	imageFromDataUrl: async (_imageDataUrl:string, _filePath:string) => {
+	imageFromDataUrl: async (_imageDataUrl:string, _filePath:string, _options:any = null) => {
+		throw new Error('Not implemented');
+	},
+
+	fetchBlob: async function(_url:string, _options:any = null) {
 		throw new Error('Not implemented');
 	},
 

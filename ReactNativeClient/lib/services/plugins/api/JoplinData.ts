@@ -1,4 +1,4 @@
-const Api = require('lib/services/rest/Api');
+import Api from 'lib/services/rest/Api';
 
 /**
  * This module provides access to the Joplin data API: https://joplinapp.org/api/

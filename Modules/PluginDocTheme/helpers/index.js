@@ -15,7 +15,7 @@ function camelCaseToDots(s) {
 
 module.exports = {
 	jpFormatClassName: function(className) {
-		if (className.indexOf('Joplin') !== 0) return className;
+		if (className.indexOf('Joplin') !== 0 || className.indexOf(' ') >= 0) return className;
 
 		const p = className.substr(6);
 		if (p === '') return 'joplin';
