@@ -82,12 +82,18 @@
 		
 		<!-- 2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification -->
 		<!--             Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed. -->
+		<!-- 2020-10-06: Changed back again to "singleInstance" and notifications still seem to work. Changing to singleInstance -->
+		<!--             to try to fix this bug: https://discourse.joplinapp.org/t/joplin-android-app-looses-nextcloud-sync-settings/10997/6 -->
+		<!--             Users would lose their settings, and it's possibly due to multiple instances of the app running at the same time, perhaps -->
+		<!--             due to sharing with the app. When checking the log, it would show "saving settings", then the app startup message, and after the app -->
+		<!--             has started, it would show "setting saved". So basically the app, or one instance of it, has started while settings were being saved -->
+
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
 			android:windowSoftInputMode="adjustResize"
-			android:launchMode="singleTop">
+			android:launchMode="singleInstance">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
