@@ -7,7 +7,7 @@ const Note = require('lib/models/Note');
 
 export interface EditorCommand {
 	name: string;
-	value: any;
+	value?: any;
 }
 
 export default class JoplinWorkspace {
