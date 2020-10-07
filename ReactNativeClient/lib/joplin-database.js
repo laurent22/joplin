@@ -349,6 +349,8 @@ class JoplinDatabase extends Database {
 				+ `Expected version: ${existingDatabaseVersions[existingDatabaseVersions.length - 1]}`);
 		}
 
+		this.logger().info(`Upgrading database from version ${fromVersion}`);
+
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 
 		let latestVersion = fromVersion;
@@ -856,17 +858,31 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
 			}
 
-			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
+			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
+
+			queries.push(updateVersionQuery);
 
 			try {
 				await this.transactionExecBatch(queries);
 			} catch (error) {
+				// In some cases listed below, when the upgrade fail it is acceptable (a fallback will be used)
+				// and in those cases, even though it fails, we still want to set the version number so that the
+				// migration is not repeated on next upgrade.
+				let saveVersionAgain = false;
+
 				if (targetVersion === 15 || targetVersion === 18 || targetVersion === 33) {
 					this.logger().warn('Could not upgrade to database v15 or v18 or v33 - FTS feature will not be used', error);
+					saveVersionAgain = true;
 				} else if (targetVersion === 34) {
-					// this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
+					this.logger().warn('Could not upgrade to database v34 - fuzzy search will not be used', error);
+					saveVersionAgain = true;
 				} else {
 					throw error;
+				}
+
+				if (saveVersionAgain) {
+					this.logger().info('Migration failed with fallback and will not be repeated - saving version number');
+					await this.transactionExecBatch([updateVersionQuery]);
 				}
 			}
 
@@ -933,10 +949,13 @@ class JoplinDatabase extends Database {
 		const version = !versionRow ? 0 : versionRow.version;
 		const tableFieldsVersion = !versionRow ? 0 : versionRow.table_fields_version;
 		this.version_ = version;
-		this.logger().info('Current database version', version);
+		this.logger().info('Current database version', versionRow);
 
 		const newVersion = await this.upgradeDatabase(version);
 		this.version_ = newVersion;
+
+		this.logger().info(`New version: ${newVersion}. Previously recorded version: ${tableFieldsVersion}`);
+
 		if (newVersion !== tableFieldsVersion) await this.refreshTableFields(newVersion);
 
 		this.tableFields_ = {};
