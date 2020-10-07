@@ -1,9 +1,5 @@
+import { ToolbarButtonLocation } from './api/JoplinViewsToolbarButtons';
 import ViewController from './ViewController';
-
-export enum ToolbarButtonLocation {
-	NoteToolbar = 'noteToolbar',
-	EditorToolbar = 'editorToolbar',
-}
 
 export default class ToolbarButtonController extends ViewController {
 

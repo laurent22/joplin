@@ -1,6 +1,13 @@
 import Plugin from '../Plugin';
-import createViewHandle, { ViewHandle } from '../utils/createViewHandle';
-import WebviewController, { ButtonSpec, ContainerType } from '../WebviewController';
+import createViewHandle from '../utils/createViewHandle';
+import WebviewController, { ContainerType } from '../WebviewController';
+import { ViewHandle } from './JoplinViews';
+
+export interface ButtonSpec {
+	id: string,
+	title?: string,
+	onClick?():void,
+}
 
 export default class JoplinViewsDialogs {
 

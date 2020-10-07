@@ -1,14 +1,5 @@
+import { MenuItemLocation } from './api/JoplinViewsMenuItems';
 import ViewController from './ViewController';
-
-export enum MenuItemLocation {
-	File = 'file',
-	Edit = 'edit',
-	View = 'view',
-	Note = 'note',
-	Tools = 'tools',
-	Help = 'help',
-	Context = 'context',
-}
 
 export default class MenuItemController extends ViewController {
 

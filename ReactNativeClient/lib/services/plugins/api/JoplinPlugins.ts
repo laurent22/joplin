@@ -1,6 +1,10 @@
 import Plugin from '../Plugin';
 import Logger from 'lib/Logger';
 
+interface Script {
+	onStart?(event:any):Promise<void>,
+}
+
 /**
  * This class provides access to plugin-related features.
  */
@@ -26,7 +30,7 @@ export default class JoplinPlugins {
 	 * });
 	 * ```
 	 */
-	async register(script: any) {
+	async register(script: Script) {
 		if (script.onStart) {
 			const startTime = Date.now();
 

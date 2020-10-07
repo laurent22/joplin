@@ -1,4 +1,3 @@
-import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import { utils as pluginUtils, PluginStates } from 'lib/services/plugins/reducer';
 import CommandService from 'lib/services/CommandService';
 import eventManager from 'lib/eventManager';
@@ -6,6 +5,7 @@ import InteropService from 'lib/services/interop/InteropService';
 import MenuUtils from 'lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from 'lib/locale';
+import { MenuItemLocation } from 'lib/services/plugins/api/JoplinViewsMenuItems';
 
 const BaseModel = require('lib/BaseModel');
 const bridge = require('electron').remote.require('./bridge').default;
@@ -181,7 +181,7 @@ export default class NoteListUtils {
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 
 		for (const info of pluginViewInfos) {
-			const location:MenuItemLocation = info.view.location;
+			const location = info.view.location;
 			if (location !== MenuItemLocation.Context) continue;
 
 			menu.append(

@@ -43,6 +43,7 @@ export default class JoplinWorkspace {
 		return this.store.getState().selectedNoteIds.slice();
 	}
 
+	// TODO: all these should be accessible via the commands namespace
 	async execEditorCommand(command:EditorCommand) {
 		return this.implementation_.execEditorCommand(command);
 	}

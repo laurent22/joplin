@@ -5,7 +5,6 @@ import JoplinWorkspace from './JoplinWorkspace';
 import JoplinFilters from './JoplinFilters';
 import JoplinCommands from './JoplinCommands';
 import JoplinViews from './JoplinViews';
-import JoplinUtils from './JoplinUtils';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import Logger from 'lib/Logger';
@@ -18,7 +17,6 @@ export default class Joplin {
 	private filters_: JoplinFilters = null;
 	private commands_: JoplinCommands = null;
 	private views_: JoplinViews = null;
-	private utils_: JoplinUtils = null;
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
 
@@ -29,7 +27,6 @@ export default class Joplin {
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
 		this.views_ = new JoplinViews(plugin, store);
-		this.utils_ = new JoplinUtils();
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 	}
@@ -62,10 +59,6 @@ export default class Joplin {
 
 	get views(): JoplinViews {
 		return this.views_;
-	}
-
-	get utils(): JoplinUtils {
-		return this.utils_;
 	}
 
 	get interop(): JoplinInterop {

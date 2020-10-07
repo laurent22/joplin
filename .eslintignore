@@ -69,8 +69,6 @@ CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services/plugins/sandboxProxy.js
-CliClient/tests/support/plugins/codemirror_test/global.d.js
-CliClient/tests/support/plugins/codemirror_test/src/index.js
 CliClient/tests/support/plugins/dialog/global.d.js
 CliClient/tests/support/plugins/dialog/src/index.js
 CliClient/tests/support/plugins/events/global.d.js
@@ -277,7 +275,6 @@ ReactNativeClient/lib/services/plugins/api/JoplinFilters.js
 ReactNativeClient/lib/services/plugins/api/JoplinInterop.js
 ReactNativeClient/lib/services/plugins/api/JoplinPlugins.js
 ReactNativeClient/lib/services/plugins/api/JoplinSettings.js
-ReactNativeClient/lib/services/plugins/api/JoplinUtils.js
 ReactNativeClient/lib/services/plugins/api/JoplinViews.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsDialogs.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsMenuItems.js

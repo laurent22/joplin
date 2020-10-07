@@ -6,13 +6,13 @@ import CommandService from 'lib/services/CommandService';
 import MenuUtils from 'lib/services/commands/MenuUtils';
 import KeymapService from 'lib/services/KeymapService';
 import { utils as pluginUtils, ViewInfo } from 'lib/services/plugins/reducer';
-import { MenuItemLocation } from 'lib/services/plugins/MenuItemController';
 import shim from 'lib/shim';
 import Setting from 'lib/models/Setting';
 import versionInfo from 'lib/versionInfo';
 import { Module } from 'lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
+import { MenuItemLocation } from 'lib/services/plugins/api/JoplinViewsMenuItems';
 
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');

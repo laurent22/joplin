@@ -1,5 +1,14 @@
-import Setting, { SettingItem as InternalSettingItem, SettingItemType, SettingSection } from 'lib/models/Setting';
+import Setting, { SettingItem as InternalSettingItem } from 'lib/models/Setting';
 import Plugin from '../Plugin';
+
+export enum SettingItemType {
+	Int = 1,
+	String = 2,
+	Bool = 3,
+	Array = 4,
+	Object = 5,
+	Button = 6,
+}
 
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
@@ -19,6 +28,13 @@ interface SettingItem {
 	minimum?: number,
 	maximum?: number,
 	step?: number,
+}
+
+export interface SettingSection {
+	label: string,
+	iconName?: string,
+	description?: string,
+	name?: string,
 }
 
 export default class JoplinSettings {
@@ -62,7 +78,6 @@ export default class JoplinSettings {
 	}
 
 	async value(key:string):Promise<any> {
-		console.info('VALUE', key, Setting.value(this.namespacedKey(key)));
 		return Setting.value(this.namespacedKey(key));
 	}
 
