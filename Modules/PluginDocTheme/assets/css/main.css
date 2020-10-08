@@ -2696,4 +2696,12 @@ span.platform-desktop {
   padding: 2px 4px;
 }
 
+/* By default, TypeDoc wraps the first line of a class documentation in a "lead" class
+and gives it a different styling, but that looks broken so disable it. */
+.tsd-panel.tsd-comment .lead {
+  font-size: inherit;
+  line-height: inherit;
+  margin-bottom: 0;
+}
+
 /* /JOPLINCHANGES */

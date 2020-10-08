@@ -9,9 +9,6 @@ export const declaration:CommandDeclaration = {
 	name: 'editAlarm',
 	label: () => _('Set alarm'),
 	iconName: 'icon-alarm',
-	// executeArguments: {
-	// 	noteId: ['string', 'Note for which the alarm should be set'],
-	// },
 };
 
 export const runtime = (comp:any):CommandRuntime => {
