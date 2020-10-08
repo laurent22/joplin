@@ -680,6 +680,10 @@ class Application extends BaseApplication {
 
 		// await populateDatabase(reg.db());
 
+		// setTimeout(() => {
+		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
+		// }, 2000);
+
 		return null;
 	}
 

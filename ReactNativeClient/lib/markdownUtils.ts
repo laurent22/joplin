@@ -7,35 +7,45 @@ const { setupLinkify } = require('lib/joplin-renderer');
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
 
+export interface MarkdownTableHeader {
+	name: string,
+	label: string,
+	filter?: Function,
+}
+
+export interface MarkdownTableRow {
+	[key:string]: string,
+}
+
 const markdownUtils = {
 	// Titles for markdown links only need escaping for [ and ]
-	escapeTitleText(text) {
+	escapeTitleText(text:string) {
 		return text.replace(/(\[|\])/g, '\\$1');
 	},
 
-	escapeLinkUrl(url) {
+	escapeLinkUrl(url:string) {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');
 		url = url.replace(/ /g, '%20');
 		return url;
 	},
 
-	prependBaseUrl(md, baseUrl) {
+	prependBaseUrl(md:string, baseUrl:string) {
 		// eslint-disable-next-line no-useless-escape
-		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (match, before, url, after) => {
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match:any, before:string, url:string, after:string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
 
-	extractImageUrls(md) {
+	extractImageUrls(md:string) {
 		const markdownIt = new MarkdownIt();
 		setupLinkify(markdownIt); // Necessary to support file:/// links
 
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
-		const output = [];
+		const output:string[] = [];
 
-		const searchUrls = tokens => {
+		const searchUrls = (tokens:any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 
@@ -62,25 +72,25 @@ const markdownUtils = {
 	// The match results has 5 items
 	// Full match array is
 	// [Full match, whitespace, list token, ol line number, whitespace following token]
-	olLineNumber(line) {
+	olLineNumber(line:string) {
 		const match = line.match(listRegex);
 		return match ? Number(match[3]) : 0;
 	},
 
-	extractListToken(line) {
+	extractListToken(line:string) {
 		const match = line.match(listRegex);
 		return match ? match[2] : '';
 	},
 
-	isListItem(line) {
+	isListItem(line:string) {
 		return listRegex.test(line);
 	},
 
-	isEmptyListItem(line) {
+	isEmptyListItem(line:string) {
 		return emptyListRegex.test(line);
 	},
 
-	createMarkdownTable(headers, rows) {
+	createMarkdownTable(headers:MarkdownTableHeader[], rows:MarkdownTableRow[]):string {
 		const output = [];
 
 		const headersMd = [];
@@ -108,7 +118,7 @@ const markdownUtils = {
 		return output.join('\n');
 	},
 
-	titleFromBody(body) {
+	titleFromBody(body:string) {
 		if (!body) return '';
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
@@ -119,4 +129,4 @@ const markdownUtils = {
 	},
 };
 
-module.exports = markdownUtils;
+export default markdownUtils;

@@ -4,7 +4,7 @@ const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const shim = require('lib/shim').default;
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async init(destDir:string) {

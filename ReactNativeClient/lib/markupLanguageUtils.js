@@ -1,4 +1,4 @@
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 const htmlUtils = require('lib/htmlUtils');
 const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource');

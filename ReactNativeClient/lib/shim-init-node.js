@@ -213,7 +213,7 @@ function shimInit() {
 		}, options);
 
 		const { basename } = require('path');
-		const { escapeTitleText } = require('lib/markdownUtils');
+		const { escapeTitleText } = require('lib/markdownUtils').default;
 		const { toFileProtocolPath } = require('lib/path-utils');
 
 		let resource = null;

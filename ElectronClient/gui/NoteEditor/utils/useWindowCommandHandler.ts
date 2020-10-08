@@ -49,7 +49,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 			}
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main' || props.isDialogVisible) return false;
+			if (props.isDialogVisible) return false;
 			if (props.markdownEditorViewerOnly) return false;
 			if (!props.hasSelectedNote) return false;
 			return props.isMarkdownNote;
@@ -64,7 +64,6 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 				// In this case, all editor-related shortcuts are disabled.
 				markdownEditorViewerOnly: state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer',
 				hasSelectedNote: !!note,
-				routeName: state.route.routeName,
 				isDialogVisible: !!Object.keys(state.visibleDialogs).length,
 				isMarkdownNote: isMarkdownNote,
 			};

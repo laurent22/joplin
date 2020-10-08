@@ -6,7 +6,7 @@ const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;;
 const shim = require('lib/shim').default;
 const fs = require('fs-extra');
 

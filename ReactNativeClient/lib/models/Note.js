@@ -11,7 +11,7 @@ const { _ } = require('lib/locale');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
-const markdownUtils = require('lib/markdownUtils.js');
+const markdownUtils = require('lib/markdownUtils').default;
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 

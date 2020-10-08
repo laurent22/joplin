@@ -23,17 +23,13 @@ export const runtime = ():CommandRuntime => {
 			} catch (error) {
 				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
 			}
-
-			// await comp.saveNoteAndWait(comp.formNote);
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main') return false;
 			return !!props.noteId;
 		},
 		mapStateToProps: (state:any) => {
 			return {
 				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-				routeName: state.route.routeName,
 			};
 		},
 	};

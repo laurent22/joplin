@@ -8,6 +8,9 @@ const bridge = require('electron').remote.require('./bridge').default;
 export const declaration:CommandDeclaration = {
 	name: 'exportPdf',
 	label: () => `PDF - ${_('PDF File')}`,
+	// executeArguments: {
+	// 	noteIds: ['string[]', 'Notes to be exported as PDF'],
+	// },
 };
 
 export const runtime = (comp:any):CommandRuntime => {

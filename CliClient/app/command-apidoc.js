@@ -3,7 +3,7 @@ const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
 const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 const { Database } = require('lib/database.js');
 
 class Command extends BaseCommand {

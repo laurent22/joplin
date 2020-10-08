@@ -6,6 +6,9 @@ const Note = require('lib/models/Note');
 export const declaration:CommandDeclaration = {
 	name: 'moveToFolder',
 	label: () => _('Move to notebook'),
+	// executeArguments: {
+	// 	noteIds: ['string[]', 'Notes to be exported as PDF'],
+	// },
 };
 
 export const runtime = (comp:any):CommandRuntime => {

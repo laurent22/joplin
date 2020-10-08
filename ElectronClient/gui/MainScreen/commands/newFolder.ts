@@ -7,6 +7,9 @@ export const declaration:CommandDeclaration = {
 	name: 'newFolder',
 	label: () => _('New notebook'),
 	iconName: 'fa-book',
+	// executeArguments: {
+	// 	parentId: ['string', 'optional', 'Parent notebook ID'],
+	// },
 };
 
 export const runtime = (comp:any):CommandRuntime => {

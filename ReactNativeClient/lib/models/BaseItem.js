@@ -7,7 +7,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const { _ } = require('lib/locale');
 const moment = require('moment');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 
 class BaseItem extends BaseModel {
 	static useUuid() {

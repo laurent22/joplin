@@ -1,4 +1,5 @@
 import eventManager from 'lib/eventManager';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
 
@@ -244,6 +245,39 @@ export default class CommandService extends BaseService {
 	exists(commandName:string):boolean {
 		const command = this.commandByName(commandName, { mustExist: false });
 		return !!command;
+	}
+
+	public commandsToMarkdownTable(state:any):string {
+		const headers:MarkdownTableHeader[] = [
+			{
+				name: 'commandName',
+				label: 'Name',
+			},
+			{
+				name: 'description',
+				label: 'Description',
+			},
+			{
+				name: 'props',
+				label: 'Props',
+			},
+		];
+
+		const rows:MarkdownTableRow[] = [];
+
+		for (const commandName in this.commands_) {
+			const props = this.commandMapStateToProps(commandName, state);
+
+			const row:MarkdownTableRow = {
+				commandName: commandName,
+				description: this.label(commandName),
+				props: JSON.stringify(props),
+			};
+
+			rows.push(row);
+		}
+
+		return markdownUtils.createMarkdownTable(headers, rows);
 	}
 
 }

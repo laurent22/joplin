@@ -204,6 +204,7 @@ ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/locale.js
 ReactNativeClient/lib/Logger.js
+ReactNativeClient/lib/markdownUtils.js
 ReactNativeClient/lib/models/Alarm.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js

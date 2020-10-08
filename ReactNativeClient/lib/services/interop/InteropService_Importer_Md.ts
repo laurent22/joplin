@@ -6,7 +6,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
 const shim = require('lib/shim').default;
-const { extractImageUrls } = require('lib/markdownUtils');
+const { extractImageUrls } = require('lib/markdownUtils').default;
 const { unique } = require('lib/ArrayUtils');
 const { pregQuote } = require('lib/string-utils-common');
 
