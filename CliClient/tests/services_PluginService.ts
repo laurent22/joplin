@@ -78,16 +78,4 @@ describe('services_PluginService', function() {
 		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
-	// it('should translate calls from plugin process to sandbox', asyncTest(async () => {
-	// 	const service = newPluginService();
-	// 	const plugin = await service.loadPlugin(`${testPluginDir}/simple`);
-	// 	await service.runPlugin(plugin);
-
-	// 	const folder = await Folder.save({ title: 'folder' });
-
-	// 	const folderFromApi = await service.executeSandboxCall(plugin.id, 'joplin.data.get', ['folders/' + folder.id]);
-	// 	expect(folder.id).toBe(folderFromApi.id);
-	// 	expect(folder.title).toBe(folderFromApi.title);
-	// }));
-
 });

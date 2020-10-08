@@ -188,7 +188,6 @@ export default class CommandService extends BaseService {
 
 	async execute(commandName:string, props:any = null):Promise<any> {
 		const command = this.commandByName(commandName);
-		// if (args === null && command.runtime.props) args = command.runtime.props;
 		this.logger().info('CommandService::execute:', commandName, props);
 		return command.runtime.execute(props ? props : {});
 	}

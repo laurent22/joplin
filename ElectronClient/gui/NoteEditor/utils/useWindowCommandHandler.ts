@@ -31,17 +31,17 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 			} else {
 				if (declaration.name === 'insertDateTime') {
-					editorRef.current.execCommand({
+					return editorRef.current.execCommand({
 						name: 'insertText',
 						value: time.formatMsToLocal(new Date().getTime()),
 					});
 				} else if (declaration.name === 'scrollToHash') {
-					editorRef.current.scrollTo({
+					return editorRef.current.scrollTo({
 						type: ScrollOptionTypes.Hash,
 						value: props.hash,
 					});
 				} else {
-					editorRef.current.execCommand({
+					return editorRef.current.execCommand({
 						name: declaration.name,
 						value: props.value,
 					});

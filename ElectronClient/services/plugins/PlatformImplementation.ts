@@ -1,11 +1,11 @@
-import { EditorCommand } from 'lib/services/plugins/api/types';
+// import { EditorCommand } from 'lib/services/plugins/api/types';
 
-interface JoplinWorkspace {
-	execEditorCommand(command:EditorCommand):Promise<string>
-}
+// interface JoplinWorkspace {
+// 	execEditorCommand(command:EditorCommand):Promise<string>
+// }
 
 interface Joplin {
-	workspace: JoplinWorkspace;
+	// workspace: JoplinWorkspace;
 }
 
 interface Components {
@@ -27,15 +27,15 @@ export default class PlatformImplementation {
 		this.components_ = {};
 
 		this.joplin_ = {
-			workspace: {
-				execEditorCommand: async (command:EditorCommand) => {
-					if (this.components_.textEditor) {
-						return this.components_.textEditor.current.execCommand(command);
-					} else {
-						return '';
-					}
-				},
-			},
+			// workspace: {
+			// 	execEditorCommand: async (command:EditorCommand) => {
+			// 		if (this.components_.textEditor) {
+			// 			return this.components_.textEditor.current.execCommand(command);
+			// 		} else {
+			// 			return '';
+			// 		}
+			// 	},
+			// },
 		};
 	}
 

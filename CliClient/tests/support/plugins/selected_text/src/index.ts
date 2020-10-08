@@ -12,8 +12,9 @@ joplin.plugins.register({
 			label: 'Reformat the selected Markdown table',
 			iconName: 'fas fa-music',
 			execute: async () => {
-				const selectedText = await joplin.workspace.execEditorCommand({ name: 'selectedText' });
-				const lines = selectedText.split('\n');
+				const selectedText = await joplin.commands.execute('selectedText');
+				
+				const lines = (selectedText as any).split('\n');
 
 				const cellWidths = [];
 
@@ -44,7 +45,7 @@ joplin.plugins.register({
 					newLines.push(newCells.join(' | '));
 				}
 
-				await joplin.workspace.execEditorCommand({ name: 'replaceSelection', value: newLines.join('\n') });
+				await joplin.commands.execute('replaceSelection', { value: newLines.join('\n') });
 			},
 		});
 		

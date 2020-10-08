@@ -1,5 +1,4 @@
 import eventManager from 'lib/eventManager';
-import { EditorCommand } from './types';
 
 /**
  * @ignore
@@ -16,11 +15,11 @@ export default class JoplinWorkspace {
 	// TODO: unregister events when plugin is closed or disabled
 
 	private store: any;
-	private implementation_:any;
+	// private implementation_:any;
 
-	constructor(implementation:any, store: any) {
+	constructor(_implementation:any, store: any) {
 		this.store = store;
-		this.implementation_ = implementation;
+		// this.implementation_ = implementation;
 	}
 
 	/**
@@ -65,14 +64,5 @@ export default class JoplinWorkspace {
 	 */
 	async selectedNoteIds():Promise<string[]> {
 		return this.store.getState().selectedNoteIds.slice();
-	}
-
-	// TODO: all these should be accessible via the commands namespace
-
-	/**
-	 * Executes the given editor command.
-	 */
-	async execEditorCommand(command:EditorCommand) {
-		return this.implementation_.execEditorCommand(command);
 	}
 }

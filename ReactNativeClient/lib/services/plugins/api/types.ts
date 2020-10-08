@@ -237,3 +237,16 @@ export interface SettingSection {
 	description?: string,
 	name?: string,
 }
+
+// =================================================================
+// Data API types
+// =================================================================
+
+/**
+ * An array of at least one element and at most three elements.
+ *
+ * [0]: Resource name (eg. "notes", "folders", "tags", etc.)
+ * [1]: (Optional) Resource ID.
+ * [2]: (Optional) Resource link.
+ */
+export type Path = string[];

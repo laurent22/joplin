@@ -83,6 +83,12 @@ const declarations:CommandDeclaration[] = [
 		label: () => _('Insert Date Time'),
 		iconName: 'icon-add-date',
 	},
+	{
+		name: 'selectedText',
+	},
+	{
+		name: 'replaceSelection',
+	},
 ];
 
 export default declarations;
