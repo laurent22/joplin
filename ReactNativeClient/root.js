@@ -615,6 +615,25 @@ class AppComponent extends React.Component {
 		};
 	}
 
+	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
+	// For example, adding a loading screen as was done in this commit: https://github.com/laurent22/joplin/commit/569355a3182bc12e50a54249882e3d68a72c2b28.
+	// had for effect that sharing with the app would create multiple instances of the app, thus breaking
+	// database access and so on. It's unclear why it happens and how to fix it but reverting that commit
+	// fixed the issue for now.
+	//
+	// Changing app launch mode doesn't help.
+	//
+	// It's possible that it's a bug in React Native, or perhaps the framework expects that the whole app can be
+	// mounted/unmounted or multiple ones can be running at the same time, but the app was not designed in this
+	// way.
+	//
+	// More reports and info about the multiple instance bug:
+	//
+	// https://github.com/laurent22/joplin/issues/3800
+	// https://github.com/laurent22/joplin/issues/3804
+	// https://github.com/laurent22/joplin/issues/3807
+	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
+	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
 	async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
