@@ -12,9 +12,9 @@ joplin.plugins.register({
 			label: 'Reformat the selected Markdown table',
 			iconName: 'fas fa-music',
 			execute: async () => {
-				const selectedText = await joplin.commands.execute('selectedText');
+				const selectedText = (await joplin.commands.execute('selectedText') as string);
 				
-				const lines = (selectedText as any).split('\n');
+				const lines = selectedText.split('\n');
 
 				const cellWidths = [];
 
