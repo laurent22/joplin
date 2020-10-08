@@ -15,6 +15,10 @@ But first install Yeoman and the Joplin Plugin Generator:
 
 	npm install -g yo generator-joplin
 
+Then to create the plugin, run:
+
+	yo joplin
+
 This will create the basic scafolding of the plugin. At the root of it, there is a number of configuration files which you normally won't need to change. Then the `src/` directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.
 
 The `src/` directory also contains a [manifest.json]() file, which you can edit to set various information about the plugin, such as its name, homepage URL, etc.

@@ -8,7 +8,7 @@ echo "Rebuild API doc..."
 echo "---------------------------------------------------"
 cd "$ROOT_DIR/../CliClient"
 API_DOC="$(npm run --silent start -- apidoc)"
-echo "$API_DOC" > "$ROOT_DIR/../readme/api.md"
+echo "$API_DOC" > "$ROOT_DIR/../readme/api/references/rest_api.md"
 cd "$ROOT_DIR"
 
 echo "---------------------------------------------------"
