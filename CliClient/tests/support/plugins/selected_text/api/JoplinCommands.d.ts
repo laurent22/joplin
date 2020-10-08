@@ -4,6 +4,17 @@ import { Command } from './types';
  * {@link JoplinViewsToolbarButtons | toolbar buttons} or {@link JoplinViewsMenuItems | menu items}.
  *
  * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/register_command)
+ *
+ * ## Executing Joplin's internal commands
+ *
+ * It is also possible to execute internal Joplin's commands which, as of now, are not well documented.
+ * You can find the list directly on GitHub though at the following locations:
+ *
+ * https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/MainScreen/commands
+ * https://github.com/laurent22/joplin/tree/dev/ElectronClient/commands
+ * https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.ts
+ *
+ * To view what arguments are supported, you can open any of these files and look at the `execute()` command.
  */
 export default class JoplinCommands {
     /**
@@ -19,7 +30,7 @@ export default class JoplinCommands {
      * await joplin.commands.execute('newFolder', { parent_id: "SOME_FOLDER_ID" });
      * ```
      */
-    execute(commandName: string, props?: any): Promise<void>;
+    execute(commandName: string, props?: any): Promise<any>;
     /**
      * <span class="platform-desktop">desktop</span> Registers a new command.
      *
