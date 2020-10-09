@@ -5,7 +5,7 @@ import { Command } from './types';
  * This class allows executing or registering new Joplin commands. Commands can be executed or associated with
  * {@link JoplinViewsToolbarButtons | toolbar buttons} or {@link JoplinViewsMenuItems | menu items}.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/register_command)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/register_command)
  *
  * ## Executing Joplin's internal commands
  *

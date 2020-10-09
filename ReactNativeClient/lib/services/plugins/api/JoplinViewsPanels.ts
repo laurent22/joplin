@@ -7,7 +7,7 @@ import { ViewHandle } from './types';
  * Allows creating and managing view panels. View panels currently are displayed at the right of the sidebar and allows displaying any HTML content (within a webview) and update it in real-time. For example
  * it could be used to display a table of content for the active note, or display various metadata or graph.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/toc)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc)
  */
 export default class JoplinViewsPanels {
 

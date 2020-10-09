@@ -9,7 +9,7 @@ import { SettingItem, SettingSection } from './types';
  *
  * Note: Currently this API does **not** provide access to Joplin's built-in settings. This is by design as plugins that modify user settings could give unexpected results
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/settings)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/settings)
  */
 export default class JoplinSettings {
 	private plugin_:Plugin = null;

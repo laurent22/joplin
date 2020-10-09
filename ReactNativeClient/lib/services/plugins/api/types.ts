@@ -26,7 +26,7 @@ export enum ImportModuleOutputFormat {
 }
 
 /**
- * Used to implement a module to export data from Joplin. [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/json_export) for an example.
+ * Used to implement a module to export data from Joplin. [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/json_export) for an example.
  *
  * In general, all the event handlers you'll need to implement take a `context` object as a first argument. This object will contain the export or import path as well as various optional properties, such as which notes or notebooks need to be exported.
  *
