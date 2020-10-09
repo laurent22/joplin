@@ -170,7 +170,7 @@
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
     "memory-cache": "^0.2.0",
-    "mermaid": "^8.8.0",
+    "mermaid": "^8.8.1",
     "moment": "^2.22.2",
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
