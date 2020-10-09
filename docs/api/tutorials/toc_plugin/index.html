@@ -373,10 +373,15 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <p>Before getting any further, make sure your environment is setup correctly as described in the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/">Get Started guide</a>.</p>
 <h2>Registering the plugin<a name="registering-the-plugin" href="#registering-the-plugin" class="heading-anchor">🔗</a></h2>
 <p>All plugins must <a href="https://joplinapp.org/plugins/api/classes/joplinplugins.html">register themselves</a> and declare what events they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <code>onStart()</code> event handler too:</p>
-<pre><code class="language-typescript">// Register the plugin
+<pre><code class="language-typescript">// Import the Joplin API
+import joplin from 'api';
+
+// Register the plugin
 joplin.plugins.register({
 
 	// Run initialisation code in the onStart event handler
+	// Note that due to the plugin multi-process architecture, you should
+	// always assume that all function calls and event handlers are async.
 	onStart: async function() {
 		console.info('TOC plugin started!');
 	},
@@ -385,8 +390,8 @@ joplin.plugins.register({
 </code></pre>
 <p>If you now build the plugin and try to run it in Joplin, you should see the message <code>TOC plugin started!</code> in the dev console.</p>
 <h2>Getting the current note<a name="getting-the-current-note" href="#getting-the-current-note" class="heading-anchor">🔗</a></h2>
-<p>In order to create the table of content, you will need to access the content of currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the <a href="">workspace</a>, which provides information about the active content being edited.</p>
-<p>So within the <code>onStart</code> event handler, add the following:</p>
+<p>In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the <a href="https://joplinapp.org/plugins/api/classes/joplinworkspace.html">workspace API</a>, which provides information about the active content being edited.</p>
+<p>So within the <code>onStart()</code> event handler, add the following:</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 
 	onStart: async function() {
@@ -405,13 +410,13 @@ joplin.plugins.register({
 		}
 
 		// This event will be triggered when the user selects a different note
-		joplin.workspace.onNoteSelectionChange(() =&gt; {
+		await joplin.workspace.onNoteSelectionChange(() =&gt; {
 			updateTocView();
 		});
 
 		// This event will be triggered when the content of the note changes
 		// as you also want to update the TOC in this case.
-		joplin.workspace.onNoteContentChange(() =&gt; {
+		await joplin.workspace.onNoteContentChange(() =&gt; {
 			updateTocView();
 		});
 
@@ -421,8 +426,9 @@ joplin.plugins.register({
 
 });
 </code></pre>
+<p>Try the above and you should see in the console the event handler being called every time a new note is opened, or whenever the note content changes.</p>
 <h2>Getting the note sections and slugs<a name="getting-the-note-sections-and-slugs" href="#getting-the-note-sections-and-slugs" class="heading-anchor">🔗</a></h2>
-<p>Now that you have the current note, you'll need to get the headers in that note in order to build the TOC from it. There are many ways to do so, such as using a Markdown parser, but for now a quick and dirty solution is to get all the lines that start with <code>#</code> followed by a space. Any such line should be a header.</p>
+<p>Now that you have the current note, you'll need to extract the headers from that note in order to build the TOC from it. Since the note content is plain Markdown, there are several ways to do so, such as using a Markdown parser, but for now a quick and dirty solution is to get all the lines that start with any number of  <code>#</code> followed by a space. Any such line should be a header.</p>
 <p>The function below, which you can copy anywhere in your file, will use this method and return an array of headers, with the text and level (H1, H2, etc.) of header:</p>
 <pre><code class="language-typescript">function noteHeaders(noteBody:string) {
 	const headers = [];
@@ -459,8 +465,11 @@ joplin.plugins.register({
 
 });
 </code></pre>
-<p>Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like &quot;My Header&quot; is converted to &quot;my-header&quot;. And if there's already a slug with that name, a number is appended to it. Without going into too much details, this is the function you will need for Joplin, so copy it somewhere in your file:</p>
-<pre><code class="language-typescript">let slugs = {};
+<p>Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like &quot;My Header&quot; is converted to &quot;my-header&quot;. And if there's already a slug with that name, a number is appended to it. Without going into too much details, you will need the &quot;slug&quot; package to generate this for you, so install it using <code>npm i -s slug</code> from the root of your plugin directory.</p>
+<p>Then this is the function you will need for Joplin, so copy it somewhere in your file:</p>
+<pre><code class="language-typescript">const nodeSlug = require('slug');
+
+let slugs = {};
 
 function headerSlug(headerText) {
 	const s = nodeSlug(headerText);
@@ -471,18 +480,29 @@ function headerSlug(headerText) {
 	return output.join('-');
 }
 </code></pre>
+<p>And you will need a utility function to escape HTML. There are many packages to do this but for now you can simply use this:</p>
+<pre><code class="language-typescript">// From https://stackoverflow.com/a/6234804/561309
+function escapeHtml(unsafe:string) {
+	return unsafe
+		.replace(/&amp;/g, &quot;&amp;amp;&quot;)
+		.replace(/&lt;/g, &quot;&amp;lt;&quot;)
+		.replace(/&gt;/g, &quot;&amp;gt;&quot;)
+		.replace(/&quot;/g, &quot;&amp;quot;&quot;)
+		.replace(/'/g, &quot;&amp;#039;&quot;);
+}
+</code></pre>
 <p>Again try to run the plugin and if you select a note with multiple headers, you should see the header list in the console.</p>
 <h2>Creating a webview<a name="creating-a-webview" href="#creating-a-webview" class="heading-anchor">🔗</a></h2>
-<p>In order to display the TOC in Joplin, you will need a <a href="https://joplinapp.org/plugins/api/classes/joplinviewspanels.html">webview panel</a>. Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the <code>html</code> property.</p>
+<p>In order to display the TOC in Joplin, you will need a <a href="https://joplinapp.org/plugins/api/classes/joplinviewspanels.html">webview panel</a>. Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.</p>
 <p>Here's how it could be done:</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 
 	onStart: async function() {
-		// Create the webview object
-		const tocView = joplin.views.createWebviewPanel();
+		// Create the panel object
+		const panel = await joplin.views.panels.create();
 
 		// Set some initial content while the TOC is being created
-		tocView.html = 'Loading...';
+		await joplin.views.panels.setHtml(panel, 'Loading...');
 
 		async function updateTocView() {
 			const note = await joplin.workspace.selectedNote();
@@ -502,24 +522,24 @@ function headerSlug(headerText) {
 					//   We assign it to a &quot;data&quot; attribute, which can then be easily retrieved from JavaScript
 					//
 					// - Also make sure you escape the text before inserting it in the HTML to avoid XSS attacks
-					//   and rendering issues. Joplin provides the function joplin.utils.escapeHtml for this purpose.
+					//   and rendering issues. For this use the `escapeHtml()` function you've added earlier.
 					itemHtml.push(`
 						&lt;p class=&quot;toc-item&quot; style=&quot;padding-left:${(header.level - 1) * 15}px&quot;&gt;
-							&lt;a class=&quot;toc-item-link&quot; href=&quot;#&quot; data-slug=&quot;${joplin.utils.escapeHtml(slug)}&quot;&gt;
-								${joplin.utils.escapeHtml(header.text)}
+							&lt;a class=&quot;toc-item-link&quot; href=&quot;#&quot; data-slug=&quot;${escapeHtml(slug)}&quot;&gt;
+								${escapeHtml(header.text)}
 							&lt;/a&gt;
 						&lt;/p&gt;
 					`);
 				}
 
 				// Finally, insert all the headers in a container and set the webview HTML:
-				tocView.html = `
+				await joplin.views.panels.setHtml(panel, `
 					&lt;div class=&quot;container&quot;&gt;
 						${itemHtml.join('\n')}
 					&lt;/div&gt;
-				`;
+				`);
 			} else {
-				tocView.html = 'Please select a note to view the table of content';
+				await joplin.views.panels.setHtml(panel, 'Please select a note to view the table of content');
 			}
 		}
 
@@ -528,15 +548,18 @@ function headerSlug(headerText) {
 
 });
 </code></pre>
-<p>Now run the plugin again and you see the TOC dynamically update as you change notes.</p>
+<p>Now run the plugin again and you should see the TOC dynamically updating as you change notes.</p>
 <h2>Styling the view<a name="styling-the-view" href="#styling-the-view" class="heading-anchor">🔗</a></h2>
 <p>In order to better integrate the TOC to Joplin, you might want to style it using CSS. To do so, first add a <code>webview.css</code> file next to <code>index.ts</code>, then you will need to let Joplin know about this file. This is done using the <code>addScript()</code> function (which is also used to add JavaScript files as we'll see later), like so:</p>
-<pre><code class="language-typescript">const tocView = joplin.views.createWebviewPanel();
-tocView.addScript('./webview.css'); // Add the CSS file to the view
+<pre><code class="language-typescript">const panel = await joplin.views.panels.create();
+ // Add the CSS file to the view, right after it has been created:
+await joplin.views.panels.addScript(panel, './webview.css');
 </code></pre>
 <p>This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of theme variables, which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.</p>
-<p>For now, the CSS file below would give the view the correct font color and family, and the right background colour:</p>
-<pre><code class="language-css">.container {
+<p>The CSS file below would give the view the correct font color and family, and the right background colour:</p>
+<pre><code class="language-css">/* In webview.css */
+
+.container {
 	background-color: var(--joplin-background-color);
 	color: var(--joplin-color);
 	font-size: var(--joplin-font-size);
@@ -548,27 +571,32 @@ tocView.addScript('./webview.css'); // Add the CSS file to the view
 	text-decoration: none;
 }
 </code></pre>
+<p>Try the plugin and the styling should be improved. You may also try to switch to dark or light mode and see the style being updated.</p>
 <h2>Making the webview interactive<a name="making-the-webview-interactive" href="#making-the-webview-interactive" class="heading-anchor">🔗</a></h2>
 <p>The next step is to make the TOC interactive so that when the user clicks on a link, the note is scrolled to right header. This can be done using an external JavaScript file that will handle the click events. As for the CSS file, create a <code>webview.js</code> file next to <code>index.ts</code>, then add the script to the webview:</p>
-<pre><code class="language-typescript">const tocView = joplin.views.createWebviewPanel();
-tocView.addScript('./webview.css'); // Add the CSS file to the view
-tocView.addScript('./webview.js'); // Add the JS file to the view
+<pre><code class="language-typescript">// In index.ts
+
+const panel = joplin.views.createWebviewPanel();
+await joplin.views.panels.addScript(panel, './webview.css');
+await joplin.views.panels.addScript(panel, './webview.js'); // Add the JS file
 </code></pre>
 <p>To check that everything's working, let's create a simple event handler that display the header slug when clicked:</p>
-<pre><code class="language-javascript">// There are many ways to listen to click events, you can even use
-// something like jQuery or React. For now to keep it simple, let's
-// do it in plain JavaScript:
+<pre><code class="language-javascript">// In webview.js
+
+// There are many ways to listen to click events, you can even use
+// something like jQuery or React. This is how it can be done using
+// plain JavaScript:
 document.addEventListener('click', event =&gt; {
 	const element = event.target;
 	// If a TOC header has been clicked:
 	if (element.className === 'toc-item-link') {
 		// Get the slug and display it:
 		const slug = element.dataset.slug;
-		alert('Clicked header slug: ' + slug);
+		console.info('Clicked header slug: ' + slug);
 	}
-})
+});
 </code></pre>
-<p>If everything works well, you should now see the slug whenever you click on a header link. The next step will be to use that slug to scroll to the right header.</p>
+<p>If everything works well, you should now see the slug in the console whenever you click on a header link. The next step will be to use that slug to scroll to the right header.</p>
 <h2>Passing messages between the webview and the plugin<a name="passing-messages-between-the-webview-and-the-plugin" href="#passing-messages-between-the-webview-and-the-plugin" class="heading-anchor">🔗</a></h2>
 <p>For security reason, webviews run within their own sandbox (iframe) and thus do not have access to the Joplin API. You can however send messages to and from the webview to the plugin, and you can call the Joplin API from the plugin.</p>
 <p>From within a webview, you have access to the webviewApi object, which among others has a <code>postMessage()</code> function you can use to send a message to the plugin. Let's use this to post the slug info to the plugin:</p>
@@ -582,16 +610,16 @@ document.addEventListener('click', event =&gt; {
 			hash: element.dataset.slug,
 		});
 	}
-})
+});
 </code></pre>
 <p>Then from the plugin, in <code>src/index.ts</code>, you can listen to this message using the <code>onMessage()</code> handler. Then from this handler, you can call the <code>scrollToHash</code> command and pass it the slug (or hash).</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 	onStart: async function() {
-		const tocView = joplin.views.createWebviewPanel();
+		const panel = await joplin.views.panels.create();
 
 		// ...
 
-		tocView.onMessage((message) =&gt; {
+		await joplin.views.panels.onMessage(panel, (message) =&gt; {
 			if (message.name === 'scrollToHash') {
 				// As the name says, the scrollToHash command makes the note scroll
 				// to the provided hash.
