@@ -1,5 +1,5 @@
 const React = require('react');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
@@ -164,10 +164,10 @@ class PromptDialog extends React.Component {
 
 	render() {
 		const style = this.props.style;
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const buttonTypes = this.props.buttons ? this.props.buttons : ['ok', 'cancel'];
 
-		const styles = this.styles(this.props.theme, style.width, style.height, this.state.visible);
+		const styles = this.styles(this.props.themeId, style.width, style.height, this.state.visible);
 
 		const onClose = (accept, buttonType) => {
 			if (this.props.onClose) {

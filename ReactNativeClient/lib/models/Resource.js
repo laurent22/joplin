@@ -3,14 +3,14 @@ const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
 const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 const JoplinError = require('lib/JoplinError');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class Resource extends BaseItem {
 	static tableName() {

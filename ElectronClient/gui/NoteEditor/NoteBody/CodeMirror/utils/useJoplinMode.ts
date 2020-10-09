@@ -1,5 +1,6 @@
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
+const Setting = require('lib/models/Setting.js');
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks
@@ -10,7 +11,7 @@ export default function useJoplinMode(CodeMirror: any) {
 			name: 'markdown',
 			taskLists: true,
 			strikethrough: true,
-			emoji: true,
+			emoji: Setting.value('markdown.plugin.emoji'),
 			tokenTypeOverrides: {
 				linkText: 'link-text',
 			},
@@ -21,7 +22,8 @@ export default function useJoplinMode(CodeMirror: any) {
 
 		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?!\S))/;
 		const inlineKatexCloseRE = /(?<![\\\s$])\$(?!\S)/;
-		const blockKatexRE = /(?<!\\)\$\$/;
+		const blockKatexOpenRE = /(?<!\S)\$\$/;
+		const blockKatexCloseRE = /(?<![\\\s])\$\$/;
 
 		// Find token will search for a valid katex start or end token
 		// If found then it will return the index, otherwise -1
@@ -32,7 +34,7 @@ export default function useJoplinMode(CodeMirror: any) {
 		}
 
 		return {
-			startState: function(): {outer: any, openCharacter: string, inner: any} {
+			startState: function(): { outer: any, openCharacter: string, inner: any } {
 				return {
 					outer: CodeMirror.startState(markdownMode),
 					openCharacter: '',
@@ -55,19 +57,19 @@ export default function useJoplinMode(CodeMirror: any) {
 				let nextTokenPos = stream.string.length;
 				let closing = false;
 
-				const blockPos = findToken(stream, blockKatexRE);
-
 				if (state.openCharacter) {
 					currentMode = stex;
 					currentState = state.inner;
 					tokenLabel = 'katex-marker-close';
 					closing = true;
 
+					const blockPos = findToken(stream, blockKatexCloseRE);
 					const inlinePos = findToken(stream, inlineKatexCloseRE);
 
 					if (state.openCharacter === '$$' && blockPos !== -1) nextTokenPos = blockPos;
 					if (state.openCharacter === '$' && inlinePos !== -1) nextTokenPos = inlinePos;
-				} else {
+				} else if (!currentState.code) {
+					const blockPos = findToken(stream, blockKatexOpenRE);
 					const inlinePos = findToken(stream, inlineKatexOpenRE);
 
 					if (blockPos !== -1) nextTokenPos = blockPos;

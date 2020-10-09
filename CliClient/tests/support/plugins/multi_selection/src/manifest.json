@@ -1,0 +1,8 @@
+{
+	"manifest_version": 1,
+	"name": "Multi Note Selection Demo",
+	"description": "Demonstrate how to get the selected notes and process them",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

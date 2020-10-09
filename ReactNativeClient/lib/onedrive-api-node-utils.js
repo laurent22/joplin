@@ -1,5 +1,6 @@
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { netUtils } = require('lib/net-utils.js');
+const shim = require('lib/shim').default;
 
 const http = require('http');
 const urlParser = require('url');
@@ -71,7 +72,7 @@ class OneDriveApiNodeUtils {
 				// away or the browser might display a connection reset error (even
 				// though it worked).
 				const waitAndDestroy = () => {
-					setTimeout(() => {
+					shim.setTimeout(() => {
 						this.oauthServer_.destroy();
 						this.oauthServer_ = null;
 					}, 1000);

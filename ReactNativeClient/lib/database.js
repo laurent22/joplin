@@ -1,6 +1,7 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { time } = require('lib/time-utils.js');
 const Mutex = require('async-mutex').Mutex;
+const shim = require('lib/shim').default;
 
 class Database {
 	constructor(driver) {
@@ -9,6 +10,8 @@ class Database {
 		this.logger_ = new Logger();
 		this.logExcludedQueryTypes_ = [];
 		this.batchTransactionMutex_ = new Mutex();
+		this.profilingEnabled_ = false;
+		this.queryId_ = 1;
 	}
 
 	setLogExcludedQueryTypes(v) {
@@ -71,10 +74,30 @@ class Database {
 
 		let waitTime = 50;
 		let totalWaitTime = 0;
+		const callStartTime = Date.now();
+		let profilingTimeoutId = null;
 		while (true) {
 			try {
 				this.logQuery(sql, params);
+
+				const queryId = this.queryId_++;
+				if (this.profilingEnabled_) {
+					console.info(`SQL START ${queryId}`, sql, params);
+
+					profilingTimeoutId = shim.setInterval(() => {
+						console.warn(`SQL ${queryId} has been running for ${Date.now() - callStartTime}: ${sql}`);
+					}, 3000);
+				}
+
 				const result = await this.driver()[callName](sql, params);
+
+				if (this.profilingEnabled_) {
+					shim.clearInterval(profilingTimeoutId);
+					profilingTimeoutId = null;
+					const elapsed = Date.now() - callStartTime;
+					if (elapsed > 10) console.info(`SQL END ${queryId}`, elapsed, sql, params);
+				}
+
 				return result; // No exception was thrown
 			} catch (error) {
 				if (error && (error.code == 'SQLITE_IOERR' || error.code == 'SQLITE_BUSY')) {
@@ -89,6 +112,8 @@ class Database {
 				} else {
 					throw this.sqliteErrorToJsError(error, sql, params);
 				}
+			} finally {
+				if (profilingTimeoutId) shim.clearInterval(profilingTimeoutId);
 			}
 		}
 	}
@@ -97,14 +122,16 @@ class Database {
 		return this.tryCall('selectOne', sql, params);
 	}
 
-	async loadExtension(path) {
-		let result =  null;
-		try {
-			result = await this.driver().loadExtension(path);
-			return result;
-		} catch (e) {
-			throw new Error(`Could not load extension ${path}`);
-		}
+	async loadExtension(/* path */) {
+		return; // Disabled for now as fuzzy search extension is not in use
+
+		// let result =  null;
+		// try {
+		// 	result = await this.driver().loadExtension(path);
+		// 	return result;
+		// } catch (e) {
+		// 	throw new Error(`Could not load extension ${path}`);
+		// }
 	}
 
 	async selectAll(sql, params = null) {

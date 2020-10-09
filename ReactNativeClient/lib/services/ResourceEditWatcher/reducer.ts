@@ -1,10 +1,8 @@
-import produce, { Draft, setAutoFreeze } from 'immer';
+import produce, { Draft } from 'immer';
 
 export const defaultState = {
 	watchedResources: {},
 };
-
-setAutoFreeze(false); // TODO: REMOVE ONCE PLUGIN BRANCH HAS BEEN MERGED!!
 
 const reducer = produce((draft: Draft<any>, action:any) => {
 	if (action.type.indexOf('RESOURCE_EDIT_WATCHER_') !== 0) return;

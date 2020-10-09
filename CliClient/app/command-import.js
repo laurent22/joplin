@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
-const InteropService = require('lib/services/InteropService.js');
+const InteropService = require('lib/services/interop/InteropService').default;
 const BaseModel = require('lib/BaseModel.js');
 const { cliUtils } = require('./cli-utils.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 class Command extends BaseCommand {
 	usage() {
@@ -15,7 +15,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const formats = service
 			.modules()
 			.filter(m => m.type === 'importer')
@@ -63,7 +63,7 @@ class Command extends BaseCommand {
 
 		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));
-		const service = new InteropService();
+		const service = InteropService.instance();
 		const result = await service.import(importOptions);
 		result.warnings.map(w => this.stdout(w));
 		cliUtils.redrawDone();

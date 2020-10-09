@@ -1,0 +1,93 @@
+(function(globalObject) {
+	// TODO: Not sure if that will work once packaged in Electron
+	const sandboxProxy = require('../../lib/services/plugins/sandboxProxy.js').default;
+	const ipcRenderer = require('electron').ipcRenderer;
+
+	const urlParams = new URLSearchParams(window.location.search);
+	const pluginId = urlParams.get('pluginId');
+
+	let eventId_ = 1;
+	const eventHandlers_ = {};
+
+	function mapEventHandlersToIds(argName, arg) {
+		if (Array.isArray(arg)) {
+			for (let i = 0; i < arg.length; i++) {
+				arg[i] = mapEventHandlersToIds(`${i}`, arg[i]);
+			}
+			return arg;
+		} else if (typeof arg === 'function') {
+			const id = `___plugin_event_${argName}_${eventId_}`;
+			eventId_++;
+			eventHandlers_[id] = arg;
+			return id;
+		} else if (arg === null) {
+			return null;
+		} else if (arg === undefined) {
+			return undefined;
+		} else if (typeof arg === 'object') {
+			for (const n in arg) {
+				arg[n] = mapEventHandlersToIds(n, arg[n]);
+			}
+		}
+
+		return arg;
+	}
+
+	const callbackPromises = {};
+	let callbackIndex = 1;
+
+	const target = (path, args) => {
+		const callbackId = `cb_${pluginId}_${Date.now()}_${callbackIndex++}`;
+		const promise = new Promise((resolve, reject) => {
+			callbackPromises[callbackId] = { resolve, reject };
+		});
+
+		ipcRenderer.send('pluginMessage', {
+			target: 'mainWindow',
+			pluginId: pluginId,
+			callbackId: callbackId,
+			path: path,
+			args: mapEventHandlersToIds(null, args),
+		});
+
+		return promise;
+	};
+
+	ipcRenderer.on('pluginMessage', (event, message) => {
+		if (message.eventId) {
+			const eventHandler = eventHandlers_[message.eventId];
+
+			if (!eventHandler) {
+				console.error('Got an event ID but no matching event handler: ', message);
+				return;
+			}
+
+			eventHandler(...message.args);
+			return;
+		}
+
+		if (message.callbackId) {
+			const promise = callbackPromises[message.callbackId];
+			if (!promise) {
+				console.error('Got a callback without matching promise: ', message);
+				return;
+			}
+
+			if (message.error) {
+				promise.reject(message.error);
+			} else {
+				promise.resolve(message.result);
+			}
+			return;
+		}
+
+		console.warn('Unhandled plugin message:', message);
+	});
+
+	const pluginScriptPath = urlParams.get('pluginScript');
+	const script = document.createElement('script');
+	script.src = pluginScriptPath;
+	document.head.appendChild(script);
+
+	globalObject.joplin = sandboxProxy(target);
+})(window);

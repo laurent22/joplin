@@ -11,6 +11,7 @@ Note that all the applications share the same library, which, for historical rea
 - macOS, Linux: Install rsync - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
+- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev`
 
 ## Building
 
@@ -24,6 +25,8 @@ Then you can test the various applications:
 
 	cd ElectronClient
 	npm start
+
+You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 
@@ -93,4 +96,4 @@ The Markdown renderer is located under ReactNativeClient/lib/joplin-renderer. Wh
 
 # Troubleshooting
 
-Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/master/readme/build_troubleshooting.md) for various tips on how to get the build working.
+Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md) for various tips on how to get the build working.

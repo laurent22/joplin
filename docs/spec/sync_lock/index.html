@@ -14,12 +14,12 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 -->
 
 <head>
-	<title>Sync Lock Specifications | Joplin</title>
+	<title>Lock types | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<link rel="shortcut icon" type="image/x-icon" href="https://joplinapp.org/favicon.ico">
 	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
 	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
@@ -320,22 +320,33 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API</p>
+<ul>
+<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
+<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="https://joplinapp.org/plugin/api/classes/joplin.html">Plugin API</a></li>
+<li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
 <li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 </ul>
 </li>
 <li>
 <p>Google Summer of Code 2020</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
 <li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
 </ul>
 </li>
@@ -360,6 +371,8 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
 <p>When a client acquires a lock, it must refresh it every X seconds. A lock timeout after Y seconds (where X &lt; Y). A lock with a timestamp greater than Y is considered expired and can be ignored by other clients. A client that tries to refresh a lock that has expired should fail.</p>
 <p>For example, if a client is currently syncing, it must stop doing so if it couldn't refresh the lock with Y seconds.</p>
 <p>For example, if a client is upgrading a target, it must stop doing so if it couldn't refresh the lock within Y seconds.</p>
+<p>If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients, seeing no active lock, might have performed in the meantime operations that invalidates the current operation. For example, another client might have upgraded the sync target, so any active sync with an expired lock should be cancelled. Or if the current client was upgrading the sync target, another client might have synced since then, making any cached data invalid.</p>
+<p>In some cases it should be safe to re-acquire a lock but adding support for this would make the algorithm more complex without much benefits.</p>
 <h1>Acquiring a SYNC lock<a name="acquiring-a-sync-lock" href="#acquiring-a-sync-lock" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>The client check if there is a valid EXCLUSIVE lock on the target</li>

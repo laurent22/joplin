@@ -1,10 +1,10 @@
 import CommandService, { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'showNoteProperties',
 	label: () => _('Note properties'),
-	iconName: 'fa-info-circle',
+	iconName: 'icon-info',
 };
 
 export const runtime = (comp:any):CommandRuntime => {

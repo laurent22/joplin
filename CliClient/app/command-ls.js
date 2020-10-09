@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');

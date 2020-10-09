@@ -63,7 +63,7 @@ class AppNavComponent extends Component {
 
 		this.previousRouteName_ = route.routeName;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = { flex: 1, backgroundColor: theme.backgroundColor };
 
@@ -81,7 +81,7 @@ class AppNavComponent extends Component {
 const AppNav = connect(state => {
 	return {
 		route: state.route,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(AppNavComponent);
 

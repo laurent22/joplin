@@ -4,12 +4,12 @@ require('app-module-path').addPath(__dirname);
 
 const fs = require('fs-extra');
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
-const InteropService_Exporter_Md = require('lib/services/InteropService_Exporter_Md.js');
+const InteropService_Exporter_Md = require('lib/services/interop/InteropService_Exporter_Md').default;
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
 const Note = require('lib/models/Note.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 
 const exportDir = `${__dirname}/export`;
 
@@ -67,8 +67,8 @@ describe('services_InteropService_Exporter_Md', function() {
 
 		expect(!exporter.context() && !(exporter.context().notePaths || Object.keys(exporter.context().notePaths).length)).toBe(false, 'Context should be empty before processing.');
 
-		await exporter.processItem(Folder, folder1);
-		await exporter.processItem(Folder, folder2);
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
 		expect(Object.keys(exporter.context().notePaths).length).toBe(3, 'There should be 3 note paths in the context.');
@@ -96,7 +96,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_NOTE, note1_2);
 
-		await exporter.processItem(Folder, folder1);
+		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
 		expect(Object.keys(exporter.context().notePaths).length).toBe(2, 'There should be 2 note paths in the context.');
@@ -121,7 +121,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 
-		await exporter.processItem(Folder, folder1);
+		await exporter.processItem(Folder.modelType(), folder1);
 		// Create a file with the path of note1 before processing note1
 		await shim.fsDriver().writeFile(`${exportDir}/folder1/note1.md`, 'Note content', 'utf-8');
 
@@ -189,10 +189,10 @@ describe('services_InteropService_Exporter_Md', function() {
 		const folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder3.id);
 
-		await exporter.processItem(Folder, folder2);
-		await exporter.processItem(Folder, folder3);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Folder.modelType(), folder3);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-		await exporter.processItem(Note, note2);
+		await exporter.processItem(Note.modelType(), note2);
 
 		expect(await shim.fsDriver().exists(`${exportDir}/folder1`)).toBe(true, 'Folder should be created in filesystem.');
 		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder2`)).toBe(true, 'Folder should be created in filesystem.');
@@ -227,9 +227,9 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-		await exporter.processItem(Note, note1);
-		await exporter.processItem(Note, note2);
-		await exporter.processItem(Note, note3);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+		await exporter.processItem(Note.modelType(), note3);
 
 		expect(await shim.fsDriver().exists(`${exportDir}/${exporter.context().notePaths[note1.id]}`)).toBe(true, 'File should be saved in filesystem.');
 		expect(await shim.fsDriver().exists(`${exportDir}/${exporter.context().notePaths[note2.id]}`)).toBe(true, 'File should be saved in filesystem.');
@@ -262,8 +262,8 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		const resource2 = await Resource.load((await Note.linkedResourceIds(note2.body))[0]);
 
-		await exporter.processItem(Folder, folder1);
-		await exporter.processItem(Folder, folder2);
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 		const context = {
 			resourcePaths: {},
@@ -271,8 +271,8 @@ describe('services_InteropService_Exporter_Md', function() {
 		context.resourcePaths[resource1.id] = 'resource1.jpg';
 		context.resourcePaths[resource2.id] = 'resource2.jpg';
 		exporter.updateContext(context);
-		await exporter.processItem(Note, note1);
-		await exporter.processItem(Note, note2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
 
 		const note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
 		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
@@ -315,13 +315,13 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 
-		await exporter.processItem(Folder, folder1);
-		await exporter.processItem(Folder, folder2);
-		await exporter.processItem(Folder, folder3);
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Folder.modelType(), folder3);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-		await exporter.processItem(Note, note1);
-		await exporter.processItem(Note, note2);
-		await exporter.processItem(Note, note3);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+		await exporter.processItem(Note.modelType(), note3);
 
 		const note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
 		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
@@ -351,10 +351,10 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 
-		await exporter.processItem(Folder, folder1);
+		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-		await exporter.processItem(Note, note1);
-		await exporter.processItem(Note, note2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
 
 		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
 		expect(note2_body).toContain('[link](../folder%20with%20space1/note1%20name%20with%20space.md)', 'Whitespace in URL should be encoded');

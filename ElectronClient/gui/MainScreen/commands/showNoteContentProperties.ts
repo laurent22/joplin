@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
-const { _ } = require('lib/locale');
 
 export const declaration:CommandDeclaration = {
 	name: 'showNoteContentProperties',

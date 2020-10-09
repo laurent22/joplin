@@ -2,7 +2,7 @@ const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { NoteItem } = require('lib/components/note-item.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
@@ -22,7 +22,7 @@ class NoteListComponent extends Component {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -114,7 +114,7 @@ const NoteList = connect(state => {
 		items: state.notes,
 		folders: state.folders,
 		notesSource: state.notesSource,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 	};
 })(NoteListComponent);

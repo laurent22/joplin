@@ -4,13 +4,13 @@ import AsyncActionQueue from '../../AsyncActionQueue';
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const UndoRedoService = require('lib/services/UndoRedoService.js').default;
 const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const md5 = require('md5');
@@ -24,9 +24,9 @@ const { ScreenHeader } = require('lib/components/screen-header.js');
 const NoteTagsDialog = require('lib/components/screens/NoteTagsDialog');
 const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
@@ -167,7 +167,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 							type: 'NAV_BACK',
 						});
 
-						setTimeout(() => {
+						shim.setTimeout(() => {
 							this.props.dispatch({
 								type: 'NAV_GO',
 								routeName: 'Note',
@@ -206,6 +206,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (this.refs.noteBodyViewer) this.refs.noteBodyViewer.rebuildMd();
 				});
 			}
+		};
+
+		this.useBetaEditor = () => {
+			return Setting.value('editor.beta') && Platform.OS !== 'android';
 		};
 
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
@@ -257,7 +261,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		const cacheKey = [themeId, this.state.titleTextInputHeight, this.state.HACK_webviewLoadingState].join('_');
@@ -403,7 +407,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
-		this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+		// It cannot theoretically be undefined, since componentDidMount should always be called before
+		// componentWillUnmount, but with React Native the impossible often becomes possible.
+		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text) {
@@ -644,7 +650,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !Setting.value('editor.beta') && !!this.selection) {
+		if (this.state.mode == 'edit' && !this.useBetaEditor() && !!this.selection) {
 			const prefix = newNote.body.substring(0, this.selection.start);
 			const suffix = newNote.body.substring(this.selection.end);
 			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
@@ -888,16 +894,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	scheduleFocusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
-		this.focusUpdateIID_ = setTimeout(() => {
+		this.focusUpdateIID_ = shim.setTimeout(() => {
 			this.focusUpdateIID_ = null;
 			this.focusUpdate();
 		}, 100);
 	}
 
 	focusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
 		if (!this.state.note) return;
@@ -957,16 +963,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const note = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
-			return <CameraView theme={this.props.theme} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		}
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view' && !Setting.value('editor.beta')) {
+		if (this.state.mode == 'view' && !this.useBetaEditor()) {
 			const onCheckboxChange = newBody => {
 				this.saveOneProperty('body', newBody);
 			};
@@ -992,16 +998,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
-						theme={this.props.theme}
+						themeId={this.props.themeId}
 						noteHash={this.props.noteHash}
 						onCheckboxChange={newBody => {
 							onCheckboxChange(newBody);
 						}}
 						onMarkForDownload={this.onMarkForDownload}
 						onLoadEnd={() => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);
@@ -1021,7 +1027,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
-			bodyComponent = Setting.value('editor.beta')
+			bodyComponent = this.useBetaEditor()
 				// Note: blurOnSubmit is necessary to get multiline to work.
 				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 				? <MarkdownEditor
@@ -1049,16 +1055,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 						note: note,
 						noteResources: this.state.noteResources,
 						highlightedKeywords: keywords,
-						theme: this.props.theme,
+						themeId: this.props.themeId,
 						noteHash: this.props.noteHash,
 						onCheckboxChange: newBody => {
 							onCheckboxChange(newBody);
 						},
 						onMarkForDownload: this.onMarkForDownload,
 						onLoadEnd: () => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);
@@ -1153,7 +1159,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
 					folderPickerOptions={this.folderPickerOptions()}
 					menuOptions={this.menuOptions()}
@@ -1170,7 +1176,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{!Setting.value('editor.beta') && actionButtonComp}
+				{!this.useBetaEditor() && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1193,7 +1199,7 @@ const NoteScreen = connect(state => {
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		searchQuery: state.searchQuery,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,

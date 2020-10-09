@@ -1,10 +1,10 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleVisiblePanes',
 	label: () => _('Toggle editor layout'),
-	iconName: 'fa-columns',
+	iconName: 'icon-layout ',
 };
 
 export const runtime = (comp:any):CommandRuntime => {

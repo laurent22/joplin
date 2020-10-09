@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 const CommandService = require('lib/services/CommandService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
@@ -15,12 +15,13 @@ const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const KeymapService = require('lib/services/KeymapService.js').default;
+const shim = require('lib/shim').default;
 
 class GotoAnything {
 
 	onTrigger() {
 		this.dispatch({
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
 			pluginName: PLUGIN_NAME,
 		});
@@ -32,6 +33,8 @@ class Dialog extends React.PureComponent {
 
 	constructor() {
 		super();
+
+		this.fuzzy_ = false;
 
 		this.state = {
 			query: '',
@@ -58,11 +61,11 @@ class Dialog extends React.PureComponent {
 	}
 
 	style() {
-		const styleKey = [this.props.theme, this.state.resultsInBody ? '1' : '0'].join('-');
+		const styleKey = [this.props.themeId, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const itemHeight = this.state.resultsInBody ? 84 : 64;
 
@@ -118,18 +121,28 @@ class Dialog extends React.PureComponent {
 
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
+
+		this.props.dispatch({
+			type: 'VISIBLE_DIALOGS_ADD',
+			name: 'gotoAnything',
+		});
 	}
 
 	componentWillUnmount() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
+
+		this.props.dispatch({
+			type: 'VISIBLE_DIALOGS_REMOVE',
+			name: 'gotoAnything',
+		});
 	}
 
 	onKeyDown(event) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -139,7 +152,7 @@ class Dialog extends React.PureComponent {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -156,9 +169,9 @@ class Dialog extends React.PureComponent {
 	}
 
 	scheduleListUpdate() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 
-		this.listUpdateIID_ = setTimeout(async () => {
+		this.listUpdateIID_ = shim.setTimeout(async () => {
 			await this.updateList();
 			this.listUpdateIID_ = null;
 		}, 100);
@@ -178,7 +191,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	async keywords(searchQuery) {
-		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, false);
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
@@ -215,7 +228,7 @@ class Dialog extends React.PureComponent {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
+				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
 				resultsInBody = !!results.find(row => row.fields.includes('body'));
 
@@ -293,7 +306,7 @@ class Dialog extends React.PureComponent {
 	async gotoItem(item) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
 
@@ -341,7 +354,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	listItemRenderer(item) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
@@ -430,7 +443,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
 
@@ -453,7 +466,7 @@ class Dialog extends React.PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
 	};

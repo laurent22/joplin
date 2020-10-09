@@ -1,0 +1,32 @@
+{{#unless hideName}}{{{wbr name}}}{{/unless}}
+{{#if typeParameters}}
+    &lt;
+    {{#each typeParameters}}
+        {{#if @index}},&nbsp;{{/if}}
+        {{name}}
+    {{/each}}
+    &gt;
+{{/if}}
+<span class="tsd-signature-symbol">(</span>
+{{#each parameters}}
+    {{#if @index}},&nbsp;{{/if}}
+    {{#if flags.isRest}}<span class="tsd-signature-symbol">...</span>{{/if}}
+    {{name}}
+    <span class="tsd-signature-symbol">
+        {{#if flags.isOptional}}?{{/if}}
+        {{#if defaultValue}}?{{/if}}
+        :&nbsp;
+    </span>
+    {{#with type}}{{>type}}{{/with}}
+{{/each}}
+<span class="tsd-signature-symbol">)</span>
+{{#if type}}
+    {{#if arrowStyle}}
+        <span class="tsd-signature-symbol"> =&gt; </span>
+    {{else}}
+        <span class="tsd-signature-symbol">: </span>
+    {{/if}}
+    {{#with type}}
+        {{>type}}
+    {{/with}}
+{{/if}}

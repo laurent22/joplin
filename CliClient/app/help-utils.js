@@ -1,6 +1,6 @@
 const { wrap } = require('lib/string-utils.js');
-const Setting = require('lib/models/Setting.js');
-const { _ } = require('lib/locale.js');
+const Setting = require('lib/models/Setting').default;
+const { _ } = require('lib/locale');
 
 const MAX_WIDTH = 78;
 const INDENT = '    ';

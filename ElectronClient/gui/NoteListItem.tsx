@@ -5,10 +5,45 @@ const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('lib/markJsUtils');
 const Note = require('lib/models/Note');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const styled = require('styled-components').default;
+
+const StyledRoot = styled.div`
+	width: ${(props:any) => props.width}px;
+	height: ${(props:any) => props.height}px;
+	opacity: ${(props:any) => props.isProvisional ? '0.5' : '1'};
+	max-width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: stretch;
+	position: relative;
+	background-color: ${(props:any) => props.selected ? props.theme.selectedColor : 'none'};
+
+	border-style: solid;
+	border-color: ${(props:any) => props.theme.color};
+	border-top-width: ${(props:any) => props.dragItemPosition === 'top' ? 2 : 0}px;
+	border-bottom-width: ${(props:any) => props.dragItemPosition === 'bottom' ? 2 : 0}px;
+	border-right: none;
+	border-left: none;
+
+	// https://stackoverflow.com/questions/50174448/css-how-to-add-white-space-before-elements-border
+	&::before {
+		content: '';
+		border-bottom: 1px solid ${(props:any) => props.theme.dividerColor};
+		width: ${(props:any) => props.width - 32}px;
+		position: absolute;
+		bottom: 0;
+		left: 16px;
+	}
+
+	&:hover {
+		background-color: ${(props:any) => props.theme.backgroundColorHover3};
+	}
+`;
 
 interface NoteListItemProps {
-	theme: number,
+	themeId: number,
 	width: number,
+	height: number,
 	style: any,
 	dragItemIndex: number,
 	highlightedWords: string[],
@@ -28,8 +63,8 @@ interface NoteListItemProps {
 
 function NoteListItem(props:NoteListItemProps, ref:any) {
 	const item = props.item;
-	const theme = themeStyle(props.theme);
-	const hPadding = 10;
+	const theme = themeStyle(props.themeId);
+	const hPadding = 16;
 
 	const anchorRef = useRef(null);
 
@@ -41,14 +76,11 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 		};
 	});
 
-	let rootStyle = Object.assign({ width: props.width, opacity: props.isProvisional ? 0.5 : 1 }, props.style.listItem);
-
-	if (props.isSelected) rootStyle = Object.assign(rootStyle, props.style.listItemSelected);
-
+	let dragItemPosition = '';
 	if (props.dragItemIndex === props.index) {
-		rootStyle.borderTop = `2px solid ${theme.color}`;
+		dragItemPosition = 'top';
 	} else if (props.index === props.itemCount - 1 && props.dragItemIndex >= props.itemCount) {
-		rootStyle.borderBottom = `2px solid ${theme.color}`;
+		dragItemPosition = 'bottom';
 	}
 
 	const onTitleClick = useCallback((event) => {
@@ -65,7 +97,7 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 		if (!item.is_todo) return null;
 
 		return (
-			<div style={{ display: 'flex', height: rootStyle.height, alignItems: 'center', paddingLeft: hPadding }}>
+			<div style={{ display: 'flex', height: props.height, alignItems: 'center', paddingLeft: hPadding }}>
 				<input
 					style={{ margin: 0, marginBottom: 1, marginRight: 5 }}
 					type="checkbox"
@@ -118,12 +150,19 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 	};
 	const watchedIcon = props.isWatched ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
 
-	// key={`${item.id}_${item.todo_completed}`}
-
 	// Need to include "todo_completed" in key so that checkbox is updated when
 	// item is changed via sync.
 	return (
-		<div className="list-item-container" style={rootStyle} onDragOver={props.onNoteDragOver} onDrop={props.onNoteDrop}>
+		<StyledRoot
+			className="list-item-container"
+			onDragOver={props.onNoteDragOver}
+			onDrop={props.onNoteDrop}
+			width={props.width}
+			height={props.height}
+			isProvisional={props.isProvisional}
+			selected={props.isSelected}
+			dragItemPosition={dragItemPosition}
+		>
 			{renderCheckbox()}
 			<a
 				ref={anchorRef}
@@ -138,7 +177,7 @@ function NoteListItem(props:NoteListItemProps, ref:any) {
 				{watchedIcon}
 				{titleComp}
 			</a>
-		</div>
+		</StyledRoot>
 	);
 }
 

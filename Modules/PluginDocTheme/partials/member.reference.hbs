@@ -1,0 +1,11 @@
+{{#with tryGetTargetReflectionDeep}}
+    {{#ifCond ../name '===' name}}
+        Re-exports <a href="{{relativeURL url}}">{{name}}</a>
+    {{else if flags.isExported}}
+        Renames and re-exports <a href="{{relativeURL url}}">{{name}}</a>
+    {{else}}
+        Renames and exports <a href="{{relativeURL url}}">{{name}}</a>
+    {{/ifCond}}
+{{else}}
+    Re-exports {{name}}
+{{/with}}

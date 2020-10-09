@@ -1,4 +1,4 @@
-const { BaseApplication } = require('lib/BaseApplication');
+const BaseApplication = require('lib/BaseApplication').default;
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const ResourceService = require('lib/services/ResourceService');
 const BaseModel = require('lib/BaseModel.js');
@@ -6,14 +6,15 @@ const Folder = require('lib/models/Folder.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { reg } = require('lib/registry.js');
 const { fileExtension } = require('lib/path-utils.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
 const RevisionService = require('lib/services/RevisionService');
+const shim = require('lib/shim').default;
 
 class Application extends BaseApplication {
 	constructor() {
@@ -161,7 +162,7 @@ class Application extends BaseApplication {
 		};
 
 		// Give it a few seconds to cancel otherwise exit anyway
-		setTimeout(async () => {
+		shim.setTimeout(async () => {
 			await doExit();
 		}, 5000);
 

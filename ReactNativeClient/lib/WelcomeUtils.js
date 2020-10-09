@@ -1,10 +1,10 @@
 const welcomeAssets = require('./welcomeAssets');
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Folder = require('lib/models/Folder');
 const Tag = require('lib/models/Tag');
-const { shim } = require('lib/shim');
-const { uuid } = require('lib/uuid');
+const shim = require('lib/shim').default;
+const uuid = require('lib/uuid').default;
 const { fileExtension, basename } = require('lib/path-utils');
 const { pregQuote } = require('lib/string-utils');
 

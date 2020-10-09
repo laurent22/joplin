@@ -8,7 +8,7 @@ const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const ResourceService = require('lib/services/ResourceService');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const ItemChange = require('lib/models/ItemChange');
 
 process.on('unhandledRejection', (reason, p) => {

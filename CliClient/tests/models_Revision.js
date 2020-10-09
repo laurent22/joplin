@@ -10,7 +10,7 @@ const NoteTag = require('lib/models/NoteTag.js');
 const Tag = require('lib/models/Tag.js');
 const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

@@ -13,7 +13,7 @@ __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	onCommitFiberUnmount: function() {},
 };
 
-const { app } = require('./app.js');
+const app = require('./app').default;
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -21,13 +21,13 @@ const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const MasterKey = require('lib/models/MasterKey');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Revision = require('lib/models/Revision.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
 const EncryptionService = require('lib/services/EncryptionService');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 
 if (bridge().env() === 'dev') {
@@ -97,7 +97,7 @@ document.addEventListener('click', (event) => event.preventDefault());
 
 app().start(bridge().processArgv()).then((result) => {
 	if (!result || !result.action) {
-		require('./gui/Root.min.js');
+		require('./gui/Root');
 	} else if (result.action === 'upgradeSyncTarget') {
 		require('./gui/Root_UpgradeSyncTarget');
 	}

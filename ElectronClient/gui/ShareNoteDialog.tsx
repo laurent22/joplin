@@ -2,17 +2,17 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import JoplinServerApi from '../lib/JoplinServerApi';
 
-const { _, _n } = require('lib/locale.js');
+import { _, _n } from 'lib/locale';
 const { themeStyle, buildStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const BaseItem = require('lib/models/BaseItem');
 const { reg } = require('lib/registry.js');
 const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {
-	theme: number,
+	themeId: number,
 	noteIds: Array<string>,
 	onClose: Function,
 }
@@ -22,7 +22,7 @@ interface SharesMap {
 }
 
 function styles_(props:ShareNoteDialogProps) {
-	return buildStyle('ShareNoteDialog', props.theme, (theme:any) => {
+	return buildStyle('ShareNoteDialog', props.themeId, (theme:any) => {
 		return {
 			noteList: {
 				marginBottom: 10,
@@ -67,7 +67,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	const [shares, setShares] = useState<SharesMap>({});
 
 	const noteCount = notes.length;
-	const theme = themeStyle(props.theme);
+	const theme = themeStyle(props.themeId);
 	const styles = styles_(props);
 
 	useEffect(() => {
@@ -206,7 +206,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
 				{encryptionWarningMessage}
-				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>
 	);

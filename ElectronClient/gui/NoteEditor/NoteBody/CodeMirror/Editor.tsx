@@ -17,18 +17,19 @@ import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
 import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
+import useKeymap from './utils/useKeymap';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
 import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
-const { shim } = require('lib/shim.js');
+
+// import eventManager from 'lib/eventManager';
 
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
-// +XML (HTML) +CSS and Markdown added
 const topLanguages = [
 	'python',
 	'clike',
@@ -51,8 +52,16 @@ const topLanguages = [
 	'haskell',
 	'pascal',
 	'css',
-	'xml',
+
+	// Additional languages, not in the PYPL list
+	'xml', // For HTML too
 	'markdown',
+	'yaml',
+	'shell',
+	'dockerfile',
+	'diff',
+	'erlang',
+	'sql',
 ];
 // Load Top Modes
 for (let i = 0; i < topLanguages.length; i++) {
@@ -67,9 +76,10 @@ for (let i = 0; i < topLanguages.length; i++) {
 
 export interface EditorProps {
 	value: string,
+	searchMarkers: any,
 	mode: string,
 	style: any,
-	theme: any,
+	codeMirrorTheme: any,
 	readOnly: boolean,
 	autoMatchBraces: boolean,
 	keyMap: string,
@@ -91,6 +101,7 @@ function Editor(props: EditorProps, ref: any) {
 	useLineSorting(CodeMirror);
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
+	useKeymap(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -134,93 +145,15 @@ function Editor(props: EditorProps, ref: any) {
 	}, []);
 
 	useEffect(() => {
-		CodeMirror.keyMap.basic = {
-			'Left': 'goCharLeft',
-			'Right': 'goCharRight',
-			'Up': 'goLineUp',
-			'Down': 'goLineDown',
-			'End': 'goLineRight',
-			'Home': 'goLineLeftSmart',
-			'PageUp': 'goPageUp',
-			'PageDown': 'goPageDown',
-			'Delete': 'delCharAfter',
-			'Backspace': 'delCharBefore',
-			'Shift-Backspace': 'delCharBefore',
-			'Tab': 'smartListIndent',
-			'Shift-Tab': 'smartListUnindent',
-			'Enter': 'insertListElement',
-			'Insert': 'toggleOverwrite',
-			'Esc': 'singleSelection',
-		};
-		// Add some of the Joplin smart list handling to emacs mode
-		CodeMirror.keyMap.emacs['Tab'] = 'smartListIndent';
-		CodeMirror.keyMap.emacs['Enter'] = 'insertListElement';
-		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
-
-		if (shim.isMac()) {
-			CodeMirror.keyMap.default = {
-				// MacOS
-				'Cmd-A': 'selectAll',
-				'Cmd-D': 'deleteLine',
-				'Cmd-Z': 'undo',
-				'Shift-Cmd-Z': 'redo',
-				'Cmd-Y': 'redo',
-				'Cmd-Home': 'goDocStart',
-				'Cmd-Up': 'goDocStart',
-				'Cmd-End': 'goDocEnd',
-				'Cmd-Down': 'goDocEnd',
-				'Cmd-Left': 'goLineLeft',
-				'Cmd-Right': 'goLineRight',
-				'Alt-Left': 'goGroupLeft',
-				'Alt-Right': 'goGroupRight',
-				'Alt-Backspace': 'delGroupBefore',
-				'Alt-Delete': 'delGroupAfter',
-				'Cmd-[': 'indentLess',
-				'Cmd-]': 'indentMore',
-				'Cmd-/': 'toggleComment',
-				'Cmd-Opt-S': 'sortSelectedLines',
-				'Opt-Up': 'swapLineUp',
-				'Opt-Down': 'swapLineDown',
-
-				'fallthrough': 'basic',
-			};
-		} else {
-			CodeMirror.keyMap.default = {
-				// Windows/linux
-				'Ctrl-A': 'selectAll',
-				'Ctrl-D': 'deleteLine',
-				'Ctrl-Z': 'undo',
-				'Shift-Ctrl-Z': 'redo',
-				'Ctrl-Y': 'redo',
-				'Ctrl-Home': 'goDocStart',
-				'Ctrl-End': 'goDocEnd',
-				'Ctrl-Up': 'goLineUp',
-				'Ctrl-Down': 'goLineDown',
-				'Ctrl-Left': 'goGroupLeft',
-				'Ctrl-Right': 'goGroupRight',
-				'Alt-Left': 'goLineStart',
-				'Alt-Right': 'goLineEnd',
-				'Ctrl-Backspace': 'delGroupBefore',
-				'Ctrl-Delete': 'delGroupAfter',
-				'Ctrl-[': 'indentLess',
-				'Ctrl-]': 'indentMore',
-				'Ctrl-/': 'toggleComment',
-				'Ctrl-Alt-S': 'sortSelectedLines',
-				'Alt-Up': 'swapLineUp',
-				'Alt-Down': 'swapLineDown',
-
-				'fallthrough': 'basic',
-			};
-		}
-	}, []);
-
-	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		const cmOptions = {
+		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
+		const userOptions = {};
+
+		const cmOptions = Object.assign({}, {
 			value: props.value,
 			screenReaderLabel: props.value,
-			theme: props.theme,
+			theme: props.codeMirrorTheme,
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
@@ -232,7 +165,8 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-		};
+		}, userOptions);
+
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
 		cm.on('change', editor_change);
@@ -241,6 +175,11 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
+
+		// It's possible for searchMarkers to be available before the editor
+		// In these cases we set the markers asap so the user can see them as
+		// soon as the editor is ready
+		if (props.searchMarkers) { cm.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options); }
 
 		return () => {
 			// Clean up codemirror
@@ -269,9 +208,9 @@ function Editor(props: EditorProps, ref: any) {
 
 	useEffect(() => {
 		if (editor) {
-			editor.setOption('theme', props.theme);
+			editor.setOption('theme', props.codeMirrorTheme);
 		}
-	}, [props.theme]);
+	}, [props.codeMirrorTheme]);
 
 	useEffect(() => {
 		if (editor) {

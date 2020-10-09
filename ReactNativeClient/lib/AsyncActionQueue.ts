@@ -1,3 +1,5 @@
+import shim from 'lib/shim';
+
 export interface QueueItemAction {
 	(): void,
 }
@@ -47,10 +49,10 @@ export default class AsyncActionQueue {
 
 		if (this.scheduleProcessingIID_) {
 			if (this.intervalType_ === IntervalType.Fixed) return;
-			clearTimeout(this.scheduleProcessingIID_);
+			shim.clearTimeout(this.scheduleProcessingIID_);
 		}
 
-		this.scheduleProcessingIID_ = setTimeout(() => {
+		this.scheduleProcessingIID_ = shim.setTimeout(() => {
 			this.scheduleProcessingIID_ = null;
 			this.processQueue();
 		}, interval);
@@ -77,7 +79,7 @@ export default class AsyncActionQueue {
 
 	async reset() {
 		if (this.scheduleProcessingIID_) {
-			clearTimeout(this.scheduleProcessingIID_);
+			shim.clearTimeout(this.scheduleProcessingIID_);
 			this.scheduleProcessingIID_ = null;
 		}
 
@@ -97,11 +99,11 @@ export default class AsyncActionQueue {
 		this.scheduleProcessing(1);
 
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (this.processing_) return;
 
 				if (!this.queue_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

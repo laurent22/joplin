@@ -9,7 +9,7 @@ const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 
 process.on('unhandledRejection', (reason, p) => {

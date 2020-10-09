@@ -1,6 +1,6 @@
+import shim from 'lib/shim';
 const { dirname } = require('lib/path-utils.js');
-const { shim } = require('lib/shim');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const pluginAssets = require('./pluginAssets/index');
 const KvStore = require('lib/services/KvStore.js');
 

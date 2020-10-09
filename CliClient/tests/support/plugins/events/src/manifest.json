@@ -1,0 +1,8 @@
+{
+	"manifest_version": 1,
+	"name": "Event demo",
+	"description": "Demonstrate how to listen to various events",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

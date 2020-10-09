@@ -1,16 +1,16 @@
 const React = require('react');
 
 const { AppState, View, StyleSheet } = require('react-native');
-const { stateUtils } = require('lib/reducer.js');
+const { stateUtils } = require('lib/reducer');
 const { connect } = require('react-redux');
 const { NoteList } = require('lib/components/note-list.js');
 const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');
 const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
@@ -81,7 +81,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	styles() {
 		if (!this.styles_) this.styles_ = {};
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const cacheKey = themeId;
 
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
@@ -207,7 +207,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const parent = this.parentItem();
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rootStyle = {
 			flex: 1,
@@ -263,7 +263,7 @@ const NotesScreen = connect(state => {
 		notesSource: state.notesSource,
 		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 		showCompletedTodos: state.settings.showCompletedTodos,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};

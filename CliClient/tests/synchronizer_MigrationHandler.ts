@@ -11,7 +11,7 @@ require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
 const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
@@ -140,7 +140,7 @@ describe('synchronizer_MigrationHandler', function() {
 
 			// Decrypt the data
 			const masterKey = (await MasterKey.all())[0];
-			Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+			Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 			await encryptionService().loadMasterKeysFromSettings();
 			await decryptionWorker().start();
 
@@ -156,7 +156,7 @@ describe('synchronizer_MigrationHandler', function() {
 			await expectThrow(async () => await checkTestData(testData));
 
 			// Enable E2EE and decrypt
-			Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+			Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 			await encryptionService().loadMasterKeysFromSettings();
 			await decryptionWorker().start();
 

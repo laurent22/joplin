@@ -1,5 +1,5 @@
 const TurndownService = require('joplin-turndown');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 
 class HtmlToMd {
 	parse(html, options = {}) {

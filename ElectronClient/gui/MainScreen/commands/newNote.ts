@@ -1,9 +1,9 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
-const Setting = require('lib/models/Setting');
+import { _ } from 'lib/locale';
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
 const TemplateUtils = require('lib/TemplateUtils');
-const { _ } = require('lib/locale');
 
 export const declaration:CommandDeclaration = {
 	name: 'newNote',

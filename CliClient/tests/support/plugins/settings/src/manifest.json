@@ -1,0 +1,8 @@
+{
+	"manifest_version": 1,
+	"name": "Setting Demo",
+	"description": "Demo to register new settings",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

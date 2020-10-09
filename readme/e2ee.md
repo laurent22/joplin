@@ -29,4 +29,4 @@ Follow the same procedure as above but instead disable E2EE on each device one b
 
 # Technical specification
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/e2ee/).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md).

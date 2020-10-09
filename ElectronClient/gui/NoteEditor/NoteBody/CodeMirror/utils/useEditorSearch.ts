@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import shim from 'lib/shim';
 
 export default function useEditorSearch(CodeMirror: any) {
 
@@ -23,7 +24,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		if (overlay) cm.removeOverlay(overlay);
 		if (scrollbarMarks) scrollbarMarks.clear();
 
-		if (overlayTimeout) clearTimeout(overlayTimeout);
+		if (overlayTimeout) shim.clearTimeout(overlayTimeout);
 
 		setOverlay(null);
 		setScrollbarMarks(null);
@@ -82,7 +83,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 	useEffect(() => {
 		return () => {
-			if (overlayTimeoutRef.current) clearTimeout(overlayTimeoutRef.current);
+			if (overlayTimeoutRef.current) shim.clearTimeout(overlayTimeoutRef.current);
 			overlayTimeoutRef.current = null;
 		};
 	}, []);
@@ -119,7 +120,8 @@ export default function useEditorSearch(CodeMirror: any) {
 		// We only want to highlight all matches when there is only 1 search term
 		if (keywords.length !== 1 || keywords[0].value == '') {
 			clearOverlay(this);
-			setPreviousKeywordValue('');
+			const prev = keywords.length > 1 ? keywords[0].value : '';
+			setPreviousKeywordValue(prev);
 			return 0;
 		}
 
@@ -139,7 +141,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 		// These operations are pretty slow, so we won't add use them until the user
 		// has finished typing, 500ms is probably enough time
-		const timeout = setTimeout(() => {
+		const timeout = shim.setTimeout(() => {
 			const scrollMarks = this.showMatchesOnScrollbar(searchTerm, true, 'cm-search-marker-scrollbar');
 			const overlay = searchOverlay(searchTerm);
 			this.addOverlay(overlay);

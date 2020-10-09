@@ -1,19 +1,20 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const EncryptionService = require('lib/services/EncryptionService');
 const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { time } = require('lib/time-utils.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 const dialogs = require('./dialogs');
 const shared = require('lib/components/shared/encryption-config-shared.js');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 class EncryptionConfigScreenComponent extends React.Component {
-	constructor() {
-		super();
-		shared.constructor(this);
+	constructor(props) {
+		super(props);
+
+		shared.constructor(this, props);
 	}
 
 	componentWillUnmount() {
@@ -35,7 +36,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	renderMasterKey(mk) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const passwordStyle = {
 			color: theme.color,
@@ -52,7 +53,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			return shared.onPasswordChange(this, mk, event.target.value);
 		};
 
-		const password = this.props.passwords[mk.id] ? this.props.passwords[mk.id] : '';
+		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 
@@ -80,7 +81,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		const needUpgradeMasterKeys = EncryptionService.instance().masterKeysThatNeedUpgrading(this.props.masterKeys);
 		if (!needUpgradeMasterKeys.length) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const rows = [];
 		const comp = this;
@@ -114,7 +115,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	renderReencryptData() {
 		if (!shim.isElectron()) return null;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const buttonLabel = _('Re-encrypt data');
 
 		const intro = this.props.shouldReencrypt ? _('The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.') : _('You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.');
@@ -139,13 +140,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const masterKeys = this.props.masterKeys;
-		const containerPadding = 10;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
-			padding: containerPadding,
+			padding: theme.configScreenPadding,
 			overflow: 'auto',
+			backgroundColor: theme.backgroundColor3,
 		});
 
 		const mkComps = [];
@@ -289,7 +290,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
 		encryptionEnabled: state.settings['encryption.enabled'],

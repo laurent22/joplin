@@ -6,8 +6,8 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
 const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
-const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
+const { _ } = require('lib/locale');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/components/global-style.js');
@@ -532,7 +532,7 @@ const ScreenHeader = connect(state => {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
 		folders: state.folders,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,

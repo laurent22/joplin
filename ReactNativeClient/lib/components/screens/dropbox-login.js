@@ -3,7 +3,7 @@ const React = require('react');
 const { View, Button, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { dialogs } = require('lib/dialogs.js');
@@ -24,7 +24,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -48,7 +48,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		return (
 			<View style={this.styles().screen}>
@@ -83,7 +83,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 
 const DropboxLoginScreen = connect(state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(DropboxLoginScreenComponent);
 

@@ -1,4 +1,4 @@
-const { isListItem, isEmptyListItem, extractListToken, olLineNumber } = require('lib/markdownUtils');
+const { isListItem, isEmptyListItem, extractListToken, olLineNumber } = require('lib/markdownUtils').default;
 
 // Markdown list indentation.
 // If the current line starts with `markup.list` token,
@@ -124,6 +124,24 @@ export default function useListIdent(CodeMirror: any) {
 				}
 			}
 		});
+	};
+
+	// This is a special case of insertList element because it happens when
+	// vim is in normal mode and input is disabled and the cursor is not
+	// necessarily at the end of line (but it should pretend it is
+	CodeMirror.commands.vimInsertListElement = function(cm: any) {
+		cm.setOption('disableInput', false);
+
+		const ranges = cm.listSelections();
+		if (ranges.length === 0) return;
+		const { anchor } = ranges[0];
+
+		// Need to move the cursor to end of line as this is the vim behavior
+		const line = cm.getLine(anchor.line);
+		cm.setCursor({ line: anchor.line, ch: line.length });
+
+		cm.execCommand('insertListElement');
+		cm.setOption('disableInput', true);
 	};
 
 	CodeMirror.commands.insertListElement = function(cm: any) {

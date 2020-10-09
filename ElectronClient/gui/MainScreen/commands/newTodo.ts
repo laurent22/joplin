@@ -1,5 +1,5 @@
 import CommandService, { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'newTodo',
@@ -13,7 +13,7 @@ export const runtime = ():CommandRuntime => {
 			return CommandService.instance().execute('newNote', { template: template, isTodo: true });
 		},
 		isEnabled: () => {
-			return CommandService.instance().isEnabled('newNote');
+			return CommandService.instance().isEnabled('newNote', {});
 		},
 		title: () => {
 			return _('New to-do');

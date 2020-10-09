@@ -7,10 +7,10 @@ import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
+import { _ } from 'lib/locale';
 
-const { bridge } = require('electron').remote.require('./bridge');
-const { shim } = require('lib/shim');
-const { _ } = require('lib/locale');
+const bridge = require('electron').remote.require('./bridge').default;
+const shim = require('lib/shim').default;
 
 const keymapService = KeymapService.instance();
 

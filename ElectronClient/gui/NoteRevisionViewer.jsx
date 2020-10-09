@@ -1,20 +1,20 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale.js');
-const NoteTextViewer = require('./NoteTextViewer.min');
+const { _ } = require('lib/locale');
+const NoteTextViewer = require('./NoteTextViewer').default;
 const HelpButton = require('./HelpButton.min');
 const BaseModel = require('lib/BaseModel');
 const Revision = require('lib/models/Revision');
 const urlUtils = require('lib/urlUtils');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 class NoteRevisionViewerComponent extends React.PureComponent {
@@ -38,7 +38,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 
 	style() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const style = {
 			root: {
@@ -114,7 +114,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			this.setState({ note: note });
 		}
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
@@ -164,7 +164,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 
 		const revisionListItems = [];
@@ -213,7 +213,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 const mapStateToProps = state => {
 	return {
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 };
 

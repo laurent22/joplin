@@ -3,7 +3,7 @@ require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
 const { fileExtension, basename } = require('lib/path-utils.js');
-const markdownUtils = require('lib/markdownUtils.js');
+const markdownUtils = require('lib/markdownUtils').default;
 
 const rootDir = dirname(__dirname);
 const welcomeDir = `${rootDir}/readme/welcome`;

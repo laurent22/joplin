@@ -3,11 +3,11 @@ const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
@@ -15,7 +15,7 @@ const NavService = require('lib/services/NavService.js');
 const VersionInfo = require('react-native-version-info').default;
 const { ReportService } = require('lib/services/report.js');
 const { time } = require('lib/time-utils');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const RNFS = require('react-native-fs');
 const checkPermissions = require('lib/checkPermissions.js').default;
@@ -154,7 +154,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	styles() {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -249,7 +249,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	renderHeader(key, title) {
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle}>
 				<Text style={theme.headerStyle}>{title}</Text>
@@ -327,7 +327,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	settingToComponent(key, value) {
-		const themeId = this.props.theme;
+		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 		const output = null;
 
@@ -429,7 +429,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	render() {
 		const settings = this.state.settings;
 
-		const theme = themeStyle(this.props.theme);
+		const theme = themeStyle(this.props.themeId);
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
@@ -545,7 +545,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 
 		return (
-			<View style={this.rootStyle(this.props.theme).root}>
+			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />
 				<ScrollView>{settingComps}</ScrollView>
 			</View>
@@ -556,7 +556,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 const ConfigScreen = connect(state => {
 	return {
 		settings: state.settings,
-		theme: state.settings.theme,
+		themeId: state.settings.theme,
 	};
 })(ConfigScreenComponent);
 

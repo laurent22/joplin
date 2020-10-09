@@ -1,4 +1,4 @@
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 
 class GeolocationNode {
 	static async currentPosition(options = null) {

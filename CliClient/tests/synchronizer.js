@@ -4,7 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { setupDatabase, synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const fs = require('fs-extra');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -12,7 +12,7 @@ const Resource = require('lib/models/Resource.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const Tag = require('lib/models/Tag.js');
 const { Database } = require('lib/database.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem.js');
 const Revision = require('lib/models/Revision.js');
@@ -788,7 +788,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		// Now client 2 set the master key password
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
 		// Now that master key should be loaded
@@ -969,7 +969,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizerStart();
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api(); });
@@ -1162,7 +1162,7 @@ describe('synchronizer', function() {
 		// expect(hasThrown).toBe(true);
 
 		// Now supply the password, and decrypt the items
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 		await decryptionWorker().start();
 
@@ -1191,7 +1191,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizerStart();
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api(); });
@@ -1498,7 +1498,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizerStart();
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 		await decryptionWorker().start();
 
@@ -1547,7 +1547,7 @@ describe('synchronizer', function() {
 
 		await synchronizerStart();
 
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 		await decryptionWorker().start();
 
@@ -1578,7 +1578,7 @@ describe('synchronizer', function() {
 		const goodCipherText = encryptedNote.encryption_cipher_text;
 		await Note.save({ id: note.id, encryption_cipher_text: 'doesntlookright' });
 
-		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
 		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));

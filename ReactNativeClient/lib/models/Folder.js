@@ -2,7 +2,7 @@ const BaseModel = require('lib/BaseModel.js');
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');
 const { Database } = require('lib/database.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem.js');
 const { substrWithEllipsis } = require('lib/string-utils.js');
 
@@ -305,7 +305,7 @@ class Folder extends BaseItem {
 	static buildTree(folders) {
 		const idToFolders = {};
 		for (let i = 0; i < folders.length; i++) {
-			idToFolders[folders[i].id] = folders[i];
+			idToFolders[folders[i].id] = Object.assign({}, folders[i]);
 			idToFolders[folders[i].id].children = [];
 		}
 

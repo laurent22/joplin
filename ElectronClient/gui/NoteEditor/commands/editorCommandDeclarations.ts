@@ -1,9 +1,12 @@
 import { CommandDeclaration } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 const declarations:CommandDeclaration[] = [
 	{
 		name: 'insertText',
+	},
+	{
+		name: 'scrollToHash',
 	},
 	{
 		name: 'textCopy',
@@ -28,57 +31,63 @@ const declarations:CommandDeclaration[] = [
 	{
 		name: 'textBold',
 		label: () => _('Bold'),
-		iconName: 'fa-bold',
+		iconName: 'icon-bold',
 	},
 	{
 		name: 'textItalic',
 		label: () => _('Italic'),
-		iconName: 'fa-italic',
+		iconName: 'icon-italic',
 	},
 	{
 		name: 'textLink',
 		label: () => _('Hyperlink'),
-		iconName: 'fa-link',
+		iconName: 'icon-link',
 	},
 	{
 		name: 'textCode',
 		label: () => _('Code'),
-		iconName: 'fa-code',
+		iconName: 'icon-code',
 	},
 	{
 		name: 'attachFile',
 		label: () => _('Attach file'),
-		iconName: 'fa-paperclip',
+		iconName: 'icon-attachment',
 	},
 	{
 		name: 'textNumberedList',
 		label: () => _('Numbered List'),
-		iconName: 'fa-list-ol',
+		iconName: 'icon-numbered-list',
 	},
 	{
 		name: 'textBulletedList',
 		label: () => _('Bulleted List'),
-		iconName: 'fa-list-ul',
+		iconName: 'icon-bulleted-list',
 	},
 	{
 		name: 'textCheckbox',
 		label: () => _('Checkbox'),
-		iconName: 'fa-check-square',
+		iconName: 'icon-to-do-list',
 	},
 	{
 		name: 'textHeading',
 		label: () => _('Heading'),
-		iconName: 'fa-heading',
+		iconName: 'icon-heading',
 	},
 	{
 		name: 'textHorizontalRule',
 		label: () => _('Horizontal Rule'),
-		iconName: 'fa-ellipsis-h',
+		iconName: 'fas fa-ellipsis-h',
 	},
 	{
 		name: 'insertDateTime',
 		label: () => _('Insert Date Time'),
-		iconName: 'fa-calendar-plus',
+		iconName: 'icon-add-date',
+	},
+	{
+		name: 'selectedText',
+	},
+	{
+		name: 'replaceSelection',
 	},
 ];
 

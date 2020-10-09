@@ -1,13 +1,13 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
-const { shim } = require('lib/shim');
+const Setting = require('lib/models/Setting').default;
+const shim = require('lib/shim').default;
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { time } = require('lib/time-utils.js');
 const { ErrorNotFound } = require('./rest/errors');
 
@@ -249,16 +249,16 @@ class ExternalEditWatcher {
 			try {
 				const subProcess = spawn(path, args, options);
 
-				const iid = setInterval(() => {
+				const iid = shim.setInterval(() => {
 					if (subProcess && subProcess.pid) {
 						/* was_debug */ this.logger().info(`Started editor with PID ${subProcess.pid}`);
-						clearInterval(iid);
+						shim.clearInterval(iid);
 						resolve();
 					}
 				}, 100);
 
 				subProcess.on('error', error => {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					reject(wrapError(error));
 				});
 			} catch (error) {

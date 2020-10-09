@@ -2,9 +2,9 @@
 // thus all the calls to SyncTargetWebDAV to avoid duplicate code.
 
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const { _ } = require('lib/locale');
+const Setting = require('lib/models/Setting').default;
+const Synchronizer = require('lib/Synchronizer').default;
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
 const JoplinServerApi = require('lib/JoplinServerApi.js').default;
 
