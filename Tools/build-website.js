@@ -509,9 +509,8 @@ function tocMd() {
 }
 
 function replaceGitHubByJoplinAppLinks(md) {
-	let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
-	output = output.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
-	return output;
+	// let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
+	return md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
 }
 
 function tocHtml() {
@@ -606,7 +605,7 @@ async function main() {
 
 	for (const mdFile of mdFiles) {
 		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
-		const targetFilePath = `${mdFile.replace(/\.md/, '')}/index.html`;
+		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
 		sources.push([mdFile, targetFilePath, { title: title }]);
 	}
 
