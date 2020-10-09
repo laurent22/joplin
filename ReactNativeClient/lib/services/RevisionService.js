@@ -9,6 +9,7 @@ const shim = require('lib/shim').default;
 const BaseService = require('lib/services/BaseService').default;
 const { _ } = require('lib/locale');
 const { sprintf } = require('sprintf-js');
+const { wrapError } = require('lib/errorUtils');
 
 class RevisionService extends BaseService {
 	constructor() {
@@ -69,36 +70,41 @@ class RevisionService extends BaseService {
 	}
 
 	async createNoteRevision_(note, parentRevId = null) {
-		const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
+		try {
+			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
-		const output = {
-			parent_id: '',
-			item_type: BaseModel.TYPE_NOTE,
-			item_id: note.id,
-			item_updated_time: note.updated_time,
-		};
+			const output = {
+				parent_id: '',
+				item_type: BaseModel.TYPE_NOTE,
+				item_id: note.id,
+				item_updated_time: note.updated_time,
+			};
 
-		const noteMd = this.noteMetadata_(note);
-		const noteTitle = note.title ? note.title : '';
-		const noteBody = note.body ? note.body : '';
+			const noteMd = this.noteMetadata_(note);
+			const noteTitle = note.title ? note.title : '';
+			const noteBody = note.body ? note.body : '';
 
-		if (!parentRev) {
-			output.title_diff = Revision.createTextPatch('', noteTitle);
-			output.body_diff = Revision.createTextPatch('', noteBody);
-			output.metadata_diff = Revision.createObjectPatch({}, noteMd);
-		} else {
-			if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+			if (!parentRev) {
+				output.title_diff = Revision.createTextPatch('', noteTitle);
+				output.body_diff = Revision.createTextPatch('', noteBody);
+				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
+			} else {
+				if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
 
-			const merged = await Revision.mergeDiffs(parentRev);
-			output.parent_id = parentRev.id;
-			output.title_diff = Revision.createTextPatch(merged.title, noteTitle);
-			output.body_diff = Revision.createTextPatch(merged.body, noteBody);
-			output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
+				const merged = await Revision.mergeDiffs(parentRev);
+				output.parent_id = parentRev.id;
+				output.title_diff = Revision.createTextPatch(merged.title, noteTitle);
+				output.body_diff = Revision.createTextPatch(merged.body, noteBody);
+				output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
+			}
+
+			if (this.isEmptyRevision_(output)) return null;
+
+			return Revision.save(output);
+		} catch (error) {
+			const newError = wrapError(`Could not create revision for note: ${note.id}`, error);
+			throw newError;
 		}
-
-		if (this.isEmptyRevision_(output)) return null;
-
-		return Revision.save(output);
 	}
 
 	async collectRevisions() {
