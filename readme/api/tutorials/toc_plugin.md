@@ -17,10 +17,15 @@ Before getting any further, make sure your environment is setup correctly as des
 All plugins must [register themselves](https://joplinapp.org/plugins/api/classes/joplinplugins.html) and declare what events they can handle. To do so, open `src/index.ts` and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the `onStart()` event handler too:
 
 ```typescript
+// Import the Joplin API
+import joplin from 'api';
+
 // Register the plugin
 joplin.plugins.register({
 
 	// Run initialisation code in the onStart event handler
+	// Note that due to the plugin multi-process architecture, you should
+	// always assume that all function calls and event handlers are async.
 	onStart: async function() {
 		console.info('TOC plugin started!');
 	},
@@ -32,9 +37,9 @@ If you now build the plugin and try to run it in Joplin, you should see the mess
 
 ## Getting the current note
 
-In order to create the table of content, you will need to access the content of currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the [workspace](), which provides information about the active content being edited.
+In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the [workspace API](https://joplinapp.org/plugins/api/classes/joplinworkspace.html), which provides information about the active content being edited.
 
-So within the `onStart` event handler, add the following:
+So within the `onStart()` event handler, add the following:
 
 ```typescript
 joplin.plugins.register({
@@ -55,13 +60,13 @@ joplin.plugins.register({
 		}
 
 		// This event will be triggered when the user selects a different note
-		joplin.workspace.onNoteSelectionChange(() => {
+		await joplin.workspace.onNoteSelectionChange(() => {
 			updateTocView();
 		});
 
 		// This event will be triggered when the content of the note changes
 		// as you also want to update the TOC in this case.
-		joplin.workspace.onNoteContentChange(() => {
+		await joplin.workspace.onNoteContentChange(() => {
 			updateTocView();
 		});
 
@@ -72,9 +77,11 @@ joplin.plugins.register({
 });
 ```
 
+Try the above and you should see in the console the event handler being called every time a new note is opened, or whenever the note content changes.
+
 ## Getting the note sections and slugs
 
-Now that you have the current note, you'll need to get the headers in that note in order to build the TOC from it. There are many ways to do so, such as using a Markdown parser, but for now a quick and dirty solution is to get all the lines that start with `#` followed by a space. Any such line should be a header.
+Now that you have the current note, you'll need to extract the headers from that note in order to build the TOC from it. Since the note content is plain Markdown, there are several ways to do so, such as using a Markdown parser, but for now a quick and dirty solution is to get all the lines that start with any number of  `#` followed by a space. Any such line should be a header.
 
 The function below, which you can copy anywhere in your file, will use this method and return an array of headers, with the text and level (H1, H2, etc.) of header:
 
@@ -118,9 +125,13 @@ joplin.plugins.register({
 });
 ```
 
-Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like "My Header" is converted to "my-header". And if there's already a slug with that name, a number is appended to it. Without going into too much details, this is the function you will need for Joplin, so copy it somewhere in your file:
+Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like "My Header" is converted to "my-header". And if there's already a slug with that name, a number is appended to it. Without going into too much details, you will need the "slug" package to generate this for you, so install it using `npm i -s slug` from the root of your plugin directory.
+
+Then this is the function you will need for Joplin, so copy it somewhere in your file:
 
 ```typescript
+const nodeSlug = require('slug');
+
 let slugs = {};
 
 function headerSlug(headerText) {
@@ -133,11 +144,25 @@ function headerSlug(headerText) {
 }
 ```
 
+And you will need a utility function to escape HTML. There are many packages to do this but for now you can simply use this:
+
+```typescript
+// From https://stackoverflow.com/a/6234804/561309
+function escapeHtml(unsafe:string) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+```
+
 Again try to run the plugin and if you select a note with multiple headers, you should see the header list in the console.
 
 ## Creating a webview
 
-In order to display the TOC in Joplin, you will need a [webview panel](https://joplinapp.org/plugins/api/classes/joplinviewspanels.html). Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the `html` property.
+In order to display the TOC in Joplin, you will need a [webview panel](https://joplinapp.org/plugins/api/classes/joplinviewspanels.html). Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.
 
 Here's how it could be done:
 
@@ -145,11 +170,11 @@ Here's how it could be done:
 joplin.plugins.register({
 
 	onStart: async function() {
-		// Create the webview object
-		const tocView = joplin.views.createWebviewPanel();
+		// Create the panel object
+		const panel = await joplin.views.panels.create();
 
 		// Set some initial content while the TOC is being created
-		tocView.html = 'Loading...';
+		await joplin.views.panels.setHtml(panel, 'Loading...');
 
 		async function updateTocView() {
 			const note = await joplin.workspace.selectedNote();
@@ -169,24 +194,24 @@ joplin.plugins.register({
 					//   We assign it to a "data" attribute, which can then be easily retrieved from JavaScript
 					//
 					// - Also make sure you escape the text before inserting it in the HTML to avoid XSS attacks
-					//   and rendering issues. Joplin provides the function joplin.utils.escapeHtml for this purpose.
+					//   and rendering issues. For this use the `escapeHtml()` function you've added earlier.
 					itemHtml.push(`
 						<p class="toc-item" style="padding-left:${(header.level - 1) * 15}px">
-							<a class="toc-item-link" href="#" data-slug="${joplin.utils.escapeHtml(slug)}">
-								${joplin.utils.escapeHtml(header.text)}
+							<a class="toc-item-link" href="#" data-slug="${escapeHtml(slug)}">
+								${escapeHtml(header.text)}
 							</a>
 						</p>
 					`);
 				}
 
 				// Finally, insert all the headers in a container and set the webview HTML:
-				tocView.html = `
+				await joplin.views.panels.setHtml(panel, `
 					<div class="container">
 						${itemHtml.join('\n')}
 					</div>
-				`;
+				`);
 			} else {
-				tocView.html = 'Please select a note to view the table of content';
+				await joplin.views.panels.setHtml(panel, 'Please select a note to view the table of content');
 			}
 		}
 
@@ -196,22 +221,25 @@ joplin.plugins.register({
 });
 ```
 
-Now run the plugin again and you see the TOC dynamically update as you change notes.
+Now run the plugin again and you should see the TOC dynamically updating as you change notes.
 
 ## Styling the view
 
 In order to better integrate the TOC to Joplin, you might want to style it using CSS. To do so, first add a `webview.css` file next to `index.ts`, then you will need to let Joplin know about this file. This is done using the `addScript()` function (which is also used to add JavaScript files as we'll see later), like so:
 
 ```typescript
-const tocView = joplin.views.createWebviewPanel();
-tocView.addScript('./webview.css'); // Add the CSS file to the view
+const panel = await joplin.views.panels.create();
+ // Add the CSS file to the view, right after it has been created:
+await joplin.views.panels.addScript(panel, './webview.css');
 ```
 
 This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of theme variables, which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.
 
-For now, the CSS file below would give the view the correct font color and family, and the right background colour:
+The CSS file below would give the view the correct font color and family, and the right background colour:
 
 ```css
+/* In webview.css */
+
 .container {
 	background-color: var(--joplin-background-color);
 	color: var(--joplin-color);
@@ -225,34 +253,40 @@ For now, the CSS file below would give the view the correct font color and famil
 }
 ```
 
+Try the plugin and the styling should be improved. You may also try to switch to dark or light mode and see the style being updated.
+
 ## Making the webview interactive
 
 The next step is to make the TOC interactive so that when the user clicks on a link, the note is scrolled to right header. This can be done using an external JavaScript file that will handle the click events. As for the CSS file, create a `webview.js` file next to `index.ts`, then add the script to the webview:
 
 ```typescript
-const tocView = joplin.views.createWebviewPanel();
-tocView.addScript('./webview.css'); // Add the CSS file to the view
-tocView.addScript('./webview.js'); // Add the JS file to the view
+// In index.ts
+
+const panel = joplin.views.createWebviewPanel();
+await joplin.views.panels.addScript(panel, './webview.css');
+await joplin.views.panels.addScript(panel, './webview.js'); // Add the JS file
 ```
 
 To check that everything's working, let's create a simple event handler that display the header slug when clicked:
 
 ```javascript
+// In webview.js
+
 // There are many ways to listen to click events, you can even use
-// something like jQuery or React. For now to keep it simple, let's
-// do it in plain JavaScript:
+// something like jQuery or React. This is how it can be done using
+// plain JavaScript:
 document.addEventListener('click', event => {
 	const element = event.target;
 	// If a TOC header has been clicked:
 	if (element.className === 'toc-item-link') {
 		// Get the slug and display it:
 		const slug = element.dataset.slug;
-		alert('Clicked header slug: ' + slug);
+		console.info('Clicked header slug: ' + slug);
 	}
-})
+});
 ```
 
-If everything works well, you should now see the slug whenever you click on a header link. The next step will be to use that slug to scroll to the right header.
+If everything works well, you should now see the slug in the console whenever you click on a header link. The next step will be to use that slug to scroll to the right header.
 
 ## Passing messages between the webview and the plugin
 
@@ -272,7 +306,7 @@ document.addEventListener('click', event => {
 			hash: element.dataset.slug,
 		});
 	}
-})
+});
 ```
 
 Then from the plugin, in `src/index.ts`, you can listen to this message using the `onMessage()` handler. Then from this handler, you can call the `scrollToHash` command and pass it the slug (or hash).
@@ -280,11 +314,11 @@ Then from the plugin, in `src/index.ts`, you can listen to this message using th
 ```typescript
 joplin.plugins.register({
 	onStart: async function() {
-		const tocView = joplin.views.createWebviewPanel();
+		const panel = await joplin.views.panels.create();
 
 		// ...
 
-		tocView.onMessage((message) => {
+		await joplin.views.panels.onMessage(panel, (message) => {
 			if (message.name === 'scrollToHash') {
 				// As the name says, the scrollToHash command makes the note scroll
 				// to the provided hash.

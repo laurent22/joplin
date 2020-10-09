@@ -39,7 +39,7 @@ In order to test the plugin, you might want to run Joplin in [Development Mode](
 
 Finally, in order to test the plugin, open the Setting screen, then navigate the the **Plugins** section, and add the plugin path in the **Development plugins** text field. For example, if your plugin project path is `/home/user/src/joplin-plugin`, add this in the text field.
 
-Restart the app, and Joplin should load the plugin and execute its `onStart` handler. If all went well you should see the test message: "Test plugin started".
+Restart the app, and Joplin should load the plugin and execute its `onStart` handler. If all went well you should see the test message in the plugin console: "Test plugin started!".
 
 # Next steps
 
