@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/blog/20190613-202613.md and any manual change
+This file was auto-generated from readme/api/references/plugin_manifest.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
+https://github.com/laurent22/joplin/blob/master/readme/api/references/plugin_manifest.md
 
 -->
 
 <head>
-	<title>Customising your notes with the help of the development tools and CSS | Joplin</title>
+	<title>Plugin Manifest | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -275,7 +275,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
 
 <body>
 
-<div class="container page-20190613-202613">
+<div class="container page-plugin_manifest">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -361,18 +361,27 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
 </li>
 </ul>
 </div>
-<h1>Customising your notes with the help of the development tools and CSS<a name="customising-your-notes-with-the-help-of-the-development-tools-and-css" href="#customising-your-notes-with-the-help-of-the-development-tools-and-css" class="heading-anchor">🔗</a></h1>
-<p>In Joplin desktop, it has been possible <a href="https://joplinapp.org/#custom-css">to customise the appearance of your notes</a> using CSS for quite some time.</p>
-<p>An issue however is that it is difficult to know what CSS to write and how to select specific elements with CSS. The development tools that were just added allow figuring this out. They are available under the menu <strong>Help &gt; Toggle development tools.</strong></p>
-<p><img src="images/20190613-202613_0.png" alt=""></p>
-<p>Then, from the &quot;Elements&quot; tab, it is possible to select an element and view the corresponding HTML as well as styles. It is also possible to modify the style in real time and view the changes before adding them to userstyle.css.</p>
-<p><img src="images/20190613-202613_1.png" alt=""></p>
-<hr>
-<p>url: <a href="https://www.patreon.com/posts/customising-your-27609047">https://www.patreon.com/posts/customising-your-27609047</a><br>
-published_at: 2019-06-13T19:26:13.000+00:00</p>
+<h1>Plugin Manifest<a name="plugin-manifest" href="#plugin-manifest" class="heading-anchor">🔗</a></h1>
+<p>The manifest file is a JSON file that describes various properties of the plugin. If you use the Yeoman generator, it should be automatically generated based on the answers you've provided. The supported properties are:</p>
+<ul>
+<li><code>manifest_version</code>: For now should always be &quot;1&quot;</li>
+<li><code>name</code>: Name of the plugin</li>
+<li><code>description</code>: Additional information about the plugin</li>
+<li><code>version</code>: Version number such as &quot;1.0.0&quot;</li>
+<li><code>homepage_url</code>: Homepage URL of the plugin (can also be, for example, a link to a GitHub repository)</li>
+</ul>
+<p>Here's a complete example:</p>
+<pre><code class="language-json">{
+    &quot;manifest_version&quot;: 1,
+    &quot;name&quot;: &quot;Joplin Simple Plugin&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;,
+    &quot;description&quot;: &quot;To test loading and running a plugin&quot;,
+    &quot;homepage_url&quot;: &quot;https://joplinapp.org&quot;
+}
+</code></pre>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/api/references/plugin_manifest.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

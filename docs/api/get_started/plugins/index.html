@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/blog/20190613-202613.md and any manual change
+This file was auto-generated from readme/api/get_started/plugins.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
+https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.md
 
 -->
 
 <head>
-	<title>Customising your notes with the help of the development tools and CSS | Joplin</title>
+	<title>Getting started with plugin development | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -275,7 +275,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
 
 <body>
 
-<div class="container page-20190613-202613">
+<div class="container page-plugins">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -361,18 +361,41 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md
 </li>
 </ul>
 </div>
-<h1>Customising your notes with the help of the development tools and CSS<a name="customising-your-notes-with-the-help-of-the-development-tools-and-css" href="#customising-your-notes-with-the-help-of-the-development-tools-and-css" class="heading-anchor">🔗</a></h1>
-<p>In Joplin desktop, it has been possible <a href="https://joplinapp.org/#custom-css">to customise the appearance of your notes</a> using CSS for quite some time.</p>
-<p>An issue however is that it is difficult to know what CSS to write and how to select specific elements with CSS. The development tools that were just added allow figuring this out. They are available under the menu <strong>Help &gt; Toggle development tools.</strong></p>
-<p><img src="images/20190613-202613_0.png" alt=""></p>
-<p>Then, from the &quot;Elements&quot; tab, it is possible to select an element and view the corresponding HTML as well as styles. It is also possible to modify the style in real time and view the changes before adding them to userstyle.css.</p>
-<p><img src="images/20190613-202613_1.png" alt=""></p>
-<hr>
-<p>url: <a href="https://www.patreon.com/posts/customising-your-27609047">https://www.patreon.com/posts/customising-your-27609047</a><br>
-published_at: 2019-06-13T19:26:13.000+00:00</p>
+<h1>Getting started with plugin development<a name="getting-started-with-plugin-development" href="#getting-started-with-plugin-development" class="heading-anchor">🔗</a></h1>
+<p>In this article you will learn the basic steps to build and test a plugin in Joplin.</p>
+<p>## Setting up your environment</p>
+<p>First you need to setup your environment:</p>
+<ul>
+<li>Make sure you have <a href="https://nodejs.org/">Node.js</a> and <a href="https://git-scm.com">git</a> installed.</li>
+<li>Install Joplin and run it in development mode.</li>
+</ul>
+<p>You will also need to have Joplin installed and running in development mode, which we'll describe later.</p>
+<p>But first install Yeoman and the Joplin Plugin Generator:</p>
+<pre><code>npm install -g yo generator-joplin
+</code></pre>
+<p>Then to create the plugin, run:</p>
+<pre><code>yo joplin
+</code></pre>
+<p>This will create the basic scafolding of the plugin. At the root of it, there is a number of configuration files which you normally won't need to change. Then the <code>src/</code> directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.</p>
+<p>The <code>src/</code> directory also contains a <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest/">manifest.json</a> file, which you can edit to set various information about the plugin, such as its name, homepage URL, etc.</p>
+<h2>Building the plugin<a name="building-the-plugin" href="#building-the-plugin" class="heading-anchor">🔗</a></h2>
+<p>The file <code>src/index.ts</code> already contain some basic code meant for testing the plugin. In particular it contains a call to <a href="https://joplinapp.org/plugins/api/classes/joplinplugins.html">joplin.plugins.register</a>, which all plugins should call to register the plugin. And an <code>onStart()</code> event handler, which will be executed by Joplin when the plugin starts.</p>
+<p>To try this basic plugin, compile the app by running the following from the root of the project:</p>
+<pre><code>npm run dist
+</code></pre>
+<p>Doing so should compile all the files into the <code>dist/</code> directory. This is from here that Joplin will load the plugin.</p>
+<h2>Testing the plugin<a name="testing-the-plugin" href="#testing-the-plugin" class="heading-anchor">🔗</a></h2>
+<p>In order to test the plugin, you might want to run Joplin in <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_mode/">Development Mode</a>. Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.</p>
+<p>Finally, in order to test the plugin, open the Setting screen, then navigate the the <strong>Plugins</strong> section, and add the plugin path in the <strong>Development plugins</strong> text field. For example, if your plugin project path is <code>/home/user/src/joplin-plugin</code>, add this in the text field.</p>
+<p>Restart the app, and Joplin should load the plugin and execute its <code>onStart</code> handler. If all went well you should see the test message: &quot;Test plugin started&quot;.</p>
+<h1>Next steps<a name="next-steps" href="#next-steps" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>You might want to check the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin/">plugin tutorial</a> to get a good overview of how to create a complete plugin and how to use the plugin API.</li>
+<li>For more information about the plugin API, check the <a href="https://joplinapp.org/plugins/api/classes/joplin.html">Plugin API reference</a>.</li>
+</ul>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/blog/20190613-202613.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

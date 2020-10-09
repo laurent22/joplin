@@ -320,16 +320,27 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api/references/rest_api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API</p>
+<ul>
+<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
+<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="https://joplinapp.org/plugins/api/classes/joplin.html">Plugin API</a></li>
+<li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
 <li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 </ul>
 </li>
 <li>
@@ -359,9 +370,9 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <li>How to listen to changes in the user interface</li>
 </ul>
 <p>## Setting up your environment</p>
-<p>Before getting any further, make sure your environment is setup correctly as described in the <a href="">Get Started guide</a>.</p>
+<p>Before getting any further, make sure your environment is setup correctly as described in the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/">Get Started guide</a>.</p>
 <h2>Registering the plugin<a name="registering-the-plugin" href="#registering-the-plugin" class="heading-anchor">🔗</a></h2>
-<p>All plugins must register themselves and declare what <a href="">events</a> they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <a href="">onStart</a> event handler too:</p>
+<p>All plugins must <a href="https://joplinapp.org/plugins/api/classes/joplinplugins.html">register themselves</a> and declare what events they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <code>onStart()</code> event handler too:</p>
 <pre><code class="language-typescript">// Register the plugin
 joplin.plugins.register({
 
@@ -462,7 +473,7 @@ function headerSlug(headerText) {
 </code></pre>
 <p>Again try to run the plugin and if you select a note with multiple headers, you should see the header list in the console.</p>
 <h2>Creating a webview<a name="creating-a-webview" href="#creating-a-webview" class="heading-anchor">🔗</a></h2>
-<p>In order to display the TOC in Joplin, you will need a <a href="">webview</a>. Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the <code>html</code> property.</p>
+<p>In order to display the TOC in Joplin, you will need a <a href="https://joplinapp.org/plugins/api/classes/joplinviewspanels.html">webview panel</a>. Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the <code>html</code> property.</p>
 <p>Here's how it could be done:</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 
@@ -523,7 +534,7 @@ function headerSlug(headerText) {
 <pre><code class="language-typescript">const tocView = joplin.views.createWebviewPanel();
 tocView.addScript('./webview.css'); // Add the CSS file to the view
 </code></pre>
-<p>This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of <a href="">theme variables</a>, which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.</p>
+<p>This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of theme variables, which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.</p>
 <p>For now, the CSS file below would give the view the correct font color and family, and the right background colour:</p>
 <pre><code class="language-css">.container {
 	background-color: var(--joplin-background-color);
@@ -560,7 +571,7 @@ document.addEventListener('click', event =&gt; {
 <p>If everything works well, you should now see the slug whenever you click on a header link. The next step will be to use that slug to scroll to the right header.</p>
 <h2>Passing messages between the webview and the plugin<a name="passing-messages-between-the-webview-and-the-plugin" href="#passing-messages-between-the-webview-and-the-plugin" class="heading-anchor">🔗</a></h2>
 <p>For security reason, webviews run within their own sandbox (iframe) and thus do not have access to the Joplin API. You can however send messages to and from the webview to the plugin, and you can call the Joplin API from the plugin.</p>
-<p>From within a webview, you have access to the <a href="">webviewApi</a> object, which among others has a <a href="">postMessage</a> function you can use to send a message to the plugin. Let's use this to post the slug info to the plugin:</p>
+<p>From within a webview, you have access to the webviewApi object, which among others has a <code>postMessage()</code> function you can use to send a message to the plugin. Let's use this to post the slug info to the plugin:</p>
 <p>Change <code>webview.js</code> like so:</p>
 <pre><code class="language-javascript">document.addEventListener('click', event =&gt; {
 	const element = event.target;
@@ -573,7 +584,7 @@ document.addEventListener('click', event =&gt; {
 	}
 })
 </code></pre>
-<p>Then from the plugin, in <code>src/index.ts</code>, you can listen to this message using the <a href="">onMessage</a> handler. Then from this handler, you can call the <a href="">scrollToHash command</a> and pass it the slug (or hash).</p>
+<p>Then from the plugin, in <code>src/index.ts</code>, you can listen to this message using the <code>onMessage()</code> handler. Then from this handler, you can call the <code>scrollToHash</code> command and pass it the slug (or hash).</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 	onStart: async function() {
 		const tocView = joplin.views.createWebviewPanel();
@@ -597,7 +608,7 @@ document.addEventListener('click', event =&gt; {
 </code></pre>
 <p>And that's it! If you run this code you should now have a fully functional TOC. The full source code is available there:</p>
 <p><a href="https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/">https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/</a></p>
-<p>Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the <a href="">plugin API</a> for further information or head to the <a href="">development forum</a> for support.</p>
+<p>Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the <a href="https://joplinapp.org/plugins/api/classes/joplin.html">plugin API</a> for further information or head to the <a href="https://discourse.joplinapp.org/c/development/6">development forum</a> for support.</p>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.md">
