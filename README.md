@@ -100,6 +100,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
+  - [Search Sorting spec](https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md)
 
 - Google Summer of Code 2020
 
@@ -345,7 +346,7 @@ You can also use search filters to further restrict the search.
 |**resource:**|Filter by attachment MIME type|`resource:image/jpeg` to return notes with a jpeg attachment.<br>`-resource:application/pdf` to return notes without a pdf attachment.<br>`resource:image/*` to return notes with any images.|
 |**sourceurl:**|Filter by source URL|`sourceurl:https://www.google.com`<br>`sourceurl:*joplinapp.org` to perform a wildcard search.|
 
-Note: In CliClient you have to escape the query using `--` when using negated filters. 
+Note: In CliClient you have to escape the query using `--` when using negated filters.
 Eg. `:search -- "-tag:tag1"`.
 
 Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.

@@ -634,6 +634,16 @@ function tempFilePath(ext) {
 	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
 }
 
+function mockDate(year, month, day, tick) {
+	const fixedDate = new Date(2020, 0, 1);
+	jasmine.clock().install();
+	jasmine.clock().mockDate(fixedDate);
+}
+
+function restoreDate() {
+	jasmine.clock().uninstall();
+}
+
 // Application for feature integration testing
 class TestApp extends BaseApplication {
 	constructor(hasGui = true) {
@@ -702,4 +712,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
