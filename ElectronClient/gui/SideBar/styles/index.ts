@@ -92,6 +92,7 @@ export const StyledExpandLink = styled.a`
 	width: 16px;
 	max-width: 16px;
 	min-width: 16px;
+	height: 100%;
 `;
 
 export const StyledNoteCount = styled.div`

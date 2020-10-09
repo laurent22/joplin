@@ -3,7 +3,6 @@ const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim.js');
-const EventEmitter = require('events');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -127,11 +126,6 @@ class JoplinDatabase extends Database {
 		this.version_ = null;
 		this.tableFieldNames_ = {};
 		this.extensionToLoad = './build/lib/sql-extensions/spellfix';
-		this.eventEmitter_ = new EventEmitter();
-	}
-
-	eventEmitter() {
-		return this.eventEmitter_;
 	}
 
 	initialized() {
@@ -360,8 +354,6 @@ class JoplinDatabase extends Database {
 			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
-
-			this.eventEmitter_.emit('startMigration', { version: targetVersion });
 
 			if (targetVersion == 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));

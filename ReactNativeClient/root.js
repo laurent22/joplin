@@ -2,7 +2,7 @@ import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Text, Image } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -376,7 +376,7 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
-async function initialize(dispatch, messageHandler) {
+async function initialize(dispatch) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -415,13 +415,8 @@ async function initialize(dispatch, messageHandler) {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
-	const db_startUpgrade = (event) => {
-		messageHandler(`Upgrading database to v${event.version}...`);
-	};
-
 	const db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
-	db.eventEmitter().on('startMigration', db_startUpgrade);
 	reg.setDb(db);
 
 	reg.dispatch = dispatch;
@@ -458,12 +453,8 @@ async function initialize(dispatch, messageHandler) {
 			// await db.clearForTesting();
 		}
 
-		db.eventEmitter().removeListener('startMigration', db_startUpgrade);
-
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
-
-		messageHandler('Initialising application...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 
@@ -611,7 +602,6 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
-			initMessage: '',
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -625,52 +615,66 @@ class AppComponent extends React.Component {
 		};
 	}
 
-	componentDidMount() {
-		setTimeout(async () => {
-			// We run initialization code with a small delay to give time
-			// to the view to render "please wait" messages.
-
+	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
+	// For example, adding a loading screen as was done in this commit: https://github.com/laurent22/joplin/commit/569355a3182bc12e50a54249882e3d68a72c2b28.
+	// had for effect that sharing with the app would create multiple instances of the app, thus breaking
+	// database access and so on. It's unclear why it happens and how to fix it but reverting that commit
+	// fixed the issue for now.
+	//
+	// Changing app launch mode doesn't help.
+	//
+	// It's possible that it's a bug in React Native, or perhaps the framework expects that the whole app can be
+	// mounted/unmounted or multiple ones can be running at the same time, but the app was not designed in this
+	// way.
+	//
+	// More reports and info about the multiple instance bug:
+	//
+	// https://github.com/laurent22/joplin/issues/3800
+	// https://github.com/laurent22/joplin/issues/3804
+	// https://github.com/laurent22/joplin/issues/3807
+	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
+	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
+	async componentDidMount() {
+		if (this.props.appState == 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch, (message) => {
-				this.setState({ initMessage: message });
-			});
-
-			BackButtonService.initialize(this.backButtonHandler_);
-
-			AlarmService.setInAppNotificationHandler(async (alarmId) => {
-				const alarm = await Alarm.load(alarmId);
-				const notification = await Alarm.makeNotification(alarm);
-				this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
-			});
-
-			AppState.addEventListener('change', this.onAppStateChange_);
-
-			const sharedData = await ShareExtension.data();
-			if (sharedData) {
-				reg.logger().info('Received shared data');
-				if (this.props.selectedFolderId) {
-					handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
-				} else {
-					reg.logger.info('Cannot handle share - default folder id is not set');
-				}
-			}
+			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
-		}, 100);
+		}
+
+		BackButtonService.initialize(this.backButtonHandler_);
+
+		AlarmService.setInAppNotificationHandler(async (alarmId) => {
+			const alarm = await Alarm.load(alarmId);
+			const notification = await Alarm.makeNotification(alarm);
+			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+		});
+
+		AppState.addEventListener('change', this.onAppStateChange_);
+
+		const sharedData = await ShareExtension.data();
+		if (sharedData) {
+			reg.logger().info('Received shared data');
+			if (this.props.selectedFolderId) {
+				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger.info('Cannot handle share - default folder id is not set');
+			}
+		}
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
-	async componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -715,19 +719,8 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	renderStartupScreen() {
-		return (
-			<View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-				<View style={{ alignItems: 'center' }}>
-					<Image style={{ marginBottom: 5 }} source={require('./images/StartUpIcon.png')} />
-					<Text style={{ color: '#444444' }}>{this.state.initMessage}</Text>
-				</View>
-			</View>
-		);
-	}
-
 	render() {
-		if (this.props.appState != 'ready') return this.renderStartupScreen();
+		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent = null;
