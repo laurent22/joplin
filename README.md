@@ -83,14 +83,23 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
 	- [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
-	- [API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
+
+- Joplin API
+
+	- [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
+	- [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
+	- [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
+	- [Plugin API](https://joplinapp.org/plugins/api/classes/joplin.html)
+	- [Data API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
 
 - Development
 
+	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec.md)
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
+	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
 
 - Google Summer of Code 2020
 
