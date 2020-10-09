@@ -1,5 +1,6 @@
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
+const Setting = require('lib/models/Setting.js');
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks
@@ -10,7 +11,7 @@ export default function useJoplinMode(CodeMirror: any) {
 			name: 'markdown',
 			taskLists: true,
 			strikethrough: true,
-			emoji: true,
+			emoji: Setting.value('markdown.plugin.emoji'),
 			tokenTypeOverrides: {
 				linkText: 'link-text',
 			},
@@ -33,7 +34,7 @@ export default function useJoplinMode(CodeMirror: any) {
 		}
 
 		return {
-			startState: function(): {outer: any, openCharacter: string, inner: any} {
+			startState: function(): { outer: any, openCharacter: string, inner: any } {
 				return {
 					outer: CodeMirror.startState(markdownMode),
 					openCharacter: '',
