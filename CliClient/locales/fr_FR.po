@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -1359,9 +1361,9 @@ msgstr "Propriétés de la note"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:142
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Erreur"
+msgstr "Erreur : %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:339
@@ -1570,9 +1572,8 @@ msgid "Toggle editor layout"
 msgstr "Basculer la disposition de l'éditeur"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Basculer la disposition de l'éditeur"
+msgstr "Basculer l'éditeur"
 
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:27
 #: ElectronClient/gui/MainScreen.min.js:313
@@ -2276,9 +2277,8 @@ msgstr[0] "Copier lien partageable"
 msgstr[1] "Copier liens partageables"
 
 #: ElectronClient/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Copier le chemin"
+msgstr "Copier commande de développement dans presse papier"
 
 #: ElectronClient/commands/stopExternalEditing.js:17
 msgid "Stop external editing"
@@ -3707,7 +3707,7 @@ msgstr ""
 "sortie \"%s\""
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
 "Impossible de charger module \"%s\" pour le format d'entrée \"%s\" et de "
@@ -3719,7 +3719,6 @@ msgid "Please specify import format for %s"
 msgstr "Veuillez spécifier le format d'import pour %s"
 
 #: ReactNativeClient/lib/services/KeymapService.js:236
-#, fuzzy
 msgid "command"
 msgstr "Commande"
 
@@ -3727,17 +3726,17 @@ msgstr "Commande"
 #: ReactNativeClient/lib/services/KeymapService.js:241
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "\"%s\" requiert la propriété \"%s\"."
 
 #: ReactNativeClient/lib/services/KeymapService.js:241
 #: ReactNativeClient/lib/services/KeymapService.js:248
 msgid "accelerator"
-msgstr ""
+msgstr "raccourci"
 
 #: ReactNativeClient/lib/services/KeymapService.js:248
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Réponse invalide : %s"
+msgstr "Invalide %s : %s."
 
 #: ReactNativeClient/lib/services/KeymapService.js:266
 #, javascript-format
@@ -3745,11 +3744,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Le raccourci \"%s\" est utilisé par les commandes \"%s\" et \"%s\", ce qui "
+"peut causer des problèmes."
 
 #: ReactNativeClient/lib/services/KeymapService.js:291
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Le raccourci \"%s\" n'est pas valide."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
