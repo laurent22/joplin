@@ -4,10 +4,6 @@
 			"name": ".",
 			"path": "."
 		},
-		{
-			"name": "D:/Web/www/nextcloud/apps/joplin",
-			"path": "D:/Web/www/nextcloud/apps/joplin"
-		},
 	],
 	"settings": {
 		"files.exclude": {

@@ -10,11 +10,11 @@ Through this tutorial you will learn about several aspect of the Joplin API, inc
 
 ## Setting up your environment
 
-Before getting any further, make sure your environment is setup correctly as described in the [Get Started guide]().
+Before getting any further, make sure your environment is setup correctly as described in the [Get Started guide](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/).
 
 ## Registering the plugin
 
-All plugins must register themselves and declare what [events]() they can handle. To do so, open `src/index.ts` and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the [onStart]() event handler too:
+All plugins must [register themselves](https://joplinapp.org/plugins/api/classes/joplinplugins.html) and declare what events they can handle. To do so, open `src/index.ts` and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the `onStart()` event handler too:
 
 ```typescript
 // Register the plugin
@@ -137,7 +137,7 @@ Again try to run the plugin and if you select a note with multiple headers, you 
 
 ## Creating a webview
 
-In order to display the TOC in Joplin, you will need a [webview](). Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the `html` property.
+In order to display the TOC in Joplin, you will need a [webview panel](https://joplinapp.org/plugins/api/classes/joplinviewspanels.html). Webviews are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the webview object, then you can set its content using the `html` property.
 
 Here's how it could be done:
 
@@ -207,7 +207,7 @@ const tocView = joplin.views.createWebviewPanel();
 tocView.addScript('./webview.css'); // Add the CSS file to the view
 ```
 
-This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of [theme variables](), which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.
+This file is just a plain CSS file you can use to style your view. Additionally, you can access from there a number of theme variables, which you can use to better integrate the view to the UI. For example, using these variables you can use a dark background in dark mode, and a light one in light mode.
 
 For now, the CSS file below would give the view the correct font color and family, and the right background colour:
 
@@ -258,7 +258,7 @@ If everything works well, you should now see the slug whenever you click on a he
 
 For security reason, webviews run within their own sandbox (iframe) and thus do not have access to the Joplin API. You can however send messages to and from the webview to the plugin, and you can call the Joplin API from the plugin.
 
-From within a webview, you have access to the [webviewApi]() object, which among others has a [postMessage]() function you can use to send a message to the plugin. Let's use this to post the slug info to the plugin:
+From within a webview, you have access to the webviewApi object, which among others has a `postMessage()` function you can use to send a message to the plugin. Let's use this to post the slug info to the plugin:
 
 Change `webview.js` like so:
 
@@ -275,7 +275,7 @@ document.addEventListener('click', event => {
 })
 ```
 
-Then from the plugin, in `src/index.ts`, you can listen to this message using the [onMessage]() handler. Then from this handler, you can call the [scrollToHash command]() and pass it the slug (or hash).
+Then from the plugin, in `src/index.ts`, you can listen to this message using the `onMessage()` handler. Then from this handler, you can call the `scrollToHash` command and pass it the slug (or hash).
 
 ```typescript
 joplin.plugins.register({
@@ -304,4 +304,4 @@ And that's it! If you run this code you should now have a fully functional TOC. 
 
 https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/
 
-Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API]() for further information or head to the [development forum]() for support.
+Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API](https://joplinapp.org/plugins/api/classes/joplin.html) for further information or head to the [development forum](https://discourse.joplinapp.org/c/development/6) for support.
