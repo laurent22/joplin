@@ -149,7 +149,7 @@ To import Evernote data, first export your Evernote notebooks to ENEX files as d
 
 In the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-In the **terminal application**, in [command-line mode](readme/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
 ## Importing from Markdown files
 
@@ -157,7 +157,7 @@ Joplin can import notes from plain Markdown file. You can either import a comple
 
 In the **desktop application**, open File > Import > MD and select your Markdown file or directory.
 
-In the **terminal application**, in [command-line mode](readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
 ## Importing from other applications
 
