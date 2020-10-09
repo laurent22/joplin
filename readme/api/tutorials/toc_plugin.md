@@ -14,7 +14,7 @@ Before getting any further, make sure your environment is setup correctly as des
 
 ## Registering the plugin
 
-All plugins must [register themselves](https://joplinapp.org/plugins/api/classes/joplinplugins.html) and declare what events they can handle. To do so, open `src/index.ts` and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the `onStart()` event handler too:
+All plugins must [register themselves](https://joplinapp.org/plugin/api/classes/joplinplugins.html) and declare what events they can handle. To do so, open `src/index.ts` and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the `onStart()` event handler too:
 
 ```typescript
 // Import the Joplin API
@@ -37,7 +37,7 @@ If you now build the plugin and try to run it in Joplin, you should see the mess
 
 ## Getting the current note
 
-In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the [workspace API](https://joplinapp.org/plugins/api/classes/joplinworkspace.html), which provides information about the active content being edited.
+In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the [workspace API](https://joplinapp.org/plugin/api/classes/joplinworkspace.html), which provides information about the active content being edited.
 
 So within the `onStart()` event handler, add the following:
 
@@ -162,7 +162,7 @@ Again try to run the plugin and if you select a note with multiple headers, you 
 
 ## Creating a webview
 
-In order to display the TOC in Joplin, you will need a [webview panel](https://joplinapp.org/plugins/api/classes/joplinviewspanels.html). Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.
+In order to display the TOC in Joplin, you will need a [webview panel](https://joplinapp.org/plugin/api/classes/joplinviewspanels.html). Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.
 
 Here's how it could be done:
 
@@ -338,4 +338,4 @@ And that's it! If you run this code you should now have a fully functional TOC. 
 
 https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/
 
-Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API](https://joplinapp.org/plugins/api/classes/joplin.html) for further information or head to the [development forum](https://discourse.joplinapp.org/c/development/6) for support.
+Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API](https://joplinapp.org/plugin/api/classes/joplin.html) for further information or head to the [development forum](https://discourse.joplinapp.org/c/development/6) for support.

@@ -329,7 +329,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
 <li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
 <li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
-<li><a href="https://joplinapp.org/plugins/api/classes/joplin.html">Plugin API</a></li>
+<li><a href="https://joplinapp.org/plugin/api/classes/joplin.html">Plugin API</a></li>
 <li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
 </li>
@@ -337,7 +337,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <p>Development</p>
 <ul>
 <li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
@@ -372,7 +372,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.
 <p>## Setting up your environment</p>
 <p>Before getting any further, make sure your environment is setup correctly as described in the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/">Get Started guide</a>.</p>
 <h2>Registering the plugin<a name="registering-the-plugin" href="#registering-the-plugin" class="heading-anchor">🔗</a></h2>
-<p>All plugins must <a href="https://joplinapp.org/plugins/api/classes/joplinplugins.html">register themselves</a> and declare what events they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <code>onStart()</code> event handler too:</p>
+<p>All plugins must <a href="https://joplinapp.org/plugin/api/classes/joplinplugins.html">register themselves</a> and declare what events they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <code>onStart()</code> event handler too:</p>
 <pre><code class="language-typescript">// Import the Joplin API
 import joplin from 'api';
 
@@ -390,7 +390,7 @@ joplin.plugins.register({
 </code></pre>
 <p>If you now build the plugin and try to run it in Joplin, you should see the message <code>TOC plugin started!</code> in the dev console.</p>
 <h2>Getting the current note<a name="getting-the-current-note" href="#getting-the-current-note" class="heading-anchor">🔗</a></h2>
-<p>In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the <a href="https://joplinapp.org/plugins/api/classes/joplinworkspace.html">workspace API</a>, which provides information about the active content being edited.</p>
+<p>In order to create the table of content, you will need to access the content of the currently selected note, and you will need to refresh the TOC every time the note changes. All this can be done using the <a href="https://joplinapp.org/plugin/api/classes/joplinworkspace.html">workspace API</a>, which provides information about the active content being edited.</p>
 <p>So within the <code>onStart()</code> event handler, add the following:</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 
@@ -493,7 +493,7 @@ function escapeHtml(unsafe:string) {
 </code></pre>
 <p>Again try to run the plugin and if you select a note with multiple headers, you should see the header list in the console.</p>
 <h2>Creating a webview<a name="creating-a-webview" href="#creating-a-webview" class="heading-anchor">🔗</a></h2>
-<p>In order to display the TOC in Joplin, you will need a <a href="https://joplinapp.org/plugins/api/classes/joplinviewspanels.html">webview panel</a>. Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.</p>
+<p>In order to display the TOC in Joplin, you will need a <a href="https://joplinapp.org/plugin/api/classes/joplinviewspanels.html">webview panel</a>. Panels are a simple way to add custom content to the UI using HTML/CSS and JavaScript. First you would create the panel object and get back a view handler. Using this handler, you can set various properties such as the HTML content.</p>
 <p>Here's how it could be done:</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 
@@ -636,7 +636,7 @@ document.addEventListener('click', event =&gt; {
 </code></pre>
 <p>And that's it! If you run this code you should now have a fully functional TOC. The full source code is available there:</p>
 <p><a href="https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/">https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/</a></p>
-<p>Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the <a href="https://joplinapp.org/plugins/api/classes/joplin.html">plugin API</a> for further information or head to the <a href="https://discourse.joplinapp.org/c/development/6">development forum</a> for support.</p>
+<p>Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the <a href="https://joplinapp.org/plugin/api/classes/joplin.html">plugin API</a> for further information or head to the <a href="https://discourse.joplinapp.org/c/development/6">development forum</a> for support.</p>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/master/readme/api/tutorials/toc_plugin.md">

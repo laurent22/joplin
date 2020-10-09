@@ -6,7 +6,7 @@ The two main extension points are:
 
 - The [data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md), which is a server that provides access to Joplin data to external applications. It is possible, using standard HTTP calls, to create, modify or delete notes, notebooks, tags, etc. as well as attach files to notes and retrieve these files. This is for example how the web clipper communicates with Joplin.
 
-- The [plugin API](https://joplinapp.org/plugins/api/classes/joplin.html), which allows directly modifying Joplin by adding new features to the application. Using this API, you can:
+- The [plugin API](https://joplinapp.org/plugin/api/classes/joplin.html), which allows directly modifying Joplin by adding new features to the application. Using this API, you can:
 	- Access notes, folders, etc. via the data API
 	- Add a view to display custom data using HTML/CSS/JS
 	- Create a dialog to display information and get input from the user
