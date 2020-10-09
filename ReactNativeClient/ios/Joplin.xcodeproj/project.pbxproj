@@ -337,7 +337,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 54;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
@@ -380,7 +380,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 54;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
