@@ -305,7 +305,7 @@ class Folder extends BaseItem {
 	static buildTree(folders) {
 		const idToFolders = {};
 		for (let i = 0; i < folders.length; i++) {
-			idToFolders[folders[i].id] = folders[i];
+			idToFolders[folders[i].id] = Object.assign({}, folders[i]);
 			idToFolders[folders[i].id].children = [];
 		}
 
