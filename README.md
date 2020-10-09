@@ -8,7 +8,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing) into 
 
 The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
+The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -52,7 +52,7 @@ Arch Linux       | An Arch Linux package is available [here](https://aur.archlin
 
 ## Web Clipper
 
-The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](readme/clipper.md).
+The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md).
 
 # Sponsors
 
@@ -71,44 +71,44 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - Applications
 
-	- [Desktop application](readme/desktop.md)
-	- [Mobile applications](readme/mobile.md)
-	- [Terminal application](readme/terminal.md)
-	- [Web Clipper](readme/clipper.md)
+	- [Desktop application](https://github.com/laurent22/joplin/blob/dev/readme/desktop.md)
+	- [Mobile applications](https://github.com/laurent22/joplin/blob/dev/readme/mobile.md)
+	- [Terminal application](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md)
+	- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md)
 
 - Support
 
 	- [Joplin Forum](https://discourse.joplinapp.org)
-	- [Markdown Guide](readme/markdown.md)
-	- [How to enable end-to-end encryption](readme/e2ee.md)
-	- [What is a conflict?](readme/conflict.md)
-	- [How to enable debug mode](readme/debugging.md)
-	- [API documentation](readme/api/references/rest_api.md)
-	- [FAQ](readme/faq.md)
+	- [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md)
+	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md)
+	- [What is a conflict?](https://github.com/laurent22/joplin/blob/dev/readme/conflict.md)
+	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
+	- [API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+	- [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
 
 - Development
 
-	- [End-to-end encryption spec](readme/spec.md)
-	- [Note History spec](readme/spec/history.md)
-	- [Sync Lock spec](readme/spec/sync_lock.md)
+	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec.md)
+	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
+	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 
 - Google Summer of Code 2020
 
-	- [Google Summer of Code 2020](readme/gsoc2020/index.md)
-	- [Project Ideas](readme/gsoc2020/ideas.md)
+	- [Google Summer of Code 2020](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2020/index.md)
+	- [Project Ideas](https://github.com/laurent22/joplin/blob/dev/readme/gsoc2020/ideas.md)
 
 - About
 
-	- [Changelog (Desktop App)](readme/changelog.md)
-	- [Changelog (CLI App)](readme/changelog_cli.md)
-	- [Stats](readme/stats.md)
-	- [Donate](readme/donate.md)
+	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
+	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
+	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
+	- [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
 <!-- TOC -->
 
 # Features
 
 - Desktop, mobile and terminal applications.
-- [Web Clipper](readme/clipper.md) for Firefox and Chrome.
+- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
 - Note history (revisions)
 - Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
@@ -222,9 +222,9 @@ In the **terminal application**, to initiate the synchronisation process, type `
 
 # Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](readme/e2ee.md) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://github.com/laurent22/joplin/blob/dev/readme/e2ee.md) for more information about this feature and how to enable it.
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](readme/spec.md).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://github.com/laurent22/joplin/blob/dev/readme/spec.md).
 
 # Note history
 
@@ -278,7 +278,7 @@ Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For 
 
 # Markdown
 
-Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](readme/markdown.md) for more information.
+Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](https://github.com/laurent22/joplin/blob/dev/readme/markdown.md) for more information.
 
 # Custom CSS
 
@@ -367,7 +367,7 @@ For any question about Joplin privacy, please leave a message on the [Joplin For
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
-Please see the [donation page](readme/donate.md) for information on how to support the development of Joplin.
+Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/donate.md) for information on how to support the development of Joplin.
 
 # Community
 
