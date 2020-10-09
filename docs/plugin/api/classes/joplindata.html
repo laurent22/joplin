@@ -76,7 +76,7 @@
 					<p>In general you would use the methods in this class as if you were using a REST API. There are four methods that map to GET, POST, PUT and DELETE calls.
 					And each method takes these parameters:</p>
 					<ul>
-						<li><code>path</code>: This is the path to the resource in the form <code>resources[/:resourceId[/:link]]</code> (eg. &quot;tags/:id/notes&quot;). The &quot;resources&quot; segment is the name of the resources you want to access (eg. &quot;notes&quot;, &quot;folders&quot;, etc.). If not followed by anything, it will refer to all the resources in that collection. The optional &quot;resourceId&quot; points to a particular resources within the collection. Finally, an optional &quot;link&quot; can be present, which links the resource to a collection of resources. This can be used in the API for example to retrieve all the notes associated with a tag.</li>
+						<li><code>path</code>: This is an array that represents the path to the resource in the form <code>[&quot;resouceName&quot;, &quot;resourceId&quot;, &quot;resourceLink&quot;]</code> (eg. [&quot;tags&quot;, &quot;:id&quot;, &quot;notes&quot;]). The &quot;resources&quot; segment is the name of the resources you want to access (eg. &quot;notes&quot;, &quot;folders&quot;, etc.). If not followed by anything, it will refer to all the resources in that collection. The optional &quot;resourceId&quot; points to a particular resources within the collection. Finally, an optional &quot;link&quot; can be present, which links the resource to a collection of resources. This can be used in the API for example to retrieve all the notes associated with a tag.</li>
 						<li><code>query</code>: (Optional) The query parameters. In a URL, this is the part after the question mark &quot;?&quot;. In this case, it should be an object with key/value pairs.</li>
 						<li><code>data</code>: (Optional) Applies to PUT and POST calls only. The request body contains the data you want to create or modify, for example the content of a note or folder.</li>
 						<li><code>files</code>: (Optional) Used to create new resources and associate them with files.</li>
@@ -85,16 +85,16 @@
 					<p>For example:</p>
 					<pre><code class="language-typescript"><span class="hljs-comment">// Get a note ID, title and body</span>
 <span class="hljs-keyword">const</span> noteId = <span class="hljs-string">&#x27;some_note_id&#x27;</span>;
-<span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> joplin.data.get(<span class="hljs-string">&#x27;notes/&#x27;</span> + noteId, { fields: [<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;body&#x27;</span>] });
+<span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> joplin.data.get([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], { fields: [<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;body&#x27;</span>] });
 
 <span class="hljs-comment">// Get all folders</span>
-<span class="hljs-keyword">const</span> folders = <span class="hljs-keyword">await</span> joplin.data.get(<span class="hljs-string">&#x27;folders&#x27;</span>);
+<span class="hljs-keyword">const</span> folders = <span class="hljs-keyword">await</span> joplin.data.get([<span class="hljs-string">&#x27;folders&#x27;</span>]);
 
 <span class="hljs-comment">// Set the note body</span>
-<span class="hljs-keyword">await</span> joplin.data.put(<span class="hljs-string">&#x27;notes/&#x27;</span> + noteId, <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;New note body&quot;</span> });
+<span class="hljs-keyword">await</span> joplin.data.put([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;New note body&quot;</span> });
 
 <span class="hljs-comment">// Create a new note under one of the folders</span>
-<span class="hljs-keyword">await</span> joplin.data.post(<span class="hljs-string">&#x27;notes&#x27;</span>, <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;my new note&quot;</span>, title: <span class="hljs-string">&quot;some title&quot;</span>, parent_id: folders[<span class="hljs-number">0</span>].id });</code></pre>
+<span class="hljs-keyword">await</span> joplin.data.post([<span class="hljs-string">&#x27;notes&#x27;</span>], <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;my new note&quot;</span>, title: <span class="hljs-string">&quot;some title&quot;</span>, parent_id: folders[<span class="hljs-number">0</span>].id });</code></pre>
 				</div>
 			</section>
 			<!--
@@ -131,7 +131,7 @@
 					<a name="delete" class="tsd-anchor"></a>
 					<h3>delete</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><a href="../globals.html#path" class="tsd-signature-type">Path</a>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -140,7 +140,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<h5>path: <a href="../globals.html#path" class="tsd-signature-type">Path</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
@@ -158,7 +158,7 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><a href="../globals.html#path" class="tsd-signature-type">Path</a>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -167,7 +167,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<h5>path: <a href="../globals.html#path" class="tsd-signature-type">Path</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
@@ -185,7 +185,7 @@
 					<a name="post" class="tsd-anchor"></a>
 					<h3>post</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">post<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, body<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, files<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">post<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><a href="../globals.html#path" class="tsd-signature-type">Path</a>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, body<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, files<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -194,7 +194,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<h5>path: <a href="../globals.html#path" class="tsd-signature-type">Path</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
@@ -218,7 +218,7 @@
 					<a name="put" class="tsd-anchor"></a>
 					<h3>put</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, body<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, files<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><a href="../globals.html#path" class="tsd-signature-type">Path</a>, query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, body<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, files<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -227,7 +227,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<h5>path: <a href="../globals.html#path" class="tsd-signature-type">Path</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
@@ -368,6 +368,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#path" class="tsd-kind-icon">Path</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>
