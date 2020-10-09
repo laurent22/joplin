@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.3) - 2020-10-09T11:17:18Z
+
+- Improved: Improved handling of database migration failures
+
 ## [cli-v1.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.2) - 2020-09-29T11:33:53Z
 
 - Fixed: Fixed crash due to missing spellfix extension

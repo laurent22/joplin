@@ -407,7 +407,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
-		this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+		// It cannot theoretically be undefined, since componentDidMount should always be called before
+		// componentWillUnmount, but with React Native the impossible often becomes possible.
+		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text) {
