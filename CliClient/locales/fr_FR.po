@@ -3384,7 +3384,7 @@ msgstr "Exporter le profil"
 #: ReactNativeClient/lib/components/screens/config.js:446
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
-"For debugging purpose only: export your profile to an external SD card."
+"Seulement pour du débogage : exporter votre profile vers une carte SD externe."
 
 #: ReactNativeClient/lib/components/screens/config.js:461
 msgid "More information"
