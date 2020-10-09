@@ -14,10 +14,12 @@ export default class JoplinViewsDialogs {
 
 	private store: any;
 	private plugin: Plugin;
+	private implementation_:any;
 
-	constructor(plugin: Plugin, store: any) {
+	constructor(implementation:any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
+		this.implementation_ = implementation;
 	}
 
 	private controller(handle:ViewHandle):WebviewController {
@@ -33,6 +35,13 @@ export default class JoplinViewsDialogs {
 		controller.containerType = ContainerType.Dialog;
 		this.plugin.addViewController(controller);
 		return handle;
+	}
+
+	/**
+	 * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
+	 */
+	async showMessageBox(message:string):Promise<number> {
+		return this.implementation_.showMessageBox(message);
 	}
 
 	/**

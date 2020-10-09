@@ -102,7 +102,7 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	showMessageBox_(window:any, options:any) {
+	showMessageBox_(window:any, options:any):number {
 		const { dialog } = require('electron');
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, options);

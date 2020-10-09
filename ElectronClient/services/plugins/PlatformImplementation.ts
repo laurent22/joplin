@@ -1,11 +1,22 @@
 // import { EditorCommand } from 'lib/services/plugins/api/types';
 
+import bridge from '../bridge';
+
 // interface JoplinWorkspace {
 // 	execEditorCommand(command:EditorCommand):Promise<string>
 // }
 
+interface JoplinViewsDialogs {
+	showMessageBox(message:string):Promise<number>;
+}
+
+interface JoplinViews {
+	dialogs: JoplinViewsDialogs
+}
+
 interface Joplin {
 	// workspace: JoplinWorkspace;
+	views: JoplinViews;
 }
 
 interface Components {
@@ -27,15 +38,13 @@ export default class PlatformImplementation {
 		this.components_ = {};
 
 		this.joplin_ = {
-			// workspace: {
-			// 	execEditorCommand: async (command:EditorCommand) => {
-			// 		if (this.components_.textEditor) {
-			// 			return this.components_.textEditor.current.execCommand(command);
-			// 		} else {
-			// 			return '';
-			// 		}
-			// 	},
-			// },
+			views: {
+				dialogs: {
+					showMessageBox: async function(message:string) {
+						return bridge().showMessageBox(message);
+					},
+				},
+			},
 		};
 	}
 

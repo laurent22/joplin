@@ -19,14 +19,16 @@ export default class JoplinViews {
 	private panels_:JoplinViewsPanels = null;
 	private menuItems_:JoplinViewsMenuItems = null;
 	private toolbarButtons_:JoplinViewsToolbarButtons = null;
+	private implementation_:any = null;
 
-	constructor(plugin: Plugin, store: any) {
+	constructor(implementation:any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
+		this.implementation_ = implementation;
 	}
 
 	public get dialogs():JoplinViewsDialogs {
-		if (!this.dialogs_) this.dialogs_ = new JoplinViewsDialogs(this.plugin, this.store);
+		if (!this.dialogs_) this.dialogs_ = new JoplinViewsDialogs(this.implementation_.dialogs, this.plugin, this.store);
 		return this.dialogs_;
 	}
 

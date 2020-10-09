@@ -29,7 +29,7 @@ export default class Joplin {
 		this.workspace_ = new JoplinWorkspace(implementation.workspace, store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
-		this.views_ = new JoplinViews(plugin, store);
+		this.views_ = new JoplinViews(implementation.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 	}
