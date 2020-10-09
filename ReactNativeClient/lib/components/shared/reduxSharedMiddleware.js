@@ -1,13 +1,16 @@
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Tag = require('lib/models/Tag');
 const BaseModel = require('lib/BaseModel');
 const Note = require('lib/models/Note');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const eventManager = require('lib/eventManager').default;
 
 const reduxSharedMiddleware = async function(store, next, action) {
 	const newState = store.getState();
+
+	eventManager.appStateEmit(newState);
 
 	let refreshTags = false;
 

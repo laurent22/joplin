@@ -8,7 +8,7 @@ const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Note = require('lib/models/Note');
 const ItemChange = require('lib/models/ItemChange');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

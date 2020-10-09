@@ -1,0 +1,21 @@
+{{#if isInPath}}
+    </ul>
+    <ul class="current">
+{{/if}}
+
+{{#if (jsIsNotKindVariable cssClasses)}}
+    <li class="{{#if isInPath}}current{{/if}} {{cssClasses}}">
+        <a href="{{relativeURL url}}" class="tsd-kind-icon">{{{jpFormatClassName title}}}</a>
+        {{#if children}}
+            <ul>
+                {{#each children}}
+                    {{> toc}}
+                {{/each}}
+            </ul>
+        {{/if}}
+    </li>
+    {{#if isInPath}}
+        </ul>
+        <ul class="after-current">
+    {{/if}}
+{{/if}}

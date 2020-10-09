@@ -1,0 +1,8 @@
+{
+	"manifest_version": 1,
+	"name": "Register Command Test",
+	"description": "To test registering commands",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

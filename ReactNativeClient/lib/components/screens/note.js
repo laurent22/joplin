@@ -4,13 +4,13 @@ import AsyncActionQueue from '../../AsyncActionQueue';
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const UndoRedoService = require('lib/services/UndoRedoService.js').default;
 const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const md5 = require('md5');
@@ -24,9 +24,9 @@ const { ScreenHeader } = require('lib/components/screen-header.js');
 const NoteTagsDialog = require('lib/components/screens/NoteTagsDialog');
 const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
@@ -167,7 +167,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 							type: 'NAV_BACK',
 						});
 
-						setTimeout(() => {
+						shim.setTimeout(() => {
 							this.props.dispatch({
 								type: 'NAV_GO',
 								routeName: 'Note',
@@ -894,16 +894,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	scheduleFocusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
-		this.focusUpdateIID_ = setTimeout(() => {
+		this.focusUpdateIID_ = shim.setTimeout(() => {
 			this.focusUpdateIID_ = null;
 			this.focusUpdate();
 		}, 100);
 	}
 
 	focusUpdate() {
-		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
 		if (!this.state.note) return;
@@ -1005,9 +1005,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						}}
 						onMarkForDownload={this.onMarkForDownload}
 						onLoadEnd={() => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);
@@ -1062,9 +1062,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						},
 						onMarkForDownload: this.onMarkForDownload,
 						onLoadEnd: () => {
-							setTimeout(() => {
+							shim.setTimeout(() => {
 								this.setState({ HACK_webviewLoadingState: 1 });
-								setTimeout(() => {
+								shim.setTimeout(() => {
 									this.setState({ HACK_webviewLoadingState: 0 });
 								}, 50);
 							}, 5);

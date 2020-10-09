@@ -1,0 +1,7 @@
+{
+	"manifest_version": 1,
+	"name": "Json Export Test",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

@@ -1,5 +1,5 @@
 import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 
 interface Props {
@@ -18,11 +18,10 @@ export const runtime = ():CommandRuntime => {
 			ExternalEditWatcher.instance().stopWatching(props.noteId);
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main') return false;
 			return !!props.noteId;
 		},
 		mapStateToProps: (state:any) => {
-			return { noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null, routeName: state.route.routeName };
+			return { noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null };
 		},
 	};
 };

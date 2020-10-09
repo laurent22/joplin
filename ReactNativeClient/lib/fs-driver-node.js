@@ -188,6 +188,11 @@ class FsDriverNode extends FsDriverBase {
 		if (encoding === 'ascii') return buffer.toString('ascii');
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
+
+	resolve(path) {
+		return require('path').resolve(path);
+	}
+
 }
 
 module.exports.FsDriverNode = FsDriverNode;

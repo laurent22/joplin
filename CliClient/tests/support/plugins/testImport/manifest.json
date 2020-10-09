@@ -1,0 +1,10 @@
+{
+    "manifest_version": 1,
+    "name": "Joplin Test Plugin",
+    "version": "1.0.0",
+    "description": "To test loading and running a plugin",
+    "homepage_url": "https://joplinapp.org",
+    "permissions": [
+        "model"
+    ]
+}

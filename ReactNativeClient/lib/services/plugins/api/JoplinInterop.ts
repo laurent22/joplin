@@ -1,0 +1,41 @@
+import InteropService from 'lib/services/interop/InteropService';
+import { Module, ModuleType } from 'lib/services/interop/types';
+import { ExportModule, ImportModule } from './types';
+
+/**
+ * Provides a way to create modules to import external data into Joplin or to export notes into any arbitrary format.
+ *
+ * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/json_export)
+ *
+ * To implement an import or export module, you would simply define an object with various event handlers that are called
+ * by the application during the import/export process.
+ *
+ * See the documentation of the [[ExportModule]] and [[ImportModule]] for more information.
+ *
+ * You may also want to refer to the Joplin API documentation to see the list of properties for each item (note, notebook, etc.) - https://joplinapp.org/api/
+ */
+export default class JoplinInterop {
+
+	async registerExportModule(module:ExportModule) {
+		const internalModule:Module = {
+			...module,
+			type: ModuleType.Exporter,
+			isCustom: true,
+			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
+		};
+
+		return InteropService.instance().registerModule(internalModule);
+	}
+
+	async registerImportModule(module:ImportModule) {
+		const internalModule:Module = {
+			...module,
+			type: ModuleType.Importer,
+			isCustom: true,
+			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
+		};
+
+		return InteropService.instance().registerModule(internalModule);
+	}
+
+}

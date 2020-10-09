@@ -52,13 +52,13 @@ export default function NoteListControls(props:Props) {
 		return (
 			<ButtonContainer>
 				<StyledButton
-					tooltip={CommandService.instance().title('newTodo')}
+					tooltip={CommandService.instance().title('newTodo', {})}
 					iconName="far fa-check-square"
 					level={ButtonLevel.Primary}
 					onClick={onNewTodoButtonClick}
 				/>
 				<StyledButton
-					tooltip={CommandService.instance().title('newNote')}
+					tooltip={CommandService.instance().title('newNote', {})}
 					iconName="icon-note"
 					level={ButtonLevel.Primary}
 					onClick={onNewNoteButtonClick}

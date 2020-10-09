@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 
 interface Props {
 	noteId: string
@@ -23,17 +23,13 @@ export const runtime = ():CommandRuntime => {
 			} catch (error) {
 				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
 			}
-
-			// await comp.saveNoteAndWait(comp.formNote);
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main') return false;
 			return !!props.noteId;
 		},
 		mapStateToProps: (state:any) => {
 			return {
 				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-				routeName: state.route.routeName,
 			};
 		},
 	};

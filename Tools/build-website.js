@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
 const Mustache = require('mustache');
+const glob = require('glob');
 
 const headerHtml = `<!doctype html>
 <html>
@@ -508,9 +509,8 @@ function tocMd() {
 }
 
 function replaceGitHubByJoplinAppLinks(md) {
-	let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
-	output = output.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
-	return output;
+	// let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
+	return md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
 }
 
 function tocHtml() {
@@ -553,6 +553,17 @@ function renderMdToHtml(md, targetPath, templateParams) {
 	fs.writeFileSync(targetPath, html);
 }
 
+async function readmeFileTitle(sourcePath) {
+	const md = await fs.readFile(sourcePath, 'utf8');
+	const r = md.match(/(^|\n)# (.*)/);
+
+	if (!r) {
+		throw new Error('Could not determine title for Markdown file: ', sourcePath);
+	} else {
+		return r[2];
+	}
+}
+
 function renderFileToHtml(sourcePath, targetPath, templateParams) {
 	const md = fs.readFileSync(sourcePath, 'utf8');
 	return renderMdToHtml(md, targetPath, templateParams);
@@ -574,33 +585,57 @@ async function main() {
 
 	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
 
-	const sources = [
-		['readme/api.md', 'docs/api/index.html', { title: 'REST API' }],
-		['readme/changelog_cli.md', 'docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' }],
-		['readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' }],
-		['readme/clipper.md', 'docs/clipper/index.html', { title: 'Web Clipper' }],
-		['readme/conflict.md', 'docs/conflict/index.html', { title: 'What is a conflict?' }],
-		['readme/debugging.md', 'docs/debugging/index.html', { title: 'Debugging' }],
-		['readme/desktop.md', 'docs/desktop/index.html', { title: 'Desktop Application' }],
-		['readme/donate.md', 'docs/donate/index.html', { title: 'Donate' }],
-		['readme/e2ee.md', 'docs/e2ee/index.html', { title: 'End-To-End Encryption' }],
-		['readme/faq.md', 'docs/faq/index.html', { title: 'FAQ' }],
-		['readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' }],
-		['readme/mobile.md', 'docs/mobile/index.html', { title: 'Mobile Application' }],
-		['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
-		['readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' }],
-		['readme/spec/e2ee.md', 'docs/spec/e2ee/index.html', { title: 'E2EE Specifications' }],
-		['readme/spec/history.md', 'docs/spec/history/index.html', { title: 'Note History Specifications' }],
-		['readme/spec/sync_lock.md', 'docs/spec/sync_lock/index.html', { title: 'Sync Lock Specifications' }],
-		['readme/stats.md', 'docs/stats/index.html', { title: 'Statistics' }],
-		['readme/terminal.md', 'docs/terminal/index.html', { title: 'Terminal Application' }],
+	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`, {
+		ignore: [
+			// '**/node_modules/**',
+			// '**/.git/**',
+			// '**/ElectronClient/lib/**',
+			// '**/CliClient/build/**',
+			// '**/CliClient/tests-build/lib/**',
+			// '**/ElectronClient/dist/**',
+			// '**/Modules/TinyMCE/JoplinLists/**',
+			// '**/Modules/TinyMCE/IconPack/**',
+			// '**/CliClient/tests-build/support/**',
+			// '**/CliClient/tests/support/plugins/**',
+			// '**/plugin_types/**',
+		],
+	}).map(f => f.substr(rootDir.length + 1));
 
-		['readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' }],
-		['readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas/index.html', { title: 'GSoC: Project Ideas' }],
+	const sources = [];
 
-		['readme/gsod2020/index.md', 'docs/gsod2020/index.html', { title: 'Google Season of Docs' }],
-		['readme/gsod2020/ideas.md', 'docs/gsod2020/ideas/index.html', { title: 'Google Season of Docs: Project Ideas' }],
-	];
+	for (const mdFile of mdFiles) {
+		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
+		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
+		sources.push([mdFile, targetFilePath, { title: title }]);
+	}
+
+	// const sources = [
+	// 	['readme/api/references/rest_api.md', 'docs/api/index.html', { title: 'Data API' }],
+	// 	['readme/changelog_cli.md', 'docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' }],
+	// 	['readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' }],
+	// 	['readme/clipper.md', 'docs/clipper/index.html', { title: 'Web Clipper' }],
+	// 	['readme/conflict.md', 'docs/conflict/index.html', { title: 'What is a conflict?' }],
+	// 	['readme/debugging.md', 'docs/debugging/index.html', { title: 'Debugging' }],
+	// 	['readme/desktop.md', 'docs/desktop/index.html', { title: 'Desktop Application' }],
+	// 	['readme/donate.md', 'docs/donate/index.html', { title: 'Donate' }],
+	// 	['readme/e2ee.md', 'docs/e2ee/index.html', { title: 'End-To-End Encryption' }],
+	// 	['readme/faq.md', 'docs/faq/index.html', { title: 'FAQ' }],
+	// 	['readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' }],
+	// 	['readme/mobile.md', 'docs/mobile/index.html', { title: 'Mobile Application' }],
+	// 	['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
+	// 	['readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' }],
+	// 	['readme/spec/e2ee.md', 'docs/spec/e2ee/index.html', { title: 'E2EE Specifications' }],
+	// 	['readme/spec/history.md', 'docs/spec/history/index.html', { title: 'Note History Specifications' }],
+	// 	['readme/spec/sync_lock.md', 'docs/spec/sync_lock/index.html', { title: 'Sync Lock Specifications' }],
+	// 	['readme/stats.md', 'docs/stats/index.html', { title: 'Statistics' }],
+	// 	['readme/terminal.md', 'docs/terminal/index.html', { title: 'Terminal Application' }],
+
+	// 	['readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' }],
+	// 	['readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas/index.html', { title: 'GSoC: Project Ideas' }],
+
+	// 	['readme/gsod2020/index.md', 'docs/gsod2020/index.html', { title: 'Google Season of Docs' }],
+	// 	['readme/gsod2020/ideas.md', 'docs/gsod2020/ideas/index.html', { title: 'Google Season of Docs: Project Ideas' }],
+	// ];
 
 	const path = require('path');
 

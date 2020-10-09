@@ -3,7 +3,7 @@ const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
 const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
-const markdownUtils = require('lib/markdownUtils');
+const markdownUtils = require('lib/markdownUtils').default;
 const { Database } = require('lib/database.js');
 
 class Command extends BaseCommand {
@@ -53,9 +53,9 @@ class Command extends BaseCommand {
 
 		const lines = [];
 
-		lines.push('# Joplin API');
+		lines.push('# Joplin Data API');
 		lines.push('');
-
+		lines.push('This API is available when the clipper server is running. It provides access to the notes, notebooks, tags and other Joplin object via a REST API. Plugins can also access this API even when the clipper server is not running.');
 		lines.push('');
 		lines.push('In order to use it, you\'ll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:');
 		lines.push('');

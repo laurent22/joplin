@@ -5,9 +5,9 @@ const Component = React.Component;
 const { Platform, View, Text } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { reg } = require('lib/registry.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
@@ -51,11 +51,11 @@ class NoteBodyViewer extends Component {
 		const mdOptions = {
 			onResourceLoaded: () => {
 				if (this.resourceLoadedTimeoutId_) {
-					clearTimeout(this.resourceLoadedTimeoutId_);
+					shim.clearTimeout(this.resourceLoadedTimeoutId_);
 					this.resourceLoadedTimeoutId_ = null;
 				}
 
-				this.resourceLoadedTimeoutId_ = setTimeout(() => {
+				this.resourceLoadedTimeoutId_ = shim.setTimeout(() => {
 					this.resourceLoadedTimeoutId_ = null;
 					this.forceUpdate();
 				}, 100);
@@ -87,16 +87,16 @@ class NoteBodyViewer extends Component {
 		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
-			const readyStateCheckInterval = setInterval(function() {
+			const readyStateCheckInterval = shim.setInterval(function() {
 			    if (document.readyState === "complete") {
-			    	clearInterval(readyStateCheckInterval);
+			    	shim.clearInterval(readyStateCheckInterval);
 			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
 
 			    	const hash = "${this.props.noteHash}";
 			    	// Gives it a bit of time before scrolling to the anchor
 			    	// so that images are loaded.
 			    	if (hash) {
-				    	setTimeout(() => { 
+				    	shim.setTimeout(() => { 
 					    	const e = document.getElementById(hash);
 							if (!e) {
 								console.warn('Cannot find hash', hash);
@@ -152,7 +152,7 @@ class NoteBodyViewer extends Component {
 	}
 
 	onLoadEnd() {
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			if (this.props.onLoadEnd) this.props.onLoadEnd();
 		}, 100);
 
@@ -160,7 +160,7 @@ class NoteBodyViewer extends Component {
 
 		// Need to display after a delay to avoid a white flash before
 		// the content is displayed.
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			if (!this.isMounted_) return;
 			this.setState({ webViewLoaded: true });
 		}, 100);

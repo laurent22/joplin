@@ -4,9 +4,9 @@ const { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, 
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const Folder = require('lib/models/Folder.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const Synchronizer = require('lib/Synchronizer').default;
 const NavService = require('lib/services/NavService.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/components/global-style.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
 

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale.js');
 const Shared = require('lib/components/shared/dropbox-login-shared');
 
 interface Props {

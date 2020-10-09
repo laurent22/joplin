@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const { netUtils } = require('lib/net-utils.js');
 
 const http = require('http');

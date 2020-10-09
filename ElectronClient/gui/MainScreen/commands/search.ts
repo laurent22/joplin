@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
 const BaseModel = require('lib/BaseModel');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'search',

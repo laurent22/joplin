@@ -7,6 +7,10 @@
     "linter-ci": "./node_modules/.bin/eslint --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
+    "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
+    "copyLib": "gulp copyLib",
+    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib/services/plugins/api/",
+    "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "setupNewRelease": "node ./Tools/setupNewRelease",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
@@ -38,7 +42,8 @@
     "husky": "^3.0.2",
     "jasmine": "^3.5.0",
     "lint-staged": "^9.2.1",
-    "typescript": "^3.7.3"
+    "typedoc": "^0.17.8",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
     "follow-redirects": "^1.11.0",

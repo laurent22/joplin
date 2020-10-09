@@ -2,8 +2,8 @@
 // to disable buggy type-checking, maybe because this
 // class is undocumented.
 import * as QuickActions from 'react-native-quick-actions';
+import { _ } from 'lib/locale';
 const { DeviceEventEmitter } = require('react-native');
-const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');
 const { reg } = require('lib/registry.js');
 

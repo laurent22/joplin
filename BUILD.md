@@ -96,4 +96,4 @@ The Markdown renderer is located under ReactNativeClient/lib/joplin-renderer. Wh
 
 # Troubleshooting
 
-Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/master/readme/build_troubleshooting.md) for various tips on how to get the build working.
+Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md) for various tips on how to get the build working.

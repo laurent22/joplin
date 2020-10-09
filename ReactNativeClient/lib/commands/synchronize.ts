@@ -1,5 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 const { reg } = require('lib/registry.js');
 
 export const declaration:CommandDeclaration = {

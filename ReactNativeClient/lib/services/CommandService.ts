@@ -1,21 +1,38 @@
-import KeymapService from './KeymapService';
-const BaseService = require('lib/services/BaseService');
-const eventManager = require('lib/eventManager');
+import eventManager from 'lib/eventManager';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
+import BaseService from 'lib/services/BaseService';
+import shim from 'lib/shim';
+
+type LabelFunction = () => string;
 
 export interface CommandRuntime {
-	execute(props:any):void
+	execute(props:any):Promise<any>
 	isEnabled?(props:any):boolean
+
+	// "state" type is "AppState" but in order not to introduce a
+	// dependency to the desktop app (so that the service can
+	// potentially be used by the mobile app too), we keep it as "any".
+	// Individual commands can define it as state:AppState when relevant.
+	//
+	// In general this method should reduce the provided state to only
+	// what's absolutely necessary. For example, if the property of a
+	// note is needed, return only that particular property and not the
+	// whole note object. This will ensure that components that depends
+	// on this command are not uncessarily re-rendered. A note object for
+	// example might change frequently but its markdown_language property
+	// will almost never change.
 	mapStateToProps?(state:any):any
+
 	// Used for the (optional) toolbar button title
 	title?(props:any):string,
-	props?:any
+	// props?:any
 }
 
 export interface CommandDeclaration {
 	name: string
 
 	// Used for the menu item label, and toolbar button tooltip
-	label?():string,
+	label?: LabelFunction | string,
 
 	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
 	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
@@ -25,8 +42,16 @@ export interface CommandDeclaration {
 	//     label() => _('Note list'),
 	//     parentLabel() => _('Focus'),
 	// Which will be displayed as "Focus: Note list" in the keymap config screen.
-	parentLabel?():string,
+	parentLabel?:LabelFunction | string,
+
+	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string,
+
+	// Will be used by TinyMCE (which doesn't support Font Awesome icons).
+	// Defaults to the "preferences" icon (a cog) if not specified.
+	// https://www.tiny.cloud/docs/advanced/editor-icon-identifiers/
+	tinymceIconName?: string,
+
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot
@@ -37,15 +62,6 @@ export interface CommandDeclaration {
 export interface Command {
 	declaration: CommandDeclaration,
 	runtime?: CommandRuntime,
-}
-
-export interface ToolbarButtonInfo {
-	name: string,
-	tooltip: string,
-	iconName: string,
-	enabled: boolean,
-	onClick():void,
-	title: string,
 }
 
 interface Commands {
@@ -94,13 +110,9 @@ export default class CommandService extends BaseService {
 
 	private commands_:Commands = {};
 	private commandPreviousStates_:CommandStates = {};
-	private mapStateToPropsIID_:any = null;
 
-	private keymapService:KeymapService = null;
-
-	initialize(store:any, keymapService:KeymapService) {
+	initialize(store:any) {
 		utils.store = store;
-		this.keymapService = keymapService;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -111,69 +123,7 @@ export default class CommandService extends BaseService {
 		eventManager.off(eventName, callback);
 	}
 
-	private propsHaveChanged(previous:any, next:any) {
-		if (!previous && next) return true;
-
-		for (const n in previous) {
-			if (previous[n] !== next[n]) return true;
-		}
-
-		return false;
-	}
-
-	scheduleMapStateToProps(state:any) {
-		if (this.mapStateToPropsIID_) clearTimeout(this.mapStateToPropsIID_);
-
-		this.mapStateToPropsIID_ = setTimeout(() => {
-			this.mapStateToProps(state);
-		}, 50);
-	}
-
-	private mapStateToProps(state:any) {
-		const newState = state;
-
-		const changedCommands:any = {};
-
-		for (const name in this.commands_) {
-			const command = this.commands_[name];
-
-			if (!command.runtime) continue;
-
-			if (!command.runtime.mapStateToProps) {
-				command.runtime.props = {};
-				continue;
-			}
-
-			const newProps = command.runtime.mapStateToProps(state);
-
-			const haveChanged = this.propsHaveChanged(command.runtime.props, newProps);
-
-			if (haveChanged) {
-				const previousState = this.commandPreviousStates_[name];
-
-				command.runtime.props = newProps;
-
-				const newState:CommandState = {
-					enabled: this.isEnabled(name),
-					title: this.title(name),
-				};
-
-				if (!previousState || previousState.title !== newState.title || previousState.enabled !== newState.enabled) {
-					changedCommands[name] = newState;
-				}
-
-				this.commandPreviousStates_[name] = newState;
-			}
-		}
-
-		if (Object.keys(changedCommands).length) {
-			eventManager.emit('commandsEnabledStateChange', { commands: changedCommands });
-		}
-
-		return newState;
-	}
-
-	private commandByName(name:string, options:CommandByNameOptions = null):Command {
+	public commandByName(name:string, options:CommandByNameOptions = null):Command {
 		options = {
 			mustExist: true,
 			runtimeMustBeRegistered: false,
@@ -192,16 +142,9 @@ export default class CommandService extends BaseService {
 	}
 
 	registerDeclaration(declaration:CommandDeclaration) {
-		// if (this.commands_[declaration.name]) throw new Error(`There is already a command with name ${declaration.name}`);
-
 		declaration = { ...declaration };
-		if (!declaration.label) declaration.label = () => '';
+		if (!declaration.label) declaration.label = '';
 		if (!declaration.iconName) declaration.iconName = '';
-
-		// In TypeScript it's not an issue, but in JavaScript it's easy to accidentally set the label
-		// to a string instead of a function, and it will cause strange errors that are hard to debug.
-		// So here check early that we have the right type.
-		if (typeof declaration.label !== 'function') throw new Error(`declaration.label must be a function: ${declaration.name}`);
 
 		this.commands_[declaration.name] = {
 			declaration: declaration,
@@ -243,35 +186,42 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[commandName];
 	}
 
-	execute(commandName:string, args:any = null) {
-		console.info('CommandService::execute:', commandName, args);
-
+	async execute(commandName:string, props:any = null):Promise<any> {
 		const command = this.commandByName(commandName);
-		command.runtime.execute(args ? args : {});
+		this.logger().info('CommandService::execute:', commandName, props);
+		return command.runtime.execute(props ? props : {});
 	}
 
-	scheduleExecute(commandName:string, args:any = null) {
-		setTimeout(() => {
+	scheduleExecute(commandName:string, args:any) {
+		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
 	}
 
-	isEnabled(commandName:string):boolean {
+	isEnabled(commandName:string, props:any):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
-		if (!command.runtime.props) return false;
-		return command.runtime.isEnabled(command.runtime.props);
+		// if (!command.runtime.props) return false;
+		return command.runtime.isEnabled(props);
 	}
 
-	title(commandName:string):string {
+	commandMapStateToProps(commandName:string, state:any):any {
 		const command = this.commandByName(commandName);
-		if (!command || !command.runtime || !command.runtime.props) return null;
-		return command.runtime.title(command.runtime.props);
+		if (!command.runtime) return null;
+		if (!command.runtime.mapStateToProps) return {};
+		return command.runtime.mapStateToProps(state);
 	}
 
-	iconName(commandName:string):string {
+	title(commandName:string, props:any):string {
+		const command = this.commandByName(commandName);
+		if (!command || !command.runtime) return null;
+		return command.runtime.title(props);
+	}
+
+	iconName(commandName:string, variant:string = null):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
+		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
 		return command.declaration.iconName;
 	}
 
@@ -279,8 +229,15 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];
-		if (fullLabel && command.declaration.parentLabel && command.declaration.parentLabel()) output.push(command.declaration.parentLabel());
-		output.push(command.declaration.label());
+
+		const parentLabel = (d:CommandDeclaration):string => {
+			if (!d.parentLabel) return '';
+			if (typeof d.parentLabel === 'function') return d.parentLabel();
+			return d.parentLabel as string;
+		};
+
+		if (fullLabel && parentLabel(command.declaration)) output.push(parentLabel(command.declaration));
+		output.push(typeof command.declaration.label === 'function' ? command.declaration.label() : command.declaration.label);
 		return output.join(': ');
 	}
 
@@ -289,58 +246,37 @@ export default class CommandService extends BaseService {
 		return !!command;
 	}
 
-	private extractExecuteArgs(command:Command, executeArgs:any) {
-		if (executeArgs) return executeArgs;
-		if (!command.runtime) throw new Error(`Command: ${command.declaration.name}: Runtime is not defined - make sure it has been registered.`);
-		if (command.runtime.props) return command.runtime.props;
-		return {};
-	}
-
-	commandToToolbarButton(commandName:string, executeArgs:any = null):ToolbarButtonInfo {
-		const command = this.commandByName(commandName, { runtimeMustBeRegistered: true });
-
-		return {
-			name: commandName,
-			tooltip: this.label(commandName),
-			iconName: command.declaration.iconName,
-			enabled: this.isEnabled(commandName),
-			onClick: () => {
-				this.execute(commandName, this.extractExecuteArgs(command, executeArgs));
+	public commandsToMarkdownTable(state:any):string {
+		const headers:MarkdownTableHeader[] = [
+			{
+				name: 'commandName',
+				label: 'Name',
 			},
-			title: this.title(commandName),
-		};
-	}
-
-	commandToMenuItem(commandName:string, executeArgs:any = null) {
-		const command = this.commandByName(commandName);
-
-		const item:any = {
-			id: command.declaration.name,
-			label: this.label(commandName),
-			click: () => {
-				this.execute(commandName, this.extractExecuteArgs(command, executeArgs));
+			{
+				name: 'description',
+				label: 'Description',
 			},
-		};
+			{
+				name: 'props',
+				label: 'Props',
+			},
+		];
 
-		if (command.declaration.role) item.role = command.declaration.role;
-		if (this.keymapService.acceleratorExists(commandName)) {
-			item.accelerator = this.keymapService.getAccelerator(commandName);
+		const rows:MarkdownTableRow[] = [];
+
+		for (const commandName in this.commands_) {
+			const props = this.commandMapStateToProps(commandName, state);
+
+			const row:MarkdownTableRow = {
+				commandName: commandName,
+				description: this.label(commandName),
+				props: JSON.stringify(props),
+			};
+
+			rows.push(row);
 		}
 
-		return item;
-	}
-
-	commandsEnabledState(previousState:any = null):any {
-		const output:any = {};
-
-		for (const name in this.commands_) {
-			const enabled = this.isEnabled(name);
-			if (!previousState || previousState[name] !== enabled) {
-				output[name] = enabled;
-			}
-		}
-
-		return output;
+		return markdownUtils.createMarkdownTable(headers, rows);
 	}
 
 }

@@ -1,0 +1,17 @@
+<ul class="tsd-hierarchy">
+    {{#each types}}
+        <li>
+            {{#if ../isTarget}}
+                <span class="target">{{this}}</span>
+            {{else}}
+                {{#compact}}{{> type}}{{/compact}}
+            {{/if}}
+
+            {{#if @last}}
+                {{#with ../next}}
+                    {{> hierarchy}}
+                {{/with}}
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>

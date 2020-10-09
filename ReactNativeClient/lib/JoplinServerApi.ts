@@ -1,9 +1,9 @@
-const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
+import shim from 'lib/shim';
+import { _ } from 'lib/locale';
+const Logger = require('lib/Logger').default;
 const JoplinError = require('lib/JoplinError');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
-const { _ } = require('lib/locale');
 
 interface JoplinServerApiOptions {
 	username: Function,

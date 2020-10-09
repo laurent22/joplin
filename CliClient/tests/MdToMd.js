@@ -1,4 +1,4 @@
-const mdImporterService = require('lib/services/InteropService_Importer_Md');
+const mdImporterService = require('lib/services/interop/InteropService_Importer_Md').default;
 const Note = require('lib/models/Note.js');
 const { setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 

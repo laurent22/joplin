@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const Mutex = require('async-mutex').Mutex;
+const shim = require('lib/shim').default;
 
 class ItemChange extends BaseModel {
 	static tableName() {
@@ -37,9 +38,9 @@ class ItemChange extends BaseModel {
 	// can be used for synchronous code, in particular when unit testing.
 	static async waitForAllSaved() {
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!ItemChange.saveCalls_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

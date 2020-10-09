@@ -1,5 +1,6 @@
 require('app-module-path').addPath(__dirname);
 
+const { tempFilePath } = require('test-utils.js');
 const KeymapService = require('lib/services/KeymapService').default;
 const keymapService = KeymapService.instance();
 
@@ -73,6 +74,31 @@ describe('services_KeymapService', () => {
 					expect(() => keymapService.validateAccelerator(accelerator)).toThrow();
 				});
 			});
+		});
+	});
+
+	describe('registerCommandAccelerator', () => {
+		beforeEach(() => keymapService.initialize());
+
+		it('should allow registering new commands', async () => {
+			keymapService.initialize('linux');
+			keymapService.registerCommandAccelerator('myCustomCommand', 'Ctrl+Shift+Alt+B');
+			expect(keymapService.getAccelerator('myCustomCommand')).toEqual('Ctrl+Shift+Alt+B');
+
+			// Check that macOS key conversion is working
+			keymapService.initialize('darwin');
+			keymapService.registerCommandAccelerator('myCustomCommand', 'CmdOrCtrl+Shift+Alt+B');
+			expect(keymapService.getAccelerator('myCustomCommand')).toEqual('Cmd+Shift+Option+B');
+			keymapService.setAccelerator('myCustomCommand', 'Cmd+Shift+Option+X');
+
+			// Check that the new custom shortcut is being saved and loaded
+			const keymapFilePath = tempFilePath('json');
+			await keymapService.saveCustomKeymap(keymapFilePath);
+
+			keymapService.initialize('darwin');
+			await keymapService.loadCustomKeymap(keymapFilePath);
+
+			expect(keymapService.getAccelerator('myCustomCommand')).toEqual('Cmd+Shift+Option+X');
 		});
 	});
 
@@ -254,15 +280,15 @@ describe('services_KeymapService', () => {
 			expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
 		});
 
-		it('should throw when the provided commands are invalid', () => {
-			const customKeymapItems = [
-				{ command: 'totallyInvalidCommand', accelerator: 'Ctrl+Shift+G' },
-				{ command: 'print', accelerator: 'Alt+P' },
-				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+J' },
-			];
+		// it('should throw when the provided commands are invalid', () => {
+		// 	const customKeymapItems = [
+		// 		{ command: 'totallyInvalidCommand', accelerator: 'Ctrl+Shift+G' },
+		// 		{ command: 'print', accelerator: 'Alt+P' },
+		// 		{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+J' },
+		// 	];
 
-			expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
-		});
+		// 	expect(() => keymapService.overrideKeymap(customKeymapItems)).toThrow();
+		// });
 
 		it('should throw when duplicate accelerators are provided', () => {
 			const customKeymaps_Darwin = [

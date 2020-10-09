@@ -1,5 +1,6 @@
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
+const shim = require('lib/shim').default;
 
 class FoldersScreenUtils {
 	static async allForDisplay(options = {}) {
@@ -48,8 +49,8 @@ class FoldersScreenUtils {
 	}
 
 	static scheduleRefreshFolders() {
-		if (this.scheduleRefreshFoldersIID_) clearTimeout(this.scheduleRefreshFoldersIID_);
-		this.scheduleRefreshFoldersIID_ = setTimeout(() => {
+		if (this.scheduleRefreshFoldersIID_) shim.clearTimeout(this.scheduleRefreshFoldersIID_);
+		this.scheduleRefreshFoldersIID_ = shim.setTimeout(() => {
 			this.scheduleRefreshFoldersIID_ = null;
 			this.refreshFolders();
 		}, 1000);
@@ -57,13 +58,13 @@ class FoldersScreenUtils {
 
 	static async cancelTimers() {
 		if (this.scheduleRefreshFoldersIID_) {
-			clearTimeout(this.scheduleRefreshFoldersIID_);
+			shim.clearTimeout(this.scheduleRefreshFoldersIID_);
 			this.scheduleRefreshFoldersIID_ = null;
 		}
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!FoldersScreenUtils.refreshCalls_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

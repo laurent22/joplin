@@ -3,13 +3,13 @@
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('test-utils.js');
-const Api = require('lib/services/rest/Api');
+const Api = require('lib/services/rest/Api').default;
 const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-const { _ } = require('lib/locale.js');
+import { _ } from 'lib/locale';
 const { themeStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');

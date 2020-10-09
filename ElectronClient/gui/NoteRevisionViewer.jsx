@@ -1,20 +1,20 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const NoteTextViewer = require('./NoteTextViewer').default;
 const HelpButton = require('./HelpButton.min');
 const BaseModel = require('lib/BaseModel');
 const Revision = require('lib/models/Revision');
 const urlUtils = require('lib/urlUtils');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 class NoteRevisionViewerComponent extends React.PureComponent {

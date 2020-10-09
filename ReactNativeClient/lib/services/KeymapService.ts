@@ -1,9 +1,9 @@
 import { KeyboardEvent } from 'react';
+import eventManager from 'lib/eventManager';
+import shim from 'lib/shim';
+import { _ } from 'lib/locale';
 
-const BaseService = require('lib/services/BaseService');
-const eventManager = require('lib/eventManager');
-const { shim } = require('lib/shim');
-const { _ } = require('lib/locale');
+const BaseService = require('lib/services/BaseService').default;
 
 const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
 const modifiersRegExp = {
@@ -94,13 +94,20 @@ export default class KeymapService extends BaseService {
 	private platform: string;
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
+	private lastSaveTime_:number;
 
 	constructor() {
 		super();
 
+		this.lastSaveTime_ = Date.now();
+
 		// By default, initialize for the current platform
 		// Manual initialization allows testing for other platforms
 		this.initialize();
+	}
+
+	get lastSaveTime():number {
+		return this.lastSaveTime_;
 	}
 
 	initialize(platform: string = shim.platformName()) {
@@ -130,14 +137,9 @@ export default class KeymapService extends BaseService {
 		if (await shim.fsDriver().exists(customKeymapPath)) {
 			this.logger().info(`KeymapService: Loading keymap from file: ${customKeymapPath}`);
 
-			try {
-				const customKeymapFile = await shim.fsDriver().readFile(customKeymapPath, 'utf-8');
-				// Custom keymaps are supposed to contain an array of keymap items
-				this.overrideKeymap(JSON.parse(customKeymapFile));
-			} catch (err) {
-				const message = err.message || '';
-				throw new Error(_('Error: %s', message));
-			}
+			const customKeymapFile = await shim.fsDriver().readFile(customKeymapPath, 'utf-8');
+			// Custom keymaps are supposed to contain an array of keymap items
+			this.overrideKeymap(JSON.parse(customKeymapFile));
 		}
 	}
 
@@ -149,6 +151,8 @@ export default class KeymapService extends BaseService {
 			const customKeymapItems = this.getCustomKeymapItems();
 			await shim.fsDriver().writeFile(customKeymapPath, JSON.stringify(customKeymapItems, null, 2), 'utf-8');
 
+			this.lastSaveTime_ = Date.now();
+
 			// Refresh the menu items so that the changes are reflected
 			eventManager.emit('keymapChange');
 		} catch (err) {
@@ -159,6 +163,28 @@ export default class KeymapService extends BaseService {
 
 	acceleratorExists(command: string) {
 		return !!this.keymap[command];
+	}
+
+	private convertToPlatform(accelerator:string) {
+		return accelerator
+			.replace(/CmdOrCtrl/g, this.platform === 'darwin' ? 'Cmd' : 'Ctrl')
+			.replace(/Option/g, this.platform === 'darwin' ? 'Option' : 'Alt')
+			.replace(/Alt/g, this.platform === 'darwin' ? 'Option' : 'Alt');
+	}
+
+	registerCommandAccelerator(commandName:string, accelerator:string) {
+		// If the command is already registered, we don't register it again and
+		// we don't update the accelerator. This is because it might have been
+		// modified by the user and we don't want the plugin to overwrite this.
+		if (this.keymap[commandName]) return;
+
+		const validatedAccelerator = this.convertToPlatform(accelerator);
+		this.validateAccelerator(validatedAccelerator);
+
+		this.keymap[commandName] = {
+			command: commandName,
+			accelerator: validatedAccelerator,
+		};
 	}
 
 	setAccelerator(command: string, accelerator: string) {
@@ -199,6 +225,12 @@ export default class KeymapService extends BaseService {
 			}
 		});
 
+		for (const commandName in this.keymap) {
+			if (!this.defaultKeymapItems.find((item:KeymapItem) => item.command === commandName)) {
+				customkeymapItems.push(this.keymap[commandName]);
+			}
+		}
+
 		return customkeymapItems;
 	}
 
@@ -213,7 +245,14 @@ export default class KeymapService extends BaseService {
 				// Validate individual custom keymap items
 				// Throws if there are any issues in the keymap item
 				this.validateKeymapItem(item);
-				this.setAccelerator(item.command, item.accelerator);
+
+				// If the command does not exist in the keymap, we are loading a new
+				// command accelerator so we need to register it.
+				if (!this.keymap[item.command]) {
+					this.registerCommandAccelerator(item.command, item.accelerator);
+				} else {
+					this.setAccelerator(item.command, item.accelerator);
+				}
 			}
 
 			// Validate the entire keymap for duplicates
@@ -227,18 +266,18 @@ export default class KeymapService extends BaseService {
 
 	private validateKeymapItem(item: KeymapItem) {
 		if (!item.hasOwnProperty('command')) {
-			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'command'));
-		} else if (!this.keymap.hasOwnProperty(item.command)) {
-			throw new Error(_('Invalid %s: %s.', 'command', item.command));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), _('command')));
+		// } else if (!this.keymap.hasOwnProperty(item.command)) {
+		// 	throw new Error(_('Invalid %s: %s.', _('command'), item.command));
 		}
 
 		if (!item.hasOwnProperty('accelerator')) {
-			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), 'accelerator'));
+			throw new Error(_('"%s" is missing the required "%s" property.', JSON.stringify(item), _('accelerator')));
 		} else if (item.accelerator !== null) {
 			try {
 				this.validateAccelerator(item.accelerator);
 			} catch {
-				throw new Error(_('Invalid %s: %s.', 'accelerator', item.command));
+				throw new Error(_('Invalid %s: %s.', _('accelerator'), item.command));
 			}
 		}
 	}
@@ -355,7 +394,9 @@ export default class KeymapService extends BaseService {
 		eventManager.off(eventName, callback);
 	}
 
-	static instance() {
+	private static instance_:KeymapService = null;
+
+	static instance():KeymapService {
 		if (this.instance_) return this.instance_;
 
 		this.instance_ = new KeymapService();

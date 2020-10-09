@@ -5,14 +5,19 @@ import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../.
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
-import CommandService, { ToolbarButtonInfo } from 'lib/services/CommandService';
+import CommandService from 'lib/services/CommandService';
+import { ToolbarButtonInfo } from 'lib/services/commands/ToolbarButtonUtils';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
+import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
+import { utils as pluginUtils } from 'lib/services/plugins/reducer';
+import { _, closestSupportedLocale } from 'lib/locale';
+
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
-const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
+const shim = require('lib/shim').default;
 const Resource = require('lib/models/Resource');
 const { themeStyle } = require('lib/theme');
 const { clipboard } = require('electron');
@@ -80,6 +85,12 @@ function dialogTextArea_keyDown(event:any) {
 	if (event.key === 'Tab') {
 		window.requestAnimationFrame(() => event.target.focus());
 	}
+}
+
+let markupToHtml_ = new MarkupToHtml();
+function stripMarkup(markupLanguage:number, markup:string, options:any = null) {
+	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
+	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
 
 // Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
@@ -152,9 +163,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
+	usePluginServiceRegistration(ref);
+
 	const dispatchDidUpdate = (editor:any) => {
-		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
-		dispatchDidUpdateIID_ = setTimeout(() => {
+		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
+		dispatchDidUpdateIID_ = shim.setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
 			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
@@ -252,6 +265,22 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				}
 
 				if (commandProcessed) return true;
+
+				const additionalCommands:any = {
+					selectedText: () => {
+						return stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_HTML, editor.selection.getContent());
+					},
+					selectedHtml: () => {
+						return editor.selection.getContent();
+					},
+					replaceSelection: (value:any) => {
+						editor.selection.setContent(value);
+					},
+				};
+
+				if (additionalCommands[cmd.name]) {
+					return additionalCommands[cmd.name](cmd.value);
+				}
 
 				if (!joplinCommandToTinyMceCommands[cmd.name]) {
 					reg.logger().warn('TinyMCE: unsupported Joplin command: ', cmd);
@@ -496,6 +525,18 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
+			const pluginCommandNames:string[] = [];
+
+			const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
+
+			for (const info of infos) {
+				const view = info.view;
+				if (view.location !== 'editorToolbar') continue;
+				pluginCommandNames.push(view.commandName);
+			}
+
+			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -514,7 +555,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
-				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
+				toolbar: `bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime${toolbarPluginButtons}`,
 				localization_function: _,
 				contextmenu: contextMenuItemNames.join(' '),
 				setup: (editor:any) => {
@@ -621,6 +662,16 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 							CommandService.instance().execute('insertDateTime');
 						},
 					});
+
+					for (const pluginCommandName of pluginCommandNames) {
+						editor.ui.registry.addButton(pluginCommandName, {
+							tooltip: CommandService.instance().label(pluginCommandName),
+							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
+							onAction: function() {
+								CommandService.instance().execute(pluginCommandName);
+							},
+						});
+					}
 
 					for (const itemName in contextMenuItems) {
 						const item = contextMenuItems[itemName];
@@ -922,7 +973,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			if (onChangeHandlerTimeoutRef.current) clearTimeout(onChangeHandlerTimeoutRef.current);
+			if (onChangeHandlerTimeoutRef.current) shim.clearTimeout(onChangeHandlerTimeoutRef.current);
 
 			nextOnChangeEventInfo.current = {
 				changeId: changeId,
@@ -931,7 +982,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				contentOriginalCss: props.contentOriginalCss,
 			};
 
-			onChangeHandlerTimeoutRef.current = setTimeout(async () => {
+			onChangeHandlerTimeoutRef.current = shim.setTimeout(async () => {
 				onChangeHandlerTimeoutRef.current = null;
 				execOnChangeEvent();
 			}, 1000);
@@ -1065,10 +1116,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	function renderLeftExtraToolbarButtons() {
 		const buttons = [];
-		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (!leftButtonCommandNames.includes(buttonName)) continue;
-			const info = props.noteToolbarButtonInfos[buttonName];
-			buttons.push(renderExtraToolbarButton(buttonName, info));
+		for (const info of props.noteToolbarButtonInfos) {
+			if (!leftButtonCommandNames.includes(info.name)) continue;
+			buttons.push(renderExtraToolbarButton(info.name, info));
 		}
 
 		return (
@@ -1080,19 +1130,18 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	function renderRightExtraToolbarButtons() {
 		const buttons = [];
-		for (const buttonName in props.noteToolbarButtonInfos) {
-			if (leftButtonCommandNames.includes(buttonName)) continue;
-			const info = props.noteToolbarButtonInfos[buttonName];
+		for (const info of props.noteToolbarButtonInfos) {
+			if (leftButtonCommandNames.includes(info.name)) continue;
 
-			if (buttonName === 'toggleEditors') {
+			if (info.name === 'toggleEditors') {
 				buttons.push(<ToggleEditorsButton
-					key={buttonName}
+					key={info.name}
 					value={ToggleEditorsButtonValue.RichText}
 					themeId={props.themeId}
 					toolbarButtonInfo={info}
 				/>);
 			} else {
-				buttons.push(renderExtraToolbarButton(buttonName, info));
+				buttons.push(renderExtraToolbarButton(info.name, info));
 			}
 		}
 

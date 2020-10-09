@@ -1,10 +1,10 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
 const Resource = require('lib/models/Resource.js');
 

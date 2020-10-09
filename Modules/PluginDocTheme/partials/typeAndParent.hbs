@@ -1,0 +1,42 @@
+{{#compact}}
+    {{#if this}}
+        {{#if elementType}}
+            {{#with elementType}}
+                {{> typeAndParent}}
+            {{/with}}
+            []
+        {{else}}
+            {{#if reflection}}
+                {{#ifSignature reflection}}
+                    {{#if reflection.parent.parent.url}}
+                        <a href="{{relativeURL reflection.parent.parent.url}}">{{reflection.parent.parent.name}}</a>
+                    {{else}}
+                        {{reflection.parent.parent.name}}
+                    {{/if}}
+                    .
+                    {{#if reflection.parent.url}}
+                        <a href="{{relativeURL reflection.parent.url}}">{{reflection.parent.name}}</a>
+                    {{else}}
+                        {{reflection.parent.name}}
+                    {{/if}}
+                {{else}}
+                    {{#if reflection.parent.url}}
+                        <a href="{{relativeURL reflection.parent.url}}">{{reflection.parent.name}}</a>
+                    {{else}}
+                        {{reflection.parent.name}}
+                    {{/if}}
+                    .
+                    {{#if reflection.url}}
+                        <a href="{{relativeURL reflection.url}}">{{reflection.name}}</a>
+                    {{else}}
+                        {{reflection.name}}
+                    {{/if}}
+                {{/ifSignature}}
+            {{else}}
+                {{this}}
+            {{/if}}
+        {{/if}}
+    {{else}}
+        void
+    {{/if}}
+{{/compact}}

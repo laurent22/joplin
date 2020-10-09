@@ -1,5 +1,5 @@
-const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
+const Logger = require('lib/Logger').default;
+const shim = require('lib/shim').default;
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
 const EventDispatcher = require('lib/EventDispatcher');

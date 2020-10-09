@@ -1,14 +1,15 @@
 const ItemChange = require('lib/models/ItemChange');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Revision = require('lib/models/Revision');
 const BaseModel = require('lib/BaseModel');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
-const { shim } = require('lib/shim');
-const BaseService = require('lib/services/BaseService');
-const { _ } = require('lib/locale.js');
+const shim = require('lib/shim').default;
+const BaseService = require('lib/services/BaseService').default;
+const { _ } = require('lib/locale');
 const { sprintf } = require('sprintf-js');
+const { wrapError } = require('lib/errorUtils');
 
 class RevisionService extends BaseService {
 	constructor() {
@@ -69,36 +70,41 @@ class RevisionService extends BaseService {
 	}
 
 	async createNoteRevision_(note, parentRevId = null) {
-		const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
+		try {
+			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
-		const output = {
-			parent_id: '',
-			item_type: BaseModel.TYPE_NOTE,
-			item_id: note.id,
-			item_updated_time: note.updated_time,
-		};
+			const output = {
+				parent_id: '',
+				item_type: BaseModel.TYPE_NOTE,
+				item_id: note.id,
+				item_updated_time: note.updated_time,
+			};
 
-		const noteMd = this.noteMetadata_(note);
-		const noteTitle = note.title ? note.title : '';
-		const noteBody = note.body ? note.body : '';
+			const noteMd = this.noteMetadata_(note);
+			const noteTitle = note.title ? note.title : '';
+			const noteBody = note.body ? note.body : '';
 
-		if (!parentRev) {
-			output.title_diff = Revision.createTextPatch('', noteTitle);
-			output.body_diff = Revision.createTextPatch('', noteBody);
-			output.metadata_diff = Revision.createObjectPatch({}, noteMd);
-		} else {
-			if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+			if (!parentRev) {
+				output.title_diff = Revision.createTextPatch('', noteTitle);
+				output.body_diff = Revision.createTextPatch('', noteBody);
+				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
+			} else {
+				if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
 
-			const merged = await Revision.mergeDiffs(parentRev);
-			output.parent_id = parentRev.id;
-			output.title_diff = Revision.createTextPatch(merged.title, noteTitle);
-			output.body_diff = Revision.createTextPatch(merged.body, noteBody);
-			output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
+				const merged = await Revision.mergeDiffs(parentRev);
+				output.parent_id = parentRev.id;
+				output.title_diff = Revision.createTextPatch(merged.title, noteTitle);
+				output.body_diff = Revision.createTextPatch(merged.body, noteBody);
+				output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
+			}
+
+			if (this.isEmptyRevision_(output)) return null;
+
+			return Revision.save(output);
+		} catch (error) {
+			const newError = wrapError(`Could not create revision for note: ${note.id}`, error);
+			throw newError;
 		}
-
-		if (this.isEmptyRevision_(output)) return null;
-
-		return Revision.save(output);
 	}
 
 	async collectRevisions() {
@@ -270,7 +276,7 @@ class RevisionService extends BaseService {
 
 		this.logger().info(`RevisionService::runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 
-		this.maintenanceTimer1_ = setTimeout(() => {
+		this.maintenanceTimer1_ = shim.setTimeout(() => {
 			this.maintenance();
 		}, 1000 * 4);
 
@@ -281,7 +287,7 @@ class RevisionService extends BaseService {
 
 	async cancelTimers() {
 		if (this.maintenanceTimer1_) {
-			clearTimeout(this.maintenanceTimer1);
+			shim.clearTimeout(this.maintenanceTimer1);
 			this.maintenanceTimer1_ = null;
 		}
 		if (this.maintenanceTimer2_) {
@@ -290,9 +296,9 @@ class RevisionService extends BaseService {
 		}
 
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!this.maintenanceCalls_.length) {
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);

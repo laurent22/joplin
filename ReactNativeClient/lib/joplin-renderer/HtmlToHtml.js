@@ -1,7 +1,7 @@
 const htmlUtils = require('./htmlUtils');
 const utils = require('./utils');
 const noteStyle = require('./noteStyle');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { themeStyle } = require('lib/theme');
 const memoryCache = require('memory-cache');
 const md5 = require('md5');

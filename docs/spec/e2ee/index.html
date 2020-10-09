@@ -14,7 +14,7 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md
 -->
 
 <head>
-	<title>E2EE Specifications | Joplin</title>
+	<title>Encryption | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -320,22 +320,33 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API</p>
+<ul>
+<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
+<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="https://joplinapp.org/plugins/api/classes/joplin.html">Plugin API</a></li>
+<li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
 <li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 </ul>
 </li>
 <li>
 <p>Google Summer of Code 2020</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
 <li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
 </ul>
 </li>
@@ -350,6 +361,102 @@ https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md
 </li>
 </ul>
 </div>
+<h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
+<p>Encrypted data is encoded to ASCII because encryption/decryption functions in React Native can only deal with strings. So for compatibility with all the apps we need to use the lowest common denominator.</p>
+<h2>Encrypted data format<a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a></h2>
+<h3>Header<a name="header" href="#header" class="heading-anchor">🔗</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identifier</td>
+<td>3 chars (&quot;JED&quot;)</td>
+</tr>
+<tr>
+<td>Version number</td>
+<td>2 chars (Hexa string)</td>
+</tr>
+</tbody>
+</table>
+<p>This is followed by the encryption metadata:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length</td>
+<td>6 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Encryption method</td>
+<td>2 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Master key ID</td>
+<td>32 chars (Hexa string)</td>
+</tr>
+</tbody>
+</table>
+<p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
+<h3>Data chunk<a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a></h3>
+<p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length</td>
+<td>6 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>(&quot;Length&quot; bytes) (ASCII)</td>
+</tr>
+</tbody>
+</table>
+<h2>Master Keys<a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a></h2>
+<p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263">strong encryption method</a>.</p>
+<p>These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.</p>
+<p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
+<p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it's available to the current app and, if so, use this for decryption.</p>
+<h2>Encryption Service<a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a></h2>
+<p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
+<h2>Encryption workflow<a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a></h2>
+<p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
+<p>They are decrypted by DecryptionWorker in the background.</p>
+<p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
+<h2>Enabling and disabling encryption<a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a></h2>
+<p>Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:</p>
+<ul>
+<li>
+<p>If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did <em>not</em> change (because the item data itself has not changed, only its representation). Because of this, client 2 will not re-download the items - it does not need to do so anyway since it has already the item data.</p>
+</li>
+<li>
+<p>When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it's encrypted on target too.</p>
+</li>
+<li>
+<p>If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user <em>must</em> manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.</p>
+</li>
+<li>
+<p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
+</li>
+<li>
+<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
+</li>
+</ul>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec/e2ee.md">

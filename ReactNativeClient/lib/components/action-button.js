@@ -5,7 +5,7 @@ const Note = require('lib/models/Note');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 
 Icon.loadFont();
 

@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 const { enexXmlToHtml } = require('lib/import-enex-html-gen.js');
 
 process.on('unhandledRejection', (reason, p) => {

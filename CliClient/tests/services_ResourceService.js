@@ -4,7 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const InteropService = require('lib/services/InteropService.js');
+const InteropService = require('lib/services/interop/InteropService').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
@@ -16,7 +16,7 @@ const ResourceService = require('lib/services/ResourceService.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 
 process.on('unhandledRejection', (reason, p) => {

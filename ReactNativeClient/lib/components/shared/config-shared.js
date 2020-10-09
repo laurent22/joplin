@@ -1,7 +1,7 @@
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const ObjectUtils = require('lib/ObjectUtils');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { createSelector } = require('reselect');
 const { reg } = require('lib/registry');
 

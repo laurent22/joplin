@@ -1,11 +1,11 @@
 const Resource = require('lib/models/Resource');
-const Setting = require('lib/models/Setting');
-const BaseService = require('lib/services/BaseService');
+const Setting = require('lib/models/Setting').default;
+const BaseService = require('lib/services/BaseService').default;
 const ResourceService = require('lib/services/ResourceService');
 const { Dirnames } = require('lib/services/synchronizer/utils/types');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const EventEmitter = require('events');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 
 class ResourceFetcher extends BaseService {
 	constructor(fileApi = null) {
@@ -196,14 +196,14 @@ class ResourceFetcher extends BaseService {
 
 	async waitForAllFinished() {
 		return new Promise((resolve) => {
-			const iid = setInterval(() => {
+			const iid = shim.setInterval(() => {
 				if (!this.updateReportIID_ &&
                     !this.scheduleQueueProcessIID_ &&
                     !this.queue_.length &&
                     !this.autoAddResourcesCalls_.length &&
                     !Object.getOwnPropertyNames(this.fetchingItems_).length) {
 
-					clearInterval(iid);
+					shim.clearInterval(iid);
 					resolve();
 				}
 			}, 100);
@@ -245,11 +245,11 @@ class ResourceFetcher extends BaseService {
 
 	scheduleQueueProcess() {
 		if (this.scheduleQueueProcessIID_) {
-			clearTimeout(this.scheduleQueueProcessIID_);
+			shim.clearTimeout(this.scheduleQueueProcessIID_);
 			this.scheduleQueueProcessIID_ = null;
 		}
 
-		this.scheduleQueueProcessIID_ = setTimeout(() => {
+		this.scheduleQueueProcessIID_ = shim.setTimeout(() => {
 			this.processQueue_();
 			this.scheduleQueueProcessIID_ = null;
 		}, 100);
@@ -258,7 +258,7 @@ class ResourceFetcher extends BaseService {
 	scheduleAutoAddResources() {
 		if (this.scheduleAutoAddResourcesIID_) return;
 
-		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
+		this.scheduleAutoAddResourcesIID_ = shim.setTimeout(() => {
 			this.scheduleAutoAddResourcesIID_ = null;
 			ResourceFetcher.instance().autoAddResources();
 		}, 1000);
@@ -272,11 +272,11 @@ class ResourceFetcher extends BaseService {
 	async destroy() {
 		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleQueueProcessIID_) {
-			clearTimeout(this.scheduleQueueProcessIID_);
+			shim.clearTimeout(this.scheduleQueueProcessIID_);
 			this.scheduleQueueProcessIID_ = null;
 		}
 		if (this.scheduleAutoAddResourcesIID_) {
-			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			shim.clearTimeout(this.scheduleAutoAddResourcesIID_);
 			this.scheduleAutoAddResourcesIID_ = null;
 		}
 		await this.waitForAllFinished();

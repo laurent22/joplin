@@ -1,12 +1,13 @@
 const React = require('react');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 const { time } = require('lib/time-utils.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
+const shim = require('lib/shim').default;
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {
@@ -176,7 +177,7 @@ class NotePropertiesDialog extends React.Component {
 			editedValue: initialValue,
 		});
 
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			if (this.refs.editField.openCalendar) {
 				this.refs.editField.openCalendar();
 			} else {

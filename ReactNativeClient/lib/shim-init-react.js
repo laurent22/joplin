@@ -1,4 +1,4 @@
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const { GeolocationReact } = require('lib/geolocation-react.js');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
@@ -9,7 +9,7 @@ const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('lib/path-utils.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const Resource = require('lib/models/Resource');
 
 const injectedJs = {
@@ -197,6 +197,23 @@ function shimInit() {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name];
 	};
+
+	shim.setTimeout = (fn, interval) => {
+		return setTimeout(fn, interval);
+	};
+
+	shim.setInterval = (fn, interval) => {
+		return setInterval(fn, interval);
+	};
+
+	shim.clearTimeout = (id) => {
+		return clearTimeout(id);
+	};
+
+	shim.clearInterval = (id) => {
+		return clearInterval(id);
+	};
+
 }
 
 module.exports = { shimInit };
