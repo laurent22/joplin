@@ -37,8 +37,8 @@ msgstr ""
 #: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
 #: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
 #: CliClient/app/command-done.js:20
-#: ReactNativeClient/lib/services/InteropService.js:218
-#: ReactNativeClient/lib/services/InteropService.js:239
+#: ReactNativeClient/lib/services/interop/InteropService.js:182
+#: ReactNativeClient/lib/services/interop/InteropService.js:194
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Ei leia \" %s\"."
@@ -107,32 +107,32 @@ msgstr "Ära küsi kinnitust."
 msgid "Output format: %s"
 msgstr "Allika Formaat: %s"
 
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:68
 #, javascript-format
 msgid "Found: %d."
 msgstr "Leitud: %d."
 
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Created: %d."
 msgstr "Loodud: %d."
 
-#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Värskendatud: %d."
 
-#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Vahele jäetud: %d."
 
-#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Ressursid: %d."
 
-#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Sildistatud: %d."
@@ -141,7 +141,7 @@ msgstr "Sildistatud: %d."
 msgid "Importing notes..."
 msgstr "Märkmete importimine..."
 
-#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:88
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Märkmed on imporditud: %s"
@@ -243,15 +243,15 @@ msgid "Passwords do not match!"
 msgstr "Paroolid ei kattu!"
 
 #: CliClient/app/command-e2ee.js:108
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Enabled"
 msgstr "Lubatud"
 
 #: CliClient/app/command-e2ee.js:108
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:109
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: ReactNativeClient/lib/models/Setting.js:610
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
+#: ReactNativeClient/lib/models/Setting.js:613
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
 msgid "Disabled"
 msgstr "Keelatud"
@@ -319,12 +319,13 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
+#: ElectronClient/gui/OneDriveLoginScreen.js:46
 #, fuzzy
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Autentimine on lõpule viidud (ei saanud autentimise luba)."
 
-#: CliClient/app/command-sync.js:90
+#: CliClient/app/command-sync.js:90 ElectronClient/gui/DropboxLoginScreen.js:29
 #: ElectronClient/gui/DropboxLoginScreen.min.js:42
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:58
 #, fuzzy
@@ -332,14 +333,14 @@ msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
 
-#: CliClient/app/command-sync.js:91
+#: CliClient/app/command-sync.js:91 ElectronClient/gui/DropboxLoginScreen.js:30
 #: ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 #, fuzzy
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
 
-#: CliClient/app/command-sync.js:93
+#: CliClient/app/command-sync.js:93 ElectronClient/gui/DropboxLoginScreen.js:32
 #: ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:65
 #, fuzzy
@@ -442,15 +443,15 @@ msgstr "Aktiivset märkmikku pole."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Märget pole olemas: \"%s\". Kas luua?"
 
-#: CliClient/app/app-gui.js:450
+#: CliClient/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
 msgstr "Sildi kustutamiseks eemaldage märkmed seotud silt."
 
-#: CliClient/app/app-gui.js:460
+#: CliClient/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Valige esmalt kustutatav märkus või märkmik."
 
-#: CliClient/app/app-gui.js:748
+#: CliClient/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
 
@@ -468,7 +469,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:460
+#: ReactNativeClient/lib/components/screens/note.js:466
 msgid "Delete note?"
 msgstr "Kas soovite märkme kustutada?"
 
@@ -601,11 +602,11 @@ msgstr "Sinu valik: "
 msgid "Invalid answer: %s"
 msgstr "Sobimatu vastus: %s"
 
-#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
 msgid "Y"
 msgstr "Y"
 
-#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:136
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
 msgid "n"
 msgstr "n"
 
@@ -697,38 +698,38 @@ msgstr ""
 msgid "Exits the application."
 msgstr "Väljub rakendusest."
 
-#: CliClient/app/app.js:61
+#: CliClient/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
 
-#: CliClient/app/app.js:91
+#: CliClient/app/app.js:92
 msgid "No notebook selected."
 msgstr "Ühtegi märkmikku pole valitud."
 
-#: CliClient/app/app.js:97
+#: CliClient/app/app.js:98
 msgid "No notebook has been specified."
 msgstr "Ühtegi märkmikku pole määratud."
 
-#: CliClient/app/app.js:136
+#: CliClient/app/app.js:137
 msgid "N"
 msgstr "N"
 
-#: CliClient/app/app.js:136
+#: CliClient/app/app.js:137
 msgid "y"
 msgstr "y"
 
-#: CliClient/app/app.js:169
+#: CliClient/app/app.js:170
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Tausta sünkroniseerimise tühistamine... Oota."
 
-#: CliClient/app/app.js:254
+#: CliClient/app/app.js:255
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Sellist käsku pole: %s"
 
-#: CliClient/app/app.js:302
+#: CliClient/app/app.js:303
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
@@ -770,32 +771,41 @@ msgstr "Märgib, et ülesannete loetelu on tehtud ."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Märkus ei ole ülesannete loetelu: %s"
 
-#: ElectronClient/bridge.js:102 ElectronClient/bridge.js:113
-#: ElectronClient/bridge.js:126 ElectronClient/bridge.js:136
+#: ElectronClient/bridge.js:97 ElectronClient/bridge.js:107
+#: ElectronClient/bridge.js:118 ElectronClient/bridge.js:126
 #: ElectronClient/checkForUpdates.js:139
 #: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/MenuBar.js:285
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:174
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:22
 #: ElectronClient/gui/PromptDialog.min.js:235
 #: ElectronClient/gui/ConfigScreen.min.js:187
-#: ElectronClient/gui/ConfigScreen.min.js:756 ElectronClient/app.js:608
+#: ElectronClient/gui/ConfigScreen.min.js:756
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ReactNativeClient/lib/components/ModalDialog.js:67
 #: ReactNativeClient/lib/components/CameraView.js:182
 #: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
 msgstr "OK"
 
-#: ElectronClient/bridge.js:113 ElectronClient/bridge.js:126
+#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
 #: ElectronClient/gui/DialogButtonRow.min.js:38
 #: ElectronClient/gui/SideBar/SideBar.min.js:264
 #: ElectronClient/gui/SideBar/SideBar.min.js:630
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
+#: ElectronClient/gui/SideBar/SideBar.js:191
+#: ElectronClient/gui/SideBar/SideBar.js:402
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:52
 #: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
 #: ElectronClient/gui/NoteList.min.js:148
-#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/utils/NoteListUtils.js:162
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
 #: ElectronClient/gui/PromptDialog.min.js:242
 #: ElectronClient/gui/ConfigScreen.min.js:746
+#: ElectronClient/gui/NoteList/NoteList.js:161
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ElectronClient/gui/ResourceScreen.js:94
-#: ReactNativeClient/lib/shim-init-node.js:91
+#: ElectronClient/gui/ResourceScreen.js:95
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:21
+#: ReactNativeClient/lib/shim-init-node.js:92
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:70
 #: ReactNativeClient/lib/components/select-date-time-dialog.js:89
 #: ReactNativeClient/lib/components/ModalDialog.js:70
@@ -805,16 +815,16 @@ msgstr "OK"
 #: ReactNativeClient/lib/components/side-menu-content.js:338
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/screens/note.js:96
-#: ReactNativeClient/lib/components/screens/note.js:525
+#: ReactNativeClient/lib/components/screens/note.js:531
 msgid "Cancel"
 msgstr "Tühista"
 
-#: ElectronClient/bridge.js:198
+#: ElectronClient/bridge.js:178
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 
-#: ElectronClient/plugins/GotoAnything.min.js:446
+#: ElectronClient/plugins/GotoAnything.min.js:459
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
@@ -823,18 +833,18 @@ msgstr ""
 "Tippige sellele hüppamiseks märkme tiitel. Või tippige #, millele järgneb "
 "sildi nimi või @, millele järgneb märkmiku nimi."
 
-#: ElectronClient/plugins/GotoAnything.min.js:486
+#: ElectronClient/plugins/GotoAnything.min.js:499
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
 #, fuzzy
 msgid "Goto Anything..."
 msgstr "Ükskõik mida..."
 
-#: ElectronClient/InteropServiceHelper.js:147
+#: ElectronClient/InteropServiceHelper.js:153
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-#: ElectronClient/InteropServiceHelper.js:164
+#: ElectronClient/InteropServiceHelper.js:170
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr ""
@@ -863,15 +873,17 @@ msgid "New version: %s"
 msgstr "Uus versioon: %s"
 
 #: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:523
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:22
+#: ReactNativeClient/lib/shim-init-node.js:92
+#: ReactNativeClient/lib/components/screens/note.js:529
 #: ReactNativeClient/lib/versionInfo.js:23
 msgid "Yes"
 msgstr "Jah"
 
 #: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/shim-init-node.js:91
-#: ReactNativeClient/lib/components/screens/note.js:524
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:23
+#: ReactNativeClient/lib/shim-init-node.js:92
+#: ReactNativeClient/lib/components/screens/note.js:530
 #: ReactNativeClient/lib/versionInfo.js:23
 msgid "No"
 msgstr "Ei"
@@ -879,6 +891,12 @@ msgstr "Ei"
 #: ElectronClient/checkForUpdates.js:153
 msgid "Full Release Notes"
 msgstr "Täielikud väljalaskemärkmed"
+
+#: ElectronClient/gui/SearchBar/SearchBar.js:50
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
+msgid "Search..."
+msgstr "Otsi..."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -897,7 +915,7 @@ msgid "Unsupported link or message: %s"
 msgstr "Toetuseta link või sõnum: %s"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:177
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
 msgid "Restore"
 msgstr "Taasta"
 
@@ -912,19 +930,22 @@ msgstr ""
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:30
 #: ElectronClient/gui/ConfigScreen.min.js:746
 #: ElectronClient/gui/Header.min.js:316
-#: ElectronClient/gui/Header/Header.min.js:303
-#: ReactNativeClient/lib/commands/historyBackward.js:16
+#: ReactNativeClient/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "Tagasi"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:237
+#: ElectronClient/gui/SideBar/SideBar.js:166
 #: ElectronClient/gui/SideBar.min.js:283
 msgid "Remove"
 msgstr "Eemalda"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:240
+#: ElectronClient/gui/SideBar/SideBar.js:169
 #: ElectronClient/gui/SideBar.min.js:286
 #: ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
@@ -938,42 +959,49 @@ msgstr ""
 "Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:241
+#: ElectronClient/gui/SideBar/SideBar.js:170
 #: ElectronClient/gui/SideBar.min.js:287
-#: ElectronClient/gui/utils/NoteListUtils.js:161
-#: ElectronClient/gui/utils/NoteListUtils.js:184
-#: ElectronClient/gui/ResourceScreen.js:46
-#: ElectronClient/gui/ResourceScreen.js:94
+#: ElectronClient/gui/utils/NoteListUtils.js:133
+#: ElectronClient/gui/utils/NoteListUtils.js:162
+#: ElectronClient/gui/ResourceScreen.js:47
+#: ElectronClient/gui/ResourceScreen.js:95
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/note.js:867
+#: ReactNativeClient/lib/components/screens/note.js:873
 msgid "Delete"
 msgstr "Kustuta"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:244
+#: ElectronClient/gui/SideBar/SideBar.js:174
 #: ElectronClient/gui/SideBar.min.js:290
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Kas eemaldada silt \"%s\" kõigist märkmetest?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:246
+#: ElectronClient/gui/SideBar/SideBar.js:177
 #: ElectronClient/gui/SideBar.min.js:292
 msgid "Remove this search from the sidebar?"
 msgstr "Kas soovite selle otsingu külgribalt eemaldada?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:305
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: ElectronClient/gui/SideBar.min.js:382
-#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:718
+#: ElectronClient/gui/SideBar/SideBar.js:228
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: ElectronClient/gui/SideBar.min.js:382 ElectronClient/gui/MenuBar.js:387
+#: ElectronClient/gui/utils/NoteListUtils.js:129
 msgid "Export"
 msgstr "Eksport"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:630
+#: ElectronClient/gui/SideBar/SideBar.js:402
 #: ElectronClient/gui/SideBar.min.js:724
 #: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/commands/synchronize.js:18
 msgid "Synchronise"
 msgstr "Sünkroniseeri"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:664
+#: ElectronClient/gui/SideBar/SideBar.js:283
 #: ElectronClient/gui/SideBar.min.js:757
 #: ReactNativeClient/lib/components/side-menu-content.js:360
 #: ReactNativeClient/lib/components/screens/notes.js:188
@@ -981,23 +1009,26 @@ msgid "All notes"
 msgstr "Kõik märkmed"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:669
+#: ElectronClient/gui/SideBar/SideBar.js:414
 #: ElectronClient/gui/SideBar.min.js:762
 #: ReactNativeClient/lib/components/side-menu-content.js:364
 msgid "Notebooks"
 msgstr "Sülearvutid"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:686
-#: ElectronClient/gui/MainScreen/commands/setTags.js:16
+#: ElectronClient/gui/SideBar/SideBar.js:426
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
 #: ElectronClient/gui/SideBar.min.js:779
 #: ElectronClient/gui/NoteText.min.js:1634
 #: ElectronClient/gui/NoteText.min.js:1810
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:840
+#: ReactNativeClient/lib/components/screens/note.js:846
 msgid "Tags"
 msgstr "Sildid"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:704
+#: ElectronClient/gui/SideBar/SideBar.js:437
 #: ElectronClient/gui/SideBar.min.js:797
 #: ReactNativeClient/lib/components/side-menu-content.js:325
 #, javascript-format
@@ -1005,35 +1036,62 @@ msgid "Decrypting items: %d/%d"
 msgstr "Üksuste dekrüpteerimine: %d/%d"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:709
+#: ElectronClient/gui/SideBar/SideBar.js:441
 #: ElectronClient/gui/SideBar.min.js:802
 #: ReactNativeClient/lib/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
 msgstr "Ressursside toomine: %d/%d"
 
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
 msgid "Sidebar"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:146
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:17
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: ElectronClient/gui/MenuBar.js:478
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:17
+msgid "Focus"
+msgstr "Fookus"
+
+#: ElectronClient/gui/StatusScreen/StatusScreen.js:26
+#: ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
+
+#: ElectronClient/gui/StatusScreen/StatusScreen.js:61
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:112
+#, fuzzy
+msgid "Retry All"
+msgstr "Uuesti"
+
+#: ElectronClient/gui/StatusScreen/StatusScreen.js:78
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:118
+msgid "Retry"
+msgstr "Uuesti"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:165
 #: ElectronClient/gui/NoteText.min.js:1547
 #, fuzzy
 msgid "strong text"
 msgstr "tugev tekst"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:166
 #, fuzzy
 msgid "emphasised text"
 msgstr "toonitud tekst"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:149
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:168
 #: ElectronClient/gui/NoteText.min.js:1616
 msgid "Insert Hyperlink"
 msgstr "Lisa hüperlink"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:185
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:201
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:203
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:204
 #: ElectronClient/gui/NoteText.min.js:1591
 #: ElectronClient/gui/NoteText.min.js:1595
 #: ElectronClient/gui/NoteText.min.js:1604
@@ -1041,31 +1099,31 @@ msgstr "Lisa hüperlink"
 msgid "List item"
 msgstr "Loendiüksus"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:238
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:15
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:256
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:82
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Lõika"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:245
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:89
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:10
-#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:608
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:263
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: ElectronClient/gui/MenuBar.js:285 ElectronClient/gui/NoteText.min.js:804
 msgid "Copy"
 msgstr "Kopeeri"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:101
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:270
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:102
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Kleebi"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:428
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:469
 #: ElectronClient/gui/NoteText.min.js:1085
 msgid "Layout"
 msgstr "Paigutus"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:428
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:469
 #: ElectronClient/gui/NoteText.min.js:1085
 #, javascript-format
 msgid ""
@@ -1080,44 +1138,45 @@ msgstr ""
 msgid "Checkbox list"
 msgstr "Märkekast"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:471
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:519
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:411
 #: ElectronClient/gui/ConfigScreen.min.js:644
-#: ReactNativeClient/lib/components/screens/note.js:1107
+#: ReactNativeClient/lib/components/screens/note.js:1113
 msgid "Edit"
 msgstr "Muuda"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:527
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:575
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: ElectronClient/gui/NoteText.min.js:1627
 #: ElectronClient/gui/NoteText.min.js:1726
 msgid "Attach file"
 msgstr "Manusta fail"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:536
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:584
 msgid "Code Block"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:545
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:593
 msgid "Inline Code"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:560
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:608
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 #: ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
 msgstr "Lisa kuupäev kellaaeg"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
 msgid "Drop notes or files here"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:419
 #, fuzzy
 msgid "Code View"
 msgstr "Kood"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:944
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1135,209 +1194,212 @@ msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:40
 #: ElectronClient/gui/NoteText.min.js:778
 msgid "Open..."
 msgstr "Avatud..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:53
 #: ElectronClient/gui/NoteText.min.js:786
 msgid "Save as..."
 msgstr "Salvesta kui..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:66
 msgid "Reveal file in folder"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:74
 #: ElectronClient/gui/NoteText.min.js:797
 msgid "Copy path to clipboard"
 msgstr "Kopeeri tee lõikelauale"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:109
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:110
 #: ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
 msgstr "Kopeeri lingi aadress"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:293
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "to-do"
 msgstr "ülesande nimekiri"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:293
 #: ElectronClient/gui/NoteText.min.js:2121
 msgid "note"
 msgstr "paberraha"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:272
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:293
 #: ElectronClient/gui/NoteText.min.js:2121
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Uue %s loomine..."
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:344
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:374
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:347
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:377
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:382
+#: ElectronClient/gui/NoteText.min.js:1656
+#, javascript-format
+msgid "In: %s"
+msgstr "Asukoht: %s"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:28
 msgid "Select all"
 msgstr "Vali kõik"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:30
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:33
 #: ElectronClient/gui/NoteText.min.js:1690
 msgid "Bold"
 msgstr "Paks"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:35
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:38
 #: ElectronClient/gui/NoteText.min.js:1698
 msgid "Italic"
 msgstr "Kald"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:43
 #: ElectronClient/gui/NoteText.min.js:1710
 msgid "Hyperlink"
 msgstr "Hüperlink"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:48
 #: ElectronClient/gui/NoteText.min.js:1718
 msgid "Code"
 msgstr "Kood"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 #: ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
 msgstr "Nummerdatud loend"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:63
 #: ElectronClient/gui/NoteText.min.js:1746
 msgid "Bulleted List"
 msgstr "Täpp-loend"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:68
 #: ElectronClient/gui/NoteText.min.js:1754
 msgid "Checkbox"
 msgstr "Märkekast"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:73
 #: ElectronClient/gui/NoteText.min.js:1762
 msgid "Heading"
 msgstr "Pealkiri"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:78
 #: ElectronClient/gui/NoteText.min.js:1770
 #, fuzzy
 msgid "Horizontal Rule"
 msgstr "Horisontaalne reegel"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 #, fuzzy
 msgid "Note title"
 msgstr "Märkmiku tiitel:"
 
-#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
+#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:16
 msgid "Search in current note"
 msgstr "Otsi praeguses märkuses"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:15
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
 #, fuzzy
 msgid "Note body"
 msgstr "Märkmete ajalugu"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
 #: ElectronClient/gui/FolderPropertiesDialog.min.js:21
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
-#: ElectronClient/gui/ResourceScreen.js:38
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:164
+#: ElectronClient/gui/ResourceScreen.js:39
 msgid "ID"
 msgstr "ID"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
 msgid "Created"
 msgstr "Loodud"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
 msgid "Updated"
 msgstr "Uuendatud"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Completed"
 msgstr "Lõpetatud"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
 msgid "Location"
 msgstr "Asukoht"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
 msgid "URL"
 msgstr "URL"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: ReactNativeClient/lib/models/Setting.js:1256
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+#: ReactNativeClient/lib/models/Setting.js:1287
 msgid "Note History"
 msgstr "Märkmete ajalugu"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+#: ElectronClient/gui/NotePropertiesDialog.min.js:34
 #, fuzzy
 msgid "Markup"
 msgstr "Märgistus"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:305
+#: ElectronClient/gui/NotePropertiesDialog.min.js:306
 msgid "Previous versions of this note"
 msgstr "Selle märkme eelmised versioonid"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:382
-#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
+#: ElectronClient/gui/NotePropertiesDialog.min.js:383
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:17
 #: ElectronClient/gui/NoteText.min.js:1834
 msgid "Note properties"
 msgstr "Märkme atribuudid"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
-msgid "An unexpected error occured while importing the keymap!"
-msgstr ""
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: ReactNativeClient/lib/services/KeymapService.js:142
+#, fuzzy, javascript-format
+msgid "Error: %s"
+msgstr "Viga"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
-msgid "Search..."
-msgstr "Otsi..."
-
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:664
-#: ElectronClient/app.js:715
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:339
+#: ElectronClient/gui/MenuBar.js:384 ElectronClient/gui/Root.js:103
 msgid "Import"
 msgstr "Impordi"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
 #, fuzzy
 msgid "Keyboard Shortcut"
 msgstr "Klaviatuuri režiim"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
-#: ElectronClient/app.js:690
+#: ElectronClient/gui/MenuBar.js:129
 msgid "Quit"
 msgstr "Lõpeta"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
-#: ElectronClient/app.js:545
+#: ElectronClient/gui/MenuBar.js:232
 #, fuzzy
 msgid "Insert template"
 msgstr "Lisa kuupäev kellaaeg"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
-#: ElectronClient/app.js:820
+#: ElectronClient/gui/MenuBar.js:483
 msgid "Actual Size"
 msgstr ""
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
-#: ElectronClient/app.js:868
+#: ElectronClient/gui/MenuBar.js:532
 msgid "Website and documentation"
 msgstr "Veebileht ja dokumentatsioon"
 
@@ -1347,7 +1409,7 @@ msgid "Hide Joplin"
 msgstr "Teave kasutaja Joplin kohta"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
-#: ElectronClient/app.js:703
+#: ElectronClient/gui/MenuBar.js:372
 msgid "Close Window"
 msgstr "Sule aken"
 
@@ -1357,26 +1419,28 @@ msgid "Preferences"
 msgstr "Eelistused..."
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:572
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/gui/MenuBar.js:254
+#: ElectronClient/gui/Root.js:104
 msgid "Options"
 msgstr "Valikud"
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/encryption-config.js:125
 msgid "Save"
 msgstr "Salvesta"
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:414
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:301
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
@@ -1384,166 +1448,182 @@ msgid ""
 "proceed please click on the link."
 msgstr ""
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:416
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
 msgid "Restart and upgrade"
 msgstr ""
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:420
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
 msgid "Some items cannot be synchronised."
 msgstr "Mõnda üksust ei saa sünkroonida."
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:422
+#: ElectronClient/gui/MainScreen/MainScreen.js:428
+#: ElectronClient/gui/MainScreen/MainScreen.js:440
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:318
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:330
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:354
 msgid "View them now"
 msgstr "Vaata neid nüüd"
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:426
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:325
 #, fuzzy
 msgid "Some items cannot be decrypted."
 msgstr "Mõnda üksust ei saa sünkroonida."
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:432
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:337
 msgid "One or more master keys need a password."
 msgstr "Üks või mitu Põhivõtit vajavad parooli."
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:434
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:342
 msgid "Set the password"
 msgstr "Parooli seadmine"
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:438
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:349
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Üks või mitu Põhivõtit vajavad parooli."
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:444
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:361
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 
+#: ElectronClient/gui/MainScreen/MainScreen.js:446
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:366
 #, fuzzy
 msgid "More info"
 msgstr "Lisainformatsioon"
 
-#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:17
 msgid "Statistics..."
 msgstr ""
 
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:17
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:18
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:18
 #: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
 #: ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "Nimeta ümber"
 
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:26
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:27
 #: ElectronClient/gui/MainScreen.min.js:292
 msgid "Rename notebook:"
 msgstr "Märkmiku ümbernimetamine:"
 
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:16
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:28
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:17
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:29
 #: ReactNativeClient/lib/components/action-button.js:64
 #: ReactNativeClient/setUpQuickActions.js:15
 #, fuzzy
 msgid "New to-do"
 msgstr "Uus to-do"
 
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:16
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:27
 msgid "Toggle note list"
 msgstr "Lülita märkuseloend sisse/välja"
 
-#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
-#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:16
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:27
 msgid "Toggle sidebar"
 msgstr "Lülita külgriba sisse/välja"
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:20
 #: ElectronClient/gui/NoteText.min.js:1642
 #: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/screens/note.js:825
+#: ReactNativeClient/lib/components/screens/note.js:831
 msgid "Set alarm"
 msgstr "Alarmi seadmine"
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:32
 #: ElectronClient/gui/MainScreen.min.js:417
 msgid "Set alarm:"
 msgstr "Alarmi seadmine:"
 
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:20
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:31
 #: ElectronClient/gui/MainScreen.min.js:549
 msgid "PDF File"
 msgstr "PDF-fail"
 
-#: ElectronClient/gui/MainScreen/commands/newNote.js:20
-#: ElectronClient/gui/MainScreen/commands/newNote.js:47
+#: ElectronClient/gui/MainScreen/commands/newNote.js:21
+#: ElectronClient/gui/MainScreen/commands/newNote.js:48
 #: ReactNativeClient/lib/components/action-button.js:73
 #: ReactNativeClient/setUpQuickActions.js:14
 msgid "New note"
 msgstr "Uus Märkus"
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:18
 #, fuzzy
 msgid "Move to notebook"
 msgstr "Teisalda märkmikku..."
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:37
 #: ElectronClient/gui/MainScreen.min.js:272
 #, fuzzy
 msgid "Move to notebook:"
 msgstr "Teisalda märkmikku..."
 
-#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
 msgstr "Lülita redaktori paigutus sisse/välja"
 
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:26
+#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
+#, fuzzy
+msgid "Toggle editors"
+msgstr "Lülita redaktori paigutus sisse/välja"
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:27
 #: ElectronClient/gui/MainScreen.min.js:313
 msgid "Rename tag:"
 msgstr "Nimeta silt ümber:"
 
-#: ElectronClient/gui/MainScreen/commands/newNotebook.js:17
-#: ElectronClient/gui/MainScreen/commands/newNotebook.js:57
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:18
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:52
 msgid "New notebook"
 msgstr "Uus märkmik"
 
-#: ElectronClient/gui/MainScreen/commands/newNotebook.js:25
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:26
 #: ElectronClient/gui/MainScreen.min.js:178
 msgid "Notebook title:"
 msgstr "Märkmiku tiitel:"
 
-#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
 msgstr "Jaga märkust..."
 
-#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
 #: ElectronClient/gui/MainScreen.min.js:448
 msgid "Template file:"
 msgstr "Mallifail:"
 
-#: ElectronClient/gui/MainScreen/commands/setTags.js:43
+#: ElectronClient/gui/MainScreen/commands/setTags.js:44
 #: ElectronClient/gui/MainScreen.min.js:221
 msgid "Add or remove tags:"
 msgstr "Siltide lisamine või eemaldamine:"
 
-#: ElectronClient/gui/MainScreen/commands/print.js:16
+#: ElectronClient/gui/MainScreen/commands/print.js:17
 msgid "Print"
 msgstr ""
 
-#: ElectronClient/gui/MainScreen/commands/print.js:25
+#: ElectronClient/gui/MainScreen/commands/print.js:26
 #: ElectronClient/gui/NoteText.min.js:1321
 msgid "Only one note can be printed at a time."
 msgstr ""
 
-#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:32
-#: ElectronClient/gui/NoteText.min.js:1656
-#, javascript-format
-msgid "In: %s"
-msgstr "Asukoht: %s"
+#: ElectronClient/gui/DropboxLoginScreen.js:35
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Saada"
 
 #: ElectronClient/gui/SideBar.min.js:304
 msgid "New sub-notebook"
@@ -1553,33 +1633,33 @@ msgstr "Uus alammärkmik"
 msgid "Token has been copied to the clipboard!"
 msgstr "Token on kopeeritud lõikelauale!"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:69
+#: ElectronClient/gui/ClipperConfigScreen.min.js:71
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Web Clipper service on lubatud ja seadke automaatselt käivituma."
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:76
+#: ElectronClient/gui/ClipperConfigScreen.min.js:78
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr "Olek: alustatud porti %d"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:82
+#: ElectronClient/gui/ClipperConfigScreen.min.js:84
 #, javascript-format
 msgid "Status: %s"
 msgstr "Staatus: %s"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:88
+#: ElectronClient/gui/ClipperConfigScreen.min.js:90
 msgid "Disable Web Clipper Service"
 msgstr "Keela Web Clipper Service"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:94
+#: ElectronClient/gui/ClipperConfigScreen.min.js:96
 msgid "The web clipper service is not enabled."
 msgstr "Web clipper service pole lubatud."
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:99
+#: ElectronClient/gui/ClipperConfigScreen.min.js:101
 msgid "Enable Web Clipper Service"
 msgstr "Luba Web Clipper Service"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:122
+#: ElectronClient/gui/ClipperConfigScreen.min.js:124
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -1587,15 +1667,15 @@ msgstr ""
 "Joplin Web Clipper võimaldab salvestada veebilehti ja ekraanipilte "
 "brauserist Joplini."
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:127
+#: ElectronClient/gui/ClipperConfigScreen.min.js:129
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Selleks, et kasutada Web Clipper, peate tegema järgmist:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:135
+#: ElectronClient/gui/ClipperConfigScreen.min.js:137
 msgid "Step 1: Enable the clipper service"
 msgstr "1. samm: Lubage Clipper service"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:140
+#: ElectronClient/gui/ClipperConfigScreen.min.js:142
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -1604,27 +1684,27 @@ msgstr ""
 "See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, "
 "võib tulemüür paluda teil anda luba Joplini kuulata teatud porti."
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:154
+#: ElectronClient/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
 msgstr "2. toiming: installige laiend"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:159
+#: ElectronClient/gui/ClipperConfigScreen.min.js:161
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Laadige alla ja installige brauseri vastav laiend:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:174
+#: ElectronClient/gui/ClipperConfigScreen.min.js:176
 msgid "Advanced options"
 msgstr "Täpsemad suvandid"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:179
+#: ElectronClient/gui/ClipperConfigScreen.min.js:181
 msgid "Authorisation token:"
 msgstr "Autoriseerimis token:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:189
+#: ElectronClient/gui/ClipperConfigScreen.min.js:191
 msgid "Copy token"
 msgstr "Kopeeri token"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:195
+#: ElectronClient/gui/ClipperConfigScreen.min.js:197
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -1632,22 +1712,129 @@ msgstr ""
 "See luba on vajalik ainult selleks, et lubada kolmanda osapoole rakendustele "
 "juurdepääsu Joplini."
 
-#: ElectronClient/gui/Root.min.js:89
+#: ElectronClient/gui/Root.min.js:89 ElectronClient/gui/Root.js:101
 msgid "OneDrive Login"
 msgstr "OneDrive-i sisselogimine"
 
-#: ElectronClient/gui/Root.min.js:90
+#: ElectronClient/gui/Root.min.js:90 ElectronClient/gui/Root.js:102
 msgid "Dropbox Login"
 msgstr "Dropbox-i sisselogimine"
 
-#: ElectronClient/gui/Root.min.js:93
+#: ElectronClient/gui/Root.min.js:93 ElectronClient/gui/Root.js:105
 #, fuzzy
 msgid "Note attachments"
 msgstr "Manused"
 
-#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:511
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/gui/MenuBar.js:206
+#: ElectronClient/gui/Root.js:106
 msgid "Synchronisation Status"
 msgstr "Sünkroonimise olek"
+
+#: ElectronClient/gui/MenuBar.js:102
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:222
+msgid "Create note from template"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:227
+msgid "Create to-do from template"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:238
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin Export kataloog"
+
+#: ElectronClient/gui/MenuBar.js:243
+#, fuzzy
+msgid "Refresh templates"
+msgstr "Mallid"
+
+#: ElectronClient/gui/MenuBar.js:266
+#, fuzzy
+msgid "Note attachments..."
+msgstr "Manused"
+
+#: ElectronClient/gui/MenuBar.js:296 ElectronClient/gui/MenuBar.js:366
+#: ElectronClient/gui/MenuBar.js:659
+msgid "&File"
+msgstr "&Fail"
+
+#: ElectronClient/gui/MenuBar.js:302 ElectronClient/gui/MenuBar.js:561
+msgid "About Joplin"
+msgstr "Teave kasutaja Joplin kohta"
+
+#: ElectronClient/gui/MenuBar.js:309
+msgid "Preferences..."
+msgstr "Eelistused..."
+
+#: ElectronClient/gui/MenuBar.js:319 ElectronClient/gui/MenuBar.js:542
+msgid "Check for updates..."
+msgstr "Otsi värskendusi..."
+
+#: ElectronClient/gui/MenuBar.js:332 ElectronClient/gui/MenuBar.js:379
+msgid "Templates"
+msgstr "Mallid"
+
+#: ElectronClient/gui/MenuBar.js:343
+#, fuzzy
+msgid "Export all"
+msgstr "Eksport"
+
+#: ElectronClient/gui/MenuBar.js:356
+#, javascript-format
+msgid "Hide %s"
+msgstr "Peida %s"
+
+#: ElectronClient/gui/MenuBar.js:415
+msgid "&Edit"
+msgstr "&Redigeeri"
+
+#: ElectronClient/gui/MenuBar.js:435
+msgid "&View"
+msgstr "&Vaade"
+
+#: ElectronClient/gui/MenuBar.js:441
+#, fuzzy
+msgid "Layout button sequence"
+msgstr "Paigutuse nupujada"
+
+#: ElectronClient/gui/MenuBar.js:494 ElectronClient/gui/MenuBar.js:500
+msgid "Zoom In"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:507
+msgid "Zoom Out"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:516
+#, fuzzy
+msgid "&Note"
+msgstr "Märge"
+
+#: ElectronClient/gui/MenuBar.js:525
+msgid "&Tools"
+msgstr "&Tööriistad"
+
+#: ElectronClient/gui/MenuBar.js:529
+msgid "&Help"
+msgstr "&Spikker"
+
+#: ElectronClient/gui/MenuBar.js:536
+msgid "Joplin Forum"
+msgstr "Joplini Foorum"
+
+#: ElectronClient/gui/MenuBar.js:539
+#: ReactNativeClient/lib/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Annetuse tegemine"
+
+#: ElectronClient/gui/MenuBar.js:549
+msgid "Toggle development tools"
+msgstr "Lülita arendus tööriistad"
 
 #: ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1661,35 +1848,34 @@ msgstr "Chrome ' i veebipood"
 msgid "Get it now:"
 msgstr "Võta nüüd:"
 
-#: ElectronClient/gui/ImportScreen.min.js:62
+#: ElectronClient/gui/ImportScreen.min.js:61
 #, fuzzy, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
 
-#: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
-msgid "Submit"
-msgstr "Saada"
-
 #: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.js:160
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
 msgid "Custom order"
 msgstr ""
 
 #: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.js:160
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
 #, fuzzy
 msgid "View"
 msgstr "&Vaade"
 
 #: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.js:160
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
-#: ReactNativeClient/lib/models/Setting.js:381
+#: ReactNativeClient/lib/models/Setting.js:389
 msgid "Sort notes by"
 msgstr "Märkmete sortimine"
 
 #: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.js:160
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
 #, javascript-format
 msgid ""
@@ -1698,57 +1884,60 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/NoteList/NoteList.js:161
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
 #, fuzzy
 msgid "Do it now"
 msgstr "Võta nüüd:"
 
 #: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.js:412
 #: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
 
 #: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.js:412
 #: ElectronClient/gui/NoteList/NoteList.min.js:423
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
 
-#: ElectronClient/gui/utils/NoteListUtils.js:37
+#: ElectronClient/gui/utils/NoteListUtils.js:41
 #: ReactNativeClient/lib/components/screen-header.js:362
 msgid "Duplicate"
 msgstr "Paljunda"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:42
+#: ElectronClient/gui/utils/NoteListUtils.js:46
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Kopeeri"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:62
+#: ElectronClient/gui/utils/NoteListUtils.js:59
 #, fuzzy
 msgid "Switch between note and to-do type"
 msgstr "Märkme ja to-do tüübi vaheldumisi aktiveerimine"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:91
+#: ElectronClient/gui/utils/NoteListUtils.js:87
 msgid "Switch to note type"
 msgstr "Märkme tüübi aktiveerimine"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:100
+#: ElectronClient/gui/utils/NoteListUtils.js:93
 #, fuzzy
 msgid "Switch to to-do type"
 msgstr "Lülita to-do-tüüpi"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:110
-#: ReactNativeClient/lib/components/screens/note.js:854
+#: ElectronClient/gui/utils/NoteListUtils.js:100
+#: ReactNativeClient/lib/components/screens/note.js:860
 msgid "Copy Markdown link"
 msgstr "Kopeeri Markdown link"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:178
+#: ElectronClient/gui/utils/NoteListUtils.js:156
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Kas kustutada märge \"%s\"?"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:180
+#: ElectronClient/gui/utils/NoteListUtils.js:159
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Kas kustutada %d märkmed?"
@@ -1784,7 +1973,7 @@ msgid "Watching..."
 msgstr "Vaadates..."
 
 #: ElectronClient/gui/NoteText.min.js:1801
-#: ElectronClient/commands/startExternalEditing.js:18
+#: ElectronClient/commands/startExternalEditing.js:19
 msgid "Edit in external editor"
 msgstr "Redigeeri välisredaktoris"
 
@@ -1793,39 +1982,39 @@ msgstr "Redigeeri välisredaktoris"
 msgid "Content Properties"
 msgstr "Märkme atribuudid"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:144
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:149
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:150
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:168
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:181
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:182
 #, fuzzy
 msgid "Re-encrypt data"
 msgstr "Vali kuupäev"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
@@ -1843,30 +2032,86 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:432
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:433
 #: ReactNativeClient/lib/components/screens/encryption-config.js:279
 #: ReactNativeClient/lib/components/screens/status.js:142
 msgid "Status"
 msgstr "Staatus"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:437
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
 msgstr "Krüpteerimine on:"
 
-#: ElectronClient/gui/StatusScreen.min.js:33
-msgid "Please select where the sync status should be exported to"
-msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:99
+#: ElectronClient/gui/ConfigScreen.min.js:84
+msgid "This will open a new screen. Save your current changes?"
+msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
 
-#: ElectronClient/gui/StatusScreen.min.js:71
-#: ReactNativeClient/lib/components/screens/status.js:112
-#, fuzzy
-msgid "Retry All"
-msgstr "Uuesti"
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:162
+#: ElectronClient/gui/ConfigScreen.min.js:172
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
 
-#: ElectronClient/gui/StatusScreen.min.js:96
-#: ReactNativeClient/lib/components/screens/status.js:118
-msgid "Retry"
-msgstr "Uuesti"
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:167
+#: ElectronClient/gui/ConfigScreen.min.js:181
+msgid "Unknown"
+msgstr "Tundmatu"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:170
+#: ElectronClient/gui/ConfigScreen.min.js:185
+msgid "Checking..."
+msgstr "Kontrollimine..."
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:176
+#: ElectronClient/gui/ConfigScreen.min.js:189
+#: ReactNativeClient/lib/models/Resource.js:320
+msgid "Error"
+msgstr "Viga"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:181
+#: ElectronClient/gui/ConfigScreen.min.js:200
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Joplin Nextcloud app ei ole installitud või valesti konfigureeritud. Palun "
+"vaadake täielikku tõrketeadet allpool:"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:213
+msgid "Show Log"
+msgstr "Näita Logi"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:191
+#: ElectronClient/gui/ConfigScreen.min.js:226
+msgid "Joplin Nextcloud App status:"
+msgstr "Joplin Nextcloud rakenduse staatus:"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:197
+#: ElectronClient/gui/ConfigScreen.min.js:240
+msgid "Check Status"
+msgstr "Kontrolli olekut"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:201
+#: ElectronClient/gui/ConfigScreen.min.js:247
+msgid "Help"
+msgstr "Abi"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:212
+#: ElectronClient/gui/ConfigScreen.min.js:266
+msgid "Show Advanced Settings"
+msgstr "Kuva täpsemad sätted"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:370
+#: ElectronClient/gui/ConfigScreen.min.js:523
+msgid "Browse..."
+msgstr "Sirvi..."
+
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:27
+#: ElectronClient/gui/ConfigScreen.min.js:763
+msgid "Apply"
+msgstr "Rakenda"
 
 #: ElectronClient/gui/MainScreen.min.js:165
 msgid "Please create a notebook first."
@@ -1880,167 +2125,109 @@ msgstr "Palun looge esmalt märkmik"
 msgid "Clear"
 msgstr "Tühjenda"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Words"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Characters excluding spaces"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:80
 msgid "Lines"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
-#: ReactNativeClient/lib/models/Setting.js:366
-#: ReactNativeClient/lib/models/Setting.js:367
-#: ReactNativeClient/lib/models/Setting.js:368
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:376
 msgid "Editor"
 msgstr "Redigeerija"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
-#: ReactNativeClient/lib/models/Setting.js:366
-#: ReactNativeClient/lib/models/Setting.js:367
-#: ReactNativeClient/lib/models/Setting.js:369
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:100
+#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:377
 #, fuzzy
 msgid "Viewer"
 msgstr "Viewer"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
-#, fuzzy
-msgid "Statistics"
-msgstr "Staatus"
-
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:106
 #, javascript-format
 msgid "Read time: %s min"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:109
+#, fuzzy
+msgid "Statistics"
+msgstr "Staatus"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:114
 #: ElectronClient/gui/ShareNoteDialog.js:175
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Sulge"
 
-#: ElectronClient/gui/ConfigScreen.min.js:84
-msgid "This will open a new screen. Save your current changes?"
-msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
-
-#: ElectronClient/gui/ConfigScreen.min.js:172
-#: ReactNativeClient/lib/components/screens/config.js:307
-msgid "Check synchronisation configuration"
-msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
-
-#: ElectronClient/gui/ConfigScreen.min.js:181
-msgid "Unknown"
-msgstr "Tundmatu"
-
-#: ElectronClient/gui/ConfigScreen.min.js:185
-msgid "Checking..."
-msgstr "Kontrollimine..."
-
-#: ElectronClient/gui/ConfigScreen.min.js:189
-#: ReactNativeClient/lib/models/Resource.js:320
-msgid "Error"
-msgstr "Viga"
-
-#: ElectronClient/gui/ConfigScreen.min.js:200
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
-"Joplin Nextcloud app ei ole installitud või valesti konfigureeritud. Palun "
-"vaadake täielikku tõrketeadet allpool:"
-
-#: ElectronClient/gui/ConfigScreen.min.js:213
-msgid "Show Log"
-msgstr "Näita Logi"
-
-#: ElectronClient/gui/ConfigScreen.min.js:226
-msgid "Joplin Nextcloud App status:"
-msgstr "Joplin Nextcloud rakenduse staatus:"
-
-#: ElectronClient/gui/ConfigScreen.min.js:240
-msgid "Check Status"
-msgstr "Kontrolli olekut"
-
-#: ElectronClient/gui/ConfigScreen.min.js:247
-msgid "Help"
-msgstr "Abi"
-
-#: ElectronClient/gui/ConfigScreen.min.js:266
-msgid "Show Advanced Settings"
-msgstr "Kuva täpsemad sätted"
-
-#: ElectronClient/gui/ConfigScreen.min.js:523
-msgid "Browse..."
-msgstr "Sirvi..."
-
-#: ElectronClient/gui/ConfigScreen.min.js:763
-msgid "Apply"
-msgstr "Rakenda"
-
 #: ElectronClient/gui/Header.min.js:267
-#: ElectronClient/gui/Header/Header.min.js:254
 msgid "Usage"
 msgstr "Kasutus"
 
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:16
 #, fuzzy
 msgid "Note list"
 msgstr "Märkmete ajalugu"
 
-#: ElectronClient/gui/Header/commands/focusSearch.js:15
+#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "Otsi kõigist märkmetest"
 
-#: ElectronClient/gui/ResourceScreen.js:31
+#: ElectronClient/gui/ResourceScreen.js:32
 #, fuzzy
 msgid "Title"
 msgstr "pealkiri"
 
-#: ElectronClient/gui/ResourceScreen.js:35
+#: ElectronClient/gui/ResourceScreen.js:36
 msgid "Size"
 msgstr ""
 
-#: ElectronClient/gui/ResourceScreen.js:39
+#: ElectronClient/gui/ResourceScreen.js:40
 #, fuzzy
 msgid "Action"
 msgstr "Asukoht"
 
-#: ElectronClient/gui/ResourceScreen.js:42
-#: ReactNativeClient/lib/path-utils.js:68
-#: ReactNativeClient/lib/path-utils.js:104
-#: ReactNativeClient/lib/models/BaseItem.js:720
+#: ElectronClient/gui/ResourceScreen.js:43
+#: ReactNativeClient/lib/path-utils.js:73
+#: ReactNativeClient/lib/path-utils.js:109
+#: ReactNativeClient/lib/models/BaseItem.js:722
 msgid "Untitled"
 msgstr "Pealkirjata"
 
-#: ElectronClient/gui/ResourceScreen.js:93
+#: ElectronClient/gui/ResourceScreen.js:94
 #, fuzzy, javascript-format
 msgid "Delete attachment \"%s\"?"
 msgstr "Kas kustutada märge \"%s\"?"
 
-#: ElectronClient/gui/ResourceScreen.js:139
+#: ElectronClient/gui/ResourceScreen.js:140
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
 
-#: ElectronClient/gui/ResourceScreen.js:140
+#: ElectronClient/gui/ResourceScreen.js:141
 #, fuzzy
 msgid "Please wait..."
 msgstr "Kontroll... Oota."
 
-#: ElectronClient/gui/ResourceScreen.js:142
+#: ElectronClient/gui/ResourceScreen.js:143
 msgid "No resources!"
 msgstr ""
 
-#: ElectronClient/gui/ResourceScreen.js:144
+#: ElectronClient/gui/ResourceScreen.js:145
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
@@ -2078,145 +2265,41 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "Kopeeri jagatav link"
 msgstr[1] "Kopeeri jagatavad lingid"
 
-#: ElectronClient/commands/stopExternalEditing.js:16
+#: ElectronClient/commands/copyDevCommand.js:18
+#, fuzzy
+msgid "Copy dev mode command to clipboard"
+msgstr "Kopeeri tee lõikelauale"
+
+#: ElectronClient/commands/stopExternalEditing.js:17
 msgid "Stop external editing"
 msgstr "Peata väline redigeerimine"
 
-#: ElectronClient/commands/startExternalEditing.js:29
+#: ElectronClient/commands/startExternalEditing.js:30
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "Tõrge märkme avamisel redaktoris: %s"
 
-#: ElectronClient/app.js:471
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-
-#: ElectronClient/app.js:533
-msgid "Create note from template"
-msgstr ""
-
-#: ElectronClient/app.js:539
-msgid "Create to-do from template"
-msgstr ""
-
-#: ElectronClient/app.js:552
-#, fuzzy
-msgid "Open template directory"
-msgstr "Joplin Export kataloog"
-
-#: ElectronClient/app.js:559
-#, fuzzy
-msgid "Refresh templates"
-msgstr "Mallid"
-
-#: ElectronClient/app.js:585
-#, fuzzy
-msgid "Note attachments..."
-msgstr "Manused"
-
-#: ElectronClient/app.js:621 ElectronClient/app.js:697
-msgid "&File"
-msgstr "&Fail"
-
-#: ElectronClient/app.js:627 ElectronClient/app.js:896
-msgid "About Joplin"
-msgstr "Teave kasutaja Joplin kohta"
-
-#: ElectronClient/app.js:634
-msgid "Preferences..."
-msgstr "Eelistused..."
-
-#: ElectronClient/app.js:644 ElectronClient/app.js:878
-msgid "Check for updates..."
-msgstr "Otsi värskendusi..."
-
-#: ElectronClient/app.js:657 ElectronClient/app.js:710
-msgid "Templates"
-msgstr "Mallid"
-
-#: ElectronClient/app.js:668
-#, fuzzy
-msgid "Export all"
-msgstr "Eksport"
-
-#: ElectronClient/app.js:683
-#, javascript-format
-msgid "Hide %s"
-msgstr "Peida %s"
-
-#: ElectronClient/app.js:748
-msgid "&Edit"
-msgstr "&Redigeeri"
-
-#: ElectronClient/app.js:768
-msgid "&View"
-msgstr "&Vaade"
-
-#: ElectronClient/app.js:774
-#, fuzzy
-msgid "Layout button sequence"
-msgstr "Paigutuse nupujada"
-
-#: ElectronClient/app.js:814
-msgid "Focus"
-msgstr "Fookus"
-
-#: ElectronClient/app.js:831 ElectronClient/app.js:837
-msgid "Zoom In"
-msgstr ""
-
-#: ElectronClient/app.js:844
-msgid "Zoom Out"
-msgstr ""
-
-#: ElectronClient/app.js:852
-#, fuzzy
-msgid "&Note"
-msgstr "Märge"
-
-#: ElectronClient/app.js:861
-msgid "&Tools"
-msgstr "&Tööriistad"
-
-#: ElectronClient/app.js:865
-msgid "&Help"
-msgstr "&Spikker"
-
-#: ElectronClient/app.js:872
-msgid "Joplin Forum"
-msgstr "Joplini Foorum"
-
-#: ElectronClient/app.js:875
-#: ReactNativeClient/lib/components/screens/config.js:495
-msgid "Make a donation"
-msgstr "Annetuse tegemine"
-
-#: ElectronClient/app.js:885
-msgid "Toggle development tools"
-msgstr "Lülita arendus tööriistad"
-
-#: ElectronClient/app.js:1028
+#: ElectronClient/app.js:339
 #, javascript-format
 msgid "Open %s"
 msgstr "Ava %s"
 
-#: ElectronClient/app.js:1030
+#: ElectronClient/app.js:341
 msgid "Exit"
 msgstr "Välju"
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:86
 #, fuzzy
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Taotlus on lubatud-võite nüüd sulgeda selle brauseri vahekaart."
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:88
 #, fuzzy
 msgid "The application has been successfully authorised."
 msgstr "Taotlus on edukalt lubatud."
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:116
 #, fuzzy
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -2230,16 +2313,6 @@ msgstr ""
 "kataloogis. See ei ole juurdepääsu tahes faile väljaspool seda kataloogi ega "
 "muid isikuandmeid. Andmeid ei jagata ühelegi kolmandale osapoolele."
 
-#: ReactNativeClient/lib/logger.js:178
-#, fuzzy, javascript-format
-msgid "Unknown log level: %s"
-msgstr "Tundmatu Logitase: %s"
-
-#: ReactNativeClient/lib/logger.js:187
-#, javascript-format
-msgid "Unknown level ID: %s"
-msgstr "Tundmatu taseme ID: %s"
-
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
 msgstr ""
@@ -2248,15 +2321,15 @@ msgstr ""
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: ReactNativeClient/lib/shim-init-node.js:90
-#: ReactNativeClient/lib/components/screens/note.js:522
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:528
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
 
-#: ReactNativeClient/lib/shim-init-node.js:157
+#: ReactNativeClient/lib/shim-init-node.js:158
 #, fuzzy, javascript-format
 msgid "Cannot access %s"
 msgstr "%s ei pääse juurde"
@@ -2284,23 +2357,23 @@ msgstr "Märkmiku ei saa sellesse asukohta teisaldada"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
 
-#: ReactNativeClient/lib/models/Setting.js:39
+#: ReactNativeClient/lib/models/Setting.js:66
 #, fuzzy
 msgid "yes"
 msgstr "Jah"
 
-#: ReactNativeClient/lib/models/Setting.js:39
-#: ReactNativeClient/lib/models/Setting.js:40
+#: ReactNativeClient/lib/models/Setting.js:66
+#: ReactNativeClient/lib/models/Setting.js:67
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:40
+#: ReactNativeClient/lib/models/Setting.js:67
 #, fuzzy
 msgid "no"
 msgstr "n"
 
-#: ReactNativeClient/lib/models/Setting.js:43
+#: ReactNativeClient/lib/models/Setting.js:69
 #, fuzzy, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2311,45 +2384,45 @@ msgstr ""
 "sünkroonimist kõik oma sisu, vastasel juhul eemaldatakse kõik failid! "
 "Lisateavet leiate KKK-st: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:51
+#: ReactNativeClient/lib/models/Setting.js:75
 msgid "Light"
 msgstr "Hele"
 
-#: ReactNativeClient/lib/models/Setting.js:52
+#: ReactNativeClient/lib/models/Setting.js:76
 msgid "Dark"
 msgstr "Tume"
 
-#: ReactNativeClient/lib/models/Setting.js:53
+#: ReactNativeClient/lib/models/Setting.js:77
 msgid "Dracula"
 msgstr "Dracula"
 
-#: ReactNativeClient/lib/models/Setting.js:54
+#: ReactNativeClient/lib/models/Setting.js:78
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: ReactNativeClient/lib/models/Setting.js:55
+#: ReactNativeClient/lib/models/Setting.js:79
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: ReactNativeClient/lib/models/Setting.js:56
+#: ReactNativeClient/lib/models/Setting.js:80
 msgid "Nord"
 msgstr "Nord"
 
-#: ReactNativeClient/lib/models/Setting.js:57
+#: ReactNativeClient/lib/models/Setting.js:81
 msgid "Aritim Dark"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:58
+#: ReactNativeClient/lib/models/Setting.js:82
 #, fuzzy
 msgid "OLED Dark"
 msgstr "Tume"
 
-#: ReactNativeClient/lib/models/Setting.js:80
+#: ReactNativeClient/lib/models/Setting.js:103
 #, fuzzy
 msgid "Synchronisation target"
 msgstr "Sünkroniseerimine eesmärk"
 
-#: ReactNativeClient/lib/models/Setting.js:82
+#: ReactNativeClient/lib/models/Setting.js:105
 #, fuzzy
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
@@ -2358,52 +2431,52 @@ msgstr ""
 "Sihtmärk, kuhu sünteesitakse. Iga sünkroonimise Target võib olla täiendavaid "
 "parameetreid, mis on nimega `sync.NUM.NAME` (kõik dokumenteeritud allpool)."
 
-#: ReactNativeClient/lib/models/Setting.js:110
+#: ReactNativeClient/lib/models/Setting.js:132
 #, fuzzy
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Kataloog, millega sünkroonitakse (absoluutne tee)"
 
-#: ReactNativeClient/lib/models/Setting.js:122
+#: ReactNativeClient/lib/models/Setting.js:143
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-i URL"
 
-#: ReactNativeClient/lib/models/Setting.js:133
+#: ReactNativeClient/lib/models/Setting.js:154
 msgid "Nextcloud username"
 msgstr "Nextcloud-i kasutajanimi"
 
-#: ReactNativeClient/lib/models/Setting.js:143
+#: ReactNativeClient/lib/models/Setting.js:164
 msgid "Nextcloud password"
 msgstr "Nextcloud-i parool"
 
-#: ReactNativeClient/lib/models/Setting.js:155
+#: ReactNativeClient/lib/models/Setting.js:175
 msgid "WebDAV URL"
 msgstr "WebDAV-i URL"
 
-#: ReactNativeClient/lib/models/Setting.js:166
+#: ReactNativeClient/lib/models/Setting.js:186
 msgid "WebDAV username"
 msgstr "WebDAV-i kasutajanimi"
 
-#: ReactNativeClient/lib/models/Setting.js:176
+#: ReactNativeClient/lib/models/Setting.js:196
 msgid "WebDAV password"
 msgstr "WebDAV-i parool"
 
-#: ReactNativeClient/lib/models/Setting.js:195
+#: ReactNativeClient/lib/models/Setting.js:215
 msgid "AWS S3 bucket"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:206
+#: ReactNativeClient/lib/models/Setting.js:226
 msgid "AWS key"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:216
+#: ReactNativeClient/lib/models/Setting.js:236
 msgid "AWS secret"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:230
+#: ReactNativeClient/lib/models/Setting.js:248
 msgid "Attachment download behaviour"
 msgstr "Manuse allalaadimise käitumine"
 
-#: ReactNativeClient/lib/models/Setting.js:231
+#: ReactNativeClient/lib/models/Setting.js:249
 #, fuzzy
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
@@ -2414,202 +2487,202 @@ msgstr ""
 "\"Auto\", nad laaditakse, kui avate märkme. \"Always\", laaditakse kõik "
 "manused, kas avate märkme või mitte."
 
-#: ReactNativeClient/lib/models/Setting.js:234
+#: ReactNativeClient/lib/models/Setting.js:252
 msgid "Always"
 msgstr "Alati"
 
-#: ReactNativeClient/lib/models/Setting.js:235
+#: ReactNativeClient/lib/models/Setting.js:253
 msgid "Manual"
 msgstr "Manuaal"
 
-#: ReactNativeClient/lib/models/Setting.js:236
+#: ReactNativeClient/lib/models/Setting.js:254
 msgid "Auto"
 msgstr "Automaatne"
 
-#: ReactNativeClient/lib/models/Setting.js:253
+#: ReactNativeClient/lib/models/Setting.js:269
 msgid "Max concurrent connections"
 msgstr "Maksimaalsed samaaegsed ühendused"
 
-#: ReactNativeClient/lib/models/Setting.js:267
+#: ReactNativeClient/lib/models/Setting.js:281
 msgid "Language"
 msgstr "Keel"
 
-#: ReactNativeClient/lib/models/Setting.js:277
+#: ReactNativeClient/lib/models/Setting.js:291
 msgid "Date format"
 msgstr "Kuupäeva formaat"
 
-#: ReactNativeClient/lib/models/Setting.js:296
+#: ReactNativeClient/lib/models/Setting.js:310
 msgid "Time format"
 msgstr "Kellaaja Formaat"
 
-#: ReactNativeClient/lib/models/Setting.js:315
+#: ReactNativeClient/lib/models/Setting.js:328
 msgid "Theme"
 msgstr "Teema"
 
-#: ReactNativeClient/lib/models/Setting.js:326
+#: ReactNativeClient/lib/models/Setting.js:338
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:338
+#: ReactNativeClient/lib/models/Setting.js:349
 msgid "Preferred light theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:352
+#: ReactNativeClient/lib/models/Setting.js:362
 msgid "Preferred dark theme"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:366
 msgid "Show note counts"
 msgstr "Kuva märkmete arv"
 
-#: ReactNativeClient/lib/models/Setting.js:366
-#: ReactNativeClient/lib/models/Setting.js:368
-#: ReactNativeClient/lib/models/Setting.js:369
+#: ReactNativeClient/lib/models/Setting.js:374
+#: ReactNativeClient/lib/models/Setting.js:376
+#: ReactNativeClient/lib/models/Setting.js:377
 msgid "Split View"
 msgstr "Tükelda vaade"
 
-#: ReactNativeClient/lib/models/Setting.js:366
+#: ReactNativeClient/lib/models/Setting.js:374
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:367
-#: ReactNativeClient/lib/models/Setting.js:368
-#: ReactNativeClient/lib/models/Setting.js:369
+#: ReactNativeClient/lib/models/Setting.js:375
+#: ReactNativeClient/lib/models/Setting.js:376
+#: ReactNativeClient/lib/models/Setting.js:377
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:372
+#: ReactNativeClient/lib/models/Setting.js:380
 msgid "Uncompleted to-dos on top"
 msgstr "Lõpetamata ülesanded üleval"
 
-#: ReactNativeClient/lib/models/Setting.js:373
+#: ReactNativeClient/lib/models/Setting.js:381
 msgid "Show completed to-dos"
 msgstr "Näita lõpuleviidud ülesandeid"
 
-#: ReactNativeClient/lib/models/Setting.js:398
+#: ReactNativeClient/lib/models/Setting.js:406
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automaatne sidumine traksid, sulg, noteeringud jne."
 
-#: ReactNativeClient/lib/models/Setting.js:400
-#: ReactNativeClient/lib/models/Setting.js:418
+#: ReactNativeClient/lib/models/Setting.js:408
+#: ReactNativeClient/lib/models/Setting.js:426
 msgid "Reverse sort order"
 msgstr "Pööra sortimisjärjestus ümber"
 
-#: ReactNativeClient/lib/models/Setting.js:407
+#: ReactNativeClient/lib/models/Setting.js:415
 msgid "Sort notebooks by"
 msgstr "Sorteeri märkmikud"
 
-#: ReactNativeClient/lib/models/Setting.js:419
+#: ReactNativeClient/lib/models/Setting.js:427
 msgid "Save geo-location with notes"
 msgstr "Salvesta geograafilise asukoha märkmed"
 
-#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:444
 #, fuzzy
 msgid "When creating a new to-do:"
 msgstr "Uue tee loomisel:"
 
-#: ReactNativeClient/lib/models/Setting.js:441
-#: ReactNativeClient/lib/models/Setting.js:456
+#: ReactNativeClient/lib/models/Setting.js:447
+#: ReactNativeClient/lib/models/Setting.js:462
 #, fuzzy
 msgid "Focus title"
 msgstr "Fookuse tiitel"
 
-#: ReactNativeClient/lib/models/Setting.js:442
-#: ReactNativeClient/lib/models/Setting.js:457
+#: ReactNativeClient/lib/models/Setting.js:448
+#: ReactNativeClient/lib/models/Setting.js:463
 #, fuzzy
 msgid "Focus body"
 msgstr "Fookuse keha"
 
-#: ReactNativeClient/lib/models/Setting.js:453
+#: ReactNativeClient/lib/models/Setting.js:459
 msgid "When creating a new note:"
 msgstr "Uue märkme loomisel:"
 
-#: ReactNativeClient/lib/models/Setting.js:467
+#: ReactNativeClient/lib/models/Setting.js:480
 #, fuzzy
 msgid "Enable soft breaks"
 msgstr "Luba pehmed katkestused"
 
-#: ReactNativeClient/lib/models/Setting.js:468
+#: ReactNativeClient/lib/models/Setting.js:481
 #, fuzzy
 msgid "Enable typographer support"
 msgstr "Luba typographer tugi"
 
-#: ReactNativeClient/lib/models/Setting.js:469
+#: ReactNativeClient/lib/models/Setting.js:482
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Luba matemaatika avaldised"
 
-#: ReactNativeClient/lib/models/Setting.js:470
+#: ReactNativeClient/lib/models/Setting.js:483
 #, fuzzy
 msgid "Enable Fountain syntax support"
 msgstr "Luba purskkaevu süntaks toetust"
 
-#: ReactNativeClient/lib/models/Setting.js:471
+#: ReactNativeClient/lib/models/Setting.js:484
 #, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Luba typographer tugi"
 
-#: ReactNativeClient/lib/models/Setting.js:473
+#: ReactNativeClient/lib/models/Setting.js:485
 #, fuzzy
 msgid "Enable ==mark== syntax"
 msgstr "Luba = = Mark = = süntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:474
+#: ReactNativeClient/lib/models/Setting.js:486
 #, fuzzy
 msgid "Enable footnotes"
 msgstr "Luba allmärkused"
 
-#: ReactNativeClient/lib/models/Setting.js:475
+#: ReactNativeClient/lib/models/Setting.js:487
 #, fuzzy
 msgid "Enable table of contents extension"
 msgstr "Luba sisukorra laiend"
 
-#: ReactNativeClient/lib/models/Setting.js:476
+#: ReactNativeClient/lib/models/Setting.js:488
 #, fuzzy
 msgid "Enable ~sub~ syntax"
 msgstr "Luba ~ sub ~ süntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:477
+#: ReactNativeClient/lib/models/Setting.js:489
 #, fuzzy
 msgid "Enable ^sup^ syntax"
 msgstr "Luba ^ SUP ^ Süntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:478
+#: ReactNativeClient/lib/models/Setting.js:490
 #, fuzzy
 msgid "Enable deflist syntax"
 msgstr "Luba deflailosüntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:479
+#: ReactNativeClient/lib/models/Setting.js:491
 #, fuzzy
 msgid "Enable abbreviation syntax"
 msgstr "Luba lühendi süntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:480
+#: ReactNativeClient/lib/models/Setting.js:492
 #, fuzzy
 msgid "Enable markdown emoji"
 msgstr "Luba allahindlusest emotikonide"
 
-#: ReactNativeClient/lib/models/Setting.js:481
+#: ReactNativeClient/lib/models/Setting.js:493
 #, fuzzy
 msgid "Enable ++insert++ syntax"
 msgstr "Luba + + lisa + + süntaks"
 
-#: ReactNativeClient/lib/models/Setting.js:482
+#: ReactNativeClient/lib/models/Setting.js:494
 #, fuzzy
 msgid "Enable multimarkdown table extension"
 msgstr "Luba mitmemarkdown tabeli laiend"
 
-#: ReactNativeClient/lib/models/Setting.js:494
+#: ReactNativeClient/lib/models/Setting.js:505
 msgid "Show tray icon"
 msgstr "Kuva salve ikoon"
 
-#: ReactNativeClient/lib/models/Setting.js:496
+#: ReactNativeClient/lib/models/Setting.js:507
 msgid "Note: Does not work in all desktop environments."
 msgstr "Märkus: ei tööta kõigil töölaua keskkondades."
 
-#: ReactNativeClient/lib/models/Setting.js:496
+#: ReactNativeClient/lib/models/Setting.js:507
 #, fuzzy
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
@@ -2619,24 +2692,24 @@ msgstr ""
 "See võimaldab Joplini taustal töötada. Soovitatav on seda sätet lubada, et "
 "teie märkmed pidevalt sünkroonitakse, vähendades seega konfliktide arvu."
 
-#: ReactNativeClient/lib/models/Setting.js:500
+#: ReactNativeClient/lib/models/Setting.js:510
 #, fuzzy
 msgid "Start application minimised in the tray icon"
 msgstr "Alusta rakenduse minimeerimise salve ikoonil"
 
-#: ReactNativeClient/lib/models/Setting.js:519
+#: ReactNativeClient/lib/models/Setting.js:525
 msgid "Editor font size"
 msgstr "Redaktori fondi suurus"
 
-#: ReactNativeClient/lib/models/Setting.js:527
+#: ReactNativeClient/lib/models/Setting.js:532
 msgid "Editor font"
 msgstr "Redaktori font"
 
-#: ReactNativeClient/lib/models/Setting.js:551
+#: ReactNativeClient/lib/models/Setting.js:556
 msgid "Editor font family"
 msgstr "Redaktori font pere"
 
-#: ReactNativeClient/lib/models/Setting.js:553
+#: ReactNativeClient/lib/models/Setting.js:557
 #, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
@@ -2646,55 +2719,55 @@ msgstr ""
 "See peab olema * monospace * font või see ei tööta korralikult. Kui font on "
 "vale või tühi, vaikimisi on üldine monospace font."
 
-#: ReactNativeClient/lib/models/Setting.js:592
+#: ReactNativeClient/lib/models/Setting.js:596
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
 
-#: ReactNativeClient/lib/models/Setting.js:598
+#: ReactNativeClient/lib/models/Setting.js:601
 #, fuzzy
 msgid "Automatically update the application"
 msgstr "Värskenda rakendus automaatselt"
 
-#: ReactNativeClient/lib/models/Setting.js:599
+#: ReactNativeClient/lib/models/Setting.js:602
 #, fuzzy
 msgid "Get pre-releases when checking for updates"
 msgstr "Hankige eelväljaanded värskenduste kontrollimisel"
 
-#: ReactNativeClient/lib/models/Setting.js:599
+#: ReactNativeClient/lib/models/Setting.js:602
 #, fuzzy, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Lisateavet väljalaske-eelse lehe kohta leiate teemast: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:607
+#: ReactNativeClient/lib/models/Setting.js:610
 #, fuzzy
 msgid "Synchronisation interval"
 msgstr "Sünkroniseerimisintervall"
 
-#: ReactNativeClient/lib/models/Setting.js:611
-#: ReactNativeClient/lib/models/Setting.js:612
-#: ReactNativeClient/lib/models/Setting.js:613
+#: ReactNativeClient/lib/models/Setting.js:614
+#: ReactNativeClient/lib/models/Setting.js:615
+#: ReactNativeClient/lib/models/Setting.js:616
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutit"
 
-#: ReactNativeClient/lib/models/Setting.js:614
+#: ReactNativeClient/lib/models/Setting.js:617
 #, javascript-format
 msgid "%d hour"
 msgstr "%d tund"
 
-#: ReactNativeClient/lib/models/Setting.js:615
-#: ReactNativeClient/lib/models/Setting.js:616
+#: ReactNativeClient/lib/models/Setting.js:618
+#: ReactNativeClient/lib/models/Setting.js:619
 #, javascript-format
 msgid "%d hours"
 msgstr "%d tundi"
 
-#: ReactNativeClient/lib/models/Setting.js:625
+#: ReactNativeClient/lib/models/Setting.js:628
 #, fuzzy
 msgid "Text editor command"
 msgstr "Tekstiredaktori käsk"
 
-#: ReactNativeClient/lib/models/Setting.js:625
+#: ReactNativeClient/lib/models/Setting.js:628
 #, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
@@ -2704,69 +2777,69 @@ msgstr ""
 "avamiseks. Kui ühtegi pole ette nähtud, proovib see automaatselt tuvastada "
 "vaikeredaktorit."
 
-#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:629
 #, fuzzy
 msgid "Page size for PDF export"
 msgstr "Lehekülje suurus PDF-i eksportimiseks"
 
-#: ReactNativeClient/lib/models/Setting.js:628
+#: ReactNativeClient/lib/models/Setting.js:631
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:629
+#: ReactNativeClient/lib/models/Setting.js:632
 msgid "Letter"
 msgstr "Kaaskiri"
 
-#: ReactNativeClient/lib/models/Setting.js:630
+#: ReactNativeClient/lib/models/Setting.js:633
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:631
+#: ReactNativeClient/lib/models/Setting.js:634
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:632
+#: ReactNativeClient/lib/models/Setting.js:635
 #, fuzzy
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ReactNativeClient/lib/models/Setting.js:633
+#: ReactNativeClient/lib/models/Setting.js:636
 msgid "Legal"
 msgstr "Õiguslik"
 
-#: ReactNativeClient/lib/models/Setting.js:636
+#: ReactNativeClient/lib/models/Setting.js:639
 msgid "Page orientation for PDF export"
 msgstr "Lehekülje suund PDF-i eksportimiseks"
 
-#: ReactNativeClient/lib/models/Setting.js:638
+#: ReactNativeClient/lib/models/Setting.js:641
 msgid "Portrait"
 msgstr "Portree"
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: ReactNativeClient/lib/models/Setting.js:642
 msgid "Landscape"
 msgstr "Maastik"
 
-#: ReactNativeClient/lib/models/Setting.js:650
+#: ReactNativeClient/lib/models/Setting.js:652
 msgid "Keyboard Mode"
 msgstr "Klaviatuuri režiim"
 
-#: ReactNativeClient/lib/models/Setting.js:653
+#: ReactNativeClient/lib/models/Setting.js:655
 msgid "Default"
 msgstr "Vaikimisi"
 
-#: ReactNativeClient/lib/models/Setting.js:654
+#: ReactNativeClient/lib/models/Setting.js:656
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:655
+#: ReactNativeClient/lib/models/Setting.js:657
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:670
+#: ReactNativeClient/lib/models/Setting.js:671
 msgid "Custom TLS certificates"
 msgstr "Kohandatud TLS-i serdid"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:672
 #, fuzzy
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -2779,7 +2852,7 @@ msgstr ""
 "sätteid, peate enne nupu \"Check synchronisation configuration\" klõpsamist "
 "oma muudatused salvestama."
 
-#: ReactNativeClient/lib/models/Setting.js:683
+#: ReactNativeClient/lib/models/Setting.js:684
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoreeri TLS-i serdi tõrked"
 
@@ -2796,7 +2869,7 @@ msgstr ""
 "Fail-Safe: Ärge pühkige kohalikke andmeid, kui sünkroonimise eesmärk on tühi "
 "(sageli tulemus vale konfiguratsioon või viga)"
 
-#: ReactNativeClient/lib/models/Setting.js:697
+#: ReactNativeClient/lib/models/Setting.js:696
 #, fuzzy
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -2805,31 +2878,31 @@ msgstr ""
 "Määrake Port, mida peaks kasutama API-server. Kui seda ei määrata, "
 "kasutatakse vaikeväärtust."
 
-#: ReactNativeClient/lib/models/Setting.js:705
+#: ReactNativeClient/lib/models/Setting.js:701
 #, fuzzy
 msgid "Enable note history"
 msgstr "Luba märkmete ajalugu"
 
-#: ReactNativeClient/lib/models/Setting.js:715
+#: ReactNativeClient/lib/models/Setting.js:711
 msgid "days"
 msgstr "päeva"
 
-#: ReactNativeClient/lib/models/Setting.js:715
+#: ReactNativeClient/lib/models/Setting.js:711
 #, javascript-format
 msgid "%d days"
 msgstr "%d päeva"
 
-#: ReactNativeClient/lib/models/Setting.js:717
+#: ReactNativeClient/lib/models/Setting.js:713
 msgid "Keep note history for"
 msgstr "Säilita märkmete ajalugu"
 
-#: ReactNativeClient/lib/models/Setting.js:744
+#: ReactNativeClient/lib/models/Setting.js:736
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:746
-#: ReactNativeClient/lib/models/Setting.js:759
-#: ReactNativeClient/lib/models/Setting.js:772
+#: ReactNativeClient/lib/models/Setting.js:737
+#: ReactNativeClient/lib/models/Setting.js:749
+#: ReactNativeClient/lib/models/Setting.js:761
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2837,57 +2910,58 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:757
+#: ReactNativeClient/lib/models/Setting.js:748
 msgid "Note list growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:770
+#: ReactNativeClient/lib/models/Setting.js:760
 msgid "Note area growth factor"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:922
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
-
-#: ReactNativeClient/lib/models/Setting.js:1250
+#: ReactNativeClient/lib/models/Setting.js:1273
 msgid "General"
 msgstr "Üldine"
 
-#: ReactNativeClient/lib/models/Setting.js:1251
+#: ReactNativeClient/lib/models/Setting.js:1275
 msgid "Synchronisation"
 msgstr "Sünkroonimine"
 
-#: ReactNativeClient/lib/models/Setting.js:1252
+#: ReactNativeClient/lib/models/Setting.js:1277
 msgid "Appearance"
 msgstr "Välimus"
 
-#: ReactNativeClient/lib/models/Setting.js:1253
+#: ReactNativeClient/lib/models/Setting.js:1279
 msgid "Note"
 msgstr "Märge"
 
-#: ReactNativeClient/lib/models/Setting.js:1254
+#: ReactNativeClient/lib/models/Setting.js:1281
+#: ReactNativeClient/lib/services/interop/InteropService.js:49
+#: ReactNativeClient/lib/services/interop/InteropService.js:59
+msgid "Markdown"
+msgstr "Markdown"
+
+#: ReactNativeClient/lib/models/Setting.js:1283
 msgid "Plugins"
 msgstr "Pluginad"
 
-#: ReactNativeClient/lib/models/Setting.js:1255
+#: ReactNativeClient/lib/models/Setting.js:1285
 msgid "Application"
 msgstr "Rakendus"
 
-#: ReactNativeClient/lib/models/Setting.js:1257
+#: ReactNativeClient/lib/models/Setting.js:1289
 msgid "Encryption"
 msgstr "Krüpteerimine"
 
-#: ReactNativeClient/lib/models/Setting.js:1258
+#: ReactNativeClient/lib/models/Setting.js:1291
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: ReactNativeClient/lib/models/Setting.js:1259
+#: ReactNativeClient/lib/models/Setting.js:1293
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatuuri režiim"
 
-#: ReactNativeClient/lib/models/Setting.js:1264
+#: ReactNativeClient/lib/models/Setting.js:1300
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2898,7 +2972,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:1265
+#: ReactNativeClient/lib/models/Setting.js:1302
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Märkmed ja sätted talletatakse: %s"
@@ -2928,7 +3002,7 @@ msgid ""
 "%s"
 msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 
-#: ReactNativeClient/lib/models/Tag.js:183
+#: ReactNativeClient/lib/models/Tag.js:184
 #, fuzzy, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Silt %s on juba olemas. Palun valige mõni muu nimi."
@@ -2956,11 +3030,11 @@ msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
 
-#: ReactNativeClient/lib/models/BaseItem.js:719
+#: ReactNativeClient/lib/models/BaseItem.js:721
 msgid "Encrypted"
 msgstr "Krüpteeritud"
 
-#: ReactNativeClient/lib/models/BaseItem.js:779
+#: ReactNativeClient/lib/models/BaseItem.js:781
 msgid "Encrypted items cannot be modified"
 msgstr "Krüpteeritud üksusi ei saa muuta"
 
@@ -2968,14 +3042,14 @@ msgstr "Krüpteeritud üksusi ei saa muuta"
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive dev (ainult testimiseks)"
 
-#: ReactNativeClient/lib/BaseApplication.js:142
-#: ReactNativeClient/lib/BaseApplication.js:155
-#: ReactNativeClient/lib/BaseApplication.js:192
+#: ReactNativeClient/lib/BaseApplication.js:151
+#: ReactNativeClient/lib/BaseApplication.js:163
+#: ReactNativeClient/lib/BaseApplication.js:195
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Kasutus: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:227
+#: ReactNativeClient/lib/BaseApplication.js:230
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Tundmatu lipp: %s"
@@ -3100,31 +3174,31 @@ msgstr ""
 "\n"
 "Palun proovige uuesti."
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:33
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:39
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr ""
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:49
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
 msgstr ""
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:60
 #, javascript-format
 msgid "Could not upgrade master key: %s"
 msgstr ""
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
 msgstr "Dekrüpteeritud üksused: %s / %s"
@@ -3142,11 +3216,11 @@ msgstr "Märkmiku redigeerimine"
 msgid "Enter notebook title"
 msgstr "Sisestage märkmiku tiitel"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Logi sisse OneDrive ' iga"
 
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:121
 #: ReactNativeClient/lib/components/screens/log.js:109
 #: ReactNativeClient/lib/components/screens/status.js:144
 msgid "Refresh"
@@ -3178,7 +3252,7 @@ msgid "Master Key %s"
 msgstr "Põhivõti %s"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/note.js:772
+#: ReactNativeClient/lib/components/screens/note.js:778
 #, javascript-format
 msgid "Created: %s"
 msgstr "Loodud: %s"
@@ -3399,71 +3473,71 @@ msgstr "Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Linke protokolliga \"%s\" ei toetata"
 
-#: ReactNativeClient/lib/components/screens/note.js:617
+#: ReactNativeClient/lib/components/screens/note.js:623
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Toetuseta pilditüüp: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:773
+#: ReactNativeClient/lib/components/screens/note.js:779
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Värskendatud: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:777
+#: ReactNativeClient/lib/components/screens/note.js:783
 msgid "View on map"
 msgstr "Vaata kaardilt"
 
-#: ReactNativeClient/lib/components/screens/note.js:784
+#: ReactNativeClient/lib/components/screens/note.js:790
 msgid "Go to source URL"
 msgstr "Mine Allika URL-ile"
 
-#: ReactNativeClient/lib/components/screens/note.js:812
+#: ReactNativeClient/lib/components/screens/note.js:818
 msgid "Attach..."
 msgstr "Lisada..."
 
-#: ReactNativeClient/lib/components/screens/note.js:814
+#: ReactNativeClient/lib/components/screens/note.js:820
 msgid "Choose an option"
 msgstr "Valida suvand"
 
-#: ReactNativeClient/lib/components/screens/note.js:814
+#: ReactNativeClient/lib/components/screens/note.js:820
 msgid "Take photo"
 msgstr "Pildista"
 
-#: ReactNativeClient/lib/components/screens/note.js:814
+#: ReactNativeClient/lib/components/screens/note.js:820
 msgid "Attach photo"
 msgstr "Manusta foto"
 
-#: ReactNativeClient/lib/components/screens/note.js:814
+#: ReactNativeClient/lib/components/screens/note.js:820
 msgid "Attach any file"
 msgstr "Manusta mis tahes fail"
 
-#: ReactNativeClient/lib/components/screens/note.js:833
+#: ReactNativeClient/lib/components/screens/note.js:839
 msgid "Share"
 msgstr "Jaga"
 
-#: ReactNativeClient/lib/components/screens/note.js:847
+#: ReactNativeClient/lib/components/screens/note.js:853
 msgid "Convert to note"
 msgstr "Teisenda märkeks"
 
-#: ReactNativeClient/lib/components/screens/note.js:847
+#: ReactNativeClient/lib/components/screens/note.js:853
 #, fuzzy
 msgid "Convert to todo"
 msgstr "Teisenda Todo"
 
-#: ReactNativeClient/lib/components/screens/note.js:861
+#: ReactNativeClient/lib/components/screens/note.js:867
 msgid "Properties"
 msgstr "Objektid"
 
-#: ReactNativeClient/lib/components/screens/note.js:1039
-#: ReactNativeClient/lib/components/screens/note.js:1097
+#: ReactNativeClient/lib/components/screens/note.js:1045
+#: ReactNativeClient/lib/components/screens/note.js:1103
 msgid "Add body"
 msgstr "Lisa keha"
 
-#: ReactNativeClient/lib/components/screens/note.js:1147
+#: ReactNativeClient/lib/components/screens/note.js:1153
 msgid "Add title"
 msgstr "Pealkirja lisamine"
 
-#: ReactNativeClient/lib/components/screens/search.js:163
+#: ReactNativeClient/lib/components/screens/search.js:160
 msgid "Search"
 msgstr "Otsi"
 
@@ -3476,60 +3550,60 @@ msgstr ""
 "Luba ei saa värskendada: autentimisandmed on puudu. Sünkroonimise "
 "käivitamine võib probleemi lahendada."
 
-#: ReactNativeClient/lib/synchronizer.js:104
+#: ReactNativeClient/lib/Synchronizer.js:108
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Loodud kohalikud üksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:105
+#: ReactNativeClient/lib/Synchronizer.js:110
 #, fuzzy, javascript-format
 msgid "Updated local items: %d."
 msgstr "Värskendatud kohalikud üksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:106
+#: ReactNativeClient/lib/Synchronizer.js:112
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Loodud kaugüksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:107
+#: ReactNativeClient/lib/Synchronizer.js:114
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Värskendatud kaugüksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:108
+#: ReactNativeClient/lib/Synchronizer.js:116
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Kustutatud kohalikud üksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:109
+#: ReactNativeClient/lib/Synchronizer.js:118
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Kustutatud kaugüksused: %d."
 
-#: ReactNativeClient/lib/synchronizer.js:110
+#: ReactNativeClient/lib/Synchronizer.js:120
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Tõmmatud üksused: %d/%d."
 
-#: ReactNativeClient/lib/synchronizer.js:112
+#: ReactNativeClient/lib/Synchronizer.js:122
 msgid "Cancelling..."
 msgstr "Tühistamine..."
 
-#: ReactNativeClient/lib/synchronizer.js:113
+#: ReactNativeClient/lib/Synchronizer.js:124
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Lõpule viidud: %s"
 
-#: ReactNativeClient/lib/synchronizer.js:114
+#: ReactNativeClient/lib/Synchronizer.js:126
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Viimane tõrge: %s"
 
-#: ReactNativeClient/lib/synchronizer.js:214
+#: ReactNativeClient/lib/Synchronizer.js:233
 msgid "Idle"
 msgstr "Jõude"
 
-#: ReactNativeClient/lib/synchronizer.js:215
+#: ReactNativeClient/lib/Synchronizer.js:235
 msgid "In progress"
 msgstr "Töötlemisel"
 
@@ -3558,14 +3632,9 @@ msgstr "WebDAV"
 msgid "File system"
 msgstr "Failisüsteem"
 
-#: ReactNativeClient/lib/commands/historyForward.js:16
+#: ReactNativeClient/lib/commands/historyForward.js:17
 msgid "Forward"
 msgstr ""
-
-#: ReactNativeClient/lib/commands/synchronize.js:17
-#, fuzzy
-msgid "Synchronize"
-msgstr "Sünkroniseeri"
 
 #: ReactNativeClient/lib/versionInfo.js:10
 #, fuzzy, javascript-format
@@ -3597,57 +3666,100 @@ msgstr "Uus versioon: %s"
 msgid "Keychain Supported: %s"
 msgstr ""
 
-#: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
-msgid "There is no data to export."
-msgstr "Eksportivaid andmeid pole."
-
-#: ReactNativeClient/lib/services/RevisionService.js:215
+#: ReactNativeClient/lib/services/RevisionService.js:221
 msgid "Restored Notes"
 msgstr "Taastatud märkmed"
 
-#: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#: ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js:43
+msgid "There is no data to export."
+msgstr "Eksportivaid andmeid pole."
+
+#: ReactNativeClient/lib/services/interop/types.js:23
+msgid "File"
+msgstr "Fail"
+
+#: ReactNativeClient/lib/services/interop/types.js:23
+msgid "Directory"
+msgstr "Kataloogid"
+
+#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:40
 #, fuzzy
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Palun täpsustage märkmik, kuhu märkmed tuleks importida."
 
-#: ReactNativeClient/lib/services/KeymapService.js:124
-#, javascript-format
-msgid "Error loading the keymap from file: %s"
+#: ReactNativeClient/lib/services/interop/InteropService.js:48
+#: ReactNativeClient/lib/services/interop/InteropService.js:57
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Joplin Export faili"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:50
+#: ReactNativeClient/lib/services/interop/InteropService.js:58
+#, fuzzy
+msgid "Joplin Export Directory"
+msgstr "Joplin Export kataloog"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:51
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Export faili (nagu Markdown)"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:52
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Export faili (HTML)"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:60
+msgid "HTML File"
+msgstr "HTML-fail"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:61
+msgid "HTML Directory"
+msgstr "HTML-kataloog"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:127
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:152
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:187
+#, fuzzy, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Määrake %s importimise vorming"
+
+#: ReactNativeClient/lib/services/KeymapService.js:236
+msgid "command"
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:141
+#: ReactNativeClient/lib/services/KeymapService.js:236
+#: ReactNativeClient/lib/services/KeymapService.js:241
 #, javascript-format
-msgid "Error saving the keymap to file: %s"
+msgid "\"%s\" is missing the required \"%s\" property."
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:204
-#, javascript-format
-msgid "Keymap item %s is missing the required \"command\" property."
+#: ReactNativeClient/lib/services/KeymapService.js:241
+#: ReactNativeClient/lib/services/KeymapService.js:248
+msgid "accelerator"
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:207
-#, javascript-format
-msgid "Keymap item %s is invalid because %s is not a valid command."
-msgstr ""
+#: ReactNativeClient/lib/services/KeymapService.js:248
+#, fuzzy, javascript-format
+msgid "Invalid %s: %s."
+msgstr "Sobimatu vastus: %s"
 
-#: ReactNativeClient/lib/services/KeymapService.js:210
-#, javascript-format
-msgid "Keymap item %s is missing the required \"accelerator\" property."
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:217
-#, javascript-format
-msgid "Keymap item %s is invalid because %s is not a valid accelerator."
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:235
+#: ReactNativeClient/lib/services/KeymapService.js:266
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:260
+#: ReactNativeClient/lib/services/KeymapService.js:291
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr ""
@@ -3763,72 +3875,31 @@ msgstr "Tulehäired"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:29
-#: ReactNativeClient/lib/services/InteropService.js:68
 #, fuzzy
-msgid "Joplin Export File"
-msgstr "Joplin Export faili"
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Tundmatu Logitase: %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:36
-#: ReactNativeClient/lib/services/InteropService.js:83
-msgid "Markdown"
-msgstr "Markdown"
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Tundmatu taseme ID: %s"
 
-#: ReactNativeClient/lib/services/InteropService.js:41
-#: ReactNativeClient/lib/services/InteropService.js:73
+#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
+#~ msgstr "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
+
 #, fuzzy
-msgid "Joplin Export Directory"
-msgstr "Joplin Export kataloog"
+#~ msgid "Synchronize"
+#~ msgstr "Sünkroniseeri"
 
-#: ReactNativeClient/lib/services/InteropService.js:47
 #, fuzzy
-msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote Export faili (nagu Markdown)"
+#~ msgid "Json Export Directory"
+#~ msgstr "JSON Export kataloog"
 
-#: ReactNativeClient/lib/services/InteropService.js:55
 #, fuzzy
-msgid "Evernote Export File (as HTML)"
-msgstr "Evernote Export faili (HTML)"
-
-#: ReactNativeClient/lib/services/InteropService.js:78
-#, fuzzy
-msgid "Json Export Directory"
-msgstr "JSON Export kataloog"
-
-#: ReactNativeClient/lib/services/InteropService.js:90
-msgid "HTML File"
-msgstr "HTML-fail"
-
-#: ReactNativeClient/lib/services/InteropService.js:95
-msgid "HTML Directory"
-msgstr "HTML-kataloog"
-
-#: ReactNativeClient/lib/services/InteropService.js:128
-msgid "File"
-msgstr "Fail"
-
-#: ReactNativeClient/lib/services/InteropService.js:128
-msgid "Directory"
-msgstr "Kataloogid"
-
-#: ReactNativeClient/lib/services/InteropService.js:174
-#, fuzzy, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
-
-#: ReactNativeClient/lib/services/InteropService.js:232
-#, fuzzy, javascript-format
-msgid "Please specify import format for %s"
-msgstr "Määrake %s importimise vorming"
-
-#: ReactNativeClient/lib/services/InteropService.js:363
-#, fuzzy, javascript-format
-msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
-msgstr ""
-"See üksus on praegu krüptitud: %s \"%s\". Palun oodake, kuni kõik üksused "
-"dekrüpteeritud ja proovige uuesti."
+#~ msgid ""
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
+#~ "be decrypted and try again."
+#~ msgstr ""
+#~ "See üksus on praegu krüptitud: %s \"%s\". Palun oodake, kuni kõik üksused "
+#~ "dekrüpteeritud ja proovige uuesti."
 
 #~ msgid "Cancelling... Please wait."
 #~ msgstr "Tühistamine... Oota."
