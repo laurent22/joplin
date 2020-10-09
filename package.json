@@ -9,9 +9,11 @@
     "build": "gulp build",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "copyLib": "gulp copyLib",
-    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/plugin/api/ ReactNativeClient/lib/services/plugins/api/",
+    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api ReactNativeClient/lib/services/plugins/api/",
+    "buildWebsite": "node Tools/build-website.js && npm run buildPluginDoc",
     "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "setupNewRelease": "node ./Tools/setupNewRelease",
+    "linkChecker": "linkchecker https://joplinapp.org",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {

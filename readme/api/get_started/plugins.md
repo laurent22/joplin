@@ -25,7 +25,7 @@ The `src/` directory also contains a [manifest.json](https://github.com/laurent2
 
 ## Building the plugin
 
-The file `src/index.ts` already contain some basic code meant for testing the plugin. In particular it contains a call to [joplin.plugins.register](https://joplinapp.org/plugin/api/classes/joplinplugins.html), which all plugins should call to register the plugin. And an `onStart()` event handler, which will be executed by Joplin when the plugin starts.
+The file `src/index.ts` already contain some basic code meant for testing the plugin. In particular it contains a call to [joplin.plugins.register](https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html), which all plugins should call to register the plugin. And an `onStart()` event handler, which will be executed by Joplin when the plugin starts.
 
 To try this basic plugin, compile the app by running the following from the root of the project:
 
@@ -44,4 +44,4 @@ Restart the app, and Joplin should load the plugin and execute its `onStart` han
 # Next steps
 
 - You might want to check the [plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin/) to get a good overview of how to create a complete plugin and how to use the plugin API.
-- For more information about the plugin API, check the [Plugin API reference](https://joplinapp.org/plugin/api/classes/joplin.html).
+- For more information about the plugin API, check the [Plugin API reference](https://joplinapp.org/api/references/plugin_api/classes/joplin.html).
