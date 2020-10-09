@@ -329,7 +329,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.m
 <li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
 <li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
 <li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
-<li><a href="https://joplinapp.org/plugin/api/classes/joplin.html">Plugin API</a></li>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
 <li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
 </li>
@@ -341,6 +341,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.m
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md">Search Sorting spec</a></li>
 </ul>
 </li>
 <li>
@@ -379,7 +380,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.m
 <p>This will create the basic scafolding of the plugin. At the root of it, there is a number of configuration files which you normally won't need to change. Then the <code>src/</code> directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.</p>
 <p>The <code>src/</code> directory also contains a <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest/">manifest.json</a> file, which you can edit to set various information about the plugin, such as its name, homepage URL, etc.</p>
 <h2>Building the plugin<a name="building-the-plugin" href="#building-the-plugin" class="heading-anchor">🔗</a></h2>
-<p>The file <code>src/index.ts</code> already contain some basic code meant for testing the plugin. In particular it contains a call to <a href="https://joplinapp.org/plugin/api/classes/joplinplugins.html">joplin.plugins.register</a>, which all plugins should call to register the plugin. And an <code>onStart()</code> event handler, which will be executed by Joplin when the plugin starts.</p>
+<p>The file <code>src/index.ts</code> already contain some basic code meant for testing the plugin. In particular it contains a call to <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html">joplin.plugins.register</a>, which all plugins should call to register the plugin. And an <code>onStart()</code> event handler, which will be executed by Joplin when the plugin starts.</p>
 <p>To try this basic plugin, compile the app by running the following from the root of the project:</p>
 <pre><code>npm run dist
 </code></pre>
@@ -391,7 +392,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api/get_started/plugins.m
 <h1>Next steps<a name="next-steps" href="#next-steps" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>You might want to check the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin/">plugin tutorial</a> to get a good overview of how to create a complete plugin and how to use the plugin API.</li>
-<li>For more information about the plugin API, check the <a href="https://joplinapp.org/plugin/api/classes/joplin.html">Plugin API reference</a>.</li>
+<li>For more information about the plugin API, check the <a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API reference</a>.</li>
 </ul>
 
 		<div class="bottom-links">

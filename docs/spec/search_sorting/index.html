@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/e2ee.md and any manual change
+This file was auto-generated from readme/spec/search_sorting.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
+https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md
 
 -->
 
 <head>
-	<title>About End-To-End Encryption (E2EE) | Joplin</title>
+	<title>Search Engine | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -275,7 +275,7 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 
 <body>
 
-<div class="container page-e2ee">
+<div class="container page-search_sorting">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -362,30 +362,32 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 </li>
 </ul>
 </div>
-<h1>About End-To-End Encryption (E2EE)<a name="about-end-to-end-encryption-e2ee" href="#about-end-to-end-encryption-e2ee" class="heading-anchor">🔗</a></h1>
-<p>End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.</p>
-<p>The system is designed to defeat any attempts at surveillance or tampering because no third party can decipher the data being communicated or stored.</p>
-<p>There is a small overhead to using E2EE since data constantly has to be encrypted and decrypted so consider whether you really need the feature.</p>
-<h1>Enabling E2EE<a name="enabling-e2ee" href="#enabling-e2ee" class="heading-anchor">🔗</a></h1>
-<p>Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on a single device first (this will create a Master Key for encryption secured by your password) and then it must be synced with all other remaining devices. It is recommended to start with the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.</p>
-<p>To enable it, please follow these steps:</p>
-<ol>
-<li>On your first device (eg. on the desktop application), go to the Encryption Config screen and click &quot;Enable encryption&quot;</li>
-<li>Input your password. This is the Master Key password which will be used to encrypt all your notes. Make sure you do not forget it since, for security reason, it cannot be recovered.</li>
-<li>Now you need to synchronise all your notes so that they are sent encrypted to the sync target (eg. to OneDrive, Nextcloud, etc.). Wait for any synchronisation that might be in progress and click on &quot;Synchronise&quot;.</li>
-<li>Wait for this synchronisation operation to complete. Since all the data needs to be re-sent (encrypted) to the sync target, it may take a long time, especially if you have many notes and resources. Note that even if synchronisation seems stuck, most likely it is still running - do not cancel it and simply let it run over night if needed.</li>
-<li>Once this first synchronisation operation is done, open the next device you are synchronising with. Click &quot;Synchronise&quot; and wait for the sync operation to complete. The device will receive the master key, and you will need to provide the password for it. At this point E2EE will be automatically enabled on this device. Once done, click Synchronise again and wait for it to complete.</li>
-<li>Repeat step 5 for each device.</li>
-</ol>
-<p>Do not manually enable encryption on multiple devices in parallel, but rather wait for the other ones to sync with the first already encrypted device. Otherwise, you may end up with multiple encryption keys (which is supported by Joplin but most probably not what you want).</p>
-<p>Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.</p>
-<h1>Disabling E2EE<a name="disabling-e2ee" href="#disabling-e2ee" class="heading-anchor">🔗</a></h1>
-<p>Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.</p>
-<h1>Technical specification<a name="technical-specification" href="#technical-specification" class="heading-anchor">🔗</a></h1>
-<p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplinapp.org/spec/e2ee/">Encryption specification</a>.</p>
+<h1>Search Engine<a name="search-engine" href="#search-engine" class="heading-anchor">🔗</a></h1>
+<p>The Search Engine powers the Search input in the note list and the Goto Anything dialog.</p>
+<h2>Search algorithm<a name="search-algorithm" href="#search-algorithm" class="heading-anchor">🔗</a></h2>
+<h3>Discretely using only the most critical parameter in sorting<a name="discretely-using-only-the-most-critical-parameter-in-sorting" href="#discretely-using-only-the-most-critical-parameter-in-sorting" class="heading-anchor">🔗</a></h3>
+<p>Sorting occurs as the Search Engine processes results, after searching for and weighting these results.</p>
+<p>Parameters include fuzziness, title matching, weight (based on BM25 and age), the completed status of to-dos, and the note's age.</p>
+<p>The Search Engine uses only the first relevant parameter to determine the order, rather than a weighted average.<br>
+In effect, this means search results with note title matches will appear above all results that only matched the note body,<br>
+regardless of weight or other parameters.</p>
+<h3>Determining weight as a sorting parameter<a name="determining-weight-as-a-sorting-parameter" href="#determining-weight-as-a-sorting-parameter" class="heading-anchor">🔗</a></h3>
+<p>The Search Engine determines the weight parameter using both <a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25</a><br>
+and the number of days since last user update.</p>
+<h4>BM25<a name="bm25" href="#bm25" class="heading-anchor">🔗</a></h4>
+<p>The Search Engine determines BM25 based on &quot;term frequency-inverse document frequency.&quot;<br>
+The &quot;TF–IDF&quot; value increases proportionally to the number of times a word appears in the document<br>
+and is offset by the number of documents in the corpus that contain the word, which helps to adjust<br>
+for the fact that some words appear more frequently in general.</p>
+<p>BM25 returns weight zero for a search term that occurs in more than half the notes.<br>
+So terms that are abundant in all notes to have zero relevance w.r.t. BM25.</p>
+<h4>Days since last user update<a name="days-since-last-user-update" href="#days-since-last-user-update" class="heading-anchor">🔗</a></h4>
+<p>Sorting increases the BM25 weight by the inverse number of days since the note was updated.<br>
+Recent notes will, therefore, be weighted highly in the search results.<br>
+This time-based weight decays logarithmically, becoming less of a factor than BM25 after months have passed.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/e2ee.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
