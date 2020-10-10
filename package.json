@@ -14,6 +14,7 @@
     "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "setupNewRelease": "node ./Tools/setupNewRelease",
     "linkChecker": "linkchecker https://joplinapp.org",
+    "clean": "npm run clean",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {
