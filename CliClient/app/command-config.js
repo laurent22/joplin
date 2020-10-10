@@ -124,7 +124,6 @@ class Command extends BaseCommand {
 
 		if (args.name == 'locale') {
 			setLocale(Setting.value('locale'));
-			app().onLocaleChanged();
 		}
 
 		await Setting.saveAll();
