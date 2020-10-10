@@ -696,7 +696,8 @@
 			"ReactNativeClient/lib/errorUtils.js": true,
 			"ReactNativeClient/lib/markdownUtils.js": true,
 			"ReactNativeClient/lib/services/plugins/api/types.js": true,
-			"ReactNativeClient/lib/services/rest/Api.js": true
+			"ReactNativeClient/lib/services/rest/Api.js": true,
+			"CliClient/tests/services_rest_Api.js": true
 		},
 		"spellright.language": [
 			"en"

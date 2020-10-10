@@ -1,21 +1,18 @@
-/* eslint-disable no-unused-vars */
-
-require('app-module-path').addPath(__dirname);
+import Api from 'lib/services/rest/Api';
+import shim from 'lib/shim';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('test-utils.js');
-const Api = require('lib/services/rest/Api').default;
 const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
-const shim = require('lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-let api = null;
+let api:Api = null;
 
 describe('services_rest_Api', function() {
 
@@ -28,21 +25,23 @@ describe('services_rest_Api', function() {
 
 	it('should ping', asyncTest(async () => {
 		const response = await api.route('GET', 'ping');
+		expect(response).toBe('JoplinClipperServer');
 	}));
 
 	it('should handle Not Found errors', asyncTest(async () => {
 		const hasThrown = await checkThrowAsync(async () => await api.route('GET', 'pong'));
+		expect(hasThrown).toBe(true);
 	}));
 
 	it('should get folders', asyncTest(async () => {
-		const f1 = await Folder.save({ title: 'mon carnet' });
+		await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('GET', 'folders');
 		expect(response.length).toBe(1);
 	}));
 
 	it('should update folders', asyncTest(async () => {
 		const f1 = await Folder.save({ title: 'mon carnet' });
-		const response = await api.route('PUT', `folders/${f1.id}`, null, JSON.stringify({
+		await api.route('PUT', `folders/${f1.id}`, null, JSON.stringify({
 			title: 'modifié',
 		}));
 
@@ -84,8 +83,8 @@ describe('services_rest_Api', function() {
 		const response2 = await api.route('GET', `folders/${f1.id}/notes`);
 		expect(response2.length).toBe(0);
 
-		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
-		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
+		await Note.save({ title: 'un', parent_id: f1.id });
+		await Note.save({ title: 'deux', parent_id: f1.id });
 		const response = await api.route('GET', `folders/${f1.id}/notes`);
 		expect(response.length).toBe(2);
 	}));
@@ -100,7 +99,7 @@ describe('services_rest_Api', function() {
 		const f1 = await Folder.save({ title: 'mon carnet' });
 		const f2 = await Folder.save({ title: 'mon deuxième carnet' });
 		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
-		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
+		await Note.save({ title: 'deux', parent_id: f1.id });
 		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
 
 		response = await api.route('GET', 'notes');
@@ -132,6 +131,41 @@ describe('services_rest_Api', function() {
 		}));
 		expect(response.title).toBe('testing');
 		expect(!!response.id).toBe(true);
+	}));
+
+	it('should allow setting note properties', asyncTest(async () => {
+		let response:any = null;
+		const f = await Folder.save({ title: 'mon carnet' });
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing',
+			parent_id: f.id,
+			latitude: '48.732071',
+			longitude: '-3.458700',
+			altitude: '21',
+		}));
+
+		const noteId = response.id;
+		
+		{
+			const note = await Note.load(noteId);
+			expect(note.latitude).toBe('48.73207100');
+			expect(note.longitude).toBe('-3.45870000');
+			expect(note.altitude).toBe('21.0000');
+		}
+
+		await api.route('PUT', 'notes/' + noteId, null, JSON.stringify({
+			latitude: '49',
+			longitude: '-3',
+			altitude: '22',
+		}));
+
+		{
+			const note = await Note.load(noteId);
+			expect(note.latitude).toBe('49.00000000');
+			expect(note.longitude).toBe('-3.00000000');
+			expect(note.altitude).toBe('22.0000');
+		}
 	}));
 
 	it('should preserve user timestamps when creating notes', asyncTest(async () => {
@@ -221,10 +255,9 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should delete resources', asyncTest(async () => {
-		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
-		response = await api.route('POST', 'notes', null, JSON.stringify({
+		await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing image',
 			parent_id: f.id,
 			image_data_url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=',
@@ -286,7 +319,7 @@ describe('services_rest_Api', function() {
 		const tag = await Tag.save({ title: 'mon étiquette' });
 		const note = await Note.save({ title: 'ma note' });
 
-		const response = await api.route('POST', `tags/${tag.id}/notes`, null, JSON.stringify({
+		await api.route('POST', `tags/${tag.id}/notes`, null, JSON.stringify({
 			id: note.id,
 		}));
 
@@ -299,7 +332,7 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({ title: 'ma note' });
 		await Tag.addNote(tag.id, note.id);
 
-		const response = await api.route('DELETE', `tags/${tag.id}/notes/${note.id}`);
+		await api.route('DELETE', `tags/${tag.id}/notes/${note.id}`);
 
 		const noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(0);

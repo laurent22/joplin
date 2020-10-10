@@ -58,7 +58,8 @@ export default class Api {
 		};
 	}
 
-	async route(method:string, path:string, query:any = null, body:any = null, files:string[] = null) {
+	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
+	async route(method:string, path:string, query:any = null, body:any = null, files:string[] = null):Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
 
@@ -548,6 +549,9 @@ export default class Api {
 		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
 		if ('markup_language' in requestNote) output.markup_language = Database.formatValue(Database.TYPE_INT, requestNote.markup_language);
+		if ('longitude' in requestNote) output.longitude = requestNote.longitude;
+		if ('latitude' in requestNote) output.latitude = requestNote.latitude;
+		if ('altitude' in requestNote) output.altitude = requestNote.altitude;
 
 		if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
