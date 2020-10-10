@@ -8,6 +8,7 @@
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",
     "setupNewRelease": "node ./Tools/setupNewRelease",
+    "clean": "npm run clean",
     "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {
