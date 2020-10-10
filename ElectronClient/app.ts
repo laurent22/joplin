@@ -75,6 +75,7 @@ const globalCommands = [
 	require('./commands/focusElement'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
+	require('./commands/toggleExternalEditing'),
 	require('./commands/copyDevCommand'),
 	require('lib/commands/synchronize'),
 	require('lib/commands/historyBackward'),

@@ -591,7 +591,7 @@ const mapStateToProps = (state: AppState) => {
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
-			'startExternalEditing',
+			'toggleExternalEditing',
 		]),
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons(state, [
 			'setTags',

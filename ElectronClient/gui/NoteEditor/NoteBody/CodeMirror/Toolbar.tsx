@@ -34,7 +34,7 @@ const mapStateToProps = (state: AppState) => {
 	const commandNames = [
 		'historyBackward',
 		'historyForward',
-		'startExternalEditing',
+		'toggleExternalEditing',
 		'-',
 		'textBold',
 		'textItalic',

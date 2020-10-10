@@ -65,7 +65,7 @@ const commandNames:string[] = [
 	'toggleSidebar',
 	'toggleNoteList',
 	'toggleVisiblePanes',
-	'startExternalEditing',
+	'toggleExternalEditing',
 	'setTags',
 	'showNoteContentProperties',
 	'copyDevCommand',
@@ -564,7 +564,7 @@ function useMenu(props:Props) {
 			note: {
 				label: _('&Note'),
 				submenu: [
-					menuItemDic.startExternalEditing,
+					menuItemDic.toggleExternalEditing,
 					menuItemDic.setTags,
 					separator(),
 					menuItemDic.showNoteContentProperties,

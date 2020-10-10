@@ -690,7 +690,13 @@
 			"ElectronClient/gui/MenuBar.js": true,
 			"ElectronClient/InteropServiceHelper.js": true,
 			"ReactNativeClient/lib/services/commands/MenuUtils.js": true,
-			"ReactNativeClient/lib/locale.js": true
+			"ReactNativeClient/lib/locale.js": true,
+			"**/plugin_types/": true,
+			"ElectronClient/commands/toggleExternalEditing.js": true,
+			"ReactNativeClient/lib/errorUtils.js": true,
+			"ReactNativeClient/lib/markdownUtils.js": true,
+			"ReactNativeClient/lib/services/plugins/api/types.js": true,
+			"ReactNativeClient/lib/services/rest/Api.js": true
 		},
 		"spellright.language": [
 			"en"

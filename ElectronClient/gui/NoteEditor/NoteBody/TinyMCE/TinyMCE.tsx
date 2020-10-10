@@ -1112,7 +1112,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		/>;
 	}
 
-	const leftButtonCommandNames = ['historyBackward', 'historyForward', 'startExternalEditing'];
+	const leftButtonCommandNames = ['historyBackward', 'historyForward', 'toggleExternalEditing'];
 
 	function renderLeftExtraToolbarButtons() {
 		const buttons = [];

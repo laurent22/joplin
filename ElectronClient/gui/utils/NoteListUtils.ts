@@ -29,6 +29,8 @@ export default class NoteListUtils {
 
 		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
 
+		const singleNoteId = noteIds.length === 1 ? noteIds[0] : null;
+
 		let hasEncrypted = false;
 		for (let i = 0; i < notes.length; i++) {
 			if (notes[i].encryption_applied) hasEncrypted = true;
@@ -59,14 +61,9 @@ export default class NoteListUtils {
 				})
 			);
 
-			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('startExternalEditing', { noteId: noteIds[0] }))
-				);
-			} else {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('stopExternalEditing', { noteId: noteIds[0] }))
-				);
+			if (singleNoteId) {
+				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, { noteId: singleNoteId })));
 			}
 
 			if (noteIds.length <= 1) {

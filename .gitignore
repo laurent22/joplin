@@ -71,6 +71,7 @@ ElectronClient/commands/copyDevCommand.js
 ElectronClient/commands/focusElement.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
+ElectronClient/commands/toggleExternalEditing.js
 ElectronClient/ElectronAppWrapper.js
 ElectronClient/global.d.js
 ElectronClient/gui/Button/Button.js

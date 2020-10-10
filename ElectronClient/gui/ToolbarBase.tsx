@@ -60,7 +60,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 						toolbarButtonInfo={o}
 					/>);
 				} else if (itemType === 'button') {
-					const target = ['historyForward', 'historyBackward', 'startExternalEditing'].includes(o.name) ? leftItemComps : centerItemComps;
+					const target = ['historyForward', 'historyBackward', 'toggleExternalEditing'].includes(o.name) ? leftItemComps : centerItemComps;
 					target.push(<ToolbarButton {...props} />);
 				} else if (itemType === 'separator') {
 					centerItemComps.push(<ToolbarSpace {...props} />);
