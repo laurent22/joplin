@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
+import { _ } from 'lib/locale';
 const styled = require('styled-components').default;
-const { _ } = require('lib/locale.js');
 
 interface Props {
 	backButtonTitle?: string,

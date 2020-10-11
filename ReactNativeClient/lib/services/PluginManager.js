@@ -1,4 +1,4 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const KeymapService = require('lib/services/KeymapService').default;
 
 class PluginManager {

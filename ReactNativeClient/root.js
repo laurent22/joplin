@@ -2,20 +2,20 @@ import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Text, Image } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
-const AlarmService = require('lib/services/AlarmService.js');
-const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
-const Alarm = require('lib/models/Alarm');
+const AlarmService = require('lib/services/AlarmService.js').default;
+const AlarmServiceDriver = require('lib/services/AlarmServiceDriver').default;
+const Alarm = require('lib/models/Alarm').default;
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('lib/shim-init-react.js');
 const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
@@ -27,7 +27,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
-const BaseService = require('lib/services/BaseService.js');
+const BaseService = require('lib/services/BaseService').default;
 const ResourceService = require('lib/services/ResourceService');
 const RevisionService = require('lib/services/RevisionService');
 const KvStore = require('lib/services/KvStore');
@@ -45,17 +45,18 @@ const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.j
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
 const { DropboxLoginScreen } = require('lib/components/screens/dropbox-login.js');
 const UpgradeSyncTargetScreen = require('lib/components/screens/UpgradeSyncTargetScreen').default;
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
 const { SideMenuContent } = require('lib/components/side-menu-content.js');
 const { SideMenuContentNote } = require('lib/components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
-const { setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
+const { setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale');
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
-const { reducer, defaultState } = require('lib/reducer.js');
+const reducer = require('lib/reducer').default;
+const { defaultState } = require('lib/reducer');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
@@ -64,7 +65,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriverMobile = require('lib/services/keychain/KeychainServiceDriver.mobile').default;
@@ -376,7 +377,7 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
-async function initialize(dispatch, messageHandler) {
+async function initialize(dispatch) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -415,13 +416,8 @@ async function initialize(dispatch, messageHandler) {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
-	const db_startUpgrade = (event) => {
-		messageHandler(`Upgrading database to v${event.version}...`);
-	};
-
 	const db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
-	db.eventEmitter().on('startMigration', db_startUpgrade);
 	reg.setDb(db);
 
 	reg.dispatch = dispatch;
@@ -458,12 +454,8 @@ async function initialize(dispatch, messageHandler) {
 			// await db.clearForTesting();
 		}
 
-		db.eventEmitter().removeListener('startMigration', db_startUpgrade);
-
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
-
-		messageHandler('Initialising application...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 
@@ -611,7 +603,6 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
-			initMessage: '',
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -625,52 +616,66 @@ class AppComponent extends React.Component {
 		};
 	}
 
-	componentDidMount() {
-		setTimeout(async () => {
-			// We run initialization code with a small delay to give time
-			// to the view to render "please wait" messages.
-
+	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
+	// For example, adding a loading screen as was done in this commit: https://github.com/laurent22/joplin/commit/569355a3182bc12e50a54249882e3d68a72c2b28.
+	// had for effect that sharing with the app would create multiple instances of the app, thus breaking
+	// database access and so on. It's unclear why it happens and how to fix it but reverting that commit
+	// fixed the issue for now.
+	//
+	// Changing app launch mode doesn't help.
+	//
+	// It's possible that it's a bug in React Native, or perhaps the framework expects that the whole app can be
+	// mounted/unmounted or multiple ones can be running at the same time, but the app was not designed in this
+	// way.
+	//
+	// More reports and info about the multiple instance bug:
+	//
+	// https://github.com/laurent22/joplin/issues/3800
+	// https://github.com/laurent22/joplin/issues/3804
+	// https://github.com/laurent22/joplin/issues/3807
+	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
+	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
+	async componentDidMount() {
+		if (this.props.appState == 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch, (message) => {
-				this.setState({ initMessage: message });
-			});
-
-			BackButtonService.initialize(this.backButtonHandler_);
-
-			AlarmService.setInAppNotificationHandler(async (alarmId) => {
-				const alarm = await Alarm.load(alarmId);
-				const notification = await Alarm.makeNotification(alarm);
-				this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
-			});
-
-			AppState.addEventListener('change', this.onAppStateChange_);
-
-			const sharedData = await ShareExtension.data();
-			if (sharedData) {
-				reg.logger().info('Received shared data');
-				if (this.props.selectedFolderId) {
-					handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
-				} else {
-					reg.logger.info('Cannot handle share - default folder id is not set');
-				}
-			}
+			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
-		}, 100);
+		}
+
+		BackButtonService.initialize(this.backButtonHandler_);
+
+		AlarmService.setInAppNotificationHandler(async (alarmId) => {
+			const alarm = await Alarm.load(alarmId);
+			const notification = await Alarm.makeNotification(alarm);
+			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+		});
+
+		AppState.addEventListener('change', this.onAppStateChange_);
+
+		const sharedData = await ShareExtension.data();
+		if (sharedData) {
+			reg.logger().info('Received shared data');
+			if (this.props.selectedFolderId) {
+				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger.info('Cannot handle share - default folder id is not set');
+			}
+		}
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
-	async componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -715,19 +720,8 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	renderStartupScreen() {
-		return (
-			<View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-				<View style={{ alignItems: 'center' }}>
-					<Image style={{ marginBottom: 5 }} source={require('./images/StartUpIcon.png')} />
-					<Text style={{ color: '#444444' }}>{this.state.initMessage}</Text>
-				</View>
-			</View>
-		);
-	}
-
 	render() {
-		if (this.props.appState != 'ready') return this.renderStartupScreen();
+		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent = null;

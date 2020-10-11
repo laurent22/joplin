@@ -1,4 +1,4 @@
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');
 
@@ -47,7 +47,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		// sensitivity ensures that the sort will ignore case
 		files.sort((a, b) => { return a.path.localeCompare(b.path, undefined, { sensitivity: 'accent' }); });
 
-		files.forEach(async file => {
+		for (const file of files) {
 			if (file.path.endsWith('.md')) {
 				try {
 					const fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');
@@ -59,7 +59,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 					throw error;
 				}
 			}
-		});
+		}
 	}
 
 	return templates;

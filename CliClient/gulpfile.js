@@ -46,8 +46,14 @@ tasks.prepareTestBuild = {
 			],
 		});
 
-		await utils.copyDir(`${__dirname}/../ReactNativeClient/lib`, `${testBuildDir}/lib`);
-		await utils.copyDir(`${__dirname}/../ReactNativeClient/locales`, `${testBuildDir}/locales`);
+		const rootDir = utils.rootDir();
+
+		await utils.copyDir(`${rootDir}/ReactNativeClient/lib`, `${testBuildDir}/lib`, {
+			excluded: [
+				`${rootDir}/ReactNativeClient/lib/joplin-renderer/node_modules`,
+			],
+		});
+		await utils.copyDir(`${rootDir}/ReactNativeClient/locales`, `${testBuildDir}/locales`);
 		await fs.mkdirp(`${testBuildDir}/data`);
 	},
 };

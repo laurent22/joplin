@@ -1,18 +1,20 @@
+import { AppState } from '../../app';
+import eventManager from 'lib/eventManager';
+import NoteListUtils from '../utils/NoteListUtils';
+import { _ } from 'lib/locale';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/theme');
 const BaseModel = require('lib/BaseModel');
-const { _ } = require('lib/locale.js');
-const { bridge } = require('electron').remote.require('./bridge');
-const eventManager = require('lib/eventManager');
+const bridge = require('electron').remote.require('./bridge').default;
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting');
-const NoteListUtils = require('../utils/NoteListUtils');
+const Setting = require('lib/models/Setting').default;
 const NoteListItem = require('../NoteListItem').default;
 const CommandService = require('lib/services/CommandService.js').default;
 const styled = require('styled-components').default;
+const shim = require('lib/shim').default;
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -22,6 +24,7 @@ const StyledRoot = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: ${(props:any) => props.theme.backgroundColor3};
+	border-right: 1px solid ${(props:any) => props.theme.dividerColor},
 `;
 
 class NoteListComponent extends React.Component {
@@ -118,6 +121,7 @@ class NoteListComponent extends React.Component {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
 			watchedNoteFiles: this.props.watchedNoteFiles,
+			plugins: this.props.plugins,
 		});
 
 		menu.popup(bridge().window());
@@ -404,11 +408,11 @@ class NoteListComponent extends React.Component {
 		// - We need to use an interval because when leaving the arrow pressed, the rendering
 		//   of items might lag behind and so the ref is not yet available at this point.
 		if (!this.itemAnchorRef(noteId)) {
-			if (this.focusItemIID_) clearInterval(this.focusItemIID_);
-			this.focusItemIID_ = setInterval(() => {
+			if (this.focusItemIID_) shim.clearInterval(this.focusItemIID_);
+			this.focusItemIID_ = shim.setInterval(() => {
 				if (this.itemAnchorRef(noteId)) {
 					this.itemAnchorRef(noteId).focus();
-					clearInterval(this.focusItemIID_);
+					shim.clearInterval(this.focusItemIID_);
 					this.focusItemIID_ = null;
 				}
 			}, 10);
@@ -435,7 +439,7 @@ class NoteListComponent extends React.Component {
 
 	componentWillUnmount() {
 		if (this.focusItemIID_) {
-			clearInterval(this.focusItemIID_);
+			shim.clearInterval(this.focusItemIID_);
 			this.focusItemIID_ = null;
 		}
 
@@ -490,7 +494,7 @@ class NoteListComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state:AppState) => {
 	return {
 		notes: state.notes,
 		folders: state.folders,
@@ -505,6 +509,7 @@ const mapStateToProps = (state:any) => {
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
 		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
 	};
 };
 

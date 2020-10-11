@@ -1,8 +1,8 @@
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
+const { _ } = require('lib/locale');
+const Setting = require('lib/models/Setting').default;
 const { FileApi } = require('lib/file-api.js');
-const { Synchronizer } = require('lib/synchronizer.js');
+const Synchronizer = require('lib/Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
 const S3 = require('aws-sdk/clients/s3');
 

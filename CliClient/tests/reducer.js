@@ -5,7 +5,8 @@ const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes,
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { reducer, defaultState, stateUtils, MAX_HISTORY } = require('lib/reducer.js');
+const reducer = require('lib/reducer').default;
+const { defaultState, stateUtils, MAX_HISTORY } = require('lib/reducer');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
@@ -87,7 +88,7 @@ function getIds(items, indexes = null) {
 
 let insideBeforeEach = false;
 
-describe('Reducer', function() {
+describe('reducer', function() {
 
 	beforeEach(async (done) => {
 		insideBeforeEach = true;

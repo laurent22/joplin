@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting.js');
-const { bridge } = require('electron').remote.require('./bridge');
+const Setting = require('lib/models/Setting').default;
+const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale.js');
 const { ReportService } = require('lib/services/report.js');
 const fs = require('fs-extra');
 

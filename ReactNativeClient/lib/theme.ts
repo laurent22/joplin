@@ -9,7 +9,7 @@ import theme_nord from './themes/nord';
 import theme_aritimDark from './themes/aritimDark';
 import theme_oledDark from './themes/oledDark';
 
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Color = require('color');
 
 const themes:any = {
@@ -427,4 +427,4 @@ function buildStyle(cacheKey:any, themeId:string, callback:Function) {
 	return cachedStyles_.styles[cacheKey].style;
 }
 
-module.exports = { themeStyle, buildStyle, themeById };
+export { themeStyle, buildStyle, themeById };

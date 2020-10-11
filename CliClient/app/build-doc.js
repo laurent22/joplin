@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const { fileExtension, dirname } = require('lib/path-utils.js');
 const wrap_ = require('word-wrap');
-const { languageCode } = require('lib/locale.js');
+const { languageCode } = require('lib/locale');
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;

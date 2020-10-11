@@ -1,6 +1,6 @@
 import LockHandler, { LockType } from './LockHandler';
 import { Dirnames } from './utils/types';
-const BaseService = require('lib/services/BaseService.js');
+const BaseService = require('lib/services/BaseService').default;
 
 // To add a new migration:
 // - Add the migration logic in ./migrations/VERSION_NUM.js
@@ -13,7 +13,7 @@ const migrations = [
 	require('./migrations/2.js').default,
 ];
 
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const { sprintf } = require('sprintf-js');
 const JoplinError = require('lib/JoplinError');
 

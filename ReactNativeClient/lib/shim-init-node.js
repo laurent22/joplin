@@ -1,17 +1,18 @@
 const fs = require('fs-extra');
-const { shim } = require('lib/shim.js');
+const shim = require('lib/shim').default;
 const { GeolocationNode } = require('lib/geolocation-node.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
+const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
+const timers = require('timers');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -66,7 +67,7 @@ function shimInit() {
 
 	shim.showMessageBox = (message, options = null) => {
 		if (shim.isElectron()) {
-			const { bridge } = require('electron').remote.require('./bridge');
+			const bridge = require('electron').remote.require('./bridge').default;
 			return bridge().showMessageBox(message, options);
 		} else {
 			throw new Error('Not implemented');
@@ -151,7 +152,7 @@ function shimInit() {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
-		const { uuid } = require('lib/uuid.js');
+		const uuid = require('lib/uuid').default;
 		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
@@ -212,7 +213,7 @@ function shimInit() {
 		}, options);
 
 		const { basename } = require('path');
-		const { escapeTitleText } = require('lib/markdownUtils');
+		const { escapeTitleText } = require('lib/markdownUtils').default;
 		const { toFileProtocolPath } = require('lib/path-utils');
 
 		let resource = null;
@@ -401,7 +402,7 @@ function shimInit() {
 	shim.Buffer = Buffer;
 
 	shim.openUrl = url => {
-		const { bridge } = require('electron').remote.require('./bridge');
+		const bridge = require('electron').remote.require('./bridge').default;
 		// Returns true if it opens the file successfully; returns false if it could
 		// not find the file.
 		return bridge().openExternal(url);
@@ -452,6 +453,22 @@ function shimInit() {
 
 	shim.pathRelativeToCwd = (path) => {
 		return toRelative(process.cwd(), path);
+	};
+
+	shim.setTimeout = (fn, interval) => {
+		return timers.setTimeout(fn, interval);
+	};
+
+	shim.setInterval = (fn, interval) => {
+		return timers.setInterval(fn, interval);
+	};
+
+	shim.clearTimeout = (id) => {
+		return timers.clearTimeout(id);
+	};
+
+	shim.clearInterval = (id) => {
+		return timers.clearInterval(id);
 	};
 
 }

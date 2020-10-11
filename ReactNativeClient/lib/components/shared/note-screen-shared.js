@@ -5,7 +5,7 @@ const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Mutex = require('async-mutex').Mutex;
 
 const shared = {};

@@ -1,7 +1,7 @@
 const { dialog } = require('electron');
-const { shim } = require('lib/shim');
-const { Logger } = require('lib/logger.js');
-const { _ } = require('lib/locale.js');
+const shim = require('lib/shim').default;
+const Logger = require('lib/Logger').default;
+const { _ } = require('lib/locale');
 const fetch = require('node-fetch');
 const { fileExtension } = require('lib/path-utils.js');
 const packageInfo = require('./packageInfo.js');

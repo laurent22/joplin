@@ -5,7 +5,7 @@ require('app-module-path').addPath(__dirname);
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const ItemChange = require('lib/models/ItemChange.js');
@@ -13,7 +13,7 @@ const Tag = require('lib/models/Tag.js');
 const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
 const RevisionService = require('lib/services/RevisionService.js');
-const { shim } = require('lib/shim');
+const shim = require('lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

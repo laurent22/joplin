@@ -78,6 +78,7 @@ export const StyledListItemAnchor = styled.a`
 	flex: 1;
 	align-items: center;
 	user-select: none;
+	height: 100%;
 `;
 
 export const StyledExpandLink = styled.a`
@@ -91,6 +92,7 @@ export const StyledExpandLink = styled.a`
 	width: 16px;
 	max-width: 16px;
 	min-width: 16px;
+	height: 100%;
 `;
 
 export const StyledNoteCount = styled.div`

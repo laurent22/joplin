@@ -3,8 +3,8 @@
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const { shim } = require('lib/shim');
-const Setting = require('lib/models/Setting');
+const shim = require('lib/shim').default;
+const Setting = require('lib/models/Setting').default;
 const KeychainService = require('lib/services/keychain/KeychainService').default;
 
 process.on('unhandledRejection', (reason, p) => {
@@ -50,7 +50,7 @@ describeIfCompatible('services_KeychainService', function() {
 	}));
 
 	it('should save and load secure settings', asyncTest(async () => {
-		Setting.setObjectKey('encryption.passwordCache', 'testing', '123456');
+		Setting.setObjectValue('encryption.passwordCache', 'testing', '123456');
 		await Setting.saveAll();
 		await Setting.load();
 		const passwords = Setting.value('encryption.passwordCache');

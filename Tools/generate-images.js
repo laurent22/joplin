@@ -281,29 +281,6 @@ const operations = [
 		iconWidth: 46,
 		iconHeight: 46,
 	},
-
-	// ============================================================================
-	// Mobile startup icon
-	// ============================================================================
-
-	{
-		source: 7,
-		dest: 'ReactNativeClient/images/StartUpIcon.png',
-		width: 64,
-		height: 64,
-	},
-	{
-		source: 7,
-		dest: 'ReactNativeClient/images/StartUpIcon@2x.png',
-		width: 128,
-		height: 128,
-	},
-	{
-		source: 7,
-		dest: 'ReactNativeClient/images/StartUpIcon@3x.png',
-		width: 192,
-		height: 192,
-	},
 ];
 
 async function main() {

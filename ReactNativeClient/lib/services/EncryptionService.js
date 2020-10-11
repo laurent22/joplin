@@ -1,7 +1,7 @@
 const { padLeft } = require('lib/string-utils.js');
-const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
-const Setting = require('lib/models/Setting.js');
+const Logger = require('lib/Logger').default;
+const shim = require('lib/shim').default;
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const JoplinError = require('lib/JoplinError');

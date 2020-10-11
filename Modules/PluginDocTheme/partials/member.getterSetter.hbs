@@ -1,0 +1,37 @@
+<ul class="tsd-signatures {{cssClasses}}">
+    {{#if getSignature}}
+        {{#with getSignature}}
+            <li class="tsd-signature tsd-kind-icon">{{#compact}}
+                <span class="tsd-signature-symbol">get</span>&nbsp;
+                {{../name}}
+                {{> member.signature.title hideName=true }}
+            {{/compact}}</li>
+        {{/with}}
+    {{/if}}
+    {{#if setSignature}}
+        {{#with setSignature}}
+            <li class="tsd-signature tsd-kind-icon">{{#compact}}
+                <span class="tsd-signature-symbol">set</span>&nbsp;
+                {{../name}}
+                {{> member.signature.title hideName=true }}
+            {{/compact}}</li>
+        {{/with}}
+    {{/if}}
+</ul>
+
+<ul class="tsd-descriptions">
+    {{#if getSignature}}
+        {{#with getSignature}}
+            <li class="tsd-description">
+                {{> member.signature.body }}
+            </li>
+        {{/with}}
+    {{/if}}
+    {{#if setSignature}}
+        {{#with setSignature}}
+            <li class="tsd-description">
+                {{> member.signature.body }}
+            </li>
+        {{/with}}
+    {{/if}}
+</ul>

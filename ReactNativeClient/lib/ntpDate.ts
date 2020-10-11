@@ -1,5 +1,5 @@
 const ntpClient = require('lib/vendor/ntp-client');
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Mutex = require('async-mutex').Mutex;
 
 let nextSyncTime = 0;

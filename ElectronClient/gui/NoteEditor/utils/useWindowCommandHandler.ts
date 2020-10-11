@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormNote } from './types';
+import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
 import CommandService, { CommandDeclaration,  CommandRuntime } from '../../../lib/services/CommandService';
 const { time } = require('lib/time-utils.js');
@@ -25,42 +25,47 @@ interface HookDependencies {
 
 function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
 	return {
-		execute: (props:any) => {
-			console.info('Running editor command:', declaration.name, props);
+		execute: async (props:any) => {
+			// console.info('Running editor command:', declaration.name, props);
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 			} else {
-				const execArgs = {
-					name: declaration.name,
-					value: props.value,
-				};
-
 				if (declaration.name === 'insertDateTime') {
-					execArgs.name = 'insertText';
-					execArgs.value = time.formatMsToLocal(new Date().getTime());
+					return editorRef.current.execCommand({
+						name: 'insertText',
+						value: time.formatMsToLocal(new Date().getTime()),
+					});
+				} else if (declaration.name === 'scrollToHash') {
+					return editorRef.current.scrollTo({
+						type: ScrollOptionTypes.Hash,
+						value: props.hash,
+					});
+				} else {
+					return editorRef.current.execCommand({
+						name: declaration.name,
+						value: props.value,
+					});
 				}
-
-				editorRef.current.execCommand(execArgs);
 			}
 		},
 		isEnabled: (props:any) => {
-			if (props.routeName !== 'Main' || props.isDialogVisible) return false;
+			if (props.isDialogVisible) return false;
 			if (props.markdownEditorViewerOnly) return false;
-			if (!props.noteId) return false;
-			const note = BaseModel.byId(props.notes, props.noteId);
-			if (!note) return false;
-			return note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			if (!props.hasSelectedNote) return false;
+			return props.isMarkdownNote;
 		},
 		mapStateToProps: (state:any) => {
+			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+			const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
+			const isMarkdownNote = note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false;
+
 			return {
 				// True when the Markdown editor is active, and only the viewer pane is visible
 				// In this case, all editor-related shortcuts are disabled.
 				markdownEditorViewerOnly: state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer',
-				noteVisiblePanes: state.noteVisiblePanes,
-				notes: state.notes,
-				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-				routeName: state.route.routeName,
+				hasSelectedNote: !!note,
 				isDialogVisible: !!Object.keys(state.visibleDialogs).length,
+				isMarkdownNote: isMarkdownNote,
 			};
 		},
 	};

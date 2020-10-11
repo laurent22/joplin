@@ -6,13 +6,9 @@ export default function styles(props: NoteEditorProps) {
 	return buildStyle(['NoteEditor'], props.themeId, (theme: any) => {
 		return {
 			root: {
-				// ...props.style,
 				boxSizing: 'border-box',
-				paddingLeft: theme.mainPadding,
+				paddingLeft: 0,// theme.mainPadding,
 				paddingTop: 0,
-				borderLeftWidth: 1,
-				borderLeftColor: theme.dividerColor,
-				borderLeftStyle: 'solid',
 				width: '100%',
 				height: '100%',
 			},

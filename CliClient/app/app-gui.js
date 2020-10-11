@@ -1,15 +1,17 @@
-const { Logger } = require('lib/logger.js');
+const Logger = require('lib/Logger').default;
 const Folder = require('lib/models/Folder.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
-const Setting = require('lib/models/Setting.js');
-const { reducer, defaultState } = require('lib/reducer.js');
+const Setting = require('lib/models/Setting').default;
+const reducer = require('lib/reducer').default;
+const { defaultState } = require('lib/reducer');
 const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
+const shim = require('lib/shim').default;
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -477,7 +479,7 @@ class AppGui {
 					this.linkSelector_.noteX + cursorOffsetX,
 					this.linkSelector_.noteY + cursorOffsetY
 				);
-				setTimeout(() => this.term_.term().inverse(this.linkSelector_.link), 50);
+				shim.setTimeout(() => this.term_.term().inverse(this.linkSelector_.link), 50);
 			}
 		} else if (cmd === 'open_link') {
 			if (this.widget('noteText').hasFocus) {

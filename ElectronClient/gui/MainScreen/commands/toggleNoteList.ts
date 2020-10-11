@@ -1,5 +1,5 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleNoteList',

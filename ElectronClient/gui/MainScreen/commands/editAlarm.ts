@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import eventManager from 'lib/eventManager';
+import { _ } from 'lib/locale';
 const Note = require('lib/models/Note');
 const BaseModel = require('lib/BaseModel');
-const { _ } = require('lib/locale');
-const eventManager = require('lib/eventManager');
 const { time } = require('lib/time-utils');
 
 export const declaration:CommandDeclaration = {
@@ -52,22 +52,23 @@ export const runtime = (comp:any):CommandRuntime => {
 			});
 		},
 		title: (props:any):string => {
-			if (!props.noteId || !props.notes) return null;
-			const note = BaseModel.byId(props.notes, props.noteId);
-			if (!note || !note.todo_due) return null;
-			return time.formatMsToLocal(note.todo_due);
+			if (!props.noteId) return null;
+			if (!props.noteTodoDue) return null;
+			return time.formatMsToLocal(props.noteTodoDue);
 		},
 		isEnabled: (props:any):boolean => {
-			const { notes, noteId } = props;
-			if (!noteId || !notes) return false;
-			const note = BaseModel.byId(notes, noteId);
-			if (!note) return false;
-			return !!note.is_todo && !note.todo_completed;
+			if (!props.noteId) return false;
+			return !!props.noteIsTodo && !props.noteTodoCompleted;
 		},
 		mapStateToProps: (state:any):any => {
+			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+			const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
+
 			return {
-				noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-				notes: state.notes,
+				noteId: note ? noteId : null,
+				noteIsTodo: note ? note.is_todo : false,
+				noteTodoCompleted: note ? note.todo_completed : false,
+				noteTodoDue: note ? note.todo_due : null,
 			};
 		},
 	};

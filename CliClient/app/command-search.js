@@ -1,8 +1,8 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 
 class Command extends BaseCommand {
 	usage() {

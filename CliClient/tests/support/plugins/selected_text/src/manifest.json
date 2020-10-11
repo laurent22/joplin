@@ -1,0 +1,8 @@
+{
+	"manifest_version": 1,
+	"name": "Selected Text Test",
+	"description": "To test getting the selected text from the editor",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

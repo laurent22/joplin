@@ -2,21 +2,23 @@ import * as React from 'react';
 import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from 'lib/services/CommandService';
+import InteropService from 'lib/services/interop/InteropService';
+import Synchronizer from 'lib/Synchronizer';
+import Setting from 'lib/models/Setting';
+import MenuUtils from 'lib/services/commands/MenuUtils';
+import InteropServiceHelper from '../../InteropServiceHelper';
+import { _ } from 'lib/locale';
 
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
-const { Synchronizer } = require('lib/synchronizer.js');
 const BaseModel = require('lib/BaseModel.js');
-const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/theme');
-const { bridge } = require('electron').remote.require('./bridge');
+const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
@@ -91,13 +93,14 @@ function FolderItem(props:any) {
 	);
 }
 
+const menuUtils = new MenuUtils(CommandService.instance());
+
 class SideBarComponent extends React.Component<Props, State> {
 
 	private folderItemsOrder_:any[] = [];
 	private tagItemsOrder_:any[] = [];
 	private rootRef:any = null;
 	private anchorItemRefs:any = {};
-	private forceUpdateDuringSyncIID_:any = null;
 
 	constructor(props:any) {
 		super(props);
@@ -115,16 +118,8 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.header_contextMenu = this.header_contextMenu.bind(this);
 		this.onAddFolderButtonClick = this.onAddFolderButtonClick.bind(this);
 		this.folderItem_click = this.folderItem_click.bind(this);
+		this.itemContextMenu = this.itemContextMenu.bind(this);
 	}
-
-	// componentDidUpdate(prevProps:any, _prevState:any) {
-	// 	const props = this.props as any;
-	// 	for (const k in this.props) {
-	// 		if (prevProps[k] !== props[k]) {
-	// 			console.info('Props', k, props[k]);
-	// 		}
-	// 	}
-	// }
 
 	onFolderDragStart_(event:any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -192,16 +187,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		});
 	}
 
-	clearForceUpdateDuringSync() {
-		if (this.forceUpdateDuringSyncIID_) {
-			clearInterval(this.forceUpdateDuringSyncIID_);
-			this.forceUpdateDuringSyncIID_ = null;
-		}
-	}
-
 	componentWillUnmount() {
-		this.clearForceUpdateDuringSync();
-
 		CommandService.instance().componentUnregisterCommands(commands);
 	}
 
@@ -209,7 +195,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		const menu = new Menu();
 
 		menu.append(
-			new MenuItem(CommandService.instance().commandToMenuItem('newFolder'))
+			new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder'))
 		);
 
 		menu.popup(bridge().window());
@@ -244,7 +230,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(CommandService.instance().commandToMenuItem('newFolder', { parentId: itemId }))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', { parentId: itemId }))
 			);
 		}
 
@@ -273,14 +259,12 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-			menu.append(new MenuItem(CommandService.instance().commandToMenuItem('renameFolder', { folderId: itemId })));
+			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('renameFolder', { folderId: itemId })));
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
-			const InteropService = require('lib/services/InteropService.js');
-
 			const exportMenu = new Menu();
-			const ioService = new InteropService();
+			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];
@@ -306,7 +290,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
-				CommandService.instance().commandToMenuItem('renameTag', { tagId: itemId })
+				menuUtils.commandToStatefulMenuItem('renameTag', { tagId: itemId })
 			));
 		}
 
@@ -412,7 +396,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					selected={selected}
 					data-id={tag.id}
 					data-type={BaseModel.TYPE_TAG}
-					onContextMenu={(event:any) => this.itemContextMenu(event)}
+					onContextMenu={this.itemContextMenu}
 					onClick={() => {
 						this.tagItem_click(tag);
 					}}
@@ -681,6 +665,4 @@ const mapStateToProps = (state:any) => {
 	};
 };
 
-const SideBar = connect(mapStateToProps)(SideBarComponent);
-
-module.exports = { SideBar };
+export default connect(mapStateToProps)(SideBarComponent);

@@ -1,4 +1,5 @@
 import { replaceBetween } from './utils';
+const shim = require('lib/shim').default;
 
 export default ({ getState, item, setState }) => {
 	const { text, selection } = getState();
@@ -20,7 +21,7 @@ export default ({ getState, item, setState }) => {
 		},
 	};
 	setState({ text: newText }, () => {
-		setTimeout(() => {
+		shim.setTimeout(() => {
 			setState({ ...extra });
 		}, 25);
 	});

@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 const CommandService = require('lib/services/CommandService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
@@ -15,12 +15,13 @@ const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const KeymapService = require('lib/services/KeymapService.js').default;
+const shim = require('lib/shim').default;
 
 class GotoAnything {
 
 	onTrigger() {
 		this.dispatch({
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
 			pluginName: PLUGIN_NAME,
 		});
@@ -128,7 +129,7 @@ class Dialog extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
@@ -141,7 +142,7 @@ class Dialog extends React.PureComponent {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -151,7 +152,7 @@ class Dialog extends React.PureComponent {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
-				type: 'PLUGIN_DIALOG_SET',
+				type: 'PLUGINLEGACY_DIALOG_SET',
 				open: false,
 			});
 		}
@@ -168,9 +169,9 @@ class Dialog extends React.PureComponent {
 	}
 
 	scheduleListUpdate() {
-		if (this.listUpdateIID_) clearTimeout(this.listUpdateIID_);
+		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 
-		this.listUpdateIID_ = setTimeout(async () => {
+		this.listUpdateIID_ = shim.setTimeout(async () => {
 			await this.updateList();
 			this.listUpdateIID_ = null;
 		}, 100);
@@ -305,7 +306,7 @@ class Dialog extends React.PureComponent {
 	async gotoItem(item) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
-			type: 'PLUGIN_DIALOG_SET',
+			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
 

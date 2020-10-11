@@ -1,4 +1,5 @@
 const moment = require('moment');
+const shim = require('lib/shim').default;
 
 class Time {
 	constructor() {
@@ -102,7 +103,7 @@ class Time {
 
 	msleep(ms) {
 		return new Promise((resolve) => {
-			setTimeout(() => {
+			shim.setTimeout(() => {
 				resolve();
 			}, ms);
 		});

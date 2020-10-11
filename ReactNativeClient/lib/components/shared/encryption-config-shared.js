@@ -1,19 +1,21 @@
 const EncryptionService = require('lib/services/EncryptionService');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting.js');
+const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey.js');
 const { reg } = require('lib/registry.js');
+const shim = require('lib/shim').default;
 
 const shared = {};
 
-shared.constructor = function(comp) {
+shared.constructor = function(comp, props) {
 	comp.state = {
 		passwordChecks: {},
 		stats: {
 			encrypted: null,
 			total: null,
 		},
+		passwords: Object.assign({}, props.passwords),
 	};
 	comp.isMounted_ = false;
 
@@ -49,7 +51,7 @@ shared.upgradeMasterKey = async function(comp, masterKey) {
 	}
 
 	try {
-		const password = comp.props.passwords[masterKey.id];
+		const password = comp.state.passwords[masterKey.id];
 		const newMasterKey = await EncryptionService.instance().upgradeMasterKey(masterKey, password);
 		await MasterKey.save(newMasterKey);
 		reg.waitForSyncFinishedThenSync();
@@ -65,13 +67,13 @@ shared.componentDidMount = async function(comp) {
 	shared.refreshStats(comp);
 
 	if (shared.refreshStatsIID_) {
-		clearInterval(shared.refreshStatsIID_);
+		shim.clearInterval(shared.refreshStatsIID_);
 		shared.refreshStatsIID_ = null;
 	}
 
-	shared.refreshStatsIID_ = setInterval(() => {
+	shared.refreshStatsIID_ = shim.setInterval(() => {
 		if (!comp.isMounted_) {
-			clearInterval(shared.refreshStatsIID_);
+			shim.clearInterval(shared.refreshStatsIID_);
 			shared.refreshStatsIID_ = null;
 			return;
 		}
@@ -80,6 +82,10 @@ shared.componentDidMount = async function(comp) {
 };
 
 shared.componentDidUpdate = async function(comp, prevProps = null) {
+	if (prevProps && comp.props.passwords !== prevProps.passwords) {
+		comp.setState({ passwords: Object.assign({}, comp.props.passwords) });
+	}
+
 	if (!prevProps || comp.props.masterKeys !== prevProps.masterKeys || comp.props.passwords !== prevProps.passwords) {
 		comp.checkPasswords();
 	}
@@ -87,7 +93,7 @@ shared.componentDidUpdate = async function(comp, prevProps = null) {
 
 shared.componentWillUnmount = function() {
 	if (shared.refreshStatsIID_) {
-		clearInterval(shared.refreshStatsIID_);
+		shim.clearInterval(shared.refreshStatsIID_);
 		shared.refreshStatsIID_ = null;
 	}
 };
@@ -96,7 +102,7 @@ shared.checkPasswords = async function(comp) {
 	const passwordChecks = Object.assign({}, comp.state.passwordChecks);
 	for (let i = 0; i < comp.props.masterKeys.length; i++) {
 		const mk = comp.props.masterKeys[i];
-		const password = comp.props.passwords[mk.id];
+		const password = comp.state.passwords[mk.id];
 		const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 		passwordChecks[mk.id] = ok;
 	}
@@ -111,18 +117,18 @@ shared.decryptedStatText = function(comp) {
 };
 
 shared.onSavePasswordClick = function(comp, mk) {
-	const password = comp.props.passwords[mk.id];
+	const password = comp.state.passwords[mk.id];
 	if (!password) {
-		Setting.deleteObjectKey('encryption.passwordCache', mk.id);
+		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
 	} else {
-		Setting.setObjectKey('encryption.passwordCache', mk.id, password);
+		Setting.setObjectValue('encryption.passwordCache', mk.id, password);
 	}
 
 	comp.checkPasswords();
 };
 
 shared.onPasswordChange = function(comp, mk, password) {
-	const passwords = comp.props.passwords;
+	const passwords = Object.assign({}, comp.state.passwords);
 	passwords[mk.id] = password;
 	comp.setState({ passwords: passwords });
 };

@@ -25,6 +25,8 @@ import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
 
+// import eventManager from 'lib/eventManager';
+
 const { reg } = require('lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
@@ -145,7 +147,10 @@ function Editor(props: EditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		const cmOptions = {
+		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
+		const userOptions = {};
+
+		const cmOptions = Object.assign({}, {
 			value: props.value,
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
@@ -160,7 +165,8 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-		};
+		}, userOptions);
+
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
 		cm.on('change', editor_change);

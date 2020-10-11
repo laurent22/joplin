@@ -1,13 +1,13 @@
 require('app-module-path').addPath(__dirname + '/..');
 
 const { syncDir, asyncTest, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../test-utils.js');
-const Setting = require('lib/models/Setting');
+const Setting = require('lib/models/Setting').default;
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
-const markdownUtils = require('lib/markdownUtils');
-const {shim} = require('lib/shim');
+const markdownUtils = require('lib/markdownUtils').default;;
+const shim = require('lib/shim').default;
 const fs = require('fs-extra');
 
 const snapshotBaseDir = `${__dirname}/../../tests/support/syncTargetSnapshots`;

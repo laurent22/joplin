@@ -1,5 +1,5 @@
 const { Database } = require('lib/database.js');
-const { uuid } = require('lib/uuid.js');
+const uuid = require('lib/uuid').default;
 const { time } = require('lib/time-utils.js');
 const Mutex = require('async-mutex').Mutex;
 

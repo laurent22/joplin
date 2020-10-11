@@ -2,7 +2,7 @@ const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const ListWidget = require('tkwidgets/ListWidget.js');
-const _ = require('lib/locale.js')._;
+const _ = require('lib/locale')._;
 
 class FolderListWidget extends ListWidget {
 	constructor() {

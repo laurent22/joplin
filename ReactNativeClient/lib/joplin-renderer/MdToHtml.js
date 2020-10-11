@@ -19,6 +19,7 @@ const rules = {
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 
+// const eventManager = require('lib/eventManager').default;
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const nodeSlug = require('slug');
@@ -298,8 +299,15 @@ class MdToHtml {
 		markdownIt.use(markdownItAnchor, { slugify: slugify });
 
 		for (const key in plugins) {
-			if (this.pluginEnabled(key)) markdownIt.use(plugins[key].module, plugins[key].options);
+			if (this.pluginEnabled(key)) {
+				markdownIt.use(plugins[key].module, plugins[key].options);
+			}
 		}
+
+		// const extraPlugins = eventManager.filterEmit('mdToHtmlPlugins', {});
+		// for (const key in extraPlugins) {
+		// 	markdownIt.use(extraPlugins[key].module, extraPlugins[key].options);
+		// }
 
 		setupLinkify(markdownIt);
 

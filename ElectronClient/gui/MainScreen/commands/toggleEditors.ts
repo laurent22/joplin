@@ -1,7 +1,7 @@
 import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
-const { _ } = require('lib/locale');
-const { stateUtils } = require('lib/reducer.js');
-const Setting = require('lib/models/Setting');
+import Setting from 'lib/models/Setting';
+import { stateUtils } from 'lib/reducer';
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleEditors',
@@ -20,12 +20,12 @@ export const runtime = ():CommandRuntime => {
 			Setting.toggle('editor.codeView');
 		},
 		isEnabled: (props:any):boolean => {
-			return !props.hasNotesBeingSaved && props.selectedNoteIds.length === 1;
+			return !props.hasNotesBeingSaved && props.hasOneSelectedNote;
 		},
 		mapStateToProps: (state:any):any => {
 			return {
 				hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
-				selectedNoteIds: state.selectedNoteIds,
+				hasOneSelectedNote: state.selectedNoteIds.length === 1,
 			};
 		},
 	};

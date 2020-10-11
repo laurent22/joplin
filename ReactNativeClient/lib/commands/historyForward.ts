@@ -1,5 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
-const { _ } = require('lib/locale');
+import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'historyForward',
@@ -8,22 +8,22 @@ export const declaration:CommandDeclaration = {
 };
 
 interface Props {
-	forwardHistoryNotes: any[],
+	hasForwardNotes: boolean,
 }
 
 export const runtime = ():CommandRuntime => {
 	return {
 		execute: async (props:Props) => {
-			if (!props.forwardHistoryNotes.length) return;
+			if (!props.hasForwardNotes) return;
 			utils.store.dispatch({
 				type: 'HISTORY_FORWARD',
 			});
 		},
 		isEnabled: (props:Props) => {
-			return props.forwardHistoryNotes.length > 0;
+			return props.hasForwardNotes;
 		},
 		mapStateToProps: (state:any) => {
-			return { forwardHistoryNotes: state.forwardHistoryNotes };
+			return { hasForwardNotes: state.forwardHistoryNotes.length > 0 };
 		},
 	};
 };

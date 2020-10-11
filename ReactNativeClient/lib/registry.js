@@ -1,6 +1,6 @@
-const { Logger } = require('lib/logger.js');
-const Setting = require('lib/models/Setting.js');
-const { shim } = require('lib/shim.js');
+const Logger = require('lib/Logger').default;
+const Setting = require('lib/models/Setting').default;
+const shim = require('lib/shim').default;
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 
 const reg = {};
@@ -78,7 +78,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 		});
 
 		if (reg.scheduleSyncId_) {
-			clearTimeout(reg.scheduleSyncId_);
+			shim.clearTimeout(reg.scheduleSyncId_);
 			reg.scheduleSyncId_ = null;
 		}
 
@@ -152,7 +152,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 		if (delay === 0) {
 			timeoutCallback();
 		} else {
-			reg.scheduleSyncId_ = setTimeout(timeoutCallback, delay);
+			reg.scheduleSyncId_ = shim.setTimeout(timeoutCallback, delay);
 		}
 		return promise;
 
@@ -204,7 +204,7 @@ reg.cancelTimers_ = () => {
 		this.recurrentSyncId_ = null;
 	}
 	if (reg.scheduleSyncId_) {
-		clearTimeout(reg.scheduleSyncId_);
+		shim.clearTimeout(reg.scheduleSyncId_);
 		reg.scheduleSyncId_ = null;
 	}
 };
@@ -214,7 +214,7 @@ reg.cancelTimers = async () => {
 	reg.cancelTimers_();
 
 	return new Promise((resolve) => {
-		setInterval(() => {
+		shim.setInterval(() => {
 			// ensure processing complete
 			if (!reg.setupRecurrentCalls_.length && !reg.schedSyncCalls_.length && !reg.timerCallbackCalls_.length && !reg.waitForReSyncCalls_.length) {
 				reg.cancelTimers_();

@@ -12,9 +12,8 @@
 // const ItemChange = require('lib/models/ItemChange');
 // const Setting = require('lib/models/Setting');
 // const Resource = require('lib/models/Resource.js');
-// const { shim } = require('lib/shim');
+// const shim = require('lib/shim').default;
 // const ResourceService = require('lib/services/ResourceService.js');
-
 
 // process.on('unhandledRejection', (reason, p) => {
 // 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

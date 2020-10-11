@@ -1,13 +1,13 @@
 const { time } = require('lib/time-utils');
 const BaseItem = require('lib/models/BaseItem.js');
-const Alarm = require('lib/models/Alarm');
+const Alarm = require('lib/models/Alarm').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const Resource = require('lib/models/Resource');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { toTitleCase } = require('lib/string-utils.js');
 
 class ReportService {

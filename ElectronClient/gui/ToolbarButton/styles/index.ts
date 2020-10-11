@@ -19,6 +19,8 @@ export const StyledRoot = styled.a<RootProps>`
 	cursor: default;
 	border-radius: 3px;
 	box-sizing: border-box;
+	color: ${(props:RootProps) => props.theme.color3};
+	font-size: ${(props:RootProps) => props.theme.toolbarIconSize * 0.8}px;
 
 	&:hover {
 		background-color: ${(props:RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};

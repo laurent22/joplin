@@ -1,5 +1,5 @@
 const React = require('react');
-const { _ } = require('lib/locale.js');
+const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
 
 function DialogButtonRow(props) {
