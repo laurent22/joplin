@@ -735,7 +735,7 @@ function useMenu(props:Props) {
 
 		const layoutButtonSequenceOptions = Setting.enumOptions('layoutButtonSequence');
 		for (const value in layoutButtonSequenceOptions) {
-			menuItemSetEnabled(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
+			menuItemSetChecked(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
 		}
 
 		function applySortItemCheckState(type:string) {
