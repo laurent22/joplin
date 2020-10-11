@@ -196,7 +196,7 @@
     "roboto-fontface": "^0.10.0",
     "sax": "^1.2.4",
     "server-destroy": "^1.0.1",
-    "slug": "^3.3.4",
+    "slug": "^3.5.0",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^4.1.1",
