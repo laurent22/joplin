@@ -2,7 +2,7 @@
 
 * * *
 
-<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
+<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
@@ -22,7 +22,7 @@ Operating System | Download | Alternative
 -----------------|--------|-------------------
 Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.2.6/Joplin-Setup-1.2.6.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.2.6/JoplinPortable.exe'>Portable version</a><br><br>The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.2.6/Joplin-1.2.6.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew (unsupported): `brew cask install joplin`
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.2.6/Joplin-1.2.6.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package (unsupported) [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, and Mint; the desktop environments supported are GNOME, KDE, Xfce, MATE, LXQT, LXDE, Unity, Cinnamon, Deepin and Pantheon), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash`
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.2.6/Joplin-1.2.6.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package (unsupported) [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, and Mint; the desktop environments supported are GNOME, KDE, Xfce, MATE, LXQT, LXDE, Unity, Cinnamon, Deepin and Pantheon), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh \| bash`
 
 ## Mobile applications
 
@@ -100,7 +100,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
-  - [Search Sorting spec](https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md)
+  - [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
 
 - Google Summer of Code 2020
 
@@ -398,7 +398,7 @@ Please see the guide for information on how to contribute to the development of 
 Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
-- [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
+- [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/dev/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file.
 - Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.

@@ -14,7 +14,7 @@ This file was auto-generated from {{{sourceMarkdownFile}}} and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
+https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 
 -->
 
@@ -489,7 +489,7 @@ function markdownToHtml(md, templateParams) {
 
 	const improveDocHtml = `
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}">
+			<a href="https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>`;

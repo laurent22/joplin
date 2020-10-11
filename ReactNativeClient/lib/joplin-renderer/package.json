@@ -2,7 +2,7 @@
   "name": "joplin-renderer",
   "version": "1.0.8",
   "description": "The Joplin note renderer, used the mobile and desktop application",
-  "repository": "https://github.com/laurent22/joplin/tree/master/ReactNativeClient/lib/joplin-renderer",
+  "repository": "https://github.com/laurent22/joplin/tree/dev/ReactNativeClient/lib/joplin-renderer",
   "main": "index.js",
   "scripts": {
     "test": "jasmine --config=tests/support/jasmine.json",

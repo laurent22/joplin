@@ -23,8 +23,8 @@ The GUI's, as listed on the [Joplin's website](https://joplinapp.org/#installati
 
 More details can be found on:
 
-- [How to contribute](https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md)
-- [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md)
+- [How to contribute](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
+- [How to build](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 
 Moreover there are community driven projects such as:
 

@@ -255,7 +255,7 @@ function flagImageUrl(locale) {
 }
 
 function poFileUrl(locale) {
-	return `https://github.com/laurent22/joplin/blob/master/CliClient/locales/${locale}.po`;
+	return `https://github.com/laurent22/joplin/blob/dev/CliClient/locales/${locale}.po`;
 }
 
 function translationStatusToMdTable(status) {
