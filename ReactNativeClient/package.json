@@ -83,7 +83,7 @@
     "redux": "4.0.0",
     "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",
-    "slug": "^3.4.0",
+    "slug": "^3.5.0",
     "stream": "0.0.2",
     "string-natural-compare": "^2.0.2",
     "string-padding": "^1.0.2",
