@@ -141,7 +141,7 @@ export default function useListIdent(CodeMirror: any) {
 		cm.setCursor({ line: anchor.line, ch: line.length });
 
 		cm.execCommand('insertListElement');
-		cm.setOption('disableInput', true);
+		CodeMirror.Vim.handleKey(cm, 'i', 'macro');
 	};
 
 	CodeMirror.commands.insertListElement = function(cm: any) {
