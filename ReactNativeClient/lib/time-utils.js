@@ -33,6 +33,10 @@ class Time {
 		this.timeFormat_ = v;
 	}
 
+	use24HourFormat() {
+		return this.timeFormat() ? this.timeFormat().includes('HH') : true;
+	}
+
 	dateTimeFormat() {
 		return `${this.dateFormat()} ${this.timeFormat()}`;
 	}
@@ -77,6 +81,10 @@ class Time {
 
 	unixMsToLocalHms(ms) {
 		return moment.unix(ms / 1000).format('HH:mm:ss');
+	}
+
+	formatDateToLocal(date, format = null) {
+		return this.formatMsToLocal(date.getTime(), format);
 	}
 
 	formatMsToLocal(ms, format = null) {

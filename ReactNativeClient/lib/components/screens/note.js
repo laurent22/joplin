@@ -2,7 +2,8 @@ import FileViewer from 'react-native-file-viewer';
 import AsyncActionQueue from '../../AsyncActionQueue';
 
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const Clipboard = require('@react-native-community/clipboard').default;
 const { connect } = require('react-redux');
 const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -36,8 +37,8 @@ const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
-const ImagePicker = require('react-native-image-picker');
-const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
+// const ImagePicker = require('react-native-image-picker');
+const SelectDateTimeDialog = require('lib/components/SelectDateTimeDialog').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
 const urlUtils = require('lib/urlUtils');
@@ -507,13 +508,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	showImagePicker(options) {
-		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, response => {
-				resolve(response);
-			});
-		});
-	}
+	// showImagePicker(options) {
+	// 	return new Promise((resolve) => {
+	// 		ImagePicker.launchImageLibrary(options, response => {
+	// 			resolve(response);
+	// 		});
+	// 	});
+	// }
 
 	async resizeImage(localFilePath, targetPath, mimeType) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
@@ -665,10 +666,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-		await this.attachFile(response, 'image');
-	}
+	// async attachPhoto_onPress() {
+	// 	const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
+	// 	await this.attachFile(response, 'image');
+	// }
 
 	takePhoto_onPress() {
 		this.setState({ showCamera: true });
@@ -817,10 +818,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [
+						{ text: _('Attach file'), id: 'attachFile' },
+						{ text: _('Take photo'), id: 'takePhoto' },
+						// { text: _('Attach photo'), id: 'attachPhoto' },
+					]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
+					// if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
 					if (buttonId === 'attachFile') this.attachFile_onPress();
 				},
 			});
@@ -1178,7 +1183,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{bodyComponent}
 				{!this.useBetaEditor() && actionButtonComp}
 
-				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
 					ref={dialogbox => {

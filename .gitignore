@@ -194,6 +194,7 @@ ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
+ReactNativeClient/lib/components/SelectDateTimeDialog.js
 ReactNativeClient/lib/errorUtils.js
 ReactNativeClient/lib/eventManager.js
 ReactNativeClient/lib/hooks/useEffectDebugger.js
@@ -211,6 +212,7 @@ ReactNativeClient/lib/markdownUtils.js
 ReactNativeClient/lib/models/Alarm.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js
+ReactNativeClient/lib/PoorManIntervals.js
 ReactNativeClient/lib/reducer.js
 ReactNativeClient/lib/services/AlarmService.js
 ReactNativeClient/lib/services/AlarmServiceDriver.android.js
