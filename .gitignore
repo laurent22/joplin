@@ -193,6 +193,7 @@ ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
+ReactNativeClient/lib/components/BackButtonDialogBox.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
 ReactNativeClient/lib/errorUtils.js
 ReactNativeClient/lib/eventManager.js
