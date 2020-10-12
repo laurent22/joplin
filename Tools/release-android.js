@@ -181,6 +181,7 @@ async function main() {
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand(`git commit -m "Android release v${version}"`));
 	console.info(await execCommand(`git tag ${tagName}`));
+	console.info(await execCommand('git pull')); // Again, to make sure git push doesn't fail
 	console.info(await execCommand('git push'));
 	console.info(await execCommand('git push --tags'));
 
