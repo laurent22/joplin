@@ -255,6 +255,8 @@ PODS:
     - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
+  - RNShare (3.3.3):
+    - React
   - RNVectorIcons (6.6.0):
     - React
   - Yoga (1.14.0)
@@ -303,6 +305,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -391,6 +394,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-quick-actions"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -438,6 +443,7 @@ SPEC CHECKSUMS:
   RNFS: 416676c3a9ae404454bade10e3d78147c7c33a40
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
+  RNShare: f4ec422e27904e0dc9310038d1110460a59ad30d
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 

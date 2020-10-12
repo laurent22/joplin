@@ -13,7 +13,7 @@ import {
 	Image,
 } from 'react-native';
 import { renderFormatButtons } from './renderButtons';
-import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
+const NoteBodyViewer = require('lib/components/NoteBodyViewer').default;
 
 const styles = StyleSheet.create({
 	buttonContainer: {
