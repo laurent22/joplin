@@ -397,12 +397,16 @@ function useMenu(props:Props) {
 			}, shim.isMac() ? noItem : printItem, {
 				type: 'separator',
 				platforms: ['darwin'],
-			}, {
+			},
+
+			!shim.isMac() ? noItem : {
 				label: _('Hide %s', 'Joplin'),
 				platforms: ['darwin'],
 				accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
 				click: () => { bridge().electronApp().hide(); },
-			}, {
+			},
+
+			{
 				type: 'separator',
 			},
 			quitMenuItem],
