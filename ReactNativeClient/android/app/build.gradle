@@ -134,6 +134,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        // https://github.com/react-native-community/react-native-camera/issues/2138
+        missingDimensionStrategy 'react-native-camera', 'general'
+
+        // Needed to fix: The number of method references in a .dex file cannot exceed 64K
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -184,7 +190,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
@@ -207,6 +213,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Needed to fix: The number of method references in a .dex file cannot exceed 64K
+    implementation 'com.android.support:multidex:2.0.1'
 }
 
 // Run this once to be able to run the application with BUCK
