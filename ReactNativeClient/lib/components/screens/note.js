@@ -37,7 +37,7 @@ const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-pi
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
-const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
+const SelectDateTimeDialog = require('lib/components/SelectDateTimeDialog').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
 const urlUtils = require('lib/urlUtils');
@@ -1178,7 +1178,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{bodyComponent}
 				{!this.useBetaEditor() && actionButtonComp}
 
-				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
 					ref={dialogbox => {

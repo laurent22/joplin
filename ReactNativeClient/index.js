@@ -17,9 +17,14 @@ LogBox.ignoreLogs([
 	// What's the point of printing warnings for non-user code. Of all the things that
 	// are broken and unreliable in React Native, require cycles are just a minor annoyance
 	// which shouldn't forever print warnings.
+	// To make it more fun, they don't normalise paths so forward slashes and backward slashes
+	// need to be handled to support Windows.
 	'Require cycle: node_modules/react-native-',
+	'Require cycle: node_modules\\react-native-',
 	'Require cycle: node_modules/rn-fetch-blob',
+	'Require cycle: node_modules\\rn-fetch-blob',
 	'Require cycle: node_modules/aws-sdk',
+	'Require cycle: node_modules\\aws-sdk',
 	
 	// It's being updated over time and we don't need to see these warnings all the time
 	'Warning: componentWillReceiveProps has been renamed',

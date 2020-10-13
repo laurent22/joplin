@@ -33,6 +33,14 @@ class Time {
 		this.timeFormat_ = v;
 	}
 
+	use24HourFormat() {
+		return this.timeFormat() ? this.timeFormat().includes('HH') : true;
+	}
+
+	formatDateToLocal(date, format = null) {
+		return this.formatMsToLocal(date.getTime(), format);
+	}
+
 	dateTimeFormat() {
 		return `${this.dateFormat()} ${this.timeFormat()}`;
 	}

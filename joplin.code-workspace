@@ -140,7 +140,6 @@
 			"./ReactNativeClient/fastlane/Preview.html": true,
 			"./ReactNativeClient/fastlane/screenshots": true,
 			"./ReactNativeClient/android/build/": true,
-			// "./ReactNativeClient/android/app/build*": true,
 			"./ReactNativeClient/android/.project": true,
 			"./ReactNativeClient/**/android/.settings/": true,
 			"./ReactNativeClient/android/app/.classpath": true,
@@ -494,8 +493,6 @@
 			"ReactNativeClient/fastlane/report.xml": true,
 			"ReactNativeClient/fastlane/Preview.html": true,
 			"ReactNativeClient/fastlane/screenshots": true,
-			// "ReactNativeClient/android/build*": true,
-			// "ReactNativeClient/android/app/build*": true,
 			"ReactNativeClient/android/.project": true,
 			"ReactNativeClient/**/android/.settings/": true,
 			"ReactNativeClient/android/app/.classpath": true,
@@ -696,7 +693,16 @@
 			"ReactNativeClient/lib/markdownUtils.js": true,
 			"ReactNativeClient/lib/services/plugins/api/types.js": true,
 			"ReactNativeClient/lib/services/rest/Api.js": true,
-			"CliClient/tests/services_rest_Api.js": true
+			"CliClient/tests/services_rest_Api.js": true,
+			"ReactNativeClient/*/fastlane/report.xml": true,
+			"ReactNativeClient/*/fastlane/Preview.html": true,
+			"ReactNativeClient/*/fastlane/screenshots": true,
+			"ReactNativeClient/**/*.jsbundle": true,
+			"ReactNativeClient/ios/Pods/": true,
+			"QtClient/build-*": true,
+			"ReactNativeClient/lib/components/BackButtonDialogBox.js": true,
+			"ReactNativeClient/lib/components/SelectDateTimeDialog.js": true,
+			"ReactNativeClient/lib/PoorManIntervals.js": true
 		},
 		"spellright.language": [
 			"en"

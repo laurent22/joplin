@@ -1,6 +1,6 @@
 const shim = require('lib/shim').default;
 const { GeolocationReact } = require('lib/geolocation-react.js');
-const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const PoorManIntervals = require('lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
@@ -18,8 +18,6 @@ const injectedJs = {
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
-	shim.setInterval = PoorManIntervals.setInterval;
-	shim.clearInterval = PoorManIntervals.clearInterval;
 	shim.sjclModule = require('lib/vendor/sjcl-rn.js');
 
 	shim.fsDriver = () => {
@@ -199,19 +197,19 @@ function shimInit() {
 	};
 
 	shim.setTimeout = (fn, interval) => {
-		return setTimeout(fn, interval);
+		return PoorManIntervals.setTimeout(fn, interval);
 	};
 
 	shim.setInterval = (fn, interval) => {
-		return setInterval(fn, interval);
+		return PoorManIntervals.setInterval(fn, interval);
 	};
 
 	shim.clearTimeout = (id) => {
-		return clearTimeout(id);
+		return PoorManIntervals.clearTimeout(id);
 	};
 
 	shim.clearInterval = (id) => {
-		return clearInterval(id);
+		return PoorManIntervals.clearInterval(id);
 	};
 
 }

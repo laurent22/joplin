@@ -481,7 +481,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
-						<Icon name="more-vert" style={this.styles().contextMenuTrigger} />
+						<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
 					</MenuTrigger>
 					<MenuOptions>
 						<ScrollView style={{ maxHeight: windowHeight }}>{menuOptionComponents}</ScrollView>
