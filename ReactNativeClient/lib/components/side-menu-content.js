@@ -237,7 +237,7 @@ class SideMenuContentComponent extends Component {
 
 		let iconWrapper = null;
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-down' : 'md-arrow-up';
 		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />;
 
 		iconWrapper = !hasChildren ? null : (

@@ -323,7 +323,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return (
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.iconButton}>
-						<Icon name="md-funnel" style={styles.topIcon} />
+						<Icon name="filter-outline" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -481,7 +481,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
-						<Icon name="md-more" style={this.styles().contextMenuTrigger} />
+						<Icon name="more-vert" style={this.styles().contextMenuTrigger} />
 					</MenuTrigger>
 					<MenuOptions>
 						<ScrollView style={{ maxHeight: windowHeight }}>{menuOptionComponents}</ScrollView>
