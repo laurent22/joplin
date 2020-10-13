@@ -2,18 +2,17 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "28.0.3"
+        buildToolsVersion = "29.0.2"
         minSdkVersion = 16
-        compileSdkVersion = 28
-        targetSdkVersion = 28
+        compileSdkVersion = 29
+        targetSdkVersion = 29
     }
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.4.2")
-
+        classpath("com.android.tools.build:gradle:3.5.3")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -22,10 +21,6 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
-        maven { url "https://jitpack.io" }
-        maven {
-            url "https://maven.google.com"
-        }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
@@ -34,22 +29,9 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
+
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
+        maven { url 'https://www.jitpack.io' }
     }
 }
-
-// TODO: Maybe remove this (forgot why it was needed - probably to make some module work)
-
-subprojects {
-    afterEvaluate {project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 28
-                buildToolsVersion "28.0.3"
-            }
-        }
-    }
-}
-
