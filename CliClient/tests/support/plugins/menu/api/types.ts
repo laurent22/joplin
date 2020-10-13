@@ -172,25 +172,9 @@ export enum MenuItemLocation {
 }
 
 export interface MenuItem {
-	/**
-	 * Command that should be associated with the menu item. All menu item should
-	 * have a command associated with them unless they are a sub-menu.
-	 */
 	commandName?: string,
-
-	/**
-	 * Accelerator associated with the menu item
-	 */
 	accelerator?: string,
-
-	/**
-	 * Menu items that should appear below this menu item. Allows creating a menu tree.
-	 */
 	submenu?: MenuItem[],
-
-	/**
-	 * Menu item label. If not specified, the command label will be used instead.
-	 */
 	label?: string,
 }
 

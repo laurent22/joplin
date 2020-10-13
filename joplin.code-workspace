@@ -697,7 +697,11 @@
 			"ReactNativeClient/lib/markdownUtils.js": true,
 			"ReactNativeClient/lib/services/plugins/api/types.js": true,
 			"ReactNativeClient/lib/services/rest/Api.js": true,
-			"CliClient/tests/services_rest_Api.js": true
+			"CliClient/tests/services_rest_Api.js": true,
+			"CliClient/tests/services/plugins/api/JoplinSetting.js": true,
+			"ReactNativeClient/lib/components/BackButtonDialogBox.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsMenus.js": true,
+			"ReactNativeClient/lib/services/plugins/MenuController.js": true
 		},
 		"spellright.language": [
 			"en"

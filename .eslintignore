@@ -264,11 +264,13 @@ ReactNativeClient/lib/services/plugins/api/JoplinSettings.js
 ReactNativeClient/lib/services/plugins/api/JoplinViews.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsDialogs.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsMenuItems.js
+ReactNativeClient/lib/services/plugins/api/JoplinViewsMenus.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsPanels.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js
 ReactNativeClient/lib/services/plugins/api/types.js
 ReactNativeClient/lib/services/plugins/BasePluginRunner.js
+ReactNativeClient/lib/services/plugins/MenuController.js
 ReactNativeClient/lib/services/plugins/MenuItemController.js
 ReactNativeClient/lib/services/plugins/Plugin.js
 ReactNativeClient/lib/services/plugins/PluginService.js

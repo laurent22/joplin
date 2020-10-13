@@ -23,7 +23,7 @@ export default function manifestFromObject(o:any):PluginManifest {
 		name: getString('name', true),
 		version: getString('version', true),
 		description: getString('description', false),
-		homepage_url: getString('homepage_url'),
+		homepage_url: getString('homepage_url', false),
 		permissions: permissions,
 	};
 

@@ -69,7 +69,7 @@ export default class MenuUtils {
 		return KeymapService.instance();
 	}
 
-	private commandToMenuItem(commandName:string, onClick:Function):MenuItem {
+	public commandToMenuItem(commandName:string, onClick:Function):MenuItem {
 		const command = this.service.commandByName(commandName);
 
 		const item:MenuItem = {
