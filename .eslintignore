@@ -69,6 +69,7 @@ CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services_rest_Api.js
+CliClient/tests/services/plugins/api/JoplinSetting.js
 CliClient/tests/services/plugins/sandboxProxy.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js

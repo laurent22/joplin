@@ -73,4 +73,15 @@ export default class JoplinSettings {
 	async setValue(key:string, value:any) {
 		return Setting.setValue(this.namespacedKey(key), value);
 	}
+
+	/**
+	 * Gets a global setting value, including app-specific settings and those set by other plugins.
+	 *
+	 * The list of available settings is not documented yet, but can be found by looking at the source code:
+	 *
+	 * https://github.com/laurent22/joplin/blob/3539a452a359162c461d2849829d2d42973eab50/ReactNativeClient/lib/models/Setting.ts#L142
+	 */
+	async globalValue(key:string):Promise<any> {
+		return Setting.value(key);
+	}
 }
