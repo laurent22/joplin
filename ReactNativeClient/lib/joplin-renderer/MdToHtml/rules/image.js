@@ -16,8 +16,22 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 		if (typeof r === 'string') return r;
-		if (r) return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}/>`;
+		if (r) {
+			let js = '';
+			if (ruleOptions.enableLongPress) {
+				const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
+				const id = r['data-resource-id'];
 
+				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
+
+				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${longPressDelay});`;
+				const touchEnd = 'if (!!t) clearTimeout(t); t=null';
+
+				js = ` ontouchstart="${touchStart}" ontouchend="${touchEnd}"`;
+			}
+
+			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}${js}/>`;
+		}
 		return defaultRender(tokens, idx, options, env, self);
 	};
 }

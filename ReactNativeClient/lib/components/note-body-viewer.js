@@ -2,15 +2,20 @@ import Async from 'react-async';
 
 const React = require('react');
 const Component = React.Component;
-const { Platform, View, Text } = require('react-native');
+const { Platform, View, Text, ToastAndroid } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting').default;
+const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 const shim = require('lib/shim').default;
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const { dialogs } = require('lib/dialogs.js');
+const BackButtonDialogBox = require('lib/components/BackButtonDialogBox').default;
+const Resource = require('lib/models/Resource.js');
+const Share = require('react-native-share').default;
 
 class NoteBodyViewer extends Component {
 	constructor() {
@@ -64,6 +69,8 @@ class NoteBodyViewer extends Component {
 			resources: this.props.noteResources,
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.joplinPostMessage_',
+			enableLongPress: shim.isReactNative(),
+			longPressDelay: 500, // TODO use system value
 		};
 
 		const result = await this.markupToHtml_.render(
@@ -203,6 +210,42 @@ class NoteBodyViewer extends Component {
 		return this.forceUpdate_;
 	}
 
+	async onResourceLongPress(msg) {
+		try {
+			const resourceId = msg.split(':')[1];
+			const resource = await Resource.load(resourceId);
+			const name = resource.title ? resource.title : resource.file_name;
+
+			const action = await dialogs.pop(this, name, [
+				{ text: _('Open'), id: 'open' },
+				{ text: _('Share'), id: 'share' },
+			]);
+
+			if (action === 'open') {
+				this.props.onJoplinLinkClick(`joplin://${resourceId}`);
+			} else if (action === 'share') {
+				const filename = resource.file_name ?
+					`${resource.file_name}.${resource.file_extension}` :
+					resource.title;
+				const targetPath = `${Setting.value('resourceDir')}/${filename}`;
+
+				await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
+
+				await Share.open({
+					type: resource.mime,
+					filename: resource.title,
+					url: `file://${targetPath}`,
+					failOnCancel: false,
+				});
+
+				await shim.fsDriver().remove(targetPath);
+			}
+		} catch (e) {
+			reg.logger().error('Could not handle link long press', e);
+			ToastAndroid.show('An error occurred, check log for details', ToastAndroid.SHORT);
+		}
+	}
+
 	render() {
 		// Note: useWebKit={false} is needed to go around this bug:
 		// https://github.com/react-native-community/react-native-webview/issues/376
@@ -256,7 +299,9 @@ class NoteBodyViewer extends Component {
 										msg = msg.split(':');
 										const resourceId = msg[1];
 										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
-									} else {
+									} else if (msg.startsWith('longclick:')) {
+										this.onResourceLongPress(msg);
+									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
 									}
 								}}
@@ -264,6 +309,11 @@ class NoteBodyViewer extends Component {
 						);
 					}}
 				</Async>
+				<BackButtonDialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}

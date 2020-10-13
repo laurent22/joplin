@@ -361,6 +361,17 @@ class SideBarComponent extends React.Component<Props, State> {
 
 	renderFolderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
 		const anchorRef = this.anchorItemRef('folder', folder.id);
+		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
+		let noteCount = folder.note_count;
+
+		// Thunderbird count: Subtract children note_count from parent folder if it expanded.
+		if (isExpanded) {
+			for (let i = 0; i < this.props.folders.length; i++) {
+				if (this.props.folders[i].parent_id === folder.id) {
+					noteCount -= this.props.folders[i].note_count;
+				}
+			}
+		}
 
 		return <FolderItem
 			key={folder.id}
@@ -369,10 +380,10 @@ class SideBarComponent extends React.Component<Props, State> {
 			themeId={this.props.themeId}
 			depth={depth}
 			selected={selected}
-			isExpanded={this.props.collapsedFolderIds.indexOf(folder.id) < 0}
+			isExpanded={isExpanded}
 			hasChildren={hasChildren}
 			anchorRef={anchorRef}
-			noteCount={folder.note_count}
+			noteCount={noteCount}
 			onFolderDragStart_={this.onFolderDragStart_}
 			onFolderDragOver_={this.onFolderDragOver_}
 			onFolderDrop_={this.onFolderDrop_}

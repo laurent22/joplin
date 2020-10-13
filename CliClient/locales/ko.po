@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ElectronClient/checkForUpdates.js:139
@@ -799,7 +801,6 @@ msgid "Toggle sidebar"
 msgstr "사이드바 표시 전환"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:17
-#, fuzzy
 msgid "Toggle editors"
 msgstr "편집기 배치 형태 전환"
 
@@ -1389,9 +1390,9 @@ msgstr ""
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
 #: ReactNativeClient/lib/services/KeymapService.js:142
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "오류"
+msgstr "오류: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
@@ -1463,9 +1464,8 @@ msgid "Exit"
 msgstr "종료"
 
 #: ElectronClient/commands/copyDevCommand.js:17
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "경로를 클립보드에 복사"
+msgstr "개발자 모드 명령을 클립보드에 복사"
 
 #: ElectronClient/commands/startExternalEditing.js:18
 msgid "Edit in external editor"
@@ -1477,13 +1477,12 @@ msgid "Error opening note in editor: %s"
 msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 #: ElectronClient/commands/toggleExternalEditing.js:16
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "외부 편집을 그만 두시려면 클릭하세요"
+msgstr "외부 편집 전환"
 
 #: ElectronClient/commands/toggleExternalEditing.js:42
 msgid "Stop"
-msgstr ""
+msgstr "중지"
 
 #: ElectronClient/commands/stopExternalEditing.js:16
 msgid "Stop external editing"
@@ -2203,9 +2202,9 @@ msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 출력을 위한)을 불러올 수 없습니다"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 출력을 위한)을 불러올 수 없습니다"
+msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 대상을 위한)을 불러올 수 없습니다"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:187
 #, javascript-format
@@ -2221,25 +2220,24 @@ msgid "Restored Notes"
 msgstr "복구된 노트들"
 
 #: ReactNativeClient/lib/services/KeymapService.js:236
-#, fuzzy
 msgid "command"
 msgstr "명령"
 
 #: ReactNativeClient/lib/services/KeymapService.js:236
 #: ReactNativeClient/lib/services/KeymapService.js:241
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "키맵 항목 %s에 필수 속성인 \"명령\"이 없습니다."
+msgstr "\"%s\"에 \"%s\" 필수 속성이 없습니다."
 
 #: ReactNativeClient/lib/services/KeymapService.js:241
 #: ReactNativeClient/lib/services/KeymapService.js:248
 msgid "accelerator"
-msgstr ""
+msgstr "단축키"
 
 #: ReactNativeClient/lib/services/KeymapService.js:248
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "잘못된 답: %s"
+msgstr "유효하지 않은 %s: %s."
 
 #: ReactNativeClient/lib/services/KeymapService.js:266
 #, javascript-format

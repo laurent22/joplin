@@ -64,12 +64,24 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		href = href.replace(/'/g, '%27');
 
 		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
+		if (ruleOptions.enableLongPress && !!resourceId) {
+			const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
+
+			const onClick = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)})`;
+			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
+
+			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${longPressDelay});`;
+			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
+
+			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+		}
+
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
 		if (ruleOptions.plainResourceRendering || pluginOptions.linkRenderingType === 2) {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${htmlentities(href)}' type='${htmlentities(mime)}'>`;
 		} else {
-			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}' type='${htmlentities(mime)}'>${icon}`;
+			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' ${js} type='${htmlentities(mime)}'>${icon}`;
 		}
 	};
 }
