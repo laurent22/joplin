@@ -2,7 +2,7 @@ import FileViewer from 'react-native-file-viewer';
 import AsyncActionQueue from '../../AsyncActionQueue';
 
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -13,6 +13,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
+const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -36,7 +37,7 @@ const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
-const ImagePicker = require('react-native-image-picker');
+// const ImagePicker = require('react-native-image-picker');
 const SelectDateTimeDialog = require('lib/components/SelectDateTimeDialog').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
@@ -507,13 +508,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	showImagePicker(options) {
-		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, response => {
-				resolve(response);
-			});
-		});
-	}
+	// showImagePicker(options) {
+	// 	return new Promise((resolve) => {
+	// 		ImagePicker.launchImageLibrary(options, response => {
+	// 			resolve(response);
+	// 		});
+	// 	});
+	// }
 
 	async resizeImage(localFilePath, targetPath, mimeType) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
@@ -665,10 +666,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-		await this.attachFile(response, 'image');
-	}
+	// async attachPhoto_onPress() {
+	// 	const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
+	// 	await this.attachFile(response, 'image');
+	// }
 
 	takePhoto_onPress() {
 		this.setState({ showCamera: true });
@@ -811,17 +812,26 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
+
+		// As of 2020-10-13, support for attaching images from the gallery is removed
+		// as the package react-native-image-picker has permission issues. It's still
+		// possible to attach files, which has often a similar UI, with thumbnails for
+		// images so normally it should be enough.
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [
+						{ text: _('Attach file'), id: 'attachFile' },
+						{ text: _('Take photo'), id: 'takePhoto' },
+						// { text: _('Attach photo'), id: 'attachPhoto' },
+					]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
 					if (buttonId === 'attachFile') this.attachFile_onPress();
+					// if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
 				},
 			});
 		}
