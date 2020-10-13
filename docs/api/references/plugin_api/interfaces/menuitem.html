@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ImportModuleOutputFormat | Joplin Plugin API Documentation</title>
+	<title>MenuItem | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,45 +54,94 @@
         </li>
 -->
 				<li>
-					<a href="importmoduleoutputformat.html">ImportModuleOutputFormat</a>
+					<a href="menuitem.html">MenuItem</a>
 				</li>
 			</ul>
-			<h1><!-- Enumeration  -->ImportModuleOutputFormat</h1>
+			<h1><!-- Interface  -->MenuItem</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<!--
+    <section class="tsd-panel tsd-hierarchy">
+        <h3>Hierarchy</h3>
+        <ul class="tsd-hierarchy">
+        <li>
+                <span class="target">MenuItem</span>
+
+        </li>
+</ul>
+
+    </section>
+    -->
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumeration members</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="importmoduleoutputformat.html#html" class="tsd-kind-icon">Html</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="importmoduleoutputformat.html#markdown" class="tsd-kind-icon">Markdown</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="menuitem.html#accelerator" class="tsd-kind-icon">accelerator</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="menuitem.html#commandname" class="tsd-kind-icon">command<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="menuitem.html#label" class="tsd-kind-icon">label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="menuitem.html#submenu" class="tsd-kind-icon">submenu</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="html" class="tsd-anchor"></a>
-					<h3>Html</h3>
-					<div class="tsd-signature tsd-kind-icon">Html<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;html&quot;</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="accelerator" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accelerator</h3>
+					<div class="tsd-signature tsd-kind-icon">accelerator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Accelerator associated with the menu item</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="markdown" class="tsd-anchor"></a>
-					<h3>Markdown</h3>
-					<div class="tsd-signature tsd-kind-icon">Markdown<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;md&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="commandname" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> command<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">command<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Command that should be associated with the menu item. All menu item should
+							have a command associated with them unless they are a sub-menu.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="label" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> label</h3>
+					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Menu item label. If not specified, the command label will be used instead.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="submenu" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> submenu</h3>
+					<div class="tsd-signature tsd-kind-icon">submenu<span class="tsd-signature-symbol">:</span> <a href="menuitem.html" class="tsd-signature-type">MenuItem</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Menu items that should appear below this menu item. Allows creating a menu tree.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -109,31 +158,19 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
-						<a href="filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
-					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-enum">
-						<a href="importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
-						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="importmoduleoutputformat.html#html" class="tsd-kind-icon">Html</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="importmoduleoutputformat.html#markdown" class="tsd-kind-icon">Markdown</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-enum">
-						<a href="menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
+						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplin.html" class="tsd-kind-icon">joplin</a>
@@ -175,43 +212,61 @@
 						<a href="../classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
+						<a href="buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/command.html" class="tsd-kind-icon">Command</a>
+						<a href="command.html" class="tsd-kind-icon">Command</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
+						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
+						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+						<a href="exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
+						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
+						<a href="importmodule.html" class="tsd-kind-icon">ImportModule</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
+						<a href="menuitem.html" class="tsd-kind-icon">MenuItem</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="menuitem.html#accelerator" class="tsd-kind-icon">accelerator</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="menuitem.html#commandname" class="tsd-kind-icon">command<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="menuitem.html#label" class="tsd-kind-icon">label</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="menuitem.html#submenu" class="tsd-kind-icon">submenu</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface">
+						<a href="script.html" class="tsd-kind-icon">Script</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
+						<a href="settingitem.html" class="tsd-kind-icon">SettingItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="../interfaces/script.html" class="tsd-kind-icon">Script</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingitem.html" class="tsd-kind-icon">SettingItem</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
+						<a href="settingsection.html" class="tsd-kind-icon">SettingSection</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>

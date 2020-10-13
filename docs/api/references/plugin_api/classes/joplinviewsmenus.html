@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ImportModuleOutputFormat | Joplin Plugin API Documentation</title>
+	<title>joplin.views.menus | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../classes/joplin.html" class="title">Joplin Plugin API Documentation</a>
+					<a href="joplin.html" class="title">Joplin Plugin API Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,45 +54,90 @@
         </li>
 -->
 				<li>
-					<a href="importmoduleoutputformat.html">ImportModuleOutputFormat</a>
+					<a href="joplinviewsmenus.html">joplin.views.menus</a>
 				</li>
 			</ul>
-			<h1><!-- Enumeration  -->ImportModuleOutputFormat</h1>
+			<h1><!-- Class  -->joplin.views.menus</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Allows creating menus.</p>
+					</div>
+					<p><a href="https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/menu">View the demo plugin</a></p>
+				</div>
+			</section>
+			<!--
+    <section class="tsd-panel tsd-hierarchy">
+        <h3>Hierarchy</h3>
+        <ul class="tsd-hierarchy">
+        <li>
+                <span class="target">JoplinViewsMenus</span>
+
+        </li>
+</ul>
+
+    </section>
+    -->
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumeration members</h3>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="importmoduleoutputformat.html#html" class="tsd-kind-icon">Html</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="importmoduleoutputformat.html#markdown" class="tsd-kind-icon">Markdown</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewsmenus.html#create" class="tsd-kind-icon">create</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="html" class="tsd-anchor"></a>
-					<h3>Html</h3>
-					<div class="tsd-signature tsd-kind-icon">Html<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;html&quot;</span></div>
-					<aside class="tsd-sources">
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="markdown" class="tsd-anchor"></a>
-					<h3>Markdown</h3>
-					<div class="tsd-signature tsd-kind-icon">Markdown<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;md&quot;</span></div>
-					<aside class="tsd-sources">
-					</aside>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, menuItems<span class="tsd-signature-symbol">: </span><a href="../interfaces/menuitem.html" class="tsd-signature-type">MenuItem</a><span class="tsd-signature-symbol">[]</span>, location<span class="tsd-signature-symbol">?: </span><a href="../enums/menuitemlocation.html" class="tsd-signature-type">MenuItemLocation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new menu from the provided menu items and place it at the given location. As of now, it is only possible to place the
+									menu as a sub-menu of the application build-in menus.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>label: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>menuItems: <a href="../interfaces/menuitem.html" class="tsd-signature-type">MenuItem</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> location: <a href="../enums/menuitemlocation.html" class="tsd-signature-type">MenuItemLocation</a><span class="tsd-signature-symbol"> = MenuItemLocation.Tools</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -109,70 +154,70 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
-						<a href="filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplin.html" class="tsd-kind-icon">joplin</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplindata.html" class="tsd-kind-icon">joplin.data</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinviews.html" class="tsd-kind-icon">joplin.views</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum">
-						<a href="importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					<li class="current tsd-kind-class">
+						<a href="joplinviewsmenus.html" class="tsd-kind-icon">joplin.views.menus</a>
 						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="importmoduleoutputformat.html#html" class="tsd-kind-icon">Html</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="joplinviewsmenus.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="importmoduleoutputformat.html#markdown" class="tsd-kind-icon">Markdown</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinviewsmenus.html#create" class="tsd-kind-icon">create</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-enum">
-						<a href="menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
+					<li class=" tsd-kind-class">
+						<a href="joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/joplin.html" class="tsd-kind-icon">joplin</a>
+						<a href="joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviews.html" class="tsd-kind-icon">joplin.views</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsmenus.html" class="tsd-kind-icon">joplin.views.menus</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
+						<a href="joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
