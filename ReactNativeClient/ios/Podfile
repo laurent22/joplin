@@ -1,6 +1,8 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+# Note: it was 13.4 to get @react-native-community/datetimepicker to work
+# but it's probably not necessary actually. Just needed to upgrade XCode.
 platform :ios, '10.0'
 
 target 'Joplin' do
