@@ -33,11 +33,11 @@ export default class AlarmServiceDriverNode {
 		return false;
 	}
 
-	notificationIsSet(id:string) {
+	notificationIsSet(id:number) {
 		return id in this.notifications_;
 	}
 
-	async clearNotification(id:string) {
+	async clearNotification(id:number) {
 		if (!this.notificationIsSet(id)) return;
 		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];

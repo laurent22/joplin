@@ -8,7 +8,7 @@ const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
 const AlarmService = require('lib/services/AlarmService.js').default;
-// const AlarmServiceDriver = require('lib/services/AlarmServiceDriver').default;
+const AlarmServiceDriver = require('lib/services/AlarmServiceDriver').default;
 const Alarm = require('lib/models/Alarm').default;
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
@@ -442,7 +442,7 @@ async function initialize(dispatch) {
 	Resource.fsDriver_ = fsDriver;
 	FileApiDriverLocal.fsDriver_ = fsDriver;
 
-	// AlarmService.setDriver(new AlarmServiceDriver());
+	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
 
 	try {

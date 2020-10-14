@@ -1,4 +1,5 @@
 // import { Notification } from 'lib/models/Alarm';
+// import Logger from 'lib/Logger';
 // const PushNotificationIOS  = require('@react-native-community/push-notification-ios').default;
 
 // export default class AlarmServiceDriver {
@@ -6,7 +7,8 @@
 // 	private hasPermission_:boolean = null;
 // 	private inAppNotificationHandler_:any = null;
 
-// 	constructor() {
+// 	constructor(logger:Logger) {
+//		this.logger_ = logger;
 // 		PushNotificationIOS.addEventListener('localNotification', (instance:any) => {
 // 			if (!this.inAppNotificationHandler_) return;
 

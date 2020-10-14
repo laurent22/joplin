@@ -2,7 +2,7 @@ const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 
 export interface Notification {
-	id: string,
+	id: number,
 	noteId: string,
 	date: Date,
 	title: string,

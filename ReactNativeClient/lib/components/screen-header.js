@@ -264,7 +264,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		const renderUndoButton = () => {
 			return renderTopButton({
-				iconName: 'md-undo',
+				iconName: 'arrow-undo-circle-sharp',
 				onPress: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
 				disabled: this.props.undoButtonDisabled,
@@ -273,7 +273,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		const renderRedoButton = () => {
 			return renderTopButton({
-				iconName: 'md-redo',
+				iconName: 'arrow-redo-circle-sharp',
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
 			});

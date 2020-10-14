@@ -709,8 +709,7 @@
 		],
 		"spellright.documentTypes": [
 			"markdown",
-			"latex",
-			"plaintext"
+			"latex"
 		]
 	},
 }
