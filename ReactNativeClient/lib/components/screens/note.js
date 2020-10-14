@@ -34,7 +34,7 @@ const { themeStyle, editorFont } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
-const { DocumentPicker, DocumentPickerUtil } = require('react-native-document-picker');
+const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 // const ImagePicker = require('react-native-image-picker');
@@ -479,19 +479,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async pickDocument() {
-		return new Promise((resolve) => {
-			DocumentPicker.show({ filetype: [DocumentPickerUtil.allFiles()] }, (error, res) => {
-				if (error) {
-					// Also returns an error if the user doesn't pick a file
-					// so just resolve with null.
-					console.info('pickDocument error:', error);
-					resolve(null);
-					return;
-				}
-
-				resolve(res);
-			});
-		});
+		try {
+			const result = await DocumentPicker.pick();
+			return result;
+		} catch (error) {
+			if (DocumentPicker.isCancel(error)) {
+				console.info('pickDocument: user has cancelled');
+				return null;
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	async imageDimensions(uri) {
@@ -567,7 +565,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachFile(pickerResponse, fileType) {
 		if (!pickerResponse) {
-			reg.logger().warn('Got no response from picker');
+			// User has cancelled
 			return;
 		}
 
