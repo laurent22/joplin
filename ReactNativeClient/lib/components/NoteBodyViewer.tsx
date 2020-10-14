@@ -1,34 +1,36 @@
-import Async from 'react-async';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
 
+const Async = require('react-async').default;
 const React = require('react');
 const Component = React.Component;
 const { Platform, View, Text, ToastAndroid } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
-const Setting = require('lib/models/Setting').default;
+const BackButtonDialogBox = require('lib/components/BackButtonDialogBox').default;
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const shim = require('lib/shim').default;
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const { dialogs } = require('lib/dialogs.js');
-const BackButtonDialogBox = require('lib/components/BackButtonDialogBox').default;
 const Resource = require('lib/models/Resource.js');
 const Share = require('react-native-share').default;
 
-class NoteBodyViewer extends Component {
+export default class NoteBodyViewer extends Component {
+
+	private forceUpdate_:boolean = false;
+	private isMounted_:boolean = false;
+	private markupToHtml_:any;
+
 	constructor() {
 		super();
+
 		this.state = {
 			resources: {},
 			webViewLoaded: false,
 			bodyHtml: '',
 		};
-
-		this.forceUpdate_ = false;
-
-		this.isMounted_ = false;
 
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 
@@ -88,22 +90,22 @@ class NoteBodyViewer extends Component {
 		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
 
 		const injectedJs = [];
+		injectedJs.push('try {');
 		injectedJs.push(shim.injectedJs('webviewLib'));
 		// Note that this postMessage function accepts two arguments, for compatibility with the desktop version, but
 		// the ReactNativeWebView actually supports only one, so the second arg is ignored (and currently not needed for the mobile app).
 		injectedJs.push('window.joplinPostMessage_ = (msg, args) => { return window.ReactNativeWebView.postMessage(msg); };');
 		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
-			const readyStateCheckInterval = shim.setInterval(function() {
+			const readyStateCheckInterval = setInterval(function() {
 			    if (document.readyState === "complete") {
-			    	shim.clearInterval(readyStateCheckInterval);
+			    	clearInterval(readyStateCheckInterval);
 			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
-
 			    	const hash = "${this.props.noteHash}";
 			    	// Gives it a bit of time before scrolling to the anchor
 			    	// so that images are loaded.
 			    	if (hash) {
-				    	shim.setTimeout(() => { 
+				    	setTimeout(() => { 
 					    	const e = document.getElementById(hash);
 							if (!e) {
 								console.warn('Cannot find hash', hash);
@@ -115,6 +117,11 @@ class NoteBodyViewer extends Component {
 			    }
 			}, 10);
 		`);
+		injectedJs.push('} catch (e) {');
+		injectedJs.push('	window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))');
+		injectedJs.push('	true;');
+		injectedJs.push('}');
+		injectedJs.push('true;');
 
 		html =
 			`
@@ -173,8 +180,8 @@ class NoteBodyViewer extends Component {
 		}, 100);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
-		const safeGetNoteProp = (props, propName) => {
+	shouldComponentUpdate(nextProps:any, nextState:any) {
+		const safeGetNoteProp = (props:any, propName:string) => {
 			if (!props) return null;
 			if (!props.note) return null;
 			return props.note[propName];
@@ -210,7 +217,7 @@ class NoteBodyViewer extends Component {
 		return this.forceUpdate_;
 	}
 
-	async onResourceLongPress(msg) {
+	async onResourceLongPress(msg:string) {
 		try {
 			const resourceId = msg.split(':')[1];
 			const resource = await Resource.load(resourceId);
@@ -256,7 +263,7 @@ class NoteBodyViewer extends Component {
 		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-503754654
 
 
-		const webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
+		const webViewStyle:any = { backgroundColor: this.props.webViewStyle.backgroundColor };
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).
@@ -267,7 +274,9 @@ class NoteBodyViewer extends Component {
 		return (
 			<View style={this.props.style}>
 				<Async promiseFn={this.reloadNote} watchFn={this.watchFn}>
-					{({ data, error, isPending }) => {
+					{(args:any) => {
+						const { data, error, isPending } = args;
+
 						if (error) {
 							console.error(error);
 							return <Text>{error.message}</Text>;
@@ -286,7 +295,7 @@ class NoteBodyViewer extends Component {
 								allowFileAccess={true}
 								onLoadEnd={() => this.onLoadEnd()}
 								onError={() => reg.logger().error('WebView error')}
-								onMessage={event => {
+								onMessage={(event:any) => {
 									// Since RN 58 (or 59) messages are now escaped twice???
 									let msg = unescape(unescape(event.nativeEvent.data));
 
@@ -296,13 +305,15 @@ class NoteBodyViewer extends Component {
 										const newBody = shared.toggleCheckbox(msg, this.props.note.body);
 										if (this.props.onCheckboxChange) this.props.onCheckboxChange(newBody);
 									} else if (msg.indexOf('markForDownload:') === 0) {
-										msg = msg.split(':');
-										const resourceId = msg[1];
+										const splittedMsg = msg.split(':');
+										const resourceId = splittedMsg[1];
 										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
 									} else if (msg.startsWith('longclick:')) {
 										this.onResourceLongPress(msg);
 									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
+									} else if (msg.startsWith('error:')) {
+										console.error('Webview injected script error: ' + msg);
 									}
 								}}
 							/>
@@ -310,7 +321,7 @@ class NoteBodyViewer extends Component {
 					}}
 				</Async>
 				<BackButtonDialogBox
-					ref={dialogbox => {
+					ref={(dialogbox:any) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -318,5 +329,3 @@ class NoteBodyViewer extends Component {
 		);
 	}
 }
-
-module.exports = { NoteBodyViewer };
