@@ -44,6 +44,13 @@ function shimInit() {
 		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
 
 		return shim.fetchWithRetry(() => {
+			// If the request has a body and it's not a GET call, and it doesn't have a Content-Type header
+			// we display a warning, because it could trigger a "Network request failed" error.
+			// https://github.com/facebook/react-native/issues/30176
+			if (options?.body && options?.method && options.method !== 'GET' && !options?.headers?.['Content-Type']) {
+				console.warn('Done a non-GET fetch call without a Content-Type header. It may make the request fail.', url, options);
+			}
+
 			return fetch(validatedUrl, options);
 		}, options);
 	};
