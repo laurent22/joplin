@@ -132,9 +132,12 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-
+		versionCode 2097583
+		versionName "1.3.0"
+		ndk {
+			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+		}
+		
         // https://github.com/react-native-community/react-native-camera/issues/2138
         missingDimensionStrategy 'react-native-camera', 'general'
 
@@ -156,7 +159,15 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-    }
+		release {
+			if (project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
+				storeFile file(JOPLIN_RELEASE_STORE_FILE)
+				storePassword JOPLIN_RELEASE_STORE_PASSWORD
+				keyAlias JOPLIN_RELEASE_KEY_ALIAS
+				keyPassword JOPLIN_RELEASE_KEY_PASSWORD
+			}
+		}
+	}
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
