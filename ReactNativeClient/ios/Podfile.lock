@@ -330,8 +330,6 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.0.3):
     - React-Core
-  - RNDeviceInfo (6.2.0):
-    - React-Core
   - RNFileViewer (2.1.4):
     - React-Core
   - RNFS (2.16.6):
@@ -409,7 +407,6 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
-  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
@@ -512,8 +509,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/push-notification-ios"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
-  RNDeviceInfo:
-    :path: "../node_modules/react-native-device-info"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer"
   RNFS:
@@ -580,7 +575,6 @@ SPEC CHECKSUMS:
   RNCClipboard: 8f9f12fabf3c06e976f19f87a62c89e28dfedfca
   RNCPushNotificationIOS: 20c4403b2ef8732297ea81e22f66c41bed7aaedf
   RNDateTimePicker: e9fcd5ecdc0c5b018871e0d178d6040dca11973c
-  RNDeviceInfo: 980848feea8d74412b16f2e3e8758c8294d63ca2
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
