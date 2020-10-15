@@ -9,11 +9,6 @@ target 'Joplin' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
-
-  target 'JoplinTests' do
-    inherit! :complete
-    # Pods for testing
-  end
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
@@ -24,14 +19,5 @@ target 'Joplin' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'Joplin-tvOS' do
-  # Pods for Joplin-tvOS
-
-  target 'Joplin-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end

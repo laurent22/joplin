@@ -140,8 +140,6 @@ export default class NoteBodyViewer extends Component {
 		const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`
 		await shim.fsDriver().writeFile(tempFile, html, 'utf8');
 
-		console.info('WROTE TO ', tempFile);
-
 		// On iOS scalesPageToFit work like this:
 		//
 		// Find the widest image, resize it *and everything else* by x% so that

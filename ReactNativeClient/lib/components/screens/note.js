@@ -37,7 +37,7 @@ const NoteBodyViewer = require('lib/components/NoteBodyViewer').default;
 const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
-// const ImagePicker = require('react-native-image-picker');
+const ImagePicker = require('react-native-image-picker').default;
 const SelectDateTimeDialog = require('lib/components/SelectDateTimeDialog').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView');
@@ -506,13 +506,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	// showImagePicker(options) {
-	// 	return new Promise((resolve) => {
-	// 		ImagePicker.launchImageLibrary(options, response => {
-	// 			resolve(response);
-	// 		});
-	// 	});
-	// }
+	showImagePicker(options) {
+		return new Promise((resolve) => {
+			ImagePicker.launchImageLibrary(options, response => {
+				resolve(response);
+			});
+		});
+	}
 
 	async resizeImage(localFilePath, targetPath, mimeType) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
@@ -664,10 +664,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	// async attachPhoto_onPress() {
-	// 	const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-	// 	await this.attachFile(response, 'image');
-	// }
+	async attachPhoto_onPress() {
+		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
+		await this.attachFile(response, 'image');
+	}
 
 	takePhoto_onPress() {
 		this.setState({ showCamera: true });
@@ -821,15 +821,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [
-						{ text: _('Attach file'), id: 'attachFile' },
-						{ text: _('Take photo'), id: 'takePhoto' },
-						// { text: _('Attach photo'), id: 'attachPhoto' },
-					]);
+					const buttons = [];
+
+					// On iOS, it will show "local files", which means certain files saved from the browser
+					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
+					//
+					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+					buttons.push({ text: _('Attach file'), id: 'attachFile' });
+					
+					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
+					// because that's only way to browse photos from the camera roll.
+					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
+					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+
+					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachFile') this.attachFile_onPress();
-					// if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
+					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
 				},
 			});
 		}

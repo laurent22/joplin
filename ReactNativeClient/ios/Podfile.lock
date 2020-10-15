@@ -250,6 +250,8 @@ PODS:
     - React-Core
   - react-native-geolocation (2.0.2):
     - React
+  - react-native-image-picker (2.3.4):
+    - React-Core
   - react-native-image-resizer (1.3.0):
     - React-Core
   - react-native-slider (3.0.3):
@@ -387,6 +389,7 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -469,6 +472,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-image-resizer:
     :path: "../node_modules/react-native-image-resizer"
   react-native-slider:
@@ -555,6 +560,7 @@ SPEC CHECKSUMS:
   react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
   react-native-document-picker: b3e78a8f7fef98b5cb069f20fc35797d55e68e28
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
+  react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-image-resizer: b53bf95ad880100e20262687e41f76fdbc9df255
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-sqlite-storage: ce71689c5a73b79390a1ab213555ae80979a5dc7
@@ -584,6 +590,6 @@ SPEC CHECKSUMS:
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c204794c7a4f7972e81faa624e36efda33d5db96
+PODFILE CHECKSUM: a0d1ca4e385ef46f9103f02206ebf612107dd508
 
 COCOAPODS: 1.9.3
