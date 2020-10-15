@@ -334,7 +334,7 @@ const footerHtmlTemplate = `
 </div></div>
 
 <div class="footer">
-Copyright (c) 2016-YYYY Laurent Cozic
+Copyright (C) 2016-YYYY Laurent Cozic
 </div>
 </body>
 </html>
