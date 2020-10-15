@@ -100,6 +100,9 @@ class OneDriveApi {
 		const r = await shim.fetch(this.tokenBaseUrl(), {
 			method: 'POST',
 			body: body,
+			headers: {
+				['Content-Type']: 'application/x-www-form-urlencoded',
+			},
 		});
 
 		if (!r.ok) {
