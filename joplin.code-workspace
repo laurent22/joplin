@@ -702,7 +702,9 @@
 			"QtClient/build-*": true,
 			"ReactNativeClient/lib/components/BackButtonDialogBox.js": true,
 			"ReactNativeClient/lib/components/SelectDateTimeDialog.js": true,
-			"ReactNativeClient/lib/PoorManIntervals.js": true
+			"ReactNativeClient/lib/PoorManIntervals.js": true,
+			"ReactNativeClient/lib/components/CameraView.js": true,
+			"ReactNativeClient/lib/components/NoteBodyViewer.js": true
 		},
 		"spellright.language": [
 			"en"

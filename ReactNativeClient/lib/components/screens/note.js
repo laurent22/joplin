@@ -40,7 +40,7 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
 const SelectDateTimeDialog = require('lib/components/SelectDateTimeDialog').default;
 const ShareExtension = require('lib/ShareExtension.js').default;
-const CameraView = require('lib/components/CameraView');
+const CameraView = require('lib/components/CameraView').default;
 const urlUtils = require('lib/urlUtils');
 
 class NoteScreenComponent extends BaseScreenComponent {

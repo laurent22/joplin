@@ -200,6 +200,7 @@ ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
 ReactNativeClient/lib/components/BackButtonDialogBox.js
+ReactNativeClient/lib/components/CameraView.js
 ReactNativeClient/lib/components/NoteBodyViewer.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
 ReactNativeClient/lib/components/SelectDateTimeDialog.js

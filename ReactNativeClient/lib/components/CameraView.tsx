@@ -31,7 +31,7 @@ class CameraView extends Component {
 		this.onLayout = this.onLayout.bind(this);
 	}
 
-	onLayout(event) {
+	onLayout(event:any) {
 		this.setState({
 			screenWidth: event.nativeEvent.layout.width,
 			screenHeight: event.nativeEvent.layout.height,
@@ -70,23 +70,26 @@ class CameraView extends Component {
 			fixOrientation: true,
 		});
 
+		this.setState({ snapping: false });
+
 		if (this.props.onPhoto) this.props.onPhoto(result);
 
-		this.setState({ snapping: false });
 	}
 
 	async onCameraReady() {
-		const ratios = await this.camera.getSupportedRatiosAsync();
-		this.setState({ ratios: ratios });
+		if (this.supportsRatios()) {
+			const ratios = await this.camera.getSupportedRatiosAsync();
+			this.setState({ ratios: ratios });
+		}
 	}
 
-	renderButton(onPress, iconName, style) {
+	renderButton(onPress:Function, iconNameOrIcon:any, style:any) {
 		let icon = null;
 
-		if (typeof iconName === 'string') {
+		if (typeof iconNameOrIcon === 'string') {
 			icon = (
 				<Icon
-					name={iconName}
+					name={iconNameOrIcon}
 					style={{
 						fontSize: 40,
 						color: 'black',
@@ -94,7 +97,7 @@ class CameraView extends Component {
 				/>
 			);
 		} else {
-			icon = iconName;
+			icon = iconNameOrIcon;
 		}
 
 		return (
@@ -106,11 +109,11 @@ class CameraView extends Component {
 		);
 	}
 
-	fitRectIntoBounds(rect, bounds) {
+	fitRectIntoBounds(rect:any, bounds:any) {
 		const rectRatio = rect.width / rect.height;
 		const boundsRatio = bounds.width / bounds.height;
 
-		const newDimensions = {};
+		const newDimensions:any = {};
 
 		// Rect is more landscape than bounds - fit to width
 		if (rectRatio > boundsRatio) {
@@ -124,7 +127,7 @@ class CameraView extends Component {
 		return newDimensions;
 	}
 
-	cameraRect(ratio) {
+	cameraRect(ratio:string) {
 		// To keep the calculations simpler, it's assumed that the phone is in
 		// portrait orientation. Then at the end we swap the values if needed.
 		const splitted = ratio.split(':');
@@ -146,16 +149,21 @@ class CameraView extends Component {
 		return output;
 	}
 
+	supportsRatios() {
+		return shim.mobilePlatform() === 'android';
+	}
+
 	render() {
 		const photoIcon = this.state.snapping ? 'md-checkmark' : 'md-camera';
 
-		const displayRatios = shim.mobilePlatform() === 'android' && this.state.ratios.length > 1;
+		const displayRatios = this.supportsRatios() && this.state.ratios.length > 1;
 
-		const reverseCameraButton = this.renderButton(this.reverse_onPress, 'md-reverse-camera', { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 20 });
+		const reverseCameraButton = this.renderButton(this.reverse_onPress, 'md-camera-reverse', { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 20 });
 		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
 
 		let cameraRatio = '4:3';
-		const cameraProps = {};
+		const cameraProps:any = {};
+
 		if (displayRatios) {
 			cameraProps.ratio = this.props.cameraRatio;
 			cameraRatio = this.props.cameraRatio;
@@ -223,7 +231,7 @@ class CameraView extends Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state:any) => {
 	return {
 		cameraRatio: state.settings['camera.ratio'],
 		cameraType: state.settings['camera.type'],
@@ -231,4 +239,4 @@ const mapStateToProps = state => {
 };
 
 
-module.exports = connect(mapStateToProps)(CameraView);
+export default connect(mapStateToProps)(CameraView);
