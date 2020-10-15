@@ -16,7 +16,7 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 				}
 
 				const cacheKey = md5(escape(token.content));
-				let sanitizedContent = context.cache.get(cacheKey);
+				let sanitizedContent = context.cache.value(cacheKey);
 
 				// For html_inline, the content is only a fragment of HTML, as it will be rendered, but
 				// it's not necessarily valid HTML. For example this HTML:
@@ -37,7 +37,7 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 
 				token.content = sanitizedContent;
 
-				context.cache.put(cacheKey, sanitizedContent, 1000 * 60 * 60);
+				context.cache.setValue(cacheKey, sanitizedContent, 1000 * 60 * 60);
 				walkHtmlTokens(token.children);
 			}
 		};

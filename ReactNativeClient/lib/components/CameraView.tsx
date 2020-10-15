@@ -1,4 +1,4 @@
-import { RNCamera } from 'react-native-camera';
+const { RNCamera } = require('react-native-camera');
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
@@ -178,7 +178,7 @@ class CameraView extends Component {
 				<View style={{ position: 'absolute', backgroundColor: '#000000', width: '100%', height: '100%' }}/>
 				<RNCamera
 					style={Object.assign({ position: 'absolute' }, cameraRect)}
-					ref={ref => {
+					ref={(ref:any) => {
 						this.camera = ref;
 					}}
 					type={this.props.cameraType}

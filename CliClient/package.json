@@ -80,7 +80,6 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
-    "memory-cache": "^0.2.0",
     "mime": "^2.0.3",
     "moment": "^2.24.0",
     "multiparty": "^4.2.1",
