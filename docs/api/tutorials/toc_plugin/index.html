@@ -399,8 +399,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md
 <li>How to create a webview</li>
 <li>How to listen to changes in the user interface</li>
 </ul>
-<p>## Setting up your environment</p>
-<p>Before getting any further, make sure your environment is setup correctly as described in the <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/">Get Started guide</a>.</p>
+<h2>Setting up your environment<a name="setting-up-your-environment" href="#setting-up-your-environment" class="heading-anchor">🔗</a></h2>
+<p>Before getting any further, make sure your environment is setup correctly as described in the <a href="https://joplinapp.org/api/get_started/plugins/">Get Started guide</a>.</p>
 <h2>Registering the plugin<a name="registering-the-plugin" href="#registering-the-plugin" class="heading-anchor">🔗</a></h2>
 <p>All plugins must <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html">register themselves</a> and declare what events they can handle. To do so, open <code>src/index.ts</code> and register the plugin as below. We'll also need to run some initialisation code when the plugin starts, so add the <code>onStart()</code> event handler too:</p>
 <pre><code class="language-typescript">// Import the Joplin API
