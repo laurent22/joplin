@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200301-125055.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200301-125055.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200301-125055.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200301-125055.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Large desktop update coming soon<a name="large-desktop-update-coming-soon" href="#large-desktop-update-coming-soon" class="heading-anchor">🔗</a></h1>
 <p>I haven't kept up with releases lately and thus the new one is quite big, it includes 8 new features, 3 security fixes, 19 improvements, and 29 bug fixes. Here's a summary of what to expect:</p>
 <p><strong>Mermaid diagram support</strong></p>
@@ -420,6 +440,8 @@ published_at: 2020-03-01T12:50:55.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Synchronising your notes 🔄<a name="synchronising-your-notes" href="#synchronising-your-notes" class="heading-anchor">🔗</a></h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. You basically choose the service you prefer among those supported, setup the configuration, and the app will be able to sync between your computers or mobile devices.</p>
 <p>The supported cloud services are the following:</p>
@@ -409,6 +429,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

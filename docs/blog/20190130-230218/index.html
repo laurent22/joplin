@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190130-230218.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190130-230218.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190130-230218.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190130-230218.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>New search engine in Joplin<a name="new-search-engine-in-joplin" href="#new-search-engine-in-joplin" class="heading-anchor">🔗</a></h1>
 <p>The original search engine in Joplin was pretty limited - it would search for your exact query and that is it. For example if you search for &quot;recipe cake&quot; it would return results that contain exactly this word in this order and nothing else - it would not return &quot;apple cake recipe&quot; or &quot;recipe for birthday cake&quot;, thus forcing you to try various queries.</p>
 <p>The last versions of Joplin include a new search engine that provides much better results, and also allow better specifying search queries.</p>
@@ -407,6 +427,8 @@ published_at: 2019-01-30T23:02:18.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

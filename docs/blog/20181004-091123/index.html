@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181004-091123.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181004-091123.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181004-091123.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181004-091123.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin and Hacktobertfest 2018 🎃<a name="joplin-and-hacktobertfest-2018" href="#joplin-and-hacktobertfest-2018" class="heading-anchor">🔗</a></h1>
 <p>The <a href="https://hacktoberfest.digitalocean.com/">Hacktobertfest event</a>  has started - it allows you to contribute to Joplin and, at the end of  the month, after having done 5 PR, you'll earn a limited edition  T-shirt.</p>
 <p>To participate, go on <a href="https://hacktoberfest.digitalocean.com/">https://hacktoberfest.digitalocean.com/</a>  log in (with you github account) and you are ready to get in.</p>
@@ -406,6 +426,8 @@ published_at: 2018-10-04T08:11:23.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

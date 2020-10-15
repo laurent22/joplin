@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200406-224254.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200406-224254.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200406-224254.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200406-224254.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin informal encryption and security audit results<a name="joplin-informal-encryption-and-security-audit-results" href="#joplin-informal-encryption-and-security-audit-results" class="heading-anchor">🔗</a></h1>
 <p>Joplin encryption, and in particular the E2EE system used during synchronisation, was recently audited by Isaac Potoczny-Jones, CEO of <a href="https://tozny.com">Tozny</a> and this is what he had to say:</p>
 <blockquote>
@@ -432,6 +452,8 @@ published_at: 2020-04-06T21:42:54.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

@@ -77,6 +77,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -233,7 +234,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -257,6 +258,23 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -308,9 +326,13 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 
 <div class="content">
 	{{{tocHtml}}}
+
+	<div class="main">
 `;
 
 const footerHtmlTemplate = `
+</div></div>
+
 <div class="footer">
 Copyright (c) 2016-YYYY Laurent Cozic
 </div>

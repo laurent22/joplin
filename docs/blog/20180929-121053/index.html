@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180929-121053.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180929-121053.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180929-121053.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180929-121053.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>New release and many bug fixes<a name="new-release-and-many-bug-fixes" href="#new-release-and-many-bug-fixes" class="heading-anchor">🔗</a></h1>
 <p>Reliability and stability is an important feature of Joplin as the application can potentially manage thousands of notes spanning many years (My oldest note, imported from another software, is from October 1999!). A stable interface without too many glitches also makes for a more pleasant user experience. For these reasons, bug fixes are always given high priority in this project, and are usually worked on before any new feature is added. The latest release for instance pretty much only contains bug fixes - eight of them, including one security fix.</p>
 <p>Joplin is not bug free yet, there are still a few issues here and there, that sometimes depend on the user's hardware or configuration, and others that are hard to replicate or fix, but the app is getting there - more stable with each new release.</p>
@@ -404,6 +424,8 @@ published_at: 2018-09-29T11:10:53.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

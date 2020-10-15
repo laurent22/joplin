@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Search Engine<a name="search-engine" href="#search-engine" class="heading-anchor">🔗</a></h1>
 <p>The Search Engine powers the Search input in the note list and the Goto Anything dialog.</p>
 <h2>Search algorithm<a name="search-algorithm" href="#search-algorithm" class="heading-anchor">🔗</a></h2>
@@ -420,6 +440,8 @@ This time-based weight decays logarithmically, becoming less of a factor than BM
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

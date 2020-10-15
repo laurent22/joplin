@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/1_welcome_to_joplin.
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/1_welcome_to_joplin.
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/1_welcome_to_joplin.
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/1_welcome_to_joplin.
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Welcome to Joplin! 🗒️<a name="welcome-to-joplin" href="#welcome-to-joplin" class="heading-anchor">🔗</a></h1>
 <p>Joplin is a free, open source note taking and to-do application, which helps you write and organise your notes, and synchronise them between your devices. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="https://joplinapp.org/#markdown">Markdown format</a>. Joplin is available as a <strong>💻 desktop</strong>, <strong>📱 mobile</strong> and <strong>🔡 terminal</strong> application.</p>
 <p>The notes in this notebook give an overview of what Joplin can do and how to use it. In general, the three applications share roughly the same functionalities; any differences will be clearly indicated.</p>
@@ -445,6 +465,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/1_welcome_to_joplin.
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

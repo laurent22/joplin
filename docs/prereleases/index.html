@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/prereleases.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/prereleases.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/prereleases.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/prereleases.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Getting pre-releases<a name="getting-pre-releases" href="#getting-pre-releases" class="heading-anchor">🔗</a></h1>
 <p>Pre-releases are available for the desktop application. They are pretty much like regular releases, except that they have not yet been tested by many users, so it is possible that a bug or two went through.</p>
 <p>You can help the development of Joplin by choosing to receive these early releases when updating the application. If you find any bug or other issue, you may report it <a href="https://discourse.joplinapp.org/">on the forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub</a>.</p>
@@ -402,6 +422,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/prereleases.md
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

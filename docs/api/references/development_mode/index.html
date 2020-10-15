@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Development mode<a name="development-mode" href="#development-mode" class="heading-anchor">🔗</a></h1>
 <p>When experimenting with Joplin, for example when developing a plugin or trying a theme, you might want to run Joplin in development mode. Doing so means that Joplin will run using a different profile, so you can experiment without risking to accidentally change or delete your data.</p>
 <p>To enable Development Mode, open Joplin as normal, then go to <strong>Help =&gt; Copy dev mode command to clipboard</strong>. This will copy a command to the clipboard. Now close Joplin, and start it again in dev mode using the command you've just copied.</p>
@@ -400,6 +420,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

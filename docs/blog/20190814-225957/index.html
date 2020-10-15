@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190814-225957.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190814-225957.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190814-225957.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190814-225957.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin now supports Fountain screenwriting markup language<a name="joplin-now-supports-fountain-screenwriting-markup-language" href="#joplin-now-supports-fountain-screenwriting-markup-language" class="heading-anchor">🔗</a></h1>
 <p><a href="https://fountain.io/">Fountain</a> is markup language for screenwriting. Similar to Markdown, it is a lightweight markup format, which allows editing screenplays in plain text.</p>
 <p>The desktop and mobile Joplin applications now support Fountain, allowing you to write and read your screenplays on your computer or on the go. To add a Fountain screenplay to a note simply wrap it into a fenced block, with the &quot;fountain&quot; identifier. For example:</p>
@@ -415,6 +435,8 @@ published_at: 2019-08-14T21:59:57.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

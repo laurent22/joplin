@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180916-210431.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180916-210431.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180916-210431.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180916-210431.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Note properties in desktop application<a name="note-properties-in-desktop-application" href="#note-properties-in-desktop-application" class="heading-anchor">🔗</a></h1>
 <p><img src="images/20180916-210431_0.png" alt=""></p>
 <p>The new desktop version of Joplin for Windows, macOS and Linux features a new dialog box to view and edit the note properties, such as the updated date, created date, source URL or even location. It's a small change but it can be useful. This dialog can be accessed by clicking on the Information icon in the toolbar.</p>
@@ -404,6 +424,8 @@ published_at: 2018-09-16T20:04:31.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Importing and exporting notes ↔️<a name="importing-and-exporting-notes" href="#importing-and-exporting-notes" class="heading-anchor">🔗</a></h1>
 <h2>Importing from Evernote<a name="importing-from-evernote" href="#importing-from-evernote" class="heading-anchor">🔗</a></h2>
 <p>Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, images, attached files and note metadata (such as author, geo-location, etc.) via ENEX files.</p>
@@ -405,6 +425,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

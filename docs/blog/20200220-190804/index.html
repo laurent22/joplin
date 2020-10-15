@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200220-190804.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200220-190804.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200220-190804.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20200220-190804.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>GSoC 2020: Joplin has been accepted as a mentor organization!<a name="gsoc-2020-joplin-has-been-accepted-as-a-mentor-organization" href="#gsoc-2020-joplin-has-been-accepted-as-a-mentor-organization" class="heading-anchor">🔗</a></h1>
 <p>Good news, our Google Summer of Code 2020 application <a href="https://summerofcode.withgoogle.com/organizations/?sp-search=joplin#6258880889225216">has been accepted</a>!</p>
 <p>Since we made the announcement back in November, we already had a few students submitted pull requests and getting themselves familiar with the codebase.</p>
@@ -404,6 +424,8 @@ published_at: 2020-02-20T19:08:04.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

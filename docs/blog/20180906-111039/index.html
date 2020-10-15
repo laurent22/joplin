@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180906-111039.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180906-111039.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180906-111039.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180906-111039.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>New iOS release with improved attachment support<a name="new-ios-release-with-improved-attachment-support" href="#new-ios-release-with-improved-attachment-support" class="heading-anchor">🔗</a></h1>
 <p><img src="images/20180906-111039_0.png" alt=""></p>
 <p>The iOS version for iPhone, iPad and iPod sometimes lags behind the Android one due to the App Store release process being more complex. However it eventually catches up, as is the case with the latest release, which includes all the features and bug fixes from the past few months.</p>
@@ -405,6 +425,8 @@ published_at: 2018-09-06T10:10:39.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

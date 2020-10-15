@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190424-112410.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190424-112410.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190424-112410.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190424-112410.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>The Joplin forum is one year old<a name="the-joplin-forum-is-one-year-old" href="#the-joplin-forum-is-one-year-old" class="heading-anchor">🔗</a></h1>
 <p>Exactly one year ago, on 24 April 2018, the <a href="https://discourse.joplinapp.org/">Joplin forum</a> was created as a result of <a href="https://github.com/laurent22/joplin/issues/418">this post on GitHub</a>. Before this, the only way to discuss the project was indeed on the GitHub bug tracker, which is not ideal for general discussion about features, development and so on.</p>
 <p>After looking at various options, eventually we settled on Discourse, which provides a nice clean UI, works well on mobile, and is easy to manage. Even better, the Discourse team was kind enough to host the project for us for free, as part of their <a href="https://blog.discourse.org/2016/03/free-discourse-forum-hosting-for-community-friendly-github-projects/">Free hosting program for open source projects</a>. Not having to manage or pay for the server is great, and it means more time can be spent developing the application.</p>
@@ -406,6 +426,8 @@ published_at: 2019-04-24T10:24:10.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

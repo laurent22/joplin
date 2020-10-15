@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h1>
 <h2>On Windows<a name="on-windows" href="#on-windows" class="heading-anchor">🔗</a></h2>
 <p>If <code>yarn dist</code> fails, it may need administrative rights.</p>
@@ -432,6 +452,8 @@ pod install
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

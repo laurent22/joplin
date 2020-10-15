@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.2.3">cli-v1.2.3</a> - 2020-10-09T11:17:18Z<a name="cli-v1-2-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-2-3-2020-10-09t11-17-18z" href="#cli-v1-2-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-2-3-2020-10-09t11-17-18z" class="heading-anchor">🔗</a></h2>
 <ul>
@@ -598,6 +618,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

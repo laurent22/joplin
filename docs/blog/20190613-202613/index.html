@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190613-202613.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190613-202613.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190613-202613.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190613-202613.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Customising your notes with the help of the development tools and CSS<a name="customising-your-notes-with-the-help-of-the-development-tools-and-css" href="#customising-your-notes-with-the-help-of-the-development-tools-and-css" class="heading-anchor">🔗</a></h1>
 <p>In Joplin desktop, it has been possible <a href="https://joplinapp.org/#custom-css">to customise the appearance of your notes</a> using CSS for quite some time.</p>
 <p>An issue however is that it is difficult to know what CSS to write and how to select specific elements with CSS. The development tools that were just added allow figuring this out. They are available under the menu <strong>Help &gt; Toggle development tools.</strong></p>
@@ -406,6 +426,8 @@ published_at: 2019-06-13T19:26:13.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181213-173459.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181213-173459.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181213-173459.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20181213-173459.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin is now featured on <a href="http://PrivacyTools.io">PrivacyTools.io</a><a name="joplin-is-now-featured-on-privacytools-io" href="#joplin-is-now-featured-on-privacytools-io" class="heading-anchor">🔗</a></h1>
 <p>Joplin is now <a href="https://www.privacytools.io/#notebook">featured on PrivacyTools.io</a>, a site dedicated to providing knowledge and tools to protect people's privacy against global mass surveillance. The app was kindly submitted by <a href="https://github.com/privacytoolsIO/privacytools.io/pull/659">Mats Estensen on GitHub</a> and accepted soon after.</p>
 <p>Since day one the Joplin project has indeed been concerned with privacy - offering End To End Encryption and supporting open standards, including WebDAV for synchronisation. Setting up Joplin synchronisation can be more complicated than other existing note applications, but the advantage is that once it is done you 100% own the data and even the infrastructure if you use Nextcloud on your own server.</p>
@@ -407,6 +427,8 @@ published_at: 2018-12-13T17:34:59.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

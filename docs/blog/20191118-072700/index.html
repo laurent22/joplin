@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191118-072700.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191118-072700.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191118-072700.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191118-072700.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin is looking into joining Google Summer of Code in 2020<a name="joplin-is-looking-into-joining-google-summer-of-code-in-2020" href="#joplin-is-looking-into-joining-google-summer-of-code-in-2020" class="heading-anchor">🔗</a></h1>
 <p><img src="images/20191118-072700_0.png" alt=""></p>
 <p>Joplin is looking into joining <strong>Google Summer of Code</strong> next summer. The application period as organisation is expected to happen in the second half of January 2020. Until then Joplin hopes to have multiple active discussion and may even have some easy commits in regard to the application and potential projects.</p>
@@ -412,6 +432,8 @@ published_at: 2019-11-18T07:27:00.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Joplin Web API for Nextcloud<a name="joplin-web-api-for-nextcloud" href="#joplin-web-api-for-nextcloud" class="heading-anchor">🔗</a></h1>
 <p><strong>This is a beta feature, not yet completed. More info coming soon!</strong></p>
 <p>The app can be downloaded from there: <a href="https://apps.nextcloud.com/apps/joplin">https://apps.nextcloud.com/apps/joplin</a></p>
@@ -434,6 +454,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

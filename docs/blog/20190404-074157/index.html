@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Markdown plugins and Goto Anything<a name="markdown-plugins-and-goto-anything" href="#markdown-plugins-and-goto-anything" class="heading-anchor">🔗</a></h1>
 <p>The latest release includes two relatively important new features:</p>
 <p>The first one, is the addition of several Markdown plugins that enable new features: for example it's now possible to add a table of contents to your notes, to enable footnotes, or to render various text decorations, such as superscript, subscript, highlighting, etc. This was all made possible thanks to the efforts of Caleb John.</p>
@@ -406,6 +426,8 @@ published_at: 2019-04-04T06:41:57.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

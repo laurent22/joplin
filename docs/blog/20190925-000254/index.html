@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>New icon for Joplin!<a name="new-icon-for-joplin" href="#new-icon-for-joplin" class="heading-anchor">🔗</a></h1>
 <p>The Joplin icon is going to change soon. The one we have now is something I put together quickly, not knowing if the project would interest someone, so I didn't want to spend too much time on it. Now that the project is more mature, it makes sense to start improving the visuals - first the icon, then the logo font, the website and finally the app UI (although these have already been improved little by little over the past year).</p>
 <p>Before picking an icon, I'd be interested to hear about your feedback and whether you have a preference among those below. They all share the same idea - which is something that looks like a note, and that contains a &quot;J&quot; too.</p>
@@ -420,6 +440,8 @@ published_at: 2019-09-24T23:02:54.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

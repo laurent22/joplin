@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190523-231026.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190523-231026.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190523-231026.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190523-231026.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Note history now in Joplin<a name="note-history-now-in-joplin" href="#note-history-now-in-joplin" class="heading-anchor">🔗</a></h1>
 <p>The latest versions of Joplin adds support for note history. The applications (desktop, mobile and CLI) now preserve previous versions of the notes, so you can inspect or restore them later on as needed.</p>
 <p>A common complain with many sync-based note taking apps is that they work in an opaque way - sometimes notes are changed or they disappear and it's not clear why - it could be a user error, or some bug, but regardless it makes it hard to trust the app with thousands of notes. So this feature give transparency over what's happening - if some note seems to be gone or changed when it shouldn't, the redundant data allows investigating the issue and restoring content.</p>
@@ -416,6 +436,8 @@ published_at: 2019-05-23T22:10:26.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic

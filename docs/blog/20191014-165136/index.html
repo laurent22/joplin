@@ -72,6 +72,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191014-165136.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -228,7 +229,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191014-165136.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -252,6 +253,23 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191014-165136.md
 	h5:hover a.heading-anchor,
 	h6:hover a.heading-anchor {
 		opacity: 1;
+	}
+
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
 	}
 
 	.bottom-links {
@@ -362,6 +380,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20191014-165136.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>New Joplin icon, second round<a name="new-joplin-icon-second-round" href="#new-joplin-icon-second-round" class="heading-anchor">🔗</a></h1>
 <p>The quest for a <a href="https://www.patreon.com/posts/new-icon-for-30218482">new Joplin icon</a>  continue - first many thanks for the votes and feedback! It definitely  helped getting a better sense of what would make a great icon.</p>
 <p>Taking all this into account, the remaining candidates are the 5  following icons. The first three were the top voted icons, and the  following two are based on the feedback here and on the forum.</p>
@@ -405,6 +425,8 @@ published_at: 2019-10-14T15:51:36.000+00:00</p>
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
+
+</div></div>
 
 <div class="footer">
 Copyright (c) 2016-2020 Laurent Cozic
