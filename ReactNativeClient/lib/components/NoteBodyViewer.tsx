@@ -71,7 +71,7 @@ export default class NoteBodyViewer extends Component {
 			resources: this.props.noteResources,
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.joplinPostMessage_',
-			enableLongPress: shim.isReactNative(),
+			enableLongPress: shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
 			longPressDelay: 500, // TODO use system value
 		};
 
