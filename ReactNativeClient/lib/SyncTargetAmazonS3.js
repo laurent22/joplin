@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting').default;
 const { FileApi } = require('lib/file-api.js');
 const Synchronizer = require('lib/Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
-const AWS = require("aws-sdk");
+const AWS = require('aws-sdk');
 
 class SyncTargetAmazonS3 extends BaseSyncTarget {
 	static id() {
