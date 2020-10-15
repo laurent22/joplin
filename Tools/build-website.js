@@ -33,6 +33,15 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		background-color: #F1F1F1;
 		color: #333333;
 	}
+
+	.root {
+		overflow: hidden;
+	}
+
+	a[href^="mailto:"] {
+		word-break: break-all;
+	}
+
 	table {
 		margin-bottom: 1em;
 	}
@@ -190,8 +199,9 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 	}
 	.nav {
 		background-color: black;
-		display: table;
-		width: inherit;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 	.nav.sticky {
 		position:fixed;
@@ -208,9 +218,8 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		/* min-width: 250px; */
-		/* For GSoC: */
-		min-width: 470px;
+		display: flex;
+		width: 100%;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -221,11 +230,11 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		font-weight: bold;
 	}
 	.nav-right {
-		display: table-cell;
-		width: 100%;
+		display: flex;
 		text-align: right;
 		vertical-align: middle;
 		line-height: 0;
+		margin-right: 10px;
 	}
 	.nav-right .share-btn {
 		display: none;
@@ -298,7 +307,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 
 <body>
 
-<div class="container page-{{sourceMarkdownName}}">
+<div class="container root page-{{sourceMarkdownName}}">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
