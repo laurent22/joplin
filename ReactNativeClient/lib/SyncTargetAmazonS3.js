@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting').default;
 const { FileApi } = require('lib/file-api.js');
 const Synchronizer = require('lib/Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
-const S3 = require('aws-sdk/clients/s3');
+const AWS = require("aws-sdk");
 
 class SyncTargetAmazonS3 extends BaseSyncTarget {
 	static id() {
@@ -41,13 +41,15 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			accessKeyId: Setting.value('sync.8.username'),
 			secretAccessKey: Setting.value('sync.8.password'),
 			s3UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
+			s3ForcePathStyle: true,
+			endpoint: new AWS.Endpoint(Setting.value('sync.8.url')),
 		};
 	}
 
 	api() {
 		if (this.api_) return this.api_;
 
-		this.api_ = new S3(this.s3AuthParameters());
+		this.api_ = new AWS.S3(this.s3AuthParameters());
 		return this.api_;
 	}
 
@@ -56,9 +58,11 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			accessKeyId: options.username(),
 			secretAccessKey: options.password(),
 			s3UseArnRegion: true,
+			s3ForcePathStyle: true,
+			endpoint: new AWS.Endpoint(options.url()),
 		};
 
-		const api = new S3(apiOptions);
+		const api = new AWS.S3(apiOptions);
 		const driver = new FileApiDriverAmazonS3(api, SyncTargetAmazonS3.s3BucketName());
 		const fileApi = new FileApi('', driver);
 		fileApi.setSyncTargetId(syncTargetId);
