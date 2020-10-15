@@ -137,6 +137,11 @@ export default class NoteBodyViewer extends Component {
 			</html>
 		`;
 
+		const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`
+		await shim.fsDriver().writeFile(tempFile, html, 'utf8');
+
+		console.info('WROTE TO ', tempFile);
+
 		// On iOS scalesPageToFit work like this:
 		//
 		// Find the widest image, resize it *and everything else* by x% so that
@@ -158,7 +163,8 @@ export default class NoteBodyViewer extends Component {
 		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
 		return {
 			source: {
-				html: html,
+				// html: html,
+				uri: 'file://' + tempFile,
 				baseUrl: `file://${Setting.value('resourceDir')}/`,
 			},
 			injectedJs: injectedJs,
@@ -271,6 +277,8 @@ export default class NoteBodyViewer extends Component {
 			webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 		}
 
+		const useWebkit = true; //Platform.OS !== 'ios'
+
 		return (
 			<View style={this.props.style}>
 				<Async promiseFn={this.reloadNote} watchFn={this.watchFn}>
@@ -286,7 +294,8 @@ export default class NoteBodyViewer extends Component {
 
 						return (
 							<WebView
-								useWebKit={Platform.OS !== 'ios'}
+								useWebKit={useWebkit}
+								allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
 								style={webViewStyle}
 								source={data.source}
 								injectedJavaScript={data.injectedJs.join('\n')}
