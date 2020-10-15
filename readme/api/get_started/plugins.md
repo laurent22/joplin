@@ -2,7 +2,7 @@
 
 In this article you will learn the basic steps to build and test a plugin in Joplin.
 
-## Setting up your environment
+## Setting up your environment
 
 First you need to setup your environment:
 

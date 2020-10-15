@@ -8,7 +8,7 @@ Through this tutorial you will learn about several aspect of the Joplin API, inc
 - How to create a webview
 - How to listen to changes in the user interface
 
-## Setting up your environment
+## Setting up your environment
 
 Before getting any further, make sure your environment is setup correctly as described in the [Get Started guide](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins/).
 
