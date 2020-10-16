@@ -1,3 +1,11 @@
+// On mobile all the setTimeout and setInterval should go through this class
+// as it will either use the native timeout/interval for short intervals or
+// the custom one for long intervals.
+
+// For custom intervals, they are triggered
+// whenever the update() function is called, and in mobile it's called for
+// example on the Redux action middleware or when the app gets focus.
+
 const { time } = require('lib/time-utils.js');
 
 type IntervalId = number;

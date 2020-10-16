@@ -63,6 +63,11 @@ class MarkupToHtml {
 		return output;
 	}
 
+	clearCache(markupLanguage) {
+		const r = this.renderer(markupLanguage);
+		if (r.clearCache) r.clearCache();
+	}
+
 	async render(markupLanguage, markup, theme, options) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}

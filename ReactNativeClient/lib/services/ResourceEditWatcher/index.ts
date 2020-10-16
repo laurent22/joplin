@@ -127,7 +127,7 @@ export default class ResourceEditWatcher {
 				// handle and once in the "raw" event handler, due to a bug in chokidar. So having
 				// this check means we don't unecessarily save the resource twice when the file is
 				// modified by the user.
-				this.logger().debug(`ResourceEditWatcher: No timestamp change - skip: ${resourceId}`);
+				this.logger().debug(`ResourceEditWatcher: No timestamp and file size change - skip: ${resourceId}`);
 				return;
 			}
 

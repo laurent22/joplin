@@ -698,6 +698,7 @@ export default class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
+		// this.logger_.addTarget(TargetType.Console, { level: Logger.LEVEL_DEBUG });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);

@@ -706,7 +706,12 @@
 			"ReactNativeClient/lib/components/CameraView.js": true,
 			"ReactNativeClient/lib/components/NoteBodyViewer.js": true,
 			"CliClient/tests/InMemoryCache.js": true,
-			"ReactNativeClient/lib/InMemoryCache.js": true
+			"ReactNativeClient/lib/InMemoryCache.js": true,
+			"ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnMessage.js": true,
+			"ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js": true,
+			"ReactNativeClient/lib/components/NoteBodyViewer/hooks/useSource.js": true,
+			"ReactNativeClient/lib/components/NoteBodyViewer/NoteBodyViewer.js": true,
+			"ReactNativeClient/lib/components/screens/Note.js": true
 		},
 		"spellright.language": [
 			"en"

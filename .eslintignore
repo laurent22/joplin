@@ -202,7 +202,11 @@ ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
 ReactNativeClient/lib/components/BackButtonDialogBox.js
 ReactNativeClient/lib/components/CameraView.js
-ReactNativeClient/lib/components/NoteBodyViewer.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnMessage.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useSource.js
+ReactNativeClient/lib/components/NoteBodyViewer/NoteBodyViewer.js
+ReactNativeClient/lib/components/screens/Note.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
 ReactNativeClient/lib/components/SelectDateTimeDialog.js
 ReactNativeClient/lib/errorUtils.js

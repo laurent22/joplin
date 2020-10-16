@@ -1,16 +1,18 @@
-import FileViewer from 'react-native-file-viewer';
 import AsyncActionQueue from '../../AsyncActionQueue';
+import UndoRedoService from 'lib/services/UndoRedoService';
+import uuid from 'lib/uuid';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
+import NoteBodyViewer from 'lib/components/NoteBodyViewer/NoteBodyViewer';
 
+const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
-const uuid = require('lib/uuid').default;
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
-const UndoRedoService = require('lib/services/UndoRedoService.js').default;
 const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const Clipboard = require('@react-native-community/clipboard').default;
@@ -27,13 +29,11 @@ const { time } = require('lib/time-utils.js');
 const { Checkbox } = require('lib/components/checkbox.js');
 const { _ } = require('lib/locale');
 const { reg } = require('lib/registry.js');
-const shim = require('lib/shim').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle, editorFont } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const NoteBodyViewer = require('lib/components/NoteBodyViewer').default;
 const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
@@ -43,8 +43,10 @@ const ShareExtension = require('lib/ShareExtension.js').default;
 const CameraView = require('lib/components/CameraView').default;
 const urlUtils = require('lib/urlUtils');
 
+const emptyArray:any[] = [];
+
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
+	static navigationOptions():any {
 		return { header: null };
 	}
 
@@ -152,7 +154,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.setState({ noteTagDialogShown: false });
 		};
 
-		this.onJoplinLinkClick_ = async msg => {
+		this.onJoplinLinkClick_ = async (msg:string) => {
 			try {
 				if (msg.indexOf('joplin://') === 0) {
 					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
@@ -195,7 +197,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		};
 
-		this.refreshResource = async (resource, noteBody = null) => {
+		this.refreshResource = async (resource:any, noteBody:string = null) => {
 			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
 			if (noteBody === null) return;
 
@@ -203,9 +205,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (resourceIds.indexOf(resource.id) >= 0) {
 				shared.clearResourceCache();
 				const attachedResources = await shared.attachedResources(noteBody);
-				this.setState({ noteResources: attachedResources }, () => {
-					if (this.refs.noteBodyViewer) this.refs.noteBodyViewer.rebuildMd();
-				});
+				this.setState({ noteResources: attachedResources });
 			}
 		};
 
@@ -231,6 +231,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.body_selectionChange = this.body_selectionChange.bind(this);
+		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
+		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 	}
 
 	undoRedoService_stackChange() {
@@ -240,11 +242,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} });
 	}
 
-	async undoRedo(type) {
+	async undoRedo(type:string) {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
-		this.setState((state) => {
+		this.setState((state:any) => {
 			const newNote = Object.assign({}, state.note);
 			newNote.body = undoState.body;
 			return {
@@ -271,7 +273,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.styles_ = {};
 
 		// TODO: Clean up these style names and nesting
-		const styles = {
+		const styles:any = {
 			screen: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
@@ -300,12 +302,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
 			},
-			noteBodyViewerPreview: {
-				borderTopColor: theme.dividerColor,
-				borderTopWidth: 1,
-				borderBottomColor: theme.dividerColor,
-				borderBottomWidth: 1,
-			},
 			checkbox: {
 				color: theme.color,
 				paddingRight: 10,
@@ -318,6 +314,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				color: theme.urlColor,
 			},
 		};
+
+		styles.noteBodyViewerPreview = {
+			...styles.noteBodyViewer,
+			borderTopColor: theme.dividerColor,
+			borderTopWidth: 1,
+			borderBottomColor: theme.dividerColor,
+			borderBottomWidth: 1,
+		}
 
 		styles.titleContainer = {
 			flex: 0,
@@ -354,7 +358,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	undoState(noteBody = null) {
+	undoState(noteBody:string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
 		};
@@ -378,11 +382,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	onMarkForDownload(event) {
+	onMarkForDownload(event:any) {
 		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps:any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -413,13 +417,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
-	title_changeText(text) {
+	title_changeText(text:string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
-	body_changeText(text) {
+	body_changeText(text:string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -429,7 +433,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_selectionChange(event) {
+	body_selectionChange(event:any) {
 		this.selection = event.nativeEvent.selection;
 	}
 
@@ -439,7 +443,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	saveActionQueue(noteId) {
+	saveActionQueue(noteId:string) {
 		if (!this.saveActionQueues_[noteId]) {
 			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
 		}
@@ -450,13 +454,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
-	async saveNoteButton_press(folderId = null) {
+	async saveNoteButton_press(folderId:string = null) {
 		await shared.saveNoteButton_press(this, folderId);
 
 		Keyboard.dismiss();
 	}
 
-	async saveOneProperty(name, value) {
+	async saveOneProperty(name:string, value:any) {
 		await shared.saveOneProperty(this, name, value);
 	}
 
@@ -492,32 +496,32 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async imageDimensions(uri) {
+	async imageDimensions(uri:string) {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
-				(width, height) => {
+				(width:number, height:number) => {
 					resolve({ width: width, height: height });
 				},
-				error => {
+				(error:any) => {
 					reject(error);
 				}
 			);
 		});
 	}
 
-	showImagePicker(options) {
+	showImagePicker(options:any) {
 		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, response => {
+			ImagePicker.launchImageLibrary(options, (response:any) => {
 				resolve(response);
 			});
 		});
 	}
 
-	async resizeImage(localFilePath, targetPath, mimeType) {
+	async resizeImage(localFilePath:string, targetPath:string, mimeType:string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
-		const dimensions = await this.imageDimensions(localFilePath);
+		const dimensions:any = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
 
@@ -563,7 +567,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return true;
 	}
 
-	async attachFile(pickerResponse, fileType) {
+	async attachFile(pickerResponse:any, fileType:string) {
 		if (!pickerResponse) {
 			// User has cancelled
 			return;
@@ -673,7 +677,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: true });
 	}
 
-	cameraView_onPhoto(data) {
+	cameraView_onPhoto(data:any) {
 		this.attachFile(
 			{
 				uri: data.uri,
@@ -723,7 +727,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ alarmDialogShown: true });
 	}
 
-	async onAlarmDialogAccept(date) {
+	async onAlarmDialogAccept(date:Date) {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
@@ -899,11 +903,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async todoCheckbox_change(checked) {
+	async todoCheckbox_change(checked:boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	titleTextInput_contentSizeChange(event) {
+	titleTextInput_contentSizeChange(event:any) {
 		if (!this.enableMultilineTitle_) return;
 
 		const height = event.nativeEvent.contentSize.height;
@@ -937,7 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async folderPickerOptions_valueChanged(itemValue) {
+	async folderPickerOptions_valueChanged(itemValue:any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
@@ -971,6 +975,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.folderPickerOptions_;
 	}
 
+	onBodyViewerLoadEnd() {
+		shim.setTimeout(() => {
+			this.setState({ HACK_webviewLoadingState: 1 });
+			shim.setTimeout(() => {
+				this.setState({ HACK_webviewLoadingState: 0 });
+			}, 50);
+		}, 5);
+	}
+
+	onBodyViewerCheckboxChange(newBody:string) {
+		this.saveOneProperty('body', newBody);
+	}
+
 	render() {
 		if (this.state.isLoading) {
 			return (
@@ -988,62 +1005,33 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		}
 
+		// Currently keyword highlighting is supported only when FTS is available.
+		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
+
 		let bodyComponent = null;
 		if (this.state.mode == 'view' && !this.useBetaEditor()) {
-			const onCheckboxChange = newBody => {
-				this.saveOneProperty('body', newBody);
-			};
-
-			// Currently keyword highlighting is supported only when FTS is available.
-			let keywords = [];
-			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				keywords = this.props.highlightedWords;
-			}
-
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
 			// to avoid the HACK_webviewLoadingState related bug.
 			bodyComponent =
 				!note || !note.body.trim() ? null : (
 					<NoteBodyViewer
 						onJoplinLinkClick={this.onJoplinLinkClick_}
-						ref="noteBodyViewer"
 						style={this.styles().noteBodyViewer}
-						webViewStyle={theme}
 						// Extra bottom padding to make it possible to scroll past the
 						// action button (so that it doesn't overlap the text)
-						paddingBottom="150"
-						note={note}
+						paddingBottom={150}
+						noteBody={note.body}
+						noteMarkupLanguage={note.markup_language}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
 						themeId={this.props.themeId}
 						noteHash={this.props.noteHash}
-						onCheckboxChange={newBody => {
-							onCheckboxChange(newBody);
-						}}
+						onCheckboxChange={this.onBodyViewerCheckboxChange}
 						onMarkForDownload={this.onMarkForDownload}
-						onLoadEnd={() => {
-							shim.setTimeout(() => {
-								this.setState({ HACK_webviewLoadingState: 1 });
-								shim.setTimeout(() => {
-									this.setState({ HACK_webviewLoadingState: 0 });
-								}, 50);
-							}, 5);
-						}}
+						onLoadEnd={this.onBodyViewerLoadEnd}
 					/>
 				);
 		} else {
-			// autoFocus={fieldToFocus === 'body'}
-
-			// Currently keyword highlighting is supported only when FTS is available.
-			let keywords = [];
-			if (this.props.searchQuery && !!this.props.ftsEnabled) {
-				keywords = this.props.highlightedWords;
-			}
-
-			const onCheckboxChange = newBody => {
-				this.saveOneProperty('body', newBody);
-			};
-
 			bodyComponent = this.useBetaEditor()
 				// Note: blurOnSubmit is necessary to get multiline to work.
 				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
@@ -1055,7 +1043,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					value={note.body}
 					borderColor={this.styles().markdownButtons.borderColor}
 					markdownButtonsColor={this.styles().markdownButtons.color}
-					saveText={text => this.body_changeText(text)}
+					saveText={(text:string) => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
@@ -1063,29 +1051,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 					placeholderTextColor={theme.colorFaded}
 					noteBodyViewer={{
 						onJoplinLinkClick: this.onJoplinLinkClick_,
-						ref: 'noteBodyViewer',
-						style: {
-							...this.styles().noteBodyViewer,
-							...this.styles().noteBodyViewerPreview,
-						},
+						style: this.styles().noteBodyViewerPreview,
+						paddingBottom: 0,
 						webViewStyle: theme,
-						note: note,
+						noteBody: note.body,
+						noteMarkupLanguage: note.markup_language,
 						noteResources: this.state.noteResources,
 						highlightedKeywords: keywords,
 						themeId: this.props.themeId,
 						noteHash: this.props.noteHash,
-						onCheckboxChange: newBody => {
-							onCheckboxChange(newBody);
-						},
+						onCheckboxChange: this.onBodyViewerCheckboxChange,
 						onMarkForDownload: this.onMarkForDownload,
-						onLoadEnd: () => {
-							shim.setTimeout(() => {
-								this.setState({ HACK_webviewLoadingState: 1 });
-								shim.setTimeout(() => {
-									this.setState({ HACK_webviewLoadingState: 0 });
-								}, 50);
-							}, 5);
-						},
+						onLoadEnd: this.onBodyViewerLoadEnd,
 					}}
 
 				/>
@@ -1112,7 +1089,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						ref="noteBodyTextField"
 						multiline={true}
 						value={note.body}
-						onChangeText={(text) => this.body_changeText(text)}
+						onChangeText={(text:string) => this.body_changeText(text)}
 						onSelectionChange={this.body_selectionChange}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
@@ -1198,7 +1175,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox:any) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -1208,7 +1185,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NoteScreen = connect(state => {
+const NoteScreen = connect((state:any) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
@@ -1226,4 +1203,4 @@ const NoteScreen = connect(state => {
 	};
 })(NoteScreenComponent);
 
-module.exports = { NoteScreen };
+export default NoteScreen;

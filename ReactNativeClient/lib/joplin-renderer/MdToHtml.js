@@ -178,7 +178,11 @@ class MdToHtml {
 		return html.substring(3, html.length - 5);
 	}
 
-	// "style" here is really the theme, as returned by themeStyle()
+	clearCache() {
+		this.cachedOutputs_ = {};
+	}
+
+	// "theme" is the theme as returned by themeStyle()
 	async render(body, theme = null, options = null) {
 		options = Object.assign({}, {
 			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
