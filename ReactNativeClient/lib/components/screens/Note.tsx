@@ -4,10 +4,11 @@ import uuid from 'lib/uuid';
 import Setting from 'lib/models/Setting';
 import shim from 'lib/shim';
 import NoteBodyViewer from 'lib/components/NoteBodyViewer/NoteBodyViewer';
+import checkPermissions from 'lib/checkPermissions';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -364,6 +365,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 	}
 
+	async requestGeoLocationPermissions() {
+		if (!Setting.value('trackLocation')) return;
+
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+			message: _('In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.'),
+			title: _('Permission needed'),
+		});
+
+		// If the user simply pressed "Deny", we don't automatically switch it off because they might accept
+		// once we show the rationale again on second try. If they press "Never again" however we switch it off.
+		// https://github.com/zoontek/react-native-permissions/issues/385#issuecomment-563132396
+		if (response === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+			reg.logger().info('Geo-location tracking has been automatically disabled');
+			Setting.setValue('trackLocation', false);
+		}
+	}
+
 	async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
@@ -380,6 +398,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
 		}
+
+		// Although it is async, we don't wait for the answer so that if permission
+		// has already been granted, it doesn't slow down opening the note. If it hasn't
+		// been granted, the popup will open anyway.
+		this.requestGeoLocationPermissions();
 	}
 
 	onMarkForDownload(event:any) {
