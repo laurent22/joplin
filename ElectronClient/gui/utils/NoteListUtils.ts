@@ -44,7 +44,7 @@ export default class NoteListUtils {
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder'))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', { noteIds }))
 			);
 
 			menu.append(
