@@ -125,7 +125,6 @@ class JoplinDatabase extends Database {
 		this.tableFields_ = null;
 		this.version_ = null;
 		this.tableFieldNames_ = {};
-		this.extensionToLoad = './build/lib/sql-extensions/spellfix';
 	}
 
 	initialized() {
@@ -847,7 +846,6 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 34) {
 				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
-				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
@@ -916,15 +914,6 @@ class JoplinDatabase extends Database {
 
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
-
-		try {
-			// Note that the only extension that can be loaded as of now is spellfix.
-			// If it fails here, it will fail on the fuzzySearchEnabled() check above
-			// too, thus disabling spellfix for the app.
-			await this.loadExtension(this.extensionToLoad);
-		} catch (error) {
-			this.logger().error(error);
-		}
 
 		let versionRow = null;
 		try {

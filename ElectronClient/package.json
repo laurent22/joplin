@@ -51,10 +51,6 @@
         {
           "from": "build-win/Joplin.VisualElementsManifest.xml",
           "to": "."
-        },
-        {
-          "from": "lib/sql-extensions/spellfix.dll",
-          "to": "usr/lib/spellfix.dll"
         }
       ],
       "extraResources": [
@@ -71,10 +67,6 @@
     "mac": {
       "icon": "../../Assets/macOs.icns",
       "extraFiles": [
-        {
-          "from": "lib/sql-extensions/spellfix.dylib",
-          "to": "usr/lib/spellfix.dylib"
-        }
       ]
     },
     "linux": {
@@ -85,10 +77,6 @@
       },
       "target": "AppImage",
       "extraFiles": [
-        {
-          "from": "lib/sql-extensions/spellfix.so",
-          "to": "usr/lib/spellfix.so"
-        }
       ]
     }
   },

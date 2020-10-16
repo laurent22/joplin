@@ -2,9 +2,6 @@ const gulp = require('gulp');
 const fs = require('fs-extra');
 const utils = require('../Tools/gulp/utils');
 const tasks = {
-	compileExtensions: {
-		fn: require('../Tools/gulp/tasks/compileExtensions.js'),
-	},
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
 	tsc: require('../Tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('../Tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
@@ -62,12 +59,10 @@ utils.registerGulpTasks(gulp, tasks);
 
 gulp.task('build', gulp.series([
 	'prepareBuild',
-	'compileExtensions',
 	'copyLib',
 ]));
 
 gulp.task('buildTests', gulp.series([
 	'prepareTestBuild',
-	'compileExtensions',
 	'copyLib',
 ]));
