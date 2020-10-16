@@ -251,7 +251,7 @@ function useMenu(props:Props) {
 					exportItems.push({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export(props.dispatch.bind(this), module);
+							await InteropServiceHelper.export((action:any) => props.dispatch(action), module);
 						},
 					});
 				}
@@ -322,7 +322,7 @@ function useMenu(props:Props) {
 			click: async () => {
 				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
 
-				this.store().dispatch({
+				props.dispatch({
 					type: 'TEMPLATE_UPDATE_ALL',
 					templates: templates,
 				});
@@ -358,8 +358,8 @@ function useMenu(props:Props) {
 		}
 		toolsItems = toolsItems.concat(toolsItemsAll);
 
-		function _checkForUpdates(ctx:any) {
-			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+		function _checkForUpdates() {
+			bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 		}
 
 		function _showAbout() {
@@ -405,7 +405,7 @@ function useMenu(props:Props) {
 			}, {
 				label: _('Check for updates...'),
 				visible: shim.isMac() ? true : false,
-				click: () => _checkForUpdates(this),
+				click: () => _checkForUpdates(),
 			}, {
 				type: 'separator',
 				visible: shim.isMac() ? true : false,
@@ -638,7 +638,7 @@ function useMenu(props:Props) {
 				}, {
 					label: _('Check for updates...'),
 					visible: shim.isMac() ? false : true,
-					click: () => _checkForUpdates(this),
+					click: () => _checkForUpdates(),
 				},
 				separator(),
 				{
