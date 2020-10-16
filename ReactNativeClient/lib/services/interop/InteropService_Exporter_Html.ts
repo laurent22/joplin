@@ -103,7 +103,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			// The source path is a bit hard-coded but shouldn't change.
 			for (let i = 0; i < result.pluginAssets.length; i++) {
 				const asset = result.pluginAssets[i];
-				const filePath = `${dirname(dirname(__dirname))}/gui/note-viewer/pluginAssets/${asset.name}`;
+				const filePath = `${dirname(dirname(dirname(__dirname)))}/gui/note-viewer/pluginAssets/${asset.name}`;
 				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
 				await shim.fsDriver().mkdir(dirname(destPath));
 				await shim.fsDriver().copy(filePath, destPath);
