@@ -73,14 +73,12 @@ const KeychainServiceDriverMobile = require('lib/services/keychain/KeychainServi
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
-const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
-if (__DEV__) SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
@@ -465,7 +463,6 @@ async function initialize(dispatch) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
-			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
 			Setting.setValue('firstStart', 0);
 		}
 
