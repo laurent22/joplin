@@ -36,7 +36,7 @@ export default class Cache {
 	private checkExpiredRecords() {
 		const now = Date.now();
 
-		for (let key in this.expirableKeys_) {				
+		for (const key in this.expirableKeys_) {
 			if (!this.records_[key]) {
 				delete this.expirableKeys_[key];
 			} else {
@@ -68,7 +68,7 @@ export default class Cache {
 		this.records_[key] = {
 			value: value,
 			expiredTime: ttl ? Date.now() + ttl : 0,
-		}
+		};
 
 		const idx = this.recordKeyHistory_.indexOf(key);
 		if (idx >= 0) this.recordKeyHistory_.splice(idx, 1);

@@ -337,16 +337,16 @@ class WebDavApi {
 	async exec(method, path = '', body = null, headers = null, options = null) {
 		headers = Object.assign({}, headers);
 		options = Object.assign({}, options);
-		
+
 		if (!options.responseFormat) options.responseFormat = 'json';
 		if (!options.target) options.target = 'string';
 
 		const authToken = this.authToken();
 
 		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
-		
+
 		// That should not be needed, but it is required for React Native 0.63+
-		// https://github.com/facebook/react-native/issues/30176 
+		// https://github.com/facebook/react-native/issues/30176
 		if (!headers['Content-Type']) {
 			if (method === 'PROPFIND') headers['Content-Type'] = 'text/xml';
 			if (method === 'PUT') headers['Content-Type'] = 'text/plain';

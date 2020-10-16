@@ -29,7 +29,7 @@ interface Props {
 
 export default function NoteBodyViewer(props:Props) {
 	const theme = themeStyle(props.themeId);
-	
+
 	const webViewStyle:any = useMemo(() => {
 		return { backgroundColor: theme.backgroundColor };
 	}, [theme.backgroundColor]);
@@ -43,7 +43,7 @@ export default function NoteBodyViewer(props:Props) {
 		props.highlightedKeywords,
 		props.noteResources,
 		props.paddingBottom,
-		props.noteHash	
+		props.noteHash
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
@@ -64,7 +64,7 @@ export default function NoteBodyViewer(props:Props) {
 	}, [props.onLoadEnd]);
 
 	function onError() {
-		reg.logger().error('WebView error')
+		reg.logger().error('WebView error');
 	}
 
 	// On iOS scalesPageToFit work like this:

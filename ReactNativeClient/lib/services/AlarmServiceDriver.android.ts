@@ -31,7 +31,7 @@ export default class AlarmServiceDriver {
 	// Returns -1 if could not be found
 	private alarmJoplinAlarmId(alarm:any):number {
 		if (!alarm.data) return -1;
-		const m = alarm.data.match(/joplinNotificationId==>(\d+)/)
+		const m = alarm.data.match(/joplinNotificationId==>(\d+)/);
 		return m ? Number(m[1]) : -1;
 	}
 
@@ -50,10 +50,10 @@ export default class AlarmServiceDriver {
 		const alarmNotifData = {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required
-			channel: "net.cozic.joplin.notification",
-			small_icon: "ic_launcher",
+			channel: 'net.cozic.joplin.notification',
+			small_icon: 'ic_launcher',
 			color: 'white',
-			data: { joplinNotificationId: notification.id + '' },
+			data: { joplinNotificationId: `${notification.id}` },
 		};
 
 		// ReactNativeAN expects a string as a date and it seems this utility

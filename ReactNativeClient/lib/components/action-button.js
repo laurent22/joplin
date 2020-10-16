@@ -60,7 +60,7 @@ class ActionButtonComponent extends React.Component {
 
 	renderIconMultiStates() {
 		const button = this.props.buttons[this.state.buttonIndex];
-		return <Icon name={button.icon} style={styles.actionButtonIcon} />
+		return <Icon name={button.icon} style={styles.actionButtonIcon} />;
 	}
 
 	renderIcon() {

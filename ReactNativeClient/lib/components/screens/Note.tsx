@@ -322,7 +322,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderTopWidth: 1,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
-		}
+		};
 
 		styles.titleContainer = {
 			flex: 0,
@@ -855,7 +855,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					//
 					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
 					buttons.push({ text: _('Attach file'), id: 'attachFile' });
-					
+
 					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
 					// because that's only way to browse photos from the camera roll.
 					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });

@@ -61,7 +61,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 			// props changes, thus triggering a render. The **content** of this noteResources array however is not changed because
 			// it doesn't contain info about the resource download state. Because of that, if we were to use the markupToHtml() cache
 			// it wouldn't re-render at all. We don't need this cache in any way because this hook is only triggered when we know
-			// something has changed. 
+			// something has changed.
 			markupToHtml().clearCache(noteMarkupLanguage);
 
 			const result = await markupToHtml().render(
@@ -125,7 +125,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 				</html>
 			`;
 
-			const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`
+			const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`;
 			await shim.fsDriver().writeFile(tempFile, html, 'utf8');
 
 			if (cancelled) return;
@@ -135,7 +135,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 			//
 			// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
 			setSource({
-				uri: 'file://' + tempFile + '?r=' + Math.round(Math.random() * 100000000),
+				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
 				baseUrl: `file://${Setting.value('resourceDir')}/`,
 			});
 
@@ -147,7 +147,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 		// - Secondly with the source to actually render the note
 		// This is necessary to prevent a race condition that could cause an ERR_ACCESS_DENIED error
 		// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
-		
+
 		if (isFirstRender) {
 			setIsFirstRender(false);
 			setSource(undefined);
@@ -158,7 +158,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 
 		return () => {
 			cancelled = true;
-		}
+		};
 	}, [resourceLoadedTime, noteBody, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender]);
 
 	return { source, injectedJs };

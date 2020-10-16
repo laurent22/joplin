@@ -8,7 +8,7 @@ describe('InMemoryCache', function() {
 
 		expect(cache.value('test')).toBe(undefined);
 		expect(cache.value('test', 'default')).toBe('default');
-		
+
 		cache.setValue('test', 'something');
 		expect(cache.value('test')).toBe('something');
 
@@ -42,7 +42,7 @@ describe('InMemoryCache', function() {
 
 	it('should delete old records', async () => {
 		const cache = new InMemoryCache(5);
-		
+
 		cache.setValue('1', '1');
 		cache.setValue('2', '2');
 		cache.setValue('3', '3');
@@ -55,5 +55,5 @@ describe('InMemoryCache', function() {
 
 		expect(cache.value('1')).toBe(undefined);
 	});
-	
+
 });
