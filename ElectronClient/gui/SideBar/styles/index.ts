@@ -68,7 +68,7 @@ function listItemTextColor(props:any) {
 
 export const StyledListItemAnchor = styled.a`
 	font-size: ${(props:any) => Math.round(props.theme.fontSize * 1.0833333)}px;
-	font-weight: 500;
+	// font-weight: 500;
 	text-decoration: none;
 	color: ${(props:any) => listItemTextColor(props)};
 	cursor: default;
