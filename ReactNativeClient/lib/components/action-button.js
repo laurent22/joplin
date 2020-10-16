@@ -26,6 +26,9 @@ class ActionButtonComponent extends React.Component {
 		this.state = {
 			buttonIndex: 0,
 		};
+
+		this.renderIconMultiStates = this.renderIconMultiStates.bind(this);
+		this.renderIcon = this.renderIcon.bind(this);
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps) {
@@ -53,6 +56,16 @@ class ActionButtonComponent extends React.Component {
 
 	newNote_press() {
 		this.newNoteNavigate(this.props.parentFolderId, false);
+	}
+
+	renderIconMultiStates() {
+		const button = this.props.buttons[this.state.buttonIndex];
+		return <Icon name={button.icon} style={styles.actionButtonIcon} />;
+	}
+
+	renderIcon() {
+		const mainButton = this.props.mainButton ? this.props.mainButton : {};
+		return mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />;
 	}
 
 	render() {
@@ -96,17 +109,13 @@ class ActionButtonComponent extends React.Component {
 			return null;
 		}
 
-		const mainButton = this.props.mainButton ? this.props.mainButton : {};
-		const mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />;
-
 		if (this.props.multiStates) {
 			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');
 			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error(`Button index out of bounds: ${this.state.buttonIndex}/${this.props.buttons.length}`);
 			const button = this.props.buttons[this.state.buttonIndex];
-			const mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />;
 			return (
 				<ReactNativeActionButton
-					icon={mainIcon}
+					renderIcon={this.renderIconMultiStates}
 					buttonColor="rgba(231,76,60,1)"
 					onPress={() => {
 						button.onPress();
@@ -115,7 +124,7 @@ class ActionButtonComponent extends React.Component {
 			);
 		} else {
 			return (
-				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() {}}>
+				<ReactNativeActionButton textStyle={styles.itemText} renderIcon={this.renderIcon} buttonColor="rgba(231,76,60,1)" onPress={function() {}}>
 					{buttonComps}
 				</ReactNativeActionButton>
 			);

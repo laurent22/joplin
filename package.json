@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Joplin root package for linting",
   "scripts": {
-    "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter": "./node_modules/.bin/eslint --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter-precommit": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
     "build": "gulp build",

@@ -58,6 +58,7 @@ plugin_types/
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
 CliClient/app/services/plugins/PluginRunner.js
+CliClient/tests/InMemoryCache.js
 CliClient/tests/models_Setting.js
 CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
@@ -195,13 +196,21 @@ ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
 ReactNativeClient/lib/commands/synchronize.js
 ReactNativeClient/lib/components/BackButtonDialogBox.js
+ReactNativeClient/lib/components/CameraView.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnMessage.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
+ReactNativeClient/lib/components/NoteBodyViewer/hooks/useSource.js
+ReactNativeClient/lib/components/NoteBodyViewer/NoteBodyViewer.js
+ReactNativeClient/lib/components/screens/Note.js
 ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js
+ReactNativeClient/lib/components/SelectDateTimeDialog.js
 ReactNativeClient/lib/errorUtils.js
 ReactNativeClient/lib/eventManager.js
 ReactNativeClient/lib/hooks/useEffectDebugger.js
 ReactNativeClient/lib/hooks/useImperativeHandlerDebugger.js
 ReactNativeClient/lib/hooks/usePrevious.js
 ReactNativeClient/lib/hooks/usePropsDebugger.js
+ReactNativeClient/lib/InMemoryCache.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
@@ -213,6 +222,7 @@ ReactNativeClient/lib/markdownUtils.js
 ReactNativeClient/lib/models/Alarm.js
 ReactNativeClient/lib/models/Setting.js
 ReactNativeClient/lib/ntpDate.js
+ReactNativeClient/lib/PoorManIntervals.js
 ReactNativeClient/lib/reducer.js
 ReactNativeClient/lib/services/AlarmService.js
 ReactNativeClient/lib/services/AlarmServiceDriver.android.js

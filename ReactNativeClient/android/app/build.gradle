@@ -15,8 +15,13 @@ import com.android.build.OutputFile
  *   // the name of the generated asset file containing your JS bundle
  *   bundleAssetName: "index.android.bundle",
  *
- *   // the entry file for bundle generation
+ *   // the entry file for bundle generation. If none specified and
+ *   // "index.android.js" exists, it will be used. Otherwise "index.js" is
+ *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
+ *
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
  *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
@@ -32,6 +37,13 @@ import com.android.build.OutputFile
  *   // bundleInFreeDebug: true,
  *   // bundleInPaidRelease: true,
  *   // bundleInBeta: true,
+ *
+ *   // whether to disable dev mode in custom build variants (by default only disabled in release)
+ *   // for example: to disable dev mode in the staging build type (if configured)
+ *   devDisabledInStaging: true,
+ *   // The configuration property can be in the following formats
+ *   //         'devDisabledIn${productFlavor}${buildType}'
+ *   //         'devDisabledIn${buildType}'
  *
  *   // the root of your project, i.e. where "package.json" lives
  *   root: "../../",
@@ -66,7 +78,6 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.android.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -99,6 +110,7 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
+
 /**
  * Whether to enable the Hermes VM.
  *
@@ -111,18 +123,13 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-	// To fix this error:
-	// > java.io.UncheckedIOException: java.io.IOException: Execution of compression failed. java.lang.OutOfMemoryError
-	// https://stackoverflow.com/q/57284812/561309
-	dexOptions { javaMaxHeapSize "4g" }
-    
     compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
-	}
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
-	defaultConfig {
-		applicationId "net.cozic.joplin"
+    defaultConfig {
+        applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 		versionCode 2097583
@@ -130,18 +137,23 @@ android {
 		ndk {
 			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		}
-		missingDimensionStrategy 'react-native-camera', 'general'
-	}
-	splits {
-		abi {
-			reset()
-			enable enableSeparateBuildPerCPUArchitecture
-			universalApk false  // If true, also generate a universal APK
-			include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-		}
-	}
-	signingConfigs {
-		debug {
+		
+        // https://github.com/react-native-community/react-native-camera/issues/2138
+        missingDimensionStrategy 'react-native-camera', 'general'
+
+        // Needed to fix: The number of method references in a .dex file cannot exceed 64K
+        multiDexEnabled true
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
+    }
+    signingConfigs {
+        debug {
             storeFile file('debug.keystore')
             storePassword 'android'
             keyAlias 'androiddebugkey'
@@ -156,57 +168,54 @@ android {
 			}
 		}
 	}
-	buildTypes {
-		debug {
+    buildTypes {
+        debug {
             signingConfig signingConfigs.debug
         }
-		release {
-			// Caution! In production, you need to generate your own keystore file.
-            // see https://facebook.github.io/react-native/docs/signed-apk-android.
-			signingConfig signingConfigs.release
-			minifyEnabled enableProguardInReleaseBuilds
-			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-		}
-	}
-	// applicationVariants are e.g. debug, release
-	applicationVariants.all { variant ->
-		variant.outputs.each { output ->
-			// For each separate APK per architecture, set a unique version code as described here:
-			// https://developer.android.com/studio/build/configure-apk-splits.html
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    // applicationVariants are e.g. debug, release
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // https://developer.android.com/studio/build/configure-apk-splits.html
             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-			def abi = output.getFilter(OutputFile.ABI)
-			if (abi != null) {  // null for the universal-debug, universal-release variants
-				output.versionCodeOverride =
-						versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
-			}
-		}
-	}
-	
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            }
+
+        }
+    }
 }
 
 dependencies {
-	implementation "org.webkit:android-jsc:r241213"
-    compile project(':react-native-push-notification')
-    // implementation (project(':react-native-camera')) {
-    // 	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
-    // 	// while react-native-camera requires v15.x, which results in broken dependencies with
-    // 	// this error message:
-    // 	// 
-    // 	// The library com.google.android.gms:play-services-base is being requested by various other libraries at [[15.0.1,15.0.1]], but resolves to 16.0.1
-    // 	//
-    // 	// For the record: found solution by removing all Firebase stuff here and running "gradlew.bat :app:dependencies"
-    // 	// That shows that react-native-camera was the one requiring v15.0.1.
-    //     exclude group: "com.google.android.gms"
-    // }
-	implementation project(':react-native-file-viewer')
-	implementation project(':react-native-securerandom')
-	implementation project(':react-native-fs')
-	implementation project(':react-native-image-picker')
-	implementation project(':react-native-vector-icons')
-	implementation project(':react-native-fs')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:28.0.0"
+    //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+      exclude group:'com.facebook.fbjni'
+    }
+
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+        exclude group:'com.squareup.okhttp3', module:'okhttp'
+    }
+
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+    }
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -216,43 +225,15 @@ dependencies {
         implementation jscFlavor
     }
 
-	implementation project(':react-native-sqlite-storage')
-	implementation project(':rn-fetch-blob')
-	implementation project(':react-native-document-picker')
-	implementation project(':react-native-image-resizer')
-	// implementation project(':react-native-share-extension')
-	implementation project(':react-native-version-info')
-	implementation project(':react-native-camera')
-	implementation "com.facebook.react:react-native:+"
-	implementation project(':react-native-quick-actions')
-
-	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
-	// implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
-
-	// To fix the error below, which happened after adding react-native-camera.
-	// Doesn't make any sense since rn-camera neither defines v26 nor 27 but
-	// v25.0.2 in build.gradle, but anyway now it works ¯\_(ツ)_/¯
-	// --------------------------------------------------------------------------------------
-	// Fatal error
-	// { Error: Command failed: ./gradlew assembleRelease -PbuildDir=build --console plain
-	//
-	// FAILURE: Build failed with an exception.
-	//
-	// * What went wrong:
-	// Execution failed for task ':app:preReleaseBuild'.
-	// > Android dependency 'com.android.support:support-v4' has different version for the compile (26.1.0) and runtime (27.1.1) classpath. You should manually set the same version via DependencyResolution
-	// --------------------------------------------------------------------------------------
-	// https://github.com/react-native-community/react-native-camera/issues/1532#issuecomment-386434771
-	compile ("com.android.support:support-v4:26.0.1") {
-        force = true //<-- force dependency resolution to 26.0.1 in my case
-    }
+    // Needed to fix: The number of method references in a .dex file cannot exceed 64K
+    implementation 'com.android.support:multidex:2.0.1'
 }
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
-	from configurations.compile
-	into 'libs'
+    from configurations.compile
+    into 'libs'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

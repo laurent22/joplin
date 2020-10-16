@@ -6,7 +6,7 @@
   "scripts": {
     "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --fail-fast=true --config=tests/support/jasmine.json",
     "test-ci": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "postinstall": "npm run build && patch-package --patch-dir ../patches",
+    "postinstall": "npm run build && patch-package --patch-dir ../patches/shared && patch-package --patch-dir ../patches/node",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --stack-trace-enabled --log-level debug --env dev"
   },
@@ -80,7 +80,6 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
-    "memory-cache": "^0.2.0",
     "mime": "^2.0.3",
     "moment": "^2.24.0",
     "multiparty": "^4.2.1",

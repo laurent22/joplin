@@ -100,8 +100,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const exportPath = this.state.profileExportPath;
 			const resourcePath = `${exportPath}/resources`;
 			try {
-				const hasPermissions = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-				if (!hasPermissions) {
+				const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+				if (response !== PermissionsAndroid.RESULTS.GRANTED) {
 					throw new Error('Permission denied');
 				}
 

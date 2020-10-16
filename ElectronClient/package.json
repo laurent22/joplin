@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dist": "node_modules/.bin/electron-builder",
-    "build": "patch-package --patch-dir ../patches && gulp build",
+    "build": "patch-package --patch-dir ../patches/shared && patch-package --patch-dir ../patches/node && gulp build",
     "postinstall": "npm run build && gulp electronRebuild",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
   },
@@ -169,7 +169,6 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
-    "memory-cache": "^0.2.0",
     "mermaid": "^8.8.1",
     "moment": "^2.22.2",
     "multiparty": "^4.2.1",

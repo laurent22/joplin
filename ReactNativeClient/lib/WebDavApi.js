@@ -335,14 +335,22 @@ class WebDavApi {
 	//  </d:propfind>'
 
 	async exec(method, path = '', body = null, headers = null, options = null) {
-		if (headers === null) headers = {};
-		if (options === null) options = {};
+		headers = Object.assign({}, headers);
+		options = Object.assign({}, options);
+
 		if (!options.responseFormat) options.responseFormat = 'json';
 		if (!options.target) options.target = 'string';
 
 		const authToken = this.authToken();
 
 		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
+
+		// That should not be needed, but it is required for React Native 0.63+
+		// https://github.com/facebook/react-native/issues/30176
+		if (!headers['Content-Type']) {
+			if (method === 'PROPFIND') headers['Content-Type'] = 'text/xml';
+			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
+		}
 
 		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because
 		// the call is idempotent and thus could be cached. According to RFC-7232 though only GET and HEAD should have
@@ -364,7 +372,6 @@ class WebDavApi {
 		const url = `${this.baseUrl()}/${path}`;
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
-
 
 		let response = null;
 

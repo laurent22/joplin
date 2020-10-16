@@ -1,0 +1,1 @@
+Patches that apply to the Node.js applications, i.e. the desktop and CLI apps.

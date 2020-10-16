@@ -1,17 +1,20 @@
 import { Notification } from 'lib/models/Alarm';
+import Logger from 'lib/Logger';
 const PushNotificationIOS  = require('@react-native-community/push-notification-ios').default;
 
 export default class AlarmServiceDriver {
 
 	private hasPermission_:boolean = null;
 	private inAppNotificationHandler_:any = null;
+	private logger_:Logger;
 
-	constructor() {
+	constructor(logger:Logger) {
+		this.logger_ = logger;
 		PushNotificationIOS.addEventListener('localNotification', (instance:any) => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
-				console.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
+				this.logger_.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
 				return;
 			}
 
@@ -57,7 +60,7 @@ export default class AlarmServiceDriver {
 		return this.hasPermissions(newPerm);
 	}
 
-	async clearNotification(id:any) {
+	async clearNotification(id:number) {
 		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 

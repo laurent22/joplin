@@ -20,7 +20,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -42,29 +41,19 @@ buck-out/
 *.keystore
 !debug.keystore
 
-# CocoaPods
-ios/Pods/
-
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
 # screenshots whenever they are needed.
 # For more information about the recommended setup visit:
-# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+# https://docs.fastlane.tools/best-practices/source-control/
 
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
 
-# This is generated:
-android/build*
-android/app/build*
+# Bundle artifact
+*.jsbundle
 
-android/.project
-android/.settings/
-android/app/.classpath
-android/app/.project
-android/app/.settings/
-android/app/src/debug/res/
-
-pluginAssets/
+# CocoaPods
+/ios/Pods/

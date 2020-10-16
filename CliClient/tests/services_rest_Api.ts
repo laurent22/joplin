@@ -146,7 +146,7 @@ describe('services_rest_Api', function() {
 		}));
 
 		const noteId = response.id;
-		
+
 		{
 			const note = await Note.load(noteId);
 			expect(note.latitude).toBe('48.73207100');
@@ -154,7 +154,7 @@ describe('services_rest_Api', function() {
 			expect(note.altitude).toBe('21.0000');
 		}
 
-		await api.route('PUT', 'notes/' + noteId, null, JSON.stringify({
+		await api.route('PUT', `notes/${noteId}`, null, JSON.stringify({
 			latitude: '49',
 			longitude: '-3',
 			altitude: '22',

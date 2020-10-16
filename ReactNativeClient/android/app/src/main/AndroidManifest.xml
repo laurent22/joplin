@@ -1,111 +1,89 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:installLocation="auto"
-	package="net.cozic.joplin"
-	android:versionCode="2"
-	android:versionName="0.8.0">
+  package="net.cozic.joplin">
 
 	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
 
-	<!-- ============================= -->
-	<!-- START RN-push-notitication    -->
-	<!-- ============================= -->
+	<!-- RN-NOTIFICATION -->
+	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<!-- ============================= -->
-	<!-- END RN-push-notitication      -->
-	<!-- ============================= -->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<!-- /RN-NOTIFICATION -->
 
-	<!-- Make these features optional to enable Chromebooks -->
+    <!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-	<uses-sdk
-		android:minSdkVersion="16"
-		android:targetSdkVersion="26" />
-
 	<application
 		android:name=".MainApplication"
-		android:usesCleartextTraffic="true"
-		android:allowBackup="true"
 		android:label="@string/app_name"
 		android:icon="@mipmap/ic_launcher"
-		android:theme="@style/AppTheme"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:allowBackup="false"
 		android:networkSecurityConfig="@xml/network_security_config"
-		android:hardwareAccelerated="true"
-		android:largeHeap="true"
-		>
+		android:theme="@style/AppTheme">
 
-		<!-- ============================= -->
-		<!-- START RN-push-notitication    -->
-		<!-- ============================= -->
-		<meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="@string/default_notification_channel_id"/>
-        <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_description" android:value="Allow displaying a notification for Joplin's alarms"/>
-        <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@android:color/white"/>
-
+		<!-- RN-NOTIFICATION -->
 		<receiver
-		    android:name="com.google.android.gms.gcm.GcmReceiver"
-		    android:exported="true"
-		    android:permission="com.google.android.c2dm.permission.SEND" >
-		    <intent-filter>
-		        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-		        <category android:name="${applicationId}" />
-		    </intent-filter>
+			android:name="com.emekalites.react.alarm.notification.AlarmReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="ACTION_DISMISS" />
+				<action android:name="ACTION_SNOOZE" />
+			</intent-filter>
 		</receiver>
 
-		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
+		<receiver
+			android:name="com.emekalites.react.alarm.notification.AlarmDismissReceiver"
+			android:enabled="true"
+			android:exported="true" />
+			<receiver
+				android:name="com.emekalites.react.alarm.notification.AlarmBootReceiver"
+				android:directBootAware="true"
+				android:enabled="false"
+				android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<!-- /RN-NOTIFICATION -->
 
-        <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-		<!-- ============================= -->
-		<!-- END RN-push-notitication      -->
-		<!-- ============================= -->
-		
 		<!--
-			2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification
-		                Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed.
-		
-		    2020-10-06: Changed back again to "singleInstance" and notifications still seem to work. Changing to singleInstance
-		                to try to fix this bug: https://discourse.joplinapp.org/t/joplin-android-app-looses-nextcloud-sync-settings/10997/6
-		                Users would lose their settings, and it's possibly due to multiple instances of the app running at the same time, perhaps
-		                due to sharing with the app. When checking the log, it would show "saving settings", then the app startup message, and after the app
-		                has started, it would show "setting saved". So basically the app, or one instance of it, has started while settings were being saved
-		
-			2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
-			            See ReactNativeClient/root.js for more info about the bug.
+		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification
+					Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed.
+
+		2020-10-06: Changed back again to "singleInstance" and notifications still seem to work. Changing to singleInstance
+					to try to fix this bug: https://discourse.joplinapp.org/t/joplin-android-app-looses-nextcloud-sync-settings/10997/6
+					Users would lose their settings, and it's possibly due to multiple instances of the app running at the same time, perhaps
+					due to sharing with the app. When checking the log, it would show "saving settings", then the app startup message, and after the app
+					has started, it would show "setting saved". So basically the app, or one instance of it, has started while settings were being saved
+
+		2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
+					See ReactNativeClient/root.js for more info about the bug.
 		-->
+
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:windowSoftInputMode="adjustResize"
-			android:launchMode="singleTop">
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+			android:launchMode="singleTop"
+				android:windowSoftInputMode="adjustResize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
-				<action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
 			</intent-filter>
 		</activity>
+
 		<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+		<!-- SHARE EXTENSION -->
 		<activity
 			android:noHistory="true"
 			android:name=".share.ShareActivity"
@@ -124,6 +102,8 @@
 				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
-	</application>
+		<!-- /SHARE EXTENSION -->
+
+    </application>
 
 </manifest>

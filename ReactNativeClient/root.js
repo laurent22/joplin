@@ -35,7 +35,7 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
 const { TagsScreen } = require('lib/components/screens/tags.js');
-const { NoteScreen } = require('lib/components/screens/note.js');
+const NoteScreen = require('lib/components/screens/Note').default;
 const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
@@ -54,7 +54,7 @@ const { DatabaseDriverReactNative } = require('lib/database-driver-react-native'
 const { reg } = require('lib/registry.js');
 const { setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale');
 const RNFetchBlob = require('rn-fetch-blob').default;
-const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const PoorManIntervals = require('lib/PoorManIntervals').default;
 const reducer = require('lib/reducer').default;
 const { defaultState } = require('lib/reducer');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
@@ -442,7 +442,7 @@ async function initialize(dispatch) {
 	Resource.fsDriver_ = fsDriver;
 	FileApiDriverLocal.fsDriver_ = fsDriver;
 
-	AlarmService.setDriver(new AlarmServiceDriver());
+	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
 
 	try {

@@ -1,6 +1,10 @@
+// Use this to show which props have been changed within a component.
+//
+// Usage: usePropsDebugger(props);
+
 import useEffectDebugger from './useEffectDebugger';
 
-export default function usePropsDebugger(effectHook:any, props:any) {
+export default function usePropsDebugger(props:any) {
 	const dependencies:any[] = [];
 	const dependencyNames:string[] = [];
 
@@ -9,5 +13,5 @@ export default function usePropsDebugger(effectHook:any, props:any) {
 		dependencyNames.push(k);
 	}
 
-	useEffectDebugger(effectHook, dependencies, dependencyNames);
+	useEffectDebugger(() => {}, dependencies, dependencyNames);
 }

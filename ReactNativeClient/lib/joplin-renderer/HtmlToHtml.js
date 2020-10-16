@@ -3,15 +3,20 @@ const utils = require('./utils');
 const noteStyle = require('./noteStyle');
 const Setting = require('lib/models/Setting').default;
 const { themeStyle } = require('lib/theme');
-const memoryCache = require('memory-cache');
+const InMemoryCache = require('lib/InMemoryCache').default;
 const md5 = require('md5');
+
+// Renderered notes can potentially be quite large (for example
+// when they come from the clipper) so keep the cache size
+// relatively small.
+const inMemoryCache = new InMemoryCache(10);
 
 class HtmlToHtml {
 	constructor(options) {
 		if (!options) options = {};
 		this.resourceBaseUrl_ = 'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
 		this.ResourceModel_ = options.ResourceModel;
-		this.cache_ = new memoryCache.Cache();
+		this.cache_ = inMemoryCache;
 		this.fsDriver_ = {
 			writeFile: (/* path, content, encoding = 'base64'*/) => { throw new Error('writeFile not set'); },
 			exists: (/* path*/) => { throw new Error('exists not set'); },
@@ -55,7 +60,7 @@ class HtmlToHtml {
 		}, options);
 
 		const cacheKey = md5(escape(markup));
-		let html = this.cache_.get(cacheKey);
+		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
 			html = htmlUtils.sanitizeHtml(markup);
@@ -80,7 +85,7 @@ class HtmlToHtml {
 			});
 		}
 
-		this.cache_.put(cacheKey, html, 1000 * 60 * 10);
+		this.cache_.setValue(cacheKey, html, 1000 * 60 * 10);
 
 		if (options.bodyOnly) {
 			return {

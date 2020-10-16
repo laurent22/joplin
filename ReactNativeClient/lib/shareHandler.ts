@@ -9,9 +9,9 @@ const { PermissionsAndroid } = require('react-native');
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {
-		const hasPermissions = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
-		if (!hasPermissions) {
+		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
 			ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
 			ShareExtension.close();
 			return;
