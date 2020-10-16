@@ -100,7 +100,7 @@ export default function NoteBodyViewer(props:Props) {
 				injectedJavaScript={injectedJs.join('\n')}
 				originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 				mixedContentMode="always"
-				allowFileAccess={true} // TODO: Implement logic to avoid race condition between source and allowFileAccess
+				allowFileAccess={true}
 				onLoadEnd={onLoadEnd}
 				onError={onError}
 				onMessage={onMessage}

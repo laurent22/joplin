@@ -1035,6 +1035,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			bodyComponent = this.useBetaEditor()
 				// Note: blurOnSubmit is necessary to get multiline to work.
 				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
+				//
+				// 2020-10-16: As of React Native 0.63, the Markdown Editor no longer crashes in Android, however the
+				// cursor is still too unreliable to be usable, so we disable it in Android.
 				? <MarkdownEditor
 					ref={this.markdownEditorRef} // For focusing the Markdown editor
 					editorFont={editorFont(this.props.editorFont)}

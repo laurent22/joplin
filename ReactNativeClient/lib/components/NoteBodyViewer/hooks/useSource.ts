@@ -27,6 +27,7 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 	const [source, setSource] = useState<Source>(undefined);
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
+	const [isFirstRender, setIsFirstRender] = useState(true);
 
 	const rendererTheme = useMemo(() => {
 		return {
@@ -141,12 +142,24 @@ export default function useSource(noteBody:string, noteMarkupLanguage:number, th
 			setInjectedJs(js);
 		}
 
-		renderNote();
+		// When mounted, we need to render the webview in two stages;
+		// - First without any source, so that all webview props are setup properly
+		// - Secondly with the source to actually render the note
+		// This is necessary to prevent a race condition that could cause an ERR_ACCESS_DENIED error
+		// https://github.com/react-native-webview/react-native-webview/issues/656#issuecomment-551312436
+		
+		if (isFirstRender) {
+			setIsFirstRender(false);
+			setSource(undefined);
+			setInjectedJs([]);
+		} else {
+			renderNote();
+		}
 
 		return () => {
 			cancelled = true;
 		}
-	}, [resourceLoadedTime, noteBody, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash]);
+	}, [resourceLoadedTime, noteBody, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender]);
 
 	return { source, injectedJs };
 }
