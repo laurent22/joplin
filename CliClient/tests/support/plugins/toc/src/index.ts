@@ -1,6 +1,6 @@
 import joplin from 'api';
 
-const nodeSlug = require('slug');
+const uslug = require('uslug');
 
 // From https://stackoverflow.com/a/6234804/561309
 function escapeHtml(unsafe:string) {
@@ -29,7 +29,7 @@ function noteHeaders(noteBody:string) {
 let slugs:any = {};
 
 function headerSlug(headerText:string) {
-	const s = nodeSlug(headerText);
+	const s = uslug(headerText);
 	let num = slugs[s] ? slugs[s] : 1;
 	const output = [s];
 	if (num > 1) output.push(num);

@@ -195,7 +195,6 @@
     "roboto-fontface": "^0.10.0",
     "sax": "^1.2.4",
     "server-destroy": "^1.0.1",
-    "slug": "^3.5.0",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^4.1.1",
@@ -211,6 +210,7 @@
     "tinymce": "^5.2.0",
     "uglifycss": "0.0.29",
     "url-parse": "^1.4.3",
+    "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support",
     "uuid": "^3.2.1",
     "valid-url": "^1.0.9",
     "xml2js": "^0.4.19"

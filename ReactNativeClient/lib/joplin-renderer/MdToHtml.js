@@ -22,7 +22,7 @@ const rules = {
 // const eventManager = require('lib/eventManager').default;
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
-const nodeSlug = require('slug');
+const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
@@ -41,7 +41,7 @@ const plugins = {
 const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s) {
-	return nodeSlug(s);
+	return uslug(s);
 }
 
 // Share across all instances of MdToHtml

@@ -5,7 +5,7 @@ import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from 'lib/shim';
 const { filename, dirname } = require('lib/path-utils');
-const nodeSlug = require('slug');
+const uslug = require('uslug');
 
 interface Plugins {
 	[key:string]: Plugin
@@ -13,7 +13,7 @@ interface Plugins {
 
 function makePluginId(source:string):string {
 	// https://www.npmjs.com/package/slug#options
-	return nodeSlug(source, nodeSlug.defaults.modes['rfc3986']).substr(0,32);
+	return uslug(source).substr(0,32);
 }
 
 export default class PluginService extends BaseService {
