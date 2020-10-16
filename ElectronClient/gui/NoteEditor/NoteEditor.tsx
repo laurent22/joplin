@@ -435,7 +435,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const wysiwygBanner = props.bodyEditor !== 'TinyMCE' ? null : (
 		<div style={{ ...styles.warningBanner }}>
-			This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} onClick={introductionPostLinkClick} href="#">introduction post</a> for more information. TO SWITCH TO THE MARKDOWN EDITOR PLEASE PRESS "Code View".
+			This is an experimental Rich Text editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} onClick={introductionPostLinkClick} href="#">introduction post</a> for more information. To switch to the Markdown Editor please press the "Toggle editors" in the top right-hand corner.
 		</div>
 	);
 

@@ -5,7 +5,7 @@ export default function styles(props:Props) {
 	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, (theme: any) => {
 		const iconSize = 15;
 		const mdIconWidth = iconSize * 1.25;
-		const buttonHeight = theme.toolbarHeight - 8;
+		const buttonHeight = theme.toolbarHeight - 7;
 		const mdIconPadding = Math.round((buttonHeight - iconSize) / 2) + 3;
 
 		const innerButton:any = {
@@ -41,14 +41,14 @@ export default function styles(props:Props) {
 			leftIcon: {
 				fontSize: iconSize,
 				position: 'relative',
-				top: 1,
+				top: 2,
 				color: theme.color3,
 			},
 			rightIcon: {
 				fontSize: iconSize - 1,
 				borderLeft: 'none',
 				position: 'relative',
-				top: 1,
+				top: 2,
 				color: theme.color3,
 			},
 		};
