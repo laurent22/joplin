@@ -34,6 +34,9 @@ export const defaultState:State = {
 };
 
 export const utils = {
+
+	// It is best to use viewsByType instead as this method creates new objects
+	// which might trigger unecessary renders even when plugin and views haven't changed.
 	viewInfosByType: function(plugins:PluginStates, type:string):ViewInfo[] {
 		const output:ViewInfo[] = [];
 
@@ -47,6 +50,22 @@ export const utils = {
 					plugin: plugin,
 					view: view,
 				});
+			}
+		}
+
+		return output;
+	},
+
+	viewsByType: function(plugins:PluginStates, type:string):any[] {
+		const output:any[] = [];
+
+		for (const pluginId in plugins) {
+			const plugin = plugins[pluginId];
+			for (const viewId in plugin.views) {
+				const view = plugin.views[viewId];
+				if (view.type !== type) continue;
+
+				output.push(view);
 			}
 		}
 

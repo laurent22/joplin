@@ -172,11 +172,13 @@ export default class KeymapService extends BaseService {
 			.replace(/Alt/g, this.platform === 'darwin' ? 'Option' : 'Alt');
 	}
 
-	registerCommandAccelerator(commandName:string, accelerator:string) {
+	public registerCommandAccelerator(commandName:string, accelerator:string) {
 		// If the command is already registered, we don't register it again and
 		// we don't update the accelerator. This is because it might have been
 		// modified by the user and we don't want the plugin to overwrite this.
 		if (this.keymap[commandName]) return;
+
+		if (!commandName) throw new Error('Cannot register an accelerator without a command name');
 
 		const validatedAccelerator = this.convertToPlatform(accelerator);
 		this.validateAccelerator(validatedAccelerator);

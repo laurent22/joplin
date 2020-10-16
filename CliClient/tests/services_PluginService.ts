@@ -2,7 +2,7 @@ import PluginRunner from '../app/services/plugins/PluginRunner';
 import PluginService from 'lib/services/plugins/PluginService';
 
 require('app-module-path').addPath(__dirname);
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow } = require('test-utils.js');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
 
@@ -40,8 +40,7 @@ describe('services_PluginService', function() {
 
 	it('should load and run a simple plugin', asyncTest(async () => {
 		const service = newPluginService();
-		const plugin = await service.loadPlugin(`${testPluginDir}/simple`);
-		await service.runPlugin(plugin);
+		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -55,9 +54,9 @@ describe('services_PluginService', function() {
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
 		const service = newPluginService();
-		const plugin = await service.loadPlugin(`${testPluginDir}/withExternalModules`);
+		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`]);
+		const plugin = service.pluginById('withexternalmodules');
 		expect(plugin.id).toBe('withexternalmodules');
-		await service.runPlugin(plugin);
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -76,6 +75,77 @@ describe('services_PluginService', function() {
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
 		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+	}));
+
+	it('should load plugins from JS bundles', asyncTest(async () => {
+		const service = newPluginService();
+
+		const plugin = await service.loadPluginFromString('example', '/tmp', `
+			/* joplin-manifest:
+			{
+				"manifest_version": 1,
+				"name": "JS Bundle test",
+				"description": "JS Bundle Test plugin",
+				"version": "1.0.0",
+				"author": "Laurent Cozic",
+				"homepage_url": "https://joplinapp.org"
+			}
+			*/
+			
+			joplin.plugins.register({
+				onStart: async function() {
+					await joplin.data.post(['folders'], null, { title: "my plugin folder" });
+				},
+			});
+		`);
+
+		await service.runPlugin(plugin);
+
+		expect(plugin.manifest.manifest_version).toBe(1);
+		expect(plugin.manifest.name).toBe('JS Bundle test');
+
+		const allFolders = await Folder.all();
+		expect(allFolders.length).toBe(1);
+	}));
+
+	it('should load plugins from JS bundle files', asyncTest(async () => {
+		const service = newPluginService();
+		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`);
+		expect(!!service.pluginById('example')).toBe(true);
+		expect((await Folder.all()).length).toBe(1);
+	}));
+
+	it('should validate JS bundles', asyncTest(async () => {
+		const invalidJsBundles = [
+			`
+				/* joplin-manifest:
+				{
+					"not_a_valid_manifest_at_all": 1
+				}
+				*/
+				
+				joplin.plugins.register({
+					onStart: async function() {},
+				});
+			`, `
+				/* joplin-manifest:
+				*/
+				
+				joplin.plugins.register({
+					onStart: async function() {},
+				});
+			`, `
+				joplin.plugins.register({
+					onStart: async function() {},
+				});
+			`, '',
+		];
+
+		const service = newPluginService();
+
+		for (const jsBundle of invalidJsBundles) {
+			await expectThrow(async () => await service.loadPluginFromString('example', '/tmp', jsBundle));
+		}
 	}));
 
 });

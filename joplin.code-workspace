@@ -711,7 +711,10 @@
 			"ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js": true,
 			"ReactNativeClient/lib/components/NoteBodyViewer/hooks/useSource.js": true,
 			"ReactNativeClient/lib/components/NoteBodyViewer/NoteBodyViewer.js": true,
-			"ReactNativeClient/lib/components/screens/Note.js": true
+			"ReactNativeClient/lib/components/screens/Note.js": true,
+			"CliClient/tests/services/plugins/api/JoplinSetting.js": true,
+			"ReactNativeClient/lib/services/plugins/api/JoplinViewsMenus.js": true,
+			"ReactNativeClient/lib/services/plugins/MenuController.js": true
 		},
 		"spellright.language": [
 			"en"

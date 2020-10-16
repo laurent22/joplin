@@ -1,6 +1,7 @@
 import Plugin from '../Plugin';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
 import JoplinViewsMenuItems from './JoplinViewsMenuItems';
+import JoplinViewsMenus from './JoplinViewsMenus';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 
@@ -18,6 +19,7 @@ export default class JoplinViews {
 	private dialogs_:JoplinViewsDialogs = null;
 	private panels_:JoplinViewsPanels = null;
 	private menuItems_:JoplinViewsMenuItems = null;
+	private menus_:JoplinViewsMenus = null;
 	private toolbarButtons_:JoplinViewsToolbarButtons = null;
 	private implementation_:any = null;
 
@@ -40,6 +42,11 @@ export default class JoplinViews {
 	public get menuItems():JoplinViewsMenuItems {
 		if (!this.menuItems_) this.menuItems_ = new JoplinViewsMenuItems(this.plugin, this.store);
 		return this.menuItems_;
+	}
+
+	public get menus():JoplinViewsMenus {
+		if (!this.menus_) this.menus_ = new JoplinViewsMenus(this.plugin, this.store);
+		return this.menus_;
 	}
 
 	public get toolbarButtons():JoplinViewsToolbarButtons {

@@ -4,7 +4,7 @@ import { _ } from 'lib/locale';
 export const declaration:CommandDeclaration = {
 	name: 'toggleSidebar',
 	label: () => _('Toggle sidebar'),
-	iconName: 'fa-bars',
+	iconName: 'fas fa-bars',
 };
 
 export const runtime = (comp:any):CommandRuntime => {
@@ -13,9 +13,6 @@ export const runtime = (comp:any):CommandRuntime => {
 			comp.props.dispatch({
 				type: 'SIDEBAR_VISIBILITY_TOGGLE',
 			});
-		},
-		title: () => {
-			return _('Toggle sidebar');
 		},
 	};
 };

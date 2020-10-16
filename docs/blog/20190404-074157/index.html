@@ -9,7 +9,7 @@ This file was auto-generated from readme/blog/20190404-074157.md and any manual 
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
+https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md
 
 -->
 
@@ -28,6 +28,15 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		background-color: #F1F1F1;
 		color: #333333;
 	}
+
+	.root {
+		overflow: hidden;
+	}
+
+	a[href^="mailto:"] {
+		word-break: break-all;
+	}
+
 	table {
 		margin-bottom: 1em;
 	}
@@ -72,6 +81,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -184,8 +194,9 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 	}
 	.nav {
 		background-color: black;
-		display: table;
-		width: inherit;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 	.nav.sticky {
 		position:fixed;
@@ -202,9 +213,8 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		/* min-width: 250px; */
-		/* For GSoC: */
-		min-width: 470px;
+		display: flex;
+		width: 100%;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -215,11 +225,11 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		font-weight: bold;
 	}
 	.nav-right {
-		display: table-cell;
-		width: 100%;
+		display: flex;
 		text-align: right;
 		vertical-align: middle;
 		line-height: 0;
+		margin-right: 10px;
 	}
 	.nav-right .share-btn {
 		display: none;
@@ -228,7 +238,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -254,6 +264,23 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 		opacity: 1;
 	}
 
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
+	}
+
 	.bottom-links {
 		display: flex;
 		justify-content: center;
@@ -275,7 +302,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 
 <body>
 
-<div class="container page-20190404-074157">
+<div class="container root page-20190404-074157">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -341,7 +368,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
-<li><a href="https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
 </ul>
 </li>
 <li>
@@ -362,6 +389,8 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>Markdown plugins and Goto Anything<a name="markdown-plugins-and-goto-anything" href="#markdown-plugins-and-goto-anything" class="heading-anchor">🔗</a></h1>
 <p>The latest release includes two relatively important new features:</p>
 <p>The first one, is the addition of several Markdown plugins that enable new features: for example it's now possible to add a table of contents to your notes, to enable footnotes, or to render various text decorations, such as superscript, subscript, highlighting, etc. This was all made possible thanks to the efforts of Caleb John.</p>
@@ -373,7 +402,7 @@ https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md
 published_at: 2019-04-04T06:41:57.000+00:00</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/blog/20190404-074157.md">
+			<a href="https://github.com/laurent22/joplin/blob/dev/readme/blog/20190404-074157.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
@@ -407,8 +436,10 @@ published_at: 2019-04-04T06:41:57.000+00:00</p>
 	ga('send', 'pageview');
 </script>
 
+</div></div>
+
 <div class="footer">
-Copyright (c) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

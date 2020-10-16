@@ -9,7 +9,7 @@ This file was auto-generated from readme/gsod2020/ideas.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
+https://github.com/laurent22/joplin/blob/dev/readme/gsod2020/ideas.md
 
 -->
 
@@ -28,6 +28,15 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		background-color: #F1F1F1;
 		color: #333333;
 	}
+
+	.root {
+		overflow: hidden;
+	}
+
+	a[href^="mailto:"] {
+		word-break: break-all;
+	}
+
 	table {
 		margin-bottom: 1em;
 	}
@@ -72,6 +81,7 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
+		word-break: break-all;
 	}
 	pre code {
 		border: none;
@@ -184,8 +194,9 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 	}
 	.nav {
 		background-color: black;
-		display: table;
-		width: inherit;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 	.nav.sticky {
 		position:fixed;
@@ -202,9 +213,8 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		/* min-width: 250px; */
-		/* For GSoC: */
-		min-width: 470px;
+		display: flex;
+		width: 100%;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -215,11 +225,11 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		font-weight: bold;
 	}
 	.nav-right {
-		display: table-cell;
-		width: 100%;
+		display: flex;
 		text-align: right;
 		vertical-align: middle;
 		line-height: 0;
+		margin-right: 10px;
 	}
 	.nav-right .share-btn {
 		display: none;
@@ -228,7 +238,7 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		display: none;
 	}
 	.footer {
-		padding-top: 1em;
+		padding: 2em;
 		border-top: 1px solid #d4d4d4;
 		margin-top: 2em;
 		color: gray;
@@ -254,6 +264,23 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 		opacity: 1;
 	}
 
+	@media (min-width: 992px) {
+		.content{
+			display: flex;
+		}
+
+		#toc{
+			display: block!important;
+			align-self: flex-start;
+			width: 300px;
+			position: sticky; top: 20px; left: 0;            
+		}
+
+		.main{
+			width: calc(100% - 300px);
+		}
+	}
+
 	.bottom-links {
 		display: flex;
 		justify-content: center;
@@ -275,7 +302,7 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 
 <body>
 
-<div class="container page-ideas">
+<div class="container root page-ideas">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -341,7 +368,7 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 <li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
-<li><a href="https://github.com/laurent22/joplin/blob/master/readme/spec/search_sorting.md">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
 </ul>
 </li>
 <li>
@@ -362,6 +389,8 @@ https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 </li>
 </ul>
 </div>
+
+	<div class="main">
 <h1>1.Idea - Create documenation hub<a name="1-idea-create-documenation-hub" href="#1-idea-create-documenation-hub" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>Make a screening of available options of how apps to be utilized to organize documentation better and simplified access to information.<br>
@@ -395,7 +424,7 @@ Task is to find a toolset to structure them and make the knowledge buried in the
 <p>Joplin has 4 panes: side bar, notes list, code and view. Change joplin in a way that these parts can be different windows. Thus it is possible to put these windows on different screens for more space and better overview.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md">
+			<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsod2020/ideas.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
@@ -429,8 +458,10 @@ Task is to find a toolset to structure them and make the knowledge buried in the
 	ga('send', 'pageview');
 </script>
 
+</div></div>
+
 <div class="footer">
-Copyright (c) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

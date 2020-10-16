@@ -64,6 +64,7 @@ CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
 CliClient/tests/services_PluginService.js
 CliClient/tests/services_rest_Api.js
+CliClient/tests/services/plugins/api/JoplinSetting.js
 CliClient/tests/services/plugins/sandboxProxy.js
 CliClient/tests/synchronizer_LockHandler.js
 CliClient/tests/synchronizer_MigrationHandler.js
@@ -267,11 +268,13 @@ ReactNativeClient/lib/services/plugins/api/JoplinSettings.js
 ReactNativeClient/lib/services/plugins/api/JoplinViews.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsDialogs.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsMenuItems.js
+ReactNativeClient/lib/services/plugins/api/JoplinViewsMenus.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsPanels.js
 ReactNativeClient/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 ReactNativeClient/lib/services/plugins/api/JoplinWorkspace.js
 ReactNativeClient/lib/services/plugins/api/types.js
 ReactNativeClient/lib/services/plugins/BasePluginRunner.js
+ReactNativeClient/lib/services/plugins/MenuController.js
 ReactNativeClient/lib/services/plugins/MenuItemController.js
 ReactNativeClient/lib/services/plugins/Plugin.js
 ReactNativeClient/lib/services/plugins/PluginService.js

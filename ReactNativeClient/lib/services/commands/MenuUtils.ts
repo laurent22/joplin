@@ -69,7 +69,7 @@ export default class MenuUtils {
 		return KeymapService.instance();
 	}
 
-	private commandToMenuItem(commandName:string, onClick:Function):MenuItem {
+	public commandToMenuItem(commandName:string, onClick:Function):MenuItem {
 		const command = this.service.commandByName(commandName);
 
 		const item:MenuItem = {
@@ -88,10 +88,9 @@ export default class MenuUtils {
 	}
 
 	public commandToStatefulMenuItem(commandName:string, props:any = null):MenuItem {
-		const output = this.commandsToMenuItems([commandName], () => {
+		return this.commandToMenuItem(commandName, () => {
 			return this.service.execute(commandName, props ? props : {});
 		});
-		return output[commandName];
 	}
 
 	public commandsToMenuItems(commandNames:string[], onClick:Function):MenuItems {

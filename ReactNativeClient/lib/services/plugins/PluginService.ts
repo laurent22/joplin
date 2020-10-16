@@ -4,7 +4,7 @@ import Global from 'lib/services/plugins/api/Global';
 import BasePluginRunner from 'lib/services/plugins/BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from 'lib/shim';
-const { filename } = require('lib/path-utils');
+const { filename, dirname } = require('lib/path-utils');
 const nodeSlug = require('slug');
 
 interface Plugins {
@@ -49,8 +49,51 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	async loadPlugin(path:string):Promise<Plugin> {
+	private async parsePluginJsBundle(jsBundleString:string) {
+		const scriptText = jsBundleString;
+		const lines = scriptText.split('\n');
+		const manifestText:string[] = [];
+
+		const StateStarted = 1;
+		const StateInManifest = 2;
+		let state:number = StateStarted;
+
+		for (let line of lines) {
+			line = line.trim();
+
+			if (state !== StateInManifest) {
+				if (line === '/* joplin-manifest:') {
+					state = StateInManifest;
+				}
+				continue;
+			}
+
+			if (state === StateInManifest) {
+				if (line.indexOf('*/') === 0) {
+					break;
+				} else {
+					manifestText.push(line);
+				}
+			}
+		}
+
+		if (!manifestText.length) throw new Error('Could not find manifest');
+
+		return {
+			scriptText: scriptText,
+			manifestText: manifestText.join('\n'),
+		};
+	}
+
+	public async loadPluginFromString(pluginId:string, baseDir:string, jsBundleString:string):Promise<Plugin> {
+		const r = await this.parsePluginJsBundle(jsBundleString);
+		return this.loadPlugin(pluginId, baseDir, r.manifestText, r.scriptText);
+	}
+
+	private async loadPluginFromPath(path:string):Promise<Plugin> {
 		const fsDriver = shim.fsDriver();
+
+		if (path.toLowerCase().endsWith('.js')) return this.loadPluginFromString(filename(path), dirname(path), await fsDriver.readFile(path));
 
 		let distPath = path;
 		if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
@@ -59,19 +102,22 @@ export default class PluginService extends BaseService {
 
 		this.logger().info(`PluginService: Loading plugin from ${path}`);
 
-		const manifestPath = `${distPath}/manifest.json`;
-		const indexPath = `${distPath}/index.js`;
-		const manifestContent = await fsDriver.readFile(manifestPath);
-		const manifest = manifestFromObject(JSON.parse(manifestContent));
-		const scriptText = await fsDriver.readFile(indexPath);
+		const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
+		const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
 		const pluginId = makePluginId(filename(path));
+
+		return this.loadPlugin(pluginId, distPath, manifestText, scriptText);
+	}
+
+	private async loadPlugin(pluginId:string, baseDir:string, manifestText:string, scriptText:string):Promise<Plugin> {
+		const manifest = manifestFromObject(JSON.parse(manifestText));
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
 		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
 		// such folders but to keep things sane we disallow it.
 		if (this.plugins_[pluginId]) throw new Error(`There is already a plugin with this ID: ${pluginId}`);
 
-		const plugin = new Plugin(pluginId, distPath, manifest, scriptText, this.logger());
+		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger());
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
@@ -84,14 +130,14 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	async loadAndRunPlugins(pluginDirOrPaths:string | string[]) {
+	public async loadAndRunPlugins(pluginDirOrPaths:string | string[]) {
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
-				.filter((stat:any) => stat.isDirectory())
+				.filter((stat:any) => (stat.isDirectory() || stat.path.toLowerCase().endsWith('.js')))
 				.map((stat:any) => `${pluginDirOrPaths}/${stat.path}`);
 		}
 
@@ -102,7 +148,7 @@ export default class PluginService extends BaseService {
 			}
 
 			try {
-				const plugin = await this.loadPlugin(pluginPath);
+				const plugin = await this.loadPluginFromPath(pluginPath);
 				await this.runPlugin(plugin);
 			} catch (error) {
 				this.logger().error(`PluginService: Could not load plugin: ${pluginPath}`, error);
@@ -110,7 +156,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	async runPlugin(plugin:Plugin) {
+	public async runPlugin(plugin:Plugin) {
 		this.plugins_[plugin.id] = plugin;
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);

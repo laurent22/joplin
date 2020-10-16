@@ -466,13 +466,13 @@ class Application extends BaseApplication {
 	async start(argv:string[]):Promise<any> {
 		const electronIsDev = require('electron-is-dev');
 
-		await fs.mkdirp(Setting.value('templateDir'), 0o755);
-
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!electronIsDev) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
+
+		await fs.mkdirp(Setting.value('templateDir'), 0o755);
 
 		await this.applySettingsSideEffects();
 

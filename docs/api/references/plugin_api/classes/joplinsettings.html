@@ -95,6 +95,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#globalvalue" class="tsd-kind-icon">global<wbr>Value</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersection" class="tsd-kind-icon">register<wbr>Section</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersetting" class="tsd-kind-icon">register<wbr>Setting</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a></li>
@@ -108,6 +109,37 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="globalvalue" class="tsd-anchor"></a>
+					<h3>global<wbr>Value</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">global<wbr>Value<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a global setting value, including app-specific settings and those set by other plugins.</p>
+								</div>
+								<p>The list of available settings is not documented yet, but can be found by looking at the source code:</p>
+								<p><a href="https://github.com/laurent22/joplin/blob/3539a452a359162c461d2849829d2d42973eab50/ReactNativeClient/lib/models/Setting.ts#L142">https://github.com/laurent22/joplin/blob/3539a452a359162c461d2849829d2d42973eab50/ReactNativeClient/lib/models/Setting.ts#L142</a></p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="registersection" class="tsd-anchor"></a>
 					<h3>register<wbr>Section</h3>
@@ -289,6 +321,9 @@
 								<a href="joplinsettings.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinsettings.html#globalvalue" class="tsd-kind-icon">global<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinsettings.html#registersection" class="tsd-kind-icon">register<wbr>Section</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -312,6 +347,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="joplinviewsmenus.html" class="tsd-kind-icon">joplin.views.menus</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
@@ -348,6 +386,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/script.html" class="tsd-kind-icon">Script</a>
