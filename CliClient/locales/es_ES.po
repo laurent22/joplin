@@ -2302,7 +2302,7 @@ msgstr ""
 #: ReactNativeClient/lib/services/KeymapService.js:291
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "El acelerador “%s” no es válido."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -2452,7 +2452,7 @@ msgstr "Versión del perfil: %s"
 #: ReactNativeClient/lib/versionInfo.js:23
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Llavero soportado: %s"
 
 #: ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
@@ -2856,7 +2856,7 @@ msgstr "Añadir título"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Actualización del objetivo de sincronización"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:119
 #, javascript-format
@@ -2948,6 +2948,8 @@ msgstr ""
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"El objetivo de sincronización necesita ser mejorado. Presiona este banner "
+"para proceder."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3144,7 +3146,7 @@ msgstr "sí"
 #: ReactNativeClient/lib/models/Setting.js:66
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:66
 msgid "no"
@@ -3187,7 +3189,7 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:80
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Oscuro"
 
 #: ReactNativeClient/lib/models/Setting.js:81
 msgid "OLED Dark"
@@ -3236,15 +3238,15 @@ msgstr "Contraseña de WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:214
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:225
 msgid "AWS key"
-msgstr ""
+msgstr "AWS key"
 
 #: ReactNativeClient/lib/models/Setting.js:235
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: ReactNativeClient/lib/models/Setting.js:247
 msgid "Attachment download behaviour"
@@ -3702,9 +3704,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1292
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Modo de teclado"
+msgstr "Atajos de teclado"
 
 #: ReactNativeClient/lib/models/Setting.js:1299
 msgid ""
@@ -3751,7 +3752,7 @@ msgstr "OneDrive"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
