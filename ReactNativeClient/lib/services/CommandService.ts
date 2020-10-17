@@ -2,7 +2,7 @@ import eventManager from 'lib/eventManager';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
-import BooleanExpression from './BooleanExpression';
+import WhenClause from './WhenClause';
 
 type LabelFunction = () => string;
 type IsEnabledFunction = (props:any) => boolean;
@@ -200,20 +200,20 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	isEnabled(commandName:string, props:any, booleanExpressionContext:any):boolean {
+	isEnabled(commandName:string, props:any, whenClauseContext:any):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
 
 		if (typeof command.runtime.isEnabled === 'function') {
 			return command.runtime.isEnabled(props);
 		} else {
-			if (!booleanExpressionContext) {
-				console.warn('booleanExpressionContext was null', commandName);
-				booleanExpressionContext = {};
+			if (!whenClauseContext) {
+				console.warn('whenClauseContext was null', commandName);
+				whenClauseContext = {};
 			}
 
-			const exp = new BooleanExpression(command.runtime.isEnabled);
-			return exp.evaluate(booleanExpressionContext);
+			const exp = new WhenClause(command.runtime.isEnabled);
+			return exp.evaluate(whenClauseContext);
 		}
 	}
 

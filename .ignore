@@ -178,10 +178,9 @@ ReactNativeClient/lib/services/AlarmServiceDriver.android.js
 ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
-ReactNativeClient/lib/services/BooleanExpression.js
 ReactNativeClient/lib/services/commands/MenuUtils.js
 ReactNativeClient/lib/services/commands/propsHaveChanged.js
-ReactNativeClient/lib/services/commands/stateToBooleanExpressionContext.js
+ReactNativeClient/lib/services/commands/stateToWhenClauseContext.js
 ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/contextkey/contextkey.js
@@ -253,6 +252,7 @@ ReactNativeClient/lib/services/synchronizer/migrations/1.js
 ReactNativeClient/lib/services/synchronizer/migrations/2.js
 ReactNativeClient/lib/services/synchronizer/utils/types.js
 ReactNativeClient/lib/services/UndoRedoService.js
+ReactNativeClient/lib/services/WhenClause.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/lib/shim.js

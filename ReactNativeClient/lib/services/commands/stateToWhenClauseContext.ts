@@ -1,7 +1,7 @@
 const BaseModel = require('lib/BaseModel');
 const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml');
 
-export default function stateToBooleanExpressionContext(state:any) {
+export default function stateToWhenClauseContext(state:any) {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
 	const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
 

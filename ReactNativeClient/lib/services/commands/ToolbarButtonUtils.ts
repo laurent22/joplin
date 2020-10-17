@@ -1,7 +1,7 @@
 import CommandService from '../CommandService';
 import propsHaveChanged from './propsHaveChanged';
 import { stateUtils } from 'lib/reducer';
-import stateToBooleanExpressionContext from './stateToBooleanExpressionContext';
+import stateToWhenClauseContext from './stateToWhenClauseContext';
 
 const separatorItem = { type: 'separator' };
 
@@ -36,8 +36,8 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName:string, props:any, booleanExpressionContext:any):ToolbarButtonInfo {
-		const newEnabled = this.service.isEnabled(commandName, props, booleanExpressionContext);
+	private commandToToolbarButton(commandName:string, props:any, whenClauseContext:any):ToolbarButtonInfo {
+		const newEnabled = this.service.isEnabled(commandName, props, whenClauseContext);
 
 		if (
 			this.toolbarButtonCache_[commandName] &&
@@ -73,7 +73,7 @@ export default class ToolbarButtonUtils {
 	public commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
 		const output:ToolbarButtonInfo[] = [];
 
-		const booleanExpressionContext = stateToBooleanExpressionContext(state);
+		const whenClauseContext = stateToWhenClauseContext(state);
 
 
 		for (const commandName of commandNames) {
@@ -83,7 +83,7 @@ export default class ToolbarButtonUtils {
 			}
 
 			const props = this.service.commandMapStateToProps(commandName, state);
-			output.push(this.commandToToolbarButton(commandName, props, booleanExpressionContext));
+			output.push(this.commandToToolbarButton(commandName, props, whenClauseContext));
 		}
 
 		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));

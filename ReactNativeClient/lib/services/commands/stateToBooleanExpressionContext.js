@@ -1,0 +1,17 @@
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+const BaseModel = require('lib/BaseModel');
+const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml');
+function stateToWhenClauseContext(state) {
+	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+	const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
+	return {
+		markdownEditorVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('editor'),
+		isDialogVisible: !!Object.keys(state.visibleDialogs).length,
+		isMarkdownNote: note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
+		hasOneSelectedNote: !!note,
+		selectedNoteCount: state.selectedNoteIds.length,
+	};
+}
+exports.default = stateToWhenClauseContext;
+// # sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3RhdGVUb0Jvb2xlYW5FeHByZXNzaW9uQ29udGV4dC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInN0YXRlVG9Cb29sZWFuRXhwcmVzc2lvbkNvbnRleHQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxNQUFNLFNBQVMsR0FBRyxPQUFPLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDM0MsTUFBTSxZQUFZLEdBQUcsT0FBTyxDQUFDLGtDQUFrQyxDQUFDLENBQUM7QUFFakUsU0FBd0Isd0JBQXdCLENBQUMsS0FBUztJQUN6RCxNQUFNLE1BQU0sR0FBRyxLQUFLLENBQUMsZUFBZSxDQUFDLE1BQU0sS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDLEtBQUssQ0FBQyxlQUFlLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQztJQUNwRixNQUFNLElBQUksR0FBRyxNQUFNLENBQUMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEtBQUssRUFBRSxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDO0lBRWpFLE9BQU87UUFDTixxQkFBcUIsRUFBRSxLQUFLLENBQUMsUUFBUSxDQUFDLGlCQUFpQixDQUFDLElBQUksS0FBSyxDQUFDLGdCQUFnQixDQUFDLFFBQVEsQ0FBQyxRQUFRLENBQUM7UUFDckcsZUFBZSxFQUFFLENBQUMsQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxjQUFjLENBQUMsQ0FBQyxNQUFNO1FBQzNELGNBQWMsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxlQUFlLEtBQUssWUFBWSxDQUFDLHdCQUF3QixDQUFDLENBQUMsQ0FBQyxLQUFLO1FBQzdGLGtCQUFrQixFQUFFLENBQUMsQ0FBQyxJQUFJO1FBQzFCLGlCQUFpQixFQUFFLEtBQUssQ0FBQyxlQUFlLENBQUMsTUFBTTtLQUMvQyxDQUFDO0FBQ0gsQ0FBQztBQVhELDJDQVdDIn0=

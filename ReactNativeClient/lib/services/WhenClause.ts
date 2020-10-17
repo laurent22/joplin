@@ -1,6 +1,6 @@
 import { ContextKeyExpr, ContextKeyExpression } from './contextkey/contextkey';
 
-export default class BooleanExpression {
+export default class WhenClause {
 
 	private expression_:string;
 	private rules_:ContextKeyExpression = null;
