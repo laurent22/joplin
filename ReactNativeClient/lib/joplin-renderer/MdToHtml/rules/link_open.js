@@ -71,9 +71,10 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
 
 			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${longPressDelay});`;
-			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
+			const cancel = 'if (!!t) {clearTimeout(t); t=null;';
+			const touchEnd = `${cancel} ${onClick};}`;
 
-			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
 		}
 
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
