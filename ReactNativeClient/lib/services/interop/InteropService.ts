@@ -282,6 +282,8 @@ export default class InteropService {
 
 		let importer = null;
 
+		// Not certain the "modulePath" property still has any use at this point. Modules should be looked up
+		// based on their format and outputFormat.
 		if (options.modulePath) {
 			importer = this.newModuleFromPath_(ModuleType.Importer, options);
 		} else {

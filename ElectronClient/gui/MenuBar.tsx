@@ -162,7 +162,7 @@ function useMenu(props:Props) {
 		const importOptions = {
 			path,
 			format: module.format,
-			modulePath: module.path,
+			outputFormat: module.outputFormat,
 			onError: console.warn,
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
