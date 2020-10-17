@@ -1,6 +1,7 @@
 import CommandService from '../CommandService';
 import propsHaveChanged from './propsHaveChanged';
 import { stateUtils } from 'lib/reducer';
+import stateToBooleanExpressionContext from './stateToBooleanExpressionContext';
 
 const separatorItem = { type: 'separator' };
 
@@ -72,7 +73,8 @@ export default class ToolbarButtonUtils {
 	public commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
 		const output:ToolbarButtonInfo[] = [];
 
-		const booleanExpressionContext = this.service.booleanExpressionContextFromState(state);
+		const booleanExpressionContext = stateToBooleanExpressionContext(state);
+
 
 		for (const commandName of commandNames) {
 			if (commandName === '-') {

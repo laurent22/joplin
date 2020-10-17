@@ -1,6 +1,7 @@
 import CommandService from '../CommandService';
 import KeymapService from '../KeymapService';
 import propsHaveChanged from './propsHaveChanged';
+import stateToBooleanExpressionContext from './stateToBooleanExpressionContext';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
@@ -111,11 +112,18 @@ export default class MenuUtils {
 	public commandsToMenuItemProps(state:any, commandNames:string[]):MenuItemProps {
 		const output:MenuItemProps = {};
 
+		const booleanExpressionContext = stateToBooleanExpressionContext(state);
+
 		for (const commandName of commandNames) {
 			const newProps = this.service.commandMapStateToProps(commandName, state);
-			if (newProps === null || propsHaveChanged(this.menuItemPropsCache_[commandName], newProps)) {
-				output[commandName] = newProps;
-				this.menuItemPropsCache_[commandName] = newProps;
+
+			// TODO: refactor
+			const command = this.service.commandByName(commandName);
+			const upgradedProps = command.runtime && typeof command.runtime.isEnabled === 'string' ? { ...newProps, enabled: this.service.isEnabled(commandName, {}, booleanExpressionContext) } : newProps;
+
+			if (newProps === null || propsHaveChanged(this.menuItemPropsCache_[commandName], upgradedProps)) {
+				output[commandName] = upgradedProps;
+				this.menuItemPropsCache_[commandName] = upgradedProps;
 			} else {
 				output[commandName] = this.menuItemPropsCache_[commandName];
 			}

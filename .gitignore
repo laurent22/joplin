@@ -232,6 +232,7 @@ ReactNativeClient/lib/services/BaseService.js
 ReactNativeClient/lib/services/BooleanExpression.js
 ReactNativeClient/lib/services/commands/MenuUtils.js
 ReactNativeClient/lib/services/commands/propsHaveChanged.js
+ReactNativeClient/lib/services/commands/stateToBooleanExpressionContext.js
 ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/contextkey/contextkey.js

@@ -3,9 +3,7 @@ import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
 import CommandService, { CommandDeclaration,  CommandRuntime } from '../../../lib/services/CommandService';
 const { time } = require('lib/time-utils.js');
-const BaseModel = require('lib/BaseModel');
 const { reg } = require('lib/registry.js');
-const { MarkupToHtml } = require('lib/joplin-renderer');
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
@@ -26,7 +24,6 @@ interface HookDependencies {
 function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
 	return {
 		execute: async (props:any) => {
-			// console.info('Running editor command:', declaration.name, props);
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 			} else {
@@ -48,26 +45,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 				}
 			}
 		},
-		isEnabled: (props:any) => {
-			if (props.isDialogVisible) return false;
-			if (props.markdownEditorViewerOnly) return false;
-			if (!props.hasSelectedNote) return false;
-			return props.isMarkdownNote;
-		},
-		mapStateToProps: (state:any) => {
-			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-			const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
-			const isMarkdownNote = note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false;
-
-			return {
-				// True when the Markdown editor is active, and only the viewer pane is visible
-				// In this case, all editor-related shortcuts are disabled.
-				markdownEditorViewerOnly: state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer',
-				hasSelectedNote: !!note,
-				isDialogVisible: !!Object.keys(state.visibleDialogs).length,
-				isMarkdownNote: isMarkdownNote,
-			};
-		},
+		isEnabled: '!isDialogVisible && markdownEditorVisible && hasOneSelectedNote && isMarkdownNote',
 	};
 }
 

@@ -200,13 +200,6 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	public booleanExpressionContextFromState(state:any) {
-		return {
-			selectedNoteCount: state.selectedNoteIds.length,
-			selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-		};
-	}
-
 	isEnabled(commandName:string, props:any, booleanExpressionContext:any):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
@@ -214,6 +207,11 @@ export default class CommandService extends BaseService {
 		if (typeof command.runtime.isEnabled === 'function') {
 			return command.runtime.isEnabled(props);
 		} else {
+			if (!booleanExpressionContext) {
+				console.warn('booleanExpressionContext was null', commandName);
+				booleanExpressionContext = {};
+			}
+
 			const exp = new BooleanExpression(command.runtime.isEnabled);
 			return exp.evaluate(booleanExpressionContext);
 		}
