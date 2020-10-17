@@ -9,6 +9,7 @@ const shim = require('lib/shim').default;
 const { extractImageUrls } = require('lib/markdownUtils').default;
 const { unique } = require('lib/ArrayUtils');
 const { pregQuote } = require('lib/string-utils-common');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {
@@ -101,6 +102,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
 			user_created_time: stat.birthtime.getTime(),
+			markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
 
 		return Note.save(note, { autoTimestamp: false });
