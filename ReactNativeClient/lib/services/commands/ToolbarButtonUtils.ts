@@ -35,8 +35,13 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName:string, props:any):ToolbarButtonInfo {
-		if (this.toolbarButtonCache_[commandName] && !propsHaveChanged(this.toolbarButtonCache_[commandName].props, props)) {
+	private commandToToolbarButton(commandName:string, props:any, booleanExpressionContext:any):ToolbarButtonInfo {
+		const newEnabled = this.service.isEnabled(commandName, props, booleanExpressionContext);
+
+		if (
+			this.toolbarButtonCache_[commandName] &&
+			!propsHaveChanged(this.toolbarButtonCache_[commandName].props, props) &&
+			this.toolbarButtonCache_[commandName].info.enabled === newEnabled) {
 			return this.toolbarButtonCache_[commandName].info;
 		}
 
@@ -46,7 +51,7 @@ export default class ToolbarButtonUtils {
 			name: commandName,
 			tooltip: this.service.label(commandName),
 			iconName: command.declaration.iconName,
-			enabled: this.service.isEnabled(commandName, props),
+			enabled: newEnabled,
 			onClick: async () => {
 				this.service.execute(commandName, props);
 			},
@@ -67,6 +72,8 @@ export default class ToolbarButtonUtils {
 	public commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
 		const output:ToolbarButtonInfo[] = [];
 
+		const booleanExpressionContext = this.service.booleanExpressionContextFromState(state);
+
 		for (const commandName of commandNames) {
 			if (commandName === '-') {
 				output.push(separatorItem as any);
@@ -74,7 +81,7 @@ export default class ToolbarButtonUtils {
 			}
 
 			const props = this.service.commandMapStateToProps(commandName, state);
-			output.push(this.commandToToolbarButton(commandName, props));
+			output.push(this.commandToToolbarButton(commandName, props, booleanExpressionContext));
 		}
 
 		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));

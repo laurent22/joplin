@@ -13,7 +13,7 @@ export const runtime = ():CommandRuntime => {
 			return CommandService.instance().execute('newNote', { template: template, isTodo: true });
 		},
 		isEnabled: () => {
-			return CommandService.instance().isEnabled('newNote', {});
+			return CommandService.instance().isEnabled('newNote', {}, null);
 		},
 		title: () => {
 			return _('New to-do');
