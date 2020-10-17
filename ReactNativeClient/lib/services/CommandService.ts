@@ -9,7 +9,7 @@ type IsEnabledFunction = (props:any) => boolean;
 type IsEnabledExpression = string;
 
 export interface CommandRuntime {
-	execute(props:any):Promise<any>
+	execute(props:any, state:any):Promise<any>
 	isEnabled?: IsEnabledFunction | IsEnabledExpression;
 
 	// "state" type is "AppState" but in order not to introduce a
@@ -28,6 +28,8 @@ export interface CommandRuntime {
 
 	// Used for the (optional) toolbar button title
 	title?(props:any):string,
+
+	mapStateToTitle?(state:any):string,
 }
 
 export interface CommandDeclaration {
@@ -112,9 +114,11 @@ export default class CommandService extends BaseService {
 
 	private commands_:Commands = {};
 	private commandPreviousStates_:CommandStates = {};
+	private store_:any;
 
 	initialize(store:any) {
 		utils.store = store;
+		this.store_ = store;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -188,10 +192,10 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[commandName];
 	}
 
-	async execute(commandName:string, props:any = null):Promise<any> {
+	async execute(commandName:string, props:any = null, state:any = null):Promise<any> {
 		const command = this.commandByName(commandName);
 		this.logger().info('CommandService::execute:', commandName, props);
-		return command.runtime.execute(props ? props : {});
+		return command.runtime.execute(props, !props ? this.store_.getState() : null); //props ? props : {});
 	}
 
 	scheduleExecute(commandName:string, args:any) {
@@ -220,14 +224,19 @@ export default class CommandService extends BaseService {
 	commandMapStateToProps(commandName:string, state:any):any {
 		const command = this.commandByName(commandName);
 		if (!command.runtime) return null;
-		if (!command.runtime.mapStateToProps) return {};
+		if (!command.runtime.mapStateToProps) return null;
 		return command.runtime.mapStateToProps(state);
 	}
 
-	title(commandName:string, props:any):string {
+	// TODO: remove props?
+	title(commandName:string, props:any, state:any = null):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
-		return command.runtime.title(props);
+		if (command.runtime.mapStateToTitle) {
+			return command.runtime.mapStateToTitle(state);
+		} else {
+			return command.runtime.title(props);
+		}
 	}
 
 	iconName(commandName:string, variant:string = null):string {

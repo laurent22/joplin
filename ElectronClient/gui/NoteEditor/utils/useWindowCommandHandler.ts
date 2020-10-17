@@ -26,23 +26,24 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 		execute: async (props:any) => {
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
+				return;
+			}
+			
+			if (declaration.name === 'insertDateTime') {
+				return editorRef.current.execCommand({
+					name: 'insertText',
+					value: time.formatMsToLocal(new Date().getTime()),
+				});
+			} else if (declaration.name === 'scrollToHash') {
+				return editorRef.current.scrollTo({
+					type: ScrollOptionTypes.Hash,
+					value: props.hash,
+				});
 			} else {
-				if (declaration.name === 'insertDateTime') {
-					return editorRef.current.execCommand({
-						name: 'insertText',
-						value: time.formatMsToLocal(new Date().getTime()),
-					});
-				} else if (declaration.name === 'scrollToHash') {
-					return editorRef.current.scrollTo({
-						type: ScrollOptionTypes.Hash,
-						value: props.hash,
-					});
-				} else {
-					return editorRef.current.execCommand({
-						name: declaration.name,
-						value: props.value,
-					});
-				}
+				return editorRef.current.execCommand({
+					name: declaration.name,
+					value: props.value,
+				});
 			}
 		},
 		isEnabled: '!isDialogVisible && markdownEditorVisible && hasOneSelectedNote && isMarkdownNote',

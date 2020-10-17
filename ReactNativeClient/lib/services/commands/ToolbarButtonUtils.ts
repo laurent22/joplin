@@ -1,4 +1,4 @@
-import CommandService from '../CommandService';
+import CommandService from 'lib/services/CommandService';
 import propsHaveChanged from './propsHaveChanged';
 import { stateUtils } from 'lib/reducer';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
@@ -36,13 +36,16 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName:string, props:any, whenClauseContext:any):ToolbarButtonInfo {
+	private commandToToolbarButton(commandName:string, props:any, state:any, whenClauseContext:any):ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, props, whenClauseContext);
+		const newTitle = this.service.title(commandName, props, state);
 
 		if (
 			this.toolbarButtonCache_[commandName] &&
 			!propsHaveChanged(this.toolbarButtonCache_[commandName].props, props) &&
-			this.toolbarButtonCache_[commandName].info.enabled === newEnabled) {
+			this.toolbarButtonCache_[commandName].info.enabled === newEnabled &&
+			this.toolbarButtonCache_[commandName].info.title === newTitle
+		) {
 			return this.toolbarButtonCache_[commandName].info;
 		}
 
@@ -56,7 +59,7 @@ export default class ToolbarButtonUtils {
 			onClick: async () => {
 				this.service.execute(commandName, props);
 			},
-			title: this.service.title(commandName, props),
+			title: newTitle,
 		};
 
 		this.toolbarButtonCache_[commandName] = {
@@ -75,7 +78,6 @@ export default class ToolbarButtonUtils {
 
 		const whenClauseContext = stateToWhenClauseContext(state);
 
-
 		for (const commandName of commandNames) {
 			if (commandName === '-') {
 				output.push(separatorItem as any);
@@ -83,7 +85,7 @@ export default class ToolbarButtonUtils {
 			}
 
 			const props = this.service.commandMapStateToProps(commandName, state);
-			output.push(this.commandToToolbarButton(commandName, props, whenClauseContext));
+			output.push(this.commandToToolbarButton(commandName, props, state, whenClauseContext));
 		}
 
 		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));

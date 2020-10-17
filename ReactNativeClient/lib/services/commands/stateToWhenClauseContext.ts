@@ -11,5 +11,7 @@ export default function stateToWhenClauseContext(state:any) {
 		isMarkdownNote: note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		hasOneSelectedNote: !!note,
 		selectedNoteCount: state.selectedNoteIds.length,
+		noteIsTodo: note ? !!note.is_todo : false,
+		noteTodoCompleted: note ? !!note.todo_completed : false,
 	};
 }
