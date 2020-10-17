@@ -2,25 +2,29 @@
 # Copyright (C) 2017 Lucas Vieites
 # Copyright (C) 2019 Andros Fenollosa
 # Copyright (C) 2019 Germán Martín
+# Copyright (C) 2020 Andros Fenollosa
 # This file is distributed under the same license as the Joplin-CLI package.
 # Lucas Vieites <lucas.vieites@gmail.com>, 2017.
 # Andros Fenollosa <andros@fenollosa.email>, 2019.
 # Germán Martín <gmag11@gmail.com>, 2019.
 # Fernando Pindado <fpindado@gmail.com>, 2020.
+# Andros Fenollosa <andros@fenollosa.email>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Fernando Pindado <fpindado@gmail.com>\n"
+"Last-Translator: Andros Fenollosa <andros@fenollosa.email>\n"
 "Language-Team: Spanish <lucas.vieites@gmail.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ElectronClient/checkForUpdates.js:139
@@ -528,12 +532,14 @@ msgstr "Creando nuevo %s..."
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:373
 msgid "The following attachments are being watched for changes:"
 msgstr ""
+"Los siguientes adjuntos están siendo vigilados para ver si hay cambios:"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:376
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"Los archivos adjuntos ya no se verán cuándo cambies a una nota diferente."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:381
 #, javascript-format
@@ -649,12 +655,15 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"El objetivo de sincronización necesita ser actualizado antes de que Joplin "
+"pueda sincronizarse. La operación puede tardar unos minutos en completarse y "
+"la aplicación necesita ser reiniciada. Para proceder, por favor, haz clic en "
+"el enlace."
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:416
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Claves maestras que necesitan actualización"
+msgstr "Reiniciar y actualizar"
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:420
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
@@ -814,9 +823,8 @@ msgid "Toggle sidebar"
 msgstr "Cambia la barra lateral"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:17
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Cambia el diseño del editor"
+msgstr "Intercambiar editores"
 
 #: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
 msgid "Template file:"
@@ -1321,9 +1329,8 @@ msgid "Import"
 msgstr "Importar"
 
 #: ElectronClient/gui/MenuBar.js:343
-#, fuzzy
 msgid "Export all"
-msgstr "Exportar"
+msgstr "Exportar todo"
 
 #: ElectronClient/gui/MenuBar.js:356
 #, javascript-format
@@ -1404,38 +1411,36 @@ msgstr "Adjuntos"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Presiona el atajo"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Pulse el atajo y luego ENTER. O bien, pulse RETROCESO para borrar el atajo."
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
 #: ReactNativeClient/lib/services/KeymapService.js:142
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Error"
+msgstr "Error: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
 msgid "Command"
-msgstr ""
+msgstr "Comando"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Modo de teclado"
+msgstr "Atajo de teclado"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Acerca de Joplin"
+msgstr "Ocultar Joplin"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Preferences"
-msgstr "Preferencias..."
+msgstr "Preferencias"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Words"
@@ -1480,6 +1485,8 @@ msgstr "Estadísticas"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"La aplicación se va a cerrar. Por favor, vuelva a iniciarla para completar "
+"el proceso."
 
 #: ElectronClient/app.js:340
 #, javascript-format
@@ -1491,9 +1498,8 @@ msgid "Exit"
 msgstr "Salir"
 
 #: ElectronClient/commands/copyDevCommand.js:17
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Copiar la ruta en el portapapeles"
+msgstr "Copiar el comando del modo de desarrollo al portapapeles"
 
 #: ElectronClient/commands/startExternalEditing.js:18
 msgid "Edit in external editor"
@@ -1505,13 +1511,12 @@ msgid "Error opening note in editor: %s"
 msgstr "Error abriendo la nota en el editor: %s"
 
 #: ElectronClient/commands/toggleExternalEditing.js:16
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Detener la edición externa"
+msgstr "Intercambiar la edición externa"
 
 #: ElectronClient/commands/toggleExternalEditing.js:42
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ElectronClient/commands/stopExternalEditing.js:16
 msgid "Stop external editing"
@@ -1740,7 +1745,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Actualiza el objetivo de sincronización a la última versión."
 
 #: CliClient/app/command-sync.js:105
 #, javascript-format
@@ -2247,10 +2252,10 @@ msgstr ""
 "No se puede cargar el módulo «%s» para el formato «%s» y  destino \"%s\""
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
-"No se puede cargar el módulo «%s» para el formato «%s» y  destino \"%s\""
+"No se puede cargar el módulo “%s” para el formato “%s” y el objetivo “%s”"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:187
 #, javascript-format
@@ -2267,23 +2272,23 @@ msgstr "Notas restauradas"
 
 #: ReactNativeClient/lib/services/KeymapService.js:236
 msgid "command"
-msgstr ""
+msgstr "comando"
 
 #: ReactNativeClient/lib/services/KeymapService.js:236
 #: ReactNativeClient/lib/services/KeymapService.js:241
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "A “%s” le falta la propiedad requerida de “%s”."
 
 #: ReactNativeClient/lib/services/KeymapService.js:241
 #: ReactNativeClient/lib/services/KeymapService.js:248
 msgid "accelerator"
-msgstr ""
+msgstr "acelerador"
 
 #: ReactNativeClient/lib/services/KeymapService.js:248
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Respuesta inválida: %s"
+msgstr "Inválido %s: %s."
 
 #: ReactNativeClient/lib/services/KeymapService.js:266
 #, javascript-format
@@ -2291,11 +2296,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"El acelerador “%s” se usa para los comandos “%s” y “%s”. Esto puede llevar a "
+"un comportamiento inesperado."
 
 #: ReactNativeClient/lib/services/KeymapService.js:291
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "El acelerador “%s” no es válido."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -2445,7 +2452,7 @@ msgstr "Versión del perfil: %s"
 #: ReactNativeClient/lib/versionInfo.js:23
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Llavero soportado: %s"
 
 #: ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
@@ -2849,7 +2856,7 @@ msgstr "Añadir título"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Actualización del objetivo de sincronización"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:119
 #, javascript-format
@@ -2941,6 +2948,8 @@ msgstr ""
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"El objetivo de sincronización necesita ser mejorado. Presiona este banner "
+"para proceder."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3137,7 +3146,7 @@ msgstr "sí"
 #: ReactNativeClient/lib/models/Setting.js:66
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: ReactNativeClient/lib/models/Setting.js:66
 msgid "no"
@@ -3180,7 +3189,7 @@ msgstr "Nord"
 
 #: ReactNativeClient/lib/models/Setting.js:80
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Oscuro"
 
 #: ReactNativeClient/lib/models/Setting.js:81
 msgid "OLED Dark"
@@ -3229,15 +3238,15 @@ msgstr "Contraseña de WebDAV"
 
 #: ReactNativeClient/lib/models/Setting.js:214
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:225
 msgid "AWS key"
-msgstr ""
+msgstr "AWS key"
 
 #: ReactNativeClient/lib/models/Setting.js:235
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: ReactNativeClient/lib/models/Setting.js:247
 msgid "Attachment download behaviour"
@@ -3695,9 +3704,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1292
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Modo de teclado"
+msgstr "Atajos de teclado"
 
 #: ReactNativeClient/lib/models/Setting.js:1299
 msgid ""
@@ -3744,7 +3752,7 @@ msgstr "OneDrive"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/commands/historyForward.js:16
 msgid "Forward"
