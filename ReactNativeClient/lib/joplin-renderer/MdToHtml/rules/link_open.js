@@ -74,6 +74,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
 
 			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+		} else {
+			js = `onclick='${js}'`;
 		}
 
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
