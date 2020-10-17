@@ -373,7 +373,7 @@ function useMenu(props:Props) {
 			});
 
 			if (copyToClipboard === 0) {
-				clipboard.writeText(v.message);
+				clipboard.writeText(v.message.split('\n').splice(3).join('\n'));
 			}
 		}
 
