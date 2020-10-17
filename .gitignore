@@ -108,7 +108,7 @@ ElectronClient/gui/MainScreen/commands/showNoteProperties.js
 ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js
 ElectronClient/gui/MainScreen/commands/toggleEditors.js
 ElectronClient/gui/MainScreen/commands/toggleNoteList.js
-ElectronClient/gui/MainScreen/commands/toggleSidebar.js
+ElectronClient/gui/MainScreen/commands/toggleSideBar.js
 ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js
 ElectronClient/gui/MainScreen/MainScreen.js
 ElectronClient/gui/MenuBar.js
@@ -182,6 +182,7 @@ ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ElectronClient/gui/utils/NoteListUtils.js
 ElectronClient/InteropServiceHelper.js
 ElectronClient/services/bridge.js
+ElectronClient/services/commands/types.js
 ElectronClient/services/plugins/hooks/useThemeCss.js
 ElectronClient/services/plugins/hooks/useViewIsReady.js
 ElectronClient/services/plugins/PlatformImplementation.js

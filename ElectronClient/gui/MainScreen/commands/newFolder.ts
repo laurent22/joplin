@@ -1,4 +1,4 @@
-import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
+import { CommandContext, CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 const Folder = require('lib/models/Folder');
 const bridge = require('electron').remote.require('./bridge').default;
@@ -11,7 +11,7 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ parentId }:any) => {
+		execute: async (_context:CommandContext, parentId:string = null) => {
 			comp.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
@@ -38,9 +38,6 @@ export const runtime = (comp:any):CommandRuntime => {
 					},
 				},
 			});
-		},
-		title: () => {
-			return _('New notebook');
 		},
 	};
 };

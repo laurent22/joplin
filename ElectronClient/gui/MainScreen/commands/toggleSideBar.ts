@@ -1,8 +1,8 @@
-import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
+import { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {
-	name: 'toggleSidebar',
+	name: 'toggleSideBar',
 	label: () => _('Toggle sidebar'),
 	iconName: 'fas fa-bars',
 };

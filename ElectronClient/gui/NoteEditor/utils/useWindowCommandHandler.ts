@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
-import CommandService, { CommandDeclaration,  CommandRuntime } from '../../../lib/services/CommandService';
+import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from 'lib/services/CommandService';
 const { time } = require('lib/time-utils.js');
 const { reg } = require('lib/registry.js');
 
@@ -23,12 +23,12 @@ interface HookDependencies {
 
 function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
 	return {
-		execute: async (props:any) => {
+		execute: async (_context:CommandContext, ...args:any[]) => {
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 				return;
 			}
-			
+
 			if (declaration.name === 'insertDateTime') {
 				return editorRef.current.execCommand({
 					name: 'insertText',
@@ -37,16 +37,16 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 			} else if (declaration.name === 'scrollToHash') {
 				return editorRef.current.scrollTo({
 					type: ScrollOptionTypes.Hash,
-					value: props.hash,
+					value: args[0],
 				});
 			} else {
 				return editorRef.current.execCommand({
 					name: declaration.name,
-					value: props.value,
+					value: args[0],
 				});
 			}
 		},
-		isEnabled: '!isDialogVisible && markdownEditorVisible && hasOneSelectedNote && isMarkdownNote',
+		isEnabled: '!modalDialogVisible && markdownEditorVisible && oneNoteSelected && noteIsMarkdown',
 	};
 }
 

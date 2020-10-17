@@ -202,9 +202,9 @@ class StateUtils {
 		return selectArrayShallow(props, cacheKey);
 	}
 
-	public hasOneSelectedNote(state:State):boolean {
+	public oneNoteSelected(state:State):boolean {
 		return state.selectedNoteIds.length === 1;
-	};
+	}
 
 	public notesOrder(stateSettings:any) {
 		if (stateSettings['notes.sortOrder.field'] === 'order') {
@@ -226,7 +226,7 @@ class StateUtils {
 				},
 			]);
 		}
-	};
+	}
 
 	public foldersOrder(stateSettings:any) {
 		return cacheEnabledOutput('foldersOrder', [
@@ -235,14 +235,14 @@ class StateUtils {
 				dir: stateSettings['folders.sortOrder.reverse'] ? 'DESC' : 'ASC',
 			},
 		]);
-	};
+	}
 
 	public hasNotesBeingSaved(state:State):boolean {
 		for (const id in state.editorNoteStatuses) {
 			if (state.editorNoteStatuses[id] === 'saving') return true;
 		}
 		return false;
-	};
+	}
 
 	public parentItem(state:State) {
 		const t = state.notesParentType;
@@ -252,14 +252,14 @@ class StateUtils {
 		if (t === 'Search') id = state.selectedSearchId;
 		if (!t || !id) return null;
 		return { type: t, id: id };
-	};
+	}
 
 	public lastSelectedNoteIds(state:State):string[] {
 		const parent = this.parentItem(state);
 		if (!parent) return [];
 		const output = (state.lastSelectedNotesIds as any)[parent.type][parent.id];
 		return output ? output : [];
-	};
+	}
 
 	public selectedNote(state:State):any {
 		const noteId = this.selectedNoteId(state);
@@ -542,7 +542,7 @@ function getNoteHistoryInfo(state:State) {
 		}
 	}
 	return null;
-};
+}
 
 function handleHistory(draft:Draft<State>, action:any) {
 	const currentNote = getNoteHistoryInfo(draft);

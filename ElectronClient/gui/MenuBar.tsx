@@ -108,7 +108,7 @@ const commandNames:string[] = [
 	'attachFile',
 	'focusSearch',
 	'showLocalSearch',
-	'toggleSidebar',
+	'toggleSideBar',
 	'toggleNoteList',
 	'toggleVisiblePanes',
 	'toggleExternalEditing',
@@ -137,7 +137,10 @@ function useMenu(props:Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName:string) => {
-		CommandService.instance().execute(commandName, props.menuItemProps[commandName]);
+		// TODO: Remove props handling
+		let p = props.menuItemProps[commandName];
+		if ('enabled' in p && Object.keys(p).length === 1) p = null;
+		CommandService.instance().execute(commandName, p);
 	}, [props.menuItemProps]);
 
 	const onImportModuleClick = useCallback(async (module:Module, moduleSource:string) => {
@@ -532,7 +535,7 @@ function useMenu(props:Props) {
 			view: {
 				label: _('&View'),
 				submenu: [
-					menuItemDic.toggleSidebar,
+					menuItemDic.toggleSideBar,
 					menuItemDic.toggleNoteList,
 					menuItemDic.toggleVisiblePanes,
 					{

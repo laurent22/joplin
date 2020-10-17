@@ -1,3 +1,4 @@
+import { State } from 'lib/reducer';
 import eventManager from 'lib/eventManager';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
@@ -8,8 +9,13 @@ type LabelFunction = () => string;
 type IsEnabledFunction = (props:any) => boolean;
 type IsEnabledExpression = string;
 
+export interface CommandContext {
+	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
+	state: State,
+}
+
 export interface CommandRuntime {
-	execute(props:any, state:any):Promise<any>
+	execute(context:CommandContext, ...args:any[]):Promise<any>
 	isEnabled?: IsEnabledFunction | IsEnabledExpression;
 
 	// "state" type is "AppState" but in order not to introduce a
@@ -147,7 +153,7 @@ export default class CommandService extends BaseService {
 		return command;
 	}
 
-	registerDeclaration(declaration:CommandDeclaration) {
+	public registerDeclaration(declaration:CommandDeclaration) {
 		declaration = { ...declaration };
 		if (!declaration.label) declaration.label = '';
 		if (!declaration.iconName) declaration.iconName = '';
@@ -159,7 +165,7 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[declaration.name];
 	}
 
-	registerRuntime(commandName:string, runtime:CommandRuntime) {
+	public registerRuntime(commandName:string, runtime:CommandRuntime) {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
 		const command = this.commandByName(commandName);
@@ -172,19 +178,19 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[commandName];
 	}
 
-	componentRegisterCommands(component:any, commands:any[]) {
+	public componentRegisterCommands(component:any, commands:any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
 		}
 	}
 
-	componentUnregisterCommands(commands:any[]) {
+	public componentUnregisterCommands(commands:any[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
-	unregisterRuntime(commandName:string) {
+	public unregisterRuntime(commandName:string) {
 		const command = this.commandByName(commandName, { mustExist: false });
 		if (!command || !command.runtime) return;
 		delete command.runtime;
@@ -192,19 +198,20 @@ export default class CommandService extends BaseService {
 		delete this.commandPreviousStates_[commandName];
 	}
 
-	async execute(commandName:string, props:any = null, state:any = null):Promise<any> {
+	public async execute(commandName:string, ...args:any[]):Promise<any> {
 		const command = this.commandByName(commandName);
-		this.logger().info('CommandService::execute:', commandName, props);
-		return command.runtime.execute(props, !props ? this.store_.getState() : null); //props ? props : {});
+		this.logger().info('CommandService::execute:', commandName, args);
+		// return command.runtime.execute(props, !props ? this.store_.getState() : null); //props ? props : {});
+		return command.runtime.execute({ state: this.store_.getState() }, ...args); // props ? props : {});
 	}
 
-	scheduleExecute(commandName:string, args:any) {
+	public scheduleExecute(commandName:string, args:any) {
 		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
 	}
 
-	isEnabled(commandName:string, props:any, whenClauseContext:any):boolean {
+	public isEnabled(commandName:string, props:any, whenClauseContext:any):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
 
@@ -221,7 +228,7 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	commandMapStateToProps(commandName:string, state:any):any {
+	public commandMapStateToProps(commandName:string, state:any):any {
 		const command = this.commandByName(commandName);
 		if (!command.runtime) return null;
 		if (!command.runtime.mapStateToProps) return null;
@@ -229,7 +236,7 @@ export default class CommandService extends BaseService {
 	}
 
 	// TODO: remove props?
-	title(commandName:string, props:any, state:any = null):string {
+	public title(commandName:string, props:any, state:any = null):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
 		if (command.runtime.mapStateToTitle) {
@@ -239,14 +246,14 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	iconName(commandName:string, variant:string = null):string {
+	public iconName(commandName:string, variant:string = null):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
 		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
 		return command.declaration.iconName;
 	}
 
-	label(commandName:string, fullLabel:boolean = false):string {
+	public label(commandName:string, fullLabel:boolean = false):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];
@@ -262,7 +269,7 @@ export default class CommandService extends BaseService {
 		return output.join(': ');
 	}
 
-	exists(commandName:string):boolean {
+	public exists(commandName:string):boolean {
 		const command = this.commandByName(commandName, { mustExist: false });
 		return !!command;
 	}

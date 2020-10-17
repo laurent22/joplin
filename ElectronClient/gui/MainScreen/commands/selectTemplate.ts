@@ -1,4 +1,4 @@
-import CommandService, { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 const TemplateUtils = require('lib/TemplateUtils');
 
@@ -8,7 +8,7 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ noteType }:any) => {
+		execute: async (_context:CommandContext, noteType:string) => {
 			comp.setState({
 				promptOptions: {
 					label: _('Template file:'),

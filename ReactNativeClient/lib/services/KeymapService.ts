@@ -37,7 +37,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Shift+Cmd+L', command: 'focusElementNoteList' },
 		{ accelerator: 'Shift+Cmd+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Shift+Cmd+B', command: 'focusElementNoteBody' },
-		{ accelerator: 'Option+Cmd+S', command: 'toggleSidebar' },
+		{ accelerator: 'Option+Cmd+S', command: 'toggleSideBar' },
 		{ accelerator: 'Option+Cmd+L', command: 'toggleNoteList' },
 		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
@@ -68,7 +68,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+L', command: 'focusElementNoteList' },
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
-		{ accelerator: 'F10', command: 'toggleSidebar' },
+		{ accelerator: 'F10', command: 'toggleSideBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
@@ -106,11 +106,11 @@ export default class KeymapService extends BaseService {
 		this.initialize();
 	}
 
-	get lastSaveTime():number {
+	public get lastSaveTime():number {
 		return this.lastSaveTime_;
 	}
 
-	initialize(platform: string = shim.platformName()) {
+	public initialize(platform: string = shim.platformName()) {
 		this.platform = platform;
 
 		switch (platform) {
@@ -131,7 +131,7 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	async loadCustomKeymap(customKeymapPath: string) {
+	public async loadCustomKeymap(customKeymapPath: string) {
 		this.customKeymapPath = customKeymapPath; // Useful for saving the changes later
 
 		if (await shim.fsDriver().exists(customKeymapPath)) {
@@ -143,7 +143,7 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	async saveCustomKeymap(customKeymapPath: string = this.customKeymapPath) {
+	public async saveCustomKeymap(customKeymapPath: string = this.customKeymapPath) {
 		this.logger().info(`KeymapService: Saving keymap to file: ${customKeymapPath}`);
 
 		try {
@@ -161,7 +161,7 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	acceleratorExists(command: string) {
+	public acceleratorExists(command: string) {
 		return !!this.keymap[command];
 	}
 
@@ -189,33 +189,33 @@ export default class KeymapService extends BaseService {
 		};
 	}
 
-	setAccelerator(command: string, accelerator: string) {
+	public setAccelerator(command: string, accelerator: string) {
 		this.keymap[command].accelerator = accelerator;
 	}
 
-	getAccelerator(command: string) {
+	public getAccelerator(command: string) {
 		const item = this.keymap[command];
 		if (!item) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
 		return item.accelerator;
 	}
 
-	getDefaultAccelerator(command: string) {
+	public getDefaultAccelerator(command: string) {
 		const defaultItem = this.defaultKeymapItems.find((item => item.command === command));
 		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
 		return defaultItem.accelerator;
 	}
 
-	getCommandNames() {
+	public getCommandNames() {
 		return Object.keys(this.keymap);
 	}
 
-	getKeymapItems() {
+	public getKeymapItems() {
 		return Object.values(this.keymap);
 	}
 
-	getCustomKeymapItems() {
+	public getCustomKeymapItems() {
 		const customkeymapItems: KeymapItem[] = [];
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
@@ -236,11 +236,11 @@ export default class KeymapService extends BaseService {
 		return customkeymapItems;
 	}
 
-	getDefaultKeymapItems() {
+	public getDefaultKeymapItems() {
 		return [...this.defaultKeymapItems];
 	}
 
-	overrideKeymap(customKeymapItems: KeymapItem[]) {
+	public overrideKeymap(customKeymapItems: KeymapItem[]) {
 		try {
 			for (let i = 0; i < customKeymapItems.length; i++) {
 				const item = customKeymapItems[i];
@@ -284,7 +284,7 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	validateKeymap(proposedKeymapItem: KeymapItem = null) {
+	public validateKeymap(proposedKeymapItem: KeymapItem = null) {
 		const usedAccelerators = new Set();
 
 		// Validate as if the proposed change is already present in the current keymap
@@ -312,7 +312,7 @@ export default class KeymapService extends BaseService {
 		}
 	}
 
-	validateAccelerator(accelerator: string) {
+	public validateAccelerator(accelerator: string) {
 		let keyFound = false;
 
 		const parts = accelerator.split('+');
@@ -334,7 +334,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
-	domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
+	public domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
 		const parts = [];
 		const { key, ctrlKey, metaKey, altKey, shiftKey } = event;
 
@@ -358,7 +358,7 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
-	static domToElectronKey(domKey: string) {
+	private static domToElectronKey(domKey: string) {
 		let electronKey;
 
 		if (/^([a-z])$/.test(domKey)) {

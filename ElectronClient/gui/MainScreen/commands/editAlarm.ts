@@ -1,10 +1,8 @@
-import { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import eventManager from 'lib/eventManager';
 import { _ } from 'lib/locale';
-import { AppState } from '../../../app';
 import { stateUtils } from 'lib/reducer';
 const Note = require('lib/models/Note');
-const BaseModel = require('lib/BaseModel');
 const { time } = require('lib/time-utils');
 
 export const declaration:CommandDeclaration = {
@@ -13,18 +11,12 @@ export const declaration:CommandDeclaration = {
 	iconName: 'icon-alarm',
 };
 
-interface Props {
-	noteId: string,
-}
-
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async (props:Props, state:AppState) => {
-			props = props ? props : {
-				noteId: stateUtils.selectedNoteId(state),
-			};
+		execute: async (context:CommandContext, noteId:string = null) => {
+			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
-			const note = await Note.load(props.noteId);
+			const note = await Note.load(noteId);
 
 			const defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
 			defaultDate.setMinutes(0);
@@ -61,38 +53,12 @@ export const runtime = (comp:any):CommandRuntime => {
 				},
 			});
 		},
-		isEnabled: 'hasOneSelectedNote && noteIsTodo && !noteTodoCompleted',
+
+		isEnabled: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
+
 		mapStateToTitle: (state:any) => {
 			const note = stateUtils.selectedNote(state);
-			console.info('MMMMMMMMMMMMM', note);
 			return note && note.todo_due ? time.formatMsToLocal(note.todo_due) : null;
 		},
-		// title: (
-		// title: {
-		// 	default: null,
-		// 	'noteTodoDue ',
-		// },
-
-		// title: (state:any):string => {
-
-		// 	// if (!props.noteId) return null;
-		// 	// if (!props.noteTodoDue) return null;
-		// 	// return time.formatMsToLocal(props.noteTodoDue);
-		// },
-		// isEnabled: (props:any):boolean => {
-		// 	if (!props.noteId) return false;
-		// 	return !!props.noteIsTodo && !props.noteTodoCompleted;
-		// },
-		// mapStateToProps: (state:any):any => {
-		// 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-		// 	const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
-
-		// 	return {
-		// 		noteId: note ? noteId : null,
-		// 		noteIsTodo: note ? note.is_todo : false,
-		// 		noteTodoCompleted: note ? note.todo_completed : false,
-		// 		noteTodoDue: note ? note.todo_due : null,
-		// 	};
-		// },
 	};
 };
