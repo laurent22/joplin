@@ -112,7 +112,9 @@ export default class MenuUtils {
 		const output:MenuItemProps = {};
 
 		for (const commandName of commandNames) {
-			const newProps = { enabled: this.service.isEnabled(commandName, whenClauseContext) };
+			const newProps = {
+				enabled: this.service.isEnabled(commandName, whenClauseContext),
+			};
 
 			if (newProps === null || propsHaveChanged(this.menuItemPropsCache_[commandName], newProps)) {
 				output[commandName] = newProps;

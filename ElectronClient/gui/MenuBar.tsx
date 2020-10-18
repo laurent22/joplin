@@ -138,10 +138,7 @@ function useMenu(props:Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName:string) => {
-		// TODO: Remove props handling
-		let p = props.menuItemProps[commandName];
-		if (p && ('enabled' in p) && Object.keys(p).length === 1) p = null;
-		CommandService.instance().execute(commandName, p);
+		CommandService.instance().execute(commandName, props.menuItemProps[commandName]);
 	}, [props.menuItemProps]);
 
 	const onImportModuleClick = useCallback(async (module:Module, moduleSource:string) => {
@@ -554,7 +551,6 @@ function useMenu(props:Props) {
 						id: 'showNoteCounts',
 						label: Setting.settingMetadata('showNoteCounts').label(),
 						type: 'checkbox',
-						// checked: Setting.value('showNoteCounts'),
 						click: () => {
 							Setting.setValue('showNoteCounts', !Setting.value('showNoteCounts'));
 						},
@@ -562,7 +558,6 @@ function useMenu(props:Props) {
 						id: 'uncompletedTodosOnTop',
 						label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
 						type: 'checkbox',
-						// checked: Setting.value('uncompletedTodosOnTop'),
 						click: () => {
 							Setting.setValue('uncompletedTodosOnTop', !Setting.value('uncompletedTodosOnTop'));
 						},
@@ -570,7 +565,6 @@ function useMenu(props:Props) {
 						id: 'showCompletedTodos',
 						label: Setting.settingMetadata('showCompletedTodos').label(),
 						type: 'checkbox',
-						// checked: Setting.value('showCompletedTodos'),
 						click: () => {
 							Setting.setValue('showCompletedTodos', !Setting.value('showCompletedTodos'));
 						},
