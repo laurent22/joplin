@@ -577,6 +577,22 @@ class SearchEngine {
 			keys.push(col);
 		}
 
+		//
+		// The object "allTerms" is used for query construction purposes (this contains all the filter terms)
+		// Since this is used for the FTS match query, we need to normalize text, title and body terms.
+		// Note, we're not normalizing terms like tag because these are matched using SQL LIKE operator and so we must preserve their diacritics.
+		//
+		// The object "terms" only include text, title, body terms and is used for highlighting.
+		// By not normalizing the text, title, body in "terms", highlighting still works correctly for words with diacritics.
+		//
+
+		allTerms = allTerms.map(x => {
+			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
+				return Object.assign(x, { value: this.normalizeText_(x.value) });
+			}
+			return x;
+		});
+
 		return {
 			termCount: termCount,
 			keys: keys,
@@ -661,12 +677,11 @@ class SearchEngine {
 			fuzzy: Setting.value('db.fuzzySearchEnabled') === 1,
 		}, options);
 
-		searchString = this.normalizeText_(searchString);
-
 		const searchType = this.determineSearchType_(searchString, options);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
+			searchString = this.normalizeText_(searchString);
 			const rows = await this.basicSearch(searchString);
 			const parsedQuery = await this.parseQuery(searchString);
 			this.processResults_(rows, parsedQuery, true);
