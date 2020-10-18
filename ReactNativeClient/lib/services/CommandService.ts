@@ -26,6 +26,9 @@ export interface CommandDeclaration {
 	// Used for the menu item label, and toolbar button tooltip
 	label?: LabelFunction | string,
 
+	// Command description - if none is provided, the label will be used as description
+	description?: string,
+
 	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
 	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
 	// but not so much within the keymap config screen, where the parent item is not displayed. Because
@@ -231,6 +234,12 @@ export default class CommandService extends BaseService {
 		if (fullLabel && parentLabel(command.declaration)) output.push(parentLabel(command.declaration));
 		output.push(typeof command.declaration.label === 'function' ? command.declaration.label() : command.declaration.label);
 		return output.join(': ');
+	}
+
+	public description(commandName:string):string {
+		const command = this.commandByName(commandName);
+		if (command.declaration.description) return command.declaration.description;
+		return this.label(commandName, true);
 	}
 
 	public exists(commandName:string):boolean {
