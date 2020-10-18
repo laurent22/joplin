@@ -1,13 +1,13 @@
 import { State } from 'lib/reducer';
 import eventManager from 'lib/eventManager';
-import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
+// import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
 import WhenClause from './WhenClause';
+import stateToWhenClauseContext from './commands/stateToWhenClauseContext';
 
 type LabelFunction = () => string;
-type IsEnabledFunction = (props:any) => boolean;
-type IsEnabledExpression = string;
+type EnabledCondition = string;
 
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
@@ -16,25 +16,8 @@ export interface CommandContext {
 
 export interface CommandRuntime {
 	execute(context:CommandContext, ...args:any[]):Promise<any>
-	isEnabled?: IsEnabledFunction | IsEnabledExpression;
-
-	// "state" type is "AppState" but in order not to introduce a
-	// dependency to the desktop app (so that the service can
-	// potentially be used by the mobile app too), we keep it as "any".
-	// Individual commands can define it as state:AppState when relevant.
-	//
-	// In general this method should reduce the provided state to only
-	// what's absolutely necessary. For example, if the property of a
-	// note is needed, return only that particular property and not the
-	// whole note object. This will ensure that components that depends
-	// on this command are not uncessarily re-rendered. A note object for
-	// example might change frequently but its markdown_language property
-	// will almost never change.
-	mapStateToProps?(state:any):any
-
+	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
-	title?(props:any):string,
-
 	mapStateToTitle?(state:any):string,
 }
 
@@ -99,15 +82,6 @@ interface CommandByNameOptions {
 	runtimeMustBeRegistered?:boolean,
 }
 
-interface CommandState {
-	title: string,
-	enabled: boolean,
-}
-
-interface CommandStates {
-	[key:string]: CommandState
-}
-
 export default class CommandService extends BaseService {
 
 	private static instance_:CommandService;
@@ -119,7 +93,6 @@ export default class CommandService extends BaseService {
 	}
 
 	private commands_:Commands = {};
-	private commandPreviousStates_:CommandStates = {};
 	private store_:any;
 
 	initialize(store:any) {
@@ -161,8 +134,6 @@ export default class CommandService extends BaseService {
 		this.commands_[declaration.name] = {
 			declaration: declaration,
 		};
-
-		delete this.commandPreviousStates_[declaration.name];
 	}
 
 	public registerRuntime(commandName:string, runtime:CommandRuntime) {
@@ -171,11 +142,8 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName);
 
 		runtime = Object.assign({}, runtime);
-		if (!runtime.isEnabled) runtime.isEnabled = () => true;
-		if (!runtime.title) runtime.title = () => null;
+		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
 		command.runtime = runtime;
-
-		delete this.commandPreviousStates_[commandName];
 	}
 
 	public componentRegisterCommands(component:any, commands:any[]) {
@@ -194,14 +162,11 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName, { mustExist: false });
 		if (!command || !command.runtime) return;
 		delete command.runtime;
-
-		delete this.commandPreviousStates_[commandName];
 	}
 
 	public async execute(commandName:string, ...args:any[]):Promise<any> {
 		const command = this.commandByName(commandName);
 		this.logger().info('CommandService::execute:', commandName, args);
-		// return command.runtime.execute(props, !props ? this.store_.getState() : null); //props ? props : {});
 		return command.runtime.execute({ state: this.store_.getState() }, ...args); // props ? props : {});
 	}
 
@@ -211,38 +176,41 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	public isEnabled(commandName:string, props:any, whenClauseContext:any):boolean {
+	public currentWhenClauseContext() {
+		return stateToWhenClauseContext(this.store_.getState());
+	}
+
+	// When looping on commands and checking their enabled state, the whenClauseContext
+	// should be specified (created using currentWhenClauseContext) to avoid having
+	// to re-create it on each call.
+	public isEnabled(commandName:string, whenClauseContext:any = null):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
 
-		if (typeof command.runtime.isEnabled === 'function') {
-			return command.runtime.isEnabled(props);
-		} else {
-			if (!whenClauseContext) {
-				console.warn('whenClauseContext was null', commandName);
-				whenClauseContext = {};
-			}
+		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 
-			const exp = new WhenClause(command.runtime.isEnabled);
-			return exp.evaluate(whenClauseContext);
-		}
+		const exp = new WhenClause(command.runtime.enabledCondition);
+		return exp.evaluate(whenClauseContext);
 	}
 
-	public commandMapStateToProps(commandName:string, state:any):any {
-		const command = this.commandByName(commandName);
-		if (!command.runtime) return null;
-		if (!command.runtime.mapStateToProps) return null;
-		return command.runtime.mapStateToProps(state);
-	}
+	// public commandMapStateToProps(commandName:string, state:any):any {
+	// 	const command = this.commandByName(commandName);
+	// 	if (!command.runtime) return null;
+	// 	if (!command.runtime.mapStateToProps) return null;
+	// 	return command.runtime.mapStateToProps(state);
+	// }
 
 	// TODO: remove props?
-	public title(commandName:string, props:any, state:any = null):string {
+	public title(commandName:string, state:any = null):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
+
+		state = state || this.store_.getState();
+
 		if (command.runtime.mapStateToTitle) {
 			return command.runtime.mapStateToTitle(state);
 		} else {
-			return command.runtime.title(props);
+			return '';
 		}
 	}
 
@@ -274,37 +242,37 @@ export default class CommandService extends BaseService {
 		return !!command;
 	}
 
-	public commandsToMarkdownTable(state:any):string {
-		const headers:MarkdownTableHeader[] = [
-			{
-				name: 'commandName',
-				label: 'Name',
-			},
-			{
-				name: 'description',
-				label: 'Description',
-			},
-			{
-				name: 'props',
-				label: 'Props',
-			},
-		];
+	// public commandsToMarkdownTable(state:any):string {
+	// 	const headers:MarkdownTableHeader[] = [
+	// 		{
+	// 			name: 'commandName',
+	// 			label: 'Name',
+	// 		},
+	// 		{
+	// 			name: 'description',
+	// 			label: 'Description',
+	// 		},
+	// 		{
+	// 			name: 'props',
+	// 			label: 'Props',
+	// 		},
+	// 	];
 
-		const rows:MarkdownTableRow[] = [];
+	// 	const rows:MarkdownTableRow[] = [];
 
-		for (const commandName in this.commands_) {
-			const props = this.commandMapStateToProps(commandName, state);
+	// 	for (const commandName in this.commands_) {
+	// 		const props = this.commandMapStateToProps(commandName, state);
 
-			const row:MarkdownTableRow = {
-				commandName: commandName,
-				description: this.label(commandName),
-				props: JSON.stringify(props),
-			};
+	// 		const row:MarkdownTableRow = {
+	// 			commandName: commandName,
+	// 			description: this.label(commandName),
+	// 			props: JSON.stringify(props),
+	// 		};
 
-			rows.push(row);
-		}
+	// 		rows.push(row);
+	// 	}
 
-		return markdownUtils.createMarkdownTable(headers, rows);
-	}
+	// 	return markdownUtils.createMarkdownTable(headers, rows);
+	// }
 
 }

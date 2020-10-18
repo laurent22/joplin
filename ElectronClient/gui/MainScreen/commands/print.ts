@@ -20,6 +20,6 @@ export const runtime = (comp:any):CommandRuntime => {
 				bridge().showErrorMessageBox(error.message);
 			}
 		},
-		isEnabled: 'someNotesSelected',
+		enabledCondition: 'someNotesSelected',
 	};
 };

@@ -15,6 +15,6 @@ export const runtime = (comp:any):CommandRuntime => {
 			});
 		},
 
-		isEnabled: 'markdownEditorVisible && oneNoteSelected',
+		enabledCondition: 'markdownEditorVisible && oneNoteSelected',
 	};
 };

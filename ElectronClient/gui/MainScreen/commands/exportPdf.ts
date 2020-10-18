@@ -52,6 +52,6 @@ export const runtime = (comp:any):CommandRuntime => {
 			}
 		},
 
-		isEnabled: 'someNotesSelected',
+		enabledCondition: 'someNotesSelected',
 	};
 };

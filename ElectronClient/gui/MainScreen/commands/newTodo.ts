@@ -12,6 +12,6 @@ export const runtime = ():CommandRuntime => {
 		execute: async (_context:CommandContext, template:string = null) => {
 			return CommandService.instance().execute('newNote', template, true);
 		},
-		isEnabled: 'oneFolderSelected && !inConflictFolder',
+		enabledCondition: 'oneFolderSelected && !inConflictFolder',
 	};
 };

@@ -25,6 +25,7 @@ import eventManager from 'lib/eventManager';
 import { AppState } from '../../app';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import { _ } from 'lib/locale';
+import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -565,6 +566,7 @@ export {
 
 const mapStateToProps = (state: AppState) => {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
 		noteId: noteId,
@@ -587,15 +589,15 @@ const mapStateToProps = (state: AppState) => {
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
-		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons(state, [
+		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
 			'toggleExternalEditing',
-		]),
-		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons(state, [
+		], whenClauseContext),
+		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
-		])[0],
+		], whenClauseContext)[0],
 	};
 };
 

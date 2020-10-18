@@ -22,7 +22,7 @@ export const runtime = ():CommandRuntime => {
 				CommandService.instance().execute('startExternalEditing', noteId);
 			}
 		},
-		isEnabled: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected',
 		mapStateToTitle: (state:any) => {
 			const noteId = stateUtils.selectedNoteId(state);
 			return state.watchedNoteFiles.includes(noteId) ? _('Stop') : '';

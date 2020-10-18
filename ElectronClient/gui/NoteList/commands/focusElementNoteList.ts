@@ -18,6 +18,6 @@ export const runtime = (comp:any):CommandRuntime => {
 				if (ref) ref.focus();
 			}
 		},
-		isEnabled: 'noteListHasNotes',
+		enabledCondition: 'noteListHasNotes',
 	};
 };

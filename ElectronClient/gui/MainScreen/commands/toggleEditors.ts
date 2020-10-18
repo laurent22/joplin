@@ -19,6 +19,6 @@ export const runtime = ():CommandRuntime => {
 			if (stateUtils.hasNotesBeingSaved(context.state)) return;
 			Setting.toggle('editor.codeView');
 		},
-		isEnabled: '!notesAreBeingSaved && oneNoteSelected',
+		enabledCondition: '!notesAreBeingSaved && oneNoteSelected',
 	};
 };

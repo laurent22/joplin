@@ -13,6 +13,7 @@ import { Module } from 'lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
 import { MenuItem, MenuItemLocation } from 'lib/services/plugins/api/types';
+import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
 
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
@@ -789,10 +790,12 @@ function useMenu(props:Props) {
 	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime]);
 
 	useEffect(() => {
+		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
+
 		for (const commandName in props.menuItemProps) {
 			const p = props.menuItemProps[commandName];
 			if (!p) continue;
-			const enabled = 'enabled' in p ? p.enabled : CommandService.instance().isEnabled(commandName, p, null);
+			const enabled = 'enabled' in p ? p.enabled : CommandService.instance().isEnabled(commandName, whenClauseContext);
 			menuItemSetEnabled(commandName, enabled);
 		}
 
@@ -863,8 +866,10 @@ function MenuBar(props:Props):JSX.Element {
 }
 
 const mapStateToProps = (state:AppState) => {
+	const whenClauseContext = stateToWhenClauseContext(state);
+
 	return {
-		menuItemProps: menuUtils.commandsToMenuItemProps(state, commandNames.concat(pluginCommandNames(state.pluginService.plugins))),
+		menuItemProps: menuUtils.commandsToMenuItemProps(commandNames.concat(pluginCommandNames(state.pluginService.plugins)), whenClauseContext),
 		routeName: state.route.routeName,
 		selectedFolderId: state.selectedFolderId,
 		layoutButtonSequence: state.settings.layoutButtonSequence,

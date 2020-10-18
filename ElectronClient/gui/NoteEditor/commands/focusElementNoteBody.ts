@@ -12,6 +12,6 @@ export const runtime = (comp:any):CommandRuntime => {
 		execute: async () => {
 			comp.editorRef.current.execCommand({ name: 'focus' });
 		},
-		isEnabled: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected',
 	};
 };

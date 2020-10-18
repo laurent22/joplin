@@ -33,6 +33,6 @@ export const runtime = ():CommandRuntime => {
 				id: newNote.id,
 			});
 		},
-		isEnabled: 'oneFolderSelected && !inConflictFolder',
+		enabledCondition: 'oneFolderSelected && !inConflictFolder',
 	};
 };

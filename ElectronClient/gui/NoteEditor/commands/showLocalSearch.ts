@@ -16,6 +16,6 @@ export const runtime = (comp:any):CommandRuntime => {
 				if (comp.noteSearchBarRef.current) comp.noteSearchBarRef.current.wrappedInstance.focus();
 			}
 		},
-		isEnabled: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected',
 	};
 };

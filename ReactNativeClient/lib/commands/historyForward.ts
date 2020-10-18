@@ -14,6 +14,6 @@ export const runtime = ():CommandRuntime => {
 				type: 'HISTORY_FORWARD',
 			});
 		},
-		isEnabled: 'historyhasForwardNotes',
+		enabledCondition: 'historyhasForwardNotes',
 	};
 };

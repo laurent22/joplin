@@ -65,8 +65,7 @@ export default class JoplinCommands {
 			execute: command.execute,
 		};
 
-		if ('isEnabled' in command) runtime.isEnabled = command.isEnabled;
-		if ('mapStateToProps' in command) runtime.mapStateToProps = command.mapStateToProps;
+		if ('enabledCondition' in command) runtime.enabledCondition = command.enabledCondition;
 
 		CommandService.instance().registerDeclaration(declaration);
 		CommandService.instance().registerRuntime(declaration.name, runtime);

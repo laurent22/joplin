@@ -54,7 +54,7 @@ export const runtime = (comp:any):CommandRuntime => {
 			});
 		},
 
-		isEnabled: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
+		enabledCondition: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
 
 		mapStateToTitle: (state:any) => {
 			const note = stateUtils.selectedNote(state);

@@ -13,6 +13,6 @@ export const runtime = (comp:any):CommandRuntime => {
 			if (!comp.titleInputRef.current) return;
 			comp.titleInputRef.current.focus();
 		},
-		isEnabled: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected',
 	};
 };

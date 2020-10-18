@@ -7,8 +7,7 @@ export interface Command {
 	label: string
 	iconName?: string,
 	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
+	enabledCondition?: string
 }
 
 // =================================================================

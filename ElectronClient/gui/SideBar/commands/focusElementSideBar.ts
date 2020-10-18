@@ -25,6 +25,6 @@ export const runtime = (comp:any):CommandRuntime => {
 			}
 		},
 
-		isEnabled: 'sideBarVisible',
+		enabledCondition: 'sideBarVisible',
 	};
 };
