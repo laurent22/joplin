@@ -1,6 +1,5 @@
 import { State } from 'lib/reducer';
 import eventManager from 'lib/eventManager';
-// import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
 import WhenClause from './WhenClause';
@@ -94,10 +93,12 @@ export default class CommandService extends BaseService {
 
 	private commands_:Commands = {};
 	private store_:any;
+	private devMode_:boolean;
 
-	initialize(store:any) {
+	initialize(store:any, devMode:boolean) {
 		utils.store = store;
 		this.store_ = store;
+		this.devMode_ = devMode;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -167,7 +168,7 @@ export default class CommandService extends BaseService {
 	public async execute(commandName:string, ...args:any[]):Promise<any> {
 		const command = this.commandByName(commandName);
 		this.logger().info('CommandService::execute:', commandName, args);
-		return command.runtime.execute({ state: this.store_.getState() }, ...args); // props ? props : {});
+		return command.runtime.execute({ state: this.store_.getState() }, ...args);
 	}
 
 	public scheduleExecute(commandName:string, args:any) {
@@ -189,18 +190,13 @@ export default class CommandService extends BaseService {
 
 		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 
-		const exp = new WhenClause(command.runtime.enabledCondition);
+		const exp = new WhenClause(command.runtime.enabledCondition, this.devMode_);
 		return exp.evaluate(whenClauseContext);
 	}
 
-	// public commandMapStateToProps(commandName:string, state:any):any {
-	// 	const command = this.commandByName(commandName);
-	// 	if (!command.runtime) return null;
-	// 	if (!command.runtime.mapStateToProps) return null;
-	// 	return command.runtime.mapStateToProps(state);
-	// }
-
-	// TODO: remove props?
+	// The title is dynamic and derived from the state, which is why the state is passed
+	// as an argument. Title can be used for example to display the alarm date on the
+	// "set alarm" toolbar button.
 	public title(commandName:string, state:any = null):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
@@ -241,38 +237,5 @@ export default class CommandService extends BaseService {
 		const command = this.commandByName(commandName, { mustExist: false });
 		return !!command;
 	}
-
-	// public commandsToMarkdownTable(state:any):string {
-	// 	const headers:MarkdownTableHeader[] = [
-	// 		{
-	// 			name: 'commandName',
-	// 			label: 'Name',
-	// 		},
-	// 		{
-	// 			name: 'description',
-	// 			label: 'Description',
-	// 		},
-	// 		{
-	// 			name: 'props',
-	// 			label: 'Props',
-	// 		},
-	// 	];
-
-	// 	const rows:MarkdownTableRow[] = [];
-
-	// 	for (const commandName in this.commands_) {
-	// 		const props = this.commandMapStateToProps(commandName, state);
-
-	// 		const row:MarkdownTableRow = {
-	// 			commandName: commandName,
-	// 			description: this.label(commandName),
-	// 			props: JSON.stringify(props),
-	// 		};
-
-	// 		rows.push(row);
-	// 	}
-
-	// 	return markdownUtils.createMarkdownTable(headers, rows);
-	// }
 
 }

@@ -179,6 +179,7 @@ ReactNativeClient/lib/services/AlarmServiceDriver.android.js
 ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
+ReactNativeClient/lib/services/commands/commandsToMarkdownTable.js
 ReactNativeClient/lib/services/commands/MenuUtils.js
 ReactNativeClient/lib/services/commands/propsHaveChanged.js
 ReactNativeClient/lib/services/commands/stateToWhenClauseContext.js

@@ -513,7 +513,7 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		CommandService.instance().initialize(this.store());
+		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev');
 
 		for (const command of commands) {
 			CommandService.instance().registerDeclaration(command.declaration);

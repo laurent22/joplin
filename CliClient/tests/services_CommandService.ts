@@ -2,7 +2,7 @@ import MenuUtils from 'lib/services/commands/MenuUtils';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
 
 interface TestCommand {
 	declaration: CommandDeclaration,
@@ -11,11 +11,12 @@ interface TestCommand {
 
 function newService():CommandService {
 	const service = new CommandService();
-	service.initialize({
+	const mockStore = {
 		getState: () => {
 			return {};
 		},
-	});
+	};
+	service.initialize(mockStore, true);
 	return service;
 }
 
@@ -239,5 +240,20 @@ describe('services_CommandService', function() {
 
 		expect(propValue).toBe('hello');
 	}));
+
+	it('should throw an error for invalid when clause keys in dev mode', asyncTest(async () => {
+		const service = newService();
+
+		registerCommand(service, createCommand('test1', {
+			execute: () => {},
+			enabledCondition: 'cond1 && cond2',
+		}));
+
+		await expectThrow(async () => service.isEnabled('test1', {}));
+		await expectThrow(async () => service.isEnabled('test1', { cond1: true }));
+		await expectNotThrow(async () => service.isEnabled('test1', { cond1: true, cond2: true }));
+		await expectNotThrow(async () => service.isEnabled('test1', { cond1: true, cond2: false }));
+	}));
+
 
 });
