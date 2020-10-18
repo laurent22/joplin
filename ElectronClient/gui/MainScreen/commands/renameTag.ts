@@ -1,4 +1,4 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 const Tag = require('lib/models/Tag');
 const bridge = require('electron').remote.require('./bridge').default;
@@ -10,7 +10,10 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ tagId }:any) => {
+		execute: async (context:CommandContext, tagId:string = null) => {
+			tagId = tagId || context.state.selectedTagId;
+			if (!tagId) return;
+
 			const tag = await Tag.load(tagId);
 			if (tag) {
 				comp.setState({

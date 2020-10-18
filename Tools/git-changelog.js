@@ -87,7 +87,7 @@ function filterLogs(logs, platform) {
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
-		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0)) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
@@ -121,7 +121,7 @@ function formatCommitMessage(msg, author, options) {
 	const isPlatformPrefix = prefix => {
 		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};
@@ -129,6 +129,7 @@ function formatCommitMessage(msg, author, options) {
 	if (splitted.length) {
 		const platform = splitted[0].trim().toLowerCase();
 		if (platform === 'api') subModule = 'api';
+		if (platform === 'plugins') subModule = 'plugins';
 		if (isPlatformPrefix(platform)) {
 			splitted.splice(0, 1);
 		}

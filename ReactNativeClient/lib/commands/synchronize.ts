@@ -1,4 +1,4 @@
-import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
+import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from 'lib/locale';
 const { reg } = require('lib/registry.js');
 
@@ -8,9 +8,11 @@ export const declaration:CommandDeclaration = {
 	iconName: 'fa-sync-alt',
 };
 
+// Note that this command actually acts as a toggle - it starts or cancels
+// synchronisation depending on the "syncStarted" parameter
 export const runtime = ():CommandRuntime => {
 	return {
-		execute: async ({ syncStarted }:any) => {
+		execute: async (_context:CommandContext, syncStarted:boolean = false) => {
 			const action = syncStarted ? 'cancel' : 'start';
 
 			if (!(await reg.syncTarget().isAuthenticated())) {
@@ -42,14 +44,6 @@ export const runtime = ():CommandRuntime => {
 				reg.scheduleSync(0);
 				return 'sync';
 			}
-		},
-		isEnabled: (props:any) => {
-			return !props.syncStarted;
-		},
-		mapStateToProps: (state:any):any => {
-			return {
-				syncStarted: state.syncStarted,
-			};
 		},
 	};
 };

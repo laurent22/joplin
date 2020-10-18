@@ -1,30 +1,23 @@
+import { State } from 'lib/reducer';
 import eventManager from 'lib/eventManager';
-import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
+import WhenClause from './WhenClause';
+import stateToWhenClauseContext from './commands/stateToWhenClauseContext';
 
 type LabelFunction = () => string;
+type EnabledCondition = string;
+
+export interface CommandContext {
+	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
+	state: State,
+}
 
 export interface CommandRuntime {
-	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-
-	// "state" type is "AppState" but in order not to introduce a
-	// dependency to the desktop app (so that the service can
-	// potentially be used by the mobile app too), we keep it as "any".
-	// Individual commands can define it as state:AppState when relevant.
-	//
-	// In general this method should reduce the provided state to only
-	// what's absolutely necessary. For example, if the property of a
-	// note is needed, return only that particular property and not the
-	// whole note object. This will ensure that components that depends
-	// on this command are not uncessarily re-rendered. A note object for
-	// example might change frequently but its markdown_language property
-	// will almost never change.
-	mapStateToProps?(state:any):any
-
+	execute(context:CommandContext, ...args:any[]):Promise<any>
+	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
-	title?(props:any):string,
+	mapStateToTitle?(state:any):string,
 }
 
 export interface CommandDeclaration {
@@ -32,6 +25,9 @@ export interface CommandDeclaration {
 
 	// Used for the menu item label, and toolbar button tooltip
 	label?: LabelFunction | string,
+
+	// Command description - if none is provided, the label will be used as description
+	description?: string,
 
 	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
 	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
@@ -88,30 +84,29 @@ interface CommandByNameOptions {
 	runtimeMustBeRegistered?:boolean,
 }
 
-interface CommandState {
+export interface SearchResult {
+	commandName: string,
 	title: string,
-	enabled: boolean,
-}
-
-interface CommandStates {
-	[key:string]: CommandState
 }
 
 export default class CommandService extends BaseService {
 
 	private static instance_:CommandService;
 
-	static instance():CommandService {
+	public static instance():CommandService {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new CommandService();
 		return this.instance_;
 	}
 
 	private commands_:Commands = {};
-	private commandPreviousStates_:CommandStates = {};
+	private store_:any;
+	private devMode_:boolean;
 
-	initialize(store:any) {
+	public initialize(store:any, devMode:boolean) {
 		utils.store = store;
+		this.store_ = store;
+		this.devMode_ = devMode;
 	}
 
 	public on(eventName:string, callback:Function) {
@@ -120,6 +115,36 @@ export default class CommandService extends BaseService {
 
 	public off(eventName:string, callback:Function) {
 		eventManager.off(eventName, callback);
+	}
+
+	public searchCommands(query:string, returnAllWhenEmpty:boolean, excludeWithoutLabel:boolean = true):SearchResult[] {
+		query = query.toLowerCase();
+
+		const output = [];
+
+		for (const commandName of this.commandNames()) {
+			const label = this.label(commandName, true);
+			if (!label && excludeWithoutLabel) continue;
+
+			const title = label ? `${label} (${commandName})` : commandName;
+
+			if ((returnAllWhenEmpty && !query) || title.toLowerCase().includes(query)) {
+				output.push({
+					commandName: commandName,
+					title: title,
+				});
+			}
+		}
+
+		output.sort((a:SearchResult, b:SearchResult) => {
+			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		});
+
+		return output;
+	}
+
+	public commandNames() {
+		return Object.keys(this.commands_);
 	}
 
 	public commandByName(name:string, options:CommandByNameOptions = null):Command {
@@ -140,7 +165,7 @@ export default class CommandService extends BaseService {
 		return command;
 	}
 
-	registerDeclaration(declaration:CommandDeclaration) {
+	public registerDeclaration(declaration:CommandDeclaration) {
 		declaration = { ...declaration };
 		if (!declaration.label) declaration.label = '';
 		if (!declaration.iconName) declaration.iconName = '';
@@ -148,83 +173,89 @@ export default class CommandService extends BaseService {
 		this.commands_[declaration.name] = {
 			declaration: declaration,
 		};
-
-		delete this.commandPreviousStates_[declaration.name];
 	}
 
-	registerRuntime(commandName:string, runtime:CommandRuntime) {
+	public registerRuntime(commandName:string, runtime:CommandRuntime) {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
 		const command = this.commandByName(commandName);
 
 		runtime = Object.assign({}, runtime);
-		if (!runtime.isEnabled) runtime.isEnabled = () => true;
-		if (!runtime.title) runtime.title = () => null;
+		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
 		command.runtime = runtime;
-
-		delete this.commandPreviousStates_[commandName];
 	}
 
-	componentRegisterCommands(component:any, commands:any[]) {
+	public componentRegisterCommands(component:any, commands:any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
 		}
 	}
 
-	componentUnregisterCommands(commands:any[]) {
+	public componentUnregisterCommands(commands:any[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
-	unregisterRuntime(commandName:string) {
+	public unregisterRuntime(commandName:string) {
 		const command = this.commandByName(commandName, { mustExist: false });
 		if (!command || !command.runtime) return;
 		delete command.runtime;
-
-		delete this.commandPreviousStates_[commandName];
 	}
 
-	async execute(commandName:string, props:any = null):Promise<any> {
+	public async execute(commandName:string, ...args:any[]):Promise<any> {
 		const command = this.commandByName(commandName);
-		this.logger().info('CommandService::execute:', commandName, props);
-		return command.runtime.execute(props ? props : {});
+		this.logger().info('CommandService::execute:', commandName, args);
+		return command.runtime.execute({ state: this.store_.getState() }, ...args);
 	}
 
-	scheduleExecute(commandName:string, args:any) {
+	public scheduleExecute(commandName:string, args:any) {
 		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
 	}
 
-	isEnabled(commandName:string, props:any):boolean {
+	public currentWhenClauseContext() {
+		return stateToWhenClauseContext(this.store_.getState());
+	}
+
+	// When looping on commands and checking their enabled state, the whenClauseContext
+	// should be specified (created using currentWhenClauseContext) to avoid having
+	// to re-create it on each call.
+	public isEnabled(commandName:string, whenClauseContext:any = null):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
-		// if (!command.runtime.props) return false;
-		return command.runtime.isEnabled(props);
+
+		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
+
+		const exp = new WhenClause(command.runtime.enabledCondition, this.devMode_);
+		return exp.evaluate(whenClauseContext);
 	}
 
-	commandMapStateToProps(commandName:string, state:any):any {
-		const command = this.commandByName(commandName);
-		if (!command.runtime) return null;
-		if (!command.runtime.mapStateToProps) return {};
-		return command.runtime.mapStateToProps(state);
-	}
-
-	title(commandName:string, props:any):string {
+	// The title is dynamic and derived from the state, which is why the state is passed
+	// as an argument. Title can be used for example to display the alarm date on the
+	// "set alarm" toolbar button.
+	public title(commandName:string, state:any = null):string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
-		return command.runtime.title(props);
+
+		state = state || this.store_.getState();
+
+		if (command.runtime.mapStateToTitle) {
+			return command.runtime.mapStateToTitle(state);
+		} else {
+			return '';
+		}
 	}
 
-	iconName(commandName:string, variant:string = null):string {
+	public iconName(commandName:string, variant:string = null):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
 		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
 		return command.declaration.iconName;
 	}
 
-	label(commandName:string, fullLabel:boolean = false):string {
+	public label(commandName:string, fullLabel:boolean = false):string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];
@@ -240,42 +271,15 @@ export default class CommandService extends BaseService {
 		return output.join(': ');
 	}
 
-	exists(commandName:string):boolean {
-		const command = this.commandByName(commandName, { mustExist: false });
-		return !!command;
+	public description(commandName:string):string {
+		const command = this.commandByName(commandName);
+		if (command.declaration.description) return command.declaration.description;
+		return this.label(commandName, true);
 	}
 
-	public commandsToMarkdownTable(state:any):string {
-		const headers:MarkdownTableHeader[] = [
-			{
-				name: 'commandName',
-				label: 'Name',
-			},
-			{
-				name: 'description',
-				label: 'Description',
-			},
-			{
-				name: 'props',
-				label: 'Props',
-			},
-		];
-
-		const rows:MarkdownTableRow[] = [];
-
-		for (const commandName in this.commands_) {
-			const props = this.commandMapStateToProps(commandName, state);
-
-			const row:MarkdownTableRow = {
-				commandName: commandName,
-				description: this.label(commandName),
-				props: JSON.stringify(props),
-			};
-
-			rows.push(row);
-		}
-
-		return markdownUtils.createMarkdownTable(headers, rows);
+	public exists(commandName:string):boolean {
+		const command = this.commandByName(commandName, { mustExist: false });
+		return !!command;
 	}
 
 }

@@ -24,7 +24,7 @@ const StyledRoot = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: ${(props:any) => props.theme.backgroundColor3};
-	border-right: 1px solid ${(props:any) => props.theme.dividerColor},
+	border-right: 1px solid ${(props:any) => props.theme.dividerColor};
 `;
 
 class NoteListComponent extends React.Component {
@@ -386,9 +386,9 @@ class NoteListComponent extends React.Component {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', { target: 'sideBar' });
+				CommandService.instance().execute('focusElement', 'sideBar');
 			} else {
-				CommandService.instance().execute('focusElement', { target: 'noteTitle' });
+				CommandService.instance().execute('focusElement', 'noteTitle');
 			}
 		}
 

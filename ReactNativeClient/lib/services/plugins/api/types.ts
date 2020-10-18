@@ -3,12 +3,47 @@
 // =================================================================
 
 export interface Command {
+	/**
+	 * Name of command - must be globally unique
+	 */
 	name: string
+
+	/**
+	 * Label to be displayed on menu items or keyboard shortcut editor for example
+	 */
 	label: string
+
+	/**
+	 * Icon to be used on toolbar buttons for example
+	 */
 	iconName?: string,
+
+	/**
+	 * Code to be ran when the command is executed. It maybe return a result.
+	 */
 	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
+
+	/**
+	 * Defines whether the command should be enabled or disabled, which in turns affects
+	 * the enabled state of any associated button or menu item.
+	 *
+	 * The condition should be expressed as a "when-clause" (as in Visual Studio Code). It's a simple boolean expression that evaluates to
+	 * `true` or `false`. It supports the following operators:
+	 *
+	 * Operator | Symbol | Example
+	 * -- | -- | --
+	 * Equality | == | "editorType == markdown"
+	 * Inequality | != | "currentScreen != config"
+	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
+	 * And | && | "oneNoteSelected && !inConflictFolder"
+	 *
+	 * Currently the supported context variables aren't documented, but you can find the list there:
+	 *
+	 * https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/services/commands/stateToWhenClauseContext.ts
+	 *
+	 * Note: Commands are enabled by default unless you use this property.
+	 */
+	enabledCondition?: string
 }
 
 // =================================================================

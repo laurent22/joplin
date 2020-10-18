@@ -125,7 +125,7 @@ joplin.plugins.register({
 });
 ```
 
-Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like "My Header" is converted to "my-header". And if there's already a slug with that name, a number is appended to it. Without going into too much details, you will need the "slug" package to generate this for you, so install it using `npm i -s uslug` from the root of your plugin directory.
+Later you will also need a way to generate the slug for each header. A slug is an identifier which is used to link to a particular header. Essentially a header text like "My Header" is converted to "my-header". And if there's already a slug with that name, a number is appended to it. Without going into too much details, you will need the "slug" package to generate this for you, so install it using `npm i -s 'git+https://github.com/laurent22/uslug.git#emoji-support'` from the root of your plugin directory (Note: you can also install the "uslug" package on its own, but it won't have emoji support).
 
 Then this is the function you will need for Joplin, so copy it somewhere in your file:
 
@@ -322,9 +322,7 @@ joplin.plugins.register({
 			if (message.name === 'scrollToHash') {
 				// As the name says, the scrollToHash command makes the note scroll
 				// to the provided hash.
-				joplin.commands.execute('scrollToHash', {
-					hash: message.hash,
-				})
+				joplin.commands.execute('scrollToHash', message.hash)
 			}
 		});
 

@@ -1,8 +1,8 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import eventManager from 'lib/eventManager';
 import { _ } from 'lib/locale';
+import { stateUtils } from 'lib/reducer';
 const Note = require('lib/models/Note');
-const BaseModel = require('lib/BaseModel');
 const { time } = require('lib/time-utils');
 
 export const declaration:CommandDeclaration = {
@@ -13,7 +13,9 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ noteId }:any) => {
+		execute: async (context:CommandContext, noteId:string = null) => {
+			noteId = noteId || stateUtils.selectedNoteId(context.state);
+
 			const note = await Note.load(noteId);
 
 			const defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
@@ -51,25 +53,12 @@ export const runtime = (comp:any):CommandRuntime => {
 				},
 			});
 		},
-		title: (props:any):string => {
-			if (!props.noteId) return null;
-			if (!props.noteTodoDue) return null;
-			return time.formatMsToLocal(props.noteTodoDue);
-		},
-		isEnabled: (props:any):boolean => {
-			if (!props.noteId) return false;
-			return !!props.noteIsTodo && !props.noteTodoCompleted;
-		},
-		mapStateToProps: (state:any):any => {
-			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-			const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
 
-			return {
-				noteId: note ? noteId : null,
-				noteIsTodo: note ? note.is_todo : false,
-				noteTodoCompleted: note ? note.todo_completed : false,
-				noteTodoDue: note ? note.todo_due : null,
-			};
+		enabledCondition: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
+
+		mapStateToTitle: (state:any) => {
+			const note = stateUtils.selectedNote(state);
+			return note && note.todo_due ? time.formatMsToLocal(note.todo_due) : null;
 		},
 	};
 };

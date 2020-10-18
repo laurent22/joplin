@@ -30,11 +30,11 @@ export default class JoplinCommands {
 	 *
 	 * // Create a new sub-notebook under the provided notebook
 	 * // Note: internally, notebooks are called "folders".
-	 * await joplin.commands.execute('newFolder', { parent_id: "SOME_FOLDER_ID" });
+	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
-	async execute(commandName: string, props: any = null):Promise<any> {
-		return CommandService.instance().execute(commandName, props);
+	async execute(commandName: string, ...args:any[]):Promise<any> {
+		return CommandService.instance().execute(commandName, ...args);
 	}
 
 	/**
@@ -65,8 +65,7 @@ export default class JoplinCommands {
 			execute: command.execute,
 		};
 
-		if ('isEnabled' in command) runtime.isEnabled = command.isEnabled;
-		if ('mapStateToProps' in command) runtime.mapStateToProps = command.mapStateToProps;
+		if ('enabledCondition' in command) runtime.enabledCondition = command.enabledCondition;
 
 		CommandService.instance().registerDeclaration(declaration);
 		CommandService.instance().registerRuntime(declaration.name, runtime);

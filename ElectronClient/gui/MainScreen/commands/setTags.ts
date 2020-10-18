@@ -1,4 +1,4 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 const Tag = require('lib/models/Tag');
 
@@ -10,7 +10,9 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ noteIds }:any) => {
+		execute: async (context:CommandContext, noteIds:string[] = null) => {
+			noteIds = noteIds || context.state.selectedNoteIds;
+
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
 			const startTags = tags
 				.map((a:any) => {
@@ -64,11 +66,6 @@ export const runtime = (comp:any):CommandRuntime => {
 				},
 			});
 		},
-		isEnabled: (props:any) => {
-			return !!props.noteIds.length;
-		},
-		mapStateToProps: (state:any) => {
-			return { noteIds: state.selectedNoteIds };
-		},
+		enabledCondition: 'someNotesSelected',
 	};
 };

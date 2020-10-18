@@ -1,12 +1,7 @@
-import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
+import CommandService, { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
-import { AppState } from '../app';
-import CommandService from 'lib/services/CommandService';
-
-interface Props {
-	noteId: string
-	noteIsBeingWatched: boolean
-}
+import { stateUtils } from 'lib/reducer';
+import { DesktopCommandContext } from '../services/commands/types';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleExternalEditing',
@@ -16,27 +11,21 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = ():CommandRuntime => {
 	return {
-		execute: async (props:Props) => {
-			if (!props.noteId) return;
+		execute: async (context:DesktopCommandContext, noteId:string = null) => {
+			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
-			if (props.noteIsBeingWatched) {
-				CommandService.instance().execute('stopExternalEditing', { noteId: props.noteId });
+			if (!noteId) return;
+
+			if (context.state.watchedNoteFiles.includes(noteId)) {
+				CommandService.instance().execute('stopExternalEditing', noteId);
 			} else {
-				CommandService.instance().execute('startExternalEditing', { noteId: props.noteId });
+				CommandService.instance().execute('startExternalEditing', noteId);
 			}
 		},
-		isEnabled: (props:Props) => {
-			return !!props.noteId;
-		},
-		mapStateToProps: (state:AppState):Props => {
-			const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-			return {
-				noteId: noteId,
-				noteIsBeingWatched: noteId ? state.watchedNoteFiles.includes(noteId) : false,
-			};
-		},
-		title: (props:Props) => {
-			return props.noteIsBeingWatched ? _('Stop') : '';
+		enabledCondition: 'oneNoteSelected',
+		mapStateToTitle: (state:any) => {
+			const noteId = stateUtils.selectedNoteId(state);
+			return state.watchedNoteFiles.includes(noteId) ? _('Stop') : '';
 		},
 	};
 };
