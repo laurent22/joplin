@@ -247,9 +247,9 @@ function NoteEditor(props: NoteEditorProps) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', { target: 'noteList' });
+				CommandService.instance().execute('focusElement', 'noteList');
 			} else {
-				CommandService.instance().execute('focusElement', { target: 'noteBody' });
+				CommandService.instance().execute('focusElement', 'noteBody');
 			}
 		}
 	}, [props.dispatch]);
@@ -364,7 +364,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', { noteIds }); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (

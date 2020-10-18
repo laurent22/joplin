@@ -139,7 +139,7 @@ function useMenu(props:Props) {
 	const onMenuItemClick = useCallback((commandName:string) => {
 		// TODO: Remove props handling
 		let p = props.menuItemProps[commandName];
-		if ('enabled' in p && Object.keys(p).length === 1) p = null;
+		if (p && ('enabled' in p) && Object.keys(p).length === 1) p = null;
 		CommandService.instance().execute(commandName, p);
 	}, [props.menuItemProps]);
 
@@ -160,7 +160,7 @@ function useMenu(props:Props) {
 
 		if (Array.isArray(path)) path = path[0];
 
-		CommandService.instance().execute('showModalMessage', { message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format) });
+		CommandService.instance().execute('showModalMessage', _('Importing from "%s" as "%s" format. Please wait...', path, module.format));
 
 		const importOptions = {
 			path,
@@ -302,12 +302,12 @@ function useMenu(props:Props) {
 		templateItems.push({
 			label: _('Create note from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', { noteType: 'note' });
+				CommandService.instance().execute('selectTemplate', 'note');
 			},
 		}, {
 			label: _('Create to-do from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', { noteType: 'todo' });
+				CommandService.instance().execute('selectTemplate', 'todo');
 			},
 		}, {
 			label: _('Insert template'),

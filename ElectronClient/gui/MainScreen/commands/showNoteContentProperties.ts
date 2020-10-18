@@ -24,11 +24,7 @@ export const runtime = (comp:any):CommandRuntime => {
 				});
 			}
 		},
-		isEnabled: (props:any) => {
-			return !!props.noteId;
-		},
-		mapStateToProps: (state:any) => {
-			return { noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null };
-		},
+
+		isEnabled: 'oneNoteSelected',
 	};
 };

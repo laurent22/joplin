@@ -10,7 +10,10 @@ export default function stateToWhenClauseContext(state:any) {
 
 	return {
 		// UI elements
-		markdownEditorVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('editor'),
+		markdownEditorVisible: !!state.settings['editor.codeView'],
+		richTextEditorVisible: !state.settings['editor.codeView'],
+		markdownEditorPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('editor'),
+		markdownViewerPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('viewer'),
 		modalDialogVisible: !!Object.keys(state.visibleDialogs).length,
 		sideBarVisible: !!state.sidebarVisibility,
 		noteListHasNotes: !!state.notes.length,
@@ -20,7 +23,7 @@ export default function stateToWhenClauseContext(state:any) {
 		syncStarted: state.syncStarted,
 
 		// Current location
-		inConflictFolder: state.selectedFolderId !== Folder.conflictFolderId(),
+		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
 
 		// Note selection
 		oneNoteSelected: !!note,

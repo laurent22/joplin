@@ -30,7 +30,7 @@ export default class JoplinCommands {
 	 *
 	 * // Create a new sub-notebook under the provided notebook
 	 * // Note: internally, notebooks are called "folders".
-	 * await joplin.commands.execute('newFolder', { parent_id: "SOME_FOLDER_ID" });
+	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
 	async execute(commandName: string, props: any = null):Promise<any> {

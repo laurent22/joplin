@@ -6,7 +6,7 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = ():CommandRuntime => {
 	return {
-		execute: async ({ target }:any) => {
+		execute: async (_context:any, target:string) => {
 			if (target === 'noteBody') return CommandService.instance().execute('focusElementNoteBody');
 			if (target === 'noteList') return CommandService.instance().execute('focusElementNoteList');
 			if (target === 'sideBar') return CommandService.instance().execute('focusElementSideBar');

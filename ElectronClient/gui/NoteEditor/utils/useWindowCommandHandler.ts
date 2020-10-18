@@ -46,7 +46,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 				});
 			}
 		},
-		isEnabled: '!modalDialogVisible && markdownEditorVisible && oneNoteSelected && noteIsMarkdown',
+		isEnabled: '!modalDialogVisible && markdownEditorPaneVisible && oneNoteSelected && noteIsMarkdown',
 	};
 }
 

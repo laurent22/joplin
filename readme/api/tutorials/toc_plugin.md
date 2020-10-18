@@ -322,9 +322,7 @@ joplin.plugins.register({
 			if (message.name === 'scrollToHash') {
 				// As the name says, the scrollToHash command makes the note scroll
 				// to the provided hash.
-				joplin.commands.execute('scrollToHash', {
-					hash: message.hash,
-				})
+				joplin.commands.execute('scrollToHash', message.hash)
 			}
 		});
 

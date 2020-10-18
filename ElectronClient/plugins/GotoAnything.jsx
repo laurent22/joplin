@@ -329,7 +329,7 @@ class Dialog extends React.PureComponent {
 				noteId: item.id,
 			});
 
-			CommandService.instance().scheduleExecute('focusElement', { target: 'noteBody' });
+			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
 				type: 'TAG_SELECT',

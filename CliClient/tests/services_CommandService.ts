@@ -269,7 +269,7 @@ describe('services_CommandService', function() {
 			},
 		}));
 
-		const menuItem = utils.commandToStatefulMenuItem('test1', { isOk: 'hello' });
+		const menuItem = utils.commandToStatefulMenuItem('test1', 'hello');
 		menuItem.click();
 
 		expect(propValue).toBe('hello');
