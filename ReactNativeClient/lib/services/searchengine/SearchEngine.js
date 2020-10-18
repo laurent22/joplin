@@ -635,7 +635,15 @@ class SearchEngine {
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
 
-		const st = scriptType(query);
+		let allTerms = [];
+		try {
+			allTerms = filterParser(query);
+		} catch (error) {
+			console.warn(error);
+		}
+
+		const textQuery = allTerms.filter(x => x.name === 'text' || x.name == 'title' || x.name == 'body').map(x => x.value).join(' ');
+		const st = scriptType(textQuery);
 
 		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
