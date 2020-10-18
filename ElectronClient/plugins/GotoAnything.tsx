@@ -1,8 +1,12 @@
+import { AppState } from "../app";
+import CommandService from 'lib/services/CommandService';
+import KeymapService from 'lib/services/KeymapService';
+import shim from 'lib/shim';
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
-const CommandService = require('lib/services/CommandService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
@@ -12,12 +16,15 @@ const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
-const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-const KeymapService = require('lib/services/KeymapService.js').default;
-const shim = require('lib/shim').default;
+
+const PLUGIN_NAME = 'gotoAnything';
 
 class GotoAnything {
+
+	public dispatch:Function;
+	public static Dialog:any;
+	public static manifest:any;
 
 	onTrigger() {
 		this.dispatch({
@@ -138,7 +145,7 @@ class Dialog extends React.PureComponent {
 		});
 	}
 
-	onKeyDown(event) {
+	onKeyDown(event:any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -148,7 +155,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	modalLayer_onClick(event) {
+	modalLayer_onClick(event:any) {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -162,7 +169,7 @@ class Dialog extends React.PureComponent {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	input_onChange(event) {
+	input_onChange(event:any) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
@@ -177,7 +184,7 @@ class Dialog extends React.PureComponent {
 		}, 100);
 	}
 
-	makeSearchQuery(query) {
+	makeSearchQuery(query:string) {
 		const output = [];
 		const splitted = query.split(' ');
 
@@ -190,7 +197,7 @@ class Dialog extends React.PureComponent {
 		return output.join(' ');
 	}
 
-	async keywords(searchQuery) {
+	async keywords(searchQuery:string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
@@ -230,7 +237,7 @@ class Dialog extends React.PureComponent {
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
-				resultsInBody = !!results.find(row => row.fields.includes('body'));
+				resultsInBody = !!results.find((row:any) => row.fields.includes('body'));
 
 				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
@@ -241,7 +248,9 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					const notes = await Note.byIds(results.map((result:any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					// Can't make any sense of this code so...
+					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
@@ -272,7 +281,7 @@ class Dialog extends React.PureComponent {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f:any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
@@ -285,7 +294,7 @@ class Dialog extends React.PureComponent {
 					}
 
 					if (!this.props.showCompletedTodos) {
-						results = results.filter((row) => !row.is_todo || !row.todo_completed);
+						results = results.filter((row:any) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
@@ -303,7 +312,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	async gotoItem(item) {
+	async gotoItem(item:any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -343,7 +352,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	listItem_onClick(event) {
+	listItem_onClick(event:any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 
@@ -353,7 +362,7 @@ class Dialog extends React.PureComponent {
 		});
 	}
 
-	listItemRenderer(item) {
+	listItemRenderer(item:any) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
@@ -376,7 +385,7 @@ class Dialog extends React.PureComponent {
 		);
 	}
 
-	selectedItemIndex(results, itemId) {
+	selectedItemIndex(results:any[] = undefined, itemId:string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -392,7 +401,7 @@ class Dialog extends React.PureComponent {
 		return this.state.results[index];
 	}
 
-	input_onKeyDown(event) {
+	input_onKeyDown(event:any) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -463,7 +472,7 @@ class Dialog extends React.PureComponent {
 
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:AppState) => {
 	return {
 		folders: state.folders,
 		themeId: state.settings.theme,
@@ -489,4 +498,4 @@ GotoAnything.manifest = {
 
 };
 
-module.exports = GotoAnything;
+export default GotoAnything;

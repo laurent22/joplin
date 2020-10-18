@@ -187,6 +187,7 @@ ElectronClient/gui/ToolbarButton/styles/index.js
 ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ElectronClient/gui/utils/NoteListUtils.js
 ElectronClient/InteropServiceHelper.js
+ElectronClient/plugins/GotoAnything.js
 ElectronClient/services/bridge.js
 ElectronClient/services/commands/types.js
 ElectronClient/services/plugins/hooks/useThemeCss.js

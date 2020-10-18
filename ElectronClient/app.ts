@@ -85,7 +85,7 @@ const globalCommands = [
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
 
 const pluginClasses = [
-	require('./plugins/GotoAnything.min'),
+	require('./plugins/GotoAnything').default,
 ];
 
 interface AppStateRoute {
