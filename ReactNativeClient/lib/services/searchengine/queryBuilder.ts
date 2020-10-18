@@ -417,7 +417,15 @@ export default function queryBuilder(terms: Term[], fuzzy: boolean) {
 
 	let query;
 	if (withs.length > 0) {
-		query = ['WITH RECURSIVE' , withs.join(',') ,queryParts.join(' ')].join(' ');
+		if (terms.find(x => x.name === 'notebook') && terms.find(x => x.name === 'any')) {
+			// The notebook filter should be independent of the any filter.
+			// So we're first finding the OR of other filters and then combining them with the notebook filter using AND
+			// in-required-notebook AND (condition #1 OR condition #2  OR ... )
+			const queryString = `${queryParts.slice(0, 2).join(' ')} AND ROWID IN ( SELECT ROWID FROM notes_fts WHERE 1=0 ${queryParts.slice(2).join(' ')})`;
+			query = ['WITH RECURSIVE' , withs.join(',') , queryString].join(' ');
+		} else {
+			query = ['WITH RECURSIVE' , withs.join(',') ,queryParts.join(' ')].join(' ');
+		}
 	} else {
 		query = queryParts.join(' ');
 	}
