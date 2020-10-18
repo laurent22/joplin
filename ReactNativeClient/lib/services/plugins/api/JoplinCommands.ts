@@ -33,8 +33,8 @@ export default class JoplinCommands {
 	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
-	async execute(commandName: string, props: any = null):Promise<any> {
-		return CommandService.instance().execute(commandName, props);
+	async execute(commandName: string, ...args:any[]):Promise<any> {
+		return CommandService.instance().execute(commandName, ...args);
 	}
 
 	/**

@@ -40,6 +40,8 @@ export interface Command {
 	 * Currently the supported context variables aren't documented, but you can find the list there:
 	 *
 	 * https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/services/commands/stateToWhenClauseContext.ts
+	 *
+	 * Note: Commands are enabled by default unless you use this property.
 	 */
 	enabledCondition?: string
 }
