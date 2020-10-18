@@ -16,7 +16,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+N', command: 'newNote' },
 		{ accelerator: 'Cmd+T', command: 'newTodo' },
 		{ accelerator: 'Cmd+S', command: 'synchronize' },
-		{ accelerator: 'Cmd+P', command: 'print' },
+		{ accelerator: '', command: 'print' },
 		{ accelerator: 'Cmd+H', command: 'hideApp' },
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
@@ -43,14 +43,15 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
 		{ accelerator: 'Cmd+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Option+Cmd+T', command: 'setTags' },
-		{ accelerator: 'Cmd+G', command: 'gotoAnything' },
+		{ accelerator: 'Cmd+P', command: 'gotoAnything' },
+		{ accelerator: 'Shift+Cmd+P', command: 'commandPalette' },
 		{ accelerator: 'F1', command: 'help' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
 		{ accelerator: 'Ctrl+T', command: 'newTodo' },
 		{ accelerator: 'Ctrl+S', command: 'synchronize' },
-		{ accelerator: 'Ctrl+P', command: 'print' },
+		{ accelerator: '', command: 'print' },
 		{ accelerator: 'Ctrl+Q', command: 'quit' },
 		{ accelerator: 'Ctrl+Alt+I', command: 'insertTemplate' },
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
@@ -75,7 +76,8 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Ctrl+Alt+T', command: 'setTags' },
 		{ accelerator: 'Ctrl+,', command: 'config' },
-		{ accelerator: 'Ctrl+G', command: 'gotoAnything' },
+		{ accelerator: 'Ctrl+P', command: 'gotoAnything' },
+		{ accelerator: 'Ctrl+Shift+P', command: 'commandPalette' },
 		{ accelerator: 'F1', command: 'help' },
 	],
 };
@@ -90,13 +92,14 @@ interface Keymap {
 }
 
 export default class KeymapService extends BaseService {
+
 	private keymap: Keymap;
 	private platform: string;
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
 	private lastSaveTime_:number;
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.lastSaveTime_ = Date.now();
@@ -398,7 +401,7 @@ export default class KeymapService extends BaseService {
 
 	private static instance_:KeymapService = null;
 
-	static instance():KeymapService {
+	public static instance():KeymapService {
 		if (this.instance_) return this.instance_;
 
 		this.instance_ = new KeymapService();

@@ -1,9 +1,9 @@
-import { AppState } from "../app";
-import CommandService from 'lib/services/CommandService';
+import * as React from 'react';
+import { AppState } from '../app';
+import CommandService, { SearchResult as CommandSearchResult } from 'lib/services/CommandService';
 import KeymapService from 'lib/services/KeymapService';
 import shim from 'lib/shim';
 
-const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
@@ -20,31 +20,69 @@ const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 const PLUGIN_NAME = 'gotoAnything';
 
+interface SearchResult {
+	id: string,
+	title: string,
+	parent_id: string,
+	fields: string[],
+	fragments?: string,
+	path?: string,
+	type?: number,
+}
+
+interface Props {
+	themeId: number,
+	dispatch: Function,
+	folders: any[],
+	showCompletedTodos: boolean,
+	userData: any,
+}
+
+interface State {
+	query: string,
+	results: SearchResult[],
+	selectedItemId: string,
+	keywords: string[],
+	listType: number,
+	showHelp: boolean,
+	resultsInBody: boolean,
+}
+
 class GotoAnything {
 
 	public dispatch:Function;
 	public static Dialog:any;
 	public static manifest:any;
 
-	onTrigger() {
+	onTrigger(event:any) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
 			pluginName: PLUGIN_NAME,
+			userData: event.userData,
 		});
 	}
 
 }
 
-class Dialog extends React.PureComponent {
+class Dialog extends React.PureComponent<Props, State> {
 
-	constructor() {
-		super();
+	private fuzzy_:boolean;
+	private styles_:any;
+	private inputRef:any;
+	private itemListRef:any;
+	private listUpdateIID_:any;
+	private markupToHtml_:any;
+
+	constructor(props:Props) {
+		super(props);
 
 		this.fuzzy_ = false;
 
+		const startString = props?.userData?.startString ? props?.userData?.startString : '';
+
 		this.state = {
-			query: '',
+			query: startString,
 			results: [],
 			selectedItemId: null,
 			keywords: [],
@@ -62,19 +100,25 @@ class Dialog extends React.PureComponent {
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
-		this.listItemRenderer = this.listItemRenderer.bind(this);
+		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
+
+		if (startString) this.scheduleListUpdate();
 	}
 
 	style() {
-		const styleKey = [this.props.themeId, this.state.resultsInBody ? '1' : '0'].join('-');
+		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
 		const theme = themeStyle(this.props.themeId);
 
-		const itemHeight = this.state.resultsInBody ? 84 : 64;
+		let itemHeight = this.state.resultsInBody ? 84 : 64;
+
+		if (this.state.listType === BaseModel.TYPE_COMMAND) {
+			itemHeight = 40;
+		}
 
 		this.styles_[styleKey] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
@@ -214,11 +258,28 @@ class Dialog extends React.PureComponent {
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
-			let results = [];
+			let results:SearchResult[] = [];
 			let listType = null;
 			let searchQuery = '';
+			let keywords = null;
 
-			if (this.state.query.indexOf('#') === 0) { // TAGS
+			if (this.state.query.indexOf(':') === 0) { // COMMANDS
+				const query = this.state.query.substr(1);
+				listType = BaseModel.TYPE_COMMAND;
+				keywords = [query];
+
+				const commandResults = CommandService.instance().searchCommands(query, true);
+
+				results = commandResults.map((result:CommandSearchResult) => {
+					return {
+						id: result.commandName,
+						title: result.title,
+						parent_id: null,
+						fields: [],
+						type: BaseModel.TYPE_COMMAND,
+					};
+				});
+			} else if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
@@ -305,7 +366,7 @@ class Dialog extends React.PureComponent {
 			this.setState({
 				listType: listType,
 				results: results,
-				keywords: await this.keywords(searchQuery),
+				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
 			});
@@ -318,6 +379,11 @@ class Dialog extends React.PureComponent {
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
+
+		if (item.type === BaseModel.TYPE_COMMAND) {
+			CommandService.instance().execute(item.id);
+			return;
+		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE || this.state.listType === BaseModel.TYPE_FOLDER) {
 			const folderPath = await Folder.folderPath(this.props.folders, item.parent_id);
@@ -355,14 +421,16 @@ class Dialog extends React.PureComponent {
 	listItem_onClick(event:any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
+		const itemType = event.currentTarget.getAttribute('data-type');
 
 		this.gotoItem({
 			id: itemId,
 			parent_id: parentId,
+			type: itemType,
 		});
 	}
 
-	listItemRenderer(item:any) {
+	renderItem(item:SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
@@ -377,7 +445,7 @@ class Dialog extends React.PureComponent {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
+			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -437,7 +505,7 @@ class Dialog extends React.PureComponent {
 
 		const itemListStyle = {
 			marginTop: 5,
-			height: Math.min(style.itemHeight * this.state.results.length, 7 * style.itemHeight),
+			height: Math.min(style.itemHeight * this.state.results.length, 10 * style.itemHeight),
 		};
 
 		return (
@@ -446,7 +514,7 @@ class Dialog extends React.PureComponent {
 				itemHeight={style.itemHeight}
 				items={this.state.results}
 				style={itemListStyle}
-				itemRenderer={this.listItemRenderer}
+				itemRenderer={this.renderItem}
 			/>
 		);
 	}
@@ -454,7 +522,7 @@ class Dialog extends React.PureComponent {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
 			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
@@ -493,6 +561,16 @@ GotoAnything.manifest = {
 			label: _('Goto Anything...'),
 			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
+		},
+		{
+			name: 'main',
+			parent: 'tools',
+			label: _('Command palette'),
+			accelerator: () => KeymapService.instance().getAccelerator('commandPalette'),
+			screens: ['Main'],
+			userData: {
+				startString: ':',
+			},
 		},
 	],
 

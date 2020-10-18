@@ -26,6 +26,8 @@ const getLabel = (commandName: string) => {
 		return _('Hide Joplin');
 	case 'closeWindow':
 		return _('Close Window');
+	case 'commandPalette':
+		return _('Command palette');
 	case 'config':
 		return shim.isMac() ? _('Preferences') : _('Options');
 	default:

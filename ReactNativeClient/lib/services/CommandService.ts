@@ -84,11 +84,16 @@ interface CommandByNameOptions {
 	runtimeMustBeRegistered?:boolean,
 }
 
+export interface SearchResult {
+	commandName: string,
+	title: string,
+}
+
 export default class CommandService extends BaseService {
 
 	private static instance_:CommandService;
 
-	static instance():CommandService {
+	public static instance():CommandService {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new CommandService();
 		return this.instance_;
@@ -98,7 +103,7 @@ export default class CommandService extends BaseService {
 	private store_:any;
 	private devMode_:boolean;
 
-	initialize(store:any, devMode:boolean) {
+	public initialize(store:any, devMode:boolean) {
 		utils.store = store;
 		this.store_ = store;
 		this.devMode_ = devMode;
@@ -110,6 +115,34 @@ export default class CommandService extends BaseService {
 
 	public off(eventName:string, callback:Function) {
 		eventManager.off(eventName, callback);
+	}
+
+	public searchCommands(query:string, returnAllWhenEmpty:boolean):SearchResult[] {
+		query = query.toLowerCase();
+
+		const output = [];
+
+		for (const commandName of this.commandNames()) {
+			const label = this.label(commandName, true);
+			const title = label ? `${label} (${commandName})` : commandName;
+
+			if ((returnAllWhenEmpty && !query) || title.toLowerCase().includes(query)) {
+				output.push({
+					commandName: commandName,
+					title: title,
+				});
+			}
+		}
+
+		output.sort((a:SearchResult, b:SearchResult) => {
+			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+		});
+
+		return output;
+	}
+
+	public commandNames() {
+		return Object.keys(this.commands_);
 	}
 
 	public commandByName(name:string, options:CommandByNameOptions = null):Command {

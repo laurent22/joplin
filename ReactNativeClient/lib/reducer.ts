@@ -1104,6 +1104,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 				const newPluginsLegacy = Object.assign({}, draft.pluginsLegacy);
 				const newPlugin = draft.pluginsLegacy[action.pluginName] ? Object.assign({}, draft.pluginsLegacy[action.pluginName]) : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
+				if ('userData' in action) newPlugin.userData = action.userData;
 				newPluginsLegacy[action.pluginName] = newPlugin;
 				draft.pluginsLegacy = newPluginsLegacy;
 			}
