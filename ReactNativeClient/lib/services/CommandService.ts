@@ -117,13 +117,15 @@ export default class CommandService extends BaseService {
 		eventManager.off(eventName, callback);
 	}
 
-	public searchCommands(query:string, returnAllWhenEmpty:boolean):SearchResult[] {
+	public searchCommands(query:string, returnAllWhenEmpty:boolean, excludeWithoutLabel:boolean = true):SearchResult[] {
 		query = query.toLowerCase();
 
 		const output = [];
 
 		for (const commandName of this.commandNames()) {
 			const label = this.label(commandName, true);
+			if (!label && excludeWithoutLabel) continue;
+
 			const title = label ? `${label} (${commandName})` : commandName;
 
 			if ((returnAllWhenEmpty && !query) || title.toLowerCase().includes(query)) {
