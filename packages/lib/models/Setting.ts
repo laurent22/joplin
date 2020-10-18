@@ -1271,6 +1271,7 @@ class Setting extends BaseModel {
 				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
 				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
 			},
+			'image.noresizing': { value: false, type: Setting.TYPE_BOOL, advanced: true, public: true, label: () => _('Do not resize images') },
 
 			'net.customCertificates': {
 				value: '',
