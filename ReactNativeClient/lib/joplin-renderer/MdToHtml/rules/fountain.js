@@ -143,5 +143,5 @@ module.exports = {
 			installRule(md, mdOptions, ruleOptions, context);
 		};
 	},
-	style: fountainCss,
+	assets: fountainCss,
 };

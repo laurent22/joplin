@@ -5,8 +5,13 @@ import { fileExtension } from './pathUtils';
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
 
+interface RendererRule {
+	install(context:any, ruleOptions:any):any,
+	assets?(theme:any):any,
+}
+
 interface RendererRules {
-	[pluginName:string]: any,
+	[pluginName:string]: RendererRule,
 }
 
 interface RendererPlugin {
@@ -94,7 +99,7 @@ interface PluginContext {
 	css: any
 	pluginAssets: any,
 	cache: any,
-};
+}
 
 interface RenderResultPluginAsset {
 	name: string,
@@ -123,7 +128,7 @@ export default class MdToHtml {
 	// Markdown-It plugin options (not Joplin plugin options)
 	private pluginOptions_:any = {};
 	private extraRendererRules_:RendererRules = {};
-		
+
 	constructor(options:Options = null) {
 		if (!options) options = {};
 
@@ -183,7 +188,7 @@ export default class MdToHtml {
 
 	// `module` is a file that has already been `required()`
 	public loadExtraRendererRule(id:string, module:any) {
-		if (this.extraRendererRules_[id]) throw new Error('A renderer rule with this ID has already been loaded: ' + id);
+		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
 		this.extraRendererRules_[id] = module;
 	}
 
@@ -236,8 +241,8 @@ export default class MdToHtml {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = rules[key];
 
-			if (rule.style) {
-				assets[key] = rule.style(theme);
+			if (rule.assets) {
+				assets[key] = rule.assets(theme);
 			}
 		}
 
@@ -386,7 +391,7 @@ export default class MdToHtml {
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = allRules[key];
-			const ruleInstall = rule.install ? rule.install : rule;
+			const ruleInstall:Function = rule.install ? rule.install : (rule as any);
 			markdownIt.use(ruleInstall(context, { ...ruleOptions }));
 		}
 

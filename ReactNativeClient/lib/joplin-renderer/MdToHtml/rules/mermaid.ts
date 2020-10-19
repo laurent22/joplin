@@ -45,5 +45,5 @@ export default {
 			installRule(md, mdOptions, ruleOptions, context);
 		};
 	},
-	style: style,
+	assets: style,
 };

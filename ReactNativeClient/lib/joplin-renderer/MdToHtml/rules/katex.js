@@ -287,5 +287,5 @@ module.exports = {
 			md.renderer.rules.math_block = blockRenderer;
 		};
 	},
-	style: katexStyle,
+	assets: katexStyle,
 };

@@ -229,5 +229,5 @@ export default {
 			installRule(md, mdOptions, ruleOptions, context);
 		};
 	},
-	style: pluginAssets[2],
+	assets: pluginAssets[2],
 };
