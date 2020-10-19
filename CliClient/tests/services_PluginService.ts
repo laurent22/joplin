@@ -2,6 +2,9 @@ import PluginRunner from '../app/services/plugins/PluginRunner';
 import PluginService from 'lib/services/plugins/PluginService';
 import { ContentScriptType } from 'lib/services/plugins/api/types';
 import MdToHtml from 'lib/joplin-renderer/MdToHtml';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
+import uuid from 'lib/uuid';
 
 require('app-module-path').addPath(__dirname);
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow } = require('test-utils.js');
@@ -152,11 +155,12 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should register a Markdown-it plugin', asyncTest(async () => {
-		const contentScriptPath = `${testContentScriptDir}/markdownItPluginTest.js`;
+		const contentScriptPath = `${Setting.value('tempDir')}/markdownItPluginTest_${uuid.createNano()}.js`;
+		await shim.fsDriver().copy(`${testContentScriptDir}/markdownItPluginTest.js`, contentScriptPath);
 
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromString('example', '/tmp', `
+		const plugin = await service.loadPluginFromString('example', Setting.value('tempDir'), `
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
@@ -179,7 +183,7 @@ describe('services_PluginService', function() {
 
 		const contentScripts = plugin.contentScriptsByType(ContentScriptType.MarkdownItPlugin);
 		expect(contentScripts.length).toBe(1);
-		expect(contentScripts[0].path).toBe(contentScriptPath);
+		expect(!!contentScripts[0].path).toBe(true);
 
 		const contentScript = contentScripts[0];
 
@@ -194,6 +198,8 @@ describe('services_PluginService', function() {
 		].join('\n'));
 
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
+
+		await shim.fsDriver().remove(contentScriptPath);
 	}));
 
 });
