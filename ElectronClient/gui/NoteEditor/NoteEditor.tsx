@@ -26,6 +26,7 @@ import { AppState } from '../../app';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import { _ } from 'lib/locale';
 import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import TagList from '../TagList';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -39,7 +40,6 @@ const Note = require('lib/models/Note.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
-const TagList = require('../TagList.min.js');
 
 const commands = [
 	require('./commands/showRevisions'),

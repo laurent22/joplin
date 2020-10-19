@@ -1,18 +1,42 @@
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
+const Tag = require('lib/models/Tag');
 
 function randomIndex(array:any[]):number {
 	return Math.round(Math.random() * (array.length - 1));
 }
 
+function randomIndexes(arrayLength:number, count:number):number[] {
+	const arr = [];
+	while (arr.length < count) {
+		const r = Math.floor(Math.random() * arrayLength);
+		if (arr.indexOf(r) === -1) arr.push(r);
+	}
+	return arr;
+}
+
+function randomElements(array:any[], count:number):any[] {
+	const indexes = randomIndexes(array.length, count);
+	const output = [];
+	for (const index of indexes) {
+		output.push(array[index]);
+	}
+	return output;
+}
+
+// Use the constants below to define how many folders, notes and tags
+// should be created.
 export default async function populateDatabase(db:any) {
 	await db.clearForTesting();
 
-	const folderCount = 2000;
-	const noteCount = 20000;
+	const folderCount = 200;
+	const noteCount = 1000;
+	const tagCount = 5000;
+	const tagsPerNote = 10;
 
 	const createdFolderIds:string[] = [];
 	const createdNoteIds:string[] = [];
+	const createdTagIds:string[] = [];
 
 	for (let i = 0; i < folderCount; i++) {
 		const folder:any = {
@@ -30,6 +54,24 @@ export default async function populateDatabase(db:any) {
 		createdFolderIds.push(savedFolder.id);
 
 		console.info(`Folders: ${i} / ${folderCount}`);
+	}
+
+	let tagBatch = [];
+	for (let i = 0; i < tagCount; i++) {
+		tagBatch.push(Tag.save({ title: `tag${i}` }, { dispatchUpdateAction: false }).then((savedTag:any) => {
+			createdTagIds.push(savedTag.id);
+			console.info(`Tags: ${i} / ${tagCount}`);
+		}));
+
+		if (tagBatch.length > 1000) {
+			await Promise.all(tagBatch);
+			tagBatch = [];
+		}
+	}
+
+	if (tagBatch.length) {
+		await Promise.all(tagBatch);
+		tagBatch = [];
 	}
 
 	let noteBatch = [];
@@ -52,5 +94,21 @@ export default async function populateDatabase(db:any) {
 	if (noteBatch.length) {
 		await Promise.all(noteBatch);
 		noteBatch = [];
+	}
+
+	let noteTagBatch = [];
+	for (const noteId of createdNoteIds) {
+		const tagIds = randomElements(createdTagIds, tagsPerNote);
+		noteTagBatch.push(Tag.setNoteTagsByIds(noteId, tagIds));
+
+		if (noteTagBatch.length > 1000) {
+			await Promise.all(noteTagBatch);
+			noteTagBatch = [];
+		}
+	}
+
+	if (noteTagBatch.length) {
+		await Promise.all(noteTagBatch);
+		noteTagBatch = [];
 	}
 }

@@ -569,6 +569,20 @@ class SideBarComponent extends React.Component<Props, State> {
 		CommandService.instance().execute('newFolder');
 	}
 
+	// componentDidUpdate(prevProps:any, prevState:any) {
+	// 	for (const n in prevProps) {
+	// 		if (prevProps[n] !== (this.props as any)[n]) {
+	// 			console.info('CHANGED PROPS', n);
+	// 		}
+	// 	}
+
+	// 	for (const n in prevState) {
+	// 		if (prevState[n] !== (this.state as any)[n]) {
+	// 			console.info('CHANGED STATE', n);
+	// 		}
+	// 	}
+	// }
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 

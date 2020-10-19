@@ -123,6 +123,7 @@ ElectronClient/gui/SideBar/styles/index.js
 ElectronClient/gui/StatusScreen/StatusScreen.js
 ElectronClient/gui/style/StyledInput.js
 ElectronClient/gui/style/StyledTextInput.js
+ElectronClient/gui/TagList.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js
 ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
 ElectronClient/gui/ToolbarBase.js
